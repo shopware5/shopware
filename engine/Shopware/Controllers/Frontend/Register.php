@@ -130,12 +130,13 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         if (!empty($paymentData)) {
             $paymentObject = $this->admin->sInitiatePaymentClass($paymentData);
             $this->admin->sSYSTEM->_POST = $this->request->getPost();
-            if (!empty($paymentObject)&&method_exists($paymentObject,'sInit')) {
-                $checkPayment = $paymentObject->sInit(Shopware()->System());
+            if ($paymentObject instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
+                $checkPayment = $paymentObject->validate($this->request);
+                if (empty($checkPayment)) {
+                    $paymentObject->savePaymentData();
+                }
             }
-            if (!empty($paymentObject)&&method_exists($paymentObject,'sUpdate')) {
-                $paymentObject->sUpdate();
-            }
+
         }
     }
 

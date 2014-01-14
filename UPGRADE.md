@@ -18,6 +18,11 @@ In this document you will find a changelog of the important changes related to t
 * Break: Custom article attributes of type `Time` are now always saved using the german format. Only affects values inserted in non-german backends
 * Removed the sSetLastArticle in sArticles.php. Was deprecated through setLastArticleById in the Shopware_Plugins_Frontend_LastArticles_Bootstrap plugin.
 * Implement new options in the article resource. "considerTaxInput" allows to get the variant prices considering the article tax. "language" allows to get a whole translated article array. The "language" parameter can contain a sub shop id or a language iso like en_GB.
+* `s_core_debit` table is now deprecated. `s_core_payment_data` and `s_core_payment_instance` should be used instead.
+* core payment classes were removed. Existing references in the core to those classes now use the core PaymentMethods module implementation. Refer to the module for details on how to implement payment method logic
+* Break: PaymentMethods core plugin components and templates had their performance improved, resulting in potential breaks for extensions
+* - getCurrentPaymentData() was removed and should be replaced with getCurrentPaymentDataAsArray(), which returns the same information but in an array format
+* Break: some payment snippets had their namespaces changed to comply with recent changes in snippet handling
 
 ## 4.1.4
 

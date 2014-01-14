@@ -137,20 +137,11 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
         $getPaymentDetails = $this->admin->sGetPaymentMeanById($this->View()->sFormData['payment']);
 
-        /**
-         * small refactoring, keeps old behavior and adds future compatibility for getCurrentPaymentData() call
-         * $getPaymentDetails['table'] validation is deprecated and will be removed
-         *
-         * getData() is deprecated and will be replaced by getCurrentPaymentData()
-         */
         $paymentClass = $this->admin->sInitiatePaymentClass($getPaymentDetails);
-        if ($getPaymentDetails['table'] || ($getPaymentDetails && method_exists($paymentClass, 'getCurrentPaymentData'))) {
-            $data = $paymentClass->getData();
-            if (!empty($data) && is_array($data)) {
+        if ($paymentClass instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
+            $data = $paymentClass->getCurrentPaymentDataAsArray(Shopware()->Session()->sUserId);
+            if (!empty($data)) {
                 $this->View()->sFormData += $data;
-            } elseif ($data instanceof \Shopware\Models\Customer\PaymentData) {
-                $tempFormData = array('paymentData' => $data);
-                $this->View()->sFormData += $tempFormData;
             }
         }
 
@@ -160,10 +151,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             $values['payment'] = $values['payment']['payment'];
             $values['isPost'] = true;
             $this->View()->sFormData = $values;
-            if ($data instanceof \Shopware\Models\Customer\PaymentData) {
-                $tempFormData = array('paymentData' => $data);
-                $this->View()->sFormData += $tempFormData;
-            }
         }
     }
 
@@ -492,7 +479,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             $sourceIsCheckoutConfirm = $this->Request()->getParam('sourceCheckoutConfirm');
             $values = $this->Request()->getPost('register');
             $this->admin->sSYSTEM->_POST['sPayment'] = $values['payment'];
-
             $checkData = $this->admin->sValidateStep3();
 
             if (!empty($checkData['checkPayment']['sErrorMessages']) || empty($checkData['sProcessed'])) {
@@ -513,8 +499,8 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
                 $this->admin->sUpdatePayment();
 
-                if (method_exists($checkData['sPaymentObject'],'sUpdate')) {
-                    $checkData['sPaymentObject']->sUpdate();
+                if ($checkData['sPaymentObject'] instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
+                    $checkData['sPaymentObject']->savePaymentData(Shopware()->Session()->sUserId, $this->Request());
                 }
             }
         }

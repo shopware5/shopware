@@ -483,10 +483,9 @@ class sAdmin
         $sPaymentObject = new $class();
 
         if (!$sPaymentObject) {
-            $this->sSYSTEM->E_CORE_WARNING("sValidateStep3 #02","Payment-Class not found");
+            $this->sSYSTEM->E_CORE_WARNING("sValidateStep3 #02","Payment class not found");
             return false;
         } else {
-            $sPaymentObject->sSYSTEM = &$this->sSYSTEM;
             return $sPaymentObject;
         }
     }
@@ -515,7 +514,7 @@ class sAdmin
             // Include management-class and check input-data
             if (!empty($paymentData['class'])) {
                 $sPaymentObject = $this->sInitiatePaymentClass($paymentData);
-                $checkPayment = $sPaymentObject->sInit($this->sSYSTEM);
+                $checkPayment = $sPaymentObject->validate(Shopware()->Front()->Request());
             }
             return array("checkPayment"=>$checkPayment,"paymentData"=>$paymentData,"sProcessed"=>true,"sPaymentObject"=>&$sPaymentObject);
         }

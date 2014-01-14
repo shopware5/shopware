@@ -34,7 +34,7 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
      */
     public function getVersion()
     {
-        return '1.0.0';
+        return '1.0.1';
     }
 
     /**
@@ -75,7 +75,6 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
     public function install()
     {
         $this->subscribeEvents();
-        $this->addSnippets();
 
         return true;
     }
@@ -140,43 +139,10 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
      */
     public function addPaths(Enlight_Event_EventArgs $arguments)
     {
-        $request = $arguments->getSubject()->Request();
-
         // Add templates folder
         $this->Application()->Template()->addTemplateDir(
             $this->Path() . 'Views/', 'payment', Enlight_Template_Manager::POSITION_APPEND
         );
-
-        if ($request->getModuleName() === 'backend') {
-            // Add snippet directory
-            $this->Application()->Snippets()->addConfigDir(
-                $this->Path() . 'Snippets/'
-            );
-        }
-    }
-
-    private function addSnippets()
-    {
-        $sql = "
-            INSERT IGNORE INTO `s_core_snippets` (`id`, `namespace`, `shopID`, `localeID`, `name`, `value`, `created`, `updated`)
-            SELECT NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/debit', `shopID`, `localeID`, `name`, `value`, '2013-11-01 00:00:00', '2013-11-01 00:00:00'
-            FROM `s_core_snippets`
-            WHERE `s_core_snippets`.`namespace` LIKE 'frontend/plugins/payment/debit';
-
-            INSERT IGNORE INTO `s_core_snippets` (`id`, `namespace`, `shopID`, `localeID`, `name`, `value`, `created`, `updated`) VALUES
-            (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 1, 'PaymentDebitLabelIban', 'IBAN', '2013-11-01 00:00:00', '2013-11-01 00:00:00'),
-            (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 2, 'PaymentDebitLabelIban', 'IBAN', '2013-11-01 00:00:00', '2013-11-01 00:00:00'),
-            (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 1, 'PaymentDebitLabelBic', 'BIC', '2013-11-01 00:00:00', '2013-11-01 00:00:00'),
-            (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 2, 'PaymentDebitLabelBic', 'BIC', '2013-11-01 00:00:00', '2013-11-01 00:00:00'),
-            (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 1, 'ErrorIBAN', 'Ungültige IBAN', '2013-11-01 00:00:00', '2013-11-01 00:00:00'),
-            (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 2, 'ErrorIBAN', 'Invalid IBAN', '2013-11-01 00:00:00', '2013-11-01 00:00:00');
-
-            INSERT IGNORE INTO `s_core_snippets` (`id`, `namespace`, `shopID`, `localeID`, `name`, `value`, `created`, `updated`)
-            SELECT NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', `shopID`, `localeID`, `name`, `value`, '2013-11-01 00:00:00', '2013-11-01 00:00:00'
-            FROM `s_core_snippets`
-            WHERE `s_core_snippets`.`name` IN ('PaymentDebitLabelBankname', 'PaymentDebitLabelName', 'PaymentDebitInfoFields') AND `s_core_snippets`.`namespace` LIKE 'frontend/plugins/payment/debit';
-        ";
-        Shopware()->Db()->query($sql);
     }
 
     /**

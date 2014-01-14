@@ -63,7 +63,7 @@ class Shopware_Tests_Modules_Admin_sInitiatePaymentClassTest extends Enlight_Com
     protected function paymentMethodClassTest(ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod $basePaymentMethod) {
         Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
 
-        $validationResult = $basePaymentMethod->validate();
+        $validationResult = $basePaymentMethod->validate(Shopware()->Front()->Request());
         $this->assertTrue(is_array($validationResult));
         if(count($validationResult)) {
             $this->assertArrayHasKey('sErrorFlag', $validationResult);
