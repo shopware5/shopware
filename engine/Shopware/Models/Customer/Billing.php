@@ -41,7 +41,7 @@ use         Shopware\Components\Model\ModelEntity,
  *   - UNIQUE KEY `FOREIGN` (`userID`)
  * </code>
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="BillingRepository")
  * @ORM\Table(name="s_user_billingaddress")
  * @ORM\HasLifecycleCallbacks
  */

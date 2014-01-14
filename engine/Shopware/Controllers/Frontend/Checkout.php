@@ -976,19 +976,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $payment = $this->admin->sGetPaymentMeanById($this->session['sPaymentID'], $this->View()->sUserData);
         }
 
-        /**
-         * small refactoring, keeps old behavior and adds future compatibility for getCurrentPaymentData() call
-         * $getPaymentDetails['table'] validation is deprecated and will be removed
-         *
-         * getData() is deprecated and will be replaced by getCurrentPaymentData()
-         */
         $paymentClass = $this->admin->sInitiatePaymentClass($payment);
-        if ($payment['table'] || ($payment && method_exists($paymentClass, 'getCurrentPaymentData'))) {
-            $data = $paymentClass->getData();
-            if (!empty($data) && is_array($data)) {
+        if ($payment && $paymentClass instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
+            $data = $paymentClass->getCurrentPaymentDataAsArray(Shopware()->Session()->sUserId);
+            if (!empty($data)) {
                 $payment['data'] = $data;
-            } elseif ($data instanceof \Shopware\Models\Customer\PaymentData) {
-                $payment['data']['paymentData'] = $data;
             }
         }
 

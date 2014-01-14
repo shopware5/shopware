@@ -92,6 +92,27 @@ class PaymentData extends ModelEntity
     protected $iban;
 
     /**
+     * @var string $accountNumber
+     *
+     * @ORM\Column(name="account_number", type="string", length=50, nullable=true)
+     */
+    protected $accountNumber;
+
+    /**
+     * @var string $bankCode
+     *
+     * @ORM\Column(name="bank_code", type="string", length=50, nullable=true)
+     */
+    protected $bankCode;
+
+    /**
+     * @var string $accountHolder
+     *
+     * @ORM\Column(name="account_holder", type="string", length=50, nullable=true)
+     */
+    protected $accountHolder;
+
+    /**
      * @var \DateTime $createdAt
      *
      * @ORM\Column(name="created_at", type="date", nullable=false)
@@ -224,4 +245,54 @@ class PaymentData extends ModelEntity
     {
         return $this->useBillingData;
     }
+
+    /**
+     * @param string $accountHolder
+     */
+    public function setAccountHolder($accountHolder)
+    {
+        $this->accountHolder = $accountHolder;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountHolder()
+    {
+        return $this->accountHolder;
+    }
+
+    /**
+     * @param string $accountNumber
+     */
+    public function setAccountNumber($accountNumber)
+    {
+        $this->accountNumber = $accountNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountNumber()
+    {
+        return $this->accountNumber;
+    }
+
+    /**
+     * @param string $bankCode
+     */
+    public function setBankCode($bankCode)
+    {
+        $this->bankCode = $bankCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBankCode()
+    {
+        return $this->bankCode;
+    }
+
+
 }
