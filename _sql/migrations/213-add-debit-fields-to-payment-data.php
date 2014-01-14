@@ -9,15 +9,15 @@ class Migrations_Migration213 Extends Shopware\Components\Migrations\AbstractMig
             ADD  `bank_code` VARCHAR( 50 ) NULL DEFAULT NULL AFTER  `account_number` ,
             ADD  `account_holder` VARCHAR( 50 ) NULL DEFAULT NULL AFTER  `bank_code` ;
 
-        UPDATE s_core_snippets
+        UPDATE IGNORE s_core_snippets
         SET namespace = 'frontend/plugins/payment/sepa'
         WHERE namespace = 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa';
 
-        UPDATE s_core_snippets
+        UPDATE IGNORE s_core_snippets
         SET namespace = 'frontend/plugins/payment/debit'
         WHERE namespace = 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/debit';
 
-        UPDATE s_core_snippets
+        UPDATE IGNORE s_core_snippets
         SET namespace = 'frontend/plugins/payment/sepaemail'
         WHERE namespace = 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/sepa/email';
 
