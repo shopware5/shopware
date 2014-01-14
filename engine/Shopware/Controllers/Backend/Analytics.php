@@ -583,9 +583,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     public function getCustomersAction()
     {
-        $start = (int) $this->Request()->getParam('start', 0);
-        $limit = (int) $this->Request()->getParam('limit', 25);
-
         $builder = Shopware()->Models()->getDBALQueryBuilder();
         $builder->select(array(
             'u.firstlogin AS firstLogin',
@@ -601,8 +598,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         ->andWhere('o.status NOT IN (-1, 4)')
         ->groupBy('u.id')
         ->orderBy('orderTime', 'DESC')
-        ->setFirstResult($start)
-        ->setMaxResults($limit)
         ->setParameter(':fromTime', $this->getFromDate())
         ->setParameter(':toTime', $this->getToDate());
 
@@ -648,6 +643,48 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $data = array_values($data);
         $this->View()->assign(array('success' => true, 'data' => $data, 'totalCount' => count($data)));
+    }
+
+    public function getCustomerAgeAction()
+    {
+        $builder = Shopware()->Models()->getDBALQueryBuilder();
+        $builder->select(array(
+            'u.firstlogin',
+            'ub.birthday'
+        ))
+        ->from('s_user', 'u')
+        ->innerJoin('u', 's_user_billingaddress', 'ub', 'ub.userID = u.id')
+        ->where('u.firstlogin >= :fromTime')
+        ->andWhere('u.firstlogin <= :toTime')
+        ->andWhere('ub.birthday IS NOT NULL')
+        ->andWhere("ub.birthday != '0000-00-00'")
+        ->orderBy('birthday', 'DESC')
+        ->setParameter(':fromTime', $this->getFromDate())
+        ->setParameter(':toTime', $this->getToDate());
+
+        $statement = $builder->execute();
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $ages = array();
+        foreach($results as &$result){
+            $age = floor((time() - strtotime($result['birthday'])) / (60*60*24*365));
+
+            if(!array_key_exists("{$age}", $ages)){
+                $ages["{$age}"] = array(
+                    'age' => $age,
+                    'count' => 0
+                );
+            }
+
+            $ages["{$age}"]['count']++;
+        }
+
+        foreach($ages as &$age){
+            $age['percent'] = round($age['count'] / $statement->rowCount() * 100, 2);
+        }
+
+        $ages = array_values($ages);
+        $this->View()->assign(array('success' => true, 'data' => $ages, 'totalCount' => count($ages)));
     }
 
     public function getMonthAction()
