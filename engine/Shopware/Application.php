@@ -60,7 +60,7 @@ class Shopware extends Enlight_Application
         Shopware($this);
 
         if ($this->oldPath === null) {
-            $this->oldPath = realpath(__DIR__ . '/../../') . '/';
+            $this->oldPath = realpath(__DIR__ . '/../../') . DIRECTORY_SEPARATOR;
         }
 
         parent::__construct($environment, $options, $container);
