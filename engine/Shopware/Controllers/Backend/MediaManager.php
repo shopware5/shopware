@@ -575,10 +575,11 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
             if($media->getType() === Media::TYPE_IMAGE){
                 $manager = Shopware()->Container()->get('thumbnail_manager');
-                $defaultSizes = $media->getDefaultThumbnails();
-                $defaultSize = $defaultSizes[0][0] . 'x' . $defaultSizes[0][1];
-
-                $manager->createMediaThumbnail($media, array($defaultSize), true);
+                $manager->createMediaThumbnail(
+                    $media,
+                    $media->getDefaultThumbnails(),
+                    true
+                );
             }
 
             $this->Response()->setHeader('Content-Type', 'text/plain');
