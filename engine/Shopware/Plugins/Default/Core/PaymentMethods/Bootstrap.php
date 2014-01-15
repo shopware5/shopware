@@ -108,6 +108,11 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
             'Enlight_Controller_Action_PostDispatchSecure_Backend_Order',
             'onBackendOrderPostDispatch'
         );
+
+        $this->subscribeEvent(
+            'Enlight_Controller_Action_PostDispatchSecure_Backend_Customer',
+            'onBackendCustomerPostDispatch'
+        );
     }
 
     /**
@@ -162,6 +167,27 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
             );
             $view->extendsTemplate(
                 'backend/order/payment_methods/view/detail/payment_methods.js'
+            );
+        }
+    }
+
+    /**
+     * Called when the BackendCustomerPostDispatch Event is triggered
+     *
+     * @param Enlight_Event_EventArgs $args
+     */
+    public function onBackendCustomerPostDispatch(Enlight_Event_EventArgs $args)
+    {
+        /**@var $view Enlight_View_Default */
+        $view = $args->getSubject()->View();
+
+        //if the controller action name equals "load" we have to load all application components
+        if ($args->getRequest()->getActionName() === 'load') {
+            $view->extendsTemplate(
+                'backend/customer/payment_methods/controller/detail.js'
+            );
+            $view->extendsTemplate(
+                'backend/customer/payment_methods/view/detail/payment_methods.js'
             );
         }
     }

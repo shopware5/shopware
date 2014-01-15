@@ -186,6 +186,7 @@ class Repository extends ModelRepository
             'billing',
             'shipping',
             'debit',
+            'paymentData',
             'attribute',
             'billingAttribute',
             'shippingAttribute',
@@ -203,6 +204,7 @@ class Repository extends ModelRepository
                 ->leftJoin('customer.languageSubShop', 'subShop')
                 ->leftJoin('subShop.locale', 'locale')
                 ->leftJoin('customer.debit', 'debit')
+                ->leftJoin('customer.paymentData', 'paymentData', \Doctrine\ORM\Query\Expr\Join::WITH, 'paymentData.paymentMean = customer.paymentId' )
                 ->leftJoin('customer.orders', 'doneOrders', \Doctrine\ORM\Query\Expr\Join::WITH, 'doneOrders.status <> -1 AND doneOrders.status <> 4' )
                 ->leftJoin('customer.orders', 'canceledOrders', \Doctrine\ORM\Query\Expr\Join::WITH, 'canceledOrders.cleared = 16')
                 ->leftJoin('billing.attribute', 'billingAttribute')
