@@ -194,6 +194,7 @@ Ext.define('Shopware.apps.MediaManager.view.thumbnail.Main', {
                     { name: 'batchSize', type: 'int' }
                 ],
                 data: [
+                    { batchSize: '1' },
                     { batchSize: '5' },
                     { batchSize: '10' },
                     { batchSize: '20' },
