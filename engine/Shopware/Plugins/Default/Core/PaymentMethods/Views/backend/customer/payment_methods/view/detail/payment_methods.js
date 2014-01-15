@@ -1,17 +1,21 @@
-//{namespace name="backend/order/view/detail/debit"}
-//{block name="backend/order/view/detail/debit" append}
-Ext.define('Shopware.apps.Order.view.detail.PaymentMethods', {
-    override: 'Shopware.apps.Order.view.detail.Debit',
+//{namespace name="backend/customer/view/detail/debit"}
+//{block name="backend/customer/view/detail/debit" append}
+Ext.define('Shopware.apps.Customer.view.detail.PaymentMethods', {
+    override: 'Shopware.apps.Customer.view.detail.Debit',
 
     initComponent: function () {
         var me = this;
 
-        me.snippets.sepaIban = '{s namespace="backend/order/view/detail/debit" name=sepa/iban}IBAN{/s}';
-        me.snippets.sepaBic = '{s namespace="backend/order/view/detail/debit" name=sepa/bic}BIC{/s}';
+        me.snippets.sepaIban = '{s namespace="backend/customer/view/detail/debit" name=sepa/iban}IBAN{/s}';
+        me.snippets.sepaBic = '{s namespace="backend/customer/view/detail/debit" name=sepa/bic}BIC{/s}';
+        me.snippets.sepaUseBillingData = '{s namespace="backend/customer/view/detail/debit" name=sepa/use_billing_data}Use billing data{/s}';
 
         me.callParent(arguments);
 
-        if (me.record.getPayment().first().get('name') === 'sepa') {
+        if (me.record.getPaymentData().first() == Ext.undefined) {
+            return;
+        }
+        if (me.record.getPaymentData().first().get('name') === 'sepa') {
             me.fieldContainer.show();
             me.accountHolderField.hide();
             me.accountNumberField.hide();
@@ -19,7 +23,7 @@ Ext.define('Shopware.apps.Order.view.detail.PaymentMethods', {
             me.ibanField.show();
             me.bicField.show();
         }
-        if (me.record.getPayment().first().get('name') === 'debit') {
+        if (me.record.getPaymentData().first().get('name') === 'debit') {
             me.fieldContainer.show();
             me.accountNumberField.show();
             me.accountHolderField.show();
@@ -33,57 +37,56 @@ Ext.define('Shopware.apps.Order.view.detail.PaymentMethods', {
         var me = this;
 
         me.accountNumberField = Ext.create('Ext.form.field.Text', {
-            name: 'paymentInstances[accountNumber]',
+            name: 'paymentData[accountNumber]',
             alias: 'accountNumber',
-            readOnly: true,
-            anchor: '95%',
             labelStyle: 'font-weight: 700;',
             style: {
                 margin: '0 0 10px'
             },
-            labelWidth: 120,
+            labelWidth: 150,
             minWidth: 250,
             fieldLabel: me.snippets.account
         });
         me.accountHolderField = Ext.create('Ext.form.field.Text', {
-            name: 'paymentInstances[accountHolder]',
+            name: 'paymentData[accountHolder]',
             alias: 'holder',
-            readOnly: true,
-            anchor: '95%',
             labelStyle: 'font-weight: 700;',
             style: {
                 margin: '0 0 10px'
             },
-            labelWidth: 120,
+            labelWidth: 150,
             minWidth: 250,
             fieldLabel: me.snippets.accountHolder
         });
         me.ibanField = Ext.create('Ext.form.field.Text', {
-            name: 'paymentInstances[iban]',
+            name: 'paymentData[iban]',
             alias: 'sepaIban',
-            readOnly: true,
-            anchor: '95%',
             labelStyle: 'font-weight: 700;',
-            style: {
-                margin: '0 0 10px'
-            },
-            labelWidth: 120,
+            labelWidth: 150,
             minWidth: 250,
             fieldLabel: me.snippets.sepaIban
         });
+        me.useBillingDataField = Ext.create('Ext.form.field.Checkbox', {
+            name: 'paymentData[useBillingData]',
+            alias: 'sepaUseBillingData',
+            labelStyle: 'font-weight: 700;',
+            labelWidth: 150,
+            minWidth: 250,
+            inputValue: true,
+            uncheckedValue: false,
+            fieldLabel: me.snippets.sepaUseBillingData
+        });
 
-        return [ me.accountNumberField, me.accountHolderField, me.ibanField ];
+        return [ me.accountNumberField, me.accountHolderField, me.ibanField, me.useBillingDataField ];
     },
 
     createRightElements: function () {
         var me = this;
 
         me.bankNameField = Ext.create('Ext.form.field.Text', {
-            name: 'paymentInstances[bankName]',
+            name: 'paymentData[bankName]',
             alias: 'bankName',
-            readOnly: true,
-            anchor: '95%',
-            labelWidth: 120,
+            labelWidth: 100,
             minWidth: 250,
             labelStyle: 'font-weight: 700;',
             style: {
@@ -93,11 +96,9 @@ Ext.define('Shopware.apps.Order.view.detail.PaymentMethods', {
             fieldLabel: me.snippets.bankName
         });
         me.bankCodeField = Ext.create('Ext.form.field.Text', {
-            name: 'paymentInstances[bankCode]',
+            name: 'paymentData[bankCode]',
             alias: 'bankCode',
-            readOnly: true,
-            anchor: '95%',
-            labelWidth: 120,
+            labelWidth: 100,
             minWidth: 250,
             labelStyle: 'font-weight: 700;',
             style: {
@@ -107,11 +108,9 @@ Ext.define('Shopware.apps.Order.view.detail.PaymentMethods', {
             fieldLabel: me.snippets.bankCode
         });
         me.bicField = Ext.create('Ext.form.field.Text', {
-            name: 'paymentInstances[bic]',
+            name: 'paymentData[bic]',
             alias: 'sepaBic',
-            readOnly: true,
-            anchor: '95%',
-            labelWidth: 120,
+            labelWidth: 100,
             minWidth: 250,
             labelStyle: 'font-weight: 700;',
             style: {

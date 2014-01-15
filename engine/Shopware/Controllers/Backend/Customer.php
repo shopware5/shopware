@@ -27,7 +27,8 @@ use Shopware\Models\Customer\Customer as Customer,
     Shopware\Models\Customer\Shipping as Shipping,
     Shopware\Models\Customer\Debit as Debit,
     Shopware\Models\Attribute\CustomerBilling as BillingAttributes,
-    Shopware\Models\Attribute\CustomerShipping as ShippingAttributes;
+    Shopware\Models\Attribute\CustomerShipping as ShippingAttributes,
+    Shopware\Models\Customer\PaymentData;
 
 /**
  * Backend Controller for the customer backend module.
@@ -463,6 +464,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     public function saveAction()
     {
         $id = $this->Request()->getParam('id', null);
+        $paymentId = $this->Request()->getParam('paymentId', null);
 
         /** @var $namespace Enlight_Components_Snippet_Namespace */
         $namespace = Shopware()->Snippets()->getNamespace('backend/customer');
@@ -483,6 +485,10 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $shipping = $customer->getShipping();
             $billing = $customer->getBilling();
             $debit = $customer->getDebit();
+
+            $paymentData = Shopware()->Models()->getRepository('Shopware\Models\Customer\PaymentData')->findOneBy(
+                array('customer' => $customer, 'paymentMean' => $paymentId)
+            );
         } else {
             //check if the user has the rights to create a new customer
             if (!$this->_isAllowed('create', 'customer')) {
@@ -509,8 +515,15 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
             $params = $this->Request()->getParams();
 
+            if (!$paymentData instanceof PaymentData && !empty($params['paymentData']) && array_filter($params['paymentData'][0])) {
+                $paymentData = new PaymentData();
+                $customer->addPaymentData($paymentData);
+                $paymentData->setPaymentMean(
+                    Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment')->find($paymentId)
+                );
+            }
 
-            $params = $this->prepareCustomerData($params, $customer, $billing, $shipping, $debit);
+            $params = $this->prepareCustomerData($params, $customer, $billing, $shipping, $debit, $paymentData);
 
             //set parameter to the customer model.
             $customer->fromArray($params);
@@ -574,7 +587,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         return $data;
     }
 
-    private function prepareCustomerData($params, $customer, $billing, $shipping, $debit)
+    private function prepareCustomerData($params, $customer, $billing, $shipping, $debit, $paymentData)
     {
         if (!empty($params['groupKey'])) {
             $params['group'] = $this->getGroupRepository()->findOneBy(array('key' => $params['groupKey']));
@@ -610,6 +623,11 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             //shipping params are empty use the billing ones
             $params['shipping'][0] = $params['billing'][0];
         }
+
+        if (!empty($params['paymentData']) && $paymentData) {
+            $paymentData->fromArray(array_shift($params['paymentData']));
+        }
+        unset($params['paymentData']);
 
         $params['billing'] = $params['billing'][0];
         $params['shipping'] = $params['shipping'][0];

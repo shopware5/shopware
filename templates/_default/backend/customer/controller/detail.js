@@ -54,6 +54,10 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
      */
     extend:'Ext.app.Controller',
 
+    refs: [
+        { ref: 'detailWindow', selector: 'customer-detail-window' }
+    ],
+
     /**
      * Contains all snippets for the controller
      * @object
@@ -283,6 +287,10 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
      * @return void
      */
     onChangePayment:function (value, container) {
+        var me = this;
+        var window = me.getDetailWindow();
+        var paymentFieldSet = window.down('customer-debit-field-set');
+
         if ( value !== 2 ) {
             container.getEl().fadeOut({
                 opacity:0,
@@ -300,10 +308,11 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
                 duration:500
             });
         }
-        container.down('textfield[alias=account]').allowBlank = (value !== 2);
-        container.down('textfield[alias=holder]').allowBlank = (value !== 2);
-        container.down('textfield[alias=bankName]').allowBlank = (value !== 2);
-        container.down('textfield[alias=bankCode]').allowBlank = (value !== 2);
+
+        paymentFieldSet.accountNumberField.allowBlank = (value !== 2);
+        paymentFieldSet.accountHolderField.allowBlank = (value !== 2);
+        paymentFieldSet.bankCodeField.allowBlank = (value !== 2);
+        paymentFieldSet.bankNameField.allowBlank = (value !== 2);
     },
 
     /**
@@ -400,6 +409,8 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
             model = form.getRecord(),
             missingField = "Unknown field",
             listStore = me.subApplication.getStore('List');
+
+        console.log("counter", model.getPaymentData().getCount());
 
         if (!form.getForm().isValid() ) {
             // check which field is not valid in order to tell the user, why the customer cannot be saved
