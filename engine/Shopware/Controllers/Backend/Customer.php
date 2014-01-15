@@ -701,6 +701,9 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         ));
 
         $this->Response()->setCookie('shop', $shop->getId(), 0, $shop->getBasePath());
+
+        $this->Response()->setCookie('session-' .  $shop->getId(), '', time() - 3600, '/');
+
         $this->redirect($url);
     }
 }
