@@ -44,14 +44,16 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
             store: 'analytics-store-navigation-overview',
             iconCls: 'sprite-report-paper',
             comparable: true,
-            leaf: true
+            leaf: true,
+            multiShop: true
         },{
             id: 'rating',
             text: 'Rating',
             store: 'analytics-store-navigation-rating',
             iconCls: 'sprite-report-paper',
             comparable: true,
-            leaf: true
+            leaf: true,
+            multiShop: true
         }, {
             id: 'referrer_revenue',
             text: 'Umsatz nach Referrer',
@@ -86,42 +88,48 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
             store: 'analytics-store-navigation-customers',
             iconCls: 'sprite-report-paper',
             comparable: true,
-            leaf: true
+            leaf: true,
+            multiShop: true
         }, {
             id: 'customer_age',
             text: 'Kundenalter',
             store: 'analytics-store-navigation-customer_age',
             iconCls: 'sprite-report-paper',
             comparable: true,
-            leaf: true
+            leaf: true,
+            multiShop: true
         }, {
             id: 'month',
             text: '{s name=nav/salesBy/month}Month{/s}',
             store: 'analytics-store-navigation-month',
             iconCls: 'sprite-calendar-month',
             comparable: true,
-            leaf: true
+            leaf: true,
+            multiShop: true
         }, {
             id: 'week',
             text: '{s name=nav/salesBy/calendarWeeks}Calendar weeks{/s}',
             store: 'analytics-store-navigation-calendar_weeks',
             iconCls: 'sprite-calendar-select-week',
             comparable: true,
-            leaf: true
+            leaf: true,
+            multiShop: true
         }, {
             id: 'weekday',
             text: '{s name=nav/salesBy/weekdays}Weekdays{/s}',
             store: 'analytics-store-navigation-weekdays',
             iconCls: 'sprite-calendar-select-days',
             comparable: true,
-            leaf: true
+            leaf: true,
+            multiShop: true
         }, {
             id: 'daytime',
             text: '{s name=nav/salesBy/time}Time{/s}',
             store: 'analytics-store-navigation-time',
             iconCls: 'sprite-clock',
             comparable: true,
-            leaf: true
+            leaf: true,
+            multiShop: true
         }, {
             id: 'category',
             text: '{s name=nav/salesBy/categories}Categories{/s}',
@@ -139,7 +147,8 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
             text: '{s name=nav/salesBy/payment}Payment{/s}',
             store: 'analytics-store-navigation-payment',
             iconCls: 'sprite-moneys',
-            leaf: true
+            leaf: true,
+            multiShop: true
         }, {
             id: 'dispatch',
             text: '{s name=nav/salesBy/shippingMethods}Shipping methods{/s}',
@@ -164,14 +173,16 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
             store: 'analytics-store-navigation-visitors',
             iconCls: 'sprite-chart-up-color',
             comparable: true,
-            leaf: true
+            leaf: true,
+            multiShop: true
         }, {
             id: 'article_impression',
             text: 'Artikel nach Aufrufen(Impressionen)',
             store: 'analytics-store-navigation-article_impressions',
             iconCls: 'sprite-chart-up-color',
             comparable: true,
-            leaf: true
+            leaf: true,
+            multiShop: true
         }]
     },
     constructor: function(config) {

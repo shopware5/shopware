@@ -226,11 +226,12 @@ class Repository
     /**
      * @param \DateTime $from
      * @param \DateTime $to
+     * @param array $shopIds
      * @return Result
      */
-    public function getAgeOfCustomers(\DateTime $from = null, \DateTime $to = null)
+    public function getAgeOfCustomers(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
     {
-        $builder = $this->createAgeOfCustomersBuilder($from, $to);
+        $builder = $this->createAgeOfCustomersBuilder($from, $to, $shopIds);
 
         return new Result($builder);
     }
@@ -904,9 +905,10 @@ class Repository
     /**
      * @param \DateTime $from
      * @param \DateTime $to
+     * @param array $shopIds
      * @return DBALQueryBuilder
      */
-    protected function createAgeOfCustomersBuilder(\DateTime $from = null, \DateTime $to = null)
+    protected function createAgeOfCustomersBuilder(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
     {
         $builder = $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
@@ -920,6 +922,15 @@ class Repository
             ->orderBy('birthday', 'DESC');
 
         $this->addDateRangeCondition($builder, $from, $to, 'users.firstlogin');
+
+        if (!empty($shopIds)) {
+            foreach ($shopIds as $shopId) {
+                $shopId = (int)$shopId;
+                $builder->addSelect(
+                    "IF(users.subshopID = {$shopId}, billing.birthday, NULL) as birthday" . $shopId
+                );
+            }
+        }
 
         return $builder;
     }

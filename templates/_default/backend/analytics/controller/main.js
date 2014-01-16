@@ -48,6 +48,7 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
     refs:[
         { ref:'panel', selector:'analytics-panel' },
         { ref:'layoutButton', selector:'analytics-toolbar button[action=layout]' },
+        { ref:'shopSelection', selector:'analytics-toolbar combobox[name=shop_selection]' },
         { ref:'fromField', selector:'analytics-toolbar datefield[name=from_date]' },
         { ref:'toField', selector:'analytics-toolbar datefield[name=to_date]' }
     ],
@@ -186,6 +187,12 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
                     panel.add(table);
                 } else {
                     layout = false;
+                }
+
+                if(!!record.raw.multiShop){
+                    me.getShopSelection().show();
+                } else {
+                    me.getShopSelection().hide();
                 }
 
                 var activeItem;

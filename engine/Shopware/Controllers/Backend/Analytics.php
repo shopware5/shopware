@@ -424,11 +424,14 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     public function getCustomerAgeAction()
     {
+        $shopIds = $this->getSelectedShopIds();
         $result = $this->getRepository()->getAgeOfCustomers(
             $this->getFromDate(),
-            $this->getToDate()
+            $this->getToDate(),
+            $this->getSelectedShopIds()
         );
 
+        $subShopCounts = array();
         $ages = array();
         foreach ($result->getData() as $row) {
             $age = floor((time() - strtotime($row['birthday'])) / (60 * 60 * 24 * 365));
@@ -440,19 +443,41 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                 );
             }
 
+            if(!empty($shopIds)){
+                foreach($shopIds as $shopId){
+                    if(!array_key_exists($shopId, $subShopCounts)){
+                        $subShopCounts[$shopId] = 0;
+                    }
+
+                    if (!array_key_exists('count' . $shopId, $ages["{$age}"])){
+                        $ages["{$age}"]['count' . $shopId] = 0;
+                    }
+
+                    if(!empty($row['birthday' . $shopId])){
+                        $ages["{$age}"]['count' . $shopId]++;
+                        $subShopCounts[$shopId]++;
+                    }
+                }
+            }
+
             $ages["{$age}"]['count']++;
         }
 
         foreach ($ages as &$age) {
             $age['percent'] = round($age['count'] / $result->getTotalCount() * 100, 2);
+
+            if(!empty($shopIds)){
+                foreach($shopIds as $shopId){
+                    $age['percent' . $shopId] = round($age['count' . $shopId] / $subShopCounts[$shopId] * 100, 2);
+                }
+            }
         }
 
         $ages = array_values($ages);
-
         $this->View()->assign(array(
             'success' => true,
             'data' => $ages,
-            'totalCount' => $result->getTotalCount()
+            'totalCount' => count($ages)
         ));
     }
 
