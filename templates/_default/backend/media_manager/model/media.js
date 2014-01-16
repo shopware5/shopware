@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.MediaManager.model.Media', {
 	extend: 'Ext.data.Model',
 	fields: [
 		//{block name="backend/media_manager/model/media/fields"}{/block}
-		'created', 'description', 'extension', 'id', { name: 'name', sortType: 'asUCText' }, 'type', 'path', 'userId', 'thumbnail', 'width', 'height', 'albumID', 'newAlbumID' ],
+		'created', 'description', 'extension', 'id', { name: 'name', sortType: 'asUCText' }, 'type', 'path', 'userId', 'thumbnail', 'width', 'height', 'albumId', 'newAlbumID' ],
 	proxy: {
 		type: 'ajax',
         api: {
