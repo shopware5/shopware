@@ -61,6 +61,37 @@ class Repository
         $this->eventManager = $eventManager;
     }
 
+    public function getCustomerGroupAmount(\DateTime $from = null, \DateTime $to = null)
+    {
+        $builder = $this->createCustomerGroupAmountBuilder($from, $to);
+
+        return new Result($builder);
+    }
+
+
+    /**
+     * @param \DateTime $from
+     * @param \DateTime $to
+     * @return DBALQueryBuilder
+     *      array (
+     *          'count' => '386109',
+     *          'amount' => '22637520.4061901',
+     *          'displayDate' => 'Monday',
+     *      ),
+     */
+    protected function createCustomerGroupAmountBuilder(\DateTime $from = null, \DateTime $to = null)
+    {
+        $builder = $this->createAmountBuilder()
+            ->addSelect('customerGroups.description as customerGroup')
+            ->innerJoin('orders', 's_user', 'users', 'users.id = orders.userID')
+            ->innerJoin('users', 's_core_customergroups', 'customerGroups', 'users.customergroup = customerGroups.groupkey')
+            ->groupBy('users.customergroup');
+
+        $this->addDateRangeCondition($builder, $from, $to, 'orders.ordertime');
+
+        return $builder;
+    }
+
     /**
      * Returns a statistic array for the whole shop data.
      *

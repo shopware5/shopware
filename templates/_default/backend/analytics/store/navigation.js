@@ -69,6 +69,13 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
             comparable: true,
             leaf: true
         }, {
+            id: 'customer-group',
+            text: 'Umsatz nach Kundengruppe',
+            store: 'analytics-store-navigation-customer-groups',
+            iconCls: 'sprite-report-paper',
+            comparable: true,
+            leaf: true
+        }, {
             id: 'referrer_visitors',
             text: 'Besucher Zugriffsquellen',
             store: 'analytics-store-navigation-referrer_visitors',

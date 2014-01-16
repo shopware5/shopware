@@ -680,6 +680,20 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         ));
     }
 
+    public function getCustomerGroupAmountAction()
+    {
+        $result = $this->getRepository()->getCustomerGroupAmount(
+            $this->getFromDate(),
+            $this->getToDate()
+        );
+
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $result->getData(),
+            'total' => $result->getTotalCount()
+        ));
+    }
+
     /**
      * helper to get the selected shop ids
      * if no shop is selected the ids of all shops are returned
