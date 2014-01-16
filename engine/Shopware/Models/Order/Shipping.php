@@ -129,14 +129,14 @@ class Shipping extends ModelEntity
     /**
      * Contains the street number of the shipping address
      * @var string $streetNumber
-     * @ORM\Column(name="streetnumber", type="string", length=6, nullable=false)
+     * @ORM\Column(name="streetnumber", type="string", length=50, nullable=false)
      */
     private $streetNumber = '';
 
     /**
      * Contains the zip code of the shipping address
      * @var string $zipCode
-     * @ORM\Column(name="zipcode", type="string", length=10, nullable=false)
+     * @ORM\Column(name="zipcode", type="string", length=50, nullable=false)
      */
     private $zipCode = '';
 
