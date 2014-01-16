@@ -31,6 +31,7 @@
  * @package     MediaManager
  * @copyright   Copyright (c) shopware AG (http://www.shopware.de)
  */
+//{namespace name=backend/media_manager/view/main}
 //{block name="backend/media_manager/controller/thumbnail"}
 Ext.define('Shopware.apps.MediaManager.controller.Thumbnail', {
 
