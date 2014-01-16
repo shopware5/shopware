@@ -121,6 +121,10 @@ EOF
                 $size = $size . 'x' . $size;
             }
 
+            if($size === '140x140'){
+                continue;
+            }
+
             $thumbnailDir = Shopware()->DocPath('media_' . strtolower($media['type'])) . 'thumbnail' . DIRECTORY_SEPARATOR;
             $path = $thumbnailDir . $this->removeSpecialCharacters($media['name']) . '_' . $size;
             if (DIRECTORY_SEPARATOR !== '/') {
