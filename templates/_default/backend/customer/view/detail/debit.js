@@ -127,12 +127,6 @@ Ext.define('Shopware.apps.Customer.view.detail.Debit', {
      */
     createDebitTopForm:function () {
         var me = this;
-//        var container, me = this;
-
-//        container = Ext.create('Ext.container.Container', {
-//            cls: Ext.baseCSSPrefix + 'field-set-container',
-//            items:me.createDebitFormTopElements()
-//        });
 
         return me.createDebitFormTopElements();
     },

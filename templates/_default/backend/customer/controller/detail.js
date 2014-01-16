@@ -309,10 +309,18 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
             });
         }
 
-        paymentFieldSet.accountNumberField.allowBlank = (value !== 2);
-        paymentFieldSet.accountHolderField.allowBlank = (value !== 2);
-        paymentFieldSet.bankCodeField.allowBlank = (value !== 2);
-        paymentFieldSet.bankNameField.allowBlank = (value !== 2);
+        if (paymentFieldSet.accountNumberField != Ext.undefined) {
+            paymentFieldSet.accountNumberField.allowBlank = (value !== 2);
+        }
+        if (paymentFieldSet.accountHolderField != Ext.undefined) {
+            paymentFieldSet.accountHolderField.allowBlank = (value !== 2);
+        }
+        if (paymentFieldSet.bankCodeField != Ext.undefined) {
+            paymentFieldSet.bankCodeField.allowBlank = (value !== 2);
+        }
+        if (paymentFieldSet.bankNameField != Ext.undefined) {
+            paymentFieldSet.bankNameField.allowBlank = (value !== 2);
+        }
     },
 
     /**
@@ -409,8 +417,6 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
             model = form.getRecord(),
             missingField = "Unknown field",
             listStore = me.subApplication.getStore('List');
-
-        console.log("counter", model.getPaymentData().getCount());
 
         if (!form.getForm().isValid() ) {
             // check which field is not valid in order to tell the user, why the customer cannot be saved
