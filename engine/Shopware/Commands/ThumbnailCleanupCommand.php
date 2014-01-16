@@ -118,16 +118,15 @@ EOF
      */
     private function getMediaThumbnailPaths($media, $sizes)
     {
+        $sizes = array_merge($sizes, array('140x140'));
+        $sizes = array_unique($sizes);
+
         $thumbnails = array();
 
         //iterate thumbnail sizes
         foreach ($sizes as $size) {
             if (strpos($size, 'x') === false) {
                 $size = $size . 'x' . $size;
-            }
-
-            if($size === '140x140'){
-                continue;
             }
 
             $thumbnailDir = Shopware()->DocPath('media_' . strtolower($media['type'])) . 'thumbnail' . DIRECTORY_SEPARATOR;
