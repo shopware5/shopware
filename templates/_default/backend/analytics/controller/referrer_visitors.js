@@ -60,14 +60,30 @@ Ext.define('Shopware.apps.Analytics.controller.ReferrerVisitors', {
 
         me.control({
             'analytics-table-referrer_visitors':{
-                viewSearchTerms: function(){
-
-                },
-                viewSearchUrl: function(){
-
-                }
+                viewSearchTerms: me.onViewSearchTerms,
+                viewSearchUrl: me.onViewSearchUrl
             }
         });
+    },
+
+    /**
+     * Switches the view to a tables which shows all search terms of the referrer
+     * @param grid
+     * @param rowIndex
+     * @param colIndex
+     */
+    onViewSearchTerms: function(grid, rowIndex, colIndex){
+
+    },
+
+    /**
+     * Switches the view to a table that shows all referrer urls where visitors are coming from
+     * @param grid
+     * @param rowIndex
+     * @param colIndex
+     */
+    onViewSearchUrl: function(grid, rowIndex, colIndex){
+
     }
 });
 //{/block}
