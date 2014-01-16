@@ -79,7 +79,5 @@ Ext.define('Shopware.apps.Order.PaymentMethods.controller.Detail', {
         }
     }
 });
-//
-
 
 //{/block}

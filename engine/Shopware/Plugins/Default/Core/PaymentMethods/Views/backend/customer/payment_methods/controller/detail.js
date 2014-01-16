@@ -64,7 +64,7 @@ Ext.define('Shopware.apps.Customer.PaymentMethods.controller.Detail', {
                 paymentFieldSet.accountNumberField.hide().allowBlank = true;
                 paymentFieldSet.accountHolderField.hide().allowBlank = true;
                 paymentFieldSet.bankCodeField.hide().allowBlank = true;
-                paymentFieldSet.bankNameField.allowBlank = false;
+                paymentFieldSet.bankNameField.allowBlank = true;
                 paymentFieldSet.useBillingDataField.show();
                 paymentFieldSet.ibanField.show();
                 paymentFieldSet.bicField.show();
@@ -82,7 +82,7 @@ Ext.define('Shopware.apps.Customer.PaymentMethods.controller.Detail', {
                 paymentFieldSet.accountNumberField.show().allowBlank = false;
                 paymentFieldSet.accountHolderField.show().allowBlank = false;
                 paymentFieldSet.bankCodeField.show().allowBlank = false;
-                paymentFieldSet.bankNameField.allowBlank = true;
+                paymentFieldSet.bankNameField.allowBlank = false;
                 paymentFieldSet.useBillingDataField.hide().allowBlank = true;
                 paymentFieldSet.ibanField.hide().allowBlank = true;
                 paymentFieldSet.bicField.hide().allowBlank = true;
@@ -99,7 +99,7 @@ Ext.define('Shopware.apps.Customer.PaymentMethods.controller.Detail', {
         var record = form.getRecord();
         var values = form.getValues();
         var store = window.paymentStore;
-        var paymentMean = store.getById(record.get('paymentId'));
+        var paymentMean = store.getById(values['paymentId']);
         var paymentData = record.getPaymentData().first();
 
         if (form.getForm().isValid() && paymentData) {

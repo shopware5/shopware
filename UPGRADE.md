@@ -23,6 +23,7 @@ In this document you will find a changelog of the important changes related to t
 * Break: PaymentMethods core plugin components and templates had their performance improved, resulting in potential breaks for extensions
 * - getCurrentPaymentData() was removed and should be replaced with getCurrentPaymentDataAsArray(), which returns the same information but in an array format
 * Break: some payment snippets had their namespaces changed to comply with recent changes in snippet handling
+* Break: in the backend, customer detail editing views and controller were improved, introducing some breaks.
 
 ## 4.1.4
 
