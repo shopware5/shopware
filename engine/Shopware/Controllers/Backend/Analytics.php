@@ -617,7 +617,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     public function getVisitorsAction()
     {
-        $result = $this->getRepository()->getVisitorImpressionsInRange(
+        $result = $this->getRepository()->getVisitorImpressions(
             $this->getFromDate(),
             $this->getToDate(),
             $this->Request()->getParam('start', 0),

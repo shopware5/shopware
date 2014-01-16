@@ -159,7 +159,7 @@ class Repository
     {
         $builder = $this->createProductAmountBuilder($from, $to)
             ->addSelect('categories.description as name')
-            ->addSelect('( SELECT parent FROM s_categories WHERE categories.id=parent LIMIT 1 ) as node')
+            ->addSelect('( SELECT parent FROM s_categories WHERE categories.id = parent LIMIT 1 ) as node')
             ->innerJoin('articles', 's_articles_categories_ro', 'articleCategories', 'articles.id = articleCategories.articleID')
             ->innerJoin('articleCategories', 's_categories', 'categories', 'articleCategories.categoryID = categories.id')
             ->andWhere('categories.active = 1')
@@ -226,12 +226,12 @@ class Repository
         $builder = $this->connection->createQueryBuilder();
 
         $builder->select(array(
-            'COUNT(s.searchterm) AS countRequests',
-            's.searchterm',
-            'MAX(s.results) as countResults'
+            'COUNT(search.searchterm) AS countRequests',
+            'search.searchterm',
+            'MAX(search.results) as countResults'
         ))
-            ->from('s_statistics_search', 's')
-            ->groupBy('s.searchterm')
+            ->from('s_statistics_search', 'search')
+            ->groupBy('search.searchterm')
             ->setFirstResult($offset)
             ->setMaxResults($limit);
 
@@ -290,21 +290,10 @@ class Repository
      *          'visits9' => '0',
      *      )
      */
-    public function getVisitorImpressionsInRange(\DateTime $from, \DateTime $to, $offset, $limit, $sort = array(), array $shopIds = array())
+    public function getVisitorImpressions($offset, $limit, \DateTime $from, \DateTime $to, $sort = array(), array $shopIds = array())
     {
         $builder = $this->createVisitorImpressionBuilder(
-            $offset, $limit, $sort, array(
-                array(
-                    'property' => 'datum',
-                    'operator' => '>=',
-                    'value' => $from->format("Y-m-d H:i:s")
-                ),
-                array(
-                    'property' => 'datum',
-                    'operator' => '<=',
-                    'value' => $to->format("Y-m-d H:i:s")
-                ),
-            )
+            $offset, $limit, $from, $to, $sort
         );
 
         if (!empty($shopIds)) {
@@ -510,7 +499,7 @@ class Repository
         $dateCondition = 'DATE_FORMAT(ordertime, \'1970-01-01 %H:00:00\')';
 
         $builder = $this->createAmountBuilder($from, $to, $shopIds)
-            ->addSelect($dateCondition .' AS date')
+            ->addSelect($dateCondition . ' AS date')
             ->groupBy($dateCondition)
             ->orderBy('date');
 
@@ -551,8 +540,8 @@ class Repository
             $this->addSort($builder, $sort);
         }
         if (!empty($shopIds)) {
-            foreach($shopIds as $shopId) {
-                $shopId = (int) $shopId;
+            foreach ($shopIds as $shopId) {
+                $shopId = (int)$shopId;
                 $builder->addSelect(
                     'SUM(IF(articleImpression.shopId = ' . $shopId . ', articleImpression.impressions, 0)) as amount' . $shopId
                 );
@@ -588,7 +577,7 @@ class Repository
             ->addGroupBy('articleImpression.date');
 
         $this->addSort($builder, $sort)
-             ->addPagination($builder, $offset, $limit);
+            ->addPagination($builder, $offset, $limit);
 
         return $builder;
     }
@@ -614,7 +603,7 @@ class Repository
             ->where('orders.status NOT IN (4, -1)')
             ->orderBy('name');
 
-        $this->addDateRangeCondition($builder, $from, $to);
+        $this->addDateRangeCondition($builder, $from, $to, 'orders.ordertime');
 
         return $builder;
     }
@@ -653,7 +642,7 @@ class Repository
             ->innerJoin('billing', 's_core_countries', 'country', 'billing.countryID = country.id')
             ->where('orders.status NOT IN (4, -1)');
 
-        $this->addDateRangeCondition($builder, $from, $to);
+        $this->addDateRangeCondition($builder, $from, $to, 'orders.ordertime');
 
         if (!empty($shopIds)) {
             foreach ($shopIds as $shopId) {
@@ -674,12 +663,12 @@ class Repository
      *
      * @param $offset
      * @param $limit
-     * @param $sort
-     * @param $filter
+     * @param array $sort
+     * @param \DateTime $from
+     * @param \DateTime $to
      * @return \Doctrine\DBAL\Query\QueryBuilder
-     * @internal param $shopIds
      */
-    protected function createVisitorImpressionBuilder($offset, $limit, array $sort = array(), array $filter = array())
+    protected function createVisitorImpressionBuilder($offset, $limit, \DateTime $from, \DateTime $to, array $sort = array())
     {
         $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
@@ -688,13 +677,13 @@ class Repository
             'SUM(uniquevisits) AS totalVisits'
         ));
 
-        $builder->from('s_statistics_visitors', 's')
-            ->leftJoin('s', 's_core_shops', 'cs', 's.shopID = cs.id')
-            ->groupBy('s.datum');
+        $builder->from('s_statistics_visitors', 'visitors')
+            ->leftJoin('visitors', 's_core_shops', 'cs', 'visitors.shopID = cs.id')
+            ->groupBy('visitors.datum');
 
         $this->addSort($builder, $sort)
-             ->addFilter($builder, $filter)
-             ->addPagination($builder, $offset, $limit);
+            ->addDateRangeCondition($builder, $from, $to, 'datum')
+            ->addPagination($builder, $offset, $limit);
 
         return $builder;
     }
@@ -712,15 +701,7 @@ class Repository
             ->andWhere("billing.birthday != '0000-00-00'")
             ->orderBy('birthday', 'DESC');
 
-        if ($from instanceof \DateTime) {
-            $builder->andWhere('users.firstlogin >= :fromTime')
-                ->setParameter(':fromTime', $from->format("Y-m-d H:i:s"));
-        }
-
-        if ($to instanceof \DateTime) {
-            $builder->andWhere('users.firstlogin <= :toTime')
-                ->setParameter(':toTime', $to->format("Y-m-d H:i:s"));
-        }
+        $this->addDateRangeCondition($builder, $from, $to, 'users.firstlogin');
 
         return $builder;
     }
@@ -741,16 +722,7 @@ class Repository
             ->groupBy('users.id')
             ->orderBy('orderTime', 'DESC');
 
-
-        if ($from instanceof \DateTime) {
-            $builder->where('orders.ordertime >= :fromTime')
-                ->setParameter(':fromTime', $from->format("Y-m-d H:i:s"));
-        }
-
-        if ($to instanceof \DateTime) {
-            $builder->andWhere('orders.ordertime <= :toTime')
-                ->setParameter(':toTime', $to->format("Y-m-d H:i:s"));
-        }
+        $this->addDateRangeCondition($builder, $from, $to, 'orders.ordertime');
 
         return $builder;
     }
@@ -770,15 +742,7 @@ class Repository
             ->groupBy('articles.id')
             ->orderBy('sellCount', 'DESC');
 
-        if ($from instanceof \DateTime) {
-            $builder->andWhere('orders.ordertime >= :fromTime')
-                ->setParameter(':fromTime', $from->format("Y-m-d H:i:s"));
-        }
-
-        if ($to instanceof \DateTime) {
-            $builder->andWhere('orders.ordertime <= :toTime')
-                ->setParameter(':toTime', $to->format("Y-m-d H:i:s"));
-        }
+        $this->addDateRangeCondition($builder, $from, $to, 'orders.ordertime');
 
         return $builder;
     }
@@ -799,15 +763,7 @@ class Repository
             ->groupBy('orders.partnerID')
             ->orderBy('revenue', 'DESC');
 
-        if ($from instanceof \DateTime) {
-            $builder->andWhere('orders.ordertime >= :fromTime')
-                ->setParameter(':fromTime', $from->format("Y-m-d H:i:s"));
-        }
-
-        if ($to instanceof \DateTime) {
-            $builder->andWhere('orders.ordertime <= :toTime')
-                ->setParameter(':toTime', $to->format("Y-m-d H:i:s"));
-        }
+        $this->addDateRangeCondition($builder, $from, $to, 'orders.ordertime');
 
         return $builder;
     }
@@ -842,15 +798,7 @@ class Repository
             ->andWhere("orders.referer LIKE 'http%//%'")
             ->orderBy('revenue');
 
-        if ($from instanceof \DateTime) {
-            $builder->andWhere('orders.ordertime >= :fromDate')
-                ->setParameter(':fromDate', $from->format("Y-m-d H:i:s"));
-        }
-
-        if ($to instanceof \DateTime) {
-            $builder->andWhere('orders.ordertime <= :toDate')
-                ->setParameter(':toDate', $to->format("Y-m-d H:i:s"));
-        }
+        $this->addDateRangeCondition($builder, $from, $to, 'orders.ordertime');
 
         if ($shop instanceof Shop && $shop->getHost()) {
             $builder->andWhere("orders.referer NOT LIKE :hostname")
@@ -869,145 +817,95 @@ class Repository
     {
         $builder = $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
-            'COUNT(r.referer) as count',
-            'r.referer as referrer'
+            'COUNT(referrers.referer) as count',
+            'referrers.referer as referrer'
         ))
-            ->from('s_statistics_referer', 'r')
+            ->from('s_statistics_referer', 'referrers')
             ->groupBy('referer')
             ->orderBy('count', 'DESC');
 
-        if ($from instanceof \DateTime) {
-            $builder->andWhere('r.datum >= :fromTime')
-                ->setParameter(':fromTime', $from->format("Y-m-d H:i:s"));
-        }
-
-        if ($to instanceof \DateTime) {
-            $builder->andWhere('r.datum <= :toTime')
-                ->setParameter(':toTime', $to->format("Y-m-d H:i:s"));
-        }
+        $this->addDateRangeCondition($builder, $from, $to, 'referrers.datum');
 
         return $builder;
     }
 
     protected function createShopStatisticBuilder(\DateTime $from, \DateTime $to)
     {
-        $builder = $this->connection->createQueryBuilder();
-        $builder->select(array(
-            'visitor.datum AS date',
+        $builder = $this->createVisitorBuilder();
+
+        $builder->addSelect(array(
             'visitor.pageimpressions AS clicks',
-            'visitor.uniquevisits AS visitors',
-            'COUNT(orders.id) AS orderCount',
-            'SUM(orders.invoice_amount) AS revenue',
             'SUM(visitor.uniquevisits) as totalVisits',
+            'SUM(orders.invoice_amount) AS revenue',
             'COUNT(DISTINCT orders.id) AS totalOrders',
             'COUNT(DISTINCT users.id) AS newCustomers',
-            '(
-                SELECT COUNT(o2.invoice_amount)
-                FROM s_order o2
-                WHERE o2.status=-1
-                AND DATE(o2.ordertime) = visitor.datum
-            ) AS cancelledOrders'
-        ))
-            ->from('s_statistics_visitors', 'visitor')
-            ->leftJoin('visitor', 's_order', 'orders', 'visitor.datum = DATE(orders.ordertime) AND orders.status NOT IN (-1)')
-            ->leftJoin('visitor', 's_user', 'users', 'users.firstlogin = visitor.datum')
+        ));
+
+        $builder->leftJoin('visitor', 's_user', 'users', 'users.firstlogin = visitor.datum')
             ->groupBy('visitor.datum');
 
-        if ($from instanceof \DateTime) {
-            $builder->andWhere('visitor.datum >= :fromDate ')
-                ->setParameter(':fromDate', $from->format("Y-m-d H:i:s"));
-        }
-
-        if ($to instanceof \DateTime) {
-            $builder->andWhere('AND visitor.datum <= :toDate')
-                ->setParameter(':toDate', $to->format("Y-m-d H:i:s"));
-        }
+        $this->addDateRangeCondition($builder, $from, $to, 'visitor.datum');
 
         return $builder;
     }
 
     protected function createOrdersOfVisitorsBuilder(\DateTime $from, \DateTime $to)
     {
-        $builder = $this->connection->createQueryBuilder();
-        $builder->select(array(
-            'visitor.datum AS date',
-            'COUNT(orders.id) AS orderCount',
-            'visitor.uniquevisits AS visitors',
-            '(
-                SELECT COUNT(cancelOrder.invoice_amount)
-                FROM s_order cancelOrder
-                WHERE cancelOrder.status = -1
-                AND DATE(cancelOrder.ordertime) = visitor.datum
-            ) AS cancelledOrders'
-        ))
-            ->from('s_statistics_visitors', 'visitor')
-            ->leftJoin('visitor', 's_order', 'orders', 'visitor.datum = DATE(orders.ordertime) AND orders.status NOT IN (-1)')
-            ->groupBy('visitor.datum');
+        $builder = $this->createVisitorBuilder();
 
-        if ($from instanceof \DateTime) {
-            $builder->andWhere('visitor.datum >= :fromDate')
-                ->setParameter(':fromDate', $from->format("Y-m-d H:i:s"));
-        }
-
-        if ($to instanceof \DateTime) {
-            $builder->andWhere('visitor.datum <= :toDate')
-                ->setParameter(':toDate', $to->format("Y-m-d H:i:s"));
-        }
+        $this->addDateRangeCondition($builder, $from, $to, 'visitor.datum');
 
         return $builder;
     }
+
+    /**
+     * Helper function which creates a dbal query builder which selects
+     * all shop visitors and the count of orders and canceled orders for each
+     * visitor.
+     *
+     * @return DBALQueryBuilder
+     */
+    protected function createVisitorBuilder()
+    {
+        $builder = $this->connection->createQueryBuilder();
+
+        $builder->select(array(
+            'visitor.datum AS date',
+            'visitor.uniquevisits AS visitors',
+            'COUNT(orders.id) AS orderCount',
+            '(
+                SELECT COUNT(o2.invoice_amount)
+                FROM s_order o2
+                WHERE o2.status=-1
+                AND DATE(o2.ordertime) = visitor.datum
+            ) AS cancelledOrders'
+        ));
+
+        $builder->from('s_statistics_visitors', 'visitor')
+            ->leftJoin('visitor', 's_order', 'orders', 'visitor.datum = DATE(orders.ordertime) AND orders.status NOT IN (-1)')
+            ->groupBy('visitor.datum');
+
+        return $builder;
+    }
+
 
     /**
      * Helper function which adds the date range condition to an aggregate order query.
      * @param DBALQueryBuilder $builder
      * @param \DateTime $from
      * @param \DateTime $to
+     * @param $column
      * @return $this
      */
-    private function addDateRangeCondition(DBALQueryBuilder $builder, \DateTime $from, \DateTime $to)
+    private function addDateRangeCondition(DBALQueryBuilder $builder, \DateTime $from, \DateTime $to, $column)
     {
         if ($from instanceof \DateTime) {
-            $builder->andWhere('orders.ordertime >= :fromDate')
+            $builder->andWhere($column . ' >= :fromDate')
                 ->setParameter('fromDate', $from->format("Y-m-d H:i:s"));
         }
         if ($to instanceof \DateTime) {
-            $builder->andWhere('orders.ordertime <= :toDate')
+            $builder->andWhere($column . ' <= :toDate')
                 ->setParameter('toDate', $to->format("Y-m-d H:i:s"));
-        }
-
-        return $this;
-    }
-
-    /**
-     * Helper function which adds multiple filter conditions to the passed DBAL query builder.
-     * Adds each filter with an AND condition.
-     *
-     * array(
-     *      array('property' => 'active', 'operator' => '=', 'value' => true),
-     *      array('property' => 'active', 'operator' => '=', 'value' => true),
-     * )
-     *
-     * @param DBALQueryBuilder $builder
-     * @param array $filter
-     * @return $this
-     */
-    private function addFilter(DBALQueryBuilder $builder, array $filter)
-    {
-        if (empty($filter)) {
-            return $this;
-        }
-
-        foreach ($filter as $key => $condition) {
-            $alias = ':' . $condition['property'] . $key;
-
-            $comparison = $builder->expr()->comparison(
-                $condition['property'],
-                $condition['operator'],
-                $alias
-            );
-
-            $builder->andWhere($comparison);
-            $builder->setParameter($alias, $condition['value']);
         }
 
         return $this;
