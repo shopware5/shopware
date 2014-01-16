@@ -76,6 +76,12 @@ class
      */
     protected $_payment;
     /**
+     * Payment instances information for this order (s_core_payment_instance)
+     *
+     * @var array
+     */
+    protected $_paymentInstances;
+    /**
      * Information about the dispatch for this order
      *
      * @var array
@@ -186,6 +192,7 @@ class
         $this->getShipping();
         $this->getDispatch();
         $this->getPayment();
+        $this->getPaymentInstances();
 
         $this->processPositions();
         $this->processOrder();
@@ -263,6 +270,7 @@ class
         $array["_billing"] = $array["_billing"]->getArrayCopy();
         $array["_shipping"] = $array["_shipping"]->getArrayCopy();
         $array["_payment"] = $array["_payment"]->getArrayCopy();
+        $array["_paymentInstances"] = $array["_paymentInstances"]->getArrayCopy();
         $array["_dispatch"] = $array["_dispatch"]->getArrayCopy();
         $array["_currency"] = $array["_currency"]->getArrayCopy();
         //$array["_order"] = current($array["_order"]);
@@ -623,6 +631,22 @@ class
             $this->_payment["data"] = new ArrayObject(Shopware()->Db()->fetchRow("
             SELECT * FROM ".$this->_payment["table"]." WHERE userID=?",$this->_userID), ArrayObject::ARRAY_AS_PROPS);
         }
+    }
+
+    /**
+     * Get payment instances information
+     * @return void
+     */
+    public function getPaymentInstances()
+    {
+        $this->_paymentInstances = new ArrayObject(
+            Shopware()->Db()->fetchAll("
+                SELECT * FROM s_core_payment_instance
+                WHERE order_id=?",
+                array($this->_id)
+            ),
+            ArrayObject::ARRAY_AS_PROPS
+        );
     }
 
     /**
