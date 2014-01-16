@@ -36,7 +36,7 @@
 Ext.define('Shopware.apps.Analytics.view.table.Weekday', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-weekday',
-    shopColumnSales: "{s name=table/daytime/sales}Sales{/s}: [0]",
+    shopColumnSales: "{s name=table/month/sum}Sales: [0]{/s}",
 
     initComponent: function() {
         var me = this;

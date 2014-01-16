@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Toolbar', {
             items: [{
                 xtype: 'combobox',
                 iconCls: 'sprite-gear',
-                name: 'Translate Shop',
+                name: 'shop_selection',
                 queryMode: 'remote',
                 fieldLabel: 'shop',
                 store: me.shopStore,

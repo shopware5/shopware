@@ -47,5 +47,18 @@ Ext.define('Shopware.apps.Analytics.store.navigation.CustomerAge', {
             root: 'data',
             totalProperty: 'total'
         }
+    },
+
+    constructor: function(config) {
+        var me = this;
+        config.fields = me.fields;
+
+        if(config.shopStore) {
+            config.shopStore.each(function(shop) {
+                config.fields.push('percent' + shop.data.id);
+            });
+        }
+
+        me.callParent(arguments);
     }
 });
