@@ -33,6 +33,7 @@
  *
  * this file handles the album administration.
  */
+//{namespace name=backend/media_manager/view/main}
 //{block name="backend/media_manager/controller/album"}
 Ext.define('Shopware.apps.MediaManager.controller.Album', {
 
