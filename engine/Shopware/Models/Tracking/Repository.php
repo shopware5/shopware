@@ -89,8 +89,9 @@ class Repository extends ModelRepository
         $builder->select('articleImpression')
                 ->from('Shopware\Models\Tracking\ArticleImpression', 'articleImpression')
                 ->where('articleImpression.articleId = :articleId')
+                ->andWhere('articleImpression.shopId = :shopId')
                 ->andWhere('articleImpression.date = :fromDate')
-                ->setParameters(array('articleId' => $articleId, 'shopId' => $shopId, 'date' => $date->format("Y-m-d")));
+                ->setParameters(array('articleId' => $articleId, 'shopId' => $shopId, 'fromDate' => $date->format("Y-m-d")));
 
         return $builder;
     }
