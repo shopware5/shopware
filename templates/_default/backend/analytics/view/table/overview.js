@@ -62,7 +62,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Overview', {
             dataIndex: 'date',
             text: 'Datum'
         }, {
-            dataIndex: 'orders',
+            dataIndex: 'orderCount',
             text: 'Bestellungen'
         }, {
             dataIndex: 'totalConversion',

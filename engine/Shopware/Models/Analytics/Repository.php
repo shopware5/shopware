@@ -137,22 +137,22 @@ class Repository
     {
         $builder = $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
-            'u.firstlogin',
-            'ub.birthday'
+            'users.firstlogin',
+            'billing.birthday'
         ))
-            ->from('s_user', 'u')
-            ->innerJoin('u', 's_user_billingaddress', 'ub', 'ub.userID = u.id')
-            ->andWhere('ub.birthday IS NOT NULL')
-            ->andWhere("ub.birthday != '0000-00-00'")
+            ->from('s_user', 'users')
+            ->innerJoin('users', 's_user_billingaddress', 'billing', 'billing.userID = users.id')
+            ->andWhere('billing.birthday IS NOT NULL')
+            ->andWhere("billing.birthday != '0000-00-00'")
             ->orderBy('birthday', 'DESC');
 
         if ($from instanceof \DateTime) {
-            $builder->andWhere('u.firstlogin >= :fromTime')
+            $builder->andWhere('users.firstlogin >= :fromTime')
                 ->setParameter(':fromTime', $from->format("Y-m-d H:i:s"));
         }
 
         if ($to instanceof \DateTime) {
-            $builder->andWhere('u.firstlogin <= :toTime')
+            $builder->andWhere('users.firstlogin <= :toTime')
                 ->setParameter(':toTime', $to->format("Y-m-d H:i:s"));
         }
 
@@ -165,26 +165,26 @@ class Repository
     {
         $builder = $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
-            'u.firstlogin AS firstLogin',
-            'o.ordertime AS orderTime',
-            'COUNT(o.id) AS count',
-            'ub.salutation'
+            'users.firstlogin AS firstLogin',
+            'orders.ordertime AS orderTime',
+            'COUNT(orders.id) AS count',
+            'billing.salutation'
         ))
-            ->from('s_user', 'u')
-            ->innerJoin('u', 's_order', 'o', 'o.userID = u.id')
-            ->innerJoin('u', 's_user_billingaddress', 'ub', 'ub.userID = u.id')
-            ->andWhere('o.status NOT IN (-1, 4)')
-            ->groupBy('u.id')
+            ->from('s_user', 'users')
+            ->innerJoin('users', 's_order', 'orders', 'orders.userID = users.id')
+            ->innerJoin('users', 's_user_billingaddress', 'billing', 'billing.userID = users.id')
+            ->andWhere('orders.status NOT IN (-1, 4)')
+            ->groupBy('users.id')
             ->orderBy('orderTime', 'DESC');
 
 
         if ($from instanceof \DateTime) {
-            $builder->where('o.ordertime >= :fromTime')
+            $builder->where('orders.ordertime >= :fromTime')
                 ->setParameter(':fromTime', $from->format("Y-m-d H:i:s"));
         }
 
         if ($to instanceof \DateTime) {
-            $builder->andWhere('o.ordertime <= :toTime')
+            $builder->andWhere('orders.ordertime <= :toTime')
                 ->setParameter(':toTime', $to->format("Y-m-d H:i:s"));
         }
 
@@ -202,18 +202,18 @@ class Repository
         ))
             ->from('s_order_details', 'od')
             ->innerJoin('od', 's_articles', 'a', 'a.id = od.articleID')
-            ->innerJoin('od', 's_order', 'o', 'o.id = od.orderID')
-            ->andWhere('o.status NOT IN (-1, 4)')
+            ->innerJoin('od', 's_order', 'orders', 'orders.id = od.orderID')
+            ->andWhere('orders.status NOT IN (-1, 4)')
             ->groupBy('a.id')
             ->orderBy('sellCount', 'DESC');
 
         if ($from instanceof \DateTime) {
-            $builder->andWhere('o.ordertime >= :fromTime')
+            $builder->andWhere('orders.ordertime >= :fromTime')
                 ->setParameter(':fromTime', $from->format("Y-m-d H:i:s"));
         }
 
         if ($to instanceof \DateTime) {
-            $builder->andWhere('o.ordertime <= :toTime')
+            $builder->andWhere('orders.ordertime <= :toTime')
                 ->setParameter(':toTime', $to->format("Y-m-d H:i:s"));
         }
 
@@ -225,25 +225,25 @@ class Repository
     {
         $builder = $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
-            'ROUND(SUM((o.invoice_amount - o.invoice_shipping) / o.currencyFactor), 2) AS revenue',
+            'ROUND(SUM((orders.invoice_amount - orders.invoice_shipping) / orders.currencyFactor), 2) AS revenue',
             'p.company AS partner',
-            'o.partnerID as trackingCode',
+            'orders.partnerID as trackingCode',
             'p.id as partnerId'
         ))
-            ->from('s_order', 'o')
-            ->leftJoin('o', 's_emarketing_partner', 'p', 'p.idcode = o.partnerID')
-            ->where('o.status NOT IN (-1, 4)')
-            ->andWhere("o.partnerID != ''")
-            ->groupBy('o.partnerID')
+            ->from('s_order', 'orders')
+            ->leftJoin('orders', 's_emarketing_partner', 'p', 'p.idcode = orders.partnerID')
+            ->where('orders.status NOT IN (-1, 4)')
+            ->andWhere("orders.partnerID != ''")
+            ->groupBy('orders.partnerID')
             ->orderBy('revenue', 'DESC');
 
         if ($from instanceof \DateTime) {
-            $builder->andWhere('o.ordertime >= :fromTime')
+            $builder->andWhere('orders.ordertime >= :fromTime')
                 ->setParameter(':fromTime', $from->format("Y-m-d H:i:s"));
         }
 
         if ($to instanceof \DateTime) {
-            $builder->andWhere('o.ordertime <= :toTime')
+            $builder->andWhere('orders.ordertime <= :toTime')
                 ->setParameter(':toTime', $to->format("Y-m-d H:i:s"));
         }
 
@@ -254,44 +254,44 @@ class Repository
     {
         $builder = $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
-            'ROUND(o.invoice_amount / o.currencyFactor, 2) AS revenue',
-            'u.id as userID',
-            'o.referer AS referrer',
-            'DATE(u.firstlogin) as firstLogin',
-            'DATE(o.ordertime) as orderTime',
+            'ROUND(orders.invoice_amount / orders.currencyFactor, 2) AS revenue',
+            'users.id as userID',
+            'orders.referer AS referrer',
+            'DATE(users.firstlogin) as firstLogin',
+            'DATE(orders.ordertime) as orderTime',
             '(
                 SELECT o2.ordertime
                 FROM s_order o2
-                WHERE o2.userID = u.id
+                WHERE o2.userID = users.id
                 ORDER BY o2.ordertime DESC
                 LIMIT 1
             ) as firstOrder',
             '(
                 SELECT ROUND(SUM(o3.invoice_amount / o3.currencyFactor), 2)
                 FROM s_order o3
-                WHERE o3.userID = u.id
+                WHERE o3.userID = users.id
                 AND o3.status != 4
                 AND o3.status != -1
             ) as customerRevenue'
         ))
-            ->from('s_order', 'o')
-            ->innerJoin('o', 's_user', 'u', 'o.userID = u.id')
-            ->where('o.status != 4 AND o.status != -1')
-            ->andWhere("o.referer LIKE 'http%//%'")
+            ->from('s_order', 'orders')
+            ->innerJoin('orders', 's_user', 'users', 'orders.userID = users.id')
+            ->where('orders.status != 4 AND orders.status != -1')
+            ->andWhere("orders.referer LIKE 'http%//%'")
             ->orderBy('revenue');
 
         if ($from instanceof \DateTime) {
-            $builder->andWhere('o.ordertime >= :fromDate')
+            $builder->andWhere('orders.ordertime >= :fromDate')
                 ->setParameter(':fromDate', $from->format("Y-m-d H:i:s"));
         }
 
         if ($to instanceof \DateTime) {
-            $builder->andWhere('o.ordertime <= :toDate')
+            $builder->andWhere('orders.ordertime <= :toDate')
                 ->setParameter(':toDate', $to->format("Y-m-d H:i:s"));
         }
 
         if ($shop instanceof Shop && $shop->getHost()) {
-            $builder->andWhere("o.referer NOT LIKE :hostname")
+            $builder->andWhere("orders.referer NOT LIKE :hostname")
                 ->setParameter(':hostname', '%' . $shop->getHost() . '%');
         }
 
@@ -331,16 +331,16 @@ class Repository
 
     protected function createShopStatisticBuilder(\DateTime $from, \DateTime $to)
     {
-        $builder = Shopware()->Models()->getDBALQueryBuilder();
+        $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
             'sv.datum AS date',
             'sv.pageimpressions AS clicks',
             'sv.uniquevisits AS visitors',
-            'COUNT(o.id) AS orders',
-            'SUM(o.invoice_amount) AS revenue',
+            'COUNT(orders.id) AS orderCount',
+            'SUM(orders.invoice_amount) AS revenue',
             'SUM(sv.uniquevisits) as totalVisits',
-            'COUNT(DISTINCT o.id) AS totalOrders',
-            'COUNT(DISTINCT u.id) AS newCustomers',
+            'COUNT(DISTINCT orders.id) AS totalOrders',
+            'COUNT(DISTINCT users.id) AS newCustomers',
             '(
                 SELECT COUNT(o2.invoice_amount)
                 FROM s_order o2
@@ -349,8 +349,8 @@ class Repository
             ) AS cancelledOrders'
         ))
             ->from('s_statistics_visitors', 'sv')
-            ->leftJoin('sv', 's_order', 'o', 'sv.datum = DATE(o.ordertime) AND o.status NOT IN (-1)')
-            ->leftJoin('sv', 's_user', 'u', 'u.firstlogin = sv.datum')
+            ->leftJoin('sv', 's_order', 'orders', 'sv.datum = DATE(orders.ordertime) AND orders.status NOT IN (-1)')
+            ->leftJoin('sv', 's_user', 'users', 'users.firstlogin = sv.datum')
             ->groupBy('sv.datum');
 
         if ($from instanceof \DateTime) {
@@ -372,7 +372,7 @@ class Repository
         $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
             'visitor.datum AS date',
-            'COUNT(orders.id) AS orders',
+            'COUNT(orders.id) AS orderCount',
             'visitor.uniquevisits AS visitors',
             '(
                 SELECT COUNT(cancelOrder.invoice_amount)

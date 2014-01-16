@@ -184,7 +184,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
             if (!empty($shopIds)) {
                 foreach ($shopIds as $shopId) {
-                    $row['conversion' . $shopId] = round($row['orders' . $shopId] / $row['visits' . $shopId] * 100, 2);
+                    $row['conversion' . $shopId] = round($row['orderCount' . $shopId] / $row['visits' . $shopId] * 100, 2);
                 }
             }
         }
@@ -206,7 +206,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $data = array();
 
         foreach ($result->getData() as $row) {
-            $orders = $row['orders'];
+            $orders = $row['orderCount'];
             $visitors = $row['visitors'];
             $cancelledOrders = $row['cancelledOrders'];
 
@@ -250,7 +250,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                     'customerValue' => 0,
                     'entireNewRevenue' => 0,
                     'entireOldRevenue' => 0,
-                    'orders' => 0,
+                    'orderCount' => 0,
                     'newCustomers' => 0,
                     'oldCustomers' => 0,
                     'perNewRevenue' => 0,
@@ -271,11 +271,11 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             }
 
             $referrer[$host]['entireRevenue'] += $result['revenue'];
-            $referrer[$host]['orders']++;
+            $referrer[$host]['orderCount']++;
         }
 
         foreach ($referrer as &$ref) {
-            $ref['lead'] = round($ref['entireRevenue'] / $ref['orders'], 2);
+            $ref['lead'] = round($ref['entireRevenue'] / $ref['orderCount'], 2);
             $ref['perNewRevenue'] = round($ref['entireNewRevenue'] / $ref['newCustomers'], 2);
             $ref['perOldRevenue'] = round($ref['entireOldRevenue'] / $ref['oldCustomers'], 2);
             $ref['customerValue'] = round($ref['customerRevenue'] / ($ref['newCustomers'] + $ref['oldCustomers']), 2);
@@ -386,7 +386,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                     'week' => $week,
                     'newCustomersOrders' => 0,
                     'oldCustomersOrders' => 0,
-                    'orders' => 0,
+                    'orderCount' => 0,
                     'male' => 0,
                     'female' => 0
                 );
@@ -398,7 +398,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                 $customers[$week]['oldCustomersOrders'] += $row['count'];
             }
 
-            $customers[$week]['orders'] += $row['count'];
+            $customers[$week]['orderCount'] += $row['count'];
 
             if ($row['salutation'] == 'mr') {
                 $customers[$week]['male']++;
@@ -408,8 +408,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         }
 
         foreach ($customers as &$entry) {
-            $entry['amountNewCustomers'] = round($entry['newCustomersOrders'] / $entry['orders'] * 100, 2);
-            $entry['amountOldCustomers'] = round($entry['oldCustomersOrders'] / $entry['orders'] * 100, 2);
+            $entry['amountNewCustomers'] = round($entry['newCustomersOrders'] / $entry['orderCount'] * 100, 2);
+            $entry['amountOldCustomers'] = round($entry['oldCustomersOrders'] / $entry['orderCount'] * 100, 2);
             $entry['maleAmount'] = round($entry['male'] / ($entry['male'] + $entry['female']) * 100, 2);
             $entry['femaleAmount'] = round($entry['female'] / ($entry['male'] + $entry['female']) * 100, 2);
         }

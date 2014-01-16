@@ -76,7 +76,7 @@ Ext.define('Shopware.apps.Analytics.view.table.ReferrerRevenue', {
             dataIndex: 'entireOldRevenue',
             text: 'Umsatz Altkunden'
         }, {
-            dataIndex: 'orders',
+            dataIndex: 'orderCount',
             text: 'Bestellungen'
         }, {
             dataIndex: 'newCustomers',
