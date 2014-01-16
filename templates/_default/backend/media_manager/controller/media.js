@@ -284,12 +284,14 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
             treeStore = tree.getStore(),
             rootNode = tree.getRootNode(),
             store = me.getStore('Media'),
-            view = me.getMediaView(),
-            cardContainer = view.cardContainer,
-            selModel, selected;
+            mediaView = me.getMediaView(),
+            cardContainer = mediaView.cardContainer,
+            selModel, selected, view;
 
-        if(view.selectedLayout === 'grid') {
-            view = view.dataView;
+        mediaView.setLoading(true);
+
+        if(mediaView.selectedLayout === 'grid') {
+            view = mediaView.dataView;
         } else {
             view = cardContainer.getLayout().getActiveItem();
         }
@@ -297,11 +299,11 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
         selModel = view.getSelectionModel();
         selected = selModel.getSelection();
 
-
         store.remove(selected);
         store.getProxy().batchActions = false;
         store.sync({
             callback : function() {
+                mediaView.setLoading(false);
                 store.load({
                     callback: function() {
                         rootNode.removeAll(false);
