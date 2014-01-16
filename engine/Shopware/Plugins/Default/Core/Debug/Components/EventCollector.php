@@ -22,42 +22,54 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Plugin\Debug\Components;
+
+use Shopware\Components\Logger;
+
 /**
+ * @category  Shopware
+ * @package   Shopware\Plugin\Debug\Components
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Plugins_Core_BenchmarkEvents_Bootstrap extends Shopware_Components_Plugin_Bootstrap
+class EventCollector implements CollectorInterface
 {
+    /**
+     * @var array
+     */
     protected $results = array();
 
-    public function install()
+    /**
+     * @var \Enlight_Event_EventManager
+     */
+    protected $eventManager;
+    /**
+     * @var Utils
+     */
+    private $utils;
+
+    /**
+     * @param \Enlight_Event_EventManager $eventManager
+     * @param Utils $utils
+     */
+    public function __construct(\Enlight_Event_EventManager $eventManager, Utils $utils)
     {
-        $this->subscribeEvent(
-            'Enlight_Controller_Front_StartDispatch',
-            'onStartDispatch'
-        );
-        $this->subscribeEvent(
-            'Enlight_Controller_Front_DispatchLoopShutdown',
-            'onDispatchLoopShutdown'
-        );
-        return true;
+        $this->eventManager = $eventManager;
+        $this->utils = $utils;
     }
 
-    public function onStartDispatch(Enlight_Event_EventArgs $args)
+    /**
+     * @return void
+     */
+    public function start()
     {
-        if (!Shopware()->Bootstrap()->hasResource('Log')) {
-            return;
-        }
-        Shopware()->Events()->registerSubscriber($this);
+        $this->eventManager->registerSubscriber($this->getListeners());
     }
 
-    public function onDispatchLoopShutdown(Enlight_Event_EventArgs $args)
-    {
-        if (!Shopware()->Bootstrap()->hasResource('Log')) {
-            return;
-        }
-        $this->logResults();
-    }
-
-    public function logResults()
+    /**
+     * @param Logger $log
+     * @return mixed
+     */
+    public function logResults(Logger $log)
     {
         foreach (array_keys($this->results) as $event) {
             if (empty($this->results[$event][0])) {
@@ -80,8 +92,8 @@ class Shopware_Plugins_Core_BenchmarkEvents_Bootstrap extends Shopware_Component
             }
             $this->results[$event] = array(
                 0 => $event,
-                1 => $this->formatMemory(0 - $this->results[$event][1]),
-                2 => $this->formatTime(0 - $this->results[$event][2]),
+                1 => $this->utils->formatMemory(0 - $this->results[$event][1]),
+                2 => $this->utils->formatTime(0 - $this->results[$event][2]),
                 3 => $listeners
             );
         }
@@ -99,10 +111,15 @@ class Shopware_Plugins_Core_BenchmarkEvents_Bootstrap extends Shopware_Component
         $table = array($label,
             $this->results
         );
-        Shopware()->Log()->table($table);
+
+        $log->table($table);
     }
 
-    public function onBenchmarkEvent(Enlight_Event_EventArgs $args)
+    /**
+     * @param \Enlight_Event_EventArgs $args
+     * @return mixed
+     */
+    public function onBenchmarkEvent(\Enlight_Event_EventArgs $args)
     {
         $event = $args->getName();
         if (!isset($this->results[$event])) {
@@ -112,6 +129,7 @@ class Shopware_Plugins_Core_BenchmarkEvents_Bootstrap extends Shopware_Component
                 2 => 0
             );
         }
+
         if (empty($this->results[$event][0])) {
             $this->results[$event][0] = true;
             $this->results[$event][1] -= memory_get_peak_usage(true);
@@ -121,32 +139,31 @@ class Shopware_Plugins_Core_BenchmarkEvents_Bootstrap extends Shopware_Component
             $this->results[$event][1] += memory_get_peak_usage(true);
             $this->results[$event][2] += microtime(true);
         }
+
         return $args->getReturn();
     }
 
+
+    /**
+     * Monitor execution time and memory on specified event points in application
+     *
+     * @return \Enlight_Event_Subscriber_Array
+     */
     public function getListeners()
     {
-        $events = Shopware()->Events()->getEvents();
-        $event_handlers = array();
+        $events = $this->eventManager->getEvents();
+
+        $listeners = new \Enlight_Event_Subscriber_Array();
+
         foreach ($events as $event) {
             if ($event == 'Enlight_Controller_Front_DispatchLoopShutdown') {
                 continue;
             }
-            $event_handlers[] = new Enlight_Event_Handler_Default($event, array($this, 'onBenchmarkEvent'), -1000);
-            $event_handlers[] = new Enlight_Event_Handler_Default($event, array($this, 'onBenchmarkEvent'), 1000);
+
+            $listeners->registerListener(new \Enlight_Event_Handler_Default($event, array($this, 'onBenchmarkEvent'), -1000));
+            $listeners->registerListener(new \Enlight_Event_Handler_Default($event, array($this, 'onBenchmarkEvent'), 1000));
         }
-        return $event_handlers;
-    }
 
-    public function formatMemory($size)
-    {
-        if (empty($size)) return '0.00 b';
-        $unit = array('b', 'kb', 'mb', 'gb', 'tb', 'pb');
-        return @number_format($size / pow(1024, ($i = floor(log($size, 1024)))), 2, '.', '') . ' ' . $unit[$i];
-    }
-
-    public function formatTime($time)
-    {
-        return number_format($time, 5, '.', '');
+        return $listeners;
     }
 }
