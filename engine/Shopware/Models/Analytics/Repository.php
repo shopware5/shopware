@@ -98,7 +98,6 @@ class Repository
         return new Result($builder);
     }
 
-
     public function getPartnerRevenue($offset, $limit, \DateTime $from, \DateTime $to)
     {
         $builder = $this->createPartnerRevenueBuilder($from, $to);
@@ -107,7 +106,6 @@ class Repository
 
         return new Result($builder);
     }
-
 
     public function getProductSells($offset, $limit, \DateTime $from, \DateTime $to)
     {
@@ -130,272 +128,6 @@ class Repository
         $builder = $this->createAgeOfCustomersBuilder($from, $to);
 
         return new Result($builder);
-    }
-
-
-    protected function createAgeOfCustomersBuilder(\DateTime $from, \DateTime $to)
-    {
-        $builder = $builder = $this->connection->createQueryBuilder();
-        $builder->select(array(
-            'users.firstlogin',
-            'billing.birthday'
-        ))
-            ->from('s_user', 'users')
-            ->innerJoin('users', 's_user_billingaddress', 'billing', 'billing.userID = users.id')
-            ->andWhere('billing.birthday IS NOT NULL')
-            ->andWhere("billing.birthday != '0000-00-00'")
-            ->orderBy('birthday', 'DESC');
-
-        if ($from instanceof \DateTime) {
-            $builder->andWhere('users.firstlogin >= :fromTime')
-                ->setParameter(':fromTime', $from->format("Y-m-d H:i:s"));
-        }
-
-        if ($to instanceof \DateTime) {
-            $builder->andWhere('users.firstlogin <= :toTime')
-                ->setParameter(':toTime', $to->format("Y-m-d H:i:s"));
-        }
-
-        return $builder;
-    }
-
-
-
-    protected function createOrdersOfCustomersBuilder(\DateTime $from, \DateTime $to)
-    {
-        $builder = $builder = $this->connection->createQueryBuilder();
-        $builder->select(array(
-            'users.firstlogin AS firstLogin',
-            'orders.ordertime AS orderTime',
-            'COUNT(orders.id) AS count',
-            'billing.salutation'
-        ))
-            ->from('s_user', 'users')
-            ->innerJoin('users', 's_order', 'orders', 'orders.userID = users.id')
-            ->innerJoin('users', 's_user_billingaddress', 'billing', 'billing.userID = users.id')
-            ->andWhere('orders.status NOT IN (-1, 4)')
-            ->groupBy('users.id')
-            ->orderBy('orderTime', 'DESC');
-
-
-        if ($from instanceof \DateTime) {
-            $builder->where('orders.ordertime >= :fromTime')
-                ->setParameter(':fromTime', $from->format("Y-m-d H:i:s"));
-        }
-
-        if ($to instanceof \DateTime) {
-            $builder->andWhere('orders.ordertime <= :toTime')
-                ->setParameter(':toTime', $to->format("Y-m-d H:i:s"));
-        }
-
-        return $builder;
-    }
-
-
-    protected function createProductSellsBuilder(\DateTime $from, \DateTime $to)
-    {
-        $builder = $builder = $this->connection->createQueryBuilder();
-        $builder->select(array(
-            'SUM(od.quantity) AS sellCount',
-            'a.name',
-            'od.articleordernumber as ordernumber'
-        ))
-            ->from('s_order_details', 'od')
-            ->innerJoin('od', 's_articles', 'a', 'a.id = od.articleID')
-            ->innerJoin('od', 's_order', 'orders', 'orders.id = od.orderID')
-            ->andWhere('orders.status NOT IN (-1, 4)')
-            ->groupBy('a.id')
-            ->orderBy('sellCount', 'DESC');
-
-        if ($from instanceof \DateTime) {
-            $builder->andWhere('orders.ordertime >= :fromTime')
-                ->setParameter(':fromTime', $from->format("Y-m-d H:i:s"));
-        }
-
-        if ($to instanceof \DateTime) {
-            $builder->andWhere('orders.ordertime <= :toTime')
-                ->setParameter(':toTime', $to->format("Y-m-d H:i:s"));
-        }
-
-        return $builder;
-    }
-
-
-    protected function createPartnerRevenueBuilder(\DateTime $from, \DateTime $to)
-    {
-        $builder = $builder = $this->connection->createQueryBuilder();
-        $builder->select(array(
-            'ROUND(SUM((orders.invoice_amount - orders.invoice_shipping) / orders.currencyFactor), 2) AS revenue',
-            'p.company AS partner',
-            'orders.partnerID as trackingCode',
-            'p.id as partnerId'
-        ))
-            ->from('s_order', 'orders')
-            ->leftJoin('orders', 's_emarketing_partner', 'p', 'p.idcode = orders.partnerID')
-            ->where('orders.status NOT IN (-1, 4)')
-            ->andWhere("orders.partnerID != ''")
-            ->groupBy('orders.partnerID')
-            ->orderBy('revenue', 'DESC');
-
-        if ($from instanceof \DateTime) {
-            $builder->andWhere('orders.ordertime >= :fromTime')
-                ->setParameter(':fromTime', $from->format("Y-m-d H:i:s"));
-        }
-
-        if ($to instanceof \DateTime) {
-            $builder->andWhere('orders.ordertime <= :toTime')
-                ->setParameter(':toTime', $to->format("Y-m-d H:i:s"));
-        }
-
-        return $builder;
-    }
-
-    protected function createReferrerRevenueBuilder(Shop $shop, \DateTime $from, \DateTime $to)
-    {
-        $builder = $builder = $this->connection->createQueryBuilder();
-        $builder->select(array(
-            'ROUND(orders.invoice_amount / orders.currencyFactor, 2) AS revenue',
-            'users.id as userID',
-            'orders.referer AS referrer',
-            'DATE(users.firstlogin) as firstLogin',
-            'DATE(orders.ordertime) as orderTime',
-            '(
-                SELECT o2.ordertime
-                FROM s_order o2
-                WHERE o2.userID = users.id
-                ORDER BY o2.ordertime DESC
-                LIMIT 1
-            ) as firstOrder',
-            '(
-                SELECT ROUND(SUM(o3.invoice_amount / o3.currencyFactor), 2)
-                FROM s_order o3
-                WHERE o3.userID = users.id
-                AND o3.status != 4
-                AND o3.status != -1
-            ) as customerRevenue'
-        ))
-            ->from('s_order', 'orders')
-            ->innerJoin('orders', 's_user', 'users', 'orders.userID = users.id')
-            ->where('orders.status != 4 AND orders.status != -1')
-            ->andWhere("orders.referer LIKE 'http%//%'")
-            ->orderBy('revenue');
-
-        if ($from instanceof \DateTime) {
-            $builder->andWhere('orders.ordertime >= :fromDate')
-                ->setParameter(':fromDate', $from->format("Y-m-d H:i:s"));
-        }
-
-        if ($to instanceof \DateTime) {
-            $builder->andWhere('orders.ordertime <= :toDate')
-                ->setParameter(':toDate', $to->format("Y-m-d H:i:s"));
-        }
-
-        if ($shop instanceof Shop && $shop->getHost()) {
-            $builder->andWhere("orders.referer NOT LIKE :hostname")
-                ->setParameter(':hostname', '%' . $shop->getHost() . '%');
-        }
-
-        return $builder;
-    }
-
-    /**
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @return DBALQueryBuilder
-     */
-    protected function createVisitedReferrerBuilder(\DateTime $from, \DateTime $to)
-    {
-        $builder = $builder = $this->connection->createQueryBuilder();
-        $builder->select(array(
-            'COUNT(r.referer) as count',
-            'r.referer as referrer'
-        ))
-            ->from('s_statistics_referer', 'r')
-            ->groupBy('referer')
-            ->orderBy('count', 'DESC');
-
-        if ($from instanceof \DateTime) {
-            $builder->andWhere('r.datum >= :fromTime')
-                ->setParameter(':fromTime', $from->format("Y-m-d H:i:s"));
-        }
-
-        if ($to instanceof \DateTime) {
-            $builder->andWhere('r.datum <= :toTime')
-                ->setParameter(':toTime', $to->format("Y-m-d H:i:s"));
-        }
-
-        return $builder;
-    }
-
-
-
-    protected function createShopStatisticBuilder(\DateTime $from, \DateTime $to)
-    {
-        $builder = $this->connection->createQueryBuilder();
-        $builder->select(array(
-            'sv.datum AS date',
-            'sv.pageimpressions AS clicks',
-            'sv.uniquevisits AS visitors',
-            'COUNT(orders.id) AS orderCount',
-            'SUM(orders.invoice_amount) AS revenue',
-            'SUM(sv.uniquevisits) as totalVisits',
-            'COUNT(DISTINCT orders.id) AS totalOrders',
-            'COUNT(DISTINCT users.id) AS newCustomers',
-            '(
-                SELECT COUNT(o2.invoice_amount)
-                FROM s_order o2
-                WHERE o2.status=-1
-                AND DATE(o2.ordertime) = sv.datum
-            ) AS cancelledOrders'
-        ))
-            ->from('s_statistics_visitors', 'sv')
-            ->leftJoin('sv', 's_order', 'orders', 'sv.datum = DATE(orders.ordertime) AND orders.status NOT IN (-1)')
-            ->leftJoin('sv', 's_user', 'users', 'users.firstlogin = sv.datum')
-            ->groupBy('sv.datum');
-
-        if ($from instanceof \DateTime) {
-            $builder->andWhere('sv.datum >= :fromDate ')
-                ->setParameter(':fromDate', $from->format("Y-m-d H:i:s"));
-        }
-
-        if ($to instanceof \DateTime) {
-            $builder->andWhere('AND sv.datum <= :toDate')
-                ->setParameter(':toDate', $to->format("Y-m-d H:i:s"));
-        }
-
-        return $builder;
-    }
-
-
-    protected function createOrdersOfVisitorsBuilder(\DateTime $from, \DateTime $to)
-    {
-        $builder = $this->connection->createQueryBuilder();
-        $builder->select(array(
-            'visitor.datum AS date',
-            'COUNT(orders.id) AS orderCount',
-            'visitor.uniquevisits AS visitors',
-            '(
-                SELECT COUNT(cancelOrder.invoice_amount)
-                FROM s_order cancelOrder
-                WHERE cancelOrder.status = -1
-                AND DATE(cancelOrder.ordertime) = visitor.datum
-            ) AS cancelledOrders'
-        ))
-            ->from('s_statistics_visitors', 'visitor')
-            ->leftJoin('visitor', 's_order', 'orders', 'visitor.datum = DATE(orders.ordertime) AND orders.status NOT IN (-1)')
-            ->groupBy('visitor.datum');
-
-        if ($from instanceof \DateTime) {
-            $builder->andWhere('visitor.datum >= :fromDate')
-                ->setParameter(':fromDate', $from->format("Y-m-d H:i:s"));
-        }
-
-        if ($to instanceof \DateTime) {
-            $builder->andWhere('visitor.datum <= :toDate')
-                ->setParameter(':toDate', $to->format("Y-m-d H:i:s"));
-        }
-
-        return $builder;
     }
 
     /**
@@ -441,7 +173,6 @@ class Repository
         return new Result($builder);
     }
 
-
     /**
      *
      * @param \DateTime $from
@@ -468,8 +199,6 @@ class Repository
 
         return new Result($builder);
     }
-
-
 
     /**
      * Returns an array which displays which search term executed in the shop.
@@ -763,7 +492,6 @@ class Repository
         return new Result($builder);
     }
 
-
     /**
      * Selects the total amount for the passed date range.
      * The data will be grouped per hour.
@@ -807,7 +535,7 @@ class Repository
      * @param array $shopIds
      * @return Result
      */
-    public function getProductImpressionOfRange(\DateTime $from, \DateTime $to, $offset, $limit, array $sort = array(), array $shopIds = array())
+    public function getProductImpressions(\DateTime $from, \DateTime $to, $offset, $limit, array $sort = array(), array $shopIds = array())
     {
         $builder = $this->createProductImpressionBuilder($offset, $limit);
 
@@ -865,7 +593,6 @@ class Repository
         return $builder;
     }
 
-
     /**
      * This function creates a DBAL query builder, which used to determine the product sale value per order.
      * This is used to display, for example, how much revenue bring the products to a category or a manufacturer.
@@ -891,7 +618,6 @@ class Repository
 
         return $builder;
     }
-
 
     /**
      * Creates a query that selects the number of orders and their total sales for the passed date range.
@@ -941,28 +667,6 @@ class Repository
         return $builder;
     }
 
-
-    /**
-     * Helper function which adds the date range condition to an aggregate order query.
-     * @param $builder
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @return $this
-     */
-    public function addDateRangeCondition($builder, \DateTime $from, \DateTime $to)
-    {
-        if ($from instanceof \DateTime) {
-            $builder->andWhere('orders.ordertime >= :fromDate')
-                ->setParameter('fromDate', $from->format("Y-m-d H:i:s"));
-        }
-        if ($to instanceof \DateTime) {
-            $builder->andWhere('orders.ordertime <= :toDate')
-                ->setParameter('toDate', $to->format("Y-m-d H:i:s"));
-        }
-
-        return $this;
-    }
-
     /**
      * Returns an query builder, which selects how much impressions and visits done
      * in the passed date range.
@@ -993,6 +697,285 @@ class Repository
              ->addPagination($builder, $offset, $limit);
 
         return $builder;
+    }
+
+    protected function createAgeOfCustomersBuilder(\DateTime $from, \DateTime $to)
+    {
+        $builder = $builder = $this->connection->createQueryBuilder();
+        $builder->select(array(
+            'users.firstlogin',
+            'billing.birthday'
+        ))
+            ->from('s_user', 'users')
+            ->innerJoin('users', 's_user_billingaddress', 'billing', 'billing.userID = users.id')
+            ->andWhere('billing.birthday IS NOT NULL')
+            ->andWhere("billing.birthday != '0000-00-00'")
+            ->orderBy('birthday', 'DESC');
+
+        if ($from instanceof \DateTime) {
+            $builder->andWhere('users.firstlogin >= :fromTime')
+                ->setParameter(':fromTime', $from->format("Y-m-d H:i:s"));
+        }
+
+        if ($to instanceof \DateTime) {
+            $builder->andWhere('users.firstlogin <= :toTime')
+                ->setParameter(':toTime', $to->format("Y-m-d H:i:s"));
+        }
+
+        return $builder;
+    }
+
+    protected function createOrdersOfCustomersBuilder(\DateTime $from, \DateTime $to)
+    {
+        $builder = $builder = $this->connection->createQueryBuilder();
+        $builder->select(array(
+            'users.firstlogin AS firstLogin',
+            'orders.ordertime AS orderTime',
+            'COUNT(orders.id) AS count',
+            'billing.salutation'
+        ))
+            ->from('s_user', 'users')
+            ->innerJoin('users', 's_order', 'orders', 'orders.userID = users.id')
+            ->innerJoin('users', 's_user_billingaddress', 'billing', 'billing.userID = users.id')
+            ->andWhere('orders.status NOT IN (-1, 4)')
+            ->groupBy('users.id')
+            ->orderBy('orderTime', 'DESC');
+
+
+        if ($from instanceof \DateTime) {
+            $builder->where('orders.ordertime >= :fromTime')
+                ->setParameter(':fromTime', $from->format("Y-m-d H:i:s"));
+        }
+
+        if ($to instanceof \DateTime) {
+            $builder->andWhere('orders.ordertime <= :toTime')
+                ->setParameter(':toTime', $to->format("Y-m-d H:i:s"));
+        }
+
+        return $builder;
+    }
+
+    protected function createProductSellsBuilder(\DateTime $from, \DateTime $to)
+    {
+        $builder = $builder = $this->connection->createQueryBuilder();
+        $builder->select(array(
+            'SUM(details.quantity) AS sellCount',
+            'articles.name',
+            'details.articleordernumber as ordernumber'
+        ))
+            ->from('s_order_details', 'details')
+            ->innerJoin('details', 's_articles', 'articles', 'articles.id = details.articleID')
+            ->innerJoin('details', 's_order', 'orders', 'orders.id = details.orderID')
+            ->andWhere('orders.status NOT IN (-1, 4)')
+            ->groupBy('articles.id')
+            ->orderBy('sellCount', 'DESC');
+
+        if ($from instanceof \DateTime) {
+            $builder->andWhere('orders.ordertime >= :fromTime')
+                ->setParameter(':fromTime', $from->format("Y-m-d H:i:s"));
+        }
+
+        if ($to instanceof \DateTime) {
+            $builder->andWhere('orders.ordertime <= :toTime')
+                ->setParameter(':toTime', $to->format("Y-m-d H:i:s"));
+        }
+
+        return $builder;
+    }
+
+    protected function createPartnerRevenueBuilder(\DateTime $from, \DateTime $to)
+    {
+        $builder = $builder = $this->connection->createQueryBuilder();
+        $builder->select(array(
+            'ROUND(SUM((orders.invoice_amount - orders.invoice_shipping) / orders.currencyFactor), 2) AS revenue',
+            'partners.company AS partner',
+            'orders.partnerID as trackingCode',
+            'partners.id as partnerId'
+        ))
+            ->from('s_order', 'orders')
+            ->leftJoin('orders', 's_emarketing_partner', 'partners', 'partners.idcode = orders.partnerID')
+            ->where('orders.status NOT IN (-1, 4)')
+            ->andWhere("orders.partnerID != ''")
+            ->groupBy('orders.partnerID')
+            ->orderBy('revenue', 'DESC');
+
+        if ($from instanceof \DateTime) {
+            $builder->andWhere('orders.ordertime >= :fromTime')
+                ->setParameter(':fromTime', $from->format("Y-m-d H:i:s"));
+        }
+
+        if ($to instanceof \DateTime) {
+            $builder->andWhere('orders.ordertime <= :toTime')
+                ->setParameter(':toTime', $to->format("Y-m-d H:i:s"));
+        }
+
+        return $builder;
+    }
+
+    protected function createReferrerRevenueBuilder(Shop $shop, \DateTime $from, \DateTime $to)
+    {
+        $builder = $builder = $this->connection->createQueryBuilder();
+        $builder->select(array(
+            'ROUND(orders.invoice_amount / orders.currencyFactor, 2) AS revenue',
+            'users.id as userID',
+            'orders.referer AS referrer',
+            'DATE(users.firstlogin) as firstLogin',
+            'DATE(orders.ordertime) as orderTime',
+            '(
+                SELECT o2.ordertime
+                FROM s_order o2
+                WHERE o2.userID = users.id
+                ORDER BY o2.ordertime DESC
+                LIMIT 1
+            ) as firstOrder',
+            '(
+                SELECT ROUND(SUM(o3.invoice_amount / o3.currencyFactor), 2)
+                FROM s_order o3
+                WHERE o3.userID = users.id
+                AND o3.status != 4
+                AND o3.status != -1
+            ) as customerRevenue'
+        ))
+            ->from('s_order', 'orders')
+            ->innerJoin('orders', 's_user', 'users', 'orders.userID = users.id')
+            ->where('orders.status != 4 AND orders.status != -1')
+            ->andWhere("orders.referer LIKE 'http%//%'")
+            ->orderBy('revenue');
+
+        if ($from instanceof \DateTime) {
+            $builder->andWhere('orders.ordertime >= :fromDate')
+                ->setParameter(':fromDate', $from->format("Y-m-d H:i:s"));
+        }
+
+        if ($to instanceof \DateTime) {
+            $builder->andWhere('orders.ordertime <= :toDate')
+                ->setParameter(':toDate', $to->format("Y-m-d H:i:s"));
+        }
+
+        if ($shop instanceof Shop && $shop->getHost()) {
+            $builder->andWhere("orders.referer NOT LIKE :hostname")
+                ->setParameter(':hostname', '%' . $shop->getHost() . '%');
+        }
+
+        return $builder;
+    }
+
+    /**
+     * @param \DateTime $from
+     * @param \DateTime $to
+     * @return DBALQueryBuilder
+     */
+    protected function createVisitedReferrerBuilder(\DateTime $from, \DateTime $to)
+    {
+        $builder = $builder = $this->connection->createQueryBuilder();
+        $builder->select(array(
+            'COUNT(r.referer) as count',
+            'r.referer as referrer'
+        ))
+            ->from('s_statistics_referer', 'r')
+            ->groupBy('referer')
+            ->orderBy('count', 'DESC');
+
+        if ($from instanceof \DateTime) {
+            $builder->andWhere('r.datum >= :fromTime')
+                ->setParameter(':fromTime', $from->format("Y-m-d H:i:s"));
+        }
+
+        if ($to instanceof \DateTime) {
+            $builder->andWhere('r.datum <= :toTime')
+                ->setParameter(':toTime', $to->format("Y-m-d H:i:s"));
+        }
+
+        return $builder;
+    }
+
+    protected function createShopStatisticBuilder(\DateTime $from, \DateTime $to)
+    {
+        $builder = $this->connection->createQueryBuilder();
+        $builder->select(array(
+            'visitor.datum AS date',
+            'visitor.pageimpressions AS clicks',
+            'visitor.uniquevisits AS visitors',
+            'COUNT(orders.id) AS orderCount',
+            'SUM(orders.invoice_amount) AS revenue',
+            'SUM(visitor.uniquevisits) as totalVisits',
+            'COUNT(DISTINCT orders.id) AS totalOrders',
+            'COUNT(DISTINCT users.id) AS newCustomers',
+            '(
+                SELECT COUNT(o2.invoice_amount)
+                FROM s_order o2
+                WHERE o2.status=-1
+                AND DATE(o2.ordertime) = visitor.datum
+            ) AS cancelledOrders'
+        ))
+            ->from('s_statistics_visitors', 'visitor')
+            ->leftJoin('visitor', 's_order', 'orders', 'visitor.datum = DATE(orders.ordertime) AND orders.status NOT IN (-1)')
+            ->leftJoin('visitor', 's_user', 'users', 'users.firstlogin = visitor.datum')
+            ->groupBy('visitor.datum');
+
+        if ($from instanceof \DateTime) {
+            $builder->andWhere('visitor.datum >= :fromDate ')
+                ->setParameter(':fromDate', $from->format("Y-m-d H:i:s"));
+        }
+
+        if ($to instanceof \DateTime) {
+            $builder->andWhere('AND visitor.datum <= :toDate')
+                ->setParameter(':toDate', $to->format("Y-m-d H:i:s"));
+        }
+
+        return $builder;
+    }
+
+    protected function createOrdersOfVisitorsBuilder(\DateTime $from, \DateTime $to)
+    {
+        $builder = $this->connection->createQueryBuilder();
+        $builder->select(array(
+            'visitor.datum AS date',
+            'COUNT(orders.id) AS orderCount',
+            'visitor.uniquevisits AS visitors',
+            '(
+                SELECT COUNT(cancelOrder.invoice_amount)
+                FROM s_order cancelOrder
+                WHERE cancelOrder.status = -1
+                AND DATE(cancelOrder.ordertime) = visitor.datum
+            ) AS cancelledOrders'
+        ))
+            ->from('s_statistics_visitors', 'visitor')
+            ->leftJoin('visitor', 's_order', 'orders', 'visitor.datum = DATE(orders.ordertime) AND orders.status NOT IN (-1)')
+            ->groupBy('visitor.datum');
+
+        if ($from instanceof \DateTime) {
+            $builder->andWhere('visitor.datum >= :fromDate')
+                ->setParameter(':fromDate', $from->format("Y-m-d H:i:s"));
+        }
+
+        if ($to instanceof \DateTime) {
+            $builder->andWhere('visitor.datum <= :toDate')
+                ->setParameter(':toDate', $to->format("Y-m-d H:i:s"));
+        }
+
+        return $builder;
+    }
+
+    /**
+     * Helper function which adds the date range condition to an aggregate order query.
+     * @param DBALQueryBuilder $builder
+     * @param \DateTime $from
+     * @param \DateTime $to
+     * @return $this
+     */
+    private function addDateRangeCondition(DBALQueryBuilder $builder, \DateTime $from, \DateTime $to)
+    {
+        if ($from instanceof \DateTime) {
+            $builder->andWhere('orders.ordertime >= :fromDate')
+                ->setParameter('fromDate', $from->format("Y-m-d H:i:s"));
+        }
+        if ($to instanceof \DateTime) {
+            $builder->andWhere('orders.ordertime <= :toDate')
+                ->setParameter('toDate', $to->format("Y-m-d H:i:s"));
+        }
+
+        return $this;
     }
 
     /**
@@ -1029,7 +1012,6 @@ class Repository
 
         return $this;
     }
-
 
     /**
      * Helper function which iterates all sort arrays and at them as order by condition.

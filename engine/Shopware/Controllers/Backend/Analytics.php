@@ -637,7 +637,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     public function getArticleImpressionsAction()
     {
-        $result = $this->getRepository()->getProductImpressionOfRange(
+        $result = $this->getRepository()->getProductImpressions(
             $this->getFromDate(),
             $this->getToDate(),
             $this->Request()->getParam('start', 0),
