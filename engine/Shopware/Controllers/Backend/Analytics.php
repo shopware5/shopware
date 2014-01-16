@@ -638,10 +638,10 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     public function getArticleImpressionsAction()
     {
         $result = $this->getRepository()->getProductImpressions(
-            $this->getFromDate(),
-            $this->getToDate(),
             $this->Request()->getParam('start', 0),
             $this->Request()->getParam('limit', 20),
+            $this->getFromDate(),
+            $this->getToDate(),
             $this->Request()->getParam('sort', array(
                 array('property' => 'totalAmount', 'direction' => 'DESC')
             )),
