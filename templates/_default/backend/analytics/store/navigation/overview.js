@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Overview', {
     remoteSort: true,
     fields: [
         { name : 'date', type: 'date', dateFormat: 'timestamp' },
-        'orders',
+        'orderCount',
         'revenue',
         'cancelledOrders',
         'totalConversion',

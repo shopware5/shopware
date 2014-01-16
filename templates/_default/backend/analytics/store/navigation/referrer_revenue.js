@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.Analytics.store.navigation.ReferrerRevenue', {
         'customerValue',
         'entireNewRevenue',
         'entireOldRevenue',
-        'orders',
+        'orderCount',
         'newCustomers',
         'oldCustomers',
         'perNewRevenue',
