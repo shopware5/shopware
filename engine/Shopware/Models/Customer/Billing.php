@@ -133,14 +133,14 @@ class Billing extends ModelEntity
     /**
      * Contains the street number of the billing address
      * @var string $streetNumber
-     * @ORM\Column(name="streetnumber", type="string", length=6, nullable=false)
+     * @ORM\Column(name="streetnumber", type="string", length=50, nullable=false)
      */
     protected $streetNumber = '';
 
     /**
      * Contains the zip code of the billing address
      * @var string $zipCode
-     * @ORM\Column(name="zipcode", type="string", length=10, nullable=false)
+     * @ORM\Column(name="zipcode", type="string", length=50, nullable=false)
      */
     protected $zipCode = '';
 
