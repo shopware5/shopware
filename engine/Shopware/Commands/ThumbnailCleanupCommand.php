@@ -68,7 +68,6 @@ EOF
         $albumId = (int)$input->getOption('albumid');
 
         $em = $this->getContainer()->get('models');
-        $manager = $this->getContainer()->get('thumbnail_manager');
 
         $builder = $em->createQueryBuilder();
         $builder->select(array('album', 'settings', 'media'))
@@ -80,16 +79,76 @@ EOF
             $builder->where('album.id = :albumId')->setParameter('albumId', $albumId);
         }
 
-        $albumArray = $builder->getQuery()->getResult();
+        $albumArray = $builder->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
         foreach ($albumArray as $album) {
-            $output->writeln("Deleting Thumbnails for Album {$album->getName()} (ID: {$album->getId()})");
+            $output->writeln("Deleting Thumbnails for Album {$album['name']} (ID: {$album['id']})");
 
-            foreach ($album->getMedia() as $media) {
-                $manager->removeMediaThumbnails($media);
+            $sizes = $album['settings']['thumbnailSize'];
+
+            if (empty($sizes)) {
+                continue;
+            }
+
+            foreach ($album['media'] as $media) {
+                $paths = $this->getMediaThumbnailPaths($media, explode(';', $sizes));
+
+                foreach($paths as $path){
+                    if(file_exists($path)){
+                        unlink($path);
+                    }
+                }
             }
         }
 
         $output->writeln("Cleanup was finished successfully");
+    }
+
+    /**
+     * Returns all thumbnails paths according to the given media object
+     *
+     * @param $media
+     * @param $sizes
+     * @return array
+     */
+    private function getMediaThumbnailPaths($media, $sizes)
+    {
+        $thumbnails = array();
+
+        //iterate thumbnail sizes
+        foreach ($sizes as $size) {
+            if (strpos($size, 'x') === false) {
+                $size = $size . 'x' . $size;
+            }
+
+            $thumbnailDir = Shopware()->DocPath('media_' . strtolower($media['type'])) . 'thumbnail' . DIRECTORY_SEPARATOR;
+            $path = $thumbnailDir . $this->removeSpecialCharacters($media['name']) . '_' . $size;
+            if (DIRECTORY_SEPARATOR !== '/') {
+                $path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
+            }
+
+            $thumbnails[] = $path . '.jpg';
+
+            if($media['extension'] !== 'jpg'){
+                $thumbnails[] = $path . '.' . $media['extension'];
+            }
+        }
+
+        return $thumbnails;
+    }
+
+    /**
+     * Removes special characters from a filename
+     *
+     * @param $name
+     * @return string
+     */
+    private function removeSpecialCharacters($name)
+    {
+        $name = iconv('utf-8', 'ascii//translit', $name);
+        $name = preg_replace('#[^A-z0-9\-_]#', '-', $name);
+        $name = preg_replace('#-{2,}#', '-', $name);
+        $name = trim($name, '-');
+        return mb_substr($name, 0, 180);
     }
 }
