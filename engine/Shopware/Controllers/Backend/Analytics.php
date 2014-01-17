@@ -199,11 +199,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             }
         }
 
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $data,
-            'totalCount' => $result->getTotalCount()
-        ));
+        $this->send($data, $result->getTotalCount());
     }
 
     public function getRatingAction()
@@ -236,7 +232,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
         $shop->registerResources(Shopware()->Bootstrap());
 
-        $results = $this->getRepository()->getReferrerRevenue(
+        $result = $this->getRepository()->getReferrerRevenue(
             $shop,
             $this->getFromDate(),
             $this->getToDate()
@@ -244,8 +240,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $referrer = array();
         $customers = array();
-        foreach ($results as $result) {
-            $url = parse_url($result['referrer']);
+        foreach ($result->getData() as $row) {
+            $url = parse_url($row['referrer']);
             $host = $url['host'];
 
             if (!array_key_exists($host, $referrer)) {
@@ -264,19 +260,19 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                 );
             }
 
-            if (!in_array($result['userID'], $customers)) {
-                if (strtotime($result['orderTime']) - strtotime($result['firstLogin']) < 60 * 60 * 24) {
-                    $referrer[$host]['entireNewRevenue'] += $result['revenue'];
+            if (!in_array($row['userID'], $customers)) {
+                if (strtotime($row['orderTime']) - strtotime($row['firstLogin']) < 60 * 60 * 24) {
+                    $referrer[$host]['entireNewRevenue'] += $row['revenue'];
                     $referrer[$host]['newCustomers']++;
                 } else {
-                    $referrer[$host]['entireOldRevenue'] += $result['revenue'];
+                    $referrer[$host]['entireOldRevenue'] += $row['revenue'];
                     $referrer[$host]['oldCustomers']++;
                 }
 
-                $referrer[$host]['customerRevenue'] += $result['revenue'];
+                $referrer[$host]['customerRevenue'] += $row['revenue'];
             }
 
-            $referrer[$host]['entireRevenue'] += $result['revenue'];
+            $referrer[$host]['entireRevenue'] += $row['revenue'];
             $referrer[$host]['orderCount']++;
         }
 
@@ -287,7 +283,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $ref['customerValue'] = round($ref['customerRevenue'] / ($ref['newCustomers'] + $ref['oldCustomers']), 2);
         }
 
-	$this->send(array_values($referrer), $result->getTotalCount());
+        $this->send(array_values($referrer), $result->getTotalCount());
     }
 
     public function getPartnerRevenueAction()
@@ -310,7 +306,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             }
         }
 
-	$this->send($data, $result->getTotalCount());
+        $this->send($data, $result->getTotalCount());
     }
 
     public function getReferrerVisitorsAction()
@@ -339,7 +335,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $referrer[$host]['count']++;
         }
 
-	$this->send(array_values($referrer), $result->getTotalCount());
+        $this->send(array_values($referrer), $result->getTotalCount());
     }
 
     public function getArticleSellsAction()
@@ -351,28 +347,28 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->getToDate()
         );
 
-	$this->send($result->getData(), $result->getTotalCount());
+        $this->send($result->getData(), $result->getTotalCount());
     }
 
     public function getReferrerSearchTermsAction()
     {
-        $selectedReferrer = (string) $this->Request()->getParam('selectedReferrer');
+        $selectedReferrer = (string)$this->Request()->getParam('selectedReferrer');
 
         $result = $this->getRepository()->getReferrerSearchTerms($selectedReferrer);
 
         $keywords = array();
-        foreach($result->getData() as $data){
+        foreach ($result->getData() as $data) {
             preg_match_all("#[?&]([qp]|query|highlight|encquery|url|field-keywords|as_q|sucheall|satitle|KW)=([^&\\$]+)#", utf8_encode($data['referrer']) . "&", $matches);
-            if(empty($matches[0])) {
+            if (empty($matches[0])) {
                 continue;
             }
 
             $ref = $matches[2][0];
             $ref = html_entity_decode(rawurldecode(strtolower($ref)));
-            $ref = str_replace('+', ' ',$ref);
+            $ref = str_replace('+', ' ', $ref);
             $ref = trim(preg_replace('/\s\s+/', ' ', $ref));
 
-            if(!array_key_exists($ref, $keywords)) {
+            if (!array_key_exists($ref, $keywords)) {
                 $keywords[$ref] = array(
                     'keyword' => $ref,
                     'count' => 0
@@ -384,15 +380,12 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $keywords = array_values($keywords);
 
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $keywords,
-            'totalCount' => count($keywords)
-        ));
+        $this->send($keywords, count($keywords));
     }
 
-    public function getSearchUrlsAction() {
-        $selectedReferrer = (string) $this->Request()->getParam('selectedReferrer');
+    public function getSearchUrlsAction()
+    {
+        $selectedReferrer = (string)$this->Request()->getParam('selectedReferrer');
 
         $result = $this->getRepository()->getReferrerUrls(
             $selectedReferrer,
@@ -453,7 +446,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $entry['femaleAmount'] = round($entry['female'] / ($entry['male'] + $entry['female']) * 100, 2);
         }
 
-	$this->send(array_values($customers), count($customers));
+        $this->send(array_values($customers), count($customers));
     }
 
     public function getCustomerAgeAction()
@@ -477,17 +470,17 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                 );
             }
 
-            if(!empty($shopIds)){
-                foreach($shopIds as $shopId){
-                    if(!array_key_exists($shopId, $subShopCounts)){
+            if (!empty($shopIds)) {
+                foreach ($shopIds as $shopId) {
+                    if (!array_key_exists($shopId, $subShopCounts)) {
                         $subShopCounts[$shopId] = 0;
                     }
 
-                    if (!array_key_exists('count' . $shopId, $ages["{$age}"])){
+                    if (!array_key_exists('count' . $shopId, $ages["{$age}"])) {
                         $ages["{$age}"]['count' . $shopId] = 0;
                     }
 
-                    if(!empty($row['birthday' . $shopId])){
+                    if (!empty($row['birthday' . $shopId])) {
                         $ages["{$age}"]['count' . $shopId]++;
                         $subShopCounts[$shopId]++;
                     }
@@ -500,8 +493,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         foreach ($ages as &$age) {
             $age['percent'] = round($age['count'] / $result->getTotalCount() * 100, 2);
 
-            if(!empty($shopIds)){
-                foreach($shopIds as $shopId){
+            if (!empty($shopIds)) {
+                foreach ($shopIds as $shopId) {
                     $age['percent' . $shopId] = round($age['count' . $shopId] / $subShopCounts[$shopId] * 100, 2);
                 }
             }
@@ -650,7 +643,10 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->Request()->getParam('start', 0),
             $this->Request()->getParam('limit', 25),
             $this->Request()->getParam('sort', array(
-                array('property' => 'countRequests', 'direction' => 'DESC')
+                array(
+                    'property' => 'countRequests',
+                    'direction' => 'DESC'
+                )
             ))
         );
 
@@ -668,7 +664,10 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->Request()->getParam('start', 0),
             $this->Request()->getParam('limit', 25),
             $this->Request()->getParam('sort', array(
-                array('property' => 'datum', 'direction' => 'DESC')
+                array(
+                    'property' => 'datum',
+                    'direction' => 'DESC'
+                )
             )),
             $this->getSelectedShopIds()
         );
@@ -687,7 +686,10 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->getFromDate(),
             $this->getToDate(),
             $this->Request()->getParam('sort', array(
-                array('property' => 'totalAmount', 'direction' => 'DESC')
+                array(
+                    'property' => 'totalAmount',
+                    'direction' => 'DESC'
+                )
             )),
             $this->getSelectedShopIds()
         );
@@ -724,7 +726,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         }
     }
 
-protected function exportCSV($data)
+    protected function exportCSV($data)
     {
         $this->Front()->Plugins()->Json()->setRenderer(false);
         $this->Response()->setHeader('Content-Type', 'text/csv; charset=utf-8');
@@ -743,7 +745,7 @@ protected function exportCSV($data)
         }
         fclose($fp);
     }
-    
+
     private function getCsvFileName()
     {
         $name = $this->Request()->getActionName();
@@ -757,7 +759,7 @@ protected function exportCSV($data)
     private function underscoreToCamelCase($str)
     {
         $str[0] = strtolower($str[0]);
-        $func = function($c) {
+        $func = function ($c) {
             return '_' . strtolower($c[1]);
         };
 
