@@ -48,8 +48,6 @@ Ext.define('Shopware.apps.Analytics.view.table.Month', {
             }
         };
 
-        me.initStoreIndices('amount', me.shopColumnText, { xtype: 'numbercolumn' });
-
         me.callParent(arguments);
     },
 

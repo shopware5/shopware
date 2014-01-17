@@ -99,6 +99,7 @@ class Repository
      * @param $limit
      * @param \DateTime $from
      * @param \DateTime $to
+     * @param int $shopId
      * @return Result
      *      array (
      *          'date' => '2012-08-28',
@@ -123,9 +124,9 @@ class Repository
      *          'newCustomers' => '0',
      *      )
      */
-    public function getShopStatistic($offset, $limit, \DateTime $from = null, \DateTime $to = null)
+    public function getShopStatistic($offset, $limit, \DateTime $from = null, \DateTime $to = null, $shopId = 0)
     {
-        $builder = $this->createShopStatisticBuilder($from, $to);
+        $builder = $this->createShopStatisticBuilder($from, $to, $shopId);
 
         $this->addPagination($builder, $offset, $limit);
 
@@ -257,12 +258,12 @@ class Repository
     /**
      * @param \DateTime $from
      * @param \DateTime $to
-     * @param array $shopIds
+     * @param int $shopId
      * @return Result
      */
-    public function getAgeOfCustomers(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
+    public function getAgeOfCustomers(\DateTime $from = null, \DateTime $to = null, $shopId = 0)
     {
-        $builder = $this->createAgeOfCustomersBuilder($from, $to, $shopIds);
+        $builder = $this->createAgeOfCustomersBuilder($from, $to, $shopId);
 
         return new Result($builder);
     }
@@ -404,7 +405,7 @@ class Repository
      * @param $offset
      * @param $limit
      * @param array $sort
-     * @param array $shopIds
+     * @param int $shopId
      *
      * @return Result
      *      array (
@@ -426,24 +427,15 @@ class Repository
      *          'visits9' => '0',
      *      )
      */
-    public function getVisitorImpressions($offset, $limit, \DateTime $from = null, \DateTime $to = null, $sort = array(), array $shopIds = array())
+    public function getVisitorImpressions($offset, $limit, \DateTime $from = null, \DateTime $to = null, $sort = array(), $shopId = 0)
     {
         $builder = $this->createVisitorImpressionBuilder(
             $offset, $limit, $from, $to, $sort
         );
 
-        if (!empty($shopIds)) {
-            foreach ($shopIds as $shopId) {
-                $shopId = (int)$shopId;
-
-                $builder->addSelect(
-                    "SUM(IF(IF(shops.main_id is null, shops.id, shops.main_id)=" . $shopId . ", visitors.pageimpressions, 0)) as impressions" . $shopId
-                );
-
-                $builder->addSelect(
-                    "SUM(IF(IF(shops.main_id is null, shops.id, shops.main_id)=" . $shopId . ", visitors.uniquevisits, 0)) as  visits" . $shopId
-                );
-            }
+        if (!empty($shopId)) {
+            $builder->andWhere('IF(shops.main_id is null, shops.id, shops.main_id) = :shopId')
+                ->setParameter('shopId', $shopId);
         }
 
         $builder = $this->eventManager->filter('Shopware_Analytics_GetVisitorsInRange', $builder, array(
@@ -463,7 +455,7 @@ class Repository
      *
      * @param \DateTime $from
      * @param \DateTime $to
-     * @param array $shopIds
+     * @param int $shopId
      * @return Result
      *      array (
      *          'count' => '122',
@@ -474,9 +466,9 @@ class Repository
      *          'name' => 'Deutschland',
      *      ),
      */
-    public function getAmountPerCountry(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
+    public function getAmountPerCountry(\DateTime $from = null, \DateTime $to = null, $shopId = 0)
     {
-        $builder = $this->createAmountBuilder($from, $to, $shopIds)
+        $builder = $this->createAmountBuilder($from, $to, $shopId)
             ->addSelect('country.countryname AS name')
             ->groupBy('billing.countryID')
             ->orderBy('name');
@@ -498,7 +490,7 @@ class Repository
      *
      * @param \DateTime $from
      * @param \DateTime $to
-     * @param array $shopIds
+     * @param int $shopId
      * @return Result
      *      array (
      *          'count' => '122',
@@ -509,9 +501,9 @@ class Repository
      *          'name' => 'Rechnung',
      *      ),
      */
-    public function getAmountPerPayment(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
+    public function getAmountPerPayment(\DateTime $from = null, \DateTime $to = null, $shopId = 0)
     {
-        $builder = $this->createAmountBuilder($from, $to, $shopIds)
+        $builder = $this->createAmountBuilder($from, $to, $shopId)
             ->addSelect('payment.description AS name')
             ->groupBy('orders.paymentID')
             ->orderBy('name');
@@ -533,7 +525,7 @@ class Repository
      *
      * @param \DateTime $from
      * @param \DateTime $to
-     * @param array $shopIds
+     * @param int $shopId
      * @return Result
      *      array (
      *          'count' => '122',
@@ -544,9 +536,9 @@ class Repository
      *          'name' => 'Standard Versand',
      *      ),
      */
-    public function getAmountPerShipping(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
+    public function getAmountPerShipping(\DateTime $from = null, \DateTime $to = null, $shopId = 0)
     {
-        $builder = $this->createAmountBuilder($from, $to, $shopIds)
+        $builder = $this->createAmountBuilder($from, $to, $shopId)
             ->addSelect('dispatch.name AS name')
             ->groupBy('orders.dispatchID')
             ->orderBy('dispatch.name');
@@ -568,7 +560,7 @@ class Repository
      *
      * @param \DateTime $from
      * @param \DateTime $to
-     * @param array $shopIds
+     * @param int $shopId
      * @return Result
      *      array (
      *          'count' => '2',
@@ -588,10 +580,10 @@ class Repository
      *          'date' => '2001-10-01',
      *      ),
      */
-    public function getAmountPerMonth(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
+    public function getAmountPerMonth(\DateTime $from = null, \DateTime $to = null, $shopId = 0)
     {
         $dateCondition = 'DATE_FORMAT(ordertime, \'%Y-%m-01\')';
-        $builder = $this->createAmountBuilder($from, $to, $shopIds)
+        $builder = $this->createAmountBuilder($from, $to, $shopId)
             ->addSelect($dateCondition . ' AS date')
             ->groupBy($dateCondition)
             ->orderBy('date');
@@ -613,7 +605,7 @@ class Repository
      *
      * @param \DateTime $from
      * @param \DateTime $to
-     * @param array $shopIds
+     * @param int $shopId
      * @return Result
      *      array (
      *          'count' => '1',
@@ -633,10 +625,10 @@ class Repository
      *          'date' => '2000-07-27',
      *      ),
      */
-    public function getAmountPerCalendarWeek(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
+    public function getAmountPerCalendarWeek(\DateTime $from = null, \DateTime $to = null, $shopId = 0)
     {
         $dateCondition = 'DATE_SUB(DATE(ordertime), INTERVAL WEEKDAY(ordertime)-3 DAY)';
-        $builder = $this->createAmountBuilder($from, $to, $shopIds)
+        $builder = $this->createAmountBuilder($from, $to, $shopId)
             ->addSelect($dateCondition . ' AS date')
             ->groupBy($dateCondition)
             ->orderBy('date');
@@ -658,7 +650,7 @@ class Repository
      *
      * @param \DateTime $from
      * @param \DateTime $to
-     * @param array $shopIds
+     * @param int $shopId
      * @return Result
      *      array (
      *          'count' => '8',
@@ -678,9 +670,9 @@ class Repository
      *          'date' => '2002-07-15',
      *      ),
      */
-    public function getAmountPerWeekday(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
+    public function getAmountPerWeekday(\DateTime $from = null, \DateTime $to = null, $shopId = 0)
     {
-        $builder = $this->createAmountBuilder($from, $to, $shopIds)
+        $builder = $this->createAmountBuilder($from, $to, $shopId)
             ->addSelect('DATE_FORMAT(ordertime, \'%Y-%m-%d\') AS date')
             ->groupBy('WEEKDAY(ordertime)')
             ->orderBy('date');
@@ -702,7 +694,7 @@ class Repository
      *
      * @param \DateTime $from
      * @param \DateTime $to
-     * @param array $shopIds
+     * @param int $shopId
      * @return Result
      *      array (
      *          'count' => '2',
@@ -722,11 +714,11 @@ class Repository
      *          'date' => '1970-01-01 01:00:00',
      *      ),
      */
-    public function getAmountPerHour(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
+    public function getAmountPerHour(\DateTime $from = null, \DateTime $to = null, $shopId = 0)
     {
         $dateCondition = 'DATE_FORMAT(ordertime, \'1970-01-01 %H:00:00\')';
 
-        $builder = $this->createAmountBuilder($from, $to, $shopIds)
+        $builder = $this->createAmountBuilder($from, $to, $shopId)
             ->addSelect($dateCondition . ' AS date')
             ->groupBy($dateCondition)
             ->orderBy('date');
@@ -749,7 +741,7 @@ class Repository
      * @param $offset
      * @param $limit
      * @param array $sort
-     * @param array $shopIds
+     * @param int $shopId
      * @return Result
      *      array (
      *          'articleId' => '213',
@@ -769,7 +761,7 @@ class Repository
      *          'amount2' => '0',
      *      ),
      */
-    public function getProductImpressions($offset, $limit, \DateTime $from = null, \DateTime $to = null, array $sort = array(), array $shopIds = array())
+    public function getProductImpressions($offset, $limit, \DateTime $from = null, \DateTime $to = null, array $sort = array(), $shopId = 0)
     {
         $builder = $this->createProductImpressionBuilder($offset, $limit);
 
@@ -784,13 +776,9 @@ class Repository
         if ($sort) {
             $this->addSort($builder, $sort);
         }
-        if (!empty($shopIds)) {
-            foreach ($shopIds as $shopId) {
-                $shopId = (int)$shopId;
-                $builder->addSelect(
-                    'SUM(IF(articleImpression.shopId = ' . $shopId . ', articleImpression.impressions, 0)) as amount' . $shopId
-                );
-            }
+        if (!empty($shopId)) {
+            $builder->andWhere('articleImpression.shopId = :shopId')
+                ->setParameter('shopId', $shopId);
         }
 
         $builder = $this->eventManager->filter('Shopware_Analytics_getProductImpressionOfRange', $builder, array(
@@ -863,7 +851,7 @@ class Repository
      *
      * @param \DateTime $from
      * @param \DateTime $to
-     * @param array $shopIds
+     * @param int $shopId
      * @return DBALQueryBuilder
      *      array (
      *          'count' => '386109',
@@ -871,7 +859,7 @@ class Repository
      *          'displayDate' => 'Monday',
      *      ),
      */
-    protected function createAmountBuilder(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
+    protected function createAmountBuilder(\DateTime $from = null, \DateTime $to = null, $shopId = 0)
     {
         $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
@@ -889,13 +877,9 @@ class Repository
 
         $this->addDateRangeCondition($builder, $from, $to, 'orders.ordertime');
 
-        if (!empty($shopIds)) {
-            foreach ($shopIds as $shopId) {
-                $shopId = (int)$shopId;
-                $builder->addSelect(
-                    "SUM(IF(orders.subshopID=" . $shopId . ", invoice_amount - invoice_shipping, 0)) as amount" . $shopId
-                );
-            }
+        if (!empty($shopId)) {
+            $builder->andWhere('orders.subshopID = :shopId')
+                ->setParameter('shopId', $shopId);
         }
 
         return $builder;
@@ -918,8 +902,8 @@ class Repository
         $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
             'datum',
-            'SUM(pageimpressions) AS totalImpressions',
-            'SUM(uniquevisits) AS totalVisits'
+            'SUM(visitors.pageimpressions) AS totalImpressions',
+            'SUM(visitors.uniquevisits) AS totalVisits'
         ));
 
         $builder->from('s_statistics_visitors', 'visitors')
@@ -936,10 +920,10 @@ class Repository
     /**
      * @param \DateTime $from
      * @param \DateTime $to
-     * @param array $shopIds
+     * @param int $shopId
      * @return DBALQueryBuilder
      */
-    protected function createAgeOfCustomersBuilder(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
+    protected function createAgeOfCustomersBuilder(\DateTime $from = null, \DateTime $to = null, $shopId = 0)
     {
         $builder = $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
@@ -954,13 +938,10 @@ class Repository
 
         $this->addDateRangeCondition($builder, $from, $to, 'users.firstlogin');
 
-        if (!empty($shopIds)) {
-            foreach ($shopIds as $shopId) {
-                $shopId = (int)$shopId;
-                $builder->addSelect(
-                    "IF(users.subshopID = {$shopId}, billing.birthday, NULL) as birthday" . $shopId
-                );
-            }
+        if (!empty($shopId)) {
+            $builder->addSelect(
+                "IF(users.subshopID = {$shopId}, billing.birthday, NULL) as birthday" . $shopId
+            );
         }
 
         return $builder;
@@ -1113,9 +1094,10 @@ class Repository
     /**
      * @param \DateTime $from
      * @param \DateTime $to
+     * @param int $shopId
      * @return DBALQueryBuilder
      */
-    protected function createShopStatisticBuilder(\DateTime $from = null, \DateTime $to = null)
+    protected function createShopStatisticBuilder(\DateTime $from = null, \DateTime $to = null, $shopId = 0)
     {
         $builder = $this->createVisitorBuilder();
 
@@ -1129,6 +1111,11 @@ class Repository
 
         $builder->leftJoin('visitor', 's_user', 'users', 'users.firstlogin = visitor.datum')
             ->groupBy('visitor.datum');
+
+        if(!empty($shopId)){
+            $builder->andWhere('users.subshopID = :shopId')
+                ->setParameter('shopId', $shopId);
+        }
 
         $this->addDateRangeCondition($builder, $from, $to, 'visitor.datum');
 

@@ -52,26 +52,6 @@ Ext.define('Shopware.apps.Analytics.view.main.Table', {
         me.callParent(arguments);
     },
 
-    initStoreIndices: function(indexName, text, params){
-        var me = this,
-            columns = me.columns,
-            columnItems = !!columns.items ? columns.items : columns,
-            column;
-
-        indexName = indexName || 'amount';
-        text = text || '[0]';
-        params = params || { };
-
-        me.shopStore.each(function(shop) {
-            column = Ext.merge({
-                dataIndex: indexName + shop.data.id,
-                text: Ext.String.format(text, shop.data.name)
-            }, params);
-
-            columnItems.push(column);
-        }, me);
-    },
-
     getColumns: function(){
         return this.columns;
     }
