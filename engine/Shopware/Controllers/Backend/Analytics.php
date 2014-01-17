@@ -515,7 +515,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         );
 
         $this->send(
-            $result->getData(),
+            $this->formatOrderAnalyticsData($result->getData()),
             $result->getTotalCount()
         );
     }
