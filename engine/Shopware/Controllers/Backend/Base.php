@@ -62,7 +62,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         }
     }
 
-/**
+   /**
     * Add the table alias to the passed filter and sort parameters.
     * @param $properties
     * @param $fields
@@ -460,19 +460,20 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $builder->groupBy('articles.id');
 
         //don't search for normal articles
-        if ($this->Request()->getParam('articles', true) == "false") {
-            $builder->andHaving('COUNT(details.id) > ?1');
-            $builder->setParameter(1, 1);
+        $displayArticles = (bool) $this->Request()->getParam('articles', true);
+        if (!$displayArticles) {
+            $builder->andWhere('articles.configuratorSetId IS NOT NULL');
         }
 
         //don't search for variant articles?
-        if ($this->Request()->getParam('variants', true) == "false") {
-            $builder->andHaving('COUNT(details.id) <= ?2');
-            $builder->setParameter(2, 1);
+        $displayVariants = (bool) $this->Request()->getParam('variants', true);
+        if (!$displayVariants) {
+            $builder->andWhere('articles.configuratorSetId IS NULL');
         }
 
         //don't search for configurator articles
-        if ($this->Request()->getParam('configurator', true) == "false") {
+        $displayConfigurators = (bool) $this->Request()->getParam('configurator', true);
+        if (!$displayConfigurators) {
             $builder->andWhere('articles.configuratorSetId IS NULL');
         }
 
