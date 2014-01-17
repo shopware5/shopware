@@ -84,7 +84,7 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
      *
      * @return bool success
      */
-    public function update()
+    public function update($version)
     {
         return true;
     }
