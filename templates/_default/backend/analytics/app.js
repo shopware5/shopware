@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.Analytics', {
      * Requires controllers for sub-application
      * @array
      */
-    controllers:[ 'Main' ],
+    controllers:[ 'Main', 'ReferrerVisitors' ],
 
     /**
      * Required stores for controller
@@ -90,6 +90,7 @@ Ext.define('Shopware.apps.Analytics', {
         'navigation.ReferrerVisitors',
         'navigation.ArticleSells',
         'navigation.Customers',
+        'navigation.SearchTerms',
         'navigation.CustomerAge'
     ],
 
@@ -144,6 +145,7 @@ Ext.define('Shopware.apps.Analytics', {
         'table.ReferrerVisitors',
         'table.ArticleSells',
         'table.Customers',
+        'table.SearchTerms',
         'table.CustomerAge'
     ],
     /**

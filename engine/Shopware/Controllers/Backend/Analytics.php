@@ -130,6 +130,20 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         return $builder;
     }
 
+    private function formatOrderAnalyticsData($data)
+    {
+        foreach ($data as &$row) {
+            $row['count'] = (int)$row['count'];
+            $row['amount'] = (float)$row['amount'];
+
+            if (!empty($row['date'])) {
+                $row['date'] = strtotime($row['date']);
+            }
+        }
+
+        return $data;
+    }
+
     /**
      * Get a list of installed shops
      */
@@ -340,6 +354,29 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         ));
     }
 
+    public function getReferrerSearchTermsAction()
+    {
+        $result = $this->getRepository()->getOrdersOfCustomers(
+            $this->getFromDate(),
+            $this->getToDate()
+        );
+
+        $this->View()->assign(array(
+                'success' => true,
+                'data' => array(
+                    array(
+                        'count' => 10,
+                        'searchterm' => 'test'
+                    ),
+                    array(
+                        'count' => 20,
+                        'searchterm' => 'trolol'
+                    )
+                ),
+                'totalCount' => 2
+            ));
+    }
+
     public function getCustomersAction()
     {
         $result = $this->getRepository()->getOrdersOfCustomers(
@@ -463,7 +500,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $this->View()->assign(array(
             'success' => true,
-            'data' => $result->getData(),
+            'data' => $this->formatOrderAnalyticsData($result->getData()),
             'total' => $result->getTotalCount()
         ));
     }
@@ -478,7 +515,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $this->View()->assign(array(
             'success' => true,
-            'data' => $result->getData(),
+            'data' => $this->formatOrderAnalyticsData($result->getData()),
             'total' => $result->getTotalCount()
         ));
     }
@@ -493,7 +530,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $this->View()->assign(array(
             'success' => true,
-            'data' => $result->getData(),
+            'data' => $this->formatOrderAnalyticsData($result->getData()),
             'total' => $result->getTotalCount()
         ));
     }
@@ -508,7 +545,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $this->View()->assign(array(
             'success' => true,
-            'data' => $result->getData(),
+            'data' => $this->formatOrderAnalyticsData($result->getData()),
             'total' => $result->getTotalCount()
         ));
     }
@@ -524,7 +561,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $this->View()->assign(array(
             'success' => true,
-            'data' => $result->getData(),
+            'data' => $this->formatOrderAnalyticsData($result->getData()),
             'total' => $result->getTotalCount()
         ));
     }
@@ -539,7 +576,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $this->View()->assign(array(
             'success' => true,
-            'data' => $result->getData(),
+            'data' => $this->formatOrderAnalyticsData($result->getData()),
             'total' => $result->getTotalCount()
         ));
     }
@@ -554,7 +591,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $this->View()->assign(array(
             'success' => true,
-            'data' => $result->getData(),
+            'data' => $this->formatOrderAnalyticsData($result->getData()),
             'total' => $result->getTotalCount()
         ));
     }
