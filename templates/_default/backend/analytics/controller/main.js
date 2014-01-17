@@ -154,9 +154,13 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
         url += '&toDate=' + Ext.Date.format(toField.getValue(), 'Y-m-d');
         url += '&type=' + me.selectedType;
 
+        if (me.getShopSelection() && me.getShopSelection().getValue()) {
+            url += '&selectedShops=' + me.getShopSelection().getValue().join(',');
+        }
+
         var form = Ext.create('Ext.form.Panel', {
             standardSubmit: true,
-            target: 'iframe',
+            target: 'iframe'
         });
 
         form.submit({
