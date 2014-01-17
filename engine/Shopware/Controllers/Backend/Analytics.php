@@ -356,25 +356,55 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     public function getReferrerSearchTermsAction()
     {
-        $result = $this->getRepository()->getOrdersOfCustomers(
-            $this->getFromDate(),
-            $this->getToDate()
+        $selectedReferrer = (string) $this->Request()->getParam('selectedReferrer');
+
+        $result = $this->getRepository()->getReferrerSearchTerms($selectedReferrer);
+
+        $keywords = array();
+        foreach($result->getData() as $data){
+            preg_match_all("#[?&]([qp]|query|highlight|encquery|url|field-keywords|as_q|sucheall|satitle|KW)=([^&\\$]+)#", utf8_encode($data['referrer']) . "&", $matches);
+            if(empty($matches[0])) {
+                continue;
+            }
+
+            $ref = $matches[2][0];
+            $ref = html_entity_decode(rawurldecode(strtolower($ref)));
+            $ref = str_replace('+', ' ',$ref);
+            $ref = trim(preg_replace('/\s\s+/', ' ', $ref));
+
+            if(!array_key_exists($ref, $keywords)) {
+                $keywords[$ref] = array(
+                    'keyword' => $ref,
+                    'count' => 0
+                );
+            }
+
+            $keywords[$ref]['count']++;
+        }
+
+        $keywords = array_values($keywords);
+
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $keywords,
+            'totalCount' => count($keywords)
+        ));
+    }
+
+    public function getSearchUrlsAction() {
+        $selectedReferrer = (string) $this->Request()->getParam('selectedReferrer');
+
+        $result = $this->getRepository()->getReferrerUrls(
+            $selectedReferrer,
+            $this->Request()->getParam('start', 0),
+            $this->Request()->getParam('limit', 25)
         );
 
         $this->View()->assign(array(
-                'success' => true,
-                'data' => array(
-                    array(
-                        'count' => 10,
-                        'searchterm' => 'test'
-                    ),
-                    array(
-                        'count' => 20,
-                        'searchterm' => 'trolol'
-                    )
-                ),
-                'totalCount' => 2
-            ));
+            'success' => true,
+            'data' => $result->getData(),
+            'totalCount' => $result->getTotalCount()
+        ));
     }
 
     public function getCustomersAction()
@@ -750,34 +780,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $toDate = $toDate->sub(new DateInterval('PT1S'));
 
         return $toDate;
-    }
-
-    /**
-     * helper method to add an limit to the query
-     * @param \Doctrine\DBAL\Query\QueryBuilder | $builder
-     */
-    private function addLimitQuery($builder)
-    {
-        $builder->setFirstResult(intval($this->Request()->getParam('start', 0)));
-        $builder->setMaxResults(intval($this->Request()->getParam('limit', 25)));
-    }
-
-    /**
-     * helper method to add an order by query to the builder
-     * uses directly the sort param
-     *
-     * @param \Doctrine\DBAL\Query\QueryBuilder | $builder
-     * @param $defaultProperty
-     * @param $defaultDirection
-     */
-    private function addOrderQuery($builder, $defaultProperty, $defaultDirection)
-    {
-        $order = (array)$this->Request()->getParam('sort', array());
-        if (empty($order)) {
-            $builder->orderBy($defaultProperty, $defaultDirection);
-        } else {
-            $builder->orderBy($order[0]["property"], $order[0]["direction"]);
-        }
     }
 }
 
