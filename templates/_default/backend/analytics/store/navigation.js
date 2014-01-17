@@ -190,8 +190,13 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
             comparable: true,
             leaf: true,
             multiShop: true
-        }]
+        },
+
+        //{block name="backend/analytics/store/navigation/items"}{/block}
+
+        ]
     },
+
     constructor: function(config) {
         var me = this;
 

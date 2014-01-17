@@ -46,6 +46,7 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
      * @array
      */
     refs:[
+        { ref:'navigation', selector:'analytics-navigation' },
         { ref:'panel', selector:'analytics-panel' },
         { ref:'layoutButton', selector:'analytics-toolbar button[action=layout]' },
         { ref:'shopSelection', selector:'analytics-toolbar combobox[name=shop_selection]' },
@@ -60,6 +61,8 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
      * @string
      */
     selectedType: null,
+
+    currenStore: null,
 
     /**
      * Creates the necessary event listener for this
@@ -112,7 +115,10 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
                     me.renderDataOutput(store, record);
                 }
             },
-            'analytics-toolbar button[action=layout]':{
+            'analytics-toolbar':{
+                exportCSV: me.onExport
+            },
+            'analytics-toolbar button[action=export]':{
                 change:function (button, item) {
                     me.getPanel().getLayout().setActiveItem(item.layout == 'table' ? 0 : 1);
                 }
@@ -136,6 +142,29 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
 
         me.renderDataOutput(store, overview);
     },
+
+    onExport: function() {
+        var me = this,
+            fromField = me.getFromField(),
+            toField = me.getToField();
+
+        var url = me.currenStore.getProxy().url;
+        url += '?format=csv';
+        url += '&fromDate=' + Ext.Date.format(fromField.getValue(), 'Y-m-d');
+        url += '&toDate=' + Ext.Date.format(toField.getValue(), 'Y-m-d');
+        url += '&type=' + me.selectedType;
+
+        var form = Ext.create('Ext.form.Panel', {
+            standardSubmit: true,
+            target: 'iframe',
+        });
+
+        form.submit({
+            method: 'POST',
+            url: url
+        });
+    },
+
     /**
      * Load chart and table for a certain statistic
      * @param store
@@ -167,8 +196,16 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
             store.getProxy().extraParams.toDate = toValue;
         }
 
+        me.currenStore = store;
+
+        if (me.getNavigation()) {
+            me.getNavigation().setLoading(true);
+        }
         store.load({
             callback:function () {
+                if (me.getNavigation()) {
+                    me.getNavigation().setLoading(false);
+                }
                 if (Ext.ClassManager.getNameByAlias(chartId)) {
                     var chart = Ext.create(chartId, {
                         store:store,

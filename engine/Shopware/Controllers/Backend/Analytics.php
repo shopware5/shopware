@@ -54,6 +54,16 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
      */
     protected $repository = null;
 
+    protected $format = null;
+
+    public function preDispatch()
+    {
+        if ($this->Request()->has('format')) {
+            $this->format = $this->Request()->getParam('format', null);
+        }
+        parent::preDispatch();
+    }
+
     protected function initAcl()
     {
         // read
@@ -217,12 +227,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                 'basketVisitConversion' => round($cancelledOrders / $visitors * 100, 2)
             );
         }
+        $this->send($data, $result->getTotalCount());
 
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $data,
-            'totalCount' => $result->getTotalCount()
-        ));
     }
 
     public function getReferrerRevenueAction()
@@ -281,13 +287,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $ref['customerValue'] = round($ref['customerRevenue'] / ($ref['newCustomers'] + $ref['oldCustomers']), 2);
         }
 
-        $referrer = array_values($referrer);
-
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $referrer,
-            'totalCount' => count($referrer)
-        ));
+	$this->send(array_values($referrer), $result->getTotalCount());
     }
 
     public function getPartnerRevenueAction()
@@ -310,11 +310,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             }
         }
 
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $data,
-            'totalCount' => $result->getTotalCount()
-        ));
+	$this->send($data, $result->getTotalCount());
     }
 
     public function getReferrerVisitorsAction()
@@ -343,13 +339,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $referrer[$host]['count']++;
         }
 
-        $referrer = array_values($referrer);
-
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $referrer,
-            'totalCount' => $result->getTotalCount()
-        ));
+	$this->send(array_values($referrer), $result->getTotalCount());
     }
 
     public function getArticleSellsAction()
@@ -361,11 +351,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->getToDate()
         );
 
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $result->getData(),
-            'totalCount' => $result->getTotalCount()
-        ));
+	$this->send($result->getData(), $result->getTotalCount());
     }
 
     public function getReferrerSearchTermsAction()
@@ -467,12 +453,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $entry['femaleAmount'] = round($entry['female'] / ($entry['male'] + $entry['female']) * 100, 2);
         }
 
-        $customers = array_values($customers);
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $customers,
-            'totalCount' => count($customers)
-        ));
+	$this->send(array_values($customers), count($customers));
     }
 
     public function getCustomerAgeAction()
@@ -526,12 +507,10 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             }
         }
 
-        $ages = array_values($ages);
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $ages,
-            'totalCount' => count($ages)
-        ));
+        $this->send(
+            array_values($ages),
+            count($ages)
+        );
     }
 
     public function getMonthAction()
@@ -542,11 +521,10 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->getSelectedShopIds()
         );
 
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $this->formatOrderAnalyticsData($result->getData()),
-            'total' => $result->getTotalCount()
-        ));
+        $this->send(
+            $result->getData(),
+            $result->getTotalCount()
+        );
     }
 
     public function getCalendarWeeksAction()
@@ -557,11 +535,10 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->getSelectedShopIds()
         );
 
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $this->formatOrderAnalyticsData($result->getData()),
-            'total' => $result->getTotalCount()
-        ));
+        $this->send(
+            $this->formatOrderAnalyticsData($result->getData()),
+            $result->getTotalCount()
+        );
     }
 
     public function getWeekdaysAction()
@@ -572,11 +549,10 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->getSelectedShopIds()
         );
 
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $this->formatOrderAnalyticsData($result->getData()),
-            'total' => $result->getTotalCount()
-        ));
+        $this->send(
+            $this->formatOrderAnalyticsData($result->getData()),
+            $result->getTotalCount()
+        );
     }
 
     public function getTimeAction()
@@ -587,11 +563,10 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->getSelectedShopIds()
         );
 
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $this->formatOrderAnalyticsData($result->getData()),
-            'total' => $result->getTotalCount()
-        ));
+        $this->send(
+            $this->formatOrderAnalyticsData($result->getData()),
+            $result->getTotalCount()
+        );
     }
 
 
@@ -603,11 +578,10 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->getSelectedShopIds()
         );
 
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $this->formatOrderAnalyticsData($result->getData()),
-            'total' => $result->getTotalCount()
-        ));
+        $this->send(
+            $this->formatOrderAnalyticsData($result->getData()),
+            $result->getTotalCount()
+        );
     }
 
     public function getPaymentAction()
@@ -618,11 +592,10 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->getSelectedShopIds()
         );
 
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $this->formatOrderAnalyticsData($result->getData()),
-            'total' => $result->getTotalCount()
-        ));
+        $this->send(
+            $this->formatOrderAnalyticsData($result->getData()),
+            $result->getTotalCount()
+        );
     }
 
     public function getShippingMethodsAction()
@@ -633,11 +606,10 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->getSelectedShopIds()
         );
 
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $this->formatOrderAnalyticsData($result->getData()),
-            'total' => $result->getTotalCount()
-        ));
+        $this->send(
+            $this->formatOrderAnalyticsData($result->getData()),
+            $result->getTotalCount()
+        );
     }
 
     public function getCategoriesAction()
@@ -651,11 +623,10 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->getToDate()
         );
 
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $result->getData(),
-            'total' => $result->getTotalCount()
-        ));
+        $this->send(
+            $result->getData(),
+            $result->getTotalCount()
+        );
     }
 
 
@@ -666,11 +637,10 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->getToDate()
         );
 
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $result->getData(),
-            'total' => $result->getTotalCount()
-        ));
+        $this->send(
+            $result->getData(),
+            $result->getTotalCount()
+        );
     }
 
 
@@ -684,11 +654,10 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             ))
         );
 
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $result->getData(),
-            'total' => $result->getTotalCount()
-        ));
+        $this->send(
+            $result->getData(),
+            $result->getTotalCount()
+        );
     }
 
     public function getVisitorsAction()
@@ -704,11 +673,10 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->getSelectedShopIds()
         );
 
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $result->getData(),
-            'total' => $result->getTotalCount()
-        ));
+        $this->send(
+            $result->getData(),
+            $result->getTotalCount()
+        );
     }
 
     public function getArticleImpressionsAction()
@@ -724,11 +692,10 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->getSelectedShopIds()
         );
 
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $result->getData(),
-            'total' => $result->getTotalCount()
-        ));
+        $this->send(
+            $result->getData(),
+            $result->getTotalCount()
+        );
     }
 
     public function getCustomerGroupAmountAction()
@@ -738,11 +705,63 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->getToDate()
         );
 
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $result->getData(),
-            'total' => $result->getTotalCount()
-        ));
+        $this->send(
+            $result->getData(),
+            $result->getTotalCount()
+        );
+    }
+
+    protected function send($data, $totalCount)
+    {
+        if (strtolower($this->format) == 'csv') {
+            $this->exportCSV($data);
+        } else {
+            $this->View()->assign(array(
+                'success' => true,
+                'data' => $data,
+                'total' => $totalCount
+            ));
+        }
+    }
+
+protected function exportCSV($data)
+    {
+        $this->Front()->Plugins()->Json()->setRenderer(false);
+        $this->Response()->setHeader('Content-Type', 'text/csv; charset=utf-8');
+        $this->Response()->setHeader('Content-Disposition', 'attachment;filename=' . $this->getCsvFileName());
+
+        echo "\xEF\xBB\xBF";
+        $fp = fopen('php://output', 'w');
+
+        fputcsv($fp, array_keys($data[0]), ";");
+
+        foreach ($data as $value) {
+            if (empty($value)) {
+                continue;
+            }
+            fputcsv($fp, $value, ";");
+        }
+        fclose($fp);
+    }
+    
+    private function getCsvFileName()
+    {
+        $name = $this->Request()->getActionName();
+        if (strpos($name, 'get') == 0) {
+            $name = substr($name, 3);
+        }
+
+        return $this->underscoreToCamelCase($name) . '.csv';
+    }
+
+    private function underscoreToCamelCase($str)
+    {
+        $str[0] = strtolower($str[0]);
+        $func = function($c) {
+            return '_' . strtolower($c[1]);
+        };
+
+        return preg_replace_callback('/([A-Z])/', $func, $str);
     }
 
     /**
