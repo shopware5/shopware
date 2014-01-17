@@ -1,17 +1,17 @@
 /**
  * todo@all: Documentation
  */
-Ext.define('Shopware.apps.Analytics.store.navigation.SearchTerms', {
+Ext.define('Shopware.apps.Analytics.store.navigation.SearchUrls', {
     extend: 'Ext.data.Store',
-    alias: 'widget.analytics-store-navigation-search-terms',
+    alias: 'widget.analytics-store-navigation-search-urls',
     remoteSort: true,
     fields: [
         'count',
-        'keyword'
+        'referrer'
     ],
     proxy: {
         type: 'ajax',
-        url: '{url controller=analytics action=getReferrerSearchTerms}',
+        url: '{url controller=analytics action=getSearchUrls}',
         reader: {
             type: 'json',
             root: 'data',

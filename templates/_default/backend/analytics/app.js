@@ -91,6 +91,7 @@ Ext.define('Shopware.apps.Analytics', {
         'navigation.ArticleSells',
         'navigation.Customers',
         'navigation.SearchTerms',
+        'navigation.SearchUrls',
         'navigation.CustomerAge'
     ],
 
@@ -146,6 +147,7 @@ Ext.define('Shopware.apps.Analytics', {
         'table.ArticleSells',
         'table.Customers',
         'table.SearchTerms',
+        'table.SearchUrls',
         'table.CustomerAge'
     ],
     /**

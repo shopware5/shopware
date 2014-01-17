@@ -29,7 +29,7 @@ Ext.define('Shopware.apps.Analytics.view.table.SearchTerms', {
             dataIndex: 'count',
             text: 'Anzahl'
         }, {
-            dataIndex: 'searchterm',
+            dataIndex: 'keyword',
             text: 'Suchbegriff'
         }];
     }

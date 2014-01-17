@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.Analytics.controller.ReferrerVisitors', {
             record = store.getAt(rowIndex),
             referrer = record.get('referrer');
 
-        me.openDetailWindow('search-terms', referrer);
+        me.openDetailWindow('search-terms', referrer, 400, 400);
     },
 
     /**
@@ -88,23 +88,29 @@ Ext.define('Shopware.apps.Analytics.controller.ReferrerVisitors', {
      * @param colIndex
      */
     onViewSearchUrls: function(grid, rowIndex, colIndex){
-        var me = this;
+        var me = this,
+            store = grid.store,
+            record = store.getAt(rowIndex),
+            referrer = record.get('referrer');
 
-        me.openDetailWindow('search-urls');
+        me.openDetailWindow('search-urls', referrer, 600, 400);
     },
 
-    openDetailWindow: function(widget, title) {
+    openDetailWindow: function(widget, title, width, height) {
         var me = this,
-            widgetName = 'widget.analytics-table-' + widget;
+            widgetName = 'widget.analytics-table-' + widget,
+            store = Ext.widget('analytics-store-navigation-' + widget);
+
+        store.getProxy().extraParams.selectedReferrer = title;
 
         Ext.create('Enlight.app.SubWindow', {
             subApp: me.subApplication,
-            width: 400,
-            height: 600,
+            width: width,
+            height: height,
             layout: 'fit',
             title: title,
             items: [Ext.create(widgetName, {
-                store: Ext.widget('analytics-store-navigation-' + widget).load()
+                store: store.load()
             })]
         }).show();
     }

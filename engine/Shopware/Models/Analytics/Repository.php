@@ -389,6 +389,38 @@ class Repository
         return new Result($builder);
     }
 
+    public function getReferrerUrls($referrer, $offset, $limit)
+    {
+        $builder = $this->createVisitedReferrerBuilder();
+
+        $this->setVisitedReferrerSelection($builder, $referrer);
+
+        $this->addPagination($builder, $offset, $limit);
+
+        $builder = $this->eventManager->filter('Shopware_Analytics_GetReferrerUrls', $builder, array(
+            'subject' => $this
+        ));
+
+        return new Result($builder);
+    }
+
+    public function getReferrerSearchTerms($referrer)
+    {
+        $builder = $this->createVisitedReferrerBuilder();
+
+        $this->setVisitedReferrerSelection($builder, $referrer);
+
+        return new Result($builder);
+    }
+
+    private function setVisitedReferrerSelection($builder, $referrer)
+    {
+        $builder->where('referrers.referer LIKE :selectedReferrer')
+                ->setParameter('selectedReferrer', '%' . $referrer . '%');
+
+        return $builder;
+    }
+
     /**
      * Returns an array which displays how much impressions and visits done
      * in the passed date range.
