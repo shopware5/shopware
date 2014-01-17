@@ -48,5 +48,18 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Time', {
             root: 'data',
             totalProperty: 'total'
         }
+    },
+
+    constructor: function(config) {
+        var me = this;
+        config.fields = me.fields;
+
+        if(config.shopStore) {
+            config.shopStore.each(function(shop) {
+                config.fields.push('amount' + shop.data.id);
+            });
+        }
+
+        me.callParent(arguments);
     }
 });

@@ -121,7 +121,8 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
                 change:me.onChangeDate
             },
             'analytics-toolbar combobox':{
-                change:me.onChangeShop
+                change:me.onChangeShop,
+                blur:me.onBlurShop
             }
         });
 
@@ -259,14 +260,22 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
      */
     onChangeShop:function (field, value) {
         var me = this,
+            store = (me.customStoreEnabled) ? me.customStore : me.dataStore;
+
+        store.getProxy().extraParams.selectedShops = value.toString();
+    },
+
+    /**
+     * reloads the store after the shop combobox loses focus
+     */
+    onBlurShop:function () {
+        var me = this,
             store = (me.customStoreEnabled) ? me.customStore : me.dataStore,
             gridPanel = me.getPanel().getLayout().getActiveItem();
 
         if(!gridPanel){
             return;
         }
-
-        store.getProxy().extraParams.selectedShop = value;
 
         store.load();
     }

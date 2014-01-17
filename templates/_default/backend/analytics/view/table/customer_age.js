@@ -47,6 +47,8 @@ Ext.define('Shopware.apps.Analytics.view.table.CustomerAge', {
             }
         };
 
+        me.initStoreIndices('percent', 'Prozentanteil: [0]');
+
         me.callParent(arguments);
     },
 
