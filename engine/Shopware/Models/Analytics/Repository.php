@@ -1147,7 +1147,7 @@ class Repository
      * @param \DateTime $to
      * @return DBALQueryBuilder
      */
-    protected function createShopStatisticBuilder(\DateTime $from = null, \DateTime $to = null)
+    protected function createShopStatisticBuilder(\DateTime $from = null, \DateTime $to = null, $shopId = 0)
     {
         $builder = $this->createVisitorBuilder();
 
@@ -1161,6 +1161,11 @@ class Repository
 
         $builder->leftJoin('visitor', 's_user', 'users', 'users.firstlogin = visitor.datum')
             ->groupBy('visitor.datum');
+
+        if(!empty($shopId)){
+            $builder->andWhere('users.subshopID = :shopId')
+                ->setParameter('shopId', $shopId);
+        }
 
         $this->addDateRangeCondition($builder, $from, $to, 'visitor.datum');
 

@@ -73,7 +73,14 @@ Ext.define('Shopware.apps.Analytics.view.main.Toolbar', {
                 maxValue: today
             },
             { xtype: 'tbspacer' },
-
+            {
+                xtype: 'button',
+                text: 'Export',
+                name: 'export',
+                handler: function() {
+                    me.fireEvent('exportCSV');
+                }
+            },
             { xtype: 'tbfill' },
             {
                 showText: true,
