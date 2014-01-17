@@ -62,7 +62,7 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
      */
     selectedType: null,
 
-    currenStore: null,
+    currentStore: null,
 
     /**
      * Creates the necessary event listener for this
@@ -116,7 +116,8 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
                 }
             },
             'analytics-toolbar':{
-                exportCSV: me.onExport
+                exportCSV: me.onExport,
+                refreshView: me.onRefreshView
             },
             'analytics-toolbar button[action=export]':{
                 change:function (button, item) {
@@ -127,8 +128,7 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
                 change:me.onChangeDate
             },
             'analytics-toolbar combobox':{
-                change:me.onChangeShop,
-                blur:me.onBlurShop
+                change:me.onChangeShop
             }
         });
 
@@ -148,7 +148,7 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
             fromField = me.getFromField(),
             toField = me.getToField();
 
-        var url = me.currenStore.getProxy().url;
+        var url = me.currentStore.getProxy().url;
         url += '?format=csv';
         url += '&fromDate=' + Ext.Date.format(fromField.getValue(), 'Y-m-d');
         url += '&toDate=' + Ext.Date.format(toField.getValue(), 'Y-m-d');
@@ -167,6 +167,16 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
             method: 'POST',
             url: url
         });
+    },
+
+    onRefreshView: function() {
+        var me = this;
+
+        if(!me.currentStore || !me.currentNavigationItem){
+            return;
+        }
+
+        me.renderDataOutput(me.currentStore, me.currentNavigationItem)
     },
 
     /**
@@ -200,7 +210,8 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
             store.getProxy().extraParams.toDate = toValue;
         }
 
-        me.currenStore = store;
+        me.currentStore = store;
+        me.currentNavigationItem = record;
 
         if (me.getNavigation()) {
             me.getNavigation().setLoading(true);
@@ -223,7 +234,8 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
                 if (Ext.ClassManager.getNameByAlias(tableId)) {
                     var table = Ext.create(tableId, {
                         store:store,
-                        shopStore:me.shopStore
+                        shopStore:me.shopStore,
+                        shopSelection:me.getShopSelection().value
                     });
                     panel.add(table);
                 } else {
@@ -304,21 +316,6 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
             store = (me.customStoreEnabled) ? me.customStore : me.dataStore;
 
         store.getProxy().extraParams.selectedShops = value.toString();
-    },
-
-    /**
-     * reloads the store after the shop combobox loses focus
-     */
-    onBlurShop:function () {
-        var me = this,
-            store = (me.customStoreEnabled) ? me.customStore : me.dataStore,
-            gridPanel = me.getPanel().getLayout().getActiveItem();
-
-        if(!gridPanel){
-            return;
-        }
-
-        store.load();
     }
 });
 //{/block}

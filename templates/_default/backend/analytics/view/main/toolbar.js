@@ -81,6 +81,14 @@ Ext.define('Shopware.apps.Analytics.view.main.Toolbar', {
                     me.fireEvent('exportCSV');
                 }
             },
+            {
+                xtype: 'button',
+                text: 'Refresh',
+                name: 'refresh',
+                handler: function() {
+                    me.fireEvent('refreshView')
+                }
+            },
             { xtype: 'tbfill' },
             {
                 showText: true,

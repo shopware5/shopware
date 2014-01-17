@@ -58,18 +58,24 @@ Ext.define('Shopware.apps.Analytics.view.main.Table', {
             columnItems = !!columns.items ? columns.items : columns,
             column;
 
+        if(!me.shopSelection) {
+            return;
+        }
+
         indexName = indexName || 'amount';
         text = text || '[0]';
         params = params || { };
 
-        me.shopStore.each(function(shop) {
+        for(var i = 0; i < me.shopSelection.length; i++){
+            var shop = me.shopStore.getAt(i);
+
             column = Ext.merge({
-                dataIndex: indexName + shop.data.id,
-                text: Ext.String.format(text, shop.data.name)
+                dataIndex: indexName + shop.get('id'),
+                text: Ext.String.format(text, shop.get('name'))
             }, params);
 
             columnItems.push(column);
-        }, me);
+        }
     },
 
     getColumns: function(){
