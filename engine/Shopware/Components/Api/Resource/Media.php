@@ -25,6 +25,7 @@
 namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Components\Thumbnail\Manager;
 use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media as MediaModel;
 use Symfony\Component\HttpFoundation\File\File;
@@ -158,17 +159,13 @@ class Media extends Resource
             throw new ApiException\ValidationException($violations);
         }
 
-        // When a media's image was changed, we need to recreate thumbnails.
-        // Therefore the onSave method of the media model needs to be called.
-        // As ist listens to prePersist, this can only be done, when a model
-        // is persisted for the first time.
-        // In other words: Changing images for a media model is not possible
-        // right now. It might also have massiv side-effects when other
-        // modules use a specific image.
-        // SW-4464
-//        $media->onSave();
-
         $this->flush();
+
+        if ($this->container->has('thumbnail_manager') && $media->getType() === MediaModel::TYPE_IMAGE) {
+            /**@var $manager Manager*/
+            $manager = $this->getContainer()->get('thumbnail_manager');
+            $manager->createMediaThumbnail($media, $media->getDefaultThumbnails());
+        }
 
         return $media;
     }
