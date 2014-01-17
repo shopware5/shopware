@@ -121,8 +121,7 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
                 change:me.onChangeDate
             },
             'analytics-toolbar combobox':{
-                change:me.onChangeShop,
-                blur:me.onBlurShop
+                change:me.onChangeShop
             }
         });
 
@@ -260,16 +259,6 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
      */
     onChangeShop:function (field, value) {
         var me = this,
-            store = (me.customStoreEnabled) ? me.customStore : me.dataStore;
-
-        store.getProxy().extraParams.selectedShops = value.toString();
-    },
-
-    /**
-     * reloads the store after the shop combobox loses focus
-     */
-    onBlurShop:function () {
-        var me = this,
             store = (me.customStoreEnabled) ? me.customStore : me.dataStore,
             gridPanel = me.getPanel().getLayout().getActiveItem();
 
@@ -277,36 +266,8 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
             return;
         }
 
-        var columns = gridPanel.getColumns(),
-            selectedShopIds = store.getProxy().extraParams.selectedShops;
+        store.getProxy().extraParams.selectedShop = value;
 
-        if(me.getPanel().shopColumnName) {
-            //the table uses multiple shop columns so add the selected ones
-            if(!Ext.isEmpty(selectedShopIds)) {
-                selectedShopIds = selectedShopIds.split(",");
-                me.shopStore.each(function (shop) {
-                    if(Ext.Array.indexOf(selectedShopIds, shop.get('id')) != -1) {
-                        columns.push({
-                            xtype: 'gridcolumn',
-                            dataIndex: 'amount' + shop.data.id,
-                            text: Ext.String.format(gridPanel.shopColumnName, shop.data.name)
-                        });
-                    }
-                });
-            } else {
-                //the user didn't select any shop so add all shop columns
-                me.shopStore.each(function (shop) {
-                    if(Ext.Array.indexOf(selectedShopIds, shop.get('id')) != -1) {
-                        columns.push({
-                            xtype: 'gridcolumn',
-                            dataIndex: 'amount' + shop.data.id,
-                            text: Ext.String.format(gridPanel.shopColumnName, shop.data.name)
-                        });
-                    }
-                });
-            }
-            gridPanel.reconfigure(null, columns);
-        }
         store.load();
     }
 });

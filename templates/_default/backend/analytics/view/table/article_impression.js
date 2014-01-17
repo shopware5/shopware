@@ -45,8 +45,6 @@ Ext.define('Shopware.apps.Analytics.view.table.ArticleImpression', {
             }
         };
 
-        me.initStoreIndices('amount', me.shopColumnName);
-
         me.callParent(arguments);
     },
     /**

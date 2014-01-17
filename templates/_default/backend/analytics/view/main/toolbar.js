@@ -50,7 +50,6 @@ Ext.define('Shopware.apps.Analytics.view.main.Toolbar', {
                 queryMode: 'remote',
                 fieldLabel: 'shop',
                 store: me.shopStore,
-                multiSelect: true,
                 displayField: 'name',
                 valueField: 'id'
             },

@@ -48,8 +48,6 @@ Ext.define('Shopware.apps.Analytics.view.table.Daytime', {
             }
         };
 
-        me.initStoreIndices('amount', me.shopColumnSales, { sortable: false });
-
         me.callParent(arguments);
     },
 

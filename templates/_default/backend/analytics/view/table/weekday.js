@@ -48,8 +48,6 @@ Ext.define('Shopware.apps.Analytics.view.table.Weekday', {
             }
         };
 
-        me.initStoreIndices('amount', me.shopColumnSales, { xtype: 'numbercolumn' });
-
         me.callParent(arguments);
     },
 
