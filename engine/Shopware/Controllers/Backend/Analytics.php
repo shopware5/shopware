@@ -640,7 +640,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->Request()->getParam('sort', array(
                 array('property' => 'totalAmount', 'direction' => 'DESC')
             )),
-            $this->getSelectedShopIds()
+            $this->getSelectedShopId()
         );
 
         $this->View()->assign(array(
