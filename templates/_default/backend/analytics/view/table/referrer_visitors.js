@@ -47,6 +47,20 @@ Ext.define('Shopware.apps.Analytics.view.table.ReferrerVisitors', {
             }
         };
 
+        me.addEvents(
+                /**
+                 * Fired when the magnifier icon in the action column was clicked
+                 * Loads the referrer search terms to the table
+                 */
+                'viewSearchTerms',
+
+                /**
+                 * Fires when application icon in the action column was clicked
+                 * Loads the referrer urls to the table
+                 */
+                'viewSearchUrl'
+        );
+
         me.callParent(arguments);
     },
 

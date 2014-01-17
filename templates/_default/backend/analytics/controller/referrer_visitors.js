@@ -61,7 +61,7 @@ Ext.define('Shopware.apps.Analytics.controller.ReferrerVisitors', {
         me.control({
             'analytics-table-referrer_visitors':{
                 viewSearchTerms: me.onViewSearchTerms,
-                viewSearchUrl: me.onViewSearchUrl
+                viewSearchUrl: me.onViewSearchUrls
             }
         });
     },
@@ -73,7 +73,12 @@ Ext.define('Shopware.apps.Analytics.controller.ReferrerVisitors', {
      * @param colIndex
      */
     onViewSearchTerms: function(grid, rowIndex, colIndex){
+        var me = this,
+            store = grid.store,
+            record = store.getAt(rowIndex),
+            referrer = record.get('referrer');
 
+        me.openDetailWindow('search-terms', referrer);
     },
 
     /**
@@ -82,8 +87,26 @@ Ext.define('Shopware.apps.Analytics.controller.ReferrerVisitors', {
      * @param rowIndex
      * @param colIndex
      */
-    onViewSearchUrl: function(grid, rowIndex, colIndex){
+    onViewSearchUrls: function(grid, rowIndex, colIndex){
+        var me = this;
 
+        me.openDetailWindow('search-urls');
+    },
+
+    openDetailWindow: function(widget, title) {
+        var me = this,
+            widgetName = 'widget.analytics-table-' + widget;
+
+        Ext.create('Enlight.app.SubWindow', {
+            subApp: me.subApplication,
+            width: 400,
+            height: 600,
+            layout: 'fit',
+            title: title,
+            items: [Ext.create(widgetName, {
+                store: Ext.widget('analytics-store-navigation-' + widget).load()
+            })]
+        }).show();
     }
 });
 //{/block}
