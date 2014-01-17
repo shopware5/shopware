@@ -132,12 +132,20 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     private function formatOrderAnalyticsData($data)
     {
+        $shopIds = $this->getSelectedShopIds();
+
         foreach ($data as &$row) {
             $row['count'] = (int)$row['count'];
             $row['amount'] = (float)$row['amount'];
 
             if (!empty($row['date'])) {
                 $row['date'] = strtotime($row['date']);
+            }
+
+            if (!empty($shopIds)) {
+                foreach ($shopIds as $shopId) {
+                    $row['amount' . $shopId] = (float)$row['amount' . $shopId];
+                }
             }
         }
 
@@ -165,14 +173,20 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->Request()->getParam('start', 0),
             $this->Request()->getParam('limit', 25),
             $this->getFromDate(),
-            $this->getToDate(),
-            $this->getSelectedShopId()
+            $this->getToDate()
         );
 
         $data = $result->getData();
+        $shopIds = $this->getSelectedShopIds();
         foreach ($data as &$row) {
             $row['date'] = strtotime($row['date']);
             $row['totalConversion'] = round($row['totalOrders'] / $row['totalVisits'] * 100, 2);
+
+            if (!empty($shopIds)) {
+                foreach ($shopIds as $shopId) {
+                    $row['conversion' . $shopId] = round($row['orderCount' . $shopId] / $row['visits' . $shopId] * 100, 2);
+                }
+            }
         }
 
         $this->View()->assign(array(
@@ -463,20 +477,16 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     public function getCustomerAgeAction()
     {
-        $shopId = $this->getSelectedShopId();
+        $shopIds = $this->getSelectedShopIds();
         $result = $this->getRepository()->getAgeOfCustomers(
             $this->getFromDate(),
             $this->getToDate(),
-            $shopId
+            $shopIds
         );
 
         $subShopCounts = array();
         $ages = array();
         foreach ($result->getData() as $row) {
-            if(!empty($shopId) && empty($row['birthday' . $shopId])){
-                continue;
-            }
-
             $age = floor((time() - strtotime($row['birthday'])) / (60 * 60 * 24 * 365));
 
             if (!array_key_exists("{$age}", $ages)) {
@@ -486,18 +496,20 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                 );
             }
 
-            if(!empty($shopId)){
-                if(!array_key_exists($shopId, $subShopCounts)){
-                    $subShopCounts[$shopId] = 0;
-                }
+            if(!empty($shopIds)){
+                foreach($shopIds as $shopId){
+                    if(!array_key_exists($shopId, $subShopCounts)){
+                        $subShopCounts[$shopId] = 0;
+                    }
 
-                if (!array_key_exists('count' . $shopId, $ages["{$age}"])){
-                    $ages["{$age}"]['count' . $shopId] = 0;
-                }
+                    if (!array_key_exists('count' . $shopId, $ages["{$age}"])){
+                        $ages["{$age}"]['count' . $shopId] = 0;
+                    }
 
-                if(!empty($row['birthday' . $shopId])){
-                    $ages["{$age}"]['count' . $shopId]++;
-                    $subShopCounts[$shopId]++;
+                    if(!empty($row['birthday' . $shopId])){
+                        $ages["{$age}"]['count' . $shopId]++;
+                        $subShopCounts[$shopId]++;
+                    }
                 }
             }
 
@@ -505,10 +517,12 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         }
 
         foreach ($ages as &$age) {
-            if(!empty($shopId)){
-                $age['percent'] = round($age['count' . $shopId] / $subShopCounts[$shopId] * 100, 2);
-            } else {
-                $age['percent'] = round($age['count'] / $result->getTotalCount() * 100, 2);
+            $age['percent'] = round($age['count'] / $result->getTotalCount() * 100, 2);
+
+            if(!empty($shopIds)){
+                foreach($shopIds as $shopId){
+                    $age['percent' . $shopId] = round($age['count' . $shopId] / $subShopCounts[$shopId] * 100, 2);
+                }
             }
         }
 
@@ -525,7 +539,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $result = $this->getRepository()->getAmountPerMonth(
             $this->getFromDate(),
             $this->getToDate(),
-            $this->getSelectedShopId()
+            $this->getSelectedShopIds()
         );
 
         $this->View()->assign(array(
@@ -540,7 +554,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $result = $this->getRepository()->getAmountPerCalendarWeek(
             $this->getFromDate(),
             $this->getToDate(),
-            $this->getSelectedShopId()
+            $this->getSelectedShopIds()
         );
 
         $this->View()->assign(array(
@@ -555,7 +569,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $result = $this->getRepository()->getAmountPerWeekday(
             $this->getFromDate(),
             $this->getToDate(),
-            $this->getSelectedShopId()
+            $this->getSelectedShopIds()
         );
 
         $this->View()->assign(array(
@@ -570,7 +584,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $result = $this->getRepository()->getAmountPerHour(
             $this->getFromDate(),
             $this->getToDate(),
-            $this->getSelectedShopId()
+            $this->getSelectedShopIds()
         );
 
         $this->View()->assign(array(
@@ -586,7 +600,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $result = $this->getRepository()->getAmountPerCountry(
             $this->getFromDate(),
             $this->getToDate(),
-            $this->getSelectedShopId()
+            $this->getSelectedShopIds()
         );
 
         $this->View()->assign(array(
@@ -601,7 +615,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $result = $this->getRepository()->getAmountPerPayment(
             $this->getFromDate(),
             $this->getToDate(),
-            $this->getSelectedShopId()
+            $this->getSelectedShopIds()
         );
 
         $this->View()->assign(array(
@@ -616,7 +630,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $result = $this->getRepository()->getAmountPerShipping(
             $this->getFromDate(),
             $this->getToDate(),
-            $this->getSelectedShopId()
+            $this->getSelectedShopIds()
         );
 
         $this->View()->assign(array(
@@ -687,7 +701,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->Request()->getParam('sort', array(
                 array('property' => 'datum', 'direction' => 'DESC')
             )),
-            $this->getSelectedShopId()
+            $this->getSelectedShopIds()
         );
 
         $this->View()->assign(array(
@@ -707,7 +721,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->Request()->getParam('sort', array(
                 array('property' => 'totalAmount', 'direction' => 'DESC')
             )),
-            $this->getSelectedShopId()
+            $this->getSelectedShopIds()
         );
 
         $this->View()->assign(array(
@@ -732,15 +746,28 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     }
 
     /**
-     * helper to get the selected shop id
+     * helper to get the selected shop ids
+     * if no shop is selected the ids of all shops are returned
      *
-     * return int $selectedShopId
+     * return array | shopIds
      */
-    private function getSelectedShopId()
+    private function getSelectedShopIds()
     {
-        $selectedShopId = (int) $this->Request()->getParam('selectedShop');
+        $selectedShopIds = (string)$this->Request()->getParam('selectedShops');
 
-        return $selectedShopId;
+        if (!empty($selectedShopIds)) {
+            return explode(',', $selectedShopIds);
+        }
+
+        $builder = $this->getManager()->getDBALQueryBuilder();
+        $builder->select('s.id')
+            ->from('s_core_shops', 's')
+            ->orderBy('s.default', 'DESC')
+            ->addOrderBy('s.name');
+
+        $statement = $builder->execute();
+
+        return $statement->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**

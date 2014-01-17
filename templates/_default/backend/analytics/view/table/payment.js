@@ -47,6 +47,8 @@ Ext.define('Shopware.apps.Analytics.view.table.Payment', {
             }
         };
 
+        me.initStoreIndices('amount', '{s name=table/payment/sales}Sales{/s}: [0]', { xtype: 'numbercolumn' });
+
         me.callParent(arguments);
     },
 
