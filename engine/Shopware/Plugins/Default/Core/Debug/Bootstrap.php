@@ -142,7 +142,7 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
 
         $eventManager = $this->get('events');
         $utils = new Utils();
-        $errorHandler = $this->Collection()->ErrorHandler();
+        $errorHandler = $this->Collection()->get('ErrorHandler');
 
         if ($this->Config()->get('logTemplateVars')) {
             $this->pushCollector(new TemplateVarCollector($eventManager));
@@ -165,7 +165,7 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
         }
 
         if ($this->Config()->get('logTemplate')) {
-            $this->pushCollector(new TemplateCollector($this->get('template'), $utils, $this->Application()));
+            $this->pushCollector(new TemplateCollector($this->get('template'), $utils, $this->get('kernel')->getRootDir()));
         }
 
         if ($this->Config()->get('logController')) {

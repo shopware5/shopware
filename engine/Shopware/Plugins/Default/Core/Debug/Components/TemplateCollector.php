@@ -39,9 +39,9 @@ class TemplateCollector implements CollectorInterface
     protected $template;
 
     /**
-     * @var \Shopware
+     * @var string
      */
-    protected $app;
+    protected $rootDir;
 
     /**
      * @var Utils
@@ -50,13 +50,14 @@ class TemplateCollector implements CollectorInterface
 
     /**
      * @param \Enlight_Template_Manager $template
-     * @param $app
+     * @param Utils $utils
+     * @param string $rootDir
      */
-    public function __construct(\Enlight_Template_Manager $template, Utils $utils, \Shopware $app)
+    public function __construct(\Enlight_Template_Manager $template, Utils $utils, $rootDir)
     {
         $this->template = $template;
-        $this->app      = $app;
-        $this->utils = $utils;
+        $this->rootDir  = $rootDir;
+        $this->utils    = $utils;
     }
 
     /**
@@ -80,8 +81,7 @@ class TemplateCollector implements CollectorInterface
         foreach (\Smarty_Internal_Debug::$template_data as $template_file) {
             $total_time += $template_file['render_time'];
             $total_time += $template_file['cache_time'];
-            $template_file['name'] = str_replace($this->app->CorePath(), '', $template_file['name']);
-            $template_file['name'] = str_replace($this->app->AppPath(), '', $template_file['name']);
+            $template_file['name'] = str_replace($this->rootDir, '', $template_file['name']);
             $template_file['compile_time'] = $this->utils->formatTime($template_file['compile_time']);
             $template_file['render_time'] = $this->utils->formatTime($template_file['render_time']);
             $template_file['cache_time'] = $this->utils->formatTime($template_file['cache_time']);
