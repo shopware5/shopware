@@ -65,31 +65,11 @@ class Repository
     {
         $builder = $this->createCustomerGroupAmountBuilder($from, $to);
 
+        $builder = $this->eventManager->filter('Shopware_Analytics_CustomerGroupAmount', $builder, array(
+            'subject' => $this
+        ));
+
         return new Result($builder);
-    }
-
-
-    /**
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @return DBALQueryBuilder
-     *      array (
-     *          'count' => '386109',
-     *          'amount' => '22637520.4061901',
-     *          'displayDate' => 'Monday',
-     *      ),
-     */
-    protected function createCustomerGroupAmountBuilder(\DateTime $from = null, \DateTime $to = null)
-    {
-        $builder = $this->createAmountBuilder()
-            ->addSelect('customerGroups.description as customerGroup')
-            ->innerJoin('orders', 's_user', 'users', 'users.id = orders.userID')
-            ->innerJoin('users', 's_core_customergroups', 'customerGroups', 'users.customergroup = customerGroups.groupkey')
-            ->groupBy('users.customergroup');
-
-        $this->addDateRangeCondition($builder, $from, $to, 'orders.ordertime');
-
-        return $builder;
     }
 
     /**
@@ -129,6 +109,10 @@ class Repository
 
         $this->addPagination($builder, $offset, $limit);
 
+        $builder = $this->eventManager->filter('Shopware_Analytics_ShopStatistic', $builder, array(
+            'subject' => $this
+        ));
+
         return new Result($builder);
     }
 
@@ -154,6 +138,10 @@ class Repository
     {
         $builder = $this->createOrdersOfVisitorsBuilder($from, $to);
 
+        $builder = $this->eventManager->filter('Shopware_Analytics_OrdersOfVisitors', $builder, array(
+            'subject' => $this
+        ));
+
         return new Result($builder);
     }
 
@@ -170,6 +158,10 @@ class Repository
 
         $this->addPagination($builder, $offset, $limit);
 
+        $builder = $this->eventManager->filter('Shopware_Analytics_VisitedReferrer', $builder, array(
+            'subject' => $this
+        ));
+
         return new Result($builder);
     }
 
@@ -182,6 +174,10 @@ class Repository
     public function getReferrerRevenue(Shop $shop, \DateTime $from = null, \DateTime $to = null)
     {
         $builder = $this->createReferrerRevenueBuilder($shop, $from, $to);
+
+        $builder = $this->eventManager->filter('Shopware_Analytics_ReferrerRevenue', $builder, array(
+            'subject' => $this
+        ));
 
         return new Result($builder);
     }
@@ -198,6 +194,10 @@ class Repository
         $builder = $this->createPartnerRevenueBuilder($from, $to);
 
         $this->addPagination($builder, $offset, $limit);
+
+        $builder = $this->eventManager->filter('Shopware_Analytics_PartnerRevenue', $builder, array(
+            'subject' => $this
+        ));
 
         return new Result($builder);
     }
@@ -226,6 +226,10 @@ class Repository
 
         $this->addPagination($builder, $offset, $limit);
 
+        $builder = $this->eventManager->filter('Shopware_Analytics_ProductSells', $builder, array(
+            'subject' => $this
+        ));
+
         return new Result($builder);
     }
 
@@ -251,6 +255,10 @@ class Repository
     {
         $builder = $this->createOrdersOfCustomersBuilder($from, $to);
 
+        $builder = $this->eventManager->filter('Shopware_Analytics_OrdersOfCustomers', $builder, array(
+            'subject' => $this
+        ));
+
         return new Result($builder);
     }
 
@@ -263,6 +271,10 @@ class Repository
     public function getAgeOfCustomers(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
     {
         $builder = $this->createAgeOfCustomersBuilder($from, $to, $shopIds);
+
+        $builder = $this->eventManager->filter('Shopware_Analytics_AgeOfCustomers', $builder, array(
+            'subject' => $this
+        ));
 
         return new Result($builder);
     }
@@ -307,6 +319,10 @@ class Repository
                 ->setParameter('parent', $categoryId);
         }
 
+        $builder = $this->eventManager->filter('Shopware_Analytics_ProductAmountPerCategory', $builder, array(
+            'subject' => $this
+        ));
+
         return new Result($builder);
     }
 
@@ -333,6 +349,10 @@ class Repository
             ->leftJoin('articles', 's_articles_supplier', 'suppliers', 'articles.supplierID = suppliers.id')
             ->groupBy('articles.supplierID')
             ->orderBy('suppliers.name');
+
+        $builder = $this->eventManager->filter('Shopware_Analytics_ProductAmountPerManufacturer', $builder, array(
+            'subject' => $this
+        ));
 
         return new Result($builder);
     }
@@ -381,7 +401,7 @@ class Repository
             }
         }
 
-        $builder = $this->eventManager->filter('Shopware_Analytics_GetSearchTerms', $builder, array(
+        $builder = $this->eventManager->filter('Shopware_Analytics_SearchTerms', $builder, array(
             'subject' => $this
         ));
 
@@ -390,13 +410,13 @@ class Repository
 
     public function getReferrerUrls($referrer, $offset, $limit)
     {
-        $builder = $this->createVisitedReferrerBuilder();
-
-        $this->setVisitedReferrerSelection($builder, $referrer);
+        $builder = $this->createVisitedReferrerBuilder()
+            ->where('referrers.referer LIKE :selectedReferrer')
+            ->setParameter('selectedReferrer', '%' . $referrer . '%');
 
         $this->addPagination($builder, $offset, $limit);
 
-        $builder = $this->eventManager->filter('Shopware_Analytics_GetReferrerUrls', $builder, array(
+        $builder = $this->eventManager->filter('Shopware_Analytics_ReferrerUrls', $builder, array(
             'subject' => $this
         ));
 
@@ -405,19 +425,15 @@ class Repository
 
     public function getReferrerSearchTerms($referrer)
     {
-        $builder = $this->createVisitedReferrerBuilder();
+        $builder = $this->createVisitedReferrerBuilder()
+            ->where('referrers.referer LIKE :selectedReferrer')
+            ->setParameter('selectedReferrer', '%' . $referrer . '%');
 
-        $this->setVisitedReferrerSelection($builder, $referrer);
+        $builder = $this->eventManager->filter('Shopware_Analytics_ReferrerSearchTerms', $builder, array(
+            'subject' => $this
+        ));
 
         return new Result($builder);
-    }
-
-    private function setVisitedReferrerSelection($builder, $referrer)
-    {
-        $builder->where('referrers.referer LIKE :selectedReferrer')
-                ->setParameter('selectedReferrer', '%' . $referrer . '%');
-
-        return $builder;
     }
 
     /**
@@ -478,7 +494,7 @@ class Repository
             }
         }
 
-        $builder = $this->eventManager->filter('Shopware_Analytics_GetVisitorsInRange', $builder, array(
+        $builder = $this->eventManager->filter('Shopware_Analytics_VisitorImpressions', $builder, array(
             'subject' => $this
         ));
 
@@ -513,7 +529,7 @@ class Repository
             ->groupBy('billing.countryID')
             ->orderBy('name');
 
-        $builder = $this->eventManager->filter('Shopware_Analytics_GetAmountPerCountry', $builder, array(
+        $builder = $this->eventManager->filter('Shopware_Analytics_AmountPerCountry', $builder, array(
             'subject' => $this
         ));
 
@@ -548,7 +564,7 @@ class Repository
             ->groupBy('orders.paymentID')
             ->orderBy('name');
 
-        $builder = $this->eventManager->filter('Shopware_Analytics_GetAmountPerPayment', $builder, array(
+        $builder = $this->eventManager->filter('Shopware_Analytics_AmountPerPayment', $builder, array(
             'subject' => $this
         ));
 
@@ -583,7 +599,7 @@ class Repository
             ->groupBy('orders.dispatchID')
             ->orderBy('dispatch.name');
 
-        $builder = $this->eventManager->filter('Shopware_Analytics_GetAmountPerShipping', $builder, array(
+        $builder = $this->eventManager->filter('Shopware_Analytics_AmountPerShipping', $builder, array(
             'subject' => $this
         ));
 
@@ -628,7 +644,7 @@ class Repository
             ->groupBy($dateCondition)
             ->orderBy('date');
 
-        $builder = $this->eventManager->filter('Shopware_Analytics_GetAmountPerMonth', $builder, array(
+        $builder = $this->eventManager->filter('Shopware_Analytics_AmountPerMonth', $builder, array(
             'subject' => $this
         ));
 
@@ -673,7 +689,7 @@ class Repository
             ->groupBy($dateCondition)
             ->orderBy('date');
 
-        $builder = $this->eventManager->filter('Shopware_Analytics_GetAmountPerWeek', $builder, array(
+        $builder = $this->eventManager->filter('Shopware_Analytics_AmountPerWeek', $builder, array(
             'subject' => $this
         ));
 
@@ -717,7 +733,7 @@ class Repository
             ->groupBy('WEEKDAY(ordertime)')
             ->orderBy('date');
 
-        $builder = $this->eventManager->filter('Shopware_Analytics_GetAmountPerWeekday', $builder, array(
+        $builder = $this->eventManager->filter('Shopware_Analytics_AmountPerWeekday', $builder, array(
             'subject' => $this
         ));
 
@@ -763,7 +779,7 @@ class Repository
             ->groupBy($dateCondition)
             ->orderBy('date');
 
-        $builder = $this->eventManager->filter('Shopware_Analytics_GetAmountPerHour', $builder, array(
+        $builder = $this->eventManager->filter('Shopware_Analytics_AmountPerHour', $builder, array(
             'subject' => $this
         ));
 
@@ -825,7 +841,7 @@ class Repository
             }
         }
 
-        $builder = $this->eventManager->filter('Shopware_Analytics_getProductImpressionOfRange', $builder, array(
+        $builder = $this->eventManager->filter('Shopware_Analytics_ProductImpressions', $builder, array(
             'subject' => $this
         ));
 
@@ -1145,6 +1161,31 @@ class Repository
     /**
      * @param \DateTime $from
      * @param \DateTime $to
+     * @return DBALQueryBuilder
+     *      array (
+     *          'count' => '386109',
+     *          'amount' => '22637520.4061901',
+     *          'displayDate' => 'Monday',
+     *      ),
+     */
+    protected function createCustomerGroupAmountBuilder(\DateTime $from = null, \DateTime $to = null)
+    {
+        $builder = $this->createAmountBuilder()
+            ->addSelect('customerGroups.description as customerGroup')
+            ->innerJoin('orders', 's_user', 'users', 'users.id = orders.userID')
+            ->innerJoin('users', 's_core_customergroups', 'customerGroups', 'users.customergroup = customerGroups.groupkey')
+            ->groupBy('users.customergroup');
+
+        $this->addDateRangeCondition($builder, $from, $to, 'orders.ordertime');
+
+        return $builder;
+    }
+
+
+    /**
+     * @param \DateTime $from
+     * @param \DateTime $to
+     * @param int $shopId
      * @return DBALQueryBuilder
      */
     protected function createShopStatisticBuilder(\DateTime $from = null, \DateTime $to = null, $shopId = 0)
