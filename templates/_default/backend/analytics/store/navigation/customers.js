@@ -54,5 +54,21 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Customers', {
             root: 'data',
             totalProperty: 'total'
         }
+    },
+
+    constructor: function (config) {
+        var me = this;
+        config.fields = me.fields;
+
+        if (config.shopStore) {
+            config.shopStore.each(function (shop) {
+                config.fields.push('amountNewCustomers' + shop.data.id);
+                config.fields.push('amountOldCustomers' + shop.data.id);
+                config.fields.push('maleAmount' + shop.data.id);
+                config.fields.push('femaleAmount' + shop.data.id);
+            });
+        }
+
+        me.callParent(arguments);
     }
 });

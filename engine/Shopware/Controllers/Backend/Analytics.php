@@ -204,6 +204,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     public function getRatingAction()
     {
+        $shopIds = $this->getSelectedShopIds();
         $result = $this->getRepository()->getOrdersOfVisitors(
             $this->getFromDate(),
             $this->getToDate(),
@@ -217,12 +218,26 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $visitors = $row['visitors'];
             $cancelledOrders = $row['cancelledOrders'];
 
-            $data[] = array(
+            $ratingData = array(
                 'date' => strtotime($row['date']),
                 'basketConversion' => round($orders / ($cancelledOrders + $orders) * 100, 2),
                 'orderConversion' => round($orders / $visitors * 100, 2),
                 'basketVisitConversion' => round($cancelledOrders / $visitors * 100, 2)
             );
+
+            if (!empty($shopIds)) {
+                foreach ($shopIds as $shopId) {
+                    $orders = $row['orderCount' . $shopId];
+                    $visitors = $row['visitors' . $shopId];
+                    $cancelledOrders = $row['cancelledOrders' . $shopId];
+
+                    $ratingData['basketConversion' . $shopId] = round($orders / ($cancelledOrders + $orders) * 100, 2);
+                    $ratingData['orderConversion' . $shopId] = round($orders / $visitors * 100, 2);
+                    $ratingData['basketVisitConversion' . $shopId] = round($cancelledOrders / $visitors * 100, 2);
+                }
+            }
+
+            $data[] = $ratingData;
         }
         $this->send($data, $result->getTotalCount());
 
@@ -403,9 +418,11 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     public function getCustomersAction()
     {
+        $shopIds = $this->getSelectedShopIds();
         $result = $this->getRepository()->getOrdersOfCustomers(
             $this->getFromDate(),
-            $this->getToDate()
+            $this->getToDate(),
+            $shopIds
         );
 
         $customers = array();
@@ -423,6 +440,20 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                     'male' => 0,
                     'female' => 0
                 );
+
+                if(!empty($shopIds)){
+                    foreach($shopIds as $shopId) {
+                        $subShopCustomers = array(
+                            'newCustomersOrders' . $shopId => 0,
+                            'oldCustomersOrders' . $shopId => 0,
+                            'orderCount' . $shopId => 0,
+                            'male' . $shopId => 0,
+                            'female' . $shopId => 0
+                        );
+
+                        $customers[$week] = array_merge($customers[$week], $subShopCustomers);
+                    }
+                }
             }
 
             if (strtotime($row['orderTime']) - strtotime($row['firstLogin']) < 60 * 60 * 24) {
@@ -435,8 +466,26 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
             if ($row['salutation'] == 'mr') {
                 $customers[$week]['male']++;
-            } else if ($row['salutation' == 'ms']) {
+            } else if ($row['salutation'] == 'ms') {
                 $customers[$week]['female']++;
+            }
+
+            if(!empty($shopIds)){
+                foreach($shopIds as $shopId) {
+                    if (strtotime($row['orderTime' . $shopId]) - strtotime($row['firstLogin' . $shopId]) < 60 * 60 * 24) {
+                        $customers[$week]['newCustomersOrders' . $shopId] += $row['count' . $shopId];
+                    } else {
+                        $customers[$week]['oldCustomersOrders' . $shopId] += $row['count' . $shopId];
+                    }
+
+                    $customers[$week]['orderCount' . $shopId] += $row['count' . $shopId];
+
+                    if ($row['salutation' . $shopId] == 'mr') {
+                        $customers[$week]['male' . $shopId]++;
+                    } else if ($row['salutation' . $shopId] == 'ms') {
+                        $customers[$week]['female' . $shopId]++;
+                    }
+                }
             }
         }
 
@@ -445,6 +494,15 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $entry['amountOldCustomers'] = round($entry['oldCustomersOrders'] / $entry['orderCount'] * 100, 2);
             $entry['maleAmount'] = round($entry['male'] / ($entry['male'] + $entry['female']) * 100, 2);
             $entry['femaleAmount'] = round($entry['female'] / ($entry['male'] + $entry['female']) * 100, 2);
+
+            if(!empty($shopIds)){
+                foreach($shopIds as $shopId) {
+                    $entry['amountNewCustomers' . $shopId] = round($entry['newCustomersOrders' . $shopId] / $entry['orderCount' . $shopId] * 100, 2);
+                    $entry['amountOldCustomers' . $shopId] = round($entry['oldCustomersOrders' . $shopId] / $entry['orderCount' . $shopId] * 100, 2);
+                    $entry['maleAmount' . $shopId] = round($entry['male' . $shopId] / ($entry['male' . $shopId] + $entry['female' . $shopId]) * 100, 2);
+                    $entry['femaleAmount' . $shopId] = round($entry['female' . $shopId] / ($entry['male' . $shopId] + $entry['female' . $shopId]) * 100, 2);
+                }
+            }
         }
 
         $this->send(array_values($customers), count($customers));

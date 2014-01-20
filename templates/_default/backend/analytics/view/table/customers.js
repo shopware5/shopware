@@ -46,6 +46,11 @@ Ext.define('Shopware.apps.Analytics.view.table.Customers', {
             }
         };
 
+        me.initStoreIndices('amountNewCustomers', '{s name="table/customers/new_customers"}New customers{/s}: [0]');
+        me.initStoreIndices('amountOldCustomers', '{s name="table/customers/regular_customers"}Regular customers{/s}: [0]');
+        me.initStoreIndices('maleAmount', '{s name="table/customers/male_portion"}Percentage male{/s}: [0]');
+        me.initStoreIndices('femaleAmount', '{s name="table/customers/female_portion"}Percentage female{/s}: [0]');
+
         me.callParent(arguments);
     },
 
