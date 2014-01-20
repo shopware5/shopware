@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Monolog\Handler\HandlerInterface;
 use Shopware\Components\Logger;
 use Shopware\Plugin\Debug\Components\ControllerCollector;
 use Shopware\Plugin\Debug\Components\DatabaseCollector;
@@ -193,8 +194,14 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
             return;
         }
 
-        $this->getLogger()->pushHandler($this->get('monolog.handler.chromephp'));
-        $this->getLogger()->pushHandler($this->get('monolog.handler.firephp'));
+        $handlers = $this->getHandlers($request);
+        if (empty($handlers)) {
+            return;
+        }
+
+        foreach ($handlers as $handler) {
+            $this->getLogger()->pushHandler($handler);
+        }
 
         $this->registerCollectors();
 
@@ -202,6 +209,24 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
             'Enlight_Controller_Front_DispatchLoopShutdown',
             array($this, 'onDispatchLoopShutdown')
         );
+    }
+
+    /**
+     * @param Enlight_Controller_Request_RequestHttp $request
+     * @return HandlerInterface[]
+     */
+    public function getHandlers(\Enlight_Controller_Request_RequestHttp $request)
+    {
+        $handlers = array();
+
+        if ($this->get('monolog.handler.chromephp')->acceptsRequest($request)) {
+            $handlers[] = $this->get('monolog.handler.chromephp');
+        }
+        if ($this->get('monolog.handler.firephp')->acceptsRequest($request)) {
+            $handlers[] = $this->get('monolog.handler.firephp');
+        }
+
+        return $handlers;
     }
 
     /**
