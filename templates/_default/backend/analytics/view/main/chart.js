@@ -96,6 +96,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Chart', {
                }]
            };
     },
+
     initMultipleShopTipsData: function(item,tipObj,dateFormatString,defaultTitle){
 
        var storeItem = item.storeItem,me = this,

@@ -125,6 +125,11 @@ Ext.define('Shopware.apps.Analytics', {
         'chart.Country',
         'chart.Dispatch',
         'chart.Payment',
+        'chart.CustomerAge',
+        'chart.Customers',
+        'chart.CustomerGroup',
+        'chart.PartnerRevenue',
+
 
         'table.Week',
         'table.Weekday',
