@@ -392,8 +392,14 @@ class Kernel implements HttpKernelInterface
 
         $container = $this->getContainerBuilder();
         $container->addObjectResource($this);
+
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/Components/DependencyInjection/'));
         $loader->load('services.xml');
+        $loader->load('logger.xml');
+
+        if (is_file($file = __DIR__ . '/Components/DependencyInjection/services_local.xml')) {
+            $loader->load($file);
+        }
 
         $this->addShopwareConfig($container, 'shopware', $this->config);
         $this->addResources($container);
