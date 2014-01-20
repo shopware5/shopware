@@ -119,13 +119,10 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
                 exportCSV: me.onExport,
                 refreshView: me.onRefreshView
             },
-            'analytics-toolbar button[action=export]':{
+            'analytics-toolbar button[action=layout]':{
                 change:function (button, item) {
                     me.getPanel().getLayout().setActiveItem(item.layout == 'table' ? 0 : 1);
                 }
-            },
-            'analytics-toolbar datefield':{
-                change:me.onChangeDate
             },
             'analytics-toolbar combobox':{
                 change:me.onChangeShop
@@ -267,43 +264,6 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
         });
     },
 
-    /**
-     * Event listener method which is fired when the user change
-     * the to date field to filter the order chart data.
-     * The to date field is placed on top of the chart.
-     *
-     * @param [Ext.form.Field.Date] - The date field which changed
-     * @param [Ext.Date] - The new value
-     * @return void
-     */
-    onChangeDate:function (field, value) {
-        var me = this;
-        if (Ext.typeOf(value) != 'date') {
-            return;
-        }
-
-        // Support custom stores
-        var store = (me.customStoreEnabled) ? me.customStore : me.dataStore;
-
-        // If we're having a store, return here
-        if(!store) {
-            return false;
-        }
-
-        // Special directive for month charts
-        if(me.selectedType === 'month') {
-                var from = me.getFromField().getValue(),
-                to = me.getToField().getValue();
-
-            if(to.getFullYear() == from.getFullYear() && (to.getMonth() - from.getMonth()) <= 0) {
-                Ext.Msg.alert('{s name=alert/time_range_too_short_title}Time range too short{/s}', '{s name=alert/time_range_too_short}Your selected time range is too short.{/s}');
-                return false;
-            }
-        }
-
-        store.getProxy().extraParams[(field.name == 'from_date' ? 'fromDate' : 'toDate')] = value;
-        store.load();
-    },
 
     /**
      * Event listener which is be fired when the user changed the shop combobox

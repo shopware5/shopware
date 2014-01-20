@@ -37,6 +37,10 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Customers', {
     remoteSort: true,
     fields: [
         'week',
+        'male',
+        'female',
+        'newCustomersOrders',
+        'oldCustomersOrders',
         'amountNewCustomers',
         'amountOldCustomers',
         'maleAmount',
