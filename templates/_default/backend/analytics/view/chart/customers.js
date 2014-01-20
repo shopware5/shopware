@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Customers', {
             type: 'Category',
             position: 'bottom',
             fields: ['week'],
-            title: '{s name=chart/customers/week/title}Calender week{/s}',
+            title: '{s name=chart/customers/week/title}Calender week{/s}'
         }
     ],
 
@@ -77,14 +77,14 @@ Ext.define('Shopware.apps.Analytics.view.chart.Customers', {
                 },
                 {
                     xtype: 'numbercolumn',
-                    text: 'Count',
+                    text: '{s name="chart/customers/count"}Count{/s}',
                     dataIndex: 'count',
                     align: 'right',
                     flex: 1
                 },
                 {
                     xtype: 'numbercolumn',
-                    text: 'Percentage',
+                    text: '{s name="chart/customers/percentage"}Percentage{/s}',
                     dataIndex: 'percentage',
                     align: 'right',
                     flex: 1

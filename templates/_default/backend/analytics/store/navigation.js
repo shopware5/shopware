@@ -45,8 +45,7 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
                 store: 'analytics-store-navigation-overview',
                 iconCls: 'sprite-chart',
                 comparable: true,
-                leaf: true,
-                multiShop: true
+                leaf: true
             },
             {
                 id: 'rating',

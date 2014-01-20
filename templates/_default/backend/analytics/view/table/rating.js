@@ -46,6 +46,10 @@ Ext.define('Shopware.apps.Analytics.view.table.Rating', {
             }
         };
 
+        me.initStoreIndices('basketConversion', '{s name="table/rating/basket_rate"}Order success rate{/s}: [0]');
+        me.initStoreIndices('orderConversion', '{s name="table/rating/order_rate"}Order conversion rate{/s}: [0]');
+        me.initStoreIndices('basketVisitConversion', '{s name="table/rating/basket_visit_rate"}Abandoned baskets / visitors{/s}: [0]');
+
         me.callParent(arguments);
     },
 
@@ -63,15 +67,15 @@ Ext.define('Shopware.apps.Analytics.view.table.Rating', {
             },
             {
                 dataIndex: 'basketConversion',
-                text: '{s name="table/rating/basket_rate"}Basket Conversion Rate{/s}'
+                text: '{s name="table/rating/basket_rate"}Order success rate{/s}'
             },
             {
                 dataIndex: 'orderConversion',
-                text: '{s name="table/rating/order_rate"}Order Conversion Rate{/s}'
+                text: '{s name="table/rating/order_rate"}Order conversion rate{/s}'
             },
             {
                 dataIndex: 'basketVisitConversion',
-                text: '{s name="table/rating/basket_visit_rate"}Basket/Visit Conversion Rate{/s}'
+                text: '{s name="table/rating/basket_visit_rate"}Abandoned baskets / visitors{/s}'
             }
         ];
     }

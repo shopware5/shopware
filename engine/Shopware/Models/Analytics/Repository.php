@@ -237,6 +237,7 @@ class Repository
     /**
      * @param \DateTime $from
      * @param \DateTime $to
+     * @param array $shopIds
      * @return Result
      *      array (
      *          'firstLogin' => '2012-08-30',
@@ -252,9 +253,27 @@ class Repository
      *          'salutation' => 'mr',
      *      ),
      */
-    public function getOrdersOfCustomers(\DateTime $from = null, \DateTime $to = null)
+    public function getOrdersOfCustomers(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
     {
         $builder = $this->createOrdersOfCustomersBuilder($from, $to);
+
+        if (!empty($shopIds)) {
+            foreach ($shopIds as $shopId) {
+                $shopId = (int)$shopId;
+                $builder->addSelect(
+                    "IF(users.subshopID=" . $shopId . ", users.firstlogin, 0) as firstLogin" . $shopId
+                );
+                $builder->addSelect(
+                    "IF(orders.subshopID=" . $shopId . ", orders.ordertime, 0) as orderTime" . $shopId
+                );
+                $builder->addSelect(
+                    "COUNT(IF(orders.subshopID=" . $shopId . ", orders.id, 0)) as count" . $shopId
+                );
+                $builder->addSelect(
+                    "IF(users.subshopID=" . $shopId . ", billing.salutation, '') as salutation" . $shopId
+                );
+            }
+        }
 
         $builder = $this->eventManager->filter('Shopware_Analytics_OrdersOfCustomers', $builder, array(
             'subject' => $this
@@ -1217,13 +1236,34 @@ class Repository
     /**
      * @param \DateTime $from
      * @param \DateTime $to
+     * @param array $shopIds
      * @return DBALQueryBuilder
      */
-    protected function createOrdersOfVisitorsBuilder(\DateTime $from = null, \DateTime $to = null)
+    protected function createOrdersOfVisitorsBuilder(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
     {
         $builder = $this->createVisitorBuilder();
 
         $this->addDateRangeCondition($builder, $from, $to, 'visitor.datum');
+
+        if (!empty($shopIds)) {
+            foreach ($shopIds as $shopId) {
+                $shopId = (int)$shopId;
+                $builder->addSelect(
+                    "SUM(IF(visitor.shopID=" . $shopId . ", visitor.uniquevisits, 0)) as visitors" . $shopId
+                );
+                $builder->addSelect(
+                    "COUNT(IF(orders.subshopID=" . $shopId . ", orders.id, 0)) as orderCount" . $shopId
+                );
+                $builder->addSelect(
+                    'IF(orders.subshopID=' . $shopId . ', (
+                        SELECT COUNT(o2.invoice_amount)
+                        FROM s_order o2
+                        WHERE o2.status=-1
+                        AND DATE(o2.ordertime) = visitor.datum
+                    ), 0) AS cancelledOrders' . $shopId
+                );
+            }
+        }
 
         return $builder;
     }

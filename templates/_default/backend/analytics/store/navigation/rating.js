@@ -50,5 +50,20 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Rating', {
             root: 'data',
             totalProperty: 'total'
         }
+    },
+
+    constructor: function (config) {
+        var me = this;
+        config.fields = me.fields;
+
+        if (config.shopStore) {
+            config.shopStore.each(function (shop) {
+                config.fields.push('basketConversion' + shop.data.id);
+                config.fields.push('orderConversion' + shop.data.id);
+                config.fields.push('basketVisitConversion' + shop.data.id);
+            });
+        }
+
+        me.callParent(arguments);
     }
 });
