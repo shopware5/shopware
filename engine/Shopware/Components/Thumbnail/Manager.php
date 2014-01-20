@@ -110,6 +110,9 @@ class Manager
 
             $thumbnailSizes = array_merge($thumbnailSizes, $album->getSettings()->getThumbnailSize());
         }
+
+        $thumbnailSizes = array_merge($thumbnailSizes, $media->getDefaultThumbnails());
+
         $thumbnailSizes = $this->uniformThumbnailSizes($thumbnailSizes);
 
         $imagePath = $this->rootDir . DIRECTORY_SEPARATOR . $media->getPath();
