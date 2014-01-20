@@ -20,8 +20,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * // todo@all add snippets
- *
  * @category   Shopware
  * @package    Analytics
  * @subpackage Overview
@@ -31,11 +29,11 @@
  */
 
 //{namespace name=backend/analytics/view/main}
-//{block name="backend/analytics/view/table/referrer_revenue"}
+//{block name="backend/analytics/view/table/customers"}
 Ext.define('Shopware.apps.Analytics.view.table.Customers', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-customers',
-    shopColumnName: 'Anteil Neu-/Stammkunden',
+    shopColumnName: '{s name="nav/customers"}Portion New-/RegularCustomer{/s}',
 
     initComponent: function () {
         var me = this;
@@ -59,19 +57,19 @@ Ext.define('Shopware.apps.Analytics.view.table.Customers', {
     getColumns: function () {
         return [{
             dataIndex: 'week',
-            text: 'Kalenderwoche'
+            text: '{s name="table/customers/calendar_week"}Calendar Week{/s}'
         }, {
             dataIndex: 'amountNewCustomers',
-            text: 'Neukunden'
+            text: '{s name="table/customers/new_customers"}New customers{/s}'
         }, {
             dataIndex: 'amountOldCustomers',
-            text: 'Stammkunden'
+            text: '{s name="table/customers/regular_customers"}Regular customers{/s}'
         }, {
             dataIndex: 'maleAmount',
-            text: 'Männl. Anteil'
+            text: '{s name="table/customers/male_portion"}Percentage male{/s}'
         }, {
             dataIndex: 'femaleAmount',
-            text: 'Weibl. Anteil'
+            text: '{s name="table/customers/female_portion"}Percentage female{/s}'
         }];
     }
 });

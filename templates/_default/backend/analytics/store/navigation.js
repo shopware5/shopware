@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
         expanded: true,
         children: [{
             id: 'overview',
-            text: 'Overview',
+            text: '{s name=nav/quick_overview}Ouick-Overview{/s}',
             store: 'analytics-store-navigation-overview',
             iconCls: 'sprite-report-paper',
             comparable: true,
@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
             multiShop: true
         },{
             id: 'rating',
-            text: 'Rating',
+            text: '{s name=nav/rating_overview}Rating-Overview{/s}',
             store: 'analytics-store-navigation-rating',
             iconCls: 'sprite-report-paper',
             comparable: true,
@@ -56,42 +56,42 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
             multiShop: true
         }, {
             id: 'referrer_revenue',
-            text: 'Umsatz nach Referrer',
+            text: '{s name=nav/turnover_referrer}Turnover by referrer{/s}',
             store: 'analytics-store-navigation-referrer_revenue',
             iconCls: 'sprite-report-paper',
             comparable: true,
             leaf: true
         }, {
             id: 'partner_revenue',
-            text: 'Umsatz nach Partnern',
+            text: '{s name=nav/turnover_partner}Turnover by partner{/s}',
             store: 'analytics-store-navigation-partner_revenue',
             iconCls: 'sprite-report-paper',
             comparable: true,
             leaf: true
         }, {
             id: 'customer-group',
-            text: 'Umsatz nach Kundengruppe',
+            text: '{s name=nav/turnover_customergroup}Turnover by customer group{/s}',
             store: 'analytics-store-navigation-customer-groups',
             iconCls: 'sprite-report-paper',
             comparable: true,
             leaf: true
         }, {
             id: 'referrer_visitors',
-            text: 'Besucher Zugriffsquellen',
+            text: '{s name=nav/visitor_source}Visitor access source{/s}',
             store: 'analytics-store-navigation-referrer_visitors',
             iconCls: 'sprite-report-paper',
             comparable: true,
             leaf: true
         }, {
             id: 'article_sells',
-            text: 'Artikel nach Verkäufen',
+            text: '{s name=nav/items_sales}Item by sales{/s}',
             store: 'analytics-store-navigation-article_sells',
             iconCls: 'sprite-report-paper',
             comparable: true,
             leaf: true
         }, {
             id: 'customers',
-            text: 'Anteil Neu-/Stammkunden',
+            text: '{s name=nav/customers}Portion New-/RegularCustomer{/s}',
             store: 'analytics-store-navigation-customers',
             iconCls: 'sprite-report-paper',
             comparable: true,
@@ -99,7 +99,7 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
             multiShop: true
         }, {
             id: 'customer_age',
-            text: 'Kundenalter',
+            text: '{s name=nav/customer_age}Customer age{/s}',
             store: 'analytics-store-navigation-customer_age',
             iconCls: 'sprite-report-paper',
             comparable: true,
@@ -184,7 +184,7 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
             multiShop: true
         }, {
             id: 'article_impression',
-            text: 'Artikel nach Aufrufen(Impressionen)',
+            text: '{s name=nav/article_impressions}Item by calls(Impressions){/s}',
             store: 'analytics-store-navigation-article_impressions',
             iconCls: 'sprite-chart-up-color',
             comparable: true,

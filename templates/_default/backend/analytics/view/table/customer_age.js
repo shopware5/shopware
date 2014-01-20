@@ -31,11 +31,11 @@
  */
 
 //{namespace name=backend/analytics/view/main}
-//{block name="backend/analytics/view/table/referrer_revenue"}
+//{block name="backend/analytics/view/table/customer_age"}
 Ext.define('Shopware.apps.Analytics.view.table.CustomerAge', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-customer_age',
-    shopColumnName: 'Kundenalter',
+    shopColumnName: '{s name="nav/customer_age"}Customer age{/s}',
 
     initComponent: function () {
         var me = this;
@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Analytics.view.table.CustomerAge', {
             }
         };
 
-        me.initStoreIndices('percent', 'Prozentanteil: [0]');
+        me.initStoreIndices('percent', '{s name="table/customer_age/percentage"}Percentage{/s}: [0]');
 
         me.callParent(arguments);
     },
@@ -60,10 +60,10 @@ Ext.define('Shopware.apps.Analytics.view.table.CustomerAge', {
     getColumns: function () {
         return [{
             dataIndex: 'age',
-            text: 'Alter'
+            text: '{s name="table/customer_age/age"}Age{/s}'
         }, {
             dataIndex: 'percent',
-            text: 'Prozentanteil'
+            text: '{s name="table/customer_age/percentage"}Percentage{/s}'
         }];
     }
 });

@@ -1,5 +1,5 @@
 //{namespace name=backend/analytics/view/main}
-//{block name="backend/analytics/view/table/search-terms"}
+//{block name="backend/analytics/view/table/search_terms"}
 Ext.define('Shopware.apps.Analytics.view.table.SearchTerms', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-search-terms',
@@ -27,10 +27,10 @@ Ext.define('Shopware.apps.Analytics.view.table.SearchTerms', {
 
         return [{
             dataIndex: 'count',
-            text: 'Anzahl'
+            text: '{s name=table/referrer_visitors/count}Number of{/s}'
         }, {
             dataIndex: 'keyword',
-            text: 'Suchbegriff'
+            text: '{s name=table/referrer_visitors/search_term}Search term{/s}'
         }];
     }
 });

@@ -20,8 +20,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * // todo@all add snippets
- *
  * @category   Shopware
  * @package    Analytics
  * @subpackage Overview
@@ -35,7 +33,7 @@
 Ext.define('Shopware.apps.Analytics.view.table.Overview', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-overview',
-    shopColumnName: 'Overview',
+    shopColumnName: '{s name="nav/quick_overview"}Quick-Overview{/s}',
 
     initComponent: function () {
         var me = this;
@@ -60,28 +58,28 @@ Ext.define('Shopware.apps.Analytics.view.table.Overview', {
         return [{
             xtype: 'datecolumn',
             dataIndex: 'date',
-            text: 'Datum'
+            text: '{s name="table/quick_overview/date"}Date{/s}'
         }, {
             dataIndex: 'orderCount',
-            text: 'Bestellungen'
+            text: '{s name="table/quick_overview/orders"}Orders{/s}'
         }, {
             dataIndex: 'totalConversion',
-            text: 'Conversion Rate'
+            text: '{s name="table/quick_overview/conversion_rate"}Conversion Rate{/s}'
         }, {
             dataIndex: 'revenue',
-            text: 'Umsatz'
+            text: '{s name="table/quick_overview/turnover"}Turnover{/s}'
         }, {
             dataIndex: 'cancelledOrders',
-            text: 'Abgebr. Warenkörbe'
+            text: '{s name="table/quick_overview/cancelled_baskets"}Cancelled baskets{/s}'
         }, {
             dataIndex: 'newCustomers',
-            text: 'Neukunden'
+            text: '{s name="table/quick_overview/new_customers"}New Customers{/s}'
         }, {
             dataIndex: 'visitors',
-            text: 'Besucher'
+            text: '{s name="table/quick_overview/visitors"}Visitors{/s}'
         }, {
             dataIndex: 'clicks',
-            text: 'Seitenaufrufe'
+            text: '{s name="table/quick_overview/page_calls"}Page calls{/s}'
         }];
     }
 });

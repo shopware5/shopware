@@ -20,8 +20,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * // todo@all add snippets
- *
  * @category   Shopware
  * @package    Analytics
  * @subpackage Overview
@@ -31,11 +29,11 @@
  */
 
 //{namespace name=backend/analytics/view/main}
-//{block name="backend/analytics/view/table/overview"}
+//{block name="backend/analytics/view/table/rating"}
 Ext.define('Shopware.apps.Analytics.view.table.Rating', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-rating',
-    shopColumnName: 'Rating',
+    shopColumnName: '{s name=nav/rating_overview}Rating{/s}',
 
     initComponent: function () {
         var me = this;
@@ -60,16 +58,16 @@ Ext.define('Shopware.apps.Analytics.view.table.Rating', {
         return [{
             xtype: 'datecolumn',
             dataIndex: 'date',
-            text: 'Datum'
+            text: '{s name="table/rating/date"}Date{/s}'
         }, {
             dataIndex: 'basketConversion',
-            text: 'Basket Conversion Rate'
+            text: '{s name="table/rating/basket_rate"}Basket Conversion Rate{/s}'
         }, {
             dataIndex: 'orderConversion',
-            text: 'Order Conversion Rate'
+            text: '{s name="table/rating/order_rate"}Order Conversion Rate{/s}'
         }, {
             dataIndex: 'basketVisitConversion',
-            text: 'Basket/Visit Conversion Rate'
+            text: '{s name="table/rating/basket_visit_rate"}Basket/Visit Conversion Rate{/s}'
         }];
     }
 });

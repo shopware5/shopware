@@ -20,8 +20,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * // todo@all add snippets
- *
  * @category   Shopware
  * @package    Analytics
  * @subpackage Overview
@@ -31,11 +29,11 @@
  */
 
 //{namespace name=backend/analytics/view/main}
-//{block name="backend/analytics/view/table/referrer_revenue"}
+//{block name="backend/analytics/view/table/referrer_visitors"}
 Ext.define('Shopware.apps.Analytics.view.table.ReferrerVisitors', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-referrer_visitors',
-    shopColumnName: 'Besucher Zugriffsquellen',
+    shopColumnName: '{s name=nav/visitor_source}Visitor access source{/s}',
 
     initComponent: function () {
         var me = this;
@@ -74,25 +72,25 @@ Ext.define('Shopware.apps.Analytics.view.table.ReferrerVisitors', {
 
         return [{
             dataIndex: 'count',
-            text: 'Anzahl'
+            text: '{s name=table/referrer_visitors/count}Number of{/s}'
         }, {
             dataIndex: 'referrer',
             flex: 2,
-            text: 'Referrer'
+            text: '{s name=table/referrer_visitors/referrer}Referrer{/s}'
         }, {
             xtype: 'actioncolumn',
-            text: 'Optionen',
+            text: '{s name=table/referrer_visitors/options}Optionen{/s}',
             items: [{
                 action: 'viewSearchTerms',
                 iconCls: 'sprite-magnifier',
-                tooltip:  'View search terms from this referrer',
+                tooltip:  '{s name=table/referrer_visitors/search_terms_tip}Display search terms of this referrer{/s}',
                 handler: function(grid, rowIndex, colIndex) {
                     me.fireEvent('viewSearchTerms', grid, rowIndex, colIndex);
                 }
             }, {
                 action: 'viewSearchUrl',
                 iconCls: 'sprite-application',
-                tooltip:  'View search links',
+                tooltip:  '{s name=table/referrer_visitors/search_links_tip}Display search links{/s}',
                 handler: function(grid, rowIndex, colIndex) {
                     me.fireEvent('viewSearchUrl', grid, rowIndex, colIndex);
                 }
