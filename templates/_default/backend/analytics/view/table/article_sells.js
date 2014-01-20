@@ -20,8 +20,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * // todo@all add snippets
- *
  * @category   Shopware
  * @package    Analytics
  * @subpackage Overview
@@ -31,11 +29,11 @@
  */
 
 //{namespace name=backend/analytics/view/main}
-//{block name="backend/analytics/view/table/referrer_revenue"}
+//{block name="backend/analytics/view/table/article_sells"}
 Ext.define('Shopware.apps.Analytics.view.table.ArticleSells', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-article_sells',
-    shopColumnName: 'Artikel nach Verkäufen',
+    shopColumnName: '{s name="nav/items_sales"}Item by sales{/s}',
 
     initComponent: function () {
         var me = this;
@@ -59,13 +57,13 @@ Ext.define('Shopware.apps.Analytics.view.table.ArticleSells', {
     getColumns: function () {
         return [{
             dataIndex: 'ordernumber',
-            text: 'Bestellnummer'
+            text: '{s name="table/items_sales/ordernumber"}Ordernumber{/s}'
         }, {
             dataIndex: 'name',
-            text: 'Artikelname'
+            text: '{s name="table/items_sales/article_name"}Article name{/s}'
         }, {
             dataIndex: 'sellCount',
-            text: 'Verkäufe'
+            text: '{s name="table/items_sales/sells"}Sells{/s}'
         }];
     }
 });

@@ -20,8 +20,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * // todo@all add snippets
- *
  * @category   Shopware
  * @package    Analytics
  * @subpackage Overview
@@ -35,7 +33,7 @@
 Ext.define('Shopware.apps.Analytics.view.table.ReferrerRevenue', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-referrer_revenue',
-    shopColumnName: 'Umsatz nach Referrer',
+    shopColumnName: '{s name=nav/turnover_referrer}Turnover by referrer{/s}',
 
     initComponent: function () {
         var me = this;
@@ -59,37 +57,37 @@ Ext.define('Shopware.apps.Analytics.view.table.ReferrerRevenue', {
     getColumns: function () {
         return [{
             dataIndex: 'host',
-            text: 'Host'
+            text: '{s name=table/referrer_revenue/host}Host{/s}'
         }, {
             dataIndex: 'entireRevenue',
-            text: 'Ges. Umsatz'
+            text: '{s name=table/referrer_revenue/total_turnover}Total Turnover{/s}'
         }, {
             dataIndex: 'lead',
-            text: 'Lead-Wert'
+            text: '{s name=table/referrer_revenue/lead}Lead-Value{/s}'
         }, {
             dataIndex: 'customerValue',
-            text: 'Kundenwert'
+            text: '{s name=table/referrer_revenue/customer_value}Customer value{/s}'
         }, {
             dataIndex: 'entireNewRevenue',
-            text: 'Umsatz Neukunden'
+            text: '{s name=table/referrer_revenue/new_turnover}Turnover new customers{/s}'
         }, {
             dataIndex: 'entireOldRevenue',
-            text: 'Umsatz Altkunden'
+            text: '{s name=table/referrer_revenue/old_turnover}Turnover old customers{/s}'
         }, {
             dataIndex: 'orderCount',
-            text: 'Bestellungen'
+            text: '{s name=table/referrer_revenue/orders}Orders{/s}'
         }, {
             dataIndex: 'newCustomers',
-            text: 'Neukunden'
+            text: '{s name=table/referrer_revenue/new_customers}New customers{/s}'
         }, {
             dataIndex: 'oldCustomers',
-            text: 'Altkunden'
+            text: '{s name=table/referrer_revenue/old_customers}Old customers{/s}'
         }, {
             dataIndex: 'perNewRevenue',
-            text: 'Umsatz/Neukunden'
+            text: '{s name=table/referrer_revenue/turnover_per_new}Turnover/New customer{/s}'
         }, {
             dataIndex: 'perOldRevenue',
-            text: 'Umsatz/Altkunden'
+            text: '{s name=table/referrer_revenue/turnover_per_old}Turnover/Old customer{/s}'
         }];
     }
 });

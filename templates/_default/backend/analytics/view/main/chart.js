@@ -84,7 +84,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Chart', {
                height: 130,
                flex: 1,
                columns: [{
-                   text   : 'Name',
+                   text   : '{s name="main/chart/name"}Name{/s}',
                    dataIndex: 'name',
                    flex: 1
                },{

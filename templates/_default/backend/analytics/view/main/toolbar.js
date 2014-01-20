@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Toolbar', {
                 iconCls: 'sprite-gear',
                 name: 'shop_selection',
                 queryMode: 'remote',
-                fieldLabel: 'shop',
+                fieldLabel: '{s name=toolbar/shop_name}Shop{/s}',
                 store: me.shopStore,
                 multiSelect: true,
                 displayField: 'name',
@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Toolbar', {
             },
             {
                 xtype: 'datefield',
-                fieldLabel: 'From',
+                fieldLabel: '{s name=toolbar/from_date}From{/s}',
                 labelWidth: 50,
                 width:150,
                 name: 'from_date',
@@ -65,7 +65,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Toolbar', {
             },
             {
                 xtype: 'datefield',
-                fieldLabel: 'To',
+                fieldLabel: '{s name=toolbar/to_date}To{/s}',
                 name: 'to_date',
                 width:130,
                 labelWidth: 30,
@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Toolbar', {
             { xtype: 'tbspacer' },
             {
                 xtype: 'button',
-                text: 'Export',
+                text: '{s name=toolbar/export}Export{/s}',
                 name: 'export',
                 handler: function() {
                     me.fireEvent('exportCSV');
@@ -83,7 +83,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Toolbar', {
             },
             {
                 xtype: 'button',
-                text: 'Refresh',
+                text: '{s name=toolbar/update}Update{/s}',
                 name: 'refresh',
                 handler: function() {
                     me.fireEvent('refreshView')

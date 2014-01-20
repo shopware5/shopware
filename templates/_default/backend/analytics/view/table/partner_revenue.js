@@ -20,8 +20,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * // todo@all add snippets
- *
  * @category   Shopware
  * @package    Analytics
  * @subpackage Overview
@@ -35,7 +33,7 @@
 Ext.define('Shopware.apps.Analytics.view.table.PartnerRevenue', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-partner_revenue',
-    shopColumnName: 'Umsatz nach Partnern',
+    shopColumnName: '{s name="nav/turnover_partner"}Turnover by partner{/s}',
 
     initComponent: function () {
         var me = this;
@@ -59,13 +57,13 @@ Ext.define('Shopware.apps.Analytics.view.table.PartnerRevenue', {
     getColumns: function () {
         return [{
             dataIndex: 'trackingCode',
-            text: 'Tracking Code'
+            text: '{s name="table/turnover_partner/tracking_code"}Tracking code{/s}'
         }, {
             dataIndex: 'partner',
-            text: 'Partner'
+            text: '{s name="table/turnover_partner/partner"}Partner{/s}'
         }, {
             dataIndex: 'revenue',
-            text: 'Umsatz'
+            text: '{s name="table/turnover_partner/turnover"}Turnover{/s}'
         }];
     }
 });
