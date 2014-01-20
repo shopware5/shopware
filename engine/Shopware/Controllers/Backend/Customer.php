@@ -629,9 +629,22 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         }
         unset($params['paymentData']);
 
+        /**
+         * Temporary support for deprecated s_user_debit table
+         * Can be removed after the table is removed
+         */
+        if($paymentData && $paymentData->getPaymentMean()->getName() == 'debit') {
+            $debitData = array(
+                'account' => $paymentData->getAccountNumber(),
+                'accountHolder' => $paymentData->getAccountHolder(),
+                'bankName' => $paymentData->getBankName(),
+                'bankCode' => $paymentData->getBankCode()
+            );
+            $params['debit'] = $debitData;
+        }
+
         $params['billing'] = $params['billing'][0];
         $params['shipping'] = $params['shipping'][0];
-        $params['debit'] = $params['debit'][0];
         $params['attribute'] = $params['attribute'][0];
         $params['billing']['attribute'] = $params['billingAttribute'][0];
         $params['shipping']['attribute'] = $params['shippingAttribute'][0];
