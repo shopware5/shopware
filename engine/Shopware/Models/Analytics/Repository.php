@@ -119,6 +119,7 @@ class Repository
     /**
      * @param \DateTime $from
      * @param \DateTime $to
+     * @param array $shopIds
      * @return Result
      *      array (
      *          'date' => '2012-08-28',
@@ -134,9 +135,9 @@ class Repository
      *          'cancelledOrders' => '0',
      *      ),
      */
-    public function getOrdersOfVisitors(\DateTime $from = null, \DateTime $to = null)
+    public function getOrdersOfVisitors(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
     {
-        $builder = $this->createOrdersOfVisitorsBuilder($from, $to);
+        $builder = $this->createOrdersOfVisitorsBuilder($from, $to, $shopIds);
 
         $builder = $this->eventManager->filter('Shopware_Analytics_OrdersOfVisitors', $builder, array(
             'subject' => $this
