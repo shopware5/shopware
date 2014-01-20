@@ -203,7 +203,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     protected function initServiceMode($request)
     {
         $config = $this->Application()->Config();
-        if (!empty($config->setOffline) && strpos($config->offlineIp, $request->getClientIp(false)) === false) {
+        if (!empty($config->setOffline) && strpos($config->offlineIp, $request->getClientIp()) === false) {
             if ($request->getControllerName() != 'error') {
                 $request->setControllerName('error')->setActionName('service')->setDispatched(false);
             }
@@ -291,7 +291,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         if ($request->getCookie('currency') !== null) {
             $currencyValue = $request->getCookie('currency');
             foreach ($shop->getCurrencies() as $currency) {
-                if($currencyValue == $currency->getId()
+                if ($currencyValue == $currency->getId()
                     || $currencyValue == $currency->getCurrency()) {
                     $shop->setCurrency($currency);
                     break;
