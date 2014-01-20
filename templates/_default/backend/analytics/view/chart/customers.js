@@ -67,7 +67,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Customers', {
             store: me.tipStoreTable,
             flex: 1,
             columns: [{
-                text   : 'Name',
+                text   : '{s name="chart/customers/name"}Name{/s}',
                 dataIndex: 'name',
                 flex: 1
             },{

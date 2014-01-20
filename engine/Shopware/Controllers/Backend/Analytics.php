@@ -206,7 +206,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $result = $this->getRepository()->getOrdersOfVisitors(
             $this->getFromDate(),
-            $this->getToDate()
+            $this->getToDate(),
+            $this->getSelectedShopIds()
         );
 
         $data = array();
