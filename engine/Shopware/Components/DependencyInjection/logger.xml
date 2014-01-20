@@ -35,6 +35,49 @@
     </parameters>
 
     <services>
+        <!-- RotatingFileHandler handler-->
+        <service id="monolog.processor.uid" class="Monolog\Processor\UidProcessor" public="false" />
+
+        <service id="monolog.handler.rotating_file" class="%monolog.handler.rotating_file.class%" public="false">
+            <argument>%kernel.root_dir%/logs/core_%kernel.environment%.log</argument>
+            <argument>14</argument>
+            <call method="pushProcessor">
+                <argument type="service" id="monolog.processor.uid" />
+            </call>
+        </service>
+
+        <service id="monolog.handler.rotating_file.plugin" class="%monolog.handler.rotating_file.class%" public="false">
+            <argument>%kernel.root_dir%/logs/plugin_%kernel.environment%.log</argument>
+            <argument>14</argument>
+            <call method="pushProcessor">
+                <argument type="service" id="monolog.processor.uid" />
+            </call>
+        </service>
+
+
+        <!-- FingersCrossed handler-->
+        <service id="monolog.handler.fingers_crossed" class="%monolog.handler.fingers_crossed.class%" public="false">
+            <argument type="service" id="monolog.handler.rotating_file" />
+            <argument>%monolog.logger.constant.critical%</argument>
+        </service>
+
+        <!-- Core logger -->
+        <service id="monolog.handler.main" alias="monolog.handler.fingers_crossed" />
+        <service id="corelogger" class="Shopware\Components\Logger">
+            <argument>core</argument>
+            <call method="pushHandler">
+                <argument type="service" id="monolog.handler.main" />
+            </call>
+        </service>
+
+        <!--Plugin logger -->
+        <service id="pluginlogger" class="Shopware\Components\Logger">
+            <argument>info</argument>
+            <call method="pushHandler">
+                <argument type="service" id="monolog.handler.rotating_file.plugin" />
+            </call>
+        </service>
+
         <!-- ChromePHP handler-->
         <service id="monolog.handler.chromephp" class="%monolog.handler.chromephp.class%">
             <tag name="shopware.event_listener" method="onRouteStartUp" event="Enlight_Controller_Front_RouteStartup" />
