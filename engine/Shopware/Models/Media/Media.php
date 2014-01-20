@@ -1007,6 +1007,12 @@ class Media extends ModelEntity
             $name      = $this->file->getBasename();
         }
 
+        // make sure that the name don't contains the file extension.
+        $name = str_replace('.' . $extension, '', $name);
+        if ($extension === 'jpeg') {
+            $name = str_replace('.jpg', '', $name);
+        }
+
         //set the file type using the type mapping
         if (array_key_exists(strtolower($extension), $this->typeMapping)) {
             $this->type = $this->typeMapping[strtolower($extension)];

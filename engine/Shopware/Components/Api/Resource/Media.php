@@ -124,6 +124,13 @@ class Media extends Resource
         $this->getManager()->persist($media);
         $this->flush();
 
+        if ($media->getType() == MediaModel::TYPE_IMAGE) {
+            /**@var $manager Manager */
+            $manager = $this->getContainer()->get('thumbnail_manager');
+
+            $manager->createMediaThumbnail($media);
+        }
+
         return $media;
     }
 
@@ -161,12 +168,12 @@ class Media extends Resource
 
         $this->flush();
 
-        if ($this->container->has('thumbnail_manager') && $media->getType() === MediaModel::TYPE_IMAGE) {
-            /**@var $manager Manager*/
+        if ($media->getType() == MediaModel::TYPE_IMAGE) {
+            /**@var $manager Manager */
             $manager = $this->getContainer()->get('thumbnail_manager');
-            $manager->createMediaThumbnail($media, $media->getDefaultThumbnails());
-        }
 
+            $manager->createMediaThumbnail($media);
+        }
         return $media;
     }
 
