@@ -340,6 +340,16 @@ class Kernel implements HttpKernelInterface
     }
 
     /**
+     * Gets the log directory.
+     *
+     * @return string The log directory
+     */
+    public function getLogDir()
+    {
+        return $this->getRootDir().'/logs';
+    }
+
+    /**
      * Dumps the service container to PHP code in the cache.
      *
      * @param ConfigCache $cache     The config cache
@@ -370,7 +380,7 @@ class Kernel implements HttpKernelInterface
      */
     protected function buildContainer()
     {
-        foreach (array('cache' => $this->getCacheDir()) as $name => $dir) {
+        foreach (array('cache' => $this->getCacheDir(), 'logs' => $this->getLogDir()) as $name => $dir) {
             if (!is_dir($dir)) {
                 if (false === @mkdir($dir, 0777, true)) {
                     throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", $name, $dir));
@@ -453,12 +463,13 @@ class Kernel implements HttpKernelInterface
     protected function getKernelParameters()
     {
         return array(
-            'kernel.root_dir' => $this->getRootDir(),
-            'kernel.environment' => $this->environment,
-            'kernel.debug' => $this->debug,
-            'kernel.name' => $this->name,
-            'kernel.cache_dir' => $this->getCacheDir(),
-            'kernel.charset' => 'UTF-8',
+            'kernel.root_dir'        => $this->getRootDir(),
+            'kernel.environment'     => $this->environment,
+            'kernel.debug'           => $this->debug,
+            'kernel.name'            => $this->name,
+            'kernel.cache_dir'       => $this->getCacheDir(),
+            'kernel.logs_dir'        => $this->getLogDir(),
+            'kernel.charset'         => 'UTF-8',
             'kernel.container_class' => $this->getContainerClass(),
         );
     }
