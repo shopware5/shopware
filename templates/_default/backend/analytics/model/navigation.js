@@ -35,8 +35,8 @@
 Ext.define('Shopware.apps.Analytics.model.Navigation', {
     extend: 'Ext.data.Model',
     fields: [
-		//{block name="backend/analytics/model/navigation/fields"}{/block}
-		{ name: 'id', type: 'string' },
+        //{block name="backend/analytics/model/navigation/fields"}{/block}
+        { name: 'id', type: 'string' },
         { name: 'text', type: 'string' },
         { name: 'leaf', type: 'boolean' },
         { name: 'loaded', type: 'boolean', defaultValue: false },
@@ -45,6 +45,7 @@ Ext.define('Shopware.apps.Analytics.model.Navigation', {
         { name: 'children' },
         { name: 'store' },
         { name: 'comparable' },
-        { name: 'leaf', type: 'boolean' }]
+        { name: 'leaf', type: 'boolean' }
+    ]
 });
 //{/block}

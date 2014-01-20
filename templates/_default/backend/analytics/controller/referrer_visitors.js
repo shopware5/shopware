@@ -39,14 +39,14 @@ Ext.define('Shopware.apps.Analytics.controller.ReferrerVisitors', {
      * Extend from the standard ExtJS 4 controller
      * @string
      */
-    extend:'Enlight.app.Controller',
+    extend: 'Enlight.app.Controller',
 
     /**
      * References to specific elements in the module
      * @array
      */
-    refs:[
-        { ref:'panel', selector:'analytics-panel' }
+    refs: [
+        { ref: 'panel', selector: 'analytics-panel' }
     ],
 
     /**
@@ -55,11 +55,11 @@ Ext.define('Shopware.apps.Analytics.controller.ReferrerVisitors', {
      *
      * @return void
      */
-    init:function () {
+    init: function () {
         var me = this;
 
         me.control({
-            'analytics-table-referrer_visitors':{
+            'analytics-table-referrer_visitors': {
                 viewSearchTerms: me.onViewSearchTerms,
                 viewSearchUrl: me.onViewSearchUrls
             }
@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.Analytics.controller.ReferrerVisitors', {
      * @param rowIndex
      * @param colIndex
      */
-    onViewSearchTerms: function(grid, rowIndex, colIndex){
+    onViewSearchTerms: function (grid, rowIndex, colIndex) {
         var me = this,
             store = grid.store,
             record = store.getAt(rowIndex),
@@ -87,7 +87,7 @@ Ext.define('Shopware.apps.Analytics.controller.ReferrerVisitors', {
      * @param rowIndex
      * @param colIndex
      */
-    onViewSearchUrls: function(grid, rowIndex, colIndex){
+    onViewSearchUrls: function (grid, rowIndex, colIndex) {
         var me = this,
             store = grid.store,
             record = store.getAt(rowIndex),
@@ -96,7 +96,7 @@ Ext.define('Shopware.apps.Analytics.controller.ReferrerVisitors', {
         me.openDetailWindow('search-urls', referrer, 600, 400);
     },
 
-    openDetailWindow: function(widget, title, width, height) {
+    openDetailWindow: function (widget, title, width, height) {
         var me = this,
             widgetName = 'widget.analytics-table-' + widget,
             store = Ext.widget('analytics-store-navigation-' + widget);

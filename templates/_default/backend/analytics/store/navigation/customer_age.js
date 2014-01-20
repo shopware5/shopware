@@ -49,12 +49,12 @@ Ext.define('Shopware.apps.Analytics.store.navigation.CustomerAge', {
         }
     },
 
-    constructor: function(config) {
+    constructor: function (config) {
         var me = this;
         config.fields = me.fields;
 
-        if(config.shopStore) {
-            config.shopStore.each(function(shop) {
+        if (config.shopStore) {
+            config.shopStore.each(function (shop) {
                 config.fields.push('percent' + shop.data.id);
             });
         }

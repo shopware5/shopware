@@ -34,7 +34,7 @@
 //{namespace name=backend/analytics/view/main}
 //{block name="backend/analytics/view/toolbar/shop"}
 Ext.define('Shopware.apps.Analytics.view.toolbar.Shop', {
-    extend : 'Ext.form.field.Picker',
+    extend: 'Ext.form.field.Picker',
     alias: 'widget.analytics-toolbar-shop',
 
     initComponent: function () {

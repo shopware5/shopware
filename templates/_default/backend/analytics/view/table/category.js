@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Category', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-category',
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
         me.columns = {
@@ -50,15 +50,18 @@ Ext.define('Shopware.apps.Analytics.view.table.Category', {
         me.callParent(arguments);
     },
 
-    getColumns: function(){
-        return [{
-            dataIndex: 'name',
-            text: '{s name=table/category/category}Category{/s}'
-        }, {
-            xtype: 'numbercolumn',
-            dataIndex: 'amount',
-            text: '{s name=table/category/sales}Sales{/s}'
-        }];
+    getColumns: function () {
+        return [
+            {
+                dataIndex: 'name',
+                text: '{s name=table/category/category}Category{/s}'
+            },
+            {
+                xtype: 'numbercolumn',
+                dataIndex: 'amount',
+                text: '{s name=table/category/sales}Sales{/s}'
+            }
+        ];
     }
 });
 //{/block}

@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Supplier', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-supplier',
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
         me.columns = {
@@ -50,15 +50,18 @@ Ext.define('Shopware.apps.Analytics.view.table.Supplier', {
         me.callParent(arguments);
     },
 
-    getColumns: function(){
-        return [{
-            dataIndex: 'name',
-            text: '{s name=table/supplier/supplier}Supplier{/s}'
-        }, {
-            xtype: 'numbercolumn',
-            dataIndex: 'amount',
-            text: '{s name=table/supplier/sales}Sales{/s}'
-        }];
+    getColumns: function () {
+        return [
+            {
+                dataIndex: 'name',
+                text: '{s name=table/supplier/supplier}Supplier{/s}'
+            },
+            {
+                xtype: 'numbercolumn',
+                dataIndex: 'amount',
+                text: '{s name=table/supplier/sales}Sales{/s}'
+            }
+        ];
     }
 });
 //{/block}

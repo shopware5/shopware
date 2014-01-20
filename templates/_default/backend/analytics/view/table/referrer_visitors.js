@@ -41,22 +41,22 @@ Ext.define('Shopware.apps.Analytics.view.table.ReferrerVisitors', {
         me.columns = {
             items: me.getColumns(),
             defaults: {
-                flex:1
+                flex: 1
             }
         };
 
         me.addEvents(
-                /**
-                 * Fired when the magnifier icon in the action column was clicked
-                 * Loads the referrer search terms to the table
-                 */
-                'viewSearchTerms',
+            /**
+             * Fired when the magnifier icon in the action column was clicked
+             * Loads the referrer search terms to the table
+             */
+            'viewSearchTerms',
 
-                /**
-                 * Fires when application icon in the action column was clicked
-                 * Loads the referrer urls to the table
-                 */
-                'viewSearchUrl'
+            /**
+             * Fires when application icon in the action column was clicked
+             * Loads the referrer urls to the table
+             */
+            'viewSearchUrl'
         );
 
         me.callParent(arguments);
@@ -70,32 +70,39 @@ Ext.define('Shopware.apps.Analytics.view.table.ReferrerVisitors', {
     getColumns: function () {
         var me = this;
 
-        return [{
-            dataIndex: 'count',
-            text: '{s name=table/referrer_visitors/count}Number of{/s}'
-        }, {
-            dataIndex: 'referrer',
-            flex: 2,
-            text: '{s name=table/referrer_visitors/referrer}Referrer{/s}'
-        }, {
-            xtype: 'actioncolumn',
-            text: '{s name=table/referrer_visitors/options}Optionen{/s}',
-            items: [{
-                action: 'viewSearchTerms',
-                iconCls: 'sprite-magnifier',
-                tooltip:  '{s name=table/referrer_visitors/search_terms_tip}Display search terms of this referrer{/s}',
-                handler: function(grid, rowIndex, colIndex) {
-                    me.fireEvent('viewSearchTerms', grid, rowIndex, colIndex);
-                }
-            }, {
-                action: 'viewSearchUrl',
-                iconCls: 'sprite-application',
-                tooltip:  '{s name=table/referrer_visitors/search_links_tip}Display search links{/s}',
-                handler: function(grid, rowIndex, colIndex) {
-                    me.fireEvent('viewSearchUrl', grid, rowIndex, colIndex);
-                }
-            }]
-        }];
+        return [
+            {
+                dataIndex: 'count',
+                text: '{s name=table/referrer_visitors/count}Number of{/s}'
+            },
+            {
+                dataIndex: 'referrer',
+                flex: 2,
+                text: '{s name=table/referrer_visitors/referrer}Referrer{/s}'
+            },
+            {
+                xtype: 'actioncolumn',
+                text: '{s name=table/referrer_visitors/options}Optionen{/s}',
+                items: [
+                    {
+                        action: 'viewSearchTerms',
+                        iconCls: 'sprite-magnifier',
+                        tooltip: '{s name=table/referrer_visitors/search_terms_tip}Display search terms of this referrer{/s}',
+                        handler: function (grid, rowIndex, colIndex) {
+                            me.fireEvent('viewSearchTerms', grid, rowIndex, colIndex);
+                        }
+                    },
+                    {
+                        action: 'viewSearchUrl',
+                        iconCls: 'sprite-application',
+                        tooltip: '{s name=table/referrer_visitors/search_links_tip}Display search links{/s}',
+                        handler: function (grid, rowIndex, colIndex) {
+                            me.fireEvent('viewSearchUrl', grid, rowIndex, colIndex);
+                        }
+                    }
+                ]
+            }
+        ];
     }
 });
 //{/block}

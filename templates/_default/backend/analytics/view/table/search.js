@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Search', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-search',
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
         me.columns = {
@@ -50,17 +50,21 @@ Ext.define('Shopware.apps.Analytics.view.table.Search', {
         me.callParent(arguments);
     },
 
-    getColumns: function(){
-        return [{
-            dataIndex: 'searchterm',
-            text: '{s name=table/search/term}Search term{/s}'
-        }, {
-            dataIndex: 'countRequests',
-            text: '{s name=table/search/requests}Requests{/s}'
-        }, {
-            dataIndex: 'countResults',
-            text: '{s name=table/search/results}Results{/s}'
-        }];
+    getColumns: function () {
+        return [
+            {
+                dataIndex: 'searchterm',
+                text: '{s name=table/search/term}Search term{/s}'
+            },
+            {
+                dataIndex: 'countRequests',
+                text: '{s name=table/search/requests}Requests{/s}'
+            },
+            {
+                dataIndex: 'countResults',
+                text: '{s name=table/search/results}Results{/s}'
+            }
+        ];
     }
 });
 //{/block}

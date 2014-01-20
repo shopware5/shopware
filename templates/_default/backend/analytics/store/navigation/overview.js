@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Overview', {
     alias: 'widget.analytics-store-navigation-overview',
     remoteSort: true,
     fields: [
-        { name : 'date', type: 'date', dateFormat: 'timestamp' },
+        { name: 'date', type: 'date', dateFormat: 'timestamp' },
         'orderCount',
         'revenue',
         'cancelledOrders',

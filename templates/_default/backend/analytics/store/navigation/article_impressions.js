@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.Analytics.store.navigation.ArticleImpressions', {
         'articleId',
         'articleName',
         'totalAmount',
-        { name : 'date', type: 'date', dateFormat: 'timestamp' }
+        { name: 'date', type: 'date', dateFormat: 'timestamp' }
     ],
     proxy: {
         type: 'ajax',
@@ -51,12 +51,12 @@ Ext.define('Shopware.apps.Analytics.store.navigation.ArticleImpressions', {
         }
     },
 
-    constructor: function(config) {
+    constructor: function (config) {
         var me = this;
         config.fields = me.fields;
 
-        if(config.shopStore) {
-            config.shopStore.each(function(shop) {
+        if (config.shopStore) {
+            config.shopStore.each(function (shop) {
                 config.fields.push('amount' + shop.data.id);
             });
         }

@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Dispatch', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-dispatch',
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
         me.columns = {
@@ -50,15 +50,18 @@ Ext.define('Shopware.apps.Analytics.view.table.Dispatch', {
         me.callParent(arguments);
     },
 
-    getColumns: function(){
-        return [{
-            dataIndex: 'name',
-            text: '{s name=table/dispatch/shippingmethod}Shipping method{/s}'
-        }, {
-            xtype: 'numbercolumn',
-            dataIndex: 'amount',
-            text: '{s name=table/dispatch/sales}Sales{/s}'
-        }];
+    getColumns: function () {
+        return [
+            {
+                dataIndex: 'name',
+                text: '{s name=table/dispatch/shippingmethod}Shipping method{/s}'
+            },
+            {
+                xtype: 'numbercolumn',
+                dataIndex: 'amount',
+                text: '{s name=table/dispatch/sales}Sales{/s}'
+            }
+        ];
     }
 });
 //{/block}

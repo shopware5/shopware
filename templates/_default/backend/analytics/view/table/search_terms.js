@@ -10,7 +10,7 @@ Ext.define('Shopware.apps.Analytics.view.table.SearchTerms', {
         me.columns = {
             items: me.getColumns(),
             defaults: {
-                flex:1
+                flex: 1
             }
         };
 
@@ -25,13 +25,16 @@ Ext.define('Shopware.apps.Analytics.view.table.SearchTerms', {
     getColumns: function () {
         var me = this;
 
-        return [{
-            dataIndex: 'count',
-            text: '{s name=table/referrer_visitors/count}Number of{/s}'
-        }, {
-            dataIndex: 'keyword',
-            text: '{s name=table/referrer_visitors/search_term}Search term{/s}'
-        }];
+        return [
+            {
+                dataIndex: 'count',
+                text: '{s name=table/referrer_visitors/count}Number of{/s}'
+            },
+            {
+                dataIndex: 'keyword',
+                text: '{s name=table/referrer_visitors/search_term}Search term{/s}'
+            }
+        ];
     }
 });
 //{/block}

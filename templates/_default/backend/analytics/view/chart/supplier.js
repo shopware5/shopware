@@ -38,10 +38,11 @@ Ext.define('Shopware.apps.Analytics.view.chart.Supplier', {
     alias: 'widget.analytics-chart-supplier',
     animate: true,
     shadows: true,
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
-        this.series = [{
+        this.series = [
+            {
                 type: 'pie',
                 field: 'amount',
                 showInLegend: true,
@@ -56,11 +57,12 @@ Ext.define('Shopware.apps.Analytics.view.chart.Supplier', {
                     trackMouse: true,
                     width: 80,
                     height: 40,
-                    renderer: function(storeItem) {
-                        this.setTitle('{s name=chart/supplier/title}Sales{/s} ' +  Ext.util.Format.number(storeItem.get('amount')));
+                    renderer: function (storeItem) {
+                        this.setTitle('{s name=chart/supplier/title}Sales{/s} ' + Ext.util.Format.number(storeItem.get('amount')));
                     }
                 }
-        }];
+            }
+        ];
         me.callParent(arguments);
     }
 });

@@ -10,7 +10,7 @@ Ext.define('Shopware.apps.Analytics.view.table.SearchUrls', {
         me.columns = {
             items: me.getColumns(),
             defaults: {
-                flex:1
+                flex: 1
             }
         };
 
@@ -25,27 +25,33 @@ Ext.define('Shopware.apps.Analytics.view.table.SearchUrls', {
     getColumns: function () {
         var me = this;
 
-        return [{
-            dataIndex: 'count',
-            text: '{s name=table/referrer_visitors/count}Number of{/s}'
-        }, {
-            dataIndex: 'referrer',
-            text: '{s name=table/referrer_visitors/search_link}Search link{/s}'
-        }, {
-            xtype: 'actioncolumn',
-            text: '{s name=table/referrer_visitors/options}Options{/s}',
-            items: [{
-                action: 'viewSearchUrl',
-                iconCls: 'sprite-application',
-                tooltip:  '{s name=table/referrer_visitors/open_link_tip}Open search link{/s}',
-                handler: function(grid, rowIndex, colIndex) {
-                    var store = grid.store,
-                        record = store.getAt(rowIndex);
+        return [
+            {
+                dataIndex: 'count',
+                text: '{s name=table/referrer_visitors/count}Number of{/s}'
+            },
+            {
+                dataIndex: 'referrer',
+                text: '{s name=table/referrer_visitors/search_link}Search link{/s}'
+            },
+            {
+                xtype: 'actioncolumn',
+                text: '{s name=table/referrer_visitors/options}Options{/s}',
+                items: [
+                    {
+                        action: 'viewSearchUrl',
+                        iconCls: 'sprite-application',
+                        tooltip: '{s name=table/referrer_visitors/open_link_tip}Open search link{/s}',
+                        handler: function (grid, rowIndex, colIndex) {
+                            var store = grid.store,
+                                record = store.getAt(rowIndex);
 
-                    window.open(record.get('referrer'), '_blank');
-                }
-            }]
-        }];
+                            window.open(record.get('referrer'), '_blank');
+                        }
+                    }
+                ]
+            }
+        ];
     }
 });
 //{/block}

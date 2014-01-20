@@ -38,29 +38,31 @@ Ext.define('Shopware.apps.Analytics.view.chart.CustomerGroup', {
     },
     mask: 'horizontal',
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
-        me.series = [{
-            type: 'pie',
-            field: 'amount',
-            showInLegend: true,
-            label: {
-                field: 'customerGroup',
-                display: 'rotate',
-                contrast: true,
-                font: '18px Arial'
-            },
-            tips: {
-                trackMouse: true,
-                width: 160,
-                height: 30,
-                renderer: function(storeItem) {
-                    var title = '{s name=chart/customer_group/title}Sales{/s}: ' +  Ext.util.Format.number(storeItem.get('amount'), '0.00');
-                    this.setTitle(title);
+        me.series = [
+            {
+                type: 'pie',
+                field: 'amount',
+                showInLegend: true,
+                label: {
+                    field: 'customerGroup',
+                    display: 'rotate',
+                    contrast: true,
+                    font: '18px Arial'
+                },
+                tips: {
+                    trackMouse: true,
+                    width: 160,
+                    height: 30,
+                    renderer: function (storeItem) {
+                        var title = '{s name=chart/customer_group/title}Sales{/s}: ' + Ext.util.Format.number(storeItem.get('amount'), '0.00');
+                        this.setTitle(title);
+                    }
                 }
             }
-        }];
+        ];
 
         me.callParent(arguments);
     }

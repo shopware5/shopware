@@ -43,44 +43,46 @@ Ext.define('Shopware.apps.Analytics.view.chart.Category', {
     mask: 'horizontal',
     listeners: {
         select: {
-            fn: function(me, selection) {
+            fn: function (me, selection) {
                 me.setZoom(selection);
                 me.mask.hide();
             }
         }
     },
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
-        me.series = [{
-            type: 'pie',
-            field: 'amount',
-            showInLegend: true,
-            listeners: {
-                itemmouseup: function(item) {
-                    var node = item.storeItem.data.node;
-                    if(!node) {
-                        return;
+        me.series = [
+            {
+                type: 'pie',
+                field: 'amount',
+                showInLegend: true,
+                listeners: {
+                    itemmouseup: function (item) {
+                        var node = item.storeItem.data.node;
+                        if (!node) {
+                            return;
+                        }
+                        me.store.getProxy().extraParams['node'] = node;
+                        me.store.load();
                     }
-                    me.store.getProxy().extraParams['node'] = node;
-                    me.store.load();
+                },
+                tips: {
+                    trackMouse: true,
+                    width: 80,
+                    height: 40,
+                    renderer: function (storeItem) {
+                        this.setTitle('{s name=chart/category/title}Sales{/s} ' + Ext.util.Format.number(storeItem.get('amount')));
+                    }
+                },
+                label: {
+                    field: 'name',
+                    display: 'rotate',
+                    contrast: true,
+                    font: '18px Arial'
                 }
-            },
-            tips: {
-                trackMouse: true,
-                width: 80,
-                height: 40,
-                renderer: function(storeItem) {
-                    this.setTitle('{s name=chart/category/title}Sales{/s} ' +  Ext.util.Format.number(storeItem.get('amount')));
-                }
-            },
-            label: {
-                field: 'name',
-                display: 'rotate',
-                contrast: true,
-                font: '18px Arial'
             }
-        }];
+        ];
 
         me.callParent(arguments);
     }

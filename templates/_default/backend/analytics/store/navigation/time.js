@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Time', {
     alias: 'widget.analytics-store-navigation-time',
     remoteSort: true,
     fields: [
-        { name : 'date', type: 'date', dateFormat: 'timestamp' },
+        { name: 'date', type: 'date', dateFormat: 'timestamp' },
         'amount',
         'displayDate'
     ],
@@ -50,12 +50,12 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Time', {
         }
     },
 
-    constructor: function(config) {
+    constructor: function (config) {
         var me = this;
         config.fields = me.fields;
 
-        if(config.shopStore) {
-            config.shopStore.each(function(shop) {
+        if (config.shopStore) {
+            config.shopStore.each(function (shop) {
                 config.fields.push('amount' + shop.data.id);
             });
         }

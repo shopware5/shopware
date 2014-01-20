@@ -49,12 +49,12 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Payment', {
         }
     },
 
-    constructor: function(config) {
+    constructor: function (config) {
         var me = this;
         config.fields = me.fields;
 
-        if(config.shopStore) {
-            config.shopStore.each(function(shop) {
+        if (config.shopStore) {
+            config.shopStore.each(function (shop) {
                 config.fields.push('amount' + shop.data.id);
             });
         }

@@ -41,8 +41,8 @@ Ext.define('Shopware.apps.Analytics.view.table.Overview', {
         me.columns = {
             items: me.getColumns(),
             defaults: {
-                align:'right',
-                flex:1
+                align: 'right',
+                flex: 1
             }
         };
 
@@ -55,32 +55,41 @@ Ext.define('Shopware.apps.Analytics.view.table.Overview', {
      * @return [array] grid columns
      */
     getColumns: function () {
-        return [{
-            xtype: 'datecolumn',
-            dataIndex: 'date',
-            text: '{s name="table/quick_overview/date"}Date{/s}'
-        }, {
-            dataIndex: 'orderCount',
-            text: '{s name="table/quick_overview/orders"}Orders{/s}'
-        }, {
-            dataIndex: 'totalConversion',
-            text: '{s name="table/quick_overview/conversion_rate"}Conversion Rate{/s}'
-        }, {
-            dataIndex: 'revenue',
-            text: '{s name="table/quick_overview/turnover"}Turnover{/s}'
-        }, {
-            dataIndex: 'cancelledOrders',
-            text: '{s name="table/quick_overview/cancelled_baskets"}Cancelled baskets{/s}'
-        }, {
-            dataIndex: 'newCustomers',
-            text: '{s name="table/quick_overview/new_customers"}New Customers{/s}'
-        }, {
-            dataIndex: 'visitors',
-            text: '{s name="table/quick_overview/visitors"}Visitors{/s}'
-        }, {
-            dataIndex: 'clicks',
-            text: '{s name="table/quick_overview/page_calls"}Page calls{/s}'
-        }];
+        return [
+            {
+                xtype: 'datecolumn',
+                dataIndex: 'date',
+                text: '{s name="table/quick_overview/date"}Date{/s}'
+            },
+            {
+                dataIndex: 'orderCount',
+                text: '{s name="table/quick_overview/orders"}Orders{/s}'
+            },
+            {
+                dataIndex: 'totalConversion',
+                text: '{s name="table/quick_overview/conversion_rate"}Conversion Rate{/s}'
+            },
+            {
+                dataIndex: 'revenue',
+                text: '{s name="table/quick_overview/turnover"}Turnover{/s}'
+            },
+            {
+                dataIndex: 'cancelledOrders',
+                text: '{s name="table/quick_overview/cancelled_baskets"}Cancelled baskets{/s}'
+            },
+            {
+                dataIndex: 'newCustomers',
+                text: '{s name="table/quick_overview/new_customers"}New Customers{/s}'
+            },
+            {
+                dataIndex: 'visitors',
+                text: '{s name="table/quick_overview/visitors"}Visitors{/s}'
+            },
+            {
+                dataIndex: 'clicks',
+                text: '{s name="table/quick_overview/page_calls"}Page calls{/s}'
+            }
+        ];
     }
 });
 //{/block}

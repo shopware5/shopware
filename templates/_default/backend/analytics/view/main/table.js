@@ -37,28 +37,30 @@ Ext.define('Shopware.apps.Analytics.view.main.Table', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.analytics-table',
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
         Ext.applyIf(me, {
-            dockedItems: [{
-                xtype: 'pagingtoolbar',
-                displayInfo: true,
-                store: me.store,
-                dock: 'bottom'
-            }]
+            dockedItems: [
+                {
+                    xtype: 'pagingtoolbar',
+                    displayInfo: true,
+                    store: me.store,
+                    dock: 'bottom'
+                }
+            ]
         });
 
         me.callParent(arguments);
     },
 
-    initStoreIndices: function(indexName, text, params){
+    initStoreIndices: function (indexName, text, params) {
         var me = this,
             columns = me.columns,
             columnItems = !!columns.items ? columns.items : columns,
             column;
 
-        if(!me.shopSelection) {
+        if (!me.shopSelection) {
             return;
         }
 
@@ -66,7 +68,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Table', {
         text = text || '[0]';
         params = params || { };
 
-        for(var i = 0; i < me.shopSelection.length; i++){
+        for (var i = 0; i < me.shopSelection.length; i++) {
             var shop = me.shopStore.getAt(i);
 
             column = Ext.merge({
@@ -78,7 +80,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Table', {
         }
     },
 
-    getColumns: function(){
+    getColumns: function () {
         return this.columns;
     }
 });

@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Country', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-country',
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
         me.columns = {
@@ -50,15 +50,18 @@ Ext.define('Shopware.apps.Analytics.view.table.Country', {
         me.callParent(arguments);
     },
 
-    getColumns: function(){
-        return [{
-            dataIndex: 'name',
-            text: '{s name=table/country/country}Country{/s}'
-        }, {
-            xtype: 'numbercolumn',
-            dataIndex: 'amount',
-            text: '{s name=table/country/sales}Sales{/s}'
-        }];
+    getColumns: function () {
+        return [
+            {
+                dataIndex: 'name',
+                text: '{s name=table/country/country}Country{/s}'
+            },
+            {
+                xtype: 'numbercolumn',
+                dataIndex: 'amount',
+                text: '{s name=table/country/sales}Sales{/s}'
+            }
+        ];
     }
 });
 //{/block}

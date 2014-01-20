@@ -38,32 +38,35 @@ Ext.define('Shopware.apps.Analytics.view.table.Week', {
     alias: 'widget.analytics-table-week',
     shopColumnText: "{s name=table/month/sum}Sales: [0]{/s}",
 
-    initComponent: function() {
-       var me = this;
+    initComponent: function () {
+        var me = this;
 
         me.columns = {
             items: me.getColumns(),
             defaults: {
-                flex:1
+                flex: 1
             }
         };
 
-       me.initStoreIndices('amount', me.shopColumnText, { xtype: 'numbercolumn' });
+        me.initStoreIndices('amount', me.shopColumnText, { xtype: 'numbercolumn' });
 
-       me.callParent(arguments);
+        me.callParent(arguments);
     },
 
-    getColumns: function() {
-        return [{
-            xtype: 'datecolumn',
-            dataIndex: 'date',
-            text: '{s name=table/week/week}Week{/s}',
-            format: '\\K\\W W, Y'
-        }, {
-            xtype: 'numbercolumn',
-            dataIndex: 'amount',
-            text: '{s name=table/week/sales}Sales{/s}'
-        }]
+    getColumns: function () {
+        return [
+            {
+                xtype: 'datecolumn',
+                dataIndex: 'date',
+                text: '{s name=table/week/week}Week{/s}',
+                format: '\\K\\W W, Y'
+            },
+            {
+                xtype: 'numbercolumn',
+                dataIndex: 'amount',
+                text: '{s name=table/week/sales}Sales{/s}'
+            }
+        ]
     }
 });
 //{/block}
