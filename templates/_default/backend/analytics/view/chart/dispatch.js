@@ -38,30 +38,32 @@ Ext.define('Shopware.apps.Analytics.view.chart.Dispatch', {
     alias: 'widget.analytics-chart-dispatch',
     animate: true,
     shadows: true,
-    initComponent: function() {
-       var me = this;
+    initComponent: function () {
+        var me = this;
 
-       this.series = [{
-           type: 'pie',
-           field: 'amount',
-           showInLegend: true,
-           label: {
-               title: '{s name=chart/dispatch/title}Shipping{/s}',
-               field: 'name',
-               display: 'rotate',
-               contrast: true,
-               font: '18px Arial'
-           },
-           tips: {
-               trackMouse: true,
-               width: 80,
-               height: 40,
-               renderer: function(storeItem, item) {
-                   this.setTitle('{s name=chart/dispatch/title}Sales{/s} ' +  Ext.util.Format.number(storeItem.get('amount')));
-               }
-           }
-       }];
-       me.callParent(arguments);
+        this.series = [
+            {
+                type: 'pie',
+                field: 'amount',
+                showInLegend: true,
+                label: {
+                    title: '{s name=chart/dispatch/title}Shipping{/s}',
+                    field: 'name',
+                    display: 'rotate',
+                    contrast: true,
+                    font: '18px Arial'
+                },
+                tips: {
+                    trackMouse: true,
+                    width: 80,
+                    height: 40,
+                    renderer: function (storeItem, item) {
+                        this.setTitle('{s name=chart/dispatch/title}Sales{/s} ' + Ext.util.Format.number(storeItem.get('amount')));
+                    }
+                }
+            }
+        ];
+        me.callParent(arguments);
     }
 });
 //{/block}

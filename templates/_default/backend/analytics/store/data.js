@@ -34,7 +34,7 @@
 Ext.define('Shopware.apps.Analytics.store.Data', {
     extend: 'Ext.data.Store',
     alias: 'widget.analytics-store-data',
-    fields: ['node', 'name', 'amount','displayDate', { name : 'date', type: 'date', dateFormat: 'timestamp' }],
+    fields: ['node', 'name', 'amount', 'displayDate', { name: 'date', type: 'date', dateFormat: 'timestamp' }],
     proxy: {
         type: 'ajax',
         url: '{url controller=analytics}',
@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Analytics.store.Data', {
         }
     },
 
-    constructor: function(config) {
+    constructor: function (config) {
         this.callParent(arguments);
     }
 });

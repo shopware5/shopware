@@ -41,29 +41,31 @@ Ext.define('Shopware.apps.Analytics.view.chart.Country', {
     legend: {
         position: 'right'
     },
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
-        me.series = [{
-            type: 'pie',
-            field: 'amount',
-            showInLegend: true,
-            label: {
-                title: '{s name=chart/country/title}Country{/s}',
-                field: 'name',
-                display: 'rotate',
-                contrast: true,
-                font: '18px Arial'
-            },
-            tips: {
-                trackMouse: true,
-                width: 80,
-                height: 40,
-                renderer: function(storeItem) {
-                    this.setTitle('{s name=chart/category/title}Sales{/s} ' +  Ext.util.Format.number(storeItem.get('amount')));
+        me.series = [
+            {
+                type: 'pie',
+                field: 'amount',
+                showInLegend: true,
+                label: {
+                    title: '{s name=chart/country/title}Country{/s}',
+                    field: 'name',
+                    display: 'rotate',
+                    contrast: true,
+                    font: '18px Arial'
+                },
+                tips: {
+                    trackMouse: true,
+                    width: 80,
+                    height: 40,
+                    renderer: function (storeItem) {
+                        this.setTitle('{s name=chart/category/title}Sales{/s} ' + Ext.util.Format.number(storeItem.get('amount')));
+                    }
                 }
             }
-        }];
+        ];
 
         me.callParent(arguments);
     }

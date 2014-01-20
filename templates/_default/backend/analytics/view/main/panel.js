@@ -38,15 +38,17 @@ Ext.define('Shopware.apps.Analytics.view.main.Panel', {
     layout: 'card',
     alias: 'widget.analytics-panel',
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
         Ext.applyIf(me, {
-            dockedItems: [{
-                xtype: 'analytics-toolbar',
-                dock: 'top',
-                shopStore: me.shopStore
-            }]
+            dockedItems: [
+                {
+                    xtype: 'analytics-toolbar',
+                    dock: 'top',
+                    shopStore: me.shopStore
+                }
+            ]
         });
 
         me.callParent(arguments);

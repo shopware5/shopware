@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Visitors', {
         'name',
         'totalImpressions',
         'totalVisits',
-        { name : 'datum', type: 'date' }
+        { name: 'datum', type: 'date' }
     ],
     proxy: {
         type: 'ajax',
@@ -50,12 +50,12 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Visitors', {
         }
     },
 
-    constructor: function(config) {
+    constructor: function (config) {
         var me = this;
         config.fields = me.fields;
 
-        if(config.shopStore) {
-            config.shopStore.each(function(shop) {
+        if (config.shopStore) {
+            config.shopStore.each(function (shop) {
                 config.fields.push('visits' + shop.data.id);
                 config.fields.push('impressions' + shop.data.id);
             });

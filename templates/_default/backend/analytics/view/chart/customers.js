@@ -40,21 +40,24 @@ Ext.define('Shopware.apps.Analytics.view.chart.Customers', {
         position: 'right'
     },
 
-    axes: [{
-        type: 'Numeric',
-        minimum: 0,
-        grid: true,
-        position: 'left',
-        fields: ['newCustomersOrders'],
-        title: '{s name=chart/customers/count/title}Count{/s}'
-    }, {
-        type: 'Category',
-        position: 'bottom',
-        fields: ['week'],
-        title: '{s name=chart/customers/week/title}Calender week{/s}',
-    }],
+    axes: [
+        {
+            type: 'Numeric',
+            minimum: 0,
+            grid: true,
+            position: 'left',
+            fields: ['newCustomersOrders'],
+            title: '{s name=chart/customers/count/title}Count{/s}'
+        },
+        {
+            type: 'Category',
+            position: 'bottom',
+            fields: ['week'],
+            title: '{s name=chart/customers/week/title}Calender week{/s}',
+        }
+    ],
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
         me.tipStoreTable = Ext.create('Ext.data.JsonStore', {
@@ -66,64 +69,71 @@ Ext.define('Shopware.apps.Analytics.view.chart.Customers', {
             height: 130,
             store: me.tipStoreTable,
             flex: 1,
-            columns: [{
-                text   : '{s name="chart/customers/name"}Name{/s}',
-                dataIndex: 'name',
-                flex: 1
-            },{
-                xtype: 'numbercolumn',
-                text   : 'Count',
-                dataIndex: 'count',
-                align: 'right',
-                flex: 1
-            },{
-                xtype: 'numbercolumn',
-                text   : 'Percentage',
-                dataIndex: 'percentage',
-                align: 'right',
-                flex: 1
-            }]
+            columns: [
+                {
+                    text: '{s name="chart/customers/name"}Name{/s}',
+                    dataIndex: 'name',
+                    flex: 1
+                },
+                {
+                    xtype: 'numbercolumn',
+                    text: 'Count',
+                    dataIndex: 'count',
+                    align: 'right',
+                    flex: 1
+                },
+                {
+                    xtype: 'numbercolumn',
+                    text: 'Percentage',
+                    dataIndex: 'percentage',
+                    align: 'right',
+                    flex: 1
+                }
+            ]
         };
 
         var tips = {
             trackMouse: true,
-                width: 580,
-                height: 130,
-                layout: 'fit',
-                items: {
+            width: 580,
+            height: 130,
+            layout: 'fit',
+            items: {
                 xtype: 'container',
-                    layout: 'hbox',
-                    items: [me.tipGrid]
+                layout: 'hbox',
+                items: [me.tipGrid]
             },
-            renderer: function(cls, item) {
+            renderer: function (cls, item) {
                 me.renderMaleData(item, this);
             }
         };
 
-        me.series = [{
-            type: 'line',
-            axis : ['left', 'bottom'],
-            highlight: true,
-            xField: 'week',
-            yField: 'newCustomersOrders',
-            fill: false,
-            smooth: true,
-            tips: tips
-        } , {
-            type: 'line',
-            axis : ['left', 'bottom'],
-            highlight: true,
-            xField: 'week',
-            yField: 'oldCustomersOrders',
-            fill: false,
-            smooth: true,
-            tips: tips
-        }];
+        me.series = [
+            {
+                type: 'line',
+                axis: ['left', 'bottom'],
+                highlight: true,
+                xField: 'week',
+                yField: 'newCustomersOrders',
+                fill: false,
+                smooth: true,
+                tips: tips
+            } ,
+            {
+                type: 'line',
+                axis: ['left', 'bottom'],
+                highlight: true,
+                xField: 'week',
+                yField: 'oldCustomersOrders',
+                fill: false,
+                smooth: true,
+                tips: tips
+            }
+        ];
 
         me.callParent(arguments);
     },
 
-    renderMaleData: function(item, tip) {
+    renderMaleData: function (item, tip) {
         var me = this, data = [],
             storeItem = item.storeItem;
 

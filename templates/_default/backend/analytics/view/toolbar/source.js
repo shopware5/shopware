@@ -34,7 +34,7 @@
 //{namespace name=backend/analytics/view/main}
 //{block name="backend/analytics/view/main/toolbar"}
 Ext.define('Shopware.apps.Analytics.view.toolbar.Source', {
-    extend : 'Ext.form.field.Picker',
+    extend: 'Ext.form.field.Picker',
     alias: 'widget.analytics-toolbar-source',
     emptyText: '{s name=toolbar/source/empty}Select shops to compare{/s}',
 
@@ -101,8 +101,8 @@ Ext.define('Shopware.apps.Analytics.view.toolbar.Source', {
             dataValue = '',
             values = me.picker.getChecked();
 
-        Ext.each(values, function(value, key) {
-            if(key !== 0) {
+        Ext.each(values, function (value, key) {
+            if (key !== 0) {
                 dataText += ', ';
                 dataValue += ',';
             }

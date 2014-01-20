@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Analytics.view.table.CustomerAge', {
         me.columns = {
             items: me.getColumns(),
             defaults: {
-                flex:1
+                flex: 1
             }
         };
 
@@ -58,13 +58,16 @@ Ext.define('Shopware.apps.Analytics.view.table.CustomerAge', {
      * @return [array] grid columns
      */
     getColumns: function () {
-        return [{
-            dataIndex: 'age',
-            text: '{s name="table/customer_age/age"}Age{/s}'
-        }, {
-            dataIndex: 'percent',
-            text: '{s name="table/customer_age/percentage"}Percentage{/s}'
-        }];
+        return [
+            {
+                dataIndex: 'age',
+                text: '{s name="table/customer_age/age"}Age{/s}'
+            },
+            {
+                dataIndex: 'percent',
+                text: '{s name="table/customer_age/percentage"}Percentage{/s}'
+            }
+        ];
     }
 });
 //{/block}

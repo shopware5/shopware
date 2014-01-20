@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Payment', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-payment',
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
         me.columns = {
@@ -52,15 +52,18 @@ Ext.define('Shopware.apps.Analytics.view.table.Payment', {
         me.callParent(arguments);
     },
 
-    getColumns: function(){
-        return [{
-            dataIndex: 'name',
-            text: '{s name=table/payment/payment}Payment{/s}'
-        }, {
-            xtype: 'numbercolumn',
-            dataIndex: 'amount',
-            text: '{s name=table/payment/sales}Sales{/s}'
-        }];
+    getColumns: function () {
+        return [
+            {
+                dataIndex: 'name',
+                text: '{s name=table/payment/payment}Payment{/s}'
+            },
+            {
+                xtype: 'numbercolumn',
+                dataIndex: 'amount',
+                text: '{s name=table/payment/sales}Sales{/s}'
+            }
+        ];
     }
 });
 //{/block}

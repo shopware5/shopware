@@ -38,29 +38,31 @@ Ext.define('Shopware.apps.Analytics.view.chart.Payment', {
     alias: 'widget.analytics-chart-payment',
     animate: true,
     shadows: true,
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
-        this.series = [{
-            type: 'pie',
-            field: 'amount',
-            showInLegend: true,
-            label: {
-                title: '{s name=chart/payment/title}Payment method{/s}',
-                field: 'name',
-                display: 'rotate',
-                contrast: true,
-                font: '18px Arial'
-            },
-            tips: {
-                trackMouse: true,
-                width: 80,
-                height: 40,
-                renderer: function(storeItem) {
-                    this.setTitle('{s name=chart/payment/title}Payment method{/s} ' +  Ext.util.Format.number(storeItem.get('amount')));
+        this.series = [
+            {
+                type: 'pie',
+                field: 'amount',
+                showInLegend: true,
+                label: {
+                    title: '{s name=chart/payment/title}Payment method{/s}',
+                    field: 'name',
+                    display: 'rotate',
+                    contrast: true,
+                    font: '18px Arial'
+                },
+                tips: {
+                    trackMouse: true,
+                    width: 80,
+                    height: 40,
+                    renderer: function (storeItem) {
+                        this.setTitle('{s name=chart/payment/title}Payment method{/s} ' + Ext.util.Format.number(storeItem.get('amount')));
+                    }
                 }
             }
-        }];
+        ];
 
 
         me.callParent(arguments);

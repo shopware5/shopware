@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Weekday', {
     alias: 'widget.analytics-table-weekday',
     shopColumnSales: "{s name=table/month/sum}Sales: [0]{/s}",
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
         me.columns = {
@@ -53,17 +53,20 @@ Ext.define('Shopware.apps.Analytics.view.table.Weekday', {
         me.callParent(arguments);
     },
 
-    getColumns: function(){
-        return [{
-            xtype: 'datecolumn',
-            dataIndex: 'date',
-            text: '{s name=table/weekday/weekday}Weekday{/s}',
-            format: 'l'
-        }, {
-            xtype: 'numbercolumn',
-            dataIndex: 'amount',
-            text: '{s name=table/weekday/sales}Sales{/s}'
-        }];
+    getColumns: function () {
+        return [
+            {
+                xtype: 'datecolumn',
+                dataIndex: 'date',
+                text: '{s name=table/weekday/weekday}Weekday{/s}',
+                format: 'l'
+            },
+            {
+                xtype: 'numbercolumn',
+                dataIndex: 'amount',
+                text: '{s name=table/weekday/sales}Sales{/s}'
+            }
+        ];
     }
 });
 //{/block}

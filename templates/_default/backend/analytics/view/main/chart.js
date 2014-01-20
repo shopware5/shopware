@@ -40,111 +40,119 @@ Ext.define('Shopware.apps.Analytics.view.main.Chart', {
     animate: true,
     theme: 'Category3',
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
         me.callParent(arguments);
     },
-    initMultipleShopTipsStores: function() {
-           var me = this;
 
-           me.tipStore = Ext.create('Ext.data.JsonStore', {
-               fields: ['name', 'data']
-           });
 
-           me.tipStoreTable = Ext.create('Ext.data.JsonStore', {
-              fields: ['name', 'data']
-           });
+    initMultipleShopTipsStores: function () {
+        var me = this;
 
-           me.tipChart = {
-               xtype: 'chart',
-               width: 100,
-               height: 100,
-               animate: false,
-               store:  me.tipStore,
-               shadow: false,
-               insetPadding: 5,
-               theme: 'Base:gradients',
-               series: [{
-                   type: 'pie',
-                   field: 'data',
-                   showInLegend: false,
-                   label: {
-                       field: 'name',
-                       display: 'rotate',
-                       contrast: true,
-                       font: '9px Arial'
-                   }
-               }]
-           };
+        me.tipStore = Ext.create('Ext.data.JsonStore', {
+            fields: ['name', 'data']
+        });
 
-           me.tipGrid = {
-               xtype: 'grid',
-               store: me.tipStoreTable,
-               height: 130,
-               flex: 1,
-               columns: [{
-                   text   : '{s name="main/chart/name"}Name{/s}',
-                   dataIndex: 'name',
-                   flex: 1
-               },{
-                   xtype: 'numbercolumn',
-                   text   : '{s name=chart/month/legendSales}Sales{/s}',
-                   dataIndex: 'data',
-                   align: 'right',
-                   flex: 1
-               }]
-           };
+        me.tipStoreTable = Ext.create('Ext.data.JsonStore', {
+            fields: ['name', 'data']
+        });
+
+        me.tipChart = {
+            xtype: 'chart',
+            width: 100,
+            height: 100,
+            animate: false,
+            store: me.tipStore,
+            shadow: false,
+            insetPadding: 5,
+            theme: 'Base:gradients',
+            series: [
+                {
+                    type: 'pie',
+                    field: 'data',
+                    showInLegend: false,
+                    label: {
+                        field: 'name',
+                        display: 'rotate',
+                        contrast: true,
+                        font: '9px Arial'
+                    }
+                }
+            ]
+        };
+
+        me.tipGrid = {
+            xtype: 'grid',
+            store: me.tipStoreTable,
+            height: 130,
+            flex: 1,
+            columns: [
+                {
+                    text: '{s name="main/chart/name"}Name{/s}',
+                    dataIndex: 'name',
+                    flex: 1
+                },
+                {
+                    xtype: 'numbercolumn',
+                    text: '{s name=chart/month/legendSales}Sales{/s}',
+                    dataIndex: 'data',
+                    align: 'right',
+                    flex: 1
+                }
+            ]
+        };
     },
 
-    initMultipleShopTipsData: function(item,tipObj,dateFormatString,defaultTitle){
+    initMultipleShopTipsData: function (item, tipObj, dateFormatString, defaultTitle) {
 
-       var storeItem = item.storeItem,me = this,
-           dataChart = [], dataTable = [];
+        var storeItem = item.storeItem, me = this,
+            dataChart = [], dataTable = [];
 
-       if (!dateFormatString) {
-           dateFormatString = 'F, Y';
-       }
+        if (!dateFormatString) {
+            dateFormatString = 'F, Y';
+        }
 
-       if (!defaultTitle) {
-           defaultTitle = '{s name=chart/month/legendSalesIn}Sales in{/s}';
-       }
+        if (!defaultTitle) {
+            defaultTitle = '{s name=chart/month/legendSalesIn}Sales in{/s}';
+        }
 
-       me.shopStore.each(function(shop) {
-           var value = storeItem.get('amount' + shop.data.id);
+        me.shopStore.each(function (shop) {
+            var value = storeItem.get('amount' + shop.data.id);
 
-           if(!value) {
-               return;
-           }
+            if (!value) {
+                return;
+            }
 
-           if (shop.data.currencyChar == "&euro;") {
-               shop.data.currencyChar = "€";
-           }
+            if (shop.data.currencyChar == "&euro;") {
+                shop.data.currencyChar = "€";
+            }
 
-           // Data for chart
-           dataChart[dataChart.length] = { name: shop.data.name, data: value};
-           // Data for table
-           dataTable[dataTable.length] = { name: shop.data.name, data: value};
+            // Data for chart
+            dataChart[dataChart.length] = { name: shop.data.name, data: value};
+            // Data for table
+            dataTable[dataTable.length] = { name: shop.data.name, data: value};
 
-       });
-       // Load data with plain values into pie chart
-       me.tipStore.loadData(dataChart);
+        });
+        // Load data with plain values into pie chart
+        me.tipStore.loadData(dataChart);
 
-       // Add total sum to table
-       dataTable[dataTable.length] = {
-         name: '{s name=chart/month/legendTotalSum}Total{/s}',
-         data: storeItem.get('amount')
-       };
+        // Add total sum to table
+        dataTable[dataTable.length] = {
+            name: '{s name=chart/month/legendTotalSum}Total{/s}',
+            data: storeItem.get('amount')
+        };
 
-       // Load formatted data with sum row into table
-       me.tipStoreTable.loadData(dataTable);
+        // Load formatted data with sum row into table
+        me.tipStoreTable.loadData(dataTable);
 
-       if(!dataChart.length) {
-           tipObj.hide();
-       } else {
-           tipObj.show();
-       }
-       tipObj.setTitle(defaultTitle +" "+ Ext.Date.format(storeItem.get('date'), dateFormatString));
-    }
+        if (!dataChart.length) {
+            tipObj.hide();
+        } else {
+            tipObj.show();
+        }
+        tipObj.setTitle(defaultTitle + " " + Ext.Date.format(storeItem.get('date'), dateFormatString));
+    },
+
 });
 //{/block}

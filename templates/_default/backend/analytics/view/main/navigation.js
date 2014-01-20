@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Navigation', {
     title: '{s name=navigation_title}Navigation{/s}',
     rootVisible: false,
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
         me.callParent(arguments);
     }

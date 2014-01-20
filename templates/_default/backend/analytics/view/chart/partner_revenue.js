@@ -39,30 +39,32 @@ Ext.define('Shopware.apps.Analytics.view.chart.PartnerRevenue', {
     },
     mask: 'horizontal',
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
-        me.series = [{
-            type: 'pie',
-            field: 'revenue',
-            showInLegend: true,
-            label: {
-                field: 'partner',
-                display: 'rotate',
-                contrast: true,
-                font: '18px Arial'
-            },
-            tips: {
-                trackMouse: true,
-                width: 160,
-                height: 30,
-                autoScroll: true,
-                renderer: function(storeItem) {
-                    var title = '{s name=chart/partner/title}Sales{/s}: ' +  Ext.util.Format.number(storeItem.get('revenue'), '0.00');
-                    this.setTitle(title);
+        me.series = [
+            {
+                type: 'pie',
+                field: 'revenue',
+                showInLegend: true,
+                label: {
+                    field: 'partner',
+                    display: 'rotate',
+                    contrast: true,
+                    font: '18px Arial'
+                },
+                tips: {
+                    trackMouse: true,
+                    width: 160,
+                    height: 30,
+                    autoScroll: true,
+                    renderer: function (storeItem) {
+                        var title = '{s name=chart/partner/title}Sales{/s}: ' + Ext.util.Format.number(storeItem.get('revenue'), '0.00');
+                        this.setTitle(title);
+                    }
                 }
             }
-        }];
+        ];
 
         me.callParent(arguments);
     }

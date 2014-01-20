@@ -41,8 +41,8 @@ Ext.define('Shopware.apps.Analytics.view.table.ArticleSells', {
         me.columns = {
             items: me.getColumns(),
             defaults: {
-                align:'right',
-                flex:1
+                align: 'right',
+                flex: 1
             }
         };
 
@@ -55,16 +55,20 @@ Ext.define('Shopware.apps.Analytics.view.table.ArticleSells', {
      * @return [array] grid columns
      */
     getColumns: function () {
-        return [{
-            dataIndex: 'ordernumber',
-            text: '{s name="table/items_sales/ordernumber"}Ordernumber{/s}'
-        }, {
-            dataIndex: 'name',
-            text: '{s name="table/items_sales/article_name"}Article name{/s}'
-        }, {
-            dataIndex: 'sellCount',
-            text: '{s name="table/items_sales/sells"}Sells{/s}'
-        }];
+        return [
+            {
+                dataIndex: 'ordernumber',
+                text: '{s name="table/items_sales/ordernumber"}Ordernumber{/s}'
+            },
+            {
+                dataIndex: 'name',
+                text: '{s name="table/items_sales/article_name"}Article name{/s}'
+            },
+            {
+                dataIndex: 'sellCount',
+                text: '{s name="table/items_sales/sells"}Sells{/s}'
+            }
+        ];
     }
 });
 //{/block}

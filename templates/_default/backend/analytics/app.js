@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Analytics', {
      * sub-application behavior and the event bus
      * @string
      */
-    extend:'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
 
     /**
      * Sets the loading path for the sub-application.
@@ -47,24 +47,24 @@ Ext.define('Shopware.apps.Analytics', {
      * controller (server-side)
      * @string
      */
-    loadPath:'{url action=load}',
+    loadPath: '{url action=load}',
 
     /**
      * Enable bulk loading
      */
-    bulkLoad:true,
+    bulkLoad: true,
 
     /**
      * Requires controllers for sub-application
      * @array
      */
-    controllers:[ 'Main', 'ReferrerVisitors' ],
+    controllers: [ 'Main', 'ReferrerVisitors' ],
 
     /**
      * Required stores for controller
      * @array
      */
-    stores:[
+    stores: [
         'Navigation',
 
         'Shop',
@@ -99,14 +99,14 @@ Ext.define('Shopware.apps.Analytics', {
      * Required models for controller
      * @array
      */
-    models:[ 'Navigation' ],
+    models: [ 'Navigation' ],
 
     /**
      * Required views for controller
      *
      * @array
      */
-    views:[
+    views: [
         'main.Window',
         'main.Navigation',
         'main.Panel',
@@ -168,7 +168,7 @@ Ext.define('Shopware.apps.Analytics', {
      * @private
      * @return [object] mainWindow - the main application window based on Enlight.app.Window
      */
-    launch:function () {
+    launch: function () {
         var me = this,
             mainController = me.getController('Main');
 

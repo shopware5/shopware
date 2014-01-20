@@ -39,22 +39,25 @@ Ext.define('Shopware.apps.Analytics.view.main.Window', {
     layout: 'border',
     title: '{s name=title}Statistics{/s}',
     width: '90%',
-    height:'90%',
-    stateId:'shopware-statistics-main-window',
+    height: '90%',
+    stateId: 'shopware-statistics-main-window',
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
-        me.items = [{
-            xtype: 'analytics-panel',
-            region: 'center',
-            shopStore: me.shopStore
-        }, {
-            xtype: 'analytics-navigation',
-            region: 'west',
-            collapsible: true,
-            store: me.navigationStore
-        }];
+        me.items = [
+            {
+                xtype: 'analytics-panel',
+                region: 'center',
+                shopStore: me.shopStore
+            },
+            {
+                xtype: 'analytics-navigation',
+                region: 'west',
+                collapsible: true,
+                store: me.navigationStore
+            }
+        ];
 
         me.callParent(arguments);
     }

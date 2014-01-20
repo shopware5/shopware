@@ -41,8 +41,8 @@ Ext.define('Shopware.apps.Analytics.view.table.Customers', {
         me.columns = {
             items: me.getColumns(),
             defaults: {
-                align:'right',
-                flex:1
+                align: 'right',
+                flex: 1
             }
         };
 
@@ -55,22 +55,28 @@ Ext.define('Shopware.apps.Analytics.view.table.Customers', {
      * @return [array] grid columns
      */
     getColumns: function () {
-        return [{
-            dataIndex: 'week',
-            text: '{s name="table/customers/calendar_week"}Calendar Week{/s}'
-        }, {
-            dataIndex: 'amountNewCustomers',
-            text: '{s name="table/customers/new_customers"}New customers{/s}'
-        }, {
-            dataIndex: 'amountOldCustomers',
-            text: '{s name="table/customers/regular_customers"}Regular customers{/s}'
-        }, {
-            dataIndex: 'maleAmount',
-            text: '{s name="table/customers/male_portion"}Percentage male{/s}'
-        }, {
-            dataIndex: 'femaleAmount',
-            text: '{s name="table/customers/female_portion"}Percentage female{/s}'
-        }];
+        return [
+            {
+                dataIndex: 'week',
+                text: '{s name="table/customers/calendar_week"}Calendar Week{/s}'
+            },
+            {
+                dataIndex: 'amountNewCustomers',
+                text: '{s name="table/customers/new_customers"}New customers{/s}'
+            },
+            {
+                dataIndex: 'amountOldCustomers',
+                text: '{s name="table/customers/regular_customers"}Regular customers{/s}'
+            },
+            {
+                dataIndex: 'maleAmount',
+                text: '{s name="table/customers/male_portion"}Percentage male{/s}'
+            },
+            {
+                dataIndex: 'femaleAmount',
+                text: '{s name="table/customers/female_portion"}Percentage female{/s}'
+            }
+        ];
     }
 });
 //{/block}

@@ -38,14 +38,14 @@ Ext.define('Shopware.apps.Analytics.view.table.Visitors', {
     alias: 'widget.analytics-table-visitors',
     shopColumnVisits: "{s name=table/visits/visits}V: [0]{/s}",
     shopColumnImpressions: "{s name=table/visits/impressions}I: [0]{/s}",
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
         me.columns = {
             items: me.getColumns(),
             defaults: {
-               align: 'right',
-               flex: 1
+                align: 'right',
+                flex: 1
             }
         };
 
@@ -55,18 +55,22 @@ Ext.define('Shopware.apps.Analytics.view.table.Visitors', {
         me.callParent(arguments);
     },
 
-    getColumns: function(){
-        return [{
-            xtype: 'datecolumn',
-            dataIndex: 'datum',
-            text: '{s name=table/visitors/date}Date{/s}'
-        }, {
-            dataIndex: 'totalVisits',
-            text: '{s name=table/visitors/totalVisits}Total visits{/s}'
-        }, {
-            dataIndex: 'totalImpressions',
-            text: '{s name=table/visitors/totalImpressions}Total impressions{/s}'
-        }];
+    getColumns: function () {
+        return [
+            {
+                xtype: 'datecolumn',
+                dataIndex: 'datum',
+                text: '{s name=table/visitors/date}Date{/s}'
+            },
+            {
+                dataIndex: 'totalVisits',
+                text: '{s name=table/visitors/totalVisits}Total visits{/s}'
+            },
+            {
+                dataIndex: 'totalImpressions',
+                text: '{s name=table/visitors/totalImpressions}Total impressions{/s}'
+            }
+        ];
     }
 });
 //{/block}

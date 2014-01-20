@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Analytics.view.table.CustomerGroup', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-customer-group',
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
         me.columns = {
@@ -50,19 +50,23 @@ Ext.define('Shopware.apps.Analytics.view.table.CustomerGroup', {
         me.callParent(arguments);
     },
 
-    getColumns: function(){
-        return [{
-            dataIndex: 'customerGroup',
-            text: '{s name=table/country/country}Customer group{/s}'
-        }, {
-            xtype: 'numbercolumn',
-            dataIndex: 'amount',
-            text: '{s name=table/country/sales}Sales{/s}'
-        }, {
-            xtype: 'numbercolumn',
-            dataIndex: 'count',
-            text: '{s name=table/country/count}Count{/s}'
-        }];
+    getColumns: function () {
+        return [
+            {
+                dataIndex: 'customerGroup',
+                text: '{s name=table/country/country}Customer group{/s}'
+            },
+            {
+                xtype: 'numbercolumn',
+                dataIndex: 'amount',
+                text: '{s name=table/country/sales}Sales{/s}'
+            },
+            {
+                xtype: 'numbercolumn',
+                dataIndex: 'count',
+                text: '{s name=table/country/count}Count{/s}'
+            }
+        ];
     }
 });
 //{/block}

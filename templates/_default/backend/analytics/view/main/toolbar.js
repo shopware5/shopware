@@ -38,76 +38,83 @@ Ext.define('Shopware.apps.Analytics.view.main.Toolbar', {
     alias: 'widget.analytics-toolbar',
     ui: 'shopware-ui',
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this,
             today = new Date();
 
         Ext.applyIf(me, {
-            items: [{
-                xtype: 'combobox',
-                iconCls: 'sprite-gear',
-                name: 'shop_selection',
-                queryMode: 'remote',
-                fieldLabel: '{s name=toolbar/shop_name}Shop{/s}',
-                store: me.shopStore,
-                multiSelect: true,
-                displayField: 'name',
-                valueField: 'id'
-            },
-            {
-                xtype: 'datefield',
-                fieldLabel: '{s name=toolbar/from_date}From{/s}',
-                labelWidth: 50,
-                width:150,
-                name: 'from_date',
-                value: new Date(today.getFullYear(), today.getMonth() - 1, today.getDate()),
-                maxValue: today
-            },
-            {
-                xtype: 'datefield',
-                fieldLabel: '{s name=toolbar/to_date}To{/s}',
-                name: 'to_date',
-                width:130,
-                labelWidth: 30,
-                value: today,
-                maxValue: today
-            },
-            { xtype: 'tbspacer' },
-            {
-                xtype: 'button',
-                text: '{s name=toolbar/export}Export{/s}',
-                name: 'export',
-                handler: function() {
-                    me.fireEvent('exportCSV');
+            items: [
+                {
+                    xtype: 'combobox',
+                    iconCls: 'sprite-gear',
+                    name: 'shop_selection',
+                    queryMode: 'remote',
+                    fieldLabel: '{s name=toolbar/shop_name}Shop{/s}',
+                    store: me.shopStore,
+                    multiSelect: true,
+                    displayField: 'name',
+                    valueField: 'id'
+                },
+                {
+                    xtype: 'datefield',
+                    fieldLabel: '{s name=toolbar/from_date}From{/s}',
+                    labelWidth: 50,
+                    width: 150,
+                    name: 'from_date',
+                    value: new Date(today.getFullYear(), today.getMonth() - 1, today.getDate()),
+                    maxValue: today
+                },
+                {
+                    xtype: 'datefield',
+                    fieldLabel: '{s name=toolbar/to_date}To{/s}',
+                    name: 'to_date',
+                    width: 130,
+                    labelWidth: 30,
+                    value: today,
+                    maxValue: today
+                },
+                { xtype: 'tbspacer' },
+                {
+                    xtype: 'button',
+                    text: '{s name=toolbar/export}Export{/s}',
+                    name: 'export',
+                    iconCls: 'sprite-drive-download',
+                    handler: function () {
+                        me.fireEvent('exportCSV');
+                    }
+                },
+                {
+                    xtype: 'button',
+                    iconCls: 'sprite-arrow-circle-135',
+                    text: '{s name=toolbar/update}Update{/s}',
+                    name: 'refresh',
+                    handler: function () {
+                        me.fireEvent('refreshView')
+                    }
+                },
+                { xtype: 'tbfill' },
+                {
+                    showText: true,
+                    xtype: 'cycle',
+                    prependText: '{s name=toolbar/view}Display as{/s} ',
+                    action: 'layout',
+                    menu: {
+                        items: [
+                            {
+                                text: '{s name=toolbar/view_chart}Chart{/s}',
+                                layout: 'chart',
+                                iconCls: 'sprite-chart'
+                            },
+                            {
+                                text: '{s name=toolbar/view_table}Table{/s}',
+                                layout: 'table',
+                                iconCls: 'sprite-table',
+                                checked: true
+                            }
+                        ]
+                    }
                 }
-            },
-            {
-                xtype: 'button',
-                text: '{s name=toolbar/update}Update{/s}',
-                name: 'refresh',
-                handler: function() {
-                    me.fireEvent('refreshView')
-                }
-            },
-            { xtype: 'tbfill' },
-            {
-                showText: true,
-                xtype: 'cycle',
-                prependText: '{s name=toolbar/view}Display as{/s} ',
-                action: 'layout',
-                menu: {
-                    items: [{
-                        text: '{s name=toolbar/view_chart}Chart{/s}',
-                        layout: 'chart',
-                        iconCls: 'sprite-chart'
-                    },{
-                        text: '{s name=toolbar/view_table}Table{/s}',
-                        layout: 'table',
-                        iconCls: 'sprite-table',
-                        checked: true
-                    }]
-                }
-            }]
+            ]
         });
 
         me.callParent(arguments);

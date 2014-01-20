@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Daytime', {
     alias: 'widget.analytics-table-daytime',
     shopColumnSales: "{s name=table/daytime/sales}Sales{/s}: [0]",
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
         me.columns = {
@@ -53,17 +53,20 @@ Ext.define('Shopware.apps.Analytics.view.table.Daytime', {
         me.callParent(arguments);
     },
 
-    getColumns: function(){
-        return [{
-            xtype: 'datecolumn',
-            dataIndex: 'date',
-            text: '{s name=table/daytime/time}Date{/s}',
-            format: 'H:00'
-        }, {
-            xtype: 'numbercolumn',
-            dataIndex: 'amount',
-            text: '{s name=table/daytime/sales}Sales{/s}'
-        }];
+    getColumns: function () {
+        return [
+            {
+                xtype: 'datecolumn',
+                dataIndex: 'date',
+                text: '{s name=table/daytime/time}Date{/s}',
+                format: 'H:00'
+            },
+            {
+                xtype: 'numbercolumn',
+                dataIndex: 'amount',
+                text: '{s name=table/daytime/sales}Sales{/s}'
+            }
+        ];
     }
 });
 //{/block}

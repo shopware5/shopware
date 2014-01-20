@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Month', {
     alias: 'widget.analytics-table-month',
     shopColumnText: "{s name=table/month/sum}Sales: [0]{/s}",
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
         me.columns = {
@@ -53,17 +53,20 @@ Ext.define('Shopware.apps.Analytics.view.table.Month', {
         me.callParent(arguments);
     },
 
-    getColumns: function(){
-        return [{
-            xtype: 'datecolumn',
-            dataIndex: 'date',
-            text: '{s name=table/month/month}Month{/s}',
-            format: 'F, Y'
-        }, {
-            xtype: 'numbercolumn',
-            dataIndex: 'amount',
-            text: '{s name=table/month/sales}Total sales{/s}'
-        }];
+    getColumns: function () {
+        return [
+            {
+                xtype: 'datecolumn',
+                dataIndex: 'date',
+                text: '{s name=table/month/month}Month{/s}',
+                format: 'F, Y'
+            },
+            {
+                xtype: 'numbercolumn',
+                dataIndex: 'amount',
+                text: '{s name=table/month/sales}Total sales{/s}'
+            }
+        ];
     }
 });
 //{/block}

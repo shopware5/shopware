@@ -41,8 +41,8 @@ Ext.define('Shopware.apps.Analytics.view.table.Rating', {
         me.columns = {
             items: me.getColumns(),
             defaults: {
-                align:'right',
-                flex:1
+                align: 'right',
+                flex: 1
             }
         };
 
@@ -55,20 +55,25 @@ Ext.define('Shopware.apps.Analytics.view.table.Rating', {
      * @return [array] grid columns
      */
     getColumns: function () {
-        return [{
-            xtype: 'datecolumn',
-            dataIndex: 'date',
-            text: '{s name="table/rating/date"}Date{/s}'
-        }, {
-            dataIndex: 'basketConversion',
-            text: '{s name="table/rating/basket_rate"}Basket Conversion Rate{/s}'
-        }, {
-            dataIndex: 'orderConversion',
-            text: '{s name="table/rating/order_rate"}Order Conversion Rate{/s}'
-        }, {
-            dataIndex: 'basketVisitConversion',
-            text: '{s name="table/rating/basket_visit_rate"}Basket/Visit Conversion Rate{/s}'
-        }];
+        return [
+            {
+                xtype: 'datecolumn',
+                dataIndex: 'date',
+                text: '{s name="table/rating/date"}Date{/s}'
+            },
+            {
+                dataIndex: 'basketConversion',
+                text: '{s name="table/rating/basket_rate"}Basket Conversion Rate{/s}'
+            },
+            {
+                dataIndex: 'orderConversion',
+                text: '{s name="table/rating/order_rate"}Order Conversion Rate{/s}'
+            },
+            {
+                dataIndex: 'basketVisitConversion',
+                text: '{s name="table/rating/basket_visit_rate"}Basket/Visit Conversion Rate{/s}'
+            }
+        ];
     }
 });
 //{/block}

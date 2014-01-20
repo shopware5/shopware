@@ -41,8 +41,8 @@ Ext.define('Shopware.apps.Analytics.view.table.PartnerRevenue', {
         me.columns = {
             items: me.getColumns(),
             defaults: {
-                align:'right',
-                flex:1
+                align: 'right',
+                flex: 1
             }
         };
 
@@ -55,16 +55,20 @@ Ext.define('Shopware.apps.Analytics.view.table.PartnerRevenue', {
      * @return [array] grid columns
      */
     getColumns: function () {
-        return [{
-            dataIndex: 'trackingCode',
-            text: '{s name="table/turnover_partner/tracking_code"}Tracking code{/s}'
-        }, {
-            dataIndex: 'partner',
-            text: '{s name="table/turnover_partner/partner"}Partner{/s}'
-        }, {
-            dataIndex: 'revenue',
-            text: '{s name="table/turnover_partner/turnover"}Turnover{/s}'
-        }];
+        return [
+            {
+                dataIndex: 'trackingCode',
+                text: '{s name="table/turnover_partner/tracking_code"}Tracking code{/s}'
+            },
+            {
+                dataIndex: 'partner',
+                text: '{s name="table/turnover_partner/partner"}Partner{/s}'
+            },
+            {
+                dataIndex: 'revenue',
+                text: '{s name="table/turnover_partner/turnover"}Turnover{/s}'
+            }
+        ];
     }
 });
 //{/block}
