@@ -44,7 +44,7 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
     /**
      * @var Logger
      */
-    protected $log;
+    protected $logger;
 
     /**
      * @var CollectorInterface[]
@@ -118,11 +118,11 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
      */
     public function getLogger()
     {
-        if ($this->log === null) {
-            $this->log = $this->get('log');
+        if ($this->logger === null) {
+            $this->logger = $this->get('debuglogger');
         }
 
-        return $this->log;
+        return $this->logger;
     }
 
     /**
@@ -186,24 +186,15 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
      */
     public function onStartDispatch(\Enlight_Event_EventArgs $args)
     {
-        // Check for ip-address
-        if (!empty($_SERVER['REMOTE_ADDR'])
-            && !empty($this->Config()->AllowIP)
-            && strpos($this->Config()->AllowIP, $_SERVER['REMOTE_ADDR']) === false
-        ) {
+        /** @var \Enlight_Controller_Request_RequestHttp $request */
+        $request = $args->getSubject()->Request();
+
+        if (!$this->isRequestAllowed($request)) {
             return;
         }
 
-        if ($this->getLogger() === null) {
-            return;
-        }
-
-        if (!empty($_SERVER['HTTP_USER_AGENT'])
-            && strpos($_SERVER['HTTP_USER_AGENT'], 'FirePHP/')!==false
-		) { 
-            $writer = new Zend_Log_Writer_Firebug();
-            $this->getLogger()->addWriter($writer);
-        }
+        $this->getLogger()->pushHandler($this->get('monolog.handler.chromephp'));
+        $this->getLogger()->pushHandler($this->get('monolog.handler.firephp'));
 
         $this->registerCollectors();
 
@@ -214,6 +205,26 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
     }
 
     /**
+     * @param Enlight_Controller_Request_RequestHttp $request
+     * @return bool
+     */
+    public function isRequestAllowed(\Enlight_Controller_Request_RequestHttp $request)
+    {
+        $clientIp  = $request->getClientIp();
+        $allowedIp = $this->Config()->get('AllowIP');
+
+        if (empty($allowedIp)) {
+            return true;
+        }
+
+        if (empty($clientIp)) {
+            return false;
+        }
+
+        return (strpos($allowedIp, $clientIp) !== false);
+    }
+
+    /**
      * Listener method of the Enlight_Controller_Front_DispatchLoopShutdown event.
      * On Dispatch Shutdown collects results and dumps to log component.
      *
@@ -221,10 +232,6 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
      */
     public function onDispatchLoopShutdown(\Enlight_Event_EventArgs $args)
     {
-        if ($this->getLogger() === null) {
-            return;
-        }
-
         foreach ($this->collectors as $collector) {
             $collector->logResults($this->getLogger());
         }
