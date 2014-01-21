@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
                 id: 'rating',
                 text: '{s name=nav/rating_overview}Rating-Overview{/s}',
                 store: 'analytics-store-navigation-rating',
-                iconCls: 'sprite-report-paper',
+                iconCls: 'sprite-star',
                 comparable: true,
                 leaf: true,
                 multiShop: true
@@ -59,7 +59,7 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
                 id: 'referrer_revenue',
                 text: '{s name=nav/turnover_referrer}Turnover by referrer{/s}',
                 store: 'analytics-store-navigation-referrer_revenue',
-                iconCls: 'sprite-report-paper',
+                iconCls: 'sprite-application-home',
                 comparable: true,
                 leaf: true
             },
@@ -67,7 +67,7 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
                 id: 'partner_revenue',
                 text: '{s name=nav/turnover_partner}Turnover by partner{/s}',
                 store: 'analytics-store-navigation-partner_revenue',
-                iconCls: 'sprite-report-paper',
+                iconCls: 'sprite-xfn-colleague',
                 comparable: true,
                 leaf: true
             },
@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
                 id: 'customer-group',
                 text: '{s name=nav/turnover_customergroup}Turnover by customer group{/s}',
                 store: 'analytics-store-navigation-customer-groups',
-                iconCls: 'sprite-report-paper',
+                iconCls: 'sprite-users',
                 comparable: true,
                 leaf: true,
                 multiShop: true
@@ -84,7 +84,7 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
                 id: 'referrer_visitors',
                 text: '{s name=nav/visitor_source}Visitor access source{/s}',
                 store: 'analytics-store-navigation-referrer_visitors',
-                iconCls: 'sprite-report-paper',
+                iconCls: 'sprite-application-search-result',
                 comparable: true,
                 leaf: true
             },
@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
                 id: 'article_sells',
                 text: '{s name=nav/items_sales}Item by sales{/s}',
                 store: 'analytics-store-navigation-article_sells',
-                iconCls: 'sprite-report-paper',
+                iconCls: 'sprite-inbox',
                 comparable: true,
                 leaf: true
             },
@@ -100,7 +100,7 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
                 id: 'customers',
                 text: '{s name=nav/customers}Portion New-/RegularCustomer{/s}',
                 store: 'analytics-store-navigation-customers',
-                iconCls: 'sprite-report-paper',
+                iconCls: 'sprite-user-silhouette-question',
                 comparable: true,
                 leaf: true,
                 multiShop: true
@@ -109,7 +109,7 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
                 id: 'customer_age',
                 text: '{s name=nav/customer_age}Customer age{/s}',
                 store: 'analytics-store-navigation-customer_age',
-                iconCls: 'sprite-report-paper',
+                iconCls: 'sprite-user',
                 comparable: true,
                 leaf: true,
                 multiShop: true
