@@ -162,7 +162,9 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
                 text: '{s name=nav/salesBy/countries}Turnover by countries{/s}',
                 store: 'analytics-store-navigation-countries',
                 iconCls: 'sprite-locale',
-                leaf: true
+                leaf: true,
+                multiShop: true,
+                comparable: true
             },
             {
                 id: 'payment',
@@ -177,7 +179,8 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
                 text: '{s name=nav/salesBy/shippingMethods}Turnover by shipping methods{/s}',
                 store: 'analytics-store-navigation-shipping_methods',
                 iconCls: 'sprite-truck-box-label',
-                leaf: true
+                leaf: true,
+                multiShop: true
             },
             {
                 id: 'supplier',

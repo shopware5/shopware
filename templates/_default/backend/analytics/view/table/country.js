@@ -27,14 +27,13 @@
  * @category   Shopware
  * @package    Analytics
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
- *
- * todo@all - documentation
  */
 //{namespace name=backend/analytics/view/main}
 //{block name="backend/analytics/view/table/country"}
 Ext.define('Shopware.apps.Analytics.view.table.Country', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-country',
+    shopColumnText: "{s name=table/country/sum}Sales: [0]{/s}",
 
     initComponent: function () {
         var me = this;
@@ -45,6 +44,8 @@ Ext.define('Shopware.apps.Analytics.view.table.Country', {
                 flex: 1
             }
         };
+
+        me.initStoreIndices('amount', me.shopColumnText, { xtype: 'numbercolumn' });
 
         me.callParent(arguments);
     },
