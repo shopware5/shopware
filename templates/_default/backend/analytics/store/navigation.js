@@ -116,7 +116,7 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
             },
             {
                 id: 'month',
-                text: '{s name=nav/salesBy/month}Month{/s}',
+                text: '{s name=nav/salesBy/month}Turnover by month{/s}',
                 store: 'analytics-store-navigation-month',
                 iconCls: 'sprite-calendar-month',
                 comparable: true,
@@ -125,7 +125,7 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
             },
             {
                 id: 'week',
-                text: '{s name=nav/salesBy/calendarWeeks}Calendar weeks{/s}',
+                text: '{s name=nav/salesBy/calendarWeeks}Turnover by calendar weeks{/s}',
                 store: 'analytics-store-navigation-calendar_weeks',
                 iconCls: 'sprite-calendar-select-week',
                 comparable: true,
@@ -134,7 +134,7 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
             },
             {
                 id: 'weekday',
-                text: '{s name=nav/salesBy/weekdays}Weekdays{/s}',
+                text: '{s name=nav/salesBy/weekdays}Turnover by weekdays{/s}',
                 store: 'analytics-store-navigation-weekdays',
                 iconCls: 'sprite-calendar-select-days',
                 comparable: true,
@@ -143,7 +143,7 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
             },
             {
                 id: 'daytime',
-                text: '{s name=nav/salesBy/time}Time{/s}',
+                text: '{s name=nav/salesBy/time}Turnover by time of day{/s}',
                 store: 'analytics-store-navigation-time',
                 iconCls: 'sprite-clock',
                 comparable: true,
@@ -152,21 +152,21 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
             },
             {
                 id: 'category',
-                text: '{s name=nav/salesBy/categories}Categories{/s}',
+                text: '{s name=nav/salesBy/categories}Turnover by categories{/s}',
                 store: 'analytics-store-navigation-categories',
                 iconCls: 'sprite-category',
                 leaf: true
             },
             {
                 id: 'country',
-                text: '{s name=nav/salesBy/countries}Countries{/s}',
+                text: '{s name=nav/salesBy/countries}Turnover by countries{/s}',
                 store: 'analytics-store-navigation-countries',
                 iconCls: 'sprite-locale',
                 leaf: true
             },
             {
                 id: 'payment',
-                text: '{s name=nav/salesBy/payment}Payment{/s}',
+                text: '{s name=nav/salesBy/payment}Turnover by payment{/s}',
                 store: 'analytics-store-navigation-payment',
                 iconCls: 'sprite-moneys',
                 leaf: true,
@@ -174,14 +174,14 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
             },
             {
                 id: 'dispatch',
-                text: '{s name=nav/salesBy/shippingMethods}Shipping methods{/s}',
+                text: '{s name=nav/salesBy/shippingMethods}Turnover by shipping methods{/s}',
                 store: 'analytics-store-navigation-shipping_methods',
                 iconCls: 'sprite-truck-box-label',
                 leaf: true
             },
             {
                 id: 'supplier',
-                text: '{s name=nav/salesBy/vendors}Vendors{/s}',
+                text: '{s name=nav/salesBy/vendors}Turnover by vendors{/s}',
                 store: 'analytics-store-navigation-vendors',
                 iconCls: 'sprite-toolbox',
                 leaf: true
