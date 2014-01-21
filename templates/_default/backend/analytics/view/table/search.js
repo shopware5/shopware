@@ -42,7 +42,8 @@ Ext.define('Shopware.apps.Analytics.view.table.Search', {
         me.columns = {
             items: me.getColumns(),
             defaults: {
-                flex: 1
+                flex: 1,
+                sortable: false
             }
         };
 
