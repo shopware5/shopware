@@ -194,7 +194,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Debit', {
                 minWidth:250,
                 xtype:'textfield'
             },
-            items: me.createLeftElements()
+            items: me.createDebitFormLeft()
         });
 
         rightContainer = Ext.create('Ext.container.Container', {
@@ -207,7 +207,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Debit', {
                 labelWidth:100,
                 xtype:'textfield'
             },
-            items: me.createRightElements()
+            items: me.createDebitFormRight()
         });
 
         return [ leftContainer, rightContainer ];
@@ -218,7 +218,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Debit', {
      *
      * @return [Array] Contains the account name and account holder
      */
-    createLeftElements:function () {
+    createDebitFormLeft:function () {
         var me = this;
         return [{
             name:'debit[account]',
@@ -236,7 +236,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Debit', {
      *
      * @return [Array] Contains the bank name and code
      */
-    createRightElements:function () {
+    createDebitFormRight:function () {
         var me = this;
         return [{
             name:'debit[bankName]',
