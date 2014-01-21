@@ -59,25 +59,22 @@ Ext.define('Shopware.apps.Analytics.view.chart.CustomerAge', {
         var me = this;
 
         me.series = [
-            {
-                type: 'line',
-                axis: ['left', 'bottom'],
-                highlight: true,
-                yField: 'percent',
-                xField: 'age',
-                fill: true,
-                smooth: true,
-                tips: {
-                    trackMouse: true,
-                    width: 120,
-                    height: 40,
-                    renderer: function (storeItem, item) {
-                        var text = '{s name=chart/customer_age/age/tip/title}Age{/s}: ' + Ext.util.Format.number(storeItem.get('age'));
-                        text += '<br>' + '&nbsp;{s name=chart/customer_age/percent/tip/title}Percent{/s}:' + Ext.util.Format.number(storeItem.get('percent')) + '%';
+            me.createLineSeries(
+                {
+                    yField: 'percent',
+                    xField: 'age'
+                },
+                {
+                    renderer: function (storeItem) {
+                        var text = '{s name=chart/customer_age/age/tip/title}Age{/s}: ';
+                        text += Ext.util.Format.number(storeItem.get('age'));
+                        text += '<br>' + '&nbsp;{s name=chart/customer_age/percent/tip/title}Percent{/s}: ';
+                        text += Ext.util.Format.number(storeItem.get('percent')) + '%';
+
                         this.setTitle(text);
                     }
                 }
-            }
+            ),
         ];
 
         me.callParent(arguments);

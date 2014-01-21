@@ -92,14 +92,12 @@ Ext.define('Shopware.apps.Analytics.view.chart.Customers', {
         };
 
         var tips = {
-            trackMouse: true,
             width: 580,
             height: 130,
-            layout: 'fit',
             items: {
                 xtype: 'container',
                 layout: 'hbox',
-                items: [me.tipGrid]
+                items: [ me.tipGrid ]
             },
             renderer: function (cls, item) {
                 me.renderMaleData(item, this);
@@ -107,26 +105,14 @@ Ext.define('Shopware.apps.Analytics.view.chart.Customers', {
         };
 
         me.series = [
-            {
-                type: 'line',
-                axis: ['left', 'bottom'],
-                highlight: true,
-                xField: 'week',
-                yField: 'newCustomersOrders',
-                fill: false,
-                smooth: true,
-                tips: tips
-            } ,
-            {
-                type: 'line',
-                axis: ['left', 'bottom'],
-                highlight: true,
-                xField: 'week',
-                yField: 'oldCustomersOrders',
-                fill: false,
-                smooth: true,
-                tips: tips
-            }
+            me.createLineSeries(
+                { xField: 'week', yField: 'newCustomersOrders' },
+                tips
+            ),
+            me.createLineSeries(
+                { xField: 'week', yField: 'oldCustomersOrders' },
+                tips
+            )
         ];
 
         me.callParent(arguments);

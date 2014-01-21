@@ -64,59 +64,71 @@ Ext.define('Shopware.apps.Analytics.view.chart.Week', {
     ],
     initComponent: function () {
         var me = this;
+
+        me.series = [];
+
         // Initiate stores for handling multiple shop values
         this.initMultipleShopTipsStores();
 
-        me.series = [
-            {
-                type: 'line',
-                axis: ['left', 'bottom'],
-                xField: 'date',
-                yField: 'amount',
-                fill: true,
-                smooth: true,
-                title: '{s name=chart/month/legendSum}Sum{/s}',
-                tips: {
-                    trackMouse: true,
-                    width: 580,
-                    height: 130,
-                    layout: 'fit',
-                    items: {
-                        xtype: 'container',
-                        layout: 'hbox',
-                        items: [me.tipChart, me.tipGrid]
-                    },
-                    renderer: function (cls, item) {
-                        me.initMultipleShopTipsData(item, this, "W, Y");
-                    }
-                }
-            }
-        ];
+        if (me.shopSelection != Ext.undefined && me.shopSelection.length > 0) {
+            Ext.each(me.shopSelection, function (shopId) {
+                var shop = me.shopStore.getById(shopId);
 
-        me.shopStore.each(function (shop) {
-            me.series[me.series.length] = {
-                type: 'line',
-                title: shop.data.name,
-                axis: ['left', 'bottom'],
-                xField: 'date',
-                yField: 'amount' + shop.data.id,
-                smooth: true,
-                tips: {
-                    trackMouse: true,
-                    width: 120,
-                    highlight: {
-                        size: 7,
-                        radius: 7
-                    },
-                    height: 60,
-                    renderer: function (storeItem, item) {
-                        this.setTitle(Ext.Date.format(storeItem.get('date'), 'F, Y'));
-                        var sales = Ext.util.Format.currency(storeItem.get('amount' + shop.data.id), shop.data.currencyChar);
-                        this.update(sales);
+                if (!(shop instanceof Ext.data.Model)) {
+                    return true;
+                }
+
+                me.series.push({
+                    type: 'line',
+                    title: shop.data.name,
+                    axis: ['left', 'bottom'],
+                    xField: 'date',
+                    yField: 'amount' + shop.data.id,
+                    smooth: true,
+                    tips: {
+                        trackMouse: true,
+                        width: 120,
+                        highlight: {
+                            size: 7,
+                            radius: 7
+                        },
+                        height: 60,
+                        renderer: function (storeItem, item) {
+                            this.setTitle(Ext.Date.format(storeItem.get('date'), 'F, Y'));
+                            var sales = Ext.util.Format.currency(storeItem.get('amount' + shop.data.id), shop.data.currencyChar);
+                            this.update(sales);
+                        }
+                    }
+                });
+            });
+        } else {
+            me.series = [
+                {
+                    type: 'line',
+                    axis: ['left', 'bottom'],
+                    xField: 'date',
+                    yField: 'amount',
+                    fill: true,
+                    smooth: true,
+                    title: '{s name=chart/month/legendSum}Sum{/s}',
+                    tips: {
+                        trackMouse: true,
+                        width: 580,
+                        height: 130,
+                        layout: 'fit',
+                        items: {
+                            xtype: 'container',
+                            layout: 'hbox',
+                            items: [me.tipChart, me.tipGrid]
+                        },
+                        renderer: function (cls, item) {
+                            me.initMultipleShopTipsData(item, this, "W, Y");
+                        }
                     }
                 }
-            };
-        }, me);
+            ];
+        }
+
         me.callParent(arguments);
 
     }

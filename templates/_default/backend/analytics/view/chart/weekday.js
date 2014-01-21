@@ -38,27 +38,11 @@ Ext.define('Shopware.apps.Analytics.view.chart.Weekday', {
     legend: {
         position: 'right'
     },
-    gradients: [
-        {
-            angle: 90,
-            id: 'bar-gradient',
-            stops: {
-                0: {
-                    color: '#99BBE8'
-                },
-                70: {
-                    color: '#77AECE'
-                },
-                100: {
-                    color: '#77AECE'
-                }
-            }
-        }
-    ],
     animate: {
         easing: 'bounceOut',
         duration: 750
     },
+
     axes: [
         {
             type: 'Numeric',
@@ -74,70 +58,83 @@ Ext.define('Shopware.apps.Analytics.view.chart.Weekday', {
             title: '{s name=chart/weekday/titleBottom}Weekday{/s}'
         }
     ],
+
     initComponent: function () {
         var me = this;
 
-        me.initMultipleShopTipsStores();
+        me.series = [];
 
-        me.series = [
-            {
-                type: 'column',
-                axis: 'left',
-                xField: 'displayDate',
-                style: {
-                    fill: 'url(#bar-gradient)',
-                    'stroke-width': 3
-                },
-                markerConfig: {
-                    type: 'circle',
-                    size: 4,
-                    radius: 4,
-                    'stroke-width': 0,
-                    fill: '#38B8BF',
-                    stroke: '#38B8BF'
-                },
-                title: 'Total sales',
-                yField: 'amount',
-                tips: {
-                    trackMouse: true,
-                    width: 580,
-                    height: 130,
-                    layout: 'fit',
-                    items: {
-                        xtype: 'container',
-                        layout: 'hbox',
-                        items: [me.tipChart, me.tipGrid]
+        // Initiate stores for handling multiple shop values
+        this.initMultipleShopTipsStores();
+
+        if (me.shopSelection != Ext.undefined && me.shopSelection.length > 0) {
+            Ext.each(me.shopSelection, function (shopId) {
+                var shop = me.shopStore.getById(shopId);
+
+                if (!(shop instanceof Ext.data.Model)) {
+                    return true;
+                }
+                me.series.push({
+                    type: 'line',
+                    title: shop.data.name,
+                    axis: ['left'],
+                    xField: 'displayDate',
+                    yField: 'amount' + shopId,
+                    smooth: true,
+                    tips: {
+                        trackMouse: true,
+                        width: 120,
+                        highlight: {
+                            size: 7,
+                            radius: 7
+                        },
+                        height: 60,
+                        renderer: function (storeItem, item) {
+                            this.setTitle(storeItem.get('displayDate'));
+                            var sales = Ext.util.Format.currency(storeItem.get('amount' + shopId), shop.data.currencyChar);
+                            this.update(sales);
+                        }
+                    }
+                })
+            });
+        } else {
+            me.series = [
+                {
+                    type: 'column',
+                    axis: 'left',
+                    xField: 'displayDate',
+                    style: {
+                        fill: 'url(#bar-gradient)',
+                        'stroke-width': 3
                     },
-                    renderer: function (cls, item) {
-                        me.initMultipleShopTipsData(item, this, 'l', '{s name=chart/weekday/legendSalesOn}Sales on{/s}');
+                    markerConfig: {
+                        type: 'circle',
+                        size: 4,
+                        radius: 4,
+                        'stroke-width': 0,
+                        fill: '#38B8BF',
+                        stroke: '#38B8BF'
+                    },
+                    title: 'Total sales',
+                    yField: 'amount',
+                    tips: {
+                        trackMouse: true,
+                        width: 580,
+                        height: 130,
+                        layout: 'fit',
+                        items: {
+                            xtype: 'container',
+                            layout: 'hbox',
+                            items: [me.tipChart, me.tipGrid]
+                        },
+                        renderer: function (cls, item) {
+                            me.initMultipleShopTipsData(item, this, 'l', '{s name=chart/weekday/legendSalesOn}Sales on{/s}');
+                        }
                     }
                 }
-            }
-        ];
-        me.shopStore.each(function (shop) {
-            me.series[me.series.length] = {
-                type: 'line',
-                title: shop.data.name,
-                axis: ['left'],
-                xField: 'displayDate',
-                yField: 'amount' + shop.data.id,
-                smooth: true,
-                tips: {
-                    trackMouse: true,
-                    width: 120,
-                    highlight: {
-                        size: 7,
-                        radius: 7
-                    },
-                    height: 60,
-                    renderer: function (storeItem, item) {
-                        this.setTitle(storeItem.get('displayDate'));
-                        var sales = Ext.util.Format.currency(storeItem.get('amount' + shop.data.id), shop.data.currencyChar);
-                        this.update(sales);
-                    }
-                }
-            };
-        }, me);
+            ];
+        }
+
         me.callParent(arguments);
     }
 });

@@ -27,8 +27,6 @@
  * @category   Shopware
  * @package    Analytics
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
- *
- * todo@all - documentation
  */
 //{namespace name=backend/analytics/view/main}
 //{block name="backend/analytics/view/chart/payment"}
@@ -37,34 +35,94 @@ Ext.define('Shopware.apps.Analytics.view.chart.Payment', {
     alias: 'widget.analytics-chart-payment',
     animate: true,
     shadows: true,
+
+    legend: {
+        position: 'right'
+    },
+
     initComponent: function () {
         var me = this;
 
+        me.series = [];
+
+        me.axes = [
+            {
+                type: 'Numeric',
+                position: 'bottom',
+                fields: me.getAxesFields('amount'),
+                title: '{s name=chart/payment/sales}Sales{/s}',
+                grid: true,
+                minimum: 0
+            },
+            {
+                type: 'Category',
+                position: 'left',
+                fields: ['name'],
+                title: '{s name=chart/payment/title}Payment method{/s}'
+            }
+        ];
+
         this.series = [
             {
-                type: 'pie',
-                field: 'amount',
-                showInLegend: true,
+                type: 'bar',
+                axis: 'bottom',
+                gutter: 80,
+                xField: 'name',
+                yField: me.getAxesFields('amount'),
+                title: me.getAxesTitles(),
+                stacked: true,
                 label: {
-                    title: '{s name=chart/payment/title}Payment method{/s}',
-                    field: 'name',
-                    display: 'rotate',
-                    contrast: true,
-                    font: '18px Arial'
+                    display: 'insideEnd',
+                    field: 'amount',
+                    renderer: Ext.util.Format.numberRenderer('0.00'),
+                    orientation: 'horizontal',
+                    'text-anchor': 'middle'
                 },
                 tips: {
                     trackMouse: true,
-                    width: 80,
-                    height: 40,
-                    renderer: function (storeItem) {
-                        this.setTitle('{s name=chart/payment/title}Payment method{/s} ' + Ext.util.Format.number(storeItem.get('amount')));
+                    width: 300,
+                    height: 60,
+                    renderer: function (storeItem, barItem) {
+                        var name = storeItem.get('name'),
+                            field = barItem.yField,
+                            shopId = field.replace('amount', ''),
+                            currency = '€',
+                            shop;
+
+                        if (shopId) {
+                            shop = me.shopStore.getById(shopId);
+                            name = shop.get('name') + '<br><br>&nbsp;' + name;
+                            currency = shop.get('currencyChar');
+                        }
+
+                        var amount = Ext.util.Format.currency(storeItem.get(field), currency);
+                        this.setTitle(name + ' : ' + amount);
                     }
                 }
             }
         ];
 
-
         me.callParent(arguments);
+    },
+
+    getAxesTitles: function() {
+        var me = this,
+            titles = [];
+
+        if (me.shopSelection == Ext.undefined || me.shopSelection.length <= 0) {
+            return '{s name=chart/payment/sum}Total sales{/s}';
+        }
+
+        Ext.each(me.shopSelection, function (shopId) {
+            if (shopId) {
+                var shop = me.shopStore.getById(shopId);
+                titles.push(shop.get('name'));
+            }
+        });
+
+        return titles;
     }
+
+
 });
 //{/block}
