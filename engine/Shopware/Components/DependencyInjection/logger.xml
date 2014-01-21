@@ -73,7 +73,7 @@
 
         <!--Plugin logger -->
         <service id="pluginlogger" class="Shopware\Components\Logger">
-            <argument>info</argument>
+            <argument>plugin</argument>
             <call method="pushHandler">
                 <argument type="service" id="monolog.handler.rotating_file.plugin" />
             </call>
