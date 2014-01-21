@@ -84,7 +84,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Overview', {
                 text: '{s name="table/quick_overview/new_customers"}New Customers{/s}'
             },
             {
-                dataIndex: 'visitors',
+                dataIndex: 'totalVisits',
                 text: '{s name="table/quick_overview/visitors"}Visitors{/s}'
             },
             {
