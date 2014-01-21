@@ -64,6 +64,7 @@ Ext.define('Shopware.apps.Analytics.view.table.PartnerRevenue', {
             },
             {
                 dataIndex: 'partner',
+                align: 'left',
                 text: '{s name="table/turnover_partner/partner"}Partner{/s}'
             },
             {

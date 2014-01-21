@@ -65,6 +65,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Rating', {
             {
                 xtype: 'datecolumn',
                 dataIndex: 'date',
+                align: 'left',
                 text: '{s name="table/rating/date"}Date{/s}'
             },
             {

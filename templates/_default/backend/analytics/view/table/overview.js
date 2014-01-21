@@ -61,6 +61,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Overview', {
             {
                 xtype: 'datecolumn',
                 dataIndex: 'date',
+                align: 'left',
                 text: '{s name="table/quick_overview/date"}Date{/s}'
             },
             {

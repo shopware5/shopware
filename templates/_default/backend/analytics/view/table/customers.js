@@ -65,6 +65,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Customers', {
         return [
             {
                 dataIndex: 'week',
+                align: 'left',
                 text: '{s name="table/customers/calendar_week"}Calendar Week{/s}'
             },
             {

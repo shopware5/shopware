@@ -42,7 +42,6 @@ Ext.define('Shopware.apps.Analytics.view.table.ArticleImpression', {
         me.columns = {
             items: me.getColumns(),
             defaults: {
-                align: 'right',
                 flex: 1
             }
         };
@@ -88,6 +87,7 @@ Ext.define('Shopware.apps.Analytics.view.table.ArticleImpression', {
             },
             {
                 dataIndex: 'totalAmount',
+                align: 'right',
                 text: '{s name=table/article_impression/impressions}Impressions{/s}'
             }
         ];

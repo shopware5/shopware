@@ -60,6 +60,7 @@ Ext.define('Shopware.apps.Analytics.view.table.ReferrerRevenue', {
         return [
             {
                 dataIndex: 'host',
+                align: 'left',
                 text: '{s name=table/referrer_revenue/host}Host{/s}'
             },
             {
