@@ -8,6 +8,7 @@
         <parameter key="monolog.logger.class">Symfony\Bridge\Monolog\Logger</parameter>
 
         <parameter key="monolog.logger.constant.critical" type="constant">Monolog\Logger::CRITICAL</parameter>
+        <parameter key="monolog.logger.constant.error" type="constant">Monolog\Logger::ERROR</parameter>
         <parameter key="monolog.logger.constant.info" type="constant">Monolog\Logger::INFO</parameter>
 
         <parameter key="monolog.handler.firephp.class">Shopware\Components\Log\Handler\FirePHPHandler</parameter>
@@ -58,7 +59,7 @@
         <!-- FingersCrossed handler-->
         <service id="monolog.handler.fingers_crossed" class="%monolog.handler.fingers_crossed.class%" public="false">
             <argument type="service" id="monolog.handler.rotating_file" />
-            <argument>%monolog.logger.constant.critical%</argument>
+            <argument>%monolog.logger.constant.error%</argument>
         </service>
 
         <!-- Core logger -->
