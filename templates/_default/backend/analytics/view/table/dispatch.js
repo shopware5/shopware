@@ -46,6 +46,8 @@ Ext.define('Shopware.apps.Analytics.view.table.Dispatch', {
             }
         };
 
+        me.initStoreIndices('amount', me.shopColumnText, { xtype: 'numbercolumn' });
+
         me.callParent(arguments);
     },
 

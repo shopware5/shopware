@@ -69,7 +69,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Payment', {
                 gutter: 80,
                 xField: 'name',
                 yField: me.getAxesFields('amount'),
-                title: me.getAxesTitles(),
+                title: me.getAxesTitles('{s name=chart/payment/sum}Total sales{/s}'),
                 stacked: true,
                 label: {
                     display: 'insideEnd',
@@ -103,26 +103,6 @@ Ext.define('Shopware.apps.Analytics.view.chart.Payment', {
         ];
 
         me.callParent(arguments);
-    },
-
-    getAxesTitles: function() {
-        var me = this,
-            titles = [];
-
-        if (me.shopSelection == Ext.undefined || me.shopSelection.length <= 0) {
-            return '{s name=chart/payment/sum}Total sales{/s}';
-        }
-
-        Ext.each(me.shopSelection, function (shopId) {
-            if (shopId) {
-                var shop = me.shopStore.getById(shopId);
-                titles.push(shop.get('name'));
-            }
-        });
-
-        return titles;
     }
-
-
 });
 //{/block}

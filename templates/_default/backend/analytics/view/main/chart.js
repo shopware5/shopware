@@ -198,6 +198,24 @@ Ext.define('Shopware.apps.Analytics.view.main.Chart', {
         });
     
         return fields;
+    },
+
+    getAxesTitles: function(defaultName) {
+        var me = this,
+            titles = [];
+
+        if (me.shopSelection == Ext.undefined || me.shopSelection.length <= 0) {
+            return defaultName;
+        }
+
+        Ext.each(me.shopSelection, function (shopId) {
+            if (shopId) {
+                var shop = me.shopStore.getById(shopId);
+                titles.push(shop.get('name'));
+            }
+        });
+
+        return titles;
     }
 
 
