@@ -77,7 +77,8 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
                 store: 'analytics-store-navigation-customer-groups',
                 iconCls: 'sprite-report-paper',
                 comparable: true,
-                leaf: true
+                leaf: true,
+                multiShop: true
             },
             {
                 id: 'referrer_visitors',

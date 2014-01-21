@@ -46,6 +46,9 @@ Ext.define('Shopware.apps.Analytics.view.table.CustomerGroup', {
             }
         };
 
+        me.initStoreIndices('amount', '{s name=table/customer_group/sales}Sales{/s}: [0]');
+        me.initStoreIndices('count', '{s name=table/customer_group/count}Number of orders{/s}: [0]');
+
         me.callParent(arguments);
     },
 
@@ -53,17 +56,18 @@ Ext.define('Shopware.apps.Analytics.view.table.CustomerGroup', {
         return [
             {
                 dataIndex: 'customerGroup',
-                text: '{s name=table/country/country}Customer group{/s}'
+                text: '{s name=table/customer_group/group}Customer group{/s}'
             },
             {
                 xtype: 'numbercolumn',
                 dataIndex: 'amount',
-                text: '{s name=table/country/sales}Sales{/s}'
+                text: '{s name=table/customer_group/sales}Sales{/s}'
             },
             {
                 xtype: 'numbercolumn',
+                format: '0',
                 dataIndex: 'count',
-                text: '{s name=table/country/count}Count{/s}'
+                text: '{s name=table/customer_group/count}Number of orders{/s}'
             }
         ];
     }
