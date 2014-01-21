@@ -100,7 +100,7 @@
 					{/block}
 				</span>
 			{/block}
-		{elseif $sArticle.sVoteAverage.count == 1}
+		{elseif $sArticle.sVoteAverange.count == 1}
 			{block name="frontend_detail_rich_snippets_review_single"}
 				{$vote=$sArticle.sVoteComments.0}
 
