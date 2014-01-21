@@ -55,7 +55,13 @@ class EnlightMailHandler extends MailHandler
      */
     protected function send($content, array $records)
     {
-        $this->mailer->setBodyText($content);
-        $this->mailer->send();
+        $mailer = clone $this->mailer;
+
+        try {
+            $mailer->setBodyText($content);
+            $mailer->send();
+        } catch (\Exception $e) {
+             // empty catch intended to prevent recursion
+        }
     }
 }
