@@ -106,11 +106,11 @@ Ext.define('Shopware.apps.Analytics.view.chart.Customers', {
 
         me.series = [
             me.createLineSeries(
-                { xField: 'week', yField: 'newCustomersOrders' },
+                { xField: 'week', yField: 'newCustomersOrders', title: '{s name="chart/customers/new_customers_legend"}New customers{/s}' },
                 tips
             ),
             me.createLineSeries(
-                { xField: 'week', yField: 'oldCustomersOrders' },
+                { xField: 'week', yField: 'oldCustomersOrders', title: '{s name="chart/customers/old_customers_legend"}Old customers{/s}' },
                 tips
             )
         ];
