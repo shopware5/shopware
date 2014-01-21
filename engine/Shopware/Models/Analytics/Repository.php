@@ -1215,7 +1215,7 @@ class Repository
         $builder = $this->createVisitorBuilder();
 
         $builder->addSelect(array(
-            'visitor.pageimpressions AS clicks',
+            'SUM(visitor.pageimpressions) AS clicks',
             'SUM(visitor.uniquevisits) as totalVisits',
             'SUM(orders.invoice_amount) AS revenue',
             'COUNT(DISTINCT orders.id) AS totalOrders',
