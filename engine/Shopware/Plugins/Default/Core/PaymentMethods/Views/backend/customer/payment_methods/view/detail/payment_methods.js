@@ -1,4 +1,4 @@
-//{namespace name="backend/customer/view/detail/debit"}
+//{namespace name="backend/customer/view/detail"}
 //{block name="backend/customer/view/detail/debit" append}
 Ext.define('Shopware.apps.Customer.view.detail.PaymentMethods', {
     override: 'Shopware.apps.Customer.view.detail.Debit',
@@ -6,9 +6,9 @@ Ext.define('Shopware.apps.Customer.view.detail.PaymentMethods', {
     initComponent: function () {
         var me = this;
 
-        me.snippets.sepaIban = '{s namespace="backend/customer/view/detail/debit" name=sepa/iban}IBAN{/s}';
-        me.snippets.sepaBic = '{s namespace="backend/customer/view/detail/debit" name=sepa/bic}BIC{/s}';
-        me.snippets.sepaUseBillingData = '{s namespace="backend/customer/view/detail/debit" name=sepa/use_billing_data}Use billing data{/s}';
+        me.snippets.sepaIban = '{s namespace="backend/customer/view/detail" name=sepa/iban}IBAN{/s}';
+        me.snippets.sepaBic = '{s namespace="backend/customer/view/detail" name=sepa/bic}BIC{/s}';
+        me.snippets.sepaUseBillingData = '{s namespace="backend/customer/view/detail" name=sepa/use_billing_data}Use billing data{/s}';
 
         me.callParent(arguments);
 
@@ -33,7 +33,7 @@ Ext.define('Shopware.apps.Customer.view.detail.PaymentMethods', {
         }
     },
 
-    createLeftElements: function () {
+    createDebitFormLeft: function () {
         var me = this;
 
         me.accountNumberField = Ext.create('Ext.form.field.Text', {
@@ -80,7 +80,7 @@ Ext.define('Shopware.apps.Customer.view.detail.PaymentMethods', {
         return [ me.accountNumberField, me.accountHolderField, me.ibanField, me.useBillingDataField ];
     },
 
-    createRightElements: function () {
+    createDebitFormRight: function () {
         var me = this;
 
         me.bankNameField = Ext.create('Ext.form.field.Text', {
