@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright ©  shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,14 +19,17 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
+ */
+
+/**
+ * Analytics CustomerGroup Chart
  *
  * @category   Shopware
  * @package    Analytics
- * @subpackage Category
- * @copyright  Copyright (c) , shopware AG (http://www.shopware.de)
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
+ *
+ * todo@all - documentation
  */
-
-
 //{namespace name=backend/analytics/view/main}
 //{block name="backend/analytics/view/chart/customer_group"}
 Ext.define('Shopware.apps.Analytics.view.chart.CustomerGroup', {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,10 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Article
  */
 
 namespace Shopware\Models\Analytics;
@@ -35,7 +31,9 @@ use Shopware\Models\Shop\Shop;
 
 /**
  * Class Repository
+ * @category  Shopware
  * @package Shopware\Models\Analytics
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Repository
 {

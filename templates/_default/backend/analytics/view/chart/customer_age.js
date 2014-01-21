@@ -1,5 +1,5 @@
 /**
- * Shopware 4.0
+ * Shopware 4
  * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
@@ -19,14 +19,17 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
+ */
+
+/**
+ * Analytics CustomerAge Chart
  *
  * @category   Shopware
  * @package    Analytics
- * @subpackage Month
- * @copyright  Copyright (c), shopware AG (http://www.shopware.de)
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
+ *
+ * todo@all - documentation
  */
-
-
 //{namespace name=backend/analytics/view/main}
 //{block name="backend/analytics/view/chart/customer_age"}
 Ext.define('Shopware.apps.Analytics.view.chart.CustomerAge', {
