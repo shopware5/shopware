@@ -60,6 +60,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         if ($this->Request()->has('format')) {
             $this->format = $this->Request()->getParam('format', null);
+
+            //remove limit parameter to export all data.
+            $this->Request()->setParam('limit', 100000);
         }
         parent::preDispatch();
     }

@@ -59,6 +59,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Visitors', {
             {
                 xtype: 'datecolumn',
                 dataIndex: 'datum',
+                align: 'left',
                 text: '{s name=table/visitors/date}Date{/s}'
             },
             {

@@ -39,24 +39,29 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
         position: 'right'
     },
 
-    axes: [
-        {
-            type: 'Time',
-            position: 'bottom',
-            fields: ['date'],
-            title: '{s name=chart/month/titleBottom}Month{/s}',
-            step: [Ext.Date.MONTH, 1],
-            dateFormat: 'M, Y',
-            label: {
-                rotate: {
-                    degrees: 315
-                }
-            }
-        }
-    ],
 
     initComponent: function () {
         var me = this;
+
+        me.axes = [
+            {
+                type: 'Time',
+                position: 'bottom',
+                fields: ['date'],
+                title: '{s name=chart/month/titleBottom}Month{/s}',
+                step: [Ext.Date.MONTH, 1],
+                dateFormat: 'M, Y',
+                label: {
+                    renderer:function (value) {
+                        var myDate = Ext.Date.add(new Date(value), Ext.Date.DAY, 4);
+                        return Ext.util.Format.date(myDate, 'M, Y');
+                    },
+                    rotate: {
+                        degrees: 315
+                    }
+                }
+            }
+        ];
 
         me.series = [];
 

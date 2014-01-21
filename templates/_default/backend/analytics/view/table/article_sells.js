@@ -43,7 +43,6 @@ Ext.define('Shopware.apps.Analytics.view.table.ArticleSells', {
         me.columns = {
             items: me.getColumns(),
             defaults: {
-                align: 'right',
                 flex: 1
             }
         };
@@ -68,6 +67,7 @@ Ext.define('Shopware.apps.Analytics.view.table.ArticleSells', {
             },
             {
                 dataIndex: 'sellCount',
+                align: 'right',
                 text: '{s name="table/items_sales/sells"}Sells{/s}'
             }
         ];

@@ -40,26 +40,27 @@ Ext.define('Shopware.apps.Analytics.view.chart.Daytime', {
     },
     animate: true,
 
-    axes: [
-        {
-            type: 'Numeric',
-            minimum: 0,
-            position: 'left',
-            fields: ['amount'],
-            title: '{s name=chart/daytime/titleLeft}Sales{/s}'
-        },
-        {
-            type: 'Time',
-            position: 'bottom',
-            fields: ['date'],
-            title: '{s name=chart/daytime/titleBottom}Time{/s}',
-            step: [Ext.Date.HOUR, 1],
-            dateFormat: 'H:00'
-        }
-    ],
 
     initComponent: function () {
         var me = this;
+
+        me.axes = [
+            {
+                type: 'Numeric',
+                minimum: 0,
+                position: 'left',
+                fields: ['amount'],
+                title: '{s name=chart/daytime/titleLeft}Sales{/s}'
+            },
+            {
+                type: 'Time',
+                position: 'bottom',
+                fields: ['date'],
+                title: '{s name=chart/daytime/titleBottom}Time{/s}',
+                step: [Ext.Date.HOUR, 1],
+                dateFormat: 'H:00'
+            }
+        ];
 
         me.initMultipleShopTipsStores();
 
