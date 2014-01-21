@@ -22,6 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
+use Monolog\Handler\BufferHandler;
+use Shopware\Components\Log\Handler\EnlightMailHandler;
+
 /**
  * Shopware Error Handler
  *
@@ -116,6 +119,15 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
     public function onStartDispatch($args)
     {
         $this->registerErrorHandler(E_ALL | E_STRICT);
+
+        if ($this->Config()->get('logMail')) {
+            $this->get('corelogger')->pushHandler($this->createMailHandler());
+        }
+
+        $this->get('events')->addListener(
+            'Enlight_Controller_Front_DispatchLoopShutdown',
+            array($this, 'onDispatchLoopShutdown')
+        );
     }
 
     /**
@@ -219,5 +231,37 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
         $this->_errorLog = $value ? true : false;
 
         return $this;
+    }
+
+
+    /**
+     * @param Enlight_Controller_EventArgs $args
+     */
+    public function onDispatchLoopShutdown(Enlight_Controller_EventArgs $args)
+    {
+        $response = $args->getSubject()->Response();
+        $exceptions = $response->getException();
+        if (empty($exceptions)) {
+            return;
+        }
+
+        $logger = $this->get('corelogger');
+        foreach ($exceptions as $exception) {
+            $logger->error((string) $exception);
+        }
+    }
+
+    /**
+     * @return BufferHandler
+     */
+    public function createMailHandler()
+    {
+        $mailer = new \Enlight_Components_Mail();
+        $mailer->addTo(Shopware()->Config()->Mail);
+        $mailer->setSubject('Error in shop "'.Shopware()->Config()->Shopname.'".');
+        $mailHandler = new EnlightMailHandler($mailer, \Monolog\Logger::WARNING);
+        $bufferedHandler = new BufferHandler($mailHandler);
+
+        return $bufferedHandler;
     }
 }
