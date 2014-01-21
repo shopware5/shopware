@@ -36,9 +36,9 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Visitors', {
     remoteSort: true,
     fields: [
         'name',
-        'totalImpressions',
-        'totalVisits',
-        { name: 'datum', type: 'date' }
+        { name: 'datum', type: 'date' },
+        { name: 'totalImpressions', type: 'int' },
+        { name: 'totalVisits', type: 'int' }
     ],
     proxy: {
         type: 'ajax',
@@ -55,8 +55,8 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Visitors', {
 
         if (config.shopStore) {
             config.shopStore.each(function (shop) {
-                config.fields.push('visits' + shop.data.id);
-                config.fields.push('impressions' + shop.data.id);
+                config.fields.push('totalVisits' + shop.data.id);
+                config.fields.push('totalImpressions' + shop.data.id);
             });
         }
 

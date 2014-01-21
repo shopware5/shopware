@@ -382,6 +382,8 @@ class Repository
      *
      * @param int $offset Numeric value which defines the query start page.
      * @param int $limit Numeric value which defines the query limit.
+     * @param \DateTime $from
+     * @param \DateTime $to
      * @param array $sort
      * @internal param array $orderBy Expects a two dimensional array with additionally order by conditions
      * @return Result
@@ -396,7 +398,7 @@ class Repository
      *          'countResults' => '1390',
      *      )
      */
-    public function getSearchTerms($offset, $limit, $sort = array())
+    public function getSearchTerms($offset, $limit, \DateTime $from = null, \DateTime $to = null, $sort = array())
     {
         $builder = $this->connection->createQueryBuilder();
 
@@ -418,6 +420,8 @@ class Repository
                 );
             }
         }
+
+        $this->addDateRangeCondition($builder, $from, $to, 'datum');
 
         $builder = $this->eventManager->filter('Shopware_Analytics_SearchTerms', $builder, array(
             'subject' => $this
@@ -503,11 +507,11 @@ class Repository
                 $shopId = (int)$shopId;
 
                 $builder->addSelect(
-                    "SUM(IF(IF(shops.main_id is null, shops.id, shops.main_id)=" . $shopId . ", visitors.pageimpressions, 0)) as impressions" . $shopId
+                    "SUM(IF(IF(shops.main_id is null, shops.id, shops.main_id)=" . $shopId . ", visitors.pageimpressions, 0)) as totalImpressions" . $shopId
                 );
 
                 $builder->addSelect(
-                    "SUM(IF(IF(shops.main_id is null, shops.id, shops.main_id)=" . $shopId . ", visitors.uniquevisits, 0)) as  visits" . $shopId
+                    "SUM(IF(IF(shops.main_id is null, shops.id, shops.main_id)=" . $shopId . ", visitors.uniquevisits, 0)) as  totalVisits" . $shopId
                 );
             }
         }
@@ -986,7 +990,7 @@ class Repository
     {
         $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
-            'datum',
+            'visitors.datum',
             'SUM(visitors.pageimpressions) AS totalImpressions',
             'SUM(visitors.uniquevisits) AS totalVisits'
         ));

@@ -704,6 +704,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $result = $this->getRepository()->getSearchTerms(
             $this->Request()->getParam('start', 0),
             $this->Request()->getParam('limit', 25),
+            $this->getFromDate(),
+            $this->getToDate(),
             $this->Request()->getParam('sort', array(
                 array(
                     'property' => 'countRequests',
@@ -721,10 +723,10 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     public function getVisitorsAction()
     {
         $result = $this->getRepository()->getVisitorImpressions(
-            $this->getFromDate(),
-            $this->getToDate(),
             $this->Request()->getParam('start', 0),
             $this->Request()->getParam('limit', 25),
+            $this->getFromDate(),
+            $this->getToDate(),
             $this->Request()->getParam('sort', array(
                 array(
                     'property' => 'datum',
