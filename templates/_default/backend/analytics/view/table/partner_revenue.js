@@ -44,7 +44,8 @@ Ext.define('Shopware.apps.Analytics.view.table.PartnerRevenue', {
             items: me.getColumns(),
             defaults: {
                 align: 'right',
-                flex: 1
+                flex: 1,
+                sortable: false
             }
         };
 
