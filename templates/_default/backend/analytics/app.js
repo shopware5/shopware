@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,17 +19,14 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Analytics
- * @subpackage App
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 /**
- * todo@all: Documentation
+ * Shopware Application - Analytics Module
+ *
+ * @category   Shopware
+ * @package    Analytics
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  */
 Ext.define('Shopware.apps.Analytics', {
 
@@ -114,8 +111,6 @@ Ext.define('Shopware.apps.Analytics', {
         'main.Table',
         'main.Chart',
 
-        'toolbar.Source',
-
         'chart.Week',
         'chart.Weekday',
         'chart.Month',
@@ -129,7 +124,6 @@ Ext.define('Shopware.apps.Analytics', {
         'chart.Customers',
         'chart.CustomerGroup',
         'chart.PartnerRevenue',
-
 
         'table.Week',
         'table.Weekday',
