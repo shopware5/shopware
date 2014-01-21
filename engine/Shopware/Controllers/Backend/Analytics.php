@@ -763,7 +763,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $result = $this->getRepository()->getCustomerGroupAmount(
             $this->getFromDate(),
-            $this->getToDate()
+            $this->getToDate(),
+            $this->getSelectedShopIds()
         );
 
         $this->send(

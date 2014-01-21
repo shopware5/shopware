@@ -59,9 +59,9 @@ class Repository
         $this->eventManager = $eventManager;
     }
 
-    public function getCustomerGroupAmount(\DateTime $from = null, \DateTime $to = null)
+    public function getCustomerGroupAmount(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
     {
-        $builder = $this->createCustomerGroupAmountBuilder($from, $to);
+        $builder = $this->createCustomerGroupAmountBuilder($from, $to, $shopIds);
 
         $builder = $this->eventManager->filter('Shopware_Analytics_CustomerGroupAmount', $builder, array(
             'subject' => $this
@@ -961,6 +961,9 @@ class Repository
                 $builder->addSelect(
                     "SUM(IF(orders.subshopID=" . $shopId . ", invoice_amount - invoice_shipping, 0)) as amount" . $shopId
                 );
+                $builder->addSelect(
+                    "IF(orders.subshopID=" . $shopId . ", COUNT(orders.id), 0) as count" . $shopId
+                );
             }
         }
 
@@ -1179,6 +1182,7 @@ class Repository
     /**
      * @param \DateTime $from
      * @param \DateTime $to
+     * @param array $shopIds
      * @return DBALQueryBuilder
      *      array (
      *          'count' => '386109',
@@ -1186,9 +1190,9 @@ class Repository
      *          'displayDate' => 'Monday',
      *      ),
      */
-    protected function createCustomerGroupAmountBuilder(\DateTime $from = null, \DateTime $to = null)
+    protected function createCustomerGroupAmountBuilder(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
     {
-        $builder = $this->createAmountBuilder()
+        $builder = $this->createAmountBuilder($from, $to, $shopIds)
             ->addSelect('customerGroups.description as customerGroup')
             ->innerJoin('orders', 's_user', 'users', 'users.id = orders.userID')
             ->innerJoin('users', 's_core_customergroups', 'customerGroups', 'users.customergroup = customerGroups.groupkey')
