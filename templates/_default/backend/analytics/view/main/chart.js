@@ -153,5 +153,53 @@ Ext.define('Shopware.apps.Analytics.view.main.Chart', {
         tipObj.setTitle(defaultTitle + " " + Ext.Date.format(storeItem.get('date'), dateFormatString));
     },
 
+    createLineSeries: function(config, tips) {
+        var defaultConfig = {
+            type: 'line',
+            axis: [ 'left', 'bottom' ],
+            highlight: true,
+            fill: false,
+            smooth: true
+        },
+        tipsConfig = {
+            trackMouse: true,
+            height: 60,
+            width: 120,
+            layout: 'fit',
+            highlight: {
+                size: 7,
+                radius: 7
+            }
+        };
+
+        if (Ext.isObject(config)) {
+            defaultConfig = Ext.apply({ }, config, defaultConfig);
+        }
+
+        if (Ext.isObject(tips)) {
+            tipsConfig = Ext.apply({ }, tips, tipsConfig);
+        }
+
+        defaultConfig.tips = tipsConfig;
+
+        return defaultConfig;
+    },
+
+    getAxesFields: function(fieldPrefix) {
+        var me = this,
+            fields = [];
+
+        if (me.shopSelection == Ext.undefined || me.shopSelection.length <= 0) {
+            return [fieldPrefix];
+        }
+
+        Ext.each(me.shopSelection, function (shopId) {
+            fields.push(fieldPrefix + shopId);
+        });
+    
+        return fields;
+    }
+
+
 });
 //{/block}

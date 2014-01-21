@@ -95,6 +95,14 @@ Ext.define('Shopware.apps.Analytics.controller.ReferrerVisitors', {
         me.openDetailWindow('search-urls', referrer, 600, 400);
     },
 
+    /**
+     * Creates a new Subwindow which contains a new table created by the given widget name
+     *
+     * @param widget - the name of the statistic e.g. 'search-terms'
+     * @param title - the title of the Subwindow
+     * @param width - width of the Subwindow
+     * @param height - height of the Subwindow
+     */
     openDetailWindow: function (widget, title, width, height) {
         var me = this,
             widgetName = 'widget.analytics-table-' + widget,

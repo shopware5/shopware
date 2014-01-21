@@ -27,8 +27,6 @@
  * @category   Shopware
  * @package    Analytics
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
- *
- * todo@all - documentation
  */
 //{namespace name=backend/analytics/view/main}
 //{block name="backend/analytics/controller/main"}
@@ -53,7 +51,6 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
         { ref: 'toField', selector: 'analytics-toolbar datefield[name=to_date]' }
     ],
 
-
     /**
      * Contains the currently displayed mode
      * @default null
@@ -61,6 +58,11 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
      */
     selectedType: null,
 
+    /**
+     * The current showed statistics store
+     * @default null
+     * @Ext.data.Store
+     */
     currentStore: null,
 
     /**
@@ -73,6 +75,7 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
     init: function () {
         var me = this;
 
+        // Load the shop store
         me.shopStore = me.subApplication.getStore('Shop').load({
             callback: function () {
                 me.dataStore = Ext.widget('analytics-store-data', { shopStore: this });
@@ -115,7 +118,14 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
                 }
             },
             'analytics-toolbar': {
+                /**
+                 * Called when the export button in the toolbar was clicked
+                 */
                 exportCSV: me.onExport,
+
+                /**
+                 * Called when the refresh button in the toolbar was clicked
+                 */
                 refreshView: me.onRefreshView
             },
             'analytics-toolbar button[action=layout]': {
@@ -124,6 +134,9 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
                 }
             },
             'analytics-toolbar combobox': {
+                /**
+                 * Called when the shop combobox selection was changed
+                 */
                 change: me.onChangeShop
             }
         });
@@ -139,6 +152,12 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
         me.renderDataOutput(store, overview);
     },
 
+    /**
+     * Will be called when the user clicks on the export button in the toolbar.
+     * Build export url together with date and shop parameter.
+     * Creates a new form and sets its url to the build one.
+     * Submits the form which leads to a download of a csv file.
+     */
     onExport: function () {
         var me = this,
             fromField = me.getFromField(),
@@ -165,6 +184,11 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
         });
     },
 
+    /**
+     * Will be called when the user clicks on the refresh button in the toolbar.
+     * Calls the renderDataOutput function when both currentStore and currentNavigationStore are present.
+     * The function call leads to a refresh and clean rebuild of the table/chart.
+     */
     onRefreshView: function () {
         var me = this;
 
@@ -176,11 +200,12 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
     },
 
     /**
-     * Load chart and table for a certain statistic
+     * Loads the chart and table for the selected statistic.
+     * If one of the components is not present, the layout switch button will be hidden.
+     * Shows/hides the shop combobox depending of the multiShop parameter of the statistic.
+     *
      * @param store
-     * @param panel
      * @param record
-     * @param layout
      */
     renderDataOutput: function (store, record) {
         var me = this,
@@ -214,10 +239,16 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
         }
 
         store.load({
-            callback: function () {
+            callback: function (result, request) {
                 if (me.getNavigation()) {
                     me.getNavigation().setLoading(false);
                 }
+                panel.setLoading(false);
+
+                if (request.success === false) {
+                    return;
+                }
+
                 if (Ext.ClassManager.getNameByAlias(chartId)) {
                     var chart = Ext.create(chartId, {
                         store: store,
@@ -260,7 +291,6 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
 
                 panel.getLayout().setActiveItem(activeItem);
 
-                panel.setLoading(false);
                 Ext.resumeLayouts(true);
             }
         });
@@ -268,7 +298,8 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
 
 
     /**
-     * Event listener which is be fired when the user changed the shop combobox
+     * Event listener which is be fired when the user changed the shop combobox.
+     * Sets the selectedShops parameter of the current store to the selection as a string e.g. "1,2".
      *
      * @param field
      * @param value
