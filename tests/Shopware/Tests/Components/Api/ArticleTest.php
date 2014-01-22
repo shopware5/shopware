@@ -1491,6 +1491,78 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         );
     }
 
+    public function testSimilarWithNumber() 
+    {
+        $articles = $this->getEntityOffset('Shopware\Models\Article\Article', 0, 3);
+
+        $data = $this->getSimpleTestData();
+        $similar = array();
+        foreach($articles as $article) {
+            $model = Shopware()->Models()->find(
+                'Shopware\Models\Article\Article', $article['id']
+            );
+
+            $similar[] = array('number' => $model->getMainDetail()->getNumber());
+        }
+
+        $data['similar'] = $similar;
+
+        $article = $this->resource->create($data);
+
+        $this->assertNotEmpty($article->getSimilar());
+    }
+
+    public function testRelatedWithNumber()
+    {
+        $articles = $this->getEntityOffset('Shopware\Models\Article\Article', 0, 3);
+
+        $data = $this->getSimpleTestData();
+        $similar = array();
+        foreach($articles as $article) {
+            $model = Shopware()->Models()->find(
+                'Shopware\Models\Article\Article', $article['id']
+            );
+
+            $similar[] = array('number' => $model->getMainDetail()->getNumber());
+        }
+
+        $data['related'] = $similar;
+
+        $article = $this->resource->create($data);
+
+        $this->assertNotEmpty($article->getRelated());
+    }
+
+
+    public function testDownloads()
+    {
+        $data = $this->getSimpleTestData();
+
+        $data['downloads'] = array(
+            array('link' => 'data:image/png;base64,' . require_once(__DIR__ . '/fixtures/base64image.php'))
+        );
+
+        $article = $this->resource->create($data);
+
+        $this->assertCount(1, $article->getDownloads());
+
+        $downloads = array(
+            array('id' => $article->getDownloads()->first()->getId()),
+            array('link' => 'file://' . __DIR__ . '/fixtures/variant-image.png')
+        );
+
+        $update = $this->resource->update(
+            $article->getId(),
+            array(
+                'downloads' => $downloads,
+                '__options_downloads' => array('replace' => false)
+            )
+        );
+
+        $this->assertCount(2, $update->getDownloads());
+    }
+
+    
     public function testArticleGrossPrices()
     {
         $data = $this->getSimpleTestData();
