@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,17 +19,15 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Analytics
- * @subpackage Month
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 /**
- * todo@all: Documentation
+ * Analytics Month Chart
+ *
+ * @category   Shopware
+ * @package    Analytics
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
+ *
  */
 //{namespace name=backend/analytics/view/main}
 //{block name="backend/analytics/view/chart/month"}
@@ -39,82 +37,112 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
     legend: {
         position: 'right'
     },
-    axes: [{
-        type: 'Numeric',
-        minimum: 0,
-        grid: true,
-        position: 'left',
-        fields: ['amount'],
-        title: '{s name=chart/month/titleLeft}Sales{/s}'
-    }, {
-        type: 'Time',
-        position: 'bottom',
-        fields: ['date'],
-        title: '{s name=chart/month/titleBottom}Month{/s}',
-        step: [Ext.Date.MONTH, 1],
-        dateFormat: 'M, Y',
-        label: {
-            rotate: {
-                degrees: 315
-            }
-        }
-    }],
-    initComponent: function() {
+
+
+    initComponent: function () {
         var me = this;
-        // Initiate stores for handling multiple shop values
-        this.initMultipleShopTipsStores();
 
-        me.series = [{
-            type: 'line',
-            axis : ['left', 'bottom'],
-            xField: 'date',
-            highlight: true,
-            yField: 'amount',
-            fill: true,
-            smooth: true,
-            title: '{s name=chart/month/legendSum}Sum{/s}',
-            tips: {
-                trackMouse: true,
-                width: 580,
-                height: 130,
-                layout: 'fit',
-                items: {
-                    xtype: 'container',
-                    layout: 'hbox',
-                    items: [me.tipChart, me.tipGrid]
-                },
-                renderer: function(cls, item) {
-                    me.initMultipleShopTipsData(item,this);
+        me.axes = [
+            {
+                type: 'Time',
+                position: 'bottom',
+                fields: ['date'],
+                title: '{s name=chart/month/titleBottom}Month{/s}',
+                step: [Ext.Date.MONTH, 1],
+                dateFormat: 'M, Y',
+                label: {
+                    renderer:function (value) {
+                        var myDate = Ext.Date.add(new Date(value), Ext.Date.DAY, 4);
+                        return Ext.util.Format.date(myDate, 'M, Y');
+                    },
+                    rotate: {
+                        degrees: 315
+                    }
                 }
             }
-        }];
+        ];
 
-        me.shopStore.each(function(shop) {
-            me.series[me.series.length] = {
-                type: 'line',
-                title: shop.data.name,
-                axis : ['left', 'bottom'],
-                xField: 'date',
-                yField: 'amount' + shop.data.id,
-                smooth: true,
-                tips: {
-                   trackMouse: true,
-                   width: 120,
-                   highlight: {
-                        size: 7,
-                        radius: 7
-                   },
-                   height: 60,
-                   renderer: function(storeItem, item) {
-                       this.setTitle(Ext.Date.format(storeItem.get('date'), 'F, Y'));
-                       var sales = Ext.util.Format.currency(storeItem.get('amount'+shop.data.id), shop.data.currencyChar);
-                       this.update(sales);
-                   }
-                }
-            };
-        }, me);
+        me.series = [];
+
+        // Initiate stores for handling multiple shop values
+        me.initMultipleShopTipsStores();
+
+        if (me.shopSelection != Ext.undefined && me.shopSelection.length > 0) {
+            me.series = me.getSeriesForShopSelection();
+        } else {
+            me.series = [
+                me.createLineSeries(
+                    {
+                        xField: 'date',
+                        yField: 'amount',
+                        title: '{s name=chart/month/legendSum}Sum{/s}',
+                    },
+                    {
+                        width: 580,
+                        height: 130,
+                        items: {
+                            xtype: 'container',
+                            layout: 'hbox',
+                            items: [me.tipChart, me.tipGrid]
+                        },
+                        renderer: function (cls, item) {
+                            me.initMultipleShopTipsData(item, this);
+                        }
+                    }
+                )
+            ];
+        }
+
+        me.axes.push({
+            type: 'Numeric',
+            minimum: 0,
+            grid: true,
+            position: 'left',
+            fields: me.getAxesFields('amount'),
+            title: '{s name=chart/month/titleLeft}Sales{/s}'
+        });
+
         me.callParent(arguments);
+    },
 
+    getSeriesForShopSelection: function() {
+        var me = this,
+            series = [];
+
+        Ext.each(me.shopSelection, function (shopId) {
+            var shop = me.shopStore.getById(shopId);
+
+            if (!(shop instanceof Ext.data.Model)) {
+                return true;
+            }
+
+            series.push(
+                me.createLineSeries(
+                    {
+                        title: shop.get('name'),
+                        xField: 'date',
+                        yField: 'amount' + shopId
+                    },
+                    {
+                        renderer: function (storeItem) {
+                            me.renderShopData(storeItem, this, shop);
+                        }
+                    }
+                )
+            );
+
+        });
+
+        return series;
+    },
+
+
+    renderShopData: function(storeItem, tip, shop) {
+        tip.setTitle(Ext.Date.format(storeItem.get('date'), 'F, Y'));
+        var sales = Ext.util.Format.currency(storeItem.get('amount' + shop.get('id')), shop.get('currencyChar'));
+        tip.update(' ' + sales);
     }
+
+
 });
 //{/block}

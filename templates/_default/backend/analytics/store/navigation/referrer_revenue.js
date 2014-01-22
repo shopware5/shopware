@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,43 +19,40 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Analytics
- * @subpackage Conversion
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 /**
- * todo@all: Documentation
+ * Analytics ReferrerRevenue Store
+ *
+ * @category   Shopware
+ * @package    Analytics
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
+ *
  */
-Ext.define('Shopware.apps.Analytics.store.Conversion', {
+Ext.define('Shopware.apps.Analytics.store.navigation.ReferrerRevenue', {
     extend: 'Ext.data.Store',
-    alias: 'widget.analytics-store-conversion',
+    alias: 'widget.analytics-store-navigation-referrer_revenue',
     remoteSort: true,
-    fields: ['node', 'name', 'totalVisits','totalOrders','totalConversion', { name : 'date', type: 'date', dateFormat: 'timestamp' }],
+    fields: [
+        'host',
+        'entireRevenue',
+        'lead',
+        'customerValue',
+        'entireNewRevenue',
+        'entireOldRevenue',
+        'orderCount',
+        'newCustomers',
+        'oldCustomers',
+        'perNewRevenue',
+        'perOldRevenue'
+    ],
     proxy: {
         type: 'ajax',
-        url: '{url controller=analytics}',
+        url: '{url controller=analytics action=getReferrerRevenue}',
         reader: {
             type: 'json',
-            root: 'data'
+            root: 'data',
+            totalProperty: 'total'
         }
-    },
-
-    constructor: function(config) {
-
-        config.fields = this.fields;
-
-        if(config.shopStore) {
-            config.shopStore.each(function(shop) {
-                config.fields[config.fields.length] = 'conversion' + shop.data.id;
-            });
-        }
-
-
-        this.callParent([config]);
     }
 });

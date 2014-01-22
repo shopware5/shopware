@@ -26,6 +26,8 @@ In this document you will find a changelog of the important changes related to t
 * Break: customer detail editing in the backend: field names and field container structured to add support for additional payment methods. As such, debit.js view and detail controller have some breaks
 * Ext.editorLang variable is no longer used and is being deprecated.
 * Deprecation (REST API): 'debit' info in /api/customers/{id} is deprecated. Use 'paymentData' instead
+* Break: Removed the Shopware.apps.Analytics.view.table.Conversion, Shopware.apps.Analytics.view.toolbar.Source and Shopware.apps.Analytics.view.toolbar.Shop file which now defined in the analytics/view/main/toolbar.js file.
+
 
 ## 4.1.4
 

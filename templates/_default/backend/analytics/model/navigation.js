@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,24 +19,21 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Analytics
- * @subpackage Navigation
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 /**
- * todo@all: Documentation
+ * Analytics Navigation Model
+ *
+ * @category   Shopware
+ * @package    Analytics
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  */
 //{block name="backend/analytics/model/navigation"}
 Ext.define('Shopware.apps.Analytics.model.Navigation', {
     extend: 'Ext.data.Model',
     fields: [
-		//{block name="backend/analytics/model/navigation/fields"}{/block}
-		{ name: 'id', type: 'string' },
+        //{block name="backend/analytics/model/navigation/fields"}{/block}
+        { name: 'id', type: 'string' },
         { name: 'text', type: 'string' },
         { name: 'leaf', type: 'boolean' },
         { name: 'loaded', type: 'boolean', defaultValue: false },
@@ -45,6 +42,7 @@ Ext.define('Shopware.apps.Analytics.model.Navigation', {
         { name: 'children' },
         { name: 'store' },
         { name: 'comparable' },
-        { name: 'leaf', type: 'boolean' }]
+        { name: 'leaf', type: 'boolean' }
+    ]
 });
 //{/block}

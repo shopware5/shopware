@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,35 +19,53 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Analytics
- * @subpackage Daytime
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 /**
- * todo@all: Documentation
+ * Analytics Time Table
+ *
+ * @category   Shopware
+ * @package    Analytics
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
+ *
  */
 //{namespace name=backend/analytics/view/main}
 //{block name="backend/analytics/view/table/daytime"}
 Ext.define('Shopware.apps.Analytics.view.table.Daytime', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-daytime',
+    shopColumnSales: "{s name=table/daytime/sales}Sales{/s}: [0]",
 
-    columns: [{
-        xtype: 'datecolumn',
-        dataIndex: 'date',
-        text: '{s name=table/daytime/time}Date{/s}',
-        format: 'H:00'
-    }, {
-        xtype: 'numbercolumn',
-        dataIndex: 'amount',
-        text: '{s name=table/daytime/sales}Sales{/s}',
-        align: 'right',
-        flex: 1
-    }]
+    initComponent: function () {
+        var me = this;
+
+        me.columns = {
+            items: me.getColumns(),
+            defaults: {
+                flex: 1,
+                sortable: false
+            }
+        };
+
+        me.initStoreIndices('amount', me.shopColumnSales, { sortable: false });
+
+        me.callParent(arguments);
+    },
+
+    getColumns: function () {
+        return [
+            {
+                xtype: 'datecolumn',
+                dataIndex: 'date',
+                text: '{s name=table/daytime/time}Date{/s}',
+                format: 'H:00'
+            },
+            {
+                xtype: 'numbercolumn',
+                dataIndex: 'amount',
+                text: '{s name=table/daytime/sales}Sales{/s}'
+            }
+        ];
+    }
 });
 //{/block}

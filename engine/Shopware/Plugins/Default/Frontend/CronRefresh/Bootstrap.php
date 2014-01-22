@@ -46,31 +46,33 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
      * To change this time - modify sql-queries
      * @static
      * @param Shopware_Components_Cron_CronJob $job
-     * @return void
+     * @return Array
      */
-    public static function onCronJobClearing(Shopware_Components_Cron_CronJob $job)
+    public function onCronJobClearing(Shopware_Components_Cron_CronJob $job)
     {
-        // Delete all entries from lastarticles older then 30 days
+        // Delete all entries from lastarticles older than 30 days
         $sql = '
             DELETE FROM s_emarketing_lastarticles WHERE `time` < date_add(current_date, interval -30 day)
         ';
         $result = Shopware()->Db()->query($sql);
         $data['lastarticles']['rows'] = $result->rowCount();
 
-        // Delete all entries from search statistic older then 30 days
+        // Delete all entries from search statistic older than 30 days
         $sql = '
             DELETE FROM s_statistics_search WHERE datum < date_add(current_date, interval -30 day)
         ';
         $result = Shopware()->Db()->query($sql);
         $data['search']['rows'] = $result->rowCount();
 
-        // Delete all entries from s_core_log older then 30 days
+        // Delete all entries from s_core_log older than 30 days
         $sql = '
             DELETE FROM s_core_log WHERE `date` < date_add(current_date, interval -30 day)
         ';
         $result = Shopware()->Db()->query($sql);
         $data['log']['rows'] = $result->rowCount();
 
+        $data['referrer']['rows'] = $this->deleteOldReferrerData(Shopware()->Config()->maximumReferrerAge);
+        $data['article_impression']['rows'] = $this->deleteOldArticleImpressionData(Shopware()->Config()->maximumImpressionAge);
         return $data;
     }
 
@@ -100,5 +102,50 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
         }
         //$adapter = new Shopware_Components_Search_Adapter_Default(Shopware()->Db(), Shopware()->Cache(), new Shopware_Components_Search_Result_Default(), Shopware()->Config());
         $adapter->buildSearchIndex();
+    }
+
+    /**
+     * Delete old entries from s_statistics_referrer
+     * by default older than 90 days
+     *
+     * @param $maximumReferrerAge
+     * @return int
+     */
+    private function deleteOldReferrerData($maximumReferrerAge)
+    {
+        $maximumReferrerAge = intval($maximumReferrerAge);
+        if ($maximumReferrerAge === 0) {
+            $maximumReferrerAge = 90;
+        }
+        //negate the value and quote it for the sql statement
+        $maximumReferrerAge = Shopware()->Db()->quote($maximumReferrerAge * -1);
+        $sql = '
+            DELETE FROM s_statistics_referer WHERE `datum` < date_add(current_date, interval '.$maximumReferrerAge.' day)
+        ';
+        $result = Shopware()->Db()->query($sql);
+        return $result->rowCount();
+    }
+
+
+    /**
+     * Delete old entries from s_statistics_article_impression
+     * by default older than 90 days
+     *
+     * @param $maximumAge
+     * @return int
+     */
+    private function deleteOldArticleImpressionData($maximumAge)
+    {
+        $maximumAge = intval($maximumAge);
+        if ($maximumAge === 0) {
+            $maximumAge = 90;
+        }
+        //negate the value and quote it for the sql statement
+        $maximumAge = Shopware()->Db()->quote($maximumAge * -1);
+        $sql = '
+            DELETE FROM  s_statistics_article_impression WHERE `date` < date_add(current_date, interval '.$maximumAge.' day)
+        ';
+        $result = Shopware()->Db()->query($sql);
+        return $result->rowCount();
     }
 }
