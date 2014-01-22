@@ -257,7 +257,7 @@ class Repository
 
         if (!empty($shopIds)) {
             foreach ($shopIds as $shopId) {
-                $shopId = (int)$shopId;
+                $shopId = (int) $shopId;
                 $builder->addSelect(
                     "IF(users.subshopID=" . $shopId . ", users.firstlogin, 0) as firstLogin" . $shopId
                 );
@@ -504,7 +504,7 @@ class Repository
 
         if (!empty($shopIds)) {
             foreach ($shopIds as $shopId) {
-                $shopId = (int)$shopId;
+                $shopId = (int) $shopId;
 
                 $builder->addSelect(
                     "SUM(IF(IF(shops.main_id is null, shops.id, shops.main_id)=" . $shopId . ", visitors.pageimpressions, 0)) as totalImpressions" . $shopId
@@ -856,7 +856,7 @@ class Repository
         }
         if (!empty($shopIds)) {
             foreach ($shopIds as $shopId) {
-                $shopId = (int)$shopId;
+                $shopId = (int) $shopId;
                 $builder->addSelect(
                     'SUM(IF(articleImpression.shopId = ' . $shopId . ', articleImpression.impressions, 0)) as amount' . $shopId
                 );
@@ -961,7 +961,7 @@ class Repository
 
         if (!empty($shopIds)) {
             foreach ($shopIds as $shopId) {
-                $shopId = (int)$shopId;
+                $shopId = (int) $shopId;
                 $builder->addSelect(
                     "SUM(IF(orders.subshopID=" . $shopId . ", invoice_amount - invoice_shipping, 0)) as amount" . $shopId
                 );
@@ -1029,7 +1029,7 @@ class Repository
 
         if (!empty($shopIds)) {
             foreach ($shopIds as $shopId) {
-                $shopId = (int)$shopId;
+                $shopId = (int) $shopId;
                 $builder->addSelect(
                     "IF(users.subshopID = {$shopId}, billing.birthday, NULL) as birthday" . $shopId
                 );
@@ -1229,7 +1229,7 @@ class Repository
         $builder->leftJoin('visitor', 's_user', 'users', 'users.firstlogin = visitor.datum')
             ->groupBy('visitor.datum');
 
-        if(!empty($shopId)){
+        if (!empty($shopId)) {
             $builder->andWhere('users.subshopID = :shopId')
                 ->setParameter('shopId', $shopId);
         }
@@ -1253,7 +1253,7 @@ class Repository
 
         if (!empty($shopIds)) {
             foreach ($shopIds as $shopId) {
-                $shopId = (int)$shopId;
+                $shopId = (int) $shopId;
                 $builder->addSelect(
                     "SUM(IF(visitor.shopID=" . $shopId . ", visitor.uniquevisits, 0)) as visitors" . $shopId
                 );

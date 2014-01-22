@@ -62,7 +62,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->format = $this->Request()->getParam('format', null);
 
             //remove limit parameter to export all data.
-            $this->Request()->setParam('limit', 100000);
+            $this->Request()->setParam('limit', null);
         }
         parent::preDispatch();
     }
@@ -148,8 +148,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $shopIds = $this->getSelectedShopIds();
 
         foreach ($data as &$row) {
-            $row['count'] = (int)$row['count'];
-            $row['amount'] = (float)$row['amount'];
+            $row['count'] = (int) $row['count'];
+            $row['amount'] = (float) $row['amount'];
 
             if (!empty($row['date'])) {
                 $row['date'] = strtotime($row['date']);
@@ -157,7 +157,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
             if (!empty($shopIds)) {
                 foreach ($shopIds as $shopId) {
-                    $row['amount' . $shopId] = (float)$row['amount' . $shopId];
+                    $row['amount' . $shopId] = (float) $row['amount' . $shopId];
                 }
             }
         }
@@ -184,7 +184,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $result = $this->getRepository()->getShopStatistic(
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', 25),
+            $this->Request()->getParam('limit', null),
             $this->getFromDate(),
             $this->getToDate()
         );
@@ -309,7 +309,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $result = $this->getRepository()->getPartnerRevenue(
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', 25),
+            $this->Request()->getParam('limit', null),
             $this->getFromDate(),
             $this->getToDate()
         );
@@ -332,7 +332,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $result = $this->getRepository()->getVisitedReferrer(
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', 25),
+            $this->Request()->getParam('limit', null),
             $this->getFromDate(),
             $this->getToDate()
         );
@@ -361,7 +361,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $result = $this->getRepository()->getProductSells(
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', 25),
+            $this->Request()->getParam('limit', null),
             $this->getFromDate(),
             $this->getToDate()
         );
@@ -371,7 +371,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     public function getReferrerSearchTermsAction()
     {
-        $selectedReferrer = (string)$this->Request()->getParam('selectedReferrer');
+        $selectedReferrer = (string) $this->Request()->getParam('selectedReferrer');
 
         $result = $this->getRepository()->getReferrerSearchTerms($selectedReferrer);
 
@@ -404,12 +404,12 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     public function getSearchUrlsAction()
     {
-        $selectedReferrer = (string)$this->Request()->getParam('selectedReferrer');
+        $selectedReferrer = (string) $this->Request()->getParam('selectedReferrer');
 
         $result = $this->getRepository()->getReferrerUrls(
             $selectedReferrer,
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', 25)
+            $this->Request()->getParam('limit', null)
         );
 
         $this->View()->assign(array(
@@ -444,8 +444,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                     'female' => 0
                 );
 
-                if(!empty($shopIds)){
-                    foreach($shopIds as $shopId) {
+                if (!empty($shopIds)) {
+                    foreach ($shopIds as $shopId) {
                         $subShopCustomers = array(
                             'newCustomersOrders' . $shopId => 0,
                             'oldCustomersOrders' . $shopId => 0,
@@ -473,8 +473,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                 $customers[$week]['female']++;
             }
 
-            if(!empty($shopIds)){
-                foreach($shopIds as $shopId) {
+            if (!empty($shopIds)) {
+                foreach ($shopIds as $shopId) {
                     if (strtotime($row['orderTime' . $shopId]) - strtotime($row['firstLogin' . $shopId]) < 60 * 60 * 24) {
                         $customers[$week]['newCustomersOrders' . $shopId] += $row['count' . $shopId];
                     } else {
@@ -498,8 +498,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $entry['maleAmount'] = round($entry['male'] / ($entry['male'] + $entry['female']) * 100, 2);
             $entry['femaleAmount'] = round($entry['female'] / ($entry['male'] + $entry['female']) * 100, 2);
 
-            if(!empty($shopIds)){
-                foreach($shopIds as $shopId) {
+            if (!empty($shopIds)) {
+                foreach ($shopIds as $shopId) {
                     $entry['amountNewCustomers' . $shopId] = round($entry['newCustomersOrders' . $shopId] / $entry['orderCount' . $shopId] * 100, 2);
                     $entry['amountOldCustomers' . $shopId] = round($entry['oldCustomersOrders' . $shopId] / $entry['orderCount' . $shopId] * 100, 2);
                     $entry['maleAmount' . $shopId] = round($entry['male' . $shopId] / ($entry['male' . $shopId] + $entry['female' . $shopId]) * 100, 2);
@@ -670,7 +670,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     public function getCategoriesAction()
     {
         $node = $this->Request()->getParam('node', 'root');
-        $node = $node === 'root' ? 1 : (int)$node;
+        $node = $node === 'root' ? 1 : (int) $node;
 
         $result = $this->getRepository()->getProductAmountPerCategory(
             $node,
@@ -703,7 +703,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $result = $this->getRepository()->getSearchTerms(
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', 25),
+            $this->Request()->getParam('limit', null),
             $this->getFromDate(),
             $this->getToDate(),
             $this->Request()->getParam('sort', array(
@@ -724,7 +724,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $result = $this->getRepository()->getVisitorImpressions(
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', 25),
+            $this->Request()->getParam('limit', null),
             $this->getFromDate(),
             $this->getToDate(),
             $this->Request()->getParam('sort', array(
@@ -746,7 +746,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $result = $this->getRepository()->getProductImpressions(
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', 20),
+            $this->Request()->getParam('limit', null),
             $this->getFromDate(),
             $this->getToDate(),
             $this->Request()->getParam('sort', array(
@@ -839,7 +839,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
      */
     private function getSelectedShopIds()
     {
-        $selectedShopIds = (string)$this->Request()->getParam('selectedShops');
+        $selectedShopIds = (string) $this->Request()->getParam('selectedShops');
 
         if (!empty($selectedShopIds)) {
             return explode(',', $selectedShopIds);
@@ -895,4 +895,3 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         return $toDate;
     }
 }
-
