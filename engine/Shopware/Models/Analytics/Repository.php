@@ -59,6 +59,13 @@ class Repository
         $this->eventManager = $eventManager;
     }
 
+    /**
+     * Returns a result which displays the total order amount per customer gorup.
+     * @param \DateTime $from
+     * @param \DateTime $to
+     * @param array $shopIds
+     * @return Result
+     */
     public function getCustomerGroupAmount(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
     {
         $builder = $this->createCustomerGroupAmountBuilder($from, $to, $shopIds);
@@ -115,6 +122,9 @@ class Repository
     }
 
     /**
+     * Returns a result which returns the orders, canceled orders and visitors count for each
+     * day of the passed date range.
+     *
      * @param \DateTime $from
      * @param \DateTime $to
      * @param array $shopIds
@@ -145,11 +155,17 @@ class Repository
     }
 
     /**
+     * Returns a result object which displays all referrers url and the call count.
+     *
      * @param $offset
      * @param $limit
      * @param \DateTime $from
      * @param \DateTime $to
      * @return Result
+     *      array (
+     *          'count' => '3',
+     *          'referrer' => 'https://www.google.de/',
+     *      )
      */
     public function getVisitedReferrer($offset, $limit, \DateTime $from = null, \DateTime $to = null)
     {
@@ -165,6 +181,7 @@ class Repository
     }
 
     /**
+     * Returns a result which displays the revenue of each referrer.
      * @param Shop $shop
      * @param \DateTime $from
      * @param \DateTime $to
@@ -182,6 +199,7 @@ class Repository
     }
 
     /**
+     * Returns a result which displays the revenue of each partner
      * @param $offset
      * @param $limit
      * @param \DateTime $from
@@ -202,6 +220,7 @@ class Repository
     }
 
     /**
+     * Returns a result which displays the sell count of each product.
      * @param $offset
      * @param $limit
      * @param \DateTime $from
@@ -233,6 +252,8 @@ class Repository
     }
 
     /**
+     * Returns a result which displays which kind of user created at which time orders.
+     *
      * @param \DateTime $from
      * @param \DateTime $to
      * @param array $shopIds
@@ -281,6 +302,7 @@ class Repository
     }
 
     /**
+     * Returns a result object which displays the customer age.
      * @param \DateTime $from
      * @param \DateTime $to
      * @param array $shopIds
@@ -345,7 +367,7 @@ class Repository
     }
 
     /**
-     *
+     * Returns a result which displays which the order count of each manufacturer product.
      * @param \DateTime $from
      * @param \DateTime $to
      * @return Result
@@ -430,6 +452,19 @@ class Repository
         return new Result($builder);
     }
 
+    /**
+     * Returns a result object which displays all referrers url and the call count.
+     *
+     * @param $referrer
+     * @param $offset
+     * @param $limit
+     * @return Result
+     *      array (
+     *          'count' => '3',
+     *          'referrer' => 'https://www.google.de/',
+     *      )
+     *
+     */
     public function getReferrerUrls($referrer, $offset, $limit)
     {
         $builder = $this->createVisitedReferrerBuilder()
@@ -445,6 +480,18 @@ class Repository
         return new Result($builder);
     }
 
+    /**
+     * Returns a result object which displays all referrers url and the call count.
+     *
+     * @param $referrer
+     * @internal param $offset
+     * @internal param $limit
+     * @return Result
+     *      array (
+     *          'count' => '3',
+     *          'referrer' => 'https://www.google.de/',
+     *      )
+     */
     public function getReferrerSearchTerms($referrer)
     {
         $builder = $this->createVisitedReferrerBuilder()
@@ -872,6 +919,7 @@ class Repository
 
 
     /**
+     * Returns a result which displays the impressions of each product.
      * @param $offset
      * @param $limit
      * @param array $sort
@@ -1007,6 +1055,7 @@ class Repository
     }
 
     /**
+     * Returns a query builder which selects the age of each customer.
      * @param \DateTime $from
      * @param \DateTime $to
      * @param array $shopIds
@@ -1040,6 +1089,7 @@ class Repository
     }
 
     /**
+     * Returns a query which displays how many orders are each customer done.
      * @param \DateTime $from
      * @param \DateTime $to
      * @return DBALQueryBuilder
@@ -1066,6 +1116,7 @@ class Repository
     }
 
     /**
+     * Returns a query which selects the sell count of each product.
      * @param \DateTime $from
      * @param \DateTime $to
      * @return DBALQueryBuilder
@@ -1091,6 +1142,8 @@ class Repository
     }
 
     /**
+     * Returns a query which selects the revenue of each partner.
+     *
      * @param \DateTime $from
      * @param \DateTime $to
      * @return DBALQueryBuilder
@@ -1117,6 +1170,7 @@ class Repository
     }
 
     /**
+     * Returns a query which selects the revenue of each referrer.
      * @param Shop $shop
      * @param \DateTime $from
      * @param \DateTime $to
@@ -1163,6 +1217,7 @@ class Repository
     }
 
     /**
+     * Returns a query which displays how many visits comes from each referrer.
      * @param \DateTime $from
      * @param \DateTime $to
      * @return DBALQueryBuilder
@@ -1184,6 +1239,8 @@ class Repository
     }
 
     /**
+     * Returns a query which selects the total order amount of each customer group.
+     *
      * @param \DateTime $from
      * @param \DateTime $to
      * @param array $shopIds
@@ -1209,6 +1266,8 @@ class Repository
 
 
     /**
+     * Returns a result which selects a whole shop statistic.
+     *
      * @param \DateTime $from
      * @param \DateTime $to
      * @param int $shopId
@@ -1240,6 +1299,7 @@ class Repository
     }
 
     /**
+     * Returns a query which selects how many orders are done per visitor.
      * @param \DateTime $from
      * @param \DateTime $to
      * @param array $shopIds

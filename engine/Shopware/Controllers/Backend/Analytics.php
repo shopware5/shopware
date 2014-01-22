@@ -369,11 +369,16 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $this->send($result->getData(), $result->getTotalCount());
     }
 
+
     public function getReferrerSearchTermsAction()
     {
         $selectedReferrer = (string) $this->Request()->getParam('selectedReferrer');
 
         $result = $this->getRepository()->getReferrerSearchTerms($selectedReferrer);
+
+        echo '<pre>';
+        var_export($result->getData());
+        exit();
 
         $keywords = array();
         foreach ($result->getData() as $data) {
@@ -412,6 +417,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->Request()->getParam('limit', null)
         );
 
+        echo '<pre>';
+        var_export($result->getData());
+        exit();
         $this->View()->assign(array(
             'success' => true,
             'data' => $result->getData(),
