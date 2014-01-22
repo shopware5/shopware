@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,17 +19,15 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Analytics
- * @subpackage Table
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 /**
- * todo@all: Documentation
+ * Analytics Table Base Class
+ *
+ * @category   Shopware
+ * @package    Analytics
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
+ *
  */
 //{namespace name=backend/analytics/view/main}
 //{block name="backend/analytics/view/main/table"}
@@ -37,19 +35,51 @@ Ext.define('Shopware.apps.Analytics.view.main.Table', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.analytics-table',
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
         Ext.applyIf(me, {
-            dockedItems: [{
-                xtype: 'pagingtoolbar',
-                displayInfo: true,
-                store: me.store,
-                dock: 'bottom'
-            }]
+            dockedItems: [
+                {
+                    xtype: 'pagingtoolbar',
+                    displayInfo: true,
+                    store: me.store,
+                    dock: 'bottom'
+                }
+            ]
         });
 
         me.callParent(arguments);
+    },
+
+    initStoreIndices: function (indexName, text, params) {
+        var me = this,
+            columns = me.columns,
+            columnItems = !!columns.items ? columns.items : columns,
+            column;
+
+        if (!me.shopSelection) {
+            return;
+        }
+
+        indexName = indexName || 'amount';
+        text = text || '[0]';
+        params = params || { };
+
+        for (var i = 0; i < me.shopSelection.length; i++) {
+            var shop = me.shopStore.getAt(i);
+
+            column = Ext.merge({
+                dataIndex: indexName + shop.get('id'),
+                text: Ext.String.format(text, shop.get('name'))
+            }, params);
+
+            columnItems.push(column);
+        }
+    },
+
+    getColumns: function () {
+        return this.columns;
     }
 });
 //{/block}

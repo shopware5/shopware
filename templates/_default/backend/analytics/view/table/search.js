@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,17 +19,15 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Analytics
- * @subpackage Search
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 /**
- * todo@all: Documentation
+ * Analytics Search Table
+ *
+ * @category   Shopware
+ * @package    Analytics
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
+ *
  */
 //{namespace name=backend/analytics/view/main}
 //{block name="backend/analytics/view/table/search"}
@@ -37,26 +35,35 @@ Ext.define('Shopware.apps.Analytics.view.table.Search', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-search',
 
-    columns: [{
-        xtype: 'gridcolumn',
-        dataIndex: 'searchterm',
-        text: '{s name=table/search/term}Search term{/s}',
-        width: 300
+    initComponent: function () {
+        var me = this;
+
+        me.columns = {
+            items: me.getColumns(),
+            defaults: {
+                flex: 1,
+                sortable: false
+            }
+        };
+
+        me.callParent(arguments);
     },
-    {
-        xtype: 'gridcolumn',
-        dataIndex: 'countRequests',
-        text: '{s name=table/search/requests}Requests{/s}',
-        align: 'right',
-        flex: 1
-    },
-    {
-        xtype: 'gridcolumn',
-        dataIndex: 'countResults',
-        text: '{s name=table/search/results}Results{/s}',
-        align: 'right',
-        flex: 1
+
+    getColumns: function () {
+        return [
+            {
+                dataIndex: 'searchterm',
+                text: '{s name=table/search/term}Search term{/s}'
+            },
+            {
+                dataIndex: 'countRequests',
+                text: '{s name=table/search/requests}Requests{/s}'
+            },
+            {
+                dataIndex: 'countResults',
+                text: '{s name=table/search/results}Results{/s}'
+            }
+        ];
     }
-    ]
 });
 //{/block}

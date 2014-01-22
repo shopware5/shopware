@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,17 +19,14 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Analytics
- * @subpackage Main
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 /**
- * todo@all: Documentation
+ * Analytics Main Controller
+ *
+ * @category   Shopware
+ * @package    Analytics
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  */
 //{namespace name=backend/analytics/view/main}
 //{block name="backend/analytics/controller/main"}
@@ -39,19 +36,20 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
      * Extend from the standard ExtJS 4 controller
      * @string
      */
-    extend:'Enlight.app.Controller',
+    extend: 'Enlight.app.Controller',
 
     /**
      * References to specific elements in the module
      * @array
      */
-    refs:[
-        { ref:'panel', selector:'analytics-panel' },
-        { ref:'layoutButton', selector:'analytics-toolbar button[action=layout]' },
-        { ref:'fromField', selector:'analytics-toolbar datefield[name=from_date]' },
-        { ref:'toField', selector:'analytics-toolbar datefield[name=to_date]' }
+    refs: [
+        { ref: 'navigation', selector: 'analytics-navigation' },
+        { ref: 'panel', selector: 'analytics-panel' },
+        { ref: 'layoutButton', selector: 'analytics-toolbar button[action=layout]' },
+        { ref: 'shopSelection', selector: 'analytics-toolbar combobox[name=shop_selection]' },
+        { ref: 'fromField', selector: 'analytics-toolbar datefield[name=from_date]' },
+        { ref: 'toField', selector: 'analytics-toolbar datefield[name=to_date]' }
     ],
-
 
     /**
      * Contains the currently displayed mode
@@ -61,56 +59,57 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
     selectedType: null,
 
     /**
+     * The current showed statistics store
+     * @default null
+     * @Ext.data.Store
+     */
+    currentStore: null,
+
+    /**
      * Creates the necessary event listener for this
      * specific controller and opens a new Ext.window.Window
      * to display the subapplication
      *
      * @return void
      */
-    init:function () {
+    init: function () {
         var me = this;
 
-        me.sourceStore = me.getStore('Source');
-        me.shopStore = me.getStore('Shop').load({
-            callback:function () {
-                me.dataStore = Ext.widget('analytics-store-data', { shopStore:this });
+        // Load the shop store
+        me.shopStore = me.subApplication.getStore('Shop').load({
+            callback: function () {
+                me.dataStore = Ext.widget('analytics-store-data', { shopStore: this });
             }
         });
-        me.navigationStore = me.getStore('Navigation');
-
+        me.navigationStore = me.subApplication.getStore('Navigation');
         me.mainWindow = me.getView('main.Window').create({
-            shopStore:me.shopStore,
-            sourceStore:me.sourceStore,
-            navigationStore:me.navigationStore
+            shopStore: me.shopStore,
+            navigationStore: me.navigationStore
         }).show();
 
         me.control({
-            'analytics-navigation':{
+            'analytics-navigation': {
 
                 /**
                  * Select an item in navigation
                  * @param tree
                  * @param record
                  */
-                select:function (tree, record) {
-                    if (!record.data.action) {
-                        return;
-                    }
-
+                select: function (tree, record) {
                     // Cache the selected data type
-                    if(record.data.id) {
+                    if (record.data.id) {
                         me.selectedType = record.data.id;
                     }
 
+                    var store = me.dataStore;
                     // If a custom store is defined ...
                     if (record.data.store) {
                         // Create a custom store, defined in navigation store
-                        var store = Ext.widget(record.data.store, { shopStore:me.shopStore });
+                        store = Ext.widget(record.data.store, { shopStore: me.shopStore });
                         me.customStore = store;
                         me.customStoreEnabled = true; // Enable flag to refresh correct store in shop-select event listeners
                     } else {
                         // Use default store
-                        var store = me.dataStore;
                         me.customStoreEnabled = false;
                         store.removeAll(true);
                     }
@@ -118,58 +117,104 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
                     me.renderDataOutput(store, record);
                 }
             },
-            'analytics-table button[action=print]':{
-                click:function (button, event) {
-                    //console.log(button);
-                }
+            'analytics-toolbar': {
+                /**
+                 * Called when the export button in the toolbar was clicked
+                 */
+                exportCSV: me.onExport,
+
+                /**
+                 * Called when the refresh button in the toolbar was clicked
+                 */
+                refreshView: me.onRefreshView
             },
-            'analytics-toolbar button[action=layout]':{
-                change:function (button, item) {
+            'analytics-toolbar button[action=layout]': {
+                change: function (button, item) {
                     me.getPanel().getLayout().setActiveItem(item.layout == 'table' ? 0 : 1);
-                    //me.dataStore.load();
                 }
             },
-            'analytics-toolbar datefield':{
-                change:me.onChangeDate
+            'analytics-toolbar combobox': {
+                /**
+                 * Called when the shop combobox selection was changed
+                 */
+                change: me.onChangeShop
             }
-//            'analytics-toolbar-source':{
-//                /**
-//                 * Shop selection changes
-//                 * Refresh stores
-//                 * @param field
-//                 * @param values
-//                 */
-//                select:function (field, values) {
-//                    var shops = [];
-//                    Ext.each(values, function (value) {
-//                        shops[shops.length] = value.data.id;
-//                    });
-//
-//                    // Support custom stores
-//                    if (me.customStoreEnabled) {
-//                        me.customStore.getProxy().extraParams['shops[]'] = shops;
-//                        me.customStore.load();
-//                    } else {
-//                        me.dataStore.getProxy().extraParams['shops[]'] = shops;
-//                        me.dataStore.load();
-//                    }
-//                }
-//            }
+        });
+
+
+        var overview = me.navigationStore.getNodeById('overview'),
+            store = Ext.widget(overview.data.store, { shopStore: me.shopStore });
+
+        me.selectedType = overview.data.id;
+        me.customStore = store;
+        me.customStoreEnabled = true;
+
+        me.renderDataOutput(store, overview);
+    },
+
+    /**
+     * Will be called when the user clicks on the export button in the toolbar.
+     * Build export url together with date and shop parameter.
+     * Creates a new form and sets its url to the build one.
+     * Submits the form which leads to a download of a csv file.
+     */
+    onExport: function () {
+        var me = this,
+            fromField = me.getFromField(),
+            toField = me.getToField();
+
+        var url = me.currentStore.getProxy().url;
+        url += '?format=csv';
+        url += '&fromDate=' + Ext.Date.format(fromField.getValue(), 'Y-m-d');
+        url += '&toDate=' + Ext.Date.format(toField.getValue(), 'Y-m-d');
+        url += '&type=' + me.selectedType;
+
+        if (me.getShopSelection() && me.getShopSelection().getValue()) {
+            url += '&selectedShops=' + me.getShopSelection().getValue().join(',');
+        }
+
+        var form = Ext.create('Ext.form.Panel', {
+            standardSubmit: true,
+            target: 'iframe'
+        });
+
+        form.submit({
+            method: 'POST',
+            url: url
         });
     },
+
     /**
-     * Load chart and table for a certain statistic
-     * @param store
-     * @param panel
-     * @param record
-     * @param layout
+     * Will be called when the user clicks on the refresh button in the toolbar.
+     * Calls the renderDataOutput function when both currentStore and currentNavigationStore are present.
+     * The function call leads to a refresh and clean rebuild of the table/chart.
      */
-    renderDataOutput:function (store, record) {
+    onRefreshView: function () {
+        var me = this;
+
+        if (!me.currentStore || !me.currentNavigationItem) {
+            return;
+        }
+
+        me.renderDataOutput(me.currentStore, me.currentNavigationItem)
+    },
+
+    /**
+     * Loads the chart and table for the selected statistic.
+     * If one of the components is not present, the layout switch button will be hidden.
+     * Shows/hides the shop combobox depending of the multiShop parameter of the statistic.
+     *
+     * @param store
+     * @param record
+     */
+    renderDataOutput: function (store, record) {
         var me = this,
             chartId = 'widget.analytics-chart-' + record.data.id,
             tableId = 'widget.analytics-table-' + record.data.id,
             panel = me.getPanel(),
-            layout = true;
+            layout = true,
+            fromValue = me.getFromField().value,
+            toValue = me.getToField().value;
 
         // Remove all previous inserted charts / tables
         Ext.suspendLayouts();
@@ -177,29 +222,40 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
         panel.setLoading(true);
 
         Ext.apply(store.getProxy().extraParams, {
-            controller:'analytics',
-            action:record.data.action,
-            type:record.data.id,
-            node:'root'
+            node: 'root'
         });
-
-
-        var fromValue = me.getFromField().value;
         if (Ext.typeOf(fromValue) == 'date') {
             store.getProxy().extraParams.fromDate = fromValue;
         }
-        var toValue = me.getToField().value;
         if (Ext.typeOf(toValue) == 'date') {
             store.getProxy().extraParams.toDate = toValue;
         }
 
+        me.currentStore = store;
+        me.currentNavigationItem = record;
+
+        if (me.getNavigation()) {
+            me.getNavigation().setLoading(true);
+        }
+
         store.load({
-            callback:function () {
+            callback: function (result, request) {
+                if (me.getNavigation()) {
+                    me.getNavigation().setLoading(false);
+                }
+                panel.setLoading(false);
+
+                if (request.success === false) {
+                    return;
+                }
+
                 if (Ext.ClassManager.getNameByAlias(chartId)) {
                     var chart = Ext.create(chartId, {
-                        store:store,
-                        shopStore:me.shopStore
+                        store: store,
+                        shopStore: me.shopStore,
+                        shopSelection: me.getShopSelection().value
                     });
+
                     panel.add(chart);
                 } else {
                     layout = false;
@@ -207,12 +263,19 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
 
                 if (Ext.ClassManager.getNameByAlias(tableId)) {
                     var table = Ext.create(tableId, {
-                        store:store,
-                        shopStore:me.shopStore
+                        store: store,
+                        shopStore: me.shopStore,
+                        shopSelection: me.getShopSelection().value
                     });
                     panel.add(table);
                 } else {
                     layout = false;
+                }
+
+                if (!!record.raw.multiShop) {
+                    me.getShopSelection().show();
+                } else {
+                    me.getShopSelection().hide();
                 }
 
                 var activeItem;
@@ -228,49 +291,24 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
 
                 panel.getLayout().setActiveItem(activeItem);
 
-                panel.setLoading(false);
                 Ext.resumeLayouts(true);
             }
         });
     },
 
+
     /**
-     * Event listener method which is fired when the user change
-     * the to date field to filter the order chart data.
-     * The to date field is placed on top of the chart.
+     * Event listener which is be fired when the user changed the shop combobox.
+     * Sets the selectedShops parameter of the current store to the selection as a string e.g. "1,2".
      *
-     * @param [Ext.form.Field.Date] - The date field which changed
-     * @param [Ext.Date] - The new value
-     * @return void
+     * @param field
+     * @param value
      */
-    onChangeDate:function (field, value) {
-        var me = this;
-        if (Ext.typeOf(value) != 'date') {
-            return;
-        }
+    onChangeShop: function (field, value) {
+        var me = this,
+            store = (me.customStoreEnabled) ? me.customStore : me.dataStore;
 
-        // Support custom stores
-        var store = (me.customStoreEnabled) ? me.customStore : me.dataStore;
-
-        // If we're having a store, return here
-        if(!store) {
-            return false;
-        }
-
-        // Special directive for month charts
-        if(me.selectedType === 'month') {
-            var me = this,
-                from = me.getFromField().getValue(),
-                to = me.getToField().getValue();
-
-            if(to.getFullYear() == from.getFullYear() && (to.getMonth() - from.getMonth()) <= 0) {
-                Ext.Msg.alert('{s name=alert/time_range_too_short_title}Time range too short{/s}', '{s name=alert/time_range_too_short}Your selected time range is too short.{/s}');
-                return false;
-            }
-        }
-
-        store.getProxy().extraParams[(field.name == 'from_date' ? 'fromDate' : 'toDate')] = value;
-        store.load();
+        store.getProxy().extraParams.selectedShops = value.toString();
     }
 });
 //{/block}

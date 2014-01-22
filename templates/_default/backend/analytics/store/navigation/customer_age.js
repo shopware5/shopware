@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,44 +19,44 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Analytics
- * @subpackage Data
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 /**
- * todo@all: Documentation
+ * Analytics CustomerAge Store
+ *
+ * @category   Shopware
+ * @package    Analytics
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
+ *
  */
-Ext.define('Shopware.apps.Analytics.store.Visitors', {
+Ext.define('Shopware.apps.Analytics.store.navigation.CustomerAge', {
     extend: 'Ext.data.Store',
-    alias: 'widget.analytics-store-visitors',
+    alias: 'widget.analytics-store-navigation-customer_age',
     remoteSort: true,
-    fields: ['node', 'name', 'totalImpressions','totalVisits', { name : 'datum', type: 'date', dateFormat: 'timestamp' }],
+    fields: [
+        'age',
+        'percent'
+    ],
     proxy: {
         type: 'ajax',
-        url: '{url controller=analytics}',
+        url: '{url controller=analytics action=getCustomerAge}',
         reader: {
             type: 'json',
-            root: 'data'
+            root: 'data',
+            totalProperty: 'total'
         }
     },
 
-    constructor: function(config) {
+    constructor: function (config) {
+        var me = this;
+        config.fields = me.fields;
 
-        config.fields = this.fields;
-
-        if(config.shopStore) {
-            config.shopStore.each(function(shop) {
-                config.fields[config.fields.length] = 'visits' + shop.data.id;
-                config.fields[config.fields.length] = 'impressions' + shop.data.id;
+        if (config.shopStore) {
+            config.shopStore.each(function (shop) {
+                config.fields.push('percent' + shop.data.id);
             });
         }
 
-
-        this.callParent([config]);
+        me.callParent(arguments);
     }
 });
