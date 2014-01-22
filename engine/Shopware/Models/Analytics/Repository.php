@@ -1065,7 +1065,7 @@ class Repository
     {
         $builder = $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
-            'users.firstlogin',
+            'users.firstlogin as firstLogin',
             'billing.birthday'
         ))
             ->from('s_user', 'users')
