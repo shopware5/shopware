@@ -102,9 +102,10 @@ class Customer extends Resource
 
         $builder = $this->getRepository()
                 ->createQueryBuilder('customer')
-                ->select('customer', 'attribute', 'billing', 'billingAttribute', 'shipping', 'shippingAttribute', 'debit')
+                ->select('customer', 'attribute', 'billing', 'billingAttribute', 'shipping', 'shippingAttribute', 'debit', 'paymentData')
                 ->leftJoin('customer.attribute', 'attribute')
                 ->leftJoin('customer.billing', 'billing')
+                ->leftJoin('customer.paymentData', 'paymentData')
                 ->leftJoin('billing.attribute', 'billingAttribute')
                 ->leftJoin('customer.shipping', 'shipping')
                 ->leftJoin('shipping.attribute', 'shippingAttribute')
@@ -175,6 +176,8 @@ class Customer extends Resource
         }
 
         $customer = new CustomerModel();
+        $params = $this->prepareAssociatedData($params, $customer);
+
         $customer->fromArray($params);
 
         $violations = $this->getManager()->validate($customer);
@@ -225,14 +228,16 @@ class Customer extends Resource
         $customer = $this->getRepository()->find($id);
 
         if (!$customer) {
-            throw new ApiException\NotFoundException("Customer by id $id not found");
+            throw new ApiException\NotFoundException("Customer with id $id not found");
         }
 
         $params = $this->prepareCustomerData($params, $customer);
+        $params = $this->prepareAssociatedData($params, $customer);
+
         $customer->fromArray($params);
 
         if (!$this->isEmailUnique($customer->getEmail(), $customer)) {
-            throw new ApiException\CustomValidationException(sprintf("Emailaddress %s for shopId %s is not unique", $customer->getEmail(), $customer->getShop()->getId()));
+            throw new ApiException\CustomValidationException(sprintf("Email address %s for shopId %s is not unique", $customer->getEmail(), $customer->getShop()->getId()));
         }
 
         $violations = $this->getManager()->validate($customer);
@@ -334,6 +339,57 @@ class Customer extends Resource
         }
 
         return $params;
+    }
+
+    /**
+     * @param array $data
+     * @param \Shopware\Models\Customer\Customer $customer
+     * @return array
+     */
+    protected function prepareAssociatedData($data, CustomerModel $customer)
+    {
+        $data = $this->prepareCustomerPaymentData($data, $customer);
+
+        return $data;
+    }
+
+    /**
+     * @param array $data
+     * @param \Shopware\Models\Customer\Customer $customer
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @return array
+     */
+    protected function prepareCustomerPaymentData($data, CustomerModel $customer)
+    {
+        if (!isset($data['paymentData'])) {
+            return $data;
+        }
+
+        $paymentDataInstances = $this->checkDataReplacement($customer->getPaymentData(), $data, 'paymentData', false);
+
+        foreach ($data['paymentData'] as &$paymentDataData) {
+            $paymentData = $this->getOneToManySubElement(
+                $paymentDataInstances,
+                $paymentDataData,
+                '\Shopware\Models\Customer\PaymentData'
+            );
+
+            if (isset($paymentDataData['paymentMean'])) {
+                $paymentMean = $this->getManager()->getRepository('Shopware\Models\Payment\Payment')->find($paymentDataData['paymentMean']);
+                $paymentData->setPaymentMean($paymentMean);
+                unset($paymentDataData['paymentMean']);
+            }
+
+            if ($paymentData->getCustomer() == null) {
+                $paymentData->setCustomer($customer);
+            }
+
+            $paymentData->fromArray($paymentDataData);
+        }
+
+        $data['paymentData'] = $paymentDataInstances;
+
+        return $data;
     }
 
     /**
