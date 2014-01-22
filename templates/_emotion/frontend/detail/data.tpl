@@ -121,6 +121,11 @@
                         <meta itemprop="rating" content="{$vote.points*2|replace:'.':','}" />
                     {/block}
 
+                    {* Vote count *}
+                    {block name="frontend_detail_comment_rich_snippets_count"}
+                        <meta itemprop="count" content="{$sArticle.sVoteAverange.count}" />
+                    {/block}
+
                     {* Minimum points *}
                     {block name="frontend_detail_comment_rich_snippets_worst"}
                         <meta itemprop="worst" content="0" />
