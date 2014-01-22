@@ -354,7 +354,7 @@ class Customer extends ModelEntity
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection $paymentData
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\PaymentData", mappedBy="customer")
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\PaymentData", mappedBy="customer", cascade={"persist"})
      */
     protected $paymentData;
 
@@ -1079,5 +1079,15 @@ class Customer extends ModelEntity
     public function getPaymentData()
     {
         return $this->paymentData;
+    }
+
+    /**
+     * @param \Shopware\Models\Customer\PaymentData $paymentData
+     */
+    public function addPaymentData(PaymentData $paymentData)
+    {
+        $paymentData->setCustomer($this);
+
+        $this->paymentData[] = $paymentData;
     }
 }
