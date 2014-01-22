@@ -233,7 +233,7 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Fake Bank', $paymentData->getBankName());
         $this->assertEquals('55555555', $paymentData->getBankCode());
 
-        $this->assertNotNull($paymentData);
+        $this->assertNotNull($debitData);
         $this->assertEquals('Max Mustermann', $debitData->getAccountHolder());
         $this->assertEquals('Fake Account', $debitData->getAccount());
         $this->assertEquals('Fake Bank', $debitData->getBankName());
@@ -324,7 +324,7 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Fake Bank', $paymentData->getBankName());
         $this->assertEquals('55555555', $paymentData->getBankCode());
 
-        $this->assertNotNull($paymentData);
+        $this->assertNotNull($debitData);
         $this->assertEquals('Max Mustermann', $debitData->getAccountHolder());
         $this->assertEquals('Fake Account', $debitData->getAccount());
         $this->assertEquals('Fake Bank', $debitData->getBankName());
