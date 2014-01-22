@@ -31,6 +31,7 @@
 
 	{* We need to put the language in there, due to the caching of the bootstrap.js *}
 	<script type="text/javascript">
+        {* Ext.editorLang is no longer used and is deprecated *}
         Ext.editorLang = '{s name=script/ext/lang}{/s}';
 	    Ext.shopwareRevision = '{Shopware::REVISION}';
     </script>

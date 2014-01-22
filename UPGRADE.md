@@ -24,6 +24,7 @@ In this document you will find a changelog of the important changes related to t
 * - getCurrentPaymentData() was removed and should be replaced with getCurrentPaymentDataAsArray(), which returns the same information but in an array format
 * Break: some payment snippets had their namespaces changed to comply with recent changes in snippet handling
 * Break: customer detail editing in the backend: field names and field container structured to add support for additional payment methods. As such, debit.js view and detail controller have some breaks
+* Ext.editorLang variable is no longer used and is being deprecated.
 
 ## 4.1.4
 
