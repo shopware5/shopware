@@ -198,16 +198,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         );
 
         $data = $result->getData();
-        $shopIds = $this->getSelectedShopIds();
         foreach ($data as &$row) {
             $row['date'] = strtotime($row['date']);
             $row['totalConversion'] = round($row['totalOrders'] / $row['totalVisits'] * 100, 2);
-
-            if (!empty($shopIds)) {
-                foreach ($shopIds as $shopId) {
-                    $row['conversion' . $shopId] = round($row['orderCount' . $shopId] / $row['visits' . $shopId] * 100, 2);
-                }
-            }
         }
 
         $this->send($data, $result->getTotalCount());

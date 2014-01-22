@@ -937,7 +937,8 @@ class Repository
 
         $builder->from('s_statistics_article_impression', 'articleImpression')
             ->leftJoin('articleImpression', 's_articles', 'article', 'articleImpression.articleId = article.id')
-            ->addGroupBy('articleImpression.date');
+            ->addGroupBy('articleImpression.date')
+            ->addGroupBy('articleImpression.articleId');
 
         $this->addSort($builder, $sort)
             ->addPagination($builder, $offset, $limit);
@@ -1275,24 +1276,40 @@ class Repository
      */
     protected function createShopStatisticBuilder(\DateTime $from = null, \DateTime $to = null, $shopId = 0)
     {
-        $builder = $this->createVisitorBuilder();
+        $builder = $this->connection->createQueryBuilder();
 
-        $builder->addSelect(array(
+        $builder->select(array(
+            'visitor.datum AS date',
             'SUM(visitor.pageimpressions) AS clicks',
             'SUM(visitor.uniquevisits) as totalVisits',
-            'SUM(orders.invoice_amount) AS revenue',
-            'COUNT(DISTINCT orders.id) AS totalOrders',
-            'COUNT(DISTINCT users.id) AS newCustomers',
+
+            '(SELECT SUM(orders.invoice_amount)
+              FROM   s_order orders
+              WHERE  Date(orders.ordertime) = visitor.datum
+              AND orders.status != -1) as revenue',
+
+            '(SELECT COUNT(orders.id)
+              FROM   s_order orders
+              WHERE  Date(orders.ordertime) = visitor.datum
+              AND orders.status != -1) as orderCount',
+
+            '(SELECT COUNT(DISTINCT users.id)
+              FROM   s_user users
+              WHERE  users.firstlogin = visitor.datum) as newCustomers',
+
+            '(SELECT COUNT(o2.invoice_amount)
+              FROM   s_order o2
+              WHERE  DATE(o2.ordertime) = visitor.datum
+              AND    o2.status = -1) AS cancelledOrders'
         ));
 
-        $builder->leftJoin('visitor', 's_user', 'users', 'users.firstlogin = visitor.datum')
+        $builder->from('s_statistics_visitors', 'visitor')
             ->groupBy('visitor.datum');
 
         if (!empty($shopId)) {
-            $builder->andWhere('users.subshopID = :shopId')
+            $builder->andWhere('visitor.shopID = :shopId')
                 ->setParameter('shopId', $shopId);
         }
-
         $this->addDateRangeCondition($builder, $from, $to, 'visitor.datum');
 
         return $builder;
