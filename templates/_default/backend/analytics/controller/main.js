@@ -142,14 +142,9 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
         });
 
 
-        var overview = me.navigationStore.getNodeById('overview'),
-            store = Ext.widget(overview.data.store, { shopStore: me.shopStore });
-
-        me.selectedType = overview.data.id;
-        me.customStore = store;
-        me.customStoreEnabled = true;
-
-        me.renderDataOutput(store, overview);
+        me.getNavigation().getSelectionModel().select(
+            me.navigationStore.getNodeById('overview')
+        );
     },
 
     /**
