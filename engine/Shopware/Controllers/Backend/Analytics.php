@@ -33,6 +33,14 @@ use Shopware\Models\Analytics\Repository;
 class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backend_ExtJs
 {
 
+    protected $dateFields = array(
+        'date', 'displayDate', 'datum', 'firstLogin', 'birthday', 'orderTime'
+    );
+
+    protected $shopFields = array(
+        'amount', 'count', 'totalImpressions', 'totalVisits', 'orderCount', 'visitors', 
+    );
+
     /**
      * Entity Manager
      * @var null
@@ -731,10 +739,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $result = $this->getRepository()->getReferrerSearchTerms($selectedReferrer);
 
-        echo '<pre>';
-        var_export($result->getData());
-        exit();
-
         $keywords = array();
         foreach ($result->getData() as $data) {
             preg_match_all("#[?&]([qp]|query|highlight|encquery|url|field-keywords|as_q|sucheall|satitle|KW)=([^&\\$]+)#", utf8_encode($data['referrer']) . "&", $matches);
@@ -772,9 +776,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->Request()->getParam('limit', null)
         );
 
-        echo '<pre>';
-        var_export($result->getData());
-        exit();
         $this->View()->assign(array(
             'success' => true,
             'data' => $result->getData(),
@@ -785,6 +786,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     protected function send($data, $totalCount)
     {
         if (strtolower($this->format) == 'csv') {
+            $data = $this->formatCsvData($data);
             $this->exportCSV($data);
         } else {
             $this->View()->assign(array(
@@ -794,6 +796,100 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             ));
         }
     }
+
+    private function formatCsvData($data)
+    {
+        if ($fields = $this->getDateFields($data[0])) {
+            foreach($data as &$row) {
+                foreach($fields as $field) {
+                    if (array_key_exists($field, $row)) {
+                        $row[$field] = date('Y-m-d H:i:s', $row[$field]);
+                    }
+                }
+            }
+        }
+
+        if ($fields = $this->getShopFields($data[0])) {
+            $shopNames = $this->getShopNames();
+
+            foreach($fields as $field => $shopId) {
+                $suffix = substr($field, 0, strlen($fields) - strlen($shopId));
+                $data = $this->switchArrayKeys($data, $shopNames[$shopId] . ' (' . $suffix . ')', $field);
+            }
+        }
+        return $data;
+    }
+
+    private function switchArrayKeys($array, $newKey, $oldKey)
+    {
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $array[$key] = $this->switchArrayKeys($value, $newKey, $oldKey);
+            } else {
+                $array[$newKey] = $array[$oldKey];
+            }
+        }
+        unset($array[$oldKey]);
+        return $array;
+    }
+
+    private function getShopNames()
+    {
+        $builder = $this->getManager()->getDBALQueryBuilder();
+        $builder->select(array('s.id', 's.name'))
+            ->from('s_core_shops', 's')
+            ->orderBy('s.default', 'DESC')
+            ->addOrderBy('s.name');
+
+        $statement = $builder->execute();
+
+        return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
+    }
+
+    protected function getShopFields($data)
+    {
+        $ids = $this->getSelectedShopIds();
+        $fields = array();
+        foreach(array_keys($data) as $key) {
+            if (in_array($key, $this->shopFields)) {
+                foreach($ids as $id) {
+                    if (array_key_exists($key . $id, $data)) {
+                        $fields[$key . $id] = $id;
+                    }
+                }
+            }
+        }
+        return $fields;
+    }
+
+    protected function getDateFields($data)
+    {
+        $fields = array();
+        foreach(array_keys($data) as $key) {
+            if (in_array($key, $this->dateFields)) {
+                $fields[] = $key;
+            }
+        }
+        return $fields;
+    }
+
+    private function isTimestamp($input)
+    {
+        if (strlen($input) != 11)  {
+            return false;
+        }
+
+        if (is_int($input)) {
+            return true;
+        }
+
+        if  (is_string($input)) {
+            return ctype_digit($input);
+        }
+
+        return false;
+    }
+
 
     protected function exportCSV($data)
     {
