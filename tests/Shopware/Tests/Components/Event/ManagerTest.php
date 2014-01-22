@@ -23,6 +23,7 @@
  */
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Enlight\Event\SubscriberInterface;
 
 /**
  * @category  Shopware
@@ -45,7 +46,6 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
     {
         $this->assertInstanceOf('Enlight_Event_EventManager', $this->eventManager);
     }
-
 
     public function testAppendEventWithCallback()
     {
@@ -297,5 +297,39 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
         $this->assertCount(2, $values->getValues());
         $this->assertEquals('foo', $values->get(0));
         $this->assertEquals('bar', $values->get(1));
+    }
+
+    public function testAddSubscriber()
+    {
+        $eventSubscriber = new EventSubsciberTest();
+        $this->eventManager->addSubscriber($eventSubscriber);
+
+        $this->assertCount(1, $this->eventManager->getListeners('eventName0'));
+        $this->assertCount(1, $this->eventManager->getListeners('eventName1'));
+        $this->assertCount(1, $this->eventManager->getListeners('eventName2'));
+        $this->assertCount(3, $this->eventManager->getListeners('eventName3'));
+
+        $listeners = $this->eventManager->getListeners('eventName3');
+        $listener = $listeners[5];
+        $this->assertEquals(5, $listener->getPosition());
+    }
+}
+
+
+
+class EventSubsciberTest implements SubscriberInterface
+{
+    public static function getSubscribedEvents()
+    {
+        return array(
+            'eventName0' => 'callback0',
+            'eventName1' => array('callback1'),
+            'eventName2' => array('callback2', 10),
+            'eventName3' => array(
+                array('callback3_0', 5),
+                array('callback3_1'),
+                array('callback3_2')
+            )
+        );
     }
 }
