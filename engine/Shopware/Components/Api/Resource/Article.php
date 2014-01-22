@@ -1155,17 +1155,23 @@ class Article extends Resource implements BatchInterface
                 continue;
             }
 
-            /**@var $relatedArticle Detail */
-            $relatedArticle = $this->getManyToManySubElement(
-                $related,
-                $relatedData,
-                '\Shopware\Models\Article\Detail',
-                array('number')
-            );
+            $relatedArticle = null;
+            if ($relatedData['number']) {
+                $articleId = $this->getManager()->getConnection()->fetchColumn(
+                    "SELECT articleID FROM s_articles_details WHERE ordernumber = :number",
+                    array(':number' => $relatedData['number'])
+                );
 
-            if ($relatedArticle) {
-                $relatedArticle = $relatedArticle->getArticle();
-            } else {
+                if ($articleId) {
+                    $relatedArticle = $this->getManyToManySubElement(
+                        $related,
+                        array('id' => $articleId),
+                        '\Shopware\Models\Article\Article'
+                    );
+                }
+            }
+
+            if (!$relatedArticle) {
                 $relatedArticle = $this->getManyToManySubElement(
                     $related,
                     $relatedData,
@@ -1211,17 +1217,23 @@ class Article extends Resource implements BatchInterface
                 continue;
             }
 
-            $similarArticle = $this->getManyToManySubElement(
-                $similar,
-                $similarData,
-                '\Shopware\Models\Article\Detail',
-                array('number')
-            );
+            $similarArticle = null;
+            if ($similarData['number']) {
+                $articleId = $this->getManager()->getConnection()->fetchColumn(
+                    "SELECT articleID FROM s_articles_details WHERE ordernumber = :number",
+                    array(':number' => $similarData['number'])
+                );
 
-            if ($similarArticle) {
-                /**@var $similarArticle Detail */
-                $similarArticle = $similarArticle->getArticle();
-            } else {
+                if ($articleId) {
+                    $similarArticle = $this->getManyToManySubElement(
+                        $similar,
+                        array('id' => $articleId),
+                        '\Shopware\Models\Article\Article'
+                    );
+                }
+            }
+
+            if (!$similarArticle) {
                 $similarArticle = $this->getManyToManySubElement(
                     $similar,
                     $similarData,
@@ -1406,6 +1418,7 @@ class Article extends Resource implements BatchInterface
             }
 
             $download->fromArray($downloadData);
+            $download->setArticle($article);
         }
         $data['downloads'] = $downloads;
 

@@ -396,7 +396,6 @@ abstract class Resource
         }
 
         $item = new $entityType();
-        $this->getManager()->persist($item);
         $collection->add($item);
 
         return $item;
