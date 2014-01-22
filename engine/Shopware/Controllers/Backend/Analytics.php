@@ -328,6 +328,20 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $this->send($data, $result->getTotalCount());
     }
 
+    public function getCustomerGroupAmountAction()
+    {
+        $result = $this->getRepository()->getCustomerGroupAmount(
+            $this->getFromDate(),
+            $this->getToDate(),
+            $this->getSelectedShopIds()
+        );
+
+        $this->send(
+            $result->getData(),
+            $result->getTotalCount()
+        );
+    }
+
     public function getReferrerVisitorsAction()
     {
         $result = $this->getRepository()->getVisitedReferrer(
@@ -367,64 +381,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         );
 
         $this->send($result->getData(), $result->getTotalCount());
-    }
-
-
-    public function getReferrerSearchTermsAction()
-    {
-        $selectedReferrer = (string) $this->Request()->getParam('selectedReferrer');
-
-        $result = $this->getRepository()->getReferrerSearchTerms($selectedReferrer);
-
-        echo '<pre>';
-        var_export($result->getData());
-        exit();
-
-        $keywords = array();
-        foreach ($result->getData() as $data) {
-            preg_match_all("#[?&]([qp]|query|highlight|encquery|url|field-keywords|as_q|sucheall|satitle|KW)=([^&\\$]+)#", utf8_encode($data['referrer']) . "&", $matches);
-            if (empty($matches[0])) {
-                continue;
-            }
-
-            $ref = $matches[2][0];
-            $ref = html_entity_decode(rawurldecode(strtolower($ref)));
-            $ref = str_replace('+', ' ', $ref);
-            $ref = trim(preg_replace('/\s\s+/', ' ', $ref));
-
-            if (!array_key_exists($ref, $keywords)) {
-                $keywords[$ref] = array(
-                    'keyword' => $ref,
-                    'count' => 0
-                );
-            }
-
-            $keywords[$ref]['count']++;
-        }
-
-        $keywords = array_values($keywords);
-
-        $this->send($keywords, count($keywords));
-    }
-
-    public function getSearchUrlsAction()
-    {
-        $selectedReferrer = (string) $this->Request()->getParam('selectedReferrer');
-
-        $result = $this->getRepository()->getReferrerUrls(
-            $selectedReferrer,
-            $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', null)
-        );
-
-        echo '<pre>';
-        var_export($result->getData());
-        exit();
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $result->getData(),
-            'totalCount' => $result->getTotalCount()
-        ));
     }
 
     public function getCustomersAction()
@@ -632,6 +588,22 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         );
     }
 
+    public function getCategoriesAction()
+    {
+        $node = $this->Request()->getParam('node', 'root');
+        $node = $node === 'root' ? 1 : (int) $node;
+
+        $result = $this->getRepository()->getProductAmountPerCategory(
+            $node,
+            $this->getFromDate(),
+            $this->getToDate()
+        );
+
+        $this->send(
+            $result->getData(),
+            $result->getTotalCount()
+        );
+    }
 
     public function getCountriesAction()
     {
@@ -675,24 +647,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         );
     }
 
-    public function getCategoriesAction()
-    {
-        $node = $this->Request()->getParam('node', 'root');
-        $node = $node === 'root' ? 1 : (int) $node;
-
-        $result = $this->getRepository()->getProductAmountPerCategory(
-            $node,
-            $this->getFromDate(),
-            $this->getToDate()
-        );
-
-        $this->send(
-            $result->getData(),
-            $result->getTotalCount()
-        );
-    }
-
-
     public function getVendorsAction()
     {
         $result = $this->getRepository()->getProductAmountPerManufacturer(
@@ -705,7 +659,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $result->getTotalCount()
         );
     }
-
 
     public function getSearchTermsAction()
     {
@@ -772,18 +725,61 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         );
     }
 
-    public function getCustomerGroupAmountAction()
+    public function getReferrerSearchTermsAction()
     {
-        $result = $this->getRepository()->getCustomerGroupAmount(
-            $this->getFromDate(),
-            $this->getToDate(),
-            $this->getSelectedShopIds()
+        $selectedReferrer = (string) $this->Request()->getParam('selectedReferrer');
+
+        $result = $this->getRepository()->getReferrerSearchTerms($selectedReferrer);
+
+        echo '<pre>';
+        var_export($result->getData());
+        exit();
+
+        $keywords = array();
+        foreach ($result->getData() as $data) {
+            preg_match_all("#[?&]([qp]|query|highlight|encquery|url|field-keywords|as_q|sucheall|satitle|KW)=([^&\\$]+)#", utf8_encode($data['referrer']) . "&", $matches);
+            if (empty($matches[0])) {
+                continue;
+            }
+
+            $ref = $matches[2][0];
+            $ref = html_entity_decode(rawurldecode(strtolower($ref)));
+            $ref = str_replace('+', ' ', $ref);
+            $ref = trim(preg_replace('/\s\s+/', ' ', $ref));
+
+            if (!array_key_exists($ref, $keywords)) {
+                $keywords[$ref] = array(
+                    'keyword' => $ref,
+                    'count' => 0
+                );
+            }
+
+            $keywords[$ref]['count']++;
+        }
+
+        $keywords = array_values($keywords);
+
+        $this->send($keywords, count($keywords));
+    }
+
+    public function getSearchUrlsAction()
+    {
+        $selectedReferrer = (string) $this->Request()->getParam('selectedReferrer');
+
+        $result = $this->getRepository()->getReferrerUrls(
+            $selectedReferrer,
+            $this->Request()->getParam('start', 0),
+            $this->Request()->getParam('limit', null)
         );
 
-        $this->send(
-            $result->getData(),
-            $result->getTotalCount()
-        );
+        echo '<pre>';
+        var_export($result->getData());
+        exit();
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $result->getData(),
+            'totalCount' => $result->getTotalCount()
+        ));
     }
 
     protected function send($data, $totalCount)
