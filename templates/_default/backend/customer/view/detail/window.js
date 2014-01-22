@@ -129,12 +129,12 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
     setStores: function(stores) {
         var me = this, billing = null, shipping = null, state, countryStore;
 
-
         me.baseFieldSet.customerGroupCombo.bindStore(stores.getCustomerGroupStore);
         me.baseFieldSet.shopStoreCombo.bindStore(stores.getShopStore);
         me.billingFieldSet.countryCombo.bindStore(stores.getCountryStore);
         me.shippingFieldSet.countryCombo.bindStore(stores.getCountryStore);
         me.debitFieldSet.paymentCombo.bindStore(stores.getPaymentStore);
+        me.paymentStore = stores.getPaymentStore;
 
         if(me.hasOwnProperty('orderGrid')) {
             me.orderGrid.dispatchStore = stores.getDispatchStore;

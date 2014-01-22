@@ -82,6 +82,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Debit', {
         me.registerEvents();
         me.title = me.snippets.title;
         me.topContainer = Ext.create('Ext.container.Container', {
+            layout: 'anchor',
             items:me.createDebitTopForm()
         });
         me.fieldContainer = Ext.create('Ext.container.Container', {
@@ -125,16 +126,9 @@ Ext.define('Shopware.apps.Customer.view.detail.Debit', {
      * @return [Array] Container which contains the payment combo box
      */
     createDebitTopForm:function () {
-        var container, me = this;
+        var me = this;
 
-        container = Ext.create('Ext.container.Container', {
-            columnWidth:.5,
-            border:false,
-            cls: Ext.baseCSSPrefix + 'field-set-container',
-            items:me.createDebitFormTopElements()
-        });
-
-        return [ container ];
+        return me.createDebitFormTopElements();
     },
 
     /**
@@ -200,7 +194,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Debit', {
                 minWidth:250,
                 xtype:'textfield'
             },
-            items:me.createDebitFormLeft()
+            items: me.createDebitFormLeft()
         });
 
         rightContainer = Ext.create('Ext.container.Container', {
@@ -213,7 +207,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Debit', {
                 labelWidth:100,
                 xtype:'textfield'
             },
-            items:me.createDebitFormRight()
+            items: me.createDebitFormRight()
         });
 
         return [ leftContainer, rightContainer ];
