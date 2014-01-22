@@ -107,6 +107,7 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
 
             "firstlogin" => $firstlogin,
             "lastlogin"  => $lastlogin,
+            "paymentId"  => 2,
 
             "billing" => array(
                 "firstName" => "Max",
@@ -239,8 +240,6 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('55555555', $debitData->getBankCode());
 
         $this->testDeleteCustomersShouldBeSuccessful($identifier);
-
-        return $identifier;
     }
 
     /**
@@ -332,8 +331,6 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('55555555', $debitData->getBankCode());
 
         $this->testDeleteCustomersShouldBeSuccessful($identifier);
-
-        return $identifier;
     }
 
     public function testPostCustomersWithInvalidDataShouldReturnError()
@@ -390,8 +387,17 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $data);
         $this->assertArrayHasKey('id', $data);
         $this->assertArrayHasKey('active', $data);
+        $this->assertArrayHasKey('paymentData', $data);
 
         $this->assertEquals('test@foobar.com', $data['email']);
+
+        $paymentInfo = array_shift($data['paymentData']);
+
+        $this->assertEquals('Max Mustermann', $paymentInfo['accountHolder']);
+        $this->assertEquals('55555555', $paymentInfo['bankCode']);
+        $this->assertEquals('Fake Bank', $paymentInfo['bankName']);
+        $this->assertEquals('Fake Account', $paymentInfo['accountNumber']);
+
     }
 
     public function testPutBatchCustomersShouldFail()
