@@ -162,14 +162,18 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
         $identity = Shopware()->Auth()->getIdentity();
         $this->View()->assign('user', $identity, true);
 
-        if ($this->Request()->get('file') == 'bootstrap' && $identity && $identity->locale) {
-            $this->View()->assign('tinymceLang', $this->getTinyMceLang($identity->locale), true);
+        if ($this->Request()->get('file') == 'bootstrap') {
+            $this->View()->assign('tinymceLang', $this->getTinyMceLang($identity), true);
         }
     }
 
-    protected function getTinyMceLang($locale)
+    protected function getTinyMceLang($identity)
     {
-        $attemptedLanguage = substr($locale->getLocale(), 0, 2);
+        if (!$identity || !$identity->locale) {
+            return 'en';
+        }
+
+        $attemptedLanguage = substr($identity->locale->getLocale(), 0, 2);
 
         if (file_exists(Shopware()->OldPath() . "engine/Library/TinyMce/langs/".$attemptedLanguage.".js")) {
             return $attemptedLanguage;
