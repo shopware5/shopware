@@ -22,6 +22,8 @@
  */
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Enlight\Event\SubscriberInterface;
+
 /**
  * The Enlight_Event_EventManager stores all event listeners.
  *
@@ -343,6 +345,24 @@ class Enlight_Event_EventManager extends Enlight_Class
         }
         $eventArgs->setProcessed(true);
         return $collection;
+    }
+
+    /**
+     * @param SubscriberInterface $subscriber
+     */
+    public function addSubscriber(SubscriberInterface $subscriber)
+    {
+        foreach ($subscriber->getSubscribedEvents() as $eventName => $params) {
+            if (is_string($params)) {
+                $this->addListener($eventName, array($subscriber, $params));
+            } elseif (is_string($params[0])) {
+                $this->addListener($eventName, array($subscriber, $params[0]), isset($params[1]) ? $params[1] : 0);
+            } else {
+                foreach ($params as $listener) {
+                    $this->addListener($eventName, array($subscriber, $listener[0]), isset($listener[1]) ? $listener[1] : 0);
+                }
+            }
+        }
     }
 
     /**
