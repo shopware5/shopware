@@ -144,19 +144,6 @@
 
         </service>
 
-        <service id="monoglog.handler.rotatingfilehandler" class="Monolog\Handler\RotatingFileHandler" public="false">
-            <argument>%kernel.root_dir%/logs/default.log</argument>
-            <argument>14</argument>
-        </service>
-
-        <service id="corelog" alias="monolog"/>
-        <service id="monolog" class="Monolog\Logger">
-            <argument>default</argument>
-            <call method="pushHandler">
-                <argument type="service" id="monoglog.handler.rotatingfilehandler" />
-            </call>
-        </service>
-
         <service id="db_connection"
                  class="Pdo"
                  factory-service="shopware.db"

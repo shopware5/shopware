@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,29 +22,35 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Components;
+
+use Monolog\Logger as BaseLogger;
+
 /**
  * @category  Shopware
- * @package   Shopware\Tests
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @package   Shopware\Components
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_RegressionTests_Ticket5148 extends Enlight_Components_Test_Plugin_TestCase
+class Logger extends BaseLogger
 {
     /**
-     * Test case method
+     * @param string|array $label
+     * @param null|array $data
      */
-    public function testStartDispatch()
+    public function table($label, $data = null)
     {
-        $front = Shopware()->Front();
-        $request  = new \Enlight_Controller_Request_RequestTestCase();
-        $request->setClientIp('127.0.0.1');
-        $front->setRequest($request);
+        if (is_array($label)) {
+            list($label, $data) = $label;
+        }
 
-        $eventArgs = $this->createEventArgs()->set('subject', $front);
+        $this->log(BaseLogger::DEBUG, $label, array('table' => $data));
+    }
 
-        $plugin = Shopware()->Plugins()->Core()->Debug();
-        $plugin->Config()->AllowIP = '127.0.0.1';
-        $plugin->onStartDispatch($eventArgs);
-
-        $this->assertInstanceOf('Shopware_Plugins_Core_Debug_Bootstrap', $plugin);
+    /**
+     * @param string $label
+     */
+    public function trace($label)
+    {
+        $this->log(BaseLogger::DEBUG, $label, array('trace' => true));
     }
 }
