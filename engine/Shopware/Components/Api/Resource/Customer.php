@@ -105,7 +105,7 @@ class Customer extends Resource
                 ->select('customer', 'attribute', 'billing', 'billingAttribute', 'shipping', 'shippingAttribute', 'debit', 'paymentData')
                 ->leftJoin('customer.attribute', 'attribute')
                 ->leftJoin('customer.billing', 'billing')
-                ->leftJoin('customer.paymentData', 'paymentData')
+                ->leftJoin('customer.paymentData', 'paymentData', \Doctrine\ORM\Query\Expr\Join::WITH, 'paymentData.paymentMean = customer.paymentId' )
                 ->leftJoin('billing.attribute', 'billingAttribute')
                 ->leftJoin('customer.shipping', 'shipping')
                 ->leftJoin('shipping.attribute', 'shippingAttribute')
@@ -362,10 +362,27 @@ class Customer extends Resource
     protected function prepareCustomerPaymentData($data, CustomerModel $customer)
     {
         if (!isset($data['paymentData'])) {
-            return $data;
+            if (isset($data['debit'])) {
+                $data['paymentData'] = array(
+                    array(
+                        "accountNumber" => $data['debit']["account"],
+                        "bankCode" => $data['debit']["bankCode"],
+                        "bankName" => $data['debit']["bankName"],
+                        "accountHolder" => $data['debit']["accountHolder"],
+                        "paymentMean" => 2
+                    )
+                );
+            } else {
+                return $data;
+            }
         }
 
-        $paymentDataInstances = $this->checkDataReplacement($customer->getPaymentData(), $data, 'paymentData', false);
+        $paymentDataInstances = $this->checkDataReplacement(
+            $customer->getPaymentData(),
+            $data,
+            'paymentData',
+            false
+        );
 
         foreach ($data['paymentData'] as &$paymentDataData) {
             $paymentData = $this->getOneToManySubElement(
@@ -382,6 +399,15 @@ class Customer extends Resource
 
             if ($paymentData->getCustomer() == null) {
                 $paymentData->setCustomer($customer);
+            }
+
+            if ($paymentData->getPaymentMean() && $paymentData->getPaymentMean()->getName() == 'debit') {
+                $data['debit'] = array(
+                    "account"       => $paymentDataData["accountNumber"],
+                    "bankCode"      => $paymentDataData["bankCode"],
+                    "bankName"      => $paymentDataData["bankName"],
+                    "accountHolder" => $paymentDataData["accountHolder"],
+                );
             }
 
             $paymentData->fromArray($paymentDataData);
