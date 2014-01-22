@@ -1,0 +1,106 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="monolog.logger.class">Symfony\Bridge\Monolog\Logger</parameter>
+
+        <parameter key="monolog.logger.constant.critical" type="constant">Monolog\Logger::CRITICAL</parameter>
+        <parameter key="monolog.logger.constant.error" type="constant">Monolog\Logger::ERROR</parameter>
+        <parameter key="monolog.logger.constant.info" type="constant">Monolog\Logger::INFO</parameter>
+
+        <parameter key="monolog.handler.firephp.class">Shopware\Components\Log\Handler\FirePHPHandler</parameter>
+        <parameter key="monolog.handler.chromephp.class">Shopware\Components\Log\Handler\ChromePhpHandler</parameter>
+
+        <parameter key="monolog.handler.fingers_crossed.class">Monolog\Handler\FingersCrossedHandler</parameter>
+        <parameter key="monolog.handler.rotating_file.class">Monolog\Handler\RotatingFileHandler</parameter>
+        <parameter key="monolog.handler.syslog.class">Monolog\Handler\SyslogHandler</parameter>
+        <parameter key="monolog.handler.null.class">Monolog\Handler\NullHandler</parameter>
+        <parameter key="monolog.handler.test.class">Monolog\Handler\TestHandler</parameter>
+        <parameter key="monolog.handler.stream.class">Monolog\Handler\StreamHandler</parameter>
+        <parameter key="monolog.handler.group.class">Monolog\Handler\GroupHandler</parameter>
+        <parameter key="monolog.handler.buffer.class">Monolog\Handler\BufferHandler</parameter>
+        <parameter key="monolog.handler.gelf.class">Monolog\Handler\GelfHandler</parameter>
+        <parameter key="monolog.handler.swift_mailer.class">Monolog\Handler\SwiftMailerHandler</parameter>
+        <parameter key="monolog.handler.native_mailer.class">Monolog\Handler\NativeMailerHandler</parameter>
+        <parameter key="monolog.handler.socket.class">Monolog\Handler\SocketHandler</parameter>
+        <parameter key="monolog.handler.pushover.class">Monolog\Handler\PushoverHandler</parameter>
+        <parameter key="monolog.handler.raven.class">Monolog\Handler\RavenHandler</parameter>
+        <parameter key="monolog.handler.raven.class">Monolog\Handler\RavenHandler</parameter>
+
+        <parameter key="monolog.formatter.pushover.class">Monolog\Handler\PushoverHandler</parameter>
+        <parameter key="monolog.formatter.wildfire.class">Shopware\Components\Log\Formatter\WildfireFormatter</parameter>
+        <parameter key="monolog.gelf.publisher.class">Gelf\MessagePublisher</parameter>
+    </parameters>
+
+    <services>
+        <!-- RotatingFileHandler handler-->
+        <service id="monolog.processor.uid" class="Monolog\Processor\UidProcessor" public="false" />
+
+        <service id="monolog.handler.rotating_file" class="%monolog.handler.rotating_file.class%" public="false">
+            <argument>%kernel.root_dir%/logs/core_%kernel.environment%.log</argument>
+            <argument>14</argument>
+            <call method="pushProcessor">
+                <argument type="service" id="monolog.processor.uid" />
+            </call>
+        </service>
+
+        <service id="monolog.handler.rotating_file.plugin" class="%monolog.handler.rotating_file.class%" public="false">
+            <argument>%kernel.root_dir%/logs/plugin_%kernel.environment%.log</argument>
+            <argument>14</argument>
+            <call method="pushProcessor">
+                <argument type="service" id="monolog.processor.uid" />
+            </call>
+        </service>
+
+
+        <!-- FingersCrossed handler-->
+        <service id="monolog.handler.fingers_crossed" class="%monolog.handler.fingers_crossed.class%" public="false">
+            <argument type="service" id="monolog.handler.rotating_file" />
+            <argument>%monolog.logger.constant.error%</argument>
+        </service>
+
+        <!-- Core logger -->
+        <service id="monolog.handler.main" alias="monolog.handler.fingers_crossed" />
+        <service id="corelogger" class="Shopware\Components\Logger">
+            <argument>core</argument>
+            <call method="pushHandler">
+                <argument type="service" id="monolog.handler.main" />
+            </call>
+        </service>
+
+        <!--Plugin logger -->
+        <service id="pluginlogger" class="Shopware\Components\Logger">
+            <argument>plugin</argument>
+            <call method="pushHandler">
+                <argument type="service" id="monolog.handler.rotating_file.plugin" />
+            </call>
+        </service>
+
+        <!-- ChromePHP handler-->
+        <service id="monolog.handler.chromephp" class="%monolog.handler.chromephp.class%">
+            <tag name="shopware.event_listener" method="onRouteStartUp" event="Enlight_Controller_Front_RouteStartup" />
+        </service>
+
+        <!-- FirePHP handler-->
+        <service id="monolog.formatter.wildfire" class="%monolog.formatter.wildfire.class%" />
+        <service id="monolog.handler.firephp" class="%monolog.handler.firephp.class%">
+            <call method="setFormatter">
+                <argument type="service" id="monolog.formatter.wildfire" />
+            </call>
+            <tag name="shopware.event_listener" method="onRouteStartUp" event="Enlight_Controller_Front_RouteStartup" />
+        </service>
+
+        <!--Debug logger used for chrome/firefox logging -->
+        <service id="debuglogger" class="Shopware\Components\Logger">
+            <argument>debug</argument>
+        </service>
+
+        <!-- Legacy Log object -->
+        <service id="log" class="Enlight_Components_Log">
+            <argument type="service" id="debuglogger" />
+        </service>
+    </services>
+ </container>
