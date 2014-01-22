@@ -28,7 +28,6 @@
  * @package    Analytics
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
- * todo@all - documentation
  */
 Ext.define('Shopware.apps.Analytics.store.navigation.Rating', {
     extend: 'Ext.data.Store',
