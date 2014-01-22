@@ -731,10 +731,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $result = $this->getRepository()->getReferrerSearchTerms($selectedReferrer);
 
-        echo '<pre>';
-        var_export($result->getData());
-        exit();
-
         $keywords = array();
         foreach ($result->getData() as $data) {
             preg_match_all("#[?&]([qp]|query|highlight|encquery|url|field-keywords|as_q|sucheall|satitle|KW)=([^&\\$]+)#", utf8_encode($data['referrer']) . "&", $matches);
@@ -772,9 +768,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->Request()->getParam('limit', null)
         );
 
-        echo '<pre>';
-        var_export($result->getData());
-        exit();
         $this->View()->assign(array(
             'success' => true,
             'data' => $result->getData(),
