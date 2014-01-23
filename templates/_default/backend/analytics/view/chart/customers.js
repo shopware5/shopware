@@ -44,96 +44,51 @@ Ext.define('Shopware.apps.Analytics.view.chart.Customers', {
             minimum: 0,
             grid: true,
             position: 'left',
-            fields: ['newCustomersOrders'],
-            title: '{s name=chart/customers/count/title}Count{/s}'
+            fields: ['newCustomersPercent', 'oldCustomersPercent'],
+            title: '{s name=chart/customers/percent/title}Percent{/s}'
         },
         {
             type: 'Category',
             position: 'bottom',
             fields: ['week'],
-            title: '{s name=chart/customers/week/title}Calender week{/s}'
+            title: '{s name=chart/customers/days/title}Days{/s}'
         }
     ],
 
     initComponent: function () {
         var me = this;
 
-        me.tipStoreTable = Ext.create('Ext.data.JsonStore', {
-            fields: ['name', 'count', 'percentage']
-        });
-
-        me.tipGrid = {
-            xtype: 'grid',
-            height: 130,
-            store: me.tipStoreTable,
-            flex: 1,
-            columns: [
-                {
-                    text: '{s name="chart/customers/name"}Name{/s}',
-                    dataIndex: 'name',
-                    flex: 1
-                },
-                {
-                    xtype: 'numbercolumn',
-                    text: '{s name="chart/customers/count"}Count{/s}',
-                    dataIndex: 'count',
-                    align: 'right',
-                    flex: 1
-                },
-                {
-                    xtype: 'numbercolumn',
-                    text: '{s name="chart/customers/percentage"}Percentage{/s}',
-                    dataIndex: 'percentage',
-                    align: 'right',
-                    flex: 1
-                }
-            ]
-        };
-
-        var tips = {
-            width: 580,
-            height: 130,
-            items: {
-                xtype: 'container',
-                layout: 'hbox',
-                items: [ me.tipGrid ]
-            },
-            renderer: function (cls, item) {
-                me.renderMaleData(item, this);
-            }
-        };
 
         me.series = [
             me.createLineSeries(
-                { xField: 'week', yField: 'newCustomersOrders', title: '{s name="chart/customers/new_customers_legend"}New customers{/s}' },
-                tips
+                { xField: 'week', yField: 'newCustomersPercent', title: '{s name="chart/customers/new_customers_legend"}New customers{/s}' },
+                {
+                    width: 210,
+                    renderer: function(storeItem) {
+                        var data = storeItem.get('newCustomersPercent') + ' %';
+                        this.setTitle(
+                            '{s name="chart/customers/new_customers_legend"}New customers{/s} <br>&nbsp;' +
+                            storeItem.get('week') + ': ' + data
+                        );
+                    }
+                }
             ),
             me.createLineSeries(
-                { xField: 'week', yField: 'oldCustomersOrders', title: '{s name="chart/customers/old_customers_legend"}Old customers{/s}' },
-                tips
+                { xField: 'week', yField: 'oldCustomersPercent', title: '{s name="chart/customers/old_customers_legend"}Old customers{/s}' },
+                {
+                    width: 210,
+                    renderer: function(storeItem) {
+                        var data = storeItem.get('oldCustomersPercent') + ' %';
+                        this.setTitle(
+                            '{s name="chart/customers/old_customers_legend"}Old customers{/s} <br>&nbsp;' +
+                            storeItem.get('week') + ': ' + data
+                        );
+                    }
+                }
             )
         ];
 
         me.callParent(arguments);
-    },
-
-    renderMaleData: function (item, tip) {
-        var me = this, data = [],
-            storeItem = item.storeItem;
-
-        data.push({
-            name: 'female',
-            count: storeItem.get('female'),
-            percentage: storeItem.get('femaleAmount')
-        });
-        data.push({
-            name: 'male',
-            count: storeItem.get('male'),
-            percentage: storeItem.get('maleAmount')
-        });
-
-        me.tipStoreTable.loadData(data);
-        tip.setTitle(storeItem.get('week'));
     }
 });
 //{/block}
