@@ -26,6 +26,7 @@ namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Models\Customer\Customer as CustomerModel;
+use Shopware\Models\Customer\PaymentData;
 
 /**
  * Customer API Resource
@@ -105,7 +106,7 @@ class Customer extends Resource
                 ->select('customer', 'attribute', 'billing', 'billingAttribute', 'shipping', 'shippingAttribute', 'debit', 'paymentData')
                 ->leftJoin('customer.attribute', 'attribute')
                 ->leftJoin('customer.billing', 'billing')
-                ->leftJoin('customer.paymentData', 'paymentData')
+                ->leftJoin('customer.paymentData', 'paymentData', \Doctrine\ORM\Query\Expr\Join::WITH, 'paymentData.paymentMean = customer.paymentId' )
                 ->leftJoin('billing.attribute', 'billingAttribute')
                 ->leftJoin('customer.shipping', 'shipping')
                 ->leftJoin('shipping.attribute', 'shippingAttribute')
@@ -361,27 +362,69 @@ class Customer extends Resource
      */
     protected function prepareCustomerPaymentData($data, CustomerModel $customer)
     {
-        if (!isset($data['paymentData'])) {
+        if (!isset($data['paymentData']) && !isset($data['debit'])) {
             return $data;
         }
 
-        $paymentDataInstances = $this->checkDataReplacement($customer->getPaymentData(), $data, 'paymentData', false);
+        if (isset($data['debit']) && !isset($data['paymentData'])) {
+            $debitPaymentMean = $this->getManager()->getRepository('Shopware\Models\Payment\Payment')->findOneBy(array('name' => 'debit'));
+
+            if ($debitPaymentMean) {
+                $data['paymentData'] = array(
+                    array(
+                        "accountNumber" => $data['debit']["account"],
+                        "bankCode" => $data['debit']["bankCode"],
+                        "bankName" => $data['debit']["bankName"],
+                        "accountHolder" => $data['debit']["accountHolder"],
+                        "paymentMeanId" => $debitPaymentMean->getId()
+                    )
+                );
+            }
+        }
+
+        $paymentDataInstances = $this->checkDataReplacement(
+            $customer->getPaymentData(),
+            $data,
+            'paymentData',
+            false
+        );
 
         foreach ($data['paymentData'] as &$paymentDataData) {
-            $paymentData = $this->getOneToManySubElement(
-                $paymentDataInstances,
-                $paymentDataData,
-                '\Shopware\Models\Customer\PaymentData'
-            );
+            try {
+                $paymentData = $this->getOneToManySubElement(
+                    $paymentDataInstances,
+                    $paymentDataData,
+                    '\Shopware\Models\Customer\PaymentData',
+                    array('id', 'paymentMeanId')
+                );
+            } catch (ApiException\CustomValidationException $cve) {
+                $paymentData = new PaymentData();
+                $this->getManager()->persist($paymentData);
+                $paymentDataInstances->add($paymentData);
+            }
 
-            if (isset($paymentDataData['paymentMean'])) {
-                $paymentMean = $this->getManager()->getRepository('Shopware\Models\Payment\Payment')->find($paymentDataData['paymentMean']);
+            if (isset($paymentDataData['paymentMeanId'])) {
+                $paymentMean = $this->getManager()->getRepository('Shopware\Models\Payment\Payment')->find($paymentDataData['paymentMeanId']);
+                if (is_null($paymentMean)) {
+                    throw new ApiException\CustomValidationException(
+                        sprintf("%s by %s %s not found", 'Shopware\Models\Payment\Payment', 'id', $paymentDataData['paymentMeanId'])
+                    );
+                }
                 $paymentData->setPaymentMean($paymentMean);
-                unset($paymentDataData['paymentMean']);
+                unset($paymentDataData['paymentMeanId']);
             }
 
             if ($paymentData->getCustomer() == null) {
                 $paymentData->setCustomer($customer);
+            }
+
+            if ($paymentData->getPaymentMean() && $paymentData->getPaymentMean()->getName() == 'debit') {
+                $data['debit'] = array(
+                    "account"       => $paymentDataData["accountNumber"],
+                    "bankCode"      => $paymentDataData["bankCode"],
+                    "bankName"      => $paymentDataData["bankName"],
+                    "accountHolder" => $paymentDataData["accountHolder"],
+                );
             }
 
             $paymentData->fromArray($paymentDataData);

@@ -354,7 +354,7 @@ class Customer extends ModelEntity
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection $paymentData
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\PaymentData", mappedBy="customer", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\PaymentData", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
      */
     protected $paymentData;
 
