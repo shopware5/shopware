@@ -54,6 +54,11 @@ class Container extends BaseContainer
     const STATUS_ASSIGNED = 3;
 
     /**
+     * Constant for the bootstrap status, set when the resource throwed an exception.
+     */
+    const STATUS_EXCEPTION = 4;
+
+    /**
      * Property which contains all registered resources
      *
      * @var array
@@ -100,6 +105,7 @@ class Container extends BaseContainer
      *
      * @param string $name
      * @param mixed $resource
+     * @param string $scope
      * @return Container
      */
     public function set($name, $resource, $scope = 'container')
@@ -186,6 +192,13 @@ class Container extends BaseContainer
             throw new \Exception('Resource "' . $name . '" not found failure');
         }
 
+        // a privious attempt to load the resource resulted in an exception,
+        // try to reload the resource to provide the original exception
+        // instead of generic "resource not found" message.
+        if ($this->resourceStatus[$name] === self::STATUS_EXCEPTION) {
+            $this->load($name);
+        }
+
         return $this->resourceList[$name];
     }
 
@@ -246,7 +259,7 @@ class Container extends BaseContainer
                 );
             }
         } catch (\Exception $e) {
-            $this->resourceStatus[$name] = self::STATUS_NOT_FOUND;
+            $this->resourceStatus[$name] = self::STATUS_EXCEPTION;
             throw $e;
         }
 
