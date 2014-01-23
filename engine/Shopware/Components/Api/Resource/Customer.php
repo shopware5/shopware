@@ -366,7 +366,7 @@ class Customer extends Resource
             return $data;
         }
 
-        if (isset($data['debit'])) {
+        if (isset($data['debit']) && !isset($data['paymentData'])) {
             $debitPaymentMean = $this->getManager()->getRepository('Shopware\Models\Payment\Payment')->findOneBy(array('name' => 'debit'));
 
             if ($debitPaymentMean) {
