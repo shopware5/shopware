@@ -362,19 +362,23 @@ class Customer extends Resource
      */
     protected function prepareCustomerPaymentData($data, CustomerModel $customer)
     {
-        if (!isset($data['paymentData'])) {
-            if (isset($data['debit'])) {
+        if (!isset($data['paymentData']) && !isset($data['debit'])) {
+            return $data;
+        }
+
+        if (isset($data['debit'])) {
+            $debitPaymentMean = $this->getManager()->getRepository('Shopware\Models\Payment\Payment')->findOneBy(array('name' => 'debit'));
+
+            if ($debitPaymentMean) {
                 $data['paymentData'] = array(
                     array(
                         "accountNumber" => $data['debit']["account"],
                         "bankCode" => $data['debit']["bankCode"],
                         "bankName" => $data['debit']["bankName"],
                         "accountHolder" => $data['debit']["accountHolder"],
-                        "paymentMeanId" => 2
+                        "paymentMeanId" => $debitPaymentMean->getId()
                     )
                 );
-            } else {
-                return $data;
             }
         }
 
