@@ -284,7 +284,7 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
 
             "paymentData" => array(
                 array(
-                    "paymentMean"   => 2,
+                    "paymentMeanId"   => 2,
                     "accountNumber" => "Fake Account",
                     "bankCode"      => "55555555",
                     "bankName"      => "Fake Bank",
