@@ -26,6 +26,7 @@ namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Models\Customer\Customer as CustomerModel;
+use Shopware\Models\Customer\PaymentData;
 
 /**
  * Customer API Resource
@@ -369,7 +370,7 @@ class Customer extends Resource
                         "bankCode" => $data['debit']["bankCode"],
                         "bankName" => $data['debit']["bankName"],
                         "accountHolder" => $data['debit']["accountHolder"],
-                        "paymentMean" => 2
+                        "paymentMeanId" => 2
                     )
                 );
             } else {
@@ -385,16 +386,28 @@ class Customer extends Resource
         );
 
         foreach ($data['paymentData'] as &$paymentDataData) {
-            $paymentData = $this->getOneToManySubElement(
-                $paymentDataInstances,
-                $paymentDataData,
-                '\Shopware\Models\Customer\PaymentData'
-            );
+            try {
+                $paymentData = $this->getOneToManySubElement(
+                    $paymentDataInstances,
+                    $paymentDataData,
+                    '\Shopware\Models\Customer\PaymentData',
+                    array('id', 'paymentMeanId')
+                );
+            } catch (ApiException\CustomValidationException $cve) {
+                $paymentData = new PaymentData();
+                $this->getManager()->persist($paymentData);
+                $paymentDataInstances->add($paymentData);
+            }
 
-            if (isset($paymentDataData['paymentMean'])) {
-                $paymentMean = $this->getManager()->getRepository('Shopware\Models\Payment\Payment')->find($paymentDataData['paymentMean']);
+            if (isset($paymentDataData['paymentMeanId'])) {
+                $paymentMean = $this->getManager()->getRepository('Shopware\Models\Payment\Payment')->find($paymentDataData['paymentMeanId']);
+                if (is_null($paymentMean)) {
+                    throw new ApiException\CustomValidationException(
+                        sprintf("%s by %s %s not found", 'Shopware\Models\Payment\Payment', 'id', $paymentDataData['paymentMeanId'])
+                    );
+                }
                 $paymentData->setPaymentMean($paymentMean);
-                unset($paymentDataData['paymentMean']);
+                unset($paymentDataData['paymentMeanId']);
             }
 
             if ($paymentData->getCustomer() == null) {
