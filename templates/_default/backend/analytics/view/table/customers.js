@@ -43,15 +43,9 @@ Ext.define('Shopware.apps.Analytics.view.table.Customers', {
             items: me.getColumns(),
             defaults: {
                 align: 'right',
-                flex: 1,
                 sortable: false
             }
         };
-
-        me.initStoreIndices('amountNewCustomers', '{s name="table/customers/new_customers"}New customers{/s}: [0]');
-        me.initStoreIndices('amountOldCustomers', '{s name="table/customers/regular_customers"}Regular customers{/s}: [0]');
-        me.initStoreIndices('maleAmount', '{s name="table/customers/male_portion"}Percentage male{/s}: [0]');
-        me.initStoreIndices('femaleAmount', '{s name="table/customers/female_portion"}Percentage female{/s}: [0]');
 
         me.callParent(arguments);
     },
@@ -62,27 +56,50 @@ Ext.define('Shopware.apps.Analytics.view.table.Customers', {
      * @return [array] grid columns
      */
     getColumns: function () {
+        var percentRenderer = function(value) {
+            return Ext.util.Format.number(value, '0.00') + ' %';
+        };
+
         return [
             {
                 dataIndex: 'week',
+                width: 120,
                 align: 'left',
-                text: '{s name="table/customers/calendar_week"}Calendar Week{/s}'
+                text: '{s name="table/customers/day"}Day{/s}'
             },
             {
-                dataIndex: 'amountNewCustomers',
-                text: '{s name="table/customers/new_customers"}New customers{/s}'
+                dataIndex: 'orderCount',
+                width: 90,
+                text: '{s name="table/customers/order_count"}Order count{/s}'
             },
             {
-                dataIndex: 'amountOldCustomers',
-                text: '{s name="table/customers/regular_customers"}Regular customers{/s}'
+                dataIndex: 'registration',
+                width: 90,
+                text: '{s name="table/customers/registration"}Registrations{/s}'
             },
             {
-                dataIndex: 'maleAmount',
-                text: '{s name="table/customers/male_portion"}Percentage male{/s}'
+                dataIndex: 'newCustomersPercent',
+                flex: 1,
+                text: '{s name="table/customers/new_customers"}New customers{/s}',
+                renderer: percentRenderer
             },
             {
-                dataIndex: 'femaleAmount',
-                text: '{s name="table/customers/female_portion"}Percentage female{/s}'
+                dataIndex: 'oldCustomersPercent',
+                flex: 1,
+                text: '{s name="table/customers/regular_customers"}Regular customers{/s}',
+                renderer: percentRenderer
+            },
+            {
+                dataIndex: 'malePercent',
+                flex: 1,
+                text: '{s name="table/customers/male_portion"}Percentage male{/s}',
+                renderer: percentRenderer
+            },
+            {
+                dataIndex: 'femalePercent',
+                flex: 1,
+                text: '{s name="table/customers/female_portion"}Percentage female{/s}',
+                renderer: percentRenderer
             }
         ];
     }

@@ -386,90 +386,44 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     public function getCustomersAction()
     {
-        $shopIds = $this->getSelectedShopIds();
         $result = $this->getRepository()->getOrdersOfCustomers(
             $this->getFromDate(),
-            $this->getToDate(),
-            $shopIds
+            $this->getToDate()
         );
 
         $customers = array();
-        $data = $result->getData();
 
-        foreach ($data as $row) {
-            $week = date('Y - W', strtotime($row['orderTime']));
+        foreach($result->getData() as $row) {
+            $week = $row['orderTime'];
+            $customers[$week]['orderCount']++;
+            $customers[$week]['week'] = $week;
+            $customers[$week]['female'] = (int)$customers[$week]['female'];
+            $customers[$week]['male'] = (int)$customers[$week]['male'];
+            $customers[$week]['registration'] = (int) $customers[$week]['registration'];
+            $customers[$week]['users'] = (array) $customers[$week]['users'];
 
-            if (!array_key_exists($week, $customers)) {
-                $customers[$week] = array(
-                    'week' => $week,
-                    'newCustomersOrders' => 0,
-                    'oldCustomersOrders' => 0,
-                    'orderCount' => 0,
-                    'male' => 0,
-                    'female' => 0
-                );
-
-                if (!empty($shopIds)) {
-                    foreach ($shopIds as $shopId) {
-                        $subShopCustomers = array(
-                            'newCustomersOrders' . $shopId => 0,
-                            'oldCustomersOrders' . $shopId => 0,
-                            'orderCount' . $shopId => 0,
-                            'male' . $shopId => 0,
-                            'female' . $shopId => 0
-                        );
-
-                        $customers[$week] = array_merge($customers[$week], $subShopCustomers);
-                    }
-                }
+            switch(strtolower($row['salutation'])) {
+                case "mr":
+                    $customers[$week]['male']++;
+                    break;
+                case "ms":
+                    $customers[$week]['female']++;
+                    break;
+                default:
+                    break;
             }
 
-            if (strtotime($row['orderTime']) - strtotime($row['firstLogin']) < 60 * 60 * 24) {
-                $customers[$week]['newCustomersOrders'] += $row['count'];
+            $users = $customers[$week]['users'];
+            if ($row['isNewCustomerOrder'] && !in_array($row['userId'], $users)) {
+                $customers[$week]['registration']++;
+            }
+
+            $customers[$week]['users'][] = $row['userId'];
+
+            if ($row['isNewCustomerOrder']) {
+                $customers[$week]['newCustomersOrders']++;
             } else {
-                $customers[$week]['oldCustomersOrders'] += $row['count'];
-            }
-
-            $customers[$week]['orderCount'] += $row['count'];
-
-            if ($row['salutation'] == 'mr') {
-                $customers[$week]['male']++;
-            } else if ($row['salutation'] == 'ms') {
-                $customers[$week]['female']++;
-            }
-
-            if (!empty($shopIds)) {
-                foreach ($shopIds as $shopId) {
-                    if (strtotime($row['orderTime' . $shopId]) - strtotime($row['firstLogin' . $shopId]) < 60 * 60 * 24) {
-                        $customers[$week]['newCustomersOrders' . $shopId] += $row['count' . $shopId];
-                    } else {
-                        $customers[$week]['oldCustomersOrders' . $shopId] += $row['count' . $shopId];
-                    }
-
-                    $customers[$week]['orderCount' . $shopId] += $row['count' . $shopId];
-
-                    if ($row['salutation' . $shopId] == 'mr') {
-                        $customers[$week]['male' . $shopId]++;
-                    } else if ($row['salutation' . $shopId] == 'ms') {
-                        $customers[$week]['female' . $shopId]++;
-                    }
-                }
-            }
-        }
-
-        foreach ($customers as &$entry) {
-            $entry['amountNewCustomers'] = round($entry['newCustomersOrders'] / $entry['orderCount'] * 100, 2);
-            $entry['amountOldCustomers'] = round($entry['oldCustomersOrders'] / $entry['orderCount'] * 100, 2);
-            $entry['maleAmount'] = round($entry['male'] / ($entry['male'] + $entry['female']) * 100, 2);
-            $entry['femaleAmount'] = round($entry['female'] / ($entry['male'] + $entry['female']) * 100, 2);
-
-            if (!empty($shopIds)) {
-                foreach ($shopIds as $shopId) {
-                    $entry['amountNewCustomers' . $shopId] = round($entry['newCustomersOrders' . $shopId] / $entry['orderCount' . $shopId] * 100, 2);
-                    $entry['amountOldCustomers' . $shopId] = round($entry['oldCustomersOrders' . $shopId] / $entry['orderCount' . $shopId] * 100, 2);
-                    $entry['maleAmount' . $shopId] = round($entry['male' . $shopId] / ($entry['male' . $shopId] + $entry['female' . $shopId]) * 100, 2);
-                    $entry['femaleAmount' . $shopId] = round($entry['female' . $shopId] / ($entry['male' . $shopId] + $entry['female' . $shopId]) * 100, 2);
-                }
+                $customers[$week]['oldCustomersOrders']++;
             }
         }
 
