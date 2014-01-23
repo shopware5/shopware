@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <shopware>
 <files>
+    <file><name>logs/</name></file>
     <file><name>cache/html/</name></file>
     <file><name>cache/general/</name></file>
     <file><name>cache/templates/</name></file>
