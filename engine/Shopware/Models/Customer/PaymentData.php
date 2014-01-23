@@ -58,6 +58,13 @@ class PaymentData extends ModelEntity
     protected $paymentMean;
 
     /**
+     * @var integer $paymentMeanId
+     *
+     * @ORM\Column(name="payment_mean_id", type="integer")
+     */
+    protected $paymentMeanId;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Customer", inversedBy="paymentData")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
@@ -123,6 +130,8 @@ class PaymentData extends ModelEntity
     {
         $this->createdAt = new \DateTime();
     }
+
+
 
     /**
      * Gets the id of the payment
@@ -294,5 +303,11 @@ class PaymentData extends ModelEntity
         return $this->bankCode;
     }
 
-
+    /**
+     * @return int
+     */
+    public function getPaymentMeanId()
+    {
+        return $this->paymentMeanId;
+    }
 }
