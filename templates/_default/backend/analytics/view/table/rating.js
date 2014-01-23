@@ -48,9 +48,9 @@ Ext.define('Shopware.apps.Analytics.view.table.Rating', {
             }
         };
 
-        me.initStoreIndices('basketConversion', '{s name="table/rating/basket_rate"}Order success rate{/s}: [0]');
-        me.initStoreIndices('orderConversion', '{s name="table/rating/order_rate"}Order conversion rate{/s}: [0]');
-        me.initStoreIndices('basketVisitConversion', '{s name="table/rating/basket_visit_rate"}Abandoned baskets / visitors{/s}: [0]');
+        me.initStoreIndices('basketConversion', '{s name="table/rating/basket_rate"}Order success rate{/s}: <br>[0]');
+        me.initStoreIndices('orderConversion', '{s name="table/rating/order_rate"}Order conversion rate{/s}: <br>[0]');
+        me.initStoreIndices('basketVisitConversion', '{s name="table/rating/basket_visit_rate"}Abandoned baskets / visitors{/s}: <br>[0]');
 
         me.callParent(arguments);
     },
@@ -65,19 +65,24 @@ Ext.define('Shopware.apps.Analytics.view.table.Rating', {
             {
                 xtype: 'datecolumn',
                 dataIndex: 'date',
+                height: 30,
+                width: 30,
                 align: 'left',
                 text: '{s name="table/rating/date"}Date{/s}'
             },
             {
                 dataIndex: 'basketConversion',
+                height: 30,
                 text: '{s name="table/rating/basket_rate"}Order success rate{/s}'
             },
             {
                 dataIndex: 'orderConversion',
+                height: 30,
                 text: '{s name="table/rating/order_rate"}Order conversion rate{/s}'
             },
             {
                 dataIndex: 'basketVisitConversion',
+                height: 30,
                 text: '{s name="table/rating/basket_visit_rate"}Abandoned baskets / visitors{/s}'
             }
         ];

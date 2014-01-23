@@ -33,6 +33,14 @@ use Shopware\Models\Analytics\Repository;
 class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backend_ExtJs
 {
 
+    protected $dateFields = array(
+        'date', 'displayDate', 'datum', 'firstLogin', 'birthday', 'orderTime'
+    );
+
+    protected $shopFields = array(
+        'amount', 'count', 'totalImpressions', 'totalVisits', 'orderCount', 'visitors', 
+    );
+
     /**
      * Entity Manager
      * @var null
@@ -190,16 +198,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         );
 
         $data = $result->getData();
-        $shopIds = $this->getSelectedShopIds();
         foreach ($data as &$row) {
             $row['date'] = strtotime($row['date']);
             $row['totalConversion'] = round($row['totalOrders'] / $row['totalVisits'] * 100, 2);
-
-            if (!empty($shopIds)) {
-                foreach ($shopIds as $shopId) {
-                    $row['conversion' . $shopId] = round($row['orderCount' . $shopId] / $row['visits' . $shopId] * 100, 2);
-                }
-            }
         }
 
         $this->send($data, $result->getTotalCount());
@@ -385,90 +386,44 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     public function getCustomersAction()
     {
-        $shopIds = $this->getSelectedShopIds();
         $result = $this->getRepository()->getOrdersOfCustomers(
             $this->getFromDate(),
-            $this->getToDate(),
-            $shopIds
+            $this->getToDate()
         );
 
         $customers = array();
-        $data = $result->getData();
 
-        foreach ($data as $row) {
-            $week = date('Y - W', strtotime($row['orderTime']));
+        foreach($result->getData() as $row) {
+            $week = $row['orderTime'];
+            $customers[$week]['orderCount']++;
+            $customers[$week]['week'] = $week;
+            $customers[$week]['female'] = (int)$customers[$week]['female'];
+            $customers[$week]['male'] = (int)$customers[$week]['male'];
+            $customers[$week]['registration'] = (int) $customers[$week]['registration'];
+            $customers[$week]['users'] = (array) $customers[$week]['users'];
 
-            if (!array_key_exists($week, $customers)) {
-                $customers[$week] = array(
-                    'week' => $week,
-                    'newCustomersOrders' => 0,
-                    'oldCustomersOrders' => 0,
-                    'orderCount' => 0,
-                    'male' => 0,
-                    'female' => 0
-                );
-
-                if (!empty($shopIds)) {
-                    foreach ($shopIds as $shopId) {
-                        $subShopCustomers = array(
-                            'newCustomersOrders' . $shopId => 0,
-                            'oldCustomersOrders' . $shopId => 0,
-                            'orderCount' . $shopId => 0,
-                            'male' . $shopId => 0,
-                            'female' . $shopId => 0
-                        );
-
-                        $customers[$week] = array_merge($customers[$week], $subShopCustomers);
-                    }
-                }
+            switch(strtolower($row['salutation'])) {
+                case "mr":
+                    $customers[$week]['male']++;
+                    break;
+                case "ms":
+                    $customers[$week]['female']++;
+                    break;
+                default:
+                    break;
             }
 
-            if (strtotime($row['orderTime']) - strtotime($row['firstLogin']) < 60 * 60 * 24) {
-                $customers[$week]['newCustomersOrders'] += $row['count'];
+            $users = $customers[$week]['users'];
+            if ($row['isNewCustomerOrder'] && !in_array($row['userId'], $users)) {
+                $customers[$week]['registration']++;
+            }
+
+            $customers[$week]['users'][] = $row['userId'];
+
+            if ($row['isNewCustomerOrder']) {
+                $customers[$week]['newCustomersOrders']++;
             } else {
-                $customers[$week]['oldCustomersOrders'] += $row['count'];
-            }
-
-            $customers[$week]['orderCount'] += $row['count'];
-
-            if ($row['salutation'] == 'mr') {
-                $customers[$week]['male']++;
-            } else if ($row['salutation'] == 'ms') {
-                $customers[$week]['female']++;
-            }
-
-            if (!empty($shopIds)) {
-                foreach ($shopIds as $shopId) {
-                    if (strtotime($row['orderTime' . $shopId]) - strtotime($row['firstLogin' . $shopId]) < 60 * 60 * 24) {
-                        $customers[$week]['newCustomersOrders' . $shopId] += $row['count' . $shopId];
-                    } else {
-                        $customers[$week]['oldCustomersOrders' . $shopId] += $row['count' . $shopId];
-                    }
-
-                    $customers[$week]['orderCount' . $shopId] += $row['count' . $shopId];
-
-                    if ($row['salutation' . $shopId] == 'mr') {
-                        $customers[$week]['male' . $shopId]++;
-                    } else if ($row['salutation' . $shopId] == 'ms') {
-                        $customers[$week]['female' . $shopId]++;
-                    }
-                }
-            }
-        }
-
-        foreach ($customers as &$entry) {
-            $entry['amountNewCustomers'] = round($entry['newCustomersOrders'] / $entry['orderCount'] * 100, 2);
-            $entry['amountOldCustomers'] = round($entry['oldCustomersOrders'] / $entry['orderCount'] * 100, 2);
-            $entry['maleAmount'] = round($entry['male'] / ($entry['male'] + $entry['female']) * 100, 2);
-            $entry['femaleAmount'] = round($entry['female'] / ($entry['male'] + $entry['female']) * 100, 2);
-
-            if (!empty($shopIds)) {
-                foreach ($shopIds as $shopId) {
-                    $entry['amountNewCustomers' . $shopId] = round($entry['newCustomersOrders' . $shopId] / $entry['orderCount' . $shopId] * 100, 2);
-                    $entry['amountOldCustomers' . $shopId] = round($entry['oldCustomersOrders' . $shopId] / $entry['orderCount' . $shopId] * 100, 2);
-                    $entry['maleAmount' . $shopId] = round($entry['male' . $shopId] / ($entry['male' . $shopId] + $entry['female' . $shopId]) * 100, 2);
-                    $entry['femaleAmount' . $shopId] = round($entry['female' . $shopId] / ($entry['male' . $shopId] + $entry['female' . $shopId]) * 100, 2);
-                }
+                $customers[$week]['oldCustomersOrders']++;
             }
         }
 
@@ -778,6 +733,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     protected function send($data, $totalCount)
     {
         if (strtolower($this->format) == 'csv') {
+            $data = $this->formatCsvData($data);
             $this->exportCSV($data);
         } else {
             $this->View()->assign(array(
@@ -787,6 +743,100 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             ));
         }
     }
+
+    private function formatCsvData($data)
+    {
+        if ($fields = $this->getDateFields($data[0])) {
+            foreach($data as &$row) {
+                foreach($fields as $field) {
+                    if (array_key_exists($field, $row)) {
+                        $row[$field] = date('Y-m-d H:i:s', $row[$field]);
+                    }
+                }
+            }
+        }
+
+        if ($fields = $this->getShopFields($data[0])) {
+            $shopNames = $this->getShopNames();
+
+            foreach($fields as $field => $shopId) {
+                $suffix = substr($field, 0, strlen($fields) - strlen($shopId));
+                $data = $this->switchArrayKeys($data, $shopNames[$shopId] . ' (' . $suffix . ')', $field);
+            }
+        }
+        return $data;
+    }
+
+    private function switchArrayKeys($array, $newKey, $oldKey)
+    {
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $array[$key] = $this->switchArrayKeys($value, $newKey, $oldKey);
+            } else {
+                $array[$newKey] = $array[$oldKey];
+            }
+        }
+        unset($array[$oldKey]);
+        return $array;
+    }
+
+    private function getShopNames()
+    {
+        $builder = $this->getManager()->getDBALQueryBuilder();
+        $builder->select(array('s.id', 's.name'))
+            ->from('s_core_shops', 's')
+            ->orderBy('s.default', 'DESC')
+            ->addOrderBy('s.name');
+
+        $statement = $builder->execute();
+
+        return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
+    }
+
+    protected function getShopFields($data)
+    {
+        $ids = $this->getSelectedShopIds();
+        $fields = array();
+        foreach(array_keys($data) as $key) {
+            if (in_array($key, $this->shopFields)) {
+                foreach($ids as $id) {
+                    if (array_key_exists($key . $id, $data)) {
+                        $fields[$key . $id] = $id;
+                    }
+                }
+            }
+        }
+        return $fields;
+    }
+
+    protected function getDateFields($data)
+    {
+        $fields = array();
+        foreach(array_keys($data) as $key) {
+            if (in_array($key, $this->dateFields)) {
+                $fields[] = $key;
+            }
+        }
+        return $fields;
+    }
+
+    private function isTimestamp($input)
+    {
+        if (strlen($input) != 11)  {
+            return false;
+        }
+
+        if (is_int($input)) {
+            return true;
+        }
+
+        if  (is_string($input)) {
+            return ctype_digit($input);
+        }
+
+        return false;
+    }
+
 
     protected function exportCSV($data)
     {

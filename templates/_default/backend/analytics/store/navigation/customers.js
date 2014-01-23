@@ -34,15 +34,43 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Customers', {
     alias: 'widget.analytics-store-navigation-customers',
     remoteSort: true,
     fields: [
-        'week',
-        'male',
-        'female',
-        'newCustomersOrders',
-        'oldCustomersOrders',
-        'amountNewCustomers',
-        'amountOldCustomers',
-        'maleAmount',
-        'femaleAmount'
+        { name: 'week', type: 'string' },
+        { name: 'male', type: 'int', defaultValue: 0 },
+        { name: 'female', type: 'int', defaultValue: 0 },
+        { name: 'registration', type: 'int', defaultValue: 0 },
+        { name: 'newCustomersOrders', type: 'int', defaultValue: 0 },
+        { name: 'oldCustomersOrders', type: 'int', defaultValue: 0 },
+        { name: 'orderCount', type: 'int', defaultValue: 0 },
+
+        { name: 'oldCustomersPercent', type: 'float', convert: function(value, record) {
+            var male = record.get('oldCustomersOrders');
+            var order = record.get('orderCount');
+
+            return male / order * 100;
+        } },
+
+
+        { name: 'newCustomersPercent', type: 'float', convert: function(value, record) {
+            var male = record.get('newCustomersOrders');
+            var order = record.get('orderCount');
+
+            return male / order * 100 ;
+        } },
+
+        { name: 'malePercent', type: 'float', convert: function(value, record) {
+            var male = record.get('male');
+            var order = record.get('orderCount');
+
+            return male / order * 100;
+        } },
+        { name: 'femalePercent', type: 'float', convert: function(value, record) {
+            var female = record.get('female');
+            var order = record.get('orderCount');
+
+            return female / order * 100;
+        } }
+
+
     ],
     proxy: {
         type: 'ajax',
@@ -52,21 +80,5 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Customers', {
             root: 'data',
             totalProperty: 'total'
         }
-    },
-
-    constructor: function (config) {
-        var me = this;
-        config.fields = me.fields;
-
-        if (config.shopStore) {
-            config.shopStore.each(function (shop) {
-                config.fields.push('amountNewCustomers' + shop.data.id);
-                config.fields.push('amountOldCustomers' + shop.data.id);
-                config.fields.push('maleAmount' + shop.data.id);
-                config.fields.push('femaleAmount' + shop.data.id);
-            });
-        }
-
-        me.callParent(arguments);
     }
 });
