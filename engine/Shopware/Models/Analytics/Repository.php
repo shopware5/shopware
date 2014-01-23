@@ -256,7 +256,7 @@ class Repository
      *
      * @param \DateTime $from
      * @param \DateTime $to
-     * @param array $shopIds
+     * @internal param array $shopIds
      * @return Result
      *      array (
      *          'firstLogin' => '2012-08-30',
@@ -272,27 +272,9 @@ class Repository
      *          'salutation' => 'mr',
      *      ),
      */
-    public function getOrdersOfCustomers(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
+    public function getOrdersOfCustomers(\DateTime $from = null, \DateTime $to = null)
     {
         $builder = $this->createOrdersOfCustomersBuilder($from, $to);
-
-        if (!empty($shopIds)) {
-            foreach ($shopIds as $shopId) {
-                $shopId = (int) $shopId;
-                $builder->addSelect(
-                    "IF(users.subshopID=" . $shopId . ", users.firstlogin, 0) as firstLogin" . $shopId
-                );
-                $builder->addSelect(
-                    "IF(orders.subshopID=" . $shopId . ", orders.ordertime, 0) as orderTime" . $shopId
-                );
-                $builder->addSelect(
-                    "COUNT(IF(orders.subshopID=" . $shopId . ", orders.id, 0)) as count" . $shopId
-                );
-                $builder->addSelect(
-                    "IF(users.subshopID=" . $shopId . ", billing.salutation, '') as salutation" . $shopId
-                );
-            }
-        }
 
         $builder = $this->eventManager->filter('Shopware_Analytics_OrdersOfCustomers', $builder, array(
             'subject' => $this
@@ -1097,18 +1079,18 @@ class Repository
      */
     protected function createOrdersOfCustomersBuilder(\DateTime $from = null, \DateTime $to = null)
     {
-        $builder = $builder = $this->connection->createQueryBuilder();
+        $builder = $this->connection->createQueryBuilder();
+
         $builder->select(array(
-            'users.firstlogin AS firstLogin',
-            'orders.ordertime AS orderTime',
-            'COUNT(orders.id) AS count',
-            'billing.salutation'
-        ))
-            ->from('s_user', 'users')
-            ->innerJoin('users', 's_order', 'orders', 'orders.userID = users.id')
+            "DATE(orders.ordertime) as orderTime",
+            '(DATE(orders.ordertime) = DATE(users.firstlogin)) as isNewCustomerOrder',
+            'billing.salutation',
+            'orders.userID as userId'
+        ));
+        $builder->from('s_order', 'orders')
+            ->innerJoin('orders', 's_user', 'users', 'orders.userID = users.id')
             ->innerJoin('users', 's_user_billingaddress', 'billing', 'billing.userID = users.id')
             ->andWhere('orders.status NOT IN (-1, 4)')
-            ->groupBy('users.id')
             ->orderBy('orderTime', 'DESC');
 
         $this->addDateRangeCondition($builder, $from, $to, 'orders.ordertime');

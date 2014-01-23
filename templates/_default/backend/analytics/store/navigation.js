@@ -100,9 +100,7 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
                 text: '{s name=nav/customers}Portion New-/RegularCustomer{/s}',
                 store: 'analytics-store-navigation-customers',
                 iconCls: 'sprite-user-silhouette-question',
-                comparable: true,
-                leaf: true,
-                multiShop: true
+                leaf: true
             },
             {
                 id: 'customer_age',
