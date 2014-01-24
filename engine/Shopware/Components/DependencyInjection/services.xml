@@ -6,7 +6,6 @@
 
     <parameters>
         <parameter key="shopware.snippet_manager.class">Shopware_Components_Snippet_Manager</parameter>
-        <parameter key="shopware.subscriber.class">Shopware_Components_Subscriber</parameter>
         <parameter key="shopware.cache_factory.class">Shopware\Components\DependencyInjection\Bridge\Cache</parameter>
         <parameter key="shopware.config_factory.class">Shopware\Components\DependencyInjection\Bridge\Config</parameter>
         <parameter key="shopware.model_factory.class">Shopware\Components\DependencyInjection\Bridge\Models</parameter>
@@ -139,9 +138,6 @@
         <service id="snippets"   class="%shopware.snippet_manager.class%">
             <argument type="service" id="shopware.model_manager"/>
             <argument>%shopware.snippet%</argument>
-        </service>
-        <service id="subscriber" class="Shopware_Components_Subscriber">
-
         </service>
 
         <service id="db_connection"
