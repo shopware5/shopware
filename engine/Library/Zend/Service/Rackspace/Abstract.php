@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Service
  * @subpackage Rackspace
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -95,6 +95,12 @@ abstract class Zend_Service_Rackspace_Abstract
      * @var string 
      */
     protected $managementUrl;
+    /**
+     * Do we use ServiceNet?
+     * 
+     * @var boolean
+     */
+    protected $useServiceNet = false;
     /**
      * Constructor
      *
@@ -231,6 +237,31 @@ abstract class Zend_Service_Rackspace_Abstract
             throw new Zend_Service_Rackspace_Exception("The authentication URL is not valid");
         }
     }
+    
+    /**
+     * Sets whether to use ServiceNet
+     * 
+     * ServiceNet is Rackspace's internal network. Bandwidth on ServiceNet is
+     * not charged.
+     * 
+     * @param boolean $useServiceNet
+     */
+    public function setServiceNet($useServiceNet = true)
+    {
+        $this->useServiceNet = $useServiceNet;
+        return $this;
+    }
+
+    /**
+     * Get whether we're using ServiceNet
+     * 
+     * @return boolean
+     */
+    public function getServiceNet()
+    {
+        return $this->useServiceNet;
+    }
+
     /**
      * Get the authentication token
      *
@@ -325,6 +356,14 @@ abstract class Zend_Service_Rackspace_Abstract
      */
     public function authenticate()
     {
+        if (empty($this->user)) {
+            /**
+             * @see Zend_Service_Rackspace_Exception
+             */
+            require_once 'Zend/Service/Rackspace/Exception.php';
+            throw new Zend_Service_Rackspace_Exception("User has not been set");
+        }
+
         $headers = array (
             self::AUTHUSER_HEADER => $this->user,
             self::AUTHKEY_HEADER => $this->key
@@ -332,9 +371,13 @@ abstract class Zend_Service_Rackspace_Abstract
         $result = $this->httpCall($this->authUrl.'/'.self::VERSION,'GET', $headers);
         if ($result->getStatus()==204) {
             $this->token = $result->getHeader(self::AUTHTOKEN);
-            $this->storageUrl = $result->getHeader(self::STORAGE_URL);
             $this->cdnUrl = $result->getHeader(self::CDNM_URL);
             $this->managementUrl = $result->getHeader(self::MANAGEMENT_URL);
+            $storageUrl = $result->getHeader(self::STORAGE_URL);
+            if ($this->useServiceNet) {
+                $storageUrl = preg_replace('|(.*)://([^/]*)(.*)|', '$1://snet-$2$3', $storageUrl);
+            }
+            $this->storageUrl = $storageUrl;
             return true;
         }
         $this->errorMsg = $result->getBody();

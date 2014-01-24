@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,24 +20,15 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Shop
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 namespace Shopware\Models\Shop;
+use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Model\ModelEntity,
     Doctrine\ORM\Mapping AS ORM;
 
 /**
  * Locale Model Entity
- *
- * todo@all: Documentation
  *
  * @ORM\Table(name="s_core_locales")
  * @ORM\Entity
@@ -73,6 +64,17 @@ class Locale extends ModelEntity
      * @ORM\Column(name="territory", type="string", length=255, nullable=false)
      */
     private $territory;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Translation\Translation", mappedBy="locale")
+     */
+    protected $translations;
+
+    public function __construct()
+    {
+        $this->translations = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -156,5 +158,21 @@ class Locale extends ModelEntity
     public function toString()
     {
         return $this->getLocale();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
+    }
+
+    /**
+     * @param mixed $translations
+     */
+    public function setTranslations($translations)
+    {
+        $this->translations = $translations;
     }
 }

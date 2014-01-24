@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Rulesets
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Patrick Stahl
- * @author     $Author$
  */
 
 namespace   Shopware\Models\Payment;
@@ -215,8 +207,8 @@ class RuleSet extends ModelEntity
     }
 
     /**
-	 * Gets the corresponding payment-model.
-	 *
+     * Gets the corresponding payment-model.
+     *
      * @return
      */
     public function getPayment()
@@ -225,8 +217,8 @@ class RuleSet extends ModelEntity
     }
 
     /**
-	 * Sets the payment-model.
-	 *
+     * Sets the payment-model.
+     *
      * @param  $payment
      * @return \Shopware\Models\Payment\RuleSet
      */

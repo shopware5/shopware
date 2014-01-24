@@ -49,7 +49,7 @@
 		<div>
 		    <label for="street2">{se name='RegisterShippingLabelStreet'}{/se}</label>
 		    <input name="register[shipping][street]" type="text"  id="street2" value="{$form_data.street|escape}" class="street text required {if $error_flags.street}instyle_error{/if}" />
-		    <input name="register[shipping][streetnumber]" type="text"  id="streetnumber2" value="{$form_data.streetnumber|escape}"  maxlength="5" class="number text required {if $error_flags.streetnumber}instyle_error{/if}" />
+		    <input name="register[shipping][streetnumber]" type="text"  id="streetnumber2" value="{$form_data.streetnumber|escape}" class="number text required {if $error_flags.streetnumber}instyle_error{/if}" />
 		</div>
 	{/block}
 
@@ -57,7 +57,7 @@
 	{block name='frontend_register_shipping_fieldset_input_zip_and_city'}
 		<div>
 		    <label for="zipcode2">{se name='RegisterShippingLabelCity'}{/se}</label>
-		    <input name="register[shipping][zipcode]" type="text" id="zipcode2" value="{$form_data.zipcode|escape}" maxlength="5" class="zipcode text required {if $error_flags.zipcode}instyle_error{/if}" />
+		    <input name="register[shipping][zipcode]" type="text" id="zipcode2" value="{$form_data.zipcode|escape}"  class="zipcode text required {if $error_flags.zipcode}instyle_error{/if}" />
 		    <input name="register[shipping][city]" type="text"  id="city2" value="{$form_data.city|escape}" size="25" class="city text required {if $error_flags.city}instyle_error{/if}" />
 		</div>
 	{/block}

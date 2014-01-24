@@ -1,7 +1,7 @@
 {extends file="backend/base/header.tpl"}
 
 {* Page title *}
-{block name='backend/base/header/title'}Shopware {Shopware::VERSION} {Shopware::VERSION_TEXT} (Rev. {Shopware::REVISION}) - Backend (c) 2013 shopware AG{/block}
+{block name='backend/base/header/title'}Shopware {Shopware::VERSION} {Shopware::VERSION_TEXT} (Rev. {Shopware::REVISION}) - Backend (c) shopware AG{/block}
 
 {block name="backend/base/header/css" append}
 <link rel="stylesheet" type="text/css" href="{link file="backend/_resources/styles/growl.css"}" />
@@ -107,5 +107,10 @@ iframe { border: 0 none !important; width: 100%; height: 100%; }
 		disableCachingValue: '{time()}{if $user && $user->locale}+{$user->locale->getId()}+{$user->role->getId()}{/if}'
 	});
     Ext.Loader.setPath('Shopware.apps', '{url module=backend action=index}', '?file=app');
+
+    Ext.onReady(function() {
+        var timeField = Ext.create('Ext.form.field.Time');
+        this.timeFormat = timeField.format;
+    });
 </script>
 {/block}

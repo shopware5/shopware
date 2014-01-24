@@ -164,7 +164,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
                 xtype:'datefield',
                 fieldLabel:'{s name=detail/sidebar/options/field/displayDate}Display date{/s}',
                 allowBlank:false,
-                format: 'd.m.Y',
+                submitFormat: 'd.m.Y',
                 required:true,
                 name:'displayDate'
             },
@@ -172,6 +172,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
                 xtype:'timefield',
                 fieldLabel:'{s name=detail/sidebar/options/field/displayTime}Display time{/s}',
                 allowBlank:false,
+                submitFormat: 'H:i',
                 required:true,
                 name:'displayTime'
             },

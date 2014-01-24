@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,17 +19,14 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Analytics
- * @subpackage App
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 /**
- * todo@all: Documentation
+ * Shopware Application - Analytics Module
+ *
+ * @category   Shopware
+ * @package    Analytics
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  */
 Ext.define('Shopware.apps.Analytics', {
 
@@ -38,7 +35,7 @@ Ext.define('Shopware.apps.Analytics', {
      * sub-application behavior and the event bus
      * @string
      */
-    extend:'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
 
     /**
      * Sets the loading path for the sub-application.
@@ -47,47 +44,111 @@ Ext.define('Shopware.apps.Analytics', {
      * controller (server-side)
      * @string
      */
-    loadPath:'{url action=load}',
+    loadPath: '{url action=load}',
 
     /**
      * Enable bulk loading
      */
-    bulkLoad:true,
+    bulkLoad: true,
 
     /**
      * Requires controllers for sub-application
      * @array
      */
-    controllers:[ 'Main' ],
+    controllers: [ 'Main', 'ReferrerVisitors' ],
 
     /**
      * Required stores for controller
      * @array
      */
-    stores:[ 'Navigation', 'Source', 'Shop', 'Data', 'Search', 'Visitors', 'Conversion' ],
+    stores: [
+        'Navigation',
+
+        'Shop',
+        'Data',
+
+        'navigation.ArticleImpressions',
+        'navigation.CalendarWeeks',
+        'navigation.Categories',
+        'navigation.Countries',
+        'navigation.CustomerGroups',
+        'navigation.Month',
+        'navigation.Overview',
+        'navigation.Payment',
+        'navigation.Search',
+        'navigation.ShippingMethods',
+        'navigation.Time',
+        'navigation.Vendors',
+        'navigation.Visitors',
+        'navigation.Weekdays',
+        'navigation.Rating',
+        'navigation.ReferrerRevenue',
+        'navigation.PartnerRevenue',
+        'navigation.ReferrerVisitors',
+        'navigation.ArticleSells',
+        'navigation.Customers',
+        'navigation.SearchTerms',
+        'navigation.SearchUrls',
+        'navigation.CustomerAge'
+    ],
 
     /**
      * Required models for controller
      * @array
      */
-    models:[ 'Navigation' ],
+    models: [ 'Navigation' ],
 
     /**
      * Required views for controller
      *
      * @array
      */
-    views:[
-        'main.Window', 'main.Navigation',
-        'main.Panel', 'main.Toolbar',
-        'main.Table', 'main.Chart',
-        'toolbar.Source',
-        'chart.Week', 'chart.Weekday', 'chart.Month', 'chart.Daytime',
-        'chart.Supplier', 'chart.Category', 'chart.Country',
-        'chart.Dispatch', 'chart.Payment',
-        'table.Week', 'table.Weekday', 'table.Month', 'table.Daytime',
-        'table.Supplier', 'table.Category', 'table.Country',
-        'table.Dispatch', 'table.Payment', 'table.Search', 'table.Visitors', 'table.Conversion'
+    views: [
+        'main.Window',
+        'main.Navigation',
+        'main.Panel',
+        'main.Toolbar',
+        'main.Table',
+        'main.Chart',
+
+        'chart.Week',
+        'chart.Weekday',
+        'chart.Month',
+        'chart.Daytime',
+        'chart.Supplier',
+        'chart.Category',
+        'chart.Country',
+        'chart.Dispatch',
+        'chart.Payment',
+        'chart.CustomerAge',
+        'chart.Customers',
+        'chart.CustomerGroup',
+        'chart.PartnerRevenue',
+        'chart.Visitors',
+
+        'table.Week',
+        'table.Weekday',
+        'table.Month',
+        'table.Daytime',
+        'table.Supplier',
+        'table.Category',
+        'table.Country',
+        'table.Dispatch',
+        'table.CustomerGroup',
+        'table.Payment',
+        'table.Search',
+        'table.Visitors',
+        'table.ArticleImpression',
+        'table.Overview',
+        'table.Rating',
+        'table.ReferrerRevenue',
+        'table.PartnerRevenue',
+        'table.ReferrerVisitors',
+        'table.ArticleSells',
+        'table.Customers',
+        'table.SearchTerms',
+        'table.SearchUrls',
+        'table.CustomerAge'
     ],
     /**
      * Returns the main application window for this is expected
@@ -102,7 +163,7 @@ Ext.define('Shopware.apps.Analytics', {
      * @private
      * @return [object] mainWindow - the main application window based on Enlight.app.Window
      */
-    launch:function () {
+    launch: function () {
         var me = this,
             mainController = me.getController('Main');
 

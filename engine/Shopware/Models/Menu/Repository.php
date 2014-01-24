@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,19 +20,11 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Menu
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
 
 namespace Shopware\Models\Menu;
 use Shopware\Components\Model\ModelRepository;
 /**
- * todo@all: Documentation
  */
 class Repository extends ModelRepository
 {
@@ -42,7 +34,7 @@ class Repository extends ModelRepository
     public function save()
     {
 
-	}
+    }
 
     /**
      * @deprecated Will be executed automatically.
@@ -59,7 +51,7 @@ class Repository extends ModelRepository
      */
     public function findOneBy(array $criteria)
     {
-        if(func_num_args() === 2) {
+        if (func_num_args() === 2) {
             return parent::findOneBy(array(func_get_arg(0) => func_get_arg(1)));
         } else {
             return parent::findOneBy($criteria);

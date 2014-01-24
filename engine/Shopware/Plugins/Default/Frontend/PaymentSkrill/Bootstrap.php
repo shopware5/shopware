@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,7 +25,7 @@
 /**
  * @category  Shopware
  * @package   Shopware\Plugins\Frontend\PaymentSkrill
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Plugins_Frontend_PaymentSkrill_Bootstrap extends Shopware_Components_DummyPlugin_Bootstrap
 {
@@ -37,7 +37,7 @@ class Shopware_Plugins_Frontend_PaymentSkrill_Bootstrap extends Shopware_Compone
             'label' => $this->getName(),
             'source' => $this->getSource(),
             'description' => 'Skrill (Moneybookers) ist die sichere Art, weltweit zu bezahlen, ohne ihre Bezahldaten jedesmal neu einzugeben.
-				    Sie können in 200 Ländern über 100 verschiedene Zahlungsoptionen nutzen, einschließlich aller wichtigen Kredit- und EC- Karten.',
+                    Sie können in 200 Ländern über 100 verschiedene Zahlungsoptionen nutzen, einschließlich aller wichtigen Kredit- und EC- Karten.',
             'license' => '',
             'support' => 'http://wiki.shopware.de',
             'link' => 'http://www.skrill.com/',

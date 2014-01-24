@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Snippet
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
- * @author     Benjamin Cremer
  */
 
 namespace   Shopware\Models\Snippet;
@@ -43,7 +35,7 @@ use         Shopware\Components\Model\ModelEntity,
  *   - UNIQUE KEY `namespace` (`namespace`,`shopID`,`name`,`localeID`)
  * </code>
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="SnippetRepository")
  * @ORM\Table(name="s_core_snippets")
  * @ORM\HasLifecycleCallbacks
  */
@@ -106,6 +98,13 @@ class Snippet extends ModelEntity
      * @ORM\Column(name="updated", type="datetime", nullable=false)
      */
     private $updated;
+
+    /**
+     * @var integer $dirty
+     *
+     * @ORM\Column(name="dirty", type="boolean", nullable=false)
+     */
+    protected $dirty = false;
 
     /**
      * Get id
@@ -301,4 +300,22 @@ class Snippet extends ModelEntity
     {
         $this->updated = new \DateTime('now');
     }
+
+    /**
+     * @param int $dirty
+     */
+    public function setDirty($dirty)
+    {
+        $this->dirty = $dirty;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDirty()
+    {
+        return $this->dirty;
+    }
+
+
 }

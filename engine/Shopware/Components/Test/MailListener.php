@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,51 +20,42 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components
- * @subpackage Test
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
  * Shopware Mail Test Listener
- * todo@all: Documentation
  */
 class Shopware_Components_Test_MailListener implements PHPUnit_Framework_TestListener
 {
-	protected $mailTransport;
-	protected $mailRecipients;
-	
-	/**
-	 * Constructor method
-	 *
-	 * @param unknown_type $mailRecipients
-	 * @param unknown_type $mailTransport
-	 */
-	public function __construct($mailRecipients, $mailTransport = array())
+    protected $mailTransport;
+    protected $mailRecipients;
+
+    /**
+     * Constructor method
+     *
+     * @param unknown_type $mailRecipients
+     * @param unknown_type $mailTransport
+     */
+    public function __construct($mailRecipients, $mailTransport = array())
     {
-    	if(!$mailTransport instanceof Zend_Mail_Transport_Abstract) {
-	    	if(empty($mailTransport['type'])) {
-	    		$mailTransport['type'] = 'sendmail';
-	    	}
-	    	if(!Shopware()->Loader()->loadClass($mailTransport['type'])) {
-				$transportName = ucfirst(strtolower($mailTransport['type']));
-				$transportName = 'Zend_Mail_Transport_'.$transportName;
-			}
-			if($transportName=='Zend_Mail_Transport_Smtp') {
-				$mailTransport = Enlight_Class::Instance($transportName, array($mailTransport['host'], $mailTransport));
-			} else {
-				$mailTransport = Enlight_Class::Instance($transportName, array($mailTransport));
-			}
-    	}
-    	$this->mailTransport = $mailTransport;
-    	$this->mailRecipients = explode(',', $mailRecipients);
+        if (!$mailTransport instanceof Zend_Mail_Transport_Abstract) {
+            if (empty($mailTransport['type'])) {
+                $mailTransport['type'] = 'sendmail';
+            }
+            if (!Shopware()->Loader()->loadClass($mailTransport['type'])) {
+                $transportName = ucfirst(strtolower($mailTransport['type']));
+                $transportName = 'Zend_Mail_Transport_'.$transportName;
+            }
+            if ($transportName=='Zend_Mail_Transport_Smtp') {
+                $mailTransport = Enlight_Class::Instance($transportName, array($mailTransport['host'], $mailTransport));
+            } else {
+                $mailTransport = Enlight_Class::Instance($transportName, array($mailTransport));
+            }
+        }
+        $this->mailTransport = $mailTransport;
+        $this->mailRecipients = explode(',', $mailRecipients);
     }
-    
+
     /**
      * Adds an error to the list of errors.
      *
@@ -78,13 +69,13 @@ class Shopware_Components_Test_MailListener implements PHPUnit_Framework_TestLis
 
         if ($e instanceof PHPUnit_Framework_ExpectationFailedException) {
             /** @var $e PHPUnit_Framework_ExpectationFailedException */
-        	//$message .= "\n" . $e->getComparisonFailure()->toString();
+            //$message .= "\n" . $e->getComparisonFailure()->toString();
         }
 
         $name = $test->getName(false);
-        
+
         $mail = new Enlight_Components_Mail();
-        
+
         $mail->addTo($this->mailRecipients);
         $mail->setSubject('PHPUnit test "' . $name . '" failed.');
         $mail->setBodyText($message);
@@ -102,10 +93,10 @@ class Shopware_Components_Test_MailListener implements PHPUnit_Framework_TestLis
                 $filename
             );
         }
-        
+
         $mail->send($this->mailTransport);
     }
-    
+
     /**
      * Adds a failure to the list of failures.
      * The passed in exception caused the failure.
@@ -116,9 +107,9 @@ class Shopware_Components_Test_MailListener implements PHPUnit_Framework_TestLis
      */
     public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time)
     {
-    	$this->addError($test, $e, $time);
+        $this->addError($test, $e, $time);
     }
-    
+
     /**
      * Incomplete test method.
      *
@@ -128,7 +119,7 @@ class Shopware_Components_Test_MailListener implements PHPUnit_Framework_TestLis
      */
     public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
-    	
+
     }
 
     /**
@@ -141,7 +132,7 @@ class Shopware_Components_Test_MailListener implements PHPUnit_Framework_TestLis
      */
     public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
-    	
+
     }
 
     /**
@@ -152,7 +143,7 @@ class Shopware_Components_Test_MailListener implements PHPUnit_Framework_TestLis
      */
     public function startTestSuite(PHPUnit_Framework_TestSuite $suite)
     {
-    	
+
     }
 
     /**
@@ -163,7 +154,7 @@ class Shopware_Components_Test_MailListener implements PHPUnit_Framework_TestLis
      */
     public function endTestSuite(PHPUnit_Framework_TestSuite $suite)
     {
-    	
+
     }
 
     /**
@@ -173,7 +164,7 @@ class Shopware_Components_Test_MailListener implements PHPUnit_Framework_TestLis
      */
     public function startTest(PHPUnit_Framework_Test $test)
     {
-    	
+
     }
 
     /**
@@ -184,6 +175,6 @@ class Shopware_Components_Test_MailListener implements PHPUnit_Framework_TestLis
      */
     public function endTest(PHPUnit_Framework_Test $test, $time)
     {
-    	
+
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -27,7 +27,7 @@
  *
  * @category  Shopware
  * @package   Shopware\Controllers\Backend
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
 use Shopware\Models\Newsletter\Address;
@@ -307,7 +307,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 ->groupBy('customer.id');
 
         $x = $builder->getQuery()->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($builder->getQuery());
+
+        $paginator = $this->getModelManager()->createPaginator($builder->getQuery());
 
         $this->Response()->setHeader('Content-Type', 'text/x-comma-separated-values;charset=utf-8');
         $this->Response()->setHeader('Content-Disposition', 'attachment; filename="export.customers.'.date("Y.m.d").'.csv"');
@@ -410,7 +411,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                  'detailsPrices',
             ));
             $builder->leftJoin('article.details', 'details', 'WITH', 'details.kind = 2')
-		            ->leftJoin('details.attribute', 'detailsAttribute')
+                    ->leftJoin('details.attribute', 'detailsAttribute')
                     ->leftJoin('details.prices', 'detailsPrices');
         }
 
@@ -419,7 +420,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
         $query = $builder->getQuery();
         $query = $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getModelManager()->createPaginator($query);
 
         $result = $paginator->getIterator()->getArrayCopy();
         foreach ($result as $key => &$article) {
@@ -617,6 +618,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 IF(d.releasedate='0000-00-00','',d.releasedate) as releasedate,
                 d.shippingfree,
                 a.topseller,
+                a.metaTitle,
                 a.keywords,
                 d.minpurchase,
                 d.purchasesteps,
@@ -1578,7 +1580,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 'message' => sprintf("Could not handle upload of type: %s.", $type)
             ));
             return;
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             // At this point any Exception would result in the import/export frontend "loading forever"
             // Append stack trace in order to be able to debug
             $message = $e->getMessage()."<br />\r\nStack Trace:".$e->getTraceAsString();
@@ -1609,17 +1611,17 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $recreateImagesLater = array();
 
         foreach ($results as $imageData) {
-            if(!empty($imageData['relations'])) {
+            if (!empty($imageData['relations'])) {
                 $relations = array();
                 $results = explode("&", $imageData['relations']);
-                foreach($results as $result) {
-                    if($result !== "") {
+                foreach ($results as $result) {
+                    if ($result !== "") {
                         $result = preg_replace('/{|}/', '', $result);
                         list($group, $option) = explode(":", $result);
 
                         // Try to get given configurator group/option. Continue, if they don't exist
                         $cGroupModel = $configuratorGroupRepository->findOneBy(array('name' => $group));
-                        if($cGroupModel === null) {
+                        if ($cGroupModel === null) {
                             continue;
                         }
                         $cOptionModel = $configuratorOptionRepository->findOneBy(
@@ -1627,7 +1629,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                                  'groupId'=>$cGroupModel->getId()
                             )
                         );
-                        if($cOptionModel === null) {
+                        if ($cOptionModel === null) {
                             continue;
                         }
                         $relations[] = array("group" => $cGroupModel, "option" => $cOptionModel);
@@ -1694,8 +1696,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $this->getManager()->flush($image);
 
             // Set mappings
-            if(!empty($relations)) {
-                foreach($relations as $relation){
+            if (!empty($relations)) {
+                foreach ($relations as $relation) {
                     $optionModel = $relation['option'];
                     Shopware()->Db()->insert('s_article_img_mappings', array(
                         'image_id' => $image->getId()
@@ -1712,7 +1714,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             }
 
             // Prevent multiple images from being a preview
-            if((int) $imageData['main'] === 1) {
+            if ((int) $imageData['main'] === 1) {
                 Shopware()->Db()->update('s_articles_img',
                     array(
                         'main' => 2
@@ -1730,10 +1732,10 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         try {
             // Clear the entity manager and rebuild images in order to get proper variant images
             Shopware()->Models()->clear();
-            foreach($recreateImagesLater as $articleId) {
+            foreach ($recreateImagesLater as $articleId) {
                 $this->recreateVariantImages($articleId);
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $errors[] = sprintf("Error building variant images. If no other errors occurred, the images have been
                 uploaded but the image-variant mapping in the shop frontend might fail. Errormessage: %s", $e->getMessage());
         }
@@ -1949,13 +1951,13 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             if ($newsletterData['group']) {
                 $group = $this->getGroupRepository()->findOneByName($newsletterData['group']);
             }
-            if(!$group && $newsletterData['group']) {
+            if (!$group && $newsletterData['group']) {
                 $group = new Group();
                 $group->setName($newsletterData['group']);
                 $this->getManager()->persist($group);
-            } elseif(!$group && $groupId = Shopware()->Config()->get("sNEWSLETTERDEFAULTGROUP")) {
+            } elseif (!$group && $groupId = Shopware()->Config()->get("sNEWSLETTERDEFAULTGROUP")) {
                 $group = $this->getGroupRepository()->findOneBy($groupId);
-            } elseif(!$group) {
+            } elseif (!$group) {
                 // If no group is specified and no default config exists, don't import the address
                 // This should never actually happen, as a default should always exist
                 // but its better to be safe than sorry
@@ -2240,10 +2242,9 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
                 if (isset($article['propertyValues']) && !empty($article['propertyValues'])) {
                     $updateData['propertyValues'] = $this->prepareImportXmlData($article['propertyValues']['propertyValue']);
+                } else {
+                    unset($updateData['propertyValues']);
                 }
-	            else {
-		            unset($updateData['propertyValues']);
-	            }
 
                 if (isset($article['related'])) {
                     $updateData['related'] = $this->prepareImportXmlData($article['related']['related']);
@@ -2256,19 +2257,19 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 if (isset($article['variants']) && !empty($article['variants'])) {
                     $updateData['variants'] = $this->prepareImportXmlData($article['variants']['variant']);
                     foreach ($article['variants'] as $key => $variant) {
-	                    if (isset($variant['prices'])) {
+                        if (isset($variant['prices'])) {
                             $updateData['variants'][$key]['prices'] = $this->prepareImportXmlData($variant['prices']['price']);
                         }
                     }
                 }
 
-	            if (isset($article['configuratorSet']) && !empty($article['configuratorSet'])) {
+                if (isset($article['configuratorSet']) && !empty($article['configuratorSet'])) {
                     foreach ($article['configuratorSet']['groups'] as $groupKey =>$group) {
-	                    $updateData['configuratorSet']['groups'][$groupKey] = $group;
-	                    foreach ($group['options'] as $optionKey => $option) {
-		                    $updateData['configuratorSet']['groups'][$groupKey]['options'][$optionKey] = array_pop($option);
+                        $updateData['configuratorSet']['groups'][$groupKey] = $group;
+                        foreach ($group['options'] as $optionKey => $option) {
+                            $updateData['configuratorSet']['groups'][$groupKey]['options'][$optionKey] = array_pop($option);
 
-	                    }
+                        }
                     }
                 }
 
@@ -2307,9 +2308,9 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     $errormessage = $e->getMessage();
                 }
 
-	            if(!empty($article["name"]) && !empty($article["id"])) {
-		            $errors[] = "Error with article: ". $article["name"]. " and articleID: ".$article["id"];
-	            }
+                if (!empty($article["name"]) && !empty($article["id"])) {
+                    $errors[] = "Error with article: ". $article["name"]. " and articleID: ".$article["id"];
+                }
                 $errors[] = "Error in line {$counter}: $errormessage";
             }
         }
@@ -2366,14 +2367,14 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 $counter++;
 
                 // Prevent invalid records from being imported and throw a exception
-                if(empty($articleData['name'])) {
+                if (empty($articleData['name'])) {
                     throw new \Exception("Article name may not be empty");
                 }
-                if(empty($articleData['ordernumber'])) {
+                if (empty($articleData['ordernumber'])) {
                     throw new \Exception("Article ordernumber may not be empty");
                 }
-                if(!empty($articleData['ordernumber'])) {
-                    if(preg_match('/[^a-zA-Z0-9-_. ]/', $articleData['ordernumber']) !== 0) {
+                if (!empty($articleData['ordernumber'])) {
+                    if (preg_match('/[^a-zA-Z0-9-_. ]/', $articleData['ordernumber']) !== 0) {
                         throw new \Exception("Invalid ordernumber: {$articleData['ordernumber']}");
                     }
                 }
@@ -2381,7 +2382,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 $result = $this->saveArticle($articleData, $articleResource, $articleMapping, $articleDetailMapping);
                 $result = $this->getArticleRepository()->find($result->getId());
 
-                if(!$result instanceof \Shopware\Models\Article\Article) {
+                if (!$result instanceof \Shopware\Models\Article\Article) {
                     $errors[] = $result;
                     continue;
                 }
@@ -2409,11 +2410,11 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     // in order to fix this, we set all options active which can be assigned to a given article
                     /** @var \Shopware\Models\Article\Configurator\Set $configuratorSet */
                     $configuratorSet = $result->getConfiguratorSet();
-                    if($configuratorSet !== null) {
+                    if ($configuratorSet !== null) {
                         $configuratorSet->getOptions()->clear();
                         $articleRepository = $this->getArticleRepository();
                         $ids = $articleRepository->getArticleConfiguratorSetOptionIds($result->getId());
-                        if(!empty($ids)) {
+                        if (!empty($ids)) {
                             $configuratorOptionRepository = Shopware()->Models()->getRepository('\Shopware\Models\Article\Configurator\Option');
                             $optionModels = $configuratorOptionRepository->findBy(array("id" => $ids));
                             $configuratorSet->setOptions($optionModels);
@@ -2465,7 +2466,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             return;
         }
 
-        if(!empty($errors)) {
+        if (!empty($errors)) {
             $errors = $this->toUtf8($errors);
             $message = implode("<br>\n", $errors);
             echo json_encode(array(
@@ -2485,12 +2486,13 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
      * Helper function which creates customerGroup-prices if available
      * @param $results CSV Iterator
      */
-    protected function insertPrices($results) {
+    protected function insertPrices($results)
+    {
         // create pricegroup array
         $customerPriceGroups = array();
-        foreach($results as $articleData) {
-            foreach($articleData as $key => $value) {
-                if(strpos($key, 'price_') !== false) {
+        foreach ($results as $articleData) {
+            foreach ($articleData as $key => $value) {
+                if (strpos($key, 'price_') !== false) {
                     $customerPriceGroups[str_replace('price_', '', $key)] = $value;
                 }
             }
@@ -2500,7 +2502,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $localCustomerGroups = Shopware()->Db()->fetchAssoc($sql);
 
         // Iter all given articles
-        foreach($results as $articleData) {
+        foreach ($results as $articleData) {
             // get articleId and detailId by ordernumber
             $sql = '
                 SELECT ad.id, articleID, t.tax
@@ -2516,12 +2518,12 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $tax = $result['tax'];
 
             // delete old and save new prices
-            foreach($customerPriceGroups as $customerGroup => $price) {
+            foreach ($customerPriceGroups as $customerGroup => $price) {
                 $price = floatval(str_replace(',' , '.', $price));
 
                 // if customer group is a preTax group (taxinput=true), recalculate the price
                 $isPreTax = $localCustomerGroups[$customerGroup]['taxinput'];
-                if($isPreTax) {
+                if ($isPreTax) {
                     $price = $price/(100+$tax)*100;
                 }
 
@@ -2578,8 +2580,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         }
 
         $isNewConfigurator = false;
-        if(isset($articleData['configuratorOptions']) && !empty($articleData['configuratorOptions'])) {
-            if(!isset($articleData['configuratorsetID']) || empty($articleData['configuratorsetID'])) {
+        if (isset($articleData['configuratorOptions']) && !empty($articleData['configuratorOptions'])) {
+            if (!isset($articleData['configuratorsetID']) || empty($articleData['configuratorsetID'])) {
                 return sprintf("Article with ordernumber %s is a variant but has no configuratorSetID. It is probably broken and was skipped",$articleData['ordernumber'] );
             }
             list($configuratorSet, $configuratorOptions) = $this->prepareNewConfiguratorImport($articleData['configuratorOptions']);
@@ -2643,12 +2645,12 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             'pseudoprice' => 'pseudoPrice'
         );
         $detailData['prices'] = array();
-        foreach($prices as $priceKey => $mappedName) {
-            if(!empty($articleData[$priceKey])) {
+        foreach ($prices as $priceKey => $mappedName) {
+            if (!empty($articleData[$priceKey])) {
                 $detailData['prices'][0][$mappedName] = $articleData[$priceKey];
             }
         }
-        if(empty($detailData['prices'])) {
+        if (empty($detailData['prices'])) {
             unset($detailData['prices']);
         }
 
@@ -2757,7 +2759,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         }
 
         // For configurators as used in SW 4
-        if($isNewConfigurator) {
+        if ($isNewConfigurator) {
             /** @var \Shopware\Models\Article\Detail $articleDetailModel */
             $articleDetailModel = $articleDetailRepostiory->findOneBy(array('number' => $articleData['mainnumber']));
             if ($articleDetailModel) {
@@ -2769,11 +2771,11 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             }
 
             // update?
-            if(isset($articleModel) && $articleModel !== null) {
-                if(!isset($updateData)) {
+            if (isset($articleModel) && $articleModel !== null) {
+                if (!isset($updateData)) {
                     $updateData = array('variants'=>array());
                 }
-                if(!isset($updateData['variants'])) {
+                if (!isset($updateData['variants'])) {
                     $updateData['variants'] = array();
                 }
                 $updateData['configuratorSet'] = $configuratorSet;
@@ -2781,7 +2783,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 $detailData['configuratorOptions'] = $configuratorOptions;
                 $updateData['variants'][] = $detailData;
                 $result = $articleResource->update($articleModel->getId(), $updateData);
-            }else{
+            } else {
                 $updateData['configuratorSet'] = $configuratorSet;
                 $updateData['variants'][0] = $detailData;
                 $updateData['variants'][0]['configuratorOptions'] = $configuratorOptions;
@@ -2825,13 +2827,14 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
      * @param $configuratorData
      * @return array
      */
-    protected  function prepareNewConfiguratorImport($configuratorData) {
+    protected function prepareNewConfiguratorImport($configuratorData)
+    {
         $configuratorGroups = array();
         $configuratorOptions = array();
 
         // split string into parts and recieve group and options this way
         $pairs = explode("|", $configuratorData);
-        foreach($pairs as $pair) {
+        foreach ($pairs as $pair) {
             list($group, $option) = explode(":", $pair);
 
             $currentGroup = array("name" => $group, "options" => array(array("name" => $option)));
@@ -2939,8 +2942,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
      * @param $data
      * @return array
      */
-    protected function prepareTranslation($data) {
-
+    protected function prepareTranslation($data)
+    {
         $translationByLanguage = array();
 
         $whitelist = array(
@@ -2953,16 +2956,16 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         );
 
         // first get a list of all available translation by language ID
-        foreach($data as $key => $value) {
-            foreach($whitelist as $translationKey => $translationMapping) {
-                if(strpos($key, $translationKey.'_') !== false) {
+        foreach ($data as $key => $value) {
+            foreach ($whitelist as $translationKey => $translationMapping) {
+                if (strpos($key, $translationKey.'_') !== false) {
                     $parts = explode('_', $key);
                     $language = array_pop($parts);
-                    if(!is_numeric($language)) {
+                    if (!is_numeric($language)) {
                         continue;
                     }
 
-                    if(!isset($translationByLanguage[$language])) {
+                    if (!isset($translationByLanguage[$language])) {
                         $translationByLanguage[$language] = array();
                         $translationByLanguage[$language]['shopId'] = $language;
                     }
@@ -3072,10 +3075,10 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         }
 
         // if no user was found by email, its save to find one via customernumber
-        if(!$customerModel && !empty($customerData['customernumber'])) {
+        if (!$customerModel && !empty($customerData['customernumber'])) {
             /** \Shopware\Models\Customer\Billing $billingModel */
             $billingModel = Shopware()->Models()->getRepository('\Shopware\Models\Customer\Billing')->findOneBy(array('number' => $customerData['customernumber']));
-            if($billingModel) {
+            if ($billingModel) {
                 /** \Shopware\Models\Customer\Customer $customerModel */
                 $customerModel = $billingModel->getCustomer();
             }
@@ -3573,7 +3576,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     continue;
                 }
 
-                if(!in_array($categoryId, $categoryIds)) {
+                if (!in_array($categoryId, $categoryIds)) {
                     $categoryIds[] = $categoryId;
                 }
 
@@ -3617,17 +3620,17 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             case "https":
             case "file":
                 $counter = 1;
-                if($baseFilename === null) {
+                if ($baseFilename === null) {
                     $filename = md5(uniqid(rand(), true));
-                }else{
+                } else {
                     $filename = $baseFilename;
                 }
 
                 while (file_exists("$destPath/$filename")) {
-                    if($baseFilename) {
+                    if ($baseFilename) {
                         $filename = "$counter-$baseFilename";
                         $counter++;
-                    }else{
+                    } else {
                         $filename = md5(uniqid(rand(), true));
                     }
                 }

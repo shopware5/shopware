@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,7 +25,7 @@
 /**
  * @category  Shopware
  * @package   Shopware\Plugins\Core
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -179,32 +179,15 @@ class Shopware_Plugins_Core_SelfHealing_Bootstrap extends Shopware_Components_Pl
      */
     private function generateModels($path)
     {
-        /**@var $generator \Shopware\Components\Model\Generator*/
+        /** @var $generator \Shopware\Components\Model\Generator */
         $generator = new \Shopware\Components\Model\Generator();
 
-        $generator->setPath(
-            $path
-        );
-
-        $generator->setModelPath(
-            Shopware()->AppPath('Models')
-        );
-
+        $generator->setPath($path);
+        $generator->setModelPath(Shopware()->AppPath('Models'));
         $generator->setSchemaManager(
-            $this->getSchemaManager()
+            $this->Application()->Models()->getConnection()->getSchemaManager()
         );
 
         return $generator->generateAttributeModels(array());
-    }
-
-    /**
-     * Helper function to create an own database schema manager to remove
-     * all dependencies to the existing shopware models and meta data caches.
-     *
-     * @return \Doctrine\DBAL\Schema\AbstractSchemaManager
-     */
-    private function getSchemaManager()
-    {
-        return $this->Application()->Models()->getConnection()->getSchemaManager();
     }
 }

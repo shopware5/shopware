@@ -166,12 +166,14 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
 
         var validFrom = Ext.create('Ext.form.field.Date', {
             anchor: '100%',
+            submitFormat: 'd.m.Y',
             fieldLabel: '{s name=settings/time_control/start_date}Start date{/s}',
             name: 'validFrom'
         });
 
         var validTo = Ext.create('Ext.form.field.Date', {
             anchor: '100%',
+            submitFormat: 'd.m.Y',
             fieldLabel: '{s name=settings/time_control/end_date}End date{/s}',
             name: 'validTo'
         });
@@ -181,7 +183,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             fieldLabel: '{s name=settings/time_control/start_time}Start time{/s}',
             increment: 30,
             validationEvent: false,
-            altFormats: 'H:i:s',
+            submitFormat: 'H:i',
             anchor: '100%'
         });
 
@@ -189,7 +191,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             name: 'validToTime',
             fieldLabel: '{s name=settings/time_control/end_time}End time{/s}',
             increment: 30,
-            altFormats: 'H:i:s',
+            submitFormat: 'H:i',
             anchor: '100%'
         });
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,16 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * This plugin provides the store api for an external access
- *
- * @copyright Copyright (c) 2011, Shopware AG
- * @author d.scharfenberg
- * @author $Author$
- * @package Shopware
- * @subpackage Controllers_Frontend
- * @creation_date 21.06.12 14:39
- * @version $Id$
  */
 class Shopware_Plugins_Backend_StoreApi_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -55,8 +45,8 @@ class Shopware_Plugins_Backend_StoreApi_Bootstrap extends Shopware_Components_Pl
      *
      * @return bool
      */
-    public function install() {
-
+    public function install()
+    {
         //Create the new resource StoreApi
         $event = $this->createEvent(
             'Enlight_Bootstrap_InitResource_StoreApi',
@@ -70,12 +60,12 @@ class Shopware_Plugins_Backend_StoreApi_Bootstrap extends Shopware_Components_Pl
             'onPreDispatch'
         );
         $this->subscribeEvent($event);
-        
+
         //creates the standard plugin form
         $form = $this->Form();
         $form->setElement('text', 'StoreApiUrl', array('label' => 'Store API Url', 'value' => 'http://store.shopware-preview.de/storeApi', 'scope'=>Shopware_Components_Form::SCOPE_SHOP));
         $form->save();
-        
+
 
         return true;
     }
@@ -90,6 +80,10 @@ class Shopware_Plugins_Backend_StoreApi_Bootstrap extends Shopware_Components_Pl
      */
     public static function onInitResourceStoreApi(Enlight_Event_EventArgs $args)
     {
+        //Setup the alternative path for the namespace Shopware_Components
+        Shopware()->Loader()->registerNamespace('Shopware_Components', dirname(__FILE__).'/Components/');
+        Shopware()->Loader()->registerNamespace('Shopware_StoreApi', dirname(__FILE__).'/StoreApi/');
+
         return new Shopware_Components_StoreApi();
     }
 
@@ -108,7 +102,7 @@ class Shopware_Plugins_Backend_StoreApi_Bootstrap extends Shopware_Components_Pl
         $request = $me->Request();
 
         //Aborts if the current is not a backend controller
-        if(strtolower($request->getModuleName()) != 'backend') {
+        if (strtolower($request->getModuleName()) != 'backend') {
             return;
         }
 

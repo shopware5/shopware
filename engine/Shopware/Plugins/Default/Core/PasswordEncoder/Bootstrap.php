@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,7 +25,7 @@
 /**
  * @category  Shopware
  * @package   Shopware\Plugins\CorePasswordManager
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -56,58 +56,58 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
      */
     public function install()
     {
-	    $this->subscribeEvents();
+        $this->subscribeEvents();
         $this->createForm();
 
         return true;
     }
 
-	/**
-	 * Registers all necessary events and hooks.
-	 */
-	 private function subscribeEvents()
-	 {
-		$this->subscribeEvent(
-			'Enlight_Bootstrap_InitResource_PasswordEncoder',
-			'onInitResourcePasswordEncoder'
-		);
+    /**
+     * Registers all necessary events and hooks.
+     */
+     private function subscribeEvents()
+     {
+        $this->subscribeEvent(
+            'Enlight_Bootstrap_InitResource_PasswordEncoder',
+            'onInitResourcePasswordEncoder'
+        );
 
-		$this->subscribeEvent(
-			'Shopware_Components_Password_Manager_AddEncoder',
-			'onAddEncoder'
-		);
-	 }
+        $this->subscribeEvent(
+            'Shopware_Components_Password_Manager_AddEncoder',
+            'onAddEncoder'
+        );
+     }
 
-	/**
-	 * Crate config form elements
-	 */
-	protected function createForm()
-	{
-		$form = $this->Form();
+    /**
+     * Crate config form elements
+     */
+    protected function createForm()
+    {
+        $form = $this->Form();
 
-		$form->setElement('combo', 'defaultPasswordEncoderName', array(
-			'label' => 'Passwörter verschlüsseln mit...',
-			'editable' => false,
-			'value' => 'Auto',
-			'valueField' => 'id','displayField'=>'id',
-			'triggerAction' => 'all',
-			'store' => 'base.EncoderName'
-		));
+        $form->setElement('combo', 'defaultPasswordEncoderName', array(
+            'label' => 'Passwörter verschlüsseln mit...',
+            'editable' => false,
+            'value' => 'Auto',
+            'valueField' => 'id','displayField'=>'id',
+            'triggerAction' => 'all',
+            'store' => 'base.EncoderName'
+        ));
 
-		$form->setElement('boolean', 'liveMigration', array(
-			'description' => 'Sollen vorhandene Benutzer-Passwörter mit anderen Passwort-Algorithmen beim nächsten Einloggen erneut gehasht werden? Das geschieht voll automatisch im Hintergrund, so dass die Passwörter sukzessiv auf einen neuen Algorithmus umgestellt werden können.',
-			'label' => 'Live Migration',
-			'value' => true,
-		));
+        $form->setElement('boolean', 'liveMigration', array(
+            'description' => 'Sollen vorhandene Benutzer-Passwörter mit anderen Passwort-Algorithmen beim nächsten Einloggen erneut gehasht werden? Das geschieht voll automatisch im Hintergrund, so dass die Passwörter sukzessiv auf einen neuen Algorithmus umgestellt werden können.',
+            'label' => 'Live Migration',
+            'value' => true,
+        ));
 
-		$form->setElement('number', 'Bcrypt-Rechenaufwand', array(
-			'description' => 'Je höher der Rechenaufwand, desto aufwändiger ist es für einen möglichen Angreifer, ein Klartext-Passwort für das verschlüsselte Passwort zu berechnen.',
-			'label'    => 'bcrypt Cost',
-			'minValue' => 4,
-			'maxValue' => 31,
-			'required' => true,
-			'value'    => 10
-		));
+        $form->setElement('number', 'Bcrypt-Rechenaufwand', array(
+            'description' => 'Je höher der Rechenaufwand, desto aufwändiger ist es für einen möglichen Angreifer, ein Klartext-Passwort für das verschlüsselte Passwort zu berechnen.',
+            'label'    => 'bcrypt Cost',
+            'minValue' => 4,
+            'maxValue' => 31,
+            'required' => true,
+            'value'    => 10
+        ));
 
         $form->setElement('number', 'sha256iterations', array(
             'description' => 'Je höher der Rechenaufwand, desto aufwändiger ist es für einen möglichen Angreifer, ein Klartext-Passwort für das verschlüsselte Passwort zu berechnen.',
@@ -122,7 +122,7 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
         $form->setParent(
             $this->Forms()->findOneBy(array('name' => 'Core'))
         );
-	 }
+     }
 
     /**
      * @return array
@@ -178,20 +178,20 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
     }
 
     /**
-	 * This method registers shopware's default hash algorithm
-	 * @param Enlight_Event_EventArgs $args
-	 * @return array
-	 */
-	public function onAddEncoder(\Enlight_Event_EventArgs $args)
-	{
-		$hashes = $args->getReturn();
+     * This method registers shopware's default hash algorithm
+     * @param Enlight_Event_EventArgs $args
+     * @return array
+     */
+    public function onAddEncoder(\Enlight_Event_EventArgs $args)
+    {
+        $hashes = $args->getReturn();
 
-		$hashes[] = new Shopware\Components\Password\Encoder\Bcrypt($this->getBcryptOptions());
+        $hashes[] = new Shopware\Components\Password\Encoder\Bcrypt($this->getBcryptOptions());
         $hashes[] = new Shopware\Components\Password\Encoder\Sha256($this->getSha256Options());
-		$hashes[] = new Shopware\Components\Password\Encoder\LegacyBackendMd5();
-		$hashes[] = new Shopware\Components\Password\Encoder\Md5();
-		$hashes[] = new Shopware\Components\Password\Encoder\PreHashed();
+        $hashes[] = new Shopware\Components\Password\Encoder\LegacyBackendMd5();
+        $hashes[] = new Shopware\Components\Password\Encoder\Md5();
+        $hashes[] = new Shopware\Components\Password\Encoder\PreHashed();
 
-		return $hashes;
-	}
+        return $hashes;
+    }
 }

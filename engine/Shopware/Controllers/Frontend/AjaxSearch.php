@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Frontend
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Stefan Hamann
- * @author     $Author$
  */
 
 /**
  * Search controller for suggest search
- *
- * todo@all: Documentation
  */
 class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
 {
@@ -83,7 +73,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
     public function doSearch($term)
     {
         $adapter = Enlight()->Events()->filter('Shopware_Controllers_Frontend_Search_SelectAdapter',null);
-        if (empty($adapter)){
+        if (empty($adapter)) {
             $adapter = new Shopware_Components_Search_Adapter_Default(Shopware()->Db(), Shopware()->Cache(), new Shopware_Components_Search_Result_Default(), Shopware()->Config());
         }
         $search = new Shopware_Components_Search($adapter);
@@ -130,7 +120,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
             "suggestSearch" => true,
             "currentPage" => 1,
             "restrictSearchResultsToCategory" => Shopware()->Shop()->get('parentID'),
-            "resultsPerPage" => empty(Shopware()->Config()->MaxLiveSearchResults) ? 6 : (int)Shopware()->Config()->MaxLiveSearchResults
+            "resultsPerPage" => empty(Shopware()->Config()->MaxLiveSearchResults) ? 6 : (int) Shopware()->Config()->MaxLiveSearchResults
         );
 
         $config["sPerPage"] = $config["resultsPerPage"];

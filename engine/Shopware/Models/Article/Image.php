@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,13 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Article
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
 
 namespace Shopware\Models\Article;
@@ -34,8 +27,9 @@ use Shopware\Components\Model\ModelEntity,
     Doctrine\ORM\Mapping AS ORM,
     Symfony\Component\Validator\Constraints as Assert,
     Doctrine\Common\Collections\ArrayCollection;
+use Shopware\Models\Media\Media;
+
 /**
- * todo@all: Documentation
  *
  * @ORM\Entity
  * @ORM\Table(name="s_articles_img")
@@ -133,7 +127,7 @@ class Image extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleImage", mappedBy="articleImage", orphanRemoval=true,cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleImage", mappedBy="articleImage", orphanRemoval=true,cascade={"persist"})
      * @var \Shopware\Models\Attribute\ArticleImage
      */
     protected $attribute;
@@ -159,7 +153,7 @@ class Image extends ModelEntity
      * rule sets which contains the configured configurator options.
      * Based on the image mapping, the variant images will be extended from the main image of the article.
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image\Mapping", mappedBy="image", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image\Mapping", mappedBy="image", orphanRemoval=true, cascade={"persist"})
      */
     protected $mappings;
 
@@ -182,7 +176,8 @@ class Image extends ModelEntity
     /**
      * Class constructor which initials the array collections.
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->mappings = new ArrayCollection();
         $this->children = new ArrayCollection();
     }
@@ -392,7 +387,7 @@ class Image extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Category
+     * @return Image
      */
     public function getParent()
     {
@@ -400,7 +395,7 @@ class Image extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Category $parent
+     * @param Image $parent
      */
     public function setParent($parent)
     {
@@ -424,7 +419,7 @@ class Image extends ModelEntity
     }
 
     /**
-     * @return
+     * @return Media
      */
     public function getMedia()
     {
@@ -432,7 +427,7 @@ class Image extends ModelEntity
     }
 
     /**
-     * @param  $media
+     * @param Media $media
      */
     public function setMedia($media)
     {

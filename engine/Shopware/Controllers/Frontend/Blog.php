@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -31,7 +31,7 @@
  *
  * @category  Shopware
  * @package   Shopware\Controllers\Frontend
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 {
@@ -133,8 +133,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        $categoryId = (int)$this->Request()->getQuery('sCategory');
-        $sPage = !empty($this->Request()->sPage) ? (int)$this->Request()->sPage : 1;
+        $categoryId = (int) $this->Request()->getQuery('sCategory');
+        $sPage = !empty($this->Request()->sPage) ? (int) $this->Request()->sPage : 1;
         $sFilterDate = urldecode($this->Request()->sFilterDate);
         $sFilterAuthor = urldecode($this->Request()->sFilterAuthor);
         $sFilterTags = urldecode($this->Request()->sFilterTags);
@@ -150,11 +150,11 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
         // PerPage
         if (!empty($this->Request()->sPerPage)) {
-            Shopware()->Session()->sPerPage = (int)$this->Request()->sPerPage;
+            Shopware()->Session()->sPerPage = (int) $this->Request()->sPerPage;
         }
         $sPerPage = Shopware()->Session()->sPerPage;
         if (empty($sPerPage)) {
-            $sPerPage = (int)Shopware()->Config()->get('sARTICLESPERPAGE');
+            $sPerPage = (int) Shopware()->Config()->get('sARTICLESPERPAGE');
         }
 
         $filter = $this->createFilter($sFilterDate, $sFilterAuthor, $sFilterTags);
@@ -170,7 +170,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $blogCategoryIds[] = $categoryId;
         $blogArticlesQuery = $this->getRepository()->getListQuery($blogCategoryIds, $sLimitStart, $sLimitEnd, $filter);
         $blogArticlesQuery->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($blogArticlesQuery);
+
+        $paginator = Shopware()->Models()->createPaginator($blogArticlesQuery);
 
         //returns the total count of the query
         $totalResult = $paginator->count();
@@ -300,7 +301,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
         //add sRelatedArticles
         foreach ($blogArticleData["assignedArticles"] as &$assignedArticle) {
-            $blogArticleData["sRelatedArticles"][] = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, (int)$assignedArticle['id']);
+            $blogArticleData["sRelatedArticles"][] = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, (int) $assignedArticle['id']);
         }
 
         //adding average vote data to the blog article

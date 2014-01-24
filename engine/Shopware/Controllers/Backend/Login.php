@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,19 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Login
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
 
 /**
  * Shopware Login Controller
- *
- * todo@all: Documentation
  */
 class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_ExtJs
 {
@@ -54,7 +45,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
         $username = $this->Request()->get('username');
         $password = $this->Request()->get('password');
 
-        if(empty($username) || empty($password)) {
+        if (empty($username) || empty($password)) {
             $this->View()->assign(array('success' => false));
             return;
         }
@@ -63,24 +54,24 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
         $auth = Shopware()->Auth();
         $result = $auth->login($username, $password);
         $user = $auth->getIdentity();
-        if(!empty($user->roleID)) {
+        if (!empty($user->roleID)) {
             $user->role = Shopware()->Models()->find(
                 'Shopware\Models\User\Role',
                 $user->roleID
             );
         }
-        if($user && ($locale = $this->Request()->get('locale')) !== null) {
+        if ($user && ($locale = $this->Request()->get('locale')) !== null) {
             $user->locale = Shopware()->Models()->getRepository(
                 'Shopware\Models\Shop\Locale'
             )->find($locale);
         }
-        if(!isset($user->locale) && !empty($user->localeID)) {
+        if (!isset($user->locale) && !empty($user->localeID)) {
             $user->locale = Shopware()->Models()->find(
                 'Shopware\Models\Shop\Locale',
                 $user->localeID
             );
         }
-        if($user && !isset($user->locale)) {
+        if ($user && !isset($user->locale)) {
             $user->locale = Shopware()->Models()->getRepository(
                 'Shopware\Models\Shop\Locale'
             )->find($this->getPlugin()->getDefaultLocale());
@@ -88,7 +79,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
 
         $messages = $result->getMessages();
         /** @var $lockedUntil Zend_Date */
-        if(isset($messages['lockedUntil'])) {
+        if (isset($messages['lockedUntil'])) {
             $lockedUntil = isset($messages['lockedUntil']) ? $messages['lockedUntil'] : null;
             $lockedUntil = $lockedUntil->toString(Zend_Date::ISO_8601);
         }
@@ -133,7 +124,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
         $locales = Shopware()->Db()->fetchPairs($sql);
 
         $data = array();
-        foreach($locales as $id => $locale) {
+        foreach ($locales as $id => $locale) {
             list($l, $t) = explode('_', $locale);
             $l = $current->getTranslation($l, 'language', $current);
             $t = $current->getTranslation($t, 'territory', $current);
@@ -156,10 +147,10 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
     public function getLoginStatusAction()
     {
         $auth = Shopware()->Auth();
-        if($auth->hasIdentity()) {
+        if ($auth->hasIdentity()) {
             $refresh = $auth->refresh();
         }
-        if($auth->hasIdentity()) {
+        if ($auth->hasIdentity()) {
             $messages = $refresh->getMessages();
             $this->View()->assign(array(
                 'success' => true,

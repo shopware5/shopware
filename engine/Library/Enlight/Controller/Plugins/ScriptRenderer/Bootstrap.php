@@ -195,7 +195,7 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
 
         if ($count === 0) {
             return null;
-        } elseif($count === 1) {
+        } elseif ($count === 1) {
             return $templateNames[0];
         } else {
             return 'snippet:string:{include file="' . implode("\"}\n{include file=\"", $templateNames) . '"}';

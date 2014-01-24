@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,13 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Api
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Daniel Nögel
  */
 
 class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Rest
@@ -60,28 +53,20 @@ class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Res
     }
 
     /**
-     * Get one translation
-     *
-     * GET /api/translations/{id}
-     */
-    public function getAction()
-    {
-        $id = $this->Request()->getParam('id');
-
-        $translation = $this->resource->getOne($id);
-
-        $this->View()->assign('data', $translation);
-        $this->View()->assign('success', true);
-    }
-
-    /**
      * Create new translation
      *
      * POST /api/translations
      */
     public function postAction()
     {
-        $translation = $this->resource->create($this->Request()->getPost());
+        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
+        $params = $this->Request()->getPost();
+
+        if ($useNumberAsId) {
+            $translation = $this->resource->createByNumber($params);
+        } else {
+            $translation = $this->resource->create($params);
+        }
 
         $location = $this->apiBaseUrl . 'translations/' . $translation['id'];
         $data = array(
@@ -100,10 +85,16 @@ class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Res
      */
     public function putAction()
     {
+        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
+
         $id = $this->Request()->getParam('id');
         $params = $this->Request()->getPost();
 
-        $translation = $this->resource->update($id, $params);
+        if ($useNumberAsId) {
+            $translation = $this->resource->updateByNumber($id, $params);
+        } else {
+            $translation = $this->resource->update($id, $params);
+        }
 
         $location = $this->apiBaseUrl . 'translations/' . $translation['id'];
         $data = array(
@@ -123,8 +114,14 @@ class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Res
     public function deleteAction()
     {
         $id = $this->Request()->getParam('id');
+        $data = $this->Request()->getParams();
+        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
 
-        $this->resource->delete($id);
+        if ($useNumberAsId) {
+            $this->resource->deleteByNumber($id, $data);
+        } else {
+            $this->resource->delete($id, $data);
+        }
 
         $this->View()->assign(array('success' => true));
     }

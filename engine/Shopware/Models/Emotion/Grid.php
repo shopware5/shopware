@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -33,7 +33,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @category  Shopware
  * @package   Shopware\Models\Emotion
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity
  * @ORM\Table(name="s_emotion_grid")
@@ -198,7 +198,8 @@ class Grid extends ModelEntity
     /**
      * Clone function for this model.
      */
-    public function __clone() {
+    public function __clone()
+    {
         $this->id = null;
         $this->emotions = new ArrayCollection();
     }

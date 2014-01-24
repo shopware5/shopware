@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -37,6 +37,19 @@ class Shopware_StoreApi_Core_Rest_Client extends Enlight_Class
     protected $client;
 
     /**
+     * @var Shopware_Components_StoreConfig
+     */
+    protected $config;
+
+    /**
+     * @param Shopware_Components_StoreConfig $config
+     */
+    public function setConfig(Shopware_Components_StoreConfig $config)
+    {
+        $this->config = $config;
+    }
+
+    /**
      * Starts the client by using the given rest server url
      *
      * @param $url
@@ -54,19 +67,31 @@ class Shopware_StoreApi_Core_Rest_Client extends Enlight_Class
         ));
     }
 
+    /**
+     * @param $type
+     * @param string $url
+     * @param array $json
+     * @return mixed|Shopware_StoreApi_Exception_Response
+     */
     public function call($type, $url, $json)
     {
-        $version = Shopware()->BackendSession()->storeApiConfigVersion;
-        $language = Shopware()->BackendSession()->storeApiConfigLanguage;
+        if ($this->config) {
+            $version = $this->config->getVersion();
+            $language = $this->config->getLanguage();
+        } else {
+            $version = 4000;
+            $language = 'DE';
+        }
+
         $json['config'] = array(
-            'version' => $version,
+            'version'  => $version,
             'language' => $language
         );
 
         $json = Zend_Json::encode($json);
         $response = $this->client->call($type, $url, $json)->post();
 
-        if($response->status == self::RESPONSE_FAILED) {
+        if ($response->status == self::RESPONSE_FAILED) {
             preg_match('#(.*):(\d*)#', $response->response->message, $error_match);
             return new Shopware_StoreApi_Exception_Response($error_match[1], $error_match[2]);
         } else {

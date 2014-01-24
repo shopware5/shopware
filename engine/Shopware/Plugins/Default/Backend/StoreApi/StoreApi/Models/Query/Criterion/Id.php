@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -29,8 +29,8 @@ class Shopware_StoreApi_Models_Query_Criterion_Id extends Shopware_StoreApi_Mode
      */
     public function __construct($ids)
     {
-        if(is_array($ids)) {
-            foreach($ids as $id) {
+        if (is_array($ids)) {
+            foreach ($ids as $id) {
                 $this->addId($id);
             }
         } else {
@@ -42,10 +42,10 @@ class Shopware_StoreApi_Models_Query_Criterion_Id extends Shopware_StoreApi_Mode
      * @param int $id
      * @return bool
      */
-    public function addId(int $id)
+    public function addId($id)
     {
         $id = intval($id);
-        if(!empty($id)) {
+        if (!empty($id)) {
             $this->collection[] = $id;
             return true;
         } else {
@@ -55,7 +55,7 @@ class Shopware_StoreApi_Models_Query_Criterion_Id extends Shopware_StoreApi_Mode
 
     public function getCriterionStatement()
     {
-        if(empty($this->collection)) {
+        if (empty($this->collection)) {
             return false;
         } else {
             return array(

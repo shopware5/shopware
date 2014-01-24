@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -26,13 +26,14 @@ namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Models\Customer\Customer as CustomerModel;
+use Shopware\Models\Customer\PaymentData;
 
 /**
  * Customer API Resource
  *
  * @category  Shopware
  * @package   Shopware\Components\Api\Resource
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Customer extends Resource
 {
@@ -102,9 +103,10 @@ class Customer extends Resource
 
         $builder = $this->getRepository()
                 ->createQueryBuilder('customer')
-                ->select('customer', 'attribute', 'billing', 'billingAttribute', 'shipping', 'shippingAttribute', 'debit')
+                ->select('customer', 'attribute', 'billing', 'billingAttribute', 'shipping', 'shippingAttribute', 'debit', 'paymentData')
                 ->leftJoin('customer.attribute', 'attribute')
                 ->leftJoin('customer.billing', 'billing')
+                ->leftJoin('customer.paymentData', 'paymentData', \Doctrine\ORM\Query\Expr\Join::WITH, 'paymentData.paymentMean = customer.paymentId' )
                 ->leftJoin('billing.attribute', 'billingAttribute')
                 ->leftJoin('customer.shipping', 'shipping')
                 ->leftJoin('shipping.attribute', 'shippingAttribute')
@@ -144,7 +146,7 @@ class Customer extends Resource
 
         $query->setHydrationMode($this->getResultMode());
 
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getManager()->createPaginator($query);
 
         //returns the total count of the query
         $totalResult = $paginator->count();
@@ -175,6 +177,8 @@ class Customer extends Resource
         }
 
         $customer = new CustomerModel();
+        $params = $this->prepareAssociatedData($params, $customer);
+
         $customer->fromArray($params);
 
         $violations = $this->getManager()->validate($customer);
@@ -225,14 +229,16 @@ class Customer extends Resource
         $customer = $this->getRepository()->find($id);
 
         if (!$customer) {
-            throw new ApiException\NotFoundException("Customer by id $id not found");
+            throw new ApiException\NotFoundException("Customer with id $id not found");
         }
 
         $params = $this->prepareCustomerData($params, $customer);
+        $params = $this->prepareAssociatedData($params, $customer);
+
         $customer->fromArray($params);
 
         if (!$this->isEmailUnique($customer->getEmail(), $customer)) {
-            throw new ApiException\CustomValidationException(sprintf("Emailaddress %s for shopId %s is not unique", $customer->getEmail(), $customer->getShop()->getId()));
+            throw new ApiException\CustomValidationException(sprintf("Email address %s for shopId %s is not unique", $customer->getEmail(), $customer->getShop()->getId()));
         }
 
         $violations = $this->getManager()->validate($customer);
@@ -334,6 +340,99 @@ class Customer extends Resource
         }
 
         return $params;
+    }
+
+    /**
+     * @param array $data
+     * @param \Shopware\Models\Customer\Customer $customer
+     * @return array
+     */
+    protected function prepareAssociatedData($data, CustomerModel $customer)
+    {
+        $data = $this->prepareCustomerPaymentData($data, $customer);
+
+        return $data;
+    }
+
+    /**
+     * @param array $data
+     * @param \Shopware\Models\Customer\Customer $customer
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @return array
+     */
+    protected function prepareCustomerPaymentData($data, CustomerModel $customer)
+    {
+        if (!isset($data['paymentData']) && !isset($data['debit'])) {
+            return $data;
+        }
+
+        if (isset($data['debit']) && !isset($data['paymentData'])) {
+            $debitPaymentMean = $this->getManager()->getRepository('Shopware\Models\Payment\Payment')->findOneBy(array('name' => 'debit'));
+
+            if ($debitPaymentMean) {
+                $data['paymentData'] = array(
+                    array(
+                        "accountNumber" => $data['debit']["account"],
+                        "bankCode" => $data['debit']["bankCode"],
+                        "bankName" => $data['debit']["bankName"],
+                        "accountHolder" => $data['debit']["accountHolder"],
+                        "paymentMeanId" => $debitPaymentMean->getId()
+                    )
+                );
+            }
+        }
+
+        $paymentDataInstances = $this->checkDataReplacement(
+            $customer->getPaymentData(),
+            $data,
+            'paymentData',
+            false
+        );
+
+        foreach ($data['paymentData'] as &$paymentDataData) {
+            try {
+                $paymentData = $this->getOneToManySubElement(
+                    $paymentDataInstances,
+                    $paymentDataData,
+                    '\Shopware\Models\Customer\PaymentData',
+                    array('id', 'paymentMeanId')
+                );
+            } catch (ApiException\CustomValidationException $cve) {
+                $paymentData = new PaymentData();
+                $this->getManager()->persist($paymentData);
+                $paymentDataInstances->add($paymentData);
+            }
+
+            if (isset($paymentDataData['paymentMeanId'])) {
+                $paymentMean = $this->getManager()->getRepository('Shopware\Models\Payment\Payment')->find($paymentDataData['paymentMeanId']);
+                if (is_null($paymentMean)) {
+                    throw new ApiException\CustomValidationException(
+                        sprintf("%s by %s %s not found", 'Shopware\Models\Payment\Payment', 'id', $paymentDataData['paymentMeanId'])
+                    );
+                }
+                $paymentData->setPaymentMean($paymentMean);
+                unset($paymentDataData['paymentMeanId']);
+            }
+
+            if ($paymentData->getCustomer() == null) {
+                $paymentData->setCustomer($customer);
+            }
+
+            if ($paymentData->getPaymentMean() && $paymentData->getPaymentMean()->getName() == 'debit') {
+                $data['debit'] = array(
+                    "account"       => $paymentDataData["accountNumber"],
+                    "bankCode"      => $paymentDataData["bankCode"],
+                    "bankName"      => $paymentDataData["bankName"],
+                    "accountHolder" => $paymentDataData["accountHolder"],
+                );
+            }
+
+            $paymentData->fromArray($paymentDataData);
+        }
+
+        $data['paymentData'] = $paymentDataInstances;
+
+        return $data;
     }
 
     /**

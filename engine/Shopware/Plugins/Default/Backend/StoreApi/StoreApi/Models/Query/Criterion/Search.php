@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -29,8 +29,8 @@ class Shopware_StoreApi_Models_Query_Criterion_Search extends Shopware_StoreApi_
      */
     public function __construct($searchStrings)
     {
-        if(is_array($searchStrings)) {
-            foreach($searchStrings as $searchString) {
+        if (is_array($searchStrings)) {
+            foreach ($searchStrings as $searchString) {
                 $this->addSearch($searchString);
             }
         } else {
@@ -44,7 +44,7 @@ class Shopware_StoreApi_Models_Query_Criterion_Search extends Shopware_StoreApi_
      */
     public function addSearch(string $searchString)
     {
-        if(!empty($searchString)) {
+        if (!empty($searchString)) {
             $this->collection[] = $searchString;
             return true;
         } else {
@@ -54,7 +54,7 @@ class Shopware_StoreApi_Models_Query_Criterion_Search extends Shopware_StoreApi_
 
     public function getCriterionStatement()
     {
-        if(empty($this->collection)) {
+        if (empty($this->collection)) {
             return false;
         } else {
             return array(

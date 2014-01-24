@@ -14,9 +14,9 @@
  *
  * @category   Zend
  * @package    Zend_Amf
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Server.php 24205 2011-07-06 13:51:19Z matthew $
+ * @version    $Id$
  */
 
 /** @see Zend_Server_Interface */
@@ -52,7 +52,7 @@ require_once 'Zend/Auth.php';
  * @todo       Make the reflection methods cache and autoload.
  * @package    Zend_Amf
  * @subpackage Server
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Amf_Server implements Zend_Server_Interface
@@ -323,6 +323,7 @@ class Zend_Amf_Server implements Zend_Server_Interface
                     throw new Zend_Amf_Server_Exception('Class "' . $className . '" does not exist: '.$e->getMessage(), 0, $e);
                 }
                 // Add the new loaded class to the server.
+                    require_once 'Zend/Amf/Server/Exception.php';
                 $this->setClass($className, $source);
             }
 
@@ -339,6 +340,8 @@ class Zend_Amf_Server implements Zend_Server_Interface
         if (0 < count($argv)) {
             $params = array_merge($params, $argv);
         }
+
+        $params = $this->_castParameters($info, $params);
 
         if ($info instanceof Zend_Server_Reflection_Function) {
             $func = $info->getName();
@@ -960,5 +963,86 @@ class Zend_Amf_Server implements Zend_Server_Interface
     public function listMethods()
     {
         return array_keys($this->_table);
+    }
+
+    /**
+     * Cast parameters
+     *
+     * Takes the provided parameters from the request, and attempts to cast them
+     * to objects, if the prototype defines any as explicit object types
+     * 
+     * @param  Reflection $reflectionMethod 
+     * @param  array $params 
+     * @return array
+     */
+    protected function _castParameters($reflectionMethod, array $params)
+    {
+        $prototypes = $reflectionMethod->getPrototypes();
+        $nonObjectTypes = array(
+            'null',
+            'mixed',
+            'void',
+            'unknown',
+            'bool',
+            'boolean',
+            'number',
+            'int',
+            'integer',
+            'double',
+            'float',
+            'string',
+            'array',
+            'object',
+            'stdclass',
+        );
+        $types      = array();
+        foreach ($prototypes as $prototype) {
+            foreach ($prototype->getParameters() as $parameter) {
+                $type = $parameter->getType();
+                if (in_array(strtolower($type), $nonObjectTypes)) {
+                    continue;
+                }
+                $position = $parameter->getPosition();
+                $types[$position] = $type;
+            }
+        }
+
+        if (empty($types)) {
+            return $params;
+        }
+
+        foreach ($params as $position => $value) {
+            if (!isset($types[$position])) {
+                // No specific type to cast to? done
+                continue;
+            }
+
+            $type = $types[$position];
+
+            if (!class_exists($type)) {
+                // Not a class, apparently. done
+                continue;
+            }
+
+            if ($value instanceof $type) {
+                // Already of the right type? done
+                continue;
+            }
+
+            if (!is_array($value) && !is_object($value)) {
+                // Can't cast scalars to objects easily; done
+                continue;
+            }
+
+            // Create instance, and loop through value to set
+            $object = new $type;
+            foreach ($value as $property => $defined) {
+                $object->{$property} = $defined;
+            }
+
+            $params[$position] = $object;
+        }
+
+        return $params;
     }
 }

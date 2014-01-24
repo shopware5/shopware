@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <shopware>
 <files>
+    <file><name>logs/</name></file>
     <file><name>config.php</name></file>
     <file><name>cache/html/</name></file>
     <file><name>cache/general/</name></file>
@@ -9,10 +10,10 @@
     <file><name>cache/doctrine/filecache/</name></file>
     <file><name>cache/doctrine/proxies/</name></file>
     <file><name>cache/doctrine/attributes/</name></file>
+    <file><name>cache/mpdf/tmp/</name></file>
+    <file><name>cache/mpdf/ttfontdata/</name></file>
 	<file><name>files/documents/</name></file>
     <file><name>files/downloads/</name></file>
-	<file><name>engine/Library/Mpdf/tmp/</name></file>
-	<file><name>engine/Library/Mpdf/ttfontdata/</name></file>
 	<file><name>engine/Shopware/Plugins/Community/</name></file>
     <file><name>engine/Shopware/Plugins/Community/Frontend</name></file>
     <file><name>engine/Shopware/Plugins/Community/Core</name></file>

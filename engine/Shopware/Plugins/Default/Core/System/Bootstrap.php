@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -27,7 +27,7 @@
  *
  * @category  Shopware
  * @package   Shopware\Plugins\Core
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -63,10 +63,7 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
     {
         $config = Shopware()->Config();
 
-        require_once(Shopware()->OldPath() . 'engine/core/class/sSystem.php');
-
         $system = new sSystem();
-
         Shopware()->Bootstrap()->registerResource('System', $system);
 
         $system->sMODULES = Shopware()->Modules();
@@ -125,10 +122,6 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
             }
         }
 
-        //$system->sCurrencyData = self::getCurrencyData();
-        //$system->sCurrencyData[$system->sCurrency]['flag'] = true;
-        //$system->sCurrency = $system->sCurrencyData[$system->sCurrency];
-
         if ($request !== null) {
             $system->sPathBase = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
         } else {
@@ -142,8 +135,6 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
         $system->sPathArticleFiles = $system->sPathBase . $config->articleFiles;
         $system->sBasefile = $config->baseFile;
 
-        //$config['sPREMIUM'] = $system->sLicenseData['sPREMIUM'];
-        //$config['sCurrencies'] = $system->sCurrencyData;
         $config['sCURRENCY'] = $system->sCurrency['currency'];
         $config['sCURRENCYHTML'] = $system->sCurrency['symbol'];
 

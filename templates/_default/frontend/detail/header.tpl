@@ -52,6 +52,9 @@
 </script>
 {/block}
 
+{* Meta title *}
+{block name="frontend_index_header_title"}{if $sArticle.metaTitle}{$sArticle.metaTitle} | {config name=sShopname}{else}{$smarty.block.parent}{/if}{/block}
+
 {* Keywords *}
 {block name="frontend_index_header_meta_keywords"}{if $sArticle.keywords}{$sArticle.keywords}{elseif $sArticle.sDescriptionKeywords}{$sArticle.sDescriptionKeywords}{/if}{/block}
 
@@ -88,7 +91,7 @@
                 'articleId': ~~(1 * '{$sArticle.articleID}'),
                 'linkDetailsRewrited': '{$sArticle.linkDetailsRewrited}',
                 'articleName': '{$sArticle.articleName}',
-                'thumbnail': getThumbnailSize('{$sLastArticles.ThumbnailSize}')
+                'thumbnail': getThumbnailSize('{config name=thumb}')
                 {rdelim};
 
             jQuery(function($) {

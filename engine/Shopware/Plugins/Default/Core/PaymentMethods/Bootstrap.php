@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,7 +25,7 @@
 /**
  * @category  Shopware
  * @package   Shopware\Plugins\CorePaymentMethods
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -34,7 +34,25 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
      */
     public function getVersion()
     {
-        return '1.0.0';
+        return '1.0.1';
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabel()
+    {
+        return 'Payment Methods';
+    }
+
+    public function getInfo()
+    {
+        return array(
+            'version' => $this->getVersion(),
+            'label' => $this->getLabel(),
+            'name' => $this->getLabel(),
+            'description' => 'Shopware Payment Methods handling. This plugin is required to handle payment methods, and should not be deactivated.'
+        );
     }
 
     /**
@@ -44,7 +62,7 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
     {
         return array(
             'install' => false,
-            'enable' => false,
+            'enable' => true,
             'update' => true
         );
     }
@@ -57,8 +75,17 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
     public function install()
     {
         $this->subscribeEvents();
-        $this->addSnippets();
 
+        return true;
+    }
+
+    /**
+     * Standard plugin update method to register all required components.
+     *
+     * @return bool success
+     */
+    public function update($version)
+    {
         return true;
     }
 
@@ -80,6 +107,11 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
         $this->subscribeEvent(
             'Enlight_Controller_Action_PostDispatchSecure_Backend_Order',
             'onBackendOrderPostDispatch'
+        );
+
+        $this->subscribeEvent(
+            'Enlight_Controller_Action_PostDispatchSecure_Backend_Customer',
+            'onBackendCustomerPostDispatch'
         );
     }
 
@@ -112,43 +144,10 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
      */
     public function addPaths(Enlight_Event_EventArgs $arguments)
     {
-        $request = $arguments->getSubject()->Request();
-
         // Add templates folder
         $this->Application()->Template()->addTemplateDir(
             $this->Path() . 'Views/', 'payment', Enlight_Template_Manager::POSITION_APPEND
         );
-
-        if ($request->getModuleName() === 'backend') {
-            // Add snippet directory
-            $this->Application()->Snippets()->addConfigDir(
-                $this->Path() . 'Snippets/'
-            );
-        }
-    }
-
-    private function addSnippets()
-    {
-        $sql = "
-            INSERT IGNORE INTO `s_core_snippets` (`id`, `namespace`, `shopID`, `localeID`, `name`, `value`, `created`, `updated`)
-            SELECT NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/debit', `shopID`, `localeID`, `name`, `value`, '2013-11-01 00:00:00', '2013-11-01 00:00:00'
-            FROM `s_core_snippets`
-            WHERE `s_core_snippets`.`namespace` LIKE 'frontend/plugins/payment/debit';
-
-            INSERT IGNORE INTO `s_core_snippets` (`id`, `namespace`, `shopID`, `localeID`, `name`, `value`, `created`, `updated`) VALUES
-            (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 1, 'PaymentDebitLabelIban', 'IBAN', '2013-11-01 00:00:00', '2013-11-01 00:00:00'),
-            (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 2, 'PaymentDebitLabelIban', 'IBAN', '2013-11-01 00:00:00', '2013-11-01 00:00:00'),
-            (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 1, 'PaymentDebitLabelBic', 'BIC', '2013-11-01 00:00:00', '2013-11-01 00:00:00'),
-            (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 2, 'PaymentDebitLabelBic', 'BIC', '2013-11-01 00:00:00', '2013-11-01 00:00:00'),
-            (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 1, 'ErrorIBAN', 'Ungültige IBAN', '2013-11-01 00:00:00', '2013-11-01 00:00:00'),
-            (NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', 1, 2, 'ErrorIBAN', 'Invalid IBAN', '2013-11-01 00:00:00', '2013-11-01 00:00:00');
-
-            INSERT IGNORE INTO `s_core_snippets` (`id`, `namespace`, `shopID`, `localeID`, `name`, `value`, `created`, `updated`)
-            SELECT NULL, 'engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa', `shopID`, `localeID`, `name`, `value`, '2013-11-01 00:00:00', '2013-11-01 00:00:00'
-            FROM `s_core_snippets`
-            WHERE `s_core_snippets`.`name` IN ('PaymentDebitLabelBankname', 'PaymentDebitLabelName', 'PaymentDebitInfoFields') AND `s_core_snippets`.`namespace` LIKE 'frontend/plugins/payment/debit';
-        ";
-        Shopware()->Db()->query($sql);
     }
 
     /**
@@ -168,6 +167,27 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
             );
             $view->extendsTemplate(
                 'backend/order/payment_methods/view/detail/payment_methods.js'
+            );
+        }
+    }
+
+    /**
+     * Called when the BackendCustomerPostDispatch Event is triggered
+     *
+     * @param Enlight_Event_EventArgs $args
+     */
+    public function onBackendCustomerPostDispatch(Enlight_Event_EventArgs $args)
+    {
+        /**@var $view Enlight_View_Default */
+        $view = $args->getSubject()->View();
+
+        //if the controller action name equals "load" we have to load all application components
+        if ($args->getRequest()->getActionName() === 'load') {
+            $view->extendsTemplate(
+                'backend/customer/payment_methods/controller/detail.js'
+            );
+            $view->extendsTemplate(
+                'backend/customer/payment_methods/view/detail/payment_methods.js'
             );
         }
     }

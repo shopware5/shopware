@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,6 +24,7 @@
 
 namespace ShopwarePlugin\PaymentMethods\Components;
 
+use Doctrine\ORM\AbstractQuery;
 use Shopware\Models\Payment\PaymentInstance;
 
 /**
@@ -37,7 +38,7 @@ class GenericPaymentMethod extends BasePaymentMethod
     /**
      * @inheritdoc
      */
-    public function validate()
+    public function validate(\Enlight_Controller_Request_Request $request)
     {
         return array();
     }
@@ -45,7 +46,7 @@ class GenericPaymentMethod extends BasePaymentMethod
     /**
      * @inheritdoc
      */
-    public function savePaymentData()
+    public function savePaymentData($userId, \Enlight_Controller_Request_Request $request)
     {
         //nothing to do, no return expected
         return;
@@ -54,7 +55,7 @@ class GenericPaymentMethod extends BasePaymentMethod
     /**
      * @inheritdoc
      */
-    public function getCurrentPaymentData()
+    public function getCurrentPaymentDataAsArray($userId)
     {
         //nothing to do, array expected
         return array();
@@ -65,26 +66,33 @@ class GenericPaymentMethod extends BasePaymentMethod
      */
     public function createPaymentInstance($orderId, $userId, $paymentId)
     {
-        $order = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')->find($orderId);
-        $user = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($userId);
-        $paymentMean = Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment')->find($paymentId);
-        $addressData = $user->getBilling();
+        $orderAmount = Shopware()->Models()->createQueryBuilder()
+            ->select('orders.invoiceAmount')
+            ->from('Shopware\Models\Order\Order', 'orders')
+            ->where('orders.id = ?1')
+            ->setParameter(1, $orderId)
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        $paymentInstance = new PaymentInstance();
-        $paymentInstance->setOrder($order);
-        $paymentInstance->setCustomer($user);
-        $paymentInstance->setPaymentMean($paymentMean);
+        $addressData = Shopware()->Models()->getRepository('Shopware\Models\Customer\Billing')
+            ->getUserBillingQuery($userId)->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
-        $paymentInstance->setFirstName($addressData->getFirstName());
-        $paymentInstance->setLastName($addressData->getLastName());
-        $paymentInstance->setAddress($addressData->getStreet() . ' ' . $addressData->getStreetNumber());
-        $paymentInstance->setZipCode($addressData->getZipCode());
-        $paymentInstance->setCity($addressData->getCity());
-        $paymentInstance->setAmount($order->getInvoiceAmount());
+        $date = new \DateTime();
+        $data = array(
+            'payment_mean_id' => $paymentId,
+            'order_id' => $orderId,
+            'user_id' => $userId,
+            'firstname' => $addressData['firstName'],
+            'lastname' => $addressData['lastName'],
+            'address' => $addressData['street'] . ' ' . $addressData['streetNumber'],
+            'zipcode' => $addressData['zipCode'],
+            'city' => $addressData['city'],
+            'amount' => $orderAmount,
+            'created_at' => $date->format('Y-m-d')
+        );
 
-        Shopware()->Models()->persist($paymentInstance);
-        Shopware()->Models()->flush();
+        Shopware()->Db()->insert("s_core_payment_instance", $data);
 
-        return $paymentInstance;
+        return true;
     }
 }

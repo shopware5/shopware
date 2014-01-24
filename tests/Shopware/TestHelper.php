@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,25 +22,15 @@
  * our trademarks remain entirely with us.
  */
 
-$docPath = realpath(dirname(__FILE__) . '/../../');
+require __DIR__ . '/../../autoload.php';
 
-set_include_path(
-    get_include_path() . PATH_SEPARATOR .
-    $docPath . '/engine/Library/' . PATH_SEPARATOR .   // Library
-    $docPath . '/engine/' . PATH_SEPARATOR .           // Shopware
-    $docPath . '/templates/' . PATH_SEPARATOR .        // Templates
-    $docPath
-);
-
-include_once 'Enlight/Application.php';
-include_once 'Shopware/Application.php';
 
 /**
  * Shopware Test Helper
  *
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 class TestHelper extends Shopware
 {
@@ -56,30 +46,11 @@ class TestHelper extends Shopware
      *
      * Loads all needed resources for the test.
      */
-    public function __construct()
+    public function __construct($env, $config, $container)
     {
         $this->testPath = __DIR__ . '/';
-        $this->oldPath = realpath(__DIR__ . '/../../') . '/';
 
-        parent::__construct('testing', $this->TestPath() . 'Configs/Default.php');
-
-        $this->Bootstrap()->loadResource('Zend');
-        $this->Bootstrap()->loadResource('Cache');
-        $this->Bootstrap()->loadResource('Db');
-        $this->Bootstrap()->loadResource('Table');
-        $this->Bootstrap()->loadResource('Plugins');
-
-        // generate attribute models
-        $this->Bootstrap()->Models()->generateAttributeModels();
-
-        $this->Bootstrap()->Plugins()->Core()->ErrorHandler()->registerErrorHandler(E_ALL | E_STRICT);
-
-        /** @var $repository \Shopware\Models\Shop\Repository */
-        $repository = $this->Bootstrap()->Models()->getRepository('Shopware\Models\Shop\Shop');
-        $shop = $repository->getActiveDefault();
-        $shop->registerResources($this->Bootstrap());
-
-        $_SERVER['HTTP_HOST'] = $shop->getHost();
+        parent::__construct($env, $config, $container);
     }
 
     /**
@@ -94,24 +65,46 @@ class TestHelper extends Shopware
             $path = str_replace('_', '/', $path);
             return $this->testPath . $path . '/';
         }
-        return $this->testPath;
-    }
 
-    /**
-     * Returns the singleton instance of the tests helper.
-     *
-     * @return TestHelper
-     */
-    public static function Instance()
-    {
-        if (!isset(self::$instance)) {
-            self::$instance = new self();
-        }
-        return self::$instance;
+        return $this->testPath;
     }
 }
 
-/**
- * Start test application
- */
-TestHelper::Instance();
+class TestKernel extends \Shopware\Kernel
+{
+    protected function initializeShopware()
+    {
+        $this->shopware = new \TestHelper(
+            $this->environment,
+            $this->getConfig(),
+            $this->container
+        );
+    }
+
+    protected function getConfigPath()
+    {
+        return __DIR__ . '/Configs/Default.php';
+    }
+
+    /**
+     * Static method to start boot kernel without leaving local scope in test helper
+     */
+    public static function start()
+    {
+        $kernel = new self('testing', true);
+        $kernel->boot();
+
+        $shopwareBootstrap = $kernel->getShopware()->Bootstrap();
+        $shopwareBootstrap->Models()->generateAttributeModels();
+        $shopwareBootstrap->Plugins()->Core()->ErrorHandler()->registerErrorHandler(E_ALL | E_STRICT);
+
+        /** @var $repository \Shopware\Models\Shop\Repository */
+        $repository = $shopwareBootstrap->Models()->getRepository('Shopware\Models\Shop\Shop');
+        $shop = $repository->getActiveDefault();
+        $shop->registerResources($shopwareBootstrap);
+
+        $_SERVER['HTTP_HOST'] = $shop->getHost();
+    }
+}
+
+TestKernel::start();

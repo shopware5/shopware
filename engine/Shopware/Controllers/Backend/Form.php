@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,21 +20,12 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Form
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
 
 use Shopware\Models\Form\Form,
     Shopware\Models\Form\Field;
 /**
  * Shopware Backend Controller for the form module
- *
- * todo@all: Documentation
  */
 class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_ExtJs
 {
@@ -75,7 +66,8 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
      * Internal helper function to get access to the entity manager.
      * @return null
      */
-    private function getManager() {
+    private function getManager()
+    {
         if ($this->manager === null) {
             $this->manager= Shopware()->Models();
         }
@@ -98,8 +90,8 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     /**
      * Returns available forms
      */
-	public function getFormsAction()
-	{
+    public function getFormsAction()
+    {
         // if id is provided return a single form instead of a collection
         if ($id = $this->Request()->getParam('id')) {
             return $this->getSingleForm($id);
@@ -118,7 +110,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         $forms = $query->getArrayResult();
 
         $this->View()->assign(array('success' => true, 'data' => $forms, 'total' => $totalResult));
-	}
+    }
 
     /**
      * Gets a single form incl. it's fields

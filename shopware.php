@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright © 2013 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,24 +21,21 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * @category   Shopware
- * @package    Shopware
- * @subpackage Shopware
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
+ * @category  Shopware
+ * @package   Shopware
+ * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 
 // Check the minimum required php version
 if (version_compare(PHP_VERSION, '5.3.2', '<')) {
     header('Content-type: text/html; charset=utf-8', true, 503);
 
+    echo '<h2>Error</h2>';
+    echo 'Your server is running PHP version ' . PHP_VERSION . ' but Shopware 4 requires at least PHP 5.3.2';
+
     echo '<h2>Fehler</h2>';
     echo 'Auf Ihrem Server läuft PHP version ' . PHP_VERSION . ', Shopware 4 benötigt mindestens PHP 5.3.2';
 
-    echo '<h2>Error</h2>';
-    echo 'Your server is running PHP version ' . PHP_VERSION . ' but Shopware 4 requires at least PHP 5.3.2';
     return;
 }
 
@@ -46,11 +43,12 @@ if (version_compare(PHP_VERSION, '5.3.2', '<')) {
 if (file_exists('config.php') && strpos(file_get_contents('config.php'), '%db.database%') !== false) {
     header('Content-type: text/html; charset=utf-8', true, 503);
 
-    echo '<h2>Fehler</h2>';
-    echo 'Shopware 4 muss zunächst konfiguriert werden. Bitte führen Sie den Installer unter /install/ aus!';
-
     echo '<h2>Error</h2>';
-    echo 'Shopware 4 must be configured first. Please run the installer under /install/!';
+    echo 'Shopware 4 must be configured installed before use. Please run the <a href="install/">installer</a>.';
+
+    echo '<h2>Fehler</h2>';
+    echo 'Shopware 4 muss zunächst konfiguriert werden. Bitte führen Sie den <a href="install/">Installer</a>.';
+
     return;
 }
 
@@ -63,21 +61,32 @@ if (is_dir('update')) {
     return;
 }
 
-set_include_path(
-    '.' . PATH_SEPARATOR .
-    dirname(__FILE__) . '/engine/Library/' . PATH_SEPARATOR .   // Library
-    dirname(__FILE__) . '/engine/' . PATH_SEPARATOR .           // Shopware
-    dirname(__FILE__) . '/templates/'                           // Templates
-);
+// check for composer autoloader
+if (!file_exists('vendor/autoload.php')) {
+    header('Content-type: text/html; charset=utf-8', true, 503);
 
-include_once 'Enlight/Application.php';
-include_once 'Shopware/Application.php';
+    echo '<h2>Error</h2>';
+    echo 'Please execute "composer install" from the command line to install the required dependencies for Shopware 4';
 
-$environment = getenv('ENV') ? getenv("ENV") : getenv("REDIRECT_ENV");
-if (empty($environment)){
-    $environment = 'production';
+    echo '<h2>Fehler</h2>';
+    echo 'Bitte führen Sie zuerst "composer install" aus.';
+
+    return;
 }
 
-$s = new Shopware($environment);
+require __DIR__ . '/autoload.php';
 
-return $s->run();
+use Shopware\Kernel;
+use Shopware\Components\HttpCache\AppCache;
+use Symfony\Component\HttpFoundation\Request;
+
+$environment = getenv('ENV') ?: getenv('REDIRECT_ENV') ?: 'production';
+
+$kernel = new Kernel($environment, $environment !== 'production');
+if ($kernel->isHttpCacheEnabled()) {
+    $kernel = new AppCache($kernel, $kernel->getHttpCacheConfig());
+}
+
+$request = Request::createFromGlobals();
+$kernel->handle($request)
+       ->send();

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,536 +21,886 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Models\Analytics\Repository;
 
 /**
  * Statistics controller
  *
  * @category  Shopware
  * @package   Shopware\Controllers\Backend
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backend_ExtJs
 {
 
-	protected function initAcl()
-	{
-		// read
-		$this->addAclPermission('shopList', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('sourceList', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('orderAnalytics', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('visits', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('orderDetailAnalytics', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('searchAnalytics', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('conversionRate', 'read', 'Insufficient Permissions');
-	}
+    protected $dateFields = array(
+        'date', 'displayDate', 'datum', 'firstLogin', 'birthday', 'orderTime'
+    );
+
+    protected $shopFields = array(
+        'amount', 'count', 'totalImpressions', 'totalVisits', 'orderCount', 'visitors', 
+    );
+
+    /**
+     * Entity Manager
+     * @var null
+     */
+    protected $manager = null;
+
+    /**
+     * @var \Shopware\Models\Shop\Repository
+     */
+    protected $shopRepository;
+
+    /**
+     * @var \Shopware\Models\Tracking\Repository
+     */
+    protected $articleImpressionRepository;
+
+    /**
+     * @var Repository
+     */
+    protected $repository = null;
+
+    protected $format = null;
+
+    public function preDispatch()
+    {
+        if ($this->Request()->has('format')) {
+            $this->format = $this->Request()->getParam('format', null);
+
+            //remove limit parameter to export all data.
+            $this->Request()->setParam('limit', null);
+        }
+        parent::preDispatch();
+    }
+
+    protected function initAcl()
+    {
+        // read
+        $this->addAclPermission('shopList', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('sourceList', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('orderAnalytics', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('visits', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('orderDetailAnalytics', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('searchAnalytics', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('conversionRate', 'read', 'Insufficient Permissions');
+    }
+
+    /**
+     * Internal helper function to get access to the entity manager.
+     *
+     * @return null|\Shopware\Components\Model\ModelManager
+     */
+    private function getManager()
+    {
+        if ($this->manager === null) {
+            $this->manager = Shopware()->Models();
+        }
+        return $this->manager;
+    }
+
+    /**
+     * Helper Method to get access to the shop repository.
+     *
+     * @return Shopware\Models\Shop\Repository
+     */
+    public function getShopRepository()
+    {
+        if ($this->shopRepository === null) {
+            $this->shopRepository = $this->getManager()->getRepository('Shopware\Models\Shop\Shop');
+        }
+        return $this->shopRepository;
+    }
+
+    /**
+     * @return Repository
+     */
+    public function getRepository()
+    {
+        if (!$this->repository) {
+            $this->repository = new Repository(
+                $this->get('models')->getConnection(),
+                $this->get('events')
+            );
+        }
+
+        return $this->repository;
+    }
+
+    /**
+     * Returns the query builder to fetch all available stores
+     *
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    private function getShopsQueryBuilder()
+    {
+        $builder = $this->getManager()->getDBALQueryBuilder();
+        $builder->select(array(
+            's.id',
+            's.name',
+            'c.currency',
+            'c.name AS currencyName',
+            'c.templateChar AS currencyChar'
+        ))
+            ->from('s_core_shops', 's')
+            ->leftJoin('s', 's_core_currencies', 'c', 's.currency_id = c.id')
+            ->orderBy('s.default', 'desc')
+            ->orderBy('s.name');
+
+        return $builder;
+    }
+
+    private function formatOrderAnalyticsData($data)
+    {
+        $shopIds = $this->getSelectedShopIds();
+
+        foreach ($data as &$row) {
+            $row['count'] = (int) $row['count'];
+            $row['amount'] = (float) $row['amount'];
+
+            if (!empty($row['date'])) {
+                $row['date'] = strtotime($row['date']);
+            }
+
+            if (!empty($shopIds)) {
+                foreach ($shopIds as $shopId) {
+                    $row['amount' . $shopId] = (float) $row['amount' . $shopId];
+                }
+            }
+        }
+
+        return $data;
+    }
 
     /**
      * Get a list of installed shops
      */
     public function shopListAction()
     {
-        $shops = $this->getShops();
-        $this->View()->assign(array('data' => $shops, 'success' => true));
-    }
-
-
-    /**
-     * Get a tree-column-model compatible list
-     * of installed shops
-     */
-    public function sourceListAction()
-    {
-        $sql = '
-           SELECT
-              s.id , s.name as text,
-              c.currency AS currency,
-              c.name AS currencyName,
-              c.templatechar AS currencyChar
-            FROM s_core_shops s, s_core_currencies c
-            WHERE s.currency_id = c.id
-            AND s.main_id IS NULL
-            ORDER BY s.default DESC, s.name
-        ';
-        $shops = Shopware()->Db()->fetchAll($sql);
-        foreach ($shops as $index => $shop) {
-            $shops[$index]['leaf'] = true;
-            $shops[$index]['checked'] = false;
-        }
+        $builder = $this->getShopsQueryBuilder();
+        $statement = $builder->execute();
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         $this->View()->assign(array(
-            'text' => '.',
-            'children' => array(
-                array('text' => 'Shops', 'expanded' => true, 'children' => $shops),
-            ),
+            'data' => $data,
             'success' => true
         ));
     }
 
-
-    /**
-     * Get sales data for statistics
-     * Kind of statistic is defined via
-     * $this->Request()->getParam('type')
-     *  Possible values:
-     *  dispatch,payment,month,weekday,week,daytime,country
-     * Returns json formatted result
-     */
-    public function orderAnalyticsAction()
+    public function getOverviewAction()
     {
-        $shops = $this->getShops();
-        $fromDate = $this->getFromDate();
-        $toDate = $this->getToDate();
+        $result = $this->getRepository()->getShopStatistic(
+            $this->Request()->getParam('start', 0),
+            $this->Request()->getParam('limit', null),
+            $this->getFromDate(),
+            $this->getToDate()
+        );
 
-        if (!$this->Request()->getParam('tax')) {
-            $sqlAmount = 'invoice_amount-invoice_shipping';
-        } else {
-            $sqlAmount = 'invoice_amount_net-invoice_shipping_net';
-        }
-        $sqlAmount = '(' . $sqlAmount . ')/currencyFactor';
-
-        $sqlWhere = '';
-        $sqlSelect = '';
-        $sqlSelectName = 'name';
-        $sqlDateSub = '14 DAY';
-        $sqlDateTo = "NOW()";
-        $sqlSelectField = 'ordertime';
-
-        switch ($this->Request()->getParam('type')) {
-            case 'dispatch':
-                $sqlSelectField = 'd.name';
-                $sqlGroupBy = 'o.dispatchID';
-                break;
-            case 'payment':
-                $sqlSelectField = 'p.description';
-                $sqlGroupBy = 'o.paymentID';
-                break;
-            case 'month':
-                $sqlSelectField = "DATE_FORMAT(ordertime, '%Y-%m-01')";
-                $sqlSelectName = 'date';
-                $sqlDateFrom = "DATE_SUB(DATE_FORMAT($sqlDateTo, '%Y-%m-01'), INTERVAL 12 MONTH)";
-                break;
-            case 'weekday':
-                $sqlSelectField = "Date_Format(ordertime, '%Y-%m-%d')";
-                $sqlGroupBy = 'WEEKDAY(ordertime)';
-                $sqlSelectName = 'date';
-                break;
-            case 'week':
-                $sqlSelectField = 'DATE_SUB(DATE(ordertime), INTERVAL WEEKDAY(ordertime)-3 DAY)';
-                $sqlSelectName = 'date';
-                $sqlDateSub = '7 * 10 DAY';
-                break;
-            case 'daytime':
-                $sqlSelectField = 'DATE_FORMAT(ordertime, \'1970-01-01 %H:00:00\')';
-                $sqlSelectName = 'date';
-                break;
-            case 'country':
-                $sqlSelectField = 'c.countryname';
-                $sqlGroupBy = 'ob.countryID';
-                break;
-            default:
-                break;
-        }
-
-        if (!isset($sqlDateFrom)) {
-            $sqlDateFrom = "DATE_SUB($sqlDateTo, INTERVAL $sqlDateSub)";
-        }
-        if (!isset($sqlGroupBy)) {
-            $sqlGroupBy = $sqlSelectField;
-        }
-        if (!empty($shops)) {
-            //$sqlWhere .= 'AND o.subshopID IN (' . Shopware()->Db()->quote($shops) .') ';
-
-            foreach ($shops as $shop) {
-                $shop = (int)$shop["id"];
-                $sqlSelect .= "SUM(IF(o.subshopID=$shop, $sqlAmount, 0)) as `amount$shop`, ";
-            }
-        }
-
-        $sql = "
-            SELECT
-        		COUNT(*) as `count`,
-        		SUM($sqlAmount) as `amount`,
-        		Date_Format(ordertime, '%W') as displayDate,
-                $sqlSelect
-                $sqlSelectField as `$sqlSelectName`
-            FROM `s_order` o
-
-            LEFT JOIN s_premium_dispatch d
-            ON o.dispatchID = d.id
-
-            LEFT JOIN s_core_paymentmeans p
-            ON o.paymentID = p.id
-
-            JOIN s_order_billingaddress ob
-            ON o.id = ob.orderID
-
-            JOIN s_core_countries c
-            ON ob.countryID = c.id
-
-            WHERE o.status NOT IN (4, -1)
-
-            AND o.ordertime <= ?
-            AND o.ordertime >= ?
-
-            $sqlWhere
-
-            GROUP BY $sqlGroupBy
-            ORDER BY $sqlSelectName
-        ";
-
-        $data = Shopware()->Db()->fetchAll($sql,array($toDate, $fromDate));
-
+        $data = $result->getData();
         foreach ($data as &$row) {
-            $row['count'] = (int)$row['count'];
-            $row['amount'] = (float)$row['amount'];
             $row['date'] = strtotime($row['date']);
+            $row['totalConversion'] = round($row['totalOrders'] / $row['totalVisits'] * 100, 2);
+        }
 
-            if (!empty($shops)) {
-                foreach ($shops as $shop) {
-                    $shop = (int)$shop["id"];
-                    $row['amount' . $shop] = (float)$row['amount' . $shop];
+        $this->send($data, $result->getTotalCount());
+    }
+
+    public function getRatingAction()
+    {
+        $shopIds = $this->getSelectedShopIds();
+        $result = $this->getRepository()->getOrdersOfVisitors(
+            $this->getFromDate(),
+            $this->getToDate(),
+            $this->getSelectedShopIds()
+        );
+
+        $data = array();
+
+        foreach ($result->getData() as $row) {
+            $orders = $row['orderCount'];
+            $visitors = $row['visitors'];
+            $cancelledOrders = $row['cancelledOrders'];
+
+            $ratingData = array(
+                'date' => strtotime($row['date']),
+                'basketConversion' => round($orders / ($cancelledOrders + $orders) * 100, 2),
+                'orderConversion' => round($orders / $visitors * 100, 2),
+                'basketVisitConversion' => round($cancelledOrders / $visitors * 100, 2)
+            );
+
+            if (!empty($shopIds)) {
+                foreach ($shopIds as $shopId) {
+                    $orders = $row['orderCount' . $shopId];
+                    $visitors = $row['visitors' . $shopId];
+                    $cancelledOrders = $row['cancelledOrders' . $shopId];
+
+                    $ratingData['basketConversion' . $shopId] = round($orders / ($cancelledOrders + $orders) * 100, 2);
+                    $ratingData['orderConversion' . $shopId] = round($orders / $visitors * 100, 2);
+                    $ratingData['basketVisitConversion' . $shopId] = round($cancelledOrders / $visitors * 100, 2);
                 }
             }
-        }
 
-        $this->View()->success = true;
-        $this->View()->data = $data;
+            $data[] = $ratingData;
+        }
+        $this->send($data, $result->getTotalCount());
+
     }
 
-    /**
-     * Get statistics for shop visitors
-     */
-    public function visitsAction()
+    public function getReferrerRevenueAction()
     {
-        $data = array();
-        $sqlSelect = null;
+        $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
+        $shop->registerResources(Shopware()->Bootstrap());
 
-        $fromDate = $this->getFromDate();
-        $toDate = $this->getToDate();
+        $result = $this->getRepository()->getReferrerRevenue(
+            $shop,
+            $this->getFromDate(),
+            $this->getToDate()
+        );
 
-        $start = intval($this->Request()->start ? $this->Request()->start : 0);
-        $limit = intval($this->Request()->limit ? $this->Request()->limit : 25);
-        $sort = $this->Request()->sort;
+        $referrer = array();
+        $customers = array();
+        foreach ($result->getData() as $row) {
+            $url = parse_url($row['referrer']);
+            $host = $url['host'];
 
-        if (empty($sort[0])) {
-            $sort[0] = array("property" => "datum", "direction" => "DESC");
-        }
-
-        $sort = $sort[0];
-
-        // sw-3321: Also take subshops page impressions and unique visits into account in order to have correct
-        // values for the corresponding main-shops.
-        $shops = $this->getShops();
-        if (!empty($shops)) {
-            foreach ($shops as $key => $shop) {
-                if ($key == 0) $sqlSelect = ",\n";
-                $shop = (int)$shop["id"];
-                $sqlSelect .= "SUM(IF(IF(cs.main_id is null, cs.id, cs.main_id)=$shop, s.pageimpressions, 0)) as `impressions$shop`, ";
-                $sqlSelect .= "SUM(IF(IF(cs.main_id is null, cs.id, cs.main_id)=$shop, s.uniquevisits, 0)) as `visits$shop` ";
-                if ($key < count($shops) - 1) $sqlSelect .= ",\n";
+            if (!array_key_exists($host, $referrer)) {
+                $referrer[$host] = array(
+                    'host' => $host,
+                    'entireRevenue' => 0,
+                    'lead' => 0,
+                    'customerValue' => 0,
+                    'entireNewRevenue' => 0,
+                    'entireOldRevenue' => 0,
+                    'orderCount' => 0,
+                    'newCustomers' => 0,
+                    'oldCustomers' => 0,
+                    'perNewRevenue' => 0,
+                    'perOldRevenue' => 0
+                );
             }
-        }
-        $sql = "
-        SELECT datum,SUM(pageimpressions) AS totalImpressions, SUM(uniquevisits) AS totalVisits
-        $sqlSelect
-        FROM s_statistics_visitors s
-        LEFT JOIN s_core_shops cs ON s.shopID = cs.id
-        WHERE datum <= ?
-        AND datum >= ?
-        GROUP BY datum
-        ORDER BY {$sort["property"]} {$sort["direction"]}
-        ";
 
-        $data = Shopware()->Db()->fetchAll($sql,array($toDate, $fromDate));
-
-        $this->View()->total = count($data);
-
-        $data = array_splice($data, $start, $limit);
-        foreach ($data as &$row) {
-            $row['datum'] = strtotime($row['datum']);
-        }
-        $this->View()->success = true;
-        $this->View()->data = $data;
-
-    }
-
-    /**
-     * Get sales data for statistics
-     * Kind of statistic is defined via
-     * $this->Request()->getParam('type')
-     *  Possible values:
-     *  supplier,category,article,voucher
-     * Returns json formatted result
-     */
-    public function orderDetailAnalyticsAction()
-    {
-        if (!$this->Request()->getParam('tax')) {
-            $sqlAmount = 'od.price * od.quantity';
-        } else {
-            $sqlAmount = 'od.price / (100+tax) * 100) * od.quantity';
-        }
-        $sqlAmount = '(' . $sqlAmount . ')/currencyFactor';
-        $sqlSelect = '';
-
-        $fromDate = $this->getFromDate();
-        $toDate = $this->getToDate();
-
-        switch ($this->Request()->getParam('type')) {
-            case 'supplier':
-                $sqlSelectField = 's.name';
-                $sqlGroupBy = 'a.supplierID';
-                $sqlJoin = '
-                    JOIN s_articles_supplier s
-                    ON s.id = a.supplierID
-                ';
-                break;
-            case 'category':
-                $sqlSelectField = 'c.description';
-                $sqlGroupBy = 'c.id';
-                $node = $this->Request()->getParam('node', 'root');
-                if ($node === 'root') {
-                    $node = 1;
+            if (!in_array($row['userID'], $customers)) {
+                if (strtotime($row['orderTime']) - strtotime($row['firstLogin']) < 60 * 60 * 24) {
+                    $referrer[$host]['entireNewRevenue'] += $row['revenue'];
+                    $referrer[$host]['newCustomers']++;
                 } else {
-                    $node = (int)$node;
+                    $referrer[$host]['entireOldRevenue'] += $row['revenue'];
+                    $referrer[$host]['oldCustomers']++;
                 }
-                $sqlSelect .= '(
-                    SELECT parent FROM s_categories
-                    WHERE c.id=parent LIMIT 1
-                ) as `node`, ';
 
-                $sqlJoin = "
-                    INNER JOIN s_articles_categories_ro ac
-                        ON  ac.articleID  = a.id
+                $referrer[$host]['customerRevenue'] += $row['revenue'];
+            }
 
-                    INNER JOIN s_categories c
-                        ON  c.id = ac.categoryID
-                        AND c.active = 1
-                        AND c.parent=$node
-                ";
-                break;
-            case 'article':
-                $sqlSelectField = 'a.name';
-                $sqlGroupBy = 'od.articleID';
-                break;
-            case 'voucher':
-                break;
-            default:
-                break;
+            $referrer[$host]['entireRevenue'] += $row['revenue'];
+            $referrer[$host]['orderCount']++;
         }
 
-        if (!isset($sqlGroupBy)) {
-            $sqlGroupBy = $sqlSelectField;
+        foreach ($referrer as &$ref) {
+            $ref['lead'] = round($ref['entireRevenue'] / $ref['orderCount'], 2);
+            $ref['perNewRevenue'] = round($ref['entireNewRevenue'] / $ref['newCustomers'], 2);
+            $ref['perOldRevenue'] = round($ref['entireOldRevenue'] / $ref['oldCustomers'], 2);
+            $ref['customerValue'] = round($ref['customerRevenue'] / ($ref['newCustomers'] + $ref['oldCustomers']), 2);
         }
 
-        $sql = "
-            SELECT
-        		COUNT(DISTINCT o.id) as `count`,
-                SUM($sqlAmount) as `amount`,
-                $sqlSelect
-                $sqlSelectField as `name`
-            FROM `s_order` o
+        $this->send(array_values($referrer), $result->getTotalCount());
+    }
 
-            JOIN s_order_details od
-            ON od.orderID = o.id AND od.modus=0
+    public function getPartnerRevenueAction()
+    {
+        $result = $this->getRepository()->getPartnerRevenue(
+            $this->Request()->getParam('start', 0),
+            $this->Request()->getParam('limit', null),
+            $this->getFromDate(),
+            $this->getToDate()
+        );
 
-            JOIN s_articles a
-            ON a.id = od.articleID
-
-            $sqlJoin
-
-            WHERE o.status NOT IN (4, -1)
-            AND o.ordertime <= ?
-            AND o.ordertime >= ?
-
-            GROUP BY $sqlGroupBy
-
-            ORDER BY `name`
-        ";
-
-        $data = Shopware()->Db()->fetchAll($sql,array($toDate, $fromDate));
+        $data = $result->getData();
 
         foreach ($data as &$row) {
-            $row['count'] = (int)$row['count'];
-            $row['amount'] = (float)$row['amount'];
-        }
-
-        $this->View()->success = true;
-        $this->View()->data = $data;
-    }
-
-    /**
-     * Get statistics for popular search terms
-     * Possible sorting values: countRequests, searchterm, countResults
-     * Sort is defined in array $this->Request()->sort (property=>...,direction=>ASC/DESC)
-     * @return json formatted output
-     */
-    public function searchAnalyticsAction()
-    {
-        $data = array();
-        $start = intval($this->Request()->start ? $this->Request()->start : 0);
-        $limit = intval($this->Request()->limit ? $this->Request()->limit : 25);
-        $sort = $this->Request()->sort;
-
-        if (empty($sort[0])) {
-            $sort[0] = array("property" => "countRequests", "direction" => "DESC");
-        }
-
-        $sort = $sort[0];
-
-        $sql = "
-        SELECT COUNT(searchterm) AS countRequests, searchterm,
-        MAX(results) AS countResults FROM s_statistics_search GROUP BY searchterm
-        ORDER BY {$sort["property"]} {$sort["direction"]}
-        ";
-
-        $data = Shopware()->Db()->fetchAll($sql);
-
-        $this->View()->total = count($data);
-
-        $data = array_splice($data, $start, $limit);
-
-        $this->View()->success = true;
-        $this->View()->data = $data;
-    }
-
-    /**
-     * Get conversion rates
-     * Basically number of orders for a day / number of visitors
-     */
-    public function conversionRateAction()
-    {
-
-        // Support subshops
-        $shops = $this->getShops();
-        $sqlSelect = "";
-        $start = intval($this->Request()->start ? $this->Request()->start : 0);
-        $limit = intval($this->Request()->limit ? $this->Request()->limit : 25);
-
-        $fromDate = $this->getFromDate();
-        $toDate = $this->getToDate();
-
-
-
-        if (!empty($shops)) {
-            foreach ($shops as $shop) {
-                $shop = (int)$shop["id"];
-                $sqlSelect .= "\n 0 AS visits$shop, 0 AS orders$shop, 0 AS conversion$shop,\n";
+            if (empty($row['partner'])) {
+                $row['partner'] = $row['trackingCode'];
+            }
+            if (empty($row['PartnerID'])) {
+                $row['PartnerID'] = 0;
             }
         }
-        /**
-         * Fetch total visitors and total orders for each day that may be occurs in statistics
-         * Result - Sample:
-         * Array ( [0] => Array
-        (
-        [date] => 2012-05-26
-        [visitsTotal] => 2
-        [visits1] => 2
-        [orders1] => 0
-        [conversion1] => 0
-        [visits6] => 0
-        [orders6] => 0
-        [conversion6] => 0
-        [visits9] => 0
-        [orders9] => 0
-        [conversion9] => 0
-        [ordersTotal] => 0
-        ) )
-         */
-        $sql = "
-        	SELECT
-        		datum as `date`,
-        		SUM(s.uniquevisits) AS `totalVisits`,
-        		$sqlSelect
-        		(SELECT COUNT(DISTINCT id) FROM s_order WHERE s_order.status NOT IN (4,-1) AND DATE(s_order.ordertime) = datum) AS `totalOrders`
-        	FROM
-        		`s_statistics_visitors` AS s
-        	WHERE datum <= ?
-            AND datum >= ?
-        	GROUP BY `date`
-        	ORDER BY `date` DESC
-       ";
 
-        $result = Shopware()->Db()->fetchAll($sql,array($toDate, $fromDate));
+        $this->send($data, $result->getTotalCount());
+    }
 
-        // Reformat result to use date as key
-        $basicStats = array();
-        foreach ($result as $row) {
-            $row["totalConversion"] = round($row["totalOrders"] / $row["totalVisits"] * 100, 2);
-            $basicStats[$row["date"]] = $row;
+    public function getCustomerGroupAmountAction()
+    {
+        $result = $this->getRepository()->getCustomerGroupAmount(
+            $this->getFromDate(),
+            $this->getToDate(),
+            $this->getSelectedShopIds()
+        );
+
+        $this->send(
+            $result->getData(),
+            $result->getTotalCount()
+        );
+    }
+
+    public function getReferrerVisitorsAction()
+    {
+        $result = $this->getRepository()->getVisitedReferrer(
+            $this->Request()->getParam('start', 0),
+            $this->Request()->getParam('limit', null),
+            $this->getFromDate(),
+            $this->getToDate()
+        );
+
+        $data = $result->getData();
+
+        $referrer = array();
+        foreach ($data as &$row) {
+            $host = parse_url($row['referrer']);
+            $host = str_replace('www.', '', $host['host']);
+
+            if (!array_key_exists($host, $referrer)) {
+                $referrer[$host] = array(
+                    'count' => 0,
+                    'referrer' => $host
+                );
+            }
+
+            $referrer[$host]['count']++;
         }
 
-        /**
-         * If shop selection is active, get visitors and orders for each shop
-         * Merge results into $basicStats Array
-         */
-        if (!empty($shops)) {
-            foreach ($shops as $shop) {
-                $shop = (int)$shop["id"];
+        $this->send(array_values($referrer), $result->getTotalCount());
+    }
 
-                $sql = "
-                SELECT datum AS `date`,
-                uniquevisits AS visits
-                FROM s_statistics_visitors WHERE shopID = ?
-                ";
+    public function getArticleSellsAction()
+    {
+        $result = $this->getRepository()->getProductSells(
+            $this->Request()->getParam('start', 0),
+            $this->Request()->getParam('limit', null),
+            $this->getFromDate(),
+            $this->getToDate()
+        );
 
-                $result = Shopware()->Db()->fetchAll($sql, array($shop));
+        $this->send($result->getData(), $result->getTotalCount());
+    }
 
-                foreach ($result as $row) {
-                    $basicStats[$row["date"]]["visits" . $shop] = $row["visits"];
+    public function getCustomersAction()
+    {
+        $result = $this->getRepository()->getOrdersOfCustomers(
+            $this->getFromDate(),
+            $this->getToDate()
+        );
+
+        $customers = array();
+
+        foreach($result->getData() as $row) {
+            $week = $row['orderTime'];
+            $customers[$week]['orderCount']++;
+            $customers[$week]['week'] = $week;
+            $customers[$week]['female'] = (int)$customers[$week]['female'];
+            $customers[$week]['male'] = (int)$customers[$week]['male'];
+            $customers[$week]['registration'] = (int) $customers[$week]['registration'];
+            $customers[$week]['users'] = (array) $customers[$week]['users'];
+
+            switch(strtolower($row['salutation'])) {
+                case "mr":
+                    $customers[$week]['male']++;
+                    break;
+                case "ms":
+                    $customers[$week]['female']++;
+                    break;
+                default:
+                    break;
+            }
+
+            $users = $customers[$week]['users'];
+            if ($row['isNewCustomerOrder'] && !in_array($row['userId'], $users)) {
+                $customers[$week]['registration']++;
+            }
+
+            $customers[$week]['users'][] = $row['userId'];
+
+            if ($row['isNewCustomerOrder']) {
+                $customers[$week]['newCustomersOrders']++;
+            } else {
+                $customers[$week]['oldCustomersOrders']++;
+            }
+        }
+
+        $this->send(array_values($customers), count($customers));
+    }
+
+    public function getCustomerAgeAction()
+    {
+        $shopIds = $this->getSelectedShopIds();
+        $result = $this->getRepository()->getAgeOfCustomers(
+            $this->getFromDate(),
+            $this->getToDate(),
+            $shopIds
+        );
+
+        $subShopCounts = array();
+        $ages = array();
+        foreach ($result->getData() as $row) {
+            $age = floor((time() - strtotime($row['birthday'])) / (60 * 60 * 24 * 365));
+
+            if (!array_key_exists("{$age}", $ages)) {
+                $ages["{$age}"] = array(
+                    'age' => $age,
+                    'count' => 0
+                );
+            }
+
+            if (!empty($shopIds)) {
+                foreach ($shopIds as $shopId) {
+                    if (!array_key_exists($shopId, $subShopCounts)) {
+                        $subShopCounts[$shopId] = 0;
+                    }
+
+                    if (!array_key_exists('count' . $shopId, $ages["{$age}"])) {
+                        $ages["{$age}"]['count' . $shopId] = 0;
+                    }
+
+                    if (!empty($row['birthday' . $shopId])) {
+                        $ages["{$age}"]['count' . $shopId]++;
+                        $subShopCounts[$shopId]++;
+                    }
                 }
+            }
 
-                $sql = "
-                    SELECT
-                        DATE(ordertime) as `date`,
-                        COUNT(o.id) AS `orders`
-                    FROM
-                        `s_order` AS o
-                    WHERE subshopID = ? AND status NOT IN (4,-1)
-                    GROUP BY DATE(ordertime)
-                    ORDER BY DATE(ordertime) DESC
-               ";
-                $result = Shopware()->Db()->fetchAll($sql, array($shop));
-                if (!empty($result)) {
-                    foreach ($result as $row) {
-                        $basicStats[$row["date"]]["orders" . $shop] = $row["orders"];
-                        if (!empty($basicStats[$row["date"]]["visits" . $shop])) {
-                            $basicStats[$row["date"]]["conversion" . $shop] = round($row["orders"] / $basicStats[$row["date"]]["visits" . $shop] * 100, 2);
-                        } else {
-                            $basicStats[$row["date"]]["conversion" . $shop] = 0;
-                        }
+            $ages["{$age}"]['count']++;
+        }
+
+        foreach ($ages as &$age) {
+            $age['percent'] = round($age['count'] / $result->getTotalCount() * 100, 2);
+
+            if (!empty($shopIds)) {
+                foreach ($shopIds as $shopId) {
+                    $age['percent' . $shopId] = round($age['count' . $shopId] / $subShopCounts[$shopId] * 100, 2);
+                }
+            }
+        }
+
+        $this->send(
+            array_values($ages),
+            count($ages)
+        );
+    }
+
+    public function getMonthAction()
+    {
+        $result = $this->getRepository()->getAmountPerMonth(
+            $this->getFromDate(),
+            $this->getToDate(),
+            $this->getSelectedShopIds()
+        );
+
+        $this->send(
+            $this->formatOrderAnalyticsData($result->getData()),
+            $result->getTotalCount()
+        );
+    }
+
+    public function getCalendarWeeksAction()
+    {
+        $result = $this->getRepository()->getAmountPerCalendarWeek(
+            $this->getFromDate(),
+            $this->getToDate(),
+            $this->getSelectedShopIds()
+        );
+
+        $this->send(
+            $this->formatOrderAnalyticsData($result->getData()),
+            $result->getTotalCount()
+        );
+    }
+
+    public function getWeekdaysAction()
+    {
+        $result = $this->getRepository()->getAmountPerWeekday(
+            $this->getFromDate(),
+            $this->getToDate(),
+            $this->getSelectedShopIds()
+        );
+
+        $this->send(
+            $this->formatOrderAnalyticsData($result->getData()),
+            $result->getTotalCount()
+        );
+    }
+
+    public function getTimeAction()
+    {
+        $result = $this->getRepository()->getAmountPerHour(
+            $this->getFromDate(),
+            $this->getToDate(),
+            $this->getSelectedShopIds()
+        );
+
+        $this->send(
+            $this->formatOrderAnalyticsData($result->getData()),
+            $result->getTotalCount()
+        );
+    }
+
+    public function getCategoriesAction()
+    {
+        $node = $this->Request()->getParam('node', 'root');
+        $node = $node === 'root' ? 1 : (int) $node;
+
+        $result = $this->getRepository()->getProductAmountPerCategory(
+            $node,
+            $this->getFromDate(),
+            $this->getToDate()
+        );
+
+        $this->send(
+            $result->getData(),
+            $result->getTotalCount()
+        );
+    }
+
+    public function getCountriesAction()
+    {
+        $result = $this->getRepository()->getAmountPerCountry(
+            $this->getFromDate(),
+            $this->getToDate(),
+            $this->getSelectedShopIds()
+        );
+
+        $this->send(
+            $this->formatOrderAnalyticsData($result->getData()),
+            $result->getTotalCount()
+        );
+    }
+
+    public function getPaymentAction()
+    {
+        $result = $this->getRepository()->getAmountPerPayment(
+            $this->getFromDate(),
+            $this->getToDate(),
+            $this->getSelectedShopIds()
+        );
+
+        $this->send(
+            $this->formatOrderAnalyticsData($result->getData()),
+            $result->getTotalCount()
+        );
+    }
+
+    public function getShippingMethodsAction()
+    {
+        $result = $this->getRepository()->getAmountPerShipping(
+            $this->getFromDate(),
+            $this->getToDate(),
+            $this->getSelectedShopIds()
+        );
+
+        $this->send(
+            $this->formatOrderAnalyticsData($result->getData()),
+            $result->getTotalCount()
+        );
+    }
+
+    public function getVendorsAction()
+    {
+        $result = $this->getRepository()->getProductAmountPerManufacturer(
+            $this->getFromDate(),
+            $this->getToDate()
+        );
+
+        $this->send(
+            $result->getData(),
+            $result->getTotalCount()
+        );
+    }
+
+    public function getSearchTermsAction()
+    {
+        $result = $this->getRepository()->getSearchTerms(
+            $this->Request()->getParam('start', 0),
+            $this->Request()->getParam('limit', null),
+            $this->getFromDate(),
+            $this->getToDate(),
+            $this->Request()->getParam('sort', array(
+                array(
+                    'property' => 'countRequests',
+                    'direction' => 'DESC'
+                )
+            ))
+        );
+
+        $this->send(
+            $result->getData(),
+            $result->getTotalCount()
+        );
+    }
+
+    public function getVisitorsAction()
+    {
+        $result = $this->getRepository()->getVisitorImpressions(
+            $this->Request()->getParam('start', 0),
+            $this->Request()->getParam('limit', null),
+            $this->getFromDate(),
+            $this->getToDate(),
+            $this->Request()->getParam('sort', array(
+                array(
+                    'property' => 'datum',
+                    'direction' => 'DESC'
+                )
+            )),
+            $this->getSelectedShopIds()
+        );
+
+        $this->send(
+            $result->getData(),
+            $result->getTotalCount()
+        );
+    }
+
+    public function getArticleImpressionsAction()
+    {
+        $result = $this->getRepository()->getProductImpressions(
+            $this->Request()->getParam('start', 0),
+            $this->Request()->getParam('limit', null),
+            $this->getFromDate(),
+            $this->getToDate(),
+            $this->Request()->getParam('sort', array(
+                array(
+                    'property' => 'totalAmount',
+                    'direction' => 'DESC'
+                )
+            )),
+            $this->getSelectedShopIds()
+        );
+
+        $this->send(
+            $result->getData(),
+            $result->getTotalCount()
+        );
+    }
+
+    public function getReferrerSearchTermsAction()
+    {
+        $selectedReferrer = (string) $this->Request()->getParam('selectedReferrer');
+
+        $result = $this->getRepository()->getReferrerSearchTerms($selectedReferrer);
+
+        $keywords = array();
+        foreach ($result->getData() as $data) {
+            preg_match_all("#[?&]([qp]|query|highlight|encquery|url|field-keywords|as_q|sucheall|satitle|KW)=([^&\\$]+)#", utf8_encode($data['referrer']) . "&", $matches);
+            if (empty($matches[0])) {
+                continue;
+            }
+
+            $ref = $matches[2][0];
+            $ref = html_entity_decode(rawurldecode(strtolower($ref)));
+            $ref = str_replace('+', ' ', $ref);
+            $ref = trim(preg_replace('/\s\s+/', ' ', $ref));
+
+            if (!array_key_exists($ref, $keywords)) {
+                $keywords[$ref] = array(
+                    'keyword' => $ref,
+                    'count' => 0
+                );
+            }
+
+            $keywords[$ref]['count']++;
+        }
+
+        $keywords = array_values($keywords);
+
+        $this->send($keywords, count($keywords));
+    }
+
+    public function getSearchUrlsAction()
+    {
+        $selectedReferrer = (string) $this->Request()->getParam('selectedReferrer');
+
+        $result = $this->getRepository()->getReferrerUrls(
+            $selectedReferrer,
+            $this->Request()->getParam('start', 0),
+            $this->Request()->getParam('limit', null)
+        );
+
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $result->getData(),
+            'totalCount' => $result->getTotalCount()
+        ));
+    }
+
+    protected function send($data, $totalCount)
+    {
+        if (strtolower($this->format) == 'csv') {
+            $data = $this->formatCsvData($data);
+            $this->exportCSV($data);
+        } else {
+            $this->View()->assign(array(
+                'success' => true,
+                'data' => $data,
+                'total' => $totalCount
+            ));
+        }
+    }
+
+    private function formatCsvData($data)
+    {
+        if ($fields = $this->getDateFields($data[0])) {
+            foreach($data as &$row) {
+                foreach($fields as $field) {
+                    if (array_key_exists($field, $row)) {
+                        $row[$field] = date('Y-m-d H:i:s', $row[$field]);
                     }
                 }
             }
         }
 
-        foreach ($basicStats as &$row) $row["date"] = strtotime($row["date"]);
-        $this->View()->total = count($basicStats);
-        $basicStats = array_splice($basicStats, $start, $limit);
-        $this->View()->data = array_values($basicStats);
-        $this->View()->success = true;
+        if ($fields = $this->getShopFields($data[0])) {
+            $shopNames = $this->getShopNames();
 
+            foreach($fields as $field => $shopId) {
+                $suffix = substr($field, 0, strlen($fields) - strlen($shopId));
+                $data = $this->switchArrayKeys($data, $shopNames[$shopId] . ' (' . $suffix . ')', $field);
+            }
+        }
+        return $data;
+    }
+
+    private function switchArrayKeys($array, $newKey, $oldKey)
+    {
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $array[$key] = $this->switchArrayKeys($value, $newKey, $oldKey);
+            } else {
+                $array[$newKey] = $array[$oldKey];
+            }
+        }
+        unset($array[$oldKey]);
+        return $array;
+    }
+
+    private function getShopNames()
+    {
+        $builder = $this->getManager()->getDBALQueryBuilder();
+        $builder->select(array('s.id', 's.name'))
+            ->from('s_core_shops', 's')
+            ->orderBy('s.default', 'DESC')
+            ->addOrderBy('s.name');
+
+        $statement = $builder->execute();
+
+        return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
+    }
+
+    protected function getShopFields($data)
+    {
+        $ids = $this->getSelectedShopIds();
+        $fields = array();
+        foreach(array_keys($data) as $key) {
+            if (in_array($key, $this->shopFields)) {
+                foreach($ids as $id) {
+                    if (array_key_exists($key . $id, $data)) {
+                        $fields[$key . $id] = $id;
+                    }
+                }
+            }
+        }
+        return $fields;
+    }
+
+    protected function getDateFields($data)
+    {
+        $fields = array();
+        foreach(array_keys($data) as $key) {
+            if (in_array($key, $this->dateFields)) {
+                $fields[] = $key;
+            }
+        }
+        return $fields;
+    }
+
+    private function isTimestamp($input)
+    {
+        if (strlen($input) != 11)  {
+            return false;
+        }
+
+        if (is_int($input)) {
+            return true;
+        }
+
+        if  (is_string($input)) {
+            return ctype_digit($input);
+        }
+
+        return false;
     }
 
 
+    protected function exportCSV($data)
+    {
+        $this->Front()->Plugins()->Json()->setRenderer(false);
+        $this->Response()->setHeader('Content-Type', 'text/csv; charset=utf-8');
+        $this->Response()->setHeader('Content-Disposition', 'attachment;filename=' . $this->getCsvFileName());
+
+        echo "\xEF\xBB\xBF";
+        $fp = fopen('php://output', 'w');
+
+        fputcsv($fp, array_keys($data[0]), ";");
+
+        foreach ($data as $value) {
+            if (empty($value)) {
+                continue;
+            }
+            fputcsv($fp, $value, ";");
+        }
+        fclose($fp);
+    }
+
+    private function getCsvFileName()
+    {
+        $name = $this->Request()->getActionName();
+        if (strpos($name, 'get') == 0) {
+            $name = substr($name, 3);
+        }
+
+        return $this->underscoreToCamelCase($name) . '.csv';
+    }
+
+    private function underscoreToCamelCase($str)
+    {
+        $str[0] = strtolower($str[0]);
+        $func = function ($c) {
+            return '_' . strtolower($c[1]);
+        };
+
+        return preg_replace_callback('/([A-Z])/', $func, $str);
+    }
 
     /**
-     * helper to get all shops
+     * helper to get the selected shop ids
+     * if no shop is selected the ids of all shops are returned
      *
-     * return shops
+     * return array | shopIds
      */
-    private function getShops(){
-        $sql = '
-            SELECT
-              s.id , s.name,
-              c.currency AS currency,
-              c.name AS currencyName,
-              c.templatechar AS currencyChar
-            FROM s_core_shops s, s_core_currencies c
-            WHERE s.currency_id = c.id AND s.main_id IS NULL
-            ORDER BY s.default DESC, s.name
-        ';
-        return Shopware()->Db()->fetchAll($sql);
+    private function getSelectedShopIds()
+    {
+        $selectedShopIds = (string) $this->Request()->getParam('selectedShops');
 
+        if (!empty($selectedShopIds)) {
+            return explode(',', $selectedShopIds);
+        }
+
+        $builder = $this->getManager()->getDBALQueryBuilder();
+        $builder->select('s.id')
+            ->from('s_core_shops', 's')
+            ->orderBy('s.default', 'DESC')
+            ->addOrderBy('s.name');
+
+        $statement = $builder->execute();
+
+        return $statement->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**
@@ -558,7 +908,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
      *
      * return DateTime | fromDate
      */
-    private function getFromDate(){
+    private function getFromDate()
+    {
         $fromDate = $this->Request()->getParam('fromDate');
         if (empty($fromDate)) {
             $fromDate = new \DateTime();
@@ -566,7 +917,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         } else {
             $fromDate = new \DateTime($fromDate);
         }
-        return $fromDate->format("Y-m-d H:i:s");
+
+        return $fromDate;
     }
 
     /**
@@ -574,8 +926,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
      *
      * return DateTime | toDate
      */
-    private function getToDate() {
-
+    private function getToDate()
+    {
         //if a to date passed, format it over the \DateTime object. Otherwise create a new date with today
         $toDate = $this->Request()->getParam('toDate');
         if (empty($toDate)) {
@@ -586,6 +938,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         //to get the right value cause 2012-02-02 is smaller than 2012-02-02 15:33:12
         $toDate = $toDate->add(new DateInterval('P1D'));
         $toDate = $toDate->sub(new DateInterval('PT1S'));
-        return $toDate->format("Y-m-d H:i:s");
+
+        return $toDate;
     }
 }

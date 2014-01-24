@@ -1,5 +1,33 @@
 # Shopware Upgrade Information
-In this document you will find a changelog of the important changes related to the code base of shopware.
+In this document you will find a changelog of the important changes related to the code base of Shopware.
+
+## 4.2.0
+
+* Add new metaTitle field to the Blog
+* Add new metaTitle field to the Article
+* Removed unused class `Services_JSON`, was located at `/engine/core/ajax/json.php`.
+* The subquery in `$priceForBasePrice` used in `sArticles::sGetArticlesByCategory` has been removed.
+* A userland implementaion of [`array_column()`](http://php.net/array_column) has been included.
+* Deprecated class `sTicketSystem` has been removed.
+* Doctrine has been updated to version 2.4. See: https://github.com/doctrine/doctrine2/blob/2.4/UPGRADE.md
+* Break: `Doctrine\ORM\Query::setParamters()` has changed. See: https://github.com/doctrine/doctrine2/blob/2.4/UPGRADE.md
+* `Shopware\Components\Model\QueryBuilder::setParameters()` provides old behavior.
+* Break: `Shopware_Plugins_Frontend_RouterOld_Bootstrap::onAssemble` event and implementation removed
+* Update Zend Framework to version 1.12.3 (latest stable)
+* Deprecation: Several unused Zend Framework components and classes are now deprecated. Refer to the full upgrade guide for details
+* Break: Custom article attributes of type `Time` are now always saved using the german format. Only affects values inserted in non-german backends
+* Removed the sSetLastArticle in sArticles.php. Was deprecated through setLastArticleById in the Shopware_Plugins_Frontend_LastArticles_Bootstrap plugin.
+* Implement new options in the article resource. "considerTaxInput" allows to get the variant prices considering the article tax. "language" allows to get a whole translated article array. The "language" parameter can contain a sub shop id or a language iso like en_GB.
+* `s_core_debit` table is now deprecated. `s_core_payment_data` and `s_core_payment_instance` should be used instead.
+* core payment classes were removed. Existing references in the core to those classes now use the core PaymentMethods module implementation. Refer to the module for details on how to implement payment method logic
+* Break: PaymentMethods core plugin components and templates had their performance improved, resulting in potential breaks for extensions
+* - getCurrentPaymentData() was removed and should be replaced with getCurrentPaymentDataAsArray(), which returns the same information but in an array format
+* Break: some payment snippets had their namespaces changed to comply with recent changes in snippet handling
+* Break: customer detail editing in the backend: field names and field container structured to add support for additional payment methods. As such, debit.js view and detail controller have some breaks
+* Ext.editorLang variable is no longer used and is being deprecated.
+* Deprecation (REST API): 'debit' info in /api/customers/{id} is deprecated. Use 'paymentData' instead
+* Break: Removed the Shopware.apps.Analytics.view.table.Conversion, Shopware.apps.Analytics.view.toolbar.Source and Shopware.apps.Analytics.view.toolbar.Shop file which now defined in the analytics/view/main/toolbar.js file.
+
 
 ## 4.1.4
 

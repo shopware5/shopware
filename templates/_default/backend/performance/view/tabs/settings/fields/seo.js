@@ -121,7 +121,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Seo', {
                     } , {
                         fieldLabel: '{s name=fieldset/seo/lastUpdate}Last update{/s}',
                         name: 'seo[routerlastupdateDate]',
-                        format: 'd.m.Y',
+                        submitFormat: 'd.m.Y',
                         xtype: 'datefield'
                     } , {
                         fieldLabel: ' ',

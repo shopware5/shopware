@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\HttpCache;
 
+use Symfony\Component\HttpKernel\HttpCache\StoreInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\HttpCache\HttpCache;
 use Symfony\Component\HttpKernel\HttpCache\Esi;
@@ -40,14 +41,24 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @category  Shopware
  * @package   Shopware\Components\HttpCache
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class AppCache extends HttpCache
 {
     /**
+     * @var HttpKernelInterface
+     */
+    protected $kernel;
+
+    /**
      * @var string
      */
     protected $cacheDir;
+
+    /**
+     * @var array
+     */
+    protected $options = array();
 
     /**
      * Constructor.
@@ -57,19 +68,22 @@ class AppCache extends HttpCache
      */
     public function __construct(HttpKernelInterface $kernel, $options)
     {
+        $this->kernel = $kernel;
+
         if (isset($options['cache_dir'])) {
             $this->cacheDir = $options['cache_dir'];
         }
 
-        $options += array(
+        $this->options = array_merge(array(
             'purge_allowed_ips' => array('127.0.0.1', '::1'),
-        );
+            'debug'             => false,
+        ), $options);
 
         parent::__construct(
             $kernel,
             $this->createStore(),
             $this->createEsi(),
-            $options
+            $this->options
         );
     }
 
@@ -82,6 +96,8 @@ class AppCache extends HttpCache
      */
     public function handle(Request $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
     {
+        $request->headers->set('Surrogate-Capability', 'shopware="ESI/1.0"');
+
         if (strpos($request->getPathInfo(), '/backend/') === 0) {
             return $this->pass($request, $catch);
         }
@@ -163,7 +179,6 @@ class AppCache extends HttpCache
 
         // If Response is not fresh age > 0 AND contains a mathing no cache tag
         if ($response->getAge() > 0 && $this->containsNoCacheTag($request, $response)) {
-            $this->record($request, 'no-cache-tag');
             $response = $this->fetch($request);
         }
 
@@ -221,7 +236,6 @@ class AppCache extends HttpCache
         return false;
     }
 
-
     /**
      * Forwards the Request to the backend and returns the Response.
      *
@@ -233,11 +247,11 @@ class AppCache extends HttpCache
      */
     protected function forward(Request $request, $raw = false, Response $entry = null)
     {
-        /** @var $bootstrap \Shopware_Bootstrap */
-        $bootstrap = $this->getKernel()->getApp()->Bootstrap();
+        $this->getKernel()->boot();
 
-        $bootstrap->registerResource('HttpCache', $this);
-        $bootstrap->registerResource('Esi', $this->getEsi());
+        /** @var $bootstrap \Shopware\Components\DependencyInjection\Container */
+        $container = $this->getKernel()->getContainer();
+        $container->set('HttpCache', $this);
 
         return parent::forward($request, $raw, $entry);
     }
@@ -251,11 +265,11 @@ class AppCache extends HttpCache
     }
 
     /**
-     * @return \Symfony\Component\HttpKernel\HttpCache\Store
+     * @return StoreInterface
      */
     protected function createStore()
     {
-        return new Store($this->cacheDir);
+        return new Store($this->cacheDir? $this->cacheDir : $this->kernel->getCacheDir().'/http_cache');
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,21 +20,11 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Core
- * @subpackage Class
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Stefan Hamann
- * @author     $Author$
  */
 
 /**
  * Deprecated Shopware Class that handles several
  * functions around customer / order related things
- *
- * todo@all: Documentation
  */
 class sAdmin
 {
@@ -43,24 +33,24 @@ class sAdmin
      *
      * @var object
      */
-    var $sSYSTEM;
+    public $sSYSTEM;
 
     /**
      * @var Shopware_Components_Snippet_Manager
      */
-    var $snippetObject;
+    public $snippetObject;
 
     /**
      * Check if current active shop has own registration
      * @var bool s_core_multilanguage.scoped_registration
      */
-    var $scopedRegistration;
+    public $scopedRegistration;
 
     /**
      * Id of current active shop
      * @var int s_core_multilanguage.id
      */
-    var $subshopId;
+    public $subshopId;
 
     public function __construct()
     {
@@ -75,9 +65,9 @@ class sAdmin
      *
      * @return bool|void
      */
-    public function sLogout ()
+    public function sLogout()
     {
-        if (Enlight()->Events()->notifyUntil('Shopware_Modules_Admin_Logout_Start', array('subject'=>$this))){
+        if (Enlight()->Events()->notifyUntil('Shopware_Modules_Admin_Logout_Start', array('subject'=>$this))) {
             return false;
         }
 
@@ -86,8 +76,8 @@ class sAdmin
         unset($this->sSYSTEM->sUSERGROUPDATA);
 
         $this->sSYSTEM->sUSERGROUPDATA = $this->sSYSTEM->sDB_CONNECTION->GetRow("
-		SELECT * FROM s_core_customergroups WHERE `groupkey` = 'EK'
-		");
+        SELECT * FROM s_core_customergroups WHERE `groupkey` = 'EK'
+        ");
         session_destroy();
         $this->sSYSTEM->_SESSION["sUserGroup"] = "EK";
         $this->sSYSTEM->_SESSION["sUserGroupData"] = $this->sSYSTEM->sUSERGROUPDATA;
@@ -128,16 +118,13 @@ class sAdmin
             $messages[] = $this->snippetObject->get('VatFailureEmpty', 'Please enter a vat id');
         } elseif (empty($ustid) || !preg_match("#^([A-Z]{2})([0-9A-Z+*.]{2,12})$#", $ustid, $vat)) {
             $messages[] = $this->snippetObject->get('VatFailureInvalid', 'The vat id entered is invalid');
-        }
-        elseif (empty($country) || $country != $vat[1]) {
+        } elseif (empty($country) || $country != $vat[1]) {
             $field_names = explode(',', $this->snippetObject->get('VatFailureErrorFields', 'Company,City,Zip,Street,Country'));
             $field_name = isset($field_names[4]) ? $field_names[4] : 'Land';
             $messages[] = sprintf($this->snippetObject->get('VatFailureErrorField', 'The field %s does not match to the vat id entered'), $field_name);
-        }
-        elseif ($country == 'DE') {
+        } elseif ($country == 'DE') {
 
-        }
-        elseif (!empty($this->sSYSTEM->sCONFIG['sVATCHECKADVANCEDNUMBER'])) {
+        } elseif (!empty($this->sSYSTEM->sCONFIG['sVATCHECKADVANCEDNUMBER'])) {
             $data = array(
                 'UstId_1' => $this->sSYSTEM->sCONFIG['sVATCHECKADVANCEDNUMBER'],
                 'UstId_2' => $vat[1] . $vat[2],
@@ -191,8 +178,7 @@ class sAdmin
             } elseif (empty($response->valid)) {
                 $messages[] = $this->snippetObject->get('VatFailureInvalid', 'The vat id entered is invalid');
             }
-        }
-        else {
+        } else {
             $messages[] = sprintf($this->snippetObject->get('VatFailureUnknownError', 'An unknown error occurs while checking your vat id. Error code %d'), 20);
         }
         if (!empty($messages) && empty($this->sSYSTEM->sCONFIG['sVATCHECKREQUIRED'])) {
@@ -209,7 +195,7 @@ class sAdmin
      * @param  $response
      * @return array
      */
-    public function sCheckVatResponse ($response)
+    public function sCheckVatResponse($response)
     {
         if (!empty($this->sSYSTEM->sCONFIG['sVATCHECKNOSERVICE'])) {
             if (in_array($response['ErrorCode'], array(999, 205, 218, 208, 217, 219))) {
@@ -288,20 +274,21 @@ class sAdmin
      * @access public
      * @return array - payment data
      */
-    public function sGetPaymentMeanById($id,$user=false){
+    public function sGetPaymentMeanById($id,$user=false)
+    {
         $id = intval($id);
         $sql = "
-		SELECT * FROM s_core_paymentmeans
-		WHERE id=?
-		";
+        SELECT * FROM s_core_paymentmeans
+        WHERE id=?
+        ";
         $data =  $this->sSYSTEM->sDB_CONNECTION->GetRow($sql,array($id));
 
 
-        if ($this->sSYSTEM->sMODULES['sBasket']->sCheckForESD()){
+        if ($this->sSYSTEM->sMODULES['sBasket']->sCheckForESD()) {
             $sEsd = true;
         }
 
-        if (!count($user)){
+        if (!count($user)) {
             $user = array();
         }
 
@@ -312,57 +299,57 @@ class sAdmin
         // set by shop-owner
 
         // Hide paymentmeans which are not active
-        if (!$data["active"] && $data["id"]!=$user["additional"]["user"]["paymentpreset"]){
+        if (!$data["active"] && $data["id"]!=$user["additional"]["user"]["paymentpreset"]) {
             $resetPayment = $this->sSYSTEM->sCONFIG["sPAYMENTDEFAULT"];
         }
 
         // If esd - order, hide payment-means, whih
         // are not accessible for esd
-        if (!$data["esdactive"] && $sEsd){
+        if (!$data["esdactive"] && $sEsd) {
             $resetPayment = $this->sSYSTEM->sCONFIG["sPAYMENTDEFAULT"];
         }
 
         // Check additional rules
-        if ($this->sManageRisks($data["id"],$basket,$user) && $data["id"]!=$user["additional"]["user"]["paymentpreset"]){
+        if ($this->sManageRisks($data["id"],$basket,$user) && $data["id"]!=$user["additional"]["user"]["paymentpreset"]) {
             $resetPayment = $this->sSYSTEM->sCONFIG["sPAYMENTDEFAULT"];
         }
 
-        if(!empty($user['additional']['countryShipping']['id'])) {
+        if (!empty($user['additional']['countryShipping']['id'])) {
             $sql = "
-				SELECT 1
-				FROM s_core_paymentmeans p
+                SELECT 1
+                FROM s_core_paymentmeans p
 
-				LEFT JOIN s_core_paymentmeans_subshops ps
-				ON ps.subshopID=?
-				AND ps.paymentID=p.id
+                LEFT JOIN s_core_paymentmeans_subshops ps
+                ON ps.subshopID=?
+                AND ps.paymentID=p.id
 
-				LEFT JOIN s_core_paymentmeans_countries pc
-				ON pc.countryID=?
-				AND pc.paymentID=p.id
+                LEFT JOIN s_core_paymentmeans_countries pc
+                ON pc.countryID=?
+                AND pc.paymentID=p.id
 
-				WHERE (ps.paymentID IS NOT NULL OR (SELECT paymentID FROM s_core_paymentmeans_subshops WHERE paymentID=p.id LIMIT 1) IS NULL)
-				AND (pc.paymentID IS NOT NULL OR (SELECT paymentID FROM s_core_paymentmeans_countries WHERE paymentID=p.id LIMIT 1) IS NULL)
+                WHERE (ps.paymentID IS NOT NULL OR (SELECT paymentID FROM s_core_paymentmeans_subshops WHERE paymentID=p.id LIMIT 1) IS NULL)
+                AND (pc.paymentID IS NOT NULL OR (SELECT paymentID FROM s_core_paymentmeans_countries WHERE paymentID=p.id LIMIT 1) IS NULL)
 
-				AND id=?
-			";
+                AND id=?
+            ";
             $active = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql, array(
                 $this->sSYSTEM->sSubShop['id'],
                 $user['additional']['countryShipping']['id'],
                 $id
             ));
-            if(empty($active)) {
+            if (empty($active)) {
                 $resetPayment = $this->sSYSTEM->sCONFIG["sPAYMENTDEFAULT"];
             }
         }
 
-        if ($resetPayment && $user["additional"]["user"]["id"]){
+        if ($resetPayment && $user["additional"]["user"]["id"]) {
             $updateAccount =  $this->sSYSTEM->sDB_CONNECTION->Execute("
-			UPDATE s_user SET paymentID = ? WHERE id = ?
-			",array($resetPayment,$user["additional"]["user"]["id"]));
+            UPDATE s_user SET paymentID = ? WHERE id = ?
+            ",array($resetPayment,$user["additional"]["user"]["id"]));
             $sql = "
-			SELECT * FROM s_core_paymentmeans
-			WHERE id=?
-			";
+            SELECT * FROM s_core_paymentmeans
+            WHERE id=?
+            ";
             $data =  $this->sSYSTEM->sDB_CONNECTION->GetRow($sql,array($resetPayment));
         }
 
@@ -386,42 +373,41 @@ class sAdmin
 
         $user = $this->sGetUserData();
 
-        if ($this->sSYSTEM->sMODULES['sBasket']->sCheckForESD()){
+        if ($this->sSYSTEM->sMODULES['sBasket']->sCheckForESD()) {
             $sEsd = true;
-        }else {
+        } else {
             $sEsd = false;
         }
 
         $countryID = (int) $user['additional']['countryShipping']['id'];
         $subshopID = (int) $this->sSYSTEM->sSubShop['id'];
-        if (empty($countryID)){
+        if (empty($countryID)) {
             $countryID = $this->sSYSTEM->sDB_CONNECTION->GetOne("
-			SELECT id FROM s_core_countries ORDER BY position ASC LIMIT 1
-			");
+            SELECT id FROM s_core_countries ORDER BY position ASC LIMIT 1
+            ");
         }
         $sql = "
-			SELECT p.*
-			FROM s_core_paymentmeans p
+            SELECT p.*
+            FROM s_core_paymentmeans p
 
-			LEFT JOIN s_core_paymentmeans_subshops ps
-			ON ps.subshopID=$subshopID
-			AND ps.paymentID=p.id
+            LEFT JOIN s_core_paymentmeans_subshops ps
+            ON ps.subshopID=$subshopID
+            AND ps.paymentID=p.id
 
-			LEFT JOIN s_core_paymentmeans_countries pc
-			ON pc.countryID=$countryID
-			AND pc.paymentID=p.id
+            LEFT JOIN s_core_paymentmeans_countries pc
+            ON pc.countryID=$countryID
+            AND pc.paymentID=p.id
 
-			WHERE (ps.paymentID IS NOT NULL OR (SELECT paymentID FROM s_core_paymentmeans_subshops WHERE paymentID=p.id LIMIT 1) IS NULL)
-			AND (pc.paymentID IS NOT NULL OR (SELECT paymentID FROM s_core_paymentmeans_countries WHERE paymentID=p.id LIMIT 1) IS NULL)
+            WHERE (ps.paymentID IS NOT NULL OR (SELECT paymentID FROM s_core_paymentmeans_subshops WHERE paymentID=p.id LIMIT 1) IS NULL)
+            AND (pc.paymentID IS NOT NULL OR (SELECT paymentID FROM s_core_paymentmeans_countries WHERE paymentID=p.id LIMIT 1) IS NULL)
 
-			ORDER BY position, name
-		";
+            ORDER BY position, name
+        ";
 
 
         $getPaymentMeans = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
 
-        if($getPaymentMeans===false)
-        {
+        if ($getPaymentMeans===false) {
             $sql = "SELECT * FROM s_core_paymentmeans ORDER BY position, name";
             $getPaymentMeans = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
         }
@@ -429,20 +415,20 @@ class sAdmin
         foreach ($getPaymentMeans as $payKey => $payValue) {
 
             // Hide paymentmeans which are not active
-            if (empty($payValue["active"]) && $payValue["id"]!=$user["additional"]["user"]["paymentpreset"]){
+            if (empty($payValue["active"]) && $payValue["id"]!=$user["additional"]["user"]["paymentpreset"]) {
                 unset($getPaymentMeans[$payKey]);
                 continue;
             }
 
             // If esd - order, hide payment-means, whih
             // are not accessible for esd
-            if (empty($payValue["esdactive"]) && $sEsd){
+            if (empty($payValue["esdactive"]) && $sEsd) {
                 unset($getPaymentMeans[$payKey]);
                 continue;
             }
 
             // Check additional rules
-            if ($this->sManageRisks($payValue["id"], $basket, $user) && $payValue["id"]!=$user["additional"]["user"]["paymentpreset"]){
+            if ($this->sManageRisks($payValue["id"], $basket, $user) && $payValue["id"]!=$user["additional"]["user"]["paymentpreset"]) {
                 unset($getPaymentMeans[$payKey]);
                 continue;
             }
@@ -472,10 +458,11 @@ class sAdmin
      * @access public
      * @return object or false -
      */
-    public function sInitiatePaymentClass($paymentData) {
+    public function sInitiatePaymentClass($paymentData)
+    {
         $dirs = array();
 
-        if(substr($paymentData['class'], -strlen('.php')) === '.php') {
+        if (substr($paymentData['class'], -strlen('.php')) === '.php') {
             $index = substr($paymentData['class'], 0, strpos($paymentData['class'], '.php'));
         } else {
             $index = $paymentData['class'];
@@ -488,18 +475,17 @@ class sAdmin
         );
 
         $class = array_key_exists($index, $dirs)?$dirs[$index]:$dirs['default'];
-        if (!$class){
+        if (!$class) {
             $this->sSYSTEM->E_CORE_WARNING("sValidateStep3 #02","Payment classes dir not loaded");
             return false;
         }
 
         $sPaymentObject = new $class();
 
-        if (!$sPaymentObject){
-            $this->sSYSTEM->E_CORE_WARNING("sValidateStep3 #02","Payment-Class not found");
+        if (!$sPaymentObject) {
+            $this->sSYSTEM->E_CORE_WARNING("sValidateStep3 #02","Payment class not found");
             return false;
         } else {
-            $sPaymentObject->sSYSTEM = &$this->sSYSTEM;
             return $sPaymentObject;
         }
     }
@@ -513,7 +499,7 @@ class sAdmin
      */
     public function sValidateStep3 ($paymentmeans = array())
     {
-        if (empty($this->sSYSTEM->_POST['sPayment'])){
+        if (empty($this->sSYSTEM->_POST['sPayment'])) {
             $this->sSYSTEM->E_CORE_WARNING("sValidateStep3 #00","No payment-id");
             return;
         }
@@ -521,14 +507,14 @@ class sAdmin
         $user = $this->sGetUserData();
         $paymentData = $this->sGetPaymentMeanById($this->sSYSTEM->_POST['sPayment'],$user);
 
-        if (!count($paymentData)){
+        if (!count($paymentData)) {
             $this->sSYSTEM->E_CORE_ERROR("sValidateStep3 #01","Could not load paymentmean");
             return;
-        }else {
+        } else {
             // Include management-class and check input-data
-            if(!empty($paymentData['class'])) {
+            if (!empty($paymentData['class'])) {
                 $sPaymentObject = $this->sInitiatePaymentClass($paymentData);
-                $checkPayment = $sPaymentObject->sInit($this->sSYSTEM);
+                $checkPayment = $sPaymentObject->validate(Shopware()->Front()->Request());
             }
             return array("checkPayment"=>$checkPayment,"paymentData"=>$paymentData,"sProcessed"=>true,"sPaymentObject"=>&$sPaymentObject);
         }
@@ -541,24 +527,18 @@ class sAdmin
      * @access public
      * @return bool
      */
-    public function sUpdateBilling (){
-
+    public function sUpdateBilling()
+    {
         $userObject = $this->sSYSTEM->_POST;
 
-        if (!empty($userObject['birthmonth']) && !empty($userObject['birthday']) && !empty($userObject['birthyear']))
-        {
+        if (!empty($userObject['birthmonth']) && !empty($userObject['birthday']) && !empty($userObject['birthyear'])) {
             $userObject['birthday'] = mktime(0,0,0, (int) $userObject['birthmonth'], (int) $userObject['birthday'], (int) $userObject['birthyear']);
-            if($userObject['birthday']>0)
-            {
+            if ($userObject['birthday']>0) {
                 $userObject['birthday'] = date('Y-m-d', $userObject['birthday']);
-            }
-            else
-            {
+            } else {
                 $userObject['birthday'] = '0000-00-00';
             }
-        }
-        else
-        {
+        } else {
             unset($userObject['birthday']);
         }
 
@@ -581,10 +561,8 @@ class sAdmin
         );
 
         $data = array();
-        foreach ($fields as $field)
-        {
-            if(isset($userObject[$field]))
-            {
+        foreach ($fields as $field) {
+            if (isset($userObject[$field])) {
                 $data[$field] = $userObject[$field];
             }
         }
@@ -600,7 +578,7 @@ class sAdmin
         $result = Shopware()->Db()->update('s_user_billingaddress', $data, $where);
 
 
-        if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg()){
+        if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg()) {
             $this->sSYSTEM->E_CORE_WARNING("sUpdateBilling #01","Could not save data (billing-adress)".$this->sSYSTEM->sDB_CONNECTION->ErrorMsg());
             return false;
         }
@@ -633,30 +611,31 @@ class sAdmin
      * @access public
      * @return -
      */
-    public function sUpdateNewsletter ($status,$email,$customer=false){
-        if (!$status){
+    public function sUpdateNewsletter($status,$email,$customer=false)
+    {
+        if (!$status) {
             // Delete
             $changeLetterState = $this->sSYSTEM->sDB_CONNECTION->Execute("
-			DELETE FROM s_campaigns_mailaddresses WHERE email=?
-			",array($email));
-        }else {
+            DELETE FROM s_campaigns_mailaddresses WHERE email=?
+            ",array($email));
+        } else {
             // Check if mail address receives already our newsletter
-            if ($this->sSYSTEM->sDB_CONNECTION->getOne("SELECT id FROM s_campaigns_mailaddresses WHERE email = ?",array($email))){
+            if ($this->sSYSTEM->sDB_CONNECTION->getOne("SELECT id FROM s_campaigns_mailaddresses WHERE email = ?",array($email))) {
                 return false;
             }
             $groupID = $this->sSYSTEM->sCONFIG['sNEWSLETTERDEFAULTGROUP'];
             if (!$groupID) $groupID = "0";
             // Insert
-            if (!empty($customer)){
+            if (!empty($customer)) {
                 $changeLetterState = $this->sSYSTEM->sDB_CONNECTION->Execute("
-				INSERT INTO s_campaigns_mailaddresses (customer, email)
-				VALUES (?,?)
-				",array(1,$email));
-            }else {
+                INSERT INTO s_campaigns_mailaddresses (customer, email)
+                VALUES (?,?)
+                ",array(1,$email));
+            } else {
                 $changeLetterState = $this->sSYSTEM->sDB_CONNECTION->Execute("
-				INSERT INTO s_campaigns_mailaddresses (groupID, email)
-				VALUES (?,?)
-				",array($groupID,$email));
+                INSERT INTO s_campaigns_mailaddresses (groupID, email)
+                VALUES (?,?)
+                ",array($groupID,$email));
             }
         }
 
@@ -683,24 +662,22 @@ class sAdmin
         }
 
         $sql = '
-			SELECT
-				MD5(CONCAT(company, department, salutation, firstname, lastname, street, streetnumber, zipcode, city, countryID)) as hash,
-				company, department, salutation, firstname, lastname,
-				street, streetnumber, zipcode, city, countryID as country, countryID, countryname
-			FROM s_order_'.$type.'address AS a
-			LEFT JOIN s_core_countries co
-			ON a.countryID=co.id
-			WHERE a.userID=?
-			GROUP BY hash
-			ORDER BY MAX(a.id) DESC
-		';
+            SELECT
+                MD5(CONCAT(company, department, salutation, firstname, lastname, street, streetnumber, zipcode, city, countryID)) as hash,
+                company, department, salutation, firstname, lastname,
+                street, streetnumber, zipcode, city, countryID as country, countryID, countryname
+            FROM s_order_'.$type.'address AS a
+            LEFT JOIN s_core_countries co
+            ON a.countryID=co.id
+            WHERE a.userID=?
+            GROUP BY hash
+            ORDER BY MAX(a.id) DESC
+        ';
 
         $addresses = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql, array($this->sSYSTEM->_SESSION['sUserId']));
 
-        foreach ($addresses as $address)
-        {
-            if(!empty($request_hash)&&$address['hash']==$request_hash)
-            {
+        foreach ($addresses as $address) {
+            if (!empty($request_hash)&&$address['hash']==$request_hash) {
                 return $address;
             }
             $address[$address['hash']]['country'] = array();
@@ -709,8 +686,7 @@ class sAdmin
             $address[$address['hash']]['country'] = $this->sGetCountryTranslation($address["country"]);
         }
 
-        if(!empty($request_hash))
-        {
+        if (!empty($request_hash)) {
             return false;
         }
 
@@ -723,10 +699,11 @@ class sAdmin
      * @access public
      * @return bool
      */
-    public function sUpdateShipping (){
+    public function sUpdateShipping()
+    {
         $userObject = $this->sSYSTEM->_POST;
 
-        if (empty($this->sSYSTEM->_SESSION["sUserId"])){
+        if (empty($this->sSYSTEM->_SESSION["sUserId"])) {
             return false;
         }
 
@@ -748,10 +725,8 @@ class sAdmin
         );
 
         $data = array();
-        foreach ($fields as $field)
-        {
-            if(isset($userObject[$field]))
-            {
+        foreach ($fields as $field) {
+            if (isset($userObject[$field])) {
                 $data[$field] = $userObject[$field];
             }
         }
@@ -760,9 +735,8 @@ class sAdmin
 
         list($data) = Enlight()->Events()->filter('Shopware_Modules_Admin_UpdateShipping_FilterSql', array($data), array('subject'=>$this,"id"=>$this->sSYSTEM->_SESSION['sUserId'],"user"=>$userObject));
 
-        if(empty($shippingID))
-        {
-            $data["userID"] = (int)$this->sSYSTEM->_SESSION['sUserId'];
+        if (empty($shippingID)) {
+            $data["userID"] = (int) $this->sSYSTEM->_SESSION['sUserId'];
             $result = Shopware()->Db()->insert('s_user_shippingaddress', $data);
 
             $shippingID = Shopware()->Db()->lastInsertId('s_user_shippingaddress');
@@ -777,10 +751,8 @@ class sAdmin
             );
             list($attributeData) = Enlight()->Events()->filter('Shopware_Modules_Admin_UpdateShippingAttributes_FilterSql', array($attributeData), array('subject'=>$this,"id"=>$this->sSYSTEM->_SESSION['sUserId'],"user"=>$userObject));
             Shopware()->Db()->insert('s_user_shippingaddress_attributes', $attributeData);
-        }
-        else
-        {
-            $where = array('id='.(int)$shippingID);
+        } else {
+            $where = array('id='.(int) $shippingID);
             $result = Shopware()->Db()->update('s_user_shippingaddress', $data,$where);
 
             $attributeData = array(
@@ -791,12 +763,12 @@ class sAdmin
                 'text5' => $userObject['text5'],
                 'text6' => $userObject['text6']
             );
-            $where = array('shippingID='.(int)$shippingID);
+            $where = array('shippingID='.(int) $shippingID);
             list($attributeData) = Enlight()->Events()->filter('Shopware_Modules_Admin_UpdateShippingAttributes_FilterSql', array($attributeData), array('subject'=>$this,"id"=>$this->sSYSTEM->_SESSION['sUserId'],"user"=>$userObject));
             Shopware()->Db()->update('s_user_shippingaddress_attributes', $attributeData,$where);
         }
 
-        if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg()){
+        if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg()) {
             $this->sSYSTEM->E_CORE_WARNING("sUpdateShipping #01","Could not save data (billing-adress)".$this->sSYSTEM->sDB_CONNECTION->ErrorMsg());
             return false;
         }
@@ -809,18 +781,19 @@ class sAdmin
      * @access public
      * @return bool
      */
-    public function sUpdatePayment (){
-        if (empty($this->sSYSTEM->_SESSION["sUserId"])){
+    public function sUpdatePayment()
+    {
+        if (empty($this->sSYSTEM->_SESSION["sUserId"])) {
             return false;
         }
         $sqlPayment = "
-		UPDATE s_user SET paymentID=? WHERE id=?";
+        UPDATE s_user SET paymentID=? WHERE id=?";
 
         $sqlPayment = Enlight()->Events()->filter('Shopware_Modules_Admin_UpdatePayment_FilterSql', $sqlPayment, array('subject'=>$this,"id"=>$this->sSYSTEM->_SESSION['sUserId']));
 
         $saveUserData = $this->sSYSTEM->sDB_CONNECTION->Execute($sqlPayment,array($this->sSYSTEM->_POST["sPayment"],$this->sSYSTEM->_SESSION["sUserId"]));
 
-        if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg()){
+        if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg()) {
             $this->sSYSTEM->E_CORE_WARNING("sUpdatePayment #01","Could not save data (payment)".$this->sSYSTEM->sDB_CONNECTION->ErrorMsg());
             return false;
         }
@@ -833,7 +806,8 @@ class sAdmin
      * @access public
      * @return bool
      */
-    public function sUpdateAccount (){
+    public function sUpdateAccount()
+    {
         $p = $this->sSYSTEM->_POST;
 
         $email = strtolower($p["email"]);
@@ -842,28 +816,28 @@ class sAdmin
         $passwordConfirmation = $p["passwordConfirmation"];
 
 
-        if ($password && $passwordConfirmation){
+        if ($password && $passwordConfirmation) {
             $encoderName = Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
             $password = Shopware()->PasswordEncoder()->encodePassword($password, $encoderName);
 
             $this->sSYSTEM->_SESSION["sUserMail"] = $email;
             $this->sSYSTEM->_SESSION["sUserPassword"] = $password;
             $sqlAccount = "
-			UPDATE s_user SET email=?, password=?, encoder=? WHERE id=?";
+            UPDATE s_user SET email=?, password=?, encoder=? WHERE id=?";
             $sqlAccount = Enlight()->Events()->filter('Shopware_Modules_Admin_UpdateAccount_FilterPasswordSql', $sqlAccount, array('email'=>$email,'password'=>$password,'encoder'=>$encoderName,'subject'=>$this,"id"=>$this->sSYSTEM->_SESSION['sUserId']));
 
             $saveUserData = $this->sSYSTEM->sDB_CONNECTION->Execute($sqlAccount,array($email,$password,$encoderName,$this->sSYSTEM->_SESSION["sUserId"]));
-        }else {
+        } else {
             $this->sSYSTEM->_SESSION["sUserMail"] = $email;
             $sqlAccount = "
-			UPDATE s_user SET email=? WHERE id=?";
+            UPDATE s_user SET email=? WHERE id=?";
             $sqlAccount = Enlight()->Events()->filter('Shopware_Modules_Admin_UpdateAccount_FilterEmailSql', $sqlAccount, array('email'=>$email,'password'=>$password,'subject'=>$this,"id"=>$this->sSYSTEM->_SESSION['sUserId']));
 
             $saveUserData = $this->sSYSTEM->sDB_CONNECTION->Execute($sqlAccount,array($email,$this->sSYSTEM->_SESSION["sUserId"]));
         }
 
 
-        if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg()){
+        if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg()) {
             $this->sSYSTEM->E_CORE_WARNING("sUpdateAccount #01","Could not save data (account)".$this->sSYSTEM->sDB_CONNECTION->ErrorMsg());
             return false;
         }
@@ -878,8 +852,8 @@ class sAdmin
      * @access public
      * @return array Array with errors that may have occurred
      */
-    public function sValidateStep2 ($rules,$edit=false){
-
+    public function sValidateStep2($rules,$edit=false)
+    {
         $sErrorMessages = array();
         $sErrorFlag = array();
 
@@ -887,37 +861,37 @@ class sAdmin
 
         $p = $this->sSYSTEM->_POST;
 
-        foreach ($rules as $ruleKey => $ruleValue){
+        foreach ($rules as $ruleKey => $ruleValue) {
 
             $p[$ruleKey] = trim($p[$ruleKey]);
 
-            if (empty($p[$ruleKey]) && !empty($rules[$ruleKey]["required"]) && empty($rules[$ruleKey]["addicted"])){
+            if (empty($p[$ruleKey]) && !empty($rules[$ruleKey]["required"]) && empty($rules[$ruleKey]["addicted"])) {
                 $sErrorFlag[$ruleKey] = true;
             }
         }
 
-        if (count($sErrorFlag)){
+        if (count($sErrorFlag)) {
             // Some error occurs
             $sErrorMessages[] = $this->snippetObject->get('ErrorFillIn','Please fill in all red fields');
         }
 
-        if(isset($rules['ustid'])) {
+        if (isset($rules['ustid'])) {
             $sVatMessages = $this->sValidateVat();
-            if(!empty($sVatMessages)) {
+            if (!empty($sVatMessages)) {
                 $sErrorFlag["ustid"] = true;
                 $sErrorMessages = array_merge($sErrorMessages, $sVatMessages);
             }
         }
 
-        if (!$edit){
-            if (!count($sErrorMessages)){
+        if (!$edit) {
+            if (!count($sErrorMessages)) {
                 $register = $this->sSYSTEM->_SESSION['sRegister'];
-                foreach ($rules as $ruleKey => $ruleValue){
+                foreach ($rules as $ruleKey => $ruleValue) {
                     $register['billing'][$ruleKey] = $p[$ruleKey];
                 }
                 $this->sSYSTEM->_SESSION['sRegister'] = $register;
-            }else {
-                foreach ($rules as $ruleKey => $ruleValue){
+            } else {
+                foreach ($rules as $ruleKey => $ruleValue) {
                     unset($this->sSYSTEM->_SESSION["sRegister"]["billing"][$ruleKey]);
                 }
             }
@@ -934,23 +908,23 @@ class sAdmin
      * @access public
      * @return array Array with errors that may have occurred
      */
-    public function sValidateStep2ShippingAddress ($rules, $edit=false){
-
+    public function sValidateStep2ShippingAddress($rules, $edit=false)
+    {
         $p = $this->sSYSTEM->_POST;
 
-        foreach ($rules as $ruleKey => $ruleValue){
-            if ($rules[$ruleKey]["addicted"]){
+        foreach ($rules as $ruleKey => $ruleValue) {
+            if ($rules[$ruleKey]["addicted"]) {
                 $addictedField = array_keys($rules[$ruleKey]["addicted"]);
-                if ($p[$addictedField[0]]==$rules[$ruleKey]["addicted"][$addictedField[0]] && !$p[$ruleKey]){
+                if ($p[$addictedField[0]]==$rules[$ruleKey]["addicted"][$addictedField[0]] && !$p[$ruleKey]) {
                     $sErrorFlag[$ruleKey] = true;
                 }
-            }else  {
-                if (!$p[$ruleKey] && $rules[$ruleKey]["required"]){
+            } else {
+                if (!$p[$ruleKey] && $rules[$ruleKey]["required"]) {
                     $sErrorFlag[$ruleKey] = true;
                 }
 
                 // Fix, to support billing- and shipping-address in one step
-                if (preg_match("/SHIPPING/",$ruleKey)){
+                if (preg_match("/SHIPPING/",$ruleKey)) {
                     $clearedRuleKey = str_replace("SHIPPING","",$ruleKey);
                     //unset($rules[$ruleKey]);
                     $p[$clearedRuleKey] = $p[$ruleKey];
@@ -961,7 +935,7 @@ class sAdmin
             }
         }
 
-        if (count($sErrorFlag)){
+        if (count($sErrorFlag)) {
             // Some error occurs
             $sErrorMessages[] = $this->snippetObject->get('ErrorFillIn','Please fill in all red fields');
         }
@@ -991,51 +965,50 @@ class sAdmin
      * @access public
      * @return array Array with errors that may have occurred
      */
-    public function sValidateStep1 ($edit = false)
+    public function sValidateStep1($edit = false)
     {
         $p = $this->sSYSTEM->_POST;
-	    $encoderName =  Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
+        $encoderName =  Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
 
-        if(isset($p["emailConfirmation"]) || isset($p["email"])) {
+        if (isset($p["emailConfirmation"]) || isset($p["email"])) {
             $p["email"] = strtolower(trim($p["email"]));
             // Check email
 
             $validator = new Zend_Validate_EmailAddress();
 
-            if (empty($p["email"]) || !$validator->isValid($p["email"])){
+            if (empty($p["email"]) || !$validator->isValid($p["email"])) {
                 $sErrorFlag["email"] = true;
                 $sErrorMessages[] = $this->snippetObject->get('MailFailure','Please enter a valid mail address');
             }
 
             // Check email confirmation if needed
-            if(isset($p["emailConfirmation"])) {
+            if (isset($p["emailConfirmation"])) {
                 $p["emailConfirmation"] = strtolower(trim($p["emailConfirmation"]));
-                if($p["email"] != $p["emailConfirmation"]){
+                if ($p["email"] != $p["emailConfirmation"]) {
                     $sErrorFlag["emailConfirmation"] = true;
                     $sErrorMessages[] = $this->snippetObject->get('MailFailureNotEqual','The mail addresses entered are not equal');
                 }
             }
-        } elseif($edit && empty($p["email"])) {
+        } elseif ($edit && empty($p["email"])) {
             $this->sSYSTEM->_POST["email"] = $p["email"] = $this->sSYSTEM->_SESSION["sUserMail"];
         }
 
-        if (empty($this->sSYSTEM->_SESSION['sRegister']))
-        {
+        if (empty($this->sSYSTEM->_SESSION['sRegister'])) {
             $this->sSYSTEM->_SESSION['sRegister'] = array();
         }
 
         // Check password if account should be created
-        if (!$p["skipLogin"] || $edit){
-            if ($edit && (!$p["password"] && !$p["passwordConfirmation"])){
+        if (!$p["skipLogin"] || $edit) {
+            if ($edit && (!$p["password"] && !$p["passwordConfirmation"])) {
 
-            }else {
-                if (strlen(trim($p["password"])) == 0 || !$p["password"] || !$p["passwordConfirmation"] || (strlen($p["password"])<$this->sSYSTEM->sCONFIG['sMINPASSWORD'])){
+            } else {
+                if (strlen(trim($p["password"])) == 0 || !$p["password"] || !$p["passwordConfirmation"] || (strlen($p["password"])<$this->sSYSTEM->sCONFIG['sMINPASSWORD'])) {
 
                     $sErrorMessages[] = Shopware()->Snippets()->getNamespace("frontend")->get('RegisterPasswordLength','',true);
 
                     $sErrorFlag["password"] = true;
                     $sErrorFlag["passwordConfirmation"] = true;
-                } elseif ($p["password"]!=$p["passwordConfirmation"])  {
+                } elseif ($p["password"]!=$p["passwordConfirmation"]) {
                     $sErrorMessages[] = Shopware()->Snippets()->getNamespace("frontend")->get('AccountPasswordNotEqual', 'The passwords are not equal', true);
                     $sErrorFlag["password"] = true;
                     $sErrorFlag["passwordConfirmation"] = true;
@@ -1044,10 +1017,10 @@ class sAdmin
             $register = $this->sSYSTEM->_SESSION["sRegister"];
             $register["auth"]["accountmode"] = "0"; // Setting account-mode to ACCOUNT
             $this->sSYSTEM->_SESSION["sRegister"] = $register;
-        }else {
+        } else {
             // Enforce the creation of an md5-hashed password for anonymous accounts
             $p["password"] = md5(uniqid(rand()));
-	        $encoderName = 'md5';
+            $encoderName = 'md5';
 
             $register = $this->sSYSTEM->_SESSION["sRegister"];
             $register["auth"]["accountmode"] = "1";  // Setting account-mode to NO_ACCOUNT
@@ -1055,13 +1028,13 @@ class sAdmin
         }
 
         // Check current password
-        if($edit && !empty(Shopware()->Config()->accountPasswordCheck)) {
+        if ($edit && !empty(Shopware()->Config()->accountPasswordCheck)) {
             $password = $p["currentPassword"];
             $current = Shopware()->Session()->sUserPassword;
             $snippet = Shopware()->Snippets()->getNamespace("frontend");
-            if(empty($password) || !Shopware()->PasswordEncoder()->isPasswordValid($password, $current, $encoderName)) {
+            if (empty($password) || !Shopware()->PasswordEncoder()->isPasswordValid($password, $current, $encoderName)) {
                 $sErrorFlag['currentPassword'] = true;
-                if($p["password"]) {
+                if ($p["password"]) {
                     $sErrorFlag['password'] = true;
                 } else {
                     $sErrorFlag['email'] = true;
@@ -1071,35 +1044,35 @@ class sAdmin
         }
 
         // Check if email is already registered
-        if (isset($p["email"]) && ($p["email"]!=$this->sSYSTEM->_SESSION["sUserMail"])){
+        if (isset($p["email"]) && ($p["email"]!=$this->sSYSTEM->_SESSION["sUserMail"])) {
             $addScopeSql = "";
-            if ($this->scopedRegistration == true){
+            if ($this->scopedRegistration == true) {
                 $addScopeSql = "
                   AND subshopID = ".$this->subshopId;
             }
             $checkIfMailExists = $this->sSYSTEM->sDB_CONNECTION->GetRow("SELECT id FROM s_user WHERE email=? AND accountmode!=1 $addScopeSql",array($p["email"]));
-            if (!empty($checkIfMailExists) && !$p["skipLogin"]){
+            if (!empty($checkIfMailExists) && !$p["skipLogin"]) {
                 $sErrorFlag["email"] = true;
                 $sErrorMessages[] = $this->snippetObject->get('MailFailureAlreadyRegistered','This mail address is already registered');
             }
         }
 
         // Save data in session
-        if (!$edit){
+        if (!$edit) {
             $register = $this->sSYSTEM->_SESSION["sRegister"];
 
-            if (!count($sErrorFlag) && !count($sErrorMessages)){
+            if (!count($sErrorFlag) && !count($sErrorMessages)) {
                 $register['auth']["email"] = $p["email"];
                 // Receive Newsletter yes / no
                 $register['auth']["receiveNewsletter"] = $p["receiveNewsletter"];
-                if ($p["password"]){
+                if ($p["password"]) {
                     $register['auth']["encoderName"] = $encoderName;
                     $register['auth']["password"] = Shopware()->PasswordEncoder()->encodePassword($p["password"], $encoderName);
-                }else {
+                } else {
                     unset($register['auth']["password"]);
                     unset($register['auth']["encoderName"]);
                 }
-            }else {
+            } else {
                 unset ($register['auth']["email"]);
                 unset ($register['auth']["password"]);
                 unset ($register['auth']["encoderName"]);
@@ -1201,12 +1174,12 @@ class sAdmin
                 throw new \Exception('No encoderName given.');
             }
 
-	        $hash      = $getUser['password'];
+            $hash      = $getUser['password'];
             $plaintext = $password;
             $password  = $hash;
 
 
-	        $isValidLogin = Shopware()->PasswordEncoder()->isPasswordValid($plaintext, $hash, $encoderName);
+            $isValidLogin = Shopware()->PasswordEncoder()->isPasswordValid($plaintext, $hash, $encoderName);
         }
 
 
@@ -1228,7 +1201,7 @@ class sAdmin
             $liveMigration = Shopware()->Config()->liveMigration;
             $defaultEncoderName = Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
 
-	        // Do not allow live migration when the password is prehashed
+            // Do not allow live migration when the password is prehashed
             if ($liveMigration && !$isPreHashed && $encoderName !== $defaultEncoderName) {
                 $newHash = Shopware()->PasswordEncoder()->encodePassword($plaintext, $defaultEncoderName);
                 $encoderName = $defaultEncoderName;
@@ -1328,6 +1301,7 @@ class sAdmin
         session_start();
 
         $this->sSYSTEM->sSESSION_ID = $newSessionId;
+        Shopware()->Session()->offsetSet('sessionId', $newSessionId);
         Shopware()->Bootstrap()->resetResource('SessionId');
         Shopware()->Bootstrap()->registerResource('SessionId', $newSessionId);
 
@@ -1354,7 +1328,7 @@ class sAdmin
     }
 
 
-	/**
+    /**
      * Verification of user authorization (logged in) on all secured pages (checkout,account)
      * @access public
      * @return boolean
@@ -1374,9 +1348,9 @@ class sAdmin
         }
 
         $sql = "
-			SELECT * FROM s_user
-			WHERE password=? AND email=? AND id=? AND UNIX_TIMESTAMP(lastlogin)>=(UNIX_TIMESTAMP(now())-?)
-		";
+            SELECT * FROM s_user
+            WHERE password=? AND email=? AND id=? AND UNIX_TIMESTAMP(lastlogin)>=(UNIX_TIMESTAMP(now())-?)
+        ";
 
         $timeOut = $this->sSYSTEM->sCONFIG['sUSERTIMEOUT'];
         $timeOut = !empty($timeOut) ? $timeOut : 7200;
@@ -1446,28 +1420,29 @@ class sAdmin
      * @access public
      * @return array - translated country data
      */
-    public function sGetCountryTranslation($country=""){
+    public function sGetCountryTranslation($country="")
+    {
         // Load Translation
         $sql = "SELECT objectdata FROM s_core_translations WHERE objecttype='config_countries' AND objectlanguage=?";
 
         $param = array($this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"]);
         $getTranslation = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],$sql, $param);
 
-        if ($getTranslation["objectdata"]){
+        if ($getTranslation["objectdata"]) {
             $object = unserialize($getTranslation["objectdata"]);
         }
 
         if (!$country) return $object;
 
         // Pass (possible) translation to country
-        if ($object[$country["id"]]["countryname"]){
+        if ($object[$country["id"]]["countryname"]) {
             $country["countryname"] = $object[$country["id"]]["countryname"];
         }
-        if ($object[$country["id"]]["notice"]){
+        if ($object[$country["id"]]["notice"]) {
             $country["notice"] = $object[$country["id"]]["notice"];
         }
 
-        if ($object[$country["id"]]["active"]){
+        if ($object[$country["id"]]["active"]) {
             $country["active"] = $object[$country["id"]]["active"];
         }
 
@@ -1480,27 +1455,28 @@ class sAdmin
      * @access public
      * @return array - translated dispatch
      */
-    public function sGetDispatchTranslation($dispatch=""){
+    public function sGetDispatchTranslation($dispatch="")
+    {
         // Load Translation
         $sql = "
-		SELECT objectdata FROM s_core_translations WHERE objecttype='config_dispatch' AND objectlanguage=?";
+        SELECT objectdata FROM s_core_translations WHERE objecttype='config_dispatch' AND objectlanguage=?";
         $params = array($this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"]);
         $getTranslation = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],$sql, $params);
 
-        if ($getTranslation["objectdata"]){
+        if ($getTranslation["objectdata"]) {
             $object = unserialize($getTranslation["objectdata"]);
         }
 
         if (!$dispatch) return $object;
 
         // Pass (possible) translation to country
-        if ($object[$dispatch["id"]]["dispatch_name"]){
+        if ($object[$dispatch["id"]]["dispatch_name"]) {
             $dispatch["name"] = $object[$dispatch["id"]]["dispatch_name"];
         }
-        if ($object[$dispatch["id"]]["dispatch_description"]){
+        if ($object[$dispatch["id"]]["dispatch_description"]) {
             $dispatch["description"] = $object[$dispatch["id"]]["dispatch_description"];
         }
-        if ($object[$dispatch["id"]]["dispatch_status_link"]){
+        if ($object[$dispatch["id"]]["dispatch_status_link"]) {
             $dispatch["status_link"] = $object[$dispatch["id"]]["dispatch_status_link"];
         }
 
@@ -1513,26 +1489,26 @@ class sAdmin
      * @access public
      * @return array - translated data
      */
-    public function sGetPaymentTranslation($payment=""){
-
+    public function sGetPaymentTranslation($payment="")
+    {
         // Load Translation
         $sql = "
-		SELECT objectdata FROM s_core_translations WHERE objecttype='config_payment' AND objectlanguage=?";
+        SELECT objectdata FROM s_core_translations WHERE objecttype='config_payment' AND objectlanguage=?";
         $params = array($this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"]);
 
         $getTranslation = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],$sql, $params);
 
-        if (!empty($getTranslation["objectdata"])){
+        if (!empty($getTranslation["objectdata"])) {
             $object = unserialize($getTranslation["objectdata"]);
         }
 
         if (!$payment) return $object;
 
         // Pass (possible) translation to payment
-        if (!empty($object[$payment["id"]]["description"])){
+        if (!empty($object[$payment["id"]]["description"])) {
             $payment["description"] = $object[$payment["id"]]["description"];
         }
-        if (!empty($object[$payment["id"]]["additionalDescription"])){
+        if (!empty($object[$payment["id"]]["additionalDescription"])) {
             $payment["additionaldescription"] = $object[$payment["id"]]["additionalDescription"];
         }
 
@@ -1544,7 +1520,7 @@ class sAdmin
      */
     public function sGetCountryStateTranslation()
     {
-        if(Shopware()->Shop()->get('skipbackend')) {
+        if (Shopware()->Shop()->get('skipbackend')) {
             return array();
         }
         $language = Shopware()->Shop()->get('isocode');
@@ -1556,7 +1532,7 @@ class sAdmin
             WHERE objecttype = 'config_country_states'
             AND objectkey = 1
             AND objectlanguage = ?
-		";
+        ";
         $translation = $this->sSYSTEM->sDB_CONNECTION->CacheGetOne(
             $cacheTime, $sql, array($language)
         );
@@ -1597,10 +1573,9 @@ class sAdmin
         $stateTranslation = $this->sGetCountryStateTranslation();
 
 
-        foreach ($getCountries as $key => $v)
-        {
+        foreach ($getCountries as $key => $v) {
 
-            if (isset($object[$v["id"]]["active"])){
+            if (isset($object[$v["id"]]["active"])) {
                 if (!$object[$v["id"]]["active"]) {
                     unset($getCountries[$key]);
                     continue;
@@ -1609,27 +1584,27 @@ class sAdmin
 
 
             $getCountries[$key]["states"] = array();
-            if (!empty($v["display_state_in_registration"])){
+            if (!empty($v["display_state_in_registration"])) {
                 // Get country states
                 $states = Shopware()->Db()->fetchAssoc("
                     SELECT * FROM s_core_countries_states
                     WHERE countryID = ? AND active = 1
                     ORDER BY position, name ASC
                 ", array($v["id"]));
-                foreach($states as $stateId => $state){
-                    if(isset($stateTranslation[$stateId])) {
+                foreach ($states as $stateId => $state) {
+                    if (isset($stateTranslation[$stateId])) {
                         $states[$stateId] = array_merge($state, $stateTranslation[$stateId]);
                     }
                 }
                 $getCountries[$key]["states"] = $states;
             }
-            if (!empty($object[$v["id"]]["countryname"])){
+            if (!empty($object[$v["id"]]["countryname"])) {
                 $getCountries[$key]["countryname"] = $object[$v["id"]]["countryname"];
             }
-            if (!empty($object[$v["id"]]["notice"])){
+            if (!empty($object[$v["id"]]["notice"])) {
                 $getCountries[$key]["notice"] = $object[$v["id"]]["notice"];
             }
-            if ($getCountries[$key]["id"]==$this->sSYSTEM->_POST['country'] || $getCountries[$key]["id"]==$this->sSYSTEM->_POST['countryID'] ){
+            if ($getCountries[$key]["id"]==$this->sSYSTEM->_POST['country'] || $getCountries[$key]["id"]==$this->sSYSTEM->_POST['countryID']) {
                 $getCountries[$key]["flag"] = true;
             } else {
                 $getCountries[$key]["flag"] = false;
@@ -1649,20 +1624,19 @@ class sAdmin
      * @access public
      * @return int - insert id
      */
-    public function sSaveRegisterMainData($userObject){
-
+    public function sSaveRegisterMainData($userObject)
+    {
         // Support for merchants
-        if ($userObject["billing"]["sValidation"]){
+        if ($userObject["billing"]["sValidation"]) {
             $sMerchant = $userObject["billing"]["sValidation"];
-        }else {
+        } else {
             $sMerchant = "";
         }
 
         if (empty($this->sSYSTEM->sCONFIG["sDefaultCustomerGroup"])) $this->sSYSTEM->sCONFIG["sDefaultCustomerGroup"] = "EK";
         $referer = $this->sSYSTEM->_SESSION['sReferer'];
 
-        if (!empty($this->sSYSTEM->_SESSION['sPartner']))
-        {
+        if (!empty($this->sSYSTEM->_SESSION['sPartner'])) {
             $sql = 'SELECT id FROM s_emarketing_partner WHERE idcode = ?';
             $partner = (int) $this->sSYSTEM->sDB_CONNECTION->GetOne($sql, array($this->sSYSTEM->_SESSION['sPartner']));
         }
@@ -1682,14 +1656,14 @@ class sAdmin
             $userObject["auth"]["encoderName"],
         );
         $sql = '
-			INSERT INTO s_user
-			(
-				password, email, paymentID, active, accountmode,
-			 	validation, firstlogin,sessionID, affiliate, customergroup,
-			 	language, subshopID, referer, encoder
-			)
-			VALUES (?,?,?,1,?,?,NOW(),?,?,?,?,?,?,?)
-		';
+            INSERT INTO s_user
+            (
+                password, email, paymentID, active, accountmode,
+                validation, firstlogin,sessionID, affiliate, customergroup,
+                language, subshopID, referer, encoder
+            )
+            VALUES (?,?,?,1,?,?,NOW(),?,?,?,?,?,?,?)
+        ';
 
         list($sql,$data) = Enlight()->Events()->filter('Shopware_Modules_Admin_SaveRegisterMainData_FilterSql', array($sql,$data), array('subject'=>$this));
 
@@ -1715,16 +1689,17 @@ class sAdmin
      * @access public
      * @return null
      */
-    public function sSaveRegisterNewsletter($userObject){
+    public function sSaveRegisterNewsletter($userObject)
+    {
         // Check for duplicates
         $checkDuplicate = $this->sSYSTEM->sDB_CONNECTION->GetRow("
-		SELECT id FROM s_campaigns_mailaddresses
-		WHERE email=?",array($userObject["auth"]["email"]));
+        SELECT id FROM s_campaigns_mailaddresses
+        WHERE email=?",array($userObject["auth"]["email"]));
 
-        if (empty($checkDuplicate["id"])){
+        if (empty($checkDuplicate["id"])) {
             $saveNewsletter = $this->sSYSTEM->sDB_CONNECTION->Execute("
-			INSERT INTO s_campaigns_mailaddresses (customer, groupID, email)
-			VALUES (1,0,?)",array($userObject["auth"]["email"]));
+            INSERT INTO s_campaigns_mailaddresses (customer, groupID, email)
+            VALUES (1,0,?)",array($userObject["auth"]["email"]));
         }
     }
 
@@ -1735,7 +1710,8 @@ class sAdmin
      * @access public
      * @return int - insert id / row id
      */
-    public function sSaveRegisterBilling($userID, $userObject){
+    public function sSaveRegisterBilling($userID, $userObject)
+    {
         if ($userObject["billing"]["birthmonth"]=="-") unset($userObject["billing"]["birthmonth"]);
         if ($userObject["billing"]["birthday"]=="--") unset($userObject["billing"]["birthday"]);
         if ($userObject["billing"]["birthyear"]=="----") unset($userObject["billing"]["birthyear"]);
@@ -1772,11 +1748,11 @@ class sAdmin
         );
 
         $sqlBilling = "INSERT INTO s_user_billingaddress
-			(userID,company,department, salutation,firstname,lastname,
-			street,streetnumber,zipcode,city,phone,
-			fax,countryID,stateID,ustid,birthday)
-			VALUES
-			(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            (userID,company,department, salutation,firstname,lastname,
+            street,streetnumber,zipcode,city,phone,
+            fax,countryID,stateID,ustid,birthday)
+            VALUES
+            (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         // Trying to insert
         list($sqlBilling,$data) = Enlight()->Events()->filter('Shopware_Modules_Admin_SaveRegisterBilling_FilterSql', array($sqlBilling,$data), array('subject'=>$this));
@@ -1796,9 +1772,9 @@ class sAdmin
             empty($userObject["text6"]) ? "" : $userObject["text6"],
         );
         $sqlAttribute = "INSERT INTO s_user_billingaddress_attributes
-     			(billingID, text1, text2, text3, text4, text5, text6)
-     			VALUES
-     			(?,?,?,?,?,?,?)";
+                 (billingID, text1, text2, text3, text4, text5, text6)
+                 VALUES
+                 (?,?,?,?,?,?,?)";
 
         list($sqlAttribute,$attributeData) = Enlight()->Events()->filter('Shopware_Modules_Admin_SaveRegisterBillingAttributes_FilterSql', array($sqlAttribute,$attributeData), array('subject'=>$this));
         $saveAttributeData = $this->sSYSTEM->sDB_CONNECTION->Execute($sqlAttribute,$attributeData);
@@ -1814,12 +1790,13 @@ class sAdmin
      * @access public
      * @return int - insert id / row id
      */
-    public function sSaveRegisterShipping($userID, $userObject){
+    public function sSaveRegisterShipping($userID, $userObject)
+    {
         $sqlShipping = "INSERT INTO s_user_shippingaddress
-			(userID,company,department, salutation,firstname,lastname,
-			street,streetnumber,zipcode,city, countryID,stateID)
-			VALUES
-			(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+            (userID,company,department, salutation,firstname,lastname,
+            street,streetnumber,zipcode,city, countryID,stateID)
+            VALUES
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
         $sqlShipping = Enlight()->Events()->filter('Shopware_Modules_Admin_SaveRegisterShipping_FilterSql', $sqlShipping, array('subject'=>$this,'user'=>$userObject,'id'=>$userID));
         $shippingParams = array(
             $userID,
@@ -1842,9 +1819,9 @@ class sAdmin
         //new attribute table
         $shippingId = $this->sSYSTEM->sDB_CONNECTION->Insert_ID();
         $sqlAttributes = "INSERT INTO s_user_shippingaddress_attributes
-     			(shippingID, text1, text2, text3, text4, text5, text6)
-     			VALUES
-     			(?, ?, ?, ?, ?, ?, ?)";
+                 (shippingID, text1, text2, text3, text4, text5, text6)
+                 VALUES
+                 (?, ?, ?, ?, ?, ?, ?)";
         $sqlAttributes = Enlight()->Events()->filter('Shopware_Modules_Admin_SaveRegisterShippingAttributes_FilterSql', $sqlAttributes, array('subject'=>$this,'user'=>$userObject,'id'=>$userID));
         $attributeParams = array(
             $shippingId,
@@ -1869,7 +1846,7 @@ class sAdmin
      */
     public function sSaveRegisterSendConfirmation($email)
     {
-        if (Enlight()->Events()->notifyUntil('Shopware_Modules_Admin_SaveRegisterSendConfirmation_Start', array('subject'=>$this,'email'=>$email))){
+        if (Enlight()->Events()->notifyUntil('Shopware_Modules_Admin_SaveRegisterSendConfirmation_Start', array('subject'=>$this,'email'=>$email))) {
             return false;
         }
 
@@ -1882,9 +1859,8 @@ class sAdmin
 
 
         $namespace = Shopware()->Snippets()->getNamespace('frontend/account/index');
-        foreach ($this->sSYSTEM->_SESSION["sRegister"]["billing"] as $key => $value)
-        {
-            if ($key == "salutation" ) {
+        foreach ($this->sSYSTEM->_SESSION["sRegister"]["billing"] as $key => $value) {
+            if ($key == "salutation") {
                 $value = ($value == "ms") ? $namespace->get('AccountSalutationMrs', 'Ms') : $namespace->get('AccountSalutationMr', 'Mr');
             }
 
@@ -1908,13 +1884,12 @@ class sAdmin
      * @param array $paymentObject - choosen payment data
      * @return boolean
      */
-    public function sSaveRegister ($paymentObject=null){
-
-        if (Enlight()->Events()->notifyUntil('Shopware_Modules_Admin_SaveRegister_Start', array('subject'=>$this))){
+    public function sSaveRegister($paymentObject=null)
+    {
+        if (Enlight()->Events()->notifyUntil('Shopware_Modules_Admin_SaveRegister_Start', array('subject'=>$this))) {
             return false;
         }
-        if(!$this->sSYSTEM->_SESSION["sRegisterFinished"])
-        {
+        if (!$this->sSYSTEM->_SESSION["sRegisterFinished"]) {
             if (empty($this->sSYSTEM->_SESSION["sRegister"]["payment"]["object"]["id"])) {
                 $register = $this->sSYSTEM->_SESSION["sRegister"];
                 $register["payment"]["object"]["id"] = $this->sSYSTEM->sCONFIG['sDEFAULTPAYMENT'];
@@ -1928,17 +1903,17 @@ class sAdmin
             $neededFields = Enlight()->Events()->filter('Shopware_Modules_Admin_SaveRegister_FilterNeededFields', $neededFields, array('subject'=>$this));
 
             // Check for needed fields
-            foreach ($neededFields as $needKey => $needValue){
-                foreach ($neededFields[$needKey] as $fieldKey => $fieldValue){
-                    if (is_array($fieldValue)){
+            foreach ($neededFields as $needKey => $needValue) {
+                foreach ($neededFields[$needKey] as $fieldKey => $fieldValue) {
+                    if (is_array($fieldValue)) {
 
                         $objKey = $fieldValue[0];
 
-                        if (empty($this->sSYSTEM->_SESSION["sRegister"][$needKey][$fieldKey][$objKey])){
+                        if (empty($this->sSYSTEM->_SESSION["sRegister"][$needKey][$fieldKey][$objKey])) {
                             $errorFields[] = $needKey."#1($needKey)($fieldKey)($objKey)->".$fieldValue;
                         }
-                    }else {
-                        if (empty($this->sSYSTEM->_SESSION["sRegister"][$needKey][$fieldValue])){
+                    } else {
+                        if (empty($this->sSYSTEM->_SESSION["sRegister"][$needKey][$fieldValue])) {
                             $errorFields[] = $needKey."#2->".$fieldValue;
                         }
                     }
@@ -1948,14 +1923,14 @@ class sAdmin
             $errorFields = Enlight()->Events()->filter('Shopware_Modules_Admin_SaveRegister_FilterErrors', $errorFields, array('subject'=>$this));
 
             // Check for occured errors
-            if (count($errorFields)){
-                if (!$_COOKIE["SHOPWARESID"]){
+            if (count($errorFields)) {
+                if (!$_COOKIE["SHOPWARESID"]) {
                     $noCookies = "NO SESSION-COOKIE";
                 }
                 $this->sSYSTEM->E_CORE_WARNING("sSaveRegister #00","Fields are missing $noCookies - ".$this->sSYSTEM->sSESSION_ID." - ".print_r($errorFields,true));
                 die ("Session Lost - Bitte aktivieren Sie Cookies in Ihrem Browser!");
                 return false;
-            }else {
+            } else {
 
                 $userObject = $this->sSYSTEM->_SESSION["sRegister"];
 
@@ -1963,35 +1938,35 @@ class sAdmin
 
                 $userID = $this->sSaveRegisterMainData($userObject);
 
-                if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg() || !$userID){
+                if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg() || !$userID) {
                     $this->sSYSTEM->E_CORE_WARNING("sSaveRegister #01","Could not save data".$this->sSYSTEM->sDB_CONNECTION->ErrorMsg().print_r($userObject));
                     die("sSaveRegister #01"."Could not save data".$this->sSYSTEM->sDB_CONNECTION->ErrorMsg());
                 }
 
-                if ($userObject["auth"]["receiveNewsletter"]){
+                if ($userObject["auth"]["receiveNewsletter"]) {
                     $this->sSaveRegisterNewsletter($userObject);
                 }
 
                 // Insert billing-address
                 $userBillingID = $this->sSaveRegisterBilling($userID,$userObject);
 
-                if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg() || !$userBillingID){
+                if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg() || !$userBillingID) {
                     $this->sSYSTEM->E_CORE_WARNING("sSaveRegister #02","Could not save data (billing-adress)".$this->sSYSTEM->sDB_CONNECTION->ErrorMsg().print_r($userObject,true));
                     die("Could not save data (billing-adress)".$this->sSYSTEM->sDB_CONNECTION->ErrorMsg());
                 }
 
 
-                if ($this->sSYSTEM->sCONFIG['sSHOPWAREMANAGEDCUSTOMERNUMBERS']){
-                    if (!Enlight()->Events()->notifyUntil('Shopware_Modules_Admin_SaveRegister_GetCustomerNumber', array('subject'=>$this,'id'=>$userID))){
+                if ($this->sSYSTEM->sCONFIG['sSHOPWAREMANAGEDCUSTOMERNUMBERS']) {
+                    if (!Enlight()->Events()->notifyUntil('Shopware_Modules_Admin_SaveRegister_GetCustomerNumber', array('subject'=>$this,'id'=>$userID))) {
                         $sql = "UPDATE `s_order_number`,`s_user_billingaddress`  SET `s_order_number`.`number`=`s_order_number`.`number`+1, `s_user_billingaddress`.`customernumber`=`s_order_number`.`number` WHERE `s_order_number`.`name` ='user' AND `s_user_billingaddress`.`userID`=?";
                         $this->sSYSTEM->sDB_CONNECTION->Execute($sql,array($userID));
                     }
                 }
 
                 // Insert shipping-adress
-                if (count($userObject["shipping"])){
+                if (count($userObject["shipping"])) {
                     $userShippingID = $this->sSaveRegisterShipping($userID,$userObject);
-                    if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg() || !$userShippingID){
+                    if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg() || !$userShippingID) {
                         $this->sSYSTEM->E_CORE_WARNING("sSaveRegister #02","Could not save data (shipping-address)".$this->sSYSTEM->sDB_CONNECTION->ErrorMsg().print_r($userObject,true));
                         return false;
                     }
@@ -2000,23 +1975,22 @@ class sAdmin
                 $uMail = $userObject["auth"]["email"];
                 $uPass = $userObject["auth"]["password"];
 
-                if ($userObject["auth"]["accountmode"]<1){
+                if ($userObject["auth"]["accountmode"]<1) {
                     $this->sSaveRegisterSendConfirmation($uMail);
                     $this->sSYSTEM->_SESSION["sOneTimeAccount"] = false;
-                }else {
+                } else {
                     $this->sSYSTEM->_SESSION["sOneTimeAccount"] = true;
                 }
 
                 // Save referer where user comes from
-                if(!empty($this->sSYSTEM->_SESSION['sReferer']))
-                {
+                if (!empty($this->sSYSTEM->_SESSION['sReferer'])) {
                     $referer = addslashes($this->sSYSTEM->_SESSION['sReferer']);
                     $sql = "
-					INSERT INTO
-						`s_emarketing_referer` ( `userID` , `referer` , `date` )
-					VALUES (
-						?, ?, NOW()
-					);";
+                    INSERT INTO
+                        `s_emarketing_referer` ( `userID` , `referer` , `date` )
+                    VALUES (
+                        ?, ?, NOW()
+                    );";
                     $this->sSYSTEM->sDB_CONNECTION->Execute($sql,array($userID,$referer));
                 }
 
@@ -2036,7 +2010,7 @@ class sAdmin
             }
 
             return true;
-        }else {
+        } else {
             $this->sSYSTEM->_POST["email"] = $this->sSYSTEM->_SESSION['sUserMail'];
             $this->sSYSTEM->_POST["passwordMD5"] = $this->sSYSTEM->_SESSION['sUserPassword'];
             $chkUserLogin = $this->sLogin($this->sSYSTEM->_SESSION["sOneTimeAccount"]);
@@ -2053,57 +2027,58 @@ class sAdmin
      * @access public
      * @return array - Data from orders who contains instant downloads
      */
-    public function sGetDownloads (){
+    public function sGetDownloads()
+    {
         $getOrders = $this->sSYSTEM->sDB_CONNECTION->GetAll("
-		SELECT id, ordernumber, invoice_amount, invoice_amount_net, invoice_shipping, invoice_shipping_net, DATE_FORMAT(ordertime,'%d.%m.%Y %H:%i') AS datum, status,cleared, comment
-		FROM s_order WHERE userID=? AND s_order.status>=0 ORDER BY ordertime DESC LIMIT 10
-		",array($this->sSYSTEM->_SESSION["sUserId"]));
+        SELECT id, ordernumber, invoice_amount, invoice_amount_net, invoice_shipping, invoice_shipping_net, DATE_FORMAT(ordertime,'%d.%m.%Y %H:%i') AS datum, status,cleared, comment
+        FROM s_order WHERE userID=? AND s_order.status>=0 ORDER BY ordertime DESC LIMIT 10
+        ",array($this->sSYSTEM->_SESSION["sUserId"]));
 
-        foreach ($getOrders as $orderKey => $orderValue){
+        foreach ($getOrders as $orderKey => $orderValue) {
 
-            if (($this->sSYSTEM->sCONFIG['sARTICLESOUTPUTNETTO'] && !$this->sSYSTEM->sUSERGROUPDATA["tax"]) || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])){
+            if (($this->sSYSTEM->sCONFIG['sARTICLESOUTPUTNETTO'] && !$this->sSYSTEM->sUSERGROUPDATA["tax"]) || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])) {
                 $getOrders[$orderKey]["invoice_amount"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($orderValue["invoice_amount_net"]);
                 $getOrders[$orderKey]["invoice_shipping"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($orderValue["invoice_shipping_net"]);
-            }else {
+            } else {
                 $getOrders[$orderKey]["invoice_amount"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($orderValue["invoice_amount"]);
                 $getOrders[$orderKey]["invoice_shipping"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($orderValue["invoice_shipping"]);
             }
 
             $getOrderDetails = $this->sSYSTEM->sDB_CONNECTION->GetAll("
-			SELECT * FROM s_order_details WHERE orderID={$orderValue["id"]}
-			");
+            SELECT * FROM s_order_details WHERE orderID={$orderValue["id"]}
+            ");
 
-            if (!count($getOrderDetails)){
+            if (!count($getOrderDetails)) {
                 unset($getOrders[$orderKey]);
-            }else {
+            } else {
                 $foundESD = false;
-                foreach ($getOrderDetails as $orderDetailsKey => $orderDetailsValue){
+                foreach ($getOrderDetails as $orderDetailsKey => $orderDetailsValue) {
                     $getOrderDetails[$orderDetailsKey]["amount"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice(round($orderDetailsValue["price"] * $orderDetailsValue["quantity"],2));
                     $getOrderDetails[$orderDetailsKey]["price"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($orderDetailsValue["price"]);
                     // Check for serial
-                    if ($getOrderDetails[$orderDetailsKey]["esdarticle"]){
+                    if ($getOrderDetails[$orderDetailsKey]["esdarticle"]) {
                         $foundESD = true;
                         $numbers = array();
                         $getSerial = $this->sSYSTEM->sDB_CONNECTION->GetAll("
-						SELECT serialnumber FROM s_articles_esd_serials, s_order_esd WHERE userID=".$this->sSYSTEM->_SESSION["sUserId"]."
-						AND orderID={$orderValue["id"]} AND orderdetailsID={$orderDetailsValue["id"]}
-						AND s_order_esd.serialID=s_articles_esd_serials.id
-						");
-                        foreach ($getSerial as $serial){
+                        SELECT serialnumber FROM s_articles_esd_serials, s_order_esd WHERE userID=".$this->sSYSTEM->_SESSION["sUserId"]."
+                        AND orderID={$orderValue["id"]} AND orderdetailsID={$orderDetailsValue["id"]}
+                        AND s_order_esd.serialID=s_articles_esd_serials.id
+                        ");
+                        foreach ($getSerial as $serial) {
                             $numbers[] = $serial["serialnumber"];
                         }
                         $getOrderDetails[$orderDetailsKey]["serial"] =  implode(",",$numbers);
                         // Building download-link
                         $getOrderDetails[$orderDetailsKey]["esdLink"] = $this->sSYSTEM->sCONFIG["sBASEFILE"].'?sViewport=account&sAction=download&esdID='.$orderDetailsValue['id'];
                         //$getOrderDetails[$orderDetailsKey]["esdLink"] = "http://".$this->sSYSTEM->sCONFIG["sBASEPATH"]."/engine/core/php/loadesd.php?id=".$orderDetailsValue["id"];
-                    }else {
+                    } else {
                         unset($getOrderDetails[$orderDetailsKey]);
                     }
                     // -- End of serial check
                 }
-                if (!empty($foundESD)){
+                if (!empty($foundESD)) {
                     $getOrders[$orderKey]["details"] = $getOrderDetails;
-                }else {
+                } else {
                     unset($getOrders[$orderKey]);
                 }
             }
@@ -2120,76 +2095,76 @@ class sAdmin
      * @access public
      * @return array - Array with order data / positions
      */
-    public function sGetOpenOrderData ()
+    public function sGetOpenOrderData()
     {
         $shop = Shopware()->Shop();
         $mainShop = $shop->getMain() !== null ? $shop->getMain() : $shop;
 
         $sql = "
-			SELECT o.*, cu.templatechar as currency_html, DATE_FORMAT(ordertime,'%d.%m.%Y %H:%i') AS datum
-			FROM s_order o
-			LEFT JOIN s_core_currencies as cu
-			ON o.currency = cu.currency
-			WHERE userID=? AND status != -1
-			AND subshopID = ?
-			ORDER BY ordertime DESC LIMIT 10
-		";
+            SELECT o.*, cu.templatechar as currency_html, DATE_FORMAT(ordertime,'%d.%m.%Y %H:%i') AS datum
+            FROM s_order o
+            LEFT JOIN s_core_currencies as cu
+            ON o.currency = cu.currency
+            WHERE userID=? AND status != -1
+            AND subshopID = ?
+            ORDER BY ordertime DESC LIMIT 10
+        ";
         $getOrders = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql, array($this->sSYSTEM->_SESSION["sUserId"], $mainShop->getId()));
 
-        foreach ($getOrders as $orderKey => $orderValue){
+        foreach ($getOrders as $orderKey => $orderValue) {
 
             $getOrders[$orderKey]["invoice_amount"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($orderValue["invoice_amount"]);
             $getOrders[$orderKey]["invoice_shipping"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($orderValue["invoice_shipping"]);
 
 
             $getOrderDetails = $this->sSYSTEM->sDB_CONNECTION->GetAll("
-			SELECT * FROM s_order_details WHERE orderID={$orderValue["id"]} ORDER BY id ASC
-			");
+            SELECT * FROM s_order_details WHERE orderID={$orderValue["id"]} ORDER BY id ASC
+            ");
 
-            if (!count($getOrderDetails)){
+            if (!count($getOrderDetails)) {
                 unset($getOrders[$orderKey]);
-            }else {
+            } else {
 
                 /** GET ARTICLE DETAILS START - @date: 05-24-2011 */
                 $active = 1;
                 /** GET ARTICLE DETAILS END */
 
-                foreach ($getOrderDetails as $orderDetailsKey => $orderDetailsValue){
+                foreach ($getOrderDetails as $orderDetailsKey => $orderDetailsValue) {
                     $getOrderDetails[$orderDetailsKey]["amount"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice(round($orderDetailsValue["price"] * $orderDetailsValue["quantity"],2));
                     $getOrderDetails[$orderDetailsKey]["price"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($orderDetailsValue["price"]);
 
                     $tmpArticle = $this->sSYSTEM->sMODULES['sArticles']->sGetProductByOrdernumber($getOrderDetails[$orderDetailsKey]['articleordernumber']);
 
-                    if(!empty($tmpArticle) && is_array($tmpArticle)) {
+                    if (!empty($tmpArticle) && is_array($tmpArticle)) {
 
                         // Set article in activate state
                         $getOrderDetails[$orderDetailsKey]['active'] = 1;
-                        if(!empty($tmpArticle['purchaseunit'])) {
+                        if (!empty($tmpArticle['purchaseunit'])) {
                             $getOrderDetails[$orderDetailsKey]['purchaseunit'] = $tmpArticle['purchaseunit'];
                         }
 
-                        if(!empty($tmpArticle['referenceunit'])) {
+                        if (!empty($tmpArticle['referenceunit'])) {
                             $getOrderDetails[$orderDetailsKey]['referenceunit'] = $tmpArticle['referenceunit'];
                         }
 
-                        if(!empty($tmpArticle['referenceprice'])) {
+                        if (!empty($tmpArticle['referenceprice'])) {
                             $getOrderDetails[$orderDetailsKey]['referenceprice'] = $tmpArticle['referenceprice'];
                         }
 
-                        if(!empty($tmpArticle['sUnit']) && is_array($tmpArticle['sUnit'])) {
+                        if (!empty($tmpArticle['sUnit']) && is_array($tmpArticle['sUnit'])) {
                             $getOrderDetails[$orderDetailsKey]['sUnit'] = $tmpArticle['sUnit'];
                         }
 
-                        if(!empty($tmpArticle['price'])) {
+                        if (!empty($tmpArticle['price'])) {
                             $getOrderDetails[$orderDetailsKey]['currentPrice'] = $tmpArticle['price'];
                         }
 
-                        if(!empty($tmpArticle['pseudoprice'])) {
+                        if (!empty($tmpArticle['pseudoprice'])) {
                             $getOrderDetails[$orderDetailsKey]['currentPseudoprice'] = $tmpArticle['pseudoprice'];
                         }
 
                         // Set article in deactivate state if it's an variant or configurator article
-                        if($tmpArticle['sVariantArticle'] === true || $tmpArticle['sConfigurator'] === true) {
+                        if ($tmpArticle['sVariantArticle'] === true || $tmpArticle['sConfigurator'] === true) {
                             $getOrderDetails[$orderDetailsKey]['active'] = 0;
                             $active = 0;
                         }
@@ -2200,16 +2175,16 @@ class sAdmin
                     /** GET ARTICLE DETAILS END */
 
                     // Check for serial
-                    if ($getOrderDetails[$orderDetailsKey]["esdarticle"]){
+                    if ($getOrderDetails[$orderDetailsKey]["esdarticle"]) {
                         $numbers = array();
                         $sql = "
-						SELECT serialnumber FROM s_articles_esd_serials, s_order_esd WHERE userID=?
-						AND orderID=? AND orderdetailsID=?
-						AND s_order_esd.serialID=s_articles_esd_serials.id
-						";
+                        SELECT serialnumber FROM s_articles_esd_serials, s_order_esd WHERE userID=?
+                        AND orderID=? AND orderdetailsID=?
+                        AND s_order_esd.serialID=s_articles_esd_serials.id
+                        ";
 
                         $getSerial = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql,array($this->sSYSTEM->_SESSION["sUserId"],$orderValue["id"],$orderDetailsValue["id"]));
-                        foreach ($getSerial as $serial){
+                        foreach ($getSerial as $serial) {
                             $numbers[] = $serial["serialnumber"];
                         }
                         $getOrderDetails[$orderDetailsKey]["serial"] =  implode(",",$numbers);
@@ -2238,10 +2213,11 @@ class sAdmin
      * @access public
      * @return string email
      */
-    public function sGetUserMailById(){
+    public function sGetUserMailById()
+    {
         $email = $this->sSYSTEM->sDB_CONNECTION->GetRow("
-		SELECT email FROM
-		s_user WHERE id=?",array($this->sSYSTEM->_SESSION["sUserId"]));
+        SELECT email FROM
+        s_user WHERE id=?",array($this->sSYSTEM->_SESSION["sUserId"]));
 
         return $email["email"];
 
@@ -2252,15 +2228,16 @@ class sAdmin
      * @access public
      * @return  int id
      */
-    public function sGetUserByMail($email){
+    public function sGetUserByMail($email)
+    {
         $addScopeSql = "";
-        if ($this->scopedRegistration == true){
+        if ($this->scopedRegistration == true) {
             $addScopeSql = "
            AND subshopID = ".$this->subshopId;
         }
         $getUserData = $this->sSYSTEM->sDB_CONNECTION->GetRow("
-		SELECT id FROM s_user WHERE email=? AND accountmode!=1 $addScopeSql
-		",array($email));
+        SELECT id FROM s_user WHERE email=? AND accountmode!=1 $addScopeSql
+        ",array($email));
 
         return $getUserData["id"];
     }
@@ -2270,7 +2247,8 @@ class sAdmin
      * @access public
      * @return array firstname/lastname
      */
-    public function sGetUserNameById($id){
+    public function sGetUserNameById($id)
+    {
         return $this->sSYSTEM->sDB_CONNECTION->GetRow("
         SELECT firstname, lastname FROM s_user_billingaddress
         WHERE userID=?
@@ -2283,12 +2261,12 @@ class sAdmin
      * @access public
      * @return array
      */
-    public function sGetUserData (){
-        if (Enlight()->Events()->notifyUntil('Shopware_Modules_Admin_GetUserData_Start', array('subject'=>$this))){
+    public function sGetUserData()
+    {
+        if (Enlight()->Events()->notifyUntil('Shopware_Modules_Admin_GetUserData_Start', array('subject'=>$this))) {
             return false;
         }
-        if (empty($this->sSYSTEM->_SESSION['sRegister']))
-        {
+        if (empty($this->sSYSTEM->_SESSION['sRegister'])) {
             $this->sSYSTEM->_SESSION['sRegister'] = array();
         }
 
@@ -2297,7 +2275,7 @@ class sAdmin
                 WHERE c.id=?";
 
         // If user is logged in
-        if (!empty($this->sSYSTEM->_SESSION["sUserId"])){
+        if (!empty($this->sSYSTEM->_SESSION["sUserId"])) {
 
             // 1.) Get billing-address
             $sql = "SELECT *
@@ -2310,8 +2288,7 @@ class sAdmin
             $attributes = $this->getUserBillingAddressAttributes($this->sSYSTEM->_SESSION["sUserId"]);
             $userData["billingaddress"] = array_merge($attributes, $billing);
 
-            if(empty($userData["billingaddress"]['customernumber']) && $this->sSYSTEM->sCONFIG['sSHOPWAREMANAGEDCUSTOMERNUMBERS'])
-            {
+            if (empty($userData["billingaddress"]['customernumber']) && $this->sSYSTEM->sCONFIG['sSHOPWAREMANAGEDCUSTOMERNUMBERS']) {
                 $sql = "UPDATE `s_order_number`,`s_user_billingaddress`  SET `s_order_number`.`number`=`s_order_number`.`number`+1, `s_user_billingaddress`.`customernumber`=`s_order_number`.`number`+1 WHERE `s_order_number`.`name` ='user' AND `s_user_billingaddress`.`userID`=?";
                 $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($this->sSYSTEM->_SESSION["sUserId"]));
             }
@@ -2319,9 +2296,9 @@ class sAdmin
             // 2.) Advanced infos
             // Query country-information
             $userData["additional"]["country"] =  $this->sSYSTEM->sDB_CONNECTION->GetRow("
-				SELECT * FROM s_core_countries
-				WHERE id=?
-				",array($userData["billingaddress"]["countryID"]));
+                SELECT * FROM s_core_countries
+                WHERE id=?
+                ",array($userData["billingaddress"]["countryID"]));
             // State selection
             $userData["additional"]["state"] =  $this->sSYSTEM->sDB_CONNECTION->GetRow("
                 SELECT * FROM s_core_countries_states
@@ -2337,12 +2314,12 @@ class sAdmin
 
             // Newsletter-Properties
             $newsletter = $this->sSYSTEM->sDB_CONNECTION->GetRow("
-				SELECT id FROM s_campaigns_mailaddresses
-				WHERE email=?
-				",array($userData["additional"]["user"]["email"]));
-            if ($newsletter["id"]){
+                SELECT id FROM s_campaigns_mailaddresses
+                WHERE email=?
+                ",array($userData["additional"]["user"]["email"]));
+            if ($newsletter["id"]) {
                 $userData["additional"]["user"]["newsletter"] = 1;
-            }else {
+            } else {
                 $userData["additional"]["user"]["newsletter"] = 0;
             }
 
@@ -2352,19 +2329,19 @@ class sAdmin
             $userData["shippingaddress"]= array_merge($attributes, $shipping);
 
             // If shipping-address is not available, billing address is coeval the shipping address
-            if (!isset($userData["shippingaddress"]["firstname"])){
+            if (!isset($userData["shippingaddress"]["firstname"])) {
                 $userData["shippingaddress"] = $userData["billingaddress"];
                 $userData["shippingaddress"]["eqalBilling"] = true;
-            }else {
-                if (($userData["shippingaddress"]["countryID"] != $userData["billingaddress"]["countryID"]) && empty($this->sSYSTEM->sCONFIG["sCOUNTRYSHIPPING"])){
+            } else {
+                if (($userData["shippingaddress"]["countryID"] != $userData["billingaddress"]["countryID"]) && empty($this->sSYSTEM->sCONFIG["sCOUNTRYSHIPPING"])) {
                     $update = $this->sSYSTEM->sDB_CONNECTION->Execute("
-					UPDATE s_user_shippingaddress SET countryID = ? WHERE id = ?
-					",array($userData["billingaddress"]["countryID"],$userData["shippingaddress"]["id"]));
+                    UPDATE s_user_shippingaddress SET countryID = ? WHERE id = ?
+                    ",array($userData["billingaddress"]["countryID"],$userData["shippingaddress"]["id"]));
                     $userData["shippingaddress"]["countryID"] = $userData["billingaddress"]["countryID"];
                 }
             }
 
-            if (empty($userData["shippingaddress"]["countryID"])){
+            if (empty($userData["shippingaddress"]["countryID"])) {
                 $targetCountryId = $userData["billingaddress"]["countryID"];
             } else {
                 $targetCountryId = $userData["shippingaddress"]["countryID"];
@@ -2382,8 +2359,8 @@ class sAdmin
             // Add areaId to session
             $this->sSYSTEM->_SESSION["sArea"] = $userData["additional"]["countryShipping"]["areaID"];
             $userData["additional"]["payment"] = $this->sGetPaymentMeanById($userData["additional"]["user"]["paymentID"],$userData);
-        }else {
-            if ($this->sSYSTEM->_SESSION["sCountry"] && $this->sSYSTEM->_SESSION["sCountry"] != $this->sSYSTEM->_SESSION["sRegister"]["billing"]["country"]){
+        } else {
+            if ($this->sSYSTEM->_SESSION["sCountry"] && $this->sSYSTEM->_SESSION["sCountry"] != $this->sSYSTEM->_SESSION["sRegister"]["billing"]["country"]) {
                 $sRegister = $this->sSYSTEM->_SESSION['sRegister'];
                 $sRegister['billing']['country']= intval($this->sSYSTEM->_SESSION["sCountry"]);
                 $this->sSYSTEM->_SESSION["sRegister"] = $sRegister;
@@ -2495,7 +2472,8 @@ class sAdmin
      * @access public
      * @return array
      */
-    public function sGetShippingcosts($countryInfo=null,$surcharge=0,$surchargestring=""){
+    public function sGetShippingcosts($countryInfo=null,$surcharge=0,$surchargestring="")
+    {
         return $this->sGetPremiumShippingcosts($countryInfo);
     }
 
@@ -2507,14 +2485,15 @@ class sAdmin
      * @access public
      * @return boolean
      */
-    public function sManageRisks($paymentID, $basket, $user) {
+    public function sManageRisks($paymentID, $basket, $user)
+    {
         // Get all assigned rules
         $queryRules = $this->sSYSTEM->sDB_CONNECTION->GetAll("
             SELECT rule1, value1, rule2, value2
             FROM s_core_rulesets
             WHERE paymentID = ?
             ORDER BY id ASC
-		",array($paymentID));
+        ",array($paymentID));
 
         if (empty($queryRules)) {
             return false;
@@ -2523,7 +2502,7 @@ class sAdmin
         // Get-User-Data
 
         // Get Basket
-        if(empty($basket)) {
+        if (empty($basket)) {
             $session = Shopware()->Session();
             $basket = array(
                 'content' => $session->sBasketQuantity,
@@ -2532,17 +2511,17 @@ class sAdmin
         }
 
         foreach ($queryRules as $rule) {
-            if ($rule["rule1"] && !$rule["rule2"]){
+            if ($rule["rule1"] && !$rule["rule2"]) {
                 $rule["rule1"] = "sRisk".$rule["rule1"];
                 if ($rule["rule2"]) $rule["rule2"] = "sRisk".$rule["rule2"];
-                if ($this->$rule["rule1"]($user,$basket,$rule["value1"])){
+                if ($this->$rule["rule1"]($user,$basket,$rule["value1"])) {
                     return true;
                 }
-            }elseif ($rule["rule1"] && $rule["rule2"]){
+            } elseif ($rule["rule1"] && $rule["rule2"]) {
                 $rule["rule1"] = "sRisk".$rule["rule1"];
                 if ($rule["rule2"]) $rule["rule2"] = "sRisk".$rule["rule2"];
                 // AND
-                if ($this->$rule["rule1"]($user,$basket,$rule["value1"]) && $this->$rule["rule2"]($user,$basket,$rule["value2"])){
+                if ($this->$rule["rule1"]($user,$basket,$rule["value1"]) && $this->$rule["rule2"]($user,$basket,$rule["value2"])) {
                     return true;
                 }
             }
@@ -2556,21 +2535,22 @@ class sAdmin
      * @param  $value
      * @return bool
      */
-    public function sRiskORDERVALUEMORE ($user, $order, $value){
+    public function sRiskORDERVALUEMORE($user, $order, $value)
+    {
         #print_r($user);
         #print_r($order);
         $basketValue = $order["AmountNumeric"];
 
-        if ($this->sSYSTEM->sCurrency["factor"]){
+        if ($this->sSYSTEM->sCurrency["factor"]) {
             $factor = $this->sSYSTEM->sCurrency["factor"];
             $basketValue /= $factor;
-        }else {
+        } else {
             $factor = 1;
         }
 
-        if ($basketValue>=$value){
+        if ($basketValue>=$value) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -2582,19 +2562,20 @@ class sAdmin
      * @param  $value
      * @return bool
      */
-    public function sRiskORDERVALUELESS ($user, $order, $value){
+    public function sRiskORDERVALUELESS($user, $order, $value)
+    {
         $basketValue = $order["AmountNumeric"];
 
-        if ($this->sSYSTEM->sCurrency["factor"]){
+        if ($this->sSYSTEM->sCurrency["factor"]) {
             $factor = $this->sSYSTEM->sCurrency["factor"];
             $basketValue /= $factor;
-        }else {
+        } else {
             $factor = 1;
         }
 
-        if ($basketValue<=$value){
+        if ($basketValue<=$value) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -2606,10 +2587,11 @@ class sAdmin
      * @param  $value
      * @return bool
      */
-    public function sRiskCUSTOMERGROUPIS ($user, $order, $value){
-        if ($user["additional"]["user"]["customergroup"]==$value){
+    public function sRiskCUSTOMERGROUPIS($user, $order, $value)
+    {
+        if ($user["additional"]["user"]["customergroup"]==$value) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -2621,10 +2603,11 @@ class sAdmin
      * @param  $value
      * @return bool
      */
-    public function sRiskCUSTOMERGROUPISNOT ($user, $order, $value){
-        if ($user["additional"]["user"]["customergroup"]!=$value){
+    public function sRiskCUSTOMERGROUPISNOT($user, $order, $value)
+    {
+        if ($user["additional"]["user"]["customergroup"]!=$value) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -2636,11 +2619,12 @@ class sAdmin
      * @param  $value
      * @return bool
      */
-    public function sRiskZIPCODE ($user, $order, $value){
+    public function sRiskZIPCODE($user, $order, $value)
+    {
         if ($value=="-1") $value = "";
-        if ($user["shippingaddress"]["zipcode"]==$value || $user["billingaddress"]["zipcode"]==$value){
+        if ($user["shippingaddress"]["zipcode"]==$value || $user["billingaddress"]["zipcode"]==$value) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -2652,10 +2636,11 @@ class sAdmin
      * @param  $value
      * @return bool
      */
-    public function sRiskZONEIS ($user, $order, $value){
-        if ($user["additional"]["countryShipping"]["countryarea"]==$value){
+    public function sRiskZONEIS($user, $order, $value)
+    {
+        if ($user["additional"]["countryShipping"]["countryarea"]==$value) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -2667,11 +2652,11 @@ class sAdmin
      * @param  $value
      * @return bool
      */
-    public function sRiskZONEISNOT ($user, $order, $value){
-
-        if ($user["additional"]["countryShipping"]["countryarea"]!=$value){
+    public function sRiskZONEISNOT($user, $order, $value)
+    {
+        if ($user["additional"]["countryShipping"]["countryarea"]!=$value) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -2683,13 +2668,14 @@ class sAdmin
      * @param  $value
      * @return bool
      */
-    public function sRiskLANDIS ($user, $order, $value){
-        if (preg_match("/$value/",$user["additional"]["countryShipping"]["countryiso"])){
+    public function sRiskLANDIS($user, $order, $value)
+    {
+        if (preg_match("/$value/",$user["additional"]["countryShipping"]["countryiso"])) {
             return true;
         }
-        if ($user["additional"]["countryShipping"]["countryiso"]==$value){
+        if ($user["additional"]["countryShipping"]["countryiso"]==$value) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -2701,14 +2687,15 @@ class sAdmin
      * @param  $value
      * @return bool
      */
-    public function sRiskLANDISNOT ($user, $order, $value){
-        if (!preg_match("/$value/",$user["additional"]["countryShipping"]["countryiso"])){
+    public function sRiskLANDISNOT($user, $order, $value)
+    {
+        if (!preg_match("/$value/",$user["additional"]["countryShipping"]["countryiso"])) {
             return true;
         }
 
-        if ($user["additional"]["countryShipping"]["countryiso"]!=$value){
+        if ($user["additional"]["countryShipping"]["countryiso"]!=$value) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -2721,10 +2708,11 @@ class sAdmin
      * @param  $value
      * @return bool
      */
-    public function sRiskNEWCUSTOMER ($user, $order, $value){
-        if ($user["additional"]["user"]["firstlogin"]==date("Y-m-d") || !$user["additional"]["user"]["firstlogin"]){
+    public function sRiskNEWCUSTOMER($user, $order, $value)
+    {
+        if ($user["additional"]["user"]["firstlogin"]==date("Y-m-d") || !$user["additional"]["user"]["firstlogin"]) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -2752,11 +2740,12 @@ class sAdmin
      * @param  $value
      * @return bool
      */
-    public function sRiskATTRIS ($user,$order,$value){
-        if (!empty($order["content"])){
+    public function sRiskATTRIS($user,$order,$value)
+    {
+        if (!empty($order["content"])) {
 
             $value = explode("|",$value);
-            if (!empty($value[0]) && isset($value[1])){
+            if (!empty($value[0]) && isset($value[1])) {
                 $number = (int) str_ireplace('attr', '', $value[0]);
 
                 $sql = "
@@ -2775,12 +2764,12 @@ class sAdmin
                 ";
 
                 $checkArticle = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql,array($this->sSYSTEM->sSESSION_ID, $value[1]));
-                if ($checkArticle){
+                if ($checkArticle) {
                     return true;
-                }else {
+                } else {
                     return false;
                 }
-            }else {
+            } else {
                 return false;
             }
         }
@@ -2793,11 +2782,12 @@ class sAdmin
      * @param  $value
      * @return bool
      */
-    public function sRiskATTRISNOT ($user,$order,$value){
-        if (!empty($order["content"])){
+    public function sRiskATTRISNOT($user,$order,$value)
+    {
+        if (!empty($order["content"])) {
 
             $value = explode("|",$value);
-            if (!empty($value[0]) && isset($value[1])){
+            if (!empty($value[0]) && isset($value[1])) {
                 $number = (int) str_ireplace('attr', '', $value[0]);
 
                 $sql = "
@@ -2817,13 +2807,13 @@ class sAdmin
                 $checkArticle = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql,array($this->sSYSTEM->sSESSION_ID, $value[1]));
 
 
-                if ($checkArticle){
+                if ($checkArticle) {
                     return true;
-                }else {
+                } else {
                     return false;
                 }
 
-            }else {
+            } else {
                 return false;
             }
 
@@ -2837,16 +2827,17 @@ class sAdmin
      * @param  $value
      * @return bool
      */
-    public function sRiskINKASSO ($user, $order, $value){
-        if ($this->sSYSTEM->_SESSION["sUserId"]){
+    public function sRiskINKASSO($user, $order, $value)
+    {
+        if ($this->sSYSTEM->_SESSION["sUserId"]) {
             $checkOrder = $this->sSYSTEM->sDB_CONNECTION->GetRow("
-			SELECT id FROM s_order WHERE cleared=16 AND userID=?", array($this->sSYSTEM->_SESSION["sUserId"]));
-            if ($checkOrder["id"]){
+            SELECT id FROM s_order WHERE cleared=16 AND userID=?", array($this->sSYSTEM->_SESSION["sUserId"]));
+            if ($checkOrder["id"]) {
                 return true;
-            }else {
+            } else {
                 return false;
             }
-        }else {
+        } else {
             return false;
         }
     }
@@ -2858,22 +2849,23 @@ class sAdmin
      * @param  $value
      * @return bool
      */
-    public function sRiskLASTORDERLESS ($user, $order, $value){
+    public function sRiskLASTORDERLESS($user, $order, $value)
+    {
         // A order from previous x days must exists
-        if ($this->sSYSTEM->_SESSION["sUserId"]){
+        if ($this->sSYSTEM->_SESSION["sUserId"]) {
             $value = (int) $value;
             $sql = "
-			SELECT id FROM s_order WHERE userID=?
-			AND TO_DAYS(ordertime) <= (TO_DAYS(now())-$value) LIMIT 1
-			";
+            SELECT id FROM s_order WHERE userID=?
+            AND TO_DAYS(ordertime) <= (TO_DAYS(now())-$value) LIMIT 1
+            ";
             $checkOrder = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql, array($this->sSYSTEM->_SESSION["sUserId"]));
 
-            if (!$checkOrder["id"]){
+            if (!$checkOrder["id"]) {
                 return true;
-            }else {
+            } else {
                 return false;
             }
-        }else {
+        } else {
             return true;
         }
     }
@@ -2885,15 +2877,16 @@ class sAdmin
      * @param  $value
      * @return bool
      */
-    public function sRiskARTICLESFROM ($user, $order, $value){
+    public function sRiskARTICLESFROM($user, $order, $value)
+    {
         $checkArticle = $this->sSYSTEM->sDB_CONNECTION->GetOne("
-			SELECT s_articles_categories_ro.id as id
-			FROM s_order_basket, s_articles_categories_ro
-			WHERE s_order_basket.articleID = s_articles_categories_ro.articleID
-			AND s_articles_categories_ro.categoryID = ?
-			AND s_order_basket.sessionID=?
-			AND s_order_basket.modus=0
-		", array($value, $this->sSYSTEM->sSESSION_ID));
+            SELECT s_articles_categories_ro.id as id
+            FROM s_order_basket, s_articles_categories_ro
+            WHERE s_order_basket.articleID = s_articles_categories_ro.articleID
+            AND s_articles_categories_ro.categoryID = ?
+            AND s_order_basket.sessionID=?
+            AND s_order_basket.modus=0
+        ", array($value, $this->sSYSTEM->sSESSION_ID));
 
         if (!empty($checkArticle))
             return true;
@@ -2908,14 +2901,15 @@ class sAdmin
      * @param  $value
      * @return bool
      */
-    public function sRiskLASTORDERSLESS($user,$order,$value){
-        if ($this->sSYSTEM->_SESSION["sUserId"]){
+    public function sRiskLASTORDERSLESS($user,$order,$value)
+    {
+        if ($this->sSYSTEM->_SESSION["sUserId"]) {
             $checkOrder = $this->sSYSTEM->sDB_CONNECTION->GetAll("
-			SELECT id FROM s_order WHERE status != -1 AND status != 4 AND userID=?", array($this->sSYSTEM->_SESSION["sUserId"]));
-            if (count($checkOrder)<=$value){
+            SELECT id FROM s_order WHERE status != -1 AND status != 4 AND userID=?", array($this->sSYSTEM->_SESSION["sUserId"]));
+            if (count($checkOrder)<=$value) {
                 return true;
             }
-        }else {
+        } else {
             return true;
         }
 
@@ -2929,11 +2923,12 @@ class sAdmin
      * @param  $value
      * @return bool
      */
-    public function sRiskPREGSTREET ($user, $order, $value){
+    public function sRiskPREGSTREET($user, $order, $value)
+    {
         $value = strtolower($value);
-        if (preg_match("/$value/",strtolower($user["shippingaddress"]["street"]))){
+        if (preg_match("/$value/",strtolower($user["shippingaddress"]["street"]))) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -2945,7 +2940,8 @@ class sAdmin
      * @param  $value
      * @return bool
      */
-    public function sRiskDIFFER ($user, $order, $value){
+    public function sRiskDIFFER($user, $order, $value)
+    {
         if (strtolower(trim($user["shippingaddress"]["street"]).trim($user["shippingaddress"]["streetnumber"])) != strtolower(trim($user["billingaddress"]["street"]).trim($user["billingaddress"]["streetnumber"]))) {
             return true;
         } elseif (trim($user["shippingaddress"]["zipcode"]) != trim($user["billingaddress"]["zipcode"])) {
@@ -2962,11 +2958,12 @@ class sAdmin
      * @param  $value
      * @return bool
      */
-    public function sRiskCUSTOMERNR ($user, $order, $value){
+    public function sRiskCUSTOMERNR($user, $order, $value)
+    {
         //echo "test";
-        if ($user["billingaddress"]["customernumber"]==$value && !empty($value)){
+        if ($user["billingaddress"]["customernumber"]==$value && !empty($value)) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -2978,11 +2975,12 @@ class sAdmin
      * @param  $value
      * @return bool
      */
-    public function sRiskLASTNAME ($user, $order, $value){
+    public function sRiskLASTNAME($user, $order, $value)
+    {
         $value = strtolower($value);
-        if (preg_match("/$value/",strtolower($user["shippingaddress"]["lastname"])) || preg_match("/$value/",strtolower($user["billingaddress"]["lastname"]))){
+        if (preg_match("/$value/",strtolower($user["shippingaddress"]["lastname"])) || preg_match("/$value/",strtolower($user["billingaddress"]["lastname"]))) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -2994,11 +2992,11 @@ class sAdmin
      * @param  $value
      * @return bool
      */
-    public function sRiskSUBSHOP ($user, $order, $value){
-
-        if ($this->sSYSTEM->sSubShop["id"]==$value){
+    public function sRiskSUBSHOP($user, $order, $value)
+    {
+        if ($this->sSYSTEM->sSubShop["id"]==$value) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -3010,11 +3008,11 @@ class sAdmin
      * @param  $value
      * @return bool
      */
-    public function sRiskSUBSHOPNOT ($user, $order, $value){
-
-        if ($this->sSYSTEM->sSubShop["id"]!=$value){
+    public function sRiskSUBSHOPNOT($user, $order, $value)
+    {
+        if ($this->sSYSTEM->sSubShop["id"]!=$value) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -3026,11 +3024,11 @@ class sAdmin
      * @param  $value
      * @return bool
      */
-    public function sRiskCURRENCIESISOIS ($user, $order, $value){
-        if(strtolower($this->sSYSTEM->sCurrency['currency']) == strtolower($value))
-        {
+    public function sRiskCURRENCIESISOIS($user, $order, $value)
+    {
+        if (strtolower($this->sSYSTEM->sCurrency['currency']) == strtolower($value)) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -3042,11 +3040,11 @@ class sAdmin
      * @param  $value
      * @return bool
      */
-    public function sRiskCURRENCIESISOISNOT ($user, $order, $value){
-        if(strtolower($this->sSYSTEM->sCurrency['currency']) != strtolower($value))
-        {
+    public function sRiskCURRENCIESISOISNOT($user, $order, $value)
+    {
+        if (strtolower($this->sSYSTEM->sCurrency['currency']) != strtolower($value)) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -3060,10 +3058,9 @@ class sAdmin
      * @access public
      * @return boolean
      */
-    public function sNewsletterSubscription ($email, $unsubscribe=false, $groupID=null)
+    public function sNewsletterSubscription($email, $unsubscribe=false, $groupID=null)
     {
-        if(empty($unsubscribe))
-        {
+        if (empty($unsubscribe)) {
             $errorflag = array();
 
             /**
@@ -3073,15 +3070,12 @@ class sAdmin
              * @date 2011-07-27
              */
             $fields = array('newsletter');
-            foreach ($fields as $field)
-            {
-                if(isset($this->sSYSTEM->_POST[$field])&&empty($this->sSYSTEM->_POST[$field]))
-                {
+            foreach ($fields as $field) {
+                if (isset($this->sSYSTEM->_POST[$field])&&empty($this->sSYSTEM->_POST[$field])) {
                     $errorflag[$field] = true;
                 }
             }
-            if(!empty($errorflag))
-            {
+            if (!empty($errorflag)) {
                 return array(
                     'code' => 5,
                     'message' => $this->snippetObject->get('ErrorFillIn','Please fill in all red fields'),
@@ -3090,13 +3084,12 @@ class sAdmin
             }
         }
 
-        if(empty($groupID))
-        {
+        if (empty($groupID)) {
             $groupID = $this->sSYSTEM->sCONFIG["sNEWSLETTERDEFAULTGROUP"];
             $sql = '
-				INSERT IGNORE INTO s_campaigns_groups (id, name)
-				VALUES (?, ?)
-			';
+                INSERT IGNORE INTO s_campaigns_groups (id, name)
+                VALUES (?, ?)
+            ';
             $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($groupID, 'Newsletter-Empfänger'));
         }
 
@@ -3107,13 +3100,12 @@ class sAdmin
         if(!preg_match($reg, $email))
             return array("code"=>1, "message"=>$this->snippetObject->get('NewsletterFailureInvalid','Enter valid eMail address'));
 
-        if(!$unsubscribe)
-        {
+        if (!$unsubscribe) {
             $sql = "SELECT * FROM s_campaigns_mailaddresses WHERE email=?";
             $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($email));
-            if($result===false) {
+            if ($result===false) {
                 $result = array("code"=>10,"message"=>$this->snippetObject->get('UnknownError','Unknown error'));
-            } elseif($result->RecordCount()) {
+            } elseif ($result->RecordCount()) {
                 $result = array("code"=>2,"message"=>$this->snippetObject->get('NewsletterFailureAlreadyRegistered','You already receive our newsletter'));
             } else {
                 $sql = "INSERT INTO s_campaigns_mailaddresses (`groupID`,email) VALUES(?, ?)";
@@ -3124,9 +3116,7 @@ class sAdmin
                 else
                     $result = array("code"=>3,"message"=>$this->snippetObject->get('NewsletterSuccess','Thank you for receiving our newsletter'));
             }
-        }
-        else
-        {
+        } else {
             $sql = "DELETE FROM s_campaigns_mailaddresses WHERE email=?";
             $result1 = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($email));
             $result = $this->sSYSTEM->sDB_CONNECTION->Affected_Rows();
@@ -3140,12 +3130,11 @@ class sAdmin
             else
                 $result = array("code"=>5,"message"=>$this->snippetObject->get('NewsletterMailDeleted','Your mail address was deleted'));
         }
-        if(!empty($result['code'])&&in_array($result['code'], array(2,3)))
-        {
+        if (!empty($result['code'])&&in_array($result['code'], array(2,3))) {
             $sql = '
-				REPLACE INTO `s_campaigns_maildata` (`email`, `groupID`, `salutation`, `title`, `firstname`, `lastname`, `street`, `streetnumber`, `zipcode`, `city`, `added`)
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '.$this->sSYSTEM->sDB_CONNECTION->sysTimeStamp.')
-			';
+                REPLACE INTO `s_campaigns_maildata` (`email`, `groupID`, `salutation`, `title`, `firstname`, `lastname`, `street`, `streetnumber`, `zipcode`, `city`, `added`)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '.$this->sSYSTEM->sDB_CONNECTION->sysTimeStamp.')
+            ';
             $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array(
                 $email,
                 $groupID,
@@ -3158,9 +3147,7 @@ class sAdmin
                 $this->sSYSTEM->_POST['zipcode'],
                 $this->sSYSTEM->_POST['city']
             ));
-        }
-        elseif(!empty($unsubscribe))
-        {
+        } elseif (!empty($unsubscribe)) {
             $sql = 'DELETE FROM `s_campaigns_maildata` WHERE `email`=? AND `groupID`=?';
             $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($email, $groupID));
         }
@@ -3173,34 +3160,32 @@ class sAdmin
      * @access public
      * @return boolean
      */
-    public function sCreateHolidaysTable ()
+    public function sCreateHolidaysTable()
     {
-        if(!function_exists('easter_days'))
-        {
-            function easter_days ($year)
+        if (!function_exists('easter_days')) {
+            function easter_days($year)
             {
                 $G = $year % 19;
-                $C = (int)($year / 100);
-                $H = (int)($C - (int)($C / 4) - (int)((8*$C+13) / 25) + 19*$G + 15) % 30;
-                $I = (int)$H - (int)($H / 28)*(1 - (int)($H / 28)*(int)(29 / ($H + 1))*((int)(21 - $G) / 11));
-                $J = ($year + (int)($year/4) + $I + 2 - $C + (int)($C/4)) % 7;
+                $C = (int) ($year / 100);
+                $H = (int) ($C - (int) ($C / 4) - (int) ((8*$C+13) / 25) + 19*$G + 15) % 30;
+                $I = (int) $H - (int) ($H / 28)*(1 - (int) ($H / 28)*(int) (29 / ($H + 1))*((int) (21 - $G) / 11));
+                $J = ($year + (int) ($year/4) + $I + 2 - $C + (int) ($C/4)) % 7;
                 $L = $I - $J;
-                $m = 3 + (int)(($L + 40) / 44);
-                $d = $L + 28 - 31 * ((int)($m / 4));
+                $m = 3 + (int) (($L + 40) / 44);
+                $d = $L + 28 - 31 * ((int) ($m / 4));
                 $E = mktime(0,0,0, $m, $d, $year)-mktime(0,0,0,3,21,$year);
                 return intval(round($E/(60*60*24),0));
             }
         }
         $sql = "
-			SELECT id, calculation, `date`
-			FROM `s_premium_holidays`
-			WHERE `date`<CURDATE()
-		";
+            SELECT id, calculation, `date`
+            FROM `s_premium_holidays`
+            WHERE `date`<CURDATE()
+        ";
         $holidays = $this->sSYSTEM->sDB_CONNECTION->CacheGetAssoc(60,$sql);
         if(empty($holidays)) return true;
 
-        foreach ($holidays as $id => $holiday)
-        {
+        foreach ($holidays as $id => $holiday) {
             $calculation = $holiday['calculation'];
             $datestamp = strtotime($holiday['date']);
             $date = date('Y-m-d',$datestamp);
@@ -3222,7 +3207,7 @@ class sAdmin
      * @access public
      * @return array
      */
-    public function sGetCountry ($country)
+    public function sGetCountry($country)
     {
         static $cache = array();
         if(empty($country))
@@ -3236,10 +3221,10 @@ class sAdmin
         else
             return false;
         $sql = "
-			SELECT c.id, c.id as countryID, countryname, countryiso, (SELECT name FROM s_core_countries_areas WHERE id = areaID ) AS countryarea, countryen, c.position, notice, c.shippingfree as shippingfree
-			FROM s_core_countries c
-			WHERE $sql
-		";
+            SELECT c.id, c.id as countryID, countryname, countryiso, (SELECT name FROM s_core_countries_areas WHERE id = areaID ) AS countryarea, countryen, c.position, notice, c.shippingfree as shippingfree
+            FROM s_core_countries c
+            WHERE $sql
+        ";
         $currencyFactor = empty($this->sSYSTEM->sCurrency["factor"]) ? 1 : $this->sSYSTEM->sCurrency["factor"];
         $cache[$country]["shippingfree"] = round($cache[$country]["shippingfree"]*$currencyFactor,2);
         return $cache[$country] = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql);
@@ -3251,7 +3236,7 @@ class sAdmin
      * @access public
      * @return array
      */
-    public function sGetPaymentmean ($payment)
+    public function sGetPaymentmean($payment)
     {
         static $cache = array();
         if(empty($payment))
@@ -3265,17 +3250,17 @@ class sAdmin
         else
             return false;
         $sql = "
-			SELECT * FROM s_core_paymentmeans
-			WHERE $sql
-		";
+            SELECT * FROM s_core_paymentmeans
+            WHERE $sql
+        ";
         $cache[$payment] = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql);
 
         $cache[$payment]["country_surcharge"] = array();
-        if (!empty($cache[$payment]["surchargestring"])){
-            foreach(explode(";",$cache[$payment]["surchargestring"]) as $countrySurcharge){
+        if (!empty($cache[$payment]["surchargestring"])) {
+            foreach (explode(";",$cache[$payment]["surchargestring"]) as $countrySurcharge) {
                 list($key,$value) = explode(":",$countrySurcharge);
                 $value = floatval(str_replace(",",".",$value));
-                if (!empty($value)){
+                if (!empty($value)) {
                     $cache[$payment]["country_surcharge"][$key] = $value;
                 }
             }
@@ -3291,22 +3276,20 @@ class sAdmin
      * @access public
      * @return array
      */
-    public function sGetDispatchBasket ($countryID=null, $paymentID = null, $stateId = null)
+    public function sGetDispatchBasket($countryID=null, $paymentID = null, $stateId = null)
     {
         $sql_select = '';
-        if(!empty($this->sSYSTEM->sCONFIG['sPREMIUMSHIPPIUNGASKETSELECT']))
-        {
+        if (!empty($this->sSYSTEM->sCONFIG['sPREMIUMSHIPPIUNGASKETSELECT'])) {
             $sql_select .= ', '.$this->sSYSTEM->sCONFIG['sPREMIUMSHIPPIUNGASKETSELECT'];
         }
         $sql = 'SELECT id, calculation_sql FROM s_premium_dispatch WHERE active=1 AND calculation=3';
         $calculations = $this->sSYSTEM->sDB_CONNECTION->GetAssoc($sql);
         if(!empty($calculations))
-            foreach ($calculations as $dispatchID => $calculation)
-            {
+            foreach ($calculations as $dispatchID => $calculation) {
                 if(empty($calculation)) $calculation = $this->sSYSTEM->sDB_CONNECTION->qstr($calculation);
                 $sql_select .= ', ('.$calculation.') as calculation_value_'.$dispatchID;
             }
-        if (empty($this->sSYSTEM->sUSERGROUPDATA["tax"]) && !empty($this->sSYSTEM->sUSERGROUPDATA["id"])){
+        if (empty($this->sSYSTEM->sUSERGROUPDATA["tax"]) && !empty($this->sSYSTEM->sUSERGROUPDATA["id"])) {
             $amount = 'b.quantity*ROUND(CAST(b.price as DECIMAL(10,2))*(100+t.tax)/100,2)';
             $amount_net = 'b.quantity*CAST(b.price as DECIMAL(10,2))';
         } else {
@@ -3315,72 +3298,71 @@ class sAdmin
         }
 
         $sql = "
-			SELECT
-				MIN(d.instock>=b.quantity) as instock,
-				MIN(d.instock>=(b.quantity+d.stockmin)) as stockmin,
-				MIN(a.laststock) as laststock,
-				SUM(d.weight*b.quantity) as weight,
-				SUM(IF(a.id,b.quantity,0)) as count_article,
-				MAX(b.shippingfree) as shippingfree,
-				SUM(IF(b.modus=0,$amount/b.currencyFactor,0)) as amount,
-				SUM(IF(b.modus=0,$amount_net/b.currencyFactor,0)) as amount_net,
-				SUM(CAST(b.price as DECIMAL(10,2))*b.quantity) as amount_display,
-				MAX(d.length) as `length`,
-				MAX(d.height) as height,
-				MAX(d.width) as width,
-				u.id as userID
-				$sql_select
-			FROM s_order_basket b
+            SELECT
+                MIN(d.instock>=b.quantity) as instock,
+                MIN(d.instock>=(b.quantity+d.stockmin)) as stockmin,
+                MIN(a.laststock) as laststock,
+                SUM(d.weight*b.quantity) as weight,
+                SUM(IF(a.id,b.quantity,0)) as count_article,
+                MAX(b.shippingfree) as shippingfree,
+                SUM(IF(b.modus=0,$amount/b.currencyFactor,0)) as amount,
+                SUM(IF(b.modus=0,$amount_net/b.currencyFactor,0)) as amount_net,
+                SUM(CAST(b.price as DECIMAL(10,2))*b.quantity) as amount_display,
+                MAX(d.length) as `length`,
+                MAX(d.height) as height,
+                MAX(d.width) as width,
+                u.id as userID
+                $sql_select
+            FROM s_order_basket b
 
-			LEFT JOIN s_articles a
-			ON b.articleID=a.id
-			AND b.modus=0
-			AND b.esdarticle=0
+            LEFT JOIN s_articles a
+            ON b.articleID=a.id
+            AND b.modus=0
+            AND b.esdarticle=0
 
-			LEFT JOIN s_articles_details d
-			ON (d.ordernumber=b.ordernumber)
-			AND d.articleID=a.id
+            LEFT JOIN s_articles_details d
+            ON (d.ordernumber=b.ordernumber)
+            AND d.articleID=a.id
 
-			LEFT JOIN s_articles_attributes at
-			ON at.articledetailsID=d.id
+            LEFT JOIN s_articles_attributes at
+            ON at.articledetailsID=d.id
 
             LEFT JOIN s_core_tax t
-			ON t.id=a.taxID
+            ON t.id=a.taxID
 
-			LEFT JOIN s_user u
-			ON u.id=?
-			AND u.active=1
+            LEFT JOIN s_user u
+            ON u.id=?
+            AND u.active=1
 
-			LEFT JOIN s_user_billingaddress ub
-			ON ub.userID=u.id
+            LEFT JOIN s_user_billingaddress ub
+            ON ub.userID=u.id
 
-			LEFT JOIN s_user_shippingaddress us
-			ON us.userID=u.id
+            LEFT JOIN s_user_shippingaddress us
+            ON us.userID=u.id
 
-			WHERE b.sessionID=?
+            WHERE b.sessionID=?
 
-			GROUP BY b.sessionID
-		";
+            GROUP BY b.sessionID
+        ";
 
         $basket = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql,array(
             $this->sSYSTEM->_SESSION["sUserId"],
             empty($this->sSYSTEM->sSESSION_ID) ? session_id() : $this->sSYSTEM->sSESSION_ID
         ));
-        if(empty($basket))
-        {
+        if (empty($basket)) {
             return false;
         }
 
         $basket["max_tax"] = $this->sSYSTEM->sMODULES['sBasket']->getMaxTax();
 
-        if(!empty($paymentID)) {
+        if (!empty($paymentID)) {
             $paymentID = (int) $paymentID;
-        } elseif(!empty($this->sSYSTEM->_SESSION['sUserId'])) {
+        } elseif (!empty($this->sSYSTEM->_SESSION['sUserId'])) {
             $user = $this->sGetUserData();
             $paymentID = (int) $user['additional']['payment']['id'];
-        } elseif(!empty($this->sSYSTEM->_POST['sPayment'])) {
+        } elseif (!empty($this->sSYSTEM->_POST['sPayment'])) {
             $paymentID = (int) $this->sSYSTEM->_POST['sPayment'];
-        } elseif(!empty($this->sSYSTEM->_SESSION['sPaymentID'])) {
+        } elseif (!empty($this->sSYSTEM->_SESSION['sPaymentID'])) {
             $paymentID = (int) $this->sSYSTEM->_SESSION['sPaymentID'];
         }
 
@@ -3389,7 +3371,7 @@ class sAdmin
         foreach ($paymentmeans as $paymentmean) {
             $paymentIDs[] = $paymentmean['id'];
         }
-        if(!in_array($paymentID, $paymentIDs)) {
+        if (!in_array($paymentID, $paymentIDs)) {
             $paymentID = reset($paymentIDs);
         }
 
@@ -3398,7 +3380,7 @@ class sAdmin
         else
             $countryID = (int) $countryID;
 
-        if(!empty($user['additional']['stateShipping']['id'])) {
+        if (!empty($user['additional']['stateShipping']['id'])) {
             $stateId = $user['additional']['stateShipping']['id'];
         }
         $sql = "
@@ -3406,7 +3388,7 @@ class sAdmin
         ";
         $mainId = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql);
         // MainId is null, so we use the current shop id
-        if(is_null($mainId)) {
+        if (is_null($mainId)) {
             $mainId = (int) $this->sSYSTEM->sSubShop['id'];
         }
         $basket['basketStateId'] = (int) $stateId;
@@ -3425,16 +3407,16 @@ class sAdmin
      * @access public
      * @return array
      */
-    public function sGetPremiumDispatch ($dispatchID = null)
+    public function sGetPremiumDispatch($dispatchID = null)
     {
         $sql = "
-			SELECT d.id, name, d.description, calculation, status_link, surcharge_calculation, bind_shippingfree, shippingfree, tax_calculation, t.tax as tax_calculation_value
-			FROM s_premium_dispatch d
-			LEFT JOIN s_core_tax t
-			ON t.id=d.tax_calculation
-			WHERE active = 1
-			AND d.id = ?
-		";
+            SELECT d.id, name, d.description, calculation, status_link, surcharge_calculation, bind_shippingfree, shippingfree, tax_calculation, t.tax as tax_calculation_value
+            FROM s_premium_dispatch d
+            LEFT JOIN s_core_tax t
+            ON t.id=d.tax_calculation
+            WHERE active = 1
+            AND d.id = ?
+        ";
         $dispatch = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql,array($dispatchID));
         if(empty($dispatch)) return false;
         return $this->sGetDispatchTranslation($dispatch);
@@ -3448,7 +3430,7 @@ class sAdmin
      * @access public
      * @return array
      */
-    public function sGetPremiumDispatches ($countryID=null, $paymentID = null, $stateId = null)
+    public function sGetPremiumDispatches($countryID=null, $paymentID = null, $stateId = null)
     {
         $this->sCreateHolidaysTable();
 
@@ -3460,133 +3442,128 @@ class sAdmin
         if(empty($basket)) return array();
 
         $sql_where = "";
-        foreach ($statements as $dispatchID => $statement)
-        {
+        foreach ($statements as $dispatchID => $statement) {
             $sql_where .= " AND ( d.id != $dispatchID OR ($statement)) ";
         }
 
         $sql_basket = array();
-        foreach ($basket as $key => $value)
-        {
+        foreach ($basket as $key => $value) {
             $sql_basket[] = $this->sSYSTEM->sDB_CONNECTION->qstr($value)." as `$key`";
         }
         $sql_basket = implode(', ',$sql_basket);
 
         $sql = "
-			SELECT
-				d.id as `key`,
-				d.id, d.name,
-				d.description,
-				d.calculation,
-				d.status_link,
-				b.*
-			FROM s_premium_dispatch d
+            SELECT
+                d.id as `key`,
+                d.id, d.name,
+                d.description,
+                d.calculation,
+                d.status_link,
+                b.*
+            FROM s_premium_dispatch d
 
-			JOIN ( SELECT $sql_basket ) b
-			JOIN s_premium_dispatch_countries dc
-			ON d.id = dc.dispatchID
-			AND dc.countryID=b.countryID
-			JOIN s_premium_dispatch_paymentmeans dp
-			ON d.id = dp.dispatchID
-			AND dp.paymentID=b.paymentID
-			LEFT JOIN s_premium_holidays h
-			ON h.date = CURDATE()
-			LEFT JOIN s_premium_dispatch_holidays dh
-			ON d.id=dh.dispatchID
-			AND h.id=dh.holidayID
+            JOIN ( SELECT $sql_basket ) b
+            JOIN s_premium_dispatch_countries dc
+            ON d.id = dc.dispatchID
+            AND dc.countryID=b.countryID
+            JOIN s_premium_dispatch_paymentmeans dp
+            ON d.id = dp.dispatchID
+            AND dp.paymentID=b.paymentID
+            LEFT JOIN s_premium_holidays h
+            ON h.date = CURDATE()
+            LEFT JOIN s_premium_dispatch_holidays dh
+            ON d.id=dh.dispatchID
+            AND h.id=dh.holidayID
 
-			LEFT JOIN (
-				SELECT dc.dispatchID
-				FROM s_order_basket b
-				JOIN s_articles_categories_ro ac
-				ON ac.articleID=b.articleID
-				JOIN s_premium_dispatch_categories dc
-				ON dc.categoryID=ac.categoryID
-				WHERE b.modus=0
-				AND b.sessionID='{$this->sSYSTEM->sSESSION_ID}'
-				GROUP BY dc.dispatchID
-			) as dk
-			ON dk.dispatchID=d.id
+            LEFT JOIN (
+                SELECT dc.dispatchID
+                FROM s_order_basket b
+                JOIN s_articles_categories_ro ac
+                ON ac.articleID=b.articleID
+                JOIN s_premium_dispatch_categories dc
+                ON dc.categoryID=ac.categoryID
+                WHERE b.modus=0
+                AND b.sessionID='{$this->sSYSTEM->sSESSION_ID}'
+                GROUP BY dc.dispatchID
+            ) as dk
+            ON dk.dispatchID=d.id
 
-			LEFT JOIN s_user u
-			ON u.id=b.userID
-			AND u.active=1
+            LEFT JOIN s_user u
+            ON u.id=b.userID
+            AND u.active=1
 
-			LEFT JOIN s_user_billingaddress ub
-			ON ub.userID=u.id
+            LEFT JOIN s_user_billingaddress ub
+            ON ub.userID=u.id
 
-			LEFT JOIN s_user_shippingaddress us
-			ON us.userID=u.id
+            LEFT JOIN s_user_shippingaddress us
+            ON us.userID=u.id
 
-			WHERE d.active=1
-			AND (
-				(bind_time_from IS NULL AND bind_time_to IS NULL)
-			OR
-				(IFNULL(bind_time_from,0) <= IFNULL(bind_time_to,86400) AND TIME_TO_SEC(DATE_FORMAT(NOW(),'%H:%i:00')) BETWEEN IFNULL(bind_time_from,0) AND IFNULL(bind_time_to,86400))
-			OR
-				(bind_time_from > bind_time_to AND TIME_TO_SEC(DATE_FORMAT(NOW(),'%H:%i:00')) NOT BETWEEN bind_time_to AND bind_time_from)
-			)
-			AND (
-				(bind_weekday_from IS NULL AND bind_weekday_to IS NULL)
-			OR
-				(IFNULL(bind_weekday_from,1) <= IFNULL(bind_weekday_to,7) AND WEEKDAY(NOW())+1 BETWEEN IFNULL(bind_weekday_from,1) AND IFNULL(bind_weekday_to,7))
-			OR
-				(bind_weekday_from > bind_weekday_to AND WEEKDAY(NOW())+1 NOT BETWEEN bind_weekday_to AND bind_weekday_from)
-			)
-			AND (bind_weight_from IS NULL OR bind_weight_from <= b.weight)
-			AND (bind_weight_to IS NULL OR bind_weight_to >= b.weight)
-			AND (bind_price_from IS NULL OR bind_price_from <= b.amount)
-			AND (bind_price_to IS NULL OR bind_price_to >= b.amount)
-			AND (bind_instock=0 OR bind_instock IS NULL OR (bind_instock=1 AND b.instock) OR (bind_instock=2 AND b.stockmin))
-			AND (bind_laststock=0 OR (bind_laststock=1 AND b.laststock))
-			AND (bind_shippingfree!=1 OR NOT b.shippingfree)
-			AND dh.holidayID IS NULL
-			AND (d.multishopID IS NULL OR d.multishopID=b.multishopID)
-			AND (d.customergroupID IS NULL OR d.customergroupID=b.customergroupID)
-			AND dk.dispatchID IS NULL
-			AND d.type IN (0)
-			$sql_where
-			GROUP BY d.id
-			ORDER BY d.position, d.name
-		";
+            WHERE d.active=1
+            AND (
+                (bind_time_from IS NULL AND bind_time_to IS NULL)
+            OR
+                (IFNULL(bind_time_from,0) <= IFNULL(bind_time_to,86400) AND TIME_TO_SEC(DATE_FORMAT(NOW(),'%H:%i:00')) BETWEEN IFNULL(bind_time_from,0) AND IFNULL(bind_time_to,86400))
+            OR
+                (bind_time_from > bind_time_to AND TIME_TO_SEC(DATE_FORMAT(NOW(),'%H:%i:00')) NOT BETWEEN bind_time_to AND bind_time_from)
+            )
+            AND (
+                (bind_weekday_from IS NULL AND bind_weekday_to IS NULL)
+            OR
+                (IFNULL(bind_weekday_from,1) <= IFNULL(bind_weekday_to,7) AND WEEKDAY(NOW())+1 BETWEEN IFNULL(bind_weekday_from,1) AND IFNULL(bind_weekday_to,7))
+            OR
+                (bind_weekday_from > bind_weekday_to AND WEEKDAY(NOW())+1 NOT BETWEEN bind_weekday_to AND bind_weekday_from)
+            )
+            AND (bind_weight_from IS NULL OR bind_weight_from <= b.weight)
+            AND (bind_weight_to IS NULL OR bind_weight_to >= b.weight)
+            AND (bind_price_from IS NULL OR bind_price_from <= b.amount)
+            AND (bind_price_to IS NULL OR bind_price_to >= b.amount)
+            AND (bind_instock=0 OR bind_instock IS NULL OR (bind_instock=1 AND b.instock) OR (bind_instock=2 AND b.stockmin))
+            AND (bind_laststock=0 OR (bind_laststock=1 AND b.laststock))
+            AND (bind_shippingfree!=1 OR NOT b.shippingfree)
+            AND dh.holidayID IS NULL
+            AND (d.multishopID IS NULL OR d.multishopID=b.multishopID)
+            AND (d.customergroupID IS NULL OR d.customergroupID=b.customergroupID)
+            AND dk.dispatchID IS NULL
+            AND d.type IN (0)
+            $sql_where
+            GROUP BY d.id
+            ORDER BY d.position, d.name
+        ";
 
         $dispatches = $this->sSYSTEM->sDB_CONNECTION->GetAssoc($sql);
-        if(empty($dispatches))
-        {
+        if (empty($dispatches)) {
             $sql = "
-				SELECT
-					d.id as `key`,
-					d.id, d.name,
-					d.description,
-					d.calculation,
-					d.status_link
-				FROM s_premium_dispatch d
+                SELECT
+                    d.id as `key`,
+                    d.id, d.name,
+                    d.description,
+                    d.calculation,
+                    d.status_link
+                FROM s_premium_dispatch d
 
-				WHERE d.active=1
-				AND d.type=1
-				GROUP BY d.id
+                WHERE d.active=1
+                AND d.type=1
+                GROUP BY d.id
 
-				ORDER BY d.position, d.name
-				LIMIT 1
-			";
+                ORDER BY d.position, d.name
+                LIMIT 1
+            ";
             $dispatches = $this->sSYSTEM->sDB_CONNECTION->GetAssoc($sql);
         }
 
         $names = array();
-        foreach ($dispatches as $dispatchID => $dispatch)
-        {
+        foreach ($dispatches as $dispatchID => $dispatch) {
             if(in_array($dispatch['name'],$names)) unset($dispatches[$dispatchID]);
             else $names[] = $dispatch['name'];
         }
         unset($names);
 
         $object = $this->sGetDispatchTranslation();
-        foreach ($dispatches as &$v)
-        {
-            if (!empty($object[$v['id']]['dispatch_name'])){
+        foreach ($dispatches as &$v) {
+            if (!empty($object[$v['id']]['dispatch_name'])) {
                 $v['name'] = $object[$v['id']]['dispatch_name'];
             }
-            if (!empty($object[$v['id']]['dispatch_description'])){
+            if (!empty($object[$v['id']]['dispatch_description'])) {
                 $v['description'] = $object[$v['id']]['dispatch_description'];
             }
         }
@@ -3600,7 +3577,7 @@ class sAdmin
      * @access public
      * @return array
      */
-    public function sGetPremiumDispatchSurcharge ($basket, $type=2)
+    public function sGetPremiumDispatchSurcharge($basket, $type=2)
     {
 
         if(empty($basket)) return false;
@@ -3609,124 +3586,120 @@ class sAdmin
         $sql = 'SELECT id, bind_sql FROM s_premium_dispatch WHERE active=1 AND type=? AND bind_sql IS NOT NULL';
         $statements = $this->sSYSTEM->sDB_CONNECTION->GetAssoc($sql,array($type));
         $sql_where = '';
-        foreach ($statements as $dispatchID => $statement)
-        {
+        foreach ($statements as $dispatchID => $statement) {
             $sql_where .= "
-			AND ( d.id!=$dispatchID OR ($statement))
-			";
+            AND ( d.id!=$dispatchID OR ($statement))
+            ";
         }
         $sql_basket = array();
-        foreach ($basket as $key => $value)
-        {
+        foreach ($basket as $key => $value) {
             $sql_basket[] = $this->sSYSTEM->sDB_CONNECTION->qstr($value)." as `$key`";
         }
         $sql_basket = implode(', ',$sql_basket);
 
         $sql = "
-			SELECT d.id, d.calculation
-			FROM s_premium_dispatch d
+            SELECT d.id, d.calculation
+            FROM s_premium_dispatch d
 
-			JOIN ( SELECT $sql_basket ) b
-			JOIN s_premium_dispatch_countries dc
-			ON d.id = dc.dispatchID
-			AND dc.countryID=b.countryID
-			JOIN s_premium_dispatch_paymentmeans dp
-			ON d.id = dp.dispatchID
-			AND dp.paymentID=b.paymentID
-			LEFT JOIN s_premium_holidays h
-			ON h.date = CURDATE()
-			LEFT JOIN s_premium_dispatch_holidays dh
-			ON d.id=dh.dispatchID
-			AND h.id=dh.holidayID
+            JOIN ( SELECT $sql_basket ) b
+            JOIN s_premium_dispatch_countries dc
+            ON d.id = dc.dispatchID
+            AND dc.countryID=b.countryID
+            JOIN s_premium_dispatch_paymentmeans dp
+            ON d.id = dp.dispatchID
+            AND dp.paymentID=b.paymentID
+            LEFT JOIN s_premium_holidays h
+            ON h.date = CURDATE()
+            LEFT JOIN s_premium_dispatch_holidays dh
+            ON d.id=dh.dispatchID
+            AND h.id=dh.holidayID
 
-			LEFT JOIN (
-				SELECT dc.dispatchID
-				FROM s_order_basket b
-				JOIN s_articles_categories_ro ac
-				ON ac.articleID=b.articleID
-				JOIN s_premium_dispatch_categories dc
-				ON dc.categoryID=ac.categoryID
-				WHERE b.modus=0
-				AND b.sessionID='{$this->sSYSTEM->sSESSION_ID}'
-				GROUP BY dc.dispatchID
-			) as dk
-			ON dk.dispatchID=d.id
+            LEFT JOIN (
+                SELECT dc.dispatchID
+                FROM s_order_basket b
+                JOIN s_articles_categories_ro ac
+                ON ac.articleID=b.articleID
+                JOIN s_premium_dispatch_categories dc
+                ON dc.categoryID=ac.categoryID
+                WHERE b.modus=0
+                AND b.sessionID='{$this->sSYSTEM->sSESSION_ID}'
+                GROUP BY dc.dispatchID
+            ) as dk
+            ON dk.dispatchID=d.id
 
-			LEFT JOIN s_user u
-			ON u.id=b.userID
-			AND u.active=1
+            LEFT JOIN s_user u
+            ON u.id=b.userID
+            AND u.active=1
 
-			LEFT JOIN s_user_billingaddress ub
-			ON ub.userID=u.id
+            LEFT JOIN s_user_billingaddress ub
+            ON ub.userID=u.id
 
-			LEFT JOIN s_user_shippingaddress us
-			ON us.userID=u.id
+            LEFT JOIN s_user_shippingaddress us
+            ON us.userID=u.id
 
-			WHERE d.active=1
-			AND (
-				(bind_time_from IS NULL AND bind_time_to IS NULL)
-			OR
-				(IFNULL(bind_time_from,0) <= IFNULL(bind_time_to,86400) AND TIME_TO_SEC(DATE_FORMAT(NOW(),'%H:%i:00')) BETWEEN IFNULL(bind_time_from,0) AND IFNULL(bind_time_to,86400))
-			OR
-				(bind_time_from > bind_time_to AND TIME_TO_SEC(DATE_FORMAT(NOW(),'%H:%i:00')) NOT BETWEEN bind_time_to AND bind_time_from)
-			)
-			AND (
-				(bind_weekday_from IS NULL AND bind_weekday_to IS NULL)
-			OR
-				(IFNULL(bind_weekday_from,1) <= IFNULL(bind_weekday_to,7) AND REPLACE(WEEKDAY(NOW()),0,6)+1 BETWEEN IFNULL(bind_weekday_from,1) AND IFNULL(bind_weekday_to,7))
-			OR
-				(bind_weekday_from > bind_weekday_to AND REPLACE(WEEKDAY(NOW()),0,6)+1 NOT BETWEEN bind_weekday_to AND bind_weekday_from)
-			)
-			AND (bind_weight_from IS NULL OR bind_weight_from <= b.weight)
-			AND (bind_weight_to IS NULL OR bind_weight_to >= b.weight)
-			AND (bind_price_from IS NULL OR bind_price_from <= b.amount)
-			AND (bind_price_to IS NULL OR bind_price_to >= b.amount)
-			AND (bind_instock=0 OR bind_instock IS NULL OR (bind_instock=1 AND b.instock) OR (bind_instock=2 AND b.stockmin))
-			AND (bind_laststock=0 OR (bind_laststock=1 AND b.laststock))
-			AND (bind_shippingfree=2 OR NOT b.shippingfree)
-			AND dh.holidayID IS NULL
-			AND (d.multishopID IS NULL OR d.multishopID=b.multishopID)
-			AND (d.customergroupID IS NULL OR d.customergroupID=b.customergroupID)
-			AND dk.dispatchID IS NULL
-			AND d.type = $type
-			AND (d.shippingfree IS NULL OR d.shippingfree > b.amount)
-			$sql_where
-			GROUP BY d.id
-		";
+            WHERE d.active=1
+            AND (
+                (bind_time_from IS NULL AND bind_time_to IS NULL)
+            OR
+                (IFNULL(bind_time_from,0) <= IFNULL(bind_time_to,86400) AND TIME_TO_SEC(DATE_FORMAT(NOW(),'%H:%i:00')) BETWEEN IFNULL(bind_time_from,0) AND IFNULL(bind_time_to,86400))
+            OR
+                (bind_time_from > bind_time_to AND TIME_TO_SEC(DATE_FORMAT(NOW(),'%H:%i:00')) NOT BETWEEN bind_time_to AND bind_time_from)
+            )
+            AND (
+                (bind_weekday_from IS NULL AND bind_weekday_to IS NULL)
+            OR
+                (IFNULL(bind_weekday_from,1) <= IFNULL(bind_weekday_to,7) AND REPLACE(WEEKDAY(NOW()),0,6)+1 BETWEEN IFNULL(bind_weekday_from,1) AND IFNULL(bind_weekday_to,7))
+            OR
+                (bind_weekday_from > bind_weekday_to AND REPLACE(WEEKDAY(NOW()),0,6)+1 NOT BETWEEN bind_weekday_to AND bind_weekday_from)
+            )
+            AND (bind_weight_from IS NULL OR bind_weight_from <= b.weight)
+            AND (bind_weight_to IS NULL OR bind_weight_to >= b.weight)
+            AND (bind_price_from IS NULL OR bind_price_from <= b.amount)
+            AND (bind_price_to IS NULL OR bind_price_to >= b.amount)
+            AND (bind_instock=0 OR bind_instock IS NULL OR (bind_instock=1 AND b.instock) OR (bind_instock=2 AND b.stockmin))
+            AND (bind_laststock=0 OR (bind_laststock=1 AND b.laststock))
+            AND (bind_shippingfree=2 OR NOT b.shippingfree)
+            AND dh.holidayID IS NULL
+            AND (d.multishopID IS NULL OR d.multishopID=b.multishopID)
+            AND (d.customergroupID IS NULL OR d.customergroupID=b.customergroupID)
+            AND dk.dispatchID IS NULL
+            AND d.type = $type
+            AND (d.shippingfree IS NULL OR d.shippingfree > b.amount)
+            $sql_where
+            GROUP BY d.id
+        ";
         $dispatches = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
         $surcharge = 0;
-        if(!empty($dispatches)){
+        if (!empty($dispatches)) {
 
-            foreach ($dispatches as $dispatch)
-            {
+            foreach ($dispatches as $dispatch) {
                 if(empty($dispatch['calculation']))
                     $from = round($basket['weight'],3);
-                elseif($dispatch['calculation']==1){
-                    if (($this->sSYSTEM->sCONFIG['sARTICLESOUTPUTNETTO'] && !$this->sSYSTEM->sUSERGROUPDATA["tax"]) || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])){
+                elseif ($dispatch['calculation']==1) {
+                    if (($this->sSYSTEM->sCONFIG['sARTICLESOUTPUTNETTO'] && !$this->sSYSTEM->sUSERGROUPDATA["tax"]) || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])) {
                         $from = round($basket['amount_net'],2);
-                    }else {
+                    } else {
                         $from = round($basket['amount'],2);
                     }
-                }
-                elseif($dispatch['calculation']==2)
+                } elseif($dispatch['calculation']==2)
                     $from = round($basket['count_article']);
                 elseif($dispatch['calculation']==3)
                     $from = round($basket['calculation_value_'.$dispatch['id']]);
                 else
                     continue;
                 $sql = "
-				SELECT `value` , `factor`
-				FROM `s_premium_shippingcosts`
-				WHERE `from` <= $from
-				AND `dispatchID` = {$dispatch['id']}
-				ORDER BY `from` DESC
-				LIMIT 1
-			";
+                SELECT `value` , `factor`
+                FROM `s_premium_shippingcosts`
+                WHERE `from` <= $from
+                AND `dispatchID` = {$dispatch['id']}
+                ORDER BY `from` DESC
+                LIMIT 1
+            ";
                 $result = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql);
 
                 if(empty($result)) continue;
                 $surcharge += $result['value'];
-                if(!empty($result['factor'])){
+                if (!empty($result['factor'])) {
                     //die($result["factor"].">".$from);
                     $surcharge +=  $result['factor']/100*$from;
                 }
@@ -3741,14 +3714,14 @@ class sAdmin
      * @access public
      * @return array
      */
-    public function sGetPremiumShippingcosts ($country=null)
+    public function sGetPremiumShippingcosts($country=null)
     {
         $currencyFactor = empty($this->sSYSTEM->sCurrency['factor']) ? 1 : $this->sSYSTEM->sCurrency['factor'];
 
         $discount_tax = empty($this->sSYSTEM->sCONFIG['sDISCOUNTTAX']) ? 0 : (float) str_replace(',','.',$this->sSYSTEM->sCONFIG['sDISCOUNTTAX']);
 
         // Determinate tax automaticly
-        if (!empty($this->sSYSTEM->sCONFIG["sTAXAUTOMODE"])){
+        if (!empty($this->sSYSTEM->sCONFIG["sTAXAUTOMODE"])) {
             $discount_tax = $this->sSYSTEM->sMODULES['sBasket']->getMaxTax();
         }
 
@@ -3780,20 +3753,20 @@ class sAdmin
         $amount = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql, array($this->sSYSTEM->sSESSION_ID));
 
         $sql = '
-			SELECT basketdiscount
-			FROM s_core_customergroups_discounts
-			WHERE groupID=?
-			AND basketdiscountstart<=?
-			ORDER BY basketdiscountstart DESC
-		';
+            SELECT basketdiscount
+            FROM s_core_customergroups_discounts
+            WHERE groupID=?
+            AND basketdiscountstart<=?
+            ORDER BY basketdiscountstart DESC
+        ';
         $basket_discount = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql,array($this->sSYSTEM->sUSERGROUPDATA['id'], $amount));
 
-        if(!empty($basket_discount)){
+        if (!empty($basket_discount)) {
 
             $percent = $basket_discount;
             $basket_discount = round($basket_discount/100*$amount, 2);
 
-            if (empty($this->sSYSTEM->sUSERGROUPDATA["tax"]) && !empty($this->sSYSTEM->sUSERGROUPDATA["id"])){
+            if (empty($this->sSYSTEM->sUSERGROUPDATA["tax"]) && !empty($this->sSYSTEM->sUSERGROUPDATA["id"])) {
                 $basket_discount_net = $basket_discount;
             } else {
                 $basket_discount_net = round($basket_discount/(100+$discount_tax)*100,2);
@@ -3804,11 +3777,11 @@ class sAdmin
             $basket_discount = $basket_discount *-1;
 
             $sql = '
-				INSERT INTO s_order_basket
-					(sessionID, articlename, articleID, ordernumber, quantity, price, netprice, tax_rate, datum, modus, currencyFactor)
-				VALUES
-					(?, ?, 0, ?, 1, ?, ?, ?, NOW(), 3, ?)
-			';
+                INSERT INTO s_order_basket
+                    (sessionID, articlename, articleID, ordernumber, quantity, price, netprice, tax_rate, datum, modus, currencyFactor)
+                VALUES
+                    (?, ?, 0, ?, 1, ?, ?, ?, NOW(), 3, ?)
+            ';
             $this->sSYSTEM->sDB_CONNECTION->Execute($sql,array(
                 $this->sSYSTEM->sSESSION_ID,
                 '- '.$percent.' % '.$discount_basket_name,
@@ -3822,10 +3795,9 @@ class sAdmin
 
         $discount = $this->sGetPremiumDispatchSurcharge($basket, 3);
 
-        if(!empty($discount))
-        {
+        if (!empty($discount)) {
             $discount *= -1;
-            if (empty($this->sSYSTEM->sUSERGROUPDATA["tax"]) && !empty($this->sSYSTEM->sUSERGROUPDATA["id"])){
+            if (empty($this->sSYSTEM->sUSERGROUPDATA["tax"]) && !empty($this->sSYSTEM->sUSERGROUPDATA["id"])) {
                 $discount_net = $discount;
                 //$tax_rate = 0;
             } else {
@@ -3834,11 +3806,11 @@ class sAdmin
             }
             $tax_rate = $discount_tax;
             $sql = '
-				INSERT INTO s_order_basket
-					(sessionID, articlename, articleID, ordernumber, quantity, price, netprice,tax_rate, datum, modus, currencyFactor)
-				VALUES
-					(?, ?, 0, ?, 1, ?, ?, ?, NOW(), 4, ?)
-			';
+                INSERT INTO s_order_basket
+                    (sessionID, articlename, articleID, ordernumber, quantity, price, netprice,tax_rate, datum, modus, currencyFactor)
+                VALUES
+                    (?, ?, 0, ?, 1, ?, ?, ?, NOW(), 4, ?)
+            ';
 
             $this->sSYSTEM->sDB_CONNECTION->Execute($sql,array(
                 $this->sSYSTEM->sSESSION_ID,
@@ -3851,17 +3823,16 @@ class sAdmin
             ));
         }
 
-        $dispatch = $this->sGetPremiumDispatch((int)$this->sSYSTEM->_SESSION['sDispatch']);
+        $dispatch = $this->sGetPremiumDispatch((int) $this->sSYSTEM->_SESSION['sDispatch']);
 
         if (!empty($payment['country_surcharge'][$country['countryiso']]))
             $payment['surcharge'] += $payment['country_surcharge'][$country['countryiso']];
         $payment['surcharge'] = round($payment['surcharge']*$currencyFactor,2);
 
-        if(!empty($payment['surcharge'])&&(empty($dispatch)||$dispatch['surcharge_calculation']==3))
-        {
+        if (!empty($payment['surcharge'])&&(empty($dispatch)||$dispatch['surcharge_calculation']==3)) {
             $surcharge = round($payment['surcharge'], 2);
             $payment['surcharge'] = 0;
-            if (empty($this->sSYSTEM->sUSERGROUPDATA["tax"]) && !empty($this->sSYSTEM->sUSERGROUPDATA["id"])){
+            if (empty($this->sSYSTEM->sUSERGROUPDATA["tax"]) && !empty($this->sSYSTEM->sUSERGROUPDATA["id"])) {
                 $surcharge_net = $surcharge;
                 //$tax_rate = 0;
             } else {
@@ -3870,11 +3841,11 @@ class sAdmin
 
             $tax_rate = $discount_tax;
             $sql = '
-				INSERT INTO s_order_basket
-					(sessionID, articlename, articleID, ordernumber, quantity, price, netprice, tax_rate, datum, modus, currencyFactor)
-				VALUES
-					(?, ?, 0, ?, 1, ?, ?, ?,NOW(), 4, ?)
-			';
+                INSERT INTO s_order_basket
+                    (sessionID, articlename, articleID, ordernumber, quantity, price, netprice, tax_rate, datum, modus, currencyFactor)
+                VALUES
+                    (?, ?, 0, ?, 1, ?, ?, ?,NOW(), 4, ?)
+            ';
             $this->sSYSTEM->sDB_CONNECTION->Execute($sql,array(
                 $this->sSYSTEM->sSESSION_ID,
                 $surcharge_name,
@@ -3885,8 +3856,7 @@ class sAdmin
                 $currencyFactor
             ));
         }
-        if(!empty($payment['debit_percent'])&&(empty($dispatch)||$dispatch['surcharge_calculation']!=2))
-        {
+        if (!empty($payment['debit_percent'])&&(empty($dispatch)||$dispatch['surcharge_calculation']!=2)) {
             $sql = 'SELECT SUM(quantity*price) as amount FROM s_order_basket WHERE sessionID=? GROUP BY sessionID';
             $amount = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql, array($this->sSYSTEM->sSESSION_ID));
 
@@ -3898,7 +3868,7 @@ class sAdmin
                 $percent_name = $this->sSYSTEM->sCONFIG["sPAYMENTSURCHARGEDEV"];
             }
 
-            if (empty($this->sSYSTEM->sUSERGROUPDATA["tax"]) && !empty($this->sSYSTEM->sUSERGROUPDATA["id"])){
+            if (empty($this->sSYSTEM->sUSERGROUPDATA["tax"]) && !empty($this->sSYSTEM->sUSERGROUPDATA["id"])) {
                 $percent_net = $percent;
                 //$tax_rate = 0;
             } else {
@@ -3907,11 +3877,11 @@ class sAdmin
             }
             $tax_rate = $discount_tax;
             $sql = '
-				INSERT INTO s_order_basket
-					(sessionID, articlename, articleID, ordernumber, quantity, price, netprice, tax_rate, datum, modus, currencyFactor)
-				VALUES
-					(?, ?, 0, ?, 1, ?, ?, ?, NOW(), 4, ?)
-			';
+                INSERT INTO s_order_basket
+                    (sessionID, articlename, articleID, ordernumber, quantity, price, netprice, tax_rate, datum, modus, currencyFactor)
+                VALUES
+                    (?, ?, 0, ?, 1, ?, ?, ?, NOW(), 4, ?)
+            ';
             $this->sSYSTEM->sDB_CONNECTION->Execute($sql,array(
                 $this->sSYSTEM->sSESSION_ID,
                 $percent_name,
@@ -3925,7 +3895,7 @@ class sAdmin
 
         if(empty($dispatch)) return array('brutto'=>0, 'netto'=>0);
 
-        if (empty($this->sSYSTEM->sUSERGROUPDATA["tax"]) && !empty($this->sSYSTEM->sUSERGROUPDATA["id"])){
+        if (empty($this->sSYSTEM->sUSERGROUPDATA["tax"]) && !empty($this->sSYSTEM->sUSERGROUPDATA["id"])) {
             $dispatch['shippingfree'] = round($dispatch['shippingfree']/(100+$discount_tax)*100,2);
         } else {
             $dispatch['shippingfree'] = $dispatch['shippingfree'];
@@ -3955,18 +3925,17 @@ class sAdmin
         else
             return false;
         $sql = "
-			SELECT `value` , `factor`
-			FROM `s_premium_shippingcosts`
-			WHERE `from` <= $from
-			AND `dispatchID` = {$dispatch['id']}
-			ORDER BY `from` DESC
-			LIMIT 1
-		";
+            SELECT `value` , `factor`
+            FROM `s_premium_shippingcosts`
+            WHERE `from` <= $from
+            AND `dispatchID` = {$dispatch['id']}
+            ORDER BY `from` DESC
+            LIMIT 1
+        ";
         $result = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql);
         if($result===false) return false;
 
-        if(!empty($dispatch['shippingfree']))
-        {
+        if (!empty($dispatch['shippingfree'])) {
             $result['shippingfree'] = round($dispatch['shippingfree']*$currencyFactor,2);
             $difference = round(($dispatch['shippingfree']-$basket['amount_display'])*$currencyFactor,2);
             $result['difference'] = array("float"=>$difference,"formated"=>$this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($difference));
@@ -3979,20 +3948,18 @@ class sAdmin
             $result['brutto'] +=  $result['surcharge'];
         $result['brutto'] *= $currencyFactor;
         $result['brutto'] = round($result['brutto'],2);
-        if(!empty($payment['surcharge'])&&$dispatch['surcharge_calculation']!=2&&(empty($basket['shippingfree'])||empty($dispatch['surcharge_calculation'])))
-        {
+        if (!empty($payment['surcharge'])&&$dispatch['surcharge_calculation']!=2&&(empty($basket['shippingfree'])||empty($dispatch['surcharge_calculation']))) {
             $result['surcharge'] = $payment['surcharge'];
             $result['brutto'] += $result['surcharge'];
         }
-        if($result['brutto']<0)
-        {
+        if ($result['brutto']<0) {
             return array('brutto'=>0, 'netto'=>0);
         }
         if(empty($dispatch['tax_calculation']))
             $result['tax'] = $basket['max_tax'];
         else
             $result['tax'] = $dispatch['tax_calculation_value'];
-        $result['tax'] = (float)$result['tax'];
+        $result['tax'] = (float) $result['tax'];
         $result['netto'] = round($result['brutto']*100/(100+$result['tax']),2);
 
         return $result;

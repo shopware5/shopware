@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Premium
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Patrick Stahl
- * @author     $Author$
  */
 
 namespace   Shopware\Models\Premium;
@@ -212,23 +204,23 @@ class Premium extends ModelEntity
         return $this->articleDetail;
     }
 
-	/**
-	 * Sets the shopId of a premium-article
-	 * @param $shopId int Contains the shopId
-	 * @return \Shopware\Models\Premium\Premium
-	 */
-	public function setShopId($shopId)
-	{
-		$this->shopId = $shopId;
-		return $this;
-	}
+    /**
+     * Sets the shopId of a premium-article
+     * @param $shopId int Contains the shopId
+     * @return \Shopware\Models\Premium\Premium
+     */
+    public function setShopId($shopId)
+    {
+        $this->shopId = $shopId;
+        return $this;
+    }
 
-	/**
-	 * Sets the shopId of a premium-article
-	 * @return int
-	 */
-	public function getShopId()
-	{
-		return $this->shopId;
-	}
+    /**
+     * Sets the shopId of a premium-article
+     * @return int
+     */
+    public function getShopId()
+    {
+        return $this->shopId;
+    }
 }

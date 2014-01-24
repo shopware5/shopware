@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,43 +20,33 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Widgets
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Stefan Hamann
- * @author     Stephan Pohl
- * @author     $Author$
  */
 
 /**
  * Backend widget controller
- *
- * todo@all: Documentation
  */
 class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_ExtJs
 {
-	public $widgetsXml;
-	public $widgetsApi;
-	public $panelApi;
+    public $widgetsXml;
+    public $widgetsApi;
+    public $panelApi;
     public $dir;
-	protected $authCode;
+    protected $authCode;
 
-	/**
-	 * Create reference to widget-model
+    /**
+     * Create reference to widget-model
      *
-	 * @return void
-	 */
-	public function preDispatch() {
-		$this->widgetsXml = Shopware()->DocPath()."files/config/Widgets.xml";
-		$this->widgetsApi = new Shopware_Models_Widgets_Widgets(null, $this->widgetsXml);
-		$this->authCode = 'f0Dbh1jL9RoddLD8lqhYHKYWyUqova'; // Shopware Update-Service Rest-Code
+     * @return void
+     */
+    public function preDispatch()
+    {
+        $this->widgetsXml = Shopware()->DocPath()."files/config/Widgets.xml";
+        $this->widgetsApi = new Shopware_Models_Widgets_Widgets(null, $this->widgetsXml);
+        $this->authCode = 'f0Dbh1jL9RoddLD8lqhYHKYWyUqova'; // Shopware Update-Service Rest-Code
         $this->dir = Shopware()->DocPath()."files/config";
 
-		parent::preDispatch();
-	}
+        parent::preDispatch();
+    }
 
     /**
      * Returns the list of active widgets for the current logged
@@ -65,9 +55,10 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      * @public
      * @return void
      */
-    public function getListAction() {
+    public function getListAction()
+    {
         $auth = Shopware()->Auth();
-        if(!$auth->hasIdentity()) {
+        if (!$auth->hasIdentity()) {
             $this->View()->assign(array('success' => false));
         }
         $identity = $auth->getIdentity();
@@ -95,7 +86,8 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      * @public
      * @return void
      */
-    public function savePositionAction() {
+    public function savePositionAction()
+    {
         try {
             $request = $this->Request();
             $column = $request->getParam('column');
@@ -107,8 +99,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             $model->setColumn($column);
             Shopware()->Models()->persist($model);
             Shopware()->Models()->flush();
-        }
-        catch(\Doctrine\ORM\ORMException $e) {
+        } catch (\Doctrine\ORM\ORMException $e) {
             $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
         }
         $this->View()->assign(array('success' => true, 'newPosition' => $position, 'newColumn' => $column));
@@ -121,7 +112,8 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      * @public
      * @return void
      */
-    public function getTurnOverVisitorsAction() {
+    public function getTurnOverVisitorsAction()
+    {
         // Get turnovers
         $fetchAmount = Shopware()->Db()->fetchRow(" SELECT
         (SELECT sum(invoice_amount/currencyFactor) AS amount FROM s_order WHERE TO_DAYS(ordertime) = TO_DAYS(now()) AND status != 4 AND status != -1) AS today,
@@ -155,7 +147,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         ");
 
 
-        if (empty($timeBack)){
+        if (empty($timeBack)) {
             $timeBack = 7;
         }
 
@@ -195,9 +187,9 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      * @public
      * @return void
      */
-    public function getVisitorsAction() {
-
-        if (empty($timeBack)){
+    public function getVisitorsAction()
+    {
+        if (empty($timeBack)) {
             $timeBack = 8;
         }
 
@@ -212,7 +204,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $data = Shopware()->Db()->fetchAll($sql,array($timeBack));
 
         $result[] = array();
-        foreach ($data as $row){
+        foreach ($data as $row) {
             $result[] = array(
             "timestamp" => strtotime($row["date"]),
             "date" => date('d.m.Y', strtotime($row["date"])),
@@ -236,7 +228,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         LIMIT 6
         ");
 
-        foreach ($fetchLoggedInUsers as &$user){
+        foreach ($fetchLoggedInUsers as &$user) {
             $user["customer"] = htmlentities($user["customer"], null,"UTF-8");
         }
 
@@ -256,21 +248,21 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      * @public
      * @return void
      */
-    public function getLastOrdersAction() {
-
+    public function getLastOrdersAction()
+    {
         $addSqlPayment = ""; $addSqlSubshop = "";
-        if (!empty($subshopID)){
+        if (!empty($subshopID)) {
             $addSqlSubshop = "
             AND s_order.subshopID = ".Shopware()->Db()->quote($subshopID);
         }
 
-        if (!empty($restrictPayment)){
+        if (!empty($restrictPayment)) {
             $addSqlPayment = "
             AND s_order.paymentID = ".Shopware()->Db()->quote($restrictPayment);
         }
 
         $sql = "
-        SELECT s_order.id AS id, currency,currencyFactor,firstname,lastname, company, subshopID, paymentID,  ordernumber AS orderNumber, transactionID, s_order.userID AS customerId, invoice_amount,invoice_shipping, DATE_FORMAT(ordertime,'%d.%m.%Y %H:%i') AS `date`, status, cleared
+        SELECT s_order.id AS id, currency,currencyFactor,firstname,lastname, company, subshopID, paymentID,  ordernumber AS orderNumber, transactionID, s_order.userID AS customerId, invoice_amount,invoice_shipping, ordertime AS `date`, status, cleared
         FROM s_order
         LEFT JOIN s_order_billingaddress ON s_order_billingaddress.userID = s_order.userID
         WHERE
@@ -285,11 +277,11 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         ";
 
         $result = Shopware()->Db()->fetchAll($sql);
-        foreach ($result as &$order){
+        foreach ($result as &$order) {
             $order["customer"] = htmlentities($order["company"] ? $order["company"] : $order["firstname"]." ".$order["lastname"],ENT_QUOTES,"UTF-8");
             $amount = round(($order["invoice_amount"]/$order["currencyFactor"]),2);
             $order["amount"] = $amount;
-            if (strlen($order["customer"])>25){
+            if (strlen($order["customer"])>25) {
                 $order["customer"] = substr($order["customer"],0,25)."..";
             }
             unset($order["firstname"]); unset($order["lastname"]);
@@ -308,7 +300,8 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      * @public
      * @return void
      */
-    public function getNoticeAction() {
+    public function getNoticeAction()
+    {
         $userID = $_SESSION["Shopware"]["Auth"]->id;
 
         $noticeMsg = Shopware()->Db()->fetchOne("
@@ -324,21 +317,22 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      * @public
      * @return void
      */
-    public function saveNoticeAction() {
+    public function saveNoticeAction()
+    {
         $noticeMsg = (string) $this->Request()->getParam('notice');
 
         $userID = $_SESSION["Shopware"]["Auth"]->id;
 
-        if (empty($userID)){
+        if (empty($userID)) {
             $this->View()->assign(array('success' => false, 'message' => 'No user id'));
             return;
         }
-        if (Shopware()->Db()->fetchOne("SELECT id FROM s_plugin_widgets_notes WHERE userID = ?",array($userID))){
+        if (Shopware()->Db()->fetchOne("SELECT id FROM s_plugin_widgets_notes WHERE userID = ?",array($userID))) {
             // Update
             Shopware()->Db()->query("
             UPDATE s_plugin_widgets_notes SET notes = ? WHERE userID = ?
             ",array($noticeMsg,$userID));
-        }else {
+        } else {
             // Insert
             Shopware()->Db()->query("
             INSERT INTO s_plugin_widgets_notes (userID, notes)
@@ -354,10 +348,10 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      * @public
      * @return void
      */
-    public function getLastMerchantAction() {
-
+    public function getLastMerchantAction()
+    {
         // Fetch all users that needs to get unlocked
-        $sql = "SELECT DISTINCT s_user.active AS active, customergroup,validation,email,s_core_customergroups.description AS customergroup_name, validation AS customergroup_id, s_user.id AS id, lastlogin, company AS company_name, customernumber, CONCAT(firstname,' ',lastname) AS customer
+        $sql = "SELECT DISTINCT s_user.active AS active, customergroup,validation,email,s_core_customergroups.description AS customergroup_name, validation AS customergroup_id, s_user.id AS id, lastlogin AS date, company AS company_name, customernumber, CONCAT(firstname,' ',lastname) AS customer
         FROM s_user LEFT JOIN s_core_customergroups
         ON groupkey = validation,
         s_user_billingaddress
@@ -367,13 +361,12 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         ORDER BY s_user.firstlogin DESC";
         $fetchUsersToUnlock = Shopware()->Db()->fetchAll($sql);
 
-        foreach ($fetchUsersToUnlock as &$user){
+        foreach ($fetchUsersToUnlock as &$user) {
             $user["customergroup_name"] = htmlentities($user["customergroup_name"],null,"UTF-8");
             $user["company_name"] = htmlentities($user["company_name"],null,"UTF-8");
             $user["customer"] = htmlentities($user["customer"],null,"UTF-8");
-            $user["date"] = date('d.m.Y H:i:s', strtotime($user["lastlogin"]));
         }
-        
+
 
         $this->View()->assign(array('success' => true, 'data' => $fetchUsersToUnlock));
     }
@@ -385,12 +378,13 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      * @public
      * @return bool
      */
-    public function requestMerchantFormAction() {
+    public function requestMerchantFormAction()
+    {
         $customergroup = (string) $this->Request()->getParam('customerGroup');
         $userId = (int) $this->Request()->getParam('id');
         $mode = (string) $this->Request()->getParam('mode');
 
-        if($mode === 'allow') {
+        if ($mode === 'allow') {
             $tplMail = 'sCUSTOMERGROUP%sACCEPTED';
         } else {
             $tplMail = 'sCUSTOMERGROUP%sREJECTED';
@@ -404,7 +398,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             ->setParameter(1, $tplMail);
 
         $mail = $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        if(empty($mail)) {
+        if (empty($mail)) {
             $this->View()->assign(array('success' => false, 'message' => 'There is no mail for the specific customer group'));
             return false;
         }
@@ -416,7 +410,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             ->setParameter(1, $userId);
 
         $email = $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        if(empty($email)) {
+        if (empty($email)) {
             $this->View()->assign(array('success' => false, 'message' => 'There is no user for the specific user id'));
             return false;
         }
@@ -435,7 +429,8 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      * @public
      * @return bool
      */
-    public function sendMailToMerchantAction() {
+    public function sendMailToMerchantAction()
+    {
         $params = $this->Request()->getParams();
         $mail = clone Shopware()->Mail();
 
@@ -447,7 +442,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $userId = $params["userId"];
         $status = $params["status"];
 
-        if(!$toMail || !$fromName || !$fromMail || !$subject || !$content || !$userId) {
+        if (!$toMail || !$fromName || !$fromMail || !$subject || !$content || !$userId) {
             $this->View()->assign(array('success' => false, 'message' => 'All required fiels needs to be filled.'));
             return false;
         }
@@ -469,15 +464,15 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $mail->ClearAddresses();
         $mail->AddAddress($toMail, "");
 
-        if (!$mail->Send()){
+        if (!$mail->Send()) {
             $this->View()->assign(array('success' => false, 'message' => 'The mail could not be sent.'));
             return false;
-        }else {
-            if ($status == "accepted"){
+        } else {
+            if ($status == "accepted") {
                 Shopware()->Db()->query("
                 UPDATE s_user SET customergroup = validation, validation = '' WHERE id = ?
                 ",array($userId));
-            }else {
+            } else {
                 Shopware()->Db()->query("
                 UPDATE s_user SET validation = '' WHERE id = ?
                 ",array($userId));

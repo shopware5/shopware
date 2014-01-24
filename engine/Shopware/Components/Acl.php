@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,22 +20,13 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components
- * @subpackage Acl
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Stefan Hamann
- * @author     $Author$
  */
+
 /**
  * Shopware ACL Components
- *
- * todo@all: Documentation
  */
-class Shopware_Components_Acl extends Zend_Acl {
-
+class Shopware_Components_Acl extends Zend_Acl
+{
     /**
      * @var Enlight_Db
      */
@@ -60,13 +51,13 @@ class Shopware_Components_Acl extends Zend_Acl {
      *
      * @return \Shopware_Components_Acl
      */
-    public function initAclResources ()
+    public function initAclResources()
     {
         $repository = Shopware()->Models()->getRepository('Shopware\Models\User\Resource');
         $resources = $repository->findAll();
 
         /**@var $resource Shopware\Models\User\Resource */
-        foreach($resources as $resource) {
+        foreach ($resources as $resource) {
              $this->addResource($resource);
         }
 
@@ -226,18 +217,18 @@ class Shopware_Components_Acl extends Zend_Acl {
      */
     public function exportResourceSQL($resourceName)
     {
-        if (!$this->hasResourceInDatabase($resourceName)){
+        if (!$this->hasResourceInDatabase($resourceName)) {
            throw new Enlight_Exception("Resource $resourceName do not exists in database");
         }
         $privilegeInsert = ""; $menuUpdate = "";
         $resourceInsert = "INSERT INTO s_core_acl_resources (name) VALUES ('".$resourceName."');\n";
         $fetchPrivileges = $this->databaseObject->fetchAll("SELECT * FROM s_core_acl_privileges WHERE resourceID = (SELECT id FROM s_core_acl_resources WHERE name = ?)",array($resourceName));
-        foreach ($fetchPrivileges as $privilege){
+        foreach ($fetchPrivileges as $privilege) {
             $privilegeInsert .= "\nINSERT INTO s_core_acl_privileges (resourceID,name) VALUES ( (SELECT id FROM s_core_acl_resources WHERE name = '$resourceName'), '{$privilege["name"]}'); ";
         }
 
         $getMenuItem = $this->databaseObject->fetchOne("SELECT name FROM s_core_menu WHERE resourceID = (SELECT id FROM s_core_acl_resources WHERE name = ?)",array($resourceName));
-        if (!empty($getMenuItem)){
+        if (!empty($getMenuItem)) {
             $menuUpdate = "\nUPDATE s_core_menu SET resourceID = (SELECT id FROM s_core_acl_resources WHERE name = '$resourceName') WHERE name = '$getMenuItem'";
         }
 
@@ -250,7 +241,7 @@ class Shopware_Components_Acl extends Zend_Acl {
         echo "\n\n-- //@UNDO\n";
         echo "\nDELETE FROM s_core_acl_roles WHERE resourceID = (SELECT id FROM s_core_acl_resources WHERE name = '$resourceName');";
         echo "\nDELETE FROM s_core_acl_privileges WHERE resourceID = (SELECT id FROM s_core_acl_resources WHERE name = '$resourceName');";
-        if (!empty($getMenuItem)){
+        if (!empty($getMenuItem)) {
         echo "\nUPDATE s_core_menu SET resourceID = 0 WHERE resourceID = (SELECT id FROM s_core_acl_resources WHERE name = '$resourceName');";
         }
         echo "\nDELETE FROM s_core_acl_resources WHERE name = '$resourceName';";

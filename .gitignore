@@ -12,10 +12,14 @@ Thumbs.db
 .sass-cache/
 
 # PhpStorm-Project
-.idea/
+/.idea/
+
+# Composer
+/composer.phar
+/vendor/
 
 # Internal Repositories
-/internal/
+/internal
 /engine/Shopware/Plugins/Commercial/
 
 # User installed plugins
@@ -30,6 +34,9 @@ Thumbs.db
 /tests/Shopware/TempFiles/
 /cache/
 
+# Log files
+/logs/
+
 # User provided content
 /media/archive/
 /media/image/
@@ -41,3 +48,6 @@ Thumbs.db
 
 /files/documents/
 /files/downloads/
+
+# Snippet exports
+/snippetsExport/

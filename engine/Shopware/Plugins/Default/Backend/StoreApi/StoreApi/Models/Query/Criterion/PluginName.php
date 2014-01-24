@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -29,8 +29,8 @@ class Shopware_StoreApi_Models_Query_Criterion_PluginName extends Shopware_Store
      */
     public function __construct($pluginNames)
     {
-        if(is_array($pluginNames)) {
-            foreach($pluginNames as $pluginName) {
+        if (is_array($pluginNames)) {
+            foreach ($pluginNames as $pluginName) {
                 $this->addPluginName($pluginName);
             }
         } else {
@@ -42,9 +42,9 @@ class Shopware_StoreApi_Models_Query_Criterion_PluginName extends Shopware_Store
      * @param string $pluginName
      * @return bool
      */
-    public function addPluginName(string $pluginName)
+    public function addPluginName($pluginName)
     {
-        if(!empty($pluginName)) {
+        if (!empty($pluginName)) {
             $this->collection[] = $pluginName;
             return true;
         } else {
@@ -54,7 +54,7 @@ class Shopware_StoreApi_Models_Query_Criterion_PluginName extends Shopware_Store
 
     public function getCriterionStatement()
     {
-        if(empty($this->collection)) {
+        if (empty($this->collection)) {
             return false;
         } else {
             return array(

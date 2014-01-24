@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,7 +25,7 @@
 /**
  * @category  Shopware
  * @package   Shopware\Plugins\RebuildIndex\Controllers\Backend
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJs
 {
@@ -81,6 +81,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         $emotion = $this->SeoIndex()->countEmotions($shopId);
         $content = $this->SeoIndex()->countContent($shopId);
         $statistic = $this->SeoIndex()->countStatic($shopId);
+        $supplier = $this->SeoIndex()->countSuppliers($shopId);
 
         $this->View()->assign(array(
             'success' => true,
@@ -90,7 +91,8 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
                 'blog' => $blog,
                 'emotion' => $emotion,
                 'statistic' => $statistic,
-                'content' => $content
+                'content' => $content,
+                'supplier' => $supplier
             ))
         ));
     }
@@ -194,7 +196,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      * @param $limit int
      * @param $shop Shopware\Models\Shop\Shop
      */
-    protected  function seoArticle($offset, $limit, $shop)
+    protected function seoArticle($offset, $limit, $shop)
     {
         $this->RewriteTable()->baseSetup();
 
@@ -213,7 +215,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
             '1900-01-01'
         ));
 
-        foreach($articles as $article) {
+        foreach ($articles as $article) {
             $data->assign('sArticle', $article);
             $path = $template->fetch(
                 'string:' . Shopware()->Config()->get('sRouterArticleTemplate'),
@@ -271,5 +273,34 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
             'success' => true
         ));
     }
-}
 
+    /**
+     * Create SEO links for Suppliers
+     */
+    public function seoSupplierAction()
+    {
+        $seoSupplierConfig = Shopware()->Config()->get('sSEOSUPPLIER');
+        if (is_null($seoSupplierConfig) || $seoSupplierConfig === false) {
+            $this->View()->assign(array(
+                'success' => true
+            ));
+            return;
+        }
+
+        @set_time_limit(1200);
+        $offset = $this->Request()->getParam('offset', 0);
+        $limit = $this->Request()->getParam('limit', 50);
+        $shopId = (int) $this->Request()->getParam('shopId', 1);
+
+        // Create shop
+        $shop = $this->SeoIndex()->registerShop($shopId);
+
+        // Make sure a template is available
+        $this->RewriteTable()->baseSetup();
+        $this->RewriteTable()->sCreateRewriteTableSuppliers($offset, $limit);
+
+        $this->View()->assign(array(
+            'success' => true
+        ));
+    }
+}

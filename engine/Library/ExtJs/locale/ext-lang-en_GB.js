@@ -77,7 +77,7 @@ Ext.onReady(function() {
         Ext.apply(Ext.util.Format, {
             thousandSeparator: ',',
             decimalSeparator: '.',
-            currencySign: '�',
+            currencySign: '£',
             // UK Pound
             dateFormat: 'd/m/Y'
         });
@@ -96,7 +96,7 @@ Ext.onReady(function() {
         prevText: 'Previous Month (Control+Left)',
         monthYearText: 'Choose a month (Control+Up/Down to move years)',
         todayTip: "{0} (Spacebar)",
-        format: "d.m.Y",
+        format: "d/m/Y",
         startDay: 0
     });
 
@@ -154,7 +154,7 @@ Ext.onReady(function() {
         minText: "The date in this field must be after {0}",
         maxText: "The date in this field must be before {0}",
         invalidText: "{0} is not a valid date - it must be in the format {1}",
-        format: "d.m.Y",
+        format: "d/m/y",
         altFormats: "d/m/Y|d/m/y|d-m-y|d-m-Y|d/m|d-m|dm|dmy|dmY|d|Y-m-d"
     });
 
@@ -285,7 +285,7 @@ Ext.onReady(function() {
         maxText: "The time in this field must be equal to or before {0}",
         invalidText: "{0} is not a valid time",
         format: "g:i A",
-        altFormats: "g:ia|g:iA|g:i a|g:i A|h:i|g:i|H:i|ga|ha|gA|h a|g a|g A|gi|hi|gia|hia|g|H"
+        altFormats: "g:ia|g:iA|g:i a|g:i A|h:i|g:i|ga|ha|gA|h a|g a|g A|gi|hi|gia|hia|g|H"
     });
 
     Ext.define("Ext.locale.en_GB.form.CheckboxGroup", {

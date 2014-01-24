@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Base
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Oliver Denter
- * @author     $Author$
  */
 
 /**
@@ -70,21 +62,22 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         }
     }
 
-/**
-	* Add the table alias to the passed filter and sort parameters.
-	* @param $properties
-	* @param $fields
-	* @return array|mixed
-	*/
-	private function prepareParam($properties, $fields) {
-		foreach ($properties as $key => $property) {
-		if (array_key_exists($property['property'], $fields)) {
-			$property['property'] = $fields[$property['property']];
-		}
-			$properties[$key] = $property;
-		}
-		return $properties;
-	}
+   /**
+    * Add the table alias to the passed filter and sort parameters.
+    * @param $properties
+    * @param $fields
+    * @return array|mixed
+    */
+    private function prepareParam($properties, $fields)
+    {
+        foreach ($properties as $key => $property) {
+        if (array_key_exists($property['property'], $fields)) {
+            $property['property'] = $fields[$property['property']];
+        }
+            $properties[$key] = $property;
+        }
+        return $properties;
+    }
 
     /**
      * Returns all supported detail status as an array. The status are used on the detail
@@ -467,24 +460,25 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $builder->groupBy('articles.id');
 
         //don't search for normal articles
-        if ($this->Request()->getParam('articles', true) == "false") {
-            $builder->andHaving('COUNT(details.id) > ?1');
-            $builder->setParameter(1, 1);
+        $displayArticles = (bool) $this->Request()->getParam('articles', true);
+        if (!$displayArticles) {
+            $builder->andWhere('articles.configuratorSetId IS NOT NULL');
         }
 
         //don't search for variant articles?
-        if ($this->Request()->getParam('variants', true) == "false") {
-            $builder->andHaving('COUNT(details.id) <= ?2');
-            $builder->setParameter(2, 1);
+        $displayVariants = (bool) $this->Request()->getParam('variants', true);
+        if (!$displayVariants) {
+            $builder->andWhere('articles.configuratorSetId IS NULL');
         }
 
         //don't search for configurator articles
-        if ($this->Request()->getParam('configurator', true) == "false") {
+        $displayConfigurators = (bool) $this->Request()->getParam('configurator', true);
+        if (!$displayConfigurators) {
             $builder->andWhere('articles.configuratorSetId IS NULL');
         }
 
         $filters = $this->Request()->getParam('filter', array());
-        foreach($filters as $filter) {
+        foreach ($filters as $filter) {
             if ($filter['property'] === 'free') {
                 $builder->andWhere(
                     $builder->expr()->orX(
@@ -498,7 +492,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             }
         }
 
-  		$repository->addOrderBy($builder, $this->prepareParam($this->Request()->getParam('sort', array()), $fields));
+        $repository->addOrderBy($builder, $this->prepareParam($this->Request()->getParam('sort', array()), $fields));
 
         $builder->setFirstResult($this->Request()->getParam('start'))
             ->setMaxResults($this->Request()->getParam('limit'));
@@ -714,7 +708,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             'state.id as id',
             'state.name as name'
         ));
-        if($countryId !== null) {
+        if ($countryId !== null) {
             $builder ->where('state.countryId = :cId');
             $builder->setParameter(':cId', $countryId);
         }
@@ -732,9 +726,9 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $total));
     }
 
-	public function getAvailableHashesAction()
-	{
-		$hashes = Shopware()->PasswordEncoder()->getCompatibleEncoders();
+    public function getAvailableHashesAction()
+    {
+        $hashes = Shopware()->PasswordEncoder()->getCompatibleEncoders();
 
         $result = array();
 
@@ -753,12 +747,12 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             );
         }
 
-		$totalResult = count($hashes);
+        $totalResult = count($hashes);
 
-		$this->View()->assign(array(
+        $this->View()->assign(array(
             'success' => true,
             'data' => $result,
             'total' => $totalResult,
         ));
-	}
+    }
 }

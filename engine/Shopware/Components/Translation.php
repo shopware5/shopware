@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components
- * @subpackage Translation
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
  * Shopware Translation Component
- *
- * todo@all: Documentation
  */
 class Shopware_Components_Translation
 {
@@ -64,56 +54,45 @@ class Shopware_Components_Translation
     {
         switch ($type) {
             case 'article':
+                return array(
+                    'txtArtikel'          => 'name',
+                    'txtshortdescription' => 'description',
+                    'txtlangbeschreibung' => 'descriptionLong',
+                    'txtzusatztxt'        => 'additionalText',
+                    'txtkeywords'         => 'keywords',
+                    'txtpackunit'         => 'packUnit'
+                );
             case 'variant':
-                if ($type == 'article') {
-                    $map = array(
-                        'txtArtikel'          => 'name',
-                        'txtshortdescription' => 'description',
-                        'txtlangbeschreibung' => 'descriptionLong',
-                        'txtzusatztxt'        => 'additionalText',
-                        'txtkeywords'         => 'keywords',
-                        'txtpackunit'         => 'packUnit'
-                    );
-                } else {
-                    $map = array(
-                        'txtzusatztxt' => 'additionalText',
-                        'txtpackunit'  => 'packUnit'
-                    );
-                }
-                break;
+                return array(
+                    'txtzusatztxt' => 'additionalText',
+                    'txtpackunit'  => 'packUnit'
+                );
             case 'link':
-                $map = array(
+                return array(
                     'linkname' => 'description'
                 );
-                break;
             case 'download':
-                $map = array(
+                return array(
                     'downloadname' => 'description'
                 );
-                break;
             case 'config_countries':
-                $map = array(
+                return array(
                     'countryname' => 'name',
                     'notice' => 'description'
                 );
-                break;
             case 'config_units':
-                $map = array(
+                return array(
                     'description' => 'name'
                 );
-                break;
             case 'config_dispatch':
-                $map = array(
+                return array(
                     'dispatch_name' => 'name',
                     'dispatch_description' => 'description',
                     'dispatch_status_link' => 'statusLink'
                 );
-                break;
             default:
-                $map = false;
-                break;
+                return false;
         }
-        return $map;
     }
 
     /**
@@ -136,12 +115,15 @@ class Shopware_Components_Translation
                 }
             }
         }
-        foreach($tmp as $tmpKey => $value) {
+        foreach ($tmp as $tmpKey => $value) {
+            if (!is_string($value)) {
+                continue;
+            }
             if (strlen(trim($value)) == 0) {
                 unset($tmp[$tmpKey]);
             }
         }
-        if(isset($key)) {
+        if (isset($key)) {
             $data[$key] = $tmp;
         } else {
             $data = $tmp;
@@ -158,7 +140,7 @@ class Shopware_Components_Translation
      * @param   null $key
      * @return  array
      */
-    protected function unFilterData($type, $data, $key = null)
+    public function unFilterData($type, $data, $key = null)
     {
         $tmp = unserialize($data);
         if ($tmp === false) {
@@ -194,7 +176,7 @@ class Shopware_Components_Translation
      */
     public function read($language, $type, $key = 1, $merge = false)
     {
-        if($type == 'variantMain') {
+        if ($type == 'variantMain') {
             $type = 'article';
         }
 
@@ -226,7 +208,7 @@ class Shopware_Components_Translation
      */
     public function write($language, $type, $key = 1, $data = null, $merge = false)
     {
-        if($type == 'variantMain') {
+        if ($type == 'variantMain') {
             $type = 'article';
             $data = array_merge(
                 $this->read($language, $type, $key),
@@ -234,7 +216,7 @@ class Shopware_Components_Translation
             );
         }
 
-        if($merge) {
+        if ($merge) {
             $tmp = $this->read($language, $type, 1);
             $tmp[$key] = $data;
             $data = $tmp;
@@ -242,7 +224,7 @@ class Shopware_Components_Translation
 
         $data = $this->filterData($type, $data, $merge ? $key : null);
 
-        if(!empty($data)) {
+        if (!empty($data)) {
             $sql = '
                 INSERT INTO `s_core_translations` (
                   `objecttype`, `objectdata`, `objectkey`, `objectlanguage`
@@ -264,7 +246,7 @@ class Shopware_Components_Translation
                 $type, $merge ? 1 : $key, $language
             ));
         }
-        if($type == 'article') {
+        if ($type == 'article') {
             $this->fixArticleTranslation($language, $key);
         }
     }
@@ -310,8 +292,8 @@ class Shopware_Components_Translation
         ));
 
         foreach ($translations as $data) {
-            $languageId = (int)$data['languageId'];
-            $articleId = (int)$data['articleId'];
+            $languageId = (int) $data['languageId'];
+            $articleId = (int) $data['articleId'];
             $data = unserialize($data['data']);
 
             if (!empty($data['txtlangbeschreibung']) && strlen($data['txtlangbeschreibung']) > 1000) {
@@ -332,10 +314,10 @@ class Shopware_Components_Translation
             Shopware()->Db()->query($sql, array(
                 $articleId,
                 $languageId,
-                isset($data['txtArtikel']) ? (string)$data['txtArtikel'] : '',
-                ($data['txtkeywords']) ? (string)$data['txtkeywords'] : '',
-                isset($data['txtshortdescription']) ? (string)$data['txtshortdescription'] : '',
-                isset($data['txtlangbeschreibung']) ? (string)$data['txtlangbeschreibung'] : '',
+                isset($data['txtArtikel']) ? (string) $data['txtArtikel'] : '',
+                ($data['txtkeywords']) ? (string) $data['txtkeywords'] : '',
+                isset($data['txtshortdescription']) ? (string) $data['txtshortdescription'] : '',
+                isset($data['txtlangbeschreibung']) ? (string) $data['txtlangbeschreibung'] : '',
             ));
         }
 

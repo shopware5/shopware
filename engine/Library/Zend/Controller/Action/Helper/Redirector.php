@@ -15,9 +15,9 @@
  * @category   Zend
  * @package    Zend_Controller
  * @subpackage Zend_Controller_Action_Helper
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Redirector.php 23939 2011-05-02 20:19:59Z matthew $
+ * @version    $Id$
  */
 
 /**
@@ -29,7 +29,7 @@ require_once 'Zend/Controller/Action/Helper/Abstract.php';
  * @category   Zend
  * @package    Zend_Controller
  * @subpackage Zend_Controller_Action_Helper
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_Helper_Abstract
@@ -100,7 +100,7 @@ class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_He
     }
 
     /**
-     * Retrieve HTTP status code for {@link _redirect()} behaviour
+     * Set HTTP status code for {@link _redirect()} behaviour
      *
      * @param  int $code
      * @return Zend_Controller_Action_Helper_Redirector Provides a fluent interface
@@ -123,7 +123,7 @@ class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_He
     }
 
     /**
-     * Retrieve exit flag for {@link _redirect()} behaviour
+     * Set exit flag for {@link _redirect()} behaviour
      *
      * @param  boolean $flag
      * @return Zend_Controller_Action_Helper_Redirector Provides a fluent interface
@@ -146,7 +146,7 @@ class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_He
     }
 
     /**
-     * Retrieve 'prepend base' flag for {@link _redirect()} behaviour
+     * Set 'prepend base' flag for {@link _redirect()} behaviour
      *
      * @param  boolean $flag
      * @return Zend_Controller_Action_Helper_Redirector Provides a fluent interface

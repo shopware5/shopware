@@ -1,8 +1,7 @@
 <?php
-
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -30,7 +29,7 @@
  *
  * @category  Shopware
  * @package   Shopware\Plugins\MarketingAggregate
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -307,7 +306,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
             'articleId' => $articleId
         ));
 
-        foreach($articles as $id) {
+        foreach ($articles as $id) {
             $this->SimilarShown()->refreshSimilarShown($articleId, $id);
             $this->SimilarShown()->refreshSimilarShown($id, $articleId);
         }
@@ -400,7 +399,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
             'sessionId' => Shopware()->SessionID()
         ));
 
-        foreach($combinations as $combination) {
+        foreach ($combinations as $combination) {
             $this->AlsoBought()->refreshBoughtArticles(
                 $combination['article_id'],
                 $combination['related_article_id']
@@ -456,7 +455,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
         }
 
         $details = $arguments->getDetails();
-        foreach($details as $article) {
+        foreach ($details as $article) {
             if ($article['mode'] != 0 || empty($article['articleID'])) {
                 continue;
             }

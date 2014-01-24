@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,12 +24,13 @@
 
 use Shopware\Models\Form\Form,
     Shopware\Models\Form\Field;
+
 /**
  * Shopware Frontend Controller for the form module
  *
  * @category  Shopware
  * @package   Shopware\Controllers\Frontend
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 {
@@ -306,7 +307,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             $req = "";
         }
 
-        switch($element['typ']) {
+        switch ($element['typ']) {
             case "password":
             case "email":
             case "text":
@@ -335,7 +336,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         }
 
         $output = '';
-        switch($element['typ']) {
+        switch ($element['typ']) {
             case "password":
             case "email":
             case "text":
@@ -421,7 +422,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             }
 
             if (!empty($value)) {
-                switch($element['typ']) {
+                switch ($element['typ']) {
                     case "date":
                         $values = preg_split("#[^0-9]#", $inputs[$element['id']], -1, PREG_SPLIT_NO_EMPTY);
                         if (count($values) != 3) {

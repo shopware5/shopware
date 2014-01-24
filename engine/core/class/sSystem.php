@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,147 +20,138 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Core
- * @subpackage Class
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Stefan Hamann
- * @author     $Author$
  */
+
 /**
  * Deprecated Shopware Class
- *
- * todo@all: Documentation
  */
 class sSystem
 {
 
-	var $sCONFIG;		// Pointer to configuration
+    public $sCONFIG;		// Pointer to configuration
 
-	var $sSESSION_ID;	// Current Session-ID
+    public $sSESSION_ID;	// Current Session-ID
 
-	var $sSMARTY;		// Pointer to Smarty
+    public $sSMARTY;		// Pointer to Smarty
 
-	var $sDB_HOST;		// Database Host
-	var $sDB_USER;		// Database User
-	var $sDB_PASSWORD;	// Database Password
-	var $sDB_DATABASE;	// Database to use
-	var $sDB_CONNECTOR;	// Database Connector ('mysql' for example)
+    public $sDB_HOST;		// Database Host
+    public $sDB_USER;		// Database User
+    public $sDB_PASSWORD;	// Database Password
+    public $sDB_DATABASE;	// Database to use
+    public $sDB_CONNECTOR;	// Database Connector ('mysql' for example)
 
-	var $sDB_CONNECTION;// Current Connection
+    public $sDB_CONNECTION;// Current Connection
 
-	var $sMODULES;		// Pointer to the different modules and its inherits
+    public $sMODULES;		// Pointer to the different modules and its inherits
 
-	var $sUSERGROUP;	// Current customer-group (Scope)
-	var $sUSERGROUPDATA; // Information about customer-group
+    public $sUSERGROUP;	// Current customer-group (Scope)
+    public $sUSERGROUPDATA; // Information about customer-group
 
-	var $sDEBUG;		// Array with Debug-Messages
-	var $sBENCHRESULTS;	// Benchmark-results as array
-	var $sBENCHMARK;	// Holds time for benchmark-purposes
+    public $sDEBUG;		// Array with Debug-Messages
+    public $sBENCHRESULTS;	// Benchmark-results as array
+    public $sBENCHMARK;	// Holds time for benchmark-purposes
 
-	var $_GET;			// Get-Variables
-	var $_POST;			// Post-Variables
-	var $_COOKIE;		// Cookies
-	var $_SESSION;		// Session
+    public $_GET;			// Get-Variables
+    public $_POST;			// Post-Variables
+    public $_COOKIE;		// Cookies
+    public $_SESSION;		// Session
 
-	// Absolute pathes
-	var $sPathMedia;		// Path to template images
-	var $sPathArticleImg;	// Path to article images
-	var $sPathBanner;		// Path to banners
-	var $sPathCmsImg;		// Path to CMS-Images
-	var $sPathCmsFiles;		// Path to CMS-Files
-	var $sPathArticleFiles;	// Path to Article-Downloads
-	var $sPathStart;		// Path to Start
-	var $sBasefile;
-	var $sBasePath;
+    // Absolute pathes
+    public $sPathMedia;		// Path to template images
+    public $sPathArticleImg;	// Path to article images
+    public $sPathBanner;		// Path to banners
+    public $sPathCmsImg;		// Path to CMS-Images
+    public $sPathCmsFiles;		// Path to CMS-Files
+    public $sPathArticleFiles;	// Path to Article-Downloads
+    public $sPathStart;		// Path to Start
+    public $sBasefile;
+    public $sBasePath;
 
-	// Additionals
-	var $sExtractor;		// Strip parts of rewrited urls and append them
-	var $sLicenseData;		// License - Data
-	var $sLanguageData;		// All active languages
-	var $sLanguage;			// Current language
+    // Additionals
+    public $sExtractor;		// Strip parts of rewrited urls and append them
+    public $sLicenseData;		// License - Data
+    public $sLanguageData;		// All active languages
+    public $sLanguage;			// Current language
 
-	var $sCurrency;			// Current active currency
-	var $sCurrencyData;		// Array with active currencies
+    public $sCurrency;			// Current active currency
+    public $sCurrencyData;		// Array with active currencies
 
-	var $sSubShop;			// Current active subshop
-	var $sSubShops;			// Information about licensed subshops
+    public $sSubShop;			// Current active subshop
+    public $sSubShops;			// Information about licensed subshops
 
 
-	var $sMailer;			// Pointer to PHP-Mailer Object
-	var $sBotSession;		// True if user is identified as bot
+    public $sMailer;			// Pointer to PHP-Mailer Object
+    public $sBotSession;		// True if user is identified as bot
 
-	function __construct()
-	{
-		$this->sBasePath = dirname(dirname(dirname(dirname(__FILE__)))).'/';
-	}
-
-    /**
-     * @deprecated
-     */
-	function sPreProcess()
-	{
-
-	}
-
+    public function __construct()
+    {
+        $this->sBasePath = dirname(dirname(dirname(dirname(__FILE__)))).'/';
+    }
 
     /**
      * @deprecated
      */
-	function sInitMailer()
+    public function sPreProcess()
+    {
+
+    }
+
+
+    /**
+     * @deprecated
+     */
+    public function sInitMailer()
     {
         // removed mailer initialisation code
-	}
+    }
 
-	function sGetTranslation($data,$id,$object,$language)
+    public function sGetTranslation($data,$id,$object,$language)
     {
         return $data;
-	}
+    }
 
-	function sInitAdo()
-	{
-	}
+    public function sInitAdo()
+    {
+    }
 
-	function sTranslateConfig()
-	{
-	}
+    public function sTranslateConfig()
+    {
+    }
 
-	function sInitConfig()
-	{
+    public function sInitConfig()
+    {
 
-	}
+    }
 
-	function sInitSmarty()
-	{
-	}
+    public function sInitSmarty()
+    {
+    }
 
-	function sInitSession()
-	{
-	}
+    public function sInitSession()
+    {
+    }
 
     /**
      * DEPRECATED
      * @param $hook
      * @return string
      */
-	function sCallHookPoint($hook)
-	{
-		return '';
-	}
+    public function sCallHookPoint($hook)
+    {
+        return '';
+    }
 
     /**
      * DEPRECATED
      */
-	function sLoadHookPoints()
-	{
-	}
+    public function sLoadHookPoints()
+    {
+    }
 
-	function sInitFactory ()
-	{
+    public function sInitFactory()
+    {
 
-	}
+    }
 
     /**
      * DEPRECATED
@@ -169,32 +160,33 @@ class sSystem
      * @param $key
      * @return bool
      */
-	function sCheckLicense($host=null, $module=null, $key)
-	{
+    public function sCheckLicense($host=null, $module=null, $key)
+    {
         return true;
-	}
+    }
 
-	function E_CORE_ERROR($ERROR_ID,$ERROR_MESSAGE){
-		throw new Enlight_Exception($ERROR_ID.': '.$ERROR_MESSAGE);
-	}
+    public function E_CORE_ERROR($ERROR_ID,$ERROR_MESSAGE)
+    {
+        throw new Enlight_Exception($ERROR_ID.': '.$ERROR_MESSAGE);
+    }
 
-	function E_CORE_WARNING ($WARNING_ID,$WARNING_MESSAGE){
-		throw new Enlight_Exception($WARNING_ID.': '.$WARNING_MESSAGE);
-	}
+    public function E_CORE_WARNING($WARNING_ID,$WARNING_MESSAGE)
+    {
+        throw new Enlight_Exception($WARNING_ID.': '.$WARNING_MESSAGE);
+    }
 
-	public function __call($name, $params=null)
-	{
-		return call_user_func_array(array($this->sMODULES['sCore'], $name), $params);
-	}
+    public function __call($name, $params=null)
+    {
+        return call_user_func_array(array($this->sMODULES['sCore'], $name), $params);
+    }
 
-	public function __get($name)
-	{
-		switch ($name)
-		{
-			case '_d':
-				return $this;
-			default:
-				return null;
-		}
-	}
+    public function __get($name)
+    {
+        switch ($name) {
+            case '_d':
+                return $this;
+            default:
+                return null;
+        }
+    }
 }

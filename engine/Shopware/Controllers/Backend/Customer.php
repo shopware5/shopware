@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Customer
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Oliver Denter
- * @author     $Author$
  */
 
 use Shopware\Models\Customer\Customer as Customer,
@@ -35,26 +27,14 @@ use Shopware\Models\Customer\Customer as Customer,
     Shopware\Models\Customer\Shipping as Shipping,
     Shopware\Models\Customer\Debit as Debit,
     Shopware\Models\Attribute\CustomerBilling as BillingAttributes,
-    Shopware\Models\Attribute\CustomerShipping as ShippingAttributes;
-/**
- * Backend Controller for the customer backend module.
- *
- * Displays all customers in an Ext.grid.Panel and allows to delete,
- * add and edit customers. On the detail page the customer data displayed
- * and a list of all done orders shown.
- */
+    Shopware\Models\Attribute\CustomerShipping as ShippingAttributes,
+    Shopware\Models\Customer\PaymentData;
+
 /**
  * Backend Controller for the customer backend module.
  * Displays all customers in an Ext.grid.Panel and allows to delete,
  * add and edit customers. On the detail page the customer data displayed
  * and a list of all done orders shown.
- *
- * @link http://www.shopware.de
- * @copyright Copyright (c) 2011, shopware AG
- * @author Oliver Denter
- * @author $Author$
- * @package Shopware_Controllers
- * @subpackage Backend
  */
 class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend_ExtJs
 {
@@ -89,22 +69,24 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      * Helper function to get access to the shop repository.
      * @return \Shopware\Models\Shop\Repository
      */
-    private function getShopRepository() {
-    	if ($this->shopRepository === null) {
-    		$this->shopRepository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
-    	}
-    	return $this->shopRepository;
+    private function getShopRepository()
+    {
+        if ($this->shopRepository === null) {
+            $this->shopRepository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+        }
+        return $this->shopRepository;
     }
 
     /**
      * Helper function to get access to the group repository.
      * @return \Shopware\Components\Model\ModelRepository
      */
-    private function getGroupRepository() {
-    	if ($this->groupRepository === null) {
-    		$this->groupRepository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Group');
-    	}
-    	return $this->groupRepository;
+    private function getGroupRepository()
+    {
+        if ($this->groupRepository === null) {
+            $this->groupRepository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Group');
+        }
+        return $this->groupRepository;
     }
 
     /**
@@ -114,7 +96,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     protected function getManager()
     {
-        if(self::$manager === null) {
+        if (self::$manager === null) {
             self::$manager = Shopware()->Models();
         }
         return self::$manager;
@@ -128,7 +110,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     protected function getRepository()
     {
-        if(self::$repository === null) {
+        if (self::$repository === null) {
             self::$repository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer');
         }
         return self::$repository;
@@ -141,7 +123,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      *
      * @return void
      */
-    protected  function initAcl()
+    protected function initAcl()
     {
         $this->addAclPermission('getList','read', 'no_list_rights', 'You do not have sufficient rights to view the list of customers.');
         $this->addAclPermission('getDetail', 'detail', 'no_detail_rights', 'You do not have sufficient rights to view the customer detail page.');
@@ -189,43 +171,47 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      * Helper function to get access to the country repository.
      * @return \Shopware\Models\Country\Repository
      */
-    private function getCountryRepository() {
-    	if ($this->countryRepository === null) {
-    		$this->countryRepository = Shopware()->Models()->getRepository('Shopware\Models\Country\Country');
-    	}
-    	return $this->countryRepository;
+    private function getCountryRepository()
+    {
+        if ($this->countryRepository === null) {
+            $this->countryRepository = Shopware()->Models()->getRepository('Shopware\Models\Country\Country');
+        }
+        return $this->countryRepository;
     }
     /**
      * Helper function to get access to the order repository.
      * @return \Shopware\Models\Order\Repository
      */
-    private function getOrderRepository() {
-    	if ($this->orderRepository === null) {
-    		$this->orderRepository = Shopware()->Models()->getRepository('Shopware\Models\Order\Order');
-    	}
-    	return $this->orderRepository;
+    private function getOrderRepository()
+    {
+        if ($this->orderRepository === null) {
+            $this->orderRepository = Shopware()->Models()->getRepository('Shopware\Models\Order\Order');
+        }
+        return $this->orderRepository;
     }
 
     /**
      * Helper function to get access to the payment repository.
      * @return \Shopware\Models\Payment\Repository
      */
-    private function getPaymentRepository() {
-    	if ($this->paymentRepository === null) {
-    		$this->paymentRepository = Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment');
-    	}
-    	return $this->paymentRepository;
+    private function getPaymentRepository()
+    {
+        if ($this->paymentRepository === null) {
+            $this->paymentRepository = Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment');
+        }
+        return $this->paymentRepository;
     }
 
     /**
      * Helper function to get access to the dispatch repository.
      * @return \Shopware\Models\Dispatch\Repository
      */
-    private function getDispatchRepository() {
-    	if ($this->dispatchRepository === null) {
-    		$this->dispatchRepository = Shopware()->Models()->getRepository('Shopware\Models\Dispatch\Dispatch');
-    	}
-    	return $this->dispatchRepository;
+    private function getDispatchRepository()
+    {
+        if ($this->dispatchRepository === null) {
+            $this->dispatchRepository = Shopware()->Models()->getRepository('Shopware\Models\Dispatch\Dispatch');
+        }
+        return $this->dispatchRepository;
     }
 
 
@@ -286,8 +272,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $countResult = $countQuery->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
             $this->View()->assign(array('success' => true, 'data' => $customers, 'total' => $countResult["customerCount"]));
-        }
-        catch (\Doctrine\ORM\ORMException $e) {
+        } catch (\Doctrine\ORM\ORMException $e) {
             $this->View()->assign(array('success' => false, 'data' => array(), 'message' => $e->getMessage()));
         }
     }
@@ -312,9 +297,8 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $data = $this->getCustomer($customerId);
 
             $this->View()->assign(array('success' => true, 'data' => $data, 'total' => 1));
-            
-        }
-        catch (\Doctrine\ORM\ORMException $e) {
+
+        } catch (\Doctrine\ORM\ORMException $e) {
             $this->View()->assign(array('success' => false, 'data' => array(), 'message' => $e->getMessage()));
         }
     }
@@ -367,8 +351,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $orders = $query->getArrayResult();
 
             $this->View()->assign(array('success' => true, 'data' => $orders, 'total' => $totalResult));
-        }
-        catch (\Doctrine\ORM\ORMException $e) {
+        } catch (\Doctrine\ORM\ORMException $e) {
             $this->View()->assign(array('success' => false, 'data' => array(), 'message' => $e->getMessage()));
         }
     }
@@ -402,8 +385,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $orders = $this->getChartData($customerId);
 
             $this->View()->assign(array('success' => true, 'data' => $orders));
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array('success' => true, 'data' => array(), 'message' => $e->getMessage()));
         }
     }
@@ -482,6 +464,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     public function saveAction()
     {
         $id = $this->Request()->getParam('id', null);
+        $paymentId = $this->Request()->getParam('paymentId', null);
 
         /** @var $namespace Enlight_Components_Snippet_Namespace */
         $namespace = Shopware()->Snippets()->getNamespace('backend/customer');
@@ -502,6 +485,10 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $shipping = $customer->getShipping();
             $billing = $customer->getBilling();
             $debit = $customer->getDebit();
+
+            $paymentData = Shopware()->Models()->getRepository('Shopware\Models\Customer\PaymentData')->findOneBy(
+                array('customer' => $customer, 'paymentMean' => $paymentId)
+            );
         } else {
             //check if the user has the rights to create a new customer
             if (!$this->_isAllowed('create', 'customer')) {
@@ -528,8 +515,15 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
             $params = $this->Request()->getParams();
 
+            if (!$paymentData instanceof PaymentData && !empty($params['paymentData']) && array_filter($params['paymentData'][0])) {
+                $paymentData = new PaymentData();
+                $customer->addPaymentData($paymentData);
+                $paymentData->setPaymentMean(
+                    Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment')->find($paymentId)
+                );
+            }
 
-            $params = $this->prepareCustomerData($params, $customer, $billing, $shipping, $debit);
+            $params = $this->prepareCustomerData($params, $customer, $billing, $shipping, $debit, $paymentData);
 
             //set parameter to the customer model.
             $customer->fromArray($params);
@@ -593,14 +587,14 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         return $data;
     }
 
-    private function prepareCustomerData($params, $customer, $billing, $shipping, $debit)
+    private function prepareCustomerData($params, $customer, $billing, $shipping, $debit, $paymentData)
     {
         if (!empty($params['groupKey'])) {
             $params['group'] = $this->getGroupRepository()->findOneBy(array('key' => $params['groupKey']));
         } else {
             unset($params['group']);
         }
- 
+
         if (!empty($params['shopId'])) {
             $params['shop'] = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $params['shopId']);
         } else {
@@ -619,24 +613,42 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         } else {
             $params['priceGroup'] = null;
         }
- 
+
         //If a different payment method is selected, it must also be placed in the "paymentPreset" so that the risk management that does not reset.
         if ($customer->getPaymentId() !== $params['paymentId']) {
             $params['paymentPreset'] = $params['paymentId'];
         }
- 
-        if(empty($id) && empty($params['shipping'][0]["firstName"]) && empty($params['shipping'][0]["lastName"])){
+
+        if (empty($id) && empty($params['shipping'][0]["firstName"]) && empty($params['shipping'][0]["lastName"])) {
             //shipping params are empty use the billing ones
             $params['shipping'][0] = $params['billing'][0];
         }
- 
+
+        if (!empty($params['paymentData']) && $paymentData) {
+            $paymentData->fromArray(array_shift($params['paymentData']));
+        }
+        unset($params['paymentData']);
+
+        /**
+         * Temporary support for deprecated s_user_debit table
+         * Can be removed after the table is removed
+         */
+        if($paymentData && $paymentData->getPaymentMean()->getName() == 'debit') {
+            $debitData = array(
+                'account' => $paymentData->getAccountNumber(),
+                'accountHolder' => $paymentData->getAccountHolder(),
+                'bankName' => $paymentData->getBankName(),
+                'bankCode' => $paymentData->getBankCode()
+            );
+            $params['debit'] = $debitData;
+        }
+
         $params['billing'] = $params['billing'][0];
         $params['shipping'] = $params['shipping'][0];
-        $params['debit'] = $params['debit'][0];
         $params['attribute'] = $params['attribute'][0];
         $params['billing']['attribute'] = $params['billingAttribute'][0];
         $params['shipping']['attribute'] = $params['shippingAttribute'][0];
- 
+
         return $params;
     }
 
@@ -652,7 +664,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $customers = $this->Request()->getParam('customers', array(array('id' => $this->Request()->getParam('id'))));
 
             //iterate the customers and add the remove action
-            foreach($customers as $customer) {
+            foreach ($customers as $customer) {
                 $entity = $this->getRepository()->find($customer['id']);
                 $this->getManager()->remove($entity);
             }
@@ -663,8 +675,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
                 'success' => true,
                 'data' => $this->Request()->getParams())
             );
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
                 'data' => $this->Request()->getParams(),
@@ -721,8 +732,9 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         ));
 
         $this->Response()->setCookie('shop', $shop->getId(), 0, $shop->getBasePath());
+
+        $this->Response()->setCookie('session-' .  $shop->getId(), '', time() - 3600, '/');
+
         $this->redirect($url);
     }
 }
-
-

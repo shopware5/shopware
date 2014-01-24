@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -31,7 +31,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @category  Shopware
  * @package   Shopware\Models\Plugin
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Table(name="s_core_plugins")
  * @ORM\Entity
@@ -229,11 +229,19 @@ class Plugin extends ModelEntity
     private $licenses;
 
     /**
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Library\Component", mappedBy="plugin", orphanRemoval=true, cascade={"all"})
+     *
+     * @var ArrayCollection
+     */
+    protected $emotionComponents;
+
+    /**
      * Class constructor.
      */
     public function __construct()
     {
         $this->added = new \DateTime('now');
+        $this->emotionComponents = new ArrayCollection();
         $this->configForms = new ArrayCollection();
         $this->menuItems = new ArrayCollection();
         $this->payments = new ArrayCollection();
@@ -631,5 +639,21 @@ class Plugin extends ModelEntity
     public function setUpdateSource($updateSource)
     {
         $this->updateSource = $updateSource;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getEmotionComponents()
+    {
+        return $this->emotionComponents;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $emotionComponents
+     */
+    public function setEmotionComponents($emotionComponents)
+    {
+        $this->emotionComponents = $emotionComponents;
     }
 }

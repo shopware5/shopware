@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -36,7 +36,7 @@ use Shopware\Models\Category\Category;
  *
  * @category  Shopware
  * @package   Shopware\Components\Model
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CategorySubscriber implements BaseEventSubscriber
 {
@@ -44,6 +44,11 @@ class CategorySubscriber implements BaseEventSubscriber
      * @var ModelManager
      */
     protected $em;
+
+    /**
+     * @var CategoryDenormalization
+     */
+    protected $categoryDenormalization;
 
     /**
      * @var array
@@ -66,14 +71,21 @@ class CategorySubscriber implements BaseEventSubscriber
     protected $disabledForNextFlush = false;
 
     /**
-     * @return \Shopware\Components\Model\CategoryDenormalization
+     * @param CategoryDenormalization $categoryDenormalization
+     */
+    public function __construct(CategoryDenormalization $categoryDenormalization)
+    {
+        $this->categoryDenormalization = $categoryDenormalization;
+    }
+
+    /**
+     * @return CategoryDenormalization
      */
     public function getCategoryComponent()
     {
-        $component = Shopware()->CategoryDenormalization();
-        $component->disableTransactions();
+        $this->categoryDenormalization->disableTransactions();
 
-        return $component;
+        return $this->categoryDenormalization;
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,13 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Article
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
 
 namespace Shopware\Models\Article;
@@ -52,7 +45,7 @@ use Shopware\Components\Model\ModelEntity,
  *   - PRIMARY KEY (`id`)
  * </code>
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="SupplierRepository")
  * @ORM\Table(name="s_articles_supplier")
  */
 class Supplier extends ModelEntity
@@ -104,6 +97,33 @@ class Supplier extends ModelEntity
      */
     private $description;
 
+    /**
+     * Title for the page - SEO metadata
+     *
+     * @var string $metaTitle
+     *
+     * @ORM\Column(name="meta_title", type="string", nullable=true)
+     */
+    protected $metaTitle;
+
+    /**
+     * Description for the page - SEO metadata
+     *
+     * @var string $metaDescription
+     *
+     * @ORM\Column(name="meta_description", type="string", nullable=true)
+     */
+    protected $metaDescription;
+
+    /**
+     * Meta keywords for the page - SEO metadata
+     *
+     * @var string $metaKeywords
+     *
+     * @ORM\Column(name="meta_keywords", type="string", nullable=true)
+     */
+    protected $metaKeywords;
+
    /**
     * INVERSE SIDE
     * Articles can be bound to a specific supplier
@@ -115,7 +135,7 @@ class Supplier extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleSupplier", mappedBy="articleSupplier", cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleSupplier", mappedBy="articleSupplier", cascade={"persist"})
      * @var \Shopware\Models\Attribute\ArticleSupplier
      */
     protected $attribute;
@@ -264,4 +284,51 @@ class Supplier extends ModelEntity
         return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ArticleSupplier', 'attribute', 'articleSupplier');
     }
 
+    /**
+     * @param string $metaTitle
+     */
+    public function setMetaTitle($metaTitle)
+    {
+        $this->metaTitle = $metaTitle;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaTitle()
+    {
+        return $this->metaTitle;
+    }
+
+    /**
+     * @param string $metaDescription
+     */
+    public function setMetaDescription($metaDescription)
+    {
+        $this->metaDescription = $metaDescription;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaDescription()
+    {
+        return $this->metaDescription;
+    }
+
+    /**
+     * @param string $metaKeywords
+     */
+    public function setMetaKeywords($metaKeywords)
+    {
+        $this->metaKeywords = $metaKeywords;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaKeywords()
+    {
+        return $this->metaKeywords;
+    }
 }

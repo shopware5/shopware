@@ -49,6 +49,13 @@ abstract class Enlight_Config_Adapter extends Enlight_Class
     protected $_nameSuffix = '';
 
     /**
+     * Allow writes
+     *
+     * @var boolean
+     */
+    protected $_allowWrites = true;
+
+    /**
      * The Enlight_Config_Adapter class constructor expects an config array which should contains a
      * suffix and a prefix for the configuration names.
      *
@@ -71,7 +78,10 @@ abstract class Enlight_Config_Adapter extends Enlight_Class
             switch ($key) {
                 case 'nameSuffix':
                 case 'namePrefix':
-                    $this->{'_' . $key} = (string)$option;
+                    $this->{'_' . $key} = (string) $option;
+                    break;
+                case 'allowWrites':
+                    $this->_allowWrites = (boolean) $option;
                     break;
                 default:
                     break;

@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Service_Rackspace
  * @subpackage Files
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -33,7 +33,7 @@ require_once 'Zend/Service/Rackspace/Files.php';
  * @category   Zend
  * @package    Zend_Service_Rackspace
  * @subpackage Files
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Service_Rackspace_Files_ObjectList implements Countable, Iterator, ArrayAccess
@@ -68,7 +68,7 @@ class Zend_Service_Rackspace_Files_ObjectList implements Countable, Iterator, Ar
             require_once 'Zend/Service/Rackspace/Files/Exception.php';
             throw new Zend_Service_Rackspace_Files_Exception("You must pass a Zend_Service_Rackspace_Files object");
         }
-        if (empty($list)) {
+        if (!is_array($list)) {
             require_once 'Zend/Service/Rackspace/Files/Exception.php';
             throw new Zend_Service_Rackspace_Files_Exception("You must pass an array of data objects");
         }

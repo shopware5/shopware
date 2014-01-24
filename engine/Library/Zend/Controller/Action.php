@@ -14,9 +14,9 @@
  *
  * @category   Zend
  * @package    Zend_Controller
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Action.php 24252 2011-07-21 23:56:54Z adamlundrigan $
+ * @version    $Id$
  */
 
 /**
@@ -37,7 +37,7 @@ require_once 'Zend/Controller/Front.php';
 /**
  * @category   Zend
  * @package    Zend_Controller
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 abstract class Zend_Controller_Action implements Zend_Controller_Action_Interface
@@ -583,6 +583,22 @@ abstract class Zend_Controller_Action implements Zend_Controller_Action_Interfac
      */
     protected function _getParam($paramName, $default = null)
     {
+        return $this->getParam($paramName, $default);
+    }
+
+    /**
+     * Gets a parameter from the {@link $_request Request object}.  If the
+     * parameter does not exist, NULL will be returned.
+     *
+     * If the parameter does not exist and $default is set, then
+     * $default will be returned instead of NULL.
+     *
+     * @param string $paramName
+     * @param mixed $default
+     * @return mixed
+     */
+    public function getParam($paramName, $default = null)
+    {
         $value = $this->getRequest()->getParam($paramName);
          if ((null === $value || '' === $value) && (null !== $default)) {
             $value = $default;
@@ -597,8 +613,22 @@ abstract class Zend_Controller_Action implements Zend_Controller_Action_Interfac
      * @param string $paramName
      * @param mixed $value
      * @return Zend_Controller_Action
+     * @deprecated Deprecated as of Zend Framework 1.7. Use
+     *             setParam() instead.
      */
     protected function _setParam($paramName, $value)
+    {
+        return $this->setParam($paramName, $value);
+    }
+
+    /**
+     * Set a parameter in the {@link $_request Request object}.
+     *
+     * @param string $paramName
+     * @param mixed $value
+     * @return Zend_Controller_Action
+     */
+    public function setParam($paramName, $value)
     {
         $this->getRequest()->setParam($paramName, $value);
 
@@ -611,8 +641,22 @@ abstract class Zend_Controller_Action implements Zend_Controller_Action_Interfac
      *
      * @param string $paramName
      * @return boolean
+     * @deprecated Deprecated as of Zend Framework 1.7. Use
+     *             hasParam() instead.
      */
     protected function _hasParam($paramName)
+    {
+        return $this->hasParam($paramName);
+    }
+
+    /**
+     * Determine whether a given parameter exists in the
+     * {@link $_request Request object}.
+     *
+     * @param string $paramName
+     * @return boolean
+     */
+    public function hasParam($paramName)
     {
         return null !== $this->getRequest()->getParam($paramName);
     }
@@ -622,8 +666,21 @@ abstract class Zend_Controller_Action implements Zend_Controller_Action_Interfac
      * as an associative array.
      *
      * @return array
+     * @deprecated Deprecated as of Zend Framework 1.7. Use
+     *             getAllParams() instead.
      */
     protected function _getAllParams()
+    {
+        return $this->getAllParams();
+    }
+
+    /**
+     * Return all parameters in the {@link $_request Request object}
+     * as an associative array.
+     *
+     * @return array
+     */
+    public function getAllParams()
     {
         return $this->getRequest()->getParams();
     }
@@ -654,8 +711,41 @@ abstract class Zend_Controller_Action implements Zend_Controller_Action_Interfac
      * @param string $module
      * @param array $params
      * @return void
+     * @deprecated Deprecated as of Zend Framework 1.7. Use
+     *             forward() instead.
      */
     final protected function _forward($action, $controller = null, $module = null, array $params = null)
+    {
+        $this->forward($action, $controller, $module, $params);
+    }
+
+    /**
+     * Forward to another controller/action.
+     *
+     * It is important to supply the unformatted names, i.e. "article"
+     * rather than "ArticleController".  The dispatcher will do the
+     * appropriate formatting when the request is received.
+     *
+     * If only an action name is provided, forwards to that action in this
+     * controller.
+     *
+     * If an action and controller are specified, forwards to that action and
+     * controller in this module.
+     *
+     * Specifying an action, controller, and module is the most specific way to
+     * forward.
+     *
+     * A fourth argument, $params, will be used to set the request parameters.
+     * If either the controller or module are unnecessary for forwarding,
+     * simply pass null values for them before specifying the parameters.
+     *
+     * @param string $action
+     * @param string $controller
+     * @param string $module
+     * @param array $params
+     * @return void
+     */
+    final public function forward($action, $controller = null, $module = null, array $params = null)
     {
         $request = $this->getRequest();
 
@@ -684,8 +774,24 @@ abstract class Zend_Controller_Action implements Zend_Controller_Action_Interfac
      * @param string $url
      * @param array $options Options to be used when redirecting
      * @return void
+     * @deprecated Deprecated as of Zend Framework 1.7. Use
+     *             redirect() instead.
      */
     protected function _redirect($url, array $options = array())
+    {
+        $this->redirect($url, $options);
+    }
+
+    /**
+     * Redirect to another URL
+     *
+     * Proxies to {@link Zend_Controller_Action_Helper_Redirector::gotoUrl()}.
+     *
+     * @param string $url
+     * @param array $options Options to be used when redirecting
+     * @return void
+     */
+    public function redirect($url, array $options = array())
     {
         $this->_helper->redirector->gotoUrl($url, $options);
     }

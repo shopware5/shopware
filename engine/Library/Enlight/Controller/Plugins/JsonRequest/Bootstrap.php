@@ -43,7 +43,7 @@ class Enlight_Controller_Plugins_JsonRequest_Bootstrap extends Enlight_Plugin_Bo
      */
     public function init()
     {
-        if($this->Collection() === null) {
+        if ($this->Collection() === null) {
             return;
         }
         $event = new Enlight_Event_Handler_Default('Enlight_Controller_Action_PreDispatch', array(
@@ -87,11 +87,11 @@ class Enlight_Controller_Plugins_JsonRequest_Bootstrap extends Enlight_Plugin_Bo
           && ($input = file_get_contents('php://input')) !== false) {
             $input = Zend_Json::decode($input);
 
-            if($this->padding !== null && isset($input[0])) {
+            if ($this->padding !== null && isset($input[0])) {
                 $request->setPost($this->padding, $input);
             } else {
-                foreach((array)$input as $key => $value) {
-                    if($value !== null) {
+                foreach ((array) $input as $key => $value) {
+                    if ($value !== null) {
                         $request->setPost($key, $value);
                     }
                 }
@@ -99,9 +99,9 @@ class Enlight_Controller_Plugins_JsonRequest_Bootstrap extends Enlight_Plugin_Bo
         }
 
         // Parse the json Params
-        if(count($this->parseParams)) {
-            foreach($this->parseParams as $Param) {
-                if(($value = $request->getParam($Param)) !== null) {
+        if (count($this->parseParams)) {
+            foreach ($this->parseParams as $Param) {
+                if (($value = $request->getParam($Param)) !== null) {
                     $value = Zend_Json::decode($value);
                     $request->setParam($Param, $value);
                 }
@@ -123,7 +123,7 @@ class Enlight_Controller_Plugins_JsonRequest_Bootstrap extends Enlight_Plugin_Bo
      */
     public function setParseInput($parseInput = true)
     {
-        $this->parseInput = (bool)$parseInput;
+        $this->parseInput = (bool) $parseInput;
         return $this;
     }
 

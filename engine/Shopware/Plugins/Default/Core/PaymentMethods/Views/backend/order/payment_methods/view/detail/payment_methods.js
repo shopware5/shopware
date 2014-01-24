@@ -1,3 +1,4 @@
+//{namespace name="backend/order/main"}
 //{block name="backend/order/view/detail/debit" append}
 Ext.define('Shopware.apps.Order.view.detail.PaymentMethods', {
     override: 'Shopware.apps.Order.view.detail.Debit',
@@ -5,8 +6,8 @@ Ext.define('Shopware.apps.Order.view.detail.PaymentMethods', {
     initComponent: function () {
         var me = this;
 
-        me.snippets.sepaIban = '{s name=sepa/iban}IBAN{/s}';
-        me.snippets.sepaBic = '{s name=sepa/bic}BIC{/s}';
+        me.snippets.sepaIban = '{s namespace="backend/order/main" name=sepa/iban}IBAN{/s}';
+        me.snippets.sepaBic = '{s namespace="backend/order/main" name=sepa/bic}BIC{/s}';
 
         me.callParent(arguments);
 

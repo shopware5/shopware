@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,7 +24,7 @@
 
 class Shopware_Components_Convert_Csv
 {
-    var $sSettings = array(
+    public $sSettings = array(
         "fieldmark"         => "\"",
         "separator" => ";",
         "encoding"=> "ISO-8859-1", //UTF-8
@@ -32,7 +32,7 @@ class Shopware_Components_Convert_Csv
         "escaped_fieldmark" => "\"\"", "newline" => "\n", "escaped_newline" => "",
     );
 
-    function encode($array, $keys = array())
+    public function encode($array, $keys = array())
     {
         if (!is_array($keys) || !count($keys)) {
             $keys = array_keys(current($array));
@@ -45,7 +45,7 @@ class Shopware_Components_Convert_Csv
         return $csv;
     }
 
-    function encode_stream($array, $keys = array(), &$stream = null)
+    public function encode_stream($array, $keys = array(), &$stream = null)
     {
         if (empty($stream)) {
             $stream = fopen("php://output", "w");
@@ -59,7 +59,7 @@ class Shopware_Components_Convert_Csv
         return true;
     }
 
-    function get_all_keys($array)
+    public function get_all_keys($array)
     {
         $keys = array();
         if (!empty($array) && is_array($array)) {
@@ -70,7 +70,7 @@ class Shopware_Components_Convert_Csv
         return $keys;
     }
 
-    function _encode_line($line, $keys)
+    public function _encode_line($line, $keys)
     {
         $csv = '';
 
@@ -111,7 +111,7 @@ class Shopware_Components_Convert_Csv
         return $csv;
     }
 
-    function decode($csv, $keys = array())
+    public function decode($csv, $keys = array())
     {
         $csv = file_get_contents($csv);
 
@@ -154,7 +154,7 @@ class Shopware_Components_Convert_Csv
         return $array;
     }
 
-    function _decode_line($line)
+    public function _decode_line($line)
     {
         $fieldmark    = $this->sSettings['fieldmark'];
         $elements     = explode($this->sSettings['separator'], $line);
@@ -183,7 +183,7 @@ class Shopware_Components_Convert_Csv
         return $tmp_elements;
     }
 
-    function _split_line($csv)
+    public function _split_line($csv)
     {
         $lines    = array();
         $elements = explode($this->sSettings['newline'], $csv);

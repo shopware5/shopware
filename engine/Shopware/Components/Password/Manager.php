@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -29,7 +29,7 @@ namespace Shopware\Components\Password;
  *
  * @category  Shopware
  * @package   Shopware\Components\Password
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Manager
 {
@@ -93,7 +93,7 @@ class Manager
      */
     public function getCompatibleEncoders()
     {
-        return array_filter($this->encoder, function($encoder) {
+        return array_filter($this->encoder, function ($encoder) {
             return !method_exists($encoder, 'isCompatible') || $encoder->isCompatible();
         });
     }

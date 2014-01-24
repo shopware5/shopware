@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,7 +32,7 @@ class Shopware_StoreApi_Core_Response_SearchResult implements IteratorAggregate,
     {
         $this->rawData = $rawData;
 
-        if(!empty($this->rawData['total'])) {
+        if (!empty($this->rawData['total'])) {
             $this->total = $this->rawData['total'];
         }
 
@@ -40,26 +40,31 @@ class Shopware_StoreApi_Core_Response_SearchResult implements IteratorAggregate,
         $this->collection = $preparedResponse->getCollection();
     }
 
-    public function getIterator() {
+    public function getIterator()
+    {
         return new ArrayIterator( $this->collection );
     }
 
-    public function offsetSet($offset, $value) {
+    public function offsetSet($offset, $value)
+    {
         if (is_null($offset)) {
             $this->collection[] = $value;
         } else {
             $this->collection[$offset] = $value;
         }
     }
-    public function offsetExists($offset) {
+    public function offsetExists($offset)
+    {
         return isset($this->collection[$offset]);
     }
 
-    public function offsetUnset($offset) {
+    public function offsetUnset($offset)
+    {
         unset($this->collection[$offset]);
     }
 
-    public function offsetGet($offset) {
+    public function offsetGet($offset)
+    {
         return isset($this->collection[$offset]) ? $this->collection[$offset] : null;
     }
 

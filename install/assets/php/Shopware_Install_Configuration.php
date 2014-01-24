@@ -1,14 +1,14 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
  * or under a proprietary license.
  *
- * The texts of the GNU Affero General Public License and of our
- * proprietary license can be found at and
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
  * in the LICENSE file you have received along with this program.
  *
  * This program is distributed in the hope that it will be useful,
@@ -20,24 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components
- * @subpackage Check
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
- */
-
-/**
- * Shopware Check System
- *
- * todo@all: Documentation
- * <code>
- * $list = new Shopware_Components_Check_System();
- * $data = $list->toArray();
- * </code>
  */
 
 class Shopware_Install_Configuration
@@ -67,7 +49,8 @@ class Shopware_Install_Configuration
 
 
 
-    public function getCurrencies(){
+    public function getCurrencies()
+    {
         $db = $this->getDatabase();
         try {
             $fetchAllCurrencies = $db->query("
@@ -75,12 +58,13 @@ class Shopware_Install_Configuration
             ");
             $fetchAllCurrencies = $fetchAllCurrencies->fetchAll();
             return $fetchAllCurrencies;
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             $this->setError($e->getMessage());
             return false;
         }
     }
-    public function updateShop($params){
+    public function updateShop($params)
+    {
         if (empty($params["c_config_shop_language"]) ||
           empty($params["c_config_shop_currency"])
           ){
@@ -98,14 +82,14 @@ class Shopware_Install_Configuration
             ");
             $fetchLanguageId->execute(array($params["c_config_shop_language"]));
             $fetchLanguageId = $fetchLanguageId->fetchColumn();
-            if (!$fetchLanguageId){
+            if (!$fetchLanguageId) {
                 throw new Exception ("Language with id ".$params["c_config_shop_language"]." not found");
             }
 
             // Do update on s_core_shops
-            if ($params["c_config_shop_language"] == "de_DE"){
+            if ($params["c_config_shop_language"] == "de_DE") {
                 $name = "Hauptshop Deutsch";
-            }else {
+            } else {
                 $name = "Default english";
             }
 
@@ -126,10 +110,10 @@ class Shopware_Install_Configuration
             $prepareStatement->execute(array(
                 $name, $params["c_config_shop_currency"],$fetchLanguageId,$host
             ));
-        }catch (PDOException $e){
+        } catch (PDOException $e) {
             $this->setError($e->getMessage());
             return false;
-        }catch (Exception $e){
+        } catch (Exception $e) {
             $this->setError($e->getMessage());
             return false;
         }
@@ -142,7 +126,8 @@ class Shopware_Install_Configuration
        return md5("A9ASD:_AD!_=%a8nx0asssblPlasS$" . md5($password));
     }
 
-    public function createAdmin($params){
+    public function createAdmin($params)
+    {
         if (empty($params["c_config_admin_user"]) ||
         empty($params["c_config_admin_name"]) ||
         empty($params["c_config_admin_email"]) ||
@@ -163,11 +148,11 @@ class Shopware_Install_Configuration
             ");
             $fetchLanguageId->execute(array($params["c_config_admin_language"]));
             $fetchLanguageId = $fetchLanguageId->fetchColumn();
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             $this->setError($e->getMessage());
             return false;
         }
-        if (!$fetchLanguageId){
+        if (!$fetchLanguageId) {
             $this->setError("Could not resolve language ".$params["c_config_admin_language"]);
             return false;
         }
@@ -193,7 +178,7 @@ class Shopware_Install_Configuration
                 $params["c_config_admin_email"]
             ));
 
-        } catch(PDOException $e){
+        } catch (PDOException $e) {
             $this->setError($e->getMessage());
             return false;
         }
@@ -201,7 +186,8 @@ class Shopware_Install_Configuration
         // Create backend user in s_core_auth
     }
 
-    public function updateConfig($params){
+    public function updateConfig($params)
+    {
         // Do update on shop-configuration
         if (empty($params["c_config_shopName"]) ||
         empty($params["c_config_mail"])
@@ -241,7 +227,7 @@ class Shopware_Install_Configuration
          $prepareStatement = $this->getDatabase()->prepare($sql);
          $prepareStatement->execute(array(serialize($params["c_config_shopName"])));
 
-     }catch(PDOException $e){
+     } catch (PDOException $e) {
          $this->setError($e->getMessage());
          return false;
      }
@@ -249,7 +235,8 @@ class Shopware_Install_Configuration
       return true;
     }
 
-    public function getShopDomain(){
+    public function getShopDomain()
+    {
         $domain = $_SERVER["HTTP_HOST"];
         $basepath = str_replace("/install/index.php","",$_SERVER["SCRIPT_NAME"]);
         return array("domain" => $domain, "basepath" =>$basepath);

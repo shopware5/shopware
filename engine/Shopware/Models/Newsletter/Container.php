@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0 - Dispatch
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Backend, Newsletter
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Daniel Nögel
- * @author     $Author$
  */
 
 namespace   Shopware\Models\Newsletter;
@@ -86,7 +78,7 @@ class Container extends ModelEntity
      * Inverse side of the association between the container and its text-child
      *
      * @var \Shopware\Models\Newsletter\ContainerType\Text
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\ContainerType\Text", mappedBy="container", cascade={"persist", "update", "remove"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\ContainerType\Text", mappedBy="container", cascade={"persist", "remove"})
      */
     protected $text;
 
@@ -96,7 +88,7 @@ class Container extends ModelEntity
      * Inverse side of the association between the container and its banner child
      *
      * @var \Shopware\Models\Newsletter\ContainerType\Banner
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\ContainerType\Banner", mappedBy="container", cascade={"persist", "update", "remove"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\ContainerType\Banner", mappedBy="container", cascade={"persist", "remove"})
      */
     protected $banner;
 
@@ -106,7 +98,7 @@ class Container extends ModelEntity
      * Inverse side of the association between the container and its link childs
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\ContainerType\Link", mappedBy="container", cascade={"persist", "update", "remove"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\ContainerType\Link", mappedBy="container", cascade={"persist", "remove"})
      */
     protected $links;
 
@@ -116,7 +108,7 @@ class Container extends ModelEntity
     * Inverse side of the association between the container and its article childs
     *
      * @var \Doctrine\Common\Collections\ArrayCollection
-    * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\ContainerType\Article", mappedBy="container", cascade={"persist", "update", "remove"})
+    * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\ContainerType\Article", mappedBy="container", cascade={"persist",  "remove"})
     */
     protected $articles;
 
@@ -322,7 +314,3 @@ class Container extends ModelEntity
         return $this->id;
     }
 }
-
-
-
-

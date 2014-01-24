@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -27,7 +27,7 @@
  *
  * @category  Shopware
  * @package   Shopware\Components\Search\Adapter
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Search_Adapter_Abstract
 {
@@ -304,7 +304,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         );
 
         foreach ($configurationItems as $arrayKeyName => $classPropertyName) {
-            if(isset($oldConfiguration[$arrayKeyName])) {
+            if (isset($oldConfiguration[$arrayKeyName])) {
                 $this->$classPropertyName = $oldConfiguration[$arrayKeyName];
             }
         }
@@ -317,7 +317,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
      */
     public function getPriceRanges()
     {
-        if(empty($this->configSearchPriceFilter)) {
+        if (empty($this->configSearchPriceFilter)) {
             return $this->configPriceFilter;
         }
         return $this->configSearchPriceFilter;
@@ -331,11 +331,11 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
     protected function initConfigurationDeprecatedPriceFilter($oldConfiguration)
     {
         if (!empty($oldConfiguration["sFUZZYSEARCHSELECTPERPAGE"])) {
-            $this->configSearchSelectPerPage = preg_split('/[^0-9]/', (string)$oldConfiguration["sFUZZYSEARCHSELECTPERPAGE"], -1, PREG_SPLIT_NO_EMPTY);
+            $this->configSearchSelectPerPage = preg_split('/[^0-9]/', (string) $oldConfiguration["sFUZZYSEARCHSELECTPERPAGE"], -1, PREG_SPLIT_NO_EMPTY);
         }
 
         if (!empty($oldConfiguration["sFUZZYSEARCHPRICEFILTER"])) {
-            $sPriceFilter = preg_split('/[^0-9]/', (string)$oldConfiguration["sFUZZYSEARCHPRICEFILTER"], -1, PREG_SPLIT_NO_EMPTY);
+            $sPriceFilter = preg_split('/[^0-9]/', (string) $oldConfiguration["sFUZZYSEARCHPRICEFILTER"], -1, PREG_SPLIT_NO_EMPTY);
             $tmp = array();
             $last = 0;
             foreach ($sPriceFilter as $key => $price) {
@@ -352,7 +352,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
      */
     public function validateCache($configuration = array(), $force = false)
     {
-        $interval = (empty($this->configSearchCache) || $this->configSearchCache < 360) ? 86400 : (int)$this->configSearchCache;
+        $interval = (empty($this->configSearchCache) || $this->configSearchCache < 360) ? 86400 : (int) $this->configSearchCache;
         $sql = '
             SELECT NOW() as current, cf.value as last,
             (SELECT 1 FROM s_search_index LIMIT 1) as not_force
@@ -428,20 +428,16 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
             if (strlen($term) < strlen($keyword)) {
                 $term1 = $keyword;
                 $term2 = $term;
-            }
-            else {
+            } else {
                 $term2 = $keyword;
                 $term1 = $term;
             }
 
             $relevance = 0;
 
-            if ($term1 === $term2) // Terms are similar
-            {
+            if ($term1 === $term2) { // Terms are similar
                 $relevance = $this->configSearchExactMatchFactor;
-            }
-            elseif (strpos($term1, $term2) !== false) // Check for sub term matching
-            {
+            } elseif (strpos($term1, $term2) !== false) { // Check for sub term matching
                 if (strlen($term1) < 4)
                     $relevance = $this->configSearchMatchFactor;
                 elseif (strlen($term1) - strlen($term2) <= 1) //ipod === ipods
@@ -515,7 +511,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         return '
                 LEFT JOIN s_articles_translations AS at
                 ON a.id=at.articleID
-                AND at.languageID=' . (int)$shopId . '
+                AND at.languageID=' . (int) $shopId . '
                ';
     }
 
@@ -624,13 +620,11 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
                 $sqlTable = 'JOIN ' . $table['referenz_table'] . ' st' . $table['tableID'] . "\n"
                     . 'ON si.elementID = st' . $table['tableID'] . '.' . $table['foreign_key'];
                 $sqlArticleId = 'st' . $table['tableID'] . '.articleID';
-            }
-            elseif (!empty($table['foreign_key'])) {
+            } elseif (!empty($table['foreign_key'])) {
                 $sqlTable = 'JOIN s_articles st' . $table['tableID'] . "\n"
                     . 'ON si.elementID = st' . $table['tableID'] . '.' . $table['foreign_key'];
                 $sqlArticleId = 'st' . $table['tableID'] . '.id';
-            }
-            else {
+            } else {
                 $sqlArticleId = 'si.elementID';
             }
             $tablesSql[] = '
@@ -729,12 +723,12 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         if (!empty($this->configSearchMinDistanceOnTop)) {
             $minimumRelevance = $max_relevance / 100 * $this->configSearchMinDistanceOnTop;
             if (!empty($minimumRelevance))
-                $sqlWhere .= ' AND relevance>=' . (int)$minimumRelevance;
+                $sqlWhere .= ' AND relevance>=' . (int) $minimumRelevance;
         }
 
         // Filter search results for supplier
         if (!empty($this->requestFilter["supplier"])) {
-            $sqlWhere .= ' AND a.supplierID=' . (int)$this->requestFilter["supplier"];
+            $sqlWhere .= ' AND a.supplierID=' . (int) $this->requestFilter["supplier"];
         }
         return $sqlWhere;
     }
@@ -750,18 +744,16 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         if (!empty($this->requestFilter["price"])) {
             if (is_array($this->requestFilter["price"])) {
                 $filterPrice = $this->requestFilter["price"];
-            }
-            else {
-                if(empty($this->configSearchPriceFilter)) {
+            } else {
+                if (empty($this->configSearchPriceFilter)) {
                     $filterPrice = $this->configPriceFilter[$this->requestFilter["price"]];
-                }
-                else {
+                } else {
                     $filterPrice = $this->configSearchPriceFilter[$this->requestFilter["price"]];
                 }
             }
 
-            $sqlHaving .= ' HAVING price>=' . (float)$filterPrice['start'];
-            $sqlHaving .= ' AND price<' . (float)$filterPrice['end'];
+            $sqlHaving .= ' HAVING price>=' . (float) $filterPrice['start'];
+            $sqlHaving .= ' AND price<' . (float) $filterPrice['end'];
         }
         return $sqlHaving;
     }
@@ -924,9 +916,9 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         // Filter search results for category
 
         if (!empty($this->requestFilter["category"])) {
-            $this->getResult()->setCurrentCategoryFilter((int)$this->requestFilter["category"]);
+            $this->getResult()->setCurrentCategoryFilter((int) $this->requestFilter["category"]);
         } else {
-            $this->getResult()->setCurrentCategoryFilter((int)$this->requestRestrictSearchResultsToCategory);
+            $this->getResult()->setCurrentCategoryFilter((int) $this->requestRestrictSearchResultsToCategory);
         }
 
         // Build final sql query and execute
@@ -943,7 +935,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         );
 
         $traceSearch = Shopware()->Config()->get('traceSearch', true);
-        if(empty($this->requestSuggestSearch) && $traceSearch) {
+        if (empty($this->requestSuggestSearch) && $traceSearch) {
             $sql = '
               INSERT INTO s_statistics_search (datum, searchterm, results)
                 VALUES (NOW(), ?, ?)
@@ -973,7 +965,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
 
         if (!empty($this->requestSortSearchResultsBy)) {
             $sortedResult = $this->sortResults($searchResultsFinal, $this->requestSortSearchResultsBy);
-            if($sortedResult !== false) {
+            if ($sortedResult !== false) {
                 $searchResultsFinal = $sortedResult;
             }
         }
@@ -997,8 +989,8 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
      * Empty method that allows to integrate own filters into search adapter
      * @param $searchResult
      */
-    public function executeCustomFilters($searchResult){
-
+    public function executeCustomFilters($searchResult)
+    {
     }
 
 
@@ -1031,7 +1023,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
 
 
         // Loop through affected categories as long as ...
-        if(!empty($result) && count($result) === 1) {
+        if (!empty($result) && count($result) === 1) {
             $this->getResult()->setCurrentCategoryFilter($result[0]['id']);
             return $this->getCountCategoryFilters($searchResults);
         }
@@ -1316,7 +1308,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
 
         if (!isset($badWords)) $badWords = preg_split("#[\s,;]+#msi", $this->configSearchBadWords, -1, PREG_SPLIT_NO_EMPTY);
 
-        if (in_array((string)$word, $badWords)) return false;
+        if (in_array((string) $word, $badWords)) return false;
         return true;
     }
 

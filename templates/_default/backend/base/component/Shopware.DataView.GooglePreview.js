@@ -40,7 +40,8 @@
      xtype:'googlepreview',
      fieldSetTitle: 'Preview',
      viewData: me.detailRecord,
-     titleField: me.mainTitleField,
+     titleField: me.titleField,
+     fallBackTitleField: me.mainTitleField,
      descriptionField: me.metaDescription,
      supportText: 'This preview displayed can differ from the version shown in the search engine.',
      refreshButtonText: 'Generate Preview'
@@ -80,6 +81,11 @@ Ext.define('Shopware.DataView.GooglePreview',
      * the field to display the value in the preview
      */
     titleField: null,
+
+    /**
+     * the field to display the value in the preview if the titleField is empty
+     */
+    fallBackTitleField: null,
 
     /**
      * support text under the preview
@@ -179,8 +185,8 @@ Ext.define('Shopware.DataView.GooglePreview',
      */
     getPreviewData: function() {
         var me = this,
-            title = me.titleField.getValue(),
-            url = me.titleField.getValue(),
+            title = me.titleField.getValue() ? me.titleField.getValue() : me.fallBackTitleField.getValue(),
+            url = title,
             metaDescription = me.descriptionField.getValue(),
             date = '';
 
@@ -193,7 +199,7 @@ Ext.define('Shopware.DataView.GooglePreview',
                 url = "www.example.com/"+url;
                 url = url.substr(0,35)+'...';
                 url = url.toLowerCase();
-                url = url.replace(' ', '-');
+                url = url.replace(/\s/g, '-');
             }
             if(metaDescription != '') {
                 metaDescription = metaDescription.substr(0,70)+'...';

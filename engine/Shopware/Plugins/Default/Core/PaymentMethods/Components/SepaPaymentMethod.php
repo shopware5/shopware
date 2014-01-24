@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,10 +25,6 @@
 namespace ShopwarePlugin\PaymentMethods\Components;
 
 use Doctrine\ORM\AbstractQuery;
-use Shopware\Models\Customer\Customer;
-use Shopware\Models\Customer\PaymentData;
-use Shopware\Models\Order\Order;
-use Shopware\Models\Payment\PaymentInstance;
 
 /**
  * Class SepaPaymentMethod
@@ -41,21 +37,21 @@ class SepaPaymentMethod extends GenericPaymentMethod
     /**
      * @inheritdoc
      */
-    public function validate()
+    public function validate(\Enlight_Controller_Request_Request $request)
     {
         $sErrorFlag = array();
 
-        if (!Shopware()->Front()->Request()->getParam("sSepaIban") || strlen(trim(Shopware()->Front()->Request()->getParam("sSepaIban"))) === 0 ) {
+        if (!$request->getParam("sSepaIban") || strlen(trim($request->getParam("sSepaIban"))) === 0 ) {
             $sErrorFlag["sSepaIban"] = true;
         }
-        if (Shopware()->Config()->sepaShowBic && Shopware()->Config()->sepaRequireBic && (!Shopware()->Front()->Request()->getParam("sSepaBic") || strlen(trim(Shopware()->Front()->Request()->getParam("sSepaBic"))) === 0 )) {
+        if (Shopware()->Config()->sepaShowBic && Shopware()->Config()->sepaRequireBic && (!$request->getParam("sSepaBic") || strlen(trim($request->getParam("sSepaBic"))) === 0 )) {
             $sErrorFlag["sSepaBic"] = true;
         }
-        if (Shopware()->Config()->sepaShowBankName && Shopware()->Config()->sepaRequireBankName && (!Shopware()->Front()->Request()->getParam("sSepaBankName") || strlen(trim(Shopware()->Front()->Request()->getParam("sSepaBankName"))) === 0 )) {
+        if (Shopware()->Config()->sepaShowBankName && Shopware()->Config()->sepaRequireBankName && (!$request->getParam("sSepaBankName") || strlen(trim($request->getParam("sSepaBankName"))) === 0 )) {
             $sErrorFlag["sSepaBankName"] = true;
         }
-        if (Shopware()->Front()->Request()->getParam("sSepaIban") && !$this->validateIBAN(Shopware()->Front()->Request()->getParam("sSepaIban"))) {
-            $sErrorMessages[] = Shopware()->Snippets()->getNamespace('engine/Shopware/Plugins/Default/Core/PaymentMethods/Views/frontend/plugins/payment/sepa')
+        if ($request->getParam("sSepaIban") && !$this->validateIBAN($request->getParam("sSepaIban"))) {
+            $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/plugins/payment/sepa')
                 ->get('ErrorIBAN', 'Invalid IBAN');
         }
 
@@ -111,48 +107,56 @@ class SepaPaymentMethod extends GenericPaymentMethod
     /**
      * @inheritdoc
      */
-    public function savePaymentData()
+    public function savePaymentData($userId, \Enlight_Controller_Request_Request $request)
     {
-        $userId = Shopware()->Session()->sUserId;
-        if (empty($userId)) {
-            return;
-        }
+        $lastPayment = $this->getCurrentPaymentDataAsArray($userId);
 
-        $lastPayment = $this->getData(AbstractQuery::HYDRATE_OBJECT);
+        $paymentMean = Shopware()->Models()->getRepository('\Shopware\Models\Payment\Payment')->
+            getPaymentsQuery(array('name' => 'Sepa'))->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
+
+        $data = array(
+            'use_billing_data' => ($request->getParam("sSepaUseBillingData")==='true'?1:0),
+            'bankname' => $request->getParam("sSepaBankName"),
+            'iban' => preg_replace('/\s+|\./', '', $request->getParam("sSepaIban")),
+            'bic' => $request->getParam("sSepaBic")
+        );
 
         if (!$lastPayment) {
-            $lastPayment = new PaymentData();
-            $lastPayment->setCustomer(
-                Shopware()->Models()->getRepository('\Shopware\Models\Customer\Customer')
-                    ->find($userId)
+            $date = new \DateTime();
+            $data['created_at'] = $date->format('Y-m-d');
+            $data['payment_mean_id'] = $paymentMean['id'];
+            $data['user_id'] = $userId;
+            Shopware()->Db()->insert("s_core_payment_data", $data);
+        } else {
+            $where = array(
+                'payment_mean_id = ?' => $paymentMean['id'],
+                'user_id = ?'  => $userId
             );
-            $lastPayment->setPaymentMean(
-                Shopware()->Models()->getRepository('\Shopware\Models\Payment\Payment')
-                    ->findOneByName('Sepa')
-            );
+
+            Shopware()->Db()->update("s_core_payment_data", $data, $where);
         }
-
-        $lastPayment->setUseBillingData(Shopware()->Front()->Request()->getParam("sSepaUseBillingData")==='true');
-        $lastPayment->setBankName(Shopware()->Front()->Request()->getParam("sSepaBankName"));
-        $lastPayment->setIban(preg_replace('/\s+|\./', '', Shopware()->Front()->Request()->getParam("sSepaIban")));
-        $lastPayment->setBic(Shopware()->Front()->Request()->getParam("sSepaBic"));
-
-        Shopware()->Models()->persist($lastPayment);
-        Shopware()->Models()->flush();
     }
 
     /**
      * @inheritdoc
      */
-    public function getCurrentPaymentData()
+    public function getCurrentPaymentDataAsArray($userId)
     {
-        $userId = Shopware()->Session()->sUserId;
-        if (empty($userId)) {
-            return;
+        $paymentData = Shopware()->Models()->getRepository('\Shopware\Models\Customer\PaymentData')
+            ->getCurrentPaymentDataQueryBuilder($userId, 'sepa')->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
+
+        if (isset($paymentData)) {
+            $arrayData = array(
+                "sSepaUseBillingData" => $paymentData['useBillingData'],
+                "sSepaBankName" => $paymentData['bankName'],
+                "sSepaIban" => $paymentData['iban'],
+                "sSepaBic" =>  $paymentData['bic']
+            );
+
+            return $arrayData;
         }
 
-        return Shopware()->Models()->getRepository('\Shopware\Models\Customer\PaymentData')
-            ->getCurrentPaymentDataQueryBuilder($userId, 'sepa')->getQuery()->getOneOrNullResult();
+        return null;
     }
 
     /**
@@ -160,66 +164,79 @@ class SepaPaymentMethod extends GenericPaymentMethod
      */
     public function createPaymentInstance($orderId, $userId, $paymentId)
     {
-        $order = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')->find($orderId);
-        $user = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($userId);
-        $paymentMean = Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment')->find($paymentId);
-        $paymentData = Shopware()->Models()->getRepository('Shopware\Models\Customer\PaymentData')
-            ->getCurrentPaymentDataQueryBuilder($userId, 'sepa')->getQuery()->getOneOrNullResult();
-        $addressData = $user->getBilling();
+        $order = Shopware()->Models()->createQueryBuilder()
+            ->select(array('orders.invoiceAmount', 'orders.number'))
+            ->from('Shopware\Models\Order\Order', 'orders')
+            ->where('orders.id = ?1')
+            ->setParameter(1, $orderId)
+            ->getQuery()
+            ->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
-        $paymentInstance = new PaymentInstance();
-        $paymentInstance->setOrder($order);
-        $paymentInstance->setCustomer($user);
-        $paymentInstance->setPaymentMean($paymentMean);
+        $addressData = Shopware()->Models()->getRepository('Shopware\Models\Customer\Billing')->
+            getUserBillingQuery($userId)->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
+        $paymentData = $this->getCurrentPaymentDataAsArray($userId);
 
-        $paymentInstance->setBankName($paymentData->getBankName());
-        $paymentInstance->setBic($paymentData->getBic());
-        $paymentInstance->setIban($paymentData->getIban());
+        $date = new \DateTime();
+        $data = array(
+            'payment_mean_id' => $paymentId,
+            'order_id' => $orderId,
+            'user_id' => $userId,
 
-        if ($paymentData->getUseBillingData()) {
-            $paymentInstance->setFirstName($addressData->getFirstName());
-            $paymentInstance->setLastName($addressData->getLastName());
-            $paymentInstance->setAccountHolder($addressData->getFirstName() . ' ' . $addressData->getLastName());
-            $paymentInstance->setAddress($addressData->getStreet() . ' ' . $addressData->getStreetNumber());
-            $paymentInstance->setZipCode($addressData->getZipCode());
-            $paymentInstance->setCity($addressData->getCity());
-        }
+            'firstname' => $paymentData['sSepaUseBillingData']?$addressData['firstName']:null,
+            'lastname' => $paymentData['sSepaUseBillingData']?$addressData['lastName']:null,
+            'address' => $paymentData['sSepaUseBillingData']?($addressData['street'] . ' ' . $addressData['streetNumber']):null,
+            'zipcode' => $paymentData['sSepaUseBillingData']?$addressData['zipCode']:null,
+            'city' => $paymentData['sSepaUseBillingData']?$addressData['city']:null,
 
-        $paymentInstance->setAmount($order->getInvoiceAmount());
+            'bank_name' => $paymentData['sSepaBankName'],
+            'account_holder' => $paymentData['sSepaUseBillingData']?($addressData['firstName'] . ' ' . $addressData['lastName']):null,
+            'bic' => $paymentData['sSepaBic'],
+            'iban' => $paymentData['sSepaIban'],
 
-        Shopware()->Models()->persist($paymentInstance);
-        Shopware()->Models()->flush();
+            'amount' => $order['invoiceAmount'],
+            'created_at' => $date->format('Y-m-d')
+        );
+
+        Shopware()->Db()->insert('s_core_payment_instance', $data);
 
         if (Shopware()->Config()->get('sepaSendEmail')) {
-            $this->sendSepaEmail($order, $user, $paymentInstance);
+            $this->sendSepaEmail($order['number'], $userId, $data);
         }
 
-        return $paymentInstance;
+        return true;
     }
 
-    private function sendSepaEmail(Order $order, Customer $user, PaymentInstance $paymentInstance)
+    private function sendSepaEmail($orderNumber, $userId, $data)
     {
         require_once(Shopware()->OldPath() . "engine/Library/Mpdf/mpdf.php");
 
         $mail = Shopware()->TemplateMail()->createMail('sORDERSEPAAUTHORIZATION', array(
             'paymentInstance' => array(
-                'firstName' => $paymentInstance->getFirstName(),
-                'lastName' => $paymentInstance->getLastName(),
-                'orderNumber' => $paymentInstance->getOrder()->getNumber()
+                'firstName' => $data['firstname'],
+                'lastName' => $data['lastname'],
+                'orderNumber' => $orderNumber
             )
         ));
 
-        $mail->addTo($user->getEmail());
+        $customerEmail = Shopware()->Models()->createQueryBuilder()
+            ->select('customer.email')
+            ->from('Shopware\Models\Customer\Customer', 'customer')
+            ->where('customer.id = ?1')
+            ->setParameter(1, $userId)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        $mail->addTo($customerEmail);
 
         Shopware()->Template()->assign('data', array(
-            'orderNumber' => $paymentInstance->getOrder()->getNumber(),
-            'accountHolder' => $paymentInstance->getAccountHolder(),
-            'address' => $paymentInstance->getAddress(),
-            'city' => $paymentInstance->getCity(),
-            'zipCode' => $paymentInstance->getZipCode(),
-            'bankName' => $paymentInstance->getBankName(),
-            'iban' => $paymentInstance->getIban(),
-            'bic' => $paymentInstance->getBic()
+            'orderNumber' => $orderNumber,
+            'accountHolder' => $data['account_holder'],
+            'address' => $data['address'],
+            'city' => $data['city'],
+            'zipCode' => $data['zipcode'],
+            'bankName' => $data['bank_name'],
+            'iban' => $data['iban'],
+            'bic' => $data['bic']
         ));
         Shopware()->Template()->assign('config', array(
             'sepaCompany' => Shopware()->Config()->get('sepaCompany'),
@@ -237,7 +254,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
             throw new \Enlight_Exception('Could not generate SEPA attachment file');
         }
 
-        $attachmentName = 'SEPA_' . $order->getNumber();
+        $attachmentName = 'SEPA_' . $orderNumber;
 
         $mail->createAttachment(
             $pdfFileContent,

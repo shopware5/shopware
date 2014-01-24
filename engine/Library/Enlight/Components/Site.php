@@ -90,10 +90,10 @@ class Enlight_Components_Site
             $key = strtolower($key);
             switch ($key) {
                 case 'id':
-                    $this->properties[$key] = (int)$option;
+                    $this->properties[$key] = (int) $option;
                     break;
                 case 'name':
-                    $this->properties[$key] = (string)$option;
+                    $this->properties[$key] = (string) $option;
                     break;
                 case 'locale':
                     $this->setLocale($option);
@@ -229,7 +229,7 @@ class Enlight_Components_Site
         if (is_string($template)) {
             $template = array('template_dir' => $template);
         }
-        $template = (array)$template;
+        $template = (array) $template;
         if (!isset($template['compile_id'])) {
             $template['compile_id'] = $this->getName() . '|' . $this->Locale()->toString();
         }

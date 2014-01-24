@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Plugins
- * @subpackage Seo
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
  * Shopware SEO Plugin
- *
- * todo@all: Documentation
  */
 class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -114,12 +104,29 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
 
         $controller = $request->getControllerName();
 
+        if ($request->getQuery('sViewport') === 'supplier' || $request->getQuery('controller') === 'supplier') {
+            $alias = $this->sGetQueryAliasList();
+
+            if (array_key_exists('sSupplier', $alias) && ($index = array_search($alias['sSupplier'], $queryBlacklist, true))) {
+                unset($queryBlacklist[$index]);
+            }
+            if ($index = array_search('sSupplier', $queryBlacklist, true)) {
+                unset($queryBlacklist[$index]);
+            }
+
+            $queryBlacklist[] = 'sCategory';
+            if (array_key_exists('sCategory', $alias)) {
+                $queryBlacklist[] = $alias['sCategory'];
+            }
+        }
+
         if (!empty($controllerBlacklist) && in_array($controller, $controllerBlacklist)) {
             $metaRobots = 'noindex,follow';
         } elseif (!empty($queryBlacklist)) {
             foreach ($queryBlacklist as $queryKey) {
                 if ($request->getQuery($queryKey) !== null) {
                     $metaRobots = 'noindex,follow';
+                    break;
                 }
             }
         }
@@ -132,6 +139,23 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
         if (!empty($metaDescription)) {
             $view->SeoMetaDescription = $metaDescription;
         }
+    }
+
+    /**
+     * Returns the query alias list as an array.
+     *
+     * @return array
+     */
+    public function sGetQueryAliasList()
+    {
+        $sQueryAliasList = array();
+        if (!empty(Shopware()->Config()->SeoQueryAlias)) {
+            foreach (explode(',', Shopware()->Config()->SeoQueryAlias) as $alias) {
+                list($key, $value) = explode('=', trim($alias));
+                $sQueryAliasList[$key] = $value;
+            }
+        }
+        return $sQueryAliasList;
     }
 
     /**

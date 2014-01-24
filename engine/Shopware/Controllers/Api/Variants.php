@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,13 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Api
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Daniel Nögel
  */
 
 class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
@@ -51,16 +44,65 @@ class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
         $id = $this->Request()->getParam('id');
         $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
 
-        if($useNumberAsId){
-            $articleDetail = $this->resource->getOneByNumber($id);
-        }else{
-            $articleDetail = $this->resource->getOne($id);
+        if ($useNumberAsId) {
+            $articleDetail = $this->resource->getOneByNumber($id, array(
+                'considerTaxInput' => $this->Request()->getParam('considerTaxInput')
+            ));
+        } else {
+            $articleDetail = $this->resource->getOne($id, array(
+                'considerTaxInput' => $this->Request()->getParam('considerTaxInput')
+            ));
         }
 
         $this->View()->assign('data', $articleDetail);
         $this->View()->assign('success', true);
     }
 
+    /**
+     * Create new variant
+     *
+     * POST /api/variants
+     */
+    public function postAction()
+    {
+        $article = $this->resource->create($this->Request()->getPost());
+
+        $location = $this->apiBaseUrl . 'variants/' . $article->getId();
+        $data = array(
+            'id'       => $article->getId(),
+            'location' => $location
+        );
+
+        $this->View()->assign(array('success' => true, 'data' => $data));
+        $this->Response()->setHeader('Location', $location);
+    }
+
+    /**
+     * Update variant
+     *
+     * PUT /api/variants/{id}
+     */
+    public function putAction()
+    {
+        $id = $this->Request()->getParam('id');
+        $params = $this->Request()->getPost();
+        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
+
+        if ($useNumberAsId) {
+            $article = $this->resource->updateByNumber($id, $params);
+        } else {
+            $article = $this->resource->update($id, $params);
+        }
+
+        $location = $this->apiBaseUrl . 'variants/' . $article->getId();
+        $data = array(
+            'id'       => $article->getId(),
+            'location' => $location
+        );
+
+        $this->View()->assign(array('success' => true, 'data' => $data));
+        $this->Response()->setHeader('Location', $location);
+    }
 
     /**
      * Delete a given variant
@@ -72,9 +114,9 @@ class Shopware_Controllers_Api_Variants extends Shopware_Controllers_Api_Rest
         $id = $this->Request()->getParam('id');
         $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
 
-        if($useNumberAsId){
+        if ($useNumberAsId) {
             $this->resource->deleteByNumber($id);
-        }else{
+        } else {
             $this->resource->delete($id);
         }
 
