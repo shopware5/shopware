@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -37,26 +37,30 @@ abstract class BasePaymentMethod
     /**
      * Validates the input received from the client
      *
+     * @param \Enlight_Controller_Request_Request $request The Request object
      * @return array List of fields containing errors
      */
-    public abstract function validate();
+    abstract public function validate(\Enlight_Controller_Request_Request $request);
 
     /**
      * Called when the customer edits his payment data.
      * Creates/updates the payment information for the current
      * method.
      *
+     * @param $userId The user id
+     * @param \Enlight_Controller_Request_Request $request The Request object
      * @return null
      */
-    public abstract function savePaymentData();
+    abstract public function savePaymentData($userId, \Enlight_Controller_Request_Request $request);
 
     /**
      * Fetches the customer's current payment data for this
-     * payment method
+     * payment method as array
      *
-     * @return \Shopware\Models\Customer\PaymentData|null
+     * @param $userId The user id
+     * @return array|null
      */
-    public abstract function getCurrentPaymentData();
+    abstract public function getCurrentPaymentDataAsArray($userId);
 
     /**
      * Creates the Payment Instance for the given order
@@ -65,37 +69,7 @@ abstract class BasePaymentMethod
      * @param $orderId The Order Id associated with the current payment
      * @param $userId The User/Customer Id associated with the current payment
      * @param $paymentId The Payment Method Id associated with the current payment
-     * @return \Shopware\Models\Payment\PaymentInstace|null
+     * @return true|null
      */
-    public abstract function createPaymentInstance($orderId, $userId, $paymentId);
-
-    /**
-     * Deprecated call
-     *
-     * Will be removed in the future, please use the other functions
-     */
-    public function sInit()
-    {
-        return $this->validate();
-    }
-
-    /**
-     * Deprecated call
-     *
-     * Will be removed in the future, please use the other functions
-     */
-    public function sUpdate()
-    {
-        return $this->savePaymentData();
-    }
-
-    /**
-     * Deprecated call
-     *
-     * Will be removed in the future, please use the other functions
-     */
-    public function getData()
-    {
-        return $this->getCurrentPaymentData();
-    }
+    abstract public function createPaymentInstance($orderId, $userId, $paymentId);
 }

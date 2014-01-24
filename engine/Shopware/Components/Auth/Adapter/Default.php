@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components_Auth
- * @subpackage Adapter
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
@@ -140,7 +132,7 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
             }
             // Increase number of failed logins
             $this->setFailedLogins($user->failedlogins + 1);
-            if(isset($lockedUntil)) {
+            if (isset($lockedUntil)) {
                 return new Zend_Auth_Result(
                     -4,
                     $this->_identity,
@@ -214,7 +206,7 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
         if ($this->_credentialColumn == $this->expiryColumn) {
             if ($this->_credential->toString('YYYY-MM-dd HH:mm:ss') >= $resultIdentity[$this->_credentialColumn]) {
                 $passwordValid = false;
-            } else  {
+            } else {
                 $passwordValid = true;
             }
         } else {

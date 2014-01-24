@@ -12,7 +12,7 @@
 
 
 {block name='frontend_index_content'}
-	<div id="detail" class="grid_16 first last">
+	<div id="detail" class="grid_16 first last" itemscope itemtype="http://data-vocabulary.org/Product">
 		
 		{* General detailbox *}
 		<div id="detailbox"><!-- detailbox -->

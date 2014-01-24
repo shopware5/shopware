@@ -1,14 +1,14 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
  * or under a proprietary license.
  *
- * The texts of the GNU Affero General Public License and of our
- * proprietary license can be found at and
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
  * in the LICENSE file you have received along with this program.
  *
  * This program is distributed in the hope that it will be useful,
@@ -20,25 +20,8 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components
- * @subpackage Check
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
-/**
- * Shopware Check System
- *
- * todo@all: Documentation
- * <code>
- * $list = new Shopware_Components_Check_System();
- * $data = $list->toArray();
- * </code>
- */
 class Shopware_Install_Requirements implements IteratorAggregate, Countable
 {
     protected $list;
@@ -51,12 +34,12 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
     protected function checkAll()
     {
         foreach ($this->list as $requirement) {
-            $name = (string)$requirement->name;
+            $name = (string) $requirement->name;
             $version = $this->check($name);
             $requirement->result = $this->compare(
                 $name,
                 $version,
-                (string)$requirement->required
+                (string) $requirement->required
             );
             $requirement->version = $version;
         }
@@ -277,7 +260,7 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
     public function checkSessionSavePath()
     {
         if (function_exists('session_save_path')) {
-            return (bool)session_save_path();
+            return (bool) session_save_path();
         } elseif (ini_get('session.save_path')) {
             return true;
         } else {
@@ -318,7 +301,7 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
 
     /**
      * Checks the suhosin.get.max_value_length which limits the max get parameter length.
-     * 
+     *
      * @return int
      */
     public function checkSuhosinGetMaxValueLength()
@@ -372,7 +355,7 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
     {
         $val = trim($val);
         $last = strtolower($val[strlen($val) - 1]);
-        $val = (float)$val;
+        $val = (float) $val;
         switch ($last) {
             case 'g':
                 $val *= 1024;
@@ -394,7 +377,7 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
     {
         $val = trim($val);
         list($val, $last) = explode(' ', $val);
-        $val = (float)$val;
+        $val = (float) $val;
         switch (strtoupper($last)) {
             case 'TB':
                 $val *= 1024;
@@ -405,7 +388,7 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
             case 'KB':
                 $val *= 1024;
             case 'B':
-                $val = (float)$val;
+                $val = (float) $val;
         }
         return $val;
     }
@@ -433,13 +416,13 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
         $list = array();
         foreach ($this->getList() as $requirement) {
             $listResult = array();
-            $listResult['name'] = (string)$requirement->name;
-            $listResult['notice'] = (string)$requirement->notice;
-            $listResult['required'] = (string)$requirement->required;
-            $listResult['version'] = (string)$requirement->version;
-            $listResult['result'] = (bool)(string)$requirement->result;
-            $listResult['error'] = (bool)$requirement->error;
-            if(!$listResult['result'] && $listResult['error']) {
+            $listResult['name'] = (string) $requirement->name;
+            $listResult['notice'] = (string) $requirement->notice;
+            $listResult['required'] = (string) $requirement->required;
+            $listResult['version'] = (string) $requirement->version;
+            $listResult['result'] = (bool) (string) $requirement->result;
+            $listResult['error'] = (bool) $requirement->error;
+            if (!$listResult['result'] && $listResult['error']) {
                 $this->setFatalError(true);
             }
             $list[] = $listResult;

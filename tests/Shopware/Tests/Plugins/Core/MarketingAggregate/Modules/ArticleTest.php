@@ -54,7 +54,6 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Modules_ArticleTest extends
     protected function insertDemoData()
     {
         $category = array(
-            'id' => '76',
             'parent' => '3',
             'path' => '|3|',
             'description' => 'TopSellerTest',
@@ -122,7 +121,9 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Modules_ArticleTest extends
         $this->removeDemoData();
         $this->insertDemoData();
 
-        $topSeller = $this->module->sGetArticleCharts($this->category['id']);
+        $category = $this->getDemoCategory();
+
+        $topSeller = $this->module->sGetArticleCharts($category['id']);
         $this->assertArrayCount(2, $topSeller);
 
         //the article "2" pseudo sales are set to 1000 so we expect that this will be the first article

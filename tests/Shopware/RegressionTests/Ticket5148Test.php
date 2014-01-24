@@ -35,6 +35,10 @@ class Shopware_RegressionTests_Ticket5148 extends Enlight_Components_Test_Plugin
     public function testStartDispatch()
     {
         $front = Shopware()->Front();
+        $request  = new \Enlight_Controller_Request_RequestTestCase();
+        $request->setClientIp('127.0.0.1');
+        $front->setRequest($request);
+
         $eventArgs = $this->createEventArgs()->set('subject', $front);
 
         $plugin = Shopware()->Plugins()->Core()->Debug();

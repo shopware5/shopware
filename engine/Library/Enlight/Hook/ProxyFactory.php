@@ -139,7 +139,7 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
             }
             $content = $this->generateProxyClass($class);
             $this->writeProxyClass($proxyFile, $content);
-        } elseif(!method_exists($proxy, 'executeParent')) {
+        } elseif (!method_exists($proxy, 'executeParent')) {
             @unlink($proxyFile);
         }
 
@@ -315,7 +315,7 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
             FilesystemIterator::CURRENT_AS_PATHNAME
         );
 
-        foreach($proxies as $proxyPath) {
+        foreach ($proxies as $proxyPath) {
             @unlink($proxyPath);
         }
     }

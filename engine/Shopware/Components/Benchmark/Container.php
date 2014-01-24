@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,18 +20,9 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components
- * @subpackage Benchmark
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
- * todo@all: Documentation
  * <code>
  * $benchmarkComponent = new Shopware_Components_Benchmark_Container;
  * $benchmarkComponent->getBenchmarks();
@@ -39,15 +30,17 @@
  */
 class Shopware_Components_Benchmark_Container
 {
-	protected $Benchmarks;
-	
-	public function Start($label){
-		$object = new Shopware_Components_Benchmark_Point();
-		$object->Start($label);
-		$this->Benchmarks[] = $object;
-		return $object;
-	}
-	public function getBenchmarks(){
-		return $this->Benchmarks;
-	}
+    protected $Benchmarks;
+
+    public function Start($label)
+    {
+        $object = new Shopware_Components_Benchmark_Point();
+        $object->Start($label);
+        $this->Benchmarks[] = $object;
+        return $object;
+    }
+    public function getBenchmarks()
+    {
+        return $this->Benchmarks;
+    }
 }

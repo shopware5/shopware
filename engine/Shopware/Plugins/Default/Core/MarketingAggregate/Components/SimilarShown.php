@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -30,7 +30,7 @@
  *
  * @category  Shopware
  * @package   Shopware\Plugins\MarketingAggregate\Components
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Components_SimilarShown extends Enlight_Class
 {
@@ -87,13 +87,13 @@ class Shopware_Components_SimilarShown extends Enlight_Class
         ");
 
         //iterate all selected articles which has to be initialed
-        foreach($articles as $articleId) {
+        foreach ($articles as $articleId) {
             //now we select all similar articles of the s_emarketing_lastarticles table
             $preparedSelect->execute(array('articleId' => $articleId));
             $combinations = $preparedSelect->fetchAll();
 
             //at least we have to insert each combination in the aggregate s_articles_similar_shown_ro table.
-            foreach($combinations as $combination) {
+            foreach ($combinations as $combination) {
                 $preparedInsert->execute($combination);
             }
         }

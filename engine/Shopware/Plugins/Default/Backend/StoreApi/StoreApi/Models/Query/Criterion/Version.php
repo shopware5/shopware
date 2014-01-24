@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -29,8 +29,8 @@ class Shopware_StoreApi_Models_Query_Criterion_Version extends Shopware_StoreApi
      */
     public function __construct($versions)
     {
-        if(is_array($versions)) {
-            foreach($versions as $version) {
+        if (is_array($versions)) {
+            foreach ($versions as $version) {
                 $this->addVersion($version);
             }
         } else {
@@ -42,10 +42,10 @@ class Shopware_StoreApi_Models_Query_Criterion_Version extends Shopware_StoreApi
      * @param int $version
      * @return bool
      */
-    public function addVersion(int $version)
+    public function addVersion($version)
     {
         $version = intval($version);
-        if(!empty($version)) {
+        if (!empty($version)) {
             $this->collection[] = $version;
             return true;
         } else {
@@ -55,7 +55,7 @@ class Shopware_StoreApi_Models_Query_Criterion_Version extends Shopware_StoreApi
 
     public function getCriterionStatement()
     {
-        if(empty($this->collection)) {
+        if (empty($this->collection)) {
             return false;
         } else {
             return array(

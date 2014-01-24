@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,13 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Media
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
 
 namespace   Shopware\Models\Media;
@@ -82,7 +75,7 @@ class Album extends ModelEntity
      * @var integer $parentId
      * @ORM\Column(name="parentID", type="integer", nullable=true)
      */
-    private $parentId;
+    private $parentId = null;
 
     /**
      * Position of the album to configure the display order
@@ -105,7 +98,7 @@ class Album extends ModelEntity
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Media\Album", inversedBy="children")
      * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
      */
-    private $parent;
+    private $parent = null;
 
     /**
      * An album can be assigned to multiple media.
@@ -117,10 +110,10 @@ class Album extends ModelEntity
     /**
      * Settings of the album.
      * @var \Shopware\Models\Media\Settings
-     * @ORM\OneToOne(targetEntity="\Shopware\Models\Media\Settings", mappedBy="album")
-     * @ORM\JoinColumn(name="id", referencedColumnName="albumID")
+     *
+     * @ORM\OneToOne(targetEntity="\Shopware\Models\Media\Settings", mappedBy="album", orphanRemoval=true, cascade={"persist"})
      */
-    private $settings;
+    protected $settings;
 
     /**
      * Initials the children and media collection
@@ -158,35 +151,6 @@ class Album extends ModelEntity
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Sets the parent id of the album. To set no parent pass 0 or null.
-     * If the album has no parent, the parent id "NULL" will be saved.
-     * @param integer|null $parentId
-     * @return Album
-     */
-    public function setParentId($parentId)
-    {
-        $this->parentId = $parentId;
-
-        if ($this->parentId !== 0 && $this->parentId !== null) {
-            $this->parent = Shopware()->Models()->find('Shopware\Models\Media\Album', $parentId);
-        } else {
-            $this->parent = null;
-            $this->parentId = null;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Returns the id of the parent album
-     * @return integer
-     */
-    public function getParentId()
-    {
-        return $this->parentId;
     }
 
     /**

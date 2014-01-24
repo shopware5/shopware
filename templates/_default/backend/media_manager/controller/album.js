@@ -33,6 +33,7 @@
  *
  * this file handles the album administration.
  */
+//{namespace name=backend/media_manager/view/main}
 //{block name="backend/media_manager/controller/album"}
 Ext.define('Shopware.apps.MediaManager.controller.Album', {
 
@@ -40,7 +41,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
      * Extend from the standard ExtJS 4 controller
      * @string
      */
-	extend: 'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     /**
      * Define references for the different parts of our application. The
@@ -51,18 +52,19 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
      *
      * @object
      */
-	refs: [
-        { ref: 'albumTree', selector: 'mediamanager-album-tree' }
-	],
+    refs: [
+        { ref: 'albumTree', selector: 'mediamanager-album-tree' },
+        { ref: 'mediaView', selector: 'mediamanager-media-view' }
+    ],
 
-	/**
-	 * Creates the necessary event listener for this
-	 * specific controller and opens a new Ext.window.Window
-	 * to display the subapplication
+    /**
+     * Creates the necessary event listener for this
+     * specific controller and opens a new Ext.window.Window
+     * to display the subapplication
      *
      * @return void
-	 */
-	init: function() {
+     */
+    init: function () {
         var me = this;
 
         me.control({
@@ -95,10 +97,13 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
             // Save album settings
             'mediamanager-album-setting button[action=mediamanager-album-setting-save]': {
                 click: me.onSaveSettings
+            },
+            'mediamanager-album-setting': {
+                generateThumbnails: me.onGenerateThumbnails
             }
         });
 
-         me.callParent(arguments);
+        me.callParent(arguments);
     },
 
     /**
@@ -106,7 +111,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
      * and the upload completed. Refreshs the tree and select the last
      * selected node.
      */
-    onReload: function() {
+    onReload: function () {
         var me = this,
             tree = this.getAlbumTree(),
             store = this.getStore('Album'),
@@ -118,7 +123,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
 
         tree.setLoading(true);
         store.load({
-            callback: function() {
+            callback: function () {
 
                 if (selected) {
                     var lastSelected = store.getNodeById(selected.data.id);
@@ -131,7 +136,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
         });
     },
 
-    expandParent: function(node) {
+    expandParent: function (node) {
         var me = this;
         if (!node) {
             return;
@@ -149,7 +154,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
      *
      * @return void
      */
-    onDeleteAlbumButton: function() {
+    onDeleteAlbumButton: function () {
         var me = this,
             tree = me.getAlbumTree(),
             store = tree.store,
@@ -164,7 +169,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
             selected.set('albumID', selected.get('id'));
             tree.setLoading(true);
             selected.destroy({
-                callback: function() {
+                callback: function () {
                     var rootNode = tree.getRootNode();
                     rootNode.removeAll(false);
 
@@ -183,13 +188,13 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
      * @param field
      * @param value
      */
-    onSearchAlbum: function(field, value) {
+    onSearchAlbum: function (field, value) {
         var me = this,
             tree = me.getAlbumTree(),
             searchString = Ext.String.trim(value),
             store = tree.store,
             view = tree.viewConfig.plugins.cmp,
-            plugin =  view.initialConfig.plugins.cmp.plugins[0];
+            plugin = view.initialConfig.plugins.cmp.plugins[0];
 
         //lock drag and drop if the tree is filtered.
         if (searchString.length > 0) {
@@ -216,7 +221,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
 
         //don't use store.clearFilter(), clearFilter() send an ajax request to reload the store.
         store.load({
-            callback: function() {
+            callback: function () {
                 tree.setLoading(false);
             }
         });
@@ -232,14 +237,14 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
      * @event click
      * @return void
      */
-    onOpenAddWindow: function() {
+    onOpenAddWindow: function () {
         var me = this,
             tree = me.getAlbumTree(),
             selModel = tree.getSelectionModel(),
             selection = selModel.getSelection(),
             parentId;
 
-        if(selection && selection.length === 1) {
+        if (selection && selection.length === 1) {
             selection = selection[0];
 
             parentId = selection.get('id');
@@ -262,7 +267,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
      * @param [object] record - clicked Ext.data.Model
      * @return void
      */
-    onOpenSettingsWindow: function(scope, view, record) {
+    onOpenSettingsWindow: function (scope, view, record) {
         this.getView('album.Setting').create({ settings: record });
     },
 
@@ -275,7 +280,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
      * @event click
      * @param [object] btn - pressed Ext.button.Button
      */
-    onAddAlbum: function(btn) {
+    onAddAlbum: function (btn) {
         var win = btn.up('window'),
             form = win.down('form'),
             values = form.getForm().getValues(),
@@ -287,11 +292,11 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
         tree.setLoading(true);
 
         model.save({
-            callback: function() {
+            callback: function () {
                 var rootNode = tree.getRootNode();
                 rootNode.removeAll(false);
 
-                if(win.closeAction == 'destroy') {
+                if (win.closeAction == 'destroy') {
                     win.destroy();
                 } else {
                     win.close()
@@ -315,7 +320,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
      * @param [object] record - Associated Ext.data.Model
      * @return void
      */
-    onAddSubAlbum: function(scope, view, record) {
+    onAddSubAlbum: function (scope, view, record) {
         var parentId = record.get('id');
         this.getView('album.Add').create({ parentId: parentId });
     },
@@ -332,7 +337,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
      * @param view
      * @param record
      */
-    onDeleteAlbum: function(scope, view, record) {
+    onDeleteAlbum: function (scope, view, record) {
         var me = this,
             tree = me.getAlbumTree(),
             store = tree.store;
@@ -340,7 +345,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
         record.set('albumID', record.get('id'));
         tree.setLoading(true);
         record.destroy({
-            callback: function() {
+            callback: function () {
                 var rootNode = tree.getRootNode();
                 rootNode.removeAll(false);
 
@@ -360,7 +365,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
      * @event reload
      * @return void
      */
-    onReloadAlbums: function() {
+    onReloadAlbums: function () {
         var me = this,
             tree = me.getAlbumTree(),
             store = tree.store;
@@ -370,7 +375,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
 
         tree.setLoading(true);
         store.load({
-            callback: function() {
+            callback: function () {
                 tree.setLoading(false);
             }
         });
@@ -388,7 +393,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
      * @param [object] newParent - updated Ext.data.Model
      * @return void
      */
-    onMoveAlbum: function(node, oldParent, newParent) {
+    onMoveAlbum: function (node, oldParent, newParent) {
         node.data.position = node.data.index + 1;
         if (newParent.data.id !== 'root') {
             node.data.parentId = newParent.data.id;
@@ -408,27 +413,115 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
      * @param [object] btn - pressed Ext.button.Button
      * @return void
      */
-    onSaveSettings: function(btn) {
+    onSaveSettings: function (btn) {
         var me = this,
             win = btn.up('window'),
-            form = win.down('form'),
             model = win.settings,
-            values = form.getValues();
+            thumbItems = win.thumbnailStore.data.items,
+            thumbChanged = me.handleAlbumModelData(model, win);
 
-        var sizes = [];
-        Ext.each(win.thumbnailStore.data.items, function(item) {
-            sizes.push(item.data);
-        });
+        me.setAlbumSizes(model, thumbItems);
 
-        model.set(values);
-        model.set('thumbnailSize', sizes);
         model.save({
-            callback: function() {
+            callback: function () {
+                if (thumbChanged) {
+                    Ext.Msg.confirm('{s name=settings/newSizesTitle}Generate new thumbnails?{/s}', '{s name=settings/generateNewSizes}New thumbnail sizes have been defined. Would you like to generate them now?{/s}', function (btn) {
+                        if (btn !== 'yes') {
+                            return false;
+                        }
+
+                        win.fireEvent('createThumbnailWindow', model);
+                    });
+                }
+
                 win.close();
                 me.getAlbumTree().fireEvent('reload');
             }
         });
+    },
 
+    /**
+     * Reads out the settings window form and sets its
+     * values to the album model.
+     *
+     * Returns boolean status whether thumbnail sizes
+     * were changed or not.
+     *
+     * @param model
+     * @param win
+     * @param setSizes
+     * @returns boolean
+     */
+    handleAlbumModelData: function (model, win) {
+        var me = this,
+            form = win.down('form'),
+            values = form.getValues(),
+            thumbItems = win.thumbnailStore.data.items,
+            thumbChanged = me.checkThumbnailsChanged(thumbItems, model.get('thumbnailSize'));
+
+        model.set(values);
+
+        return thumbChanged;
+    },
+
+    setAlbumSizes: function(model, thumbItems){
+        var sizes = [];
+
+        Ext.each(thumbItems, function (item) {
+            sizes.push(item.data);
+        });
+
+        model.set('thumbnailSize', sizes);
+    },
+
+    /**
+     * This method first saves the album and generates the
+     * thumbnails afterwards with the defined sizes.
+     *
+     * @param window
+     */
+    onGenerateThumbnails: function (window) {
+        var me = this,
+            model = window.settings,
+            thumbItems = window.thumbnailStore.data.items,
+            thumbChanged = me.handleAlbumModelData(model, window);
+
+        if (thumbChanged) {
+            Ext.Msg.confirm('{s name=settings/saveNowTitle}Save album?{/s}', '{s name=settings/saveBeforeGeneration}The album must first be saved. Save album now?{/s}', function (btn) {
+                if (btn !== 'yes') {
+                    return false;
+                }
+
+                me.setAlbumSizes(model, thumbItems);
+
+                // save the album and generate the thumbnails on the callback
+                model.save({
+                    callback: function () {
+                        window.fireEvent('createThumbnailWindow', model);
+                    }
+                });
+            });
+        } else {
+            window.fireEvent('createThumbnailWindow', model);
+        }
+    },
+
+    /**
+     * Determines if the thumbnails sizes have changed
+     *
+     * @param thumbnailItems
+     * @param oldSizes
+     * @returns bool
+     */
+    checkThumbnailsChanged: function (thumbnailItems, oldSizes) {
+        var thumbnails = [];
+
+        // check if new thumbnails were created or changed
+        Ext.each(thumbnailItems, function (item) {
+            thumbnails.push(item.data);
+        });
+
+        return JSON.stringify(oldSizes) != JSON.stringify(thumbnails);
     }
 });
 //{/block}

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,19 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Plugins
- * @subpackage AdvancedMenu
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
+
 /**
  * Shopware AdvancedMenu Plugin
- *
- * todo@all: Documentation
  */
 class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -115,7 +106,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         $view->assign('sAdvancedMenu', $this->getAdvancedMenu(
             $parent,
             $category,
-            (int)$config->levels
+            (int) $config->levels
         ));
         $view->extendsTemplate('frontend/plugins/advanced_menu/index.tpl');
     }
@@ -150,8 +141,8 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
 
         $ref =& $tree;
         foreach ($path as $categoryId) {
-            foreach($ref as $categoryKey => $category) {
-                if($category['id'] == $categoryId) {
+            foreach ($ref as $categoryKey => $category) {
+                if ($category['id'] == $categoryId) {
                     $ref[$categoryKey]['flag'] = true;
                     $ref =& $ref[$categoryKey]['sub'];
                     continue 2;

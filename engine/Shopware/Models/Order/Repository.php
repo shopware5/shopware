@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,13 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Order
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
 
 namespace   Shopware\Models\Order;
@@ -49,7 +42,8 @@ class Repository extends ModelRepository
      * @param null $limit
      * @return \Doctrine\ORM\Query
      */
-    public function getPaymentStatusQuery($filter = null, $order = null, $offset = null, $limit = null) {
+    public function getPaymentStatusQuery($filter = null, $order = null, $offset = null, $limit = null)
+    {
         $builder = $this->getPaymentStatusQueryBuilder($filter, $order);
         if ($limit !== null) {
             $builder->setFirstResult($offset)
@@ -66,8 +60,8 @@ class Repository extends ModelRepository
      * @param null $order
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getPaymentStatusQueryBuilder($filter = null, $order = null) {
-
+    public function getPaymentStatusQueryBuilder($filter = null, $order = null)
+    {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'status.id as id',
@@ -77,10 +71,10 @@ class Repository extends ModelRepository
                 ->where('status.group = ?1')
                 ->setParameter(1, 'payment');
 
-        if($filter !== null) {
+        if ($filter !== null) {
             $builder->addFilter($filter);
         }
-        if($order !== null) {
+        if ($order !== null) {
             $builder->addOrderBy($order);
         }
 
@@ -96,7 +90,8 @@ class Repository extends ModelRepository
      * @param null $limit
      * @return \Doctrine\ORM\Query
      */
-    public function getOrderStatusQuery($filter = null, $order = null, $offset = null, $limit = null){
+    public function getOrderStatusQuery($filter = null, $order = null, $offset = null, $limit = null)
+    {
         $builder = $this->getOrderStatusQueryBuilder($filter, $order);
         if ($limit !== null) {
             $builder->setFirstResult($offset)
@@ -113,7 +108,8 @@ class Repository extends ModelRepository
      * @param null $order
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getOrderStatusQueryBuilder($filter = null, $order = null) {
+    public function getOrderStatusQueryBuilder($filter = null, $order = null)
+    {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'status.id as id',
@@ -127,7 +123,7 @@ class Repository extends ModelRepository
         if ($filter !== null) {
             $builder->addFilter($filter);
         }
-        if($order !== null) {
+        if ($order !== null) {
             $builder->addOrderBy($order);
         }
 
@@ -170,6 +166,7 @@ class Repository extends ModelRepository
             'documents',
             'payment',
             'customer',
+            'paymentInstances',
             'shipping',
             'billing',
             'billingCountry',
@@ -197,6 +194,7 @@ class Repository extends ModelRepository
                 ->leftJoin('orders.paymentStatus', 'paymentStatus')
                 ->leftJoin('orders.orderStatus', 'orderStatus')
                 ->leftJoin('orders.customer', 'customer')
+                ->leftJoin('orders.paymentInstances', 'paymentInstances')
                 ->leftJoin('customer.debit', 'debit')
                 ->leftJoin('orders.billing', 'billing')
                 ->leftJoin('billing.country', 'billingCountry')

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -49,9 +49,9 @@ abstract class Shopware_StoreApi_Models_Query_Query extends Enlight_Class
      */
     public function addCriterion($criterion)
     {
-        if($criterion instanceof Shopware_StoreApi_Models_Query_Criterion_Criterion) {
+        if ($criterion instanceof Shopware_StoreApi_Models_Query_Criterion_Criterion) {
             $this->criterion[] = $criterion;
-        } elseif(is_array($criterion)) {
+        } elseif (is_array($criterion)) {
             foreach($criterion as $item)
             $this->addCriterion($item);
         }
@@ -63,14 +63,14 @@ abstract class Shopware_StoreApi_Models_Query_Query extends Enlight_Class
     {
         $criterion_collection = array();
 
-        if(empty($this->criterion)) {
+        if (empty($this->criterion)) {
             return $criterion_collection;
         }
-        
-        foreach($this->criterion as $criterion) {
-            if(in_array(get_class($criterion), $this->validCriterion)) {
+
+        foreach ($this->criterion as $criterion) {
+            if (in_array(get_class($criterion), $this->validCriterion)) {
                 $statement = $criterion->getCriterionStatement();
-                if(!empty($statement)) {
+                if (!empty($statement)) {
                     $criterion_collection = array_merge($statement, $criterion_collection);
                 }
             }
@@ -113,7 +113,7 @@ abstract class Shopware_StoreApi_Models_Query_Query extends Enlight_Class
 
     public function setOrderBy($orderBy)
     {
-        if(in_array($orderBy, $this->validOrderBy)) {
+        if (in_array($orderBy, $this->validOrderBy)) {
             $this->orderBy = $orderBy;
         }
 
@@ -122,7 +122,7 @@ abstract class Shopware_StoreApi_Models_Query_Query extends Enlight_Class
 
     public function setOrderDirection($orderDirection)
     {
-        if(in_array($orderDirection, $this->validOrderDirection)) {
+        if (in_array($orderDirection, $this->validOrderDirection)) {
             $this->orderDirection = $orderDirection;
         }
 

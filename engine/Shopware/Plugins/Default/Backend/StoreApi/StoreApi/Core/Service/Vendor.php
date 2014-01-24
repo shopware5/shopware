@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -43,7 +43,7 @@ class Shopware_StoreApi_Core_Service_Vendor extends Enlight_Class
         );
         $searchResult = $this->getVendors($vendorQuery);
 
-        if($searchResult instanceof Shopware_StoreApi_Exception_Response) {
+        if ($searchResult instanceof Shopware_StoreApi_Exception_Response) {
             return $searchResult;
         }
 

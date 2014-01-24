@@ -44,6 +44,8 @@ interface Enlight_View_Cache
 
     /**
      * Returns if the view is already cached.
+     *
+     * @deprecated 4.2
      * @return bool
      */
     public function isCached();

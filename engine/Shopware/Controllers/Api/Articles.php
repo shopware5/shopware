@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,13 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Api
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Benjamin Cremer
  */
 
 class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
@@ -53,7 +46,9 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
         $sort   = $this->Request()->getParam('sort', array());
         $filter = $this->Request()->getParam('filter', array());
 
-        $result = $this->resource->getList($offset, $limit, $filter, $sort);
+        $result = $this->resource->getList($offset, $limit, $filter, $sort, array(
+            'language' => $this->Request()->getParam('language')
+        ));
 
         $this->View()->assign($result);
         $this->View()->assign('success', true);
@@ -70,9 +65,15 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
         $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
 
         if ($useNumberAsId) {
-            $article = $this->resource->getOneByNumber($id);
+            $article = $this->resource->getOneByNumber($id, array(
+                'language' => $this->Request()->getParam('language'),
+                'considerTaxInput' => $this->Request()->getParam('considerTaxInput'),
+            ));
         } else {
-            $article = $this->resource->getOne($id);
+            $article = $this->resource->getOne($id, array(
+                'language' => $this->Request()->getParam('language'),
+                'considerTaxInput' => $this->Request()->getParam('considerTaxInput')
+            ));
         }
 
         $this->View()->assign('data', $article);
@@ -109,9 +110,9 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
         $params = $this->Request()->getPost();
         $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
 
-        if($useNumberAsId){
+        if ($useNumberAsId) {
             $article = $this->resource->updateByNumber($id, $params);
-        }else{
+        } else {
             $article = $this->resource->update($id, $params);
         }
 
@@ -135,9 +136,9 @@ class Shopware_Controllers_Api_Articles extends Shopware_Controllers_Api_Rest
         $id = $this->Request()->getParam('id');
         $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
 
-        if($useNumberAsId){
+        if ($useNumberAsId) {
             $this->resource->deleteByNumber($id);
-        }else{
+        } else {
             $this->resource->delete($id);
         }
 

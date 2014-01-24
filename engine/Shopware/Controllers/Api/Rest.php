@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,17 +20,9 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Api
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Benjamin Cremer
  */
 
 /**
- * todo@all: Documentation
  */
 class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
 {
@@ -39,7 +31,6 @@ class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
     public function preDispatch()
     {
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
-        $this->Front()->throwExceptions(false);
 
         // todo@bc set url in shopware specific way
         $serverUrlHelper = new Zend_View_Helper_ServerUrl();
@@ -59,11 +50,58 @@ class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
         });
 
         $data = Zend_Json::encode($data);
-        if($pretty) {
+        if ($pretty) {
             $data = Zend_Json::prettyPrint($data);
         }
 
         $this->response()->setHeader('Content-type', 'application/json', true);
         $this->response()->setBody($data);
     }
+
+    /**
+     * Controller Action for the batchAction
+     *
+     * @throws RuntimeException
+     */
+    public function batchAction()
+    {
+        // To support the batch mode, the controller just needs to reference the api resource
+        // with the "resource" property
+        if (!property_exists($this, 'resource')) {
+            throw new RuntimeException('Property "resource" not found.');
+        }
+
+        $params = $this->Request()->getPost();
+
+        $this->resource->setResultMode(
+            Shopware\Components\Api\Resource\Resource::HYDRATE_ARRAY
+        );
+        $result = $this->resource->batch($params);
+
+        $this->View()->assign(array('success' => true, 'data' => $result));
+    }
+
+    /**
+     * Controller Action for the batchDelete
+     *
+     * @throws RuntimeException
+     */
+    public function batchDeleteAction()
+    {
+        // To support the batch mode, the controller just needs to reference the api resource
+        // with the "resource" property
+        if (!property_exists($this, 'resource')) {
+            throw new RuntimeException('Property "resource" not found.');
+        }
+
+        $params = $this->Request()->getPost();
+
+        $this->resource->setResultMode(
+            Shopware\Components\Api\Resource\Resource::HYDRATE_ARRAY
+        );
+        $result = $this->resource->batchDelete($params);
+
+        $this->View()->assign(array('success' => true, 'data' => $result));
+    }
+
 }

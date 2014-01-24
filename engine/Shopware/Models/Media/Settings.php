@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,13 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Media
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
 
 namespace   Shopware\Models\Media;
@@ -95,27 +88,7 @@ class Settings extends ModelEntity
      * @ORM\OneToOne(targetEntity="Shopware\Models\Media\Album", inversedBy="settings")
      * @ORM\JoinColumn(name="albumID", referencedColumnName="id")
      */
-    private $album;
-
-    /**
-     * Sets the id of the assigned album.
-     * @param int $albumId
-     * @return \Shopware\Models\Media\Settings
-     */
-    public function setAlbumId($albumId)
-    {
-        $this->albumId = $albumId;
-        return $this;
-    }
-
-    /**
-     * Returns the id assigned album
-     * @return int
-     */
-    public function getAlbumId()
-    {
-        return $this->albumId;
-    }
+    protected $album;
 
     /**
      * Sets whether thumbnails will be created on this album.
@@ -192,67 +165,24 @@ class Settings extends ModelEntity
         return explode(';', $this->thumbnailSize);
     }
 
-    /**
-     * If the album settings updated and the thumbnail configuration changed,
-     * the new configuration have to be executed on each assigned media.
-     * To notify the configuration change the model gets the entity change set
-     * over the doctrine unit of work instance.
-     * When update is checked whether the old thumbnails should be deleted,
-     * and whether new thumbnail files must be generated.
-     *
-     * @ORM\PreUpdate
-     */
-    public function onUpdate()
-    {
-        if ($this->albumId === null || $this->albumId === 0) {
-            return;
-        }
-        /**@var $album \Shopware\Models\Media\Album*/
-        $album = Shopware()->Models()->find('\Shopware\Models\Media\Album', $this->albumId);
-
-        //album correctly loaded?
-        if ($album === null) {
-            return;
-        }
-
-        //load media
-        $media = $album->getMedia();
-        if ($media === null) {
-            return;
-        }
-
-        //returns a change set for the model, which contains all changed properties with the old and new value.
-        $changeSet = Shopware()->Models()->getUnitOfWork()->getEntityChangeSet($this);
-
-        //thumbnail configuration changed?
-        if (!isset($changeSet['createThumbnails']) && !isset($changeSet['thumbnailSize'])) {
-            return;
-        }
-        //Check whether it is necessary to delete the thumbnails first.
-        $removeThumbnails = (isset($changeSet['createThumbnails'])) ? $changeSet['createThumbnails'][0] : $this->createThumbnails;
-        $sizes = $this->thumbnailSize;
-        if ($changeSet['thumbnailSize'][0] !== $changeSet['thumbnailSize'][1]) {
-            $removeThumbnails = true;
-            $sizes = $changeSet['thumbnailSize'][0];
-        }
-
-        /**@var $image \Shopware\Models\Media\Media*/
-        foreach ($media as $image) {
-            //only remove and create thumbnail for image media
-            if ($image->getType() !== Media::TYPE_IMAGE) {
-                continue;
-            }
-            if ($removeThumbnails) {
-                $image->removeAlbumThumbnails($sizes, $image->getFileName());
-            }
-            if ($this->createThumbnails) {
-                $image->createAlbumThumbnails($album);
-            }
-        }
-    }
+	/**
+	 * If the album settings updated and the thumbnail configuration changed,
+	 * the new configuration have to be executed on each assigned media.
+	 * To notify the configuration change the model gets the entity change set
+	 * over the doctrine unit of work instance.
+	 * When update is checked whether the old thumbnails should be deleted,
+	 * and whether new thumbnail files must be generated.
+	 *
+	 * @ORM\PreUpdate
+	 * @deprecated
+	 */
+	public function onUpdate()
+	{
+		return;
+	}
 
     /**
-     * @return
+     * @return \Shopware\Models\Media\Album
      */
     public function getAlbum()
     {

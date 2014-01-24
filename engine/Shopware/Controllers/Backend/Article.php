@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,7 +25,7 @@
 /**
  * @category  Shopware
  * @package   Shopware\Controllers\Backend
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_ExtJs
 {
@@ -596,7 +596,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $sql= "INSERT INTO s_articles
                SELECT NULL,
-                   supplierID, CONCAT(name, '-', 'Copy'), description, description_long, shippingtime, datum, active, taxID, pseudosales, topseller, keywords, changetime, pricegroupID, pricegroupActive, filtergroupID, laststock, crossbundlelook, notification, template, mode, NULL, available_from, available_to, NULL
+                   supplierID, CONCAT(name, '-', 'Copy'), description, description_long, shippingtime, datum, active, taxID, pseudosales, topseller, metaTitle, keywords, changetime, pricegroupID, pricegroupActive, filtergroupID, laststock, crossbundlelook, notification, template, mode, NULL, available_from, available_to, NULL
                FROM s_articles as source
                WHERE source.id = ?";
         Shopware()->Db()->query($sql, array($articleId));
@@ -1087,7 +1087,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $imageData['parent'] = $parent;
 
         $join = '';
-        foreach($options as $option) {
+        foreach ($options as $option) {
             $alias = 'alias'. $option->getId();
             $join = $join . ' INNER JOIN s_article_configurator_option_relations alias'. $option->getId() .
                     ' ON ' . $alias . '.option_id = ' . $option->getId() .
@@ -1924,7 +1924,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getModelManager()->createPaginator($query);
 
         return $paginator->getIterator()->getArrayCopy();
     }
@@ -3090,7 +3090,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $sql = "SELECT `name`, `default` FROM s_core_engine_elements";
         $data = Shopware()->Db()->fetchAll($sql);
         $prepared = array();
-        foreach($data as $item) {
+        foreach ($data as $item) {
             $prepared[$item['name']] = $item['default'];
         }
 
@@ -3389,7 +3389,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
             $query = $builder->getQuery();
             $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-            $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+            $paginator = $this->getModelManager()->createPaginator($query);
 
             //returns the total count of the query
             $totalResult = $paginator->count();
@@ -3422,7 +3422,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $query = $this->getRepository()->getEsdByArticleQuery($articleId, $filter, $limit, $start, $sort);
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getModelManager()->createPaginator($query);
 
         //returns the total count of the query
         $totalResult = $paginator->count();
@@ -3453,7 +3453,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $query = $this->getRepository()->getSerialsByEsdQuery($esdId, $filter, $start, $limit, $sort);
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getModelManager()->createPaginator($query);
 
         //returns the total count of the query
         $totalResult = $paginator->count();
@@ -3882,7 +3882,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $builder = $this->getVariantsWithOptionsBuilder($articleId, $offset, $limit);
             $query = $builder->getQuery();
             $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
-            $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+            $paginator = $this->getModelManager()->createPaginator($query);
             $details = $paginator->getIterator()->getArrayCopy();
 
             $counter = $offset;
@@ -4079,7 +4079,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         ";
         $attributes = Shopware()->Db()->fetchAssoc($sql);
         $prepared = array();
-        foreach($attributes as $name => $attr) {
+        foreach ($attributes as $name => $attr) {
             $prepared[$name] = $attr['default'];
         }
 
@@ -4162,8 +4162,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function previewDetailAction()
     {
-        $shopId = (int)$this->Request()->getParam('shopId');
-        $articleId = (int)$this->Request()->getParam('articleId');
+        $shopId = (int) $this->Request()->getParam('shopId');
+        $articleId = (int) $this->Request()->getParam('articleId');
 
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $shop = $repository->getActiveById($shopId);

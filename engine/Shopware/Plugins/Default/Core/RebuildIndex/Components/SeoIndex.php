@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,7 +25,7 @@
 /**
  * @category  Shopware
  * @package   Shopware\Plugins\RebuildIndex\Components
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Components_SeoIndex extends Enlight_Class
 {
@@ -50,7 +50,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
             if ($resultTime === $cachedTime) {
                 $resultTime = $currentTime;
             }
-            if($resultTime !== $currentTime) {
+            if ($resultTime !== $currentTime) {
                 $this->setCachedTime($resultTime, $elementId, $shopId);
             }
         }
@@ -78,10 +78,10 @@ class Shopware_Components_SeoIndex extends Enlight_Class
             WHERE v.element_id=e.id AND e.id=? AND v.shop_id=?
         ";
         $cachedTime = Shopware()->Db()->fetchOne($sql, array($elementId, $shopId));
-        if(!empty($cachedTime)) {
+        if (!empty($cachedTime)) {
             $cachedTime = unserialize($cachedTime);
         }
-        if(empty($cachedTime)) {
+        if (empty($cachedTime)) {
             $cachedTime = '0000-00-00 00:00:00';
         }
 
@@ -197,8 +197,8 @@ class Shopware_Components_SeoIndex extends Enlight_Class
 
         // Calculate the number of articles which have been update since the last update time
         $sql = "
-			SELECT COUNT(a.id)
-			FROM s_articles a
+            SELECT COUNT(a.id)
+            FROM s_articles a
 
             INNER JOIN s_articles_categories_ro ac
                 ON  ac.articleID = a.id
@@ -207,21 +207,21 @@ class Shopware_Components_SeoIndex extends Enlight_Class
                 ON  c.id = ac.categoryID
                 AND c.active = 1
 
-			JOIN s_articles_details d
-			    ON d.id = a.main_detail_id
+            JOIN s_articles_details d
+                ON d.id = a.main_detail_id
 
-			LEFT JOIN s_articles_attributes at
-			    ON at.articledetailsID=d.id
+            LEFT JOIN s_articles_attributes at
+                ON at.articledetailsID=d.id
 
-			LEFT JOIN s_articles_translations atr
-			    ON atr.articleID=a.id
-			    AND atr.languageID=?
+            LEFT JOIN s_articles_translations atr
+                ON atr.articleID=a.id
+                AND atr.languageID=?
 
-			LEFT JOIN s_articles_supplier s
-			    ON s.id=a.supplierID
+            LEFT JOIN s_articles_supplier s
+                ON s.id=a.supplierID
 
-			WHERE a.active=1
-			ORDER BY a.changetime, a.id
+            WHERE a.active=1
+            ORDER BY a.changetime, a.id
         ";
 
         return (int) Shopware()->Db()->fetchOne($sql, array(
@@ -281,8 +281,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
         }
         $static = array();
 
-        if (!empty($urls))
-        {
+        if (!empty($urls)) {
             foreach (explode("\n", $urls) as $url) {
                 list($key, $value) = explode(',', trim($url));
                 if (empty($key) || empty($value)) continue;
@@ -291,5 +290,25 @@ class Shopware_Components_SeoIndex extends Enlight_Class
         }
 
         return count($static);
+    }
+
+    /**
+     * Get the number of supplier which friendly url will be updated
+     *
+     * @param $shopId
+     * @return int
+     */
+    public function countSuppliers($shopId)
+    {
+        $seoSupplierConfig = Shopware()->Config()->get('sSEOSUPPLIER');
+        if (is_null($seoSupplierConfig) || $seoSupplierConfig === false) {
+            return 0;
+        }
+
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Supplier');
+
+        $numResults = $repository->getFriendlyUrlSuppliersCountQueryBuilder()->getQuery()->getSingleScalarResult();
+
+        return (int) $numResults;
     }
 }

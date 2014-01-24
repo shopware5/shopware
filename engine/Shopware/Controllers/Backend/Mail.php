@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,21 +20,12 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Mail
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
 
 use Shopware\Models\Mail\Mail,
     Shopware\Models\Mail\Attachment;
 /**
  * Backend Controller for the mail backend module
- *
- * todo@all: Documentation
  */
 class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_ExtJs
 {
@@ -54,7 +45,8 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
      * Internal helper function to get access to the entity manager.
      * @return null
      */
-    private function getManager() {
+    private function getManager()
+    {
         if ($this->manager === null) {
             $this->manager= Shopware()->Models();
         }
@@ -65,7 +57,8 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
      * Internal helper function to get access to the mail repository.
      * @return null|Shopware\Models\Mail\Repository
      */
-    private function getRepository() {
+    private function getRepository()
+    {
         if ($this->repository === null) {
             $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Mail\Mail');
         }
@@ -187,7 +180,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $data = $data['data'];
 
         /**@var $mail \Shopware\Models\Mail\Mail*/
-        if (!$mail instanceof \Shopware\Models\Mail\Mail ) {
+        if (!$mail instanceof \Shopware\Models\Mail\Mail) {
             $this->View()->assign(array('success' => false, 'message' => 'Mail not found'));
             return;
         }
@@ -221,7 +214,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $query = $this->getRepository()->getMailQuery($id);
         $mail = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
 
-        if (!$mail instanceof \Shopware\Models\Mail\Mail ) {
+        if (!$mail instanceof \Shopware\Models\Mail\Mail) {
             $this->View()->assign(array('success' => false, 'message' => 'Mail not found'));
             return false;
         }

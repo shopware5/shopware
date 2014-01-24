@@ -8,8 +8,13 @@
 
 {* Canonical link *}
 {block name='frontend_index_header_canonical'}
-<link rel="canonical" href="{$sCategoryContent.sSelfCanonical}" title="{if $sCategoryContent.description}{$sCategoryContent.description}{else}{$sShopname}{/if}" />
+<link rel="canonical" href="{$sCategoryContent.sSelfCanonical}" title="{if $sCategoryContent.canonicalTitle}{$sCategoryContent.canonicalTitle}{elseif $sCategoryContent.description}{$sCategoryContent.description}{else}{$sShopname}{/if}" />
 {/block}
+
+{* Title *}
+{block name='frontend_index_header_title'}{strip}
+    {if $sCategoryContent.title}{$sCategoryContent.title}{else}{$smarty.block.parent}{/if}
+{/strip}{/block}
 
 {* RSS and Atom feeds *}
 {block name="frontend_index_header_feeds"}

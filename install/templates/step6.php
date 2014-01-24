@@ -1,5 +1,5 @@
 <?php
-if (!defined("installer")){
+if (!defined("installer")) {
     exit;
 }
 ?>
@@ -10,7 +10,7 @@ if (!defined("installer")){
     </div>
 
     <?php
-     if ($error == true){
+     if ($error == true) {
      ?>
      <div class="alert alert-error">
          <?php echo $error ?>
@@ -52,7 +52,7 @@ if (!defined("installer")){
                 <label><?php echo $language["step6_sconfig_currency"];?></label>
                     <select name="c_config_shop_currency">
                         <?php
-                        foreach ($currencies as $currency){
+                        foreach ($currencies as $currency) {
                         ?>
                             <option value="<?php echo $currency["id"] ?>" <?php echo $parameters["c_config_shop_currency"] == $currency["id"] ? "selected" : ""?>><?php echo $currency["currency"] ?></option>
                         <?php
@@ -96,13 +96,13 @@ if (!defined("installer")){
         <div class="row">
             <div class="span6">
                 <label><?php echo $language["step6_admin_password"];?></label>
-                <input type="text" value="<?php echo isset($parameters["c_config_admin_password"]) ? $parameters["c_config_admin_password"] : 'demo' ?>" name="c_config_admin_password" required="required" />
+                <input type="password" value="<?php echo isset($parameters["c_config_admin_password"]) ? $parameters["c_config_admin_password"] : 'demo' ?>" name="c_config_admin_password" required="required" />
             </div>
 
             <div class="span6">
 
                 <label><?php echo $language["step6_admin_password_repeat"];?></label>
-                <input type="text" value="<?php echo isset($parameters["c_config_admin_password2"]) ? $parameters["c_config_admin_password2"] : 'demo' ?>" name="c_config_admin_password2" required="required" />
+                <input type="password" value="<?php echo isset($parameters["c_config_admin_password2"]) ? $parameters["c_config_admin_password2"] : 'demo' ?>" name="c_config_admin_password2" required="required" />
             </div>
         </div>
 

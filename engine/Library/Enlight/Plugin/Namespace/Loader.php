@@ -67,9 +67,6 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
      */
     public function addPrefixPath($prefix, $path)
     {
-        //if (!file_exists($path) || !is_dir($path)) {
-        //    throw new Enlight_Exception('Parameter path "' . $path . '" is not a valid directory failure');
-        //}
         $prefix = trim($prefix, '_');
         $path = realpath($path) . DIRECTORY_SEPARATOR;
         $this->prefixPaths[$path] = $prefix;
@@ -90,6 +87,7 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
         if (!class_exists($class, false)) {
             Enlight_Application::Instance()->Loader()->loadClass($class, $file);
         }
+
         $plugin = new $class($name, $this);
         $this->plugins[$name] = $plugin;
         return $this;
@@ -116,7 +114,7 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
             $this->initPlugin($name, $prefix, $file);
             return $this;
         }
-        if($throwException) {
+        if ($throwException) {
             throw new Enlight_Exception('Plugin "' . $name .'" in namespace "' . $this->getName() .'" not found');
         }
     }

@@ -1,0 +1,277 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="shopware.snippet_manager.class">Shopware_Components_Snippet_Manager</parameter>
+        <parameter key="shopware.subscriber.class">Shopware_Components_Subscriber</parameter>
+        <parameter key="shopware.cache_factory.class">Shopware\Components\DependencyInjection\Bridge\Cache</parameter>
+        <parameter key="shopware.config_factory.class">Shopware\Components\DependencyInjection\Bridge\Config</parameter>
+        <parameter key="shopware.model_factory.class">Shopware\Components\DependencyInjection\Bridge\Models</parameter>
+    </parameters>
+
+    <services>
+        <service id="bootstrap"       synthetic="true" />
+        <service id="application"     synthetic="true" />
+
+        <service id="locale_factory" class="Shopware\Components\DependencyInjection\Bridge\Locale" />
+        <service id="shopware.locale" alias="locale" />
+        <service id="locale"
+                 class="Zend_Locale"
+                 factory-service="locale_factory"
+                 factory-method="factory">
+            <argument type="service" id="service_container"/>
+        </service>
+
+        <service id="currency_factory" class="Shopware\Components\DependencyInjection\Bridge\Currency"/>
+        <service id="currency"
+                 class="Zend_Currency"
+                 factory-service="currency_factory"
+                 factory-method="factory">
+
+            <argument type="service" id="service_container"/>
+            <argument type="service" id="shopware.locale"/>
+        </service>
+
+        <service id="template_factory" class="Shopware\Components\DependencyInjection\Bridge\Template" />
+        <service id="template"
+                 class="Enlight_Template_Manager"
+                 factory-service="template_factory"
+                 factory-method="factory">
+            <argument type="service" id="events"/>
+            <argument type="service" id="snippets"/>
+            <argument>%shopware.template%</argument>
+        </service>
+
+        <service id="session_factory" class="Shopware\Components\DependencyInjection\Bridge\Session" />
+        <service id="session"
+                 class="Enlight_Components_Session_Namespace"
+                 factory-service="session_factory"
+                 factory-method="factory">
+            <argument type="service" id="service_container"/>
+        </service>
+
+        <service id="mailtransport_factory" class="Shopware\Components\DependencyInjection\Bridge\MailTransport" />
+        <service id="shopware.mail_transport" alias="MailTransport" />
+        <service id="MailTransport"
+                 class="Zend_Mail_Transport_Abstract"
+                 factory-service="mailtransport_factory"
+                 factory-method="factory">
+            <argument type="service" id="Loader"/>
+            <argument type="service" id="config"/>
+            <argument>%shopware.mail%</argument>
+        </service>
+
+        <service id="mail_factory" class="Shopware\Components\DependencyInjection\Bridge\Mail" />
+        <service id="mail"
+                 class="Zend_Mail_Transport_Abstract"
+                 factory-service="mail_factory"
+                 factory-method="factory">
+            <argument type="service" id="service_container"/>
+            <argument type="service" id="config"/>
+            <argument>%shopware.mail%</argument>
+        </service>
+
+        <service id="templatemail_factory" class="Shopware\Components\DependencyInjection\Bridge\TemplateMail" />
+        <service id="templatemail"
+                 class="Shopware_Components_TemplateMail"
+                 factory-service="templatemail_factory"
+                 factory-method="factory">
+
+            <argument type="service" id="service_container"/>
+        </service>
+
+        <service id="table_factory" class="Shopware\Components\DependencyInjection\Bridge\Table" />
+        <service id="table"
+                 class="stdClass"
+                 factory-service="table_factory"
+                 factory-method="factory">
+
+            <argument type="service" id="shopware.db"/>
+            <argument type="service" id="cache"/>
+        </service>
+
+        <service id="plugins_factory" class="Shopware\Components\DependencyInjection\Bridge\Plugins" />
+        <service id="plugin_manager" alias="plugins" />
+        <service id="plugins"
+                 class="Enlight_Plugin_PluginManager"
+                 factory-service="plugins_factory"
+                 factory-method="factory">
+
+            <argument type="service" id="service_container"/>
+            <argument type="service" id="Loader"/>
+            <argument type="service" id="events"/>
+            <argument type="service" id="application"/>
+            <argument>%shopware.plugins%</argument>
+        </service>
+
+        <service id="shopware.plugin_manager" class="Shopware\Components\Plugin\Manager">
+            <argument type="service" id="models"/>
+            <argument type="service" id="plugins"/>
+        </service>
+
+        <service id="front_factory" class="Shopware\Components\DependencyInjection\Bridge\Front" />
+        <service id="front"
+                 class="Enlight_Controller_Front"
+                 factory-service="front_factory"
+                 factory-method="factory">
+
+            <argument type="service" id="service_container"/>
+            <argument type="service" id="bootstrap"/>
+            <argument type="service" id="events"/>
+            <argument>%shopware.front%</argument>
+        </service>
+
+        <service id="router"
+                 class="Enlight_Controller_Router"
+                 factory-service="front"
+                 factory-method="Router" />
+
+
+        <service id="date" class="Zend_Date">
+            <argument type="service" id="locale"/>
+        </service>
+
+        <service id="shopware.loader" alias="Loader" />
+        <service id="Loader"     class="Enlight_Loader" />
+        <service id="snippets"   class="%shopware.snippet_manager.class%">
+            <argument type="service" id="shopware.model_manager"/>
+            <argument>%shopware.snippet%</argument>
+        </service>
+        <service id="subscriber" class="Shopware_Components_Subscriber">
+
+        </service>
+
+        <service id="db_connection"
+                 class="Pdo"
+                 factory-service="shopware.db"
+                 factory-method="getConnection" />
+
+        <service id="shopware.db" alias="Db"/>
+        <service id="db"
+                 class="Enlight_Components_Db_Adapter_Pdo_Mysql"
+                 factory-class="Enlight_Components_Db"
+                 factory-method="factory">
+
+            <argument>%shopware.db.adapter%</argument>
+            <argument>%shopware.db%</argument>
+            <call method="getConnection"/>
+        </service>
+
+        <service id="cache_zend"
+                 class="Zend_Cache_Core"
+                 factory-class="Zend_Cache"
+                 factory-method="factory"
+                 public="false">
+
+            <argument>Core</argument>
+            <argument>%shopware.cache.backend%</argument>
+            <argument>%shopware.cache.frontendOptions%</argument>
+            <argument>%shopware.cache.backendOptions%</argument>
+        </service>
+
+        <service id="cache_factory" class="%shopware.cache_factory.class%"/>
+        <service id="cache"
+                 class="Zend_Cache_Core"
+                 factory-service="cache_factory"
+                 factory-method="factory">
+
+            <argument type="service" id="cache_zend"/>
+        </service>
+
+        <service id="config_factory" class="%shopware.config_factory.class%" />
+        <service id="config"
+                 class="Shopware_Components_Config"
+                 factory-service="config_factory"
+                 factory-method="factory">
+            <argument type="service" id="cache" />
+            <argument type="service" id="db" on-invalid="ignore"/>
+            <argument>%shopware.config%</argument>
+         </service>
+
+        <service id="shopware.event_manager" alias="events" />
+        <service id="events" class="Enlight_Event_EventManager" />
+
+        <service id="shopware.hook_manager" alias="Hooks" />
+        <service id="Hooks" class="Enlight_Hook_HookManager">
+            <argument type="service" id="shopware.event_manager" />
+            <argument type="service" id="shopware.loader" />
+            <argument>%shopware.hook%</argument>
+        </service>
+
+        <service id="shopware.model_config" alias="ModelConfig" />
+        <service id="ModelConfig" class="Shopware\Components\Model\Configuration">
+            <argument>%shopware.Model%</argument>
+            <argument type="service" id="cache" />
+            <argument type="service" id="shopware.hook_manager" />
+        </service>
+
+        <service id="model_factory" class="Shopware\Components\DependencyInjection\Bridge\Models" />
+        <service id="shopware.model_manager" alias="models" />
+        <service id="models"
+                 class="Shopware\Components\Model\ModelManager"
+                 factory-service="model_factory"
+                 factory-method="factory">
+
+            <argument type="service" id="model_event_manager" />
+            <argument type="service" id="shopware.model_config" />
+            <argument type="service" id="shopware.loader" />
+            <argument type="service" id="db_connection" />
+            <argument>%kernel.root_dir%</argument>
+            <argument type="service" id="shopware.model_annotations" />
+         </service>
+
+        <service id="model_annotations_factory" class="Shopware\Components\DependencyInjection\Bridge\ModelAnnotation" />
+        <service id="shopware.model_annotations" alias="ModelAnnotations" />
+        <service id="ModelAnnotations"
+                 class="Doctrine\ORM\Mapping\Driver\AnnotationDriver"
+                 factory-service="model_annotations_factory"
+                 factory-method="factory">
+
+            <argument type="service" id="shopware.model_config" />
+            <argument>%kernel.root_dir%/engine/Shopware/Models</argument>
+        </service>
+
+        <service id="model_event_manager" class="Doctrine\Common\EventManager" public="false" />
+
+        <service id="EventSubscriber" class="Shopware\Components\Model\EventSubscriber" public="false">
+            <argument type="service" id="shopware.event_manager" />
+            <tag name="doctrine.event_subscriber" />
+        </service>
+
+        <service id="OrderHistorySubscriber" class="Shopware\Models\Order\OrderHistorySubscriber" public="false">
+            <tag name="doctrine.event_subscriber" />
+        </service>
+
+        <service id="CategorySubscriber" class="Shopware\Components\Model\CategorySubscriber">
+            <argument type="service" id="CategoryDenormalization" />
+            <tag name="doctrine.event_subscriber" />
+        </service>
+
+        <service id="CategoryDenormalization" class="Shopware\Components\Model\CategoryDenormalization">
+            <argument type="service" id="db_connection" />
+        </service>
+
+        <service id="shopware.snippet_database_handler" class="Shopware\Components\Snippet\DatabaseHandler">
+            <argument type="service" id="shopware.model_manager" />
+            <argument type="service" id="db" />
+            <argument>%kernel.root_dir%</argument>
+        </service>
+
+        <service id="shopware.snippet_query_handler" class="Shopware\Components\Snippet\QueryHandler">
+            <argument>%kernel.root_dir%/snippets/</argument>
+        </service>
+        <service id="shopware.cache_manager" class="Shopware\Components\CacheManager">
+            <argument type="service" id="service_container" />
+        </service>
+
+        <service id="thumbnail_generator_basic" class="Shopware\Components\Thumbnail\Generator\Basic" />
+
+        <service id="thumbnail_manager" class="Shopware\Components\Thumbnail\Manager">
+            <argument type="service" id="thumbnail_generator_basic" />
+            <argument>%kernel.root_dir%</argument>
+        </service>
+    </services>
+</container>

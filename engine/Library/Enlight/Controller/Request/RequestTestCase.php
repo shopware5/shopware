@@ -96,7 +96,7 @@ class Enlight_Controller_Request_RequestTestCase
      */
     public function setServer($key, $value = null)
     {
-        $this->_serverParams[$key] = $value === null ? null : (string)$value;
+        $this->_serverParams[$key] = $value === null ? null : (string) $value;
         return $this;
     }
 
@@ -131,7 +131,7 @@ class Enlight_Controller_Request_RequestTestCase
     {
         if ($value !== null) {
             $key = $this->_normalizeHeaderName($key);
-            $this->_headers[$key] = (string)$value;
+            $this->_headers[$key] = (string) $value;
         } else {
             unset($this->_headers[$key]);
         }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,18 +20,9 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components
- * @subpackage Benchmark
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
- * todo@all: Documentation
  * <code>
  * $pointComponent = new Shopware_Components_Benchmark_Point
  * $pointComponent->Start($label);
@@ -39,23 +30,25 @@
  */
 class Shopware_Components_Benchmark_Point
 {
-	public $start;
-	public $end;
-	public $label;
-	public $start_ram;
-	public $stop_ram;
-	public $stopped = false;
-	
-	public function Start($label){
-		$this->label = $label;
-		$this->start = microtime(true);
-		$this->start_ram = memory_get_peak_usage(true);
-		return $this;
-	}
-	
-	public function Stop(){
-		$this->stopped = true;
-		$this->end = microtime(true);
-		$this->stop_ram = memory_get_peak_usage(true);
-	}
+    public $start;
+    public $end;
+    public $label;
+    public $start_ram;
+    public $stop_ram;
+    public $stopped = false;
+
+    public function Start($label)
+    {
+        $this->label = $label;
+        $this->start = microtime(true);
+        $this->start_ram = memory_get_peak_usage(true);
+        return $this;
+    }
+
+    public function Stop()
+    {
+        $this->stopped = true;
+        $this->end = microtime(true);
+        $this->stop_ram = memory_get_peak_usage(true);
+    }
 }

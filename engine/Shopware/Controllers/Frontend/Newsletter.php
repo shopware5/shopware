@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Newsletter
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
  * Newsletter controller
- *
- * todo@all: Documentation
  */
 class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
 {
@@ -170,7 +160,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
                 $this->sendMail(Shopware()->System()->_POST["newsletter"], 'sOPTINNEWSLETTER', $link);
 
                 // Setting status-code
-				$this->View()->sStatus = array("code" => 3, "message" => Shopware()->Snippets()->getNamespace('frontend')->get('sMailConfirmation'));
+                $this->View()->sStatus = array("code" => 3, "message" => Shopware()->Snippets()->getNamespace('frontend')->get('sMailConfirmation'));
 
                 Shopware()->Db()->query("
                 INSERT INTO s_core_optin (datum,hash,data)
@@ -190,22 +180,22 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         $customergroups = $this->getCustomerGroups();
         $customergroups = Shopware()->Db()->quote($customergroups);
 
-        $page = (int)$this->Request()->getQuery('sPage', 1);
-        $perPage = (int)Shopware()->Config()->get('contentPerPage', 12);
+        $page = (int) $this->Request()->getQuery('sPage', 1);
+        $perPage = (int) Shopware()->Config()->get('contentPerPage', 12);
 
         $sql = "
-			SELECT SQL_CALC_FOUND_ROWS id, IF(datum IS NULL,'',datum) as `date`, subject as description, sendermail, sendername
-			FROM `s_campaigns_mailings`
-			WHERE `status`!=0
-			AND plaintext=0
-			AND `publish`!=0
-			AND languageID=?
-			AND customergroup IN ($customergroups)
-			ORDER BY `id` DESC
-		";
+            SELECT SQL_CALC_FOUND_ROWS id, IF(datum IS NULL,'',datum) as `date`, subject as description, sendermail, sendername
+            FROM `s_campaigns_mailings`
+            WHERE `status`!=0
+            AND plaintext=0
+            AND `publish`!=0
+            AND languageID=?
+            AND customergroup IN ($customergroups)
+            ORDER BY `id` DESC
+        ";
         $sql = Shopware()->Db()->limit($sql, $perPage, $perPage * ($page - 1));
         $result = Shopware()->Db()->query($sql, array(Shopware()->System()->sLanguage));
-        
+
         $content = array();
         while ($row = $result->fetch()) {
             $row['link'] = $this->Front()->Router()->assemble(array('action' => 'detail', 'sID' => $row['id']));
@@ -243,15 +233,15 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         $customergroups = Shopware()->Db()->quote($customergroups);
 
         $sql = "
-			SELECT id, IF(datum='00-00-0000','',datum) as `date`, subject as description, sendermail, sendername
-			FROM `s_campaigns_mailings`
-			WHERE `status`!=0
-			AND plaintext=0
-			AND publish!=0
-			AND languageID=?
-			AND id=?
-			AND customergroup IN ($customergroups)
-		";
+            SELECT id, IF(datum='00-00-0000','',datum) as `date`, subject as description, sendermail, sendername
+            FROM `s_campaigns_mailings`
+            WHERE `status`!=0
+            AND plaintext=0
+            AND publish!=0
+            AND languageID=?
+            AND id=?
+            AND customergroup IN ($customergroups)
+        ";
         $content = Shopware()->Db()->fetchRow($sql, array(Shopware()->System()->sLanguage, $this->request()->sID));
         if (!empty($content)) {
            // ($license = Shopware()->License()->getLicense('sCORE')) || ($license = Shopware()->License()->getLicense('sCOMMUNITY'));

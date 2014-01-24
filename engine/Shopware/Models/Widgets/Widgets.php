@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,10 +24,6 @@
 
 /**
  * Model to handle widgets
- *
- * @link http://www.shopware.de
- * @copyright Copyright (c) 2011, shopware AG
- * @author Stefan Hamann
  */
 class Shopware_Models_Widgets_Widgets extends Enlight_Class implements Enlight_Hook
 {
@@ -58,7 +54,7 @@ class Shopware_Models_Widgets_Widgets extends Enlight_Class implements Enlight_H
      * @param  $panel
      * @return void
      */
-    public function setWidget ($widget)
+    public function setWidget($widget)
     {
         $this->widget = $widget;
         $this->widgetXML = Shopware()->DocPath()."/files/config/Widgets.xml";
@@ -69,7 +65,7 @@ class Shopware_Models_Widgets_Widgets extends Enlight_Class implements Enlight_H
      * @param  $panel
      * @return void
      */
-    public function setPanel ($panel)
+    public function setPanel($panel)
     {
         $this->panel = $panel;
         $this->panelXML = Shopware()->DocPath()."/files/config/Panels.xml";

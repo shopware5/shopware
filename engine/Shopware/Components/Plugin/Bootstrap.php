@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,12 +22,15 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Shopware\Models\Emotion\Library\Component;
+
 /**
  * Shopware Plugin Bootstrap
  *
  * @category  Shopware
  * @package   Shopware\Components\Plugin\Bootstrap
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Bootstrap_Config
 {
@@ -54,7 +57,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Constructor method
      *
-     * @param $name
+     * @param                     $name
      * @param Enlight_Config|null $info
      */
     public function __construct($name, $info = null)
@@ -80,11 +83,11 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         parent::__construct($name);
     }
 
-
     /**
      * Helper function to get access on the http cache plugin.
      * Notice if the Http Cache plugin isn't installed, this function
      * returns null.
+     *
      * @return Shopware_Plugins_Core_HttpCache_Bootstrap|null
      */
     protected function HttpCache()
@@ -95,12 +98,13 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             return null;
         }
 
-        /**@var $plugin \Shopware\Models\Plugin\Plugin*/
+        /**@var $plugin \Shopware\Models\Plugin\Plugin */
         $plugin = Shopware()->Models()->find('\Shopware\Models\Plugin\Plugin', $httpCache->getId());
 
         if (!$plugin->getActive() || !$plugin->getInstalled()) {
             return null;
         }
+
         return $httpCache;
     }
 
@@ -110,6 +114,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      *
      * @param \Enlight_Config $currentPluginInfo
      * @param \Enlight_Config $updatePluginInfo
+     *
      * @return bool
      */
     public function hasInfoNewerVersion(Enlight_Config $updatePluginInfo, Enlight_Config $currentPluginInfo)
@@ -153,6 +158,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Update plugin method
      *
      * @param string $version
+     *
      * @return bool
      */
     public function update($version)
@@ -160,6 +166,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         if (empty($this->info->capabilities['update']) || empty($this->info->capabilities['install'])) {
             return false;
         }
+
         return $this->install();
     }
 
@@ -186,7 +193,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * @return Enlight_Config
      */
-    public final function Info()
+    final public function Info()
     {
         return $this->info;
     }
@@ -194,7 +201,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * @return string
      */
-    public final function Path()
+    final public function Path()
     {
         return $this->info->path;
     }
@@ -212,23 +219,26 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * @return Shopware\Models\Plugin\Plugin
      */
-    public final function Plugin()
+    final public function Plugin()
     {
-        if($this->plugin === null) {
+        if ($this->plugin === null) {
             $repo = Shopware()->Models()->getRepository(
                 'Shopware\Models\Plugin\Plugin'
             );
-            $this->plugin = $repo->findOneBy(array(
-                'id' => $this->getId()
-            ));
+            $this->plugin = $repo->findOneBy(
+                array(
+                    'id' => $this->getId()
+                )
+            );
         }
+
         return $this->plugin;
     }
 
     /**
      * @return Shopware\Components\Model\ModelRepository
      */
-    public final function Forms()
+    final public function Forms()
     {
         return Shopware()->Models()->getRepository(
             'Shopware\Models\Config\Form'
@@ -240,31 +250,37 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      *
      * @return Shopware\Models\Config\Form
      */
-    public final function Form()
+    final public function Form()
     {
-        if(!$this->hasForm()) {
+        if (!$this->hasForm()) {
             $this->form = $this->initForm();
         }
+
         return $this->form;
     }
 
     /**
      * @return bool
      */
-    public final function hasForm()
+    final public function hasForm()
     {
-        if($this->form === null && $this->getName() !== null) {
+        if ($this->form === null && $this->getName() !== null) {
             $formRepository = $this->Forms();
-            $this->form = $formRepository->findOneBy(array(
-                'name' => $this->getName()
-            ));
+            $this->form = $formRepository->findOneBy(
+                array(
+                    'name' => $this->getName()
+                )
+            );
         }
-        if($this->form === null && $this->getId() !== null) {
+        if ($this->form === null && $this->getId() !== null) {
             $formRepository = $this->Forms();
-            $this->form = $formRepository->findOneBy(array(
-                'pluginId' => $this->getId()
-            ));
+            $this->form = $formRepository->findOneBy(
+                array(
+                    'pluginId' => $this->getId()
+                )
+            );
         }
+
         return $this->form !== null;
     }
 
@@ -275,16 +291,19 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     {
         $info = $this->Info();
         $formRepository = $this->Forms();
-        $form  = new \Shopware\Models\Config\Form;
+        $form = new \Shopware\Models\Config\Form;
         $form->setPluginId($this->getId());
         $form->setName($info->name);
         $form->setLabel($info->label);
         $form->setDescription($info->description);
-        $parent = $formRepository->findOneBy(array(
-            'name' => strpos($this->name, 'Payment') !== false ? 'Payment' : 'Other'
-        ));
+        $parent = $formRepository->findOneBy(
+            array(
+                'name' => strpos($this->name, 'Payment') !== false ? 'Payment' : 'Other'
+            )
+        );
         $form->setParent($parent);
         $this->Application()->Models()->persist($form);
+
         return $form;
     }
 
@@ -293,7 +312,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      *
      * @return Shopware\Models\Menu\Repository
      */
-    public final function Menu()
+    final public function Menu()
     {
         return Shopware()->Models()->getRepository(
             'Shopware\Models\Menu\Menu'
@@ -304,38 +323,43 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Create a new menu item instance
      *
      * @param array $options
+     *
      * @return Shopware\Models\Menu\Menu|null
      */
     public function createMenuItem(array $options)
     {
-        if(!isset($options['label'])) {
+        if (!isset($options['label'])) {
             return null;
         }
-        if(isset($options['parent'])
-          && $options['parent'] instanceof \Shopware\Models\Menu\Menu) {
+        if (isset($options['parent'])
+            && $options['parent'] instanceof \Shopware\Models\Menu\Menu
+        ) {
             $parentId = $options['parent']->getId();
         } else {
             $parentId = null;
             unset($options['parent']);
         }
-        $item = $this->Menu()->findOneBy(array(
-            'label' => $options['label'],
-            'parentId' => $parentId
-        ));
-        if($item === null) {
+        $item = $this->Menu()->findOneBy(
+            array(
+                'label' => $options['label'],
+                'parentId' => $parentId
+            )
+        );
+        if ($item === null) {
             $item = new Shopware\Models\Menu\Menu();
         }
         $item->fromArray($options);
         $plugin = $this->Plugin();
         $plugin->getMenuItems()->add($item);
         $item->setPlugin($plugin);
+
         return $item;
     }
 
     /**
      * @return Shopware\Components\Model\ModelRepository
      */
-    public final function Payments()
+    final public function Payments()
     {
         return Shopware()->Models()->getRepository(
             'Shopware\Models\Payment\Payment'
@@ -348,32 +372,36 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * @param   array $options
      * @param   null $description
      * @param   null $action
+     *
      * @return  \Shopware\Models\Payment\Payment
      */
     public function createPayment($options, $description = null, $action = null)
     {
-        if(is_string($options)) {
+        if (is_string($options)) {
             $options = array('name' => $options);
         }
-        $payment = $this->Payments()->findOneBy(array(
-            'name' => $options['name']
-        ));
-        if($payment === null) {
+        $payment = $this->Payments()->findOneBy(
+            array(
+                'name' => $options['name']
+            )
+        );
+        if ($payment === null) {
             $payment = new \Shopware\Models\Payment\Payment();
             $payment->setName($options['name']);
             $this->Application()->Models()->persist($payment);
         }
         $payment->fromArray($options);
-        if($description !== null) {
+        if ($description !== null) {
             $payment->setDescription($description);
         }
-        if($action !== null) {
+        if ($action !== null) {
             $payment->setAction($action);
         }
         $plugin = $this->Plugin();
         $plugin->getPayments()->add($payment);
         $payment->setPlugin($plugin);
         Shopware()->Models()->flush($payment);
+
         return $payment;
     }
 
@@ -381,19 +409,22 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Create a new template
      *
      * @param   array|string $options
+     *
      * @return  \Shopware\Models\Shop\Template
      */
     public function createTemplate($options)
     {
-        if(is_string($options)) {
+        if (is_string($options)) {
             $options = array('template' => $options);
         }
-        $template = $this->Payments()->findOneBy(array(
-            'template' => $options['template']
-        ));
-        if($template === null) {
+        $template = $this->Payments()->findOneBy(
+            array(
+                'template' => $options['template']
+            )
+        );
+        if ($template === null) {
             $template = new \Shopware\Models\Shop\Template();
-            if(!isset($options['name'])) {
+            if (!isset($options['name'])) {
                 $options['name'] = ucfirst($options['template']);
             }
         }
@@ -401,6 +432,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         $plugin = $this->Plugin();
         $plugin->getTemplates()->add($template);
         $template->setPlugin($plugin);
+
         return $template;
     }
 
@@ -410,12 +442,22 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     public function createCronJob($name, $action, $interval = 86400, $active = 1)
     {
         $sql = '
-			INSERT INTO s_crontab (`name`, `action`, `next`, `start`, `interval`, `active`, `end`, `pluginID`)
-			VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-		';
-        Shopware()->Db()->query($sql, array(
-            $name, $action, new Zend_Date(), null, $interval, $active, new Zend_Date(), $this->getId()
-        ));
+            INSERT INTO s_crontab (`name`, `action`, `next`, `start`, `interval`, `active`, `end`, `pluginID`)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        ';
+        Shopware()->Db()->query(
+            $sql,
+            array(
+                $name,
+                $action,
+                new Zend_Date(),
+                null,
+                $interval,
+                $active,
+                new Zend_Date(),
+                $this->getId()
+            )
+        );
     }
 
     /**
@@ -425,7 +467,8 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      *
      * @param string|Enlight_Event_Handler $event
      * @param string $listener
-     * @param integer  $position
+     * @param integer $position
+     *
      * @return Enlight_Plugin_Bootstrap_Config
      */
     public function subscribeEvent($event, $listener = null, $position = null)
@@ -435,7 +478,118 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         } else {
             parent::subscribeEvent($event, $listener, $position);
         }
+
         return $this;
+    }
+
+    /**
+     * Helper function to register a plugin controller.
+     *
+     * If the default event listener is used for the registration of a plugin controller, the following requirements must be fulfilled:
+     *  1. The plugin directory must contain a 'Controller' subdirectory.
+     *  2. The "Controllers" directory must contain a subdirectory which corresponds to the module (Frontend, Backend, Widgets or API)
+     *  3. The controller must be filed in the module directory.
+     *  4. The controller file must have the same name as the controller class.
+     *
+     * If all the requirements are fulfilled, the controller is registered automatically.
+     * Additionally, the following plugin namespaces/directories are registered, if available:
+     *  1. The 'Views' plugin directory is added as a template directory.
+     *  2. The 'Snippets' plugin directory is added as a config directory.
+     *  3. The 'Components' plugin directory is added as a component namespace.
+     *
+     * @example
+     * <code>
+     *   public function install() {
+     *       $this->registerController('Frontend', 'Example1');
+     *       return true;
+     *   }
+     * </code>
+     *
+     * @param string $module - Possible values: Frontend, Backend, Widgets, Api
+     * @param string $name - The name of the controller
+     * @param string $listener - Name of the event listener function which will be called
+     * @return $this
+     * @throws Exception
+     */
+    public function registerController($module, $name, $listener = 'getDefaultControllerPath')
+    {
+        if (empty($module)) {
+            throw new Exception('Register controller requires a module name');
+        }
+        if (empty($name)) {
+            throw new Exception('Register controller requires a controller name');
+        }
+        $this->subscribeEvent(
+            'Enlight_Controller_Dispatcher_ControllerPath_' . $module . '_' . $name,
+            $listener
+        );
+        return $this;
+    }
+
+
+    /**
+     * Standard event listener function for plugin controllers.
+     * If the default event listener is used for the registration of a plugin controller, the following requirements must be fulfilled:
+     *  1. The plugin directory must contain a 'Controller' subdirectory.
+     *  2. The "Controllers" directory must contain a subdirectory which corresponds to the module (Frontend, Backend, Widgets or API)
+     *  3. The controller must be filed in the module directory.
+     *  4. The controller file must have the same name as the controller class.
+     *
+     * If all the requirements are fulfilled, the controller is registered automatically.
+     * Additionally, the following plugin namespaces/directories are registered, if available:
+     *  1. The 'Views' plugin directory is added as a template directory.
+     *  2. The 'Snippets' plugin directory is added as a config directory.
+     *  3. The 'Components' plugin directory is added as a component namespace.
+     *
+     * @param Enlight_Event_EventArgs $arguments
+     * @throws Exception
+     * @return string
+     */
+    public function getDefaultControllerPath(Enlight_Event_EventArgs $arguments)
+    {
+        $eventName = $arguments->getName();
+        $eventName = str_replace('Enlight_Controller_Dispatcher_ControllerPath_', '', $eventName);
+
+        $parts = explode('_', $eventName);
+
+        $module = $parts[0];
+        $controller = $parts[1];
+
+        $path = $this->Path() . 'Controllers/' . ucfirst($module) . '/' . ucfirst($controller) . '.php';
+
+        if (!file_exists($path)) {
+            throw new Enlight_Exception('Controller "' . $controller . '" can\'t load failure');
+        }
+
+        //register plugin model directory
+        if (file_exists($this->Path() . 'Models')) {
+            $this->registerCustomModels();
+        }
+
+        //register plugin views directory
+        if (file_exists($this->Path() . 'Views')) {
+            $this->Application()->Template()->addTemplateDir(
+                $this->Path() . 'Views/'
+            );
+        }
+
+        //register plugin snippet directory
+        if (file_exists($this->Path() . 'Snippets')) {
+            $this->Application()->Snippets()->addConfigDir(
+                $this->Path() . 'Snippets/'
+            );
+        }
+
+        //register plugin component directory
+        if (file_exists($this->Path() . 'Components')) {
+            $this->Application()->Loader()->registerNamespace(
+                'Shopware_Components',
+                $this->Path() . 'Components/'
+            );
+        }
+
+        return $path;
+
     }
 
     /**
@@ -445,9 +599,9 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     {
         return array(
             'install' => true,
-            'update'  => true,
-            'enable'  => true,
-            'dummy'   => false
+            'update' => true,
+            'enable' => true,
+            'dummy' => false
         );
     }
 
@@ -535,9 +689,11 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
 
     /**
      * @deprecated Use the event subscriber direct
-     * @param $event
-     * @param $listener
+     *
+     * @param      $event
+     * @param      $listener
      * @param null $position
+     *
      * @return Enlight_Event_Handler_Plugin
      */
     public function createEvent($event, $listener, $position = null)
@@ -545,17 +701,22 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         $handler = new Enlight_Event_Handler_Plugin(
             $event, $this->collection, $this, $listener, $position
         );
+
         return $handler;
     }
 
     /**
      * @deprecated Use the event subscriber (Event: class::method::type)
-     * @param   $class
+     *
+     * @param        $class
+     *
      * @deprecated
-     * @param   $method
-     * @param   $listener
+     *
+     * @param        $method
+     * @param        $listener
      * @param   null $type
      * @param   null $position
+     *
      * @return  Enlight_Event_Handler_Plugin
      */
     public function createHook($class, $method, $listener, $type = null, $position = null)
@@ -564,6 +725,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             $class . '::' . $method . '::' . $type,
             $this->collection, $this, $listener, $position
         );
+
         return $handler;
     }
 
@@ -571,6 +733,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Subscribe hook method
      *
      * @param Enlight_Hook_HookHandler $handler
+     *
      * @return Shopware_Components_Plugin_Bootstrap
      */
     public function subscribeHook($handler)
@@ -583,7 +746,15 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      *
      * @deprecated Use the createCronJob method
      */
-    public function subscribeCron($name, $action, $interval = 86400, $active = true, $next = null, $start = null, $end = null)
+    public function subscribeCron(
+        $name,
+        $action,
+        $interval = 86400,
+        $active = true,
+        $next = null,
+        $start = null,
+        $end = null
+    )
     {
         $this->createCronJob($name, $action, $interval, $active);
     }
@@ -591,18 +762,21 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Check if a list of given plugins is currently available
      * and active
+     *
      * @param array $plugins
+     *
      * @return bool
      */
     protected function assertRequiredPluginsPresent(array $plugins)
     {
-        foreach ($plugins as $plugin){
+        foreach ($plugins as $plugin) {
             $sql = 'SELECT 1 FROM s_core_plugins WHERE name = ? AND active = 1';
             $test = Shopware()->Db()->fetchOne($sql, array($plugin));
-            if (empty($test)){
+            if (empty($test)) {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -615,7 +789,9 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * use assertVersionGreaterThen().
      *
      * @since 4.1.3 introduced assertMinimumVersion($requiredVersion)
+     *
      * @param  string $requiredVersion string Format: 3.5.4 or 3.5.4.21111
+     *
      * @return bool
      */
     protected function assertMinimumVersion($requiredVersion)
@@ -636,7 +812,9 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * the currently installed shopware version.
      *
      * @deprectated 4.1.3 Use assertMinimumVersion instead
+     *
      * @param  $requiredVersion string Format: 3.5.4 or 3.5.4.21111
+     *
      * @return bool
      */
     protected function assertVersionGreaterThen($requiredVersion)
@@ -653,14 +831,17 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             'Shopware\CustomModels',
             $this->Path() . 'Models/'
         );
-        $this->Application()->ModelAnnotations()->addPaths(array(
-            $this->Path() . 'Models/'
-        ));
+        $this->Application()->ModelAnnotations()->addPaths(
+            array(
+                $this->Path() . 'Models/'
+            )
+        );
     }
 
 
     /**
      * Helper function to enable the http cache for a single shopware controller.
+     *
      * @param int $cacheTime
      * @param array $cacheIds
      */
@@ -681,6 +862,89 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         if ($httpCache) {
             $httpCache->disableControllerCache();
         }
+    }
+
+    /**
+     * Creates a new component which can be used in the backend emotion
+     * module.
+     *
+     * @param array $options {
+     *     @type string $name               Required; Logical name of the component
+     *     @type string $template           Required; Template class name which will be loaded in the frontend
+     *     @type string $xType              Required; Ext JS xtype for the backend module component
+     *     @type string $cls                Optional; $cls Css class which used in the frontend emotion
+     *     @type string $convertFunction    Optional; Data convert function which allows to convert the saved backend data
+     *     @type string $description        Optional; Description field for the component, which displayed in the backend module.
+     * }
+     *
+     * @return Component
+     */
+    public function createEmotionComponent(array $options)
+    {
+        $config = array_merge(array(
+            'convertFunction' => null,
+            'description' => '',
+            'cls' => '',
+            'xtype' => 'emotion-components-base'
+        ), $options);
+
+        $component = new Component();
+        $component->fromArray($config);
+
+        $component->setPluginId($this->getId());
+        $component->setPlugin($this->Plugin());
+
+        //saves the component automatically if the plugin is saved
+        $this->Plugin()->getEmotionComponents()->add($component);
+
+        //register post dispatch of backend and widgets emotion controller to load the template extensions of the plugin
+        $this->subscribeEvent('Enlight_Controller_Action_PostDispatchSecure_Widgets_Emotion', 'extendsEmotionTemplates');
+        $this->subscribeEvent('Enlight_Controller_Action_PostDispatchSecure_Backend_Emotion', 'extendsEmotionTemplates');
+
+        return $component;
+    }
+
+    /**
+     * Event listener of the post dispatch event of the backend and widgets emotion controller
+     * to load the plugin emotion template extensions.
+     *
+     * @param Enlight_Event_EventArgs $args
+     */
+    public function extendsEmotionTemplates(Enlight_Event_EventArgs $args)
+    {
+        /**@var $view Enlight_View_Default*/
+        $view = $args->getSubject()->View();
+        $view->addTemplateDir($this->Path() . '/Views/emotion_components/');
+
+        if ($args->getSubject()->Request()->getModuleName() !== 'backend') {
+            return;
+        }
+
+        $backendPath = $this->Path() . '/Views/emotion_components/backend/';
+        if (!file_exists($backendPath)) {
+            return;
+        }
+
+        $directoryIterator = new \DirectoryIterator($backendPath);
+        $regex = new \RegexIterator($directoryIterator,  '/^.+\.js$/i', \RecursiveRegexIterator::GET_MATCH);
+        foreach ($regex as $file) {
+            $path = 'backend/' . $file[0];
+            $view->extendsBlock('backend/Emotion/app', '{include file="'. $path .'"}', 'append');
+        }
+    }
+
+    /**
+     * Removes the snippets present in the plugin's ini files
+     * from the database
+     *
+     * @param bool $removeDirty if true, the snippets changed by the
+     * shop owner will also be removed
+     */
+    public function removeSnippets($removeDirty = false)
+    {
+        $this->get('shopware.snippet_database_handler')->removeFromDatabase($this->Path().'Snippets/', $removeDirty);
+        $this->get('shopware.snippet_database_handler')->removeFromDatabase($this->Path().'snippets/', $removeDirty);
+        $this->get('shopware.snippet_database_handler')->removeFromDatabase($this->Path().'Resources/snippet/', $removeDirty);
     }
 
 }

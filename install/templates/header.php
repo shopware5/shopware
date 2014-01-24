@@ -1,5 +1,5 @@
 <?php
-if (!defined("installer")){
+if (!defined("installer")) {
     exit;
 }
 ?>
@@ -27,7 +27,7 @@ if (!defined("installer")){
 
     <div class="meta">
         <p>
-            <strong>Shopware-Version:</strong> ___VERSION___
+            <?php echo $language['meta_text']; ?>
         </p>
     </div>
 </div>
@@ -37,7 +37,7 @@ if (!defined("installer")){
             <li class="<?php if ($tab == "start") echo "active"; else { echo "disabled";}; ?>"><a href="#start"><?php echo $language["start_install"];?></a></li>
             <li class="<?php if ($tab == "system") echo "active"; else { echo "disabled";}; ?>"><a href="#system"><?php echo $language["system_requirements"];?></a></li>
             <li class="<?php if ($tab == "database") echo "active"; else { echo "disabled";}; ?>"><a href="#database"><?php echo $language["configure_db"];?></a></li>
-            <li class="<?php if ($tab == "database_import") echo "active"; else { echo "disabled";}; ?>"><a href="#databaseimport">DB-Import</a></li>
+            <li class="<?php if ($tab == "database_import") echo "active"; else { echo "disabled";}; ?>"><a href="#databaseimport"><?php echo $language["import_db"];?></a></li>
             <li class="<?php if ($tab == "licence") echo "active"; else { echo "disabled";}; ?>"><a href="#license"><?php echo $language["licence"];?></a></li>
             <li class="<?php if ($tab == "configuration") echo "active"; else { echo "disabled";}; ?>"><a href="#configuration"><?php echo $language["configuration"];?></a></li>
             <li class="<?php if ($tab == "done") echo "active"; else { echo "disabled";}; ?>"><a href="#done"><?php echo $language["done"];?></a></li>

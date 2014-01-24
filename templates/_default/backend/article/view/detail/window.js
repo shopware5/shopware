@@ -134,14 +134,21 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         categoryNoticeTitle:'{s name=category/category_assignment}Assign categories{/s}',
         invalidPlugin: '{s name=window_invalid_plugin}The plugin [0] is not compatible with Shopware 4.1. Please uninstall the plugin or contact the provider regarding for a compatible version.{/s}',
         descriptions: {
-            title:'{s name=detail/description/title}Description{/s}',
+            title:'{s name=detail/description/title}Description{/s}'
+        },
+        meta: {
+            title:'{s name=detail/meta/title}meta information{/s}',
+            metaTitle: {
+                label: '{s name=detail/meta/meta_title_label}Title{/s}',
+                support: '{s name=detail/meta/meta_title_support}Meta-Title for search engines{/s}'
+            },
             description: {
-                label: '{s name=detail/description/description_label}Short description{/s}',
-                support: '{s name=detail/description/description_support}Short description for search engines, exports and overviews{/s}'
+                label: '{s name=detail/meta/description_label}Short description{/s}',
+                support: '{s name=detail/meta/description_support}Short description for search engines, exports and overviews{/s}'
             },
             keywords: {
-                label: '{s name=detail/description/keywords_label}Keywords{/s}',
-                support: '{s name=detail/description/keywords_support}Meta keywords for search engines and intelligent search{/s}'
+                label: '{s name=detail/meta/keywords_label}Keywords{/s}',
+                support: '{s name=detail/meta/keywords_support}Meta keywords for search engines and intelligent search{/s}'
             }
         },
         additional: {
@@ -349,6 +356,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
                 me.createBaseFieldSet(),
                 me.createPriceFieldSet(),
                 me.createDescriptionFieldSet(),
+                me.createMetaFieldSet(),
                 me.createBasePriceFieldSet(),
                 me.createSettingsFieldSet(),
                 me.createPropertiesFieldSet()
@@ -480,16 +488,47 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
                     margin: '0 0 15',
                     cls: Ext.baseCSSPrefix + 'article-description-long',
                     height: 100
-                }, {
+                }
+            ]
+        });
+    },
+
+    /**
+     * Creates the meta field set for the main form panel.
+     * Contains the keywords, and the short meta description
+     * @return Ext.form.FieldSet
+     */
+    createMetaFieldSet: function () {
+        var me = this;
+
+        return Ext.create('Ext.form.FieldSet', {
+            layout: 'anchor',
+            cls: Ext.baseCSSPrefix + 'article-meta-field-set',
+            defaults: {
+                labelWidth: 155,
+                anchor: '100%',
+                translatable: true,
+                xtype: 'textarea'
+            },
+            title: me.snippets.meta.title,
+            items: [
+                {
+                    xtype: 'textfield',
+                    name: 'metaTitle',
+                    fieldLabel: me.snippets.meta.metaTitle.label,
+                    supportText: me.snippets.meta.metaTitle.support
+                },
+                {
                     name: 'description',
                     height: 100,
-                    fieldLabel: me.snippets.descriptions.description.label,
-                    supportText: me.snippets.descriptions.description.support
-                }, {
+                    fieldLabel: me.snippets.meta.description.label,
+                    supportText: me.snippets.meta.description.support
+                },
+                {
                     name: 'keywords',
                     height: 100,
-                    fieldLabel: me.snippets.descriptions.keywords.label,
-                    supportText: me.snippets.descriptions.keywords.support
+                    fieldLabel: me.snippets.meta.keywords.label,
+                    supportText: me.snippets.meta.keywords.support
                 }
             ]
         });

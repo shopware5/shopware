@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Voucher
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Marcel Schmäing
- * @author     $Author$
  */
 
 namespace Shopware\Models\Voucher;
@@ -35,8 +27,6 @@ use Shopware\Components\Model\ModelEntity,
     Doctrine\ORM\Mapping AS ORM;
 /**
  * Standard Voucher Model Entity
- *
- * todo@all: Documentation
  *
  * @ORM\Table(name="s_emarketing_vouchers")
  * @ORM\Entity(repositoryClass="Repository")
@@ -180,14 +170,14 @@ class Voucher extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Voucher\Code", mappedBy="voucher", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Voucher\Code", mappedBy="voucher", orphanRemoval=true, cascade={"persist"})
      * @var \Doctrine\Common\Collections\ArrayCollection An array of \Shopware\Models\Voucher\Code Objects
      */
     protected $codes;
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Voucher", mappedBy="voucher", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Voucher", mappedBy="voucher", orphanRemoval=true, cascade={"persist"})
      * @var \Shopware\Models\Attribute\Voucher
      */
     protected $attribute;

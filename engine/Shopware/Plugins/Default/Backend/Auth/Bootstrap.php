@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,21 +20,11 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Plugins_Backend
- * @subpackage Backend
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
  *
  * Shopware Auth Plugin
- *
- * todo@all: Documentation
  */
 class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -133,12 +123,12 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     public function isAllowed($params)
     {
-        if (empty($params) || $this->shouldUseAcl() == false){
+        if (empty($params) || $this->shouldUseAcl() == false) {
             return true;
         }
         $resourceId = isset($params['resource']) ? $params['resource'] : $this->aclResource;
 
-        if(!$this->acl->has($resourceId)) {
+        if (!$this->acl->has($resourceId)) {
             return true;
         }
 
@@ -207,9 +197,9 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
             return;
         }
 
-        if($this->shouldAuth()) {
-            if($this->checkAuth() === null) {
-                if($this->request->isXmlHttpRequest()) {
+        if ($this->shouldAuth()) {
+            if ($this->checkAuth() === null) {
+                if ($this->request->isXmlHttpRequest()) {
                     throw new Enlight_Controller_Exception('Unauthorized', 401);
                 } else {
                     $this->action->redirect('backend/');
@@ -228,25 +218,25 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     {
         /** @var $auth Shopware_Components_Auth */
         $auth = Shopware()->Auth();
-        if($auth->hasIdentity()) {
+        if ($auth->hasIdentity()) {
             $auth->refresh();
         }
 
         $this->initLocale($auth);
 
-        if($auth->hasIdentity()) {
+        if ($auth->hasIdentity()) {
 
             $identity = $auth->getIdentity();
 
             $this->acl = Shopware()->Acl();
             $this->aclRole = $identity->role;
 
-            if(!$this->acl->has($this->aclResource)) {
+            if (!$this->acl->has($this->aclResource)) {
                 return $auth;
             }
 
             $actionName = $this->request->getActionName();
-            if($this->action instanceof Shopware_Controllers_Backend_ExtJs) {
+            if ($this->action instanceof Shopware_Controllers_Backend_ExtJs) {
                 $rules = $this->action->getAclRules();
             }
             if (isset($rules[$actionName])) {
@@ -275,7 +265,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     protected function initLocale($auth = null)
     {
         $bootstrap = $this->Application()->Bootstrap();
-        if($auth !== null) {
+        if ($auth !== null) {
             $user = $auth->getIdentity();
             /** @var $locale \Shopware\Models\Shop\Locale */
         }
@@ -299,13 +289,9 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
                   . Shopware::REVISION;
         $baseHash = substr(sha1($baseHash), 0 , 5);
         $template->setCompileId('backend_' . $locale->toString() . '_' . $baseHash);
-        if (isset($user->role)) {
-            $template->setCacheId($user->role->getName());
-        }
 
-        if($this->action !== null && $this->action->View()->hasTemplate()) {
+        if ($this->action !== null && $this->action->View()->hasTemplate()) {
             $this->action->View()->Template()->setCompileId($template->getCompileId());
-            $this->action->View()->Template()->setCacheId($template->getCacheId());
         }
     }
 
@@ -317,10 +303,10 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     public function registerAclPlugin($auth)
     {
         $bootstrap = $this->Application()->Bootstrap();
-        if($this->acl === null) {
+        if ($this->acl === null) {
             $this->acl = $bootstrap->getResource('Acl');
         }
-        if($auth->hasIdentity()) {
+        if ($auth->hasIdentity()) {
             $identity = $auth->getIdentity();
             $this->aclRole = $identity->role;
         }
@@ -343,25 +329,48 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     public function getDefaultLocale()
     {
-        $locales = $this->getLocales();
-        $default = array_keys(Zend_Locale::getBrowser());
-        if(!empty($default)) {
-            if ($default[0] == 'en_US') {
-                $default[] = 'en_GB';
+        $backendLocales = $this->getLocales();
+        $browserLocales = array_keys(Zend_Locale::getBrowser());
+
+        if (!empty($browserLocales)) {
+            $quotedBackendLocale = Shopware()->Db()->quote($backendLocales);
+            $orderIndex = 1;
+            $orderCriteria = '';
+            foreach ($browserLocales as $browserLocale) {
+                $orderCriteria .= 'WHEN ' . Shopware()->Db()->quote($browserLocale) . ' THEN ' . $orderIndex . ' ';
+                $orderIndex++;
             }
-            $defaultSelect = Shopware()->Db()->quote($default);
-            $sql = 'SELECT locale, id FROM s_core_locales WHERE locale IN (' . $defaultSelect . ')';
-            $defaultIds = Shopware()->Db()->fetchPairs($sql);
-            foreach($default as $key => $locale) {
-                if(isset($defaultIds[$locale])) {
-                    $default[$key] = (int)$defaultIds[$locale];
-                } else {
-                    unset($default[$key]);
+            $orderCriteria .= 'ELSE ' . $orderIndex . ' END ';
+
+            // For each browser locale, get exact or similar
+            // filtered by allowed backend locales
+            // ordered by exact match from browser
+            $sql = 'SELECT id FROM s_core_locales
+                WHERE locale LIKE :browserLocale AND id IN (' . $quotedBackendLocale . ')
+                ORDER BY CASE locale ' . $orderCriteria . ' LIMIT 1';
+
+            foreach ($browserLocales as $key => $locale) {
+                $fetchResult = Shopware()->Db()->fetchOne($sql, array(
+                    'browserLocale' => $locale . '%'
+                ));
+
+                if ($fetchResult) {
+                    return $fetchResult;
                 }
             }
-            $default = array_intersect($default, $locales);
         }
-        return !empty($default) ? array_shift($default) : array_shift($locales);
+
+        // No match from the browser locales, fallback to default shop locale
+        $defaultShop = Shopware()->Models()->getRepository(
+            'Shopware\Models\Shop\Shop'
+        )->getDefault();
+
+        if ($defaultShop) {
+            $defaultShopLocale = $defaultShop->getLocale()->getId();
+        }
+
+        // if default shop locale is allowed, use it, otherwise use the first allowed locale
+        return in_array($defaultShopLocale, $backendLocales) ? $defaultShopLocale : array_shift($backendLocales);
     }
 
     /**
@@ -372,7 +381,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     public function getLocales()
     {
         $locales =  $this->Config()->get('backendLocales', array(1));
-        if($locales instanceof Enlight_Config) {
+        if ($locales instanceof Enlight_Config) {
             $locales = $locales->toArray();
         }
         return $locales;
@@ -398,28 +407,28 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
             $options['gc_maxlifetime'] = $backendTimeout;
         }
         $refererCheck = false; $clientCheck = false;
-        if(is_bool($options['referer_check'])) {
+        if (is_bool($options['referer_check'])) {
             $refererCheck = $options['referer_check'];
             unset($options['referer_check']);
         }
-        if(!empty($options['client_check'])) {
+        if (!empty($options['client_check'])) {
             $clientCheck = true;
         }
         unset($options['client_check']);
 
-	    if (!isset($options['save_handler']) || $options['save_handler'] == 'db') {
-		    // SW-4819 Add database backend support
-		    $config_save_handler = array(
-	           'name'           => 's_core_sessions_backend',
-	           'primary'        => 'id',
-	           'modifiedColumn' => 'modified',
-	           'dataColumn'     => 'data',
-	           'lifetimeColumn' => 'expiry'
-	        );
-	        Enlight_Components_Session::setSaveHandler(
-	           new Enlight_Components_Session_SaveHandler_DbTable($config_save_handler)
-	        );
-	    }
+        if (!isset($options['save_handler']) || $options['save_handler'] == 'db') {
+            // SW-4819 Add database backend support
+            $config_save_handler = array(
+               'name'           => 's_core_sessions_backend',
+               'primary'        => 'id',
+               'modifiedColumn' => 'modified',
+               'dataColumn'     => 'data',
+               'lifetimeColumn' => 'expiry'
+            );
+            Enlight_Components_Session::setSaveHandler(
+               new Enlight_Components_Session_SaveHandler_DbTable($config_save_handler)
+            );
+        }
 
         Enlight_Components_Session::start($options);
 
@@ -427,15 +436,15 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
           && strpos($referer, 'http') === 0) {
             $referer = substr($referer, 0, strpos($referer, '/backend/'));
             $referer .= '/backend/';
-            if(!isset($_SESSION['__SW_REFERER'])) {
+            if (!isset($_SESSION['__SW_REFERER'])) {
                 $_SESSION['__SW_REFERER'] = $referer;
             } elseif (strpos($referer, $_SESSION['__SW_REFERER']) !== 0) {
                 Enlight_Components_Session::destroy();
                 throw new Exception('Referer check for backend session failed');
             }
         }
-        if($clientCheck && ($client = $this->request->getHeader('userAgent')) !== null) {
-            if(!isset($_SESSION['__SW_CLIENT'])) {
+        if ($clientCheck && ($client = $this->request->getHeader('userAgent')) !== null) {
+            if (!isset($_SESSION['__SW_CLIENT'])) {
                 $_SESSION['__SW_CLIENT'] = $client;
             } elseif ($client !==  $_SESSION['__SW_CLIENT']) {
                 Enlight_Components_Session::destroy();
@@ -477,7 +486,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     public function onInitResourceAcl()
     {
-        if(!Shopware()->Bootstrap()->issetResource('Db')) {
+        if (!Shopware()->Bootstrap()->issetResource('Db')) {
             return null;
         }
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,13 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Shop
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
 
 namespace Shopware\Models\Property;
@@ -34,7 +27,6 @@ use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\Query\SqlWalker;
 
 /**
- * todo@all: Documentation
  */
 class Repository extends ModelRepository
 {
@@ -47,13 +39,14 @@ class Repository extends ModelRepository
      * @param $offset
      * @return \Doctrine\ORM\Query
      */
-    public function getPropertyRelationQuery($filter = null, $order = null, $limit = null, $offset = null) {
-    	$builder = $this->getPropertyRelationQueryBuilder($filter, $order);
+    public function getPropertyRelationQuery($filter = null, $order = null, $limit = null, $offset = null)
+    {
+        $builder = $this->getPropertyRelationQueryBuilder($filter, $order);
         if ($offset !== null && $limit !== null) {
             $builder->setFirstResult($offset)
                    ->setMaxResults($limit);
         }
-    	return $builder->getQuery();
+        return $builder->getQuery();
     }
 
     /**
@@ -63,8 +56,9 @@ class Repository extends ModelRepository
      * @param $order
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getPropertyRelationQueryBuilder($filter, $order) {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+    public function getPropertyRelationQueryBuilder($filter, $order)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'relations'
         ));
@@ -72,14 +66,14 @@ class Repository extends ModelRepository
             ->leftJoin('relations.option', 'options')
             ->leftJoin('relations.group', 'groups');
 
-        if($filter !== null) {
+        if ($filter !== null) {
             $builder->addFilter($filter);
         }
-        if($order !== null) {
+        if ($order !== null) {
             $builder->addOrderBy($order);
         }
 
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -110,8 +104,8 @@ class Repository extends ModelRepository
      * @param null $order
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getListGroupsQueryBuilder($filter = null, $order = null) {
-
+    public function getListGroupsQueryBuilder($filter = null, $order = null)
+    {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'groups',
@@ -122,10 +116,10 @@ class Repository extends ModelRepository
             ->leftJoin('groups.options', 'options')
             ->leftJoin('groups.attribute', 'attributes');
 
-        if($filter !== null) {
+        if ($filter !== null) {
             $builder->addFilter($filter);
         }
-        if($order !== null) {
+        if ($order !== null) {
             $builder->addOrderBy($order);
         }
 
@@ -200,7 +194,7 @@ class Repository extends ModelRepository
                 ->leftJoin('groups.attribute', 'attribute')
                 ->orderBy('groups.position');
 
-        if(!empty($filter[0]["value"])) {
+        if (!empty($filter[0]["value"])) {
             $builder->andWhere('groups.name LIKE :filter')
                     ->setParameter('filter', '%' . $filter[0]["value"] . '%');
         }
@@ -241,7 +235,7 @@ class Repository extends ModelRepository
                 ->from('Shopware\Models\Property\Option', 'options')
                 ->orderBy('options.name');
 
-        if(!empty($filter[0]["value"])) {
+        if (!empty($filter[0]["value"])) {
             $builder->where('options.name LIKE :filter')
                     ->setParameter('filter', '%' . $filter[0]["value"] . '%');
         }

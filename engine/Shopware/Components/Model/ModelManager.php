@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,23 +24,28 @@
 
 namespace Shopware\Components\Model;
 
+use Shopware\Components\Model\Query\SqlWalker;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
-use Doctrine\Common\EventManager;
-use Doctrine\DBAL\Connection;
-use Doctrine\Common\Util\Inflector;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Tools\Pagination\Paginator;
-use Shopware\Components\Model\Query\SqlWalker;
 use Doctrine\ORM\Query;
-use Shopware\Components\Model\DBAL\QueryBuilder as DBALQueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
+use Doctrine\Common\Util\Inflector;
+use Doctrine\Common\EventManager;
+use Symfony\Component\Translation\Translator;
+use Symfony\Component\Validator\ConstraintValidatorFactory;
+use Symfony\Component\Validator\Mapping\ClassMetadataFactory;
+use Symfony\Component\Validator\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Validator\Validator;
 
 /**
  * Global Manager which is responsible for initializing the adapter classes.
  *
  * @category  Shopware
  * @package   Shopware\Components\Model
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ModelManager extends EntityManager
 {
@@ -56,26 +61,6 @@ class ModelManager extends EntityManager
     protected $debugMode = false;
 
     /**
-     * Creates a new EntityManager that operates on the given database connection
-     * and uses the given Configuration and EventManager implementations.
-     *
-     * @param \Doctrine\DBAL\Connection $conn
-     * @param \Shopware\Components\Model\Configuration $config
-     * @param \Doctrine\Common\EventManager $eventManager
-     */
-    protected function __construct(Connection $conn, Configuration $config, EventManager $eventManager)
-    {
-        parent::__construct($conn, $config, $eventManager);
-        $this->proxyFactory = new ProxyFactory(
-            $this,
-            $config->getProxyDir(),
-            $config->getProxyNamespace(),
-            $config->getAutoGenerateProxyClasses()
-        );
-    }
-
-
-    /**
      * @return DBALQueryBuilder
      */
     public function getDBALQueryBuilder()
@@ -83,18 +68,16 @@ class ModelManager extends EntityManager
         return new DBALQueryBuilder($this->getConnection());
     }
 
-
     /**
      * Factory method to create EntityManager instances.
      *
-     * @param mixed $conn An array with the connection parameters or an existing
-     *      Connection instance.
-     * @param Configuration $config The Configuration instance to use.
-     * @param \Doctrine\Common\EventManager|null $eventManager The EventManager instance to use.
+     * @param Connection $conn
+     * @param Configuration $config
+     * @param EventManager $eventManager
      * @throws \Doctrine\ORM\ORMException
-     * @return ModelManager The created EntityManager.
+     * @return ModelManager
      */
-    public static function create(Connection $conn, Configuration $config, EventManager $eventManager = null)
+    public static function createInstance(Connection $conn, Configuration $config, EventManager $eventManager = null)
     {
         if (!$config->getMetadataDriverImpl()) {
             throw ORMException::missingMappingDriverImpl();
@@ -256,6 +239,7 @@ class ModelManager extends EntityManager
     public function createPaginator(\Doctrine\ORM\Query $query)
     {
         $paginator = new Paginator($query);
+        $paginator->setUseOutputWalkers(false);
 
         return $paginator;
     }
@@ -269,17 +253,16 @@ class ModelManager extends EntityManager
     }
 
     /**
-     * @return \Symfony\Component\Validator\Validator
+     * @return Validator
      */
     public function getValidator()
     {
         if (null === $this->validator) {
             $reader = $this->getConfiguration()->getAnnotationsReader();
-            $this->validator = new \Symfony\Component\Validator\Validator(
-                new \Symfony\Component\Validator\Mapping\ClassMetadataFactory(
-                    new \Symfony\Component\Validator\Mapping\Loader\AnnotationLoader($reader)
-                ),
-                new \Symfony\Component\Validator\ConstraintValidatorFactory()
+            $this->validator = new Validator(
+                new ClassMetadataFactory(new AnnotationLoader($reader)),
+                new ConstraintValidatorFactory(),
+                new Translator('en_us')
             );
         }
 
@@ -303,18 +286,9 @@ class ModelManager extends EntityManager
         /** @var $generator \Shopware\Components\Model\Generator*/
         $generator = new \Shopware\Components\Model\Generator();
 
-        $generator->setPath(
-            $this->getConfiguration()->getAttributeDir()
-        );
-
-        $generator->setModelPath(
-            Shopware()->AppPath('Models')
-        );
-
-        $generator->setSchemaManager(
-            $this->getConnection()->getSchemaManager()
-        );
-
+        $generator->setPath($this->getConfiguration()->getAttributeDir());
+        $generator->setModelPath(Shopware()->AppPath('Models'));
+        $generator->setSchemaManager($this->getConnection()->getSchemaManager());
         $generator->generateAttributeModels($tableNames);
 
         $this->regenerateAttributeProxies($tableNames);
@@ -481,6 +455,7 @@ class ModelManager extends EntityManager
 
     /**
      * Helper function to add mysql specified command to increase the sql performance.
+     *
      * @param \Doctrine\ORM\Query $query
      * @param null $index Name of the forced index
      * @param bool $straightJoin true or false. Allow to add STRAIGHT_JOIN select condition

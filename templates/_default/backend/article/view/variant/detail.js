@@ -545,7 +545,7 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
             }, {
                 xtype: 'datefield',
                 name: 'releaseDate',
-                format: 'd.m.Y',
+                submitFormat: 'd.m.Y',
                 fieldLabel: me.snippets.settings.releaseDate
             }]
         });

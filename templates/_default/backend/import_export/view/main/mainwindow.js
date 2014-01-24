@@ -170,13 +170,15 @@ Ext.define('Shopware.apps.ImportExport.view.main.Mainwindow', {
                     xtype: 'datefield',
                     fieldLabel: me.snippets.dateFrom,
                     name: 'dateFrom',
-                    maxValue: new Date()
+                    maxValue: new Date(),
+                    submitFormat: 'd.m.Y'
                 },
                 {
                     xtype: 'datefield',
                     fieldLabel: me.snippets.dateTo,
                     name: 'dateTo',
-                    maxValue: new Date()
+                    maxValue: new Date(),
+                    submitFormat: 'd.m.Y'
                 },
                 {
                     xtype: 'combobox',

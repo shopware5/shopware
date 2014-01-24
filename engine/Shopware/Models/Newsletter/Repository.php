@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0 - Repository
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Backend, Newsletter
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Daniel Nögel
- * @author     $Author$
  */
 
 namespace   Shopware\Models\Newsletter;
@@ -67,18 +59,18 @@ class Repository extends ModelRepository
      * @param null $order
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getListGroupsQueryBuilder($filter = null, $order = null) {
-
+    public function getListGroupsQueryBuilder($filter = null, $order = null)
+    {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'groups'
         ));
         $builder->from('Shopware\Models\Newsletter\Group', 'groups');
 
-        if($filter !== null) {
+        if ($filter !== null) {
             $builder->addFilter($filter);
         }
-        if($order !== null) {
+        if ($order !== null) {
             $builder->addOrderBy($order);
         }
 
@@ -114,8 +106,8 @@ class Repository extends ModelRepository
      * @param null $order
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getListAddressesQueryBuilder($filter = null, $order = null) {
-
+    public function getListAddressesQueryBuilder($filter = null, $order = null)
+    {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'address',
@@ -128,7 +120,7 @@ class Repository extends ModelRepository
             ->leftJoin('address.newsletterGroup', 'newsletterGroup')
             ->leftJoin('address.lastNewsletter', 'lastNewsletter');
 
-        if($filter !== null) {
+        if ($filter !== null) {
             $builder->andWhere($builder->expr()->orX(
                 'address.email LIKE :search',
                 'newsletterGroup.name LIKE :search',
@@ -137,7 +129,7 @@ class Repository extends ModelRepository
             $builder->setParameter('search', '%' . $filter[0]['value'] . '%');
 
         }
-        if($order !== null) {
+        if ($order !== null) {
             $builder->addOrderBy($order);
         }
 
@@ -164,7 +156,7 @@ class Repository extends ModelRepository
             $builder->setFirstResult($offset)
                    ->setMaxResults($limit);
         }
-        
+
         return $builder->getQuery();
     }
 
@@ -175,21 +167,21 @@ class Repository extends ModelRepository
      * @param null $order
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getListSenderQueryBuilder($filter = null, $order = null) {
-
+    public function getListSenderQueryBuilder($filter = null, $order = null)
+    {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'sender'
         ));
         $builder->from('Shopware\Models\Newsletter\Sender', 'sender');
 
-        if($filter !== null) {
+        if ($filter !== null) {
             $builder->andWhere($builder->expr()->orX(
                 'mailing.subject LIKE :search'
             ));
             $builder->setParameter('search', '%' . $filter[0]['value'] . '%');
         }
-        if($order !== null) {
+        if ($order !== null) {
             $builder->addOrderBy($order);
         }
 
@@ -214,7 +206,7 @@ class Repository extends ModelRepository
             $builder->setFirstResult($offset)
                    ->setMaxResults($limit);
         }
-        
+
         return $builder->getQuery();
     }
 
@@ -225,8 +217,8 @@ class Repository extends ModelRepository
      * @param null $order
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getListNewslettersQueryBuilder($filter = null, $order = null) {
-
+    public function getListNewslettersQueryBuilder($filter = null, $order = null)
+    {
         // Joining the addresses will have a massive impact on query time if many addresses needs to be joined
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
@@ -247,13 +239,13 @@ class Repository extends ModelRepository
 //                ->leftJoin('mailing.addresses', 'addresses')
                 ->where('mailing.status > -1');
 
-        if($filter !== null) {
+        if ($filter !== null) {
             $builder->andWhere($builder->expr()->orX(
                 'mailing.subject LIKE :search'
             ));
             $builder->setParameter('search', '%' . $filter[0]['value'] . '%');
         }
-        if($order !== null) {
+        if ($order !== null) {
             $builder->addOrderBy($order);
         }
 

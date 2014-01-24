@@ -1,8 +1,7 @@
 <?php
-
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -26,7 +25,7 @@
 /**
  * @category  Shopware
  * @package   Shopware\Plugins\RebuildINdex
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -169,7 +168,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
         $this->SeoIndex()->registerShop($shops[0]);
         $this->RewriteTable()->sCreateRewriteTableCleanup();
 
-        foreach($shops as $shopId) {
+        foreach ($shops as $shopId) {
             /** @var $repository \Shopware\Models\Shop\Repository */
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
             $shop = $repository->getActiveById($shopId);
@@ -191,12 +190,12 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
             $this->RewriteTable()->sCreateRewriteTableCampaigns();
             $this->RewriteTable()->sCreateRewriteTableContent();
             $this->RewriteTable()->sCreateRewriteTableBlog();
+            $this->RewriteTable()->sCreateRewriteTableSuppliers();
             $this->RewriteTable()->sCreateRewriteTableStatic();
         }
 
         return true;
     }
-
 
     /**
      * Event listener function of the search index rebuild cron job.

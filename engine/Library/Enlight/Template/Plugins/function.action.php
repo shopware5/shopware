@@ -62,7 +62,7 @@ function smarty_function_action($params, Enlight_Template_Default $template)
         unset($params['name']);
     }
     if (isset($params['params'])) {
-        $userParams = (array)$params['params'];
+        $userParams = (array) $params['params'];
         unset($params['params']);
     } else {
         $userParams = array();

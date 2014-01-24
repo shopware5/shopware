@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,7 +25,7 @@
 /**
  * @category  Shopware
  * @package   Shopware\Controllers\Frontend
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
 {
@@ -58,7 +58,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        $id = (int)$this->Request()->sArticle;
+        $id = (int) $this->Request()->sArticle;
         $tpl = (string) $this->Request()->template;
         if (empty($id)) {
             return $this->forward('error');
@@ -77,58 +77,52 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             );
         }
 
-        if (!$this->View()->isCached()) {
-            $article = Shopware()->Modules()->Articles()->sGetArticleById($id);
+        $article = Shopware()->Modules()->Articles()->sGetArticleById($id);
 
-            if (empty($article) || empty($article["articleName"])) {
-                return $this->forward('error');
-            }
-
-            if (!empty($article['template'])) {
-                $this->View()->loadTemplate('frontend/detail/' . $article['template']);
-            } elseif (!empty($article['mode'])) {
-                $this->View()->loadTemplate('frontend/blog/detail.tpl');
-            } elseif ($tpl === 'ajax' || $this->Request()->isXmlHttpRequest()) {
-                $this->View()->loadTemplate('frontend/detail/ajax.tpl');
-            }
-
-            $article = Shopware()->Modules()->Articles()->sGetConfiguratorImage($article);
-            $article['sBundles'] = Shopware()->Modules()->Articles()->sGetArticleBundlesByArticleID($id);
-
-            if (!empty(Shopware()->Config()->InquiryValue)) {
-                $this->View()->sInquiry = $this->Front()->Router()->assemble(array(
-                    'sViewport' => 'support',
-                    'sFid' => Shopware()->Config()->InquiryID,
-                    'sInquiry' => 'detail',
-                    'sOrdernumber' => $article['ordernumber']
-                ));
-            }
-
-            if (!empty($article["categoryID"])) {
-                $breadcrumb = array_reverse(Shopware()->Modules()->sCategories()->sGetCategoriesByParent($article["categoryID"]));
-                $categoryInfo = end($breadcrumb);
-            } else {
-                $breadcrumb = array();
-                $categoryInfo = null;
-            }
-
-            $breadcrumb[] = array(
-                'link' => $article['linkDetails'],
-                'name' => $article['articleName']
-            );
-
-            // SW-3493 sArticle->getArticleById and sBasket->sGetGetBasket differ in camelcase
-            $article['sReleaseDate'] = $article['sReleasedate'];
-
-            // Push ThumbnailSize to template
-            $lastArticles['ThumbnailSize'] = Shopware()->Config()->thumb;
-
-            $this->View()->sLastArticles = $lastArticles;
-            $this->View()->sBreadcrumb = $breadcrumb;
-            $this->View()->sCategoryInfo = $categoryInfo;
-            $this->View()->sArticle = $article;
-            $this->View()->rand = md5(uniqid(rand()));
+        if (empty($article) || empty($article["articleName"])) {
+            return $this->forward('error');
         }
+
+        if (!empty($article['template'])) {
+            $this->View()->loadTemplate('frontend/detail/' . $article['template']);
+        } elseif (!empty($article['mode'])) {
+            $this->View()->loadTemplate('frontend/blog/detail.tpl');
+        } elseif ($tpl === 'ajax' || $this->Request()->isXmlHttpRequest()) {
+            $this->View()->loadTemplate('frontend/detail/ajax.tpl');
+        }
+
+        $article = Shopware()->Modules()->Articles()->sGetConfiguratorImage($article);
+        $article['sBundles'] = Shopware()->Modules()->Articles()->sGetArticleBundlesByArticleID($id);
+
+        if (!empty(Shopware()->Config()->InquiryValue)) {
+            $this->View()->sInquiry = $this->Front()->Router()->assemble(array(
+                'sViewport' => 'support',
+                'sFid' => Shopware()->Config()->InquiryID,
+                'sInquiry' => 'detail',
+                'sOrdernumber' => $article['ordernumber']
+            ));
+        }
+
+        if (!empty($article["categoryID"])) {
+            $breadcrumb = array_reverse(Shopware()->Modules()->sCategories()->sGetCategoriesByParent($article["categoryID"]));
+            $categoryInfo = end($breadcrumb);
+        } else {
+            $breadcrumb = array();
+            $categoryInfo = null;
+        }
+
+        $breadcrumb[] = array(
+            'link' => $article['linkDetails'],
+            'name' => $article['articleName']
+        );
+
+        // SW-3493 sArticle->getArticleById and sBasket->sGetGetBasket differ in camelcase
+        $article['sReleaseDate'] = $article['sReleasedate'];
+
+        $this->View()->sBreadcrumb = $breadcrumb;
+        $this->View()->sCategoryInfo = $categoryInfo;
+        $this->View()->sArticle = $article;
+        $this->View()->rand = md5(uniqid(rand()));
     }
 
     /**
@@ -138,7 +132,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
      */
     public function ratingAction()
     {
-        $id = (int)$this->Request()->sArticle;
+        $id = (int) $this->Request()->sArticle;
         if (empty($id)) {
             return $this->forward('error');
         }
@@ -152,8 +146,8 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
 
         if ($hash = $this->Request()->sConfirmation) {
             $getVote = Shopware()->Db()->fetchRow('
-				SELECT * FROM s_core_optin WHERE hash = ?
-			', array($hash));
+                SELECT * FROM s_core_optin WHERE hash = ?
+            ', array($hash));
             if (!empty($getVote['data'])) {
                 Shopware()->System()->_POST = unserialize($getVote['data']);
                 $voteConfirmed = true;
@@ -191,9 +185,9 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
                 $hash = md5(uniqid(rand()));
 
                 $sql = '
-				    INSERT INTO s_core_optin (datum, hash, data)
-				    VALUES (NOW(), ?, ?)
-			    ';
+                    INSERT INTO s_core_optin (datum, hash, data)
+                    VALUES (NOW(), ?, ?)
+                ';
                 Shopware()->Db()->query($sql, array(
                     $hash, serialize(Shopware()->System()->_POST)
                 ));

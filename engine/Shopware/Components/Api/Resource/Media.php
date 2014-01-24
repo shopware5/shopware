@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,13 +25,17 @@
 namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Components\Thumbnail\Manager;
+use Shopware\Models\Media\Album;
+use Shopware\Models\Media\Media as MediaModel;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * Media API Resource
  *
  * @category  Shopware
  * @package   Shopware\Components\Api\Resource
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Media extends Resource
 {
@@ -86,7 +90,7 @@ class Media extends Resource
         $query = $this->getRepository()->getMediaListQuery($criteria, $orderBy, $limit, $offset);
         $query->setHydrationMode($this->resultMode);
 
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getManager()->createPaginator($query);
 
         //returns the total count of the query
         $totalResult = $paginator->count();
@@ -119,6 +123,13 @@ class Media extends Resource
 
         $this->getManager()->persist($media);
         $this->flush();
+
+        if ($media->getType() == MediaModel::TYPE_IMAGE) {
+            /**@var $manager Manager */
+            $manager = $this->getContainer()->get('thumbnail_manager');
+
+            $manager->createMediaThumbnail($media);
+        }
 
         return $media;
     }
@@ -155,18 +166,14 @@ class Media extends Resource
             throw new ApiException\ValidationException($violations);
         }
 
-        // When a media's image was changed, we need to recreate thumbnails.
-        // Therefore the onSave method of the media model needs to be called.
-        // As ist listens to prePersist, this can only be done, when a model
-        // is persisted for the first time.
-        // In other words: Changing images for a media model is not possible
-        // right now. It might also have massiv side-effects when other
-        // modules use a specific image.
-        // SW-4464
-//        $media->onSave();
-
         $this->flush();
 
+        if ($media->getType() == MediaModel::TYPE_IMAGE) {
+            /**@var $manager Manager */
+            $manager = $this->getContainer()->get('thumbnail_manager');
+
+            $manager->createMediaThumbnail($media);
+        }
         return $media;
     }
 
@@ -258,16 +265,60 @@ class Media extends Resource
         return $params;
     }
 
+    /**
+     * Internal helper function which is used to upload the passed image link
+     * to the server and create a media object for the image.
+     *
+     * @param $link
+     * @param $albumId
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @return MediaModel
+     */
+    public function internalCreateMediaByFileLink($link, $albumId = -1)
+    {
+        $name = pathinfo($link, PATHINFO_FILENAME);
+        $path = $this->load($link, $name);
+        $name = pathinfo($path, PATHINFO_FILENAME);
+        $file = new File($path);
+
+        $media = new MediaModel();
+
+        $media->setAlbumId($albumId);
+        $media->setFile($file);
+        $media->setName($name);
+        $media->setDescription('');
+        $media->setCreated(new \DateTime());
+        $media->setUserId(0);
+
+        /**@var $album Album*/
+        $album = $this->getManager()->find('Shopware\Models\Media\Album', $albumId);
+        if (!$album) {
+            throw new ApiException\CustomValidationException(
+                sprintf("Album by id %s not found", $albumId)
+            );
+        }
+
+        $media->setAlbum($album);
+
+        try {
+            //persist the model into the model manager this uploads and resizes the image
+            $this->getManager()->persist($media);
+        } catch (\Doctrine\ORM\ORMException $e) {
+            throw new ApiException\CustomValidationException(
+                sprintf("Some error occurred while loading your image")
+            );
+        }
+        return $media;
+    }
 
     /**
-     * Helper function to load a remote file
      * @param string $url URL of the resource that should be loaded (ftp, http, file)
      * @param string $baseFilename Optional: Instead of creating a hash, create a filename based on the given one
      * @return bool|string returns the absolute path of the downloaded file
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    protected function load($url, $baseFilename = null)
+    public function load($url, $baseFilename = null)
     {
         $destPath = Shopware()->DocPath('media_' . 'temp');
         if (!is_dir($destPath)) {
@@ -286,27 +337,22 @@ class Media extends Resource
             );
         }
 
+        if (strpos($url, 'data:image') !== false) {
+            return $this->uploadBase64File(
+                $url,
+                $destPath,
+                $baseFilename
+            );
+        }
+
         $urlArray = parse_url($url);
         $urlArray['path'] = explode("/", $urlArray['path']);
         switch ($urlArray['scheme']) {
             case "ftp":
             case "http":
+            case "https":
             case "file":
-                $counter = 1;
-                if ($baseFilename === null) {
-                    $filename = md5(uniqid(rand(), true));
-                } else {
-                    $filename = $baseFilename;
-                }
-
-                while (file_exists("$destPath/$filename")) {
-                    if ($baseFilename) {
-                        $filename = "$counter-$baseFilename";
-                        $counter++;
-                    } else {
-                        $filename = md5(uniqid(rand(), true));
-                    }
-                }
+                $filename = $this->getUniqueFileName($destPath, $baseFilename);
 
                 if (!$put_handle = fopen("$destPath/$filename", "w+")) {
                     throw new \Exception("Could not open $destPath/$filename for writing");
@@ -326,5 +372,75 @@ class Media extends Resource
         throw new \InvalidArgumentException(
             sprintf("Unsupported schema '%s'.", $urlArray['scheme'])
         );
+    }
+
+    /**
+     * Helper function which downloads the passed image url
+     * and save the image with a unique file name in the destination path.
+     * If the passed baseFilename already exists in the destination path,
+     * the function creates a unique file name.
+     *
+     * @param $url
+     * @param $destinationPath
+     * @param $baseFilename
+     * @return string
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws \Exception
+     */
+    protected function uploadBase64File($url, $destinationPath, $baseFilename)
+    {
+        if (!$get_handle = fopen($url, "r")) {
+            throw new \Exception("Could not open $url for reading");
+        }
+
+        $meta = stream_get_meta_data($get_handle);
+        if (!strpos($meta['mediatype'], 'image/') === false) {
+            throw new ApiException\CustomValidationException('No valid media type passed for the article image : ' . $url);
+        }
+
+        $extension = str_replace('image/', '', $meta['mediatype']);
+        $filename = $this->getUniqueFileName($destinationPath, $baseFilename);
+        $filename .= '.' . $extension;
+
+        if (!$put_handle = fopen("$destinationPath/$filename", "w+")) {
+            throw new \Exception("Could not open $destinationPath/$filename for writing");
+        }
+        while (!feof($get_handle)) {
+            fwrite($put_handle, fgets($get_handle, 4096));
+        }
+        fclose($get_handle);
+        fclose($put_handle);
+
+        return "$destinationPath/$filename";
+    }
+
+    /**
+     * Helper function to get a unique file name for the passed destination path.
+     * @param $destPath
+     * @param null $baseFileName
+     * @return null|string
+     */
+    private function getUniqueFileName($destPath, $baseFileName = null)
+    {
+        $counter = 1;
+        if ($baseFileName === null) {
+            $filename = md5(uniqid(rand(), true));
+        } else {
+            $filename = $baseFileName;
+        }
+
+        $filename = substr($filename, 0, 50);
+
+        while (file_exists("$destPath/$filename")) {
+            if ($baseFileName) {
+                $filename = "$counter-$baseFileName";
+                $counter++;
+            } else {
+                $filename = md5(uniqid(rand(), true));
+            }
+            $filename = substr($filename, 0, 50);
+        }
+
+        return $filename;
     }
 }

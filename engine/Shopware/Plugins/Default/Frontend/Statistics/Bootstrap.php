@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Plugins
- * @subpackage Statistics
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
  * Shopware Statistics Plugin
- *
- * todo@all: Documentation
  */
 class Shopware_Plugins_Frontend_Statistics_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -60,7 +50,7 @@ class Shopware_Plugins_Frontend_Statistics_Bootstrap extends Shopware_Components
         ));
 
         $form->setElement('textarea', 'botBlackList', array(
-                'label' => 'Bot-Liste', 
+                'label' => 'Bot-Liste',
                 'value' => 'antibot;appie;architext;bjaaland;digout4u;echo;fast-webcrawler;ferret;googlebot;
 gulliver;harvest;htdig;ia_archiver;jeeves;jennybot;linkwalker;lycos;mercator;moget;muscatferret;
 myweb;netcraft;nomad;petersnews;scooter;slurp;unlost_web_crawler;voila;voyager;webbase;weblayers;
@@ -163,6 +153,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
             $this->refreshBasket($request);
             $this->refreshLog($request);
             $this->refreshReferer($request);
+            $this->refreshArticleImpression($request);
             $this->refreshCurrentUsers($request);
             $this->refreshPartner($request, $response);
         }
@@ -236,7 +227,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         Shopware()->Db()->query($sql, array(
             $request->getClientIp(false),
             $request->getParam('requestPage', $request->getRequestUri()),
-            empty(Shopware()->Session()->sUserId) ? 0 : (int)Shopware()->Session()->sUserId
+            empty(Shopware()->Session()->sUserId) ? 0 : (int) Shopware()->Session()->sUserId
         ));
     }
 
@@ -300,6 +291,35 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
     }
 
     /**
+     * Refresh article impressions
+     *
+     * @param   \Enlight_Controller_Request_RequestHttp $request
+     * @return null|object|\Shopware\Models\Tracking\Banner
+     */
+    public function refreshArticleImpression($request)
+    {
+        $articleId = $request->getParam('articleId');
+        if (empty($articleId)) {
+            return;
+        }
+        $shopId = Shopware()->Shop()->getId();
+        /** @var $repository \Shopware\Models\Tracking\Repository */
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Tracking\ArticleImpression');
+        $articleImpressionQuery = $repository->getArticleImpressionQuery($articleId, $shopId);
+        /** @var  $articleImpression \Shopware\Models\Tracking\ArticleImpression */
+        $articleImpression = $articleImpressionQuery->getOneOrNullResult();
+
+        // If no Entry for this day exists - create a new one
+        if ($articleImpression === null) {
+            $articleImpression = new \Shopware\Models\Tracking\ArticleImpression($articleId, $shopId);
+            Shopware()->Models()->persist($articleImpression);
+        } else {
+            $articleImpression->increaseImpressions();
+        }
+        Shopware()->Models()->flush();
+    }
+
+    /**
      * Refresh partner log
      *
      * @param   \Enlight_Controller_Request_RequestHttp $request
@@ -314,10 +334,10 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
                 if (!empty($campaignID)) {
                     Shopware()->Session()->sPartner = 'sCampaign' . $campaignID;
                     $sql = '
-						UPDATE s_campaigns_mailings
-						SET clicked = clicked + 1
-						WHERE id = ?
-					';
+                        UPDATE s_campaigns_mailings
+                        SET clicked = clicked + 1
+                        WHERE id = ?
+                    ';
                     Shopware()->Db()->query($sql, array($campaignID));
                 }
             } else {

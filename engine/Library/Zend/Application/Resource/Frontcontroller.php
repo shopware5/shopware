@@ -15,9 +15,9 @@
  * @category   Zend
  * @package    Zend_Application
  * @subpackage Resource
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Frontcontroller.php 23772 2011-02-28 21:35:29Z ralph $
+ * @version    $Id$
  */
 
 /**
@@ -32,7 +32,7 @@ require_once 'Zend/Application/Resource/ResourceAbstract.php';
  * @category   Zend
  * @package    Zend_Application
  * @subpackage Resource
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Application_Resource_Frontcontroller extends Zend_Application_Resource_ResourceAbstract
@@ -135,6 +135,22 @@ class Zend_Application_Resource_Frontcontroller extends Zend_Application_Resourc
                     }
                     break;
 
+                case 'dispatcher':
+                    if(!isset($value['class'])) {
+                        require_once 'Zend/Application/Exception.php';
+                        throw new Zend_Application_Exception('You must specify both ');
+                    }
+                    if (!isset($value['params'])) {
+                        $value['params'] = array();
+                    }
+                    
+                    $dispatchClass = $value['class'];
+                    if(!class_exists($dispatchClass)) {
+                        require_once 'Zend/Application/Exception.php';
+                        throw new Zend_Application_Exception('Dispatcher class not found!');
+                    }
+                    $front->setDispatcher(new $dispatchClass((array)$value['params']));
+                    break;
                 default:
                     $front->setParam($key, $value);
                     break;

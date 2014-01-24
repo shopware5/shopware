@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -29,7 +29,7 @@ include_once(Shopware()->OldPath() . "engine/Library/Mpdf/mpdf.php");
  *
  * @category  Shopware
  * @package   Shopware\Components\Document
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 {
@@ -461,7 +461,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         // "language" actually refers to a language-shop and not to a locale
         $shop = $repository->getActiveById($this->_order->order->language);
-        if(!empty($this->_order->order->currencyID)) {
+        if (!empty($this->_order->order->currencyID)) {
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Currency');
             $shop->setCurrency($repository->find($this->_order->order->currencyID));
         }
@@ -471,7 +471,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     /**
      * Set object configuration from array
      */
-    protected function setConfig (array $config)
+    protected function setConfig(array $config)
     {
         $this->_config = $config;
         foreach ($config as $key => $v) {

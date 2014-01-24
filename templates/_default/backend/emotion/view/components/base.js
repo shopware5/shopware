@@ -89,7 +89,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
     },
 
     createFormElements: function() {
-        var me = this, items = [], name, fieldLabel, snippet, supportText;
+        var me = this, items = [], store, name, fieldLabel, snippet, supportText;
 
         Ext.each(me.getSettings('fields', true), function(item) {
             name = item.get('name');
@@ -106,6 +106,11 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                     fieldLabel = snippet;
                 }
             }
+            
+            store = null;
+            if (item.get('store')) {
+                store = Ext.create(item.get('store'));
+            }
 
             items.push({
                 xtype: item.get('xType'),
@@ -113,14 +118,15 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                 fieldLabel: fieldLabel || '',
                 fieldId: item.get('id'),
                 valueType: item.get('valueType'),
+                queryMode: 'remote',
                 name: item.get('name') || '',
-                store: item.get('store'),
+                store: store,
                 displayField: item.get('displayField'),
                 valueField: item.get('valueField'),
                 checkedValue: true,
                 uncheckedValue: false,
                 supportText: supportText || '',
-                allowBlank: (!item.get('allowBlank') ? true : false),
+                allowBlank: (item.get('allowBlank') ? true : false),
                 value: item.get('defaultValue') || ''
             });
         });
@@ -128,7 +134,6 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
         items.push(me.createSizingFields());
         return items;
     },
-
 
     /**
      * @private

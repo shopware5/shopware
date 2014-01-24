@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -51,7 +51,7 @@ class Shopware_StoreApi_Models_Product extends Shopware_StoreApi_Models_Model
 
     public function isRentable()
     {
-        if(!empty($this->rawData['details']['rent'])) {
+        if (!empty($this->rawData['details']['rent'])) {
             return true;
         } else {
             return false;
@@ -66,7 +66,7 @@ class Shopware_StoreApi_Models_Product extends Shopware_StoreApi_Models_Model
         $main['rent_version'] = false;
         $details[] = $main;
 
-       if($this->isRentable() === true) {
+       if ($this->isRentable() === true) {
            $rent = $this->rawData['details']['rent'];
            $rent['rent_version'] = true;
            $details[] = $rent;
@@ -77,7 +77,7 @@ class Shopware_StoreApi_Models_Product extends Shopware_StoreApi_Models_Model
 
     public function isTestable()
     {
-        if(!empty($this->rawData['attributes']['test_modus'])) {
+        if (!empty($this->rawData['attributes']['test_modus'])) {
             return true;
         } else {
             return false;
@@ -86,7 +86,7 @@ class Shopware_StoreApi_Models_Product extends Shopware_StoreApi_Models_Model
 
     public function isCertified()
     {
-        if(!empty($this->rawData['addons']['certification'])) {
+        if (!empty($this->rawData['addons']['certification'])) {
             return true;
         } else {
             return false;
@@ -95,7 +95,7 @@ class Shopware_StoreApi_Models_Product extends Shopware_StoreApi_Models_Model
 
     public function isEncrypted()
     {
-        if(!empty($this->rawData['addons']['encryption'])) {
+        if (!empty($this->rawData['addons']['encryption'])) {
             return true;
         } else {
             return false;
@@ -104,7 +104,7 @@ class Shopware_StoreApi_Models_Product extends Shopware_StoreApi_Models_Model
 
     public function isHighlighted()
     {
-        if(!empty($this->rawData['addons']['highlight'])) {
+        if (!empty($this->rawData['addons']['highlight'])) {
             return true;
         } else {
             return false;
@@ -113,7 +113,7 @@ class Shopware_StoreApi_Models_Product extends Shopware_StoreApi_Models_Model
 
     public function isHighlightedAsBanner()
     {
-        if(!empty($this->rawData['addons']['banner'])) {
+        if (!empty($this->rawData['addons']['banner'])) {
             return true;
         } else {
             return false;

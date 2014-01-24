@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,13 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Performance
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
 
 use Doctrine\ORM\AbstractQuery;
@@ -68,7 +61,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         )->getActiveShops(AbstractQuery::HYDRATE_ARRAY);
         $this->View()->assign(array(
             'success' => true,
-            'data' => array_map(function($item) {return array('id' => $item['id'], 'name' => $item['name']);}, $shops)
+            'data' => array_map(function ($item) {return array('id' => $item['id'], 'name' => $item['name']);}, $shops)
         ));
     }
 
@@ -135,11 +128,11 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      * @return Array
      */
     public function prepareForSavingDefault($data)
-   	{
+    {
         unset($data['id']);
 
         return $data;
-   	}
+    }
 
     /**
      * Prepare seo array for saving
@@ -148,7 +141,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      * @return Array
      */
     public function prepareSeoConfigForSaving($data)
-	{
+    {
         unset($data['id']);
 
         $date = date_create($data['routerlastupdateDate'])->format('Y-m-d');

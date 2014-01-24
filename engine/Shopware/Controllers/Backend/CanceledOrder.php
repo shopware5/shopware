@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage CanceledOrder
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Daniel Nögel
- * @author     $Author$
  */
 
 use Shopware\Models\Order\Order;
@@ -59,7 +51,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     }
 
 
-    public function convertOrderAction() {
+    public function convertOrderAction()
+    {
         if (!($orderId = $this->Request()->getParam('orderId'))) {
             $this->View()->assign(array('success' => false, 'message' => 'No orderId passed'));
             return;
@@ -79,7 +72,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $result = $builder->getQuery()->getArrayResult();
 
         // Check requiered fields
-        if(empty($result) || $result[0]['customer'] === null || $result[0]['customer']['billing'] === null) {
+        if (empty($result) || $result[0]['customer'] === null || $result[0]['customer']['billing'] === null) {
             $this->View()->assign(array('success' => false, 'message' => 'Could not get required customer data'));
             return;
         }
@@ -87,7 +80,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         // Get ordernumber
         $numberRepository = Shopware()->Models()->getRepository('Shopware\Models\Order\Number');
         $numberModel = $numberRepository->findOneBy(array('name' => 'invoice'));
-        if($numberModel === null){
+        if ($numberModel === null) {
             $this->View()->assign(array('success' => false, 'message' => 'Could not get ordernumber'));
             return;
         }
@@ -106,7 +99,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $orderDetailModel->setNumber($newOrderNumber);
 
         // If there is no shipping address, set billing address to be the shipping address
-        if($result[0]['customer']['shipping'] === null) {
+        if ($result[0]['customer']['shipping'] === null) {
             $result[0]['customer']['shipping'] = $result[0]['customer']['billing'];
         }
 
@@ -140,8 +133,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      * Get last viewports/exit pages. This way you can determine, where the customers do have
      * problems with the shop system.
      */
-    public function getViewportsAction() {
-
+    public function getViewportsAction()
+    {
         $startDate = $this->Request()->getParam('fromDate', date("Y-m-d", mktime(0, 0, 0, 1, 1, date("Y"))));
         $endDate   = $this->Request()->getParam('toDate', date("Y-m-d"));
         $filter = $this->Request()->getParam('filter', null);
@@ -160,21 +153,21 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $result = Shopware()->Db()->query($sql, $params);
         $total = $result->rowCount();
 
-        if(is_array($filter) && isset($filter[0]['value'])) {
+        if (is_array($filter) && isset($filter[0]['value'])) {
             $params['filter'] = '%' . $filter[0]['value'] . '%';
             $filter = 'AND lastviewport LIKE :filter';
-         }else{
+         } else {
             $filter = '';
         }
 
-        if($sort !== null && isset($sort[0]['property'])) {
+        if ($sort !== null && isset($sort[0]['property'])) {
             if (isset($sort['0']['direction']) && $sort['0']['direction'] === 'DESC') {
                 $direction = 'DESC';
             } else {
                 $direction = 'ASC';
             }
 
-            switch($sort[0]['property']){
+            switch ($sort[0]['property']) {
                 case 'number':
                     $sort = 'number';
                     break;
@@ -190,7 +183,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             }
 
             $sort = "ORDER BY $sort $direction";
-        }else{
+        } else {
             $sort = '';
         }
 
@@ -213,8 +206,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
         // Insert the percentage into each field manually
         $sum = 0;
-        if($data !== null && isset($total)) {
-            for($i=0;$i<count($data);$i++){
+        if ($data !== null && isset($total)) {
+            for ($i=0;$i<count($data);$i++) {
                 $data[$i]['percent'] = round($data[$i]['number'] / $total * 100, 1);
             }
         }
@@ -230,8 +223,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     /**
      * Get available vouchers for a customer who canceled his order.
      * */
-    public function getVoucherAction() {
-
+    public function getVoucherAction()
+    {
         $orderId = $this->Request()->getParam('id', null);
 
         $sql = "SELECT s_emarketing_vouchers.id, s_emarketing_vouchers.description, s_emarketing_vouchers.value
@@ -262,7 +255,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      * @param $voucherId
      * @return array|null
      */
-    private function getFreeVoucherCode($voucherId) {
+    private function getFreeVoucherCode($voucherId)
+    {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('voucherCodes.id', 'voucherCodes.code'))
                 ->from('Shopware\Models\Voucher\Voucher', 'voucher')
@@ -277,7 +271,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
                 ->setMaxResults(1);
         $query = $builder->getQuery();
         $total = Shopware()->Models()->getQueryCount($query);
-        if($total === 0) {
+        if ($total === 0) {
             return null;
         }
 
@@ -287,7 +281,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     /**
      * Sends a CanceledQuestion Mail to a given mail-adress
      */
-    public function sendCanceledQuestionMailAction() {
+    public function sendCanceledQuestionMailAction()
+    {
         if (!($mailTo = $this->Request()->getParam('mail'))) {
             $this->View()->assign(array('success' => false, 'message' => 'No mail passed'));
             return;
@@ -315,11 +310,11 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
         // Set the template depending on the voucherId. -1 is a special Id, which defines
         // the 'Ask for Reason' question.
-        if($template === 'sCANCELEDQUESTION') {
+        if ($template === 'sCANCELEDQUESTION') {
             $context = null;
-        }else{
+        } else {
             $code = $this->getFreeVoucherCode($voucherId);
-            if($code === null) {
+            if ($code === null) {
                 $this->View()->assign(array('success' => false, 'message' => 'Mo more free codes available'));
                 return;
             }
@@ -330,9 +325,9 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
         // find the shop matching the order
         $orderModel = Shopware()->Models()->find('Shopware\Models\Order\Order', $orderId);
-        if(!$orderModel instanceof Shopware\Models\Order\Order) {
+        if (!$orderModel instanceof Shopware\Models\Order\Order) {
             $shop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
-        }else{
+        } else {
             $shop = $orderModel->getLanguageSubShop();
         }
         $shop->registerResources(Shopware()->Bootstrap());
@@ -368,7 +363,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             $model = $orderRepository->find($orderId);
             $model->setComment('Frage gesendet');
             Shopware()->Models()->flush();
-        }else{
+        } else {
             $orderRepository = Shopware()->Models()->getRepository('Shopware\Models\Order\Order');
             $model = $orderRepository->find($orderId);
             $model->setComment($model->getComment() . ' Gutschein gesendet');
@@ -393,10 +388,10 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             'startDate' => $startDate,
         );
 
-        if(is_array($filter) && isset($filter[0]['value'])) {
+        if (is_array($filter) && isset($filter[0]['value'])) {
             $params['filter'] = '%' . $filter[0]['value'] . '%';
             $filter = 'AND s_core_paymentmeans.description LIKE :filter';
-         }else{
+         } else {
             $filter = '';
         }
 
@@ -435,21 +430,21 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             'startDate' => $startDate,
         );
 
-        if(is_array($filter) && isset($filter[0]['value'])) {
+        if (is_array($filter) && isset($filter[0]['value'])) {
             $params['filter'] = '%' . $filter[0]['value'] . '%';
             $filter = 'AND (s_articles.name LIKE :filter OR s_order_basket.ordernumber LIKE :filter)';
-         }else{
+         } else {
             $filter = '';
         }
 
-        if($sort !== null && isset($sort[0]['property'])) {
+        if ($sort !== null && isset($sort[0]['property'])) {
             if (isset($sort['0']['direction']) && $sort['0']['direction'] === 'DESC') {
                 $direction = 'DESC';
             } else {
                 $direction = 'ASC';
             }
 
-            switch($sort[0]['property']){
+            switch ($sort[0]['property']) {
                 case 'number':
                     $sort = 'b1.number';
                     break;
@@ -465,7 +460,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             }
 
             $sort = "ORDER BY $sort $direction";
-        }else{
+        } else {
             $sort = '';
         }
 
@@ -506,21 +501,21 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             'startDate' => $startDate,
         );
 
-        if(is_array($filter) && isset($filter[0]['value'])) {
+        if (is_array($filter) && isset($filter[0]['value'])) {
             $params['filter'] = '%' . $filter[0]['value'] . '%';
             $filter = 'AND s_order_basket.datum LIKE :filter';
-         }else{
+         } else {
             $filter = '';
         }
 
-        if($sort !== null && isset($sort[1]['property'])) {
+        if ($sort !== null && isset($sort[1]['property'])) {
             if (isset($sort['1']['direction']) && $sort['1']['direction'] === 'DESC') {
                 $direction = 'DESC';
             } else {
                 $direction = 'ASC';
             }
 
-            switch($sort[1]['property']){
+            switch ($sort[1]['property']) {
                 case 'basket.date':
                     $sort = 'date';
                     break;
@@ -539,7 +534,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             }
 
             $sort = "ORDER BY $sort $direction";
-        }else{
+        } else {
             $sort = '';
         }
 
@@ -593,12 +588,12 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
                 ->setParameter(2, $startDate)
                 ->setParameter(3, $endDate);
 
-        if($filter !== null){
+        if ($filter !== null) {
             $builder->andWhere('billing.lastName LIKE ?4 OR billing.firstName LIKE ?4 OR payment.description LIKE ?4 OR orders.invoiceAmount LIKE ?4')
                     ->setParameter(4, $filter . '%');
         }
 
-        if($sort !== null){
+        if ($sort !== null) {
             $builder->addOrderBy($sort);
         }
 
@@ -633,7 +628,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         }
 
         //iterate the posted orders and remove them.
-        foreach($orders as $order) {
+        foreach ($orders as $order) {
             if (empty($order['id'])) {
                 continue;
             }

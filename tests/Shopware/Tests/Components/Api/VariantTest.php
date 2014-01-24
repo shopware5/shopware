@@ -30,6 +30,11 @@
 class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Components_Api_TestCase
 {
     /**
+     * @var \Shopware\Components\Api\Resource\Variant
+     */
+    protected $resource;
+
+    /**
      * @var \Shopware\Components\Api\Resource\Article
      */
     private $resourceArticle;
@@ -298,5 +303,381 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
     public function testDeleteWithMissingIdShouldThrowParameterMissingException()
     {
         $this->resource->delete('');
+    }
+
+
+    public function testVariantCreate()
+    {
+        $data = $this->getSimpleArticleData();
+        $data['mainDetail'] = $this->getSimpleVariantData();
+        $configuratorSet = $this->getSimpleConfiguratorSet();
+        $data['configuratorSet'] = $configuratorSet;
+
+        $article = $this->resourceArticle->create($data);
+        $this->assertCount(0, $article->getDetails());
+
+        $create = $this->getSimpleVariantData();
+        $create['articleId'] = $article->getId();
+        $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
+
+        $variant = $this->resource->create($create);
+        $this->assertCount(count($create['configuratorOptions']), $variant->getConfiguratorOptions());
+
+        $create = $this->getSimpleVariantData();
+        $create['articleId'] = $article->getId();
+        $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
+        $variant = $this->resource->create($create);
+        $this->assertCount(count($create['configuratorOptions']), $variant->getConfiguratorOptions());
+
+        $this->resourceArticle->setResultMode(\Shopware\Components\Api\Resource\Variant::HYDRATE_ARRAY);
+        $id = $article->getId();
+        $article = $this->resourceArticle->getOne($id);
+        $this->assertCount(2, $article['details']);
+
+        return $id;
+    }
+
+    private function getVariantOptionsOfSet($configuratorSet)
+    {
+        $options = array();
+        foreach($configuratorSet['groups'] as $group) {
+            $id = rand(0, count($group['options']) - 1);
+            $option = $group['options'][$id];
+            $options[] = array(
+                'optionId' => $option['id'],
+                'groupId'  => $group['id']
+            );
+        }
+        return $options;
+    }
+
+    /**
+     * @depends testVariantCreate
+     * @param $articleId
+     */
+    public function testVariantUpdate($articleId)
+    {
+        $this->resourceArticle->setResultMode(\Shopware\Components\Api\Resource\Variant::HYDRATE_ARRAY);
+        $article = $this->resourceArticle->getOne($articleId);
+
+        foreach($article['details'] as $variantData) {
+            $updateData = array(
+                'articleId' => $articleId,
+                'inStock' => 2000,
+                'number' => $variantData['number'] . '-Updated',
+                'unitId' => $this->getRandomId('s_core_units')
+            );
+            $variant = $this->resource->update($variantData['id'], $updateData);
+
+            $this->assertEquals($variant->getUnit()->getId(), $updateData['unitId']);
+            $this->assertEquals($variant->getInStock(), $updateData['inStock']);
+            $this->assertEquals($variant->getNumber(), $updateData['number']);
+        }
+    }
+
+    public function testVariantImageAssignByMediaId()
+    {
+        $data = $this->getSimpleArticleData();
+        $data['mainDetail'] = $this->getSimpleVariantData();
+        $configuratorSet = $this->getSimpleConfiguratorSet();
+        $data['configuratorSet'] = $configuratorSet;
+        $data['images'] = $this->getSimpleMedia(2);
+
+        $article = $this->resourceArticle->create($data);
+
+        $create = $this->getSimpleVariantData();
+        $create['articleId'] = $article->getId();
+        $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
+        $create['images'] = $this->getSimpleMedia(1);
+
+        /**@var $variant \Shopware\Models\Article\Detail */
+        $variant = $this->resource->create($create);
+
+        $this->assertCount(1, $variant->getImages());
+        return $variant->getId();
+
+    }
+
+    /**
+     * @depends testVariantImageAssignByMediaId
+     * @param $variantId
+     * @return int
+     * @internal param $articleId
+     */
+    public function testVariantImageReset($variantId)
+    {
+        $this->resource->setResultMode(\Shopware\Components\Api\Resource\Variant::HYDRATE_OBJECT);
+        $variant = $this->resource->getOne($variantId);
+        $this->assertTrue($variant->getImages()->count() > 0);
+
+        $update = array(
+            'articleId' => $variant->getArticle()->getId(),
+            'images' => array()
+        );
+
+        $variant = $this->resource->update($variantId, $update);
+
+        $this->assertCount(0, $variant->getImages());
+
+        $article = $variant->getArticle();
+        /**@var $image \Shopware\Models\Article\Image*/
+        foreach($article->getImages() as $image) {
+            $this->assertCount(0, $image->getMappings());
+        }
+
+        return $variant->getId();
+    }
+
+    /**
+     * @depends testVariantImageReset
+     * @param $variantId
+     */
+    public function testVariantAddImage($variantId)
+    {
+        $this->resource->setResultMode(\Shopware\Components\Api\Resource\Variant::HYDRATE_OBJECT);
+        $variant = $this->resource->getOne($variantId);
+        $this->assertTrue($variant->getImages()->count() === 0);
+
+        $update = array(
+            'articleId' => $variant->getArticle()->getId(),
+            'images' => $this->getSimpleMedia(3)
+        );
+        $variant = $this->resource->update($variantId, $update);
+        $this->assertCount(3, $variant->getImages());
+
+
+        $add = array(
+            'articleId' => $variant->getArticle()->getId(),
+            '__options_images' => array('replace' => false),
+            'images' => $this->getSimpleMedia(5, 20)
+        );
+        $variant = $this->resource->update($variantId, $add);
+        $this->assertCount(8, $variant->getImages());
+
+        /**@var $image \Shopware\Models\Article\Image*/
+        foreach($variant->getArticle()->getImages() as $image) {
+            $this->assertCount(1, $image->getMappings(), "No image mapping created!");
+
+            /**@var $mapping \Shopware\Models\Article\Image\Mapping*/
+            $mapping = $image->getMappings()->current();
+            $this->assertCount(
+                $variant->getConfiguratorOptions()->count(),
+                $mapping->getRules(),
+                "Image mapping contains not enough rules. "
+            );
+        }
+    }
+
+    /**
+     * @return int
+     */
+    public function testVariantImageCreateByLink()
+    {
+        $data = $this->getSimpleArticleData();
+        $data['mainDetail'] = $this->getSimpleVariantData();
+        $configuratorSet = $this->getSimpleConfiguratorSet();
+        $data['configuratorSet'] = $configuratorSet;
+        $article = $this->resourceArticle->create($data);
+
+        $create = $this->getSimpleVariantData();
+        $create['articleId'] = $article->getId();
+        $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
+        $create['images'] = array(
+            array('link' => 'data:image/png;base64,' . require_once(__DIR__ . '/fixtures/base64image.php')),
+            array('link' => 'file://' . __DIR__ . '/fixtures/variant-image.png'),
+        );
+
+        $this->resourceArticle->setResultMode(\Shopware\Components\Api\Resource\Variant::HYDRATE_OBJECT);
+        $this->resource->setResultMode(\Shopware\Components\Api\Resource\Variant::HYDRATE_OBJECT);
+
+        /**@var $variant \Shopware\Models\Article\Detail*/
+        $variant = $this->resource->create($create);
+        $article = $this->resourceArticle->getOne($article->getId());
+
+        $this->assertCount(2, $article->getImages());
+        $this->assertCount(2, $variant->getImages());
+
+        /**@var $image \Shopware\Models\Article\Image*/
+        foreach($article->getImages() as $image) {
+            $this->assertCount(1, $image->getMappings(), "No image mapping created!");
+
+            /**@var $mapping \Shopware\Models\Article\Image\Mapping*/
+            $mapping = $image->getMappings()->current();
+            $this->assertCount(
+                $variant->getConfiguratorOptions()->count(),
+                $mapping->getRules(),
+                "Image mapping contains not enough rules. "
+            );
+        }
+        return $variant->getId();
+    }
+
+
+
+    private function getSimpleMedia($limit = 5, $offset = 0)
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select('media.id  as mediaId')
+            ->from('Shopware\Models\Media\Media', 'media')
+            ->where('media.albumId = -1')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit);
+
+        return $builder->getQuery()->getArrayResult();
+    }
+
+
+    private function getRandomId($table) {
+        return Shopware()->Db()->fetchOne("SELECT id FROM " . $table . " ORDER BY RAND() LIMIT 1");
+    }
+
+
+    private function getSimpleVariantData() {
+        return array(
+            'number' => 'swTEST' . uniqid(),
+            'inStock' => 100,
+            'unitId' => 1,
+            'prices' => array(
+                array(
+                    'customerGroupKey' => 'EK',
+                    'from' => 1,
+                    'to' => '-',
+                    'price' => 400,
+                ),
+            )
+        );
+    }
+
+    private function getSimpleArticleData()
+    {
+        return array(
+            'name' => 'Images - Test Artikel',
+            'description' => 'Test description',
+            'active' => true,
+            'taxId' => 1,
+            'supplierId' => 2
+        );
+    }
+
+    private function getSimpleConfiguratorSet($groupLimit = 3, $optionLimit = 5)
+    {
+
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('groups.id'))
+            ->from('Shopware\Models\Article\Configurator\Group', 'groups')
+            ->setFirstResult(0)
+            ->setMaxResults($groupLimit)
+            ->orderBy('groups.position', 'ASC');
+
+        $groups = $builder->getQuery()->getArrayResult();
+
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('options.id'))
+            ->from('Shopware\Models\Article\Configurator\Option', 'options')
+            ->where('options.groupId = :groupId')
+            ->setFirstResult(0)
+            ->setMaxResults($optionLimit)
+            ->orderBy('options.position', 'ASC');
+
+        foreach($groups as &$group) {
+            $builder->setParameter('groupId', $group['id']);
+            $group['options'] = $builder->getQuery()->getArrayResult();
+        }
+
+        return array(
+            'name' => 'Test-Set',
+            'groups' => $groups
+        );
+    }
+
+    public function testVariantDefaultPriceBehavior()
+    {
+        $data = $this->getSimpleArticleData();
+        $data['mainDetail'] = $this->getSimpleVariantData();
+
+        $configuratorSet = $this->getSimpleConfiguratorSet();
+        $data['configuratorSet'] = $configuratorSet;
+
+        $article = $this->resourceArticle->create($data);
+
+        $create = $this->getSimpleVariantData();
+        $create['articleId'] = $article->getId();
+        $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
+
+        $variant = $this->resource->create($create);
+
+        $this->resource->setResultMode(2);
+        $data = $this->resource->getOne($variant->getId());
+
+        $this->assertEquals(400 / 1.19, $data['prices'][0]['price']);
+    }
+
+    public function testVariantGrossPrices()
+    {
+        $data = $this->getSimpleArticleData();
+        $data['mainDetail'] = $this->getSimpleVariantData();
+
+        $configuratorSet = $this->getSimpleConfiguratorSet();
+        $data['configuratorSet'] = $configuratorSet;
+
+        $article = $this->resourceArticle->create($data);
+
+        $create = $this->getSimpleVariantData();
+        $create['articleId'] = $article->getId();
+        $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
+
+        $variant = $this->resource->create($create);
+
+        $this->resource->setResultMode(2);
+        $data = $this->resource->getOne($variant->getId(), array(
+            'considerTaxInput' => true
+        ));
+
+        $this->assertEquals(400, $data['prices'][0]['price']);
+    }
+
+
+
+    public function testBatchModeShouldBeSuccessful()
+    {
+        $data = $this->getSimpleArticleData();
+        $data['mainDetail'] = $this->getSimpleVariantData();
+        $configuratorSet = $this->getSimpleConfiguratorSet();
+        $data['configuratorSet'] = $configuratorSet;
+
+        $article = $this->resourceArticle->create($data);
+        $this->assertCount(0, $article->getDetails());
+
+        // Create 5 new variants
+        $batchData = array();
+        for ($i = 0; $i < 5; $i++) {
+            $create = $this->getSimpleVariantData();
+            $create['articleId'] = $article->getId();
+            $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
+            $batchData[] = $create;
+        }
+
+        // Update the price of the existing variant
+        $existingVariant = $data['mainDetail'];
+        $existingVariant['prices'] = array(
+            array(
+                'customerGroupKey' => 'EK',
+                'from' => 1,
+                'to' => '-',
+                'price' => 473.99,
+            )
+        );
+        $batchData[] =  $existingVariant;
+
+        // Run batch operations
+        $this->resource->batch($batchData);
+
+        // Check results
+        $this->resourceArticle->setResultMode(\Shopware\Components\Api\Resource\Variant::HYDRATE_ARRAY);
+        $id = $article->getId();
+        $article = $this->resourceArticle->getOne($id);
+
+        $this->assertCount(5, $article['details']);
+        $this->assertEquals(398, round($article['mainDetail']['prices'][0]['price']));
     }
 }

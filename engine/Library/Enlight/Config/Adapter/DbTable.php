@@ -71,6 +71,13 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
     protected $_sectionColumn = 'section';
 
     /**
+     * The dirty column in the database table.
+     *
+     * @var null|string
+     */
+    protected $_dirtyColumn = 'dirty';
+
+    /**
      * The automatic serialization option value.
      *
      * @var bool
@@ -112,10 +119,10 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
                 case 'valueColumn':
                 case 'createdColumn':
                 case 'updatedColumn':
-                    $this->{'_' . $key} = (string)$option;
+                    $this->{'_' . $key} = (string) $option;
                     break;
                 case 'automaticSerialization':
-                    $this->{'_' . $key} = (bool)$option;
+                    $this->{'_' . $key} = (bool) $option;
                     break;
                 case 'sectionColumn':
                 case 'table':
@@ -137,13 +144,13 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
      */
     public function getTable($name = null)
     {
-        if($name !== null) {
+        if ($name !== null) {
             return new Enlight_Components_Table(array(
                'name' => $name,
                'db' => $this->_db)
             );
         }
-        if(!$this->_table instanceof Enlight_Components_Table) {
+        if (!$this->_table instanceof Enlight_Components_Table) {
             $this->_table = new Enlight_Components_Table(array(
                 'name' => $this->_table,
                 'db' => $this->_db)
@@ -167,7 +174,7 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
 
         $extends = $config->getExtends();
         $currentSection = is_array($section) ? implode(':', $section) : $section;
-        while($currentSection !== null) {
+        while ($currentSection !== null) {
             $data = array_merge($this->readSection($name, $currentSection), $data);
             $currentSection = isset($extends[$currentSection]) ? $extends[$currentSection] : null;
         }
@@ -198,7 +205,7 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
             if (is_array($this->_sectionColumn)) {
                 $section = explode(':', $section);
                 foreach ($this->_sectionColumn as $key => $sectionColumn) {
-                    if (isset($section[$key])) {
+                    if (!empty($section[$key])) {
                         $select->where($sectionColumn . '=?', $section[$key]);
                     }
                 }
@@ -226,13 +233,22 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
      *
      * @param      Enlight_Config $config
      * @param      array          $fields
-     * @param      bool           $update
+     * @param      bool           $update If false, existing rows are not updated
+     * @param      bool           $force If true, existing dirty columns are updated
+     * @param      bool           $allowReset If true, updating existing columns with existing value will reset dirty flag
      * @return     Enlight_Config_Adapter_DbTable
      */
-    public function write(Enlight_Config $config, $fields = null, $update = true)
+    public function write(Enlight_Config $config, $fields = null, $update = true, $force = false, $allowReset = false)
     {
+        if (!$this->_allowWrites) {
+            return $this;
+        }
+
         $name = $this->_namePrefix . $config->getName() . $this->_nameSuffix;
         $section = $config->getSection();
+        if (is_string($section)) {
+            $section = explode($config->getSectionSeparator(), $config->getSection());
+        }
 
         $dbTable = $this->getTable($this->_namespaceColumn === null ? $name : null);
         $db = $dbTable->getAdapter();
@@ -274,7 +290,7 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
             }
         }
 
-        foreach ((array)$fields as $field) {
+        foreach ((array) $fields as $field) {
             $fieldWhere = $where;
             $fieldWhere[] = $db->quoteInto($this->_nameColumn . '=?', $field);
 
@@ -283,16 +299,27 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
             if ($row !== null) {
                 if ($update) {
                     $data = $updateData;
+                    $newValue = $config->get($field);
                     if ($this->_automaticSerialization) {
-                        $data[$this->_valueColumn] = serialize($config->get($field));
-                    } else {
-                        $data[$this->_valueColumn] = $config->get($field);
+                        $newValue = serialize($newValue);
                     }
+
+                    if (!$force && $row[$this->_dirtyColumn] == 1 && ($row[$this->_valueColumn] != $newValue || !$allowReset)) {
+                        continue;
+                    }
+
+                    if ($allowReset && $row[$this->_valueColumn] == $newValue) {
+                        $data[$this->_dirtyColumn] = 0;
+                    } else {
+                        $data[$this->_valueColumn] = $newValue;
+                    }
+
                     $dbTable->update($data, $fieldWhere);
                 }
             } else {
                 $data = $insertData;
                 $data[$this->_nameColumn] = $field;
+                $data[$this->_dirtyColumn] = 0;
                 if ($this->_automaticSerialization) {
                     $data[$this->_valueColumn] = serialize($config->get($field));
                 } else {
@@ -302,6 +329,68 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
             }
         }
         $config->setDirtyFields(array_diff($config->getDirtyFields(), $fields));
+
+        return $this;
+    }
+
+    /**
+     * Removes the data from the data store.
+     *
+     * @param      Enlight_Config $config
+     * @param      array          $fields
+     * @param      bool           $update
+     * @return     Enlight_Config_Adapter_DbTable
+     */
+    public function delete(Enlight_Config $config, $fields = null, $deleteDirty = false)
+    {
+        $name = $this->_namePrefix . $config->getName() . $this->_nameSuffix;
+        $section = explode($config->getSectionSeparator(), $config->getSection());
+
+        $dbTable = $this->getTable($this->_namespaceColumn === null ? $name : null);
+        $db = $dbTable->getAdapter();
+
+        if ($fields === null) {
+            $fields = $config->getDirtyFields();
+        }
+        if (empty($fields)) {
+            return $this;
+        }
+
+        $where = array();
+        $insertData = array();
+
+        if ($this->_namespaceColumn !== null) {
+            $insertData[$this->_namespaceColumn] = $name;
+            $where[] = $db->quoteInto($this->_namespaceColumn . '=?', $name);
+        }
+
+        if ($section !== null) {
+            if (is_array($this->_sectionColumn)) {
+                foreach ($this->_sectionColumn as $key => $sectionColumn) {
+                    if (isset($section[$key])) {
+                        $where[] = $db->quoteInto($sectionColumn . '=?', $section[$key]);
+                        $insertData[$sectionColumn] = $section[$key];
+                    }
+                }
+            } else {
+                $where[] = $db->quoteInto($this->_sectionColumn . '=?', $section);
+                $insertData[$this->_sectionColumn] = $section;
+            }
+        }
+
+        foreach ((array) $fields as $field) {
+            $fieldWhere = $where;
+            $fieldWhere[] = $db->quoteInto($this->_nameColumn . '=?', $field);
+            if (!$deleteDirty) {
+                $fieldWhere[] = $db->quoteInto($this->_dirtyColumn . '=?', 0);
+            }
+
+            $row = $dbTable->fetchRow($fieldWhere);
+
+            if ($row !== null) {
+                $row->delete();
+            }
+        }
 
         return $this;
     }

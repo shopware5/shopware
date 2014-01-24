@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,59 +20,35 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Content
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     Stefan Hamann
  */
 
 /**
- * todo@all: Documentation
  */
 class Shopware_Controllers_Frontend_Content extends Enlight_Controller_Action
 {
-	public function preDispatch()
-	{
-        //todo@hl: check this
-		return;
-		$this->View()->setCaching(true);
-		$this->View()->addCacheID(array(
-			'frontend',
-			'content',
-			(int) $this->Request()->sContent,
-			(int) $this->Request()->sCid
-		));
-	}
-	
-	public function indexAction()
-	{
-		if (empty($this->Request()->sContent)){
-			return $this->forward('index','index');
-		}
-		
-		$groupID = $this->Request()->sContent;
-		$detailID = $this->Request()->sCid;
-		
-		if (!empty($detailID)){
-			$this->view->loadTemplate('frontend/content/detail.tpl');
-		}
-		
-		//if(!$this->view->isCached()) {
-			if (!empty($detailID)){
-				$sContent = Shopware()->Modules()->Cms()->sGetDynamicContentById($groupID, $detailID);
-				$this->view->sContentItem = $sContent['sContent'];
-				$this->view->sPages = $sContent['sPages'];
-			} else {
-				$sContent = Shopware()->Modules()->Cms()->sGetDynamicContentByGroup($groupID, $this->Request()->sPage);
-				$this->view->sContent = $sContent['sContent'];
-				$this->view->sPages = $sContent['sPages'];
-			}
-			$this->view->sContentName = Shopware()->Modules()->Cms()->sGetDynamicGroupName($groupID);
-			$this->view->sBreadcrumb = array(0=>array('name'=>$this->view->sContentName));
-		//}
-	}
+    public function indexAction()
+    {
+        if (empty($this->Request()->sContent)) {
+            return $this->forward('index','index');
+        }
+
+        $groupID = $this->Request()->sContent;
+        $detailID = $this->Request()->sCid;
+
+        if (!empty($detailID)) {
+            $this->view->loadTemplate('frontend/content/detail.tpl');
+        }
+
+        if (!empty($detailID)) {
+            $sContent = Shopware()->Modules()->Cms()->sGetDynamicContentById($groupID, $detailID);
+            $this->view->sContentItem = $sContent['sContent'];
+            $this->view->sPages = $sContent['sPages'];
+        } else {
+            $sContent = Shopware()->Modules()->Cms()->sGetDynamicContentByGroup($groupID, $this->Request()->sPage);
+            $this->view->sContent = $sContent['sContent'];
+            $this->view->sPages = $sContent['sPages'];
+        }
+        $this->view->sContentName = Shopware()->Modules()->Cms()->sGetDynamicGroupName($groupID);
+        $this->view->sBreadcrumb = array(0=>array('name'=>$this->view->sContentName));
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Blog
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Marcel Schmäing
- * @author     $Author$
  */
 
 namespace Shopware\Models\Blog;
@@ -97,11 +89,11 @@ class Repository extends ModelRepository
         ->orderBy("blog.displayDate","DESC");
 
 
-        if(!empty($blogCategoryIds)) {
+        if (!empty($blogCategoryIds)) {
             $builder->andWhere($builder->expr()->in('blog.categoryId', $blogCategoryIds));
         }
 
-        if(!empty($filter)) {
+        if (!empty($filter)) {
             $builder->addFilter($filter);
         }
 
@@ -281,14 +273,14 @@ class Repository extends ModelRepository
                 ->andWhere('blog.displayDate < :now')
                 ->setParameter("now", new \DateTime())
                 ->orderBy('blog.displayDate', 'DESC');
-        if(!empty($categoryIds)) {
+        if (!empty($categoryIds)) {
             $builder->andWhere($builder->expr()->in('blog.categoryId', $categoryIds));
         }
 
-        if(!empty($filter)){
+        if (!empty($filter)) {
             $builder->addFilter($filter);
         }
-        
+
         return $builder;
     }
 
@@ -337,7 +329,7 @@ class Repository extends ModelRepository
             ->leftJoin('blog.comments', 'comments' , \Doctrine\ORM\Query\Expr\Join::WITH, 'comments.active != 1')
             ->groupBy("blog.id");
 
-        if(!empty($blogCategoryIds)) {
+        if (!empty($blogCategoryIds)) {
             $builder->where($builder->expr()->in('blog.categoryId', $blogCategoryIds));
         }
 

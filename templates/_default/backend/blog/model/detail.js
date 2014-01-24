@@ -56,10 +56,11 @@ Ext.define('Shopware.apps.Blog.model.Detail', {
         { name : 'authorId', type : 'int', useNull: true },
         { name : 'categoryId', type : 'int', useNull: true  },
         { name : 'tags', type : 'string'},
+        { name : 'metaTitle', type : 'string' },
         { name : 'metaKeyWords', type : 'string' },
         { name : 'metaDescription', type : 'string' },
-        { name : 'displayDate' },
-        { name : 'displayTime' }
+        { name : 'displayDate', type: 'date', dateFormat: 'd.m.Y' },
+        { name : 'displayTime', type: 'date', dateFormat: 'H:i' }
     ],
 	/**
 	* If the name of the field is 'id' extjs assumes automatically that

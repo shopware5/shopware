@@ -21,7 +21,7 @@
  * @author     $Author$
  */
 
-require_once('Smarty/Smarty.class.php');
+require_once 'Smarty/Smarty.class.php';
 
 /**
  * Enlight resource to compile snippets.
@@ -140,7 +140,7 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
     {
         if (is_string($namespace)) {
             $namespace = $this->snippets->getNamespace($namespace);
-        } elseif(!$namespace instanceof Enlight_Config) {
+        } elseif (!$namespace instanceof Enlight_Config) {
             return $content;
         }
 
@@ -197,7 +197,7 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
             if (!preg_match("!(.?)(name=)(.*?)(?=(\s|$))!", $_block_args, $_match) && empty($_block_default)) {
                 throw new SmartyException("\"" . $_block_tag . "\" missing name attribute");
             }
-            $_block_force = (bool)preg_match('#[\s]force#', $_block_args);
+            $_block_force = (bool) preg_match('#[\s]force#', $_block_args);
             $_block_name = !empty($_match[3]) ? trim($_match[3], '\'"') : $_block_default;
             if (preg_match("!(.?)(namespace=)(.*?)(?=(\s|$))!", $_block_args, $_match)) {
                 $_namespace = trim($_match[3], '\'"');

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers_Widgets
- * @subpackage Widgets
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
  * Shopware Application
- *
- * todo@all: Documentation
  */
 
 class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
@@ -43,8 +33,7 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
      */
     public function preDispatch()
     {
-        //$this->View()->setCaching(false);
-        if($this->Request()->getActionName() == 'refreshStatistic') {
+        if ($this->Request()->getActionName() == 'refreshStatistic') {
             $this->Front()->Plugins()->ViewRenderer()->setNoRender();
         }
     }
@@ -72,7 +61,7 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
         $plugin = Shopware()->Plugins()->Frontend()->Statistics();
         $plugin->updateLog($request, $response);
 
-        if(($articleId = $request->getParam('articleId')) !== null) {
+        if (($articleId = $request->getParam('articleId')) !== null) {
             $plugin = Shopware()->Plugins()->Frontend()->LastArticles();
             $plugin->setLastArticleById($articleId);
         }
@@ -83,11 +72,9 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
      */
     public function menuAction()
     {
-        if(!$this->View()->isCached()) {
-            $this->View()->sGroup = $this->Request()->getParam('group');
-            $plugin = Shopware()->Plugins()->Core()->ControllerBase();
-            $this->View()->sMenu = $plugin->getMenu();
-        }
+        $this->View()->sGroup = $this->Request()->getParam('group');
+        $plugin = Shopware()->Plugins()->Core()->ControllerBase();
+        $this->View()->sMenu = $plugin->getMenu();
     }
 
     /**
@@ -95,20 +82,18 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
      */
     public function shopMenuAction()
     {
-        if(!$this->View()->isCached()) {
-            $shop = Shopware()->Shop();
-            $main = $shop->getMain() !== null ? $shop->getMain() : $shop;
+        $shop = Shopware()->Shop();
+        $main = $shop->getMain() !== null ? $shop->getMain() : $shop;
 
-            $this->View()->shop = $shop;
-            $this->View()->currencies = $shop->getCurrencies();
-            $languages = $shop->getChildren()->toArray();
-            foreach($languages as $languageKey => $language) {
-                if(!$language->getActive()) {
-                    unset($languages[$languageKey]);
-                }
+        $this->View()->shop = $shop;
+        $this->View()->currencies = $shop->getCurrencies();
+        $languages = $shop->getChildren()->toArray();
+        foreach ($languages as $languageKey => $language) {
+            if (!$language->getActive()) {
+                unset($languages[$languageKey]);
             }
-            array_unshift($languages, $main);
-            $this->View()->languages = $languages;
         }
+        array_unshift($languages, $main);
+        $this->View()->languages = $languages;
     }
 }

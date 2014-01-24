@@ -56,6 +56,7 @@ Ext.define('Shopware.apps.Article.model.Article', {
         { name: 'name', type: 'string' },
         { name: 'description', type: 'string', useNull: true },
         { name: 'descriptionLong', type: 'string' },
+        { name: 'metaTitle', type: 'string', useNull: true },
         { name: 'keywords', type: 'string', useNull: true },
         { name: 'added', type: 'date', dateFormat: 'd.m.Y' },
         { name: 'changed', type: 'date' },

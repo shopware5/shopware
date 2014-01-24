@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -51,7 +51,7 @@ class Shopware_StoreApi_Models_Category extends Shopware_StoreApi_Models_Model
 
     public function getProducts()
     {
-        if(!empty($this->rawData['_products'])) {
+        if (!empty($this->rawData['_products'])) {
             return new Shopware_StoreApi_Core_Response_Response(array( '_products' => $this->rawData['_products'] ), false);
         }
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -36,13 +36,13 @@ class sArticles
      *
      * @var sSystem
      */
-    var $sSYSTEM;
+    public $sSYSTEM;
     /**
      * Array of already loaded promotions
      *
      * @var array
      */
-    var $sCachePromotions = array();
+    public $sCachePromotions = array();
 
     /**
      * @var \Shopware\Models\Category\Category
@@ -121,12 +121,13 @@ class sArticles
     /**
      * Class constructor.
      */
-    public function __construct()
+    public function __construct(\Shopware\Models\Category\Category $category = null, $translationId = null, $customerGroupId = null)
     {
-        $this->category = Shopware()->Shop()->getCategory();
+        $this->category = ($category) ?: Shopware()->Shop()->getCategory();
         $this->categoryId = $this->category->getId();
-        $this->translationId = !Shopware()->Shop()->getDefault() ? Shopware()->Shop()->getId() : null;
-        $this->customerGroupId = (int) Shopware()->Modules()->System()->sSYSTEM->sUSERGROUPDATA['id'];
+
+        $this->translationId = ($translationId)  ?: (!Shopware()->Shop()->getDefault() ? Shopware()->Shop()->getId() : null);
+        $this->customerGroupId = $customerGroupId ?: ((int) Shopware()->Modules()->System()->sSYSTEM->sUSERGROUPDATA['id']);
     }
 
     /**
@@ -136,11 +137,11 @@ class sArticles
      */
     public function sDeleteComparison($article)
     {
-        $article = (int)$article;
+        $article = (int) $article;
         if ($article) {
             $checkForArticle = $this->sSYSTEM->sDB_CONNECTION->Execute("
-			DELETE FROM s_order_comparisons WHERE sessionID=? AND articleID=?
-			", array($this->sSYSTEM->sSESSION_ID, $article));
+            DELETE FROM s_order_comparisons WHERE sessionID=? AND articleID=?
+            ", array($this->sSYSTEM->sSESSION_ID, $article));
         }
     }
 
@@ -151,8 +152,8 @@ class sArticles
     public function sDeleteComparisons()
     {
         $sql = "
-		  DELETE FROM s_order_comparisons WHERE sessionID=?
-		";
+          DELETE FROM s_order_comparisons WHERE sessionID=?
+        ";
         $checkForArticle = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($this->sSYSTEM->sSESSION_ID));
     }
 
@@ -164,16 +165,16 @@ class sArticles
      */
     public function sAddComparison($article)
     {
-        $article = (int)$article;
+        $article = (int) $article;
         if ($article) {
             // Check if this article is already noted
             $checkForArticle = $this->sSYSTEM->sDB_CONNECTION->GetRow("
-			SELECT id FROM s_order_comparisons WHERE sessionID=? AND articleID=?
-			", array($this->sSYSTEM->sSESSION_ID, $article));
+            SELECT id FROM s_order_comparisons WHERE sessionID=? AND articleID=?
+            ", array($this->sSYSTEM->sSESSION_ID, $article));
             // Check if max. numbers of articles for one comparison-session is reached
             $checkNumberArticles = $this->sSYSTEM->sDB_CONNECTION->GetRow("
-			SELECT COUNT(id) AS countArticles FROM s_order_comparisons WHERE sessionID=?
-			", array($this->sSYSTEM->sSESSION_ID));
+            SELECT COUNT(id) AS countArticles FROM s_order_comparisons WHERE sessionID=?
+            ", array($this->sSYSTEM->sSESSION_ID));
 
             if ($checkNumberArticles["countArticles"] >= $this->sSYSTEM->sCONFIG["sMAXCOMPARISONS"]) {
                 return "max_reached";
@@ -182,16 +183,16 @@ class sArticles
             //
             if (!$checkForArticle["id"]) {
                 $articleName = $this->sSYSTEM->sDB_CONNECTION->GetOne("
-				SELECT s_articles.name AS articleName FROM s_articles WHERE
-				id = ?
-				", array($article));
+                SELECT s_articles.name AS articleName FROM s_articles WHERE
+                id = ?
+                ", array($article));
 
                 if (!$articleName) return false;
 
                 $sql = "
-				INSERT INTO s_order_comparisons (sessionID, userID, articlename, articleID, datum)
-				VALUES (?,?,?,?,now())
-				";
+                INSERT INTO s_order_comparisons (sessionID, userID, articlename, articleID, datum)
+                VALUES (?,?,?,?,now())
+                ";
 
 
                 $queryNewPrice = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array(
@@ -222,8 +223,8 @@ class sArticles
 
         // Get all comparisons for this user
         $checkForArticle = $this->sSYSTEM->sDB_CONNECTION->GetAll("
-			SELECT * FROM s_order_comparisons WHERE sessionID=?
-			", array($this->sSYSTEM->sSESSION_ID));
+            SELECT * FROM s_order_comparisons WHERE sessionID=?
+            ", array($this->sSYSTEM->sSESSION_ID));
 
         if (count($checkForArticle)) {
             foreach ($checkForArticle as $k => $article) {
@@ -251,13 +252,13 @@ class sArticles
 
         // Get all comparisons for this user
         $checkForArticle = $this->sSYSTEM->sDB_CONNECTION->GetAll("
-			SELECT * FROM s_order_comparisons WHERE sessionID=?
-			", array($this->sSYSTEM->sSESSION_ID));
+            SELECT * FROM s_order_comparisons WHERE sessionID=?
+            ", array($this->sSYSTEM->sSESSION_ID));
 
         if (count($checkForArticle)) {
             foreach ($checkForArticle as $article) {
                 if ($article["articleID"]) {
-                    $data = $this->sGetPromotionById("fix", 0, (int)$article["articleID"]);
+                    $data = $this->sGetPromotionById("fix", 0, (int) $article["articleID"]);
                     $articles[] = $data;
                 }
             }
@@ -338,55 +339,55 @@ class sArticles
         $language = $this->translationId;
 
         $sql = "
-			SELECT
-				fv.optionID AS id,
-				fo.id AS optionID,
-				fo.name AS name,
-				f.id AS groupID,
-				f.name AS groupName,
-				fv.value AS value,
-				fv.id AS valueID,
-				st.objectdata AS nameTranslation,
-				st2.objectdata AS groupNameTranslation,
-				st3.objectdata AS valueTranslation
-			FROM s_filter_articles fa
+            SELECT
+                fv.optionID AS id,
+                fo.id AS optionID,
+                fo.name AS name,
+                f.id AS groupID,
+                f.name AS groupName,
+                fv.value AS value,
+                fv.id AS valueID,
+                st.objectdata AS nameTranslation,
+                st2.objectdata AS groupNameTranslation,
+                st3.objectdata AS valueTranslation
+            FROM s_filter_articles fa
 
-		    JOIN s_filter_values fv
-		    ON fv.id=fa.valueID
+            JOIN s_filter_values fv
+            ON fv.id=fa.valueID
 
-			JOIN s_filter f
-			ON f.id=?
+            JOIN s_filter f
+            ON f.id=?
 
-			JOIN s_filter_relations fr
-			ON fr.groupID=f.id
+            JOIN s_filter_relations fr
+            ON fr.groupID=f.id
 
-		    JOIN s_filter_options fo
-		    ON fo.id=fr.optionID
-		    AND fo.id=fv.optionID
+            JOIN s_filter_options fo
+            ON fo.id=fr.optionID
+            AND fo.id=fv.optionID
 
-			LEFT JOIN s_core_translations AS st
-			ON st.objecttype='propertyoption'
-			AND st.objectkey=fv.optionID
-			AND st.objectlanguage=?
+            LEFT JOIN s_core_translations AS st
+            ON st.objecttype='propertyoption'
+            AND st.objectkey=fv.optionID
+            AND st.objectlanguage=?
 
-			LEFT JOIN s_core_translations AS st2
-			ON st2.objecttype='propertygroup'
-			AND st2.objectkey=f.id
-			AND st2.objectlanguage=?
+            LEFT JOIN s_core_translations AS st2
+            ON st2.objecttype='propertygroup'
+            AND st2.objectkey=f.id
+            AND st2.objectlanguage=?
 
-			LEFT JOIN s_core_translations AS st3
+            LEFT JOIN s_core_translations AS st3
             ON st3.objecttype='propertyvalue'
             AND st3.objectkey=fv.id
             AND st3.objectlanguage='$language'
 
             WHERE fa.articleID=?
 
-			ORDER BY
-			  fr.position ASC,
-			  IF(f.sortmode=1, TRIM(REPLACE(fv.value,',','.'))+0, 0),
+            ORDER BY
+              fr.position ASC,
+              IF(f.sortmode=1, TRIM(REPLACE(fv.value,',','.'))+0, 0),
               IF(f.sortmode=3, fv.position, 0),
-			  fv.value
-		";
+              fv.value
+        ";
 
         $getProperties = Shopware()->Db()->fetchAll($sql, array(
             $filterGroupId,
@@ -414,7 +415,7 @@ class sArticles
 
         $result = array();
         foreach ($getProperties as $property) {
-            if(!isset($result[$property['optionID']])) {
+            if (!isset($result[$property['optionID']])) {
                 $property['values'] = array($property['value']);
                 $result[$property['optionID']] = $property;
             } else {
@@ -441,14 +442,14 @@ class sArticles
             WHERE articleID=?
             AND active=1
             GROUP BY articleID
-		";
+        ";
 
         $article = (int) $article;
         $getArticles = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql, array($article), "article_$article");
 
-        if (empty($getArticles["averange"])){
+        if (empty($getArticles["averange"])) {
             $getArticles["averange"] = "0.00";
-        }else{
+        } else {
             $getArticles["averange"] = round($getArticles["averange"]*2);
         }
         if (empty($getArticles["number"])) $getArticles["number"] = "0";
@@ -493,17 +494,17 @@ class sArticles
 
         if (!empty($this->sSYSTEM->_SESSION['sArticleCommentInserts'][$article])) {
             $sql = '
-				DELETE FROM s_articles_vote WHERE id=?
-			';
+                DELETE FROM s_articles_vote WHERE id=?
+            ';
             $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array(
                 $this->sSYSTEM->_SESSION['sArticleCommentInserts'][$article]
             ));
         }
 
         $sql = '
-			INSERT INTO s_articles_vote (articleID, name, headline, comment, points, datum, active)
-			VALUES (?, ?, ?, ?, ?, ?, ?)
-		';
+            INSERT INTO s_articles_vote (articleID, name, headline, comment, points, datum, active)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        ';
         $insertComment = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array(
             $article,
             $this->sSYSTEM->_POST["sVoteName"],
@@ -538,12 +539,12 @@ class sArticles
         $article = (int) $article;
 
         $getArticles = $this->sSYSTEM->sDB_CONNECTION->GetAll("
-		SELECT *
+        SELECT *
         FROM s_articles_vote FORCE INDEX (get_articles_votes)
-	    WHERE articleID = ?
-		AND active = 1
-		ORDER BY datum DESC
-		", array($article));
+        WHERE articleID = ?
+        AND active = 1
+        ORDER BY datum DESC
+        ", array($article));
         foreach ($getArticles as $articleKey => $articleValue) {
             $getArticles[$articleKey]["comment"] = str_replace("\\n", "", $getArticles[$articleKey]["comment"]);
             $getArticles[$articleKey]["comment"] = str_replace("\\r", "", $getArticles[$articleKey]["comment"]);
@@ -566,8 +567,8 @@ class sArticles
         $sSearch = intval($this->sSYSTEM->_GET['sSearch']);
 
         $getArticles = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHESEARCH'], "
-		SELECT id FROM s_articles WHERE supplierID=? AND active=1 ORDER BY topseller DESC
-		", array($sSearch));
+        SELECT id FROM s_articles WHERE supplierID=? AND active=1 ORDER BY topseller DESC
+        ", array($sSearch));
 
         return $getArticles;
     }
@@ -599,17 +600,17 @@ class sArticles
         $sSearch = trim(stripslashes(html_entity_decode($search)));
 
 
-        if (strlen($sSearch) < (int)$this->sSYSTEM->sCONFIG["sMINSEARCHLENGHT"] && empty($mode)) {
+        if (strlen($sSearch) < (int) $this->sSYSTEM->sCONFIG["sMINSEARCHLENGHT"] && empty($mode)) {
             return false;
         }
 
-        $sPage = !empty($this->sSYSTEM->_GET['sPage']) ? (int)$this->sSYSTEM->_GET['sPage'] : 1;
+        $sPage = !empty($this->sSYSTEM->_GET['sPage']) ? (int) $this->sSYSTEM->_GET['sPage'] : 1;
 
         if ($this->sSYSTEM->_GET['sPerPage']) {
-            $this->sSYSTEM->_SESSION['sPerPage'] = (int)$this->sSYSTEM->_GET['sPerPage'];
+            $this->sSYSTEM->_SESSION['sPerPage'] = (int) $this->sSYSTEM->_GET['sPerPage'];
         }
         if ($this->sSYSTEM->_POST['sPerPage']) {
-            $this->sSYSTEM->_SESSION['sPerPage'] = (int)$this->sSYSTEM->_POST['sPerPage'];
+            $this->sSYSTEM->_SESSION['sPerPage'] = (int) $this->sSYSTEM->_POST['sPerPage'];
         }
 
         if ($this->sSYSTEM->_SESSION['sPerPage']) {
@@ -634,16 +635,16 @@ class sArticles
                 foreach ($sSearch as $search) {
                     $search = $this->sSYSTEM->sDB_CONNECTION->qstr("%$search%");
                     $sql_add_where .= "
-							OR (
-								'{$this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["id"]}'=t.languageID
-								AND (t.name LIKE $search OR t.keywords LIKE $search)
-							)
-					";
+                            OR (
+                                '{$this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["id"]}'=t.languageID
+                                AND (t.name LIKE $search OR t.keywords LIKE $search)
+                            )
+                    ";
                 }
                 $sql_add_join = "
-					LEFT JOIN s_articles_translations AS t
-					ON a.id=t.articleID
-				";
+                    LEFT JOIN s_articles_translations AS t
+                    ON a.id=t.articleID
+                ";
             }
 
             $sqlFields = array("s.name", "a.name", "a.keywords", "d.ordernumber");
@@ -669,10 +670,10 @@ class sArticles
         }
 
         $sql = "
-			SELECT SQL_CALC_FOUND_ROWS DISTINCT
-					a.id as id
-			FROM s_categories c, s_categories c2,
-			     s_articles_categories_ro ac
+            SELECT SQL_CALC_FOUND_ROWS DISTINCT
+                    a.id as id
+            FROM s_categories c, s_categories c2,
+                 s_articles_categories_ro ac
 
             JOIN s_articles AS a
                 INNER JOIN s_articles_categories_ro ac
@@ -682,29 +683,29 @@ class sArticles
                     ON  c.id = ac.categoryID
                     AND c.active = 1
 
-			JOIN s_articles_details AS d
-			ON d.id=a.main_detail_id
+            JOIN s_articles_details AS d
+            ON d.id=a.main_detail_id
 
-			LEFT JOIN s_articles_avoid_customergroups ag
+            LEFT JOIN s_articles_avoid_customergroups ag
             ON ag.articleID = a.id
             AND ag.customergroupID={$this->customerGroupId}
 
-			LEFT JOIN s_articles_supplier s
-			ON s.id=a.supplierID
+            LEFT JOIN s_articles_supplier s
+            ON s.id=a.supplierID
 
-			$sql_add_join
+            $sql_add_join
 
-			WHERE a.mode = 0
-			AND a.active=1
-			AND ag.articleID IS NULL
-	        AND (
-				0
-				$sql_search_fields
-				$sql_add_where
-			)
-			ORDER BY $orderBy
-			LIMIT $sLimitStart,$sLimitEnd
-		";
+            WHERE a.mode = 0
+            AND a.active=1
+            AND ag.articleID IS NULL
+            AND (
+                0
+                $sql_search_fields
+                $sql_add_where
+            )
+            ORDER BY $orderBy
+            LIMIT $sLimitStart,$sLimitEnd
+        ";
 
         $ret["sArticles"] = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll(
             $this->sSYSTEM->sCONFIG['sCACHESEARCH'],
@@ -812,9 +813,9 @@ class sArticles
 
         // PerPage
         if (!empty($this->sSYSTEM->_GET['sPerPage'])) {
-            $sCategoryConfig['sPerPage'] = (int)$this->sSYSTEM->_GET['sPerPage'];
+            $sCategoryConfig['sPerPage'] = (int) $this->sSYSTEM->_GET['sPerPage'];
         } elseif (!empty($this->sSYSTEM->_POST['sPerPage'])) {
-            $sCategoryConfig['sPerPage'] = (int)$this->sSYSTEM->_POST['sPerPage'];
+            $sCategoryConfig['sPerPage'] = (int) $this->sSYSTEM->_POST['sPerPage'];
         }
         if (!empty($sCategoryConfig['sPerPage'])) {
             $sPerPage = $sCategoryConfig['sPerPage'];
@@ -824,9 +825,9 @@ class sArticles
 
         // Order List by
         if (isset($this->sSYSTEM->_POST['sSort'])) {
-            $sCategoryConfig['sSort'] = (int)$this->sSYSTEM->_POST['sSort'];
+            $sCategoryConfig['sSort'] = (int) $this->sSYSTEM->_POST['sSort'];
         } elseif (!empty($this->sSYSTEM->_GET['sSort'])) {
-            $sCategoryConfig['sSort'] = (int)$this->sSYSTEM->_GET['sSort'];
+            $sCategoryConfig['sSort'] = (int) $this->sSYSTEM->_GET['sSort'];
         }
         if (!empty($sCategoryConfig['sSort'])) {
             $this->sSYSTEM->_POST['sSort'] = $sCategoryConfig['sSort'];
@@ -855,7 +856,7 @@ class sArticles
         }
 
         if (!empty($this->sSYSTEM->_GET['sSupplier']) && is_numeric($this->sSYSTEM->_GET['sSupplier'])) {
-            $sCategoryConfig['sSupplier'] = (int)$this->sSYSTEM->_GET['sSupplier'];
+            $sCategoryConfig['sSupplier'] = (int) $this->sSYSTEM->_GET['sSupplier'];
         }
 
         if (!empty($this->sSYSTEM->_GET['sTemplate'])) {
@@ -869,7 +870,7 @@ class sArticles
             unset($this->sSYSTEM->_SESSION['sCategoryConfig' . $categoryId]);
         }
 
-        $sPage = !empty($this->sSYSTEM->_GET['sPage']) ? (int)$this->sSYSTEM->_GET['sPage'] : 1;
+        $sPage = !empty($this->sSYSTEM->_GET['sPage']) ? (int) $this->sSYSTEM->_GET['sPage'] : 1;
         $sLimitStart = ($sPage - 1) * $sPerPage;
         $sLimitEnd = $sPerPage;
 
@@ -954,22 +955,22 @@ class sArticles
                     ORDER BY min_price
                     LIMIT 1
                 ) * ( (100 - IFNULL(cd.discount, 0) ) / 100)
-			";
+            ";
             $join_price = "
-				LEFT JOIN s_core_customergroups cg
-		    		ON cg.groupkey = '{$this->sSYSTEM->sUSERGROUP}'
+                LEFT JOIN s_core_customergroups cg
+                    ON cg.groupkey = '{$this->sSYSTEM->sUSERGROUP}'
 
-				LEFT JOIN s_core_pricegroups_discounts cd
-				    ON a.pricegroupActive=1
-				    AND cd.groupID=a.pricegroupID
-				    AND cd.customergroupID=cg.id
-				    AND cd.discountstart=(
+                LEFT JOIN s_core_pricegroups_discounts cd
+                    ON a.pricegroupActive=1
+                    AND cd.groupID=a.pricegroupID
+                    AND cd.customergroupID=cg.id
+                    AND cd.discountstart=(
                         SELECT MAX(discountstart)
                         FROM s_core_pricegroups_discounts
                         WHERE groupID=a.pricegroupID
                         AND customergroupID=cg.id
                     )
-			";
+            ";
         } else {
             $select_price = 'IFNULL(p.price, p2.price)';
             $join_price = '';
@@ -991,7 +992,7 @@ class sArticles
         $addFilterWhere = "";
         if (!empty($activeFilters)) {
             foreach ($activeFilters as $filter) {
-                $filter = (int)$filter;
+                $filter = (int) $filter;
                 if ($filter > 0) {
                     $addFilterSQL .= "
                         INNER JOIN s_filter_articles fv$filter
@@ -1002,19 +1003,9 @@ class sArticles
             }
         }
 
-        $markNew = (int)$this->sSYSTEM->sCONFIG['sMARKASNEW'];
-        $topSeller = (int)$this->sSYSTEM->sCONFIG['sMARKASTOPSELLER'];
+        $markNew = (int) $this->sSYSTEM->sCONFIG['sMARKASNEW'];
+        $topSeller = (int) $this->sSYSTEM->sCONFIG['sMARKASTOPSELLER'];
         $now = Shopware()->Db()->quote(date('Y-m-d'));
-
-        //deprecated the priceForBasePrice is no longer used
-        $priceForBasePrice = "
-        (
-            SELECT price
-            FROM s_articles_prices
-            WHERE articledetailsID = aDetails.id
-            AND pricegroup= IF(p.id IS NULL, 'EK', p.pricegroup)
-            AND `from` = 1 LIMIT 1
-        ) as priceForBasePrice";
 
         $sql = "
             SELECT
@@ -1077,8 +1068,6 @@ class sArticles
                 aAttributes.attr18,
                 aAttributes.attr19,
                 aAttributes.attr20,
-
-                $priceForBasePrice,
 
                 $select_price as price,
 
@@ -1300,7 +1289,7 @@ class sArticles
             // Price-Handling
             $articles[$articleKey]["price"] = $this->sCalculatingPrice($articles[$articleKey]["price"], $articles[$articleKey]["tax"], $articles[$articleKey]["taxID"], $articles[$articleKey]);
             $articles[$articleKey]["priceNumeric"] = floatval(str_replace(",", ".", $articles[$articleKey]["price"]));
-            $articles[$articleKey]["pseudoprice"] = (float)$articles[$articleKey]["pseudoprice"];
+            $articles[$articleKey]["pseudoprice"] = (float) $articles[$articleKey]["pseudoprice"];
 
             if (!empty($articles[$articleKey]["pseudoprice"])) {
                 $articles[$articleKey]["pseudoprice"] = $this->sCalculatingPrice($articles[$articleKey]["pseudoprice"], $articles[$articleKey]["tax"], $articles[$articleKey]["taxID"], $articles[$articleKey]);
@@ -1385,17 +1374,20 @@ class sArticles
      */
     public function sGetSupplierById($id)
     {
-        $id = (int)$id;
-        $categoryId = (int)$this->sSYSTEM->_GET['sCategory'];
+        $id = (int) $id;
+        $categoryId = (int) $this->sSYSTEM->_GET['sCategory'];
 
         $supplierRepository = Shopware()->Models()->getRepository(
             'Shopware\Models\Article\Supplier'
         );
         $supplier = $supplierRepository->find($id);
-        if(!is_object($supplier)) {
+        if (!is_object($supplier)) {
             return array();
         }
         $supplier = Shopware()->Models()->toArray($supplier);
+        if (!Shopware()->Shop()->getDefault()) {
+            $supplier = $this->sGetTranslation($supplier, $supplier['id'], 'supplier');
+        }
         $supplier['link'] = $this->sSYSTEM->sCONFIG['sBASEFILE'];
         $supplier['link'] .= '?sViewport=cat&sCategory=' . $categoryId . '&sPage=1&sSupplier=0';
 
@@ -1427,7 +1419,7 @@ class sArticles
      */
     protected function addActiveFilterCondition($builder, $activeFilters)
     {
-        foreach($activeFilters as $valueId) {
+        foreach ($activeFilters as $valueId) {
             if ($valueId <= 0) {
                 continue;
             }
@@ -1480,11 +1472,11 @@ class sArticles
      *  -   Shopware_Modules_Articles_GetFilterQuery
      *
      * @param null $activeFilters
-     * @return \Shopware\Components\Model\DBAL\QueryBuilder
+     * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     protected function getFilterQuery($activeFilters = null)
     {
-        /**@var $builder \Shopware\Components\Model\DBAL\QueryBuilder*/
+        /**@var $builder \Doctrine\DBAL\Query\QueryBuilder */
         $builder = Shopware()->Models()->getDBALQueryBuilder();
 
         $builder->select(array(
@@ -1689,7 +1681,7 @@ class sArticles
         $builder->addOrderBy('filterRelations.position');
         $builder->addOrderBy('filterOptions.name');
 
-        switch($sortMode) {
+        switch ($sortMode) {
             case self::FILTERS_SORT_ALPHANUMERIC:
                 $builder->addOrderBy('filterValues.value');
                 break;
@@ -1803,7 +1795,7 @@ class sArticles
 
         if (count($filterIds) > 1) {
             $sortMode = Shopware()->Config()->get('defaultFilterSort', self::FILTERS_SORT_POSITION);
-        } else if (count($filterIds) === 1) {
+        } elseif (count($filterIds) === 1) {
             $sortMode = $filterIds[0]['sortmode'];
         } else {
             $sortMode = self::FILTERS_SORT_POSITION;
@@ -1821,7 +1813,7 @@ class sArticles
         return $sortMode;
     }
 
-    public function sGetCategoryProperties($categoryId = null, $activeFilters = null)
+    public function sGetCategoryProperties($categoryId = null, $supplierId = null, $activeFilters = null)
     {
         if ($categoryId === null
             && !empty($this->sSYSTEM->_GET["sCategory"])
@@ -1834,13 +1826,27 @@ class sArticles
             $activeFilters = preg_split('/\|/', $this->sSYSTEM->_GET["sFilterProperties"], -1, PREG_SPLIT_NO_EMPTY);
         }
 
-        $categoryId = (int)$categoryId;
-        $activeFilters = (array)$activeFilters;
+        $categoryId = (int) $categoryId;
+        $supplierId = (int) $supplierId;
+        $activeFilters = (array) $activeFilters;
 
-        $getProperties = $this->getCategoryFilters($categoryId, $activeFilters);
+        if ($categoryId != Shopware()->Shop()->getCategory()->getId()) {
+            $getProperties = $this->getCategoryFilters($categoryId, $activeFilters, $supplierId);
+        } else {
+            $getProperties = array();
+        }
 
-        $baseLink = $this->sSYSTEM->sCONFIG['sBASEFILE']
-            . '?sViewport=cat&sCategory=' . $categoryId . '&sPage=1';
+
+        if (!empty($this->sSYSTEM->_GET["sViewport"]) && $this->sSYSTEM->_GET["sViewport"] == 'supplier' && $supplierId) {
+            $baseLink = $this->sSYSTEM->sCONFIG['sBASEFILE']
+                . '?sViewport=supplier&sSupplier=' . $supplierId;
+            if ($categoryId !== Shopware()->Shop()->getCategory()->getId()) {
+                $baseLink .= '&sCategory=' . $categoryId;
+            }
+        } else {
+            $baseLink = $this->sSYSTEM->sCONFIG['sBASEFILE']
+                . '?sViewport=cat&sCategory=' . $categoryId . '&sPage=1';
+        }
 
         $propertyArray = array();
 
@@ -1865,12 +1871,12 @@ class sArticles
             $filters[] = $property['valueID'];
             $link = $baseLink . '&sFilterProperties=' . implode('|', $filters);
 
-            if(empty($lastOptionId) || $lastOptionId != $property['optionID']) {
+            if (empty($lastOptionId) || $lastOptionId != $property['optionID']) {
                 //only set the default remove link once per option group like color
                 $removeLink = $baseLink . '&sFilterProperties=0';
             }
             $lastOptionId = $property['optionID'];
-            
+
             if (!empty($activeFilters)
                 && in_array($property['valueID'], $activeFilters)
             ) {
@@ -1934,13 +1940,13 @@ class sArticles
      */
     public function sGetAffectedSuppliers($id = null, $limit = null)
     {
-        $id = empty($id) ? (int)$this->sSYSTEM->_GET["sCategory"] : (int)$id;
+        $id = empty($id) ? (int) $this->sSYSTEM->_GET["sCategory"] : (int) $id;
         $configLimit = $this->sSYSTEM->sCONFIG['sMAXSUPPLIERSCATEGORY'] ? $this->sSYSTEM->sCONFIG['sMAXSUPPLIERSCATEGORY'] : 30;
-        $limit = empty($limit) ? $configLimit : (int)$limit;
+        $limit = empty($limit) ? $configLimit : (int) $limit;
 
         $sql = "
-			SELECT s.id AS id, COUNT(DISTINCT a.id) AS countSuppliers, s.name AS name, s.img AS image
-			FROM s_articles a
+            SELECT s.id AS id, COUNT(DISTINCT a.id) AS countSuppliers, s.name AS name, s.img AS image
+            FROM s_articles a
                 INNER JOIN s_articles_categories_ro ac
                     ON  ac.articleID = a.id
                     AND ac.categoryID = ?
@@ -1948,30 +1954,47 @@ class sArticles
                     ON  c.id = ac.categoryID
                     AND c.active = 1
 
-			JOIN s_articles_supplier s
-			ON s.id=a.supplierID
+            JOIN s_articles_supplier s
+            ON s.id=a.supplierID
 
-			LEFT JOIN s_articles_avoid_customergroups ag
+            LEFT JOIN s_articles_avoid_customergroups ag
             ON ag.articleID=a.id
             AND ag.customergroupID={$this->customerGroupId}
 
-			WHERE ag.articleID IS NULL
-			AND a.active = 1
+            WHERE ag.articleID IS NULL
+            AND a.active = 1
 
-			GROUP BY s.id
-			ORDER BY s.name ASC
-			LIMIT 0, $limit
-		";
+            GROUP BY s.id
+            ORDER BY s.name ASC
+            LIMIT 0, $limit
+        ";
         $getSupplier = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHESUPPLIER'], $sql, array(
             $id
         ));
 
         foreach ($getSupplier as $supplierKey => $supplierValue) {
+            if (!Shopware()->Shop()->getDefault()) {
+                $getSupplier[$supplierKey] = $this->sGetTranslation($supplierValue, $supplierValue['id'], 'supplier');
+            }
             if ($supplierValue["image"]) {
                 $getSupplier[$supplierKey]["image"] = $supplierValue["image"];
             }
 
-            $query = array('sViewport' => 'cat', 'sCategory' => $id, 'sPage' => 1, 'sSupplier' => $supplierValue["id"]);
+
+            if ($id !== Shopware()->Shop()->getCategory()->getId()) {
+                $query = array(
+                    'sViewport' => 'cat',
+                    'sCategory' => $id,
+                    'sPage' => 1,
+                    'sSupplier' => $supplierValue["id"]
+                );
+            } else {
+                $query = array(
+                    'sViewport' => 'supplier',
+                    'sSupplier' => $supplierValue["id"]
+                );
+            }
+
             $getSupplier[$supplierKey]["link"] = Shopware()->Router()->assemble($query);
         }
 
@@ -1988,15 +2011,15 @@ class sArticles
      */
     public function sCalculatingPrice($price, $tax, $taxId = 0, $article = array())
     {
-        if (empty($taxId)){
+        if (empty($taxId)) {
             throw new Enlight_Exception("Empty taxID in sCalculatingPrice");
         }
 
-        $price = (float)$price;
+        $price = (float) $price;
 
         // Support tax rate defined by certain conditions
         $getTaxByConditions = $this->getTaxRateByConditions($taxId);
-        if ($getTaxByConditions === false) $tax = (float)$tax; else $tax = (float)$getTaxByConditions;
+        if ($getTaxByConditions === false) $tax = (float) $tax; else $tax = (float) $getTaxByConditions;
 
         // Calculate global discount
         if ($this->sSYSTEM->sUSERGROUPDATA["mode"] && $this->sSYSTEM->sUSERGROUPDATA["discount"]) {
@@ -2052,7 +2075,7 @@ class sArticles
 
         $getTax = Shopware()->Db()->fetchRow($sql,$parameters);
 
-        if (empty($getTax["id"])){
+        if (empty($getTax["id"])) {
             $getTax["tax"] = Shopware()->Db()->fetchOne("SELECT tax FROM s_core_tax WHERE id = ?",array($taxId));
         }
 
@@ -2079,7 +2102,7 @@ class sArticles
      */
     public function sCalculatingPriceNum($price, $tax, $doNotRound = false, $ignoreTax = false, $taxId = 0, $ignoreCurrency = false, $article = array())
     {
-        if (empty($taxId)){
+        if (empty($taxId)) {
             throw new Enlight_Exception ("Empty tax id in sCalculatingPriceNum");
         }
         // Calculating global discount
@@ -2089,7 +2112,7 @@ class sArticles
 
         // Support tax rate defined by certain conditions
         $getTaxByConditions = $this->getTaxRateByConditions($taxId);
-        if ($getTaxByConditions===false) $tax = (float)$tax; else $tax = (float)$getTaxByConditions;
+        if ($getTaxByConditions===false) $tax = (float) $tax; else $tax = (float) $getTaxByConditions;
 
         if (!empty($this->sSYSTEM->sCurrency["factor"]) && $ignoreCurrency == false) {
             $price = floatval($price) * floatval($this->sSYSTEM->sCurrency["factor"]);
@@ -2131,7 +2154,7 @@ class sArticles
             $sLimitChart = 20;
         }
         if (!empty($category)) {
-            $category = (int)$category;
+            $category = (int) $category;
         } elseif (!empty($this->sSYSTEM->_GET['sCategory'])) {
             $category = (int) $this->sSYSTEM->_GET['sCategory'];
         } else {
@@ -2170,7 +2193,7 @@ class sArticles
             WHERE ag.articleID IS NULL
             ORDER BY s.sales DESC, s.article_id DESC
             LIMIT $sLimitChart
-		";
+        ";
 
         $queryChart = Shopware()->Db()->fetchAssoc($sql, array(
             'categoryId'      => $category,
@@ -2180,7 +2203,7 @@ class sArticles
         $articles = array();
         if (!empty($queryChart))
             foreach ($queryChart as $articleID => $quantity) {
-                $article = $this->sGetPromotionById('fix', 0, (int)$articleID);
+                $article = $this->sGetPromotionById('fix', 0, (int) $articleID);
                 if (!empty($article["articleID"])) {
                     $article['quantity'] = $quantity;
                     $articles[] = $article;
@@ -2202,19 +2225,19 @@ class sArticles
      * @access public
      * @return bool
      */
-    function sCheckIfEsd($id, $detailsID, $realtime = false)
+    public function sCheckIfEsd($id, $detailsID, $realtime = false)
     {
         // Check if this article is esd-only (check in variants, too -> later)
 
         if ($detailsID) {
             $sqlGetEsd = "
-			SELECT id, serials FROM s_articles_esd WHERE articleID=$id
-			AND articledetailsID=$detailsID
-			";
+            SELECT id, serials FROM s_articles_esd WHERE articleID=$id
+            AND articledetailsID=$detailsID
+            ";
         } else {
             $sqlGetEsd = "
-			SELECT id, serials FROM s_articles_esd WHERE articleID=$id
-			";
+            SELECT id, serials FROM s_articles_esd WHERE articleID=$id
+            ";
         }
 
         $getEsd = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($realtime == true ? 0 : $this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sqlGetEsd);
@@ -2236,7 +2259,7 @@ class sArticles
     {
         $article = (int) $article;
 
-        if($categoryId === null) {
+        if ($categoryId === null) {
             $categoryId = (int) $this->sSYSTEM->_GET['sCategory'];
         }
 
@@ -2252,9 +2275,9 @@ class sArticles
 
         // Order List by
         if (isset($this->sSYSTEM->_POST['sSort'])) {
-            $sCategoryConfig['sSort'] = (int)$this->sSYSTEM->_POST['sSort'];
-        } elseif(!empty($this->sSYSTEM->_GET['sSort'])) {
-            $sCategoryConfig['sSort'] = (int)$this->sSYSTEM->_GET['sSort'];
+            $sCategoryConfig['sSort'] = (int) $this->sSYSTEM->_POST['sSort'];
+        } elseif (!empty($this->sSYSTEM->_GET['sSort'])) {
+            $sCategoryConfig['sSort'] = (int) $this->sSYSTEM->_GET['sSort'];
         }
         if (!empty($sCategoryConfig['sSort'])) {
             $this->sSYSTEM->_POST['sSort'] = $sCategoryConfig['sSort'];
@@ -2304,32 +2327,32 @@ class sArticles
                     ORDER BY min_price
                     LIMIT 1
                 ) * ((100 - IFNULL(cd.discount, 0)) / 100)
-			";
+            ";
             $join_price = "
-				LEFT JOIN s_core_customergroups cg
-				ON cg.groupkey = '{$this->sSYSTEM->sUSERGROUP}'
+                LEFT JOIN s_core_customergroups cg
+                ON cg.groupkey = '{$this->sSYSTEM->sUSERGROUP}'
 
-				LEFT JOIN s_core_pricegroups_discounts cd
-				ON a.pricegroupActive=1
-				AND cd.groupID=a.pricegroupID
-				AND cd.customergroupID=cg.id
-				AND cd.discountstart=(
-					SELECT MAX(discountstart)
-					FROM s_core_pricegroups_discounts
-					WHERE groupID=a.pricegroupID
-					AND customergroupID=cg.id
+                LEFT JOIN s_core_pricegroups_discounts cd
+                ON a.pricegroupActive=1
+                AND cd.groupID=a.pricegroupID
+                AND cd.customergroupID=cg.id
+                AND cd.discountstart=(
+                    SELECT MAX(discountstart)
+                    FROM s_core_pricegroups_discounts
+                    WHERE groupID=a.pricegroupID
+                    AND customergroupID=cg.id
                 )
-			";
+            ";
         } else {
             $select_price = '0';
             $join_price = '';
         }
 
         $sql = "
-			SELECT a.id, name AS articleName,
-				$select_price as price
+            SELECT a.id, name AS articleName,
+                $select_price as price
 
-			FROM s_articles a
+            FROM s_articles a
                 INNER JOIN s_articles_categories_ro ac
                     ON  ac.articleID = a.id
                     AND ac.categoryID = $categoryId
@@ -2337,24 +2360,24 @@ class sArticles
                     ON  c.id = ac.categoryID
                     AND c.active = 1
 
-			JOIN s_articles_details AS aDetails
-			ON aDetails.articleID=a.id AND aDetails.kind=1
+            JOIN s_articles_details AS aDetails
+            ON aDetails.articleID=a.id AND aDetails.kind=1
 
-			JOIN s_articles_attributes AS aAttributes
-			ON aAttributes.articledetailsID = aDetails.id
+            JOIN s_articles_attributes AS aAttributes
+            ON aAttributes.articledetailsID = aDetails.id
 
-			LEFT JOIN s_articles_avoid_customergroups ag
+            LEFT JOIN s_articles_avoid_customergroups ag
             ON ag.articleID=ac.articleID
             AND ag.customergroupID={$this->customerGroupId}
 
-			$join_price
+            $join_price
 
-			WHERE a.active=1
-	        AND ag.articleID IS NULL
+            WHERE a.active=1
+            AND ag.articleID IS NULL
 
             GROUP BY a.id
-			ORDER BY $orderBy
-		";
+            ORDER BY $orderBy
+        ";
 
         $getAllArticles = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll(
             $this->sSYSTEM->sCONFIG['sCACHECATEGORY'], $sql,
@@ -2402,17 +2425,17 @@ class sArticles
         return false;
 
         $fetchGroups = $this->sSYSTEM->sDB_CONNECTION->CacheGetAssoc($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], "
-			SELECT groupID as id, groupID, groupname, groupdescription, groupimage FROM s_articles_groups_accessories WHERE articleID=$id ORDER BY groupname ASC
-		");
+            SELECT groupID as id, groupID, groupname, groupdescription, groupimage FROM s_articles_groups_accessories WHERE articleID=$id ORDER BY groupname ASC
+        ");
 
         if (empty($fetchGroups))
             return false;
 
         foreach ($fetchGroups as $key => $configGroup) {
             $fetchOptions = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], "
-				SELECT optionID, optionname, ordernumber FROM s_articles_groups_accessories_option
-				WHERE articleID=$id AND groupID={$configGroup["groupID"]} ORDER BY optionID ASC
-				");
+                SELECT optionID, optionname, ordernumber FROM s_articles_groups_accessories_option
+                WHERE articleID=$id AND groupID={$configGroup["groupID"]} ORDER BY optionID ASC
+                ");
             if (empty($fetchOptions)) {
                 unset($fetchGroups[$key]);
             } else {
@@ -2552,12 +2575,12 @@ class sArticles
     public function sGetUnit($id)
     {
         static $cache = array();
-        if(isset($cache[$id])) {
+        if (isset($cache[$id])) {
             return $cache[$id];
         }
         $unit = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], "
-		  SELECT unit, description FROM s_core_units WHERE id=?
-		", array($id));
+          SELECT unit, description FROM s_core_units WHERE id=?
+        ", array($id));
 
         if (!empty($unit) && !Shopware()->Shop()->get('skipbackend')) {
             $sql = "SELECT objectdata FROM s_core_translations WHERE objecttype='config_units' AND objectlanguage=" . Shopware()->Shop()->getId();
@@ -2597,17 +2620,17 @@ class sArticles
         if (!$customergroup || !$groupID) return false;
 
         $sql = "
-		SELECT s_core_pricegroups_discounts.discount AS discount,discountstart
-		FROM
-			s_core_pricegroups_discounts,
-			s_core_customergroups AS scc
-		WHERE
-			groupID=$groupID AND customergroupID = scc.id
-		AND
-			scc.groupkey = ?
-		GROUP BY discount
-		ORDER BY discountstart ASC
-		";
+        SELECT s_core_pricegroups_discounts.discount AS discount,discountstart
+        FROM
+            s_core_pricegroups_discounts,
+            s_core_customergroups AS scc
+        WHERE
+            groupID=$groupID AND customergroupID = scc.id
+        AND
+            scc.groupkey = ?
+        GROUP BY discount
+        ORDER BY discountstart ASC
+        ";
 
         $getGroups = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sql, array($customergroup));
 
@@ -2699,26 +2722,26 @@ class sArticles
 
         if (empty($usepricegroups)) {
             $sql = "
-			SELECT price FROM s_articles_prices, s_articles_details WHERE
-			s_articles_details.id=s_articles_prices.articledetailsID AND
-			pricegroup=?
-			AND s_articles_details.articleID=?
-			GROUP BY ROUND(price,2)
-			ORDER BY price ASC
-			LIMIT 2
-		";
+            SELECT price FROM s_articles_prices, s_articles_details WHERE
+            s_articles_details.id=s_articles_prices.articledetailsID AND
+            pricegroup=?
+            AND s_articles_details.articleID=?
+            GROUP BY ROUND(price,2)
+            ORDER BY price ASC
+            LIMIT 2
+        ";
         } else {
             $sql = "
-			SELECT price FROM s_articles_details
-			LEFT JOIN
-			s_articles_prices ON s_articles_details.id=s_articles_prices.articledetailsID AND
-			pricegroup=? AND s_articles_prices.from = '1'
-			WHERE
-			s_articles_details.articleID=?
-			GROUP BY ROUND(price,2)
-			ORDER BY price ASC
-			LIMIT 2
-			";
+            SELECT price FROM s_articles_details
+            LEFT JOIN
+            s_articles_prices ON s_articles_details.id=s_articles_prices.articledetailsID AND
+            pricegroup=? AND s_articles_prices.from = '1'
+            WHERE
+            s_articles_details.articleID=?
+            GROUP BY ROUND(price,2)
+            ORDER BY price ASC
+            LIMIT 2
+            ";
         }
 
         $queryCheapestPrice = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($realtime == true ? 0 : $this->sSYSTEM->sCONFIG['sCACHEPRICES'], $sql, array(
@@ -2730,17 +2753,17 @@ class sArticles
             if (empty($cheapestPrice)) {
                 // No Price for this customer-group fetch defaultprice
                 $sql = "
-				SELECT price FROM s_articles_details
-				LEFT JOIN s_articles_prices
-				  ON s_articles_details.id=s_articles_prices.articledetailsID
-				  AND pricegroup='EK'
-				  AND s_articles_prices.from = '1'
-				WHERE
-				  s_articles_details.articleID=$article
-				GROUP BY ROUND(price,2)
-				ORDER BY price ASC
-				LIMIT 2
-				";
+                SELECT price FROM s_articles_details
+                LEFT JOIN s_articles_prices
+                  ON s_articles_details.id=s_articles_prices.articledetailsID
+                  AND pricegroup='EK'
+                  AND s_articles_prices.from = '1'
+                WHERE
+                  s_articles_details.articleID=$article
+                GROUP BY ROUND(price,2)
+                ORDER BY price ASC
+                LIMIT 2
+                ";
 
                 $queryCheapestPrice = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($realtime == true ? 0 : $this->sSYSTEM->sCONFIG['sCACHEPRICES'], $sql, false, "article_$article");
                 if (count($queryCheapestPrice) > 1) {
@@ -2757,22 +2780,22 @@ class sArticles
         }
 
         $sql = "
-		SELECT s_core_pricegroups_discounts.discount AS discount,discountstart
-		FROM
-			s_core_pricegroups_discounts,
-			s_core_customergroups AS scc
-		WHERE
-			groupID=? AND customergroupID = scc.id
-		AND
-			scc.groupkey = ?
-		GROUP BY discount
-		ORDER BY discountstart ASC
-		";
+        SELECT s_core_pricegroups_discounts.discount AS discount,discountstart
+        FROM
+            s_core_pricegroups_discounts,
+            s_core_customergroups AS scc
+        WHERE
+            groupID=? AND customergroupID = scc.id
+        AND
+            scc.groupkey = ?
+        GROUP BY discount
+        ORDER BY discountstart ASC
+        ";
 
         $getGroups = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sql, array($pricegroup, $this->sSYSTEM->sUSERGROUP));
 
         //if there are no discounts for this customergroup don't show "ab:"
-        if(empty($getGroups)) {
+        if (empty($getGroups)) {
             return $cheapestPrice;
         }
 
@@ -2841,7 +2864,7 @@ class sArticles
                 GROUP BY ROUND(price,2)
                 ORDER BY price ASC
                 LIMIT 2
-			";
+            ";
         }
 
         $variantData = Shopware()->Db()->fetchRow($sql, array($priceGroup, $article));
@@ -2858,7 +2881,7 @@ class sArticles
     public function sGetArticleById($id = 0, $sCategoryID = null)
     {
 
-        if(empty($sCategoryID)) {
+        if (empty($sCategoryID)) {
             $sCategoryID = intval($this->sSYSTEM->_GET['sCategory']);
         }
         if (empty($sCategoryID) || $sCategoryID == $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["parentID"]) {
@@ -2910,6 +2933,7 @@ class sArticles
                 a.mode,
                 a.taxID,
                 a.description AS description,
+                a.metaTitle,
                 a.keywords,
                 a.description_long,
                 aSupplier.name AS supplierName,
@@ -2927,41 +2951,41 @@ class sArticles
                 filtergroupID,
                 a.crossbundlelook,
                 IF(aDetails.releasedate > CURDATE(), 1, 0) as sUpcoming,
-			    IF(aDetails.releasedate > CURDATE(), aDetails.releasedate, '') as sReleasedate
+                IF(aDetails.releasedate > CURDATE(), aDetails.releasedate, '') as sReleasedate
 
-			FROM s_articles a
+            FROM s_articles a
 
             $subShopJoin
 
-			JOIN s_articles_details aDetails
-			    ON aDetails.id=a.main_detail_id
+            JOIN s_articles_details aDetails
+                ON aDetails.id=a.main_detail_id
 
-			JOIN s_core_tax AS aTax
+            JOIN s_core_tax AS aTax
                 ON a.taxID=aTax.id
 
             JOIN s_articles_attributes AS aAttributes
                 ON aAttributes.articledetailsID=aDetails.id
 
-			LEFT JOIN s_articles_prices AS p
+            LEFT JOIN s_articles_prices AS p
                 ON p.articledetailsID=aDetails.id
                 AND p.pricegroup='" . $this->sSYSTEM->sUSERGROUP . "'
                 AND p.from='1'
 
-			LEFT JOIN s_articles_prices AS p2
+            LEFT JOIN s_articles_prices AS p2
                 ON p2.articledetailsID=aDetails.id
                 AND p2.pricegroup='EK'
                 AND p2.from='1'
 
             LEFT JOIN s_articles_supplier AS aSupplier
-			ON aSupplier.id=a.supplierID
+            ON aSupplier.id=a.supplierID
 
             LEFT JOIN s_articles_avoid_customergroups ag
             ON ag.articleID=a.id
             AND ag.customergroupID={$this->customerGroupId}
 
-			WHERE a.id=" . $id . "
-			AND ag.articleID IS NULL
-		";
+            WHERE a.id=" . $id . "
+            AND ag.articleID IS NULL
+        ";
 
         if (empty(Shopware()->Session()->Admin)) {
             $sql .= "AND a.active=1";
@@ -2975,6 +2999,13 @@ class sArticles
 
         // Translate main - data
         $getArticle = $this->sGetTranslation($getArticle, $id, "article", $this->sSYSTEM->sLanguage);
+
+        //mock a supplier array so we can use sGetTranslation
+        $supplier = array(
+            'description' => $getArticle['supplierDescription']
+        );
+        $supplier = $this->sGetTranslation($supplier, $getArticle['supplierID'], 'supplier', $this->sSYSTEM->sLanguage);
+        $getArticle['supplierDescription'] = $supplier['description'];
 
         /*
           Calculating matching price SW 2.1
@@ -2990,9 +3021,9 @@ class sArticles
 
             // Grap related links
             $getRelatedLinks = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], "
-				SELECT id, description, link, target FROM s_articles_information
-				WHERE articleID={$getArticle["articleID"]}
-				", false, "article_" . $getArticle["articleID"]);
+                SELECT id, description, link, target FROM s_articles_information
+                WHERE articleID={$getArticle["articleID"]}
+                ", false, "article_" . $getArticle["articleID"]);
             // Add 'http://' to link (if not set)
             if (isset($getRelatedLinks[0])) {
                 foreach ($getRelatedLinks as $linkKey => $linkValue) {
@@ -3009,9 +3040,12 @@ class sArticles
 
             // Building link 'More articles from this supplier'
             // =================================================.
+            //
+            // This is most likely dead code. I'll update it for now, as part of SW-6977, but its
+            // not tested nor should it be in use anywhere
             $link = $this->sSYSTEM->sCONFIG['sBASEFILE']
-                . "?sViewport=search&sSearch=" . $getArticle['supplierID']
-                . "&sSearchMode=supplier&sSearchText=" . urlencode($getArticle['supplierName']);
+                . "sViewport=supplier&sSupplier=" . $getArticle['supplierID']
+                . "&sSearchText=" . urlencode($getArticle['supplierName']);
 
             $getRelatedLinks[count($getRelatedLinks)] = array("supplierSearch" => true,
                 "description" => $getArticle["supplierName"],
@@ -3035,8 +3069,8 @@ class sArticles
             // Get article accessories
             // =================================================.
             $getRelatedArticles = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], "
-				SELECT relatedarticle FROM s_articles_relationships WHERE articleID={$getArticle["articleID"]}
-				", false, "article_" . $getArticle["articleID"]);
+                SELECT relatedarticle FROM s_articles_relationships WHERE articleID={$getArticle["articleID"]}
+                ", false, "article_" . $getArticle["articleID"]);
             if (count($getRelatedArticles)) {
                 foreach ($getRelatedArticles as $relatedArticleValue) {
                     $tmpContainer = $this->sGetPromotionById("fix", 0, (int) $relatedArticleValue['relatedarticle']);
@@ -3065,17 +3099,17 @@ class sArticles
                 }
             } else {
 
-                if (!empty( $sCategoryID )){
+                if (!empty( $sCategoryID )) {
                     $similarLimit = $this->sSYSTEM->sCONFIG['sSIMILARLIMIT'] ? $this->sSYSTEM->sCONFIG['sSIMILARLIMIT'] : 3;
                     $sqlGetCategory = "
-					SELECT DISTINCT s_articles.id AS relatedarticle FROM s_articles_categories_ro, s_articles, s_articles_details
-					WHERE s_articles_categories_ro.categoryID=" . $sCategoryID . "
-					AND s_articles.id=s_articles_categories_ro.articleID AND s_articles.id=s_articles_details.articleID
-					AND s_articles_details.kind=1
-					AND s_articles.id!={$getArticle["articleID"]}
-					AND s_articles.active=1
-					ORDER BY s_articles_details.sales DESC LIMIT $similarLimit
-					";
+                    SELECT DISTINCT s_articles.id AS relatedarticle FROM s_articles_categories_ro, s_articles, s_articles_details
+                    WHERE s_articles_categories_ro.categoryID=" . $sCategoryID . "
+                    AND s_articles.id=s_articles_categories_ro.articleID AND s_articles.id=s_articles_details.articleID
+                    AND s_articles_details.kind=1
+                    AND s_articles.id!={$getArticle["articleID"]}
+                    AND s_articles.active=1
+                    ORDER BY s_articles_details.sales DESC LIMIT $similarLimit
+                    ";
 
                     $getSimilarArticles = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sqlGetCategory, false, "article_" . $getArticle["articleID"]);
 
@@ -3110,16 +3144,16 @@ class sArticles
                     */
                 if ($getArticle["pricegroup"] != $this->sSYSTEM->sUSERGROUP) {
                     $sql = "
-						SELECT `from` AS valFrom,`to` AS valTo, price, pseudoprice FROM s_articles_prices WHERE articledetailsID={$getArticle["articleDetailsID"]}
-						AND (pricegroup='EK')
-						ORDER BY id ASC
-						";
+                        SELECT `from` AS valFrom,`to` AS valTo, price, pseudoprice FROM s_articles_prices WHERE articledetailsID={$getArticle["articleDetailsID"]}
+                        AND (pricegroup='EK')
+                        ORDER BY id ASC
+                        ";
                 } else {
                     $sql = "
-						SELECT `from` AS valFrom,`to` AS valTo, price, pseudoprice FROM s_articles_prices WHERE articledetailsID={$getArticle["articleDetailsID"]}
-						AND (pricegroup='" . $this->sSYSTEM->sUSERGROUP . "')
-						ORDER BY id ASC
-						";
+                        SELECT `from` AS valFrom,`to` AS valTo, price, pseudoprice FROM s_articles_prices WHERE articledetailsID={$getArticle["articleDetailsID"]}
+                        AND (pricegroup='" . $this->sSYSTEM->sUSERGROUP . "')
+                        ORDER BY id ASC
+                        ";
                 }
 
                 $getBlockPricings = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sql, false, "article_" . $getArticle["articleID"]);
@@ -3192,8 +3226,8 @@ class sArticles
 
             // Calculating price for reference-unit
             if ($getArticle["purchaseunit"] > 0 && $getArticle["referenceunit"]) {
-                $getArticle["purchaseunit"] = (float)$getArticle["purchaseunit"];
-                $getArticle["referenceunit"] = (float)$getArticle["referenceunit"];
+                $getArticle["purchaseunit"] = (float) $getArticle["purchaseunit"];
+                $getArticle["referenceunit"] = (float) $getArticle["referenceunit"];
 
                 $getArticle["referenceprice"] = $this->calculateReferencePrice(
                     $getArticle["price"],
@@ -3229,8 +3263,8 @@ class sArticles
             // Downloads
             // =================================================.
             $sql = "
-				SELECT id, description, filename, size FROM s_articles_downloads WHERE articleID = {$getArticle["articleID"]}
-				";
+                SELECT id, description, filename, size FROM s_articles_downloads WHERE articleID = {$getArticle["articleID"]}
+                ";
 
             $getArticleDownloads = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sql, false, "article_" . $getArticle["articleID"]);
             foreach ($getArticleDownloads as $articleDownloadKey => $articleDownloadValue) {
@@ -3305,8 +3339,8 @@ class sArticles
      */
     public function calculateReferencePrice($price, $purchaseUnit, $referenceUnit)
     {
-        $purchaseUnit = (float)$purchaseUnit;
-        $referenceUnit = (float)$referenceUnit;
+        $purchaseUnit = (float) $purchaseUnit;
+        $referenceUnit = (float) $referenceUnit;
 
         $price = floatval(str_replace(",", ".", $price));
         return $price / $purchaseUnit * $referenceUnit;
@@ -3332,8 +3366,8 @@ class sArticles
             return null;
         }
 
-        $returnData["purchaseunit"] = (float)$cheapestVariantData["purchaseunit"];
-        $returnData["referenceunit"] = (float)$cheapestVariantData["referenceunit"];
+        $returnData["purchaseunit"] = (float) $cheapestVariantData["purchaseunit"];
+        $returnData["referenceunit"] = (float) $cheapestVariantData["referenceunit"];
         $returnData["packunit"] = $cheapestVariantData["packunit"];
         // Read unit if set
         if ($cheapestVariantData["unitID"]) {
@@ -3391,8 +3425,7 @@ class sArticles
                 case 2:
                     break;
             }
-        }
-        else {
+        } else {
             if (!$price) {
                 $price = "0";
             } else {
@@ -3428,8 +3461,8 @@ class sArticles
             return false;
         }
 
-        $markNew = (int)$this->sSYSTEM->sCONFIG['sMARKASNEW'];
-        $markTop = (int)$this->sSYSTEM->sCONFIG['sMARKASTOPSELLER'];
+        $markNew = (int) $this->sSYSTEM->sCONFIG['sMARKASNEW'];
+        $markTop = (int) $this->sSYSTEM->sCONFIG['sMARKASTOPSELLER'];
         // Used in emotion widget to fetch only articles that have an image assigned
 
         $sql = "
@@ -3532,8 +3565,8 @@ class sArticles
 
         // Calculating price for reference-unit
         if ($getPromotionResult["purchaseunit"] > 0 && $getPromotionResult["referenceunit"]) {
-            $getPromotionResult["purchaseunit"] = (float)$getPromotionResult["purchaseunit"];
-            $getPromotionResult["referenceunit"] = (float)$getPromotionResult["referenceunit"];
+            $getPromotionResult["purchaseunit"] = (float) $getPromotionResult["purchaseunit"];
+            $getPromotionResult["referenceunit"] = (float) $getPromotionResult["referenceunit"];
 
             $getPromotionResult["referenceprice"] = $this->calculateReferencePrice(
                 $getPromotionResult["price"],
@@ -3606,7 +3639,7 @@ class sArticles
             case 'top':
             case 'new':
             case 'random':
-                if ($withImage){
+                if ($withImage) {
                     $withImageJoin = "
                         JOIN s_articles_img ai
                         ON ai.articleID=a.id
@@ -3617,7 +3650,7 @@ class sArticles
                     $withImageJoin = "";
                 }
                 if ($mode == 'top') {
-                    $promotionTime = !empty($this->sSYSTEM->sCONFIG['sPROMOTIONTIME']) ? (int)$this->sSYSTEM->sCONFIG['sPROMOTIONTIME'] : 30;
+                    $promotionTime = !empty($this->sSYSTEM->sCONFIG['sPROMOTIONTIME']) ? (int) $this->sSYSTEM->sCONFIG['sPROMOTIONTIME'] : 30;
                     $now = Shopware()->Db()->quote(date('Y-m-d H:00:00'));
                     $sql = "
                         SELECT od.articleID
@@ -3669,7 +3702,7 @@ class sArticles
                 }
                 break;
             case "fix":
-                if(is_string($value)) {
+                if (is_string($value)) {
                     $sql = "SELECT articleID FROM s_articles_details WHERE ordernumber LIKE ?";
                     $value = Shopware()->Db()->fetchOne($sql, array(trim($value))) ?: $value;
                 }
@@ -3713,8 +3746,8 @@ class sArticles
             ));
 
         } else {
-            $markNew = (int)$this->sSYSTEM->sCONFIG['sMARKASNEW'];
-            $markTop = (int)$this->sSYSTEM->sCONFIG['sMARKASTOPSELLER'];
+            $markNew = (int) $this->sSYSTEM->sCONFIG['sMARKASNEW'];
+            $markTop = (int) $this->sSYSTEM->sCONFIG['sMARKASTOPSELLER'];
             $now = Shopware()->Db()->quote(date('Y-m-d'));
 
             $sql = "
@@ -3745,8 +3778,8 @@ class sArticles
                     (SELECT 1 FROM s_articles_details WHERE articleID=a.id AND kind!=1 LIMIT 1) as sVariantArticle
                 FROM s_articles a
 
-				JOIN s_articles_details d
-				ON d.id=a.main_detail_id
+                JOIN s_articles_details d
+                ON d.id=a.main_detail_id
 
                 JOIN s_articles_attributes at
                 ON at.articleID=a.id
@@ -3953,7 +3986,7 @@ class sArticles
             $imageData['attribute']['attribute3'] = $image['attribute3'];
         }
 
-        foreach($sizes as $key => $size) {
+        foreach ($sizes as $key => $size) {
             if (strpos($size, 'x')===0) {
                 $size = $size.'x'.$size;
             }
@@ -4056,7 +4089,7 @@ class sArticles
     public function sGetArticlePictures($sArticleID, $onlyCover = true, $pictureSize = 0, $ordernumber = null, $allImages = false, $realtime = false, $forceMainImage = false)
     {
         static $articleAlbum;
-        if($articleAlbum === null) {
+        if ($articleAlbum === null) {
             //now we search for the default article album of the media manager, this album contains the thumbnail configuration.
             /**@var $model \Shopware\Models\Media\Album*/
             $articleAlbum = $this->getMediaRepository()
@@ -4065,7 +4098,7 @@ class sArticles
         }
 
         //first we convert the passed article id into an integer to prevent sql injections
-        $articleId = (int)$sArticleID;
+        $articleId = (int) $sArticleID;
 
         Enlight()->Events()->notify('Shopware_Modules_Articles_GetArticlePictures_Start', array('subject' => $this, 'id' => $articleId));
 
@@ -4100,7 +4133,7 @@ class sArticles
         $images = array();
 
         //first we add all variant images, this images has a higher priority as the normal article images
-        foreach($variantImages as $variantImage) {
+        foreach ($variantImages as $variantImage) {
 
             //if the image wasn't added already, we can add the image
             if (!in_array($variantImage['id'], $addedImages)) {
@@ -4115,7 +4148,7 @@ class sArticles
         }
 
         //after the variant images added, we can add the normal images, this images has a lower priority as the variant images
-        foreach($articleImages as $articleImage) {
+        foreach ($articleImages as $articleImage) {
             //add only normal images without any configuration
             //if the image wasn't added already, we can add the image
             if (!in_array($articleImage['id'], $addedImages)) {
@@ -4134,42 +4167,6 @@ class sArticles
         return $images;
     }
 
-    /**
-     * Insert a article in the list of the recently visit articles
-     * @param string $image absolut image url
-     * @param string $name name of the article
-     * @param int $id id of the article
-     * @access public
-     * @return bool
-     */
-    public function sSetLastArticle($image, $name, $id)
-    {
-        if (empty($this->sSYSTEM->sSESSION_ID) || empty($name) || empty($id)) {
-            return;
-        }
-
-        Shopware()->Events()->notify('Shopware_Modules_Articles_Before_SetLastArticle', array(
-            'subject'   => $this,
-            'article'   => $id
-        ));
-
-        $insertArticle = $this->sSYSTEM->sDB_CONNECTION->Execute('
-			INSERT INTO s_emarketing_lastarticles
-				(img, name, articleID, sessionID, time, userID, shopID)
-			VALUES
-				(?, ?, ?, ?, NOW(), ?, ?)
-			ON DUPLICATE KEY UPDATE time=NOW(), userID=VALUES(userID)
-		', array(
-            (string)$image,
-            (string)$name,
-            $id,
-            $this->sSYSTEM->sSESSION_ID,
-            (int)$this->sSYSTEM->_SESSION['sUserId'],
-            (int)$this->sSYSTEM->sLanguage
-        ));
-
-        return $insertArticle;
-    }
 
     /**
      * Get article id by ordernumber
@@ -4180,8 +4177,8 @@ class sArticles
     public function sGetArticleIdByOrderNumber($ordernumber)
     {
         $checkForArticle = $this->sSYSTEM->sDB_CONNECTION->GetRow("
-		SELECT articleID AS id FROM s_articles_details WHERE ordernumber=?
-		", array($ordernumber));
+        SELECT articleID AS id FROM s_articles_details WHERE ordernumber=?
+        ", array($ordernumber));
 
         if ($checkForArticle["id"]) {
             return $checkForArticle["id"];
@@ -4203,7 +4200,7 @@ class sArticles
             SELECT s_articles.id,s_articles_details.id AS did, s_articles.name AS articleName, additionaltext FROM s_articles_details, s_articles WHERE
             ordernumber=?
             AND s_articles.id=s_articles_details.articleID
-		", array($ordernumber));
+        ", array($ordernumber));
 
         if (!empty($checkForArticle)) {
             $checkForArticle = $this->sGetTranslation($checkForArticle, $checkForArticle["id"], "article");
@@ -4228,8 +4225,8 @@ class sArticles
     public function sGetArticleNameByArticleId($articleId, $returnAll = false)
     {
         $ordernumber = $this->sSYSTEM->sDB_CONNECTION->GetOne("
-			SELECT ordernumber FROM s_articles_details WHERE kind=1 AND articleID=?
-		", array($articleId));
+            SELECT ordernumber FROM s_articles_details WHERE kind=1 AND articleID=?
+        ", array($articleId));
         return $this->sGetArticleNameByOrderNumber($ordernumber, $returnAll);
     }
 
@@ -4242,9 +4239,9 @@ class sArticles
     public function sGetArticleTaxById($id)
     {
         $checkForArticle = $this->sSYSTEM->sDB_CONNECTION->GetRow("
-		SELECT s_core_tax.tax AS tax FROM s_core_tax, s_articles WHERE s_articles.id=? AND
-		s_articles.taxID = s_core_tax.id
-		", array($id));
+        SELECT s_core_tax.tax AS tax FROM s_core_tax, s_articles WHERE s_articles.id=? AND
+        s_articles.taxID = s_core_tax.id
+        ", array($id));
 
         if ($checkForArticle["tax"]) {
             return $checkForArticle["tax"];
@@ -4264,16 +4261,16 @@ class sArticles
     {
         if (!empty($this->sSYSTEM->_SESSION['sUserId'])) {
             $updateArticles = $this->sSYSTEM->sDB_CONNECTION->Execute('
-				UPDATE s_emarketing_lastarticles
-				SET userID=?
-				WHERE sessionID=?
-			', array(
+                UPDATE s_emarketing_lastarticles
+                SET userID=?
+                WHERE sessionID=?
+            ', array(
                 $this->sSYSTEM->_SESSION['sUserId'],
                 $this->sSYSTEM->sSESSION_ID
             ));
         }
 
-        $numberOfArticles = (int)$this->sSYSTEM->sCONFIG['sLASTARTICLESTOSHOW'];
+        $numberOfArticles = (int) $this->sSYSTEM->sCONFIG['sLASTARTICLESTOSHOW'];
 
 
         $categoryJoin = "
@@ -4286,26 +4283,26 @@ class sArticles
         ";
 
         $sql = "
-			SELECT img, l.name, l.articleID
-			FROM s_emarketing_lastarticles l
+            SELECT img, l.name, l.articleID
+            FROM s_emarketing_lastarticles l
 
-			LEFT JOIN s_core_shops sc ON sc.id=l.shopID
+            LEFT JOIN s_core_shops sc ON sc.id=l.shopID
 
-			$categoryJoin
+            $categoryJoin
 
-			WHERE l.sessionID=?
-			AND l.articleID!=?
-			AND l.shopID=?
+            WHERE l.sessionID=?
+            AND l.articleID!=?
+            AND l.shopID=?
 
             GROUP BY l.articleID
-			ORDER BY time DESC
-			LIMIT {$numberOfArticles}
+            ORDER BY time DESC
+            LIMIT {$numberOfArticles}
         ";
 
 
         $queryArticles = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql, array(
             $this->sSYSTEM->sSESSION_ID,
-            (int)$currentArticle,
+            (int) $currentArticle,
             $this->sSYSTEM->sLanguage
         ));
 
@@ -4331,12 +4328,12 @@ class sArticles
 
         $sToday = date("Y-m-d");
         $sql = "
-			SELECT category,mode, TRIM(ordernumber) as ordernumber, link, description, link_target, img
-			FROM s_emarketing_promotions
-			WHERE category=$category AND ((TO_DAYS(valid_from) <= TO_DAYS('$sToday') AND
-			TO_DAYS(valid_to) >= TO_DAYS('$sToday')) OR
-			(valid_from='0000-00-00' AND valid_to='0000-00-00')) ORDER BY position ASC
-		";
+            SELECT category,mode, TRIM(ordernumber) as ordernumber, link, description, link_target, img
+            FROM s_emarketing_promotions
+            WHERE category=$category AND ((TO_DAYS(valid_from) <= TO_DAYS('$sToday') AND
+            TO_DAYS(valid_to) >= TO_DAYS('$sToday')) OR
+            (valid_from='0000-00-00' AND valid_to='0000-00-00')) ORDER BY position ASC
+        ";
         $sql = Enlight()->Events()->filter('Shopware_Modules_Articles_GetPromotions_FilterSQL', $sql, array('subject' => $this, 'category' => $category));
 
         $getAffectedPromitions = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
@@ -4393,7 +4390,7 @@ class sArticles
      */
     public function sGetTranslations($data, $object)
     {
-        if(Shopware()->Shop()->get('skipbackend') || empty($data)) {
+        if (Shopware()->Shop()->get('skipbackend') || empty($data)) {
             return $data;
         }
         $language = Shopware()->Shop()->getId();
@@ -4447,7 +4444,7 @@ class sArticles
                 s.objectkey IN ($ids)
             AND
                 s.objectlanguage = '$language'
-		";
+        ";
 
         $translations = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($cacheTime, $sql);
 
@@ -4474,7 +4471,7 @@ class sArticles
     }
 
     /**
-     * Get translation for an object (article / variant / link / download)
+     * Get translation for an object (article / variant / link / download / supplier)
      * @param $data
      * @param $id
      * @param $object
@@ -4483,7 +4480,7 @@ class sArticles
      */
     public function sGetTranslation($data, $id, $object, $language = null)
     {
-        if(Shopware()->Shop()->get('skipbackend')) {
+        if (Shopware()->Shop()->get('skipbackend')) {
             return $data;
         }
         $id = (int) $id;
@@ -4522,6 +4519,12 @@ class sArticles
                     'name' => 'groupname',
                 );
                 break;
+            case 'supplier':
+                $map = array(
+                    'meta_title' => 'title',
+                    'description' => 'description',
+                );
+                break;
         }
 
         $sql = "
@@ -4529,7 +4532,7 @@ class sArticles
             WHERE objecttype = '$object'
             AND objectkey = ?
             AND objectlanguage = '$language'
-		";
+        ";
         $objectData = $this->sSYSTEM->sDB_CONNECTION->CacheGetOne(
             $cacheTime, $sql, array($id)
         );
@@ -4670,12 +4673,10 @@ class sArticles
                         if (!empty($debug)) echo $string . " matching combination\n";
                         $sArticle["images"][$imageKey]["relations"] = "";
                         $positions[$image["position"]] = $imageKey;
-                    }
-                    elseif (count($imageFailedCheck) == count($available) && $relation == "&") { // UND VERKNï¿½PFUNG
+                    } elseif (count($imageFailedCheck) == count($available) && $relation == "&") { // UND VERKNï¿½PFUNG
                         $sArticle["images"][$imageKey]["relations"] = "";
                         $positions[$image["position"]] = $imageKey;
-                    }
-                    else {
+                    } else {
                         if (!empty($debug)) echo $string . " doesnt match combination\n";
                         unset($sArticle["images"][$imageKey]);
                     }

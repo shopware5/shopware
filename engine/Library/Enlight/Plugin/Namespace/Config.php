@@ -61,28 +61,9 @@ class Enlight_Plugin_Namespace_Config extends Enlight_Plugin_Namespace
      */
     public function __construct($name, $storage = null)
     {
-        if($storage !== null && $storage instanceof Enlight_Config) {
+        if ($storage !== null && $storage instanceof Enlight_Config) {
             $this->storage = $storage;
         }
-
-//        if (is_string($options)) {
-//            $options = array('storage' => $options);
-//        }
-//        if (!isset($options['storage'])) {
-//            $options['storage'] = $name;
-//        }
-//        if (is_string($options['storage'])) {
-//            $this->storage = new Enlight_Config(
-//                $options['storage'],
-//                array(
-//                    'allowModifications' => true,
-//                    'adapter' => isset($options['storageAdapter']) ? $options['storageAdapter'] : null,
-//                    'section' => isset($options['section']) ? $options['section'] : 'production'
-//                )
-//            );
-//        } elseif ($options['storage'] instanceof Enlight_Config) {
-//            $this->storage = $options['storage'];
-//        }
 
         parent::__construct($name);
     }
@@ -102,8 +83,12 @@ class Enlight_Plugin_Namespace_Config extends Enlight_Plugin_Namespace
             return parent::load($name, $throwException);
         }
 
+        /** @var $item \Enlight_Config */
+        $classname = $item->get('class');
+
         /** @var $plugin Enlight_Plugin_Bootstrap_Config */
-        $plugin = new $item->class($name, $item);
+        $plugin = new $classname($name, $item);
+
         return parent::registerPlugin($plugin, $throwException);
     }
 
@@ -139,9 +124,20 @@ class Enlight_Plugin_Namespace_Config extends Enlight_Plugin_Namespace
      */
     public function Storage()
     {
-        if(!isset($this->storage)) {
+        if (!isset($this->storage)) {
             $this->storage = $this->initStorage();
         }
+
+        return $this->storage;
+    }
+
+    /**
+     * @return Enlight_Config
+     */
+    public function reloadStorage()
+    {
+        $this->storage = $this->initStorage();
+
         return $this->storage;
     }
 
@@ -164,6 +160,7 @@ class Enlight_Plugin_Namespace_Config extends Enlight_Plugin_Namespace
         if ($this->subscriber === null) {
             $this->subscriber = new Enlight_Event_Subscriber_Plugin($this, $this->Storage());
         }
+
         return $this->subscriber;
     }
 

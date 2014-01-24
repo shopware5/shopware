@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Payment
- * @copyright  Copyright (c) 2013, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Tiago Garcia
- * @author     $Author$
  */
 
 namespace Shopware\Models\Customer;
@@ -66,6 +58,13 @@ class PaymentData extends ModelEntity
     protected $paymentMean;
 
     /**
+     * @var integer $paymentMeanId
+     *
+     * @ORM\Column(name="payment_mean_id", type="integer")
+     */
+    protected $paymentMeanId;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Customer", inversedBy="paymentData")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
@@ -100,15 +99,39 @@ class PaymentData extends ModelEntity
     protected $iban;
 
     /**
+     * @var string $accountNumber
+     *
+     * @ORM\Column(name="account_number", type="string", length=50, nullable=true)
+     */
+    protected $accountNumber;
+
+    /**
+     * @var string $bankCode
+     *
+     * @ORM\Column(name="bank_code", type="string", length=50, nullable=true)
+     */
+    protected $bankCode;
+
+    /**
+     * @var string $accountHolder
+     *
+     * @ORM\Column(name="account_holder", type="string", length=50, nullable=true)
+     */
+    protected $accountHolder;
+
+    /**
      * @var \DateTime $createdAt
      *
      * @ORM\Column(name="created_at", type="date", nullable=false)
      */
     protected $createdAt;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->createdAt = new \DateTime();
     }
+
+
 
     /**
      * Gets the id of the payment
@@ -230,5 +253,61 @@ class PaymentData extends ModelEntity
     public function getUseBillingData()
     {
         return $this->useBillingData;
+    }
+
+    /**
+     * @param string $accountHolder
+     */
+    public function setAccountHolder($accountHolder)
+    {
+        $this->accountHolder = $accountHolder;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountHolder()
+    {
+        return $this->accountHolder;
+    }
+
+    /**
+     * @param string $accountNumber
+     */
+    public function setAccountNumber($accountNumber)
+    {
+        $this->accountNumber = $accountNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountNumber()
+    {
+        return $this->accountNumber;
+    }
+
+    /**
+     * @param string $bankCode
+     */
+    public function setBankCode($bankCode)
+    {
+        $this->bankCode = $bankCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBankCode()
+    {
+        return $this->bankCode;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPaymentMeanId()
+    {
+        return $this->paymentMeanId;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -27,7 +27,7 @@
  *
  * @category  Shopware
  * @package   Shopware\Controllers\Frontend
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_Action
 {
@@ -77,22 +77,22 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
      */
     public function saveOrder($transactionId, $paymentUniqueId, $paymentStatusId = null, $sendStatusMail = false)
     {
-        if(empty($transactionId) || empty($paymentUniqueId)) {
+        if (empty($transactionId) || empty($paymentUniqueId)) {
             return false;
         }
 
         $sql = '
-			SELECT ordernumber FROM s_order
-			WHERE transactionID=? AND temporaryID=?
-			AND status!=-1 AND userID=?
-		';
+            SELECT ordernumber FROM s_order
+            WHERE transactionID=? AND temporaryID=?
+            AND status!=-1 AND userID=?
+        ';
         $orderNumber = Shopware()->Db()->fetchOne($sql, array(
                 $transactionId,
                 $paymentUniqueId,
                 Shopware()->Session()->sUserId
             ));
 
-        if(empty($orderNumber)) {
+        if (empty($orderNumber)) {
             $user = $this->getUser();
             $basket = $this->getBasket();
 
@@ -132,10 +132,10 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
     public function savePaymentStatus($transactionId, $paymentUniqueId, $paymentStatusId, $sendStatusMail = false)
     {
         $sql = '
-			SELECT id FROM s_order
-			WHERE transactionID=? AND temporaryID=?
-			AND status!=-1
-		';
+            SELECT id FROM s_order
+            WHERE transactionID=? AND temporaryID=?
+            AND status!=-1
+        ';
         $orderId = Shopware()->Db()->fetchOne($sql, array(
                 $transactionId,
                 $paymentUniqueId
@@ -153,7 +153,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
     {
         $user = $this->getUser();
         $basket = $this->getBasket();
-        if (!empty($user['additional']['charge_vat'])){
+        if (!empty($user['additional']['charge_vat'])) {
             return empty($basket['AmountWithTaxNumeric']) ? $basket['AmountNumeric'] : $basket['AmountWithTaxNumeric'];
         } else {
             return $basket['AmountNetNumeric'];
@@ -169,7 +169,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
     {
         $user = $this->getUser();
         $basket = $this->getBasket();
-        if (!empty($user['additional']['charge_vat'])){
+        if (!empty($user['additional']['charge_vat'])) {
             return $basket['sShippingcostsWithTax'];
         } else {
             return str_replace(',', '.', $basket['sShippingcosts']);
@@ -183,7 +183,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
      */
     public function getUser()
     {
-        if(!empty(Shopware()->Session()->sOrderVariables['sUserData'])) {
+        if (!empty(Shopware()->Session()->sOrderVariables['sUserData'])) {
             return Shopware()->Session()->sOrderVariables['sUserData'];
         } else {
             return null;
@@ -197,7 +197,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
      */
     public function getBasket()
     {
-        if(!empty(Shopware()->Session()->sOrderVariables['sBasket'])) {
+        if (!empty(Shopware()->Session()->sOrderVariables['sBasket'])) {
             return Shopware()->Session()->sOrderVariables['sBasket'];
         } else {
             return null;
@@ -209,7 +209,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
      */
     public function getOrderNumber()
     {
-        if(!empty(Shopware()->Session()->sOrderVariables['sOrderNumber'])) {
+        if (!empty(Shopware()->Session()->sOrderVariables['sOrderNumber'])) {
             return Shopware()->Session()->sOrderVariables['sOrderNumber'];
         } else {
             return null;

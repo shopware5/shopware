@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Document
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Patrick Stahl
- * @author     $Author$
  */
 
 namespace   Shopware\Models\Document;
@@ -44,57 +36,57 @@ use         Shopware\Components\Model\ModelEntity,
 class Element extends ModelEntity
 {
 
-	/**
-	 * The id property is an identifier property which means
-	 * doctrine associations can be defined over this field
-	 *
-	 * @var integer $id
-	 * @ORM\Column(name="id", type="integer", nullable=false)
-	 * @ORM\Id
-	 * @ORM\GeneratedValue(strategy="IDENTITY")
-	 */
-	private $id;
+    /**
+     * The id property is an identifier property which means
+     * doctrine associations can be defined over this field
+     *
+     * @var integer $id
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
-	/**
-	 * Contains the name of the document.
-	 *
-	 * @var integer $documentId
-	 * @ORM\Column(name="documentID", type="integer", nullable=false)
-	 */
-	private $documentId = '';
+    /**
+     * Contains the name of the document.
+     *
+     * @var integer $documentId
+     * @ORM\Column(name="documentID", type="integer", nullable=false)
+     */
+    private $documentId = '';
 
-	/**
-	 * Contains the name of the document.
-	 *
-	 * @var string $name
-	 * @ORM\Column(name="name", type="string", nullable=false)
-	 */
-	private $name = '';
+    /**
+     * Contains the name of the document.
+     *
+     * @var string $name
+     * @ORM\Column(name="name", type="string", nullable=false)
+     */
+    private $name = '';
 
-	/**
-	 * Contains the name of the document.
-	 *
-	 * @var string $style
-	 * @ORM\Column(name="style", type="string", nullable=false)
-	 */
-	private $style = '';
+    /**
+     * Contains the name of the document.
+     *
+     * @var string $style
+     * @ORM\Column(name="style", type="string", nullable=false)
+     */
+    private $style = '';
 
-	/**
-	 * Contains the name of the document.
-	 *
-	 * @var string $value
-	 * @ORM\Column(name="value", type="string", nullable=false)
-	 */
-	private $value = '';
+    /**
+     * Contains the name of the document.
+     *
+     * @var string $value
+     * @ORM\Column(name="value", type="string", nullable=false)
+     */
+    private $value = '';
 
-	/**
-	 * Owning Side
-	 *
+    /**
+     * Owning Side
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Document\Document", inversedBy="elements")
-	 * @ORM\JoinColumn(name="documentID", referencedColumnName="id")
-	 * @var \Shopware\Models\Document\Document
-	 */
-	private $document;
+     * @ORM\JoinColumn(name="documentID", referencedColumnName="id")
+     * @var \Shopware\Models\Document\Document
+     */
+    private $document;
 
     /**
      * Getter function for the unique id identifier property
@@ -106,85 +98,85 @@ class Element extends ModelEntity
         return $this->id;
     }
 
-	/**
-	 * Gets the name of the document.
-	 *
-	 * @param string $name
-	 * @return \Shopware\Models\Document\Element
-	 */
-	public function setName($name)
-	{
-		$this->name = $name;
-		return $this;
-	}
+    /**
+     * Gets the name of the document.
+     *
+     * @param string $name
+     * @return \Shopware\Models\Document\Element
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
+    }
 
-	/**
-	 * Sets the documents name.
-	 *
-	 * @return string
-	 */
-	public function getName()
-	{
-		return $this->name;
-	}
+    /**
+     * Sets the documents name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
 
-	/**
-	 * Sets the value for an element.
-	 *
-	 * @param string $value
-	 * @return \Shopware\Models\Document\Element
-	 */
-	public function setValue($value)
-	{
-		$this->value = $value;
-		return $this;
-	}
+    /**
+     * Sets the value for an element.
+     *
+     * @param string $value
+     * @return \Shopware\Models\Document\Element
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+        return $this;
+    }
 
-	/**
-	 * Gets the value for an element.
-	 *
-	 * @return string
-	 */
-	public function getValue()
-	{
-		return $this->value;
-	}
+    /**
+     * Gets the value for an element.
+     *
+     * @return string
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
 
-	/**
-	 * Sets the style for
-	 *
-	 * @param string $style
-	 * @return \Shopware\Models\Document\Element
-	 */
-	public function setStyle($style)
-	{
-		$this->style = $style;
-		return $this;
-	}
+    /**
+     * Sets the style for
+     *
+     * @param string $style
+     * @return \Shopware\Models\Document\Element
+     */
+    public function setStyle($style)
+    {
+        $this->style = $style;
+        return $this;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getStyle()
-	{
-		return $this->style;
-	}
+    /**
+     * @return string
+     */
+    public function getStyle()
+    {
+        return $this->style;
+    }
 
-	/**
-	 * @param \Shopware\Models\Document\Document $document
-	 * @return \Shopware\Models\Document\Element
-	 */
-	public function setDocument($document)
-	{
-		$this->document = $document;
-		return $this;
-	}
+    /**
+     * @param \Shopware\Models\Document\Document $document
+     * @return \Shopware\Models\Document\Element
+     */
+    public function setDocument($document)
+    {
+        $this->document = $document;
+        return $this;
+    }
 
-	/**
-	 * @return \Shopware\Models\Document\Document
-	 */
-	public function getDocument()
-	{
-		return $this->document;
-	}
+    /**
+     * @return \Shopware\Models\Document\Document
+     */
+    public function getDocument()
+    {
+        return $this->document;
+    }
 }
