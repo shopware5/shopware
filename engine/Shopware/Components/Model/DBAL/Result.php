@@ -55,16 +55,17 @@ class Result
     protected $totalCount;
 
     /**
+     * The fetch mode which is used for the PDOStatement->fetch() function.
      * @var int
      */
     protected $fetchMode;
 
     /**
-     * Class constructor which expects the DBAL query builder object
+     * Class constructor which expects the DBAL query builder object.
      *
-     * @param QueryBuilder $builder
-     * @param int $fetchMode
-     * @param bool $useCountQuery
+     * @param QueryBuilder $builder The DBAL\Query builder object.
+     * @param int $fetchMode Allows to define the data result structure
+     * @param bool $useCountQuery Allows to disable or enable the total count query.
      * @internal param array $data
      */
     function __construct(QueryBuilder $builder, $fetchMode = \PDO::FETCH_ASSOC, $useCountQuery = true)
@@ -74,7 +75,7 @@ class Result
         $this->fetchMode = $fetchMode;
 
         if ($useCountQuery) {
-            $builder = $this->getCountQuery($builder);
+            $this->addTotalCountSelect($builder);
         }
 
         $this->statement = $builder->execute();
@@ -91,14 +92,14 @@ class Result
      * the total count.
      *
      * @param QueryBuilder $builder
-     * @return QueryBuilder
+     * @return $this
      */
-    private function getCountQuery(QueryBuilder $builder)
+    private function addTotalCountSelect(QueryBuilder $builder)
     {
         $select = $builder->getQueryPart('select');
         $select[0] = ' SQL_CALC_FOUND_ROWS ' . $select[0];
-
-        return $builder->select($select);
+        $builder->select($select);
+        return $this;
     }
 
     /**
