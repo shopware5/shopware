@@ -55,22 +55,35 @@ class Result
     protected $totalCount;
 
     /**
+     * @var int
+     */
+    protected $fetchMode;
+
+    /**
      * Class constructor which expects the DBAL query builder object
      *
      * @param QueryBuilder $builder
+     * @param int $fetchMode
+     * @param bool $useCountQuery
      * @internal param array $data
      */
-    function __construct(QueryBuilder $builder)
+    function __construct(QueryBuilder $builder, $fetchMode = \PDO::FETCH_ASSOC, $useCountQuery = true)
     {
         $builder = clone $builder;
 
-        $builder = $this->getCountQuery($builder);
+        $this->fetchMode = $fetchMode;
+
+        if ($useCountQuery) {
+            $builder = $this->getCountQuery($builder);
+        }
 
         $this->statement = $builder->execute();
 
-        $this->totalCount = $builder->getConnection()->fetchColumn(
-            "SELECT FOUND_ROWS() as count"
-        );
+        if ($useCountQuery) {
+            $this->totalCount = $builder->getConnection()->fetchColumn(
+                "SELECT FOUND_ROWS() as count"
+            );
+        }
     }
 
     /**
@@ -95,9 +108,7 @@ class Result
     public function getData()
     {
         if ($this->data === null) {
-            $this->data = $this->statement->fetchAll(
-                \PDO::FETCH_ASSOC
-            );
+            $this->data = $this->statement->fetchAll($this->fetchMode);
         }
 
         return $this->data;
