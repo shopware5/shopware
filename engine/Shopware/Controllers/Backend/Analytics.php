@@ -87,6 +87,18 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $this->addAclPermission('conversionRate', 'read', 'Insufficient Permissions');
     }
 
+    public function init()
+    {
+        parent::init();
+        $currency = Shopware()->Db()->fetchRow(
+            'SELECT templatechar as sign, (symbol_position < 32) currencyAtEnd
+            FROM s_core_currencies
+            WHERE standard = 1'
+        );
+
+        $this->View()->assign('analyticsCurrency', $currency);
+    }
+
     /**
      * Internal helper function to get access to the entity manager.
      *
@@ -190,20 +202,40 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     public function getOverviewAction()
     {
-        $result = $this->getRepository()->getShopStatistic(
-            $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', null),
+        $turnover = $this->getRepository()->getShopStatisticTurnover(
             $this->getFromDate(),
             $this->getToDate()
         );
 
-        $data = $result->getData();
-        foreach ($data as &$row) {
-            $row['date'] = strtotime($row['date']);
-            $row['totalConversion'] = round($row['totalOrders'] / $row['totalVisits'] * 100, 2);
+        $visitors = $this->getRepository()->getShopStatisticVisitors(
+            $this->getFromDate(),
+            $this->getToDate()
+        );
+
+        $registrations = $this->getRepository()->getShopStatisticRegistrations(
+            $this->getFromDate(),
+            $this->getToDate()
+        );
+
+        $turnover = array_map('reset', $turnover->getData());
+        $visitors = array_map('reset', $visitors->getData());
+        $registrations = array_map('reset', $registrations->getData());
+
+        $data = array_merge_recursive($turnover, $visitors);
+        $data = array_merge_recursive($data, $registrations);
+
+        foreach($data as $date => &$row) {
+            $row['date'] = strtotime($date);
+            $row['conversion'] = round($row['orderCount'] / $row['visits'] * 100, 2);
         }
 
-        $this->send($data, $result->getTotalCount());
+        $splice = array_splice(
+            array_values($data),
+            $this->Request()->getParam('start', 0),
+            $this->Request()->getParam('limit', 25)
+        );
+
+        $this->send($splice, count($data));
     }
 
     public function getRatingAction()

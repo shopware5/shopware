@@ -35,14 +35,14 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Overview', {
     remoteSort: true,
     fields: [
         { name: 'date', type: 'date', dateFormat: 'timestamp' },
-        'orderCount',
-        'revenue',
-        'cancelledOrders',
-        'totalConversion',
-        'totalVisits',
-        'newCustomers',
-        'visitors',
-        'clicks'
+        { name: 'orderCount', type: 'int' },
+        { name: 'turnover', type: 'float' },
+        { name: 'cancelledOrders', type: 'int' },
+        { name: 'conversion', type: 'float' },
+        { name: 'visits', type: 'int' },
+        { name: 'newCustomers', type: 'int' },
+        { name: 'visitors', type: 'int' },
+        { name: 'clicks', type: 'int' }
     ],
     proxy: {
         type: 'ajax',
