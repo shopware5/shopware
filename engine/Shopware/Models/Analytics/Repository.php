@@ -78,47 +78,87 @@ class Repository
     }
 
     /**
-     * Returns a statistic array for the whole shop data.
+     * Returns a dbal result object which displays the total visits of each day
+     * for the passed date range.
      *
-     * @param $offset
-     * @param $limit
+     * The data array is indexed by the order date. To remove the useless array level
+     * execute the following code:
+     *      $visitors = $repository->getShopStatisticVisitors(... , ...);
+     *      $visitors = array_map('reset', $visitors->getData());
+     *
      * @param \DateTime $from
      * @param \DateTime $to
      * @return Result
-     *      array (
-     *          'date' => '2012-08-28',
-     *          'visitors' => '6',
-     *          'orderCount' => '0',
-     *          'cancelledOrders' => '0',
-     *          'clicks' => '473',
-     *          'totalVisits' => '6',
-     *          'revenue' => NULL,
-     *          'totalOrders' => '0',
-     *          'newCustomers' => '0',
-     *      ),
-     *      array (
-     *          'date' => '2012-08-29',
-     *          'visitors' => '6',
-     *          'orderCount' => '0',
-     *          'cancelledOrders' => '0',
-     *          'clicks' => '1279',
-     *          'totalVisits' => '6',
-     *          'revenue' => NULL,
-     *          'totalOrders' => '0',
-     *          'newCustomers' => '0',
-     *      )
      */
-    public function getShopStatistic($offset, $limit, \DateTime $from = null, \DateTime $to = null)
+    public function getShopStatisticVisitors(\DateTime $from = null, \DateTime $to = null)
     {
-        $builder = $this->createShopStatisticBuilder($from, $to);
+        $builder = $this->createShopStatisticVisitorsBuilder($from, $to);
 
-        $this->addPagination($builder, $offset, $limit);
-
-        $builder = $this->eventManager->filter('Shopware_Analytics_ShopStatistic', $builder, array(
+        $builder = $this->eventManager->filter('Shopware_Analytics_ShopStatisticVisitors', $builder, array(
             'subject' => $this
         ));
 
-        return new Result($builder);
+        return new Result(
+            $builder,
+            \PDO::FETCH_GROUP|\PDO::FETCH_ASSOC,
+            false
+        );
+    }
+
+    /**
+     * Returns a dbal result object which displays the total visits of each day
+     * for the passed date range.
+     *
+     * The data array is indexed by the order date. To remove the useless array level
+     * execute the following code:
+     *      $registrations = $repository->getShopStatisticRegistrations(... , ...);
+     *      $registrations = array_map('reset', $registrations->getData());
+     *
+     * @param \DateTime $from
+     * @param \DateTime $to
+     * @return Result
+     */
+    public function getShopStatisticRegistrations(\DateTime $from = null, \DateTime $to = null)
+    {
+        $builder = $this->createShopStatisticRegistrationsBuilder($from, $to);
+
+        $builder = $this->eventManager->filter('Shopware_Analytics_ShopStatisticRegistrations', $builder, array(
+            'subject' => $this
+        ));
+
+        return new Result(
+            $builder,
+            \PDO::FETCH_GROUP|\PDO::FETCH_ASSOC,
+            false
+        );
+    }
+
+    /**
+     * Returns a dbal result object which displays the turnover and the total orders of each day
+     * for the passed date range.
+     *
+     * The data array is indexed by the order date. To remove the useless array level
+     * execute the following code:
+     *      $turnover = $repository->getShopStatisticTurnover(... , ...);
+     *      $turnover = array_map('reset', $turnover->getData());
+     *
+     * @param \DateTime $from
+     * @param \DateTime $to
+     * @return Result
+     */
+    public function getShopStatisticTurnover(\DateTime $from = null, \DateTime $to = null)
+    {
+        $builder = $this->createShopStatisticTurnoverBuilder($from, $to);
+
+        $builder = $this->eventManager->filter('Shopware_Analytics_ShopStatisticTurnover', $builder, array(
+            'subject' => $this
+        ));
+
+        return new Result(
+            $builder,
+            \PDO::FETCH_GROUP|\PDO::FETCH_ASSOC,
+            false
+        );
     }
 
     /**
@@ -1249,54 +1289,101 @@ class Repository
 
 
     /**
-     * Returns a result which selects a whole shop statistic.
+     * Creates a query builder which selects the turnover and order count of each
+     * day for the passed date range.
+     *
+     * The data array is indexed by the order date. To remove the useless array level
+     * execute the following code:
+     *      $turnover = $repository->getShopStatisticTurnover(... , ...);
+     *      $turnover = array_map('reset', $turnover->getData());
      *
      * @param \DateTime $from
      * @param \DateTime $to
-     * @param int $shopId
      * @return DBALQueryBuilder
      */
-    protected function createShopStatisticBuilder(\DateTime $from = null, \DateTime $to = null, $shopId = 0)
+    protected function createShopStatisticTurnoverBuilder(\DateTime $from = null, \DateTime $to = null)
+    {
+        $builder = $this->connection->createQueryBuilder();
+        $builder->select(array(
+            'DATE(orders.ordertime) as orderTime',
+            'COUNT(orders.id) as orderCount',
+            'SUM(orders.invoice_amount / orders.currencyFactor) as turnover',
+        ));
+
+        $builder->from('s_order', 'orders')
+            ->where('orders.status NOT IN (-1, 4)')
+            ->orderBy('DATE(orders.ordertime)', 'DESC')
+            ->groupBy('DATE(orders.ordertime)');
+
+        $this->addDateRangeCondition($builder, $from, $to, 'orderTime');
+
+        return $builder;
+    }
+
+    /**
+     * Creates a query builder which selects the total visits for each day of the
+     * passed date range.
+     *
+     * The data array is indexed by the order date. To remove the useless array level
+     * execute the following code:
+     *      $visitors = $repository->getShopStatisticVisitors(... , ...);
+     *      $visitors = array_map('reset', $visitors->getData());
+     *
+     * @param \DateTime $from
+     * @param \DateTime $to
+     * @return DBALQueryBuilder
+     */
+    protected function createShopStatisticVisitorsBuilder(\DateTime $from = null, \DateTime $to = null)
     {
         $builder = $this->connection->createQueryBuilder();
 
         $builder->select(array(
-            'visitor.datum AS date',
+            'visitor.datum AS orderTime',
             'SUM(visitor.pageimpressions) AS clicks',
-            'SUM(visitor.uniquevisits) as totalVisits',
-
-            '(SELECT SUM(orders.invoice_amount)
-              FROM   s_order orders
-              WHERE  Date(orders.ordertime) = visitor.datum
-              AND orders.status != -1) as revenue',
-
-            '(SELECT COUNT(orders.id)
-              FROM   s_order orders
-              WHERE  Date(orders.ordertime) = visitor.datum
-              AND orders.status != -1) as orderCount',
-
-            '(SELECT COUNT(DISTINCT users.id)
-              FROM   s_user users
-              WHERE  users.firstlogin = visitor.datum) as newCustomers',
-
-            '(SELECT COUNT(o2.invoice_amount)
-              FROM   s_order o2
-              WHERE  DATE(o2.ordertime) = visitor.datum
-              AND    o2.status = -1) AS cancelledOrders'
+            'SUM(visitor.uniquevisits) as visits'
         ));
 
         $builder->from('s_statistics_visitors', 'visitor')
+            ->orderBy('visitor.datum', 'DESC')
             ->groupBy('visitor.datum');
 
-        if (!empty($shopId)) {
-            $builder->andWhere('visitor.shopID = :shopId')
-                ->setParameter('shopId', $shopId);
-        }
         $this->addDateRangeCondition($builder, $from, $to, 'visitor.datum');
 
         return $builder;
     }
 
+
+    /**
+     * Creates a query builder which selects the total registrations for each
+     * day of the passed date range.
+     *
+     * The data array is indexed by the order date. To remove the useless array level
+     * execute the following code:
+     *      $registrations = $repository->getShopStatisticRegistrations(... , ...);
+     *      $registrations = array_map('reset', $registrations->getData());
+     *
+     * @param \DateTime $from
+     * @param \DateTime $to
+     * @return DBALQueryBuilder
+     */
+    protected function createShopStatisticRegistrationsBuilder(\DateTime $from = null, \DateTime $to = null)
+    {
+        $builder = $this->connection->createQueryBuilder();
+
+        $builder->select(array(
+            'firstlogin as firstLogin',
+            'COUNT(id) as registrations'
+        ));
+
+        $builder->from('s_user', 'users')
+            ->orderBy('users.firstlogin', 'DESC')
+            ->groupBy('users.firstlogin');
+
+        $this->addDateRangeCondition($builder, $from, $to, 'users.firstlogin');
+
+        return $builder;
+    }
+    
     /**
      * Returns a query which selects how many orders are done per visitor.
      * @param \DateTime $from
