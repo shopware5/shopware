@@ -34,7 +34,7 @@ Ext.define('Shopware.apps.Analytics.store.navigation.ArticleSells', {
     alias: 'widget.analytics-store-navigation-article_sells',
     remoteSort: true,
     fields: [
-        'sellCount',
+        'sales',
         'name',
         'ordernumber'
     ],

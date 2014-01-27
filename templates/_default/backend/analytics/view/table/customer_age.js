@@ -47,7 +47,9 @@ Ext.define('Shopware.apps.Analytics.view.table.CustomerAge', {
             }
         };
 
-        me.initStoreIndices('percent', '{s name="table/customer_age/percentage"}Percentage{/s}: [0]');
+        me.initStoreIndices('percent', '{s name="table/customer_age/percentage"}Percentage{/s}: [0]', {
+            renderer: me.percentRenderer
+        });
 
         me.callParent(arguments);
     },
@@ -58,6 +60,8 @@ Ext.define('Shopware.apps.Analytics.view.table.CustomerAge', {
      * @return [array] grid columns
      */
     getColumns: function () {
+        var me = this;
+
         return [
             {
                 dataIndex: 'age',
@@ -65,9 +69,16 @@ Ext.define('Shopware.apps.Analytics.view.table.CustomerAge', {
             },
             {
                 dataIndex: 'percent',
-                text: '{s name="table/customer_age/percentage"}Percentage{/s}'
+                text: '{s name="table/customer_age/percentage"}Percentage{/s}',
+                renderer: me.percentRenderer
             }
         ];
+    },
+
+    percentRenderer: function(value) {
+        return value + ' %';
     }
+
+
 });
 //{/block}

@@ -1358,7 +1358,7 @@ class Repository
     {
         $builder = $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
-            'SUM(details.quantity) AS sellCount',
+            'SUM(details.quantity) AS sales',
             'articles.name',
             'details.articleordernumber as ordernumber'
         ))
@@ -1367,7 +1367,7 @@ class Repository
             ->innerJoin('details', 's_order', 'orders', 'orders.id = details.orderID')
             ->andWhere('orders.status NOT IN (-1, 4)')
             ->groupBy('articles.id')
-            ->orderBy('sellCount', 'DESC');
+            ->orderBy('sales', 'DESC');
 
         $this->addDateRangeCondition($builder, $from, $to, 'orders.ordertime');
 
