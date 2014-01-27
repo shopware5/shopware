@@ -61,7 +61,14 @@ Ext.define('Shopware.apps.Analytics.view.chart.PartnerRevenue', {
                     height: 30,
                     autoScroll: true,
                     renderer: function (storeItem) {
-                        var title = '{s name=chart/partner/title}Sales{/s}: ' + Ext.util.Format.number(storeItem.get('turnover'), '0.00');
+                        var value = Ext.util.Format.currency(
+                            storeItem.get('turnover'),
+                            me.subApp.currencySign,
+                            2,
+                            (me.subApp.currencyAtEnd == 1)
+                        );
+
+                        var title = '{s name=chart/partner/title}Sales{/s}: ' + value;
                         this.setTitle(title);
                     }
                 }
@@ -70,5 +77,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.PartnerRevenue', {
 
         me.callParent(arguments);
     }
+
+
 });
 //{/block}

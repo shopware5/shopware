@@ -66,8 +66,8 @@ Ext.define('Shopware.apps.Analytics.view.main.Table', {
         text = text || '[0]';
         params = params || { };
 
-        for (var i = 0; i < me.shopSelection.length; i++) {
-            var shop = me.shopStore.getAt(i);
+        Ext.each(me.shopSelection, function (shopId) {
+            var shop = me.shopStore.getById(shopId);
 
             column = Ext.merge({
                 dataIndex: indexName + shop.get('id'),
@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Table', {
             }, params);
 
             columnItems.push(column);
-        }
+        });
     },
 
     getColumns: function () {
