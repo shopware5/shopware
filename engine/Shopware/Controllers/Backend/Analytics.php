@@ -643,6 +643,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     public function getVendorsAction()
     {
         $result = $this->getRepository()->getProductAmountPerManufacturer(
+            $this->Request()->getParam('start', 0),
+            $this->Request()->getParam('limit', null),
             $this->getFromDate(),
             $this->getToDate()
         );

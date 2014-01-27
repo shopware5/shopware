@@ -46,12 +46,17 @@ Ext.define('Shopware.apps.Analytics.view.table.Dispatch', {
             }
         };
 
-        me.initStoreIndices('amount', me.shopColumnText, { xtype: 'numbercolumn' });
+        me.initStoreIndices('turnover', '{s name=table/dispatch/turnover}Turnover{/s}', {
+            xtype: 'numbercolumn',
+            renderer: me.currencyRenderer
+        });
 
         me.callParent(arguments);
     },
 
     getColumns: function () {
+        var me = this;
+
         return [
             {
                 dataIndex: 'name',
@@ -59,10 +64,22 @@ Ext.define('Shopware.apps.Analytics.view.table.Dispatch', {
             },
             {
                 xtype: 'numbercolumn',
-                dataIndex: 'amount',
-                text: '{s name=table/dispatch/sales}Sales{/s}'
+                dataIndex: 'turnover',
+                text: '{s name=table/dispatch/turnover}Turnover{/s}',
+                renderer: me.currencyRenderer
             }
         ];
+    },
+
+    currencyRenderer: function(value) {
+        var me = this;
+
+        return Ext.util.Format.currency(
+            value,
+            me.subApp.currencySign,
+            2,
+            (me.subApp.currencyAtEnd == 1)
+        );
     }
 });
 //{/block}

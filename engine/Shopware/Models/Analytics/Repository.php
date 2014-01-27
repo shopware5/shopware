@@ -600,6 +600,8 @@ class Repository
 
     /**
      * Returns a result which displays which the order count of each manufacturer product.
+     * @param null $offset
+     * @param null $limit
      * @param \DateTime $from
      * @param \DateTime $to
      * @return Result
@@ -614,13 +616,15 @@ class Repository
      *         'name' => 'Example',
      *      )
      */
-    public function getProductAmountPerManufacturer(\DateTime $from = null, \DateTime $to = null)
+    public function getProductAmountPerManufacturer($offset = null, $limit = null, \DateTime $from = null, \DateTime $to = null)
     {
         $builder = $this->createProductAmountBuilder($from, $to)
             ->addSelect('suppliers.name')
             ->leftJoin('articles', 's_articles_supplier', 'suppliers', 'articles.supplierID = suppliers.id')
             ->groupBy('articles.supplierID')
             ->orderBy('suppliers.name');
+
+        $this->addPagination($builder, $offset, $limit);
 
         $builder = $this->eventManager->filter('Shopware_Analytics_ProductAmountPerManufacturer', $builder, array(
             'subject' => $this

@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Country', {
                 type: 'Category',
                 position: 'left',
                 fields: ['name'],
-                title: '{s name=chart/country/title}Payment method{/s}'
+                title: '{s name=chart/country/title}Country{/s}'
             }
         ];
 
@@ -81,7 +81,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Country', {
                 tips: {
                     trackMouse: true,
                     width: 180,
-                    height: 30,
+                    height: 45,
                     renderer: function (storeItem, barItem) {
 
                         var name = storeItem.get('name'),
