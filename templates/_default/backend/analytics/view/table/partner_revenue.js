@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.Analytics.view.table.PartnerRevenue', {
                 text: '{s name="table/turnover_partner/partner"}Partner{/s}'
             },
             {
-                dataIndex: 'revenue',
+                dataIndex: 'turnover',
                 text: '{s name="table/turnover_partner/turnover"}Turnover{/s}'
             }
         ];

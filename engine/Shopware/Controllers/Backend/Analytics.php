@@ -202,17 +202,17 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     public function getOverviewAction()
     {
-        $turnover = $this->getRepository()->getShopStatisticTurnover(
+        $turnover = $this->getRepository()->getDailyTurnover(
             $this->getFromDate(),
             $this->getToDate()
         );
 
-        $visitors = $this->getRepository()->getShopStatisticVisitors(
+        $visitors = $this->getRepository()->getDailyVisitors(
             $this->getFromDate(),
             $this->getToDate()
         );
 
-        $registrations = $this->getRepository()->getShopStatisticRegistrations(
+        $registrations = $this->getRepository()->getDailyRegistrations(
             $this->getFromDate(),
             $this->getToDate()
         );
@@ -241,43 +241,52 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     public function getRatingAction()
     {
         $shopIds = $this->getSelectedShopIds();
-        $result = $this->getRepository()->getOrdersOfVisitors(
+        $visitors = $this->getRepository()->getDailyShopVisitors(
             $this->getFromDate(),
             $this->getToDate(),
-            $this->getSelectedShopIds()
+            $shopIds
+        );
+        $visitors = array_map('reset', $visitors->getData());
+
+        $orders = $this->getRepository()->getDailyShopOrders(
+            $this->getFromDate(),
+            $this->getToDate(),
+            $shopIds
         );
 
-        $data = array();
+        $orders = array_map('reset', $orders->getData());
+        $data = array_merge_recursive($orders, $visitors);
 
-        foreach ($result->getData() as $row) {
+        foreach($data as $date => &$row) {
+            $row['date'] = strtotime($date);
             $orders = $row['orderCount'];
-            $visitors = $row['visitors'];
+            $visitors = $row['visits'];
             $cancelledOrders = $row['cancelledOrders'];
 
-            $ratingData = array(
-                'date' => strtotime($row['date']),
-                'basketConversion' => round($orders / ($cancelledOrders + $orders) * 100, 2),
-                'orderConversion' => round($orders / $visitors * 100, 2),
-                'basketVisitConversion' => round($cancelledOrders / $visitors * 100, 2)
-            );
+            $row['basketConversion'] = round($orders / ($cancelledOrders + $orders) * 100, 2);
+            $row['orderConversion'] = round($orders / $visitors * 100, 2);
+            $row['basketVisitConversion'] = round($cancelledOrders / $visitors * 100, 2);
 
-            if (!empty($shopIds)) {
-                foreach ($shopIds as $shopId) {
-                    $orders = $row['orderCount' . $shopId];
-                    $visitors = $row['visitors' . $shopId];
-                    $cancelledOrders = $row['cancelledOrders' . $shopId];
+            foreach ($shopIds as $shopId) {
+                $orders = $row['orderCount' . $shopId];
+                $visitors = $row['visits' . $shopId];
+                $cancelledOrders = $row['cancelledOrders' . $shopId];
 
-                    $ratingData['basketConversion' . $shopId] = round($orders / ($cancelledOrders + $orders) * 100, 2);
-                    $ratingData['orderConversion' . $shopId] = round($orders / $visitors * 100, 2);
-                    $ratingData['basketVisitConversion' . $shopId] = round($cancelledOrders / $visitors * 100, 2);
-                }
+                $row['basketConversion' . $shopId] = round($orders / ($cancelledOrders + $orders) * 100, 2);
+                $row['orderConversion' . $shopId] = round($orders / $visitors * 100, 2);
+                $row['basketVisitConversion' . $shopId] = round($cancelledOrders / $visitors * 100, 2);
             }
-
-            $data[] = $ratingData;
         }
-        $this->send($data, $result->getTotalCount());
 
+        $splice = array_splice(
+            array_values($data),
+            $this->Request()->getParam('start', 0),
+            $this->Request()->getParam('limit', 25)
+        );
+
+        $this->send($splice, count($data));
     }
+
 
     public function getReferrerRevenueAction()
     {
@@ -299,40 +308,36 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             if (!array_key_exists($host, $referrer)) {
                 $referrer[$host] = array(
                     'host' => $host,
-                    'entireRevenue' => 0,
-                    'lead' => 0,
-                    'customerValue' => 0,
-                    'entireNewRevenue' => 0,
-                    'entireOldRevenue' => 0,
                     'orderCount' => 0,
+                    'turnover' => 0,
+                    'average' => 0,
                     'newCustomers' => 0,
-                    'oldCustomers' => 0,
-                    'perNewRevenue' => 0,
-                    'perOldRevenue' => 0
+                    'turnoverNewCustomer' => 0,
+                    'averageNewCustomer' => 0,
+                    'regularCustomers' => 0,
+                    'turnoverRegularCustomer' => 0,
+                    'averageRegularCustomer' => 0
                 );
             }
 
             if (!in_array($row['userID'], $customers)) {
                 if (strtotime($row['orderTime']) - strtotime($row['firstLogin']) < 60 * 60 * 24) {
-                    $referrer[$host]['entireNewRevenue'] += $row['revenue'];
+                    $referrer[$host]['turnoverNewCustomer'] += $row['turnover'];
                     $referrer[$host]['newCustomers']++;
                 } else {
-                    $referrer[$host]['entireOldRevenue'] += $row['revenue'];
-                    $referrer[$host]['oldCustomers']++;
+                    $referrer[$host]['turnoverRegularCustomer'] += $row['turnover'];
+                    $referrer[$host]['regularCustomers']++;
                 }
-
-                $referrer[$host]['customerRevenue'] += $row['revenue'];
             }
 
-            $referrer[$host]['entireRevenue'] += $row['revenue'];
+            $referrer[$host]['turnover'] += $row['turnover'];
             $referrer[$host]['orderCount']++;
         }
 
         foreach ($referrer as &$ref) {
-            $ref['lead'] = round($ref['entireRevenue'] / $ref['orderCount'], 2);
-            $ref['perNewRevenue'] = round($ref['entireNewRevenue'] / $ref['newCustomers'], 2);
-            $ref['perOldRevenue'] = round($ref['entireOldRevenue'] / $ref['oldCustomers'], 2);
-            $ref['customerValue'] = round($ref['customerRevenue'] / ($ref['newCustomers'] + $ref['oldCustomers']), 2);
+            $ref['average'] = round($ref['turnover'] / $ref['orderCount'], 2);
+            $ref['averageNewCustomer'] = round($ref['turnoverNewCustomer'] / $ref['newCustomers'], 2);
+            $ref['averageRegularCustomer'] = round($ref['turnoverRegularCustomer'] / $ref['regularCustomers'], 2);
         }
 
         $this->send(array_values($referrer), $result->getTotalCount());
@@ -424,6 +429,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         );
 
         $customers = array();
+        $users = array();
 
         foreach($result->getData() as $row) {
             $week = $row['orderTime'];
@@ -432,7 +438,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $customers[$week]['female'] = (int)$customers[$week]['female'];
             $customers[$week]['male'] = (int)$customers[$week]['male'];
             $customers[$week]['registration'] = (int) $customers[$week]['registration'];
-            $customers[$week]['users'] = (array) $customers[$week]['users'];
+            $users[$week] = (array) $users[$week];
 
             switch(strtolower($row['salutation'])) {
                 case "mr":
@@ -445,12 +451,11 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                     break;
             }
 
-            $users = $customers[$week]['users'];
-            if ($row['isNewCustomerOrder'] && !in_array($row['userId'], $users)) {
+            if ($row['isNewCustomerOrder'] && !in_array($row['userId'], $users[$week])) {
                 $customers[$week]['registration']++;
             }
 
-            $customers[$week]['users'][] = $row['userId'];
+            $users[$week][] = $row['userId'];
 
             if ($row['isNewCustomerOrder']) {
                 $customers[$week]['newCustomersOrders']++;
@@ -923,16 +928,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         if (!empty($selectedShopIds)) {
             return explode(',', $selectedShopIds);
         }
-
-        $builder = $this->getManager()->getDBALQueryBuilder();
-        $builder->select('s.id')
-            ->from('s_core_shops', 's')
-            ->orderBy('s.default', 'DESC')
-            ->addOrderBy('s.name');
-
-        $statement = $builder->execute();
-
-        return $statement->fetchAll(PDO::FETCH_COLUMN);
+        return array();
     }
 
     /**
