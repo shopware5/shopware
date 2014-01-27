@@ -481,8 +481,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         foreach ($result->getData() as $row) {
             $age = floor((time() - strtotime($row['birthday'])) / (60 * 60 * 24 * 365));
 
-            if (!array_key_exists("{$age}", $ages)) {
-                $ages["{$age}"] = array(
+            if (!array_key_exists("$age", $ages)) {
+                $ages["$age"] = array(
                     'age' => $age,
                     'count' => 0
                 );
@@ -494,18 +494,18 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                         $subShopCounts[$shopId] = 0;
                     }
 
-                    if (!array_key_exists('count' . $shopId, $ages["{$age}"])) {
-                        $ages["{$age}"]['count' . $shopId] = 0;
+                    if (!array_key_exists('count' . $shopId, $ages["$age"])) {
+                        $ages["$age"]['count' . $shopId] = 0;
                     }
 
                     if (!empty($row['birthday' . $shopId])) {
-                        $ages["{$age}"]['count' . $shopId]++;
+                        $ages["$age"]['count' . $shopId]++;
                         $subShopCounts[$shopId]++;
                     }
                 }
             }
 
-            $ages["{$age}"]['count']++;
+            $ages["$age"]['count']++;
         }
 
         foreach ($ages as &$age) {
@@ -520,7 +520,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $this->send(
             array_values($ages),
-            count($ages)
+            25
         );
     }
 

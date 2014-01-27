@@ -66,9 +66,9 @@ Ext.define('Shopware.apps.Analytics.view.table.ArticleSells', {
                 text: '{s name="table/items_sales/article_name"}Article name{/s}'
             },
             {
-                dataIndex: 'sellCount',
+                dataIndex: 'sales',
                 align: 'right',
-                text: '{s name="table/items_sales/sells"}Sells{/s}'
+                text: '{s name="table/items_sales/sales"}Sales{/s}'
             }
         ];
     }

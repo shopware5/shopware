@@ -66,7 +66,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.CustomerAge', {
                 {
                     renderer: function (storeItem) {
                         var text = '{s name=chart/customer_age/age/tip/title}Age{/s}: ';
-                        text += Ext.util.Format.number(storeItem.get('age'));
+                        text += Ext.util.Format.number(storeItem.get('age'), '0');
                         text += '<br>' + '&nbsp;{s name=chart/customer_age/percent/tip/title}Percent{/s}: ';
                         text += Ext.util.Format.number(storeItem.get('percent')) + '%';
 
