@@ -34,10 +34,10 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Categories', {
     alias: 'widget.analytics-store-navigation-categories',
     remoteSort: true,
     fields: [
-        'count',
-        'name',
-        'node',
-        'amount'
+        { name: 'orderCount', type: 'int' },
+        { name: 'name', type: 'string' },
+        { name: 'node', type: 'int' },
+        { name: 'turnover', type: 'float' }
     ],
     proxy: {
         type: 'ajax',
