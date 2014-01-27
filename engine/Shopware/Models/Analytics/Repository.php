@@ -60,41 +60,23 @@ class Repository
     }
 
     /**
-     * Returns a result which displays the total order amount per customer gorup.
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @param array $shopIds
-     * @return Result
-     */
-    public function getCustomerGroupAmount(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
-    {
-        $builder = $this->createCustomerGroupAmountBuilder($from, $to, $shopIds);
-
-        $builder = $this->eventManager->filter('Shopware_Analytics_CustomerGroupAmount', $builder, array(
-            'subject' => $this
-        ));
-
-        return new Result($builder);
-    }
-
-    /**
      * Returns a dbal result object which displays the total visits of each day
      * for the passed date range.
      *
      * The data array is indexed by the order date. To remove the useless array level
      * execute the following code:
-     *      $visitors = $repository->getShopStatisticVisitors(... , ...);
+     *      $visitors = $repository->getDailyVisitors(... , ...);
      *      $visitors = array_map('reset', $visitors->getData());
      *
      * @param \DateTime $from
      * @param \DateTime $to
      * @return Result
      */
-    public function getShopStatisticVisitors(\DateTime $from = null, \DateTime $to = null)
+    public function getDailyVisitors(\DateTime $from = null, \DateTime $to = null)
     {
-        $builder = $this->createShopStatisticVisitorsBuilder($from, $to);
+        $builder = $this->createDailyVisitorsBuilder($from, $to);
 
-        $builder = $this->eventManager->filter('Shopware_Analytics_ShopStatisticVisitors', $builder, array(
+        $builder = $this->eventManager->filter('Shopware_Analytics_DailyVisitors', $builder, array(
             'subject' => $this
         ));
 
@@ -106,23 +88,153 @@ class Repository
     }
 
     /**
+     * Returns a dbal result object which displays the total visits of each
+     * day for the passed date range.
+     * If shop ids passed, the data result contains additionally for each shop id
+     * a data result column like "visits1" for "visits" + shop id.
+     *
+     * The data array is indexed by the order date. To remove the useless array level
+     * execute the following code:
+     *      $visitors = $repository->getDailyShopVisitors(... , ...);
+     *      $visitors = array_map('reset', $visitors->getData());
+     *
+     *
+     * @param \DateTime $from
+     * @param \DateTime $to
+     * @param array $shopIds
+     * @return Result
+     */
+    public function getDailyShopVisitors(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
+    {
+        $builder = $this->createDailyVisitorsBuilder($from, $to);
+
+        foreach($shopIds as $shopId) {
+            $builder->addSelect(
+                "SUM(IF(visitor.shopID = " . $shopId . ", visitor.uniquevisits, 0)) as visits" . $shopId
+            );
+        }
+
+        $builder = $this->eventManager->filter('Shopware_Analytics_DailyShopVisitors', $builder, array(
+            'subject' => $this
+        ));
+
+        return new Result(
+            $builder,
+            \PDO::FETCH_GROUP|\PDO::FETCH_ASSOC,
+            false
+        );
+    }
+
+
+    /**
+     * Returns a dbal result object which displays the total orders of each
+     * day for the passed date range.
+     * If shop ids passed, the data result contains additionally for each shop id
+     * a data result column like "orderCount1" for "orderCount" + shop id.
+     *
+     * The data array is indexed by the order date. To remove the useless array level
+     * execute the following code:
+     *      $orders = $repository->getDailyShopOrders(... , ...);
+     *      $orders = array_map('reset', $orders->getData());
+     *
+     * @param \DateTime $from
+     * @param \DateTime $to
+     * @param array $shopIds
+     * @return Result
+     */
+    public function getDailyShopOrders(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
+    {
+        $builder = $this->createDailyShopOrderBuilder($from, $to, $shopIds);
+
+        $builder = $this->eventManager->filter('Shopware_Analytics_DailyShopOrders', $builder, array(
+            'subject' => $this
+        ));
+
+        return new Result(
+            $builder,
+            \PDO::FETCH_GROUP|\PDO::FETCH_ASSOC,
+            false
+        );
+    }
+
+    /**
+     * Returns a dbal query builder which displays the total orders of each
+     * day for the passed date range.
+     * If shop ids passed, the data result contains additionally for each shop id
+     * a data result column like "orderCount1" for "orderCount" + shop id.
+     *
+     * The data array is indexed by the order date. To remove the useless array level
+     * execute the following code:
+     *      $orders = $repository->getDailyShopOrders(... , ...);
+     *      $orders = array_map('reset', $orders->getData());
+     *
+     * @param \DateTime $from
+     * @param \DateTime $to
+     * @param array $shopIds
+     * @return DBALQueryBuilder
+     */
+    protected function createDailyShopOrderBuilder(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
+    {
+        $builder = $this->connection->createQueryBuilder();
+
+        $builder->select(array(
+            "DATE(orders.ordertime) as orderTime",
+
+            "SUM( IF(
+			    orders.status NOT IN (-1, 4),
+		   	    1, 0
+	   	    )) as orderCount",
+
+            "SUM( IF(
+   			    orders.status = -1,
+   			    1, 0
+		    )) as cancelledOrders"
+        ));
+
+        foreach($shopIds as $shopId) {
+            $builder->addSelect(
+                "SUM( IF(
+	   		        orders.subshopID = ".$shopId." AND orders.status NOT IN (-1, 4),
+	   		        1, 0
+		        )) as orderCount" . $shopId
+            );
+
+            $builder->addSelect(
+                "SUM( IF(
+                    orders.subshopID = ".$shopId." AND orders.status = -1,
+	   		        1, 0
+	   	        )) cancelledOrders" . $shopId
+            );
+        }
+
+        $builder->from('s_order', 'orders')
+            ->orderBy('orders.ordertime', 'DESC')
+            ->groupBy('DATE(orders.ordertime)');
+
+        $this->addDateRangeCondition($builder, $from, $to, 'DATE(orders.ordertime)');
+
+        return $builder;
+    }
+
+
+    /**
      * Returns a dbal result object which displays the total visits of each day
      * for the passed date range.
      *
      * The data array is indexed by the order date. To remove the useless array level
      * execute the following code:
-     *      $registrations = $repository->getShopStatisticRegistrations(... , ...);
+     *      $registrations = $repository->getDailyRegistrations(... , ...);
      *      $registrations = array_map('reset', $registrations->getData());
      *
      * @param \DateTime $from
      * @param \DateTime $to
      * @return Result
      */
-    public function getShopStatisticRegistrations(\DateTime $from = null, \DateTime $to = null)
+    public function getDailyRegistrations(\DateTime $from = null, \DateTime $to = null)
     {
-        $builder = $this->createShopStatisticRegistrationsBuilder($from, $to);
+        $builder = $this->createDailyRegistrationsBuilder($from, $to);
 
-        $builder = $this->eventManager->filter('Shopware_Analytics_ShopStatisticRegistrations', $builder, array(
+        $builder = $this->eventManager->filter('Shopware_Analytics_DailyRegistrations', $builder, array(
             'subject' => $this
         ));
 
@@ -139,16 +251,16 @@ class Repository
      *
      * The data array is indexed by the order date. To remove the useless array level
      * execute the following code:
-     *      $turnover = $repository->getShopStatisticTurnover(... , ...);
+     *      $turnover = $repository->getDailyTurnover(... , ...);
      *      $turnover = array_map('reset', $turnover->getData());
      *
      * @param \DateTime $from
      * @param \DateTime $to
      * @return Result
      */
-    public function getShopStatisticTurnover(\DateTime $from = null, \DateTime $to = null)
+    public function getDailyTurnover(\DateTime $from = null, \DateTime $to = null)
     {
-        $builder = $this->createShopStatisticTurnoverBuilder($from, $to);
+        $builder = $this->createDailyTurnoverBuilder($from, $to);
 
         $builder = $this->eventManager->filter('Shopware_Analytics_ShopStatisticTurnover', $builder, array(
             'subject' => $this
@@ -159,6 +271,104 @@ class Repository
             \PDO::FETCH_GROUP|\PDO::FETCH_ASSOC,
             false
         );
+    }
+
+
+    /**
+     * Creates a query builder which selects the turnover and order count of each
+     * day for the passed date range.
+     *
+     * The data array is indexed by the order date. To remove the useless array level
+     * execute the following code:
+     *      $turnover = $repository->getDailyTurnover(... , ...);
+     *      $turnover = array_map('reset', $turnover->getData());
+     *
+     * @param \DateTime $from
+     * @param \DateTime $to
+     * @return DBALQueryBuilder
+     */
+    protected function createDailyTurnoverBuilder(\DateTime $from = null, \DateTime $to = null)
+    {
+        $builder = $this->connection->createQueryBuilder();
+        $builder->select(array(
+            'DATE(orders.ordertime) as orderTime',
+            'COUNT(orders.id) as orderCount',
+            'SUM(orders.invoice_amount / orders.currencyFactor) as turnover',
+        ));
+
+        $builder->from('s_order', 'orders')
+            ->where('orders.status NOT IN (-1, 4)')
+            ->orderBy('DATE(orders.ordertime)', 'DESC')
+            ->groupBy('DATE(orders.ordertime)');
+
+        $this->addDateRangeCondition($builder, $from, $to, 'orderTime');
+
+        return $builder;
+    }
+
+
+    /**
+     * Creates a query builder which selects the total visits for each day of the
+     * passed date range.
+     *
+     * The data array is indexed by the order date. To remove the useless array level
+     * execute the following code:
+     *      $visitors = $repository->getDailyVisitors(... , ...);
+     *      $visitors = array_map('reset', $visitors->getData());
+     *
+     * @param \DateTime $from
+     * @param \DateTime $to
+     * @return DBALQueryBuilder
+     */
+    protected function createDailyVisitorsBuilder(\DateTime $from = null, \DateTime $to = null)
+    {
+        $builder = $this->connection->createQueryBuilder();
+
+        $builder->select(array(
+            'visitor.datum AS date',
+            'SUM(visitor.pageimpressions) AS clicks',
+            'SUM(visitor.uniquevisits) as visits'
+        ));
+
+        $builder->from('s_statistics_visitors', 'visitor')
+            ->orderBy('visitor.datum', 'DESC')
+            ->groupBy('visitor.datum');
+
+        $this->addDateRangeCondition($builder, $from, $to, 'visitor.datum');
+
+        return $builder;
+    }
+
+
+    /**
+     * Creates a query builder which selects the total registrations for each
+     * day of the passed date range.
+     *
+     * The data array is indexed by the order date. To remove the useless array level
+     * execute the following code:
+     *      $registrations = $repository->getDailyRegistrations(... , ...);
+     *      $registrations = array_map('reset', $registrations->getData());
+     *
+     * @param \DateTime $from
+     * @param \DateTime $to
+     * @return DBALQueryBuilder
+     */
+    protected function createDailyRegistrationsBuilder(\DateTime $from = null, \DateTime $to = null)
+    {
+        $builder = $this->connection->createQueryBuilder();
+
+        $builder->select(array(
+            'firstlogin as firstLogin',
+            'COUNT(id) as registrations'
+        ));
+
+        $builder->from('s_user', 'users')
+            ->orderBy('users.firstlogin', 'DESC')
+            ->groupBy('users.firstlogin');
+
+        $this->addDateRangeCondition($builder, $from, $to, 'users.firstlogin');
+
+        return $builder;
     }
 
     /**
@@ -1175,7 +1385,7 @@ class Repository
     {
         $builder = $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
-            'ROUND(SUM((orders.invoice_amount - orders.invoice_shipping) / orders.currencyFactor), 2) AS revenue',
+            'ROUND(SUM((orders.invoice_amount - orders.invoice_shipping) / orders.currencyFactor), 2) AS turnover',
             'partners.company AS partner',
             'orders.partnerID as trackingCode',
             'partners.id as partnerId'
@@ -1185,7 +1395,7 @@ class Repository
             ->where('orders.status NOT IN (-1, 4)')
             ->andWhere("orders.partnerID != ''")
             ->groupBy('orders.partnerID')
-            ->orderBy('revenue', 'DESC');
+            ->orderBy('turnover', 'DESC');
 
         $this->addDateRangeCondition($builder, $from, $to, 'orders.ordertime');
 
@@ -1203,31 +1413,17 @@ class Repository
     {
         $builder = $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
-            'ROUND(orders.invoice_amount / orders.currencyFactor, 2) AS revenue',
+            'ROUND(orders.invoice_amount / orders.currencyFactor, 2) AS turnover',
             'users.id as userID',
             'orders.referer AS referrer',
             'DATE(users.firstlogin) as firstLogin',
-            'DATE(orders.ordertime) as orderTime',
-            '(
-                SELECT o2.ordertime
-                FROM s_order o2
-                WHERE o2.userID = users.id
-                ORDER BY o2.ordertime DESC
-                LIMIT 1
-            ) as firstOrder',
-            '(
-                SELECT ROUND(SUM(o3.invoice_amount / o3.currencyFactor), 2)
-                FROM s_order o3
-                WHERE o3.userID = users.id
-                AND o3.status != 4
-                AND o3.status != -1
-            ) as customerRevenue'
+            'DATE(orders.ordertime) as orderTime'
         ))
             ->from('s_order', 'orders')
             ->innerJoin('orders', 's_user', 'users', 'orders.userID = users.id')
             ->where('orders.status != 4 AND orders.status != -1')
             ->andWhere("orders.referer LIKE 'http%//%'")
-            ->orderBy('revenue');
+            ->orderBy('turnover');
 
         $this->addDateRangeCondition($builder, $from, $to, 'orders.ordertime');
 
@@ -1288,101 +1484,6 @@ class Repository
     }
 
 
-    /**
-     * Creates a query builder which selects the turnover and order count of each
-     * day for the passed date range.
-     *
-     * The data array is indexed by the order date. To remove the useless array level
-     * execute the following code:
-     *      $turnover = $repository->getShopStatisticTurnover(... , ...);
-     *      $turnover = array_map('reset', $turnover->getData());
-     *
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @return DBALQueryBuilder
-     */
-    protected function createShopStatisticTurnoverBuilder(\DateTime $from = null, \DateTime $to = null)
-    {
-        $builder = $this->connection->createQueryBuilder();
-        $builder->select(array(
-            'DATE(orders.ordertime) as orderTime',
-            'COUNT(orders.id) as orderCount',
-            'SUM(orders.invoice_amount / orders.currencyFactor) as turnover',
-        ));
-
-        $builder->from('s_order', 'orders')
-            ->where('orders.status NOT IN (-1, 4)')
-            ->orderBy('DATE(orders.ordertime)', 'DESC')
-            ->groupBy('DATE(orders.ordertime)');
-
-        $this->addDateRangeCondition($builder, $from, $to, 'orderTime');
-
-        return $builder;
-    }
-
-    /**
-     * Creates a query builder which selects the total visits for each day of the
-     * passed date range.
-     *
-     * The data array is indexed by the order date. To remove the useless array level
-     * execute the following code:
-     *      $visitors = $repository->getShopStatisticVisitors(... , ...);
-     *      $visitors = array_map('reset', $visitors->getData());
-     *
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @return DBALQueryBuilder
-     */
-    protected function createShopStatisticVisitorsBuilder(\DateTime $from = null, \DateTime $to = null)
-    {
-        $builder = $this->connection->createQueryBuilder();
-
-        $builder->select(array(
-            'visitor.datum AS orderTime',
-            'SUM(visitor.pageimpressions) AS clicks',
-            'SUM(visitor.uniquevisits) as visits'
-        ));
-
-        $builder->from('s_statistics_visitors', 'visitor')
-            ->orderBy('visitor.datum', 'DESC')
-            ->groupBy('visitor.datum');
-
-        $this->addDateRangeCondition($builder, $from, $to, 'visitor.datum');
-
-        return $builder;
-    }
-
-
-    /**
-     * Creates a query builder which selects the total registrations for each
-     * day of the passed date range.
-     *
-     * The data array is indexed by the order date. To remove the useless array level
-     * execute the following code:
-     *      $registrations = $repository->getShopStatisticRegistrations(... , ...);
-     *      $registrations = array_map('reset', $registrations->getData());
-     *
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @return DBALQueryBuilder
-     */
-    protected function createShopStatisticRegistrationsBuilder(\DateTime $from = null, \DateTime $to = null)
-    {
-        $builder = $this->connection->createQueryBuilder();
-
-        $builder->select(array(
-            'firstlogin as firstLogin',
-            'COUNT(id) as registrations'
-        ));
-
-        $builder->from('s_user', 'users')
-            ->orderBy('users.firstlogin', 'DESC')
-            ->groupBy('users.firstlogin');
-
-        $this->addDateRangeCondition($builder, $from, $to, 'users.firstlogin');
-
-        return $builder;
-    }
     
     /**
      * Returns a query which selects how many orders are done per visitor.
@@ -1444,10 +1545,29 @@ class Repository
         ));
 
         $builder->from('s_statistics_visitors', 'visitor')
-            ->leftJoin('visitor', 's_order', 'orders', 'visitor.datum = DATE(orders.ordertime) AND orders.status NOT IN (-1)')
+            ->leftJoin('visitor', 's_order', 'orders', 'visitor.datum = DATE(orders.ordertime) AND orders.status NOT IN (-1, 4)')
             ->groupBy('visitor.datum');
 
         return $builder;
+    }
+
+
+    /**
+     * Returns a result which displays the total order amount per customer gorup.
+     * @param \DateTime $from
+     * @param \DateTime $to
+     * @param array $shopIds
+     * @return Result
+     */
+    public function getCustomerGroupAmount(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
+    {
+        $builder = $this->createCustomerGroupAmountBuilder($from, $to, $shopIds);
+
+        $builder = $this->eventManager->filter('Shopware_Analytics_CustomerGroupAmount', $builder, array(
+            'subject' => $this
+        ));
+
+        return new Result($builder);
     }
 
 

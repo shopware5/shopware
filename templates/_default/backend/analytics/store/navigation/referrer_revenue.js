@@ -35,16 +35,15 @@ Ext.define('Shopware.apps.Analytics.store.navigation.ReferrerRevenue', {
     remoteSort: true,
     fields: [
         'host',
-        'entireRevenue',
-        'lead',
-        'customerValue',
-        'entireNewRevenue',
-        'entireOldRevenue',
+        'turnover',
+        'average',
+        'turnoverNewCustomer',
+        'turnoverRegularCustomer',
         'orderCount',
         'newCustomers',
-        'oldCustomers',
-        'perNewRevenue',
-        'perOldRevenue'
+        'regularCustomers',
+        'averageNewCustomer',
+        'averageRegularCustomer'
     ],
     proxy: {
         type: 'ajax',

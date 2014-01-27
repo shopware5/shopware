@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.Analytics.store.navigation.PartnerRevenue', {
     fields: [
         'trackingCode',
         'partner',
-        'revenue'
+        'turnover'
     ],
     proxy: {
         type: 'ajax',

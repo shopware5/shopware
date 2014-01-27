@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Overview', {
         { name: 'cancelledOrders', type: 'int' },
         { name: 'conversion', type: 'float' },
         { name: 'visits', type: 'int' },
-        { name: 'newCustomers', type: 'int' },
+        { name: 'registrations', type: 'int' },
         { name: 'visitors', type: 'int' },
         { name: 'clicks', type: 'int' }
     ],

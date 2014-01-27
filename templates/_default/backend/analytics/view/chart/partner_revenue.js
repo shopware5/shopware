@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.PartnerRevenue', {
         me.series = [
             {
                 type: 'pie',
-                field: 'revenue',
+                field: 'turnover',
                 showInLegend: true,
                 label: {
                     field: 'partner',
@@ -61,7 +61,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.PartnerRevenue', {
                     height: 30,
                     autoScroll: true,
                     renderer: function (storeItem) {
-                        var title = '{s name=chart/partner/title}Sales{/s}: ' + Ext.util.Format.number(storeItem.get('revenue'), '0.00');
+                        var title = '{s name=chart/partner/title}Sales{/s}: ' + Ext.util.Format.number(storeItem.get('turnover'), '0.00');
                         this.setTitle(title);
                     }
                 }
