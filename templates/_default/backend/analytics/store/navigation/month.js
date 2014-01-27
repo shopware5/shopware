@@ -35,7 +35,8 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Month', {
     remoteSort: true,
     fields: [
         { name: 'date', type: 'date', dateFormat: 'timestamp' },
-        'amount',
+        { name: 'turnover', type: 'float' },
+        { name: 'orderCount', type: 'int' },
         'displayDate'
     ],
     proxy: {
@@ -54,7 +55,7 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Month', {
 
         if (config.shopStore) {
             config.shopStore.each(function (shop) {
-                config.fields.push('amount' + shop.data.id);
+                config.fields.push('turnover' + shop.data.id);
             });
         }
 

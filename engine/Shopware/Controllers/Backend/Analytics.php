@@ -153,7 +153,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             's.name',
             'c.currency',
             'c.name AS currencyName',
-            'c.templateChar AS currencyChar'
+            'c.templateChar AS currencyChar',
+            '(c.symbol_position < 32) currencyAtEnd'
         ))
             ->from('s_core_shops', 's')
             ->leftJoin('s', 's_core_currencies', 'c', 's.currency_id = c.id')
@@ -168,8 +169,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $shopIds = $this->getSelectedShopIds();
 
         foreach ($data as &$row) {
-            $row['count'] = (int) $row['count'];
-            $row['amount'] = (float) $row['amount'];
+            $row['orderCount'] = (int) $row['orderCount'];
+            $row['turnover'] = (float) $row['turnover'];
 
             if (!empty($row['date'])) {
                 $row['date'] = strtotime($row['date']);
@@ -177,7 +178,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
             if (!empty($shopIds)) {
                 foreach ($shopIds as $shopId) {
-                    $row['amount' . $shopId] = (float) $row['amount' . $shopId];
+                    $row['turnover' . $shopId] = (float) $row['turnover' . $shopId];
                 }
             }
         }

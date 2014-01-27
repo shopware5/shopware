@@ -47,12 +47,17 @@ Ext.define('Shopware.apps.Analytics.view.table.Month', {
             }
         };
 
-        me.initStoreIndices('amount', me.shopColumnText, { xtype: 'numbercolumn' });
+        me.initStoreIndices('turnover', me.shopColumnText, {
+            xtype: 'numbercolumn',
+            renderer: me.currencyRenderer
+        });
 
         me.callParent(arguments);
     },
 
     getColumns: function () {
+        var me = this;
+
         return [
             {
                 xtype: 'datecolumn',
@@ -62,10 +67,23 @@ Ext.define('Shopware.apps.Analytics.view.table.Month', {
             },
             {
                 xtype: 'numbercolumn',
-                dataIndex: 'amount',
-                text: '{s name=table/month/sales}Total sales{/s}'
+                dataIndex: 'turnover',
+                text: '{s name=table/month/turnover}Turnover{/s}',
+                renderer: me.currencyRenderer
             }
         ];
+    },
+
+    currencyRenderer: function(value) {
+        var me = this;
+
+        return Ext.util.Format.currency(
+            value,
+            me.subApp.currencySign,
+            2,
+            (me.subApp.currencyAtEnd == 1)
+        );
     }
+
 });
 //{/block}

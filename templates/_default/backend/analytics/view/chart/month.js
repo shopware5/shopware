@@ -64,9 +64,6 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
 
         me.series = [];
 
-        // Initiate stores for handling multiple shop values
-        me.initMultipleShopTipsStores();
-
         if (me.shopSelection != Ext.undefined && me.shopSelection.length > 0) {
             me.series = me.getSeriesForShopSelection();
         } else {
@@ -74,19 +71,21 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
                 me.createLineSeries(
                     {
                         xField: 'date',
-                        yField: 'amount',
-                        title: '{s name=chart/month/legendSum}Sum{/s}',
+                        yField: 'turnover',
+                        title: '{s name=chart/month/legendSum}Sum{/s}'
                     },
                     {
-                        width: 580,
-                        height: 130,
-                        items: {
-                            xtype: 'container',
-                            layout: 'hbox',
-                            items: [me.tipChart, me.tipGrid]
-                        },
-                        renderer: function (cls, item) {
-                            me.initMultipleShopTipsData(item, this);
+                        width: 90,
+                        height: 45,
+                        renderer: function (storeItem) {
+                            var value = Ext.util.Format.currency(
+                                storeItem.get('turnover'),
+                                me.subApp.currencySign,
+                                2,
+                                (me.subApp.currencyAtEnd == 1)
+                            );
+
+                            this.setTitle(Ext.Date.format(storeItem.get('date'), 'F, Y') + '<br><br>&nbsp;' + value);
                         }
                     }
                 )
@@ -98,7 +97,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
             minimum: 0,
             grid: true,
             position: 'left',
-            fields: me.getAxesFields('amount'),
+            fields: me.getAxesFields('turnover'),
             title: '{s name=chart/month/titleLeft}Sales{/s}'
         });
 
@@ -121,9 +120,11 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
                     {
                         title: shop.get('name'),
                         xField: 'date',
-                        yField: 'amount' + shopId
+                        yField: 'turnover' + shopId
                     },
                     {
+                        width: 90,
+                        height: 45,
                         renderer: function (storeItem) {
                             me.renderShopData(storeItem, this, shop);
                         }
@@ -136,11 +137,17 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
         return series;
     },
 
-
     renderShopData: function(storeItem, tip, shop) {
-        tip.setTitle(Ext.Date.format(storeItem.get('date'), 'F, Y'));
-        var sales = Ext.util.Format.currency(storeItem.get('amount' + shop.get('id')), shop.get('currencyChar'));
-        tip.update(' ' + sales);
+        var me = this;
+
+        var sales = Ext.util.Format.currency(
+            storeItem.get('turnover' + shop.get('id')),
+            me.subApp.currencySign,
+            2,
+            (me.subApp.currencyAtEnd == 1)
+        );
+
+        tip.setTitle(Ext.Date.format(storeItem.get('date'), 'F, Y') + '<br><br>&nbsp;' + sales);
     }
 
 

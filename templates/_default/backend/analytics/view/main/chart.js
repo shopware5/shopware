@@ -116,7 +116,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Chart', {
         }
 
         me.shopStore.each(function (shop) {
-            var value = storeItem.get('amount' + shop.data.id);
+            var value = storeItem.get('turnover' + shop.data.id);
 
             if (!value) {
                 return;
@@ -138,7 +138,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Chart', {
         // Add total sum to table
         dataTable[dataTable.length] = {
             name: '{s name=chart/month/legendTotalSum}Total{/s}',
-            data: storeItem.get('amount')
+            data: storeItem.get('turnover')
         };
 
         // Load formatted data with sum row into table
@@ -157,7 +157,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Chart', {
             type: 'line',
             axis: [ 'left', 'bottom' ],
             highlight: true,
-            fill: false,
+            fill: true,
             smooth: true
         },
         tipsConfig = {
