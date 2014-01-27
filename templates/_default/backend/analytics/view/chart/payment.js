@@ -49,8 +49,8 @@ Ext.define('Shopware.apps.Analytics.view.chart.Payment', {
             {
                 type: 'Numeric',
                 position: 'bottom',
-                fields: me.getAxesFields('amount'),
-                title: '{s name=chart/payment/sales}Sales{/s}',
+                fields: me.getAxesFields('turnover'),
+                title: '{s name=chart/payment/turnover}Turnover{/s}',
                 grid: true,
                 minimum: 0
             },
@@ -68,12 +68,12 @@ Ext.define('Shopware.apps.Analytics.view.chart.Payment', {
                 axis: 'bottom',
                 gutter: 80,
                 xField: 'name',
-                yField: me.getAxesFields('amount'),
-                title: me.getAxesTitles('{s name=chart/payment/sum}Total sales{/s}'),
+                yField: me.getAxesFields('turnover'),
+                title: me.getAxesTitles('{s name=chart/payment/turnover}Turnover{/s}'),
                 stacked: true,
                 label: {
                     display: 'insideEnd',
-                    field: 'amount',
+                    field: 'turnover',
                     renderer: Ext.util.Format.numberRenderer('0.00'),
                     orientation: 'horizontal',
                     'text-anchor': 'middle'
@@ -81,22 +81,25 @@ Ext.define('Shopware.apps.Analytics.view.chart.Payment', {
                 tips: {
                     trackMouse: true,
                     width: 300,
-                    height: 60,
+                    height: 45,
                     renderer: function (storeItem, barItem) {
                         var name = storeItem.get('name'),
                             field = barItem.yField,
-                            shopId = field.replace('amount', ''),
-                            currency = '€',
+                            shopId = field.replace('turnover', ''),
                             shop;
 
                         if (shopId) {
                             shop = me.shopStore.getById(shopId);
                             name = shop.get('name') + '<br><br>&nbsp;' + name;
-                            currency = shop.get('currencyChar');
                         }
 
-                        var amount = Ext.util.Format.currency(storeItem.get(field), currency);
-                        this.setTitle(name + ' : ' + amount);
+                        var turnover = Ext.util.Format.currency(
+                            storeItem.get(field),
+                            me.subApp.currencySign,
+                            2,
+                            (me.subApp.currencyAtEnd == 1)
+                        );
+                        this.setTitle(name + ' : ' + turnover);
                     }
                 }
             }

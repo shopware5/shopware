@@ -50,6 +50,8 @@ Ext.define('Shopware.apps.Analytics.view.table.Supplier', {
     },
 
     getColumns: function () {
+        var me = this;
+
         return [
             {
                 dataIndex: 'name',
@@ -57,10 +59,22 @@ Ext.define('Shopware.apps.Analytics.view.table.Supplier', {
             },
             {
                 xtype: 'numbercolumn',
-                dataIndex: 'amount',
-                text: '{s name=table/supplier/sales}Sales{/s}'
+                dataIndex: 'turnover',
+                text: '{s name=table/supplier/turnover}Turnover{/s}',
+                renderer: me.currencyRenderer
             }
         ];
+    },
+
+    currencyRenderer: function(value) {
+        var me = this;
+
+        return Ext.util.Format.currency(
+            value,
+            me.subApp.currencySign,
+            2,
+            (me.subApp.currencyAtEnd == 1)
+        );
     }
 });
 //{/block}
