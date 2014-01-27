@@ -37,37 +37,28 @@ Ext.define('Shopware.apps.Analytics.view.chart.Week', {
     legend: {
         position: 'right'
     },
-    axes: [
-        {
-            type: 'Numeric',
-            minimum: 0,
-            grid: true,
-            position: 'left',
-            fields: ['amount'],
-            title: '{s name=chart/week/titleLeft}Sales{/s}'
-        },
-        {
-            type: 'Time',
-            position: 'bottom',
-            fields: ['date'],
-            title: '{s name=chart/week/titleBottom}Date{/s}',
-            dateFormat: '\\K\\W W, Y',
-            minorTickSteps: 6,
-            step: [Ext.Date.HOUR, 7 * 24],
-            label: {
-                rotate: {
-                    degrees: 315
-                }
-            }
-        }
-    ],
+
     initComponent: function () {
         var me = this;
 
-        me.series = [];
+        me.axes = [
+            {
+                type: 'Time',
+                position: 'bottom',
+                fields: ['date'],
+                title: '{s name=chart/week/titleBottom}Date{/s}',
+                dateFormat: '\\K\\W W, Y',
+                minorTickSteps: 6,
+                step: [Ext.Date.HOUR, 7 * 24],
+                label: {
+                    rotate: {
+                        degrees: 315
+                    }
+                }
+            }
+        ];
 
-        // Initiate stores for handling multiple shop values
-        this.initMultipleShopTipsStores();
+        me.series = [];
 
         if (me.shopSelection != Ext.undefined && me.shopSelection.length > 0) {
             Ext.each(me.shopSelection, function (shopId) {
@@ -82,7 +73,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Week', {
                     title: shop.data.name,
                     axis: ['left', 'bottom'],
                     xField: 'date',
-                    yField: 'amount' + shop.data.id,
+                    yField: 'turnover' + shop.data.id,
                     smooth: true,
                     tips: {
                         trackMouse: true,
@@ -93,9 +84,16 @@ Ext.define('Shopware.apps.Analytics.view.chart.Week', {
                         },
                         height: 60,
                         renderer: function (storeItem, item) {
-                            this.setTitle(Ext.Date.format(storeItem.get('date'), 'F, Y'));
-                            var sales = Ext.util.Format.currency(storeItem.get('amount' + shop.data.id), shop.data.currencyChar);
-                            this.update(sales);
+                            var value = Ext.util.Format.currency(
+                                storeItem.get('turnover' + shop.data.id),
+                                me.subApp.currencySign,
+                                2,
+                                (me.subApp.currencyAtEnd == 1)
+                            );
+                            this.setTitle(
+                                Ext.Date.format(storeItem.get('date'), 'F, Y') + '<br><br>&nbsp;' +
+                                value
+                            );
                         }
                     }
                 });
@@ -106,28 +104,46 @@ Ext.define('Shopware.apps.Analytics.view.chart.Week', {
                     type: 'line',
                     axis: ['left', 'bottom'],
                     xField: 'date',
-                    yField: 'amount',
+                    yField: 'turnover',
                     fill: true,
                     smooth: true,
                     title: '{s name=chart/month/legendSum}Sum{/s}',
                     tips: {
                         trackMouse: true,
-                        width: 580,
-                        height: 130,
+                        width: 90,
+                        height: 45,
                         layout: 'fit',
                         items: {
                             xtype: 'container',
                             layout: 'hbox',
                             items: [me.tipChart, me.tipGrid]
                         },
-                        renderer: function (cls, item) {
-                            me.initMultipleShopTipsData(item, this, "W, Y");
+                        renderer: function (storeItem) {
+                            var value = Ext.util.Format.currency(
+                                storeItem.get('turnover'),
+                                me.subApp.currencySign,
+                                2,
+                                (me.subApp.currencyAtEnd == 1)
+                            );
+                            this.setTitle(
+                                Ext.Date.format(storeItem.get('date'), 'F, Y') + '<br><br>&nbsp;' +
+                                value
+                            )
+
                         }
                     }
                 }
             ];
         }
 
+        me.axes.push({
+            type: 'Numeric',
+            minimum: 0,
+            grid: true,
+            position: 'left',
+            fields: me.getAxesFields('turnover'),
+            title: '{s name=chart/week/titleLeft}Sales{/s}'
+        });
         me.callParent(arguments);
 
     }

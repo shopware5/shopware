@@ -37,34 +37,20 @@ Ext.define('Shopware.apps.Analytics.view.chart.Weekday', {
     legend: {
         position: 'right'
     },
-    animate: {
-        easing: 'bounceOut',
-        duration: 750
-    },
-
-    axes: [
-        {
-            type: 'Numeric',
-            minimum: 0,
-            position: 'left',
-            fields: ['amount'],
-            title: '{s name=chart/weekday/titleLeft}Sales{/s}'
-        },
-        {
-            type: 'category',
-            position: 'bottom',
-            fields: ['displayDate'],
-            title: '{s name=chart/weekday/titleBottom}Weekday{/s}'
-        }
-    ],
 
     initComponent: function () {
         var me = this;
 
-        me.series = [];
+        me.axes = [
+            {
+                type: 'Category',
+                position: 'bottom',
+                fields: ['displayDate'],
+                title: '{s name=chart/weekday/titleBottom}Weekday{/s}'
+            }
+        ];
 
-        // Initiate stores for handling multiple shop values
-        this.initMultipleShopTipsStores();
+        me.series = [];
 
         if (me.shopSelection != Ext.undefined && me.shopSelection.length > 0) {
             Ext.each(me.shopSelection, function (shopId) {
@@ -73,68 +59,73 @@ Ext.define('Shopware.apps.Analytics.view.chart.Weekday', {
                 if (!(shop instanceof Ext.data.Model)) {
                     return true;
                 }
-                me.series.push({
-                    type: 'line',
-                    title: shop.data.name,
-                    axis: ['left'],
-                    xField: 'displayDate',
-                    yField: 'amount' + shopId,
-                    smooth: true,
-                    tips: {
-                        trackMouse: true,
-                        width: 120,
-                        highlight: {
-                            size: 7,
-                            radius: 7
+
+                me.series.push(
+                    me.createLineSeries(
+                        {
+                            title: shop.get('name'),
+                            xField: 'displayDate',
+                            yField: 'turnover' + shopId
                         },
-                        height: 60,
-                        renderer: function (storeItem, item) {
-                            this.setTitle(storeItem.get('displayDate'));
-                            var sales = Ext.util.Format.currency(storeItem.get('amount' + shopId), shop.data.currencyChar);
-                            this.update(sales);
+                        {
+                            width: 90,
+                            height: 45,
+                            renderer: function (storeItem) {
+                                me.renderShopData(storeItem, this, shop);
+                            }
                         }
-                    }
-                })
+                    )
+                );
             });
         } else {
             me.series = [
-                {
-                    type: 'column',
-                    axis: 'left',
-                    xField: 'displayDate',
-                    style: {
-                        fill: 'url(#bar-gradient)',
-                        'stroke-width': 3
+                me.createLineSeries(
+                    {
+                        xField: 'displayDate',
+                        yField: 'turnover',
+                        title: '{s name=chart/weekday/legendSum}Sum{/s}'
                     },
-                    markerConfig: {
-                        type: 'circle',
-                        size: 4,
-                        radius: 4,
-                        'stroke-width': 0,
-                        fill: '#38B8BF',
-                        stroke: '#38B8BF'
-                    },
-                    title: 'Total sales',
-                    yField: 'amount',
-                    tips: {
-                        trackMouse: true,
-                        width: 580,
-                        height: 130,
-                        layout: 'fit',
-                        items: {
-                            xtype: 'container',
-                            layout: 'hbox',
-                            items: [me.tipChart, me.tipGrid]
-                        },
-                        renderer: function (cls, item) {
-                            me.initMultipleShopTipsData(item, this, 'l', '{s name=chart/weekday/legendSalesOn}Sales on{/s}');
+                    {
+                        width: 90,
+                        height: 45,
+                        renderer: function (storeItem) {
+                            me.renderShopData(storeItem, this, null);
                         }
                     }
-                }
+                )
             ];
         }
 
+        me.axes.push({
+            type: 'Numeric',
+            minimum: 0,
+            grid: true,
+            position: 'left',
+            fields: me.getAxesFields('turnover'),
+            title: '{s name=chart/weekday/turnover}Turnover{/s}'
+        });
+
         me.callParent(arguments);
+    },
+
+
+    renderShopData: function(storeItem, tip, shop) {
+        var me = this,
+            field = 'turnover';
+
+        if (shop) {
+            field += shop.get('id');
+        }
+
+        var sales = Ext.util.Format.currency(
+            storeItem.get(field),
+            me.subApp.currencySign,
+            2,
+            (me.subApp.currencyAtEnd == 1)
+        );
+
+        tip.setTitle(storeItem.get('displayDate') + '<br><br>&nbsp;' + sales);
     }
+
 });
 //{/block}
