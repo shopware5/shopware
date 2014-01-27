@@ -1226,8 +1226,8 @@ class Repository
     {
         $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
-            'COUNT(orders.id) AS count',
-            'SUM((orders.invoice_amount - orders.invoice_shipping) / orders.currencyFactor) AS amount',
+            'COUNT(orders.id) AS orderCount',
+            'SUM((orders.invoice_amount - orders.invoice_shipping) / orders.currencyFactor) AS turnover',
             'Date_Format(orders.ordertime, \'%W\') as displayDate'
         ));
 
@@ -1244,10 +1244,10 @@ class Repository
             foreach ($shopIds as $shopId) {
                 $shopId = (int) $shopId;
                 $builder->addSelect(
-                    "SUM(IF(orders.subshopID=" . $shopId . ", invoice_amount - invoice_shipping, 0)) as amount" . $shopId
+                    "SUM(IF(orders.subshopID=" . $shopId . ", invoice_amount - invoice_shipping, 0)) as turnover" . $shopId
                 );
                 $builder->addSelect(
-                    "IF(orders.subshopID=" . $shopId . ", COUNT(orders.id), 0) as count" . $shopId
+                    "IF(orders.subshopID=" . $shopId . ", COUNT(orders.id), 0) as orderCount" . $shopId
                 );
             }
         }

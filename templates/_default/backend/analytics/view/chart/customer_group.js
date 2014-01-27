@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.CustomerGroup', {
         me.series = [
             {
                 type: 'pie',
-                field: 'amount',
+                field: 'turnover',
                 showInLegend: true,
                 label: {
                     field: 'customerGroup',
@@ -59,7 +59,14 @@ Ext.define('Shopware.apps.Analytics.view.chart.CustomerGroup', {
                     width: 160,
                     height: 30,
                     renderer: function (storeItem) {
-                        var title = '{s name=chart/customer_group/title}Sales{/s}: ' + Ext.util.Format.number(storeItem.get('amount'), '0.00');
+                        var value = Ext.util.Format.currency(
+                            storeItem.get('turnover'),
+                            me.subApp.currencySign,
+                            2,
+                            (me.subApp.currencyAtEnd == 1)
+                        );
+
+                        var title = '{s name=chart/customer_group/title}Sales{/s}: ' + value;
                         this.setTitle(title);
                     }
                 }

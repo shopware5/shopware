@@ -57,6 +57,8 @@ Ext.define('Shopware.apps.Analytics.view.table.PartnerRevenue', {
      * @return [array] grid columns
      */
     getColumns: function () {
+        var me = this;
+
         return [
             {
                 dataIndex: 'trackingCode',
@@ -69,9 +71,21 @@ Ext.define('Shopware.apps.Analytics.view.table.PartnerRevenue', {
             },
             {
                 dataIndex: 'turnover',
-                text: '{s name="table/turnover_partner/turnover"}Turnover{/s}'
+                text: '{s name="table/turnover_partner/turnover"}Turnover{/s}',
+                renderer: me.currencyRenderer
             }
         ];
+    },
+
+    currencyRenderer: function(value) {
+        var me = this;
+
+        return Ext.util.Format.currency(
+            value,
+            me.subApp.currencySign,
+            2,
+            (me.subApp.currencyAtEnd == 1)
+        );
     }
 });
 //{/block}
