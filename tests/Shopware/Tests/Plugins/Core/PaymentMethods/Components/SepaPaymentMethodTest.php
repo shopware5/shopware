@@ -30,11 +30,12 @@
 
 class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlight_Components_Test_Plugin_TestCase
 {
-    protected $sepaPaymentMethod;
+    protected static $sepaPaymentMethod;
 
-    public function setUp()
-    {
-        parent::setUp();
+    protected static $sepaStatus;
+
+    public static function setUpBeforeClass() {
+        parent::setUpBeforeClass();
 
         $helper = \TestHelper::Instance();
         $loader = $helper->Loader();
@@ -46,22 +47,25 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
             $pluginDir . '/Components/'
         );
 
-        //As by default SEPA is disabled, we need to activate it
+        //SEPA needs to be active for this. Also, we need to save existing status to later restore it
         $sepaPaymentMean = Shopware()->Models()
             ->getRepository('\Shopware\Models\Payment\Payment')
-            ->findOneByName('Sepa')
-            ->setActive(true);
+            ->findOneByName('Sepa');
+
+        self::$sepaStatus = $sepaPaymentMean->getActive();
+
+        $sepaPaymentMean->setActive(true);
         Shopware()->Models()->flush($sepaPaymentMean);
 
-        $this->sepaPaymentMethod = new \ShopwarePlugin\PaymentMethods\Components\SepaPaymentMethod();
+        self::$sepaPaymentMethod = new \ShopwarePlugin\PaymentMethods\Components\SepaPaymentMethod();
     }
 
     public static function tearDownAfterClass()
     {
-        $sepaPaymentMean = Shopware()->Models()
+        Shopware()->Models()
             ->getRepository('\Shopware\Models\Payment\Payment')
             ->findOneByName('Sepa')
-            ->setActive(false);
+            ->setActive(self::$sepaStatus);
 
         $paymentData = Shopware()->Models()
             ->getRepository('\Shopware\Models\Customer\PaymentData')
@@ -85,7 +89,7 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
     {
         $this->Request()->setMethod('GET');
 
-        $validationResult = $this->sepaPaymentMethod->validate($this->Request());
+        $validationResult = self::$sepaPaymentMethod->validate($this->Request());
         $this->assertTrue(is_array($validationResult));
         if (count($validationResult)) {
             $this->assertArrayHasKey('sErrorFlag', $validationResult);
@@ -105,7 +109,7 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
             "sSepaBankName" => "Some Valid Bank Name"
         ));
 
-        $validationResult = $this->sepaPaymentMethod->validate($this->Request());
+        $validationResult = self::$sepaPaymentMethod->validate($this->Request());
         $this->assertTrue(is_array($validationResult));
         if (count($validationResult)) {
             $this->assertArrayHasKey('sErrorFlag', $validationResult);
@@ -126,22 +130,64 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
             "sSepaBankName" => "Some Valid Bank Name"
         ));
 
-        $validationResult = $this->sepaPaymentMethod->validate($this->Request());
+        $validationResult = self::$sepaPaymentMethod->validate($this->Request());
         $this->assertTrue(is_array($validationResult));
         $this->assertCount(0, $validationResult);
     }
 
+    /**
+     * Covers issue SW-7721
+     */
+    public function testCreatePaymentInstanceWithNoPaymentData()
+    {
+        $orderId = 57;
+        $userId = 1;
+        $paymentId = 6;
+        Shopware()->Session()->sUserId = $userId;
+
+        //for now, don't test email
+        Shopware()->Config()->set('sepaSendEmail', false);
+
+        self::$sepaPaymentMethod->createPaymentInstance($orderId, $userId, $paymentId);
+
+        $paymentInstance = Shopware()->Models()
+            ->getRepository('\Shopware\Models\Payment\PaymentInstance')
+            ->findOneBy(array('order' => $orderId, 'customer' => $userId, 'paymentMean' => $paymentId));
+
+        $this->assertInstanceOf('Shopware\Models\Payment\PaymentInstance', $paymentInstance);
+        $this->assertInstanceOf('Shopware\Models\Order\Order', $paymentInstance->getOrder());
+        $this->assertEquals(57, $paymentInstance->getOrder()->getId());
+        $this->assertInstanceOf('Shopware\Models\Payment\Payment', $paymentInstance->getPaymentMean());
+        $this->assertEquals('sepa', $paymentInstance->getPaymentMean()->getName());
+
+        $this->assertNull($paymentInstance->getBankName());
+        $this->assertNull($paymentInstance->getBic());
+        $this->assertNull($paymentInstance->getIban());
+        $this->assertNull($paymentInstance->getFirstName());
+        $this->assertNull($paymentInstance->getLastName());
+        $this->assertNull($paymentInstance->getAddress());
+        $this->assertNull($paymentInstance->getZipCode());
+        $this->assertNull($paymentInstance->getCity());
+        $this->assertNotNull($paymentInstance->getAmount());
+
+        Shopware()->Models()->remove($paymentInstance);
+        Shopware()->Models()->flush($paymentInstance);
+    }
+
     public function testSavePaymentDataInitialEmptyData()
     {
-        $this->sepaPaymentMethod->savePaymentData(1, $this->Request());
+        self::$sepaPaymentMethod->savePaymentData(1, $this->Request());
 
-        $lastPayment = $this->sepaPaymentMethod->getCurrentPaymentDataAsArray(1, $this->Request());
+        $lastPayment = self::$sepaPaymentMethod->getCurrentPaymentDataAsArray(1, $this->Request());
         $this->assertEquals(null, $lastPayment['sSepaBankName']);
         $this->assertEquals(null, $lastPayment['sSepaBic']);
         $this->assertEquals(null, $lastPayment['sSepaIban']);
         $this->assertEquals(false, $lastPayment['sSepaUseBillingData']);
     }
 
+    /**
+     * @depends testSavePaymentDataInitialEmptyData
+     */
     public function testSavePaymentDataUpdatePrevious()
     {
         $this->Request()->setQuery(array(
@@ -152,9 +198,9 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
         ));
         Shopware()->Front()->setRequest($this->Request());
 
-        $this->sepaPaymentMethod->savePaymentData(1, $this->Request());
+        self::$sepaPaymentMethod->savePaymentData(1, $this->Request());
 
-        $lastPayment = $this->sepaPaymentMethod->getCurrentPaymentDataAsArray(1, $this->Request());
+        $lastPayment = self::$sepaPaymentMethod->getCurrentPaymentDataAsArray(1, $this->Request());
         $this->assertEquals("Some Valid Bank Name", $lastPayment['sSepaBankName']);
         $this->assertEquals("Some Valid Bic", $lastPayment['sSepaBic']);
         $this->assertEquals("AL47212110090000000235698741", $lastPayment['sSepaIban']);
@@ -171,7 +217,7 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
         //for now, don't test email
         Shopware()->Config()->set('sepaSendEmail', false);
 
-        $this->sepaPaymentMethod->createPaymentInstance($orderId, $userId, $paymentId);
+        self::$sepaPaymentMethod->createPaymentInstance($orderId, $userId, $paymentId);
 
         $paymentInstance = Shopware()->Models()
             ->getRepository('\Shopware\Models\Payment\PaymentInstance')
@@ -191,5 +237,6 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
         $this->assertEquals("Musterstr. 55", $paymentInstance->getAddress());
         $this->assertEquals("55555", $paymentInstance->getZipCode());
         $this->assertEquals("Musterhausen", $paymentInstance->getCity());
+        $this->assertNotNull($paymentInstance->getAmount());
     }
 }
