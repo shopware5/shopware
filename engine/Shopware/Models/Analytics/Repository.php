@@ -1190,8 +1190,8 @@ class Repository
     {
         $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
-            'COUNT(DISTINCT orders.id) AS count',
-            'SUM((details.price * details.quantity)/currencyFactor) AS amount'
+            'COUNT(DISTINCT orders.id) AS orderCount',
+            'SUM((details.price * details.quantity)/currencyFactor) AS turnover'
         ))
             ->from('s_order', 'orders')
             ->innerJoin('orders', 's_order_details', 'details', 'orders.id = details.orderID AND details.modus=0')
@@ -1244,7 +1244,7 @@ class Repository
             foreach ($shopIds as $shopId) {
                 $shopId = (int) $shopId;
                 $builder->addSelect(
-                    "SUM(IF(orders.subshopID=" . $shopId . ", invoice_amount - invoice_shipping, 0)) as turnover" . $shopId
+                    "SUM(IF(orders.subshopID=" . $shopId . ", (invoice_amount - invoice_shipping)/currencyFactor, 0)) as turnover" . $shopId
                 );
                 $builder->addSelect(
                     "IF(orders.subshopID=" . $shopId . ", COUNT(orders.id), 0) as orderCount" . $shopId
@@ -1484,72 +1484,6 @@ class Repository
     }
 
 
-    
-    /**
-     * Returns a query which selects how many orders are done per visitor.
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @param array $shopIds
-     * @return DBALQueryBuilder
-     */
-    protected function createOrdersOfVisitorsBuilder(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
-    {
-        $builder = $this->createVisitorBuilder();
-
-        $this->addDateRangeCondition($builder, $from, $to, 'visitor.datum');
-
-        if (!empty($shopIds)) {
-            foreach ($shopIds as $shopId) {
-                $shopId = (int) $shopId;
-                $builder->addSelect(
-                    "SUM(IF(visitor.shopID=" . $shopId . ", visitor.uniquevisits, 0)) as visitors" . $shopId
-                );
-                $builder->addSelect(
-                    "COUNT(IF(orders.subshopID=" . $shopId . ", orders.id, 0)) as orderCount" . $shopId
-                );
-                $builder->addSelect(
-                    'IF(orders.subshopID=' . $shopId . ', (
-                        SELECT COUNT(o2.invoice_amount)
-                        FROM s_order o2
-                        WHERE o2.status=-1
-                        AND DATE(o2.ordertime) = visitor.datum
-                    ), 0) AS cancelledOrders' . $shopId
-                );
-            }
-        }
-
-        return $builder;
-    }
-
-    /**
-     * Helper function which creates a dbal query builder which selects
-     * all shop visitors and the count of orders and canceled orders for each
-     * visitor.
-     *
-     * @return DBALQueryBuilder
-     */
-    protected function createVisitorBuilder()
-    {
-        $builder = $this->connection->createQueryBuilder();
-
-        $builder->select(array(
-            'visitor.datum AS date',
-            'visitor.uniquevisits AS visitors',
-            'COUNT(orders.id) AS orderCount',
-            '(
-                SELECT COUNT(o2.invoice_amount)
-                FROM s_order o2
-                WHERE o2.status=-1
-                AND DATE(o2.ordertime) = visitor.datum
-            ) AS cancelledOrders'
-        ));
-
-        $builder->from('s_statistics_visitors', 'visitor')
-            ->leftJoin('visitor', 's_order', 'orders', 'visitor.datum = DATE(orders.ordertime) AND orders.status NOT IN (-1, 4)')
-            ->groupBy('visitor.datum');
-
-        return $builder;
-    }
 
 
     /**
