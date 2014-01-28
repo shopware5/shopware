@@ -37,44 +37,80 @@ Ext.define('Shopware.apps.Analytics.view.chart.CustomerAge', {
     legend: {
         position: 'right'
     },
-    axes: [
-        {
-            type: 'Numeric',
-            minimum: 0,
-            grid: true,
-            position: 'bottom',
-            fields: ['age'],
-            title: '{s name=chart/customer_age/age/title}Age{/s}'
-        },
-        {
-            type: 'Numeric',
-            position: 'left',
-            fields: ['percent'],
-            title: '{s name=chart/customer_age/percent/title}Percentage{/s}'
-        }
-    ],
 
     initComponent: function () {
         var me = this;
 
-        me.series = [
-            me.createLineSeries(
-                {
-                    yField: 'percent',
-                    xField: 'age'
-                },
-                {
-                    renderer: function (storeItem) {
-                        var text = '{s name=chart/customer_age/age/tip/title}Age{/s}: ';
-                        text += Ext.util.Format.number(storeItem.get('age'), '0');
-                        text += '<br>' + '&nbsp;{s name=chart/customer_age/percent/tip/title}Percent{/s}: ';
-                        text += Ext.util.Format.number(storeItem.get('percent')) + '%';
-
-                        this.setTitle(text);
-                    }
-                }
-            ),
+        me.axes = [
+            {
+                type: 'Numeric',
+                minimum: 0,
+                grid: true,
+                position: 'bottom',
+                fields: ['age'],
+                title: '{s name=chart/customer_age/age/title}Age{/s}'
+            },
+            {
+                type: 'Numeric',
+                position: 'left',
+                fields: me.getAxesFields('percent'),
+                title: '{s name=chart/customer_age/percent/title}Percentage{/s}'
+            }
         ];
+
+        me.series = [];
+
+        if (me.shopSelection != Ext.undefined && me.shopSelection.length > 0) {
+            Ext.each(me.shopSelection, function (shopId) {
+                var shop = me.shopStore.getById(shopId);
+
+                if (!(shop instanceof Ext.data.Model)) {
+                    return true;
+                }
+
+                me.series.push(
+                    me.createLineSeries(
+                        {
+                            title: shop.get('name'),
+                            xField: 'age',
+                            yField: 'percent' + shopId
+                        },
+                        {
+                            width: 180,
+                            height: 60,
+                            renderer: function (storeItem) {
+                                this.setTitle(
+                                    shop.get('name') + '<br><br>&nbsp;' +
+                                    '{s name=chart/customer_age/age/title}Age{/s}: ' + storeItem.get('age') + '<br>&nbsp;' +
+                                    '{s name=chart/customer_age/percent/title}Percentage{/s}: ' + storeItem.get('percent' + shopId) + ' %'
+                                );
+                            }
+                        }
+                    )
+                );
+            });
+        } else {
+            me.series = [
+                me.createLineSeries(
+                    {
+                        xField: 'age',
+                        yField: 'percent',
+                        title: '{s name=chart/customer_age/percent/title}Percentage{/s}'
+                    },
+                    {
+                        width: 180,
+                        height: 45,
+                        renderer: function (storeItem) {
+                            this.setTitle(
+                                '{s name=chart/customer_age/age/title}Age{/s}: ' + storeItem.get('age') + '<br><br>&nbsp;' +
+                                '{s name=chart/customer_age/percent/title}Percentage{/s}: ' + storeItem.get('percent') + ' %'
+                            );
+                        }
+                    }
+                )
+            ];
+        }
+
 
         me.callParent(arguments);
     }

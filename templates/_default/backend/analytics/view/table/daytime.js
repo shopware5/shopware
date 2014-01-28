@@ -59,7 +59,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Daytime', {
             {
                 xtype: 'datecolumn',
                 dataIndex: 'date',
-                text: '{s name=table/daytime/time}Date{/s}',
+                text: '{s name=table/daytime/time}Time{/s}',
                 format: 'H:00'
             },
             {

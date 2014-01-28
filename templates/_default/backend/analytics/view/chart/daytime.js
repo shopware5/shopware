@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Daytime', {
                             yField: 'turnover' + shopId
                         },
                         {
-                            width: 90,
+                            width: 150,
                             height: 45,
                             renderer: function (storeItem) {
                                 me.renderShopData(storeItem, this, shop);
@@ -85,10 +85,11 @@ Ext.define('Shopware.apps.Analytics.view.chart.Daytime', {
                 me.createLineSeries(
                     {
                         xField: 'date',
-                        yField: 'turnover'
+                        yField: 'turnover',
+                        title: '{s name=general/turnover}Turnover{/s}'
                     },
                     {
-                        width: 90,
+                        width: 150,
                         height: 45,
                         renderer: function (storeItem) {
                             me.renderShopData(storeItem, this, null);
