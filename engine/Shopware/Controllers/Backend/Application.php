@@ -22,8 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-use Doctrine\ORM\Tools\Pagination\Paginator;
-
 /**
  * Base controller for a single backend sub application.
  * This controller contains many functions for the quad operations for a single model
@@ -401,11 +399,8 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     public function getDetail($id)
     {
         $builder = $this->getDetailQuery($id);
-        $query = $builder->getQuery();
 
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        $paginator = new Paginator($query);
-
+        $paginator = $this->getQueryPaginator($builder);
         $data = $paginator->getIterator()->current();
         $data = $this->getAdditionalDetailData($data);
 
@@ -580,10 +575,8 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         $builder->setFirstResult($offset)
                 ->setMaxResults($limit);
 
-        $query = $builder->getQuery();
+        $paginator = $this->getQueryPaginator($builder);
 
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        $paginator = new Paginator($query);
         $data = $paginator->getIterator()->getArrayCopy();
 
         return array(
@@ -620,10 +613,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         $builder->setFirstResult($offset)
             ->setMaxResults($limit);
 
-        $query = $builder->getQuery();
-
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        $paginator = new Paginator($query);
+        $paginator = $this->getQueryPaginator($builder);
         $data = $paginator->getIterator()->getArrayCopy();
 
         return array(
@@ -1066,7 +1056,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     ) {
         $query = $builder->getQuery();
         $query->setHydrationMode($hydrationMode);
-        return new Paginator($query);
+        return $this->getManager()->createPaginator($query);
     }
 
     /**
