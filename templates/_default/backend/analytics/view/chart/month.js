@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
                         title: '{s name=chart/month/legendSum}Sum{/s}'
                     },
                     {
-                        width: 90,
+                        width: 180,
                         height: 45,
                         renderer: function (storeItem) {
                             var value = Ext.util.Format.currency(
@@ -123,7 +123,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
                         yField: 'turnover' + shopId
                     },
                     {
-                        width: 90,
+                        width: 180,
                         height: 45,
                         renderer: function (storeItem) {
                             me.renderShopData(storeItem, this, shop);

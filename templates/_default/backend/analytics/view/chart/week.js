@@ -75,9 +75,10 @@ Ext.define('Shopware.apps.Analytics.view.chart.Week', {
                     xField: 'date',
                     yField: 'turnover' + shop.data.id,
                     smooth: true,
+                    fill: true,
                     tips: {
                         trackMouse: true,
-                        width: 120,
+                        width: 180,
                         highlight: {
                             size: 7,
                             radius: 7
@@ -91,7 +92,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Week', {
                                 (me.subApp.currencyAtEnd == 1)
                             );
                             this.setTitle(
-                                Ext.Date.format(storeItem.get('date'), 'F, Y') + '<br><br>&nbsp;' +
+                                Ext.Date.format(storeItem.get('date'), '\\K\\W W, Y') + '<br><br>&nbsp;' +
                                 value
                             );
                         }
@@ -107,10 +108,10 @@ Ext.define('Shopware.apps.Analytics.view.chart.Week', {
                     yField: 'turnover',
                     fill: true,
                     smooth: true,
-                    title: '{s name=chart/month/legendSum}Sum{/s}',
+                    title: '{s name=general/turnover}Turnover{/s}',
                     tips: {
                         trackMouse: true,
-                        width: 90,
+                        width: 180,
                         height: 45,
                         layout: 'fit',
                         items: {
@@ -126,7 +127,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Week', {
                                 (me.subApp.currencyAtEnd == 1)
                             );
                             this.setTitle(
-                                Ext.Date.format(storeItem.get('date'), 'F, Y') + '<br><br>&nbsp;' +
+                                Ext.Date.format(storeItem.get('date'), '\\K\\W W, Y') + '<br><br>&nbsp;' +
                                 value
                             )
 

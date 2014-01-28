@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Weekday', {
                             yField: 'turnover' + shopId
                         },
                         {
-                            width: 90,
+                            width: 180,
                             height: 45,
                             renderer: function (storeItem) {
                                 me.renderShopData(storeItem, this, shop);
@@ -83,10 +83,10 @@ Ext.define('Shopware.apps.Analytics.view.chart.Weekday', {
                     {
                         xField: 'displayDate',
                         yField: 'turnover',
-                        title: '{s name=chart/weekday/legendSum}Sum{/s}'
+                        title: '{s name=general/turnover}Turnover{/s}'
                     },
                     {
-                        width: 90,
+                        width: 180,
                         height: 45,
                         renderer: function (storeItem) {
                             me.renderShopData(storeItem, this, null);

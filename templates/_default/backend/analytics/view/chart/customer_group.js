@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.CustomerGroup', {
                 },
                 tips: {
                     trackMouse: true,
-                    width: 160,
+                    width: 180,
                     height: 30,
                     renderer: function (storeItem) {
                         var value = Ext.util.Format.currency(
@@ -66,7 +66,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.CustomerGroup', {
                             (me.subApp.currencyAtEnd == 1)
                         );
 
-                        var title = '{s name=chart/customer_group/title}Sales{/s}: ' + value;
+                        var title = '{s name=general/turnover}Turnover{/s}: ' + value;
                         this.setTitle(title);
                     }
                 }

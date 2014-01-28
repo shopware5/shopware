@@ -91,13 +91,14 @@ Ext.define('Shopware.apps.Analytics.view.main.Table', {
                 var column = Ext.clone(config);
 
                 column = Ext.merge(column, {
-                    dataIndex: Ext.String.format(config.dataIndex, + shop.get('id')),
+                    dataIndex: config.dataIndex + shopId,
                     text: Ext.String.format(config.text, shop.get('name'))
                 });
-
+                
                 me.columns.items.push(column);
             });
         });
+        
     },
 
     getColumns: function () {

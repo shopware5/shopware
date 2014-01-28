@@ -132,12 +132,6 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
                 change: function (button, item) {
                     me.getPanel().getLayout().setActiveItem(item.layout == 'table' ? 0 : 1);
                 }
-            },
-            'analytics-toolbar combobox': {
-                /**
-                 * Called when the shop combobox selection was changed
-                 */
-                change: me.onChangeShop
             }
         });
 
@@ -225,6 +219,9 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
         if (Ext.typeOf(toValue) == 'date') {
             store.getProxy().extraParams.toDate = toValue;
         }
+        if (me.getShopSelection() && me.getShopSelection().getValue()) {
+            store.getProxy().extraParams.selectedShops = me.getShopSelection().getValue().toString();
+        }
 
         me.currentStore = store;
         me.currentNavigationItem = record;
@@ -289,21 +286,6 @@ Ext.define('Shopware.apps.Analytics.controller.Main', {
                 Ext.resumeLayouts(true);
             }
         });
-    },
-
-
-    /**
-     * Event listener which is be fired when the user changed the shop combobox.
-     * Sets the selectedShops parameter of the current store to the selection as a string e.g. "1,2".
-     *
-     * @param field
-     * @param value
-     */
-    onChangeShop: function (field, value) {
-        var me = this,
-            store = (me.customStoreEnabled) ? me.customStore : me.dataStore;
-
-        store.getProxy().extraParams.selectedShops = value.toString();
     }
 });
 //{/block}
