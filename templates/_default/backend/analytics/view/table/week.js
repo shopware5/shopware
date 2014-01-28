@@ -56,6 +56,8 @@ Ext.define('Shopware.apps.Analytics.view.table.Week', {
         me.callParent(arguments);
     },
 
+    createPagingbar: function() {},
+
     getColumns: function () {
         var me = this;
 

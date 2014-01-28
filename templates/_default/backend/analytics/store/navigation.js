@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
             },
             {
                 id: 'rating',
-                text: '{s name=nav/rating_overview}Rating-Overview{/s}',
+                text: '{s name=nav/rating_overview}Conversion-Overview{/s}',
                 store: 'analytics-store-navigation-rating',
                 iconCls: 'sprite-star',
                 comparable: true,

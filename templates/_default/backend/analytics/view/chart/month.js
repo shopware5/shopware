@@ -46,10 +46,9 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
             {
                 type: 'Time',
                 position: 'bottom',
-                fields: ['date'],
+                fields: ['normal'],
                 title: '{s name=chart/month/titleBottom}Month{/s}',
-                step: [Ext.Date.MONTH, 1],
-                dateFormat: 'M, Y',
+                step:[ Ext.Date.MONTH, 1 ],
                 label: {
                     renderer:function (value) {
                         var myDate = Ext.Date.add(new Date(value), Ext.Date.DAY, 4);
@@ -70,9 +69,9 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
             me.series = [
                 me.createLineSeries(
                     {
-                        xField: 'date',
+                        xField: 'normal',
                         yField: 'turnover',
-                        title: '{s name=chart/month/legendSum}Sum{/s}'
+                        title: '{s name=general/turnover}Turnover{/s}'
                     },
                     {
                         width: 180,
@@ -85,7 +84,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
                                 (me.subApp.currencyAtEnd == 1)
                             );
 
-                            this.setTitle(Ext.Date.format(storeItem.get('date'), 'F, Y') + '<br><br>&nbsp;' + value);
+                            this.setTitle(Ext.Date.format(storeItem.get('normal'), 'F, Y') + '<br><br>&nbsp;' + value);
                         }
                     }
                 )
@@ -98,7 +97,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
             grid: true,
             position: 'left',
             fields: me.getAxesFields('turnover'),
-            title: '{s name=chart/month/titleLeft}Sales{/s}'
+            title: '{s name=general/turnover}Turnover{/s}'
         });
 
         me.callParent(arguments);
@@ -119,7 +118,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
                 me.createLineSeries(
                     {
                         title: shop.get('name'),
-                        xField: 'date',
+                        xField: 'normal',
                         yField: 'turnover' + shopId
                     },
                     {
@@ -147,7 +146,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
             (me.subApp.currencyAtEnd == 1)
         );
 
-        tip.setTitle(Ext.Date.format(storeItem.get('date'), 'F, Y') + '<br><br>&nbsp;' + sales);
+        tip.setTitle(Ext.Date.format(storeItem.get('normal'), 'F, Y') + '<br><br>&nbsp;' + sales);
     }
 
 

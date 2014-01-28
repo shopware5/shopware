@@ -51,6 +51,8 @@ Ext.define('Shopware.apps.Analytics.view.table.ReferrerRevenue', {
         me.callParent(arguments);
     },
 
+    createPagingbar: function() {},
+
     /**
      * Creates the grid columns
      *

@@ -50,6 +50,8 @@ Ext.define('Shopware.apps.Analytics.view.table.Customers', {
         me.callParent(arguments);
     },
 
+    createPagingbar: function() {},
+
     /**
      * Creates the grid columns
      *
