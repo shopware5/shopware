@@ -29,6 +29,7 @@ use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Shopware\Components\Model\ModelManager;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
+use Shopware\Components\Snippet\Writer\DatabaseWriter;
 
 /**
  * @category  Shopware
@@ -102,12 +103,8 @@ class DatabaseHandler
         $this->inputAdapter = new \Enlight_Config_Adapter_File(array(
             'configDir' => $snippetsDir,
         ));
-        $this->outputAdapter = new \Enlight_Config_Adapter_DbTable(array(
-            'db' => $this->db,
-            'table' => 's_core_snippets',
-            'namespaceColumn' => 'namespace',
-            'sectionColumn' => array('shopID', 'localeID')
-        ));
+
+        $databaseWriter = new DatabaseWriter($this->em->getConnection());
 
         $finder = new Finder();
         $finder->files()->in($snippetsDir);
@@ -137,9 +134,9 @@ class DatabaseHandler
                     $locale = $localeRepository->findOneBy(array('locale' => $index));
                 }
 
-                $namespaceData->setSection(array(1, $locale->getId()))->read();
-                $namespaceData->setData($values);
-                $this->outputAdapter->write($namespaceData, array_keys($values), true, false, true);
+                $databaseWriter->setUpdate(false);
+                $databaseWriter->write($values, $namespace, $locale->getId(), 1);
+
                 if ($this->output) {
                     $this->output->writeln('<info>Imported ' . count($values) . ' snippets into ' . $locale->getLocale() . '</info>');
                 }
