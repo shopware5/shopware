@@ -69,7 +69,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Customers', {
             },
             {
                 dataIndex: 'orderCount',
-                width: 90,
+                width: 150,
                 text: '{s name="table/customers/order_count"}Order count{/s}'
             },
             {

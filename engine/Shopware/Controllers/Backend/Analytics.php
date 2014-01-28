@@ -341,7 +341,10 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $ref['averageRegularCustomer'] = round($ref['turnoverRegularCustomer'] / $ref['regularCustomers'], 2);
         }
 
-        $this->send(array_values($referrer), $result->getTotalCount());
+        $this->send(
+            array_values($referrer),
+            $this->Request()->getParam('limit', 0)
+        );
     }
 
     public function getPartnerRevenueAction()
@@ -410,9 +413,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $this->send(array_values($referrer), $result->getTotalCount());
     }
 
-    public function getArticleSellsAction()
+    public function getArticleSalesAction()
     {
-        $result = $this->getRepository()->getProductSells(
+        $result = $this->getRepository()->getProductSales(
             $this->Request()->getParam('start', 0),
             $this->Request()->getParam('limit', null),
             $this->getFromDate(),
@@ -465,7 +468,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             }
         }
 
-        $this->send(array_values($customers), count($customers));
+        $this->send(array_values($customers), 25);
     }
 
     public function getCustomerAgeAction()
@@ -549,7 +552,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $this->send(
             $this->formatOrderAnalyticsData($result->getData()),
-            $result->getTotalCount()
+            25
         );
     }
 
@@ -707,7 +710,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->getToDate(),
             $this->Request()->getParam('sort', array(
                 array(
-                    'property' => 'totalAmount',
+                    'property' => 'turnover',
                     'direction' => 'DESC'
                 )
             )),

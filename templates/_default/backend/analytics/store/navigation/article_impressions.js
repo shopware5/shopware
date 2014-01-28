@@ -36,9 +36,10 @@ Ext.define('Shopware.apps.Analytics.store.navigation.ArticleImpressions', {
     fields: [
         'articleId',
         'articleName',
-        'totalAmount',
+        { name: 'totalImpressions', type: 'int' },
         { name: 'date', type: 'date', dateFormat: 'timestamp' }
     ],
+
     proxy: {
         type: 'ajax',
         url: '{url controller=analytics action=getArticleImpressions}',
@@ -55,7 +56,7 @@ Ext.define('Shopware.apps.Analytics.store.navigation.ArticleImpressions', {
 
         if (config.shopStore) {
             config.shopStore.each(function (shop) {
-                config.fields.push('amount' + shop.data.id);
+                config.fields.push('totalImpressions' + shop.data.id);
             });
         }
 

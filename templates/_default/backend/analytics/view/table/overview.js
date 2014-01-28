@@ -72,11 +72,12 @@ Ext.define('Shopware.apps.Analytics.view.table.Overview', {
             },
             {
                 dataIndex: 'conversion',
-                text: '{s name="table/quick_overview/conversion_rate"}Conversion Rate{/s}'
+                text: '{s name="table/quick_overview/conversion_rate"}Conversion Rate{/s}',
+                renderer: me.percentRenderer
             },
             {
                 dataIndex: 'turnover',
-                text: '{s name="table/quick_overview/turnover"}Turnover{/s}',
+                text: '{s name="general/turnover"}Turnover{/s}',
                 renderer: function(value) {
 
                     return Ext.util.Format.currency(
@@ -100,6 +101,11 @@ Ext.define('Shopware.apps.Analytics.view.table.Overview', {
                 text: '{s name="table/quick_overview/page_calls"}Impressions{/s}'
             }
         ];
+    },
+
+    percentRenderer: function(value) {
+        return value + ' %';
     }
 });
+
 //{/block}

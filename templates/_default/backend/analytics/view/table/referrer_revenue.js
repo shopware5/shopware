@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.Analytics.view.table.ReferrerRevenue', {
             },
             {
                 dataIndex: 'turnover',
-                text: '{s name=table/referrer_revenue/total_turnover}Turnover{/s}',
+                text: '{s name=general/turnover}Turnover{/s}',
                 renderer: me.currencyRenderer
             },
             {
@@ -82,7 +82,7 @@ Ext.define('Shopware.apps.Analytics.view.table.ReferrerRevenue', {
 
             {
                 dataIndex: 'newCustomers',
-                text: '{s name=table/referrer_revenue/new_customers}New customers{/s}'
+                text: '{s name=table/referrer_revenue/new_customers}Orders new customers{/s}'
             },
             {
                 dataIndex: 'turnoverNewCustomer',
@@ -97,7 +97,7 @@ Ext.define('Shopware.apps.Analytics.view.table.ReferrerRevenue', {
 
             {
                 dataIndex: 'regularCustomers',
-                text: '{s name=table/referrer_revenue/old_customers}Regular customers{/s}'
+                text: '{s name=table/referrer_revenue/old_customers}Orders Regular customers{/s}'
             },
             {
                 dataIndex: 'turnoverRegularCustomer',

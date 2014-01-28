@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Payment', {
                 type: 'Numeric',
                 position: 'bottom',
                 fields: me.getAxesFields('turnover'),
-                title: '{s name=chart/payment/turnover}Turnover{/s}',
+                title: '{s name=general/turnover}Turnover{/s}',
                 grid: true,
                 minimum: 0
             },
@@ -69,7 +69,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Payment', {
                 gutter: 80,
                 xField: 'name',
                 yField: me.getAxesFields('turnover'),
-                title: me.getAxesTitles('{s name=chart/payment/turnover}Turnover{/s}'),
+                title: me.getAxesTitles('{s name=general/turnover}Turnover{/s}'),
                 stacked: true,
                 label: {
                     display: 'insideEnd',

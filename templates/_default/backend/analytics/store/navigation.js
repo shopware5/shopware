@@ -88,9 +88,9 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
                 leaf: true
             },
             {
-                id: 'article_sells',
+                id: 'article_sales',
                 text: '{s name=nav/items_sales}Item by sales{/s}',
-                store: 'analytics-store-navigation-article_sells',
+                store: 'analytics-store-navigation-article_sales',
                 iconCls: 'sprite-inbox',
                 comparable: true,
                 leaf: true

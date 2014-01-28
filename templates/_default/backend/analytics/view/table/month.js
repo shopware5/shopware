@@ -34,7 +34,7 @@
 Ext.define('Shopware.apps.Analytics.view.table.Month', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-month',
-    shopColumnText: "{s name=table/month/sum}Sales: [0]{/s}",
+    shopColumnText: "{s name=general/turnover}Turnover{/s}: [0]",
 
     initComponent: function () {
         var me = this;
@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Month', {
             {
                 xtype: 'numbercolumn',
                 dataIndex: 'turnover',
-                text: '{s name=table/month/turnover}Turnover{/s}',
+                text: '{s name=general/turnover}Turnover{/s}',
                 renderer: me.currencyRenderer
             }
         ];

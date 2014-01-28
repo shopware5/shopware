@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.PartnerRevenue', {
                             (me.subApp.currencyAtEnd == 1)
                         );
 
-                        var title = '{s name=chart/partner/title}Sales{/s}: ' + value;
+                        var title = '{s name=general/turnover}Turnover{/s}: ' + value;
                         this.setTitle(title);
                     }
                 }

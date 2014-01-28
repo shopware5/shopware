@@ -69,6 +69,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Customers', {
                 { xField: 'week', yField: 'newCustomersPercent', title: '{s name="chart/customers/new_customers_legend"}New customers{/s}' },
                 {
                     width: 210,
+                    height: 45,
                     renderer: function(storeItem) {
                         var data = Ext.util.Format.number(storeItem.get('newCustomersPercent'), '0.00') + ' %';
                         this.setTitle(storeItem.get('week') + ': ' + data);
@@ -78,6 +79,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Customers', {
             me.createLineSeries(
                 { xField: 'week', yField: 'oldCustomersPercent', title: '{s name="chart/customers/old_customers_legend"}Old customers{/s}' },
                 {
+                    height: 45,
                     width: 210,
                     renderer: function(storeItem) {
                         var data = Ext.util.Format.number(storeItem.get('oldCustomersPercent'), '0.00') + ' %';
