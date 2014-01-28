@@ -54,6 +54,8 @@ Ext.define('Shopware.apps.Analytics.view.table.CustomerAge', {
         me.callParent(arguments);
     },
 
+    createPagingbar: function() {},
+
     /**
      * Creates the grid columns
      *

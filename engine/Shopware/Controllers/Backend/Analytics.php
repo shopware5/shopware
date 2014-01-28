@@ -173,6 +173,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $row['turnover'] = (float) $row['turnover'];
 
             if (!empty($row['date'])) {
+                $row['normal'] = $row['date'];
                 $row['date'] = strtotime($row['date']);
             }
 
@@ -341,9 +342,14 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $ref['averageRegularCustomer'] = round($ref['turnoverRegularCustomer'] / $ref['regularCustomers'], 2);
         }
 
+        // Sort the multidimensional array
+        usort($referrer, function($a,$b) {
+            return $a['turnover'] < $b['turnover'];
+        });
+
         $this->send(
             array_values($referrer),
-            $this->Request()->getParam('limit', 0)
+            $this->Request()->getParam('limit', 25)
         );
     }
 
@@ -468,7 +474,10 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             }
         }
 
-        $this->send(array_values($customers), 25);
+        $this->send(
+            array_values($customers),
+            $this->Request()->getParam('limit', 25)
+        );
     }
 
     public function getCustomerAgeAction()
@@ -524,7 +533,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $this->send(
             array_values($ages),
-            25
+            $this->Request()->getParam('limit', 0)
         );
     }
 
@@ -552,7 +561,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $this->send(
             $this->formatOrderAnalyticsData($result->getData()),
-            25
+            $this->Request()->getParam('limit', 0)
         );
     }
 

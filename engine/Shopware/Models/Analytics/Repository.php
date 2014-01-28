@@ -589,7 +589,7 @@ class Repository
             ->addSelect('suppliers.name')
             ->leftJoin('articles', 's_articles_supplier', 'suppliers', 'articles.supplierID = suppliers.id')
             ->groupBy('articles.supplierID')
-            ->orderBy('suppliers.name');
+            ->orderBy('turnover', 'DESC');
 
         $this->addPagination($builder, $offset, $limit);
 
@@ -799,7 +799,7 @@ class Repository
         $builder = $this->createAmountBuilder($from, $to, $shopIds)
             ->addSelect('country.countryname AS name')
             ->groupBy('billing.countryID')
-            ->orderBy('name');
+            ->orderBy('turnover', 'DESC');
 
         $builder = $this->eventManager->filter('Shopware_Analytics_AmountPerCountry', $builder, array(
             'subject' => $this
@@ -834,7 +834,7 @@ class Repository
         $builder = $this->createAmountBuilder($from, $to, $shopIds)
             ->addSelect('payment.description AS name')
             ->groupBy('orders.paymentID')
-            ->orderBy('name');
+            ->orderBy('turnover', 'DESC');
 
         $builder = $this->eventManager->filter('Shopware_Analytics_AmountPerPayment', $builder, array(
             'subject' => $this
@@ -869,7 +869,7 @@ class Repository
         $builder = $this->createAmountBuilder($from, $to, $shopIds)
             ->addSelect('dispatch.name AS name')
             ->groupBy('orders.dispatchID')
-            ->orderBy('dispatch.name');
+            ->orderBy('turnover', 'DESC');
 
         $builder = $this->eventManager->filter('Shopware_Analytics_AmountPerShipping', $builder, array(
             'subject' => $this
@@ -910,11 +910,11 @@ class Repository
      */
     public function getAmountPerMonth(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
     {
-        $dateCondition = 'DATE_FORMAT(ordertime, \'%Y-%m-01\')';
+        $dateCondition = 'DATE_FORMAT(ordertime, \'%Y-%m-04\')';
         $builder = $this->createAmountBuilder($from, $to, $shopIds)
             ->addSelect($dateCondition . ' AS date')
             ->groupBy($dateCondition)
-            ->orderBy('date');
+            ->orderBy('date', 'DESC');
 
         $builder = $this->eventManager->filter('Shopware_Analytics_AmountPerMonth', $builder, array(
             'subject' => $this
@@ -959,7 +959,7 @@ class Repository
         $builder = $this->createAmountBuilder($from, $to, $shopIds)
             ->addSelect($dateCondition . ' AS date')
             ->groupBy($dateCondition)
-            ->orderBy('date');
+            ->orderBy('date', 'DESC');
 
         $builder = $this->eventManager->filter('Shopware_Analytics_AmountPerWeek', $builder, array(
             'subject' => $this
@@ -1003,7 +1003,7 @@ class Repository
         $builder = $this->createAmountBuilder($from, $to, $shopIds)
             ->addSelect('DATE_FORMAT(ordertime, \'%Y-%m-%d\') AS date')
             ->groupBy('WEEKDAY(ordertime)')
-            ->orderBy('date');
+            ->orderBy('date', 'DESC');
 
         $builder = $this->eventManager->filter('Shopware_Analytics_AmountPerWeekday', $builder, array(
             'subject' => $this
@@ -1447,6 +1447,7 @@ class Repository
             ->addSelect('customerGroups.description as customerGroup')
             ->innerJoin('orders', 's_user', 'users', 'users.id = orders.userID')
             ->innerJoin('users', 's_core_customergroups', 'customerGroups', 'users.customergroup = customerGroups.groupkey')
+            ->orderBy('turnover', 'DESC')
             ->groupBy('users.customergroup');
 
         $this->addDateRangeCondition($builder, $from, $to, 'orders.ordertime');

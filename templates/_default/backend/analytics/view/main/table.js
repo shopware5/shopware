@@ -38,6 +38,14 @@ Ext.define('Shopware.apps.Analytics.view.main.Table', {
     initComponent: function () {
         var me = this;
 
+        me.createPagingbar();
+
+        me.callParent(arguments);
+    },
+
+    createPagingbar: function() {
+        var me = this;
+
         Ext.applyIf(me, {
             dockedItems: [
                 {
@@ -48,8 +56,6 @@ Ext.define('Shopware.apps.Analytics.view.main.Table', {
                 }
             ]
         });
-
-        me.callParent(arguments);
     },
 
     initStoreIndices: function (indexName, text, params) {
