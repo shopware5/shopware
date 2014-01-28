@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Snippet;
 
+use Shopware\Components\Snippet\Writer\QueryWriter;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -42,11 +43,6 @@ class QueryHandler
      * @var \Enlight_Config_Adapter_File the file adapter
      */
     protected $inputAdapter;
-
-    /**
-     * @var \Enlight_Config_Writer_Query the query writer
-     */
-    protected $outputWriter;
 
     public function __construct($snippetsDir)
     {
@@ -76,11 +72,8 @@ class QueryHandler
         $this->inputAdapter = new \Enlight_Config_Adapter_File(array(
             'configDir' => $snippetsDir,
         ));
-        $this->outputWriter = new \Enlight_Config_Writer_Query(array(
-            'table' => 's_core_snippets',
-            'namespaceColumn' => 'namespace',
-            'sectionColumn' => array('shopID', 'localeID')
-        ));
+
+        $queryWriter = new QueryWriter();
 
         $finder->files()->in($snippetsDir);
         foreach ($finder as $file) {
@@ -101,12 +94,11 @@ class QueryHandler
                     $locales[$index] = 'SET @locale_'.$index.' = (SELECT id FROM s_core_locales WHERE locale = \''.$index.'\');';
                 }
 
-                $namespaceData->setSection(array(1, '@locale_'.$index))->read();
-                $namespaceData->setData($values);
-                $this->outputWriter->write($namespaceData, array_keys($values), $update);
+                $queryWriter->setUpdate($update);
+                $queryWriter->write($values, $namespace, '@locale_'.$index, 1);
             }
         }
-        $result = $this->outputWriter->getQueries();
+        $result = $queryWriter->getQueries();
         foreach ($locales as $locale) {
             array_unshift($result, $locale);
         }
