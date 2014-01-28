@@ -48,9 +48,24 @@ Ext.define('Shopware.apps.Analytics.view.table.Rating', {
             }
         };
 
-        me.initStoreIndices('basketConversion', '{s name="table/rating/basket_rate"}Order success rate{/s}: <br>[0]');
-        me.initStoreIndices('orderConversion', '{s name="table/rating/order_rate"}Order conversion rate{/s}: <br>[0]');
-        me.initStoreIndices('basketVisitConversion', '{s name="table/rating/basket_visit_rate"}Abandoned baskets / visitors{/s}: <br>[0]');
+
+        me.initShopColumns([
+            {
+                dataIndex: 'basketConversion',
+                text: '{s name="table/rating/basket_rate"}Order success rate{/s}: <br>[0]',
+                renderer: me.percentRenderer
+            },
+            {
+                dataIndex: 'orderConversion',
+                text: '{s name="table/rating/order_rate"}Order conversion rate{/s}: <br>[0]',
+                renderer: me.percentRenderer
+            },
+            {
+                dataIndex: 'basketVisitConversion',
+                text: '{s name="table/rating/basket_visit_rate"}Abandoned baskets / visitors{/s}: <br>[0]',
+                renderer: me.percentRenderer
+            }
+        ]);
 
         me.callParent(arguments);
     },
@@ -61,6 +76,8 @@ Ext.define('Shopware.apps.Analytics.view.table.Rating', {
      * @return [array] grid columns
      */
     getColumns: function () {
+        var me = this;
+
         return [
             {
                 xtype: 'datecolumn',
@@ -73,19 +90,26 @@ Ext.define('Shopware.apps.Analytics.view.table.Rating', {
             {
                 dataIndex: 'basketConversion',
                 height: 30,
-                text: '{s name="table/rating/basket_rate"}Order success rate{/s}'
+                text: '{s name="table/rating/basket_rate"}Order success rate{/s}',
+                renderer: me.percentRenderer
             },
             {
                 dataIndex: 'orderConversion',
                 height: 30,
-                text: '{s name="table/rating/order_rate"}Order conversion rate{/s}'
+                text: '{s name="table/rating/order_rate"}Order conversion rate{/s}',
+                renderer: me.percentRenderer
             },
             {
                 dataIndex: 'basketVisitConversion',
                 height: 30,
-                text: '{s name="table/rating/basket_visit_rate"}Abandoned baskets / visitors{/s}'
+                text: '{s name="table/rating/basket_visit_rate"}Abandoned baskets / visitors{/s}',
+                renderer: me.percentRenderer
             }
         ];
+    },
+
+    percentRenderer: function(value) {
+        return value + ' %';
     }
 });
 //{/block}

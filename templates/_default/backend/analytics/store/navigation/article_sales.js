@@ -22,16 +22,16 @@
  */
 
 /**
- * Analytics ArticleSells Store
+ * Analytics ArticleSales Store
  *
  * @category   Shopware
  * @package    Analytics
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-Ext.define('Shopware.apps.Analytics.store.navigation.ArticleSells', {
+Ext.define('Shopware.apps.Analytics.store.navigation.ArticleSales', {
     extend: 'Ext.data.Store',
-    alias: 'widget.analytics-store-navigation-article_sells',
+    alias: 'widget.analytics-store-navigation-article_sales',
     remoteSort: true,
     fields: [
         'sales',
@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Analytics.store.navigation.ArticleSells', {
     ],
     proxy: {
         type: 'ajax',
-        url: '{url controller=analytics action=getArticleSells}',
+        url: '{url controller=analytics action=getArticleSales}',
         reader: {
             type: 'json',
             root: 'data',

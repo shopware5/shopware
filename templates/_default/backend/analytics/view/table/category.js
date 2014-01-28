@@ -59,7 +59,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Category', {
             {
                 xtype: 'numbercolumn',
                 dataIndex: 'turnover',
-                text: '{s name=table/category/turnover}Turnover{/s}',
+                text: '{s name=general/turnover}Turnover{/s}',
                 renderer: me.currencyRenderer
             }
         ];

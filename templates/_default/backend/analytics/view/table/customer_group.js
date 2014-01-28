@@ -46,10 +46,18 @@ Ext.define('Shopware.apps.Analytics.view.table.CustomerGroup', {
             }
         };
 
-        me.initStoreIndices('turnover', '{s name=table/customer_group/turnover}Turnover{/s}: [0]', {
-            renderer: me.currencyRenderer
-        });
-        me.initStoreIndices('orderCount', '{s name=table/customer_group/count}Number of orders{/s}: [0]');
+
+        me.initShopColumns([
+            {
+                text: '{s name=general/turnover}Turnover{/s}: [0]',
+                dataIndex: 'turnover',
+                renderer: me.currencyRenderer
+            },
+            {
+                text: '{s name=table/customer_group/count}Number of orders{/s}: [0]',
+                dataIndex: 'orderCount'
+            }
+        ]);
 
         me.callParent(arguments);
     },
@@ -65,7 +73,7 @@ Ext.define('Shopware.apps.Analytics.view.table.CustomerGroup', {
             {
                 xtype: 'numbercolumn',
                 dataIndex: 'turnover',
-                text: '{s name=table/customer_group/sales}Sales{/s}',
+                text: '{s name=general/turnover}Turnover{/s}',
                 renderer: me.currencyRenderer
             },
             {

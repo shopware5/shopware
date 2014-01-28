@@ -48,8 +48,10 @@ Ext.define('Shopware.apps.Analytics.view.table.Visitors', {
             }
         };
 
-        me.initStoreIndices('totalVisits', me.shopColumnVisits, { sortable: false });
-        me.initStoreIndices('totalImpressions', me.shopColumnImpressions, { sortable: false });
+        me.initShopColumns([
+            { text: me.shopColumnVisits, dataIndex: 'totalVisits' },
+            { text: me.shopColumnImpressions, dataIndex: 'totalImpressions' },
+        ]);
 
         me.callParent(arguments);
     },

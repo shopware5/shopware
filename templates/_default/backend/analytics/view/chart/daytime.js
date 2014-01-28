@@ -103,7 +103,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Daytime', {
             minimum: 0,
             position: 'left',
             fields: me.getAxesFields('turnover'),
-            title: '{s name=chart/daytime/turnover}Turnover{/s}'
+            title: '{s name=general/turnover}Turnover{/s}'
         });
 
         me.callParent(arguments);

@@ -78,6 +78,28 @@ Ext.define('Shopware.apps.Analytics.view.main.Table', {
         });
     },
 
+    initShopColumns: function(columns) {
+        var me = this;
+
+        if (!me.columns) {
+            me.columns = [];
+        }
+        Ext.each(me.shopSelection, function (shopId) {
+            var shop = me.shopStore.getById(shopId);
+
+            Ext.each(columns, function(config) {
+                var column = Ext.clone(config);
+
+                column = Ext.merge(column, {
+                    dataIndex: Ext.String.format(config.dataIndex, + shop.get('id')),
+                    text: Ext.String.format(config.text, shop.get('name'))
+                });
+
+                me.columns.items.push(column);
+            });
+        });
+    },
+
     getColumns: function () {
         return this.columns;
     }

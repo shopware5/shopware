@@ -33,7 +33,7 @@
 Ext.define('Shopware.apps.Analytics.view.table.Country', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-country',
-    shopColumnText: "{s name=table/country/sum}Sales: [0]{/s}",
+    shopColumnText: "{s name=general/turnover}Turnover{/s}: [0]",
 
     initComponent: function () {
         var me = this;
@@ -65,7 +65,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Country', {
             {
                 xtype: 'numbercolumn',
                 dataIndex: 'turnover',
-                text: '{s name=table/country/turnover}Turnover{/s}',
+                text: '{s name=general/turnover}Turnover{/s}',
                 renderer: me.currencyRenderer
             }
         ];

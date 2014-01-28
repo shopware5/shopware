@@ -60,7 +60,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Supplier', {
             {
                 xtype: 'numbercolumn',
                 dataIndex: 'turnover',
-                text: '{s name=table/supplier/turnover}Turnover{/s}',
+                text: '{s name=general/turnover}Turnover{/s}',
                 renderer: me.currencyRenderer
             }
         ];

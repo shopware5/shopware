@@ -102,7 +102,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Weekday', {
             grid: true,
             position: 'left',
             fields: me.getAxesFields('turnover'),
-            title: '{s name=chart/weekday/turnover}Turnover{/s}'
+            title: '{s name=general/turnover}Turnover{/s}'
         });
 
         me.callParent(arguments);

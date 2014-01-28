@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.Analytics.view.table.PartnerRevenue', {
             },
             {
                 dataIndex: 'turnover',
-                text: '{s name="table/turnover_partner/turnover"}Turnover{/s}',
+                text: '{s name="general/turnover"}Turnover{/s}',
                 renderer: me.currencyRenderer
             }
         ];

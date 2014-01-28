@@ -372,39 +372,6 @@ class Repository
     }
 
     /**
-     * Returns a result which returns the orders, canceled orders and visitors count for each
-     * day of the passed date range.
-     *
-     * @param \DateTime $from
-     * @param \DateTime $to
-     * @param array $shopIds
-     * @return Result
-     *      array (
-     *          'date' => '2012-08-28',
-     *          'visitors' => '6',
-     *          'orderCount' => '0',
-     *          'cancelledOrders' => '0',
-     *      ),
-     *
-     *      array (
-     *          'date' => '2012-08-29',
-     *          'visitors' => '6',
-     *          'orderCount' => '0',
-     *          'cancelledOrders' => '0',
-     *      ),
-     */
-    public function getOrdersOfVisitors(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
-    {
-        $builder = $this->createOrdersOfVisitorsBuilder($from, $to, $shopIds);
-
-        $builder = $this->eventManager->filter('Shopware_Analytics_OrdersOfVisitors', $builder, array(
-            'subject' => $this
-        ));
-
-        return new Result($builder);
-    }
-
-    /**
      * Returns a result object which displays all referrers url and the call count.
      *
      * @param $offset
@@ -488,13 +455,13 @@ class Repository
      *          'ordernumber' => 'SW10002841',
      *      ),
      */
-    public function getProductSells($offset, $limit, \DateTime $from = null, \DateTime $to = null)
+    public function getProductSales($offset, $limit, \DateTime $from = null, \DateTime $to = null)
     {
-        $builder = $this->createProductSellsBuilder($from, $to);
+        $builder = $this->createProductSalesBuilder($from, $to);
 
         $this->addPagination($builder, $offset, $limit);
 
-        $builder = $this->eventManager->filter('Shopware_Analytics_ProductSells', $builder, array(
+        $builder = $this->eventManager->filter('Shopware_Analytics_ProductSales', $builder, array(
             'subject' => $this
         ));
 
@@ -1141,7 +1108,7 @@ class Repository
             foreach ($shopIds as $shopId) {
                 $shopId = (int) $shopId;
                 $builder->addSelect(
-                    'SUM(IF(articleImpression.shopId = ' . $shopId . ', articleImpression.impressions, 0)) as amount' . $shopId
+                    'SUM(IF(articleImpression.shopId = ' . $shopId . ', articleImpression.impressions, 0)) as totalImpressions' . $shopId
                 );
             }
         }
@@ -1168,7 +1135,7 @@ class Repository
             'articleImpression.articleId',
             'article.name as articleName',
             'UNIX_TIMESTAMP(articleImpression.date) as date',
-            'SUM(articleImpression.impressions) as totalAmount'
+            'SUM(articleImpression.impressions) as totalImpressions'
         ));
 
         $builder->from('s_statistics_article_impression', 'articleImpression')
@@ -1358,7 +1325,7 @@ class Repository
      * @param \DateTime $to
      * @return DBALQueryBuilder
      */
-    protected function createProductSellsBuilder(\DateTime $from = null, \DateTime $to = null)
+    protected function createProductSalesBuilder(\DateTime $from = null, \DateTime $to = null)
     {
         $builder = $builder = $this->connection->createQueryBuilder();
         $builder->select(array(

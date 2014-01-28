@@ -34,7 +34,7 @@
 Ext.define('Shopware.apps.Analytics.view.table.Daytime', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-daytime',
-    shopColumnSales: "{s name=table/daytime/sales}Sales{/s}: [0]",
+    shopColumnSales: "{s name=general/turnover}Turnover{/s}: [0]",
 
     initComponent: function () {
         var me = this;
@@ -47,12 +47,14 @@ Ext.define('Shopware.apps.Analytics.view.table.Daytime', {
             }
         };
 
-        me.initStoreIndices('amount', me.shopColumnSales, { sortable: false });
+        me.initStoreIndices('turnover', me.shopColumnSales, { sortable: false });
 
         me.callParent(arguments);
     },
 
     getColumns: function () {
+        var me = this;
+
         return [
             {
                 xtype: 'datecolumn',
@@ -62,10 +64,22 @@ Ext.define('Shopware.apps.Analytics.view.table.Daytime', {
             },
             {
                 xtype: 'numbercolumn',
-                dataIndex: 'amount',
-                text: '{s name=table/daytime/sales}Sales{/s}'
+                dataIndex: 'turnover',
+                text: '{s name=general/turnover}Turnover{/s}',
+                renderer: me.currencyRenderer
             }
         ];
+    },
+
+    currencyRenderer: function(value) {
+        var me = this;
+
+        return Ext.util.Format.currency(
+            value,
+            me.subApp.currencySign,
+            2,
+            (me.subApp.currencyAtEnd == 1)
+        );
     }
 });
 //{/block}

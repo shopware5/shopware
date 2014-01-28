@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Payment', {
             }
         };
 
-        me.initStoreIndices('turnover', '{s name=table/payment/turnover}Turnover{/s}: [0]', {
+        me.initStoreIndices('turnover', '{s name=general/turnover}Turnover{/s}: [0]', {
             xtype: 'numbercolumn',
             renderer: me.currencyRenderer
         });
@@ -65,7 +65,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Payment', {
             {
                 xtype: 'numbercolumn',
                 dataIndex: 'turnover',
-                text: '{s name=table/payment/turnover}Turnover{/s}',
+                text: '{s name=general/turnover}Turnover{/s}',
                 renderer: me.currencyRenderer
             }
         ];
