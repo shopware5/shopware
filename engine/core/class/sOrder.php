@@ -249,7 +249,7 @@ class sOrder
         $availableSerials = $this->getAvailableSerialsOfEsd($esdArticle["id"]);
 
         if ((count($availableSerials) <= $this->config->get('esdMinSerials')) || count($availableSerials) <= $quantity) {
-            // No serialnumber anymore, inform merchant
+            // Not enough serial numbers anymore, inform merchant
             $context = array(
                 'sArticleName' => $basketRow["articlename"],
                 'sMail'        => $this->sUserData["additional"]["user"]["email"],
@@ -266,7 +266,7 @@ class sOrder
             $mail->send();
         }
 
-        // Check if enough serials are available, if not, an email has been sent
+        // Check if enough serials are available, if not, an email has been sent, and we can return
         if (count($availableSerials) < $quantity) {
             return;
         }
@@ -885,8 +885,8 @@ class sOrder
 
     /**
      * Helper function which checks if the passed article is out of stock and
-     * deactivates it if the config flag sDeactivateNoInStock is set to true
-     * and the passed "lastStock" parameter is even true.
+     * deactivates it if the config flag sDeactivateNoInStock
+     * and the passed "lastStock" parameter are both true.
      *
      * @param $orderNumber
      * @param $articleId
@@ -1095,7 +1095,6 @@ class sOrder
 
         return $basketRow;
     }
-
 
     /**
      * send order confirmation mail
@@ -1375,7 +1374,6 @@ class sOrder
         return $result;
     }
 
-
     /**
      * Check if this order could be refered to a previous recommendation
      * @access public
@@ -1584,7 +1582,6 @@ class sOrder
         }
     }
 
-
     /**
      * Helper function which returns the current payment status
      * of the passed order.
@@ -1656,4 +1653,26 @@ class sOrder
             array(':orderId' => $orderId)
         );
     }
+
+    /**
+     * Setter for config
+     *
+     * @param \Shopware_Components_Config $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
+    }
+
+    /**
+     * Getter for config
+     *
+     * @return \Shopware_Components_Config
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+
 }
