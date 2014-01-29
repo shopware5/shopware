@@ -78,6 +78,7 @@ class SnippetsToDbCommand extends ShopwareCommand
 
                 $output->writeln('<info>Importing snippets for '.$plugin->getName().' plugin</info>');
                 $databaseLoader->loadToDatabase($pluginPath.'/Snippets/');
+                $databaseLoader->loadToDatabase($pluginPath.'/snippets/');
                 $databaseLoader->loadToDatabase($pluginPath.'/Resources/snippet/');
             }
             $output->writeln('<info>Plugin snippets processed correctly</info>');
