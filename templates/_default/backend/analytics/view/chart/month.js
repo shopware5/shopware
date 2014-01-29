@@ -46,10 +46,9 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
             {
                 type: 'Time',
                 position: 'bottom',
-                fields: ['date'],
+                fields: ['normal'],
                 title: '{s name=chart/month/titleBottom}Month{/s}',
-                step: [Ext.Date.MONTH, 1],
-                dateFormat: 'M, Y',
+                step:[ Ext.Date.MONTH, 1 ],
                 label: {
                     renderer:function (value) {
                         var myDate = Ext.Date.add(new Date(value), Ext.Date.DAY, 4);
@@ -64,29 +63,28 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
 
         me.series = [];
 
-        // Initiate stores for handling multiple shop values
-        me.initMultipleShopTipsStores();
-
         if (me.shopSelection != Ext.undefined && me.shopSelection.length > 0) {
             me.series = me.getSeriesForShopSelection();
         } else {
             me.series = [
                 me.createLineSeries(
                     {
-                        xField: 'date',
-                        yField: 'amount',
-                        title: '{s name=chart/month/legendSum}Sum{/s}',
+                        xField: 'normal',
+                        yField: 'turnover',
+                        title: '{s name=general/turnover}Turnover{/s}'
                     },
                     {
-                        width: 580,
-                        height: 130,
-                        items: {
-                            xtype: 'container',
-                            layout: 'hbox',
-                            items: [me.tipChart, me.tipGrid]
-                        },
-                        renderer: function (cls, item) {
-                            me.initMultipleShopTipsData(item, this);
+                        width: 180,
+                        height: 45,
+                        renderer: function (storeItem) {
+                            var value = Ext.util.Format.currency(
+                                storeItem.get('turnover'),
+                                me.subApp.currencySign,
+                                2,
+                                (me.subApp.currencyAtEnd == 1)
+                            );
+
+                            this.setTitle(Ext.Date.format(storeItem.get('normal'), 'F, Y') + '<br><br>&nbsp;' + value);
                         }
                     }
                 )
@@ -98,8 +96,8 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
             minimum: 0,
             grid: true,
             position: 'left',
-            fields: me.getAxesFields('amount'),
-            title: '{s name=chart/month/titleLeft}Sales{/s}'
+            fields: me.getAxesFields('turnover'),
+            title: '{s name=general/turnover}Turnover{/s}'
         });
 
         me.callParent(arguments);
@@ -120,10 +118,12 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
                 me.createLineSeries(
                     {
                         title: shop.get('name'),
-                        xField: 'date',
-                        yField: 'amount' + shopId
+                        xField: 'normal',
+                        yField: 'turnover' + shopId
                     },
                     {
+                        width: 180,
+                        height: 45,
                         renderer: function (storeItem) {
                             me.renderShopData(storeItem, this, shop);
                         }
@@ -136,11 +136,17 @@ Ext.define('Shopware.apps.Analytics.view.chart.Month', {
         return series;
     },
 
-
     renderShopData: function(storeItem, tip, shop) {
-        tip.setTitle(Ext.Date.format(storeItem.get('date'), 'F, Y'));
-        var sales = Ext.util.Format.currency(storeItem.get('amount' + shop.get('id')), shop.get('currencyChar'));
-        tip.update(' ' + sales);
+        var me = this;
+
+        var sales = Ext.util.Format.currency(
+            storeItem.get('turnover' + shop.get('id')),
+            me.subApp.currencySign,
+            2,
+            (me.subApp.currencyAtEnd == 1)
+        );
+
+        tip.setTitle(Ext.Date.format(storeItem.get('normal'), 'F, Y') + '<br><br>&nbsp;' + sales);
     }
 
 

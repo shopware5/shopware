@@ -34,8 +34,8 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Vendors', {
     alias: 'widget.analytics-store-navigation-vendors',
     remoteSort: true,
     fields: [
-        'name',
-        'amount'
+        { name: 'name', type: 'string' },
+        { name: 'turnover', type: 'float' }
     ],
     proxy: {
         type: 'ajax',

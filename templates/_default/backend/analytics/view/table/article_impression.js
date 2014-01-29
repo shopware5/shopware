@@ -46,7 +46,9 @@ Ext.define('Shopware.apps.Analytics.view.table.ArticleImpression', {
             }
         };
 
-        me.initStoreIndices('amount', me.shopColumnName);
+        me.initShopColumns([
+            { text: me.shopColumnName, dataIndex: 'totalImpressions' }
+        ]);
 
         me.callParent(arguments);
     },
@@ -86,7 +88,7 @@ Ext.define('Shopware.apps.Analytics.view.table.ArticleImpression', {
                 ]
             },
             {
-                dataIndex: 'totalAmount',
+                dataIndex: 'totalImpressions',
                 align: 'right',
                 text: '{s name=table/article_impression/impressions}Impressions{/s}'
             }

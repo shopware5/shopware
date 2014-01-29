@@ -46,13 +46,25 @@ Ext.define('Shopware.apps.Analytics.view.table.CustomerGroup', {
             }
         };
 
-        me.initStoreIndices('amount', '{s name=table/customer_group/sales}Sales{/s}: [0]');
-        me.initStoreIndices('count', '{s name=table/customer_group/count}Number of orders{/s}: [0]');
+
+        me.initShopColumns([
+            {
+                text: '{s name=general/turnover}Turnover{/s}: [0]',
+                dataIndex: 'turnover',
+                renderer: me.currencyRenderer
+            },
+            {
+                text: '{s name=table/customer_group/count}Number of orders{/s}: [0]',
+                dataIndex: 'orderCount'
+            }
+        ]);
 
         me.callParent(arguments);
     },
 
     getColumns: function () {
+        var me = this;
+
         return [
             {
                 dataIndex: 'customerGroup',
@@ -60,16 +72,28 @@ Ext.define('Shopware.apps.Analytics.view.table.CustomerGroup', {
             },
             {
                 xtype: 'numbercolumn',
-                dataIndex: 'amount',
-                text: '{s name=table/customer_group/sales}Sales{/s}'
+                dataIndex: 'turnover',
+                text: '{s name=general/turnover}Turnover{/s}',
+                renderer: me.currencyRenderer
             },
             {
                 xtype: 'numbercolumn',
                 format: '0',
-                dataIndex: 'count',
+                dataIndex: 'orderCount',
                 text: '{s name=table/customer_group/count}Number of orders{/s}'
             }
         ];
+    },
+
+    currencyRenderer: function(value) {
+        var me = this;
+
+        return Ext.util.Format.currency(
+            value,
+            me.subApp.currencySign,
+            2,
+            (me.subApp.currencyAtEnd == 1)
+        );
     }
 });
 //{/block}

@@ -57,6 +57,8 @@ Ext.define('Shopware.apps.Analytics.view.table.Overview', {
      * @return [array] grid columns
      */
     getColumns: function () {
+        var me = this;
+
         return [
             {
                 xtype: 'datecolumn',
@@ -69,30 +71,41 @@ Ext.define('Shopware.apps.Analytics.view.table.Overview', {
                 text: '{s name="table/quick_overview/orders"}Orders{/s}'
             },
             {
-                dataIndex: 'totalConversion',
-                text: '{s name="table/quick_overview/conversion_rate"}Conversion Rate{/s}'
+                dataIndex: 'conversion',
+                text: '{s name="table/quick_overview/conversion_rate"}Conversion Rate{/s}',
+                renderer: me.percentRenderer
             },
             {
-                dataIndex: 'revenue',
-                text: '{s name="table/quick_overview/turnover"}Turnover{/s}'
+                dataIndex: 'turnover',
+                text: '{s name="general/turnover"}Turnover{/s}',
+                renderer: function(value) {
+
+                    return Ext.util.Format.currency(
+                        value,
+                        me.subApp.currencySign,
+                        2,
+                        (me.subApp.currencyAtEnd == 1)
+                    );
+                }
             },
             {
-                dataIndex: 'cancelledOrders',
-                text: '{s name="table/quick_overview/cancelled_baskets"}Cancelled baskets{/s}'
+                dataIndex: 'registrations',
+                text: '{s name="table/quick_overview/registrations"}New customers{/s}'
             },
             {
-                dataIndex: 'newCustomers',
-                text: '{s name="table/quick_overview/new_customers"}New Customers{/s}'
-            },
-            {
-                dataIndex: 'totalVisits',
+                dataIndex: 'visits',
                 text: '{s name="table/quick_overview/visitors"}Visitors{/s}'
             },
             {
                 dataIndex: 'clicks',
-                text: '{s name="table/quick_overview/page_calls"}Page calls{/s}'
+                text: '{s name="table/quick_overview/page_calls"}Impressions{/s}'
             }
         ];
+    },
+
+    percentRenderer: function(value) {
+        return value + ' %';
     }
 });
+
 //{/block}
