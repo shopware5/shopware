@@ -46,7 +46,7 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_AlsoBoughtTest e
         $this->resetAlsoBought();
         $this->AlsoBought()->initAlsoBought();
 
-        $this->assertCount(18, $this->getAllAlsoBought());
+        $this->assertCount(42, $this->getAllAlsoBought());
     }
 
     public function testRefreshBoughtArticles()
