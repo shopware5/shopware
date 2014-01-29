@@ -24,6 +24,30 @@ In this document you will find a changelog of the important changes related to t
 
 ## 4.2.0
 
+* Removed the following methods
+    * \sAdmin::sCheckTaxID()
+    * \sAdmin::sGetDispatch()
+    * \sAdmin::sGetDispatches()
+    * \sAdmin::sGetShippingcosts()
+    * \sArticles::sGetArticleAccessories()
+    * \sArticles::sCreateTranslationTable
+    * \sArticles::sGetLiveShopping
+    * \sArticles::sGetArticleBundlesByArticleID
+    * \sArticles::sGetArticleBundleByID
+    * \sArticles::sGetBundleBasketDiscount
+    * \sSystem::sPreProcess
+    * \sSystem::sInitMailer
+    * \sSystem::sGetTranslation
+    * \sSystem::sInitAdo
+    * \sSystem::sTranslateConfig
+    * \sSystem::sInitConfig
+    * \sSystem::sInitSmarty
+    * \sSystem::sInitSession
+    * \sSystem::sCallHookPoint
+    * \sSystem::sLoadHookPoints
+    * \sSystem::sInitFactory
+    * \sSystem::sCheckLicense
+
 * Add new metaTitle field to the Blog
 * Add new metaTitle field to the Article
 * Removed unused class `Services_JSON`, was located at `/engine/core/ajax/json.php`.
