@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.Analytics.view.table.ReferrerVisitors', {
         return [
             {
                 dataIndex: 'count',
-                text: '{s name=table/referrer_visitors/count}Number of{/s}'
+                text: '{s name=table/referrer_visitors/count}Count{/s}'
             },
             {
                 dataIndex: 'referrer',

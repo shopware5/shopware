@@ -28,6 +28,7 @@
  * @package    Analytics
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  */
+//{block name="backend/analytics/application"}
 Ext.define('Shopware.apps.Analytics', {
 
     /**
@@ -85,7 +86,7 @@ Ext.define('Shopware.apps.Analytics', {
         'navigation.ReferrerRevenue',
         'navigation.PartnerRevenue',
         'navigation.ReferrerVisitors',
-        'navigation.ArticleSells',
+        'navigation.ArticleSales',
         'navigation.Customers',
         'navigation.SearchTerms',
         'navigation.SearchUrls',
@@ -144,7 +145,7 @@ Ext.define('Shopware.apps.Analytics', {
         'table.ReferrerRevenue',
         'table.PartnerRevenue',
         'table.ReferrerVisitors',
-        'table.ArticleSells',
+        'table.ArticleSales',
         'table.Customers',
         'table.SearchTerms',
         'table.SearchUrls',
@@ -167,6 +168,10 @@ Ext.define('Shopware.apps.Analytics', {
         var me = this,
             mainController = me.getController('Main');
 
+        me.currencySign = '{$analyticsCurrency.sign}';
+        me.currencyAtEnd = '{$analyticsCurrency.currencyAtEnd}';
+
         return mainController.mainWindow;
     }
 });
+//{/block}

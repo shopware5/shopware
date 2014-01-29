@@ -38,6 +38,14 @@ Ext.define('Shopware.apps.Analytics.view.main.Table', {
     initComponent: function () {
         var me = this;
 
+        me.createPagingbar();
+
+        me.callParent(arguments);
+    },
+
+    createPagingbar: function() {
+        var me = this;
+
         Ext.applyIf(me, {
             dockedItems: [
                 {
@@ -48,8 +56,6 @@ Ext.define('Shopware.apps.Analytics.view.main.Table', {
                 }
             ]
         });
-
-        me.callParent(arguments);
     },
 
     initStoreIndices: function (indexName, text, params) {
@@ -66,8 +72,8 @@ Ext.define('Shopware.apps.Analytics.view.main.Table', {
         text = text || '[0]';
         params = params || { };
 
-        for (var i = 0; i < me.shopSelection.length; i++) {
-            var shop = me.shopStore.getAt(i);
+        Ext.each(me.shopSelection, function (shopId) {
+            var shop = me.shopStore.getById(shopId);
 
             column = Ext.merge({
                 dataIndex: indexName + shop.get('id'),
@@ -75,7 +81,30 @@ Ext.define('Shopware.apps.Analytics.view.main.Table', {
             }, params);
 
             columnItems.push(column);
+        });
+    },
+
+    initShopColumns: function(columns) {
+        var me = this;
+
+        if (!me.columns) {
+            me.columns = [];
         }
+        Ext.each(me.shopSelection, function (shopId) {
+            var shop = me.shopStore.getById(shopId);
+
+            Ext.each(columns, function(config) {
+                var column = Ext.clone(config);
+
+                column = Ext.merge(column, {
+                    dataIndex: config.dataIndex + shopId,
+                    text: Ext.String.format(config.text, shop.get('name'))
+                });
+                
+                me.columns.items.push(column);
+            });
+        });
+        
     },
 
     getColumns: function () {

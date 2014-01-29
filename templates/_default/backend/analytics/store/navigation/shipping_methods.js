@@ -34,8 +34,8 @@ Ext.define('Shopware.apps.Analytics.store.navigation.ShippingMethods', {
     alias: 'widget.analytics-store-navigation-shipping_methods',
     remoteSort: true,
     fields: [
-        'name',
-        'amount'
+        { name: 'name', type: 'string' },
+        { name: 'turnover', type: 'float' }
     ],
     proxy: {
         type: 'ajax',
@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Analytics.store.navigation.ShippingMethods', {
 
         if (config.shopStore) {
             config.shopStore.each(function (shop) {
-                config.fields.push('amount' + shop.data.id);
+                config.fields.push('turnover' + shop.data.id);
             });
         }
 

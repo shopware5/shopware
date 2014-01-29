@@ -34,7 +34,7 @@
 Ext.define('Shopware.apps.Analytics.view.table.Week', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-week',
-    shopColumnText: "{s name=table/month/sum}Sales: [0]{/s}",
+    shopColumnText: "{s name=general/turnover}Turnover{/s}: [0]",
 
     initComponent: function () {
         var me = this;
@@ -47,12 +47,20 @@ Ext.define('Shopware.apps.Analytics.view.table.Week', {
             }
         };
 
-        me.initStoreIndices('amount', me.shopColumnText, { xtype: 'numbercolumn' });
+        me.initStoreIndices('turnover', me.shopColumnText, {
+            xtype: 'numbercolumn',
+            renderer: me.currencyRenderer
+
+        });
 
         me.callParent(arguments);
     },
 
+    createPagingbar: function() {},
+
     getColumns: function () {
+        var me = this;
+
         return [
             {
                 xtype: 'datecolumn',
@@ -62,10 +70,22 @@ Ext.define('Shopware.apps.Analytics.view.table.Week', {
             },
             {
                 xtype: 'numbercolumn',
-                dataIndex: 'amount',
-                text: '{s name=table/week/sales}Sales{/s}'
+                dataIndex: 'turnover',
+                text: '{s name=general/turnover}Turnover{/s}',
+                renderer: me.currencyRenderer
             }
         ]
+    },
+
+    currencyRenderer: function(value) {
+        var me = this;
+
+        return Ext.util.Format.currency(
+            value,
+            me.subApp.currencySign,
+            2,
+            (me.subApp.currencyAtEnd == 1)
+        );
     }
 });
 //{/block}

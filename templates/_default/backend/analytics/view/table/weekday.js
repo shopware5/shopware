@@ -34,7 +34,7 @@
 Ext.define('Shopware.apps.Analytics.view.table.Weekday', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-weekday',
-    shopColumnSales: "{s name=table/month/sum}Sales: [0]{/s}",
+    shopColumnSales: "{s name=general/turnover}Turnover{/s}: [0]",
 
     initComponent: function () {
         var me = this;
@@ -47,12 +47,17 @@ Ext.define('Shopware.apps.Analytics.view.table.Weekday', {
             }
         };
 
-        me.initStoreIndices('amount', me.shopColumnSales, { xtype: 'numbercolumn' });
+        me.initStoreIndices('turnover', me.shopColumnSales, {
+            xtype: 'numbercolumn',
+            renderer: me.currencyRenderer
+        });
 
         me.callParent(arguments);
     },
 
     getColumns: function () {
+        var me = this;
+
         return [
             {
                 xtype: 'datecolumn',
@@ -62,10 +67,22 @@ Ext.define('Shopware.apps.Analytics.view.table.Weekday', {
             },
             {
                 xtype: 'numbercolumn',
-                dataIndex: 'amount',
-                text: '{s name=table/weekday/sales}Sales{/s}'
+                dataIndex: 'turnover',
+                text: '{s name=general/turnover}Turnover{/s}',
+                renderer: me.currencyRenderer
             }
         ];
+    },
+
+    currencyRenderer: function(value) {
+        var me = this;
+
+        return Ext.util.Format.currency(
+            value,
+            me.subApp.currencySign,
+            2,
+            (me.subApp.currencyAtEnd == 1)
+        );
     }
 });
 //{/block}

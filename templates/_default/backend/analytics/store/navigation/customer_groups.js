@@ -34,9 +34,9 @@ Ext.define('Shopware.apps.Analytics.store.navigation.CustomerGroups', {
     alias: 'widget.analytics-store-navigation-customer-groups',
     remoteSort: true,
     fields: [
-        'amount',
+        'turnover',
         'customerGroup',
-        'count'
+        'orderCount'
     ],
     proxy: {
         type: 'ajax',
@@ -54,8 +54,8 @@ Ext.define('Shopware.apps.Analytics.store.navigation.CustomerGroups', {
 
         if (config.shopStore) {
             config.shopStore.each(function (shop) {
-                config.fields.push('amount' + shop.data.id);
-                config.fields.push('count' + shop.data.id);
+                config.fields.push('turnover' + shop.data.id);
+                config.fields.push('orderCount' + shop.data.id);
             });
         }
 

@@ -46,12 +46,17 @@ Ext.define('Shopware.apps.Analytics.view.table.Payment', {
             }
         };
 
-        me.initStoreIndices('amount', '{s name=table/payment/sales}Sales{/s}: [0]', { xtype: 'numbercolumn' });
+        me.initStoreIndices('turnover', '{s name=general/turnover}Turnover{/s}: [0]', {
+            xtype: 'numbercolumn',
+            renderer: me.currencyRenderer
+        });
 
         me.callParent(arguments);
     },
 
     getColumns: function () {
+        var me = this;
+
         return [
             {
                 dataIndex: 'name',
@@ -59,10 +64,23 @@ Ext.define('Shopware.apps.Analytics.view.table.Payment', {
             },
             {
                 xtype: 'numbercolumn',
-                dataIndex: 'amount',
-                text: '{s name=table/payment/sales}Sales{/s}'
+                dataIndex: 'turnover',
+                text: '{s name=general/turnover}Turnover{/s}',
+                renderer: me.currencyRenderer
             }
         ];
+    },
+
+    currencyRenderer: function(value) {
+        var me = this;
+
+        return Ext.util.Format.currency(
+            value,
+            me.subApp.currencySign,
+            2,
+            (me.subApp.currencyAtEnd == 1)
+        );
     }
+
 });
 //{/block}
