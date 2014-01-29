@@ -1655,7 +1655,7 @@ class sOrder
     }
 
     /**
-     * Getter for config
+     * Setter for config
      *
      * @param \Shopware_Components_Config $config
      */
@@ -1665,7 +1665,7 @@ class sOrder
     }
 
     /**
-     * Setter for config
+     * Getter for config
      *
      * @return \Shopware_Components_Config
      */
