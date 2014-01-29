@@ -142,7 +142,7 @@ class sOrderTest extends PHPUnit_Framework_TestCase
 
     public function testRefreshOrderedVariant()
     {
-        $detail = Shopware()->Db()->fetchRow('SELECT * FROM s_articles_details ORDER BY RAND() LIMIT 1');
+        $detail = Shopware()->Db()->fetchRow('SELECT * FROM s_articles_details WHERE instock > 10 ORDER BY RAND() LIMIT 1');
 
         $this->invokeMethod($this->module, 'refreshOrderedVariant', array(
             $detail['ordernumber'],
