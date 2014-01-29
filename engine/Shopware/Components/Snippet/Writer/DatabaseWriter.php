@@ -95,8 +95,8 @@ class DatabaseWriter
             }
         } else {
             $rows = $this->db->fetchAll(sprintf(
-                'SELECT * FROM s_core_snippets WHERE shopID = %s AND localeID = %s AND namespace = %s'),
-                $shopId, $localeId, $namespace
+                'SELECT * FROM s_core_snippets WHERE shopID = %s AND localeID = %s AND namespace = \'%s\'',
+                $shopId, $localeId, $namespace)
             );
 
             $this->db->beginTransaction();
@@ -157,6 +157,7 @@ class DatabaseWriter
                         $this->db->executeUpdate($query, array_values($queryData));
                     }
                 }
+                $this->db->commit();
             } catch (\Exception $e) {
                 $this->db->rollBack();
                 throw new \Exception(sprintf('An error occurred when importing namespace "%s" for locale "%s"', $namespace, $localeId), 0, $e);
