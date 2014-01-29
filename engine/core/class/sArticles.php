@@ -784,6 +784,22 @@ class sArticles
     }
 
     /**
+     * @return bool
+     */
+    private function isHttpCacheActive()
+    {
+        $httpCache = Shopware()->Plugins()->Core()->HttpCache();
+        if (!$httpCache instanceof Shopware_Components_Plugin_Bootstrap) {
+            return false;
+        }
+
+        /**@var $plugin \Shopware\Models\Plugin\Plugin */
+        $plugin = Shopware()->Models()->find('\Shopware\Models\Plugin\Plugin', $httpCache->getId());
+
+        return $plugin->getActive() && $plugin->getInstalled();
+    }
+
+    /**
      * Get all articles from a specific category
      *
      * @param int $categoryId category id
@@ -802,7 +818,7 @@ class sArticles
             return false;
         }
 
-        if (isset($this->sSYSTEM->_SESSION['sCategoryConfig' . $categoryId])) {
+        if (!$this->isHttpCacheActive() && isset($this->sSYSTEM->_SESSION['sCategoryConfig' . $categoryId])) {
             $sCategoryConfig = $this->sSYSTEM->_SESSION['sCategoryConfig' . $categoryId];
         } else {
             $sCategoryConfig = array();
@@ -864,7 +880,7 @@ class sArticles
         }
 
         // save category config to session
-        if (!empty($sCategoryConfig)) {
+        if (!$this->isHttpCacheActive() && !empty($sCategoryConfig)) {
             $this->sSYSTEM->_SESSION['sCategoryConfig' . $categoryId] = $sCategoryConfig;
         } else {
             unset($this->sSYSTEM->_SESSION['sCategoryConfig' . $categoryId]);
@@ -2267,7 +2283,7 @@ class sArticles
             return;
         }
 
-        if (isset($this->sSYSTEM->_SESSION['sCategoryConfig' . $categoryId])) {
+        if (!$this->isHttpCacheActive() && isset($this->sSYSTEM->_SESSION['sCategoryConfig' . $categoryId])) {
             $sCategoryConfig = $this->sSYSTEM->_SESSION['sCategoryConfig' . $categoryId];
         } else {
             $sCategoryConfig = array();
