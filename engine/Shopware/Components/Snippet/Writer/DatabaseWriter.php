@@ -26,6 +26,11 @@ namespace Shopware\Components\Snippet\Writer;
 
 use Doctrine\DBAL\Connection;
 
+/**
+ * @category  Shopware
+ * @package   Shopware\Components\Snippet\Writer
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
 class DatabaseWriter
 {
     /**
@@ -39,23 +44,30 @@ class DatabaseWriter
     private $update;
 
     /**
+     * Whether or not overwrite dirty snippets
+     *
      * @var boolean
      */
     private $force;
 
     /**
-     * @var boolean
+     * @param Connection $db
      */
-    private $allowReset;
-
     public function __construct(Connection $db)
     {
-        $this->db = $db;
-        $this->update = true;
-        $this->force = false;
-        $this->allowReset = false;
+        $this->db         = $db;
+        $this->update     = true;
+
+        $this->force      = false;
     }
 
+    /**
+     * @param array $data
+     * @param string $namespace
+     * @param int $localeId
+     * @param int $shopId
+     * @throws \Exception
+     */
     public function write($data, $namespace, $localeId, $shopId)
     {
         if (empty($data)) {
@@ -66,41 +78,22 @@ class DatabaseWriter
             throw new \Exception('Required database connection is missing');
         }
 
-        // If no update are allowed, we can speed up using INSERT IGNORE
-        if (!$this->update) {
-            $this->db->beginTransaction();
-            try {
-                foreach ($data as $name => $value) {
-                    $queryData = array(
-                        'namespace' => $namespace,
-                        'shopID' => $shopId,
-                        'localeID' => $localeId,
-                        'name' => $name,
-                        'value' => $value,
-                        'created' => date('Y-m-d H:i:s', time()),
-                        'updated' => date('Y-m-d H:i:s', time()),
-                        'dirty' => 0
-                    );
+        $this->db->beginTransaction();
+        try {
 
-                    $query = 'INSERT IGNORE INTO s_core_snippets'
-                        . ' (' . implode(', ', array_keys($queryData)) . ')'
-                        . ' VALUES (' . implode(', ', array_fill(0, count($queryData), '?')) . ')';
+            // If no update are allowed, we can speed up using INSERT IGNORE
+            if (!$this->update) {
+                $this->insertBatch($data, $namespace, $localeId, $shopId);
+            } else {
+                $rows = $this->db->fetchAll(
+                    'SELECT * FROM s_core_snippets WHERE shopID = :shopId AND localeID = :localeId AND namespace = :namespace',
+                    array(
+                        'shopId'    => $shopId,
+                        'localeId'  => $localeId,
+                        'namespace' => $namespace
+                    )
+                );
 
-                    $this->db->executeUpdate($query, array_values($queryData));
-                }
-                $this->db->commit();
-            } catch (\Exception $e) {
-                $this->db->rollBack();
-                throw new \Exception(sprintf('An error occurred when importing namespace "%s" for locale "%s"', $namespace, $localeId), 0, $e);
-            }
-        } else {
-            $rows = $this->db->fetchAll(sprintf(
-                'SELECT * FROM s_core_snippets WHERE shopID = %s AND localeID = %s AND namespace = \'%s\'',
-                $shopId, $localeId, $namespace)
-            );
-
-            $this->db->beginTransaction();
-            try {
                 foreach ($data as $name => $value) {
                     $row = null;
 
@@ -115,54 +108,96 @@ class DatabaseWriter
 
                     if ($row !== null) {
                         // Found a matching value, try update
-
-                        // If not forced, value is dirty and columns are different, skip
-                        if (!$this->force && $row['dirty'] == 1 && (!$this->allowReset || $row['value'] != $value)) {
-                            continue;
-                        }
-
-                        // If values are the same and they are not dirty or not allowReset, skip
-                        if ((!$this->allowReset || $row['dirty'] == 0) && $row['value'] == $value && !$this->force) {
-                            continue;
-                        }
-
-                        $queryData = array(
-                            'value' => $value,
-                            'updated' => date('Y-m-d H:i:s', time()),
-                            'dirty' => 0
-                        );
-
-                        if ($this->allowReset && $row['value'] == $value) {
-                            $queryData['dirty'] = 0;
-                        }
-
-                        $this->db->update('s_core_snippets', $queryData, array('id' => $row['id']));
+                        $this->updateRecord($value, $row);
                     } else {
                         // No matching value, just insert a new one
-                        $queryData = array(
-                            'namespace' => $namespace,
-                            'shopID' => $shopId,
-                            'localeID' => $localeId,
-                            'name' => $name,
-                            'value' => $value,
-                            'created' => date('Y-m-d H:i:s', time()),
-                            'updated' => date('Y-m-d H:i:s', time()),
-                            'dirty' => 0
-                        );
-
-                        $query = 'INSERT IGNORE INTO s_core_snippets'
-                            . ' (' . implode(', ', array_keys($queryData)) . ')'
-                            . ' VALUES (' . implode(', ', array_fill(0, count($queryData), '?')) . ')';
-
-                        $this->db->executeUpdate($query, array_values($queryData));
+                        $this->insertRecord($name, $value, $namespace, $localeId, $shopId);
                     }
                 }
-                $this->db->commit();
-            } catch (\Exception $e) {
-                $this->db->rollBack();
-                throw new \Exception(sprintf('An error occurred when importing namespace "%s" for locale "%s"', $namespace, $localeId), 0, $e);
             }
+            $this->db->commit();
+        } catch (\Exception $e) {
+            $this->db->rollBack();
+            throw new \Exception(sprintf('An error occurred when importing namespace "%s" for locale "%s"', $namespace, $localeId), 0, $e);
         }
+    }
+
+    /**
+     * @param array $data
+     * @param string $namespace
+     * @param int $localeId
+     * @param int $shopId
+     */
+    private function insertBatch($data, $namespace, $localeId, $shopId)
+    {
+        $insertSql = 'INSERT INTO s_core_snippets (namespace, shopID, localeID, name, value, created, updated, dirty)
+                      VALUES (:namespace, :shopId, :localeId, :name, :value, :created, :updated, 0)';
+
+        $insertStmt = $this->db->prepare($insertSql);
+        foreach ($data as $name => $value) {
+            $insertStmt->execute(
+                array(
+                    'namespace' => $namespace,
+                    'shopId' => $shopId,
+                    'localeId' => $localeId,
+                    'name' => $name,
+                    'value' => $value,
+                    'created' => date('Y-m-d H:i:s', time()),
+                    'updated' => date('Y-m-d H:i:s', time())
+                )
+            );
+        }
+    }
+
+    /**
+     * @param string $name
+     * @param string $value
+     * @param string $namespace
+     * @param int $localeId
+     * @param int $shopId
+     */
+    private function insertRecord($name, $value, $namespace, $localeId, $shopId)
+    {
+        $queryData = array(
+            'namespace' => $namespace,
+            'shopID'    => $shopId,
+            'localeID'  => $localeId,
+            'name'      => $name,
+            'value'     => $value,
+            'created'   => date('Y-m-d H:i:s', time()),
+            'updated'   => date('Y-m-d H:i:s', time()),
+            'dirty'     => 0
+        );
+
+        $this->db->insert('s_core_snippets', $queryData);
+    }
+
+    /**
+     * @param string $value
+     * @param array $row
+     */
+    private function updateRecord($value, $row)
+    {
+        $hasSameValue = $row['value'] == $value;
+        $isDirty      = $row['dirty'] == 1;
+
+        // snippet was never touched after insert
+        if (!$this->force && $hasSameValue && !$isDirty) {
+            return;
+        }
+
+        // If not forced, value is dirty and columns are different, skip
+        if (!$this->force && $isDirty && !$hasSameValue) {
+            return;
+        }
+
+        $queryData = array(
+            'value'   => $value,
+            'updated' => date('Y-m-d H:i:s', time()),
+            'dirty'   => 0
+        );
+
+        $this->db->update('s_core_snippets', $queryData, array('id' => $row['id']));
     }
 
     /**
@@ -179,22 +214,6 @@ class DatabaseWriter
     public function getUpdate()
     {
         return $this->update;
-    }
-
-    /**
-     * @param boolean $allowReset
-     */
-    public function setAllowReset($allowReset)
-    {
-        $this->allowReset = $allowReset;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function getAllowReset()
-    {
-        return $this->allowReset;
     }
 
     /**

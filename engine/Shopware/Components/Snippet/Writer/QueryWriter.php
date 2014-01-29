@@ -24,6 +24,11 @@
 
 namespace Shopware\Components\Snippet\Writer;
 
+/**
+ * @category  Shopware
+ * @package   Shopware\Components\Snippet\Writer
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
 class QueryWriter
 {
     private $queries;
