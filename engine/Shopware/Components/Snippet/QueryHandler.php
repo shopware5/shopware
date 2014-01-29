@@ -30,7 +30,7 @@ use Symfony\Component\Finder\Finder;
 /**
  * @category  Shopware
  * @package   Shopware\Components\Snippet
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class QueryHandler
 {
@@ -40,10 +40,8 @@ class QueryHandler
     protected $snippetsDir;
 
     /**
-     * @var \Enlight_Config_Adapter_File the file adapter
+     * @param string $snippetsDir
      */
-    protected $inputAdapter;
-
     public function __construct($snippetsDir)
     {
         $this->snippetsDir = $snippetsDir;
@@ -69,7 +67,7 @@ class QueryHandler
 
         $finder = new Finder();
 
-        $this->inputAdapter = new \Enlight_Config_Adapter_File(array(
+        $inputAdapter = new \Enlight_Config_Adapter_File(array(
             'configDir' => $snippetsDir,
         ));
 
@@ -85,8 +83,8 @@ class QueryHandler
             }
 
             $namespaceData = new \Enlight_Components_Snippet_Namespace(array(
-                'adapter' => $this->inputAdapter,
-                'name' => $namespace,
+                'adapter' => $inputAdapter,
+                'name'    => $namespace,
             ));
 
             foreach ($namespaceData->read()->toArray() as $index => $values) {
@@ -102,6 +100,7 @@ class QueryHandler
         foreach ($locales as $locale) {
             array_unshift($result, $locale);
         }
+
         return $result;
     }
 }

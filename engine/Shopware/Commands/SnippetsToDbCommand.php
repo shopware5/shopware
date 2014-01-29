@@ -24,6 +24,7 @@
 
 namespace Shopware\Commands;
 
+use Shopware\Components\Snippet\DatabaseHandler;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -49,6 +50,12 @@ class SnippetsToDbCommand extends ShopwareCommand
                 InputOption::VALUE_NONE,
                 'If given, the active plugin snippets will also be loaded'
             )
+            ->addOption(
+                'force',
+                'f',
+                InputOption::VALUE_NONE,
+                'If given, the file will be overwritten if it already exists'
+            )
         ;
     }
 
@@ -57,10 +64,12 @@ class SnippetsToDbCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        //Import core snippets
+        /** @var DatabaseHandler $databaseLoader */
         $databaseLoader = $this->container->get('shopware.snippet_database_handler');
+        $force = $input->getOption('force');
+
         $databaseLoader->setOutput($output);
-        $databaseLoader->loadToDatabase();
+        $databaseLoader->loadToDatabase(null, $force);
 
         //Import plugin snippets
         if ($input->getOption('include-plugins')) {
@@ -77,10 +86,11 @@ class SnippetsToDbCommand extends ShopwareCommand
                 ));
 
                 $output->writeln('<info>Importing snippets for '.$plugin->getName().' plugin</info>');
-                $databaseLoader->loadToDatabase($pluginPath.'/Snippets/');
-                $databaseLoader->loadToDatabase($pluginPath.'/snippets/');
-                $databaseLoader->loadToDatabase($pluginPath.'/Resources/snippet/');
+                $databaseLoader->loadToDatabase($pluginPath.'/Snippets/', $force);
+                $databaseLoader->loadToDatabase($pluginPath.'/snippets/', $force);
+                $databaseLoader->loadToDatabase($pluginPath.'/Resources/snippet/', $force);
             }
+
             $output->writeln('<info>Plugin snippets processed correctly</info>');
         }
     }

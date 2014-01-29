@@ -26,7 +26,9 @@
 use Shopware\Components\Model\ModelManager;
 
 /**
- * Shopware Snippet Manager
+ * @category  Shopware
+ * @package   Shopware\Components\Snippet
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Manager
 {
