@@ -80,6 +80,9 @@ class DatabaseHandler
         $this->db = $db;
     }
 
+    /**
+     * @param OutputInterface $output
+     */
     public function setOutput(OutputInterface $output)
     {
         $this->output = $output;
@@ -110,6 +113,9 @@ class DatabaseHandler
         $finder->files()->in($snippetsDir);
         $defaultLocale = $localeRepository->findOneBy(array('locale' => 'en_GB'));
 
+        $snippetCount = $this->em->getConnection()->fetchArray('SELECT * FROM s_core_snippets LIMIT 1');
+        $databaseWriter->setUpdate((bool) $snippetCount);
+
         foreach ($finder as $file) {
             $filePath = $file->getRelativePathname();
             if (strpos($filePath, '.ini') == strlen($filePath) - 4) {
@@ -134,7 +140,6 @@ class DatabaseHandler
                     $locale = $localeRepository->findOneBy(array('locale' => $index));
                 }
 
-                $databaseWriter->setUpdate(false);
                 $databaseWriter->write($values, $namespace, $locale->getId(), 1);
 
                 if ($this->output) {
