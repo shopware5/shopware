@@ -1,9 +1,5 @@
-<?php
-if (!defined("installer")) {
-    exit;
-}
-?>
-<!-- Start page -->
+<?php $app->render('header.php', array('tab' => 'configuration')) ?>
+
 <div id="start">
     <div class="page-header">
         <h2><?php echo $language["step6_header"];?></h2>
@@ -112,3 +108,5 @@ if (!defined("installer")) {
         </div>
     </form>
 </div>
+
+<?php $app->render('footer.php') ?>

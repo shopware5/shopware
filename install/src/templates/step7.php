@@ -1,9 +1,5 @@
-<?php
-if (!defined("installer")) {
-    exit;
-}
-?>
-<!-- Start page -->
+<?php $app->render('header.php', array('tab' => 'done')) ?>
+
 <div id="start">
     <div class="page-header">
         <h2><?php echo $language["step7_title"];?></h2>
@@ -14,3 +10,5 @@ if (!defined("installer")) {
         <a href="http://<?php echo $shop["domain"]."".$shop["basepath"]."/backend" ?>" target="_blank"><?php echo $language["step7_backend"];?></a>
     </div>
 </div>
+
+<?php $app->render('footer.php') ?>

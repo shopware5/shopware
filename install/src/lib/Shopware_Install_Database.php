@@ -22,8 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-require_once(dirname(__FILE__)."/Shopware_Components_Dump.php");
-
 class Shopware_Install_Database
 {
     /**
@@ -45,7 +43,7 @@ class Shopware_Install_Database
 
     public function __construct(array $databaseParameters)
     {
-        $this->configFile = dirname(__FILE__)."/../../../config.php";
+        $this->configFile = __DIR__ . '/../../../config.php';
         $this->database_parameters = $databaseParameters;
     }
 
@@ -171,7 +169,7 @@ class Shopware_Install_Database
 
     public function importDump()
     {
-        $dump = new Shopware_Components_Dump(dirname(__FILE__)."/../../assets/sql/sw4_clean.sql");
+        $dump = new Shopware_Components_Dump(__DIR__ . '/../../assets/sql/sw4_clean.sql');
 
         foreach ($dump as $line) {
             try {
@@ -187,7 +185,7 @@ class Shopware_Install_Database
 
     public function importDumpEn()
     {
-        $dump = file_get_contents(dirname(__FILE__)."/../../assets/sql/en.sql");
+        $dump = file_get_contents(__DIR__ . '/../../assets/sql/en.sql');
         $dump = explode("\r\n",$dump);
 
         foreach ($dump as $line) {
@@ -207,7 +205,7 @@ class Shopware_Install_Database
 
     public function importDumpSnippets()
     {
-        $snippetsSql = dirname(__FILE__)."/../../assets/sql/snippets.sql";
+        $snippetsSql = __DIR__ . '/../../assets/sql/snippets.sql';
 
         if (!file_exists($snippetsSql)) {
             return;
@@ -225,7 +223,7 @@ class Shopware_Install_Database
                 break;
             }
         }
-        $batches = array_map(function($chunk) use ($locales) {
+        $batches = array_map(function ($chunk) use ($locales) {
                 return array_merge($locales, $chunk);
             },
             array_chunk($rows, 500)

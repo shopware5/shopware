@@ -1,9 +1,5 @@
-<?php
-if (!defined("installer")) {
-    exit;
-}
-?>
-<!-- Start page -->
+<?php $app->render('header.php', array('tab' => 'database_import')) ?>
+
 <div id="start" class="step4">
     <div class="page-header">
         <h2><?php echo $language["step4_header"];?></h2>
@@ -35,3 +31,5 @@ if (!defined("installer")) {
         </div>
     </form>
 </div>
+
+<?php $app->render('footer.php') ?>
