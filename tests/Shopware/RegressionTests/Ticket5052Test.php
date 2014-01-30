@@ -113,7 +113,7 @@ class Shopware_RegressionTests_Ticket5052 extends Enlight_Components_Test_Contro
     }
 
     protected function checkImages($data, $article) {
-        $this->assertArrayCount(count($article['images']), $data['images']);
+        $this->assertCount(count($article['images']), $data['images']);
 
         for($i=0; $i<=count($article['images'])-1;$i++) {
             $image = $data['images'][$i];
@@ -134,12 +134,12 @@ class Shopware_RegressionTests_Ticket5052 extends Enlight_Components_Test_Contro
 
         $this->assertEquals($set['id'], $expected['id'], 'Configurator set id not matched  article =>' . $article['id']);
         $this->assertEquals($set['name'], $expected['name'], 'Configurator set name not matched  article =>' . $article['id']);
-        $this->assertArrayCount($expected['groups'], $set['groups']);
-        $this->assertArrayCount($expected['options'], $set['options']);
+        $this->assertCount($expected['groups'], $set['groups']);
+        $this->assertCount($expected['options'], $set['options']);
     }
 
     protected function checkCategories($data, $article) {
-        $this->assertArrayCount(count($article['categories']), $data['categories'], 'Categories count not match   article =>' . $article['id']);
+        $this->assertCount(count($article['categories']), $data['categories'], 'Categories count not match   article =>' . $article['id']);
 
         for($i=0; $i<=count($article['categories'])-1;$i++) {
             $expected = $article['categories'][$i];

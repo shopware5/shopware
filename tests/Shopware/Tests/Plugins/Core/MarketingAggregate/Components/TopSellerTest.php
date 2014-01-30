@@ -52,7 +52,7 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_TopSellerTest ex
 
         $this->TopSeller()->initTopSeller();
 
-        $this->assertArrayCount(
+        $this->assertCount(
             count($this->getAllArticles()),
             $this->getAllTopSeller()
         );
