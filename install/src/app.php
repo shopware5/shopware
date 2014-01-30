@@ -1,31 +1,29 @@
 <?php
-use Slim\Slim;
-
-if (!defined("installer")) {
-    exit;
-}
-
 require SW_PATH . '/engine/Library/Slim/Slim.php';
-require 'assets/php/Shopware_Install_Requirements.php';
-require 'assets/php/Shopware_Install_Requirements_Path.php';
-require 'assets/php/Shopware_Install_Database.php';
-require 'assets/php/Shopware_Install_License.php';
-require 'assets/php/Shopware_Install_Configuration.php';
+require 'lib/Shopware_Components_Dump.php';
+require 'lib/Shopware_Install_Requirements.php';
+require 'lib/Shopware_Install_Requirements_Path.php';
+require 'lib/Shopware_Install_Database.php';
+require 'lib/Shopware_Install_License.php';
+require 'lib/Shopware_Install_Configuration.php';
 
-\Slim\Slim::registerAutoloader();
+use Slim\Slim;
+Slim::registerAutoloader();
 
-// Initiate slim
-$app = new \Slim\Slim();
-
-//$app->add(new Slim_Middleware_SessionCookie());
+$app = new Slim(array(
+    'templates.path'  => __DIR__ . '/templates'
+));
+$app->contentType('text/html; charset=utf-8');
 
 $configObj = new Shopware_Install_Configuration();
 $basepath = $configObj->getShopDomain();
 
 if (!isset($_SESSION)) {
+    session_cache_limiter(false);
     session_set_cookie_params(600, $basepath['basepath']);
     session_start();
 }
+
 if (!isset($_SESSION["parameters"])) {
     $_SESSION["parameters"] = array();
 }
@@ -39,6 +37,7 @@ $selectedLanguage = substr($selectedLanguage[0], 0, 2);
 if (empty($selectedLanguage) || !in_array($selectedLanguage, $allowedLanguages)) {
     $selectedLanguage = "de";
 }
+
 if (isset($_POST["language"]) && in_array($_POST["language"], $allowedLanguages)) {
     $selectedLanguage = $_POST["language"];
     unset($_SESSION["parameters"]["c_config_shop_language"]);
@@ -50,58 +49,51 @@ if (isset($_POST["language"]) && in_array($_POST["language"], $allowedLanguages)
 } else {
     $_SESSION["language"] = $selectedLanguage;
 }
-$language = require("assets/lang/$selectedLanguage.php");
 
-// Assign components
-$app->config('install.requirements', new Shopware_Install_Requirements());
-$app->config('install.requirementsPath', new Shopware_Install_Requirements_Path());
-$app->config('install.language',$selectedLanguage);
+$language = require "assets/lang/$selectedLanguage.php";
 
-$app->contentType('text/html; charset=utf-8');
-
-// Save post - parameters
+// Save post parameters starting with "c_" to session
 $params = $app->request()->params();
-
 foreach ($params as $key => $value) {
-    if (strpos($key,"c_")!==false) {
+    if (strpos($key,"c_") !== false) {
         $_SESSION["parameters"][$key] = $value;
     }
 }
 
 // Initiate database object
 $databaseParameters = array(
-    "user"     => isset($_SESSION["parameters"]["c_database_user"]) ? $_SESSION["parameters"]["c_database_user"] : "",
-    "password" => isset($_SESSION["parameters"]["c_database_user"]) ? $_SESSION["parameters"]["c_database_password"] : "",
-    "host"     => isset($_SESSION["parameters"]["c_database_user"]) ? $_SESSION["parameters"]["c_database_host"] : "",
-    "port"     => isset($_SESSION["parameters"]["c_database_user"]) ? $_SESSION["parameters"]["c_database_port"] : "",
-    "socket"   => isset($_SESSION["parameters"]["c_database_user"]) ? $_SESSION["parameters"]["c_database_socket"] : "",
-    "database" => isset($_SESSION["parameters"]["c_database_user"]) ? $_SESSION["parameters"]["c_database_schema"] : "",
+    "user"     => isset($_SESSION["parameters"]["c_database_user"])     ? $_SESSION["parameters"]["c_database_user"] : "",
+    "password" => isset($_SESSION["parameters"]["c_database_password"]) ? $_SESSION["parameters"]["c_database_password"] : "",
+    "host"     => isset($_SESSION["parameters"]["c_database_host"])     ? $_SESSION["parameters"]["c_database_host"] : "",
+    "port"     => isset($_SESSION["parameters"]["c_database_port"])     ? $_SESSION["parameters"]["c_database_port"] : "",
+    "socket"   => isset($_SESSION["parameters"]["c_database_socket"])   ? $_SESSION["parameters"]["c_database_socket"] : "",
+    "database" => isset($_SESSION["parameters"]["c_database_schema"])   ? $_SESSION["parameters"]["c_database_schema"] : "",
 );
-$app->config("install.database.parameters",$databaseParameters);
+
+$app->config("install.database.parameters", $databaseParameters);
 $app->config('install.database',new Shopware_Install_Database($databaseParameters));
-$app->config('install.license',new Shopware_Install_License());
-$app->config('install.configuration',$configObj);
+$app->config('install.license', new Shopware_Install_License());
+$app->config('install.configuration', $configObj);
+$app->config('install.requirements', new Shopware_Install_Requirements());
+$app->config('install.requirementsPath', new Shopware_Install_Requirements_Path());
+$app->config('install.language', $selectedLanguage);
 
 // Set global variables
-$app->view()->setData("selectedLanguage",$selectedLanguage);
-$app->view()->setData("language",$language);
+$app->view()->setData("selectedLanguage", $selectedLanguage);
+$app->view()->setData("language", $language);
 $app->view()->setData("baseURL", str_replace('index.php', '', $_SERVER["PHP_SELF"]));
-$app->view()->setData("app",$app);
-$app->view()->setData("error",false);
+$app->view()->setData("app", $app);
+$app->view()->setData("error", false);
 $app->view()->setData("parameters", $_SESSION["parameters"]);
-$app->view()->setData("basepath","http://".$basepath["domain"].$basepath["basepath"]);
+$app->view()->setData("basepath", "http://".$basepath["domain"].$basepath["basepath"]);
 
 // Step 1: Select language
-$app->map('/', function () {
-    $app = Slim::getInstance();
-    $app->render("/header.php",array("tab"=>"start"));
+$app->map('/', function () use ($app) {
     $app->render("/step1.php",array());
-    $app->render("/footer.php");
 })->via('GET','POST')->name("step1");
 
 // Step 2: Check system requirements
-$app->map('/step2/', function () {
-    $app = Slim::getInstance();
+$app->map('/step2/', function () use ($app) {
     // Check system requirements
     $shopwareSystemCheck = $app->config('install.requirements');
     $systemCheckResults = $shopwareSystemCheck->toArray();
@@ -118,15 +110,15 @@ $app->map('/step2/', function () {
         // No errors and submitted form - proceed with next-step
         $app->redirect($app->urlFor("step3"));
     }
-    $app->render("/header.php",array(
-        "tab"=>"system","systemCheckResults"=>$systemCheckResults,"systemCheckResultsWritePermissions"=>$systemCheckPathResults));
-    $app->render("/step2.php",array());
-    $app->render("/footer.php");
+
+    $app->render("/step2.php", array(
+        "systemCheckResults"                 => $systemCheckResults,
+        "systemCheckResultsWritePermissions" => $systemCheckPathResults
+    ));
 })->name("step2")->via('GET','POST');
 
 // Step 3: Enter database
-$app->map('/step3/', function () {
-    $app = Slim::getInstance();
+$app->map('/step3/', function () use ($app) {
     if ($app->request()->post("action")) {
         // Check form
         $getParams = $app->config("install.database.parameters");
@@ -139,11 +131,11 @@ $app->map('/step3/', function () {
             $dbObj->setDatabase();
 
             if ($dbObj->getError()) {
-                $app->view()->setData("error",$dbObj->getError());
+                $app->view()->setData("error", $dbObj->getError());
             } else {
                 $dbObj->writeConfig();
                 if ($dbObj->getError()) {
-                    $app->view()->setData("error",$dbObj->getError());
+                    $app->view()->setData("error", $dbObj->getError());
                 } else {
                     // Redirect to step 4 - (everything seems to be okay)
                     $app->redirect($app->urlFor("step4"));
@@ -151,15 +143,13 @@ $app->map('/step3/', function () {
             }
         }
     }
+
     // Assign form parameters back
-    $app->render("/header.php",array("tab"=>"database"));
     $app->render("/step3.php",array());
-    $app->render("/footer.php");
 })->name("step3")->via('GET','POST');
 
 // Step 4: Import database
-$app->map('/step4/', function () {
-    $app = Slim::getInstance();
+$app->map('/step4/', function () use ($app) {
     if ($app->request()->post("action") && !$app->request()->post("c_skip")) {
         // Check if required fields are suited
         $getParams = $app->config("install.database.parameters");
@@ -192,15 +182,12 @@ $app->map('/step4/', function () {
         $app->redirect($app->urlFor("step5"));
     }
 
-    $app->render("/header.php",array("tab"=>"database_import"));
     $app->render("/step4.php",array());
-    $app->render("/footer.php");
 })->name("step4")->via('GET','POST');
 
 // Step 5: Enter license
-$app->map('/step5/', function () {
-    $app = Slim::getInstance();
-    $app->render("/header.php",array("tab"=>"licence"));
+$app->map('/step5/', function () use ($app) {
+
     if ($app->request()->post("action")) {
         if ($app->request()->post("c_edition")!="ce") {
             // If PE/EE/EEC check license
@@ -236,14 +223,13 @@ $app->map('/step5/', function () {
     if (empty($_SESSION["parameters"]["c_license"])) {
         $_SESSION["parameters"]["c_license"] = "";
     }
+
     $app->view()->setData("parameters",$_SESSION["parameters"]);
     $app->render("/step5.php",array());
-    $app->render("/footer.php");
 })->name("step5")->via('GET','POST');
 
 // Step 6: Configure
-$app->map('/step6/', function () use ($language) {
-    $app = Slim::getInstance();
+$app->map('/step6/', function () use ($app, $language) {
     $configObj = $app->config("install.configuration");
     $dbObj = $app->config("install.database");
     $dbObj->setDatabase();
@@ -289,20 +275,15 @@ $app->map('/step6/', function () use ($language) {
     if (empty($_SESSION["parameters"]["c_config_admin_language"])) {
         $_SESSION["parameters"]["c_config_admin_language"] = $language['locale'];
     }
+
     $app->view()->setData("parameters",$_SESSION["parameters"]);
-    $app->render("/header.php",array("tab"=>"configuration"));
     $app->render("/step6.php",array());
-    $app->render("/footer.php");
 })->name("step6")->via('GET','POST');
 
 // Step 7: Finish
-$app->map('/step7/', function () {
-    $app = Slim::getInstance();
-    $app->render("/header.php",array("tab"=>"done"));
+$app->map('/step7/', function () use ($app) {
     $configObj = $app->config("install.configuration");
     $app->render("/step7.php",array("shop"=>$configObj->getShopDomain()));
-    $app->render("/footer.php");
 })->name("step7")->via('GET','POST');
 
-
-$app->run();
+return $app;

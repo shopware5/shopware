@@ -1,11 +1,6 @@
-<?php
-if (!defined("installer")) {
-    exit;
-}
-?>
-<!-- Start page -->
-<div id="start">
+<?php $app->render('header.php', array('tab' => 'system')) ?>
 
+<div id="start">
     <?php
     if ($error == true) {
     ?>
@@ -111,3 +106,5 @@ if (!defined("installer")) {
         </div>
     </form>
 </div>
+
+<?php $app->render('footer.php'); ?>
