@@ -486,7 +486,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $billing = $customer->getBilling();
             $debit = $customer->getDebit();
 
-            $paymentData = Shopware()->Models()->getRepository('Shopware\Models\Customer\PaymentData')->findOneBy(
+            $paymentData = $this->getManager()->getRepository('Shopware\Models\Customer\PaymentData')->findOneBy(
                 array('customer' => $customer, 'paymentMean' => $paymentId)
             );
         } else {
@@ -519,7 +519,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
                 $paymentData = new PaymentData();
                 $customer->addPaymentData($paymentData);
                 $paymentData->setPaymentMean(
-                    Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment')->find($paymentId)
+                    $this->getManager()->getRepository('Shopware\Models\Payment\Payment')->find($paymentId)
                 );
             }
 
