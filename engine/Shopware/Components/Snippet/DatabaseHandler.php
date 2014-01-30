@@ -89,6 +89,9 @@ class DatabaseHandler
     {
         $snippetsDir = $snippetsDir ? : $this->kernelRoot . '/snippets/';
         if (!file_exists($snippetsDir)) {
+            if ($this->output && $snippetsDir == ($this->kernelRoot . '/snippets/')) {
+                $this->output->writeln('<info>No snippets folder found in Shopware core, skipping</info>');
+            }
             return;
         }
 
