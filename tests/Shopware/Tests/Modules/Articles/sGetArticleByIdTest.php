@@ -122,11 +122,11 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
     }
 
     private function assertLinks($expected, $data) {
-        $this->assertArrayCount(count($expected['sLinks']), $data['sLinks']);
+        $this->assertCount(count($expected['sLinks']), $data['sLinks']);
     }
 
     private function assertSimilar($expected, $data) {
-        $this->assertArrayCount(count($expected['sSimilarArticles']), $data['sSimilarArticles']);
+        $this->assertCount(count($expected['sSimilarArticles']), $data['sSimilarArticles']);
 
         for($i=0; $i < count($expected['sSimilarArticles']); $i++) {
             $expectedArticle = $expected['sSimilarArticles'][$i];
@@ -138,7 +138,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
     }
 
     private function assertRelated($expected, $data) {
-        $this->assertArrayCount(count($expected['sRelatedArticles']), $data['sRelatedArticles']);
+        $this->assertCount(count($expected['sRelatedArticles']), $data['sRelatedArticles']);
 
         for($i=0; $i < count($expected['sRelatedArticles']); $i++) {
             $expectedArticle = $expected['sRelatedArticles'][$i];

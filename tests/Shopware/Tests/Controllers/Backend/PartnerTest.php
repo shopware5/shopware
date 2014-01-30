@@ -159,7 +159,7 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
         $this->Request()->setParams($params);
         $this->dispatch('backend/Partner/savePartner');
         $this->assertTrue($this->View()->success);
-        $this->assertArrayCount(1, $this->View()->data);
+        $this->assertCount(1, $this->View()->data);
         $this->assertEquals("streetDummy", $this->View()->data["street"]);
 
         //test update partner
@@ -286,6 +286,6 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
         $this->Request()->setParams($params);
         $this->dispatch('backend/Partner/deletePartner');
         $this->assertTrue($this->View()->success);
-        $this->assertArrayCount(1, $this->View()->data);
+        $this->assertCount(1, $this->View()->data);
     }
 }

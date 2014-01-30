@@ -124,7 +124,7 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Modules_ArticleTest extends
         $category = $this->getDemoCategory();
 
         $topSeller = $this->module->sGetArticleCharts($category['id']);
-        $this->assertArrayCount(2, $topSeller);
+        $this->assertCount(2, $topSeller);
 
         //the article "2" pseudo sales are set to 1000 so we expect that this will be the first article
         //in the top seller slider.
