@@ -61,7 +61,7 @@ class Shopware_Install_Requirements_Path implements IteratorAggregate, Countable
      */
     protected function checkExits($name)
     {
-        $name = dirname(__FILE__) . "/../../../" . $name;
+        $name = __DIR__ . "/../../../" . $name;
 
         if (file_exists($name) && is_readable($name) && is_writeable($name)) {
             return true;
@@ -91,7 +91,7 @@ class Shopware_Install_Requirements_Path implements IteratorAggregate, Countable
     public function getList()
     {
         if ($this->list === null) {
-            $this->list = simplexml_load_file(dirname(__FILE__).'/Path.xml');
+            $this->list = simplexml_load_file(__DIR__.'/Path.xml');
 
             $this->list = $this->list->files;
 
