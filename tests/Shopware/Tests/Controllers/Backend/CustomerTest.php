@@ -213,4 +213,23 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
         $this->manager->remove($dummyData);
         $this->manager->flush();
     }
+
+    /**
+     * Test that performOrderAction() sets the correct cookie settings
+     */
+    public function testPerformOrderAction()
+    {
+        $params = array(
+            'id' => 1
+        );
+        $this->Request()->setParams($params);
+
+        /** @var Enlight_Controller_Response_ResponseTestCase $response */
+        $response = $this->dispatch('backend/Customer/performOrder');
+
+        $cookie = $response->getFullCookie('session-1');
+
+        $this->assertNotNull($cookie);
+        $this->assertGreaterThanOrEqual($cookie['expire'], time() - 3600);
+    }
 }
