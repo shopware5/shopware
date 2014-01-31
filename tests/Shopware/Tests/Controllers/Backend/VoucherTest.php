@@ -148,7 +148,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
         $this->Request()->setParams($params);
         $this->dispatch('backend/voucher/saveVoucher');
         $this->assertTrue($this->View()->success);
-        $this->assertArrayCount(1, $this->View()->data);
+        $this->assertCount(20, $this->View()->data);
         $this->assertEquals($params["description"], $this->View()->data["description"]);
 
         return $this->View()->data["id"];
@@ -258,7 +258,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
         $this->dispatch('backend/voucher/saveVoucher');
 
         $this->assertTrue($this->View()->success);
-        $this->assertArrayCount(1, $this->View()->data);
+        $this->assertCount(20, $this->View()->data);
         $this->assertEquals($params["description"], $this->View()->data["description"]);
         return $id;
     }
@@ -291,7 +291,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
     {
         $this->dispatch('backend/voucher/getVoucherCodes?voucherID=' . $id);
         $this->assertTrue($this->View()->success);
-        $this->assertArrayCount(50, $this->View()->data);
+        $this->assertCount(50, $this->View()->data);
         return $id;
     }
 

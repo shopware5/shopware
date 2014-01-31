@@ -39,7 +39,7 @@ class Shopware_RegressionTests_Ticket4747 extends Enlight_Components_Test_Contro
         ));
 
         $options = $groups['Edelbrände']['options'];
-        $this->assertArrayCount(5, $options, 'Option count of edelbrände do not match');
+        $this->assertCount(5, $options, 'Option count of edelbrände do not match');
 
         //check position of "Trinktemperatur" value positions
         $this->assertArrayKeys($options, array(
@@ -123,7 +123,7 @@ class Shopware_RegressionTests_Ticket4747 extends Enlight_Components_Test_Contro
         ));
 
         $options = $groups['Edelbrände']['options'];
-        $this->assertArrayCount(5, $options, 'Option count of edelbrände do not match');
+        $this->assertCount(5, $options, 'Option count of edelbrände do not match');
 
         //check position of "Trinktemperatur" value positions
         $this->assertArrayKeys($options, array(
@@ -194,7 +194,7 @@ class Shopware_RegressionTests_Ticket4747 extends Enlight_Components_Test_Contro
     private function assertArrayKeys($array, $expectedKeys)
     {
         $keys = array_keys($array);
-        $this->assertArrayCount(count($expectedKeys), $keys, 'Array count do not match!');
+        $this->assertCount(count($expectedKeys), $keys, 'Array count do not match!');
 
         foreach($expectedKeys as $expectedKey) {
             $this->assertEquals($expectedKey['value'], $keys[$expectedKey['index']], $expectedKey['message']);

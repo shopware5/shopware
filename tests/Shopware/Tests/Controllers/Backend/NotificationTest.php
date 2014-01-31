@@ -106,7 +106,7 @@ class Shopware_Tests_Controllers_Backend_NotificationTest extends Enlight_Compon
 
         $returnData = $this->View()->data;
 
-        $this->assertArrayCount(1, $returnData);
+        $this->assertCount(1, $returnData);
         $this->assertEquals("test@example.com", $returnData[0]["mail"]);
         $this->assertNotEmpty($returnData[0]["name"]);
         $this->assertNotEmpty($returnData[0]["customerId"]);
