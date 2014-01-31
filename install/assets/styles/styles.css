@@ -16,6 +16,7 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 select { width: 100% }
 label { font-weight: bold }
 label.allowBlank { font-weight: normal }
+.hidden { display: none }
 
 /** STRUCTURE */
 .info {
@@ -290,4 +291,27 @@ input.inline-success:focus {
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 6px #7ABA7B;
 
     border-color: #356635;
+}
+
+.progress-container {
+    background: #e9f0f8;
+    border: 1px solid #afcae0;
+    padding: 35px 20px 20px;
+    margin: 0 150px 50px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+.progress-container .progress {
+    border-color: #afcae0;
+    background: #d2d9e1;
+}
+.progress-container .progress-text, .counter-text {
+    text-align: center;
+    font-size: 12px;
+    color: #7e8b9b;
+    text-shadow: 0 1px 0 #fff;
+}
+.progress-actions {
+    margin: 20px 0 0;
 }

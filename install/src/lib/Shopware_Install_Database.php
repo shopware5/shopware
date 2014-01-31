@@ -22,8 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-require_once(dirname(__FILE__)."/Shopware_Components_Dump.php");
-
 class Shopware_Install_Database
 {
     /**
@@ -45,7 +43,7 @@ class Shopware_Install_Database
 
     public function __construct(array $databaseParameters)
     {
-        $this->configFile = dirname(__FILE__)."/../../../config.php";
+        $this->configFile = __DIR__ . '/../../../config.php';
         $this->database_parameters = $databaseParameters;
     }
 
@@ -82,7 +80,6 @@ class Shopware_Install_Database
         }
 
         $connectionString = implode(';', $connectionSettings);
-
         try {
             $this->database = new PDO("mysql:$connectionString", $user, $password);
             $this->database->exec("SET CHARACTER SET utf8");
@@ -169,75 +166,19 @@ class Shopware_Install_Database
         return true;
     }
 
-    public function importDump()
-    {
-        $dump = new Shopware_Components_Dump(dirname(__FILE__)."/../../assets/sql/sw4_clean.sql");
-
-        foreach ($dump as $line) {
-            try {
-                $this->getDatabase()->query($line);
-            } catch (PDOException $e) {
-                $this->setError("Database-Error!: " . $e->getMessage() . "<br/>");
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     public function importDumpEn()
     {
-        $dump = file_get_contents(dirname(__FILE__)."/../../assets/sql/en.sql");
+        $dump = file_get_contents(__DIR__ . '/../../assets/sql/en.sql');
         $dump = explode("\r\n",$dump);
 
         foreach ($dump as $line) {
             if (empty($line)) continue;
-
             try {
-
                 $this->getDatabase()->query($line);
             } catch (PDOException $e) {
                 $this->setError("Database-Error!: " . $e->getMessage() . "<br/>");
                 return false;
             }
-        }
-
-        return true;
-    }
-
-    public function importDumpSnippets()
-    {
-        $snippetsSql = dirname(__FILE__)."/../../assets/sql/snippets.sql";
-
-        if (!file_exists($snippetsSql)) {
-            return;
-        }
-
-        $query = file_get_contents($snippetsSql);
-        $rows = explode(";\n", trim($query));
-
-        $locales = array();
-        foreach ($rows as $key => $row) {
-            if (strpos($row, ' s_core_locales ') !== false) {
-                $locales[] = $row;
-                unset($rows[$key]);
-            } else {
-                break;
-            }
-        }
-        $batches = array_map(function($chunk) use ($locales) {
-                return array_merge($locales, $chunk);
-            },
-            array_chunk($rows, 500)
-        );
-
-        try {
-            foreach ($batches as $batch) {
-                $this->getDatabase()->exec(implode(";\n", $batch));
-            }
-        } catch (PDOException $e) {
-            $this->setError("Database-Error!: " . $e->getMessage() . "<br/>");
-            return false;
         }
 
         return true;
