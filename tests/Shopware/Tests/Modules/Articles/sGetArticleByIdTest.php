@@ -39,7 +39,8 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
         ,216 => array ( 'articleID' => '216', 'articleDetailsID' => '761', 'ordernumber' => 'SW10214.1', 'datum' => '2012-08-29', 'additionaltext' => '200ml', 'shippingtime' => '', 'shippingfree' => '0', 'instock' => '66', 'minpurchase' => 1, 'notification' => '0', 'purchasesteps' => 1, 'maxpurchase' => '100', 'purchaseunit' => 200, 'referenceunit' => 100, 'packunit' => '', 'suppliernumber' => '', 'ean' => '', 'weight' => '0.000', 'laststock' => '0', 'unitID' => NULL, 'template' => '', 'pricegroupID' => NULL, 'pricegroupActive' => '0', 'mode' => '0', 'taxID' => '1', 'description' => ' fuga Ingens res Ut no facultas, res post flagitiosa perspicuus in eveho lacrimabilis Namucense.', 'keywords' => '', 'supplierName' => 'stop the water while using me', 'supplierImg' => 'media/image/stopthewater.png', 'supplierID' => '15', 'supplierDescription' => '', 'articleName' => 'All Natural - Sesame Sage Bodylotion', 'price' => '21,40', 'sales' => '0', 'pseudoprice' => '0', 'pricegroup' => 'EK', 'tax' => '19.00', 'attr1' => '', 'attr2' => '', 'attr3' => '', 'attr4' => '', 'attr5' => '', 'attr6' => '', 'attr7' => '', 'attr8' => '', 'attr9' => '', 'attr10' => '', 'attr11' => '', 'attr12' => '', 'attr13' => '', 'attr14' => '', 'attr15' => '', 'attr16' => '', 'attr17' => NULL, 'attr18' => '', 'attr19' => '', 'attr20' => '', 'filtergroupID' => NULL, 'crossbundlelook' => false, 'sUpcoming' => '0', 'sReleasedate' => '', 'sLinks' => array ( 0 => array ( 'id' => '137', 'description' => 'stop the water while using me', 'link' => 'http://stop-the-water-while-using-me.com', 'target' => '', 'supplierSearch' => false, ), 1 => array ( 'supplierSearch' => true, 'description' => 'stop the water while using me', 'link' => 'shopware.php?sViewport=search&sSearch=15&sSearchMode=supplier&sSearchText=stop+the+water+while+using+me', 'target' => '_parent', ), ), 'sRelatedArticles' => array ( ), 'sSimilarArticles' => array ( ), 'esd' => false, 'sBlockPrices' => array ( ), 'sVariants' => array ( ), 'referenceprice' => '10.70', 'priceStartingFrom' => '21,40', 'quantity' => 1, 'active' => 1, 'sConfiguratorSelection' => array ( 'valueID' => 761, 'active' => 1, 'kind' => 1, 'ordernumber' => 'SW10214.1', 'instock' => 66, 'price' => array ( 0 => array ( 'id' => 916, 'articleId' => 216, 'articleDetailsId' => 761, 'customerGroupKey' => 'EK', 'from' => 1, 'to' => 'beliebig', 'price' => '21,40', 'pseudoPrice' => 0, 'basePrice' => 0, 'percent' => 0, 'priceNet' => 17.983193277311, 'pricenumeric' => 24.99, ), ), 'id' => 761, 'articleID' => 216, 'unitID' => NULL, 'suppliernumber' => '', 'additionaltext' => '200ml', 'stockmin' => 0, 'weight' => '0.000', 'width' => NULL, 'length' => NULL, 'height' => NULL, 'ean' => '', 'position' => 0, 'minpurchase' => NULL, 'purchasesteps' => NULL, 'maxpurchase' => NULL, 'purchaseunit' => '200.0000', 'referenceunit' => '100.000', 'packunit' => '', 'shippingfree' => false, 'releasedate' => NULL, 'shippingtime' => '', 'attributes' => array ( 'id' => 806, 'articleId' => 216, 'articleDetailId' => 761, 'attr1' => '', 'attr2' => '', 'attr3' => '', 'attr4' => '', 'attr5' => '', 'attr6' => '', 'attr7' => '', 'attr8' => '', 'attr9' => '', 'attr10' => '', 'attr11' => '', 'attr12' => '', 'attr13' => '', 'attr14' => '', 'attr15' => '', 'attr16' => '', 'attr17' => NULL, 'attr18' => '', 'attr19' => '', 'attr20' => '', ), ), 'sConfiguratorValues' => array ( ), 'sConfigurator' => array ( 0 => array ( 'groupID' => 14, 'groupname' => 'Inhalt', 'groupnameOrig' => 'Inhalt', 'groupdescription' => NULL, 'groupdescriptionOrig' => NULL, 'groupimage' => '', 'postion' => 16, 'selected_value' => NULL, 'selected' => false, 'values' => array ( 88 => array ( 'optionID' => 88, 'groupID' => 14, 'optionnameOrig' => '200ml', 'optionname' => '200ml', 'optionposition' => 1, 'optionactive' => 1, 'user_selected' => 1, 'selected' => 1, ), 89 => array ( 'optionID' => 89, 'groupID' => 14, 'optionnameOrig' => '500ml', 'optionname' => '500ml', 'optionposition' => 2, 'optionactive' => 1, 'user_selected' => 0, 'selected' => 0, ), 90 => array ( 'optionID' => 90, 'groupID' => 14, 'optionnameOrig' => '5l', 'optionname' => '5l', 'optionposition' => 3, 'optionactive' => 1, 'user_selected' => 0, 'selected' => 0, ), ), 'user_selected' => false, ), ), 'sConfiguratorSettings' => array ( 'articleID' => 216, 'type' => 0, 'template' => 'article_config_upprice.tpl', 'instock' => false, 'upprice' => 0, ), 'image' => array ( 'src' => array ( 'original' => 'http://dr.test.shopware.in/next/media/image/All-Natural-Sesame-Sage-Body-Lotion.jpg', 0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/All-Natural-Sesame-Sage-Body-Lotion_30x30.jpg', 1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/All-Natural-Sesame-Sage-Body-Lotion_57x57.jpg', 2 => 'http://dr.test.shopware.in/next/media/image/thumbnail/All-Natural-Sesame-Sage-Body-Lotion_105x105.jpg', 3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/All-Natural-Sesame-Sage-Body-Lotion_140x140.jpg', 4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/All-Natural-Sesame-Sage-Body-Lotion_285x255.jpg', 5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/All-Natural-Sesame-Sage-Body-Lotion_720x600.jpg', ), 'res' => array ( 'original' => array ( 'width' => 0, 'height' => 0, ), 'description' => '', ), 'position' => 1, 'extension' => 'jpg', 'main' => 1, 'id' => 530, 'parentId' => NULL, 'attribute' => array ( ), ), 'images' => array ( 0 => array ( 'src' => array ( 'original' => 'http://dr.test.shopware.in/next/media/image/All-Natural-Sesame-Sage-Body-Lotion-Hintergrund.jpg', 0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/All-Natural-Sesame-Sage-Body-Lotion-Hintergrund_30x30.jpg', 1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/All-Natural-Sesame-Sage-Body-Lotion-Hintergrund_57x57.jpg', 2 => 'http://dr.test.shopware.in/next/media/image/thumbnail/All-Natural-Sesame-Sage-Body-Lotion-Hintergrund_105x105.jpg', 3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/All-Natural-Sesame-Sage-Body-Lotion-Hintergrund_140x140.jpg', 4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/All-Natural-Sesame-Sage-Body-Lotion-Hintergrund_285x255.jpg', 5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/All-Natural-Sesame-Sage-Body-Lotion-Hintergrund_720x600.jpg', ), 'res' => array ( 'original' => array ( 'width' => 0, 'height' => 0, ), 'description' => '', ), 'position' => 2, 'extension' => 'jpg', 'main' => 2, 'id' => 531, 'parentId' => NULL, 'attribute' => array ( ), ), ), 'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10214.1', 'linkDetails' => 'shopware.php?sViewport=detail&sArticle=216', 'linkDetailsRewrited' => 'http://dr.test.shopware.in/next/sommerwelten/beauty-und-care/216/all-natural-sesame-sage-bodylotion', 'linkNote' => 'shopware.php?sViewport=note&sAdd=SW10214.1', 'linkTellAFriend' => 'shopware.php?sViewport=tellafriend&sDetails=216', 'linkCheaper' => 'shopware.php?sViewport=cheaper&sDetails=216', 'sDownloads' => array ( ), 'sAccessories' => false, 'sVoteAverange' => array ( 'averange' => '0.00', 'count' => '0', ), 'sVoteComments' => array ( ), 'sNavigation' => NULL, 'sDescriptionKeywords' => 'res, dux, pars, Nos, arx, Alternis, eniteo, Subnoto, qualiscumque, appositus, instigatus, vas, inhumanitas, iam, Charybdis, sano, industrius, perspicuus, flagitiosa, eveho', )
     );
 
-    protected $articleProperties = array('articleID',
+    protected $articleProperties = array(
+        'articleID',
         'articleDetailsID',
         'additionaltext',
         'shippingtime',
@@ -60,7 +61,6 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
         'supplierImg',
         'tax'
     );
-
 
     protected $configuratorSelectionProperties = array(
         'valueID',
@@ -100,7 +100,6 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
         return $this->module;
     }
  
-
     public function testArticles() {
         $this->dispatch("/");
 
@@ -109,7 +108,6 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
 
             $this->assertArticleData($expected, $data);
             $this->assertLinks($expected, $data);
-            $this->assertSimilar($expected, $data);
             $this->assertRelated($expected, $data);
             $this->assertConfiguratorSelection($expected['sConfiguratorSelection'], $data['sConfiguratorSelection']);
         }
@@ -122,23 +120,11 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
     }
 
     private function assertLinks($expected, $data) {
-        $this->assertArrayCount(count($expected['sLinks']), $data['sLinks']);
-    }
-
-    private function assertSimilar($expected, $data) {
-        $this->assertArrayCount(count($expected['sSimilarArticles']), $data['sSimilarArticles']);
-
-        for($i=0; $i < count($expected['sSimilarArticles']); $i++) {
-            $expectedArticle = $expected['sSimilarArticles'][$i];
-            $gotArticle = $data['sSimilarArticles'][$i];
-            foreach($this->articleProperties as $property) {
-                $this->assertEquals($expectedArticle[$property], $gotArticle[$property]);
-            }
-        }
+        $this->assertCount(count($expected['sLinks']), $data['sLinks']);
     }
 
     private function assertRelated($expected, $data) {
-        $this->assertArrayCount(count($expected['sRelatedArticles']), $data['sRelatedArticles']);
+        $this->assertCount(count($expected['sRelatedArticles']), $data['sRelatedArticles']);
 
         for($i=0; $i < count($expected['sRelatedArticles']); $i++) {
             $expectedArticle = $expected['sRelatedArticles'][$i];
@@ -148,7 +134,6 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
             }
         }
     }
-
 
     private function assertConfiguratorSelection($expected, $data) {
         foreach($this->configuratorSelectionProperties as $property) {

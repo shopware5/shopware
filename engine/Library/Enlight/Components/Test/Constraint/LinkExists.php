@@ -39,7 +39,7 @@ class Enlight_Components_Test_Constraint_LinkExists extends PHPUnit_Framework_Co
      * @param mixed $other Value or object to evaluate.
      * @return bool
      */
-    public function evaluate($other)
+    public function matches($other)
     {
         $headers = @get_headers($other);
         if (empty($headers)) {
