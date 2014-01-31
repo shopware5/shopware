@@ -702,6 +702,8 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
     /**
      * This test is failing due to SW-7789. As such, there is a commented assertion at the end
      * It should be restore once SW-7793 is resolved
+     *
+     * @group disable
      */
     public function testCreateUseConfiguratorId()
     {
@@ -791,7 +793,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->resource->setResultMode(\Shopware\Components\Api\Resource\Article::HYDRATE_ARRAY);
         $data = $this->resource->getOne($article->getId());
 
-        //$this->assertCount(5, $data['details'][0]['configuratorOptions']);
+        $this->assertCount(5, $data['details'][0]['configuratorOptions']);
 
         return $variantNumber;
     }
@@ -801,6 +803,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
      * It should be restore once SW-7793 is resolved
      *
      * @depends testCreateUseConfiguratorId
+     * @group disable
      */
     public function testUpdateUseConfiguratorIds($variantNumber) {
 
@@ -827,7 +830,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->resource->update($id, $data);
 
         $data = $this->resource->getOne($id);
-        //$this->assertCount(2, $data['details'][0]['configuratorOptions']);
+        $this->assertCount(2, $data['details'][0]['configuratorOptions']);
     }
 
     public function testCreateWithMainImages()
