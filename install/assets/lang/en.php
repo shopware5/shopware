@@ -53,6 +53,8 @@ return array(
     'step5_ec' => 'Shopware Enterprise Premium Edition (License: Commercial / License key required)', //  Shopware Enterprise Premium Edition (License: Commercial / License key required)
     'step5_license' => 'License key', // License-Key:
     'step5_info' => 'If you have purchased a commercial Shopware version, select the appropriate edition in the list. Then enter the license key that you received upon purchasing.', //  If you have purchased a commercial shopware version, select the appropriate edition in the list. Then, enter the license key that you received after the purchase.
+    'step5_license_error' => 'It is required that you enter a valid to install a commercial shopware edition.',
+
     // Step 6
     'step6_header' => 'Shop configuration',   // Shop configuration
     'step6_sconfig_header' => 'Frontend configuration',   // Frontend configuration

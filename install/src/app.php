@@ -171,9 +171,12 @@ $app->map('/step3/', function () use ($app) {
 
 // Step 4: Import database
 $app->map('/step4/', function () use ($app) {
+    if ($app->request()->post('action')) {
+        $app->redirect($app->urlFor('step5'));
+    }
 
     // Check form
-    $getParams = $app->config("install.database.parameters");
+    $getParams = $app->config('install.database.parameters');
     if (empty($getParams["user"]) || empty($getParams["host"]) || empty($getParams["port"]) || empty($getParams["database"])) {
         $app->render('step3.php',array("error" => "Please fill in all fields"));
         return;
@@ -190,8 +193,7 @@ $app->map('/step4/', function () use ($app) {
 })->name("step4")->via('GET','POST');
 
 // Step 5: Enter license
-$app->map('/step5/', function () use ($app) {
-
+$app->map('/step5/', function () use ($app, $language) {
     /** @var Shopware_Install_Database $dbObj */
     $dbObj = $app->config("install.database");
     $dbObj->setDatabase();
@@ -204,7 +206,7 @@ $app->map('/step5/', function () use ($app) {
         if ($app->request()->post("c_edition") != "ce") {
             // If PE/EE/EEC check license
             if (!$app->request()->post("c_license")) {
-                $app->view()->setData("error","It is required that you enter a proper license key to install shopware pe/ee/ec");
+                $app->view()->setData("error", $language['step5_license_error']);
             } else {
                 $licenseObj = $app->config("install.license");
                 $dbObj = $app->config("install.database");
