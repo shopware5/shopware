@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    <form action="<?php echo $app->urlFor('step5', array()); ?>" method="post">
+    <form action="<?php echo $app->urlFor('step4', array()); ?>" method="post">
         <input type="hidden" name="action" value="check" />
 
         <div class="actions clearfix">
