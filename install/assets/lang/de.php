@@ -42,12 +42,11 @@ return array(
     'step3_field_database' => 'Datenbank Name:', // Database
     'step3_info' => 'Geben Sie hier Ihre Datenbank-Zugangsdaten ein, wenn Sie sich nicht sicher sind, welche Dateien Sie eintragen müssen, kontaktieren Sie Ihren Provider.', // Enter your database connection - if you are not sure what data must be entered here, please contact your provider.
     'step_3_loading' => 'Datenbank wird importiert...',
+
     // Step 4
-    'step4_header' => 'Datenbank importieren', // Database import
-    'step4_skip_import' => 'Die Standard-Datenbank nicht importieren', // Skip database import
-    'step4_skip_info' =>
-      'Achtung: Diese Option nur auswählen, wenn die Datenbank schon importiert worden ist oder Sie die Datenbank selbst importieren möchten.<br/>' .
-      'Wenn Sie die Datenbank selbst importieren möchten, führen Sie den Import bitte durch, bevor Sie fortfahren.', //  Warning: If you do not skip the database importing, may be any existing Shopware tables will removed.
+    'step4_header'      => 'Datenbank importieren', // Database import
+    'step4_skip_import' => 'Überspringen', // Skip database import
+
     // Step 5
     'step5_header' => 'Wählen Sie die Lizenz unter der Sie Shopware verwenden möchten', // Choose your license
     'step5_ce' => 'Shopware Community Version(Lizenz: Open-Source AGPL)', // Shopware Community Edition (License: AGPL)
@@ -81,4 +80,8 @@ return array(
     'step7_frontend' => 'Zum Shop-Frontend', // Open shop frontend
     'step7_backend' => 'Zum Shop-Backend (Administration)', // Open shop backend
 
+    'migration_progress_text'           => 'Bitte starten Sie das Datenbank-Update mit einen Klick auf den Button "Starten".<br> <strong>Bestehende Shopware Tabellen werden enfernt.</strong>',
+    'migration_counter_text_migrations' => 'Datenbank-Update wird durchgeführt',
+    'migration_update_success'          => 'Datenbank Update wurde erfolgreich durchgeführt',
+    "start"                             => "Starten",
 );

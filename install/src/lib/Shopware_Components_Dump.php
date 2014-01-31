@@ -32,18 +32,32 @@ class Shopware_Components_Dump implements SeekableIterator, Countable
     public function __construct($filename)
     {
         $this->stream = fopen($filename, 'rb');
+        if (!$this->stream) {
+            throw new Exception('Can not open stream. File: ' . $filename);
+        }
+
         $this->position = 0;
-        $this->count = 0;
+        $this->count    = 0;
+
         while (!feof($this->stream)) {
             stream_get_line($this->stream, 1000000, ";\n");
             $this->count++;
         }
+
         $this->rewind();
     }
 
     public function seek($position)
     {
-        $this->position = (int) $position;
+        $this->rewind();
+
+        while ($this->position < $position && $this->valid()) {
+            $this->next();
+        }
+
+        if ($this->key() < $position) {
+            throw new OutOfBoundsException("invalid seek position ($position)");
+        }
     }
 
     public function count()
@@ -71,13 +85,22 @@ class Shopware_Components_Dump implements SeekableIterator, Countable
 
     public function next()
     {
+        ++$this->position;
+
         $this->current = stream_get_line($this->stream, 1000000, ";\n");
         $this->current = trim(preg_replace('#^\s*--[^\n\r]*#', '', $this->current));
-        ++$this->position;
+
     }
 
     public function valid()
     {
         return !feof($this->stream);
+    }
+
+    public function __destruct()
+    {
+        if ($this->stream !== null) {
+            fclose($this->stream);
+        }
     }
 }
