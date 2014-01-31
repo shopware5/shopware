@@ -13,7 +13,12 @@
     <link rel="shortcut icon" href="<?php echo $basepath ?>/templates/_default/frontend/_resources/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href="<?php echo $basepath ?>/install/assets/styles/bootstrap.min.css" media="all"/>
     <link rel="stylesheet" type="text/css" href="<?php echo $basepath ?>/install/assets/styles/styles.css" media="all"/>
-
+    <script>
+        var shopwareTranslations = {
+            'counterTextMigrations': '<?php echo $language['migration_counter_text_migrations']; ?>',
+            'updateSuccess':         '<?php echo $language['migration_update_success']; ?>'
+        }
+    </script>
 </head>
 <body>
 

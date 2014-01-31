@@ -22,14 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Shopware Check System
- *
- * <code>
- * $list = new Shopware_Components_Check_System();
- * $data = $list->toArray();
- * </code>
- */
 class Shopware_Install_License
 {
     protected $pluginInstallationQueries = '

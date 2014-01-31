@@ -1,15 +1,11 @@
 <?php $app->render('header.php', array('tab' => 'system')) ?>
 
 <div id="start">
-    <?php
-    if ($error == true) {
-    ?>
-    <div class="alert alert-error">
-        <?php echo $language["step2_error"];?>
-   </div>
-   <?php
-    }
-   ?>
+    <?php if ($error): ?>
+        <div class="alert alert-error">
+            <?php echo $language["step2_error"];?>
+        </div>
+    <?php endif ?>
 
     <form action="<?php echo $app->urlFor('step2', array()); ?>" method="post">
         <input type="hidden" name="action" value="check" />
@@ -107,4 +103,4 @@
     </form>
 </div>
 
-<?php $app->render('footer.php'); ?>
+<?php $app->render('footer.php') ?>

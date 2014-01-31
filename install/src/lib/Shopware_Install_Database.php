@@ -80,7 +80,6 @@ class Shopware_Install_Database
         }
 
         $connectionString = implode(';', $connectionSettings);
-
         try {
             $this->database = new PDO("mysql:$connectionString", $user, $password);
             $this->database->exec("SET CHARACTER SET utf8");
@@ -167,22 +166,6 @@ class Shopware_Install_Database
         return true;
     }
 
-    public function importDump()
-    {
-        $dump = new Shopware_Components_Dump(__DIR__ . '/../../assets/sql/sw4_clean.sql');
-
-        foreach ($dump as $line) {
-            try {
-                $this->getDatabase()->query($line);
-            } catch (PDOException $e) {
-                $this->setError("Database-Error!: " . $e->getMessage() . "<br/>");
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     public function importDumpEn()
     {
         $dump = file_get_contents(__DIR__ . '/../../assets/sql/en.sql');
@@ -190,52 +173,12 @@ class Shopware_Install_Database
 
         foreach ($dump as $line) {
             if (empty($line)) continue;
-
             try {
-
                 $this->getDatabase()->query($line);
             } catch (PDOException $e) {
                 $this->setError("Database-Error!: " . $e->getMessage() . "<br/>");
                 return false;
             }
-        }
-
-        return true;
-    }
-
-    public function importDumpSnippets()
-    {
-        $snippetsSql = __DIR__ . '/../../assets/sql/snippets.sql';
-
-        if (!file_exists($snippetsSql)) {
-            return;
-        }
-
-        $query = file_get_contents($snippetsSql);
-        $rows = explode(";\n", trim($query));
-
-        $locales = array();
-        foreach ($rows as $key => $row) {
-            if (strpos($row, ' s_core_locales ') !== false) {
-                $locales[] = $row;
-                unset($rows[$key]);
-            } else {
-                break;
-            }
-        }
-        $batches = array_map(function ($chunk) use ($locales) {
-                return array_merge($locales, $chunk);
-            },
-            array_chunk($rows, 500)
-        );
-
-        try {
-            foreach ($batches as $batch) {
-                $this->getDatabase()->exec(implode(";\n", $batch));
-            }
-        } catch (PDOException $e) {
-            $this->setError("Database-Error!: " . $e->getMessage() . "<br/>");
-            return false;
         }
 
         return true;
