@@ -704,7 +704,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     }
 
     /**
-     *
+     * Redirect the backend user to the frontend, impersonating a customer
      */
     public function performOrderAction()
     {
