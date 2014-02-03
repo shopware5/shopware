@@ -34,8 +34,8 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Payment', {
     alias: 'widget.analytics-store-navigation-payment',
     remoteSort: true,
     fields: [
-        'name',
-        'amount'
+        { name: 'turnover', type: 'float' },
+        { name: 'name', type: 'string' }
     ],
     proxy: {
         type: 'ajax',
@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Payment', {
 
         if (config.shopStore) {
             config.shopStore.each(function (shop) {
-                config.fields.push('amount' + shop.data.id);
+                config.fields.push('turnover' + shop.data.id);
             });
         }
 

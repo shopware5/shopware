@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
 
 
     initComponent: function () {
-        var me = this;
+        var me = this, impressionTip = { }, visitTip = { };
 
         me.axes = [
             {
@@ -59,51 +59,109 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
 
         me.series = [];
 
-        me.tipStore = Ext.create('Ext.data.JsonStore', {
-            fields: ['name', 'data']
-        });
+        if (me.shopSelection && me.shopSelection.length > 0) {
+            me.tipStore = Ext.create('Ext.data.JsonStore', {
+                fields: ['name', 'data']
+            });
 
-        me.impressionGrid = {
-            xtype: 'grid',
-            store: me.tipStore,
-            height: 130,
-            flex: 1,
-            columns: [
-                {
-                    text: '{s name="visitors/chart/tip/name"}Shop{/s}',
-                    dataIndex: 'name',
-                    flex: 1
-                },
-                {
-                    xtype: 'numbercolumn',
-                    text: '{s name=visitors/chart/tip/impressions}Impressions{/s}',
-                    dataIndex: 'data',
-                    align: 'right',
-                    flex: 1
-                }
-            ]
-        };
-        me.visitsGrid = {
-            xtype: 'grid',
-            store: me.tipStore,
-            height: 130,
-            flex: 1,
-            columns: [
-                {
-                    text: '{s name="visitors/chart/tip/name"}Shop{/s}',
-                    dataIndex: 'name',
-                    flex: 1
-                },
-                {
-                    xtype: 'numbercolumn',
-                    text: '{s name=visitors/chart/tip/visits}Visits{/s}',
-                    dataIndex: 'data',
-                    align: 'right',
-                    flex: 1
-                }
-            ]
-        };
+            me.impressionGrid = {
+                xtype: 'grid',
+                store: me.tipStore,
+                height: 130,
+                flex: 1,
+                columns: [
+                    {
+                        text: '{s name="visitors/chart/tip/name"}Shop{/s}',
+                        dataIndex: 'name',
+                        flex: 1
+                    },
+                    {
+                        xtype: 'numbercolumn',
+                        text: '{s name=visitors/chart/tip/impressions}Impressions{/s}',
+                        dataIndex: 'data',
+                        align: 'right',
+                        flex: 1
+                    }
+                ]
+            };
+            me.visitsGrid = {
+                xtype: 'grid',
+                store: me.tipStore,
+                height: 130,
+                flex: 1,
+                columns: [
+                    {
+                        text: '{s name="visitors/chart/tip/name"}Shop{/s}',
+                        dataIndex: 'name',
+                        flex: 1
+                    },
+                    {
+                        xtype: 'numbercolumn',
+                        text: '{s name=visitors/chart/tip/visits}Visits{/s}',
+                        dataIndex: 'data',
+                        align: 'right',
+                        flex: 1
+                    }
+                ]
+            };
 
+            impressionTip = {
+                width: 580,
+                height: 130,
+                items: {
+                xtype: 'container',
+                    layout: 'fit',
+                    items: [ me.impressionGrid ]
+                },
+                renderer: function (storeItem) {
+                    this.setTitle(
+                        '{s name=chart/visitors/legend_impression}Total impressions{/s} ' +
+                        Ext.Date.format(storeItem.get('datum'), 'D, M, Y')
+                    );
+                    me.getSubShopData(storeItem, 'totalImpressions');
+                }
+            };
+
+            visitTip = {
+                width: 580,
+                height: 130,
+                items: {
+                    xtype: 'container',
+                    layout: 'fit',
+                    items: [me.visitsGrid]
+                },
+                renderer: function (storeItem) {
+                    this.setTitle(
+                        '{s name=chart/visitors/legend_visits}Total visits{/s} ' +
+                        Ext.Date.format(storeItem.get('datum'), 'D, M, Y')
+                    );
+                    me.getSubShopData(storeItem, 'totalVisits');
+                }
+            };
+
+        } else {
+            visitTip = {
+                width: 180,
+                height: 30,
+                renderer: function(storeItem) {
+                    this.setTitle(
+                        Ext.Date.format(storeItem.get('datum'), 'D, M, Y') + ':&nbsp;' +
+                        storeItem.get('totalVisits')
+                    )
+                }
+            };
+
+            impressionTip = {
+                width: 180,
+                height: 30,
+                renderer: function(storeItem) {
+                    this.setTitle(
+                        Ext.Date.format(storeItem.get('datum'), 'D, M, Y') + ':&nbsp;' +
+                        storeItem.get('totalImpressions')
+                    )
+                }
+            };
+        }
 
         me.series = [
             me.createLineSeries(
@@ -112,19 +170,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                     yField: 'totalImpressions',
                     title: '{s name=chart/visitors/legend_impression}Total impressions{/s}'
                 },
-                {
-                    width: 580,
-                    height: 130,
-                    items: {
-                        xtype: 'container',
-                        layout: 'fit',
-                        items: [me.impressionGrid]
-                    },
-                    renderer: function (storeItem) {
-                        this.setTitle('{s name=chart/visitors/legend_impression}Total impressions{/s}');
-                        me.getSubShopData(storeItem, 'totalImpressions');
-                    }
-                }
+                impressionTip
             ),
             me.createLineSeries(
                 {
@@ -132,19 +178,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                     yField: 'totalVisits',
                     title: '{s name=chart/visitors/legend_visits}Total visits{/s}'
                 },
-                {
-                    width: 580,
-                    height: 130,
-                    items: {
-                        xtype: 'container',
-                        layout: 'fit',
-                        items: [me.visitsGrid]
-                    },
-                    renderer: function (storeItem) {
-                        this.setTitle('{s name=chart/visitors/legend_visits}Total visits{/s}');
-                        me.getSubShopData(storeItem, 'totalVisits');
-                    }
-                }
+                visitTip
             )
         ];
 
@@ -153,7 +187,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
             grid: true,
             position: 'left',
             fields: ['totalImpressions', 'totalVisits'],
-            title: '{s name=chart/visitors/y_axes}Sales{/s}'
+            title: '{s name=chart/visitors/count}Count{/s}'
         });
 
         me.callParent(arguments);
@@ -163,13 +197,14 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
     getSubShopData: function(storeItem, field) {
         var me = this, data = [];
 
-        me.shopStore.each(function (shop) {
-            var id = shop.get('id');
+        Ext.each(me.shopSelection, function (shopId) {
+            var shop = me.shopStore.getById(shopId);
 
             data.push(
-                { name: shop.get('name'), data: storeItem.get(field + id) }
+                { name: shop.get('name'), data: storeItem.get(field + shopId) }
             );
         });
+
         me.tipStore.loadData(data);
     }
 

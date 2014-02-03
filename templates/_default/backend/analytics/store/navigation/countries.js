@@ -34,8 +34,8 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Countries', {
     alias: 'widget.analytics-store-navigation-countries',
     remoteSort: true,
     fields: [
-        'amount',
-        'name'
+        { name: 'turnover', type: 'float' },
+        { name: 'name', type: 'string' }
     ],
     proxy: {
         type: 'ajax',
@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Countries', {
 
         if (config.shopStore) {
             config.shopStore.each(function (shop) {
-                config.fields.push('amount' + shop.data.id);
+                config.fields.push('turnover' + shop.get('id'));
             });
         }
 

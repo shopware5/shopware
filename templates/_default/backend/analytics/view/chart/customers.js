@@ -51,6 +51,11 @@ Ext.define('Shopware.apps.Analytics.view.chart.Customers', {
             type: 'Category',
             position: 'bottom',
             fields: ['week'],
+            label: {
+                rotate: {
+                    degrees: 315
+                }
+            },
             title: '{s name=chart/customers/days/title}Days{/s}'
         }
     ],
@@ -64,12 +69,10 @@ Ext.define('Shopware.apps.Analytics.view.chart.Customers', {
                 { xField: 'week', yField: 'newCustomersPercent', title: '{s name="chart/customers/new_customers_legend"}New customers{/s}' },
                 {
                     width: 210,
+                    height: 45,
                     renderer: function(storeItem) {
-                        var data = storeItem.get('newCustomersPercent') + ' %';
-                        this.setTitle(
-                            '{s name="chart/customers/new_customers_legend"}New customers{/s} <br>&nbsp;' +
-                            storeItem.get('week') + ': ' + data
-                        );
+                        var data = Ext.util.Format.number(storeItem.get('newCustomersPercent'), '0.00') + ' %';
+                        this.setTitle(storeItem.get('week') + ': ' + data);
                     }
                 }
             ),
@@ -77,12 +80,10 @@ Ext.define('Shopware.apps.Analytics.view.chart.Customers', {
                 { xField: 'week', yField: 'oldCustomersPercent', title: '{s name="chart/customers/old_customers_legend"}Old customers{/s}' },
                 {
                     width: 210,
+                    height: 45,
                     renderer: function(storeItem) {
-                        var data = storeItem.get('oldCustomersPercent') + ' %';
-                        this.setTitle(
-                            '{s name="chart/customers/old_customers_legend"}Old customers{/s} <br>&nbsp;' +
-                            storeItem.get('week') + ': ' + data
-                        );
+                        var data = Ext.util.Format.number(storeItem.get('oldCustomersPercent'), '0.00') + ' %';
+                        this.setTitle(storeItem.get('week') + ': ' + data);
                     }
                 }
             )
