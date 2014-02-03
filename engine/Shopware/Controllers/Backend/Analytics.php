@@ -719,7 +719,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->getToDate(),
             $this->Request()->getParam('sort', array(
                 array(
-                    'property' => 'turnover',
+                    'property' => 'totalImpressions',
                     'direction' => 'DESC'
                 )
             )),
