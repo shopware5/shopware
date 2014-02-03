@@ -293,7 +293,7 @@ class Repository
         $builder->select(array(
             'DATE(orders.ordertime) as orderTime',
             'COUNT(orders.id) as orderCount',
-            'SUM(orders.invoice_amount / orders.currencyFactor) as turnover',
+            'SUM((orders.invoice_amount - orders.invoice_shipping) / orders.currencyFactor) as turnover',
         ));
 
         $builder->from('s_order', 'orders')
@@ -1215,10 +1215,10 @@ class Repository
             foreach ($shopIds as $shopId) {
                 $shopId = (int) $shopId;
                 $builder->addSelect(
-                    "SUM(IF(orders.subshopID=" . $shopId . ", (invoice_amount - invoice_shipping)/currencyFactor, 0)) as turnover" . $shopId
+                    "SUM(IF(orders.language=" . $shopId . ", (invoice_amount - invoice_shipping)/currencyFactor, 0)) as turnover" . $shopId
                 );
                 $builder->addSelect(
-                    "IF(orders.subshopID=" . $shopId . ", COUNT(orders.id), 0) as orderCount" . $shopId
+                    "IF(orders.language=" . $shopId . ", COUNT(orders.id), 0) as orderCount" . $shopId
                 );
             }
         }
@@ -1356,7 +1356,7 @@ class Repository
     {
         $builder = $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
-            'ROUND(SUM((orders.invoice_amount - orders.invoice_shipping) / orders.currencyFactor), 2) AS turnover',
+            'SUM((orders.invoice_amount - orders.invoice_shipping) / orders.currencyFactor) AS turnover',
             'partners.company AS partner',
             'orders.partnerID as trackingCode',
             'partners.id as partnerId'
@@ -1384,7 +1384,7 @@ class Repository
     {
         $builder = $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
-            'ROUND(orders.invoice_amount / orders.currencyFactor, 2) AS turnover',
+            'ROUND((orders.invoice_amount - orders.invoice_shipping) / orders.currencyFactor, 2) AS turnover',
             'users.id as userID',
             'orders.referer AS referrer',
             'DATE(users.firstlogin) as firstLogin',
