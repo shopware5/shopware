@@ -293,7 +293,7 @@ class Repository
         $builder->select(array(
             'DATE(orders.ordertime) as orderTime',
             'COUNT(orders.id) as orderCount',
-            'SUM((orders.invoice_amount - orders.invoice_shipping) / orders.currencyFactor) as turnover',
+            'SUM(orders.invoice_amount / orders.currencyFactor) as turnover',
         ));
 
         $builder->from('s_order', 'orders')
@@ -1198,7 +1198,7 @@ class Repository
         $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
             'COUNT(orders.id) AS orderCount',
-            'SUM((orders.invoice_amount - orders.invoice_shipping) / orders.currencyFactor) AS turnover',
+            'SUM(orders.invoice_amount / orders.currencyFactor) AS turnover',
             'Date_Format(orders.ordertime, \'%W\') as displayDate'
         ));
 
@@ -1356,7 +1356,7 @@ class Repository
     {
         $builder = $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
-            'SUM((orders.invoice_amount - orders.invoice_shipping) / orders.currencyFactor) AS turnover',
+            'SUM(orders.invoice_amount / orders.currencyFactor) AS turnover',
             'partners.company AS partner',
             'orders.partnerID as trackingCode',
             'partners.id as partnerId'
@@ -1384,7 +1384,7 @@ class Repository
     {
         $builder = $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
-            'ROUND((orders.invoice_amount - orders.invoice_shipping) / orders.currencyFactor, 2) AS turnover',
+            'ROUND(orders.invoice_amount / orders.currencyFactor, 2) AS turnover',
             'users.id as userID',
             'orders.referer AS referrer',
             'DATE(users.firstlogin) as firstLogin',
