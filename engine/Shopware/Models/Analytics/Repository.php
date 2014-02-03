@@ -194,14 +194,14 @@ class Repository
         foreach($shopIds as $shopId) {
             $builder->addSelect(
                 "SUM( IF(
-	   		        orders.subshopID = ".$shopId." AND orders.status NOT IN (-1, 4),
+	   		        orders.language = ".$shopId." AND orders.status NOT IN (-1, 4),
 	   		        1, 0
 		        )) as orderCount" . $shopId
             );
 
             $builder->addSelect(
                 "SUM( IF(
-                    orders.subshopID = ".$shopId." AND orders.status = -1,
+                    orders.language = ".$shopId." AND orders.status = -1,
 	   		        1, 0
 	   	        )) cancelledOrders" . $shopId
             );
@@ -1312,7 +1312,7 @@ class Repository
             ->innerJoin('orders', 's_user', 'users', 'orders.userID = users.id')
             ->innerJoin('users', 's_user_billingaddress', 'billing', 'billing.userID = users.id')
             ->andWhere('orders.status NOT IN (-1, 4)')
-            ->orderBy('orderTime', 'DESC');
+            ->orderBy('orderTime', 'ASC');
 
         $this->addDateRangeCondition($builder, $from, $to, 'orders.ordertime');
 
