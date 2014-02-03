@@ -34,7 +34,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 {
 
     protected $dateFields = array(
-        'date', 'displayDate', 'datum', 'firstLogin', 'birthday', 'orderTime'
+        'date', 'displayDate',  'firstLogin', 'birthday', 'orderTime'
     );
 
     protected $shopFields = array(
