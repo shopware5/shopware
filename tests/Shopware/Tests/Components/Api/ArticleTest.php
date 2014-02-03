@@ -700,37 +700,12 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
     }
 
     /**
-     * This test is failing due to SW-7789. As such, there is a commented assertion at the end
-     * It should be restore once SW-7793 is resolved
      *
-     * @group disable
      */
     public function testCreateUseConfiguratorId()
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('PARTIAL groups.{id}', 'PARTIAL options.{id}'))
-                ->from('Shopware\Models\Article\Configurator\Group', 'groups')
-                ->innerJoin('groups.options', 'options')
-                ->orderBy('groups.position', 'ASC')
-                ->addOrderBy('options.position', 'ASC')
-                ->setFirstResult(0)
-                ->setMaxResults(2);
-
-        $query = $builder->getQuery();
-        $query->setHydrationMode(\Shopware\Components\Api\Resource\Article::HYDRATE_ARRAY);
-        $paginator = Shopware()->Models()->createPaginator($query);
-
-        $configurator = $paginator->getIterator()->getArrayCopy();
-
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('options.id as optionId', 'options.groupId as groupId'))
-            ->from('Shopware\Models\Article\Configurator\Option', 'options')
-            ->addOrderBy('options.position', 'ASC')
-            ->setFirstResult(0)
-            ->setMaxResults(5);
-
-        $options = $builder->getQuery()->getArrayResult();
-
+        $configurator = $this->getSimpleConfiguratorSet(2, 5);
+        $variantOptions = $this->getVariantOptionsOfSet($configurator);
         $variantNumber = 'swVariant' . uniqid();
 
         $testData = array(
@@ -756,36 +731,10 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                     'prices' => array(
                         array('customerGroupKey' => 'EK','from' => 1,'to' => '-','price' => 400)
                     ),
-                    /**
-                     * 0 =>
-                     *  array (
-                     *      'optionId' => 11,
-                     *      'groupId' => 5,
-                     *  ),
-                     * 1 =>
-                     *  array (
-                     *      'optionId' => 35,
-                     *      'groupId' => 5,
-                     *  )
-                     */
-                    'configuratorOptions' => $options
+                    'configuratorOptions' => $variantOptions
                 )
             ),
-            /**
-             * array(
-             *    'name' => 'Test-Set'
-             *    'groups' => array(
-             *        'id' => 5,
-             *        'options' = array(
-             *            'id' => 11
-             *        )
-             *    )
-             * )
-             */
-            'configuratorSet' => array(
-                'name' => 'Test-Set',
-                'groups' => $configurator
-            )
+            'configuratorSet' => $configurator
         );
 
         $article = $this->resource->create($testData);
@@ -793,28 +742,19 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->resource->setResultMode(\Shopware\Components\Api\Resource\Article::HYDRATE_ARRAY);
         $data = $this->resource->getOne($article->getId());
 
-        $this->assertCount(5, $data['details'][0]['configuratorOptions']);
+
+        $this->assertCount(2, $data['details'][0]['configuratorOptions']);
 
         return $variantNumber;
     }
 
     /**
-     * This test is failing due to SW-7789. As such, there is a commented assertion at the end
-     * It should be restore once SW-7793 is resolved
-     *
      * @depends testCreateUseConfiguratorId
-     * @group disable
      */
     public function testUpdateUseConfiguratorIds($variantNumber) {
 
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('options.id as optionId', 'options.groupId as groupId'))
-            ->from('Shopware\Models\Article\Configurator\Option', 'options')
-            ->addOrderBy('options.position', 'ASC')
-            ->setFirstResult(2)
-            ->setMaxResults(2);
-
-        $options = $builder->getQuery()->getArrayResult();
+        $configurator = $this->getSimpleConfiguratorSet(2, 5);
+        $variantOptions = $this->getVariantOptionsOfSet($configurator);
 
         $id = Shopware()->Db()->fetchOne("SELECT articleID FROM s_articles_details WHERE ordernumber = ?", array($variantNumber));
 
@@ -822,7 +762,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
             'variants' => array(
                 array(
                     'number' => $variantNumber,
-                    'configuratorOptions' => $options
+                    'configuratorOptions' => $variantOptions
                 )
             )
         );
@@ -1949,6 +1889,21 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
         $this->assertEquals(3, count($result));
     }
+
+    private function getVariantOptionsOfSet($configuratorSet)
+    {
+        $options = array();
+        foreach($configuratorSet['groups'] as $group) {
+            $id = rand(0, count($group['options']) - 1);
+            $option = $group['options'][$id];
+            $options[] = array(
+                'optionId' => $option['id'],
+                'groupId'  => $group['id']
+            );
+        }
+        return $options;
+    }
+
 }
 
 
