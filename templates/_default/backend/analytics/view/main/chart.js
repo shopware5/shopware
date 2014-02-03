@@ -93,7 +93,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Chart', {
                 },
                 {
                     xtype: 'numbercolumn',
-                    text: '{s name=chart/month/legendSales}Sales{/s}',
+                    text: '{s name=general/turnover}Turnover{/s}',
                     dataIndex: 'data',
                     align: 'right',
                     flex: 1
@@ -112,11 +112,11 @@ Ext.define('Shopware.apps.Analytics.view.main.Chart', {
         }
 
         if (!defaultTitle) {
-            defaultTitle = '{s name=chart/month/legendSalesIn}Sales in{/s}';
+            defaultTitle = '{s name=general/turnover}Turnover{/s}';
         }
 
         me.shopStore.each(function (shop) {
-            var value = storeItem.get('amount' + shop.data.id);
+            var value = storeItem.get('turnover' + shop.data.id);
 
             if (!value) {
                 return;
@@ -137,8 +137,8 @@ Ext.define('Shopware.apps.Analytics.view.main.Chart', {
 
         // Add total sum to table
         dataTable[dataTable.length] = {
-            name: '{s name=chart/month/legendTotalSum}Total{/s}',
-            data: storeItem.get('amount')
+            name: '{s name=general/turnover}Turnover{/s}',
+            data: storeItem.get('turnover')
         };
 
         // Load formatted data with sum row into table
@@ -157,7 +157,7 @@ Ext.define('Shopware.apps.Analytics.view.main.Chart', {
             type: 'line',
             axis: [ 'left', 'bottom' ],
             highlight: true,
-            fill: false,
+            fill: true,
             smooth: true
         },
         tipsConfig = {

@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Category', {
         me.series = [
             {
                 type: 'pie',
-                field: 'amount',
+                field: 'turnover',
                 showInLegend: true,
                 listeners: {
                     itemmouseup: function (item) {
@@ -61,16 +61,28 @@ Ext.define('Shopware.apps.Analytics.view.chart.Category', {
                         if (!node) {
                             return;
                         }
+                        me.setLoading(true);
                         me.store.getProxy().extraParams['node'] = node;
-                        me.store.load();
+                        me.store.load({
+                            callback: function() {
+                                me.setLoading(false);
+                            }
+                        });
                     }
                 },
                 tips: {
                     trackMouse: true,
-                    width: 80,
-                    height: 40,
+                    width: 180,
+                    height: 45,
                     renderer: function (storeItem) {
-                        this.setTitle('{s name=chart/category/title}Sales{/s} ' + Ext.util.Format.number(storeItem.get('amount')));
+                        var value = Ext.util.Format.currency(
+                            storeItem.get('turnover'),
+                            me.subApp.currencySign,
+                            2,
+                            (me.subApp.currencyAtEnd == 1)
+                        );
+
+                        this.setTitle(storeItem.get('name') + '<br><br>&nbsp;' +  value);
                     }
                 },
                 label: {

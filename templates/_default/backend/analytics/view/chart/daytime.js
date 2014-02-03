@@ -46,13 +46,6 @@ Ext.define('Shopware.apps.Analytics.view.chart.Daytime', {
         me.series = [];
         me.axes = [
             {
-                type: 'Numeric',
-                minimum: 0,
-                position: 'left',
-                fields: ['amount'],
-                title: '{s name=chart/daytime/titleLeft}Sales{/s}'
-            },
-            {
                 type: 'Time',
                 position: 'bottom',
                 fields: ['date'],
@@ -61,8 +54,6 @@ Ext.define('Shopware.apps.Analytics.view.chart.Daytime', {
                 dateFormat: 'H:00'
             }
         ];
-
-        me.initMultipleShopTipsStores();
 
         if (me.shopSelection != Ext.undefined && me.shopSelection.length > 0) {
             Ext.each(me.shopSelection, function (shopId) {
@@ -77,13 +68,13 @@ Ext.define('Shopware.apps.Analytics.view.chart.Daytime', {
                         {
                             title: shop.data.name,
                             xField: 'date',
-                            yField: 'amount' + shopId
+                            yField: 'turnover' + shopId
                         },
                         {
+                            width: 150,
+                            height: 45,
                             renderer: function (storeItem) {
-                                this.setTitle(Ext.Date.format(storeItem.get('date'), 'H:00'));
-                                var sales = Ext.util.Format.currency(storeItem.get('amount' + shopId), shop.get('currencyChar'));
-                                this.update(sales);
+                                me.renderShopData(storeItem, this, shop);
                             }
                         }
                     )
@@ -94,25 +85,51 @@ Ext.define('Shopware.apps.Analytics.view.chart.Daytime', {
                 me.createLineSeries(
                     {
                         xField: 'date',
-                        yField: 'amount'
+                        yField: 'turnover',
+                        title: '{s name=general/turnover}Turnover{/s}'
                     },
                     {
-                        width: 580,
-                        height: 130,
-                        items: {
-                            xtype: 'container',
-                            layout: 'hbox',
-                            items: [me.tipChart, me.tipGrid]
-                        },
-                        renderer: function (cls, item) {
-                            me.initMultipleShopTipsData(item, this, 'l', '{s name=chart/daytime/legendSalesOn}Sales on{/s}');
+                        width: 150,
+                        height: 45,
+                        renderer: function (storeItem) {
+                            me.renderShopData(storeItem, this, null);
                         }
                     }
                 )
             ];
-
         }
+
+        me.axes.push({
+            type: 'Numeric',
+            minimum: 0,
+            position: 'left',
+            fields: me.getAxesFields('turnover'),
+            title: '{s name=general/turnover}Turnover{/s}'
+        });
+
         me.callParent(arguments);
+    },
+
+    renderShopData: function(storeItem, tip, shop) {
+        var me = this,
+            field = 'turnover';
+
+        if (shop) {
+            field += shop.get('id');
+        }
+
+        var sales = Ext.util.Format.currency(
+            storeItem.get(field),
+            me.subApp.currencySign,
+            2,
+            (me.subApp.currencyAtEnd == 1)
+        );
+
+        tip.setTitle(
+            Ext.Date.format(storeItem.get('date'), 'H:00')+
+            '<br><br>&nbsp;' + sales
+        );
     }
+
 });
 //{/block}

@@ -32,7 +32,7 @@
 Ext.define('Shopware.apps.Analytics.store.Shop', {
     extend: 'Ext.data.Store',
     alias: 'widget.analytics-store-shop',
-    fields: ['id', 'name', 'currency', 'currencyName', 'currencyChar'],
+    fields: ['id', 'name', 'currency', 'currencyName', 'currencyChar', 'currencyAtEnd'],
     //autoLoad: true,
     proxy: {
         type: 'ajax',

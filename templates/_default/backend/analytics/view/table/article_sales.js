@@ -22,7 +22,7 @@
  */
 
 /**
- * Analytics ArticleSells Table
+ * Analytics ArticleSales Table
  *
  * @category   Shopware
  * @package    Analytics
@@ -30,10 +30,10 @@
  *
  */
 //{namespace name=backend/analytics/view/main}
-//{block name="backend/analytics/view/table/article_sells"}
-Ext.define('Shopware.apps.Analytics.view.table.ArticleSells', {
+//{block name="backend/analytics/view/table/article_sales"}
+Ext.define('Shopware.apps.Analytics.view.table.ArticleSales', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
-    alias: 'widget.analytics-table-article_sells',
+    alias: 'widget.analytics-table-article_sales',
     shopColumnName: '{s name="nav/items_sales"}Item by sales{/s}',
 
     initComponent: function () {
@@ -66,9 +66,9 @@ Ext.define('Shopware.apps.Analytics.view.table.ArticleSells', {
                 text: '{s name="table/items_sales/article_name"}Article name{/s}'
             },
             {
-                dataIndex: 'sellCount',
+                dataIndex: 'sales',
                 align: 'right',
-                text: '{s name="table/items_sales/sells"}Sells{/s}'
+                text: '{s name="table/items_sales/sales"}Sales{/s}'
             }
         ];
     }

@@ -33,7 +33,7 @@
 Ext.define('Shopware.apps.Analytics.view.table.Country', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-country',
-    shopColumnText: "{s name=table/country/sum}Sales: [0]{/s}",
+    shopColumnText: "{s name=general/turnover}Turnover{/s}: [0]",
 
     initComponent: function () {
         var me = this;
@@ -46,12 +46,17 @@ Ext.define('Shopware.apps.Analytics.view.table.Country', {
             }
         };
 
-        me.initStoreIndices('amount', me.shopColumnText, { xtype: 'numbercolumn' });
+        me.initStoreIndices('turnover', me.shopColumnText, {
+            xtype: 'numbercolumn',
+            renderer: me.priceRenderer
+        });
 
         me.callParent(arguments);
     },
 
     getColumns: function () {
+        var me = this;
+
         return [
             {
                 dataIndex: 'name',
@@ -59,10 +64,23 @@ Ext.define('Shopware.apps.Analytics.view.table.Country', {
             },
             {
                 xtype: 'numbercolumn',
-                dataIndex: 'amount',
-                text: '{s name=table/country/sales}Sales{/s}'
+                dataIndex: 'turnover',
+                text: '{s name=general/turnover}Turnover{/s}',
+                renderer: me.currencyRenderer
             }
         ];
+    },
+
+
+    currencyRenderer: function(value) {
+        var me = this;
+
+        return Ext.util.Format.currency(
+            value,
+            me.subApp.currencySign,
+            2,
+            (me.subApp.currencyAtEnd == 1)
+        );
     }
 });
 //{/block}

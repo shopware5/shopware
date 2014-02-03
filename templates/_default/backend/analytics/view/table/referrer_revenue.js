@@ -51,12 +51,16 @@ Ext.define('Shopware.apps.Analytics.view.table.ReferrerRevenue', {
         me.callParent(arguments);
     },
 
+    createPagingbar: function() {},
+
     /**
      * Creates the grid columns
      *
      * @return [array] grid columns
      */
     getColumns: function () {
+        var me = this;
+
         return [
             {
                 dataIndex: 'host',
@@ -64,46 +68,61 @@ Ext.define('Shopware.apps.Analytics.view.table.ReferrerRevenue', {
                 text: '{s name=table/referrer_revenue/host}Host{/s}'
             },
             {
-                dataIndex: 'entireRevenue',
-                text: '{s name=table/referrer_revenue/total_turnover}Total Turnover{/s}'
-            },
-            {
-                dataIndex: 'lead',
-                text: '{s name=table/referrer_revenue/lead}Lead-Value{/s}'
-            },
-            {
-                dataIndex: 'customerValue',
-                text: '{s name=table/referrer_revenue/customer_value}Customer value{/s}'
-            },
-            {
-                dataIndex: 'entireNewRevenue',
-                text: '{s name=table/referrer_revenue/new_turnover}Turnover new customers{/s}'
-            },
-            {
-                dataIndex: 'entireOldRevenue',
-                text: '{s name=table/referrer_revenue/old_turnover}Turnover old customers{/s}'
-            },
-            {
                 dataIndex: 'orderCount',
                 text: '{s name=table/referrer_revenue/orders}Orders{/s}'
             },
             {
+                dataIndex: 'turnover',
+                text: '{s name=general/turnover}Turnover{/s}',
+                renderer: me.currencyRenderer
+            },
+            {
+                dataIndex: 'average',
+                text: '{s name=table/referrer_revenue/average}Ø Order value{/s}',
+                renderer: me.currencyRenderer
+            },
+
+            {
                 dataIndex: 'newCustomers',
-                text: '{s name=table/referrer_revenue/new_customers}New customers{/s}'
+                text: '{s name=table/referrer_revenue/new_customers}Orders new customers{/s}'
             },
             {
-                dataIndex: 'oldCustomers',
-                text: '{s name=table/referrer_revenue/old_customers}Old customers{/s}'
+                dataIndex: 'turnoverNewCustomer',
+                text: '{s name=table/referrer_revenue/new_turnover}Turnover new customers{/s}',
+                renderer: me.currencyRenderer
             },
             {
-                dataIndex: 'perNewRevenue',
-                text: '{s name=table/referrer_revenue/turnover_per_new}Turnover/New customer{/s}'
+                dataIndex: 'averageNewCustomer',
+                text: '{s name=table/referrer_revenue/average_new_customers}Ø New customer<br>order value{/s}',
+                renderer: me.currencyRenderer
+            },
+
+            {
+                dataIndex: 'regularCustomers',
+                text: '{s name=table/referrer_revenue/old_customers}Orders Regular customers{/s}'
             },
             {
-                dataIndex: 'perOldRevenue',
-                text: '{s name=table/referrer_revenue/turnover_per_old}Turnover/Old customer{/s}'
+                dataIndex: 'turnoverRegularCustomer',
+                text: '{s name=table/referrer_revenue/old_turnover}Turnover regular customers{/s}',
+                renderer: me.currencyRenderer
+            },
+            {
+                dataIndex: 'averageRegularCustomer',
+                text: '{s name=table/referrer_revenue/average_old_customers}Ø Regular customer<br>order value{/s}',
+                renderer: me.currencyRenderer
             }
         ];
+    },
+
+    currencyRenderer: function(value) {
+        var me = this;
+
+        return Ext.util.Format.currency(
+            value,
+            me.subApp.currencySign,
+            2,
+            (me.subApp.currencyAtEnd == 1)
+        );
     }
 });
 //{/block}

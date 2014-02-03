@@ -74,20 +74,20 @@ Ext.define('Shopware.apps.Analytics.view.main.Toolbar', {
                 { xtype: 'tbspacer' },
                 {
                     xtype: 'button',
-                    text: '{s name=toolbar/export}Export{/s}',
-                    name: 'export',
-                    iconCls: 'sprite-drive-download',
-                    handler: function () {
-                        me.fireEvent('exportCSV');
-                    }
-                },
-                {
-                    xtype: 'button',
                     iconCls: 'sprite-arrow-circle-135',
                     text: '{s name=toolbar/update}Update{/s}',
                     name: 'refresh',
                     handler: function () {
                         me.fireEvent('refreshView')
+                    }
+                },
+                {
+                    xtype: 'button',
+                    text: '{s name=toolbar/export}Export{/s}',
+                    name: 'export',
+                    iconCls: 'sprite-drive-download',
+                    handler: function () {
+                        me.fireEvent('exportCSV');
                     }
                 },
                 { xtype: 'tbfill' },
