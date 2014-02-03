@@ -333,7 +333,7 @@ class Document extends ModelEntity
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Document', 'attribute', 'orderDocument');
+        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Document', 'attribute', 'document');
     }
 
 }
