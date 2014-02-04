@@ -60,11 +60,6 @@ Ext.define('Shopware.apps.Analytics.view.table.ArticleImpression', {
     getColumns: function () {
         return [
             {
-                xtype: 'datecolumn',
-                dataIndex: 'date',
-                text: '{s name=table/article_impression/date}Date{/s}'
-            },
-            {
                 xtype: 'actioncolumn',
                 dataIndex: 'articleName',
                 text: '{s name=table/article_impression/articleName}Article Name{/s}',

@@ -36,8 +36,7 @@ Ext.define('Shopware.apps.Analytics.store.navigation.ArticleImpressions', {
     fields: [
         'articleId',
         'articleName',
-        { name: 'totalImpressions', type: 'int' },
-        { name: 'date', type: 'date', dateFormat: 'timestamp' }
+        { name: 'totalImpressions', type: 'int' }
     ],
 
     proxy: {
