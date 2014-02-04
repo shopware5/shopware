@@ -137,9 +137,9 @@ class WildfireFormatter extends BaseWildfireFormatter
         $json = $this->toJson(
             array(
                 array(
-                    'Type' => $type,
-                    'File' => $file,
-                    'Line' => $line,
+                    'Type'  => $type,
+                    'File'  => $file,
+                    'Line'  => $line,
                     'Label' => $label,
                 ),
                 $message,
@@ -147,12 +147,7 @@ class WildfireFormatter extends BaseWildfireFormatter
             $handleError
         );
 
-        // The message itself is a serialization of the above JSON object + it's length
-        return sprintf(
-            '%s|%s|',
-            strlen($json),
-            $json
-        );
+        return $json;
     }
 
     /**
