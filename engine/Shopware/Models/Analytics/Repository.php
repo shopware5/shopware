@@ -1134,13 +1134,11 @@ class Repository
         $builder->select(array(
             'articleImpression.articleId',
             'article.name as articleName',
-            'UNIX_TIMESTAMP(articleImpression.date) as date',
             'SUM(articleImpression.impressions) as totalImpressions'
         ));
 
         $builder->from('s_statistics_article_impression', 'articleImpression')
             ->leftJoin('articleImpression', 's_articles', 'article', 'articleImpression.articleId = article.id')
-            ->addGroupBy('articleImpression.date')
             ->addGroupBy('articleImpression.articleId');
 
         $this->addSort($builder, $sort)
