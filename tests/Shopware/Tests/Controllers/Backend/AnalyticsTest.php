@@ -112,13 +112,14 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         Shopware()->Db()->update(
             's_articles',
             array('main_detail_id' => $this->articleDetailId),
-            'id = ' . $this->articleId
+                'id = ' . $this->articleId
         );
 
         Shopware()->Db()->insert(
             's_categories',
             array(
                 'description' => 'phpunit category',
+                'parent' => 1,
                 'active'      => 1
             )
         );
@@ -144,6 +145,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
                 'subshopID'          => 1,
                 'currencyFactor'     => 1,
                 'dispatchID'         => 9,
+                'language'           => 1,
                 'paymentID'          => 2
             ),
             array(
@@ -155,6 +157,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
                 'subshopID'          => 1,
                 'currencyFactor'     => 1,
                 'dispatchID'         => 9,
+                'language'           => 1,
                 'paymentID'          => 2
             )
         );
@@ -299,21 +302,32 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             0,
             25,
             new DateTime('2013-01-01'),
-            new DateTime('2014-01-01')
+            new DateTime('2014-01-01'),
+            array(
+                array(
+                    'property'  => 'datum',
+                    'direction' => 'ASC'
+                )
+            ),
+            array('1')
         );
 
         $this->assertEquals(
             $result->getData(),
             array(
                 array(
-                    'datum'            => '2013-06-01',
-                    'totalImpressions' => 300,
-                    'totalVisits'      => 10
+                    'datum'             => '2013-06-01',
+                    'totalImpressions'  => 300,
+                    'totalImpressions1' => 300,
+                    'totalVisits'       => 10,
+                    'totalVisits1'      => 10,
                 ),
                 array(
-                    'datum'            => '2013-06-15',
-                    'totalImpressions' => 500,
-                    'totalVisits'      => 20
+                    'datum'             => '2013-06-15',
+                    'totalImpressions'  => 500,
+                    'totalImpressions1' => 500,
+                    'totalVisits'       => 20,
+                    'totalVisits1'      => 20
                 )
             )
         );
@@ -413,17 +427,25 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             0,
             25,
             new DateTime('2013-01-01'),
-            new DateTime('2014-01-01')
+            new DateTime('2014-01-01'),
+            array(
+                array(
+                    'property'  => 'articleId',
+                    'direction' => 'ASC'
+                )
+            ),
+            array('1')
         );
 
         $this->assertEquals(
             $result->getData(),
             array(
                 array(
-                    'articleId'        => $this->articleId,
-                    'articleName'      => 'PHPUNIT ARTICLE',
-                    'date'             => 1371247200,
-                    'totalImpressions' => 10
+                    'articleId'         => $this->articleId,
+                    'articleName'       => 'PHPUNIT ARTICLE',
+                    'date'              => 1371247200,
+                    'totalImpressions'  => 10,
+                    'totalImpressions1' => 10
                 )
             )
         );
@@ -433,7 +455,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
     {
         $result = $this->repository->getAgeOfCustomers(
             new DateTime('2013-01-01'),
-            new DateTime('2014-01-01')
+            new DateTime('2014-01-01'),
+            array('1')
         );
 
         $this->assertEquals(
@@ -441,7 +464,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             array(
                 array(
                     'firstLogin' => '2013-06-01',
-                    'birthday'   => '1990-01-01'
+                    'birthday'   => '1990-01-01',
+                    'birthday1'  => '1990-01-01'
                 )
             )
         );
@@ -451,7 +475,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
     {
         $result = $this->repository->getAmountPerHour(
             new DateTime('2013-01-01'),
-            new DateTime('2014-01-01')
+            new DateTime('2014-01-01'),
+            array('1')
         );
 
         $this->assertEquals(
@@ -459,7 +484,9 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             array(
                 array(
                     'orderCount'  => 1,
+                    'orderCount1' => 1,
                     'turnover'    => 1000,
+                    'turnover1'   => 1000,
                     'displayDate' => 'Saturday',
                     'date'        => '1970-01-01 10:00:00'
                 )
@@ -613,7 +640,13 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             0,
             25,
             new DateTime('2013-01-01'),
-            new DateTime('2014-01-01')
+            new DateTime('2014-01-01'),
+            array(
+                array(
+                    'property'  => 'countRequests',
+                    'direction' => 'ASC'
+                )
+            )
         );
 
         $this->assertEquals(
@@ -658,7 +691,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
     {
         $result = $this->repository->getDailyShopVisitors(
             new DateTime('2013-01-01'),
-            new DateTime('2014-01-01')
+            new DateTime('2014-01-01'),
+            array('1')
         );
 
         $this->assertEquals(
@@ -666,14 +700,16 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             array(
                 '2013-06-15' => array(
                     array(
-                        'clicks' => 500,
-                        'visits' => 20
+                        'clicks'  => 500,
+                        'visits'  => 20,
+                        'visits1' => 20
                     )
                 ),
                 '2013-06-01' => array(
                     array(
-                        'clicks' => 300,
-                        'visits' => 10
+                        'clicks'  => 300,
+                        'visits'  => 10,
+                        'visits1' => 10
                     )
                 )
             )
@@ -684,7 +720,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
     {
         $result = $this->repository->getDailyShopOrders(
             new DateTime('2013-01-01'),
-            new DateTime('2014-01-01')
+            new DateTime('2014-01-01'),
+            array('1')
         );
 
         $this->assertEquals(
@@ -693,13 +730,17 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
                 '2013-06-15' => array(
                     array(
                         'orderCount'      => 0,
-                        'cancelledOrders' => 1
+                        'orderCount1'      => 0,
+                        'cancelledOrders' => 1,
+                        'cancelledOrders1' => 1
                     )
                 ),
                 '2013-06-01' => array(
                     array(
                         'orderCount'      => 1,
-                        'cancelledOrders' => 0
+                        'orderCount1'      => 1,
+                        'cancelledOrders' => 0,
+                        'cancelledOrders1' => 0
                     )
                 )
             )
@@ -848,7 +889,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
     public function testGetProductAmountPerCategory()
     {
         $result = $this->repository->getProductAmountPerCategory(
-            0,
+            1,
             new DateTime('2013-01-01'),
             new DateTime('2014-01-01')
         );
