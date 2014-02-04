@@ -950,7 +950,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             }
 
             /**@var $order \Shopware\Models\Order\Order*/
-            $order = $this->getRepository()->find($data['id']);
+            $order = Shopware()->Models()->find('Shopware\Models\Order\Order', $data['id']);
             if (!$order) {
                 continue;
             }

@@ -85,6 +85,17 @@ class Enlight_Controller_Response_ResponseTestCase
     }
 
     /**
+     * Gets all the information for a cookie
+     *
+     * @param string $name
+     * @return Zend_Controller_Request_HttpTestCase
+     */
+    public function getFullCookie($name)
+    {
+        return isset($this->_cookies[$name]) ? $this->_cookies[$name] : null;
+    }
+
+    /**
      * Gets a header value
      *
      * @param string $name
