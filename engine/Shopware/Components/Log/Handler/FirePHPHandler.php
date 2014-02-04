@@ -108,6 +108,91 @@ class FirePHPHandler extends BaseFirePHPHandler
     }
 
     /**
+     * Creates message header from record
+     *
+     * @see createHeader()
+     * @param  array  $record
+     * @return string
+     */
+    protected function createRecordHeader(array $record)
+    {
+        $chunkSize = 5000;
+        $length = strlen($record['formatted']);
+
+        if ($length < $chunkSize) {
+            // Wildfire is extensible to support multiple protocols & plugins in a single request,
+            // but we're not taking advantage of that (yet), so we're using "1" for simplicity's sake.
+            $header = $this->createHeader(
+                array(1, 1, 1, self::$messageIndex++),
+                $length . '|' . $record['formatted']. '|'
+            );
+
+            return $header;
+        }
+
+        $parts = str_split($record['formatted'], $chunkSize);
+        $headers = array();
+        for ($i = 0; $i < count($parts); $i++) {
+            $part    = $parts[$i];
+            $isFirst = ($i == 0);
+            $isLast  = ($i == count($parts) -1);
+
+            if ($isFirst) {
+                $headers[] = $this->createHeader(
+                    array(1, 1, 1, self::$messageIndex++),
+                    $length . '|' . $part . '|\\'
+                );
+            } elseif ($isLast) {
+                $headers[] = $this->createHeader(
+                    array(1, 1, 1, self::$messageIndex++),
+                    '|' . $part. '|'
+                );
+            } else {
+                $headers[] = $this->createHeader(
+                    array(1, 1, 1, self::$messageIndex++),
+                    '|' . $part . '|\\'
+                );
+            }
+        }
+
+        return $headers;
+    }
+
+    /**
+     * Creates & sends header for a record, ensuring init headers have been sent prior
+     *
+     * @see sendHeader()
+     * @see sendInitHeaders()
+     * @param array $record
+     */
+    protected function write(array $record)
+    {
+        // WildFire-specific headers must be sent prior to any messages
+        if (!self::$initialized) {
+            self::$sendHeaders = $this->headersAccepted();
+
+            foreach ($this->getInitHeaders() as $header => $content) {
+
+                $this->sendHeader($header, $content);
+            }
+
+            self::$initialized = true;
+        }
+
+        $headers = $this->createRecordHeader($record);
+
+        if (is_array($headers[0])) {
+            foreach ($headers as $header) {
+                $this->sendHeader(key($header), current($header));
+            }
+
+            return;
+        }
+
+        $this->sendHeader(key($headers), current($headers));
+    }
+
+    /**
      * Override default behavior since we check the user agent in onKernelResponse
      */
     protected function headersAccepted()
