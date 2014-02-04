@@ -159,6 +159,18 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
                 'dispatchID'         => 9,
                 'language'           => 1,
                 'paymentID'          => 2
+            ),
+            array(
+                'userID'             => $this->userId,
+                'invoice_amount'     => '500',
+                'invoice_amount_net' => '420',
+                'ordertime'          => '2014-02-01 10:11:12',
+                'status'             => 0,
+                'subshopID'          => 1,
+                'currencyFactor'     => 2,
+                'dispatchID'         => 9,
+                'language'           => 1,
+                'paymentID'          => 2
             )
         );
         foreach ($orders as $order) {
@@ -216,6 +228,15 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             array(
                 'userID'         => $this->userId,
                 'orderID'        => $this->orderIds[1],
+                'company'        => $userBillingAddress['company'],
+                'salutation'     => $userBillingAddress['salutation'],
+                'customernumber' => $this->customerNumber,
+                'countryID'      => $userBillingAddress['countryID'],
+                'stateID'        => $userBillingAddress['stateID'],
+            ),
+            array(
+                'userID'         => $this->userId,
+                'orderID'        => $this->orderIds[2],
                 'company'        => $userBillingAddress['company'],
                 'salutation'     => $userBillingAddress['salutation'],
                 'customernumber' => $this->customerNumber,
@@ -902,6 +923,26 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
                     'turnover'   => 1000,
                     'name'       => 'phpunit category',
                     'node'       => ''
+                )
+            )
+        );
+    }
+
+    public function testOrderCurrencyFactor()
+    {
+        $result = $this->repository->getAmountPerHour(
+            new DateTime('2014-01-01'),
+            new DateTime('2014-02-02')
+        );
+
+        $this->assertEquals(
+            $result->getData(),
+            array(
+                array(
+                    'orderCount'  => 1,
+                    'turnover'    => 250,
+                    'displayDate' => 'Saturday',
+                    'date'        => '1970-01-01 10:00:00'
                 )
             )
         );
