@@ -218,10 +218,6 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
     public function getHandlers(\Enlight_Controller_Request_RequestHttp $request)
     {
         $handlers = array();
-
-        if ($this->get('monolog.handler.chromephp')->acceptsRequest($request)) {
-            $handlers[] = $this->get('monolog.handler.chromephp');
-        }
         if ($this->get('monolog.handler.firephp')->acceptsRequest($request)) {
             $handlers[] = $this->get('monolog.handler.firephp');
         }
