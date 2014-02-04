@@ -112,14 +112,14 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         Shopware()->Db()->update(
             's_articles',
             array('main_detail_id' => $this->articleDetailId),
-                'id = ' . $this->articleId
+            'id = ' . $this->articleId
         );
 
         Shopware()->Db()->insert(
             's_categories',
             array(
                 'description' => 'phpunit category',
-                'parent' => 1,
+                'parent'      => 1,
                 'active'      => 1
             )
         );
@@ -729,17 +729,17 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             array(
                 '2013-06-15' => array(
                     array(
-                        'orderCount'      => 0,
+                        'orderCount'       => 0,
                         'orderCount1'      => 0,
-                        'cancelledOrders' => 1,
+                        'cancelledOrders'  => 1,
                         'cancelledOrders1' => 1
                     )
                 ),
                 '2013-06-01' => array(
                     array(
-                        'orderCount'      => 1,
+                        'orderCount'       => 1,
                         'orderCount1'      => 1,
-                        'cancelledOrders' => 0,
+                        'cancelledOrders'  => 0,
                         'cancelledOrders1' => 0
                     )
                 )
