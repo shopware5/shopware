@@ -34,7 +34,7 @@
 Ext.define('Shopware.apps.Analytics.view.table.ArticleImpression', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-article_impression',
-    shopColumnName: "{s name=table/article_impression/shop}Impressions: [0]{/s}",
+    shopColumnName: "{s name=table/article_impression/shop}Impressions{/s}: [0]",
     initComponent: function () {
         var me = this;
 
@@ -59,11 +59,6 @@ Ext.define('Shopware.apps.Analytics.view.table.ArticleImpression', {
      */
     getColumns: function () {
         return [
-            {
-                xtype: 'datecolumn',
-                dataIndex: 'date',
-                text: '{s name=table/article_impression/date}Date{/s}'
-            },
             {
                 xtype: 'actioncolumn',
                 dataIndex: 'articleName',
@@ -90,7 +85,7 @@ Ext.define('Shopware.apps.Analytics.view.table.ArticleImpression', {
             {
                 dataIndex: 'totalImpressions',
                 align: 'right',
-                text: '{s name=table/article_impression/impressions}Impressions{/s}'
+                text: '{s name=table/article_impression/shop}Impressions{/s}'
             }
         ];
     }

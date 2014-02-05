@@ -46,9 +46,6 @@ class Shopware_Install_Configuration
         return $this->database;
     }
 
-
-
-
     public function getCurrencies()
     {
         $db = $this->getDatabase();
@@ -239,7 +236,7 @@ class Shopware_Install_Configuration
     {
         $domain = $_SERVER["HTTP_HOST"];
         $basepath = str_replace("/install/index.php","",$_SERVER["SCRIPT_NAME"]);
-        return array("domain" => $domain, "basepath" =>$basepath);
+        return array("domain" => $domain, "basepath" => $basepath);
     }
 
     public function setError($error)

@@ -1,8 +1,3 @@
-<?php
-if (!defined("installer")) {
-    exit;
-}
-?>
 <!doctype html>
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
 <!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
@@ -18,7 +13,12 @@ if (!defined("installer")) {
     <link rel="shortcut icon" href="<?php echo $basepath ?>/templates/_default/frontend/_resources/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href="<?php echo $basepath ?>/install/assets/styles/bootstrap.min.css" media="all"/>
     <link rel="stylesheet" type="text/css" href="<?php echo $basepath ?>/install/assets/styles/styles.css" media="all"/>
-
+    <script>
+        var shopwareTranslations = {
+            'counterTextMigrations': '<?php echo $language['migration_counter_text_migrations']; ?>',
+            'updateSuccess':         '<?php echo $language['migration_update_success']; ?>'
+        }
+    </script>
 </head>
 <body>
 

@@ -21,6 +21,10 @@
  */
 
 /**
+ * @deprecated This constraint is flawed, producing incorrect results. It will be removed.
+ * Please use PHPUnit_Framework_Constraint_Count and/or assertCount() instead
+ *
+ *
  * Grants to get access on all array functions.
  *
  * The Enlight_Components_Test_Constraint_ArrayCount is an extension of the PHPUnit_Framework_Constraint

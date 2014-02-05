@@ -27,7 +27,8 @@ In this document you will find a changelog of the important changes related to t
 * Ext.editorLang variable is no longer used and is being deprecated.
 * Deprecation (REST API): 'debit' info in /api/customers/{id} is deprecated. Use 'paymentData' instead
 * Break: Removed the Shopware.apps.Analytics.view.table.Conversion, Shopware.apps.Analytics.view.toolbar.Source and Shopware.apps.Analytics.view.toolbar.Shop file which now defined in the analytics/view/main/toolbar.js file.
-
+* Removed unused class `Shopware_Components_Subscriber`, was located at `/engine/Shopware/Components/Subscriber.php`.
+* Deprecation: Enlight's assertArrayCount() and assertArrayNotCount() are deprecated. Use phpunit's assertCount() instead
 
 ## 4.1.4
 

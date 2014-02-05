@@ -123,7 +123,7 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
         $this->assertTrue($this->View()->getAssign('success'));
         $returnData = $this->View()->getAssign('data');
         $this->assertGreaterThan(2, $this->View()->getAssign('total'));
-        $this->assertArrayCount(2, $returnData);
+        $this->assertCount(2, $returnData);
     }
 
     /**
@@ -185,7 +185,7 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         $this->dispatch($url . $query);
         $returnData = $this->View()->getAssign('data');
-        $this->assertArrayCount(2, $returnData);
+        $this->assertCount(2, $returnData);
         $this->assertTrue($this->View()->getAssign('success'));
     }
 }

@@ -147,7 +147,7 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
         $this->Request()->setParams($params);
         $this->dispatch('backend/Category/createDetail');
         $this->assertTrue($this->View()->success);
-        $this->assertArrayCount(1, $this->View()->data);
+        $this->assertCount(24, $this->View()->data);
         $this->assertEquals($this->dummyData["name"], $this->View()->data["name"]);
 
         //test update category

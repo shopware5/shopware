@@ -22,14 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Shopware Check System
- *
- * <code>
- * $list = new Shopware_Components_Check_System();
- * $data = $list->toArray();
- * </code>
- */
 class Shopware_Install_License
 {
     protected $pluginInstallationQueries = '
@@ -115,9 +107,8 @@ class Shopware_Install_License
     public function downloadLicensePlugin()
     {
         $name = 'plugin' . md5($this->getPluginDownloadPath()) . '.zip';
-        $message = '';
-        $tmp = dirname(__FILE__) . "/../../../" . 'files/downloads/';
-        $targetDir = dirname(dirname(dirname(dirname(__FILE__)))) . "/engine/Shopware/Plugins/Community/";
+        $tmp = __DIR__ . '/../../../files/downloads/';
+        $targetDir = dirname(dirname(dirname(__DIR__))) . "/engine/Shopware/Plugins/Community/";
 
         if (!file_exists($targetDir) || !is_writable($targetDir)) {
             $this->setError("Directory $targetDir does not exists or is not writable");
@@ -166,8 +157,8 @@ class Shopware_Install_License
             $this->setError("SwagLicense was not extracted correctly. Please install the plugin manually through shopware plugin-manager after installation.");
             return false;
         }
-        // Delete file
 
+        // Delete file
         @unlink($tmp . $name);
 
         return true;
@@ -175,11 +166,6 @@ class Shopware_Install_License
 
     public function installLicensePlugin()
     {
-        // Insert plugin into s_core_plugins
-        // Check if inserted before
-        // INSERT INTO `s_core_plugins` (`id`, `namespace`, `name`, `label`, `source`, `description`, `description_long`, `active`, `added`, `installation_date`, `update_date`, `refresh_date`, `author`, `copyright`, `license`, `version`, `support`, `changes`, `link`, `store_version`, `store_date`, `capability_update`, `capability_install`, `capability_enable`, `update_source`, `update_version`) VALUES
-        //(65, 'Core', 'SwagLicense', 'Lizenz-Manager', 'Commercial', '', '', 0, '2012-08-14 14:48:51', NULL, NULL, '2012-08-25 18:14:44', 'shopware AG', 'Copyright © 2012, shopware AG', NULL, '1.0.0', NULL, NULL, NULL, NULL, NULL, 1, 1, 1, NULL, '1.0.2');
-
         try {
             $sql = "
             SELECT id FROM s_core_plugins WHERE name = 'SwagLicense'

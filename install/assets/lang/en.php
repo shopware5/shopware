@@ -43,9 +43,8 @@ return array(
     'step3_info' => 'Enter your database connection - if you are not sure what data must be entered here, please contact your hosting provider.', // Enter your database connection - if you are not sure what data must be entered here, please contact your provider.
     'step_3_loading' => 'Importing database...',
     // Step 4
-    'step4_header' => 'Database import', // Database import
+    'step4_header'      => 'Database import', // Database import
     'step4_skip_import' => 'Skip database import', // Skip database import
-    'step4_skip_info' => 'Warning: If you do not skip the database import, any existing Shopware tables may be removed.', //  Warning: If you do not skip the database importing, may be any existing Shopware tables will removed.
     // Step 5
     'step5_header' => 'Choose your license', // Choose your license
     'step5_ce' => 'Shopware Community Edition (License: AGPL)', // Shopware Community Edition (License: AGPL)
@@ -54,6 +53,8 @@ return array(
     'step5_ec' => 'Shopware Enterprise Premium Edition (License: Commercial / License key required)', //  Shopware Enterprise Premium Edition (License: Commercial / License key required)
     'step5_license' => 'License key', // License-Key:
     'step5_info' => 'If you have purchased a commercial Shopware version, select the appropriate edition in the list. Then enter the license key that you received upon purchasing.', //  If you have purchased a commercial shopware version, select the appropriate edition in the list. Then, enter the license key that you received after the purchase.
+    'step5_license_error' => 'It is required that you enter a valid to install a commercial shopware edition.',
+
     // Step 6
     'step6_header' => 'Shop configuration',   // Shop configuration
     'step6_sconfig_header' => 'Frontend configuration',   // Frontend configuration
@@ -78,4 +79,9 @@ return array(
     'step7_info' => 'The installation has been completed successfully<br/><br /> For security reasons, you should now delete the installer (/install directory) from your server via FTP.', // The installation was finished successful
     'step7_frontend' => 'Open shop frontend', // Open shop frontend
     'step7_backend' => 'Open shop backend', // Open shop backend
+
+    'migration_progress_text'           => 'Please start the database import by clicking the "Start" button.<br> <strong>Any existing Shopware tables may be removed.</strong>',
+    'migration_counter_text_migrations' => 'Database import in progress',
+    'migration_update_success'          => 'Database import complete',
+    "start"                             => "Start",
 );
