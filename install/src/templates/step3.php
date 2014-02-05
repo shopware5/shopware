@@ -1,23 +1,15 @@
-<?php
-if (!defined("installer")) {
-    exit;
-}
-?>
-<!-- Start page -->
+<?php $app->render('header.php', array('tab' => 'database')) ?>
+
 <div id="start">
     <div class="page-header">
         <h2><?php echo $language["step3_header"];?></h2>
     </div>
 
-    <?php
-     if ($error == true) {
-     ?>
-     <div class="alert alert-error">
-         <?php echo $error ?>
-    </div>
-    <?php
-     }
-    ?>
+    <?php if ($error): ?>
+        <div class="alert alert-error">
+            <?php echo $error ?>
+        </div>
+    <?php endif ?>
 
     <div class="row">
         <div class="span12">
@@ -53,3 +45,5 @@ if (!defined("installer")) {
         </div>
     </div>
 </div>
+
+<?php $app->render('footer.php') ?>

@@ -1,20 +1,11 @@
-<?php
-if (!defined("installer")) {
-    exit;
-}
-?>
-<!-- Start page -->
-<div id="start">
+<?php $app->render('header.php', array('tab' => 'system')) ?>
 
-    <?php
-    if ($error == true) {
-    ?>
-    <div class="alert alert-error">
-        <?php echo $language["step2_error"];?>
-   </div>
-   <?php
-    }
-   ?>
+<div id="start">
+    <?php if ($error): ?>
+        <div class="alert alert-error">
+            <?php echo $language["step2_error"];?>
+        </div>
+    <?php endif ?>
 
     <form action="<?php echo $app->urlFor('step2', array()); ?>" method="post">
         <input type="hidden" name="action" value="check" />
@@ -111,3 +102,5 @@ if (!defined("installer")) {
         </div>
     </form>
 </div>
+
+<?php $app->render('footer.php') ?>

@@ -37,7 +37,7 @@ class Shopware_Controllers_Api_GenerateArticleImages extends Shopware_Controller
     /**
      * Update article
      *
-     * PUT /api/generatevarianimages/{id}
+     * PUT /api/generateArticleImages/{id}
      */
     public function putAction()
     {
@@ -51,6 +51,28 @@ class Shopware_Controllers_Api_GenerateArticleImages extends Shopware_Controller
         $this->resource->generateVariantImages($id);
 
         $this->View()->assign(array('success' => true));
+    }
+
+    /**
+     * Controller Action for the batchAction
+     * Blocks batch actions implemented by the extended class
+     *
+     * @throws RuntimeException
+     */
+    public function batchAction()
+    {
+        throw new \Shopware\Components\Api\Exception\BatchInterfaceNotImplementedException('Batch operations not implemented by this resource');
+    }
+
+    /**
+     * Controller Action for the batchDelete
+     * Blocks batch actions implemented by the extended class
+     *
+     * @throws RuntimeException
+     */
+    public function batchDeleteAction()
+    {
+        throw new \Shopware\Components\Api\Exception\BatchInterfaceNotImplementedException('Batch operations not implemented by this resource');
     }
 
 }

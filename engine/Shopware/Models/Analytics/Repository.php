@@ -194,14 +194,14 @@ class Repository
         foreach($shopIds as $shopId) {
             $builder->addSelect(
                 "SUM( IF(
-	   		        orders.subshopID = ".$shopId." AND orders.status NOT IN (-1, 4),
+	   		        orders.language = ".$shopId." AND orders.status NOT IN (-1, 4),
 	   		        1, 0
 		        )) as orderCount" . $shopId
             );
 
             $builder->addSelect(
                 "SUM( IF(
-                    orders.subshopID = ".$shopId." AND orders.status = -1,
+                    orders.language = ".$shopId." AND orders.status = -1,
 	   		        1, 0
 	   	        )) cancelledOrders" . $shopId
             );
@@ -1134,13 +1134,11 @@ class Repository
         $builder->select(array(
             'articleImpression.articleId',
             'article.name as articleName',
-            'UNIX_TIMESTAMP(articleImpression.date) as date',
             'SUM(articleImpression.impressions) as totalImpressions'
         ));
 
         $builder->from('s_statistics_article_impression', 'articleImpression')
             ->leftJoin('articleImpression', 's_articles', 'article', 'articleImpression.articleId = article.id')
-            ->addGroupBy('articleImpression.date')
             ->addGroupBy('articleImpression.articleId');
 
         $this->addSort($builder, $sort)
@@ -1198,7 +1196,7 @@ class Repository
         $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
             'COUNT(orders.id) AS orderCount',
-            'SUM((orders.invoice_amount - orders.invoice_shipping) / orders.currencyFactor) AS turnover',
+            'SUM(orders.invoice_amount / orders.currencyFactor) AS turnover',
             'Date_Format(orders.ordertime, \'%W\') as displayDate'
         ));
 
@@ -1215,10 +1213,10 @@ class Repository
             foreach ($shopIds as $shopId) {
                 $shopId = (int) $shopId;
                 $builder->addSelect(
-                    "SUM(IF(orders.subshopID=" . $shopId . ", (invoice_amount - invoice_shipping)/currencyFactor, 0)) as turnover" . $shopId
+                    "SUM(IF(orders.language=" . $shopId . ", (invoice_amount - invoice_shipping)/currencyFactor, 0)) as turnover" . $shopId
                 );
                 $builder->addSelect(
-                    "IF(orders.subshopID=" . $shopId . ", COUNT(orders.id), 0) as orderCount" . $shopId
+                    "IF(orders.language=" . $shopId . ", COUNT(orders.id), 0) as orderCount" . $shopId
                 );
             }
         }
@@ -1312,7 +1310,7 @@ class Repository
             ->innerJoin('orders', 's_user', 'users', 'orders.userID = users.id')
             ->innerJoin('users', 's_user_billingaddress', 'billing', 'billing.userID = users.id')
             ->andWhere('orders.status NOT IN (-1, 4)')
-            ->orderBy('orderTime', 'DESC');
+            ->orderBy('orderTime', 'ASC');
 
         $this->addDateRangeCondition($builder, $from, $to, 'orders.ordertime');
 
@@ -1356,7 +1354,7 @@ class Repository
     {
         $builder = $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
-            'ROUND(SUM((orders.invoice_amount - orders.invoice_shipping) / orders.currencyFactor), 2) AS turnover',
+            'SUM(orders.invoice_amount / orders.currencyFactor) AS turnover',
             'partners.company AS partner',
             'orders.partnerID as trackingCode',
             'partners.id as partnerId'

@@ -107,6 +107,7 @@ class SnippetsToSqlCommand extends ShopwareCommand
                 $output->writeln('<info>Importing snippets for '.$plugin->getName().' plugin</info>');
                 $queries = array_merge(
                     $queryLoader->loadToQuery($pluginPath.'/Snippets/'),
+                    $queryLoader->loadToQuery($pluginPath.'/snippets/'),
                     $queryLoader->loadToQuery($pluginPath.'/Resources/snippet/')
                 );
                 file_put_contents($input->getArgument('file'), implode(PHP_EOL, $queries), FILE_APPEND);

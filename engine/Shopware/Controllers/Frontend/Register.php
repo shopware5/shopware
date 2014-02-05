@@ -127,16 +127,14 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
         $this->admin->sSaveRegister();
 
-        if (!empty($paymentData)) {
+        $userId = $this->admin->sSYSTEM->_SESSION["sUserId"];
+
+        if (!empty($paymentData) && $userId) {
             $paymentObject = $this->admin->sInitiatePaymentClass($paymentData);
             $this->admin->sSYSTEM->_POST = $this->request->getPost();
             if ($paymentObject instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
-                $checkPayment = $paymentObject->validate($this->request);
-                if (empty($checkPayment)) {
-                    $paymentObject->savePaymentData();
-                }
+                $paymentObject->savePaymentData($userId, $this->request);
             }
-
         }
     }
 

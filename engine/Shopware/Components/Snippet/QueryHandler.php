@@ -24,12 +24,13 @@
 
 namespace Shopware\Components\Snippet;
 
+use Shopware\Components\Snippet\Writer\QueryWriter;
 use Symfony\Component\Finder\Finder;
 
 /**
  * @category  Shopware
  * @package   Shopware\Components\Snippet
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class QueryHandler
 {
@@ -39,15 +40,8 @@ class QueryHandler
     protected $snippetsDir;
 
     /**
-     * @var \Enlight_Config_Adapter_File the file adapter
+     * @param string $snippetsDir
      */
-    protected $inputAdapter;
-
-    /**
-     * @var \Enlight_Config_Writer_Query the query writer
-     */
-    protected $outputWriter;
-
     public function __construct($snippetsDir)
     {
         $this->snippetsDir = $snippetsDir;
@@ -73,14 +67,11 @@ class QueryHandler
 
         $finder = new Finder();
 
-        $this->inputAdapter = new \Enlight_Config_Adapter_File(array(
+        $inputAdapter = new \Enlight_Config_Adapter_File(array(
             'configDir' => $snippetsDir,
         ));
-        $this->outputWriter = new \Enlight_Config_Writer_Query(array(
-            'table' => 's_core_snippets',
-            'namespaceColumn' => 'namespace',
-            'sectionColumn' => array('shopID', 'localeID')
-        ));
+
+        $queryWriter = new QueryWriter();
 
         $finder->files()->in($snippetsDir);
         foreach ($finder as $file) {
@@ -92,8 +83,8 @@ class QueryHandler
             }
 
             $namespaceData = new \Enlight_Components_Snippet_Namespace(array(
-                'adapter' => $this->inputAdapter,
-                'name' => $namespace,
+                'adapter' => $inputAdapter,
+                'name'    => $namespace,
             ));
 
             foreach ($namespaceData->read()->toArray() as $index => $values) {
@@ -101,15 +92,15 @@ class QueryHandler
                     $locales[$index] = 'SET @locale_'.$index.' = (SELECT id FROM s_core_locales WHERE locale = \''.$index.'\');';
                 }
 
-                $namespaceData->setSection(array(1, '@locale_'.$index))->read();
-                $namespaceData->setData($values);
-                $this->outputWriter->write($namespaceData, array_keys($values), $update);
+                $queryWriter->setUpdate($update);
+                $queryWriter->write($values, $namespace, '@locale_'.$index, 1);
             }
         }
-        $result = $this->outputWriter->getQueries();
+        $result = $queryWriter->getQueries();
         foreach ($locales as $locale) {
             array_unshift($result, $locale);
         }
+
         return $result;
     }
 }

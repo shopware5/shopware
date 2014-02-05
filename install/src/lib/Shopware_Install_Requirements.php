@@ -54,7 +54,7 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
     public function getList()
     {
         if ($this->list === null) {
-            $xml_object = simplexml_load_file(dirname(__FILE__) . '/System.xml');
+            $xml_object = simplexml_load_file(__DIR__ . '/System.xml');
             if (is_object($xml_object->requirements) == true) {
                 $this->list = $xml_object->requirement;
             }
@@ -292,7 +292,7 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
     public function checkDiskFreeSpace()
     {
         if (function_exists('disk_free_space')) {
-            return $this->encodeSize(disk_free_space(dirname(__FILE__)));
+            return $this->encodeSize(disk_free_space(__DIR__));
         } else {
             return false;
         }
@@ -323,7 +323,7 @@ class Shopware_Install_Requirements implements IteratorAggregate, Countable
     public function checkIncludePath()
     {
         if (function_exists('set_include_path')) {
-            $old = set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__) . DIRECTORY_SEPARATOR);
+            $old = set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . DIRECTORY_SEPARATOR);
             return $old && get_include_path() != $old;
         } else {
             return false;

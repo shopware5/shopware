@@ -1,9 +1,5 @@
-<?php
-if (!defined("installer")) {
-    exit;
-}
-?>
-<!-- Start page -->
+<?php $app->render('/header.php', array('tab' => 'start')) ?>
+
 <div id="start">
     <div class="page-header">
         <h2><?php echo $language["start_install"];?></h2>
@@ -26,10 +22,10 @@ if (!defined("installer")) {
                     selected="selected"<?php } ?>><?php echo $language["select_language_en"];?></option>
         </select>
 
-
         <div class="actions clearfix">
-
             <input type="submit" class="right primary" value="<?php echo $language["forward"];?>"" />
         </div>
     </form>
 </div>
+
+<?php $app->render('footer.php') ?>
