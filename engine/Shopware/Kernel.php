@@ -165,6 +165,9 @@ class Kernel implements HttpKernelInterface
         // Create englight request from global state
         $enlightRequest = new EnlightRequest();
 
+        // Let the symfony request handle the trusted proxies
+        $enlightRequest->setRemoteAddress($request->getClientIp());
+
         return $enlightRequest;
     }
 
@@ -217,6 +220,10 @@ class Kernel implements HttpKernelInterface
 
         $this->initializeContainer();
         $this->initializeShopware();
+
+        if ($this->isHttpCacheEnabled()) {
+            SymfonyRequest::setTrustedProxies(array('127.0.0.1'));
+        }
 
         $this->booted = true;
     }
