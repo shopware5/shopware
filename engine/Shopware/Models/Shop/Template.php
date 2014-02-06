@@ -130,14 +130,14 @@ class Template extends ModelEntity
      * @var integer $parentId
      * @ORM\Column(name="parent_id", type="integer", nullable=true)
      */
-    private $parentId;
+    private $parentId = null;
 
     /**
      * @var \Shopware\Models\Shop\Template
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Template")
+     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Shop\Template")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
-    protected $parent;
+    protected $parent = null;
 
     /**
      * Get id
@@ -345,7 +345,7 @@ class Template extends ModelEntity
     /**
      * @param \Shopware\Models\Shop\Template $parent
      */
-    public function setParent($parent)
+    public function setParent(Template $parent)
     {
         $this->parent = $parent;
     }
