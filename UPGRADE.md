@@ -281,6 +281,8 @@ In this document you will find a changelog of the important changes related to t
     * `detailModal`
     * `paymentEditingInCheckoutPage`
     * `showbundlemainarticle`
+* New commands: `sw:cron:list` and `sw:cron:run`
+* Running cronjobs using `php shopware.php backend/cron` is not recommended and should be seen as deprecated
 
 ## 4.3.1
 
