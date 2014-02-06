@@ -127,6 +127,19 @@ class Template extends ModelEntity
     private $plugin;
 
     /**
+     * @var integer $parentId
+     * @ORM\Column(name="parent_id", type="integer", nullable=true)
+     */
+    private $parentId;
+
+    /**
+     * @var \Shopware\Models\Shop\Template
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Template")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     */
+    protected $parent;
+
+    /**
      * Get id
      *
      * @return integer
@@ -327,5 +340,21 @@ class Template extends ModelEntity
     public function toString()
     {
         return $this->getTemplate();
+    }
+
+    /**
+     * @param \Shopware\Models\Shop\Template $parent
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+    }
+
+    /**
+     * @return \Shopware\Models\Shop\Template
+     */
+    public function getParent()
+    {
+        return $this->parent;
     }
 }
