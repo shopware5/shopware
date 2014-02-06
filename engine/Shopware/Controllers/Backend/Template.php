@@ -1,10 +1,12 @@
 <?php
 
+use Shopware\Components\Plugin\Manager;
+use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Template;
+use Shopware\Theme;
 
 class Shopware_Controllers_Backend_Template extends Shopware_Controllers_Backend_Application
 {
-
     /**
      * Model which handled through this controller
      * @var string
@@ -16,7 +18,6 @@ class Shopware_Controllers_Backend_Template extends Shopware_Controllers_Backend
      * @var string
      */
     protected $alias = 'template';
-
 
     /**
      * Override of the application controller
@@ -76,22 +77,111 @@ class Shopware_Controllers_Backend_Template extends Shopware_Controllers_Backend
      */
     protected function registerThemes()
     {
-        $themes = $this->initialThemes();
+        $directories = new DirectoryIterator(
+            $this->container->getParameter('kernel.root_dir') . '/engine/Shopware/Themes'
+        );
+
+        $themes = $this->initialThemes($directories);
+
+        $pluginThemes = $this->initialPluginThemes();
+
+        $themes = array_merge($themes, $pluginThemes);
 
         $this->resolveThemeParents($themes);
     }
 
     /**
-     * Helper function which iterates the engine\Shopware\Themes directory
-     * and registers all stored themes within the directory as \Shopware\Models\Shop\Template.
+     * Helper function which iterates all plugins
+     * and registers their themes.
+     * Returns an array with all registered plugin themes.
+     *
      * @return array
      */
-    protected function initialThemes()
+    protected function initialPluginThemes()
     {
-        $directories = new DirectoryIterator(
-            $this->container->getParameter('kernel.root_dir') . '/engine/Shopware/Themes'
-        );
+        $plugins = $this->getActivePlugins();
 
+        /** @var Manager $pluginManager */
+        $pluginManager = $this->container->get('shopware.plugin_manager');
+
+        $themes = array();
+
+        /**@var $plugin Plugin*/
+        foreach($plugins as $plugin) {
+            //get the plugin bootstrap to get access on the plugin path.
+            $bootstrap = $pluginManager->getPluginBootstrap(
+                $plugin
+            );
+
+            //bootstrap not found? skip plugin.
+            if (!$bootstrap instanceof Shopware_Components_Plugin_Bootstrap) {
+                continue;
+            }
+
+            //check if plugin contains themes
+            if (!file_exists($bootstrap->Path() . DIRECTORY_SEPARATOR . 'Themes')) {
+                continue;
+            }
+
+            $directories = new DirectoryIterator(
+                $bootstrap->Path() . DIRECTORY_SEPARATOR . 'Themes'
+            );
+
+            //the initialThemes function create for each theme directory a shop template.
+            $pluginThemes = $this->initialThemes($directories);
+
+            if (empty($pluginThemes)) {
+                continue;
+            }
+
+            //merge the plugin themes into the already detected plugin themes.
+            $themes = array_merge($themes, $pluginThemes);
+
+            //iterate themes to set the plugin id.
+            foreach($themes as $theme) {
+                /**@var $theme Theme*/
+                /**@var $template Template*/
+                $template = $this->getRepository()->findOneBy(array(
+                    'template' => $theme->getTemplate()
+                ));
+                
+                $template->setPlugin($plugin);
+            }
+
+            $this->getManager()->flush();
+        }
+
+        return $themes;
+    }
+
+    /**
+     * Returns an object list with all installed and activated plugins.
+     *
+     * @return array
+     */
+    protected function getActivePlugins()
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+
+        $builder->select(array('plugins'))
+            ->from('Shopware\Models\Plugin\Plugin', 'plugins')
+            ->where('plugins.active = true')
+            ->andWhere('plugins.installed IS NOT NULL');
+
+        return $builder->getQuery()->getResult(
+            \Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT
+        );
+    }
+
+
+    /**
+     * Helper function which iterates the engine\Shopware\Themes directory
+     * and registers all stored themes within the directory as \Shopware\Models\Shop\Template.
+     * @param DirectoryIterator $directories
+     * @return array
+     */
+    protected function initialThemes(DirectoryIterator $directories)
+    {
         $themes = array();
 
         /**@var $directory DirectoryIterator */
@@ -133,7 +223,7 @@ class Shopware_Controllers_Backend_Template extends Shopware_Controllers_Backend
      */
     protected function resolveThemeParents(array $themes)
     {
-        /**@var $theme \Shopware\Theme */
+        /**@var $theme Theme */
         foreach ($themes as $theme) {
             if ($theme->getExtend() === null) {
                 continue;
@@ -170,10 +260,10 @@ class Shopware_Controllers_Backend_Template extends Shopware_Controllers_Backend
      * Used to update the Shopware\Models\Shop\Template entity with
      * the theme data.
      *
-     * @param \Shopware\Theme $theme
+     * @param Theme $theme
      * @return array
      */
-    protected function getThemeDefinition(\Shopware\Theme $theme)
+    protected function getThemeDefinition(Theme $theme)
     {
         return array(
             'template' => $theme->getTemplate(),
@@ -181,7 +271,10 @@ class Shopware_Controllers_Backend_Template extends Shopware_Controllers_Backend
             'author' => $theme->getAuthor(),
             'license' => $theme->getLicense(),
             'description' => $theme->getDescription(),
-            'version' => 3
+            'version' => 3,
+            'esi' => true,
+            'style' => true,
+            'emotion' => true
         );
     }
 
@@ -190,7 +283,7 @@ class Shopware_Controllers_Backend_Template extends Shopware_Controllers_Backend
      * Returns a new instance of the \Shopware\Theme
      *
      * @param DirectoryIterator $directory
-     * @return \Shopware\Theme
+     * @return Theme
      * @throws Exception
      */
     protected function getThemeClass(DirectoryIterator $directory)
@@ -203,15 +296,17 @@ class Shopware_Controllers_Backend_Template extends Shopware_Controllers_Backend
         if (!file_exists($file)) {
             throw new Exception(sprintf(
                 "Theme directory %s contains no Theme.php",
-                array($directory->getFilename())
+                $directory->getFilename()
             ));
         }
+
+        require_once $file;
 
         return new $class();
     }
 
     /**
-     * Iterates all Shopware 3-4 templates which
+     * Iterates all Shopware 4 templates which
      * stored in the /templates/ directory.
      * Each template are stored as new Shopware\Models\Shop\Template.
      */
