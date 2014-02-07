@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.Index.model.Orders', {
 	extend: 'Ext.data.Model',
 	fields: [
 		//{block name="backend/index/model/orders/fields"}{/block}
-        { name: 'date' },
+        { name: 'date', type: 'date', dateFormat:'Y-m-d H:i:s' },
         { name: 'orderNumber' },
         { name: 'customer' },
         { name: 'customerId' },

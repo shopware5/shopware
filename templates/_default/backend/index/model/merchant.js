@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Index.model.Merchant', {
         { name: 'customergroup' },
         { name: 'customergroup_name' },
         { name: 'customergroup_id' },
-        { name: 'date' },
+        { name: 'date', type: 'date', dateFormat:'Y-m-d H:i:s' },
         { name: 'validation' }
     ]
 });
