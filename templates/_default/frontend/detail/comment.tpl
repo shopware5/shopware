@@ -67,10 +67,16 @@
 			<div class="comment_block{if $smarty.foreach.comment.last} last{/if}{if $vote.answer} no_border{/if}">
 
 				<div class="left_container">
+				{* Star rating *}
+				{block name="frontend_detail_comment_star_rating"}
+					<div class="star star{$vote.points*2}"></div>
+				{/block}
+
 				{* Author *}
 				{block name='frontend_detail_comment_author'}
+
 					<strong class="author">
-						{se name="DetailCommentInfoFrom"}{/se} {$vote.name}
+						{se name="DetailCommentInfoFrom"}{/se} <span class="name">{$vote.name}</span>
 					</strong>
 				{/block}
 
@@ -79,11 +85,6 @@
 					<span class="date">
 						{$vote.datum}
 					</span>
-				{/block}
-
-				{* Star rating *}
-				{block name="frontend_detail_comment_star_rating"}
-					<div class="star star{$vote.points*2}"></div>
 				{/block}
 				</div>
 
@@ -137,9 +138,7 @@
 		{* Display notice if the shop owner needs to unlock a comment before it will'be listed *}
 		{if {config name=VoteUnlock}}
 			<div class="notice">
-				<div class="center">
-					<strong>{s name='DetailCommentTextReview'}{/s}</strong>
-				</div>
+				<span>{s name='DetailCommentTextReview'}{/s}</span>
 			</div>
 		{/if}
 
@@ -213,10 +212,10 @@
 					{* Captcha *}
 					{block name='frontend_detail_comment_input_captcha'}
 					<div class="captcha">
-                        <div class="captcha-placeholder" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
+						<div class="captcha-placeholder" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
 						<div class="code">
 							<label>{se name="DetailCommentLabelCaptcha"}{/se}</label>
-							<input type="text" name="sCaptcha"  class="text {if $sErrorFlag.sCaptcha}instyle_error{/if}" />
+							<input type="text" name="sCaptcha"class="text {if $sErrorFlag.sCaptcha}instyle_error{/if}" />
 							<div class="clear">&nbsp;</div>
 						</div>
 					</div>

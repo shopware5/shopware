@@ -20,17 +20,8 @@
 	{/foreach} 
 </div>
 
-{* Variant picture *}
-{*if $sArticle.image.res.relations}
-	<div id="img{$sArticle.image.res.relations}" style="display:none">
-	    <a href="{$sArticle.image.src.5}"  title="{if $sArticle.image.res.description}{$sArticle.image.res.description}{else}{$sArticle.articleName}{/if}" >
-	    <img src="{$sArticle.image.src.4}" alt="{$sArticle.articleName}" border="0" title="{if $sArticle.image.res.description}{$sArticle.image.res.description}{else}{$sArticle.articleName}{/if}" /> </a>
-	</div>
-{/if*}
-
 {* Thumbnails *}
 {if $sArticle.images}
-	<div class="space border">&nbsp;</div>
 	<div class="space">&nbsp;</div>
 	<div class="thumb_box">
         {if $sArticle.image.src.4}
