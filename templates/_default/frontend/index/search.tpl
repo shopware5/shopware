@@ -4,8 +4,8 @@
 	<div class="inner_searchcontainer">
 		<form action="{url controller='search' fullPath=false}" method="get" id="searchform">
 			{block name="frontend_index_search_innerform"}{/block}
-			<input type="text" name="sSearch" id="searchfield" value="{s name="IndexSearchFieldValue"}Suche:{/s}" maxlength="30"  />
-			<input type="submit" id="submit_search" value="" />
+			<input type="text" name="sSearch" id="searchfield" autocomplete="off" value="{s name="IndexSearchFieldValue"}Suche:{/s}" maxlength="30"  />
+			<input type="submit" id="submit_search_btn" value="Suchen" />
 		</form>
 		
 		{* Ajax loader *}
