@@ -1,8 +1,8 @@
 
-Ext.define('Shopware.apps.Template', {
+Ext.define('Shopware.apps.Theme', {
     extend: 'Enlight.app.SubApplication',
 
-    name:'Shopware.apps.Template',
+    name:'Shopware.apps.Theme',
 
     loadPath: '{url action=load}',
     bulkLoad: true,
@@ -11,14 +11,15 @@ Ext.define('Shopware.apps.Template', {
 
     views: [
         'list.Window',
-        'list.Template',
+        'list.Theme',
+        'list.extensions.Info',
 
-        'detail.Template',
+        'detail.Theme',
         'detail.Window'
     ],
 
-    models: [ 'Template' ],
-    stores: [ 'Template' ],
+    models: [ 'Theme' ],
+    stores: [ 'Theme' ],
 
     launch: function() {
         return this.getController('Main').mainWindow;

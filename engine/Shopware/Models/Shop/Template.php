@@ -23,6 +23,7 @@
  */
 
 namespace Shopware\Models\Shop;
+use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Model\ModelEntity,
     Doctrine\ORM\Mapping as ORM;
 
@@ -138,6 +139,18 @@ class Template extends ModelEntity
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
     protected $parent = null;
+
+    /**
+     * @var ArrayCollection $shops
+     * @ORM\OneToMany(targetEntity="Shop", mappedBy="template")
+     */
+    protected $shops;
+
+    function __construct()
+    {
+        $this->shops = new ArrayCollection();
+    }
+
 
     /**
      * Get id
