@@ -222,7 +222,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
 
         // fallback to default shop, default language
         // this needs to be fixed, because its wrong for non-english installations
-        if ($locale->getId() !== $this->getDefaultLocale()->getId()) {
+        if ($locale->getId() !== 1) {
             $extends[] = array(
                 1,
                 1,
