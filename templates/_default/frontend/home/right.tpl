@@ -11,9 +11,7 @@
 	{/block}
 	
 	{* Topseller *}
-	{block name='frontend_home_right_topseller'}
-		{include file='frontend/plugins/index/topseller.tpl'}
-	{/block}
+	{block name='frontend_home_right_topseller'}{/block}
 	
 	{* Campaign right bottom *}
 	{block name='frontend_home_right_campaign_bottom'}
