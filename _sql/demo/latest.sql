@@ -7053,63 +7053,6 @@ INSERT INTO `s_filter_values` (`id`, `optionID`, `value`, `position`) VALUES
 (40, 1, '>30%', 8),
 (41, 4, 'schokobraun', 3);
 
-TRUNCATE TABLE `s_library_component`;
-INSERT INTO `s_library_component` (`id`, `name`, `x_type`, `convert_function`, `description`, `template`, `cls`, `pluginID`) VALUES
-(2, 'HTML-Element', 'emotion-components-html-element', NULL, '', 'component_html', 'html-text-element', NULL),
-(3, 'Banner', 'emotion-components-banner', 'getBannerMappingLinks', '', 'component_banner', 'banner-element', NULL),
-(4, 'Artikel', 'emotion-components-article', 'getArticle', '', 'component_article', 'article-element', NULL),
-(5, 'Kategorie-Teaser', 'emotion-components-category-teaser', 'getCategoryTeaser', '', 'component_category_teaser', 'category-teaser-element', NULL),
-(6, 'Blog-Artikel', 'emotion-components-blog', 'getBlogEntry', '', 'component_blog', 'blog-element', NULL),
-(7, 'Banner-Slider', 'emotion-components-banner-slider', 'getBannerSlider', '', 'component_banner_slider', 'banner-slider-element', NULL),
-(8, 'Youtube-Video', 'emotion-components-youtube', NULL, '', 'component_youtube', 'youtube-element', NULL),
-(9, 'iFrame-Element', '', NULL, '', 'component_iframe', 'iframe-element', NULL),
-(10, 'Hersteller-Slider', 'emotion-components-manufacturer-slider', 'getManufacturerSlider', '', 'component_manufacturer_slider', 'manufacturer-slider-element', NULL),
-(11, 'Artikel-Slider', 'emotion-components-article-slider', 'getArticleSlider', '', 'component_article_slider', 'article-slider-element', NULL);
-
-TRUNCATE TABLE `s_library_component_field`;
-INSERT INTO `s_library_component_field` (`id`, `componentID`, `name`, `x_type`, `value_type`, `field_label`, `support_text`, `help_title`, `help_text`, `store`, `display_field`, `value_field`, `default_value`, `allow_blank`) VALUES
-(3, 3, 'file', 'mediaselectionfield', '', 'Bild', '', '', '', '', '', '', '', 0),
-(4, 2, 'text', 'tinymce', '', 'Text', 'Anzuzeigender Text', 'HTML-Text', 'Geben Sie hier den Text ein der im Element angezeigt werden soll.', '', '', '', '', 0),
-(5, 4, 'article', 'emotion-components-fields-article', '', 'Artikelsuche', 'Der anzuzeigende Artikel', 'Lorem ipsum dolor', 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam', '', '', '', '', 0),
-(6, 2, 'cms_title', 'textfield', '', 'Titel', '', '', '', '', '', '', '', 0),
-(7, 3, 'bannerMapping', 'hidden', 'json', '', '', '', '', '', '', '', '', 0),
-(8, 4, 'article_type', 'emotion-components-fields-article-type', '', 'Typ des Artikels', '', '', '', '', '', '', '', 0),
-(9, 5, 'image_type', 'emotion-components-fields-category-image-type', '', 'Typ des Bildes', '', '', '', '', '', '', '', 0),
-(10, 5, 'image', 'mediaselectionfield', '', 'Bild', '', '', '', '', '', '', '', 0),
-(11, 5, 'category_selection', 'emotion-components-fields-category-selection', '', '', '', '', '', '', '', '', '', 1),
-(12, 6, 'entry_amount', 'numberfield', '', 'Anzahl', '', '', '', '', '', '', '', 0),
-(13, 7, 'banner_slider_title', 'textfield', '', 'Überschrift', '', '', '', '', '', '', '', 0),
-(15, 7, 'banner_slider_arrows', 'checkbox', '', 'Pfeile anzeigen', '', '', '', '', '', '', '', 0),
-(16, 7, 'banner_slider_numbers', 'checkbox', '', 'Nummern ausgeben', '', '', '', '', '', '', '', 0),
-(17, 7, 'banner_slider_scrollspeed', 'numberfield', '', 'Scroll-Geschwindigkeit', '', '', '', '', '', '', '', 0),
-(18, 7, 'banner_slider_rotation', 'checkbox', '', 'Automatisch rotieren', '', '', '', '', '', '', '', 0),
-(19, 7, 'banner_slider_rotatespeed', 'numberfield', '', 'Rotations Geschwindigkeit', '', '', '', '', '', '', '5000', 0),
-(20, 7, 'banner_slider', 'hidden', 'json', '', '', '', '', '', '', '', '', 0),
-(22, 8, 'video_id', 'textfield', '', 'Youtube-Video ID', '', '', '', '', '', '', '', 0),
-(23, 8, 'video_hd', 'checkbox', '', 'HD-Video verwenden', '', '', '', '', '', '', '', 0),
-(24, 9, 'iframe_url', 'textfield', '', 'URL', '', '', '', '', '', '', '', 0),
-(25, 10, 'manufacturer_type', 'emotion-components-fields-manufacturer-type', '', '', '', '', '', '', '', '', '', 0),
-(26, 10, 'manufacturer_category', 'emotion-components-fields-category-selection', '', '', '', '', '', '', '', '', '', 1),
-(27, 10, 'selected_manufacturers', 'hidden', 'json', '', '', '', '', '', '', '', '', 0),
-(28, 10, 'manufacturer_slider_title', 'textfield', '', 'Überschrift', '', '', '', '', '', '', '', 0),
-(30, 10, 'manufacturer_slider_arrows', 'checkbox', '', 'Pfeile anzeigen', '', '', '', '', '', '', '', 0),
-(31, 10, 'manufacturer_slider_numbers', 'checkbox', '', 'Nummern ausgeben', '', '', '', '', '', '', '', 0),
-(32, 10, 'manufacturer_slider_scrollspeed', 'numberfield', '', 'Scroll-Geschwindigkeit', '', '', '', '', '', '', '', 0),
-(33, 10, 'manufacturer_slider_rotation', 'checkbox', '', 'Automatisch rotieren', '', '', '', '', '', '', '', 0),
-(34, 10, 'manufacturer_slider_rotatespeed', 'numberfield', '', 'Rotations Geschwindigkeit', '', '', '', '', '', '', '5000', 0),
-(36, 11, 'article_slider_type', 'emotion-components-fields-article-slider-type', '', '', '', '', '', '', '', '', '', 0),
-(37, 11, 'selected_articles', 'hidden', 'json', '', '', '', '', '', '', '', '', 0),
-(38, 11, 'article_slider_max_number', 'numberfield', '', 'max. Anzahl', '', '', '', '', '', '', '', 0),
-(39, 11, 'article_slider_title', 'textfield', '', 'Überschrift', '', '', '', '', '', '', '', 0),
-(41, 11, 'article_slider_arrows', 'checkbox', '', 'Pfeile anzeigen', '', '', '', '', '', '', '', 0),
-(42, 11, 'article_slider_numbers', 'checkbox', '', 'Nummern ausgeben', '', '', '', '', '', '', '', 0),
-(43, 11, 'article_slider_scrollspeed', 'numberfield', '', 'Scroll-Geschwindigkeit', '', '', '', '', '', '', '', 0),
-(44, 11, 'article_slider_rotation', 'checkbox', '', 'Automatisch rotieren', '', '', '', '', '', '', '', 0),
-(45, 11, 'article_slider_rotatespeed', 'numberfield', '', 'Rotations Geschwindigkeit', '', '', '', '', '', '', '5000', 0),
-(47, 3, 'link', 'textfield', '', 'Link', '', '', '', '', '', '', '', 0),
-(48, 5, 'blog_category', 'checkboxfield', '', 'Blog-Kategorie', 'Bei der ausgewählten Kategorie handelt es sich um eine Blog-Kategorie', '', '', '', '', '', '', 0),
-(49, 6, 'thumbnail_size', 'textfield', '', 'Thumbnail-Größe', 'Thumbnail-Nummer, die verwendet werden soll. Im Standard stehen Ihnen 0 bis 3 zur Verfügung.', '', '', '', '', '', '2', 1);
-
 TRUNCATE TABLE `s_media`;
 INSERT INTO `s_media` (`id`, `albumID`, `name`, `description`, `path`, `type`, `extension`, `file_size`, `userID`, `created`) VALUES
 (2, -1, 'Muensterlaender_Lagerkorn_Ballons_Hochformat', '', 'media/image/Muensterlaender_Lagerkorn_Ballons_Hochformat.jpg', 'IMAGE', 'jpg', 1157037, 48, '2012-08-15'),
