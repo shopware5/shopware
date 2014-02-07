@@ -1554,7 +1554,7 @@ class sAdmin
             );
             if (!empty($translationFallback)) {
                 $translationFallback = unserialize($translationFallback);
-                $translation = array_merge($translationFallback, $translation);
+                $translation += $translationFallback;
             }
         }
         return $translation;
