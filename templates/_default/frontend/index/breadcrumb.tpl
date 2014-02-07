@@ -1,7 +1,6 @@
 {* Breadcrumb *}
 <div id="breadcrumb">
 	{if $sShopname}
-		{se name='BreadcrumbDefault'}{/se}
 		<a href="{url controller='index'}">
 			{$sShopname}
 		</a>
