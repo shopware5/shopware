@@ -12,10 +12,6 @@ Ext.define('Shopware.apps.Theme.view.list.Theme', {
             me.createInfoView()
         ];
 
-        me.dockedItems = [
-            me.createToolbar()
-        ];
-
         me.callParent(arguments);
     },
 
@@ -78,80 +74,6 @@ Ext.define('Shopware.apps.Theme.view.list.Theme', {
             '</tpl>',
             '<div class="x-clear"></div>{/literal}'
         );
-    },
-
-    /**
-     * Following functions creates the toolbar elements
-     * @returns { Ext.toolbar.Toolbar }
-     */
-    createToolbar: function () {
-        var me = this;
-
-        me.toolbar = Ext.create('Ext.toolbar.Toolbar', {
-            items: me.createToolbarItems(),
-            dock: 'top'
-        });
-
-        return me.toolbar;
-    },
-
-
-    createToolbarItems: function () {
-        var me = this,
-            items = [];
-
-        items.push(me.createShopCombo());
-        items.push(me.createAssignButton());
-        items.push(me.createPreviewButton());
-
-        return items;
-    },
-
-    createShopCombo: function () {
-        var me = this;
-
-        me.shopStore = Ext.create('Shopware.apps.Base.store.Shop').load({
-            callback: function(records) {
-                var first = records.shift();
-                me.shopCombo.select(first);
-            }
-        });
-
-        me.shopCombo = Ext.create('Ext.form.field.ComboBox', {
-            name: 'shop',
-            store: me.shopStore,
-            displayField: 'name'
-        });
-
-        return me.shopCombo;
-    },
-
-    createAssignButton: function () {
-        var me = this;
-
-        me.assignButton = Ext.create('Ext.button.Button', {
-            text: 'Select theme',
-            disabled: true,
-            handler: function() {
-                me.fireEvent('assign-theme', me);
-            }
-        });
-
-        return me.assignButton;
-    },
-
-    createPreviewButton: function () {
-        var me = this;
-
-        me.previewButton = Ext.create('Ext.button.Button', {
-            text: 'Preview theme',
-            disabled: true,
-            handler: function() {
-                me.fireEvent('preview-theme', me);
-            }
-        });
-
-        return me.previewButton;
     }
 
 });

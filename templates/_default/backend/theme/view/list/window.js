@@ -15,5 +15,121 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
                 { xtype: 'theme-listing-info-panel' }
             ]
         };
+    },
+
+    initComponent: function() {
+        var me = this;
+
+        me.dockedItems = [
+            me.createToolbar()
+        ];
+
+        me.callParent(arguments);
+    },
+
+    /**
+     * Following functions creates the toolbar elements
+     * @returns { Ext.toolbar.Toolbar }
+     */
+    createToolbar: function () {
+        var me = this;
+
+        me.toolbar = Ext.create('Ext.toolbar.Toolbar', {
+            items: me.createToolbarItems(),
+            dock: 'top'
+        });
+
+        return me.toolbar;
+    },
+
+    createToolbarItems: function () {
+        var me = this,
+            items = [];
+
+        items.push(me.createShopCombo());
+        items.push('-');
+        items.push(me.createAssignButton());
+        items.push(me.createPreviewButton());
+        items.push('-');
+        items.push(me.createConfigureButton());
+        items.push(me.createAddButton());
+
+        return items;
+    },
+
+    createShopCombo: function () {
+        var me = this;
+
+        me.shopStore = Ext.create('Shopware.apps.Base.store.Shop').load({
+            callback: function(records) {
+                var first = records.shift();
+                me.shopCombo.select(first);
+            }
+        });
+
+        me.shopCombo = Ext.create('Ext.form.field.ComboBox', {
+            name: 'shop',
+            store: me.shopStore,
+            displayField: 'name',
+            valueField: 'id'
+        });
+
+        return me.shopCombo;
+    },
+
+    createAssignButton: function () {
+        var me = this;
+
+        me.assignButton = Ext.create('Ext.button.Button', {
+            text: 'Select theme',
+            disabled: true,
+            handler: function() {
+                me.fireEvent('assign-theme', me);
+            }
+        });
+
+        return me.assignButton;
+    },
+
+    createPreviewButton: function () {
+        var me = this;
+
+        me.previewButton = Ext.create('Ext.button.Button', {
+            text: 'Preview theme',
+            disabled: true,
+            handler: function() {
+                me.fireEvent('preview-theme', me);
+            }
+        });
+
+        return me.previewButton;
+    },
+
+    createConfigureButton: function() {
+        var me = this;
+
+        me.configureButton = Ext.create('Ext.button.Button', {
+            text: 'Configure theme',
+            disabled: true,
+            handler: function() {
+                me.fireEvent('configure-theme', me);
+            }
+        });
+
+        return me.configureButton;
+    },
+
+    createAddButton: function() {
+        var me = this;
+
+        me.addButton = Ext.create('Ext.button.Button', {
+            text: 'Add theme',
+            handler: function() {
+                me.fireEvent('add-theme', me);
+            }
+        });
+
+        return me.addButton;
     }
+
 });
