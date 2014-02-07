@@ -5,7 +5,7 @@ use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Template;
 use Shopware\Theme;
 
-class Shopware_Controllers_Backend_Template extends Shopware_Controllers_Backend_Application
+class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Application
 {
     /**
      * Model which handled through this controller
@@ -47,15 +47,54 @@ class Shopware_Controllers_Backend_Template extends Shopware_Controllers_Backend
      */
     protected function getList($offset, $limit, $sort = array(), $filter = array(), array $wholeParams = array())
     {
-        $data = parent::getList($offset, $limit, $sort, $filter, $wholeParams);
+        if (!isset($wholeParams['shopId'])) {
+            $wholeParams['shopId'] = $this->getDefaultShopId();
+        }
+
+        $data = parent::getList(null, null, $sort, $filter, $wholeParams);
+
+        $template = $this->getShopTemplate($wholeParams['shopId']);
+
+        if (!$template instanceof Template) {
+            return $data;
+        }
+
+        foreach($data['data'] as &$theme) {
+            $theme['enabled'] = ($theme['id'] === $template->getId());
+        }
 
         return $data;
     }
 
+    protected function getShopTemplate($shopId)
+    {
+        $builder = $this->getRepository()->createQueryBuilder('template');
+        $builder->innerJoin('template.shops', 'shops')
+            ->where('shops.id = :shopId')
+            ->setParameter('shopId', $shopId);
 
+        return $builder->getQuery()->getOneOrNullResult(
+            \Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT
+        );
+    }
+
+    private function getDefaultShopId() {
+        return Shopware()->Db()->fetchOne(
+            'SELECT id FROM s_core_shops WHERE `default` = 1'
+        );
+    }
+
+    /**
+     * Controller action which called to assign a shop template.
+     */
     public function assignAction()
     {
-
+        $this->View()->assign(
+            $this->assign(
+                $this->Request()->getParam('shopId', null),
+                $this->Request()->getParam('templateId', null)
+            )
+        );
     }
 
     /**
@@ -64,10 +103,11 @@ class Shopware_Controllers_Backend_Template extends Shopware_Controllers_Backend
      *
      * @param $shopId
      * @param $templateId
+     * @return array
      */
     protected function assign($shopId, $templateId)
     {
-
+        return array('success' => true);
     }
 
     /**
@@ -177,6 +217,7 @@ class Shopware_Controllers_Backend_Template extends Shopware_Controllers_Backend
     /**
      * Helper function which iterates the engine\Shopware\Themes directory
      * and registers all stored themes within the directory as \Shopware\Models\Shop\Template.
+     *
      * @param DirectoryIterator $directories
      * @return array
      */

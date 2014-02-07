@@ -27,15 +27,16 @@
  * @version    $Id$
  * @author shopware AG
  */
-@mixin shopware-template {
-    div[id^=config-form-template] .#{$prefix}panel-body {
-        background: #fff !important;
+@mixin shopware-theme {
 
-        .thumb-wrap {
-            height: 100px;
+    .theme-listing {
+        .thumbnail {
+
             width: 135px;
-            margin: 20px 0 20px 28px;
+            height: 100px;
+            margin: 20px 0 25px 28px;
             position: relative;
+            float: left;
 
             .hint {
                 position: absolute;
@@ -51,7 +52,7 @@
                     width: 70px;
                     text-align: left;
                     position: absolute;
-                    left: 9px; top: 2px;
+                    left: 2px; top: 10px;
                 }
             }
             .enabled {
@@ -74,6 +75,8 @@
             .#{$prefix}editable {
                 text-align: center;
                 display: block;
+                margin-top: 6px;
+                color: #A0A0A0;
             }
 
             .thumb {
@@ -85,7 +88,7 @@
             }
         }
 
-        .thumb-wrap .thumb, .inner-thumb, .inner-thumb img {
+        .thumbnail .thumb, .inner-thumb, .inner-thumb img {
             width: 135px;
             height: 100px;
         }
@@ -95,7 +98,7 @@
         }
     }
 
-    div[id^=config-template-detail] .#{$prefix}panel-body {
+    div[id^=config-theme-detail] .#{$prefix}panel-body {
         .#{$prefix}preview-image td.#{$prefix}form-item-body {
             background: #fff;
         }

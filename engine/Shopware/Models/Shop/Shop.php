@@ -134,8 +134,15 @@ class Shop extends ModelEntity
     private $secureBaseUrl;
 
     /**
+     * @var $template int
+     * @ORM\Column(name="template_id", type="integer", nullable=true)
+     */
+    private $templateId;
+
+    /**
      * @var Template $template
-     * @ORM\ManyToOne(targetEntity="Template")
+     * @ORM\ManyToOne(targetEntity="Template", inversedBy="shops")
+     * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
      */
     private $template;
 
