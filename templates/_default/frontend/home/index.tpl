@@ -1,8 +1,14 @@
 {extends file='frontend/index/index.tpl'}
 
-{block name="frontend_index_content_top"}
-	
+{block name="frontend_index_content_top"}{/block}
+
+{* Breadcrumb *}
+{block name='frontend_index_breadcrumb'}
+	<div class="clear"></div>
 {/block}
+
+{* Hide sidebar left *}
+{block name='frontend_index_content_left'}{/block}
 
 {* Main content *}
 {block name='frontend_index_content'}
@@ -20,12 +26,14 @@
 	
 	{block name='frontend_home_index_text'}
 		{* Category headline *}
-		{include file='frontend/listing/text.tpl'}
+		{if !$hasEmotion}
+			{include file='frontend/listing/text.tpl'}
+		{/if}
 	{/block}
-	
+
+	{* Promotion *}
 	{block name='frontend_home_index_promotions'}
-		{* Promotion *}
-		{include file='frontend/listing/promotions.tpl'}
+		{action module=widgets controller=emotion action=index categoryId=$sCategoryContent.id controllerName=$Controller}
 	{/block}
 	
 	{block name='frontend_home_index_blog'}
@@ -42,15 +50,15 @@
 	
 	
 	<div class="doublespace">&nbsp;</div>
-	
+
+	{* Tagcloud *}
 	{block name='frontend_home_index_tagcloud'}
-		{* Tagcloud *}
-		{include file='frontend/plugins/index/tagcloud.tpl'}
+		{if {config name=show namespace=TagCloud } && !$isEmotionLandingPage}
+			{action module=widgets controller=listing action=tag_cloud}
+		{/if}
 	{/block}
 </div>
 {/block}
 
-{* Sidebar right *}
-{block name='frontend_index_content_right'}
-	{include file='frontend/home/right.tpl'}
-{/block}
+{* Hide sidebar right *}
+{block name='frontend_index_content_right'}{/block}
