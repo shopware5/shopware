@@ -1,7 +1,7 @@
 <div id="left" class="grid_4 first">
 	{* Campaign left top *}
 	{block name='frontend_index_left_campaigns_top'}
-		{include file="frontend/campaign/box.tpl" sCategoryCampaigns=$sCampaigns.leftTop}
+		{include file="frontend/campaign/box.tpl" campaignsData=$campaigns.leftTop}
 	{/block}
 	
 	{* Maincategories left *}
@@ -11,12 +11,7 @@
 	
 	{* Campaign left middle *}
 	{block name='frontend_index_left_campaigns_middle'}
-		{include file="frontend/campaign/box.tpl" sCategoryCampaigns=$sCampaigns.leftMiddle}
-	{/block}
-
-	{* Static sites *}
-	{block name='frontend_index_left_menu'}
-		{include file='frontend/index/menu_left.tpl'}
+		{include file="frontend/campaign/box.tpl" campaignsData=$campaigns.leftMiddle}
 	{/block}
 
 	{* Trusted shops logo *}
@@ -26,17 +21,18 @@
 		{/if}
 	{/block}
 
+	{* Static sites *}
+	{block name='frontend_index_left_menu'}
+		{include file='frontend/index/menu_left.tpl'}
+	{/block}
+
 	{* Campaign left bottom *}
 	{block name='frontend_index_left_campaigns_bottom'}
 		{include file="frontend/campaign/box.tpl" sCategoryCampaigns=$sCampaigns.leftBottom}
 	{/block}
 	
 	{* Last articles *}
-	{block name='frontend_index_left_last_articles'}
-		{if $sLastArticles}
-			{include file="frontend/plugins/index/viewlast.tpl" sLastArticles=$sLastArticles}
-		{/if}
-	{/block}
+	{block name='frontend_index_left_last_articles'}{/block}
 	
 	<div class="clear">&nbsp;</div>
 </div>
