@@ -168,7 +168,10 @@ class Kernel implements HttpKernelInterface
         // Set commandline args as request uri
         // This is used for legacy cronjob routing.
         // e.g: /usr/bin/php shopware.php /backend/cron
-        if (is_array($argv = $request->server->get('argv')) && isset($argv[1])) {
+        if (PHP_SAPI === 'cli'
+            && is_array($argv = $request->server->get('argv'))
+            && isset($argv[1])
+        ) {
             $enlightRequest->setRequestUri($argv[1]);
         }
 
