@@ -5,14 +5,15 @@
 <link type="text/css" media="all" rel="stylesheet" href="{link file='frontend/_resources/styles/framework.css'}" />
 {block name="frontend_detail_header_css"}
 <style type="text/css">
-    .container_20 { width: 580px }
+    .container_20, #content .inner { width: 580px; border-color: transparent }
     .image, .main-details { float: left; }
     .image {
         width: 285px;
         height: 285px;
         margin: 0 20px 0 0;
     }
-
+    
+    .container_20 { margin: 0px }
     .main-details { width: 235px; font-size: 12px; line-height: 18px }
     .main-details table { width: 100% }
     .title, .sub-title {
@@ -35,15 +36,13 @@
         line-height: 18px;
     }
     .upper-content, .lower-content {
-        padding: 20px;
+        padding: 0 20px;
     }
     .upper-content {
         border-bottom: 1px solid #dedede;
     }
     .lower-content {
-        border-top: 1px solid #fff;
         padding: 10px 20px;
-        background: #f7f7f7;
     }
     table .property {
         background: #f7f7f7;
@@ -51,7 +50,7 @@
         border-right: 1px solid #DFDFDF;
         text-shadow: 0 1px 0 #fff;
     }
-    #mainNavigation { display: none !important }
+    #mainNavigation, #header { display: none !important }
 {/block}
 </style>
 {/block}

@@ -1,11 +1,11 @@
 <table class="grid_11 first table-configurator" cellpadding="0" cellspacing="0">
 	<thead>
-	<tr>
-		<th>&nbsp;</th>
-		{foreach from=$sArticle.sConfigurator.1.values item=option key=pos}
-			<th>{$option.optionname}</th>
-		{/foreach}
-	</tr>
+		<tr>
+			<th>&nbsp;</th>
+			{foreach from=$sArticle.sConfigurator.1.values item=option key=pos}
+				<th>{$option.optionname}</th>
+			{/foreach}
+		</tr>
 	</thead>
 	<tbody>
 
@@ -30,8 +30,10 @@
 	{/foreach}
 	</tbody>
 </table>
+
 {* Article price *}
 {block name='frontend_detail_data_price_info'}
+    <div class="clear"></div>
     <p class="modal_open">
         {s namespace="frontend/detail/data" name="DetailDataPriceInfo"}{/s}
     </p>
