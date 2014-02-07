@@ -2,6 +2,7 @@
 
 use Shopware\Components\Plugin\Manager;
 use Shopware\Models\Plugin\Plugin;
+use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
 use Shopware\Theme;
 
@@ -18,6 +19,19 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      * @var string
      */
     protected $alias = 'template';
+
+    /**
+     * Controller action which called to assign a shop template.
+     */
+    public function assignAction()
+    {
+        $this->View()->assign(
+            $this->assign(
+                $this->Request()->getParam('shopId', null),
+                $this->Request()->getParam('themeId', null)
+            )
+        );
+    }
 
     /**
      * Override of the application controller
@@ -59,54 +73,96 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             return $data;
         }
 
-        foreach($data['data'] as &$theme) {
+        foreach ($data['data'] as &$theme) {
+            if ($theme['version'] < 3) {
+                $theme['screen'] = $this->getTemplateImage($theme);
+            } else {
+                $theme['screen'] = $this->getThemeImage($theme);
+            }
             $theme['enabled'] = ($theme['id'] === $template->getId());
         }
 
         return $data;
     }
 
-    protected function getShopTemplate($shopId)
+
+    protected function getTemplateImage(array $template)
     {
-        $builder = $this->getRepository()->createQueryBuilder('template');
-        $builder->innerJoin('template.shops', 'shops')
-            ->where('shops.id = :shopId')
-            ->setParameter('shopId', $shopId);
-
-        return $builder->getQuery()->getOneOrNullResult(
-            \Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT
+        $templateDir = Shopware()->Template()->resolveTemplateDir(
+            $template['template']
         );
+
+        $thumbnail = $templateDir . '/preview_thb.png';
+
+        if (!file_exists($thumbnail)) {
+            return null;
+        }
+
+        $thumbnail = file_get_contents($thumbnail);
+        return 'data:image/png;base64,' . base64_encode($thumbnail);
     }
 
-    private function getDefaultShopId() {
-        return Shopware()->Db()->fetchOne(
-            'SELECT id FROM s_core_shops WHERE `default` = 1'
-        );
+
+    protected function getThemeImage(array $theme)
+    {
+        $directory = $this->getThemeDirectory($theme['id']);
+
+        $thumbnail = $directory . '/preview.png';
+
+        if (!file_exists($thumbnail)) {
+            return null;
+        }
+
+        $thumbnail = file_get_contents($thumbnail);
+        return 'data:image/png;base64,' . base64_encode($thumbnail);
     }
+
+
+    protected function getThemeDirectory($themeId)
+    {
+        /**@var $template Template:: */
+        $template = $this->getRepository()->find($themeId);
+
+        if ($template->getPlugin()) {
+            /** @var Manager $pluginManager */
+            $pluginManager = $this->container->get('shopware.plugin_manager');
+
+            $bootstrap = $pluginManager->getPluginBootstrap(
+                $template->getPlugin()
+            );
+
+            //bootstrap not found? skip plugin.
+            if (!$bootstrap instanceof Shopware_Components_Plugin_Bootstrap) {
+                return null;
+            }
+
+            return $bootstrap->Path() . DIRECTORY_SEPARATOR . 'Themes' . $template->getTemplate();
+        } else {
+            return $this->getDefaultThemeDirectory() . DIRECTORY_SEPARATOR . $template->getTemplate();
+        }
+    }
+
 
     /**
-     * Controller action which called to assign a shop template.
-     */
-    public function assignAction()
-    {
-        $this->View()->assign(
-            $this->assign(
-                $this->Request()->getParam('shopId', null),
-                $this->Request()->getParam('templateId', null)
-            )
-        );
-    }
-
-    /**
-     * Assigns the passed template (identified over the primary key)
+     * Assigns the passed theme (identified over the primary key)
      * to the passed shop (identified over the shop primary key)
      *
      * @param $shopId
-     * @param $templateId
+     * @param $themeId
      * @return array
      */
-    protected function assign($shopId, $templateId)
+    protected function assign($shopId, $themeId)
     {
+        /**@var $shop Shop*/
+        $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $shopId);
+
+        /**@var $theme Template*/
+        $theme = $this->getManager()->find('Shopware\Models\Shop\Template', $themeId);
+
+        $shop->setTemplate($theme);
+
+        $this->getManager()->flush();
+
         return array('success' => true);
     }
 
@@ -118,7 +174,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     protected function registerThemes()
     {
         $directories = new DirectoryIterator(
-            $this->container->getParameter('kernel.root_dir') . '/engine/Shopware/Themes'
+            $this->getDefaultThemeDirectory()
         );
 
         $themes = $this->initialThemes($directories);
@@ -128,6 +184,14 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         $themes = array_merge($themes, $pluginThemes);
 
         $this->resolveThemeParents($themes);
+    }
+
+    private function getDefaultThemeDirectory()
+    {
+        return $this->container->getParameter('kernel.root_dir') .
+        DIRECTORY_SEPARATOR . 'engine' .
+        DIRECTORY_SEPARATOR . 'Shopware' .
+        DIRECTORY_SEPARATOR . 'Themes';
     }
 
     /**
@@ -146,8 +210,8 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
         $themes = array();
 
-        /**@var $plugin Plugin*/
-        foreach($plugins as $plugin) {
+        /**@var $plugin Plugin */
+        foreach ($plugins as $plugin) {
             //get the plugin bootstrap to get access on the plugin path.
             $bootstrap = $pluginManager->getPluginBootstrap(
                 $plugin
@@ -178,13 +242,13 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             $themes = array_merge($themes, $pluginThemes);
 
             //iterate themes to set the plugin id.
-            foreach($themes as $theme) {
-                /**@var $theme Theme*/
-                /**@var $template Template*/
+            foreach ($themes as $theme) {
+                /**@var $theme Theme */
+                /**@var $template Template */
                 $template = $this->getRepository()->findOneBy(array(
                     'template' => $theme->getTemplate()
                 ));
-                
+
                 $template->setPlugin($plugin);
             }
 
@@ -192,25 +256,6 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         }
 
         return $themes;
-    }
-
-    /**
-     * Returns an object list with all installed and activated plugins.
-     *
-     * @return array
-     */
-    protected function getActivePlugins()
-    {
-        $builder = $this->getManager()->createQueryBuilder();
-
-        $builder->select(array('plugins'))
-            ->from('Shopware\Models\Plugin\Plugin', 'plugins')
-            ->where('plugins.active = true')
-            ->andWhere('plugins.installed IS NOT NULL');
-
-        return $builder->getQuery()->getResult(
-            \Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT
-        );
     }
 
 
@@ -412,4 +457,45 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
         return $data;
     }
+
+
+    /**
+     * Returns an object list with all installed and activated plugins.
+     *
+     * @return array
+     */
+    protected function getActivePlugins()
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+
+        $builder->select(array('plugins'))
+            ->from('Shopware\Models\Plugin\Plugin', 'plugins')
+            ->where('plugins.active = true')
+            ->andWhere('plugins.installed IS NOT NULL');
+
+        return $builder->getQuery()->getResult(
+            \Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT
+        );
+    }
+
+
+    protected function getShopTemplate($shopId)
+    {
+        $builder = $this->getRepository()->createQueryBuilder('template');
+        $builder->innerJoin('template.shops', 'shops')
+            ->where('shops.id = :shopId')
+            ->setParameter('shopId', $shopId);
+
+        return $builder->getQuery()->getOneOrNullResult(
+            \Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT
+        );
+    }
+
+    private function getDefaultShopId()
+    {
+        return Shopware()->Db()->fetchOne(
+            'SELECT id FROM s_core_shops WHERE `default` = 1'
+        );
+    }
+
 }

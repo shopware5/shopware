@@ -5,6 +5,8 @@ Ext.define('Shopware.apps.Theme.controller.Main', {
     refs: [
         { ref: 'listing', selector: 'theme-listing' },
         { ref: 'listingView', selector: 'theme-listing dataview' },
+        { ref: 'listingWindow', selector: 'theme-list-window' },
+        { ref: 'shopCombo', selector: 'theme-list-window combobox[name=shop]' },
         { ref: 'infoPanel', selector: 'theme-listing-info-panel' }
     ],
 
@@ -15,9 +17,9 @@ Ext.define('Shopware.apps.Theme.controller.Main', {
             'theme-listing dataview': {
                 selectionchange: me.onSelectTheme
             },
-            'theme-listing': {
+            'theme-list-window': {
                 'assign-theme': me.onAssignTheme,
-                'preview-theme': me.onPreviewtheme
+                'preview-theme': me.onPreviewTheme
             }
 
         });
@@ -26,8 +28,53 @@ Ext.define('Shopware.apps.Theme.controller.Main', {
     },
 
     onAssignTheme: function() {
+        var me = this, shop, theme;
 
+        shop = me.getSelectedShop();
+        theme = me.getSelectedTheme();
+
+        Ext.Ajax.request({
+            url: '{url controller="theme" action="assign"}',
+            method: 'POST',
+            params: {
+                shopId: shop.get('id'),
+                themeId: theme.get('id')
+            },
+            success: function(response, opts) {
+                me.getListingView().getStore().load();
+            }
+        });
     },
+
+    getSelectedTheme: function() {
+        var me = this;
+
+        if (!(me.getListingView())) {
+            return null;
+        }
+
+        var selModel = me.getListingView().getSelectionModel();
+
+        if (selModel.getSelection().length > 0) {
+            return selModel.getSelection().shift();
+        } else {
+            return null;
+        }
+    },
+
+    getSelectedShop: function() {
+        var me = this;
+
+        if (!(me.getShopCombo())) {
+            return null;
+        }
+
+        return me.getShopCombo().getStore().getById(
+            me.getShopCombo().getValue()
+        );
+    },
+
+
 
     onPreviewTheme: function() {
 
@@ -35,17 +82,17 @@ Ext.define('Shopware.apps.Theme.controller.Main', {
 
     onSelectTheme: function(view, records) {
         var me = this;
+        var record = { };
 
-        console.log("select", arguments);
-        var record = Ext.create('Shopware.apps.Theme.model.Theme');
-
-        me.getListing().previewButton.disable();
-        me.getListing().assignButton.disable();
+        me.getListingWindow().previewButton.disable();
+        me.getListingWindow().assignButton.disable();
+        me.getListingWindow().configureButton.disable();
 
         if (records.length > 0) {
             record = records.shift();
-            me.getListing().previewButton.enable();
-            me.getListing().assignButton.enable();
+            me.getListingWindow().previewButton.enable();
+            me.getListingWindow().assignButton.enable();
+            me.getListingWindow().configureButton.enable();
         }
 
         me.getInfoPanel().updateInfoView(record);

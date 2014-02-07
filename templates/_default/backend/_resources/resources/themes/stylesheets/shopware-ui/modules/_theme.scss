@@ -98,6 +98,17 @@
         }
     }
 
+    .theme-info-panel {
+        .screen {
+            margin: 10px 0;
+
+            img {
+                margin: 0 auto;
+                display: block;
+            }
+        }
+    }
+
     div[id^=config-theme-detail] .#{$prefix}panel-body {
         .#{$prefix}preview-image td.#{$prefix}form-item-body {
             background: #fff;
