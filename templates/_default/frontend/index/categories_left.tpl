@@ -1,5 +1,4 @@
 {* Maincategories left *}
-
 {function name=categories level=0}
 	<ul class="{if !$level}categories{else}submenu{/if} level{$level}">
 	{block name="frontend_index_categories_left_ul"}{/block}
@@ -16,9 +15,10 @@
 	</ul>
 {/function}
 
-
 {if $sCategories}
 	{call name=categories categories=$sCategories}
 {elseif $sMainCategories}
 	{call name=categories categories=$sMainCategories}
 {/if}
+
+<div class="left_categories_shadow"></div>
