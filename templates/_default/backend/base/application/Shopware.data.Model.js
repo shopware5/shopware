@@ -232,7 +232,7 @@ Ext.define('Shopware.data.Model', {
      * @returns Shopware.data.Model
      */
     reload: function (options) {
-        var me = this, proxy = me.proxy;
+        var me = this, proxy = me.proxy, callback = null;
 
         if (!Ext.isString(proxy.api.detail)) {
             if (options && Ext.isFunction(options.callback)) {
@@ -250,15 +250,19 @@ Ext.define('Shopware.data.Model', {
 
         store.getProxy().extraParams.id = me.get('id');
 
+        if (options && Ext.isFunction(options.callback)) {
+            callback = options.callback;
+        }
+
+        options.callback = function (records, operation) {
+            var record = records[0];
+            if (Ext.isFunction(callback)) {
+                callback(record, operation);
+            }
+        };
+
         try {
-            store.load({
-                callback: function (records, operation) {
-                    var record = records[0];
-                    if (options && Ext.isFunction(options.callback)) {
-                        options.callback(record, operation);
-                    }
-                }
-            });
+            store.load(options);
         } catch (e) {
             return e;
         }

@@ -4,11 +4,9 @@ Ext.define('Shopware.apps.Theme.model.Theme', {
 
     configure: function() {
         return {
-            controller: 'Theme',
-            detail: 'Shopware.apps.Theme.view.detail.Theme'
+            controller: 'Theme'
         };
     },
-
 
     fields: [
         { name : 'id', type: 'int', useNull: true },
@@ -26,6 +24,16 @@ Ext.define('Shopware.apps.Theme.model.Theme', {
 
         { name : 'screen', type: 'string' },
         { name : 'enabled', type: 'boolean', defaultValue: false }
+    ],
+
+    associations: [
+        {
+            type: 'hasMany',
+            model: 'Shopware.apps.Theme.model.Element',
+            name: 'getElements',
+            associationKey: 'elements'
+        }
     ]
+
 });
 

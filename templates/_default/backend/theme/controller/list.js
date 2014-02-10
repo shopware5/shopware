@@ -1,5 +1,5 @@
 
-Ext.define('Shopware.apps.Theme.controller.Main', {
+Ext.define('Shopware.apps.Theme.controller.List', {
     extend: 'Enlight.app.Controller',
 
     refs: [
@@ -21,12 +21,17 @@ Ext.define('Shopware.apps.Theme.controller.Main', {
                 'assign-theme': me.onAssignTheme,
                 'preview-theme': me.onPreviewTheme
             }
-
         });
 
         me.mainWindow = me.getView('list.Window').create({ }).show();
     },
 
+
+
+    /**
+     * Event listener of the toolbar "assign button".
+     * Switches the shop template.
+     */
     onAssignTheme: function() {
         var me = this, shop, theme;
 
@@ -46,6 +51,48 @@ Ext.define('Shopware.apps.Theme.controller.Main', {
         });
     },
 
+
+
+    onPreviewTheme: function() {
+
+    },
+
+    /**
+     * Event listener of the theme listing - selectionchange
+     * event.
+     *
+     * Disables / Enables the toolbar buttons and refresh the info panel.
+     *
+     * @param view
+     * @param records
+     */
+    onSelectTheme: function(view, records) {
+        var me = this;
+        var record = { };
+
+        me.getListingWindow().previewButton.disable();
+        me.getListingWindow().assignButton.disable();
+        me.getListingWindow().configureButton.disable();
+
+        if (records.length > 0) {
+            record = records.shift();
+
+            me.getListingWindow().previewButton.enable();
+            me.getListingWindow().assignButton.enable();
+
+            if (record && record.getElements().getCount() > 0) {
+                me.getListingWindow().configureButton.enable();
+            }
+        }
+
+        me.getInfoPanel().updateInfoView(record);
+    },
+
+    /**
+     * Returns the selected theme model of the theme listing
+     *
+     * @returns { Shopware.apps.Theme.model.Theme }
+     */
     getSelectedTheme: function() {
         var me = this;
 
@@ -62,6 +109,11 @@ Ext.define('Shopware.apps.Theme.controller.Main', {
         }
     },
 
+    /**
+     * Returns the selected shop model of the toolbar combo box.
+     *
+     * @returns { Shopware.apps.Base.model.Shop }
+     */
     getSelectedShop: function() {
         var me = this;
 
@@ -72,29 +124,7 @@ Ext.define('Shopware.apps.Theme.controller.Main', {
         return me.getShopCombo().getStore().getById(
             me.getShopCombo().getValue()
         );
-    },
-
-
-
-    onPreviewTheme: function() {
-
-    },
-
-    onSelectTheme: function(view, records) {
-        var me = this;
-        var record = { };
-
-        me.getListingWindow().previewButton.disable();
-        me.getListingWindow().assignButton.disable();
-        me.getListingWindow().configureButton.disable();
-
-        if (records.length > 0) {
-            record = records.shift();
-            me.getListingWindow().previewButton.enable();
-            me.getListingWindow().assignButton.enable();
-            me.getListingWindow().configureButton.enable();
-        }
-
-        me.getInfoPanel().updateInfoView(record);
     }
+
+
 });

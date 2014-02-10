@@ -7,7 +7,7 @@ Ext.define('Shopware.apps.Theme', {
     loadPath: '{url action=load}',
     bulkLoad: true,
 
-    controllers: [ 'Main' ],
+    controllers: [ 'List', 'Detail' ],
 
     views: [
         'list.Window',
@@ -15,13 +15,25 @@ Ext.define('Shopware.apps.Theme', {
         'list.extensions.Info',
 
         'detail.Theme',
-        'detail.Window'
+        'detail.Window',
+
+        'detail.elements.ArticleSelection',
+        'detail.elements.CategorySelection',
+        'detail.elements.CheckboxField',
+        'detail.elements.ColorPicker',
+        'detail.elements.DateField',
+        'detail.elements.EmField',
+        'detail.elements.MediaSelection',
+        'detail.elements.PercentField',
+        'detail.elements.SnippetSelection',
+        'detail.elements.TextAreaField',
+        'detail.elements.TextField'
     ],
 
-    models: [ 'Theme' ],
+    models: [ 'Theme', 'Element', 'ConfigValue' ],
     stores: [ 'Theme' ],
 
     launch: function() {
-        return this.getController('Main').mainWindow;
+        return this.getController('List').mainWindow;
     }
 });
