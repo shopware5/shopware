@@ -99,6 +99,8 @@ class ConfigLoader
             );
         }
 
+        $config = array_change_key_case($config, CASE_LOWER);
+
         return $config;
     }
 
