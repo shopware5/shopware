@@ -47,6 +47,19 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         parent::listAction();
     }
 
+    protected function getDetailQuery($id)
+    {
+        $builder = parent::getDetailQuery($id);
+        $builder->addSelect(array('elements', 'values'))
+            ->leftJoin('template.elements', 'elements')
+            ->leftJoin('elements.values', 'values', 'WITH', 'values.shopId = :shopId')
+            ->orderBy('elements.position')
+            ->addOrderBy('elements.name')
+            ->setParameter('shopId', 1);
+
+        return $builder;
+    }
+
     /**
      * The getList function returns an array of the configured class model.
      * The listing query created in the getListQuery function.
@@ -85,6 +98,17 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         return $data;
     }
 
+    /**
+     * @return \Shopware\Components\Model\QueryBuilder
+     */
+    protected function getListQuery()
+    {
+        $builder = parent::getListQuery();
+        $builder->addSelect('elements')
+                ->leftJoin('template.elements', 'elements');
+
+        return $builder;
+    }
 
     protected function getTemplateImage(array $template)
     {
@@ -292,12 +316,76 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
             $template->fromArray($data);
 
+            $template->setElements(
+                $this->getThemeConfiguration($theme, $template)
+            );
+
             $this->getManager()->flush($template);
 
             $themes[] = $theme;
         }
 
         return $themes;
+    }
+
+    /**
+     * Helper function which refresh the theme configuration element definition.
+     *
+     * @param Theme $theme
+     * @param Template $template
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    protected function getThemeConfiguration(Theme $theme, Template $template)
+    {
+        $theme->createConfig();
+
+        $definition = $theme->getConfig();
+        $existing = $template->getElements();
+
+        /**@var $element Template\ConfigElement*/
+        foreach($definition as $element) {
+
+            $exist = $this->getElementByName($existing, $element->getName());
+            $element->setTemplate($template);
+
+            if ($exist instanceof Template\ConfigElement) {
+                $exist->fromArray($element->toArray());
+            } else {
+                $existing->add($element);
+            }
+        }
+
+        $toRemove = array();
+        foreach($existing as $element) {
+            if (!array_key_exists($element->getName(), $definition)) {
+                $toRemove[] = $element;
+            }
+        }
+
+        foreach($toRemove as $element) {
+            $existing->removeElement($element);
+        }
+
+        return $existing;
+    }
+
+    /**
+     * Helper function which checks if the element name is already exists in the
+     * passed collection of config elements.
+     *
+     * @param $collection
+     * @param $name
+     * @return null|Template\ConfigElement
+     */
+    private function getElementByName($collection, $name)
+    {
+        /**@var $element Template\ConfigElement*/
+        foreach($collection as $element) {
+            if ($element->getName() == $name) {
+                return $element;
+            }
+        }
+        return null;
     }
 
     /**

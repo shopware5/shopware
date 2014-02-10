@@ -142,13 +142,30 @@ class Template extends ModelEntity
 
     /**
      * @var ArrayCollection $shops
-     * @ORM\OneToMany(targetEntity="Shop", mappedBy="template")
+     * @ORM\OneToMany(
+     *      targetEntity="Shopware\Models\Shop\Shop",
+     *      mappedBy="template"
+     * )
      */
     protected $shops;
+
+    /**
+     * @var $config ArrayCollection
+     * @ORM\OneToMany(
+     *      targetEntity="Shopware\Models\Shop\Template\ConfigElement",
+     *      mappedBy="template",
+     *      orphanRemoval=true,
+     *      cascade={"persist"}
+     * )
+     * @ORM\OrderBy({"position" = "ASC"})
+     */
+    protected $elements;
+
 
     function __construct()
     {
         $this->shops = new ArrayCollection();
+        $this->elements = new ArrayCollection();
     }
 
 
@@ -370,4 +387,43 @@ class Template extends ModelEntity
     {
         return $this->parent;
     }
+
+    /**
+     * @param mixed $elements
+     */
+    public function setElements($elements)
+    {
+        $this->setOneToMany(
+            $elements,
+            '\Shopware\Models\Shop\Template\ConfigElement',
+            'elements',
+            'template'
+        );
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getElements()
+    {
+        return $this->elements;
+    }
+
+    /**
+     * @param ArrayCollection $shops
+     */
+    public function setShops($shops)
+    {
+        $this->shops = $shops;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getShops()
+    {
+        return $this->shops;
+    }
+
+
 }
