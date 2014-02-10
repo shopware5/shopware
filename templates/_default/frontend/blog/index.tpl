@@ -51,3 +51,6 @@
 	{/block}
 </div>
 {/block}
+
+{* Hide sidebar left *}
+{block name='frontend_index_content_left'}{/block}
