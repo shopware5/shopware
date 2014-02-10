@@ -2582,7 +2582,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $isNewConfigurator = false;
         if (isset($articleData['configuratorOptions']) && !empty($articleData['configuratorOptions'])) {
             if (!isset($articleData['configuratorsetID']) || empty($articleData['configuratorsetID'])) {
-                return sprintf("Article with ordernumber %s is a variant but has no configuratorSetID. It is probably broken and was skipped",$articleData['ordernumber'] );
+                throw new \Exception(sprintf("Article with ordernumber %s is a variant but has no configuratorSetID. It is probably broken and was skipped", $articleData['ordernumber']));
             }
             list($configuratorSet, $configuratorOptions) = $this->prepareNewConfiguratorImport($articleData['configuratorOptions']);
             $isNewConfigurator = true;
