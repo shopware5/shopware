@@ -2,17 +2,115 @@
 
 namespace Shopware;
 
+use Shopware\Models\Shop\Template\ConfigElement;
+
 class Theme
 {
+    /**
+     * Constant for the color picker field
+     * which can be used as template config element
+     */
+    const TYPE_COLOR_PICKER = 'theme-color-picker';
+
+    /**
+     * Constant for the em input field
+     * which can be used as template config element
+     */
+    const TYPE_EM_FIELD = 'theme-em-field';
+
+    /**
+     * Constant for the percent input field
+     * which can be used as template config element
+     */
+    const TYPE_PERCENT_FIELD = 'theme-percent-field';
+
+    /**
+     * Constant for the date input field
+     * which can be used as template config element
+     */
+    const TYPE_DATE_FIELD = 'theme-date-field';
+
+    /**
+     * Constant for the text input field
+     * which can be used as template config element
+     */
+    const TYPE_TEXT_FIELD = 'theme-text-field';
+
+    /**
+     * Constant for the text area input field
+     * which can be used as template config element
+     */
+    const TYPE_TEXT_AREA_FIELD = 'theme-text-area-field';
+
+    /**
+     * Constant for the snippet selection field
+     * which can be used as template config element
+     */
+    const TYPE_SNIPPET = 'theme-snippet-selection';
+
+    /**
+     * Constant for the media selection field
+     * which can be used as template config element
+     */
+    const TYPE_MEDIA = 'theme-media-selection';
+
+    /**
+     * Constant for the category selection field
+     * which can be used as template config element
+     */
+    const TYPE_CATEGORY = 'theme-category-selection';
+
+    /**
+     * Constant for the article selection field
+     * which can be used as template config element
+     */
+    const TYPE_ARTICLE = 'theme-article-selection';
+
+    /**
+     * Constant for the checkbox field
+     * which can be used as template config element
+     */
+    const TYPE_CHECKBOX = 'theme-checkbox-field';
+
+    /**
+     * Defines the parent theme
+     * @var null
+     */
     protected $extend = null;
 
+    /**
+     * Defines the human readable theme name
+     * which displayed in the backend
+     * @var string
+     */
     protected $name = '';
 
+    /**
+     * Allows to define a description text
+     * for the theme
+     * @var null
+     */
     protected $description = null;
 
+    /**
+     * Name of the theme author.
+     * @var null
+     */
     protected $author = null;
 
+    /**
+     * License of the theme source code.
+     *
+     * @var null
+     */
     protected $license = null;
+
+
+    /**
+     * @var array
+     * Contains all field of the createConfig
+     */
+    private $config = array();
 
     /**
      * Don't override this function. Used
@@ -70,5 +168,282 @@ class Theme
         return $paths[count($paths) - 2];
     }
 
+    /**
+     * Override this function to create
+     * an own theme configuration
+     */
+    public function createConfig()
+    {
+    }
+
+
+    /**
+     * Creates a color picker field which displayed in the theme configuration
+     * window of the theme manager module.
+     *
+     * @param array $options {
+     *      @type string $name          Required; Logical name which used as template variable name
+     *      @type string $fieldLabel    Optional; Ext JS form field label.
+     *      @type string $allowBlank    Optional; Defines if the value can contains null
+     *      @type string $defaultValue  Optional; Default value of this config element
+     *      @type string $position      Optional; Position which can be used to define the field positions
+     *      @type string $supportText   Optional; Text which displayed below the input field.
+     * }
+     *
+     * 
+     */
+    protected function createColorPicker(array $options)
+    {
+        $options += array('type' => self::TYPE_COLOR_PICKER);
+        $this->createConfigElement($options);
+    }
+
+    /**
+     * Creates a color picker field which displayed in the theme configuration
+     * window of the theme manager module.
+     *
+     * @param array $options {
+     *      @type string $name          Required; Logical name which used as template variable name
+     *      @type string $fieldLabel    Optional; Ext JS form field label.
+     *      @type string $allowBlank    Optional; Defines if the value can contains null
+     *      @type string $defaultValue  Optional; Default value of this config element
+     *      @type string $position      Optional; Position which can be used to define the field positions
+     *      @type string $supportText   Optional; Text which displayed below the input field.
+     * }
+     *
+     * 
+     */
+    protected function createEmField(array $options)
+    {
+        $options += array('type' => self::TYPE_EM_FIELD);
+        $this->createConfigElement($options);
+    }
+
+    /**
+     * Creates a color picker field which displayed in the theme configuration
+     * window of the theme manager module.
+     *
+     * @param array $options {
+     *      @type string $name          Required; Logical name which used as template variable name
+     *      @type string $fieldLabel    Optional; Ext JS form field label.
+     *      @type string $allowBlank    Optional; Defines if the value can contains null
+     *      @type string $defaultValue  Optional; Default value of this config element
+     *      @type string $position      Optional; Position which can be used to define the field positions
+     *      @type string $supportText   Optional; Text which displayed below the input field.
+     * }
+     *
+     * 
+     */
+    protected function createPercentField(array $options)
+    {
+        $options += array('type' => self::TYPE_PERCENT_FIELD);
+        $this->createConfigElement($options);
+    }
+
+    /**
+     * Creates a color picker field which displayed in the theme configuration
+     * window of the theme manager module.
+     *
+     * @param array $options {
+     *      @type string $name          Required; Logical name which used as template variable name
+     *      @type string $fieldLabel    Optional; Ext JS form field label.
+     *      @type string $allowBlank    Optional; Defines if the value can contains null
+     *      @type string $defaultValue  Optional; Default value of this config element
+     *      @type string $position      Optional; Position which can be used to define the field positions
+     *      @type string $supportText   Optional; Text which displayed below the input field.
+     * }
+     *
+     * 
+     */
+    protected function createDateField(array $options)
+    {
+        $options += array('type' => self::TYPE_DATE_FIELD);
+        $this->createConfigElement($options);
+    }
+
+    /**
+     * Creates a color picker field which displayed in the theme configuration
+     * window of the theme manager module.
+     *
+     * @param array $options {
+     *      @type string $name          Required; Logical name which used as template variable name
+     *      @type string $fieldLabel    Optional; Ext JS form field label.
+     *      @type string $allowBlank    Optional; Defines if the value can contains null
+     *      @type string $defaultValue  Optional; Default value of this config element
+     *      @type string $position      Optional; Position which can be used to define the field positions
+     *      @type string $supportText   Optional; Text which displayed below the input field.
+     * }
+     *
+     * 
+     */
+    protected function createMediaSelection(array $options)
+    {
+        $options += array('type' => self::TYPE_MEDIA);
+        $this->createConfigElement($options);
+    }
+
+    /**
+     * Creates a color picker field which displayed in the theme configuration
+     * window of the theme manager module.
+     *
+     * @param array $options {
+     *      @type string $name          Required; Logical name which used as template variable name
+     *      @type string $fieldLabel    Optional; Ext JS form field label.
+     *      @type string $allowBlank    Optional; Defines if the value can contains null
+     *      @type string $defaultValue  Optional; Default value of this config element
+     *      @type string $position      Optional; Position which can be used to define the field positions
+     *      @type string $supportText   Optional; Text which displayed below the input field.
+     * }
+     *
+     * 
+     */
+    protected function createTextField(array $options)
+    {
+        $options += array('type' => self::TYPE_TEXT_FIELD);
+        $this->createConfigElement($options);
+    }
+
+    /**
+     * Creates a color picker field which displayed in the theme configuration
+     * window of the theme manager module.
+     *
+     * @param array $options {
+     *      @type string $name          Required; Logical name which used as template variable name
+     *      @type string $fieldLabel    Optional; Ext JS form field label.
+     *      @type string $allowBlank    Optional; Defines if the value can contains null
+     *      @type string $defaultValue  Optional; Default value of this config element
+     *      @type string $position      Optional; Position which can be used to define the field positions
+     *      @type string $supportText   Optional; Text which displayed below the input field.
+     * }
+     *
+     * 
+     */
+    protected function createTextAreaField(array $options)
+    {
+        $options += array('type' => self::TYPE_TEXT_AREA_FIELD);
+        $this->createConfigElement($options);
+    }
+
+    /**
+     * Creates a color picker field which displayed in the theme configuration
+     * window of the theme manager module.
+     *
+     * @param array $options {
+     *      @type string $name          Required; Logical name which used as template variable name
+     *      @type string $fieldLabel    Optional; Ext JS form field label.
+     *      @type string $allowBlank    Optional; Defines if the value can contains null
+     *      @type string $defaultValue  Optional; Default value of this config element
+     *      @type string $position      Optional; Position which can be used to define the field positions
+     *      @type string $supportText   Optional; Text which displayed below the input field.
+     * }
+     *
+     * 
+     */
+    protected function createSnippetSelection(array $options)
+    {
+        $options += array('type' => self::TYPE_SNIPPET);
+        $this->createConfigElement($options);
+    }
+
+    /**
+     * Creates a color picker field which displayed in the theme configuration
+     * window of the theme manager module.
+     *
+     * @param array $options {
+     *      @type string $name          Required; Logical name which used as template variable name
+     *      @type string $fieldLabel    Optional; Ext JS form field label.
+     *      @type string $allowBlank    Optional; Defines if the value can contains null
+     *      @type string $defaultValue  Optional; Default value of this config element
+     *      @type string $position      Optional; Position which can be used to define the field positions
+     *      @type string $supportText   Optional; Text which displayed below the input field.
+     * }
+     *
+     * 
+     */
+    protected function createArticleSelection(array $options)
+    {
+        $options += array('type' => self::TYPE_ARTICLE);
+        $this->createConfigElement($options);
+    }
+
+    /**
+     * Creates a color picker field which displayed in the theme configuration
+     * window of the theme manager module.
+     *
+     * @param array $options {
+     *      @type string $name          Required; Logical name which used as template variable name
+     *      @type string $fieldLabel    Optional; Ext JS form field label.
+     *      @type string $allowBlank    Optional; Defines if the value can contains null
+     *      @type string $defaultValue  Optional; Default value of this config element
+     *      @type string $position      Optional; Position which can be used to define the field positions
+     *      @type string $supportText   Optional; Text which displayed below the input field.
+     * }
+     *
+     * 
+     */
+    protected function createCategorySelection(array $options)
+    {
+        $options += array('type' => self::TYPE_CATEGORY);
+        $this->createConfigElement($options);
+    }
+
+    /**
+     * Creates a color picker field which displayed in the theme configuration
+     * window of the theme manager module.
+     *
+     * @param array $options {
+     *      @type string $name          Required; Logical name which used as template variable name
+     *      @type string $fieldLabel    Optional; Ext JS form field label.
+     *      @type string $allowBlank    Optional; Defines if the value can contains null
+     *      @type string $defaultValue  Optional; Default value of this config element
+     *      @type string $position      Optional; Position which can be used to define the field positions
+     *      @type string $supportText   Optional; Text which displayed below the input field.
+     * }
+     */
+    protected function createCheckboxField(array $options)
+    {
+        $options += array('type' => self::TYPE_CHECKBOX);
+        $this->createConfigElement($options);
+    }
+
+    /**
+     * Helper function which creates a new template config element.
+     * Requires that the $data parameter contains a $name property.
+     *
+     * @param array $data
+     * @throws \Exception
+     */
+    private function createConfigElement(array $data)
+    {
+        //name is the only requirement for a config field.
+        if (!isset($data['name'])) {
+            throw new \Exception(sprintf(
+                'Theme %s tries to create a config element without a name!',
+                $this->name
+            ));
+        }
+
+        $element = new ConfigElement();
+
+        $element->fromArray($data);
+
+        //name has to be unique, otherwise throw exception
+        if (in_array($element->getName(), $this->config)) {
+            throw new \Exception(sprintf(
+                'Theme %s configured duplicate name %s in different config elements',
+                $this->name, $element->getName()
+            ));
+        }
+
+        $this->config[$element->getName()] = $element;
+    }
+
+    /**
+     * @return array
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
 
 }
