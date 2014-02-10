@@ -35,21 +35,16 @@
 
 {/block}
 
-{* Sidebar left *}
-
-{block name='frontend_index_content_left'}
-{if $sBasket.content && !$sUserLoggedIn}
-	{include file="frontend/checkout/cart_left.tpl"}
-{/if}
-{/block}
+{* Hide sidebar left *}
+{block name='frontend_index_content_left'}{/block}
 
 
 {* Main content *}
 {block name='frontend_index_content'}
-<div class="grid_16 {if $sUserLoggedIn}push_2{/if} last" id="basket">
+<div class="grid_16 last" id="basket">
 
 	{* If articles are in the basket... *}
-	{if $sBasket.content}
+		{if $sBasket.content}
 
 		{* Add article informations *}
 		{block name='frontend_checkout_add_article'}
@@ -63,52 +58,77 @@
 			{include file="frontend/checkout/error_messages.tpl"}
 		{/block}
 
-		{block name='frontend_checkout_cart_deliveryfree'}
-		{* Deliveryfree *}
-		{if $sShippingcostsDifference}
-			<div class="notice">
-				<strong>{se name="CartInfoFreeShipping"}{/se}</strong>
-				{se name="CartInfoFreeShippingDifference"}{/se}
-			</div>
-		{/if}
-		{/block}
 
-		<div class="table grid_16">
+		{block name='frontend_checkout_cart_deliveryfree'}{/block}
+
+			<div class="table grid_16 cart">
+			{* Checkout *}
+			<div class="actions">
+				{block name="frontend_checkout_actions_confirm"}
+				{if !$sMinimumSurcharge && !$sDispatchNoOrder}
+					<a href="{url action=confirm}" title="{s name='CheckoutActionsLinkProceed' namespace="frontend/checkout/actions"}{/s}" class="button-right large right checkout" >
+						{se name="CheckoutActionsLinkProceed" namespace="frontend/checkout/actions"}{/se}
+					</a>
+					<div class="clear"></div>
+				{/if}
+				{/block}
+			</div>
+			<div class="space">&nbsp;</div>
+
 			{* Table head *}
 			{block name='frontend_checkout_cart_cart_head'}
 				{include file="frontend/checkout/cart_header.tpl"}
 			{/block}
 
-			{block name='frontend_checkout_cart_item_before'}{/block}
-
 			{* Article items *}
-			{block name='frontend_checkout_cart_item_outer'}
-				{foreach name=basket from=$sBasket.content item=sBasketItem key=key}
-					{block name='frontend_checkout_cart_item'}
-						{include file='frontend/checkout/cart_item.tpl'}
-					{/block}
-				{/foreach}
-			{/block}
-
-			{block name='frontend_checkout_cart_item_after'}{/block}
+			{foreach name=basket from=$sBasket.content item=sBasketItem key=key}
+				{block name='frontend_checkout_cart_item'}
+				{include file='frontend/checkout/cart_item.tpl'}
+				{/block}
+			{/foreach}
 
 			{* Premium articles *}
 			{block name='frontend_checkout_cart_premiums'}
-				{include file='frontend/checkout/premiums.tpl'}
+				<div class="table_row noborder">
+					{include file='frontend/checkout/cart_footer_left.tpl'}
+				</div>
+
+				{* The tag is still open due to a template issue in the frontend/checkout/shipping_costs which has a unclosed div-tag *}
+				<div class="table_row non">
+					<div class="table_row shipping">
+					{if $sBasket.content && !$sUserLoggedIn}
+						{if !$sUserData.additional.user.id}
+							{include file="frontend/checkout/shipping_costs.tpl"}
+						{/if}
+					{/if}
+				</div>
 			{/block}
 
 			{* Table foot *}
 			{block name='frontend_checkout_cart_cart_footer'}
-				{include file="frontend/checkout/cart_footer.tpl"}
+
+			{include file="frontend/checkout/cart_footer.tpl"}
+
+			</div>
+
+			<div class="space">&nbsp;</div>
+			{* Action Buttons *}
+			{include file="frontend/checkout/actions.tpl"}
+			<div class="space">&nbsp;</div>
+
+
+			<div class="clear"></div>
+			<div class="doublespace"></div>
+
+			{if $sPremiums}
+			<div class="table_head">
+				<div class="grid_19">{s name="sCartPremiumsHeadline" namespace="frontend/checkout/premiums"}Bitte w&auml;hlen Sie zwischen den folgenden Pr&auml;mien{/s}</div>
+			</div>
+			{/if}
+			{* Premium articles *}
+			{include file='frontend/checkout/premiums.tpl'}
 			{/block}
 		</div>
-
-		<div class="space">&nbsp;</div>
-
-		{* Action Buttons *}
-		{include file="frontend/checkout/actions.tpl"}
-
-		<div class="space">&nbsp;</div>
 	{/if}
 </div>
 {/block}
