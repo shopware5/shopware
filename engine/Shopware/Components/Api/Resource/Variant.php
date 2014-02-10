@@ -717,8 +717,8 @@ class Variant extends Resource implements BatchInterface
     {
         /**@var $availableGroup Option */
         foreach ($availableGroups as $availableGroup) {
-            if ($availableGroup->getName() == $groupData['name']
-                || $availableGroup->getId() == $groupData['id']) {
+            if ( ($availableGroup->getName() == $groupData['name'] && $groupData['name'] !== null)
+                || ($availableGroup->getId() == $groupData['id']) && $groupData['id'] !== null) {
 
                 return $availableGroup;
             }
@@ -739,8 +739,8 @@ class Variant extends Resource implements BatchInterface
     {
         /**@var $availableOption Option */
         foreach ($availableOptions as $availableOption) {
-            if ($availableOption->getName() == $optionData['name']
-                || $availableOption->getId() == $optionData['id']) {
+            if ( ($availableOption->getName() == $optionData['name'] && $optionData['name'] !== null)
+                || ($availableOption->getId() == $optionData['id'] && $optionData['id'] !== null)) {
 
                 return $availableOption;
             }
