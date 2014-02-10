@@ -70,25 +70,19 @@
 
                 {* Display the right of cancelation *}
                 {if {config name=revocationnotice}}
-                    <div class="revocation modal_open">
-                        {s name="ConfirmTextRightOfRevocationNew"}{/s}
+                    <div class="confirm_accept modal_open">
+                        {s name="ConfirmTextRightOfRevocationNew"}<p>Bitte beachten Sie bei Ihrer Bestellung auch unsere <a href="{url controller=custom sCustom=8 forceSecure}" data-modal-height="500" data-modal-width="800">Widerrufsbelehrung</a>.</p>{/s}
                     </div>
-                    <div class="space"></div>
                 {/if}
 
                 {* AGB checkbox *}
                 {block name='frontend_checkout_confirm_agb'}
-                    {if !{config name='IgnoreAGB'}}
-                        <div class="agb-holder"></div>
-                    {/if}
-                    <div class="clear"></div>
                 {/block}
 
                 {* Newsletter registration *}
                 {block name='frontend_checkout_confirm_newsletter'}
                     {if !$sUserData.additional.user.newsletter && {config name=newsletter}}
                         <div class="clear"></div>
-                        <div class="newsletter-holder"></div>
                     {/if}
                 {/block}
 
@@ -135,7 +129,9 @@
                             {$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}<br />
                             {$sUserData.billingaddress.street} {$sUserData.billingaddress.streetnumber}<br />
                             {$sUserData.billingaddress.zipcode} {$sUserData.billingaddress.city}<br />
-                            {$sUserData.additional.country.countryname}
+                            {if $sUserData.additional.state.shortcode}{$sUserData.additional.state.shortcode} - {/if}{$sUserData.additional.country.countryname}
+
+
                         </p>
 
                         {* Action buttons *}
@@ -169,7 +165,7 @@
                             {$sUserData.shippingaddress.firstname} {$sUserData.shippingaddress.lastname}<br />
                             {$sUserData.shippingaddress.street} {$sUserData.shippingaddress.streetnumber}<br />
                             {$sUserData.shippingaddress.zipcode} {$sUserData.shippingaddress.city}<br />
-                            {$sUserData.additional.countryShipping.countryname}
+                            {if $sUserData.additional.stateShipping.shortcode}{$sUserData.additional.stateShipping.shortcode} - {/if}{$sUserData.additional.countryShipping.countryname}
                         </p>
 
                         {* Action buttons *}
@@ -240,13 +236,18 @@
                                 <div class="vouchers">
                                     <form method="post" action="{url action='addVoucher' sTargetAction=$sTargetAction}">
                                         {block name='frontend_checkout_table_footer_left_add_voucher_agb'}
-                                            {if !{config name='IgnoreAGB'}}
-                                                <input type="hidden" class="agb-checkbox" name="sAGB" value="{if $sAGBChecked}1{else}0{/if}" />
-                                            {/if}
+                                        {if !{config name='IgnoreAGB'}}
+                                            <input type="hidden" class="agb-checkbox" name="sAGB"
+                                                   value="{if $sAGBChecked}1{else}0{/if}"/>
+                                        {/if}
                                         {/block}
                                         <label for="basket_add_voucher">{s name="CheckoutFooterLabelAddVoucher" namespace="frontend/checkout/cart_footer_left"}{/s}</label>
-                                        <input type="text" class="text" id="basket_add_voucher" name="sVoucher" onfocus="this.value='';" value="{s name='CheckoutFooterAddVoucherLabelInline' namespace="frontend/checkout/cart_footer_left"}{/s}" />
-                                        <input type="submit" value="{s name='CheckoutFooterActionAddVoucher' namespace="frontend/checkout/cart_footer_left"}{/s}" class="button-middle small" />
+                                        <input type="text" class="text" id="basket_add_voucher" name="sVoucher"
+                                               onfocus="this.value='';"
+                                               value="{s name='CheckoutFooterAddVoucherLabelInline' namespace="frontend/checkout/cart_footer_left"}{/s}"/>
+                                        <input type="submit"
+                                               value="{s name='CheckoutFooterActionAddVoucher' namespace="frontend/checkout/cart_footer_left"}{/s}"
+                                               class="box_send"/>
                                     </form>
                                 </div>
                             {/block}
@@ -254,14 +255,9 @@
                             {block name='frontend_checkout_table_footer_left_add_article'}
                                 <div class="add_article">
                                     <form method="post" action="{url action='addArticle' sTargetAction=$sTargetAction}">
-                                        {block name='frontend_checkout_table_footer_left_add_article_agb'}
-                                            {if !{config name='IgnoreAGB'}}
-                                                <input type="hidden" class="agb-checkbox" name="sAGB" value="{if $sAGBChecked}1{else}0{/if}" />
-                                            {/if}
-                                        {/block}
                                         <label for="basket_add_article">{s name='CheckoutFooterLabelAddArticle' namespace="frontend/checkout/cart_footer_left"}{/s}:</label>
                                         <input id="basket_add_article" name="sAdd" type="text" value="{s name='CheckoutFooterIdLabelInline' namespace="frontend/checkout/cart_footer_left"}{/s}" onfocus="this.value='';" class="ordernum text" />
-                                        <input type="submit" class="button-middle small" value="{s name='CheckoutFooterActionAdd' namespace="frontend/checkout/cart_footer_left"}{/s}" />
+                                        <input type="submit" class="box_send" value="{s name='CheckoutFooterActionAdd' namespace="frontend/checkout/cart_footer_left"}{/s}" />
                                     </form>
                                 </div>
                             {/block}
@@ -278,33 +274,34 @@
                         <div class="space"></div>
                     {/if}
 
-                    {* Premiums articles *}
-                    {block name='frontend_checkout_confirm_premiums'}
-                        {if {config name=premiumarticles}}
-                            <div class="space"></div>
-                            {include file='frontend/checkout/premiums.tpl'}
-                        {/if}
-                    {/block}
+					{* Premiums articles *}
+					{block name='frontend_checkout_confirm_premiums'}
+						{if $sPremiums}
+							{if {config name=premiumarticles}}
+								<h2 class="headingbox">{s name="sCartPremiumsHeadline" namespace="frontend/checkout/premiums"}{/s}</h2>
+								{include file='frontend/checkout/premiums.tpl'}
+							{/if}
+						{/if}
+					{/block}
                 </div>
             </div>
             <div class="space"></div>
         {/if}
 
-
         <div class="table grid_16">
 			{block name='frontend_checkout_confirm_confirm_head'}
-           		{include file="frontend/checkout/confirm_header.tpl"}
+            	{include file="frontend/checkout/confirm_header.tpl"}
 			{/block}
 
 			{block name='frontend_checkout_confirm_item_before'}{/block}
 
             {* Article items *}
 			{block name='frontend_checkout_confirm_item_outer'}
-				{foreach name=basket from=$sBasket.content item=sBasketItem key=key}
-					{block name='frontend_checkout_confirm_item'}
-						{include file='frontend/checkout/confirm_item.tpl'}
-					{/block}
-				{/foreach}
+            {foreach name=basket from=$sBasket.content item=sBasketItem key=key}
+                {block name='frontend_checkout_confirm_item'}
+                	{include file='frontend/checkout/confirm_item.tpl'}
+                {/block}
+            {/foreach}
 			{/block}
 
 			{block name='frontend_checkout_confirm_item_after'}{/block}
@@ -333,20 +330,13 @@
 
 
                     {block name='frontend_checkout_confirm_footer'}
-                        {* Include country specific notice message *}
-                        <div class="country-notice grid_16 first">
-                        {if {config name=countrynotice} && $sCountry.notice && {include file="string:{$sCountry.notice}"} !== ""}
-                            {* Include country specific notice message *}
-                            <p>{include file="string:{$sCountry.notice}"}</p>
-                        {/if}
-                        </div>
 
                         {if !$sLaststock.hideBasket}
                             {block name='frontend_checkout_confirm_submit'}
                             {* Submit order button *}
                             <div class="actions">
                                 {if $sPayment.embediframe || $sPayment.action}
-                                    <input type="submit" class="button-right large" id="basketButton" value="{s name='ConfirmDoPayment'}Zahlung durchfÃ¼hren{/s}" />
+                                    <input type="submit" class="button-right large" id="basketButton" value="{s name='ConfirmDoPayment'}Zahlung durchführen{/s}" />
                                 {else}
                                     <input type="submit" class="button-right large" id="basketButton" value="{s name='ConfirmActionSubmit'}{/s}" />
                                 {/if}
@@ -357,7 +347,7 @@
                             <div class="error">
                                 <div class="center">
                                     <strong>
-                                        {s name='ConfirmErrorStock'}Ein Artikel aus Ihrer Bestellung ist nicht mehr verfÃ¼gbar! Bitte entfernen Sie die Position aus dem Warenkorb!{/s}
+                                        {s name='ConfirmErrorStock'}Ein Artikel aus Ihrer Bestellung ist nicht mehr verfügbar! Bitte entfernen Sie die Position aus dem Warenkorb!{/s}
                                     </strong>
                                 </div>
                             </div>
@@ -370,7 +360,8 @@
                     {if !{config name='IgnoreAGB'}}
                     	<input type="checkbox" class="left" name="sAGB" id="sAGB" {if $sAGBChecked} checked="checked"{/if} />
                     {/if}
-                    {* Additional hidden input for IE11 fix empty post body *}
+
+					{* Additional hidden input for IE11 fix empty post body *}
 					<input type="hidden" name="ieCheckValue" value="42" />
                     <label for="sAGB" class="chklabel modal_open {if $sAGBError}instyle_error{/if}">{s name="ConfirmTerms"}{/s}</label>
                 </div>
@@ -379,7 +370,7 @@
                     <div class="more_info">
                         <p>
                             <input type="checkbox" name="sNewsletter" value="1" class="chkbox"{if $sNewsletter} checked="checked"{/if} />
-                            <label for="newsletter" class="chklabel">
+                            <label for="sNewsletter" class="chklabel">
                                 {s name="ConfirmLabelNewsletter"}{/s}
                             </label>
                         </p>
