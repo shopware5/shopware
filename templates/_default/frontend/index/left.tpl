@@ -28,7 +28,7 @@
 
 	{* Campaign left bottom *}
 	{block name='frontend_index_left_campaigns_bottom'}
-		{include file="frontend/campaign/box.tpl" sCategoryCampaigns=$sCampaigns.leftBottom}
+		{include file="frontend/campaign/box.tpl" campaignsData=$sCampaigns.leftBottom}
 	{/block}
 	
 	{* Last articles *}
