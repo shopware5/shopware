@@ -536,6 +536,14 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertEquals(2, count($article->getLinks()));
         $this->assertEquals(2, count($article->getMainDetail()->getPrices()));
 
+        $groups = Shopware()->Models()
+                ->getRepository('Shopware\Models\Article\Configurator\Group')
+                ->findBy(array('name' => array('Group1', 'Group2')));
+
+        foreach ($groups as $group) {
+            Shopware()->Models()->remove($group);
+        }
+
         $this->resource->delete($article);
     }
 
