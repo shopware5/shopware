@@ -309,6 +309,245 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
     }
 
     /**
+     * Test creating an article with new configurator set and multiple variants
+     * SW-7925
+     *
+     * @return int
+     */
+    public function testCreateWithVariantsAndNewConfiguratorSetShouldBeSuccessful()
+    {
+        $testData = array(
+            'name' => 'Test article',
+            'description' => 'Test description',
+            'descriptionLong' => 'Long test description',
+            'active' => true,
+            'pseudoSales' => 999,
+            'highlight' => true,
+            'keywords' => 'test, testarticle',
+            'metaTitle' => 'this is a test title with umlauts äöüß',
+
+            'filterGroupId' => 1,
+
+            'propertyValues' => array(
+                array(
+                    'value' => 'grün',
+                    'option' => array(
+                        'name' => 'Farbe'
+                    )
+                ),
+                array(
+                    'value' => 'testWert',
+                    'option' => array(
+                        'name' => 'neueOption' . uniqid()
+                    )
+                )
+            ),
+
+            'mainDetail' => array(
+                'number' => 'swConfigSetMainTest' . uniqid(),
+                'inStock' => 15,
+                'unitId' => 1,
+
+                'attribute' => array(
+                    'attr1' => 'Freitext1',
+                    'attr2' => 'Freitext2',
+                ),
+
+                'minPurchase' => 5,
+                'purchaseSteps' => 2,
+                'purchaseSteps' => 2,
+
+                'prices' => array(
+                    array(
+                        'customerGroupKey' => 'EK',
+                        'from' => 1,
+                        'to' => 20,
+                        'price' => 500,
+                    ),
+                    array(
+                        'customerGroupKey' => 'EK',
+                        'from' => 21,
+                        'to' => '-',
+                        'price' => 400,
+                    ),
+                )
+            ),
+
+            'configuratorSet' => array(
+                'name' => 'NewConfigSet',
+                'groups' => array(
+                    array(
+                        'name' => 'Group1',
+                        'options' => array(
+                            array('name' => 'Opt11'),
+                            array('name' => 'Opt12')
+                        )
+                    ),
+                    array(
+                        'name' => 'Group2',
+                        'options' => array(
+                            array('name' => 'Opt21'),
+                            array('name' => 'Opt22'),
+                            array('name' => 'Opt23'),
+                            array('name' => 'Opt24'),
+                            array('name' => 'Opt25'),
+                            array('name' => 'Opt26'),
+                            array('name' => 'Opt27')
+                        )
+                    ),
+                )
+            ),
+
+            'variants' => array(
+                array(
+                    'number' => 'swConfigSetMainTest.variant.' . uniqid(),
+                    'inStock' => 17,
+                    // create a new unit
+                    'unit' => array(
+                        'unit' => 'xyz',
+                        'name' => 'newUnit'
+                    ),
+
+                    'attribute' => array(
+                        'attr3' => 'Freitext3',
+                        'attr4' => 'Freitext4',
+                    ),
+
+                    'configuratorOptions' => array(
+                        array(
+                            'option' => 'Opt11',
+                            'group' => 'Group1'
+                        ),
+                        array(
+                            'option' => 'Opt23',
+                            'group' => 'Group2'
+                        ),
+                        array(
+                            'option' => 'Opt24',
+                            'group' => 'Group2'
+                        )
+                    ),
+
+                    'minPurchase' => 5,
+                    'purchaseSteps' => 2,
+
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'H',
+                            'from' => 1,
+                            'to' => 20,
+                            'price' => 500,
+                        ),
+                        array(
+                            'customerGroupKey' => 'H',
+                            'from' => 21,
+                            'to' => '-',
+                            'price' => 400,
+                        ),
+                    )
+                ),
+                array(
+                    'number' => 'swConfigSetMainTest.variant.' . uniqid(),
+                    'inStock' => 18,
+                    // create another new unit
+                    'unit' => array(
+                        'unit' => 'xyz',
+                        'name' => 'newUnit'
+                    ),
+
+                    'attribute' => array(
+                        'attr3' => 'Freitext3',
+                        'attr4' => 'Freitext4',
+                    ),
+
+                    'configuratorOptions' => array(
+                        array(
+                            'option' => 'Opt12',
+                            'group' => 'Group1'
+                        ),
+                        array(
+                            'option' => 'Opt27',
+                            'group' => 'Group2'
+                        )
+                    ),
+
+                    'minPurchase' => 5,
+                    'purchaseSteps' => 2,
+
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'H',
+                            'from' => 1,
+                            'to' => 20,
+                            'price' => 500,
+                        ),
+                        array(
+                            'customerGroupKey' => 'H',
+                            'from' => 21,
+                            'to' => '-',
+                            'price' => 400,
+                        ),
+                    )
+                )
+            ),
+            'taxId' => 1,
+            'supplierId' => 2,
+            'categories' => array(
+                array('id' => 15),
+                array('id' => 10),
+            ),
+            'links' => array(
+                array('name' => 'foobar', 'link' => 'http://example.org'),
+                array('name' => 'Video', 'link' => 'http://example.org'),
+            ),
+        );
+
+        $article = $this->resource->create($testData);
+
+        $this->assertInstanceOf('\Shopware\Models\Article\Article', $article);
+        $this->assertGreaterThan(0, $article->getId());
+
+        $this->assertEquals($article->getName(), $testData['name']);
+        $this->assertEquals($article->getDescription(), $testData['description']);
+        $this->assertEquals($article->getMetaTitle(), $testData['metaTitle']);
+
+        $this->assertEquals($article->getDescriptionLong(), $testData['descriptionLong']);
+        $this->assertEquals(
+            $article->getMainDetail()->getAttribute()->getAttr1(),
+            $testData['mainDetail']['attribute']['attr1']
+        );
+        $this->assertEquals(
+            $article->getMainDetail()->getAttribute()->getAttr2(),
+            $testData['mainDetail']['attribute']['attr2']
+        );
+
+
+        $propertyValues = $article->getPropertyValues()->getValues();
+        $this->assertEquals(count($propertyValues), count($testData['propertyValues']));
+        foreach ($propertyValues as $propertyValue) {
+            $this->assertContains($propertyValue->getValue(), array("grün", "testWert"));
+        }
+
+        $this->assertEquals($testData['taxId'], $article->getTax()->getId());
+
+        $this->assertEquals(2, count($article->getCategories()));
+        $this->assertEquals(0, count($article->getRelated()));
+        $this->assertEquals(0, count($article->getSimilar()));
+        $this->assertEquals(2, count($article->getLinks()));
+        $this->assertEquals(2, count($article->getMainDetail()->getPrices()));
+
+        $groups = Shopware()->Models()
+                ->getRepository('Shopware\Models\Article\Configurator\Group')
+                ->findBy(array('name' => array('Group1', 'Group2')));
+
+        foreach ($groups as $group) {
+            Shopware()->Models()->remove($group);
+        }
+
+        $this->resource->delete($article);
+    }
+
+    /**
      * @depends testCreateShouldBeSuccessful
      */
     public function testGetOneByNumberShouldBeSuccessful($id)
