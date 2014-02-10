@@ -14,15 +14,16 @@
 {block name='frontend_index_content_left'}{/block}
 
 {* Hide breadcrumb *}
-{block name='frontend_index_breadcrumb'}<hr class="clear" />{/block}
+{block name='frontend_index_breadcrumb'}<div class="clear"></div>{/block}
 
 {block name="frontend_index_content"}
 	<div class="grid_16 register" id="center">
 
-			{block name='frontend_register_index_dealer_register'}
-		    {* Included for compatibility reasons *}
-		    {/block}
-			{block name='frontend_register_index_cgroup_header'}
+		{block name='frontend_register_index_dealer_register'}
+			{* Included for compatibility reasons *}
+		{/block}
+
+		{block name='frontend_register_index_cgroup_header'}
 			{if $register.personal.form_data.sValidation}
 			{* Include information related to registration for other customergroups then guest, this block get overridden by b2b essentials plugin *}
 				<div class="supplier_register">
@@ -42,7 +43,7 @@
 					</div>
 				</div>
 			{/if}
-			{/block}
+		{/block}
 
 			
 		<form method="post" action="{url action=saveRegister}">
@@ -84,9 +85,16 @@
 		</form>
 	</div>
 {/block}
+
 {* Sidebar right *}
 {block name='frontend_index_content_right'}
 	<div id="right" class="grid_5 register last">
-		{s name='RegisterInfoAdvantages'}{/s}
+		<div class="register_info">
+			{s name='RegisterInfoAdvantages'}{/s}
+		</div>
+
+	    {if {config name=TSID}}
+	        {include file='frontend/plugins/trusted_shops/logo.tpl'}
+	    {/if}
 	</div>
 {/block}
