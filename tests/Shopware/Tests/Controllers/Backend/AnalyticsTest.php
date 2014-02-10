@@ -55,7 +55,9 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
         $this->repository = new Repository(Shopware()->Models()->getConnection(), Shopware()->Events());
 
-        $this->setUpDemoData();
+        $this->orderNumber = uniqid('SW');
+        $this->articleId = 0;
+        $this->userId = 0;
     }
 
     public function tearDown()
@@ -63,11 +65,9 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $this->removeDemoData();
     }
 
-    private function setUpDemoData()
+    private function createCustomer()
     {
         $this->customerNumber = uniqid();
-        $this->orderNumber = uniqid('SW');
-        $this->orderIds = array();
 
         Shopware()->Db()->insert(
             's_user',
@@ -84,6 +84,19 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         );
         $this->userId = Shopware()->Db()->lastInsertId();
 
+        Shopware()->Db()->insert('s_user_billingaddress', array(
+            'userID'         => $this->userId,
+            'company'        => 'PHPUNIT',
+            'salutation'     => 'mr',
+            'customernumber' => $this->customerNumber,
+            'countryID'      => 2,
+            'stateID'        => 3,
+            'birthday'       => '1990-01-01'
+        ));
+    }
+
+    private function createArticle()
+    {
         Shopware()->Db()->insert(
             's_articles',
             array(
@@ -112,9 +125,12 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         Shopware()->Db()->update(
             's_articles',
             array('main_detail_id' => $this->articleDetailId),
-            'id = ' . $this->articleId
+                'id = ' . $this->articleId
         );
+    }
 
+    private function createCategory()
+    {
         Shopware()->Db()->insert(
             's_categories',
             array(
@@ -132,6 +148,11 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
                 'categoryID' => $this->categoryId
             )
         );
+    }
+
+    private function createOrders()
+    {
+        $this->orderIds = array();
 
         $orders = array(
             array(
@@ -173,6 +194,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
                 'paymentID'          => 2
             )
         );
+
         foreach ($orders as $order) {
             Shopware()->Db()->insert('s_order', $order);
             array_push($this->orderIds, Shopware()->Db()->lastInsertId());
@@ -205,15 +227,11 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         }
 
         $userBillingAddress = array(
-            'userID'         => $this->userId,
             'company'        => 'PHPUNIT',
             'salutation'     => 'mr',
-            'customernumber' => $this->customerNumber,
             'countryID'      => 2,
-            'stateID'        => 3,
-            'birthday'       => '1990-01-01'
+            'stateID'        => 3
         );
-        Shopware()->Db()->insert('s_user_billingaddress', $userBillingAddress);
 
         $orderBillingAddresses = array(
             array(
@@ -247,7 +265,10 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         foreach ($orderBillingAddresses as $address) {
             Shopware()->Db()->insert('s_order_billingaddress', $address);
         }
+    }
 
+    private function createVisitors()
+    {
         $visitors = array(
             array(
                 'shopID'          => 1,
@@ -265,7 +286,10 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         foreach ($visitors as $visitor) {
             Shopware()->Db()->insert('s_statistics_visitors', $visitor);
         }
+    }
 
+    private function createImpressions()
+    {
         Shopware()->Db()->insert(
             's_statistics_article_impression',
             array(
@@ -275,7 +299,10 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
                 'impressions' => 10
             )
         );
+    }
 
+    private function createSearchTerms()
+    {
         Shopware()->Db()->insert(
             's_statistics_search',
             array(
@@ -284,7 +311,10 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
                 'results'    => 10
             )
         );
+    }
 
+    private function createReferrer()
+    {
         Shopware()->Db()->insert(
             's_statistics_referer',
             array(
@@ -299,26 +329,31 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         Shopware()->Db()->delete('s_user', 'id = ' . $this->userId);
         Shopware()->Db()->delete('s_user_billingaddress', 'userID = ' . $this->userId);
         Shopware()->Db()->delete('s_order', 'userID = ' . $this->userId);
+        Shopware()->Db()->delete('s_order_billingaddress', 'userID = ' . $this->userId);
         Shopware()->Db()->delete('s_articles', 'id = ' . $this->articleId);
         Shopware()->Db()->delete('s_articles_details', 'articleID = ' . $this->articleId);
-        Shopware()->Db()->delete('s_statistics_visitors', 'shopID = 1');
         Shopware()->Db()->delete('s_statistics_article_impression', 'articleId = ' . $this->articleId);
-        Shopware()->Db()->delete('s_order_billingaddress', 'userID = ' . $this->userId);
         Shopware()->Db()->delete('s_order_details', 'articleID = ' . $this->articleId);
+        Shopware()->Db()->delete('s_statistics_visitors', 'shopID = 1');
         Shopware()->Db()->delete('s_statistics_search', "searchterm = 'phpunit search term'");
         Shopware()->Db()->delete('s_statistics_referer', "referer = 'http://www.google.de/?q=phpunit'");
-        Shopware()->Db()->delete('s_categories', 'id = ' . $this->categoryId);
-        Shopware()->Db()->delete(
-            's_articles_categories_ro',
-            array(
-                'articleID'  => $this->articleId,
-                'categoryID' => $this->categoryId
-            )
-        );
+
+        if($this->categoryId) {
+            Shopware()->Db()->delete('s_categories', 'id = ' . $this->categoryId);
+            Shopware()->Db()->delete(
+                's_articles_categories_ro',
+                array(
+                    'articleID'  => $this->articleId,
+                    'categoryID' => $this->categoryId
+                )
+            );
+        }
     }
 
     public function testGetVisitorImpressions()
     {
+        $this->createVisitors();
+
         $result = $this->repository->getVisitorImpressions(
             0,
             25,
@@ -356,6 +391,9 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testGetOrdersOfCustomers()
     {
+        $this->createCustomer();
+        $this->createOrders();
+
         $result = $this->repository->getOrdersOfCustomers(
             new DateTime('2013-01-01'),
             new DateTime('2014-01-01')
@@ -376,6 +414,9 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testGetReferrerRevenue()
     {
+        $this->createCustomer();
+        $this->createOrders();
+
         $shop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
         $shop->registerResources(Shopware()->Bootstrap());
 
@@ -401,6 +442,9 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testGetPartnerRevenue()
     {
+        $this->createCustomer();
+        $this->createOrders();
+
         $result = $this->repository->getPartnerRevenue(
             0,
             25,
@@ -423,6 +467,10 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testGetProductSales()
     {
+        $this->createCustomer();
+        $this->createArticle();
+        $this->createOrders();
+
         $result = $this->repository->getProductSales(
             0,
             25,
@@ -444,6 +492,9 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testGetProductImpressions()
     {
+        $this->createArticle();
+        $this->createImpressions();
+
         $result = $this->repository->getProductImpressions(
             0,
             25,
@@ -474,6 +525,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testGetAgeOfCustomers()
     {
+        $this->createCustomer();
+
         $result = $this->repository->getAgeOfCustomers(
             new DateTime('2013-01-01'),
             new DateTime('2014-01-01'),
@@ -494,6 +547,9 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testGetAmountPerHour()
     {
+        $this->createCustomer();
+        $this->createOrders();
+
         $result = $this->repository->getAmountPerHour(
             new DateTime('2013-01-01'),
             new DateTime('2014-01-01'),
@@ -517,6 +573,9 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testGetAmountPerWeekday()
     {
+        $this->createCustomer();
+        $this->createOrders();
+
         $result = $this->repository->getAmountPerWeekday(
             new DateTime('2013-01-01'),
             new DateTime('2014-01-01')
@@ -537,6 +596,9 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testGetAmountPerCalendarWeek()
     {
+        $this->createCustomer();
+        $this->createOrders();
+
         $result = $this->repository->getAmountPerCalendarWeek(
             new DateTime('2013-01-01'),
             new DateTime('2014-01-01')
@@ -557,6 +619,9 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testGetAmountPerMonth()
     {
+        $this->createCustomer();
+        $this->createOrders();
+
         $result = $this->repository->getAmountPerMonth(
             new DateTime('2013-01-01'),
             new DateTime('2014-01-01')
@@ -577,6 +642,9 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testGetCustomerGroupAmount()
     {
+        $this->createCustomer();
+        $this->createOrders();
+
         $result = $this->repository->getCustomerGroupAmount(
             new DateTime('2013-01-01'),
             new DateTime('2014-01-01')
@@ -597,6 +665,9 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testGetAmountPerCountry()
     {
+        $this->createCustomer();
+        $this->createOrders();
+
         $result = $this->repository->getAmountPerCountry(
             new DateTime('2013-01-01'),
             new DateTime('2014-01-01')
@@ -617,6 +688,9 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testGetAmountPerShipping()
     {
+        $this->createCustomer();
+        $this->createOrders();
+
         $result = $this->repository->getAmountPerShipping(
             new DateTime('2013-01-01'),
             new DateTime('2014-01-01')
@@ -637,6 +711,9 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testGetAmountPerPayment()
     {
+        $this->createCustomer();
+        $this->createOrders();
+
         $result = $this->repository->getAmountPerPayment(
             new DateTime('2013-01-01'),
             new DateTime('2014-01-01')
@@ -657,6 +734,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testGetSearchTerms()
     {
+        $this->createSearchTerms();
+
         $result = $this->repository->getSearchTerms(
             0,
             25,
@@ -684,6 +763,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testGetDailyVisitors()
     {
+        $this->createVisitors();
+
         $result = $this->repository->getDailyVisitors(
             new DateTime('2013-01-01'),
             new DateTime('2014-01-01')
@@ -710,6 +791,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testGetDailyShopVisitors()
     {
+        $this->createVisitors();
+
         $result = $this->repository->getDailyShopVisitors(
             new DateTime('2013-01-01'),
             new DateTime('2014-01-01'),
@@ -739,6 +822,9 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testGetDailyShopOrders()
     {
+        $this->createCustomer();
+        $this->createOrders();
+
         $result = $this->repository->getDailyShopOrders(
             new DateTime('2013-01-01'),
             new DateTime('2014-01-01'),
@@ -770,6 +856,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testGetDailyRegistrations()
     {
+        $this->createCustomer();
+
         $result = $this->repository->getDailyRegistrations(
             new DateTime('2013-01-01'),
             new DateTime('2014-01-01')
@@ -789,6 +877,9 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testGetDailyTurnover()
     {
+        $this->createCustomer();
+        $this->createOrders();
+
         $result = $this->repository->getDailyTurnover(
             new DateTime('2013-01-01'),
             new DateTime('2014-01-01')
@@ -809,6 +900,10 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testGetProductAmountPerManufacturer()
     {
+        $this->createCustomer();
+        $this->createArticle();
+        $this->createOrders();
+
         $result = $this->repository->getProductAmountPerManufacturer(
             0,
             25,
@@ -830,6 +925,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testGetVisitedReferrer()
     {
+        $this->createReferrer();
+
         $result = $this->repository->getVisitedReferrer(
             0,
             25,
@@ -850,6 +947,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testGetReferrerUrls()
     {
+        $this->createReferrer();
+
         $result = $this->repository->getReferrerUrls(
             'google.de',
             0,
@@ -869,6 +968,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testGetReferrerSearchTerms()
     {
+        $this->createReferrer();
+
         $result = $this->repository->getReferrerSearchTerms('google.de');
         $data = $result->getData();
 
@@ -890,6 +991,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     private function getSearchTermFromReferrerUrl($url)
     {
+
         preg_match_all(
             "#[?&]([qp]|query|highlight|encquery|url|field-keywords|as_q|sucheall|satitle|KW)=([^&\\$]+)#",
                 utf8_encode($url) . "&",
@@ -909,6 +1011,11 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testGetProductAmountPerCategory()
     {
+        $this->createArticle();
+        $this->createCategory();
+        $this->createCustomer();
+        $this->createOrders();
+
         $result = $this->repository->getProductAmountPerCategory(
             1,
             new DateTime('2013-01-01'),
@@ -930,6 +1037,9 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     public function testOrderCurrencyFactor()
     {
+        $this->createCustomer();
+        $this->createOrders();
+
         $result = $this->repository->getAmountPerHour(
             new DateTime('2014-01-01'),
             new DateTime('2014-02-02')
