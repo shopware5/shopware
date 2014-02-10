@@ -103,6 +103,10 @@ class Kernel implements HttpKernelInterface
         $this->name = 'Shopware';
 
         $this->initializeConfig();
+
+        if (!empty($this->config['phpsettings'])) {
+            $this->setPhpSettings($this->config['phpsettings']);
+        }
     }
 
     /**
@@ -259,6 +263,24 @@ class Kernel implements HttpKernelInterface
         // Set up mpdf cache dirs
         define("_MPDF_TEMP_PATH", $this->getRootDir() .'/cache/mpdf/tmp/');
         define("_MPDF_TTFONTDATAPATH", $this->getRootDir() .'/cache/mpdf/ttfontdata/');
+    }
+
+    /**
+     * Sets the php settings from the config
+     *
+     * @param array $settings
+     * @param string $prefix
+     */
+    public function setPhpSettings(array $settings, $prefix = '')
+    {
+        foreach ($settings as $key => $value) {
+            $key = empty($prefix) ? $key : $prefix . $key;
+            if (is_scalar($value)) {
+                ini_set($key, $value);
+            } elseif (is_array($value)) {
+                $this->setPhpSettings($value, $key . '.');
+            }
+        }
     }
 
     /**
@@ -538,6 +560,6 @@ class Kernel implements HttpKernelInterface
      */
     public function getHttpCacheConfig()
     {
-        return is_array($this->config['httpCache']) ? $this->config['httpCache'] : array();
+        return is_array($this->config['httpcache']) ? $this->config['httpcache'] : array();
     }
 }

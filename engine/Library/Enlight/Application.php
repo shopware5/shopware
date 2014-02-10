@@ -349,6 +349,7 @@ class Enlight_Application
      * This method sets the configuration of the options parameter into the different configurations.
      * If the options are not an array, the loadConfig method should be used to convert the options into an array.
      *
+     * @deprecated 4.2
      * @param array $options
      * @return Enlight_Application
      */
@@ -406,6 +407,7 @@ class Enlight_Application
     /**
      * Sets the php settings from the config
      *
+     * @deprecated 4.2
      * @param array $settings
      * @param string $prefix
      * @return Enlight_Application
@@ -426,6 +428,7 @@ class Enlight_Application
     /**
      * Sets include paths
      *
+     * @deprecated 4.2
      * @param array $paths
      * @return Enlight_Application
      */
