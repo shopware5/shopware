@@ -112,7 +112,7 @@
 						<input type="submit" value="{s name=sNewsletterButton}{/s}" class="button-right large"/>
 					</fieldset>
 				</form>
-				<hr class="clear"/>
+				<div class="clear"></div>
 			</div>
 		{/if}
 	</div>
