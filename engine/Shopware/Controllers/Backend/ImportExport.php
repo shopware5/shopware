@@ -1685,6 +1685,13 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 $imageData['main'] = 1;
             }
 
+            //generate thumbnails
+            if ($media->getType() ==  \Shopware\Models\Media\Media::TYPE_IMAGE) {
+                /**@var $manager \Shopware\Components\Thumbnail\Manager */
+                $manager = Shopware()->Container()->get('thumbnail_manager');
+                $manager->createMediaThumbnail($media);
+            }
+
             $image->setArticle($article);
             $image->setDescription($imageData['description']);
             $image->setPosition($imageData['position']);
