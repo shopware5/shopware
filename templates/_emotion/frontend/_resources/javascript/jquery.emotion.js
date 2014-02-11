@@ -303,8 +303,7 @@
     var pluginName = 'httpCacheFilters',
         defaults = {
             mode: 'listing'
-        },
-        hasSessionStorageSupport = typeof(window.Storage) !== 'undefined' || !window.hasOwnProperty('sessionStorage');
+        };
 
     /**
      * Plugin constructor which merges the default settings
@@ -322,6 +321,7 @@
         me.opts = $.extend({}, defaults, options);
         me._defaults = defaults;
         me._name = pluginName;
+        me._hasSessionStorageSupport = me.isSessionStorageSupported();
 
         me.init();
     }
@@ -337,7 +337,7 @@
             mode;
 
         // Check if the browser support { @link sessionStorage }
-        if(!hasSessionStorageSupport) {
+        if(!me._hasSessionStorageSupport) {
             return false;
         }
 
@@ -393,10 +393,12 @@
      * @returns { Boolean }
      */
     Plugin.prototype.saveCurrentState = function(url) {
-        if(!url || !url.length) {
-            url = window.location.href;
+        var me = this,
+            itemValue = url || window.location.href;
+
+        if (me._hasSessionStorageSupport) {
+            window.sessionStorage.setItem(pluginName, itemValue);
         }
-        window.sessionStorage.setItem(pluginName, url);
 
         return true;
     };
@@ -416,6 +418,29 @@
 
         window.sessionStorage.removeItem(pluginName);
         return true;
+    };
+
+    /**
+     * Returns whether or not the sessionStorage is available and works - SW-7524
+     *
+     * @returns {boolean}
+     */
+    Plugin.prototype.isSessionStorageSupported = function () {
+        var testKey = 'test',
+            supported = typeof(window.Storage) !== 'undefined' || !window.hasOwnProperty('sessionStorage'),
+            storage = window.sessionStorage;
+
+        if (!supported) {
+            return supported;
+        }
+
+        try {
+            storage.setItem(testKey, '1');
+            storage.removeItem(testKey);
+            return supported;
+        } catch (error) {
+            return false;
+        }
     };
 
     /** Lightweight plugin starter */
