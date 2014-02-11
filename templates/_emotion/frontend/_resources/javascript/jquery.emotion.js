@@ -321,7 +321,7 @@
         me.opts = $.extend({}, defaults, options);
         me._defaults = defaults;
         me._name = pluginName;
-        me._hasSessionStorageSupport = me.isSessionStorageSupported();
+        me.hasSessionStorageSupport = me.isSessionStorageSupported();
 
         me.init();
     }
@@ -337,7 +337,7 @@
             mode;
 
         // Check if the browser support { @link sessionStorage }
-        if(!me._hasSessionStorageSupport) {
+        if(!me.hasSessionStorageSupport) {
             return false;
         }
 
@@ -396,7 +396,7 @@
         var me = this,
             itemValue = url || window.location.href;
 
-        if (me._hasSessionStorageSupport) {
+        if (me.hasSessionStorageSupport) {
             window.sessionStorage.setItem(pluginName, itemValue);
         }
 
