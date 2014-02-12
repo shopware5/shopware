@@ -48,7 +48,7 @@ Ext.define('Ext.data.writer.Json-Shopware', {
                     value = record.get(field.name);
                     if (field.serialize) {
                         data[name] = field.serialize(value, record);
-                    } else if (field.type === Ext.data.Types.DATE && field.dateFormat) {
+                    } else if (field.type === Ext.data.Types.DATE && field.dateFormat && Ext.isDate(value)) {
                         data[name] = Ext.Date.format(value, field.dateFormat);
                     } else {
                         data[name] = value;
@@ -66,7 +66,7 @@ Ext.define('Ext.data.writer.Json-Shopware', {
                         value = record.get(field.name);
                         if (field.serialize) {
                             data[name] = field.serialize(value, record);
-                        } else if (field.type === Ext.data.Types.DATE && field.dateFormat) {
+                        } else if (field.type === Ext.data.Types.DATE && field.dateFormat && Ext.isDate(value)) {
                             data[name] = Ext.Date.format(value, field.dateFormat);
                         } else {
                             data[name] = value;

@@ -104,7 +104,7 @@ class Shopware_Plugins_Frontend_LastArticles_Bootstrap extends Shopware_Componen
             && !Shopware()->Session()->Bot
             && Shopware()->Shop()->getTemplate()->getVersion() == 1
         ) {
-            $this->setLastArticle($view->sArticle);
+            $this->setLastArticleById($view->sArticle["articleID"]);
         }
 
         if (rand(0, 100) === 0) {

@@ -20,8 +20,9 @@ $configObj = new Shopware_Install_Configuration();
 $basepath = $configObj->getShopDomain();
 
 if (!isset($_SESSION)) {
+    $sessionPath = str_replace('index.php','',$app->request()->getScriptName());
     session_cache_limiter(false);
-    session_set_cookie_params(600, $basepath['basepath']);
+    session_set_cookie_params(600, $sessionPath);
     session_start();
 }
 

@@ -58,6 +58,10 @@ class Shopware_Tests_Components_Api_MediaTest extends Shopware_Tests_Components_
 
         $media = $this->resource->create($data);
         $this->assertFileExists($path);
+
+        //check if the thumbnails are generated
+        $path = Shopware()->DocPath('media_image_thumbnail') . '/test-bild-used_140x140.jpg';
+        $this->assertFileExists($path);
     }
 
 
