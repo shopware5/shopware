@@ -55,6 +55,8 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
         items.push('-');
         items.push(me.createConfigureButton());
         items.push(me.createAddButton());
+        items.push('->')
+        items.push(me.createSearchField());
 
         return items;
     },
@@ -136,6 +138,25 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
         });
 
         return me.addButton;
+    },
+
+    createSearchField: function() {
+        var me = this;
+
+        me.searchField = Ext.create('Ext.form.field.Text', {
+            cls: 'searchfield',
+            width: 170,
+            emptyText: 'Search ...',
+            enableKeyEvents: true,
+            checkChangeBuffer: 500,
+            listeners: {
+                change: function (field, value) {
+                    me.fireEvent('search-theme', me, field, value);
+                }
+            }
+        });
+
+        return me.searchField;
     }
 
 });

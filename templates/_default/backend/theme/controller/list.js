@@ -19,14 +19,38 @@ Ext.define('Shopware.apps.Theme.controller.List', {
             },
             'theme-list-window': {
                 'assign-theme': me.onAssignTheme,
-                'preview-theme': me.onPreviewTheme
+                'preview-theme': me.onPreviewTheme,
+                'search-theme': me.onSearchTheme
             }
         });
 
         me.mainWindow = me.getView('list.Window').create({ }).show();
     },
 
+    /**
+     * Event listener of the listing window search field.
+     * Filters the store with the passed value.
+     *
+     * @param window
+     * @param field
+     * @param value
+     * @returns { boolean }
+     */
+    onSearchTheme: function(window, field, value) {
+        var me = this,
+            listing = me.getListingView(),
+            store = listing.getStore();
 
+        value = Ext.String.trim(value);
+        store.filters.clear();
+        store.currentPage = 1;
+
+        if (value.length > 0) {
+            store.filter({ property: 'search', value: value });
+        } else {
+            store.load();
+        }
+    },
 
     /**
      * Event listener of the toolbar "assign button".
