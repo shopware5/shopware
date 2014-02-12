@@ -45,6 +45,9 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         parent::listAction();
     }
 
+    /**
+     * Controller action which used from the article selection configuration field.
+     */
     public function getArticlesAction()
     {
         $this->View()->assign(
@@ -57,41 +60,10 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         );
     }
 
-    protected function getArticles($offset, $limit, $id, $query)
-    {
-        $builder = $this->getManager()->createQueryBuilder();
-        $builder->select(array('article'))
-            ->from('Shopware\Models\Article\Article', 'article')
-            ->setFirstResult($offset)
-            ->setMaxResults($limit);
-
-        if ($this->Request()->getParam('id')) {
-            $builder->andWhere('article.id = :id')
-                ->setParameter('id', $id);
-        } else if ($query) {
-            $filters = $this->getFilterConditions(
-                array(array('property' => 'search', 'value' => $query)),
-                'Shopware\Models\Article\Article',
-                'article'
-            );
-            if (!empty($filters)) {
-                $builder->addFilter($filters);
-            }
-        }
-
-        $query = $builder->getQuery();
-        $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
-
-        $paginator = $this->getManager()->createPaginator($query);
-
-        return array(
-            'success' => true,
-            'data' => $paginator->getIterator()->getArrayCopy(),
-            'total' => $paginator->count()
-        );
-    }
 
     /**
+     * Override of the Application controller to select all template associations.
+     *
      * @param $id
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
@@ -154,27 +126,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         $this->getManager()->flush();
     }
 
-    /**
-     * Helper function to get the theme configuration value of the passed
-     * value collection.
-     * If no shop value exist, the function creates a new value object.
-     *
-     * @param ArrayCollection $collection
-     * @param $shopId
-     * @return Template\ConfigValue
-     */
-    private function getElementShopValue(ArrayCollection $collection, $shopId)
-    {
-        /**@var $value Template\ConfigValue */
-        foreach ($collection as $value) {
-            if ($value->getShop()->getId() == $shopId) {
-                return $value;
-            }
-        }
-        $value = new Template\ConfigValue();
-        $collection->add($value);
-        return $value;
-    }
+
 
     /**
      * The getList function returns an array of the configured class model.
@@ -217,6 +169,8 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     }
 
     /**
+     * Override of the Application controller to select the template configuration.
+     *
      * @return \Shopware\Components\Model\QueryBuilder
      */
     protected function getListQuery()
@@ -252,6 +206,12 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         return array('success' => true);
     }
 
+    /**
+     * Returns the current selected template for the passed shop id.
+     *
+     * @param $shopId
+     * @return Template
+     */
     protected function getShopTemplate($shopId)
     {
         $builder = $this->getRepository()->createQueryBuilder('template');
@@ -264,6 +224,10 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         );
     }
 
+    /**
+     * Returns the id of the default shop.
+     * @return string
+     */
     private function getDefaultShopId()
     {
         return Shopware()->Db()->fetchOne(
@@ -289,4 +253,71 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         }
         return null;
     }
+
+    /**
+     * Helper function to get the theme configuration value of the passed
+     * value collection.
+     * If no shop value exist, the function creates a new value object.
+     *
+     * @param ArrayCollection $collection
+     * @param $shopId
+     * @return Template\ConfigValue
+     */
+    private function getElementShopValue(ArrayCollection $collection, $shopId)
+    {
+        /**@var $value Template\ConfigValue */
+        foreach ($collection as $value) {
+            if ($value->getShop()->getId() == $shopId) {
+                return $value;
+            }
+        }
+        $value = new Template\ConfigValue();
+        $collection->add($value);
+        return $value;
+    }
+
+
+    /**
+     * Used for the article selection configuration field.
+     *
+     * @param $offset
+     * @param $limit
+     * @param $id
+     * @param $query
+     * @return array
+     */
+    protected function getArticles($offset, $limit, $id, $query)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select(array('article'))
+            ->from('Shopware\Models\Article\Article', 'article')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit);
+
+        if ($this->Request()->getParam('id')) {
+            $builder->andWhere('article.id = :id')
+                ->setParameter('id', $id);
+        } else if ($query) {
+            $filters = $this->getFilterConditions(
+                array(array('property' => 'search', 'value' => $query)),
+                'Shopware\Models\Article\Article',
+                'article'
+            );
+            if (!empty($filters)) {
+                $builder->addFilter($filters);
+            }
+        }
+
+        $query = $builder->getQuery();
+        $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
+
+        $paginator = $this->getManager()->createPaginator($query);
+
+        return array(
+            'success' => true,
+            'data' => $paginator->getIterator()->getArrayCopy(),
+            'total' => $paginator->count()
+        );
+    }
+
 }
