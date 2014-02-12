@@ -1,15 +1,15 @@
 <div class="table_row {if $lastrow} lastrow{/if}">
 
+	{* Reviews *}
+	{if !{config name=VoteDisable}}
+		<div class="rating{if !$sUserLoggedIn} full_length{/if}">
+			<div class="star star{($sBasketItem.sVoteAverange.averange*2)|round}"></div>
+		</div>
+	{/if}
+
 	{* Article informations *}
 	<div class="grid_12">
-	
-		{* Reviews *}
-		{if !{config name=VoteDisable}}
-			<div class="rating">
-				<div class="star star{($sBasketItem.sVoteAverange.averange*2)|round}"></div>
-			</div>
-		{/if}
-		
+
 		{* Article picture *}
 		{if $sBasketItem.image.src.0}
 			<a href="{$sBasketItem.linkDetails}" title="{$sBasketItem.articlename}" class="thumb_image">
@@ -24,54 +24,51 @@
 				<img class="no_image" src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{$sBasketItem.articlename}" />
 			</a>
 		{/if}
-		
-		
-		
+
+
+
 		{* Delivery informations *}
 		{if {config name=BASKETSHIPPINGINFO}}
-			<div class="delivery">
+			<div class="delivery{if !$sUserLoggedIn} full_length{/if}{if {config name=VoteDisable}} vote_disabled{/if}"  >
 				{include file="frontend/plugins/index/delivery_informations.tpl" sArticle=$sBasketItem}
 			</div>
 		{/if}
-		
+
 		<div class="basket_details">
 			{* Article name *}
 			<a class="title" href="{$sBasketItem.linkDetails}" title="{$sBasketItem.articlename}">
 				{$sBasketItem.articlename|truncate:40}
 			</a>
-			
+
 			{* Supplier name *}
 			<div class="supplier">
 				{s name='NoteInfoSupplier'}{/s} {$sBasketItem.supplierName}
 			</div>
-			
+
 			{* Order number *}
 			<p class="ordernumber">
 				{se name='NoteInfoId'}{/se} {$sBasketItem.ordernumber}
 			</p>
-			
+
 			{* Article Description *}
 			<p class="desc">
 				{$sBasketItem.description_long|strip_tags|trim|truncate:160}
-				
+
 				{* Unit price *}
 				{block name="frontend_note_item_unitprice"}
 				{if $sBasketItem.purchaseunit}
-                    <div class="article_price_unit">
-		                <p>
-		                    <strong>{se name="NoteUnitPriceContent"}{/se}:</strong> {$sBasketItem.purchaseunit} {$sBasketItem.sUnit.description}
-		                </p>
-		                {if $sBasketItem.purchaseunit != $sBasketItem}
-		                    <p>
-		                        {if $sBasketItem.referenceunit}
-		                            <strong class="baseprice">{se name="NoteUnitPriceBaseprice"}{/se}:</strong> {$sBasketItem.referenceunit} {$sBasketItem.sUnit.description} = {$sBasketItem.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
-		                        {/if}
-		                    </p>
-		                {/if}
-		            </div>
-		        {/if}
+						<div class="article_price_unit">
+						<p>
+							<strong>{se name="NoteUnitPriceContent"}{/se}:</strong> {$sBasketItem.purchaseunit} {$sBasketItem.sUnit.description}
+							{if $sBasketItem.purchaseunit != $sBasketItem}
+								{if $sBasketItem.referenceunit}
+									({$sBasketItem.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s} / {$sBasketItem.referenceunit} {$sBasketItem.sUnit.description})
+								{/if}
+							{/if}
+						</p>
+					</div>
+				{/if}
 				{/block}
-				
 			</p>
 			{if $sBasketItem.datum_add}
 				{* added date *}
@@ -81,9 +78,9 @@
 			{/if}
 			{block name="frontend_note_index_items"}{/block}
 		</div>
-		
+
 	</div>
-	
+
 	{* Unit price *}
 	<div>
 		{block name="frontend_note_item_price"}
@@ -92,12 +89,12 @@
 		{else}
 			<strong class="price">{if $sBasketItem.priceStartingFrom}{s namespace='frontend/listing/box_article' name='ListingBoxArticleStartsAt'}{/s} {/if}{$sBasketItem.price|currency}*</strong>
 		{/if}
-		
+
 		{* Remove article *}
 		<a href="{url controller='note' action='delete' sDelete=$sBasketItem.id}" class="delete" title="{s name='NoteLinkDelete'}{/s}">
 			{se name='NoteLinkDelete'}{/se}
 		</a>
-		
+
 		{* Additional links *}
 		{block name="frontend_note_item_actions"}
 		<div class="action">
@@ -107,7 +104,7 @@
 				{s name='NoteLinkBuy'}{/s}
 			</a>
 			{/if}
-			
+
 			{* Compare article *}
 			{block name="frontend_note_item_actions_compare"}{/block}
 
@@ -118,5 +115,5 @@
 		</div>
 		{/block}
 	{/block}
-	</div>	
+	</div>
 </div>
