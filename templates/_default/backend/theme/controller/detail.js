@@ -74,8 +74,11 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
             if (element.getConfigValues() instanceof Ext.data.Store) {
                 data.value = me.getElementShopValue(element, shop);
             }
+            if (data.xtype == "theme-checkbox-field" && data.value) {
+                data.checked = true;
+            }
 
-            elements.push(element.data);
+            elements.push(data);
         });
         return elements;
     },

@@ -4,10 +4,17 @@ Ext.define('Shopware.apps.Theme.view.detail.elements.ArticleSelection', {
 
     alias: 'widget.theme-article-selection',
 
-    initComponent: function() {
-        var me = this;
+    hideTrigger: true,
 
-        me.store = Ext.create('Shopware.apps.Base.store.Article').load();
+    initComponent: function() {
+        var me = this, params = { };
+
+        if (me.value) {
+            params.id = me.value
+        }
+
+        me.store = Ext.create('Shopware.apps.Theme.store.Article').load(params);
+
         me.callParent(arguments);
     }
 });
