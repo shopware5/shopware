@@ -7,6 +7,13 @@
 	{assign var='sBreadcrumb' value=[['name'=>"{s name='AccountTitle'}{/s}", 'link' =>{url action='index'}]]}
 {/block}
 
+{* Breadcrumb *}
+{block name='frontend_index_breadcrumb'}
+	<div id="breadcrumb" class="account">
+		{se name='AccountHeaderWelcome'}{/se}, <strong style="font-weight:bold;">{$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}</strong>
+	</div>
+{/block}
+
 {block name='frontend_index_content'}
 <div class="grid_16 account" id="center">
 	<div class="cat_text">
@@ -43,9 +50,10 @@
 				{$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}<br />
 				{$sUserData.additional.user.email}
 			</p>
-			
-			<a href="#" class="button-middle small change_password hide_script">{se name="AccountLinkChangePassword"}{/se}</a>
-			<a href="#" class="button-middle small change_mail hide_script">{se name='AccountLinkChangeMail'}{/se}</a>
+			<div class="change">
+				<a href="#" class="button-middle small change_password">{se name="AccountLinkChangePassword"}{/se}</a>
+				<a href="#" class="button-middle small change_mail">{se name='AccountLinkChangeMail'}{/se}</a>
+			</div>
 		</div>
 	</div>
 	{/block}
