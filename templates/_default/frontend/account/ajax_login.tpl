@@ -21,13 +21,14 @@
 		<form method="get" name="new_customer" class="new_customer_form" action="{url controller='register'}">
 		<p>
 			{se name="LoginInfoNew"}{/se}
-			
-			<br />
-			
-			{if !{config name=NoAccountDisable}}
-				<input type="checkbox" class="chk_noaccount" name="skipLogin" value="1" /> <strong>{se name="LoginLabelNoAccount"}Kein Kundenkonto erstellen{/se}</strong>
-			{/if}
 		</p>
+		<div class="clear"></div>
+		{if !{config name=NoAccountDisable}}
+		<div class="checkbox">
+				<input type="checkbox" class="chk_noaccount" id="skipLogin" name="skipLogin" value="1" />
+				<label class="chklabel" for="skipLogin">{se name="LoginLabelNoAccount"}Kein Kundenkonto erstellen{/se}</label>
+		</div>
+		{/if}
 
 		<input type="submit" class="button-right large left" value="{s name='LoginActionCreateAccount'}Weiter{/s}" />
 		
