@@ -25,7 +25,6 @@ Ext.define('Shopware.apps.Theme', {
         'detail.elements.EmField',
         'detail.elements.MediaSelection',
         'detail.elements.PercentField',
-        'detail.elements.SnippetSelection',
         'detail.elements.TextAreaField',
         'detail.elements.TextField'
     ],
