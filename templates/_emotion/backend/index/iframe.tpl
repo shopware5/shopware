@@ -37,7 +37,7 @@
 		enabled: true,
 		disableCaching: true,
 		disableCachingParam: 'no-cache',
-		disableCachingValue: '{time()}{if $user && $user->locale}+{$user->locale->getId()}+{$user->role->getId()}{/if}'
+		disableCachingValue: '{timestamp}{if $user && $user->locale}+{$user->locale->getId()}+{$user->role->getId()}{/if}'
 	});
     Ext.Loader.setPath('Shopware.apps', '{url module=backend action=index}', '?file=app');
 </script>
