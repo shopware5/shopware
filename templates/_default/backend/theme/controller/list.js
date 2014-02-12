@@ -1,4 +1,3 @@
-
 Ext.define('Shopware.apps.Theme.controller.List', {
     extend: 'Enlight.app.Controller',
 
@@ -10,7 +9,7 @@ Ext.define('Shopware.apps.Theme.controller.List', {
         { ref: 'infoPanel', selector: 'theme-listing-info-panel' }
     ],
 
-    init: function() {
+    init: function () {
         var me = this;
 
         me.control({
@@ -36,7 +35,7 @@ Ext.define('Shopware.apps.Theme.controller.List', {
      * @param value
      * @returns { boolean }
      */
-    onSearchTheme: function(window, field, value) {
+    onSearchTheme: function (window, field, value) {
         var me = this,
             listing = me.getListingView(),
             store = listing.getStore();
@@ -56,7 +55,7 @@ Ext.define('Shopware.apps.Theme.controller.List', {
      * Event listener of the toolbar "assign button".
      * Switches the shop template.
      */
-    onAssignTheme: function() {
+    onAssignTheme: function () {
         var me = this, shop, theme;
 
         shop = me.getSelectedShop();
@@ -69,16 +68,48 @@ Ext.define('Shopware.apps.Theme.controller.List', {
                 shopId: shop.get('id'),
                 themeId: theme.get('id')
             },
-            success: function(response, opts) {
+            success: function (response, opts) {
                 me.getListingView().getStore().load();
             }
         });
     },
 
 
+    onPreviewTheme: function () {
+        var me = this, shop, theme = null,
+            url = '{url controller="theme" action="preview"}';
 
-    onPreviewTheme: function() {
+        shop = me.getSelectedShop();
+        theme = me.getSelectedTheme();
 
+        //preview window already opened?
+        if (me.previewWindow) {
+            me.previewWindow.close();
+            me.previewWindow = null;
+
+            me.getListingWindow().previewButton.setText('Preview theme');
+            me.removePreviewFlag()
+        } else {
+            url += '?themeId=' + theme.get('id') + '&shopId=' + shop.get('id');
+
+            me.getListingWindow().previewButton.setText('Stop preview');
+            theme.set('preview', true);
+            me.previewWindow = window.open(url);
+        }
+
+        me.enableToolbarButtons();
+    },
+
+    /**
+     * Helper function which removes the preview flag of each listing record.
+     */
+    removePreviewFlag: function() {
+        var me = this,
+            store = me.getListingView().getStore();
+
+        store.each(function(item) {
+            item.set('preview', false);
+        });
     },
 
     /**
@@ -90,26 +121,43 @@ Ext.define('Shopware.apps.Theme.controller.List', {
      * @param view
      * @param records
      */
-    onSelectTheme: function(view, records) {
+    onSelectTheme: function (view, records) {
         var me = this;
         var record = { };
+
+        if (records.length > 0) {
+            record = records.shift();
+        }
+
+        me.enableToolbarButtons();
+
+        me.getInfoPanel().updateInfoView(record);
+    },
+
+    /**
+     * @param record
+     */
+    enableToolbarButtons: function() {
+        var me = this;
+
+        var record = me.getSelectedTheme();
 
         me.getListingWindow().previewButton.disable();
         me.getListingWindow().assignButton.disable();
         me.getListingWindow().configureButton.disable();
 
-        if (records.length > 0) {
-            record = records.shift();
-
+        if (record instanceof Ext.data.Model) {
             me.getListingWindow().previewButton.enable();
             me.getListingWindow().assignButton.enable();
 
-            if (record && record.getElements().getCount() > 0) {
+            if (record.getElements().getCount() > 0) {
                 me.getListingWindow().configureButton.enable();
             }
         }
 
-        me.getInfoPanel().updateInfoView(record);
+        if (me.previewWindow) {
+            me.getListingWindow().previewButton.enable();
+        }
     },
 
     /**
@@ -117,7 +165,7 @@ Ext.define('Shopware.apps.Theme.controller.List', {
      *
      * @returns { Shopware.apps.Theme.model.Theme }
      */
-    getSelectedTheme: function() {
+    getSelectedTheme: function () {
         var me = this;
 
         if (!(me.getListingView())) {
@@ -138,7 +186,7 @@ Ext.define('Shopware.apps.Theme.controller.List', {
      *
      * @returns { Shopware.apps.Base.model.Shop }
      */
-    getSelectedShop: function() {
+    getSelectedShop: function () {
         var me = this;
 
         if (!(me.getShopCombo())) {
