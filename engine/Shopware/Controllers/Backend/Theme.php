@@ -1,6 +1,7 @@
 <?php
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\AbstractQuery;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
 
@@ -42,6 +43,52 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         $this->container->get('theme_manager')->registerThemes();
 
         parent::listAction();
+    }
+
+    public function getArticlesAction()
+    {
+        $this->View()->assign(
+            $this->getArticles(
+                $this->Request()->getParam('start'),
+                $this->Request()->getParam('limit'),
+                $this->Request()->getParam('id'),
+                $this->Request()->getParam('query', null)
+            )
+        );
+    }
+
+    protected function getArticles($offset, $limit, $id, $query)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select(array('article'))
+            ->from('Shopware\Models\Article\Article', 'article')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit);
+
+        if ($this->Request()->getParam('id')) {
+            $builder->andWhere('article.id = :id')
+                ->setParameter('id', $id);
+        } else if ($query) {
+            $filters = $this->getFilterConditions(
+                array(array('property' => 'search', 'value' => $query)),
+                'Shopware\Models\Article\Article',
+                'article'
+            );
+            if (!empty($filters)) {
+                $builder->addFilter($filters);
+            }
+        }
+
+        $query = $builder->getQuery();
+        $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
+
+        $paginator = $this->getManager()->createPaginator($query);
+
+        return array(
+            'success' => true,
+            'data' => $paginator->getIterator()->getArrayCopy(),
+            'total' => $paginator->count()
+        );
     }
 
     /**
@@ -213,7 +260,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             ->setParameter('shopId', $shopId);
 
         return $builder->getQuery()->getOneOrNullResult(
-            \Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT
+            AbstractQuery::HYDRATE_OBJECT
         );
     }
 
