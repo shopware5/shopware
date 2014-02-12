@@ -11,7 +11,8 @@
 
 	{* Error messages *}
 	{block name='frontend_account_shipping_error_messages'}
-		{include file="frontend/register/error_message.tpl" error_messages=$sErrorMessages}
+		<h1>{se name='ShippingHeadline'}Lieferadresse ändern{/se}</h1>
+  {include file="frontend/register/error_message.tpl" error_messages=$sErrorMessages}
 	{/block}
 
 	{* Shipping form *}
