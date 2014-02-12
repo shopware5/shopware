@@ -12,6 +12,8 @@
 <div class="grid_16 orders" id="center">
 	{if !$sOpenOrders}
 	{block name="frontend_account_orders_info_empty"}
+		<h1>{se name='OrdersHeadline'}Meine Bestellungen{/se}</h1>
+
 		<fieldset>
 			<div class="notice center bold">
 				{se name="OrdersInfoEmpty"}{/se}
