@@ -23,7 +23,8 @@ Ext.define('Shopware.apps.Theme.model.Theme', {
         { name : 'pluginId', type: 'int' },
 
         { name : 'screen', type: 'string' },
-        { name : 'enabled', type: 'boolean', defaultValue: false }
+        { name : 'enabled', type: 'boolean', defaultValue: false },
+        { name : 'preview', type: 'boolean', defaultValue: false }
     ],
 
     associations: [

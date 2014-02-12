@@ -33,6 +33,36 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     }
 
     /**
+     * Starts a template preview
+     */
+    public function previewAction()
+    {
+        $themeId = $this->Request()->getParam('themeId');
+
+        $shopId = $this->Request()->getParam('shopId');
+
+        /**@var $theme Template*/
+        $theme = $this->getRepository()->find($themeId);
+
+        /** @var $shop \Shopware\Models\Shop\Shop */
+        $shop  = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveById($shopId);
+        $shop->registerResources(Shopware()->Bootstrap());
+
+        Shopware()->Session()->template = $theme->getTemplate();
+        Shopware()->Session()->Admin = true;
+
+        if (!$this->Request()->isXmlHttpRequest()) {
+            $url = $this->Front()->Router()->assemble(array(
+                'module' => 'frontend',
+                'controller' => 'index',
+                'appendSession' => true,
+            ));
+            $this->redirect($url);
+        }
+    }
+
+
+    /**
      * Override of the application controller
      * to trigger the theme and template registration when the
      * list should be displayed.

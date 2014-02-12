@@ -73,6 +73,7 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
 
         me.shopCombo = Ext.create('Ext.form.field.ComboBox', {
             name: 'shop',
+            editable: false,
             store: me.shopStore,
             displayField: 'name',
             valueField: 'id'
