@@ -1,7 +1,9 @@
 {extends file="frontend/index/index.tpl"}
 
-{* Empty left sidebar *}
-{block name="frontend_index_content_left"}{/block}
+{* Left sidebar *}
+{block name="frontend_index_content_left"}
+	{include file='frontend/index/left.tpl'}
+{/block}
 
 {* Main content *}
 {block name="frontend_index_content"}
