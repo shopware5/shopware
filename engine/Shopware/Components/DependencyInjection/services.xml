@@ -269,5 +269,14 @@
             <argument type="service" id="thumbnail_generator_basic" />
             <argument>%kernel.root_dir%</argument>
         </service>
+
+
+        <service id="theme_manager" class="Shopware\Components\Theme\Manager">
+            <argument>%kernel.root_dir%</argument>
+            <argument type="service" id="models" />
+            <argument type="service" id="shopware.plugin_manager" />
+            <argument type="service" id="template" />
+        </service>
+
     </services>
 </container>
