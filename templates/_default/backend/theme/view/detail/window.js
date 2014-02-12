@@ -46,7 +46,6 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
     },
 
 
-
     createToolbar: function () {
         var me = this;
 
