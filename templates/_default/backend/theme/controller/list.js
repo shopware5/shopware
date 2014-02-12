@@ -13,6 +13,9 @@ Ext.define('Shopware.apps.Theme.controller.List', {
         var me = this;
 
         me.control({
+            'theme-listing html5fileupload': {
+                fileUploaded: me.onThemeUploaded
+            },
             'theme-listing dataview': {
                 selectionchange: me.onSelectTheme
             },
@@ -27,13 +30,20 @@ Ext.define('Shopware.apps.Theme.controller.List', {
     },
 
     /**
+     * Event listener of the upload drop zone.
+     * Called after the zip archive uploaded.
+     */
+    onThemeUploaded: function() {
+        this.getListingView().getStore().load();
+    },
+
+    /**
      * Event listener of the listing window search field.
      * Filters the store with the passed value.
      *
      * @param window
      * @param field
      * @param value
-     * @returns { boolean }
      */
     onSearchTheme: function (window, field, value) {
         var me = this,
@@ -75,8 +85,11 @@ Ext.define('Shopware.apps.Theme.controller.List', {
     },
 
 
+    /**
+     * Event listener function of the "preview theme" listing toolbar button.
+     */
     onPreviewTheme: function () {
-        var me = this, shop, theme = null,
+        var me = this, shop, theme,
             url = '{url controller="theme" action="preview"}';
 
         shop = me.getSelectedShop();
@@ -135,7 +148,8 @@ Ext.define('Shopware.apps.Theme.controller.List', {
     },
 
     /**
-     * @param record
+     * Helper function which enables/disables the listing
+     * window toolbar buttons for the current state.
      */
     enableToolbarButtons: function() {
         var me = this;

@@ -4,6 +4,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\FileBag;
 
 class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Application
 {
@@ -32,6 +34,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         );
     }
 
+
     /**
      * Starts a template preview
      */
@@ -41,11 +44,11 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
         $shopId = $this->Request()->getParam('shopId');
 
-        /**@var $theme Template*/
+        /**@var $theme Template */
         $theme = $this->getRepository()->find($themeId);
 
         /** @var $shop \Shopware\Models\Shop\Shop */
-        $shop  = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveById($shopId);
+        $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveById($shopId);
         $shop->registerResources(Shopware()->Bootstrap());
 
         Shopware()->Session()->template = $theme->getTemplate();
@@ -60,7 +63,6 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             $this->redirect($url);
         }
     }
-
 
     /**
      * Override of the application controller
@@ -88,6 +90,32 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
                 $this->Request()->getParam('query', null)
             )
         );
+    }
+
+
+    /**
+     * Controller action which is used to upload a theme zip file
+     * and extract it into the engine\Shopware\Themes folder.
+     *
+     * @throws Exception
+     */
+    public function uploadAction()
+    {
+        $file = $this->getUploadedFile();
+
+        if (strtolower($file->getClientOriginalExtension()) !== 'zip') {
+            $this->removeUploadFile($file);
+
+            throw new Exception(sprintf(
+                'Uploaded file %s is no zip file',
+                $file->getClientOriginalName()
+            ));
+        }
+
+        $this->unzipFile($file, $this->container->get('theme_manager')->getDefaultThemeDirectory());
+        $this->removeUploadFile($file);
+
+        $this->View()->assign('success', true);
     }
 
 
@@ -155,7 +183,6 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
         $this->getManager()->flush();
     }
-
 
 
     /**
@@ -329,7 +356,12 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
                 ->setParameter('id', $id);
         } else if ($query) {
             $filters = $this->getFilterConditions(
-                array(array('property' => 'search', 'value' => $query)),
+                array(
+                    array(
+                        'property' => 'search',
+                        'value' => $query
+                    )
+                ),
                 'Shopware\Models\Article\Article',
                 'article'
             );
@@ -350,4 +382,57 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         );
     }
 
+    /**
+     * Helper function which creates a UploadedFile object
+     * for the fileId element in the $_FILES object.
+     *
+     * @return UploadedFile
+     * @throws Exception
+     */
+    private function getUploadedFile()
+    {
+        $file = $_FILES['fileId'];
+
+        if ($file['size'] < 1 && $file['error'] === 1 || empty($_FILES)) {
+            throw new Exception("The file exceeds the max file size.");
+        }
+
+        $fileInfo = pathinfo($file['name']);
+        $fileExtension = strtolower($fileInfo['extension']);
+        $file['name'] = $fileInfo['filename'] . "." . $fileExtension;
+        $_FILES['fileId']['name'] = $file['name'];
+
+        $fileBag = new FileBag($_FILES);
+
+        /** @var $file  */
+        return $fileBag->get('fileId');
+
+    }
+
+    /**
+     * Removes the temporary created upload file.
+     *
+     * @param UploadedFile $file
+     */
+    private function removeUploadFile(UploadedFile $file)
+    {
+        unlink($file->getPathname());
+        unlink($file);
+    }
+
+    /**
+     * Helper function to decompress zip files.
+     * @param UploadedFile $file
+     * @param $targetDirectory
+     */
+    private function unzipFile(UploadedFile $file, $targetDirectory)
+    {
+        $filter = new Zend_Filter_Decompress(array(
+            'adapter' => $file->getClientOriginalExtension(),
+            'options' => array('target' => $targetDirectory)
+        ));
+        $filter->filter(
+            $file->getPath() . DIRECTORY_SEPARATOR .  $file->getFilename()
+        );
+    }
 }

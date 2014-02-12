@@ -3,7 +3,7 @@ Ext.define('Shopware.apps.Theme.view.list.extensions.Info', {
     extend: 'Shopware.listing.InfoPanel',
     alias: 'widget.theme-listing-info-panel',
     cls: 'theme-info-panel',
-    width: 300,
+    width: 240,
 
     configure: function() {
         return {

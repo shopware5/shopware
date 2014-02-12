@@ -146,13 +146,25 @@ class Manager
     }
 
     /**
+     * Helper function which returns the default shopware theme directory.
+     * @return string
+     */
+    public function getDefaultThemeDirectory()
+    {
+        return $this->rootDir .
+        DIRECTORY_SEPARATOR . 'engine' .
+        DIRECTORY_SEPARATOR . 'Shopware' .
+        DIRECTORY_SEPARATOR . 'Themes';
+    }
+
+    /**
      * Helper function which returns the theme directory for the passed
      * shop template.
      *
      * @param Template $theme
      * @return null|string
      */
-    private function getThemeDirectory(Template $theme)
+    public function getThemeDirectory(Template $theme)
     {
         if ($theme->getPlugin()) {
 
@@ -278,17 +290,6 @@ class Manager
         return $themes;
     }
 
-    /**
-     * Helper function which returns the default shopware theme directory.
-     * @return string
-     */
-    private function getDefaultThemeDirectory()
-    {
-        return $this->rootDir .
-        DIRECTORY_SEPARATOR . 'engine' .
-        DIRECTORY_SEPARATOR . 'Shopware' .
-        DIRECTORY_SEPARATOR . 'Themes';
-    }
 
     /**
      * Helper function which refresh the theme configuration element definition.
