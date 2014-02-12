@@ -116,7 +116,11 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
     saveConfig: function(theme, shop, formPanel, window) {
         var me = this;
 
-        theme = me.updateShopValues(theme, shop, formPanel.getForm().getValues());
+        theme = me.updateShopValues(
+            theme,
+            shop,
+            formPanel.getForm().getValues()
+        );
 
         theme.save({
             callback: function() {
@@ -136,21 +140,46 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
      * @returns mixed
      */
     updateShopValues: function(theme, shop, values) {
+        var me = this, configValue;
 
         theme.getElements().each(function(element) {
-            var value = null;
+            configValue = me.getShopConfigValue(element, shop);
 
-            value = values[element.get('name')];
-
-            element.getConfigValues().each(function(configValue) {
-                if (configValue.get('shopId') == shop.get('id')) {
-                    configValue.set('value', value);
-                    return false;
-                }
-            });
+            configValue.set(
+                'value',
+                values[element.get('name')]
+            );
         });
 
         return theme;
+    },
+
+    getShopConfigValue: function(element, shop) {
+        var me = this,
+            valueObject = null;
+
+        element.getConfigValues().each(function(configValue) {
+            if (configValue.get('shopId') == shop.get('id')) {
+                valueObject = configValue;
+                return false;
+            }
+        });
+
+        if (valueObject == null) {
+            valueObject = Ext.create('Shopware.apps.Theme.model.ConfigValue', {
+                shopId: shop.get('id'),
+                elementId: element.get('id')
+            });
+
+            if (!element.getConfigValues() instanceof Ext.data.Store) {
+                element['configValuesStore'] = Ext.create('Ext.data.Store', {
+                    model: 'Shopware.apps.Theme.model.ConfigValue'
+                });
+            }
+            element.getConfigValues().add(valueObject);
+        }
+
+        return valueObject;
     },
 
     /**

@@ -31,7 +31,7 @@ Ext.define('Shopware.apps.Theme', {
     ],
 
     models: [ 'Theme', 'Element', 'ConfigValue' ],
-    stores: [ 'Theme' ],
+    stores: [ 'Theme', 'Category' ],
 
     launch: function() {
         return this.getController('List').mainWindow;
