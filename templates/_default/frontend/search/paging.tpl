@@ -56,11 +56,11 @@
 {block name='frontend_listing_actions_items_per_page'}
 {if $sPerPage}
 	<form method="post" action="{$sLinks.sPerPage}">
-	<div class="articleperpage rightalign">
+	<div class="articleperpage right">
 		<label>{s name='ListingLabelItemsPerPage'}Artikel pro Seite:{/s}</label>
 		<select name="sPerPage" class="auto_submit">
 		{foreach from=$sPerPage item=perPage}
-	        <option value="2" {if $perPage eq $sRequests.sPerPage}selected="selected"{/if}>{$perPage}</option>
+			<option value="{$perPage}" {if $perPage eq $sRequests.sPerPage}selected="selected"{/if}>{$perPage}</option>
 		{/foreach}
 		</select>
 	</div>
