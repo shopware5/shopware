@@ -27,7 +27,7 @@
 {block name="frontend_detail_index_actions" append}
 {if !$hideFacebook}
 <div style="margin-top:25px">
-<script src="http://connect.facebook.net/{$Locale}/all.js#xfbml=1"></script><fb:like href="{url sArticle=$sArticle.articleID}" width="250"></fb:like>
+<script src="http://connect.facebook.net/{$Locale}/all.js#xfbml=1"></script><fb:like href="{url sArticle=$sArticle.articleID}" send="false" layout="button_count" width="250" show_faces="false"></fb:like>
 </div>
 {/if}
 {/block}
@@ -37,7 +37,7 @@
 <div id="facebook">
         <h2>{s name="facebookTabTitle"}Facebook-Kommentare{/s}</h2>
         <div class="container">
-			<div id="fb-root"></div><script src="http://connect.facebook.net/{$Locale}/all.js#appId={$app_id}&amp;xfbml=1"></script><fb:comments href="{url sArticle=$sArticle.articleID title=$sArticle.articleName}" migrated="1" xid="{$unique_id}" width="425"></fb:comments>
+			<div id="fb-root"></div><script src="http://connect.facebook.net/{$Locale}/all.js#appId={$app_id}&amp;xfbml=1"></script><fb:comments href="{url sArticle=$sArticle.articleID title=$sArticle.articleName}" migrated="1" xid="{$unique_id}" width="560"></fb:comments>
         </div>
 </div>
 {/if}
