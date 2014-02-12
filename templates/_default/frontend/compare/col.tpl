@@ -16,7 +16,12 @@
 	{* Name *}
 	<div class="name">
 		{block name='frontend_compare_article_name'}
-		<h3><a href="{$sArticle.linkDetails}" title="{$sArticle.articleName}">{$sArticle.articleName|truncate:47}</a></h3>
+			<h3><a href="{$sArticle.linkDetails}" title="{$sArticle.articleName}">{$sArticle.articleName|truncate:47}</a></h3>
+
+			{* More informations button *}
+			<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName}" class="button-right small_right">
+				{s name='ListingBoxLinkDetails' namespace="frontend/listing/box_article"}{/s}
+			</a>
 		{/block}
 	</div>
 	
@@ -66,9 +71,9 @@
 	{* Properties *}
 	{foreach from=$sArticle.sProperties item=property}
 		{block name='frontend_compare_properties'}
-		<div class="property" style="background-color:{if $property@iteration%2}#f5f5f5{else}#e3e3e3{/if};">
-			{if $property.value}{$property.value}{else}-{/if}
-		</div>
+			<div class="property" style="background-color:#fff;">
+				{if $property.value}{$property.value}{else}-{/if}
+			</div>
 		{/block}
 	{/foreach}
 </div>
