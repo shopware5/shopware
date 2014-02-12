@@ -2,7 +2,7 @@
 {block name='frontend_widgets_delivery_infos'}
 	<div class="delivery_container">
 	{if $sArticle.shippingfree}
-	    <p class="red">
+	    <p class="shipping_free">
 	    	<strong>{se name="DetailDataInfoShippingfree"}{/se}</strong>
 	    </p>
 	{/if}
