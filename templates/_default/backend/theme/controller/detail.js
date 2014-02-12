@@ -127,7 +127,9 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
 
         theme.save({
             callback: function() {
-                console.log("saved ", arguments);
+                if (window instanceof Ext.window.Window) {
+                    window.destroy();
+                }
             }
         });
 
