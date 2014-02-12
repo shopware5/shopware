@@ -59,6 +59,18 @@ class Enlight_Controller_Request_RequestTestCase
     }
 
     /**
+     * Set SERVER remote address
+     *
+     * @param string $address
+     * @return Enlight_Controller_Request_RequestHttp
+     */
+    public function setRemoteAddress($address)
+    {
+        $this->setServer('REMOTE_ADDR', $address);
+        return $this;
+    }
+
+    /**
      * Sets HTTP host method
      *
      * @param string $host
