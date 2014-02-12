@@ -269,6 +269,9 @@ Ext.define('Shopware.form.field.Media', {
 
         me.items = me.createItems();
         me.callParent(arguments);
+        if (me.value) {
+            me.requestMediaData(me.value);
+        }
     },
 
     /**
@@ -403,7 +406,7 @@ Ext.define('Shopware.form.field.Media', {
         var me = this;
 
         me.preview = Ext.create('Ext.Img', {
-            src: me.mediaPath + me.value,
+            src: me.noMedia,
             height: 100,
             maxHeight: 100,
             padding: 5,

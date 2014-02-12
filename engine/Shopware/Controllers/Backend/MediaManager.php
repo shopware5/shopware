@@ -359,7 +359,10 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
      */
     public function getMediaAction()
     {
-        $id = $this->Request()->getParam('mediaId', null);
+        $id = $this->Request()->getParam(
+            'mediaId',
+            $this->Request()->getParam('id', null)
+        );
         $path = $this->Request()->getParam('path', null);
 
         if (empty($id) && empty($path)) {
