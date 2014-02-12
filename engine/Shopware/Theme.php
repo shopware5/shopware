@@ -43,12 +43,6 @@ class Theme
     const TYPE_TEXT_AREA_FIELD = 'theme-text-area-field';
 
     /**
-     * Constant for the snippet selection field
-     * which can be used as template config element
-     */
-    const TYPE_SNIPPET = 'theme-snippet-selection';
-
-    /**
      * Constant for the media selection field
      * which can be used as template config element
      */
@@ -321,27 +315,6 @@ class Theme
     protected function createTextAreaField(array $options)
     {
         $options += array('type' => self::TYPE_TEXT_AREA_FIELD);
-        $this->createConfigElement($options);
-    }
-
-    /**
-     * Creates a color picker field which displayed in the theme configuration
-     * window of the theme manager module.
-     *
-     * @param array $options {
-     *      @type string $name          Required; Logical name which used as template variable name
-     *      @type string $fieldLabel    Optional; Ext JS form field label.
-     *      @type string $allowBlank    Optional; Defines if the value can contains null
-     *      @type string $defaultValue  Optional; Default value of this config element
-     *      @type string $position      Optional; Position which can be used to define the field positions
-     *      @type string $supportText   Optional; Text which displayed below the input field.
-     * }
-     *
-     * 
-     */
-    protected function createSnippetSelection(array $options)
-    {
-        $options += array('type' => self::TYPE_SNIPPET);
         $this->createConfigElement($options);
     }
 

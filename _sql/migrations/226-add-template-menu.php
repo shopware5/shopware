@@ -7,7 +7,7 @@ class Migrations_Migration226 Extends Shopware\Components\Migrations\AbstractMig
             SET @parent = (SELECT id FROM `s_core_menu` WHERE `name`= 'Einstellungen');
 
             INSERT INTO `s_core_menu` (`id`, `parent`, `hyperlink`, `name`,`onclick`, `style`,`class`,`position` ,`active` ,`pluginID` ,`resourceID` ,`controller` ,`shortcut` ,`action`)
-            VALUES (NULL ,  @parent,  '',  'Template Manager', NULL , NULL ,  'sprite-application-image',  '0',  '1', NULL , NULL ,  'Theme', NULL ,  'Index');
+            VALUES (NULL ,  @parent,  '',  'Template Manager', NULL , NULL ,  'sprite-application-icon-large',  '0',  '1', NULL , NULL ,  'Theme', NULL ,  'Index');
 EOD;
         $this->addSql($sql);
     }

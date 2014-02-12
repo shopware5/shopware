@@ -46,6 +46,7 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
         var me = this,
             items = [];
 
+        items.push({ xtype: 'tbspacer', width: 6 });
         items.push(me.createShopCombo());
         items.push('-');
         items.push(me.createAssignButton());
