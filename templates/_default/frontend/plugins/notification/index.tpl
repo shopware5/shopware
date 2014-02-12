@@ -1,5 +1,5 @@
 <div id="article_notification">
-	<input type="hidden" value="{$NotifyHideBasket}" name="notifyHideBasket" id="notifyHideBasket" />
+    <input type="hidden" value="{$NotifyHideBasket}" name="notifyHideBasket" id="notifyHideBasket" />
 
 
 	{if $NotifyValid == true}
@@ -7,42 +7,40 @@
 			{se name='DetailNotifyInfoValid'}{/se}
 		</div>
 	{elseif $NotifyInvalid == true && $NotifyAlreadyRegistered != true}
-				<div class="notice">
-					{se name='DetailNotifyInfoInvalid'}{/se}
-				</div>
-    {elseif $NotifyEmailError == true}
-		<div class="error">
-			{se name='DetailNotifyInfoErrorMail'}{/se}
+		<div class="notice">
+			{se name='DetailNotifyInfoInvalid'}{/se}
 		</div>
+    {elseif $NotifyEmailError == true}
+        <div class="error">
+            {se name='DetailNotifyInfoErrorMail'}{/se}
+        </div>
 	{elseif $WaitingForOptInApprovement}
 		<div id="articleNotificationWasSend" class="displaynone">
 			<div class="success">
 				{se name='DetailNotifyInfoSuccess'}{/se}
 			</div>
 		</div>
-	{elseif $NotifyAlreadyRegistered == true}
-		<div class="success">
-			<div class="center">
-				<strong>
-					{se name='DetailNotifyAlreadyRegistered'}{/se}
-				</strong>
-			</div>
-		</div>
-	{else}
-		{if $NotifyValid != true}
-		<div class="notice">
-		<div class="center">
-				<strong>
-					{se name='DetailNotifyHeader'}{/se}
-				</strong>
-			</div>
-		</div>
-		{/if}
-	{/if}
-	
-	<form method="post" action="{url action='notify' sArticle=$sArticle.articleID}" id="sendArticleNotification">
+    {elseif $NotifyAlreadyRegistered == true}
+        <div class="success">
+            <div class="center">
+                <strong>
+                    {se name='DetailNotifyAlreadyRegistered'}{/se}
+                </strong>
+            </div>
+        </div>
+    {else}
+        {if $NotifyValid != true}
+        <div class="notice">
+        <div class="center">
+                <strong>
+                    {se name='DetailNotifyHeader'}{/se}
+                </strong>
+            </div>
+        </div>
+        {/if}
+    {/if}
+    <form method="post" action="{url action='notify' sArticle=$sArticle.articleID}" id="sendArticleNotification">
 		<input type="hidden" name="notifyOrdernumber" value="{$sArticle.ordernumber}" id="variantOrdernumber" />
-		
 		<fieldset>
 			
 			<div>
@@ -51,10 +49,9 @@
 				
 				<div class="clear">&nbsp;</div>
 				
-				<input type="submit"  value="{s name='DetailNotifyActionSubmit'}{/s}" class="button-right small" />
+				<input type="submit"  value="{s name='DetailNotifyActionSubmit'}{/s}" class="button-right small_right" />
 			</div>
 		</fieldset>
-		<div class="doublespace">&nbsp;</div>
 	</form>
 </div>
 
