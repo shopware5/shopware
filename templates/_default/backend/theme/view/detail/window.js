@@ -86,7 +86,7 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
             name: 'cancel-button',
             text: 'Cancel',
             handler: function () {
-
+                me.destroy();
             }
         });
         return me.cancelButton;

@@ -36,6 +36,7 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
 
         me.toolbar = Ext.create('Ext.toolbar.Toolbar', {
             items: me.createToolbarItems(),
+            ui: 'shopware-ui',
             dock: 'top'
         });
 
@@ -83,6 +84,7 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
 
         me.assignButton = Ext.create('Ext.button.Button', {
             text: 'Select theme',
+            cls: 'small',
             disabled: true,
             handler: function() {
                 me.fireEvent('assign-theme', me);
@@ -98,6 +100,7 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
         me.previewButton = Ext.create('Ext.button.Button', {
             text: 'Preview theme',
             disabled: true,
+            cls: 'small',
             handler: function() {
                 me.fireEvent('preview-theme', me);
             }
@@ -112,6 +115,7 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
         me.configureButton = Ext.create('Ext.button.Button', {
             text: 'Configure theme',
             disabled: true,
+            cls: 'small',
             handler: function() {
                 me.fireEvent('configure-theme', me);
             }
@@ -125,6 +129,7 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
 
         me.addButton = Ext.create('Ext.button.Button', {
             text: 'Add theme',
+            cls: 'small',
             handler: function() {
                 me.fireEvent('add-theme', me);
             }
