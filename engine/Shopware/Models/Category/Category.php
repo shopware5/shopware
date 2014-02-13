@@ -953,7 +953,7 @@ class Category extends ModelEntity
      */
     protected function isChildOfInternal(Category $category, Category $searched)
     {
-        if ($category->getParent()->getId() === $searched->getId()) {
+        if ($category->getParent() && $category->getParent()->getId() === $searched->getId()) {
             return true;
         }
 
