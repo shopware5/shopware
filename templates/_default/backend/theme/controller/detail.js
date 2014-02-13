@@ -71,20 +71,46 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
                 data.fieldLabel = data.name;
             }
 
+            if (data.xtype == "theme-select-field") {
+                data.store = me.createSelectStore(data.selection);
+                data.valueField = 'name';
+                data.displayField = 'name';
+            }
+
             if (element['getConfigValuesStore'] instanceof Ext.data.Store) {
                 data.value = me.getElementShopValue(element, shop);
             }
+
             if (data.xtype == "theme-checkbox-field" && data.value) {
                 data.checked = true;
             }
+
             if (data.value == Ext.undefined) {
                 data.value = null;
             }
-            console.log("data", data);
-
             elements.push(data);
         });
+
         return elements;
+    },
+
+    /**
+     *
+     * @param values
+     * @returns { Ext.data.Store }
+     */
+    createSelectStore: function(values) {
+        var data = [], value;
+
+        for (var i = 0; i <= values.length - 1; i++) {
+            value = values[i];
+            data.push({ name: value });
+        }
+
+        return Ext.create('Ext.data.Store', {
+            fields: [ 'name'],
+            data: data
+        });
     },
 
     /**

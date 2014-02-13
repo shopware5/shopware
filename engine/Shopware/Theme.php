@@ -67,6 +67,18 @@ class Theme
     const TYPE_CHECKBOX = 'theme-checkbox-field';
 
     /**
+     * Constant for the checkbox field
+     * which can be used as template config element
+     */
+    const TYPE_PIXEL = 'theme-pixel-field';
+
+    /**
+     * Constant for the checkbox field
+     * which can be used as template config element
+     */
+    const TYPE_SELECT = 'theme-select-field';
+
+    /**
      * Defines the parent theme
      * @var null
      */
@@ -376,6 +388,45 @@ class Theme
     protected function createCheckboxField(array $options)
     {
         $options += array('type' => self::TYPE_CHECKBOX);
+        $this->createConfigElement($options);
+    }
+
+    /**
+     * Creates a pixel field which displayed in the theme configuration
+     * window of the theme manager module.
+     *
+     * @param array $options {
+     *      @type string $name          Required; Logical name which used as template variable name
+     *      @type string $fieldLabel    Optional; Ext JS form field label.
+     *      @type string $allowBlank    Optional; Defines if the value can contains null
+     *      @type string $defaultValue  Optional; Default value of this config element
+     *      @type string $position      Optional; Position which can be used to define the field positions
+     *      @type string $supportText   Optional; Text which displayed below the input field.
+     * }
+     */
+    protected function createPixelField(array $options)
+    {
+        $options += array('type' => self::TYPE_PIXEL);
+        $this->createConfigElement($options);
+    }
+
+
+    /**
+     * Creates a select field which displayed in the theme configuration
+     * window of the theme manager module.
+     *
+     * @param array $options {
+     *      @type string $name          Required; Logical name which used as template variable name
+     *      @type string $fieldLabel    Optional; Ext JS form field label.
+     *      @type string $allowBlank    Optional; Defines if the value can contains null
+     *      @type string $defaultValue  Optional; Default value of this config element
+     *      @type string $position      Optional; Position which can be used to define the field positions
+     *      @type string $supportText   Optional; Text which displayed below the input field.
+     * }
+     */
+    protected function createSelectField(array $options)
+    {
+        $options += array('type' => self::TYPE_SELECT);
         $this->createConfigElement($options);
     }
 

@@ -94,6 +94,18 @@ class ConfigElement extends ModelEntity
 
     /**
      * @var
+     * @ORM\Column(name="selection", type="array", nullable=true)
+     */
+    protected $selection = null;
+
+    /**
+     * @var
+     * @ORM\Column(name="tab", type="string")
+     */
+    protected $tab = 'Main';
+
+    /**
+     * @var
      * @ORM\Column(name="field_label", type="string", nullable=true)
      */
     protected $fieldLabel = null;
@@ -281,7 +293,41 @@ class ConfigElement extends ModelEntity
             'fieldLabel' => $this->fieldLabel,
             'defaultValue' => $this->defaultValue,
             'allowBlank' => $this->allowBlank,
-            'position' => $this->position
+            'position' => $this->position,
+            'selection' => $this->selection,
+            'tab' => $this->tab
         );
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSelection()
+    {
+        return $this->selection;
+    }
+
+    /**
+     * @param mixed $selection
+     */
+    public function setSelection($selection)
+    {
+        $this->selection = $selection;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTab()
+    {
+        return $this->tab;
+    }
+
+    /**
+     * @param mixed $tab
+     */
+    public function setTab($tab)
+    {
+        $this->tab = $tab;
     }
 }
