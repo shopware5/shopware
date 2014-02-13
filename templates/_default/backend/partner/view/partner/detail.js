@@ -258,7 +258,8 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
                 keyNavEnabled:false,
                 mouseWheelEnabled:false,
                 required:true,
-                allowDecimals: true
+                allowDecimals: true,
+                decimalSeparator: '.'
             },
             {
                 xtype:'combobox',
