@@ -63,7 +63,7 @@ Ext.define('Shopware.apps.Partner.model.Detail', {
         { name : 'web', type : 'string' },
         { name : 'profile', type : 'string' },
         { name : 'fix', type : 'float' },
-        { name : 'percent', type : 'int' },
+        { name : 'percent', type : 'float' },
         { name : 'cookieLifeTime', type : 'int' },
         { name : 'active', type : 'int' }
     ],
