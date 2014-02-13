@@ -22,11 +22,20 @@ Ext.define('Shopware.apps.Theme.controller.List', {
             'theme-list-window': {
                 'assign-theme': me.onAssignTheme,
                 'preview-theme': me.onPreviewTheme,
-                'search-theme': me.onSearchTheme
+                'search-theme': me.onSearchTheme,
+                'create-theme': me.onCreateTheme
             }
         });
 
         me.mainWindow = me.getView('list.Window').create({ }).show();
+    },
+
+    onCreateTheme: function() {
+        var me = this;
+
+        me.getView('create.Window').create({
+            record: Ext.create('Shopware.apps.Theme.model.Theme')
+        }).show();
     },
 
     /**

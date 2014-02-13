@@ -278,5 +278,9 @@
             <argument type="service" id="template" />
         </service>
 
+        <service id="theme_factory" class="Shopware\Components\Theme\Factory">
+            <argument type="service" id="theme_manager" />
+        </service>
+
     </services>
 </container>

@@ -132,10 +132,10 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
         var me = this;
 
         me.addButton = Ext.create('Ext.button.Button', {
-            text: 'Add theme',
+            text: 'Create theme',
             cls: 'small',
             handler: function() {
-                me.fireEvent('add-theme', me);
+                me.fireEvent('create-theme', me);
             }
         });
 

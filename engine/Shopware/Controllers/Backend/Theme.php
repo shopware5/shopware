@@ -34,7 +34,6 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         );
     }
 
-
     /**
      * Starts a template preview
      */
@@ -62,6 +61,32 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             ));
             $this->redirect($url);
         }
+    }
+
+    public function createAction()
+    {
+        $name = $this->Request()->getParam('name');
+        $parentId = $this->Request()->getParam('parentId');
+
+        if (empty($name)) {
+            throw new Exception('Each theme requires a defined name!');
+        }
+
+        $parent = null;
+        if ($parentId) {
+            $parent = $this->getRepository()->find($parentId);
+            if (!$parent instanceof Template) {
+                throw new Exception(sprintf(
+                    'Shop template by id %s not found',
+                    $parentId
+                ));
+            }
+
+        }
+
+        $this->container->get('theme_factory')->generateTheme($name, $parent);
+
+        $this->View()->assign('success', true);
     }
 
     /**
