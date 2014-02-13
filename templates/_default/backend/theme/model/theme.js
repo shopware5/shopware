@@ -4,14 +4,14 @@ Ext.define('Shopware.apps.Theme.model.Theme', {
 
     configure: function() {
         return {
-            controller: 'Theme'
+            controller: 'Theme',
+            detail: 'Shopware.apps.Theme.view.create.Theme'
         };
     },
 
     fields: [
         { name : 'id', type: 'int', useNull: true },
         { name : 'name', type: 'string' },
-        { name : 'theme', type: 'string' },
         { name : 'description', type: 'string' },
         { name : 'author', type: 'string' },
         { name : 'license', type: 'string' },
@@ -22,6 +22,8 @@ Ext.define('Shopware.apps.Theme.model.Theme', {
         { name : 'version', type: 'int' },
         { name : 'pluginId', type: 'int' },
 
+        { name : 'parentId', type: 'int', useNull: true, defaultValue: null },
+
         { name : 'screen', type: 'string' },
         { name : 'enabled', type: 'boolean', defaultValue: false },
         { name : 'preview', type: 'boolean', defaultValue: false }
@@ -29,6 +31,7 @@ Ext.define('Shopware.apps.Theme.model.Theme', {
 
     associations: [
         {
+            relation: 'OneToMany',
             type: 'hasMany',
             model: 'Shopware.apps.Theme.model.Element',
             name: 'getElements',

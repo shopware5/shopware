@@ -60,11 +60,34 @@ class Manager
 
         $themes = $this->initialThemes($directories);
 
+        $this->removeDeletedThemes();
+
         $pluginThemes = $this->initialPluginThemes();
 
         $themes = array_merge($themes, $pluginThemes);
 
         $this->resolveThemeParents($themes);
+    }
+
+    /**
+     * Removes the database entries for themes which file no more exist.
+     */
+    private function removeDeletedThemes()
+    {
+        $themes = $this->repository->createQueryBuilder('templates');
+        $themes->where('templates.version = 3')
+            ->andWhere('templates.pluginId IS NULL');
+
+        $themes = $themes->getQuery()->getResult(AbstractQuery::HYDRATE_OBJECT);
+
+        /**@var $theme Template*/
+        foreach($themes as $theme) {
+            $directory = $this->getThemeDirectory($theme);
+            if (!file_exists($directory)) {
+                $this->entityManager->remove($theme);
+            }
+        }
+        $this->entityManager->flush();
     }
 
     /**

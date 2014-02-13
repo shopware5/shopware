@@ -17,6 +17,8 @@ Ext.define('Shopware.apps.Theme', {
         'detail.Theme',
         'detail.Window',
 
+        'create.Window',
+
         'detail.elements.ArticleSelection',
         'detail.elements.CategorySelection',
         'detail.elements.CheckboxField',
