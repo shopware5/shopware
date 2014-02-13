@@ -3190,8 +3190,8 @@ jQuery.fn.liveSearch = function (conf) {
                 $.post(me.attr('href'), function (data) {
                     var modal = $.modal(data, '', {
                         'position':'fixed',
-                        'width': ~~(1 * width),
-                        'height': ~~(1 * height)
+                        'width': parseInt(width),
+                        'height': parseInt(height)
                     });
 
                     // Remove close icon
@@ -3211,8 +3211,6 @@ jQuery.fn.liveSearch = function (conf) {
                 'width': config.width
             }
         });
-
-        if(settings.width) { modal.css('width', settings.width); }
 
         if (headline.length) {
             var h2 = $('<h2>', {
