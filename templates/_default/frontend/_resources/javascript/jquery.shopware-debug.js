@@ -2602,9 +2602,7 @@ jQuery.fn.liveSearch = function (conf) {
 	        	'width': config.width
 	        } 
 	    });
-	    
-	    if(settings.width) { modal.css('width', settings.width); }
-	    
+
 	    if (headline.length) {
 	        var h2 = $('<h2>', {
 	            'html': headline
