@@ -19,6 +19,8 @@ Ext.define('Shopware.apps.Theme', {
 
         'create.Window',
 
+        'detail.elements.Suffix',
+        'detail.elements.PixelField',
         'detail.elements.ArticleSelection',
         'detail.elements.CategorySelection',
         'detail.elements.CheckboxField',
@@ -28,7 +30,8 @@ Ext.define('Shopware.apps.Theme', {
         'detail.elements.MediaSelection',
         'detail.elements.PercentField',
         'detail.elements.TextAreaField',
-        'detail.elements.TextField'
+        'detail.elements.TextField',
+        'detail.elements.SelectField',
     ],
 
     models: [ 'Theme', 'Element', 'ConfigValue' ],

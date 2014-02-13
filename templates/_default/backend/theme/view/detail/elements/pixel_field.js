@@ -1,10 +1,10 @@
 
-Ext.define('Shopware.apps.Theme.view.detail.elements.PercentField', {
+Ext.define('Shopware.apps.Theme.view.detail.elements.PixelField', {
     extend: 'Shopware.apps.Theme.view.detail.elements.Suffix',
 
-    alias: 'widget.theme-percent-field',
+    alias: 'widget.theme-pixel-field',
 
-    suffix: '%',
+    suffix: 'px',
     fallbackValue: '0',
     elementStyle: 'text-align: right'
 });

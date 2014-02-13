@@ -7,6 +7,7 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
     height: 420,
     width: 1080,
     layout: 'fit',
+    cls: 'theme-config-window',
 
     initComponent: function() {
         var me = this;
@@ -17,22 +18,76 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
         me.callParent(arguments);
     },
 
+    /**
+     * Creates the form panel for the window.
+     * @returns { Ext.form.Panel }
+     */
     createFormPanel: function() {
         var me = this;
 
-        var counter = Math.round(me.elements.length / 2);
+        var tabs = me.createTabs(me.elements);
 
         me.formPanel = Ext.create('Ext.form.Panel', {
-            layout: 'column',
-            bodyPadding: 20,
-            items: [
-                me.createContainer(me.elements.slice(0, counter)),
-                me.createContainer(me.elements.slice(counter))
-            ]
+            layout: 'fit',
+            items: [{
+                xtype: 'tabpanel',
+                items: tabs
+            }]
         });
         return me.formPanel;
     },
 
+    /**
+     * Creates the tab panels for the config window.
+     *
+     * @param elements
+     * @returns { Array }
+     */
+    createTabs: function(elements) {
+        var me = this, tabs = [],
+            collection = {};
+
+        Ext.each(elements, function(element) {
+            var tab = collection[element.tab];
+
+            if (!tab) {
+                tab = {
+                    padding: 20,
+                    layout: 'column',
+                    xtype: 'container',
+                    autoScroll: true,
+                    title: element.tab,
+                    items: [ ]
+                };
+            }
+
+            tab.items.push(element);
+            collection[element.tab] = tab;
+        });
+
+        //iterate tab collection to create tabs
+        for (var key in collection) {
+            var tab = collection[key],
+                fields = tab.items;
+
+            var counter = Math.round(fields.length / 2);
+
+            tab.items = [
+                me.createContainer(fields.slice(0, counter)),
+                me.createContainer(fields.slice(counter))
+            ];
+
+            tabs.push(tab);
+        }
+
+        return tabs;
+    },
+
+    /**
+     * Creates a column container for the tab panels.
+     * @param fields
+     * @returns { Ext.container.Container }
+     */
     createContainer: function(fields) {
         return Ext.create('Ext.container.Container', {
             columnWidth: 0.5,
@@ -46,6 +101,11 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
     },
 
 
+    /**
+     * Creates the window toolbar.
+     *
+     * @returns { Ext.toolbar.Toolbar }
+     */
     createToolbar: function () {
         var me = this;
 
@@ -57,6 +117,11 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
         return me.toolbar;
     },
 
+    /**
+     * Creates all toolbar elements.
+     *
+     * @returns { Array }
+     */
     createToolbarItems: function() {
         var me = this, items = [];
 
@@ -68,7 +133,6 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
 
         return items;
     },
-
 
     /**
      * Creates the cancel button which will be displayed
