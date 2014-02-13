@@ -40,7 +40,8 @@
 
             .hint {
                 position: absolute;
-                left: -3px; top: -3px;
+                left: -3px;
+                top: -3px;
                 height: 70px;
                 width: 70px;
 
@@ -50,9 +51,10 @@
                     display: block;
                     font-weight: bold;
                     width: 70px;
-                    text-align: left;
+                    text-align: center;
                     position: absolute;
-                    left: 2px; top: 10px;
+                    left: -7px;
+                    top: 18px;
                 }
             }
             .enabled {
@@ -68,7 +70,6 @@
 
                 span {
                     text-shadow: 0 1px 0 #0166ff;
-                    left: 0; top: 12px;
                 }
             }
 
@@ -105,6 +106,18 @@
             img {
                 margin: 0 auto;
                 display: block;
+            }
+        }
+
+        .info-item {
+            margin: 3px 0;
+            padding: 5px;
+
+            .label {
+                font-weight: 700;
+            }
+            .value {
+                padding-top: 4px;
             }
         }
     }
