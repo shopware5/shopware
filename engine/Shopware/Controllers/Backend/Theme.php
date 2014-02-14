@@ -159,12 +159,39 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         ))
             ->leftJoin('template.elements', 'elements')
             ->leftJoin('elements.values', 'values', 'WITH', 'values.shopId = :shopId')
-            ->orderBy('elements.position')
+            ->addOrderBy('elements.tab')
+            ->addOrderBy('elements.position')
             ->addOrderBy('elements.name')
             ->setParameter('shopId', 1);
 
         return $builder;
     }
+
+    /**
+     * Override to get all snippet definitions for the loaded theme configuration.
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function getAdditionalDetailData(array $data)
+    {
+        $template = $this->getRepository()->find($data['id']);
+
+        /**@var $namespace Enlight_Components_Snippet_Namespace */
+        $namespace = $this->container->get('snippets')->getNamespace(
+            $this->container->get('theme_manager')->getSnippetNamespace($template) . 'backend/config'
+        );
+        
+        $namespace->read();
+
+        foreach($data['elements'] as &$element) {
+            $element['fieldLabel'] = $namespace->get($element['name'], $element['fieldLabel']);
+            $element['supportText'] = $namespace->get($element['name'] . '_support', $element['supportText']);
+        }
+
+        return $data;
+    }
+
 
     /**
      * Saves the passed theme configuration.

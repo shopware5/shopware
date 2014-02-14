@@ -1,9 +1,10 @@
 
+//{namespace name=backend/theme/main}
 
 Ext.define('Shopware.apps.Theme.view.detail.Window', {
     extend: 'Enlight.app.Window',
     alias: 'widget.theme-detail-window',
-    title : '{s name=title}Theme details{/s}',
+    title : '{s name=detail_window}Theme details{/s}',
     height: 420,
     width: 1080,
     layout: 'fit',
@@ -148,7 +149,7 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
         me.cancelButton = Ext.create('Ext.button.Button', {
             cls: 'secondary',
             name: 'cancel-button',
-            text: 'Cancel',
+            text: '{s name=cancel}Cancel{/s}',
             handler: function () {
                 me.destroy();
             }
@@ -170,7 +171,7 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
         me.saveButton = Ext.create('Ext.button.Button', {
             cls: 'primary',
             name: 'detail-save-button',
-            text: 'Save',
+            text: '{s name=save}Save{/s}',
             handler: function () {
                 me.fireEvent(
                     'saveConfig',

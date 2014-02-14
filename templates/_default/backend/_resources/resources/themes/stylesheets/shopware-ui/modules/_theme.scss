@@ -106,6 +106,8 @@
             img {
                 margin: 0 auto;
                 display: block;
+                max-height: 200px;
+                max-width: 200px;
             }
         }
 
@@ -118,6 +120,14 @@
             }
             .value {
                 padding-top: 4px;
+            }
+        }
+    }
+
+    .theme-config-window {
+        .theme-custom-field {
+            .x-form-item-body {
+                padding: 1px;
             }
         }
     }

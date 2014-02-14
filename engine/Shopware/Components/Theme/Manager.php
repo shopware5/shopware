@@ -7,6 +7,7 @@ use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Plugin\Manager as PluginManager;
+use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Template;
 use Shopware\Theme;
@@ -34,16 +35,22 @@ class Manager
     protected $rootDir;
 
     /**
+     * @var DatabaseHandler
+     */
+    protected $snippetWriter;
+
+    /**
      * @var ModelRepository
      */
     protected $repository;
 
-    function __construct($rootDir, ModelManager $entityManager, PluginManager $pluginManager, \Enlight_Template_Manager $templateManager)
+    function __construct($rootDir, ModelManager $entityManager, PluginManager $pluginManager, \Enlight_Template_Manager $templateManager, DatabaseHandler $snippetWriter)
     {
         $this->entityManager = $entityManager;
         $this->pluginManager = $pluginManager;
         $this->rootDir = $rootDir;
         $this->templateManager = $templateManager;
+        $this->snippetWriter = $snippetWriter;
         $this->repository = $entityManager->getRepository('Shopware\Models\Shop\Template');
     }
 
@@ -69,26 +76,6 @@ class Manager
         $this->resolveThemeParents($themes);
     }
 
-    /**
-     * Removes the database entries for themes which file no more exist.
-     */
-    private function removeDeletedThemes()
-    {
-        $themes = $this->repository->createQueryBuilder('templates');
-        $themes->where('templates.version = 3')
-            ->andWhere('templates.pluginId IS NULL');
-
-        $themes = $themes->getQuery()->getResult(AbstractQuery::HYDRATE_OBJECT);
-
-        /**@var $theme Template*/
-        foreach($themes as $theme) {
-            $directory = $this->getThemeDirectory($theme);
-            if (!file_exists($directory)) {
-                $this->entityManager->remove($theme);
-            }
-        }
-        $this->entityManager->flush();
-    }
 
     /**
      * Iterates all Shopware 4 templates which
@@ -200,7 +187,7 @@ class Manager
                 return null;
             }
 
-            return $bootstrap->Path() . DIRECTORY_SEPARATOR . 'Themes' . $theme->getTemplate();
+            return $bootstrap->Path() . DIRECTORY_SEPARATOR . 'Themes' . DIRECTORY_SEPARATOR . $theme->getTemplate();
         } else {
             return $this->getDefaultThemeDirectory() . DIRECTORY_SEPARATOR . $theme->getTemplate();
         }
@@ -307,12 +294,77 @@ class Manager
 
             $this->entityManager->flush($template);
 
+            $this->initialThemeSnippets($template);
+
             $themes[] = $theme;
         }
 
         return $themes;
     }
 
+    /**
+     * Reads the snippet of all theme ini files and write them
+     * into the database
+     * @param Template $template
+     */
+    public function initialThemeSnippets(Template $template)
+    {
+        $directory = $this->getSnippetDirectory($template);
+
+        if (!file_exists($directory)) {
+            return;
+        }
+
+        $namespace = $this->getSnippetNamespace($template);
+
+        $this->snippetWriter->loadToDatabase(
+            $directory,
+            false,
+            $namespace
+        );
+    }
+
+    public function getSnippetNamespace(Template $template)
+    {
+        return 'themes/' . strtolower($template->getTemplate()) . '/';
+    }
+
+    /**
+     * Returns the fix defined snippet directory of the passed theme.
+     *
+     * @param Template $template
+     * @return string
+     */
+    public function getSnippetDirectory(Template $template)
+    {
+        return $this->getThemeDirectory($template) .
+        DIRECTORY_SEPARATOR .
+        '_private' .
+        DIRECTORY_SEPARATOR .
+        'snippets' .
+        DIRECTORY_SEPARATOR;
+    }
+
+    /**
+     * Removes the database entries for themes which file no more exist.
+     */
+    private function removeDeletedThemes()
+    {
+        $themes = $this->repository->createQueryBuilder('templates');
+        $themes->where('templates.version = 3')
+            ->andWhere('templates.pluginId IS NULL');
+
+        $themes = $themes->getQuery()->getResult(AbstractQuery::HYDRATE_OBJECT);
+
+        /**@var $theme Template */
+        foreach ($themes as $theme) {
+            $directory = $this->getThemeDirectory($theme);
+            if (!file_exists($directory)) {
+                $this->entityManager->remove($theme);
+            }
+        }
+        $this->entityManager->flush();
+    }
 
     /**
      * Helper function which refresh the theme configuration element definition.
@@ -503,8 +555,8 @@ class Manager
      */
     private function getElementByName($collection, $name)
     {
-        /**@var $element Template\ConfigElement*/
-        foreach($collection as $element) {
+        /**@var $element Template\ConfigElement */
+        foreach ($collection as $element) {
             if ($element->getName() == $name) {
                 return $element;
             }

@@ -1,3 +1,6 @@
+
+//{namespace name=backend/theme/main}
+
 Ext.define('Shopware.apps.Theme.controller.List', {
     extend: 'Enlight.app.Controller',
 
@@ -20,14 +23,21 @@ Ext.define('Shopware.apps.Theme.controller.List', {
                 selectionchange: me.onSelectTheme
             },
             'theme-list-window': {
-                'assign-theme': me.onAssignTheme,
-                'preview-theme': me.onPreviewTheme,
                 'search-theme': me.onSearchTheme,
+                'refresh-list': me.onRefreshList,
                 'create-theme': me.onCreateTheme
+            },
+            'theme-listing-info-panel' : {
+                'assign-theme': me.onAssignTheme,
+                'preview-theme': me.onPreviewTheme
             }
         });
 
         me.mainWindow = me.getView('list.Window').create({ }).show();
+    },
+
+    onRefreshList: function() {
+        this.getListingView().getStore().load();
     },
 
     onCreateTheme: function() {
@@ -109,12 +119,12 @@ Ext.define('Shopware.apps.Theme.controller.List', {
             me.previewWindow.close();
             me.previewWindow = null;
 
-            me.getListingWindow().previewButton.setText('Preview theme');
+            me.getInfoPanel().previewButton.setText('{s name=preview}Preview theme{/s}');
             me.removePreviewFlag()
         } else {
             url += '?themeId=' + theme.get('id') + '&shopId=' + shop.get('id');
 
-            me.getListingWindow().previewButton.setText('Stop preview');
+            me.getInfoPanel().previewButton.setText('{s name=stop_preview}Stop preview{/s}');
             theme.set('preview', true);
             me.previewWindow = window.open(url);
         }
@@ -165,21 +175,21 @@ Ext.define('Shopware.apps.Theme.controller.List', {
 
         var record = me.getSelectedTheme();
 
-        me.getListingWindow().previewButton.disable();
-        me.getListingWindow().assignButton.disable();
-        me.getListingWindow().configureButton.disable();
+        me.getInfoPanel().previewButton.disable();
+        me.getInfoPanel().assignButton.disable();
+        me.getInfoPanel().configureButton.disable();
 
         if (record instanceof Ext.data.Model) {
-            me.getListingWindow().previewButton.enable();
-            me.getListingWindow().assignButton.enable();
+            me.getInfoPanel().previewButton.enable();
+            me.getInfoPanel().assignButton.enable();
 
             if (record.getElements().getCount() > 0) {
-                me.getListingWindow().configureButton.enable();
+                me.getInfoPanel().configureButton.enable();
             }
         }
 
         if (me.previewWindow) {
-            me.getListingWindow().previewButton.enable();
+            me.getInfoPanel().previewButton.enable();
         }
     },
 
