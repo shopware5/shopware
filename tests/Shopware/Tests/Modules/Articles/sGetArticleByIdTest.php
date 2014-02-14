@@ -113,6 +113,20 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
         }
     }
 
+    public function testGetDisabledArticleById() {
+        $this->dispatch("/");
+
+        $id = $this->articles[2]['articleID'];
+
+        Shopware()->Db()->query('UPDATE s_articles SET active = 0 WHERE id = ?', array($id));
+
+        $this->assertCount(0, $this->Module()->sGetArticleById($id));
+
+        Shopware()->Db()->query('UPDATE s_articles SET active = 1 WHERE id = ?', array($id));
+
+        $this->assertGreaterThan(0, count($this->Module()->sGetArticleById($id)));
+    }
+
     private function assertArticleData($expected, $data) {
         foreach($this->articleProperties as $property) {
             $this->assertEquals($expected[$property], $data[$property]);

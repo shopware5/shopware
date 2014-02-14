@@ -3013,6 +3013,11 @@ class sArticles
 
         $getArticle = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sql, false, "article_" . $id);
 
+        // If the article is empty at this point, it means something went wrong, and we should skip the following steps
+        if (empty($getArticle)) {
+            return $getArticle;
+        }
+
         // Translate main - data
         $getArticle = $this->sGetTranslation($getArticle, $id, "article", $this->sSYSTEM->sLanguage);
 
