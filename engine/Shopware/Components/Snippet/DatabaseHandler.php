@@ -84,8 +84,9 @@ class DatabaseHandler
      *
      * @param null $snippetsDir
      * @param bool $force
+     * @param string $namespacePrefix Allows to prefix the snippet namespace.
      */
-    public function loadToDatabase($snippetsDir = null, $force = false)
+    public function loadToDatabase($snippetsDir = null, $force = false, $namespacePrefix = '')
     {
         $snippetsDir = $snippetsDir ? : $this->kernelRoot . '/snippets/';
         if (!file_exists($snippetsDir)) {
@@ -135,7 +136,7 @@ class DatabaseHandler
                     $locale = $localeRepository->findOneBy(array('locale' => $index));
                 }
 
-                $databaseWriter->write($values, $namespace, $locale->getId(), 1);
+                $databaseWriter->write($values, $namespacePrefix . $namespace, $locale->getId(), 1);
 
                 if ($this->output) {
                     $this->output->writeln('<info>Imported ' . count($values) . ' snippets into ' . $locale->getLocale() . '</info>');
