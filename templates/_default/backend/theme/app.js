@@ -21,8 +21,6 @@ Ext.define('Shopware.apps.Theme', {
 
         'detail.elements.Suffix',
         'detail.elements.PixelField',
-        'detail.elements.ArticleSelection',
-        'detail.elements.CategorySelection',
         'detail.elements.CheckboxField',
         'detail.elements.ColorPicker',
         'detail.elements.DateField',
@@ -35,7 +33,7 @@ Ext.define('Shopware.apps.Theme', {
     ],
 
     models: [ 'Theme', 'Element', 'ConfigValue' ],
-    stores: [ 'Theme', 'Category', 'Article' ],
+    stores: [ 'Theme' ],
 
     launch: function() {
         return this.getController('List').mainWindow;
