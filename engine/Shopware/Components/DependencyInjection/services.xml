@@ -276,6 +276,7 @@
             <argument type="service" id="models" />
             <argument type="service" id="shopware.plugin_manager" />
             <argument type="service" id="template" />
+            <argument type="service" id="shopware.snippet_database_handler" />
         </service>
 
         <service id="theme_factory" class="Shopware\Components\Theme\Factory">

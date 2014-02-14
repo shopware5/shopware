@@ -1,11 +1,14 @@
 
+//{namespace name=backend/theme/main}
+
 Ext.define('Shopware.apps.Theme.view.list.Window', {
     extend: 'Shopware.window.Listing',
     alias: 'widget.theme-list-window',
     height: '80%',
-    width: '50%',
-    title : '{s name=window_title}Theme manager{/s}',
+    width: '75%',
+    title : '{s name=listing}Theme manager 2.0{/s}',
     minWidth: 600,
+
 
     configure: function() {
         return {
@@ -51,12 +54,9 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
         items.push({ xtype: 'tbspacer', width: 6 });
         items.push(me.createShopCombo());
         items.push('-');
-        items.push(me.createAssignButton());
-        items.push(me.createPreviewButton());
-        items.push('-');
-        items.push(me.createConfigureButton());
         items.push(me.createAddButton());
-        items.push('->')
+        items.push(me.createRefreshButton());
+        items.push('->');
         items.push(me.createSearchField());
 
         return items;
@@ -74,7 +74,9 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
 
         me.shopCombo = Ext.create('Ext.form.field.ComboBox', {
             name: 'shop',
+            fieldLabel: '{s name=shop_combo}Template-Auswahl für Shop{/s}',
             editable: false,
+            labelWidth: 150,
             store: me.shopStore,
             displayField: 'name',
             valueField: 'id'
@@ -83,57 +85,11 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
         return me.shopCombo;
     },
 
-    createAssignButton: function () {
-        var me = this;
-
-        me.assignButton = Ext.create('Ext.button.Button', {
-            text: 'Select theme',
-            cls: 'small',
-            disabled: true,
-            handler: function() {
-                me.fireEvent('assign-theme', me);
-            }
-        });
-
-        return me.assignButton;
-    },
-
-    createPreviewButton: function () {
-        var me = this;
-
-        me.previewButton = Ext.create('Ext.button.Button', {
-            text: 'Preview theme',
-            disabled: true,
-            cls: 'small',
-            handler: function() {
-                me.fireEvent('preview-theme', me);
-            }
-        });
-
-        return me.previewButton;
-    },
-
-    createConfigureButton: function() {
-        var me = this;
-
-        me.configureButton = Ext.create('Ext.button.Button', {
-            text: 'Configure theme',
-            disabled: true,
-            cls: 'small',
-            handler: function() {
-                me.fireEvent('configure-theme', me);
-            }
-        });
-
-        return me.configureButton;
-    },
-
     createAddButton: function() {
         var me = this;
 
         me.addButton = Ext.create('Ext.button.Button', {
-            text: 'Create theme',
-            cls: 'small',
+            text: '{s name=create}Create theme{/s}',
             handler: function() {
                 me.fireEvent('create-theme', me);
             }
@@ -142,13 +98,26 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
         return me.addButton;
     },
 
+    createRefreshButton: function() {
+        var me = this;
+
+        me.refreshButton = Ext.create('Ext.button.Button', {
+            text: '{s name=refresh}Refresh list{/s}',
+            handler: function() {
+                me.fireEvent('refresh-list', me);
+            }
+        });
+
+        return me.refreshButton;
+    },
+
     createSearchField: function() {
         var me = this;
 
         me.searchField = Ext.create('Ext.form.field.Text', {
             cls: 'searchfield',
             width: 170,
-            emptyText: 'Search ...',
+            emptyText: '{s name=search}Search ...{/s}',
             enableKeyEvents: true,
             checkChangeBuffer: 500,
             listeners: {

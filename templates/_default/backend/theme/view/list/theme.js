@@ -1,3 +1,6 @@
+
+//{namespace name=backend/theme/main}
+
 Ext.define('Shopware.apps.Theme.view.list.Theme', {
     alias: 'widget.theme-listing',
     region: 'center',
@@ -22,11 +25,11 @@ Ext.define('Shopware.apps.Theme.view.list.Theme', {
             requestURL: '{url controller="Theme" action="upload"}',
             enablePreviewImage: false,
             showInput: false,
-            dropZoneText: '{s name=theme/drop_zone}Upload single theme using drag+drop{/s}'
+            dropZoneText: '{s name=drop_zone}Upload single theme using drag+drop (zip){/s}'
         });
 
-        me.dropZone.snippets.messageTitle = 'Theme manager';
-        me.dropZone.snippets.messageText = 'Theme uploaded successfully';
+        me.dropZone.snippets.messageTitle = '{s name=upload_title}Theme manager{/s}';
+        me.dropZone.snippets.messageText = '{s name=upload_message}Theme uploaded successfully{/s}';
 
         return me.dropZone;
     },
@@ -57,11 +60,11 @@ Ext.define('Shopware.apps.Theme.view.list.Theme', {
             '</tpl>',
                     '<tpl if="enabled">',
                         '<div class="hint enabled">',
-                            '<span>{/literal}{s name=theme/hint_enabled}Enabled{/s}{literal}</span>',
+                            '<span>{/literal}{s name=enabled}Enabled{/s}{literal}</span>',
                         '</div>',
                     '<tpl elseif="preview">',
                         '<div class="hint preview">',
-                            '<span>{/literal}{s name=theme/hint_preview}Preview{/s}{literal}</span>',
+                            '<span>{/literal}{s name=preview_hint}Preview{/s}{literal}</span>',
                         '</div>',
                     '</tpl>',
 

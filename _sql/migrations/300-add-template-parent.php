@@ -1,5 +1,5 @@
 <?php
-class Migrations_Migration225 Extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration300 Extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up()
     {

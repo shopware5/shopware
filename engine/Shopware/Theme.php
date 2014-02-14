@@ -49,18 +49,6 @@ class Theme
     const TYPE_MEDIA = 'theme-media-selection';
 
     /**
-     * Constant for the category selection field
-     * which can be used as template config element
-     */
-    const TYPE_CATEGORY = 'theme-category-selection';
-
-    /**
-     * Constant for the article selection field
-     * which can be used as template config element
-     */
-    const TYPE_ARTICLE = 'theme-article-selection';
-
-    /**
      * Constant for the checkbox field
      * which can be used as template config element
      */
@@ -327,48 +315,6 @@ class Theme
     protected function createTextAreaField(array $options)
     {
         $options += array('type' => self::TYPE_TEXT_AREA_FIELD);
-        $this->createConfigElement($options);
-    }
-
-    /**
-     * Creates a color picker field which displayed in the theme configuration
-     * window of the theme manager module.
-     *
-     * @param array $options {
-     *      @type string $name          Required; Logical name which used as template variable name
-     *      @type string $fieldLabel    Optional; Ext JS form field label.
-     *      @type string $allowBlank    Optional; Defines if the value can contains null
-     *      @type string $defaultValue  Optional; Default value of this config element
-     *      @type string $position      Optional; Position which can be used to define the field positions
-     *      @type string $supportText   Optional; Text which displayed below the input field.
-     * }
-     *
-     * 
-     */
-    protected function createArticleSelection(array $options)
-    {
-        $options += array('type' => self::TYPE_ARTICLE);
-        $this->createConfigElement($options);
-    }
-
-    /**
-     * Creates a color picker field which displayed in the theme configuration
-     * window of the theme manager module.
-     *
-     * @param array $options {
-     *      @type string $name          Required; Logical name which used as template variable name
-     *      @type string $fieldLabel    Optional; Ext JS form field label.
-     *      @type string $allowBlank    Optional; Defines if the value can contains null
-     *      @type string $defaultValue  Optional; Default value of this config element
-     *      @type string $position      Optional; Position which can be used to define the field positions
-     *      @type string $supportText   Optional; Text which displayed below the input field.
-     * }
-     *
-     * 
-     */
-    protected function createCategorySelection(array $options)
-    {
-        $options += array('type' => self::TYPE_CATEGORY);
         $this->createConfigElement($options);
     }
 

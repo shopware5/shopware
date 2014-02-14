@@ -1,4 +1,6 @@
 
+//{namespace name=backend/theme/main}
+
 Ext.define('Shopware.apps.Theme.view.create.Theme', {
 
     extend: 'Shopware.model.Container',
@@ -11,12 +13,13 @@ Ext.define('Shopware.apps.Theme.view.create.Theme', {
         return {
             fieldSets: [
                 {
-                    title: 'Theme data',
+                    title: '{s name=theme_data}Theme data{/s}',
                     padding: 10,
                     layout: 'fit',
                     fields: {
                         parentId: me.createExtendCombo,
                         name: {
+                            fieldLabel: '{s name=name}Name{/s}',
                             allowBlank: false,
                             vtype: 'alphanum'
                         }
@@ -43,7 +46,7 @@ Ext.define('Shopware.apps.Theme.view.create.Theme', {
             anchor: '100%',
             valueField: 'id',
             allowBlank: false,
-            fieldLabel: 'Extension of'
+            fieldLabel: '{s name=extension_of}Extension of{/s}'
         });
 
         return me.extendCombo;

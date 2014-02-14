@@ -14,7 +14,7 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
             'theme-detail-window': {
                 saveConfig: me.saveConfig
             },
-            'theme-list-window': {
+            'theme-listing-info-panel': {
                 'configure-theme': me.onConfigureTheme
             }
         });
@@ -42,7 +42,6 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
                 shopId: shop.get('id')
             },
             callback: function(record) {
-
                 me.getView('detail.Window').create({
                     elements: me.createThemeConfiguration(record, shop),
                     theme: record,
