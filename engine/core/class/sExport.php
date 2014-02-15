@@ -417,23 +417,56 @@ class sExport
         return $this->sSystem->rewriteLink(array(2=>$this->sSYSTEM->sCONFIG["sBASEFILE"]."?sViewport=detail&sArticle=$articleID",3=>$title),true).(empty($this->sSettings["partnerID"])?"":"?sPartner=".urlencode($this->sSettings["partnerID"]));
     }
 
-    public function sGetImageLink($hash, $imageSize = null)
+    public function sGetImageLink($hash, $imageSize = null, $imageNr = null)
     {
         if (empty($hash)) {
             return "";
         }
 
+        // split the urls into array
+        $imageHash = explode(';', $hash);
+
+        foreach ($imageHash as $image) {
+            // Split into URL, position and main
+            $imageTmp = explode(':', $image);
+            
+            // find the main image
+            if($imageTmp[2] == 1)
+                $imageMain = $imageTmp[0];
+                
+            // Sort all images into Array (with their position as the KEY)
+            $images[$imageTmp[1]] = $imageTmp[0];
+        }
+
         // get the image directory
         $imageDir = 'http://' . $this->shop->getHost() . $this->request->getBasePath() . '/media/image/';
 
-        // if no imageSize was set, return the full image
-        if (null === $imageSize) {
-            return $imageDir . $hash;
+        // if no imageSize and no imageNumber was set, return the full main image
+        if (null === $imageSize && null === $imageNr) {
+            return $imageDir . $imageMain;
         }
 
-        // get filename and extension in order to insert thumbnail size later
-        $extension = pathinfo($hash, PATHINFO_EXTENSION);
-        $fileName = pathinfo($hash, PATHINFO_FILENAME);
+        // if no imageSize was set, return the full image
+        if (null === $imageSize) {
+            // check if image number exists
+            if(empty($images[$imageNr]))
+                return "";
+            else
+                return $imageDir . $images[$imageNr];
+        }
+
+        // if the image number is not set return main image
+        if(null === $imageNr){
+            // get filename and extension in order to insert thumbnail size later
+            $extension = pathinfo($imageMain, PATHINFO_EXTENSION);
+            $fileName = pathinfo($imageMain, PATHINFO_FILENAME);   
+        }
+        else{
+            // get filename and extension in order to insert thumbnail size later
+            $extension = pathinfo($images[$imageNr], PATHINFO_EXTENSION);
+            $fileName = pathinfo($images[$imageNr], PATHINFO_FILENAME);
+        }
+
         $thumbDir = $imageDir . 'thumbnail/';
 
         // get thumbnail sizes
@@ -446,8 +479,8 @@ class sExport
                 $size = $size . 'x' . $size;
             }
         }
-
-        if (isset($sizes[$imageSize])) {
+        // if the combination of imagesize and image number exists
+        if (isset($sizes[$imageSize]) && $fileName != "") {
             return $thumbDir . $fileName . '_' . $sizes[(int) $imageSize] . '.' . $extension;
         }
 
@@ -555,12 +588,12 @@ class sExport
         if (empty($this->sSettings["image_filter"])) {
             $sql_add_join[] = "
                 LEFT JOIN s_articles_img as i
-                ON i.articleID = a.id AND i.main=1 AND i.article_detail_id IS NULL
+                ON i.articleID = a.id AND i.article_detail_id IS NULL
             ";
         } else {
             $sql_add_join[] = "
                 JOIN s_articles_img as i
-                ON i.articleID = a.id AND i.main=1 AND i.article_detail_id IS NULL
+                ON i.articleID = a.id AND i.article_detail_id IS NULL
             ";
         }
 
@@ -719,10 +752,10 @@ class sExport
                 u.unit,
                 u.description as unit_description,
                 t.tax,
-                CONCAT(i.img, '.', i.extension) as image,
+                GROUP_CONCAT(CONCAT(CONCAT(CONCAT(i.img, '.', i.extension), ':', i.position), ':', i.main) SEPARATOR ';') as image,
 
                 a.configurator_set_id as configurator,
-
+                
                 ROUND(IFNULL($grouppricefield, $pricefield)*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]},2) as netprice,
                 ROUND(IFNULL($grouppricefield, $pricefield)*(100+t.tax)/100*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]},2) as price,
                 pd.discount,
