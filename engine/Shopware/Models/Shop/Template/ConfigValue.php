@@ -129,7 +129,6 @@ class ConfigValue extends ModelEntity
     }
 
 
-
     /**
      * @return int
      */

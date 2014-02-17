@@ -232,7 +232,7 @@ EOD;
      */
     private function generateStructure($directory, $baseDir)
     {
-        foreach($directory as $key => $value) {
+        foreach ($directory as $key => $value) {
             if (is_array($value)) {
                 mkdir($baseDir . DIRECTORY_SEPARATOR . $key);
 
@@ -240,7 +240,7 @@ EOD;
             } else {
                 //switch between create file or create directory
                 if (strpos($value, '.') !== false) {
-                    file_put_contents($baseDir . DIRECTORY_SEPARATOR. $value, '');
+                    file_put_contents($baseDir . DIRECTORY_SEPARATOR . $value, '');
                 } else {
                     mkdir($baseDir . DIRECTORY_SEPARATOR . $value);
                 }
