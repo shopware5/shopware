@@ -40,6 +40,11 @@ class Factory
      */
     private $themeManager;
 
+    /**
+     * Source template for the Theme.php of a theme
+     *
+     * @var string
+     */
     private $phpSource = <<<'EOD'
 <?php
 
@@ -114,6 +119,12 @@ class Theme extends \Shopware\Theme
 }
 EOD;
 
+    /**
+     * Directory / File structure which will be
+     * generated for the theme.
+     *
+     * @var array
+     */
     private $structure = array(
         '_private' => array(
             'smarty',
@@ -121,11 +132,20 @@ EOD;
         )
     );
 
+
     function __construct($themeManager)
     {
         $this->themeManager = $themeManager;
     }
 
+    /**
+     * Function which generates a new shopware theme
+     * into the engine/Shopware/Themes directory.
+     *
+     * @param array $data
+     * @param Template $parent
+     * @throws \Exception
+     */
     public function generateTheme(array $data, Template $parent = null)
     {
         if (!is_writable($this->themeManager->getDefaultThemeDirectory())) {

@@ -87,6 +87,7 @@ Ext.define('Shopware.apps.Theme.view.create.Theme', {
             store: me.extendStore,
             labelWidth: 130,
             queryMode: 'local',
+            editable: false,
             name: 'parentId',
             displayField: 'name',
             anchor: '100%',
