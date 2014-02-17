@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `s_core_templates_config_elements` (
   `field_label` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `support_text` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `allow_blank` int(1) NOT NULL DEFAULT '1',
-  `tab` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Main',
+  `tab` text COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
