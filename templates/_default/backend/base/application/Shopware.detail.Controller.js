@@ -425,14 +425,16 @@ Ext.define('Shopware.detail.Controller', {
             success: function(result) {
                 window.setLoading(false);
 
+                if (window instanceof Shopware.window.Detail) {
+                    window.loadRecord(result);
+                }
+
                 Shopware.app.Application.fireEvent(me.getEventName('save-successfully'), me, result, window, record, form);
 
                 Shopware.Notification.createGrowlMessage(
                     me.getConfig('saveSuccessTitle'),
                     me.getConfig('saveSuccessMessage')
                 );
-
-                window.loadRecord(result);
             }
         });
     },

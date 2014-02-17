@@ -65,26 +65,33 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
     public function createAction()
     {
+        $template = $this->Request()->getParam('template');
         $name = $this->Request()->getParam('name');
         $parentId = $this->Request()->getParam('parentId');
 
+        if (empty($template)) {
+            throw new Exception('Each theme requires a defined source code name!');
+        }
         if (empty($name)) {
-            throw new Exception('Each theme requires a defined name!');
+            throw new Exception('Each theme requires a defined readable name!');
         }
 
         $parent = null;
         if ($parentId) {
             $parent = $this->getRepository()->find($parentId);
+
             if (!$parent instanceof Template) {
                 throw new Exception(sprintf(
                     'Shop template by id %s not found',
                     $parentId
                 ));
             }
-
         }
 
-        $this->container->get('theme_factory')->generateTheme($name, $parent);
+        $this->container->get('theme_factory')->generateTheme(
+            $this->Request()->getParams(),
+            $parent
+        );
 
         $this->View()->assign('success', true);
     }
@@ -159,7 +166,6 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         ))
             ->leftJoin('template.elements', 'elements')
             ->leftJoin('elements.values', 'values', 'WITH', 'values.shopId = :shopId')
-            ->addOrderBy('elements.tab')
             ->addOrderBy('elements.position')
             ->addOrderBy('elements.name')
             ->setParameter('shopId', 1);
@@ -184,9 +190,15 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         
         $namespace->read();
 
+        //translate config elements.
         foreach($data['elements'] as &$element) {
             $element['fieldLabel'] = $namespace->get($element['name'], $element['fieldLabel']);
             $element['supportText'] = $namespace->get($element['name'] . '_support', $element['supportText']);
+
+            $element['tab']['fieldLabel'] = $namespace->get($element['tab']['name'], $element['tab']['fieldLabel']);
+            if (empty($element['tab']['fieldLabel'])) {
+                $element['tab']['fieldLabel'] = $element['tab']['name'];
+            }
         }
 
         return $data;
@@ -268,8 +280,10 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
             if ($theme['version'] < 3) {
                 $theme['screen'] = $this->container->get('theme_manager')->getTemplateImage($instance);
+                $theme['path'] = $this->container->get('theme_manager')->getTemplateDirectory($instance);
             } else {
                 $theme['screen'] = $this->container->get('theme_manager')->getThemeImage($instance);
+                $theme['path'] = $this->container->get('theme_manager')->getThemeDirectory($instance);
             }
             $theme['enabled'] = ($theme['id'] === $template->getId());
         }
@@ -284,9 +298,15 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      */
     protected function getListQuery()
     {
-        $builder = parent::getListQuery();
-        $builder->addSelect('elements')
-            ->leftJoin('template.elements', 'elements');
+        $builder = $this->getManager()->createQueryBuilder();
+        $fields = $this->getModelFields($this->model, $this->alias);
+
+        $builder->select(array_column($fields, 'alias'));
+        $builder->from($this->model, $this->alias);
+
+        $builder->addSelect('COUNT(elements.id) as hasConfig')
+            ->leftJoin('template.elements', 'elements')
+            ->groupBy('template.id');
 
         return $builder;
     }

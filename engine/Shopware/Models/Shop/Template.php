@@ -157,7 +157,6 @@ class Template extends ModelEntity
      *      orphanRemoval=true,
      *      cascade={"persist"}
      * )
-     * @ORM\OrderBy({"tab" = "ASC", "position" = "ASC"})
      */
     protected $elements;
 

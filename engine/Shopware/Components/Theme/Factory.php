@@ -14,19 +14,19 @@ class Factory
     private $phpSource = <<<'EOD'
 <?php
 
-namespace Shopware\Themes\$$NAME$$;
+namespace Shopware\Themes\$TEMPLATE$;
 
 class Theme extends \Shopware\Theme
 {
-    protected $extend = $$PARENT$$;
+    protected $extend = '$PARENT$';
 
-    protected $name = '$$NAME$$';
+    protected $name = '$NAME$';
 
-    protected $description = null;
+    protected $description = '$DESCRIPTION$';
 
-    protected $author = null;
+    protected $author = '$AUTHOR$';
 
-    protected $license = null;
+    protected $license = '$LICENSE$';
 
     public function createConfig()
     {
@@ -97,27 +97,31 @@ EOD;
         $this->themeManager = $themeManager;
     }
 
-    public function generateTheme($name, Template $parent = null)
+    public function generateTheme(array $data, Template $parent = null)
     {
         if (!is_writable($this->themeManager->getDefaultThemeDirectory())) {
             throw new \Exception(
                 "Theme directory isn't writable"
             );
         }
+        if (!isset($data['template']) || empty($data['template'])) {
+            throw new \Exception(
+                "Passed data array contains no valid theme name under the array key 'template'."
+            );
+        }
 
         //ensure that the first character is upper case.
         //required for the directory structure and php namespace
-        $name = ucfirst($name);
+        $data['template'] = ucfirst($data['template']);
 
-        $this->createThemeDirectory($name);
+        $this->createThemeDirectory($data['template']);
 
-        $this->generateThemePhp($name, $parent);
+        $this->generateThemePhp($data, $parent);
 
         $this->generateStructure(
             $this->structure,
-            $this->getThemeDirectory($name)
+            $this->getThemeDirectory($data['template'])
         );
-
     }
 
     /**
@@ -145,23 +149,50 @@ EOD;
     /**
      * Generates the Theme.php file for the theme.
      *
-     * @param $name
+     * @param array $data
      * @param Template $parent
      */
-    private function generateThemePhp($name, Template $parent = null)
+    private function generateThemePhp(array $data, Template $parent = null)
     {
-        $source = str_replace('$$NAME$$', $name, $this->phpSource);
+        $source = str_replace('$TEMPLATE$', $data['template'], $this->phpSource);
 
         if ($parent instanceof Template) {
-            $source = str_replace('$$PARENT$$', "'" . $parent->getTemplate(). "'", $source);
+            $source = str_replace('$PARENT$', $parent->getTemplate(), $source);
         } else {
-            $source = str_replace('$$PARENT$$', 'null', $source);
+            $source = str_replace('$PARENT$', 'null', $source);
         }
 
+        $source = $this->replacePlaceholder('name', $data['name'], $source);
+        $source = $this->replacePlaceholder('author', $data['author'], $source);
+        $source = $this->replacePlaceholder('license', $data['license'], $source);
+        $source = $this->replacePlaceholder('description', $data['description'], $source);
+
         file_put_contents(
-            $this->getThemeDirectory($name) . DIRECTORY_SEPARATOR . 'Theme.php',
+            $this->getThemeDirectory($data['template']) . DIRECTORY_SEPARATOR . 'Theme.php',
             $source
         );
+    }
+
+    /**
+     * Helper function which replace the passed source placeholder with the passed content.
+     * If the content isn't set or is empty, the function replace the placeholder with the optional
+     * default value.
+     *
+     * @param string $placeholder Placeholder name, without surrounding '$'
+     * @param string $content Content which should be placed into the source
+     * @param string $source Source template where the content should be injected.
+     * @param string $default Fallback if the passed content is empty or isn't set
+     * @return mixed
+     */
+    private function replacePlaceholder($placeholder, $content, $source, $default = '')
+    {
+        $placeholder = strtoupper($placeholder);
+
+        if (isset($content) && !empty($content)) {
+            return str_replace('$' . $placeholder . '$', $content, $source);
+        } else {
+            return str_replace('$' . $placeholder . '$', $default, $source);
+        }
     }
 
     /**
