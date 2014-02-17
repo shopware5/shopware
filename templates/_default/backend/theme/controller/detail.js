@@ -55,6 +55,7 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
 
         Shopware.app.Application.on('theme-save-successfully', function(controller, result, window, record) {
             window.destroy();
+            me.getListingView().getStore().load();
         });
     },
 
