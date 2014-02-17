@@ -793,7 +793,7 @@ class sBasket
                     $factor = 1;
                 }
 
-                $surcharge = $this->sSYSTEM->sUSERGROUPDATA["minimumordersurcharge"]/$factor;
+                $surcharge = $this->sSYSTEM->sUSERGROUPDATA["minimumordersurcharge"]*$factor;
 
                 $params = array(
                     $this->sSYSTEM->sSESSION_ID,
