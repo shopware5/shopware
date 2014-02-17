@@ -74,7 +74,7 @@ Ext.define('Shopware.apps.Theme.view.create.Theme', {
         };
     },
 
-    createExtendCombo: function(container, model, formField, field, fieldAssociation) {
+    createExtendCombo: function() {
         var me = this;
 
         me.extendStore = Ext.create('Shopware.apps.Theme.store.Theme', {

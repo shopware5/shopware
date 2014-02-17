@@ -216,6 +216,17 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     }
 
     /**
+     * @param Template $template
+     * @return Enlight_Components_Snippet_Namespace
+     */
+    private function getSnippetNamespace(Template $template)
+    {
+        return $this->container->get('snippets')->getNamespace(
+            $this->container->get('theme_manager')->getSnippetNamespace($template) . 'backend/config'
+        );
+    }
+
+    /**
      * Override to get all snippet definitions for the loaded theme configuration.
      *
      * @param array $data
@@ -223,12 +234,10 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      */
     protected function getAdditionalDetailData(array $data)
     {
+        /**@var $template Template*/
         $template = $this->getRepository()->find($data['id']);
 
-        /**@var $namespace Enlight_Components_Snippet_Namespace */
-        $namespace = $this->container->get('snippets')->getNamespace(
-            $this->container->get('theme_manager')->getSnippetNamespace($template) . 'backend/config'
-        );
+        $namespace = $this->getSnippetNamespace($template);
 
         $namespace->read();
 
@@ -317,14 +326,21 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         }
 
         foreach ($data['data'] as &$theme) {
+            /**@var $instance Template*/
             $instance = $this->getRepository()->find($theme['id']);
 
             if ($theme['version'] < 3) {
                 $theme['screen'] = $this->container->get('theme_manager')->getTemplateImage($instance);
                 $theme['path'] = $this->container->get('theme_manager')->getTemplateDirectory($instance);
             } else {
+                $namespace = $this->getSnippetNamespace($instance);
+                $namespace->read();
+
                 $theme['screen'] = $this->container->get('theme_manager')->getThemeImage($instance);
                 $theme['path'] = $this->container->get('theme_manager')->getThemeDirectory($instance);
+
+                $theme['name'] = $namespace->get('theme_name', $theme['name']);
+                $theme['description'] = $namespace->get('theme_description', $theme['description']);
             }
             $theme['enabled'] = ($theme['id'] === $template->getId());
         }
