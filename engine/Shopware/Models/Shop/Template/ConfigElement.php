@@ -286,7 +286,16 @@ class ConfigElement extends ModelEntity
         return $this->id;
     }
 
-    public function toArray() {
+    /**
+     * Helper function to return the model data as
+     * array.
+     * Used to compare the existing theme configuration
+     * with the refreshed configuration in the Shopware\Components\Theme\Manager
+     *
+     * @return array
+     */
+    public function toArray()
+    {
         return array(
             'name' => $this->name,
             'type' => $this->type,

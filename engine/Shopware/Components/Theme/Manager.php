@@ -197,9 +197,9 @@ class Manager
     public function getDefaultThemeDirectory()
     {
         return $this->rootDir .
-            DIRECTORY_SEPARATOR . 'engine' .
-            DIRECTORY_SEPARATOR . 'Shopware' .
-            DIRECTORY_SEPARATOR . 'Themes';
+        DIRECTORY_SEPARATOR . 'engine' .
+        DIRECTORY_SEPARATOR . 'Shopware' .
+        DIRECTORY_SEPARATOR . 'Themes';
     }
 
     /**
@@ -404,7 +404,10 @@ class Manager
     private function getThemeWithConfig(Theme $theme)
     {
         $builder = $this->entityManager->createQueryBuilder();
-        $builder->select(array('template', 'elements'))
+        $builder->select(array(
+            'template',
+            'elements'
+        ))
             ->from('Shopware\Models\Shop\Template', 'template')
             ->leftJoin('template.elements', 'elements')
             ->where('template.template = :name')
