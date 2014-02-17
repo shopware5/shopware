@@ -2,7 +2,6 @@
 
 namespace Shopware\Components\Theme;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
@@ -44,7 +43,12 @@ class Manager
      */
     protected $repository;
 
-    function __construct($rootDir, ModelManager $entityManager, PluginManager $pluginManager, \Enlight_Template_Manager $templateManager, DatabaseHandler $snippetWriter)
+    function __construct(
+        $rootDir,
+        ModelManager $entityManager,
+        PluginManager $pluginManager,
+        \Enlight_Template_Manager $templateManager,
+        DatabaseHandler $snippetWriter)
     {
         $this->entityManager = $entityManager;
         $this->pluginManager = $pluginManager;
@@ -66,7 +70,6 @@ class Manager
         );
 
         $themes = $this->initialThemes($directories);
-
         $this->removeDeletedThemes();
 
         $pluginThemes = $this->initialPluginThemes();
@@ -162,9 +165,9 @@ class Manager
     public function getDefaultThemeDirectory()
     {
         return $this->rootDir .
-        DIRECTORY_SEPARATOR . 'engine' .
-        DIRECTORY_SEPARATOR . 'Shopware' .
-        DIRECTORY_SEPARATOR . 'Themes';
+            DIRECTORY_SEPARATOR . 'engine' .
+            DIRECTORY_SEPARATOR . 'Shopware' .
+            DIRECTORY_SEPARATOR . 'Themes';
     }
 
     /**
@@ -191,6 +194,67 @@ class Manager
         } else {
             return $this->getDefaultThemeDirectory() . DIRECTORY_SEPARATOR . $theme->getTemplate();
         }
+    }
+
+    /**
+     * Returns the template directory of the passed shop template.
+     * @param Template $template
+     * @return string
+     */
+    public function getTemplateDirectory(Template $template)
+    {
+        return $this->templateManager->resolveTemplateDir(
+            $template->getTemplate()
+        );
+    }
+
+    /**
+     * Reads the snippet of all theme ini files and write them
+     * into the database
+     * @param Template $template
+     */
+    public function initialThemeSnippets(Template $template)
+    {
+        $directory = $this->getSnippetDirectory($template);
+
+        if (!file_exists($directory)) {
+            return;
+        }
+
+        $namespace = $this->getSnippetNamespace($template);
+
+        $this->snippetWriter->loadToDatabase(
+            $directory,
+            false,
+            $namespace
+        );
+    }
+
+    /**
+     * Returns the snippet namespace for the passed theme.
+     *
+     * @param Template $template
+     * @return string
+     */
+    public function getSnippetNamespace(Template $template)
+    {
+        return 'themes/' . strtolower($template->getTemplate()) . '/';
+    }
+
+    /**
+     * Returns the fix defined snippet directory of the passed theme.
+     *
+     * @param Template $template
+     * @return string
+     */
+    public function getSnippetDirectory(Template $template)
+    {
+        return $this->getThemeDirectory($template) .
+        DIRECTORY_SEPARATOR .
+        '_private' .
+        DIRECTORY_SEPARATOR .
+        'snippets' .
+        DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -277,9 +341,7 @@ class Manager
 
             $data = $this->getThemeDefinition($theme);
 
-            $template = $this->repository->findOneBy(array(
-                'template' => $theme->getTemplate()
-            ));
+            $template = $this->getThemeWithConfig($theme);
 
             if (!$template instanceof Template) {
                 $template = new Template();
@@ -288,9 +350,7 @@ class Manager
 
             $template->fromArray($data);
 
-            $template->setElements(
-                $this->getThemeConfiguration($theme, $template)
-            );
+            $this->initialThemeConfiguration($theme, $template);
 
             $this->entityManager->flush($template);
 
@@ -303,46 +363,24 @@ class Manager
     }
 
     /**
-     * Reads the snippet of all theme ini files and write them
-     * into the database
-     * @param Template $template
-     */
-    public function initialThemeSnippets(Template $template)
-    {
-        $directory = $this->getSnippetDirectory($template);
-
-        if (!file_exists($directory)) {
-            return;
-        }
-
-        $namespace = $this->getSnippetNamespace($template);
-
-        $this->snippetWriter->loadToDatabase(
-            $directory,
-            false,
-            $namespace
-        );
-    }
-
-    public function getSnippetNamespace(Template $template)
-    {
-        return 'themes/' . strtolower($template->getTemplate()) . '/';
-    }
-
-    /**
-     * Returns the fix defined snippet directory of the passed theme.
+     * Helper function to select the shopware template with all config elements
+     * with only one query.
      *
-     * @param Template $template
-     * @return string
+     * @param Theme $theme
+     * @return mixed
      */
-    public function getSnippetDirectory(Template $template)
+    private function getThemeWithConfig(Theme $theme)
     {
-        return $this->getThemeDirectory($template) .
-        DIRECTORY_SEPARATOR .
-        '_private' .
-        DIRECTORY_SEPARATOR .
-        'snippets' .
-        DIRECTORY_SEPARATOR;
+        $builder = $this->entityManager->createQueryBuilder();
+        $builder->select(array('template', 'elements'))
+            ->from('Shopware\Models\Shop\Template', 'template')
+            ->leftJoin('template.elements', 'elements')
+            ->where('template.template = :name')
+            ->setParameter('name', $theme->getTemplate());
+
+        return $builder->getQuery()->getOneOrNullResult(
+            AbstractQuery::HYDRATE_OBJECT
+        );
     }
 
     /**
@@ -371,9 +409,8 @@ class Manager
      *
      * @param Theme $theme
      * @param Template $template
-     * @return ArrayCollection
      */
-    private function getThemeConfiguration(Theme $theme, Template $template)
+    private function initialThemeConfiguration(Theme $theme, Template $template)
     {
         $theme->createConfig();
 
@@ -382,15 +419,18 @@ class Manager
 
         /**@var $element Template\ConfigElement */
         foreach ($definition as $element) {
-
-            $exist = $this->getElementByName($existing, $element->getName());
-            $element->setTemplate($template);
+            $exist = $this->getElementByName(
+                $existing,
+                $element->getName()
+            );
 
             if ($exist instanceof Template\ConfigElement) {
                 $exist->fromArray($element->toArray());
             } else {
                 $existing->add($element);
             }
+
+            $element->setTemplate($template);
         }
 
         $toRemove = array();
@@ -403,8 +443,6 @@ class Manager
         foreach ($toRemove as $element) {
             $existing->removeElement($element);
         }
-
-        return $existing;
     }
 
     /**

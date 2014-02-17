@@ -100,9 +100,9 @@ class ConfigElement extends ModelEntity
 
     /**
      * @var
-     * @ORM\Column(name="tab", type="string")
+     * @ORM\Column(name="tab", type="array")
      */
-    protected $tab = 'Main';
+    protected $tab = array('name' => 'Main');
 
     /**
      * @var

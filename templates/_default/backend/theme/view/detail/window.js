@@ -1,5 +1,37 @@
+/**
+ * Shopware 4
+ * Copyright © shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
+/**
+ * Shopware Application
+ *
+ * @category  Shopware
+ * @package   Shopware
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
 
 //{namespace name=backend/theme/main}
+
+//{block name="backend/theme/view/detail/window"}
 
 Ext.define('Shopware.apps.Theme.view.detail.Window', {
     extend: 'Enlight.app.Window',
@@ -49,7 +81,8 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
             collection = {};
 
         Ext.each(elements, function(element) {
-            var tab = collection[element.tab];
+            var config = element.tab;
+            var tab = collection[config.name];
 
             if (!tab) {
                 tab = {
@@ -57,13 +90,13 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
                     layout: 'column',
                     xtype: 'container',
                     autoScroll: true,
-                    title: element.tab,
+                    title: config.fieldLabel,
                     items: [ ]
                 };
             }
 
             tab.items.push(element);
-            collection[element.tab] = tab;
+            collection[config.name] = tab;
         });
 
         //iterate tab collection to create tabs
@@ -186,3 +219,6 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
     }
 
 });
+
+//{/block}
+

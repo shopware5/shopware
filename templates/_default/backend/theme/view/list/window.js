@@ -1,5 +1,37 @@
+/**
+ * Shopware 4
+ * Copyright © shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
+/**
+ * Shopware Application
+ *
+ * @category  Shopware
+ * @package   Shopware
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
 
 //{namespace name=backend/theme/main}
+
+//{block name="backend/theme/view/list/window"}
 
 Ext.define('Shopware.apps.Theme.view.list.Window', {
     extend: 'Shopware.window.Listing',
@@ -53,7 +85,7 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
 
         items.push({ xtype: 'tbspacer', width: 6 });
         items.push(me.createShopCombo());
-        items.push('-');
+        items.push({ xtype: 'tbspacer', width: 12 });
         items.push(me.createAddButton());
         items.push(me.createRefreshButton());
         items.push('->');
@@ -76,7 +108,8 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
             name: 'shop',
             fieldLabel: '{s name=shop_combo}Template-Auswahl für Shop{/s}',
             editable: false,
-            labelWidth: 150,
+            labelWidth: 175,
+            labelStyle: 'margin-top: 2px',
             store: me.shopStore,
             displayField: 'name',
             valueField: 'id'
@@ -90,6 +123,7 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
 
         me.addButton = Ext.create('Ext.button.Button', {
             text: '{s name=create}Create theme{/s}',
+            iconCls: 'sprite-application--plus',
             handler: function() {
                 me.fireEvent('create-theme', me);
             }
@@ -103,6 +137,7 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
 
         me.refreshButton = Ext.create('Ext.button.Button', {
             text: '{s name=refresh}Refresh list{/s}',
+            iconCls: 'sprite-arrow-circle-135',
             handler: function() {
                 me.fireEvent('refresh-list', me);
             }
@@ -131,3 +166,6 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
     }
 
 });
+
+//{/block}
+
