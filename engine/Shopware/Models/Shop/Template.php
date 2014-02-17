@@ -23,6 +23,7 @@
  */
 
 namespace Shopware\Models\Shop;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Model\ModelEntity,
     Doctrine\ORM\Mapping as ORM;
@@ -279,7 +280,7 @@ class Template extends ModelEntity
      */
     public function setEsi($esi)
     {
-        $this->esi = (bool) $esi;
+        $this->esi = (bool)$esi;
         return $this;
     }
 
@@ -297,7 +298,7 @@ class Template extends ModelEntity
      */
     public function setEmotion($emotion)
     {
-        $this->emotion = (bool) $emotion;
+        $this->emotion = (bool)$emotion;
         return $this;
     }
 
@@ -316,7 +317,7 @@ class Template extends ModelEntity
      */
     public function setStyle($style)
     {
-        $this->style = (bool) $style;
+        $this->style = (bool)$style;
 
         return $this;
     }
