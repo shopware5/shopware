@@ -1,3 +1,4 @@
+
 <div class="ajax_modal_custom">
 	{block name='frontend_custom_ajax_action_buttons'}
 	<div class="heading">

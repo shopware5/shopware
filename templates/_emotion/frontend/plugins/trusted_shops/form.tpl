@@ -1,3 +1,4 @@
+
 {if !$sUserData.additional.charge_vat}
 	{assign var="sRealAmount" value=$sAmountNet|replace:",":"."}
 {else}

@@ -1,3 +1,4 @@
+
 {* Compare container *}
 {block name='frontend_index_navigation_inline' append}
 <div id="compareContainerAjax">

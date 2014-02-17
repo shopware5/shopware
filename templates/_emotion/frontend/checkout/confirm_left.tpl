@@ -1,3 +1,4 @@
+
 <div id="left" class="grid_4 first info">
 
 	{block name='frontend_checkout_confirm_left_payment_method'}

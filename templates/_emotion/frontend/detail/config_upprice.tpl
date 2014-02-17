@@ -1,3 +1,4 @@
+
 <form method="post" action="{url sArticle=$sArticle.articleID sCategory=$sArticle.categoryID}" class="upprice_config">
 
 	{foreach from=$sArticle.sConfigurator item=sConfigurator}

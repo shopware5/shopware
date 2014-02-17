@@ -1,3 +1,4 @@
+
 {extends file="frontend/checkout/confirm.tpl"}
 
 {block name='frontend_index_content_left'}{/block}

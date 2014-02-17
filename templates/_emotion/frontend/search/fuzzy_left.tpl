@@ -1,3 +1,4 @@
+
 <div class="grid_4 first" id="left">
 	<div class="filter_search">
 	{* Headline *}

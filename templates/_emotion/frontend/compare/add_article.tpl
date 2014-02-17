@@ -1,3 +1,4 @@
+
 {if $sCompareAddResult|is_bool}
 	{include file="frontend/compare/index.tpl"}
 {else}

@@ -1,3 +1,4 @@
+
 {if $sRelatedArticles}
 	<div class="relatedbox_container{if $sArticle.sVariant} displaynone{/if}">
 		

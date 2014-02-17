@@ -1,3 +1,4 @@
+
 {extends file='parent:frontend/home/index.tpl'}
 
 {block name='frontend_index_header_canonical'}

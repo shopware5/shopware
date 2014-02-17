@@ -1,3 +1,4 @@
+
 {if $GoogleConversionID}
 {if $sAmountWithTax}
 	{assign var="sRealAmount" value=$sAmountWithTax|replace:",":"."}

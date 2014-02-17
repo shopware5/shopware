@@ -1,3 +1,4 @@
+
 {if !$sArticle.sBookmarks}
 	{block name='frontend_blog_bookmarks_bookmarks'}
 	<div class="bookmarks">

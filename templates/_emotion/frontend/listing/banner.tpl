@@ -1,3 +1,4 @@
+
 {block name="frontend_listing_banner"}
 {if $sBanner}
 	{if $sBanner.extension=="swf"}

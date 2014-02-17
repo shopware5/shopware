@@ -1,3 +1,4 @@
+
 {* Categorie headline *}
 {block name="frontend_listing_text"}
 {if $sCategoryContent.cmsheadline}

@@ -1,3 +1,4 @@
+
 {extends file='parent:frontend/listing/box_article.tpl'}
 {* Disable the "buy now" button *}
 {block name='frontend_listing_box_article_actions_buy_now'}{/block}

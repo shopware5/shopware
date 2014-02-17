@@ -1,3 +1,4 @@
+
 <div class="actions">
     {* Contiune shopping *}
     {if $sBasket.sLastActiveArticle.link}

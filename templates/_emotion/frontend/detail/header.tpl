@@ -90,7 +90,7 @@
                 {/foreach}
                 'articleId': ~~(1 * '{$sArticle.articleID}'),
                 'linkDetailsRewrited': '{$sArticle.linkDetailsRewrited}',
-                'articleName': '{$sArticle.articleName}',
+                'articleName': '{$sArticle.articleName|escape:"javascript"}',
                 'thumbnail': getThumbnailSize('{config name=thumb}')
                 {rdelim};
 

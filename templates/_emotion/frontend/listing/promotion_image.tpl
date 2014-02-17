@@ -1,3 +1,4 @@
+
 {* Promotion image *}
 {block name="frontend_listing_promotion_image"}
 <div class="artbox_shoppingworld">

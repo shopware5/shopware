@@ -1,3 +1,4 @@
+
 {block name='frontend_frontend_checkout_added_info_teaser'}
 {if $sArticleName}
 	<div class="success bold center">

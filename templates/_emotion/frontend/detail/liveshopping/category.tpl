@@ -1,3 +1,4 @@
+
 {if $sLiveshoppingData.valid_to_ts}
 
 	<!-- <pre>{$sLiveshoppingData|print_r}</pre> -->

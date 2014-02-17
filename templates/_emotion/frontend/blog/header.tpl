@@ -1,3 +1,4 @@
+
 {extends file='frontend/index/header.tpl'}
 
 {* Title *}

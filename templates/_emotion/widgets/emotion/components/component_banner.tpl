@@ -1,3 +1,4 @@
+
 <div class="mapping">
     {if $Data.link}
         <a href="{$Data.link}">

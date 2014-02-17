@@ -1,3 +1,4 @@
+
 <div class="table_head">
 {block name='frontend_checkout_cart_header_field_labels'}
 	{* Article informations *}

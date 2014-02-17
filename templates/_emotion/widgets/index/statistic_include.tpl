@@ -1,3 +1,4 @@
+
 <script>
 jQuery(document).ready(function($) {
     var cok = document.cookie.match(/session-{$Shop->getId()}=([^;])+/g),

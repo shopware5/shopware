@@ -1,3 +1,4 @@
+
 {if $sArticle.sError && $sArticle.sError.variantNotAvailable}
     <div class="error">{s name='VariantAreNotAvailable'}Die ausgewählte Variante steht aktuell nicht zur Verfügung{/s}</div>
 {/if}

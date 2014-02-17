@@ -1,3 +1,4 @@
+
 {* Used in checkout/ajax_add_article.tpl *}
 {extends file="frontend/listing/box_article.tpl"}
 

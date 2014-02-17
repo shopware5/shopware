@@ -1,3 +1,4 @@
+
 {if $sLiveshoppingData.valid_to_ts}
 	<div class="liveshopping_detail">
 		

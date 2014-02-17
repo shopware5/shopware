@@ -1,3 +1,4 @@
+
 {if $sEmotions|@count > 0}
 {$style = ''}
 {foreach $sEmotions as $emotion}

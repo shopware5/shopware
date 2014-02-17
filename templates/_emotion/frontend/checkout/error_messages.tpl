@@ -1,3 +1,4 @@
+
 {* Basket informations *}
 {block name='frontend_checkout_error_messages_basket_error'}
 {if $sBasketInfo}

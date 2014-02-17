@@ -1,3 +1,4 @@
+
 {if $sArticle.sRelatedArticles && !$sArticle.crossbundlelook}
     <div id="related">
         <h2>{se name='DetailRelatedHeader'}{/se}</h2>

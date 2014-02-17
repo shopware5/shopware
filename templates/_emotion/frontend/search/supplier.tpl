@@ -1,3 +1,4 @@
+
 {extends file="frontend/search/index.tpl"}
 
 {block name='frontend_search_index_headline'}

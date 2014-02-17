@@ -1,3 +1,4 @@
+
 {* Search filter options *}
 {block name='frontend_search_filter_category_box'}
 <div class="category_filter">

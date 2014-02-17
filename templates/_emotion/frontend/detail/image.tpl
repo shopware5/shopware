@@ -1,3 +1,4 @@
+
 {block name="frontend_detail_image"}
 	{if $sArticle.image.src.4}
 		{* Main picture *}

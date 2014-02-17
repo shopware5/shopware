@@ -1,3 +1,4 @@
+
 <h2>{se name="ExceptionHeader"}Ups! An error has occurred!{/se}</h2>
 
 {if $exception}

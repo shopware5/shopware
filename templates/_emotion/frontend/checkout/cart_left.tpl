@@ -1,3 +1,4 @@
+
 {if !$sUserData.additional.user.id}
 <div id="left" class="grid_4 basket first">
 	{include file="frontend/checkout/shipping_costs.tpl"}

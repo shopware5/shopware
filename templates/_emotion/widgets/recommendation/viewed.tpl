@@ -1,3 +1,4 @@
+
 {if $viewedArticles}
     <script type="text/javascript">
         (function($) {
