@@ -1,3 +1,4 @@
+
 <div class="similar">
 	<div class="content">
 		{if $sArticle.sSimilarArticles}    

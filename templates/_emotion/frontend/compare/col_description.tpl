@@ -1,3 +1,4 @@
+
 {* Compare Description *}
 <div class="grid_3 compare_desc first">
 	

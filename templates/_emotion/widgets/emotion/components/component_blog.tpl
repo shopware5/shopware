@@ -1,3 +1,4 @@
+
 {if $Data}
     <div class="blog-outer-container">
         {foreach $Data.entries as $entry}

@@ -1,3 +1,4 @@
+
 <h2 class="headingbox largesize">{se name="AccountHeaderNavigation"}{/se}</h2>
 <div class="adminbox">
 	{block name="frontend_account_content_right_start"}

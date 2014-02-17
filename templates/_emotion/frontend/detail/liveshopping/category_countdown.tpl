@@ -1,3 +1,4 @@
+
 {if $sLiveshoppingData.valid_to_ts}
 	{assign var=uniquekey value=$smarty.now|uniqid}
 	

@@ -1,3 +1,4 @@
+
 {* Bundlebox  *}
 {if $sArticle.sRelatedArticles && $sArticle.crossbundlelook || $sArticle.sBundles}
 	{if !$sArticle.sVariants}

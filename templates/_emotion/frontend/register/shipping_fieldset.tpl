@@ -1,4 +1,5 @@
 
+
 <div class="alternative_shipping">
 	<h2 class="headingbox_dark largesize">{s name='RegisterShippingHeadline'}{/s}</h2>
 	{* Salutation *}

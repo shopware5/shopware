@@ -1,3 +1,4 @@
+
 <div class="inner_cart">
 	{if $sBasket.content}
 		{foreach name=ajaxbasket from=$sBasket.content item=sBasketItem}

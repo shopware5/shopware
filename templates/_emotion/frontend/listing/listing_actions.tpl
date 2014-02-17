@@ -1,3 +1,4 @@
+
 {if !$sOffers}
 
 {block name="frontend_listing_actions_class"}

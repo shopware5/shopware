@@ -1,3 +1,4 @@
+
 {extends file='frontend/listing/listing_actions.tpl'}
 
 {* Listing paging *}

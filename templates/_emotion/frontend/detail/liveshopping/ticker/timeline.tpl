@@ -1,3 +1,4 @@
+
 <div class="time_bars">		
 	<strong class="end_time">
 		{$sLiveshoppingData.valid_to_ts|date:datetime}

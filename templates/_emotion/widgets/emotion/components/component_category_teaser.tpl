@@ -1,3 +1,4 @@
+
 {if $Data}
 	<div class="teaser_box">
 		<a href="{if $Data.blog_category}{url controller=blog action=index sCategory=$Data.category_selection}{else}{url controller=cat action=index sCategory=$Data.category_selection}{/if}" title="{$Data.categoryName|strip_tags}">

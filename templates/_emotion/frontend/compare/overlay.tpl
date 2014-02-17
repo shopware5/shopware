@@ -1,3 +1,4 @@
+
 <div class="heading">
 	{* Headline *}
 	<h2>{se name='CompareHeader'}{/se}</h2>

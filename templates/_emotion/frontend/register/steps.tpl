@@ -1,3 +1,4 @@
+
 {* Step box *}
 <div class="step_box">
 	{block name='frontend_register_steps'}

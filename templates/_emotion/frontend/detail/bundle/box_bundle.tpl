@@ -1,3 +1,4 @@
+
 {if $sBundles}
 	<div class="bundle_container{if $sArtile.sVariant} displaynone{/if}">
 		

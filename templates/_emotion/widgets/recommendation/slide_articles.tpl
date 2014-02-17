@@ -1,3 +1,4 @@
+
 <div class="slide">
 	{foreach from=$articles item=article}
 		{assign var=image value=$article.image.src.2}

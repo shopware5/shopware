@@ -1,3 +1,4 @@
+
 {if $sSuccessAction}
 	<div class="success bold center grid_16">
 		{if $sSuccessAction == 'billing'}

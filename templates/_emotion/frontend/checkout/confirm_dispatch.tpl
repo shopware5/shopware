@@ -1,3 +1,4 @@
+
 {if $sDispatches}
 <div class="dispatch-methods">
 	<form method="POST" action="{url action='calculateShippingCosts' sTargetAction=$sTargetAction}" class="payment">

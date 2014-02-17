@@ -1,3 +1,4 @@
+
 {block name='frontend_index_header_javascript' append}
 {if $GoogleTrackingID}
 {include file="frontend/plugins/google/analytics.tpl"}

@@ -1,3 +1,4 @@
+
 <div class="table_row{if $lastitem} lastrow{/if}">
 
 	{block name='frontend_account_order_item_overview_row'}

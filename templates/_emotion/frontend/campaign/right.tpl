@@ -1,3 +1,4 @@
+
 {block name="frontend_campaign_right"}
 <div id="right" class="grid_3 last">
 	{* Campaign right top *}

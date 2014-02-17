@@ -1,4 +1,5 @@
 
+
 <div class="payment_method">
 	<h2 class="headingbox_dark largesize">{s name='RegisterPaymentHeadline'}{/s}</h2>
 	{foreach from=$payment_means item=payment_mean name=register_payment_mean}

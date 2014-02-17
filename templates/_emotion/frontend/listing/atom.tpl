@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="{encoding}" ?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 <link href="{$sCategoryContent.atomFeed|rewrite:$sCategoryContent.description|escape}" rel="self" type="application/atom+xml" />

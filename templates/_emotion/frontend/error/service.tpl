@@ -1,3 +1,4 @@
+
 {extends file='frontend/index/index.tpl'}
 {block name='frontend_index_header_title' prepend}{s name="ServiceIndexTitle"}Wartungsarbeiten{/s} | {/block}
 {block name='frontend_index_content'}

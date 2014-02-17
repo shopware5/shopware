@@ -1,3 +1,4 @@
+
 {foreach from=$sCategoryTree item=categoryTree}
     {if $depth==1}
     {elseif $depth==2}

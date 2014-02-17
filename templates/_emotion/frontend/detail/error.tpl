@@ -1,3 +1,4 @@
+
 {extends file='frontend/detail/index.tpl'}
 {block name='frontend_index_content'}
 

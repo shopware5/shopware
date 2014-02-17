@@ -1,3 +1,4 @@
+
 {if $partnerId}
 {*Partner Statistic Menu Item*}
 <li>

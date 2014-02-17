@@ -1,3 +1,4 @@
+
 {* 
 	BENOETIGTE PARAMETER
 	sLiveshoppingData > Liveshopping-Datensatz

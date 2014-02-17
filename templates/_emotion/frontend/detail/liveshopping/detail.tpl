@@ -1,3 +1,4 @@
+
 {if $sLiveshoppingData.valid_to_ts}
 	{assign var=pseudoprice_num value=$sArticlePseudoprice|replace:'.':''|replace:',':'.'|floatval}
 	{assign var=price_num value=$sLiveshoppingData.price|floatval}

@@ -1,3 +1,4 @@
+
 {$width = $sElementWidth-61}
 <div class="slide" style="width:{$width|round:0}px;height:{$sElementHeight}px">
 	{foreach from=$articles item=article}
