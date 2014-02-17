@@ -168,13 +168,13 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     public function uploadAction()
     {
         /**@var $file UploadedFile*/
-        $file = $this->container->get('file_manager')->getUploadedFile(
+        $file = $this->container->get('file_manager')->getUpload(
             $_FILES,
             'fileId'
         );
 
         if (strtolower($file->getClientOriginalExtension()) !== 'zip') {
-            $this->container->get('file_manager')->removeUploadFile($file);
+            $this->container->get('file_manager')->remove($file);
 
             throw new Exception(sprintf(
                 'Uploaded file %s is no zip file',
@@ -182,12 +182,12 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             ));
         }
 
-        $this->container->get('file_manager')->unzipFile(
+        $this->container->get('file_manager')->unzip(
             $file,
             $this->container->get('theme_manager')->getDefaultThemeDirectory()
         );
 
-        $this->container->get('file_manager')->removeUploadFile($file);
+        $this->container->get('file_manager')->remove($file);
 
         $this->View()->assign('success', true);
     }
