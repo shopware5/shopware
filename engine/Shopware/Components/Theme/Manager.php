@@ -173,6 +173,8 @@ class Manager
     }
 
     /**
+     * Returns the theme preview thumbnail.
+     *
      * @param \Shopware\Models\Shop\Template $theme
      * @return null|string
      */
