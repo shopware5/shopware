@@ -3015,7 +3015,7 @@ class sArticles
 
         // If the article is empty at this point, it means something went wrong, and we should skip the following steps
         if (empty($getArticle)) {
-            return $getArticle;
+            return array();
         }
 
         // Translate main - data
