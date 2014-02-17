@@ -1,16 +1,137 @@
-{extends file='parent:frontend/detail/comment.tpl'}
+<style type="text/css">
+#detail #detailinfo #comments .no_border {
+    border-bottom: 0 none;
+}
 
-{block name='frontend_detail_comment_author'}
+#detail #detailinfo #comments .answer {
+    padding: 8px 12px;
+    font-style: italic;
+    margin: 0 0 0 25px;
+    border: 1px dashed;
+}
+#detail #detailinfo #comments .answer .left_container {
+    width: 100px;
+    font-style: normal;
+}
+#detail #detailinfo #comments .answer .right_container {
+    width: 332px
+}
 
-	<div class="star star{$vote.points*2}"></div>
+/** colors.css */
+#detail #detailinfo #comments .answer {
+    border-color: #c7c7c7;
+    color: #999;
+}
+</style>
 
-	<strong class="author">
-		{se name="DetailCommentInfoFrom"}{/se} <span class="name">{$vote.name}</span>
-	</strong>
-{/block}
+<div id="comments">
+	{* Response save comment *}
+	{if $sAction == "ratingAction"}
+		{block name='frontend_detail_comment_error_messages'}
+		<div>
+			{if $sErrorFlag}
+				<div class="error bold center">
+					{se name="DetailCommentInfoFillOutFields"}{/se}
+				</div>
+			{else}
+				{if {config name="OptinVote"} && !{$smarty.get.sConfirmation}}
+					<div class="success bold center">
+						{se name="DetailCommentInfoSuccessOptin"}{/se}
+					</div>
+				{else}
+					<div class="success bold center">
+						{se name="DetailCommentInfoSuccess"}{/se}
+					</div>
+				{/if}
+			{/if}
+		</div>
+		{/block}
+	{/if}
 
-{* Star rating *}
-{block name="frontend_detail_comment_star_rating"}{/block}
+	<h2>{s name="DetailCommentHeader"}{/s} "{$sArticle.articleName}"</h2>
+
+	{if $sArticle.sVoteAverange.count}
+		<div class="overview_rating">
+			<strong>{se name="DetailCommentInfoAverageRate"}{/se}</strong>
+			<div class="star star{$sArticle.sVoteAverange.averange}">Star Rating</div>
+			<span>({s name="DetailCommentInfoRating"}{/s})</span>
+			<div class="clear">&nbsp;</div>
+		</div>
+	{/if}
+
+	<div class="doublespace">&nbsp;</div>
+
+	{* Display comments *}
+	{if $sArticle.sVoteComments}
+		{foreach name=comment from=$sArticle.sVoteComments item=vote}
+			<div class="comment_block{if $smarty.foreach.comment.last} last{/if}{if $vote.answer} no_border{/if}">
+
+				<div class="left_container">
+				{* Star rating *}
+				{block name="frontend_detail_comment_star_rating"}
+					<div class="star star{$vote.points*2}"></div>
+				{/block}
+
+				{* Author *}
+				{block name='frontend_detail_comment_author'}
+
+					<strong class="author">
+						{se name="DetailCommentInfoFrom"}{/se} <span class="name">{$vote.name}</span>
+					</strong>
+				{/block}
+
+				{* Date *}
+				{block name='frontend_detail_comment_date'}
+					<span class="date">
+						{$vote.datum}
+					</span>
+				{/block}
+				</div>
+
+				<div class="right_container">
+				{block name='frontend_detail_comment_text'}
+					{* Headline *}
+					{block name='frontend_detail_comment_headline'}
+						<h3>{$vote.headline}</h3>
+					{/block}
+
+					{* Comment text *}
+					<p>
+						{$vote.comment|nl2br}
+					</p>
+				{/block}
+				</div>
+
+
+
+				<div class="clear">&nbsp;</div>
+
+			</div>
+
+            {block name="frontend_detail_answer_block"}
+                {if $vote.answer}
+                <div class="comment_block answer">
+                    <div class="left_container">
+                        <strong class="author">
+                            {se name="DetailCommentInfoFrom"}{/se} {se name="DetailCommentInfoFromAdmin"}Admin{/se}
+                        </strong>
+                        <span class="date">
+                            {$vote.answer_date}
+                        </span>
+                    </div>
+                    <div class="right_container">
+                        {$vote.answer}
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                {/if}
+            {/block}
+
+		{/foreach}
+
+		<div class="space">&nbsp;</div>
+
+	{/if}
 
 	{block name='frontend_detail_comment_post'}
 
@@ -91,7 +212,7 @@
 					{* Captcha *}
 					{block name='frontend_detail_comment_input_captcha'}
 					<div class="captcha">
-                        <div class="captcha-placeholder" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
+						<div class="captcha-placeholder" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
 						<div class="code">
 							<label>{se name="DetailCommentLabelCaptcha"}{/se}</label>
 							<input type="text" name="sCaptcha"class="text {if $sErrorFlag.sCaptcha}instyle_error{/if}" />
@@ -113,3 +234,4 @@
 			</div>
 		</form>
 	{/block}
+</div>

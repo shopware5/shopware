@@ -1,4 +1,53 @@
-{extends file='parent:frontend/checkout/confirm.tpl'}
+{extends file="frontend/index/index.tpl"}
+
+{* Javascript *}
+{block name="frontend_index_header_javascript" append}
+<script type="text/javascript">
+//<![CDATA[
+	if(top!=self){
+		top.location=self.location;
+	}
+//]]>
+</script>
+{/block}
+
+{* Include the necessary stylesheets. We need inline styles here due to the fact that the colors are configuratable. *}
+{block name="frontend_index_header_css_screen" append}
+	<style type="text/css">
+		#confirm .table, #confirm .country-notice {
+			background: {config name=baskettablecolor};
+		}
+		#confirm .table .table_head {
+			color: {config name=basketheaderfontcolor};
+			background: {config name=basketheadercolor};
+		}
+	</style>
+{/block}
+
+{* Hide breadcrumb *}
+{block name='frontend_index_breadcrumb'}<hr class="clear" />{/block}
+
+{block name="frontend_index_content_top"}
+<div class="grid_20 first">
+
+	{* Step box *}
+	{include file="frontend/register/steps.tpl" sStepActive="finished"}
+
+	{* AGB is not accepted by user *}
+	{if $sAGBError}
+		<div class="error agb_confirm">
+			<div class="center">
+				<strong>
+					{s name='ConfirmErrorAGB'}{/s}
+				</strong>
+			</div>
+		</div>
+	{/if}
+</div>
+{/block}
+
+{* Hide sidebar left *}
+{block name='frontend_index_content_left'}{/block}
 
 {* Main content *}
 {block name="frontend_index_content"}
@@ -182,14 +231,16 @@
                     {* Voucher and add article *}
                     {if {config name=commentvoucherarticle}}
                         <div class="voucher-add-article">
+
                             {block name='frontend_checkout_table_footer_left_add_voucher'}
                                 <div class="vouchers">
                                     <form method="post" action="{url action='addVoucher' sTargetAction=$sTargetAction}">
-                                    {* Add a hidden AGB Checkbox into the form *}
+                                        {block name='frontend_checkout_table_footer_left_add_voucher_agb'}
                                         {if !{config name='IgnoreAGB'}}
                                             <input type="hidden" class="agb-checkbox" name="sAGB"
                                                    value="{if $sAGBChecked}1{else}0{/if}"/>
                                         {/if}
+                                        {/block}
                                         <label for="basket_add_voucher">{s name="CheckoutFooterLabelAddVoucher" namespace="frontend/checkout/cart_footer_left"}{/s}</label>
                                         <input type="text" class="text" id="basket_add_voucher" name="sVoucher"
                                                onfocus="this.value='';"
@@ -225,31 +276,40 @@
 
 					{* Premiums articles *}
 					{block name='frontend_checkout_confirm_premiums'}
-					{if $sPremiums}
-					    {if {config name=premiumarticles}}
-					    	<h2 class="headingbox">{s name="sCartPremiumsHeadline" namespace="frontend/checkout/premiums"}{/s}</h2>
-					        {include file='frontend/checkout/premiums.tpl'}
-					    {/if}
-					{/if}
+						{if $sPremiums}
+							{if {config name=premiumarticles}}
+								<h2 class="headingbox">{s name="sCartPremiumsHeadline" namespace="frontend/checkout/premiums"}{/s}</h2>
+								{include file='frontend/checkout/premiums.tpl'}
+							{/if}
+						{/if}
 					{/block}
                 </div>
             </div>
             <div class="space"></div>
         {/if}
 
-
         <div class="table grid_16">
-            {include file="frontend/checkout/confirm_header.tpl"}
+			{block name='frontend_checkout_confirm_confirm_head'}
+            	{include file="frontend/checkout/confirm_header.tpl"}
+			{/block}
+
+			{block name='frontend_checkout_confirm_item_before'}{/block}
 
             {* Article items *}
+			{block name='frontend_checkout_confirm_item_outer'}
             {foreach name=basket from=$sBasket.content item=sBasketItem key=key}
                 {block name='frontend_checkout_confirm_item'}
-                {include file='frontend/checkout/confirm_item.tpl'}
+                	{include file='frontend/checkout/confirm_item.tpl'}
                 {/block}
             {/foreach}
+			{/block}
+
+			{block name='frontend_checkout_confirm_item_after'}{/block}
 
             {* Table footer *}
-            {include file="frontend/checkout/confirm_footer.tpl"}
+			{block name='frontend_checkout_confirm_confirm_footer'}
+            	{include file="frontend/checkout/confirm_footer.tpl"}
+			{/block}
         </div>
 
         <div class="space">&nbsp;</div>
@@ -300,6 +360,7 @@
                     {if !{config name='IgnoreAGB'}}
                     	<input type="checkbox" class="left" name="sAGB" id="sAGB" {if $sAGBChecked} checked="checked"{/if} />
                     {/if}
+
 					{* Additional hidden input for IE11 fix empty post body *}
 					<input type="hidden" name="ieCheckValue" value="42" />
                     <label for="sAGB" class="chklabel modal_open {if $sAGBError}instyle_error{/if}">{s name="ConfirmTerms"}{/s}</label>

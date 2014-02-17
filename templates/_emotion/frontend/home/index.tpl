@@ -1,34 +1,64 @@
-{extends file='parent:frontend/home/index.tpl'}
+{extends file='frontend/index/index.tpl'}
 
-{* Tagcloud *}
-{block name="frontend_home_index_tagcloud"}
-{if {config name=show namespace=TagCloud } && !$isEmotionLandingPage}
-	{action module=widgets controller=listing action=tag_cloud}
-{/if}
-{/block}
-
-{* Topseller *}
-{block name='frontend_home_right_topseller'}{/block}
+{block name="frontend_index_content_top"}{/block}
 
 {* Breadcrumb *}
 {block name='frontend_index_breadcrumb'}
 	<div class="clear"></div>
 {/block}
 
-{* Promotion *}
-{block name='frontend_home_index_promotions'}
-    {action module=widgets controller=emotion action=index categoryId=$sCategoryContent.id controllerName=$Controller}
-{/block}
-
-{* Sidebar left *}
+{* Hide sidebar left *}
 {block name='frontend_index_content_left'}{/block}
 
-{* Sidebar right *}
-{block name='frontend_index_content_right'}{/block}
+{* Main content *}
+{block name='frontend_index_content'}
+<div id="center" class="grid_13 home">
+	
+	{block name='frontend_home_index_banner'}
+		{* Banner *}
+		{include file='frontend/listing/banner.tpl'}
+	{/block}
+	
+	{block name='frontend_home_index_liveshopping'}
+		{* Liveshopping *}
+		{include file='frontend/listing/liveshopping.tpl'}
+	{/block}
+	
+	{block name='frontend_home_index_text'}
+		{* Category headline *}
+		{if !$hasEmotion}
+			{include file='frontend/listing/text.tpl'}
+		{/if}
+	{/block}
 
-{* Category text *}
-{block name='frontend_home_index_text'}
-    {if !$hasEmotion}
-        {$smarty.block.parent}
-    {/if}
+	{* Promotion *}
+	{block name='frontend_home_index_promotions'}
+		{action module=widgets controller=emotion action=index categoryId=$sCategoryContent.id controllerName=$Controller}
+	{/block}
+	
+	{block name='frontend_home_index_blog'}
+		{* Blog Articles *}
+		{if $sBlog.sArticles|@count}
+		<div class="listing_box">
+			<h2 class="headingbox_nobg largesize">{se name='WidgetsBlogHeadline'}{/se}:</h2>
+			{foreach from=$sBlog.sArticles item=article key=key name="counter"}
+				{include file="frontend/blog/box.tpl" sArticle=$article key=$key homepage=true}
+			{/foreach}
+		</div>
+		{/if} 
+	{/block}
+	
+	
+	<div class="doublespace">&nbsp;</div>
+
+	{* Tagcloud *}
+	{block name='frontend_home_index_tagcloud'}
+		{if {config name=show namespace=TagCloud } && !$isEmotionLandingPage}
+			{action module=widgets controller=listing action=tag_cloud}
+		{/if}
+	{/block}
+</div>
 {/block}
+
+{* Hide sidebar right *}
+{block name='frontend_index_content_right'}{/block}
