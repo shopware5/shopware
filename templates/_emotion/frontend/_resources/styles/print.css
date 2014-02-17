@@ -147,5 +147,5 @@
 	.table .push_2 {left: 10%}
 	.table .push_1 {left: 5%}
 	
-	#content .inner .teaser .button-right {behavior: url(.) !important;}
+	#content .inner .teaser .button-right {behavior: url() !important;}
 }

@@ -5,8 +5,6 @@
  * @package    Shopware_Template
  * @subpackage Shopware_Template_Frontend
  * @copyright  Copyright (c) 2010 shopware AG (http://www.shopware.de)
- * @author     hl/shopware AG
- * @author     stp/shopware AG
  *}
 {block name="frontend_index_start"}{/block}
 <?xml version="1.0" ?>
@@ -17,7 +15,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{s name='IndexXmlLang'}de{/s}">
 {/block}
 {block name='frontend_index_header'}
-{include file='./frontend/index/header.tpl'}
+	{include file='./frontend/index/header.tpl'}
 {/block}
 <body {if $Controller}class="ctl_{$Controller}"{/if}>
 

@@ -110,7 +110,7 @@ div.step_box #first_step {display: inline;}
 .supportrequest form label {display: inline;}
 .supportrequest div.textarea label {margin-left: 50px;}
 .ticketoverview .content .row .button-middle {width: 120px;}
-#registerbutton {behavior: url(.) !important}
+#registerbutton {behavior: url() !important}
 
 /* Checkout */
 .table .table_premium .body .article {margin: 0 5px 10px;}
@@ -183,7 +183,7 @@ div.table_foot .box .text  {width: 150px !important;}
 
 /* Finished */
 #formTShops .button-right {width: 380px;}
-.finish .teaser .button-right {position: relative !important;display: block;width: 350px;behavior: url(.) !important;}
+.finish .teaser .button-right {position: relative !important;display: block;width: 350px;behavior: url() !important;}
 .finish .teaser .button-right:after {content: '';clear:both;float: none;}
 
 /*	SLIDERS

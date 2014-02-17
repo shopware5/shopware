@@ -30,6 +30,7 @@
 	{/foreach}
 	</tbody>
 </table>
+
 {* Article price *}
 {block name='frontend_detail_data_price_info'}
     <div class="clear"></div>

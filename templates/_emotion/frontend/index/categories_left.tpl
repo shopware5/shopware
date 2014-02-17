@@ -20,4 +20,5 @@
 {elseif $sMainCategories}
 	{call name=categories categories=$sMainCategories}
 {/if}
+
 <div class="left_categories_shadow"></div>
