@@ -27,6 +27,7 @@ namespace Shopware\Models\Shop;
 use Shopware\Components\Model\ModelEntity,
     Doctrine\ORM\Mapping as ORM,
     Doctrine\Common\Collections\ArrayCollection;
+use Shopware\Components\Theme\Manager;
 
 /**
  *
@@ -708,12 +709,28 @@ class Shop extends ModelEntity
         }
 
         if ($this->getTemplate() !== null) {
-            /** @var $template \Enlight_Template_Manager */
+            /** @var $templateManager \Enlight_Template_Manager */
             $templateManager = $bootstrap->getResource('Template');
             $template = $this->getTemplate();
             $localeName = $this->getLocale()->toString();
 
-            if ($template->getVersion() == 2) {
+            if ($template->getVersion() == 3) {
+
+                /**@var $themeManager Manager*/
+                $themeManager = Shopware()->Container()->get('theme_manager');
+
+                $hierarchy = $themeManager->getInheritanceHierarchy($template);
+                $path = $themeManager->getHierarchyPaths($hierarchy);
+                $config = $themeManager->getHierarchyConfig($hierarchy, $this);
+                $themeManager->registerHierarchySmartyFunctions($hierarchy);
+
+                $path['base'] = $themeManager->getDefaultThemeDirectory() . DIRECTORY_SEPARATOR;
+                $path['include_dir'] = './';
+
+                $templateManager->setTemplateDir($path);
+                $templateManager->assign($config);
+
+            } else if ($template->getVersion() == 2) {
                 $templateManager->addTemplateDir(array(
                     'custom' => $template->toString(),
                     'local' => '_emotion_local',
