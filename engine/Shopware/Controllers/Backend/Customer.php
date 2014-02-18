@@ -116,7 +116,17 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         return self::$repository;
     }
 
-
+    /**
+     * Deactivates the authentication for the performOrderRedirect action
+     * This is used in the performOrder action
+     */
+    public function init()
+    {
+        if (in_array($this->Request()->getActionName(), array('performOrderRedirect'))) {
+            Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        }
+        parent::init();
+    }
 
     /**
      * Registers the different acl permission for the different controller actions.
@@ -712,29 +722,79 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $sql = 'SELECT id, email, password, subshopID, language FROM s_user WHERE id = ?';
         $user = Shopware()->Db()->fetchRow($sql, array($userId));
 
-        if (!empty($user['email'])) {
-            $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
-            $shop = $repository->getActiveById($user['language']);
-            $shop->registerResources(Shopware()->Bootstrap());
-            Shopware()->Session()->Admin = true;
-
-            Shopware()->System()->_POST = array(
-                'email' => $user['email'],
-                'passwordMD5' => $user['password'],
-            );
-            Shopware()->Modules()->Admin()->sLogin(true);
+        if (empty($user['email'])) {
+            return;
         }
 
-        $url = $this->Front()->Router()->assemble(array(
-            'module' => 'frontend',
-            'controller' => 'index',
-            'appendSession' => true
-        ));
+        /** @var $repository Shopware\Models\Shop\Repository */
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+        $shop = $repository->getActiveById($user['language']);
+        $shop->registerResources(Shopware()->Bootstrap());
 
-        $this->Response()->setCookie('shop', $shop->getId(), 0, $shop->getBasePath());
+        Shopware()->Session()->Admin = true;
+        Shopware()->System()->_POST = array(
+                'email' => $user['email'],
+                'passwordMD5' => $user['password'],
+        );
+        Shopware()->Modules()->Admin()->sLogin(true);
 
-        $this->Response()->setCookie('session-' .  $shop->getId(), '', time() - 3600, '/');
+        $url = $this->Front()->Router()->assemble(
+                array(
+                        'action' => 'performOrderRedirect',
+                        'shopId' => $shop->getId(),
+                        'hash' => $this->createPerformOrderRedirectHash($user['password']),
+                        'sessionId' => Shopware()->SessionID(),
+                        'userId' => $user['id'],
+                        'fullPath' => true
+                )
+        );
 
+        //change the url to the subshop url
+        $url = str_replace('://' . $this->Request()->getHttpHost(), '://' . $shop->getHost(), $url);
         $this->redirect($url);
+    }
+
+    /**
+     * This Action can be called with a different domain.
+     * So domain depending cookies can be changed.
+     * This is needed when the users want's to perform an order on a different domain.
+     * For example in a different Subshop
+     */
+    public function performOrderRedirectAction()
+    {
+        $shopId = (int)$this->Request()->getQuery('shopId');
+        $userId = (int)$this->Request()->getQuery('userId');
+        $sessionId = $this->Request()->getQuery('sessionId');
+        $hash = $this->Request()->getQuery('hash');
+
+        $sql = 'SELECT password FROM s_user WHERE id = ?';
+        $userPasswordHash = Shopware()->Db()->fetchOne($sql, array($userId));
+
+
+        //don't trust anyone without this information
+        if (empty($shopId) || empty($sessionId) || empty($hash) || $hash !== $this->createPerformOrderRedirectHash($userPasswordHash) ) {
+            return;
+        }
+
+        /** @var  $repository Shopware\Models\Shop\Repository */
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+        $shop = $repository->getActiveById($shopId);
+
+        $path = rtrim($shop->getBasePath(), '/') . '/';
+        //update right domain cookies
+        $this->Response()->setCookie('shop', $shopId, 0, $path);
+        $this->Response()->setCookie('session-' . $shopId, $sessionId, 0, '/');
+        $this->redirect($shop->getBaseUrl());
+    }
+
+    /**
+     * generates a hash value for the performOrderRedirectAction
+     *
+     * @param $userPasswordHash
+     * @return string
+     */
+    private function createPerformOrderRedirectHash($userPasswordHash)
+    {
+        return sha1($userPasswordHash);
     }
 }
