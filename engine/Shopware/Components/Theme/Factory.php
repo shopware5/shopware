@@ -132,8 +132,10 @@ EOD;
         )
     );
 
-
-    function __construct($themeManager)
+    /**
+     * @param Manager $themeManager
+     */
+    function __construct(Manager $themeManager)
     {
         $this->themeManager = $themeManager;
     }
