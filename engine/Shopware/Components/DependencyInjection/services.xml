@@ -283,8 +283,5 @@
             <argument type="service" id="theme_manager" />
         </service>
 
-        <service id="file_manager" class="Shopware\Components\File\Manager">
-        </service>
-
     </services>
 </container>
