@@ -213,21 +213,20 @@ class Manager
      */
     public function getThemeDirectory(Template $theme)
     {
-        if ($theme->getPlugin()) {
-
-            $bootstrap = $this->pluginManager->getPluginBootstrap(
-                $theme->getPlugin()
-            );
-
-            //bootstrap not found? skip plugin.
-            if (!$bootstrap instanceof \Shopware_Components_Plugin_Bootstrap) {
-                return null;
-            }
-
-            return $bootstrap->Path() . DIRECTORY_SEPARATOR . 'Themes' . DIRECTORY_SEPARATOR . $theme->getTemplate();
-        } else {
+        if (!$theme->getPlugin()) {
             return $this->getDefaultThemeDirectory() . DIRECTORY_SEPARATOR . $theme->getTemplate();
         }
+
+        $bootstrap = $this->pluginManager->getPluginBootstrap(
+            $theme->getPlugin()
+        );
+
+        //bootstrap not found? skip plugin.
+        if (!$bootstrap instanceof \Shopware_Components_Plugin_Bootstrap) {
+            return null;
+        }
+
+        return $bootstrap->Path() . DIRECTORY_SEPARATOR . 'Themes' . DIRECTORY_SEPARATOR . $theme->getTemplate();
     }
 
     /**

@@ -26,6 +26,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -168,30 +169,44 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     public function uploadAction()
     {
         /**@var $file UploadedFile*/
-        $file = $this->container->get('file_manager')->getUpload(
-            $_FILES,
-            'fileId'
-        );
+        $file = Symfony\Component\HttpFoundation\Request::createFromGlobals()->files->get('fileId');
+        $system = new Filesystem();
 
         if (strtolower($file->getClientOriginalExtension()) !== 'zip') {
-            $this->container->get('file_manager')->remove($file);
+            $name = $file->getClientOriginalName();
+
+            $system->remove($file->getPathname());
 
             throw new Exception(sprintf(
                 'Uploaded file %s is no zip file',
-                $file->getClientOriginalName()
+                $name
             ));
         }
 
-        $this->container->get('file_manager')->unzip(
-            $file,
-            $this->container->get('theme_manager')->getDefaultThemeDirectory()
-        );
+        $this->unzip($file, $this->container->get('theme_manager')->getDefaultThemeDirectory());
 
-        $this->container->get('file_manager')->remove($file);
+        $system->remove($file->getPathname());
 
         $this->View()->assign('success', true);
     }
 
+
+    /**
+     * Helper function to decompress zip files.
+     * @param UploadedFile $file
+     * @param $targetDirectory
+     */
+    private function unzip(UploadedFile $file, $targetDirectory)
+    {
+        $filter = new \Zend_Filter_Decompress(array(
+            'adapter' => $file->getClientOriginalExtension(),
+            'options' => array('target' => $targetDirectory)
+        ));
+
+        $filter->filter(
+            $file->getPath() . DIRECTORY_SEPARATOR . $file->getFilename()
+        );
+    }
 
     /**
      * Override of the Application controller to select all template associations.
