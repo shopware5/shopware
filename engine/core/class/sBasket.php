@@ -788,7 +788,7 @@ class sBasket
 
                 if ($this->sSYSTEM->sCurrency["factor"]) {
                     $factor = $this->sSYSTEM->sCurrency["factor"];
-                    $discountNet /= $factor;
+                    $discountNet *= $factor;
                 } else {
                     $factor = 1;
                 }
