@@ -438,9 +438,6 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
 
         form.getForm().updateRecord(model);
 
-        // set this always to the shopId because language shops and subshops are the same
-        model.set('shopId', model.get('languageId'));
-
         //save the model and check in the callback function if the operation was successfully
         model.save({
             callback:function (data, operation) {

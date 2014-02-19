@@ -597,6 +597,17 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         return $data;
     }
 
+    /**
+     * Helper method to prepare the customer for saving
+     *
+     * @param $params
+     * @param $customer
+     * @param $billing
+     * @param $shipping
+     * @param $debit
+     * @param $paymentData
+     * @return mixed
+     */
     private function prepareCustomerData($params, $customer, $billing, $shipping, $debit, $paymentData)
     {
         if (!empty($params['groupKey'])) {
@@ -605,16 +616,15 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             unset($params['group']);
         }
 
-        if (!empty($params['shopId'])) {
-            $params['shop'] = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $params['shopId']);
-        } else {
-            unset($params['shop']);
-        }
-
         if (!empty($params['languageId'])) {
-            $params['languageSubShop'] = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $params['languageId']);
+            /** @var $shopRepository \Shopware\Models\Shop\Repository */
+            $shopRepository = $this->getShopRepository();
+            $params['languageSubShop'] = $shopRepository->find($params['languageId']);
+            //always setting the shop depending to the languageId
+            $params['shop'] = $shopRepository->getMainShopById($params['languageId']);
         } else {
             unset($params['languageSubShop']);
+            unset($params['shop']);
         }
 
 
@@ -727,7 +737,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         }
 
         /** @var $repository Shopware\Models\Shop\Repository */
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+        $repository = $this->getShopRepository();
         $shop = $repository->getActiveById($user['language']);
         $shop->registerResources(Shopware()->Bootstrap());
 
@@ -777,7 +787,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         }
 
         /** @var  $repository Shopware\Models\Shop\Repository */
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+        $repository = $this->getShopRepository();
         $shop = $repository->getActiveById($shopId);
 
         $path = rtrim($shop->getBasePath(), '/') . '/';
