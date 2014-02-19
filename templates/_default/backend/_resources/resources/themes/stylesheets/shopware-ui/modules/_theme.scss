@@ -31,11 +31,28 @@
 
     .theme-listing {
 
+		.x-grid-group-title {
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+
+		.x-grid-group-hd {
+			border-width: 0 0 2px 0;
+			border-style: solid;
+			border-color: #99BBE8;
+			padding: 10px 4px 4px 20px;
+			background: #FFF;
+			cursor: pointer;
+			font-size: 12px;
+		}
+
         .thumbnail {
 
             width: 135px;
             height: 100px;
-            margin: 20px 0 25px 28px;
+            margin: 20px 0 35px 28px;
             position: relative;
             float: left;
 
