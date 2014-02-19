@@ -3796,7 +3796,8 @@ class sAdmin
         $discount = $this->sGetPremiumDispatchSurcharge($basket, 3);
 
         if (!empty($discount)) {
-            $discount *= -1;
+            $discount *= -$currencyFactor;
+
             if (empty($this->sSYSTEM->sUSERGROUPDATA["tax"]) && !empty($this->sSYSTEM->sUSERGROUPDATA["id"])) {
                 $discount_net = $discount;
                 //$tax_rate = 0;
