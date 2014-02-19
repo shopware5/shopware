@@ -733,24 +733,25 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
         Shopware()->Session()->Admin = true;
         Shopware()->System()->_POST = array(
-                'email' => $user['email'],
-                'passwordMD5' => $user['password'],
+            'email' => $user['email'],
+            'passwordMD5' => $user['password'],
         );
         Shopware()->Modules()->Admin()->sLogin(true);
 
-        $url = $this->Front()->Router()->assemble(
-                array(
-                        'action' => 'performOrderRedirect',
-                        'shopId' => $shop->getId(),
-                        'hash' => $this->createPerformOrderRedirectHash($user['password']),
-                        'sessionId' => Shopware()->SessionID(),
-                        'userId' => $user['id'],
-                        'fullPath' => true
-                )
-        );
+        $url = $this->Front()->Router()->assemble(array(
+            'action'    => 'performOrderRedirect',
+            'shopId'    => $shop->getId(),
+            'hash'      => $this->createPerformOrderRedirectHash($user['password']),
+            'sessionId' => Shopware()->SessionID(),
+            'userId'    => $user['id'],
+            'fullPath'  => true
+        ));
 
-        //change the url to the subshop url
-        $url = str_replace('://' . $this->Request()->getHttpHost(), '://' . $shop->getHost(), $url);
+        if ($shop->getHost()) {
+            //change the url to the subshop url
+            $url = str_replace('://' . $this->Request()->getHttpHost(), '://' . $shop->getHost(), $url);
+        }
+
         $this->redirect($url);
     }
 
@@ -762,14 +763,13 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     public function performOrderRedirectAction()
     {
-        $shopId = (int)$this->Request()->getQuery('shopId');
-        $userId = (int)$this->Request()->getQuery('userId');
+        $shopId    = (int)$this->Request()->getQuery('shopId');
+        $userId    = (int)$this->Request()->getQuery('userId');
         $sessionId = $this->Request()->getQuery('sessionId');
-        $hash = $this->Request()->getQuery('hash');
+        $hash      = $this->Request()->getQuery('hash');
 
         $sql = 'SELECT password FROM s_user WHERE id = ?';
         $userPasswordHash = Shopware()->Db()->fetchOne($sql, array($userId));
-
 
         //don't trust anyone without this information
         if (empty($shopId) || empty($sessionId) || empty($hash) || $hash !== $this->createPerformOrderRedirectHash($userPasswordHash) ) {
@@ -781,9 +781,11 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $shop = $repository->getActiveById($shopId);
 
         $path = rtrim($shop->getBasePath(), '/') . '/';
+
         //update right domain cookies
         $this->Response()->setCookie('shop', $shopId, 0, $path);
         $this->Response()->setCookie('session-' . $shopId, $sessionId, 0, '/');
+
         $this->redirect($shop->getBaseUrl());
     }
 
