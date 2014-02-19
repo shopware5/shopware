@@ -3764,7 +3764,7 @@ class sAdmin
         if (!empty($basket_discount)) {
 
             $percent = $basket_discount;
-            $basket_discount = round($basket_discount/100*$amount, 2);
+            $basket_discount = round($basket_discount/100*($amount*$currencyFactor), 2);
 
             if (empty($this->sSYSTEM->sUSERGROUPDATA["tax"]) && !empty($this->sSYSTEM->sUSERGROUPDATA["id"])) {
                 $basket_discount_net = $basket_discount;
@@ -3796,7 +3796,8 @@ class sAdmin
         $discount = $this->sGetPremiumDispatchSurcharge($basket, 3);
 
         if (!empty($discount)) {
-            $discount *= -1;
+            $discount *= -$currencyFactor;
+
             if (empty($this->sSYSTEM->sUSERGROUPDATA["tax"]) && !empty($this->sSYSTEM->sUSERGROUPDATA["id"])) {
                 $discount_net = $discount;
                 //$tax_rate = 0;

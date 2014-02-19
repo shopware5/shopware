@@ -788,12 +788,12 @@ class sBasket
 
                 if ($this->sSYSTEM->sCurrency["factor"]) {
                     $factor = $this->sSYSTEM->sCurrency["factor"];
-                    $discountNet /= $factor;
+                    $discountNet *= $factor;
                 } else {
                     $factor = 1;
                 }
 
-                $surcharge = $this->sSYSTEM->sUSERGROUPDATA["minimumordersurcharge"]/$factor;
+                $surcharge = $this->sSYSTEM->sUSERGROUPDATA["minimumordersurcharge"]*$factor;
 
                 $params = array(
                     $this->sSYSTEM->sSESSION_ID,
