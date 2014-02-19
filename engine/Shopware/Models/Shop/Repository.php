@@ -289,6 +289,36 @@ class Repository extends ModelRepository
     }
 
     /**
+     * Returns the main shop of the given shopId
+     * The shopId can also be a languageShopID
+     * If the given id already belongs to the main shop this will be returned.
+     *
+     * @param $shopId | id of the language shop or the main shop
+     * @return \Shopware\Models\Shop\Shop
+     */
+    public function getMainShopById($shopId)
+    {
+        $builder = $this->createQueryBuilder('shop')
+                ->leftJoin('shop.main', 'main')
+                ->where('shop.id = :shopId')
+                ->setParameter('shopId', $shopId);
+
+        /** @var $shop \Shopware\Models\Shop\Shop */
+        $shop = $builder->getQuery()->getOneOrNullResult();
+
+        if ($shop === null) {
+            return null;
+        }
+
+        if ($shop->getMain() === null) {
+            //this shop is already the main shop return it
+            return $shop;
+        } else {
+            return $shop->getMain();
+        }
+    }
+
+    /**
      * Returns the active shops
      *
      * @return mixed
