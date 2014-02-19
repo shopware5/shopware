@@ -73,48 +73,131 @@ Ext.define('Shopware.apps.Theme.view.list.Theme', {
             itemSelector: '.thumbnail',
             tpl: me.createTemplate(),
             store: me.store,
-            cls: 'theme-listing'
+            cls: 'theme-listing',
+            listeners: {
+                render: Ext.bind(me.onAddInfoViewEvents, me)
+            }
         });
 
         return me.infoView;
     },
 
     createTemplate: function () {
+        var me = this;
+
         return new Ext.XTemplate(
-            '{literal}<tpl for=".">',
+            '{literal}{[this.getRows(values)]}',
+            '<div class="x-clear"></div>{/literal}', {
 
-            '<tpl if="enabled">',
-                '<div class="thumbnail enabled">',
-            '<tpl elseif="preview">',
-                '<div class="thumbnail previewed">',
-            '<tpl else>',
-                '<div class="thumbnail">',
-            '</tpl>',
-                    '<tpl if="enabled">',
-                        '<div class="hint enabled">',
-                            '<span>{/literal}{s name=enabled}Enabled{/s}{literal}</span>',
-                        '</div>',
-                    '<tpl elseif="preview">',
-                        '<div class="hint preview">',
-                            '<span>{/literal}{s name=preview_hint}Preview{/s}{literal}</span>',
-                        '</div>',
-                    '</tpl>',
+                getRows: function (values) {
+                    var me = this,
+                        templatesByVersion = {
+                            'shopware5': [],
+                            'shopware4': [],
+                            'others': []
+                        }, output = '';
 
-                    '<div class="thumb">',
-                        '<div class="inner-thumb">',
-                            '<tpl if="screen">',
-                                '<img src="{screen}" title="{name}" />',
-                            '</tpl>',
+                    Ext.each(values, function(item) {
+                        if(item.version === 3) {
+                            templatesByVersion['shopware5'].push(item);
+                        } else if(item.version === 2) {
+                            templatesByVersion['shopware4'].push(item);
+                        } else {
+                            templatesByVersion['others'].push(item);
+                        }
+                    });
+
+                    Ext.iterate(templatesByVersion, function(name, values) {
+                        output += me.getRow(name, values);
+                    });
+
+                    return output;
+                },
+
+                getRow: function (name, values) {
+                    var me = this,
+                        snippets = {
+                            'shopware5': '{s name=designed_for_shopware5}Designed for Shopware 5{/s}',
+                            'shopware4': '{s name=designed_for_shopware4}Designed for Shopware 4{/s}',
+                            'others': '{s name=designed_for_others}Designed for older versions{/s}'
+                        };
+
+                    if(values.length <= 0) {
+                        return '';
+                    }
+
+                    return [
+                        '<div class="theme--outer-container">',
+                        '<div class="x-grid-group-hd x-grid-group-hd-collapsible">',
+                            '<div class="x-grid-group-title">' + snippets[name] + '</div>',
                         '</div>',
-                        '<tpl if="hasConfig">',
-                            '<div class="mapping-config">&nbsp;</div>',
-                        '</tpl>',
-                    '</div>',
-                    '<span class="x-editable">{name}</span>',
-                '</div>',
-            '</tpl>',
-            '<div class="x-clear"></div>{/literal}'
+                        '<div class="theme--container">',
+                            me.getItem(values),
+                            '<div class="x-clear"></div>',
+                        '</div></div>'
+                    ].join('');
+                },
+
+                getItem: function (values) {
+                    var items = [];
+
+                    Ext.each(values, function(theme) {
+                        var itemTpl = '';
+
+                        if(theme.enabled) {
+                            itemTpl += '<div class="thumbnail enabled">';
+                            itemTpl += '<div class="hint enabled"><span>{s name=enabled}Enabled{/s}</span></div>';
+                        } else if(theme.preview) {
+                            itemTpl += '<div class="thumbnail previewed">';
+                            itemTpl += '<div class="hint preview"><span>{s name=preview_hint}Preview{/s}</span></div>';
+                        } else {
+                            itemTpl += '<div class="thumbnail">'
+                        }
+
+                        itemTpl += '<div class="thumb"><div class="inner-thumb">';
+
+                        if(theme.screen) {
+                            itemTpl += Ext.String.format('<img src="[0]" alt="[1]" />', theme.screen, theme.name);
+                        }
+
+                        if(theme.hasConfig) {
+                            itemTpl += '<div class="mapping-config">&nbsp;</div>';
+                        }
+
+                        itemTpl += '<span class="x-editable">' + theme.name + '</span>';
+                        itemTpl += '</div></div></div>';
+
+                        items.push(itemTpl);
+                    });
+
+                    return items.join('');
+                }
+            }
         );
+    },
+
+    onAddInfoViewEvents: function() {
+        var me = this,
+            view = me.infoView,
+            viewEl = view.getEl();
+
+        viewEl.on('click', function(evt, target) {
+            var el = Ext.get(target), parent, themeContainer;
+
+            if(!el.hasCls('x-grid-group-title')) {
+                return;
+            }
+            parent = el.parent('.theme--outer-container');
+            themeContainer = parent.down('.theme--container');
+
+            if(parent.hasCls('x-grid-group-hd-collapsed')) {
+                parent.removeCls('x-grid-group-hd-collapsed');
+                themeContainer.setStyle('display', 'block');
+            } else {
+                parent.addCls('x-grid-group-hd-collapsed');
+                themeContainer.setStyle('display', 'none');
+            }
+        });
     }
 
 });
