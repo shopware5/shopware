@@ -27,9 +27,9 @@ namespace Shopware\Components\Theme;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
-use Shopware\Components\Plugin\Manager as PluginManager;
 use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Models\Plugin\Plugin;
+use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
 use Shopware\Theme;
 
@@ -45,11 +45,6 @@ use Shopware\Theme;
  */
 class Manager
 {
-    /**
-     * @var \Shopware\Components\Plugin\Manager
-     */
-    protected $pluginManager;
-
     /**
      * @var \Enlight_Template_Manager
      */
@@ -78,12 +73,10 @@ class Manager
     function __construct(
         $rootDir,
         ModelManager $entityManager,
-        PluginManager $pluginManager,
         \Enlight_Template_Manager $templateManager,
         DatabaseHandler $snippetWriter)
     {
         $this->entityManager = $entityManager;
-        $this->pluginManager = $pluginManager;
         $this->rootDir = $rootDir;
         $this->templateManager = $templateManager;
         $this->snippetWriter = $snippetWriter;
@@ -109,6 +102,119 @@ class Manager
         $themes = array_merge($themes, $pluginThemes);
 
         $this->resolveThemeParents($themes);
+    }
+
+    /**
+     * Returns the inheritance hierarchy for the passed theme.
+     *
+     * @param Template $template
+     * @return array
+     */
+    public function getInheritanceHierarchy(Template $template)
+    {
+        $hierarchy = array();
+        $hierarchy[] = $template;
+
+        if ($template->getParent() instanceof Template) {
+            $hierarchy = array_merge(
+                $hierarchy,
+                $this->getInheritanceHierarchy($template->getParent())
+            );
+        }
+        return $hierarchy;
+    }
+
+    /**
+     * Returns the theme directory hierarchy.
+     *
+     * @param array $hierarchy
+     * @return array
+     */
+    public function getHierarchyPaths(array $hierarchy)
+    {
+        $paths = array();
+
+        /**@var $theme Template */
+        foreach ($hierarchy as $theme) {
+            $paths[] = $this->getThemeDirectory($theme);
+        }
+
+        return $paths;
+    }
+
+    /**
+     * Returns the shop theme configuration for the passed
+     * hierarchy.
+     * Iterates all passed themes and merges the configuration.
+     *
+     * @param array $hierarchy
+     * @param Shop $shop
+     * @return array
+     */
+    public function getHierarchyConfig(array $hierarchy, Shop $shop)
+    {
+        $config = array();
+
+        /**@var $theme Template */
+        foreach ($hierarchy as $theme) {
+            $config = array_merge(
+                $themeConfig = $this->getThemeConfiguration($theme, $shop),
+                $config
+            );
+        }
+        return $config;
+    }
+
+    /**
+     * Registers all smarty functions for each passed
+     * shopware theme.
+     *
+     * @param array $hierarchy
+     */
+    public function registerHierarchySmartyFunctions(array $hierarchy)
+    {
+        /**@var $theme Template */
+        foreach ($hierarchy as $theme) {
+            $dir = $this->getSmartyDirectory($theme);
+
+            if (!file_exists($dir)) {
+                return;
+            }
+
+            $this->templateManager->addPluginsDir($dir);
+        }
+    }
+
+    /**
+     * Helper function which returns the theme configuration as
+     * key - value array.
+     * The element name is used as array key, the shop config
+     * as value. If no shop config saved, the value will fallback to
+     * the default value.
+     *
+     * @param Template $template
+     * @param Shop $shop
+     * @return array
+     */
+    private function getThemeConfiguration(Template $template, Shop $shop)
+    {
+        $builder = $this->entityManager->createQueryBuilder();
+        $builder->select(array(
+            'element.name',
+            'IFNULL(values.value, element.defaultValue) as value',
+        ));
+        $builder->from('Shopware\Models\Shop\Template\ConfigElement', 'element')
+            ->leftJoin('element.values', 'values', 'WITH', 'values.shopId = :shopId')
+            ->where('element.templateId = :templateId')
+            ->setParameter('shopId', $shop->getId())
+            ->setParameter('templateId', $template->getId());
+
+        $data = $builder->getQuery()->getArrayResult();
+
+        return array_combine(
+            array_column($data, 'name'),
+            array_column($data, 'value')
+        );
     }
 
 
@@ -213,20 +319,53 @@ class Manager
      */
     public function getThemeDirectory(Template $theme)
     {
-        if (!$theme->getPlugin()) {
+        if ($theme->getPlugin()) {
+
+            return $this->getPluginPath($theme->getPlugin()) .
+            DIRECTORY_SEPARATOR .
+            'Themes' .
+            DIRECTORY_SEPARATOR .
+            $theme->getTemplate();
+
+        } else {
             return $this->getDefaultThemeDirectory() . DIRECTORY_SEPARATOR . $theme->getTemplate();
         }
+    }
 
-        $bootstrap = $this->pluginManager->getPluginBootstrap(
-            $theme->getPlugin()
-        );
+    /**
+     * Returns the less directory for the passed theme.
+     * @param Template $template
+     * @return string
+     */
+    public function getThemeLessDirectory(Template $template)
+    {
+        return $this->getThemeDirectory($template) .
+        DIRECTORY_SEPARATOR .
+        '_public' .
+        DIRECTORY_SEPARATOR .
+        'source' .
+        DIRECTORY_SEPARATOR .
+        'less';
+    }
 
-        //bootstrap not found? skip plugin.
-        if (!$bootstrap instanceof \Shopware_Components_Plugin_Bootstrap) {
-            return null;
-        }
+    /**
+     * Helper function to build the path to the passed plugin.
+     * @param Plugin $plugin
+     * @return string
+     */
+    private function getPluginPath(Plugin $plugin)
+    {
+        $namespace = strtolower($plugin->getNamespace());
+        $source = strtolower($plugin->getSource());
+        $name = $plugin->getName();
 
-        return $bootstrap->Path() . DIRECTORY_SEPARATOR . 'Themes' . DIRECTORY_SEPARATOR . $theme->getTemplate();
+        return $this->rootDir .
+        DIRECTORY_SEPARATOR . 'engine' .
+        DIRECTORY_SEPARATOR . 'Shopware' .
+        DIRECTORY_SEPARATOR . 'Plugins' .
+        DIRECTORY_SEPARATOR . ucfirst($source) .
+        DIRECTORY_SEPARATOR . ucfirst($namespace) .
+        DIRECTORY_SEPARATOR . ucfirst($name);
     }
 
     /**
@@ -291,6 +430,23 @@ class Manager
     }
 
     /**
+     * Returns the fix defined snippet directory of the passed theme.
+     *
+     * @param Template $template
+     * @return string
+     */
+    public function getSmartyDirectory(Template $template)
+    {
+        return $this->getThemeDirectory($template) .
+        DIRECTORY_SEPARATOR .
+        '_private' .
+        DIRECTORY_SEPARATOR .
+        'smarty' .
+        DIRECTORY_SEPARATOR;
+    }
+
+
+    /**
      * Helper function which iterates all plugins
      * and registers their themes.
      * Returns an array with all registered plugin themes.
@@ -305,24 +461,15 @@ class Manager
 
         /**@var $plugin Plugin */
         foreach ($plugins as $plugin) {
-
-            //get the plugin bootstrap to get access on the plugin path.
-            $bootstrap = $this->pluginManager->getPluginBootstrap(
-                $plugin
-            );
-
-            //bootstrap not found? skip plugin.
-            if (!$bootstrap instanceof \Shopware_Components_Plugin_Bootstrap) {
-                continue;
-            }
+            $path = $this->getPluginPath($plugin);
 
             //check if plugin contains themes
-            if (!file_exists($bootstrap->Path() . DIRECTORY_SEPARATOR . 'Themes')) {
+            if (!file_exists($path . DIRECTORY_SEPARATOR . 'Themes')) {
                 continue;
             }
 
             $directories = new \DirectoryIterator(
-                $bootstrap->Path() . DIRECTORY_SEPARATOR . 'Themes'
+                $path . DIRECTORY_SEPARATOR . 'Themes'
             );
 
             //the initialThemes function create for each theme directory a shop template.
@@ -539,6 +686,32 @@ class Manager
             throw new \Exception(sprintf(
                 "Theme directory %s contains no Theme.php",
                 $directory->getFilename()
+            ));
+        }
+
+        require_once $file;
+
+        return new $class();
+    }
+
+    /**
+     * @param Template $template
+     * @return Theme
+     * @throws \Exception
+     */
+    public function getThemeByTemplate(Template $template)
+    {
+        $namespace = "Shopware\\Themes\\" . $template->getTemplate();
+        $class = $namespace . "\\Theme";
+
+        $directory = $this->getThemeDirectory($template);
+
+        $file = $directory . DIRECTORY_SEPARATOR . 'Theme.php';
+
+        if (!file_exists($file)) {
+            throw new \Exception(sprintf(
+                "Theme directory %s contains no Theme.php",
+                $template->getTemplate()
             ));
         }
 
