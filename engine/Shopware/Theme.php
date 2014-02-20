@@ -137,6 +137,12 @@ class Theme
      */
     private $config = array();
 
+
+    protected $less = array();
+
+    protected $javascript = array();
+
+
     /**
      * Don't override this function. Used
      * from the backend template module
@@ -446,6 +452,16 @@ class Theme
     public function getConfig()
     {
         return $this->config;
+    }
+
+    public function getLess()
+    {
+        return $this->less;
+    }
+
+    public function getJavascript()
+    {
+        return $this->javascript;
     }
 
 }

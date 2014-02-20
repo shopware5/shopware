@@ -8,8 +8,7 @@ class Theme extends \Shopware\Theme
 
     protected $name = 'Shopware responsive theme';
 
-    public function createConfig()
-    {
+    protected $less = array('style.less', 'color.less');
 
-    }
+    public function createConfig() { }
 }

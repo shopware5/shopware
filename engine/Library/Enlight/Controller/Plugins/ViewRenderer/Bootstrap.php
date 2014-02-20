@@ -196,7 +196,7 @@ class Enlight_Controller_Plugins_ViewRenderer_Bootstrap extends Enlight_Plugin_B
      * is notified. After the template has been rendered the
      * Enlight_Plugins_ViewRenderer_PostRender event is notified.
      *
-     * @param   string      $template
+     * @param   Enlight_Template_Default      $template
      * @param   string|null $name
      * @return  Enlight_Controller_Plugins_ViewRenderer_Bootstrap
      */
@@ -206,7 +206,11 @@ class Enlight_Controller_Plugins_ViewRenderer_Bootstrap extends Enlight_Plugin_B
 
         $this->Application()->Events()->notify(
             'Enlight_Plugins_ViewRenderer_PreRender',
-            array('subject' => $this, 'template' => $template)
+            array(
+                'subject' => $this,
+                'template' => $template,
+                'request' => $this->Action()->Request()
+            )
         );
 
         $render = $action->View()->render($template);
