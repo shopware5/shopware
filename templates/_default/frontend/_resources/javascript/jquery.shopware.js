@@ -3190,8 +3190,8 @@ jQuery.fn.liveSearch = function (conf) {
                 $.post(me.attr('href'), function (data) {
                     var modal = $.modal(data, '', {
                         'position':'fixed',
-                        'width': parseInt(width),
-                        'height': parseInt(height)
+                        'width': parseInt(width, 10),
+                        'height': parseInt(height, 10)
                     });
 
                     // Remove close icon
