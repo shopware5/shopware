@@ -1743,6 +1743,15 @@ class Article extends Resource implements BatchInterface
         $image->setExtension($media->getExtension());
         $image->setDescription($media->getDescription());
 
+        if ($media->getType() === MediaModel::TYPE_IMAGE) {
+            $manager = Shopware()->Container()->get('thumbnail_manager');
+            $manager->createMediaThumbnail(
+                $media,
+                $media->getDefaultThumbnails(),
+                true
+            );
+        }
+
         return $image;
     }
 

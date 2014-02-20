@@ -455,6 +455,27 @@ class Variant extends Resource implements BatchInterface
                     $image = $this->getArticleResource()->createNewArticleImage(
                         $article, $media
                     );
+                } else {
+                    $media = null;
+                    $tempImage = $image;
+                    while ($media === null) {
+                        if ($tempImage->getMedia()) {
+                            $media = $tempImage->getMedia();
+                        } elseif ($tempImage->getParent()) {
+                            $tempImage = $tempImage->getParent();
+                        } else {
+                            break;
+                        }
+                    }
+
+                    if ($media->getType() === MediaModel::TYPE_IMAGE) {
+                        $manager = Shopware()->Container()->get('thumbnail_manager');
+                        $manager->createMediaThumbnail(
+                            $media,
+                            $media->getDefaultThumbnails(),
+                            true
+                        );
+                    }
                 }
 
             } elseif (isset($imageData['link'])) {
@@ -468,7 +489,7 @@ class Variant extends Resource implements BatchInterface
                 );
 
             } else {
-                throw new ApiException\CustomValidationException("One of the passed variant images don't contains a mediaId or link property!");
+                throw new ApiException\CustomValidationException("One of the passed variant images doesn't contains a mediaId or link property!");
             }
 
             $variantImage = $this->createVariantImage(

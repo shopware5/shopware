@@ -172,8 +172,8 @@ class Manager
             'jpg' => $thumbnailDir . $media->getName() . '_' . $suffix . '.jpg'
         );
 
-        if($media->getExtension() !== 'jpg'){
-            $fileNames[$media->getExtension()] =  $thumbnailDir. $media->getName() . '_' . $suffix . '.' . $media->getExtension();
+        if ($media->getExtension() !== 'jpg') {
+            $fileNames[$media->getExtension()] = $thumbnailDir. $media->getName() . '_' . $suffix . '.' . $media->getExtension();
         }
 
         return $fileNames;
