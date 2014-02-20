@@ -333,7 +333,7 @@ class Repository extends ModelRepository
         //returns the right shop depending on the url
         $shop = $this->getShopByRequest($shops, $requestPath);
 
-        if ($shop !== null) {
+        if ($shop !== false) {
             return $shop;
         }
 
@@ -393,16 +393,22 @@ class Repository extends ModelRepository
      *
      * @param $shops \Shopware\Models\Shop\Shop[]
      * @param $requestPath
-     * @return null|\Shopware\Models\Shop\Shop $shop
+     * @return false|\Shopware\Models\Shop\Shop $shop
      */
     protected function getShopByRequest($shops, $requestPath)
     {
-        $shop = null;
+        /*
+         * Multiple shops can match the requested url, so we need to assign a hierarchy.
+         *
+         * We rank shops based on how much they have in common with the requested url (using strlen)
+         * and return the last element in the end
+         */
+        $shop = array();
         foreach ($shops as $currentShop) {
             if ($currentShop->getBaseUrl() == $currentShop->getBasePath()) {
                 //if the base url matches exactly the basePath we have found the main shop but the loop will continue
-                if ($shop === null) {
-                    $shop = $currentShop;
+                if ($shop[0] === null) {
+                    $shop[0] = $currentShop;
                 }
             } elseif ($requestPath == $currentShop->getBaseUrl()
                 || (strpos($requestPath, $currentShop->getBaseUrl()) === 0
@@ -413,7 +419,7 @@ class Repository extends ModelRepository
                  *
                  * f.e. this will match: localhost/en/blog/blogId=3 but this won't: localhost/entsorgung/
                  */
-                $shop = $currentShop;
+                $shop[strlen($currentShop->getBaseUrl())] = $currentShop;
                 break;
             } elseif ($currentShop->getSecure()
                 && ($requestPath == $currentShop->getSecureBaseUrl()
@@ -427,10 +433,10 @@ class Repository extends ModelRepository
                  *
                  * f.e. this will match: localhost/en/blog/blogId=3 but this won't: localhost/entsorgung/
                  */
-                $shop = $currentShop;
+                $shop[strlen($currentShop->getBaseUrl())] = $currentShop;
                 break;
             }
         }
-        return $shop;
+        return end($shop);
     }
 }
