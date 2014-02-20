@@ -476,7 +476,7 @@ class
                 $position["netto"] = 0;
             }
 
-            $position["amount_netto"] = $position["netto"] * $position["quantity"];
+            $position["amount_netto"] = round($position["netto"] * $position["quantity"], 2);
 
             $position["amount"] = $position["price"] * $position["quantity"];
 
