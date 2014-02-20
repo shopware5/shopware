@@ -394,24 +394,6 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
         $variant = $this->resource->create($create);
 
         $this->assertCount(1, $variant->getImages());
-        foreach ($variant->getImages() as $image) {
-
-            $media = null;
-            while ($media === null) {
-                if ($image->getMedia()) {
-                    $media = $image->getMedia();
-                } elseif ($image->getParent()) {
-                    $image = $image->getParent();
-                } else {
-                    break;
-                }
-            }
-
-            $this->assertCount(6, $media->getThumbnails());
-            foreach ($media->getThumbnails() as $thumbnail) {
-                $this->assertFileExists(Shopware()->OldPath() . $thumbnail);
-            }
-        }
         return $variant->getId();
 
     }
