@@ -338,7 +338,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
             'images' => array(
                 array(
-                    'link' => 'http://www.shopware.com/sites/all/themes/shopware/_resources/images/logo.png'
+                    'link' => 'http://lorempixel.com/600/400/'
                 ),
                 array(
                     'link' => 'data:image/png;base64,' . require(__DIR__ . '/fixtures/base64image.php')
@@ -415,7 +415,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
                     'images' => array(
                         array(
-                            'link' => 'http://www.shopware.com/sites/default/files/assets/images/sw_logo.png'
+                            'link' => 'http://lorempixel.com/600/400/'
                         )
                     ),
 
