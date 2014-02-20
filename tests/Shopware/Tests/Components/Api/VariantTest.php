@@ -444,23 +444,6 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
         );
         $variant = $this->resource->update($variantId, $update);
         $this->assertCount(3, $variant->getImages());
-        foreach ($variant->getImages() as $image) {
-            $media = null;
-            while ($media === null) {
-                if ($image->getMedia()) {
-                    $media = $image->getMedia();
-                } elseif ($image->getParent()) {
-                    $image = $image->getParent();
-                } else {
-                    break;
-                }
-            }
-
-            $this->assertCount(6, $media->getThumbnails());
-            foreach ($media->getThumbnails() as $thumbnail) {
-                $this->assertFileExists(Shopware()->OldPath() . $thumbnail);
-            }
-        }
 
         $add = array(
             'articleId' => $variant->getArticle()->getId(),
@@ -472,22 +455,6 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
 
         /**@var $image \Shopware\Models\Article\Image*/
         foreach($variant->getArticle()->getImages() as $image) {
-            $media = null;
-            while ($media === null) {
-                if ($image->getMedia()) {
-                    $media = $image->getMedia();
-                } elseif ($image->getParent()) {
-                    $image = $image->getParent();
-                } else {
-                    break;
-                }
-            }
-
-            $this->assertCount(6, $media->getThumbnails());
-            foreach ($media->getThumbnails() as $thumbnail) {
-                $this->assertFileExists(Shopware()->OldPath() . $thumbnail);
-            }
-
             $this->assertCount(1, $image->getMappings(), "No image mapping created!");
 
             /**@var $mapping \Shopware\Models\Article\Image\Mapping*/
