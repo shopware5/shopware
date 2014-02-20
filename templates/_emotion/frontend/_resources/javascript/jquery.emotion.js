@@ -321,6 +321,7 @@
         me.opts = $.extend({}, defaults, options);
         me._defaults = defaults;
         me._name = pluginName;
+        me.storage = window.sessionStorage;
         me.hasSessionStorageSupport = me.isSessionStorageSupported();
 
         me.init();
@@ -397,7 +398,7 @@
             itemValue = url || window.location.href;
 
         if (me.hasSessionStorageSupport) {
-            window.sessionStorage.setItem(pluginName, itemValue);
+            me.storage.setItem(pluginName, itemValue);
         }
 
         return true;
@@ -411,12 +412,16 @@
      * @returns { Boolean } Truthy, if all went well, otherwise falsy
      */
     Plugin.prototype.restoreState = function() {
-        if(!window.sessionStorage.getItem(pluginName)) {
+        var me = this,
+            item = me.hasSessionStorageSupport && me.storage.getItem(pluginName);
+
+        if(!item) {
             return false;
         }
-        $('.article_overview a').attr('href', window.sessionStorage.getItem(pluginName));
 
-        window.sessionStorage.removeItem(pluginName);
+        $('.article_overview a').attr('href', item);
+
+        me.storage.removeItem(pluginName);
         return true;
     };
 
@@ -426,18 +431,17 @@
      * @returns {boolean}
      */
     Plugin.prototype.isSessionStorageSupported = function () {
-        var testKey = 'test',
-            supported = typeof(window.Storage) !== 'undefined' || !window.hasOwnProperty('sessionStorage'),
-            storage = window.sessionStorage;
+        var me = this,
+            testKey = 'test';
 
-        if (!supported) {
-            return supported;
+        if (!me.storage) {
+            return false;
         }
 
         try {
-            storage.setItem(testKey, '1');
-            storage.removeItem(testKey);
-            return supported;
+            me.storage.setItem(testKey, '1');
+            me.storage.removeItem(testKey);
+            return true;
         } catch (error) {
             return false;
         }
