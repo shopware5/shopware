@@ -301,6 +301,7 @@
     "use strict";
 
     var pluginName = 'httpCacheFilters',
+        sessionStorage = window.sessionStorage,
         defaults = {
             mode: 'listing'
         };
@@ -321,7 +322,6 @@
         me.opts = $.extend({}, defaults, options);
         me._defaults = defaults;
         me._name = pluginName;
-        me.storage = window.sessionStorage;
         me.hasSessionStorageSupport = me.isSessionStorageSupported();
 
         me.init();
@@ -398,7 +398,7 @@
             itemValue = url || window.location.href;
 
         if (me.hasSessionStorageSupport) {
-            me.storage.setItem(pluginName, itemValue);
+            sessionStorage.setItem(pluginName, itemValue);
         }
 
         return true;
@@ -413,7 +413,7 @@
      */
     Plugin.prototype.restoreState = function() {
         var me = this,
-            item = me.hasSessionStorageSupport && me.storage.getItem(pluginName);
+            item = me.hasSessionStorageSupport && sessionStorage.getItem(pluginName);
 
         if(!item) {
             return false;
@@ -421,7 +421,7 @@
 
         $('.article_overview a').attr('href', item);
 
-        me.storage.removeItem(pluginName);
+        sessionStorage.removeItem(pluginName);
         return true;
     };
 
@@ -431,16 +431,15 @@
      * @returns {boolean}
      */
     Plugin.prototype.isSessionStorageSupported = function () {
-        var me = this,
-            testKey = 'test';
+        var testKey = 'test';
 
-        if (!me.storage) {
+        if (!sessionStorage) {
             return false;
         }
 
         try {
-            me.storage.setItem(testKey, '1');
-            me.storage.removeItem(testKey);
+            sessionStorage.setItem(testKey, '1');
+            sessionStorage.removeItem(testKey);
             return true;
         } catch (error) {
             return false;
