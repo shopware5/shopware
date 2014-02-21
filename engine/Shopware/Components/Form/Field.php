@@ -61,6 +61,14 @@ class Field extends Base implements FieldInterface, Validate
     protected $attributes = array();
 
     /**
+     * Help text for the user to explain
+     * which effects has this field configuration.
+     *
+     * @var string
+     */
+    protected $help;
+
+    /**
      * Defines if the field is
      * required to configured.
      *
@@ -146,6 +154,22 @@ class Field extends Base implements FieldInterface, Validate
     public function getAttributes()
     {
         return $this->attributes;
+    }
+
+    /**
+     * @param string $help
+     */
+    public function setHelp($help)
+    {
+        $this->help = $help;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHelp()
+    {
+        return $this->help;
     }
 
     /**
