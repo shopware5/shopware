@@ -25,6 +25,14 @@ class Field extends Base implements FieldInterface, Validate
     protected $defaultValue;
 
     /**
+     * Defines if the field is
+     * required to configured.
+     *
+     * @var boolean
+     */
+    protected $required = false;
+
+    /**
      * @param string $name
      */
     public function setName($name)
@@ -70,6 +78,22 @@ class Field extends Base implements FieldInterface, Validate
     public function setDefaultValue($defaultValue)
     {
         $this->defaultValue = $defaultValue;
+    }
+
+    /**
+     * @param boolean $required
+     */
+    public function setRequired($required)
+    {
+        $this->required = $required;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getRequired()
+    {
+        return $this->required;
     }
 
     /**
