@@ -1,0 +1,16 @@
+{
+  "name": "SwagBareTheme",
+  "version": "1.0.0",
+  "description": "A bare theme for Shopware, whcih could be used as a boilerplate template",
+  "keywords": [
+    "bare",
+    "theme",
+    "shopware"
+  ],
+  "author": "shopware AG",
+  "license": "New BSD",
+  "devDependencies": {
+    "styledocco": "latest",
+    "bower": "latest"
+  }
+}
