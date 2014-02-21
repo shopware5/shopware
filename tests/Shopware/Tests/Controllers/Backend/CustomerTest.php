@@ -219,6 +219,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
      */
     public function testPerformOrderAction()
     {
+        //set the user id
         $params = array(
             'id' => 1
         );
@@ -227,9 +228,14 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
         /** @var Enlight_Controller_Response_ResponseTestCase $response */
         $response = $this->dispatch('backend/Customer/performOrder');
 
-        $cookie = $response->getFullCookie('session-1');
+        $headerLocation = $response->getHeader("Location");
+        $this->reset();
+        $this->assertNotEmpty($headerLocation);
+        $newLocation = explode('/backend/',$headerLocation );
+        $response = $this->dispatch('backend/'.$newLocation[1]);
 
-        $this->assertNotNull($cookie);
-        $this->assertGreaterThanOrEqual($cookie['expire'], time() - 3600);
+        $cookie = $response->getFullCookie('session-1');
+        $this->assertTrue(strpos($headerLocation, $cookie['value']) !== false);
+        $this->assertEquals(0, $cookie['expire']);
     }
 }
