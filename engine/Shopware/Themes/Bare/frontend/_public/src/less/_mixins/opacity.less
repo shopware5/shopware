@@ -8,6 +8,6 @@
 	@ie-opacity: @opacity * 100;
 	-khtml-opacity: @opacity;
 	-moz-opacity: @opacity;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=@{opacity * 100})";
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=@{ie-opacity})";
 	opacity: @opacity;
 }
