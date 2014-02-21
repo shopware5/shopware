@@ -19,6 +19,11 @@ class Field extends Base implements FieldInterface
     protected $name;
 
     /**
+     * @var mixed
+     */
+    protected $defaultValue;
+
+    /**
      * @param string $name
      */
     public function setName($name)
@@ -48,6 +53,22 @@ class Field extends Base implements FieldInterface
     public function getLabel()
     {
         return $this->label;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDefaultValue()
+    {
+        return $this->defaultValue;
+    }
+
+    /**
+     * @param mixed $defaultValue
+     */
+    public function setDefaultValue($defaultValue)
+    {
+        $this->defaultValue = $defaultValue;
     }
 
 
