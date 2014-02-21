@@ -1,6 +1,9 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+## 4.2.2
+* Add a new basic setting to add a possibility to disable the tell a friend feature
+
 ## 4.2.0
 
 * Add new metaTitle field to the Blog
