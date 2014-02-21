@@ -20,9 +20,19 @@ class Field extends Base implements FieldInterface, Validate
     protected $name;
 
     /**
+     * @optional
      * @var mixed
      */
     protected $defaultValue;
+
+    /**
+     * Contains additional data for each
+     * config field.
+     *
+     * @optional
+     * @var array
+     */
+    protected $attributes = array();
 
     /**
      * Defines if the field is
@@ -94,6 +104,22 @@ class Field extends Base implements FieldInterface, Validate
     public function getRequired()
     {
         return $this->required;
+    }
+
+    /**
+     * @param array $attributes
+     */
+    public function setAttributes($attributes)
+    {
+        $this->attributes = $attributes;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
     }
 
     /**
