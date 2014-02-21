@@ -1,0 +1,33 @@
+/**
+ * Shopware
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the NEW BSD license
+ * that is bundled with this package in the file LICENSE.
+ * It is also available through the world-wide-web at this URL:
+ * <http://opensource.org/licenses/BSD-3-Clause>
+ *
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to info@shopware.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or modify the file if you wish to upgrade Shopware to a newer
+ * version. If you wish to customize the storefront template of Shopware please
+ * refer to http://wiki.shopware.com for more information.
+ *
+ * @category    design
+ * @copyright   Copyright (c) 2014 shopware AG (http://www.shopware.com)
+ * @license     http://opensource.org/licenses/BSD-3-Clause  New BSD
+ */
+/** @TODO - Remove include of normalize when the ability to use a preprocessor in theme is ready for prime time */
+@import "../../vendors/normalize-less/normalize";
+@import "mixins";
+
+.test {
+	.opacity(0.5);
+	.box-sizing();
+	.box-shadow(0px, 1px, 0px, #f00);
+}
