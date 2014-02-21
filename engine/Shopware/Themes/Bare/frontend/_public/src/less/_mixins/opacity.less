@@ -1,9 +1,7 @@
-/**
-	The mixins provides you a cross-browser compatible opacity which supports IE starting from version 8 to the
-	newest one. Safari, Chrome and Firefox are supported in all versions.
-
-	@param: {Number} opacity: Value of the opacity, starting from 0 to 1.
-*/
+// The mixins provides you a cross-browser compatible opacity which supports IE starting from version 8 to the
+// newest one. Safari, Chrome and Firefox are supported in all versions.
+//
+// @param: {Number} opacity: Value of the opacity, starting from 0 to 1.
 .opacity(@opacity) {
 	@ie-opacity: @opacity * 100;
 	-khtml-opacity: @opacity;
