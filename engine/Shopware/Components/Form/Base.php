@@ -23,7 +23,7 @@ class Base
             'type' => get_class($this)
         );
 
-        foreach($properties as $property => $value) {
+        foreach ($properties as $property => $value) {
             $method = 'get' . ucfirst($property);
 
             if (!method_exists($this, $method)) {
@@ -31,10 +31,10 @@ class Base
             }
 
             $value = $this->$method();
-
-            if (is_array($value) || $value instanceof ArrayCollection) {
+            
+            if ($value instanceof \Traversable) {
                 $converted = array();
-                foreach($value as $item) {
+                foreach ($value as $item) {
                     if ($item instanceof Base) {
                         $converted[] = $item->toArray();
                     } else {
@@ -43,10 +43,8 @@ class Base
                 }
                 $value = $converted;
             }
-
             $data[$property] = $value;
         }
-
 
         return $data;
     }
