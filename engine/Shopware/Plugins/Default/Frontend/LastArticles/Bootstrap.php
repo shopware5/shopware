@@ -42,26 +42,43 @@ class Shopware_Plugins_Frontend_LastArticles_Bootstrap extends Shopware_Componen
         $form = $this->Form();
         $parent = $this->Forms()->findOneBy(array('name' => 'Frontend'));
         $form->setParent($parent);
+        $form->setTranslation('en_GB', 'Recently viewed items');
         $form->setElement('checkbox', 'show', array(
             'label' => 'Artikelverlauf anzeigen',
             'value' => true,
             'scope' => Shopware\Models\Config\Element::SCOPE_SHOP
+        ), array(
+            'en_GB' => 'Display recently viewed items'
         ));
         $form->setElement('text', 'controller', array(
             'label' => 'Controller-Auswahl',
             'value' => 'index, listing, detail, custom, newsletter, sitemap, campaign',
             'scope' => Shopware\Models\Config\Element::SCOPE_SHOP
+        ), array(
+            'en_GB' => 'Controller selection'
         ));
         $form->setElement('number', 'thumb', array(
             'label' => 'Vorschaubild-Größe',
             'value' => 2,
             'scope' => Shopware\Models\Config\Element::SCOPE_SHOP
+        ), array(
+            'en_GB' => array(
+                'label' => 'Thumbnail size',
+                'description' => 'Index of the thumbnail size of the associated album to use. Starts at 0'
+            )
+        ));
+        $form->setElement('number', 'lastarticlestoshow', array(
+            'label' => 'Anzahl Artikel in Verlauf (zuletzt angeschaut)',
+            'value' => 5
+        ), array(
+            'en_GB' => 'Maximum number of items to display'
         ));
         $form->setElement('number', 'time', array(
             'label' => 'Speicherfrist in Tagen',
             'value' => 15
+        ), array(
+            'en_GB' => 'Storage period in days'
         ));
-
         return true;
     }
 

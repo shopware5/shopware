@@ -96,7 +96,7 @@ class ElementTranslation extends ModelEntity
      * Set description
      *
      * @param string $description
-     * @return Element
+     * @return ElementTranslation
      */
     public function setDescription($description)
     {
@@ -118,7 +118,7 @@ class ElementTranslation extends ModelEntity
      * Set label
      *
      * @param string $label
-     * @return Element
+     * @return ElementTranslation
      */
     public function setLabel($label)
     {
@@ -170,5 +170,20 @@ class ElementTranslation extends ModelEntity
     public function getLocale()
     {
         return $this->locale;
+    }
+
+    /**
+     * Set locale by locale code
+     *
+     * @param string $localeCode
+     * @return ElementTranslation
+     */
+    public function setLocaleByCode($localeCode)
+    {
+        if (!empty($localeCode)) {
+            $this->locale = Shopware()->Models()->getRepository('Shopware\Models\Shop\Locale')
+                ->findOneBy(array('locale' => $localeCode));
+        }
+        return $this;
     }
 }

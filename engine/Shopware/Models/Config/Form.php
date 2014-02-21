@@ -231,7 +231,7 @@ class Form extends ModelEntity
      * @param array $options
      * @return Form
      */
-    public function setElement($type, $name, $options = null)
+    public function setElement($type, $name, $options = null, $translations = array())
     {
         /** @var $value Element */
         foreach ($this->elements as $element) {
@@ -243,7 +243,7 @@ class Form extends ModelEntity
                 return $this;
             }
         }
-        $this->addElement($type, $name, $options);
+        $this->addElement($type, $name, $options, $translations);
         return $this;
     }
 
@@ -268,11 +268,11 @@ class Form extends ModelEntity
      * @param array $options
      * @return \Shopware\Models\Config\Form
      */
-    public function addElement($element, $name = null, $options = null)
+    public function addElement($element, $name = null, $options = null, $translations = array())
     {
         if (!$element instanceof Element) {
             $element = new Element(
-                $element, $name, $options
+                $element, $name, $options, $translations
             );
         }
         $element->setForm($this);
@@ -359,6 +359,30 @@ class Form extends ModelEntity
     public function getTranslations()
     {
         return $this->translations;
+    }
+
+    public function setTranslation($localeCode, $label, $description = null)
+    {
+        /** @var $translation FormTranslation */
+        foreach ($this->translations as $translation) {
+            if ($translation->getLocale()->getLocale() === $localeCode) {
+                $translation->setLabel($label);
+                if ($description !== null) {
+                    $translation->setDescription($description);
+                }
+                return $this;
+            }
+        }
+
+        $translation = new FormTranslation();
+        $translation->setLabel($label);
+        $translation->setLocaleByCode($localeCode);
+        if ($description !== null) {
+            $translation->setDescription($description);
+        }
+
+        $this->addTranslation($translation);
+        return $this;
     }
 
     /**
