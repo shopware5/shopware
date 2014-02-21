@@ -271,7 +271,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
      * @return void
      */
     onChangeCategory: function(view, record, dom) {
-        var me = this, store = view.store, el = Ext.get(dom), category, pluginStore = me.subApplication.pluginStore,
+        var me = this, store = view.store, category, pluginStore = me.subApplication.pluginStore,
             mainWindow = me.getMainWindow(),
             navigation = me.getManagerNavigation();
 
@@ -289,7 +289,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
         }
 
         // Terminate the category
-        category = el.getAttribute('data-action');
+        category = dom.getAttribute('data-action');
         if(category === 'null') {
             category = null;
         }
