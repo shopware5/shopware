@@ -1031,9 +1031,12 @@ class Customer extends ModelEntity
         $this->priceGroup = $priceGroup;
     }
 
-    public function setLanguageSubShop($languageSubShop)
+    public function setLanguageSubShop(\Shopware\Models\Shop\Shop $languageSubShop)
     {
         $this->languageSubShop = $languageSubShop;
+
+        $subShop = ($languageSubShop->getMain()) ? $languageSubShop->getMain() : $languageSubShop;
+        $this->setShop($subShop);
     }
 
     public function getLanguageSubShop()
