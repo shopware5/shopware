@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.CanceledOrder', {
 
     models: [ 'Order', 'Customer', 'Basket', 'Statistic', 'Articles', 'Voucher', 'Viewports' ],
 
-    views: [ 'main.Window', 'tabs.order.Orders', 'tabs.baskets.Main', 'tabs.baskets.Overview', 'tabs.baskets.Articles', 'tabs.Statistics', 'Toolbar', 'tabs.order.Main', 'tabs.order.Detail', 'tabs.baskets.Viewports' ],
+    views: [ 'main.Window', 'tabs.order.Orders', 'tabs.baskets.Main', 'tabs.baskets.Overview', 'tabs.baskets.Articles', 'tabs.Statistics', 'Toolbar', 'tabs.order.Main', 'tabs.order.Detail', 'tabs.order.Position', 'tabs.baskets.Viewports' ],
 
     /**
      * Returns the main application window for this is expected

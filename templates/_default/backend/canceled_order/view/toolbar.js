@@ -116,10 +116,9 @@ Ext.define('Shopware.apps.CanceledOrder.view.Toolbar', {
             me.toDate,
             {
                 xtype: 'button',
-                ui: 'shopware-ui',
+                iconCls: 'sprite-arrow-circle-135',
                 text: me.snippets.filter.button,
                 tooltip : me.snippets.filter.tooltip,
-
                 handler: function(button) {
                     me.fireEvent('filter', me.fromDate.getValue(), me.toDate.getValue());
                 }
