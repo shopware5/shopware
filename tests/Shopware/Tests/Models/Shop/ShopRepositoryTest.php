@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Copyright © 2012 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,25 +20,20 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
  */
 
-/**
- * @category  Shopware
- * @package   Shopware\Tests
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
- */
-class Shopware_RegressionTests_Ticket7994Test extends Enlight_Components_Test_Controller_TestCase
+class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
-     * Tests set up method
+     * Ensures that getActiveByRequest() returns the correct shop
+     *
+     * @ticket SW-7774
      */
-    public function setUp()
+    public function testGetActiveByRequest()
     {
-        parent::setUp();
-
+        // Set up some test shops
         Shopware()->Bootstrap()
-                ->resetResource('Template');
+            ->resetResource('Template');
 
         $sql= "SELECT base_path FROM s_core_shops WHERE id = 1";
         $mainBasePath = Shopware()->Db()->fetchOne($sql);
@@ -51,29 +46,16 @@ class Shopware_RegressionTests_Ticket7994Test extends Enlight_Components_Test_Co
         ";
         Shopware()->Db()->query(
             $sql, array(
-                $mainBasePath."/english",
-                $mainBasePath."/en/uk",
-                $mainBasePath."/en"
+            $mainBasePath."/english",
+            $mainBasePath."/en/uk",
+            $mainBasePath."/en"
         ));
 
         $sql= "UPDATE `s_core_shops` SET `host` = 'fallbackhost' WHERE `id` = 1 AND `host` = ''";
         Shopware()->Db()->query($sql);
-    }
 
-    public function tearDown()
-    {
-        parent::tearDown();
-        $sql = "
-            DELETE FROM s_core_shops WHERE id IN (100, 101, 102);
-        ";
-        Shopware()->Db()->exec($sql);
 
-        $sql= "UPDATE `s_core_shops` SET `host` = '' WHERE `id` = 1 AND `host` = 'fallbackhost'";
-        Shopware()->Db()->query($sql);
-    }
-
-    public function testVirtualURLs()
-    {
+        // The actual testing
         $request = $this->Request();
         $repository = 'Shopware\Models\Shop\Shop';
 
@@ -104,6 +86,15 @@ class Shopware_RegressionTests_Ticket7994Test extends Enlight_Components_Test_Co
         $this->callGetActiveShopByRequest($request, $repository, $mainShop["base_path"]."/en/ukfoooo", 'testShop3');
         $this->callGetActiveShopByRequest($request, $repository, $mainShop["base_path"]."/en/uk", 'testShop2');
         $this->callGetActiveShopByRequest($request, $repository, $mainShop["base_path"]."/en/uk/things", 'testShop2');
+
+        // Remove test data
+        $sql = "
+            DELETE FROM s_core_shops WHERE id IN (100, 101, 102);
+        ";
+        Shopware()->Db()->exec($sql);
+
+        $sql= "UPDATE `s_core_shops` SET `host` = '' WHERE `id` = 1 AND `host` = 'fallbackhost'";
+        Shopware()->Db()->query($sql);
     }
 
     /**
