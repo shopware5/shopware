@@ -492,10 +492,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             }
 
             $customer = $this->getRepository()->find($id);
-            $shipping = $customer->getShipping();
-            $billing = $customer->getBilling();
-            $debit = $customer->getDebit();
-
             $paymentData = $this->getManager()->getRepository('Shopware\Models\Customer\PaymentData')->findOneBy(
                 array('customer' => $customer, 'paymentMean' => $paymentId)
             );
@@ -510,19 +506,9 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
                 return;
             }
             $customer = new Customer();
-            $billing = new Billing();
-            $shipping = new Shipping();
-            $debit = new Debit();
         }
 
         try {
-            if (!$shipping instanceof Shipping) {
-                $shipping = new Shipping();
-            }
-            if (!$debit instanceof Debit) {
-                $debit = new Debit();
-            }
-
             $params = $this->Request()->getParams();
 
             if (!$paymentData instanceof PaymentData && !empty($params['paymentData']) && array_filter($params['paymentData'][0])) {
@@ -533,7 +519,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
                 );
             }
 
-            $params = $this->prepareCustomerData($params, $customer, $billing, $shipping, $debit, $paymentData);
+            $params = $this->prepareCustomerData($params, $customer, $paymentData);
 
             //set parameter to the customer model.
             $customer->fromArray($params);
@@ -600,15 +586,12 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     /**
      * Helper method to prepare the customer for saving
      *
-     * @param $params
-     * @param $customer
-     * @param $billing
-     * @param $shipping
-     * @param $debit
-     * @param $paymentData
-     * @return mixed
+     * @param array $params
+     * @param Shopware\Models\Customer\Customer $customer
+     * @param array $paymentData
+     * @return array
      */
-    private function prepareCustomerData($params, $customer, $billing, $shipping, $debit, $paymentData)
+    private function prepareCustomerData($params, Shopware\Models\Customer\Customer $customer, $paymentData)
     {
         if (!empty($params['groupKey'])) {
             $params['group'] = $this->getGroupRepository()->findOneBy(array('key' => $params['groupKey']));
@@ -620,13 +603,11 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             /** @var $shopRepository \Shopware\Models\Shop\Repository */
             $shopRepository = $this->getShopRepository();
             $params['languageSubShop'] = $shopRepository->find($params['languageId']);
-            //always setting the shop depending to the languageId
-            $params['shop'] = $shopRepository->getMainShopById($params['languageId']);
+
         } else {
             unset($params['languageSubShop']);
             unset($params['shop']);
         }
-
 
         if (!empty($params['priceGroupId'])) {
             $params['priceGroup'] = Shopware()->Models()->find('Shopware\Models\Customer\PriceGroup', $params['priceGroupId']);
@@ -739,6 +720,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         /** @var $repository Shopware\Models\Shop\Repository */
         $repository = $this->getShopRepository();
         $shop = $repository->getActiveById($user['language']);
+
         $shop->registerResources(Shopware()->Bootstrap());
 
         Shopware()->Session()->Admin = true;
