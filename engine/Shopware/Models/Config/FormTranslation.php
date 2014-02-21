@@ -151,6 +151,21 @@ class FormTranslation extends ModelEntity
     }
 
     /**
+     * Set locale by locale code
+     *
+     * @param string $localeCode
+     * @return FormTranslation
+     */
+    public function setLocaleByCode($localeCode)
+    {
+        if (!empty($localeCode)) {
+            $this->locale = Shopware()->Models()->getRepository('Shopware\Models\Shop\Locale')
+                ->findOneBy(array('locale' => $localeCode));
+        }
+        return $this;
+    }
+
+    /**
      * @param \Shopware\Models\Config\Form $form
      */
     public function setForm($form)

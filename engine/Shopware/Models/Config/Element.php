@@ -128,13 +128,29 @@ class Element extends ModelEntity
      * @param $name
      * @param array $options
      */
-    public function __construct($type, $name, $options = null)
+    public function __construct($type, $name, $options = null, $translations = array())
     {
         $this->type = $type;
         $this->name = $name;
         $this->setOptions($options);
 
         $this->translations = new ArrayCollection();
+
+        if (!empty($translations)) {
+            foreach ($translations as $locale => $value) {
+                $translation = new ElementTranslation();
+                $translation->setLocaleByCode($locale);
+                $translation->setElement($this);
+                if (is_array($value)) {
+                    $translation->setLabel($value['label']);
+                    $translation->setDescription($value['description']);
+                } else {
+                    $translation->setLabel($value);
+                }
+
+                $this->addTranslation($translation);
+            }
+        }
     }
 
     /**
