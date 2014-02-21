@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_Controller_TestCase
+class Shopware_Tests_Models_ShopRepositoryTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Ensures that getActiveByRequest() returns the correct shop
@@ -56,7 +56,8 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
 
 
         // The actual testing
-        $request = $this->Request();
+        $request = new Enlight_Controller_Request_RequestTestCase();
+
         $repository = 'Shopware\Models\Shop\Shop';
 
         /** @var $repository \Shopware\Models\Shop\Repository */
