@@ -1,0 +1,29 @@
+{
+  "name": "SwagBareTheme",
+  "version": "1.0.0",
+  "authors": [
+    "shopware AG"
+  ],
+  "description": "A bare theme for Shopware, whcih could be used as a boilerplate template",
+  "keywords": [
+    "bare",
+    "theme",
+    "shopware"
+  ],
+  "license": "New BSD",
+  "homepage": "http://shopware.com",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "frontend/_public/vendors",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "normalize-less": "*",
+    "jquery": "1.11.0",
+    "handlebars": "~1.3.0"
+  }
+}
