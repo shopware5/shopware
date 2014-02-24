@@ -578,8 +578,9 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $endDate   = $this->Request()->getParam('toDate', date("Y-m-d"));
 
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('orders', 'customer', 'billing', 'payment'))
+        $builder->select(array('orders', 'customer', 'billing', 'payment', 'details'))
                 ->from('Shopware\Models\Order\Order', 'orders')
+                ->leftJoin('orders.details', 'details')
                 ->leftJoin('orders.customer', 'customer')
                 ->leftJoin('orders.payment', 'payment')
                 ->leftJoin('customer.billing', 'billing')
