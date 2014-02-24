@@ -209,6 +209,16 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             $this->View()->loadTemplate('frontend/blog/' . $type . '.tpl');
         }
 
+
+	    /**@var $repository \Shopware\Models\Emotion\Repository*/
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
+        $query = $repository->getCampaignByCategoryQuery($categoryId);
+        $campaignsResult = $query->getArrayResult();
+        $campaigns = array();
+        foreach ($campaignsResult as $campaign) {
+            $campaign['categoryId'] = $categoryId;
+            $campaigns[$campaign['landingPageBlock']][] = $campaign;
+        }
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
         $assigningData = array(
             'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
@@ -220,7 +230,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             'sFilterAuthor' => $this->getAuthorFilterData($blogCategoryIds, $filter),
             'sFilterTags' => $this->getTagsFilterData($blogCategoryIds, $filter),
             'sCategoryInfo' => $categoryContent,
-            'sBlogArticles' => $blogArticles
+            'sBlogArticles' => $blogArticles,
+	        'campaigns' => $campaigns
         );
 
         $this->View()->assign(array_merge($assigningData, $this->getPagerData($totalResult, $sLimitEnd, $sPage, $categoryId)));

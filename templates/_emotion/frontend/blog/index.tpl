@@ -24,7 +24,7 @@
 	
 	{* Campaign top *}
 	{block name='frontend_blog_index_campaign_top'}
-		{include file="frontend/campaign/box.tpl" campaignsData=$sCampaigns.rightTop}
+		{include file="frontend/campaign/box.tpl" campaignsData=$campaigns.leftTop}
 	{/block}
 	
 	<div class="blog_navi">
@@ -39,6 +39,11 @@
 			</ul>
 		</div>
 		{/block}
+
+		{* Campaign Middle *}
+		{block name='frontend_blog_index_campaign_middle'}
+			{include file="frontend/campaign/box.tpl" campaignsData=$campaigns.leftMiddle}
+		{/block}
 	
 		{* Blog filter *}
 		{block name='frontend_blog_index_filter'}
@@ -47,7 +52,7 @@
 	</div>
 	{* Campaign bottom *}
 	{block name='frontend_blog_index_campaign_bottom'}
-		{include file="frontend/campaign/box.tpl" campaignsData=$sCampaigns.rightBottom}
+		{include file="frontend/campaign/box.tpl" campaignsData=$campaigns.leftBottom}
 	{/block}
 </div>
 {/block}
