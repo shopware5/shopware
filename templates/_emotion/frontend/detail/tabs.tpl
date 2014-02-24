@@ -3,27 +3,19 @@
 <ul>
 
 	{block name="frontend_detail_tabs_description"}
-		<li>
+		<li class="first">
 			<a href="#description">{se name='DetailTabsDescription'}{/se}</a>
 		</li>
 	{/block}
 	
 	{block name="frontend_detail_tabs_rating"}
-	
+
 	{if !{config name=VoteDisable}}
 		<li>
 			<a href="#comments">
 				<span>
-					{s name='DetailTabsRating'}{/s} 
-					
-					{if $sArticle.sVoteAverange.count}
-						[{$sArticle.sVoteAverange.count}]
-					{/if}
+					{s name='DetailTabsRating'}{/s} ({$sArticle.sVoteAverange.count})
 				</span>
-				
-				{if $sArticle.sVoteAverange.count}
-                    <span class="star star{$sArticle.sVoteAverange.averange}">Star Rating</span>
-   				{/if}
 			</a>
 		</li>
 	{/if}
