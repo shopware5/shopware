@@ -79,7 +79,6 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Main', {
             },
             {
                 xtype:'canceled-order-view-order-position',
-                store: me.canceledOrderStore,
                 internalTitle: 'orders'
             }
         ];
