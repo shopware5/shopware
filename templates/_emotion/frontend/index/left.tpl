@@ -28,7 +28,10 @@
 
 	{* Campaign left bottom *}
 	{block name='frontend_index_left_campaigns_bottom'}
-		{include file="frontend/campaign/box.tpl" campaignsData=$sCampaigns.leftBottom}
+		{if $campaigns.leftBottom}
+			<div class="space"></div>
+		{/if}
+		{include file="frontend/campaign/box.tpl" campaignsData=$campaigns.leftBottom}
 	{/block}
 	
 	{* Last articles *}
