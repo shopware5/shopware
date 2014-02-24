@@ -6049,9 +6049,8 @@ if (navigator.appVersion.indexOf("MSIE 7.") != -1)
  * @license: MIT http://rem.mit-license.org/
  * @link: https://gist.github.com/remy/350433
  */
-if (typeof window.localStorage == 'undefined' || typeof window.sessionStorage == 'undefined') (function () {
-
-    var Storage = function (type) {
+(function () {
+    window.Storage = function (type) {
         function createCookie(name, value, days) {
             var date, expires;
 
@@ -6085,20 +6084,20 @@ if (typeof window.localStorage == 'undefined' || typeof window.sessionStorage ==
         function setData(data) {
             data = JSON.stringify(data);
             if (type == 'session') {
-                window.name = data;
+                createCookie('sessionStorage', data, 0);
             } else {
                 createCookie('localStorage', data, 365);
             }
         }
         function clearData() {
             if (type == 'session') {
-                window.name = '';
+                createCookie('sessionStorage', '', 0);
             } else {
                 createCookie('localStorage', '', 365);
             }
         }
         function getData() {
-            var data = type == 'session' ? window.name : readCookie('localStorage');
+            var data = type == 'session' ? readCookie('sessionStorage') : readCookie('localStorage');
             return data ? JSON.parse(data) : {};
         }
 

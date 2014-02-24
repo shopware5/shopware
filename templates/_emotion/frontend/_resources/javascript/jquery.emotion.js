@@ -302,9 +302,36 @@
 
     var pluginName = 'httpCacheFilters',
         sessionStorage = window.sessionStorage,
+        hasSessionStorageSupport = isSessionStorageSupported(),
         defaults = {
             mode: 'listing'
         };
+
+    if(!hasSessionStorageSupport) {
+        sessionStorage = new Storage('session');
+        hasSessionStorageSupport = isSessionStorageSupported();
+    }
+
+    /**
+     * Returns whether or not the sessionStorage is available and works - SW-7524
+     *
+     * @returns {boolean}
+     */
+    function isSessionStorageSupported () {
+        var testKey = 'test';
+
+        if (!sessionStorage) {
+            return false;
+        }
+
+        try {
+            sessionStorage.setItem(testKey, '1');
+            sessionStorage.removeItem(testKey);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
 
     /**
      * Plugin constructor which merges the default settings
@@ -322,7 +349,6 @@
         me.opts = $.extend({}, defaults, options);
         me._defaults = defaults;
         me._name = pluginName;
-        me.hasSessionStorageSupport = me.isSessionStorageSupported();
 
         me.init();
     }
@@ -336,11 +362,6 @@
     Plugin.prototype.init = function() {
         var me = this,
             mode;
-
-        // Check if the browser support { @link sessionStorage }
-        if(!me.hasSessionStorageSupport) {
-            return false;
-        }
 
         // Terminate if we're on the category listing or on the detail page
         mode = $(me.element).hasClass('ctl_detail') ? 'detail' : 'listing';
@@ -394,10 +415,9 @@
      * @returns { Boolean }
      */
     Plugin.prototype.saveCurrentState = function(url) {
-        var me = this,
-            itemValue = url || window.location.href;
+        var itemValue = url || window.location.href;
 
-        if (me.hasSessionStorageSupport) {
+        if (hasSessionStorageSupport) {
             sessionStorage.setItem(pluginName, itemValue);
         }
 
@@ -412,8 +432,7 @@
      * @returns { Boolean } Truthy, if all went well, otherwise falsy
      */
     Plugin.prototype.restoreState = function() {
-        var me = this,
-            item = me.hasSessionStorageSupport && sessionStorage.getItem(pluginName);
+        var item = hasSessionStorageSupport && sessionStorage.getItem(pluginName);
 
         if(!item) {
             return false;
@@ -423,27 +442,6 @@
 
         sessionStorage.removeItem(pluginName);
         return true;
-    };
-
-    /**
-     * Returns whether or not the sessionStorage is available and works - SW-7524
-     *
-     * @returns {boolean}
-     */
-    Plugin.prototype.isSessionStorageSupported = function () {
-        var testKey = 'test';
-
-        if (!sessionStorage) {
-            return false;
-        }
-
-        try {
-            sessionStorage.setItem(testKey, '1');
-            sessionStorage.removeItem(testKey);
-            return true;
-        } catch (error) {
-            return false;
-        }
     };
 
     /** Lightweight plugin starter */
