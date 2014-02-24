@@ -111,6 +111,7 @@
 	<div class="table_row voucher">
 		<div class="grid_6">
 			{block name='frontend_checkout_cart_item_voucher_details'}
+			<div class="voucher_img">&nbsp;</div>
 			<div class="basket_details">
 				<strong class="title">{$sBasketItem.articlename}</strong>
 				
