@@ -515,7 +515,6 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
                 array(
                     'articleId'         => $this->articleId,
                     'articleName'       => 'PHPUNIT ARTICLE',
-                    'date'              => 1371247200,
                     'totalImpressions'  => 10,
                     'totalImpressions1' => 10
                 )
@@ -950,7 +949,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $this->createReferrer();
 
         $result = $this->repository->getReferrerUrls(
-            'google.de',
+            'phpunit',
             0,
             25
         );
@@ -970,7 +969,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
     {
         $this->createReferrer();
 
-        $result = $this->repository->getReferrerSearchTerms('google.de');
+        $result = $this->repository->getReferrerSearchTerms('phpunit');
         $data = $result->getData();
 
         $this->assertEquals(
