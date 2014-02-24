@@ -309,7 +309,7 @@
 
     if(!hasSessionStorageSupport) {
         sessionStorage = new Storage('session');
-        hasSessionStorageSupport = isSessionStorageSupported();
+        hasSessionStorageSupport = true;
     }
 
     /**
