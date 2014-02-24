@@ -202,6 +202,15 @@ class Kernel implements HttpKernelInterface
             }
         }
 
+        // Handling headers sent by header()
+        foreach (headers_list() as $header) {
+            $headerArray = explode(': ', $header, 2);
+            $headerName  = strtolower($headerArray[0]);
+            $headerValue = $headerArray[1];
+            header_remove($headerName);
+            $headers[$headerName] = $headerValue;
+        }
+
         $symfonyResponse = new SymfonyResponse(
             $response->getBody(),
             $response->getHttpResponseCode(),
