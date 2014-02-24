@@ -42,7 +42,8 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
 
     refs: [
         { ref: 'orderGrid', selector: 'canceled-order-tabs-order-orders' },
-        { ref : 'detailView', selector : 'canceled-order-view-order-detail' }
+        { ref: 'orderPositionGrid', selector:'canceled-order-view-order-position' },
+        { ref: 'detailView', selector : 'canceled-order-view-order-detail' }
     ],
 
     snippets : {
@@ -90,8 +91,8 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
                 filter: me.onFilter,
                 dateEnter: me.onFilter
             },
-            'canceled-order-tabs-baskets-main': {
-                tabChange: me.onBasketTabChanged
+            'canceled-order-view-order-position': {
+                openArticle: me.onOpenArticle
             }
         });
 
@@ -162,7 +163,32 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
             return;
         }
 
+        me.updatePosition(selections[0]);
         me.updateDetails(selections[0]);
+    },
+
+    /**
+     * Updates the position grid
+     *
+     * @param selected
+     */
+    updatePosition: function(selected) {
+        var me = this,
+            positionGrid = me.getOrderPositionGrid(),
+            positionStore,
+            record = null;
+
+        if (Ext.isArray(selected)) {
+            record = selected[selected.length-1];
+        } else {
+            record = selected;
+        }
+
+        if (record instanceof Ext.data.Model && record.getPositions() instanceof Ext.data.Store) {
+            positionStore = record.getPositions();
+        }
+
+        positionGrid.reconfigure(positionStore);
     },
 
     /**
@@ -195,6 +221,22 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
             id: record.get('id')
         });
         store.load();
+    },
+
+    /**
+     * Callback function for openArticle. Will open the Article subApplication.
+     *
+     * @param record
+     * @return
+     */
+    onOpenArticle: function(record) {
+        Shopware.app.Application.addSubApplication({
+            name: 'Shopware.apps.Article',
+            action: 'detail',
+            params: {
+                articleId: record.get('articleId')
+            }
+        });
     },
 
     /**
@@ -397,15 +439,6 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
         store.load();
 
     },
-
-    /**
-     * Called when the tab in the basket tab changes.
-     * Needed in order to apply filters
-     */
-    onBasketTabChanged: function(panel, newCard, oldCard) {
-//        console.log(panel, newCard, oldCard);
-    },
-
 
     /**
      * Callback function for search events
