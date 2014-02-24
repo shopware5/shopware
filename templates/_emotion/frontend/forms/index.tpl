@@ -5,8 +5,10 @@
 	{$sBreadcrumb = [['name'=>{$sSupport.name}, 'link'=>{url controller=ticket sFid=$sSupport.id}]]}
 {/block}
 
-{* Empty sidebar left *}
-{block name='frontend_index_content_left'}{/block}
+{* Sidebar left *}
+{block name='frontend_index_content_left'}
+	{include file="frontend/index/left.tpl"}
+{/block}
 
 {* Main content *}
 {block name='frontend_index_content'}
