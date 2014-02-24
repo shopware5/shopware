@@ -333,7 +333,7 @@ class Repository extends ModelRepository
         //returns the right shop depending on the url
         $shop = $this->getShopByRequest($shops, $requestPath);
 
-        if ($shop !== false) {
+        if ($shop !== null) {
             return $shop;
         }
 
@@ -403,28 +403,31 @@ class Repository extends ModelRepository
          * We rank shops based on how much they have in common with the requested url (using strlen)
          * and return the last element in the end
          */
-        $shop = array();
+        $shop = null;
         foreach ($shops as $currentShop) {
             if ($currentShop->getBaseUrl() == $currentShop->getBasePath()) {
                 //if the base url matches exactly the basePath we have found the main shop but the loop will continue
-                if ($shop[0] === null) {
-                    $shop[0] = $currentShop;
+                if ($shop === null) {
+                    $shop = $currentShop;
                 }
             } elseif ($requestPath == $currentShop->getBaseUrl()
                 || (strpos($requestPath, $currentShop->getBaseUrl()) === 0
-                    && in_array($requestPath[strlen($currentShop->getBaseUrl())], array('/', '?')))) {
+                && in_array($requestPath[strlen($currentShop->getBaseUrl())], array('/', '?')))
+            ) {
                 /*
                  * Check if the url is the same as the (sub)shop url
                  * or if its the beginning of it, followed by / or ?
                  *
                  * f.e. this will match: localhost/en/blog/blogId=3 but this won't: localhost/entsorgung/
                  */
-                $shop[strlen($currentShop->getBaseUrl())] = $currentShop;
-                break;
+                if (!$shop || $currentShop->getBaseUrl() > $shop->getBaseUrl()) {
+                    $shop = $currentShop;
+                }
             } elseif ($currentShop->getSecure()
                 && ($requestPath == $currentShop->getSecureBaseUrl()
-                    || (strpos($requestPath, $currentShop->getSecureBaseUrl()) === 0
-                        && in_array($requestPath[strlen($currentShop->getSecureBaseUrl())], array('/', '?'))))) {
+                || (strpos($requestPath, $currentShop->getSecureBaseUrl()) === 0
+                && in_array($requestPath[strlen($currentShop->getSecureBaseUrl())], array('/', '?'))))
+            ) {
                 /*
                  * Only if the shop is used in secure (ssl) mode
                  *
@@ -433,10 +436,12 @@ class Repository extends ModelRepository
                  *
                  * f.e. this will match: localhost/en/blog/blogId=3 but this won't: localhost/entsorgung/
                  */
-                $shop[strlen($currentShop->getBaseUrl())] = $currentShop;
-                break;
+                if (!$shop || $currentShop->getBaseUrl() > $shop->getBaseUrl()) {
+                    $shop = $currentShop;
+                }
             }
         }
-        return end($shop);
+
+        return $shop;
     }
 }
