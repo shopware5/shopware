@@ -54,10 +54,10 @@ class Template
         $template->setEventManager($eventManager);
 
         $template->setTemplateDir(array(
-            'custom'      => '_local',
-            'local'       => '_local',
-            'emotion'     => '_default',
-            'default'     => '_default',
+            'custom'      => '_emotion_local',
+            'local'       => '_emotion_local',
+            'emotion'     => '_emotion',
+            'default'     => '_emotion',
             'base'        => 'templates',
             'include_dir' => '.',
         ));
