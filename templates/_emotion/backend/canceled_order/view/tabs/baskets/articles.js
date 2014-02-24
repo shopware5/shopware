@@ -114,7 +114,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.baskets.Articles', {
 
         return [
             {
-                iconCls:'sprite-pencil',
+                iconCls:'sprite-inbox',
                 action:'edit',
                 tooltip:me.snippets.tooltip.edit,
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
