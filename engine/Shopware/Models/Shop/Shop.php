@@ -722,8 +722,8 @@ class Shop extends ModelEntity
             } else {
                 $templateManager->addTemplateDir(array(
                     'custom' => $template->toString(),
-                    'local' => '_local',
-                    'emotion' => '_default',
+                    'local' => '_emotion_local',
+                    'emotion' => '_emotion',
                 ));
             }
 

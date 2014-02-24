@@ -310,8 +310,8 @@ class Shopware_Models_Widgets_Panel extends Enlight_Class implements Enlight_Hoo
         $template->addTemplateDir(
             Shopware()->DocPath().$config["object"]["views"],
             $panelTemplates,
-            Shopware()->DocPath().'templates/_local/',
-            Shopware()->DocPath().'templates/_default/'
+            Shopware()->DocPath().'templates/_emotion_local/',
+            Shopware()->DocPath().'templates/_emotion/'
         );
 
         $template->setCompileId(md5(get_class($this)));
