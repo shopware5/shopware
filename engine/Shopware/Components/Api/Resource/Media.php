@@ -310,15 +310,12 @@ class Media extends Resource
         }
 
         if ($media->getType() === MediaModel::TYPE_IMAGE) {
-            $settingSizes = $album->getSettings()->getThumbnailSize();
-            if (!empty($settingSizes) && !empty($settingSizes[0])) {
-                $manager = Shopware()->Container()->get('thumbnail_manager');
-                $manager->createMediaThumbnail(
-                    $media,
-                    array(),
-                    true
-                );
-            }
+            $manager = Shopware()->Container()->get('thumbnail_manager');
+            $manager->createMediaThumbnail(
+                $media,
+                array(),
+                true
+            );
         }
 
         return $media;
