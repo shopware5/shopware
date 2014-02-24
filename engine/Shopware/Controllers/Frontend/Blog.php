@@ -209,7 +209,6 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             $this->View()->loadTemplate('frontend/blog/' . $type . '.tpl');
         }
 
-
 	    /**@var $repository \Shopware\Models\Emotion\Repository*/
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
         $query = $repository->getCampaignByCategoryQuery($categoryId);
@@ -219,6 +218,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             $campaign['categoryId'] = $categoryId;
             $campaigns[$campaign['landingPageBlock']][] = $campaign;
         }
+
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
         $assigningData = array(
             'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
