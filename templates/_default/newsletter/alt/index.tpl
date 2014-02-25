@@ -23,7 +23,7 @@
 
 {if $sArticle.pseudoprice}
 
-statt {$sArticle.pseudoprice|currency:use_shortname}
+{s name="NewsletterIndexPseudoInsteadOf"}statt {/s}{$sArticle.pseudoprice|currency:use_shortname}
 {/if}
 
 {$sArticle.price|currency:use_shortname}
@@ -44,7 +44,7 @@ statt {$sArticle.pseudoprice|currency:use_shortname}
 
 {if $sArticle.pseudoprice}
 
-statt {$sArticle.pseudoprice|currency:use_shortname}
+{s name="NewsletterIndexPseudoInsteadOf"}statt {/s}{$sArticle.pseudoprice|currency:use_shortname}
 {/if}
 
 {$sArticle.price|currency:use_shortname}
@@ -57,9 +57,10 @@ statt {$sArticle.pseudoprice|currency:use_shortname}
 {/if}
 {/foreach}
 
-
-Sie erhalten diesen Newsletter in der Text-Darstellung, besuchen Sie bitte unseren Shop
-um auf die Angebote zugreifen zu können.
-{if $sUserGroup.tax}* Alle Preise inkl ges. MwSt{else}* Alle Preise zzgl. ges. MwSt{/if} zzgl. Versand und ggf. Nachnahmegeb&uuml;hren, wenn nicht anders beschrieben
-realisiert mit shopware von www.shopware.ag
-Copyright &copy; 2008 shopware AG - Alle Rechte vorbehalten
+{s name="NewsletterIndexInfoPlain"}Sie erhalten diesen Newsletter in der Text-Darstellung, besuchen Sie bitte unseren Shop um auf die Angebote zugreifen zu können.{/s}
+{if $sUserGroupData.tax}
+{s name="NewsletterIndexInfoIncludeVat"}* Alle Preise inkl. gesetzl. Mehrwertsteuer zzgl. Versand{/s}
+{else}
+{s name="NewsletterIndexInfoExcludeVat"}* Alle Preise verstehen sich zzgl. Mehrwertsteuer und Versand{/s}
+{/if}
+{s name="NewsletterIndexCopyright"}Copyright &copy; shopware AG - Alle Rechte vorbehalten{/s}
