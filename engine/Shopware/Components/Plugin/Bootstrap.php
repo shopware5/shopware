@@ -947,4 +947,15 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         $this->get('shopware.snippet_database_handler')->removeFromDatabase($this->Path().'Resources/snippet/', $removeDirty);
     }
 
+    /**
+     * Returns the Locale object for the provided locale code
+     *
+     * @param string $localeCode
+     * @return null|Shopware\Models\Shop\Locale
+     */
+    public function getLocaleByCode($localeCode)
+    {
+        return Shopware()->Models()->getRepository('Shopware\Models\Shop\Locale')
+                ->findOneBy(array('locale' => $localeCode));
+    }
 }

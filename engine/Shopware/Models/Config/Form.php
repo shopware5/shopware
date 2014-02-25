@@ -23,9 +23,11 @@
  */
 
 namespace Shopware\Models\Config;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping as ORM,
-    Doctrine\Common\Collections\ArrayCollection;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Shopware\Models\Shop\Locale;
 
 /**
  *
@@ -231,7 +233,7 @@ class Form extends ModelEntity
      * @param array $options
      * @return Form
      */
-    public function setElement($type, $name, $options = null, $translations = array())
+    public function setElement($type, $name, $options = null)
     {
         /** @var $value Element */
         foreach ($this->elements as $element) {
@@ -243,7 +245,7 @@ class Form extends ModelEntity
                 return $this;
             }
         }
-        $this->addElement($type, $name, $options, $translations);
+        $this->addElement($type, $name, $options);
         return $this;
     }
 
@@ -268,11 +270,11 @@ class Form extends ModelEntity
      * @param array $options
      * @return \Shopware\Models\Config\Form
      */
-    public function addElement($element, $name = null, $options = null, $translations = array())
+    public function addElement($element, $name = null, $options = null)
     {
         if (!$element instanceof Element) {
             $element = new Element(
-                $element, $name, $options, $translations
+                $element, $name, $options
             );
         }
         $element->setForm($this);
@@ -361,11 +363,18 @@ class Form extends ModelEntity
         return $this->translations;
     }
 
-    public function setTranslation($localeCode, $label, $description = null)
+
+    /**
+     * @param Shopware\Models\Shop\Locale $locale
+     * @param string $label
+     * @param null|string $description
+     * @return $this
+     */
+    public function setTranslation(Locale $locale, $label, $description = null)
     {
         /** @var $translation FormTranslation */
         foreach ($this->translations as $translation) {
-            if ($translation->getLocale()->getLocale() === $localeCode) {
+            if ($translation->getLocale()->getLocale() === $locale->getLocale()) {
                 $translation->setLabel($label);
                 if ($description !== null) {
                     $translation->setDescription($description);
@@ -376,7 +385,7 @@ class Form extends ModelEntity
 
         $translation = new FormTranslation();
         $translation->setLabel($label);
-        $translation->setLocaleByCode($localeCode);
+        $translation->setLocale($locale);
         if ($description !== null) {
             $translation->setDescription($description);
         }
