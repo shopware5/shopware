@@ -9,7 +9,6 @@ In this document you will find a changelog of the important changes related to t
 * Deprecation: The Database Column impressions in s_articles_details in now deprecated. Please use the s_statistics_article_impression table.
 * `Shopware_Components_Plugin_Bootstrap` now has a `addFormTranslations()` method to facilitate translations creation for forms.
 
-
 ## 4.2.0
 
 * Add new metaTitle field to the Blog
