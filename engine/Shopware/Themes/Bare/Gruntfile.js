@@ -11,6 +11,7 @@ module.exports = function(grunt) {
             options: {
                 // Override jshint defaults
                 globals: {
+                    Handlebars: true,
                     jQuery: true,
                     console: true,
                     window: true,
@@ -34,6 +35,23 @@ module.exports = function(grunt) {
             }
         },
 
+        // Compile less files
+        less: {
+            development: {
+                options: {
+                    report: 'min',
+                    ieCompat: true,
+                    compress: true,
+                    dumpLineNumbers: 'all',
+                    sourceMap: true,
+                    sourceMapFilename: 'frontend/_public/dist/all.map'
+                },
+                files: {
+                    'frontend/_public/dist/all.css': 'frontend/_public/src/less/all.less'
+                }
+            }
+        },
+
         // Watch less, js and css files for development
         watch: {
             files: [
@@ -41,7 +59,21 @@ module.exports = function(grunt) {
                 '<%= lesslint.src %>',
                 '<%= csslint.src %>'
             ],
-            tasks: [ 'jshint', 'lesslint', 'csslint' ]
+            tasks: [ 'jshint', 'lesslint', 'csslint', 'less' ]
+        },
+
+        // Minifies javascript files
+        uglify: {
+            development: {
+                options: {
+                    report: 'min',
+                    sourceMap: true,
+                    sourceMapName: 'frontend/_public/dist/jquery.all.map'
+                },
+                files: {
+                    'frontend/_public/dist/jquery.all.js': [ 'frontend/_public/src/js/**/*.js' ]
+                }
+            }
         }
     });
 
@@ -49,8 +81,11 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-csslint');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-lesslint');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
 
     // Register own tasks
     grunt.registerTask('test', [ 'jshint', 'lesslint', 'csslint' ]);
+    grunt.registerTask('default', [ 'jshint', 'lesslint', 'csslint', 'less:development', 'uglify:development' ]);
 };
