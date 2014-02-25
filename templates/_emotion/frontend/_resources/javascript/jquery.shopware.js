@@ -6049,7 +6049,7 @@ if (navigator.appVersion.indexOf("MSIE 7.") != -1)
  * @link: https://gist.github.com/remy/350433
  */
 (function () {
-    window.Storage = function (type) {
+    window.StoragePolyFill = function (type) {
         function createCookie(name, value, days) {
             var date, expires;
 
@@ -6136,7 +6136,7 @@ if (navigator.appVersion.indexOf("MSIE 7.") != -1)
         };
     };
 
-    if (typeof window.localStorage == 'undefined') window.localStorage = new Storage('local');
-    if (typeof window.sessionStorage == 'undefined') window.sessionStorage = new Storage('session');
+    if (typeof window.localStorage == 'undefined') window.localStorage = new StoragePolyFill('local');
+    if (typeof window.sessionStorage == 'undefined') window.sessionStorage = new StoragePolyFill('session');
 
 })();
