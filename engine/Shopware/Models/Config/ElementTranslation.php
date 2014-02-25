@@ -171,19 +171,4 @@ class ElementTranslation extends ModelEntity
     {
         return $this->locale;
     }
-
-    /**
-     * Set locale by locale code
-     *
-     * @param string $localeCode
-     * @return ElementTranslation
-     */
-    public function setLocaleByCode($localeCode)
-    {
-        if (!empty($localeCode)) {
-            $this->locale = Shopware()->Models()->getRepository('Shopware\Models\Shop\Locale')
-                ->findOneBy(array('locale' => $localeCode));
-        }
-        return $this;
-    }
 }

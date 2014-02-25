@@ -128,29 +128,12 @@ class Element extends ModelEntity
      * @param $name
      * @param array $options
      */
-    public function __construct($type, $name, $options = null, $translations = array())
+    public function __construct($type, $name, $options = null)
     {
         $this->type = $type;
         $this->name = $name;
-        $this->setOptions($options);
-
         $this->translations = new ArrayCollection();
-
-        if (!empty($translations)) {
-            foreach ($translations as $locale => $value) {
-                $translation = new ElementTranslation();
-                $translation->setLocaleByCode($locale);
-                $translation->setElement($this);
-                if (is_array($value)) {
-                    $translation->setLabel($value['label']);
-                    $translation->setDescription($value['description']);
-                } else {
-                    $translation->setLabel($value);
-                }
-
-                $this->addTranslation($translation);
-            }
-        }
+        $this->setOptions($options);
     }
 
     /**
@@ -272,6 +255,18 @@ class Element extends ModelEntity
      */
     public function setOptions(array $options)
     {
+        if (!empty($options['translations']) && is_array($options['translations'])) {
+            foreach ($options['translations'] as $translationData) {
+                $translation = new ElementTranslation();
+                $translation->setLocale($translationData['locale']);
+                $translation->setElement($this);
+                $translation->setLabel($translationData['label']);
+                $translation->setDescription($translationData['description']);
+                $this->addTranslation($translation);
+            }
+            unset($options['translations']);
+        }
+
         $fields = array('label', 'value', 'description', 'required', 'scope');
         foreach ($fields as $field) {
             if (array_key_exists($field, $options)) {
