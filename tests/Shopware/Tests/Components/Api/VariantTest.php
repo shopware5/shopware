@@ -445,7 +445,6 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
         $variant = $this->resource->update($variantId, $update);
         $this->assertCount(3, $variant->getImages());
 
-
         $add = array(
             'articleId' => $variant->getArticle()->getId(),
             '__options_images' => array('replace' => false),
@@ -483,7 +482,7 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
         $create['articleId'] = $article->getId();
         $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
         $create['images'] = array(
-            array('link' => 'data:image/png;base64,' . require_once(__DIR__ . '/fixtures/base64image.php')),
+            array('link' => 'data:image/png;base64,' . require(__DIR__ . '/fixtures/base64image.php')),
             array('link' => 'file://' . __DIR__ . '/fixtures/variant-image.png'),
         );
 
@@ -495,10 +494,25 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
         $article = $this->resourceArticle->getOne($article->getId());
 
         $this->assertCount(2, $article->getImages());
-        $this->assertCount(2, $variant->getImages());
 
         /**@var $image \Shopware\Models\Article\Image*/
         foreach($article->getImages() as $image) {
+            $media = null;
+            while ($media === null) {
+                if ($image->getMedia()) {
+                    $media = $image->getMedia();
+                } elseif ($image->getParent()) {
+                    $image = $image->getParent();
+                } else {
+                    break;
+                }
+            }
+
+            $this->assertCount(6, $media->getThumbnails());
+            foreach ($media->getThumbnails() as $thumbnail) {
+                $this->assertFileExists(Shopware()->OldPath() . $thumbnail);
+            }
+
             $this->assertCount(1, $image->getMappings(), "No image mapping created!");
 
             /**@var $mapping \Shopware\Models\Article\Image\Mapping*/
@@ -506,13 +520,11 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
             $this->assertCount(
                 $variant->getConfiguratorOptions()->count(),
                 $mapping->getRules(),
-                "Image mapping contains not enough rules. "
+                "Image mapping does not contain enough rules."
             );
         }
         return $variant->getId();
     }
-
-
 
     private function getSimpleMedia($limit = 5, $offset = 0)
     {
@@ -526,13 +538,13 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
         return $builder->getQuery()->getArrayResult();
     }
 
-
-    private function getRandomId($table) {
+    private function getRandomId($table)
+    {
         return Shopware()->Db()->fetchOne("SELECT id FROM " . $table . " ORDER BY RAND() LIMIT 1");
     }
 
-
-    private function getSimpleVariantData() {
+    private function getSimpleVariantData()
+    {
         return array(
             'number' => 'swTEST' . uniqid(),
             'inStock' => 100,

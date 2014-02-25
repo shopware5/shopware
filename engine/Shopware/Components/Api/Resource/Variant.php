@@ -468,7 +468,7 @@ class Variant extends Resource implements BatchInterface
                 );
 
             } else {
-                throw new ApiException\CustomValidationException("One of the passed variant images don't contains a mediaId or link property!");
+                throw new ApiException\CustomValidationException("One of the passed variant images doesn't contains a mediaId or link property!");
             }
 
             $variantImage = $this->createVariantImage(
