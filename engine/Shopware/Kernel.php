@@ -195,10 +195,20 @@ class Kernel implements HttpKernelInterface
         $headers = array();
         foreach ($rawHeaders as $header) {
             if (!isset($headers[$header['name']]) || !empty($header['replace'])) {
+                header_remove($header['name']);
                 $headers[$header['name']] = array($header['value']);
             } else {
                 $headers[$header['name']][] = $header['value'];
             }
+        }
+
+        // Handling headers sent by header()
+        foreach (headers_list() as $header) {
+            $headerArray = explode(': ', $header, 2);
+            $headerName  = strtolower($headerArray[0]);
+            $headerValue = $headerArray[1];
+            header_remove($headerName);
+            $headers[$headerName] = $headerValue;
         }
 
         $symfonyResponse = new SymfonyResponse(
