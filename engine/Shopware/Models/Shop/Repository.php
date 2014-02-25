@@ -391,18 +391,12 @@ class Repository extends ModelRepository
     /**
      * returns the right shop depending on the request object
      *
-     * @param $shops \Shopware\Models\Shop\Shop[]
-     * @param $requestPath
-     * @return false|\Shopware\Models\Shop\Shop $shop
+     * @param \Shopware\Models\Shop\Shop[] $shops
+     * @param string $requestPath
+     * @return null|\Shopware\Models\Shop\Shop $shop
      */
     protected function getShopByRequest($shops, $requestPath)
     {
-        /*
-         * Multiple shops can match the requested url, so we need to assign a hierarchy.
-         *
-         * We rank shops based on how much they have in common with the requested url (using strlen)
-         * and return the last element in the end
-         */
         $shop = null;
         foreach ($shops as $currentShop) {
             if ($currentShop->getBaseUrl() == $currentShop->getBasePath()) {
@@ -436,7 +430,7 @@ class Repository extends ModelRepository
                  *
                  * f.e. this will match: localhost/en/blog/blogId=3 but this won't: localhost/entsorgung/
                  */
-                if (!$shop || $currentShop->getBaseUrl() > $shop->getBaseUrl()) {
+                if (!$shop || $currentShop->getSecureBaseUrl() > $shop->getSecureBaseUrl()) {
                     $shop = $currentShop;
                 }
             }
