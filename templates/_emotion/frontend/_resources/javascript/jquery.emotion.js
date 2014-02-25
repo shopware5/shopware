@@ -308,7 +308,7 @@
         };
 
     if(!hasSessionStorageSupport) {
-        sessionStorage = new Storage('session');
+        sessionStorage = new StoragePolyFill('session');
         hasSessionStorageSupport = true;
     }
 
@@ -438,9 +438,20 @@
             return false;
         }
 
-        $('.article_overview a').attr('href', item);
+        var detailItem = sessionStorage.getItem(pluginName + '-detail');
 
-        sessionStorage.removeItem(pluginName);
+        if (!detailItem) {
+            detailItem = window.location.href;
+            sessionStorage.setItem(pluginName + '-detail', window.location.href);
+        }
+
+        if(detailItem === window.location.href) {
+            $('.article_overview a').attr('href', item);
+        } else {
+            sessionStorage.removeItem(pluginName);
+            sessionStorage.removeItem(pluginName + '-detail');
+        }
+
         return true;
     };
 
