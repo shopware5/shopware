@@ -310,10 +310,13 @@ class Media extends Resource
         }
 
         if ($media->getType() === MediaModel::TYPE_IMAGE) {
+            $settingSizes = $album->getSettings()->getThumbnailSize();
+            $settingSizes += $media->getDefaultThumbnails();
+
             $manager = Shopware()->Container()->get('thumbnail_manager');
             $manager->createMediaThumbnail(
                 $media,
-                array(),
+                $settingSizes,
                 true
             );
         }
