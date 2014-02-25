@@ -59,21 +59,21 @@ class Shopware_RegressionTests_Ticket5302Test extends Enlight_Components_Test_Co
         $request = $this->Request();
         return array(
             array(
-                '/templates/_default/frontend/_resources/favicon.ico',
+                '/templates/_emotion/frontend/_resources/favicon.ico',
                 'string:' .
                     '{link file="frontend/_resources/favicon.ico"}'
             ),
             array(
-                '/templates/_default/frontend/_resources/favicon.ico',
+                '/templates/_emotion/frontend/_resources/favicon.ico',
                 'Ticket5302/test1.tpl'
             ),
             array(
-                '/templates/_default/frontend/_resources/favicon.ico',
+                '/templates/_emotion/frontend/_resources/favicon.ico',
                 'Ticket5302/test2.tpl'
             ),
             array(
                 "{$request->getScheme()}://{$request->getHttpHost()}{$request->getBasePath()}" .
-                    '/templates/_default/frontend/_resources/favicon.ico',
+                    '/templates/_emotion/frontend/_resources/favicon.ico',
                 'string:' .
                     '{link file="frontend/_resources/favicon.ico" fullPath}'
             ),
