@@ -6,6 +6,7 @@ In this document you will find a changelog of the important changes related to t
 * Remove old payment dummy plugins out of the core: PaymentSofort and PigmbhRatePAYPayment
 * Add a new basic setting to add a possibility to disable the tell a friend feature
 * [REST API] Add thumbnail generation to article and variant create and update actions
+* Deprecation: The Database Column impressions in s_articles_details in now deprecated. Please use the s_statistics_article_impression table.
 
 ## 4.2.0
 
