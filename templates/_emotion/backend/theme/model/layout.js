@@ -31,17 +31,38 @@
 
 //{namespace name=backend/theme/main}
 
-//{block name="backend/theme/view/detail/elements/percent"}
+//{block name="backend/theme/model/layout"}
 
-Ext.define('Shopware.apps.Theme.view.detail.elements.PercentField', {
-    extend: 'Shopware.apps.Theme.view.detail.elements.Suffix',
+Ext.define('Shopware.apps.Theme.model.Layout', {
+    extend: 'Ext.data.Model',
 
-    alias: 'widget.theme-percent-field',
+    fields: [
+        { name: 'id', type: 'int', useNull: true },
+        { name: 'type', type: 'string' },
+        { name: 'title', type: 'string' },
+        { name: 'name', type: 'string' },
+        { name: 'attributes' },
 
-    suffix: '%',
-    fallbackValue: '0',
-    elementStyle: 'text-align: right'
+        //mapping fields which used only for the form field generation
+        { name: 'xtype', type: 'string', mapping: 'type' },
+        { name: 'containerId', type: 'int', mapping: 'id' }
+    ],
+
+    associations: [
+        {
+            type: 'hasMany',
+            model: 'Shopware.apps.Theme.model.Element',
+            name: 'getElements',
+            associationKey: 'elements'
+        },
+        {
+            type: 'hasMany',
+            model: 'Shopware.apps.Theme.model.Layout',
+            name: 'getChildren',
+            associationKey: 'children'
+        }
+    ]
 });
 
-//{/block}
 
+//{/block}

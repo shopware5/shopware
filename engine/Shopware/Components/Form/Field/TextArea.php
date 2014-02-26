@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 4
  * Copyright © shopware AG
@@ -21,22 +22,22 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Components\Form\Field;
+
+use Shopware\Components\Form\Field;
+
 /**
- * Shopware Application
- *
- * @category  Shopware
- * @package   Shopware
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ * Class Text
+ * @package Shopware\Components\Form\Field
  */
-
-//{namespace name=backend/theme/main}
-
-//{block name="backend/theme/view/detail/elements/select"}
-
-Ext.define('Shopware.apps.Theme.view.detail.elements.SelectField', {
-    extend: 'Ext.form.field.ComboBox',
-    alias: 'widget.theme-select-field'
-});
-
-//{/block}
-
+class TextArea extends Field
+{
+    /**
+     * Requires to set a name for the field
+     * @param $name
+     */
+    function __construct($name)
+    {
+        $this->name = $name;
+    }
+}

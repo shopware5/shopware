@@ -31,9 +31,9 @@
 
 //{namespace name=backend/theme/main}
 
-//{block name="backend/theme/view/detail/elements/text_area"}
+//{block name="backend/theme/view/detail/fields/text_area"}
 
-Ext.define('Shopware.apps.Theme.view.detail.elements.TextAreaField', {
+Ext.define('Shopware.apps.Theme.view.detail.fields.TextAreaField', {
     extend: 'Ext.form.field.TextArea',
 
     alias: 'widget.theme-text-area-field'

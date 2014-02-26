@@ -31,21 +31,17 @@
 
 //{namespace name=backend/theme/main}
 
-//{block name="backend/theme/store/theme"}
+//{block name="backend/theme/view/detail/fields/em"}
 
-Ext.define('Shopware.apps.Theme.store.Theme', {
-    extend:'Shopware.store.Listing',
-    model: 'Shopware.apps.Theme.model.Theme',
+Ext.define('Shopware.apps.Theme.view.detail.fields.EmField', {
+    extend: 'Shopware.apps.Theme.view.detail.fields.Suffix',
 
-    groupField: 'version',
+    alias: 'widget.theme-em-field',
 
-    groupDir: 'DESC',
-
-    configure: function() {
-        return {
-            controller: 'Theme'
-        };
-    }
+    suffix: 'em',
+    fallbackValue: '0',
+    elementStyle: 'text-align: right'
 });
 
 //{/block}
+

@@ -31,9 +31,9 @@
 
 //{namespace name=backend/theme/main}
 
-//{block name="backend/theme/view/detail/elements/color_picker"}
+//{block name="backend/theme/view/detail/fields/color_picker"}
 
-Ext.define('Shopware.apps.Theme.view.detail.elements.ColorPicker', {
+Ext.define('Shopware.apps.Theme.view.detail.fields.ColorPicker', {
     extend: 'Ext.form.FieldContainer',
     alias: 'widget.theme-color-picker',
     cls: 'theme-custom-field',

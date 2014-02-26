@@ -109,4 +109,3 @@ Ext.define('Shopware.apps.Theme.view.create.Theme', {
 });
 
 //{/block}
-

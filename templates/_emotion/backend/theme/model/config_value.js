@@ -38,12 +38,11 @@ Ext.define('Shopware.apps.Theme.model.ConfigValue', {
 
     fields: [
         { name: 'id', type: 'int', useNull: true },
+        { name: 'elementName', type: 'string' },
         { name: 'elementId', type: 'int' },
         { name: 'shopId', type: 'int' },
         { name: 'value' }
     ]
 });
 
-
 //{/block}
-

@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4
- * Copyright © shopware AG
+ * Copyright Â© shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -26,6 +26,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
+use Shopware\Models\Shop\TemplateConfig;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -145,22 +146,6 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     }
 
     /**
-     * Controller action which used from the article selection configuration field.
-     */
-    public function getArticlesAction()
-    {
-        $this->View()->assign(
-            $this->getArticles(
-                $this->Request()->getParam('start'),
-                $this->Request()->getParam('limit'),
-                $this->Request()->getParam('id'),
-                $this->Request()->getParam('query', null)
-            )
-        );
-    }
-
-
-    /**
      * Controller action which is used to upload a theme zip file
      * and extract it into the engine\Shopware\Themes folder.
      *
@@ -190,7 +175,6 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         $this->View()->assign('success', true);
     }
 
-
     /**
      * Helper function to decompress zip files.
      * @param UploadedFile $file
@@ -217,15 +201,6 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     protected function getDetailQuery($id)
     {
         $builder = parent::getDetailQuery($id);
-        $builder->addSelect(array(
-            'elements',
-            'values'
-        ))
-            ->leftJoin('template.elements', 'elements')
-            ->leftJoin('elements.values', 'values', 'WITH', 'values.shopId = :shopId')
-            ->addOrderBy('elements.position')
-            ->addOrderBy('elements.name')
-            ->setParameter('shopId', 1);
 
         return $builder;
     }
@@ -252,24 +227,113 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         /**@var $template Template*/
         $template = $this->getRepository()->find($data['id']);
 
+        /**@var $shop Shop*/
+        $shop = $this->getManager()->find(
+            'Shopware\Models\Shop\Shop',
+            $this->Request()->getParam('shopId')
+        );
+
         $namespace = $this->getSnippetNamespace($template);
 
         $namespace->read();
 
-        //translate config elements.
-        foreach ($data['elements'] as &$element) {
-            $element['fieldLabel'] = $namespace->get($element['name'], $element['fieldLabel']);
-            $element['supportText'] = $namespace->get($element['name'] . '_support', $element['supportText']);
-
-            $element['tab']['fieldLabel'] = $namespace->get($element['tab']['name'], $element['tab']['fieldLabel']);
-            if (empty($element['tab']['fieldLabel'])) {
-                $element['tab']['fieldLabel'] = $element['tab']['name'];
-            }
-        }
+        $data['configLayout'] = $this->getConfigLayout(
+            $template,
+            $shop,
+            null,
+            $namespace
+        );
 
         return $data;
     }
 
+    /**
+     * @param Template $template
+     * @param Shopware\Models\Shop\Shop $shop
+     * @param null $parentId
+     * @param Enlight_Components_Snippet_Namespace $namespace
+     * @return array
+     */
+    private function getConfigLayout(
+        Template $template,
+        Shop $shop,
+        $parentId = null,
+        Enlight_Components_Snippet_Namespace $namespace)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select(array('layout', 'elements', 'values'))
+            ->from('Shopware\Models\Shop\TemplateConfig\Layout', 'layout')
+            ->leftJoin('layout.elements', 'elements')
+            ->leftJoin('elements.values', 'values', 'WITH', 'values.shopId = :shopId')
+            ->where('layout.templateId = :templateId')
+            ->setParameter('templateId', $template->getId())
+            ->setParameter('shopId', $shop->getId());
+
+        if ($parentId == null) {
+            $builder->andWhere('layout.parentId IS NULL');
+        } else {
+            $builder->andWhere('layout.parentId = :parentId')
+                ->setParameter('parentId', $parentId);
+        }
+
+        $layout = $builder->getQuery()->getArrayResult();
+
+        foreach($layout as &$container) {
+            $container = $this->translateContainer(
+                $container,
+                $namespace
+            );
+
+            $container['children'] = $this->getConfigLayout(
+                $template,
+                $shop,
+                $container['id'],
+                $namespace
+            );
+        }
+
+        return $layout;
+    }
+
+    /**
+     *
+     */
+    public function getConfigSetsAction()
+    {
+        $template = $this->Request()->getParam('templateId');
+        $template = $this->getRepository()->find($template);
+
+        $this->View()->assign(array(
+            'succes' => true,
+            'data' => $this->getConfigSets($template)
+        ));
+    }
+
+    /**
+     * @param Template $template
+     * @return array
+     */
+    private function getConfigSets(Template $template)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select(array('template', 'sets'))
+            ->from('Shopware\Models\Shop\Template', 'template')
+            ->innerJoin('template.configSets', 'sets')
+            ->where('sets.templateId = :templateId')
+            ->setParameter('templateId', $template->getId());
+
+        $sets = $builder->getQuery()->getArrayResult();
+
+        $sets[0]['screen'] = $this->container->get('theme_manager')->getThemeImage($template);
+
+        if ($template->getParent() instanceof Template) {
+            $sets = array_merge(
+                $sets,
+                $this->getConfigSets($template->getParent())
+            );
+        }
+        return $sets;
+    }
 
     /**
      * Saves the passed theme configuration.
@@ -282,37 +346,36 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         $theme = $this->getRepository()->find($data['id']);
 
         /**@var $theme Template */
-        foreach ($data['elements'] as $elementData) {
+        foreach ($data['values'] as $valueData) {
+
             $element = $this->getElementByName(
                 $theme->getElements(),
-                $elementData['name']
+                $valueData['elementName']
             );
 
-            if (!($element instanceof Template\ConfigElement)) {
+            if (!($element instanceof TemplateConfig\Element)) {
                 continue;
             }
 
-            foreach ($elementData['values'] as $valueData) {
-                $value = $this->getElementShopValue(
-                    $element->getValues(),
-                    $valueData['shopId']
-                );
+            $value = $this->getElementShopValue(
+                $element->getValues(),
+                $valueData['shopId']
+            );
 
-                $shop = $this->getManager()->getReference(
-                    'Shopware\Models\Shop\Shop',
-                    $valueData['shopId']
-                );
+            /**@var $shop Shop*/
+            $shop = $this->getManager()->getReference(
+                'Shopware\Models\Shop\Shop',
+                $valueData['shopId']
+            );
 
-                $value->setShop($shop);
-                $value->setElement($element);
+            $value->setShop($shop);
+            $value->setElement($element);
 
-                $value->setValue($valueData['value']);
-            }
+            $value->setValue($valueData['value']);
         }
 
         $this->getManager()->flush();
     }
-
 
     /**
      * The getList function returns an array of the configured class model.
@@ -383,7 +446,6 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         return $builder;
     }
 
-
     /**
      * Assigns the passed theme (identified over the primary key)
      * to the passed shop (identified over the shop primary key)
@@ -442,11 +504,11 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      *
      * @param $collection
      * @param $name
-     * @return null|Template\ConfigElement
+     * @return null|TemplateConfig\Element
      */
     private function getElementByName($collection, $name)
     {
-        /**@var $element Template\ConfigElement */
+        /**@var $element TemplateConfig\Element */
         foreach ($collection as $element) {
             if ($element->getName() == $name) {
                 return $element;
@@ -462,68 +524,90 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      *
      * @param ArrayCollection $collection
      * @param $shopId
-     * @return Template\ConfigValue
+     * @return TemplateConfig\Value
      */
     private function getElementShopValue(ArrayCollection $collection, $shopId)
     {
-        /**@var $value Template\ConfigValue */
+        /**@var $value TemplateConfig\Value */
         foreach ($collection as $value) {
             if ($value->getShop()->getId() == $shopId) {
                 return $value;
             }
         }
-        $value = new Template\ConfigValue();
+        $value = new TemplateConfig\Value();
         $collection->add($value);
         return $value;
     }
 
-
     /**
-     * Used for the article selection configuration field.
-     *
-     * @param $offset
-     * @param $limit
-     * @param $id
-     * @param $query
+     * @param array $container
+     * @param Enlight_Components_Snippet_Namespace $namespace
      * @return array
      */
-    protected function getArticles($offset, $limit, $id, $query)
+    private function translateContainer(array $container, Enlight_Components_Snippet_Namespace $namespace)
     {
-        $builder = $this->getManager()->createQueryBuilder();
-        $builder->select(array('article'))
-            ->from('Shopware\Models\Article\Article', 'article')
-            ->setFirstResult($offset)
-            ->setMaxResults($limit);
-
-        if ($this->Request()->getParam('id')) {
-            $builder->andWhere('article.id = :id')
-                ->setParameter('id', $id);
-        } else if ($query) {
-            $filters = $this->getFilterConditions(
-                array(
-                    array(
-                        'property' => 'search',
-                        'value' => $query
-                    )
-                ),
-                'Shopware\Models\Article\Article',
-                'article'
+        foreach($container['elements'] as &$element) {
+            $element['fieldLabel'] = $this->convertSnippet(
+                $element['fieldLabel'],
+                $namespace
             );
-            if (!empty($filters)) {
-                $builder->addFilter($filters);
-            }
+            $element['supportText'] = $this->convertSnippet(
+                $element['supportText'],
+                $namespace
+            );
         }
 
-        $query = $builder->getQuery();
-        $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
+        if (isset($container['title'])) {
+            $container['title'] = $this->convertSnippet(
+                $container['title'],
+                $namespace
+            );
+        }
+        return $container;
+    }
 
-        $paginator = $this->getManager()->createPaginator($query);
+    /**
+     * Helper function to check, convert and load the translation for
+     * the passed value.
+     *
+     * @param $snippet
+     * @param Enlight_Components_Snippet_Namespace $namespace
+     * @return mixed
+     */
+    private function convertSnippet($snippet, Enlight_Components_Snippet_Namespace $namespace)
+    {
+        if (!$this->isSnippet($snippet)) {
+            return $snippet;
+        }
 
-        return array(
-            'success' => true,
-            'data' => $paginator->getIterator()->getArrayCopy(),
-            'total' => $paginator->count()
+        return $namespace->get(
+            $this->getSnippetName($snippet)
         );
+    }
+
+    /**
+     * Checks if the passed value match the snippet pattern.
+     *
+     * @param $value
+     * @return bool
+     */
+    private function isSnippet($value)
+    {
+        return (bool) (substr($value, -2) == '__'
+            && substr($value, 0, 2) == '__');
+    }
+
+    /**
+     * Helper function to remove the snippet pattern
+     * of the passed snippet name.
+     *
+     * @param $name
+     * @return string
+     */
+    private function getSnippetName($name)
+    {
+        $name = substr($name, 2);
+        return substr($name, 0, strlen($name) - 2);
     }
 
 }

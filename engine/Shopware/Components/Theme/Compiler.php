@@ -70,20 +70,26 @@ class Compiler {
 
         $hierarchy = $manager->getInheritanceHierarchy($shop->getTemplate());
 
-        /**@var $lessCompiler \lessc*/
-        $lessCompiler = $this->container->get('less_compiler');
+        $config = $manager->getHierarchyConfig($hierarchy, $shop);
+
+        /**@var $less \lessc*/
+        $less = $this->container->get('less_compiler');
+
+        $less->setVariables($config);
+
+        $content = '';
 
         foreach($hierarchy as $template) {
             $instance = $manager->getThemeByTemplate($template);
 
-            $less = $instance->getLess();
+            $files = $instance->getLess();
 
-            if (empty($less)) continue;
+            if (empty($files)) continue;
 
             $directory = $manager->getThemeLessDirectory($template);
 
             $content = '';
-            foreach($less as &$file) {
+            foreach($files as &$file) {
                 $path = $directory . DIRECTORY_SEPARATOR . $file;
                 if (!file_exists($path)) {
                     throw new \Exception(sprintf(
@@ -93,6 +99,22 @@ class Compiler {
                 }
                 $content .= file_get_contents($path) . "\n";
             }
+        }
+
+        $lessFile = 'cache/output' . $shop->getId()  . '.less';
+        $cssFile = 'cache/output' . $shop->getId()  . '.css';
+
+        $before = null;
+        if (file_exists($lessFile)) {
+            $before = file_get_contents($lessFile);
+        }
+
+        if ($before != $content) {
+            file_put_contents($lessFile, $content);
+        }
+
+        if (file_exists($lessFile)) {
+            $less->checkedCompile($lessFile, $cssFile);
         }
     }
 

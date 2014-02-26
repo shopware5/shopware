@@ -39,7 +39,13 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
     title : '{s name=detail_window}Theme details{/s}',
     height: 420,
     width: 1080,
-    layout: 'fit',
+    layout: {
+        type: 'hbox',
+        align: 'stretch'
+    },
+    defaults: {
+        flex: 1
+    },
     cls: 'theme-config-window',
 
     initComponent: function() {
@@ -58,14 +64,9 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
     createFormPanel: function() {
         var me = this;
 
-        var tabs = me.createTabs(me.elements);
-
         me.formPanel = Ext.create('Ext.form.Panel', {
             layout: 'fit',
-            items: [{
-                xtype: 'tabpanel',
-                items: tabs
-            }]
+            items: me.configLayout
         });
         return me.formPanel;
     },
@@ -159,6 +160,8 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
     createToolbarItems: function() {
         var me = this, items = [];
 
+        items.push(me.createConfigSetButton());
+
         items.push({ xtype: 'tbfill' });
 
         items.push(me.createCancelButton());
@@ -167,6 +170,22 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
 
         return items;
     },
+
+
+    createConfigSetButton: function () {
+        var me = this;
+
+        me.cancelButton = Ext.create('Ext.button.Button', {
+            cls: 'secondary',
+            name: 'cancel-button',
+            text: '{s name=config_sets}Config sets{/s}',
+            handler: function () {
+                me.fireEvent('load-config-sets', me, me.theme);
+            }
+        });
+        return me.cancelButton;
+    },
+
 
     /**
      * Creates the cancel button which will be displayed
@@ -221,4 +240,3 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
 });
 
 //{/block}
-

@@ -1,0 +1,173 @@
+
+Ext.define('Shopware.apps.Theme.view.config_sets.Window', {
+    extend: 'Enlight.app.Window',
+    alias: 'widget.theme-config-set-window',
+    title : '{s name=config_set_window}Configuration sets{/s}',
+    width: 600,
+    height: 250,
+    layout: {
+        type: 'vbox',
+        align: 'stretch'
+    },
+    defaults: {
+        flex: 1
+    },
+    cls: 'theme-config-set-window',
+
+    initComponent: function() {
+        var me = this;
+
+        me.items = me.createItems();
+        me.dockedItems = [ me.createToolbar() ];
+
+        me.callParent(arguments);
+    },
+
+    createItems: function() {
+        var me = this, items = [];
+
+        me.store.each(function(theme) {
+
+            if (!theme.getConfigSets() instanceof Ext.data.Store) {
+                return true;
+            }
+            if (!theme.getConfigSets().getCount() > 0) {
+                return true;
+            }
+            var item = me.createFieldSet(theme);
+
+            items.push(item);
+        });
+
+        me.formPanel = Ext.create('Ext.form.Panel', {
+            items: items
+        });
+
+        return [ me.formPanel ];
+    },
+
+
+    createFieldSet: function(theme) {
+        var me = this;
+
+        return Ext.create('Ext.form.FieldSet', {
+            layout: 'fit',
+            flex: 1,
+            title: '{s name=config_set_title_prefix}Configuration sets{/s} ' + theme.get('name'),
+            items: [ me.createConfigSetCombo(theme) ]
+        });
+    },
+
+    createConfigSetCombo: function(theme) {
+        return Ext.create('Ext.form.field.ComboBox', {
+            name: 'set' + theme.get('id'),
+            store: theme.getConfigSets(),
+            queryMode: 'local',
+            valueField: 'id',
+            displayField: 'name',
+            listConfig: {
+                getInnerTpl: function() {
+                    var screen = theme.get('screen');
+
+                    return '{literal}' +
+                        '<div class="combo-item">' +
+                            '<div style="float: left; padding: 5px; width: 60px; height: 60px;">' +
+                                '<img style="display:block; height: 100%" src="'+ screen +'" />' +
+                            '</div>' +
+                            '<div style="float: left; padding-left: 30px">' +
+                                '<h1>{name}</h1>' +
+                                '<div style="padding-left: 15px;">{description}</div>' +
+                            '</div>' +
+                            '<div class="x-clear" />'
+                        '</div>' +
+                        '{/literal}';
+                }
+            }
+        });
+    },
+
+
+    /**
+     * Creates the window toolbar.
+     *
+     * @returns { Ext.toolbar.Toolbar }
+     */
+    createToolbar: function () {
+        var me = this;
+
+        me.toolbar = Ext.create('Ext.toolbar.Toolbar', {
+            items: me.createToolbarItems(),
+            dock: 'bottom'
+        });
+
+        return me.toolbar;
+    },
+
+    /**
+     * Creates all toolbar elements.
+     *
+     * @returns { Array }
+     */
+    createToolbarItems: function() {
+        var me = this, items = [];
+
+        items.push({ xtype: 'tbfill' });
+
+        items.push(me.createCancelButton());
+
+        items.push(me.createSaveButton());
+
+        return items;
+    },
+
+
+    /**
+     * Creates the cancel button which will be displayed
+     * in the bottom toolbar of the detail window.
+     * The button handler will be raised to the internal
+     * function me.onCancel
+     *
+     * @return Ext.button.Button
+     */
+    createCancelButton: function () {
+        var me = this;
+
+        me.cancelButton = Ext.create('Ext.button.Button', {
+            cls: 'secondary',
+            name: 'cancel-button',
+            text: '{s name=cancel}Cancel{/s}',
+            handler: function () {
+                me.destroy();
+            }
+        });
+        return me.cancelButton;
+    },
+
+    /**
+     * Creates the save button which will be displayed
+     * in the bottom toolbar of the detail window.
+     * The button handler will be raised to the internal
+     * function me.onSave
+     *
+     * @return Ext.button.Button
+     */
+    createSaveButton: function () {
+        var me = this;
+
+        me.saveButton = Ext.create('Ext.button.Button', {
+            cls: 'primary',
+            name: 'detail-save-button',
+            text: '{s name=save}Save{/s}',
+            handler: function () {
+                me.fireEvent(
+                    'assign-config-sets',
+                    me,
+                    me.theme,
+                    me.formPanel
+                );
+            }
+        });
+        return me.saveButton;
+    }
+
+});

@@ -1,6 +1,7 @@
+<?php
 /**
  * Shopware 4
- * Copyright © shopware AG
+ * Copyright Â© shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,23 +22,17 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Models\Shop\TemplateConfig;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+
 /**
- * Shopware Application
- *
- * @category  Shopware
- * @package   Shopware
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ * @ORM\Table(name="s_core_templates_config_set_value")
+ * @ORM\Entity
  */
+class SetValue extends ModelEntity
+{
 
-//{namespace name=backend/theme/main}
 
-//{block name="backend/theme/view/detail/elements/media"}
-
-Ext.define('Shopware.apps.Theme.view.detail.elements.MediaSelection', {
-    extend: 'Shopware.form.field.Media',
-    alias: 'widget.theme-media-selection',
-    valueField: 'path'
-});
-
-//{/block}
-
+}
