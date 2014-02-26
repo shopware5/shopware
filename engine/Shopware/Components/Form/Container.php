@@ -39,6 +39,32 @@ class Container extends Base implements ContainerInterface
     protected $elements;
 
     /**
+     * Contains additional data for each
+     * config field.
+     *
+     * @optional
+     * @var array
+     */
+    protected $attributes = array();
+
+    /**
+     * @param array $attributes
+     */
+    public function setAttributes($attributes)
+    {
+        $this->attributes = $attributes;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
+
+    /**
      * Initials the elements collection.
      */
     function __construct()

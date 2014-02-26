@@ -24,20 +24,22 @@
 
 namespace Shopware\Components\Form\Interfaces;
 
-use Shopware\Components\Form as Form;
-
 /**
- * Interface Persister
+ * Interface Field
  * @package Shopware\Components\Form\Interfaces
  */
-interface Persister
+interface Element
 {
     /**
-     * Saves the given container to the database, files or wherever.
-     *
-     * @param Form\Interfaces\Container $container
-     * @param $reference
-     * @return
+     * Sets the name of this field.
+     * @param string $name
      */
-    public function save(Form\Interfaces\Container $container, $reference);
+    public function setName($name);
+
+    /**
+     * Returns the name of this field.
+     * @return string
+     */
+    public function getName();
+
 }

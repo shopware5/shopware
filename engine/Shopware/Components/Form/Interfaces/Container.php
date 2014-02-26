@@ -24,8 +24,6 @@
 
 namespace Shopware\Components\Form\Interfaces;
 
-use Shopware\Components\Form\Base;
-
 /**
  * Interface Container
  * @package Shopware\Components\Form\Interfaces
@@ -34,20 +32,19 @@ interface Container
 {
     /**
      * Overrides all elements of this container
-     * @param $elements
+     * @param Element[] $elements
      */
     public function setElements($elements);
 
     /**
      * Returns all elements of this container.
-     * @return array
+     * @return Element[]
      */
     public function getElements();
 
     /**
-     * Adds a new element to this container
-     * @param Base $element
+     * @param Element $element
      */
-    public function addElement(Base $element);
+    public function addElement(Element $element);
 
 }
