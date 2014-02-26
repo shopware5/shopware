@@ -135,7 +135,7 @@ class Field extends Base implements FieldInterface, Validate
     /**
      * @return boolean
      */
-    public function getRequired()
+    public function isRequired()
     {
         return $this->required;
     }

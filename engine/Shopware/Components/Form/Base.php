@@ -22,13 +22,36 @@
  * our trademarks remain entirely with us.
  */
 namespace Shopware\Components\Form;
+use Shopware\Components\Form\Interfaces\Element;
 
 /**
  * Class Base
  * @package Shopware\Components\Form
  */
-class Base
+class Base implements Element
 {
+    /**
+     * @var string
+     */
+    protected $name;
+
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
     /**
      * Outputs the object data as array.
      * Used to convert a form structure to
