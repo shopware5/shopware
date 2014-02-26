@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4
- * Copyright © shopware AG
+ * Copyright Â© shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,13 +24,18 @@
 
 namespace Shopware\Components\Theme;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
+use Shopware\Components\Form\Container\TabContainer;
+use Shopware\Components\Form\Container;
+use Shopware\Components\Form\Field;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
+use Shopware\Models\Shop\TemplateConfig;
 use Shopware\Theme;
 
 /**
@@ -70,17 +75,31 @@ class Manager
      */
     protected $repository;
 
+    /**
+     * @var \Shopware\Components\Form\Persister\Theme
+     */
+    protected $persister;
+
+    /**
+     * @param $rootDir
+     * @param ModelManager $entityManager
+     * @param \Enlight_Template_Manager $templateManager
+     * @param DatabaseHandler $snippetWriter
+     * @param \Shopware\Components\Form\Persister\Theme $persister
+     */
     function __construct(
         $rootDir,
         ModelManager $entityManager,
         \Enlight_Template_Manager $templateManager,
-        DatabaseHandler $snippetWriter)
+        DatabaseHandler $snippetWriter,
+        \Shopware\Components\Form\Persister\Theme $persister)
     {
         $this->entityManager = $entityManager;
         $this->rootDir = $rootDir;
         $this->templateManager = $templateManager;
         $this->snippetWriter = $snippetWriter;
         $this->repository = $entityManager->getRepository('Shopware\Models\Shop\Template');
+        $this->persister = $persister;
     }
 
     /**
@@ -102,26 +121,11 @@ class Manager
         $themes = array_merge($themes, $pluginThemes);
 
         $this->resolveThemeParents($themes);
-    }
 
-    /**
-     * Returns the inheritance hierarchy for the passed theme.
-     *
-     * @param Template $template
-     * @return array
-     */
-    public function getInheritanceHierarchy(Template $template)
-    {
-        $hierarchy = array();
-        $hierarchy[] = $template;
-
-        if ($template->getParent() instanceof Template) {
-            $hierarchy = array_merge(
-                $hierarchy,
-                $this->getInheritanceHierarchy($template->getParent())
-            );
+        /**@var $theme Theme*/
+        foreach($themes as $theme) {
+            $this->initialThemeConfiguration($theme);
         }
-        return $hierarchy;
     }
 
     /**
@@ -186,37 +190,24 @@ class Manager
     }
 
     /**
-     * Helper function which returns the theme configuration as
-     * key - value array.
-     * The element name is used as array key, the shop config
-     * as value. If no shop config saved, the value will fallback to
-     * the default value.
+     * Returns the inheritance hierarchy for the passed theme.
      *
      * @param Template $template
-     * @param Shop $shop
      * @return array
      */
-    private function getThemeConfiguration(Template $template, Shop $shop)
+    public function getInheritanceHierarchy(Template $template)
     {
-        $builder = $this->entityManager->createQueryBuilder();
-        $builder->select(array(
-            'element.name',
-            'IFNULL(values.value, element.defaultValue) as value',
-        ));
-        $builder->from('Shopware\Models\Shop\Template\ConfigElement', 'element')
-            ->leftJoin('element.values', 'values', 'WITH', 'values.shopId = :shopId')
-            ->where('element.templateId = :templateId')
-            ->setParameter('shopId', $shop->getId())
-            ->setParameter('templateId', $template->getId());
+        $hierarchy = array();
+        $hierarchy[] = $template;
 
-        $data = $builder->getQuery()->getArrayResult();
-
-        return array_combine(
-            array_column($data, 'name'),
-            array_column($data, 'value')
-        );
+        if ($template->getParent() instanceof Template) {
+            $hierarchy = array_merge(
+                $hierarchy,
+                $this->getInheritanceHierarchy($template->getParent())
+            );
+        }
+        return $hierarchy;
     }
-
 
     /**
      * Iterates all Shopware 4 templates which
@@ -299,110 +290,6 @@ class Manager
     }
 
     /**
-     * Helper function which returns the default shopware theme directory.
-     * @return string
-     */
-    public function getDefaultThemeDirectory()
-    {
-        return $this->rootDir .
-        DIRECTORY_SEPARATOR . 'engine' .
-        DIRECTORY_SEPARATOR . 'Shopware' .
-        DIRECTORY_SEPARATOR . 'Themes';
-    }
-
-    /**
-     * Helper function which returns the theme directory for the passed
-     * shop template.
-     *
-     * @param Template $theme
-     * @return null|string
-     */
-    public function getThemeDirectory(Template $theme)
-    {
-        if ($theme->getPlugin()) {
-
-            return $this->getPluginPath($theme->getPlugin()) .
-            DIRECTORY_SEPARATOR .
-            'Themes' .
-            DIRECTORY_SEPARATOR .
-            $theme->getTemplate();
-
-        } else {
-            return $this->getDefaultThemeDirectory() . DIRECTORY_SEPARATOR . $theme->getTemplate();
-        }
-    }
-
-    /**
-     * Returns the less directory for the passed theme.
-     * @param Template $template
-     * @return string
-     */
-    public function getThemeLessDirectory(Template $template)
-    {
-        return $this->getThemeDirectory($template) .
-        DIRECTORY_SEPARATOR .
-        '_public' .
-        DIRECTORY_SEPARATOR .
-        'source' .
-        DIRECTORY_SEPARATOR .
-        'less';
-    }
-
-    /**
-     * Helper function to build the path to the passed plugin.
-     * @param Plugin $plugin
-     * @return string
-     */
-    private function getPluginPath(Plugin $plugin)
-    {
-        $namespace = strtolower($plugin->getNamespace());
-        $source = strtolower($plugin->getSource());
-        $name = $plugin->getName();
-
-        return $this->rootDir .
-        DIRECTORY_SEPARATOR . 'engine' .
-        DIRECTORY_SEPARATOR . 'Shopware' .
-        DIRECTORY_SEPARATOR . 'Plugins' .
-        DIRECTORY_SEPARATOR . ucfirst($source) .
-        DIRECTORY_SEPARATOR . ucfirst($namespace) .
-        DIRECTORY_SEPARATOR . ucfirst($name);
-    }
-
-    /**
-     * Returns the template directory of the passed shop template.
-     * @param Template $template
-     * @return string
-     */
-    public function getTemplateDirectory(Template $template)
-    {
-        return $this->templateManager->resolveTemplateDir(
-            $template->getTemplate()
-        );
-    }
-
-    /**
-     * Reads the snippet of all theme ini files and write them
-     * into the database
-     * @param Template $template
-     */
-    public function initialThemeSnippets(Template $template)
-    {
-        $directory = $this->getSnippetDirectory($template);
-
-        if (!file_exists($directory)) {
-            return;
-        }
-
-        $namespace = $this->getSnippetNamespace($template);
-
-        $this->snippetWriter->loadToDatabase(
-            $directory,
-            false,
-            $namespace
-        );
-    }
-
-    /**
      * Returns the snippet namespace for the passed theme.
      *
      * @param Template $template
@@ -445,6 +332,194 @@ class Manager
         DIRECTORY_SEPARATOR;
     }
 
+    /**
+     * Returns the less directory for the passed theme.
+     * @param Template $template
+     * @return string
+     */
+    public function getThemeLessDirectory(Template $template)
+    {
+        return $this->getThemeDirectory($template) .
+        DIRECTORY_SEPARATOR .
+        '_public' .
+        DIRECTORY_SEPARATOR .
+        'source' .
+        DIRECTORY_SEPARATOR .
+        'less';
+    }
+
+    /**
+     * Returns the template directory of the passed shop template.
+     * @param Template $template
+     * @return string
+     */
+    public function getTemplateDirectory(Template $template)
+    {
+        return $this->templateManager->resolveTemplateDir(
+            $template->getTemplate()
+        );
+    }
+
+    /**
+     * Helper function which returns the default shopware theme directory.
+     * @return string
+     */
+    public function getDefaultThemeDirectory()
+    {
+        return $this->rootDir .
+        DIRECTORY_SEPARATOR . 'engine' .
+        DIRECTORY_SEPARATOR . 'Shopware' .
+        DIRECTORY_SEPARATOR . 'Themes';
+    }
+
+    /**
+     * Helper function which returns the theme directory for the passed
+     * shop template.
+     *
+     * @param Template $theme
+     * @return null|string
+     */
+    public function getThemeDirectory(Template $theme)
+    {
+        if ($theme->getPlugin()) {
+
+            return $this->getPluginPath($theme->getPlugin()) .
+            DIRECTORY_SEPARATOR .
+            'Themes' .
+            DIRECTORY_SEPARATOR .
+            $theme->getTemplate();
+
+        } else {
+            return $this->getDefaultThemeDirectory() . DIRECTORY_SEPARATOR . $theme->getTemplate();
+        }
+    }
+
+    /**
+     * @param Template $template
+     * @return Theme
+     * @throws \Exception
+     */
+    public function getThemeByTemplate(Template $template)
+    {
+        $namespace = "Shopware\\Themes\\" . $template->getTemplate();
+        $class = $namespace . "\\Theme";
+
+        $directory = $this->getThemeDirectory($template);
+
+        $file = $directory . DIRECTORY_SEPARATOR . 'Theme.php';
+
+        if (!file_exists($file)) {
+            throw new \Exception(sprintf(
+                "Theme directory %s contains no Theme.php",
+                $template->getTemplate()
+            ));
+        }
+
+        require_once $file;
+
+        return new $class();
+    }
+
+    /**
+     * Helper function which refresh the theme configuration element definition.
+     *
+     * @param Theme $theme
+     */
+    private function initialThemeConfiguration(Theme $theme)
+    {
+        $container = $this->createConfigContainer($theme);
+
+        $theme->createConfig($container);
+
+        $template = $this->getTemplateWithConfig($theme);
+
+        $this->persister->save($container, $template);
+
+        $this->removeUnusedConfig($template, $container);
+    }
+
+    /**
+     * Helper function which iterates the engine\Shopware\Themes directory
+     * and registers all stored themes within the directory as \Shopware\Models\Shop\Template.
+     *
+     * @param \DirectoryIterator $directories
+     * @return array
+     */
+    private function initialThemes(\DirectoryIterator $directories)
+    {
+        $themes = array();
+
+        /**@var $directory \DirectoryIterator */
+        foreach ($directories as $directory) {
+            //check valid directory
+            if ($directory->isDot() || !$directory->isDir()) {
+                continue;
+            }
+
+            $theme = $this->getThemeClass($directory);
+
+            $data = $this->getThemeDefinition($theme);
+
+            $template = $this->repository->findOneBy(array(
+                'template' => $theme->getTemplate()
+            ));
+
+            if (!$template instanceof Template) {
+                $template = new Template();
+                $this->entityManager->persist($template);
+            }
+
+            $template->fromArray($data);
+
+            $this->entityManager->flush($template);
+
+            $this->initialThemeSnippets($template);
+
+            $this->initialThemeConfigurationSets($theme, $template);
+
+            $themes[] = $theme;
+        }
+
+        return $themes;
+    }
+
+
+    /**
+     * @param Theme $theme
+     * @param Template $template
+     */
+    private function initialThemeConfigurationSets(Theme $theme, Template $template)
+    {
+        $collection = new ArrayCollection();
+        $theme->createConfigSets($collection);
+
+        foreach($collection as $item) {
+            $existing = $this->getExistingConfigSet(
+                $template->getConfigSets(),
+                $item['name']
+            );
+            $existing->setTemplate($template);
+            $existing->fromArray($item);
+        }
+    }
+
+    /**
+     * @param ArrayCollection $collection
+     * @param $name
+     * @return TemplateConfig\Set
+     */
+    private function getExistingConfigSet(ArrayCollection $collection, $name)
+    {
+        /**@var $item TemplateConfig\Set*/
+        foreach($collection as $item) {
+            if ($item->getName() == $name) {
+                return $item;
+            }
+        }
+        $item = new TemplateConfig\Set();
+        $collection->add($item);
+        return $item;
+    }
 
     /**
      * Helper function which iterates all plugins
@@ -500,46 +575,67 @@ class Manager
     }
 
     /**
-     * Helper function which iterates the engine\Shopware\Themes directory
-     * and registers all stored themes within the directory as \Shopware\Models\Shop\Template.
+     * Helper function which removes all unused configuration containers and elements
+     * which are stored in the database but not in the passed container.
      *
-     * @param \DirectoryIterator $directories
-     * @return array
+     * @param Template $template
+     * @param Container $container
      */
-    private function initialThemes(\DirectoryIterator $directories)
+    private function removeUnusedConfig(Template $template, Container $container)
     {
-        $themes = array();
+        $existing = $this->getLayout($template);
+        $structure = $this->getContainerNames($container);
 
-        /**@var $directory \DirectoryIterator */
-        foreach ($directories as $directory) {
-            //check valid directory
-            if ($directory->isDot() || !$directory->isDir()) {
-                continue;
+        /**@var $layout TemplateConfig\Layout*/
+        foreach($existing as $layout) {
+            if (!in_array($layout->getName(), $structure['containers'])) {
+                $this->entityManager->remove($layout);
             }
-
-            $theme = $this->getThemeClass($directory);
-
-            $data = $this->getThemeDefinition($theme);
-
-            $template = $this->getThemeWithConfig($theme);
-
-            if (!$template instanceof Template) {
-                $template = new Template();
-                $this->entityManager->persist($template);
-            }
-
-            $template->fromArray($data);
-
-            $this->initialThemeConfiguration($theme, $template);
-
-            $this->entityManager->flush($template);
-
-            $this->initialThemeSnippets($template);
-
-            $themes[] = $theme;
         }
 
-        return $themes;
+        $existing = $this->getElements($template);
+
+        /**@var $layout TemplateConfig\Element*/
+        foreach($existing as $layout) {
+            if (!in_array($layout->getName(), $structure['fields'])) {
+                $this->entityManager->remove($layout);
+            }
+        }
+
+        $this->entityManager->flush();
+    }
+
+    /**
+     * Returns all config containers of the passed template.
+     *
+     * @param Template $template
+     * @return array
+     */
+    private function getLayout(Template $template)
+    {
+        $builder = $this->entityManager->createQueryBuilder();
+        $builder->select('layout')
+            ->from('Shopware\Models\Shop\TemplateConfig\Layout', 'layout')
+            ->where('layout.templateId = :templateId')
+            ->setParameter('templateId', $template->getId());
+
+        return $builder->getQuery()->getResult();
+    }
+
+    /**
+     * Returns all config elements of the passed template.
+     * @param Template $template
+     * @return array
+     */
+    private function getElements(Template $template)
+    {
+        $builder = $this->entityManager->createQueryBuilder();
+        $builder->select('elements')
+            ->from('Shopware\Models\Shop\TemplateConfig\Element', 'elements')
+            ->where('elements.templateId = :templateId')
+            ->setParameter('templateId', $template->getId());
+
+        return $builder->getQuery()->getResult();
     }
 
     /**
@@ -549,15 +645,17 @@ class Manager
      * @param Theme $theme
      * @return mixed
      */
-    private function getThemeWithConfig(Theme $theme)
+    private function getTemplateWithConfig(Theme $theme)
     {
         $builder = $this->entityManager->createQueryBuilder();
         $builder->select(array(
             'template',
-            'elements'
+            'elements',
+            'layouts'
         ))
             ->from('Shopware\Models\Shop\Template', 'template')
             ->leftJoin('template.elements', 'elements')
+            ->leftJoin('template.layouts', 'layouts')
             ->where('template.template = :name')
             ->setParameter('name', $theme->getTemplate());
 
@@ -567,157 +665,80 @@ class Manager
     }
 
     /**
-     * Removes the database entries for themes which file no more exist.
-     */
-    private function removeDeletedThemes()
-    {
-        $themes = $this->repository->createQueryBuilder('templates');
-        $themes->where('templates.version = 3')
-            ->andWhere('templates.pluginId IS NULL');
-
-        $themes = $themes->getQuery()->getResult(AbstractQuery::HYDRATE_OBJECT);
-
-        /**@var $theme Template */
-        foreach ($themes as $theme) {
-            $directory = $this->getThemeDirectory($theme);
-            if (!file_exists($directory)) {
-                $this->entityManager->remove($theme);
-            }
-        }
-        $this->entityManager->flush();
-    }
-
-    /**
-     * Helper function which refresh the theme configuration element definition.
-     *
+     * Helper function which
      * @param Theme $theme
-     * @param Template $template
+     * @return TabContainer
      */
-    private function initialThemeConfiguration(Theme $theme, Template $template)
+    private function createConfigContainer(Theme $theme)
     {
-        $theme->createConfig();
+        $container = new TabContainer();
+        $container->setName('main_container');
 
-        $definition = $theme->getConfig();
-        $existing = $template->getElements();
-
-        /**@var $element Template\ConfigElement */
-        foreach ($definition as $element) {
-            $exist = $this->getElementByName(
-                $existing,
-                $element->getName()
-            );
-
-            if ($exist instanceof Template\ConfigElement) {
-                $exist->fromArray($element->toArray());
-            } else {
-                $existing->add($element);
-            }
-
-            $element->setTemplate($template);
-        }
-
-        $toRemove = array();
-        foreach ($existing as $element) {
-            if (!array_key_exists($element->getName(), $definition)) {
-                $toRemove[] = $element;
-            }
-        }
-
-        foreach ($toRemove as $element) {
-            $existing->removeElement($element);
-        }
-    }
-
-    /**
-     * Helper function which resolves the theme parent for each
-     * passed theme
-     *
-     * @param array $themes
-     * @throws \Exception
-     */
-    private function resolveThemeParents(array $themes)
-    {
-        /**@var $theme Theme */
-        foreach ($themes as $theme) {
-            if ($theme->getExtend() === null) {
-                continue;
-            }
-
+        if ($theme->useInheritanceConfig() && $theme->getExtend() !== null) {
+            /**@var $template Template*/
             $template = $this->repository->findOneBy(array(
                 'template' => $theme->getTemplate()
             ));
 
-            $parent = $this->repository->findOneBy(array(
-                'template' => $theme->getExtend()
-            ));
+            $hierarchy = $this->getInheritanceHierarchy($template);
+            unset($hierarchy[0]);
 
-            if (!$parent instanceof Template) {
-                throw new \Exception(sprintf(
-                    "Parent %s of theme %s not found",
-                    array(
-                        $theme->getExtend(),
-                        $theme->getTemplate()
-                    )
-                ));
+            foreach(array_reverse($hierarchy) as $template) {
+                $parent = $this->getThemeByTemplate($template);
+
+                $parent->createConfig($container);
+
+                if (!$parent->useInheritanceConfig()) {
+                    break;
+                }
             }
 
-            $template->setParent($parent);
-
-            $this->entityManager->flush();
+            return $container;
+        } else {
+            return $container;
         }
     }
 
     /**
-     * Resolves the passed directory to a theme class.
-     * Returns a new instance of the \Shopware\Theme
-     *
-     * @param \DirectoryIterator $directory
-     * @return Theme
-     * @throws \Exception
-     */
-    private function getThemeClass(\DirectoryIterator $directory)
-    {
-        $namespace = "Shopware\\Themes\\" . $directory->getFilename();
-        $class = $namespace . "\\Theme";
-
-        $file = $directory->getPathname() . DIRECTORY_SEPARATOR . 'Theme.php';
-
-        if (!file_exists($file)) {
-            throw new \Exception(sprintf(
-                "Theme directory %s contains no Theme.php",
-                $directory->getFilename()
-            ));
-        }
-
-        require_once $file;
-
-        return new $class();
-    }
-
-    /**
+     * Reads the snippet of all theme ini files and write them
+     * into the database
      * @param Template $template
-     * @return Theme
-     * @throws \Exception
      */
-    public function getThemeByTemplate(Template $template)
+    private function initialThemeSnippets(Template $template)
     {
-        $namespace = "Shopware\\Themes\\" . $template->getTemplate();
-        $class = $namespace . "\\Theme";
+        $directory = $this->getSnippetDirectory($template);
 
-        $directory = $this->getThemeDirectory($template);
-
-        $file = $directory . DIRECTORY_SEPARATOR . 'Theme.php';
-
-        if (!file_exists($file)) {
-            throw new \Exception(sprintf(
-                "Theme directory %s contains no Theme.php",
-                $template->getTemplate()
-            ));
+        if (!file_exists($directory)) {
+            return;
         }
 
-        require_once $file;
+        $namespace = $this->getSnippetNamespace($template);
 
-        return new $class();
+        $this->snippetWriter->loadToDatabase(
+            $directory,
+            false,
+            $namespace
+        );
+    }
+
+    /**
+     * Helper function to build the path to the passed plugin.
+     * @param Plugin $plugin
+     * @return string
+     */
+    private function getPluginPath(Plugin $plugin)
+    {
+        $namespace = strtolower($plugin->getNamespace());
+        $source = strtolower($plugin->getSource());
+        $name = $plugin->getName();
+
+        return $this->rootDir .
+        DIRECTORY_SEPARATOR . 'engine' .
+        DIRECTORY_SEPARATOR . 'Shopware' .
+        DIRECTORY_SEPARATOR . 'Plugins' .
+        DIRECTORY_SEPARATOR . ucfirst($source) .
+        DIRECTORY_SEPARATOR . ucfirst($namespace) .
+        DIRECTORY_SEPARATOR . ucfirst($name);
     }
 
     /**
@@ -793,21 +814,156 @@ class Manager
     }
 
     /**
-     * Helper function which checks if the element name is already exists in the
-     * passed collection of config elements.
+     * Resolves the passed directory to a theme class.
+     * Returns a new instance of the \Shopware\Theme
      *
-     * @param $collection
-     * @param $name
-     * @return null|Template\ConfigElement
+     * @param \DirectoryIterator $directory
+     * @return Theme
+     * @throws \Exception
      */
-    private function getElementByName($collection, $name)
+    private function getThemeClass(\DirectoryIterator $directory)
     {
-        /**@var $element Template\ConfigElement */
-        foreach ($collection as $element) {
-            if ($element->getName() == $name) {
-                return $element;
+        $namespace = "Shopware\\Themes\\" . $directory->getFilename();
+        $class = $namespace . "\\Theme";
+
+        $file = $directory->getPathname() . DIRECTORY_SEPARATOR . 'Theme.php';
+
+        if (!file_exists($file)) {
+            throw new \Exception(sprintf(
+                "Theme directory %s contains no Theme.php",
+                $directory->getFilename()
+            ));
+        }
+
+        require_once $file;
+
+        return new $class();
+    }
+
+    /**
+     * Removes the database entries for themes which file no more exist.
+     */
+    private function removeDeletedThemes()
+    {
+        $themes = $this->repository->createQueryBuilder('templates');
+        $themes->where('templates.version = 3')
+            ->andWhere('templates.pluginId IS NULL');
+
+        $themes = $themes->getQuery()->getResult(AbstractQuery::HYDRATE_OBJECT);
+
+        /**@var $theme Template */
+        foreach ($themes as $theme) {
+            $directory = $this->getThemeDirectory($theme);
+            if (!file_exists($directory)) {
+                $this->entityManager->remove($theme);
             }
         }
-        return null;
+        $this->entityManager->flush();
+    }
+
+    /**
+     * Helper function which resolves the theme parent for each
+     * passed theme
+     *
+     * @param array $themes
+     * @throws \Exception
+     */
+    private function resolveThemeParents(array $themes)
+    {
+        /**@var $theme Theme */
+        foreach ($themes as $theme) {
+            if ($theme->getExtend() === null) {
+                continue;
+            }
+
+            $template = $this->repository->findOneBy(array(
+                'template' => $theme->getTemplate()
+            ));
+
+            $parent = $this->repository->findOneBy(array(
+                'template' => $theme->getExtend()
+            ));
+
+            if (!$parent instanceof Template) {
+                throw new \Exception(sprintf(
+                    "Parent %s of theme %s not found",
+                    array(
+                        $theme->getExtend(),
+                        $theme->getTemplate()
+                    )
+                ));
+            }
+
+            $template->setParent($parent);
+
+            $this->entityManager->flush();
+        }
+    }
+
+    /**
+     * Helper function which returns the theme configuration as
+     * key - value array.
+     * The element name is used as array key, the shop config
+     * as value. If no shop config saved, the value will fallback to
+     * the default value.
+     *
+     * @param Template $template
+     * @param Shop $shop
+     * @return array
+     */
+    private function getThemeConfiguration(Template $template, Shop $shop)
+    {
+        $builder = $this->entityManager->createQueryBuilder();
+        $builder->select(array(
+            'element.name',
+            'values.value',
+            'element.defaultValue'
+        ));
+        $builder->from('Shopware\Models\Shop\TemplateConfig\Element', 'element')
+            ->leftJoin('element.values', 'values', 'WITH', 'values.shopId = :shopId')
+            ->where('element.templateId = :templateId')
+            ->setParameter('shopId', $shop->getId())
+            ->setParameter('templateId', $template->getId());
+
+        $data = $builder->getQuery()->getArrayResult();
+
+        foreach($data as &$row) {
+            if (empty($row['value'])) {
+                $row['value'] = $row['defaultValue'];
+            }
+        }
+
+        return array_combine(
+            array_column($data, 'name'),
+            array_column($data, 'value')
+        );
+    }
+
+    /**
+     * Helper function to create an array with all container and element names.
+     *
+     * @param Container $container
+     * @return array
+     */
+    private function getContainerNames(Container $container)
+    {
+        $layout = array(
+            'containers' => array(),
+            'fields' => array()
+        );
+
+        $layout['containers'][] = $container->getName();
+
+        foreach($container->getElements() as $element) {
+            if ($element instanceof Container) {
+                $child = $this->getContainerNames($element);
+                $layout['containers'] = array_merge($layout['containers'], $child['containers']);
+                $layout['fields'] = array_merge($layout['fields'], $child['fields']);
+            } else if ($element instanceof Field) {
+                $layout['fields'][] = $element->getName();
+            }
+        }
+
+        return $layout;
     }
 }

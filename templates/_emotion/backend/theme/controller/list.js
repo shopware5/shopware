@@ -267,4 +267,3 @@ Ext.define('Shopware.apps.Theme.controller.List', {
 });
 
 //{/block}
-

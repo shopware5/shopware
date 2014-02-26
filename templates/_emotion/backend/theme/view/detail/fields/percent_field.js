@@ -31,21 +31,15 @@
 
 //{namespace name=backend/theme/main}
 
-//{block name="backend/theme/store/theme"}
+//{block name="backend/theme/view/detail/fields/percent"}
 
-Ext.define('Shopware.apps.Theme.store.Theme', {
-    extend:'Shopware.store.Listing',
-    model: 'Shopware.apps.Theme.model.Theme',
-
-    groupField: 'version',
-
-    groupDir: 'DESC',
-
-    configure: function() {
-        return {
-            controller: 'Theme'
-        };
-    }
+Ext.define('Shopware.apps.Theme.view.detail.fields.PercentField', {
+    extend: 'Shopware.apps.Theme.view.detail.fields.Suffix',
+    alias: 'widget.theme-percent-field',
+    suffix: '%',
+    fallbackValue: '0',
+    elementStyle: 'text-align: right'
 });
 
 //{/block}
+

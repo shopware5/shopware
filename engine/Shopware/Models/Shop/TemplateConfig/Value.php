@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Models\Shop\Template;
+namespace Shopware\Models\Shop\TemplateConfig;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Model\ModelEntity;
@@ -33,7 +33,7 @@ use Shopware\Models\Shop\Shop;
  * @ORM\Table(name="s_core_templates_config_values")
  * @ORM\Entity
  */
-class ConfigValue extends ModelEntity
+class Value extends ModelEntity
 {
 
     /**
@@ -52,9 +52,9 @@ class ConfigValue extends ModelEntity
     private $elementId;
 
     /**
-     * @var ConfigElement $element
+     * @var Element $element
      * @ORM\ManyToOne(
-     *      targetEntity="Shopware\Models\Shop\Template\ConfigElement",
+     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Element",
      *      inversedBy="values"
      * )
      * @ORM\JoinColumn(name="element_id", referencedColumnName="id")
@@ -81,7 +81,7 @@ class ConfigValue extends ModelEntity
     private $value;
 
     /**
-     * @param \Shopware\Models\Shop\Template\ConfigElement $element
+     * @param \Shopware\Models\Shop\TemplateConfig\Element $element
      */
     public function setElement($element)
     {
@@ -89,7 +89,7 @@ class ConfigValue extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\Template\ConfigElement
+     * @return \Shopware\Models\Shop\TemplateConfig\Element
      */
     public function getElement()
     {

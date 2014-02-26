@@ -31,13 +31,12 @@
 
 //{namespace name=backend/theme/main}
 
-//{block name="backend/theme/view/detail/elements/checkbox"}
+//{block name="backend/theme/view/detail/fields/date"}
 
-Ext.define('Shopware.apps.Theme.view.detail.elements.CheckboxField', {
-    extend: 'Ext.form.field.Checkbox',
-    alias: 'widget.theme-checkbox-field',
-    inputValue: true,
-    uncheckedValue: false
+Ext.define('Shopware.apps.Theme.view.detail.fields.DateField', {
+    extend: 'Ext.form.field.Date',
+    alias: 'widget.theme-date-field'
+
 });
 
 //{/block}

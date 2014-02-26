@@ -31,21 +31,22 @@
 
 //{namespace name=backend/theme/main}
 
-//{block name="backend/theme/store/theme"}
+//{block name="backend/theme/store/config_sets"}
 
-Ext.define('Shopware.apps.Theme.store.Theme', {
-    extend:'Shopware.store.Listing',
+Ext.define('Shopware.apps.Theme.store.ConfigSets', {
+    extend:'Ext.data.Store',
     model: 'Shopware.apps.Theme.model.Theme',
 
-    groupField: 'version',
-
-    groupDir: 'DESC',
-
-    configure: function() {
-        return {
-            controller: 'Theme'
-        };
+    proxy: {
+        type: 'ajax',
+        url: '{url controller="theme" action="getConfigSets"}',
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
+        }
     }
 });
 
 //{/block}
+

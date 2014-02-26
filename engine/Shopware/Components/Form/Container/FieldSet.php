@@ -38,6 +38,17 @@ class FieldSet extends BaseContainer
     protected $title;
 
     /**
+     * @param string $name
+     * @param string $title
+     */
+    function __construct($name, $title)
+    {
+        $this->title = $title;
+        $this->name = $name;
+        parent::__construct();
+    }
+
+    /**
      * @param string $title
      */
     public function setTitle($title)

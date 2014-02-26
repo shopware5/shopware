@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 4
  * Copyright © shopware AG
@@ -21,31 +22,22 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Components\Form\Field;
+
+use Shopware\Components\Form\Field;
+
 /**
- * Shopware Application
- *
- * @category  Shopware
- * @package   Shopware
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ * Class Text
+ * @package Shopware\Components\Form\Field
  */
-
-//{namespace name=backend/theme/main}
-
-//{block name="backend/theme/store/theme"}
-
-Ext.define('Shopware.apps.Theme.store.Theme', {
-    extend:'Shopware.store.Listing',
-    model: 'Shopware.apps.Theme.model.Theme',
-
-    groupField: 'version',
-
-    groupDir: 'DESC',
-
-    configure: function() {
-        return {
-            controller: 'Theme'
-        };
+class Pixel extends Field
+{
+    /**
+     * Requires to set a name for the field
+     * @param $name
+     */
+    function __construct($name)
+    {
+        $this->name = $name;
     }
-});
-
-//{/block}
+}

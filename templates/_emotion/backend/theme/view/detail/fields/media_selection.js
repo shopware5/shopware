@@ -31,16 +31,12 @@
 
 //{namespace name=backend/theme/main}
 
-//{block name="backend/theme/view/detail/elements/pixel"}
+//{block name="backend/theme/view/detail/fields/media"}
 
-Ext.define('Shopware.apps.Theme.view.detail.elements.PixelField', {
-    extend: 'Shopware.apps.Theme.view.detail.elements.Suffix',
-
-    alias: 'widget.theme-pixel-field',
-
-    suffix: 'px',
-    fallbackValue: '0',
-    elementStyle: 'text-align: right'
+Ext.define('Shopware.apps.Theme.view.detail.fields.MediaSelection', {
+    extend: 'Shopware.form.field.Media',
+    alias: 'widget.theme-media-selection',
+    valueField: 'path'
 });
 
 //{/block}

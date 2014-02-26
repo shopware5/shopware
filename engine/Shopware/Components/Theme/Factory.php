@@ -173,6 +173,16 @@ EOD;
             $this->structure,
             $this->getThemeDirectory($data['template'])
         );
+
+        $this->movePreviewImage($this->getThemeDirectory($data['template']));
+    }
+
+    /**
+     * @param $directory
+     */
+    private function movePreviewImage($directory)
+    {
+        copy(__DIR__ . '/preview.png', $directory . '/preview.png');
     }
 
     /**

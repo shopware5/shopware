@@ -71,14 +71,27 @@ Ext.define('Shopware.apps.Theme.model.Theme', {
         {
             relation: 'OneToMany',
             type: 'hasMany',
-            model: 'Shopware.apps.Theme.model.Element',
-            name: 'getElements',
-            associationKey: 'elements'
+            model: 'Shopware.apps.Theme.model.Layout',
+            name: 'getLayout',
+            associationKey: 'configLayout'
+        },
+        {
+            //only for save action.
+            type: 'hasMany',
+            model: 'Shopware.apps.Theme.model.ConfigValue',
+            name: 'getConfigValues',
+            associationKey: 'values'
+        },
+        {
+            //read only
+            type: 'hasMany',
+            model: 'Shopware.apps.Theme.model.ConfigSet',
+            name: 'getConfigSets',
+            associationKey: 'configSets'
         }
     ]
 
 });
 
 //{/block}
-
 

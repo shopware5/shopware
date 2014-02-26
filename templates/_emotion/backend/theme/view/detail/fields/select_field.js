@@ -31,21 +31,12 @@
 
 //{namespace name=backend/theme/main}
 
-//{block name="backend/theme/store/theme"}
+//{block name="backend/theme/view/detail/fields/select"}
 
-Ext.define('Shopware.apps.Theme.store.Theme', {
-    extend:'Shopware.store.Listing',
-    model: 'Shopware.apps.Theme.model.Theme',
-
-    groupField: 'version',
-
-    groupDir: 'DESC',
-
-    configure: function() {
-        return {
-            controller: 'Theme'
-        };
-    }
+Ext.define('Shopware.apps.Theme.view.detail.fields.SelectField', {
+    extend: 'Ext.form.field.ComboBox',
+    alias: 'widget.theme-select-field'
 });
 
 //{/block}
+

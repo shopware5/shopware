@@ -276,6 +276,7 @@
             <argument type="service" id="models" />
             <argument type="service" id="template" />
             <argument type="service" id="shopware.snippet_database_handler" />
+            <argument type="service" id="theme_config_persister" />
         </service>
 
         <service id="theme_factory" class="Shopware\Components\Theme\Factory">
@@ -285,6 +286,9 @@
         <service id="theme_compiler" class="Shopware\Components\Theme\Compiler">
             <argument type="service" id="service_container" />
             <tag name="shopware.event_listener" method="beforeRender" event="Enlight_Plugins_ViewRenderer_PreRender" />
+        </service>
+        <service id="theme_config_persister" class="Shopware\Components\Form\Persister\Theme">
+            <argument type="service" id="models" />
         </service>
 
         <service id="less_compiler" class="lessc" />

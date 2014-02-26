@@ -31,16 +31,13 @@
 
 //{namespace name=backend/theme/main}
 
-//{block name="backend/theme/view/detail/elements/em"}
+//{block name="backend/theme/view/detail/fields/text"}
 
-Ext.define('Shopware.apps.Theme.view.detail.elements.EmField', {
-    extend: 'Shopware.apps.Theme.view.detail.elements.Suffix',
+Ext.define('Shopware.apps.Theme.view.detail.fields.TextField', {
+    extend: 'Ext.form.field.Text',
 
-    alias: 'widget.theme-em-field',
+    alias: 'widget.theme-text-field'
 
-    suffix: 'em',
-    fallbackValue: '0',
-    elementStyle: 'text-align: right'
 });
 
 //{/block}

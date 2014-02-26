@@ -31,13 +31,18 @@
 
 //{namespace name=backend/theme/main}
 
-//{block name="backend/theme/view/detail/elements/date"}
+//{block name="backend/theme/model/config_set"}
 
-Ext.define('Shopware.apps.Theme.view.detail.elements.DateField', {
-    extend: 'Ext.form.field.Date',
-    alias: 'widget.theme-date-field'
+Ext.define('Shopware.apps.Theme.model.ConfigSet', {
+    extend: 'Ext.data.Model',
 
+    fields: [
+        { name: 'id', type: 'int', useNull: true },
+        { name: 'templateId', type: 'int' },
+        { name: 'name', type: 'string' },
+        { name: 'description', type: 'string' },
+        { name: 'values' }
+    ]
 });
 
 //{/block}
-

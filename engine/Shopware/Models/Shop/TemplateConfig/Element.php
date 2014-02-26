@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4
- * Copyright © shopware AG
+ * Copyright Â© shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,18 +22,19 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Models\Shop\Template;
+namespace Shopware\Models\Shop\TemplateConfig;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Models\Shop\Template;
+use Shopware\Models\Shop\TemplateConfig;
 
 /**
  * @ORM\Table(name="s_core_templates_config_elements")
  * @ORM\Entity
  */
-class ConfigElement extends ModelEntity
+class Element extends ModelEntity
 {
     /**
      * @var integer $id
@@ -60,7 +61,7 @@ class ConfigElement extends ModelEntity
     /**
      * @var ArrayCollection $values
      * @ORM\OneToMany(
-     *      targetEntity="Shopware\Models\Shop\Template\ConfigValue",
+     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Value",
      *      mappedBy="element",
      *      orphanRemoval=true,
      *      cascade={"persist"}
@@ -88,21 +89,15 @@ class ConfigElement extends ModelEntity
 
     /**
      * @var
-     * @ORM\Column(name="default_value", type="string", nullable=true)
+     * @ORM\Column(name="default_value", type="array", nullable=false)
      */
-    protected $defaultValue = null;
+    protected $defaultValue;
 
     /**
      * @var
      * @ORM\Column(name="selection", type="array", nullable=true)
      */
     protected $selection = null;
-
-    /**
-     * @var
-     * @ORM\Column(name="tab", type="array")
-     */
-    protected $tab = array('name' => 'Main');
 
     /**
      * @var
@@ -121,6 +116,25 @@ class ConfigElement extends ModelEntity
      * @ORM\Column(name="allow_blank", type="boolean", nullable=false)
      */
     protected $allowBlank = true;
+
+    /**
+     * @var string
+     * @ORM\Column(name="attributes", type="array", nullable=false)
+     */
+    protected $attributes;
+
+    /**
+     * @var Layout
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\TemplateConfig\Layout", inversedBy="elements")
+     * @ORM\JoinColumn(name="container_id", referencedColumnName="id")
+     */
+    protected $container;
+
+    /**
+     * @var
+     * @ORM\Column(name="container_id", type="integer", nullable=false)
+     */
+    protected $containerId;
 
 
     function __construct()
@@ -248,7 +262,7 @@ class ConfigElement extends ModelEntity
     {
         return $this->setOneToMany(
             $values,
-            '\Shopware\Models\Shop\Template\ConfigValue',
+            '\Shopware\Models\Shop\TemplateConfig\Value',
             'values',
             'element'
         );
@@ -303,8 +317,7 @@ class ConfigElement extends ModelEntity
             'defaultValue' => $this->defaultValue,
             'allowBlank' => $this->allowBlank,
             'position' => $this->position,
-            'selection' => $this->selection,
-            'tab' => $this->tab
+            'selection' => $this->selection
         );
     }
 
@@ -325,18 +338,34 @@ class ConfigElement extends ModelEntity
     }
 
     /**
-     * @return mixed
+     * @param mixed $container
      */
-    public function getTab()
+    public function setContainer($container)
     {
-        return $this->tab;
+        $this->container = $container;
     }
 
     /**
-     * @param mixed $tab
+     * @return mixed
      */
-    public function setTab($tab)
+    public function getContainer()
     {
-        $this->tab = $tab;
+        return $this->container;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * @param string $attributes
+     */
+    public function setAttributes($attributes)
+    {
+        $this->attributes = $attributes;
     }
 }
