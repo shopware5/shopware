@@ -23,7 +23,7 @@
  */
 
 namespace   Shopware\Models\Customer;
-use         Shopware\Components\Model\ModelEntity,
+use         Shopware\Components\Model\LazyFetchModelEntity,
             Symfony\Component\Validator\Constraints as Assert,
             Doctrine\ORM\Mapping AS ORM;
 
@@ -56,7 +56,7 @@ use         Shopware\Components\Model\ModelEntity,
  * @ORM\Table(name="s_user")
  * @ORM\HasLifecycleCallbacks
  */
-class Customer extends ModelEntity
+class Customer extends LazyFetchModelEntity
 {
     /**
      * The id property is an identifier property which means
@@ -899,7 +899,7 @@ class Customer extends ModelEntity
      */
     public function getGroup()
     {
-        return $this->group;
+        return $this->fetchLazy($this->group, array('key' => $this->groupKey));
     }
 
     /**
@@ -1092,5 +1092,13 @@ class Customer extends ModelEntity
         $paymentData->setCustomer($this);
 
         $this->paymentData[] = $paymentData;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGroupKey()
+    {
+        return $this->groupKey;
     }
 }
