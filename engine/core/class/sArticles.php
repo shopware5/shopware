@@ -905,13 +905,14 @@ class sArticles
 
                 break;
             case 2:
-                $groupBy = "aDetails.sales, aDetails.impressions, aDetails.articleID";
-                $orderBy = "aDetails.sales DESC, aDetails.impressions DESC, aDetails.articleID DESC";
+                $groupBy = "aDetails.sales, sai.impressions, aDetails.articleID";
+                $orderBy = "aDetails.sales DESC, sai.impressions DESC, aDetails.articleID DESC";
                 //if the customer want to sort the listing by most sales, we have to use the s_articles_details as base table
                 $sqlFromPath = "
                     FROM s_articles_details aDetails FORCE INDEX (articles_by_category_sort_popularity)
                     INNER JOIN s_articles a
                         ON aDetails.id = a.main_detail_id
+                    LEFT JOIN s_statistics_article_impression sai ON a.id = sai.articleId
                 ";
                 break;
             case 3:
@@ -2299,12 +2300,14 @@ class sArticles
             $this->sSYSTEM->_POST['sSort'] = $sCategoryConfig['sSort'];
         }
 
+        $joinImpressions = '';
         switch ($this->sSYSTEM->_POST['sSort']) {
             case 1:
                 $orderBy = "a.datum DESC, a.changetime DESC, a.id DESC";
                 break;
             case 2:
-                $orderBy = "aDetails.sales DESC, aDetails.impressions DESC, aDetails.articleID DESC";
+                $orderBy = "aDetails.sales DESC, sai.impressions DESC, aDetails.articleID DESC";
+                $joinImpressions = "LEFT JOIN s_statistics_article_impression sai ON a.id = sai.articleId";
                 break;
             case 3:
                 $orderBy = "price ASC, a.id";
@@ -2378,6 +2381,8 @@ class sArticles
 
             JOIN s_articles_details AS aDetails
             ON aDetails.articleID=a.id AND aDetails.kind=1
+
+            $joinImpressions
 
             JOIN s_articles_attributes AS aAttributes
             ON aAttributes.articledetailsID = aDetails.id
