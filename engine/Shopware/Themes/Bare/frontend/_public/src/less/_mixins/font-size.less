@@ -1,0 +1,33 @@
+.unitize(@sizeValue, @property: font-size, @baseValue: 10) {
+	@remValue: @sizeValue;
+	@pxValue: (@sizeValue * @baseValue);
+	@{property}: ~"@{pxValue}px";
+	@{property}: ~"@{remValue}rem";
+}
+.unitize-property(@property, @topValue, @rightValue, @bottomValue, @leftValue, @baseValue: 10) {
+	@remTopValue: @topValue;
+	@pxTopValue: (@topValue * @baseValue);
+	@remRightValue: @rightValue;
+	@pxTopValue: (@rightValue * @baseValue);
+	@remRightValue: @rightValue;
+	@pxRightValue: (@rightValue * @baseValue);
+	@remBottomValue: @bottomValue;
+	@pxBottomValue: (@bottomValue * @baseValue);
+	@remLeftValue: @leftValue;
+	@pxLeftValue: (@leftValue * @baseValue);
+	
+	@{property}: ~"@{pxTopValue}px @{pxRightValue}px @{pxBottomValue}px @{pxLeftValue}px";
+	@{property}: ~"@{remTopValue}rem @{remRightValue}rem @{remBottomValue}rem @{remLeftValue}rem";
+}
+.unitize-padding(@topValue, @rightValue, @bottomValue, @leftValue) {
+	.unitize-property(padding, @topValue, @rightValue, @bottomValue, @leftValue);
+}
+.unitize-margin(@topValue, @rightValue, @bottomValue, @leftValue) {
+	.unitize-property(margin, @topValue, @rightValue, @bottomValue, @leftValue);
+}
+.unitize-height(@sizeValue) {
+	.unitize(@sizeValue, height);
+}
+.unitize-width(@sizeValue) {
+	.unitize(@sizeValue, width);
+}

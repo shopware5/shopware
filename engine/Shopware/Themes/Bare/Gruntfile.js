@@ -50,7 +50,7 @@ module.exports = function(grunt) {
                 options: {
                     report: 'min',
                     ieCompat: true,
-                    compress: true,
+                    compress: false,
                     dumpLineNumbers: 'all',
                     sourceMap: true,
                     outputSourceFiles: true,
