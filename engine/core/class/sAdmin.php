@@ -1296,6 +1296,8 @@ class sAdmin
         session_regenerate_id(true);
         $newSessionId = session_id();
 
+        // clear any set-cokie header before opening a new session
+        header_remove('Set-Cookie');
         // close and restart session to make sure the db-session handler writes updates.
         session_write_close();
         session_start();
