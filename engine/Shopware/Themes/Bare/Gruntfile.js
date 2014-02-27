@@ -85,6 +85,7 @@ module.exports = function(grunt) {
                     'frontend/_public/dist/all.js': [
                         'frontend/_public/vendors/jquery/dist/jquery.js',
                         'frontend/_public/vendors/handlebars/handlebars.js',
+                        'frontend/_public/vendors/picturefill/picturefill.js',
                         'frontend/_public/src/js/**/*.js'
                     ]
                 }

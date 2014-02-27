@@ -25,6 +25,7 @@
     "normalize-less": "*",
     "jquery": "1.11.0",
     "handlebars": "~1.3.0",
-    "pocketgrid": "*"
+    "pocketgrid": "*",
+    "picturefill": "~1.2.1"
   }
 }
