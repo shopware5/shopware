@@ -832,8 +832,13 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         var me = this,
             store = me.getStore('PropertyValue'),
             optionId = event.record.getId();
+
         store.clearFilter();
-        store.filter('optionId', optionId);
+        store.filter({
+            filterFn: function(item) {
+                return item.get('optionId') === optionId;
+            }
+        });
     },
 
     /**
