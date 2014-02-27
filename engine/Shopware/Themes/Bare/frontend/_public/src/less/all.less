@@ -24,6 +24,7 @@
  */
 /** @TODO - Remove include of normalize when the ability to use a preprocessor in theme is ready for prime time */
 @import "../../vendors/normalize-less/normalize";
+@import "../vendors/pocketgrid/pocketgrid.css";
 @import "variables";
 @import "mixins";
 @import "components";
@@ -31,10 +32,6 @@
 @import "hacks";
 @import "ie";
 
-.test {
-	.opacity(0.5);
-	.box-sizing();
-	.box-shadow(0, 1px, 0px, #f00);
-	.linear-gradient(#fff, #000);
-	.border-radius(3px);
+*, *::before, *::after {
+    .box-sizing();
 }
