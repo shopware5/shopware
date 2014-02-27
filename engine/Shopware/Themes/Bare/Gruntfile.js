@@ -22,7 +22,15 @@ module.exports = function(grunt) {
 
         // Lint our less files
         lesslint: {
-            src: [ 'frontend/_public/src/less/**/*.less' ]
+            src: [ 'frontend/_public/src/less/all.less' ],
+            options: {
+                imports: [
+                    'frontend/_public/src/less/_variables',
+                    'frontend/_public/src/less/_mixins',
+                    'frontend/_public/src/less/_components',
+                    'frontend/_public/src/less/_modules'
+                ]
+            }
         },
 
         // Lint our css files
@@ -31,7 +39,8 @@ module.exports = function(grunt) {
             options: {
                 "box-sizing": false,
                 "important": true,
-                "zero-units": false
+                "zero-units": false,
+                'universal-selector': false
             }
         },
 
@@ -44,7 +53,9 @@ module.exports = function(grunt) {
                     compress: true,
                     dumpLineNumbers: 'all',
                     sourceMap: true,
-                    sourceMapFilename: 'frontend/_public/dist/all.map'
+                    outputSourceFiles: true,
+                    sourceMapFilename: 'frontend/_public/dist/all.css.map',
+                    sourceMapBasepath: 'frontend/_public/dist/'
                 },
                 files: {
                     'frontend/_public/dist/all.css': 'frontend/_public/src/less/all.less'
@@ -56,10 +67,10 @@ module.exports = function(grunt) {
         watch: {
             files: [
                 '<%= jshint.files %>',
-                '<%= lesslint.src %>',
+                'frontend/_public/src/less/**/*.less',
                 '<%= csslint.src %>'
             ],
-            tasks: [ 'jshint', 'lesslint', 'csslint', 'less' ]
+            tasks: [ 'jshint', 'lesslint', 'csslint', 'less', 'uglify:development' ]
         },
 
         // Minifies javascript files
@@ -68,10 +79,14 @@ module.exports = function(grunt) {
                 options: {
                     report: 'min',
                     sourceMap: true,
-                    sourceMapName: 'frontend/_public/dist/jquery.all.map'
+                    sourceMapName: 'frontend/_public/dist/all.js.map'
                 },
                 files: {
-                    'frontend/_public/dist/jquery.all.js': [ 'frontend/_public/src/js/**/*.js' ]
+                    'frontend/_public/dist/all.js': [
+                        'frontend/_public/vendors/jquery/dist/jquery.js',
+                        'frontend/_public/vendors/handlebars/handlebars.js',
+                        'frontend/_public/src/js/**/*.js'
+                    ]
                 }
             }
         }
