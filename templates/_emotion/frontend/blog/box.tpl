@@ -20,7 +20,7 @@
 
 					{if $sArticle.displayDate}
 						<span {if !$sArticle.author.name} class="first"{/if}>
-                        {$sArticle.displayDate|date_format:"%d.%m.%Y %H:%M"}
+                        {$sArticle.displayDate|date:"DATETIME_SHORT"}
                     </span>
 					{/if}
 					{if $sArticle.categoryInfo.description}<span>{if $sArticle.categoryInfo.linkCategory}<a

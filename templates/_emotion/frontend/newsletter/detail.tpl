@@ -9,7 +9,7 @@
 				
 				{* Newsletter title *}
 				{block name='frontend_newsletter_listing_title'}
-					<h2 class="headingbox">{if $sContentItem.date}{$sContentItem.date|date_format:"%d.%m.%Y"} - {/if}{$sContentItem.description}</h2>
+					<h2 class="headingbox">{if $sContentItem.date}{$sContentItem.date|date:"DATE_SHORT"} - {/if}{$sContentItem.description}</h2>
 				{/block}
 			    
 			    {* Actual newsletter *}

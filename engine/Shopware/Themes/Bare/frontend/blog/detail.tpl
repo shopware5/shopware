@@ -30,7 +30,7 @@
 
 	                {* Date *}
 	                {block name='frontend_blog_detail_date'}
-	                <span>{$sArticle.displayDate|date_format:"%d.%m.%Y %H:%M"}</span>
+	                <span>{$sArticle.displayDate|date:"DATETIME_SHORT"}</span>
 	                {/block}
 
 	                {* Category *}
