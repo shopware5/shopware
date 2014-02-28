@@ -1,0 +1,41 @@
+.footer-main {
+	.unitize(24, 16, padding-top);
+	background: #fff;
+
+	.footer--column {
+		.unitize-padding(0, 20, 0, 20, 16);
+		border-top: 1px solid @borderColor;
+
+		&.is--last {
+			border-bottom: 1px solid @borderColor;
+		}
+	}
+
+	.column--headline {
+		color: @primaryColor;
+
+		&::after {
+			.unitize-margin(-3.5, 0, 0, 0, 16);
+			.unitize(24, 16);
+			color: @primaryTextColor;
+			content: '+';
+			font-weight: bold;
+			float: right;
+		}
+	}
+
+	.column--content {
+		display: none;
+	}
+
+	.footer--bottom {
+		.unitize(12, 16);
+		.unitize-padding(0, 12, 0, 12, 12);
+		text-align: center;
+	}
+	.footer--logo {
+		color: #00b7e3;
+		text-shadow: 1px 1px 1px @lightTextColor;
+		.unitize(28, 12);
+	}
+}
