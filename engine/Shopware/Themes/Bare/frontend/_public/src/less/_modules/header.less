@@ -5,7 +5,6 @@
 
 	.logo-main {
 		.unitize-padding(10, 10, 10, 10, 16);
-		border-bottom: 1px solid @borderColor;
 	}
 	.logo--shop { width: 50% }
 	.logo--trusted-shops { width: 50% }
@@ -15,5 +14,53 @@
 		.unitize-height(24, 16);
 		float: right;
 		display: block;
+	}
+}
+
+.shop--navigation {
+	.navigation--list {
+		.linear-gradient(@lightGradientStart, @lightGradientEnd);
+		width: 100%;
+	}
+	.navigation--entry {
+		.unitize-padding(12, 10, 12, 10, 16);
+		border: 1px solid @borderColor;
+		border-right: 0 none;
+		display: block;
+		text-align: center;
+		width: 15%;
+	}
+	.entry--link {
+		font-weight: bold;
+		color: @primaryTextColor;
+		text-decoration: none;
+	}
+
+	.main-search--form,
+	.cart--link > span,
+	.entry--account {
+		display: none;
+	}
+
+	.entry--cart {
+		.linear-gradient(@primaryColor, @secondaryColor);
+		border-top: 1px solid @primaryColor;
+		border-bottom: 1px solid darken(@secondaryColor, 10%);
+		border-left: 0 none;
+
+		.entry--link {
+			color: #fff;
+		}
+	}
+	.entry--spacer {
+		.unitize-height(48, 16);
+		width: 40%;
+		border-left: 0 none;
+	}
+
+	.entry--menu-left {
+		border-right: 1px solid @borderColor;
+		border-left: 0 none;
+		width: 30%;
 	}
 }

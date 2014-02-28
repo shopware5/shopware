@@ -78,6 +78,7 @@
                     {block name='frontend_index_logo'}
                         <div class="logo--shop block">
                             <a href="{url controller='index'}" title="{config name=shopName} - {s name='IndexLinkDefault'}{/s}">
+
 								<img src="{link file='frontend/_public/src/img/logos/logo--mobile.png'}" alt="{config name=shopName} - {s name='IndexLinkDefault'}{/s}" />
                             </a>
                         </div>
@@ -98,28 +99,37 @@
 
             {* Shop navigation *}
             <nav class="shop--navigation block-group">
-                <ul class="navigation--list" role="menubar">
+                <ul class="navigation--list block-group" role="menubar">
 
+					{* Menu (Off canvas left) trigger *}
 					{block name='frontend_index_offcanvas_left_trigger'}
-						<li class="navigation--entry entry--offcanvas-menu-left" role="menuitem">
-							<a href="#offcanvas--left" title="Kategorien öffnen">
-								Kategorien öffnen
+						<li class="navigation--entry entry--menu-left block" role="menuitem">
+							<a class="entry--link entry--trigger" href="#offcanvas--left" title="Menü öffnen">
+								<i class="icon--menu"></i> Menü
 							</a>
 						</li>
 					{/block}
 
+					{* Spacer *}
+					{block name="frontend_index_shop_navigation_spacer"}
+						<li class="navigation--entry entry--spacer block"></li>
+					{/block}
+
                     {* Search form *}
                     {block name='frontend_index_search'}
-                        <li class="navigation--entry entry--search" role="menuitem">
+                        <li class="navigation--entry entry--search block" role="menuitem">
+							<a class="entry--link entry--trigger" href="#show-hide--search" title="Suche anzeigen / ausblenden">
+								<i class="icon--search"></i>
+							</a>
                             {include file="frontend/index/_includes/search.tpl"}
                         </li>
                     {/block}
 
                     {* My account entry *}
                     {block name="frontend_index_checkout_actions_my_options"}
-                        <li class="navigation--entry entry--account" role="menuitem">
+                        <li class="navigation--entry entry--account block" role="menuitem">
                             {block name="frontend_index_checkout_actions_account"}
-                                <a href="{url controller='account'}" title="{s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}" class="account">
+                                <a href="{url controller='account'}" title="{s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}" class="entry--link">
                                     {s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}
                                 </a>
                             {/block}
@@ -128,7 +138,10 @@
 
                     {* Cart entry *}
                     {block name='frontend_index_checkout_actions'}
-                        <li class="navigation--entry entry--cart" role="menuitem">
+                        <li class="navigation--entry entry--cart block" role="menuitem">
+							<a class="entry--link entry--trigger" href="#show-hide--search" title="Warenkorb anzeigen / ausblenden">
+								<i class="icon--basket"></i>
+							</a>
                             {action module=widgets controller=checkout action=info}
                         </li>
                     {/block}
