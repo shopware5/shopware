@@ -132,8 +132,9 @@ class Element extends ModelEntity
     {
         $this->type = $type;
         $this->name = $name;
-        $this->translations = new ArrayCollection();
         $this->setOptions($options);
+
+        $this->translations = new ArrayCollection();
     }
 
     /**
@@ -255,18 +256,6 @@ class Element extends ModelEntity
      */
     public function setOptions(array $options)
     {
-        if (!empty($options['translations']) && is_array($options['translations'])) {
-            foreach ($options['translations'] as $translationData) {
-                $translation = new ElementTranslation();
-                $translation->setLocale($translationData['locale']);
-                $translation->setElement($this);
-                $translation->setLabel($translationData['label']);
-                $translation->setDescription($translationData['description']);
-                $this->addTranslation($translation);
-            }
-            unset($options['translations']);
-        }
-
         $fields = array('label', 'value', 'description', 'required', 'scope');
         foreach ($fields as $field) {
             if (array_key_exists($field, $options)) {
