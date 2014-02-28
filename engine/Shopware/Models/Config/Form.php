@@ -363,37 +363,6 @@ class Form extends ModelEntity
         return $this->translations;
     }
 
-
-    /**
-     * @param Shopware\Models\Shop\Locale $locale
-     * @param string $label
-     * @param null|string $description
-     * @return $this
-     */
-    public function setTranslation(Locale $locale, $label, $description = null)
-    {
-        /** @var $translation FormTranslation */
-        foreach ($this->translations as $translation) {
-            if ($translation->getLocale()->getLocale() === $locale->getLocale()) {
-                $translation->setLabel($label);
-                if ($description !== null) {
-                    $translation->setDescription($description);
-                }
-                return $this;
-            }
-        }
-
-        $translation = new FormTranslation();
-        $translation->setLabel($label);
-        $translation->setLocale($locale);
-        if ($description !== null) {
-            $translation->setDescription($description);
-        }
-
-        $this->addTranslation($translation);
-        return $this;
-    }
-
     /**
      * @param $translation FormTranslation
      * @return \Shopware\Models\Config\Form

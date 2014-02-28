@@ -38,67 +38,58 @@ class Shopware_Plugins_Frontend_LastArticles_Bootstrap extends Shopware_Componen
             'Enlight_Controller_Action_PostDispatch',
             'onPostDispatch'
         );
-
-        $enLocale = $this->getLocaleByCode('en_GB');
-
         $form = $this->Form();
         $parent = $this->Forms()->findOneBy(array('name' => 'Frontend'));
         $form->setParent($parent);
-        $form->setTranslation($enLocale, 'Recently viewed items');
         $form->setElement('checkbox', 'show', array(
             'label' => 'Artikelverlauf anzeigen',
             'value' => true,
-            'scope' => Shopware\Models\Config\Element::SCOPE_SHOP,
-            'translations' => array(
-                array(
-                    'locale' => $enLocale,
-                    'label' => 'Display recently viewed items'
-                )
-            )
+            'scope' => Shopware\Models\Config\Element::SCOPE_SHOP
         ));
         $form->setElement('text', 'controller', array(
             'label' => 'Controller-Auswahl',
             'value' => 'index, listing, detail, custom, newsletter, sitemap, campaign',
-            'scope' => Shopware\Models\Config\Element::SCOPE_SHOP,
-            'translations' => array(
-                array(
-                    'locale' => $enLocale,
-                    'label' => 'Controller selection'
-                )
-            )
+            'scope' => Shopware\Models\Config\Element::SCOPE_SHOP
         ));
         $form->setElement('number', 'thumb', array(
             'label' => 'Vorschaubild-Größe',
             'value' => 2,
-            'scope' => Shopware\Models\Config\Element::SCOPE_SHOP,
-            'translations' => array(
-                array(
-                    'locale' => $enLocale,
-                    'label' => 'Thumbnail size',
-                    'description' => 'Index of the thumbnail size of the associated album to use. Starts at 0'
-                )
-            )
+            'scope' => Shopware\Models\Config\Element::SCOPE_SHOP
         ));
         $form->setElement('number', 'lastarticlestoshow', array(
             'label' => 'Anzahl Artikel in Verlauf (zuletzt angeschaut)',
-            'value' => 5,
-            'translations' => array(
-                array(
-                    'locale' => $enLocale,
-                    'label' => 'Maximum number of items to display'
-                )
-            )
+            'value' => 5
         ));
         $form->setElement('number', 'time', array(
             'label' => 'Speicherfrist in Tagen',
-            'value' => 15,
-            'translations' => array(
-                array(
-                    'locale' => $enLocale,
-                    'label' => 'Storage period in days'
+            'value' => 15
+        ));
+
+        $this->addFormTranslations(
+            array(
+                'en_GB' => array(
+                    'plugin_form' => array(
+                        'label' => 'Recently viewed items'
+                    ),
+                    'show' => array(
+                        'label' => 'Display recently viewed items'
+                    ),
+                    'controller' => array(
+                        'label' => 'Controller selection'
+                    ),
+                    'thumb' => array(
+                        'label' => 'Thumbnail size',
+                        'description' => 'Index of the thumbnail size of the associated album to use. Starts at 0'
+                    ),
+                    'lastarticlestoshow' => array(
+                        'label' => 'Maximum number of items to display'
+                    ),
+                    'time' => array(
+                        'label' => 'Storage period in days'
+                    )
                 )
             )
-        ));
+        );
         return true;
     }
 
