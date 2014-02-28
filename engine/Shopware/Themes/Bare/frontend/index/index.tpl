@@ -26,18 +26,18 @@
 {block name='frontend_index_navigation'}
     <header class="header-main">
         <div class="container">
-            <div class="top-bar">
+            <div class="top-bar block-group">
 
                 {* Language and Currency switcher *}
                 {block name='frontend_index_actions'}
-                    <div class="top-bar--switches">
+                    <div class="top-bar--switches block">
                         {action module=widgets controller=index action=shopMenu}
                     </div>
                 {/block}
 
                 {* Top bar navigation *}
                 {block name="frontend_index_top_bar_nav"}
-                    <nav class="top-bar--navigation">
+                    <nav class="top-bar--navigation block">
                         <ul class="navigation--list" role="menubar">
 
                             {* Compare - TODO - Check syntax *}
@@ -72,11 +72,11 @@
 
             {* Logo container *}
             {block name='frontend_index_logo_container'}
-                <div class="logo" role="banner">
+                <div class="logo-main block-group" role="banner">
 
                     {* Main shop logo *}
                     {block name='frontend_index_logo'}
-                        <div class="logo--main">
+                        <div class="logo--shop block">
                             <a href="{url controller='index'}" title="{config name=shopName} - {s name='IndexLinkDefault'}{/s}">
 								<img src="{link file='frontend/_public/src/img/logos/logo--mobile.png'}" alt="{config name=shopName} - {s name='IndexLinkDefault'}{/s}" />
                             </a>
@@ -86,8 +86,8 @@
                     {* Trusted Shops *}
                     {block name='frontend_index_logo_trusted_shops'}
                         {if {config name=TSID}}
-                            <div class="logo--trusted-shops">
-                                <a href="https://www.trustedshops.com/shop/certificate.php?shop_id={config name=TSID}" title="{s name='WidgetsTrustedLogo' namespace='frontend/plugins/trusted_shops/logo'}{/s}" target="_blank">
+                            <div class="logo--trusted-shops block">
+                                <a class="trusted-shops--link" href="https://www.trustedshops.com/shop/certificate.php?shop_id={config name=TSID}" title="{s name='WidgetsTrustedLogo' namespace='frontend/plugins/trusted_shops/logo'}{/s}" target="_blank">
                                     <img src="{link file='frontend/_public/src/img/logos/logo--trusted-shops.png'}" alt="{s name='WidgetsTrustedLogo' namespace='frontend/plugins/trusted_shops/logo'}{/s}" />
                                 </a>
                             </div>
@@ -97,7 +97,7 @@
             {/block}
 
             {* Shop navigation *}
-            <nav class="shop--navigation">
+            <nav class="shop--navigation block-group">
                 <ul class="navigation--list" role="menubar">
 
 					{block name='frontend_index_offcanvas_left_trigger'}
