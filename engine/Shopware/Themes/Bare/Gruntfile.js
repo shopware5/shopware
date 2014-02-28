@@ -77,6 +77,7 @@ module.exports = function(grunt) {
         uglify: {
             development: {
                 options: {
+                    mangle: false,
                     report: 'min',
                     sourceMap: true,
                     sourceMapName: 'frontend/_public/dist/all.js.map'

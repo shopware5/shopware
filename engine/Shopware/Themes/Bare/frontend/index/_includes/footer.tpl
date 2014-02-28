@@ -1,6 +1,6 @@
 {* Footer menu *}
 {block name='frontend_index_footer_menu'}
-    <div class="footer--columns">
+    <div class="footer--columns block-group">
         {include file='frontend/index/_includes/menu_footer.tpl'}
     </div>
 {/block}
@@ -24,6 +24,9 @@
             <div class="footer--copyright">
                 {s name="IndexCopyright"}Copyright &copy; 2014 shopware AG{/s}
             </div>
+			<div class="footer--logo">
+				<i class="icon--shopware"></i>
+			</div>
         {/block}
 	</div>
 {/block}
