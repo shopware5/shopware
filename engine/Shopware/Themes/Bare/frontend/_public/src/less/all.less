@@ -32,23 +32,3 @@
 @import "modules";
 @import "hacks";
 @import "ie";
-
-*, *::before, *::after {
-    .box-sizing();
-}
-html {
-	font-size: 62.5%;
-}
-body {
-	.unitize(1.6);
-	font-family: @bodyFontStack;
-	color: @primaryTextColor;
-	background: @primaryBackgroundColor;
-}
-
-// All images should be responsive by default
-img {
-	display: block;
-	max-width: 100%;
-	height: auto;
-}

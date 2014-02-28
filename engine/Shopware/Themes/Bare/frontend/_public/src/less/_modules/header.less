@@ -1,23 +1,19 @@
 .header-main {
 	background: #fff;
-}
 
-.top-bar {
-	display: none;
-}
+	.top-bar { display: none }
 
-// Logo styling
-.logo {
-	.clearfix();
-	.unitize-padding(1, 1, 1, 1);
-	border-bottom: 1px solid @borderColor;
-
-	.logo--main {
-		float: left;
+	.logo-main {
+		.unitize-padding(10, 10, 10, 10, 16);
+		border-bottom: 1px solid @borderColor;
 	}
-	.logo--trusted-shops {
-		.unitize-height(2.4);
-		.unitize-width(2.4);
+	.logo--shop { width: 50% }
+	.logo--trusted-shops { width: 50% }
+
+	.trusted-shops--link {
+		.unitize-width(24, 16);
+		.unitize-height(24, 16);
 		float: right;
+		display: block;
 	}
 }
