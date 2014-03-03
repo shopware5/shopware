@@ -1,0 +1,40 @@
+* {
+    .box-sizing();
+}
+body {
+	font: @bodyFontStack;
+	color: @primaryTextColor;
+	background: @primaryBackgroundColor;
+}
+
+// All images should be responsive by default
+img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
+
+a {
+	.transition();
+	color: @primaryColor;
+	text-decoration: none;
+
+	&:hover {
+		color: darken(@secondaryColor, 10%);
+	}
+}
+
+ul {
+	margin: 0;
+	padding: 0;
+}
+
+.ajax-loader { display: none }
+
+@media screen and (min-width: 64em) {
+	body {
+		font-size: 87.5%;
+	}
+}
+
+h2 { margin: 0; }

@@ -1,0 +1,120 @@
+.off-canvas--container,
+.off-canvas--pusher,
+.off-canvas--content {
+	height: 100%;
+}
+.off-canvas--content {
+	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch;
+	background: @primaryBackgroundColor;
+}
+.off-canvas--content,
+.off-canvas--inner-content {
+	position: relative;
+}
+.off-canvas--container {
+	position: relative;
+	overflow: hidden;
+}
+.off-canvas--pusher {
+	position: relative;
+	left: 0;
+	z-index: 99;
+	height: 100%;
+	-webkit-transition: -webkit-transform 0.5s;
+	transition: transform 0.5s;
+
+	&::after {
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 0;
+		height: 0;
+		background: rgba(0, 0, 0, 0.2);
+		content: '';
+		opacity: 0;
+		-webkit-transition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;
+		transition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;
+	}
+}
+
+.off-canvas--visible-content {
+	.unitize-width(300, 16);
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 100;
+	visibility: hidden;
+	height: 100%;
+	background: @primaryBackgroundColor;
+	-webkit-transition: all 0.5s;
+	transition: all 0.5s;
+
+	&::after {
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0,0,0,0.2);
+		content: '';
+		opacity: 1;
+		-webkit-transition: opacity 0.5s;
+		transition: opacity 0.5s;
+	}
+}
+
+.js--direction--right {
+	.off-canvas--visible-content {
+		left: auto;
+		right: 0;
+	}
+}
+
+.js--off-canvas--menu-open {
+	.off-canvas--pusher::after {
+		width: 100%;
+		height: 100%;
+		opacity: 1;
+		-webkit-transition: opacity 0.5s;
+		transition: opacity 0.5s;
+	}
+
+	.off-canvas--visible-content::after {
+		width: 0;
+		height: 0;
+		opacity: 0;
+		-webkit-transition: opacity 0.3s, width 0.1s 0.3s, height 0.1s 0.3s;
+		transition: opacity 0.3s, width 0.1s 0.3s, height 0.1s 0.3s;
+	}
+}
+
+.js--effect--reveal {
+	.off-canvas--visible-content {
+		z-index: 1;
+	}
+
+	&.js--off-canvas--menu-open {
+		&.js--direction--left {
+			.off-canvas--pusher {
+				-webkit-transform: translate3d(300px, 0, 0);
+				transform: translate3d(300px, 0, 0);
+			}
+		}
+		&.js--direction--right {
+			.off-canvas--pusher {
+				-webkit-transform: translate3d(-300px, 0, 0);
+				transform: translate3d(-300px, 0, 0);
+			}
+		}
+
+		.off-canvas--visible-content {
+			visibility: visible;
+			-webkit-transition: -webkit-transform 0.3s;
+			transition: transform 0.3s;
+
+			&::after { display: none }
+		}
+
+	}
+}
