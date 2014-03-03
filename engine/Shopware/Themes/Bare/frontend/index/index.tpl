@@ -13,21 +13,6 @@
 
 <body class="{if $Controller}is--ctl-{$Controller}{/if}">
 <div class="off-canvas--container">
-	<nav class="test-navi">
-		<ul>
-			<li>Test</li>
-			<li>Test</li>
-			<li>Test</li>
-			<li>Test</li>
-			<li>Test</li>
-			<li>Test</li>
-			<li>Test</li>
-			<li>Test</li>
-			<li>Test</li>
-			<li>Test</li>
-			<li>Test</li>
-		</ul>
-	</nav>
 	<div class="off-canvas--pusher">
 		<div class="off-canvas--content">
 			<div class="off-canvas--inner-content">
@@ -123,7 +108,7 @@
 									{* Menu (Off canvas left) trigger *}
 									{block name='frontend_index_offcanvas_left_trigger'}
 										<li class="navigation--entry entry--menu-left block" role="menuitem">
-											<a class="entry--link entry--trigger" href="#offcanvas--left" title="Menü öffnen">
+											<a class="entry--link entry--trigger" href="#offcanvas--left" title="Menü öffnen" data-offcanvas="true" data-direction="fromLeft" data-selector=".navigation-main">
 												<i class="icon--menu"></i> Menü
 											</a>
 										</li>
