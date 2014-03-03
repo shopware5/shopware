@@ -1323,6 +1323,14 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             unset($data['tax']);
         }
 
+        // Add articleId if it's not provided by the client
+        if ($data['articleId'] == 0) {
+            $articleDetails = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail')->findOneByNumber($data['articleNumber']);
+            if ( ! is_null($articleDetails)) {
+                $data['articleId'] = $articleDetails->getArticle()->getId();
+            }
+        }
+
         return $data;
     }
 
