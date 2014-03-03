@@ -83,7 +83,7 @@
 				{* Date *}
 				{block name='frontend_detail_comment_date'}
 					<span class="date">
-						{$vote.datum}
+						{$vote.datum|date:"DATETIME_MEDIUM"}
 					</span>
 				{/block}
 				</div>
@@ -116,7 +116,7 @@
                             {se name="DetailCommentInfoFrom"}{/se} {se name="DetailCommentInfoFromAdmin"}Admin{/se}
                         </strong>
                         <span class="date">
-                            {$vote.answer_date}
+                            {$vote.answer_date|date:"DATETIME_MEDIUM"}
                         </span>
                     </div>
                     <div class="right_container">
