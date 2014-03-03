@@ -271,27 +271,64 @@
         </service>
 
 
-        <service id="theme_manager" class="Shopware\Components\Theme\Manager">
+
+
+
+        <service id="theme_path_resolver" class="Shopware\Components\Theme\PathResolver">
             <argument>%kernel.root_dir%</argument>
-            <argument type="service" id="models" />
             <argument type="service" id="template" />
-            <argument type="service" id="shopware.snippet_database_handler" />
-            <argument type="service" id="theme_config_persister" />
         </service>
 
         <service id="theme_factory" class="Shopware\Components\Theme\Factory">
-            <argument type="service" id="theme_manager" />
+            <argument type="service" id="theme_path_resolver" />
         </service>
 
-        <service id="theme_compiler" class="Shopware\Components\Theme\Compiler">
-            <argument type="service" id="service_container" />
-            <tag name="shopware.event_listener" method="beforeRender" event="Enlight_Plugins_ViewRenderer_PreRender" />
-        </service>
         <service id="theme_config_persister" class="Shopware\Components\Form\Persister\Theme">
             <argument type="service" id="models" />
         </service>
 
+        <service id="theme_configurator" class="Shopware\Components\Theme\Configurator">
+            <argument type="service" id="models" />
+            <argument type="service" id="theme_util" />
+            <argument type="service" id="theme_config_persister" />
+        </service>
+
+        <service id="theme_inheritance" class="Shopware\Components\Theme\Inheritance">
+            <argument type="service" id="models" />
+            <argument type="service" id="theme_path_resolver" />
+        </service>
+
+        <service id="theme_util" class="Shopware\Components\Theme\Util">
+            <argument type="service" id="models" />
+            <argument type="service" id="theme_path_resolver" />
+        </service>
+
+        <service id="theme_installer" class="Shopware\Components\Theme\Installer">
+            <argument type="service" id="models" />
+            <argument type="service" id="theme_configurator" />
+            <argument type="service" id="theme_path_resolver" />
+            <argument type="service" id="theme_util" />
+            <argument type="service" id="shopware.snippet_database_handler" />
+        </service>
+
+
+
+        <service id="theme_compiler" class="Shopware\Components\Theme\Compiler">
+
+        </service>
+
         <service id="less_compiler" class="lessc" />
+
+
+
+
+
+
+
+
+
+
+
 
     </services>
 </container>

@@ -37,42 +37,6 @@ use Shopware\Models\Shop\Template;
 class Compiler
 {
     /**
-     * @var Container
-     */
-    protected $container;
-
-    /**
-     * @param Container $container
-     */
-    function __construct(Container $container)
-    {
-        $this->container = $container;
-    }
-
-    /**
-     * @Event Enlight_Plugins_ViewRenderer_PreRender
-     */
-    public function beforeRender(\Enlight_Event_EventArgs $args)
-    {
-        /**@var $request \Enlight_Controller_Request_RequestHttp */
-        $request = $args->getRequest();
-
-        //only compile if it's a frontend request
-        if (!$this->isFrontendRequest($request)) {
-            return;
-        }
-
-        /**@var $shop \Shopware\Models\Shop\Shop */
-        $shop = $this->container->get('shop');
-
-        if ($shop->getTemplate()->getVersion() < 3) {
-            return;
-        }
-
-        $this->compile($shop->getTemplate(), $shop);
-    }
-
-    /**
      * Compiles all required resources for the frontend template
      *
      * @param Template $template
