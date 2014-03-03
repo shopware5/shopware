@@ -67,7 +67,7 @@ class Set extends ModelEntity
     protected $values;
 
     /**
-     * @var Element $element
+     * @var Template $element
      * @ORM\ManyToOne(
      *      targetEntity="Shopware\Models\Shop\Template",
      *      inversedBy="configSets"
@@ -141,7 +141,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\TemplateConfig\Element
+     * @return \Shopware\Models\Shop\Template
      */
     public function getTemplate()
     {
@@ -149,7 +149,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Shop\TemplateConfig\Element $template
+     * @param \Shopware\Models\Shop\Template $template
      */
     public function setTemplate($template)
     {

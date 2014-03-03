@@ -36,9 +36,10 @@ use Shopware\Models\Shop\Template;
 class Factory
 {
     /**
-     * @var Manager
+     * @var PathResolver
      */
-    private $themeManager;
+    private $pathResolver;
+
 
     /**
      * Source template for the Theme.php of a theme
@@ -64,57 +65,6 @@ class Theme extends \Shopware\Theme
 
     public function createConfig()
     {
-//        todo implement your theme configuration here.
-
-//        $this->createTextField(array(
-//            'name' => 'textField',
-//            'fieldLabel' => 'Text input'
-//        ));
-//
-//        $this->createCheckboxField(array(
-//            'name' => 'checkboxField',
-//            'fieldLabel' => 'Activate'
-//        ));
-//
-//        $this->createArticleSelection(array(
-//            'name' => 'articleSelection',
-//            'fieldLabel' => 'Select article'
-//        ));
-//
-//        $this->createCategorySelection(array(
-//            'name' => 'categorySelection',
-//            'fieldLabel' => 'Select category'
-//        ));
-//
-//        $this->createColorPicker(array(
-//            'name' => 'colorPicker',
-//            'fieldLabel' => 'Select color'
-//        ));
-//
-//        $this->createDateField(array(
-//            'name' => 'dateField',
-//            'fieldLabel' => 'Date input'
-//        ));
-//
-//        $this->createEmField(array(
-//            'name' => 'emField',
-//            'fieldLabel' => 'EM input'
-//        ));
-//
-//        $this->createMediaSelection(array(
-//            'name' => 'mediaSelection',
-//            'fieldLabel' => 'Select media'
-//        ));
-//
-//        $this->createPercentField(array(
-//            'name' => 'percentField',
-//            'fieldLabel' => 'Percent input'
-//        ));
-//
-//        $this->createTextAreaField(array(
-//            'name' => 'textAreaField',
-//            'fieldLabel' => 'Text input'
-//        ));
     }
 }
 EOD;
@@ -133,14 +83,6 @@ EOD;
     );
 
     /**
-     * @param Manager $themeManager
-     */
-    function __construct(Manager $themeManager)
-    {
-        $this->themeManager = $themeManager;
-    }
-
-    /**
      * Function which generates a new shopware theme
      * into the engine/Shopware/Themes directory.
      *
@@ -150,7 +92,7 @@ EOD;
      */
     public function generateTheme(array $data, Template $parent = null)
     {
-        if (!is_writable($this->themeManager->getDefaultThemeDirectory())) {
+        if (!is_writable($this->pathResolver->getDefaultThemeDirectory())) {
             throw new \Exception(
                 "Theme directory isn't writable"
             );
@@ -204,7 +146,7 @@ EOD;
      */
     private function getThemeDirectory($name)
     {
-        return $this->themeManager->getDefaultThemeDirectory() . DIRECTORY_SEPARATOR . $name;
+        return $this->pathResolver->getDefaultThemeDirectory() . DIRECTORY_SEPARATOR . $name;
     }
 
     /**

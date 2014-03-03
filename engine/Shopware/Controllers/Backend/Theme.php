@@ -139,8 +139,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      */
     public function listAction()
     {
-        $this->container->get('theme_manager')->registerTemplates();
-        $this->container->get('theme_manager')->registerThemes();
+        $this->container->get('theme_installer')->synchronize();
 
         parent::listAction();
     }
@@ -168,7 +167,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             ));
         }
 
-        $this->unzip($file, $this->container->get('theme_manager')->getDefaultThemeDirectory());
+        $this->unzip($file, $this->container->get('theme_path_resolver')->getDefaultThemeDirectory());
 
         $system->remove($file->getPathname());
 
@@ -182,27 +181,13 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      */
     private function unzip(UploadedFile $file, $targetDirectory)
     {
-        $filter = new \Zend_Filter_Decompress(array(
-            'adapter' => $file->getClientOriginalExtension(),
-            'options' => array('target' => $targetDirectory)
-        ));
+        $filter = new \Zend_Filter_Decompress();
+        $filter->setAdapter($file->getClientOriginalExtension());
+        $filter->setOptions(array('target' => $targetDirectory));
 
         $filter->filter(
             $file->getPath() . DIRECTORY_SEPARATOR . $file->getFilename()
         );
-    }
-
-    /**
-     * Override of the Application controller to select all template associations.
-     *
-     * @param $id
-     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
-     */
-    protected function getDetailQuery($id)
-    {
-        $builder = parent::getDetailQuery($id);
-
-        return $builder;
     }
 
     /**
@@ -212,7 +197,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     private function getSnippetNamespace(Template $template)
     {
         return $this->container->get('snippets')->getNamespace(
-            $this->container->get('theme_manager')->getSnippetNamespace($template) . 'backend/config'
+            $this->container->get('theme_util')->getSnippetNamespace($template) . 'backend/config'
         );
     }
 
@@ -324,8 +309,6 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
         $sets = $builder->getQuery()->getArrayResult();
 
-        $sets[0]['screen'] = $this->container->get('theme_manager')->getThemeImage($template);
-
         if ($template->getParent() instanceof Template) {
             $sets = array_merge(
                 $sets,
@@ -407,15 +390,12 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             /**@var $instance Template*/
             $instance = $this->getRepository()->find($theme['id']);
 
-            if ($theme['version'] < 3) {
-                $theme['screen'] = $this->container->get('theme_manager')->getTemplateImage($instance);
-                $theme['path'] = $this->container->get('theme_manager')->getTemplateDirectory($instance);
-            } else {
+            $theme['screen'] = $this->container->get('theme_util')->getPreviewImage($instance);
+            $theme['path'] = $this->container->get('theme_path_resolver')->getDirectory($instance);
+
+            if ($theme['version'] >= 3) {
                 $namespace = $this->getSnippetNamespace($instance);
                 $namespace->read();
-
-                $theme['screen'] = $this->container->get('theme_manager')->getThemeImage($instance);
-                $theme['path'] = $this->container->get('theme_manager')->getThemeDirectory($instance);
 
                 $theme['name'] = $namespace->get('theme_name', $theme['name']);
                 $theme['description'] = $namespace->get('theme_description', $theme['description']);
