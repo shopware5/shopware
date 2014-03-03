@@ -193,7 +193,7 @@ class Manager
      * Returns the inheritance hierarchy for the passed theme.
      *
      * @param Template $template
-     * @return array
+     * @return Template[]
      */
     public function getInheritanceHierarchy(Template $template)
     {
@@ -337,13 +337,25 @@ class Manager
      * @param Template $template
      * @return string
      */
-    public function getThemeLessDirectory(Template $template)
+    public function getPublicDirectory(Template $template)
     {
         return $this->getThemeDirectory($template) .
         DIRECTORY_SEPARATOR .
-        '_public' .
+        'frontend' .
         DIRECTORY_SEPARATOR .
-        'source' .
+        '_public';
+    }
+
+    /**
+     * Returns the less directory for the passed theme.
+     * @param Template $template
+     * @return string
+     */
+    public function getLessDirectory(Template $template)
+    {
+        return $this->getPublicDirectory($template) .
+        DIRECTORY_SEPARATOR .
+        'src' .
         DIRECTORY_SEPARATOR .
         'less';
     }
