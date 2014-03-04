@@ -21,24 +21,46 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 /**
  * Deprecated Shopware Class that handle static shop pages and dynamic content
  */
 class sCms
 {
     /**
-    * Pointer to Shopware-Core-public functions
-    *
-    * @var    object
-    * @access private
+     * Shopware Core sSystem instance
+     * @var sSystem
     */
     public $sSYSTEM;
 
     /**
-     * Eine bestimmte, statische Seite auslesen (z.B. AGB etc.)
-     * @access public
-     * @param null $staticId
-     * @return array
+     * Database connection which used for each database operation in this class.
+     * Injected over the class constructor
+     *
+     * @var Enlight_Components_Adodb
+     */
+    private $adodb;
+
+    /**
+     * Shopware configuration object which used for
+     * each config access in this class.
+     * Injected over the class constructor
+     *
+     * @var Shopware_Components_Config
+     */
+    private $config;
+
+    public function __construct()
+    {
+        $this->adodb = Shopware()->Adodb();
+        $this->config = Shopware()->Config();
+    }
+
+    /**
+     * Read a specific, static page (E.g. terms and conditions, etc.)
+     *
+     * @param int $staticId The page id
+     * @return array|false Page data, or false if none found by given id
      */
     public function sGetStaticPage($staticId = null)
     {
@@ -50,10 +72,11 @@ class sCms
         if (empty($staticId)) {
             return false;
         }
-        // Query all information of the static-template
+
+        // Load static page data from database
         $sql = "SELECT * FROM s_cms_static WHERE id=?";
-        $staticPage = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow(
-            $this->sSYSTEM->sCONFIG['sCACHESTATIC'],
+        $staticPage = $this->adodb->CacheGetRow(
+            $this->config->get('sCACHESTATIC'),
             $sql, array($staticId)
         );
         if (empty($staticPage)) {
@@ -70,8 +93,8 @@ class sCms
                 WHERE p.parentID = ?
                 ORDER BY p.position
             ';
-            $staticPage['siblingPages'] = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll(
-                $this->sSYSTEM->sCONFIG['sCACHESTATIC'],
+            $staticPage['siblingPages'] = $this->adodb->CacheGetAll(
+                $this->config->get('sCACHESTATIC'),
                 $sql, array($staticId, $staticPage['parentID'])
             );
             $sql = '
@@ -79,8 +102,8 @@ class sCms
                 FROM s_cms_static p
                 WHERE p.id = ?
             ';
-            $staticPage['parent'] = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow(
-                $this->sSYSTEM->sCONFIG['sCACHESTATIC'],
+            $staticPage['parent'] = $this->adodb->CacheGetRow(
+                $this->config->get('sCACHESTATIC'),
                 $sql, array($staticPage['parentID'])
             );
         } else {
@@ -90,8 +113,8 @@ class sCms
                 WHERE p.parentID = ?
                 ORDER BY p.position
             ';
-            $staticPage['subPages'] = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll(
-                $this->sSYSTEM->sCONFIG['sCACHESTATIC'],
+            $staticPage['subPages'] = $this->adodb->CacheGetAll(
+                $this->config->get('sCACHESTATIC'),
                 $sql, array($staticId)
             );
         }
@@ -99,11 +122,13 @@ class sCms
     }
 
      /**
-     * Dynamische Inhalte einer Gruppe auslesen
-     * @param int $group Gruppen-ID
-     * @param int $sPage Aktuelle Seite
-     * @access public
-     * @return array
+      * @deprecated This code seems to be legacy, dead code. See ticket SW-8142
+      *
+      * Dynamische Inhalte einer Gruppe auslesen
+      *
+      * @param int $group Group id
+      * @param int $sPage Current page
+      * @return array
      */
     public function sGetDynamicContentByGroup($group,$sPage=1)
     {
@@ -113,7 +138,7 @@ class sCms
         ";
 
 
-        $getCountTopics = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHESTATIC'],$sql,array($group));
+        $getCountTopics = $this->adodb->CacheGetRow($this->config->get('sCACHESTATIC'),$sql,array($group));
 
         if ($sPage > $getCountTopics["countTopics"] || $sPage <= 0 ) $sPage = 1;
 
@@ -133,7 +158,7 @@ class sCms
                 $pages["numbers"][$i]["markup"] = false;
             }
             $pages["numbers"][$i]["value"] = $i;
-            $pages["numbers"][$i]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'].$this->sSYSTEM->sBuildLink(array("sPage"=>$i),false);
+            $pages["numbers"][$i]["link"] = $this->config->get('sBASEFILE').$this->sSYSTEM->sBuildLink(array("sPage"=>$i),false);
         }
 
 
@@ -151,7 +176,7 @@ class sCms
             $tempDatum = explode(".",$queryDynamic[$dynamicKey]["datum"]);
 
             // Building Link for more information page (optional)
-            $queryDynamic[$dynamicKey]["linkDetails"] = $this->sSYSTEM->sCONFIG['sBASEFILE'].$this->sSYSTEM->sBuildLink(array("sCid"=>$dynamicValue["id"]),false);
+            $queryDynamic[$dynamicKey]["linkDetails"] = $this->config->get('sBASEFILE').$this->sSYSTEM->sBuildLink(array("sCid"=>$dynamicValue["id"]),false);
 
             // Get Image
             if ($queryDynamic[$dynamicKey]["img"]) {
@@ -169,12 +194,15 @@ class sCms
     }
 
      /**
-     * Detailinformationen eines Gruppen-Eintrags
-     * @param int $group Gruppen-ID
-     * @param int $id ID des Eintrags
-     * @access public
-     * @return array
-     */
+      * @deprecated This code seems to be legacy, dead code. See ticket SW-8142
+      *
+      * Detailinformationen eines Gruppen-Eintrags
+      *
+      * @param int $group Gruppen-ID
+      * @param int $id ID des Eintrags
+      * @access public
+      * @return array
+      */
     public function sGetDynamicContentById($group,$id)
     {
         // Query - Topic
@@ -183,13 +211,13 @@ class sCms
         AND id=?
         ";
 
-        $queryDynamic = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHESTATIC'],$sql,array($group,$id));
+        $queryDynamic = $this->adodb->CacheGetRow($this->config->get('sCACHESTATIC'),$sql,array($group,$id));
 
         if ($queryDynamic["id"]) {
             $tempDatum = explode(".",$queryDynamic["datum"]);
 
             // Building Link for more information page (optional)
-            $queryDynamic["linkDetails"] = $this->sSYSTEM->sCONFIG['sBASEFILE'].$this->sSYSTEM->sBuildLink(array("sCid"=>$queryDynamic["id"]),false);
+            $queryDynamic["linkDetails"] = $this->config->get('sBASEFILE').$this->sSYSTEM->sBuildLink(array("sCid"=>$queryDynamic["id"]),false);
 
             // Get Image
             if ($queryDynamic["img"]) {
@@ -198,7 +226,7 @@ class sCms
             }
             // Get attachment
             if ($queryDynamic["attachment"]) {
-                $queryDynamic["attachment"] =  "http://".$this->sSYSTEM->sCONFIG["sBASEPATH"].$this->sSYSTEM->sCONFIG["sCMSFILES"]."/".$queryDynamic["attachment"];
+                $queryDynamic["attachment"] =  "http://".$this->config("sBASEPATH").$this->config("sCMSFILES")."/".$queryDynamic["attachment"];
             }
 
             $queryDynamic["dateExploded"] = $tempDatum;
@@ -212,18 +240,20 @@ class sCms
     }
 
      /**
-     * Name einer Gruppe anhand der ID
-     * @param int $group Gruppen-ID
-     * @access public
-     * @return string Name
-     */
+      * @deprecated This code seems to be legacy, dead code. See ticket SW-8142
+      *
+      * Name einer Gruppe anhand der ID
+      * @param int $group Gruppen-ID
+      * @access public
+      * @return string Name
+      */
     public function sGetDynamicGroupName($group)
     {
         $sql = "
         SELECT description FROM s_cms_groups WHERE id=?
         ";
 
-        $queryDynamic = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHESTATIC'],$sql,array($group));
+        $queryDynamic = $this->adodb->CacheGetRow($this->config->get('sCACHESTATIC'),$sql,array($group));
 
         return $queryDynamic["description"];
     }
