@@ -89,6 +89,7 @@ class Configurator
         $this->removeUnused($template, $container);
 
         $this->synchronizeSets($theme, $template);
+
     }
 
     /**
@@ -100,14 +101,38 @@ class Configurator
         $collection = new ArrayCollection();
         $theme->createConfigSets($collection);
 
+        $synchronized = array();
+
         foreach ($collection as $item) {
             $existing = $this->getExistingConfigSet(
                 $template->getConfigSets(),
                 $item['name']
             );
+
+            if (!$existing instanceof Shop\TemplateConfig\Set) {
+                $existing = new Shop\TemplateConfig\Set();
+                $template->getConfigSets()->add($existing);
+            }
+
             $existing->setTemplate($template);
+
             $existing->fromArray($item);
+            $synchronized[] = $existing;
         }
+
+        foreach($template->getConfigSets() as $existing) {
+            $defined = $this->getExistingConfigSet(
+                $synchronized,
+                $existing->getName()
+            );
+
+            if ($defined instanceof Shop\TemplateConfig\Set) {
+                continue;
+            }
+
+            $this->entityManager->remove($existing);
+        }
+        $this->entityManager->flush();
     }
 
     /**
@@ -273,11 +298,11 @@ class Configurator
     }
 
     /**
-     * @param ArrayCollection $collection
+     * @param Shop\TemplateConfig\Set[] $collection
      * @param $name
      * @return Shop\TemplateConfig\Set
      */
-    private function getExistingConfigSet(ArrayCollection $collection, $name)
+    private function getExistingConfigSet(array $collection, $name)
     {
         /**@var $item Shop\TemplateConfig\Set */
         foreach ($collection as $item) {
@@ -285,8 +310,6 @@ class Configurator
                 return $item;
             }
         }
-        $item = new Shop\TemplateConfig\Set();
-        $collection->add($item);
-        return $item;
+        return null;
     }
 }

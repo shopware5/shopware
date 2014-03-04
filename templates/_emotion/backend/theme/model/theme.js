@@ -62,6 +62,7 @@ Ext.define('Shopware.apps.Theme.model.Theme', {
 
         { name : 'screen', type: 'string' },
         { name : 'hasConfig', type: 'int' },
+        { name : 'hasConfigSet', type: 'boolean' },
 
         { name : 'enabled', type: 'boolean', defaultValue: false },
         { name : 'preview', type: 'boolean', defaultValue: false }

@@ -27,6 +27,7 @@ namespace Shopware\Models\Shop;
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Model\ModelEntity,
     Doctrine\ORM\Mapping as ORM;
+use Shopware\Models\Shop\TemplateConfig\Set;
 
 /**
  * Template Model Entity
@@ -471,7 +472,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Set[]
      */
     public function getConfigSets()
     {
@@ -479,7 +480,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $configSets
+     * @param Set[] $configSets
      */
     public function setConfigSets($configSets)
     {

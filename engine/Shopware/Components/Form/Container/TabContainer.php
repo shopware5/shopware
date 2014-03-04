@@ -43,6 +43,7 @@ class TabContainer extends Container
 
     /**
      * @param Element $element
+     * @return $this
      * @throws \InvalidArgumentException
      */
     public function addElement(Element $element)
@@ -52,14 +53,15 @@ class TabContainer extends Container
                 '$element must be instance of Shopware\Components\Form\Container\Tab'
             );
         }
-        $this->addTab($element);
+        return $this->addTab($element);
     }
 
     /**
      * @param Tab $element
+     * @return $this
      */
     public function addTab(Tab $element)
     {
-        parent::addElement($element);
+        return parent::addElement($element);
     }
 }

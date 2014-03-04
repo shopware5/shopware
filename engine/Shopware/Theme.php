@@ -268,7 +268,7 @@ class Theme
         $element = new Form\Field\Date($name);
         $element->fromArray($options);
         $element->setLabel($label);
-
+        $element->setDefaultValue($defaultValue);
         return $element;
     }
 

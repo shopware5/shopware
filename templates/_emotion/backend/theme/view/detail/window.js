@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
     height: 420,
     width: 1080,
     layout: {
-        type: 'hbox',
+        type: 'vbox',
         align: 'stretch'
     },
     defaults: {
@@ -72,71 +72,6 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
     },
 
     /**
-     * Creates the tab panels for the config window.
-     *
-     * @param elements
-     * @returns { Array }
-     */
-    createTabs: function(elements) {
-        var me = this, tabs = [],
-            collection = {};
-
-        Ext.each(elements, function(element) {
-            var config = element.tab;
-            var tab = collection[config.name];
-
-            if (!tab) {
-                tab = {
-                    padding: 20,
-                    layout: 'column',
-                    xtype: 'container',
-                    autoScroll: true,
-                    title: config.fieldLabel,
-                    items: [ ]
-                };
-            }
-
-            tab.items.push(element);
-            collection[config.name] = tab;
-        });
-
-        //iterate tab collection to create tabs
-        for (var key in collection) {
-            var tab = collection[key],
-                fields = tab.items;
-
-            var counter = Math.round(fields.length / 2);
-
-            tab.items = [
-                me.createContainer(fields.slice(0, counter)),
-                me.createContainer(fields.slice(counter))
-            ];
-
-            tabs.push(tab);
-        }
-
-        return tabs;
-    },
-
-    /**
-     * Creates a column container for the tab panels.
-     * @param fields
-     * @returns { Ext.container.Container }
-     */
-    createContainer: function(fields) {
-        return Ext.create('Ext.container.Container', {
-            columnWidth: 0.5,
-            defaults: {
-                labelWidth: 150,
-                anchor: '95%'
-            },
-            layout: 'anchor',
-            items: fields
-        });
-    },
-
-
-    /**
      * Creates the window toolbar.
      *
      * @returns { Ext.toolbar.Toolbar }
@@ -160,7 +95,9 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
     createToolbarItems: function() {
         var me = this, items = [];
 
-        items.push(me.createConfigSetButton());
+        if (me.theme.get('hasConfigSet')) {
+            items.push(me.createConfigSetButton());
+        }
 
         items.push({ xtype: 'tbfill' });
 

@@ -40,7 +40,8 @@ Ext.define('Shopware.apps.Theme.view.config_sets.Window', {
         });
 
         me.formPanel = Ext.create('Ext.form.Panel', {
-            items: items
+            items: items,
+            bodyPadding: 15
         });
 
         return [ me.formPanel ];
@@ -53,7 +54,7 @@ Ext.define('Shopware.apps.Theme.view.config_sets.Window', {
         return Ext.create('Ext.form.FieldSet', {
             layout: 'fit',
             flex: 1,
-            title: '{s name=config_set_title_prefix}Configuration sets{/s} ' + theme.get('name'),
+            title: '{s name=config_set_title_prefix}Configuration sets{/s} :' + theme.get('name'),
             items: [ me.createConfigSetCombo(theme) ]
         });
     },
@@ -71,12 +72,9 @@ Ext.define('Shopware.apps.Theme.view.config_sets.Window', {
 
                     return '{literal}' +
                         '<div class="combo-item">' +
-                            '<div style="float: left; padding: 5px; width: 60px; height: 60px;">' +
-                                '<img style="display:block; height: 100%" src="'+ screen +'" />' +
-                            '</div>' +
-                            '<div style="float: left; padding-left: 30px">' +
+                            '<div>' +
                                 '<h1>{name}</h1>' +
-                                '<div style="padding-left: 15px;">{description}</div>' +
+                                '<div>{description}</div>' +
                             '</div>' +
                             '<div class="x-clear" />'
                         '</div>' +
