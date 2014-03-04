@@ -24,78 +24,93 @@ class Homepage extends Page
 
     public function checkBanner($image, $links = null)
     {
-        $banners = $this->findAll('css', 'div.banner-element img');
+        $banners = $this->findAllEmotionParentElements('banner');
 
-        $parent = null;
+        $return = array();
 
-        foreach ($banners as $banner) {
-            $bannerImage = $banner->getAttribute('src');
+        foreach ($banners as $bannerKey => $banner) {
 
-            if (strpos($bannerImage, $image) !== false) {
+            $elements = array();
 
-                $parent = $banner->getParent();
-                break;
-            }
-        }
+            $cssClass = 'div.'.str_replace(' ', '.', $banner->getAttribute('class'));
 
-        if (empty($parent)) {
-            $message = sprintf('The given banner was not found');
-            throw new ResponseTextException($message, $this->getSession());
-        }
+            $class = sprintf('div.emotion-element %s ', $cssClass);
+            $elements['img'] = $this->find('css', $class.'div.mapping img');
 
-        if (isset($links)) {
-            //Banner besitzt Mapping
-            if (is_array($links)) {
-                $mapping = $this->findAll('css', 'div.banner-element a.emotion-banner-mapping');
-                $parent = $this->getEmotionParent($parent);
+            if(isset($links))
+            {
+                if(is_array($links))
+                {
+                    $elements['mapping'] = array();
+                    $mapping = array();
 
-                foreach ($links as $link) {
-                    $link = $link['mapping'];
+                    $maps = $this->findAllEmotionElements($cssClass, 'div.banner-mapping a');
 
-                    foreach ($mapping as $key => $mappingLink) {
-                        $mapLink = $mappingLink->getAttribute('href');
+                    foreach($maps as $mapKey => $map)
+                    {
+                        $class = sprintf('div.emotion-element %s div.banner-mapping a:nth-of-type(%d) ', $cssClass, $mapKey + 1);
 
-                        if (strpos($mapLink, $link) !== false) {
-                            $myParent = $this->getEmotionParent($mappingLink);
+                        $mapping['a'] = $this->find('css', $class);
 
-                            if ($this->compareNodes($parent, $myParent)) {
-                                unset($mapping[$key]);
-                                break;
-                            }
-                        }
-
-                        if ($mappingLink == end($mapping)) {
-                            $message = sprintf('The given banner redirects not to %s', $link);
-                            throw new ResponseTextException($message, $this->getSession());
-                        }
+                        $elements['mapping'][] = $mapping;
                     }
                 }
-            } //Banner leitet zu einer einzigen URL weiter
-            else {
-                $link = $parent->getAttribute('href');
-
-                if (strpos($link, $links) === false) {
-                    $message = sprintf('The given banner redirects not to %s', $links);
-                    throw new ResponseTextException($message, $this->getSession());
+                else
+                {
+                    $elements['a'] = $this->find('css', $class.'div.mapping a');
                 }
             }
+
+            $return[] = $elements;
         }
+
+        foreach($return as $itemKey => $item)
+        {
+            $check = array(
+                    array($item['img']->getAttribute('src'), $image)
+            );
+
+            if(isset($links))
+            {
+                if(is_array($links))
+                {
+                    foreach($item['mapping'] as $subKey => $subitem)
+                    {
+                        $check[] = array($subitem['a']->getAttribute('href'), $links[$subKey]['mapping']);
+                    }
+                }
+                else
+                {
+                    $check[] = array($item['a']->getAttribute('href'), $links);
+                }
+            }
+
+            if ($this->checkArray($check)) {
+                unset($return[$itemKey]);
+                return;
+            }
+        }
+
+        $message = sprintf('The given banner was not found!');
+        throw new ResponseTextException($message, $this->getSession());
     }
 
     public function checkBlogArticles($articles)
     {
         $return = array();
-        $blogs = $this->findAllEmotionElements('blog');
+        $blogs = $this->findAllEmotionParentElements('blog');
 
         foreach($blogs as $blog_key => $blog)
         {
-            $entries = $this->findAllEmotionElements('blog', $blog_key + 1, 'div.blog-entry');
+            $cssClass = 'div.'.str_replace(' ', '.', $blog->getAttribute('class'));
+
+            $entries = $this->findAllEmotionElements($cssClass, 'div.blog-entry');
 
             foreach($entries as $entry_key => $entry)
             {
                 $elements = array();
 
-                $class = sprintf('div.emotion-element div.blog-element:nth-of-type(%d) div.blog-entry:nth-of-type(%d) ', $blog_key + 1,  $entry_key + 1);
+                $class = sprintf('div.emotion-element %s div.blog-entry:nth-of-type(%d) ', $cssClass,  $entry_key + 1);
                 $elements['a-image'] = $this->find('css', $class.'div.blog_img a');
                 $elements['a-title'] = $this->find('css', $class.'h2 a');
                 $elements['p-text']  = $this->find('css', $class.'p');
@@ -141,11 +156,13 @@ class Homepage extends Page
 
     public function checkYoutubeVideo($code)
     {
-        $videos = $this->findAllEmotionElements('youtube');
+        $videos = $this->findAllEmotionParentElements('youtube');
 
         foreach($videos as $video_key => $video)
         {
-            $class = sprintf('div.emotion-element div.youtube-element:nth-of-type(%d) ', $video_key + 1);
+            $cssClass = 'div.'.str_replace(' ', '.', $video->getAttribute('class'));
+
+            $class = sprintf('div.emotion-element %s ', $cssClass);
             $source = $this->find('css', $class.'iframe')->getAttribute('src');
 
             if(strpos($source, $code) !== FALSE)
@@ -241,7 +258,7 @@ class Homepage extends Page
     private function checkArray($check)
     {
         foreach ($check as $compare) {
-//            var_dump($compare);
+            //var_dump($compare);
             if (strpos($compare[0], $compare[1]) === false) {
                 return false;
             }
@@ -255,24 +272,26 @@ class Homepage extends Page
     {
         $selector = $type . '-slider';
 
-        $sliders = $this->findAllEmotionElements($selector);
+        $sliders = $this->findAllEmotionParentElements($selector);
 
         $return = array();
 
         foreach($sliders as $slider_key => $slider)
         {
+            $cssClass = 'div.'.str_replace(' ', '.', $slider->getAttribute('class'));
+
             switch($type)
             {
                 case 'banner':
-                    $return[$slider_key] = $this->findAllEmotionBannerSliderElements($slider_key);
+                    $return[$slider_key] = $this->findAllEmotionBannerSliderElements($cssClass);
                     break;
 
                 case 'manufacturer':
-                    $return[$slider_key] = $this->findAllEmotionManufacturerSliderElements($slider_key);
+                    $return[$slider_key] = $this->findAllEmotionManufacturerSliderElements($cssClass);
                     break;
 
                 case 'article':
-                    $return[$slider_key] = $this->findAllEmotionArticleSliderElements($slider_key);
+                    $return[$slider_key] = $this->findAllEmotionArticleSliderElements($cssClass);
                     break;
             }
         }
@@ -285,18 +304,18 @@ class Homepage extends Page
      * @param $slider_key
      * @return array
      */
-    private function findAllEmotionBannerSliderElements($slider_key)
+    private function findAllEmotionBannerSliderElements($cssClass)
     {
         $return = array();
 
         $class = 'div.slide';
-        $slides = $this->findAllEmotionElements('banner-slider', $slider_key + 1, $class);
+        $slides = $this->findAllEmotionElements($cssClass, $class);
 
         foreach($slides as $slide_key => $slide)
         {
             $elements = array();
 
-            $class = sprintf('div.emotion-element div.banner-slider-element:nth-of-type(%d) div.slide:nth-of-type(%d) ', $slider_key + 1,  $slide_key + 1);
+            $class = sprintf('div.emotion-element %s div.slide:nth-of-type(%d) ', $cssClass,  $slide_key + 1);
             $elements['a']   = $this->find('css', $class.'a');
             $elements['img'] = $this->find('css', $class.'img');
 
@@ -310,23 +329,23 @@ class Homepage extends Page
      * @param $slider_key
      * @return array
      */
-    private function findAllEmotionManufacturerSliderElements($slider_key)
+    private function findAllEmotionManufacturerSliderElements($cssClass)
     {
         $return = array();
 
         $class = 'div.slide';
-        $slides = $this->findAllEmotionElements('manufacturer-slider', $slider_key + 1, $class);
+        $slides = $this->findAllEmotionElements($cssClass, $class);
 
         foreach($slides as $slide_key => $slide)
         {
             $class = sprintf('div.slide:nth-of-type(%d) div.supplier', $slide_key + 1);
-            $suppliers = $this->findAllEmotionElements('manufacturer-slider', $slider_key + 1, $class);
+            $suppliers = $this->findAllEmotionElements($cssClass, $class);
 
             foreach($suppliers as $supplier_key => $supplier)
             {
                 $elements = array();
 
-                $class = sprintf('div.emotion-element div.manufacturer-slider-element:nth-of-type(%d) div.slide:nth-of-type(%d) div.supplier:nth-of-type(%d) ', $slider_key + 1,  $slide_key + 1, $supplier_key + 1);
+                $class = sprintf('div.emotion-element %s div.slide:nth-of-type(%d) div.supplier:nth-of-type(%d) ', $cssClass,  $slide_key + 1, $supplier_key + 1);
                 $elements['a-image'] = $this->find('css', $class.'a.image-wrapper');
                 $elements['img']     = $this->find('css', $class.'img');
 
@@ -341,23 +360,23 @@ class Homepage extends Page
      * @param $slider_key
      * @return array
      */
-    private function findAllEmotionArticleSliderElements($slider_key)
+    private function findAllEmotionArticleSliderElements($cssClass)
     {
         $return = array();
 
         $class = 'div.slide';
-        $slides = $this->findAllEmotionElements('article-slider', $slider_key + 1, $class);
+        $slides = $this->findAllEmotionElements($cssClass, $class);
 
         foreach($slides as $slide_key => $slide)
         {
             $class = sprintf('div.slide:nth-of-type(%d) div.outer-article-box', $slide_key + 1);
-            $articles = $this->findAllEmotionElements('article-slider', $slider_key + 1, $class);
+            $articles = $this->findAllEmotionElements($cssClass, $class);
 
             foreach($articles as $article_key => $article)
             {
                 $elements = array();
 
-                $class = sprintf('div.emotion-element div.article-slider-element:nth-of-type(%d) div.slide:nth-of-type(%d) div.outer-article-box:nth-of-type(%d) ', $slider_key + 1,  $slide_key + 1, $article_key + 1);
+                $class = sprintf('div.emotion-element %s div.slide:nth-of-type(%d) div.outer-article-box:nth-of-type(%d) ', $cssClass,  $slide_key + 1, $article_key + 1);
                 $elements['a-thumb'] = $this->find('css', $class.'a.article-thumb-wrapper');
                 $elements['img']     = $this->find('css', $class.'img');
                 $elements['a-title'] = $this->find('css', $class.'a.title');
@@ -370,20 +389,29 @@ class Homepage extends Page
     }
 
     /**
-     * Helper function to find all emotion elements of one typ
+     * Helper function to find all emotion parents elements of one type
      * @param $type
-     * @param int $id
-     * @param string $class
      * @return array
      */
 
-    private function findAllEmotionElements($type, $id = 0, $class = '')
+    private function findAllEmotionParentElements($type)
     {
-        $selector = 'div.emotion-element div.' . $type . '-element';
+        $selector = 'div.' . $type . '-element';
 
-        if (!empty($id)) {
-            $selector .= ':nth-of-type(' . $id . ')';
-        }
+        $elements = $this->findAllEmotionElements($selector);
+
+        return $elements;
+    }
+
+    /**
+     * Helper function to find all emotion sub-elements of a parent
+     * @param $parentClass
+     * @param string $class
+     * @return array
+     */
+    private function findAllEmotionElements($parentClass, $class = '')
+    {
+        $selector = 'div.emotion-element '.$parentClass;
 
         if (!empty($class)) {
             $selector .= ' ' . $class;
@@ -393,37 +421,5 @@ class Homepage extends Page
         $elements = $this->findAll('css', $selector);
 
         return $elements;
-    }
-
-    /**
-     * Helper function to compare two nodes by their classes
-     * @param \Behat\Mink\Element\NodeElement $node1
-     * @param \Behat\Mink\Element\NodeElement $node2
-     * @return bool
-     */
-    private function compareNodes(Behat\Mink\Element\NodeElement $node1, Behat\Mink\Element\NodeElement $node2)
-    {
-        $class1 = $node1->getAttribute('class');
-        $class2 = $node2->getAttribute('class');
-
-        if ($class1 === $class2) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Helper function to get the top-parent of an emotion element (using its class)
-     * @param \Behat\Mink\Element\NodeElement $node
-     * @return \Behat\Mink\Element\NodeElement
-     */
-    private function getEmotionParent(Behat\Mink\Element\NodeElement $node)
-    {
-        do {
-            $node = $node->getParent();
-        } while (strpos($node->getAttribute('class'), 'emotion-element') === false);
-
-        return $node;
     }
 }
