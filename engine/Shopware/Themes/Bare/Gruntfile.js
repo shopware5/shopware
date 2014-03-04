@@ -87,6 +87,9 @@ module.exports = function(grunt) {
                         'frontend/_public/vendors/jquery/dist/jquery.js',
                         'frontend/_public/vendors/handlebars/handlebars.js',
                         'frontend/_public/vendors/picturefill/picturefill.js',
+                        'frontend/_public/vendors/jquery.transit/jquery.transit.js',
+                        'frontend/_public/vendors/jquery.event.move/js/jquery.event.move.js',
+                        'frontend/_public/vendors/jquery.event.swipe/js/jquery.event.swipe.js',
                         'frontend/_public/src/js/**/*.js'
                     ]
                 }

@@ -1,7 +1,25 @@
 ;(function($, window, document, undefined) {
     "use strict";
 
+    /**
+     * Off canvas menu plugin
+     *
+     * The plugin provides an lightweight way to use an off canvas pattern for all kind of content. The content
+     * needs to be positioned off canvas using CSS3 `transform`. All the rest will be handled by the plugin.
+     *
+     * @example Simple usage
+     * ```
+     *     <a href="#" data-offcanvas="true">Menu</a>
+     * ```
+     *
+     * @example Show the menu on the right side
+     * ```
+     *     <a href="#" data-offcanvas="true" data-direction="fromRight">Menu</a>
+     * ```
+     */
     var pluginName = 'offcanvasMenu',
+        isTouch = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0)),
+        clickEvt = (isTouch ? (window.navigator.msPointerEnabled ? 'MSPointerDown': 'touchstart') : 'click'),
         defaults = {
             container: '.off-canvas--container',
             content: '.off-canvas--content',
@@ -26,6 +44,7 @@
      *
      * @param {HTMLElement} element - Element which should be used in the plugin
      * @param {Object} userOpts - User settings for the plugin
+     * @returns {Void}
      * @constructor
      */
     function Plugin(element, userOpts) {
@@ -37,16 +56,6 @@
         me._defaults = defaults;
         me._name = pluginName;
 
-        // Terminate the direction
-        if(me.$el.attr('data-direction') && me.$el.attr('data-direction').length) {
-            me.opts.direction = (me.$el.attr('data-direction') === 'fromRight' ? 'fromRight': 'fromLeft');
-        }
-
-        // Should we need to move content?
-        if(me.$el.attr('data-selector') && me.$el.attr('data-selector').length) {
-            me._$move = $(me.$el.attr('data-selector'));
-        }
-
         me.init();
     }
 
@@ -54,7 +63,7 @@
      * Initializes the plugin, sets up event listeners and adds the necessary
      * classes to get the plugin up and running.
      *
-     * @returns {void}
+     * @returns {Void}
      */
     Plugin.prototype.init = function() {
         var me = this,
