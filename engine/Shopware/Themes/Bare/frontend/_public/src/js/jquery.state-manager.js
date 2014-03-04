@@ -459,19 +459,4 @@
         // Just return the public API instead of all available functions
         return ret;
     })();
-
-    StateManager.init([{
-        type: 'smartphone',
-        enter: '0em',
-        exit: '47.75em'
-    }, {
-        type: 'tablet',
-        enter: '47.75em',
-        exit: '64em'
-    }, {
-        type: 'desktop',
-        enter: '64em',
-        exit: '320em'
-    }]);
-
 })(jQuery, window, document);
