@@ -2,12 +2,13 @@
 
 {block name="frontend_index_content_top"}{/block}
 
-{* Hide sidebar left *}
-{block name='frontend_index_content_left'}{/block}
+{block name='frontend_index_content_left'}
+    {include file="frontend/index/_includes/main_sidebar.tpl"}
+{/block}
 
 {* Main content *}
 {block name='frontend_index_content'}
-<div class="content">
+<div class="content block">
 	
 	{block name='frontend_home_index_banner'}
 		{* Banner *}
