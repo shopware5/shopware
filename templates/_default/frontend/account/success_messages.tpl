@@ -10,6 +10,8 @@
 			{se name='AccountAccountSuccess'}{/se}
 		{elseif $sSuccessAction == 'newsletter'}
 			{se name='AccountNewsletterSuccess'}{/se}
+		{elseif $sSuccessAction == 'optinnewsletter'}
+			{se namespace="frontend" name='sMailConfirmation'}{/se}
 		{/if}
 	</div>
 {/if}
