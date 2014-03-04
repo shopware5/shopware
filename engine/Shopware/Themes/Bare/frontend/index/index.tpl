@@ -102,14 +102,14 @@
 					<nav class="shop--navigation block-group">
 						<ul class="navigation--list block-group" role="menubar">
 
-									{* Menu (Off canvas left) trigger *}
-									{block name='frontend_index_offcanvas_left_trigger'}
-										<li class="navigation--entry entry--menu-left block" role="menuitem">
-											<a class="entry--link entry--trigger" href="#offcanvas--left">
-												<i class="icon--menu"></i> Menü
-											</a>
-										</li>
-									{/block}
+							{* Menu (Off canvas left) trigger *}
+							{block name='frontend_index_offcanvas_left_trigger'}
+								<li class="navigation--entry entry--menu-left block" role="menuitem">
+									<a class="entry--link entry--trigger" href="#offcanvas--left">
+										<i class="icon--menu"></i> Menü
+									</a>
+								</li>
+							{/block}
 
 							{* Spacer *}
 							{block name="frontend_index_shop_navigation_spacer"}

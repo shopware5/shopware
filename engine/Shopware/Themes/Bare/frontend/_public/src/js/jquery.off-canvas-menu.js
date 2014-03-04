@@ -21,22 +21,25 @@
         isTouch = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0)),
         clickEvt = (isTouch ? (window.navigator.msPointerEnabled ? 'MSPointerDown': 'touchstart') : 'click'),
         defaults = {
-            container: '.off-canvas--container',
-            content: '.off-canvas--content',
-            pusher: '.off-canvas--pusher',
 
-            effect: 'reveal',
-            menuOpenCls: 'js--off-canvas--menu-open',
-            direction: 'fromLeft',  // fromLeft or fromRight
+            /** @string wrapSelector Selector for the content wrapper */
+            wrapSelector: '.page-wrap',
 
-            leftDirectionCls: 'js--direction--left',
-            rightDirectionCls: 'js--direction--right',
+            /** @string direction Animation direction, `fromLeft` (default) and `fromRight` are possible */
+            direction: 'fromLeft',
 
-            canvasContentCls: 'off-canvas--visible-content'
-        },
-        effects = [
-            { name: 'reveal', push: false, cls: 'js--effect--reveal' }
-        ];
+            /** @string swipeContainerSelector Container selector which should catch the swipe gestructure */
+            swipeContainerSelector: '.header-main',
+
+            /** @string leftMenuOpenCls Class which should be added when the menu will be opened on the left side */
+            leftMenuOpenCls: 'js--menu-left--open',
+
+            /** @string rightMenuOpenCls Class which should be added when the menu will be opened on the right side */
+            rightMenuOpenCls: 'js--menu-right--open',
+
+            /** @string disableTransitionCls Class which disables all transitions for a smoother swiping */
+            disableTransitionCls: 'js--no-transition'
+        };
 
     /**
      * Plugin constructor which merges the default settings with the user settings
@@ -67,91 +70,90 @@
      */
     Plugin.prototype.init = function() {
         var me = this,
-            opts = me.opts,
-            effect = opts.effect,
-            dirCls = (opts.direction === 'fromRight' ? opts.rightDirectionCls : opts.leftDirectionCls);
+            opts = me.opts;
 
-        me.effect = undefined;
-        me._$container = $(opts.container);
-        me._$content = $(opts.content);
-        me._$pusher = $(opts.pusher);
-        me._$holder = me.createHoldingContainer();
+        // Cache the neccessary elements
+        me.$pageWrap = $(opts.wrapSelector);
+        me.$body = $('body');
+        me.$swipe = $(opts.swipeContainerSelector);
 
-        // Terminate effect
-        $.each(effects, function(i, item) {
-            if(item.name === effect) {
-                me.effect = item;
+        // Parse the direction, which should be used for the animation
+        var direction = me.$el.attr('data-direction');
+        if(direction && direction.length && direction === 'fromRight') {
+            opts.direction = 'fromRight';
+        }
+
+        me.registerEventListeners();
+    };
+
+    /**
+     * Registers all neccessary event listeners for the plugin to proper operate. The
+     * method contains the event callback methods as well due to the small amount of
+     * code.
+     *
+     * @returns {Boolean}
+     */
+    Plugin.prototype.registerEventListeners = function() {
+        var me = this,
+            opts = me.opts;
+
+        // Button click
+        me.$el.on(clickEvt + '.' + pluginName, function(event) {
+            event.preventDefault();
+            me.$body.addClass((opts.direction === 'fromLeft' ? opts.leftMenuOpenCls : opts.rightMenuOpenCls));
+        });
+
+        // Swipe gestructure
+        me.$swipe.on((opts.direction === 'fromLeft' ? 'swiperight' : 'swipeleft') + '.' + pluginName, function() {
+            me.$body.addClass((opts.direction === 'fromLeft' ? opts.leftMenuOpenCls : opts.rightMenuOpenCls));
+
+        // Allow the user to swipe themself
+        }).on('movestart.' + pluginName, function(e) {
+
+            // Allows the normal up and down scrolling from the browser
+            if ((e.distX > e.distY && e.distX < -e.distY) || (e.distX < e.distY && e.distX > -e.distY)) {
+                e.preventDefault();
+                return;
             }
+            me.$pageWrap.addClass(opts.disableTransitionCls);
+        }).on('move.' + pluginName, function(e) {
+            var x = e.distX;
+
+            if(opts.direction === 'fromLeft') {
+                x = (x < 0 ? 0 : x);
+                x = (x > 300 ? 300 : x);
+            } else {
+                x =(x > 0 ? 0 : x);
+                x = (x < -300 ? -300 : x);
+            }
+            me.$pageWrap.css({ translate: [ x, 0] });
+        }).on('moveend.' + pluginName, function() {
+            me.$pageWrap.removeAttr('style').removeClass(opts.disableTransitionCls);
         });
 
-        // Throw error if we effect was not found
-        if(!me.effect || !me.effect.name.length) {
-            throw new Error('Effect "' + effect + '" is not supported.');
-        }
-        me._$container.addClass(me.effect.cls).addClass(dirCls);
-        me._$holder.prependTo(me.effect.push ? me._$pusher : me._$container);
-
-        if(me.hasOwnProperty('_$move')) {
-            me._$move.appendTo(me._$holder);
-        }
-
-        me.$el.on('click.' + pluginName, function(event) {
-            event.stopPropagation();
-            event.preventDefault();
-
-            me._$container.addClass(opts.menuOpenCls);
-        });
-
-        me._$container.on('click.' + pluginName, function(event) {
-            event.stopPropagation();
-            event.preventDefault();
-
-            me._$container.removeClass(opts.menuOpenCls);
-        });
+        return true;
     };
 
     /**
-     * Creates the content element for the off canvas content
+     * Destroyes the initialized plugin completely, so all event listeners will
+     * be removed and the plugin data, which is stored in-memory referenced to
+     * the DOM node.
      *
-     * @returns {jQuery} Created element
-     */
-    Plugin.prototype.createHoldingContainer = function() {
-        return $('<div>', { 'class': this.opts.canvasContentCls });
-    };
-
-    /**
-     * Helper method which opens the off canvas menu.
-     *
-     * @returns {void}
-     */
-    Plugin.prototype.open = function() {
-        var me = this;
-
-        me._$container.addClass(me.opts.menuOpenCls);
-    };
-
-    /**
-     * Helper method which closes the off canvas menu.
-     *
-     * @returns {void}
-     */
-    Plugin.prototype.close = function() {
-        var me = this;
-
-        me._$container.removeClass(me.opts.menuOpenCls);
-    };
-
-    /**
-     * Helper method which completely destroyes the plugin.
-     *
-     * @returns {void}
+     * @returns {Boolean}
      */
     Plugin.prototype.destroy = function() {
-        var me = this;
+        var me = this,
+            opts = me.opts;
 
-        me.$el.off('click.' + pluginName);
-        me._$container.removeClass(me.opts.menuOpenCls).removeClass(me.effect.cls);
-        me.$el.removeData('plugin_' + pluginName);
+        me.$swipe
+            .off((opts.direction === 'fromLeft' ? 'swiperight' : 'swipeleft') + '.' + pluginName)
+            .off('movestart.' + pluginName)
+            .off('move.' + pluginName)
+            .off('moveend.' + pluginName);
+
+        me.$el.off(clickEvt + '.' + pluginName).data('plugin_' + pluginName);
+
+        return true;
     };
 
     $.fn[pluginName] = function ( options ) {
