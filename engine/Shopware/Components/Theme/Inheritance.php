@@ -17,12 +17,19 @@ class Inheritance
      */
     private $entityManager;
 
+    /**
+     * @var Util
+     */
+    private $util;
+
     function __construct(
         ModelManager $entityManager,
+        Util $util,
         PathResolver $pathResolver)
     {
         $this->pathResolver = $pathResolver;
         $this->entityManager = $entityManager;
+        $this->util = $util;
     }
 
     /**
@@ -30,7 +37,7 @@ class Inheritance
      * @param \Shopware\Models\Shop\Template $template
      * @return \Shopware\Models\Shop\Template[]
      */
-    public function getInheritanceHierarchy(Shop\Template $template)
+    public function buildInheritance(Shop\Template $template)
     {
         $hierarchy = array();
         $hierarchy[] = $template;
@@ -38,28 +45,10 @@ class Inheritance
         if ($template->getParent() instanceof Shop\Template) {
             $hierarchy = array_merge(
                 $hierarchy,
-                $this->getInheritanceHierarchy($template->getParent())
+                $this->buildInheritance($template->getParent())
             );
         }
         return $hierarchy;
-    }
-
-    /**
-     * Returns the theme directory hierarchy.
-     *
-     * @param array $hierarchy
-     * @return array
-     */
-    public function getHierarchyPaths(array $hierarchy)
-    {
-        $directories = array();
-
-        /**@var $theme Shop\Template */
-        foreach ($hierarchy as $theme) {
-            $directories[] = $this->pathResolver->getDirectory($theme);
-        }
-
-        return $directories;
     }
 
     /**
@@ -67,49 +56,155 @@ class Inheritance
      * hierarchy.
      * Iterates all passed themes and merges the configuration.
      *
-     * @param array $hierarchy
+     * @param \Shopware\Models\Shop\Template $template
      * @param \Shopware\Models\Shop\Shop $shop
      * @return array
      */
-    public function getHierarchyConfig(array $hierarchy, Shop\Shop $shop)
+    public function buildConfig(Shop\Template $template, Shop\Shop $shop)
     {
-        $config = array();
+        $config = $this->getShopConfig($template, $shop);
 
-        /**@var $theme Shop\Template */
-        foreach ($hierarchy as $theme) {
+        if ($template->getParent() instanceof Shop\Template) {
             $config = array_merge(
-                $themeConfig = $this->getConfig($theme, $shop),
-                $config
+                $this->buildConfig($template->getParent(), $shop)
             );
         }
         return $config;
     }
 
     /**
-     * Registers all smarty functions for each passed
-     * shopware theme.
-     *
-     * @param array $hierarchy
+     * @param Shop\Template $template
      * @return array
      */
-    public function getSmartyDirectories(array $hierarchy)
+    public function getLessDirectories(Shop\Template $template)
     {
-        $directories = array();
+        $directories = array(
+            $this->pathResolver->getLessDirectory($template)
+        );
 
-        /**@var $theme Shop\Template */
-        foreach ($hierarchy as $theme) {
-            $dir = $this->pathResolver->getSmartyDirectory($theme);
-
-            if (!file_exists($dir)) {
-                continue;
-            }
-
-            $directories[] = $dir;
+        if ($template->getParent() instanceof Shop\Template) {
+            $directories = array_merge(
+                $directories,
+                $this->getLessDirectories($template->getParent())
+            );
         }
 
         return $directories;
     }
 
+    /**
+     * @param Shop\Template $template
+     * @return array
+     */
+    public function getPublicDirectories(Shop\Template $template)
+    {
+        $directories = array(
+            $this->pathResolver->getPublicDirectory($template)
+        );
+
+        if ($template->getParent() instanceof Shop\Template) {
+            $directories = array_merge(
+                $directories,
+                $this->getPublicDirectories($template->getParent())
+            );
+        }
+
+        return $directories;
+    }
+
+    /**
+     * Returns the theme directory hierarchy.
+     *
+     * @param \Shopware\Models\Shop\Template $template
+     * @return array
+     */
+    public function getTemplateDirectories(Shop\Template $template)
+    {
+        $directories = array(
+            $this->pathResolver->getDirectory($template)
+        );
+
+        if ($template->getParent() instanceof Shop\Template) {
+            $directories = array_merge(
+                $directories,
+                $this->getTemplateDirectories($template->getParent())
+            );
+        }
+
+        return $directories;
+    }
+
+    /**
+     * Registers all smarty functions for each passed
+     * shopware theme.
+     *
+     * @param \Shopware\Models\Shop\Template $template
+     * @return array
+     */
+    public function getSmartyDirectories(Shop\Template $template)
+    {
+        $directories = array(
+            $this->pathResolver->getDirectory($template)
+        );
+
+        if ($template->getParent() instanceof Shop\Template) {
+            $directories = array_merge(
+                $directories,
+                $this->getSmartyDirectories($template->getParent())
+            );
+        }
+
+        return $directories;
+    }
+
+    /**
+     * @param Shop\Template $template
+     * @return array
+     */
+    public function getCssFiles(Shop\Template $template)
+    {
+        $theme = $this->util->getThemeByTemplate($template);
+
+        $css = $theme->getCss();
+
+        $directory = $this->pathResolver->getCssDirectory($template);
+        foreach($css as &$file) {
+            $file = $directory . DIRECTORY_SEPARATOR . $file;
+        }
+
+        if ($template->getParent() instanceof Shop\Template) {
+            $css = array_merge(
+                $css,
+                $this->getCssFiles($template->getParent())
+            );
+        }
+
+        return $css;
+    }
+    /**
+     * @param Shop\Template $template
+     * @return array
+     */
+    public function getJavascriptFiles(Shop\Template $template)
+    {
+        $theme = $this->util->getThemeByTemplate($template);
+
+        $files = $theme->getJavascript();
+
+        $directory = $this->pathResolver->getJavascriptDirectory($template);
+        foreach($files as &$file) {
+            $file = $directory . DIRECTORY_SEPARATOR . $file;
+        }
+
+        if ($template->getParent() instanceof Shop\Template) {
+            $files = array_merge(
+                $files,
+                $this->getJavascriptFiles($template->getParent())
+            );
+        }
+
+        return $files;
+    }
 
     /**
      * Helper function which returns the theme configuration as
@@ -122,7 +217,7 @@ class Inheritance
      * @param \Shopware\Models\Shop\Shop $shop
      * @return array
      */
-    private function getConfig(Shop\Template $template, Shop\Shop $shop)
+    private function getShopConfig(Shop\Template $template, Shop\Shop $shop)
     {
         $builder = $this->entityManager->createQueryBuilder();
         $builder->select(array(

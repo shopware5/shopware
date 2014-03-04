@@ -25,9 +25,9 @@
 namespace Shopware\Components\Theme;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Shopware\Components\DependencyInjection\Container;
-use Shopware\Models\Shop\Shop;
-use Shopware\Models\Shop\Template;
+use Shopware\Components\Theme\Minifier\Css;
+use Shopware\Components\Theme\Minifier\Js;
+use Shopware\Models\Shop as Shop;
 
 /**
  * @category  Shopware
@@ -37,259 +37,389 @@ use Shopware\Models\Shop\Template;
 class Compiler
 {
     /**
-     * Compiles all required resources for the frontend template
-     *
-     * @param Template $template
-     * @param Shop $shop
+     * File name for theme css and js files.
      */
-    public function compile(Template $template, Shop $shop)
-    {
-        /**@var $manager Manager */
-        $manager = $this->container->get('theme_manager');
-
-        $hierarchy = $manager->getInheritanceHierarchy($template);
-        $config = $manager->getHierarchyConfig($hierarchy, $shop);
-
-        $compiler = $this->container->get('less_compiler');
-
-        $compiler->setFormatter("compressed");
-        $compiler->setImportDir(null);
-
-        $eventArguments = new \Enlight_Event_EventArgs(array(
-            'subject' => $this,
-            'container' => $this->container,
-            'themeManager' => $manager,
-            'themeConfig' => $config,
-            'template' => $template,
-            'shop' => $shop
-        ));
-
-        $this->addPluginLessConfig($compiler, $eventArguments);
-
-        $this->compileThemeLess($template, $shop, $hierarchy, $config);
-
-        $this->compilePluginLess($template, $shop, $config);
-    }
-
+    const THEME_FILE_NAME = 'theme';
 
     /**
-     * Collects all theme .less files and compiles them into one compressed .css file.
-     * If the .css file already exists the .less file won't be compiled
-     *
-     * @param \Shopware\Models\Shop\Template $template
-     * @param Shop $shop
-     * @param Template[] $hierarchy
-     * @param array $config
+     * File name for plugin css and js files.
      */
-    protected function compileThemeLess(Template $template, Shop $shop, array $hierarchy, array $config)
+    const PLUGIN_FILE_NAME = 'plugin';
+
+    /**
+     * @var \lessc
+     */
+    private $compiler;
+
+    /**
+     * @var PathResolver
+     */
+    private $pathResolver;
+
+    /**
+     * @var Inheritance
+     */
+    private $inheritance;
+
+    /**
+     * @var \Enlight_Event_EventManager
+     */
+    private $eventManager;
+
+    /**
+     * @var Css
+     */
+    private $cssMinifier;
+
+    /**
+     * @var Js
+     */
+    private $jsMinifier;
+
+
+    function __construct(
+        \lessc $compiler,
+        PathResolver $pathResolver,
+        Inheritance $inheritance,
+        Css $cssMinifier,
+        Js $jsMinifier,
+        \Enlight_Event_EventManager $eventManager
+    )
     {
-        $cssFile = $this->getCompilerDirectory() . 'theme' . $shop->getId() . '.css';
-        $lessFile = $this->getCompilerDirectory() . 'theme' . $shop->getId() . '.less';
-
-//        // only compile if the css file no more exists
-//        if (file_exists($cssFile)) {
-//            return;
-//        }
-
-        /**@var $manager Manager */
-        $manager = $this->container->get('theme_manager');
-
-        /**@var $compiler \lessc */
-        $compiler = $this->container->get('less_compiler');
-
-        $compiler->setVariables($config);
-
-        $content = '';
-
-        foreach ($hierarchy as $template) {
-            $instance = $manager->getThemeByTemplate($template);
-            $files = $instance->getLess();
-
-            // no less files in theme configured? skip this theme
-            if (empty($files)) continue;
-
-            // returns the frontend/_public/src/less directory of the theme
-            $directory = $manager->getLessDirectory($template);
-
-            // adds the frontend/_public directory as import directory.
-            $public = $manager->getPublicDirectory($template);
-
-            $compiler->addImportDir($public);
-
-            $content .= $this->concatenateFileContents($directory, $files);
-        }
-
-        file_put_contents($lessFile, $content);
-
-        $compiler->compileFile($lessFile, $cssFile);
+        $this->compiler = $compiler;
+        $this->eventManager = $eventManager;
+        $this->inheritance = $inheritance;
+        $this->pathResolver = $pathResolver;
+        $this->cssMinifier = $cssMinifier;
+        $this->jsMinifier = $jsMinifier;
     }
 
     /**
-     * @param Template $template
-     * @param Shop $shop
-     * @param array $config
+     * Compiles all required resources for the passed shop and template.
+     *
+     * @param $timestamp
+     * @param Shop\Template $template
+     * @param Shop\Shop $shop
+     */
+    public function compile($timestamp, Shop\Template $template, Shop\Shop $shop)
+    {
+        $this->compiler->setFormatter("compressed");
+
+        $this->buildConfig($template, $shop);
+
+        $this->compileThemeLess($timestamp, $template, $shop);
+
+        $this->compilePluginLess($timestamp, $template, $shop);
+
+        $this->compileThemeCss($timestamp, $template, $shop);
+
+        $this->compilePluginCss($timestamp, $template, $shop);
+
+        $this->compileThemeJavascript($timestamp, $template, $shop);
+
+        $this->compilePluginJavascript($timestamp, $template, $shop);
+    }
+
+    /**
+     * Builds the less configuration.
+     * The function loads first the inheritance config of the passed
+     * template and shop instance.
+     * After the theme configuration is set into the less compiler,
+     * the function throws the event `Theme_Compiler_Collect_Plugin_Less_Config`
+     * to allow plugins to override the theme configuration.
+     *
+     * @param Shop\Template $template
+     * @param Shop\Shop $shop
+     * @return array
      * @throws \Exception
      */
-    protected function compilePluginLess(Template $template, Shop $shop, array $config)
+    protected function buildConfig(Shop\Template $template, Shop\Shop $shop)
     {
-        $cssFile = $this->getCompilerDirectory() . 'theme' . $shop->getId() . '.css';
+        $config = $this->inheritance->buildConfig($template, $shop);
+        $this->compiler->setVariables($config);
 
-//        // only compile if the css file no more exists
-//        if (file_exists($cssFile)) {
-//            return;
-//        }
-
-        /**@var $compiler \lessc */
-        $compiler = $this->container->get('less_compiler');
-        $compiler->setVariables($config);
-
-        /**@var $manager Manager */
-        $manager = $this->container->get('theme_manager');
-
-        $eventArguments = new \Enlight_Event_EventArgs(array(
-            'subject' => $this,
-            'container' => $this->container,
-            'themeManager' => $manager,
-            'themeConfig' => $config,
-            'template' => $template,
-            'shop' => $shop
-        ));
-
-        $this->addPluginImportDirectories($compiler, $eventArguments);
-
-        $this->addPluginLessFiles($compiler, $eventArguments, $shop);
-    }
-
-    /**
-     * Helper function which collects the less configuration of all plugins
-     * which registered on the `Theme_Compiler_Collect_Plugin_Less_Config` event.
-     *
-     * @param \lessc $compiler
-     * @param \Enlight_Event_EventArgs $eventArguments
-     * @throws \Exception
-     */
-    private function addPluginLessConfig(\lessc $compiler, \Enlight_Event_EventArgs $eventArguments)
-    {
         $collection = new ArrayCollection();
-
-        $this->container->get('events')->collect(
-            'Theme_Compiler_Collect_Plugin_Less_Config',
-            $collection,
-            $eventArguments
-        );
+        $this->eventManager->collect('Theme_Compiler_Collect_Less_Config', $collection, array(
+            'shop' => $shop,
+            'template' => $template
+        ));
 
         foreach ($collection as $config) {
             if (!is_array($config)) {
                 throw new \Exception("The passed plugin less config isn't an array!");
             }
-            $compiler->setVariables($config);
+            $this->compiler->setVariables($config);
+        }
+
+        return array();
+    }
+
+    /**
+     * @param $timestamp
+     * @param Shop\Template $template
+     * @param Shop\Shop $shop
+     */
+    protected function compileThemeLess($timestamp, Shop\Template $template, Shop\Shop $shop)
+    {
+        $hierarchy = $this->inheritance->buildInheritance($template);
+
+        //creates the theme css file name for the passed timestamp and shop id.
+        $themeFile = $fileName = $this->getThemeCssFile($timestamp, $shop);
+        $output = new \SplFileObject($themeFile, "w+");
+
+        foreach (array_reverse($hierarchy) as $shopTemplate) {
+            $dir = $this->pathResolver->getPublicDirectory($shopTemplate);
+
+            //set unique import directory for less @import commands
+            $this->compiler->setImportDir(array($dir));
+
+            $lessFile = $this->pathResolver->getLessDirectory($shopTemplate) . DIRECTORY_SEPARATOR . 'all.less';
+
+            if (!file_exists($lessFile)) {
+                continue;
+            }
+
+            $compiled = $this->compiler->compile(
+                file_get_contents($lessFile)
+            );
+            $output->fwrite($compiled);
         }
     }
 
     /**
-     * Helper function which collects the less import directories of all plugins
-     * which registered on the `Theme_Compiler_Collect_Plugin_Import_Directories` event.
-     *
-     * @param \lessc $compiler
-     * @param \Enlight_Event_EventArgs $eventArguments
+     * @param $timestamp
+     * @param Shop\Template $template
+     * @param Shop\Shop $shop
      * @throws \Exception
      */
-    private function addPluginImportDirectories(\lessc $compiler, \Enlight_Event_EventArgs $eventArguments)
+    protected function compilePluginLess($timestamp, Shop\Template $template, Shop\Shop $shop)
     {
-        $importDirectories = new ArrayCollection();
-        $this->container->get('events')->collect(
-            'Theme_Compiler_Collect_Plugin_Import_Directories',
-            $importDirectories,
-            $eventArguments
-        );
+        $collection = new ArrayCollection();
+        $this->eventManager->collect('Theme_Compiler_Collect_Plugin_Less', $collection, array(
+            'shop' => $shop,
+            'template' => $template
+        ));
 
-        foreach ($importDirectories as $directory) {
-            if (!file_exists($directory)) {
-                throw new \Exception(sprintf(
-                    "Tried to add %s as less import directory, but the directory doesn't exist",
-                    $directory
-                ));
+        //creates the plugin css file name for the passed timestamp and shop id.
+        $fileName = $fileName = $this->getPluginCssFile($timestamp, $shop);
+        $output = new \SplFileObject($fileName, "w+");
+        $output->fwrite('');
+
+        if ($collection->count() <= 0) {
+            return;
+        }
+
+        /**@var $pluginLess PluginLess */
+        foreach ($collection as $pluginLess) {
+            if (!$pluginLess instanceof PluginLess) {
+                throw new \Exception(
+                    "Some plugin tries to extends less compiling, but the passed config object isn't an instance of \\Shopware\\Components\\Theme\\PluginLess"
+                );
             }
-            $compiler->addImportDir($directory);
+
+            $files = $pluginLess->getFiles();
+            if (empty($files)) {
+                throw new \Exception(
+                    "Some plugin tries to extends less compiling, but the files array are empty."
+                );
+            }
+
+            //set unique import directory for less @import commands
+            $this->compiler->setImportDir(array($pluginLess->getImportDirectory()));
+
+            //set plugin variables for the next compiling step
+            $this->compiler->setVariables($pluginLess->getConfig());
+
+            $content = $this->concatenateFileContents($pluginLess->getFiles());
+
+            $content = $this->compiler->compile($content);
+
+            $output->fwrite($content);
         }
     }
 
     /**
-     * Helper function which collects all plugin less files which
-     * registered on the `Theme_Compiler_Collect_Plugin_Less` event.
-     * The function concatenate the files and compiles them over the
-     * \lessc compiler into the "plugin_shopId.css" file.
-     *
-     * @param \lessc $compiler
-     * @param \Enlight_Event_EventArgs $eventArguments
-     * @param Shop $shop
+     * @param $timestamp
+     * @param Shop\Template $template
+     * @param Shop\Shop $shop
+     * @throws \Exception
      */
-    private function addPluginLessFiles(\lessc $compiler, \Enlight_Event_EventArgs $eventArguments, Shop $shop)
+    protected function compileThemeCss($timestamp, Shop\Template $template, Shop\Shop $shop)
     {
-        $cssFile = $this->getCompilerDirectory() . 'plugin' . $shop->getId() . '.css';
-        $lessFile = $this->getCompilerDirectory() . 'plugin' . $shop->getId() . '.less';
+        $cssFiles = $this->inheritance->getCssFiles($template);
 
-        $files = new ArrayCollection();
-        $this->container->get('events')->collect(
-            'Theme_Compiler_Collect_Plugin_Less',
-            $files,
-            $eventArguments
-        );
+        $fileName = $this->getThemeCssFile($timestamp, $shop);
 
-        $content = $this->concatenateFileContents('', $files->getValues());
+        $output = new \SplFileObject($fileName, "a+");
 
-        file_put_contents($lessFile, $content);
-
-        $compiler->compileFile($lessFile, $cssFile);
+        foreach($cssFiles as $file) {
+            if (!file_exists($file)) {
+                throw new \Exception(sprintf(
+                    "Theme css file %s doesn't exists",
+                    $file
+                ));
+            }
+            $minified = $this->cssMinifier->minify(
+                file_get_contents($file)
+            );
+            $output->fwrite($minified);
+        }
     }
 
     /**
-     * @param $directory
+     * @param $timestamp
+     * @param Shop\Template $template
+     * @param Shop\Shop $shop
+     * @throws \Exception
+     */
+    protected function compilePluginCss($timestamp, Shop\Template $template, Shop\Shop $shop)
+    {
+        $collection = new ArrayCollection();
+        $this->eventManager->collect('Theme_Compiler_Collect_Plugin_Css', $collection, array(
+            'shop' => $shop,
+            'template' => $template
+        ));
+
+        if ($collection->count() <= 0) {
+            return;
+        }
+
+        $fileName = $this->getPluginCssFile($timestamp, $shop);
+        $output = new \SplFileObject($fileName, "a+");
+
+        foreach($collection as $file) {
+            if (!file_exists($file)) {
+                throw new \Exception(sprintf(
+                    "Some plugin tries to minify a css file, but the file %s doesn't exist",
+                    $file
+                ));
+            }
+            $minified = $this->cssMinifier->minify(
+                file_get_contents($file)
+            );
+            $output->fwrite($minified);
+        }
+    }
+
+    /**
+     * @param $timestamp
+     * @param Shop\Template $template
+     * @param Shop\Shop $shop
+     * @throws \Exception
+     */
+    protected function compileThemeJavascript($timestamp, Shop\Template $template, Shop\Shop $shop)
+    {
+        $files = $this->inheritance->getJavascriptFiles($template);
+
+        $fileName = $this->getThemeJavascriptFile($timestamp, $shop);
+
+        $output = new \SplFileObject($fileName, "w+");
+
+        foreach($files as $file) {
+            if (!file_exists($file)) {
+                throw new \Exception(sprintf(
+                    "Theme javascript file %s doesn't exists",
+                    $file
+                ));
+            }
+            $content = file_get_contents($file);
+            $minified = $this->jsMinifier->minify($content);
+            $output->fwrite($minified);
+        }
+    }
+
+    /**
+     * @param $timestamp
+     * @param Shop\Template $template
+     * @param Shop\Shop $shop
+     * @throws \Exception
+     */
+    protected function compilePluginJavascript($timestamp, Shop\Template $template, Shop\Shop $shop)
+    {
+        $collection = new ArrayCollection();
+        $this->eventManager->collect('Theme_Compiler_Collect_Plugin_Javascript', $collection, array(
+            'shop' => $shop,
+            'template' => $template
+        ));
+
+        $fileName = $this->getPluginJavascriptFile($timestamp, $shop);
+        $output = new \SplFileObject($fileName, "w+");
+        $output->fwrite('');
+
+        if ($collection->count() <= 0) {
+            return;
+        }
+
+        foreach($collection as $file) {
+            if (!file_exists($file)) {
+                throw new \Exception(sprintf(
+                    "Some plugin tries to minify a css file, but the file %s doesn't exist",
+                    $file
+                ));
+            }
+            $content = file_get_contents($file);
+            $minified = $this->jsMinifier->minify($content);
+            $output->fwrite($minified);
+        }
+    }
+
+    /**
+     * @param $timestamp
+     * @param Shop\Shop $shop
+     * @return string
+     */
+    private function getThemeCssFile($timestamp, Shop\Shop $shop)
+    {
+        return $this->pathResolver->buildCssPath($shop, self::THEME_FILE_NAME, $timestamp);
+    }
+
+    /**
+     * @param $timestamp
+     * @param Shop\Shop $shop
+     * @return string
+     */
+    private function getPluginCssFile($timestamp, Shop\Shop $shop)
+    {
+        return $this->pathResolver->buildCssPath($shop, self::PLUGIN_FILE_NAME, $timestamp);
+    }
+
+    /**
+     * @param $timestamp
+     * @param Shop\Shop $shop
+     * @return string
+     */
+    private function getThemeJavascriptFile($timestamp, Shop\Shop $shop)
+    {
+        return $this->pathResolver->buildJsPath($shop, self::THEME_FILE_NAME, $timestamp);
+    }
+    /**
+     * @param $timestamp
+     * @param Shop\Shop $shop
+     * @return string
+     */
+    private function getPluginJavascriptFile($timestamp, Shop\Shop $shop)
+    {
+        return $this->pathResolver->buildJsPath($shop, self::PLUGIN_FILE_NAME, $timestamp);
+    }
+
+    /**
      * @param array $files
      * @return string
      * @throws \Exception
      */
-    private function concatenateFileContents($directory, array $files)
+    private function concatenateFileContents(array $files)
     {
         $content = '';
         foreach ($files as $file) {
-            $path = $directory . DIRECTORY_SEPARATOR . $file;
-
-            if (!file_exists($path)) {
+            if (!file_exists($file)) {
                 throw new \Exception(sprintf(
                     "Tried to compile %s file which doesn't exist",
-                    $path
+                    $file
                 ));
             }
 
-            $content .= file_get_contents($path) . "\n";
+            $content .= file_get_contents($file) . "\n";
         }
         return $content;
     }
-
-
-    /**
-     * @param \Enlight_Controller_Request_RequestHttp $request
-     * @return bool
-     */
-    private function isFrontendRequest(\Enlight_Controller_Request_RequestHttp $request)
-    {
-        $module = strtolower($request->getModuleName());
-
-        return (bool)in_array($module, array(
-            'frontend',
-            'widgets'
-        ));
-    }
-
-    /**
-     * Returns the compiler directory which used to
-     * create the compiled less files.
-     * @return string
-     */
-    private function getCompilerDirectory()
-    {
-        return 'cache' . DIRECTORY_SEPARATOR;
-    }
-
 }

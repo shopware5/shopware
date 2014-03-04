@@ -71,7 +71,6 @@ class Theme
      */
     protected $license = null;
 
-
     /**
      * @var array
      * Contains all field of the createConfig
@@ -96,11 +95,9 @@ class Theme
      */
     protected $inheritanceConfig = true;
 
-
-    protected $less = array();
-
     protected $javascript = array();
 
+    protected $css = array();
 
     /**
      * Don't override this function. Used
@@ -194,14 +191,14 @@ class Theme
         return $this->inheritanceConfig;
     }
 
-    public function getLess()
-    {
-        return $this->less;
-    }
-
-    public function getJavascript()
+    final public function getJavascript()
     {
         return $this->javascript;
+    }
+
+    final public function getCss()
+    {
+        return $this->css;
     }
 
 

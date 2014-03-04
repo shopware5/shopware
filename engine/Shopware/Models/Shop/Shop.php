@@ -27,7 +27,7 @@ namespace Shopware\Models\Shop;
 use Shopware\Components\Model\ModelEntity,
     Doctrine\ORM\Mapping as ORM,
     Doctrine\Common\Collections\ArrayCollection;
-use Shopware\Components\Theme\Manager;
+use Shopware\Components\Theme\Inheritance;
 
 /**
  *
@@ -716,16 +716,14 @@ class Shop extends ModelEntity
 
             if ($template->getVersion() == 3) {
 
-                /**@var $themeManager Manager*/
-                $themeManager = Shopware()->Container()->get('theme_manager');
+                /**@var $inheritance Inheritance*/
+                $inheritance = Shopware()->Container()->get('theme_inheritance');
+                $config = $inheritance->buildConfig($template, $this);
+                $path = $inheritance->getTemplateDirectories($template);
 
-                $hierarchy = $themeManager->getInheritanceHierarchy($template);
-                $path = $themeManager->getHierarchyPaths($hierarchy);
-                $config = $themeManager->getHierarchyConfig($hierarchy, $this);
-                $themeManager->registerHierarchySmartyFunctions($hierarchy);
-
-                $path['base'] = $themeManager->getDefaultThemeDirectory() . DIRECTORY_SEPARATOR;
-                $path['include_dir'] = './';
+                $templateManager->addPluginsDir(
+                    $inheritance->getSmartyDirectories($template)
+                );
 
                 $templateManager->setTemplateDir($path);
                 $templateManager->assign($config);

@@ -136,6 +136,104 @@ class PathResolver
     }
 
     /**
+     * Helper function which returns the default shopware theme directory.
+     * @return string
+     */
+    public function getCacheDirectory()
+    {
+        return $this->getDefaultThemeDirectory() .
+        DIRECTORY_SEPARATOR . '_cache';
+    }
+
+    /**
+     * @return string
+     */
+    public function getCacheDirectoryUrl()
+    {
+        return 'engine' .
+        DIRECTORY_SEPARATOR . 'Shopware' .
+        DIRECTORY_SEPARATOR . 'Themes' .
+        DIRECTORY_SEPARATOR . '_cache';
+    }
+
+    /**
+     * @param Shop\Shop $shop
+     * @param $fileName
+     * @param $timestamp
+     * @return string
+     */
+    public function buildCssName(Shop\Shop $shop, $fileName, $timestamp)
+    {
+        return $timestamp . '_' . $fileName . $shop->getId() . '.css';
+    }
+
+    /**
+     * @param Shop\Shop $shop
+     * @param $fileName
+     * @param $timestamp
+     * @return string
+     */
+    public function buildCssPath(Shop\Shop $shop, $fileName, $timestamp)
+    {
+        return $this->getCacheDirectory() .
+        DIRECTORY_SEPARATOR .
+        $this->buildCssName($shop, $fileName, $timestamp);
+    }
+
+    /**
+     * @param Shop\Shop $shop
+     * @param $fileName
+     * @param $timestamp
+     * @return string
+     */
+    public function buildJsName(Shop\Shop $shop, $fileName, $timestamp)
+    {
+        return $timestamp . '_' . $fileName . $shop->getId() . '.js';
+    }
+
+    /**
+     * @param Shop\Shop $shop
+     * @param $fileName
+     * @param $timestamp
+     * @return string
+     */
+    public function buildJsPath(Shop\Shop $shop, $fileName, $timestamp)
+    {
+        return $this->getCacheDirectory() .
+        DIRECTORY_SEPARATOR .
+        $this->buildJsName($shop, $fileName, $timestamp);
+    }
+
+
+    /**
+     * @param Shop\Template $template
+     * @return string
+     */
+    public function getCssDirectory(Shop\Template $template)
+    {
+        return $this->getPublicDirectory($template) .
+        DIRECTORY_SEPARATOR .
+        'src' .
+        DIRECTORY_SEPARATOR .
+        'css';
+    }
+
+    /**
+     * @param Shop\Template $template
+     * @return string
+     */
+    public function getJavascriptDirectory(Shop\Template $template)
+    {
+        return $this->getPublicDirectory($template) .
+        DIRECTORY_SEPARATOR .
+        'src' .
+        DIRECTORY_SEPARATOR .
+        'js';
+    }
+
+    /**
+     *
+     *
      * Returns the default templates directory.
      * @return string
      */
@@ -143,8 +241,6 @@ class PathResolver
     {
         return $this->rootDir . '/templates';
     }
-
-
 
     /**
      * Helper function to build the path to the passed plugin.
