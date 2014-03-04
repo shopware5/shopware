@@ -43,7 +43,9 @@
             "Doctrine\\ORM\\Persisters\\BasicEntityPersister": "engine/Library/",
             "Shopware": "engine/",
             "Enlight": "engine/Library/",
-            "Zend": "engine/Library/"
+            "Zend": "engine/Library/",
+            "CSSmin": "engine/Library/minify/",
+            "JSMin": "engine/Library/minify/"
         },
         "classmap": [
             "engine/core/class/"
