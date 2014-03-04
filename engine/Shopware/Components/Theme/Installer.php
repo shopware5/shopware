@@ -57,9 +57,6 @@ class Installer
         $this->repository = $entityManager->getRepository('Shopware\Models\Shop\Template');
     }
 
-    /**
-     *
-     */
     public function synchronize()
     {
         $this->synchronizeThemes();

@@ -4,7 +4,7 @@ Ext.define('Shopware.apps.Theme.view.detail.containers.TabPanel', {
     alias: 'widget.theme-tab-panel',
     bodyPadding: 15,
     layout: {
-        type: 'hbox',
+        type: 'vbox',
         align: 'stretch'
     },
     defaults: {
