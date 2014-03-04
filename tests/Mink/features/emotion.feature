@@ -11,9 +11,9 @@ Feature: Emotion
 
 		  And I should see a banner "beach_teaser5038874e87338.jpg" with mapping:
 		    |                    mapping                     |
+			|     /sommerwelten/beachwear/213/surfbrett      |
+			| /sommerwelten/accessoires/170/sonnenbrille-red |
 			|  /sommerwelten/beachwear/178/strandtuch-ibiza  |
-		    | /sommerwelten/accessoires/170/sonnenbrille-red |
-		    |     /sommerwelten/beachwear/213/surfbrett      |
 
 		  And I should see a banner "deli_teaser503886c2336e3.jpg" to "/Campaign/index/emotionId/6"
 		  And I should see a banner "flip_teaser503886e4dd480.jpg"
