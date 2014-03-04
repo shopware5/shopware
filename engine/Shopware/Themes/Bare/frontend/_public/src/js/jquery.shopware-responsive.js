@@ -16,11 +16,11 @@ $(function() {
     StateManager.registerListener([{
         type: 'smartphone',
         enter: function() {
-            $('.navigation-main').insertBefore($('.page-wrap'));
+            $('.sidebar-main').insertBefore($('.page-wrap'));
             $('*[data-offcanvas="true"]').offcanvasMenu();
         },
         exit: function() {
-            $('.navigation-main').insertAfter($('.header-main'));
+            $('.sidebar-main').insertAfter($('.content--breadcrumb'));
             $('*[data-offcanvas="true"]').data('plugin_offcanvasMenu').destroy();
         }
     }]);

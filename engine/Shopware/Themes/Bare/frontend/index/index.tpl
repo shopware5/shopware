@@ -159,11 +159,11 @@
 			{/block}
 		{/block}
 
-		<section class="content-main container">
+		<section class="content-main container block-group">
 
 			{* Breadcrumb *}
 			{block name='frontend_index_breadcrumb'}
-				<nav class="content--breadcrumb">
+				<nav class="content--breadcrumb block">
 					{include file='frontend/index/_includes/breadcrumb.tpl'}
 				</nav>
 			{/block}
