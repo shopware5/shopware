@@ -1,6 +1,7 @@
 * {
     .box-sizing();
 }
+html, body { overflow-x: hidden }
 body {
 	font: @bodyFontStack;
 	color: @primaryTextColor;
@@ -14,6 +15,8 @@ img {
 	height: auto;
 }
 
+h1, h2, h3, h4, h5, h6 { margin: 0; }
+
 a {
 	.transition();
 	color: @primaryColor;
@@ -23,12 +26,10 @@ a {
 		color: darken(@secondaryColor, 10%);
 	}
 }
-
 ul {
 	margin: 0;
 	padding: 0;
 }
-
 .ajax-loader { display: none }
 
 @media screen and (min-width: 64em) {
@@ -36,5 +37,3 @@ ul {
 		font-size: 87.5%;
 	}
 }
-
-h2 { margin: 0; }

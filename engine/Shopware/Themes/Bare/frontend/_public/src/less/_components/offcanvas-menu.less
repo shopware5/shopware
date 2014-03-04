@@ -11,6 +11,7 @@
 .page-wrap {
 	.transition(all, 0.25s, ease-in-out);
 	.transform-style(preverse-3d);
+    min-height: 100%;
 
 	// Disables the transition, so the user can slide
 	&.js--no-transition {
@@ -33,6 +34,9 @@
 
 // State - Menu left open
 .js--menu-left--open {
+    .navigation-main {
+        .translate(0, 0);
+    }
 	.page-wrap {
 		.translate(300px, 0);
 
