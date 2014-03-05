@@ -34,8 +34,11 @@ if (!isset($_SESSION["parameters"])) {
  * Load language file
  */
 $allowedLanguages = array("de", "en");
-$selectedLanguage = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
-$selectedLanguage = substr($selectedLanguage[0], 0, 2);
+$selectedLanguage = "de";
+if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+    $selectedLanguage = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+    $selectedLanguage = substr($selectedLanguage[0], 0, 2);
+}
 if (empty($selectedLanguage) || !in_array($selectedLanguage, $allowedLanguages)) {
     $selectedLanguage = "de";
 }
