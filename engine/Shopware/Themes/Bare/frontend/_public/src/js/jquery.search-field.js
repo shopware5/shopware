@@ -5,6 +5,7 @@
         isTouch = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0)),
         clickEvt = (isTouch ? (window.navigator.msPointerEnabled ? 'MSPointerDown': 'touchstart') : 'click'),
         defaults = {
+            /** @string activeCls Class which will be added when the drop down was triggered */
             activeCls: 'is--active'
         };
 
@@ -29,6 +30,12 @@
         me.init();
     }
 
+    /**
+     * Initializes the plugin, sets up event listeners and adds the necessary
+     * classes to get the plugin up and running.
+     *
+     * @returns {Void}
+     */
     Plugin.prototype.init = function() {
         var me = this;
 
@@ -49,6 +56,13 @@
         });
     };
 
+    /**
+     * Destroyes the initialized plugin completely, so all event listeners will
+     * be removed and the plugin data, which is stored in-memory referenced to
+     * the DOM node.
+     *
+     * @returns {Boolean}
+     */
     Plugin.prototype.destroy = function() {
         var me = this;
 
