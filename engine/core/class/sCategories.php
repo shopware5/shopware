@@ -65,14 +65,34 @@ class sCategories
     public $customerGroupId;
 
     /**
+     * Database connection which used for each database operation in this class.
+     * Injected over the class constructor
+     *
+     * @var Enlight_Components_Db_Adapter_Pdo_Mysql
+     */
+    private $db;
+
+    /**
+     * Shopware configuration object which used for
+     * each config access in this class.
+     * Injected over the class constructor
+     *
+     * @var Shopware_Components_Config
+     */
+    private $config;
+
+    /**
      * Class constructor.
      */
     public function __construct()
     {
+        $this->db = Shopware()->Db();
+        $this->config = Shopware()->Config();
+
         $this->manager = Shopware()->Models();
         $this->repository = $this->manager->getRepository('Shopware\Models\Category\Category');
-        $this->baseUrl = Shopware()->Config()->get('baseFile') . '?sViewport=cat&sCategory=';
-        $this->blogBaseUrl = Shopware()->Config()->get('baseFile') . '?sViewport=blog&sCategory=';
+        $this->baseUrl = $this->config->get('baseFile') . '?sViewport=cat&sCategory=';
+        $this->blogBaseUrl = $this->config->get('baseFile') . '?sViewport=blog&sCategory=';
         $this->baseId = (int) Shopware()->Shop()->get('parentID');
         $this->customerGroupId = (int) Shopware()->Modules()->System()->sSYSTEM->sUSERGROUPDATA['id'];
     }
@@ -171,7 +191,7 @@ class sCategories
             ORDER BY ac.id
         ';
 
-        return (int) Shopware()->Db()->fetchOne($sql, array(
+        return (int) $this->db->fetchOne($sql, array(
             '%|' . $parentId . '|%',
             $articleId
         ));
@@ -273,7 +293,7 @@ class sCategories
         $detailUrl .= $category['category']['id'];
 
         $canonical = $detailUrl;
-        if (Shopware()->Config()->get('forceCanonicalHttp')) {
+        if ($this->config->get('forceCanonicalHttp')) {
             $canonical = str_replace('https://', 'http://', $canonical);
         }
 
@@ -293,7 +313,7 @@ class sCategories
         ));
 
         if (empty($category['template'])) {
-            $category['template'] = Shopware()->Config()->get('categoryDefaultTpl');
+            $category['template'] = $this->config->get('categoryDefaultTpl');
         }
 
         if (empty($category['template'])) {
