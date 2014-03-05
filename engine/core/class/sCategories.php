@@ -265,7 +265,7 @@ class sCategories
         $detailUrl .= $category['category']['id'];
 
         $canonical = $detailUrl;
-        if (Shopware()->Config()->get('forceUnsecureCanonical')) {
+        if (Shopware()->Config()->get('forceCanonicalHttp')) {
             $canonical = str_replace('https://', 'http://', $canonical);
         }
 
