@@ -18,10 +18,12 @@ $(function() {
         enter: function() {
             $('.sidebar-main').insertBefore($('.page-wrap'));
             $('*[data-offcanvas="true"]').offcanvasMenu();
+            $('*[data-search-dropdown="true"]').searchFieldDropDown();
         },
         exit: function() {
             $('.sidebar-main').insertAfter($('.content--breadcrumb'));
             $('*[data-offcanvas="true"]').data('plugin_offcanvasMenu').destroy();
+            $('*[data-search-dropdown="true"]').data('plugin_searchFieldDropDown').destroy();
         }
     }]);
 });

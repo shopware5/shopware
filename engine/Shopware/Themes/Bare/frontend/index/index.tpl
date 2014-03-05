@@ -118,7 +118,7 @@
 
 							{* Search form *}
 							{block name='frontend_index_search'}
-								<li class="navigation--entry entry--search block" role="menuitem">
+								<li class="navigation--entry entry--search block" role="menuitem" data-search-dropdown="true" aria-haspopup="true">
 									<a class="entry--link entry--trigger" href="#show-hide--search" title="Suche anzeigen / ausblenden">
 										<i class="icon--search"></i>
 									</a>

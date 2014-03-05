@@ -28,6 +28,19 @@ ul {
 	margin: 0;
 	padding: 0;
 }
+input[type="text"], input[type="search"], input[type="password"] {
+	.border-radius();
+	.box-sizing();
+	.unitize-padding(10, 10, 10, 10, 16);
+	background: @lightGradientEnd;
+	border: 1px solid @borderColor;
+	color: @primaryTextColor;
+
+	&:focus {
+		background: #fff;
+	}
+}
+
 .ajax-loader { display: none }
 
 @media screen and (min-width: 64em) {
