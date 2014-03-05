@@ -181,6 +181,7 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
             data = Ext.apply(data, { }, data.attributes);
         }
         delete data.attributes;
+        console.log("data", data);
 
         return data;
     },

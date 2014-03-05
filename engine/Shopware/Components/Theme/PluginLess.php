@@ -69,7 +69,7 @@ class PluginLess
 
     /**
      * @param array $config Contains the less variables, has to be a key value array.
-     * @param array $files  Contains the full file name paths.
+     * @param array $files Contains the full file name paths.
      * @param null $importDirectory Full path to the import directory for less @import commands
      */
     function __construct(array $config, array $files, $importDirectory = null)

@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 namespace Shopware\Components\Form\Persister;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Form as Form;
 use Shopware\Components\Model\ModelManager;
@@ -71,7 +72,7 @@ class Theme implements Form\Interfaces\Persister
         $entity = $this->createContainer($container, $template, $parent);
 
         //do class switch to route the container to the responsible save function.
-        switch($class) {
+        switch ($class) {
             case "Shopware\\Components\\Form\\Container\\TabContainer":
                 $entity = $this->saveTabContainer($entity, $container, $template, $parent);
                 break;
@@ -86,7 +87,7 @@ class Theme implements Form\Interfaces\Persister
         }
 
         //check for recursion
-        foreach($container->getElements() as $element) {
+        foreach ($container->getElements() as $element) {
             if ($element instanceof Form\Interfaces\Container) {
                 $this->saveContainer($element, $template, $entity);
 
@@ -181,61 +182,61 @@ class Theme implements Form\Interfaces\Persister
         Template $template,
         TemplateConfig\Layout $parent)
     {
-        /**@var $field Form\Field*/
+        /**@var $field Form\Field */
         $data = array(
-            'attributes'   => $field->getAttributes(),
-            'fieldLabel'   => $field->getLabel(),
-            'name'         => $field->getName(),
+            'attributes' => $field->getAttributes(),
+            'fieldLabel' => $field->getLabel(),
+            'name' => $field->getName(),
             'defaultValue' => $field->getDefaultValue(),
-            'supportText'  => $field->getHelp(),
-            'allowBlank'   => !$field->isRequired()
+            'supportText' => $field->getHelp(),
+            'allowBlank' => !$field->isRequired()
         );
 
         $class = get_class($field);
 
-        switch($class) {
+        switch ($class) {
             case "Shopware\\Components\\Form\\Field\\Text":
-                /**@var $field Form\Field\Text*/
+                /**@var $field Form\Field\Text */
                 $data += array('type' => 'theme-text-field');
                 break;
             case "Shopware\\Components\\Form\\Field\\Boolean":
-                /**@var $field Form\Field\Boolean*/
+                /**@var $field Form\Field\Boolean */
                 $data += array('type' => 'theme-checkbox-field');
                 break;
             case "Shopware\\Components\\Form\\Field\\Date":
-                /**@var $field Form\Field\Date*/
+                /**@var $field Form\Field\Date */
                 $data += array('type' => 'theme-date-field');
                 break;
             case "Shopware\\Components\\Form\\Field\\Color":
-                /**@var $field Form\Field\Color*/
+                /**@var $field Form\Field\Color */
                 $data += array('type' => 'theme-color-picker');
                 break;
             case "Shopware\\Components\\Form\\Field\\Media":
-                /**@var $field Form\Field\Media*/
+                /**@var $field Form\Field\Media */
                 $data += array('type' => 'theme-media-selection');
                 break;
             case "Shopware\\Components\\Form\\Field\\Number":
-                /**@var $field Form\Field\Number*/
+                /**@var $field Form\Field\Number */
                 $data += array('type' => 'numberfield');
                 break;
             case "Shopware\\Components\\Form\\Field\\Em":
-                /**@var $field Form\Field\Number*/
+                /**@var $field Form\Field\Number */
                 $data += array('type' => 'theme-em-field');
                 break;
             case "Shopware\\Components\\Form\\Field\\Percent":
-                /**@var $field Form\Field\Number*/
+                /**@var $field Form\Field\Number */
                 $data += array('type' => 'theme-percent-field');
                 break;
             case "Shopware\\Components\\Form\\Field\\Pixel":
-                /**@var $field Form\Field\Number*/
+                /**@var $field Form\Field\Number */
                 $data += array('type' => 'theme-pixel-field');
                 break;
             case "Shopware\\Components\\Form\\Field\\TextArea":
-                /**@var $field Form\Field\Number*/
+                /**@var $field Form\Field\Number */
                 $data += array('type' => 'theme-text-area-field');
                 break;
             case "Shopware\\Components\\Form\\Field\\Selection":
-                /**@var $field Form\Field\Selection*/
+                /**@var $field Form\Field\Selection */
                 $data += array(
                     'type' => 'theme-select-field',
                     'selection' => $field->getStore()
@@ -262,8 +263,8 @@ class Theme implements Form\Interfaces\Persister
      */
     private function checkExistingElement(ArrayCollection $collection, $name)
     {
-        /**@var $element TemplateConfig\Element*/
-        foreach($collection as $element) {
+        /**@var $element TemplateConfig\Element */
+        foreach ($collection as $element) {
             if ($element->getName() == $name) {
                 return $element;
             }
@@ -278,8 +279,8 @@ class Theme implements Form\Interfaces\Persister
      */
     private function checkExistingLayout(ArrayCollection $collection, $name)
     {
-        /**@var $element TemplateConfig\Layout*/
-        foreach($collection as $element) {
+        /**@var $element TemplateConfig\Layout */
+        foreach ($collection as $element) {
             if ($element->getName() == $name) {
                 return $element;
             }

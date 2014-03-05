@@ -252,7 +252,7 @@ class Compiler
 
         $output = new \SplFileObject($fileName, "a+");
 
-        foreach($cssFiles as $file) {
+        foreach ($cssFiles as $file) {
             if (!file_exists($file)) {
                 throw new \Exception(sprintf(
                     "Theme css file %s doesn't exists",
@@ -287,7 +287,7 @@ class Compiler
         $fileName = $this->getPluginCssFile($timestamp, $shop);
         $output = new \SplFileObject($fileName, "a+");
 
-        foreach($collection as $file) {
+        foreach ($collection as $file) {
             if (!file_exists($file)) {
                 throw new \Exception(sprintf(
                     "Some plugin tries to minify a css file, but the file %s doesn't exist",
@@ -315,7 +315,7 @@ class Compiler
 
         $output = new \SplFileObject($fileName, "w+");
 
-        foreach($files as $file) {
+        foreach ($files as $file) {
             if (!file_exists($file)) {
                 throw new \Exception(sprintf(
                     "Theme javascript file %s doesn't exists",
@@ -350,7 +350,7 @@ class Compiler
             return;
         }
 
-        foreach($collection as $file) {
+        foreach ($collection as $file) {
             if (!file_exists($file)) {
                 throw new \Exception(sprintf(
                     "Some plugin tries to minify a css file, but the file %s doesn't exist",
@@ -392,6 +392,7 @@ class Compiler
     {
         return $this->pathResolver->buildJsPath($shop, self::THEME_FILE_NAME, $timestamp);
     }
+
     /**
      * @param $timestamp
      * @param Shop\Shop $shop
