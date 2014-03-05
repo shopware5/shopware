@@ -116,7 +116,17 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         return self::$repository;
     }
 
-
+    /**
+     * Deactivates the authentication for the performOrderRedirect action
+     * This is used in the performOrder action
+     */
+    public function init()
+    {
+        if (in_array($this->Request()->getActionName(), array('performOrderRedirect'))) {
+            Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        }
+        parent::init();
+    }
 
     /**
      * Registers the different acl permission for the different controller actions.
@@ -482,10 +492,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             }
 
             $customer = $this->getRepository()->find($id);
-            $shipping = $customer->getShipping();
-            $billing = $customer->getBilling();
-            $debit = $customer->getDebit();
-
             $paymentData = $this->getManager()->getRepository('Shopware\Models\Customer\PaymentData')->findOneBy(
                 array('customer' => $customer, 'paymentMean' => $paymentId)
             );
@@ -500,19 +506,9 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
                 return;
             }
             $customer = new Customer();
-            $billing = new Billing();
-            $shipping = new Shipping();
-            $debit = new Debit();
         }
 
         try {
-            if (!$shipping instanceof Shipping) {
-                $shipping = new Shipping();
-            }
-            if (!$debit instanceof Debit) {
-                $debit = new Debit();
-            }
-
             $params = $this->Request()->getParams();
 
             if (!$paymentData instanceof PaymentData && !empty($params['paymentData']) && array_filter($params['paymentData'][0])) {
@@ -523,7 +519,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
                 );
             }
 
-            $params = $this->prepareCustomerData($params, $customer, $billing, $shipping, $debit, $paymentData);
+            $params = $this->prepareCustomerData($params, $customer, $paymentData);
 
             //set parameter to the customer model.
             $customer->fromArray($params);
@@ -587,7 +583,15 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         return $data;
     }
 
-    private function prepareCustomerData($params, $customer, $billing, $shipping, $debit, $paymentData)
+    /**
+     * Helper method to prepare the customer for saving
+     *
+     * @param array $params
+     * @param Shopware\Models\Customer\Customer $customer
+     * @param array $paymentData
+     * @return array
+     */
+    private function prepareCustomerData($params, Shopware\Models\Customer\Customer $customer, $paymentData)
     {
         if (!empty($params['groupKey'])) {
             $params['group'] = $this->getGroupRepository()->findOneBy(array('key' => $params['groupKey']));
@@ -595,18 +599,15 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             unset($params['group']);
         }
 
-        if (!empty($params['shopId'])) {
-            $params['shop'] = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $params['shopId']);
-        } else {
-            unset($params['shop']);
-        }
-
         if (!empty($params['languageId'])) {
-            $params['languageSubShop'] = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $params['languageId']);
+            /** @var $shopRepository \Shopware\Models\Shop\Repository */
+            $shopRepository = $this->getShopRepository();
+            $params['languageSubShop'] = $shopRepository->find($params['languageId']);
+
         } else {
             unset($params['languageSubShop']);
+            unset($params['shop']);
         }
-
 
         if (!empty($params['priceGroupId'])) {
             $params['priceGroup'] = Shopware()->Models()->find('Shopware\Models\Customer\PriceGroup', $params['priceGroupId']);
@@ -712,29 +713,82 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $sql = 'SELECT id, email, password, subshopID, language FROM s_user WHERE id = ?';
         $user = Shopware()->Db()->fetchRow($sql, array($userId));
 
-        if (!empty($user['email'])) {
-            $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
-            $shop = $repository->getActiveById($user['language']);
-            $shop->registerResources(Shopware()->Bootstrap());
-            Shopware()->Session()->Admin = true;
-
-            Shopware()->System()->_POST = array(
-                'email' => $user['email'],
-                'passwordMD5' => $user['password'],
-            );
-            Shopware()->Modules()->Admin()->sLogin(true);
+        if (empty($user['email'])) {
+            return;
         }
 
+        /** @var $repository Shopware\Models\Shop\Repository */
+        $repository = $this->getShopRepository();
+        $shop = $repository->getActiveById($user['language']);
+
+        $shop->registerResources(Shopware()->Bootstrap());
+
+        Shopware()->Session()->Admin = true;
+        Shopware()->System()->_POST = array(
+            'email' => $user['email'],
+            'passwordMD5' => $user['password'],
+        );
+        Shopware()->Modules()->Admin()->sLogin(true);
+
         $url = $this->Front()->Router()->assemble(array(
-            'module' => 'frontend',
-            'controller' => 'index',
-            'appendSession' => true
+            'action'    => 'performOrderRedirect',
+            'shopId'    => $shop->getId(),
+            'hash'      => $this->createPerformOrderRedirectHash($user['password']),
+            'sessionId' => Shopware()->SessionID(),
+            'userId'    => $user['id'],
+            'fullPath'  => true
         ));
 
-        $this->Response()->setCookie('shop', $shop->getId(), 0, $shop->getBasePath());
-
-        $this->Response()->setCookie('session-' .  $shop->getId(), '', time() - 3600, '/');
+        if ($shop->getHost()) {
+            //change the url to the subshop url
+            $url = str_replace('://' . $this->Request()->getHttpHost(), '://' . $shop->getHost(), $url);
+        }
 
         $this->redirect($url);
+    }
+
+    /**
+     * This Action can be called with a different domain.
+     * So domain depending cookies can be changed.
+     * This is needed when the users want's to perform an order on a different domain.
+     * For example in a different Subshop
+     */
+    public function performOrderRedirectAction()
+    {
+        $shopId    = (int)$this->Request()->getQuery('shopId');
+        $userId    = (int)$this->Request()->getQuery('userId');
+        $sessionId = $this->Request()->getQuery('sessionId');
+        $hash      = $this->Request()->getQuery('hash');
+
+        $sql = 'SELECT password FROM s_user WHERE id = ?';
+        $userPasswordHash = Shopware()->Db()->fetchOne($sql, array($userId));
+
+        //don't trust anyone without this information
+        if (empty($shopId) || empty($sessionId) || empty($hash) || $hash !== $this->createPerformOrderRedirectHash($userPasswordHash) ) {
+            return;
+        }
+
+        /** @var  $repository Shopware\Models\Shop\Repository */
+        $repository = $this->getShopRepository();
+        $shop = $repository->getActiveById($shopId);
+
+        $path = rtrim($shop->getBasePath(), '/') . '/';
+
+        //update right domain cookies
+        $this->Response()->setCookie('shop', $shopId, 0, $path);
+        $this->Response()->setCookie('session-' . $shopId, $sessionId, 0, '/');
+
+        $this->redirect($shop->getBaseUrl());
+    }
+
+    /**
+     * generates a hash value for the performOrderRedirectAction
+     *
+     * @param $userPasswordHash
+     * @return string
+     */
+    private function createPerformOrderRedirectHash($userPasswordHash)
+    {
+        return sha1($userPasswordHash);
     }
 }

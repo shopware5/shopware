@@ -81,7 +81,7 @@ class Shopware_Install_Database
 
         $connectionString = implode(';', $connectionSettings);
         try {
-            $this->database = new PDO("mysql:$connectionString", $user, $password);
+            $this->database = new PDO("mysql:$connectionString", $user, $password, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'"));
             $this->database->exec("SET CHARACTER SET utf8");
             $this->database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {

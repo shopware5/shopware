@@ -22,25 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * @category  Shopware
- * @package   Shopware\Plugins\Frontend\PigmbhRatePAYPayment
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class Shopware_Plugins_Frontend_PigmbhRatePAYPayment_Bootstrap extends Shopware_Components_DummyPlugin_Bootstrap
+class Shopware_Tests_Controllers_Widgets_IndexTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
-     * @return array
+     * @ticket SW-8127
      */
-    public function getInfo()
+    public function testShopMenu()
     {
-        return array(
-            'version'   => $this->getVersion(),
-            'autor'     => 'Payintelligent GmbH',
-            'copyright' => 'Copyright (c) 2011-2012, Payintelligent GmbH',
-            'label'     => 'RatePAY Payment Module',
-            'link'      => 'http://www.payintelligent.de/',
-            'support'   => 'http://www.payintelligent.de/'
-        );
+        $this->dispatch('/Widgets/Index/shopMenu');
+        $this->assertEquals(200, $this->Response()->getHttpResponseCode());
+
+        Shopware()->Models()->flush();
     }
 }

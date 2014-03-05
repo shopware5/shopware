@@ -445,7 +445,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Store', {
      * @return void
      */
     onChangeCategory: function(view, record, dom) {
-        var me = this, store = me.subApplication.categoryStore, el = Ext.get(dom), category, communityStore = me.subApplication.communityStore,
+        var me = this, store = me.subApplication.categoryStore, category, communityStore = me.subApplication.communityStore,
             storeView = me.getStoreView(),
             managerSearch = me.getManagerNavigation().searchField,
             storeSearch = me.getStoreNavigation().searchField,
@@ -463,7 +463,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Store', {
         });
 
         // Terminate the category
-        category = el.getAttribute('data-action');
+        category = dom.getAttribute('data-action');
         if(category === 'null') {
             category = null;
             communityStore.pageSize = 6;

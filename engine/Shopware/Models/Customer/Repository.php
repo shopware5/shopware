@@ -94,14 +94,15 @@ class Repository extends ModelRepository
 
         //filter the displayed columns with the passed filter string
         if (!empty($filter)) {
-            $builder->where('billing.number LIKE ?1')         //Search only the beginning of the customer number.
-                    ->orWhere('billing.firstName LIKE ?2')    //Full text search for the first name of the customer
-                    ->orWhere('billing.lastName LIKE ?2')     //Full text search for the last name of the customer
-                    ->orWhere('customer.firstLogin LIKE ?3')  //Search only for the end of the first login date.
-                    ->orWhere('customergroups.name LIKE ?2')   //Full text search for the customer group
-                    ->orWhere('billing.company LIKE ?2')      //Full text search for the company of the customer
-                    ->orWhere('billing.city LIKE ?2')         //Full text search for the city of the customer
-                    ->orWhere('billing.zipCode LIKE ?1')     //Search only the beginning of the customer number.
+            $builder->where('billing.number LIKE ?1')           //Search only the beginning of the customer number.
+                    ->orWhere('billing.firstName LIKE ?2')      //Full text search for the first name of the customer
+                    ->orWhere('billing.lastName LIKE ?2')       //Full text search for the last name of the customer
+                    ->orWhere('customer.email LIKE ?2')         //Full text search for the customer email
+                    ->orWhere('customer.firstLogin LIKE ?3')    //Search only for the end of the first login date.
+                    ->orWhere('customergroups.name LIKE ?2')    //Full text search for the customer group
+                    ->orWhere('billing.company LIKE ?2')        //Full text search for the company of the customer
+                    ->orWhere('billing.city LIKE ?2')           //Full text search for the city of the customer
+                    ->orWhere('billing.zipCode LIKE ?1')        //Search only the beginning of the customer number.
                     ->setParameter(1,       $filter . '%')
                     ->setParameter(2, '%' . $filter . '%')
                     ->setParameter(3, '%' . $filter      );
@@ -139,14 +140,15 @@ class Repository extends ModelRepository
 
         //filter the displayed columns with the passed filter string
         if (!empty($filter)) {
-            $builder->andWhere('billing.number LIKE ?1')         //Search only the beginning of the customer number.
-                    ->orWhere('billing.firstName LIKE ?2')    //Full text search for the first name of the customer
-                    ->orWhere('billing.lastName LIKE ?2')     //Full text search for the last name of the customer
-                    ->orWhere('customer.firstLogin LIKE ?3')  //Search only for the end of the first login date.
-                    ->orWhere('customergroups.name LIKE ?2')   //Full text search for the customer group
-                    ->orWhere('billing.company LIKE ?2')      //Full text search for the company of the customer
-                    ->orWhere('billing.city LIKE ?2')         //Full text search for the city of the customer
-                    ->orWhere('billing.zipCode LIKE ?1')     //Search only the beginning of the customer number.
+            $builder->andWhere('billing.number LIKE ?1')        //Search only the beginning of the customer number.
+                    ->orWhere('billing.firstName LIKE ?2')      //Full text search for the first name of the customer
+                    ->orWhere('billing.lastName LIKE ?2')       //Full text search for the last name of the customer
+                    ->orWhere('customer.email LIKE ?2')         //Full text search for the customer email
+                    ->orWhere('customer.firstLogin LIKE ?3')    //Search only for the end of the first login date.
+                    ->orWhere('customergroups.name LIKE ?2')    //Full text search for the customer group
+                    ->orWhere('billing.company LIKE ?2')        //Full text search for the company of the customer
+                    ->orWhere('billing.city LIKE ?2')           //Full text search for the city of the customer
+                    ->orWhere('billing.zipCode LIKE ?1')        //Search only the beginning of the customer number.
                     ->setParameter(1,       $filter . '%')
                     ->setParameter(2, '%' . $filter . '%')
                     ->setParameter(3, '%' . $filter      );

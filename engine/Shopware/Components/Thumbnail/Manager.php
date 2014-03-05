@@ -56,16 +56,23 @@ class Manager
     protected $rootDir;
 
     /**
+     * @var \Enlight_Event_EventManager
+     */
+    protected $eventManager;
+
+    /**
      * The constructor for the thumbnail manager.
      * Expects a passed generator and the media/destination directory
      *
      * @param GeneratorInterface $generator
      * @param String $rootDir - the full path to the shopware directory e.g. /var/www/shopware/
+     * @param \Enlight_Event_EventManager $eventManager
      */
-    function __construct(GeneratorInterface $generator, $rootDir)
+    function __construct(GeneratorInterface $generator, $rootDir, \Enlight_Event_EventManager $eventManager)
     {
         $this->generator = $generator;
         $this->rootDir = $rootDir;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -117,18 +124,33 @@ class Manager
 
         $imagePath = $this->rootDir . DIRECTORY_SEPARATOR . $media->getPath();
 
-        foreach ($thumbnailSizes as $size) {
+        $parameters = array(
+            'path' => $imagePath,
+            'sizes' => $thumbnailSizes,
+            'keepProportions' => $keepProportions
+        );
+
+        if ($this->eventManager) {
+            $parameters = $this->eventManager->filter(
+                'Shopware_Components_Thumbnail_Manager_CreateThumbnail',
+                $parameters,
+                array('subject' => $this, 'media' => $media)
+            );
+        }
+
+        foreach ($parameters['sizes'] as $size) {
             $suffix = $size['width'] . 'x' . $size['height'];
 
             $destinations = $this->getDestination($media, $suffix);
 
             foreach($destinations as $destination){
+
                 $this->generator->createThumbnail(
-                    $imagePath,
+                    $parameters['path'],
                     $destination,
                     $size['width'],
                     $size['height'],
-                    $keepProportions
+                    $parameters['keepProportions']
                 );
             }
         }
@@ -150,8 +172,8 @@ class Manager
             'jpg' => $thumbnailDir . $media->getName() . '_' . $suffix . '.jpg'
         );
 
-        if($media->getExtension() !== 'jpg'){
-            $fileNames[$media->getExtension()] =  $thumbnailDir. $media->getName() . '_' . $suffix . '.' . $media->getExtension();
+        if ($media->getExtension() !== 'jpg') {
+            $fileNames[$media->getExtension()] = $thumbnailDir. $media->getName() . '_' . $suffix . '.' . $media->getExtension();
         }
 
         return $fileNames;

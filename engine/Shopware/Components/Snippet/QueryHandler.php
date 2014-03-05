@@ -63,8 +63,6 @@ class QueryHandler
         }
 
         $locales = array();
-        $locales['default'] = 'SET @locale_default = (SELECT id FROM s_core_locales WHERE locale = \'en_GB\');';
-
         $finder = new Finder();
 
         $inputAdapter = new \Enlight_Config_Adapter_File(array(

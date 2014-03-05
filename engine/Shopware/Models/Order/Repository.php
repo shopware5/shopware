@@ -460,6 +460,7 @@ class Repository extends ModelRepository
                                 $expr->like('paymentStatus.description', '?1'),
                                 $expr->like('orders.orderTime', '?2'),
                                 $expr->like('billing.company', '?3'),
+                                $expr->like('customer.email', '?3'),
                                 $expr->like('billing.lastName', '?3'),
                                 $expr->like('billing.firstName', '?3'),
                                 $expr->like('shop.name', '?3'),

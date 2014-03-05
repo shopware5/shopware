@@ -249,7 +249,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         $shippingCostsResult = array();
         foreach ($shippingCosts as $shippingCost) {
 
-            if (!empty($shippingCost['bindTimeFrom'])) {
+            if (!is_null($shippingCost['bindTimeFrom'])) {
                 $date = new Zend_Date();
                 $date->setMinute(0);
                 $date->setHour(0);
@@ -257,7 +257,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
                 $shippingCost['bindTimeFrom'] = $date->addSecond($shippingCost['bindTimeFrom'])->toString("HH:mm");
             }
 
-            if (!empty($shippingCost['bindTimeTo'])) {
+            if (!is_null($shippingCost['bindTimeTo'])) {
                 $date = new Zend_Date();
                 $date->setMinute(0);
                 $date->setHour(0);
