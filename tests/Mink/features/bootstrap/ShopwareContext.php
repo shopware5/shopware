@@ -348,5 +348,14 @@ class ShopwareContext extends SubContext
         $this->getPage('Homepage')->checkArticle($data);
     }
 
+    /**
+     * @Given /^I am on the listing page:$/
+     */
+    public function iAmOnTheListingPage(TableNode $params)
+    {
+        $params = $params->getHash();
+
+        $this->getPage('Listing')->openListing($params);
+    }
 }
 

@@ -1,15 +1,41 @@
 <?php
 
-use SensioLabs\Behat\PageObjectExtension\PageObject\Page,
-    Behat\Mink\Exception\ResponseTextException,
-    Behat\Behat\Context\Step;
+use SensioLabs\Behat\PageObjectExtension\PageObject\Page, Behat\Mink\Exception\ResponseTextException,
+        Behat\Behat\Context\Step;
 
 class Listing extends Page
 {
     /**
      * @var string $path
      */
-    protected $path = '/listing';
+    protected $path = '/listing/?sPage={sPage}&sTemplate={sTemplate}&sPerPage={sPerPage}&sSort={sSort}';
+
+    public function openListing($params)
+    {
+        $parameters = array();
+
+        foreach ($params as $param) {
+            $parameters[$param['parameter']] = $param['value'];
+        }
+
+        if (empty($parameters['sPage'])) {
+            $parameters['sPage'] = 1;
+        }
+
+        if (empty($parameters['sTemplate'])) {
+            $parameters['sTemplate'] = 'table';
+        }
+
+        if (empty($parameters['sPerPage'])) {
+            $parameters['sPerPage'] = 12;
+        }
+
+        if (empty($parameters['sSort'])) {
+            $parameters['sSort'] = 1;
+        }
+
+        $this->open($parameters);
+    }
 
     public function checkPrice($position, $price2)
     {
@@ -22,7 +48,7 @@ class Listing extends Page
         $price = $this->toPrice($price);
         $price2 = $this->toPrice($price2);
 
-        if ($price != $price2) {
+        if ($price !== $price2) {
             $message = sprintf(
                     'The price of article on position %s (%s €) is different from %s €!',
                     $position,

@@ -32,7 +32,7 @@ class Homepage extends Page
 
         $return = array();
 
-        foreach ($banners as $bannerKey => $banner) {
+        foreach ($banners as $banner) {
 
             $elements = array();
 
@@ -101,28 +101,28 @@ class Homepage extends Page
         $return = array();
         $blogs = $this->findAllEmotionParentElements('blog');
 
-        foreach ($blogs as $blog_key => $blog) {
+        foreach ($blogs as $blogKey => $blog) {
             $cssClass = 'div.' . str_replace(' ', '.', $blog->getAttribute('class'));
 
             $entries = $this->findAllEmotionElements($cssClass, 'div.blog-entry');
 
-            foreach ($entries as $entry_key => $entry) {
+            foreach ($entries as $entryKey => $entry) {
                 $elements = array();
 
-                $class = sprintf('div.emotion-element %s div.blog-entry:nth-of-type(%d) ', $cssClass, $entry_key + 1);
+                $class = sprintf('div.emotion-element %s div.blog-entry:nth-of-type(%d) ', $cssClass, $entryKey + 1);
                 $elements['a-image'] = $this->find('css', $class . 'div.blog_img a');
                 $elements['a-title'] = $this->find('css', $class . 'h2 a');
                 $elements['p-text'] = $this->find('css', $class . 'p');
 
-                $return[$blog_key][] = $elements;
+                $return[$blogKey][] = $elements;
             }
         }
 
         foreach ($articles as $article) {
             $found = false;
 
-            foreach ($blogs as $blog_key => $blog) {
-                foreach ($return[$blog_key] as $itemKey => $item) {
+            foreach ($blogs as $blogKey => $blog) {
+                foreach ($return[$blogKey] as $itemKey => $item) {
                     $check = array(
                             array($item['a-image']->getAttribute('title'), $article['title']),
                             array($item['a-image']->getAttribute('style'), $article['image']),
@@ -135,7 +135,7 @@ class Homepage extends Page
 
                     if ($this->checkArray($check)) {
                         $found = true;
-                        unset($return[$blog_key][$itemKey]);
+                        unset($return[$blogKey][$itemKey]);
                         break;
                     }
                 }
@@ -163,7 +163,7 @@ class Homepage extends Page
     {
         $videos = $this->findAllEmotionParentElements('youtube');
 
-        foreach ($videos as $video_key => $video) {
+        foreach ($videos as $video) {
             $cssClass = 'div.' . str_replace(' ', '.', $video->getAttribute('class'));
 
             $class = sprintf('div.emotion-element %s ', $cssClass);
@@ -392,20 +392,20 @@ class Homepage extends Page
 
         $return = array();
 
-        foreach ($sliders as $slider_key => $slider) {
+        foreach ($sliders as $sliderKey => $slider) {
             $cssClass = 'div.' . str_replace(' ', '.', $slider->getAttribute('class'));
 
             switch ($type) {
                 case 'banner':
-                    $return[$slider_key] = $this->findAllEmotionBannerSliderElements($cssClass);
+                    $return[$sliderKey] = $this->findAllEmotionBannerSliderElements($cssClass);
                     break;
 
                 case 'manufacturer':
-                    $return[$slider_key] = $this->findAllEmotionManufacturerSliderElements($cssClass);
+                    $return[$sliderKey] = $this->findAllEmotionManufacturerSliderElements($cssClass);
                     break;
 
                 case 'article':
-                    $return[$slider_key] = $this->findAllEmotionArticleSliderElements($cssClass);
+                    $return[$sliderKey] = $this->findAllEmotionArticleSliderElements($cssClass);
                     break;
             }
         }
@@ -425,10 +425,10 @@ class Homepage extends Page
         $class = 'div.slide';
         $slides = $this->findAllEmotionElements($cssClass, $class);
 
-        foreach ($slides as $slide_key => $slide) {
+        foreach ($slides as $slideKey => $slide) {
             $elements = array();
 
-            $class = sprintf('div.emotion-element %s div.slide:nth-of-type(%d) ', $cssClass, $slide_key + 1);
+            $class = sprintf('div.emotion-element %s div.slide:nth-of-type(%d) ', $cssClass, $slideKey + 1);
             $elements['a'] = $this->find('css', $class . 'a');
             $elements['img'] = $this->find('css', $class . 'img');
 
@@ -449,18 +449,18 @@ class Homepage extends Page
         $class = 'div.slide';
         $slides = $this->findAllEmotionElements($cssClass, $class);
 
-        foreach ($slides as $slide_key => $slide) {
-            $class = sprintf('div.slide:nth-of-type(%d) div.supplier', $slide_key + 1);
+        foreach ($slides as $slideKey => $slide) {
+            $class = sprintf('div.slide:nth-of-type(%d) div.supplier', $slideKey + 1);
             $suppliers = $this->findAllEmotionElements($cssClass, $class);
 
-            foreach ($suppliers as $supplier_key => $supplier) {
+            foreach ($suppliers as $supplierKey => $supplier) {
                 $elements = array();
 
                 $class = sprintf(
                         'div.emotion-element %s div.slide:nth-of-type(%d) div.supplier:nth-of-type(%d) ',
                         $cssClass,
-                        $slide_key + 1,
-                        $supplier_key + 1
+                        $slideKey + 1,
+                        $supplierKey + 1
                 );
                 $elements['a-image'] = $this->find('css', $class . 'a.image-wrapper');
                 $elements['img'] = $this->find('css', $class . 'img');
@@ -483,18 +483,18 @@ class Homepage extends Page
         $class = 'div.slide';
         $slides = $this->findAllEmotionElements($cssClass, $class);
 
-        foreach ($slides as $slide_key => $slide) {
-            $class = sprintf('div.slide:nth-of-type(%d) div.outer-article-box', $slide_key + 1);
+        foreach ($slides as $slideKey => $slide) {
+            $class = sprintf('div.slide:nth-of-type(%d) div.outer-article-box', $slideKey + 1);
             $articles = $this->findAllEmotionElements($cssClass, $class);
 
-            foreach ($articles as $article_key => $article) {
+            foreach ($articles as $articleKey => $article) {
                 $elements = array();
 
                 $class = sprintf(
                         'div.emotion-element %s div.slide:nth-of-type(%d) div.outer-article-box:nth-of-type(%d) ',
                         $cssClass,
-                        $slide_key + 1,
-                        $article_key + 1
+                        $slideKey + 1,
+                        $articleKey + 1
                 );
                 $elements['a-thumb'] = $this->find('css', $class . 'a.article-thumb-wrapper');
                 $elements['img'] = $this->find('css', $class . 'img');
@@ -557,4 +557,5 @@ class Homepage extends Page
 
         return $values;
     }
+
 }
