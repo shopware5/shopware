@@ -83,6 +83,11 @@
             opts.direction = 'fromRight';
         }
 
+        var selector = me.$el.attr('data-selector');
+        if(selector && selector.length) {
+            opts.offcanvasElement = selector;
+        }
+
         me.registerEventListeners();
     };
 
@@ -100,7 +105,15 @@
         // Button click
         me.$el.on(clickEvt + '.' + pluginName, function(event) {
             event.preventDefault();
-            me.$body.addClass((opts.direction === 'fromLeft' ? opts.leftMenuOpenCls : opts.rightMenuOpenCls));
+
+            if(me.$body.hasClass((opts.direction === 'fromLeft' ? opts.leftMenuOpenCls : opts.rightMenuOpenCls))) {
+                me.$pageWrap.transition({ translate: [0, 0] }, 250, function() {
+                    me.$pageWrap.removeAttr('style');
+                    me.$body.removeClass((opts.direction === 'fromLeft' ? opts.leftMenuOpenCls : opts.rightMenuOpenCls));
+                });
+            } else {
+                me.$body.addClass((opts.direction === 'fromLeft' ? opts.leftMenuOpenCls : opts.rightMenuOpenCls));
+            }
         });
 
         // Swipe gestructure
@@ -127,8 +140,19 @@
                 x = (x < -300 ? -300 : x);
             }
             me.$pageWrap.css({ translate: [ x, 0] });
+            me.$body.addClass((opts.direction === 'fromLeft' ? opts.leftMenuOpenCls : opts.rightMenuOpenCls));
         }).on('moveend.' + pluginName, function() {
             me.$pageWrap.removeAttr('style').removeClass(opts.disableTransitionCls);
+        });
+
+        // Allow the user to close the off canvas menu
+        $('.entry--close-off-canvas').on(clickEvt + '.' + pluginName, function(event) {
+            event.preventDefault();
+
+            me.$pageWrap.transition({ translate: [0, 0] }, 250, function() {
+                me.$pageWrap.removeAttr('style');
+                me.$body.removeClass((opts.direction === 'fromLeft' ? opts.leftMenuOpenCls : opts.rightMenuOpenCls));
+            });
         });
 
         return true;

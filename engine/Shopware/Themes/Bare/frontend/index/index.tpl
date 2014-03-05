@@ -105,7 +105,7 @@
 							{* Menu (Off canvas left) trigger *}
 							{block name='frontend_index_offcanvas_left_trigger'}
 								<li class="navigation--entry entry--menu-left block" role="menuitem">
-									<a class="entry--link entry--trigger" href="#offcanvas--left" data-offcanvas="true">
+									<a class="entry--link entry--trigger" href="#offcanvas--left" data-offcanvas="true" data-selector=".sidebar-main">
 										<i class="icon--menu"></i> Menü
 									</a>
 								</li>
@@ -182,10 +182,12 @@
 			{* Sidebar right *}
 			{block name='frontend_index_content_right'}{/block}
 
-			{* TODO - Needs correct block *}
-			{if $sLastArticlesShow && !$isEmotionLandingPage}
-				{include file="frontend/plugins/index/viewlast.tpl"}
-			{/if}
+			{* Last seen products *}
+			{block name='frontend_index_left_last_articles'}
+				{if $sLastArticlesShow && !$isEmotionLandingPage}
+					{include file="frontend/plugins/index/viewlast.tpl"}
+				{/if}
+			{/block}
 		</section>
 
 		{* Footer *}
