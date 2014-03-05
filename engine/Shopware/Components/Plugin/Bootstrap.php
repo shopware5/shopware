@@ -949,6 +949,31 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         $this->get('shopware.snippet_database_handler')->removeFromDatabase($this->Path().'Resources/snippet/', $removeDirty);
     }
 
+    /**
+     * Adds translations to the form and its elements. The accepted array format
+     * accepts a special 'plugin_form' key for the form translation. All other
+     * keys will be matched to element names.
+     *
+     * Example $translations array:
+     * <code>
+     * array(
+         'en_GB' => array(
+            'plugin_form' => array(
+                'label' => 'Recently viewed items'
+            ),
+            'show' => array(
+                'label' => 'Display recently viewed items'
+            ),
+            'thumb' => array(
+                'label' => 'Thumbnail size',
+                'description' => 'Index of the thumbnail size of the associated album to use. Starts at 0'
+            )
+         )
+     * )
+     * </code>
+     *
+     * @param array $translations
+     */
     public function addFormTranslations($translations)
     {
         $form = $this->Form();
