@@ -276,6 +276,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         if (empty($referer)
             || strpos($referer, 'http') !== 0
             || strpos($referer, $request->getHttpHost()) !== false
+            || !empty(Shopware()->Session()->Admin)
         ) {
             return;
         }
