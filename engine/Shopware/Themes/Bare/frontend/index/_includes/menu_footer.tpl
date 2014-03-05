@@ -55,7 +55,7 @@
 		</p>
 
 		{block name="frontend_index_footer_column_newsletter_form"}
-			<form class="newsletter--from" action="{url controller='newsletter'}" method="post">
+			<form class="newsletter--form" action="{url controller='newsletter'}" method="post">
 				<input type="hidden" value="1" name="subscribeToNewsletter" />
 
 				<input type="text" name="newsletter" class="newsletter--field" value="{s name="IndexFooterNewsletterValue"}Ihre E-Mail Adresse{/s}" />
