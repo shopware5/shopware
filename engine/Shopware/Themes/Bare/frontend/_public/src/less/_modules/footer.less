@@ -12,7 +12,12 @@
 	}
 
 	.column--headline {
+		.user-select(none);
 		color: @primaryColor;
+
+		&.is--active::after {
+			content: '-';
+		}
 
 		&::after {
 			.unitize-margin(-3.5, 0, 0, 0, 16);
@@ -26,6 +31,10 @@
 
 	.column--content {
 		display: none;
+
+		&.is--active {
+			display: block;
+		}
 	}
 
 	.footer--bottom {

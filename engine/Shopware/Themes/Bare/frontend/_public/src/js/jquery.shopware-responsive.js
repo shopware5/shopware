@@ -19,11 +19,13 @@ $(function() {
             $('.sidebar-main').insertBefore($('.page-wrap'));
             $('*[data-offcanvas="true"]').offcanvasMenu();
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
+            $('*[data-slide-panel="true"]').slidePanel();
         },
         exit: function() {
             $('.sidebar-main').insertAfter($('.content--breadcrumb'));
             $('*[data-offcanvas="true"]').data('plugin_offcanvasMenu').destroy();
             $('*[data-search-dropdown="true"]').data('plugin_searchFieldDropDown').destroy();
+            $('*[data-slide-panel="true"]').data('plugin_slidePanel').destroy();
         }
     }]);
 });
