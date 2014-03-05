@@ -168,7 +168,7 @@ class Inheritance
         $css = $theme->getCss();
 
         $directory = $this->pathResolver->getCssDirectory($template);
-        foreach($css as &$file) {
+        foreach ($css as &$file) {
             $file = $directory . DIRECTORY_SEPARATOR . $file;
         }
 
@@ -181,6 +181,7 @@ class Inheritance
 
         return $css;
     }
+
     /**
      * @param Shop\Template $template
      * @return array
@@ -192,7 +193,7 @@ class Inheritance
         $files = $theme->getJavascript();
 
         $directory = $this->pathResolver->getJavascriptDirectory($template);
-        foreach($files as &$file) {
+        foreach ($files as &$file) {
             $file = $directory . DIRECTORY_SEPARATOR . $file;
         }
 

@@ -120,7 +120,7 @@ class Configurator
             $synchronized[] = $existing;
         }
 
-        foreach($template->getConfigSets() as $existing) {
+        foreach ($template->getConfigSets() as $existing) {
             $defined = $this->getExistingConfigSet(
                 $synchronized,
                 $existing->getName()

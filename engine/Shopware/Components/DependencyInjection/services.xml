@@ -272,7 +272,11 @@
 
 
 
-
+        <service id="theme_service" class="Shopware\Components\Theme\Service">
+            <argument type="service" id="models" />
+            <argument type="service" id="snippets" />
+            <argument type="service" id="theme_util" />
+        </service>
 
         <service id="theme_path_resolver" class="Shopware\Components\Theme\PathResolver">
             <argument>%kernel.root_dir%</argument>
