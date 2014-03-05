@@ -52,6 +52,7 @@
                 me.$el.removeClass(me.opts.activeCls);
             } else {
                 me.$el.addClass(me.opts.activeCls);
+                me.$el.find('.main-search--field').delay(150).focus();
             }
         });
     };

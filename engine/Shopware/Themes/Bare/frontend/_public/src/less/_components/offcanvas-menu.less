@@ -5,6 +5,18 @@
 	position: absolute;
 	left: 0; top: 0;
 	height: 100%;
+	border-right: 1px solid rgba(red(@lightTextColor), green(@lightTextColor), blue(@lightTextColor), 50%);
+
+	&::after {
+		.box-shadow(inset -5px 0 5px -5px @lightTextColor);
+		content: '';
+		display: block;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 5px;
+	}
 
 	.logo--trusted-shops {
 		display: none;
