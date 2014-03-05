@@ -188,9 +188,4 @@
             }
         });
     };
-
-    // Register plugin
-    $(function() {
-        $('*[data-offcanvas="true"]').offcanvasMenu();
-    });
 })(jQuery, window, document);
