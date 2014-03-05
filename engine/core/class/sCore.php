@@ -28,15 +28,20 @@
 class sCore
 {
     /**
-    * Pointer to Shopware-Core-Functions
+    * Pointer to Shopware Core functions
     *
-    * @var    object
-    * @access private
+    * @var sSystem
     */
     public $sSYSTEM;
 
-
-    public function sBuildLink($sVariables, $sUsePost=false)
+    /**
+     * Creates query string for an url based on sVariables and sSYSTEM->_GET
+     *
+     * @param array $sVariables Variables that configure the generated url
+     * @param bool $sUsePost DEAD VAR - REMOVE
+     * @return string
+     */
+    public function sBuildLink($sVariables, $sUsePost = false)
     {
         $cat = array("sCategory","sPage");
 
@@ -45,8 +50,7 @@ class sCore
         // If viewport is available, this will be the first variable
         if (!empty($tempGET["sViewport"])) {
             $url['sViewport'] = $tempGET["sViewport"];
-            if ($url["sViewport"]=="cat"
-            ) {
+            if ($url["sViewport"]=="cat") {
                 foreach ($cat as $catAllowedVariable) {
                     if (!empty($tempGET[$catAllowedVariable])) {
                         $url[$catAllowedVariable] = $tempGET[$catAllowedVariable];
@@ -81,7 +85,14 @@ class sCore
         return $queryString;
     }
 
-    public function sRewriteLink($link=null, $title=null)
+    /**
+     * Tries to rewrite the provided link using SEO friendly urls
+     *
+     * @param string $link The link to rewrite.
+     * @param string $title Title also passed into the rewriter.
+     * @return mixed|string Complete url, rewritten if possible
+     */
+    public function sRewriteLink($link = null, $title = null)
     {
         $url = str_replace(',', '=', $link);
         $url = html_entity_decode($url);
