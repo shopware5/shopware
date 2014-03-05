@@ -37,9 +37,9 @@ class sCms
      * Database connection which used for each database operation in this class.
      * Injected over the class constructor
      *
-     * @var Enlight_Components_Adodb
+     * @var Enlight_Components_Db_Adapter_Pdo_Mysql
      */
-    private $adodb;
+    private $db;
 
     /**
      * Shopware configuration object which used for
@@ -52,7 +52,7 @@ class sCms
 
     public function __construct()
     {
-        $this->adodb = Shopware()->Adodb();
+        $this->db = Shopware()->Db();
         $this->config = Shopware()->Config();
     }
 
@@ -75,8 +75,7 @@ class sCms
 
         // Load static page data from database
         $sql = "SELECT * FROM s_cms_static WHERE id=?";
-        $staticPage = $this->adodb->CacheGetRow(
-            $this->config->get('sCACHESTATIC'),
+        $staticPage = $this->db->fetchRow(
             $sql, array($staticId)
         );
         if (empty($staticPage)) {
@@ -93,8 +92,7 @@ class sCms
                 WHERE p.parentID = ?
                 ORDER BY p.position
             ';
-            $staticPage['siblingPages'] = $this->adodb->CacheGetAll(
-                $this->config->get('sCACHESTATIC'),
+            $staticPage['siblingPages'] = $this->db->fetchAll(
                 $sql, array($staticId, $staticPage['parentID'])
             );
             $sql = '
@@ -102,8 +100,7 @@ class sCms
                 FROM s_cms_static p
                 WHERE p.id = ?
             ';
-            $staticPage['parent'] = $this->adodb->CacheGetRow(
-                $this->config->get('sCACHESTATIC'),
+            $staticPage['parent'] = $this->db->fetchRow(
                 $sql, array($staticPage['parentID'])
             );
         } else {
@@ -113,8 +110,7 @@ class sCms
                 WHERE p.parentID = ?
                 ORDER BY p.position
             ';
-            $staticPage['subPages'] = $this->adodb->CacheGetAll(
-                $this->config->get('sCACHESTATIC'),
+            $staticPage['subPages'] = $this->db->fetchAll(
                 $sql, array($staticId)
             );
         }
@@ -137,16 +133,15 @@ class sCms
         SELECT COUNT(id) as countTopics FROM s_cms_content WHERE groupID=? GROUP BY groupID
         ";
 
-
-        $getCountTopics = $this->adodb->CacheGetRow($this->config->get('sCACHESTATIC'),$sql,array($group));
+        $getCountTopics = $this->db->fetchRow($sql, array($group));
 
         if ($sPage > $getCountTopics["countTopics"] || $sPage <= 0 ) $sPage = 1;
 
-        $limitStart = $sPage * $this->sSYSTEM->sCONFIG["sCONTENTPERPAGE"] - $this->sSYSTEM->sCONFIG["sCONTENTPERPAGE"];
-        $limitEnd = intval($this->sSYSTEM->sCONFIG["sCONTENTPERPAGE"]);
+        $limitStart = $sPage * $this->config->get('sCONTENTPERPAGE') - $this->config->get('sCONTENTPERPAGE');
+        $limitEnd = intval($this->config->get('sCONTENTPERPAGE'));
 
         // Calculate number of pages
-        $numberPages = intval($getCountTopics["countTopics"] / $this->sSYSTEM->sCONFIG["sCONTENTPERPAGE"]) != $getCountTopics["countTopics"] / $this->sSYSTEM->sCONFIG["sCONTENTPERPAGE"] ? intval($getCountTopics["countTopics"] / $this->sSYSTEM->sCONFIG["sCONTENTPERPAGE"])+1 : intval($getCountTopics["countTopics"] / $this->sSYSTEM->sCONFIG["sCONTENTPERPAGE"]);
+        $numberPages = intval($getCountTopics["countTopics"] / $this->config->get('sCONTENTPERPAGE')) != $getCountTopics["countTopics"] / $this->config->get('sCONTENTPERPAGE') ? intval($getCountTopics["countTopics"] / $this->config->get('sCONTENTPERPAGE'))+1 : intval($getCountTopics["countTopics"] / $this->config->get('sCONTENTPERPAGE'));
 
         // Make Array with page-structure to render in template
         $pages = array();
@@ -168,9 +163,9 @@ class sCms
             FROM s_cms_content WHERE groupID=?
             ORDER BY datum DESC
         ";
-        $sql = Shopware()->Db()->limit($sql, $limitEnd, $limitStart);
+        $sql = $this->db->limit($sql, $limitEnd, $limitStart);
 
-        $queryDynamic = Shopware()->Db()->fetchAll($sql, array($group));
+        $queryDynamic = $this->db->fetchAll($sql, array($group));
 
         foreach ($queryDynamic as $dynamicKey => $dynamicValue) {
             $tempDatum = explode(".",$queryDynamic[$dynamicKey]["datum"]);
@@ -185,7 +180,7 @@ class sCms
             }
             // Get attachment
             if ($queryDynamic[$dynamicKey]["attachment"]) {
-                $queryDynamic[$dynamicKey]["attachment"] =  "http://".$this->sSYSTEM->sCONFIG["sBASEPATH"].$this->sSYSTEM->sCONFIG["sCMSFILES"]."/".$queryDynamic[$dynamicKey]["attachment"];
+                $queryDynamic[$dynamicKey]["attachment"] =  "http://".$this->config->get('sBASEPATH').$this->config->get('sCMSFILES')."/".$queryDynamic[$dynamicKey]["attachment"];
             }
 
             $queryDynamic[$dynamicKey]["dateExploded"] = $tempDatum;
@@ -211,7 +206,7 @@ class sCms
         AND id=?
         ";
 
-        $queryDynamic = $this->adodb->CacheGetRow($this->config->get('sCACHESTATIC'),$sql,array($group,$id));
+        $queryDynamic = $this->db->fetchRow($sql, array($group,$id));
 
         if ($queryDynamic["id"]) {
             $tempDatum = explode(".",$queryDynamic["datum"]);
@@ -226,7 +221,7 @@ class sCms
             }
             // Get attachment
             if ($queryDynamic["attachment"]) {
-                $queryDynamic["attachment"] =  "http://".$this->config("sBASEPATH").$this->config("sCMSFILES")."/".$queryDynamic["attachment"];
+                $queryDynamic["attachment"] =  "http://".$this->config->get("sBASEPATH").$this->config->get("sCMSFILES")."/".$queryDynamic["attachment"];
             }
 
             $queryDynamic["dateExploded"] = $tempDatum;
@@ -253,7 +248,7 @@ class sCms
         SELECT description FROM s_cms_groups WHERE id=?
         ";
 
-        $queryDynamic = $this->adodb->CacheGetRow($this->config->get('sCACHESTATIC'),$sql,array($group));
+        $queryDynamic = $this->db->fetchRow($sql, array($group));
 
         return $queryDynamic["description"];
     }
