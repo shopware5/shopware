@@ -32,7 +32,6 @@ namespace Shopware\Components\Snippet\Writer;
 class QueryWriter
 {
     private $queries;
-
     private $update;
 
     public function __construct()
@@ -46,35 +45,71 @@ class QueryWriter
             throw new \Exception('You called write() but provided no data to be written');
         }
 
+        if (!$this->update) {
+            $this->generateInsertQueries($data, $namespace, $localeId, $shopId);
+            return $this;
+        }
+
+        $this->generateUpdateInsertQueries($data, $namespace, $localeId, $shopId);
+
+        return $this;
+    }
+
+    private function generateUpdateInsertQueries($data, $namespace, $localeId, $shopId)
+    {
         foreach ($data as $name => $value) {
             $queryData = array(
                 'namespace' => '\''.addslashes($namespace).'\'',
-                'shopID' => $shopId,
-                'localeID' => $localeId,
-                'name' => '\''.addslashes($name).'\'',
-                'value' => '\''.addslashes($value).'\'',
-                'created' => '\''.date('Y-m-d H:i:s', time()).'\'',
-                'updated' => '\''.date('Y-m-d H:i:s', time()).'\'',
-                'dirty' => 0
+                'shopID'    => $shopId,
+                'localeID'  => $localeId,
+                'name'      => '\''.addslashes($name).'\'',
+                'value'     => '\''.addslashes($value).'\'',
+                'created'   => '\''.date('Y-m-d H:i:s', time()).'\'',
+                'updated'   => '\''.date('Y-m-d H:i:s', time()).'\'',
+                'dirty'     => 0
             );
 
-            if (!$this->update) {
-                $this->queries[] = 'INSERT IGNORE INTO s_core_snippets'
-                    . ' (' . implode(', ', array_keys($queryData)) . ')'
-                    . ' VALUES (' . implode(', ', array_values($queryData)) . ');';
-            } else {
-                $updateData = array(
-                    'updated=IF(dirty = 1, updated, \''.date('Y-m-d H:i:s', time()).'\')',
-                    'value=IF(dirty = 1, value, \''.addslashes($value).'\')',
-                    'dirty=IF(value = \''.addslashes($value).'\', 0, 1)'
-                );
+            $updateData = array(
+                'updated=IF(dirty = 1, updated, \''.date('Y-m-d H:i:s', time()).'\')',
+                'value=IF(dirty = 1, value, \''.addslashes($value).'\')',
+                'dirty=IF(value = \''.addslashes($value).'\', 0, 1)'
+            );
 
-                $this->queries[] = 'INSERT INTO s_core_snippets'
-                    . ' (' . implode(', ', array_keys($queryData)) . ')'
-                    . ' VALUES (' . implode(', ', array_values($queryData)) . ')'
-                    . ' ON DUPLICATE KEY UPDATE ' . implode(', ', array_values($updateData)) . ';';
+            $this->queries[] = 'INSERT INTO s_core_snippets'
+                . ' (' . implode(', ', array_keys($queryData)) . ')'
+                . ' VALUES (' . implode(', ', array_values($queryData)) . ')'
+                . ' ON DUPLICATE KEY UPDATE ' . implode(', ', array_values($updateData)) . ';';
+        }
+    }
+
+    private function generateInsertQueries($data, $namespace, $localeId, $shopId)
+    {
+        $insertSql = 'INSERT IGNORE INTO s_core_snippets (namespace, shopID, localeID, name, value, created, updated, dirty) VALUES ';
+
+        $counter = 0;
+        foreach ($data as $name => $value) {
+            $queryData = array(
+                    'namespace' => '\''.addslashes($namespace).'\'',
+                    'shopID'    => $shopId,
+                    'localeID'  => $localeId,
+                    'name'      => '\''.addslashes($name).'\'',
+                    'value'     => '\''.addslashes($value).'\'',
+                    'created'   => '\''.date('Y-m-d H:i:s', time()).'\'',
+                    'updated'   => '\''.date('Y-m-d H:i:s', time()).'\'',
+                    'dirty'     => 0
+            );
+
+            $values[] = '(' . implode(', ', array_values($queryData)) . ')';
+            if (++$counter % 50 == 0) {
+                $this->queries[] = $insertSql . implode(', ', $values) . ';';
+                $values = array();
             }
         }
+
+        if (!empty($values)) {
+            $this->queries[] = $insertSql . implode(', ', $values) . ';';
+        }
+
         return $this;
     }
 
@@ -101,6 +136,4 @@ class QueryWriter
     {
         return $this->update;
     }
-
-
 }

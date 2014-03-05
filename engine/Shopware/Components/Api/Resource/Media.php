@@ -308,6 +308,19 @@ class Media extends Resource
                 sprintf("Some error occurred while loading your image")
             );
         }
+
+        if ($media->getType() === MediaModel::TYPE_IMAGE) {
+            $settingSizes = $album->getSettings()->getThumbnailSize();
+            $settingSizes += $media->getDefaultThumbnails();
+
+            $manager = Shopware()->Container()->get('thumbnail_manager');
+            $manager->createMediaThumbnail(
+                $media,
+                $settingSizes,
+                true
+            );
+        }
+
         return $media;
     }
 

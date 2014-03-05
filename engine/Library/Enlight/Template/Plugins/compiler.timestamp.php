@@ -23,24 +23,18 @@
  */
 
 /**
- * @category  Shopware
- * @package   Shopware\Plugins\Frontend\PaymentSofort
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ * Returns the current time measured in the number of seconds
+ * since the Unix Epoch (January 1 1970 00:00:00 GMT).
  */
-class Shopware_Plugins_Frontend_PaymentSofort_Bootstrap extends Shopware_Components_DummyPlugin_Bootstrap
+class Smarty_Compiler_Timestamp extends Smarty_Internal_CompileBase
 {
     /**
-     * @return array
+     * @param $args
+     * @param $compiler
+     * @return int
      */
-    public function getInfo()
+    public function compile($args, $compiler)
     {
-        return array(
-            'version'   => $this->getVersion(),
-            'autor'     => 'SOFORT AG',
-            'copyright' => 'SOFORT AG, 2012',
-            'label'     => 'SOFORT Gateway',
-            'support'   => 'https://www.payment-network.com/sue_de/integration/list/88',
-            'link'      => 'http://www.sofort.com',
-        );
+        return time();
     }
 }

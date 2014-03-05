@@ -3190,8 +3190,8 @@ jQuery.fn.liveSearch = function (conf) {
                 $.post(me.attr('href'), function (data) {
                     var modal = $.modal(data, '', {
                         'position':'fixed',
-                        'width': ~~(1 * width),
-                        'height': ~~(1 * height)
+                        'width': parseInt(width, 10),
+                        'height': parseInt(height, 10)
                     });
 
                     // Remove close icon
@@ -3203,16 +3203,16 @@ jQuery.fn.liveSearch = function (conf) {
 
     //creates an modal window with text and headline
     $.modal = function (text, headline, settings) {
-        if (settings) $.extend(config, settings);
+        settings = settings || {};
+        settings = $.extend({}, config, settings);
+
         if ($('.modal')) $('.modal').remove();
         var modal = $('<div>', {
             'class': 'modal',
             'css': {
-                'width': config.width
+                'width': settings.width
             }
         });
-
-        if(settings.width) { modal.css('width', settings.width); }
 
         if (headline.length) {
             var h2 = $('<h2>', {
@@ -3220,24 +3220,23 @@ jQuery.fn.liveSearch = function (conf) {
             }).appendTo(modal);
         }
         if (text.length) {
-            var container = $(config.textContainer, {
+            var container = $(settings.textContainer, {
                 'html': text
             });
 
-            if (config.textClass.length) {
-                container.addClass(config.textClass)
+            if (settings.textClass.length) {
+                container.addClass(settings.textClass)
             }
             container.appendTo(modal);
         }
 
         //get css properties
         modal.show();
-        if(!config.position) {
-            config.position = modal.css('position');
+        if(!settings.position) {
+            settings.position = modal.css('position');
         }
-        config.top = modal.css('top');
+        settings.top = modal.css('top');
         modal.hide();
-
 
         modal.appendTo('body');
 
@@ -3247,10 +3246,10 @@ jQuery.fn.liveSearch = function (conf) {
 
         modal.show().css('marginLeft', -(modal.width()/2)).hide();
 
-        if (config.useOverlay == true) {
+        if (settings.useOverlay == true) {
             $.modal.overlay.fadeIn();
 
-            $(config.overlay).bind('click', function (event) {
+            $(settings.overlay).bind('click', function (event) {
                 $.modalClose();
             });
         }
@@ -3259,20 +3258,20 @@ jQuery.fn.liveSearch = function (conf) {
         if($.browser.msie && parseInt($.browser.version) == 6) {
             $.ie6fix.open(modal, config);
         } else {
-            if (config.position == 'absolute') {
+            if (settings.position == 'absolute') {
                 modal.css({
-                    'position': config.position,
+                    'position': settings.position,
                     'bottom': 'auto'
-                }).fadeIn(config.animationSpeed);
-            } else if (config.position == 'fixed') {
+                }).fadeIn(settings.animationSpeed);
+            } else if (settings.position == 'fixed') {
                 $('.modal').fadeIn();
                 modal.css({
-                    'position': config.position,
+                    'position': settings.position,
                     'top': -(modal.height() + 100) + 'px',
                     'display': 'block'
                 }).animate({
                             'top': '40px'
-                        }, config.animationSpeed)
+                        }, settings.animationSpeed)
             }
         }
 
@@ -6049,9 +6048,8 @@ if (navigator.appVersion.indexOf("MSIE 7.") != -1)
  * @license: MIT http://rem.mit-license.org/
  * @link: https://gist.github.com/remy/350433
  */
-if (typeof window.localStorage == 'undefined' || typeof window.sessionStorage == 'undefined') (function () {
-
-    var Storage = function (type) {
+(function () {
+    window.StoragePolyFill = function (type) {
         function createCookie(name, value, days) {
             var date, expires;
 
@@ -6085,20 +6083,20 @@ if (typeof window.localStorage == 'undefined' || typeof window.sessionStorage ==
         function setData(data) {
             data = JSON.stringify(data);
             if (type == 'session') {
-                window.name = data;
+                createCookie('sessionStorage', data, 0);
             } else {
                 createCookie('localStorage', data, 365);
             }
         }
         function clearData() {
             if (type == 'session') {
-                window.name = '';
+                createCookie('sessionStorage', '', 0);
             } else {
                 createCookie('localStorage', '', 365);
             }
         }
         function getData() {
-            var data = type == 'session' ? window.name : readCookie('localStorage');
+            var data = type == 'session' ? readCookie('sessionStorage') : readCookie('localStorage');
             return data ? JSON.parse(data) : {};
         }
 
@@ -6138,7 +6136,7 @@ if (typeof window.localStorage == 'undefined' || typeof window.sessionStorage ==
         };
     };
 
-    if (typeof window.localStorage == 'undefined') window.localStorage = new Storage('local');
-    if (typeof window.sessionStorage == 'undefined') window.sessionStorage = new Storage('session');
+    if (typeof window.localStorage == 'undefined') window.localStorage = new StoragePolyFill('local');
+    if (typeof window.sessionStorage == 'undefined') window.sessionStorage = new StoragePolyFill('session');
 
 })();

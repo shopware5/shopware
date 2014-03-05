@@ -309,6 +309,202 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
     }
 
     /**
+     * Test that creating an article with images generates thumbnails
+     *
+     * @return int Article Id
+     */
+    public function testCreateWithImageShouldCreateThumbnails()
+    {
+        $testData = array(
+            'name' => 'Test article with images',
+            'description' => 'Test description',
+            'active' => true,
+            'filterGroupId' => 1,
+
+            'propertyValues' => array(
+                array(
+                    'value' => 'grün',
+                    'option' => array(
+                        'name' => 'Farbe'
+                    )
+                ),
+                array(
+                    'value' => 'testWert',
+                    'option' => array(
+                        'name' => 'neueOption' . uniqid()
+                    )
+                )
+            ),
+
+            'images' => array(
+                array(
+                    'link' => 'http://lorempixel.com/600/400/'
+                ),
+                array(
+                    'link' => 'data:image/png;base64,' . require(__DIR__ . '/fixtures/base64image.php')
+                ),
+                array(
+                    'link' => 'file://' . __DIR__ . '/fixtures/variant-image.png'
+                )
+            ),
+
+            'mainDetail' => array(
+                'number' => 'swTEST' . uniqid(),
+                'inStock' => 15,
+                'unitId' => 1,
+
+                'attribute' => array(
+                    'attr1' => 'Freitext1',
+                    'attr2' => 'Freitext2',
+                ),
+
+                'minPurchase' => 5,
+                'purchaseSteps' => 2,
+                'purchaseSteps' => 2,
+
+                'prices' => array(
+                    array(
+                        'customerGroupKey' => 'EK',
+                        'from' => 1,
+                        'to' => 20,
+                        'price' => 500,
+                    ),
+                    array(
+                        'customerGroupKey' => 'EK',
+                        'from' => 21,
+                        'to' => '-',
+                        'price' => 400,
+                    ),
+                )
+            ),
+
+            'configuratorSet' => array(
+                'name' => 'MeinKonf',
+                'groups' => array(
+                    array(
+                        'name' => 'Farbe',
+                        'options' => array(
+                            array('name' => 'Gelb'),
+                            array('name' => 'grün')
+                        )
+                    ),
+                    array(
+                        'name' => 'Gräße',
+                        'options' => array(
+                            array('name' => 'L'),
+                            array('name' => 'XL')
+                        )
+                    ),
+                )
+            ),
+
+            'variants' => array(
+                array(
+                    'number' => 'swTEST.variant.' . uniqid(),
+                    'inStock' => 17,
+                    // create a new unit
+                    'unit' => array(
+                        'unit' => 'xyz',
+                        'name' => 'newUnit'
+                    ),
+
+                    'attribute' => array(
+                        'attr3' => 'Freitext3',
+                        'attr4' => 'Freitext4',
+                    ),
+
+                    'images' => array(
+                        array(
+                            'link' => 'http://lorempixel.com/600/400/'
+                        )
+                    ),
+
+                    'configuratorOptions' => array(
+                        array(
+                            'option' => 'Gelb',
+                            'group' => 'Farbe'
+                        ),
+                        array(
+                            'option' => 'XL',
+                            'group' => 'Größe'
+                        )
+
+                    ),
+
+                    'minPurchase' => 5,
+                    'purchaseSteps' => 2,
+
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'H',
+                            'from' => 1,
+                            'to' => 20,
+                            'price' => 500,
+                        ),
+                        array(
+                            'customerGroupKey' => 'H',
+                            'from' => 21,
+                            'to' => '-',
+                            'price' => 400,
+                        ),
+                    )
+
+                )
+            ),
+            'taxId' => 1,
+            'supplierId' => 2,
+        );
+
+        $article = $this->resource->create($testData);
+
+        $this->assertInstanceOf('\Shopware\Models\Article\Article', $article);
+        $this->assertGreaterThan(0, $article->getId());
+        $this->assertCount(4, $article->getImages());
+
+        foreach ($article->getImages() as $image) {
+            $this->assertCount(6, $image->getMedia()->getThumbnails());
+            foreach ($image->getMedia()->getThumbnails() as $thumbnail) {
+                $this->assertFileExists(Shopware()->OldPath() . $thumbnail);
+            }
+        }
+
+        return $article->getId();
+    }
+
+    /**
+     * Test that updating an Article with images generates thumbnails
+     *
+     * @depends testCreateWithImageShouldCreateThumbnails
+     * @return int
+     */
+    public function testUpdateWithImageShouldCreateThumbnails($id)
+    {
+        $testData = array(
+            'images' => array(
+                array(
+                    'link' => 'http://www.shopware.com/sites/default/files/assets/images/refsprite_dbahn.png'
+                )
+            ),
+        );
+
+        $article = $this->resource->update($id, $testData);
+
+        $this->assertInstanceOf('\Shopware\Models\Article\Article', $article);
+        $this->assertGreaterThan(0, $article->getId());
+
+        $this->assertCount(5, $article->getImages());
+        foreach ($article->getImages() as $image) {
+            $this->assertCount(6, $image->getMedia()->getThumbnails());
+            foreach ($image->getMedia()->getThumbnails() as $thumbnail) {
+                $this->assertFileExists(Shopware()->OldPath() . $thumbnail);
+            }
+        }
+
+        // Cleanup test data
+        $this->resource->delete($id);
+    }
+
+    /**
      * Test creating an article with new configurator set and multiple variants
      * SW-7925
      *
@@ -1192,7 +1388,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
         $data['images'] = array(
             array(
-                'link' => 'data:image/png;base64,' . require_once(__DIR__ . '/fixtures/base64image.php')
+                'link' => 'data:image/png;base64,' . require(__DIR__ . '/fixtures/base64image.php')
             )
         );
 
@@ -1728,7 +1924,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $data = $this->getSimpleTestData();
 
         $data['downloads'] = array(
-            array('link' => 'data:image/png;base64,' . require_once(__DIR__ . '/fixtures/base64image.php'))
+            array('link' => 'data:image/png;base64,' . require(__DIR__ . '/fixtures/base64image.php'))
         );
 
         $article = $this->resource->create($data);

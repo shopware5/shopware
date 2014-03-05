@@ -301,10 +301,37 @@
     "use strict";
 
     var pluginName = 'httpCacheFilters',
+        sessionStorage = window.sessionStorage,
+        hasSessionStorageSupport = isSessionStorageSupported(),
         defaults = {
             mode: 'listing'
-        },
-        hasSessionStorageSupport = typeof(window.Storage) !== 'undefined' || !window.hasOwnProperty('sessionStorage');
+        };
+
+    if(!hasSessionStorageSupport) {
+        sessionStorage = new StoragePolyFill('session');
+        hasSessionStorageSupport = true;
+    }
+
+    /**
+     * Returns whether or not the sessionStorage is available and works - SW-7524
+     *
+     * @returns {boolean}
+     */
+    function isSessionStorageSupported () {
+        var testKey = 'test';
+
+        if (!sessionStorage) {
+            return false;
+        }
+
+        try {
+            sessionStorage.setItem(testKey, '1');
+            sessionStorage.removeItem(testKey);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
 
     /**
      * Plugin constructor which merges the default settings
@@ -335,11 +362,6 @@
     Plugin.prototype.init = function() {
         var me = this,
             mode;
-
-        // Check if the browser support { @link sessionStorage }
-        if(!hasSessionStorageSupport) {
-            return false;
-        }
 
         // Terminate if we're on the category listing or on the detail page
         mode = $(me.element).hasClass('ctl_detail') ? 'detail' : 'listing';
@@ -393,10 +415,11 @@
      * @returns { Boolean }
      */
     Plugin.prototype.saveCurrentState = function(url) {
-        if(!url || !url.length) {
-            url = window.location.href;
+        var itemValue = url || window.location.href;
+
+        if (hasSessionStorageSupport) {
+            sessionStorage.setItem(pluginName, itemValue);
         }
-        window.sessionStorage.setItem(pluginName, url);
 
         return true;
     };
@@ -409,12 +432,26 @@
      * @returns { Boolean } Truthy, if all went well, otherwise falsy
      */
     Plugin.prototype.restoreState = function() {
-        if(!window.sessionStorage.getItem(pluginName)) {
+        var item = hasSessionStorageSupport && sessionStorage.getItem(pluginName);
+
+        if(!item) {
             return false;
         }
-        $('.article_overview a').attr('href', window.sessionStorage.getItem(pluginName));
 
-        window.sessionStorage.removeItem(pluginName);
+        var detailItem = sessionStorage.getItem(pluginName + '-detail');
+
+        if (!detailItem) {
+            detailItem = window.location.href;
+            sessionStorage.setItem(pluginName + '-detail', window.location.href);
+        }
+
+        if(detailItem === window.location.href) {
+            $('.article_overview a').attr('href', item);
+        } else {
+            sessionStorage.removeItem(pluginName);
+            sessionStorage.removeItem(pluginName + '-detail');
+        }
+
         return true;
     };
 

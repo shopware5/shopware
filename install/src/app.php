@@ -34,8 +34,11 @@ if (!isset($_SESSION["parameters"])) {
  * Load language file
  */
 $allowedLanguages = array("de", "en");
-$selectedLanguage = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
-$selectedLanguage = substr($selectedLanguage[0], 0, 2);
+$selectedLanguage = "de";
+if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+    $selectedLanguage = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+    $selectedLanguage = substr($selectedLanguage[0], 0, 2);
+}
 if (empty($selectedLanguage) || !in_array($selectedLanguage, $allowedLanguages)) {
     $selectedLanguage = "de";
 }
@@ -333,16 +336,13 @@ $app->map('/step4/importDatabase', function () use ($app) {
     }
 
     $preSql = <<<'EOD'
-SET NAMES "utf8";
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 SET FOREIGN_KEY_CHECKS = 0;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -419,65 +419,46 @@ $app->map('/step4/importSnippets', function () use ($app) {
         throw new \Exception("database eror");
     }
 
-    $preSql = 'SET NAMES "utf8";
+    $preSql = '
        SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
        SET time_zone = "+00:00";
        SET @locale_de_DE = (SELECT id FROM s_core_locales WHERE locale = "de_DE");
        SET @locale_en_GB = (SELECT id FROM s_core_locales WHERE locale = "en_GB");
-       SET @locale_default = (SELECT id FROM s_core_locales WHERE locale = "en_GB");
    ';
 
     $conn->query($preSql);
     $dump->seek($offset);
 
     $sql = array();
-    $batchSize = 2000;
+    $batchSize = 50;
     foreach (range(0, $batchSize - 1) as $count) {
         $current = trim($dump->current());
+
         if (empty($current)) {
             continue;
         }
 
-        $sql[] = $current;
-        $dump->next();
-
-        if ($count % 200 === 0) {
-            try {
-                $conn->exec(implode(";\n", $sql));
-                $sql = array();
-            } catch (PDOException $e) {
-                $data = array(
-                        'query'        => $sql,
-                        'success'      => false,
-                        'offset'       => $offset,
-                        'errorMsg'     => $e->getMessage(),
-                );
-
-                $response->body(json_encode($data));
-                return;
-            }
-        }
-    }
-
-    try {
-        $conn->exec(implode(";\n", $sql));
-    } catch (PDOException $e) {
-        $data = array(
+        try {
+            $conn->exec($current);
+            $dump->next();
+        } catch (PDOException $e) {
+            $data = array(
                 'query'        => $sql,
                 'success'      => false,
                 'offset'       => $offset,
                 'errorMsg'     => $e->getMessage(),
-        );
+            );
 
-        $response->body(json_encode($data));
-        return;
+            $response->body(json_encode($data));
+            return;
+        }
     }
 
     $data = array(
-            'valid'      => $dump->valid(),
-            'offset'     => $dump->key(),
-            'totalCount' => $totalCount,
-            'success'    => true,
+        'valid'      => $dump->valid(),
+        'offset'     => $dump->key(),
+        'totalCount' => $totalCount,
+        'success'    => true,
     );
 
     $response->body(json_encode($data));

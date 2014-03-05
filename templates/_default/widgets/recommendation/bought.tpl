@@ -4,8 +4,8 @@
             $(document).ready(function() {
                 $('.bought-slider').ajaxSlider('locale', {
                     'height': 130,
-                    'width': 628,
-                    'scrollWidth': 576,
+                    'width': 896,
+                    'scrollWidth': 896,
                     'title': '{s name="DetailBoughtArticlesSlider" namespace="frontend/plugins/recommendation/blocks_detail"}Kunden kauften auch:{/s}',
                     'titleClass': 'headingbox_nobg',
                     'headline': true,

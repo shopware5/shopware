@@ -139,7 +139,8 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.Main', {
                 store:Ext.create('Shopware.store.User').load(),
                 valueField:'id',
                 editable:true,
-                displayField:'name'
+                displayField:'name',
+                pageSize: 10
             },
             {
                 xtype:'checkbox',
