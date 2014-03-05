@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4
- * Copyright Â© shopware AG
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Components\Form\Persister;
 
 use Doctrine\Common\Collections\ArrayCollection;

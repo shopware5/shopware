@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4
- * Copyright Â© shopware AG
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -250,6 +250,9 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     }
 
     /**
+     * Helper function which checks if the passed template
+     * or the inheritance templates has configuration sets.
+     *
      * @param Template $template
      * @return bool
      */
@@ -340,6 +343,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
     /**
      * Returns the id of the default shop.
+     *
      * @return string
      */
     private function getDefaultShopId()
