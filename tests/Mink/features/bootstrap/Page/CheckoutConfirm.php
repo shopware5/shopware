@@ -48,10 +48,8 @@ class CheckoutConfirm extends Page
 
         $this->selectFieldOption('register[payment]', $value);
 
-        if($value === 2)
-        {
-            foreach($data as $field => $value)
-            {
+        if ($value === 2) {
+            foreach ($data as $field => $value) {
                 $this->fillField($field, $value);
             }
         }
