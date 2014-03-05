@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 namespace Shopware\Models\Shop\TemplateConfig;
 
 use Doctrine\Common\Collections\ArrayCollection;
