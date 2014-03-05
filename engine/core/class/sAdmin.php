@@ -1567,7 +1567,7 @@ class sAdmin
      */
     public function sGetCountryList()
     {
-        $getCountries = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],"SELECT * FROM s_core_countries WHERE active = 1 ORDER BY position, countryname ASC");
+        $getCountries = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],"SELECT * FROM s_core_countries ORDER BY position, countryname ASC");
 
         $object = $this->sGetCountryTranslation();
         $stateTranslation = $this->sGetCountryStateTranslation();
@@ -1577,6 +1577,12 @@ class sAdmin
 
             if (isset($object[$v["id"]]["active"])) {
                 if (!$object[$v["id"]]["active"]) {
+                    unset($getCountries[$key]);
+                    continue;
+                }
+            } else {
+                // Use main config when nothing is set for subshop or if current is main shop (isocode 1)
+                if(!$v["active"]) {
                     unset($getCountries[$key]);
                     continue;
                 }
