@@ -50,6 +50,20 @@ class sNewsletter
     private $config;
 
     /**
+     * Shopware Articles core module
+     *
+     * @var sArticles
+     */
+    private $articlesModule;
+
+    /**
+     * Shopware Marketing core module
+     *
+     * @var sMarketing
+     */
+    private $marketingModule;
+
+    /**
      * Class constructor.
      * Injects all dependencies which are required for this class.
      */
@@ -57,6 +71,8 @@ class sNewsletter
     {
         $this->db = Shopware()->Db();
         $this->config = Shopware()->Config();
+        $this->articlesModule = Shopware()->Modules()->Articles();
+        $this->marketingModule = Shopware()->Modules()->Marketing();
     }
 
     /**
@@ -72,10 +88,10 @@ class sNewsletter
             SELECT value, description FROM s_campaigns_containers WHERE type='ctSuggest'
             AND promotionID = ?
         ";
-        unset($this->sSYSTEM->sMODULES['sArticles']->sCachePromotions);
-        unset($this->sSYSTEM->sMODULES['sMarketing']->sBlacklist);
+        unset($this->articlesModule->sCachePromotions);
+        unset($this->marketingModule->sBlacklist);
 
-        $getSuggestInfo = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($sql, null, array(intval($id)));
+        $getSuggestInfo = $this->db->fetchRow($sql, array(intval($id)));
         if ($getSuggestInfo["value"] && $getSuggestInfo["description"]) {
             // Main information
             $sSuggestion["description"] = $getSuggestInfo["description"];
@@ -94,7 +110,7 @@ class sNewsletter
 
                 foreach ($selectLast as $lastArticle) {
                     $category = $this->sSYSTEM->_GET["sCategory"] ? : 0;
-                    $temp = $this->sSYSTEM->sMODULES['sArticles']->sGetPromotionById("fix", $category, $lastArticle["articleID"]);
+                    $temp = $this->articlesModule->sGetPromotionById("fix", $category, $lastArticle["articleID"]);
                     if ($temp["articleID"] && empty($blacklist[$temp["articleID"]])) {
                         $finalRecommendations[] = $temp;
                         $blacklist[$temp["articleID"]] = $temp["articleID"];
@@ -108,10 +124,10 @@ class sNewsletter
             $category = $this->sSYSTEM->_GET['sCategory'] ? : 0;
 
             while ($leftRecommendations > 0) {
-                $article = $this->sSYSTEM->sMODULES['sArticles']->sGetPromotionById($randomize[array_rand($randomize)], $category, '');
+                $article = $this->articlesModule->sGetPromotionById($randomize[array_rand($randomize)], $category, '');
                 if (!empty($article)) {
                     $leftRecommendations--;
-                    $this->sSYSTEM->sMODULES['sArticles']->sCachePromotions[] = $article['articleID'];
+                    $this->articlesModule->sCachePromotions[] = $article['articleID'];
                     $finalRecommendations[] = $article;
                 }
             }
@@ -143,12 +159,12 @@ class sNewsletter
         $this->config->offsetSet('sMAXCROSSSIMILAR', 1);
 
         foreach ($lastViewedArticles as $lastArticle) {
-            $this->sSYSTEM->sMODULES['sMarketing']->sBlacklist[] = $lastArticle["articleID"];
+            $this->marketingModule->sBlacklist[] = $lastArticle["articleID"];
         }
 
         $selectLastAlsoView = array();
         foreach ($lastViewedArticles as $lastArticle) {
-            $temp = $this->sSYSTEM->sMODULES['sMarketing']->sGetSimilaryShownArticles($lastArticle["articleID"]);
+            $temp = $this->marketingModule->sGetSimilaryShownArticles($lastArticle["articleID"]);
             if ($temp[0]["id"]) {
                 $selectLastAlsoView[]["articleID"] = $temp[0]["id"];
             }
@@ -176,10 +192,10 @@ class sNewsletter
 
         $selectLastOrders = $this->db->fetchAll($sql, array($userId));
         foreach ($selectLastOrders as $lastArticle) {
-            $this->sSYSTEM->sMODULES['sMarketing']->sBlacklist[] = $lastArticle["articleID"];
+            $this->marketingModule->sBlacklist[] = $lastArticle["articleID"];
         }
         foreach ($selectLastOrders as $lastArticle) {
-            $temp = $this->sSYSTEM->sMODULES['sMarketing']->sGetAlsoBoughtArticles($lastArticle["articleID"]);
+            $temp = $this->marketingModule->sGetAlsoBoughtArticles($lastArticle["articleID"]);
             if ($temp[0]["id"]) {
                 $selectLastAlsoBought[]["articleID"] = $temp[0]["id"];
             }
