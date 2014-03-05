@@ -221,12 +221,12 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         }
 
         //check canonical shopware configuration
-        $forceUnsecureCanonical = Shopware()->Config()->get('forceUnsecureCanonical');
+        $forceCanonicalHttp = Shopware()->Config()->get('forceCanonicalHttp');
 
         //check if the current link is a canonical link
         $isCanonical = (strpos($src[0], 'rel="canonical"') !== false);
 
-        $replaceCanonical = !($isCanonical && $forceUnsecureCanonical);
+        $replaceCanonical = !($isCanonical && $forceCanonicalHttp);
 
         if ($this->useSecure && $src[1] != 'a' && $replaceCanonical) {
             $link = str_replace('http://' . $this->basePath, 'https://' . $this->basePath, $link);
