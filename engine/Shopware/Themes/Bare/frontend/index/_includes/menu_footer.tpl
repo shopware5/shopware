@@ -58,7 +58,7 @@
 			<form class="newsletter--form" action="{url controller='newsletter'}" method="post">
 				<input type="hidden" value="1" name="subscribeToNewsletter" />
 
-				<input type="text" name="newsletter" class="newsletter--field" value="{s name="IndexFooterNewsletterValue"}Ihre E-Mail Adresse{/s}" />
+				<input type="text" name="newsletter" class="newsletter--field" placeholder="{s name="IndexFooterNewsletterValue"}Ihre E-Mail Adresse{/s}" />
 				<input type="submit" class="newsletter--button" value="{s name='IndexFooterNewsletterSubmit'}Newsletter abonnieren{/s}" />
 			</form>
 		{/block}
