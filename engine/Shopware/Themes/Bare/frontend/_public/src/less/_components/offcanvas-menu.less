@@ -7,17 +7,6 @@
 	height: 100%;
 	border-right: 1px solid rgba(red(@lightTextColor), green(@lightTextColor), blue(@lightTextColor), 50%);
 
-	&::after {
-		.box-shadow(inset -5px 0 5px -5px @lightTextColor);
-		content: '';
-		display: block;
-		height: 100%;
-		position: absolute;
-		top: 0;
-		right: 0;
-		width: 5px;
-	}
-
 	.logo--trusted-shops {
 		display: none;
 	}
@@ -28,6 +17,17 @@
 	.transition(all, 0.25s, ease-in-out);
 	.transform-style(preverse-3d);
     min-height: 100%;
+
+	&::before {
+		.unitize(-8, 16, left);
+		.unitize-width(8, 16);
+		.box-shadow(inset -5px 0 5px -5px @lightTextColor);
+		content: '';
+		display: block;
+		height: 100%;
+		position: absolute;
+		top: 0;
+	}
 
 	// Disables the transition, so the user can slide
 	&.js--no-transition {
