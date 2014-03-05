@@ -29,7 +29,7 @@
             direction: 'fromLeft',
 
             /** @string swipeContainerSelector Container selector which should catch the swipe gestructure */
-            swipeContainerSelector: '.header-main',
+            swipeContainerSelector: '.page-wrap',
 
             /** @string leftMenuOpenCls Class which should be added when the menu will be opened on the left side */
             leftMenuOpenCls: 'js--menu-left--open',
@@ -87,6 +87,7 @@
         if(selector && selector.length) {
             opts.offcanvasElement = selector;
         }
+        me.$offcanvas = $(opts.offcanvasElement);
 
         me.registerEventListeners();
     };
@@ -153,6 +154,34 @@
                 me.$pageWrap.removeAttr('style');
                 me.$body.removeClass((opts.direction === 'fromLeft' ? opts.leftMenuOpenCls : opts.rightMenuOpenCls));
             });
+        });
+
+        me.$offcanvas.on((opts.direction === 'fromLeft' ? 'swipeleft' : 'swiperight') + '.' + pluginName, function() {
+            me.$pageWrap.transition({ translate: [0, 0] }, 250, function() {
+                me.$pageWrap.removeAttr('style');
+                me.$body.removeClass((opts.direction === 'fromLeft' ? opts.leftMenuOpenCls : opts.rightMenuOpenCls));
+            });
+        }).on('movestart.' + pluginName, function(e) {
+
+            // Allows the normal up and down scrolling from the browser
+            if ((e.distX > e.distY && e.distX < -e.distY) || (e.distX < e.distY && e.distX > -e.distY)) {
+                e.preventDefault();
+                return;
+            }
+            me.$pageWrap.addClass(opts.disableTransitionCls);
+        }).on('move.' + pluginName, function(e) {
+            var x = 300 - Math.abs(e.distX);
+            if(opts.direction === 'fromLeft') {
+                x = (x < 0 ? 0 : x);
+                x = (x > 300 ? 300 : x);
+            } else {
+                x =(x > 0 ? 0 : x);
+                x = (x < -300 ? -300 : x);
+            }
+            me.$pageWrap.css({ translate: [ x, 0] });
+            //me.$body.addClass((opts.direction === 'fromLeft' ? opts.leftMenuOpenCls : opts.rightMenuOpenCls));
+        }).on('moveend.' + pluginName, function() {
+            me.$pageWrap.removeAttr('style').removeClass(opts.disableTransitionCls);
         });
 
         return true;
