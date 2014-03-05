@@ -4,7 +4,7 @@
 		{include file="frontend/campaign/box.tpl" campaignsData=$campaigns.leftTop}
 	{/block}
 	
-	{* Maincategories left *}
+	{* Sidebar category tree *}
 	{block name='frontend_index_left_categories'}
         <div class="navigation--smartphone">
             <ul class="navigation--list ">
@@ -16,15 +16,15 @@
 
                 <li class="navigation--entry entry--my-account">
                     <a class="navigation--link" href="{url controller='account'}" title="{s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}">
-                        {s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}
+                        <i class="icon--account"></i> {s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}
                     </a>
                 </li>
             </ul>
 
-            <h2 class="headline">Kategorien</h2>
+            <h2 class="navigation--headline">Kategorien</h2>
         </div>
 
-		{include file='frontend/index/_includes/categories_left.tpl'}
+		{include file='frontend/index/_includes/sidebar_categories.tpl'}
 	{/block}			
 	
 	{* Campaign left middle *}
@@ -46,14 +46,6 @@
 
 	{* Campaign left bottom *}
 	{block name='frontend_index_left_campaigns_bottom'}
-		{if $campaigns.leftBottom}
-			<div class="space"></div>
-		{/if}
 		{include file="frontend/campaign/box.tpl" campaignsData=$campaigns.leftBottom}
 	{/block}
-	
-	{* Last articles *}
-	{block name='frontend_index_left_last_articles'}{/block}
-	
-	<div class="clear">&nbsp;</div>
 </aside>
