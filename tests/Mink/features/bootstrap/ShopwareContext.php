@@ -330,5 +330,23 @@ class ShopwareContext extends SubContext
         $this->getPage('Homepage')->checkSlider('article', $articles);
     }
 
+    /**
+     * @Given /^I should see a categorie teaser "([^"]*)" with image "([^"]*)" to "([^"]*)"$/
+     */
+    public function iShouldSeeACategorieTeaserWithImageTo($title, $image, $link)
+    {
+        $this->getPage('Homepage')->checkCategoryTeaser($title, $image, $link);
+    }
+
+    /**
+     * @Given /^I should see an article:$/
+     */
+    public function iShouldSeeAnArticle(TableNode $data)
+    {
+        $data = $data->getHash();
+
+        $this->getPage('Homepage')->checkArticle($data);
+    }
+
 }
 
