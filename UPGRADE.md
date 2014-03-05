@@ -1,6 +1,12 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+## 4.3.0
+
+* `sCore::sCustomRenderer()` removed
+* `sCore::sBuildLink()` second argument removed (dead code)
+* `sCore` no longer returns `null` when calling not implemented functions
+
 ## 4.2.2
 
 * Remove old payment dummy plugins out of the core: PaymentSofort and PigmbhRatePAYPayment
