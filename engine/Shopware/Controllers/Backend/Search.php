@@ -125,7 +125,6 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
                 OR TRIM(CONCAT(firstname,' ',lastname)) LIKE $search
             )
             AND u.id = b.userID
-            AND u.accountmode = 0
             GROUP BY id
             ORDER BY name ASC
         ";
