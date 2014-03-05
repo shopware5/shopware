@@ -2594,39 +2594,39 @@ jQuery.fn.liveSearch = function (conf) {
 	
 	//creates an modal window with text and headline
 	$.modal = function (text, headline, settings) {
-	    if (settings) $.extend(config, settings);
+        settings = settings || {};
+        settings = $.extend({}, config, settings);
+
 	    if ($('.modal')) $('.modal').remove();
 	    var modal = $('<div>', {
 	        'class': 'modal',
 	        'css': {
-	        	'width': config.width
+	        	'width': settings.width
 	        } 
 	    });
-	    
-	    if(settings.width) { modal.css('width', settings.width); }
-	    
+
 	    if (headline.length) {
 	        var h2 = $('<h2>', {
 	            'html': headline
 	        }).appendTo(modal)
 	    }
 	    if (text.length) {
-	        var container = $(config.textContainer, {
+	        var container = $(settings.textContainer, {
 	            'html': text
 	        });
 	        
-	        if (config.textClass.length) {
-	            container.addClass(config.textClass)
+	        if (settings.textClass.length) {
+	            container.addClass(settings.textClass)
 	        }
 	        container.appendTo(modal);
 	    }
 	    
 	    //get css properties
 	    modal.show();
-	    if(!config.position) {
-	   		config.position = modal.css('position');
+	    if(!settings.position) {
+            settings.position = modal.css('position');
 	    }
-	    config.top = modal.css('top');
+        settings.top = modal.css('top');
 	    modal.hide();
 	    
 	  
@@ -2634,32 +2634,32 @@ jQuery.fn.liveSearch = function (conf) {
 	    
 	    modal.show().css('marginLeft', -(modal.width()/2)).hide();
 	    
-	    if (config.useOverlay == true) {
+	    if (settings.useOverlay == true) {
 	        $.modal.overlay.fadeIn();
 	        
-	        $(config.overlay).bind('click', function (event) {
+	        $(settings.overlay).bind('click', function (event) {
 	            $.modalClose();
 	        })
 	    }
 	    $('.modal').fadeIn('fast');
 	    
 	    if($.browser.msie && parseInt($.browser.version) == 6) {
-	 		$.ie6fix.open(modal, config);
+	 		$.ie6fix.open(modal, settings);
 	 	} else {
-	        if (config.position == 'absolute') {
+	        if (settings.position == 'absolute') {
 	            modal.css({
-	                'position': config.position,
+	                'position': settings.position,
 	                'bottom': 'auto'
-	            }).fadeIn(config.animationSpeed);
-	        } else if (config.position == 'fixed') {
+	            }).fadeIn(settings.animationSpeed);
+	        } else if (settings.position == 'fixed') {
 	        	$('.modal').fadeIn();
 	            modal.css({
-	                'position': config.position,
+	                'position': settings.position,
 	                'top': -(modal.height() + 100) + 'px',
 	                'display': 'block'
 	            }).animate({
 	                'top': '40px'
-	            }, config.animationSpeed)
+	            }, settings.animationSpeed)
 	        }
 	    }
 	    
