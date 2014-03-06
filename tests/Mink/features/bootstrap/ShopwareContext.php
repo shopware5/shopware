@@ -113,5 +113,15 @@ class ShopwareContext extends SubContext
 
         $this->getPage('Homepage')->checkSlider('article', $articles);
     }
+
+    /**
+     * @Then /^The comparision should look like this:$/
+     */
+    public function theComparisionShouldLookLikeThis(TableNode $articles)
+    {
+        $articles = $articles->getHash();
+
+        $this->getPage('Homepage')->checkComparision($articles);
+    }
 }
 

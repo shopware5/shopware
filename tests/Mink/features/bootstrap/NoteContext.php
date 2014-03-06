@@ -46,4 +46,23 @@ class NoteContext extends SubContext
     {
         $this->getPage('Note')->visitArticleDetails($position);
     }
+
+    /**
+     * @Then /^My note should look like this:$/
+     */
+    public function myNoteShouldLookLikeThis(TableNode $articles)
+    {
+        $articles = $articles->getHash();
+
+        $this->getPage('Note')->checkList($articles);
+    }
+
+    /**
+     * @Then /^My note should be empty$/
+     * @Then /^My note should contain "([^"]*)" articles$/
+     */
+    public function myNoteShouldBeEmpty($count = 0)
+    {
+        $this->getPage('Note')->countArticles($count);
+    }
 }
