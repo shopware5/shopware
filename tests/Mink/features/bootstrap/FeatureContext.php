@@ -29,6 +29,7 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
         $this->useContext('checkout', new CheckoutContext($parameters));
         $this->useContext('listing',  new ListingContext($parameters));
         $this->useContext('detail',   new DetailContext($parameters));
+        $this->useContext('note',     new NoteContext($parameters));
     }
 
     /**

@@ -27,8 +27,7 @@ Feature: Note
 		When  I follow "Vergleichen"
 		Then  I should see "Sonnenbrille Speed Eyes"
 
-		When  I move backward one page
-		 And  I follow "Sonnenbrille Speed Eyes"
+		When  I visit the detail page of the article on position "1" of my note
 		 And  I go to next article
 		Then  I should see "Sonnenbrille Big Eyes"
 
@@ -49,12 +48,12 @@ Feature: Note
 
 		When  I move backward one page
 		 And  I follow "Vergleich löschen"
-		 And  I go to "/note"
+		 And  I go to my note
 
 		Then  I should not see "Artikel vergleichen"
 
-		When  I remove the article on position "2"
-		 And  I remove the article on position "1"
+		When  I remove the article on position "2" of my note
+		 And  I remove the article on position "1" of my note
 
 		Then  I should not see "Sonnenbrille Speed Eyes"
 		 And  I should not see "Sonnenbrille Big Eyes"
