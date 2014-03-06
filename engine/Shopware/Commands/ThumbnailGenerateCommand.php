@@ -122,7 +122,7 @@ EOF
                         continue;
                     }
 
-                    $generator->createMediaThumbnail($media, array($size));
+                    $generator->createMediaThumbnail($media, array($size), true);
                 }
 
                 $progress->advance();
