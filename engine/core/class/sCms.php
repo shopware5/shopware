@@ -245,7 +245,7 @@ class sCms
             $queryDynamic["dateExploded"] = $tempDate;
         } else {
             // No content found, throw an Exception
-            throw new Enlight_Exception("sCMS##sGetContentById", "Content with id '$id' not found");
+            throw new Enlight_Exception("sCMS##sGetContentById: Content with id '$id' not found");
         }
 
         return array("sContent" => $queryDynamic);
