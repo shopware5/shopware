@@ -33,4 +33,16 @@ class Detail extends Page
             $this->clickLink('Warenkorb anzeigen');
         }
     }
+
+    public function goToNeighbor($direction)
+    {
+        $link = $this->find('css', 'a.article_'.$direction);
+
+        if(empty($link))
+        {
+            throw new \Exception('Detail page has to basket button');
+        }
+
+        $link->click();
+    }
 }
