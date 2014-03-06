@@ -1,120 +1,109 @@
-.off-canvas--container,
-.off-canvas--pusher,
-.off-canvas--content {
-	height: 100%;
-}
-.off-canvas--content {
-	overflow-y: scroll;
-	-webkit-overflow-scrolling: touch;
-	background: @primaryBackgroundColor;
-}
-.off-canvas--content,
-.off-canvas--inner-content {
-	position: relative;
-}
-.off-canvas--container {
-	position: relative;
-	overflow: hidden;
-}
-.off-canvas--pusher {
-	position: relative;
-	left: 0;
-	z-index: 99;
-	height: 100%;
-	-webkit-transition: -webkit-transform 0.5s;
-	transition: transform 0.5s;
-
-	&::after {
-		position: absolute;
-		top: 0;
-		right: 0;
-		width: 0;
-		height: 0;
-		background: rgba(0, 0, 0, 0.2);
-		content: '';
-		opacity: 0;
-		-webkit-transition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;
-		transition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;
-	}
-}
-
-.off-canvas--visible-content {
+/** Main navigation of the storefront */
+.sidebar-main {
 	.unitize-width(300, 16);
+	.translate(-300px, 0);
 	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 100;
-	visibility: hidden;
+	left: 0; top: 0;
 	height: 100%;
-	background: @primaryBackgroundColor;
-	-webkit-transition: all 0.5s;
-	transition: all 0.5s;
+	border-right: 1px solid rgba(red(@lightTextColor), green(@lightTextColor), blue(@lightTextColor), 50%);
 
-	&::after {
+	.logo--trusted-shops {
+		display: none;
+	}
+}
+
+// Will be used for the off canvas animation
+.page-wrap {
+	.transition(all, 0.25s, ease-in-out);
+	.transform-style(preverse-3d);
+    min-height: 100%;
+
+	&::before {
+		.unitize(-8, 16, left);
+		.unitize-width(8, 16);
+		.box-shadow(inset -5px 0 5px -5px @lightTextColor);
+		content: '';
+		display: block;
+		height: 100%;
 		position: absolute;
 		top: 0;
-		right: 0;
-		width: 100%;
-		height: 100%;
-		background: rgba(0,0,0,0.2);
-		content: '';
-		opacity: 1;
-		-webkit-transition: opacity 0.5s;
-		transition: opacity 0.5s;
+	}
+
+	// Disables the transition, so the user can slide
+	&.js--no-transition {
+		.transition(none, 0s, linear);
 	}
 }
 
-.js--direction--right {
-	.off-canvas--visible-content {
-		left: auto;
-		right: 0;
+// State - Menu left open
+.js--menu-left--open {
+    .sidebar-main {
+        .translate(0, 0);
+    }
+	.page-wrap {
+		.translate(300px, 0);
+	}
+}
+// State - Menu right open
+.js--menu-right--open {
+	.page-wrap {
+		.translate(-300px, 0, 0);
 	}
 }
 
-.js--off-canvas--menu-open {
-	.off-canvas--pusher::after {
-		width: 100%;
-		height: 100%;
-		opacity: 1;
-		-webkit-transition: opacity 0.5s;
-		transition: opacity 0.5s;
+.navigation--smartphone {
+	.navigation--entry {
+		.unitize-padding(12, 10, 12, 10, 16);
+		background: #fff;
+		border-bottom: 1px solid @borderColor;
+	}
+	.navigation--link {
+		display: block;
 	}
 
-	.off-canvas--visible-content::after {
-		width: 0;
-		height: 0;
-		opacity: 0;
-		-webkit-transition: opacity 0.3s, width 0.1s 0.3s, height 0.1s 0.3s;
-		transition: opacity 0.3s, width 0.1s 0.3s, height 0.1s 0.3s;
-	}
-}
+	.entry--close-off-canvas {
+		.linear-gradient(@lightTextColor, @primaryTextColor);
+		border-bottom: 1px solid @darkBorderColor;
 
-.js--effect--reveal {
-	.off-canvas--visible-content {
-		z-index: 1;
-	}
+		.navigation--link {
+			.clearfix();
+			color: #fafafa;
+			font-weight: bold;
+			text-shadow: 1px 1px 0 @darkTextColor;
 
-	&.js--off-canvas--menu-open {
-		&.js--direction--left {
-			.off-canvas--pusher {
-				-webkit-transform: translate3d(300px, 0, 0);
-				transform: translate3d(300px, 0, 0);
+			&:active {
+				color: #eeeeff;
 			}
 		}
-		&.js--direction--right {
-			.off-canvas--pusher {
-				-webkit-transform: translate3d(-300px, 0, 0);
-				transform: translate3d(-300px, 0, 0);
-			}
+		.icon--arrow-right {
+			.unitize-margin(3, 0, 0, 0, 16);
+			float: right;
 		}
+	}
+}
 
-		.off-canvas--visible-content {
-			visibility: visible;
-			-webkit-transition: -webkit-transform 0.3s;
-			transition: transform 0.3s;
+.navigation--headline,
+.sidebar--navigation {
+	.unitize-margin(0, 10, 0, 10, 16);
+}
+.navigation--headline {
+	.unitize-margin(16, 10, 16, 10, 16);
+	font-size: 1em;
+}
+.sidebar--navigation {
+	.border-radius();
+	background: #fff;
+	border: 1px solid @borderColor;
 
-			&::after { display: none }
+	.navigation--entry {
+		.unitize-padding(10, 20, 10, 20, 16);
+		border-bottom: 1px solid @borderColor;
+
+		&:last-child {
+			border-bottom: 0 none;
 		}
-
+	}
+	.navigation--link {
+		color: @primaryTextColor;
 	}
 }

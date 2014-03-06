@@ -13,19 +13,23 @@
 	<meta name="keywords" content="{block name='frontend_index_header_meta_keywords'}{if $sCategoryContent.metakeywords}{$sCategoryContent.metakeywords}{else}{s name='IndexMetaKeywordsStandard'}{/s}{/if}{/block}" />
 	<meta name="description" content="{block name='frontend_index_header_meta_description'}{s name='IndexMetaDescriptionStandard'}{/s}{/block}" />
 
-    <meta itemprop="copyrightHolder" content="{config name=sShopname}" />
-    <meta itemprop="copyrightYear" content="{s name='IndexMetaCopyrightYear'}2014{/s}" />
-    <meta itemprop="isFamilyFriendly" content="{s name='IndexMetaIsFamilyFriendly'}true{/s}" />
+	{block name='frontend_index_header_meta_tags_schema_webpage'}
+		<meta itemprop="copyrightHolder" content="{config name=sShopname}" />
+		<meta itemprop="copyrightYear" content="{s name='IndexMetaCopyrightYear'}2014{/s}" />
+		<meta itemprop="isFamilyFriendly" content="{s name='IndexMetaIsFamilyFriendly'}true{/s}" />
 
-    {* @TODO - Replace with config option *}
-    <meta itemprop="image" content="{link file='frontend/_public/src/img/logo.png'}" />
+		{* @TODO - Replace with config option *}
+		<meta itemprop="image" content="{link file='frontend/_public/src/img/logo.png'}" />
+	{/block}
 
-	<meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+	{block name='frontend_index_header_meta_tags_mobile'}
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
 
-	{* @TODO - Add snippets or config options here *}
-	<meta name="mobile-web-app-capable" content="yes">
-	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		{* @TODO - Add snippets or config options here *}
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	{/block}
 {/block}
 
 {* Set favicons and touch icons for all different sizes *}

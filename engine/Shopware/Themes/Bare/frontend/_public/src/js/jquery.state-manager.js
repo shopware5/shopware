@@ -323,6 +323,61 @@
             },
 
             /**
+             * Adds a breakpoint to check against, after the {@link StateManger.init} was called.
+             *
+             * @param {Object|Array} breakpoint One or more breakpoints.
+             * @returns {Void}
+             */
+            add: function(breakpoint) {
+
+                // Create getter methods for the different types
+                $.each((breakpoint instanceof Array ? breakpoint : [ breakpoint ]), function() {
+                    var type = this.type,
+                        prettyType = capitaliseFirstLetter((type === '*' ? 'wildcard' : type)),
+                        conflict = false;
+
+                    $.each(breakPoints, function(i, item) {
+                        if(item.type === type) {
+                            conflict = true;
+                            return false;
+                        }
+                    });
+
+                    if(conflict) {
+                        throw new Error('Multiple breakpoints for the type "' + type + '" detected.');
+                    }
+
+                    ret['is' + prettyType] = function() {
+                        return (type === curr);
+                    };
+
+                    breakPoints.push(this);
+                });
+            },
+
+            /**
+             * Removes breakpoint by type and removes the generated getter method for the type.
+             *
+             * @param {String} type Type which should be removed
+             * @returns {Boolean}
+             */
+            remove: function(type, removeListener) {
+                removeListener = removeListener || false;
+
+                $.each(breakPoints, function(i, item) {
+                    var itemType = item.type,
+                        prettyType = capitaliseFirstLetter((type === '*' ? 'wildcard' : type));
+
+                    if(type === itemType) {
+                        breakPoints.splice(i, 1);
+                        delete ret['is' + prettyType];
+                    }
+                });
+
+                return true;
+            },
+
+            /**
              * Registers one or multiple event listeners to the StateManager,
              * so they will be fired when the type matches the current active
              * state / type.
@@ -404,18 +459,4 @@
         // Just return the public API instead of all available functions
         return ret;
     })();
-
-    StateManager.init([{
-        type: 'smartphone',
-        enter: '0em',
-        exit: '47.75em'
-    }, {
-        type: 'tablet',
-        enter: '47.75em',
-        exit: '64em'
-    }, {
-        type: 'desktop',
-        enter: '64em',
-        exit: '320em'
-    }]);
 })(jQuery, window, document);
