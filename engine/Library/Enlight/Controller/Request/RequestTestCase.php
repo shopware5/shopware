@@ -150,4 +150,16 @@ class Enlight_Controller_Request_RequestTestCase
         $this->setServer('HTTP_' . $key, $value);
         return $this;
     }
+
+    /**
+     * Sets the request URI scheme
+     *
+     * @param $value
+     * @return Enlight_Controller_Request_RequestHttp
+     */
+    public function setSecure($value = true)
+    {
+        $_SERVER['HTTPS'] = $value ? 'on' : null;
+        return $this;
+    }
 }
