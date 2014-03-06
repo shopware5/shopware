@@ -23,12 +23,17 @@
  */
 
 /**
- * Deprecated Shopware Class that handle static shop pages and dynamic content
+ * Deprecated Shopware class that handle static shop pages and dynamic content
+ * Used to handle pages such as "Help", etc
+ *
+ * Used by Frontend_Custom and Frontend_Content controllers
  */
 class sCms
 {
     /**
-     * Shopware Core sSystem instance
+     * The use of this variable in this class is now limited to calling sBuildLink, which is actually part of sCore.
+     *
+     * Shopware sore sSystem instance
      * @var sSystem
     */
     public $sSYSTEM;
@@ -50,10 +55,26 @@ class sCms
      */
     private $config;
 
-    public function __construct()
+    /**
+     * The Front controller object
+     *
+     * @var Enlight_Controller_Front
+     */
+    private $front;
+
+    /**
+     * Shopware Core core module
+     *
+     * @var sCore
+     */
+    private $coreModule;
+
+    public function __construct($db = null, $config = null, $front = null, $coreModule = null)
     {
-        $this->db = Shopware()->Db();
-        $this->config = Shopware()->Config();
+        $this->db = $db ? : Shopware()->Db();
+        $this->config = $config ? : Shopware()->Config();
+        $this->front = $front ? : Shopware()->Front();
+        $this->coreModule = $coreModule ? : Shopware()->Modules()->Core();
     }
 
     /**
@@ -64,19 +85,17 @@ class sCms
      */
     public function sGetStaticPage($staticId = null)
     {
-        if (empty($staticId) && !empty($this->sSYSTEM->_GET['sCustom'])) {
-            $staticId = (int) $this->sSYSTEM->_GET['sCustom'];
-        } else {
-            $staticId = (int) $staticId;
+        if (empty($staticId)) {
+            $staticId = (int) $this->front->Request()->getQuery('sCustom', $staticId);
         }
         if (empty($staticId)) {
             return false;
         }
 
         // Load static page data from database
-        $sql = "SELECT * FROM s_cms_static WHERE id=?";
         $staticPage = $this->db->fetchRow(
-            $sql, array($staticId)
+            "SELECT * FROM s_cms_static WHERE id = ?",
+            array($staticId)
         );
         if (empty($staticPage)) {
             return false;
@@ -120,46 +139,44 @@ class sCms
      /**
       * @deprecated This code seems to be legacy, dead code. See ticket SW-8142
       *
-      * Dynamische Inhalte einer Gruppe auslesen
+      * Get dynamic content of a group
       *
       * @param int $group Group id
       * @param int $sPage Current page
       * @return array
      */
-    public function sGetDynamicContentByGroup($group,$sPage=1)
+    public function sGetDynamicContentByGroup($group, $sPage = 1)
     {
         // Get count of topics
         $sql = "
-        SELECT COUNT(id) as countTopics FROM s_cms_content WHERE groupID=? GROUP BY groupID
+        SELECT COUNT(id) as countTopics FROM s_cms_content WHERE groupID = ? GROUP BY groupID
         ";
 
-        $getCountTopics = $this->db->fetchRow($sql, array($group));
+        $getCountTopics = $this->db->fetchOne($sql, array($group));
 
-        if ($sPage > $getCountTopics["countTopics"] || $sPage <= 0 ) $sPage = 1;
+        if ($sPage > $getCountTopics || $sPage <= 0 ) {
+            $sPage = 1;
+        }
 
-        $limitStart = $sPage * $this->config->get('sCONTENTPERPAGE') - $this->config->get('sCONTENTPERPAGE');
+        $limitStart = ($sPage - 1) * $this->config->get('sCONTENTPERPAGE');
         $limitEnd = intval($this->config->get('sCONTENTPERPAGE'));
 
         // Calculate number of pages
-        $numberPages = intval($getCountTopics["countTopics"] / $this->config->get('sCONTENTPERPAGE')) != $getCountTopics["countTopics"] / $this->config->get('sCONTENTPERPAGE') ? intval($getCountTopics["countTopics"] / $this->config->get('sCONTENTPERPAGE'))+1 : intval($getCountTopics["countTopics"] / $this->config->get('sCONTENTPERPAGE'));
+        $numberPages = ceil($getCountTopics / $this->config->get('sCONTENTPERPAGE'));
 
         // Make Array with page-structure to render in template
         $pages = array();
 
-        for ($i=1;$i<=$numberPages;$i++) {
-            if ($i==$sPage) {
-                $pages["numbers"][$i]["markup"] = true;
-            } else {
-                $pages["numbers"][$i]["markup"] = false;
-            }
+        for ($i = 1; $i <= $numberPages; $i++) {
+            $pages["numbers"][$i]["markup"] = ($i == $sPage);
             $pages["numbers"][$i]["value"] = $i;
-            $pages["numbers"][$i]["link"] = $this->config->get('sBASEFILE').$this->sSYSTEM->sBuildLink(array("sPage"=>$i),false);
+            $pages["numbers"][$i]["link"] = $this->config->get('sBASEFILE') . $this->coreModule->sBuildLink(array("sPage"=>$i));
         }
-
 
         // Query - Topic
         $sql = "
-            SELECT id, description,text,img,link,attachment, datum as `date`, DATE_FORMAT(datum,'%d.%m.%Y') AS datumFormated
+            SELECT id, description, text, img, link, attachment,
+              datum as `date`, DATE_FORMAT(datum,'%d.%m.%Y') AS datumFormated
             FROM s_cms_content WHERE groupID=?
             ORDER BY datum DESC
         ";
@@ -167,90 +184,87 @@ class sCms
 
         $queryDynamic = $this->db->fetchAll($sql, array($group));
 
-        foreach ($queryDynamic as $dynamicKey => $dynamicValue) {
-            $tempDatum = explode(".",$queryDynamic[$dynamicKey]["datum"]);
+        foreach ($queryDynamic as &$dynamicValue) {
+            $tempDate = explode(".", $dynamicValue["datum"]);
 
             // Building Link for more information page (optional)
-            $queryDynamic[$dynamicKey]["linkDetails"] = $this->config->get('sBASEFILE').$this->sSYSTEM->sBuildLink(array("sCid"=>$dynamicValue["id"]),false);
+            $dynamicValue["linkDetails"] = $this->config->get('sBASEFILE') . $this->coreModule->sBuildLink(array("sCid" => $dynamicValue["id"]));
 
             // Get Image
-            if ($queryDynamic[$dynamicKey]["img"]) {
-                $queryDynamic[$dynamicKey]["imgBig"] = $this->sSYSTEM->sPathCmsImg.$queryDynamic[$dynamicKey]["img"].".jpg";
-                $queryDynamic[$dynamicKey]["img"] = $this->sSYSTEM->sPathCmsImg.$queryDynamic[$dynamicKey]["img"]."Thumb.jpg";
+            if ($dynamicValue["img"]) {
+                $dynamicValue["imgBig"] = $this->sSYSTEM->sPathCmsImg . $dynamicValue["img"] . ".jpg";
+                $dynamicValue["img"] = $this->sSYSTEM->sPathCmsImg . $dynamicValue["img"] . "Thumb.jpg";
             }
             // Get attachment
-            if ($queryDynamic[$dynamicKey]["attachment"]) {
-                $queryDynamic[$dynamicKey]["attachment"] =  "http://".$this->config->get('sBASEPATH').$this->config->get('sCMSFILES')."/".$queryDynamic[$dynamicKey]["attachment"];
+            if ($dynamicValue["attachment"]) {
+                $dynamicValue["attachment"] = "http://" . $this->config->get('sBASEPATH') . $this->config->get('sCMSFILES') . "/" . $dynamicValue["attachment"];
             }
 
-            $queryDynamic[$dynamicKey]["dateExploded"] = $tempDatum;
+            $dynamicValue["dateExploded"] = $tempDate;
         }
-        return array("sContent"=>$queryDynamic,"sPages"=>$pages);
+        return array("sContent" => $queryDynamic, "sPages" => $pages);
     }
 
      /**
       * @deprecated This code seems to be legacy, dead code. See ticket SW-8142
       *
-      * Detailinformationen eines Gruppen-Eintrags
+      * Details of a group entry
       *
-      * @param int $group Gruppen-ID
-      * @param int $id ID des Eintrags
-      * @access public
+      * @param int $group Group ID
+      * @param int $id Entry ID
       * @return array
+      * @throws Enlight_Exception If provided arguments don't match any content
       */
-    public function sGetDynamicContentById($group,$id)
+    public function sGetDynamicContentById($group, $id)
     {
         // Query - Topic
         $sql = "
-        SELECT id, description,text,img,link,attachment,DATE_FORMAT(datum,'%d.%m.%Y') AS datum FROM s_cms_content WHERE groupID=?
-        AND id=?
+            SELECT id, description, text, img, link, attachment, DATE_FORMAT(datum,'%d.%m.%Y') AS datum
+            FROM s_cms_content WHERE groupID = ?
+            AND id = ?
         ";
 
-        $queryDynamic = $this->db->fetchRow($sql, array($group,$id));
+        $queryDynamic = $this->db->fetchRow($sql, array($group, $id));
 
         if ($queryDynamic["id"]) {
-            $tempDatum = explode(".",$queryDynamic["datum"]);
+            $tempDate = explode(".", $queryDynamic["datum"]);
 
             // Building Link for more information page (optional)
-            $queryDynamic["linkDetails"] = $this->config->get('sBASEFILE').$this->sSYSTEM->sBuildLink(array("sCid"=>$queryDynamic["id"]),false);
+            $queryDynamic["linkDetails"] = $this->config->get('sBASEFILE') . $this->coreModule->sBuildLink(array("sCid"=>$queryDynamic["id"]));
 
             // Get Image
             if ($queryDynamic["img"]) {
-                $queryDynamic["imgBig"] = $this->sSYSTEM->sPathCmsImg.$queryDynamic["img"].".jpg";
-                $queryDynamic["img"] = $this->sSYSTEM->sPathCmsImg.$queryDynamic["img"]."Thumb.jpg";
+                $queryDynamic["imgBig"] = $this->sSYSTEM->sPathCmsImg . $queryDynamic["img"] . ".jpg";
+                $queryDynamic["img"] = $this->sSYSTEM->sPathCmsImg . $queryDynamic["img"] . "Thumb.jpg";
             }
             // Get attachment
             if ($queryDynamic["attachment"]) {
-                $queryDynamic["attachment"] =  "http://".$this->config->get("sBASEPATH").$this->config->get("sCMSFILES")."/".$queryDynamic["attachment"];
+                $queryDynamic["attachment"] =  "http://" . $this->config->get("sBASEPATH") . $this->config->get("sCMSFILES") . "/".$queryDynamic["attachment"];
             }
 
-            $queryDynamic["dateExploded"] = $tempDatum;
+            $queryDynamic["dateExploded"] = $tempDate;
         } else {
-            // Error-Handler
-            $this->sSYSTEM->E_CORE_WARNING ("sCMS##sGetContentById","Content with id $id not found");
-            return false;
+            // No content found, throw an Exception
+            throw new Enlight_Exception("sCMS##sGetContentById", "Content with id '$id' not found");
         }
 
-        return array("sContent"=>$queryDynamic);
+        return array("sContent" => $queryDynamic);
     }
 
      /**
       * @deprecated This code seems to be legacy, dead code. See ticket SW-8142
       *
-      * Name einer Gruppe anhand der ID
-      * @param int $group Gruppen-ID
-      * @access public
-      * @return string Name
+      * Gets the name of a group
+      * @param int $group Group id
+      * @return string Name of the group
       */
     public function sGetDynamicGroupName($group)
     {
         $sql = "
-        SELECT description FROM s_cms_groups WHERE id=?
+          SELECT description FROM s_cms_groups WHERE id = ?
         ";
 
-        $queryDynamic = $this->db->fetchRow($sql, array($group));
-
-        return $queryDynamic["description"];
+        return $this->db->fetchOne($sql, array($group));
     }
 }
 ?>
