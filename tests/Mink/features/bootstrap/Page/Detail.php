@@ -2,6 +2,7 @@
 
 use Behat\Mink\Driver\SahiDriver;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use Behat\Mink\Exception\ResponseTextException;
 use Behat\Behat\Context\Step;
 
 class Detail extends Page
@@ -17,7 +18,7 @@ class Detail extends Page
     protected function verifyPage()
     {
         if (!$this->hasButton('In den Warenkorb')) {
-            throw new \Exception('Detail page has to basket button');
+            throw new \Exception('Detail page has no basket button');
         }
     }
 
@@ -40,7 +41,8 @@ class Detail extends Page
 
         if(empty($link))
         {
-            throw new \Exception('Detail page has to basket button');
+            $message = sprintf('Detail page has no %s button', $direction);
+            throw new ResponseTextException($message, $this->getSession());
         }
 
         $link->click();

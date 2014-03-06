@@ -76,12 +76,16 @@ class CheckoutCart extends Page
 
     public function removeArticle($position)
     {
-        $classes = array(
-            'cart' => 'div.table_row:nth-of-type('.($position + 3).') form a.del',
-            'note' => 'div.table_row:nth-of-type('.($position + 1).') a.delete'
-        );
+        $class = 'div.table_row:nth-of-type('.($position + 3).') form a.del';
 
-        $button = $this->find('css', implode(', ', $classes));
+        $button = $this->find('css', $class);
+
+        if(empty($button))
+        {
+            $message = sprintf('Cart page has no article on position %d', $position);
+            throw new ResponseTextException($message, $this->getSession());
+        }
+
         $button->click();
     }
 }
