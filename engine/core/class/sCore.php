@@ -28,26 +28,20 @@
 class sCore
 {
     /**
-     * Pointer to Shopware Core functions
+     * The Front controller object
+     * Needed to retrieve the request and router
      *
-     * @var sSystem
+     * @var Enlight_Controller_Front
      */
-    public $sSYSTEM;
+    private $front;
 
-    /**
-     * Pointer to the Router
-     *
-     * @var Enlight_Controller_Router
-     */
-    public $router;
-
-    public function __construct(Enlight_Controller_Router $router)
+    public function __construct($front = null)
     {
-        $this->router = $router ? : Shopware()->Front()->Router();
+        $this->front = $front ? : Shopware()->Front();
     }
 
     /**
-     * Creates query string for an url based on sVariables and sSYSTEM->_GET
+     * Creates query string for an url based on sVariables and Request GET variables
      *
      * @param array $sVariables Variables that configure the generated url
      * @return string
@@ -57,7 +51,7 @@ class sCore
         $url = array();
         $allowedCategoryVariables = array("sCategory", "sPage");
 
-        $tempGET = $this->sSYSTEM->_GET;
+        $tempGET = $this->front->Request() ? $this->front->Request()->getParams() : null;
 
         // If viewport is available, this will be the first variable
         if (!empty($tempGET["sViewport"])) {
@@ -117,16 +111,18 @@ class sCore
         }
         $query['module'] = 'frontend';
 
-        return $this->router->assemble($query);
+        return $this->front->Router()->assemble($query);
     }
 
     /**
+     * @deprecated Use sRewriteLink instead
+     *
      * Same as sRewriteLink, but with a different argument structure.
      *
      * @param $args
      * @return mixed|string
      */
-    public function rewriteLink($args)
+    public function rewriteLink($args = array())
     {
         return $this->sRewriteLink($args[2], empty($args[3]) ? null : $args[3]);
     }
