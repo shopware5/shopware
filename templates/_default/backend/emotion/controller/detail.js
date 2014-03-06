@@ -205,7 +205,6 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 data.push(me.getFieldData(field, record));
             }
         });
-        console.log('data', data);
         record.set('data', data);
         win.destroy();
     },
