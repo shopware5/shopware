@@ -27,134 +27,26 @@
 		{block name='frontend_index_navigation'}
 			<header class="header-main">
 				<div class="container">
-					<div class="top-bar block-group">
 
-						{* Language and Currency switcher *}
-						{block name='frontend_index_actions'}
-							<div class="top-bar--switches block">
-								{action module=widgets controller=index action=shopMenu}
-							</div>
-						{/block}
-
-						{* Top bar navigation *}
-						{block name="frontend_index_top_bar_nav"}
-							<nav class="top-bar--navigation block">
-								<ul class="navigation--list" role="menubar">
-
-									{* Compare - TODO - Check syntax *}
-									{block name='frontend_index_navigation_inline'}
-										{if $sCompareShow}
-											<li class="navigation--entry entry--compare" role="menuitem" aria-haspopup="true">
-												{action module=widgets controller=compare}
-											</li>
-										{/if}
-									{/block}
-
-									{* Notepad *}
-									{block name="frontend_index_checkout_actions_notepad"}
-										<li class="navigation--entry entry--notepad" role="menuitem">
-											<a href="{url controller='note'}" title="{s namespace='frontend/index/checkout_actions' name='IndexLinkNotepad'}{/s}" class="note">
-												{s namespace='frontend/index/checkout_actions' name='IndexLinkNotepad'}{/s} {if $sNotesQuantity > 0}<span class="notes_quantity">{$sNotesQuantity}</span>{/if}
-											</a>
-										</li>
-									{/block}
-
-									{* Service / Support drop down *}
-									{block name="frontend_index_checkout_actions_service_menu"}
-										<li class="navigation--entry entry--service has--drop-down" role="menuitem" aria-haspopup="true">
-											{s name='IndexLinkService'}Service/Hilfe{/s}
-											{action module=widgets controller=index action=menu group=gLeft}
-										</li>
-									{/block}
-								</ul>
-							</nav>
-						{/block}
-					</div>
+					{* Include the top bar navigation *}
+					{include file="frontend/index/_includes/topbar-navigation.tpl"}
 
 					{* Logo container *}
 					{block name='frontend_index_logo_container'}
-						<div class="logo-main block-group" role="banner">
-
-							{* Main shop logo *}
-							{block name='frontend_index_logo'}
-								<div class="logo--shop block">
-									<a href="{url controller='index'}" title="{config name=shopName} - {s name='IndexLinkDefault'}{/s}">
-
-										<img src="{link file='frontend/_public/src/img/logos/logo--mobile.png'}" alt="{config name=shopName} - {s name='IndexLinkDefault'}{/s}" />
-									</a>
-								</div>
-							{/block}
-
-							{* Trusted Shops *}
-							{block name='frontend_index_logo_trusted_shops'}
-								{if {config name=TSID}}
-									<div class="logo--trusted-shops block">
-										<a class="trusted-shops--link" href="https://www.trustedshops.com/shop/certificate.php?shop_id={config name=TSID}" title="{s name='WidgetsTrustedLogo' namespace='frontend/plugins/trusted_shops/logo'}{/s}" target="_blank">
-											<img src="{link file='frontend/_public/src/img/logos/logo--trusted-shops.png'}" alt="{s name='WidgetsTrustedLogo' namespace='frontend/plugins/trusted_shops/logo'}{/s}" />
-										</a>
-									</div>
-								{/if}
-							{/block}
-						</div>
+						{include file="frontend/index/_includes/logo-container.tpl"}
 					{/block}
 
 					{* Shop navigation *}
-					<nav class="shop--navigation block-group">
-						<ul class="navigation--list block-group" role="menubar">
-
-							{* Menu (Off canvas left) trigger *}
-							{block name='frontend_index_offcanvas_left_trigger'}
-								<li class="navigation--entry entry--menu-left block" role="menuitem">
-									<a class="entry--link entry--trigger" href="#offcanvas--left" data-offcanvas="true" data-selector=".sidebar-main">
-										<i class="icon--menu"></i> Menü
-									</a>
-								</li>
-							{/block}
-
-							{* Spacer *}
-							{block name="frontend_index_shop_navigation_spacer"}
-								<li class="navigation--entry entry--spacer block"></li>
-							{/block}
-
-							{* Search form *}
-							{block name='frontend_index_search'}
-								<li class="navigation--entry entry--search block" role="menuitem" data-search-dropdown="true" aria-haspopup="true">
-									<a class="entry--link entry--trigger" href="#show-hide--search" title="Suche anzeigen / ausblenden">
-										<i class="icon--search"></i>
-									</a>
-									{include file="frontend/index/_includes/search.tpl"}
-								</li>
-							{/block}
-
-							{* My account entry *}
-							{block name="frontend_index_checkout_actions_my_options"}
-								<li class="navigation--entry entry--account block" role="menuitem">
-									{block name="frontend_index_checkout_actions_account"}
-										<a href="{url controller='account'}" title="{s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}" class="entry--link">
-											{s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}
-										</a>
-									{/block}
-								</li>
-							{/block}
-
-							{* Cart entry *}
-							{block name='frontend_index_checkout_actions'}
-								<li class="navigation--entry entry--cart block" role="menuitem">
-									<a class="entry--link entry--trigger" href="#show-hide--search" title="Warenkorb anzeigen / ausblenden">
-										<i class="icon--basket"></i>
-									</a>
-									{action module=widgets controller=checkout action=info}
-								</li>
-							{/block}
-						</ul>
-					</nav>
+					{block name='frontend_index_shop_navigation'}
+						{include file="frontend/index/_includes/shop-navigation.tpl"}
+					{/block}
 				</div>
 			</header>
 
 			{* Maincategories navigation top *}
 			{block name='frontend_index_navigation_categories_top'}
 				<nav class="navigation-main">
-					{include file='frontend/index/_includes/categories_top.tpl'}
+					{include file='frontend/index/_includes/main-navigation.tpl'}
 				</nav>
 			{/block}
 		{/block}
@@ -173,7 +65,7 @@
 
 			{* Sidebar left *}
 			{block name='frontend_index_content_left'}
-				{include file='frontend/index/_includes/left.tpl'}
+				{include file='frontend/index/_includes/sidebar.tpl'}
 			{/block}
 
 			{* Main content *}
@@ -194,11 +86,12 @@
 		{block name="frontend_index_footer"}
 			<footer class="footer-main">
 				<div class="container">
-					{include file='frontend/index/_includes/footer.tpl'}
+					{block name="frontend_index_footer_container"}
+						{include file='frontend/index/_includes/footer.tpl'}
+					{/block}
 				</div>
 			</footer>
 		{/block}
-
 
 		{block name='frontend_index_body_inline'}{/block}
 	</div>
