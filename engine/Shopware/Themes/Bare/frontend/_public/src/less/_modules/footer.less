@@ -12,7 +12,12 @@
 	}
 
 	.column--headline {
+		.user-select(none);
 		color: @primaryColor;
+
+		&.is--active::after {
+			content: '-';
+		}
 
 		&::after {
 			.unitize-margin(-3.5, 0, 0, 0, 16);
@@ -26,8 +31,13 @@
 
 	.column--content {
 		display: none;
+
+		&.is--active {
+			display: block;
+		}
 	}
 
+	// Second footer with the shopware logo and vat notice
 	.footer--bottom {
 		.unitize(12, 16);
 		.unitize-padding(0, 12, 0, 12, 12);
@@ -38,4 +48,24 @@
 		text-shadow: 1px 1px 1px @lightTextColor;
 		.unitize(28, 12);
 	}
+
+	// Navigation links
+	.navigation--list {
+		.unitize-padding(0, 0, 16, 0, 16);
+	}
+	.navigation--entry {
+		.unitize-padding(10, 0, 10, 0, 16);
+	}
+	.navigation--link {
+		color: @darkTextColor
+	}
+
+	// Newsletter registration
+	.newsletter--form {
+		.unitize-padding(0, 0, 16, 0, 16);
+	}
+	.newsletter--field {
+		width: 100%;
+	}
+	.newsletter--button { display: none }
 }

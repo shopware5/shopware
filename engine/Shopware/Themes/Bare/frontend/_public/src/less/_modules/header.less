@@ -18,6 +18,8 @@
 }
 
 .shop--navigation {
+	position: relative;
+
 	.navigation--list {
 		.linear-gradient(@lightGradientStart, @lightGradientEnd);
 		width: 100%;
@@ -63,4 +65,41 @@
 		border-left: 0 none;
 		width: 30%;
 	}
+
+	.entry--search {
+		font-weight: bold;
+
+		&.is--active {
+			background: #fff;
+			border-bottom-color: #fff;
+
+			.main-search--form {
+				.unitize(48, 16, top);
+				left: 0;
+				display: block;
+				position: absolute;
+			}
+		}
+	}
+}
+
+.main-search--form {
+	.unitize-padding(8, 10, 8, 10, 16);
+	.box-shadow(0 6px 6px -6px @lightTextColor);
+	position: relative;
+	background: #fff;
+	border-bottom: 1px solid @borderColor;
+	width: 100%;
+
+	.icon--search {
+		.unitize(22, 16, top);
+		.unitize(22, 16, left);
+		position: absolute;
+	}
+
+	.main-search--field {
+		.unitize-padding(10, 10, 10, 38, 16);
+		width: 100%;
+	}
+	.main-search--button { display: none; }
 }

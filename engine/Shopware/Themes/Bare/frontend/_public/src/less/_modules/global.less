@@ -1,6 +1,7 @@
 * {
     .box-sizing();
 }
+html, body { overflow-x: hidden }
 body {
 	font: @bodyFontStack;
 	color: @primaryTextColor;
@@ -23,10 +24,23 @@ a {
 		color: darken(@secondaryColor, 10%);
 	}
 }
-
 ul {
 	margin: 0;
 	padding: 0;
+}
+
+input[type="text"], input[type="search"], input[type="password"] {
+	.appearance();
+	.border-radius();
+	.box-sizing();
+	.unitize-padding(10, 10, 10, 10, 16);
+	background: @lightGradientEnd;
+	border: 1px solid @borderColor;
+	color: @primaryTextColor;
+
+	&:focus {
+		background: #fff;
+	}
 }
 
 .ajax-loader { display: none }
@@ -36,5 +50,3 @@ ul {
 		font-size: 87.5%;
 	}
 }
-
-h2 { margin: 0; }

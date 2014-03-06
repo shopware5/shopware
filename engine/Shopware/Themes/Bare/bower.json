@@ -27,6 +27,9 @@
     "handlebars": "~1.3.0",
     "pocketgrid": "*",
     "picturefill": "~1.2.1",
-    "open-sans-fontface": "~1.0.4"
+    "open-sans-fontface": "~1.0.4",
+    "jquery.event.swipe": "~0.5.2",
+    "jquery.event.move": "~1.3.6",
+    "jquery.transit": "~0.9.9"
   }
 }
