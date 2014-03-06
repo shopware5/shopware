@@ -23,7 +23,7 @@
  */
 
 /**
- * Deprecated Shopware Class that handle newsletters
+ * Deprecated Shopware core class used to generate article suggestions for newsletters
  */
 class sNewsletter
 {
@@ -67,16 +67,18 @@ class sNewsletter
      * Class constructor.
      * Injects all dependencies which are required for this class.
      */
-    public function __construct()
+    public function __construct($db = null, $config = null, $articlesModule = null, $marketingModule = null)
     {
-        $this->db = Shopware()->Db();
-        $this->config = Shopware()->Config();
-        $this->articlesModule = Shopware()->Modules()->Articles();
-        $this->marketingModule = Shopware()->Modules()->Marketing();
+        $this->db = $db ? : Shopware()->Db();
+        $this->config = $config ? : Shopware()->Config();
+        $this->articlesModule = $articlesModule ? : Shopware()->Modules()->Articles();
+        $this->marketingModule = $marketingModule ? : Shopware()->Modules()->Marketing();
     }
 
     /**
      * Gets article suggestions
+     * Not used in the core
+     * Used by SwagNewsletter premium plugin
      *
      * @param $id
      * @param int $userId
@@ -124,7 +126,11 @@ class sNewsletter
             $category = $this->sSYSTEM->_GET['sCategory'] ? : 0;
 
             while ($leftRecommendations > 0) {
-                $article = $this->articlesModule->sGetPromotionById($randomize[array_rand($randomize)], $category, '');
+                $article = $this->articlesModule->sGetPromotionById(
+                    $randomize[array_rand($randomize)],
+                    $category,
+                    ''
+                );
                 if (!empty($article)) {
                     $leftRecommendations--;
                     $this->articlesModule->sCachePromotions[] = $article['articleID'];
