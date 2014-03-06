@@ -991,15 +991,17 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
                 $translationArray = $translationSet['plugin_form'];
                 foreach ($form->getTranslations() as $existingTranslation) {
                     // Check if translation for this locale already exists
-                    if ($existingTranslation->getLocale()->getLocale() == $localeCode) {
-                        if (array_key_exists('label', $translationArray)) {
-                            $existingTranslation->setLabel($translationArray['label']);
-                        }
-                        if (array_key_exists('description', $translationArray)) {
-                            $existingTranslation->setDescription($translationArray['description']);
-                        }
-                        $isUpdate = true;
+                    if ($existingTranslation->getLocale()->getLocale() != $localeCode) {
+                        continue;
                     }
+                    if (array_key_exists('label', $translationArray)) {
+                        $existingTranslation->setLabel($translationArray['label']);
+                    }
+                    if (array_key_exists('description', $translationArray)) {
+                        $existingTranslation->setDescription($translationArray['description']);
+                    }
+                    $isUpdate = true;
+                    break;
                 }
                 if (!$isUpdate) {
                     $formTranslation = new FormTranslation();
@@ -1021,15 +1023,17 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
                 $element = $form->getElement($targetName);
                 foreach ($element->getTranslations() as $existingTranslation) {
                     // Check if translation for this locale already exists
-                    if ($existingTranslation->getLocale()->getLocale() == $localeCode) {
-                        if (array_key_exists('label', $translationArray)) {
-                            $existingTranslation->setLabel($translationArray['label']);
-                        }
-                        if (array_key_exists('description', $translationArray)) {
-                            $existingTranslation->setDescription($translationArray['description']);
-                        }
-                        $isUpdate = true;
+                    if ($existingTranslation->getLocale()->getLocale() != $localeCode) {
+                        continue;
                     }
+                    if (array_key_exists('label', $translationArray)) {
+                        $existingTranslation->setLabel($translationArray['label']);
+                    }
+                    if (array_key_exists('description', $translationArray)) {
+                        $existingTranslation->setDescription($translationArray['description']);
+                    }
+                    $isUpdate = true;
+                    break;
                 }
                 if (!$isUpdate) {
                     $elementTranslation = new ElementTranslation();
