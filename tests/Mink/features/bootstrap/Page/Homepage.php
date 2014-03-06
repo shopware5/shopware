@@ -558,4 +558,61 @@ class Homepage extends Page
         return $values;
     }
 
+    /**
+     * @param $articles
+     * @throws Behat\Mink\Exception\ResponseTextException
+     */
+    public function checkComparision($articles)
+    {
+        foreach ($articles as $key => $article) {
+            $class = sprintf('div.compare_article:nth-of-type(%d) ', $key + 2);
+
+            $elements = array(
+                    'a-picture' => $this->find('css', $class . 'div.picture a'),
+                    'img' => $this->find('css', $class . 'div.picture img'),
+                    'h3-a-name' => $this->find('css', $class . 'div.name h3 a'),
+                    'a-name' => $this->find('css', $class . 'div.name a.button-right'),
+                    'div-votes' => $this->find('css', $class . 'div.votes div.star'),
+                    'p-desc' => $this->find('css', $class . 'div.desc'),
+                    'strong-price' => $this->find('css', $class . 'div.price strong')
+            );
+
+            $check = array();
+
+            if (!empty($article['image'])) {
+                $check[] = array($elements['img']->getAttribute('src'), $article['image']);
+            }
+
+            if (!empty($article['name'])) {
+                $check[] = array($elements['a-picture']->getAttribute('title'), $article['name']);
+                $check[] = array($elements['img']->getAttribute('alt'), $article['name']);
+                $check[] = array($elements['h3-a-name']->getAttribute('title'), $article['name']);
+                $check[] = array($elements['h3-a-name']->getText(), $article['name']);
+                $check[] = array($elements['a-name']->getAttribute('title'), $article['name']);
+            }
+
+            if (!empty($article['ranking'])) {
+                $check[] = array($elements['div-votes']->getAttribute('class'), $article['ranking']);
+            }
+
+            if (!empty($article['text'])) {
+                $check[] = array($elements['p-desc']->getText(), $article['text']);
+            }
+
+            if (!empty($article['price'])) {
+                $check[] = $this->toFloat(array($elements['strong-price']->getText(), $article['price']));
+            }
+
+            if (!empty($article['link'])) {
+                $check[] = array($elements['a-picture']->getAttribute('href'), $article['link']);
+                $check[] = array($elements['h3-a-name']->getAttribute('href'), $article['link']);
+                $check[] = array($elements['a-name']->getAttribute('href'), $article['link']);
+            }
+
+            if (!$this->checkArray($check)) {
+                $message = sprintf('The article on position %d is different', $key + 1);
+                throw new ResponseTextException($message, $this->getSession());
+            }
+        }
+    }
 }
