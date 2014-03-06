@@ -76,7 +76,12 @@ class CheckoutCart extends Page
 
     public function removeArticle($position)
     {
-        $button = $this->find('css', 'div.table_row:nth-of-type('.$position.') form a.del');
+        $classes = array(
+            'cart' => 'div.table_row:nth-of-type('.($position + 3).') form a.del',
+            'note' => 'div.table_row:nth-of-type('.($position + 1).') a.delete'
+        );
+
+        $button = $this->find('css', implode(', ', $classes));
         $button->click();
     }
 }
