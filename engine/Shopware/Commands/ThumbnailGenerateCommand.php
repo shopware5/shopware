@@ -59,6 +59,11 @@ class ThumbnailGenerateCommand extends ShopwareCommand
                     'f',
                     InputOption::VALUE_NONE,
                     'Force complete thumbnail generation'
+                )->addOption(
+                    'proportional',
+                    'p',
+                    InputOption::VALUE_NONE,
+                    'Keeps the image proportions'
                 )->setHelp(
                     <<<EOF
                     The <info>%command.name%</info> generates a thumbnail.
@@ -73,6 +78,7 @@ EOF
     {
         $albumId = (int)$input->getOption('albumid');
         $force = (bool)$input->getOption('force');
+        $proportional = (bool)$input->getOption('proportional');
 
         $em = $this->getContainer()->get('models');
 
@@ -122,7 +128,7 @@ EOF
                         continue;
                     }
 
-                    $generator->createMediaThumbnail($media, array($size), true);
+                    $generator->createMediaThumbnail($media, array($size), $proportional);
                 }
 
                 $progress->advance();
