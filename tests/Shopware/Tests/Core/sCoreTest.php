@@ -40,7 +40,8 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
     public function testsBuildLink()
     {
         // Empty data will return empty string
-        $this->module->sSYSTEM->_GET = array();
+        $request = $this->Request()->setParams(array());
+        $this->Front()->setRequest($request);
         $this->assertEquals('', $this->module->sBuildLink(array()));
 
 
@@ -68,12 +69,13 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
 
         // Provided sVariables override _GET, not overlapping get included from both
         // Also test that null values don't get passed on
-        $this->module->sSYSTEM->_GET = array(
+        $request = $this->Request()->setParams(array(
             'just' => 'used',
             'some' => 'for',
             'variables' => 'testing',
             'nullGet' => null
-        );
+        ));
+        $this->Front()->setRequest($request);
         $sVariablesTestResult = $this->module->sBuildLink(array(
             'other' => 'with',
             'variables' => 'values',
@@ -97,12 +99,13 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
 
         // Test that sViewport=cat only keeps sCategory and sPage from GET
         // Test that they can still be overwriten by sVariables
-        $this->module->sSYSTEM->_GET = array(
+        $request = $this->Request()->setParams(array(
             'sViewport' => 'cat',
             'sCategory' => 'getCategory',
             'sPage' => 'getPage',
             'foo' => 'bar'
-        );
+        ));
+        $this->Front()->setRequest($request);
         $sVariablesTestResult = $this->module->sBuildLink(array(
             'sCategory' => 'sVariablesCategory',
             'other' => 'with',
@@ -127,12 +130,13 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
 
 
         // Test that overriding sViewport doesn't override the special behavior
-        $this->module->sSYSTEM->_GET = array(
+        $request = $this->Request()->setParams(array(
             'sViewport' => 'cat',
             'sCategory' => 'getCategory',
             'sPage' => 'getPage',
-            'foo' => 'bar'
-        );
+            'foo' => 'boo'
+        ));
+        $this->Front()->setRequest($request);
         $sVariablesTestResult = $this->module->sBuildLink(array(
             'sViewport' => 'test',
             'sCategory' => 'sVariablesCategory',
