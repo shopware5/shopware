@@ -5,7 +5,7 @@ namespace Shopware\Themes\Bare;
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Form as Form;
 
-class Theme extends \Shopware\Theme
+class Theme extends \Shopware\Components\Theme
 {
     protected $extend = null;
 

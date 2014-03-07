@@ -130,7 +130,6 @@ class Compiler
      *
      * @param Shop\Template $template
      * @param Shop\Shop $shop
-     * @return array
      * @throws \Exception
      */
     protected function buildConfig(Shop\Template $template, Shop\Shop $shop)
@@ -150,11 +149,18 @@ class Compiler
             }
             $this->compiler->setVariables($config);
         }
-
-        return array();
     }
 
     /**
+     * Compiles all less files of the theme inheritance of the passed shop template.
+     * The timestamp is required for file caching.
+     *
+     * Shopware implements the convention that each theme, which wants to implement less compiling,
+     * has a all.less file within the /THEME-DIR/frontend/_public/src/less directory.
+     * This file will be compiled into the theme.css file.
+     *
+     * Notice: The theme _public directory will be configured into the less compiler as import directory.
+     *
      * @param $timestamp
      * @param Shop\Template $template
      * @param Shop\Shop $shop
@@ -187,6 +193,34 @@ class Compiler
     }
 
     /**
+     * This function is responsible to allow plugins to compile less files into the plugin.css file.
+     * The event fires the Theme_Compiler_Collect_Plugin_Less collect event to collect all plugin less definintions.
+     *
+     * Example to add an own plugin less compiling step:
+     * <code>
+     *   public function eventListener(Enlight_Event_EventArgs $args)
+     *   {
+     *       $less = new \Shopware\Components\Theme\PluginLess(
+     *           //configuration
+     *           array(
+     *               'color1' => '#fff',
+     *               'color2' => '#000'
+     *           ),
+     *
+     *           //less files to compile
+     *           array(
+     *               __DIR__ . DIRECTORY_SEPARATOR . 'event1.less',
+     *               __DIR__ . DIRECTORY_SEPARATOR . 'event2.less'
+     *           ),
+     *
+     *           //import directory
+     *           __DIR__
+     *       );
+     *
+     *       return new ArrayCollection(array($less));
+     *   }
+     * </code>
+     *
      * @param $timestamp
      * @param Shop\Template $template
      * @param Shop\Shop $shop
@@ -239,6 +273,14 @@ class Compiler
     }
 
     /**
+     * This function allows to define simple css files within a theme which compressed
+     * into one theme.css file for the frontend.
+     *
+     * To define which css files of the theme should be compressed, the Theme.php $css property is used.
+     * Shopware expects that all css file of this property is stored within the /frontend/_public/src/css
+     * directory.
+     *
+     *
      * @param $timestamp
      * @param Shop\Template $template
      * @param Shop\Shop $shop

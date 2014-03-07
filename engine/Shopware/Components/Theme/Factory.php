@@ -50,7 +50,7 @@ class Factory
 
 namespace Shopware\Themes\$TEMPLATE$;
 
-class Theme extends \Shopware\Theme
+class Theme extends \Shopware\Components\Theme
 {
     protected $extend = '$PARENT$';
 
