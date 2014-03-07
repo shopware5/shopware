@@ -15,7 +15,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @When /^I search for "([^"]*)"$/
+     * @When /^I search for "(?P<searchTerm>[^"]*)"$/
      */
     public function iSearchFor($searchTerm)
     {
@@ -23,7 +23,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Given /^I should see a banner "([^"]*)"$/
+     * @Given /^I should see a banner "(?P<image>[^"]*)"$/
      */
     public function iShouldSeeABanner($image)
     {
@@ -31,7 +31,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Given /^I should see a banner "([^"]*)" to "([^"]*)"$/
+     * @Given /^I should see a banner "(?P<image>[^"]*)" to "(?P<link>[^"]*)"$/
      */
     public function iShouldSeeABannerTo($image, $link)
     {
@@ -39,7 +39,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Given /^I should see a banner "([^"]*)" with mapping:$/
+     * @Given /^I should see a banner "(?P<image>[^"]*)" with mapping:$/
      */
     public function iShouldSeeABannerWithMapping($image, TableNode $mapping)
     {
@@ -59,7 +59,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Given /^I should see a categorie teaser "([^"]*)" with image "([^"]*)" to "([^"]*)"$/
+     * @Given /^I should see a categorie teaser "(?P<title>[^"]*)" with image "(?P<image>[^"]*)" to "(?P<link>[^"]*)"$/
      */
     public function iShouldSeeACategorieTeaserWithImageTo($title, $image, $link)
     {
@@ -87,7 +87,7 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Given /^I should see a YouTube-Video "([^"]*)"$/
+     * @Given /^I should see a YouTube-Video "(?P<code>[^"]*)"$/
      */
     public function iShouldSeeAYoutubeVideo($code)
     {

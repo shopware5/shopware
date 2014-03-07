@@ -11,8 +11,8 @@ class Homepage extends Page
     protected $path = '/';
 
     /**
+     * Searches the given term in the shop
      * @param string $searchTerm
-     * @return array
      */
     public function searchFor($searchTerm)
     {
@@ -22,6 +22,7 @@ class Homepage extends Page
     }
 
     /**
+     * Checks an emotion banner element
      * @param string $image
      * @param mixed $links
      * @throws Behat\Mink\Exception\ResponseTextException
@@ -93,6 +94,7 @@ class Homepage extends Page
     }
 
     /**
+     * Checks an emotion blog element
      * @param array $articles
      * @throws Behat\Mink\Exception\ResponseTextException
      */
@@ -156,6 +158,7 @@ class Homepage extends Page
     }
 
     /**
+     * Checks an emotion Youtube element
      * @param string $code
      * @throws Behat\Mink\Exception\ResponseTextException
      */
@@ -179,6 +182,7 @@ class Homepage extends Page
     }
 
     /**
+     * Checks an emotion slider element
      * @param string $type
      * @param array $slides
      * @throws Behat\Mink\Exception\ResponseTextException
@@ -257,6 +261,7 @@ class Homepage extends Page
     }
 
     /**
+     * Checks an emotion category teaser element
      * @param string $title
      * @param string $image
      * @param string $link
@@ -295,6 +300,7 @@ class Homepage extends Page
     }
 
     /**
+     * Checks an emotion article element
      * @param array $data
      * @throws Behat\Mink\Exception\ResponseTextException
      */
@@ -559,7 +565,8 @@ class Homepage extends Page
     }
 
     /**
-     * @param $articles
+     * Compares the comparision list with the given list of articles
+     * @param array $articles
      * @throws Behat\Mink\Exception\ResponseTextException
      */
     public function checkComparision($articles)

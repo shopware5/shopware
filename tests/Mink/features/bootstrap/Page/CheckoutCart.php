@@ -1,9 +1,7 @@
 <?php
 
-use SensioLabs\Behat\PageObjectExtension\PageObject\Page,
-    Behat\Mink\Exception\ResponseTextException,
-    Behat\Behat\Context\Step;
-
+use SensioLabs\Behat\PageObjectExtension\PageObject\Page, Behat\Mink\Exception\ResponseTextException,
+        Behat\Behat\Context\Step;
 
 class CheckoutCart extends Page
 {
@@ -12,10 +10,61 @@ class CheckoutCart extends Page
      */
     protected $path = '/checkout/cart';
 
-    public function assertSum($sum, $selector)
+    /**
+     * Checks the sum of the cart
+     * @param string $sum
+     */
+    public function checkSum($sum)
     {
-        $total = $this->getPrice($selector);
-        $sum   = $this->toPrice($sum);
+        $this->assertSum($sum, '#aggregation p.textright');
+    }
+
+    /**
+     * Checks the shipping costs
+     * @param string $costs
+     */
+    public function checkShippingCosts($costs)
+    {
+        $this->assertSum($costs, '#aggregation div:nth-of-type(1) p.textright');
+    }
+
+    /**
+     * Checks the total sum of the cart
+     * @param string $sum
+     */
+    public function checkTotalSum($sum)
+    {
+        $this->assertSum($sum, '#aggregation div.totalamount p.textright');
+    }
+
+    /**
+     * Checks the sum of the cart without vat
+     * @param string $sum
+     */
+    public function checkSumWithoutVat($sum)
+    {
+        $this->assertSum($sum, '#aggregation div.tax p.textright');
+    }
+
+    /**
+     * Checks the vat
+     * @param string $vat
+     */
+    public function checkVat($vat)
+    {
+        $this->assertSum($vat, '#aggregation div:nth-of-type(4) p.textright');
+    }
+
+    /**
+     * Helper class to check a price
+     * @param string $sum
+     * @param string $locator
+     * @throws Behat\Mink\Exception\ResponseTextException
+     */
+    private function assertSum($sum, $locator)
+    {
+        $total = $this->getPrice($locator);
+        $sum = $this->toPrice($sum);
 
         if ($total != $sum) {
             $message = sprintf('The sum (%s €) is different from %s €!', $total, $sum);
@@ -23,9 +72,14 @@ class CheckoutCart extends Page
         }
     }
 
-    private function getPrice($cssSelector)
+    /**
+     * Helper function to get a price from the cart
+     * @param string $locator
+     * @return float
+     */
+    private function getPrice($locator)
     {
-        $price = $this->find('css', $cssSelector);
+        $price = $this->find('css', $locator);
         $price = $price->getText();
 
         $price = $this->toPrice($price);
@@ -33,21 +87,24 @@ class CheckoutCart extends Page
         return $price;
     }
 
+    /**
+     * Helper function to validate a price
+     * @param string $price
+     * @return float
+     */
     private function toPrice($price)
     {
-        $price = str_replace('.', '',  $price); //Tausenderpunkte entfernen
+        $price = str_replace('.', '', $price); //Tausenderpunkte entfernen
         $price = str_replace(',', '.', $price); //Punkt statt Komma
         $price = floatval($price);
 
         return $price;
     }
 
-    public function proceedToCheckout()
-    {
-        $this->checkField('sAGB');
-        $this->pressButton('basketButton');
-    }
-
+    /**
+     * Adds a voucher to the cart
+     * @param string $voucher
+     */
     public function addVoucher($voucher)
     {
         $this->open();
@@ -58,6 +115,10 @@ class CheckoutCart extends Page
         $button->press();
     }
 
+    /**
+     * Adds an article to the cart
+     * @param string $article
+     */
     public function addArticle($article)
     {
         $this->open();
@@ -68,24 +129,37 @@ class CheckoutCart extends Page
         $button->press();
     }
 
+    /**
+     * Remove the voucher from the cart
+     * @throws Behat\Mink\Exception\ResponseTextException
+     */
     public function removeVoucher()
     {
         $link = $this->find('css', 'div.table_row.voucher a.del');
+
+        if (empty($link)) {
+            $message = 'Cart page has no voucher';
+            throw new ResponseTextException($message, $this->getSession());
+        }
+
         $link->click();
     }
 
+    /**
+     * Remove the article of the given position from the cart
+     * @param integer $position
+     * @throws Behat\Mink\Exception\ResponseTextException
+     */
     public function removeArticle($position)
     {
-        $class = 'div.table_row:nth-of-type('.($position + 3).') form a.del';
+        $locator = 'div.table_row:nth-of-type(' . ($position + 3) . ') form a.del';
+        $link = $this->find('css', $locator);
 
-        $button = $this->find('css', $class);
-
-        if(empty($button))
-        {
+        if (empty($link)) {
             $message = sprintf('Cart page has no article on position %d', $position);
             throw new ResponseTextException($message, $this->getSession());
         }
 
-        $button->click();
+        $link->click();
     }
 }

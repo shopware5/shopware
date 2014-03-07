@@ -3,7 +3,6 @@
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Behat\Behat\Context\Step;
 
-
 class CheckoutConfirm extends Page
 {
     /**
@@ -11,14 +10,25 @@ class CheckoutConfirm extends Page
      */
     protected $path = '/checkout/confirm';
 
+    /**
+     * Login a user
+     * @param string $email
+     * @param string $password
+     */
     public function login($email, $password)
     {
+        $this->open();
+
         $this->fillField('email', $email);
         $this->fillField('password', $password);
 
         $this->pressButton('Anmelden');
     }
 
+    /**
+     * Changes the billing address
+     * @param array $values
+     */
     public function changeBilling($values)
     {
         $this->open();
@@ -29,6 +39,10 @@ class CheckoutConfirm extends Page
         $this->getPage('Account')->changeBilling($values);
     }
 
+    /**
+     * Changes the shipping address
+     * @param array $values
+     */
     public function changeShipping($values)
     {
         $this->open();
@@ -39,7 +53,12 @@ class CheckoutConfirm extends Page
         $this->getPage('Account')->changeShipping($values);
     }
 
-    public function changePayment($value, $data=array())
+    /**
+     * Changes the payment method
+     * @param integer $value
+     * @param array $data
+     */
+    public function changePayment($value, $data = array())
     {
         $this->open();
 
@@ -57,6 +76,10 @@ class CheckoutConfirm extends Page
         $this->pressButton('Ändern');
     }
 
+    /**
+     * Changes the Dispatch method
+     * @param integer $value
+     */
     public function changeDelivery($value)
     {
         $this->open();
@@ -67,5 +90,14 @@ class CheckoutConfirm extends Page
         $button->press();
     }
 
+    /**
+     * Proceeds the checkout
+     */
+    public function proceedToCheckout()
+    {
+        $this->open();
 
+        $this->checkField('sAGB');
+        $this->pressButton('basketButton');
+    }
 }

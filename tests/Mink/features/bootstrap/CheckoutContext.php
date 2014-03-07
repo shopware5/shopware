@@ -11,7 +11,7 @@ class CheckoutContext extends SubContext
      */
     public function theSumShouldBe($sum)
     {
-        $this->getPage('CheckoutCart')->assertSum($sum, '#aggregation p.textright');
+        $this->getPage('CheckoutCart')->checkSum($sum);
     }
 
     /**
@@ -19,7 +19,7 @@ class CheckoutContext extends SubContext
      */
     public function theShippingCostsShouldBe($costs)
     {
-        $this->getPage('CheckoutCart')->assertSum($costs, '#aggregation div:nth-of-type(1) p.textright');
+        $this->getPage('CheckoutCart')->checkShippingCosts($costs);
     }
 
     /**
@@ -27,7 +27,7 @@ class CheckoutContext extends SubContext
      */
     public function theTotalSumShouldBe($sum)
     {
-        $this->getPage('CheckoutCart')->assertSum($sum, '#aggregation div.totalamount p.textright');
+        $this->getPage('CheckoutCart')->checkTotalSum($sum);
     }
 
     /**
@@ -35,7 +35,7 @@ class CheckoutContext extends SubContext
      */
     public function theSumWithoutVatShouldBe($sum)
     {
-        $this->getPage('CheckoutCart')->assertSum($sum, '#aggregation div.tax p.textright');
+        $this->getPage('CheckoutCart')->checkSumWithoutVat($sum);
     }
 
     /**
@@ -43,11 +43,11 @@ class CheckoutContext extends SubContext
      */
     public function theVatShouldBe($vat)
     {
-        $this->getPage('CheckoutCart')->assertSum($vat, '#aggregation div:nth-of-type(4) p.textright');
+        $this->getPage('CheckoutCart')->checkVat($vat);
     }
 
     /**
-     * @When /^I add the voucher "([^"]*)" to my basket$/
+     * @When /^I add the voucher "(?P<code>[^"]*)" to my basket$/
      */
     public function iAddTheVoucherToMyBasket($voucher)
     {
@@ -63,7 +63,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @When /^I add the article "([^"]*)" to my basket$/
+     * @When /^I add the article "(?P<articleNr>[^"]*)" to my basket$/
      */
     public function iAddTheArticleToMyBasket($article)
     {
@@ -71,7 +71,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @When /^I remove the article on position "([^"]*)"$/
+     * @When /^I remove the article on position (?P<num>\d+)$/
      */
     public function iRemoveTheArticleOnPosition($position)
     {
@@ -79,7 +79,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Given /^I log in as "([^"]*)" with password "([^"]*)" on checkout$/
+     * @Given /^I log in as "(?P<email>[^"]*)" with password "(?P<password>[^"]*)" on checkout$/
      */
     public function iLogInAsWithPasswordOnCheckout($email, $password)
     {
@@ -87,9 +87,9 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Then /^I change my billing adress on confirm page:$/
+     * @Then /^I change my billing address on confirm page:$/
      */
-    public function iChangeMyBillingAdressOnConfirmPage(TableNode $fieldValues)
+    public function iChangeMyBillingAddressOnConfirmPage(TableNode $fieldValues)
     {
         $values = $fieldValues->getHash();
 
@@ -97,9 +97,9 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Then /^I change my shipping adress on confirm page:$/
+     * @Then /^I change my shipping address on confirm page:$/
      */
-    public function iChangeMyShippingAdressOnConfirmPage(TableNode $fieldValues)
+    public function iChangeMyShippingAddressOnConfirmPage(TableNode $fieldValues)
     {
         $values = $fieldValues->getHash();
 
@@ -115,7 +115,7 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @When /^I change my payment method to debit using account of "([^"]*)" \(no\. "(\d+)"\) of bank "([^"]*)" \(code "(\d+)"\)$/
+     * @When /^I change my payment method to debit using account of "(?P<name>[^"]*)" \(no\. "(?P<account>\d+)"\) of bank "(?P<bank>[^"]*)" \(code "(?P<code>\d+)"\)$/
      */
     public function iChangeMyPaymentMethodToDebitUsingAccountOfNoOfBankCode($name, $kto, $bank, $blz)
     {
@@ -140,7 +140,6 @@ class CheckoutContext extends SubContext
      */
     public function iProceedToCheckout()
     {
-        $this->getPage('CheckoutCart')->proceedToCheckout();
+        $this->getPage('CheckoutConfirm')->proceedToCheckout();
     }
 }
-

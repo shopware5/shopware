@@ -11,7 +11,8 @@ class Note extends Page
     protected $path = '/note';
 
     /**
-     * @param $position
+     * Removes the article on the given position from the note
+     * @param integer $position
      */
     public function removeArticle($position)
     {
@@ -20,7 +21,8 @@ class Note extends Page
     }
 
     /**
-     * @param $position
+     * Put the article on the given position in the cart
+     * @param integer $position
      */
     public function buyArticle($position)
     {
@@ -29,7 +31,8 @@ class Note extends Page
     }
 
     /**
-     * @param $position
+     * Add the article on the given position to the comparision list
+     * @param integer $position
      */
     public function compareArticle($position)
     {
@@ -38,7 +41,8 @@ class Note extends Page
     }
 
     /**
-     * @param $position
+     * Visit the detail page of the article on the given position
+     * @param integer $position
      */
     public function visitArticleDetails($position)
     {
@@ -47,8 +51,9 @@ class Note extends Page
     }
 
     /**
-     * @param $position
-     * @param $class
+     * Helper class to click one of the action buttons of the article on the given position
+     * @param integer $position
+     * @param string $class
      * @throws Behat\Mink\Exception\ResponseTextException
      */
     private function clickButton($position, $class)
@@ -66,7 +71,8 @@ class Note extends Page
     }
 
     /**
-     * @param $count
+     * Counts the articles on the note and compares it with the given amount
+     * @param integer $count
      * @throws Behat\Mink\Exception\ResponseTextException
      */
     public function countArticles($count)
@@ -82,6 +88,7 @@ class Note extends Page
     }
 
     /**
+     * Compares the complete note with the given list of articles
      * @param $articles
      * @throws Behat\Mink\Exception\ResponseTextException
      */

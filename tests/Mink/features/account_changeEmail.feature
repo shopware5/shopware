@@ -10,9 +10,9 @@ Feature: Change Email
 		Then  I should see "Zugangsdaten wurden erfolgreich gespeichert"
 
 	Examples:
-		|         email       |      new_email      |
+		| email               | new_email           |
 		| "test@example.com"  | "test2@example.com" |
-		| "test2@example.com" |  "test@example.com" |
+		| "test2@example.com" | "test@example.com"  |
 
 
 	Scenario Outline: I can't change my password, when something is wrong
@@ -25,7 +25,7 @@ Feature: Change Email
 		And   I should see <message>
 
 	Examples:
-		|  password   |      new_email      |     confirmation    |                      message                     |
-		| "shopware"  |        "abc"        |         "abc"       | "Bitte geben Sie eine gültige eMail-Adresse ein" |
-		| "shopware"  | "test@example.com"  | "test2@example.com" |   "Die eMail-Adressen stimmen nicht überein."    |
-		| "shopware4" | "test2@example.com" | "test2@example.com" |      "Das aktuelle Passwort stimmt nicht!"       |
+		| password    | new_email           | confirmation        | message                                          |
+		| "shopware"  | "abc"               | "abc"               | "Bitte geben Sie eine gültige eMail-Adresse ein" |
+		| "shopware"  | "test@example.com"  | "test2@example.com" | "Die eMail-Adressen stimmen nicht überein."      |
+		| "shopware4" | "test2@example.com" | "test2@example.com" | "Das aktuelle Passwort stimmt nicht!"            |

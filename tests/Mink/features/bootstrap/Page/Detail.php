@@ -35,12 +35,15 @@ class Detail extends Page
         }
     }
 
+    /**
+     * @param $direction
+     * @throws Behat\Mink\Exception\ResponseTextException
+     */
     public function goToNeighbor($direction)
     {
-        $link = $this->find('css', 'a.article_'.$direction);
+        $link = $this->find('css', 'a.article_' . $direction);
 
-        if(empty($link))
-        {
+        if (empty($link)) {
             $message = sprintf('Detail page has no %s button', $direction);
             throw new ResponseTextException($message, $this->getSession());
         }
