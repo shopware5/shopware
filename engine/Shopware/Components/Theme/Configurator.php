@@ -28,7 +28,7 @@ use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Form as Form;
 use Shopware\Components\Model as Model;
 use Shopware\Models\Shop as Shop;
-use Shopware\Theme;
+use Shopware\Components\Theme;
 
 class Configurator
 {

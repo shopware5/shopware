@@ -83,11 +83,19 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         Shopware()->Session()->Admin = true;
 
         if (!$this->Request()->isXmlHttpRequest()) {
+
+            $this->get('events')->notify('Shopware_Theme_Preview_Starts', array(
+                'session' => Shopware()->Session(),
+                'shop'    => $shop,
+                'theme'   => $theme
+            ));
+
             $url = $this->Front()->Router()->assemble(array(
                 'module' => 'frontend',
                 'controller' => 'index',
                 'appendSession' => true,
             ));
+
             $this->redirect($url);
         }
     }
@@ -246,7 +254,10 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             $shop
         );
 
-        return $data;
+        return $this->get('events')->filter('Shopware_Theme_Detail_Loaded', $data, array(
+            'shop' => $shop,
+            'template' => $template
+        ));
     }
 
     /**
@@ -258,7 +269,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      */
     private function hasTemplateConfigSet(Template $template)
     {
-        /**@var $theme \Shopware\Theme */
+        /**@var $theme \Shopware\Components\Theme */
         $theme = $this->get('theme_util')->getThemeByTemplate($template);
 
         if ($template->getConfigSets()->count() > 0) {
@@ -317,6 +328,10 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             }
         }
 
+        $data = $this->get('events')->filter('Shopware_Theme_Listing_Loaded', $data, array(
+            'shop' => $shop
+        ));
+
         return $data;
     }
 
@@ -337,7 +352,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             ->leftJoin('template.elements', 'elements')
             ->groupBy('template.id');
 
-        return $builder;
+        return $this->get('events')->filter('Shopware_Theme_Listing_Query_Created', $builder);
     }
 
 

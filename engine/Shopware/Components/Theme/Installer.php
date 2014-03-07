@@ -29,7 +29,7 @@ use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop as Shop;
-use Shopware\Theme;
+use Shopware\Components\Theme;
 
 class Installer
 {
