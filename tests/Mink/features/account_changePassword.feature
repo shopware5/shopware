@@ -10,9 +10,9 @@ Feature: Change Password
 		Then  I should see "Zugangsdaten wurden erfolgreich gespeichert"
 
 	Examples:
-	|  password   | new_password |
-	| "shopware"  |  "shopware4" |
-	| "shopware4" |  "shopware"  |
+		| password    | new_password |
+		| "shopware"  | "shopware4"  |
+		| "shopware4" | "shopware"   |
 
 
 	Scenario Outline: I can't change my password, when something is wrong
@@ -25,7 +25,7 @@ Feature: Change Password
 		And   I should see <message>
 
 	Examples:
-	|  password   | new_password | confirmation |                                  message                                  |
-	| "shopware"  |    "sw4"     |    "sw4"     | "Bitte wählen Sie ein Passwort welches aus mindestens 8 Zeichen besteht." |
-	| "shopware"  |  "shopware4" |  "shopware5" |                  "Die Passwörter stimmen nicht überein."                  |
-	| "shopware4" |  "shopware5" |  "shopware5" |                   "Das aktuelle Passwort stimmt nicht!"                   |
+		| password    | new_password | confirmation | message                                                                   |
+		| "shopware"  | "sw4"        | "sw4"        | "Bitte wählen Sie ein Passwort welches aus mindestens 8 Zeichen besteht." |
+		| "shopware"  | "shopware4"  | "shopware5"  | "Die Passwörter stimmen nicht überein."                                   |
+		| "shopware4" | "shopware5"  | "shopware5"  | "Das aktuelle Passwort stimmt nicht!"                                     |

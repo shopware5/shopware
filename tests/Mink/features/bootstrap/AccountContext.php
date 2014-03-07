@@ -2,6 +2,7 @@
 
 use Behat\Behat\Context\Step;
 use Behat\Gherkin\Node\TableNode;
+
 require_once 'SubContext.php';
 
 class AccountContext extends SubContext
@@ -25,7 +26,7 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Given /^I log in as "([^"]*)" with password "([^"]*)"$/
+     * @Given /^I log in as "(?P<email>[^"]*)" with password "(?P<password>[^"]*)"$/
      */
     public function iLogInAsWithPassword($email, $password)
     {
@@ -33,7 +34,7 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Given /^I log in successful as "([^"]*)" with password "([^"]*)"$/
+     * @Given /^I log in successful as "(?P<email>[^"]*)" with password "(?P<password>[^"]*)"$/
      */
     public function iLogInSuccessfulAsWithPassword($email, $password)
     {
@@ -42,7 +43,7 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Then /^I change my email with password "([^"]*)" to "([^"]*)" with confirmation "([^"]*)"$/
+     * @Then /^I change my email with password "(?P<password>[^"]*)" to "(?P<new>[^"]*)" with confirmation "(?P<confirmation>[^"]*)"$/
      */
     public function iChangeMyEmailWithPasswordToWithConfirmation($password, $email, $emailConfirmation)
     {
@@ -50,7 +51,7 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Then /^I change my password from "([^"]*)" to "([^"]*)" with confirmation "([^"]*)"$/
+     * @Then /^I change my password from "(?P<old>[^"]*)" to "(?P<new>[^"]*)" with confirmation "(?P<confirmation>[^"]*)"$/
      */
     public function iChangeMyPasswordFromToWithConfirmation($currentPassword, $password, $passwordConfirmation)
     {
@@ -58,20 +59,19 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Then /^I change my billing adress:$/
+     * @Then /^I change my billing address:$/
      */
-    public function iChangeMyBillingAdress(TableNode $fieldValues)
+    public function iChangeMyBillingAddress(TableNode $fieldValues)
     {
         $values = $fieldValues->getHash();
 
         $this->getPage('Account')->changeBilling($values);
-
     }
 
     /**
-     * @Then /^I change my shipping adress:$/
+     * @Then /^I change my shipping address:$/
      */
-    public function iChangeMyShippingAdress(TableNode $fieldValues)
+    public function iChangeMyShippingAddress(TableNode $fieldValues)
     {
         $values = $fieldValues->getHash();
 

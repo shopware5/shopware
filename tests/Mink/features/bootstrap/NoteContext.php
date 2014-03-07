@@ -16,7 +16,7 @@ class NoteContext extends SubContext
     }
 
     /**
-     * @When /^I remove the article on position "([^"]*)" of my note$/
+     * @When /^I remove the article on position (?P<num>\d+) of my note$/
      */
     public function iRemoveTheArticleOnPositionOfMyNote($position)
     {
@@ -24,7 +24,7 @@ class NoteContext extends SubContext
     }
 
     /**
-     * @When /^I put the article on position "([^"]*)" of my note in the basket$/
+     * @When /^I put the article on position (?P<num>\d+) of my note in the basket$/
      */
     public function iPutTheArticleOnPositionOfMyNoteInTheBasket($position)
     {
@@ -32,7 +32,7 @@ class NoteContext extends SubContext
     }
 
     /**
-     * @When /^I compare the article on position "([^"]*)" of my note$/
+     * @When /^I compare the article on position (?P<num>\d+) of my note$/
      */
     public function iCompareTheArticleOnPositionOfMyNote($position)
     {
@@ -40,7 +40,7 @@ class NoteContext extends SubContext
     }
 
     /**
-     * @When /^I visit the detail page of the article on position "([^"]*)" of my note$/
+     * @When /^I visit the detail page of the article on position (?P<num>\d+) of my note$/
      */
     public function iVisitTheDetailPageOfTheArticleOnPositionOfMyNote($position)
     {
@@ -59,7 +59,7 @@ class NoteContext extends SubContext
 
     /**
      * @Then /^My note should be empty$/
-     * @Then /^My note should contain "([^"]*)" articles$/
+     * @Then /^My note should contain (?P<num>\d+) articles$/
      */
     public function myNoteShouldBeEmpty($count = 0)
     {

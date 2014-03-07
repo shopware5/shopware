@@ -10,6 +10,11 @@ class Account extends Page
      */
     protected $path = '/account';
 
+    /**
+     * Logins a user
+     * @param string $email
+     * @param string $password
+     */
     public function login($email, $password)
     {
         $this->open();
@@ -20,6 +25,9 @@ class Account extends Page
         $this->pressButton('Anmelden');
     }
 
+    /**
+     * Check if the user was successfully logged in
+     */
     public function verifyLogin()
     {
         $assert = new \Behat\Mink\WebAssert($this->getSession());
@@ -37,6 +45,12 @@ class Account extends Page
         $assert->pageTextContains('Sie besitzen bereits ein Kundenkonto');
     }
 
+    /**
+     * Changes the password of the user
+     * @param string $currentPassword
+     * @param string $password
+     * @param string $passwordConfirmation
+     */
     public function changePassword($currentPassword, $password, $passwordConfirmation)
     {
         $this->fillField('currentPassword', $currentPassword);
@@ -46,6 +60,12 @@ class Account extends Page
         $this->pressButton('Passwort ändern');
     }
 
+    /**
+     * Changes the email address of the user
+     * @param string $password
+     * @param string $email
+     * @param string $emailConfirmation
+     */
     public function changeEmail($password, $email, $emailConfirmation)
     {
         $this->fillField('emailPassword', $password);
@@ -55,18 +75,30 @@ class Account extends Page
         $this->pressButton('E-Mail ändern');
     }
 
+    /**
+     * Changes the billing address of the user
+     * @param array $values
+     */
     public function changeBilling($values)
     {
         $this->fillBilling($values);
         $this->pressButton('Ändern');
     }
 
+    /**
+     * Changes the shipping address of the user
+     * @param array $values
+     */
     public function changeShipping($values)
     {
         $this->fillShipping($values);
         $this->pressButton('Ändern');
     }
 
+    /**
+     * Register a new user
+     * @param array $values
+     */
     public function register($values)
     {
         $billingValues = array();
@@ -98,6 +130,10 @@ class Account extends Page
         $this->pressButton('Registrierung abschließen');
     }
 
+    /**
+     * Helper function to fill the billing address form
+     * @param array $values
+     */
     private function fillBilling($values)
     {
         $personal_fields = array(
@@ -138,6 +174,10 @@ class Account extends Page
         }
     }
 
+    /**
+     * Helper function to fill the shipping address form
+     * @param array $values
+     */
     private function fillShipping($values)
     {
         foreach ($values as $row) {

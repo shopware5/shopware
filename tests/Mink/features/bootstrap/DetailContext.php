@@ -7,7 +7,7 @@ require_once 'SubContext.php';
 class DetailContext extends SubContext
 {
     /**
-     * @Given /^I am on the detail page for article "([^"]*)"$/
+     * @Given /^I am on the detail page for article (?P<articleId>\d+)$/
      */
     public function iAmOnTheDetailPageForArticle($articleId)
     {
@@ -15,7 +15,7 @@ class DetailContext extends SubContext
     }
 
     /**
-     * @When /^I put the article "([^"]*)" times into the basket$/
+     * @When /^I put the article "(?P<quantity>[^"]*)" times into the basket$/
      */
     public function iPutTheArticleTimesIntoTheBasket($quantity)
     {
