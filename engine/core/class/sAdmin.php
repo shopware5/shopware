@@ -31,7 +31,7 @@ class sAdmin
     /**
      * Pointer to sSystem object
      *
-     * @var object
+     * @var sSystem
      */
     public $sSYSTEM;
 
@@ -61,6 +61,8 @@ class sAdmin
     }
 
     /**
+     * This function seems to be unused. See SW-8161
+     *
      * Logout user and destroy session
      *
      * @return bool|void
@@ -86,9 +88,12 @@ class sAdmin
     }
 
     /**
-     * DEPRECATED , old vatid check
-     * @deprecated
-     * @return -
+     * This function seems to be unused. See SW-8161
+     *
+     * @deprecated Old vat id check
+     * @param $id
+     * @param $country
+     * @return array an empty array
      */
     public function sCheckTaxID($id, $country)
     {
@@ -97,7 +102,8 @@ class sAdmin
 
     /**
      * Checks vat id with webservice
-     * @return array assoziative array with success / error codes
+     *
+     * @return array Associative array with success / error codes
      */
     public function sValidateVat()
     {
@@ -191,9 +197,11 @@ class sAdmin
     }
 
     /**
-     * Process answer from german vat webservice
-     * @param  $response
-     * @return array
+     * Handles the response from the german VAT id validation
+     * Used only in sAdmin::sValidateVat()
+     *
+     * @param  $response The response from the validation webservice
+     * @return array List of errors found by the remote service
      */
     public function sCheckVatResponse($response)
     {
@@ -267,22 +275,26 @@ class sAdmin
         }
         return $result;
     }
+
     /**
-     * Get data from a certain payment
-     * @param int $id - s_core_paymentmeans.id
-     * @param array $user - array with user data (sGetUserData)
-     * @access public
-     * @return array - payment data
+     * Get data from a certain payment mean
+     * If user data is provided, the current user payment
+     * mean is validated against current country, risk management, etc
+     * and reset to default if necessary.
+     *
+     * Used in several places to get the payment mean data
+     *
+     * @param int $id Payment mean id
+     * @param array|bool $user Array with user data (sGetUserData)
+     * @return array Payment data
      */
-    public function sGetPaymentMeanById($id,$user=false)
+    public function sGetPaymentMeanById($id, $user = false)
     {
         $id = intval($id);
         $sql = "
-        SELECT * FROM s_core_paymentmeans
-        WHERE id=?
+            SELECT * FROM s_core_paymentmeans WHERE id = ?
         ";
-        $data =  $this->sSYSTEM->sDB_CONNECTION->GetRow($sql,array($id));
-
+        $data = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql, array($id));
 
         if ($this->sSYSTEM->sMODULES['sBasket']->sCheckForESD()) {
             $sEsd = true;
@@ -295,22 +307,23 @@ class sAdmin
         $basket = $this->sSYSTEM->sMODULES['sBasket']->sBASKET;
 
         // Check for risk-management
-        // If rule matches, reset to default paymentmean if this paymentmean was not
+        // If rule matches, reset to default payment mean if this payment mean was not
         // set by shop-owner
 
-        // Hide paymentmeans which are not active
-        if (!$data["active"] && $data["id"]!=$user["additional"]["user"]["paymentpreset"]) {
+        // Hide payment means which are not active
+        if (!$data["active"] && $data["id"] != $user["additional"]["user"]["paymentpreset"]) {
             $resetPayment = $this->sSYSTEM->sCONFIG["sPAYMENTDEFAULT"];
         }
 
-        // If esd - order, hide payment-means, whih
-        // are not accessible for esd
+        // If esd - order, hide payment means which
+        // are not available for esd
         if (!$data["esdactive"] && $sEsd) {
             $resetPayment = $this->sSYSTEM->sCONFIG["sPAYMENTDEFAULT"];
         }
 
         // Check additional rules
-        if ($this->sManageRisks($data["id"],$basket,$user) && $data["id"]!=$user["additional"]["user"]["paymentpreset"]) {
+        if ($this->sManageRisks($data["id"], $basket, $user)
+            && $data["id"] != $user["additional"]["user"]["paymentpreset"]) {
             $resetPayment = $this->sSYSTEM->sCONFIG["sPAYMENTDEFAULT"];
         }
 
@@ -327,10 +340,14 @@ class sAdmin
                 ON pc.countryID=?
                 AND pc.paymentID=p.id
 
-                WHERE (ps.paymentID IS NOT NULL OR (SELECT paymentID FROM s_core_paymentmeans_subshops WHERE paymentID=p.id LIMIT 1) IS NULL)
-                AND (pc.paymentID IS NOT NULL OR (SELECT paymentID FROM s_core_paymentmeans_countries WHERE paymentID=p.id LIMIT 1) IS NULL)
+                WHERE (ps.paymentID IS NOT NULL OR (
+                  SELECT paymentID FROM s_core_paymentmeans_subshops WHERE paymentID=p.id LIMIT 1
+                ) IS NULL)
+                AND (pc.paymentID IS NOT NULL OR (
+                  SELECT paymentID FROM s_core_paymentmeans_countries WHERE paymentID=p.id LIMIT 1
+                ) IS NULL)
 
-                AND id=?
+                AND id = ?
             ";
             $active = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql, array(
                 $this->sSYSTEM->sSubShop['id'],
@@ -343,14 +360,15 @@ class sAdmin
         }
 
         if ($resetPayment && $user["additional"]["user"]["id"]) {
-            $updateAccount =  $this->sSYSTEM->sDB_CONNECTION->Execute("
-            UPDATE s_user SET paymentID = ? WHERE id = ?
-            ",array($resetPayment,$user["additional"]["user"]["id"]));
+            $updateAccount = $this->sSYSTEM->sDB_CONNECTION->Execute(
+                "UPDATE s_user SET paymentID = ? WHERE id = ?",
+                array($resetPayment, $user["additional"]["user"]["id"])
+            );
             $sql = "
             SELECT * FROM s_core_paymentmeans
             WHERE id=?
             ";
-            $data =  $this->sSYSTEM->sDB_CONNECTION->GetRow($sql,array($resetPayment));
+            $data = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql,array($resetPayment));
         }
 
         // Get Translation
@@ -364,8 +382,7 @@ class sAdmin
     /**
      * Get all available payments
      *
-     * @access public
-     * @return array - payments data
+     * @return array Payments data
      */
     public function sGetPaymentMeans()
     {
@@ -414,13 +431,13 @@ class sAdmin
 
         foreach ($getPaymentMeans as $payKey => $payValue) {
 
-            // Hide paymentmeans which are not active
-            if (empty($payValue["active"]) && $payValue["id"]!=$user["additional"]["user"]["paymentpreset"]) {
+            // Hide payment means which are not active
+            if (empty($payValue["active"]) && $payValue["id"] != $user["additional"]["user"]["paymentpreset"]) {
                 unset($getPaymentMeans[$payKey]);
                 continue;
             }
 
-            // If esd - order, hide payment-means, whih
+            // If esd - order, hide payment means, which
             // are not accessible for esd
             if (empty($payValue["esdactive"]) && $sEsd) {
                 unset($getPaymentMeans[$payKey]);
@@ -428,7 +445,7 @@ class sAdmin
             }
 
             // Check additional rules
-            if ($this->sManageRisks($payValue["id"], $basket, $user) && $payValue["id"]!=$user["additional"]["user"]["paymentpreset"]) {
+            if ($this->sManageRisks($payValue["id"], $basket, $user) && $payValue["id"] != $user["additional"]["user"]["paymentpreset"]) {
                 unset($getPaymentMeans[$payKey]);
                 continue;
             }
@@ -453,10 +470,11 @@ class sAdmin
     }
 
     /**
-     * Loads the system class of the specified payment (engine/core/class/paymentmeans)
-     * @param array $paymentData - Array with payment data
-     * @access public
-     * @return object or false -
+     * Loads the system class of the specified payment mean
+     *
+     * @param array $paymentData Array with payment data
+     * @return ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod
+     * The payment mean handling class instance
      */
     public function sInitiatePaymentClass($paymentData)
     {
@@ -474,7 +492,7 @@ class sAdmin
             array('subject' => $this)
         );
 
-        $class = array_key_exists($index, $dirs)?$dirs[$index]:$dirs['default'];
+        $class = array_key_exists($index, $dirs) ? $dirs[$index] : $dirs['default'];
         if (!$class) {
             $this->sSYSTEM->E_CORE_WARNING("sValidateStep3 #02","Payment classes dir not loaded");
             return false;
@@ -493,38 +511,40 @@ class sAdmin
     /**
      * Last step of the registration - validate all user fields that exists in session and
      * stores the data into database
+     *
      * @param array $paymentmeans - Array with payment data
-     * @access public
-     * @return -
+     * @return array Payment data
      */
-    public function sValidateStep3 ($paymentmeans = array())
+    public function sValidateStep3($paymentmeans = array())
     {
         if (empty($this->sSYSTEM->_POST['sPayment'])) {
-            $this->sSYSTEM->E_CORE_WARNING("sValidateStep3 #00","No payment-id");
+            $this->sSYSTEM->E_CORE_WARNING("sValidateStep3 #00","No payment id");
             return;
         }
 
         $user = $this->sGetUserData();
-        $paymentData = $this->sGetPaymentMeanById($this->sSYSTEM->_POST['sPayment'],$user);
+        $paymentData = $this->sGetPaymentMeanById($this->sSYSTEM->_POST['sPayment'], $user);
 
         if (!count($paymentData)) {
             $this->sSYSTEM->E_CORE_ERROR("sValidateStep3 #01","Could not load paymentmean");
-            return;
         } else {
-            // Include management-class and check input-data
+            // Include management class and check input data
             if (!empty($paymentData['class'])) {
                 $sPaymentObject = $this->sInitiatePaymentClass($paymentData);
                 $checkPayment = $sPaymentObject->validate(Shopware()->Front()->Request());
             }
-            return array("checkPayment"=>$checkPayment,"paymentData"=>$paymentData,"sProcessed"=>true,"sPaymentObject"=>&$sPaymentObject);
+            return array(
+                "checkPayment" => $checkPayment,
+                "paymentData" => $paymentData,
+                "sProcessed" => true,
+                "sPaymentObject" => &$sPaymentObject
+            );
         }
-        return;
     }
 
     /**
      * Updates the billing address of the user
      *
-     * @access public
      * @return bool
      */
     public function sUpdateBilling()
@@ -1484,16 +1504,16 @@ class sAdmin
     }
 
     /**
-     * Loads translation for the different paymentmeans
+     * Loads translation for the different payment means
+     *
      * @param array $payment - translation for a specific payment
-     * @access public
      * @return array - translated data
      */
-    public function sGetPaymentTranslation($payment="")
+    public function sGetPaymentTranslation($payment = "")
     {
         // Load Translation
         $sql = "
-        SELECT objectdata FROM s_core_translations WHERE objecttype='config_payment' AND objectlanguage=?";
+        SELECT objectdata FROM s_core_translations WHERE objecttype='config_payment' AND objectlanguage = ?";
         $params = array($this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"]);
 
         $getTranslation = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],$sql, $params);
@@ -2243,9 +2263,10 @@ class sAdmin
     }
 
     /**
-     * Get user first- and lastname by id
-     * @access public
-     * @return array firstname/lastname
+     * Get user first and last name by id
+     *
+     * @param int $id
+     * @return array first name/last name
      */
     public function sGetUserNameById($id)
     {
@@ -2257,8 +2278,8 @@ class sAdmin
 
 
     /**
-     *  Get all data from the current logged in user
-     * @access public
+     * Get all data from the current logged in user
+     *
      * @return array
      */
     public function sGetUserData()
@@ -2277,7 +2298,7 @@ class sAdmin
         // If user is logged in
         if (!empty($this->sSYSTEM->_SESSION["sUserId"])) {
 
-            // 1.) Get billing-address
+            // 1.) Get billing address
             $sql = "SELECT *
                     FROM
                         s_user_billingaddress
@@ -2293,8 +2314,8 @@ class sAdmin
                 $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($this->sSYSTEM->_SESSION["sUserId"]));
             }
 
-            // 2.) Advanced infos
-            // Query country-information
+            // 2.) Advanced info
+            // Query country information
             $userData["additional"]["country"] =  $this->sSYSTEM->sDB_CONNECTION->GetRow("
                 SELECT * FROM s_core_countries
                 WHERE id=?
@@ -2312,7 +2333,7 @@ class sAdmin
             $attributes = $this->getUserAttributes($this->sSYSTEM->_SESSION["sUserId"]);
             $userData["additional"]["user"] = array_merge($attributes, $additional);
 
-            // Newsletter-Properties
+            // Newsletter properties
             $newsletter = $this->sSYSTEM->sDB_CONNECTION->GetRow("
                 SELECT id FROM s_campaigns_mailaddresses
                 WHERE email=?
@@ -2323,7 +2344,7 @@ class sAdmin
                 $userData["additional"]["user"]["newsletter"] = 0;
             }
 
-            // 3.) Get shipping-adress
+            // 3.) Get shipping address
             $shipping = $this->sSYSTEM->sDB_CONNECTION->GetRow("SELECT * FROM s_user_shippingaddress WHERE userID=?", array($this->sSYSTEM->_SESSION["sUserId"]));
             $attributes = $this->getUserShippingAddressAttributes($this->sSYSTEM->_SESSION["sUserId"]);
             $userData["shippingaddress"]= array_merge($attributes, $shipping);
@@ -2376,7 +2397,7 @@ class sAdmin
 
         $userData = Enlight()->Events()->filter('Shopware_Modules_Admin_GetUserData_FilterResult', $userData, array('subject'=>$this,'id'=>$this->sSYSTEM->_SESSION["sUserId"]));
 
-        return  $userData;
+        return $userData;
     }
 
     private function getUserBillingAddressAttributes($userId)
@@ -2466,23 +2487,23 @@ class sAdmin
     }
 
     /**
-     * DEPRECATED Get shippingcosts
+     * DEPRECATED Get shipping costs
+     *
      * @param array $countryInfo - data from shipping country
      * @param double $surcharge - surcharge for current payment
-     * @access public
      * @return array
      */
-    public function sGetShippingcosts($countryInfo=null,$surcharge=0,$surchargestring="")
+    public function sGetShippingcosts($countryInfo = null, $surcharge = 0, $surchargestring = "")
     {
         return $this->sGetPremiumShippingcosts($countryInfo);
     }
 
     /**
-     * Shopware Risk-Management
+     * Shopware Risk Management
+     *
      * @param int $paymentID - payment id (s_core_paymentmeans.id)
      * @param array $basket - current shoppingcart
      * @param array $user -  user data
-     * @access public
      * @return boolean
      */
     public function sManageRisks($paymentID, $basket, $user)
@@ -2493,7 +2514,7 @@ class sAdmin
             FROM s_core_rulesets
             WHERE paymentID = ?
             ORDER BY id ASC
-        ",array($paymentID));
+        ", array($paymentID));
 
         if (empty($queryRules)) {
             return false;
@@ -2513,14 +2534,17 @@ class sAdmin
         foreach ($queryRules as $rule) {
             if ($rule["rule1"] && !$rule["rule2"]) {
                 $rule["rule1"] = "sRisk".$rule["rule1"];
-                if ($rule["rule2"]) $rule["rule2"] = "sRisk".$rule["rule2"];
+                if ($rule["rule2"]) {
+                    $rule["rule2"] = "sRisk".$rule["rule2"];
+                }
                 if ($this->$rule["rule1"]($user,$basket,$rule["value1"])) {
                     return true;
                 }
             } elseif ($rule["rule1"] && $rule["rule2"]) {
                 $rule["rule1"] = "sRisk".$rule["rule1"];
-                if ($rule["rule2"]) $rule["rule2"] = "sRisk".$rule["rule2"];
-                // AND
+                if ($rule["rule2"]) {
+                    $rule["rule2"] = "sRisk".$rule["rule2"];
+                }
                 if ($this->$rule["rule1"]($user,$basket,$rule["value1"]) && $this->$rule["rule2"]($user,$basket,$rule["value2"])) {
                     return true;
                 }
@@ -3270,10 +3294,10 @@ class sAdmin
 
     /**
      * Get dispatch methods
+     *
      * @param int $countryID
      * @param int $paymentID
      * @param null $stateId
-     * @access public
      * @return array
      */
     public function sGetDispatchBasket($countryID=null, $paymentID = null, $stateId = null)
