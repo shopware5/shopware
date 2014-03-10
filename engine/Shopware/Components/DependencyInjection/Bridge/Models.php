@@ -30,6 +30,7 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Proxy\Autoloader;
 use Shopware\Components\Model\Configuration;
+use Shopware\Components\Model\LazyFetchModelEntity;
 use Shopware\Components\Model\ModelManager;
 
 /**
@@ -99,6 +100,8 @@ class Models
             $config,
             $eventManager
         );
+
+        LazyFetchModelEntity::setEntityManager($entityManager);
 
         return $entityManager;
     }

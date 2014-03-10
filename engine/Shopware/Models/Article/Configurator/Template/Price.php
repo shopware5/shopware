@@ -23,7 +23,7 @@
  */
 
 namespace Shopware\Models\Article\Configurator\Template;
-use Shopware\Components\Model\ModelEntity,
+use Shopware\Components\Model\LazyFetchModelEntity,
     Doctrine\ORM\Mapping AS ORM,
     Symfony\Component\Validator\Constraints as Assert,
     Doctrine\Common\Collections\ArrayCollection;
@@ -32,7 +32,7 @@ use Shopware\Components\Model\ModelEntity,
  * @ORM\Entity
  * @ORM\Table(name="s_article_configurator_template_prices")
  */
-class Price extends ModelEntity
+class Price extends LazyFetchModelEntity
 {
     /**
      * @var integer $id
@@ -151,7 +151,7 @@ class Price extends ModelEntity
      */
     public function getCustomerGroup()
     {
-        return $this->customerGroup;
+        return $this->fetchLazy($this->customerGroup, array('groupkey' => $this->customerGroupKey));
     }
 
     /**
