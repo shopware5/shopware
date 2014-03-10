@@ -3,7 +3,7 @@
 	<p class="heading">{s name='WidgetsRecentlyViewedHeadline'}{/s}</p>
 </div>
 <script>
-	(function($, window, document) {
+	;(function($, window, document) {
 		$(document).ready(function() {
 			var shopId = '{$Shop->getId()}',
 				basePath = '{$Shop->getBaseUrl()}',
@@ -22,5 +22,5 @@
 				$('.viewlast').hide();
 			}
 		});
-	}(jQuery,  window, document));
+	}(jQuery, window, document));
 </script>

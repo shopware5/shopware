@@ -72,7 +72,7 @@
         //<![CDATA[
 
         {* LastSeenArticle Client Script *}
-        ;(function() {
+        ;(function($) {
             var getThumbnailSize = function(configThumbnailSize) {
                 var thumbnail, thumbnails;
                 configThumbnailSize = ~~(1 * configThumbnailSize);
@@ -94,7 +94,7 @@
                 'thumbnail': getThumbnailSize('{config name=thumb}')
                 {rdelim};
 
-            jQuery(function($) {
+            $(document).ready(function() {
                 var numberOfArticles = '{config name=lastarticlestoshow}';
                 var languageCode = '{$Shop->getId()}';
                 var basePath = '{$Shop->getBaseUrl()}';
@@ -106,7 +106,7 @@
                     basePath: basePath
                 });
             });
-        })();
+        })(jQuery);
         //]]>
     </script>
 {/block}
