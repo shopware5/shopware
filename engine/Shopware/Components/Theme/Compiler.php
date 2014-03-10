@@ -25,11 +25,14 @@
 namespace Shopware\Components\Theme;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Shopware\Components\Theme\Minifier\Css;
-use Shopware\Components\Theme\Minifier\Js;
+use Shopware\Components\Theme\Compressor\Css;
+use Shopware\Components\Theme\Compressor\Js;
 use Shopware\Models\Shop as Shop;
 
 /**
+ * The Theme\Compiler class is used for the less compiling in the store front.
+ * This class handles additionally the css and javascript minification.
+ *
  * @category  Shopware
  * @package   Shopware
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
@@ -69,20 +72,28 @@ class Compiler
     /**
      * @var Css
      */
-    private $cssMinifier;
+    private $cssCompressor;
 
     /**
      * @var Js
      */
-    private $jsMinifier;
+    private $jsCompressor;
 
 
+    /**
+     * @param \lessc $compiler
+     * @param PathResolver $pathResolver
+     * @param Inheritance $inheritance
+     * @param Css $cssCompressor
+     * @param Js $jsCompressor
+     * @param \Enlight_Event_EventManager $eventManager
+     */
     function __construct(
         \lessc $compiler,
         PathResolver $pathResolver,
         Inheritance $inheritance,
-        Css $cssMinifier,
-        Js $jsMinifier,
+        Css $cssCompressor,
+        Js $jsCompressor,
         \Enlight_Event_EventManager $eventManager
     )
     {
@@ -90,12 +101,15 @@ class Compiler
         $this->eventManager = $eventManager;
         $this->inheritance = $inheritance;
         $this->pathResolver = $pathResolver;
-        $this->cssMinifier = $cssMinifier;
-        $this->jsMinifier = $jsMinifier;
+        $this->cssCompressor = $cssCompressor;
+        $this->jsCompressor = $jsCompressor;
     }
 
     /**
      * Compiles all required resources for the passed shop and template.
+     * The function compiles all theme and plugin less files and
+     * compresses the theme and plugin javascript and css files
+     * into one file.
      *
      * @param $timestamp
      * @param Shop\Template $template
@@ -301,7 +315,7 @@ class Compiler
                     $file
                 ));
             }
-            $minified = $this->cssMinifier->minify(
+            $minified = $this->cssCompressor->compress(
                 file_get_contents($file)
             );
             $output->fwrite($minified);
@@ -309,6 +323,12 @@ class Compiler
     }
 
     /**
+     * Compress the plugin css files which can be added
+     * over the `Theme_Compiler_Collect_Plugin_Css` event.
+     * Each file will be minified by the Theme\Compressor\Css class.
+     * The compressed css content will be added to the plugin.css file
+     * which stored in the theme cache directory.
+     *
      * @param $timestamp
      * @param Shop\Template $template
      * @param Shop\Shop $shop
@@ -332,11 +352,11 @@ class Compiler
         foreach ($collection as $file) {
             if (!file_exists($file)) {
                 throw new \Exception(sprintf(
-                    "Some plugin tries to minify a css file, but the file %s doesn't exist",
+                    "Some plugin tries to compress a css file, but the file %s doesn't exist",
                     $file
                 ));
             }
-            $minified = $this->cssMinifier->minify(
+            $minified = $this->cssCompressor->compress(
                 file_get_contents($file)
             );
             $output->fwrite($minified);
@@ -344,6 +364,11 @@ class Compiler
     }
 
     /**
+     * Compress the theme javascript files.
+     * Each file will be minified by the Theme\Compressor\Js class.
+     * The compressed js content will be added to the theme.js file
+     * which stored in the theme cache directory.
+     *
      * @param $timestamp
      * @param Shop\Template $template
      * @param Shop\Shop $shop
@@ -365,12 +390,18 @@ class Compiler
                 ));
             }
             $content = file_get_contents($file);
-            $minified = $this->jsMinifier->minify($content);
+            $minified = $this->jsCompressor->compress($content);
             $output->fwrite($minified);
         }
     }
 
     /**
+     * Compress the plugin javascript files which can be added
+     * over the `Theme_Compiler_Collect_Plugin_Javascript` event.
+     * Each file will be minified by the Theme\Compressor\Js class.
+     * The compressed js content will be added to the plugin.js file
+     * which stored in the theme cache directory.
+     *
      * @param $timestamp
      * @param Shop\Template $template
      * @param Shop\Shop $shop
@@ -395,17 +426,19 @@ class Compiler
         foreach ($collection as $file) {
             if (!file_exists($file)) {
                 throw new \Exception(sprintf(
-                    "Some plugin tries to minify a css file, but the file %s doesn't exist",
+                    "Some plugin tries to compress a css file, but the file %s doesn't exist",
                     $file
                 ));
             }
             $content = file_get_contents($file);
-            $minified = $this->jsMinifier->minify($content);
+            $minified = $this->jsCompressor->compress($content);
             $output->fwrite($minified);
         }
     }
 
     /**
+     * Helper function which returns the css file for the themes.
+     * The file name are build over the shop id and current compiler timestamp.
      * @param $timestamp
      * @param Shop\Shop $shop
      * @return string
@@ -416,6 +449,9 @@ class Compiler
     }
 
     /**
+     * Helper function which returns the css file for the plugins.
+     * The file name are build over the shop id and current compiler timestamp.
+     *
      * @param $timestamp
      * @param Shop\Shop $shop
      * @return string
@@ -426,6 +462,9 @@ class Compiler
     }
 
     /**
+     * Helper function which returns the js file for the themes.
+     * The file name are build over the shop id and current compiler timestamp.
+     *
      * @param $timestamp
      * @param Shop\Shop $shop
      * @return string
@@ -436,6 +475,9 @@ class Compiler
     }
 
     /**
+     * Helper function which returns the js file for the plugins.
+     * The file name are build over the shop id and current compiler timestamp.
+     *
      * @param $timestamp
      * @param Shop\Shop $shop
      * @return string
@@ -446,6 +488,8 @@ class Compiler
     }
 
     /**
+     * Helper function to concatenate the content of the passed files.
+     *
      * @param array $files
      * @return string
      * @throws \Exception

@@ -28,18 +28,33 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop as Shop;
 use Shopware\Components\Theme;
 
+/**
+ * The Theme\Util class is a helper class
+ * which contains different small functions
+ * which used in all other Theme\* classes.
+ *
+ * @package Shopware\Components\Theme
+ */
 class Util
 {
     /**
+     * Required for different path operations.
      * @var PathResolver
      */
     private $pathResolver;
 
     /**
+     * Only used to get all active plugins.
      * @var ModelManager
      */
     private $entityManager;
 
+    /**
+     * Class constructor which injects all dependencies.
+     *
+     * @param ModelManager $entityManager
+     * @param PathResolver $pathResolver
+     */
     function __construct(ModelManager $entityManager, PathResolver $pathResolver)
     {
         $this->entityManager = $entityManager;
@@ -47,6 +62,9 @@ class Util
     }
 
     /**
+     * Returns the preview image of the passed shopware template.
+     * The image will be encoded as base 64 image.
+     *
      * @param Shop\Template $template
      * @return null|string
      */
@@ -60,6 +78,11 @@ class Util
     }
 
     /**
+     * Helper function which returns the Theme.php instance
+     * of the passed shopware template.
+     * The function resolves the theme directory over the
+     * getDirectory function of the PathResolver
+     *
      * @param Shop\Template $template
      * @return Theme
      * @throws \Exception

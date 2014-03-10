@@ -21,22 +21,39 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-namespace Shopware\Components\Theme\Minifier;
 
-class Css
+namespace Shopware\Components\Theme\Compressor;
+
+/**
+ * Javascript compressor for the frontend themes.
+ * Used to compress theme and plugin javascript files.
+ *
+ * @package Shopware\Components\Theme\Compressor
+ */
+class Js implements CompressorInterface
 {
     /**
-     * @var \CSSmin
+     * @var \JSMin
      */
-    private $minifier;
+    private $compressor;
 
-    function __construct($minifier)
+    /**
+     * @param \JSMin $compressor
+     */
+    function __construct(\JSMin $compressor)
     {
-        $this->minifier = $minifier;
+        $this->compressor = $compressor;
     }
 
-    public function minify($css)
+    /**
+     * Compress the passed content and returns
+     * the compressed content.
+     *
+     * @param string $content
+     * @return string
+     */
+    public function compress($content)
     {
-        return $this->minifier->run($css);
+        return $this->compressor->minify($content);
     }
 }
