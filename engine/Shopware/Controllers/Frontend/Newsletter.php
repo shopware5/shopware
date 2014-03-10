@@ -30,6 +30,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
     /**
      * Transition method
      * Confirm action method
+     * @deprecated
      */
     public function confirmAction()
     {

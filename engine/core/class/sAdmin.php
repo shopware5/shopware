@@ -630,7 +630,7 @@ class sAdmin
 
                 $link = Shopware()->Front()->Router()->assemble(array(
                         'sViewport' => 'newsletter',
-                        'action' => 'confirm',
+                        'action' => 'index',
                         'sConfirmation' => $hash
                     )
                 );
@@ -663,7 +663,15 @@ class sAdmin
         return true;
     }
 
-    private function sendMail($recipient, $template, $optin=false)
+    /**
+     * Sends a mail to the given recipient with a given template.
+     * If the optin parameter is set, the sConfirmLink variable will be filled by the optin link.
+     *
+     * @param $recipient
+     * @param $template
+     * @param string $optin
+     */
+    private function sendMail($recipient, $template, $optin='')
     {
         $context = array();
 
