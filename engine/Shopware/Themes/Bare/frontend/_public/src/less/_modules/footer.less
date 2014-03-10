@@ -67,5 +67,40 @@
 	.newsletter--field {
 		width: 100%;
 	}
-	.newsletter--button { display: none }
+}
+
+@media screen and (min-width: @tabletViewportWidth) {
+	.footer-main {
+		.unitize-margin(21, 0, 0, 0, 16);
+		border-top: 1px solid @borderColor;
+
+		.footer--column {
+			.unitize-padding(0, 10, 0, 10, 16);
+			width: 25%;
+			border: 0 none;
+
+			&.is--last {
+				border-bottom: 0 none;
+			}
+		}
+
+		.footer--columns {
+			border-bottom: 1px solid @borderColor;
+		}
+
+		.column--content {
+			display: block;
+		}
+
+		.column--headline::after {
+			display: none;
+		}
+
+		.navigation--entry {
+			padding: 0;
+		}
+		.navigation--link {
+			line-height: 1.4;
+		}
+	}
 }
