@@ -5625,27 +5625,6 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         defaults = {
         };
 
-    /**
-     * Returns whether or not the localStorage is available and works - SW-7524
-     *
-     * @returns {boolean}
-     */
-    function isLocalStorageSupported () {
-        var testKey = 'test';
-
-        if (!localStorage) {
-            return false;
-        }
-
-        try {
-            localStorage.setItem(testKey, '1');
-            localStorage.removeItem(testKey);
-            return true;
-        } catch (error) {
-            return false;
-        }
-    }
-
     var format = function (str) {
         for (var i = 1; i < arguments.length; i++) {
             str = str.replace('%' + (i - 1), arguments[i]);
@@ -5728,7 +5707,7 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
     };
 
     $(document).ready(function() {
-        if(!isLocalStorageSupported()) {
+        if(!$.isLocalStorageSupported) {
             localStorage = new StoragePolyFill('local');
         }
 
@@ -5755,27 +5734,6 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         localStorage = window.localStorage,
         defaults = {
         };
-
-    /**
-     * Returns whether or not the localStorage is available and works - SW-7524
-     *
-     * @returns {boolean}
-     */
-    function isLocalStorageSupported () {
-        var testKey = 'test';
-
-        if (!localStorage) {
-            return false;
-        }
-
-        try {
-            localStorage.setItem(testKey, '1');
-            localStorage.removeItem(testKey);
-            return true;
-        } catch (error) {
-            return false;
-        }
-    }
 
     // Append articles to Template
     var createTemplate = function(article, lastClass) {
@@ -5860,7 +5818,7 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
     };
 
     $(document).ready(function() {
-        if(!isLocalStorageSupported()) {
+        if(!$.isLocalStorageSupported) {
             localStorage = new StoragePolyFill('local');
         }
 
@@ -6105,7 +6063,7 @@ if (navigator.appVersion.indexOf("MSIE 7.") != -1)
  * @license: MIT http://rem.mit-license.org/
  * @link: https://gist.github.com/remy/350433
  */
-(function () {
+(function ($, window, document, undefined) {
     window.StoragePolyFill = function (type) {
         function createCookie(name, value, days) {
             var date, expires;
@@ -6158,7 +6116,7 @@ if (navigator.appVersion.indexOf("MSIE 7.") != -1)
         }
 
 
-// initialise if there's already data
+        // initialise if there's already data
         var data = getData();
 
         return {
@@ -6172,7 +6130,7 @@ if (navigator.appVersion.indexOf("MSIE 7.") != -1)
                 return data[key] === undefined ? null : data[key];
             },
             key: function (i) {
-// not perfect, but works
+                // not perfect, but works
                 var ctr = 0;
                 for (var k in data) {
                     if (ctr == i) return k;
@@ -6196,4 +6154,30 @@ if (navigator.appVersion.indexOf("MSIE 7.") != -1)
     if (typeof window.localStorage == 'undefined') window.localStorage = new StoragePolyFill('local');
     if (typeof window.sessionStorage == 'undefined') window.sessionStorage = new StoragePolyFill('session');
 
-})();
+    /**
+     * Returns whether or not the given storage is available and works - SW-7524
+     *
+     * @returns { boolean }
+     */
+    function isStorageSupported (storage) {
+        var testKey = 'test';
+
+        if (!storage) {
+            return false;
+        }
+
+        try {
+            storage.setItem(testKey, '1');
+            storage.removeItem(testKey);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    $.extend($, {
+        isLocalStorageSupported: isStorageSupported(window.localStorage),
+        isSessionStorageSupported: isStorageSupported(window.sessionStorage)
+    });
+
+})(jQuery, window, document);
