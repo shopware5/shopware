@@ -308,27 +308,6 @@
         };
 
     /**
-     * Returns whether or not the sessionStorage is available and works - SW-7524
-     *
-     * @returns {boolean}
-     */
-    function isSessionStorageSupported () {
-        var testKey = 'test';
-
-        if (!sessionStorage) {
-            return false;
-        }
-
-        try {
-            sessionStorage.setItem(testKey, '1');
-            sessionStorage.removeItem(testKey);
-            return true;
-        } catch (error) {
-            return false;
-        }
-    }
-
-    /**
      * Plugin constructor which merges the default settings
      * with the user configuration and sets up the DOM bridge.
      *
@@ -457,9 +436,7 @@
      * If not, the poly fill will be set so the data will be saved into session cookies.
      */
     $(document).ready(function() {
-        hasSessionStorageSupport = isSessionStorageSupported();
-
-        if(!hasSessionStorageSupport) {
+        if(!$.isSessionStorageSupported) {
             sessionStorage = new StoragePolyFill('session');
             hasSessionStorageSupport = true;
         }
