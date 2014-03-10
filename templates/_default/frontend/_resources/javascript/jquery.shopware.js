@@ -5621,8 +5621,30 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
     "use strict";
 
     var pluginName = 'lastSeenArticlesCollector',
+        localStorage = window.localStorage,
         defaults = {
         };
+
+    /**
+     * Returns whether or not the localStorage is available and works - SW-7524
+     *
+     * @returns {boolean}
+     */
+    function isLocalStorageSupported () {
+        var testKey = 'test';
+
+        if (!localStorage) {
+            return false;
+        }
+
+        try {
+            localStorage.setItem(testKey, '1');
+            localStorage.removeItem(testKey);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
 
     var format = function (str) {
         for (var i = 1; i < arguments.length; i++) {
@@ -5705,14 +5727,20 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         localStorage.removeItem('lastSeenArticle-'+opts.shopId + '-' + opts.basePath + (index - articleNum));
     };
 
-    $.fn[pluginName] = function ( options ) {
-        return this.each(function () {
-            if (!$.data(this, 'plugin_' + pluginName)) {
-                $.data(this, 'plugin_' + pluginName,
-                    new Plugin( this, options ));
-            }
-        });
-    }
+    $(document).ready(function() {
+        if(!isLocalStorageSupported()) {
+            localStorage = new StoragePolyFill('local');
+        }
+
+        $.fn[pluginName] = function ( options ) {
+            return this.each(function () {
+                if (!$.data(this, 'plugin_' + pluginName)) {
+                    $.data(this, 'plugin_' + pluginName,
+                        new Plugin( this, options ));
+                }
+            });
+        }
+    });
 })( jQuery, window, document );
 
 /**
@@ -5724,8 +5752,30 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
     "use strict";
 
     var pluginName = 'lastSeenArticlesDisplayer',
+        localStorage = window.localStorage,
         defaults = {
         };
+
+    /**
+     * Returns whether or not the localStorage is available and works - SW-7524
+     *
+     * @returns {boolean}
+     */
+    function isLocalStorageSupported () {
+        var testKey = 'test';
+
+        if (!localStorage) {
+            return false;
+        }
+
+        try {
+            localStorage.setItem(testKey, '1');
+            localStorage.removeItem(testKey);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
 
     // Append articles to Template
     var createTemplate = function(article, lastClass) {
@@ -5809,14 +5859,20 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         }
     };
 
-    $.fn[pluginName] = function ( options ) {
-        return this.each(function () {
-            if (!$.data(this, 'plugin_' + pluginName)) {
-                $.data(this, 'plugin_' + pluginName,
-                    new Plugin( this, options ));
-            }
-        });
-    }
+    $(document).ready(function() {
+        if(!isLocalStorageSupported()) {
+            localStorage = new StoragePolyFill('local');
+        }
+
+        $.fn[pluginName] = function ( options ) {
+            return this.each(function () {
+                if (!$.data(this, 'plugin_' + pluginName)) {
+                    $.data(this, 'plugin_' + pluginName,
+                        new Plugin( this, options ));
+                }
+            });
+        }
+    });
 })(jQuery, window, document);
 
 /**
