@@ -2273,24 +2273,34 @@ class sAdmin
      * @param array $additionalParams
      * @return array
      */
-    public function getPagerStructure($destinationPage, $numberOfPages, $additionalParams = array()) {
+    public function getPagerStructure($destinationPage, $numberOfPages, $additionalParams = array())
+    {
         $pagesStructure = array();
         $baseFile = $this->sSYSTEM->sCONFIG['sBASEFILE'];
         if ($numberOfPages > 1) {
             for ($i = 1; $i <= $numberOfPages; $i++) {
                 $pagesStructure["numbers"][$i]["markup"] = ($i == $destinationPage);
                 $pagesStructure["numbers"][$i]["value"] = $i;
-                $pagesStructure["numbers"][$i]["link"] = $baseFile . $this->sSYSTEM->sBuildLink($additionalParams + array("sPage" => $i), false);
+                $pagesStructure["numbers"][$i]["link"] = $baseFile . $this->sSYSTEM->sBuildLink(
+                    $additionalParams + array("sPage" => $i),
+                    false
+                );
             }
             // Previous page
             if ($destinationPage != 1) {
-                $pagesStructure["previous"] = $baseFile . $this->sSYSTEM->sBuildLink($additionalParams + array("sPage" => $destinationPage - 1), false);
+                $pagesStructure["previous"] = $baseFile . $this->sSYSTEM->sBuildLink(
+                    $additionalParams + array("sPage" => $destinationPage - 1),
+                    false
+                );
             } else {
                 $pagesStructure["previous"] = null;
             }
             // Next page
             if ($destinationPage != $numberOfPages) {
-                $pagesStructure["next"] = $baseFile . $this->sSYSTEM->sBuildLink($additionalParams + array("sPage" => $destinationPage + 1), false);
+                $pagesStructure["next"] = $baseFile . $this->sSYSTEM->sBuildLink(
+                    $additionalParams + array("sPage" => $destinationPage + 1),
+                    false
+                );
             } else {
                 $pagesStructure["next"] = null;
             }
