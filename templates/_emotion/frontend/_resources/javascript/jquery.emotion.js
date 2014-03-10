@@ -302,15 +302,10 @@
 
     var pluginName = 'httpCacheFilters',
         sessionStorage = window.sessionStorage,
-        hasSessionStorageSupport = isSessionStorageSupported(),
+        hasSessionStorageSupport = false,
         defaults = {
             mode: 'listing'
         };
-
-    if(!hasSessionStorageSupport) {
-        sessionStorage = new StoragePolyFill('session');
-        hasSessionStorageSupport = true;
-    }
 
     /**
      * Returns whether or not the sessionStorage is available and works - SW-7524
@@ -354,10 +349,12 @@
     }
 
     /**
-     * Initialized the plugin, checks if { @link sessionStorage } is
-     * supported and sets up the event listener.
+     * Initializes the plugin.
+     * If the user is on the listing page, listeners for the detail links will be set.
+     * When one of them was clicked, the current listing url with all applied filters will be saved into the session storage.
+     * If the user is on a detail page, the listing url will be set in the back button.
      *
-     * @returns { Boolean } Falsy, if { @link sessionStorage } isn't supported, otherwise truthy
+     * @returns { Boolean } initialisation status
      */
     Plugin.prototype.init = function() {
         var me = this,
@@ -455,18 +452,29 @@
         return true;
     };
 
-    /** Lightweight plugin starter */
-    $.fn[pluginName] = function ( options ) {
-        return this.each(function () {
-            if (!$.data(this, 'plugin_' + pluginName)) {
-                $.data(this, 'plugin_' + pluginName,
-                new Plugin( this, options ));
-            }
-        });
-    };
+    /**
+     * Checks if the session storage is available and ready to save data.
+     * If not, the poly fill will be set so the data will be saved into session cookies.
+     */
+    $(document).ready(function() {
+        hasSessionStorageSupport = isSessionStorageSupported();
 
-    /** Fire up the plugin */
-    $(function() {
+        if(!hasSessionStorageSupport) {
+            sessionStorage = new StoragePolyFill('session');
+            hasSessionStorageSupport = true;
+        }
+
+        /** Lightweight plugin starter */
+        $.fn[pluginName] = function ( options ) {
+            return this.each(function () {
+                if (!$.data(this, 'plugin_' + pluginName)) {
+                    $.data(this, 'plugin_' + pluginName,
+                    new Plugin( this, options ));
+                }
+            });
+        };
+
+        /** Fire up the plugin */
         $('body').httpCacheFilters();
     });
 })(jQuery, window);
