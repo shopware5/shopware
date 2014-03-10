@@ -21,11 +21,22 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Components\Theme;
 
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop as Shop;
 
+/**
+ * The Theme\Inheritance class is used to
+ * to resolve shop template inheritance in the frontend.
+ *
+ * The class implements different functions to build configurations,
+ * template directories or other resources which should include the
+ * theme inheritance.
+ *
+ * @package Shopware\Components\Theme
+ */
 class Inheritance
 {
     /**
@@ -43,6 +54,11 @@ class Inheritance
      */
     private $util;
 
+    /**
+     * @param ModelManager $entityManager
+     * @param Util $util
+     * @param PathResolver $pathResolver
+     */
     function __construct(
         ModelManager $entityManager,
         Util $util,
@@ -55,6 +71,7 @@ class Inheritance
 
     /**
      * Returns the inheritance hierarchy for the passed theme.
+     *
      * @param \Shopware\Models\Shop\Template $template
      * @return \Shopware\Models\Shop\Template[]
      */
@@ -94,6 +111,8 @@ class Inheritance
     }
 
     /**
+     * Returns all less directories for the passed shop template inheritance.
+     *
      * @param Shop\Template $template
      * @return array
      */
@@ -114,6 +133,8 @@ class Inheritance
     }
 
     /**
+     * Returns all public directories for the passed shop template inheritance.
+     *
      * @param Shop\Template $template
      * @return array
      */
@@ -134,7 +155,9 @@ class Inheritance
     }
 
     /**
-     * Returns the theme directory hierarchy.
+     * This function is used to build the inheritance template hierarchy.
+     * The returned directory array will be registered as template directories.
+     * The function is used from the ViewRenderer plugin of Enlight.
      *
      * @param \Shopware\Models\Shop\Template $template
      * @return array
@@ -179,6 +202,8 @@ class Inheritance
     }
 
     /**
+     * Returns all css files for the passed shop template inheritance.
+     *
      * @param Shop\Template $template
      * @return array
      */
@@ -204,6 +229,8 @@ class Inheritance
     }
 
     /**
+     * Returns all javascript files for the passed shop template inheritance.
+     *
      * @param Shop\Template $template
      * @return array
      */
@@ -231,6 +258,7 @@ class Inheritance
     /**
      * Helper function which returns the theme configuration as
      * key - value array.
+     *
      * The element name is used as array key, the shop config
      * as value. If no shop config saved, the value will fallback to
      * the default value.
@@ -261,6 +289,7 @@ class Inheritance
             }
         }
 
+        //creates a key value array for the configuration.
         return array_combine(
             array_column($data, 'name'),
             array_column($data, 'value')

@@ -26,10 +26,19 @@ namespace Shopware\Components\Theme;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop as Shop;
 
+/**
+ * The Theme\PathResolver class is a helper
+ * class which handles all path operations
+ * for themes. For example the class
+ * contains a getDirectory function which
+ * returns the Theme directory of the passed shop template.
+ *
+ * @package Shopware\Components\Theme
+ */
 class PathResolver
 {
     /**
-     * @var
+     * @var string
      */
     private $rootDir;
 
@@ -156,6 +165,9 @@ class PathResolver
     }
 
     /**
+     * Helper function which builds the css file
+     * name for the passed shop, file type and timestamp.
+     *
      * @param Shop\Shop $shop
      * @param $fileName
      * @param $timestamp
@@ -167,6 +179,13 @@ class PathResolver
     }
 
     /**
+     * Helper function which build the directory path to the passed
+     * css file.
+     * This function is used for the less smarty function.
+     * The smarty function checks if this file is
+     * already exists, if this isn't the case, the smarty
+     * function starts the theme compiler operations.
+     *
      * @param Shop\Shop $shop
      * @param $fileName
      * @param $timestamp
@@ -180,6 +199,9 @@ class PathResolver
     }
 
     /**
+     * Helper function which builds the javascript file
+     * name for the passed shop object, file type and timestamp
+     *
      * @param Shop\Shop $shop
      * @param $fileName
      * @param $timestamp
@@ -191,6 +213,12 @@ class PathResolver
     }
 
     /**
+     * Builds the path to the passed javascript file.
+     * This function is used for the javascript smarty function.
+     * The smarty function checks if this file is
+     * already exists, if this isn't the case, the smarty
+     * function starts the theme compiler operations.
+     *
      * @param Shop\Shop $shop
      * @param $fileName
      * @param $timestamp
@@ -205,6 +233,8 @@ class PathResolver
 
 
     /**
+     * Helper function which returns the css directory of a theme.
+     *
      * @param Shop\Template $template
      * @return string
      */
@@ -218,6 +248,9 @@ class PathResolver
     }
 
     /**
+     * Helper function which returns the javascript directory
+     * of a theme.
+     *
      * @param Shop\Template $template
      * @return string
      */
@@ -231,8 +264,6 @@ class PathResolver
     }
 
     /**
-     *
-     *
      * Returns the default templates directory.
      * @return string
      */

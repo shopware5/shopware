@@ -31,6 +31,16 @@ use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop as Shop;
 use Shopware\Components\Theme;
 
+/**
+ * The Theme\Installer class handles the theme installation.
+ * It synchronize the file system themes with the already
+ * installed themes which stored in the database.
+ * Within the synchronization process the installer class
+ * uses the Theme\Configurator class to synchronize the
+ * theme configuration with the database.
+ *
+ * @package Shopware\Components\Theme
+ */
 class Installer
 {
     /**
@@ -78,6 +88,14 @@ class Installer
         $this->repository = $entityManager->getRepository('Shopware\Models\Shop\Template');
     }
 
+    /**
+     * Synchronize the file system themes
+     * with the already installed themes which stored in the database.
+     * The function initials additionally the old shopware 3.5 templates.
+     *
+     * The synchronization are processed in the synchronizeThemes and
+     * synchronizeTemplates function.
+     */
     public function synchronize()
     {
         $this->synchronizeThemes();
@@ -88,21 +106,33 @@ class Installer
      * Iterates all Shopware 5 themes which
      * stored in the /engine/Shopware/Themes directory.
      * Each theme are stored as new Shopware\Models\Shop\Template.
+     *
+     * After the themes are initialed and stored in the database,
+     * the function resolves the inheritance of each theme.
+     *
+     * After the inheritance is build, the installer uses
+     * the Theme\Configurator to synchronize the theme configurations.
+     *
      */
     private function synchronizeThemes()
     {
+        //creates a directory iterator for the default theme directory (engine/Shopware/Themes)
         $directories = new \DirectoryIterator(
             $this->pathResolver->getDefaultThemeDirectory()
         );
 
+        //synchronize the default themes which stored in the engine/Shopware/Themes directory.
         $themes = $this->synchronizeThemeDirectories($directories);
 
+        //to prevent inconsistent data, themes which removed from the file system has to be removed.
         $this->removeDeletedThemes();
 
+        //before the inheritance can be build, the plugin themes has to be initialed.
         $pluginThemes = $this->synchronizePluginThemes();
 
         $themes = array_merge($themes, $pluginThemes);
 
+        //builds the theme inheritance
         $this->setParents($themes);
 
         /**@var $theme Theme */
@@ -154,7 +184,7 @@ class Installer
      * and registers all stored themes within the directory as \Shopware\Models\Shop\Template.
      *
      * @param \DirectoryIterator $directories
-     * @return array
+     * @return Theme[]
      */
     private function synchronizeThemeDirectories(\DirectoryIterator $directories)
     {
@@ -196,9 +226,13 @@ class Installer
     /**
      * Helper function which iterates all plugins
      * and registers their themes.
-     * Returns an array with all registered plugin themes.
      *
-     * @return array
+     * Returns an array with all registered plugin themes.
+     * The return value is used to iterate all themes within the
+     * synchronizeThemes function to build the theme inheritance
+     * and the theme configuration.
+     *
+     * @return Theme[]
      */
     private function synchronizePluginThemes()
     {
@@ -249,7 +283,9 @@ class Installer
 
     /**
      * Reads the snippet of all theme ini files and write them
-     * into the database
+     * into the database.
+     *
+     * The theme snippet namespace are prefixed with themes/theme-name
      */
     private function synchronizeSnippets(Shop\Template $template)
     {

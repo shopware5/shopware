@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Components\Theme;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -30,6 +31,17 @@ use Shopware\Components\Model as Model;
 use Shopware\Models\Shop as Shop;
 use Shopware\Components\Theme;
 
+/**
+ * The Theme\Configurator class is used
+ * for theme configuration operations.
+ * This class handles the configuration synchronization
+ * between file system and database.
+ *
+ * Additionally this class is used to build the configuration
+ * inheritance for the backend module.
+ *
+ * @package Shopware\Components\Theme
+ */
 class Configurator
 {
     /**
@@ -69,29 +81,68 @@ class Configurator
     }
 
     /**
-     * Helper function which refresh the theme configuration element definition.
+     * This function synchronize the defined file system theme configuration with
+     * the already initialed configuration of the database.
+     *
+     * This function handles the configuration inheritance for the backend.
+     *
+     * If one of the theme container elements isn't valid the function throws an exception
      *
      * @param Theme $theme
+     * @throws \Exception
      */
     public function synchronize(Theme $theme)
     {
+        //prevents the theme configuration lazy loading
         $template = $this->getTemplate($theme);
 
+        //static main container which generated for each theme configuration.
         $container = new Form\Container\TabContainer('main_container');
 
+        //inject the inheritance config container.
         $this->injectConfig($theme, $container);
 
         $theme->createConfig($container);
 
+        $this->validateConfig($container);
+
+        //use the theme persister class to write the Shopware\Components\Form elements into the database
         $this->persister->save($container, $template);
 
         $this->removeUnused($template, $container);
 
         $this->synchronizeSets($theme, $template);
-
     }
 
     /**
+     * Helper function which validates the passed Shopware\Components\Form\Container.
+     *
+     * @param Form\Interfaces\Container $container
+     * @throws \Exception
+     */
+    private function validateConfig(Form\Interfaces\Container $container)
+    {
+        //check if the container implements the validation interface
+        if ($container instanceof Form\Interfaces\Validate) {
+            $container->validate();
+        }
+
+        foreach ($container->getElements() as $element) {
+            //check recursive validation.
+            if ($element instanceof Form\Interfaces\Container) {
+                $this->validateConfig($element);
+
+                //check Form\Field validation
+            } else if ($element instanceof Form\Interfaces\Validate) {
+                $element->validate();
+            }
+        }
+    }
+
+    /**
+     * Synchronize the theme configuration sets of the file system and
+     * the database.
+     *
      * @param Theme $theme
      * @param Shop\Template $template
      */
@@ -102,12 +153,15 @@ class Configurator
 
         $synchronized = array();
 
+        //iterates all configurations sets of the file system
         foreach ($collection as $item) {
+            //check if this set is already defined, to prevent auto increment in the database.
             $existing = $this->getExistingConfigSet(
                 $template->getConfigSets(),
                 $item['name']
             );
 
+            //if the set isn't defined, create a new one
             if (!$existing instanceof Shop\TemplateConfig\Set) {
                 $existing = new Shop\TemplateConfig\Set();
                 $template->getConfigSets()->add($existing);
@@ -119,7 +173,9 @@ class Configurator
             $synchronized[] = $existing;
         }
 
+        //iterates all sets of the template, file system and database
         foreach ($template->getConfigSets() as $existing) {
+            //check if the current set was synchronized in the foreach before
             $defined = $this->getExistingConfigSet(
                 $synchronized,
                 $existing->getName()
@@ -129,8 +185,10 @@ class Configurator
                 continue;
             }
 
+            //if it wasn't synchronized, the file system theme want to remove the set.
             $this->entityManager->remove($existing);
         }
+
         $this->entityManager->flush();
     }
 
@@ -168,6 +226,8 @@ class Configurator
     /**
      * Helper function to select the shopware template with all config elements
      * with only one query.
+     *
+     * Used to synchronize the theme configuration in the synchronize() function.
      *
      * @param Theme $theme
      * @return mixed
@@ -210,6 +270,7 @@ class Configurator
 
     /**
      * Returns all config elements of the passed template.
+     *
      * @param \Shopware\Models\Shop\Template $template
      * @return array
      */
@@ -226,6 +287,9 @@ class Configurator
 
     /**
      * Helper function to create an array with all container and element names.
+     * This function is used to synchronize the configuration fields and containers.
+     * Elements which not stored in this array has to be removed by the removeUnused()
+     * function
      *
      * @param \Shopware\Components\Form\Container $container
      * @return array
@@ -265,6 +329,20 @@ class Configurator
     }
 
     /**
+     * This function handles the configuration inheritance for the synchronization.
+     * The function handles the inheritance over a recursive call.
+     *
+     * First this function is called with the theme which should be synchronized.
+     * If the theme uses a inheritance configuration, the
+     * function resolves the theme parent and calls the "createConfig" function
+     * of the Theme.php.
+     * The Form\Container\TabContainer won't be initialed again, so each
+     * inheritance level becomes the same container instance passed into their
+     * createConfig() function.
+     *
+     * This allows the developer to display the theme configuration of extened
+     * themes.
+     *
      * @param Theme $theme
      * @param Form\Container\TabContainer $container
      * @return Form\Container\TabContainer
@@ -297,6 +375,9 @@ class Configurator
     }
 
     /**
+     * Helper function which checks if the configuration set is
+     * already exists in the passed collection.
+     *
      * @param Shop\TemplateConfig\Set[] $collection
      * @param $name
      * @return Shop\TemplateConfig\Set
