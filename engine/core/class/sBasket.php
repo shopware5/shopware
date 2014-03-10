@@ -1182,7 +1182,7 @@ class sBasket
                     $totalCount++;
                 }
 
-                $totalAmountNet += $getArticles[$key]["amountnet"];
+                $totalAmountNet += round($getArticles[$key]["amountnet"], 2);
 
                 $getArticles[$key]["priceNumeric"] = $getArticles[$key]["price"];
                 $getArticles[$key]["price"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($getArticles[$key]["price"]);
