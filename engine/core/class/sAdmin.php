@@ -3149,7 +3149,7 @@ class sAdmin
             } elseif ($result->RecordCount()) {
                 $result = array("code"=>2,"message"=>$this->snippetObject->get('NewsletterFailureAlreadyRegistered','You already receive our newsletter'));
             } else {
-                $customer = Shopware()->Db()->query('SELECT * FROM s_user WHERE email = ?;', array($email))->rowCount();
+                $customer = Shopware()->Db()->fetchOne('SELECT id FROM s_user WHERE email = ? LIMIT 1', array($email));
 
                 $sql = "INSERT INTO s_campaigns_mailaddresses (customer, `groupID`, email) VALUES(?, ?, ?)";
                 $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array((int) !empty($customer), $groupID, $email));
