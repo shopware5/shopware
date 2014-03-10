@@ -56,13 +56,9 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
     /**
      * Index action method
-     *
-     * Read orders and notes
      */
     public function indexAction()
     {
-        $this->View()->sOrders = $this->admin->sGetOpenOrderData();
-        $this->View()->sNotes = Shopware()->Modules()->Basket()->sGetNotes();
         if ($this->Request()->getParam('success')) {
             $this->View()->sSuccessAction = $this->Request()->getParam('success');
         }
@@ -162,7 +158,12 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      */
     public function ordersAction()
     {
-        $this->View()->sOpenOrders = $this->admin->sGetOpenOrderData();
+        $destinationPage = (int)$this->Request()->sPage;
+        $orderData = $this->admin->sGetOpenOrderData($destinationPage);
+        $this->View()->sOpenOrders = $orderData["orderData"];
+        $this->View()->sNumberPages = $orderData["numberOfPages"];
+        $this->View()->sPages = $orderData["pages"];
+
         //this has to be assigned here because the config method in smarty can't handle array structures
         $this->View()->sDownloadAvailablePaymentStatus = Shopware()->Config()->get('downloadAvailablePaymentStatus');
     }
