@@ -26,8 +26,8 @@
 				{* Notepad *}
 				{block name="frontend_index_checkout_actions_notepad"}
 					<li class="navigation--entry entry--notepad" role="menuitem">
-						<a href="{url controller='note'}" title="{s namespace='frontend/index/checkout_actions' name='IndexLinkNotepad'}{/s}" class="note">
-							{s namespace='frontend/index/checkout_actions' name='IndexLinkNotepad'}{/s} {if $sNotesQuantity > 0}<span class="notes_quantity">{$sNotesQuantity}</span>{/if}
+						<a href="{url controller='note'}" title="{s namespace='frontend/index/checkout_actions' name='IndexLinkNotepad'}{/s}" class="note navigation--link">
+							<i class="icon--heart"></i> {s namespace='frontend/index/checkout_actions' name='IndexLinkNotepad'}{/s} {if $sNotesQuantity > 0}<span class="notes_quantity">{$sNotesQuantity}</span>{/if}
 						</a>
 					</li>
 				{/block}
@@ -35,7 +35,7 @@
 				{* Service / Support drop down *}
 				{block name="frontend_index_checkout_actions_service_menu"}
 					<li class="navigation--entry entry--service has--drop-down" role="menuitem" aria-haspopup="true">
-						{s name='IndexLinkService'}Service/Hilfe{/s}
+						<i class="icon--service"></i> {s name='IndexLinkService'}Service/Hilfe{/s}
 
 						{* Include of the widget *}
 						{block name="frontend_index_checkout_actions_service_menu_include"}
