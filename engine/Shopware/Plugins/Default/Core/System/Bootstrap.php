@@ -130,7 +130,6 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
         $system->sPathArticleImg = $system->sPathBase . '/media/image/';
         $system->sPathBanner = $system->sPathBase . $config->banner . '/';
         $system->sPathSupplierImg = $system->sPathBase . $config->supplierImages . '/';
-        $system->sPathCmsImg = $system->sPathBase . $config->cmsImages . '/';
         $system->sPathStart = $system->sPathBase . $config->baseFile;
         $system->sPathArticleFiles = $system->sPathBase . $config->articleFiles;
         $system->sBasefile = $config->baseFile;

@@ -60,8 +60,6 @@ class sSystem
     public $sPathMedia;		// Path to template images
     public $sPathArticleImg;	// Path to article images
     public $sPathBanner;		// Path to banners
-    public $sPathCmsImg;		// Path to CMS-Images
-    public $sPathCmsFiles;		// Path to CMS-Files
     public $sPathArticleFiles;	// Path to Article-Downloads
     public $sPathStart;		// Path to Start
     public $sBasefile;
