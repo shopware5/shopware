@@ -742,10 +742,9 @@ class sAdmin
     }
 
     /**
-     * Updates the delivery address of the user
+     * Updates the shipping address of the user
      *
-     * @access public
-     * @return bool
+     * @return bool If operation was successful
      */
     public function sUpdateShipping()
     {
@@ -755,7 +754,7 @@ class sAdmin
             return false;
         }
 
-        $sql = 'SELECT id FROM s_user_shippingaddress WHERE userID=?';
+        $sql = 'SELECT id FROM s_user_shippingaddress WHERE userID = ?';
         $shippingID = Shopware()->Db()->fetchOne($sql, array($this->sSYSTEM->_SESSION['sUserId']));
 
         $fields = array(
@@ -780,8 +779,14 @@ class sAdmin
         }
         $data["countryID"] = isset($userObject["country"]) ? $userObject["country"] : 0;
 
-
-        list($data) = Enlight()->Events()->filter('Shopware_Modules_Admin_UpdateShipping_FilterSql', array($data), array('subject'=>$this,"id"=>$this->sSYSTEM->_SESSION['sUserId'],"user"=>$userObject));
+        list($data) = Enlight()->Events()->filter(
+            'Shopware_Modules_Admin_UpdateShipping_FilterSql',
+            array($data), array(
+                'subject' => $this,
+                "id" => $this->sSYSTEM->_SESSION['sUserId'],
+                "user" => $userObject
+            )
+        );
 
         if (empty($shippingID)) {
             $data["userID"] = (int) $this->sSYSTEM->_SESSION['sUserId'];
@@ -797,11 +802,19 @@ class sAdmin
                 'text5' => $userObject['text5'],
                 'text6' => $userObject['text6']
             );
-            list($attributeData) = Enlight()->Events()->filter('Shopware_Modules_Admin_UpdateShippingAttributes_FilterSql', array($attributeData), array('subject'=>$this,"id"=>$this->sSYSTEM->_SESSION['sUserId'],"user"=>$userObject));
+            list($attributeData) = Enlight()->Events()->filter(
+                'Shopware_Modules_Admin_UpdateShippingAttributes_FilterSql',
+                array($attributeData),
+                array(
+                    'subject' => $this,
+                    "id" => $this->sSYSTEM->_SESSION['sUserId'],
+                    "user" => $userObject
+                )
+            );
             Shopware()->Db()->insert('s_user_shippingaddress_attributes', $attributeData);
         } else {
             $where = array('id='.(int) $shippingID);
-            $result = Shopware()->Db()->update('s_user_shippingaddress', $data,$where);
+            $result = Shopware()->Db()->update('s_user_shippingaddress', $data, $where);
 
             $attributeData = array(
                 'text1' => $userObject['text1'],
@@ -812,8 +825,16 @@ class sAdmin
                 'text6' => $userObject['text6']
             );
             $where = array('shippingID='.(int) $shippingID);
-            list($attributeData) = Enlight()->Events()->filter('Shopware_Modules_Admin_UpdateShippingAttributes_FilterSql', array($attributeData), array('subject'=>$this,"id"=>$this->sSYSTEM->_SESSION['sUserId'],"user"=>$userObject));
-            Shopware()->Db()->update('s_user_shippingaddress_attributes', $attributeData,$where);
+            list($attributeData) = Enlight()->Events()->filter(
+                'Shopware_Modules_Admin_UpdateShippingAttributes_FilterSql',
+                array($attributeData),
+                array(
+                    'subject' => $this,
+                    "id" => $this->sSYSTEM->_SESSION['sUserId'],
+                    "user" => $userObject
+                )
+            );
+            Shopware()->Db()->update('s_user_shippingaddress_attributes', $attributeData, $where);
         }
 
         if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg()) {
@@ -824,10 +845,9 @@ class sAdmin
     }
 
     /**
-     * Updates the payment of the user
+     * Updates the payment mean of the user
      *
-     * @access public
-     * @return bool
+     * @return bool If operation was successful
      */
     public function sUpdatePayment()
     {
@@ -835,11 +855,21 @@ class sAdmin
             return false;
         }
         $sqlPayment = "
-        UPDATE s_user SET paymentID=? WHERE id=?";
+        UPDATE s_user SET paymentID = ? WHERE id = ?";
 
-        $sqlPayment = Enlight()->Events()->filter('Shopware_Modules_Admin_UpdatePayment_FilterSql', $sqlPayment, array('subject'=>$this,"id"=>$this->sSYSTEM->_SESSION['sUserId']));
+        $sqlPayment = Enlight()->Events()->filter(
+            'Shopware_Modules_Admin_UpdatePayment_FilterSql',
+            $sqlPayment,
+            array(
+                'subject' => $this,
+                "id" => $this->sSYSTEM->_SESSION['sUserId']
+            )
+        );
 
-        $saveUserData = $this->sSYSTEM->sDB_CONNECTION->Execute($sqlPayment,array($this->sSYSTEM->_POST["sPayment"],$this->sSYSTEM->_SESSION["sUserId"]));
+        $saveUserData = $this->sSYSTEM->sDB_CONNECTION->Execute(
+            $sqlPayment,
+            array($this->sSYSTEM->_POST["sPayment"], $this->sSYSTEM->_SESSION["sUserId"])
+        );
 
         if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg()) {
             $this->sSYSTEM->E_CORE_WARNING("sUpdatePayment #01","Could not save data (payment)".$this->sSYSTEM->sDB_CONNECTION->ErrorMsg());
