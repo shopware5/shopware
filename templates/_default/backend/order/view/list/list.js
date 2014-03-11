@@ -655,13 +655,13 @@ Ext.define('Shopware.apps.Order.view.list.List', {
         );
 
         if (record.get('customerComment').length > 0) {
-            comments.push("<b>" + me.snippets.customerComment + "</b><br/>" + record.get('customerComment'));
+            comments.push("<b>" + me.snippets.customerComment + "</b><br/>" + Ext.String.htmlEncode(record.get('customerComment')));
         }
         if (record.get('internalComment').length > 0) {
-            comments.push("<b>" + me.snippets.internalComment + "</b><br/>" + record.get('internalComment'));
+            comments.push("<b>" + me.snippets.internalComment + "</b><br/>" + Ext.String.htmlEncode(record.get('internalComment')));
         }
         if (record.get('comment').length > 0) {
-            comments.push("<b>" + me.snippets.externalComment + "</b><br/>" + record.get('comment'));
+            comments.push("<b>" + me.snippets.externalComment + "</b><br/>" + Ext.String.htmlEncode(record.get('comment')));
         }
 
         if (comments.length > 0) {
