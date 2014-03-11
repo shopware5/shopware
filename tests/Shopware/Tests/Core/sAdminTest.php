@@ -218,7 +218,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         );
         $this->assertEquals(5, $customerPaymentId);
 
-        $this->deleteDummyCustomer();
+        $this->deleteDummyCustomer($customer);
     }
 
     /**
@@ -301,6 +301,185 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers sAdmin::sUpdateBilling
+     */
+    public function testsUpdateBilling()
+    {
+        $customer = $this->createDummyCustomer();
+        $this->module->sSYSTEM->_SESSION['sUserId'] = $customer->getId();
+
+        $testData = array(
+            'company' => 'TestCompany',
+            'department' => 'TestDepartment',
+            'salutation' => 'TestSalutation',
+            'firstname' => 'TestFirstName',
+            'lastname' => 'TestLastName',
+            'street' => 'TestStreet',
+            'streetnumber' => 'TestStreetNumber',
+            'zipcode' => 'TestZip',
+            'city' => 'TestCity',
+            'phone' => 'TestPhone',
+            'fax' => 'TestFax',
+            'country' => '2',
+            'stateID' => '1',
+            'ustid' => 'TestUstId',
+            'birthday' => '21',
+            'birthmonth' => '10',
+            'birthyear' => '1998',
+            'text1' => 'TestText1',
+            'text2' => 'TestText2',
+            'text3' => 'TestText3',
+            'text4' => 'TestText4',
+            'text5' => 'TestText5',
+            'text6' => 'TestText6'
+        );
+        $this->module->sSYSTEM->_POST = $testData;
+
+        $this->assertTrue($this->module->sUpdateBilling());
+        $result = Shopware()->Db()->fetchRow('
+            SELECT *
+
+            FROM s_user_billingaddress
+            LEFT JOIN s_user_billingaddress_attributes
+            ON s_user_billingaddress.id = s_user_billingaddress_attributes.billingID
+
+            WHERE s_user_billingaddress.userID = ?
+        ', array($customer->getId()));
+
+
+        // Prepare testData for comparison
+        $testData['countryID'] = $testData['country'];
+        unset($testData['country']);
+        $testData['birthday'] = mktime(0,0,0, (int) $testData['birthmonth'], (int) $testData['birthday'], (int) $testData['birthyear']);
+        $testData['birthday'] = '1998-10-21';
+        unset($testData['birthmonth']);
+        unset($testData['birthyear']);
+
+        $this->assertArrayHasKey('id', $result);
+        foreach ($testData as $key => $value) {
+            $this->assertEquals($value, $result[$key]);
+        }
+
+        $this->deleteDummyCustomer($customer);
+    }
+
+    /**
+     * @covers sAdmin::sUpdateNewsletter
+     */
+    public function testsUpdateNewsletter()
+    {
+        $email = uniqid() . 'test@foobar.com';
+
+        // Test insertion
+        $this->assertTrue($this->module->sUpdateNewsletter(true, $email));
+        $newsletterSubscription = Shopware()->Db()->fetchRow(
+            'SELECT * FROM s_campaigns_mailaddresses WHERE email = ?',
+            array($email)
+        );
+        $this->assertNotNull($newsletterSubscription);
+        $this->assertEquals(0, $newsletterSubscription['customer']);
+        $this->assertEquals(1, $newsletterSubscription['groupID']);
+
+        // Test removal
+        $this->assertTrue($this->module->sUpdateNewsletter(false, $email));
+        $newsletterSubscription = Shopware()->Db()->fetchRow(
+            'SELECT * FROM s_campaigns_mailaddresses WHERE email = ?',
+            array($email)
+        );
+        $this->assertFalse($newsletterSubscription);
+
+
+        // Retest insertion for customers
+        $this->assertTrue($this->module->sUpdateNewsletter(true, $email, true));
+        $newsletterSubscription = Shopware()->Db()->fetchRow(
+            'SELECT * FROM s_campaigns_mailaddresses WHERE email = ?',
+            array($email)
+        );
+        $this->assertNotNull($newsletterSubscription);
+        $this->assertEquals(1, $newsletterSubscription['customer']);
+        $this->assertEquals(0, $newsletterSubscription['groupID']);
+
+        // Test removal
+        $this->assertTrue($this->module->sUpdateNewsletter(false, $email));
+        $newsletterSubscription = Shopware()->Db()->fetchRow(
+            'SELECT * FROM s_campaigns_mailaddresses WHERE email = ?',
+            array($email)
+        );
+        $this->assertFalse($newsletterSubscription);
+    }
+
+    /**
+     * @covers sAdmin::sGetPreviousAddresses
+     */
+    public function testsGetPreviousAddresses()
+    {
+        $customer = $this->createDummyCustomer();
+        $this->module->sSYSTEM->_SESSION['sUserId'] = null;
+
+        // Test no user id
+        $this->assertFalse($this->module->sGetPreviousAddresses('shipping'));
+
+        $this->module->sSYSTEM->_SESSION['sUserId'] = $customer->getId();
+
+        // Test empty argument scenario
+        $this->assertFalse($this->module->sGetPreviousAddresses(''));
+
+        // Test fetching for new customer with no order (should return empty)
+        $this->assertCount(0, $this->module->sGetPreviousAddresses('shipping'));
+        $this->assertCount(0, $this->module->sGetPreviousAddresses('billing'));
+
+        $this->deleteDummyCustomer($customer);
+
+        // Test with existing demo customer data
+        $this->module->sSYSTEM->_SESSION['sUserId'] = 1;
+
+        $shippingData = $this->module->sGetPreviousAddresses('shipping');
+        $billingData = $this->module->sGetPreviousAddresses('billing');
+        $this->assertCount(1, $shippingData);
+        $this->assertCount(1, $billingData);
+
+        $shippingDetails = end($shippingData);
+        $billingDetails = end($billingData);
+
+        $this->assertArrayHasKey('hash', $shippingDetails);
+        $this->assertArrayHasKey('hash', $billingDetails);
+
+        $this->assertEquals($shippingDetails, $this->module->sGetPreviousAddresses('shipping', $shippingDetails['hash']));
+        $this->assertEquals($billingDetails, $this->module->sGetPreviousAddresses('billing', $billingDetails['hash']));
+
+        foreach(array($shippingDetails, $billingDetails) as $details) {
+            $this->assertInternalType('array', $details);
+            $this->assertCount(13, $details);
+            $this->assertArrayHasKey('company', $details);
+            $this->assertArrayHasKey('department', $details);
+            $this->assertArrayHasKey('salutation', $details);
+            $this->assertArrayHasKey('firstname', $details);
+            $this->assertArrayHasKey('lastname', $details);
+            $this->assertArrayHasKey('street', $details);
+            $this->assertArrayHasKey('streetnumber', $details);
+            $this->assertArrayHasKey('zipcode', $details);
+            $this->assertArrayHasKey('city', $details);
+            $this->assertArrayHasKey('country', $details);
+            $this->assertArrayHasKey('countryID', $details);
+            $this->assertArrayHasKey('countryname', $details);
+
+            $this->assertNotEmpty($details['hash']);
+            $this->assertEquals('shopware AG', $details['company']);
+            $this->assertEquals('', $details['department']);
+            $this->assertEquals('mr', $details['salutation']);
+            $this->assertEquals('Max', $details['firstname']);
+            $this->assertEquals('Mustermann', $details['lastname']);
+            $this->assertEquals('Mustermannstraße', $details['street']);
+            $this->assertEquals('92', $details['streetnumber']);
+            $this->assertEquals('48624', $details['zipcode']);
+            $this->assertEquals('Schöppingen', $details['city']);
+            $this->assertEquals('2', $details['country']);
+            $this->assertEquals('2', $details['countryID']);
+            $this->assertEquals('Deutschland', $details['countryname']);
+        }
+    }
+
+    /**
      * Create dummy customer entity
      *
      * @return \Shopware\Models\Customer\Customer
@@ -361,8 +540,16 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     /**
      * Deletes all dummy customer entity
      */
-    private function deleteDummyCustomer()
+    private function deleteDummyCustomer(\Shopware\Models\Customer\Customer $customer)
     {
-        Shopware()->Db()->query("DELETE FROM s_user WHERE email LIKE '%test@foobar.com'");
+        $billingId = Shopware()->Db()->fetchOne('SELECT id FROM s_user_billingaddress WHERE userID = ?', array($customer->getId()));
+        $shippingId = Shopware()->Db()->fetchOne('SELECT id FROM s_user_shippingaddress WHERE userID = ?', array($customer->getId()));
+
+        Shopware()->Db()->delete('s_user_billingaddress_attributes', 'billingID = '.$billingId);
+        Shopware()->Db()->delete('s_user_shippingaddress_attributes', 'shippingID = '.$shippingId);
+        Shopware()->Db()->delete('s_user_billingaddress', 'id = '.$billingId);
+        Shopware()->Db()->delete('s_user_shippingaddress', 'id = '.$shippingId);
+        Shopware()->Db()->delete('s_core_payment_data', 'user_id = '.$customer->getId());
+        Shopware()->Db()->delete('s_user', 'id = '.$customer->getId());
     }
 }
