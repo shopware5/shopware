@@ -19,5 +19,5 @@
 			{/if}
 		{/block}
     {/foreach}
-	v{block name='frontend_index_navigation_categories_top_after'}{/block}
+	{block name='frontend_index_navigation_categories_top_after'}{/block}
 </ul>
