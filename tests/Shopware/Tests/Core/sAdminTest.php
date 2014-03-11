@@ -480,6 +480,97 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers sAdmin::sUpdateShipping
+     */
+    public function testsUpdateShipping()
+    {
+        // Test no user id
+        $this->assertFalse($this->module->sUpdateShipping());
+
+        $customer = $this->createDummyCustomer();
+        $this->module->sSYSTEM->_SESSION['sUserId'] = $customer->getId();
+
+        // With user id but with no data, operation is successful
+        $this->assertTrue($this->module->sUpdateShipping());
+
+        // Setup dummy test data and test with it
+        $testData = array(
+            'company' => 'Testcompany',
+            'department' => 'Testdepartment',
+            'salutation' => 'Testsalutation',
+            'firstname' => 'Testfirstname',
+            'lastname' => 'Testlastname',
+            'street' => 'Teststreet',
+            'streetnumber' => 'Teststreetnumber',
+            'zipcode' => 'Testzipcode',
+            'city' => 'Testcity',
+            'country' => '2',
+            'stateID' => '4',
+            'text1' => 'TestText1',
+            'text2' => 'TestText2',
+            'text3' => 'TestText3',
+            'text4' => 'TestText4',
+            'text5' => 'TestText5',
+            'text6' => 'TestText6'
+        );
+        $this->module->sSYSTEM->_POST = $testData;
+        $this->assertTrue($this->module->sUpdateShipping());
+
+        $result = Shopware()->Db()->fetchRow('
+            SELECT *
+
+            FROM s_user_shippingaddress
+            LEFT JOIN s_user_shippingaddress_attributes
+            ON s_user_shippingaddress.id = s_user_shippingaddress_attributes.shippingID
+
+            WHERE s_user_shippingaddress.userID = ?
+        ', array($customer->getId()));
+
+        // Prepare testData for comparison
+        $testData['countryID'] = $testData['country'];
+        unset($testData['country']);
+
+        $this->assertArrayHasKey('id', $result);
+        foreach ($testData as $key => $value) {
+            $this->assertEquals($value, $result[$key]);
+        }
+
+        $this->deleteDummyCustomer($customer);
+    }
+
+    /**
+     * @covers sAdmin::sUpdatePayment
+     */
+    public function testsUpdatePayment()
+    {
+        // Test no user id
+        $this->assertFalse($this->module->sUpdatePayment());
+
+        $customer = $this->createDummyCustomer();
+        $this->module->sSYSTEM->_SESSION['sUserId'] = $customer->getId();
+
+        // Test that operation succeeds even without payment id
+        $this->assertTrue($this->module->sUpdatePayment());
+        $this->assertEquals(
+            0,
+            Shopware()->Db()->fetchOne('SELECT paymentID FROM s_user WHERE id = ?', array($customer->getId()))
+        );
+
+        // Setup dummy test data and test with it
+        $testData = array(
+            'sPayment' => 2
+        );
+        $this->module->sSYSTEM->_POST = $testData;
+        $this->assertTrue($this->module->sUpdatePayment());
+        $this->assertEquals(
+            2,
+            Shopware()->Db()->fetchOne('SELECT paymentID FROM s_user WHERE id = ?', array($customer->getId()))
+        );
+
+        $this->deleteDummyCustomer($customer);
+    }
+
+    /**
      * Create dummy customer entity
      *
      * @return \Shopware\Models\Customer\Customer
