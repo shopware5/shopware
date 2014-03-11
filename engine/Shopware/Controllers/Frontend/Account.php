@@ -521,7 +521,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         if ($this->Request()->isPost()) {
             $status = $this->Request()->getPost('newsletter') ? true : false;
             $this->admin->sUpdateNewsletter($status, $this->admin->sGetUserMailById(), true);
-            $this->View()->sSuccessAction = 'newsletter';
+            $this->View()->sSuccessAction = Shopware()->Config()->optinnewsletter ? 'optinnewsletter' : 'newsletter';
         }
         $this->forward('index');
     }
