@@ -211,11 +211,23 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
     getFieldData: function(field, record) {
         if (field.getName() === 'bannerMapping') {
+            var recordData = record.get('data'),
+                mapping = record.get('mapping');
+
+            if(!mapping) {
+                Ext.each(recordData, function(el) {
+                    if(el.key === 'bannerMapping') {
+                        mapping = el.value;
+                        return false;
+                    }
+                });
+            }
+
             return {
                 id: field.fieldId,
                 type: field.valueType,
                 key: field.getName(),
-                value: record.get('mapping')
+                value: mapping
             };
         } else if(field.getName() === 'banner_slider') {
             return {
@@ -366,7 +378,6 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
         element.set('mapping', mapping);
         view.destroy();
-
     },
 
     onDuplicateEmotion: function(scope, record) {
