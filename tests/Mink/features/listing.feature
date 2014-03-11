@@ -69,3 +69,46 @@ Feature: Show Listing
 
 		When I reset all filters
 		Then I should see 10 articles
+
+      @javascript
+  Scenario: I can change the sort
+    Given I am on the listing page:
+      | parameter | value |
+        Then I should see "Kundengruppen Brutto / Nettopreise"
+
+        When  I select "Beliebtheit" from "sSort"
+        Then  I should see "ESD Download Artikel"
+         But  I should not see "Kundengruppen Brutto / Nettopreise"
+
+        When  I select "Niedrigster Preis" from "sSort"
+        Then  I should see "Fliegenklatsche lila"
+        But   I should not see "ESD Download Artikel"
+
+        When  I select "Höchster Preis" from "sSort"
+        Then  I should see "Dart Automat Standgerät"
+        But   I should not see "Fliegenklatsche lila"
+
+        When  I select "Artikelbezeichnung" from "sSort"
+        Then  I should see "Artikel mit Abverkauf"
+        But   I should not see "Dart Automat Standgerät"
+
+        When  I select "Erscheinungsdatum" from "sSort"
+        Then  I should see "Kundengruppen Brutto / Nettopreise"
+        But   I should not see "Artikel mit Abverkauf"
+
+  @javascript
+  Scenario Outline: I can change the articles per page
+    Given I am on the listing page:
+      | parameter | value  |
+      | sPerPage  | <from> |
+    Then I should see <from> articles
+
+    When I select "<to>" from "sPerPage"
+    Then I should see <to> articles
+
+  Examples:
+    | from | to |
+    | 12   | 24 |
+    | 24   | 36 |
+    | 36   | 48 |
+    | 48   | 12 |

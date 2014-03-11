@@ -8,4 +8,3 @@ Feature: Login
 	Scenario: I can login as a user with correct credentials
 		Given I log in successful as "test@example.com" with password "shopware"
 		Then I should see "Willkommen, Max Mustermann"
-

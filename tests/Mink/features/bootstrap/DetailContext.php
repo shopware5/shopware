@@ -37,5 +37,16 @@ class DetailContext extends SubContext
     {
         $this->getPage('Detail')->goToNeighbor('next');
     }
+
+    /**
+     * @Given /^I should see an average customer evaluation of (?P<average>\d+) from following evaluations$/
+     */
+    public function iShouldSeeAnAverageCustomerEvaluationOfFromFollowingEvaluations($average, TableNode $evaluations)
+    {
+        $evaluations = $evaluations->getHash();
+
+        $this->getPage('Detail')->checkEvaluations($average, $evaluations);
+    }
+
 }
 
