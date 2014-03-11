@@ -96,7 +96,7 @@ class ElementTranslation extends ModelEntity
      * Set description
      *
      * @param string $description
-     * @return Element
+     * @return ElementTranslation
      */
     public function setDescription($description)
     {
@@ -118,7 +118,7 @@ class ElementTranslation extends ModelEntity
      * Set label
      *
      * @param string $label
-     * @return Element
+     * @return ElementTranslation
      */
     public function setLabel($label)
     {

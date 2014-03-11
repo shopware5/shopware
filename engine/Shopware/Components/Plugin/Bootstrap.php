@@ -24,6 +24,8 @@
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Models\Emotion\Library\Component;
+use Shopware\Models\Config\ElementTranslation;
+use Shopware\Models\Config\FormTranslation;
 
 /**
  * Shopware Plugin Bootstrap
@@ -947,4 +949,104 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         $this->get('shopware.snippet_database_handler')->removeFromDatabase($this->Path().'Resources/snippet/', $removeDirty);
     }
 
+    /**
+     * Adds translations to the form and its elements. The accepted array format
+     * accepts a special 'plugin_form' key for the form translation. All other
+     * keys will be matched to element names.
+     *
+     * Example $translations array:
+     * <code>
+     * array(
+         'en_GB' => array(
+            'plugin_form' => array(
+                'label' => 'Recently viewed items'
+            ),
+            'show' => array(
+                'label' => 'Display recently viewed items'
+            ),
+            'thumb' => array(
+                'label' => 'Thumbnail size',
+                'description' => 'Index of the thumbnail size of the associated album to use. Starts at 0'
+            )
+         )
+     * )
+     * </code>
+     *
+     * @param array $translations
+     */
+    public function addFormTranslations($translations)
+    {
+        $form = $this->Form();
+
+        foreach ($translations as $localeCode => $translationSet) {
+            $locale = Shopware()->Models()->getRepository('Shopware\Models\Shop\Locale')
+                ->findOneBy(array('locale' => $localeCode));
+            if (empty($locale)) {
+                continue;
+            }
+
+            // First process the form translations
+            if (array_key_exists('plugin_form', $translationSet)) {
+                $isUpdate = false;
+                $translationArray = $translationSet['plugin_form'];
+                foreach ($form->getTranslations() as $existingTranslation) {
+                    // Check if translation for this locale already exists
+                    if ($existingTranslation->getLocale()->getLocale() != $localeCode) {
+                        continue;
+                    }
+                    if (array_key_exists('label', $translationArray)) {
+                        $existingTranslation->setLabel($translationArray['label']);
+                    }
+                    if (array_key_exists('description', $translationArray)) {
+                        $existingTranslation->setDescription($translationArray['description']);
+                    }
+                    $isUpdate = true;
+                    break;
+                }
+                if (!$isUpdate) {
+                    $formTranslation = new FormTranslation();
+                    if (array_key_exists('label', $translationArray)) {
+                        $formTranslation->setLabel($translationArray['label']);
+                    }
+                    if (array_key_exists('description', $translationArray)) {
+                        $formTranslation->setDescription($translationArray['description']);
+                    }
+                    $formTranslation->setLocale($locale);
+                    $form->addTranslation($formTranslation);
+                }
+                unset($translationSet['plugin_form']);
+            }
+
+            // Then the element translations
+            foreach ($translationSet as $targetName => $translationArray) {
+                $isUpdate = false;
+                $element = $form->getElement($targetName);
+                foreach ($element->getTranslations() as $existingTranslation) {
+                    // Check if translation for this locale already exists
+                    if ($existingTranslation->getLocale()->getLocale() != $localeCode) {
+                        continue;
+                    }
+                    if (array_key_exists('label', $translationArray)) {
+                        $existingTranslation->setLabel($translationArray['label']);
+                    }
+                    if (array_key_exists('description', $translationArray)) {
+                        $existingTranslation->setDescription($translationArray['description']);
+                    }
+                    $isUpdate = true;
+                    break;
+                }
+                if (!$isUpdate) {
+                    $elementTranslation = new ElementTranslation();
+                    if (array_key_exists('label', $translationArray)) {
+                        $elementTranslation->setLabel($translationArray['label']);
+                    }
+                    if (array_key_exists('description', $translationArray)) {
+                        $elementTranslation->setDescription($translationArray['description']);
+                    }
+                    $elementTranslation->setLocale($locale);
+                    $element->addTranslation($elementTranslation);
+                }
+            }
+        }
+    }
 }
