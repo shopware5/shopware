@@ -571,6 +571,286 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers sAdmin::sUpdateAccount
+     */
+    public function testsUpdateAccount()
+    {
+        // Test no user id
+        $this->assertTrue($this->module->sUpdateAccount());
+
+        $customer = $this->createDummyCustomer();
+        $this->module->sSYSTEM->_SESSION['sUserId'] = $customer->getId();
+        $this->module->sSYSTEM->_POST['email'] = uniqid() . 'test@foobar.com';
+
+        $this->assertTrue($this->module->sUpdateAccount());
+
+        // Test that email was updated
+        $this->assertNotEquals(
+            $customer->getEmail(),
+            Shopware()->Db()->fetchOne('SELECT email FROM s_user WHERE id = ?', array($customer->getId()))
+        );
+
+        $this->module->sSYSTEM->_POST['password'] = uniqid() . 'password';
+        $this->module->sSYSTEM->_POST['passwordConfirmation'] = $this->module->sSYSTEM->_POST['password'];
+
+        $this->assertTrue($this->module->sUpdateAccount());
+
+        // Test that password was updated
+        $this->assertNotEquals(
+            $customer->getPassword(),
+            Shopware()->Db()->fetchOne('SELECT password FROM s_user WHERE id = ?', array($customer->getId()))
+        );
+
+        $this->deleteDummyCustomer($customer);
+    }
+
+    /**
+     * @covers sAdmin::sValidateStep2
+     */
+    public function testsValidateStep2()
+    {
+        // Test with no rules, should always validate
+        $result = $this->module->sValidateStep2(array());
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('sErrorFlag', $result);
+        $this->assertArrayHasKey('sErrorMessages', $result);
+        $this->assertCount(0, $result['sErrorFlag']);
+        $this->assertCount(0, $result['sErrorMessages']);
+
+        $testRuleSet = array(
+            'testField1' => array('required' => 1),
+            'testField2' => array('required' => 0),
+            'testField3' => array('required' => 1),
+        );
+
+        // Test failing validation, should have 2 failing fields
+        $result = $this->module->sValidateStep2($testRuleSet);
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('sErrorFlag', $result);
+        $this->assertArrayHasKey('sErrorMessages', $result);
+        $this->assertCount(2, $result['sErrorFlag']);
+        $this->assertArrayHasKey('testField1', $result['sErrorFlag']);
+        $this->assertArrayHasKey('testField3', $result['sErrorFlag']);
+        $this->assertCount(1, $result['sErrorMessages']);
+
+
+        // Setup dummy test data and test with it, see it passes
+        $testData = array(
+            'testField1' => 'testValue',
+            'testField2' => 'testValue',
+            'testField3' => 'testValue',
+        );
+        $this->module->sSYSTEM->_POST = $testData;
+        $result = $this->module->sValidateStep2($testRuleSet);
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('sErrorFlag', $result);
+        $this->assertArrayHasKey('sErrorMessages', $result);
+        $this->assertCount(0, $result['sErrorFlag']);
+        $this->assertCount(0, $result['sErrorMessages']);
+
+        // Test that using vat id will trigger aux function to validate it
+        $this->config->offsetSet('sVATCHECKENDABLED', true);
+        $testRuleSet['ustid'] = array('required' => 1);
+        $testData['ustid'] = '12345';
+        $this->module->sSYSTEM->_POST = $testData;
+        $result = $this->module->sValidateStep2($testRuleSet);
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('sErrorFlag', $result);
+        $this->assertArrayHasKey('sErrorMessages', $result);
+        $this->assertCount(2, $result['sErrorFlag']);
+        $this->assertCount(1, $result['sErrorMessages']);
+        $this->assertContains('VatFailureInvalid', $result['sErrorFlag']);
+        $this->assertContains('VatFailureErrorInfo', $result['sErrorFlag']);
+    }
+
+    /**
+     * @covers sAdmin::sValidateStep2ShippingAddress
+     */
+    public function testsValidateStep2ShippingAddress()
+    {
+        // Test with no rules, should always validate
+        $result = $this->module->sValidateStep2ShippingAddress(array());
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('sErrorFlag', $result);
+        $this->assertArrayHasKey('sErrorMessages', $result);
+        $this->assertNull($result['sErrorFlag']);
+        $this->assertNull($result['sErrorMessages']);
+
+        $testRuleSet = array(
+            'testField1' => array('required' => 1),
+            'testField2' => array('required' => 0),
+            'testField3' => array('required' => 1),
+        );
+
+        // Test failing validation, should have 2 failing fields
+        $result = $this->module->sValidateStep2ShippingAddress($testRuleSet);
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('sErrorFlag', $result);
+        $this->assertArrayHasKey('sErrorMessages', $result);
+        $this->assertCount(2, $result['sErrorFlag']);
+        $this->assertArrayHasKey('testField1', $result['sErrorFlag']);
+        $this->assertArrayHasKey('testField3', $result['sErrorFlag']);
+        $this->assertCount(1, $result['sErrorMessages']);
+
+
+        // Setup dummy test data and test with it, see it passes
+        $testData = array(
+            'testField1' => 'testValue',
+            'testField2' => 'testValue',
+            'testField3' => 'testValue',
+        );
+        $this->module->sSYSTEM->_POST = $testData;
+        $result = $this->module->sValidateStep2ShippingAddress($testRuleSet);
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('sErrorFlag', $result);
+        $this->assertArrayHasKey('sErrorMessages', $result);
+        $this->assertNull($result['sErrorFlag']);
+        $this->assertNull($result['sErrorMessages']);
+    }
+
+    /**
+     * @covers sAdmin::sValidateStep1
+     */
+    public function testsValidateStep1WithoutEdit()
+    {
+        $testData = array();
+        $this->module->sSYSTEM->_POST = &$testData;
+
+        // Test with no data, should fail on password field
+        $result = $this->module->sValidateStep1();
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('sErrorFlag', $result);
+        $this->assertArrayHasKey('sErrorMessages', $result);
+        $this->assertCount(1, $result['sErrorMessages']);
+        $this->assertContains(
+            'Bitte w&auml;hlen Sie ein Passwort welches aus mindestens {config name="MinPassword"} Zeichen besteht.',
+            $result['sErrorMessages']
+        );
+        $this->assertCount(2, $result['sErrorFlag']);
+        $this->assertArrayHasKey('password', $result['sErrorFlag']);
+        $this->assertArrayHasKey('passwordConfirmation', $result['sErrorFlag']);
+
+        // Test with diverging password, should fail
+        $testData = array(
+            'password' => 'password',
+            'passwordConfirmation' => 'passwordConfirmation',
+        );
+        $result = $this->module->sValidateStep1();
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('sErrorFlag', $result);
+        $this->assertArrayHasKey('sErrorMessages', $result);
+        $this->assertCount(1, $result['sErrorMessages']);
+        $this->assertContains(
+            'Die Passwörter stimmen nicht überein.',
+            $result['sErrorMessages']
+        );
+        $this->assertCount(2, $result['sErrorFlag']);
+        $this->assertArrayHasKey('password', $result['sErrorFlag']);
+        $this->assertArrayHasKey('passwordConfirmation', $result['sErrorFlag']);
+
+        // Test with matching passwords, should succeed
+        $testData = array(
+            'password' => 'password',
+            'passwordConfirmation' => 'password',
+        );
+        $result = $this->module->sValidateStep1();
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('sErrorFlag', $result);
+        $this->assertArrayHasKey('sErrorMessages', $result);
+        $this->assertNull($result['sErrorMessages']);
+        $this->assertNull($result['sErrorFlag']);
+
+        // Test with invalid email, should fail
+        $testData['email'] = 'failmail.com';
+        $result = $this->module->sValidateStep1();
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('sErrorFlag', $result);
+        $this->assertArrayHasKey('sErrorMessages', $result);
+        $this->assertCount(1, $result['sErrorMessages']);
+        $this->assertContains(
+            'MailFailure',
+            $result['sErrorMessages']
+        );
+        $this->assertCount(1, $result['sErrorFlag']);
+        $this->assertArrayHasKey('email', $result['sErrorFlag']);
+
+        // Test with valid email, should succeed
+        $testData['email'] = 'foo@failmail.com';
+        $result = $this->module->sValidateStep1();
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('sErrorFlag', $result);
+        $this->assertArrayHasKey('sErrorMessages', $result);
+        $this->assertNull($result['sErrorMessages']);
+        $this->assertNull($result['sErrorFlag']);
+
+        // Test with diverging emailConfirmation and email, should fail
+        $testData['emailConfirmation'] = 'bar@failmail.com';
+        $result = $this->module->sValidateStep1();
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('sErrorFlag', $result);
+        $this->assertArrayHasKey('sErrorMessages', $result);
+        $this->assertCount(1, $result['sErrorMessages']);
+        $this->assertContains(
+            'MailFailureNotEqual',
+            $result['sErrorMessages']
+        );
+        $this->assertCount(1, $result['sErrorFlag']);
+        $this->assertArrayHasKey('emailConfirmation', $result['sErrorFlag']);
+
+        // Test with valid email, should succeed
+        $testData['emailConfirmation'] = 'foo@failmail.com';
+        $result = $this->module->sValidateStep1();
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('sErrorFlag', $result);
+        $this->assertArrayHasKey('sErrorMessages', $result);
+        $this->assertNull($result['sErrorMessages']);
+        $this->assertNull($result['sErrorFlag']);
+
+        // Test that session data is correctly set
+        $sessionRegister = $this->module->sSYSTEM->_SESSION["sRegister"]['auth'];
+        $this->assertEquals(0, $sessionRegister['accountmode']);
+        $this->assertNull($sessionRegister['receiveNewsletter']);
+        $this->assertEquals('foo@failmail.com', $sessionRegister['email']);
+        $this->assertEquals('bcrypt', $sessionRegister['encoderName']);
+        $this->assertArrayHasKey('password', $sessionRegister);
+
+        // Test with skipLogin
+        $testData['skipLogin'] = true;
+        $this->module->sValidateStep1();
+        $sessionRegister = $this->module->sSYSTEM->_SESSION["sRegister"]['auth'];
+        $this->assertEquals(1, $sessionRegister['accountmode']);
+        $this->assertNull($sessionRegister['receiveNewsletter']);
+        $this->assertEquals('foo@failmail.com', $sessionRegister['email']);
+        $this->assertEquals('md5', $sessionRegister['encoderName']);
+        $this->assertArrayHasKey('password', $sessionRegister);
+    }
+
+    /**
+     * @covers sAdmin::sValidateStep1
+     * @group wip
+     */
+    public function testsValidateStep1WithEdit()
+    {
+        $testData = array();
+        $this->module->sSYSTEM->_POST = &$testData;
+
+        // Test with edit, no data
+        $result = $this->module->sValidateStep1(true);
+        var_export($result);
+//        $this->assertInternalType('array', $result);
+//        $this->assertArrayHasKey('sErrorFlag', $result);
+//        $this->assertArrayHasKey('sErrorMessages', $result);
+//        $this->assertCount(1, $result['sErrorMessages']);
+//        $this->assertContains(
+//            'Das aktuelle Passwort stimmt nicht!',
+//            $result['sErrorMessages']
+//        );
+//        $this->assertCount(2, $result['sErrorFlag']);
+//        $this->assertArrayHasKey('password', $result['sErrorFlag']);
+//        $this->assertArrayHasKey('currentPassword', $result['sErrorFlag']);
+    }
+
+    /**
      * Create dummy customer entity
      *
      * @return \Shopware\Models\Customer\Customer

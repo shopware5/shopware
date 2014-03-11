@@ -226,6 +226,16 @@ class Shopware extends Enlight_Application
     }
 
     /**
+     * Returns the instance of the password manager
+     *
+     * @return \Shopware\Components\Password\Manager
+     */
+    public function PasswordEncoder()
+    {
+        return $this->_bootstrap->getResource('PasswordEncoder');
+    }
+
+    /**
      * Returns application instance
      *
      * @return Shopware
