@@ -9,7 +9,7 @@
 {* Main content *}
 {block name='frontend_index_content'}
 <div class="content block">
-	
+
 	{block name='frontend_home_index_banner'}
 		{* Banner *}
 		{include file='frontend/listing/banner.tpl'}

@@ -1,0 +1,79 @@
+.btn, input[type="button"], button, input[type="reset"], input[type="submit"] {
+	@backgroundGradientStart: rgba(red(@primaryBackgroundColor), green(@primaryBackgroundColor), blue(@primaryBackgroundColor), .6);
+	@boxShadowColor: rgba(red(@primaryBackgroundColor), green(@primaryBackgroundColor), blue(@primaryBackgroundColor), .8);
+	.linear-gradient(#fff, @backgroundGradientStart);
+	.box-shadow(0 1px 1px @backgroundGradientStart);
+	.unitize-padding(9, 16, 9, 16, 16);
+	.border-radius(4px);
+	.transition();
+	.appearance();
+	display: inline-block;
+	font-weight: normal;
+	text-decoration: none;
+	text-align: center;
+	cursor: pointer;
+	border: 1px solid @borderColor;
+	color: @primaryTextColor;
+
+	&:active {
+		.linear-gradient(@backgroundGradientStart, #fff);
+	}
+
+	&:hover {
+		color: @primaryColor;
+	}
+
+	&:focus {
+		outline: none;
+	}
+
+	/** State: Small button */
+	&.is--small {
+		.unitize-padding(5, 16, 5, 16, 12);
+		.unitize(12, 16, font-size);
+	}
+
+	/** Type: Light grey button */
+	&.btn--grey {
+		.linear-gradient(#fff, @primaryBackgroundColor);
+		border-color: @lightDarkBorderColor;
+	}
+
+	/** Type: Primary button */
+	&.btn--primary {
+		@backgroundGradientEnd: rgba(red(@primaryContrastColor), green(@primaryContrastColor), blue(@primaryContrastColor), .7);
+		@boxShadowColor: rgba(red(@primaryTextColor), green(@primaryTextColor), blue(@primaryTextColor), .6);
+		.linear-gradient-multi(0%, @primaryColor, 65%, @primaryColor, 100%, @backgroundGradientEnd);
+		.box-shadow(0 1px 3px @boxShadowColor);
+		text-shadow: 0 1px 1px @primaryContrastColor;
+		border: 0 none;
+		border-bottom: 1px solid @primaryContrastColor;
+		color: #fff;
+
+		&:hover {
+			@backgroundGradientEnd: rgba(red(@complementarySecondaryColor), green(@complementarySecondaryColor), blue(@complementarySecondaryColor), .5);
+			.linear-gradient-multi(0%, @complementaryPrimaryColor, 65%, @complementaryPrimaryColor, 100%, @backgroundGradientEnd);
+			text-shadow: 0 1px 1px @complementarySecondaryColor;
+			border: 0 none;
+			border-bottom: 1px solid @complementarySecondaryColor;
+		}
+	}
+
+	/** Type: Secondary button */
+	&.btn--secondary {
+		@boxShadowColor: rgba(red(@primaryTextColor), green(@primaryTextColor), blue(@primaryTextColor), .5);
+		.linear-gradient-multi(0%, @lightTextColor, 55%, @lightTextColor, 100%, @primaryTextColor);
+		.box-shadow(0 1px 3px @boxShadowColor);
+		text-shadow: 0 1px 1px darken(@primaryTextColor, 10%);
+		color: #fff;
+		border: 0 none;
+		border-bottom: 1px solid @darkBorderColor;
+
+		&:hover {
+			background: @primaryTextColor;
+		}
+		&:active {
+			.linear-gradient-multi(0%, @primaryTextColor, 55%, @lightTextColor, 100%, @lightTextColor);
+		}
+	}
+}

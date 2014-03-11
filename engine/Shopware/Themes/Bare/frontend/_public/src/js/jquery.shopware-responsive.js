@@ -2,7 +2,7 @@ $(function() {
     StateManager.init([{
         type: 'smartphone',
         enter: '0em',
-        exit: '47.75em'
+        exit: '47.7495em'
     }, {
         type: 'tablet',
         enter: '47.75em',
