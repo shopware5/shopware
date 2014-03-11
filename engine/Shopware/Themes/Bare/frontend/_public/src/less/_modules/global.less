@@ -29,21 +29,12 @@ ul {
 	padding: 0;
 }
 
-input[type="text"], input[type="search"], input[type="password"] {
-	.appearance();
-	.border-radius();
-	.box-sizing();
-	.unitize-padding(10, 10, 10, 10, 16);
-	background: @lightGradientEnd;
-	border: 1px solid @borderColor;
-	color: @primaryTextColor;
-
-	&:focus {
-		background: #fff;
-	}
-}
-
 .ajax-loader { display: none }
+
+// @debug
+.content {
+	padding: 1em 0;
+}
 
 @media screen and (min-width: 64em) {
 	body {

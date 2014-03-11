@@ -45,7 +45,8 @@
 	}
 
 	.entry--cart {
-		.linear-gradient(@primaryColor, @secondaryColor);
+		@backgroundGradientEnd: rgba(red(@primaryContrastColor), green(@primaryContrastColor), blue(@primaryContrastColor), .7);
+		.linear-gradient-multi(0%, @primaryColor, 65%, @primaryColor, 100%, @backgroundGradientEnd);
 		border-top: 1px solid @primaryColor;
 		border-bottom: 1px solid darken(@secondaryColor, 10%);
 		border-left: 0 none;
