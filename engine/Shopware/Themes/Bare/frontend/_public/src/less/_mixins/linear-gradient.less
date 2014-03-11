@@ -12,12 +12,24 @@
 	background-image: -o-linear-gradient(top, @start, @end);
 	background-image: linear-gradient(to bottom, @start, @end);
 }
-.linear-gradient-multi(@firstPos, @firstColor, @secondPos, @secondColor, @thirdPos, @thirdColor) {
+.linear-gradient-multi(@firstPos, @firstColor, @secondPos, @secondColor, @thirdPos, @thirdColor, @startFrom: top, @endTo: bottom) {
 	background-color: @firstColor;
-	background-image: -moz-linear-gradient(top, @firstColor @firstPos, @secondColor @secondPos, @thirdColor @thirdPos);
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(@firstPos,@firstColor), color-stop(@secondPos,@secondColor), color-stop(@thirdPos,@thirdColor));
-	background-image: -webkit-linear-gradient(top, @firstColor @firstPos,@secondColor @secondPos,@thirdColor @thirdPos);
-	background-image: -o-linear-gradient(top, @firstColor @firstPos,@secondColor @secondPos,@thirdColor @thirdPos);
-	background-image: -ms-linear-gradient(top, @firstColor @firstPos,@secondColor @secondPos,@thirdColor @thirdPos);
-	background-image: linear-gradient(to bottom, @firstColor @firstPos,@secondColor @secondPos,@thirdColor @thirdPos);
+	background-image: -moz-linear-gradient(@startFrom, @firstColor @firstPos, @secondColor @secondPos, @thirdColor @thirdPos);
+	background-image: -webkit-gradient(linear, left @startFrom, left @endTo, color-stop(@firstPos,@firstColor), color-stop(@secondPos,@secondColor), color-stop(@thirdPos,@thirdColor));
+	background-image: -webkit-linear-gradient(@startFrom, @firstColor @firstPos,@secondColor @secondPos,@thirdColor @thirdPos);
+	background-image: -o-linear-gradient(@startFrom, @firstColor @firstPos,@secondColor @secondPos,@thirdColor @thirdPos);
+	background-image: -ms-linear-gradient(@startFrom, @firstColor @firstPos,@secondColor @secondPos,@thirdColor @thirdPos);
+	background-image: linear-gradient(to @endTo, @firstColor @firstPos,@secondColor @secondPos,@thirdColor @thirdPos);
+}
+
+.primary-gradient() {
+	@rgba-color: rgba(red(@primaryContrastColor), green(@primaryContrastColor), blue(@primaryContrastColor), .7);
+	.linear-gradient-multi(0%, @rgba-color, 66%, @primaryColor, 100%, @primaryColor, bottom, top);
+}
+.secondary-gradient() {
+	.linear-gradient-multi(0%, @primaryTextColor, 53%, @lightTextColor, 100%, @lightTextColor, bottom, top);
+}
+.white-gradient() {
+	@rgba-color: rgba(red(@primaryBackgroundColor), green(@primaryBackgroundColor), blue(@primaryBackgroundColor), .6);
+	.linear-gradient(#fff, @rgba-color);
 }

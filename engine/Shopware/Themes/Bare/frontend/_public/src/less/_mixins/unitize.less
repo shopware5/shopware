@@ -1,7 +1,7 @@
 .unitize(@value, @baseValue: 16, @property: font-size) {
 	@pxValue: @value;
 	@emValue: (@value / @baseValue);
-	@{property}: ~"@{pxValue}px";
+	//@{property}: ~"@{pxValue}px";
 	@{property}: ~"@{emValue}em";
 }
 
@@ -18,7 +18,7 @@
 	@pxLeftValue: @leftValue;
 	@emLeftValue: (@leftValue / @baseValue);
 
-	@{property}: ~"@{pxTopValue}px @{pxRightValue}px @{pxBottomValue}px @{pxLeftValue}px";
+	//@{property}: ~"@{pxTopValue}px @{pxRightValue}px @{pxBottomValue}px @{pxLeftValue}px";
 	@{property}: ~"@{emTopValue}em @{emRightValue}em @{emBottomValue}em @{emLeftValue}em";
 }
 

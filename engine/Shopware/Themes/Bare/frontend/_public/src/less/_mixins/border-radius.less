@@ -9,6 +9,24 @@
 	border-radius: @radius;
 	// Prevent the background color leaks out
 	-webkit-background-clip: padding-box;
-	-moz-background-clip:    padding;
-	background-clip:         padding-box;
+	-moz-background-clip: padding;
+	background-clip: padding-box;
+}
+.border-radius-multi(@leftTop: 0, @rightTop:0, @rightBottom: 0, @leftBottom: 0) {
+	-webkit-border-top-left-radius: @leftTop;
+	-webkit-border-top-right-radius:  @rightTop;
+	-webkit-border-bottom-right-radius: @rightBottom;
+	-webkit-border-bottom-left-radius: @leftBottom;
+	-moz-border-radius-topleft: @leftTop;
+	-moz-border-radius-topright:  @rightTop;
+	-moz-border-radius-bottomright: @rightBottom;
+	-moz-border-radius-bottomleft: @leftBottom;
+	border-top-left-radius: @leftTop;
+	border-top-right-radius:  @rightTop;
+	border-bottom-right-radius: @rightBottom;
+	border-bottom-left-radius: @leftBottom;
+	// Prevent the background color leaks out
+	-webkit-background-clip: padding-box;
+	-moz-background-clip: padding;
+	background-clip: padding-box;
 }
