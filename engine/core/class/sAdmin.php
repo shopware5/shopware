@@ -623,6 +623,27 @@ class sAdmin
             if ($this->sSYSTEM->sDB_CONNECTION->getOne("SELECT id FROM s_campaigns_mailaddresses WHERE email = ?",array($email))) {
                 return false;
             }
+
+            if (Shopware()->Config()->optinnewsletter) {
+                $hash = md5(uniqid(rand()));
+                $data = serialize(array("newsletter"=>$email,"subscribeToNewsletter"=>true));
+
+                $link = Shopware()->Front()->Router()->assemble(array(
+                        'sViewport' => 'newsletter',
+                        'action' => 'index',
+                        'sConfirmation' => $hash
+                    )
+                );
+
+                $this->sendMail($email, 'sOPTINNEWSLETTER', $link);
+
+                Shopware()->Db()->query('
+                    INSERT INTO s_core_optin (datum, hash, data)
+                    VALUES (now(),?,?)
+                ',array($hash,$data));
+                return true;
+            }
+
             $groupID = $this->sSYSTEM->sCONFIG['sNEWSLETTERDEFAULTGROUP'];
             if (!$groupID) $groupID = "0";
             // Insert
@@ -642,6 +663,26 @@ class sAdmin
         return true;
     }
 
+    /**
+     * Sends a mail to the given recipient with a given template.
+     * If the optin parameter is set, the sConfirmLink variable will be filled by the optin link.
+     *
+     * @param $recipient
+     * @param $template
+     * @param string $optin
+     */
+    private function sendMail($recipient, $template, $optin='')
+    {
+        $context = array();
+
+        if (!empty($optin)) {
+            $context['sConfirmLink'] = $optin;
+        }
+
+        $mail = Shopware()->TemplateMail()->createMail($template, $context);
+        $mail->addTo($recipient);
+        $mail->send();
+    }
 
     /**
      * Set previous used address to default address
@@ -3108,8 +3149,10 @@ class sAdmin
             } elseif ($result->RecordCount()) {
                 $result = array("code"=>2,"message"=>$this->snippetObject->get('NewsletterFailureAlreadyRegistered','You already receive our newsletter'));
             } else {
-                $sql = "INSERT INTO s_campaigns_mailaddresses (`groupID`,email) VALUES(?, ?)";
-                $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($groupID, $email));
+                $customer = Shopware()->Db()->fetchOne('SELECT id FROM s_user WHERE email = ? LIMIT 1', array($email));
+
+                $sql = "INSERT INTO s_campaigns_mailaddresses (customer, `groupID`, email) VALUES(?, ?, ?)";
+                $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array((int) !empty($customer), $groupID, $email));
 
                 if($result===false)
                     $result = array("code"=>10,"message"=>$this->snippetObject->get('UnknownError','Unknown error'));
