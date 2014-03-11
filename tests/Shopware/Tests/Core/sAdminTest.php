@@ -44,7 +44,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         // Create a stub for the Shopware_Components_Snippet_Manager class.
         $stub = $this->getMockBuilder('\Enlight_Components_Snippet_Manager')
-            ->setMethods(['get'])
+            ->setMethods(array('get'))
             ->disableOriginalConstructor()
             ->getMock();
 
