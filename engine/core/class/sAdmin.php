@@ -545,7 +545,7 @@ class sAdmin
     /**
      * Updates the billing address of the user
      *
-     * @return bool
+     * @return bool If operation was successful
      */
     public function sUpdateBilling()
     {
@@ -553,7 +553,7 @@ class sAdmin
 
         if (!empty($userObject['birthmonth']) && !empty($userObject['birthday']) && !empty($userObject['birthyear'])) {
             $userObject['birthday'] = mktime(0,0,0, (int) $userObject['birthmonth'], (int) $userObject['birthday'], (int) $userObject['birthyear']);
-            if ($userObject['birthday']>0) {
+            if ($userObject['birthday'] > 0) {
                 $userObject['birthday'] = date('Y-m-d', $userObject['birthday']);
             } else {
                 $userObject['birthday'] = '0000-00-00';
@@ -593,10 +593,17 @@ class sAdmin
             'userID='.(int) $this->sSYSTEM->_SESSION['sUserId']
         );
 
-        list($data,$where) = Enlight()->Events()->filter('Shopware_Modules_Admin_UpdateBilling_FilterSql', array($data,$where), array('subject'=>$this,"id"=>$this->sSYSTEM->_SESSION['sUserId'],"user"=>$userObject));
+        list($data, $where) = Enlight()->Events()->filter(
+            'Shopware_Modules_Admin_UpdateBilling_FilterSql',
+            array($data,$where),
+            array(
+                'subject' => $this,
+                "id" => $this->sSYSTEM->_SESSION['sUserId'],
+                "user" => $userObject
+            )
+        );
 
         $result = Shopware()->Db()->update('s_user_billingaddress', $data, $where);
-
 
         if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg()) {
             $this->sSYSTEM->E_CORE_WARNING("sUpdateBilling #01","Could not save data (billing-adress)".$this->sSYSTEM->sDB_CONNECTION->ErrorMsg());
@@ -613,11 +620,19 @@ class sAdmin
             "text6" => $userObject['text6'],
         );
 
-        $sql= "SELECT id FROM s_user_billingaddress WHERE userID = " . (int) $this->sSYSTEM->_SESSION['sUserId'];
+        $sql = "SELECT id FROM s_user_billingaddress WHERE userID = " . (int) $this->sSYSTEM->_SESSION['sUserId'];
         $billingId = Shopware()->Db()->fetchOne($sql);
         $where = array(" billingID = " . $billingId);
 
-        list($data,$where) = Enlight()->Events()->filter('Shopware_Modules_Admin_UpdateBillingAttributes_FilterSql', array($data,$where), array('subject'=>$this,"id"=>$this->sSYSTEM->_SESSION['sUserId'],"user"=>$userObject));
+        list($data, $where) = Enlight()->Events()->filter(
+            'Shopware_Modules_Admin_UpdateBillingAttributes_FilterSql',
+            array($data, $where),
+            array(
+                'subject' => $this,
+                "id" => $this->sSYSTEM->_SESSION['sUserId'],
+                "user" => $userObject
+            )
+        );
 
         Shopware()->Db()->update('s_user_billingaddress_attributes', $data, $where);
 
@@ -625,55 +640,68 @@ class sAdmin
     }
 
     /**
-     * Add, remove customer from maillinglist
-     * @param bool $status 1 = Insert, 0 = Delete
-     * @param string $email - mail address
-     * @access public
-     * @return -
+     * Add or remove an email address from the mailing list
+     *
+     * @param bool $status True if insert, false if remove
+     * @param string $email Email address
+     * @param bool $customer If email address belongs to a customer
+     * @return bool If operation was successful
      */
-    public function sUpdateNewsletter($status,$email,$customer=false)
+    public function sUpdateNewsletter($status, $email, $customer = false)
     {
         if (!$status) {
             // Delete
-            $changeLetterState = $this->sSYSTEM->sDB_CONNECTION->Execute("
-            DELETE FROM s_campaigns_mailaddresses WHERE email=?
-            ",array($email));
+            $changeLetterState = $this->sSYSTEM->sDB_CONNECTION->Execute(
+                "DELETE FROM s_campaigns_mailaddresses WHERE email = ?",
+                array($email)
+            );
         } else {
             // Check if mail address receives already our newsletter
-            if ($this->sSYSTEM->sDB_CONNECTION->getOne("SELECT id FROM s_campaigns_mailaddresses WHERE email = ?",array($email))) {
+            if ($this->sSYSTEM->sDB_CONNECTION->getOne(
+                "SELECT id FROM s_campaigns_mailaddresses WHERE email = ?",
+                array($email))
+            ) {
                 return false;
             }
             $groupID = $this->sSYSTEM->sCONFIG['sNEWSLETTERDEFAULTGROUP'];
-            if (!$groupID) $groupID = "0";
+            if (!$groupID) {
+                $groupID = "0";
+            }
             // Insert
             if (!empty($customer)) {
                 $changeLetterState = $this->sSYSTEM->sDB_CONNECTION->Execute("
                 INSERT INTO s_campaigns_mailaddresses (customer, email)
                 VALUES (?,?)
-                ",array(1,$email));
+                ", array(1, $email));
             } else {
                 $changeLetterState = $this->sSYSTEM->sDB_CONNECTION->Execute("
                 INSERT INTO s_campaigns_mailaddresses (groupID, email)
                 VALUES (?,?)
-                ",array($groupID,$email));
+                ", array($groupID, $email));
             }
         }
 
         return true;
     }
 
-
     /**
-     * Set previous used address to default address
-     * @param string $type  shipping / billing
-     * @param string $request_hash  secure hash
-     * @access public
-     * @return -
+     * Gets the current order addresses for a given type and current user
+     * If a valid address hash is provided, only that address is returned
+     * Used on frontend controllers to get and set addresses
+     *
+     * @param string $type shipping / billing
+     * @param string $request_hash secure hash
+     * @return array|bool Array with addresses if no match found, or array with address details
+     * if match found, or false on failure
      */
-    public function sGetPreviousAddresses($type, $request_hash=null)
+    public function sGetPreviousAddresses($type, $request_hash = null)
     {
-        if (empty($type)) return false;
-        if (empty($this->sSYSTEM->_SESSION['sUserId'])) return false;
+        if (empty($type)) {
+            return false;
+        }
+        if (empty($this->sSYSTEM->_SESSION['sUserId'])) {
+            return false;
+        }
 
         if ($type=='shipping') {
             $type = 'shipping';
@@ -697,7 +725,7 @@ class sAdmin
         $addresses = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql, array($this->sSYSTEM->_SESSION['sUserId']));
 
         foreach ($addresses as $address) {
-            if (!empty($request_hash)&&$address['hash']==$request_hash) {
+            if (!empty($request_hash) && $address['hash'] == $request_hash) {
                 return $address;
             }
             $address[$address['hash']]['country'] = array();
