@@ -104,3 +104,51 @@
 	}
 	.main-search--button { display: none; }
 }
+
+@media screen and (min-width: @tabletViewportWidth) {
+	.header-main {
+		.top-bar {
+			.unitize-padding(4, 0, 4, 0, 16);
+			display: block;
+			border-bottom: 1px solid @borderColor;
+		}
+		.top-bar--switches {
+			.clearfix();
+			width: 25%;
+		}
+		// @todo - needs reformatting due to a select box which should be visible
+		.top-bar--language, .top-bar--currency {
+			float: left;
+
+			& > form { float: left; }
+		}
+	}
+
+	.top-bar--navigation {
+		width: 75%;
+		text-align: right;
+
+		.navigation--entry {
+			.unitize-padding(0, 16, 0, 16, 16);
+			display: inline-block;
+			border-left: 1px solid @borderColor;
+
+			i { .unitize-padding(0, 5, 0, 0, 16); }
+
+			&:first-child {
+				border-left: 0 none;
+			}
+		}
+
+		.navigation--entry, .navigation--link {
+			color: @primaryTextColor;
+			cursor: pointer;
+
+			&:hover {
+				color: @primaryColor;
+			}
+		}
+
+		.service--list { display: none; }
+	}
+}

@@ -21,12 +21,15 @@
 {block name='frontend_index_actions_currency'}
     {if $currencies|count > 1}
         <div class="top-bar--currency">
-            {foreach $currencies as $currency}
-                <form action="{$smarty.server.REQUEST_URI}" method="post" class="currency--form">
-                    <input type="hidden" name="__currency" value="{$currency->getId()}" />
-                    <input type="submit" {if $currency->getId() === $shop->getCurrency()->getId()}class="is--active"{/if} value="{$currency->getCurrency()}" />
-                </form>
-            {/foreach}
+			<form action="{$smarty.server.REQUEST_URI}" method="post" class="currency--form">
+				<select name="currency--select">
+					{foreach $currencies as $currency}
+						<option value="{$currency->getId()}"{if $currency->getId() === $shop->getCurrency()->getId()} selected="selected"{/if}>
+							{$currency->getCurrency()}
+						</option>
+					{/foreach}
+				</select>
+			</form>
         </div>
     {/if}
 {/block}
