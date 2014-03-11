@@ -326,28 +326,33 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     private function removeDemoData()
     {
-        Shopware()->Db()->delete('s_user', 'id = ' . $this->userId);
-        Shopware()->Db()->delete('s_user_billingaddress', 'userID = ' . $this->userId);
-        Shopware()->Db()->delete('s_order', 'userID = ' . $this->userId);
-        Shopware()->Db()->delete('s_order_billingaddress', 'userID = ' . $this->userId);
-        Shopware()->Db()->delete('s_articles', 'id = ' . $this->articleId);
-        Shopware()->Db()->delete('s_articles_details', 'articleID = ' . $this->articleId);
-        Shopware()->Db()->delete('s_statistics_article_impression', 'articleId = ' . $this->articleId);
-        Shopware()->Db()->delete('s_order_details', 'articleID = ' . $this->articleId);
-        Shopware()->Db()->delete('s_statistics_visitors', 'shopID = 1');
-        Shopware()->Db()->delete('s_statistics_search', "searchterm = 'phpunit search term'");
-        Shopware()->Db()->delete('s_statistics_referer', "referer = 'http://www.google.de/?q=phpunit'");
+        if($this->userId) {
+            Shopware()->Db()->delete('s_user', 'id = ' . $this->userId);
+            Shopware()->Db()->delete('s_user_billingaddress', 'userID = ' . $this->userId);
+            Shopware()->Db()->delete('s_order', 'userID = ' . $this->userId);
+            Shopware()->Db()->delete('s_order_billingaddress', 'userID = ' . $this->userId);
+        }
+
+        if($this->articleDetailId) {
+            Shopware()->Db()->delete('s_articles_details', 'id = ' . $this->articleDetailId);
+        }
+
+        if($this->articleId) {
+            Shopware()->Db()->delete('s_articles', 'id = ' . $this->articleId);
+            Shopware()->Db()->delete('s_statistics_article_impression', 'articleId = ' . $this->articleId);
+            Shopware()->Db()->delete('s_order_details', 'articleID = ' . $this->articleId);
+        }
 
         if($this->categoryId) {
+            if($this->articleId) {
+                Shopware()->Db()->delete('s_articles_categories_ro', 'articleID = ' . $this->articleId);
+            }
             Shopware()->Db()->delete('s_categories', 'id = ' . $this->categoryId);
-            Shopware()->Db()->delete(
-                's_articles_categories_ro',
-                array(
-                    'articleID'  => $this->articleId,
-                    'categoryID' => $this->categoryId
-                )
-            );
         }
+
+        Shopware()->Db()->delete('s_statistics_visitors', "shopID = 1 AND datum = '2013-06-01' OR datum = '2013-06-15'");
+        Shopware()->Db()->delete('s_statistics_search', "searchterm = 'phpunit search term'");
+        Shopware()->Db()->delete('s_statistics_referer', "referer = 'http://www.google.de/?q=phpunit'");
     }
 
     public function testGetVisitorImpressions()
