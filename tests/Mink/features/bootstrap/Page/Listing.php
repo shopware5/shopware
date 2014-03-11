@@ -29,6 +29,11 @@ class Listing extends Page
             $parameters['sPage'] = 1;
         }
 
+        $parameters['sSupplier'] = isset($parameters['sSupplier']) ? $parameters['sSupplier'] : '';
+        $parameters['sTemplate'] = isset($parameters['sTemplate']) ? $parameters['sTemplate'] : '';
+        $parameters['sPerPage'] = isset($parameters['sPerPage']) ? $parameters['sPerPage'] : '';
+        $parameters['sSort'] = isset($parameters['sSort']) ? $parameters['sSort'] : '';
+
         $this->open($parameters);
     }
 

@@ -23,6 +23,14 @@ class ShopwareContext extends SubContext
     }
 
     /**
+     * @When /^I received the search-results for "(?P<searchTerm>[^"]*)"$/
+     */
+    public function iReceivedTheSearchResultsFor($searchTerm)
+    {
+        $this->getPage('Homepage')->receiveSearchResultsFor($searchTerm);
+    }
+
+    /**
      * @Given /^I should see a banner "(?P<image>[^"]*)"$/
      */
     public function iShouldSeeABanner($image)

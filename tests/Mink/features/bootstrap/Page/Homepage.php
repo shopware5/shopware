@@ -21,6 +21,14 @@ class Homepage extends Page
         $this->verifyResponse();
     }
 
+    public function receiveSearchResultsFor($searchTerm)
+    {
+        $this->fillField('searchfield', $searchTerm);
+        $this->getSession()->wait(5000, "$('ul.searchresult').children().length > 0");
+    }
+
+
+
     /**
      * Checks an emotion banner element
      * @param string $image
