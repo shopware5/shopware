@@ -10,7 +10,14 @@
 	background-image: -webkit-linear-gradient(top, @start 0%, @end 100%);
 	background-image: -moz-linear-gradient(top, @start, @end);
 	background-image: -o-linear-gradient(top, @start, @end);
-	background-image: linear-gradient(to bottom, @start, @end);
+	background-image: linear-gradient(from bottom, @start, @end);
+}
+.linear-gradient-horizontal(@start, @end) {
+	background-image: -webkit-gradient(linear, left top, right top, from(@start), to(@end));
+	background-image: -webkit-linear-gradient(left, @start 0%, @end 100%);
+	background-image: -moz-linear-gradient(left, @start, @end);
+	background-image: -o-linear-gradient(left, @start, @end);
+	background-image: linear-gradient(to right, @start, @end);
 }
 .linear-gradient-multi(@firstPos, @firstColor, @secondPos, @secondColor, @thirdPos, @thirdColor, @startFrom: top, @endTo: bottom) {
 	background-color: @firstColor;

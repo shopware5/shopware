@@ -27,5 +27,10 @@ $(function() {
             $('*[data-search-dropdown="true"]').data('plugin_searchFieldDropDown').destroy();
             $('*[data-slide-panel="true"]').data('plugin_slidePanel').destroy();
         }
+    }, {
+        type:'tablet',
+        enter: function() {
+            $('*[data-scrollable-list="true"]').scrollableList();
+        }
     }]);
 });
