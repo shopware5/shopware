@@ -156,6 +156,12 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
         return elements;
     },
 
+    /**
+     * Creates the whole config container for the theme
+     * configuration panel.
+     * @param container
+     * @param shop
+     */
     createConfigContainer: function(container, shop) {
         var me = this, items = [],
             data = container.data;
@@ -181,7 +187,6 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
             data = Ext.apply(data, { }, data.attributes);
         }
         delete data.attributes;
-        console.log("data", data);
 
         return data;
     },
@@ -282,6 +287,12 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
 
         theme.save({
             callback: function() {
+                Shopware.Notification.createGrowlMessage(
+                    '{s name="application"}Theme manager 2.0{/s}',
+                    '{s name="save_message"}Theme configuration saved{/s}',
+                    'Theme manager'
+                );
+
                 if (window instanceof Ext.window.Window) {
                     window.destroy();
                 }

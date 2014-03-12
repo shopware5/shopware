@@ -149,8 +149,7 @@ class PathResolver
      */
     public function getCacheDirectory()
     {
-        return $this->getDefaultThemeDirectory() .
-        DIRECTORY_SEPARATOR . '_cache';
+        return $this->rootDir . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR . 'cache';
     }
 
     /**
@@ -158,10 +157,7 @@ class PathResolver
      */
     public function getCacheDirectoryUrl()
     {
-        return 'engine' .
-        DIRECTORY_SEPARATOR . 'Shopware' .
-        DIRECTORY_SEPARATOR . 'Themes' .
-        DIRECTORY_SEPARATOR . '_cache';
+        return 'web' . DIRECTORY_SEPARATOR . 'cache';
     }
 
     /**

@@ -201,7 +201,7 @@ class Installer
             $theme = $this->util->getThemeByDirectory($directory);
 
             $data = $this->getThemeDefinition($theme);
-
+            
             $template = $this->repository->findOneBy(array(
                 'template' => $theme->getTemplate()
             ));

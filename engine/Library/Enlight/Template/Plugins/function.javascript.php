@@ -29,12 +29,14 @@ function smarty_function_javascript($params, $template)
 {
     $file = $params['file'];
     $time = $params['timestamp'];
-    
+
     /**@var $pathResolver \Shopware\Components\Theme\PathResolver*/
     $pathResolver = Shopware()->Container()->get('theme_path_resolver');
 
     /**@var $shop \Shopware\Models\Shop\Shop*/
     $shop = Shopware()->Container()->get('shop');
+
+    $disableCaching = Shopware()->Container()->get('config')->get('disableThemeCaching');
 
     $path = $pathResolver->buildJsPath($shop, $file, $time);
 
@@ -46,7 +48,7 @@ function smarty_function_javascript($params, $template)
         DIRECTORY_SEPARATOR .
         $fileName;
 
-    if (file_exists($path)) {
+    if (file_exists($path) && !$disableCaching) {
         return $url;
     }
 

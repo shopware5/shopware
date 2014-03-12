@@ -119,6 +119,8 @@ class Compiler
     {
         $this->compiler->setFormatter("compressed");
 
+        $this->clearDirectory();
+
         $this->buildConfig($template, $shop);
 
         $this->compileThemeLess($timestamp, $template, $shop);
@@ -132,6 +134,34 @@ class Compiler
         $this->compileThemeJavascript($timestamp, $template, $shop);
 
         $this->compilePluginJavascript($timestamp, $template, $shop);
+    }
+
+    /**
+     * Helper function to clear the theme cache directory
+     * before the new css and js files are compiled.
+     */
+    private function clearDirectory()
+    {
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator(
+                $this->pathResolver->getCacheDirectory(),
+                \RecursiveDirectoryIterator::SKIP_DOTS
+            ),
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
+
+        /** @var \SplFileInfo $path */
+        foreach ($iterator as $path) {
+            if ($path->getFilename() === '.gitkeep') {
+                continue;
+            }
+
+            if ($path->isDir()) {
+                rmdir($path->__toString());
+            } else {
+                unlink($path->__toString());
+            }
+        }
     }
 
     /**

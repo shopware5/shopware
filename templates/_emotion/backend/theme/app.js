@@ -69,7 +69,7 @@ Ext.define('Shopware.apps.Theme', {
         'detail.fields.PercentField',
         'detail.fields.TextAreaField',
         'detail.fields.TextField',
-        'detail.fields.SelectField',
+        'detail.fields.SelectField'
     ],
 
     models: [ 'Theme', 'Element', 'ConfigValue', 'Layout', 'ConfigSet' ],

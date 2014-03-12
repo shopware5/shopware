@@ -102,7 +102,8 @@ class Cache extends Resource implements ContainerAwareInterface
             $this->getCacheInfo('template'),
             $this->getCacheInfo('proxy'),
             $this->getCacheInfo('doctrine-file'),
-            $this->getCacheInfo('doctrine-proxy')
+            $this->getCacheInfo('doctrine-proxy'),
+            $this->getCacheInfo('themes')
         );
 
         return array('data' => $data, 'total' => count($data));
@@ -146,6 +147,7 @@ class Cache extends Resource implements ContainerAwareInterface
             $this->cacheManager->clearTemplateCache();
             $this->cacheManager->clearProxyCache();
             $this->cacheManager->clearSearchCache();
+            $this->cacheManager->clearThemeCache();
 
             return;
         }
@@ -182,6 +184,9 @@ class Cache extends Resource implements ContainerAwareInterface
             case 'search':
                 $tags[] = 'Shopware_Modules_Search';
                 $this->cacheManager->clearSearchCache();
+                break;
+            case 'themes':
+                $this->cacheManager->clearThemeCache();
                 break;
             case 'rewrite':
                 $this->cacheManager->clearRewriteCache();
@@ -225,6 +230,9 @@ class Cache extends Resource implements ContainerAwareInterface
                 break;
             case 'doctrine-file':
                 $cacheInfo = $this->cacheManager->getDoctrineFileCacheInfo();
+                break;
+            case 'themes':
+                $cacheInfo = $this->cacheManager->getThemeCacheInfo();
                 break;
             default:
                 throw new ApiException\NotFoundException("Cache {$cache} is not a valid cache id.");

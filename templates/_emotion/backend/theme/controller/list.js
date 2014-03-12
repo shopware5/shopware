@@ -86,6 +86,11 @@ Ext.define('Shopware.apps.Theme.controller.List', {
      */
     onThemeUploaded: function() {
         this.getListingView().getStore().load();
+        Shopware.Notification.createGrowlMessage(
+            '{s name="application"}Theme manager{/s}',
+            '{s name="upload_message"}Theme uploaded{/s}',
+            'Theme manager'
+        );
     },
 
     /**
@@ -130,6 +135,18 @@ Ext.define('Shopware.apps.Theme.controller.List', {
                 themeId: theme.get('id')
             },
             success: function (response, opts) {
+                var message = Ext.String.format(
+                    '{s name="assign_message"}Theme [0] assigned to shop [1]{/s}',
+                    theme.get('name'),
+                    shop.get('name')
+                );
+
+                Shopware.Notification.createGrowlMessage(
+                    '{s name="application"}Theme manager 2.0{/s}',
+                    message,
+                    'Theme manager'
+                );
+
                 me.getListingView().getStore().load();
             }
         });

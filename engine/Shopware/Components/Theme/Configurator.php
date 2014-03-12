@@ -109,7 +109,11 @@ class Configurator
         //use the theme persister class to write the Shopware\Components\Form elements into the database
         $this->persister->save($container, $template);
 
-        $this->removeUnused($template, $container);
+        $this->removeUnused(
+            $this->getLayout($template),
+            $this->getElements($template),
+            $container
+        );
 
         $this->synchronizeSets($theme, $template);
     }
@@ -145,6 +149,7 @@ class Configurator
      *
      * @param Theme $theme
      * @param Shop\Template $template
+     * @throws \Exception
      */
     private function synchronizeSets(Theme $theme, Shop\Template $template)
     {
@@ -155,10 +160,19 @@ class Configurator
 
         //iterates all configurations sets of the file system
         foreach ($collection as $item) {
+            if (!$item instanceof ConfigSet) {
+                throw new \Exception(sprintf(
+                    "Theme %s adds a configuration set which isn't an instance of Shopware\Components\Theme\ConfigSet.",
+                    $theme->getTemplate()
+                ));
+            }
+
+            $item->validate();
+
             //check if this set is already defined, to prevent auto increment in the database.
             $existing = $this->getExistingConfigSet(
                 $template->getConfigSets(),
-                $item['name']
+                $item->getName()
             );
 
             //if the set isn't defined, create a new one
@@ -169,7 +183,10 @@ class Configurator
 
             $existing->setTemplate($template);
 
-            $existing->fromArray($item);
+            $existing->setName($item->getName());
+            $existing->setDescription($item->getDescription());
+            $existing->setValues($item->getValues());
+
             $synchronized[] = $existing;
         }
 
@@ -196,25 +213,26 @@ class Configurator
      * Helper function which removes all unused configuration containers and elements
      * which are stored in the database but not in the passed container.
      *
-     * @param Shop\Template $template
+     * @param \Doctrine\Common\Collections\ArrayCollection $containers
+     * @param \Doctrine\Common\Collections\ArrayCollection $fields
      * @param Form\Container $container
      */
-    private function removeUnused(Shop\Template $template, Form\Container $container)
+    private function removeUnused(
+        ArrayCollection $containers,
+        ArrayCollection $fields,
+        Form\Container $container)
     {
-        $existing = $this->getLayout($template);
         $structure = $this->getContainerNames($container);
 
         /**@var $layout Shop\TemplateConfig\Layout */
-        foreach ($existing as $layout) {
+        foreach ($containers as $layout) {
             if (!in_array($layout->getName(), $structure['containers'])) {
                 $this->entityManager->remove($layout);
             }
         }
 
-        $existing = $this->getElements($template);
-
         /**@var $layout Shop\TemplateConfig\Element */
-        foreach ($existing as $layout) {
+        foreach ($fields as $layout) {
             if (!in_array($layout->getName(), $structure['fields'])) {
                 $this->entityManager->remove($layout);
             }
@@ -255,7 +273,7 @@ class Configurator
      * Returns all config containers of the passed template.
      *
      * @param \Shopware\Models\Shop\Template $template
-     * @return array
+     * @return ArrayCollection
      */
     private function getLayout(Shop\Template $template)
     {
@@ -272,7 +290,7 @@ class Configurator
      * Returns all config elements of the passed template.
      *
      * @param \Shopware\Models\Shop\Template $template
-     * @return array
+     * @return ArrayCollection
      */
     private function getElements(Shop\Template $template)
     {
