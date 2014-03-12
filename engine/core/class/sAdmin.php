@@ -2253,15 +2253,15 @@ class sAdmin
             $getOrders[$orderKey]["dispatch"] = $this->sGetDispatch($orderValue['dispatchID']);
         }
 
+        $getOrders = Enlight()->Events()->filter('Shopware_Modules_Admin_GetOpenOrderData_FilterResult', $getOrders, array('subject'=>$this,'id'=>$this->sSYSTEM->_SESSION["sUserId"],'subshopID'=>$this->sSYSTEM->sSubShop["id"]));
+
         $orderData["orderData"] = $getOrders;
 
         // Make Array with page-structure to render in template
         $numberOfPages = ceil($foundOrdersCount / $limitEnd);
         $orderData["numberOfPages"] = $numberOfPages;
+
         $orderData["pages"] = $this->getPagerStructure($destinationPage, $numberOfPages);
-
-        $orderData = Enlight()->Events()->filter('Shopware_Modules_Admin_GetOpenOrderData_FilterResult', $orderData, array('subject'=>$this,'id'=>$this->sSYSTEM->_SESSION["sUserId"],'subshopID'=>$this->sSYSTEM->sSubShop["id"]));
-
         return $orderData;
     }
 
