@@ -4,7 +4,7 @@ In this document you will find a changelog of the important changes related to t
 ## 4.2.2
 
 * Remove old payment dummy plugins out of the core: PaymentSofort and PigmbhRatePAYPayment
-* Add a new basic setting to add a possibility to disable the tell a friend feature
+* Add a new basic setting to add a possibility to disable the tell a friend feature. Attention by default the function is off.
 * [REST API] Add thumbnail generation to article and variant create and update actions
 * Deprecation: The Database Column impressions in s_articles_details in now deprecated. Please use the s_statistics_article_impression table.
 * `Shopware_Components_Plugin_Bootstrap` now has a `addFormTranslations()` method to facilitate translations creation for forms.
