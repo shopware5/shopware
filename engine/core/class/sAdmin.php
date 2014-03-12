@@ -1095,7 +1095,8 @@ class sAdmin
     }
 
     /**
-     * Validate account information (register)
+     * Validate account information
+     * Used in the Frontend Account and Register controllers
      *
      * @param boolean $edit If the current call is editing data from a new or existing customer
      * @return array Array with errors that may have occurred
