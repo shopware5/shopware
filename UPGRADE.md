@@ -8,6 +8,8 @@ In this document you will find a changelog of the important changes related to t
 * [REST API] Add thumbnail generation to article and variant create and update actions
 * Deprecation: The Database Column impressions in s_articles_details in now deprecated. Please use the s_statistics_article_impression table.
 * `Shopware_Components_Plugin_Bootstrap` now has a `addFormTranslations()` method to facilitate translations creation for forms.
+* Removed view variables `sOrders` and `sNotes` from `/engine/Shopware/Controllers/Frontend/Account.php` index action
+* The method `sGetOpenOrderData` in `/engine/core/class/sAdmin.php` returns now a different array structure and will accept new optional parameters
 
 ## 4.2.0
 

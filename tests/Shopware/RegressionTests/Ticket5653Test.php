@@ -96,7 +96,7 @@ class Shopware_RegressionTests_Ticket5653 extends Enlight_Components_Test_Plugin
      */
     private function getDummyOrder($orders)
     {
-        foreach ($orders as $order) {
+        foreach ($orders["orderData"] as $order) {
             if ($order["id"] == 165681) {
                 return $order;
             }

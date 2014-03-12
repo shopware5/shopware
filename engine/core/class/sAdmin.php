@@ -2133,24 +2133,33 @@ class sAdmin
 
     /**
      * Account - Get all orders that the user did
+     *
      * @access public
+     * @param int $destinationPage
+     * @param int $perPage
      * @return array - Array with order data / positions
      */
-    public function sGetOpenOrderData()
+    public function sGetOpenOrderData($destinationPage = 1, $perPage = 10)
     {
         $shop = Shopware()->Shop();
         $mainShop = $shop->getMain() !== null ? $shop->getMain() : $shop;
 
+        $destinationPage = !empty($destinationPage) ? $destinationPage : 1;
+        $limitStart = Shopware()->Db()->quote(($destinationPage - 1) * $perPage);
+        $limitEnd = Shopware()->Db()->quote($perPage);
+
         $sql = "
-            SELECT o.*, cu.templatechar as currency_html, DATE_FORMAT(ordertime,'%d.%m.%Y %H:%i') AS datum
+            SELECT SQL_CALC_FOUND_ROWS o.*, cu.templatechar as currency_html, DATE_FORMAT(ordertime,'%d.%m.%Y %H:%i') AS datum
             FROM s_order o
             LEFT JOIN s_core_currencies as cu
             ON o.currency = cu.currency
             WHERE userID=? AND status != -1
             AND subshopID = ?
-            ORDER BY ordertime DESC LIMIT 10
+            ORDER BY ordertime DESC
+            LIMIT $limitStart, $limitEnd
         ";
         $getOrders = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql, array($this->sSYSTEM->_SESSION["sUserId"], $mainShop->getId()));
+        $foundOrdersCount = (int)Shopware()->Db()->fetchOne('SELECT FOUND_ROWS()');
 
         foreach ($getOrders as $orderKey => $orderValue) {
 
@@ -2245,9 +2254,59 @@ class sAdmin
         }
 
         $getOrders = Enlight()->Events()->filter('Shopware_Modules_Admin_GetOpenOrderData_FilterResult', $getOrders, array('subject'=>$this,'id'=>$this->sSYSTEM->_SESSION["sUserId"],'subshopID'=>$this->sSYSTEM->sSubShop["id"]));
-        return $getOrders;
+
+        $orderData["orderData"] = $getOrders;
+
+        // Make Array with page-structure to render in template
+        $numberOfPages = ceil($foundOrdersCount / $limitEnd);
+        $orderData["numberOfPages"] = $numberOfPages;
+
+        $orderData["pages"] = $this->getPagerStructure($destinationPage, $numberOfPages);
+        return $orderData;
     }
 
+    /**
+     * Calculates and returns the pager structure for the frontend
+     *
+     * @param int $destinationPage
+     * @param int $numberOfPages
+     * @param array $additionalParams
+     * @return array
+     */
+    public function getPagerStructure($destinationPage, $numberOfPages, $additionalParams = array())
+    {
+        $pagesStructure = array();
+        $baseFile = $this->sSYSTEM->sCONFIG['sBASEFILE'];
+        if ($numberOfPages > 1) {
+            for ($i = 1; $i <= $numberOfPages; $i++) {
+                $pagesStructure["numbers"][$i]["markup"] = ($i == $destinationPage);
+                $pagesStructure["numbers"][$i]["value"] = $i;
+                $pagesStructure["numbers"][$i]["link"] = $baseFile . $this->sSYSTEM->sBuildLink(
+                    $additionalParams + array("sPage" => $i),
+                    false
+                );
+            }
+            // Previous page
+            if ($destinationPage != 1) {
+                $pagesStructure["previous"] = $baseFile . $this->sSYSTEM->sBuildLink(
+                    $additionalParams + array("sPage" => $destinationPage - 1),
+                    false
+                );
+            } else {
+                $pagesStructure["previous"] = null;
+            }
+            // Next page
+            if ($destinationPage != $numberOfPages) {
+                $pagesStructure["next"] = $baseFile . $this->sSYSTEM->sBuildLink(
+                    $additionalParams + array("sPage" => $destinationPage + 1),
+                    false
+                );
+            } else {
+                $pagesStructure["next"] = null;
+            }
+        }
+        return $pagesStructure;
+    }
 
     /**
      * Get a user mail by id
