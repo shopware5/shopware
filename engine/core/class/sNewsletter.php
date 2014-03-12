@@ -23,15 +23,14 @@
  */
 
 /**
- * Deprecated Shopware core class used to generate article suggestions for newsletters
+ * @deprecated
+ *
+ * Shopware core class used to generate article suggestions for newsletters
+ * Currently only used in plugins
+ * Will be removed soon
  */
 class sNewsletter
 {
-    /**
-     * @var sSystem
-     */
-    public $sSYSTEM;
-
     /**
      * Database connection which used for each database operation in this class.
      * Injected over the class constructor
@@ -57,6 +56,13 @@ class sNewsletter
     private $articlesModule;
 
     /**
+     * Request wrapper object
+     *
+     * @var Enlight_Controller_Request_RequestHttp
+     */
+    private $request;
+
+    /**
      * Shopware Marketing core module
      *
      * @var sMarketing
@@ -67,15 +73,23 @@ class sNewsletter
      * Class constructor.
      * Injects all dependencies which are required for this class.
      */
-    public function __construct($db = null, $config = null, $articlesModule = null, $marketingModule = null)
-    {
+    public function __construct(
+        $db = null,
+        $config = null,
+        $articlesModule = null,
+        $request = null,
+        $marketingModule = null
+    ) {
         $this->db = $db ? : Shopware()->Db();
         $this->config = $config ? : Shopware()->Config();
         $this->articlesModule = $articlesModule ? : Shopware()->Modules()->Articles();
+        $this->request = $request ? : Shopware()->Front()->Request();
         $this->marketingModule = $marketingModule ? : Shopware()->Modules()->Marketing();
     }
 
     /**
+     * @deprecated
+     *
      * Gets article suggestions
      * Not used in the core
      * Used by SwagNewsletter premium plugin
@@ -111,7 +125,7 @@ class sNewsletter
                 $blacklist = array();
 
                 foreach ($selectLast as $lastArticle) {
-                    $category = $this->sSYSTEM->_GET["sCategory"] ? : 0;
+                    $category = $this->request->getQuery("sCategory", 0);
                     $temp = $this->articlesModule->sGetPromotionById("fix", $category, $lastArticle["articleID"]);
                     if ($temp["articleID"] && empty($blacklist[$temp["articleID"]])) {
                         $finalRecommendations[] = $temp;
@@ -123,7 +137,7 @@ class sNewsletter
             $leftRecommendations = $sSuggestion["value"] - count($finalRecommendations);
 
             $randomize = array('new', 'top');
-            $category = $this->sSYSTEM->_GET['sCategory'] ? : 0;
+            $category = $this->request->getQuery("sCategory", 0);
 
             while ($leftRecommendations > 0) {
                 $article = $this->articlesModule->sGetPromotionById(
