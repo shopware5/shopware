@@ -8,6 +8,7 @@ class ListingContext extends SubContext
 {
     /**
      * @Given /^I am on the listing page:$/
+     * @Given /^I go to the listing page:$/
      */
     public function iAmOnTheListingPage(TableNode $params)
     {

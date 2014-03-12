@@ -32,7 +32,7 @@ class Account extends Page
     {
         $assert = new \Behat\Mink\WebAssert($this->getSession());
         $assert->pageTextContains(
-                'Dies ist Ihr Konto Dashboard, wo Sie die Möglichkeit haben, Ihre letzten Kontoaktivitäten einzusehen'
+            'Dies ist Ihr Konto Dashboard, wo Sie die Möglichkeit haben, Ihre letzten Kontoaktivitäten einzusehen'
         );
     }
 
@@ -41,8 +41,30 @@ class Account extends Page
      */
     protected function verifyPage()
     {
+        if ($this->logout())
+        {
+            $this->open();
+            return;
+        }
+
         $assert = new \Behat\Mink\WebAssert($this->getSession());
         $assert->pageTextContains('Sie besitzen bereits ein Kundenkonto');
+    }
+
+    /**
+     * Helper function to logout a customer (important by using the Sahi driver)
+     * @return bool
+     */
+    private function logout()
+    {
+        $link = $this->find('css', 'div.adminbox a.logout');
+
+        if (!empty($link)) {
+            $link->click();
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -107,15 +129,15 @@ class Account extends Page
         foreach ($values as $row) {
             if (!empty($row['billing'])) {
                 $billingValues[] = array(
-                        'field' => $row['field'],
-                        'value' => $row['billing']
+                    'field' => $row['field'],
+                    'value' => $row['billing']
                 );
             }
 
             if (!empty($row['shipping'])) {
                 $shippingValues[] = array(
-                        'field' => $row['field'],
-                        'value' => $row['shipping']
+                    'field' => $row['field'],
+                    'value' => $row['shipping']
                 );
             }
         }
@@ -137,17 +159,17 @@ class Account extends Page
     private function fillBilling($values)
     {
         $personal_fields = array(
-                'customer_type',
-                'salutation',
-                'firstname',
-                'lastname',
-                'email',
-                'password',
-                'passwordConfirmation',
-                'phone',
-                'birthday',
-                'birthmonth',
-                'birthyear'
+            'customer_type',
+            'salutation',
+            'firstname',
+            'lastname',
+            'email',
+            'password',
+            'passwordConfirmation',
+            'phone',
+            'birthday',
+            'birthmonth',
+            'birthyear'
         );
 
         foreach ($values as $row) {
