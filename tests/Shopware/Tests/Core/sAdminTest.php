@@ -856,7 +856,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->session["sUserMail"] = $customer->getEmail();
         Shopware()->Session()->offsetSet(
             "sUserPassword",
-            Shopware()->PasswordEncoder()->encodePassword("foobar", 'bcrypt')
+            Shopware()->PasswordEncoder()->encodePassword("fooobar", 'bcrypt')
         );
         // Then set post with wrong data
         $this->post = array(
@@ -877,13 +877,136 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('currentPassword', $result['sErrorFlag']);
 
         // Now use correct data to test correct behavior
-        $this->post['currentPassword'] = 'foobar';
+        $this->post['currentPassword'] = 'fooobar';
         $result = $this->module->sValidateStep1(true);
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('sErrorFlag', $result);
         $this->assertArrayHasKey('sErrorMessages', $result);
         $this->assertNull($result['sErrorMessages']);
         $this->assertNull($result['sErrorFlag']);
+
+        $this->deleteDummyCustomer($customer);
+    }
+
+    /**
+     * @covers sAdmin::sLogin
+     */
+    public function testsLogin()
+    {
+        // Test with no data, get error
+        $result = $this->module->sLogin();
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('sErrorFlag', $result);
+        $this->assertArrayHasKey('sErrorMessages', $result);
+        $this->assertCount(1, $result['sErrorMessages']);
+        $this->assertContains('LoginFailure', $result['sErrorMessages']);
+        $this->assertCount(2, $result['sErrorFlag']);
+        $this->assertArrayHasKey('email', $result['sErrorFlag']);
+        $this->assertArrayHasKey('password', $result['sErrorFlag']);
+
+        // Test with wrong data, get error
+        $this->post = array(
+            'email' => uniqid() . 'test',
+            'password' => uniqid() . 'test',
+        );
+        $result = $this->module->sLogin();
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('sErrorFlag', $result);
+        $this->assertArrayHasKey('sErrorMessages', $result);
+        $this->assertCount(1, $result['sErrorMessages']);
+        $this->assertContains('LoginFailure', $result['sErrorMessages']);
+        $this->assertNull($result['sErrorFlag']);
+
+        $customer = $this->createDummyCustomer();
+
+        // Test successful login
+        $this->post = array(
+            'email' => $customer->getEmail(),
+            'password' => 'fooobar',
+        );
+        $result = $this->module->sLogin();
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('sErrorFlag', $result);
+        $this->assertArrayHasKey('sErrorMessages', $result);
+        $this->assertNull($result['sErrorFlag']);
+        $this->assertNull($result['sErrorMessages']);
+
+        // Test wrong pre-hashed password. Need a user with md5 encoded password
+        Shopware()->Db()->update(
+            's_user',
+            array(
+                'password' => md5('fooobar'),
+                'encoder' => 'md5'
+            ),
+            'id = '.$customer->getId()
+        );
+
+        $this->post = array(
+            'email' => $customer->getEmail(),
+            'passwordMD5' => uniqid(),
+        );
+        $result = $this->module->sLogin(true);
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('sErrorFlag', $result);
+        $this->assertArrayHasKey('sErrorMessages', $result);
+        $this->assertNull($result['sErrorFlag']);
+        $this->assertCount(1, $result['sErrorMessages']);
+        $this->assertContains('LoginFailure', $result['sErrorMessages']);
+
+        // Test correct pre-hashed password
+        $this->post = array(
+            'email' => $customer->getEmail(),
+            'passwordMD5' => md5('fooobar'),
+        );
+        $result = $this->module->sLogin(true);
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('sErrorFlag', $result);
+        $this->assertArrayHasKey('sErrorMessages', $result);
+        $this->assertNull($result['sErrorFlag']);
+        $this->assertNull($result['sErrorMessages']);
+
+        $modifiedMd5User = Shopware()->Db()->fetchRow(
+            'SELECT * FROM s_user WHERE id = ?',
+            array($customer->getId())
+        );
+
+        // Test that it's the same user, but with different last login
+        $this->assertEquals($modifiedMd5User['email'], $customer->getEmail());
+        $this->assertEquals($modifiedMd5User['password'], md5('fooobar'));
+        $this->assertNotEquals($modifiedMd5User['lastlogin'], $customer->getLastLogin()->format('Y-m-d H:i:s'));
+
+        // Test inactive account
+        Shopware()->Db()->update('s_user', array('active' => 0), 'id = '.$customer->getId());
+        $result = $this->module->sLogin(true);
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('sErrorFlag', $result);
+        $this->assertArrayHasKey('sErrorMessages', $result);
+        $this->assertNull($result['sErrorFlag']);
+        $this->assertCount(1, $result['sErrorMessages']);
+        $this->assertContains('LoginFailureActive', $result['sErrorMessages']);
+
+        // Test brute force lockout
+        Shopware()->Db()->update('s_user', array('active' => 1), 'id = '.$customer->getId());
+        $this->post = array(
+            'email' => $customer->getEmail(),
+            'password' => 'asasasasas',
+        );
+        $this->module->sLogin();
+        $this->module->sLogin();
+        $this->module->sLogin();
+        $this->module->sLogin();
+        $this->module->sLogin();
+        $this->module->sLogin();
+        $this->module->sLogin();
+        $this->module->sLogin();
+        $this->module->sLogin();
+        $result = $this->module->sLogin();
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('sErrorFlag', $result);
+        $this->assertArrayHasKey('sErrorMessages', $result);
+        $this->assertNull($result['sErrorFlag']);
+        $this->assertCount(1, $result['sErrorMessages']);
+        $this->assertContains('LoginFailureLocked', $result['sErrorMessages']);
 
         $this->deleteDummyCustomer($customer);
     }

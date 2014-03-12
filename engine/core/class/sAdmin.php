@@ -1233,9 +1233,15 @@ class sAdmin
     }
 
     /**
-     * Frontend user login
-     * @param boolean $ignoreAccountMode Allows customers who have chosen the fast registration, one-time login after registration
-     * @return array Array with errors that may have occurred
+     * Login a user in the frontend
+     * Used for login and registration in frontend, also for user impersonation
+     * from backend
+     *
+     * @param boolean $ignoreAccountMode Allows customers who have chosen
+     * the fast registration, one-time login after registration
+     * @throws Exception If no password encoder is specified
+     * @return array|false Array with errors that may have occurred, or false if
+     * the process is interrupted by an event
      */
     public function sLogin($ignoreAccountMode = false)
     {
@@ -1291,7 +1297,7 @@ class sAdmin
             $addScopeSql = " AND subshopID = " . $this->subshopId;
         }
 
-        // When working with a prehashed password, we need to limit the getUser-SQL by password,
+        // When working with a prehashed password, we need to limit the getUser query by password,
         // as there might be multiple users with the same mail address (accountmode = 1).
         $preHashedSql = '';
         if ($isPreHashed) {
@@ -1324,11 +1330,8 @@ class sAdmin
             $plaintext = $password;
             $password  = $hash;
 
-
             $isValidLogin = Shopware()->PasswordEncoder()->isPasswordValid($plaintext, $hash, $encoderName);
         }
-
-
 
         if ($isValidLogin) {
             $this->regenerateSessionId();
@@ -1366,7 +1369,7 @@ class sAdmin
                         'password' => $hash,
                         'encoder'  => $encoderName,
                     ),
-                        'id = ' . $userId
+                    'id = ' . $userId
                 );
             }
 
@@ -1399,9 +1402,8 @@ class sAdmin
                 }
             }
 
-            // Ticket #5427 - Prevent brute force logins
+            // Prevent brute force login attempts
             if (!empty($email)) {
-                // Update failed login counter
                 $sql = "
                     UPDATE s_user SET
                         failedlogins = failedlogins + 1,
@@ -1412,7 +1414,7 @@ class sAdmin
                         )
                     WHERE email = ? " . $addScopeSql;
                 Shopware()->Db()->query($sql, array($email));
-            } // Ticket #5427 - Prevent brute force logins
+            }
 
             Enlight()->Events()->notify(
                 'Shopware_Modules_Admin_Login_Failure',
@@ -1435,6 +1437,7 @@ class sAdmin
 
     /**
      * Regenerates session id and updates references in the db
+     * Used by sAdmin::sLogin
      */
     public function regenerateSessionId()
     {
@@ -1442,7 +1445,7 @@ class sAdmin
         session_regenerate_id(true);
         $newSessionId = session_id();
 
-        // close and restart session to make sure the db-session handler writes updates.
+        // close and restart session to make sure the db session handler writes updates.
         session_write_close();
         session_start();
 
@@ -1468,8 +1471,8 @@ class sAdmin
         );
 
         $conn = Shopware()->Models()->getConnection();
-        foreach ($sessions as $tablename => $column) {
-            $conn->update($tablename, array($column => $newSessionId), array($column => $oldSessionId));
+        foreach ($sessions as $tableName => $column) {
+            $conn->update($tableName, array($column => $newSessionId), array($column => $oldSessionId));
         }
     }
 
