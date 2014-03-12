@@ -179,8 +179,18 @@ class sBasket
             return;
         }
 
-        $basketAmount = $this->sSYSTEM->sDB_CONNECTION->GetOne("SELECT SUM(quantity*(floor(price * 100 + .55)/100))
-        AS totalAmount FROM s_order_basket WHERE sessionID=? AND modus!=4 GROUP BY sessionID",array($this->sSYSTEM->sSESSION_ID));
+        $sql = "SELECT SUM(quantity*(floor(price * 100 + .55)/100)) AS totalAmount
+                FROM s_order_basket
+                WHERE sessionID=? AND modus!=4
+                GROUP BY sessionID";
+        $params = array($this->sSYSTEM->sSESSION_ID);
+
+        $sql = Enlight()->Events()->filter(
+            'Shopware_Modules_Basket_InsertDiscount_FilterSql_BasketAmount',
+            $sql,
+            array('subject' => $this, "params" => $params)
+        );
+        $basketAmount = Shopware()->Db()->fetchOne($sql, $params);
 
         if (!$basketAmount) return;	// No articles in basket, return
 
