@@ -31,6 +31,7 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
         $this->useContext('detail',   new DetailContext($parameters));
         $this->useContext('note',     new NoteContext($parameters));
         $this->useContext('form',     new FormContext($parameters));
+        $this->useContext('blog',     new BlogContext($parameters));
     }
 
     /**

@@ -131,5 +131,19 @@ class ShopwareContext extends SubContext
 
         $this->getPage('Homepage')->checkComparision($articles);
     }
+
+    /**
+     * @Given /^the "(?P<name>[^"]*)" plugin is enabled$/
+     */
+    public function thePluginIsEnabled($name)
+    {
+        /** @var Manager $pluginManager */
+        $pluginManager = $this->getContainer()->get('shopware.plugin_Manager');
+        $pluginManager->refreshPluginList();
+
+        $plugin = $pluginManager->getPluginByName($name);
+        $pluginManager->installPlugin($plugin);
+        $pluginManager->activatePlugin($plugin);
+    }
 }
 
