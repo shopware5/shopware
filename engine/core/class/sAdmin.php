@@ -2136,17 +2136,17 @@ class sAdmin
      *
      * @access public
      * @param int $destinationPage
-     * @param int $sPerPage
+     * @param int $perPage
      * @return array - Array with order data / positions
      */
-    public function sGetOpenOrderData($destinationPage = 1, $sPerPage = 10)
+    public function sGetOpenOrderData($destinationPage = 1, $perPage = 10)
     {
         $shop = Shopware()->Shop();
         $mainShop = $shop->getMain() !== null ? $shop->getMain() : $shop;
 
         $destinationPage = !empty($destinationPage) ? $destinationPage : 1;
-        $limitStart = Shopware()->Db()->quote(($destinationPage - 1) * $sPerPage);
-        $limitEnd = Shopware()->Db()->quote($sPerPage);
+        $limitStart = Shopware()->Db()->quote(($destinationPage - 1) * $perPage);
+        $limitEnd = Shopware()->Db()->quote($perPage);
 
         $sql = "
             SELECT SQL_CALC_FOUND_ROWS o.*, cu.templatechar as currency_html, DATE_FORMAT(ordertime,'%d.%m.%Y %H:%i') AS datum
