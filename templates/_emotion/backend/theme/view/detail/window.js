@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Theme.view.detail.Window', {
     extend: 'Enlight.app.Window',
     alias: 'widget.theme-detail-window',
     title : '{s name=detail_window}Theme details{/s}',
-    height: 420,
+    height: 600,
     width: 1080,
     layout: {
         type: 'vbox',

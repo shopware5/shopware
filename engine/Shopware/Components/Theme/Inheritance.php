@@ -188,7 +188,7 @@ class Inheritance
     public function getSmartyDirectories(Shop\Template $template)
     {
         $directories = array(
-            $this->pathResolver->getDirectory($template)
+            $this->pathResolver->getSmartyDirectory($template)
         );
 
         if ($template->getParent() instanceof Shop\Template) {

@@ -76,7 +76,7 @@ Ext.define('Shopware.apps.Theme.view.config_sets.Window', {
         return Ext.create('Ext.form.FieldSet', {
             layout: 'fit',
             flex: 1,
-            title: '{s name=config_set_title_prefix}Configuration sets{/s} :' + theme.get('name'),
+            title: '{s name=config_set_title_prefix}Configuration sets{/s} : ' + theme.get('name'),
             items: [ me.createConfigSetCombo(theme) ]
         });
     },

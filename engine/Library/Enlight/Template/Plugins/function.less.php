@@ -29,12 +29,14 @@ function smarty_function_less($params, $template)
 {
     $file = $params['file'];
     $time = $params['timestamp'];
-    
+
     /**@var $pathResolver \Shopware\Components\Theme\PathResolver*/
     $pathResolver = Shopware()->Container()->get('theme_path_resolver');
 
     /**@var $shop \Shopware\Models\Shop\Shop*/
     $shop = Shopware()->Container()->get('shop');
+
+    $disableCaching = Shopware()->Container()->get('config')->get('disableThemeCaching');
 
     $cssFile = $pathResolver->buildCssPath($shop, $file, $time);
 
@@ -45,8 +47,8 @@ function smarty_function_less($params, $template)
         $pathResolver->getCacheDirectoryUrl() .
         DIRECTORY_SEPARATOR .
         $fileName;
-    
-    if (file_exists($cssFile)) {
+
+    if (file_exists($cssFile) && !$disableCaching) {
         return $url;
     }
 

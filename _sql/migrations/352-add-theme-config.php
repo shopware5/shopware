@@ -72,6 +72,24 @@ CREATE TABLE IF NOT EXISTS `s_core_templates_config_set` (
 EOD;
         $this->addSql($sql);
 
+        $sql = <<<'EOD'
+
+        SET @parent = (SELECT id FROM `s_core_config_forms` WHERE `name`='Service');
+        INSERT INTO `s_core_config_elements` (`id`, `form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `filters`, `validators`, `options`)
+        VALUES (NULL, @parent, 'disableThemeCaching', 'b:0;', 'Theme Compiler Caching deaktivieren', NULL, 'boolean', '0', '0', '0', NULL, NULL, NULL);
+
+EOD;
+        $this->addSql($sql);
+
+        $sql = <<<'EOD'
+        SET @parent = (SELECT id FROM `s_core_config_elements` WHERE `name`='disableThemeCaching');
+
+        INSERT INTO `s_core_config_element_translations`
+        (`id`, `element_id`, `locale_id`, `label`, `description`)
+        VALUES (NULL, @parent, '2', 'Disable theme compiler caching', NULL);
+
+EOD;
+        $this->addSql($sql);
 
     }
 }

@@ -165,6 +165,10 @@
 {include file='backend/base/component/Shopware.component.IconPreloader.js'}
 {include file='backend/base/component/Shopware.global.ErrorReporter.js'}
 
+{include file='backend/base/component/Shopware.form.field.ColorField.js'}
+{include file='backend/base/component/Shopware.form.field.ColorSelection.js'}
+{include file='backend/base/component/Shopware.color.Window.js'}
+
 {include file='backend/base/component/element/boolean.js'}
 {include file='backend/base/component/element/boolean_select.js'}
 {include file='backend/base/component/element/button.js'}

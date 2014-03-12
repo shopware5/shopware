@@ -24,6 +24,7 @@
 namespace Shopware\Components\Theme;
 
 use Shopware\Models\Shop\Template;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class to generate shopware themes.
@@ -39,6 +40,10 @@ class Factory
      */
     private $pathResolver;
 
+    /**
+     * @var Filesystem
+     */
+    private $fileSystem;
 
     /**
      * Source template for the Theme.php of a theme
@@ -80,6 +85,12 @@ EOD;
             'snippets'
         )
     );
+
+    function __construct(PathResolver $pathResolver, Filesystem $fileSystem)
+    {
+        $this->pathResolver = $pathResolver;
+        $this->fileSystem = $fileSystem;
+    }
 
     /**
      * Function which generates a new shopware theme
@@ -123,7 +134,10 @@ EOD;
      */
     private function movePreviewImage($directory)
     {
-        copy(__DIR__ . '/preview.png', $directory . '/preview.png');
+        $this->fileSystem->copy(
+            __DIR__ . '/preview.png',
+            $directory . '/preview.png'
+        );
     }
 
     /**
@@ -132,7 +146,9 @@ EOD;
      */
     private function createThemeDirectory($name)
     {
-        mkdir($this->getThemeDirectory($name));
+        $this->fileSystem->mkdir(
+            $this->getThemeDirectory($name)
+        );
     }
 
 
@@ -169,10 +185,11 @@ EOD;
         $source = $this->replacePlaceholder('license', $data['license'], $source);
         $source = $this->replacePlaceholder('description', $data['description'], $source);
 
-        file_put_contents(
+        $output = new \SplFileObject(
             $this->getThemeDirectory($data['template']) . DIRECTORY_SEPARATOR . 'Theme.php',
-            $source
+            "w+"
         );
+        $output->fwrite($source);
     }
 
     /**
@@ -207,15 +224,21 @@ EOD;
     {
         foreach ($directory as $key => $value) {
             if (is_array($value)) {
-                mkdir($baseDir . DIRECTORY_SEPARATOR . $key);
+
+                $this->fileSystem->mkdir($baseDir . DIRECTORY_SEPARATOR . $key);
 
                 $this->generateStructure($value, $baseDir . DIRECTORY_SEPARATOR . $key);
+
             } else {
                 //switch between create file or create directory
                 if (strpos($value, '.') !== false) {
-                    file_put_contents($baseDir . DIRECTORY_SEPARATOR . $value, '');
+                    $output = new \SplFileObject(
+                        $baseDir . DIRECTORY_SEPARATOR . $value,
+                        "w+"
+                    );
+                    $output->fwrite('');
                 } else {
-                    mkdir($baseDir . DIRECTORY_SEPARATOR . $value);
+                    $this->fileSystem->mkdir($baseDir . DIRECTORY_SEPARATOR . $value);
                 }
             }
         }

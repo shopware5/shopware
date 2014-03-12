@@ -219,16 +219,18 @@ class Theme
      * The function parameter collection can be used to add new sets.
      *
      * Example:
-     * <code>
-     *   $collection->add(array(
-     *       'name' => '__snippet_name__',
-     *       'description' => '__snippet_name__',
-     *       'values' => array(
-     *           'bare_text' => 'Bare text',
-     *           'bare_select' => '__snippet_name__'
-     *       )
-     *   ));
-     * </code>
+     *   public function createConfigSets(ArrayCollection $collection)
+     *   {
+     *      $set = new ConfigSet();
+     *      $set->setName('Set name');
+     *      $set->setDescription('Set description');
+     *      $set->setValues(array(
+     *          'field1' => 'field1_value',
+     *          'field2' => 'field2_value'
+     *      ));
+     *
+     *      $collection->add($set);
+     *   }
      */
     public function createConfigSets(ArrayCollection $collection) { }
 

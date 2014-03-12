@@ -33,7 +33,8 @@ namespace Shopware\Components\Theme;
  * This event is a collection event, which expects that
  * the event listener returns a Doctrine\Common\Collections\ArrayCollection.
  *
- * @example:
+ * example:
+ * <code>
  *      public function addLessFiles(Enlight_Event_EventArgs $args)
  *      {
  *          $less = new \Shopware\Components\Theme\PluginLess(
@@ -54,7 +55,7 @@ namespace Shopware\Components\Theme;
  *          );
  *          return new ArrayCollection(array($less));
  *      }
- *
+ * </code>
  * @package Shopware\Components\Theme
  */
 class PluginLess
@@ -93,7 +94,7 @@ class PluginLess
      * @param array $files Contains the full file name paths.
      * @param null $importDirectory Full path to the import directory for less @import commands
      */
-    function __construct(array $config, array $files, $importDirectory = null)
+    function __construct(array $config = array(), array $files = array(), $importDirectory = null)
     {
         $this->config = $config;
         $this->files = $files;
