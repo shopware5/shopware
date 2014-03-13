@@ -1,8 +1,11 @@
+// Basic header
 .header-main {
 	background: #fff;
 
+	// Hide the currency and language switcher
 	.top-bar { display: none }
 
+	// Logo
 	.logo-main {
 		.unitize-padding(10, 10, 10, 10, 16);
 	}
@@ -211,6 +214,7 @@
 @media screen and (min-width: @desktopViewportWidth) {
 
 	.header-main {
+		.top-bar { .unitize-margin(0, 0, 8, 0, 16) }
 		.logo-main { width: 28.5% }
 		.logo--shop { width: 75% }
 		.logo--trusted-shops { width: 25%; }
