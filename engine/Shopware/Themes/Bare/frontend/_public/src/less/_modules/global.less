@@ -6,6 +6,8 @@ body {
 	font: @bodyFontStack;
 	color: @primaryTextColor;
 	background: @primaryBackgroundColor;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
 }
 
 // All images should be responsive by default
@@ -16,7 +18,7 @@ img {
 }
 
 a {
-	.transition();
+	.transition(color);
 	color: @primaryColor;
 	text-decoration: none;
 
@@ -29,12 +31,17 @@ ul {
 	padding: 0;
 }
 
+// Hide ajax loader by default
 .ajax-loader { display: none }
 
 // @debug
 .content {
 	padding: 1em 0;
 }
+
+::-moz-placeholder { color: @lightTextColor }
+::-webkit-input-placeholder { color: @lightTextColor }
+:-ms-input-placeholder { color: @lightTextColor }
 
 @media screen and (min-width: 64em) {
 	body {

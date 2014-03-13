@@ -39,14 +39,14 @@
 
 	// Second footer with the shopware logo and vat notice
 	.footer--bottom {
-		.unitize(12, 16);
+		.unitize(12, 16, font-size);
 		.unitize-padding(0, 12, 0, 12, 12);
 		text-align: center;
 	}
 	.footer--logo {
+		.unitize(28, 12, font-size);
 		color: #00b7e3;
 		text-shadow: 1px 1px 1px @lightTextColor;
-		.unitize(28, 12);
 	}
 
 	// Navigation links
@@ -62,10 +62,23 @@
 
 	// Newsletter registration
 	.newsletter--form {
+		.clearfix();
 		.unitize-padding(0, 0, 16, 0, 16);
 	}
 	.newsletter--field {
-		width: 100%;
+		.border-radius-multi(3px, 0, 0, 3px);
+		width: 87.5%;
+		float: left;
+	}
+	.newsletter--button {
+		.box-shadow(0 0 0 transparent);
+		.border-radius-multi(0, 3px, 3px, 0);
+		.unitize-padding(9, 5, 9, 5, 16);
+		width: 12.5%;
+		float: left;
+
+		.icon--mail { .unitize(12, 16, font-size); }
+		.button--text { display: none }
 	}
 }
 
@@ -101,6 +114,26 @@
 		}
 		.navigation--link {
 			line-height: 1.4;
+		}
+
+		.newsletter--field {
+			width: 80%;
+		}
+		.newsletter--button {
+			width: 20%;
+		}
+	}
+}
+@media screen and (min-width: @desktopViewportWidth) {
+	.footer-main {
+		.footer--columns {
+			.unitize-padding(0, 0, 20, 0, 16);
+		}
+		.footer--bottom {
+			.unitize(15, 16, font-size);
+		}
+		.footer--logo {
+			.unitize-padding(10, 0, 10, 0, 16);
 		}
 	}
 }
