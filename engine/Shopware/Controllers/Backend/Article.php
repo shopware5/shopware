@@ -1164,8 +1164,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         Shopware()->Models()->flush();
         Shopware()->Models()->clear();
 
+        $detail = $this->getArticleDetailRepository()->find($detail->getId());
         if ($data['standard']) {
-            $detail = $this->getArticleDetailRepository()->find($detail->getId());
             $article = $detail->getArticle();
             $mainDetail = $article->getMainDetail();
             $mainDetail->setKind(2);
