@@ -147,7 +147,11 @@
     Plugin.prototype.destroy = function() {
         var me = this;
 
-        me.$el.off(clickEvt + '.' + pluginName);
+        if(me.opts.showArrows) {
+            me.$leftArrow.remove();
+            me.$rightArrow.remove();
+        }
+        me.$el.unwrap();
     };
 
     $.fn[pluginName] = function ( options ) {
