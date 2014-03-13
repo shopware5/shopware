@@ -45,3 +45,6 @@
 .unitize-padding(@topValue, @rightValue, @bottomValue, @leftValue, @baseValue: 16) {
 	.unitize-multiple(@topValue, @rightValue, @bottomValue, @leftValue, @baseValue, padding);
 }
+.unitze-variable(@value, @baseValue: 16) {
+	@emValue: (@value / @baseValue);
+}
