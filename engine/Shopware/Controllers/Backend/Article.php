@@ -1162,7 +1162,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $detail->fromArray($data);
         Shopware()->Models()->persist($detail);
         Shopware()->Models()->flush();
+        Shopware()->Models()->clear();
+
+        $detail = $this->getArticleDetailRepository()->find($detail->getId());
         if ($data['standard']) {
+            $article = $detail->getArticle();
             $mainDetail = $article->getMainDetail();
             $mainDetail->setKind(2);
             $article->setMainDetail($detail);
@@ -2343,6 +2347,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             }
 
             Shopware()->Models()->flush();
+            Shopware()->Models()->clear();
+
+            $article = $this->getRepository()->find($articleId);
 
             //check if the main detail variant was deleted
             if ($article->getMainDetail() === null) {
