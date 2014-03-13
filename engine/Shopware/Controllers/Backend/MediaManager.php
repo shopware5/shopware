@@ -575,11 +575,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
             if($media->getType() === Media::TYPE_IMAGE){
                 $manager = Shopware()->Container()->get('thumbnail_manager');
-                $manager->createMediaThumbnail(
-                    $media,
-                    $media->getDefaultThumbnails(),
-                    true
-                );
+                $manager->createMediaThumbnail($media, array(), true);
             }
 
             $this->Response()->setHeader('Content-Type', 'text/plain');

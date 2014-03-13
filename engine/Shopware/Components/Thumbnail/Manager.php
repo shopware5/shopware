@@ -111,11 +111,12 @@ class Manager
 
             $settingSizes = $settings->getThumbnailSize();
 
+            //when no sizes are defined in the album
             if (empty($settingSizes) || empty($settingSizes[0])) {
-                throw new \Exception("No thumbnail sizes were found in the album settings");
+                $settingSizes = array();
             }
 
-            $thumbnailSizes = array_merge($thumbnailSizes, $album->getSettings()->getThumbnailSize());
+            $thumbnailSizes = array_merge($thumbnailSizes, $settingSizes);
         }
 
         $thumbnailSizes = array_merge($thumbnailSizes, $media->getDefaultThumbnails());
