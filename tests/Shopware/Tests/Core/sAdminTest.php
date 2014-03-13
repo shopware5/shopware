@@ -1012,6 +1012,321 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers sAdmin::sCheckUser
+     */
+    public function testsCheckUser()
+    {
+        $customer = $this->createDummyCustomer();
+
+        // Basic failing case
+        $this->assertFalse($this->module->sCheckUser());
+
+        // Test successful login
+        $this->post = array(
+            'email' => $customer->getEmail(),
+            'password' => 'fooobar',
+        );
+        $result = $this->module->sLogin();
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('sErrorFlag', $result);
+        $this->assertArrayHasKey('sErrorMessages', $result);
+        $this->assertNull($result['sErrorFlag']);
+        $this->assertNull($result['sErrorMessages']);
+
+        // Test that user is correctly logged in
+        $this->assertTrue($this->module->sCheckUser());
+
+        // Force timeout
+        Shopware()->Db()->update('s_user', array('lastlogin' => '2000-01-01 00:00:00'), 'id = '.$customer->getId());
+        $this->assertFalse($this->module->sCheckUser());
+
+        $this->assertEquals($customer->getGroup()->getKey(), $this->session['sUserGroup']);
+        $this->assertInternalType('array', $this->session['sUserGroupData']);
+        $this->assertArrayHasKey('groupkey', $this->session['sUserGroupData']);
+        $this->assertArrayHasKey('description', $this->session['sUserGroupData']);
+        $this->assertArrayHasKey('tax', $this->session['sUserGroupData']);
+        $this->assertArrayHasKey('taxinput', $this->session['sUserGroupData']);
+        $this->assertArrayHasKey('mode', $this->session['sUserGroupData']);
+        $this->assertArrayHasKey('discount', $this->session['sUserGroupData']);
+        $this->assertArrayHasKey('minimumorder', $this->session['sUserGroupData']);
+        $this->assertArrayHasKey('minimumordersurcharge', $this->session['sUserGroupData']);
+
+        $this->deleteDummyCustomer($customer);
+    }
+
+    /**
+     * @covers sAdmin::sGetCountryTranslation
+     */
+    public function testsGetCountryTranslation()
+    {
+        // Backup existing data and inject demo data
+        $existingData = Shopware()->Db()->fetchRow("
+            SELECT * FROM s_core_translations
+            WHERE objecttype = 'config_countries' AND objectlanguage = 2
+        ");
+
+        $demoData = array(
+            'objectkey' => 1,
+            'objectlanguage' => 2,
+            'objecttype' => 'config_countries',
+            'objectdata' => 'a:2:{i:2;a:2:{s:6:"active";s:1:"1";s:11:"countryname";s:7:"Germany";}i:5;a:2:{s:6:"active";s:1:"1";s:11:"countryname";s:7:"Belgium";}}'
+        );
+
+        if($existingData) {
+            Shopware()->Db()->update('s_core_translations', $demoData, 'id = '.$existingData['id']);
+        } else {
+            Shopware()->Db()->insert('s_core_translations', $demoData);
+        }
+
+        // Test loading all data, should return the test data
+        $this->module->sSYSTEM->sLanguage = 2;
+        $result = $this->module->sGetCountryTranslation();
+        $this->assertCount(2, $result);
+        $this->assertArrayHasKey(2, $result);
+        $this->assertArrayHasKey(5, $result);
+        $this->assertArrayHasKey('active', $result[2]);
+        $this->assertArrayHasKey('countryname', $result[2]);
+        $this->assertEquals(1, $result[2]['active']);
+        $this->assertEquals('Germany', $result[2]['countryname']);
+        $this->assertArrayHasKey('active', $result[5]);
+        $this->assertArrayHasKey('countryname', $result[5]);
+        $this->assertEquals(1, $result[5]['active']);
+        $this->assertEquals('Belgium', $result[5]['countryname']);
+
+        // Test with just one country
+        $result = $this->module->sGetCountryTranslation(array('id' => 2, 'randomField' => 'randomValue'));
+        $this->assertCount(4, $result);
+        $this->assertArrayHasKey('id', $result);
+        $this->assertArrayHasKey('active', $result);
+        $this->assertArrayHasKey('countryname', $result);
+        $this->assertArrayHasKey('randomField', $result);
+        $this->assertEquals(2, $result['id']);
+        $this->assertEquals(1, $result['active']);
+        $this->assertEquals('Germany', $result['countryname']);
+        $this->assertEquals('randomValue', $result['randomField']);
+
+        // If backup data exists, restore it
+        if($existingData) {
+            $existingDataId = $existingData['id'];
+            unset($existingData['id']);
+            Shopware()->Db()->update('s_core_translations', $existingData, 'id = '.$existingDataId);
+        }
+    }
+
+    /**
+     * @covers sAdmin::sGetDispatchTranslation
+     */
+    public function testsGetDispatchTranslation()
+    {
+        // Backup existing data and inject demo data
+        $existingData = Shopware()->Db()->fetchRow("
+            SELECT * FROM s_core_translations
+            WHERE objecttype = 'config_dispatch' AND objectlanguage = 2
+        ");
+
+        $demoData = array(
+            'objectkey' => 1,
+            'objectlanguage' => 2,
+            'objecttype' => 'config_dispatch',
+            'objectdata' => 'a:2:{i:9;a:3:{s:13:"dispatch_name";s:17:"Standard shipping";s:20:"dispatch_description";s:29:"Standard shipping description";s:20:"dispatch_status_link";s:18:"http://www.dhl.com";}i:10;a:3:{s:13:"dispatch_name";s:18:"Shipping by weight";s:20:"dispatch_description";s:30:"Shipping by weight description";s:20:"dispatch_status_link";s:3:"url";}}'
+        );
+
+        if($existingData) {
+            Shopware()->Db()->update('s_core_translations', $demoData, 'id = '.$existingData['id']);
+        } else {
+            Shopware()->Db()->insert('s_core_translations', $demoData);
+        }
+
+        // Test loading all data, should return the test data
+        $this->module->sSYSTEM->sLanguage = 2;
+        $result = $this->module->sGetDispatchTranslation();
+        $this->assertCount(2, $result);
+        $this->assertArrayHasKey(9, $result);
+        $this->assertArrayHasKey(10, $result);
+        $this->assertArrayHasKey('dispatch_name', $result[9]);
+        $this->assertArrayHasKey('dispatch_description', $result[9]);
+        $this->assertArrayHasKey('dispatch_status_link', $result[9]);
+        $this->assertArrayHasKey('dispatch_name', $result[10]);
+        $this->assertArrayHasKey('dispatch_description', $result[10]);
+        $this->assertArrayHasKey('dispatch_status_link', $result[10]);
+        $this->assertEquals('Standard shipping', $result[9]['dispatch_name']);
+        $this->assertEquals('Standard shipping description', $result[9]['dispatch_description']);
+        $this->assertEquals('http://www.dhl.com', $result[9]['dispatch_status_link']);
+        $this->assertEquals('Shipping by weight', $result[10]['dispatch_name']);
+        $this->assertEquals('Shipping by weight description', $result[10]['dispatch_description']);
+        $this->assertEquals('url', $result[10]['dispatch_status_link']);
+
+        // Test with just one shipping method
+        $result = $this->module->sGetDispatchTranslation(array('id' => 9, 'randomField' => 'randomValue'));
+        $this->assertCount(5, $result);
+        $this->assertArrayHasKey('id', $result);
+        $this->assertArrayHasKey('name', $result);
+        $this->assertArrayHasKey('description', $result);
+        $this->assertArrayHasKey('status_link', $result);
+        $this->assertArrayHasKey('randomField', $result);
+        $this->assertEquals(9, $result['id']);
+        $this->assertEquals('Standard shipping', $result['name']);
+        $this->assertEquals('Standard shipping description', $result['description']);
+        $this->assertEquals('http://www.dhl.com', $result['status_link']);
+        $this->assertEquals('randomValue', $result['randomField']);
+
+        // If backup data exists, restore it
+        if($existingData) {
+            $existingDataId = $existingData['id'];
+            unset($existingData['id']);
+            Shopware()->Db()->update('s_core_translations', $existingData, 'id = '.$existingDataId);
+        }
+    }
+
+    /**
+     * @covers sAdmin::sGetPaymentTranslation
+     */
+    public function testsGetPaymentTranslation()
+    {
+        // Backup existing data and inject demo data
+        $existingData = Shopware()->Db()->fetchRow("
+            SELECT * FROM s_core_translations
+            WHERE objecttype = 'config_payment' AND objectlanguage = 2
+        ");
+
+        $demoData = array(
+            'objectkey' => 1,
+            'objectlanguage' => 2,
+            'objecttype' => 'config_payment',
+            'objectdata' => 'a:5:{i:4;a:2:{s:11:"description";s:7:"Invoice";s:21:"additionalDescription";s:141:"Payment by invoice. Shopware provides automatic invoicing for all customers on orders after the first, in order to avoid defaults on payment.";}i:2;a:2:{s:11:"description";s:5:"Debit";s:21:"additionalDescription";s:15:"Additional text";}i:3;a:2:{s:11:"description";s:16:"Cash on delivery";s:21:"additionalDescription";s:25:"(including 2.00 Euro VAT)";}i:5;a:2:{s:11:"description";s:15:"Paid in advance";s:21:"additionalDescription";s:57:"The goods are delivered directly upon receipt of payment.";}i:6;a:1:{s:21:"additionalDescription";s:17:"SEPA direct debit";}}'
+        );
+
+        if($existingData) {
+            Shopware()->Db()->update('s_core_translations', $demoData, 'id = '.$existingData['id']);
+        } else {
+            Shopware()->Db()->insert('s_core_translations', $demoData);
+        }
+
+        // Test loading all data, should return the test data
+        $this->module->sSYSTEM->sLanguage = 2;
+        $result = $this->module->sGetPaymentTranslation();
+        $this->assertCount(5, $result);
+        $this->assertArrayHasKey(2, $result);
+        $this->assertArrayHasKey(3, $result);
+        $this->assertArrayHasKey(4, $result);
+        $this->assertArrayHasKey(5, $result);
+        $this->assertArrayHasKey(6, $result);
+        $this->assertArrayHasKey('description', $result[2]);
+        $this->assertArrayHasKey('additionalDescription', $result[2]);
+        $this->assertArrayHasKey('description', $result[3]);
+        $this->assertArrayHasKey('additionalDescription', $result[3]);
+        $this->assertArrayHasKey('description', $result[5]);
+        $this->assertArrayHasKey('additionalDescription', $result[5]);
+        $this->assertEquals('Debit', $result[2]['description']);
+        $this->assertEquals('Additional text', $result[2]['additionalDescription']);
+        $this->assertEquals('Cash on delivery', $result[3]['description']);
+        $this->assertEquals('(including 2.00 Euro VAT)', $result[3]['additionalDescription']);
+        $this->assertEquals('Paid in advance', $result[5]['description']);
+        $this->assertEquals('The goods are delivered directly upon receipt of payment.', $result[5]['additionalDescription']);
+
+        // Test with just one payment mean
+        $result = $this->module->sGetPaymentTranslation(array('id' => 2, 'randomField' => 'randomValue'));
+        $this->assertCount(4, $result);
+        $this->assertArrayHasKey('id', $result);
+        $this->assertArrayHasKey('description', $result);
+        $this->assertArrayHasKey('additionaldescription', $result);
+        $this->assertArrayHasKey('randomField', $result);
+        $this->assertEquals(2, $result['id']);
+        $this->assertEquals('Debit', $result['description']);
+        $this->assertEquals('Additional text', $result['additionaldescription']);
+        $this->assertEquals('randomValue', $result['randomField']);
+
+        // If backup data exists, restore it
+        if($existingData) {
+            $existingDataId = $existingData['id'];
+            unset($existingData['id']);
+            Shopware()->Db()->update('s_core_translations', $existingData, 'id = '.$existingDataId);
+        }
+    }
+
+
+    /**
+     * @covers sAdmin::sGetCountryStateTranslation
+     * @group wip
+     */
+    public function testsGetCountryStateTranslation()
+    {
+        // Backup existing data and inject demo data
+        $existingData = Shopware()->Db()->fetchRow("
+            SELECT * FROM s_core_translations
+            WHERE objecttype = 'config_country_states' AND objectlanguage = 1
+        ");
+
+        $demoData = array(
+            'objectkey' => 1,
+            'objectlanguage' => 1,
+            'objecttype' => 'config_country_states',
+            'objectdata' => 'a:2:{i:24;a:1:{s:4:"name";s:10:"California";}i:23;a:1:{s:4:"name";s:18:"Arkansas (english)";}}'
+        );
+
+        if($existingData) {
+            Shopware()->Db()->update('s_core_translations', $demoData, 'id = '.$existingData['id']);
+        } else {
+            Shopware()->Db()->insert('s_core_translations', $demoData);
+        }
+
+        // Test with default shop, return empty array
+        $this->assertCount(0, $this->module->sGetCountryStateTranslation());
+
+        // Hack the current system shop, so we can properly test this
+        Shopware()->Shop()->setDefault(false);
+
+        $result = $this->module->sGetCountryStateTranslation();
+        $this->assertCount(2, $result);
+        $this->assertArrayHasKey(23, $result);
+        $this->assertArrayHasKey(24, $result);
+        $this->assertArrayHasKey('name', $result[23]);
+        $this->assertArrayHasKey('name', $result[24]);
+        $this->assertEquals('Arkansas (english)', $result[23]['name']);
+        $this->assertEquals('California', $result[24]['name']);
+
+        // Create a stub of a Shop for fallback.
+        $stub = $this->getMockBuilder('\Shopware\Models\Shop\Shop')
+            ->setMethods(array('getId'))
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $stub->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue(10000));
+        Shopware()->Shop()->setFallback($stub);
+
+        Shopware()->Db()->insert('s_core_translations', array(
+            'objectkey' => 1,
+            'objectlanguage' => 10000,
+            'objecttype' => 'config_country_states',
+            'objectdata' => 'a:1:{i:2;a:1:{s:4:"name";s:13:"asdfasfdasdfa";}}'
+        ));
+
+        // Test with fallback
+        $result = $this->module->sGetCountryStateTranslation();
+        $this->assertCount(3, $result);
+        $this->assertArrayHasKey(2, $result);
+        $this->assertArrayHasKey(23, $result);
+        $this->assertArrayHasKey(24, $result);
+        $this->assertArrayHasKey('name', $result[2]);
+        $this->assertArrayHasKey('name', $result[23]);
+        $this->assertArrayHasKey('name', $result[24]);
+        $this->assertEquals('asdfasfdasdfa', $result[2]['name']);
+        $this->assertEquals('Arkansas (english)', $result[23]['name']);
+        $this->assertEquals('California', $result[24]['name']);
+
+        // If backup data exists, restore it
+        if($existingData) {
+            $existingDataId = $existingData['id'];
+            unset($existingData['id']);
+            Shopware()->Db()->update('s_core_translations', $existingData, 'id = '.$existingDataId);
+        }
+        Shopware()->Db()->delete('s_core_translations', 'objectlanguage = 10000');
+
+    }
+
+    /**
      * Create dummy customer entity
      *
      * @return \Shopware\Models\Customer\Customer
