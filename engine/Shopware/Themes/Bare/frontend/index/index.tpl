@@ -26,10 +26,10 @@
 		{* Shop header *}
 		{block name='frontend_index_navigation'}
 			<header class="header-main">
-				<div class="container">
+				{* Include the top bar navigation *}
+				{include file="frontend/index/_includes/topbar-navigation.tpl"}
 
-					{* Include the top bar navigation *}
-					{include file="frontend/index/_includes/topbar-navigation.tpl"}
+				<div class="container">
 
 					{* Logo container *}
 					{block name='frontend_index_logo_container'}

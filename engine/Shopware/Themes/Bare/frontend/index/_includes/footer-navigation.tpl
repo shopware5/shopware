@@ -80,8 +80,8 @@
 					{/block}
 
 					{block name="frontend_index_footer_column_newsletter_form_submit"}
-						<button type="submit" class="newsletter--button">
-							<i class="icon--search"></i> <span class="button--text">{s name='IndexFooterNewsletterSubmit'}Newsletter abonnieren{/s}</span>
+						<button type="submit" class="newsletter--button btn btn--secondary">
+							<i class="icon--mail"></i> <span class="button--text">{s name='IndexFooterNewsletterSubmit'}Newsletter abonnieren{/s}</span>
 						</button>
 					{/block}
 				</form>
