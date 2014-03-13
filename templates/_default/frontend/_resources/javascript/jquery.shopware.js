@@ -5620,6 +5620,7 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
     "use strict";
 
     var pluginName = 'lastSeenArticlesCollector',
+        localStorage = window.localStorage,
         defaults = {
         };
 
@@ -5704,14 +5705,20 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         localStorage.removeItem('lastSeenArticle-'+opts.shopId + '-' + opts.basePath + (index - articleNum));
     };
 
-    $.fn[pluginName] = function ( options ) {
-        return this.each(function () {
-            if (!$.data(this, 'plugin_' + pluginName)) {
-                $.data(this, 'plugin_' + pluginName,
-                    new Plugin( this, options ));
-            }
-        });
-    }
+    $(document).ready(function() {
+        if(!$.isLocalStorageSupported) {
+            localStorage = new StoragePolyFill('local');
+        }
+
+        $.fn[pluginName] = function ( options ) {
+            return this.each(function () {
+                if (!$.data(this, 'plugin_' + pluginName)) {
+                    $.data(this, 'plugin_' + pluginName,
+                        new Plugin( this, options ));
+                }
+            });
+        }
+    });
 })( jQuery, window, document );
 
 /**
@@ -5723,6 +5730,7 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
     "use strict";
 
     var pluginName = 'lastSeenArticlesDisplayer',
+        localStorage = window.localStorage,
         defaults = {
         };
 
@@ -5808,14 +5816,20 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         }
     };
 
-    $.fn[pluginName] = function ( options ) {
-        return this.each(function () {
-            if (!$.data(this, 'plugin_' + pluginName)) {
-                $.data(this, 'plugin_' + pluginName,
-                    new Plugin( this, options ));
-            }
-        });
-    }
+    $(document).ready(function() {
+        if(!$.isLocalStorageSupported) {
+            localStorage = new StoragePolyFill('local');
+        }
+
+        $.fn[pluginName] = function ( options ) {
+            return this.each(function () {
+                if (!$.data(this, 'plugin_' + pluginName)) {
+                    $.data(this, 'plugin_' + pluginName,
+                        new Plugin( this, options ));
+                }
+            });
+        }
+    });
 })(jQuery, window, document);
 
 /**
@@ -6048,7 +6062,7 @@ if (navigator.appVersion.indexOf("MSIE 7.") != -1)
  * @license: MIT http://rem.mit-license.org/
  * @link: https://gist.github.com/remy/350433
  */
-(function () {
+(function ($, window, document, undefined) {
     window.StoragePolyFill = function (type) {
         function createCookie(name, value, days) {
             var date, expires;
@@ -6101,7 +6115,7 @@ if (navigator.appVersion.indexOf("MSIE 7.") != -1)
         }
 
 
-// initialise if there's already data
+        // initialise if there's already data
         var data = getData();
 
         return {
@@ -6115,7 +6129,7 @@ if (navigator.appVersion.indexOf("MSIE 7.") != -1)
                 return data[key] === undefined ? null : data[key];
             },
             key: function (i) {
-// not perfect, but works
+                // not perfect, but works
                 var ctr = 0;
                 for (var k in data) {
                     if (ctr == i) return k;
@@ -6139,4 +6153,30 @@ if (navigator.appVersion.indexOf("MSIE 7.") != -1)
     if (typeof window.localStorage == 'undefined') window.localStorage = new StoragePolyFill('local');
     if (typeof window.sessionStorage == 'undefined') window.sessionStorage = new StoragePolyFill('session');
 
-})();
+    /**
+     * Returns whether or not the given storage is available and works - SW-7524
+     *
+     * @returns { boolean }
+     */
+    function isStorageSupported (storage) {
+        var testKey = 'test';
+
+        if (!storage) {
+            return false;
+        }
+
+        try {
+            storage.setItem(testKey, '1');
+            storage.removeItem(testKey);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    $.extend($, {
+        isLocalStorageSupported: isStorageSupported(window.localStorage),
+        isSessionStorageSupported: isStorageSupported(window.sessionStorage)
+    });
+
+})(jQuery, window, document);
