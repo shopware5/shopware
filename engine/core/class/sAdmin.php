@@ -1478,17 +1478,23 @@ class sAdmin
 
 
     /**
-     * Verification of user authorization (logged in) on all secured pages (checkout,account)
-     * @access public
-     * @return boolean
+     * Checks if user is correctly logged in. Also checks session timeout
+     *
+     * @return boolean If user is authorized
      */
     public function sCheckUser()
     {
-        if (Enlight()->Events()->notifyUntil('Shopware_Modules_Admin_CheckUser_Start', array('subject' => $this))) {
+        if (Enlight()->Events()->notifyUntil(
+            'Shopware_Modules_Admin_CheckUser_Start',
+            array('subject' => $this))
+        ) {
             return false;
         }
 
-        if (empty($this->sSYSTEM->_SESSION["sUserMail"]) || empty($this->sSYSTEM->_SESSION["sUserPassword"]) || empty($this->sSYSTEM->_SESSION["sUserId"])) {
+        if (empty($this->sSYSTEM->_SESSION["sUserMail"])
+            || empty($this->sSYSTEM->_SESSION["sUserPassword"])
+            || empty($this->sSYSTEM->_SESSION["sUserId"])
+        ) {
             unset($this->sSYSTEM->_SESSION["sUserMail"]);
             unset($this->sSYSTEM->_SESSION["sUserPassword"]);
             unset($this->sSYSTEM->_SESSION["sUserId"]);
@@ -1498,7 +1504,8 @@ class sAdmin
 
         $sql = "
             SELECT * FROM s_user
-            WHERE password=? AND email=? AND id=? AND UNIX_TIMESTAMP(lastlogin)>=(UNIX_TIMESTAMP(now())-?)
+            WHERE password = ? AND email = ? AND id = ?
+            AND UNIX_TIMESTAMP(lastlogin) >= (UNIX_TIMESTAMP(now())-?)
         ";
 
         $timeOut = $this->sSYSTEM->sCONFIG['sUSERTIMEOUT'];
@@ -1514,7 +1521,6 @@ class sAdmin
             )
         );
 
-
         $getUser = Enlight()->Events()->filter(
             'Shopware_Modules_Admin_CheckUser_FilterGetUser',
             $getUser,
@@ -1523,10 +1529,7 @@ class sAdmin
 
         if (!empty($getUser["id"])) {
             $this->sSYSTEM->sUSERGROUPDATA = $this->sSYSTEM->sDB_CONNECTION->GetRow(
-                "
-                                SELECT * FROM s_core_customergroups
-                                WHERE groupkey=?
-                            ",
+                "SELECT * FROM s_core_customergroups WHERE groupkey = ?",
                 array($getUser["customergroup"])
             );
 
@@ -1541,7 +1544,7 @@ class sAdmin
             $this->sSYSTEM->_SESSION["sUserGroupData"] = $this->sSYSTEM->sUSERGROUPDATA;
 
             $updateTime = $this->sSYSTEM->sDB_CONNECTION->Execute(
-                "UPDATE s_user SET lastlogin=NOW(), sessionID=? WHERE id=?",
+                "UPDATE s_user SET lastlogin=NOW(), sessionID = ? WHERE id = ?",
                 array($this->sSYSTEM->sSESSION_ID, $getUser["id"])
             );
             Enlight()->Events()->notify(
@@ -1564,24 +1567,37 @@ class sAdmin
     }
 
     /**
-     * Loads the translation for the country table
-     * @param array $country - (optional) translation for a specific country
-     * @access public
-     * @return array - translated country data
+     * Loads translations for countries. If no argument is provided,
+     * all translations for current locale are returned, otherwise
+     * returns the provided country's translation
+     * Used internally in sAdmin
+     *
+     * @param array|string $country Optional array containing country data
+     * for translation
+     * @return array Translated country/ies data
      */
-    public function sGetCountryTranslation($country="")
+    public function sGetCountryTranslation($country = "")
     {
-        // Load Translation
-        $sql = "SELECT objectdata FROM s_core_translations WHERE objecttype='config_countries' AND objectlanguage=?";
+        // Load translation
+        $sql = "
+            SELECT objectdata FROM s_core_translations
+            WHERE objecttype = 'config_countries' AND objectlanguage = ?
+        ";
 
         $param = array($this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"]);
-        $getTranslation = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],$sql, $param);
+        $getTranslation = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow(
+            $this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],
+            $sql,
+            $param
+        );
 
         if ($getTranslation["objectdata"]) {
             $object = unserialize($getTranslation["objectdata"]);
         }
 
-        if (!$country) return $object;
+        if (!$country) {
+            return $object;
+        }
 
         // Pass (possible) translation to country
         if ($object[$country["id"]]["countryname"]) {
@@ -1599,24 +1615,36 @@ class sAdmin
     }
 
     /**
-     * Loads the translation for the different shipping methods
-     * @param array $dispatch - translation for a specific dispatch
-     * @access public
-     * @return array - translated dispatch
+     * Loads the translation for shipping methods. If no argument is provided,
+     * all translations for current locale are returned, otherwise
+     * returns the provided shipping methods translation
+     * Used internally in sAdmin
+     *
+     * @param array|string $dispatch Optional array containing shipping method
+     * data for translation
+     * @return array Translated shipping method(s) data
      */
-    public function sGetDispatchTranslation($dispatch="")
+    public function sGetDispatchTranslation($dispatch = "")
     {
         // Load Translation
         $sql = "
-        SELECT objectdata FROM s_core_translations WHERE objecttype='config_dispatch' AND objectlanguage=?";
+            SELECT objectdata FROM s_core_translations
+            WHERE objecttype='config_dispatch' AND objectlanguage = ?
+        ";
         $params = array($this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"]);
-        $getTranslation = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],$sql, $params);
+        $getTranslation = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow(
+            $this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],
+            $sql,
+            $params
+        );
 
         if ($getTranslation["objectdata"]) {
             $object = unserialize($getTranslation["objectdata"]);
         }
 
-        if (!$dispatch) return $object;
+        if (!$dispatch) {
+            return $object;
+        }
 
         // Pass (possible) translation to country
         if ($object[$dispatch["id"]]["dispatch_name"]) {
@@ -1633,25 +1661,37 @@ class sAdmin
     }
 
     /**
-     * Loads translation for the different payment means
+     * Loads the translation for payment means. If no argument is provided,
+     * all translations for current locale are returned, otherwise
+     * returns the provided payment means translation
+     * Used internally in sAdmin
      *
-     * @param array $payment - translation for a specific payment
-     * @return array - translated data
+     * @param array|string $payment Optional array containing payment mean
+     * data for translation
+     * @return array Translated payment mean(s) data
      */
     public function sGetPaymentTranslation($payment = "")
     {
         // Load Translation
         $sql = "
-        SELECT objectdata FROM s_core_translations WHERE objecttype='config_payment' AND objectlanguage = ?";
+            SELECT objectdata FROM s_core_translations
+            WHERE objecttype='config_payment' AND objectlanguage = ?
+        ";
         $params = array($this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"]);
 
-        $getTranslation = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],$sql, $params);
+        $getTranslation = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow(
+            $this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],
+            $sql,
+            $params
+        );
 
         if (!empty($getTranslation["objectdata"])) {
             $object = unserialize($getTranslation["objectdata"]);
         }
 
-        if (!$payment) return $object;
+        if (!$payment) {
+            return $object;
+        }
 
         // Pass (possible) translation to payment
         if (!empty($object[$payment["id"]]["description"])) {
@@ -1665,7 +1705,11 @@ class sAdmin
     }
 
     /**
-     * @return array|mixed
+     * Get translations for country states in the current shop language
+     * Also includes fallback translations
+     * Used internally in sAdmin
+     *
+     * @return array States translations
      */
     public function sGetCountryStateTranslation()
     {
@@ -1691,6 +1735,7 @@ class sAdmin
         } else {
             $translation = array();
         }
+
         if (!empty($fallback)) {
             $sql = "
                 SELECT objectdata FROM s_core_translations
@@ -1716,11 +1761,13 @@ class sAdmin
      */
     public function sGetCountryList()
     {
-        $getCountries = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],"SELECT * FROM s_core_countries WHERE active = 1 ORDER BY position, countryname ASC");
+        $getCountries = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll(
+            $this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],
+            "SELECT * FROM s_core_countries WHERE active = 1 ORDER BY position, countryname ASC"
+        );
 
         $object = $this->sGetCountryTranslation();
         $stateTranslation = $this->sGetCountryStateTranslation();
-
 
         foreach ($getCountries as $key => $v) {
 
@@ -1731,7 +1778,6 @@ class sAdmin
                 }
             }
 
-
             $getCountries[$key]["states"] = array();
             if (!empty($v["display_state_in_registration"])) {
                 // Get country states
@@ -1740,6 +1786,7 @@ class sAdmin
                     WHERE countryID = ? AND active = 1
                     ORDER BY position, name ASC
                 ", array($v["id"]));
+
                 foreach ($states as $stateId => $state) {
                     if (isset($stateTranslation[$stateId])) {
                         $states[$stateId] = array_merge($state, $stateTranslation[$stateId]);
@@ -1753,17 +1800,23 @@ class sAdmin
             if (!empty($object[$v["id"]]["notice"])) {
                 $getCountries[$key]["notice"] = $object[$v["id"]]["notice"];
             }
-            if ($getCountries[$key]["id"]==$this->sSYSTEM->_POST['country'] || $getCountries[$key]["id"]==$this->sSYSTEM->_POST['countryID']) {
+
+            if ($getCountries[$key]["id"] == $this->sSYSTEM->_POST['country']
+                || $getCountries[$key]["id"] == $this->sSYSTEM->_POST['countryID']
+            ) {
                 $getCountries[$key]["flag"] = true;
             } else {
                 $getCountries[$key]["flag"] = false;
             }
         }
 
-        $getCountries = Enlight()->Events()->filter('Shopware_Modules_Admin_GetCountries_FilterResult', $getCountries, array('subject' => $this));
+        $getCountries = Enlight()->Events()->filter(
+            'Shopware_Modules_Admin_GetCountries_FilterResult',
+            $getCountries,
+            array('subject' => $this)
+        );
 
         return $getCountries;
-
     }
 
 
