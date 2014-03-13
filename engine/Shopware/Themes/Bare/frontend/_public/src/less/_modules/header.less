@@ -208,3 +208,84 @@
 		.cart--quantity { color: #fff; font-weight: normal }
 	}
 }
+@media screen and (min-width: @desktopViewportWidth) {
+
+	.header-main {
+		.logo-main { width: 28.5% }
+		.logo--shop { width: 75% }
+		.logo--trusted-shops { width: 25%; }
+	}
+
+	// General shop navigation
+	.shop--navigation {
+		width: 71.5%;
+
+		.navigation--entry {
+			.unitize-padding(8, 16, 8, 16, 16);
+		}
+		.entry--cart {
+			.unitize-padding(5, 16, 5, 16, 16);
+		}
+
+		// Search entry
+		.entry--search {
+			.unitize(14, 16, font-size);
+			.unitize-margin(0, 100, 0, 0, 14);
+			background: #fff;
+			padding: 0;
+			border: 0 none;
+			width: 35%;
+
+			.icon--search {
+				.unitize(14, 14, top);
+				.unitize(14, 14, left);
+			}
+
+			.entry--trigger { display: none }
+		}
+
+		// Search form
+		.main-search--form {
+			.box-shadow(0 0 0 transparent);
+			display: block;
+			padding: 0;
+			border: 0 none;
+		}
+	}
+
+	// Cart link
+	.cart--link {
+		text-shadow: 0 1px 0 @primaryContrastColor;
+
+		.cart--quantity { display: none; }
+
+		.cart--display,
+		.cart--amount { display: inline-block; }
+	}
+
+	.cart--display {
+		.unitize-margin(0, 25, 0, 5, 16);
+		font-weight: bold;
+		color: #fff;
+	}
+	.cart--amount {
+		.border-radius(3px);
+		.unitize-padding(3, 5, 3, 10, 16);
+		background: #fff;
+		color: @primaryTextColor;
+		position: relative;
+		text-shadow: 0 0 0 transparent;
+
+		// Arrow at the amout display
+		&::after {
+			.unitize(-6, 16, left);
+			.unitize(8, 16, top);
+			.unitize-height(12, 16);
+			.unitize-width(12, 16);
+			.rotate(45deg);
+			content: '';
+			background: #fff;
+			position: absolute;
+		}
+	}
+}
