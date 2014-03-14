@@ -46,19 +46,19 @@ Ext.define('Shopware.apps.Theme.view.settings.Settings', {
                     fields: {
                         forceCompile: {
                             fieldLabel: '{s name=force_compile_field}Disable compiler caching{/s}',
-                            labelWidth: 150
+                            labelWidth: 180
                         },
                         createSourceMap: {
                             fieldLabel: '{s name=create_source_map_field}Create a css source map{/s}',
-                            labelWidth: 150
+                            labelWidth: 180
                         },
                         compressCss: {
-                            fieldLabel: '{s name=compress_sss_field}Disable css compressing{/s}',
-                            labelWidth: 150
+                            fieldLabel: '{s name=compress_css_files}Compress css files{/s}',
+                            labelWidth: 180
                         },
                         compressJs: {
-                            fieldLabel: '{s name=compress_js_field}Disable js compressing{/s}',
-                            labelWidth: 150
+                            fieldLabel: '{s name=compress_js_files}Compress javascript files{/s}',
+                            labelWidth: 180
                         }
                     }
                 }

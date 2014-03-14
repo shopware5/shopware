@@ -65,18 +65,26 @@ class Configurator
     protected $repository;
 
     /**
+     * @var \Enlight_Event_EventManager
+     */
+    protected $eventManager;
+
+    /**
      * @param Model\ModelManager $entityManager
-     * @param Form\Persister\Theme $persister
      * @param Util $util
+     * @param Form\Persister\Theme $persister
+     * @param \Enlight_Event_EventManager $eventManager
      */
     function __construct(
         Model\ModelManager $entityManager,
         Util $util,
-        Form\Persister\Theme $persister)
+        Form\Persister\Theme $persister,
+        \Enlight_Event_EventManager $eventManager)
     {
         $this->entityManager = $entityManager;
         $this->persister = $persister;
         $this->util = $util;
+        $this->eventManager = $eventManager;
         $this->repository = $entityManager->getRepository('Shopware\Models\Shop\Template');
     }
 
@@ -102,12 +110,30 @@ class Configurator
         //inject the inheritance config container.
         $this->injectConfig($theme, $container);
 
+        $this->eventManager->notify('Theme_Configurator_Container_Injected', array(
+            'theme' => $theme,
+            'template' => $template,
+            'container' => $container
+        ));
+
         $theme->createConfig($container);
 
         $this->validateConfig($container);
 
+        $this->eventManager->notify('Theme_Configurator_Theme_Config_Created', array(
+            'theme' => $theme,
+            'template' => $template,
+            'container' => $container
+        ));
+
         //use the theme persister class to write the Shopware\Components\Form elements into the database
         $this->persister->save($container, $template);
+
+        $this->eventManager->notify('Theme_Configurator_Theme_Config_Saved', array(
+            'theme' => $theme,
+            'template' => $template,
+            'container' => $container
+        ));
 
         $this->removeUnused(
             $this->getLayout($template),
@@ -116,6 +142,12 @@ class Configurator
         );
 
         $this->synchronizeSets($theme, $template);
+
+        $this->eventManager->notify('Theme_Configurator_Theme_Config_Synchronized', array(
+            'theme' => $theme,
+            'template' => $template,
+            'container' => $container
+        ));
     }
 
     /**
@@ -187,6 +219,13 @@ class Configurator
             $existing->setDescription($item->getDescription());
             $existing->setValues($item->getValues());
 
+            $this->eventManager->notify('Theme_Configurator_Theme_ConfigSet_Updated', array(
+                'theme' => $theme,
+                'template' => $template,
+                'existing' => $existing,
+                'defined' => $item
+            ));
+
             $synchronized[] = $existing;
         }
 
@@ -207,6 +246,11 @@ class Configurator
         }
 
         $this->entityManager->flush();
+
+        $this->eventManager->notify('Theme_Configurator_Theme_ConfigSets_Synchronized', array(
+            'theme' => $theme,
+            'template' => $template
+        ));
     }
 
     /**
@@ -223,6 +267,12 @@ class Configurator
         Form\Container $container)
     {
         $structure = $this->getContainerNames($container);
+
+        $structure = $this->eventManager->filter('Theme_Configurator_Container_Names_Loaded', $structure, array(
+            'containers' => $container,
+            'fields' => $fields,
+            'container' => $container
+        ));
 
         /**@var $layout Shop\TemplateConfig\Layout */
         foreach ($containers as $layout) {
@@ -283,7 +333,13 @@ class Configurator
             ->where('layout.templateId = :templateId')
             ->setParameter('templateId', $template->getId());
 
-        return $builder->getQuery()->getResult();
+        $layout = $builder->getQuery()->getResult();
+
+        $layout = $this->eventManager->filter('Theme_Configurator_Layout_Loaded', $layout, array(
+            'template' => $template
+        ));
+
+        return $layout;
     }
 
     /**
@@ -300,7 +356,13 @@ class Configurator
             ->where('elements.templateId = :templateId')
             ->setParameter('templateId', $template->getId());
 
-        return $builder->getQuery()->getResult();
+        $elements = $builder->getQuery()->getResult();
+
+        $elements = $this->eventManager->filter('Theme_Configurator_Elements_Loaded', $elements, array(
+            'template' => $template
+        ));
+
+        return $elements;
     }
 
     /**

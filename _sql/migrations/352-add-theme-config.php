@@ -72,6 +72,30 @@ CREATE TABLE IF NOT EXISTS `s_core_templates_config_set` (
 EOD;
         $this->addSql($sql);
 
+
+        $sql = <<<'EOD'
+
+CREATE TABLE IF NOT EXISTS `s_core_theme_settings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `compiler_force` int(1) NOT NULL,
+  `compiler_create_source_map` int(1) NOT NULL,
+  `compiler_compress_css` int(1) NOT NULL,
+  `compiler_compress_js` int(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+
+EOD;
+        $this->addSql($sql);
+
+
+        $sql = <<<'EOD'
+INSERT INTO `s_core_theme_settings`
+(`compiler_force`, `compiler_create_source_map`, `compiler_compress_css`, `compiler_compress_js`)
+VALUES
+(0, 0, 1, 1);
+EOD;
+        $this->addSql($sql);
+
     }
 }
 
