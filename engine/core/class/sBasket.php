@@ -1856,7 +1856,7 @@ class sBasket
         // Update basket data
         $admin->sGetUserData();
         $this->sGetBasket();
-        $admin->sGetShippingcosts();
+        $admin->sGetPremiumShippingcosts();
 
         // Update basket data in session
         $session->sBasketCurrency = Shopware()->Shop()->getCurrency()->getId();

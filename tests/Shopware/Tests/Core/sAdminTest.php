@@ -55,6 +55,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->module->sSYSTEM->sCONFIG = &$this->config;
         $this->module->sSYSTEM->_SESSION = &$this->session;
         $this->module->sSYSTEM->_POST = &$this->post;
+        $this->module->sSYSTEM->sLanguage = 1;
 
         // Create a stub for the Shopware_Components_Snippet_Manager class.
         $stub = $this->getMockBuilder('\Enlight_Components_Snippet_Manager')
@@ -1717,7 +1718,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers sAdmin::sSaveRegister
-     * @group wip
      */
     public function testsSaveRegister()
     {
@@ -1754,6 +1754,10 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->module->sCheckUser());
         $this->assertTrue($this->module->sSaveRegister());
         $userId = $this->session["sUserId"];
+        $this->assertEquals(
+            $userId,
+            Shopware()->Db()->fetchOne('SELECT id FROM s_user WHERE id = ?', array($userId))
+        );
         $this->assertNotEmpty($this->session["sUserId"]);
         $this->assertTrue($this->module->sCheckUser());
 
@@ -1762,6 +1766,460 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         Shopware()->Db()->delete('s_user_attributes', 'userID = '.$userId);
         Shopware()->Db()->delete('s_user', 'id = '.$userId);
+    }
+
+    /**
+     * @covers sAdmin::sGetDownloads
+     */
+    public function testsGetDownloads()
+    {
+        $customer = $this->createDummyCustomer();
+        $this->session["sUserId"] = $customer->getId();
+
+        // New customers don't have available downloads
+        $this->assertCount(0, $this->module->sGetDownloads());
+
+        // Inject demo data
+        $orderData = array(
+            'ordernumber' => uniqid(),
+            'userID' => $customer->getId(),
+            'invoice_amount' => '37.99',
+            'invoice_amount_net' => '31.92',
+            'invoice_shipping' => '0',
+            'invoice_shipping_net' => '0',
+            'ordertime' => '2014-03-14 10:26:20',
+            'status' => '0',
+            'cleared' => '17',
+            'paymentID' => '4',
+            'transactionID' => '',
+            'comment' => '',
+            'customercomment' => '',
+            'internalcomment' => '',
+            'net' => '0',
+            'taxfree' => '0',
+            'partnerID' => '',
+            'temporaryID' => '',
+            'referer' => '',
+            'cleareddate' => NULL,
+            'trackingcode' => '',
+            'language' => '2',
+            'dispatchID' => '9',
+            'currency' => 'EUR',
+            'currencyFactor' => '1',
+            'subshopID' => '1',
+            'remote_addr' => '127.0.0.1'
+        );
+
+        Shopware()->Db()->insert('s_order', $orderData);
+        $orderId = Shopware()->Db()->lastInsertId();
+
+        $orderDetailsData = array(
+            'orderID' => $orderId,
+            'ordernumber' => '20003',
+            'articleID' => '98765',
+            'articleordernumber' => 'SW10196',
+            'price' => '34.99',
+            'quantity' => '1',
+            'name' => 'ESD download article',
+            'status' => '0',
+            'shipped' => '0',
+            'shippedgroup' => '0',
+            'releasedate' => '0000-00-00',
+            'modus' => '0',
+            'esdarticle' => '1',
+            'taxID' => '1',
+            'tax_rate' => '19',
+            'config' => ''
+        );
+
+        Shopware()->Db()->insert('s_order_details', $orderDetailsData);
+        $orderDetailId = Shopware()->Db()->lastInsertId();
+
+        $orderEsdData = array(
+            'serialID' => '8',
+            'esdID' => '2',
+            'userID' => $customer->getId(),
+            'orderID' => $orderId,
+            'orderdetailsID' => $orderDetailId,
+            'datum' => '2014-03-14 10:26:20'
+        );
+
+        Shopware()->Db()->insert('s_order_esd', $orderEsdData);
+
+        // Mock a login
+        $orderEsdId = Shopware()->Db()->lastInsertId();
+
+        // Calling the method should now return the expected data
+        $result = $this->module->sGetDownloads();
+        $this->assertCount(1, $result);
+        $esd = end($result);
+        $this->assertArrayHasKey('id', $esd);
+        $this->assertArrayHasKey('ordernumber', $esd);
+        $this->assertArrayHasKey('invoice_amount', $esd);
+        $this->assertArrayHasKey('invoice_amount_net', $esd);
+        $this->assertArrayHasKey('invoice_shipping', $esd);
+        $this->assertArrayHasKey('invoice_shipping_net', $esd);
+        $this->assertArrayHasKey('datum', $esd);
+        $this->assertArrayHasKey('status', $esd);
+        $this->assertArrayHasKey('cleared', $esd);
+        $this->assertArrayHasKey('comment', $esd);
+        $this->assertArrayHasKey('details', $esd);
+        $this->assertEquals($orderData['ordernumber'], $esd['ordernumber']);
+        $this->assertEquals('37,99', $esd['invoice_amount']);
+        $this->assertEquals($orderData['invoice_amount_net'], $esd['invoice_amount_net']);
+        $this->assertEquals($orderData['invoice_shipping'], $esd['invoice_shipping']);
+        $this->assertEquals($orderData['invoice_shipping_net'], $esd['invoice_shipping_net']);
+        $this->assertEquals('14.03.2014 10:26', $esd['datum']);
+        $this->assertEquals($orderData['status'], $esd['status']);
+        $this->assertEquals($orderData['cleared'], $esd['cleared']);
+        $this->assertEquals($orderData['comment'], $esd['comment']);
+        $this->assertCount(1, $esd['details']);
+        $esdDetail = end($esd['details']);
+
+        $this->assertArrayHasKey('id', $esdDetail);
+        $this->assertArrayHasKey('orderID', $esdDetail);
+        $this->assertArrayHasKey('ordernumber', $esdDetail);
+        $this->assertArrayHasKey('articleID', $esdDetail);
+        $this->assertArrayHasKey('articleordernumber', $esdDetail);
+        $this->assertArrayHasKey('serial', $esdDetail);
+        $this->assertArrayHasKey('esdLink', $esdDetail);
+        $this->assertNotNull($esdDetail['esdLink']);
+
+        return array(
+            'customer' => $customer,
+            'orderEsdId' => $orderEsdId,
+            'orderDetailId' => $orderDetailId,
+            'orderId' => $orderId,
+            'orderData' => $orderData
+        );
+    }
+
+    /**
+     * @covers sAdmin::sGetOpenOrderData
+     * @depends testsGetDownloads
+     * @ticket SW-5653
+     */
+    public function testsGetOpenOrderData($demoData)
+    {
+        // Inherit data from previous test
+        $customer = $demoData['customer'];
+        $oldOrderId = $demoData['orderId'];
+        $orderEsdId = $demoData['orderEsdId'];
+        $orderNumber = uniqid();
+
+        // Add another order to the customer
+        $orderData = array(
+            'ordernumber' => $orderNumber,
+            'userID' => $customer->getId(),
+            'invoice_amount' => '16.89',
+            'invoice_amount_net' => '14.2',
+            'invoice_shipping' => '3.9',
+            'invoice_shipping_net' => '3.28',
+            'ordertime' => '2013-04-08 17:39:30',
+            'status' => '0',
+            'cleared' => '17',
+            'paymentID' => '5',
+            'transactionID' => '',
+            'comment' => '',
+            'customercomment' => '',
+            'internalcomment' => '',
+            'net' => '0',
+            'taxfree' => '0',
+            'partnerID' => '',
+            'temporaryID' => '',
+            'referer' => '',
+            'cleareddate' => NULL,
+            'trackingcode' => '',
+            'language' => '2',
+            'dispatchID' => '9',
+            'currency' => 'EUR',
+            'currencyFactor' => '1',
+            'subshopID' => '1',
+            'remote_addr' => '172.16.10.71'
+        );
+
+        Shopware()->Db()->insert('s_order', $orderData);
+        $orderId = Shopware()->Db()->lastInsertId();
+
+        Shopware()->Db()->query("
+            INSERT IGNORE INTO `s_order_details` (`orderID`, `ordernumber`, `articleID`, `articleordernumber`, `price`, `quantity`, `name`, `status`, `shipped`, `shippedgroup`, `releasedate`, `modus`, `esdarticle`, `taxID`, `tax_rate`, `config`) VALUES
+            (?, ?, 12, 'SW10012', 9.99, 1, 'Kobra Vodka 37,5%', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
+            (?, ?, 0, 'SHIPPINGDISCOUNT', -2, 1, 'Warenkorbrabatt', 0, 0, 0, '0000-00-00', 4, 0, 0, 19, ''),
+            (?, ?, 0, 'sw-surcharge', 5, 1, 'Mindermengenzuschlag', 0, 0, 0, '0000-00-00', 4, 0, 0, 19, '');
+        ", array(
+            $orderId, $orderNumber,
+            $orderId, $orderNumber,
+            $orderId, $orderNumber
+        ));
+
+
+        // At this point, the user is not logged in so we should have no data
+        $this->assertCount(0, $this->module->sGetOpenOrderData());
+
+        // Mock a login
+        $this->session["sUserId"] = $customer->getId();
+
+        // Calling the method should now return the expected data
+        $result = $this->module->sGetOpenOrderData();
+        $this->assertCount(2, $result);
+        foreach ($result as $order) {
+            $this->assertArrayHasKey('id', $order);
+            $this->assertArrayHasKey('ordernumber', $order);
+            $this->assertArrayHasKey('invoice_amount', $order);
+            $this->assertArrayHasKey('invoice_amount_net', $order);
+            $this->assertArrayHasKey('invoice_shipping', $order);
+            $this->assertArrayHasKey('invoice_shipping_net', $order);
+            $this->assertArrayHasKey('datum', $order);
+            $this->assertArrayHasKey('status', $order);
+            $this->assertArrayHasKey('cleared', $order);
+            $this->assertArrayHasKey('comment', $order);
+            $this->assertArrayHasKey('details', $order);
+            foreach ($order['details'] as $detail) {
+                $this->assertArrayHasKey('id', $detail);
+                $this->assertArrayHasKey('orderID', $detail);
+                $this->assertArrayHasKey('ordernumber', $detail);
+                $this->assertArrayHasKey('articleID', $detail);
+                $this->assertArrayHasKey('articleordernumber', $detail);
+            }
+
+            // This tests SW-5653
+            if ($order['id'] == $orderId) {
+                $this->assertNotEmpty($order);
+                $this->assertEquals($orderNumber, $order["ordernumber"]);
+                $this->assertEquals($customer->getId(), $order["userID"]);
+                break;
+            }
+        }
+
+        Shopware()->Db()->delete('s_order_esd', 'id = '.$orderEsdId);
+        Shopware()->Db()->delete('s_order_details', 'orderID = '.$orderId);
+        Shopware()->Db()->delete('s_order_details', 'orderID = '.$oldOrderId);
+        Shopware()->Db()->delete('s_order', 'id = '.$orderId);
+        Shopware()->Db()->delete('s_order', 'id = '.$oldOrderId);
+        $this->deleteDummyCustomer($customer);
+    }
+
+    /**
+     * @covers sAdmin::sGetUserMailById
+     * @covers sAdmin::sGetUserByMail
+     * @covers sAdmin::sGetUserNameById
+     */
+    public function testGetEmailAndUser()
+    {
+        $customer = $this->createDummyCustomer();
+
+        // Test sGetUserMailById with null and expected cases
+        $this->assertNull($this->module->sGetUserMailById());
+        $this->session["sUserId"] = $customer->getId();
+        $this->assertEquals($customer->getEmail(), $this->module->sGetUserMailById());
+
+        // Test sGetUserByMail with null and expected cases
+        $this->assertNull($this->module->sGetUserByMail(uniqid()));
+        $this->assertEquals($customer->getId(), $this->module->sGetUserByMail($customer->getEmail()));
+
+        // Test sGetUserNameById with null and expected cases
+        $this->assertEmpty($this->module->sGetUserNameById(uniqid()));
+        $this->assertEquals(
+            array('firstname' => 'Max', 'lastname' => 'Mustermann'),
+            $this->module->sGetUserNameById($customer->getId())
+        );
+
+        $this->deleteDummyCustomer($customer);
+    }
+
+    /**
+     * @covers sAdmin::sGetUserData
+     */
+    public function testsGetUserDataWithoutLogin()
+    {
+        $this->assertEquals(
+            array('additional' =>
+                array(
+                    'country' => array(),
+                    'countryShipping' => array(),
+                    'stateShipping' => array('id' => 0)
+                )
+            ),
+            $this->module->sGetUserData()
+        );
+
+        $this->session["sCountry"] = 20;
+
+        $this->assertEquals(
+            array('additional' =>
+                array(
+                    'country' => array(
+                        'id' => '20',
+                        'countryname' => 'Namibia',
+                        'countryiso' => 'NA',
+                        'areaID' => '2',
+                        'countryen' => 'NAMIBIA',
+                        'position' => '10',
+                        'notice' => '',
+                        'shippingfree' => '0',
+                        'taxfree' => '0',
+                        'taxfree_ustid' => '0',
+                        'taxfree_ustid_checked' => '0',
+                        'active' => '0',
+                        'iso3' => 'NAM',
+                        'display_state_in_registration' => '0',
+                        'force_state_in_registration' => '0',
+                        'countryarea' => 'welt'
+                    ),
+                    'countryShipping' => array(
+                        'id' => '20',
+                        'countryname' => 'Namibia',
+                        'countryiso' => 'NA',
+                        'areaID' => '2',
+                        'countryen' => 'NAMIBIA',
+                        'position' => '10',
+                        'notice' => '',
+                        'shippingfree' => '0',
+                        'taxfree' => '0',
+                        'taxfree_ustid' => '0',
+                        'taxfree_ustid_checked' => '0',
+                        'active' => '0',
+                        'iso3' => 'NAM',
+                        'display_state_in_registration' => '0',
+                        'force_state_in_registration' => '0',
+                        'countryarea' => 'welt'
+                    ),
+                    'stateShipping' => array('id' => 0),
+                )
+            ),
+            $this->module->sGetUserData()
+        );
+    }
+
+    /**
+     * @covers sAdmin::sGetUserData
+     */
+    public function testsGetUserDataWithLogin()
+    {
+        $customer = $this->createDummyCustomer();
+        $this->session["sUserId"] = $customer->getId();
+
+        $result = $this->module->sGetUserData();
+
+        $expectedData = array(
+            'billingaddress' => array(
+                'customerBillingId' => (string) $customer->getBilling()->getId(),
+                'text1' => 'Freitext1',
+                'text2' => 'Freitext2',
+                'text3' => NULL,
+                'text4' => NULL,
+                'text5' => NULL,
+                'text6' => NULL,
+                'id' => (string) $customer->getBilling()->getId(),
+                'userID' => (string) $customer->getId(),
+                'company' => '',
+                'department' => '',
+                'salutation' => '',
+                'customernumber' => (string) $customer->getBilling()->getNumber(),
+                'firstname' => 'Max',
+                'lastname' => 'Mustermann',
+                'street' => '',
+                'streetnumber' => '',
+                'zipcode' => '',
+                'city' => '',
+                'phone' => '',
+                'fax' => '',
+                'countryID' => '0',
+                'stateID' => NULL,
+                'ustid' => '',
+                'birthday' => '1986-12-20',
+            ),
+            'additional' => array(
+                'country' => array(
+                    2 => array(
+                        'active' => '1',
+                        'countryname' => 'Germany',
+                    ),
+                ),
+                'state' => array(),
+                'user' => array(
+                    'id' => $customer->getId(),
+                    'password' => $customer->getPassword(),
+                    'encoder' => 'bcrypt',
+                    'email' => $customer->getEmail(),
+                    'active' => '1',
+                    'accountmode' => '0',
+                    'confirmationkey' => '',
+                    'paymentID' => '0',
+                    'firstlogin' => '2014-03-04',
+                    'lastlogin' => $customer->getLastLogin()->format('Y-m-d H:i:s'),
+                    'sessionID' => '',
+                    'newsletter' => 0,
+                    'validation' => '',
+                    'affiliate' => '0',
+                    'customergroup' => 'EK',
+                    'paymentpreset' => '0',
+                    'language' => '1',
+                    'subshopID' => '1',
+                    'referer' => '',
+                    'pricegroupID' => NULL,
+                    'internalcomment' => '',
+                    'failedlogins' => '0',
+                    'lockeduntil' => NULL,
+                ),
+                'countryShipping' => array(
+                    2 => array(
+                        'active' => '1',
+                        'countryname' => 'Germany',
+                    ),
+                ),
+                'stateShipping' => array(),
+                'payment' => array(
+                    'id' => '5',
+                    'name' => 'prepayment',
+                    'description' => 'Vorkasse',
+                    'template' => 'prepayment.tpl',
+                    'class' => 'prepayment.php',
+                    'table' => '',
+                    'hide' => '0',
+                    'additionaldescription' => 'Sie zahlen einfach vorab und erhalten die Ware bequem und günstig bei Zahlungseingang nach Hause geliefert.',
+                    'debit_percent' => '0',
+                    'surcharge' => '0',
+                    'surchargestring' => '',
+                    'position' => '1',
+                    'active' => '1',
+                    'esdactive' => '0',
+                    'embediframe' => '',
+                    'hideprospect' => '0',
+                    'action' => NULL,
+                    'pluginID' => NULL,
+                    'source' => NULL,
+                ),
+            ),
+            'shippingaddress' => array(
+                'customerShippingId' => $customer->getShipping()->getId(),
+                'text1' => 'Freitext1',
+                'text2' => 'Freitext2',
+                'text3' => NULL,
+                'text4' => NULL,
+                'text5' => NULL,
+                'text6' => NULL,
+                'id' => $customer->getShipping()->getId(),
+                'userID' => $customer->getId(),
+                'company' => 'Widgets Inc.',
+                'department' => '',
+                'salutation' => 'Mr',
+                'firstname' => 'Max',
+                'lastname' => 'Mustermann',
+                'street' => '',
+                'streetnumber' => '',
+                'zipcode' => '',
+                'city' => '',
+                'countryID' => '0',
+                'stateID' => NULL,
+            ),
+        );
+
+        $this->assertEquals($result['billingaddress'], $expectedData['billingaddress']);
+        $this->assertEquals($result['shippingaddress'], $expectedData['shippingaddress']);
+        $this->assertEquals($result['additional'], $expectedData['additional']);
+
+        $this->deleteDummyCustomer($customer);
     }
 
     /**

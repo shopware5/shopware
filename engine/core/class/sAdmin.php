@@ -2334,9 +2334,10 @@ class sAdmin
     }
 
     /**
-     * Account - get purchased instant downloads
+     * Get purchased instant downloads for the current user
+     * Used in Account controller to display download available to the user
      *
-     * @return array - Data from orders who contains instant downloads
+     * @return array Data from orders who contains instant downloads
      */
     public function sGetDownloads()
     {
@@ -2388,7 +2389,7 @@ class sAdmin
                             $numbers[] = $serial["serialnumber"];
                         }
                         $getOrderDetails[$orderDetailsKey]["serial"] =  implode(",", $numbers);
-                        // Building download-link
+                        // Building download link
                         $getOrderDetails[$orderDetailsKey]["esdLink"] = $this->sSYSTEM->sCONFIG["sBASEFILE"].'?sViewport=account&sAction=download&esdID='.$orderDetailsValue['id'];
                     } else {
                         unset($getOrderDetails[$orderDetailsKey]);
@@ -2413,9 +2414,10 @@ class sAdmin
     }
 
     /**
-     * Account - Get all orders that the user did
-     * @access public
-     * @return array - Array with order data / positions
+     * Get all orders for the current user
+     * Used in the user account in the Frontend
+     *
+     * @return array Array with order data / positions
      */
     public function sGetOpenOrderData()
     {
@@ -2423,15 +2425,18 @@ class sAdmin
         $mainShop = $shop->getMain() !== null ? $shop->getMain() : $shop;
 
         $sql = "
-            SELECT o.*, cu.templatechar as currency_html, DATE_FORMAT(ordertime,'%d.%m.%Y %H:%i') AS datum
+            SELECT o.*, cu.templatechar as currency_html, DATE_FORMAT(ordertime, '%d.%m.%Y %H:%i') AS datum
             FROM s_order o
             LEFT JOIN s_core_currencies as cu
             ON o.currency = cu.currency
-            WHERE userID=? AND status != -1
+            WHERE userID = ? AND status != -1
             AND subshopID = ?
             ORDER BY ordertime DESC LIMIT 10
         ";
-        $getOrders = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql, array($this->sSYSTEM->_SESSION["sUserId"], $mainShop->getId()));
+        $getOrders = $this->sSYSTEM->sDB_CONNECTION->GetAll(
+            $sql,
+            array($this->sSYSTEM->_SESSION["sUserId"], $mainShop->getId())
+        );
 
         foreach ($getOrders as $orderKey => $orderValue) {
 
@@ -2446,10 +2451,7 @@ class sAdmin
             if (!count($getOrderDetails)) {
                 unset($getOrders[$orderKey]);
             } else {
-
-                /** GET ARTICLE DETAILS START - @date: 05-24-2011 */
                 $active = 1;
-                /** GET ARTICLE DETAILS END */
 
                 foreach ($getOrderDetails as $orderDetailsKey => $orderDetailsValue) {
                     $getOrderDetails[$orderDetailsKey]["amount"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice(round($orderDetailsValue["price"] * $orderDetailsValue["quantity"],2));
@@ -2500,12 +2502,19 @@ class sAdmin
                     if ($getOrderDetails[$orderDetailsKey]["esdarticle"]) {
                         $numbers = array();
                         $sql = "
-                        SELECT serialnumber FROM s_articles_esd_serials, s_order_esd WHERE userID=?
-                        AND orderID=? AND orderdetailsID=?
-                        AND s_order_esd.serialID=s_articles_esd_serials.id
+                        SELECT serialnumber FROM s_articles_esd_serials, s_order_esd WHERE userID = ?
+                        AND orderID = ? AND orderdetailsID = ?
+                        AND s_order_esd.serialID = s_articles_esd_serials.id
                         ";
 
-                        $getSerial = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql,array($this->sSYSTEM->_SESSION["sUserId"],$orderValue["id"],$orderDetailsValue["id"]));
+                        $getSerial = $this->sSYSTEM->sDB_CONNECTION->GetAll(
+                            $sql,
+                            array(
+                                $this->sSYSTEM->_SESSION["sUserId"],
+                                $orderValue["id"],
+                                $orderDetailsValue["id"]
+                            )
+                        );
                         foreach ($getSerial as $serial) {
                             $numbers[] = $serial["serialnumber"];
                         }
@@ -2516,130 +2525,158 @@ class sAdmin
                     }
                     // -- End of serial check
                 }
-                /** GET ARTICLE DETAILS START - @date: 05-24-2011 */
                 $getOrders[$orderKey]['activeBuyButton'] = $active;
-                /** GET ARTICLE DETAILS END */
 
                 $getOrders[$orderKey]["details"] = $getOrderDetails;
             }
-            $getOrders[$orderKey]["dispatch"] = $this->sGetDispatch($orderValue['dispatchID']);
+            $getOrders[$orderKey]["dispatch"] = $this->sGetPremiumDispatch($orderValue['dispatchID']);
         }
 
-        $getOrders = Enlight()->Events()->filter('Shopware_Modules_Admin_GetOpenOrderData_FilterResult', $getOrders, array('subject' => $this,'id' => $this->sSYSTEM->_SESSION["sUserId"],'subshopID' => $this->sSYSTEM->sSubShop["id"]));
+        $getOrders = Enlight()->Events()->filter(
+            'Shopware_Modules_Admin_GetOpenOrderData_FilterResult',
+            $getOrders,
+            array(
+                'subject' => $this,
+                'id' => $this->sSYSTEM->_SESSION["sUserId"],
+                'subshopID' => $this->sSYSTEM->sSubShop["id"]
+            )
+        );
+
         return $getOrders;
     }
 
 
     /**
-     * Get a user mail by id
-     * @access public
-     * @return string email
+     * Get the current user's email address
+     *
+     * @return string Current user email address
      */
     public function sGetUserMailById()
     {
-        $email = $this->sSYSTEM->sDB_CONNECTION->GetRow("
-        SELECT email FROM
-        s_user WHERE id=?",array($this->sSYSTEM->_SESSION["sUserId"]));
+        $email = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+            "SELECT email FROM s_user WHERE id = ?",
+            array($this->sSYSTEM->_SESSION["sUserId"])
+        );
 
         return $email["email"];
-
     }
 
     /**
-     * Get user id by mail
-     * @access public
-     * @return  int id
+     * Get user id by his email address
+     *
+     * @param string $email Email address of the user
+     * @return int The user id
      */
     public function sGetUserByMail($email)
     {
         $addScopeSql = "";
         if ($this->scopedRegistration == true) {
-            $addScopeSql = "
-           AND subshopID = ".$this->subshopId;
+            $addScopeSql = "AND subshopID = ".$this->subshopId;
         }
-        $getUserData = $this->sSYSTEM->sDB_CONNECTION->GetRow("
-        SELECT id FROM s_user WHERE email=? AND accountmode!=1 $addScopeSql
-        ",array($email));
+        $getUserData = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+            "SELECT id FROM s_user WHERE email = ? AND accountmode != 1 $addScopeSql",
+            array($email)
+        );
 
         return $getUserData["id"];
     }
 
     /**
-     * Get user first and last name by id
+     * Get user first and last names by id
      *
-     * @param int $id
+     * @param int $id User id
      * @return array first name/last name
      */
     public function sGetUserNameById($id)
     {
-        return $this->sSYSTEM->sDB_CONNECTION->GetRow("
-        SELECT firstname, lastname FROM s_user_billingaddress
-        WHERE userID=?
-        ",array($id));
+        return $this->sSYSTEM->sDB_CONNECTION->GetRow(
+            "SELECT firstname, lastname FROM s_user_billingaddress
+            WHERE userID = ?",
+            array($id)
+        );
     }
-
 
     /**
      * Get all data from the current logged in user
      *
-     * @return array
+     * @return array|false User data, of false if interrupted
      */
     public function sGetUserData()
     {
-        if (Enlight()->Events()->notifyUntil('Shopware_Modules_Admin_GetUserData_Start', array('subject' => $this))) {
+        if (Enlight()->Events()->notifyUntil(
+            'Shopware_Modules_Admin_GetUserData_Start',
+            array('subject' => $this))
+        ) {
             return false;
         }
         if (empty($this->sSYSTEM->_SESSION['sRegister'])) {
             $this->sSYSTEM->_SESSION['sRegister'] = array();
         }
 
-       $countryQuery = "SELECT c.*, a.`name` AS countryarea FROM s_core_countries c
-                LEFT JOIN s_core_countries_areas a ON a.id = c.areaID AND a.active = 1
-                WHERE c.id=?";
+        $userData = array();
+
+        $countryQuery = "
+          SELECT c.*, a.`name` AS countryarea
+          FROM s_core_countries c
+          LEFT JOIN s_core_countries_areas a
+           ON a.id = c.areaID AND a.active = 1
+          WHERE c.id = ?";
 
         // If user is logged in
         if (!empty($this->sSYSTEM->_SESSION["sUserId"])) {
 
             // 1.) Get billing address
-            $sql = "SELECT *
-                    FROM
-                        s_user_billingaddress
-                    WHERE
-                        userID=?";
+            $sql = "SELECT * FROM s_user_billingaddress
+                    WHERE userID = ?";
 
-            $billing = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql,array($this->sSYSTEM->_SESSION["sUserId"]));
+            $billing = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+                $sql,
+                array($this->sSYSTEM->_SESSION["sUserId"])
+            );
             $attributes = $this->getUserBillingAddressAttributes($this->sSYSTEM->_SESSION["sUserId"]);
             $userData["billingaddress"] = array_merge($attributes, $billing);
 
-            if (empty($userData["billingaddress"]['customernumber']) && $this->sSYSTEM->sCONFIG['sSHOPWAREMANAGEDCUSTOMERNUMBERS']) {
-                $sql = "UPDATE `s_order_number`,`s_user_billingaddress`  SET `s_order_number`.`number`=`s_order_number`.`number`+1, `s_user_billingaddress`.`customernumber`=`s_order_number`.`number`+1 WHERE `s_order_number`.`name` ='user' AND `s_user_billingaddress`.`userID`=?";
+            if (empty($userData["billingaddress"]['customernumber'])
+                && $this->sSYSTEM->sCONFIG['sSHOPWAREMANAGEDCUSTOMERNUMBERS']
+            ) {
+                $sql = "
+                    UPDATE `s_order_number`,`s_user_billingaddress`
+                    SET `s_order_number`.`number`=`s_order_number`.`number`+1,
+                    `s_user_billingaddress`.`customernumber`=`s_order_number`.`number`+1
+                    WHERE `s_order_number`.`name` ='user'
+                    AND `s_user_billingaddress`.`userID`=?";
+
                 $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($this->sSYSTEM->_SESSION["sUserId"]));
             }
 
             // 2.) Advanced info
             // Query country information
-            $userData["additional"]["country"] =  $this->sSYSTEM->sDB_CONNECTION->GetRow("
-                SELECT * FROM s_core_countries
-                WHERE id=?
-                ",array($userData["billingaddress"]["countryID"]));
+            $userData["additional"]["country"] =  $this->sSYSTEM->sDB_CONNECTION->GetRow(
+                "SELECT * FROM s_core_countries WHERE id = ?",
+                array($userData["billingaddress"]["countryID"])
+            );
             // State selection
-            $userData["additional"]["state"] =  $this->sSYSTEM->sDB_CONNECTION->GetRow("
-                SELECT * FROM s_core_countries_states
-                WHERE id=?
-                ",array($userData["billingaddress"]["stateID"]));
+            $userData["additional"]["state"] =  $this->sSYSTEM->sDB_CONNECTION->GetRow(
+                "SELECT * FROM s_core_countries_states WHERE id=?",
+                array($userData["billingaddress"]["stateID"])
+            );
 
 
             $userData["additional"]["country"] = $this->sGetCountryTranslation($userData["additional"]["country"]);
 
-            $additional = $this->sSYSTEM->sDB_CONNECTION->GetRow("SELECT * FROM s_user WHERE id=?",array($this->sSYSTEM->_SESSION["sUserId"]));
+            $additional = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+                "SELECT * FROM s_user WHERE id=?",
+                array($this->sSYSTEM->_SESSION["sUserId"])
+            );
             $attributes = $this->getUserAttributes($this->sSYSTEM->_SESSION["sUserId"]);
             $userData["additional"]["user"] = array_merge($attributes, $additional);
 
             // Newsletter properties
-            $newsletter = $this->sSYSTEM->sDB_CONNECTION->GetRow("
-                SELECT id FROM s_campaigns_mailaddresses
-                WHERE email=?
-                ",array($userData["additional"]["user"]["email"]));
+            $newsletter = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+                "SELECT id FROM s_campaigns_mailaddresses WHERE email = ?",
+                array($userData["additional"]["user"]["email"])
+            );
+
             if ($newsletter["id"]) {
                 $userData["additional"]["user"]["newsletter"] = 1;
             } else {
@@ -2647,19 +2684,25 @@ class sAdmin
             }
 
             // 3.) Get shipping address
-            $shipping = $this->sSYSTEM->sDB_CONNECTION->GetRow("SELECT * FROM s_user_shippingaddress WHERE userID=?", array($this->sSYSTEM->_SESSION["sUserId"]));
+            $shipping = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+                "SELECT * FROM s_user_shippingaddress WHERE userID=?",
+                array($this->sSYSTEM->_SESSION["sUserId"])
+            );
             $attributes = $this->getUserShippingAddressAttributes($this->sSYSTEM->_SESSION["sUserId"]);
             $userData["shippingaddress"]= array_merge($attributes, $shipping);
 
-            // If shipping-address is not available, billing address is coeval the shipping address
+            // If shipping address is not available, billing address is coeval the shipping address
             if (!isset($userData["shippingaddress"]["firstname"])) {
                 $userData["shippingaddress"] = $userData["billingaddress"];
                 $userData["shippingaddress"]["eqalBilling"] = true;
             } else {
-                if (($userData["shippingaddress"]["countryID"] != $userData["billingaddress"]["countryID"]) && empty($this->sSYSTEM->sCONFIG["sCOUNTRYSHIPPING"])) {
-                    $update = $this->sSYSTEM->sDB_CONNECTION->Execute("
-                    UPDATE s_user_shippingaddress SET countryID = ? WHERE id = ?
-                    ",array($userData["billingaddress"]["countryID"],$userData["shippingaddress"]["id"]));
+                if (($userData["shippingaddress"]["countryID"] != $userData["billingaddress"]["countryID"])
+                    && empty($this->sSYSTEM->sCONFIG["sCOUNTRYSHIPPING"])
+                ) {
+                    $update = $this->sSYSTEM->sDB_CONNECTION->Execute(
+                        "UPDATE s_user_shippingaddress SET countryID = ? WHERE id = ?",
+                        array($userData["billingaddress"]["countryID"],$userData["shippingaddress"]["id"])
+                    );
                     $userData["shippingaddress"]["countryID"] = $userData["billingaddress"]["countryID"];
                 }
             }
@@ -2669,27 +2712,42 @@ class sAdmin
             } else {
                 $targetCountryId = $userData["shippingaddress"]["countryID"];
             }
-            $userData["additional"]["countryShipping"] = $this->sSYSTEM->sDB_CONNECTION->GetRow($countryQuery,array($targetCountryId));
-            $userData["additional"]["countryShipping"] = $this->sGetCountryTranslation($userData["additional"]["countryShipping"]);
+
+            $userData["additional"]["countryShipping"] = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+                $countryQuery,
+                array($targetCountryId)
+            );
+            $userData["additional"]["countryShipping"] = $this->sGetCountryTranslation(
+                $userData["additional"]["countryShipping"]
+            );
             $this->sSYSTEM->_SESSION["sCountry"] = $userData["additional"]["countryShipping"]["id"];
+
             // State selection
-            $userData["additional"]["stateShipping"] =  $this->sSYSTEM->sDB_CONNECTION->GetRow("
-            SELECT * FROM s_core_countries_states
-            WHERE id=?
-            ",array($userData["shippingaddress"]["stateID"]));
+            $userData["additional"]["stateShipping"] =  $this->sSYSTEM->sDB_CONNECTION->GetRow(
+                "SELECT * FROM s_core_countries_states WHERE id=?",
+                array($userData["shippingaddress"]["stateID"])
+            );
             // Add stateId to session
             $this->sSYSTEM->_SESSION["sState"] = $userData["additional"]["stateShipping"]["id"];
             // Add areaId to session
             $this->sSYSTEM->_SESSION["sArea"] = $userData["additional"]["countryShipping"]["areaID"];
-            $userData["additional"]["payment"] = $this->sGetPaymentMeanById($userData["additional"]["user"]["paymentID"],$userData);
+            $userData["additional"]["payment"] = $this->sGetPaymentMeanById(
+                $userData["additional"]["user"]["paymentID"],
+                $userData
+            );
         } else {
-            if ($this->sSYSTEM->_SESSION["sCountry"] && $this->sSYSTEM->_SESSION["sCountry"] != $this->sSYSTEM->_SESSION["sRegister"]["billing"]["country"]) {
+            if ($this->sSYSTEM->_SESSION["sCountry"]
+                && $this->sSYSTEM->_SESSION["sCountry"] != $this->sSYSTEM->_SESSION["sRegister"]["billing"]["country"]
+            ) {
                 $sRegister = $this->sSYSTEM->_SESSION['sRegister'];
                 $sRegister['billing']['country']= intval($this->sSYSTEM->_SESSION["sCountry"]);
                 $this->sSYSTEM->_SESSION["sRegister"] = $sRegister;
             }
 
-            $userData["additional"]["country"] = $this->sSYSTEM->sDB_CONNECTION->GetRow($countryQuery, array(intval($this->sSYSTEM->_SESSION["sRegister"]["billing"]["country"])));
+            $userData["additional"]["country"] = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+                $countryQuery,
+                array(intval($this->sSYSTEM->_SESSION["sRegister"]["billing"]["country"]))
+            );
             $userData["additional"]["countryShipping"] = $userData["additional"]["country"];
             $userData["additional"]["stateShipping"]["id"] = !empty($this->sSYSTEM->_SESSION["sState"]) ? $this->sSYSTEM->_SESSION["sState"] : 0;
 
@@ -2697,11 +2755,21 @@ class sAdmin
             /* todo@all Do we need a translation here? */
         }
 
-        $userData = Enlight()->Events()->filter('Shopware_Modules_Admin_GetUserData_FilterResult', $userData, array('subject' => $this,'id' => $this->sSYSTEM->_SESSION["sUserId"]));
+        $userData = Enlight()->Events()->filter(
+            'Shopware_Modules_Admin_GetUserData_FilterResult',
+            $userData,
+            array('subject' => $this,'id' => $this->sSYSTEM->_SESSION["sUserId"])
+        );
 
         return $userData;
     }
 
+    /**
+     * Returns the given user's billing address attributes
+     *
+     * @param $userId User id
+     * @return array The given user's billing address attributes
+     */
     private function getUserBillingAddressAttributes($userId)
     {
         $builder = Shopware()->Models()->createQueryBuilder();
@@ -2723,6 +2791,12 @@ class sAdmin
         }
     }
 
+    /**
+     * Returns the given user's shipping address attributes
+     *
+     * @param $userId User id
+     * @return array The given user's shipping address attributes
+     */
     private function getUserShippingAddressAttributes($userId)
     {
         $builder = Shopware()->Models()->createQueryBuilder();
@@ -2744,6 +2818,12 @@ class sAdmin
         }
     }
 
+    /**
+     * Returns the given user's attributes
+     *
+     * @param $userId User id
+     * @return array The given user's attributes
+     */
     private function getUserAttributes($userId)
     {
         $builder = Shopware()->Models()->createQueryBuilder();
@@ -2765,47 +2845,11 @@ class sAdmin
     }
 
     /**
-     * Get dispatch method by id
-     * @deprecated is not in use
-     * @access public
-     * @param $dispatchID
-     * @return array
-     */
-    public function sGetDispatch($dispatchID)
-    {
-        return $this->sGetPremiumDispatch($dispatchID);
-    }
-
-    /**
-     * DEPRECATED Get all dispatch methods, filtered by country
-     * @param int $countryID s_core_countries.id
-     * @access public
-     * @return array
-     */
-
-    public function sGetDispatches($countryID)
-    {
-        return $this->sGetPremiumDispatches($countryID);
-    }
-
-    /**
-     * DEPRECATED Get shipping costs
-     *
-     * @param array $countryInfo - data from shipping country
-     * @param double $surcharge - surcharge for current payment
-     * @return array
-     */
-    public function sGetShippingcosts($countryInfo = null, $surcharge = 0, $surchargestring = "")
-    {
-        return $this->sGetPremiumShippingcosts($countryInfo);
-    }
-
-    /**
      * Shopware Risk Management
      *
-     * @param int $paymentID - payment id (s_core_paymentmeans.id)
-     * @param array $basket - current shoppingcart
-     * @param array $user -  user data
+     * @param int $paymentID Payment mean id (s_core_paymentmeans.id)
+     * @param array $basket Current shopping cart
+     * @param array $user User data
      * @return boolean
      */
     public function sManageRisks($paymentID, $basket, $user)
@@ -2821,8 +2865,6 @@ class sAdmin
         if (empty($queryRules)) {
             return false;
         }
-
-        // Get-User-Data
 
         // Get Basket
         if (empty($basket)) {
@@ -2863,8 +2905,6 @@ class sAdmin
      */
     public function sRiskORDERVALUEMORE($user, $order, $value)
     {
-        #print_r($user);
-        #print_r($order);
         $basketValue = $order["AmountNumeric"];
 
         if ($this->sSYSTEM->sCurrency["factor"]) {

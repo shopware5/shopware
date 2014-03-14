@@ -637,8 +637,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         $country = $this->getSelectedCountry();
         $payment = $this->getSelectedPayment();
-        if(empty($country)||empty($payment)) return array('brutto'=>0, 'netto'=>0);
-        $shippingcosts = $this->admin->sGetShippingcosts($country, $payment['surcharge'], $payment['surchargestring']);
+        if (empty($country) || empty($payment)) {
+            return array('brutto'=>0, 'netto'=>0);
+        }
+        $shippingcosts = $this->admin->sGetPremiumShippingcosts($country);
         return empty($shippingcosts) ? array('brutto'=>0, 'netto'=>0) : $shippingcosts;
     }
 
