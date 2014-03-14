@@ -363,7 +363,12 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         // Prepare testData for comparison
         $this->post['countryID'] = $this->post['country'];
         unset($this->post['country']);
-        $this->post['birthday'] = mktime(0,0,0, (int) $this->post['birthmonth'], (int) $this->post['birthday'], (int) $this->post['birthyear']);
+        $this->post['birthday'] = mktime(
+            0,0,0,
+            (int) $this->post['birthmonth'],
+            (int) $this->post['birthday'],
+            (int) $this->post['birthyear']
+        );
         $this->post['birthday'] = '1998-10-21';
         unset($this->post['birthmonth']);
         unset($this->post['birthyear']);
@@ -448,8 +453,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         $shippingData = $this->module->sGetPreviousAddresses('shipping');
         $billingData = $this->module->sGetPreviousAddresses('billing');
-        $this->assertCount(1, $shippingData);
-        $this->assertCount(1, $billingData);
+        $this->assertGreaterThan(0, count($shippingData));
+        $this->assertGreaterThan(0, count($billingData));
 
         $shippingDetails = end($shippingData);
         $billingDetails = end($billingData);
@@ -1244,10 +1249,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         }
     }
 
-
     /**
      * @covers sAdmin::sGetCountryStateTranslation
-     * @group wip
      */
     public function testsGetCountryStateTranslation()
     {
@@ -1323,7 +1326,434 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             Shopware()->Db()->update('s_core_translations', $existingData, 'id = '.$existingDataId);
         }
         Shopware()->Db()->delete('s_core_translations', 'objectlanguage = 10000');
+    }
 
+    /**
+     * @covers sAdmin::sGetCountryList
+     */
+    public function testsGetCountryList()
+    {
+        // Test with default country data
+        $result = $this->module->sGetCountryList();
+        foreach ($result as $country) {
+            $this->assertArrayHasKey('id', $country);
+            $this->assertArrayHasKey('countryname', $country);
+            $this->assertArrayHasKey('countryiso', $country);
+            $this->assertArrayHasKey('areaID', $country);
+            $this->assertArrayHasKey('countryen', $country);
+            $this->assertArrayHasKey('shippingfree', $country);
+            $this->assertArrayHasKey('taxfree', $country);
+            $this->assertArrayHasKey('display_state_in_registration', $country);
+            $this->assertArrayHasKey('force_state_in_registration', $country);
+            $this->assertArrayHasKey('states', $country);
+            $this->assertArrayHasKey('flag', $country);
+        }
+
+        // Add translations
+        $existingCountryData = Shopware()->Db()->fetchRow("
+            SELECT * FROM s_core_translations
+            WHERE objecttype = 'config_countries' AND objectlanguage = 1
+        ");
+        $existingStateData = Shopware()->Db()->fetchRow("
+            SELECT * FROM s_core_translations
+            WHERE objecttype = 'config_country_states' AND objectlanguage = 1
+        ");
+
+        $demoCountryData = array(
+            'objectkey' => 1,
+            'objectlanguage' => 1,
+            'objecttype' => 'config_countries',
+            'objectdata' => 'a:1:{i:2;a:2:{s:6:"active";s:1:"1";s:11:"countryname";s:7:"Germany";}}'
+        );
+        $demoStateData = array(
+            'objectkey' => 1,
+            'objectlanguage' => 1,
+            'objecttype' => 'config_country_states',
+            'objectdata' => 'a:2:{i:2;a:1:{s:4:"name";s:3:"111";}i:3;a:1:{s:4:"name";s:3:"222";}}'
+        );
+
+        if($existingCountryData) {
+            Shopware()->Db()->update('s_core_translations', $demoCountryData, 'id = '.$existingCountryData['id']);
+        } else {
+            Shopware()->Db()->insert('s_core_translations', $demoCountryData);
+        }
+        if($existingStateData) {
+            Shopware()->Db()->update('s_core_translations', $demoStateData, 'id = '.$existingStateData['id']);
+        } else {
+            Shopware()->Db()->insert('s_core_translations', $demoStateData);
+        }
+
+        // Test with translations but display_states = false
+        $result = $this->module->sGetCountryList();
+        $country = $result[0]; // Germany
+        $this->assertArrayHasKey('id', $country);
+        $this->assertArrayHasKey('countryname', $country);
+        $this->assertArrayHasKey('countryiso', $country);
+        $this->assertArrayHasKey('areaID', $country);
+        $this->assertArrayHasKey('countryen', $country);
+        $this->assertArrayHasKey('shippingfree', $country);
+        $this->assertArrayHasKey('taxfree', $country);
+        $this->assertArrayHasKey('display_state_in_registration', $country);
+        $this->assertArrayHasKey('force_state_in_registration', $country);
+        $this->assertArrayHasKey('states', $country);
+        $this->assertArrayHasKey('flag', $country);
+        $this->assertCount(0, $country['states']);
+        $this->assertEquals('Germany', $country['countryname']);
+
+
+        // Hack the current system shop, so we can properly test this
+        Shopware()->Shop()->setDefault(false);
+
+        // Make Germany display states, so we can test it
+        $existingGermanyData = Shopware()->Db()->fetchRow("
+            SELECT * FROM s_core_countries
+            WHERE countryiso = 'DE'
+        ");
+        Shopware()->Db()->update(
+            's_core_countries',
+            array('display_state_in_registration' => 1),
+            'id = '.$existingGermanyData['id']
+        );
+
+        // Test with translations and states
+        $result = $this->module->sGetCountryList();
+        $country = $result[0]; // Germany
+        $this->assertArrayHasKey('id', $country);
+        $this->assertArrayHasKey('countryname', $country);
+        $this->assertArrayHasKey('countryiso', $country);
+        $this->assertArrayHasKey('areaID', $country);
+        $this->assertArrayHasKey('countryen', $country);
+        $this->assertArrayHasKey('shippingfree', $country);
+        $this->assertArrayHasKey('taxfree', $country);
+        $this->assertArrayHasKey('display_state_in_registration', $country);
+        $this->assertArrayHasKey('force_state_in_registration', $country);
+        $this->assertArrayHasKey('states', $country);
+        $this->assertArrayHasKey('flag', $country);
+        $this->assertCount(16, $country['states']);
+        $this->assertEquals('Germany', $country['countryname']);
+        foreach ($country['states'] as $state) {
+            $this->assertArrayHasKey('id', $state);
+            $this->assertArrayHasKey('countryID', $state);
+            $this->assertArrayHasKey('name', $state);
+            $this->assertArrayHasKey('shortcode', $state);
+            $this->assertArrayHasKey('active', $state);
+        }
+        $this->assertContains('111', array_column($country['states'], 'name'));
+
+        // If backup data exists, restore it
+        if($existingCountryData) {
+            $existingCountryDataId = $existingCountryData['id'];
+            unset($existingCountryData['id']);
+            Shopware()->Db()->update('s_core_translations', $existingCountryData, 'id = '.$existingCountryDataId);
+        }
+        if($existingStateData) {
+            $existingStateDataId = $existingStateData['id'];
+            unset($existingStateData['id']);
+            Shopware()->Db()->update('s_core_translations', $existingStateData, 'id = '.$existingStateDataId);
+        }
+        if($existingGermanyData) {
+            $existingGermanyDataId = $existingGermanyData['id'];
+            unset($existingGermanyData['id']);
+            Shopware()->Db()->update('s_core_countries', $existingGermanyData, 'id = '.$existingGermanyDataId);
+        }
+
+        // Remove shop hack
+        Shopware()->Shop()->setDefault(true);
+    }
+
+    /**
+     * @covers sAdmin::sSaveRegisterMainData
+     * @expectedException Zend_Db_Statement_Exception
+     */
+    public function testsSaveRegisterMainDataWithEmptyData()
+    {
+        $this->module->sSaveRegisterMainData(array());
+
+    }
+
+    /**
+     * @covers sAdmin::sSaveRegisterMainData
+     */
+    public function testsSaveRegisterMainData()
+    {
+        $password = Shopware()->PasswordEncoder()->encodePassword(
+            'foo',
+            'bcrypt'
+        );
+        $testData = array(
+            'auth' => array(
+                'password' => $password,
+                'email' => uniqid() . 'test@foobar.com',
+                'accountmode' => 1,
+                'encoderName' => 'bcrypt'
+            ),
+            'payment' => array(
+                'object' => array(
+                    'id' => 2
+                )
+            )
+        );
+        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+
+        $result = $this->module->sSaveRegisterMainData($testData);
+
+        /** @var $customer Shopware\Models\Customer\Customer */
+
+        $customer = Shopware()->Db()->fetchRow(
+            'SELECT * FROM s_user WHERE id = ?',
+            array($result)
+        );
+
+        $this->assertEquals($testData['auth']['email'], $customer['email']);
+        $this->assertEquals($customer['password'], $password);
+        $this->assertEquals($testData['auth']['accountmode'], $customer['accountmode']);
+        $this->assertEquals(2, $customer['paymentID']);
+
+        return $result;
+    }
+
+    /**
+     * @covers sAdmin::sSaveRegisterBilling
+     * @depends testsSaveRegisterMainData
+     * @expectedException Zend_Db_Statement_Exception
+     */
+    public function testsSaveRegisterBillingWithEmptyData($userId)
+    {
+        $this->module->sSaveRegisterBilling($userId, array());
+    }
+
+    /**
+     * @covers sAdmin::sSaveRegisterBilling
+     * @depends testsSaveRegisterMainData
+     */
+    public function testsSaveRegisterBilling($userId)
+    {
+        $testData = array(
+            'company' => 'Testcompany',
+            'department' => 'Testdepartment',
+            'salutation' => 'Testsalutation',
+            'firstname' => 'Testfirstname',
+            'lastname' => 'Testlastname',
+            'street' => 'Teststreet',
+            'streetnumber' => 'Teststreetnumber',
+            'zipcode' => 'Testzipcode',
+            'city' => 'Testcity',
+            'phone' => 'Testphone',
+            'fax' => 'Testfax',
+            'country' => '2',
+            'stateID' => '3',
+            'ustid' => 'Testustid',
+
+            'birthyear' => '1999',
+            'birthmonth' => '2',
+            'birthday' => '21',
+
+            'text1' => 'text1',
+            'text2' => 'text2',
+            'text3' => 'text3',
+            'text4' => 'text4',
+            'text5' => 'text5',
+            'text6' => 'text6'
+        );
+
+        $result = $this->module->sSaveRegisterBilling($userId, array('billing' => $testData));
+        $this->assertGreaterThan(0, $result);
+
+        $savedData = Shopware()->Db()->fetchRow('
+            SELECT *
+
+            FROM s_user_billingaddress
+            LEFT JOIN s_user_billingaddress_attributes
+            ON s_user_billingaddress.id = s_user_billingaddress_attributes.billingID
+
+            WHERE s_user_billingaddress.id = ?
+        ', array($result));
+
+        // Prepare demo data for comparison
+        $testData['countryID'] = $testData['country'];
+        unset($testData['country']);
+        $testData['birthday'] = mktime(
+            0,0,0,
+            (int) $testData['birthmonth'],
+            (int) $testData['birthday'],
+            (int) $testData['birthyear']
+        );
+        $testData['birthday'] = '1999-02-21';
+        unset($testData['birthmonth']);
+        unset($testData['birthyear']);
+
+        foreach ($testData as $name => $value) {
+            $this->assertEquals($savedData[$name], $value);
+        }
+
+        Shopware()->Db()->delete('s_user_billingaddress_attributes', 'billingID = '.$result);
+        Shopware()->Db()->delete('s_user_billingaddress', 'userID = '.$userId);
+    }
+
+    /**
+     * @covers sAdmin::sSaveRegisterShipping
+     * @depends testsSaveRegisterMainData
+     * @expectedException Zend_Db_Statement_Exception
+     */
+    public function testsSaveRegisterShippingWithEmptyData($userId)
+    {
+        $this->module->sSaveRegisterShipping($userId, array());
+    }
+
+    /**
+     * @covers sAdmin::sSaveRegisterShipping
+     * @depends testsSaveRegisterMainData
+     */
+    public function testsSaveRegisterShipping($userId)
+    {
+        $testData = array(
+            'company' => 'Testcompany',
+            'department' => 'Testdepartment',
+            'salutation' => 'Testsalutation',
+            'firstname' => 'Testfirstname',
+            'lastname' => 'Testlastname',
+            'street' => 'Teststreet',
+            'streetnumber' => 'Teststreetnumber',
+            'zipcode' => 'Testzipcode',
+            'city' => 'Testcity',
+            'country' => '2',
+            'stateID' => '3',
+
+            'text1' => 'text1',
+            'text2' => 'text2',
+            'text3' => 'text3',
+            'text4' => 'text4',
+            'text5' => 'text5',
+            'text6' => 'text6'
+        );
+
+        $result = $this->module->sSaveRegisterShipping($userId, array('shipping' => $testData));
+        $this->assertGreaterThan(0, $result);
+
+        $savedData = Shopware()->Db()->fetchRow('
+            SELECT *
+
+            FROM s_user_shippingaddress
+            LEFT JOIN s_user_shippingaddress_attributes
+            ON s_user_shippingaddress.id = s_user_shippingaddress_attributes.shippingID
+
+            WHERE s_user_shippingaddress.id = ?
+        ', array($result));
+
+        // Prepare demo data for comparison
+        $testData['countryID'] = $testData['country'];
+        unset($testData['country']);
+
+        foreach ($testData as $name => $value) {
+            $this->assertEquals($savedData[$name], $value);
+        }
+
+        Shopware()->Db()->delete('s_user_shippingaddress_attributes', 'shippingID = '.$result);
+        Shopware()->Db()->delete('s_user_shippingaddress', 'userID = '.$userId);
+        Shopware()->Db()->delete('s_user_attributes', 'userID = '.$userId);
+        Shopware()->Db()->delete('s_user', 'id = '.$userId);
+    }
+
+    /**
+     * @covers sAdmin::sSaveRegisterNewsletter
+     */
+    public function testsSaveRegisterNewsletter()
+    {
+        // Test basic scenario
+        $email = uniqid() . 'test@foobar.com';
+        $result = Shopware()->Db()->fetchOne(
+            'SELECT id FROM s_campaigns_mailaddresses WHERE email = ?',
+            array($email)
+        );
+        $this->assertFalse($result);
+
+        $testData = array(
+            'auth' => array(
+                'email' =>  $email,
+            ),
+        );
+        $this->module->sSaveRegisterNewsletter($testData);
+        $result = Shopware()->Db()->fetchOne(
+            'SELECT id FROM s_campaigns_mailaddresses WHERE email = ?',
+            array($email)
+        );
+        $this->assertGreaterThan(0, $result);
+
+        // Test that duplicates are not changed
+        $this->module->sSaveRegisterNewsletter($testData);
+        $result = Shopware()->Db()->fetchOne(
+            'SELECT id FROM s_campaigns_mailaddresses WHERE email = ?',
+            array($email)
+        );
+        $this->assertGreaterThan(0, $result);
+    }
+
+    /**
+     * @covers sAdmin::sSaveRegister
+     */
+    public function testsSaveRegisterWithRegistrationFinished()
+    {
+        $customer = $this->createDummyCustomer();
+
+        $this->session["sRegisterFinished"] = true;
+        $this->session['sUserMail'] = $customer->getEmail();
+        $this->session['sUserPassword'] = $customer->getPassword();
+        $this->session['sOneTimeAccount'] = true;
+        $this->assertTrue($this->module->sSaveRegister());
+        $this->assertNotEmpty($this->session["sUserId"]);
+
+        $this->deleteDummyCustomer($customer);
+    }
+
+    /**
+     * @covers sAdmin::sSaveRegister
+     * @expectedException Enlight_Exception
+     */
+    public function testsSaveRegisterWithNoData()
+    {
+        $this->assertTrue($this->module->sSaveRegister());
+        $this->assertNotEmpty($this->session["sUserId"]);
+    }
+
+    /**
+     * @covers sAdmin::sSaveRegister
+     * @group wip
+     */
+    public function testsSaveRegister()
+    {
+        // Prepare all needed test structures for login
+        $testData = array(
+            'auth' => array(
+                'email' => uniqid() . 'test@foobar.com',
+                'password' => 'fooobar',
+                'accountmode' => 1,
+                'encoderName' => 'bcrypt'
+            ),
+            'billing' => array(
+                'salutation' => 'testsalutation',
+                'firstname' => 'testfirstname',
+                'lastname' => 'testlastname',
+                'street' => 'teststreet',
+                'streetnumber' => 'teststreetnumber',
+                'zipcode' => 'testzipcode',
+                'city' => 'testcity',
+                'country' => 'testcountry'
+            ),
+            'payment' => array(
+                'object' => array(
+                    'id' => 2
+                )
+            )
+        );
+        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+
+        $this->session['sRegister'] = $testData;
+
+        // Test that login was successful
+        $this->assertEmpty($this->session["sUserId"]);
+        $this->assertTrue($this->module->sSaveRegister());
+        $this->assertNotEmpty($this->session["sUserId"]);
+        $this->assertTrue($this->module->sCheckUser());
     }
 
     /**
@@ -1392,11 +1822,16 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $billingId = Shopware()->Db()->fetchOne('SELECT id FROM s_user_billingaddress WHERE userID = ?', array($customer->getId()));
         $shippingId = Shopware()->Db()->fetchOne('SELECT id FROM s_user_shippingaddress WHERE userID = ?', array($customer->getId()));
 
-        Shopware()->Db()->delete('s_user_billingaddress_attributes', 'billingID = '.$billingId);
-        Shopware()->Db()->delete('s_user_shippingaddress_attributes', 'shippingID = '.$shippingId);
-        Shopware()->Db()->delete('s_user_billingaddress', 'id = '.$billingId);
-        Shopware()->Db()->delete('s_user_shippingaddress', 'id = '.$shippingId);
+        if($billingId) {
+            Shopware()->Db()->delete('s_user_billingaddress_attributes', 'billingID = '.$billingId);
+            Shopware()->Db()->delete('s_user_billingaddress', 'id = '.$billingId);
+        }
+        if($shippingId) {
+            Shopware()->Db()->delete('s_user_shippingaddress_attributes', 'shippingID = '.$shippingId);
+            Shopware()->Db()->delete('s_user_shippingaddress', 'id = '.$shippingId);
+        }
         Shopware()->Db()->delete('s_core_payment_data', 'user_id = '.$customer->getId());
+        Shopware()->Db()->delete('s_user_attributes', 'userID = '.$customer->getId());
         Shopware()->Db()->delete('s_user', 'id = '.$customer->getId());
     }
 }

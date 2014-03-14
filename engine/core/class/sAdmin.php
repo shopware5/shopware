@@ -1323,7 +1323,7 @@ class sAdmin
             }
 
             if (empty($encoderName)) {
-                throw new \Exception('No encoderName given.');
+                throw new \Exception('No encoder name given.');
             }
 
             $hash      = $getUser['password'];
@@ -1755,76 +1755,77 @@ class sAdmin
     }
 
     /**
-     * Get country list
-     * @access public
-     * @return array - country list
+     * Get list of currently active countries. Includes states and translations
+     *
+     * @return array Country list
      */
     public function sGetCountryList()
     {
-        $getCountries = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll(
+        $countryList = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll(
             $this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],
             "SELECT * FROM s_core_countries WHERE active = 1 ORDER BY position, countryname ASC"
         );
 
-        $object = $this->sGetCountryTranslation();
-        $stateTranslation = $this->sGetCountryStateTranslation();
+        $countryTranslations = $this->sGetCountryTranslation();
+        $stateTranslations = $this->sGetCountryStateTranslation();
 
-        foreach ($getCountries as $key => $v) {
+        foreach ($countryList as $key => $country) {
 
-            if (isset($object[$v["id"]]["active"])) {
-                if (!$object[$v["id"]]["active"]) {
-                    unset($getCountries[$key]);
+            if (isset($countryTranslations[$country["id"]]["active"])) {
+                if (!$countryTranslations[$country["id"]]["active"]) {
+                    unset($countryList[$key]);
                     continue;
                 }
             }
 
-            $getCountries[$key]["states"] = array();
-            if (!empty($v["display_state_in_registration"])) {
+            $countryList[$key]["states"] = array();
+            if (!empty($country["display_state_in_registration"])) {
                 // Get country states
                 $states = Shopware()->Db()->fetchAssoc("
                     SELECT * FROM s_core_countries_states
                     WHERE countryID = ? AND active = 1
                     ORDER BY position, name ASC
-                ", array($v["id"]));
+                ", array($country["id"]));
 
                 foreach ($states as $stateId => $state) {
-                    if (isset($stateTranslation[$stateId])) {
-                        $states[$stateId] = array_merge($state, $stateTranslation[$stateId]);
+                    if (isset($stateTranslations[$stateId])) {
+                        $states[$stateId] = array_merge($state, $stateTranslations[$stateId]);
                     }
                 }
-                $getCountries[$key]["states"] = $states;
+                $countryList[$key]["states"] = $states;
             }
-            if (!empty($object[$v["id"]]["countryname"])) {
-                $getCountries[$key]["countryname"] = $object[$v["id"]]["countryname"];
+            if (!empty($countryTranslations[$country["id"]]["countryname"])) {
+                $countryList[$key]["countryname"] = $countryTranslations[$country["id"]]["countryname"];
             }
-            if (!empty($object[$v["id"]]["notice"])) {
-                $getCountries[$key]["notice"] = $object[$v["id"]]["notice"];
+            if (!empty($countryTranslations[$country["id"]]["notice"])) {
+                $countryList[$key]["notice"] = $countryTranslations[$country["id"]]["notice"];
             }
 
-            if ($getCountries[$key]["id"] == $this->sSYSTEM->_POST['country']
-                || $getCountries[$key]["id"] == $this->sSYSTEM->_POST['countryID']
+            if ($countryList[$key]["id"] == $this->sSYSTEM->_POST['country']
+                || $countryList[$key]["id"] == $this->sSYSTEM->_POST['countryID']
             ) {
-                $getCountries[$key]["flag"] = true;
+                $countryList[$key]["flag"] = true;
             } else {
-                $getCountries[$key]["flag"] = false;
+                $countryList[$key]["flag"] = false;
             }
         }
 
-        $getCountries = Enlight()->Events()->filter(
+        $countryList = Enlight()->Events()->filter(
             'Shopware_Modules_Admin_GetCountries_FilterResult',
-            $getCountries,
+            $countryList,
             array('subject' => $this)
         );
 
-        return $getCountries;
+        return $countryList;
     }
 
 
     /**
-     * Registration - storage main user data (login data / entry in s_user)
-     * @param array $userObject - Array with all information from the registration process
-     * @access public
-     * @return int - insert id
+     * Stores user data in database.
+     * Used internally in sAdmin during the registration process
+     *
+     * @param array $userObject  Array with all information from the registration process
+     * @return int Created user id
      */
     public function sSaveRegisterMainData($userObject)
     {
@@ -1835,12 +1836,17 @@ class sAdmin
             $sMerchant = "";
         }
 
-        if (empty($this->sSYSTEM->sCONFIG["sDefaultCustomerGroup"])) $this->sSYSTEM->sCONFIG["sDefaultCustomerGroup"] = "EK";
+        if (empty($this->sSYSTEM->sCONFIG["sDefaultCustomerGroup"])) {
+            $this->sSYSTEM->sCONFIG["sDefaultCustomerGroup"] = "EK";
+        }
         $referer = $this->sSYSTEM->_SESSION['sReferer'];
 
         if (!empty($this->sSYSTEM->_SESSION['sPartner'])) {
             $sql = 'SELECT id FROM s_emarketing_partner WHERE idcode = ?';
-            $partner = (int) $this->sSYSTEM->sDB_CONNECTION->GetOne($sql, array($this->sSYSTEM->_SESSION['sPartner']));
+            $partner = (int) $this->sSYSTEM->sDB_CONNECTION->GetOne(
+                $sql,
+                array($this->sSYSTEM->_SESSION['sPartner'])
+            );
         }
 
         $data = array(
@@ -1867,10 +1873,17 @@ class sAdmin
             VALUES (?,?,?,1,?,?,NOW(),?,?,?,?,?,?,?)
         ';
 
-        list($sql,$data) = Enlight()->Events()->filter('Shopware_Modules_Admin_SaveRegisterMainData_FilterSql', array($sql,$data), array('subject' => $this));
+        list($sql, $data) = Enlight()->Events()->filter(
+            'Shopware_Modules_Admin_SaveRegisterMainData_FilterSql',
+            array($sql, $data),
+            array('subject' => $this)
+        );
 
         $saveUserData = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, $data);
-        Enlight()->Events()->notify('Shopware_Modules_Admin_SaveRegisterMainData_Return', array('subject' => $this,'insertObject' => $saveUserData));
+        Enlight()->Events()->notify(
+            'Shopware_Modules_Admin_SaveRegisterMainData_Return',
+            array('subject' => $this,'insertObject' => $saveUserData)
+        );
 
         $userId = $this->sSYSTEM->sDB_CONNECTION->Insert_ID();
 
@@ -1878,54 +1891,72 @@ class sAdmin
             INSERT INTO s_user_attributes (userID) VALUES (?)
         ";
         $data = array($userId);
-        list($sql,$data) = Enlight()->Events()->filter('Shopware_Modules_Admin_SaveRegisterMainDataAttributes_FilterSql', array($sql,$data), array('subject' => $this));
+
+        list($sql,$data) = Enlight()->Events()->filter(
+            'Shopware_Modules_Admin_SaveRegisterMainDataAttributes_FilterSql',
+            array($sql, $data),
+            array('subject' => $this)
+        );
         $saveAttributeData = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, $data);
-        Enlight()->Events()->notify('Shopware_Modules_Admin_SaveRegisterMainDataAttributes_Return', array('subject' => $this,'insertObject' => $saveAttributeData));
+
+        Enlight()->Events()->notify(
+            'Shopware_Modules_Admin_SaveRegisterMainDataAttributes_Return',
+            array('subject' => $this, 'insertObject' => $saveAttributeData)
+        );
 
         return $userId;
     }
 
     /**
-     * Registration - storage of email in maillist
-     * @param array $userObject - Array with all information from the registration process
-     * @access public
-     * @return null
+     * Adds user's email to the mailing list
+     * Used during registration
+     *
+     * @param array $userObject Array with all information from the registration process
      */
     public function sSaveRegisterNewsletter($userObject)
     {
         // Check for duplicates
         $checkDuplicate = $this->sSYSTEM->sDB_CONNECTION->GetRow("
-        SELECT id FROM s_campaigns_mailaddresses
-        WHERE email=?",array($userObject["auth"]["email"]));
+            SELECT id FROM s_campaigns_mailaddresses WHERE email = ?",
+            array($userObject["auth"]["email"])
+        );
 
         if (empty($checkDuplicate["id"])) {
-            $saveNewsletter = $this->sSYSTEM->sDB_CONNECTION->Execute("
-            INSERT INTO s_campaigns_mailaddresses (customer, groupID, email)
-            VALUES (1,0,?)",array($userObject["auth"]["email"]));
+            $saveNewsletter = $this->sSYSTEM->sDB_CONNECTION->Execute(
+                "INSERT INTO s_campaigns_mailaddresses (customer, groupID, email) VALUES (1, 0, ?)",
+                array($userObject["auth"]["email"])
+            );
         }
     }
 
     /**
-     * Registration - storage of billing address
-     * @param int $userID - user id (s_user.id) from sSaveRegisterMain
-     * @param array $userObject - Array with all information from the registration process
-     * @access public
-     * @return int - insert id / row id
+     * Save user billing address.
+     * Used internally in sAdmin during the registration process
+     *
+     * @param int $userID User id (s_user.id) from sSaveRegisterMain
+     * @param array $userObject Array with all information from the registration process
+     * @return int Created billing address id
      */
     public function sSaveRegisterBilling($userID, $userObject)
     {
-        if ($userObject["billing"]["birthmonth"]=="-") unset($userObject["billing"]["birthmonth"]);
-        if ($userObject["billing"]["birthday"]=="--") unset($userObject["billing"]["birthday"]);
-        if ($userObject["billing"]["birthyear"]=="----") unset($userObject["billing"]["birthyear"]);
+        if ($userObject["billing"]["birthmonth"] == "-") {
+            unset($userObject["billing"]["birthmonth"]);
+        }
+        if ($userObject["billing"]["birthday"] == "--") {
+            unset($userObject["billing"]["birthday"]);
+        }
+        if ($userObject["billing"]["birthyear"] == "----") {
+            unset($userObject["billing"]["birthyear"]);
+        }
 
         if (!empty($userObject["billing"]["birthmonth"]) &&
             !empty($userObject["billing"]["birthday"]) &&
             !empty($userObject["billing"]["birthyear"])
         ) {
-            $date = $userObject["billing"]["birthyear"]."-".$userObject["billing"]["birthmonth"]."-".$userObject["billing"]["birthday"];
+            $date = $userObject["billing"]["birthyear"] . "-" . $userObject["billing"]["birthmonth"]
+                . "-" . $userObject["billing"]["birthday"];
 
-            $date = date("Y-m-d",strtotime($date));
-
+            $date = date("Y-m-d", strtotime($date));
         } else {
             $date = "0000-00-00";
         }
@@ -1950,17 +1981,24 @@ class sAdmin
         );
 
         $sqlBilling = "INSERT INTO s_user_billingaddress
-            (userID,company,department, salutation,firstname,lastname,
-            street,streetnumber,zipcode,city,phone,
-            fax,countryID,stateID,ustid,birthday)
+            (userID, company, department, salutation, firstname, lastname,
+            street, streetnumber, zipcode, city,phone,
+            fax, countryID, stateID, ustid, birthday)
             VALUES
             (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         // Trying to insert
-        list($sqlBilling,$data) = Enlight()->Events()->filter('Shopware_Modules_Admin_SaveRegisterBilling_FilterSql', array($sqlBilling,$data), array('subject' => $this));
+        list($sqlBilling,$data) = Enlight()->Events()->filter(
+            'Shopware_Modules_Admin_SaveRegisterBilling_FilterSql',
+            array($sqlBilling,$data),
+            array('subject' => $this)
+        );
 
         $saveUserData = $this->sSYSTEM->sDB_CONNECTION->Execute($sqlBilling,$data);
-        Enlight()->Events()->notify('Shopware_Modules_Admin_SaveRegisterBilling_Return', array('subject' => $this,'insertObject' => $saveUserData));
+        Enlight()->Events()->notify(
+            'Shopware_Modules_Admin_SaveRegisterBilling_Return',
+            array('subject' => $this, 'insertObject' => $saveUserData)
+        );
 
         //new attribute tables.
         $billingID = $this->sSYSTEM->sDB_CONNECTION->Insert_ID();
@@ -1978,28 +2016,42 @@ class sAdmin
                  VALUES
                  (?,?,?,?,?,?,?)";
 
-        list($sqlAttribute,$attributeData) = Enlight()->Events()->filter('Shopware_Modules_Admin_SaveRegisterBillingAttributes_FilterSql', array($sqlAttribute,$attributeData), array('subject' => $this));
+        list($sqlAttribute,$attributeData) = Enlight()->Events()->filter(
+            'Shopware_Modules_Admin_SaveRegisterBillingAttributes_FilterSql',
+            array($sqlAttribute,$attributeData),
+            array('subject' => $this)
+        );
         $saveAttributeData = $this->sSYSTEM->sDB_CONNECTION->Execute($sqlAttribute,$attributeData);
-        Enlight()->Events()->notify('Shopware_Modules_Admin_SaveRegisterBillingAttributes_Return', array('subject' => $this,'insertObject' => $saveAttributeData));
+        Enlight()->Events()->notify(
+            'Shopware_Modules_Admin_SaveRegisterBillingAttributes_Return',
+            array('subject' => $this,'insertObject' => $saveAttributeData)
+        );
 
         return $billingID;
     }
 
     /**
-     * Registration - storage of shipping address
-     * @param int $userID - user id (s_user.id) from sSaveRegisterMain
-     * @param array $userObject - Array with all information from the registration process
-     * @access public
-     * @return int - insert id / row id
+     * Save user shipping address.
+     * Used internally in sAdmin during the registration process
+     *
+     * @param int $userID user id (s_user.id) from sSaveRegisterMain
+     * @param array $userObject Array with all information from the registration process
+     * @return int Created shipping address id
      */
     public function sSaveRegisterShipping($userID, $userObject)
     {
         $sqlShipping = "INSERT INTO s_user_shippingaddress
-            (userID,company,department, salutation,firstname,lastname,
-            street,streetnumber,zipcode,city, countryID,stateID)
+            (userID, company, department, salutation, firstname, lastname,
+            street, streetnumber, zipcode, city, countryID, stateID)
             VALUES
             (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
-        $sqlShipping = Enlight()->Events()->filter('Shopware_Modules_Admin_SaveRegisterShipping_FilterSql', $sqlShipping, array('subject' => $this,'user' => $userObject,'id' => $userID));
+
+        $sqlShipping = Enlight()->Events()->filter(
+            'Shopware_Modules_Admin_SaveRegisterShipping_FilterSql',
+            $sqlShipping,
+            array('subject' => $this, 'user' => $userObject, 'id' => $userID)
+        );
+
         $shippingParams = array(
             $userID,
             $userObject["shipping"]["company"],
@@ -2016,7 +2068,10 @@ class sAdmin
         );
         // Trying to insert
         $saveUserData = $this->sSYSTEM->sDB_CONNECTION->Execute($sqlShipping, $shippingParams);
-        Enlight()->Events()->notify('Shopware_Modules_Admin_SaveRegisterShipping_Return', array('subject' => $this,'insertObject' => $saveUserData));
+        Enlight()->Events()->notify(
+            'Shopware_Modules_Admin_SaveRegisterShipping_Return',
+            array('subject' => $this, 'insertObject' => $saveUserData)
+        );
 
         //new attribute table
         $shippingId = $this->sSYSTEM->sDB_CONNECTION->Insert_ID();
@@ -2024,7 +2079,12 @@ class sAdmin
                  (shippingID, text1, text2, text3, text4, text5, text6)
                  VALUES
                  (?, ?, ?, ?, ?, ?, ?)";
-        $sqlAttributes = Enlight()->Events()->filter('Shopware_Modules_Admin_SaveRegisterShippingAttributes_FilterSql', $sqlAttributes, array('subject' => $this,'user' => $userObject,'id' => $userID));
+
+        $sqlAttributes = Enlight()->Events()->filter(
+            'Shopware_Modules_Admin_SaveRegisterShippingAttributes_FilterSql',
+            $sqlAttributes,
+            array('subject' => $this, 'user' => $userObject, 'id' => $userID)
+        );
         $attributeParams = array(
             $shippingId,
             $userObject["shipping"]["text1"],
@@ -2035,20 +2095,27 @@ class sAdmin
             $userObject["shipping"]["text6"]
         );
         $saveAttributeData = $this->sSYSTEM->sDB_CONNECTION->Execute($sqlAttributes, $attributeParams);
-        Enlight()->Events()->notify('Shopware_Modules_Admin_SaveRegisterShippingAttributes_Return', array('subject' => $this,'insertObject' => $saveAttributeData));
+        Enlight()->Events()->notify(
+            'Shopware_Modules_Admin_SaveRegisterShippingAttributes_Return',
+            array('subject' => $this, 'insertObject' => $saveAttributeData)
+        );
 
         return $shippingId;
     }
 
     /**
-     * Registration - Mail register confirmation
-     * @param string $email - Recipient mail
-     * @access public
-     * @return null
+     * Send email with registration confirmation
+     * Used internally in sAdmin during the registration process
+     *
+     * @param string $email Recipient email address
+     * @return null|false False if stopped, null otherwise
      */
     public function sSaveRegisterSendConfirmation($email)
     {
-        if (Enlight()->Events()->notifyUntil('Shopware_Modules_Admin_SaveRegisterSendConfirmation_Start', array('subject' => $this,'email' => $email))) {
+        if (Enlight()->Events()->notifyUntil(
+            'Shopware_Modules_Admin_SaveRegisterSendConfirmation_Start',
+            array('subject' => $this,'email' => $email))
+        ) {
             return false;
         }
 
@@ -2076,19 +2143,26 @@ class sAdmin
             $mail->addBcc($this->sSYSTEM->sCONFIG['sMAIL']);
         }
 
-        Enlight()->Events()->notify('Shopware_Modules_Admin_SaveRegisterSendConfirmation_BeforeSend', array('subject' => $this,'mail' => $mail));
+        Enlight()->Events()->notify(
+            'Shopware_Modules_Admin_SaveRegisterSendConfirmation_BeforeSend',
+            array('subject' => $this,'mail' => $mail)
+        );
 
         $mail->send();
     }
 
     /**
-     * Register - finaly check data and call the different sub functions (saveBilling etc.)
-     * @param array $paymentObject - choosen payment data
-     * @return boolean
+     * Main registration function used by the Register controller
+     * Calls all previously defined helper functions to save user data
+     *
+     * @return boolean If the operation was successful
      */
-    public function sSaveRegister($paymentObject=null)
+    public function sSaveRegister()
     {
-        if (Enlight()->Events()->notifyUntil('Shopware_Modules_Admin_SaveRegister_Start', array('subject' => $this))) {
+        if (Enlight()->Events()->notifyUntil(
+            'Shopware_Modules_Admin_SaveRegister_Start',
+            array('subject' => $this))
+        ) {
             return false;
         }
         if (!$this->sSYSTEM->_SESSION["sRegisterFinished"]) {
@@ -2098,33 +2172,53 @@ class sAdmin
                 $this->sSYSTEM->_SESSION["sRegister"] = $register;
             }
 
-            $neededFields["auth"] = array("email","password");
-            $neededFields["billing"] = array("salutation","firstname","lastname","street","streetnumber","zipcode","city","country");
-            $neededFields["payment"] = array("object"=>array("id"));
+            $neededFields = array(
+                "auth" => array(
+                    "email",
+                    "password"
+                ),
+                "billing" => array(
+                    "salutation", "firstname",
+                    "lastname", "street",
+                    "streetnumber", "zipcode",
+                    "city", "country"
+                ),
+                "payment" => array(
+                    "object" => array("id")
+                )
+            );
 
-            $neededFields = Enlight()->Events()->filter('Shopware_Modules_Admin_SaveRegister_FilterNeededFields', $neededFields, array('subject' => $this));
+            $neededFields = Enlight()->Events()->filter(
+                'Shopware_Modules_Admin_SaveRegister_FilterNeededFields',
+                $neededFields,
+                array('subject' => $this)
+            );
 
             // Check for needed fields
-            foreach ($neededFields as $needKey => $needValue) {
-                foreach ($neededFields[$needKey] as $fieldKey => $fieldValue) {
+            foreach ($neededFields as $sectionKey => $sectionFields) {
+                foreach ($neededFields[$sectionKey] as $fieldKey => $fieldValue) {
                     if (is_array($fieldValue)) {
 
                         $objKey = $fieldValue[0];
 
-                        if (empty($this->sSYSTEM->_SESSION["sRegister"][$needKey][$fieldKey][$objKey])) {
-                            $errorFields[] = $needKey."#1($needKey)($fieldKey)($objKey)->".$fieldValue;
+                        if (empty($this->sSYSTEM->_SESSION["sRegister"][$sectionKey][$fieldKey][$objKey])) {
+                            $errorFields[] = $sectionKey."#1($sectionKey)($fieldKey)($objKey)->".$fieldValue;
                         }
                     } else {
-                        if (empty($this->sSYSTEM->_SESSION["sRegister"][$needKey][$fieldValue])) {
-                            $errorFields[] = $needKey."#2->".$fieldValue;
+                        if (empty($this->sSYSTEM->_SESSION["sRegister"][$sectionKey][$fieldValue])) {
+                            $errorFields[] = $sectionKey."#2->".$fieldValue;
                         }
                     }
                 }
             }
 
-            $errorFields = Enlight()->Events()->filter('Shopware_Modules_Admin_SaveRegister_FilterErrors', $errorFields, array('subject' => $this));
+            $errorFields = Enlight()->Events()->filter(
+                'Shopware_Modules_Admin_SaveRegister_FilterErrors',
+                $errorFields,
+                array('subject' => $this)
+            );
 
-            // Check for occured errors
+            // Check for errors
             if (count($errorFields)) {
                 if (!$_COOKIE["SHOPWARESID"]) {
                     $noCookies = "NO SESSION-COOKIE";
@@ -2133,11 +2227,13 @@ class sAdmin
                 die ("Session Lost - Bitte aktivieren Sie Cookies in Ihrem Browser!");
                 return false;
             } else {
-
                 $userObject = $this->sSYSTEM->_SESSION["sRegister"];
 
-                if (!$userObject["payment"]["object"]["id"]) $userObject["payment"]["object"]["id"] = $this->sSYSTEM->sCONFIG['sPAYMENTDEFAULT'];
+                if (!$userObject["payment"]["object"]["id"]) {
+                    $userObject["payment"]["object"]["id"] = $this->sSYSTEM->sCONFIG['sPAYMENTDEFAULT'];
+                }
 
+                // Save main user data
                 $userID = $this->sSaveRegisterMainData($userObject);
 
                 if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg() || !$userID) {
@@ -2149,7 +2245,7 @@ class sAdmin
                     $this->sSaveRegisterNewsletter($userObject);
                 }
 
-                // Insert billing-address
+                // Save user billing address
                 $userBillingID = $this->sSaveRegisterBilling($userID,$userObject);
 
                 if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg() || !$userBillingID) {
@@ -2159,15 +2255,26 @@ class sAdmin
 
 
                 if ($this->sSYSTEM->sCONFIG['sSHOPWAREMANAGEDCUSTOMERNUMBERS']) {
-                    if (!Enlight()->Events()->notifyUntil('Shopware_Modules_Admin_SaveRegister_GetCustomerNumber', array('subject' => $this,'id' => $userID))) {
-                        $sql = "UPDATE `s_order_number`,`s_user_billingaddress`  SET `s_order_number`.`number`=`s_order_number`.`number`+1, `s_user_billingaddress`.`customernumber`=`s_order_number`.`number` WHERE `s_order_number`.`name` ='user' AND `s_user_billingaddress`.`userID`=?";
-                        $this->sSYSTEM->sDB_CONNECTION->Execute($sql,array($userID));
+                    if (!Enlight()->Events()->notifyUntil(
+                        'Shopware_Modules_Admin_SaveRegister_GetCustomerNumber', 
+                        array('subject' => $this,'id' => $userID))
+                    ) {
+                        $sql = "
+                            UPDATE
+                              s_order_number, s_user_billingaddress
+                            SET
+                              s_order_number.number = s_order_number.number+1,
+                              s_user_billingaddress.customernumber = s_order_number.number
+                            WHERE s_order_number.name = 'user'
+                            AND s_user_billingaddress.userID = ?
+                        ";
+                        $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($userID));
                     }
                 }
 
-                // Insert shipping-adress
+                // Save user shipping address
                 if (count($userObject["shipping"])) {
-                    $userShippingID = $this->sSaveRegisterShipping($userID,$userObject);
+                    $userShippingID = $this->sSaveRegisterShipping($userID, $userObject);
                     if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg() || !$userShippingID) {
                         $this->sSYSTEM->E_CORE_WARNING("sSaveRegister #02","Could not save data (shipping-address)".$this->sSYSTEM->sDB_CONNECTION->ErrorMsg().print_r($userObject,true));
                         return false;
@@ -2177,7 +2284,7 @@ class sAdmin
                 $uMail = $userObject["auth"]["email"];
                 $uPass = $userObject["auth"]["password"];
 
-                if ($userObject["auth"]["accountmode"]<1) {
+                if ($userObject["auth"]["accountmode"] < 1) {
                     $this->sSaveRegisterSendConfirmation($uMail);
                     $this->sSYSTEM->_SESSION["sOneTimeAccount"] = false;
                 } else {
@@ -2188,12 +2295,12 @@ class sAdmin
                 if (!empty($this->sSYSTEM->_SESSION['sReferer'])) {
                     $referer = addslashes($this->sSYSTEM->_SESSION['sReferer']);
                     $sql = "
-                    INSERT INTO
-                        `s_emarketing_referer` ( `userID` , `referer` , `date` )
-                    VALUES (
-                        ?, ?, NOW()
+                        INSERT INTO
+                            s_emarketing_referer (userID, referer, date)
+                        VALUES (
+                            ?, ?, NOW()
                     );";
-                    $this->sSYSTEM->sDB_CONNECTION->Execute($sql,array($userID,$referer));
+                    $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($userID, $referer));
                 }
 
                 $this->sSYSTEM->_POST["email"] = $uMail;
@@ -2205,40 +2312,50 @@ class sAdmin
                 // The user is now registered
                 $this->sSYSTEM->_SESSION["sRegisterFinished"] = true;
 
-                Enlight()->Events()->notify('Shopware_Modules_Admin_SaveRegister_Successful', array('subject' => $this,'id' => $userID,'billingID' => $userBillingID,'shippingID' => $userShippingID));
+                Enlight()->Events()->notify(
+                    'Shopware_Modules_Admin_SaveRegister_Successful',
+                    array(
+                        'subject' => $this,
+                        'id' => $userID,
+                        'billingID' => $userBillingID,
+                        'shippingID' => $userShippingID
+                    )
+                );
 
                 // Garbage
                 unset($this->sSYSTEM->_SESSION['sRegister']);
             }
-
-            return true;
         } else {
             $this->sSYSTEM->_POST["email"] = $this->sSYSTEM->_SESSION['sUserMail'];
             $this->sSYSTEM->_POST["passwordMD5"] = $this->sSYSTEM->_SESSION['sUserPassword'];
             $chkUserLogin = $this->sLogin($this->sSYSTEM->_SESSION["sOneTimeAccount"]);
-            return true;
         }
-
+        return true;
     }
-
-
-
 
     /**
      * Account - get purchased instant downloads
-     * @access public
+     *
      * @return array - Data from orders who contains instant downloads
      */
     public function sGetDownloads()
     {
-        $getOrders = $this->sSYSTEM->sDB_CONNECTION->GetAll("
-        SELECT id, ordernumber, invoice_amount, invoice_amount_net, invoice_shipping, invoice_shipping_net, DATE_FORMAT(ordertime,'%d.%m.%Y %H:%i') AS datum, status,cleared, comment
-        FROM s_order WHERE userID=? AND s_order.status>=0 ORDER BY ordertime DESC LIMIT 10
-        ",array($this->sSYSTEM->_SESSION["sUserId"]));
+        $getOrders = $this->sSYSTEM->sDB_CONNECTION->GetAll(
+            "SELECT
+                id, ordernumber, invoice_amount, invoice_amount_net,
+                invoice_shipping, invoice_shipping_net,
+                DATE_FORMAT(ordertime, '%d.%m.%Y %H:%i') AS datum,
+                status, cleared, comment
+            FROM s_order WHERE userID = ? AND s_order.status >= 0
+            ORDER BY ordertime DESC LIMIT 10",
+            array($this->sSYSTEM->_SESSION["sUserId"])
+        );
 
         foreach ($getOrders as $orderKey => $orderValue) {
 
-            if (($this->sSYSTEM->sCONFIG['sARTICLESOUTPUTNETTO'] && !$this->sSYSTEM->sUSERGROUPDATA["tax"]) || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])) {
+            if (($this->sSYSTEM->sCONFIG['sARTICLESOUTPUTNETTO'] && !$this->sSYSTEM->sUSERGROUPDATA["tax"])
+                || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])
+            ) {
                 $getOrders[$orderKey]["invoice_amount"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($orderValue["invoice_amount_net"]);
                 $getOrders[$orderKey]["invoice_shipping"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($orderValue["invoice_shipping_net"]);
             } else {
@@ -2247,7 +2364,7 @@ class sAdmin
             }
 
             $getOrderDetails = $this->sSYSTEM->sDB_CONNECTION->GetAll("
-            SELECT * FROM s_order_details WHERE orderID={$orderValue["id"]}
+              SELECT * FROM s_order_details WHERE orderID = {$orderValue["id"]}
             ");
 
             if (!count($getOrderDetails)) {
@@ -2257,6 +2374,7 @@ class sAdmin
                 foreach ($getOrderDetails as $orderDetailsKey => $orderDetailsValue) {
                     $getOrderDetails[$orderDetailsKey]["amount"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice(round($orderDetailsValue["price"] * $orderDetailsValue["quantity"],2));
                     $getOrderDetails[$orderDetailsKey]["price"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($orderDetailsValue["price"]);
+
                     // Check for serial
                     if ($getOrderDetails[$orderDetailsKey]["esdarticle"]) {
                         $foundESD = true;
@@ -2269,14 +2387,12 @@ class sAdmin
                         foreach ($getSerial as $serial) {
                             $numbers[] = $serial["serialnumber"];
                         }
-                        $getOrderDetails[$orderDetailsKey]["serial"] =  implode(",",$numbers);
+                        $getOrderDetails[$orderDetailsKey]["serial"] =  implode(",", $numbers);
                         // Building download-link
                         $getOrderDetails[$orderDetailsKey]["esdLink"] = $this->sSYSTEM->sCONFIG["sBASEFILE"].'?sViewport=account&sAction=download&esdID='.$orderDetailsValue['id'];
-                        //$getOrderDetails[$orderDetailsKey]["esdLink"] = "http://".$this->sSYSTEM->sCONFIG["sBASEPATH"]."/engine/core/php/loadesd.php?id=".$orderDetailsValue["id"];
                     } else {
                         unset($getOrderDetails[$orderDetailsKey]);
                     }
-                    // -- End of serial check
                 }
                 if (!empty($foundESD)) {
                     $getOrders[$orderKey]["details"] = $getOrderDetails;
@@ -2286,7 +2402,11 @@ class sAdmin
             }
         }
 
-        $getOrders = Enlight()->Events()->filter('Shopware_Modules_Admin_GetDownloads_FilterResult', $getOrders, array('subject' => $this,'id' => $this->sSYSTEM->_SESSION["sUserId"]));
+        $getOrders = Enlight()->Events()->filter(
+            'Shopware_Modules_Admin_GetDownloads_FilterResult',
+            $getOrders,
+            array('subject' => $this,'id' => $this->sSYSTEM->_SESSION["sUserId"])
+        );
 
         return $getOrders;
 
