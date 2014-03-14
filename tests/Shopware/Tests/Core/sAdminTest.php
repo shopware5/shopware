@@ -1751,9 +1751,17 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         // Test that login was successful
         $this->assertEmpty($this->session["sUserId"]);
+        $this->assertFalse($this->module->sCheckUser());
         $this->assertTrue($this->module->sSaveRegister());
+        $userId = $this->session["sUserId"];
         $this->assertNotEmpty($this->session["sUserId"]);
         $this->assertTrue($this->module->sCheckUser());
+
+        // Logout and delete data
+        Shopware()->Session()->unsetAll();
+
+        Shopware()->Db()->delete('s_user_attributes', 'userID = '.$userId);
+        Shopware()->Db()->delete('s_user', 'id = '.$userId);
     }
 
     /**
