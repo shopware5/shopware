@@ -311,7 +311,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
     /**
      * Test that creating an article with images generates thumbnails
      *
-     * @group wip
      * @return int Article Id
      */
     public function testCreateWithImageShouldCreateThumbnails()
@@ -475,7 +474,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
      * Test that updating an Article with images generates thumbnails
      *
      * @depends testCreateWithImageShouldCreateThumbnails
-     * @group wip
      * @return int
      */
     public function testUpdateWithImageShouldCreateThumbnails($id)
