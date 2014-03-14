@@ -96,40 +96,18 @@ class Inheritance
      *
      * @param \Shopware\Models\Shop\Template $template
      * @param \Shopware\Models\Shop\Shop $shop
+     * @param bool $onlyLess
      * @return array
      */
-    public function buildConfig(Shop\Template $template, Shop\Shop $shop)
+    public function buildConfig(Shop\Template $template, Shop\Shop $shop, $onlyLess = true)
     {
-        $config = $this->getShopConfig($template, $shop);
+        $config = $this->getShopConfig($template, $shop, $onlyLess);
 
         if ($template->getParent() instanceof Shop\Template) {
-            $config = array_merge(
-                $this->buildConfig($template->getParent(), $shop)
-            );
+            $parent = $this->buildConfig($template->getParent(), $shop, $onlyLess);
+            $config = array_merge($parent, $config);
         }
         return $config;
-    }
-
-    /**
-     * Returns all less directories for the passed shop template inheritance.
-     *
-     * @param Shop\Template $template
-     * @return array
-     */
-    public function getLessDirectories(Shop\Template $template)
-    {
-        $directories = array(
-            $this->pathResolver->getLessDirectory($template)
-        );
-
-        if ($template->getParent() instanceof Shop\Template) {
-            $directories = array_merge(
-                $directories,
-                $this->getLessDirectories($template->getParent())
-            );
-        }
-
-        return $directories;
     }
 
     /**
@@ -213,7 +191,7 @@ class Inheritance
 
         $css = $theme->getCss();
 
-        $directory = $this->pathResolver->getCssDirectory($template);
+        $directory = $this->pathResolver->getPublicDirectory($template);
         foreach ($css as &$file) {
             $file = $directory . DIRECTORY_SEPARATOR . $file;
         }
@@ -240,7 +218,8 @@ class Inheritance
 
         $files = $theme->getJavascript();
 
-        $directory = $this->pathResolver->getJavascriptDirectory($template);
+        $directory = $this->pathResolver->getPublicDirectory($template);
+
         foreach ($files as &$file) {
             $file = $directory . DIRECTORY_SEPARATOR . $file;
         }
@@ -265,9 +244,10 @@ class Inheritance
      *
      * @param \Shopware\Models\Shop\Template $template
      * @param \Shopware\Models\Shop\Shop $shop
+     * @param bool $onlyLess
      * @return array
      */
-    private function getShopConfig(Shop\Template $template, Shop\Shop $shop)
+    private function getShopConfig(Shop\Template $template, Shop\Shop $shop, $onlyLess = true)
     {
         $builder = $this->entityManager->createQueryBuilder();
         $builder->select(array(
@@ -281,6 +261,17 @@ class Inheritance
             ->setParameter('shopId', $shop->getId())
             ->setParameter('templateId', $template->getId());
 
+        if ($onlyLess) {
+            $builder->andWhere('element.type IN (:type)')
+                ->setParameter('type', array(
+                    'theme-color-picker',
+                    'theme-em-field',
+                    'theme-percent-field',
+                    'theme-pixel-field',
+                    'theme-select-field'
+                ));
+        }
+
         $data = $builder->getQuery()->getArrayResult();
 
         foreach ($data as &$row) {
@@ -290,9 +281,18 @@ class Inheritance
         }
 
         //creates a key value array for the configuration.
-        return array_combine(
+        $config = array_combine(
             array_column($data, 'name'),
             array_column($data, 'value')
         );
+
+        if ($template->getParent() instanceof Shop\Template) {
+            $config = array_merge(
+                $this->getShopConfig($template->getParent(), $shop, $onlyLess),
+                $config
+            );
+        }
+
+        return $config;
     }
 }

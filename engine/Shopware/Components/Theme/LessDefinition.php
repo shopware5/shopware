@@ -24,7 +24,7 @@
 namespace Shopware\Components\Theme;
 
 /**
- * Class PluginLess.
+ * Class LessDefinition.
  *
  * This class is used to implement own less files via plugin.
  * To add plugin less files you can listen to the event
@@ -37,7 +37,7 @@ namespace Shopware\Components\Theme;
  * <code>
  *      public function addLessFiles(Enlight_Event_EventArgs $args)
  *      {
- *          $less = new \Shopware\Components\Theme\PluginLess(
+ *          $less = new \Shopware\Components\Theme\LessDefinition(
  *              //less configuration variables
  *              array(
  *                  'color1' => '#fff',
@@ -58,7 +58,7 @@ namespace Shopware\Components\Theme;
  * </code>
  * @package Shopware\Components\Theme
  */
-class PluginLess
+class LessDefinition
 {
     /**
      * Array of less files which should be concatenated and compiled.

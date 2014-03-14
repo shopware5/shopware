@@ -84,7 +84,7 @@ Ext.define('Shopware.form.field.ColorSelection', {
                 id: 'color-picker-canvas-' + Ext.id(),
                 width: 371,
                 height: 371,
-                cursor: 'default'
+                style: 'cursor: default !important;'
             }, canvas;
 
         canvas = Ext.DomHelper.append(me.getEl().dom, spec);

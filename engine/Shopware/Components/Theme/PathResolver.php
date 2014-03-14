@@ -71,6 +71,61 @@ class PathResolver
     }
 
     /**
+     * Helper function to build the path to the passed plugin.
+     * @param Plugin $plugin
+     * @return string
+     */
+    public function getPluginPath(Plugin $plugin)
+    {
+        $namespace = strtolower($plugin->getNamespace());
+        $source = strtolower($plugin->getSource());
+        $name = $plugin->getName();
+
+        return $this->rootDir .
+        DIRECTORY_SEPARATOR . 'engine' .
+        DIRECTORY_SEPARATOR . 'Shopware' .
+        DIRECTORY_SEPARATOR . 'Plugins' .
+        DIRECTORY_SEPARATOR . ucfirst($source) .
+        DIRECTORY_SEPARATOR . ucfirst($namespace) .
+        DIRECTORY_SEPARATOR . ucfirst($name);
+    }
+
+    /**
+     * Returns the default templates directory.
+     * @return string
+     */
+    public function getDefaultTemplateDirectory()
+    {
+        return $this->rootDir . '/templates';
+    }
+
+    /**
+     * Helper function which returns the default shopware theme directory.
+     * @return string
+     */
+    public function getDefaultThemeDirectory()
+    {
+        return $this->rootDir .
+        DIRECTORY_SEPARATOR . 'engine' .
+        DIRECTORY_SEPARATOR . 'Shopware' .
+        DIRECTORY_SEPARATOR . 'Themes';
+    }
+
+    /**
+     * Returns the less directory for the passed theme.
+     * @param Shop\Template $template
+     * @return string
+     */
+    public function getPublicDirectory(Shop\Template $template)
+    {
+        return $this->getThemeDirectory($template) .
+        DIRECTORY_SEPARATOR .
+        'frontend' .
+        DIRECTORY_SEPARATOR .
+        '_public';
+    }
+
+    /**
      * Returns the fix defined snippet directory of the passed theme.
      *
      * @param Shop\Template $template
@@ -107,20 +162,6 @@ class PathResolver
      * @param Shop\Template $template
      * @return string
      */
-    public function getPublicDirectory(Shop\Template $template)
-    {
-        return $this->getThemeDirectory($template) .
-        DIRECTORY_SEPARATOR .
-        'frontend' .
-        DIRECTORY_SEPARATOR .
-        '_public';
-    }
-
-    /**
-     * Returns the less directory for the passed theme.
-     * @param Shop\Template $template
-     * @return string
-     */
     public function getLessDirectory(Shop\Template $template)
     {
         return $this->getPublicDirectory($template) .
@@ -130,107 +171,8 @@ class PathResolver
         'less';
     }
 
-
     /**
-     * Helper function which returns the default shopware theme directory.
-     * @return string
-     */
-    public function getDefaultThemeDirectory()
-    {
-        return $this->rootDir .
-        DIRECTORY_SEPARATOR . 'engine' .
-        DIRECTORY_SEPARATOR . 'Shopware' .
-        DIRECTORY_SEPARATOR . 'Themes';
-    }
-
-    /**
-     * Helper function which returns the default shopware theme directory.
-     * @return string
-     */
-    public function getCacheDirectory()
-    {
-        return $this->rootDir . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR . 'cache';
-    }
-
-    /**
-     * @return string
-     */
-    public function getCacheDirectoryUrl()
-    {
-        return 'web' . DIRECTORY_SEPARATOR . 'cache';
-    }
-
-    /**
-     * Helper function which builds the css file
-     * name for the passed shop, file type and timestamp.
-     *
-     * @param Shop\Shop $shop
-     * @param $fileName
-     * @param $timestamp
-     * @return string
-     */
-    public function buildCssName(Shop\Shop $shop, $fileName, $timestamp)
-    {
-        return $timestamp . '_' . $fileName . $shop->getId() . '.css';
-    }
-
-    /**
-     * Helper function which build the directory path to the passed
-     * css file.
-     * This function is used for the less smarty function.
-     * The smarty function checks if this file is
-     * already exists, if this isn't the case, the smarty
-     * function starts the theme compiler operations.
-     *
-     * @param Shop\Shop $shop
-     * @param $fileName
-     * @param $timestamp
-     * @return string
-     */
-    public function buildCssPath(Shop\Shop $shop, $fileName, $timestamp)
-    {
-        return $this->getCacheDirectory() .
-        DIRECTORY_SEPARATOR .
-        $this->buildCssName($shop, $fileName, $timestamp);
-    }
-
-    /**
-     * Helper function which builds the javascript file
-     * name for the passed shop object, file type and timestamp
-     *
-     * @param Shop\Shop $shop
-     * @param $fileName
-     * @param $timestamp
-     * @return string
-     */
-    public function buildJsName(Shop\Shop $shop, $fileName, $timestamp)
-    {
-        return $timestamp . '_' . $fileName . $shop->getId() . '.js';
-    }
-
-    /**
-     * Builds the path to the passed javascript file.
-     * This function is used for the javascript smarty function.
-     * The smarty function checks if this file is
-     * already exists, if this isn't the case, the smarty
-     * function starts the theme compiler operations.
-     *
-     * @param Shop\Shop $shop
-     * @param $fileName
-     * @param $timestamp
-     * @return string
-     */
-    public function buildJsPath(Shop\Shop $shop, $fileName, $timestamp)
-    {
-        return $this->getCacheDirectory() .
-        DIRECTORY_SEPARATOR .
-        $this->buildJsName($shop, $fileName, $timestamp);
-    }
-
-
-    /**
-     * Helper function which returns the css directory of a theme.
-     *
+     * Returns the less directory for the passed theme.
      * @param Shop\Template $template
      * @return string
      */
@@ -244,48 +186,119 @@ class PathResolver
     }
 
     /**
-     * Helper function which returns the javascript directory
-     * of a theme.
-     *
      * @param Shop\Template $template
      * @return string
      */
-    public function getJavascriptDirectory(Shop\Template $template)
+    public function getThemeLessFile(Shop\Template $template)
     {
-        return $this->getPublicDirectory($template) .
-        DIRECTORY_SEPARATOR .
-        'src' .
-        DIRECTORY_SEPARATOR .
-        'js';
+        return $this->getLessDirectory($template) .
+        DIRECTORY_SEPARATOR . 'all.less';
     }
 
     /**
-     * Returns the default templates directory.
+     * Helper function which returns the default shopware theme directory.
      * @return string
      */
-    public function getDefaultTemplateDirectory()
+    public function getCacheDirectory()
     {
-        return $this->rootDir . '/templates';
+        return $this->rootDir . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR . 'cache';
     }
 
     /**
-     * Helper function to build the path to the passed plugin.
-     * @param Plugin $plugin
+     * @param Shop\Shop $shop
+     * @param $timestamp
      * @return string
      */
-    public function getPluginPath(Plugin $plugin)
+    public function getCacheCssUrl(Shop\Shop $shop, $timestamp)
     {
-        $namespace = strtolower($plugin->getNamespace());
-        $source = strtolower($plugin->getSource());
-        $name = $plugin->getName();
+        return $shop->getBasePath() .
+        DIRECTORY_SEPARATOR .
+        'web' . DIRECTORY_SEPARATOR . 'cache' .
+        DIRECTORY_SEPARATOR .
+        $this->buildTimestampName($timestamp, $shop, 'css');
+    }
 
-        return $this->rootDir .
-        DIRECTORY_SEPARATOR . 'engine' .
-        DIRECTORY_SEPARATOR . 'Shopware' .
-        DIRECTORY_SEPARATOR . 'Plugins' .
-        DIRECTORY_SEPARATOR . ucfirst($source) .
-        DIRECTORY_SEPARATOR . ucfirst($namespace) .
-        DIRECTORY_SEPARATOR . ucfirst($name);
+    /**
+     * @param Shop\Shop $shop
+     * @param $timestamp
+     * @return string
+     */
+    public function getCacheJsUrl(Shop\Shop $shop, $timestamp)
+    {
+        return $shop->getBasePath() .
+        DIRECTORY_SEPARATOR .
+        'web' . DIRECTORY_SEPARATOR . 'cache' .
+        DIRECTORY_SEPARATOR .
+        $this->buildTimestampName($timestamp, $shop, 'js');
+    }
+
+    /**
+     * Returns the directory path to the compiler source map.
+     * @return string
+     */
+    public function getSourceMapPath()
+    {
+        return $this->getCacheDirectory() . DIRECTORY_SEPARATOR . 'css.source.map';
+    }
+
+    /**
+     * Returns the shop url to the generated compiler source map.
+     *
+     * @param Shop\Shop $shop
+     * @return string
+     */
+    public function getSourceMapUrl(Shop\Shop $shop)
+    {
+        return $shop->getBasePath() . '/web/cache/css.source.map';
+    }
+
+    /**
+     * Helper function which build the directory path to the passed
+     * css file.
+     * This function is used for the less smarty function.
+     * The smarty function checks if this file is
+     * already exists, if this isn't the case, the smarty
+     * function starts the theme compiler operations.
+     *
+     * @param Shop\Shop $shop
+     * @param $timestamp
+     * @return string
+     */
+    public function getCssFilePath(Shop\Shop $shop, $timestamp)
+    {
+        return $this->getCacheDirectory() .
+        DIRECTORY_SEPARATOR .
+        $this->buildTimestampName($timestamp, $shop, 'css');
+    }
+
+    /**
+     * Builds the path to the passed javascript file.
+     * This function is used for the javascript smarty function.
+     * The smarty function checks if this file is
+     * already exists, if this isn't the case, the smarty
+     * function starts the theme compiler operations.
+     *
+     * @param Shop\Shop $shop
+     * @param $timestamp
+     * @return string
+     */
+    public function getJsFilePath(Shop\Shop $shop, $timestamp)
+    {
+        return $this->getCacheDirectory() .
+        DIRECTORY_SEPARATOR .
+        $this->buildTimestampName($timestamp, $shop, 'js');
+    }
+
+    /**
+     * Helper function to build a unique file name.
+     * @param $timestamp
+     * @param Shop\Shop $shop
+     * @param $suffix
+     * @return string
+     */
+    private function buildTimestampName($timestamp, Shop\Shop $shop, $suffix)
+    {
+        return $timestamp . '_' . 'theme' . $shop->getId() . '.' . $suffix;
     }
 
     /**

@@ -151,7 +151,6 @@ EOD;
         );
     }
 
-
     /**
      * Helper function to generate the full theme directory name.
      * example: /var/www/engine/Shopware/Themes/MyTheme

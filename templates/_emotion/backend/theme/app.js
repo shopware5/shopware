@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Theme', {
     loadPath: '{url action=load}',
     bulkLoad: true,
 
-    controllers: [ 'List', 'Detail' ],
+    controllers: [ 'List', 'Detail', 'Settings' ],
 
     views: [
         'list.Window',
@@ -69,10 +69,13 @@ Ext.define('Shopware.apps.Theme', {
         'detail.fields.PercentField',
         'detail.fields.TextAreaField',
         'detail.fields.TextField',
-        'detail.fields.SelectField'
+        'detail.fields.SelectField',
+
+        'settings.Window',
+        'settings.Settings'
     ],
 
-    models: [ 'Theme', 'Element', 'ConfigValue', 'Layout', 'ConfigSet' ],
+    models: [ 'Theme', 'Element', 'ConfigValue', 'Layout', 'ConfigSet', 'Settings' ],
     stores: [ 'Theme', 'ConfigSets' ],
 
     launch: function() {

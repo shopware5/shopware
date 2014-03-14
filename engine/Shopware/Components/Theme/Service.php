@@ -24,8 +24,10 @@
 namespace Shopware\Components\Theme;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop as Shop;
+use Shopware\Models\Theme\Settings;
 
 /**
  * The theme service class handles all crud operations
@@ -72,6 +74,46 @@ class Service
     }
 
     /**
+     * Returns the system configuration for themes.
+     * This configuration is used to configure the less compiler
+     * or the js compressor.
+     *
+     * @param int $hydration
+     * @return Settings|array
+     */
+    public function getSystemConfiguration($hydration = AbstractQuery::HYDRATE_ARRAY)
+    {
+        $builder = $this->entityManager->createQueryBuilder();
+        $builder->select(array('settings'))
+            ->from('Shopware\Models\Theme\Settings', 'settings')
+            ->orderBy('settings.id', 'ASC')
+            ->setFirstResult(0)
+            ->setMaxResults(1);
+
+        return $builder->getQuery()->getOneOrNullResult(
+            $hydration
+        );
+    }
+
+
+    /**
+     * Saves the passed configuration data into the database.
+     *
+     * @param $data
+     */
+    public function saveSystemConfiguration($data)
+    {
+        $settings = $this->getSystemConfiguration(AbstractQuery::HYDRATE_OBJECT);
+
+        if (!$settings instanceof Settings) {
+            $settings = new Settings();
+            $this->entityManager->persist($settings);
+        }
+        $settings->fromArray($data);
+        $this->entityManager->flush();
+    }
+
+    /**
      * This function returns the nested configuration layout
      * and translate the element and container snippets.
      * If a shop instance passed, the function selects additionally the
@@ -83,14 +125,85 @@ class Service
      */
     public function getLayout(Shop\Template $template, Shop\Shop $shop = null)
     {
+        $layout = $this->buildConfigLayout(
+            $template,
+            $shop
+        );
         $namespace = $this->getConfigSnippetNamespace($template);
         $namespace->read();
 
-        return $this->buildConfigLayout(
-            $template,
-            $namespace,
-            $shop
+        //theme configurations contains only one main container on the first level.
+        $layout[0] = $this->translateContainer($layout[0], $template, $namespace);
+
+        return $layout;
+    }
+
+    /**
+     * Translates the passed container values.
+     *
+     * This function is a double recursive function.
+     * The function iterates first the container elements
+     * and children to translate the configuration with the
+     * current namespace.
+     * After the container should be translated with the
+     * current namespace, the function needs to load
+     * the template parent namespace and calls himself again.
+     * This is required because the theme configuration are copied
+     * from the extended theme but the snippets are not copied.
+     *
+     * @param array $container
+     * @param Shop\Template $template
+     * @param \Enlight_Components_Snippet_Namespace $namespace
+     * @return array
+     */
+    protected function translateContainer(array $container, Shop\Template $template, \Enlight_Components_Snippet_Namespace $namespace)
+    {
+        foreach ($container['elements'] as &$element) {
+            $element['fieldLabel'] = $this->convertSnippet(
+                $element['fieldLabel'],
+                $namespace
+            );
+
+            $element['supportText'] = $this->convertSnippet(
+                $element['supportText'],
+                $namespace
+            );
+
+            $element['help'] = $this->convertSnippet(
+                $element['help'],
+                $namespace
+            );
+
+            $element['defaultValue'] = $this->convertSnippet(
+                $element['defaultValue'],
+                $namespace
+            );
+
+            if (isset($element['selection'])) {
+                foreach ($element['selection'] as &$selection) {
+                    $selection = $this->convertSnippet($selection, $namespace);
+                }
+            }
+        }
+
+        $container['title'] = $this->convertSnippet(
+            $container['title'],
+            $namespace
         );
+
+        //recursive call for sub children
+        foreach ($container['children'] as &$child) {
+            $child = $this->translateContainer($child, $template, $namespace);
+        }
+
+        //start recursive translation for the inheritance configuration
+        if ($template->getParent() instanceof Shop\Template) {
+            $parentNamespace = $this->getConfigSnippetNamespace($template->getParent());
+            $namespace->read();
+            $container = $this->translateContainer($container, $template->getParent(), $parentNamespace);
+        }
+
+        return $container;
     }
 
     /**
@@ -101,13 +214,11 @@ class Service
      *
      * @param Shop\Template $template
      * @param Shop\Shop $shop
-     * @param \Enlight_Components_Snippet_Namespace $namespace
      * @param null $parentId
      * @return array
      */
     protected function buildConfigLayout(
         Shop\Template $template,
-        \Enlight_Components_Snippet_Namespace $namespace,
         Shop\Shop $shop = null,
         $parentId = null)
     {
@@ -119,6 +230,7 @@ class Service
             ->from('Shopware\Models\Shop\TemplateConfig\Layout', 'layout')
             ->leftJoin('layout.elements', 'elements')
             ->where('layout.templateId = :templateId')
+            ->orderBy('elements.id')
             ->setParameter('templateId', $template->getId());
 
         if ($shop instanceof Shop\Shop) {
@@ -137,11 +249,8 @@ class Service
         $layout = $builder->getQuery()->getArrayResult();
 
         foreach ($layout as &$container) {
-            $container = $this->translateConfig($container, $namespace);
-
             $container['children'] = $this->buildConfigLayout(
                 $template,
-                $namespace,
                 $shop,
                 $container['id']
             );
@@ -169,6 +278,7 @@ class Service
             ->from('Shopware\Models\Shop\Template', 'template')
             ->innerJoin('template.configSets', 'sets')
             ->where('sets.templateId = :templateId')
+            ->orderBy('sets.name')
             ->setParameter('templateId', $template->getId());
 
         $themes = $builder->getQuery()->getArrayResult();
@@ -302,53 +412,6 @@ class Service
     }
 
     /**
-     * Translates the passed config data.
-     * This function is used to translate form containers and the form
-     * elements and the default values of this elements.
-     *
-     * @param array $container
-     * @param \Enlight_Components_Snippet_Namespace $namespace
-     * @return array
-     */
-    public function translateConfig(array $container, \Enlight_Components_Snippet_Namespace $namespace)
-    {
-        foreach ($container['elements'] as &$element) {
-            $element['fieldLabel'] = $this->convertSnippet(
-                $element['fieldLabel'],
-                $namespace
-            );
-
-            $element['supportText'] = $this->convertSnippet(
-                $element['supportText'],
-                $namespace
-            );
-
-            $element['help'] = $this->convertSnippet(
-                $element['help'],
-                $namespace
-            );
-
-            $element['defaultValue'] = $this->convertSnippet(
-                $element['defaultValue'],
-                $namespace
-            );
-
-            if (isset($element['selection'])) {
-                foreach ($element['selection'] as &$selection) {
-                    $selection = $this->convertSnippet($selection, $namespace);
-                }
-            }
-        }
-
-        $container['title'] = $this->convertSnippet(
-            $container['title'],
-            $namespace
-        );
-
-        return $container;
-    }
-
-    /**
      * Translates the passed config set data.
      *
      * @param $set
@@ -397,7 +460,8 @@ class Service
         }
 
         return $namespace->get(
-            $this->getSnippetName($snippet)
+            $this->getSnippetName($snippet),
+            $snippet
         );
     }
 
