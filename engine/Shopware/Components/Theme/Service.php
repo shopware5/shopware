@@ -95,7 +95,6 @@ class Service
         );
     }
 
-
     /**
      * Saves the passed configuration data into the database.
      *

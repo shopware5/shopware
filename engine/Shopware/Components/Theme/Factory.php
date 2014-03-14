@@ -46,6 +46,11 @@ class Factory
     private $fileSystem;
 
     /**
+     * @var \Enlight_Event_EventManager
+     */
+    private $eventManager;
+
+    /**
      * Source template for the Theme.php of a theme
      *
      * @var string
@@ -86,10 +91,16 @@ EOD;
         )
     );
 
-    function __construct(PathResolver $pathResolver, Filesystem $fileSystem)
+    /**
+     * @param PathResolver $pathResolver
+     * @param Filesystem $fileSystem
+     * @param \Enlight_Event_EventManager $eventManager
+     */
+    function __construct(PathResolver $pathResolver, Filesystem $fileSystem, \Enlight_Event_EventManager $eventManager)
     {
         $this->pathResolver = $pathResolver;
         $this->fileSystem = $fileSystem;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -121,12 +132,20 @@ EOD;
 
         $this->generateThemePhp($data, $parent);
 
+        $directory = $this->getThemeDirectory($data['template']);
         $this->generateStructure(
             $this->structure,
-            $this->getThemeDirectory($data['template'])
+            $directory
         );
 
-        $this->movePreviewImage($this->getThemeDirectory($data['template']));
+        $this->eventManager->notify('Theme_Factory_Structure_Generated', array(
+            'data' => $data,
+            'directory' => $directory
+        ));
+
+        $this->movePreviewImage(
+            $this->getThemeDirectory($data['template'])
+        );
     }
 
     /**
@@ -138,6 +157,10 @@ EOD;
             __DIR__ . '/preview.png',
             $directory . '/preview.png'
         );
+
+        $this->eventManager->notify('Theme_Factory_Preview_Image_Created', array(
+            'directory' => $directory
+        ));
     }
 
     /**
@@ -146,9 +169,13 @@ EOD;
      */
     private function createThemeDirectory($name)
     {
-        $this->fileSystem->mkdir(
-            $this->getThemeDirectory($name)
-        );
+        $directory = $this->getThemeDirectory($name);
+        $this->fileSystem->mkdir($directory);
+
+        $this->eventManager->notify('Theme_Factory_Theme_Directory_Created', array(
+            'name' => $name,
+            'directory' => $directory
+        ));
     }
 
     /**
@@ -188,6 +215,12 @@ EOD;
             $this->getThemeDirectory($data['template']) . DIRECTORY_SEPARATOR . 'Theme.php',
             "w+"
         );
+
+        $output = $this->eventManager->filter('Theme_Factory_Theme_Source_Generated', $source, array(
+            'data' => $data,
+            'parent' => $parent
+        ));
+
         $output->fwrite($source);
     }
 

@@ -26,7 +26,6 @@ namespace Shopware\Components\Theme;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
-use Shopware\Components\Theme\Compressor\Css;
 use Shopware\Components\Theme\Compressor\Js;
 use Shopware\Models\Shop as Shop;
 
@@ -136,7 +135,7 @@ class Compiler
 
         $this->compressThemeJavascript($timestamp, $template, $shop);
 
-        $this->compilePluginJavascript($timestamp, $template, $shop);
+        $this->compressPluginJavascript($timestamp, $template, $shop);
     }
 
     /**
@@ -354,7 +353,6 @@ class Compiler
 
         /**@var $pluginLess LessDefinition */
         foreach ($collection as $definition) {
-
             if (!$definition instanceof LessDefinition) {
                 throw new \Exception(
                     "Some plugin tries to extends less compiling, but the passed config object isn't an instance of \\Shopware\\Components\\Theme\\LessDefinition"
@@ -443,7 +441,6 @@ class Compiler
         );
 
         foreach ($files as $file) {
-            
             if (!file_exists($file)) {
                 throw new \Exception(sprintf(
                     "Theme javascript file %s doesn't exists",
@@ -473,7 +470,7 @@ class Compiler
      * @param Shop\Shop $shop
      * @throws \Exception
      */
-    protected function compilePluginJavascript($timestamp, Shop\Template $template, Shop\Shop $shop)
+    protected function compressPluginJavascript($timestamp, Shop\Template $template, Shop\Shop $shop)
     {
         $collection = new ArrayCollection();
         $this->eventManager->collect('Theme_Compiler_Collect_Plugin_Javascript', $collection, array(
@@ -511,7 +508,10 @@ class Compiler
     }
 
     /**
-     * Returns the less directory for the passed theme.
+     * Helper function which creates a url for the passed directory/file path.
+     * This urls are used for the less compiler, to create the source map
+     * and to prepend this url for each relative path.
+     *
      * @param \Shopware\Models\Shop\Shop $shop
      * @param $path
      * @return string
@@ -519,7 +519,7 @@ class Compiler
     private function formatPathToUrl(Shop\Shop $shop, $path)
     {
         $path = str_replace($this->rootDir, '', $path);
-        $path =  '//' . $shop->getHost() . $shop->getBasePath() . $path;
+        $path = '//' . $shop->getHost() . $shop->getBasePath() . $path;
         return $path;
     }
 
@@ -539,7 +539,7 @@ class Compiler
 
         /** @var \SplFileInfo $path */
         foreach ($iterator as $path) {
-            if ($path->getFilename() === '.gitkeep') {
+            if ($path->getFilename() == '.gitkeep') {
                 continue;
             }
 
