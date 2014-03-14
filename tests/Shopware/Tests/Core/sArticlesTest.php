@@ -31,10 +31,13 @@
  */
 class sArticlesTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * This can probably be removed
+     */
     public static function setUpBeforeClass()
     {
         $testHelper = TestHelper::Instance();
-        require $testHelper->DocPath() . 'engine/core/class/sArticles.php';
+        require_once $testHelper->DocPath() . 'engine/core/class/sArticles.php';
     }
 
     protected function assertsArticlesState($sArticles, $categoryId, $translationId, $customerGroupId)
