@@ -718,7 +718,7 @@ class Shop extends ModelEntity
 
                 /**@var $inheritance Inheritance*/
                 $inheritance = Shopware()->Container()->get('theme_inheritance');
-                $config = $inheritance->buildConfig($template, $this);
+                $config = $inheritance->buildConfig($template, $this, false);
                 $path = $inheritance->getTemplateDirectories($template);
 
                 $templateManager->addPluginsDir(

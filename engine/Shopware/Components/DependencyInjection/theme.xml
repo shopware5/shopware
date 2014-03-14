@@ -5,14 +5,9 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="CSSmin" class="CSSmin" />
         <service id="JSMin" class="JSMin" />
-        <service id="less_compiler" class="lessc" />
+        <service id="less_compiler" class="Less_Parser" />
         <service id="symfony_file_system" class="Symfony\Component\Filesystem\Filesystem" />
-
-        <service id="css_compressor" class="Shopware\Components\Theme\Compressor\Css">
-            <argument type="service" id="CSSmin" />
-        </service>
 
         <service id="js_compressor" class="Shopware\Components\Theme\Compressor\Js">
             <argument type="service" id="JSMin" />
@@ -64,10 +59,11 @@
         </service>
 
         <service id="theme_compiler" class="Shopware\Components\Theme\Compiler">
+            <argument>%kernel.root_dir%</argument>
             <argument type="service" id="less_compiler" />
             <argument type="service" id="theme_path_resolver" />
             <argument type="service" id="theme_inheritance" />
-            <argument type="service" id="css_compressor" />
+            <argument type="service" id="theme_service" />
             <argument type="service" id="js_compressor" />
             <argument type="service" id="events" />
         </service>

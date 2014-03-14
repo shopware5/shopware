@@ -1,4 +1,3 @@
-<?php
 /**
  * Shopware 4
  * Copyright © shopware AG
@@ -22,38 +21,18 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Theme\Compressor;
+//{namespace name=backend/theme/main}
 
-/**
- * Css compressor for the frontend themes.
- * Used to compress theme and plugin css files.
- *
- * @package Shopware\Components\Theme\Compressor
- */
-class Css implements CompressorInterface
-{
-    /**
-     * @var \CSSmin
-     */
-    private $compressor;
+//{block name="backend/theme/view/settings/window"}
 
-    /**
-     * @param \CSSmin $compressor
-     */
-    function __construct(\CSSmin $compressor)
-    {
-        $this->compressor = $compressor;
-    }
+Ext.define('Shopware.apps.Theme.view.settings.Window', {
+    extend: 'Shopware.window.Detail',
+    alias: 'widget.theme-settings-window',
+    title : '{s name=settings_window}System configuration{/s}',
+    height: 270,
+    width: 520,
+    modal: true
+});
 
-    /**
-     * Compress the passed content and returns
-     * the compressed content.
-     *
-     * @param string $content
-     * @return string
-     */
-    public function compress($content)
-    {
-        return $this->compressor->run($content);
-    }
-}
+//{/block}
+

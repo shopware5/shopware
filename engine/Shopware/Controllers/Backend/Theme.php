@@ -350,11 +350,32 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
         $builder->addSelect('COUNT(elements.id) as hasConfig')
             ->leftJoin('template.elements', 'elements')
+            ->orderBy('template.name')
             ->groupBy('template.id');
 
         return $this->get('events')->filter('Shopware_Theme_Listing_Query_Created', $builder);
     }
 
+    public function loadSettingsAction()
+    {
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $this->container->get('theme_service')->getSystemConfiguration()
+        ));
+    }
+
+    /**
+     *
+     */
+    public function saveSettingsAction()
+    {
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $this->container->get('theme_service')->saveSystemConfiguration(
+                $this->Request()->getParams()
+            )
+        ));
+    }
 
     /**
      * Returns the id of the default shop.

@@ -23,11 +23,9 @@
  * @param $template
  * @return string
  * @throws Exception
- *
  */
-function smarty_function_javascript($params, $template)
+function smarty_function_compileTheme($params, $template)
 {
-    $file = $params['file'];
     $time = $params['timestamp'];
 
     /**@var $pathResolver \Shopware\Components\Theme\PathResolver*/
@@ -36,20 +34,23 @@ function smarty_function_javascript($params, $template)
     /**@var $shop \Shopware\Models\Shop\Shop*/
     $shop = Shopware()->Container()->get('shop');
 
-    $disableCaching = Shopware()->Container()->get('config')->get('disableThemeCaching');
+    /**@var $settings \Shopware\Models\Theme\Settings*/
+    $settings = Shopware()->Container()->get('theme_service')->getSystemConfiguration(
+        \Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT
+    );
 
-    $path = $pathResolver->buildJsPath($shop, $file, $time);
+    $cssFile = $pathResolver->getCssFilePath($shop, $time);
+    $jsFile = $pathResolver->getJsFilePath($shop, $time);
+    $jsUrl = $pathResolver->getCacheJsUrl($shop, $time);
+    $cssUrl = $pathResolver->getCacheCssUrl($shop, $time);
 
-    $fileName = $pathResolver->buildJsName($shop, $file, $time);
+    $result = '
+        <link href="' . $cssUrl . '" media="screen" rel="stylesheet" type="text/css" />
+        <script src="'. $jsUrl  . '"></script>
+    ';
 
-    $url = $shop->getBasePath() .
-        DIRECTORY_SEPARATOR .
-        $pathResolver->getCacheDirectoryUrl() .
-        DIRECTORY_SEPARATOR .
-        $fileName;
-
-    if (file_exists($path) && !$disableCaching) {
-        return $url;
+    if (file_exists($jsFile) && file_exists($cssFile) && !$settings->getForceCompile()) {
+        return $result;
     }
 
     /**@var $compiler \Shopware\Components\Theme\Compiler*/
@@ -57,5 +58,5 @@ function smarty_function_javascript($params, $template)
 
     $compiler->compile($time, $shop->getTemplate(), $shop);
 
-    return $url;
+    return $result;
 }

@@ -2,6 +2,8 @@
 
 namespace Shopware\Themes\TestResponsive;
 
+use Shopware\Components\Theme\ConfigSet;
+
 class Theme extends \Shopware\Components\Theme
 {
     protected $extend = 'Bare';
@@ -19,7 +21,7 @@ class Theme extends \Shopware\Components\Theme
 
     public function createConfigSets(\Doctrine\Common\Collections\ArrayCollection $collection)
     {
-        $collection->add(array('name' => 'set1'));
-        $collection->add(array('name' => 'set2'));
+        $collection->add(new ConfigSet('set1', array('value1' => 1)));
+        $collection->add(new ConfigSet('set2', array('value1' => 2)));
     }
 }

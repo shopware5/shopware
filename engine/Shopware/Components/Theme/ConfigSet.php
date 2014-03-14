@@ -73,7 +73,7 @@ class ConfigSet
      * @param string $name
      * @param array $values
      */
-    function __construct($description = '', $name = '', array $values = array())
+    function __construct($name = '', array $values = array(), $description = '')
     {
         $this->description = $description;
         $this->name = $name;

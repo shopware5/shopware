@@ -88,6 +88,7 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
         items.push({ xtype: 'tbspacer', width: 12 });
         items.push(me.createAddButton());
         items.push(me.createRefreshButton());
+        items.push(me.createSettingsButton());
         items.push('->');
         items.push(me.createSearchField());
 
@@ -144,6 +145,20 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
         });
 
         return me.refreshButton;
+    },
+
+    createSettingsButton: function() {
+        var me = this;
+
+        me.settingsButton = Ext.create('Ext.button.Button', {
+            text: '{s name=settings}Settings{/s}',
+            iconCls: 'sprite-gear',
+            handler: function() {
+                me.fireEvent('open-settings', me);
+            }
+        });
+
+        return me.settingsButton;
     },
 
     createSearchField: function() {

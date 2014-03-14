@@ -21,10 +21,14 @@
  * our trademarks remain entirely with us.
  */
 
+//{namespace name=backend/theme/main}
+
+//{block name="backend/theme/view/config_set/window"}
+
 Ext.define('Shopware.apps.Theme.view.config_sets.Window', {
     extend: 'Enlight.app.Window',
     alias: 'widget.theme-config-set-window',
-    title : '{s name=config_set_window}Configuration sets{/s}',
+    title : '{s name=config_sets}Configuration sets{/s}',
     width: 600,
     height: 250,
     layout: {
@@ -191,3 +195,5 @@ Ext.define('Shopware.apps.Theme.view.config_sets.Window', {
     }
 
 });
+
+//{/block}
