@@ -82,10 +82,12 @@ class ConfigSet
 
     /**
      * @param mixed $description
+     * @return $this
      */
     public function setDescription($description)
     {
         $this->description = $description;
+        return $this;
     }
 
     /**
@@ -98,10 +100,12 @@ class ConfigSet
 
     /**
      * @param mixed $name
+     * @return $this
      */
     public function setName($name)
     {
         $this->name = $name;
+        return $this;
     }
 
     /**
@@ -114,10 +118,12 @@ class ConfigSet
 
     /**
      * @param mixed $values
+     * @return $this
      */
     public function setValues($values)
     {
         $this->values = $values;
+        return $this;
     }
 
     /**

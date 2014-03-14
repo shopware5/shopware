@@ -34,7 +34,7 @@
 //{block name="backend/theme/view/detail/fields/text_area"}
 
 Ext.define('Shopware.apps.Theme.view.detail.fields.TextAreaField', {
-    extend: 'Ext.form.field.TextArea',
+    extend: 'Shopware.form.field.TinyMCE',
 
     alias: 'widget.theme-text-area-field'
 });

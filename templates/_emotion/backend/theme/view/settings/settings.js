@@ -36,6 +36,11 @@
 Ext.define('Shopware.apps.Theme.view.settings.Settings', {
     extend: 'Shopware.model.Container',
     padding: 15,
+    flex: 1,
+    layout: {
+        type: 'hbox',
+        align: 'stretch'
+    },
 
     configure: function() {
         return {
@@ -43,22 +48,24 @@ Ext.define('Shopware.apps.Theme.view.settings.Settings', {
                 {
                     title: '{s name=compiler_configuration}Compiler configuration{/s}',
                     padding: 15,
+                    layout: 'anchor',
+                    flex:1,
                     fields: {
                         forceCompile: {
                             fieldLabel: '{s name=force_compile_field}Disable compiler caching{/s}',
-                            labelWidth: 180
+                            labelWidth: 250
                         },
                         createSourceMap: {
                             fieldLabel: '{s name=create_source_map_field}Create a css source map{/s}',
-                            labelWidth: 180
+                            labelWidth: 250
                         },
                         compressCss: {
                             fieldLabel: '{s name=compress_css_files}Compress css files{/s}',
-                            labelWidth: 180
+                            labelWidth: 250
                         },
                         compressJs: {
                             fieldLabel: '{s name=compress_js_files}Compress javascript files{/s}',
-                            labelWidth: 180
+                            labelWidth: 250
                         }
                     }
                 }

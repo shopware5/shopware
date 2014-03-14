@@ -219,6 +219,9 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
             data.value = null;
         }
 
+        if (Ext.isObject(data.attributes)) {
+            data = Ext.apply(data, { }, data.attributes);
+        }
 
         return data;
     },
