@@ -4,6 +4,7 @@ namespace Shopware\Themes\Bare;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Form as Form;
+use Shopware\Components\Theme\ConfigSet;
 
 class Theme extends \Shopware\Components\Theme
 {
@@ -46,5 +47,20 @@ class Theme extends \Shopware\Components\Theme
      */
     public function createConfigSets(ArrayCollection $collection)
     {
+
+
+        $set = new ConfigSet();
+        $set->setName('Minimale Darstellung')
+            ->setDescription('Deaktiviert alle nicht notwendigen Features des Bare Themes. Dadurch werden Sitebar Element und Slider deaktiviert')
+            ->setValues(array('color' => '#fff'));
+        $collection->add($set);
+
+        $set = new ConfigSet();
+        $set->setName('Maximale Darstellung')
+            ->setDescription('Aktiviert alle zusätzlichen Features des Bare Themes. Slider, Einkaufswelten und Sitebars werden in der Storefront darstellt')
+            ->setValues(array('color' => '#fff'));
+
+        $collection->add($set);
+
     }
 }

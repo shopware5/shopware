@@ -285,11 +285,6 @@ class Compiler
     {
         $hierarchy = $this->inheritance->buildInheritance($template);
 
-        $hierarchy = $this->eventManager->filter('Theme_Compiler_Build_Inheritance', $hierarchy, array(
-            'shop' => $shop,
-            'template' => $template
-        ));
-
         //use array_reverse to compile the bare themes first.
         foreach (array_reverse($hierarchy) as $shopTemplate) {
             $definition = new LessDefinition();

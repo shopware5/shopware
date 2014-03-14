@@ -295,6 +295,7 @@ class Theme
         return $element;
     }
 
+
     /**
      * Creates a ext js number field.
      * @param $name
