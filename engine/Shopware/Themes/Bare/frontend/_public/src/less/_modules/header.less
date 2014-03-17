@@ -110,6 +110,7 @@
 	.main-search--button { display: none; }
 }
 
+// Tablet styling for the global shop header
 @media screen and (min-width: @tabletViewportWidth) {
 	.header-main {
 		.container { .clearfix() }
@@ -132,7 +133,7 @@
 
 		.logo-main {
 			.unitize-padding(24, 10, 24, 10, 16);
-			width: 35.5%;
+			width: 35%;
 		}
 		.logo--shop { width: 82% }
 		.logo--trusted-shops { width: 18% }
@@ -149,6 +150,8 @@
 	}
 	.shop--navigation {
 		.unitize-padding(16, 0, 16, 0, 16);
+
+		.entry--account { width: 25% }
 	}
 
 	.top-bar--navigation {
@@ -180,7 +183,7 @@
 	}
 
 	.shop--navigation {
-		width: 64.5%;
+		width: 65%;
 
 		.navigation--list {
 			background-image: none;
@@ -211,6 +214,8 @@
 		.cart--quantity { color: #fff; font-weight: normal }
 	}
 }
+
+// Desktop styling for the global shop header
 @media screen and (min-width: @desktopViewportWidth) {
 
 	.header-main {
