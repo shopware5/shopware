@@ -867,7 +867,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
         component = record.getComponent().first(),
         fields = component.getFields();
 
-        me.fireEvent('openSettingsWindow', me, record, component, fields, me.emotion);
+        me.fireEvent('openSettingsWindow', me, record, component, fields, me.emotion, me.dataviewStore.getAt(0).data.settings);
     },
 
     onBeforeResize: function(resizer, width, height, event) {
