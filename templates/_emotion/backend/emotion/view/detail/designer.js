@@ -232,6 +232,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                         }
 
                         elementWidth = (100 / values.settings.cols) * width + '%';
+
                         if(horizontal) {
                             elementWidth = 100 * width + 'px';
                         }
@@ -870,7 +871,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
         me.fireEvent('openSettingsWindow', me, record, component, fields, me.emotion, me.dataviewStore.getAt(0).data.settings);
     },
 
-    onBeforeResize: function(resizer, width, height, event) {
+    onBeforeResize: function(resizer) {
         var element = resizer.el,
             me = this,
             id = element.getAttribute('data-emotionid'),
@@ -904,18 +905,18 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
         return true;
     },
 
-    onResizeDrag: function(resizer, width, height, event) {
+    onResizeDrag: function(resizer, width, height) {
         var element = resizer.el,
             me = this,
             id = element.getAttribute('data-emotionid'),
             store = me.dataviewStore.getAt(0).get('elements'),
             dataViewData = me.dataviewStore.getAt(0).data.settings,
             cellHeight = 45,
-            cellWidth = (Ext.get(me.getId()).getWidth() - 40) / dataViewData.cols,
+            horizontal = (me.dataviewStore.getAt(0).data.settings.cols > me.dataviewStore.getAt(0).data.settings.rows),
+            cellWidth = (horizontal ? 100 : (Ext.get(me.getId()).getWidth() - 40) / dataViewData.cols),
             colSpan = width / cellWidth,
             rowSpan = height / cellHeight,
             baseCls, record, i, attr;
-
 
         if(!id) {
             for(i in element.dom.attributes) {
@@ -975,8 +976,9 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
             id = element.getAttribute('data-emotionid'),
             store = me.dataviewStore.getAt(0).get('elements'),
             dataViewData = me.dataviewStore.getAt(0).data.settings,
+            horizontal = (me.dataviewStore.getAt(0).data.settings.cols > me.dataviewStore.getAt(0).data.settings.rows),
             cellHeight = 45,
-            cellWidth = (Ext.get(me.getId()).getWidth() - 40) / dataViewData.cols,
+            cellWidth = (horizontal ? 100 : (Ext.get(me.getId()).getWidth() - 40) / dataViewData.cols),
             colSpan = width / cellWidth,
             rowSpan = height / cellHeight,
             record, baseCls, i, attr;
