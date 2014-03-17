@@ -858,9 +858,6 @@ class Article extends Resource implements BatchInterface
             $variants[] = $variant;
         }
 
-
-
-
         $data['details'] = $variants;
         unset($data['variants']);
 
