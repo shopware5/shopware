@@ -85,7 +85,9 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
         me.callParent(arguments);
 
         // We need to force the first call to set the initial value of the display field
-        me.onUpdateSizeDisplay();
+        if(me.settings.gridSettings.cols < me.settings.gridSettings.rows) {
+            me.onUpdateSizeDisplay();
+        }
     },
 
     createFormElements: function() {
@@ -131,7 +133,11 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
             });
         });
 
-        items.push(me.createSizingFields());
+        // ...create the size field only in the vertical mode of an emotion world
+        if(me.settings.gridSettings.cols < me.settings.gridSettings.rows) {
+            items.push(me.createSizingFields());
+        }
+
         return items;
     },
 
