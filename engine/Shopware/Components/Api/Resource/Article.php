@@ -850,9 +850,16 @@ class Article extends Resource implements BatchInterface
 
                 $data['mainDetail'] = $newMain;
             }
+            
+            if (!$variantData['isMain']){
+	            $variant->setKind(2);
+            }
 
             $variants[] = $variant;
         }
+
+
+
 
         $data['details'] = $variants;
         unset($data['variants']);
