@@ -4,7 +4,14 @@
 	{block name='frontend_index_logo'}
 		<div class="logo--shop block">
 			<a href="{url controller='index'}" title="{config name=shopName} - {s name='IndexLinkDefault'}{/s}">
-				<img src="{link file='frontend/_public/src/img/logos/logo--mobile.png'}" alt="{config name=shopName} - {s name='IndexLinkDefault' namespace="frontend/index/index"}{/s}" />
+				<span data-picture data-alt="{config name=shopName} - {s name='IndexLinkDefault' namespace="frontend/index/index"}{/s}">
+					<span data-src="{link file='frontend/_public/src/img/logos/logo--mobile.png'}"></span>
+					<span data-src="{link file='frontend/_public/src/img/logos/logo--tablet.png'}" data-media="(min-width: 47.75em)"></span>
+
+					<noscript>
+						<img src="{link file='frontend/_public/src/img/logos/logo--mobile.png'}" alt="{config name=shopName} - {s name='IndexLinkDefault'}{/s}">
+					</noscript>
+				</span>
 			</a>
 		</div>
 	{/block}

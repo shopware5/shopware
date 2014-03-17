@@ -1,8 +1,11 @@
+// Basic header
 .header-main {
 	background: #fff;
 
+	// Hide the currency and language switcher
 	.top-bar { display: none }
 
+	// Logo
 	.logo-main {
 		.unitize-padding(10, 10, 10, 10, 16);
 	}
@@ -39,13 +42,16 @@
 	}
 
 	.main-search--form,
-	.cart--link > span,
+	.cart--display,
+	.cart--quantity,
+	.cart--amount,
+	.search--display,
 	.entry--account {
 		display: none;
 	}
 
 	.entry--cart {
-		.linear-gradient(@primaryColor, @secondaryColor);
+		.primary-gradient();
 		border-top: 1px solid @primaryColor;
 		border-bottom: 1px solid darken(@secondaryColor, 10%);
 		border-left: 0 none;
@@ -102,4 +108,193 @@
 		width: 100%;
 	}
 	.main-search--button { display: none; }
+}
+
+// Tablet styling for the global shop header
+@media screen and (min-width: @tabletViewportWidth) {
+	.header-main {
+		.container { .clearfix() }
+
+		.top-bar {
+			.unitize-padding(4, 0, 4, 0, 16);
+			display: block;
+			border-bottom: 1px solid @borderColor;
+		}
+		.top-bar--switches {
+			.clearfix();
+			width: 25%;
+		}
+		// @todo - needs reformatting due to a select box which should be visible
+		.top-bar--language, .top-bar--currency {
+			float: left;
+
+			& > form { float: left; }
+		}
+
+		.logo-main {
+			.unitize-padding(24, 10, 24, 10, 16);
+			width: 35%;
+		}
+		.logo--shop { width: 82% }
+		.logo--trusted-shops { width: 18% }
+
+		.trusted-shops--link {
+			.unitize-height(43, 16);
+			.unitize-width(43, 16);
+			float: left;
+		}
+	}
+
+	.logo-main, .shop--navigation {
+		float: left;
+	}
+	.shop--navigation {
+		.unitize-padding(16, 0, 16, 0, 16);
+
+		.entry--account { width: 25% }
+	}
+
+	.top-bar--navigation {
+		width: 75%;
+		text-align: right;
+
+		.navigation--entry {
+			.unitize-padding(0, 16, 0, 16, 16);
+			display: inline-block;
+			border-left: 1px solid @borderColor;
+
+			i { .unitize-padding(0, 5, 0, 0, 16); }
+
+			&:first-child {
+				border-left: 0 none;
+			}
+		}
+
+		.navigation--entry, .navigation--link {
+			color: @primaryTextColor;
+			cursor: pointer;
+
+			&:hover {
+				color: @primaryColor;
+			}
+		}
+
+		.service--list { display: none; }
+	}
+
+	.shop--navigation {
+		width: 65%;
+
+		.navigation--list {
+			background-image: none;
+			text-align: right;
+		}
+		.navigation--entry {
+			.white-gradient();
+			.unitize-margin(0, 10, 0, 10, 16);
+			.unitize-padding(12, 20, 12, 20, 16);
+			.border-radius();
+			border-right: 1px solid @borderColor;
+			width: auto;
+			float: none;
+			display: inline-block;
+		}
+
+		.entry--cart {
+			.primary-gradient();
+		}
+
+		.entry--link { font-weight: normal }
+		.entry--menu-left, .entry--spacer { display: none }
+
+		.cart--quantity,
+		.search--display,
+		.entry--account { display: inline-block }
+
+		.cart--quantity { color: #fff; font-weight: normal }
+	}
+}
+
+// Desktop styling for the global shop header
+@media screen and (min-width: @desktopViewportWidth) {
+
+	.header-main {
+		.top-bar { .unitize-margin(0, 0, 8, 0, 16) }
+		.logo-main { width: 28.5% }
+		.logo--shop { width: 75% }
+		.logo--trusted-shops { width: 25%; }
+	}
+
+	// General shop navigation
+	.shop--navigation {
+		width: 71.5%;
+
+		.navigation--entry {
+			.unitize-padding(8, 16, 8, 16, 16);
+		}
+		.entry--cart {
+			.unitize-padding(5, 16, 5, 16, 16);
+		}
+
+		// Search entry
+		.entry--search {
+			.unitize(14, 16, font-size);
+			.unitize-margin(0, 100, 0, 0, 14);
+			background: #fff;
+			padding: 0;
+			border: 0 none;
+			width: 35%;
+
+			.icon--search {
+				.unitize(14, 14, top);
+				.unitize(14, 14, left);
+			}
+
+			.entry--trigger { display: none }
+		}
+
+		// Search form
+		.main-search--form {
+			.box-shadow(0 0 0 transparent);
+			display: block;
+			padding: 0;
+			border: 0 none;
+		}
+	}
+
+	// Cart link
+	.cart--link {
+		text-shadow: 0 1px 0 @primaryContrastColor;
+
+		.cart--quantity { display: none; }
+
+		.cart--display,
+		.cart--amount { display: inline-block; }
+	}
+
+	.cart--display {
+		.unitize-margin(0, 25, 0, 5, 16);
+		font-weight: bold;
+		color: #fff;
+	}
+	.cart--amount {
+		.border-radius(3px);
+		.unitize-padding(3, 5, 3, 10, 16);
+		background: #fff;
+		color: @primaryTextColor;
+		position: relative;
+		text-shadow: 0 0 0 transparent;
+
+		// Arrow at the amout display
+		&::after {
+			.unitize(-6, 16, left);
+			.unitize(8, 16, top);
+			.unitize-height(12, 16);
+			.unitize-width(12, 16);
+			.rotate(45deg);
+			content: '';
+			background: #fff;
+			position: absolute;
+		}
+	}
 }

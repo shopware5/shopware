@@ -1,0 +1,19 @@
+input[type="text"], input[type="search"], input[type="password"], input[type="email"] {
+	@boxShadowColor: rgba(red(@borderColor), green(@borderColor), blue(@borderColor), .9);
+	.appearance();
+	.border-radius(3px);
+	.box-sizing();
+	.unitize-padding(9, 10, 9, 10, 16);
+	.box-shadow(inset 0 1px 1px @boxShadowColor);
+	background: @lightGradientEnd;
+	border: 1px solid @borderColor;
+	border-top-color: darken(@borderColor, 5%);
+	color: @primaryTextColor;
+
+	&:focus {
+		.box-shadow(0 0 0 transparent);
+		outline: none;
+		border-color: @primaryColor;
+		background: #fff;
+	}
+}

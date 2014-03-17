@@ -2,7 +2,7 @@ $(function() {
     StateManager.init([{
         type: 'smartphone',
         enter: '0em',
-        exit: '47.75em'
+        exit: '47.7495em'
     }, {
         type: 'tablet',
         enter: '47.75em',
@@ -26,6 +26,14 @@ $(function() {
             $('*[data-offcanvas="true"]').data('plugin_offcanvasMenu').destroy();
             $('*[data-search-dropdown="true"]').data('plugin_searchFieldDropDown').destroy();
             $('*[data-slide-panel="true"]').data('plugin_slidePanel').destroy();
+        }
+    }, {
+        type:'tablet',
+        enter: function() {
+            $('*[data-scrollable-list="true"]').scrollableList();
+        },
+        exit: function() {
+            $('*[data-scrollable-list="true"]').data('plugin_scrollableList').destroy();
         }
     }]);
 });

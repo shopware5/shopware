@@ -20,6 +20,10 @@
 			<li class="navigation--entry entry--search block" role="menuitem" data-search-dropdown="true" aria-haspopup="true">
 				<a class="entry--link entry--trigger" href="#show-hide--search" title="{s name="IndexTitleSearchToggle"}Suche anzeigen / schließen{/s}">
 					<i class="icon--search"></i>
+
+					{block name='frontend_index_search_display'}
+						<span class="search--display">{s name="IndexSearchFieldSubmit"}Suchen{/s}</span>
+					{/block}
 				</a>
 
 				{* Include of the search form *}
@@ -34,7 +38,7 @@
 			<li class="navigation--entry entry--account block" role="menuitem">
 				{block name="frontend_index_checkout_actions_account"}
 					<a href="{url controller='account'}" title="{s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}" class="entry--link">
-						{s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}
+						<i class="icon--account"></i> {s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}
 					</a>
 				{/block}
 			</li>
