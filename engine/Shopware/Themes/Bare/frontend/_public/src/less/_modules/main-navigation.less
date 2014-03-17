@@ -1,3 +1,50 @@
 .navigation-main {
+	background: #fff;
     display: none;
+}
+@media screen and (min-width: @tabletViewportWidth) {
+	.navigation-main {
+		.unitize-margin(0, 0, 20, 0, 16);
+		.unitize-padding(0, 12, 0, 12, 16);
+		border-bottom: 4px solid lighten(@primaryContrastColor, 1%);
+		display: block;
+		position: relative;
+
+		.navigation--list {
+			.clearfix();
+		}
+		.navigation--entry {
+			float: left;
+		}
+		.navigation--link {
+			.unitize-margin(0, 10, 0, 10, 16);
+			.unitize-padding(8, 12, 8, 12, 16);
+			display: block;
+			cursor: pointer;
+			color: @primaryTextColor;
+		}
+
+		.is--active {
+			.primary-gradient();
+			.border-radius-multi(3px, 3px);
+			.navigation--link { color: #fff; }
+
+		}
+	}
+	.js--scrollable-list--arrow-left,
+	.js--scrollable-list--arrow-right {
+		.border-radius();
+		.secondary-gradient();
+		.unitize-padding(6, 10, 6, 10, 16);
+		position: absolute;
+		top: 0;
+		z-index: 10;
+		color: #fff;
+	}
+	.js--scrollable-list--arrow-left {
+		left: 2px;
+	}
+	.js--scrollable-list--arrow-right {
+		right: 2px;
+	}
 }

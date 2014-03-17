@@ -1,4 +1,4 @@
-<ul class="navigation--list container" role="menubar" itemscope="itemscope" itemtype="http://schema.org/SiteNavigationElement">
+<ul class="navigation--list container" role="menubar" itemscope="itemscope" itemtype="http://schema.org/SiteNavigationElement" data-scrollable-list="true">
 	{block name='frontend_index_navigation_categories_top_home'}
     <li class="navigation--entry {if $sCategoryCurrent eq $sCategoryStart} is--active{/if}" role="menuitem">
         <a class="navigation--link is--first{if $sCategoryCurrent eq $sCategoryStart} active{/if}" href="{url controller='index'}" title="{s name='IndexLinkHome' namespace="frontend/index/categories_top"}{/s}" itemprop="url">
@@ -19,5 +19,5 @@
 			{/if}
 		{/block}
     {/foreach}
-	v{block name='frontend_index_navigation_categories_top_after'}{/block}
+	{block name='frontend_index_navigation_categories_top_after'}{/block}
 </ul>
