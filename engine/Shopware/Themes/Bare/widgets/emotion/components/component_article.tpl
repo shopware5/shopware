@@ -42,65 +42,7 @@
 {/block}
 
 {* Increase the size of the description text *}
-{block name='frontend_listing_box_article_description'}
-
-	{* emotions auf der starteite *}
-	{if $Controller == 'index'}
-		{* 3 spalter *}
-		{if $sTemplate eq 'listing-3col'}
-			{if $colWidth eq 3}
-				{assign var=size value=1250}
-			{elseif $colWidth eq 2}
-				{assign var=size value=700}
-			{else}
-				{assign var=size value=200}
-			{/if}
-	
-		{* 4 spalter *}
-		{else}
-			{if $colWidth eq 4}
-				{assign var=size value=1350}
-			{elseif $colWidth eq 3}
-				{assign var=size value=800}
-			{elseif $colWidth eq 2}
-				{assign var=size value=0}
-			{else}
-				{assign var=size value=165}
-			{/if}
-		{/if}
-		
-		{* emotions im listing *}
-		{else}
-					
-		{* 3 spalter *}
-		{if $sTemplate eq 'listing-3col'}
-			{if $colWidth eq 3}
-				{assign var=size value=850}
-			{elseif $colWidth eq 2}
-				{assign var=size value=350}
-			{else}
-				{assign var=size value=180}
-			{/if}
-	
-		{* 4 spalter *}
-		{else}
-			{if $colWidth eq 4}
-				{assign var=size value=850}
-			{elseif $colWidth eq 3}
-				{assign var=size value=500}
-			{elseif $colWidth eq 2}
-				{assign var=size value=0}
-			{else}
-				{assign var=size value=120}
-			{/if}
-		{/if}
-	{/if}
-	
-	<p class="desc">
-	    {$Data.description_long|strip_tags|truncate:$size}
-	</p>
-	
-{/block}
+{block name='frontend_listing_box_article_description'}{/block}
 
 {* Unit price *}
 {block name='frontend_listing_box_article_unit'}

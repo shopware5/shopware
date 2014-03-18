@@ -1,4 +1,4 @@
-<div class="mapping">
+{* <div class="mapping">
     {if $Data.link}
         <a href="{$Data.link}">
             <img src="{link file=$Data.file}" />
@@ -18,4 +18,5 @@
 			{/foreach}
         </div>
     {/if}
-</div>
+</div> *}
+<div class="emotion--element-banner" style="background-image:url({link file=$Data.file})" data-parallax-speed="10"></div>

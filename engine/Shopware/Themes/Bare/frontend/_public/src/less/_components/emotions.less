@@ -1,0 +1,45 @@
+.emotion--container {
+	width: 100%;
+
+	&.js--fullscreen-active {
+		overflow-y: scroll;
+		-webkit-overflow-scrolling: touch;
+	}
+}
+
+.emotion--header {
+	.unitize-padding(20, 20, 20, 20, 16);
+	.clearfix();
+
+	.header--link {
+		display: inline-block;
+		float: right;
+		.unitize-margin(14, 0, 0, 0, 16);
+	}
+	.header--headline {
+		float: left;
+		margin: 0;
+	}
+}
+
+.emotion--list {
+	.clearfix();
+}
+.emotion--element {
+	float: left;
+	display: block;
+	list-style: none;
+}
+
+/** Element styles */
+.emotion--element-banner {
+	height: 100%; width: 100%;
+
+	// see: http://css-tricks.com/perfect-full-page-background-image/
+	background-position: center center;
+	background-repeat: no-repeat;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
