@@ -172,7 +172,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                 createColumns: function(cols, rows) {
                     var columns = '',
                         horizontal = (cols > rows),
-                        width;
+                        width, style;
 
                     for(var i = 1; i <= cols; i++) {
                         width = (100 / cols);
@@ -182,10 +182,16 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                             width = width + '%';
                         }
 
+                        style = 'width:' + width + ';';
+
+                        if(i % 8 === 0) {
+                            style += 'border-right: 2px dashed #bebebe;';
+                        }
+
                         if(i === cols) {
-                            columns += '<div class="col col-1x1 col-last" style="width:' + width+ '"></div>';
+                            columns += '<div class="col col-1x1 col-last" style="' + style+ '"></div>';
                         } else {
-                            columns += '<div class="col col-1x1" style="width:' + width + '"></div>';
+                            columns += '<div class="col col-1x1" style="' + style + '"></div>';
                         }
                     }
                     columns += '<div class="x-clear"></div>';
