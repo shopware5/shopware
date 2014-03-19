@@ -1,4 +1,4 @@
-<div class="product-box{if $lastitem} is--last{/if}{if $firstitem} is--first{/if}">
+<div class="product--box{if $lastitem} is--last{/if}{if $firstitem} is--first{/if}">
 	{* Top *}
 	{block name='frontend_listing_box_article_hint'}
 		{if $sArticle.highlight}
@@ -29,11 +29,12 @@
 
 	{* Article picture *}
 	{block name='frontend_listing_box_article_picture'}
-		<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName}">
-			<span data-picture data-alt="{config name=shopName} - {s name='IndexLinkDefault' namespace="frontend/index/index"}{/s}">
+		<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName}" class="box--image">
+			<span data-picture data-alt="{config name=shopName} - {s name='IndexLinkDefault' namespace="frontend/index/index"}{/s}" class="image--element">
 				<span data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.2}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}"></span>
 				<span data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.3}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" data-media="(min-width: 47.75em)"></span>
 				<span data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" data-media="(min-width: 64em)"></span>
+				<span data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.5}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" data-media="(min-width: 120em)"></span>
 
 				<noscript>
 					<img src="{if isset($sArticle.image.src)}{$sArticle.image.src.3}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" alt="{$sArticle.articleName}">
@@ -44,7 +45,7 @@
 
 	{* Article name *}
 	{block name='frontend_listing_box_article_name'}
-		<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" class="title"
+		<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" class="box--title"
 		   title="{$sArticle.articleName}">{$sArticle.articleName|truncate:47}</a>
 	{/block}
 
@@ -98,22 +99,23 @@
 
 	{* Compare and more *}
 	{block name='frontend_listing_box_article_actions'}
-		<div class="actions">
+		<div class="box--actions">
 
 			{block name='frontend_listing_box_article_actions_buy_now'}
 			{* Buy now button *}
 				{if !$sArticle.priceStartingFrom &&!$sArticle.sConfigurator && !$sArticle.variants && !$sArticle.sVariantArticle && !$sArticle.laststock == 1 && !($sArticle.notification == 1 && {config name="deactivatebasketonnotification"} == 1)}
 					<a href="{url controller='checkout' action='addArticle' sAdd=$sArticle.ordernumber}"
-					   title="{s name='ListingBoxLinkBuy'}{/s}" class="buynow">{s name='ListingBoxLinkBuy'}{/s}</a>
+					   title="{s name='ListingBoxLinkBuy'}{/s}" class="actions--buynow">{s name='ListingBoxLinkBuy'}{/s}</a>
 				{/if}
 			{/block}
 
 			{block name='frontend_listing_box_article_actions_inline'}
 			{* More informations button *}
 				<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName}"
-				   class="more">{s name='ListingBoxLinkDetails'}{/s}</a>
+				   class="actions--more">{s name='ListingBoxLinkDetails'}{/s}</a>
 			{/block}
 		</div>
+
 		{if $sArticle.pseudoprice}
 			<div class="pseudo_percent">%</div>
 		{/if}

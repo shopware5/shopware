@@ -1,0 +1,47 @@
+.product--box {
+	border: 1px solid @borderColor;
+	height: 100%;
+
+	.box--image {
+		.unitize(20, 16, padding-top);
+		.unitize(20, 16, padding-bottom);
+		.unitize(14, 16, margin-bottom);
+		padding-left: 10%;
+		padding-right: 10%;
+		height: 70%;
+		display: block;
+		border-bottom: 1px solid @borderColor;
+
+		span {
+			display: block;
+			text-align: center;
+		}
+
+		& > span {
+			width: 80%;
+			margin: 0 auto;
+		}
+
+		img {
+			display: inline-block;
+		}
+	}
+
+	.box--title, .box--actions {
+		.unitize-padding(0, 20, 12, 16, 20);
+		display: block;
+		font-weight: bold;
+	}
+
+	.box--title {
+		color: @primaryTextColor;
+
+		&:hover {
+			color: @primaryColor;
+		}
+	}
+
+	.box--actions {
+		.unitize(16, 16, margin-top);
+	}
+}

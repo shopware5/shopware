@@ -7,23 +7,13 @@
 {block name='frontend_listing_box_article_description'}{/block}
 
 {* Unit price *}
-{block name='frontend_listing_box_article_unit'}
-{if $sArticle.purchaseunit}
-    <div class="{if !$sArticle.pseudoprice}article_price_unit{else}article_price_unit_pseudo{/if}">
-        {if $sArticle.purchaseunit && $sArticle.purchaseunit != 0}
-            <p>
-            	<span class="purchaseunit">
-                	<strong>{se name="ListingBoxArticleContent" namespace="frontend/listing/box_article"}{/se}:</strong> {$sArticle.purchaseunit} {$sArticle.sUnit.description}
-                </span>
-        {/if}
-        {if $sArticle.purchaseunit != $sArticle.referenceunit}
-                {if $sArticle.referenceunit}
-                	<span class="referenceunit">
-                     ({$sArticle.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s} / {$sArticle.referenceunit} {$sArticle.sUnit.description})
-                    </span>
-                {/if}
-            </p>
-        {/if}
-    </div>
-{/if}
-{/block}    	
+{block name='frontend_listing_box_article_unit'}{/block}
+
+{* Hide product price *}
+{block name='frontend_listing_box_article_price'}{/block}
+
+{block name='frontend_listing_box_article_hint'}{/block}
+
+{block name='frontend_listing_box_article_new'}{/block}
+
+{block name='frontend_listing_box_article_esd'}{/block}
