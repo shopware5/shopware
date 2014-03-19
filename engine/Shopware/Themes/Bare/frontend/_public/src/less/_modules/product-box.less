@@ -1,16 +1,14 @@
-.product--box {
+.panel--box {
 	border: 1px solid @borderColor;
 	height: 100%;
 
 	.box--image {
 		.unitize(20, 16, padding-top);
 		.unitize(20, 16, padding-bottom);
-		.unitize(14, 16, margin-bottom);
-		padding-left: 10%;
-		padding-right: 10%;
 		height: 70%;
 		display: block;
-		border-bottom: 1px solid @borderColor;
+		padding-left: 10%;
+		padding-right: 10%;
 
 		span {
 			display: block;
@@ -18,6 +16,7 @@
 		}
 
 		& > span {
+			height: 100%;
 			width: 80%;
 			margin: 0 auto;
 		}
@@ -27,21 +26,38 @@
 		}
 	}
 
-	.box--title, .box--actions {
-		.unitize-padding(0, 20, 12, 16, 20);
-		display: block;
-		font-weight: bold;
-	}
-
 	.box--title {
+		font-weight: bold;
 		color: @primaryTextColor;
 
 		&:hover {
 			color: @primaryColor;
 		}
 	}
+}
+
+.product--box {
+	.box--image {
+		.unitize(14, 16, margin-bottom);
+		border-bottom: 1px solid @borderColor;
+	}
+
+	.box--title, .box--actions {
+		.unitize-padding(0, 20, 12, 16, 20);
+		display: block;
+		font-weight: bold;
+	}
 
 	.box--actions {
 		.unitize(16, 16, margin-top);
+	}
+
+	/** @todo - reformat the percentage symbole */
+	.pseudo_percent { display: none }
+}
+
+.category-teaser--box {
+	.box--title {
+		.unitize-padding(0, 20, 12, 16, 20);
 	}
 }
