@@ -24,9 +24,10 @@
 
 .emotion--list {
 	.clearfix();
+	position: relative;
 }
 .emotion--element {
-	float: left;
+	position: absolute;
 	display: block;
 	list-style: none;
 }
@@ -36,7 +37,7 @@
 	height: 100%; width: 100%;
 
 	// see: http://css-tricks.com/perfect-full-page-background-image/
-	background-position: center center;
+	background-position: 50% 0%;
 	background-repeat: no-repeat;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;

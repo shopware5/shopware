@@ -13,9 +13,10 @@
   		{/if}
 	{/foreach}
 
-	{$style = "{$style}.emotion--{$emotion@index}{ldelim}padding-left: {$emotion.grid.gutter / 16}em;{rdelim}"}
+	{$style = "{$style}.emotion--{$emotion@index}{ldelim}padding-left:{$emotion.grid.gutter / 14}em;{rdelim}"}
+	{$style = "{$style}.emotion--list-{$emotion@index}{ldelim}height:{($cellHeight * $finalEndRow / 14)}em{rdelim}"}
 
-    <section class="emotion--container emotion--col{$emotion.grid.cols} emotion--{$emotion@index}" data-emotions="true">
+    <section class="emotion--container emotion--col{$emotion.grid.cols} emotion--{$emotion@index}" data-emotions="true" data-last-row="{$finalEndRow}" data-max-col="{$emotion.grid.cols}" data-cell-height="{$cellHeight}">
 
         {if $emotion.elements.0}
 
@@ -34,7 +35,7 @@
                 {$colWidth = ($element.endCol - $element.startCol) + 1}
                 {$colHeight = ($element.endRow - $element.startRow) + 1}
                 {$elementWidth = {((($element.endCol - $element.startCol) + 1) / $emotion.grid.cols) * 100}}
-				{$elementHeight = ((($element.endRow - $element.startRow) + 1) * $cellHeight) / 16}
+				{$elementHeight = ((($element.endRow - $element.startRow) + 1) * $cellHeight) / 14}
                 {$left = (($element.startCol - 1) / $emotion.grid.cols) * 100}
                 {$top = (($element.startRow - 1) / $finalEndRow) * 100}
                 {$listingTpl = "listing-{$emotion.grid.cols}col"}
@@ -52,9 +53,9 @@
                 {$sController=$Controller}
                 {$sEmotionCols=$emotion.grid.cols}
 
-                {$style = "{$style}.emotion-element--{$emotion@index}-{$element@index}{ldelim}width:{$elementWidth}%;height:{$elementHeight}em;left:{$left}%;top:{$top}%;padding-right:{$emotion.grid.gutter / 16}em;padding-bottom:{$emotion.grid.gutter / 16}em{rdelim}"}
+                {$style = "{$style}.emotion-element--{$emotion@index}-{$element@index}{ldelim}width:{$elementWidth}%;height:{$elementHeight}em;left:{$left}%;top:{$top}%;padding-right:{$emotion.grid.gutter / 14}em;padding-bottom:{$emotion.grid.gutter / 14}em{rdelim}"}
                 
-                <li class="emotion--element {$element.component.cls} emotion-element--{$emotion@index}-{$element@index}">
+                <li class="emotion--element {$element.component.cls} emotion-element--{$emotion@index}-{$element@index}" data-col="{$element.startCol - 1}" data-row="{$element.startRow - 1}">
                     {block name="widgets/emotion/index/inner-element"}
                         {if $template == 'component_article'}
                             {include file="widgets/emotion/components/component_article.tpl"}
