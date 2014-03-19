@@ -1,45 +1,7 @@
 {extends file='parent:frontend/listing/box_article.tpl'}
+
 {* Disable the "buy now" button *}
 {block name='frontend_listing_box_article_actions_buy_now'}{/block}
-
-{* Article picture *}
-{block name='frontend_listing_box_article_picture'}
-
-				
-	{* 3 spalter bilder *}
-	{if $sTemplate eq 'listing-3col'}
-		{* 1/3 *}
-		{if $colWidth eq 3}
-			{assign var=image value=$sArticle.image.src.4}
-		{* 2/3 *}
-		{elseif $colWidth eq 2}
-			{assign var=image value=$sArticle.image.src.4}
-		{* 3/3 *}
-		{else}
-			{assign var=image value=$sArticle.image.src.3}
-		{/if}
-		
-	{* 4 spalter *}
-	{else}
-		{* 1/4 *}
-		{if $colWidth eq 4}
-			{assign var=image value=$sArticle.image.src.4}
-		{* 2/4 *}
-		{elseif $colWidth eq 3}
-			{assign var=image value=$sArticle.image.src.4}
-		{* 3/4 *}
-		{elseif $colWidth eq 2}
-			{assign var=image value=$sArticle.image.src.4}
-		{* 4/4 *}
-		{else}
-			{assign var=image value=$sArticle.image.src.3}
-		{/if}
-	{/if}
-	
-	<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName}" class="artbox_thumb" {if isset($sArticle.image.src)} 
-		style="background: url({$image}) no-repeat center center"{/if}>
-	{if !isset($sArticle.image.src)}<img src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{s name='ListingBoxNoPicture'}{/s}" />{/if}</a>
-{/block}
 
 {* Increase the size of the description text *}
 {block name='frontend_listing_box_article_description'}{/block}

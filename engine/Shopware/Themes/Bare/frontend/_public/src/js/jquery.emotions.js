@@ -6,7 +6,10 @@
         clickEvt = (isTouch ? (window.navigator.msPointerEnabled ? 'MSPointerDown': 'touchstart') : 'click'),
         defaults = {
             /** @string activeCls Class which will be added when the drop down was triggered */
-            fullScreenCls: 'js--fullscreen-active'
+            fullScreenCls: 'js--fullscreen-active',
+            maxContainerWidth: 1260,
+            cellHeightOffset: 25,
+            baseFontSize: 16
         };
 
     /**
@@ -43,13 +46,48 @@
         me.registerEventListeners();
         me._fullscreenActive = false;
 
-        /* me.itemTotalWidth =  0;
-        me.$el.find('.emotion--entry').each(function() {
-            me.itemTotalWidth += $(this).outerWidth();
-        }); */
+        me._baseWidth = me.opts.maxContainerWidth || 1260;
+        me._lastRow = parseInt(me.$el.attr('data-last-row'), 10);
+        me._cellHeight = parseInt(me.$el.attr('data-cell-height'), 10) + me.opts.cellHeightOffset;
 
+        me.$list = me.$el.find('.emotion--list');
+        me.$elements = me.$el.find('.emotion--element').each(function() {
+            var $item = $(this);
 
-        me.$el.find('.emotion--list').width(me.itemTotalWidth);
+            // Cache the inital width and height
+            $item.data('width', $item.outerWidth());
+            $item.data('height', $item.outerHeight());
+        });
+
+        $(window).resize(function() {
+            me.resizeElements();
+        });
+        me.resizeElements();
+    };
+
+    Plugin.prototype.resizeElements = function() {
+        var me = this;
+
+        var containerWidth = me.$el.outerWidth(),
+            percentage;
+
+        if(me._baseWidth < containerWidth) {
+            me.$list.removeAttr('style');
+
+            me.$elements.each(function() {
+                $(this).removeAttr('style');
+            });
+        }
+        percentage = Math.floor((containerWidth / me._baseWidth) * 100);
+
+        me.$elements.each(function() {
+            var $item = $(this),
+                itemHeight = $item.data('height');
+
+            $item.css('height', (itemHeight / 100 ) * percentage);
+        });
+
+        me.$list.css('height', Math.floor((((me._cellHeight * me._lastRow) / 100) * percentage) / me.opts.baseFontSize) + 'em');
     };
 
     Plugin.prototype.registerEventListeners = function() {
@@ -86,42 +124,6 @@
                 me._fullscreenActive = false;
             }
         };
-
-        /* // Cache the last x-coordinate
-        var lastX = 0,
-            isMoving = false;
-
-        me.$el.on('movestart.' + pluginName, function(e) {
-            // Allows the normal up and down scrolling from the browser
-            if ((e.distX > e.distY && e.distX < -e.distY) || (e.distX < e.distY && e.distX > -e.distY)) {
-                e.preventDefault();
-                return;
-            }
-        }).on('move.' + pluginName, function(e) {
-            var x = lastX + e.distX;
-
-            // Set boundary to the left side of the container
-            if(x > 0) {
-                x = 0;
-                lastX = 0;
-            }
-
-            if(Math.abs(x) > me.itemTotalWidth) {
-                x = -me.itemTotalWidth;
-            }
-
-            me.$el.find('.emotion--list').css({ translate: [ x, 0] });
-        }).on('moveend.' + pluginName, function(e) {
-            lastX = lastX + e.distX;
-
-            if(lastX > 0) {
-                lastX = 0;
-            }
-
-            if(Math.abs(lastX) > me.itemTotalWidth) {
-                lastX = -me.itemTotalWidth;
-            }
-        }); */
     };
 
     Plugin.prototype.launchFullscreen = function(element) {
