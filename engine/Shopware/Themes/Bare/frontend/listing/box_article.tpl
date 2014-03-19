@@ -1,4 +1,4 @@
-<div class="product--box{if $lastitem} is--last{/if}{if $firstitem} is--first{/if}">
+<div class="product--box panel--box{if $lastitem} is--last{/if}{if $firstitem} is--first{/if}">
 	{* Top *}
 	{block name='frontend_listing_box_article_hint'}
 		{if $sArticle.highlight}
