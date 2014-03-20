@@ -676,7 +676,13 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                     });
                 }
 
+                // Fixes the jumping of the scroll state due to the refresh of the dataview
+                var scrollTopPos = me.body.dom.scrollTop,
+                    scrollLeftPos = me.body.dom.scrollLeft;
+
                 me.dataView.refresh();
+                me.body.dom.scrollTop = scrollTopPos;
+                me.body.dom.scrollLeft = scrollLeftPos;
 
                 // Remove class from the sourceEl element
                 Ext.get(data.sourceEl).removeCls('dragged');
