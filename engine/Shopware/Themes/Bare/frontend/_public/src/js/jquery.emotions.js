@@ -51,6 +51,7 @@
         me._cellHeight = parseInt(me.$el.attr('data-cell-height'), 10) + me.opts.cellHeightOffset;
 
         me.$list = me.$el.find('.emotion--list');
+        me.$mappings  = me.$el.find('.element-banner--mapping');
         me.$elements = me.$el.find('.emotion--element').each(function() {
             var $item = $(this);
 
@@ -59,10 +60,38 @@
             $item.data('height', $item.outerHeight());
         });
 
+        me.resizeBannerMapping();
+
         $(window).resize(function() {
             me.resizeElements();
         });
         me.resizeElements();
+    };
+
+    Plugin.prototype.resizeBannerMapping = function () {
+        var me = this;
+
+        me.$mappings.each(function () {
+            var $this = $(this),
+                $parent = $(this).parent('.emotion--element-banner'),
+                imgWidth = $parent.attr('data-width'),
+                imgHeight = $parent.attr('data-height'),
+                width = $this.outerWidth(),
+                height = $this.outerHeight(),
+                top = $this.css('top'),
+                left = $this.css('left');
+
+            // Remove the unit and cast the values to integer
+            top = parseInt(top.substring(0, top.length - 2), 10);
+            left = parseInt(left.substring(0, left.length - 2), 10);
+
+            $this.css({
+                left: (left / imgWidth) * 100 + '%',
+                top: (top / imgHeight) * 100 + '%',
+                width: (width / imgWidth) * 100 + '%',
+                height: (height / imgHeight) * 100 + '%'
+            });
+        });
     };
 
     Plugin.prototype.resizeElements = function() {
