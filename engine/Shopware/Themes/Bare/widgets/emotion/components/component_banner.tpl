@@ -19,4 +19,18 @@
         </div>
     {/if}
 </div> *}
-<div class="emotion--element-banner" style="background-image:url({link file=$Data.file})" data-parallax-speed="10"></div>
+<div class="emotion--element-banner" style="background-image:url({link file=$Data.file})" data-image-src="{link file=$Data.file}" data-width="{$Data.fileInfo.width}" data-height="{$Data.fileInfo.height}">
+
+	{* Banner link - will be stretched to the full size of the element *}
+	{if $Data.link}
+		<a class="element-banner--link" href="{$Data.link}">&nbsp;</a>
+	{/if}
+
+	{* Banner mapping, similar to a image map *}
+	{if $Data.bannerMapping}
+		{foreach $Data.bannerMapping as $mapping}
+			<a href="{$mapping.link}"{if $mapping.linkLocation eq "external"} target="_blank"{/if} class="element-banner--mapping" style="width:{$mapping.width}px;height:{$mapping.height}px;left:{$mapping.x}px;top:{$mapping.y}px"{if $mapping.title} title="{$mapping.title}"{/if}></a>
+			</a>
+		{/foreach}
+	{/if}
+</div>

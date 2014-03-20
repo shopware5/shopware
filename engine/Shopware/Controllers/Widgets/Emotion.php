@@ -351,7 +351,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
     private function getBannerMappingLinks($data, $category, $element)
     {
-
         if (!empty($data['link'])) {
             preg_match('/^([a-z]*:\/\/|shopware\.php|mailto:)/i', $data['link'], $matches);
 
@@ -359,6 +358,17 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 $data['link'] = $this->Request()->getBaseUrl() . $data['link'];
             }
         }
+
+	    // Get image size of the banner
+	    if(isset($data['file']) && !empty($data['file'])) {
+		    $fullPath = getcwd() . DIRECTORY_SEPARATOR . $data['file'];
+		    list($bannerWidth, $bannerHeight) = getimagesize($fullPath);
+
+		    $data['fileInfo'] = array(
+			    'width' => $bannerWidth,
+			    'height' => $bannerHeight
+		    );
+	    }
 
         $mappings = $data['bannerMapping'];
         if (!empty($mappings)) {
