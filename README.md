@@ -1,3 +1,11 @@
+# EDITS 
+
+install ant https://ant.apache.org/manual/install.html
+use setx command
+set ANT_HOME=c:\ant
+set JAVA_HOME=C:\Program Files (x86)\Java\jdk1.8.0
+set PATH=%PATH%;%ANT_HOME%\bin
+
 # Shopware 4
 
 - **License**: Dual license AGPL v3 / Proprietary
