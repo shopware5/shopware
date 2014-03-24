@@ -32,7 +32,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * Backend controller for the theme manager 2.0
  *
  * @category  Shopware
- * @package   Shopware
+ * @package   Shopware\Controllers\Backend
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Application
@@ -130,7 +130,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             }
         }
 
-        $this->container->get('theme_factory')->generateTheme(
+        $this->container->get('theme_generator')->generateTheme(
             $this->Request()->getParams(),
             $parent
         );

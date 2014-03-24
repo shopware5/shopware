@@ -7,7 +7,7 @@
     <services>
         <service id="JSMin" class="JSMin" />
         <service id="less_compiler" class="Less_Parser" />
-        <service id="symfony_file_system" class="Symfony\Component\Filesystem\Filesystem" />
+        <service id="file_system" class="Symfony\Component\Filesystem\Filesystem" />
 
         <service id="js_compressor" class="Shopware\Components\Theme\Compressor\Js">
             <argument type="service" id="JSMin" />
@@ -24,9 +24,9 @@
             <argument type="service" id="template" />
         </service>
 
-        <service id="theme_factory" class="Shopware\Components\Theme\Factory">
+        <service id="theme_generator" class="Shopware\Components\Theme\Generator">
             <argument type="service" id="theme_path_resolver" />
-            <argument type="service" id="symfony_file_system" />
+            <argument type="service" id="file_system" />
         </service>
 
         <service id="theme_config_persister" class="Shopware\Components\Form\Persister\Theme">

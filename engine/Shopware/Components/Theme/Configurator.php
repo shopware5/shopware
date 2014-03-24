@@ -40,7 +40,9 @@ use Shopware\Components\Theme;
  * Additionally this class is used to build the configuration
  * inheritance for the backend module.
  *
- * @package Shopware\Components\Theme
+ * @category  Shopware
+ * @package   Shopware\Components\Theme
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Configurator
 {

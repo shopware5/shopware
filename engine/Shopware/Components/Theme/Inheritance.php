@@ -35,7 +35,9 @@ use Shopware\Models\Shop as Shop;
  * template directories or other resources which should include the
  * theme inheritance.
  *
- * @package Shopware\Components\Theme
+ * @category  Shopware
+ * @package   Shopware\Components\Theme
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Inheritance
 {

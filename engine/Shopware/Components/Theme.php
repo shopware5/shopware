@@ -33,7 +33,7 @@ use Shopware\Components\Form as Form;
  * Contains the inheritance and config definition of a theme.
  *
  * @category  Shopware
- * @package   Shopware
+ * @package   Shopware\Components
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Theme
@@ -92,7 +92,7 @@ class Theme
      * The javascript property allows to define .js files
      * which should be compressed into one small .js file for the frontend.
      * The shopware theme compiler expects that this files are
-     * stored in the ../Themes/NAME/frontend/_public/src/js directory.
+     * stored in the ../Themes/NAME/frontend/_public/ directory.
      *
      * @var array
      */
@@ -102,7 +102,7 @@ class Theme
      * The css property allows to define .css files
      * which should be compressed into one small .css file for the frontend.
      * The shopware theme compiler expects that this files are
-     * stored in the ../Themes/NAME/frontend/_public/src/css directory.
+     * stored in the ../Themes/NAME/frontend/_public/ directory.
      *
      * @var array
      */
@@ -294,7 +294,6 @@ class Theme
 
         return $element;
     }
-
 
     /**
      * Creates a ext js number field.

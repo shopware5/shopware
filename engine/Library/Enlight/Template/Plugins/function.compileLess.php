@@ -24,7 +24,7 @@
  * @return string
  * @throws Exception
  */
-function smarty_function_compileTheme($params, $template)
+function smarty_function_compileLess($params, $template)
 {
     $time = $params['timestamp'];
 
@@ -39,24 +39,31 @@ function smarty_function_compileTheme($params, $template)
         \Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT
     );
 
-    $cssFile = $pathResolver->getCssFilePath($shop, $time);
-    $jsFile = $pathResolver->getJsFilePath($shop, $time);
-    $jsUrl = $pathResolver->getCacheJsUrl($shop, $time);
-    $cssUrl = $pathResolver->getCacheCssUrl($shop, $time);
+    $files = $pathResolver->getCssFilePaths($shop, $time);
 
-    $result = '
-        <link href="' . $cssUrl . '" media="screen" rel="stylesheet" type="text/css" />
-        <script src="'. $jsUrl  . '"></script>
-    ';
+    $urls = array();
 
-    if (file_exists($jsFile) && file_exists($cssFile) && !$settings->getForceCompile()) {
-        return $result;
+    $compile = $settings->getForceCompile();
+
+    foreach($files as $key => $file) {
+        $urls[$key] = $pathResolver->formatPathToUrl(
+            $file,
+            $shop
+        );
+
+        if (!file_exists($file)) {
+            $compile = true;
+        }
+    }
+
+    if (!$compile) {
+        return $urls;
     }
 
     /**@var $compiler \Shopware\Components\Theme\Compiler*/
     $compiler = Shopware()->Container()->get('theme_compiler');
 
-    $compiler->compile($time, $shop->getTemplate(), $shop);
+    $compiler->compileLess($time, $shop->getTemplate(), $shop);
 
-    return $result;
+    return $urls;
 }

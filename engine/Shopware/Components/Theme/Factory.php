@@ -30,10 +30,10 @@ use Symfony\Component\Filesystem\Filesystem;
  * Class to generate shopware themes.
  *
  * @category  Shopware
- * @package   Shopware
+ * @package   Shopware\Components\Theme
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Factory
+class Generator
 {
     /**
      * @var PathResolver
@@ -138,7 +138,7 @@ EOD;
             $directory
         );
 
-        $this->eventManager->notify('Theme_Factory_Structure_Generated', array(
+        $this->eventManager->notify('Theme_Generator_Structure_Generated', array(
             'data' => $data,
             'directory' => $directory
         ));
@@ -158,7 +158,7 @@ EOD;
             $directory . '/preview.png'
         );
 
-        $this->eventManager->notify('Theme_Factory_Preview_Image_Created', array(
+        $this->eventManager->notify('Theme_Generator_Preview_Image_Created', array(
             'directory' => $directory
         ));
     }
@@ -172,7 +172,7 @@ EOD;
         $directory = $this->getThemeDirectory($name);
         $this->fileSystem->mkdir($directory);
 
-        $this->eventManager->notify('Theme_Factory_Theme_Directory_Created', array(
+        $this->eventManager->notify('Theme_Generator_Theme_Directory_Created', array(
             'name' => $name,
             'directory' => $directory
         ));
@@ -216,7 +216,7 @@ EOD;
             "w+"
         );
 
-        $output = $this->eventManager->filter('Theme_Factory_Theme_Source_Generated', $source, array(
+        $output = $this->eventManager->filter('Theme_Generator_Theme_Source_Generated', $source, array(
             'data' => $data,
             'parent' => $parent
         ));

@@ -28,7 +28,9 @@ namespace Shopware\Components\Theme\Compressor;
  * Javascript compressor for the frontend themes.
  * Used to compress theme and plugin javascript files.
  *
- * @package Shopware\Components\Theme\Compressor
+ * @category  Shopware
+ * @package   Shopware\Components\Theme\Compressor
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Js implements CompressorInterface
 {
