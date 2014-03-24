@@ -270,25 +270,5 @@
             <argument>%kernel.root_dir%</argument>
             <argument type="service" id="events" />
         </service>
-
-
-        <service id="theme_manager" class="Shopware\Components\Theme\Manager">
-            <argument>%kernel.root_dir%</argument>
-            <argument type="service" id="models" />
-            <argument type="service" id="template" />
-            <argument type="service" id="shopware.snippet_database_handler" />
-        </service>
-
-        <service id="theme_factory" class="Shopware\Components\Theme\Factory">
-            <argument type="service" id="theme_manager" />
-        </service>
-
-        <service id="theme_compiler" class="Shopware\Components\Theme\Compiler">
-            <argument type="service" id="service_container" />
-            <tag name="shopware.event_listener" method="beforeRender" event="Enlight_Plugins_ViewRenderer_PreRender" />
-        </service>
-
-        <service id="less_compiler" class="lessc" />
-
     </services>
 </container>

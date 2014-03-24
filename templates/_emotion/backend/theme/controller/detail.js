@@ -1,21 +1,21 @@
 /**
-* Shopware 4
-* Copyright © shopware AG
-*
-* According to our dual licensing model, this program can be used either
-* under the terms of the GNU Affero General Public License, version 3,
-* or under a proprietary license.
-*
-* The texts of the GNU Affero General Public License with an additional
-* permission and of our proprietary license can be found at and
-* in the LICENSE file you have received along with this program.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Affero General Public License for more details.
-*
-* "Shopware" is a registered trademark of shopware AG.
+ * Shopware 4
+ * Copyright © shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
@@ -37,6 +37,7 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
     extend: 'Enlight.app.Controller',
 
     refs: [
+        { ref: 'detailWindow', selector: 'theme-detail-window' },
         { ref: 'listingView', selector: 'theme-listing dataview' },
         { ref: 'shopCombo', selector: 'theme-list-window combobox[name=shop]' }
     ],
@@ -45,8 +46,12 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
         var me = this;
 
         me.control({
+            'theme-config-set-window': {
+                'assign-config-sets': me.onAssignConfigSets
+            },
             'theme-detail-window': {
-                saveConfig: me.saveConfig
+                saveConfig: me.saveConfig,
+                'load-config-sets': me.onLoadConfigSets
             },
             'theme-listing-info-panel': {
                 'configure-theme': me.onConfigureTheme
@@ -58,6 +63,48 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
             me.getListingView().getStore().load();
         });
     },
+
+    onAssignConfigSets: function(window, theme, formPanel) {
+        var me = this, data = { };
+
+        formPanel.getForm().getFields().each(function(field) {
+            if (!field.value) {
+                return false;
+            }
+            var item = field.store.getById(field.value);
+
+            data = Ext.apply(data, item.get('values'));
+        });
+
+        var detailForm = me.getDetailWindow().formPanel;
+
+        detailForm.getForm().getFields().each(function(field) {
+            if(data.hasOwnProperty(field.name)) {
+                field.setValue(data[field.name]);
+            }
+        });
+
+        window.destroy();
+    },
+
+
+    onLoadConfigSets: function(window, theme) {
+        var me = this;
+
+        var store = Ext.create('Shopware.apps.Theme.store.ConfigSets');
+
+        store.load({
+            params: {
+                templateId: theme.get('id')
+            },
+            callback: function() {
+                var window = me.getView('config_sets.Window').create({
+                    store: store
+                }).show();
+            }
+        });
+    },
+
 
     /**
      * Event listener of the toolbar "configure button".
@@ -82,7 +129,7 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
             },
             callback: function(record) {
                 me.getView('detail.Window').create({
-                    elements: me.createThemeConfiguration(record, shop),
+                    configLayout: me.createThemeConfiguration(record, shop),
                     theme: record,
                     shop:  shop
                 }).show();
@@ -99,37 +146,84 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
      * @returns { Array }
      */
     createThemeConfiguration: function(theme, shop) {
-        var me = this, elements = [], data;
+        var me = this, elements = [], element;
 
-        theme.getElements().each(function(element) {
-            data = element.data;
-            delete data.id;
-
-            if (!data.fieldLabel) {
-                data.fieldLabel = data.name;
-            }
-
-            if (data.xtype == "theme-select-field") {
-                data.store = me.createSelectStore(data.selection);
-                data.valueField = 'name';
-                data.displayField = 'name';
-            }
-
-            if (element['getConfigValuesStore'] instanceof Ext.data.Store) {
-                data.value = me.getElementShopValue(element, shop);
-            }
-
-            if (data.xtype == "theme-checkbox-field" && data.value) {
-                data.checked = true;
-            }
-
-            if (data.value == Ext.undefined) {
-                data.value = null;
-            }
-            elements.push(data);
+        theme.getLayout().each(function(container) {
+            element = me.createConfigContainer(container, shop);
+            elements.push(element);
         });
 
         return elements;
+    },
+
+    /**
+     * Creates the whole config container for the theme
+     * configuration panel.
+     * @param container
+     * @param shop
+     */
+    createConfigContainer: function(container, shop) {
+        var me = this, items = [],
+            data = container.data;
+
+        delete data.id;
+
+        if (container.getElements() instanceof Ext.data.Store) {
+            container.getElements().each(function(child) {
+                var element = me.createConfigElement(child, shop);
+                items.push(element);
+            });
+        }
+        if (container.getChildren() instanceof Ext.data.Store) {
+            container.getChildren().each(function(child) {
+                var element = me.createConfigContainer(child, shop);
+                items.push(element);
+            });
+        }
+
+        data.items = items;
+
+        if (Ext.isObject(data.attributes)) {
+            data = Ext.apply(data, { }, data.attributes);
+        }
+        delete data.attributes;
+
+        return data;
+    },
+
+    createConfigElement: function(element, shop) {
+        var me = this,
+            data = element.data;
+
+        delete data.id;
+
+        if (!data.fieldLabel) {
+            data.fieldLabel = data.name;
+        }
+
+        if (data.xtype == "theme-select-field") {
+            data.store = me.createSelectStore(data.selection);
+            data.valueField = 'name';
+            data.displayField = 'name';
+        }
+
+        if (element['getConfigValuesStore'] instanceof Ext.data.Store) {
+            data.value = me.getElementShopValue(element, shop);
+        }
+
+        if (data.xtype == "theme-checkbox-field" && data.value) {
+            data.checked = true;
+        }
+
+        if (data.value == Ext.undefined) {
+            data.value = null;
+        }
+
+        if (Ext.isObject(data.attributes)) {
+            data = Ext.apply(data, { }, data.attributes);
+        }
+
+        return data;
     },
 
     /**
@@ -190,11 +284,18 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
         theme = me.updateShopValues(
             theme,
             shop,
+            formPanel.getForm().getFields(),
             formPanel.getForm().getValues()
         );
 
         theme.save({
             callback: function() {
+                Shopware.Notification.createGrowlMessage(
+                    '{s name="application"}Theme manager 2.0{/s}',
+                    '{s name="save_message"}Theme configuration saved{/s}',
+                    'Theme manager'
+                );
+
                 if (window instanceof Ext.window.Window) {
                     window.destroy();
                 }
@@ -209,50 +310,31 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
      *
      * @param theme
      * @param shop
-     * @param values
-     * @returns mixed
+     * @param formFields
+     * @param formValues
+     * @returns { Shopware.apps.Theme.model.Theme }
      */
-    updateShopValues: function(theme, shop, values) {
-        var me = this, configValue;
+    updateShopValues: function(theme, shop, formFields, formValues) {
+        var data = [];
 
-        theme.getElements().each(function(element) {
-            configValue = me.getShopConfigValue(element, shop);
-
-            configValue.set(
-                'value',
-                values[element.get('name')]
-            );
+        var store = Ext.create('Ext.data.Store', {
+            model: 'Shopware.apps.Theme.model.ConfigValue'
         });
 
-        return theme;
-    },
-
-    getShopConfigValue: function(element, shop) {
-        var me = this,
-            valueObject = null;
-
-        element.getConfigValues().each(function(configValue) {
-            if (configValue.get('shopId') == shop.get('id')) {
-                valueObject = configValue;
-                return false;
-            }
-        });
-
-        if (valueObject == null) {
-            valueObject = Ext.create('Shopware.apps.Theme.model.ConfigValue', {
+        formFields.each(function(field) {
+            var model = Ext.create('Shopware.apps.Theme.model.ConfigValue', {
                 shopId: shop.get('id'),
-                elementId: element.get('id')
+                elementId: field.elementId,
+                elementName: field.name,
+                value: formValues[field.name]
             });
 
-            if (!element.getConfigValues() instanceof Ext.data.Store) {
-                element['configValuesStore'] = Ext.create('Ext.data.Store', {
-                    model: 'Shopware.apps.Theme.model.ConfigValue'
-                });
-            }
-            element.getConfigValues().add(valueObject);
-        }
+            store.add(model);
+        });
 
-        return valueObject;
+        theme['getConfigValuesStore'] = store;
+
+        return theme;
     },
 
     /**
@@ -297,4 +379,3 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
 });
 
 //{/block}
-

@@ -27,6 +27,7 @@ namespace Shopware\Models\Shop;
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Model\ModelEntity,
     Doctrine\ORM\Mapping as ORM;
+use Shopware\Models\Shop\TemplateConfig\Set;
 
 /**
  * Template Model Entity
@@ -153,7 +154,7 @@ class Template extends ModelEntity
     /**
      * @var $config ArrayCollection
      * @ORM\OneToMany(
-     *      targetEntity="Shopware\Models\Shop\Template\ConfigElement",
+     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Element",
      *      mappedBy="template",
      *      orphanRemoval=true,
      *      cascade={"persist"}
@@ -161,11 +162,35 @@ class Template extends ModelEntity
      */
     protected $elements;
 
+    /**
+     * @var $config ArrayCollection
+     * @ORM\OneToMany(
+     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Layout",
+     *      mappedBy="template",
+     *      orphanRemoval=true,
+     *      cascade={"persist"}
+     * )
+     */
+    protected $layouts;
+
+    /**
+     * @var $configSets ArrayCollection
+     * @ORM\OneToMany(
+     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Set",
+     *      mappedBy="template",
+     *      orphanRemoval=true,
+     *      cascade={"persist"}
+     * )
+     */
+    protected $configSets;
+
 
     function __construct()
     {
         $this->shops = new ArrayCollection();
         $this->elements = new ArrayCollection();
+        $this->layouts = new ArrayCollection();
+        $this->configSets = new ArrayCollection();
     }
 
 
@@ -395,7 +420,7 @@ class Template extends ModelEntity
     {
         $this->setOneToMany(
             $elements,
-            '\Shopware\Models\Shop\Template\ConfigElement',
+            '\Shopware\Models\Shop\TemplateConfig\Element',
             'elements',
             'template'
         );
@@ -423,6 +448,43 @@ class Template extends ModelEntity
     public function getShops()
     {
         return $this->shops;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $layouts
+     */
+    public function setLayouts($layouts)
+    {
+        $this->setOneToMany(
+            $layouts,
+            '\Shopware\Models\Shop\TemplateConfig\Layout',
+            'layouts',
+            'template'
+        );
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getLayouts()
+    {
+        return $this->layouts;
+    }
+
+    /**
+     * @return Set[]
+     */
+    public function getConfigSets()
+    {
+        return $this->configSets;
+    }
+
+    /**
+     * @param Set[] $configSets
+     */
+    public function setConfigSets($configSets)
+    {
+        $this->configSets = $configSets;
     }
 
 

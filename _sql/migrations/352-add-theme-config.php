@@ -15,12 +15,31 @@ CREATE TABLE IF NOT EXISTS `s_core_templates_config_elements` (
   `field_label` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `support_text` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `allow_blank` int(1) NOT NULL DEFAULT '1',
-  `tab` text COLLATE utf8_unicode_ci,
+  `container_id` int(11) NOT NULL,
+  `attributes` text COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 EOD;
         $this->addSql($sql);
+
+
+        $sql = <<<'EOD'
+
+CREATE TABLE IF NOT EXISTS `s_core_templates_config_layout` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) DEFAULT NULL,
+  `template_id` int(11) NOT NULL,
+  `type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `attributes` text COLLATE utf8_unicode_ci,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+EOD;
+        $this->addSql($sql);
+
 
 
         $sql = <<<'EOD'
@@ -36,8 +55,48 @@ CREATE TABLE IF NOT EXISTS `s_core_templates_config_values` (
 
 EOD;
         $this->addSql($sql);
+
+
+        $sql = <<<'EOD'
+
+CREATE TABLE IF NOT EXISTS `s_core_templates_config_set` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `template_id` int(11) NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `description` text COLLATE utf8_unicode_ci NOT NULL,
+  `element_values` text COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `template_id` (`template_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+EOD;
+        $this->addSql($sql);
+
+
+        $sql = <<<'EOD'
+
+CREATE TABLE IF NOT EXISTS `s_core_theme_settings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `compiler_force` int(1) NOT NULL,
+  `compiler_create_source_map` int(1) NOT NULL,
+  `compiler_compress_css` int(1) NOT NULL,
+  `compiler_compress_js` int(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+
+EOD;
+        $this->addSql($sql);
+
+
+        $sql = <<<'EOD'
+INSERT INTO `s_core_theme_settings`
+(`compiler_force`, `compiler_create_source_map`, `compiler_compress_css`, `compiler_compress_js`)
+VALUES
+(0, 0, 1, 1);
+EOD;
+        $this->addSql($sql);
+
     }
 }
-
 
 

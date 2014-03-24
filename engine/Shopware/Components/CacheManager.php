@@ -25,6 +25,7 @@
 namespace Shopware\Components;
 
 use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\Theme\PathResolver;
 
 /**
  * @category  Shopware
@@ -64,6 +65,11 @@ class CacheManager
     private $events;
 
     /**
+     * @var PathResolver
+     */
+    private $themePathResolver;
+
+    /**
      * @param Container $container
      */
     public function __construct(Container $container)
@@ -75,6 +81,7 @@ class CacheManager
         $this->db       = $container->get('db');
         $this->config   = $container->get('config');
         $this->events   = $container->get('events');
+        $this->themePathResolver = $container->get('theme_path_resolver');
     }
 
     /**
@@ -196,6 +203,14 @@ class CacheManager
     }
 
     /**
+     * Deletes all compiled css and js files.
+     */
+    public function clearThemeCache()
+    {
+        $this->clearDirectory($this->themePathResolver->getCacheDirectory());
+    }
+
+    /**
      * Returns cache information
      *
      * @param null $request
@@ -269,6 +284,20 @@ class CacheManager
         $dir = $this->container->getParameter('shopware.model.proxydir');
         $info = $this->getDirectoryInfo($dir);
         $info['name'] = 'Doctrine Proxies';
+
+        return $info;
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getThemeCacheInfo()
+    {
+        $info = $this->getDirectoryInfo(
+            $this->themePathResolver->getCacheDirectory()
+        );
+        $info['name'] = 'Shopware 5 themes';
 
         return $info;
     }

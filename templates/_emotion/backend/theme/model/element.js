@@ -46,6 +46,7 @@ Ext.define('Shopware.apps.Theme.model.Element', {
         { name: 'fieldLabel', type: 'string', useNull: true },
         { name: 'supportText', type: 'string', useNull: true },
         { name: 'allowBlank', type: 'boolean', defaultValue: true },
+        { name: 'attributes' },
 
         //no type definition for auto typing
         { name: 'tab' },
@@ -53,7 +54,7 @@ Ext.define('Shopware.apps.Theme.model.Element', {
         //mapping fields which used only for the form field generation
         { name: 'value', mapping: 'defaultValue' },
         { name: 'xtype', type: 'string', mapping: 'type' },
-        { name: 'elementId', type: 'string', mapping: 'id' }
+        { name: 'elementId', type: 'int', mapping: 'id' }
     ],
 
     associations: [
@@ -68,4 +69,3 @@ Ext.define('Shopware.apps.Theme.model.Element', {
 
 
 //{/block}
-
