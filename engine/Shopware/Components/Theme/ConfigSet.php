@@ -48,7 +48,9 @@ namespace Shopware\Components\Theme;
  *
  * </code>
  *
- * @package Shopware\Components\Theme
+ * @category  Shopware
+ * @package   Shopware\Components\Theme
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ConfigSet
 {

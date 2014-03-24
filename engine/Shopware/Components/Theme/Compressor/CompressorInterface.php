@@ -5,7 +5,9 @@ namespace Shopware\Components\Theme\Compressor;
 /**
  * Interface CompressorInterface
  *
- * @package Shopware\Components\Theme\Compressor
+ * @category  Shopware
+ * @package   Shopware\Components\Theme\Compressor
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface CompressorInterface
 {

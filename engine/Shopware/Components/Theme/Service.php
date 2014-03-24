@@ -35,7 +35,9 @@ use Shopware\Models\Theme\Settings;
  * It supports to get translated data, nested configuration
  * and shop configuration.
  *
- * @package Shopware\Components\Theme
+ * @category  Shopware
+ * @package   Shopware\Components\Theme
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Service
 {

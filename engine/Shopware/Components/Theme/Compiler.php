@@ -34,7 +34,7 @@ use Shopware\Models\Shop as Shop;
  * This class handles additionally the css and javascript minification.
  *
  * @category  Shopware
- * @package   Shopware
+ * @package   Shopware\Components\Theme
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Compiler
@@ -113,13 +113,13 @@ class Compiler
      * @param Shop\Template $template
      * @param Shop\Shop $shop
      */
-    public function compile($timestamp, Shop\Template $template, Shop\Shop $shop)
+    public function compileLess($timestamp, Shop\Template $template, Shop\Shop $shop)
     {
         $this->compiler->SetOptions(
             $this->getCompilerConfiguration($shop)
         );
 
-        $this->clearDirectory();
+        $this->clearDirectory(array('css'));
 
         $this->buildConfig($template, $shop);
 
@@ -132,6 +132,18 @@ class Compiler
         $this->compressPluginCss($template, $shop);
 
         $this->outputCompiledCss($timestamp, $shop);
+    }
+
+    /**
+     * Compiles the javascript files for the passed shop template.
+     *
+     * @param $timestamp
+     * @param Shop\Template $template
+     * @param Shop\Shop $shop
+     */
+    public function compileJavascript($timestamp, Shop\Template $template, Shop\Shop $shop)
+    {
+        $this->clearDirectory(array('js'));
 
         $this->compressThemeJavascript($timestamp, $template, $shop);
 
@@ -177,7 +189,7 @@ class Compiler
      * @param Shop\Shop $shop
      * @param LessDefinition $definition
      */
-    private function compileLess(Shop\Shop $shop, LessDefinition $definition)
+    private function compileLessDefinition(Shop\Shop $shop, LessDefinition $definition)
     {
         //set unique import directory for less @import commands
         if ($definition->getImportDirectory()) {
@@ -225,7 +237,8 @@ class Compiler
      */
     private function outputCompiledCss($timestamp, Shop\Shop $shop)
     {
-        $file = $this->pathResolver->getCssFilePath($shop, $timestamp);
+        $file = $this->pathResolver->getCssFilePaths($shop, $timestamp);
+        $file = $file['default'];
 
         $output = new \SplFileObject($file, "w+");
 
@@ -297,7 +310,7 @@ class Compiler
                 $this->pathResolver->getThemeLessFile($shopTemplate)
             ));
 
-            $this->compileLess($shop, $definition);
+            $this->compileLessDefinition($shop, $definition);
         }
     }
 
@@ -354,7 +367,7 @@ class Compiler
                 );
             }
 
-            $this->compileLess($shop, $definition);
+            $this->compileLessDefinition($shop, $definition);
         }
     }
 
@@ -379,7 +392,7 @@ class Compiler
             $this->inheritance->getCssFiles($template)
         );
 
-        $this->compileLess($shop, $definition);
+        $this->compileLessDefinition($shop, $definition);
     }
 
     /**
@@ -409,7 +422,7 @@ class Compiler
 
         $definition->setFiles($collection->toArray());
 
-        $this->compileLess($shop, $definition);
+        $this->compileLessDefinition($shop, $definition);
     }
 
     /**
@@ -427,7 +440,8 @@ class Compiler
     {
         $files = $this->inheritance->getJavascriptFiles($template);
 
-        $fileName = $this->pathResolver->getJsFilePath($shop, $timestamp);
+        $fileName = $this->pathResolver->getJsFilePaths($shop, $timestamp);
+        $fileName = $fileName['default'];
 
         $output = new \SplFileObject($fileName, "w+");
 
@@ -473,7 +487,8 @@ class Compiler
             'template' => $template
         ));
 
-        $fileName = $this->pathResolver->getJsFilePath($shop, $timestamp);
+        $fileName = $this->pathResolver->getJsFilePaths($shop, $timestamp);
+        $fileName = $fileName['default'];
 
         $output = new \SplFileObject($fileName, "w+");
         $output->fwrite('');
@@ -522,7 +537,7 @@ class Compiler
      * Helper function to clear the theme cache directory
      * before the new css and js files are compiled.
      */
-    private function clearDirectory()
+    private function clearDirectory($extensions = array())
     {
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator(
@@ -535,6 +550,10 @@ class Compiler
         /** @var \SplFileInfo $path */
         foreach ($iterator as $path) {
             if ($path->getFilename() == '.gitkeep') {
+                continue;
+            }
+
+            if (!empty($extensions) && !in_array($path->getExtension(), $extensions)) {
                 continue;
             }
 

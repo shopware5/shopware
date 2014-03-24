@@ -33,7 +33,9 @@ use Shopware\Components\Theme;
  * which contains different small functions
  * which used in all other Theme\* classes.
  *
- * @package Shopware\Components\Theme
+ * @category  Shopware
+ * @package   Shopware\Components\Theme
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Util
 {

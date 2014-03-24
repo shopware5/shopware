@@ -33,7 +33,9 @@ use Shopware\Models\Shop as Shop;
  * contains a getDirectory function which
  * returns the Theme directory of the passed shop template.
  *
- * @package Shopware\Components\Theme
+ * @category  Shopware
+ * @package   Shopware\Components\Theme
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PathResolver
 {
@@ -204,32 +206,10 @@ class PathResolver
         return $this->rootDir . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR . 'cache';
     }
 
-    /**
-     * @param Shop\Shop $shop
-     * @param $timestamp
-     * @return string
-     */
-    public function getCacheCssUrl(Shop\Shop $shop, $timestamp)
-    {
-        return $shop->getBasePath() .
-        DIRECTORY_SEPARATOR .
-        'web' . DIRECTORY_SEPARATOR . 'cache' .
-        DIRECTORY_SEPARATOR .
-        $this->buildTimestampName($timestamp, $shop, 'css');
-    }
 
-    /**
-     * @param Shop\Shop $shop
-     * @param $timestamp
-     * @return string
-     */
-    public function getCacheJsUrl(Shop\Shop $shop, $timestamp)
+    public function formatPathToUrl($path, Shop\Shop $shop)
     {
-        return $shop->getBasePath() .
-        DIRECTORY_SEPARATOR .
-        'web' . DIRECTORY_SEPARATOR . 'cache' .
-        DIRECTORY_SEPARATOR .
-        $this->buildTimestampName($timestamp, $shop, 'js');
+        return str_replace($this->rootDir, $shop->getBaseUrl(), $path);
     }
 
     /**
@@ -262,13 +242,13 @@ class PathResolver
      *
      * @param Shop\Shop $shop
      * @param $timestamp
-     * @return string
+     * @return array
      */
-    public function getCssFilePath(Shop\Shop $shop, $timestamp)
+    public function getCssFilePaths(Shop\Shop $shop, $timestamp)
     {
-        return $this->getCacheDirectory() .
-        DIRECTORY_SEPARATOR .
-        $this->buildTimestampName($timestamp, $shop, 'css');
+        return array(
+            'default' => $this->getCacheDirectory() . DIRECTORY_SEPARATOR . $this->buildTimestampName($timestamp, $shop, 'css')
+        );
     }
 
     /**
@@ -280,13 +260,13 @@ class PathResolver
      *
      * @param Shop\Shop $shop
      * @param $timestamp
-     * @return string
+     * @return array
      */
-    public function getJsFilePath(Shop\Shop $shop, $timestamp)
+    public function getJsFilePaths(Shop\Shop $shop, $timestamp)
     {
-        return $this->getCacheDirectory() .
-        DIRECTORY_SEPARATOR .
-        $this->buildTimestampName($timestamp, $shop, 'js');
+        return array(
+            'default' => $this->getCacheDirectory() . DIRECTORY_SEPARATOR . $this->buildTimestampName($timestamp, $shop, 'js')
+        );
     }
 
     /**

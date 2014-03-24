@@ -56,7 +56,10 @@ namespace Shopware\Components\Theme;
  *          return new ArrayCollection(array($less));
  *      }
  * </code>
- * @package Shopware\Components\Theme
+ *
+ * @category  Shopware
+ * @package   Shopware\Components\Theme
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class LessDefinition
 {

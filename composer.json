@@ -44,7 +44,6 @@
             "Shopware": "engine/",
             "Enlight": "engine/Library/",
             "Zend": "engine/Library/",
-            "CSSmin": "engine/Library/minify/",
             "JSMin": "engine/Library/minify/"
         },
         "classmap": [

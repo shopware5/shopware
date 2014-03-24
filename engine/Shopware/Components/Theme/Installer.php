@@ -39,7 +39,9 @@ use Shopware\Components\Theme;
  * uses the Theme\Configurator class to synchronize the
  * theme configuration with the database.
  *
- * @package Shopware\Components\Theme
+ * @category  Shopware
+ * @package   Shopware\Components\Theme
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Installer
 {
