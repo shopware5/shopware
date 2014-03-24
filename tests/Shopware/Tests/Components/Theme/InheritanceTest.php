@@ -36,20 +36,6 @@ class Shopware_Tests_Components_Theme_InheritanceTest extends Shopware_Tests_Com
         $this->assertEquals('master', $hierarchy[1]->getName());
     }
 
-    public function testLessDirectories()
-    {
-        $custom = $this->getDummyTemplates();
-
-        $directories = Shopware()->Container()->get('theme_inheritance')
-            ->getLessDirectories($custom);
-
-        $this->assertCount(2, $directories);
-
-        foreach ($directories as $dir) {
-            $this->assertStringEndsWith('/_public/src/less', $dir);
-        }
-    }
-
     public function testSmartyDirectories()
     {
         $custom = $this->getDummyTemplates();
@@ -63,22 +49,6 @@ class Shopware_Tests_Components_Theme_InheritanceTest extends Shopware_Tests_Com
             $this->assertStringEndsWith('/_private/smarty/', $dir);
         }
     }
-
-
-    public function testPublicDirectories()
-    {
-        $custom = $this->getDummyTemplates();
-
-        $directories = Shopware()->Container()->get('theme_inheritance')
-            ->getPublicDirectories($custom);
-
-        $this->assertCount(2, $directories);
-
-        foreach ($directories as $dir) {
-            $this->assertStringEndsWith('/frontend/_public', $dir);
-        }
-    }
-
 
     public function testTemplateDirectories()
     {
@@ -116,18 +86,15 @@ class Shopware_Tests_Components_Theme_InheritanceTest extends Shopware_Tests_Com
             ->will($this->returnValue($bareTheme));
 
         $pathResolver = $this->getPathResolver();
-        $pathResolver->expects($this->once())
-            ->method('getJavascriptDirectory')
-            ->will($this->returnValue('javascript_directory'));
-
-        $pathResolver->expects($this->once())
-            ->method('getCssDirectory')
-            ->will($this->returnValue('css_directory'));
+        $pathResolver->expects($this->any())
+            ->method('getPublicDirectory')
+            ->will($this->returnValue('public_directory'));
 
         $inheritance = new \Shopware\Components\Theme\Inheritance(
             null,
             $util,
-            $pathResolver
+            $pathResolver,
+            $this->getEventManager()
         );
 
         $files = $inheritance->getJavascriptFiles($template);
@@ -136,7 +103,7 @@ class Shopware_Tests_Components_Theme_InheritanceTest extends Shopware_Tests_Com
 
         foreach ($files as $file) {
             $this->assertStringEndsWith('.js', $file);
-            $this->assertStringStartsWith('javascript_directory', $file);
+            $this->assertStringStartsWith('public_directory', $file);
         }
 
         $files = $inheritance->getCssFiles($template);
@@ -145,7 +112,7 @@ class Shopware_Tests_Components_Theme_InheritanceTest extends Shopware_Tests_Com
 
         foreach ($files as $file) {
             $this->assertStringEndsWith('.css', $file);
-            $this->assertStringStartsWith('css_directory', $file);
+            $this->assertStringStartsWith('public_directory', $file);
         }
     }
 
