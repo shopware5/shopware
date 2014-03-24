@@ -323,7 +323,8 @@ class sAdmin
 
         // Check additional rules
         if ($this->sManageRisks($data["id"], $basket, $user)
-            && $data["id"] != $user["additional"]["user"]["paymentpreset"]) {
+            && $data["id"] != $user["additional"]["user"]["paymentpreset"]
+        ) {
             $resetPayment = $this->sSYSTEM->sCONFIG["sPAYMENTDEFAULT"];
         }
 
@@ -445,7 +446,9 @@ class sAdmin
             }
 
             // Check additional rules
-            if ($this->sManageRisks($payValue["id"], $basket, $user) && $payValue["id"] != $user["additional"]["user"]["paymentpreset"]) {
+            if ($this->sManageRisks($payValue["id"], $basket, $user)
+                && $payValue["id"] != $user["additional"]["user"]["paymentpreset"]
+            ) {
                 unset($getPaymentMeans[$payKey]);
                 continue;
             }
@@ -2850,7 +2853,7 @@ class sAdmin
      * @param int $paymentID Payment mean id (s_core_paymentmeans.id)
      * @param array $basket Current shopping cart
      * @param array $user User data
-     * @return boolean
+     * @return boolean If customer is a risk customer
      */
     public function sManageRisks($paymentID, $basket, $user)
     {
@@ -2878,235 +2881,203 @@ class sAdmin
         foreach ($queryRules as $rule) {
             if ($rule["rule1"] && !$rule["rule2"]) {
                 $rule["rule1"] = "sRisk".$rule["rule1"];
-                if ($rule["rule2"]) {
-                    $rule["rule2"] = "sRisk".$rule["rule2"];
-                }
-                if ($this->$rule["rule1"]($user,$basket,$rule["value1"])) {
+                if ($this->$rule["rule1"]($user, $basket, $rule["value1"])) {
                     return true;
                 }
             } elseif ($rule["rule1"] && $rule["rule2"]) {
                 $rule["rule1"] = "sRisk".$rule["rule1"];
-                if ($rule["rule2"]) {
-                    $rule["rule2"] = "sRisk".$rule["rule2"];
-                }
-                if ($this->$rule["rule1"]($user,$basket,$rule["value1"]) && $this->$rule["rule2"]($user,$basket,$rule["value2"])) {
+                $rule["rule2"] = "sRisk".$rule["rule2"];
+                if ($this->$rule["rule1"]($user, $basket, $rule["value1"])
+                    && $this->$rule["rule2"]($user, $basket, $rule["value2"])
+                ) {
                     return true;
                 }
             }
         }
+        return false;
     }
 
     /**
-     * Risk-Management Order value greater then
-     * @param  $user
-     * @param  $order
-     * @param  $value
-     * @return bool
+     * Risk management - Order value greater then
+     * 
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
      */
     public function sRiskORDERVALUEMORE($user, $order, $value)
     {
         $basketValue = $order["AmountNumeric"];
 
         if ($this->sSYSTEM->sCurrency["factor"]) {
-            $factor = $this->sSYSTEM->sCurrency["factor"];
-            $basketValue /= $factor;
-        } else {
-            $factor = 1;
+            $basketValue /= $this->sSYSTEM->sCurrency["factor"];
         }
 
-        if ($basketValue>=$value) {
-            return true;
-        } else {
-            return false;
-        }
+        return ($basketValue >= $value);
     }
 
     /**
-     * Risk-Management Order value less then
-     * @param  $user
-     * @param  $order
-     * @param  $value
-     * @return bool
+     * Risk management - Order value less then
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
      */
     public function sRiskORDERVALUELESS($user, $order, $value)
     {
         $basketValue = $order["AmountNumeric"];
 
         if ($this->sSYSTEM->sCurrency["factor"]) {
-            $factor = $this->sSYSTEM->sCurrency["factor"];
-            $basketValue /= $factor;
-        } else {
-            $factor = 1;
+            $basketValue /= $this->sSYSTEM->sCurrency["factor"];
         }
 
-        if ($basketValue<=$value) {
-            return true;
-        } else {
-            return false;
-        }
+        return ($basketValue <= $value);
     }
 
     /**
-     * Risk-Management customer group match x
-     * @param  $user
-     * @param  $order
-     * @param  $value
-     * @return bool
+     * Risk management Customer group matches value
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
      */
     public function sRiskCUSTOMERGROUPIS($user, $order, $value)
     {
-        if ($user["additional"]["user"]["customergroup"]==$value) {
-            return true;
-        } else {
-            return false;
-        }
+        return ($user["additional"]["user"]["customergroup"] == $value);
     }
 
     /**
-     * Risk-Management customer group match not
-     * @param  $user
-     * @param  $order
-     * @param  $value
-     * @return bool
+     * Risk management Customer group doesn't match value
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
      */
     public function sRiskCUSTOMERGROUPISNOT($user, $order, $value)
     {
-        if ($user["additional"]["user"]["customergroup"]!=$value) {
-            return true;
-        } else {
-            return false;
-        }
+        return ($user["additional"]["user"]["customergroup"] != $value);
     }
 
     /**
-     * Risk-Management zip code is
-     * @param  $user
-     * @param  $order
-     * @param  $value
-     * @return bool
+     * Risk management - Shipping or billing zip code match value
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
      */
     public function sRiskZIPCODE($user, $order, $value)
     {
-        if ($value=="-1") $value = "";
-        if ($user["shippingaddress"]["zipcode"]==$value || $user["billingaddress"]["zipcode"]==$value) {
-            return true;
-        } else {
-            return false;
+        if ($value == "-1") {
+            $value = "";
         }
+        return ($user["shippingaddress"]["zipcode"] == $value || $user["billingaddress"]["zipcode"] == $value);
     }
 
     /**
-     * Risk-Management  country zone is
-     * @param  $user
-     * @param  $order
-     * @param  $value
-     * @return bool
+     * Risk management - Country zone matches value
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
      */
     public function sRiskZONEIS($user, $order, $value)
     {
-        if ($user["additional"]["countryShipping"]["countryarea"]==$value) {
-            return true;
-        } else {
-            return false;
-        }
+        return ($user["additional"]["countryShipping"]["countryarea"] == $value);
     }
 
     /**
-     * Risk-Management country zone is not
-     * @param  $user
-     * @param  $order
-     * @param  $value
-     * @return bool
+     * Risk management - Country zone doesn't match value
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
      */
     public function sRiskZONEISNOT($user, $order, $value)
     {
-        if ($user["additional"]["countryShipping"]["countryarea"]!=$value) {
-            return true;
-        } else {
-            return false;
-        }
+        return ($user["additional"]["countryShipping"]["countryarea"] != $value);
     }
 
     /**
-     * Risk-Management country is
-     * @param  $user
-     * @param  $order
-     * @param  $value
-     * @return bool
+     * Risk management - Country matches value
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
      */
     public function sRiskLANDIS($user, $order, $value)
     {
-        if (preg_match("/$value/",$user["additional"]["countryShipping"]["countryiso"])) {
+        if (preg_match("/$value/", $user["additional"]["countryShipping"]["countryiso"])) {
             return true;
         }
-        if ($user["additional"]["countryShipping"]["countryiso"]==$value) {
-            return true;
-        } else {
-            return false;
-        }
+        return ($user["additional"]["countryShipping"]["countryiso"] == $value);
     }
 
     /**
-     * Risk-Management country is not
-     * @param  $user
-     * @param  $order
-     * @param  $value
-     * @return bool
+     * Risk management - Country doesn't match value
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
      */
     public function sRiskLANDISNOT($user, $order, $value)
     {
-        if (!preg_match("/$value/",$user["additional"]["countryShipping"]["countryiso"])) {
+        if (!preg_match("/$value/", $user["additional"]["countryShipping"]["countryiso"])) {
             return true;
         }
 
-        if ($user["additional"]["countryShipping"]["countryiso"]!=$value) {
-            return true;
-        } else {
-            return false;
-        }
+        return ($user["additional"]["countryShipping"]["countryiso"] != $value);
     }
 
 
     /**
-     * Risk-Management customer is new
-     * @param  $user
-     * @param  $order
-     * @param  $value
-     * @return bool
+     * Risk management - Customer is new
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
      */
     public function sRiskNEWCUSTOMER($user, $order, $value)
     {
-        if ($user["additional"]["user"]["firstlogin"]==date("Y-m-d") || !$user["additional"]["user"]["firstlogin"]) {
-            return true;
-        } else {
-            return false;
-        }
+        return (
+            $user["additional"]["user"]["firstlogin"] == date("Y-m-d")
+            || !$user["additional"]["user"]["firstlogin"]
+        );
     }
 
     /**
-     * Risk-Management order has more then x positions
-     * @param  $user
-     * @param  $order
-     * @param  $value
-     * @return bool
+     * Risk management - Order has more then value positions
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
      */
     public function sRiskORDERPOSITIONSMORE($user, $order, $value)
     {
-        if ((is_array($order["content"]) && count($order["content"]) >= $value) || $order["content"] >= $value) {
-            return true;
-        } else {
-            return false;
-        }
+        return (
+            (is_array($order["content"]) && count($order["content"]) >= $value)
+            || $order["content"] >= $value
+        );
     }
 
     /**
-     * Risk-Management Article attribute x from basket - positions is y
-     * @param  $user
-     * @param  $order
-     * @param  $value
-     * @return bool
+     * Risk management - Article attribute x from basket - positions is y
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
      */
-    public function sRiskATTRIS($user,$order,$value)
+    public function sRiskATTRIS($user, $order, $value)
     {
         if (!empty($order["content"])) {
 
@@ -3117,19 +3088,21 @@ class sAdmin
                 $sql = "
                 SELECT s_articles_attributes.id
                 FROM s_order_basket, s_articles_attributes, s_articles_details
-                WHERE
-                s_order_basket.sessionID=?
-                AND s_order_basket.modus=0
+                WHERE s_order_basket.sessionID = ?
+                AND s_order_basket.modus = 0
                 AND (
-                s_order_basket.ordernumber = s_articles_details.ordernumber
-                OR (s_order_basket.articleID = s_articles_details.articleID AND s_articles_details.kind = 1)
+                    s_order_basket.ordernumber = s_articles_details.ordernumber
+                    OR (s_order_basket.articleID = s_articles_details.articleID AND s_articles_details.kind = 1)
                 )
                 AND s_articles_details.id = s_articles_attributes.articledetailsID
                 AND s_articles_attributes.attr{$number} = ?
                 LIMIT 1
                 ";
 
-                $checkArticle = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql,array($this->sSYSTEM->sSESSION_ID, $value[1]));
+                $checkArticle = $this->sSYSTEM->sDB_CONNECTION->GetOne(
+                    $sql,
+                    array($this->sSYSTEM->sSESSION_ID, $value[1])
+                );
                 if ($checkArticle) {
                     return true;
                 } else {
@@ -3142,13 +3115,14 @@ class sAdmin
     }
 
     /**
-     * Risk-Management article attribute x from basket is not y
-     * @param  $user
-     * @param  $order
-     * @param  $value
-     * @return bool
+     * Risk management - article attribute x from basket is not y
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
      */
-    public function sRiskATTRISNOT($user,$order,$value)
+    public function sRiskATTRISNOT($user, $order, $value)
     {
         if (!empty($order["content"])) {
 
@@ -3170,7 +3144,13 @@ class sAdmin
                 AND s_articles_attributes.attr{$number}!= ?
                 LIMIT 1
                 ";
-                $checkArticle = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql,array($this->sSYSTEM->sSESSION_ID, $value[1]));
+                $checkArticle = $this->sSYSTEM->sDB_CONNECTION->GetOne(
+                    $sql,
+                    array(
+                        $this->sSYSTEM->sSESSION_ID,
+                        $value[1]
+                    )
+                );
 
 
                 if ($checkArticle) {
@@ -3187,17 +3167,21 @@ class sAdmin
     }
 
     /**
-     * Risk-Management customer had payment problems in past
-     * @param  $user
-     * @param  $order
-     * @param  $value
-     * @return bool
+     * Risk management - customer had payment problems in past
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
      */
     public function sRiskINKASSO($user, $order, $value)
     {
         if ($this->sSYSTEM->_SESSION["sUserId"]) {
             $checkOrder = $this->sSYSTEM->sDB_CONNECTION->GetRow("
-            SELECT id FROM s_order WHERE cleared=16 AND userID=?", array($this->sSYSTEM->_SESSION["sUserId"]));
+                SELECT id FROM s_order
+                WHERE cleared=16 AND userID=?",
+                array($this->sSYSTEM->_SESSION["sUserId"])
+            );
             if ($checkOrder["id"]) {
                 return true;
             } else {
@@ -3209,11 +3193,12 @@ class sAdmin
     }
 
     /**
-     * Risk-Management Last order less x days
-     * @param  $user
-     * @param  $order
-     * @param  $value
-     * @return bool
+     * Risk management - Last order less x days
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
      */
     public function sRiskLASTORDERLESS($user, $order, $value)
     {
@@ -3224,7 +3209,12 @@ class sAdmin
             SELECT id FROM s_order WHERE userID=?
             AND TO_DAYS(ordertime) <= (TO_DAYS(now())-$value) LIMIT 1
             ";
-            $checkOrder = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql, array($this->sSYSTEM->_SESSION["sUserId"]));
+            $checkOrder = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+                $sql,
+                array(
+                    $this->sSYSTEM->_SESSION["sUserId"]
+                )
+            );
 
             if (!$checkOrder["id"]) {
                 return true;
@@ -3237,11 +3227,12 @@ class sAdmin
     }
 
     /**
-     * Risk-Management articles from a certain category
-     * @param  $user
-     * @param  $order
-     * @param  $value
-     * @return bool
+     * Risk management - Articles from a certain category
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
      */
     public function sRiskARTICLESFROM($user, $order, $value)
     {
@@ -3254,25 +3245,26 @@ class sAdmin
             AND s_order_basket.modus=0
         ", array($value, $this->sSYSTEM->sSESSION_ID));
 
-        if (!empty($checkArticle))
-            return true;
-        else
-            return false;
+        return (!empty($checkArticle));
     }
 
     /**
-     * Risk-Management Order value greater then
-     * @param  $user
-     * @param  $order
-     * @param  $value
-     * @return bool
+     * Risk management - Order value greater then
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
      */
-    public function sRiskLASTORDERSLESS($user,$order,$value)
+    public function sRiskLASTORDERSLESS($user, $order, $value)
     {
         if ($this->sSYSTEM->_SESSION["sUserId"]) {
-            $checkOrder = $this->sSYSTEM->sDB_CONNECTION->GetAll("
-            SELECT id FROM s_order WHERE status != -1 AND status != 4 AND userID=?", array($this->sSYSTEM->_SESSION["sUserId"]));
-            if (count($checkOrder)<=$value) {
+            $checkOrder = $this->sSYSTEM->sDB_CONNECTION->GetAll(
+                "SELECT id FROM s_order
+                  WHERE status != -1 AND status != 4 AND userID = ?",
+                array($this->sSYSTEM->_SESSION["sUserId"])
+            );
+            if (count($checkOrder) <= $value) {
                 return true;
             }
         } else {
@@ -3283,11 +3275,12 @@ class sAdmin
     }
 
     /**
-     * Risk management Block if street contains pattern
-     * @param  $user
-     * @param  $order
-     * @param  $value
-     * @return bool
+     * Risk management - Block if street contains pattern
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
      */
     public function sRiskPREGSTREET($user, $order, $value)
     {
@@ -3300,11 +3293,12 @@ class sAdmin
     }
 
     /**
-     * Risk-Management block if billing address not eqal to shipping address
-     * @param  $user
-     * @param  $order
-     * @param  $value
-     * @return bool
+     * Risk management - Block if billing address not equal to shipping address
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
      */
     public function sRiskDIFFER($user, $order, $value)
     {
@@ -3318,16 +3312,16 @@ class sAdmin
     }
 
     /**
-     * Risk-Management block if customernumber matches pattern
-     * @param  $user
-     * @param  $order
-     * @param  $value
-     * @return bool
+     * Risk management - Block if customer number matches pattern
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
      */
     public function sRiskCUSTOMERNR($user, $order, $value)
     {
-        //echo "test";
-        if ($user["billingaddress"]["customernumber"]==$value && !empty($value)) {
+        if ($user["billingaddress"]["customernumber"] == $value && !empty($value)) {
             return true;
         } else {
             return false;
@@ -3335,11 +3329,12 @@ class sAdmin
     }
 
     /**
-     * Risk-Management block if lastname matches pattern
-     * @param  $user
-     * @param  $order
-     * @param  $value
-     * @return bool
+     * Risk management - Block if last name matches pattern
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
      */
     public function sRiskLASTNAME($user, $order, $value)
     {
@@ -3352,11 +3347,12 @@ class sAdmin
     }
 
     /**
-     * Risk-Management  Block if subshop id is x
-     * @param  $user
-     * @param  $order
-     * @param  $value
-     * @return bool
+     * Risk management -  Block if subshop id is x
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
      */
     public function sRiskSUBSHOP($user, $order, $value)
     {
@@ -3368,11 +3364,12 @@ class sAdmin
     }
 
     /**
-     * Risk-Management  Block if subshop id is not x
-     * @param  $user
-     * @param  $order
-     * @param  $value
-     * @return bool
+     * Risk management -  Block if subshop id is not x
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
      */
     public function sRiskSUBSHOPNOT($user, $order, $value)
     {
@@ -3384,11 +3381,12 @@ class sAdmin
     }
 
     /**
-     * Risk-Management Block if currency id is not x
-     * @param  $user
-     * @param  $order
-     * @param  $value
-     * @return bool
+     * Risk management - Block if currency id is not x
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
      */
     public function sRiskCURRENCIESISOIS($user, $order, $value)
     {
@@ -3400,11 +3398,12 @@ class sAdmin
     }
 
     /**
-     * Risk-Management Block if currency id is x
-     * @param  $user
-     * @param  $order
-     * @param  $value
-     * @return bool
+     * Risk management - Block if currency id is x
+     *
+     * @param  $user User data
+     * @param  $order Order data
+     * @param  $value Value to compare against
+     * @return bool Rule validation result
      */
     public function sRiskCURRENCIESISOISNOT($user, $order, $value)
     {
@@ -3418,26 +3417,20 @@ class sAdmin
 
     /**
      * Subscribe / unsubscribe to mailing list
-     * @param string $email - mail
-     * @param boolean $unsubscribe
-     * @param id $groupID id of the mailinglist group
-     * @access public
-     * @return boolean
+     *
+     * @param string $email Email address
+     * @param boolean $unsubscribe If true, remove email address from mailing list
+     * @param id $groupID Id of the mailing list group
+     * @return array Array with the result of the operation
      */
-    public function sNewsletterSubscription($email, $unsubscribe=false, $groupID=null)
+    public function sNewsletterSubscription($email, $unsubscribe = false, $groupID = null)
     {
         if (empty($unsubscribe)) {
             $errorflag = array();
 
-            /**
-             * Only the mail address needs to be a mandatory item
-             * @ticket #5781
-             * @author S.Pohl <stp@shopware.de>
-             * @date 2011-07-27
-             */
             $fields = array('newsletter');
             foreach ($fields as $field) {
-                if (isset($this->sSYSTEM->_POST[$field])&&empty($this->sSYSTEM->_POST[$field])) {
+                if (isset($this->sSYSTEM->_POST[$field]) && empty($this->sSYSTEM->_POST[$field])) {
                     $errorflag[$field] = true;
                 }
             }
@@ -3460,27 +3453,48 @@ class sAdmin
         }
 
         $email = trim(strtolower(stripslashes($email)));
-        if(empty($email))
-            return array("code"=>6, "message" => $this->snippetObject->get('NewsletterFailureMail','Enter eMail address'));
+        if(empty($email)) {
+            return array(
+                "code"=>6,
+                "message" => $this->snippetObject->get('NewsletterFailureMail', 'Enter eMail address')
+            );
+        }
         $reg = "/^(([^<>()[\]\\\\.,;:\s@\"]+(\.[^<>()[\]\\\\.,;:\s@\"]+)*)|(\"([^\"\\\\\r]|(\\\\[\w\W]))*\"))@((\[([0-9]{1,3}\.){3}[0-9]{1,3}\])|(([a-z\-0-9áàäçéèêñóòôöüæøå]+\.)+[a-z]{2,}))$/i";
-        if(!preg_match($reg, $email))
-            return array("code"=>1, "message" => $this->snippetObject->get('NewsletterFailureInvalid','Enter valid eMail address'));
-
+        if(!preg_match($reg, $email)) {
+            return array(
+                "code"=>1,
+                "message" => $this->snippetObject->get('NewsletterFailureInvalid', 'Enter valid eMail address')
+            );
+        }
         if (!$unsubscribe) {
             $sql = "SELECT * FROM s_campaigns_mailaddresses WHERE email=?";
             $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($email));
-            if ($result===false) {
-                $result = array("code"=>10,"message" => $this->snippetObject->get('UnknownError','Unknown error'));
+
+            if ($result === false) {
+                $result = array(
+                    "code"=>10,
+                    "message" => $this->snippetObject->get('UnknownError','Unknown error')
+                );
             } elseif ($result->RecordCount()) {
-                $result = array("code"=>2,"message" => $this->snippetObject->get('NewsletterFailureAlreadyRegistered','You already receive our newsletter'));
+                $result = array(
+                    "code"=>2,
+                    "message" => $this->snippetObject->get('NewsletterFailureAlreadyRegistered','You already receive our newsletter')
+                );
             } else {
                 $sql = "INSERT INTO s_campaigns_mailaddresses (`groupID`,email) VALUES(?, ?)";
                 $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($groupID, $email));
 
-                if($result===false)
-                    $result = array("code"=>10,"message" => $this->snippetObject->get('UnknownError','Unknown error'));
-                else
-                    $result = array("code"=>3,"message" => $this->snippetObject->get('NewsletterSuccess','Thank you for receiving our newsletter'));
+                if($result===false) {
+                    $result = array(
+                        "code"=>10,
+                        "message" => $this->snippetObject->get('UnknownError','Unknown error')
+                    );
+                } else {
+                    $result = array(
+                        "code"=>3,
+                        "message" => $this->snippetObject->get('NewsletterSuccess','Thank you for receiving our newsletter')
+                    );
+                }
             }
         } else {
             $sql = "DELETE FROM s_campaigns_mailaddresses WHERE email=?";
@@ -3489,14 +3503,27 @@ class sAdmin
             $sql = "UPDATE s_user SET newsletter=0 WHERE email=?";
             $result2 =$this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($email));
             $result += $this->sSYSTEM->sDB_CONNECTION->Affected_Rows();
-            if($result1===false||$result2===false)
-                $result = array("code"=>10,"message" => $this->snippetObject->get('UnknownError','Unknown error'));
-            elseif(empty($result))
-                $result = array("code"=>4,"message" => $this->snippetObject->get('NewsletterFailureNotFound','This mail address could not be found'));
-            else
-                $result = array("code"=>5,"message" => $this->snippetObject->get('NewsletterMailDeleted','Your mail address was deleted'));
+            if ($result1 === false || $result2 === false) {
+                $result = array(
+                    "code"=>10,
+                    "message" => $this->snippetObject->get('UnknownError','Unknown error')
+                );
+            }
+            elseif (empty($result)) {
+                $result = array(
+                    "code"=>4,
+                    "message" => $this->snippetObject->get('NewsletterFailureNotFound','This mail address could not be found')
+                );
+            }
+            else {
+                $result = array(
+                    "code"=>5,
+                    "message" => $this->snippetObject->get('NewsletterMailDeleted','Your mail address was deleted')
+                );
+            }
         }
-        if (!empty($result['code'])&&in_array($result['code'], array(2,3))) {
+
+        if (!empty($result['code']) && in_array($result['code'], array(2,3))) {
             $sql = '
                 REPLACE INTO `s_campaigns_maildata` (`email`, `groupID`, `salutation`, `title`, `firstname`, `lastname`, `street`, `streetnumber`, `zipcode`, `city`, `added`)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '.$this->sSYSTEM->sDB_CONNECTION->sysTimeStamp.')

@@ -53,6 +53,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->post = array();
         $this->config = Shopware()->Config();
         $this->module->sSYSTEM->sCONFIG = &$this->config;
+        $this->module->sSYSTEM->sCurrency = Shopware()->Db()->fetchRow('SELECT * FROM s_core_currencies WHERE currency LIKE "EUR"');
         $this->module->sSYSTEM->_SESSION = &$this->session;
         $this->module->sSYSTEM->_POST = &$this->post;
         $this->module->sSYSTEM->sLanguage = 1;
@@ -2103,38 +2104,49 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         $expectedData = array(
             'billingaddress' => array(
-                'customerBillingId' => (string) $customer->getBilling()->getId(),
+                'customerBillingId' => $customer->getBilling()->getId(),
                 'text1' => 'Freitext1',
                 'text2' => 'Freitext2',
                 'text3' => NULL,
                 'text4' => NULL,
                 'text5' => NULL,
                 'text6' => NULL,
-                'id' => (string) $customer->getBilling()->getId(),
-                'userID' => (string) $customer->getId(),
+                'id' => $customer->getBilling()->getId(),
+                'userID' => $customer->getId(),
                 'company' => '',
                 'department' => '',
                 'salutation' => '',
-                'customernumber' => (string) $customer->getBilling()->getNumber(),
+                'customernumber' => $customer->getBilling()->getNumber(),
                 'firstname' => 'Max',
                 'lastname' => 'Mustermann',
                 'street' => '',
                 'streetnumber' => '',
-                'zipcode' => '',
+                'zipcode' => '12345',
                 'city' => '',
                 'phone' => '',
                 'fax' => '',
-                'countryID' => '0',
+                'countryID' => '2',
                 'stateID' => NULL,
                 'ustid' => '',
                 'birthday' => '1986-12-20',
             ),
             'additional' => array(
                 'country' => array(
-                    2 => array(
-                        'active' => '1',
-                        'countryname' => 'Germany',
-                    ),
+                    'id' => '2',
+                    'countryname' => 'Germany',
+                    'countryiso' => 'DE',
+                    'areaID' => '1',
+                    'countryen' => 'GERMANY',
+                    'position' => '1',
+                    'notice' => '',
+                    'shippingfree' => '0',
+                    'taxfree' => '0',
+                    'taxfree_ustid' => '0',
+                    'taxfree_ustid_checked' => '0',
+                    'active' => '1',
+                    'iso3' => 'DEU',
+                    'display_state_in_registration' => '0',
+                    'force_state_in_registration' => '0'
                 ),
                 'state' => array(),
                 'user' => array(
@@ -2146,7 +2158,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                     'accountmode' => '0',
                     'confirmationkey' => '',
                     'paymentID' => '0',
-                    'firstlogin' => '2014-03-04',
+                    'firstlogin' => $customer->getFirstLogin()->format('Y-m-d'),
                     'lastlogin' => $customer->getLastLogin()->format('Y-m-d H:i:s'),
                     'sessionID' => '',
                     'newsletter' => 0,
@@ -2163,10 +2175,22 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                     'lockeduntil' => NULL,
                 ),
                 'countryShipping' => array(
-                    2 => array(
-                        'active' => '1',
-                        'countryname' => 'Germany',
-                    ),
+                    'id' => '2',
+                    'countryname' => 'Germany',
+                    'countryiso' => 'DE',
+                    'areaID' => '1',
+                    'countryen' => 'GERMANY',
+                    'position' => '1',
+                    'notice' => '',
+                    'shippingfree' => '0',
+                    'taxfree' => '0',
+                    'taxfree_ustid' => '0',
+                    'taxfree_ustid_checked' => '0',
+                    'active' => '1',
+                    'iso3' => 'DEU',
+                    'display_state_in_registration' => '0',
+                    'force_state_in_registration' => '0',
+                    'countryarea' => 'deutschland'
                 ),
                 'stateShipping' => array(),
                 'payment' => array(
@@ -2206,7 +2230,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'salutation' => 'Mr',
                 'firstname' => 'Max',
                 'lastname' => 'Mustermann',
-                'street' => '',
+                'street' => 'Merkel Strasse, 10',
                 'streetnumber' => '',
                 'zipcode' => '',
                 'city' => '',
@@ -2215,10 +2239,494 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             ),
         );
 
-        $this->assertEquals($result['billingaddress'], $expectedData['billingaddress']);
-        $this->assertEquals($result['shippingaddress'], $expectedData['shippingaddress']);
-        $this->assertEquals($result['additional'], $expectedData['additional']);
+        $this->assertEquals($expectedData, $result);
 
+        $this->deleteDummyCustomer($customer);
+    }
+
+    /**
+     * @covers sAdmin::sManageRisks
+     * @covers sAdmin::sRiskORDERVALUELESS
+     * @covers sAdmin::sRiskORDERVALUEMORE
+     * @covers sAdmin::sRiskCUSTOMERGROUPIS
+     * @covers sAdmin::sRiskCUSTOMERGROUPISNOT
+     * @covers sAdmin::sRiskZIPCODE
+     * @covers sAdmin::sRiskZONEIS
+     * @covers sAdmin::sRiskZONEISNOT
+     * @covers sAdmin::sRiskLANDIS
+     * @covers sAdmin::sRiskLANDISNOT
+     * @covers sAdmin::sRiskNEWCUSTOMER
+     * @covers sAdmin::sRiskORDERPOSITIONSMORE
+     * @covers sAdmin::sRiskATTRIS
+     * @covers sAdmin::sRiskATTRISNOT
+     * @covers sAdmin::sRiskINKASSO
+     * @covers sAdmin::sRiskLASTORDERLESS
+     * @covers sAdmin::sRiskARTICLESFROM
+     * @covers sAdmin::sRiskLASTORDERSLESS
+     * @covers sAdmin::sRiskPREGSTREET
+     * @covers sAdmin::sRiskDIFFER
+     * @covers sAdmin::sRiskCUSTOMERNR
+     * @covers sAdmin::sRiskLASTNAME
+     * @covers sAdmin::sRiskSUBSHOP
+     * @covers sAdmin::sRiskSUBSHOPNOT
+     * @covers sAdmin::sRiskCURRENCIESISOIS
+     * @covers sAdmin::sRiskCURRENCIESISOISNOT
+     * @group wip
+     */
+    public function testsManageRisks()
+    {
+        $customer = $this->createDummyCustomer();
+        $this->session["sUserId"] = $customer->getId();
+
+        $basket = array(
+            'content' => 1,
+            'AmountNumeric' => 10
+        );
+        $user = $this->module->sGetUserData();
+
+        // Inject demo data
+        $orderData = array(
+            'ordernumber' => uniqid(),
+            'userID' => $customer->getId(),
+            'invoice_amount' => '37.99',
+            'invoice_amount_net' => '31.92',
+            'invoice_shipping' => '0',
+            'invoice_shipping_net' => '0',
+            'ordertime' => new DateTime(),
+            'status' => '0',
+            'cleared' => '17',
+            'paymentID' => '4',
+            'transactionID' => '',
+            'comment' => '',
+            'customercomment' => '',
+            'internalcomment' => '',
+            'net' => '0',
+            'taxfree' => '0',
+            'partnerID' => '',
+            'temporaryID' => '',
+            'referer' => '',
+            'cleareddate' => NULL,
+            'cleared' => 16,
+            'trackingcode' => '',
+            'language' => '2',
+            'dispatchID' => '9',
+            'currency' => 'EUR',
+            'currencyFactor' => '1',
+            'subshopID' => '1',
+            'remote_addr' => '127.0.0.1'
+        );
+
+        Shopware()->Db()->insert('s_order', $orderData);
+        $orderId = Shopware()->Db()->lastInsertId();
+
+        // No rules, returns false
+        $this->assertFalse($this->module->sManageRisks(2, $basket, $user));
+
+        // Test all rules
+
+        // sRiskORDERVALUELESS
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'ORDERVALUELESS',
+                'value1' => 20
+            )
+        );
+        $firstTestRuleId = Shopware()->Db()->lastInsertId();
+        $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
+
+        // sRiskORDERVALUEMORE
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'ORDERVALUEMORE',
+                'value1' => 20
+            )
+        );
+        // Test 'OR' logic between different rules (only one needs to be true)
+        $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
+
+        // Deleting the first rule, only a false one is left
+        Shopware()->Db()->delete('s_core_rulesets', 'id = '.$firstTestRuleId);
+        $this->assertFalse($this->module->sManageRisks(2, $basket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskCUSTOMERGROUPIS
+        // sRiskCUSTOMERGROUPISNOT
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'CUSTOMERGROUPIS',
+                'value1' => 'EK',
+                'rule2' => 'CUSTOMERGROUPISNOT',
+                'value2' => 'EK'
+            )
+        );
+
+        // Test 'AND' logic between the two parts of the same rule (both need to be true)
+        $this->assertFalse($this->module->sManageRisks(2, $basket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskZIPCODE
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'ZIPCODE',
+                'value1' => '12345'
+            )
+        );
+        $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskZONEIS
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'ZONEIS',
+                'value1' => '12345'
+            )
+        );
+        $this->assertFalse($this->module->sManageRisks(2, $basket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskZONEISNOT
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'ZONEISNOT',
+                'value1' => '12345'
+            )
+        );
+        $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskLANDIS
+        // sRiskLANDISNOT
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'LANDIS',
+                'value1' => 'DE',
+                'rule2' => 'LANDISNOT',
+                'value2' => 'UK'
+            )
+        );
+        $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskNEWCUSTOMER
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'NEWCUSTOMER',
+            )
+        );
+        $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskORDERPOSITIONSMORE
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'ORDERPOSITIONSMORE',
+                'value1' => '2'
+            )
+        );
+        $this->assertFalse($this->module->sManageRisks(2, $basket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        $this->module->sSYSTEM->sSESSION_ID = rand(111111111, 999999999);
+        $basketModule = Shopware()->Modules()->Basket();
+        $basketModule->sSYSTEM = &$this->module->sSYSTEM;
+        $basketModule->sAddArticle('SW10118.8');
+
+        // sRiskATTRIS
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'ATTRIS',
+                'value1' => '1|0'
+            )
+        );
+
+        $fullBasket = $basketModule->sGetBasket();
+        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        $basketModule->sAddArticle('SW10118.8');
+        // sRiskATTRISNOT
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'ATTRISNOT',
+                'value1' => '17|null'
+            )
+        );
+        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskINKASSO
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'INKASSO'
+            )
+        );
+        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskLASTORDERLESS
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'LASTORDERLESS',
+                'value1' => '1'
+            )
+        );
+        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskARTICLESFROM
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'ARTICLESFROM',
+                'value1' => '1'
+            )
+        );
+        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskARTICLESFROM
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'ARTICLESFROM',
+                'value1' => '9'
+            )
+        );
+        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskLASTORDERSLESS
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'LASTORDERSLESS',
+                'value1' => '9'
+            )
+        );
+        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskLASTORDERSLESS
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'LASTORDERSLESS',
+                'value1' => '0'
+            )
+        );
+        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskPREGSTREET
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'PREGSTREET',
+                'value1' => 'Merkel'
+            )
+        );
+        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskPREGSTREET
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'PREGSTREET',
+                'value1' => 'Google'
+            )
+        );
+        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskDIFFER
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'DIFFER'
+            )
+        );
+        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskCUSTOMERNR
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'CUSTOMERNR',
+                'value1' => $customer->getBilling()->getNumber()
+            )
+        );
+        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskCUSTOMERNR
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'CUSTOMERNR',
+                'value1' => 'ThisIsNeverGoingToBeACustomerNumber'
+            )
+        );
+        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskLASTNAME
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'LASTNAME',
+                'value1' => 'Mustermann'
+            )
+        );
+        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskLASTNAME
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'LASTNAME',
+                'value1' => 'NotMustermann'
+            )
+        );
+        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskSUBSHOP
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'SUBSHOP',
+                'value1' => '1'
+            )
+        );
+        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskSUBSHOP
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'SUBSHOP',
+                'value1' => '2'
+            )
+        );
+        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskSUBSHOPNOT
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'SUBSHOPNOT',
+                'value1' => '2'
+            )
+        );
+        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskSUBSHOPNOT
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'SUBSHOPNOT',
+                'value1' => '1'
+            )
+        );
+        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskCURRENCIESISOIS
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'CURRENCIESISOIS',
+                'value1' => 'eur'
+            )
+        );
+        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskCURRENCIESISOIS
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'CURRENCIESISOIS',
+                'value1' => 'yen'
+            )
+        );
+        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskCURRENCIESISOISNOT
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'CURRENCIESISOISNOT',
+                'value1' => 'eur'
+            )
+        );
+        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskCURRENCIESISOISNOT
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'CURRENCIESISOISNOT',
+                'value1' => 'yen'
+            )
+        );
+        $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        Shopware()->Db()->delete('s_order', 'id = '.$orderId);
         $this->deleteDummyCustomer($customer);
     }
 
@@ -2230,10 +2738,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     private function createDummyCustomer()
     {
         $date = new DateTime();
-        $date->modify('-10 days');
-        $firstLogin = $date->format(DateTime::ISO8601);
-
-        $date->modify('+2 day');
+        $date->modify('-8 days');
         $lastLogin = $date->format(DateTime::ISO8601);
 
         $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ISO8601);
@@ -2242,7 +2747,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             "password" => "fooobar",
             "email"    => uniqid() . 'test@foobar.com',
 
-            "firstlogin" => $firstLogin,
             "lastlogin"  => $lastLogin,
 
             "billing" => array(
@@ -2253,6 +2757,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                     'text1' => 'Freitext1',
                     'text2' => 'Freitext2',
                 ),
+                "zipcode"   => '12345',
+                "countryId" => '2'
             ),
 
             "shipping" => array(
@@ -2260,9 +2766,10 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 "company"    => "Widgets Inc.",
                 "firstName"  => "Max",
                 "lastName"   => "Mustermann",
-                "attribute" => array(
-                    'text1' => 'Freitext1',
-                    'text2' => 'Freitext2',
+                "street"     => "Merkel Strasse, 10",
+                "attribute"  => array(
+                    'text1'  => 'Freitext1',
+                    'text2'  => 'Freitext2',
                 ),
             ),
 
