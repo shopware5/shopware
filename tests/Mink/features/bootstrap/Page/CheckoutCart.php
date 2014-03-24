@@ -1,7 +1,7 @@
 <?php
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page, Behat\Mink\Exception\ResponseTextException,
-        Behat\Behat\Context\Step;
+    Behat\Behat\Context\Step;
 
 class CheckoutCart extends Page
 {
@@ -11,94 +11,70 @@ class CheckoutCart extends Page
     protected $path = '/checkout/cart';
 
     /**
-     * Checks the sum of the cart
-     * @param string $sum
+     * Checks the sum, shipping costs, total sum, sum without vat and vat of the cart.
+     * @param string $totalSum
+     * @param string|null $shippingCosts
+     * @param array $vat
      */
-    public function checkSum($sum)
+    public function checkSums($totalSum, $shippingCosts = null, $vat = array())
     {
-        $this->assertSum($sum, '#aggregation p.textright');
-    }
+        $prices = $this->getPage('Helper')->toFloat(array('total' => $totalSum, 'shipping' => $shippingCosts));
 
-    /**
-     * Checks the shipping costs
-     * @param string $costs
-     */
-    public function checkShippingCosts($costs)
-    {
-        $this->assertSum($costs, '#aggregation div:nth-of-type(1) p.textright');
-    }
+        $elements = array();
+        $elements['total'] = $this->find('css', '#aggregation div.totalamount p.textright');
 
-    /**
-     * Checks the total sum of the cart
-     * @param string $sum
-     */
-    public function checkTotalSum($sum)
-    {
-        $this->assertSum($sum, '#aggregation div.totalamount p.textright');
-    }
+        $check = array();
+        $check[] = $this->getPage('Helper')->toFloat(array($elements['total']->getText(), $prices['total']));
 
-    /**
-     * Checks the sum of the cart without vat
-     * @param string $sum
-     */
-    public function checkSumWithoutVat($sum)
-    {
-        $this->assertSum($sum, '#aggregation div.tax p.textright');
-    }
+        if($shippingCosts !== null)
+        {
+            $elements['sum'] = $this->find('css', '#aggregation p.textright');
+            $elements['shipping'] = $this->find('css', '#aggregation div:nth-of-type(1) p.textright');
 
-    /**
-     * Checks the vat
-     * @param string $vat
-     */
-    public function checkVat($vat)
-    {
-        $this->assertSum($vat, '#aggregation div:nth-of-type(4) p.textright');
-    }
+            $check[] = $this->getPage('Helper')->toFloat(
+                array($elements['sum']->getText(), $prices['total'] - $prices['shipping'])
+            );
+            $check[] = $this->getPage('Helper')->toFloat(
+                array($elements['shipping']->getText(), $prices['shipping'])
+            );
+        }
 
-    /**
-     * Helper class to check a price
-     * @param string $sum
-     * @param string $locator
-     * @throws Behat\Mink\Exception\ResponseTextException
-     */
-    private function assertSum($sum, $locator)
-    {
-        $total = $this->getPrice($locator);
-        $sum = $this->toPrice($sum);
+        if (!empty($vat)) {
+            $totalVat = 0;
 
-        if ($total != $sum) {
-            $message = sprintf('The sum (%s €) is different from %s €!', $total, $sum);
+            $elements['sumWithoutVat'] = $this->find('css', '#aggregation div.tax p.textright');
+
+            foreach ($vat as $key => $field) {
+                $elements['vat-percent' . $key] = $this->find(
+                    'css',
+                    sprintf('#aggregation_left div:nth-of-type(%d) span.frontend_checkout_cart_footer', $key + 4)
+                );
+                $elements['vat-value' . $key] = $this->find(
+                    'css',
+                    sprintf('#aggregation div:nth-of-type(%d) p.textright', $key + 4)
+                );
+
+                $field = $this->getPage('Helper')->toFloat($field);
+
+                $check[] = array($elements['vat-percent' . $key]->getText(), $field['percent']);
+                $check[] = $this->getPage('Helper')->toFloat(
+                    array($elements['vat-value' . $key]->getText(), $field['value'])
+                );
+
+                $totalVat += $field['value'];
+            }
+
+            $check[] = $this->getPage('Helper')->toFloat(
+                array($elements['sumWithoutVat']->getText(), $prices['total'] - $totalVat)
+            );
+        }
+
+        $result = $this->getPage('Helper')->checkArray($check);
+
+        if ($result !== true) {
+            $message = sprintf('The value on cart (%s) is deviant from %s!', $check[$result][0], $check[$result][1]);
             throw new ResponseTextException($message, $this->getSession());
         }
-    }
-
-    /**
-     * Helper function to get a price from the cart
-     * @param string $locator
-     * @return float
-     */
-    private function getPrice($locator)
-    {
-        $price = $this->find('css', $locator);
-        $price = $price->getText();
-
-        $price = $this->toPrice($price);
-
-        return $price;
-    }
-
-    /**
-     * Helper function to validate a price
-     * @param string $price
-     * @return float
-     */
-    private function toPrice($price)
-    {
-        $price = str_replace('.', '', $price); //Tausenderpunkte entfernen
-        $price = str_replace(',', '.', $price); //Punkt statt Komma
-        $price = floatval($price);
-
-        return $price;
     }
 
     /**

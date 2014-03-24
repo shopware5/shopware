@@ -116,29 +116,14 @@ class Detail extends Page
             $check[] = array($elements['div-answer']->getText(), $evaluations[$key]['comment']);
         }
 
-        if (!$this->checkArray($check)) {
-            $message = sprintf('The evaluations are different');
+        $result = $this->getPage('Helper')->checkArray($check);
+        if ($result !== true) {
+            $message = sprintf(
+                'The evaluations are different ("%s" is not included in "%s")',
+                $check[$result][1],
+                $check[$result][0]
+            );
             throw new ResponseTextException($message, $this->getSession());
         }
-    }
-
-    /**
-     * Helper function to check each row of an array. If each second sub-element of a row is in its first, check is true
-     * @param array $check
-     * @return bool
-     */
-    private function checkArray($check)
-    {
-        foreach ($check as $compare) {
-            if ($compare[0] === $compare[1]) {
-                continue;
-            }
-
-            if (strpos($compare[0], $compare[1]) === false) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }

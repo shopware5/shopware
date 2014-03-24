@@ -2,6 +2,7 @@
 
 use Behat\Behat\Context\Step;
 use Behat\Gherkin\Node\TableNode;
+
 require_once 'SubContext.php';
 
 class ShopwareContext extends SubContext
@@ -123,13 +124,13 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Then /^The comparision should look like this:$/
+     * @Then /^The comparison should look like this:$/
      */
-    public function theComparisionShouldLookLikeThis(TableNode $articles)
+    public function theComparisonShouldLookLikeThis(TableNode $articles)
     {
         $articles = $articles->getHash();
 
-        $this->getPage('Homepage')->checkComparision($articles);
+        $this->getPage('Homepage')->checkComparison($articles);
     }
 
     /**
@@ -137,13 +138,30 @@ class ShopwareContext extends SubContext
      */
     public function thePluginIsEnabled($name)
     {
-        /** @var Manager $pluginManager */
+        /** @var \Shopware\Components\Plugin\Manager $pluginManager */
         $pluginManager = $this->getContainer()->get('shopware.plugin_Manager');
         $pluginManager->refreshPluginList();
 
         $plugin = $pluginManager->getPluginByName($name);
+        var_dump($plugin);
         $pluginManager->installPlugin($plugin);
         $pluginManager->activatePlugin($plugin);
+    }
+
+    /**
+     * @Given /^the articles from "(?P<name>[^"]*)" have tax id (?P<num>\d+)$/
+     */
+    public function theArticlesFromHaveTaxId($supplier, $taxId)
+    {
+        $taxId = intval($taxId);
+
+        $sql = sprintf(
+            'UPDATE s_articles SET taxID = %d WHERE supplierID =
+                    (SELECT id FROM s_articles_supplier WHERE name = "%s")',
+            $taxId,
+            $supplier
+        );
+        Shopware()->Db()->exec($sql);
     }
 }
 

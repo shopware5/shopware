@@ -7,7 +7,7 @@ Feature: Configurator articles
 
 		When  I select "SW10203.13" from "sAdd"
 		Then  I put the article "2 Stück" times into the basket
-		Then  The total sum should be "31,90 €"
+		Then  the total sum should be "31,90 €"
 		And   I should see "Artikel mit Tabellenkonfigurator pink / L"
 		And   I should see "SW10203.13"
 
@@ -20,7 +20,7 @@ Feature: Configurator articles
 		And  I select <size> from "group[7]"
 		And  I press "recalc"
 		Then  I put the article <quantity> times into the basket
-		Then  The total sum should be <total>
+		Then  the total sum should be <total>
 		And   I should see <configuration>
 		And   I should see <articlenumber>
 
@@ -39,7 +39,7 @@ Feature: Configurator articles
 		And   I select <warranty> from "group[13]"
 		And   I press "recalc"
 		Then  I put the article <quantity> times into the basket
-		Then  The total sum should be <total>
+		Then  the total sum should be <total>
 		And   I should see <configuration>
 		And   I should see <articlenumber>
 
@@ -60,7 +60,7 @@ Feature: Configurator articles
 		When  I select <size> from "group[7]"
 		And   I press "recalc"
 		Then  I put the article <quantity> times into the basket
-		Then  The total sum should be <total>
+		Then  the total sum should be <total>
 		And   I should see <configuration>
 		And   I should see <articlenumber>
 

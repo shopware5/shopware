@@ -10,6 +10,7 @@ Feature: detail page
       | Bert Bewerter | 10         | Super Artikel | Dieser Artikel zeichnet sich durch extreme Stabilität aus und fasst super viele Klamotten. Das Preisleistungsverhältnis ist exorbitant gut. | Vielen Dank für die positive Bewertung. Wir legen bei der Auswahl unserer Artikel besonders Wert auf die Qualität, sowie das Preis - / Leistungsverhältnis. |
       | Pep Eroni     | 10         | Hervorragend  | bin sehr zufrieden...                                                                                                                       | Danke                                                                                                                                                       |
 
+  @plugin
   Scenario: I can let me notify, when an article is available
     Given the "Notification" plugin is enabled
     And I am on the detail page for article 243

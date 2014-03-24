@@ -1,7 +1,8 @@
 <?php
 
-use SensioLabs\Behat\PageObjectExtension\PageObject\Page, Behat\Mink\Exception\ResponseTextException,
-        Behat\Behat\Context\Step;
+use SensioLabs\Behat\PageObjectExtension\PageObject\Page, Behat\Mink\Exception\ExpectationException,
+    Behat\Mink\Exception\ResponseTextException,
+    Behat\Behat\Context\Step;
 
 class Note extends Page
 {
@@ -71,20 +72,20 @@ class Note extends Page
     }
 
     /**
-     * Counts the articles on the note and compares it with the given amount
-     * @param integer $count
-     * @throws Behat\Mink\Exception\ResponseTextException
+     * Counts the articles on the note
+     * If the number is not equal to $count, the helper function will throw an exception $message.
+     * If the number is equal to $count, the function will return an array of all articles on the note.
+     * @param int $count
+     * @return array
      */
-    public function countArticles($count)
+    public function countArticles($count = 0)
     {
         $this->open();
 
-        $articles = $this->findAll('css', 'div.table_row');
+        $message = 'There are %d articles on the note (should be %d)';
+        $articles = $this->getPage('Helper')->countElements('div.table_row', $message, $count);
 
-        if (count($articles) != $count) {
-            $message = sprintf('There are %d articles on the note (should be %d)', count($articles), $count);
-            throw new ResponseTextException($message, $this->getSession());
-        }
+        return $articles;
     }
 
     /**
@@ -94,100 +95,77 @@ class Note extends Page
      */
     public function checkList($articles)
     {
-        $this->open();
+        $articlesOnNote = $this->countArticles(count($articles));
 
-        foreach ($articles as $key => $article) {
-            $class = sprintf('div.table_row:nth-of-type(%d) ', $key + 2);
+        foreach ($articles as $articleKey => $article) {
+            foreach ($articlesOnNote as $articleOnNoteKey => $articleOnNote) {
 
-            $elements = array(
-                    'a-thumb' => $this->find('css', $class . 'a.thumb_image'),
-                    'img' => $this->find('css', $class . 'img'),
-                    'a-zoom' => $this->find('css', $class . 'a.zoom_picture'),
-                    'a-title' => $this->find('css', $class . 'a.title'),
-                    'div-supplier' => $this->find('css', $class . 'div.supplier'),
-                    'p-number' => $this->find('css', $class . 'p.ordernumber'),
-                    'p-desc' => $this->find('css', $class . 'p.desc'),
-                    'strong-price' => $this->find('css', $class . 'strong.price'),
-                    'a-detail' => $this->find('css', $class . 'a.detail'),
-            );
+                $locator = sprintf('div.table_row:nth-of-type(%d) ', $articleOnNoteKey + 2);
 
-            $check = array();
+                $elements = array(
+                    'a-thumb' => $this->find('css', $locator . 'a.thumb_image'),
+                    'img' => $this->find('css', $locator . 'img'),
+                    'a-zoom' => $this->find('css', $locator . 'a.zoom_picture'),
+                    'a-title' => $this->find('css', $locator . 'a.title'),
+                    'div-supplier' => $this->find('css', $locator . 'div.supplier'),
+                    'p-number' => $this->find('css', $locator . 'p.ordernumber'),
+                    'p-desc' => $this->find('css', $locator . 'p.desc'),
+                    'strong-price' => $this->find('css', $locator . 'strong.price'),
+                    'a-detail' => $this->find('css', $locator . 'a.detail'),
+                );
 
-            if (!empty($article['name'])) {
-                $check[] = array($elements['a-thumb']->getAttribute('title'), $article['name']);
-                $check[] = array($elements['img']->getAttribute('alt'), $article['name']);
-                $check[] = array($elements['a-title']->getAttribute('title'), $article['name']);
-                $check[] = array($elements['a-title']->getText(), $article['name']);
-                $check[] = array($elements['a-detail']->getAttribute('title'), $article['name']);
-            }
+                $check = array();
 
-            if (!empty($article['supplier'])) {
-                $check[] = array($elements['div-supplier']->getText(), $article['supplier']);
-            }
+                if (!empty($article['name'])) {
+                    $check[] = array($elements['a-thumb']->getAttribute('title'), $article['name']);
+                    $check[] = array($elements['img']->getAttribute('alt'), $article['name']);
+                    $check[] = array($elements['a-title']->getAttribute('title'), $article['name']);
+                    $check[] = array($elements['a-title']->getText(), $article['name']);
+                    $check[] = array($elements['a-detail']->getAttribute('title'), $article['name']);
+                }
 
-            if (!empty($article['ordernumber'])) {
-                $check[] = array($elements['p-number']->getText(), $article['ordernumber']);
-            }
+                if (!empty($article['supplier'])) {
+                    $check[] = array($elements['div-supplier']->getText(), $article['supplier']);
+                }
 
-            if (!empty($article['text'])) {
-                $check[] = array($elements['p-desc']->getText(), $article['text']);
-            }
+                if (!empty($article['ordernumber'])) {
+                    $check[] = array($elements['p-number']->getText(), $article['ordernumber']);
+                }
 
-            if (!empty($article['price'])) {
-                $check[] = $this->toFloat(array($elements['strong-price']->getText(), $article['price']));
-            }
+                if (!empty($article['text'])) {
+                    $check[] = array($elements['p-desc']->getText(), $article['text']);
+                }
 
-            if (!empty($article['image'])) {
-                $check[] = array($elements['img']->getAttribute('src'), $article['image']);
-            }
+                if (!empty($article['price'])) {
+                    $check[] = $this->getPage('Helper')->toFloat(
+                        array($elements['strong-price']->getText(), $article['price'])
+                    );
+                }
 
-            if (!empty($article['link'])) {
-                $check[] = array($elements['a-thumb']->getAttribute('href'), $article['link']);
-                $check[] = array($elements['a-title']->getAttribute('href'), $article['link']);
-                $check[] = array($elements['a-detail']->getAttribute('href'), $article['link']);
-            }
+                if (!empty($article['image'])) {
+                    $check[] = array($elements['img']->getAttribute('src'), $article['image']);
+                }
 
-            if (!$this->checkArray($check)) {
-                $message = sprintf('The article on position %d is different', $key + 1);
-                throw new ResponseTextException($message, $this->getSession());
-            }
-        }
-    }
+                if (!empty($article['link'])) {
+                    $check[] = array($elements['a-thumb']->getAttribute('href'), $article['link']);
+                    $check[] = array($elements['a-title']->getAttribute('href'), $article['link']);
+                    $check[] = array($elements['a-detail']->getAttribute('href'), $article['link']);
+                }
 
-    /**
-     * Helper function to check each row of an array. If each second sub-element of a row is in its first, check is true
-     * @param array $check
-     * @return bool
-     */
-    private function checkArray($check)
-    {
-        foreach ($check as $compare) {
-            if ($compare[0] === $compare[1]) {
-                continue;
-            }
+                $result = $this->getPage('Helper')->checkArray($check);
+                if ($result === true) {
+                    unset($articlesOnNote[$articleOnNoteKey]);
+                    break;
+                }
 
-            if (strpos($compare[0], $compare[1]) === false) {
-                return false;
+                if ($articleOnNote == end($articlesOnNote)) {
+                    $message = sprintf(
+                        'The article on position %d was not found!',
+                        $articleKey + 1
+                    );
+                    throw new ResponseTextException($message, $this->getSession());
+                }
             }
         }
-
-        return true;
-    }
-
-    /**
-     * Helper function to validate prices to floats
-     * @param array $values
-     * @return array
-     */
-    private function toFloat($values)
-    {
-        foreach ($values as $key => $value) {
-            $value = str_replace(array('ab', ' ', '.'), '', $value);
-            $value = str_replace(',', '.', $value);
-
-            $values[$key] = floatval($value);
-        }
-
-        return $values;
     }
 }

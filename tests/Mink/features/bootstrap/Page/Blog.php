@@ -13,17 +13,14 @@ class Blog extends Page
     protected $path = '/blog/index/sCategory/{categoryId}';
 
     /**
-     * @param $count
-     * @throws Behat\Mink\Exception\ResponseTextException
+     * Counts the blog articles
+     * If the number is not equal to $count, the helper function will throw an exception $message.
+     * @param int $count
      */
-    public function countArticles($count)
+    public function countArticles($count = 0)
     {
-        $articles = $this->findAll('css', 'div.blogbox');
-
-        if (count($articles) != $count) {
-            $message = sprintf('There are %d blog articles (should be %d)', count($articles), $count);
-            throw new ResponseTextException($message, $this->getSession());
-        }
+        $message = 'There are %d blog articles (should be %d)';
+        $this->getPage('Helper')->countElements('div.blogbox', $message, $count);
     }
 
 }
