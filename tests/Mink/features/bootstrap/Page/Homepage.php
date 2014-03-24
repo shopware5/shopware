@@ -1,7 +1,7 @@
 <?php
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page, Behat\Mink\Exception\ResponseTextException,
-        Behat\Behat\Context\Step;
+    Behat\Behat\Context\Step;
 
 class Homepage extends Page
 {
@@ -26,7 +26,6 @@ class Homepage extends Page
         $this->fillField('searchfield', $searchTerm);
         $this->getSession()->wait(5000, "$('ul.searchresult').children().length > 0");
     }
-
 
 
     /**
@@ -59,9 +58,9 @@ class Homepage extends Page
 
                     foreach ($maps as $mapKey => $map) {
                         $class = sprintf(
-                                'div.emotion-element %s div.banner-mapping a:nth-of-type(%d) ',
-                                $cssClass,
-                                $mapKey + 1
+                            'div.emotion-element %s div.banner-mapping a:nth-of-type(%d) ',
+                            $cssClass,
+                            $mapKey + 1
                         );
 
                         $mapping['a'] = $this->find('css', $class);
@@ -78,7 +77,7 @@ class Homepage extends Page
 
         foreach ($return as $itemKey => $item) {
             $check = array(
-                    array($item['img']->getAttribute('src'), $image)
+                array($item['img']->getAttribute('src'), $image)
             );
 
             if (isset($links)) {
@@ -91,7 +90,8 @@ class Homepage extends Page
                 }
             }
 
-            if ($this->checkArray($check)) {
+            $result = $this->getPage('Helper')->checkArray($check);
+            if ($result === true) {
                 unset($return[$itemKey]);
                 return;
             }
@@ -134,16 +134,17 @@ class Homepage extends Page
             foreach ($blogs as $blogKey => $blog) {
                 foreach ($return[$blogKey] as $itemKey => $item) {
                     $check = array(
-                            array($item['a-image']->getAttribute('title'), $article['title']),
-                            array($item['a-image']->getAttribute('style'), $article['image']),
-                            array($item['a-image']->getAttribute('href'), $article['link']),
-                            array($item['a-title']->getAttribute('title'), $article['title']),
-                            array($item['a-title']->getAttribute('href'), $article['link']),
-                            array($item['a-title']->getText(), $article['title']),
-                            array($item['p-text']->getText(), $article['text'])
+                        array($item['a-image']->getAttribute('title'), $article['title']),
+                        array($item['a-image']->getAttribute('style'), $article['image']),
+                        array($item['a-image']->getAttribute('href'), $article['link']),
+                        array($item['a-title']->getAttribute('title'), $article['title']),
+                        array($item['a-title']->getAttribute('href'), $article['link']),
+                        array($item['a-title']->getText(), $article['title']),
+                        array($item['p-text']->getText(), $article['text'])
                     );
 
-                    if ($this->checkArray($check)) {
+                    $result = $this->getPage('Helper')->checkArray($check);
+                    if ($result === true) {
                         $found = true;
                         unset($return[$blogKey][$itemKey]);
                         break;
@@ -156,8 +157,8 @@ class Homepage extends Page
 
                 if ($blog == end($blogs)) {
                     $message = sprintf(
-                            'The blog article "%s" with its given properties was not found!',
-                            $article['title']
+                        'The blog article "%s" with its given properties was not found!',
+                        $article['title']
                     );
                     throw new ResponseTextException($message, $this->getSession());
                 }
@@ -209,7 +210,7 @@ class Homepage extends Page
                     switch ($type) {
                         case 'banner':
                             $check = array(
-                                    array($item['img']->getAttribute('src'), $slide['image'])
+                                array($item['img']->getAttribute('src'), $slide['image'])
                             );
                             if (!empty($slide['title'])) {
                                 $check[] = array($item['img']->getAttribute('title'), $slide['title']);
@@ -224,28 +225,29 @@ class Homepage extends Page
 
                         case 'manufacturer':
                             $check = array(
-                                    array($item['a-image']->getAttribute('href'), $slide['link']),
-                                    array($item['a-image']->getAttribute('title'), $slide['name']),
-                                    array($item['img']->getAttribute('src'), $slide['image']),
-                                    array($item['img']->getAttribute('alt'), $slide['name'])
+                                array($item['a-image']->getAttribute('href'), $slide['link']),
+                                array($item['a-image']->getAttribute('title'), $slide['name']),
+                                array($item['img']->getAttribute('src'), $slide['image']),
+                                array($item['img']->getAttribute('alt'), $slide['name'])
                             );
                             break;
 
                         case 'article':
                             $check = array(
-                                    array($item['a-thumb']->getAttribute('href'), $slide['link']),
-                                    array($item['a-thumb']->getAttribute('title'), $slide['name']),
-                                    array($item['img']->getAttribute('src'), $slide['image']),
-                                    array($item['img']->getAttribute('title'), $slide['name']),
-                                    array($item['a-title']->getAttribute('href'), $slide['link']),
-                                    array($item['a-title']->getAttribute('title'), $slide['name']),
-                                    array($item['a-title']->getText(), $slide['name']),
-                                    $this->toFloat(array($item['p-price']->getText(), $slide['price']))
+                                array($item['a-thumb']->getAttribute('href'), $slide['link']),
+                                array($item['a-thumb']->getAttribute('title'), $slide['name']),
+                                array($item['img']->getAttribute('src'), $slide['image']),
+                                array($item['img']->getAttribute('title'), $slide['name']),
+                                array($item['a-title']->getAttribute('href'), $slide['link']),
+                                array($item['a-title']->getAttribute('title'), $slide['name']),
+                                array($item['a-title']->getText(), $slide['name']),
+                                $this->getPage('Helper')->toFloat(array($item['p-price']->getText(), $slide['price']))
                             );
                             break;
                     }
 
-                    if ($this->checkArray($check)) {
+                    $result = $this->getPage('Helper')->checkArray($check);
+                    if ($result === true) {
                         $found = true;
                         unset($sliders[$sliderKey][$itemKey]);
                         break;
@@ -290,13 +292,14 @@ class Homepage extends Page
             $elements['h3'] = $this->find('css', $class . 'h3');
 
             $check = array(
-                    array($elements['a']->getAttribute('href'), $link),
-                    array($elements['a']->getAttribute('title'), $title),
-                    array($elements['div-image']->getAttribute('style'), $image),
-                    array($elements['h3']->getText(), $title)
+                array($elements['a']->getAttribute('href'), $link),
+                array($elements['a']->getAttribute('title'), $title),
+                array($elements['div-image']->getAttribute('style'), $image),
+                array($elements['h3']->getText(), $title)
             );
 
-            if ($this->checkArray($check)) {
+            $result = $this->getPage('Helper')->checkArray($check);
+            if ($result === true) {
                 break;
             }
 
@@ -351,7 +354,7 @@ class Homepage extends Page
                         break;
 
                     case 'price':
-                        $check[] = $this->toFloat(array($elements['p-price']->getText(), $row['value']));
+                        $check[] = $this->getPage('Helper')->toFloat(array($elements['p-price']->getText(), $row['value']));
                         break;
 
                     case 'link':
@@ -362,7 +365,8 @@ class Homepage extends Page
                 }
             }
 
-            if ($this->checkArray($check)) {
+            $result = $this->getPage('Helper')->checkArray($check);
+            if ($result === true) {
                 break;
             }
 
@@ -371,26 +375,6 @@ class Homepage extends Page
                 throw new ResponseTextException($message, $this->getSession());
             }
         }
-    }
-
-    /**
-     * Helper function to check each row of an array. If each second sub-element of a row is in its first, check is true
-     * @param array $check
-     * @return bool
-     */
-    private function checkArray($check)
-    {
-        foreach ($check as $compare) {
-            if ($compare[0] === $compare[1]) {
-                continue;
-            }
-
-            if (strpos($compare[0], $compare[1]) === false) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     /**
@@ -471,10 +455,10 @@ class Homepage extends Page
                 $elements = array();
 
                 $class = sprintf(
-                        'div.emotion-element %s div.slide:nth-of-type(%d) div.supplier:nth-of-type(%d) ',
-                        $cssClass,
-                        $slideKey + 1,
-                        $supplierKey + 1
+                    'div.emotion-element %s div.slide:nth-of-type(%d) div.supplier:nth-of-type(%d) ',
+                    $cssClass,
+                    $slideKey + 1,
+                    $supplierKey + 1
                 );
                 $elements['a-image'] = $this->find('css', $class . 'a.image-wrapper');
                 $elements['img'] = $this->find('css', $class . 'img');
@@ -505,10 +489,10 @@ class Homepage extends Page
                 $elements = array();
 
                 $class = sprintf(
-                        'div.emotion-element %s div.slide:nth-of-type(%d) div.outer-article-box:nth-of-type(%d) ',
-                        $cssClass,
-                        $slideKey + 1,
-                        $articleKey + 1
+                    'div.emotion-element %s div.slide:nth-of-type(%d) div.outer-article-box:nth-of-type(%d) ',
+                    $cssClass,
+                    $slideKey + 1,
+                    $articleKey + 1
                 );
                 $elements['a-thumb'] = $this->find('css', $class . 'a.article-thumb-wrapper');
                 $elements['img'] = $this->find('css', $class . 'img');
@@ -556,77 +540,80 @@ class Homepage extends Page
     }
 
     /**
-     * Helper function to validate prices to floats
-     * @param array $values
-     * @return array
-     */
-    private function toFloat($values)
-    {
-        foreach ($values as $key => $value) {
-            $value = str_replace(array('ab', ' ', '.'), '', $value);
-            $value = str_replace(',', '.', $value);
-
-            $values[$key] = floatval($value);
-        }
-
-        return $values;
-    }
-
-    /**
-     * Compares the comparision list with the given list of articles
+     * Compares the comparison list with the given list of articles
      * @param array $articles
      * @throws Behat\Mink\Exception\ResponseTextException
      */
-    public function checkComparision($articles)
+    public function checkComparison($articles)
     {
-        foreach ($articles as $key => $article) {
-            $class = sprintf('div.compare_article:nth-of-type(%d) ', $key + 2);
+        $message = 'There are %d articles in the comparison (should be %d)';
+        $articlesInComparison = $this->getPage('Helper')->countElements(
+            'div.compare_article',
+            $message,
+            count($articles)
+        );
 
-            $elements = array(
-                    'a-picture' => $this->find('css', $class . 'div.picture a'),
-                    'img' => $this->find('css', $class . 'div.picture img'),
-                    'h3-a-name' => $this->find('css', $class . 'div.name h3 a'),
-                    'a-name' => $this->find('css', $class . 'div.name a.button-right'),
-                    'div-votes' => $this->find('css', $class . 'div.votes div.star'),
-                    'p-desc' => $this->find('css', $class . 'div.desc'),
-                    'strong-price' => $this->find('css', $class . 'div.price strong')
-            );
+        foreach ($articles as $articleKey => $article) {
+            foreach ($articlesInComparison as $articleInComparisonKey => $articleInComparison) {
 
-            $check = array();
+                $locator = sprintf('div.compare_article:nth-of-type(%d) ', $articleInComparisonKey + 2);
 
-            if (!empty($article['image'])) {
-                $check[] = array($elements['img']->getAttribute('src'), $article['image']);
-            }
+                $elements = array(
+                    'a-picture' => $this->find('css', $locator . 'div.picture a'),
+                    'img' => $this->find('css', $locator . 'div.picture img'),
+                    'h3-a-name' => $this->find('css', $locator . 'div.name h3 a'),
+                    'a-name' => $this->find('css', $locator . 'div.name a.button-right'),
+                    'div-votes' => $this->find('css', $locator . 'div.votes div.star'),
+                    'p-desc' => $this->find('css', $locator . 'div.desc'),
+                    'strong-price' => $this->find('css', $locator . 'div.price strong')
+                );
 
-            if (!empty($article['name'])) {
-                $check[] = array($elements['a-picture']->getAttribute('title'), $article['name']);
-                $check[] = array($elements['img']->getAttribute('alt'), $article['name']);
-                $check[] = array($elements['h3-a-name']->getAttribute('title'), $article['name']);
-                $check[] = array($elements['h3-a-name']->getText(), $article['name']);
-                $check[] = array($elements['a-name']->getAttribute('title'), $article['name']);
-            }
+                $check = array();
 
-            if (!empty($article['ranking'])) {
-                $check[] = array($elements['div-votes']->getAttribute('class'), $article['ranking']);
-            }
+                if (!empty($article['image'])) {
+                    $check[] = array($elements['img']->getAttribute('src'), $article['image']);
+                }
 
-            if (!empty($article['text'])) {
-                $check[] = array($elements['p-desc']->getText(), $article['text']);
-            }
+                if (!empty($article['name'])) {
+                    $check[] = array($elements['a-picture']->getAttribute('title'), $article['name']);
+                    $check[] = array($elements['img']->getAttribute('alt'), $article['name']);
+                    $check[] = array($elements['h3-a-name']->getAttribute('title'), $article['name']);
+                    $check[] = array($elements['h3-a-name']->getText(), $article['name']);
+                    $check[] = array($elements['a-name']->getAttribute('title'), $article['name']);
+                }
 
-            if (!empty($article['price'])) {
-                $check[] = $this->toFloat(array($elements['strong-price']->getText(), $article['price']));
-            }
+                if (!empty($article['ranking'])) {
+                    $check[] = array($elements['div-votes']->getAttribute('class'), $article['ranking']);
+                }
 
-            if (!empty($article['link'])) {
-                $check[] = array($elements['a-picture']->getAttribute('href'), $article['link']);
-                $check[] = array($elements['h3-a-name']->getAttribute('href'), $article['link']);
-                $check[] = array($elements['a-name']->getAttribute('href'), $article['link']);
-            }
+                if (!empty($article['text'])) {
+                    $check[] = array($elements['p-desc']->getText(), $article['text']);
+                }
 
-            if (!$this->checkArray($check)) {
-                $message = sprintf('The article on position %d is different', $key + 1);
-                throw new ResponseTextException($message, $this->getSession());
+                if (!empty($article['price'])) {
+                    $check[] = $this->getPage('Helper')->toFloat(array($elements['strong-price']->getText(), $article['price']));
+                }
+
+                if (!empty($article['link'])) {
+                    $check[] = array($elements['a-picture']->getAttribute('href'), $article['link']);
+                    $check[] = array($elements['h3-a-name']->getAttribute('href'), $article['link']);
+                    $check[] = array($elements['a-name']->getAttribute('href'), $article['link']);
+                }
+
+                $result = $this->getPage('Helper')->checkArray($check);
+
+                if ($result === true) {
+                    unset($articlesInComparison[$articleInComparisonKey]);
+                    break;
+                }
+
+                if ($articleInComparison == end($articlesInComparison)) {
+                    $message = sprintf(
+                        'The article on position %d was not found!',
+                        $articleKey + 1
+                    );
+                    throw new ResponseTextException($message, $this->getSession());
+                }
             }
         }
     }

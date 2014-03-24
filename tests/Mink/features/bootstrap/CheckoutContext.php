@@ -7,43 +7,17 @@ require_once 'SubContext.php';
 class CheckoutContext extends SubContext
 {
     /**
-     * @Then /^The sum should be "([^"]*)"$/
+     * @Given /^the total sum should be "([^"]*)"$/
+     * @Given /^the total sum should be "([^"]*)" when shipping costs are "([^"]*)"$/
+     * @Given /^the total sum should be "([^"]*)" when shipping costs are "([^"]*)" and VAT is:$/
      */
-    public function theSumShouldBe($sum)
+    public function theSumsShouldBe($sum, $shippingCosts = null, TableNode $vat = null)
     {
-        $this->getPage('CheckoutCart')->checkSum($sum);
-    }
+        if(isset($vat)) {
+            $vat = $vat->getHash();
+        }
 
-    /**
-     * @Given /^The shipping costs should be "([^"]*)"$/
-     */
-    public function theShippingCostsShouldBe($costs)
-    {
-        $this->getPage('CheckoutCart')->checkShippingCosts($costs);
-    }
-
-    /**
-     * @Then /^The total sum should be "([^"]*)"$/
-     */
-    public function theTotalSumShouldBe($sum)
-    {
-        $this->getPage('CheckoutCart')->checkTotalSum($sum);
-    }
-
-    /**
-     * @Given /^The sum without VAT should be "([^"]*)"$/
-     */
-    public function theSumWithoutVatShouldBe($sum)
-    {
-        $this->getPage('CheckoutCart')->checkSumWithoutVat($sum);
-    }
-
-    /**
-     * @Given /^The VAT should be "([^"]*)"$/
-     */
-    public function theVatShouldBe($vat)
-    {
-        $this->getPage('CheckoutCart')->checkVat($vat);
+        $this->getPage('CheckoutCart')->checkSums($sum, $shippingCosts, $vat);
     }
 
     /**

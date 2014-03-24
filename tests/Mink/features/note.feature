@@ -39,7 +39,7 @@ Feature: Note
 		When  I compare the article on position 1 of my note
 		And  I compare the article on position 2 of my note
 		And  I follow "Vergleich starten"
-		Then  The comparision should look like this:
+		Then  The comparison should look like this:
 			| image                              | name                    | ranking | text                                                                                                                                             | price   | link                                      |
 			| Sonnenbrille-Damen-rot_105x105.jpg | Sonnenbrille Big Eyes   | 0       | Caput. Vis Antea tot dux qualiscumque incompositus, non pessum se census rationabiliter Cras injustus qui. Sis canalis sententiosus Mico, fio eo | 9,99 €  | /sommerwelten/166/sonnenbrille-big-eyes   |
 			| Sonnenbrille-gruen_105x105.jpg     | Sonnenbrille Speed Eyes | 0       | N sui ut glorificus, voro subdo flos alter laxe novem orbus sesquimellesimus, eruo ivi sero trimodus insuadibilis sus ver Jugiter episcopalis    | 13,49 € | /sommerwelten/167/sonnenbrille-speed-eyes |
@@ -50,9 +50,7 @@ Feature: Note
 		Then  I should not see "Artikel vergleichen"
 
 		When  I remove the article on position 2 of my note
-		Then  My note should look like this:
-			| name                  | supplier              | ordernumber | text                                                                                                                                                       | price  | image                  | link                                    |
-			| Sonnenbrille Big Eyes | Sun Smile and Protect | SW10166     | Caput. Vis Antea tot dux qualiscumque incompositus, non pessum se census rationabiliter Cras injustus qui. Sis canalis sententiosus Mico, fio eo amo Posco | 9,99 € | Sonnenbrille-Damen-rot | /sommerwelten/166/sonnenbrille-big-eyes |
+		Then  My note should contain 1 articles
 
 		When  I remove the article on position 1 of my note
 		Then  My note should be empty

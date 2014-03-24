@@ -1,7 +1,7 @@
 <?php
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page, Behat\Mink\Exception\ResponseTextException,
-        Behat\Behat\Context\Step;
+    Behat\Behat\Context\Step;
 
 class Listing extends Page
 {
@@ -55,10 +55,10 @@ class Listing extends Page
 
         if ($price !== $price2) {
             $message = sprintf(
-                    'The price of article on position %s (%s €) is different from %s €!',
-                    $position,
-                    $price,
-                    $price2
+                'The price of article on position %s (%s €) is different from %s €!',
+                $position,
+                $price,
+                $price2
             );
             throw new ResponseTextException($message, $this->getSession());
         }
@@ -109,8 +109,8 @@ class Listing extends Page
 
                         if (empty($valueName)) {
                             $valueName = $this->find(
-                                    'css',
-                                    sprintf('%s:nth-of-type(%d) li:nth-of-type(%d) img', $filterClass, $i + 2, $key + 1)
+                                'css',
+                                sprintf('%s:nth-of-type(%d) li:nth-of-type(%d) img', $filterClass, $i + 2, $key + 1)
                             );
                             $valueName = $valueName->getAttribute('alt');
                         }
@@ -126,9 +126,9 @@ class Listing extends Page
 
                         if ($value == end($values)) {
                             $message = sprintf(
-                                    'The value "%s" was not found for filter "%s"!',
-                                    $property['value'],
-                                    $property['filter']
+                                'The value "%s" was not found for filter "%s"!',
+                                $property['value'],
+                                $property['filter']
                             );
                             throw new ResponseTextException($message, $this->getSession());
                         }
@@ -148,16 +148,13 @@ class Listing extends Page
     }
 
     /**
-     * @param $count
-     * @throws Behat\Mink\Exception\ResponseTextException
+     * Counts the articles in the listing
+     * If the number is not equal to $count, the helper function will throw an exception $message.
+     * @param int $count
      */
-    public function countArticles($count)
+    public function countArticles($count = 0)
     {
-        $articles = $this->findAll('css', 'div.artbox');
-
-        if (count($articles) != $count) {
-            $message = sprintf('There are %d articles in the listing (should be %d)', count($articles), $count);
-            throw new ResponseTextException($message, $this->getSession());
-        }
+        $message = 'There are %d articles in the listing (should be %d)';
+        $this->getPage('Helper')->countElements('div.artbox', $message, $count);
     }
 }
