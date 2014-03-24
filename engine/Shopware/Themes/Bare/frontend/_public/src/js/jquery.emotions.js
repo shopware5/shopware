@@ -52,6 +52,7 @@
 
         me.$list = me.$el.find('.emotion--list');
         me.$mappings  = me.$el.find('.element-banner--mapping');
+        me.$videos = me.$el.find('video');
         me.$elements = me.$el.find('.emotion--element').each(function() {
             var $item = $(this);
 
@@ -60,7 +61,14 @@
             $item.data('height', $item.outerHeight());
         });
 
-        me.resizeBannerMapping();
+        // ...if a banner mapping is active, resize it to percentage values
+        if(me.$mappings.length) {
+            me.resizeBannerMapping();
+        }
+
+        if(me.$videos.length) {
+            me.resizeVideoElement();
+        }
 
         $(window).resize(function() {
             me.resizeElements();
@@ -90,6 +98,38 @@
                 top: (top / imgHeight) * 100 + '%',
                 width: (width / imgWidth) * 100 + '%',
                 height: (height / imgHeight) * 100 + '%'
+            });
+        });
+    };
+
+    Plugin.prototype.resizeVideoElement = function() {
+        var me = this,
+            $videos = me.$el.find('video');
+
+        var resizeElement = function($el) {
+            var $parent = $el.parents('.emotion--element-video'),
+                vidWidth = Math.floor($el.width()),
+                vidHeight = Math.floor($el.height()),
+                parentWidth = Math.floor($parent.width()),
+                parentHeight = Math.floor($parent.height());
+
+            $el.css({ 'height': (parentHeight - vidHeight) + vidHeight + 'px' });
+
+            vidWidth = Math.floor($el.width());
+            $el.css('margin-left', -(vidWidth - parentWidth) / 2 + 'px');
+        };
+
+        $videos.each(function() {
+            var $this = $(this);
+
+            $this.on('loadeddata', function() {
+                resizeElement($(this));
+            });
+        });
+
+        $(window).on('resize.' + pluginName, function() {
+            $videos.each(function() {
+                resizeElement($(this));
             });
         });
     };
