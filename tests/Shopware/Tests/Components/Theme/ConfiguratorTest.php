@@ -61,7 +61,8 @@ class Shopware_Tests_Components_Theme_ConfiguratorTest extends Shopware_Tests_Co
         $configurator = new \Shopware\Components\Theme\Configurator(
             $manager,
             $util,
-            $persister
+            $persister,
+            $this->getEventManager()
         );
 
         $container = new \Shopware\Components\Form\Container\TabContainer('test');
@@ -140,20 +141,31 @@ class Shopware_Tests_Components_Theme_ConfiguratorTest extends Shopware_Tests_Co
                 $this->isInstanceOf('Shopware\Models\Shop\TemplateConfig\Element')
             ));
 
+        $eventManager = $this->getEventManager();
+        $eventManager->expects($this->once())
+            ->method('filter')
+            ->will($this->returnValue(array(
+                'containers' => array('container1', 'container4'),
+                'fields' => array('field1','field3','field4')
+            )));
+
         $configurator = $this->getMockBuilder('Shopware\Components\Theme\Configurator')
             ->setConstructorArgs(array(
                 $entityManager,
                 null,
-                null
+                null,
+                $eventManager
             ))
             ->getMock();
 
         $container = new \Shopware\Components\Form\Container\TabContainer('container1');
         $tab = new \Shopware\Components\Form\Container\Tab('container4', 'title');
+
         $container->addElement($tab);
         $tab->addElement(new \Shopware\Components\Form\Field\Text('field1'));
         $tab->addElement(new \Shopware\Components\Form\Field\Text('field3'));
         $tab->addElement(new \Shopware\Components\Form\Field\Text('field4'));
+
 
         $this->invokeMethod(
             $configurator,
@@ -210,7 +222,7 @@ class Shopware_Tests_Components_Theme_ConfiguratorTest extends Shopware_Tests_Co
             ->method('flush');
 
         $configurator = $this->getMockBuilder('Shopware\Components\Theme\Configurator')
-            ->setConstructorArgs(array($entityManager, null, null))
+            ->setConstructorArgs(array($entityManager, null, null, $this->getEventManager()))
             ->getMock();
 
         $this->invokeMethod(
@@ -258,7 +270,7 @@ class Shopware_Tests_Components_Theme_ConfiguratorTest extends Shopware_Tests_Co
             ->with($this->isInstanceOf('Shopware\Models\Shop\TemplateConfig\Set'));
 
         $configurator = $this->getMockBuilder('Shopware\Components\Theme\Configurator')
-            ->setConstructorArgs(array($entityManager, null, null))
+            ->setConstructorArgs(array($entityManager, null, null, $this->getEventManager()))
             ->getMock();
 
         $theme = $this->getResponsiveTheme();

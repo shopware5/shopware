@@ -57,19 +57,17 @@ class Shopware_Tests_Components_Theme_PathResolverTest extends Shopware_Tests_Co
         /**@var $shop \Shopware\Models\Shop\Shop*/
         foreach($shops as $shop) {
 
-            $names = array('theme', 'plugin');
+            $files = $this->pathResolver->getCssFilePaths($shop, $timestamp);
 
-            foreach($names as $name) {
-                $file = $this->pathResolver->buildCssPath($shop, $name, $timestamp);
-                $expected = $rootDir . '/web/cache/' . $timestamp . '_' . $name . $shop->getId() . '.css';
-                $this->assertEquals($expected, $file);
+            $expected = $rootDir . '/web/cache/' . $timestamp . '_' . 'theme' . $shop->getId() . '.css';
+            $this->assertEquals($expected, $files['default']);
 
 
-                //js file name test
-                $file = $this->pathResolver->buildJsPath($shop, $name, $timestamp);
-                $expected = $rootDir . '/web/cache/' . $timestamp . '_' . $name . $shop->getId() . '.js';
-                $this->assertEquals($expected, $file);
-            }
+            //js file name test
+            $files = $this->pathResolver->getJsFilePaths($shop, $timestamp);
+
+            $expected = $rootDir . '/web/cache/' . $timestamp . '_' . 'theme' . $shop->getId() . '.js';
+            $this->assertEquals($expected, $files['default']);
         }
     }
 }

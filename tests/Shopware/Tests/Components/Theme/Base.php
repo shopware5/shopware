@@ -38,6 +38,13 @@ class Shopware_Tests_Components_Theme_Base extends Enlight_Components_Test_TestC
             ->getMock();
     }
 
+    protected function getEventManager()
+    {
+        return $this->getMockBuilder('Enlight_Event_EventManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
     /**
      * @return PHPUnit_Framework_MockObject_MockObject
      */

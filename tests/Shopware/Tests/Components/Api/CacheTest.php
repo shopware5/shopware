@@ -54,7 +54,7 @@ class Shopware_Tests_Components_Api_CacheTest extends Shopware_Tests_Components_
     public function testGetListShouldBeSuccessFull()
     {
         $caches = $this->getResource()->getList();
-        $this->assertEquals(6, count($caches['data']));
+        $this->assertEquals(7, count($caches['data']));
     }
 
     /**
