@@ -6915,11 +6915,14 @@ INSERT INTO `s_emotion_element_value` (`id`, `emotionID`, `elementID`, `componen
 TRUNCATE TABLE `s_emotion_grid`;
 INSERT INTO `s_emotion_grid` (`id`, `name`, `cols`, `rows`, `cell_height`, `article_height`, `gutter`) VALUES
 (1, '3-Spaltig', 3, 20, 185, 2, 10),
-(2, '4-Spaltig', 4, 20, 185, 2, 10);
+(2, '4-Spaltig', 4, 20, 185, 2, 10),
+(3, 'Horizontales Scrolling', 40, 8, 185, 2, 10);
+
 
 TRUNCATE TABLE `s_emotion_templates`;
 INSERT INTO `s_emotion_templates` (`id`, `name`, `file`) VALUES
-(1, 'Standard', 'index.tpl');
+(1, 'Standard', 'index.tpl'),
+(2, 'Horizontales Scrolling', 'horizontal_scrolling.tpl');
 
 TRUNCATE TABLE `s_export`;
 INSERT INTO `s_export` (`id`, `name`, `last_export`, `active`, `hash`, `show`, `count_articles`, `expiry`, `interval`, `formatID`, `last_change`, `filename`, `encodingID`, `categoryID`, `currencyID`, `customergroupID`, `partnerID`, `languageID`, `active_filter`, `image_filter`, `stockmin_filter`, `instock_filter`, `price_filter`, `own_filter`, `header`, `body`, `footer`, `count_filter`, `multishopID`, `variant_export`) VALUES
