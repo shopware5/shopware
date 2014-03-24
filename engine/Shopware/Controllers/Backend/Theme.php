@@ -221,9 +221,17 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      */
     private function unzip(UploadedFile $file, $targetDirectory)
     {
-        $filter = new \Zend_Filter_Decompress();
-        $filter->setAdapter($file->getClientOriginalExtension());
-        $filter->setOptions(array('target' => $targetDirectory));
+        if (!is_writable($targetDirectory)) {
+            throw new Exception(sprintf(
+                "Target Directory %s isn't writable",
+                $targetDirectory
+            ));
+        }
+
+        $filter = new \Zend_Filter_Decompress(array(
+            'adapter' => $file->getClientOriginalExtension(),
+            'options' => array('target' => $targetDirectory)
+        ));
 
         $filter->filter(
             $file->getPath() . DIRECTORY_SEPARATOR . $file->getFilename()

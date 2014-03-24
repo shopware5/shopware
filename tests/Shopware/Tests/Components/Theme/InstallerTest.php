@@ -70,7 +70,5 @@ class Shopware_Tests_Components_Theme_InstallerTest extends Shopware_Tests_Compo
         );
 
         $this->assertCount(2, $themes);
-        $this->assertInstanceOf('Shopware\Themes\TestBare\Theme', $themes[0]);
-        $this->assertInstanceOf('Shopware\Themes\TestResponsive\Theme', $themes[1]);
     }
 }
