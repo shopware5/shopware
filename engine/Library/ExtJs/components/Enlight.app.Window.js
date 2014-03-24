@@ -410,8 +410,13 @@ Ext.define('Enlight.app.Window', {
      */
     onMouseDown: function() {
         var me = this,
-            subApp = me.subApplication || me.subApp,
-            windowManager = subApp.windowManager;
+            subApp = me.subApplication || me.subApp;
+
+        if (!subApp) {
+            return;
+        }
+
+        var windowManager = subApp.windowManager;
 
         // We need a try & catch here to prevent errors if the will be activated and
         // destroyed immediately after that.

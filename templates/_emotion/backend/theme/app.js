@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Theme', {
     loadPath: '{url action=load}',
     bulkLoad: true,
 
-    controllers: [ 'List', 'Detail' ],
+    controllers: [ 'List', 'Detail', 'Settings' ],
 
     views: [
         'list.Window',
@@ -53,21 +53,30 @@ Ext.define('Shopware.apps.Theme', {
 
         'create.Window',
 
-        'detail.elements.Suffix',
-        'detail.elements.PixelField',
-        'detail.elements.CheckboxField',
-        'detail.elements.ColorPicker',
-        'detail.elements.DateField',
-        'detail.elements.EmField',
-        'detail.elements.MediaSelection',
-        'detail.elements.PercentField',
-        'detail.elements.TextAreaField',
-        'detail.elements.TextField',
-        'detail.elements.SelectField',
+        'config_sets.Window',
+
+        'detail.containers.Tab',
+        'detail.containers.TabPanel',
+        'detail.containers.FieldSet',
+
+        'detail.fields.Suffix',
+        'detail.fields.PixelField',
+        'detail.fields.CheckboxField',
+        'detail.fields.ColorPicker',
+        'detail.fields.DateField',
+        'detail.fields.EmField',
+        'detail.fields.MediaSelection',
+        'detail.fields.PercentField',
+        'detail.fields.TextAreaField',
+        'detail.fields.TextField',
+        'detail.fields.SelectField',
+
+        'settings.Window',
+        'settings.Settings'
     ],
 
-    models: [ 'Theme', 'Element', 'ConfigValue' ],
-    stores: [ 'Theme' ],
+    models: [ 'Theme', 'Element', 'ConfigValue', 'Layout', 'ConfigSet', 'Settings' ],
+    stores: [ 'Theme', 'ConfigSets' ],
 
     launch: function() {
         return this.getController('List').mainWindow;
@@ -75,4 +84,3 @@ Ext.define('Shopware.apps.Theme', {
 });
 
 //{/block}
-

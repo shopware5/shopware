@@ -23,8 +23,8 @@
  */
 namespace Shopware\Components\Form\Container;
 
-use Shopware\Components\Form\Base;
 use Shopware\Components\Form\Container;
+use Shopware\Components\Form\Interfaces\Element;
 
 /**
  * Class TabContainer
@@ -33,24 +33,35 @@ use Shopware\Components\Form\Container;
 class TabContainer extends Container
 {
     /**
-     * @param Base $element
+     * @param string $name
+     */
+    function __construct($name)
+    {
+        $this->name = $name;
+        parent::__construct();
+    }
+
+    /**
+     * @param Element $element
+     * @return $this
      * @throws \InvalidArgumentException
      */
-    public function addElement(Base $element)
+    public function addElement(Element $element)
     {
         if (!$element instanceof Tab) {
             throw new \InvalidArgumentException(
                 '$element must be instance of Shopware\Components\Form\Container\Tab'
             );
         }
-        $this->addTab($element);
+        return $this->addTab($element);
     }
 
     /**
      * @param Tab $element
+     * @return $this
      */
     public function addTab(Tab $element)
     {
-        parent::addElement($element);
+        return parent::addElement($element);
     }
 }

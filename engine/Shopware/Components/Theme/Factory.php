@@ -21,24 +21,34 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 namespace Shopware\Components\Theme;
 
 use Shopware\Models\Shop\Template;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class to generate shopware themes.
  *
  * @category  Shopware
- * @package   Shopware
+ * @package   Shopware\Components\Theme
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Factory
+class Generator
 {
     /**
-     * @var Manager
+     * @var PathResolver
      */
-    private $themeManager;
+    private $pathResolver;
+
+    /**
+     * @var Filesystem
+     */
+    private $fileSystem;
+
+    /**
+     * @var \Enlight_Event_EventManager
+     */
+    private $eventManager;
 
     /**
      * Source template for the Theme.php of a theme
@@ -50,7 +60,7 @@ class Factory
 
 namespace Shopware\Themes\$TEMPLATE$;
 
-class Theme extends \Shopware\Theme
+class Theme extends \Shopware\Components\Theme
 {
     protected $extend = '$PARENT$';
 
@@ -64,57 +74,6 @@ class Theme extends \Shopware\Theme
 
     public function createConfig()
     {
-//        todo implement your theme configuration here.
-
-//        $this->createTextField(array(
-//            'name' => 'textField',
-//            'fieldLabel' => 'Text input'
-//        ));
-//
-//        $this->createCheckboxField(array(
-//            'name' => 'checkboxField',
-//            'fieldLabel' => 'Activate'
-//        ));
-//
-//        $this->createArticleSelection(array(
-//            'name' => 'articleSelection',
-//            'fieldLabel' => 'Select article'
-//        ));
-//
-//        $this->createCategorySelection(array(
-//            'name' => 'categorySelection',
-//            'fieldLabel' => 'Select category'
-//        ));
-//
-//        $this->createColorPicker(array(
-//            'name' => 'colorPicker',
-//            'fieldLabel' => 'Select color'
-//        ));
-//
-//        $this->createDateField(array(
-//            'name' => 'dateField',
-//            'fieldLabel' => 'Date input'
-//        ));
-//
-//        $this->createEmField(array(
-//            'name' => 'emField',
-//            'fieldLabel' => 'EM input'
-//        ));
-//
-//        $this->createMediaSelection(array(
-//            'name' => 'mediaSelection',
-//            'fieldLabel' => 'Select media'
-//        ));
-//
-//        $this->createPercentField(array(
-//            'name' => 'percentField',
-//            'fieldLabel' => 'Percent input'
-//        ));
-//
-//        $this->createTextAreaField(array(
-//            'name' => 'textAreaField',
-//            'fieldLabel' => 'Text input'
-//        ));
     }
 }
 EOD;
@@ -133,11 +92,15 @@ EOD;
     );
 
     /**
-     * @param Manager $themeManager
+     * @param PathResolver $pathResolver
+     * @param Filesystem $fileSystem
+     * @param \Enlight_Event_EventManager $eventManager
      */
-    function __construct(Manager $themeManager)
+    function __construct(PathResolver $pathResolver, Filesystem $fileSystem, \Enlight_Event_EventManager $eventManager)
     {
-        $this->themeManager = $themeManager;
+        $this->pathResolver = $pathResolver;
+        $this->fileSystem = $fileSystem;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -150,7 +113,7 @@ EOD;
      */
     public function generateTheme(array $data, Template $parent = null)
     {
-        if (!is_writable($this->themeManager->getDefaultThemeDirectory())) {
+        if (!is_writable($this->pathResolver->getDefaultThemeDirectory())) {
             throw new \Exception(
                 "Theme directory isn't writable"
             );
@@ -169,10 +132,35 @@ EOD;
 
         $this->generateThemePhp($data, $parent);
 
+        $directory = $this->getThemeDirectory($data['template']);
         $this->generateStructure(
             $this->structure,
+            $directory
+        );
+
+        $this->eventManager->notify('Theme_Generator_Structure_Generated', array(
+            'data' => $data,
+            'directory' => $directory
+        ));
+
+        $this->movePreviewImage(
             $this->getThemeDirectory($data['template'])
         );
+    }
+
+    /**
+     * @param $directory
+     */
+    private function movePreviewImage($directory)
+    {
+        $this->fileSystem->copy(
+            __DIR__ . '/preview.png',
+            $directory . '/preview.png'
+        );
+
+        $this->eventManager->notify('Theme_Generator_Preview_Image_Created', array(
+            'directory' => $directory
+        ));
     }
 
     /**
@@ -181,9 +169,14 @@ EOD;
      */
     private function createThemeDirectory($name)
     {
-        mkdir($this->getThemeDirectory($name));
-    }
+        $directory = $this->getThemeDirectory($name);
+        $this->fileSystem->mkdir($directory);
 
+        $this->eventManager->notify('Theme_Generator_Theme_Directory_Created', array(
+            'name' => $name,
+            'directory' => $directory
+        ));
+    }
 
     /**
      * Helper function to generate the full theme directory name.
@@ -194,7 +187,7 @@ EOD;
      */
     private function getThemeDirectory($name)
     {
-        return $this->themeManager->getDefaultThemeDirectory() . DIRECTORY_SEPARATOR . $name;
+        return $this->pathResolver->getDefaultThemeDirectory() . DIRECTORY_SEPARATOR . $name;
     }
 
     /**
@@ -218,10 +211,17 @@ EOD;
         $source = $this->replacePlaceholder('license', $data['license'], $source);
         $source = $this->replacePlaceholder('description', $data['description'], $source);
 
-        file_put_contents(
+        $output = new \SplFileObject(
             $this->getThemeDirectory($data['template']) . DIRECTORY_SEPARATOR . 'Theme.php',
-            $source
+            "w+"
         );
+
+        $output = $this->eventManager->filter('Theme_Generator_Theme_Source_Generated', $source, array(
+            'data' => $data,
+            'parent' => $parent
+        ));
+
+        $output->fwrite($source);
     }
 
     /**
@@ -256,15 +256,21 @@ EOD;
     {
         foreach ($directory as $key => $value) {
             if (is_array($value)) {
-                mkdir($baseDir . DIRECTORY_SEPARATOR . $key);
+
+                $this->fileSystem->mkdir($baseDir . DIRECTORY_SEPARATOR . $key);
 
                 $this->generateStructure($value, $baseDir . DIRECTORY_SEPARATOR . $key);
+
             } else {
                 //switch between create file or create directory
                 if (strpos($value, '.') !== false) {
-                    file_put_contents($baseDir . DIRECTORY_SEPARATOR . $value, '');
+                    $output = new \SplFileObject(
+                        $baseDir . DIRECTORY_SEPARATOR . $value,
+                        "w+"
+                    );
+                    $output->fwrite('');
                 } else {
-                    mkdir($baseDir . DIRECTORY_SEPARATOR . $value);
+                    $this->fileSystem->mkdir($baseDir . DIRECTORY_SEPARATOR . $value);
                 }
             }
         }

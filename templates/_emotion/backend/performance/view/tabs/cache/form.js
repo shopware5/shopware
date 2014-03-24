@@ -100,6 +100,11 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Form', {
                         name: 'cache[http]',
                         boxLabel: '{s name=form/items/backend}Http-Proxy-Cache{/s}',
                         supportText: '{s name=form/items/backend/support}Cache for the Http-Reverse-Proxy, if active{/s}'
+                    },
+                    {
+                        name: 'cache[theme]',
+                        boxLabel: '{s name=form/items/theme}Theme Cache{/s}',
+                        supportText: '{s name=form/items/theme/support}Cache for the Shopware 5 themes{/s}'
                     }
                 ] },
             { xtype: 'container',
