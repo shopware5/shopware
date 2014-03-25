@@ -72,6 +72,8 @@ class PathResolver
         }
     }
 
+
+
     /**
      * Helper function to build the path to the passed plugin.
      * @param Plugin $plugin
@@ -101,16 +103,49 @@ class PathResolver
         return $this->rootDir . '/templates';
     }
 
-    /**
-     * Helper function which returns the default shopware theme directory.
-     * @return string
-     */
-    public function getDefaultThemeDirectory()
+    private function getBaseThemeDirectory()
     {
         return $this->rootDir .
         DIRECTORY_SEPARATOR . 'engine' .
         DIRECTORY_SEPARATOR . 'Shopware' .
         DIRECTORY_SEPARATOR . 'Themes';
+    }
+
+    /**
+     * Returns the Frontend folder of the Themes directory.
+     *
+     * @return string
+     */
+    public function getFrontendThemeDirectory()
+    {
+        return $this->getBaseThemeDirectory() .
+        DIRECTORY_SEPARATOR .
+        'Frontend';
+    }
+
+    /**
+     * Returns the backend theme directory
+     * of the default theme location.
+     *
+     * @return string
+     */
+    public function getBackendThemeDirectory()
+    {
+        return $this->getBaseThemeDirectory() .
+        DIRECTORY_SEPARATOR .
+        'Backend' ;
+    }
+
+    /**
+     * Returns the current Ext JS backend theme which
+     * is used for the shopware backend.
+     * @return string
+     */
+    public function getExtJsThemeDirectory()
+    {
+        return $this->getBackendThemeDirectory() .
+        DIRECTORY_SEPARATOR .
+        'ExtJs';
     }
 
     /**
@@ -296,10 +331,12 @@ class PathResolver
             DIRECTORY_SEPARATOR .
             'Themes' .
             DIRECTORY_SEPARATOR .
+            'Frontend' .
+            DIRECTORY_SEPARATOR .
             $theme->getTemplate();
 
         } else {
-            return $this->getDefaultThemeDirectory() . DIRECTORY_SEPARATOR . $theme->getTemplate();
+            return $this->getFrontendThemeDirectory() . DIRECTORY_SEPARATOR . $theme->getTemplate();
         }
     }
 
