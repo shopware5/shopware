@@ -36,7 +36,7 @@
 
 		{* Actual include of the categories *}
 		{block name='frontend_index_left_categories_inner'}
-			{include file='frontend/index/_includes/sidebar-categories.tpl'}
+			{include file='frontend/index/sidebar-categories.tpl'}
 		{/block}
 	{/block}			
 	
@@ -54,7 +54,7 @@
 
 	{* Static sites *}
 	{block name='frontend_index_left_menu'}
-		{include file='frontend/index/_includes/sites-navigation.tpl'}
+		{include file='frontend/index/sites-navigation.tpl'}
 	{/block}
 
 	{* Campaign left bottom *}
