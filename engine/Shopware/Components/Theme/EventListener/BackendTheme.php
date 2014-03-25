@@ -11,6 +11,9 @@ class BackendTheme
      */
     private $container;
 
+    /**
+     * @param Container $container
+     */
     function __construct(Container $container)
     {
         $this->container = $container;
