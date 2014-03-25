@@ -120,7 +120,7 @@ class Installer
     {
         //creates a directory iterator for the default theme directory (engine/Shopware/Themes)
         $directories = new \DirectoryIterator(
-            $this->pathResolver->getDefaultThemeDirectory()
+            $this->pathResolver->getFrontendThemeDirectory()
         );
 
         //synchronize the default themes which stored in the engine/Shopware/Themes directory.
@@ -251,8 +251,13 @@ class Installer
                 continue;
             }
 
+            //check if plugin contains themes
+            if (!file_exists($path . DIRECTORY_SEPARATOR . 'Themes' . DIRECTORY_SEPARATOR . 'Frontend')) {
+                continue;
+            }
+
             $directories = new \DirectoryIterator(
-                $path . DIRECTORY_SEPARATOR . 'Themes'
+                $path . DIRECTORY_SEPARATOR . 'Themes' . DIRECTORY_SEPARATOR . 'Frontend'
             );
 
             //the synchronizeThemeDirectories function create for each theme directory a shop template.

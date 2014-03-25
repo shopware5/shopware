@@ -53,15 +53,6 @@ class Template
         $template->setOptions($options);
         $template->setEventManager($eventManager);
 
-        $template->setTemplateDir(array(
-            'custom'      => '_emotion_local',
-            'local'       => '_emotion_local',
-            'emotion'     => '_emotion',
-            'default'     => '_emotion',
-            'base'        => 'templates',
-            'include_dir' => '.',
-        ));
-
         $resource = new \Enlight_Components_Snippet_Resource($snippetManager);
         $template->registerResource('snippet', $resource);
         $template->setDefaultResourceType('snippet');

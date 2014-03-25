@@ -69,5 +69,11 @@
             <argument type="service" id="js_compressor" />
             <argument type="service" id="events" />
         </service>
+
+        <service id="theme_backend_registration" class="Shopware\Components\Theme\EventListener\BackendTheme">
+            <argument type="service" id="service_container" />
+            <tag name="shopware.event_listener" method="registerBackendTheme" event="Enlight_Controller_Front_RouteShutdown" />
+        </service>
+
     </services>
 </container>

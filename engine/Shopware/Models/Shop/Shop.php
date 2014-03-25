@@ -715,7 +715,6 @@ class Shop extends ModelEntity
             $localeName = $this->getLocale()->toString();
 
             if ($template->getVersion() == 3) {
-
                 /**@var $inheritance Inheritance*/
                 $inheritance = Shopware()->Container()->get('theme_inheritance');
                 $config = $inheritance->buildConfig($template, $this, false);
@@ -733,12 +732,13 @@ class Shop extends ModelEntity
                     'custom' => $template->toString(),
                     'local' => '_emotion_local',
                     'emotion' => '_emotion',
+                    'include_dir' => '.'
                 ));
             } else {
-                $templateManager->addTemplateDir(array(
-                    'custom' => $template->toString(),
-                    'local' => '_emotion_local',
-                    'emotion' => '_emotion',
+                throw new \Exception(sprintf(
+                    'Tried to load unsupported template version %s for template: %s',
+                    $template->getVersion(),
+                    $template->getName()
                 ));
             }
 
