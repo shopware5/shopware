@@ -629,7 +629,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     }
 
     /**
-     * Get Shippingcosts as an array (brutto / netto) depending on selected country / payment
+     * Get shipping costs as an array (brutto / netto) depending on selected country / payment
      *
      * @return array
      */

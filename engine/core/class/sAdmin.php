@@ -3417,10 +3417,11 @@ class sAdmin
 
     /**
      * Subscribe / unsubscribe to mailing list
+     * Used in the Newsletter frontend controller to manage subscriptions
      *
      * @param string $email Email address
      * @param boolean $unsubscribe If true, remove email address from mailing list
-     * @param id $groupID Id of the mailing list group
+     * @param int $groupID Id of the mailing list group
      * @return array Array with the result of the operation
      */
     public function sNewsletterSubscription($email, $unsubscribe = false, $groupID = null)
@@ -3455,75 +3456,77 @@ class sAdmin
         $email = trim(strtolower(stripslashes($email)));
         if(empty($email)) {
             return array(
-                "code"=>6,
+                "code" => 6,
                 "message" => $this->snippetObject->get('NewsletterFailureMail', 'Enter eMail address')
             );
         }
         $reg = "/^(([^<>()[\]\\\\.,;:\s@\"]+(\.[^<>()[\]\\\\.,;:\s@\"]+)*)|(\"([^\"\\\\\r]|(\\\\[\w\W]))*\"))@((\[([0-9]{1,3}\.){3}[0-9]{1,3}\])|(([a-z\-0-9áàäçéèêñóòôöüæøå]+\.)+[a-z]{2,}))$/i";
         if(!preg_match($reg, $email)) {
             return array(
-                "code"=>1,
+                "code" => 1,
                 "message" => $this->snippetObject->get('NewsletterFailureInvalid', 'Enter valid eMail address')
             );
         }
         if (!$unsubscribe) {
-            $sql = "SELECT * FROM s_campaigns_mailaddresses WHERE email=?";
+            $sql = "SELECT * FROM s_campaigns_mailaddresses WHERE email = ?";
             $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($email));
 
             if ($result === false) {
                 $result = array(
-                    "code"=>10,
-                    "message" => $this->snippetObject->get('UnknownError','Unknown error')
+                    "code" => 10,
+                    "message" => $this->snippetObject->get('UnknownError', 'Unknown error')
                 );
             } elseif ($result->RecordCount()) {
                 $result = array(
-                    "code"=>2,
+                    "code" => 2,
                     "message" => $this->snippetObject->get('NewsletterFailureAlreadyRegistered','You already receive our newsletter')
                 );
             } else {
                 $sql = "INSERT INTO s_campaigns_mailaddresses (`groupID`,email) VALUES(?, ?)";
                 $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($groupID, $email));
 
-                if($result===false) {
+                if($result === false) {
                     $result = array(
-                        "code"=>10,
-                        "message" => $this->snippetObject->get('UnknownError','Unknown error')
+                        "code" => 10,
+                        "message" => $this->snippetObject->get('UnknownError', 'Unknown error')
                     );
                 } else {
                     $result = array(
-                        "code"=>3,
-                        "message" => $this->snippetObject->get('NewsletterSuccess','Thank you for receiving our newsletter')
+                        "code" => 3,
+                        "message" => $this->snippetObject->get('NewsletterSuccess', 'Thank you for receiving our newsletter')
                     );
                 }
             }
         } else {
-            $sql = "DELETE FROM s_campaigns_mailaddresses WHERE email=?";
+            $sql = "DELETE FROM s_campaigns_mailaddresses WHERE email = ?";
             $result1 = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($email));
             $result = $this->sSYSTEM->sDB_CONNECTION->Affected_Rows();
-            $sql = "UPDATE s_user SET newsletter=0 WHERE email=?";
+
+            $sql = "UPDATE s_user SET newsletter = 0 WHERE email = ?";
             $result2 =$this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($email));
             $result += $this->sSYSTEM->sDB_CONNECTION->Affected_Rows();
+
             if ($result1 === false || $result2 === false) {
                 $result = array(
-                    "code"=>10,
+                    "code" => 10,
                     "message" => $this->snippetObject->get('UnknownError','Unknown error')
                 );
             }
             elseif (empty($result)) {
                 $result = array(
-                    "code"=>4,
-                    "message" => $this->snippetObject->get('NewsletterFailureNotFound','This mail address could not be found')
+                    "code" => 4,
+                    "message" => $this->snippetObject->get('NewsletterFailureNotFound', 'This mail address could not be found')
                 );
             }
             else {
                 $result = array(
-                    "code"=>5,
-                    "message" => $this->snippetObject->get('NewsletterMailDeleted','Your mail address was deleted')
+                    "code" => 5,
+                    "message" => $this->snippetObject->get('NewsletterMailDeleted', 'Your mail address was deleted')
                 );
             }
         }
 
-        if (!empty($result['code']) && in_array($result['code'], array(2,3))) {
+        if (!empty($result['code']) && in_array($result['code'], array(2, 3))) {
             $sql = '
                 REPLACE INTO `s_campaigns_maildata` (`email`, `groupID`, `salutation`, `title`, `firstname`, `lastname`, `street`, `streetnumber`, `zipcode`, `city`, `added`)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '.$this->sSYSTEM->sDB_CONNECTION->sysTimeStamp.')
@@ -3541,7 +3544,7 @@ class sAdmin
                 $this->sSYSTEM->_POST['city']
             ));
         } elseif (!empty($unsubscribe)) {
-            $sql = 'DELETE FROM `s_campaigns_maildata` WHERE `email`=? AND `groupID`=?';
+            $sql = 'DELETE FROM `s_campaigns_maildata` WHERE `email` = ? AND `groupID` = ?';
             $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($email, $groupID));
         }
 
@@ -3550,7 +3553,7 @@ class sAdmin
 
     /**
      * Generate table with german holidays
-     * @access public
+     *
      * @return boolean
      */
     public function sCreateHolidaysTable()
@@ -3575,8 +3578,10 @@ class sAdmin
             FROM `s_premium_holidays`
             WHERE `date`<CURDATE()
         ";
-        $holidays = $this->sSYSTEM->sDB_CONNECTION->CacheGetAssoc(60,$sql);
-        if(empty($holidays)) return true;
+        $holidays = $this->sSYSTEM->sDB_CONNECTION->CacheGetAssoc(60, $sql);
+        if(empty($holidays)) {
+            return true;
+        }
 
         foreach ($holidays as $id => $holiday) {
             $calculation = $holiday['calculation'];
@@ -3595,53 +3600,65 @@ class sAdmin
     }
 
     /**
-     * Get a specific country
-     * @param int $country - s_core_countries.id
-     * @access public
-     * @return array
+     * Get country from its id or iso code
+     * Used internally in sAdmin::sGetPremiumShippingcosts()
+     *
+     * @param int $country Country id or iso code
+     * @return array|false Array with country information, including area, or false if empty argument
      */
     public function sGetCountry($country)
     {
         static $cache = array();
-        if(empty($country))
+        if(empty($country)) {
             return false;
-        if(isset($cache[$country]))
+        }
+        if(isset($cache[$country])) {
             return $cache[$country];
-        if(is_numeric($country))
+        }
+        if (is_numeric($country)) {
             $sql = "c.id=".$country;
-        elseif(is_string($country))
+        } elseif (is_string($country)) {
             $sql = "c.countryiso=".$this->sSYSTEM->sDB_CONNECTION->qstr($country);
-        else
+        } else {
             return false;
+        }
+
         $sql = "
-            SELECT c.id, c.id as countryID, countryname, countryiso, (SELECT name FROM s_core_countries_areas WHERE id = areaID ) AS countryarea, countryen, c.position, notice, c.shippingfree as shippingfree
+            SELECT c.id, c.id as countryID, countryname, countryiso,
+                (SELECT name FROM s_core_countries_areas WHERE id = areaID ) AS countryarea,
+                countryen, c.position, notice, c.shippingfree as shippingfree
             FROM s_core_countries c
             WHERE $sql
         ";
         $currencyFactor = empty($this->sSYSTEM->sCurrency["factor"]) ? 1 : $this->sSYSTEM->sCurrency["factor"];
-        $cache[$country]["shippingfree"] = round($cache[$country]["shippingfree"]*$currencyFactor,2);
+        $cache[$country]["shippingfree"] = round($cache[$country]["shippingfree"]*$currencyFactor, 2);
         return $cache[$country] = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql);
     }
 
     /**
      * Get a specific payment
-     * @param int $payment - s_core_paymentmeans.id
-     * @access public
-     * @return array
+     * Used internally in sAdmin::sGetPremiumShippingcosts()
+     *
+     * @param int $payment Payment mean id or name
+     * @return array|false Array with payment mean information, including area, or false if empty argument
      */
     public function sGetPaymentmean($payment)
     {
         static $cache = array();
-        if(empty($payment))
+        if (empty($payment)) {
             return false;
-        if(isset($cache[$payment]))
+        }
+        if (isset($cache[$payment])) {
             return $cache[$payment];
-        if(is_numeric($payment))
+        }
+        if (is_numeric($payment)) {
             $sql = "id=".$payment;
-        elseif(is_string($payment))
+        } elseif (is_string($payment)) {
             $sql = "name=".$this->sSYSTEM->sDB_CONNECTION->qstr($payment);
-        else
+        } else {
             return false;
+        }
+
         $sql = "
             SELECT * FROM s_core_paymentmeans
             WHERE $sql
@@ -3662,26 +3679,28 @@ class sAdmin
     }
 
     /**
-     * Get dispatch methods
+     * Get dispatch data for basket
+     * Used internally in sAdmin::sGetPremiumShippingcosts() and sAdmin::sGetPremiumDispatches()
      *
-     * @param int $countryID
-     * @param int $paymentID
-     * @param null $stateId
-     * @return array
+     * @param int $countryID Country id
+     * @param int $paymentID Payment mean id
+     * @param int $stateId Country state id
+     * @return array|false Array with dispatch data for the basket, or false if no basket
      */
-    public function sGetDispatchBasket($countryID=null, $paymentID = null, $stateId = null)
+    public function sGetDispatchBasket($countryID = null, $paymentID = null, $stateId = null)
     {
         $sql_select = '';
         if (!empty($this->sSYSTEM->sCONFIG['sPREMIUMSHIPPIUNGASKETSELECT'])) {
             $sql_select .= ', '.$this->sSYSTEM->sCONFIG['sPREMIUMSHIPPIUNGASKETSELECT'];
         }
-        $sql = 'SELECT id, calculation_sql FROM s_premium_dispatch WHERE active=1 AND calculation=3';
+        $sql = 'SELECT id, calculation_sql FROM s_premium_dispatch WHERE active = 1 AND calculation = 3';
         $calculations = $this->sSYSTEM->sDB_CONNECTION->GetAssoc($sql);
-        if(!empty($calculations))
+        if(!empty($calculations)) {
             foreach ($calculations as $dispatchID => $calculation) {
                 if(empty($calculation)) $calculation = $this->sSYSTEM->sDB_CONNECTION->qstr($calculation);
                 $sql_select .= ', ('.$calculation.') as calculation_value_'.$dispatchID;
             }
+        }
         if (empty($this->sSYSTEM->sUSERGROUPDATA["tax"]) && !empty($this->sSYSTEM->sUSERGROUPDATA["id"])) {
             $amount = 'b.quantity*ROUND(CAST(b.price as DECIMAL(10,2))*(100+t.tax)/100,2)';
             $amount_net = 'b.quantity*CAST(b.price as DECIMAL(10,2))';
@@ -3709,39 +3728,42 @@ class sAdmin
             FROM s_order_basket b
 
             LEFT JOIN s_articles a
-            ON b.articleID=a.id
-            AND b.modus=0
-            AND b.esdarticle=0
+            ON b.articleID = a.id
+            AND b.modus = 0
+            AND b.esdarticle = 0
 
             LEFT JOIN s_articles_details d
-            ON (d.ordernumber=b.ordernumber)
-            AND d.articleID=a.id
+            ON (d.ordernumber = b.ordernumber)
+            AND d.articleID = a.id
 
             LEFT JOIN s_articles_attributes at
-            ON at.articledetailsID=d.id
+            ON at.articledetailsID = d.id
 
             LEFT JOIN s_core_tax t
-            ON t.id=a.taxID
+            ON t.id = a.taxID
 
             LEFT JOIN s_user u
-            ON u.id=?
-            AND u.active=1
+            ON u.id = ?
+            AND u.active = 1
 
             LEFT JOIN s_user_billingaddress ub
-            ON ub.userID=u.id
+            ON ub.userID = u.id
 
             LEFT JOIN s_user_shippingaddress us
-            ON us.userID=u.id
+            ON us.userID = u.id
 
-            WHERE b.sessionID=?
+            WHERE b.sessionID = ?
 
             GROUP BY b.sessionID
         ";
 
-        $basket = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql,array(
-            $this->sSYSTEM->_SESSION["sUserId"],
-            empty($this->sSYSTEM->sSESSION_ID) ? session_id() : $this->sSYSTEM->sSESSION_ID
-        ));
+        $basket = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+            $sql,
+            array(
+                $this->sSYSTEM->_SESSION["sUserId"],
+                empty($this->sSYSTEM->sSESSION_ID) ? session_id() : $this->sSYSTEM->sSESSION_ID
+            )
+        );
         if (empty($basket)) {
             return false;
         }
@@ -3759,19 +3781,20 @@ class sAdmin
             $paymentID = (int) $this->sSYSTEM->_SESSION['sPaymentID'];
         }
 
-        $paymentmeans = $this->sGetPaymentMeans();
+        $paymentMeans = $this->sGetPaymentMeans();
         $paymentIDs = array();
-        foreach ($paymentmeans as $paymentmean) {
-            $paymentIDs[] = $paymentmean['id'];
+        foreach ($paymentMeans as $paymentMean) {
+            $paymentIDs[] = $paymentMean['id'];
         }
         if (!in_array($paymentID, $paymentIDs)) {
             $paymentID = reset($paymentIDs);
         }
 
-        if(empty($countryID)&&!empty($user['additional']['countryShipping']['id']))
+        if (empty($countryID) && !empty($user['additional']['countryShipping']['id'])) {
             $countryID = (int) $user['additional']['countryShipping']['id'];
-        else
+        } else {
             $countryID = (int) $countryID;
+        }
 
         if (!empty($user['additional']['stateShipping']['id'])) {
             $stateId = $user['additional']['stateShipping']['id'];
@@ -3796,43 +3819,55 @@ class sAdmin
 
     /**
      * Get premium dispatch method
-     * @param int $dispatchID
-     * @access public
-     * @return array
+     * Used internally, in sOrder and AboCommerce plugin
+     *
+     * @param int $dispatchID Dispatch method id
+     * @return array|false Array with dispatch method data
      */
     public function sGetPremiumDispatch($dispatchID = null)
     {
         $sql = "
-            SELECT d.id, name, d.description, calculation, status_link, surcharge_calculation, bind_shippingfree, shippingfree, tax_calculation, t.tax as tax_calculation_value
+            SELECT d.id, `name`, d.description, calculation, status_link,
+              surcharge_calculation, bind_shippingfree, shippingfree, tax_calculation,
+              t.tax as tax_calculation_value
             FROM s_premium_dispatch d
             LEFT JOIN s_core_tax t
-            ON t.id=d.tax_calculation
+            ON t.id = d.tax_calculation
             WHERE active = 1
             AND d.id = ?
         ";
-        $dispatch = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql,array($dispatchID));
-        if(empty($dispatch)) return false;
+        $dispatch = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql, array($dispatchID));
+        if (empty($dispatch)) {
+            return false;
+        }
         return $this->sGetDispatchTranslation($dispatch);
     }
 
     /**
-     * Get premium dispatch methods
-     * @param int $countryID
-     * @param int $paymentID
-     * @param null $stateId
-     * @access public
-     * @return array
+     * Get dispatch methods
+     *
+     * @param int $countryID Country id
+     * @param int $paymentID Payment mean id
+     * @param int $stateId Country state id
+     * @return array Shipping methods data
      */
-    public function sGetPremiumDispatches($countryID=null, $paymentID = null, $stateId = null)
+    public function sGetPremiumDispatches($countryID = null, $paymentID = null, $stateId = null)
     {
         $this->sCreateHolidaysTable();
 
         $basket = $this->sGetDispatchBasket($countryID, $paymentID, $stateId);
 
-        $sql = "SELECT id, bind_sql FROM s_premium_dispatch WHERE active=1 AND type IN (0) AND bind_sql IS NOT NULL AND bind_sql != ''";
+        $sql = "
+            SELECT id, bind_sql
+            FROM s_premium_dispatch
+            WHERE active=1 AND type IN (0)
+            AND bind_sql IS NOT NULL AND bind_sql != ''
+        ";
         $statements = $this->sSYSTEM->sDB_CONNECTION->GetAssoc($sql);
 
-        if(empty($basket)) return array();
+        if(empty($basket)) {
+            return array();
+        }
 
         $sql_where = "";
         foreach ($statements as $dispatchID => $statement) {
@@ -3964,20 +3999,27 @@ class sAdmin
     }
 
     /**
-     * Get premium dispatch surcharges
+     * Get dispatch surcharge value for current basket and shipping method
+     * Used internally in sAdmin::sGetPremiumShippingcosts()
+     *
      * @param $basket
      * @param $type
-     * @access public
-     * @return array
+     * @return array|false
      */
-    public function sGetPremiumDispatchSurcharge($basket, $type=2)
+    public function sGetPremiumDispatchSurcharge($basket, $type = 2)
     {
-
-        if(empty($basket)) return false;
+        if (empty($basket)) {
+            return false;
+        }
         $type = (int) $type;
 
-        $sql = 'SELECT id, bind_sql FROM s_premium_dispatch WHERE active=1 AND type=? AND bind_sql IS NOT NULL';
-        $statements = $this->sSYSTEM->sDB_CONNECTION->GetAssoc($sql,array($type));
+        $sql = '
+            SELECT id, bind_sql
+            FROM s_premium_dispatch
+            WHERE active = 1 AND type = ?
+            AND bind_sql IS NOT NULL
+        ';
+        $statements = $this->sSYSTEM->sDB_CONNECTION->GetAssoc($sql, array($type));
         $sql_where = '';
         foreach ($statements as $dispatchID => $statement) {
             $sql_where .= "
@@ -4064,33 +4106,37 @@ class sAdmin
         $dispatches = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
         $surcharge = 0;
         if (!empty($dispatches)) {
-
             foreach ($dispatches as $dispatch) {
-                if(empty($dispatch['calculation']))
+                if(empty($dispatch['calculation'])) {
                     $from = round($basket['weight'],3);
-                elseif ($dispatch['calculation']==1) {
-                    if (($this->sSYSTEM->sCONFIG['sARTICLESOUTPUTNETTO'] && !$this->sSYSTEM->sUSERGROUPDATA["tax"]) || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])) {
-                        $from = round($basket['amount_net'],2);
+                } elseif ($dispatch['calculation']==1) {
+                    if (($this->sSYSTEM->sCONFIG['sARTICLESOUTPUTNETTO'] && !$this->sSYSTEM->sUSERGROUPDATA["tax"])
+                        || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])
+                    ) {
+                        $from = round($basket['amount_net'], 2);
                     } else {
-                        $from = round($basket['amount'],2);
+                        $from = round($basket['amount'], 2);
                     }
-                } elseif($dispatch['calculation']==2)
+                } elseif($dispatch['calculation'] == 2) {
                     $from = round($basket['count_article']);
-                elseif($dispatch['calculation']==3)
+                } elseif ($dispatch['calculation'] == 3) {
                     $from = round($basket['calculation_value_'.$dispatch['id']]);
-                else
+                } else {
                     continue;
+                }
                 $sql = "
-                SELECT `value` , `factor`
-                FROM `s_premium_shippingcosts`
-                WHERE `from` <= $from
-                AND `dispatchID` = {$dispatch['id']}
-                ORDER BY `from` DESC
-                LIMIT 1
-            ";
+                    SELECT `value` , `factor`
+                    FROM `s_premium_shippingcosts`
+                    WHERE `from` <= $from
+                    AND `dispatchID` = {$dispatch['id']}
+                    ORDER BY `from` DESC
+                    LIMIT 1
+                ";
                 $result = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql);
 
-                if(empty($result)) continue;
+                if(empty($result)) {
+                    continue;
+                }
                 $surcharge += $result['value'];
                 if (!empty($result['factor'])) {
                     //die($result["factor"].">".$from);
@@ -4102,18 +4148,19 @@ class sAdmin
     }
 
     /**
-     * Get premium shippingcosts
-     * @param int $country - s_core_countries.id
-     * @access public
-     * @return array
+     * Get shipping costs
+     * Used in sBasket and Checkout controller
+     *
+     * @param array $country Array with a single country details
+     * @return array|false Array with shipping costs data, or false on failure
      */
-    public function sGetPremiumShippingcosts($country=null)
+    public function sGetPremiumShippingcosts($country = null)
     {
         $currencyFactor = empty($this->sSYSTEM->sCurrency['factor']) ? 1 : $this->sSYSTEM->sCurrency['factor'];
 
         $discount_tax = empty($this->sSYSTEM->sCONFIG['sDISCOUNTTAX']) ? 0 : (float) str_replace(',','.',$this->sSYSTEM->sCONFIG['sDISCOUNTTAX']);
 
-        // Determinate tax automaticly
+        // Determinate tax automatically
         if (!empty($this->sSYSTEM->sCONFIG["sTAXAUTOMODE"])) {
             $discount_tax = $this->sSYSTEM->sMODULES['sBasket']->getMaxTax();
         }
@@ -4136,13 +4183,24 @@ class sAdmin
         ));
 
         $basket = $this->sGetDispatchBasket(empty($country['id']) ? null : $country['id']);
-        if(empty($basket)) return false;
+        if(empty($basket)) {
+            return false;
+        }
         $country = $this->sGetCountry($basket['countryID']);
-        if(empty($country)) return false;
+        if(empty($country)) {
+            return false;
+        }
         $payment = $this->sGetPaymentmean($basket['paymentID']);
-        if(empty($payment)) return false;
+        if(empty($payment)) {
+            return false;
+        }
 
-        $sql = 'SELECT SUM((CAST(price as DECIMAL(10,2))*quantity)/currencyFactor) as amount FROM s_order_basket WHERE sessionID=? GROUP BY sessionID';
+        $sql = '
+            SELECT SUM((CAST(price as DECIMAL(10,2))*quantity)/currencyFactor) as amount
+            FROM s_order_basket
+            WHERE sessionID=?
+            GROUP BY sessionID
+        ';
         $amount = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql, array($this->sSYSTEM->sSESSION_ID));
 
         $sql = '
@@ -4152,7 +4210,10 @@ class sAdmin
             AND basketdiscountstart<=?
             ORDER BY basketdiscountstart DESC
         ';
-        $basket_discount = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql,array($this->sSYSTEM->sUSERGROUPDATA['id'], $amount));
+        $basket_discount = $this->sSYSTEM->sDB_CONNECTION->GetOne(
+            $sql,
+            array($this->sSYSTEM->sUSERGROUPDATA['id'], $amount)
+        );
 
         if (!empty($basket_discount)) {
 
@@ -4163,7 +4224,6 @@ class sAdmin
                 $basket_discount_net = $basket_discount;
             } else {
                 $basket_discount_net = round($basket_discount/(100+$discount_tax)*100,2);
-
             }
             $tax_rate = $discount_tax;
             $basket_discount_net = $basket_discount_net *-1;
@@ -4171,19 +4231,23 @@ class sAdmin
 
             $sql = '
                 INSERT INTO s_order_basket
-                    (sessionID, articlename, articleID, ordernumber, quantity, price, netprice, tax_rate, datum, modus, currencyFactor)
+                    (sessionID, articlename, articleID, ordernumber,
+                    quantity, price, netprice, tax_rate, datum, modus, currencyFactor)
                 VALUES
                     (?, ?, 0, ?, 1, ?, ?, ?, NOW(), 3, ?)
             ';
-            $this->sSYSTEM->sDB_CONNECTION->Execute($sql,array(
-                $this->sSYSTEM->sSESSION_ID,
-                '- '.$percent.' % '.$discount_basket_name,
-                $discount_basket_ordernumber,
-                $basket_discount,
-                $basket_discount_net,
-                $tax_rate,
-                $currencyFactor
-            ));
+            $this->sSYSTEM->sDB_CONNECTION->Execute(
+                $sql,
+                array(
+                    $this->sSYSTEM->sSESSION_ID,
+                    '- '.$percent.' % '.$discount_basket_name,
+                    $discount_basket_ordernumber,
+                    $basket_discount,
+                    $basket_discount_net,
+                    $tax_rate,
+                    $currencyFactor
+                )
+            );
         }
 
         $discount = $this->sGetPremiumDispatchSurcharge($basket, 3);
@@ -4201,29 +4265,34 @@ class sAdmin
             $tax_rate = $discount_tax;
             $sql = '
                 INSERT INTO s_order_basket
-                    (sessionID, articlename, articleID, ordernumber, quantity, price, netprice,tax_rate, datum, modus, currencyFactor)
+                    (sessionID, articlename, articleID, ordernumber,
+                    quantity, price, netprice,tax_rate, datum, modus, currencyFactor)
                 VALUES
                     (?, ?, 0, ?, 1, ?, ?, ?, NOW(), 4, ?)
             ';
 
-            $this->sSYSTEM->sDB_CONNECTION->Execute($sql,array(
-                $this->sSYSTEM->sSESSION_ID,
-                $discount_name,
-                $discount_ordernumber,
-                $discount,
-                $discount_net,
-                $tax_rate,
-                $currencyFactor
-            ));
+            $this->sSYSTEM->sDB_CONNECTION->Execute(
+                $sql,
+                array(
+                    $this->sSYSTEM->sSESSION_ID,
+                    $discount_name,
+                    $discount_ordernumber,
+                    $discount,
+                    $discount_net,
+                    $tax_rate,
+                    $currencyFactor
+                )
+            );
         }
 
         $dispatch = $this->sGetPremiumDispatch((int) $this->sSYSTEM->_SESSION['sDispatch']);
 
-        if (!empty($payment['country_surcharge'][$country['countryiso']]))
+        if (!empty($payment['country_surcharge'][$country['countryiso']])) {
             $payment['surcharge'] += $payment['country_surcharge'][$country['countryiso']];
+        }
         $payment['surcharge'] = round($payment['surcharge']*$currencyFactor,2);
 
-        if (!empty($payment['surcharge'])&&(empty($dispatch)||$dispatch['surcharge_calculation']==3)) {
+        if (!empty($payment['surcharge']) && (empty($dispatch) || $dispatch['surcharge_calculation'] == 3)) {
             $surcharge = round($payment['surcharge'], 2);
             $payment['surcharge'] = 0;
             if (empty($this->sSYSTEM->sUSERGROUPDATA["tax"]) && !empty($this->sSYSTEM->sUSERGROUPDATA["id"])) {
@@ -4236,23 +4305,30 @@ class sAdmin
             $tax_rate = $discount_tax;
             $sql = '
                 INSERT INTO s_order_basket
-                    (sessionID, articlename, articleID, ordernumber, quantity, price, netprice, tax_rate, datum, modus, currencyFactor)
+                    (sessionID, articlename, articleID, ordernumber, quantity,
+                    price, netprice, tax_rate, datum, modus, currencyFactor)
                 VALUES
                     (?, ?, 0, ?, 1, ?, ?, ?,NOW(), 4, ?)
             ';
-            $this->sSYSTEM->sDB_CONNECTION->Execute($sql,array(
-                $this->sSYSTEM->sSESSION_ID,
-                $surcharge_name,
-                $surcharge_ordernumber,
-                $surcharge,
-                $surcharge_net,
-                $tax_rate,
-                $currencyFactor
-            ));
+            $this->sSYSTEM->sDB_CONNECTION->Execute(
+                $sql,
+                array(
+                    $this->sSYSTEM->sSESSION_ID,
+                    $surcharge_name,
+                    $surcharge_ordernumber,
+                    $surcharge,
+                    $surcharge_net,
+                    $tax_rate,
+                    $currencyFactor
+                )
+            );
         }
-        if (!empty($payment['debit_percent'])&&(empty($dispatch)||$dispatch['surcharge_calculation']!=2)) {
+        if (!empty($payment['debit_percent']) && (empty($dispatch) || $dispatch['surcharge_calculation']!=2)) {
             $sql = 'SELECT SUM(quantity*price) as amount FROM s_order_basket WHERE sessionID=? GROUP BY sessionID';
-            $amount = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql, array($this->sSYSTEM->sSESSION_ID));
+            $amount = $this->sSYSTEM->sDB_CONNECTION->GetOne(
+                $sql,
+                array($this->sSYSTEM->sSESSION_ID)
+            );
 
             $percent = round($amount / 100 * $payment['debit_percent'], 2);
 
@@ -4272,22 +4348,28 @@ class sAdmin
             $tax_rate = $discount_tax;
             $sql = '
                 INSERT INTO s_order_basket
-                    (sessionID, articlename, articleID, ordernumber, quantity, price, netprice, tax_rate, datum, modus, currencyFactor)
+                    (sessionID, articlename, articleID, ordernumber, quantity,
+                    price, netprice, tax_rate, datum, modus, currencyFactor)
                 VALUES
                     (?, ?, 0, ?, 1, ?, ?, ?, NOW(), 4, ?)
             ';
-            $this->sSYSTEM->sDB_CONNECTION->Execute($sql,array(
-                $this->sSYSTEM->sSESSION_ID,
-                $percent_name,
-                $percent_ordernumber,
-                $percent,
-                $percent_net,
-                $tax_rate,
-                $currencyFactor
-            ));
+            $this->sSYSTEM->sDB_CONNECTION->Execute(
+                $sql,
+                array(
+                    $this->sSYSTEM->sSESSION_ID,
+                    $percent_name,
+                    $percent_ordernumber,
+                    $percent,
+                    $percent_net,
+                    $tax_rate,
+                    $currencyFactor
+                )
+            );
         }
 
-        if(empty($dispatch)) return array('brutto'=>0, 'netto'=>0);
+        if (empty($dispatch)) {
+            return array('brutto'=>0, 'netto'=>0);
+        }
 
         if (empty($this->sSYSTEM->sUSERGROUPDATA["tax"]) && !empty($this->sSYSTEM->sUSERGROUPDATA["id"])) {
             $dispatch['shippingfree'] = round($dispatch['shippingfree']/(100+$discount_tax)*100,2);
@@ -4295,29 +4377,31 @@ class sAdmin
             $dispatch['shippingfree'] = $dispatch['shippingfree'];
         }
 
-        if ((!empty($dispatch['shippingfree'])&&$dispatch['shippingfree']<=$basket['amount_display'])
-            ||empty($basket['count_article'])
-            ||(!empty($basket['shippingfree'])&&empty($dispatch['bind_shippingfree']))
+        if ((!empty($dispatch['shippingfree']) && $dispatch['shippingfree'] <= $basket['amount_display'])
+            || empty($basket['count_article'])
+            || (!empty($basket['shippingfree']) && empty($dispatch['bind_shippingfree']))
         ) {
-            if(empty($dispatch['surcharge_calculation'])&&!empty($payment['surcharge']))
+            if (empty($dispatch['surcharge_calculation']) && !empty($payment['surcharge']))
                 return array(
                     'brutto' => $payment['surcharge'],
-                    'netto'=>round($payment['surcharge']*100/(100+$this->sSYSTEM->sCONFIG['sTAXSHIPPING']),2)
+                    'netto' => round($payment['surcharge']*100/(100+$this->sSYSTEM->sCONFIG['sTAXSHIPPING']),2)
                 );
-            else
-                return array('brutto'=>0, 'netto'=>0);
+            else {
+                return array('brutto' => 0, 'netto' => 0);
+            }
         }
 
-        if(empty($dispatch['calculation']))
+        if (empty($dispatch['calculation'])) {
             $from = round($basket['weight'],3);
-        elseif($dispatch['calculation']==1)
+        } elseif ($dispatch['calculation']==1) {
             $from = round($basket['amount'],2);
-        elseif($dispatch['calculation']==2)
+        } elseif ($dispatch['calculation']==2) {
             $from = round($basket['count_article']);
-        elseif($dispatch['calculation']==3)
+        } elseif ($dispatch['calculation']==3) {
             $from = round($basket['calculation_value_'.$dispatch['id']],2);
-        else
+        } else {
             return false;
+        }
         $sql = "
             SELECT `value` , `factor`
             FROM `s_premium_shippingcosts`
@@ -4327,32 +4411,43 @@ class sAdmin
             LIMIT 1
         ";
         $result = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql);
-        if($result===false) return false;
+        if ($result === false) {
+            return false;
+        }
 
         if (!empty($dispatch['shippingfree'])) {
             $result['shippingfree'] = round($dispatch['shippingfree']*$currencyFactor,2);
             $difference = round(($dispatch['shippingfree']-$basket['amount_display'])*$currencyFactor,2);
-            $result['difference'] = array("float" => $difference,"formated" => $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($difference));
+            $result['difference'] = array(
+                "float" => $difference,
+                "formated" => $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($difference)
+            );
         }
         $result['brutto'] = $result['value'];
-        if(!empty($result['factor']))
+        if (!empty($result['factor'])) {
             $result['brutto'] +=  $result['factor']/100*$from;
+        }
         $result['surcharge'] = $this->sGetPremiumDispatchSurcharge($basket);
-        if(!empty($result['surcharge']))
+        if (!empty($result['surcharge'])) {
             $result['brutto'] +=  $result['surcharge'];
+        }
         $result['brutto'] *= $currencyFactor;
         $result['brutto'] = round($result['brutto'],2);
-        if (!empty($payment['surcharge'])&&$dispatch['surcharge_calculation']!=2&&(empty($basket['shippingfree'])||empty($dispatch['surcharge_calculation']))) {
+        if (!empty($payment['surcharge'])
+            && $dispatch['surcharge_calculation'] != 2
+            && (empty($basket['shippingfree']) || empty($dispatch['surcharge_calculation']))
+        ) {
             $result['surcharge'] = $payment['surcharge'];
             $result['brutto'] += $result['surcharge'];
         }
-        if ($result['brutto']<0) {
-            return array('brutto'=>0, 'netto'=>0);
+        if ($result['brutto'] < 0) {
+            return array('brutto' => 0, 'netto' => 0);
         }
-        if(empty($dispatch['tax_calculation']))
+        if(empty($dispatch['tax_calculation'])) {
             $result['tax'] = $basket['max_tax'];
-        else
+        } else {
             $result['tax'] = $dispatch['tax_calculation_value'];
+        }
         $result['tax'] = (float) $result['tax'];
         $result['netto'] = round($result['brutto']*100/(100+$result['tax']),2);
 
