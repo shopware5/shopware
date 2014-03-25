@@ -6097,7 +6097,7 @@ if (navigator.appVersion.indexOf("MSIE 7.") != -1)
                 }
 
                 if (c.indexOf(nameEQ) == 0) {
-                    return decodeURI(c.substring(nameEQ.length, c.length));;
+                    return decodeURI(c.substring(nameEQ.length, c.length));
                 }
             }
             return null;
