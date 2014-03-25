@@ -36,4 +36,6 @@ $(function() {
             $('*[data-scrollable-list="true"]').data('plugin_scrollableList').destroy();
         }
     }]);
+
+    $('*[data-emotions="true"]').emotions();
 });
