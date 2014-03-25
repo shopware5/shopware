@@ -60,7 +60,7 @@ Ext.define('Shopware.apps.Theme.view.list.Theme', {
             dropZoneText: '{s name=drop_zone}Upload single theme using drag+drop (zip){/s}'
         });
 
-        me.dropZone.snippets.messageTitle = '{s name=upload_title}Theme manager{/s}';
+        me.dropZone.snippets.messageTitle = '{s name=upload_title}Theme Manager 2.0{/s}';
         me.dropZone.snippets.messageText = '{s name=upload_message}Theme uploaded successfully{/s}';
 
         return me.dropZone;
@@ -93,8 +93,7 @@ Ext.define('Shopware.apps.Theme.view.list.Theme', {
                     var me = this,
                         templatesByVersion = {
                             'shopware5': [],
-                            'shopware4': [],
-                            'others': []
+                            'shopware4': []
                         }, output = '';
 
                     Ext.each(values, function(item) {
@@ -102,8 +101,6 @@ Ext.define('Shopware.apps.Theme.view.list.Theme', {
                             templatesByVersion['shopware5'].push(item);
                         } else if(item.version === 2) {
                             templatesByVersion['shopware4'].push(item);
-                        } else {
-                            templatesByVersion['others'].push(item);
                         }
                     });
 
@@ -118,8 +115,7 @@ Ext.define('Shopware.apps.Theme.view.list.Theme', {
                     var me = this,
                         snippets = {
                             'shopware5': '{s name=designed_for_shopware5}Designed for Shopware 5{/s}',
-                            'shopware4': '{s name=designed_for_shopware4}Designed for Shopware 4{/s}',
-                            'others': '{s name=designed_for_others}Designed for older versions{/s}'
+                            'shopware4': '{s name=designed_for_shopware4}Designed for Shopware 4{/s}'
                         };
 
                     if(values.length <= 0) {
