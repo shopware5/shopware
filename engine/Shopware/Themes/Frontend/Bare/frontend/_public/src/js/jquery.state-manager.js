@@ -234,13 +234,26 @@
 
             // Loop through exit function to call
             for(var j = 0; j < exitFnArr.length; j++) {
-                exitFnArr[j].call(null, evtObj);
+                fireCallback(exitFnArr[j], evtObj);
             }
 
             // ...then loop through enter functions to call
             for(var k = 0; k < enterFnArr.length; k++) {
-                enterFnArr[k].call(null, evtObj);
+                fireCallback(enterFnArr[k], evtObj);
             }
+        };
+
+        /**
+         * Wrapper method which calls the passed function with a slighty delay
+         * to get some time for the DOM manipulation.
+         *
+         * @param {Function} fn - Function which should be called
+         * @param {Object} evtObj - Event object which will be passed to the function.
+         */
+        var fireCallback = function(fn, evtObj) {
+            window.setTimeout(function() {
+                fn.call(null, evtObj);
+            }, 25);
         };
 
         /**
