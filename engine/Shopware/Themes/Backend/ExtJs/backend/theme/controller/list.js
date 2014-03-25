@@ -86,11 +86,6 @@ Ext.define('Shopware.apps.Theme.controller.List', {
      */
     onThemeUploaded: function() {
         this.getListingView().getStore().load();
-        Shopware.Notification.createGrowlMessage(
-            '{s name="application"}Theme manager{/s}',
-            '{s name="upload_message"}Theme uploaded{/s}',
-            'Theme manager'
-        );
     },
 
     /**
