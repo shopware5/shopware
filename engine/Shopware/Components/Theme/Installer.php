@@ -251,8 +251,13 @@ class Installer
                 continue;
             }
 
+            //check if plugin contains themes
+            if (!file_exists($path . DIRECTORY_SEPARATOR . 'Themes' . DIRECTORY_SEPARATOR . 'Frontend')) {
+                continue;
+            }
+
             $directories = new \DirectoryIterator(
-                $path . DIRECTORY_SEPARATOR . 'Themes'
+                $path . DIRECTORY_SEPARATOR . 'Themes' . DIRECTORY_SEPARATOR . 'Frontend'
             );
 
             //the synchronizeThemeDirectories function create for each theme directory a shop template.
