@@ -30,6 +30,11 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     private $module;
 
     /**
+     * @var sBasket
+     */
+    private $basketModule;
+
+    /**
      * @var Shopware_Components_Config
      */
     private $config;
@@ -55,8 +60,12 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->module->sSYSTEM->sCONFIG = &$this->config;
         $this->module->sSYSTEM->sCurrency = Shopware()->Db()->fetchRow('SELECT * FROM s_core_currencies WHERE currency LIKE "EUR"');
         $this->module->sSYSTEM->_SESSION = &$this->session;
+        $this->module->sSYSTEM->sSESSION_ID = null;
         $this->module->sSYSTEM->_POST = &$this->post;
         $this->module->sSYSTEM->sLanguage = 1;
+        $this->basketModule = Shopware()->Modules()->Basket();
+        $this->basketModule->sSYSTEM = &$this->module->sSYSTEM;
+        $this->basketModule->sDeleteBasket();
 
         // Create a stub for the Shopware_Components_Snippet_Manager class.
         $stub = $this->getMockBuilder('\Enlight_Components_Snippet_Manager')
@@ -2271,7 +2280,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
      * @covers sAdmin::sRiskSUBSHOPNOT
      * @covers sAdmin::sRiskCURRENCIESISOIS
      * @covers sAdmin::sRiskCURRENCIESISOISNOT
-     * @group wip
      */
     public function testsManageRisks()
     {
@@ -2445,9 +2453,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
 
         $this->module->sSYSTEM->sSESSION_ID = rand(111111111, 999999999);
-        $basketModule = Shopware()->Modules()->Basket();
-        $basketModule->sSYSTEM = &$this->module->sSYSTEM;
-        $basketModule->sAddArticle('SW10118.8');
+        $this->basketModule->sAddArticle('SW10118.8');
 
         // sRiskATTRIS
         Shopware()->Db()->insert(
@@ -2459,11 +2465,11 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $fullBasket = $basketModule->sGetBasket();
+        $fullBasket = $this->basketModule->sGetBasket();
         $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
 
-        $basketModule->sAddArticle('SW10118.8');
+        $this->basketModule->sAddArticle('SW10118.8');
         // sRiskATTRISNOT
         Shopware()->Db()->insert(
             's_core_rulesets',
@@ -2728,6 +2734,371 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         Shopware()->Db()->delete('s_order', 'id = '.$orderId);
         $this->deleteDummyCustomer($customer);
+    }
+
+    /**
+     * @covers sAdmin::sNewsletterSubscription
+     */
+    public function testsNewsletterSubscription()
+    {
+        $validAddress = uniqid().'@shopware.com';
+
+        // Test subscribe with empty post field and empty address, fail validation
+        $this->post['newsletter'] = '';
+        $result = $this->module->sNewsletterSubscription('');
+        $this->assertEquals(
+            array('code' => 5, 'message' => 'ErrorFillIn', 'sErrorFlag' => array('newsletter' => true)),
+            $result
+        );
+
+        // Test unsubscribe with non existing email, fail
+        $result = $this->module->sNewsletterSubscription(uniqid().'@shopware.com', true);
+        $this->assertEquals(
+            array('code' => 4, 'message' => 'NewsletterFailureNotFound'),
+            $result
+        );
+
+        // Test unsubscribe with empty post field, fail validation
+        $result = $this->module->sNewsletterSubscription('', true);
+        $this->assertEquals(
+            array('code' => 6, 'message' => 'NewsletterFailureMail'),
+            $result
+        );
+
+        $this->post = array();
+        // Test with empty field, fail validation
+        $result = $this->module->sNewsletterSubscription('');
+        $this->assertEquals(
+            array('code' => 6, 'message' => 'NewsletterFailureMail'),
+            $result
+        );
+
+        // Test with malformed email, fail validation
+        $result = $this->module->sNewsletterSubscription('thisIsNotAValidEmailAddress');
+        $this->assertEquals(
+            array('code' => 1, 'message' => 'NewsletterFailureInvalid'),
+            $result
+        );
+
+        // Check that test email does not exist
+        $this->assertFalse(
+            Shopware()->Db()->fetchRow(
+                'SELECT email, groupID FROM s_campaigns_mailaddresses WHERE email LIKE ?',
+                array($validAddress)
+            )
+        );
+
+        // Test with correct unique email, all ok
+        $result = $this->module->sNewsletterSubscription($validAddress);
+        $this->assertEquals(
+            array('code' => 3, 'message' => 'NewsletterSuccess'),
+            $result
+        );
+
+        // Check that test email was inserted
+        $this->assertEquals(
+            array(
+                'email' => $validAddress,
+                'groupID' => $this->config->get('sNEWSLETTERDEFAULTGROUP')
+            ),
+            Shopware()->Db()->fetchRow(
+                'SELECT email, groupID FROM s_campaigns_mailaddresses WHERE email LIKE ?',
+                array($validAddress)
+            )
+        );
+        $this->assertEquals(
+            array(
+                array(
+                    'email' => $validAddress,
+                    'groupID' => $this->config->get('sNEWSLETTERDEFAULTGROUP')
+                )
+            ),
+            Shopware()->Db()->fetchAll(
+                'SELECT email, groupID FROM s_campaigns_maildata WHERE email LIKE ?',
+                array($validAddress)
+            )
+        );
+
+        // Test with same email, fail
+        $result = $this->module->sNewsletterSubscription($validAddress);
+        $this->assertEquals(
+            array('code' => 2, 'message' => 'NewsletterFailureAlreadyRegistered'),
+            $result
+        );
+
+        // Test with same email in a different list, fail
+        $groupId = rand(1, 9999);
+        $result = $this->module->sNewsletterSubscription($validAddress, false, $groupId);
+        $this->assertEquals(
+            array('code' => 2, 'message' => 'NewsletterFailureAlreadyRegistered'),
+            $result
+        );
+
+        // Check that test email address is still there, but now in two groups
+        $this->assertEquals(
+            array(
+                array(
+                    'email' => $validAddress,
+                    'groupID' => $this->config->get('sNEWSLETTERDEFAULTGROUP')
+                )
+            ),
+            Shopware()->Db()->fetchAll(
+                'SELECT email, groupID FROM s_campaigns_mailaddresses WHERE email LIKE ?',
+                array($validAddress)
+            )
+        );
+        $this->assertEquals(
+            array(
+                array(
+                    'email' => $validAddress,
+                    'groupID' => $this->config->get('sNEWSLETTERDEFAULTGROUP')
+                ),
+                array(
+                    'email' => $validAddress,
+                    'groupID' => $groupId
+                )
+            ),
+            Shopware()->Db()->fetchAll(
+                'SELECT email, groupID FROM s_campaigns_maildata WHERE email LIKE ?',
+                array($validAddress)
+            )
+        );
+
+        // Test unsubscribe the same email, all ok
+        $result = $this->module->sNewsletterSubscription($validAddress, true);
+        $this->assertEquals(
+            array('code' => 5, 'message' => 'NewsletterMailDeleted'),
+            $result
+        );
+
+        // Check that test email address was removed
+        $this->assertFalse(
+            Shopware()->Db()->fetchRow(
+                'SELECT email, groupID FROM s_campaigns_mailaddresses WHERE email LIKE ?',
+                array($validAddress)
+            )
+        );
+
+        // But not completely from maildata
+        $this->assertEquals(
+            array(
+                array(
+                    'email' => $validAddress,
+                    'groupID' => $groupId
+                )
+            ),
+            Shopware()->Db()->fetchAll(
+                'SELECT email, groupID FROM s_campaigns_maildata WHERE email LIKE ?',
+                array($validAddress)
+            )
+        );
+
+        Shopware()->Db()->delete(
+            's_campaigns_maildata',
+            'email LIKE "'.$validAddress.'"'
+        );
+    }
+
+    /**
+     * @covers sAdmin::sGetCountry
+     */
+    public function testsGetCountry()
+    {
+        // Empty argument, return false
+        $this->assertFalse($this->module->sGetCountry(''));
+
+        // No matching country, return empty array
+        $this->assertEquals(array(), $this->module->sGetCountry(-1));
+
+        // Valid country returns valid data
+        $result = $this->module->sGetCountry('de');
+        $this->assertEquals(
+            array(
+                'id' => '2',
+                'countryID' => '2',
+                'countryname' => 'Deutschland',
+                'countryiso' => 'DE',
+                'countryarea' => 'deutschland',
+                'countryen' => 'GERMANY',
+                'position' => '1',
+                'notice' => '',
+                'shippingfree' => '0',
+            ),
+            $result
+        );
+
+        // Fetching for id or iso code gives the same result
+        $this->assertEquals(
+            $this->module->sGetCountry($result['id']),
+            $result
+        );
+    }
+
+    /**
+     * @covers sAdmin::sGetPaymentmean
+     */
+    public function testsGetPaymentmean()
+    {
+        // Empty argument, return false
+        $this->assertFalse($this->module->sGetPaymentmean(''));
+
+        // No matching payment mean, return empty array
+        $this->assertEquals(array('country_surcharge' => array()), $this->module->sGetPaymentmean(-1));
+
+        // Valid country returns valid data
+        $result = $this->module->sGetPaymentmean(
+            Shopware()->Db()->fetchOne('SELECT id FROM s_core_paymentmeans WHERE name = "debit"')
+        );
+
+        $this->assertEquals(
+            array(
+                'id' => '2',
+                'name' => 'debit',
+                'description' => 'Lastschrift',
+                'template' => 'debit.tpl',
+                'class' => 'debit.php',
+                'table' => 's_user_debit',
+                'hide' => '0',
+                'additionaldescription' => 'Zusatztext',
+                'debit_percent' => '-10',
+                'surcharge' => '0',
+                'surchargestring' => '',
+                'position' => '4',
+                'active' => '1',
+                'esdactive' => '0',
+                'embediframe' => '',
+                'hideprospect' => '0',
+                'action' => '',
+                'pluginID' => NULL,
+                'source' => NULL,
+                'country_surcharge' =>
+                    array (
+                    ),
+            ),
+            $result
+        );
+
+        // Fetching for id or iso code gives the same result
+        $this->assertEquals(
+            $this->module->sGetPaymentmean($result['name']),
+            $result
+        );
+    }
+
+    /**
+     * @covers sAdmin::sGetDispatchBasket
+     */
+    public function testsGetDispatchBasket()
+    {
+        // No basket, return false
+        $this->assertFalse($this->module->sGetDispatchBasket());
+
+        $this->module->sSYSTEM->sSESSION_ID = rand(111111111, 999999999);
+        $this->basketModule->sAddArticle('SW10118.8');
+
+        // With the correct data, return properly formatted array
+        // This is a big query function
+        $result = $this->module->sGetDispatchBasket();
+        $this->assertArrayHasKey('instock', $result);
+        $this->assertArrayHasKey('stockmin', $result);
+        $this->assertArrayHasKey('laststock', $result);
+        $this->assertArrayHasKey('weight', $result);
+        $this->assertArrayHasKey('count_article', $result);
+        $this->assertArrayHasKey('shippingfree', $result);
+        $this->assertArrayHasKey('amount', $result);
+        $this->assertArrayHasKey('amount_net', $result);
+        $this->assertArrayHasKey('amount_display', $result);
+        $this->assertArrayHasKey('length', $result);
+        $this->assertArrayHasKey('height', $result);
+        $this->assertArrayHasKey('width', $result);
+        $this->assertArrayHasKey('userID', $result);
+        $this->assertArrayHasKey('has_topseller', $result);
+        $this->assertArrayHasKey('has_comment', $result);
+        $this->assertArrayHasKey('has_esd', $result);
+        $this->assertArrayHasKey('max_tax', $result);
+        $this->assertArrayHasKey('basketStateId', $result);
+        $this->assertArrayHasKey('countryID', $result);
+        $this->assertArrayHasKey('paymentID', $result);
+        $this->assertArrayHasKey('customergroupID', $result);
+        $this->assertArrayHasKey('multishopID', $result);
+        $this->assertArrayHasKey('sessionID', $result);
+    }
+
+    /**
+     * @covers sAdmin::sGetPremiumDispatches
+     */
+    public function testsGetPremiumDispatches()
+    {
+        // No basket, return empty array,
+        $this->assertEquals(array(), $this->module->sGetPremiumDispatches());
+
+        $this->module->sSYSTEM->sSESSION_ID = rand(111111111, 999999999);
+        $this->basketModule->sAddArticle('SW10118.8');
+
+        $result = $this->module->sGetPremiumDispatches();
+
+        $this->assertGreaterThan(0, count($result));
+        foreach ($result as $dispatch) {
+            $this->assertArrayHasKey('id', $dispatch);
+            $this->assertArrayHasKey('name', $dispatch);
+            $this->assertArrayHasKey('description', $dispatch);
+            $this->assertArrayHasKey('calculation', $dispatch);
+            $this->assertArrayHasKey('status_link', $dispatch);
+        }
+    }
+
+    /**
+     * @covers sAdmin::sGetPremiumDispatchSurcharge
+     */
+    public function testsGetPremiumDispatchSurcharge()
+    {
+        // No basket, return false,
+        $this->assertFalse($this->module->sGetPremiumDispatchSurcharge(null));
+
+        $this->module->sSYSTEM->sSESSION_ID = rand(111111111, 999999999);
+        $this->basketModule->sAddArticle('SW10010');
+        $fullBasket = $this->module->sGetDispatchBasket();
+
+        $result = $this->module->sGetPremiumDispatchSurcharge($fullBasket);
+        $this->assertEquals(0, $result);
+
+    }
+
+    /**
+     * @covers sAdmin::sGetPremiumShippingcosts
+     * @group wip
+     */
+    public function testsGetPremiumShippingcosts()
+    {
+        // No basket, return false,
+        $this->assertFalse($this->module->sGetPremiumShippingcosts());
+
+        $countries = $this->module->sGetCountryList();
+        foreach ($countries as $country) {
+            if ($country['countryiso']) {
+                $germany = $country;
+                break;
+            }
+        }
+
+        $this->module->sSYSTEM->sSESSION_ID = rand(111111111, 999999999);
+        $this->basketModule->sAddArticle('SW10010');
+
+        // With country data, no dispatch method
+        $this->assertEquals(
+            array('brutto' => 0, 'netto' => 0),
+            $this->module->sGetPremiumShippingcosts($germany)
+        );
+
+        // With dispatch method
+        $this->module->sSYSTEM->_SESSION['sDispatch'] = 9;
+        $result = $this->module->sGetPremiumShippingcosts($germany);
+        $this->assertArrayHasKey('brutto', $result);
+        $this->assertArrayHasKey('netto', $result);
+        $this->assertArrayHasKey('value', $result);
+        $this->assertArrayHasKey('factor', $result);
+        $this->assertArrayHasKey('surcharge', $result);
+        $this->assertArrayHasKey('tax', $result);
     }
 
     /**
