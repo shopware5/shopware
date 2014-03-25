@@ -1,7 +1,7 @@
 {* Footer menu *}
 {block name='frontend_index_footer_menu'}
     <div class="footer--columns block-group">
-        {include file='frontend/index/_includes/footer-navigation.tpl'}
+        {include file='frontend/index/footer-navigation.tpl'}
     </div>
 {/block}
 
