@@ -148,8 +148,8 @@
         var me = this;
 
         if(me.opts.showArrows) {
-            me.$leftArrow.remove();
-            me.$rightArrow.remove();
+            if(me.$leftArrow) me.$leftArrow.remove();
+            if(me.$rightArrow) me.$rightArrow.remove();
         }
         me.$el.unwrap();
     };
