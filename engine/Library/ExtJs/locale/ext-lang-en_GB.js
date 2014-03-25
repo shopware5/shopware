@@ -350,6 +350,41 @@ Ext.onReady(function() {
             dropDownTitle: 'Articles'
         }
     });
+
+    Ext.define('Shopware.listing.en_GB.InfoPanel', {
+        override: 'Shopware.listing.InfoPanel',
+        title: 'Detailed information',
+        statics: {
+            displayConfig: {
+                emptyText: 'No record selected.'
+            }
+        }
+    });
+
+    Ext.define('Shopware.window.en_GB.Detail', {
+        override: 'Shopware.window.Detail',
+        statics: {
+            displayConfig: {
+                cancelButtonText: 'Cancel',
+                saveButtonText: 'Save'
+            }
+        }
+    });
+    Ext.define('Shopware.window.en_GB.Progress', {
+        override: 'Shopware.window.Progress',
+        statics: {
+            displayConfig: {
+                cancelButtonText: 'Cancel process',
+                closeButtonText: 'Close window',
+                successHeader: 'Success',
+                requestHeader: 'Request',
+                errorHeader: 'Error message',
+                requestResultTitle: 'Request results',
+                processCanceledText: 'Process canceled at position [0] of [1]'
+            }
+        }
+    });
+
     Ext.define('Shopware.form.field.en_GB.TinyMCE', {
         override:'Shopware.form.field.TinyMCE',
 

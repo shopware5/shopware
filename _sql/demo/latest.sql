@@ -6246,7 +6246,6 @@ INSERT INTO `s_core_shop_pages` (`shop_id`, `group_id`) VALUES
 TRUNCATE TABLE `s_core_tax_rules`;
 TRUNCATE TABLE `s_core_templates`;
 INSERT INTO `s_core_templates` (`id`, `template`, `name`, `description`, `author`, `license`, `esi`, `style_support`, `emotion`, `version`, `plugin_id`) VALUES
-(4, 'orange', 'Orange', NULL, 'shopware AG', 'AGPL', 0, 0, 0, 1, NULL),
 (11, 'emotion_orange', 'Emotion Orange', NULL, 'shopware AG', 'AGPL', 1, 0, 1, 2, NULL),
 (14, 'emotion_turquoise', 'Emotion Turquoise', NULL, 'shopware AG', 'AGPL', 1, 0, 1, 2, NULL),
 (15, 'emotion_brown', 'Emotion Brown', NULL, 'shopware AG', 'AGPL', 1, 0, 1, 2, NULL),
