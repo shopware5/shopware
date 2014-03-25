@@ -1,8 +1,8 @@
 .unitize(@value, @baseValue: 16, @property: font-size) {
 	@pxValue: @value;
 	@emValue: (@value / @baseValue);
-	//@{property}: ~"@{pxValue}px";
-	@{property}: ~"@{emValue}em";
+	@{property}: ~"@{pxValue}px";
+	@{property}: ~"@{emValue}rem";
 }
 
 .unitize-multiple(@topValue, @rightValue, @bottomValue, @leftValue, @baseValue: 16, @property: font-size) {
