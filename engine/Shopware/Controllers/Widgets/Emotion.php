@@ -310,10 +310,12 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         // Second get category image per random, if configured
         if ($data["image_type"] != "selected_image") {
 
+	        
             if ($data['blog_category']) {
                 $result = $this->getRandomBlogEntry($data["category_selection"]);
                 if (!empty( $result['media']['thumbnails'])) {
-                    $data['image'] = $result['media']['thumbnails'][2];
+	                $data['image'] = $result['media']['thumbnails'][2];
+	                $data['images'] = $result['media']['thumbnails'];
                 } else {
                     $data['image'] = $result['media']['path'];
                 }
@@ -321,8 +323,8 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             } else {
                 // Get random article from selected $category
                 $temp = Shopware()->Modules()->Articles()->sGetPromotionById('random', $data["category_selection"], 0, true);
-
-                $data["image"] = $temp["image"]["src"][2];
+	            $data["image"] = $temp["image"]["src"][2];
+	            $data['images'] = $temp['image']['src'];
             }
         }
         return $data;
@@ -349,7 +351,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
     private function getBannerMappingLinks($data, $category, $element)
     {
-
         if (!empty($data['link'])) {
             preg_match('/^([a-z]*:\/\/|shopware\.php|mailto:)/i', $data['link'], $matches);
 
@@ -357,6 +358,17 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 $data['link'] = $this->Request()->getBaseUrl() . $data['link'];
             }
         }
+
+	    // Get image size of the banner
+	    if(isset($data['file']) && !empty($data['file'])) {
+		    $fullPath = getcwd() . DIRECTORY_SEPARATOR . $data['file'];
+		    list($bannerWidth, $bannerHeight) = getimagesize($fullPath);
+
+		    $data['fileInfo'] = array(
+			    'width' => $bannerWidth,
+			    'height' => $bannerHeight
+		    );
+	    }
 
         $mappings = $data['bannerMapping'];
         if (!empty($mappings)) {

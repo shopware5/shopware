@@ -338,13 +338,14 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
      * @param component
      * @param fields
      */
-    onOpenSettingsWindow: function(view, record, component, fields, emotion) {
+    onOpenSettingsWindow: function(view, record, component, fields, emotion, settings) {
         this.getView('components.SettingsWindow').create({
             settings: {
                 record: record,
                 component: component,
                 fields: fields,
-                grid: emotion
+                grid: emotion,
+                gridSettings: settings
             }
         });
     },

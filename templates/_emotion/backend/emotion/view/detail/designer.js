@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
     alias: 'widget.emotion-detail-designer',
     layout: 'column',
     autoScroll: true,
-    bodyPadding: 20,
+    bodyPadding: '20 20 20',
 
     /**
      * Initializes the component and builds up the main interface
@@ -57,8 +57,81 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
 
         me.addEvents('openSettingsWindow');
 
-        me.items = [ me.dataView ];
+        me.items = [ me.createScaleView(), me.dataView ];
         me.callParent(arguments);
+    },
+
+    createScaleView: function() {
+        var me = this,
+            settings = me.dataviewStore.getAt(0).data.settings,
+            tpl;
+
+        tpl = new Ext.XTemplate(
+            '{literal}',
+                '<div class="x-emotion-grid-messure-panel">',
+                    '{[this.renderScaleColumns(values.settings)]}',
+                '</div>',
+            '{/literal}',
+            {
+                renderScaleColumns: function() {
+                    var columns = '',
+                        horizontal = (settings.cols > settings.rows),
+                        width, style;
+
+                    for(var i = 1; i <= settings.cols; i++) {
+                        width = (100 / settings.cols);
+                        if(horizontal) {
+                            width = '100px';
+                        } else {
+                            width = width + '%';
+                        }
+
+                        style = 'width:' + width + ';';
+
+                        var content = [
+                            '<div class="col-sep col-sep-small"><div class="inner"></div></div>',
+                            '<div class="col-sep col-sep-small"><div class="inner"></div></div>',
+                            '<div class="col-sep col-sep-small"><div class="inner"></div></div>',
+                            '<div class="col-sep col-sep-small"><div class="inner"></div></div>',
+                            '<div class="col-sep col-sep-middle"><div class="inner"></div></div>',
+                            '<div class="col-sep col-sep-small"><div class="inner"></div></div>',
+                            '<div class="col-sep col-sep-small"><div class="inner"></div></div>',
+                            '<div class="col-sep col-sep-small"><div class="inner"></div></div>',
+                            '<div class="col-sep col-sep-small"><div class="inner"></div></div>'
+                        ].join('');
+
+                        if(i === settings.cols) {
+                            columns += Ext.String.format('<div class="col col-1x1 col-last" style="[0]">[1]</div>', style, content);
+                        } else {
+                            columns += Ext.String.format('<div class="col col-1x1" style="[0]">[1]</div>', style, content);
+                        }
+                    }
+                    columns += '<div class="x-clear"></div>';
+
+                    return columns;
+                }
+            }
+        );
+
+        return Ext.create('Ext.view.View', {
+            renderData: {},
+            tpl: tpl,
+            cls: 'x-emotion-grid-messure-outer-panel',
+            height: 35,
+            columnWidth: 1,
+            listeners: {
+                scope: me,
+                afterrender: function(comp) {
+                    if(settings.cols < settings.rows) {
+                        return;
+                    }
+                    window.setTimeout(function() {
+                        var messurePanel = comp.getEl().dom.children[0];
+                        messurePanel.style.width = settings.cols * 100 + 'px';
+                    }, 250);
+                }
+            }
+        });
     },
 
     createGridView: function() {
@@ -71,7 +144,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
             columnWidth: 1,
             cls: 'x-emotion-grid-outer-container',
             tpl: me.dataViewTemplate,
-            style: 'position: absolute; top: 15px; left: 15px; overflow-y: hidden',
+            style: 'position: absolute; top: 45px; left: 15px; overflow-y: hidden; margin: 0 0 30px;',
             listeners: {
                 scope: me,
                 afterrender: me.addGridEvents,
@@ -115,7 +188,17 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                  * @return [integer] total height of the grid (in pixels)
                  */
                 getGridHeight: function(settings) {
-                    return settings.rows * 45;
+                    var horizontal = (settings.cols > settings.rows),
+                        height = settings.rows * 45;
+
+                    height += 35;
+
+                    // ...we need 30px more due to the scrollbar at the bottom of the grid
+                    if(horizontal) {
+                        height += 30;
+                    }
+
+                    return height;
                 },
 
                 /**
@@ -130,9 +213,9 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
 
                     for(var i = 1; i <= settings.rows; i++) {
                         if(i === settings.rows) {
-                            rows += '<div class="row row-last">' + me.createColumns(settings.cols) + '</div>';
+                            rows += '<div class="row row-last">' + me.createColumns(settings.cols, settings.rows) + '</div>';
                         } else {
-                            rows += '<div class="row">' + me.createColumns(settings.cols) + '</div>';
+                            rows += '<div class="row">' + me.createColumns(settings.cols, settings.rows) + '</div>';
                         }
                     }
                     return rows;
@@ -145,14 +228,25 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                  * @param settings
                  * @return [string] HTML string of the generated columns
                  */
-                createColumns: function(cols) {
-                    var columns = '';
+                createColumns: function(cols, rows) {
+                    var columns = '',
+                        horizontal = (cols > rows),
+                        width, style;
 
                     for(var i = 1; i <= cols; i++) {
-                        if(i === cols) {
-                            columns += '<div class="col col-1x1 col-last" style="width:' + (100 / cols) + '%"></div>';
+                        width = (100 / cols);
+                        if(horizontal) {
+                            width = '100px';
                         } else {
-                            columns += '<div class="col col-1x1" style="width:' + (100 / cols) + '%"></div>';
+                            width = width + '%';
+                        }
+
+                        style = 'width:' + width + ';';
+
+                        if(i === cols) {
+                            columns += Ext.String.format('<div class="col col-1x1 col-last[0]" style="[1]"></div>', (i % 8 === 0) ? ' col-marker' : '', style);
+                        } else {
+                            columns += Ext.String.format('<div class="col col-1x1[0]" style="[1]"></div>', (i % 8 === 0) ? ' col-marker' : '', style);
                         }
                     }
                     columns += '<div class="x-clear"></div>';
@@ -165,13 +259,19 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                         els = values.elements,
                         baseElement = Ext.get(this.parentId),
                         baseWidth = (baseElement.getWidth() - 40) / values.settings.cols,
+                        horizontal = values.settings.cols > values.settings.rows,
                         dh = new Ext.dom.Helper, specs;
+
+                    if(horizontal) {
+                        baseWidth = 100;
+                    }
 
                     Ext.each(els, function(element) {
                         var width = (element.get('endCol') - element.get('startCol')) + 1,
                             rowHeight = (element.get('endRow') - element.get('startRow')) + 1,
                             children = [],  baseCls = 'col-' + width + 'x' + rowHeight, height,
-                            component = element.getComponent().first(), componentId = element.data.componentId;
+                            component = element.getComponent().first(), componentId = element.data.componentId,
+                            elementWidth;
 
                         height = rowHeight * 45 + 'px';
 
@@ -192,6 +292,11 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                                 break;
                         }
 
+                        elementWidth = (100 / values.settings.cols) * width + '%';
+
+                        if(horizontal) {
+                            elementWidth = 100 * width + 'px';
+                        }
                         specs = {
                             cls: baseCls + ' x-emotion-element ' + (component.get('cls').length ? ' ' + component.get('cls') : ''),
                             tag: 'div',
@@ -201,7 +306,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                                 left: (element.get('startCol') -1) * baseWidth + 'px',
                                 height: height,
                                 'line-height': height,
-                                width: (100 / values.settings.cols) * width + '%'
+                                width: elementWidth
                             },
                             children: children
                         };
@@ -350,15 +455,21 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
      * @return voud
      */
     addGridEvents: function() {
-        var me = this
+        var me = this,
+            settings = me.dataviewStore.getAt(0).data.settings;
 
         /**
          * Patching the height of the emotion outer container
          * which fix the emotion designer d'n'd functionality temporarily.
          */
         Ext.defer(function() {
-            var height = me.dataViewTemplate.getGridHeight(me.dataviewStore.getAt(0).data.settings);
+            var height = me.dataViewTemplate.getGridHeight(settings);
             me.dataView.getEl().setHeight(height);
+
+            if(settings.cols > settings.rows) {
+
+                me.dataView.getEl().setWidth(100 * settings.cols + 1);
+            }
         }, 200, me);
 
         me.dataView.getEl().on({
@@ -438,11 +549,15 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                 var stage = view.dataView.getEl(),
                     x = e.getX(),
                     y = e.getY(),
-                    id = me.getId(),
                     colHeight = 44,
-                    colWidth = (Ext.get(id).getWidth() - 40) / me.dataviewStore.getAt(0).data.settings.cols,
+                    colWidth = (stage.getWidth()) / me.dataviewStore.getAt(0).data.settings.cols,
                     startCol, startRow, record = data.draggedRecord,
-                    entry = me.dataviewStore.getAt(0), elements = entry.get('elements');
+                    entry = me.dataviewStore.getAt(0), elements = entry.get('elements'),
+                    horizontal = (me.dataviewStore.getAt(0).data.settings.cols > me.dataviewStore.getAt(0).data.settings.rows);
+
+                if(horizontal) {
+                    colWidth = 100;
+                }
 
                 x = x - stage.getX();
                 y = y - stage.getY();
@@ -527,9 +642,15 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                    y = e.getY(),
                    id = me.getId(),
                    colHeight = 44,
-                   colWidth = (Ext.get(id).getWidth() - 40) / me.dataviewStore.getAt(0).data.settings.cols,
+                   settings = me.dataviewStore.getAt(0).data.settings,
+                   colWidth = (Ext.get(id).getWidth() - 40) / settings.cols,
                    startCol, startRow, record = data.draggedRecord, endRow, endCol,
-                   entry = me.dataviewStore.getAt(0), elements = entry.get('elements');
+                   entry = me.dataviewStore.getAt(0), elements = entry.get('elements'),
+                   horizontal = (settings.cols > settings.rows);
+
+                if(horizontal) {
+                    colWidth = 100;
+                }
 
                 x = x - stage.getX();
                 y = y - stage.getY();
@@ -616,7 +737,19 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                     });
                 }
 
+                // Fixes the jumping of the scroll state due to the refresh of the dataview
+                var scrollTopPos = me.body.dom.scrollTop,
+                    scrollLeftPos = me.body.dom.scrollLeft;
+
                 me.dataView.refresh();
+
+                // Fix the width of the dataview for horizontal emotion worlds
+                if(settings.cols > settings.rows) {
+                    me.dataView.getEl().setWidth(100 * settings.cols + 1);
+                }
+
+                me.body.dom.scrollTop = scrollTopPos;
+                me.body.dom.scrollLeft = scrollLeftPos;
 
                 // Remove class from the sourceEl element
                 Ext.get(data.sourceEl).removeCls('dragged');
@@ -686,7 +819,12 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
             id = me.getId(),
             dataViewData = me.dataviewStore.getAt(0).data.settings,
             cellHeight = 45,
-            cellWidth = (Ext.get(id).getWidth() - 40) / dataViewData.cols;
+            cellWidth = (Ext.get(id).getWidth() - 40) / dataViewData.cols,
+            horizontal = (me.dataviewStore.getAt(0).data.settings.cols > me.dataviewStore.getAt(0).data.settings.rows);
+
+        if(horizontal) {
+            cellWidth = 100;
+        }
 
         Ext.each(elements, function(item) {
 
@@ -809,10 +947,10 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
         component = record.getComponent().first(),
         fields = component.getFields();
 
-        me.fireEvent('openSettingsWindow', me, record, component, fields, me.emotion);
+        me.fireEvent('openSettingsWindow', me, record, component, fields, me.emotion, me.dataviewStore.getAt(0).data.settings);
     },
 
-    onBeforeResize: function(resizer, width, height, event) {
+    onBeforeResize: function(resizer) {
         var element = resizer.el,
             me = this,
             id = element.getAttribute('data-emotionid'),
@@ -846,18 +984,18 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
         return true;
     },
 
-    onResizeDrag: function(resizer, width, height, event) {
+    onResizeDrag: function(resizer, width, height) {
         var element = resizer.el,
             me = this,
             id = element.getAttribute('data-emotionid'),
             store = me.dataviewStore.getAt(0).get('elements'),
             dataViewData = me.dataviewStore.getAt(0).data.settings,
             cellHeight = 45,
-            cellWidth = (Ext.get(me.getId()).getWidth() - 40) / dataViewData.cols,
+            horizontal = (me.dataviewStore.getAt(0).data.settings.cols > me.dataviewStore.getAt(0).data.settings.rows),
+            cellWidth = (horizontal ? 100 : (Ext.get(me.getId()).getWidth() - 40) / dataViewData.cols),
             colSpan = width / cellWidth,
             rowSpan = height / cellHeight,
             baseCls, record, i, attr;
-
 
         if(!id) {
             for(i in element.dom.attributes) {
@@ -917,8 +1055,9 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
             id = element.getAttribute('data-emotionid'),
             store = me.dataviewStore.getAt(0).get('elements'),
             dataViewData = me.dataviewStore.getAt(0).data.settings,
+            horizontal = (me.dataviewStore.getAt(0).data.settings.cols > me.dataviewStore.getAt(0).data.settings.rows),
             cellHeight = 45,
-            cellWidth = (Ext.get(me.getId()).getWidth() - 40) / dataViewData.cols,
+            cellWidth = (horizontal ? 100 : (Ext.get(me.getId()).getWidth() - 40) / dataViewData.cols),
             colSpan = width / cellWidth,
             rowSpan = height / cellHeight,
             record, baseCls, i, attr;
