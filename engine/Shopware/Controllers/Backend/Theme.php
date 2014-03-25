@@ -207,7 +207,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             ));
         }
 
-        $this->unzip($file, $this->container->get('theme_path_resolver')->getDefaultThemeDirectory());
+        $this->unzip($file, $this->container->get('theme_path_resolver')->getFrontendThemeDirectory());
 
         $system->remove($file->getPathname());
 
