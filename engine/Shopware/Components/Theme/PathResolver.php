@@ -331,6 +331,8 @@ class PathResolver
             DIRECTORY_SEPARATOR .
             'Themes' .
             DIRECTORY_SEPARATOR .
+            'Frontend' .
+            DIRECTORY_SEPARATOR .
             $theme->getTemplate();
 
         } else {
