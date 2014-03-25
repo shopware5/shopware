@@ -16,7 +16,7 @@ $(function() {
     StateManager.registerListener([{
         type: 'smartphone',
         enter: function() {
-            $('.sidebar-main').insertBefore($('.page-wrap'));
+            ('.sidebar-main').insertBefore($('.page-wrap'));
             $('*[data-offcanvas="true"]').offcanvasMenu();
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
             $('*[data-slide-panel="true"]').slidePanel();
@@ -30,10 +30,10 @@ $(function() {
     }, {
         type:'tablet',
         enter: function() {
-            $('*[data-scrollable-list="true"]').scrollableList();
+            /* $('*[data-scrollable-list="true"]').scrollableList(); */
         },
         exit: function() {
-            $('*[data-scrollable-list="true"]').data('plugin_scrollableList').destroy();
+            /* $('*[data-scrollable-list="true"]').data('plugin_scrollableList').destroy(); */
         }
     }]);
 
