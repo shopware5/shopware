@@ -43,3 +43,9 @@ ul {
 ::-moz-placeholder { color: @lightTextColor }
 ::-webkit-input-placeholder { color: @lightTextColor }
 :-ms-input-placeholder { color: @lightTextColor }
+
+@media screen and (min-width: @desktopViewportWidth) {
+	.page-wrap {
+		.unitize(14, 16, font-size);
+	}
+}
