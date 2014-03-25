@@ -164,6 +164,10 @@ class Installer
                 continue;
             }
 
+            if (strpos($directories->getFilename(), 'emotion') == false) {
+                continue;
+            }
+
             //draw template information over the directory
             $data = $this->getTemplateDefinition($directory);
 
