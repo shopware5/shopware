@@ -120,7 +120,7 @@ class Installer
     {
         //creates a directory iterator for the default theme directory (engine/Shopware/Themes)
         $directories = new \DirectoryIterator(
-            $this->pathResolver->getDefaultThemeDirectory()
+            $this->pathResolver->getFrontendThemeDirectory()
         );
 
         //synchronize the default themes which stored in the engine/Shopware/Themes directory.

@@ -113,7 +113,7 @@ EOD;
      */
     public function generateTheme(array $data, Template $parent = null)
     {
-        if (!is_writable($this->pathResolver->getDefaultThemeDirectory())) {
+        if (!is_writable($this->pathResolver->getFrontendThemeDirectory())) {
             throw new \Exception(
                 "Theme directory isn't writable"
             );
@@ -187,7 +187,7 @@ EOD;
      */
     private function getThemeDirectory($name)
     {
-        return $this->pathResolver->getDefaultThemeDirectory() . DIRECTORY_SEPARATOR . $name;
+        return $this->pathResolver->getFrontendThemeDirectory() . DIRECTORY_SEPARATOR . $name;
     }
 
     /**
