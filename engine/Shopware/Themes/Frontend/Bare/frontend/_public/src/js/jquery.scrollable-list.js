@@ -152,6 +152,7 @@
             if(me.$rightArrow) me.$rightArrow.remove();
         }
         me.$el.unwrap();
+        me.$el.removeData('plugin_' + pluginName);
     };
 
     $.fn[pluginName] = function ( options ) {
