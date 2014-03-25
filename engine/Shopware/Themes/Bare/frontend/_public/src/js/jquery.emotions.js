@@ -74,6 +74,10 @@
             me.resizeElements();
         });
         me.resizeElements();
+
+        if(me.$el.hasClass('emotion--horizontal')) {
+            me.registerHorizontalEventListeners();
+        }
     };
 
     Plugin.prototype.resizeBannerMapping = function () {
@@ -131,6 +135,19 @@
             $videos.each(function() {
                 resizeElement($(this));
             });
+        });
+    };
+
+    Plugin.prototype.registerHorizontalEventListeners = function() {
+        var me = this;
+
+        me._pageCounter = 0;
+        me._maxPages = parseInt(me.$list.attr('data-pages'), 10);
+
+        me.$list.on('swipeleft.' + pluginName, function() {
+            me._pageCounter++;
+
+            me.$list.transition({ translate: [ -(me._pageCounter * 100 / me._maxPages) + '%', 0 ] }, 450);
         });
     };
 

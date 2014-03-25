@@ -90,6 +90,7 @@ module.exports = function(grunt) {
                         'frontend/_public/vendors/jquery.transit/jquery.transit.js',
                         'frontend/_public/vendors/jquery.event.move/js/jquery.event.move.js',
                         'frontend/_public/vendors/jquery.event.swipe/js/jquery.event.swipe.js',
+                        'frontend/_public/vendors/swiper/dist/idangerous.swiper.min.js',
                         'frontend/_public/src/js/**/*.js'
                     ]
                 }
