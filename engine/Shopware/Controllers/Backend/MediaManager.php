@@ -651,11 +651,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         if (!$settings) {
             $settings = new Settings();
             $settings->setAlbum($album);
-            $settings->setIcon('sprite-blue-folder');
-            $settings->setCreateThumbnails(0);
-            $settings->setThumbnailSize('');
         }
-
         // validate album name
         if(empty($data['text'])){
             throw new Exception('No valid album name passed!');
@@ -671,25 +667,40 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $data['parent'] = $parent;
         }
 
-        if (isset($data['createThumbnails']) && !empty($data['createThumbnails'])) {
-            $settings->setCreateThumbnails($data['createThumbnails']);
+        $thumbnailSizes = '';
+        $createThumbnails = 0;
+        $icon = 'sprite-blue-folder';
+
+        if (isset($data['createThumbnails'])) {
+            $createThumbnails = (int) $data['createThumbnails'];
         }
 
         if (isset($data['thumbnailSize'])) {
-            $sizes = array();
+            $thumbnailSizes = array();
 
             foreach ($data['thumbnailSize'] as $size) {
                 if (!empty($size['value']) && $size['value'] !== '') {
-                    $sizes[] = $size['value'];
+                    $thumbnailSizes[] = $size['value'];
                 }
             }
-
-            $settings->setThumbnailSize(empty($sizes) ? '' : $sizes);
         }
 
         if(isset($data['iconCls']) && !empty($data['iconCls'])) {
-            $settings->setIcon($data['iconCls']);
+            $icon = $data['iconCls'];
         }
+
+        $albumId = $album->getId();
+        if(empty($albumId) && $data['parent'] !== null) {
+            /** @var Settings $parentSettings */
+            $parentSettings = $data['parent']->getSettings();
+
+            $thumbnailSizes = $parentSettings->getThumbnailSize();
+            $createThumbnails = $parentSettings->getCreateThumbnails();
+        }
+
+        $settings->setCreateThumbnails($createThumbnails);
+        $settings->setThumbnailSize(empty($thumbnailSizes) ? '' : $thumbnailSizes);
+        $settings->setIcon($icon);
 
         $data['settings'] = $settings;
 
@@ -697,7 +708,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
     }
 
 
-    
+
     /**
      * Updates the meta information of a media. Handles the batch process and
      * the single process to save a media.
