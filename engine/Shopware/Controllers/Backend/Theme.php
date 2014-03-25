@@ -206,8 +206,16 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
                 $name
             ));
         }
+        $targetDirectory = $this->container->get('theme_path_resolver')->getFrontendThemeDirectory();
 
-        $this->unzip($file, $this->container->get('theme_path_resolver')->getFrontendThemeDirectory());
+        if (!is_writable($targetDirectory)) {
+            return $this->View()->assign(array(
+                'success' => false,
+                'error' => sprintf("Target Directory %s isn't writable", $targetDirectory)
+            ));
+        }
+
+        $this->unzip($file, $targetDirectory);
 
         $system->remove($file->getPathname());
 
@@ -218,16 +226,10 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      * Helper function to decompress zip files.
      * @param UploadedFile $file
      * @param $targetDirectory
+     * @throws Exception
      */
     private function unzip(UploadedFile $file, $targetDirectory)
     {
-        if (!is_writable($targetDirectory)) {
-            throw new Exception(sprintf(
-                "Target Directory %s isn't writable",
-                $targetDirectory
-            ));
-        }
-
         $filter = new \Zend_Filter_Decompress(array(
             'adapter' => $file->getClientOriginalExtension(),
             'options' => array('target' => $targetDirectory)

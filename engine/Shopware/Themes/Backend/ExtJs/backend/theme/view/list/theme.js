@@ -56,6 +56,9 @@ Ext.define('Shopware.apps.Theme.view.list.Theme', {
         me.dropZone = Ext.create('Shopware.app.FileUpload', {
             requestURL: '{url controller="Theme" action="upload"}',
             enablePreviewImage: false,
+            snippets: {
+                messageTitle: ''
+            },
             showInput: false,
             dropZoneText: '{s name=drop_zone}Upload single theme using drag+drop (zip){/s}'
         });
