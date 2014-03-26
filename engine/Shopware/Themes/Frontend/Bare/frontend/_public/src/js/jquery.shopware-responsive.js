@@ -30,10 +30,8 @@ $(function() {
     }, {
         type:'tablet',
         enter: function() {
-            /* $('*[data-scrollable-list="true"]').scrollableList(); */
         },
         exit: function() {
-            /* $('*[data-scrollable-list="true"]').data('plugin_scrollableList').destroy(); */
         }
     }]);
 
