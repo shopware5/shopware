@@ -1572,23 +1572,24 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $propertyGroupId = $this->Request()->getParam('propertyGroupId');
         $searchValue = $this->Request()->getParam('query');
 
-        $builder = Shopware()->Models()->createQueryBuilder()->select(array('pv.id', 'pv.value', 'po.id as optionId'))
-            ->from('Shopware\Models\Property\Value', 'pv')
-            ->join('pv.option', 'po')
-            ->join('po.groups', 'pg', 'with', 'pg.id = :propertyGroupId')
+        $builder = Shopware()->Models()->getDBALQueryBuilder();
+        $builder->select(array(
+                'filterValues.id AS id',
+                'filterValues.value AS value',
+                'filterOptions.id AS optionId'))
+            ->from('s_filter_values', 'filterValues')
+            ->innerJoin('filterValues', 's_filter_options', 'filterOptions', 'filterValues.optionID = filterOptions.id' )
+            ->innerJoin('filterOptions', 's_filter_relations', 'filterRelations', 'filterOptions.id = filterRelations.optionID' )
+            ->innerJoin('filterRelations', 's_filter', 'filter', 'filter.id = filterRelations.groupID AND (filter.id = :propertyGroupId)' )
             ->setParameter('propertyGroupId', $propertyGroupId);
 
         if (!empty($searchValue)) {
-            $builder->where('pv.value like :searchValue');
+            $builder->where('filterValues.value like :searchValue');
             $builder->setParameter('searchValue', '%' . $searchValue . '%');
         }
-
-        $query = $builder->getQuery();
-        $data = $query->getArrayResult();
-
+        $statement = $builder->execute();
         $this->View()->assign(array(
-            'data' =>  $data,
-            'total' =>  count($data),
+            'data' => $statement->fetchAll(PDO::FETCH_ASSOC),
             'success' => true
         ));
     }
