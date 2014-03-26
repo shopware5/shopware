@@ -34,6 +34,216 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        $this->View()->sCategoryTree = Shopware()->Modules()->sCategories()->sGetWholeCategoryTree();
+        $categoryTree = Shopware()->Modules()->sCategories()->sGetWholeCategoryTree();
+        $additionalTrees = $this->getAdditionalTrees();
+
+        $categoryTree = array_merge($categoryTree, $additionalTrees);
+        $this->View()->sCategoryTree = $categoryTree;
+    }
+
+    /**
+     * Helper function to get additional page trees
+     * @return array
+     */
+    private function getAdditionalTrees()
+    {
+        return array(
+            $this->getCustomPages(),
+            $this->getSupplierPages(),
+            $this->getLandingPages()
+        );
+    }
+
+    /**
+     * Helper function to get all custom pages of the shop
+     * @return array
+     */
+    private function getCustomPages()
+    {
+        /** @var Shopware\Models\Site\Repository $siteRepository */
+        $siteRepository = $this->get('models')->getRepository('Shopware\Models\Site\Site');
+
+        $pageGroups = Shopware()->Shop()->getPages();
+
+        $staticPages = array(
+            'name' => 'SitemapStaticPages',
+            'link' => '',
+            'sub' => array()
+        );
+
+        foreach ($pageGroups as $pageGroup) {
+            /** @var Doctrine\ORM\Query $query */
+            $query = $siteRepository->getSitesByNodeNameQuery($pageGroup->getKey());
+            $pages = $query->getArrayResult();
+
+            foreach ($pages as $page) {
+
+                if(!$this->filterLink($page['link'])){
+                    continue;
+                }
+
+                if (isset($staticPages['sub'][$page['id']])) {
+                    continue;
+                }
+
+                $staticPages['sub'][$page['id']] = array_merge(
+                    $page,
+                    $this->getSitemapArray(
+                        $page['id'],
+                        $page['description'],
+                        'custom',
+                        'sCustom',
+                        $page['link']
+                    )
+                );
+
+                foreach ($page['children'] as $child) {
+
+                    if(!$this->filterLink($child['link'])){
+                        continue;
+                    }
+
+                    $staticPages['sub'][$page['id']]['sub'][] = $this->getSitemapArray(
+                        $child['id'],
+                        $child['description'],
+                        'custom',
+                        'sCustom',
+                        $child['link']
+                    );
+                }
+            }
+        }
+
+        return $staticPages;
+    }
+
+    /**
+     * Helper function to filter predefined links, which should not be in the sitemap (external links, sitemap links itself)
+     * Returns false, if the link is not allowed
+     * @param string $link
+     * @return bool
+     */
+    private function filterLink($link)
+    {
+        if (empty($link)) {
+            return true;
+        }
+
+        $userParams = parse_url($link, PHP_URL_QUERY);
+        parse_str($userParams, $userParams);
+
+        if (empty($userParams['sViewport'])) {
+            return false;
+        }
+
+        $blacklist = array('sitemap', 'sitemapXml');
+
+        if (in_array($userParams['sViewport'], $blacklist)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Helper function to get all supplier pages
+     * @return array
+     */
+    private function getSupplierPages()
+    {
+        $builder = $this->get('models')->createQueryBuilder();
+        $builder->select(array('supplier', 'attribute'))
+            ->from('Shopware\Models\Article\Supplier', 'supplier')
+            ->leftJoin('supplier.attribute', 'attribute');
+
+        $suppliers = $builder->getQuery()->getArrayResult();
+
+        $supplierPages = array(
+            'name' => 'SitemapSupplierPages',
+            'link' => '',
+            'sub' => array()
+        );
+
+        foreach ($suppliers as $supplier) {
+            $supplierPages['sub'][] = array_merge(
+                $supplier,
+                $this->getSitemapArray(
+                    $supplier['id'],
+                    $supplier['name'],
+                    'supplier',
+                    'sSupplier'
+                )
+            );
+        }
+
+        return $supplierPages;
+    }
+
+    /**
+     * Helper function to get all landing pages
+     * @return array
+     */
+    private function getLandingPages()
+    {
+        /** @var Shopware\Models\Emotion\Repository $emotionRepository */
+        $emotionRepository = $this->get('models')->getRepository('Shopware\Models\Emotion\Emotion');
+
+        $builder = $emotionRepository->getCampaigns();
+        $campaigns = $builder->getQuery()->getArrayResult();
+
+        $landingPages = array(
+            'name' => 'SitemapLandingPages',
+            'link' => '',
+            'sub' => array()
+        );
+
+        foreach ($campaigns as $campaign) {
+            $landingPages['sub'][] = array_merge(
+                $campaign[0],
+                array('categoryId' => $campaign['categoryId']),
+                $this->getSitemapArray(
+                    $campaign[0]['id'],
+                    $campaign[0]['name'],
+                    'campaign',
+                    'emotionId',
+                    array('sCategory' => $campaign['categoryId'])
+                )
+            );
+        }
+
+        return $landingPages;
+    }
+
+    /**
+     * Helper function to create a sitemap readable array
+     * If $link is an array, it will be used as additional params for link assembling
+     * @param integer $id
+     * @param string $name
+     * @param string $viewport
+     * @param string $idParam
+     * @param string|array $link
+     * @return array
+     */
+    private function getSitemapArray($id, $name, $viewport, $idParam, $link = '')
+    {
+        if(is_array($link) || !strlen($link)){
+            $userParams = array(
+                'sViewport' => $viewport,
+                $idParam => $id
+            );
+
+            if(is_array($link))
+            {
+                $userParams = array_merge($userParams, $link);
+            }
+
+            $link = $this->Front()->Router()->assemble($userParams);
+        }
+
+        return array(
+            'id' => $id,
+            'name' => $name,
+            'link' => $link
+        );
     }
 }

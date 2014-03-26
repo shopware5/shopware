@@ -124,6 +124,13 @@ class Supplier extends ModelEntity
      */
     protected $metaKeywords;
 
+    /**
+     * @var \DateTime $changed
+     *
+     * @ORM\Column(name="changed", type="datetime", nullable=false)
+     */
+    private $changed = 'now';
+
    /**
     * INVERSE SIDE
     * Articles can be bound to a specific supplier
@@ -330,5 +337,31 @@ class Supplier extends ModelEntity
     public function getMetaKeywords()
     {
         return $this->metaKeywords;
+    }
+
+    /**
+     * Set changed
+     *
+     * @param \DateTime|string $changed
+     * @return Supplier
+     */
+    public function setChanged($changed = 'now')
+    {
+        if (!$changed instanceof \DateTime) {
+            $this->changed = new \DateTime($changed);
+        } else {
+            $this->changed = $changed;
+        }
+        return $this;
+    }
+
+    /**
+     * Get changed
+     *
+     * @return \DateTime
+     */
+    public function getChanged()
+    {
+        return $this->changed;
     }
 }

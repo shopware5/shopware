@@ -266,8 +266,9 @@ class Repository extends ModelRepository
     public function getCampaigns($offset=null, $limit=null)
     {
         $builder = $this->createQueryBuilder('emotions');
-        $builder->select(array('emotions','categories.id AS categoryId'))
+        $builder->select(array('emotions','categories.id AS categoryId', 'attribute'))
                 ->innerJoin('emotions.categories','categories')
+                ->leftJoin('emotions.attribute','attribute')
                 ->where('emotions.isLandingPage = 1 ')
                 ->andWhere('emotions.active = 1');
 

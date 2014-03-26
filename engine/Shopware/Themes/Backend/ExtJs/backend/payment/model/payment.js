@@ -69,6 +69,7 @@ Ext.define('Shopware.apps.Payment.model.Payment', {
         { name : 'position',       type: 'int' },
         { name : 'active',       type: 'boolean' },
         { name : 'esdActive',       type: 'boolean' },
+        { name : 'mobileActive',       type: 'boolean' },
         { name : 'embedIFrame',       type: 'string' },
         { name : 'hideProspect',       type: 'boolean' },
         { name : 'action',       type: 'string' },

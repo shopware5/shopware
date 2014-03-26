@@ -13,9 +13,5 @@
     {else}
     	{if $depth==1}<ul>{/if}<li>
         	<a href="{$categoryTree.link}" title="{$categoryTree.name}">{$categoryTree.name}</a></li>{if $depth==1}</ul>{/if}
-    	{/if}	
-    
-    {if $categoryTree.sub}
-    
-    {/if}
+    	{/if}
 {/foreach}
