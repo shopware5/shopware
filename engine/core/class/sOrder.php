@@ -701,7 +701,7 @@ class sOrder
         );
 
         if ($dispatchId) {
-            $variables["sDispatch"] = $this->sSYSTEM->sMODULES['sAdmin']->sGetDispatch($dispatchId);
+            $variables["sDispatch"] = $this->sSYSTEM->sMODULES['sAdmin']->sGetPremiumDispatch($dispatchId);
         }
         if ($this->bookingId) {
             $variables['sBookingID'] = $this->bookingId;

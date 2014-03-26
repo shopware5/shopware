@@ -6,6 +6,7 @@ In this document you will find a changelog of the important changes related to t
 * `sCore::sCustomRenderer()` removed
 * `sCore::sBuildLink()` second argument removed (dead code)
 * `sCore` no longer returns `null` when calling not implemented functions
+* `sAdmin::sGetDispatch()`, `sAdmin::sGetDispatches()` and `sAdmin::sGetShippingcosts()` were removed.
 
 ## 4.2.2
 
