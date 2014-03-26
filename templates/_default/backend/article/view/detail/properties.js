@@ -177,6 +177,8 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
             displayField: 'value',
             valueField: 'id',
             queryMode: 'remote',
+            minChars: 2,
+            queryDelay: 750,
             cls: Ext.baseCSSPrefix + 'article-properties-box-selection'
         });
     },
