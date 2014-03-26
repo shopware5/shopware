@@ -632,7 +632,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
                 $this->Response()
                     ->setHeader('Content-Type', 'application/octet-stream')
                     ->setHeader('Content-Disposition', 'attachment; filename="'.$download['file'].'"')
-                    ->setHeader('X-Accel-Redirect', $filePath);
+                    ->setHeader('X-Accel-Redirect', '/'.$file);
 
                 $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
