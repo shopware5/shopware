@@ -16,7 +16,7 @@ $(function() {
     StateManager.registerListener([{
         type: 'smartphone',
         enter: function() {
-            ('.sidebar-main').insertBefore($('.page-wrap'));
+            $('.sidebar-main').insertBefore($('.page-wrap'));
             $('*[data-offcanvas="true"]').offcanvasMenu();
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
             $('*[data-slide-panel="true"]').slidePanel();
