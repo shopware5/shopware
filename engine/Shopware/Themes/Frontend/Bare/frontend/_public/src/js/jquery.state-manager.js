@@ -56,10 +56,6 @@
             // Collection that corresponds to @{link listeners} and holds the current on / off state.
             listenersInit = [],
 
-            // Resize timer speed
-            tmrFastSpd = 100,
-            tmrSlowSpd = 500,
-
             // Browser specific font size, used for converting EM based values to it's corresponding pixel value.
             defaultFontSize = Number(getComputedStyle(document.body, null).fontSize.replace(/[^\d]/g, '')),
             resizeWidth = 0,
@@ -70,6 +66,17 @@
 
             // `matchMedia` small polyfill
             matchMedia = window.matchMedia || window.msMatchMedia,
+
+            // `requestAnimationFrame` polyfill, which supports the Page Visiblity API
+            requestAnimationFrame = (function() {
+                return window.requestAnimationFrame    ||
+                    window.webkitRequestAnimationFrame ||
+                    window.mozRequestAnimationFrame    ||
+                    function( callback ){
+                        window.setTimeout(callback, 1000 / 60);
+                    };
+            })(),
+
             ret;
 
         /**
@@ -106,19 +113,14 @@
          * @returns {Void}
          */
         var checkResize = function() {
-            var width = getWindowWidth(),
-                resizeTmrSpd;
+            var width = getWindowWidth();
 
             if(width !== resizeWidth) {
-                resizeTmrSpd = tmrFastSpd;
-
                 checkBreakpoints(width);
-            } else {
-                resizeTmrSpd = tmrSlowSpd;
             }
 
             resizeWidth = width;
-            window.setTimeout(checkResize, resizeTmrSpd);
+            requestAnimationFrame(checkResize);
         };
 
         /**
