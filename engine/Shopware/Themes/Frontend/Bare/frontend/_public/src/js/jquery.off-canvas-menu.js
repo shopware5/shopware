@@ -204,7 +204,7 @@
             .off('move.' + pluginName)
             .off('moveend.' + pluginName);
 
-        me.$el.off(clickEvt + '.' + pluginName).data('plugin_' + pluginName);
+        me.$el.off(clickEvt + '.' + pluginName).removeData('plugin_' + pluginName);
 
         return true;
     };
