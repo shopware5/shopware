@@ -27,9 +27,21 @@
  */
 class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 {
+    /**
+     * @var Enlight_Components_Session_Namespace
+     */
     protected $session;
+
+    /**
+     * @var sAdmin
+     */
     protected $admin;
+
+    /**
+     * @var sSystem
+     */
     protected $system;
+
     protected $post;
     protected $error;
 
