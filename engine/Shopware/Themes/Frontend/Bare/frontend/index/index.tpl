@@ -98,7 +98,10 @@
 
 {* Include jQuery and all other javascript files at the bottom of the page *}
 {block name="frontend_index_header_javascript_jquery_lib"}
-	<script src="{link file='frontend/_public/dist/all.js'}"></script>
+	{compileJavascript timestamp={timestamp} output="javascriptFiles"}
+	{foreach $javascriptFiles as $file}
+		<script src="{$file}"></script>
+	{/foreach}
 {/block}
 
 {block name="frontend_index_header_javascript"}
