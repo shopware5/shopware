@@ -19,7 +19,25 @@
 			{/if}
 
 			<ul id="categories_s">
-				<li><a href="{$categoryTree.link}" title="{$categoryTree.name}" class="active">{$categoryTree.name}</a></li>
+				<li>
+                    {if $categoryTree.name == 'SitemapStaticPages'}
+                        <a href="{$categoryTree.link}" title="{s name='SitemapStaticPages'}Statische Seiten{/s}" class="active">
+                            {s name='SitemapStaticPages'}Statische Seiten{/s}
+                        </a>
+                    {elseif $categoryTree.name == 'SitemapSupplierPages'}
+                        <a href="{$categoryTree.link}" title="{s name='SitemapSupplierPages'}Herstellerseiten{/s}" class="active">
+                            {s name='SitemapSupplierPages'}Herstellerseiten{/s}
+                        </a>
+                    {elseif $categoryTree.name == 'SitemapLandingPages'}
+                        <a href="{$categoryTree.link}" title="{s name='SitemapLandingPages'}Landingpages{/s}" class="active">
+                            {s name='SitemapLandingPages'}Landingpages{/s}
+                        </a>
+                    {else}
+                        <a href="{$categoryTree.link}" title="{$categoryTree.name}" class="active">
+                            {$categoryTree.name}
+                        </a>
+                    {/if}
+                </li>
 				{if $categoryTree.sub}
 					{include file="frontend/sitemap/recurse.tpl" sCategoryTree=$categoryTree.sub depth=1}
 				{/if}

@@ -151,6 +151,13 @@ class Site extends ModelEntity
     private $target;
 
     /**
+     * @var \DateTime $changed
+     *
+     * @ORM\Column(name="changed", type="datetime", nullable=false)
+     */
+    private $changed = 'now';
+
+    /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\OneToMany(targetEntity="Site", mappedBy="parent")
      * @ORM\OrderBy({"position" = "ASC"})
@@ -516,5 +523,31 @@ class Site extends ModelEntity
     public function getPageTitle()
     {
         return $this->pageTitle;
+    }
+
+    /**
+     * Set changed
+     *
+     * @param \DateTime|string $changed
+     * @return Site
+     */
+    public function setChanged($changed = 'now')
+    {
+        if (!$changed instanceof \DateTime) {
+            $this->changed = new \DateTime($changed);
+        } else {
+            $this->changed = $changed;
+        }
+        return $this;
+    }
+
+    /**
+     * Get changed
+     *
+     * @return \DateTime
+     */
+    public function getChanged()
+    {
+        return $this->changed;
     }
 }

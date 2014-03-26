@@ -95,7 +95,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             );
         }
 
-        if (!empty($this->Request()->Submit)) {
+        if ($this->Request()->isPost()) {
             $this->checkFields($this->_elements);
         }
 
@@ -174,6 +174,10 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     private function checkFields()
     {
         $this->_errors = $this->_validateInput($this->Request()->getPost(), $this->_elements);
+
+        if (empty($this->Request()->Submit)) {
+            return;
+        }
 
         if (!empty(Shopware()->Config()->CaptchaColor)) {
             $captcha = str_replace(' ', '', strtolower($this->Request()->sCaptcha));
