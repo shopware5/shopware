@@ -35,9 +35,14 @@ class Theme extends \Shopware\Components\Theme
      */
     protected $license = '__license__';
 
+	/**
+	 * Javascript files which will be used in the theme
+	 *
+	 * @var array
+	 */
 	protected $javascript = array(
-		'vendors/jquery/dist/jquery.js',
-		'vendors/handlebars/handlebars.js',
+		'vendors/jquery/dist/jquery.min.js',
+		'vendors/handlebars/handlebars.min.js',
 		'vendors/picturefill/picturefill.js',
 		'vendors/jquery.transit/jquery.transit.js',
 		'vendors/jquery.event.move/js/jquery.event.move.js',
