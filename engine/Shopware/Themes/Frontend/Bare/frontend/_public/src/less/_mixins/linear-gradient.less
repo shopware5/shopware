@@ -12,7 +12,6 @@
 	background-image: -ms-linear-gradient(top, @start, @end);
 	background-image: -o-linear-gradient(top, @start, @end);
 	background-image: linear-gradient(from bottom, @start, @end);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='@{start}', endColorstr='@{end}', GradientType=0 );
 }
 .linear-gradient-horizontal(@start, @end) {
 	background-image: -webkit-gradient(linear, left top, right top, from(@start), to(@end));
@@ -21,7 +20,6 @@
 	background-image: -ms-linear-gradient(left, @start, @end);
 	background-image: -o-linear-gradient(left, @start, @end);
 	background-image: linear-gradient(to right, @start, @end);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='@{start}', endColorstr='@{end}', GradientType=1 );
 }
 .linear-gradient-multi(@firstPos, @firstColor, @secondPos, @secondColor, @thirdPos, @thirdColor, @startFrom: top, @endTo: bottom) {
 	background-color: @firstColor;
@@ -31,7 +29,6 @@
 	background-image: -o-linear-gradient(@startFrom, @firstColor @firstPos,@secondColor @secondPos,@thirdColor @thirdPos);
 	background-image: -ms-linear-gradient(@startFrom, @firstColor @firstPos,@secondColor @secondPos,@thirdColor @thirdPos);
 	background-image: linear-gradient(to @endTo, @firstColor @firstPos,@secondColor @secondPos,@thirdColor @thirdPos);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='@{firstColor}', endColorstr='@{thirdColor}', GradientType=1 );
 }
 
 .primary-gradient() {
