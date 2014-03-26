@@ -3066,7 +3066,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers sAdmin::sGetPremiumShippingcosts
-     * @group wip
      */
     public function testsGetPremiumShippingcosts()
     {
