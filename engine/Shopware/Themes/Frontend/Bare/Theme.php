@@ -35,6 +35,27 @@ class Theme extends \Shopware\Components\Theme
      */
     protected $license = '__license__';
 
+	/**
+	 * Javascript files which will be used in the theme
+	 *
+	 * @var array
+	 */
+	protected $javascript = array(
+		'vendors/jquery/dist/jquery.min.js',
+		'vendors/handlebars/handlebars.min.js',
+		'vendors/picturefill/picturefill.js',
+		'vendors/jquery.transit/jquery.transit.js',
+		'vendors/jquery.event.move/js/jquery.event.move.js',
+		'vendors/jquery.event.swipe/js/jquery.event.swipe.js',
+
+		'src/js/jquery.state-manager.js',
+		'src/js/jquery.emotions.js',
+		'src/js/jquery.off-canvas-menu.js',
+		'src/js/jquery.search-field.js',
+		'src/js/jquery.slide-panel.js',
+		'src/js/jquery.shopware-responsive.js'
+	);
+
     /**
      * @param Form\Container\TabContainer $container
      */

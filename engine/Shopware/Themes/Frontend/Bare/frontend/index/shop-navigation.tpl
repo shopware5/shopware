@@ -28,7 +28,7 @@
 
 				{* Include of the search form *}
 				{block name='frontend_index_search_include'}
-					{include file="frontend/index/_includes/search.tpl"}
+					{include file="frontend/index/search.tpl"}
 				{/block}
 			</li>
 		{/block}

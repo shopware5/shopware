@@ -8,7 +8,7 @@
 {/block}
 
 {block name='frontend_index_header'}
-	{include file='frontend/index/_includes/header.tpl'}
+	{include file='frontend/index/header.tpl'}
 {/block}
 
 <body class="{if $Controller}is--ctl-{$Controller}{/if}">
@@ -27,18 +27,18 @@
 		{block name='frontend_index_navigation'}
 			<header class="header-main">
 				{* Include the top bar navigation *}
-				{include file="frontend/index/_includes/topbar-navigation.tpl"}
+				{include file="frontend/index/topbar-navigation.tpl"}
 
 				<div class="container">
 
 					{* Logo container *}
 					{block name='frontend_index_logo_container'}
-						{include file="frontend/index/_includes/logo-container.tpl"}
+						{include file="frontend/index/logo-container.tpl"}
 					{/block}
 
 					{* Shop navigation *}
 					{block name='frontend_index_shop_navigation'}
-						{include file="frontend/index/_includes/shop-navigation.tpl"}
+						{include file="frontend/index/shop-navigation.tpl"}
 					{/block}
 				</div>
 			</header>
@@ -46,7 +46,7 @@
 			{* Maincategories navigation top *}
 			{block name='frontend_index_navigation_categories_top'}
 				<nav class="navigation-main">
-					{include file='frontend/index/_includes/main-navigation.tpl'}
+					{include file='frontend/index/main-navigation.tpl'}
 				</nav>
 			{/block}
 		{/block}
@@ -56,7 +56,7 @@
 			{* Breadcrumb *}
 			{block name='frontend_index_breadcrumb'}
 				<nav class="content--breadcrumb block">
-					{include file='frontend/index/_includes/breadcrumb.tpl'}
+					{include file='frontend/index/breadcrumb.tpl'}
 				</nav>
 			{/block}
 
@@ -65,7 +65,7 @@
 
 			{* Sidebar left *}
 			{block name='frontend_index_content_left'}
-				{include file='frontend/index/_includes/sidebar.tpl'}
+				{include file='frontend/index/sidebar.tpl'}
 			{/block}
 
 			{* Main content *}
@@ -87,7 +87,7 @@
 			<footer class="footer-main">
 				<div class="container">
 					{block name="frontend_index_footer_container"}
-						{include file='frontend/index/_includes/footer.tpl'}
+						{include file='frontend/index/footer.tpl'}
 					{/block}
 				</div>
 			</footer>
@@ -98,7 +98,10 @@
 
 {* Include jQuery and all other javascript files at the bottom of the page *}
 {block name="frontend_index_header_javascript_jquery_lib"}
-	<script src="{link file='frontend/_public/dist/all.js'}"></script>
+	{compileJavascript timestamp={timestamp} output="javascriptFiles"}
+	{foreach $javascriptFiles as $file}
+		<script src="{$file}"></script>
+	{/foreach}
 {/block}
 
 {block name="frontend_index_header_javascript"}

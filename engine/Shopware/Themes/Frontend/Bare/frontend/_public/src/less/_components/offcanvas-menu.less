@@ -1,7 +1,8 @@
 /** Main navigation of the storefront */
 .sidebar-main {
+	.unitze-variable(300, 16);
 	.unitize-width(300, 16);
-	.translate(-300px, 0);
+	.translate(~"-@{emValue}rem", 0);
 	position: absolute;
 	left: 0; top: 0;
 	height: 100%;
@@ -41,13 +42,15 @@
         .translate(0, 0);
     }
 	.page-wrap {
-		.translate(300px, 0);
+		.unitze-variable(300, 16);
+		.translate(~"@{emValue}rem", 0);
 	}
 }
 // State - Menu right open
 .js--menu-right--open {
 	.page-wrap {
-		.translate(-300px, 0, 0);
+		.unitze-variable(300, 16);
+		.translate(~"-@{emValue}rem", 0);
 	}
 }
 

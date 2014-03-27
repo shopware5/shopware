@@ -21,12 +21,13 @@
 /**
  * @param $params
  * @param $template
- * @return string
+ * @return void
  * @throws Exception
  */
 function smarty_function_compileJavascript($params, $template)
 {
     $time = $params['timestamp'];
+	$output = $params['output'];
 
     /**@var $pathResolver \Shopware\Components\Theme\PathResolver*/
     $pathResolver = Shopware()->Container()->get('theme_path_resolver');
@@ -57,7 +58,8 @@ function smarty_function_compileJavascript($params, $template)
     }
 
     if (!$compile) {
-        return $urls;
+        // see: http://stackoverflow.com/a/9473886
+        $template->assign($output, $urls);
     }
 
     /**@var $compiler \Shopware\Components\Theme\Compiler*/
@@ -65,5 +67,5 @@ function smarty_function_compileJavascript($params, $template)
 
     $compiler->compileJavascript($time, $shop->getTemplate(), $shop);
 
-    return $urls;
+    $template->assign($output, $urls);
 }

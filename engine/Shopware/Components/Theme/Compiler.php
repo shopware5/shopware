@@ -490,7 +490,7 @@ class Compiler
         $fileName = $this->pathResolver->getJsFilePaths($shop, $timestamp);
         $fileName = $fileName['default'];
 
-        $output = new \SplFileObject($fileName, "w+");
+        $output = new \SplFileObject($fileName, "a+");
         $output->fwrite('');
 
         if ($collection->count() <= 0) {
