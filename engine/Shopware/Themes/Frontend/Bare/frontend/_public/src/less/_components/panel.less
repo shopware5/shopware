@@ -1,0 +1,272 @@
+/* Basic panel component for boxes and bordered containers.
+
+The panel can be used with different content structures.
+See the documentation of the child elements for additional information.
+
+Example:
+```
+<div class="panel">
+    <h3 class="panel--title">Panel title</h3>
+    <div class="panel--body">
+        Panel content ...
+    </div>
+</div>
+```
+*/
+.panel {
+  border: 1px solid @borderColor;
+
+  &.shadow {
+    .box-shadow(0 1px 3px 0 rgba(0, 0, 0, 0.1));
+  }
+}
+
+/* A header box for a panel.
+
+Example:
+```
+<div class="panel--header primary">Panel header</div>
+```
+*/
+.panel--header {
+  display: block;
+  .unitize-padding(10, 10);
+  .unitize(14, 16, font-size);
+  font-weight: bold;
+  color: @primaryTextColor;
+  background: @primaryBackgroundColor;
+  border-bottom: 1px solid @borderColor;
+
+  &.secondary {
+    color: @lightTextColor;
+    background: #fff;
+  }
+
+  &.primary {
+    color: @primaryColor;
+    background: #fff;
+  }
+}
+
+/* A title heading for a panel.
+
+Example:
+```
+<h3 class="panel--title primary">Panel title</h3>
+```
+*/
+.panel--title {
+  display: block;
+  .unitize-padding(20, 0, 10, 0);
+  .unitize-margin(0, 20);
+  .unitize(16, 16, font-size);
+  font-weight: bold;
+  color: @darkTextColor;
+
+  &.underline {
+    border-bottom: 1px solid @borderColor;
+  }
+
+  &.secondary {
+    color: @primaryTextColor;
+  }
+
+  &.primary {
+    color: @primaryColor;
+  }
+}
+
+/* The content body for a panel.
+
+Example:
+```
+<div class="panel--body wide">Panel content ...</div>
+```
+*/
+.panel--body {
+  display: block;
+  position: relative;
+  .unitize-padding(10, 10);
+  .unitize(14, 16, font-size);
+  .unitize(24, 16, line-height);
+
+  &.slim {
+    .unitize-padding(5, 5);
+  }
+
+  &.wide {
+    .unitize-padding(20, 20);
+  }
+
+  &.flat {
+    background: @primaryBackgroundColor;
+  }
+
+  &.embossed {
+    .box-shadow(inset 0 0 3px 0 rgba(0, 0, 0, 0.2));
+    background: @primaryBackgroundColor;
+  }
+}
+
+/* A table in a panel.
+
+Example:
+```
+<div class="panel">
+    <table class="panel--table">
+        <tr class="primary">
+            <th></th>
+        </tr>
+        <tr class="bordered">
+            <td></td>
+        </tr>
+    </table>
+</div>
+```
+*/
+.panel--table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  empty-cells: show;
+
+  &.bordered {
+    border: 1px solid @borderColor;
+  }
+
+  th, td {
+    .unitize-padding(10, 10);
+    .unitize(14, 16, font-size);
+    .unitize(24, 16, line-height);
+    border-width: 0 0 1px 0;
+    border-style: solid;
+    border-color: @borderColor;
+  }
+
+  th {
+    font-weight: bold;
+    text-align: left;
+    color: #38434e;
+    background: @primaryBackgroundColor;
+  }
+
+  tr.secondary {
+    th {
+      background: #fff;
+    }
+    td {
+      background: @primaryBackgroundColor;
+    }
+  }
+
+  tr.primary {
+    th, td {
+      color: @primaryColor;
+      background: #fff;
+    }
+  }
+
+  tr.bordered {
+    th, td {
+      border-width: 0 1px 1px 0;
+    }
+    th:last-child,
+    td:last-child {
+      border-width: 0 0 1px 0;
+    }
+  }
+
+  tr:last-child {
+    td {
+      border-bottom: 0 none;
+    }
+  }
+}
+
+/* A list in a panel.
+
+Example:
+```
+<div class="panel">
+    <ul class="panel--list">
+        <li></li>
+        <li class="secondary"></li>
+        <li class="primary"></li>
+    </ul>
+</div>
+```
+*/
+.panel--list {
+  list-style: none;
+
+  &.bordered {
+    border: 1px solid @borderColor;
+  }
+
+  li {
+    .unitize-padding(10, 10);
+    .unitize(14, 16, font-size);
+    .unitize(24, 16, line-height);
+    border-bottom: 1px solid @borderColor;
+
+    &:last-child {
+      border-bottom: 0 none;
+    }
+
+    &.secondary {
+      background: @primaryBackgroundColor;
+    }
+
+    &.primary {
+      color: @primaryColor;
+    }
+  }
+}
+
+/* Arrow buttons for panels.
+
+Example:
+```
+<div class="panel--body">
+    <a href="" class="panel--arrow left"></a>
+    <a href="" class="panel--arrow right"></a>
+</div>
+```
+*/
+.panel--arrow {
+  display: block;
+  position: absolute;
+  top: 50%;
+  z-index: 90;
+  border: 1px solid @borderColor;
+  font-family: 'shopware';
+  text-align: center;
+  color: @primaryTextColor;
+  .unitize-width(22);
+  .unitize-height(30);
+  .unitize(-15, 16, margin-top);
+  .unitize(28, 16, line-height);
+  .unitize(12, 16, font-size);
+  .linear-gradient(#ffffff, #edeff2);
+  .border-radius(3px);
+
+  &.left {
+    .unitize(10, 16, left);
+
+    &:before {
+      content: "\e611";
+    }
+  }
+
+  &.right {
+    .unitize(10, 16, right);
+
+    &:before {
+      content: "\e60f";
+    }
+  }
+
+  &:hover {
+    color: @primaryColor;
+  }
+}
