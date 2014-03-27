@@ -28,7 +28,11 @@
  */
 class sBasket
 {
+    /**
+     * @var sSystem
+     */
     public $sSYSTEM;
+
     public $sBASKET;
 
     /**
