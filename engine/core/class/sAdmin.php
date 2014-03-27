@@ -36,6 +36,23 @@ class sAdmin
     public $sSYSTEM;
 
     /**
+     * Database connection which used for each database operation in this class.
+     * Injected over the class constructor
+     *
+     * @var Enlight_Components_Db_Adapter_Pdo_Mysql
+     */
+    private $db;
+
+    /**
+     * Shopware configuration object which used for
+     * each config access in this class.
+     * Injected over the class constructor
+     *
+     * @var Shopware_Components_Config
+     */
+    private $config;
+
+    /**
      * @var Shopware_Components_Snippet_Manager
      */
     public $snippetObject;
@@ -52,8 +69,11 @@ class sAdmin
      */
     public $subshopId;
 
-    public function __construct()
+    public function __construct($db = null, $config = null)
     {
+        $this->db = $db ? : Shopware()->Db();
+        $this->config = $config ? : Shopware()->Config();
+
         $this->snippetObject = Shopware()->Snippets()->getNamespace('frontend/account/internalMessages');
         $shop = Shopware()->Shop()->getMain() !== null ? Shopware()->Shop()->getMain() : Shopware()->Shop();
         $this->scopedRegistration = $shop->getCustomerScope();
@@ -77,9 +97,10 @@ class sAdmin
         unset($_SESSION);
         unset($this->sSYSTEM->sUSERGROUPDATA);
 
-        $this->sSYSTEM->sUSERGROUPDATA = $this->sSYSTEM->sDB_CONNECTION->GetRow("
-        SELECT * FROM s_core_customergroups WHERE `groupkey` = 'EK'
-        ");
+        $this->sSYSTEM->sUSERGROUPDATA = $this->db->fetchRow(
+            "SELECT * FROM s_core_customergroups WHERE `groupkey` = 'EK'"
+        );
+        $this->sSYSTEM->sUSERGROUPDATA = $this->sSYSTEM->sUSERGROUPDATA ? : array();
         session_destroy();
         $this->sSYSTEM->_SESSION["sUserGroup"] = "EK";
         $this->sSYSTEM->_SESSION["sUserGroupData"] = $this->sSYSTEM->sUSERGROUPDATA;
@@ -116,7 +137,7 @@ class sAdmin
 
         $messages = array();
         $ustid = preg_replace('#[^0-9A-Z\+\*\.]#', '', strtoupper($this->sSYSTEM->_POST['ustid']));
-        $country = $this->sSYSTEM->sDB_CONNECTION->GetOne(
+        $country = $this->db->fetchOne(
             'SELECT countryiso FROM s_core_countries WHERE id=?',
             array($this->sSYSTEM->_POST['country'])
         );
@@ -294,7 +315,7 @@ class sAdmin
         $sql = "
             SELECT * FROM s_core_paymentmeans WHERE id = ?
         ";
-        $data = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql, array($id));
+        $data = $this->db->fetchRow($sql, array($id)) ? : array();
 
         if ($this->sSYSTEM->sMODULES['sBasket']->sCheckForESD()) {
             $sEsd = true;
@@ -350,7 +371,7 @@ class sAdmin
 
                 AND id = ?
             ";
-            $active = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql, array(
+            $active = $this->db->fetchOne($sql, array(
                 $this->sSYSTEM->sSubShop['id'],
                 $user['additional']['countryShipping']['id'],
                 $id
@@ -361,15 +382,12 @@ class sAdmin
         }
 
         if ($resetPayment && $user["additional"]["user"]["id"]) {
-            $updateAccount = $this->sSYSTEM->sDB_CONNECTION->Execute(
+            $updateAccount = $this->db->query(
                 "UPDATE s_user SET paymentID = ? WHERE id = ?",
                 array($resetPayment, $user["additional"]["user"]["id"])
             );
-            $sql = "
-            SELECT * FROM s_core_paymentmeans
-            WHERE id=?
-            ";
-            $data = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql,array($resetPayment));
+            $sql = "SELECT * FROM s_core_paymentmeans WHERE id = ?";
+            $data = $this->db->fetchRow($sql, array($resetPayment)) ? : array();
         }
 
         // Get Translation
@@ -400,7 +418,7 @@ class sAdmin
         $countryID = (int) $user['additional']['countryShipping']['id'];
         $subshopID = (int) $this->sSYSTEM->sSubShop['id'];
         if (empty($countryID)) {
-            $countryID = $this->sSYSTEM->sDB_CONNECTION->GetOne("
+            $countryID = $this->db->fetchOne("
             SELECT id FROM s_core_countries ORDER BY position ASC LIMIT 1
             ");
         }
@@ -423,11 +441,11 @@ class sAdmin
         ";
 
 
-        $getPaymentMeans = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
+        $getPaymentMeans = $this->db->fetchAll($sql);
 
         if ($getPaymentMeans===false) {
             $sql = "SELECT * FROM s_core_paymentmeans ORDER BY position, name";
-            $getPaymentMeans = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
+            $getPaymentMeans = $this->db->fetchAll($sql);
         }
 
         foreach ($getPaymentMeans as $payKey => $payValue) {
@@ -461,12 +479,17 @@ class sAdmin
         //if no payment is left use always the fallback payment no matter if it has any restrictions too
         if (!count($getPaymentMeans)) {
             $sql = "SELECT * FROM s_core_paymentmeans WHERE id =?";
-            $fallBackPayment = Shopware()->Db()->fetchRow($sql, array(Shopware()->Config()->get('paymentdefault')));
+            $fallBackPayment = $this->db->fetchRow($sql, array(Shopware()->Config()->get('paymentdefault')));
+            $fallBackPayment = $fallBackPayment ? : array();
 
             $getPaymentMeans[] = $this->sGetPaymentTranslation($fallBackPayment);
         }
 
-        $getPaymentMeans = Enlight()->Events()->filter('Shopware_Modules_Admin_GetPaymentMeans_DataFilter', $getPaymentMeans, array('subject' => $this));
+        $getPaymentMeans = Enlight()->Events()->filter(
+            'Shopware_Modules_Admin_GetPaymentMeans_DataFilter',
+            $getPaymentMeans,
+            array('subject' => $this)
+        );
 
         return $getPaymentMeans;
 
@@ -606,10 +629,10 @@ class sAdmin
             )
         );
 
-        $result = Shopware()->Db()->update('s_user_billingaddress', $data, $where);
+        $result = $this->db->update('s_user_billingaddress', $data, $where);
 
-        if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg()) {
-            $this->sSYSTEM->E_CORE_WARNING("sUpdateBilling #01","Could not save data (billing-adress)".$this->sSYSTEM->sDB_CONNECTION->ErrorMsg());
+        if ($this->db->getErrorMessage()) {
+            $this->sSYSTEM->E_CORE_WARNING("sUpdateBilling #01","Could not save data (billing-adress)".$this->db->getErrorMessage());
             return false;
         }
 
@@ -624,7 +647,7 @@ class sAdmin
         );
 
         $sql = "SELECT id FROM s_user_billingaddress WHERE userID = " . (int) $this->sSYSTEM->_SESSION['sUserId'];
-        $billingId = Shopware()->Db()->fetchOne($sql);
+        $billingId = $this->db->fetchOne($sql);
         $where = array(" billingID = " . $billingId);
 
         list($data, $where) = Enlight()->Events()->filter(
@@ -637,7 +660,7 @@ class sAdmin
             )
         );
 
-        Shopware()->Db()->update('s_user_billingaddress_attributes', $data, $where);
+        $this->db->update('s_user_billingaddress_attributes', $data, $where);
 
         return true;
     }
@@ -654,13 +677,13 @@ class sAdmin
     {
         if (!$status) {
             // Delete
-            $changeLetterState = $this->sSYSTEM->sDB_CONNECTION->Execute(
+            $changeLetterState = $this->db->query(
                 "DELETE FROM s_campaigns_mailaddresses WHERE email = ?",
                 array($email)
             );
         } else {
             // Check if mail address receives already our newsletter
-            if ($this->sSYSTEM->sDB_CONNECTION->getOne(
+            if ($this->db->fetchOne(
                 "SELECT id FROM s_campaigns_mailaddresses WHERE email = ?",
                 array($email))
             ) {
@@ -693,12 +716,12 @@ class sAdmin
             }
             // Insert
             if (!empty($customer)) {
-                $changeLetterState = $this->sSYSTEM->sDB_CONNECTION->Execute("
+                $changeLetterState = $this->db->query("
                 INSERT INTO s_campaigns_mailaddresses (customer, email)
                 VALUES (?,?)
                 ", array(1, $email));
             } else {
-                $changeLetterState = $this->sSYSTEM->sDB_CONNECTION->Execute("
+                $changeLetterState = $this->db->query("
                 INSERT INTO s_campaigns_mailaddresses (groupID, email)
                 VALUES (?,?)
                 ", array($groupID, $email));
@@ -767,7 +790,7 @@ class sAdmin
             ORDER BY MAX(a.id) DESC
         ';
 
-        $addresses = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql, array($this->sSYSTEM->_SESSION['sUserId']));
+        $addresses = $this->db->fetchAll($sql, array($this->sSYSTEM->_SESSION['sUserId']));
 
         foreach ($addresses as $address) {
             if (!empty($request_hash) && $address['hash'] == $request_hash) {
@@ -801,7 +824,7 @@ class sAdmin
         }
 
         $sql = 'SELECT id FROM s_user_shippingaddress WHERE userID = ?';
-        $shippingID = Shopware()->Db()->fetchOne($sql, array($this->sSYSTEM->_SESSION['sUserId']));
+        $shippingID = $this->db->fetchOne($sql, array($this->sSYSTEM->_SESSION['sUserId']));
 
         $fields = array(
             'company',
@@ -836,9 +859,9 @@ class sAdmin
 
         if (empty($shippingID)) {
             $data["userID"] = (int) $this->sSYSTEM->_SESSION['sUserId'];
-            $result = Shopware()->Db()->insert('s_user_shippingaddress', $data);
+            $result = $this->db->insert('s_user_shippingaddress', $data);
 
-            $shippingID = Shopware()->Db()->lastInsertId('s_user_shippingaddress');
+            $shippingID = $this->db->lastInsertId('s_user_shippingaddress');
             $attributeData = array(
                 'shippingID' => $shippingID,
                 'text1' => $userObject['text1'],
@@ -857,10 +880,10 @@ class sAdmin
                     "user" => $userObject
                 )
             );
-            Shopware()->Db()->insert('s_user_shippingaddress_attributes', $attributeData);
+            $this->db->insert('s_user_shippingaddress_attributes', $attributeData);
         } else {
             $where = array('id='.(int) $shippingID);
-            $result = Shopware()->Db()->update('s_user_shippingaddress', $data, $where);
+            $result = $this->db->update('s_user_shippingaddress', $data, $where);
 
             $attributeData = array(
                 'text1' => $userObject['text1'],
@@ -880,11 +903,11 @@ class sAdmin
                     "user" => $userObject
                 )
             );
-            Shopware()->Db()->update('s_user_shippingaddress_attributes', $attributeData, $where);
+            $this->db->update('s_user_shippingaddress_attributes', $attributeData, $where);
         }
 
-        if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg()) {
-            $this->sSYSTEM->E_CORE_WARNING("sUpdateShipping #01","Could not save data (billing-adress)".$this->sSYSTEM->sDB_CONNECTION->ErrorMsg());
+        if ($this->db->getErrorMessage()) {
+            $this->sSYSTEM->E_CORE_WARNING("sUpdateShipping #01","Could not save data (billing-adress)".$this->db->getErrorMessage());
             return false;
         }
         return true;
@@ -913,13 +936,13 @@ class sAdmin
             )
         );
 
-        $saveUserData = $this->sSYSTEM->sDB_CONNECTION->Execute(
+        $saveUserData = $this->db->query(
             $sqlPayment,
             array($this->sSYSTEM->_POST["sPayment"], $this->sSYSTEM->_SESSION["sUserId"])
         );
 
-        if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg()) {
-            $this->sSYSTEM->E_CORE_WARNING("sUpdatePayment #01","Could not save data (payment)".$this->sSYSTEM->sDB_CONNECTION->ErrorMsg());
+        if ($this->db->getErrorMessage()) {
+            $this->sSYSTEM->E_CORE_WARNING("sUpdatePayment #01","Could not save data (payment)".$this->db->getErrorMessage());
             return false;
         }
         return true;
@@ -960,7 +983,7 @@ class sAdmin
                 )
             );
 
-            $saveUserData = $this->sSYSTEM->sDB_CONNECTION->Execute(
+            $saveUserData = $this->db->query(
                 $sqlAccount,
                 array($email, $password, $encoderName, $this->sSYSTEM->_SESSION["sUserId"])
             );
@@ -979,14 +1002,14 @@ class sAdmin
                 )
             );
 
-            $saveUserData = $this->sSYSTEM->sDB_CONNECTION->Execute(
+            $saveUserData = $this->db->query(
                 $sqlAccount,
                 array($email, $this->sSYSTEM->_SESSION["sUserId"])
             );
         }
 
-        if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg()) {
-            $this->sSYSTEM->E_CORE_WARNING("sUpdateAccount #01","Could not save data (account)".$this->sSYSTEM->sDB_CONNECTION->ErrorMsg());
+        if ($this->db->getErrorMessage()) {
+            $this->sSYSTEM->E_CORE_WARNING("sUpdateAccount #01","Could not save data (account)".$this->db->getErrorMessage());
             return false;
         }
         return true;
@@ -1235,11 +1258,11 @@ class sAdmin
                 $addScopeSql = "
                   AND subshopID = ".$this->subshopId;
             }
-            $checkIfMailExists = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+            $checkIfMailExists = $this->db->fetchRow(
                 "SELECT id FROM s_user WHERE email = ? AND accountmode != 1 $addScopeSql",
                 array($postData["email"])
             );
-            if (!empty($checkIfMailExists) && !$postData["skipLogin"]) {
+            if ($checkIfMailExists && !$postData["skipLogin"]) {
                 $sErrorFlag["email"] = true;
                 $sErrorMessages[] = $this->snippetObject->get('MailFailureAlreadyRegistered', 'This mail address is already registered');
             }
@@ -1356,7 +1379,7 @@ class sAdmin
             $sql = "SELECT id, customergroup, password, encoder FROM s_user WHERE email=? AND active=1 AND accountmode!=1 AND (lockeduntil < now() OR lockeduntil IS NULL) " . $addScopeSql;
         }
 
-        $getUser = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql, array($email));
+        $getUser = $this->db->fetchRow($sql, array($email)) ? : array();
 
         if (!count($getUser)) {
             $isValidLogin = false;
@@ -1382,7 +1405,7 @@ class sAdmin
         if ($isValidLogin) {
             $this->regenerateSessionId();
 
-            $this->sSYSTEM->sDB_CONNECTION->Execute(
+            $this->db->query(
                 "UPDATE s_user SET lastlogin=NOW(),failedlogins = 0, lockeduntil = NULL, sessionID=? WHERE id=?",
                 array($this->sSYSTEM->sSESSION_ID, $getUser["id"])
             );
@@ -1409,7 +1432,7 @@ class sAdmin
             if (!empty($newHash) && $newHash !== $hash) {
                 $hash = $newHash;
                 $userId = (int) $getUser['id'];
-                Shopware()->Db()->update(
+                $this->db->update(
                     's_user',
                     array(
                         'password' => $hash,
@@ -1427,14 +1450,14 @@ class sAdmin
         } else {
             // Check if account is disabled
             $sql = "SELECT id FROM s_user WHERE email=? AND active=0 " . $addScopeSql;
-            $getUser = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql, array($email));
+            $getUser = $this->db->fetchOne($sql, array($email));
             if ($getUser) {
                 $sErrorMessages[] = $this->snippetObject->get(
                     'LoginFailureActive',
                     'Your account is disabled. Please contact us.'
                 );
             } else {
-                $getLockedUntilTime = Shopware()->Db()->fetchOne(
+                $getLockedUntilTime = $this->db->fetchOne(
                     "SELECT 1 FROM s_user WHERE email = ? AND lockeduntil > NOW()",
                     array($email)
                 );
@@ -1459,7 +1482,7 @@ class sAdmin
                             NULL
                         )
                     WHERE email = ? " . $addScopeSql;
-                Shopware()->Db()->query($sql, array($email));
+                $this->db->query($sql, array($email));
             }
 
             Enlight()->Events()->notify(
@@ -1557,7 +1580,7 @@ class sAdmin
         $timeOut = $this->sSYSTEM->sCONFIG['sUSERTIMEOUT'];
         $timeOut = !empty($timeOut) ? $timeOut : 7200;
 
-        $getUser = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+        $getUser = $this->db->fetchRow(
             $sql,
             array(
                 $this->sSYSTEM->_SESSION["sUserPassword"],
@@ -1566,6 +1589,7 @@ class sAdmin
                 $timeOut
             )
         );
+        $getUser = $getUser ? : array();
 
         $getUser = Enlight()->Events()->filter(
             'Shopware_Modules_Admin_CheckUser_FilterGetUser',
@@ -1574,10 +1598,11 @@ class sAdmin
         );
 
         if (!empty($getUser["id"])) {
-            $this->sSYSTEM->sUSERGROUPDATA = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+            $this->sSYSTEM->sUSERGROUPDATA = $this->db->fetchRow(
                 "SELECT * FROM s_core_customergroups WHERE groupkey = ?",
                 array($getUser["customergroup"])
             );
+            $this->sSYSTEM->sUSERGROUPDATA = $this->sSYSTEM->sUSERGROUPDATA ? : array();
 
             if ($this->sSYSTEM->sUSERGROUPDATA["mode"]) {
                 $this->sSYSTEM->sUSERGROUP = "EK";
@@ -1589,7 +1614,7 @@ class sAdmin
             $this->sSYSTEM->_SESSION["sUserGroup"] = $this->sSYSTEM->sUSERGROUP;
             $this->sSYSTEM->_SESSION["sUserGroupData"] = $this->sSYSTEM->sUSERGROUPDATA;
 
-            $updateTime = $this->sSYSTEM->sDB_CONNECTION->Execute(
+            $updateTime = $this->db->query(
                 "UPDATE s_user SET lastlogin=NOW(), sessionID = ? WHERE id = ?",
                 array($this->sSYSTEM->sSESSION_ID, $getUser["id"])
             );
@@ -1631,11 +1656,11 @@ class sAdmin
         ";
 
         $param = array($this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"]);
-        $getTranslation = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow(
-            $this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],
+        $getTranslation = $this->db->fetchRow(
             $sql,
             $param
         );
+        $getTranslation = $getTranslation ? : array();
 
         if ($getTranslation["objectdata"]) {
             $object = unserialize($getTranslation["objectdata"]);
@@ -1678,11 +1703,11 @@ class sAdmin
             WHERE objecttype='config_dispatch' AND objectlanguage = ?
         ";
         $params = array($this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"]);
-        $getTranslation = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow(
-            $this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],
+        $getTranslation = $this->db->fetchRow(
             $sql,
             $params
         );
+        $getTranslation = $getTranslation ? : array();
 
         if ($getTranslation["objectdata"]) {
             $object = unserialize($getTranslation["objectdata"]);
@@ -1725,11 +1750,11 @@ class sAdmin
         ";
         $params = array($this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"]);
 
-        $getTranslation = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow(
-            $this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],
+        $getTranslation = $this->db->fetchRow(
             $sql,
             $params
         );
+        $getTranslation = $getTranslation ? : array();
 
         if (!empty($getTranslation["objectdata"])) {
             $object = unserialize($getTranslation["objectdata"]);
@@ -1764,7 +1789,6 @@ class sAdmin
         }
         $language = Shopware()->Shop()->get('isocode');
         $fallback = Shopware()->Shop()->get('fallback');
-        $cacheTime = Shopware()->Config()->get('cacheCountries');
 
         $sql = "
             SELECT objectdata FROM s_core_translations
@@ -1772,8 +1796,8 @@ class sAdmin
             AND objectkey = 1
             AND objectlanguage = ?
         ";
-        $translation = $this->sSYSTEM->sDB_CONNECTION->CacheGetOne(
-            $cacheTime, $sql, array($language)
+        $translation = $this->db->fetchOne(
+            $sql, array($language)
         );
 
         if (!empty($translation)) {
@@ -1789,8 +1813,8 @@ class sAdmin
                 AND objectkey = 1
                 AND objectlanguage = ?
             ";
-            $translationFallback = $this->sSYSTEM->sDB_CONNECTION->CacheGetOne(
-                $cacheTime, $sql, array($fallback)
+            $translationFallback = $this->db->fetchOne(
+                $sql, array($fallback)
             );
             if (!empty($translationFallback)) {
                 $translationFallback = unserialize($translationFallback);
@@ -1807,8 +1831,7 @@ class sAdmin
      */
     public function sGetCountryList()
     {
-        $countryList = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll(
-            $this->sSYSTEM->sCONFIG['sCACHECOUNTRIES'],
+        $countryList = $this->db->fetchAll(
             "SELECT * FROM s_core_countries WHERE active = 1 ORDER BY position, countryname ASC"
         );
 
@@ -1827,7 +1850,7 @@ class sAdmin
             $countryList[$key]["states"] = array();
             if (!empty($country["display_state_in_registration"])) {
                 // Get country states
-                $states = Shopware()->Db()->fetchAssoc("
+                $states = $this->db->fetchAssoc("
                     SELECT * FROM s_core_countries_states
                     WHERE countryID = ? AND active = 1
                     ORDER BY position, name ASC
@@ -1889,7 +1912,7 @@ class sAdmin
 
         if (!empty($this->sSYSTEM->_SESSION['sPartner'])) {
             $sql = 'SELECT id FROM s_emarketing_partner WHERE idcode = ?';
-            $partner = (int) $this->sSYSTEM->sDB_CONNECTION->GetOne(
+            $partner = (int) $this->db->fetchOne(
                 $sql,
                 array($this->sSYSTEM->_SESSION['sPartner'])
             );
@@ -1925,13 +1948,13 @@ class sAdmin
             array('subject' => $this)
         );
 
-        $saveUserData = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, $data);
+        $saveUserData = $this->db->query($sql, $data);
         Enlight()->Events()->notify(
             'Shopware_Modules_Admin_SaveRegisterMainData_Return',
             array('subject' => $this,'insertObject' => $saveUserData)
         );
 
-        $userId = $this->sSYSTEM->sDB_CONNECTION->Insert_ID();
+        $userId = $this->db->lastInsertId();
 
         $sql = "
             INSERT INTO s_user_attributes (userID) VALUES (?)
@@ -1943,7 +1966,7 @@ class sAdmin
             array($sql, $data),
             array('subject' => $this)
         );
-        $saveAttributeData = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, $data);
+        $saveAttributeData = $this->db->query($sql, $data);
 
         Enlight()->Events()->notify(
             'Shopware_Modules_Admin_SaveRegisterMainDataAttributes_Return',
@@ -1962,13 +1985,13 @@ class sAdmin
     public function sSaveRegisterNewsletter($userObject)
     {
         // Check for duplicates
-        $checkDuplicate = $this->sSYSTEM->sDB_CONNECTION->GetRow("
+        $checkDuplicate = $this->db->fetchRow("
             SELECT id FROM s_campaigns_mailaddresses WHERE email = ?",
             array($userObject["auth"]["email"])
         );
 
         if (empty($checkDuplicate["id"])) {
-            $saveNewsletter = $this->sSYSTEM->sDB_CONNECTION->Execute(
+            $this->db->query(
                 "INSERT INTO s_campaigns_mailaddresses (customer, groupID, email) VALUES (1, 0, ?)",
                 array($userObject["auth"]["email"])
             );
@@ -2040,14 +2063,14 @@ class sAdmin
             array('subject' => $this)
         );
 
-        $saveUserData = $this->sSYSTEM->sDB_CONNECTION->Execute($sqlBilling,$data);
+        $saveUserData = $this->db->query($sqlBilling,$data);
         Enlight()->Events()->notify(
             'Shopware_Modules_Admin_SaveRegisterBilling_Return',
             array('subject' => $this, 'insertObject' => $saveUserData)
         );
 
         //new attribute tables.
-        $billingID = $this->sSYSTEM->sDB_CONNECTION->Insert_ID();
+        $billingID = $this->db->lastInsertId();
         $attributeData = array(
             $billingID,
             empty($userObject["text1"]) ? "" : $userObject["text1"],
@@ -2067,7 +2090,7 @@ class sAdmin
             array($sqlAttribute,$attributeData),
             array('subject' => $this)
         );
-        $saveAttributeData = $this->sSYSTEM->sDB_CONNECTION->Execute($sqlAttribute,$attributeData);
+        $saveAttributeData = $this->db->query($sqlAttribute,$attributeData);
         Enlight()->Events()->notify(
             'Shopware_Modules_Admin_SaveRegisterBillingAttributes_Return',
             array('subject' => $this,'insertObject' => $saveAttributeData)
@@ -2113,14 +2136,14 @@ class sAdmin
             $userObject["shipping"]["stateID"]
         );
         // Trying to insert
-        $saveUserData = $this->sSYSTEM->sDB_CONNECTION->Execute($sqlShipping, $shippingParams);
+        $saveUserData = $this->db->query($sqlShipping, $shippingParams);
         Enlight()->Events()->notify(
             'Shopware_Modules_Admin_SaveRegisterShipping_Return',
             array('subject' => $this, 'insertObject' => $saveUserData)
         );
 
         //new attribute table
-        $shippingId = $this->sSYSTEM->sDB_CONNECTION->Insert_ID();
+        $shippingId = $this->db->lastInsertId();
         $sqlAttributes = "INSERT INTO s_user_shippingaddress_attributes
                  (shippingID, text1, text2, text3, text4, text5, text6)
                  VALUES
@@ -2140,7 +2163,7 @@ class sAdmin
             $userObject["shipping"]["text5"],
             $userObject["shipping"]["text6"]
         );
-        $saveAttributeData = $this->sSYSTEM->sDB_CONNECTION->Execute($sqlAttributes, $attributeParams);
+        $saveAttributeData = $this->db->query($sqlAttributes, $attributeParams);
         Enlight()->Events()->notify(
             'Shopware_Modules_Admin_SaveRegisterShippingAttributes_Return',
             array('subject' => $this, 'insertObject' => $saveAttributeData)
@@ -2282,9 +2305,9 @@ class sAdmin
                 // Save main user data
                 $userID = $this->sSaveRegisterMainData($userObject);
 
-                if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg() || !$userID) {
-                    $this->sSYSTEM->E_CORE_WARNING("sSaveRegister #01","Could not save data".$this->sSYSTEM->sDB_CONNECTION->ErrorMsg().print_r($userObject));
-                    die("sSaveRegister #01"."Could not save data".$this->sSYSTEM->sDB_CONNECTION->ErrorMsg());
+                if ($this->db->getErrorMessage() || !$userID) {
+                    $this->sSYSTEM->E_CORE_WARNING("sSaveRegister #01","Could not save data".$this->db->getErrorMessage().print_r($userObject));
+                    die("sSaveRegister #01"."Could not save data".$this->db->getErrorMessage());
                 }
 
                 if ($userObject["auth"]["receiveNewsletter"]) {
@@ -2294,9 +2317,9 @@ class sAdmin
                 // Save user billing address
                 $userBillingID = $this->sSaveRegisterBilling($userID,$userObject);
 
-                if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg() || !$userBillingID) {
-                    $this->sSYSTEM->E_CORE_WARNING("sSaveRegister #02","Could not save data (billing-adress)".$this->sSYSTEM->sDB_CONNECTION->ErrorMsg().print_r($userObject,true));
-                    die("Could not save data (billing-adress)".$this->sSYSTEM->sDB_CONNECTION->ErrorMsg());
+                if ($this->db->getErrorMessage() || !$userBillingID) {
+                    $this->sSYSTEM->E_CORE_WARNING("sSaveRegister #02","Could not save data (billing-adress)".$this->db->getErrorMessage().print_r($userObject,true));
+                    die("Could not save data (billing-adress)".$this->db->getErrorMessage());
                 }
 
 
@@ -2314,15 +2337,15 @@ class sAdmin
                             WHERE s_order_number.name = 'user'
                             AND s_user_billingaddress.userID = ?
                         ";
-                        $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($userID));
+                        $this->db->query($sql, array($userID));
                     }
                 }
 
                 // Save user shipping address
                 if (count($userObject["shipping"])) {
                     $userShippingID = $this->sSaveRegisterShipping($userID, $userObject);
-                    if ($this->sSYSTEM->sDB_CONNECTION->ErrorMsg() || !$userShippingID) {
-                        $this->sSYSTEM->E_CORE_WARNING("sSaveRegister #02","Could not save data (shipping-address)".$this->sSYSTEM->sDB_CONNECTION->ErrorMsg().print_r($userObject,true));
+                    if ($this->db->getErrorMessage() || !$userShippingID) {
+                        $this->sSYSTEM->E_CORE_WARNING("sSaveRegister #02","Could not save data (shipping-address)".$this->db->getErrorMessage().print_r($userObject,true));
                         return false;
                     }
                 }
@@ -2346,7 +2369,7 @@ class sAdmin
                         VALUES (
                             ?, ?, NOW()
                     );";
-                    $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($userID, $referer));
+                    $this->db->query($sql, array($userID, $referer));
                 }
 
                 $this->sSYSTEM->_POST["email"] = $uMail;
@@ -2388,7 +2411,7 @@ class sAdmin
      */
     public function sGetDownloads($destinationPage = 1, $perPage = 10)
     {
-        $getOrders = $this->sSYSTEM->sDB_CONNECTION->GetAll(
+        $getOrders = $this->db->fetchAll(
             "SELECT
                 id, ordernumber, invoice_amount, invoice_amount_net,
                 invoice_shipping, invoice_shipping_net,
@@ -2411,7 +2434,7 @@ class sAdmin
                 $getOrders[$orderKey]["invoice_shipping"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($orderValue["invoice_shipping"]);
             }
 
-            $getOrderDetails = $this->sSYSTEM->sDB_CONNECTION->GetAll("
+            $getOrderDetails = $this->db->fetchAll("
               SELECT * FROM s_order_details WHERE orderID = {$orderValue["id"]}
             ");
 
@@ -2427,7 +2450,7 @@ class sAdmin
                     if ($getOrderDetails[$orderDetailsKey]["esdarticle"]) {
                         $foundESD = true;
                         $numbers = array();
-                        $getSerial = $this->sSYSTEM->sDB_CONNECTION->GetAll("
+                        $getSerial = $this->db->fetchAll("
                         SELECT serialnumber FROM s_articles_esd_serials, s_order_esd WHERE userID=".$this->sSYSTEM->_SESSION["sUserId"]."
                         AND orderID={$orderValue["id"]} AND orderdetailsID={$orderDetailsValue["id"]}
                         AND s_order_esd.serialID=s_articles_esd_serials.id
@@ -2493,7 +2516,7 @@ class sAdmin
             ORDER BY ordertime DESC
             LIMIT $limitStart, $limitEnd
         ";
-        $getOrders = $this->sSYSTEM->sDB_CONNECTION->GetAll(
+        $getOrders = $this->db->fetchAll(
             $sql,
             array($this->sSYSTEM->_SESSION["sUserId"], $mainShop->getId())
         );
@@ -2505,7 +2528,7 @@ class sAdmin
             $getOrders[$orderKey]["invoice_shipping"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($orderValue["invoice_shipping"]);
 
 
-            $getOrderDetails = $this->sSYSTEM->sDB_CONNECTION->GetAll("
+            $getOrderDetails = $this->db->fetchAll("
             SELECT * FROM s_order_details WHERE orderID={$orderValue["id"]} ORDER BY id ASC
             ");
 
@@ -2568,7 +2591,7 @@ class sAdmin
                         AND s_order_esd.serialID = s_articles_esd_serials.id
                         ";
 
-                        $getSerial = $this->sSYSTEM->sDB_CONNECTION->GetAll(
+                        $getSerial = $this->db->fetchAll(
                             $sql,
                             array(
                                 $this->sSYSTEM->_SESSION["sUserId"],
@@ -2664,7 +2687,7 @@ class sAdmin
      */
     public function sGetUserMailById()
     {
-        $email = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+        $email = $this->db->fetchRow(
             "SELECT email FROM s_user WHERE id = ?",
             array($this->sSYSTEM->_SESSION["sUserId"])
         );
@@ -2684,7 +2707,7 @@ class sAdmin
         if ($this->scopedRegistration == true) {
             $addScopeSql = "AND subshopID = ".$this->subshopId;
         }
-        $getUserData = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+        $getUserData = $this->db->fetchRow(
             "SELECT id FROM s_user WHERE email = ? AND accountmode != 1 $addScopeSql",
             array($email)
         );
@@ -2700,11 +2723,11 @@ class sAdmin
      */
     public function sGetUserNameById($id)
     {
-        return $this->sSYSTEM->sDB_CONNECTION->GetRow(
+        return $this->db->fetchRow(
             "SELECT firstname, lastname FROM s_user_billingaddress
             WHERE userID = ?",
             array($id)
-        );
+        ) ? : array();
     }
 
     /**
@@ -2740,10 +2763,11 @@ class sAdmin
             $sql = "SELECT * FROM s_user_billingaddress
                     WHERE userID = ?";
 
-            $billing = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+            $billing = $this->db->fetchRow(
                 $sql,
                 array($this->sSYSTEM->_SESSION["sUserId"])
             );
+            $billing = $billing ? : array();
             $attributes = $this->getUserBillingAddressAttributes($this->sSYSTEM->_SESSION["sUserId"]);
             $userData["billingaddress"] = array_merge($attributes, $billing);
 
@@ -2757,48 +2781,47 @@ class sAdmin
                     WHERE `s_order_number`.`name` ='user'
                     AND `s_user_billingaddress`.`userID`=?";
 
-                $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($this->sSYSTEM->_SESSION["sUserId"]));
+                $this->db->query($sql, array($this->sSYSTEM->_SESSION["sUserId"]));
             }
 
             // 2.) Advanced info
             // Query country information
-            $userData["additional"]["country"] =  $this->sSYSTEM->sDB_CONNECTION->GetRow(
+            $userData["additional"]["country"] =  $this->db->fetchRow(
                 "SELECT * FROM s_core_countries WHERE id = ?",
                 array($userData["billingaddress"]["countryID"])
             );
+            $userData["additional"]["country"] = $userData["additional"]["country"] ? : array();
             // State selection
-            $userData["additional"]["state"] =  $this->sSYSTEM->sDB_CONNECTION->GetRow(
+            $userData["additional"]["state"] =  $this->db->fetchRow(
                 "SELECT * FROM s_core_countries_states WHERE id=?",
                 array($userData["billingaddress"]["stateID"])
             );
-
+            $userData["additional"]["state"] = $userData["additional"]["state"] ? : array();
 
             $userData["additional"]["country"] = $this->sGetCountryTranslation($userData["additional"]["country"]);
 
-            $additional = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+            $additional = $this->db->fetchRow(
                 "SELECT * FROM s_user WHERE id=?",
                 array($this->sSYSTEM->_SESSION["sUserId"])
             );
+            $additional = $additional ? : array();
             $attributes = $this->getUserAttributes($this->sSYSTEM->_SESSION["sUserId"]);
             $userData["additional"]["user"] = array_merge($attributes, $additional);
 
             // Newsletter properties
-            $newsletter = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+            $newsletter = $this->db->fetchRow(
                 "SELECT id FROM s_campaigns_mailaddresses WHERE email = ?",
                 array($userData["additional"]["user"]["email"])
             );
 
-            if ($newsletter["id"]) {
-                $userData["additional"]["user"]["newsletter"] = 1;
-            } else {
-                $userData["additional"]["user"]["newsletter"] = 0;
-            }
+            $userData["additional"]["user"]["newsletter"] = $newsletter["id"] ? 1 : 0;
 
             // 3.) Get shipping address
-            $shipping = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+            $shipping = $this->db->fetchRow(
                 "SELECT * FROM s_user_shippingaddress WHERE userID=?",
                 array($this->sSYSTEM->_SESSION["sUserId"])
             );
+            $shipping = $shipping ? : array();
             $attributes = $this->getUserShippingAddressAttributes($this->sSYSTEM->_SESSION["sUserId"]);
             $userData["shippingaddress"]= array_merge($attributes, $shipping);
 
@@ -2810,9 +2833,9 @@ class sAdmin
                 if (($userData["shippingaddress"]["countryID"] != $userData["billingaddress"]["countryID"])
                     && empty($this->sSYSTEM->sCONFIG["sCOUNTRYSHIPPING"])
                 ) {
-                    $update = $this->sSYSTEM->sDB_CONNECTION->Execute(
+                    $this->db->query(
                         "UPDATE s_user_shippingaddress SET countryID = ? WHERE id = ?",
-                        array($userData["billingaddress"]["countryID"],$userData["shippingaddress"]["id"])
+                        array($userData["billingaddress"]["countryID"], $userData["shippingaddress"]["id"])
                     );
                     $userData["shippingaddress"]["countryID"] = $userData["billingaddress"]["countryID"];
                 }
@@ -2824,20 +2847,22 @@ class sAdmin
                 $targetCountryId = $userData["shippingaddress"]["countryID"];
             }
 
-            $userData["additional"]["countryShipping"] = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+            $userData["additional"]["countryShipping"] = $this->db->fetchRow(
                 $countryQuery,
                 array($targetCountryId)
             );
+            $userData["additional"]["countryShipping"] = $userData["additional"]["countryShipping"] ? : array();
             $userData["additional"]["countryShipping"] = $this->sGetCountryTranslation(
                 $userData["additional"]["countryShipping"]
             );
             $this->sSYSTEM->_SESSION["sCountry"] = $userData["additional"]["countryShipping"]["id"];
 
             // State selection
-            $userData["additional"]["stateShipping"] =  $this->sSYSTEM->sDB_CONNECTION->GetRow(
+            $userData["additional"]["stateShipping"] =  $this->db->fetchRow(
                 "SELECT * FROM s_core_countries_states WHERE id=?",
                 array($userData["shippingaddress"]["stateID"])
             );
+            $userData["additional"]["stateShipping"] = $userData["additional"]["stateShipping"] ? : array();
             // Add stateId to session
             $this->sSYSTEM->_SESSION["sState"] = $userData["additional"]["stateShipping"]["id"];
             // Add areaId to session
@@ -2855,10 +2880,11 @@ class sAdmin
                 $this->sSYSTEM->_SESSION["sRegister"] = $sRegister;
             }
 
-            $userData["additional"]["country"] = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+            $userData["additional"]["country"] = $this->db->fetchRow(
                 $countryQuery,
                 array(intval($this->sSYSTEM->_SESSION["sRegister"]["billing"]["country"]))
             );
+            $userData["additional"]["country"] = $userData["additional"]["country"] ? : array();
             $userData["additional"]["countryShipping"] = $userData["additional"]["country"];
             $userData["additional"]["stateShipping"]["id"] = !empty($this->sSYSTEM->_SESSION["sState"]) ? $this->sSYSTEM->_SESSION["sState"] : 0;
 
@@ -2966,7 +2992,7 @@ class sAdmin
     public function sManageRisks($paymentID, $basket, $user)
     {
         // Get all assigned rules
-        $queryRules = $this->sSYSTEM->sDB_CONNECTION->GetAll("
+        $queryRules = $this->db->fetchAll("
             SELECT rule1, value1, rule2, value2
             FROM s_core_rulesets
             WHERE paymentID = ?
@@ -3207,7 +3233,7 @@ class sAdmin
                 LIMIT 1
                 ";
 
-                $checkArticle = $this->sSYSTEM->sDB_CONNECTION->GetOne(
+                $checkArticle = $this->db->fetchOne(
                     $sql,
                     array($this->sSYSTEM->sSESSION_ID, $value[1])
                 );
@@ -3252,7 +3278,7 @@ class sAdmin
                 AND s_articles_attributes.attr{$number}!= ?
                 LIMIT 1
                 ";
-                $checkArticle = $this->sSYSTEM->sDB_CONNECTION->GetOne(
+                $checkArticle = $this->db->fetchOne(
                     $sql,
                     array(
                         $this->sSYSTEM->sSESSION_ID,
@@ -3285,16 +3311,12 @@ class sAdmin
     public function sRiskINKASSO($user, $order, $value)
     {
         if ($this->sSYSTEM->_SESSION["sUserId"]) {
-            $checkOrder = $this->sSYSTEM->sDB_CONNECTION->GetRow("
+            $checkOrder = $this->db->fetchRow("
                 SELECT id FROM s_order
                 WHERE cleared=16 AND userID=?",
                 array($this->sSYSTEM->_SESSION["sUserId"])
             );
-            if ($checkOrder["id"]) {
-                return true;
-            } else {
-                return false;
-            }
+            return ($checkOrder && $checkOrder["id"]);
         } else {
             return false;
         }
@@ -3317,18 +3339,14 @@ class sAdmin
             SELECT id FROM s_order WHERE userID=?
             AND TO_DAYS(ordertime) <= (TO_DAYS(now())-$value) LIMIT 1
             ";
-            $checkOrder = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+            $checkOrder = $this->db->fetchRow(
                 $sql,
                 array(
                     $this->sSYSTEM->_SESSION["sUserId"]
                 )
             );
 
-            if (!$checkOrder["id"]) {
-                return true;
-            } else {
-                return false;
-            }
+            return (!$checkOrder || !$checkOrder["id"]);
         } else {
             return true;
         }
@@ -3344,7 +3362,7 @@ class sAdmin
      */
     public function sRiskARTICLESFROM($user, $order, $value)
     {
-        $checkArticle = $this->sSYSTEM->sDB_CONNECTION->GetOne("
+        $checkArticle = $this->db->fetchOne("
             SELECT s_articles_categories_ro.id as id
             FROM s_order_basket, s_articles_categories_ro
             WHERE s_order_basket.articleID = s_articles_categories_ro.articleID
@@ -3367,7 +3385,7 @@ class sAdmin
     public function sRiskLASTORDERSLESS($user, $order, $value)
     {
         if ($this->sSYSTEM->_SESSION["sUserId"]) {
-            $checkOrder = $this->sSYSTEM->sDB_CONNECTION->GetAll(
+            $checkOrder = $this->db->fetchAll(
                 "SELECT id FROM s_order
                   WHERE status != -1 AND status != 4 AND userID = ?",
                 array($this->sSYSTEM->_SESSION["sUserId"])
@@ -3558,7 +3576,7 @@ class sAdmin
                 INSERT IGNORE INTO s_campaigns_groups (id, name)
                 VALUES (?, ?)
             ';
-            $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($groupID, 'Newsletter-Empfänger'));
+            $this->db->query($sql, array($groupID, 'Newsletter-Empfänger'));
         }
 
         $email = trim(strtolower(stripslashes($email)));
@@ -3575,23 +3593,33 @@ class sAdmin
         }
         if (!$unsubscribe) {
             $sql = "SELECT * FROM s_campaigns_mailaddresses WHERE email = ?";
-            $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($email));
+            $result = $this->db->query($sql, array($email));
 
             if ($result === false) {
                 $result = array(
                     "code" => 10,
                     "message" => $this->snippetObject->get('UnknownError', 'Unknown error')
                 );
-            } elseif ($result->RecordCount()) {
+            } elseif ($result->rowCount()) {
                 $result = array(
                     "code" => 2,
                     "message" => $this->snippetObject->get('NewsletterFailureAlreadyRegistered','You already receive our newsletter')
                 );
             } else {
-                $customer = Shopware()->Db()->fetchOne('SELECT id FROM s_user WHERE email = ? LIMIT 1', array($email));
+                $customer = $this->db->fetchOne(
+                    'SELECT id FROM s_user WHERE email = ? LIMIT 1',
+                    array($email)
+                );
 
                 $sql = "INSERT INTO s_campaigns_mailaddresses (customer, `groupID`, email) VALUES(?, ?, ?)";
-                $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array((int) !empty($customer), $groupID, $email));
+                $result = $this->db->query(
+                    $sql,
+                    array(
+                        (int) !empty($customer),
+                        $groupID,
+                        $email
+                    )
+                );
 
                 if($result === false) {
                     $result = array(
@@ -3607,12 +3635,12 @@ class sAdmin
             }
         } else {
             $sql = "DELETE FROM s_campaigns_mailaddresses WHERE email = ?";
-            $result1 = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($email));
-            $result = $this->sSYSTEM->sDB_CONNECTION->Affected_Rows();
+            $result1 = $this->db->query($sql, array($email));
+            $result = $result1->rowCount();
 
             $sql = "UPDATE s_user SET newsletter = 0 WHERE email = ?";
-            $result2 =$this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($email));
-            $result += $this->sSYSTEM->sDB_CONNECTION->Affected_Rows();
+            $result2 =$this->db->query($sql, array($email));
+            $result += $result2->rowCount();
 
             if ($result1 === false || $result2 === false) {
                 $result = array(
@@ -3637,9 +3665,9 @@ class sAdmin
         if (!empty($result['code']) && in_array($result['code'], array(2, 3))) {
             $sql = '
                 REPLACE INTO `s_campaigns_maildata` (`email`, `groupID`, `salutation`, `title`, `firstname`, `lastname`, `street`, `streetnumber`, `zipcode`, `city`, `added`)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '.$this->sSYSTEM->sDB_CONNECTION->sysTimeStamp.')
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
             ';
-            $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array(
+            $this->db->query($sql, array(
                 $email,
                 $groupID,
                 $this->sSYSTEM->_POST['salutation'],
@@ -3653,7 +3681,7 @@ class sAdmin
             ));
         } elseif (!empty($unsubscribe)) {
             $sql = 'DELETE FROM `s_campaigns_maildata` WHERE `email` = ? AND `groupID` = ?';
-            $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($email, $groupID));
+            $this->db->query($sql, array($email, $groupID));
         }
 
         return $result;
@@ -3686,7 +3714,7 @@ class sAdmin
             FROM `s_premium_holidays`
             WHERE `date`<CURDATE()
         ";
-        $holidays = $this->sSYSTEM->sDB_CONNECTION->CacheGetAssoc(60, $sql);
+        $holidays = $this->db->fetchAssoc($sql);
         if(empty($holidays)) {
             return true;
         }
@@ -3703,7 +3731,7 @@ class sAdmin
             $calculation = str_replace("YEAR()","'$year'",$calculation);
             $calculation = str_replace("DATE()","'$date'",$calculation);
             $sql = "UPDATE s_premium_holidays SET `date`= $calculation WHERE id = $id";
-            $this->sSYSTEM->sDB_CONNECTION->Execute($sql);
+            $this->db->query($sql);
         }
     }
 
@@ -3726,7 +3754,7 @@ class sAdmin
         if (is_numeric($country)) {
             $sql = "c.id=".$country;
         } elseif (is_string($country)) {
-            $sql = "c.countryiso=".$this->sSYSTEM->sDB_CONNECTION->qstr($country);
+            $sql = "c.countryiso=".$this->db->quote($country);
         } else {
             return false;
         }
@@ -3740,7 +3768,7 @@ class sAdmin
         ";
         $currencyFactor = empty($this->sSYSTEM->sCurrency["factor"]) ? 1 : $this->sSYSTEM->sCurrency["factor"];
         $cache[$country]["shippingfree"] = round($cache[$country]["shippingfree"]*$currencyFactor, 2);
-        return $cache[$country] = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql);
+        return $cache[$country] = $this->db->fetchRow($sql) ? : array();
     }
 
     /**
@@ -3762,7 +3790,7 @@ class sAdmin
         if (is_numeric($payment)) {
             $sql = "id=".$payment;
         } elseif (is_string($payment)) {
-            $sql = "name=".$this->sSYSTEM->sDB_CONNECTION->qstr($payment);
+            $sql = "name=".$this->db->quote($payment);
         } else {
             return false;
         }
@@ -3771,7 +3799,7 @@ class sAdmin
             SELECT * FROM s_core_paymentmeans
             WHERE $sql
         ";
-        $cache[$payment] = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql);
+        $cache[$payment] = $this->db->fetchRow($sql) ? : array();
 
         $cache[$payment]["country_surcharge"] = array();
         if (!empty($cache[$payment]["surchargestring"])) {
@@ -3802,10 +3830,10 @@ class sAdmin
             $sql_select .= ', '.$this->sSYSTEM->sCONFIG['sPREMIUMSHIPPIUNGASKETSELECT'];
         }
         $sql = 'SELECT id, calculation_sql FROM s_premium_dispatch WHERE active = 1 AND calculation = 3';
-        $calculations = $this->sSYSTEM->sDB_CONNECTION->GetAssoc($sql);
+        $calculations = $this->db->fetchAssoc($sql);
         if(!empty($calculations)) {
             foreach ($calculations as $dispatchID => $calculation) {
-                if(empty($calculation)) $calculation = $this->sSYSTEM->sDB_CONNECTION->qstr($calculation);
+                if(empty($calculation)) $calculation = $this->db->quote($calculation);
                 $sql_select .= ', ('.$calculation.') as calculation_value_'.$dispatchID;
             }
         }
@@ -3865,14 +3893,14 @@ class sAdmin
             GROUP BY b.sessionID
         ";
 
-        $basket = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+        $basket = $this->db->fetchRow(
             $sql,
             array(
                 $this->sSYSTEM->_SESSION["sUserId"],
                 empty($this->sSYSTEM->sSESSION_ID) ? session_id() : $this->sSYSTEM->sSESSION_ID
             )
         );
-        if (empty($basket)) {
+        if ($basket === false) {
             return false;
         }
 
@@ -3910,7 +3938,7 @@ class sAdmin
         $sql = "
             SELECT main_id FROM s_core_shops WHERE id=".(int) $this->sSYSTEM->sSubShop['id']."
         ";
-        $mainId = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql);
+        $mainId = $this->db->fetchOne($sql);
         // MainId is null, so we use the current shop id
         if (is_null($mainId)) {
             $mainId = (int) $this->sSYSTEM->sSubShop['id'];
@@ -3944,8 +3972,8 @@ class sAdmin
             WHERE active = 1
             AND d.id = ?
         ";
-        $dispatch = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql, array($dispatchID));
-        if (empty($dispatch)) {
+        $dispatch = $this->db->fetchRow($sql, array($dispatchID));
+        if ($dispatch === false) {
             return false;
         }
         return $this->sGetDispatchTranslation($dispatch);
@@ -3971,7 +3999,7 @@ class sAdmin
             WHERE active=1 AND type IN (0)
             AND bind_sql IS NOT NULL AND bind_sql != ''
         ";
-        $statements = $this->sSYSTEM->sDB_CONNECTION->GetAssoc($sql);
+        $statements = $this->db->fetchAssoc($sql);
 
         if(empty($basket)) {
             return array();
@@ -3984,7 +4012,7 @@ class sAdmin
 
         $sql_basket = array();
         foreach ($basket as $key => $value) {
-            $sql_basket[] = $this->sSYSTEM->sDB_CONNECTION->qstr($value)." as `$key`";
+            $sql_basket[] = $this->db->quote($value)." as `$key`";
         }
         $sql_basket = implode(', ',$sql_basket);
 
@@ -4066,7 +4094,7 @@ class sAdmin
             ORDER BY d.position, d.name
         ";
 
-        $dispatches = $this->sSYSTEM->sDB_CONNECTION->GetAssoc($sql);
+        $dispatches = $this->db->fetchAssoc($sql);
         if (empty($dispatches)) {
             $sql = "
                 SELECT
@@ -4084,7 +4112,7 @@ class sAdmin
                 ORDER BY d.position, d.name
                 LIMIT 1
             ";
-            $dispatches = $this->sSYSTEM->sDB_CONNECTION->GetAssoc($sql);
+            $dispatches = $this->db->fetchAssoc($sql);
         }
 
         $names = array();
@@ -4127,7 +4155,7 @@ class sAdmin
             WHERE active = 1 AND type = ?
             AND bind_sql IS NOT NULL
         ';
-        $statements = $this->sSYSTEM->sDB_CONNECTION->GetAssoc($sql, array($type));
+        $statements = $this->db->fetchAssoc($sql, array($type));
         $sql_where = '';
         foreach ($statements as $dispatchID => $statement) {
             $sql_where .= "
@@ -4136,7 +4164,7 @@ class sAdmin
         }
         $sql_basket = array();
         foreach ($basket as $key => $value) {
-            $sql_basket[] = $this->sSYSTEM->sDB_CONNECTION->qstr($value)." as `$key`";
+            $sql_basket[] = $this->db->quote($value)." as `$key`";
         }
         $sql_basket = implode(', ',$sql_basket);
 
@@ -4211,7 +4239,7 @@ class sAdmin
             $sql_where
             GROUP BY d.id
         ";
-        $dispatches = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
+        $dispatches = $this->db->fetchAll($sql);
         $surcharge = 0;
         if (!empty($dispatches)) {
             foreach ($dispatches as $dispatch) {
@@ -4240,9 +4268,9 @@ class sAdmin
                     ORDER BY `from` DESC
                     LIMIT 1
                 ";
-                $result = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql);
+                $result = $this->db->fetchRow($sql);
 
-                if(empty($result)) {
+                if($result === false) {
                     continue;
                 }
                 $surcharge += $result['value'];
@@ -4282,7 +4310,7 @@ class sAdmin
         $discount_basket_name = isset($this->sSYSTEM->sCONFIG['sDISCOUNTNAME']) ? $this->sSYSTEM->sCONFIG['sDISCOUNTNAME']: 'Warenkorbrabatt';
 
         $sql = 'DELETE FROM s_order_basket WHERE sessionID=? AND modus IN (3, 4) AND ordernumber IN (?, ?, ?, ?)';
-        $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array(
+        $this->db->query($sql, array(
             $this->sSYSTEM->sSESSION_ID,
             $surcharge_ordernumber,
             $discount_ordernumber,
@@ -4309,7 +4337,7 @@ class sAdmin
             WHERE sessionID=?
             GROUP BY sessionID
         ';
-        $amount = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql, array($this->sSYSTEM->sSESSION_ID));
+        $amount = $this->db->fetchOne($sql, array($this->sSYSTEM->sSESSION_ID));
 
         $sql = '
             SELECT basketdiscount
@@ -4318,7 +4346,7 @@ class sAdmin
             AND basketdiscountstart<=?
             ORDER BY basketdiscountstart DESC
         ';
-        $basket_discount = $this->sSYSTEM->sDB_CONNECTION->GetOne(
+        $basket_discount = $this->db->fetchOne(
             $sql,
             array($this->sSYSTEM->sUSERGROUPDATA['id'], $amount)
         );
@@ -4344,7 +4372,7 @@ class sAdmin
                 VALUES
                     (?, ?, 0, ?, 1, ?, ?, ?, NOW(), 3, ?)
             ';
-            $this->sSYSTEM->sDB_CONNECTION->Execute(
+            $this->db->query(
                 $sql,
                 array(
                     $this->sSYSTEM->sSESSION_ID,
@@ -4379,7 +4407,7 @@ class sAdmin
                     (?, ?, 0, ?, 1, ?, ?, ?, NOW(), 4, ?)
             ';
 
-            $this->sSYSTEM->sDB_CONNECTION->Execute(
+            $this->db->query(
                 $sql,
                 array(
                     $this->sSYSTEM->sSESSION_ID,
@@ -4418,7 +4446,7 @@ class sAdmin
                 VALUES
                     (?, ?, 0, ?, 1, ?, ?, ?,NOW(), 4, ?)
             ';
-            $this->sSYSTEM->sDB_CONNECTION->Execute(
+            $this->db->query(
                 $sql,
                 array(
                     $this->sSYSTEM->sSESSION_ID,
@@ -4433,7 +4461,7 @@ class sAdmin
         }
         if (!empty($payment['debit_percent']) && (empty($dispatch) || $dispatch['surcharge_calculation']!=2)) {
             $sql = 'SELECT SUM(quantity*price) as amount FROM s_order_basket WHERE sessionID=? GROUP BY sessionID';
-            $amount = $this->sSYSTEM->sDB_CONNECTION->GetOne(
+            $amount = $this->db->fetchOne(
                 $sql,
                 array($this->sSYSTEM->sSESSION_ID)
             );
@@ -4461,7 +4489,7 @@ class sAdmin
                 VALUES
                     (?, ?, 0, ?, 1, ?, ?, ?, NOW(), 4, ?)
             ';
-            $this->sSYSTEM->sDB_CONNECTION->Execute(
+            $this->db->query(
                 $sql,
                 array(
                     $this->sSYSTEM->sSESSION_ID,
@@ -4518,7 +4546,7 @@ class sAdmin
             ORDER BY `from` DESC
             LIMIT 1
         ";
-        $result = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql);
+        $result = $this->db->fetchRow($sql);
         if ($result === false) {
             return false;
         }
