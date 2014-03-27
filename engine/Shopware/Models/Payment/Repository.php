@@ -34,17 +34,18 @@ class Repository extends ModelRepository
 {
 
     /**
-      * Returns a query-object for all known payments
-      *
-      * @param null $filter
-      * @param null $order
-      * @param null $offset
-      * @param null $limit
-      * @return \Doctrine\ORM\Query
-      */
-     public function getPaymentsQuery($filter = null, $order = null, $offset = null, $limit = null)
+     * Returns a query-object for all known payments
+     *
+     * @param null $filter
+     * @param null $order
+     * @param null $offset
+     * @param null $limit
+     * @param bool $onlyActive
+     * @return \Doctrine\ORM\Query
+     */
+     public function getPaymentsQuery($filter = null, $order = null, $offset = null, $limit = null, $onlyActive = true)
      {
-         $builder = $this->getPaymentsQueryBuilder($filter, $order);
+         $builder = $this->getPaymentsQueryBuilder($filter, $order, $onlyActive);
          if ($limit !== null) {
              $builder->setFirstResult($offset)
                      ->setMaxResults($limit);
@@ -52,15 +53,16 @@ class Repository extends ModelRepository
          return $builder->getQuery();
      }
 
-     /**
-      * Helper method to create the query builder for the "getPaymentsQuery" function.
-      * This function can be hooked to modify the query builder of the query object.
-      *
-      * @param null $filter
-      * @param null $order
-      * @return \Doctrine\ORM\QueryBuilder
-      */
-     public function getPaymentsQueryBuilder($filter = null, $order = null)
+    /**
+     * Helper method to create the query builder for the "getPaymentsQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     *
+     * @param null $filter
+     * @param null $order
+     * @param bool $onlyActive
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+     public function getPaymentsQueryBuilder($filter = null, $order = null, $onlyActive = true)
      {
          $builder = $this->createQueryBuilder('p');
          $builder->select(array(
@@ -70,7 +72,10 @@ class Repository extends ModelRepository
              'p.position as position',
              'p.active as active'
          ));
-         $builder->where('p.active = 1');
+
+         if($onlyActive) {
+             $builder->where('p.active = 1');
+         }
 
          if ($filter !== null) {
              $builder->addFilter($filter);
