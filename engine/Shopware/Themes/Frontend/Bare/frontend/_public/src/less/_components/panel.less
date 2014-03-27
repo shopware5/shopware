@@ -14,10 +14,14 @@ Example:
 ```
 */
 .panel {
-  border: 1px solid @borderColor;
+  display: block;
 
-  &.shadow {
+  &.has--shadow {
     .box-shadow(0 1px 3px 0 rgba(0, 0, 0, 0.1));
+  }
+
+  &.has--border {
+    border: 1px solid @borderColor;
   }
 }
 
@@ -90,6 +94,10 @@ Example:
   .unitize(14, 16, font-size);
   .unitize(24, 16, line-height);
 
+  &.has--border {
+    border: 1px solid @borderColor;
+  }
+
   &.slim {
     .unitize-padding(5, 5);
   }
@@ -117,7 +125,7 @@ Example:
         <tr class="primary">
             <th></th>
         </tr>
-        <tr class="bordered">
+        <tr class="has--border">
             <td></td>
         </tr>
     </table>
@@ -130,7 +138,7 @@ Example:
   border-spacing: 0;
   empty-cells: show;
 
-  &.bordered {
+  &.has--border {
     border: 1px solid @borderColor;
   }
 
@@ -166,7 +174,7 @@ Example:
     }
   }
 
-  tr.bordered {
+  tr.has--border {
     th, td {
       border-width: 0 1px 1px 0;
     }
@@ -199,7 +207,7 @@ Example:
 .panel--list {
   list-style: none;
 
-  &.bordered {
+  &.has--border {
     border: 1px solid @borderColor;
   }
 
@@ -223,7 +231,7 @@ Example:
   }
 }
 
-/* Arrow buttons for panels.
+/* Arrow buttons for example for a slider panel.
 
 Example:
 ```
@@ -268,5 +276,119 @@ Example:
 
   &:hover {
     color: @primaryColor;
+  }
+}
+
+/* A small dot navigation for example for a slider panel.
+
+Example:
+```
+<div class="panel--dot-nav">
+    <a href=""></a>
+    <a href="" class="is--active"></a>
+    <a href=""></a>
+</div>
+```
+*/
+.panel--dot-nav {
+  display: block;
+  text-align: center;
+
+  a {
+    .unitize-margin(0, 5);
+    .unitize-width(21);
+    .unitize-height(21);
+    display: inline-block;
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAqCAYAAABcOxDuAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDIxIDc5LjE1NDkxMSwgMjAxMy8xMC8yOS0xMTo0NzoxNiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpCQjIxRTMxOUI1QjUxMUUzQUVBREM2Qjk3M0U0ODA2OSIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpCQjIxRTMxQUI1QjUxMUUzQUVBREM2Qjk3M0U0ODA2OSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkJCMjFFMzE3QjVCNTExRTNBRUFEQzZCOTczRTQ4MDY5IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkJCMjFFMzE4QjVCNTExRTNBRUFEQzZCOTczRTQ4MDY5Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+feKpCAAABGRJREFUeNq0l0+IG3UUx1/mfzKTyZ9N0lVLK0W3FIt0BQ896KK0B8XLHvTo2dq7FkQERVp76Enaigc9i6IFcRVFKtoqFLGU1oNKFbu73Z38nSSTTObPb3xvOhPCdjZNNvUHj9mZ976fnd+fed/dVK1hwjaDa7V7j7IgWA4CeAzvixiNVApucKnU53k98yfesyRhKgGKsP6Tns/eE3huSVMVkCUBeI4DnzEYOB50LRswfxHzJ/J6+spW+Fao2DB7x32fnd5VyomFnLrdLKBpWrBZM12e514v5jLv4yM3zgkjdVLdtF7TMso7BEvLEowbVKMootgyrTOoU+dy6ml87IRTjadsdvrP+B57ay6v3RMYD6orYj3pSB/zYqjmeP7J+UpekCURphlUTzrUnyJODOWsvrPIp7jFgq7CTgbpUH/I6jlPEI+gEu7osqYpMMsg/cD1lunlCariWdwvCcJMUNIjZwF/zBA0DQHM4dGYCcoLqA+gRDwi8Rh4roOZoJHeIx5BGb7lat9xZoL2Bw4Qh3gE7acV8adOx54JSnriEI+gliIJ13CR1+qt7o6ApEP9OnGIR9ABxmpWlT+7dbvB7IE7FZDqSYf6T4lDPC7qMJsZRfwqm5EvGfU29PqTrS/VGfUOkI70xInXlAbN+wa2sQ8837/0x98brNYcvxSUpzrP9y6TjvQRZ9il6G0NjMs5TQlkkV/DtvbsRtUs5bJp2gDcWR5834e+7QI2D8BmXSsX1e8VWbyAup8jPUvspxhljIMYhxzXX8S+cMD1WDFggZTiUo4ocA01Lf0uifxVrKG4jlEd7aeJnT/qNrswdmM8iDEX/UIS1jHWMW5Fb9fd2vmTPngqaEfFtJtq+ClHXx6dQzo20alJ9ChhdOFHR6mgARrfnnHGN6qh+rumX23cKSgXtamND7UMdclQTNwX4xvdqKmML24iaHzQ6dlvjhpfDCXjO4pT+3LfnsrQp5hlQmflPNi/fQd+ywA+XwFl8Qhkn3sFODUX1gwcF27+a3i4RC/gmf6WZDFUrza7F3HKQ59ybl4D49RLwJobd//pUpiHyolPQNr3+J2laIdLcbVc0Jbo5CQan981wTj5YiIwnAE+pzzVTWx8zS/OAWttju/0mG9eODe58Vm/fjNRl7KufJ1ofEKS8bnGOkgTWJZr3E40PiHJ+GyWB8HfuHeDDvKTG5+3/2nwewwCN9g2KE91Extf+eVXoVbVwEUhQ8DWoOeUp7qJjW9+715Q3v4QqlUdzHUH7DZDUBBe6b5a08M81U1sfLRpC0eOgv7xCjjPH4OGvABGuxhe6V7/aCXMU12S8Q2/KIzD2J3eEEXhqVIhC5m0hPbBsNG0oN21wPN8EAQedE3FxpMPgWR81P5c1/0Ru9W7ka20h99+1OGXzK59rN2xD+9+oMiN9sgk41vFN9Szyi/oa2fx0Q+RI7D/1/j+WWvCww8V7q/xXf/LCK8HH6lMbXyoZagb+3/UqKvKOzG+/wQYAAaKBjONxQFSAAAAAElFTkSuQmCC') 0 0 no-repeat transparent;
+
+    &.is--active {
+      background-position: 0 -21px;
+    }
+  }
+}
+
+/* A tab navigation for a tab-content panel.
+
+Example:
+```
+<div class="panel">
+    <ul class="panel--tab-nav">
+        <li><a href="" class="is--active"></a></li>
+        <li><a href=""></a></li>
+    </ul>
+    <div class="panel--body has--border">
+        <div class="panel--tab-content is--active"></div>
+        <div class="panel--tab-content"></div>
+    </div>
+</div>
+```
+*/
+.panel--tab-nav {
+  list-style: none;
+
+  li {
+    display: inline-block;
+
+    a {
+      .unitize-padding(10, 20);
+      .unitize-margin(0, 5, 0, 0);
+      .unitize(24, 16, line-height);
+      .unitize(14, 16, font-size);
+      .linear-gradient(#ffffff, #eff0f3);
+      .border-radius-multi(3px, 3px, 0, 0);
+      display: block;
+      position: relative;
+      z-index: 90;
+      font-weight: bold;
+      text-align: center;
+      color: #748595;
+      border-width: 1px 1px 0 1px;
+      border-style: solid;
+      border-color: @borderColor;
+
+      &.is--active {
+        .unitize(1, 16, top);
+        color: @darkTextColor;
+        background: #fff;
+
+        &:hover {
+          color: @darkTextColor;
+        }
+      }
+
+      &:hover {
+        color: @primaryColor;
+        background: #fff;
+      }
+    }
+  }
+}
+
+/* A content box for a tab-content panel.
+
+Example:
+```
+<div class="panel">
+    <ul class="panel--tab-nav">
+        <li><a href="" class="is--active"></a></li>
+        <li><a href=""></a></li>
+    </ul>
+    <div class="panel--body has--border">
+        <div class="panel--tab-content is--active"></div>
+        <div class="panel--tab-content"></div>
+    </div>
+</div>
+```
+*/
+.panel--tab-content {
+  display: none;
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: 10;
+
+  &.is--active {
+    display: block;
+    z-index: 11;
   }
 }
