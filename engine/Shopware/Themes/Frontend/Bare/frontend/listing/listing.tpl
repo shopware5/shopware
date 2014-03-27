@@ -1,6 +1,3 @@
-{* Promotion *}
-{include file='frontend/listing/promotions.tpl' sTemplate=$sTemplate}
-
 {* Sorting and changing layout *}
 {block name="frontend_listing_top_actions"}
 	{if $showListing && !$sOffers}
