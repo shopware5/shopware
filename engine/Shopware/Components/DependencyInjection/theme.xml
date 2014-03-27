@@ -27,6 +27,7 @@
         <service id="theme_generator" class="Shopware\Components\Theme\Generator">
             <argument type="service" id="theme_path_resolver" />
             <argument type="service" id="file_system" />
+            <argument type="service" id="events" />
         </service>
 
         <service id="theme_config_persister" class="Shopware\Components\Form\Persister\Theme">
