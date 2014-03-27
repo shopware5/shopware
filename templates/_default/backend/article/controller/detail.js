@@ -337,7 +337,16 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         propertyStore.each(function(property) {
             property.setDirty();
         });
-        propertyStore.sync();
+        propertyStore.save({
+            success: function () {
+                //reload the property list after finish saving
+                me.getStore('PropertyValue').load({
+                    callback: function () {
+                        propertyStore.load();
+                    }
+                });
+            }
+        });
         return article;
     },
 
@@ -832,11 +841,14 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         var me = this,
             store = me.getStore('PropertyValue'),
             optionId = event.record.getId();
-
-        store.clearFilter();
-        store.filter({
-            filterFn: function(item) {
-                return item.get('optionId') === optionId;
+        store.load({
+            callback: function() {
+                store.clearFilter();
+                store.filter({
+                    filterFn: function(item) {
+                        return item.get('optionId') === optionId;
+                    }
+                });
             }
         });
     },
