@@ -13,8 +13,9 @@
 {* Hide actual listing if a emotion world is active *}
 {if !$sOffers}
     {block name="frontend_listing_listing_outer"}
-        <div class="listing" id="{$sTemplate}">
+        <ul class="listing listing--{$sTemplate}">
             {block name="frontend_listing_list_inline"}
+
                 {* Actual listing *}
                 {if $showListing}
                     {foreach $sArticles as $sArticle}
@@ -22,7 +23,7 @@
                     {/foreach}
                 {/if}
             {/block}
-        </div>
+        </ul>
     {/block}
 {else}
     {if $sCategoryContent.parent != 1}
