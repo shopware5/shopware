@@ -34,53 +34,131 @@ class Repository extends ModelRepository
 {
 
     /**
-      * Returns a query-object for all known payments
-      *
-      * @param null $filter
-      * @param null $order
-      * @param null $offset
-      * @param null $limit
-      * @return \Doctrine\ORM\Query
-      */
-     public function getPaymentsQuery($filter = null, $order = null, $offset = null, $limit = null)
-     {
-         $builder = $this->getPaymentsQueryBuilder($filter, $order);
-         if ($limit !== null) {
-             $builder->setFirstResult($offset)
-                     ->setMaxResults($limit);
-         }
-         return $builder->getQuery();
-     }
+     * Returns a query-object for all known and active payments
+     *
+     * @deprecated use getActivePaymentsQuery instead
+     * @param null $filter
+     * @param null $order
+     * @param null $offset
+     * @param null $limit
+     * @return \Doctrine\ORM\Query
+     */
+    public function getPaymentsQuery($filter = null, $order = null, $offset = null, $limit = null)
+    {
+        return $this->getActivePaymentsQuery($filter, $order, $offset, $limit);
+    }
 
-     /**
-      * Helper method to create the query builder for the "getPaymentsQuery" function.
-      * This function can be hooked to modify the query builder of the query object.
-      *
-      * @param null $filter
-      * @param null $order
-      * @return \Doctrine\ORM\QueryBuilder
-      */
-     public function getPaymentsQueryBuilder($filter = null, $order = null)
-     {
-         $builder = $this->createQueryBuilder('p');
-         $builder->select(array(
-             'p.id as id',
-             'p.name as name',
-             'p.description as description',
-             'p.position as position',
-             'p.active as active'
-         ));
-         $builder->where('p.active = 1');
+    /**
+     * Helper method to create the query builder for the "getPaymentsQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     *
+     * @deprecated use getActivePaymentsQueryBuilder instead
+     * @param null $filter
+     * @param null $order
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getPaymentsQueryBuilder($filter = null, $order = null)
+    {
+        return $this->getActivePaymentsQueryBuilder($filter, $order);
+    }
 
-         if ($filter !== null) {
-             $builder->addFilter($filter);
-         }
-         if ($order !== null) {
-             $builder->addOrderBy($order);
-         }
+    /**
+     * Returns a query-object for all known and active payments
+     *
+     * @param null $filter
+     * @param null $order
+     * @param null $offset
+     * @param null $limit
+     * @return \Doctrine\ORM\Query
+     */
+    public function getActivePaymentsQuery($filter = null, $order = null, $offset = null, $limit = null)
+    {
+        $builder = $this->getActivePaymentsQueryBuilder($filter, $order);
+        if ($limit !== null) {
+            $builder->setFirstResult($offset)->setMaxResults($limit);
+        }
+        return $builder->getQuery();
+    }
 
-         return $builder;
-     }
+    /**
+     * Helper method to create the query builder for the "getActivePaymentsQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     *
+     * @param null $filter
+     * @param null $order
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getActivePaymentsQueryBuilder($filter = null, $order = null)
+    {
+        $builder = $this->createQueryBuilder('p');
+        $builder->select(
+            array(
+                'p.id as id',
+                'p.name as name',
+                'p.description as description',
+                'p.position as position',
+                'p.active as active'
+            )
+        );
+        $builder->where('p.active = 1');
+
+        if ($filter !== null) {
+            $builder->addFilter($filter);
+        }
+        if ($order !== null) {
+            $builder->addOrderBy($order);
+        }
+
+        return $builder;
+    }
+
+    /**
+     * Returns a query-object for all payments
+     *
+     * @param null $filter
+     * @param null $order
+     * @param null $offset
+     * @param null $limit
+     * @return \Doctrine\ORM\Query
+     */
+    public function getAllPaymentsQuery($filter = null, $order = null, $offset = null, $limit = null)
+    {
+        $builder = $this->getAllPaymentsQueryBuilder($filter, $order);
+        if ($limit !== null) {
+            $builder->setFirstResult($offset)->setMaxResults($limit);
+        }
+        return $builder->getQuery();
+    }
+
+    /**
+     * Helper method to create the query builder for the "getAllPaymentsQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     *
+     * @param null $filter
+     * @param null $order
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getAllPaymentsQueryBuilder($filter = null, $order = null)
+    {
+        $builder = $this->createQueryBuilder('p');
+        $builder->select(
+            array(
+                'p.id as id',
+                'p.name as name',
+                'p.description as description',
+                'p.position as position',
+                'p.active as active'
+            )
+        );
+        if ($filter !== null) {
+            $builder->addFilter($filter);
+        }
+        if ($order !== null) {
+            $builder->addOrderBy($order);
+        }
+
+        return $builder;
+    }
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....

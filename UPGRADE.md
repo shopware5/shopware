@@ -11,6 +11,7 @@ In this document you will find a changelog of the important changes related to t
 * Removed view variables `sOrders` and `sNotes` from `/engine/Shopware/Controllers/Frontend/Account.php` index action
 * The method `sGetOpenOrderData` in `/engine/core/class/sAdmin.php` returns now a different array structure and will accept new optional parameters
 * Added X-Sendfile support for ESD downloads. `redirectDownload` configuration variable is now deprecated, `esdDownloadStrategy` should be used instead
+* Deprecation: `/engine/Shopware/Models/Payment/Repository.php:` `getPaymentsQuery` and `getPaymentsQueryBuilder` use `getActivePaymentsQuery` and `getActivePaymentsQueryBuilder` instead.
 
 ## 4.2.0
 
