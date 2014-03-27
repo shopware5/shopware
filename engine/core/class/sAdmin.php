@@ -128,15 +128,24 @@ class sAdmin
      */
     public function sValidateVat()
     {
-        if (empty($this->sSYSTEM->sCONFIG['sVATCHECKENDABLED'])) {
+        $vatCheckEnabled = $this->config->get('sVATCHECKENDABLED');
+        if (empty($vatCheckEnabled)) {
             return array();
         }
-        if (empty($this->sSYSTEM->_POST["ustid"]) && empty($this->sSYSTEM->sCONFIG['sVATCHECKREQUIRED'])) {
+        $vatCheckRequired = $this->config->get('sVATCHECKREQUIRED');
+        if (empty($this->sSYSTEM->_POST["ustid"]) && empty($vatCheckRequired)) {
             return array();
         }
 
         $messages = array();
         $ustid = preg_replace('#[^0-9A-Z\+\*\.]#', '', strtoupper($this->sSYSTEM->_POST['ustid']));
+
+        $vatCheckAdvancedNumber = $this->config->get('sVATCHECKADVANCEDNUMBER');
+        $vatCheckConfirmation = $this->config->get('sVATCHECKCONFIRMATION');
+        $vatCheckAdvanced = $this->config->get('sVATCHECKADVANCED');
+        $vatCheckAdvancedCountries = $this->config->get('sVATCHECKADVANCEDCOUNTRIES');
+        $vatCheckNoService = $this->config->get('sVATCHECKNOSERVICE');
+
         $country = $this->db->fetchOne(
             'SELECT countryiso FROM s_core_countries WHERE id=?',
             array($this->sSYSTEM->_POST['country'])
@@ -151,19 +160,19 @@ class sAdmin
             $messages[] = sprintf($this->snippetObject->get('VatFailureErrorField', 'The field %s does not match to the vat id entered'), $field_name);
         } elseif ($country == 'DE') {
 
-        } elseif (!empty($this->sSYSTEM->sCONFIG['sVATCHECKADVANCEDNUMBER'])) {
+        } elseif (!empty($vatCheckAdvancedNumber)) {
             $data = array(
-                'UstId_1' => $this->sSYSTEM->sCONFIG['sVATCHECKADVANCEDNUMBER'],
+                'UstId_1' => $vatCheckAdvancedNumber,
                 'UstId_2' => $vat[1] . $vat[2],
                 'Firmenname' => '',
                 'Ort' => '',
                 'PLZ' => '',
                 'Strasse' => '',
-                'Druck' => empty($this->sSYSTEM->sCONFIG['sVATCHECKCONFIRMATION']) ? 'nein' : 'ja'
+                'Druck' => empty($vatCheckConfirmation) ? 'nein' : 'ja'
             );
 
-            if (!empty($this->sSYSTEM->sCONFIG['sVATCHECKADVANCED'])
-                && strpos($this->sSYSTEM->sCONFIG['sVATCHECKADVANCEDCOUNTRIES'], $vat[1]) !== false
+            if (!empty($vatCheckAdvanced)
+                && strpos($vatCheckAdvancedCountries, $vat[1]) !== false
             ) {
                 $data['Firmenname'] = $this->sSYSTEM->_POST['company'];
                 $data['Ort'] = $this->sSYSTEM->_POST['city'];
@@ -178,7 +187,7 @@ class sAdmin
                 'method' => 'GET',
                 'header' => 'Content-Type: text/html; charset=utf-8',
                 'timeout' => 5,
-                'user_agent' => 'Shopware/' . $this->sSYSTEM->sCONFIG['sVERSION']
+                'user_agent' => 'Shopware/' . $this->config->get('sVERSION')
             )));
             $response = @file_get_contents($request, false, $context);
 
@@ -186,7 +195,7 @@ class sAdmin
             if (!empty($response) && preg_match_all($reg, $response, $matches)) {
                 $response = array_combine($matches[1], $matches[2]);
                 $messages = $this->sCheckVatResponse($response);
-            } elseif (empty($this->sSYSTEM->sCONFIG['sVATCHECKNOSERVICE'])) {
+            } elseif (empty($vatCheckNoService)) {
                 $messages[] = sprintf($this->snippetObject->get('VatFailureUnknownError', 'An unknown error occurs while checking your vat id. Error code %d'), 10);
             }
         } elseif (false && class_exists('SoapClient')) {
@@ -199,7 +208,8 @@ class sAdmin
             }
             if (is_soap_fault($response)) {
                 $messages[] = sprintf($this->snippetObject->get('VatFailureUnknownError', 'An unknown error occurs while checking your vat id. Error code %d'), 12);
-                if (!empty($this->sSYSTEM->sCONFIG['sVATCHECKDEBUG'])) {
+                $vatCheckDebug = $this->config->get('sVATCHECKDEBUG');
+                if (!empty($vatCheckDebug)) {
                     $messages[] = "SOAP-error: (errorcode: {$response->faultcode}, errormsg: {$response->faultstring})";
                 }
             } elseif (empty($response->valid)) {
@@ -208,10 +218,14 @@ class sAdmin
         } else {
             $messages[] = sprintf($this->snippetObject->get('VatFailureUnknownError', 'An unknown error occurs while checking your vat id. Error code %d'), 20);
         }
-        if (!empty($messages) && empty($this->sSYSTEM->sCONFIG['sVATCHECKREQUIRED'])) {
+
+        $vatCheckRequired = $this->config->get('sVATCHECKREQUIRED');
+        if (!empty($messages) && empty($vatCheckRequired)) {
             $messages[] = $this->snippetObject->get('VatFailureErrorInfo', ''); // todo@all In the case vat is not required in registration, this info message should occur
         }
-        $messages = Enlight()->Events()->filter('Shopware_Modules_Admin_CheckTaxID_MessagesFilter', $messages,
+        $messages = Enlight()->Events()->filter(
+            'Shopware_Modules_Admin_CheckTaxID_MessagesFilter',
+            $messages,
             array('subject' => $this, "post" => $this->sSYSTEM->_POST->toArray())
         );
         return $messages;
@@ -226,13 +240,15 @@ class sAdmin
      */
     public function sCheckVatResponse($response)
     {
-        if (!empty($this->sSYSTEM->sCONFIG['sVATCHECKNOSERVICE'])) {
+        $vatCheckNoService = $this->config->get('sVATCHECKNOSERVICE');
+        if (!empty($vatCheckNoService)) {
             if (in_array($response['ErrorCode'], array(999, 205, 218, 208, 217, 219))) {
                 return array();
             }
         }
         // todo@all remove if no longer needed, else fix this unicode mess
-        if (!empty($this->sSYSTEM->sCONFIG['sVATCHECKDEBUG'])) {
+        $vatCheckDebug = $this->config->get('sVATCHECKDEBUG');
+        if (!empty($vatCheckDebug)) {
             switch ($response['ErrorCode']) {
                 case 200: break;
                 case 201: $msg = 'Die eingegebene USt-IdNr. ist ungültig.'; break;
@@ -288,7 +304,7 @@ class sAdmin
             $fields = array('Erg_Name', 'Erg_Ort', 'Erg_PLZ', 'Erg_Str');
             $field_names = explode(',', $this->snippetObject->get('VatFailureErrorFields', 'Company,City,Zip,Street,Country'));
             foreach ($fields as $key => $field) {
-                if (isset($response[$field]) && strpos($this->sSYSTEM->sCONFIG['sVATCHECKVALIDRESPONSE'], $response[$field]) === false) {
+                if (isset($response[$field]) && strpos($this->config->get('sVATCHECKVALIDRESPONSE'), $response[$field]) === false) {
                     $name = isset($field_names[$key]) ? $field_names[$key] : $field;
                     $result[] = sprintf($this->snippetObject->get('VatFailureErrorField', 'The field %s does not match to the vat id entered'), $name);
                 }
@@ -333,20 +349,20 @@ class sAdmin
 
         // Hide payment means which are not active
         if (!$data["active"] && $data["id"] != $user["additional"]["user"]["paymentpreset"]) {
-            $resetPayment = $this->sSYSTEM->sCONFIG["sPAYMENTDEFAULT"];
+            $resetPayment = $this->config->get('sPAYMENTDEFAULT');
         }
 
         // If esd - order, hide payment means which
         // are not available for esd
         if (!$data["esdactive"] && $sEsd) {
-            $resetPayment = $this->sSYSTEM->sCONFIG["sPAYMENTDEFAULT"];
+            $resetPayment = $this->config->get('sPAYMENTDEFAULT');
         }
 
         // Check additional rules
         if ($this->sManageRisks($data["id"], $basket, $user)
             && $data["id"] != $user["additional"]["user"]["paymentpreset"]
         ) {
-            $resetPayment = $this->sSYSTEM->sCONFIG["sPAYMENTDEFAULT"];
+            $resetPayment = $this->config->get('sPAYMENTDEFAULT');
         }
 
         if (!empty($user['additional']['countryShipping']['id'])) {
@@ -377,7 +393,7 @@ class sAdmin
                 $id
             ));
             if (empty($active)) {
-                $resetPayment = $this->sSYSTEM->sCONFIG["sPAYMENTDEFAULT"];
+                $resetPayment = $this->config->get('sPAYMENTDEFAULT');
             }
         }
 
@@ -689,7 +705,8 @@ class sAdmin
                 return false;
             }
 
-            if (Shopware()->Config()->optinnewsletter) {
+            $optinNewsletter = $this->config->get('optinnewsletter');
+            if ($optinNewsletter) {
                 $hash = md5(uniqid(rand()));
                 $data = serialize(array("newsletter"=>$email,"subscribeToNewsletter"=>true));
 
@@ -702,14 +719,18 @@ class sAdmin
 
                 $this->sendMail($email, 'sOPTINNEWSLETTER', $link);
 
-                Shopware()->Db()->query('
-                    INSERT INTO s_core_optin (datum, hash, data)
-                    VALUES (now(),?,?)
-                ',array($hash,$data));
+                $this->db->insert(
+                    's_core_optin',
+                    array(
+                        'datum' => new Zend_Date(),
+                        'hash' => $hash,
+                        'data' => $data
+                    )
+                );
                 return true;
             }
 
-            $groupID = $this->sSYSTEM->sCONFIG['sNEWSLETTERDEFAULTGROUP'];
+            $groupID = $this->config->get('sNEWSLETTERDEFAULTGROUP');
             if (!$groupID) {
                 $groupID = "0";
             }
@@ -1209,7 +1230,7 @@ class sAdmin
                 if (strlen(trim($postData["password"])) == 0
                     || !$postData["password"]
                     || !$postData["passwordConfirmation"]
-                    || (strlen($postData["password"]) < $this->sSYSTEM->sCONFIG['sMINPASSWORD'])
+                    || (strlen($postData["password"]) < $this->config->get('sMINPASSWORD'))
                 ) {
                     $sErrorMessages[] = Shopware()->Snippets()->getNamespace("frontend")->get('RegisterPasswordLength','',true);
 
@@ -1576,7 +1597,7 @@ class sAdmin
             AND UNIX_TIMESTAMP(lastlogin) >= (UNIX_TIMESTAMP(now())-?)
         ";
 
-        $timeOut = $this->sSYSTEM->sCONFIG['sUSERTIMEOUT'];
+        $timeOut = $this->config->get('sUSERTIMEOUT');
         $timeOut = !empty($timeOut) ? $timeOut : 7200;
 
         $getUser = $this->db->fetchRow(
@@ -1898,14 +1919,11 @@ class sAdmin
     public function sSaveRegisterMainData($userObject)
     {
         // Support for merchants
-        if ($userObject["billing"]["sValidation"]) {
-            $sMerchant = $userObject["billing"]["sValidation"];
-        } else {
-            $sMerchant = "";
-        }
+        $sMerchant = $userObject["billing"]["sValidation"] ? : "";
 
-        if (empty($this->sSYSTEM->sCONFIG["sDefaultCustomerGroup"])) {
-            $this->sSYSTEM->sCONFIG["sDefaultCustomerGroup"] = "EK";
+        $defaultCustomerGroup = $this->config->get('sDefaultCustomerGroup');
+        if (empty($defaultCustomerGroup)) {
+            $this->config->set('sDefaultCustomerGroup', 'EK');
         }
         $referer = $this->sSYSTEM->_SESSION['sReferer'];
 
@@ -1925,7 +1943,7 @@ class sAdmin
             empty($sMerchant) ? "" : $sMerchant,
             $this->sSYSTEM->sSESSION_ID,
             empty($partner) ? "" : $partner,
-            $this->sSYSTEM->sCONFIG["sDefaultCustomerGroup"],
+            $this->config->get('sDefaultCustomerGroup'),
             $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"],
             $this->subshopId,
             empty($referer) ? "" : $referer,
@@ -2189,9 +2207,9 @@ class sAdmin
 
         $context = array(
             'sMAIL'     => $email,
-            'sShop'     => Shopware()->Config()->ShopName,
-            'sShopURL'  => 'http://' . Shopware()->Config()->BasePath,
-            'sConfig'   => Shopware()->Config(),
+            'sShop'     => $this->config->get('ShopName'),
+            'sShopURL'  => 'http://' . $this->config->get('BasePath'),
+            'sConfig'   => $this->config,
         );
 
 
@@ -2207,8 +2225,9 @@ class sAdmin
         $mail = Shopware()->TemplateMail()->createMail('sREGISTERCONFIRMATION', $context);
         $mail->addTo($email);
 
-        if (!empty($this->sSYSTEM->sCONFIG["sSEND_CONFIRM_MAIL"])) {
-            $mail->addBcc($this->sSYSTEM->sCONFIG['sMAIL']);
+        $sendConfirmationEmail = $this->config->get('sSEND_CONFIRM_MAIL');
+        if (!empty($sendConfirmationEmail)) {
+            $mail->addBcc($this->config->get('sMAIL'));
         }
 
         Enlight()->Events()->notify(
@@ -2237,7 +2256,7 @@ class sAdmin
         if (!$this->sSYSTEM->_SESSION["sRegisterFinished"]) {
             if (empty($this->sSYSTEM->_SESSION["sRegister"]["payment"]["object"]["id"])) {
                 $register = $this->sSYSTEM->_SESSION["sRegister"];
-                $register["payment"]["object"]["id"] = $this->sSYSTEM->sCONFIG['sDEFAULTPAYMENT'];
+                $register["payment"]["object"]["id"] = $this->config->get('sDEFAULTPAYMENT');
                 $this->sSYSTEM->_SESSION["sRegister"] = $register;
             }
 
@@ -2297,7 +2316,7 @@ class sAdmin
                 $userObject = $this->sSYSTEM->_SESSION["sRegister"];
 
                 if (!$userObject["payment"]["object"]["id"]) {
-                    $userObject["payment"]["object"]["id"] = $this->sSYSTEM->sCONFIG['sPAYMENTDEFAULT'];
+                    $userObject["payment"]["object"]["id"] = $this->config->get('sPAYMENTDEFAULT');
                 }
 
                 // Save main user data
@@ -2319,7 +2338,7 @@ class sAdmin
                 }
 
 
-                if ($this->sSYSTEM->sCONFIG['sSHOPWAREMANAGEDCUSTOMERNUMBERS']) {
+                if ($this->config->get('sSHOPWAREMANAGEDCUSTOMERNUMBERS')) {
                     if (!Enlight()->Events()->notifyUntil(
                         'Shopware_Modules_Admin_SaveRegister_GetCustomerNumber', 
                         array('subject' => $this,'id' => $userID))
@@ -2419,7 +2438,7 @@ class sAdmin
 
         foreach ($getOrders as $orderKey => $orderValue) {
 
-            if (($this->sSYSTEM->sCONFIG['sARTICLESOUTPUTNETTO'] && !$this->sSYSTEM->sUSERGROUPDATA["tax"])
+            if (($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA["tax"])
                 || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])
             ) {
                 $getOrders[$orderKey]["invoice_amount"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($orderValue["invoice_amount_net"]);
@@ -2455,7 +2474,7 @@ class sAdmin
                         }
                         $getOrderDetails[$orderDetailsKey]["serial"] =  implode(",", $numbers);
                         // Building download link
-                        $getOrderDetails[$orderDetailsKey]["esdLink"] = $this->sSYSTEM->sCONFIG["sBASEFILE"].'?sViewport=account&sAction=download&esdID='.$orderDetailsValue['id'];
+                        $getOrderDetails[$orderDetailsKey]["esdLink"] = $this->config->get('sBASEFILE').'?sViewport=account&sAction=download&esdID='.$orderDetailsValue['id'];
                     } else {
                         unset($getOrderDetails[$orderDetailsKey]);
                     }
@@ -2599,8 +2618,8 @@ class sAdmin
                         }
                         $getOrderDetails[$orderDetailsKey]["serial"] =  implode(",",$numbers);
                         // Building download-link
-                        $getOrderDetails[$orderDetailsKey]["esdLink"] = $this->sSYSTEM->sCONFIG["sBASEFILE"].'?sViewport=account&sAction=download&esdID='.$orderDetailsValue['id'];
-                        //$getOrderDetails[$orderDetailsKey]["esdLink"] = "http://".$this->sSYSTEM->sCONFIG["sBASEPATH"]."/engine/core/php/loadesd.php?id=".$orderDetailsValue["id"];
+                        $getOrderDetails[$orderDetailsKey]["esdLink"] = $this->config->get('sBASEFILE').'?sViewport=account&sAction=download&esdID='.$orderDetailsValue['id'];
+                        //$getOrderDetails[$orderDetailsKey]["esdLink"] = "http://".$this->config->get('sBASEPATH')."/engine/core/php/loadesd.php?id=".$orderDetailsValue["id"];
                     }
                     // -- End of serial check
                 }
@@ -2767,7 +2786,7 @@ class sAdmin
             $userData["billingaddress"] = array_merge($attributes, $billing);
 
             if (empty($userData["billingaddress"]['customernumber'])
-                && $this->sSYSTEM->sCONFIG['sSHOPWAREMANAGEDCUSTOMERNUMBERS']
+                && $this->config->get('sSHOPWAREMANAGEDCUSTOMERNUMBERS')
             ) {
                 $sql = "
                     UPDATE `s_order_number`,`s_user_billingaddress`
@@ -2821,12 +2840,13 @@ class sAdmin
             $userData["shippingaddress"]= array_merge($attributes, $shipping);
 
             // If shipping address is not available, billing address is coeval the shipping address
+            $countryShipping = $this->config->get('sCOUNTRYSHIPPING');
             if (!isset($userData["shippingaddress"]["firstname"])) {
                 $userData["shippingaddress"] = $userData["billingaddress"];
                 $userData["shippingaddress"]["eqalBilling"] = true;
             } else {
                 if (($userData["shippingaddress"]["countryID"] != $userData["billingaddress"]["countryID"])
-                    && empty($this->sSYSTEM->sCONFIG["sCOUNTRYSHIPPING"])
+                    && empty($countryShipping)
                 ) {
                     $this->db->query(
                         "UPDATE s_user_shippingaddress SET countryID = ? WHERE id = ?",
@@ -3566,7 +3586,7 @@ class sAdmin
         }
 
         if (empty($groupID)) {
-            $groupID = $this->sSYSTEM->sCONFIG["sNEWSLETTERDEFAULTGROUP"];
+            $groupID = $this->config->get('sNEWSLETTERDEFAULTGROUP');
             $sql = '
                 INSERT IGNORE INTO s_campaigns_groups (id, name)
                 VALUES (?, ?)
@@ -3821,8 +3841,9 @@ class sAdmin
     public function sGetDispatchBasket($countryID = null, $paymentID = null, $stateId = null)
     {
         $sql_select = '';
-        if (!empty($this->sSYSTEM->sCONFIG['sPREMIUMSHIPPIUNGASKETSELECT'])) {
-            $sql_select .= ', '.$this->sSYSTEM->sCONFIG['sPREMIUMSHIPPIUNGASKETSELECT'];
+        $premiumShippingBsketSelect = $this->config->get('sPREMIUMSHIPPIUNGASKETSELECT');
+        if (!empty($premiumShippingBsketSelect)) {
+            $sql_select .= ', '.$premiumShippingBsketSelect;
         }
         $sql = 'SELECT id, calculation_sql FROM s_premium_dispatch WHERE active = 1 AND calculation = 3';
         $calculations = $this->db->fetchAssoc($sql);
@@ -4241,7 +4262,7 @@ class sAdmin
                 if(empty($dispatch['calculation'])) {
                     $from = round($basket['weight'],3);
                 } elseif ($dispatch['calculation']==1) {
-                    if (($this->sSYSTEM->sCONFIG['sARTICLESOUTPUTNETTO'] && !$this->sSYSTEM->sUSERGROUPDATA["tax"])
+                    if (($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA["tax"])
                         || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])
                     ) {
                         $from = round($basket['amount_net'], 2);
@@ -4289,20 +4310,22 @@ class sAdmin
     {
         $currencyFactor = empty($this->sSYSTEM->sCurrency['factor']) ? 1 : $this->sSYSTEM->sCurrency['factor'];
 
-        $discount_tax = empty($this->sSYSTEM->sCONFIG['sDISCOUNTTAX']) ? 0 : (float) str_replace(',','.',$this->sSYSTEM->sCONFIG['sDISCOUNTTAX']);
+        $discount_tax = $this->config->get('sDISCOUNTTAX');
+        $discount_tax = empty($discount_tax) ? 0 : (float) str_replace(',', '.', $discount_tax);
 
         // Determinate tax automatically
-        if (!empty($this->sSYSTEM->sCONFIG["sTAXAUTOMODE"])) {
+        $taxAutoMode = $this->config->get('sTAXAUTOMODE');
+        if (!empty($taxAutoMode)) {
             $discount_tax = $this->sSYSTEM->sMODULES['sBasket']->getMaxTax();
         }
 
-        $surcharge_ordernumber = isset($this->sSYSTEM->sCONFIG['sPAYMENTSURCHARGEABSOLUTENUMBER']) ? $this->sSYSTEM->sCONFIG['sPAYMENTSURCHARGEABSOLUTENUMBER'] : 'PAYMENTSURCHARGEABSOLUTENUMBER';
-        $surcharge_name = isset($this->sSYSTEM->sCONFIG["sPAYMENTSURCHARGEABSOLUTE"]) ? $this->sSYSTEM->sCONFIG["sPAYMENTSURCHARGEABSOLUTE"] : 'Zuschlag für Zahlungsart';
-        $discount_ordernumber = isset($this->sSYSTEM->sCONFIG['sSHIPPINGDISCOUNTNUMBER']) ? $this->sSYSTEM->sCONFIG['sSHIPPINGDISCOUNTNUMBER'] : 'SHIPPINGDISCOUNT';
-        $discount_name = isset($this->sSYSTEM->sCONFIG["sSHIPPINGDISCOUNTNAME"]) ? $this->sSYSTEM->sCONFIG["sSHIPPINGDISCOUNTNAME"] : 'Warenkorbrabatt';
-        $percent_ordernumber = isset($this->sSYSTEM->sCONFIG['sPAYMENTSURCHARGENUMBER']) ? $this->sSYSTEM->sCONFIG['sPAYMENTSURCHARGENUMBER']: "PAYMENTSURCHARGE";
-        $discount_basket_ordernumber = isset($this->sSYSTEM->sCONFIG['sDISCOUNTNUMBER']) ? $this->sSYSTEM->sCONFIG['sDISCOUNTNUMBER']: 'DISCOUNT';
-        $discount_basket_name = isset($this->sSYSTEM->sCONFIG['sDISCOUNTNAME']) ? $this->sSYSTEM->sCONFIG['sDISCOUNTNAME']: 'Warenkorbrabatt';
+        $surcharge_ordernumber = $this->config->get('sPAYMENTSURCHARGEABSOLUTENUMBER', 'PAYMENTSURCHARGEABSOLUTENUMBER');
+        $surcharge_name = $this->config->get('sPAYMENTSURCHARGEABSOLUTE', 'Zuschlag für Zahlungsart');
+        $discount_ordernumber = $this->config->get('sSHIPPINGDISCOUNTNUMBER', 'SHIPPINGDISCOUNT');
+        $discount_name = $this->config->get('sSHIPPINGDISCOUNTNAME', 'Warenkorbrabatt');
+        $percent_ordernumber = $this->config->get('sPAYMENTSURCHARGENUMBER', "PAYMENTSURCHARGE");
+        $discount_basket_ordernumber = $this->config->get('sDISCOUNTNUMBER', 'DISCOUNT');
+        $discount_basket_name = $this->config->get('sDISCOUNTNAME', 'Warenkorbrabatt');
 
         $sql = 'DELETE FROM s_order_basket WHERE sessionID=? AND modus IN (3, 4) AND ordernumber IN (?, ?, ?, ?)';
         $this->db->query($sql, array(
@@ -4464,9 +4487,9 @@ class sAdmin
             $percent = round($amount / 100 * $payment['debit_percent'], 2);
 
             if ($percent>0) {
-                $percent_name = $this->sSYSTEM->sCONFIG["sPAYMENTSURCHARGEADD"];
+                $percent_name = $this->config->get('sPAYMENTSURCHARGEADD');
             } else {
-                $percent_name = $this->sSYSTEM->sCONFIG["sPAYMENTSURCHARGEDEV"];
+                $percent_name = $this->config->get('sPAYMENTSURCHARGEDEV');
             }
 
             if (empty($this->sSYSTEM->sUSERGROUPDATA["tax"]) && !empty($this->sSYSTEM->sUSERGROUPDATA["id"])) {
@@ -4515,7 +4538,7 @@ class sAdmin
             if (empty($dispatch['surcharge_calculation']) && !empty($payment['surcharge']))
                 return array(
                     'brutto' => $payment['surcharge'],
-                    'netto' => round($payment['surcharge']*100/(100+$this->sSYSTEM->sCONFIG['sTAXSHIPPING']),2)
+                    'netto' => round($payment['surcharge']*100/(100+$this->config->get('sTAXSHIPPING')),2)
                 );
             else {
                 return array('brutto' => 0, 'netto' => 0);
