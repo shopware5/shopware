@@ -229,7 +229,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     {
         $orderStatus = $this->getOrderRepository()->getOrderStatusQuery()->getArrayResult();
         $paymentStatus = $this->getOrderRepository()->getPaymentStatusQuery()->getArrayResult();
-        $payment = $this->getPaymentRepository()->getPaymentsQuery()->getArrayResult();
+        $payment = $this->getPaymentRepository()->getAllPaymentsQuery()->getArrayResult();
         $dispatch = $this->getDispatchRepository()->getDispatchesQuery()->getArrayResult();
         $shop = $this->getShopRepository()->getBaseListQuery()->getArrayResult();
         $country = $this->getCountryRepository()->getCountriesQuery()->getArrayResult();
