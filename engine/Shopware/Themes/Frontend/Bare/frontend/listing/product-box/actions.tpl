@@ -12,7 +12,7 @@
         {/block}
 
         {* More information button *}
-        {block name='frontend_listing_box_article_actions_inline'}
+        {block name='frontend_listing_box_article_actions_more'}
             <a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName}"
                class="product--action action--more">{s name='ListingBoxLinkDetails'}{/s}</a>
         {/block}
