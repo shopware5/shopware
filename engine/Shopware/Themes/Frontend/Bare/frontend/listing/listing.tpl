@@ -11,17 +11,30 @@
 {/block}
 
 {* Hide actual listing if a emotion world is active *}
-{if !$sOffers} 
-	<div class="listing" id="{$sTemplate}">
-	{block name="frontend_listing_list_inline"}
-		{* Actual listing *}
-		{if $showListing}
-			{foreach $sArticles as $sArticle}
-				{include file="frontend/listing/box_article.tpl" sTemplate=$sTemplate lastitem=$sArticle@last firstitem=$sArticle@first}
-			{/foreach}
-		{/if}
-	{/block}
-	</div>
+{if !$sOffers}
+    {block name="frontend_listing_listing_outer"}
+        <div class="listing" id="{$sTemplate}">
+            {block name="frontend_listing_list_inline"}
+                {* Actual listing *}
+                {if $showListing}
+                    {foreach $sArticles as $sArticle}
+                        {include file="frontend/listing/box_article.tpl" sTemplate=$sTemplate lastitem=$sArticle@last firstitem=$sArticle@first}
+                    {/foreach}
+                {/if}
+            {/block}
+        </div>
+    {/block}
+{else}
+    {if $sCategoryContent.parent != 1}
+        <div class="listing_actions normal">
+            <div class="top">
+                <a class="offers" href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}">
+                    {s name="ListingActionsOffersLink"}Weitere Artikel in dieser Kategorie &raquo;{/s}
+                </a>
+            </div>
+        </div>
+        <div class="space">&nbsp;</div>
+    {/if}
 {/if}
 
 {* Paging *}
