@@ -157,7 +157,30 @@ Ext.define('Shopware.apps.Order.view.detail.Debit', {
             labelStyle: 'font-weight: 700;',
             editable:false,
             queryMode: 'local',
+            tpl: Ext.create('Ext.XTemplate',
+                '<tpl for=".">',
+                '<tpl if="this.doHighlight(id)">',
+                '<div class="x-boundlist-item" style="background-color:#F2DEDE; color: #A94442">{literal}{description}{/literal}</div>',
+                '<tpl else>',
+                '<div class="x-boundlist-item">{literal}{description}{/literal}</div>',
+                '</tpl>',
+                '</tpl>',
+                {
+                    doHighlight: function (id) {
+                        //highlight all inactive payment methods of the boundlist
+                        var record = me.paymentCombo.getStore().findRecord('id', id);
+                        return !record.get('active');
+                    }
+                }
+            ),
             listeners: {
+                afterrender: function(field) {
+                    //initial call
+                    me.highlightPaymentComboBox(field);
+                    this.on('change', function(field) {
+                        me.highlightPaymentComboBox(field);
+                    });
+                },
                 change:function (field, newValue) {
                     me.fireEvent('changePayment', newValue, me.fieldContainer);
                 }
@@ -165,6 +188,24 @@ Ext.define('Shopware.apps.Order.view.detail.Debit', {
         });
 
         return me.paymentCombo;
+    },
+
+    /**
+     * highlights the inactive payment methods of the payment comboBox
+     *
+     * @param field
+     */
+    highlightPaymentComboBox: function (field) {
+        var store = field.getStore();
+            var selectedRecord = store.findRecord('id', field.getValue()),
+            input = Ext.get(field.getEl().down('.x-form-field'));
+
+        if (!selectedRecord.get('active')) {
+            input.setStyle({ 'color': '#A94442', 'background': '#F2DEDE' });
+        }
+        else {
+            input.setStyle({ 'background': '', 'color': '' });
+        }
     },
 
     /**
