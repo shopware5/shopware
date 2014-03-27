@@ -89,7 +89,7 @@ class sCms
             "SELECT * FROM s_cms_static WHERE id = ?",
             array($staticId)
         );
-        if (empty($staticPage)) {
+        if ($staticPage === false) {
             return false;
         }
 
@@ -114,6 +114,7 @@ class sCms
             $staticPage['parent'] = $this->db->fetchRow(
                 $sql, array($staticPage['parentID'])
             );
+            $staticPage['parent'] = $staticPage['parent'] ? : array();
         } else {
             $sql = '
                 SELECT p.id, p.description, p.link, p.target, p.page_title
