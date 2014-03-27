@@ -167,7 +167,7 @@ Ext.define('Shopware.apps.Order.view.detail.Debit', {
                 '</tpl>',
                 {
                     doHighlight: function (id) {
-                        //highlight all inactive payment methods of the boundlist
+                        //highlight all inactive payment methods of the bound list
                         var record = me.paymentCombo.getStore().findRecord('id', id);
                         return !record.get('active');
                     }
