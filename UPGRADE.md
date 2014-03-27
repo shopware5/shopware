@@ -10,6 +10,7 @@ In this document you will find a changelog of the important changes related to t
 * `Shopware_Components_Plugin_Bootstrap` now has a `addFormTranslations()` method to facilitate translations creation for forms.
 * Removed view variables `sOrders` and `sNotes` from `/engine/Shopware/Controllers/Frontend/Account.php` index action
 * The method `sGetOpenOrderData` in `/engine/core/class/sAdmin.php` returns now a different array structure and will accept new optional parameters
+* Added X-Sendfile support for ESD downloads. `redirectDownload` configuration variable is now deprecated, `esdDownloadStrategy` should be used instead
 
 ## 4.2.0
 
