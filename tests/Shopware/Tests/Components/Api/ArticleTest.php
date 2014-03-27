@@ -494,10 +494,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
         $this->assertCount(5, $article->getImages());
         foreach ($article->getImages() as $image) {
-            echo "<pre>";
-            print_r($article->getImages()->count());
-            echo "</pre>";
-            exit();
             $this->assertCount(6, $image->getMedia()->getThumbnails());
             foreach ($image->getMedia()->getThumbnails() as $thumbnail) {
                 $this->assertFileExists(Shopware()->OldPath() . $thumbnail);
