@@ -6,13 +6,11 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-<div id="center" class="grid_13">
+<div class="content block">
+
 	{* Banner *}
-	
 	{block name="frontend_listing_index_banner"}
-		{if !$sLiveShopping}
-			{include file='frontend/listing/banner.tpl' sLiveShopping=$sLiveShopping}
-		{/if}
+		{include file='frontend/listing/banner.tpl'}
 	{/block}
 	
 	{* Liveshopping *}
@@ -33,7 +31,6 @@
 	{/block}
 	
 	{* Change / Logic move to controller *}
-	
 	{if $sCategoryContent.template eq "article_listing_1col.tpl"}
 		{assign var="sTemplate" value="listing-1col"}
 		{assign var="sBoxMode" value="list"}
