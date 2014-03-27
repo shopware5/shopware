@@ -13,11 +13,6 @@
 		{include file='frontend/listing/banner.tpl'}
 	{/block}
 	
-	{* Liveshopping *}
-	{block name="frontend_listing_index_liveshopping"}
-		{include file='frontend/listing/liveshopping.tpl'}
-	{/block}
-	
 	{* Category headline *}
 	{block name="frontend_listing_index_text"}
 		{if !$hasEmotion && !$sSupplierInfo}
