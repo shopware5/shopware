@@ -5,7 +5,7 @@
 	@{property}: ~"@{emValue}rem";
 }
 
-.unitize-multiple(@topValue, @rightValue, @bottomValue, @leftValue, @baseValue: 16, @property: font-size) {
+.unitize-multiple(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: 16, @property: font-size) {
 	@pxTopValue: @topValue;
 	@emTopValue: (@topValue / @baseValue);
 
@@ -19,32 +19,33 @@
 	@emLeftValue: (@leftValue / @baseValue);
 
 	//@{property}: ~"@{pxTopValue}px @{pxRightValue}px @{pxBottomValue}px @{pxLeftValue}px";
-	@{property}: ~"@{emTopValue}em @{emRightValue}em @{emBottomValue}em @{emLeftValue}em";
+	@{property}: ~"@{emTopValue}rem @{emRightValue}rem @{emBottomValue}rem @{emLeftValue}rem";
 }
 
-.unitize-height(@value, @baseValue) {
+.unitize-height(@value, @baseValue: 16) {
 	.unitize(@value, @baseValue, height);
 }
 
-.unitize-width(@value, @baseValue) {
+.unitize-width(@value, @baseValue: 16) {
 	.unitize(@value, @baseValue, width);
 }
 
-.unitize-max-height(@value, @baseValue) {
+.unitize-max-height(@value, @baseValue: 16) {
 	.unitize(@value, @baseValue, max-height);
 }
 
-.unitize-max-width(@value, @baseValue) {
+.unitize-max-width(@value, @baseValue: 16) {
 	.unitize(@value, @baseValue, max-width);
 }
 
-.unitize-margin(@topValue, @rightValue, @bottomValue, @leftValue, @baseValue: 16) {
+.unitize-margin(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: 16) {
 	.unitize-multiple(@topValue, @rightValue, @bottomValue, @leftValue, @baseValue, margin);
 }
 
-.unitize-padding(@topValue, @rightValue, @bottomValue, @leftValue, @baseValue: 16) {
+.unitize-padding(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: 16) {
 	.unitize-multiple(@topValue, @rightValue, @bottomValue, @leftValue, @baseValue, padding);
 }
+
 .unitze-variable(@value, @baseValue: 16) {
 	@emValue: (@value / @baseValue);
 }
