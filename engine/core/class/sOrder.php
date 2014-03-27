@@ -1102,7 +1102,11 @@ class sOrder
      */
     public function sendMail($variables)
     {
-        $variables = $this->eventManager->filter('Shopware_Modules_Order_SendMail_FilterVariables', $variables, array('subject' => $this));
+        $variables = $this->eventManager->filter(
+            'Shopware_Modules_Order_SendMail_FilterVariables',
+            $variables,
+            array('subject' => $this)
+        );
 
         $context = array(
             'sOrderDetails' => $variables["sOrderDetails"],
@@ -1135,8 +1139,10 @@ class sOrder
         // Support for individual payment means with custom-tables
         if ($variables["additional"]["payment"]["table"]) {
             $paymentTable = $this->db->fetchRow("
-            SELECT * FROM {$variables["additional"]["payment"]["table"]}
-            WHERE userID=?",array($variables["additional"]["user"]["id"]));
+                  SELECT * FROM {$variables["additional"]["payment"]["table"]}
+                  WHERE userID=?",
+                array($variables["additional"]["user"]["id"])
+            );
             $context["sPaymentTable"] = $paymentTable ? : array();
         } else {
             $context["sPaymentTable"] = array();
