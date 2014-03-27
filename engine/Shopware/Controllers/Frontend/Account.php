@@ -523,7 +523,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         if ($this->Request()->isPost()) {
             $status = $this->Request()->getPost('newsletter') ? true : false;
             $this->admin->sUpdateNewsletter($status, $this->admin->sGetUserMailById(), true);
-            $successMessage = 'newsletter';
+            $successMessage =  $status ? 'newsletter' : 'deletenewsletter';
             if(Shopware()->Config()->optinnewsletter && $status) {
                 $successMessage = 'optinnewsletter';
             }
