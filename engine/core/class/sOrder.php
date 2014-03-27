@@ -731,12 +731,12 @@ class sOrder
     }
 
     /**
-     * Helper function which returns the esd defition of the passed variant
+     * Helper function which returns the esd definition of the passed variant
      * order number.
      * Used for the sManageEsd function to check if the current order article variant
      * is an esd variant.
      * @param $orderNumber
-     * @return array
+     * @return array|false
      */
     private function getVariantEsd($orderNumber)
     {
@@ -773,7 +773,7 @@ class sOrder
      * Helper function which returns the attribute data of the passed order position.
      *
      * @param $detailId
-     * @return mixed
+     * @return array|false
      */
     private function getOrderDetailAttributes($detailId)
     {
@@ -958,7 +958,7 @@ class sOrder
      * of the passed order id.
      *
      * @param $orderId
-     * @return array|null
+     * @return array|false
      */
     private function getOrderAttributes($orderId)
     {
@@ -1137,7 +1137,7 @@ class sOrder
             $paymentTable = $this->db->fetchRow("
             SELECT * FROM {$variables["additional"]["payment"]["table"]}
             WHERE userID=?",array($variables["additional"]["user"]["id"]));
-            $context["sPaymentTable"] = $paymentTable;
+            $context["sPaymentTable"] = $paymentTable ? : array();
         } else {
             $context["sPaymentTable"] = array();
         }
@@ -1386,7 +1386,7 @@ class sOrder
         SELECT * FROM s_emarketing_tellafriend WHERE confirmed=0 AND recipient=?
         ";
         $checkIfUserFound = $this->db->fetchRow($tmpSQL, array($checkMail));
-        if (count($checkIfUserFound)) {
+        if ($checkIfUserFound) {
             $this->db->executeUpdate("
             UPDATE s_emarketing_tellafriend SET confirmed=1 WHERE recipient=?
             ",array($checkMail));
@@ -1396,7 +1396,7 @@ class sOrder
             WHERE s_user_billingaddress.userID = s_user.id AND s_user.id=?
             ",array($checkIfUserFound["sender"]));
 
-            if (empty($advertiser)) {
+            if (!$advertiser) {
                 return;
             }
 
