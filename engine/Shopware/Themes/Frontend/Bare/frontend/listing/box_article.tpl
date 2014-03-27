@@ -25,16 +25,13 @@
 
 	{* Product description *}
 	{block name='frontend_listing_box_article_description'}
-		{if $sTemplate eq 'listing-1col'}
-			{$size=270}
-		{else}
-			{$size=60}
-		{/if}
-		<p class="product--description">
-			{if $sTemplate}
-				{$sArticle.description_long|strip_tags|truncate:$size}
-			{/if}
-		</p>
+        {if $sTemplate eq 'listing-1col'}
+            {$size=270}
+        {else}
+            {$size=60}
+        {/if}
+
+        {include file="frontend/listing/product-box/description.tpl" size=$size}
 	{/block}
 
 	{* Product price - Unit price *}
