@@ -99,6 +99,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected $configuratorSetRepository = null;
 
+    /**
+     * @var \Shopware\Components\Model\ModelRepository
+     */
+    protected $propertyValueRepository = null;
+
     public function initAcl()
     {
         $this->addAclPermission("loadStores","read","Insufficient Permissions");
@@ -283,6 +288,19 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
 
         return $this->configuratorSetRepository;
+    }
+
+    /**
+     * Helper function to get access to the Property Value repository.
+     * @return \Shopware\Components\Model\ModelRepository
+     */
+    protected function getPropertyValueRepository()
+    {
+        if ($this->propertyValueRepository === null) {
+            $this->propertyValueRepository = Shopware()->Models()->getRepository('Shopware\Models\Property\Value');
+        }
+
+        return $this->propertyValueRepository;
     }
 
     /**
@@ -1551,27 +1569,40 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function getPropertyValuesAction()
     {
-        $propertyGroupId =  $this->Request()->getParam('propertyGroupId');
+        $propertyGroupId = $this->Request()->getParam('propertyGroupId');
+        $searchValue = $this->Request()->getParam('query');
 
-        $builder = Shopware()->Models()->createQueryBuilder()
-            ->from('Shopware\Models\Property\Value', 'pv')
-            ->join('pv.option', 'po')
-            ->join('po.groups', 'pg', 'with', 'pg.id = :propertyGroupId')
-            ->setParameter('propertyGroupId', $propertyGroupId)
-            ->select(array( 'pv.id', 'pv.value', 'po.id as optionId' ));
+        $builder = Shopware()->Models()->getDBALQueryBuilder();
+        $builder->select(array(
+                'filterValues.id AS id',
+                'filterValues.value AS value',
+                'filterOptions.id AS optionId'))
+            ->from('s_filter_values', 'filterValues')
+            ->innerJoin('filterValues', 's_filter_options', 'filterOptions', 'filterValues.optionID = filterOptions.id' )
+            ->innerJoin('filterOptions', 's_filter_relations', 'filterRelations', 'filterOptions.id = filterRelations.optionID' )
+            ->innerJoin('filterRelations', 's_filter', 'filter', 'filter.id = filterRelations.groupID AND (filter.id = :propertyGroupId)' )
+            ->setParameter('propertyGroupId', $propertyGroupId);
 
-        $query = $builder->getQuery();
-        $data = $query->getArrayResult();
-
+        if (!empty($searchValue)) {
+            $builder->where('filterValues.value like :searchValue');
+            $builder->setParameter('searchValue', '%' . $searchValue . '%');
+        }
+        $statement = $builder->execute();
         $this->View()->assign(array(
-            'data' =>  $data,
-            'total' =>  count($data),
+            'data' => $statement->fetchAll(PDO::FETCH_ASSOC),
             'success' => true
         ));
     }
 
+    /**
+     * saves the property list values in the article module
+     */
     public function setPropertyListAction()
     {
+        if(!$this->Request()->isPost()) {
+            //don't save the property list on a get request. This will only occur when there is an ext js problem
+            return;
+        }
         $models = Shopware()->Models();
         $articleId = $this->Request()->getParam('articleId');
         /** @var $article Shopware\Models\Article\Article */
@@ -1594,13 +1625,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         // If no property group is set for the article, don't recreate the property values
         $propertyGroup = $article->getPropertyGroup();
         if (!$propertyGroup) {
-            $this->View()->assign(array(
-                'success' => true
-            ));
-
+            $this->View()->assign(array('success' => true));
             return;
         }
 
+        $propertyValueRepository = $this->getPropertyValueRepository();
         // recreate property values
         foreach ($properties as $property) {
             if (empty($property['value'])) {
@@ -1608,18 +1637,28 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             }
             /** @var $article Shopware\Models\Property\Option */
             $option = $models->find('Shopware\Models\Property\Option', $property['id']);
-            foreach ((array) $property['value'] as $value) {
+            foreach ((array)$property['value'] as $value) {
+                $propertyValueModel = null;
                 if (is_int($value)) {
-                    $value = $models->find('Shopware\Models\Property\Value', $value);
-                } else {
-                    $value = new Shopware\Models\Property\Value(
-                        $option,
-                        $value
-                    );
-                    $models->persist($value);
+                    // search for property id
+                    $propertyValueModel = $propertyValueRepository->find($value);
                 }
-                if ($value !== null) {
-                    $propertyValues->add($value);
+                if ($propertyValueModel === null) {
+                    //search for property value
+                    $propertyValueModel = $propertyValueRepository->findOneBy(
+                        array(
+                            'value' => $value,
+                            'optionId' => $option->getId()
+                        )
+                    );
+                }
+                if ($propertyValueModel === null) {
+                    $propertyValueModel = new Shopware\Models\Property\Value($option, $value);
+                    $models->persist($propertyValueModel);
+                }
+                if (!$propertyValues->contains($propertyValueModel)) {
+                    //add only new values
+                    $propertyValues->add($propertyValueModel);
                 }
             }
         }
