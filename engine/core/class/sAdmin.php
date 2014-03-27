@@ -499,6 +499,7 @@ class sAdmin
      * Loads the system class of the specified payment mean
      *
      * @param array $paymentData Array with payment data
+     * @throws Enlight_Exception If no payment classes were loaded
      * @return ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod
      * The payment mean handling class instance
      */
@@ -520,15 +521,13 @@ class sAdmin
 
         $class = array_key_exists($index, $dirs) ? $dirs[$index] : $dirs['default'];
         if (!$class) {
-            $this->sSYSTEM->E_CORE_WARNING("sValidateStep3 #02","Payment classes dir not loaded");
-            return false;
+            throw new Enlight_Exception("sValidateStep3 #02: Payment classes dir not loaded");
         }
 
         $sPaymentObject = new $class();
 
         if (!$sPaymentObject) {
-            $this->sSYSTEM->E_CORE_WARNING("sValidateStep3 #02","Payment class not found");
-            return false;
+            throw new Enlight_Exception("sValidateStep3 #02: Payment class not found");
         } else {
             return $sPaymentObject;
         }
@@ -539,20 +538,20 @@ class sAdmin
      * stores the data into database
      *
      * @param array $paymentmeans - Array with payment data
+     * @throws Enlight_Exception If no payment mean is set in POST
      * @return array Payment data
      */
     public function sValidateStep3($paymentmeans = array())
     {
         if (empty($this->sSYSTEM->_POST['sPayment'])) {
-            $this->sSYSTEM->E_CORE_WARNING("sValidateStep3 #00","No payment id");
-            return;
+            throw new Enlight_Exception("sValidateStep3 #00: No payment id");
         }
 
         $user = $this->sGetUserData();
         $paymentData = $this->sGetPaymentMeanById($this->sSYSTEM->_POST['sPayment'], $user);
 
         if (!count($paymentData)) {
-            $this->sSYSTEM->E_CORE_ERROR("sValidateStep3 #01","Could not load paymentmean");
+            throw new Enlight_Exception("sValidateStep3 #01: Could not load paymentmean");
         } else {
             // Include management class and check input data
             if (!empty($paymentData['class'])) {
@@ -571,6 +570,7 @@ class sAdmin
     /**
      * Updates the billing address of the user
      *
+     * @throws Enlight_Exception On database error
      * @return boolean If operation was successful
      */
     public function sUpdateBilling()
@@ -632,8 +632,7 @@ class sAdmin
         $result = $this->db->update('s_user_billingaddress', $data, $where);
 
         if ($this->db->getErrorMessage()) {
-            $this->sSYSTEM->E_CORE_WARNING("sUpdateBilling #01","Could not save data (billing-adress)".$this->db->getErrorMessage());
-            return false;
+            throw new Enlight_Exception("sUpdateBilling #01: Could not save data (billing address)".$this->db->getErrorMessage());
         }
 
         //new attribute tables.
@@ -813,6 +812,7 @@ class sAdmin
      * Updates the shipping address of the user
      * Used in the Frontend Account controller
      *
+     * @throws Enlight_Exception On database error
      * @return boolean If operation was successful
      */
     public function sUpdateShipping()
@@ -907,8 +907,7 @@ class sAdmin
         }
 
         if ($this->db->getErrorMessage()) {
-            $this->sSYSTEM->E_CORE_WARNING("sUpdateShipping #01","Could not save data (billing-adress)".$this->db->getErrorMessage());
-            return false;
+            throw new Enlight_Exception("sUpdateShipping #01: Could not save data (billing address)".$this->db->getErrorMessage());
         }
         return true;
     }
@@ -917,6 +916,7 @@ class sAdmin
      * Updates the payment mean of the user
      * Used in the Frontend Account controller
      *
+     * @throws Enlight_Exception On database error
      * @return boolean If operation was successful
      */
     public function sUpdatePayment()
@@ -942,8 +942,7 @@ class sAdmin
         );
 
         if ($this->db->getErrorMessage()) {
-            $this->sSYSTEM->E_CORE_WARNING("sUpdatePayment #01","Could not save data (payment)".$this->db->getErrorMessage());
-            return false;
+            throw new Enlight_Exception("sUpdatePayment #01: Could not save data (payment)".$this->db->getErrorMessage());
         }
         return true;
     }
@@ -952,6 +951,7 @@ class sAdmin
      * Update user's email address and password
      * Used in the Frontend Account controller
      *
+     * @throws Enlight_Exception On database error
      * @return boolean If operation was successful
      */
     public function sUpdateAccount()
@@ -1009,8 +1009,7 @@ class sAdmin
         }
 
         if ($this->db->getErrorMessage()) {
-            $this->sSYSTEM->E_CORE_WARNING("sUpdateAccount #01","Could not save data (account)".$this->db->getErrorMessage());
-            return false;
+            throw new Enlight_Exception("sUpdateAccount #01: Could not save data (account)".$this->db->getErrorMessage());
         }
         return true;
 
@@ -2224,6 +2223,7 @@ class sAdmin
      * Main registration function used by the Register controller
      * Calls all previously defined helper functions to save user data
      *
+     * @throws Enlight_Exception On database errors
      * @return boolean If the operation was successful
      */
     public function sSaveRegister()
@@ -2292,9 +2292,7 @@ class sAdmin
                 if (!$_COOKIE["SHOPWARESID"]) {
                     $noCookies = "NO SESSION-COOKIE";
                 }
-                $this->sSYSTEM->E_CORE_WARNING("sSaveRegister #00","Fields are missing $noCookies - ".$this->sSYSTEM->sSESSION_ID." - ".print_r($errorFields,true));
-                die ("Session Lost - Bitte aktivieren Sie Cookies in Ihrem Browser!");
-                return false;
+                throw new Enlight_Exception("sSaveRegister #00: Fields are missing $noCookies - ".$this->sSYSTEM->sSESSION_ID." - ".print_r($errorFields,true));
             } else {
                 $userObject = $this->sSYSTEM->_SESSION["sRegister"];
 
@@ -2306,8 +2304,7 @@ class sAdmin
                 $userID = $this->sSaveRegisterMainData($userObject);
 
                 if ($this->db->getErrorMessage() || !$userID) {
-                    $this->sSYSTEM->E_CORE_WARNING("sSaveRegister #01","Could not save data".$this->db->getErrorMessage().print_r($userObject));
-                    die("sSaveRegister #01"."Could not save data".$this->db->getErrorMessage());
+                    throw new Enlight_Exception("sSaveRegister #01: Could not save data".$this->db->getErrorMessage().print_r($userObject));
                 }
 
                 if ($userObject["auth"]["receiveNewsletter"]) {
@@ -2318,8 +2315,7 @@ class sAdmin
                 $userBillingID = $this->sSaveRegisterBilling($userID,$userObject);
 
                 if ($this->db->getErrorMessage() || !$userBillingID) {
-                    $this->sSYSTEM->E_CORE_WARNING("sSaveRegister #02","Could not save data (billing-adress)".$this->db->getErrorMessage().print_r($userObject,true));
-                    die("Could not save data (billing-adress)".$this->db->getErrorMessage());
+                    throw new Enlight_Exception("sSaveRegister #02: Could not save data (billing-adress)".$this->db->getErrorMessage().print_r($userObject,true));
                 }
 
 
@@ -2345,8 +2341,7 @@ class sAdmin
                 if (count($userObject["shipping"])) {
                     $userShippingID = $this->sSaveRegisterShipping($userID, $userObject);
                     if ($this->db->getErrorMessage() || !$userShippingID) {
-                        $this->sSYSTEM->E_CORE_WARNING("sSaveRegister #02","Could not save data (shipping-address)".$this->db->getErrorMessage().print_r($userObject,true));
-                        return false;
+                        throw new Enlight_Exception("sSaveRegister #02: Could not save data (shipping-address)".$this->db->getErrorMessage().print_r($userObject,true));
                     }
                 }
 
