@@ -216,10 +216,10 @@ EOD;
             "w+"
         );
 
-        $output = $this->eventManager->filter('Theme_Generator_Theme_Source_Generated', $source, array(
-            'data' => $data,
-            'parent' => $parent
-        ));
+        $source = $this->eventManager->filter('Theme_Generator_Theme_Source_Generated',
+            $source,
+            array('data' => $data, 'parent' => $parent)
+        );
 
         $output->fwrite($source);
     }
