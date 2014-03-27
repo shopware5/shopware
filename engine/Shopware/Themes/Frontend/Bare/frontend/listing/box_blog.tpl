@@ -2,7 +2,7 @@
 
 {* Description *}
 {block name='frontend_listing_box_article_description'}
-<p class="desc">
+<p class="product--description blog--description">
 	{$sArticle.description_long|strip_tags|truncate:450}
 </p>
 {/block}
