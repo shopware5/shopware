@@ -49,6 +49,8 @@
 		{include file='frontend/listing/listing.tpl' sTemplate=$sTemplate}
 
 	    {if $sCategoryContent.parent != 1 && ! $showListing && !$sSupplierInfo}
+
+            {* Further products in the category *}
             {block name="frontend_listing_index_listing_further_products"}
                 <div class="further-products">
                     <a class="further-products--link" href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}">
@@ -74,9 +76,12 @@
         {include file="frontend/listing/sidebar.tpl"}
     {/block}
 
-    {if {config name=TSID}}
-        {include file='frontend/plugins/trusted_shops/logo.tpl'}
-    {/if}
+    {* Trusted shops logo in the sidebar *}
+    {block name='frontend_listing_index_sidebar_trusted_shops'}
+        {if {config name=TSID}}
+            {include file='frontend/plugins/trusted_shops/logo.tpl'}
+        {/if}
+    {/block}
 {/block}
 
 {* Sidebar right *}
