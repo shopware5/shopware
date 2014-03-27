@@ -68,7 +68,7 @@
     Plugin.prototype.destroy = function() {
         var me = this;
 
-        me.$el.off(clickEvt + '.' + pluginName);
+        me.$el.off(clickEvt + '.' + pluginName).removeData('plugin_' + pluginName);
     };
 
     $.fn[pluginName] = function ( options ) {

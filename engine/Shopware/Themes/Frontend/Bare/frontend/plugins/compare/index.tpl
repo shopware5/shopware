@@ -1,8 +1,6 @@
 {* Compare container *}
 {block name='frontend_index_navigation_inline' append}
-<div id="compareContainerAjax">
 	{include file='frontend/compare/index.tpl'}
-</div>
 {/block}
 
 {* Compare result *}

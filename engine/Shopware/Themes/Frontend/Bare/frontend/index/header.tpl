@@ -64,7 +64,10 @@
 
 {* Stylesheets *}
 {block name="frontend_index_header_css_screen"}
-	<link href="{link file="frontend/_public/dist/all.css"}" media="screen" rel="stylesheet" type="text/css" />
+	{{compileLess timestamp={timestamp} output="lessFiles"}}
+	{foreach $lessFiles as $stylesheet}
+		<link href="{$stylesheet}" media="screen" rel="stylesheet" type="text/css" />
+	{/foreach}
 {/block}
 
 {* Print Stylesheets *}

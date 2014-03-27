@@ -3,7 +3,7 @@
 {block name="frontend_index_content_top"}{/block}
 
 {block name='frontend_index_content_left'}
-    {include file="frontend/index/_includes/sidebar.tpl"}
+    {include file="frontend/index/sidebar.tpl"}
 {/block}
 
 {* Main content *}
