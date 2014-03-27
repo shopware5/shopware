@@ -25,7 +25,7 @@
 		{/if}
 	{/block}
 	
-	{* Change / Logic move to controller *}
+	{* Remap the template names to the new syntax *}
 	{if $sCategoryContent.template eq "article_listing_1col.tpl"}
 		{assign var="sTemplate" value="listing-1col"}
 		{assign var="sBoxMode" value="list"}
@@ -42,7 +42,6 @@
 		{assign var="sTemplate" value="listing-3col"}
 		{assign var="sBoxMode" value="table"}
 	{/if}
-	
 
 	{* Listing *}
 	{block name="frontend_listing_index_listing"}
