@@ -61,6 +61,13 @@ class sAdmin
     private $session;
 
     /**
+     * Request wrapper object
+     *
+     * @var Enlight_Controller_Front
+     */
+    private $front;
+
+    /**
      * Shopware password encoder.
      * Injected over the class constructor
      *
@@ -69,11 +76,11 @@ class sAdmin
     private $passwordEncoder;
 
     /**
-     * Request wrapper object
+     * sBasket core class instance
      *
-     * @var Enlight_Controller_Front
+     * @var sBasket
      */
-    private $front;
+    private $basketModule;
 
     /**
      * @var Shopware_Components_Snippet_Manager
@@ -97,7 +104,8 @@ class sAdmin
         Shopware_Components_Config              $config             = null,
         Enlight_Components_Session_Namespace    $session            = null,
         Enlight_Controller_Front                $front              = null,
-        \Shopware\Components\Password\Manager   $passwordEncoder    = null
+        \Shopware\Components\Password\Manager   $passwordEncoder    = null,
+        sBasket                                 $basketModule       = null
     )
     {
         $this->db = $db ? : Shopware()->Db();
@@ -105,6 +113,7 @@ class sAdmin
         $this->session = $session ? : Shopware()->Session();
         $this->front = $front ? : Shopware()->Front();
         $this->passwordEncoder = $passwordEncoder ? : Shopware()->PasswordEncoder();
+        $this->basketModule = $basketModule ? : Shopware()->Modules()->Basket();
 
         $this->snippetObject = Shopware()->Snippets()->getNamespace('frontend/account/internalMessages');
         $shop = Shopware()->Shop()->getMain() !== null ? Shopware()->Shop()->getMain() : Shopware()->Shop();
@@ -131,85 +140,66 @@ class sAdmin
         }
 
         $messages = array();
-        $ustid = preg_replace('#[^0-9A-Z\+\*\.]#', '', strtoupper($postUstId));
+        $ustId = preg_replace('#[^0-9A-Z\+\*\.]#', '', strtoupper($postUstId));
 
         $vatCheckAdvancedNumber = $this->config->get('sVATCHECKADVANCEDNUMBER');
-        $vatCheckConfirmation = $this->config->get('sVATCHECKCONFIRMATION');
-        $vatCheckAdvanced = $this->config->get('sVATCHECKADVANCED');
-        $vatCheckAdvancedCountries = $this->config->get('sVATCHECKADVANCEDCOUNTRIES');
-        $vatCheckNoService = $this->config->get('sVATCHECKNOSERVICE');
 
         $country = $this->db->fetchOne(
             'SELECT countryiso FROM s_core_countries WHERE id=?',
             array($this->front->Request()->getPost('country'))
         );
+
+        $vat = null;
+        $matchResult = preg_match("#^([A-Z]{2})([0-9A-Z+*.]{2,12})$#", $ustId, $vat);
+
         if (empty($postUstId)) {
             $messages[] = $this->snippetObject->get('VatFailureEmpty', 'Please enter a vat id');
-        } elseif (empty($ustid) || !preg_match("#^([A-Z]{2})([0-9A-Z+*.]{2,12})$#", $ustid, $vat)) {
+        } elseif (empty($ustId) || !$matchResult) {
             $messages[] = $this->snippetObject->get('VatFailureInvalid', 'The vat id entered is invalid');
         } elseif (empty($country) || $country != $vat[1]) {
-            $field_names = explode(',', $this->snippetObject->get('VatFailureErrorFields', 'Company,City,Zip,Street,Country'));
+            $field_names = explode(',', $this->snippetObject->get(
+                'VatFailureErrorFields',
+                'Company,City,Zip,Street,Country'
+            ));
             $field_name = isset($field_names[4]) ? $field_names[4] : 'Land';
-            $messages[] = sprintf($this->snippetObject->get('VatFailureErrorField', 'The field %s does not match to the vat id entered'), $field_name);
+            $messages[] = sprintf($this->snippetObject->get(
+                'VatFailureErrorField',
+                'The field %s does not match to the vat id entered'
+            ), $field_name);
         } elseif ($country == 'DE') {
 
         } elseif (!empty($vatCheckAdvancedNumber)) {
-            $data = array(
-                'UstId_1' => $vatCheckAdvancedNumber,
-                'UstId_2' => $vat[1] . $vat[2],
-                'Firmenname' => '',
-                'Ort' => '',
-                'PLZ' => '',
-                'Strasse' => '',
-                'Druck' => empty($vatCheckConfirmation) ? 'nein' : 'ja'
-            );
+            $messages = $this->checkAdvancedVatNumber($vat);
 
-            if (!empty($vatCheckAdvanced)
-                && strpos($vatCheckAdvancedCountries, $vat[1]) !== false
-            ) {
-                $data['Firmenname'] = $this->front->Request()->getPost('company');
-                $data['Ort'] = $this->front->Request()->getPost('city');
-                $data['PLZ'] = $this->front->Request()->getPost('zipcode');
-                $data['Strasse'] = $this->front->Request()->getPost('street') . ' ' . $this->front->Request()->getPost('streetnumber');
-            }
-
-            $request = 'http://evatr.bff-online.de/evatrRPC?';
-            $request .= http_build_query($data, '', '&');
-
-            $context = stream_context_create(array('http' => array(
-                'method' => 'GET',
-                'header' => 'Content-Type: text/html; charset=utf-8',
-                'timeout' => 5,
-                'user_agent' => 'Shopware/' . $this->config->get('sVERSION')
-            )));
-            $response = @file_get_contents($request, false, $context);
-
-            $reg = '#<param>\s*<value><array><data>\s*<value><string>([^<]*)</string></value>\s*<value><string>([^<]*)</string></value>\s*</data></array></value>\s*</param>#msi';
-            if (!empty($response) && preg_match_all($reg, $response, $matches)) {
-                $response = array_combine($matches[1], $matches[2]);
-                $messages = $this->sCheckVatResponse($response);
-            } elseif (empty($vatCheckNoService)) {
-                $messages[] = sprintf($this->snippetObject->get('VatFailureUnknownError', 'An unknown error occurs while checking your vat id. Error code %d'), 10);
-            }
-        } elseif (false && class_exists('SoapClient')) {
-            $url = 'http://ec.europa.eu/taxation_customs/vies/services/checkVatService.wsdl';
-            if (!file_get_contents($url)) {
-                $messages[] = sprintf($this->snippetObject->get('VatFailureUnknownError', 'An unknown error occurs while checking your vat id. Error code %d'), 11);
-            } else {
-                $client = new SoapClient($url, array('exceptions' => 0, 'connection_timeout' => 5));
-                $response = $client->checkVat(array('countryCode' => $vat[1], 'vatNumber' => $vat[2]));
-            }
-            if (is_soap_fault($response)) {
-                $messages[] = sprintf($this->snippetObject->get('VatFailureUnknownError', 'An unknown error occurs while checking your vat id. Error code %d'), 12);
-                $vatCheckDebug = $this->config->get('sVATCHECKDEBUG');
-                if (!empty($vatCheckDebug)) {
-                    $messages[] = "SOAP-error: (errorcode: {$response->faultcode}, errormsg: {$response->faultstring})";
-                }
-            } elseif (empty($response->valid)) {
-                $messages[] = $this->snippetObject->get('VatFailureInvalid', 'The vat id entered is invalid');
-            }
+            /**
+             * This portion of code is dead, but should be useful in the future
+             * It validates Vat Id on an european service.
+             */
+//        } elseif (false && class_exists('SoapClient')) {
+//            $url = 'http://ec.europa.eu/taxation_customs/vies/services/checkVatService.wsdl';
+//            if (!file_get_contents($url)) {
+//                $messages[] = sprintf($this->snippetObject->get('VatFailureUnknownError', 'An unknown error occurs while checking your vat id. Error code %d'), 11);
+//            } else {
+//                $client = new SoapClient($url, array('exceptions' => 0, 'connection_timeout' => 5));
+//                $response = $client->checkVat(array('countryCode' => $vat[1], 'vatNumber' => $vat[2]));
+//            }
+//            if (is_soap_fault($response)) {
+//                $messages[] = sprintf($this->snippetObject->get(
+//                    'VatFailureUnknownError',
+//                    'An unknown error occurs while checking your vat id. Error code %d'
+//                ), 12);
+//                $vatCheckDebug = $this->config->get('sVATCHECKDEBUG');
+//                if (!empty($vatCheckDebug)) {
+//                    $messages[] = "SOAP-error: (errorcode: {$response->faultcode}, errormsg: {$response->faultstring})";
+//                }
+//            } elseif (empty($response->valid)) {
+//                $messages[] = $this->snippetObject->get('VatFailureInvalid', 'The vat id entered is invalid');
+//            }
         } else {
-            $messages[] = sprintf($this->snippetObject->get('VatFailureUnknownError', 'An unknown error occurs while checking your vat id. Error code %d'), 20);
+            $messages[] = sprintf($this->snippetObject->get(
+                'VatFailureUnknownError',
+                'An unknown error occurs while checking your vat id. Error code %d'
+            ), 20);
         }
 
         $vatCheckRequired = $this->config->get('sVATCHECKREQUIRED');
@@ -225,13 +215,74 @@ class sAdmin
     }
 
     /**
-     * Handles the response from the german VAT id validation
-     * Used only in sAdmin::sValidateVat()
+     * Uses a german web service to check vat id
+     * Helper for sAdmin::sValidateVat
+     * Include in PT-1829
      *
-     * @param  $response The response from the validation webservice
+     * @param $vat array Vat Id, separated in 2 letter prefix + number
+     * @return array Resulting messages
+     */
+    private function checkAdvancedVatNumber($vat)
+    {
+        $messages = array();
+        $vatCheckAdvancedNumber = $this->config->get('sVATCHECKADVANCEDNUMBER');
+        $vatCheckConfirmation = $this->config->get('sVATCHECKCONFIRMATION');
+        $vatCheckAdvanced = $this->config->get('sVATCHECKADVANCED');
+        $vatCheckAdvancedCountries = $this->config->get('sVATCHECKADVANCEDCOUNTRIES');
+        $vatCheckNoService = $this->config->get('sVATCHECKNOSERVICE');
+
+        $data = array(
+            'UstId_1' => $vatCheckAdvancedNumber,
+            'UstId_2' => $vat[1] . $vat[2],
+            'Firmenname' => '',
+            'Ort' => '',
+            'PLZ' => '',
+            'Strasse' => '',
+            'Druck' => empty($vatCheckConfirmation) ? 'nein' : 'ja'
+        );
+
+        if (!empty($vatCheckAdvanced)
+            && strpos($vatCheckAdvancedCountries, $vat[1]) !== false
+        ) {
+            $data['Firmenname'] = $this->front->Request()->getPost('company');
+            $data['Ort'] = $this->front->Request()->getPost('city');
+            $data['PLZ'] = $this->front->Request()->getPost('zipcode');
+            $data['Strasse'] = $this->front->Request()->getPost('street') . ' ' . $this->front->Request()->getPost('streetnumber');
+        }
+
+        $apiRequest = 'http://evatr.bff-online.de/evatrRPC?';
+        $apiRequest .= http_build_query($data, '', '&');
+
+        $context = stream_context_create(array('http' => array(
+            'method' => 'GET',
+            'header' => 'Content-Type: text/html; charset=utf-8',
+            'timeout' => 5,
+            'user_agent' => 'Shopware/' . $this->config->get('sVERSION')
+        )));
+        $response = @file_get_contents($apiRequest, false, $context);
+
+        $reg = '#<param>\s*<value><array><data>\s*<value><string>([^<]*)</string></value>\s*<value><string>([^<]*)</string></value>\s*</data></array></value>\s*</param>#msi';
+        if (!empty($response) && preg_match_all($reg, $response, $matches)) {
+            $response = array_combine($matches[1], $matches[2]);
+            $messages = $this->sCheckVatResponse($response);
+        } elseif (empty($vatCheckNoService)) {
+            $messages[] = sprintf($this->snippetObject->get(
+                'VatFailureUnknownError',
+                'An unknown error occurs while checking your vat id. Error code %d'
+            ), 10);
+        }
+        return $messages;
+    }
+
+    /**
+     * Handles the response from the german VAT id validation
+     * Helper for sAdmin::sValidateVat()
+     * Include in PT-1829
+     *
+     * @param array $response The response from the validation webservice
      * @return array List of errors found by the remote service
      */
-    public function sCheckVatResponse($response)
+    private function sCheckVatResponse($response)
     {
         $vatCheckNoService = $this->config->get('sVATCHECKNOSERVICE');
         if (!empty($vatCheckNoService)) {
@@ -294,11 +345,19 @@ class sAdmin
             $result[] = $msg;
         } else {
             $fields = array('Erg_Name', 'Erg_Ort', 'Erg_PLZ', 'Erg_Str');
-            $field_names = explode(',', $this->snippetObject->get('VatFailureErrorFields', 'Company,City,Zip,Street,Country'));
+            $field_names = explode(',', $this->snippetObject->get(
+                'VatFailureErrorFields',
+                'Company,City,Zip,Street,Country'
+            ));
             foreach ($fields as $key => $field) {
-                if (isset($response[$field]) && strpos($this->config->get('sVATCHECKVALIDRESPONSE'), $response[$field]) === false) {
+                if (isset($response[$field])
+                    && strpos($this->config->get('sVATCHECKVALIDRESPONSE'), $response[$field]) === false
+                ) {
                     $name = isset($field_names[$key]) ? $field_names[$key] : $field;
-                    $result[] = sprintf($this->snippetObject->get('VatFailureErrorField', 'The field %s does not match to the vat id entered'), $name);
+                    $result[] = sprintf($this->snippetObject->get(
+                        'VatFailureErrorField',
+                        'The field %s does not match to the vat id entered'), $name
+                    );
                 }
             }
         }
@@ -320,10 +379,11 @@ class sAdmin
     public function sGetPaymentMeanById($id, $user = false)
     {
         $id = intval($id);
-        $sql = "
-            SELECT * FROM s_core_paymentmeans WHERE id = ?
-        ";
-        $data = $this->db->fetchRow($sql, array($id)) ? : array();
+
+        $data = $this->db->fetchRow(
+            'SELECT * FROM s_core_paymentmeans WHERE id = ?',
+            array($id)
+        ) ? : array();
 
         if ($this->sSYSTEM->sMODULES['sBasket']->sCheckForESD()) {
             $sEsd = true;
@@ -394,14 +454,20 @@ class sAdmin
                 "UPDATE s_user SET paymentID = ? WHERE id = ?",
                 array($resetPayment, $user["additional"]["user"]["id"])
             );
-            $sql = "SELECT * FROM s_core_paymentmeans WHERE id = ?";
-            $data = $this->db->fetchRow($sql, array($resetPayment)) ? : array();
+            $data = $this->db->fetchRow(
+                'SELECT * FROM s_core_paymentmeans WHERE id = ?',
+                array($resetPayment)
+            ) ? : array();
         }
 
         // Get Translation
         $data = $this->sGetPaymentTranslation($data);
 
-        $data = Enlight()->Events()->filter('Shopware_Modules_Admin_GetPaymentMeanById_DataFilter', $data, array('subject' => $this,"id" => $id,"user" => $user));
+        $data = Enlight()->Events()->filter(
+            'Shopware_Modules_Admin_GetPaymentMeanById_DataFilter',
+            $data,
+            array('subject' => $this, "id" => $id, "user" => $user)
+        );
 
         return $data;
     }
