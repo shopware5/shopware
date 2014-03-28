@@ -47,7 +47,7 @@ class Enlight_Components_Session_Namespace
 
     /**
      * Unset the given offset.
-     * @param $key The key to unset.
+     * @param string $key Key to unset.
      */
     public function offsetUnset($key)
     {
