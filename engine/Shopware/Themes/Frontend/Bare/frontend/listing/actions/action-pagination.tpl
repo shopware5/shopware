@@ -32,7 +32,7 @@
         {/block}
 
         {* Pagination - Next page *}
-        {block name='frontend_listing_actions_paging_previous'}
+        {block name='frontend_listing_actions_paging_next'}
             {if $sPages.next}
                 <a href="{$sPages.next|rewrite:$sCategoryInfo.name}" title="{s name='ListingLinkNext'}{/s}" class="pagination--link paging--next">{s name="ListingTextNext"}&gt;{/s}</a>
             {/if}
