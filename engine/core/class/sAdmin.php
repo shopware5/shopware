@@ -69,6 +69,13 @@ class sAdmin
     private $passwordEncoder;
 
     /**
+     * Request wrapper object
+     *
+     * @var Enlight_Controller_Front
+     */
+    private $front;
+
+    /**
      * @var Shopware_Components_Snippet_Manager
      */
     public $snippetObject;
@@ -89,46 +96,20 @@ class sAdmin
         Enlight_Components_Db_Adapter_Pdo_Mysql $db                 = null,
         Shopware_Components_Config              $config             = null,
         Enlight_Components_Session_Namespace    $session            = null,
+        Enlight_Controller_Front                $front              = null,
         \Shopware\Components\Password\Manager   $passwordEncoder    = null
     )
     {
         $this->db = $db ? : Shopware()->Db();
         $this->config = $config ? : Shopware()->Config();
         $this->session = $session ? : Shopware()->Session();
+        $this->front = $front ? : Shopware()->Front();
         $this->passwordEncoder = $passwordEncoder ? : Shopware()->PasswordEncoder();
 
         $this->snippetObject = Shopware()->Snippets()->getNamespace('frontend/account/internalMessages');
         $shop = Shopware()->Shop()->getMain() !== null ? Shopware()->Shop()->getMain() : Shopware()->Shop();
         $this->scopedRegistration = $shop->getCustomerScope();
         $this->subshopId = $shop->getId();
-    }
-
-    /**
-     * This function seems to be unused. See SW-8161
-     *
-     * Logout user and destroy session
-     *
-     * @return bool|void
-     */
-    public function sLogout()
-    {
-        if (Enlight()->Events()->notifyUntil('Shopware_Modules_Admin_Logout_Start', array('subject' => $this))) {
-            return false;
-        }
-
-        unset($this->sSYSTEM->_SESSION);
-        unset($_SESSION);
-        unset($this->sSYSTEM->sUSERGROUPDATA);
-
-        $this->sSYSTEM->sUSERGROUPDATA = $this->db->fetchRow(
-            "SELECT * FROM s_core_customergroups WHERE `groupkey` = 'EK'"
-        );
-        $this->sSYSTEM->sUSERGROUPDATA = $this->sSYSTEM->sUSERGROUPDATA ? : array();
-        session_destroy();
-        $this->session->offsetSet('sUserGroup', 'EK');
-        $this->session->offsetSet('sUserGroupData', $this->sSYSTEM->sUSERGROUPDATA);
-
-        session_regenerate_id();
     }
 
     /**
@@ -144,12 +125,13 @@ class sAdmin
             return array();
         }
         $vatCheckRequired = $this->config->get('sVATCHECKREQUIRED');
-        if (empty($this->sSYSTEM->_POST["ustid"]) && empty($vatCheckRequired)) {
+        $postUstId = $this->front->Request()->getPost("ustid");
+        if (empty($postUstId) && empty($vatCheckRequired)) {
             return array();
         }
 
         $messages = array();
-        $ustid = preg_replace('#[^0-9A-Z\+\*\.]#', '', strtoupper($this->sSYSTEM->_POST['ustid']));
+        $ustid = preg_replace('#[^0-9A-Z\+\*\.]#', '', strtoupper($postUstId));
 
         $vatCheckAdvancedNumber = $this->config->get('sVATCHECKADVANCEDNUMBER');
         $vatCheckConfirmation = $this->config->get('sVATCHECKCONFIRMATION');
@@ -159,9 +141,9 @@ class sAdmin
 
         $country = $this->db->fetchOne(
             'SELECT countryiso FROM s_core_countries WHERE id=?',
-            array($this->sSYSTEM->_POST['country'])
+            array($this->front->Request()->getPost('country'))
         );
-        if (empty($this->sSYSTEM->_POST["ustid"])) {
+        if (empty($postUstId)) {
             $messages[] = $this->snippetObject->get('VatFailureEmpty', 'Please enter a vat id');
         } elseif (empty($ustid) || !preg_match("#^([A-Z]{2})([0-9A-Z+*.]{2,12})$#", $ustid, $vat)) {
             $messages[] = $this->snippetObject->get('VatFailureInvalid', 'The vat id entered is invalid');
@@ -185,10 +167,10 @@ class sAdmin
             if (!empty($vatCheckAdvanced)
                 && strpos($vatCheckAdvancedCountries, $vat[1]) !== false
             ) {
-                $data['Firmenname'] = $this->sSYSTEM->_POST['company'];
-                $data['Ort'] = $this->sSYSTEM->_POST['city'];
-                $data['PLZ'] = $this->sSYSTEM->_POST['zipcode'];
-                $data['Strasse'] = $this->sSYSTEM->_POST['street'] . ' ' . $this->sSYSTEM->_POST['streetnumber'];
+                $data['Firmenname'] = $this->front->Request()->getPost('company');
+                $data['Ort'] = $this->front->Request()->getPost('city');
+                $data['PLZ'] = $this->front->Request()->getPost('zipcode');
+                $data['Strasse'] = $this->front->Request()->getPost('street') . ' ' . $this->front->Request()->getPost('streetnumber');
             }
 
             $request = 'http://evatr.bff-online.de/evatrRPC?';
@@ -232,12 +214,12 @@ class sAdmin
 
         $vatCheckRequired = $this->config->get('sVATCHECKREQUIRED');
         if (!empty($messages) && empty($vatCheckRequired)) {
-            $messages[] = $this->snippetObject->get('VatFailureErrorInfo', ''); // todo@all In the case vat is not required in registration, this info message should occur
+            $messages[] = $this->snippetObject->get('VatFailureErrorInfo', '');
         }
         $messages = Enlight()->Events()->filter(
             'Shopware_Modules_Admin_CheckTaxID_MessagesFilter',
             $messages,
-            array('subject' => $this, "post" => $this->sSYSTEM->_POST->toArray())
+            array('subject' => $this, "post" => $this->front->Request()->getPost())
         );
         return $messages;
     }
@@ -257,7 +239,6 @@ class sAdmin
                 return array();
             }
         }
-        // todo@all remove if no longer needed, else fix this unicode mess
         $vatCheckDebug = $this->config->get('sVATCHECKDEBUG');
         if (!empty($vatCheckDebug)) {
             switch ($response['ErrorCode']) {
@@ -409,7 +390,7 @@ class sAdmin
         }
 
         if ($resetPayment && $user["additional"]["user"]["id"]) {
-            $updateAccount = $this->db->query(
+            $this->db->query(
                 "UPDATE s_user SET paymentID = ? WHERE id = ?",
                 array($resetPayment, $user["additional"]["user"]["id"])
             );
@@ -570,12 +551,13 @@ class sAdmin
      */
     public function sValidateStep3($paymentmeans = array())
     {
-        if (empty($this->sSYSTEM->_POST['sPayment'])) {
+        $paymentId = $this->front->Request()->getPost('sPayment');
+        if (empty($paymentId)) {
             throw new Enlight_Exception("sValidateStep3 #00: No payment id");
         }
 
         $user = $this->sGetUserData();
-        $paymentData = $this->sGetPaymentMeanById($this->sSYSTEM->_POST['sPayment'], $user);
+        $paymentData = $this->sGetPaymentMeanById($paymentId, $user);
 
         if (!count($paymentData)) {
             throw new Enlight_Exception("sValidateStep3 #01: Could not load paymentmean");
@@ -602,17 +584,17 @@ class sAdmin
      */
     public function sUpdateBilling()
     {
-        $userObject = $this->sSYSTEM->_POST;
+        $postData = $this->front->Request()->getPost();
 
-        if (!empty($userObject['birthmonth']) && !empty($userObject['birthday']) && !empty($userObject['birthyear'])) {
-            $userObject['birthday'] = mktime(0,0,0, (int) $userObject['birthmonth'], (int) $userObject['birthday'], (int) $userObject['birthyear']);
-            if ($userObject['birthday'] > 0) {
-                $userObject['birthday'] = date('Y-m-d', $userObject['birthday']);
+        if (!empty($postData['birthmonth']) && !empty($postData['birthday']) && !empty($postData['birthyear'])) {
+            $postData['birthday'] = mktime(0,0,0, (int) $postData['birthmonth'], (int) $postData['birthday'], (int) $postData['birthyear']);
+            if ($postData['birthday'] > 0) {
+                $postData['birthday'] = date('Y-m-d', $postData['birthday']);
             } else {
-                $userObject['birthday'] = '0000-00-00';
+                $postData['birthday'] = '0000-00-00';
             }
         } else {
-            unset($userObject['birthday']);
+            unset($postData['birthday']);
         }
 
         $fields = array(
@@ -635,12 +617,12 @@ class sAdmin
 
         $data = array();
         foreach ($fields as $field) {
-            if (isset($userObject[$field])) {
-                $data[$field] = $userObject[$field];
+            if (isset($postData[$field])) {
+                $data[$field] = $postData[$field];
             }
         }
 
-        $data["countryID"] = $userObject["country"];
+        $data["countryID"] = $postData["country"];
 
         $where = array(
             'userID='.(int) $this->session->offsetGet('sUserId')
@@ -648,15 +630,15 @@ class sAdmin
 
         list($data, $where) = Enlight()->Events()->filter(
             'Shopware_Modules_Admin_UpdateBilling_FilterSql',
-            array($data,$where),
+            array($data, $where),
             array(
                 'subject' => $this,
                 "id" => $this->session->offsetGet('sUserId'),
-                "user" => $userObject
+                "user" => $postData
             )
         );
 
-        $result = $this->db->update('s_user_billingaddress', $data, $where);
+        $this->db->update('s_user_billingaddress', $data, $where);
 
         if ($this->db->getErrorMessage()) {
             throw new Enlight_Exception("sUpdateBilling #01: Could not save data (billing address)".$this->db->getErrorMessage());
@@ -664,12 +646,12 @@ class sAdmin
 
         //new attribute tables.
         $data = array(
-            "text1" => $userObject['text1'],
-            "text2" => $userObject['text2'],
-            "text3" => $userObject['text3'],
-            "text4" => $userObject['text4'],
-            "text5" => $userObject['text5'],
-            "text6" => $userObject['text6'],
+            "text1" => $postData['text1'],
+            "text2" => $postData['text2'],
+            "text3" => $postData['text3'],
+            "text4" => $postData['text4'],
+            "text5" => $postData['text5'],
+            "text6" => $postData['text6'],
         );
 
         $sql = "SELECT id FROM s_user_billingaddress WHERE userID = " . (int) $this->session->offsetGet('sUserId');
@@ -682,11 +664,12 @@ class sAdmin
             array(
                 'subject' => $this,
                 "id" => $this->session->offsetGet('sUserId'),
-                "user" => $userObject
+                "user" => $postData
             )
         );
 
         $this->db->update('s_user_billingaddress_attributes', $data, $where);
+        $this->front->Request()->setPost($postData);
 
         return true;
     }
@@ -703,7 +686,7 @@ class sAdmin
     {
         if (!$status) {
             // Delete
-            $changeLetterState = $this->db->query(
+            $this->db->query(
                 "DELETE FROM s_campaigns_mailaddresses WHERE email = ?",
                 array($email)
             );
@@ -747,12 +730,12 @@ class sAdmin
             }
             // Insert
             if (!empty($customer)) {
-                $changeLetterState = $this->db->query("
+                $this->db->query("
                 INSERT INTO s_campaigns_mailaddresses (customer, email)
                 VALUES (?,?)
                 ", array(1, $email));
             } else {
-                $changeLetterState = $this->db->query("
+                $this->db->query("
                 INSERT INTO s_campaigns_mailaddresses (groupID, email)
                 VALUES (?,?)
                 ", array($groupID, $email));
@@ -798,7 +781,8 @@ class sAdmin
         if (empty($type)) {
             return false;
         }
-        if (empty($this->session->offsetGet('sUserId'))) {
+        $userId = $this->session->offsetGet('sUserId');
+        if (empty($userId)) {
             return false;
         }
 
@@ -849,14 +833,17 @@ class sAdmin
      */
     public function sUpdateShipping()
     {
-        $userObject = $this->sSYSTEM->_POST;
-
-        if (empty($this->session->offsetGet('sUserId'))) {
+        $userId = (int) $this->session->offsetGet('sUserId');
+        if (empty($userId)) {
             return false;
         }
 
-        $sql = 'SELECT id FROM s_user_shippingaddress WHERE userID = ?';
-        $shippingID = $this->db->fetchOne($sql, array($this->session->offsetGet('sUserId')));
+        $postData = $this->front->Request()->getPost();
+
+        $shippingID = $this->db->fetchOne(
+            'SELECT id FROM s_user_shippingaddress WHERE userID = ?',
+            array($userId)
+        );
 
         $fields = array(
             'company',
@@ -874,56 +861,56 @@ class sAdmin
 
         $data = array();
         foreach ($fields as $field) {
-            if (isset($userObject[$field])) {
-                $data[$field] = $userObject[$field];
+            if (isset($postData[$field])) {
+                $data[$field] = $postData[$field];
             }
         }
-        $data["countryID"] = isset($userObject["country"]) ? $userObject["country"] : 0;
+        $data["countryID"] = isset($postData["country"]) ? $postData["country"] : 0;
 
         list($data) = Enlight()->Events()->filter(
             'Shopware_Modules_Admin_UpdateShipping_FilterSql',
             array($data), array(
                 'subject' => $this,
                 "id" => $this->session->offsetGet('sUserId'),
-                "user" => $userObject
+                "user" => $postData
             )
         );
 
         if (empty($shippingID)) {
-            $data["userID"] = (int) $this->session->offsetGet('sUserId');
+            $data["userID"] = $userId;
             $this->db->insert('s_user_shippingaddress', $data);
 
             $shippingID = $this->db->lastInsertId('s_user_shippingaddress');
             $attributeData = array(
                 'shippingID' => $shippingID,
-                'text1' => $userObject['text1'],
-                'text2' => $userObject['text2'],
-                'text3' => $userObject['text3'],
-                'text4' => $userObject['text4'],
-                'text5' => $userObject['text5'],
-                'text6' => $userObject['text6']
+                'text1' => $postData['text1'],
+                'text2' => $postData['text2'],
+                'text3' => $postData['text3'],
+                'text4' => $postData['text4'],
+                'text5' => $postData['text5'],
+                'text6' => $postData['text6']
             );
             list($attributeData) = Enlight()->Events()->filter(
                 'Shopware_Modules_Admin_UpdateShippingAttributes_FilterSql',
                 array($attributeData),
                 array(
                     'subject' => $this,
-                    "id" => $this->session->offsetGet('sUserId'),
-                    "user" => $userObject
+                    "id" => $userId,
+                    "user" => $postData
                 )
             );
             $this->db->insert('s_user_shippingaddress_attributes', $attributeData);
         } else {
             $where = array('id='.(int) $shippingID);
-            $result = $this->db->update('s_user_shippingaddress', $data, $where);
+            $this->db->update('s_user_shippingaddress', $data, $where);
 
             $attributeData = array(
-                'text1' => $userObject['text1'],
-                'text2' => $userObject['text2'],
-                'text3' => $userObject['text3'],
-                'text4' => $userObject['text4'],
-                'text5' => $userObject['text5'],
-                'text6' => $userObject['text6']
+                'text1' => $postData['text1'],
+                'text2' => $postData['text2'],
+                'text3' => $postData['text3'],
+                'text4' => $postData['text4'],
+                'text5' => $postData['text5'],
+                'text6' => $postData['text6']
             );
             $where = array('shippingID='.(int) $shippingID);
             list($attributeData) = Enlight()->Events()->filter(
@@ -932,7 +919,7 @@ class sAdmin
                 array(
                     'subject' => $this,
                     "id" => $this->session->offsetGet('sUserId'),
-                    "user" => $userObject
+                    "user" => $postData
                 )
             );
             $this->db->update('s_user_shippingaddress_attributes', $attributeData, $where);
@@ -953,7 +940,8 @@ class sAdmin
      */
     public function sUpdatePayment()
     {
-        if (empty($this->session->offsetGet('sUserId'))) {
+        $userId = $this->session->offsetGet('sUserId');
+        if (empty($userId)) {
             return false;
         }
         $sqlPayment = "
@@ -968,9 +956,12 @@ class sAdmin
             )
         );
 
-        $saveUserData = $this->db->query(
+        $this->db->query(
             $sqlPayment,
-            array($this->sSYSTEM->_POST["sPayment"], $this->session->offsetGet('sUserId'))
+            array(
+                $this->front->Request()->getPost('sPayment'),
+                $this->session->offsetGet('sUserId')
+            )
         );
 
         if ($this->db->getErrorMessage()) {
@@ -988,12 +979,12 @@ class sAdmin
      */
     public function sUpdateAccount()
     {
-        $p = $this->sSYSTEM->_POST;
+        $postData = $this->front->Request()->getPost();
 
-        $email = strtolower($p["email"]);
+        $email = strtolower($postData["email"]);
 
-        $password = $p["password"];
-        $passwordConfirmation = $p["passwordConfirmation"];
+        $password = $postData["password"];
+        $passwordConfirmation = $postData["passwordConfirmation"];
 
         if ($password && $passwordConfirmation) {
             $encoderName = $this->passwordEncoder->getDefaultPasswordEncoderName();
@@ -1067,17 +1058,17 @@ class sAdmin
                 'edit' => $edit,
                 'rules' => $rules,
                 'subject' => $this,
-                "post" => $this->sSYSTEM->_POST->toArray()
+                "post" => $this->front->Request()->getPost()
             )
         );
 
-        $postData = $this->sSYSTEM->_POST;
+        $postData = $this->front->Request()->getPost();
 
         foreach ($rules as $ruleKey => $ruleValue) {
             $postData[$ruleKey] = trim($postData[$ruleKey]);
 
             if (empty($postData[$ruleKey])
-                && !empty($rules[$ruleKey]["required"]) 
+                && !empty($rules[$ruleKey]["required"])
                 && empty($rules[$ruleKey]["addicted"])
             ) {
                 $sErrorFlag[$ruleKey] = true;
@@ -1111,13 +1102,13 @@ class sAdmin
             $this->session->offsetSet('sRegister', $register);
         }
         list($sErrorMessages,$sErrorFlag) = Enlight()->Events()->filter(
-            'Shopware_Modules_Admin_ValidateStep2_FilterResult', 
-            array($sErrorMessages,$sErrorFlag), 
+            'Shopware_Modules_Admin_ValidateStep2_FilterResult',
+            array($sErrorMessages,$sErrorFlag),
             array(
                 'edit' => $edit,
                 'rules' => $rules,
                 'subject' => $this,
-                "post" => $this->sSYSTEM->_POST->toArray()
+                "post" => $this->front->Request()->getPost()
             )
         );
 
@@ -1134,7 +1125,7 @@ class sAdmin
      */
     public function sValidateStep2ShippingAddress($rules, $edit = false)
     {
-        $postData = $this->sSYSTEM->_POST;
+        $postData = $this->front->Request()->getPost();
 
         foreach ($rules as $ruleKey => $ruleValue) {
             if ($rules[$ruleKey]["addicted"]) {
@@ -1186,7 +1177,7 @@ class sAdmin
                 'edit' => $edit,
                 'rules' => $rules,
                 'subject' => $this,
-                "post" => $this->sSYSTEM->_POST->toArray()
+                "post" => $this->front->Request()->getPost()
             )
         );
 
@@ -1202,7 +1193,7 @@ class sAdmin
      */
     public function sValidateStep1($edit = false)
     {
-        $postData = $this->sSYSTEM->_POST;
+        $postData = $this->front->Request()->getPost();
         $encoderName =  $this->passwordEncoder->getDefaultPasswordEncoderName();
 
         if (isset($postData["emailConfirmation"]) || isset($postData["email"])) {
@@ -1226,15 +1217,19 @@ class sAdmin
                 }
             }
         } elseif ($edit && empty($postData["email"])) {
-            $this->sSYSTEM->_POST["email"] = $postData["email"] = $this->session->offsetGet('sUserMail');
+            $userEmail = $this->session->offsetGet('sUserMail');
+            if ($userEmail) {
+                $this->front->Request()->setPost('email', $userEmail);
+            }
+            $postData["email"] = $userEmail;
         }
 
-        if (empty($this->session->offsetGet('sRegister'))) {
+        $register = $this->session->offsetGet('sRegister');
+        if (empty($register)) {
             $this->session->offsetSet('sRegister', array());
         }
 
         // Check password if account should be created
-        $register = $this->session->offsetGet('sRegister');
         if (!$postData["skipLogin"] || $edit) {
             if ($edit && (!$postData["password"] && !$postData["passwordConfirmation"])) {
 
@@ -1326,7 +1321,7 @@ class sAdmin
         list($sErrorMessages, $sErrorFlag) = Enlight()->Events()->filter(
             'Shopware_Modules_Admin_ValidateStep1_FilterResult',
             array($sErrorMessages, $sErrorFlag),
-            array('edit' => $edit, 'subject' => $this, "post" => $this->sSYSTEM->_POST->toArray())
+            array('edit' => $edit, 'subject' => $this, "post" => $this->front->Request()->getPost())
         );
 
         return array("sErrorFlag" => $sErrorFlag, "sErrorMessages" => $sErrorMessages);
@@ -1350,24 +1345,24 @@ class sAdmin
             array(
                 'subject'           => $this,
                 'ignoreAccountMode' => $ignoreAccountMode,
-                'post'              => $this->sSYSTEM->_POST->toArray()
+                'post'              => $this->front->Request()->getPost()
             )
         )) {
             return false;
         }
 
         // If fields are not set, markup these fields
-        $email = strtolower($this->sSYSTEM->_POST["email"]);
+        $email = strtolower($this->front->Request()->getPost('email'));
         if (empty($email)) {
             $sErrorFlag['email'] = true;
         }
 
         // If password is already md5-decrypted or the parameter $ignoreAccountMode is set, use it directly
-        if ($ignoreAccountMode && $this->sSYSTEM->_POST['passwordMD5']) {
-            $password = $this->sSYSTEM->_POST["passwordMD5"];
+        if ($ignoreAccountMode && $this->front->Request()->getPost('passwordMD5')) {
+            $password = $this->front->Request()->getPost('passwordMD5');
             $isPreHashed = true;
         } else {
-            $password = $this->sSYSTEM->_POST["password"];
+            $password = $this->front->Request()->getPost('password');
             $isPreHashed = false;
         }
 
@@ -1550,7 +1545,7 @@ class sAdmin
         session_start();
 
         $this->sSYSTEM->sSESSION_ID = $newSessionId;
-        Shopware()->Session()->offsetSet('sessionId', $newSessionId);
+        $this->session->offsetSet('sessionId', $newSessionId);
         Shopware()->Bootstrap()->resetResource('SessionId');
         Shopware()->Bootstrap()->registerResource('SessionId', $newSessionId);
 
@@ -1593,9 +1588,13 @@ class sAdmin
             return false;
         }
 
-        if (empty($this->session->offsetGet('sUserMail'))
-            || empty($this->session->offsetGet('sUserPassword'))
-            || empty($this->session->offsetGet('sUserId'))
+        $userId = $this->session->offsetGet('sUserId');
+        $userMail = $this->session->offsetGet('sUserMail');
+        $userPassword = $this->session->offsetGet('sUserPassword');
+
+        if (empty($userMail)
+            || empty($userPassword)
+            || empty($userId)
         ) {
             $this->session->offsetUnset('sUserMail');
             $this->session->offsetUnset('sUserPassword');
@@ -1616,9 +1615,9 @@ class sAdmin
         $getUser = $this->db->fetchRow(
             $sql,
             array(
-                $this->session->offsetGet('sUserPassword'),
-                $this->session->offsetGet('sUserMail'),
-                $this->session->offsetGet('sUserId'),
+                $userPassword,
+                $userMail,
+                $userId,
                 $timeOut
             )
         );
@@ -1903,8 +1902,8 @@ class sAdmin
                 $countryList[$key]["notice"] = $countryTranslations[$country["id"]]["notice"];
             }
 
-            if ($countryList[$key]["id"] == $this->sSYSTEM->_POST['country']
-                || $countryList[$key]["id"] == $this->sSYSTEM->_POST['countryID']
+            if ($countryList[$key]["id"] == $this->front->Request()->getPost('country')
+                || $countryList[$key]["id"] == $this->front->Request()->getPost('countryID')
             ) {
                 $countryList[$key]["flag"] = true;
             } else {
@@ -1940,11 +1939,12 @@ class sAdmin
         }
         $referer = $this->session->offsetGet('sReferer');
 
-        if (!empty($this->session->offsetGet('sPartner'))) {
+        $partnerId = $this->session->offsetGet('sPartner');
+        if (!empty($partnerId)) {
             $sql = 'SELECT id FROM s_emarketing_partner WHERE idcode = ?';
             $partner = (int) $this->db->fetchOne(
                 $sql,
-                array($this->session->offsetGet('sPartner'))
+                array($partnerId)
             );
         }
 
@@ -2354,7 +2354,7 @@ class sAdmin
 
                 if ($this->config->get('sSHOPWAREMANAGEDCUSTOMERNUMBERS')) {
                     if (!Enlight()->Events()->notifyUntil(
-                        'Shopware_Modules_Admin_SaveRegister_GetCustomerNumber', 
+                        'Shopware_Modules_Admin_SaveRegister_GetCustomerNumber',
                         array('subject' => $this,'id' => $userID))
                     ) {
                         $sql = "
@@ -2389,8 +2389,9 @@ class sAdmin
                 }
 
                 // Save referer where user comes from
-                if (!empty($this->session->offsetGet('sReferer'))) {
-                    $referer = addslashes($this->session->offsetGet('sReferer'));
+                $referer = $this->session->offsetGet('sReferer');
+                if (!empty($referer)) {
+                    $referer = addslashes($referer);
                     $sql = "
                         INSERT INTO
                             s_emarketing_referer (userID, referer, date)
@@ -2400,8 +2401,8 @@ class sAdmin
                     $this->db->query($sql, array($userID, $referer));
                 }
 
-                $this->sSYSTEM->_POST["email"] = $uMail;
-                $this->sSYSTEM->_POST["passwordMD5"] = $uPass;
+                $this->front->Request()->setPost('email', $uMail);
+                $this->front->Request()->setPost('passwordMD5', $uPass);
 
                 // Login user
                 $this->sLogin(true);
@@ -2423,8 +2424,8 @@ class sAdmin
                 $this->session->offsetUnset('sRegister');
             }
         } else {
-            $this->sSYSTEM->_POST["email"] = $this->session->offsetGet('sUserMail');
-            $this->sSYSTEM->_POST["passwordMD5"] = $this->session->offsetGet('sUserPassword');
+            $this->front->Request()->setPost('email', $this->session->offsetGet('sUserMail'));
+            $this->front->Request()->setPost('passwordMD5', $this->session->offsetGet('sUserPassword'));
             $this->sLogin($this->session->offsetGet('sOneTimeAccount'));
         }
         return true;
@@ -2771,7 +2772,8 @@ class sAdmin
         ) {
             return false;
         }
-        if (empty($this->session->offsetGet('sRegister'))) {
+        $register = $this->session->offsetGet('sRegister');
+        if (empty($register)) {
             $this->session->offsetSet('sRegister', array());
         }
 
@@ -2785,7 +2787,8 @@ class sAdmin
           WHERE c.id = ?";
 
         // If user is logged in
-        if (!empty($this->session->offsetGet('sUserId'))) {
+        $userId = $this->session->offsetGet('sUserId');
+        if (!empty($userId)) {
 
             // 1.) Get billing address
             $sql = "SELECT * FROM s_user_billingaddress
@@ -2793,10 +2796,10 @@ class sAdmin
 
             $billing = $this->db->fetchRow(
                 $sql,
-                array($this->session->offsetGet('sUserId'))
+                array($userId)
             );
             $billing = $billing ? : array();
-            $attributes = $this->getUserBillingAddressAttributes($this->session->offsetGet('sUserId'));
+            $attributes = $this->getUserBillingAddressAttributes($userId);
             $userData["billingaddress"] = array_merge($attributes, $billing);
 
             if (empty($userData["billingaddress"]['customernumber'])
@@ -2809,7 +2812,7 @@ class sAdmin
                     WHERE `s_order_number`.`name` ='user'
                     AND `s_user_billingaddress`.`userID`=?";
 
-                $this->db->query($sql, array($this->session->offsetGet('sUserId')));
+                $this->db->query($sql, array($userId));
             }
 
             // 2.) Advanced info
@@ -2830,10 +2833,10 @@ class sAdmin
 
             $additional = $this->db->fetchRow(
                 "SELECT * FROM s_user WHERE id=?",
-                array($this->session->offsetGet('sUserId'))
+                array($userId)
             );
             $additional = $additional ? : array();
-            $attributes = $this->getUserAttributes($this->session->offsetGet('sUserId'));
+            $attributes = $this->getUserAttributes($userId);
             $userData["additional"]["user"] = array_merge($attributes, $additional);
 
             // Newsletter properties
@@ -2847,10 +2850,10 @@ class sAdmin
             // 3.) Get shipping address
             $shipping = $this->db->fetchRow(
                 "SELECT * FROM s_user_shippingaddress WHERE userID=?",
-                array($this->session->offsetGet('sUserId'))
+                array($userId)
             );
             $shipping = $shipping ? : array();
-            $attributes = $this->getUserShippingAddressAttributes($this->session->offsetGet('sUserId'));
+            $attributes = $this->getUserShippingAddressAttributes($userId);
             $userData["shippingaddress"]= array_merge($attributes, $shipping);
 
             // If shipping address is not available, billing address is coeval the shipping address
@@ -2915,10 +2918,8 @@ class sAdmin
             );
             $userData["additional"]["country"] = $userData["additional"]["country"] ? : array();
             $userData["additional"]["countryShipping"] = $userData["additional"]["country"];
-            $userData["additional"]["stateShipping"]["id"] = !empty($this->session->offsetGet('sState')) ? $this->session->offsetGet('sState') : 0;
-
-
-            /* todo@all Do we need a translation here? */
+            $state = $this->session->offsetGet('sState');
+            $userData["additional"]["stateShipping"]["id"] = !empty($state) ? $state : 0;
         }
 
         $userData = Enlight()->Events()->filter(
@@ -3062,7 +3063,7 @@ class sAdmin
 
     /**
      * Risk management - Order value greater then
-     * 
+     *
      * @param  $user User data
      * @param  $order Order data
      * @param  $value Value to compare against
@@ -3586,7 +3587,8 @@ class sAdmin
 
             $fields = array('newsletter');
             foreach ($fields as $field) {
-                if (isset($this->sSYSTEM->_POST[$field]) && empty($this->sSYSTEM->_POST[$field])) {
+                $fieldData = $this->front->Request()->getPost($field);
+                if (isset($fieldData) && empty($fieldData)) {
                     $errorflag[$field] = true;
                 }
             }
@@ -3699,14 +3701,14 @@ class sAdmin
             $this->db->query($sql, array(
                 $email,
                 $groupID,
-                $this->sSYSTEM->_POST['salutation'],
-                $this->sSYSTEM->_POST['title'],
-                $this->sSYSTEM->_POST['firstname'],
-                $this->sSYSTEM->_POST['lastname'],
-                $this->sSYSTEM->_POST['street'],
-                $this->sSYSTEM->_POST['streetnumber'],
-                $this->sSYSTEM->_POST['zipcode'],
-                $this->sSYSTEM->_POST['city']
+                $this->front->Request()->getPost('salutation'),
+                $this->front->Request()->getPost('title'),
+                $this->front->Request()->getPost('firstname'),
+                $this->front->Request()->getPost('lastname'),
+                $this->front->Request()->getPost('street'),
+                $this->front->Request()->getPost('streetnumber'),
+                $this->front->Request()->getPost('zipcode'),
+                $this->front->Request()->getPost('city')
             ));
         } elseif (!empty($unsubscribe)) {
             $sql = 'DELETE FROM `s_campaigns_maildata` WHERE `email` = ? AND `groupID` = ?';
@@ -3935,16 +3937,19 @@ class sAdmin
         }
 
         $basket["max_tax"] = $this->sSYSTEM->sMODULES['sBasket']->getMaxTax();
+        $userId = $this->session->offsetGet('sUserId');
+        $postPaymentId = $this->front->Request()->getPost('sPayment');
+        $sessionPaymentId = $this->session->offsetGet('sPaymentID');
 
         if (!empty($paymentID)) {
             $paymentID = (int) $paymentID;
-        } elseif (!empty($this->session->offsetGet('sUserId'))) {
+        } elseif (!empty($userId)) {
             $user = $this->sGetUserData();
             $paymentID = (int) $user['additional']['payment']['id'];
-        } elseif (!empty($this->sSYSTEM->_POST['sPayment'])) {
-            $paymentID = (int) $this->sSYSTEM->_POST['sPayment'];
-        } elseif (!empty($this->session->offsetGet('sPaymentID'))) {
-            $paymentID = (int) $this->session->offsetGet('sPaymentID');
+        } elseif (!empty($postPaymentId)) {
+            $paymentID = (int) $postPaymentId;
+        } elseif (!empty($sessionPaymentId)) {
+            $paymentID = (int) $sessionPaymentId;
         }
 
         $paymentMeans = $this->sGetPaymentMeans();
