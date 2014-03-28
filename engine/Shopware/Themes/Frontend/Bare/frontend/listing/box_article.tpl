@@ -1,123 +1,51 @@
-<div class="product--box panel--box{if $lastitem} is--last{/if}{if $firstitem} is--first{/if}">
-	{* Top *}
-	{block name='frontend_listing_box_article_hint'}
-		{if $sArticle.highlight}
-			<div class="ico_tipp">{se name='ListingBoxTip'}{/se}</div>
-		{/if}
-	{/block}
+<li class="product--box panel--box{if $lastitem} is--last{/if}{if $firstitem} is--first{/if}">
 
-	{* New *}
-	{block name='frontend_listing_box_article_new'}
-		{if $sArticle.newArticle}
-			<div class="ico_new" {if $sArticle.pseudoprice}style="top:50px;"{/if}>{se name='ListingBoxNew'}{/se}</div>
-		{/if}
-	{/block}
+    {* Product box badges - highlight, newcomer, ESD product and discount *}
+    {block name='frontend_listing_box_article_rating'}
+        {include file="frontend/listing/product-box/badges.tpl"}
+    {/block}
 
-	{* ESD article *}
-	{block name='frontend_listing_box_article_esd'}
-		{if $sArticle.esd}
-			<div class="ico_esd">{se name='ListingBoxInstantDownload'}{/se}</div>
-		{/if}
-	{/block}
-
-	{* Article rating *}
+	{* Customer rating for the product *}
 	{block name='frontend_listing_box_article_rating'}
 		{if $sArticle.sVoteAverange.averange}
-			<div class="star star{($sArticle.sVoteAverange.averange * 2)|round:0}"></div>
+			<div class="product--rating star{($sArticle.sVoteAverange.averange * 2)|round:0}"></div>
 		{/if}
 	{/block}
 
-	{* Article picture *}
+	{* Product image *}
 	{block name='frontend_listing_box_article_picture'}
-		<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName}" class="box--image">
-			<span data-picture data-alt="{config name=shopName} - {s name='IndexLinkDefault' namespace="frontend/index/index"}{/s}" class="image--element">
-				<span data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.2}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}"></span>
-				<span data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.3}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" data-media="(min-width: 47.75em)"></span>
-				<span data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" data-media="(min-width: 64em)"></span>
-				<span data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.5}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" data-media="(min-width: 120em)"></span>
-
-				<noscript>
-					<img src="{if isset($sArticle.image.src)}{$sArticle.image.src.3}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" alt="{$sArticle.articleName}">
-				</noscript>
-			</span>
-		</a>
+        {include file="frontend/listing/product-box/image.tpl"}
 	{/block}
 
-	{* Article name *}
+	{* Product name *}
 	{block name='frontend_listing_box_article_name'}
-		<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" class="box--title"
+		<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" class="product--title"
 		   title="{$sArticle.articleName}">{$sArticle.articleName|truncate:47}</a>
 	{/block}
 
-	{* Description *}
+	{* Product description *}
 	{block name='frontend_listing_box_article_description'}
-		{if $sTemplate eq 'listing-1col'}
-			{assign var=size value=270}
-		{else}
-			{assign var=size value=60}
-		{/if}
-		<p class="desc">
-			{if $sTemplate}
-				{$sArticle.description_long|strip_tags|truncate:$size}
-			{/if}
-		</p>
+        {if $sTemplate eq 'listing-1col'}
+            {$size=270}
+        {else}
+            {$size=60}
+        {/if}
+
+        {include file="frontend/listing/product-box/description.tpl" size=$size}
 	{/block}
 
-	{* Unit price *}
+	{* Product price - Unit price *}
 	{block name='frontend_listing_box_article_unit'}
-		{if $sArticle.purchaseunit}
-			<div class="{if !$sArticle.pseudoprice}article_price_unit{else}article_price_unit_pseudo{/if}">
-				{if $sArticle.purchaseunit && $sArticle.purchaseunit != 0}
-				<p>
-						<span class="purchaseunit">
-							<strong>{se name="ListingBoxArticleContent"}{/se}
-								:</strong> {$sArticle.purchaseunit} {$sArticle.sUnit.description}
-						</span>
-					{/if}
-					{if $sArticle.purchaseunit != $sArticle.referenceunit}
-					{if $sArticle.referenceunit}
-						<span class="referenceunit">
-							 ({$sArticle.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
-							/ {$sArticle.referenceunit} {$sArticle.sUnit.description})
-							</span>
-					{/if}
-				</p>
-				{/if}
-			</div>
-		{/if}
+        {include file="frontend/listing/product-box/unit-price.tpl"}
 	{/block}
 
-	{* Article Price *}
+	{* Product price - Default and discount price *}
 	{block name='frontend_listing_box_article_price'}
-		<p class="{if $sArticle.pseudoprice}pseudoprice{else}price{/if}{if !$sArticle.pseudoprice} both{/if}">
-			{if $sArticle.pseudoprice}
-				<span class="pseudo">{s name="reducedPrice"}Statt: {/s}{$sArticle.pseudoprice|currency} {s name="Star"}*{/s}</span>
-			{/if}
-			<span class="price">{if $sArticle.priceStartingFrom && !$sArticle.liveshoppingData}{s name='ListingBoxArticleStartsAt'}{/s} {/if}{$sArticle.price|currency} {s name="Star"}*{/s}</span>
-		</p>
+        {include file="frontend/listing/product-box/price.tpl"}
 	{/block}
 
-	{* Compare and more *}
+	{* Product actions - Compare product, more information, buy now *}
 	{block name='frontend_listing_box_article_actions'}
-		<div class="box--actions">
-
-			{block name='frontend_listing_box_article_actions_buy_now'}
-			{* Buy now button *}
-				{if !$sArticle.priceStartingFrom &&!$sArticle.sConfigurator && !$sArticle.variants && !$sArticle.sVariantArticle && !$sArticle.laststock == 1 && !($sArticle.notification == 1 && {config name="deactivatebasketonnotification"} == 1)}
-					<a href="{url controller='checkout' action='addArticle' sAdd=$sArticle.ordernumber}"
-					   title="{s name='ListingBoxLinkBuy'}{/s}" class="actions--buynow">{s name='ListingBoxLinkBuy'}{/s}</a>
-				{/if}
-			{/block}
-
-			{block name='frontend_listing_box_article_actions_inline'}
-			{* More informations button *}
-				<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName}"
-				   class="actions--more">{s name='ListingBoxLinkDetails'}{/s}</a>
-			{/block}
-		</div>
-
-		{if $sArticle.pseudoprice}
-			<div class="pseudo_percent">%</div>
-		{/if}
+        {include file="frontend/listing/product-box/actions.tpl"}
 	{/block}
-</div>
+</li>

@@ -6,9 +6,11 @@
 {* Properties filter *}
 {block name='frontend_listing_right_filter_properties'}
 	{if $sPropertiesOptionsOnly|@count or $sSuppliers|@count>1 && $sCategoryContent.parent != 1}
-		<div class="filter_properties">
-			<h2 class="headingbox_nobg filter_properties">{s name='FilterHeadline'}Filtern nach:{/s}</h2>
-			<div class="supplier_filter">
+		<div class="filter--container">
+			<h2 class="filter--headline">{s name='FilterHeadline'}Filtern nach:{/s}</h2>
+
+			<div class="filter--content">
+
 				{* Properties filter *}
 				{if $sPropertiesOptionsOnly|@count}
 					{include file='frontend/listing/filter_properties.tpl'}

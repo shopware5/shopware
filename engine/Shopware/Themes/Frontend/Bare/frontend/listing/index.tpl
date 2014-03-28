@@ -6,18 +6,11 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-<div id="center" class="grid_13">
+<div class="content block">
+
 	{* Banner *}
-	
 	{block name="frontend_listing_index_banner"}
-		{if !$sLiveShopping}
-			{include file='frontend/listing/banner.tpl' sLiveShopping=$sLiveShopping}
-		{/if}
-	{/block}
-	
-	{* Liveshopping *}
-	{block name="frontend_listing_index_liveshopping"}
-		{include file='frontend/listing/liveshopping.tpl'}
+		{include file='frontend/listing/banner.tpl'}
 	{/block}
 	
 	{* Category headline *}
@@ -32,8 +25,7 @@
 		{/if}
 	{/block}
 	
-	{* Change / Logic move to controller *}
-	
+	{* Remap the template names to the new syntax *}
 	{if $sCategoryContent.template eq "article_listing_1col.tpl"}
 		{assign var="sTemplate" value="listing-1col"}
 		{assign var="sBoxMode" value="list"}
@@ -50,21 +42,23 @@
 		{assign var="sTemplate" value="listing-3col"}
 		{assign var="sBoxMode" value="table"}
 	{/if}
-	
 
 	{* Listing *}
 	{block name="frontend_listing_index_listing"}
 		{include file='frontend/listing/listing.tpl' sTemplate=$sTemplate}
+
 	    {if $sCategoryContent.parent != 1 && ! $showListing && !$sSupplierInfo}
-	        <div class="emotion-link">
-	            <a class="emotion-offers" href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}">
-	                {s name="ListingActionsOffersLink"}Weitere Artikel in dieser Kategorie{/s}
-	            </a>
-	        </div>
-	        <div class="space">&nbsp;</div>
+
+            {* Further products in the category *}
+            {block name="frontend_listing_index_listing_further_products"}
+                <div class="further-products">
+                    <a class="further-products--link" href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}">
+                        {s name="ListingActionsOffersLink"}Weitere Artikel in dieser Kategorie{/s}
+                    </a>
+                </div>
+            {/block}
 	    {/if}
 	{/block}
-
 	
 	{* Tagcloud *}
 	{block name="frontend_listing_index_tagcloud"}
@@ -78,13 +72,15 @@
 {* Trusted shops logo *}
 {block name='frontend_index_left_trustedshops'}
     {block name="frontend_listing_left_additional_features"}
-        {include file="frontend/listing/right.tpl"}
-        <div class="clear">&nbsp;</div>
+        {include file="frontend/listing/sidebar.tpl"}
     {/block}
 
-    {if {config name=TSID}}
-        {include file='frontend/plugins/trusted_shops/logo.tpl'}
-    {/if}
+    {* Trusted shops logo in the sidebar *}
+    {block name='frontend_listing_index_sidebar_trusted_shops'}
+        {if {config name=TSID}}
+            {include file='frontend/plugins/trusted_shops/logo.tpl'}
+        {/if}
+    {/block}
 {/block}
 
 {* Sidebar right *}
