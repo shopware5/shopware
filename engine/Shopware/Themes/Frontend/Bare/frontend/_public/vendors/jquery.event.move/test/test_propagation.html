@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	
+	<!-- Make IE recognise HTML5 elements (for styling - must stay in the head, before elements are used) -->
+	<!--[if IE]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	
+	<title>Making special events bubble once only.</title>
+	
+	<link rel="icon" type="image/png" href="images/favicon.png" />
+	
+	<style>
+		body {
+			padding: 50px;
+			color: #666666;
+			font-family: 'Helvetica', Arial, sans-serif;
+			font-size: 75%;
+		}
+		
+		.outer {
+			position: relative;
+			color: orange;
+			background-color: red;
+			width: 200px;
+			height: 200px;
+			padding: 10px;
+			margin-bottom: 50px;
+		}
+		
+		.inner {
+			position: absolute;
+			left: 50px;
+			top: 50px;
+			width: 100px;
+			height: 100px;
+			color: red;
+			background: orange;
+			padding: 10px;
+		}
+	</style>
+</head>
+
+<body>
+	
+	<div class="outer">
+		.outer
+		<div class="inner">
+			.inner
+		</div>
+	</div>
+	
+	<!--script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"></script-->
+	<script src="js/jquery-1.5.2.js"></script>
+	<script src="js/jquery.event.move.js"></script>
+	<script>
+		function logEvent(e){ console.log(e.type, e.startX, e.startY, e.deltaX, e.deltaY); }
+		
+		jQuery(document)
+		.ready(function(){
+			var outer = jQuery('.outer'),
+					inner = jQuery('.inner');
+			
+			outer.bind('movestart', logEvent);
+			
+			inner.bind('movestart', logEvent);
+			inner.bind('move', logEvent);
+			inner.bind('moveend', logEvent);
+			
+			jQuery(document)
+			.bind('click', logEvent)
+		});
+	</script>
+</body>
+</html>

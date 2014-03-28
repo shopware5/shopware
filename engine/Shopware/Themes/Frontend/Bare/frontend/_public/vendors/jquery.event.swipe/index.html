@@ -1,0 +1,329 @@
+---
+title: jQuery.event.swipe
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="author" content="">
+	<meta name="description" content="">
+	
+	<title>jQuery.event.swipe</title>
+	
+	<script>document.documentElement.className = 'js';</script>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.5">
+	<!-- Force latest IE rendering engine & Chrome Frame -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<!-- Make IE recognise HTML5 elements for styling -->
+	<!--[if lte IE 8]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	
+	<link rel="icon" type="image/png" href="images/favicon.png" />
+	<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+	
+	<link rel="stylesheet" type="text/css" href="http://stephband.info/css/template.min.css" />
+	<link rel="stylesheet" type="text/css" href="http://stephband.info/css/template.theme.min.css" />
+	
+	<link rel="stylesheet" type="text/css" href="http://stephband.github.com/css/site.layout.css" />
+	<link rel="stylesheet" type="text/css" href="http://stephband.github.com/css/docs.classes.css" />
+	<link rel="stylesheet" type="text/css" href="http://stephband.github.com/css/site.highlight.light.css" />
+	
+	<!--[if lte IE 8]><link rel="stylesheet" type="text/css" href="http://stephband.github.com/template/css/template.ie.css" /><![endif]-->
+	<!--[if IE 8]><link rel="stylesheet" type="text/css" href="http://stephband.github.com/template/css/template.ie8.css" /><![endif]-->
+	<!--[if IE 7]><link rel="stylesheet" type="text/css" href="http://stephband.github.com/template/css/template.ie7.css" /><![endif]-->
+	
+	<style>
+		.site_wrap > .slides_wrap {
+			margin-bottom: 1em;
+			margin-left: -8px;
+			margin-right: -8px;
+		}
+
+		.img_slides_wrap {
+			width: 784px;
+			border: 8px solid #333333;
+			background-color: #444444;
+			overflow: hidden;
+		}
+
+		.img_slide {
+			padding: 0;
+		}
+
+		.js .img_slide {
+			/* Overide template's height transitions. */
+			width: 100%;
+			height: auto;
+		}
+
+		.slide_buttons_index {
+			text-align: center;
+		}
+
+		.notransition,
+		.notransition .slide {
+			-webkit-transition-duration: 0 !important;
+			   -moz-transition-duration: 0 !important;
+			    -ms-transition-duration: 0 !important;
+			        transition-duration: 0 !important;
+		
+			-webkit-transition-delay: 0 !important;
+			   -moz-transition-delay: 0 !important;
+			    -ms-transition-delay: 0 !important;
+			        transition-delay: 0 !important;
+		}
+
+		@media screen and (max-width: 640px) {
+			.img_slides_wrap {
+				width: 100%;
+
+				-webkit-box-sizing: content-box;
+				   -moz-box-sizing: content-box;
+				    -ms-box-sizing: content-box;
+				        box-sizing: content-box;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<header class="site_header" id="page_header">
+		<div class="site_wrap wrap">
+			<a class="logo_thumb thumb" href="http://stephband.info" title="stephband" rel="index">
+				<h1>stephband.info</h1>
+			</a>
+		</div>
+	</header>
+
+	<div class="site_wrap wrap">
+		<h1>jQuery.event.swipe</h1>
+	
+		<div class="img_slides_wrap slides_wrap wrap">
+			<img class="img_slide slide active" id="slide1" src="https://lh5.googleusercontent.com/-MShhyv4lWuM/T4Si18g0XsI/AAAAAAAAANU/Nnnxh68myRA/s768/Norway_201241.png"
+			/><img class="img_slide slide" id="slide2" src="https://lh6.googleusercontent.com/-BED5h574s1Q/T4Sji7_hmOI/AAAAAAAAAO8/JMChDngsCDk/s768/Norway_201284.png"
+			/><img class="img_slide slide" id="slide3" src="https://lh6.googleusercontent.com/-n31QkVB4M9c/T4SjckZM1TI/AAAAAAAAAOs/H26JyEo9970/s768/Norway_201276.png"
+			/><img class="img_slide slide" id="slide4" src="https://lh6.googleusercontent.com/-jti_dD8mDiQ/T4ShY14T5HI/AAAAAAAAAKE/-jF6OT_zmb4/s768/Norway_2012102.png" />
+		</div>
+
+		<ul class="horizontal slide_buttons_index buttons_index index">
+			<li><a class="slide_button button" href="#slide1">1</a></li>
+			<li><a class="slide_button button" href="#slide2">2</a></li>
+			<li><a class="slide_button button" href="#slide3">3</a></li>
+			<li><a class="slide_button button" href="#slide4">4</a></li>
+		</ul>
+
+		<h2>Project</h2>
+		<ul>
+			<li>Github: <a href="http://github.com/stephband/jquery.event.swipe">github.com/stephband/jquery.event.swipe</a></li>
+			<li>Issues: <a href="http://github.com/stephband/jquery.event.swipe/issues">github.com/stephband/jquery.event.swipe/issues</a></li>
+			<li>Dependency: <a href="http://github.com/stephband/jquery.event.move">github.com/stephband/jquery.event.move</a></li>
+		</ul>
+		
+		<h2 id="what">Swipe events</h2>
+		<dl>
+			<dt>swipeleft, swiperight, swipeup, swipedown</dt>
+			<dd>Fired when the finger is released from the touch surface (or mouse button) if the finger has a) just moved at least a threshold distance or b) moved quickly over a shorter distance.
+					Also responds to mouse events.</dd>
+		</dl>
+		<p>Swipe event objects are augmented with the properties:</p>
+		<dl>
+			<dt>e.pageX, e.pageY</dt>
+			<dd>Current page coordinates of pointer.</dd>
+			
+			<dt>e.startX, e.startY</dt>
+			<dd>Page coordinates the pointer had at the start of the swipe.</dd>
+			
+			<dt>e.distX, e.distY</dt>
+			<dd>Distance finger moved during the swipe.</dd>
+	
+			<dt>e.velocityX, e.velocityY</dt>
+			<dd>Velocity, in pixels/ms, averaged over the last few move events.</dd>
+		</dl>
+	
+		<h2 id="how">How to use swipe events</h2>
+	
+{% highlight js %}
+var slides = jQuery('.slides'),
+    i = 0;
+
+slides
+.on('swipeleft', function(e) {
+  slides.eq(i + 1).addClass('active');
+})
+.on('swiperight', function(e) {
+  slides.eq(i - 1).addClass('active');
+});{% endhighlight %}
+	
+		<p>
+			Swipe events are a thin wrapper around the moveend event; a convenience to reveal when a finger has moved in a swipe gesture.
+			The underlying move events bubble and you can delegate them, but making the swipe events also do this would be unnecessarily expensive.
+			Use move events if you need more flexibility.
+		</p>
+	
+		<h2 id="scroll">Swipe or scroll</h2>
+		<p>
+		   Swipe events are a thin wrapper built on top of move events (<a href="http://stephband.info/jquery.event.move/">stephband.info/jquery.event.move</a>).
+		   Move events, by default, override native scrolling, as they assume that you want to move something rather than scroll the window.
+		   To re-enable scrolling, call <code>e.preventDefault()</code> inside a movestart handler.
+		</p>
+		<p>
+		   In the example above, we want to be able to <code>swipeleft</code> and <code>swiperight</code>, but scroll up and down.
+		   Inside a movestart handler, the direction of the finger is moving is calculated and the event is prevented if it is found to be moving up or down::</p>
+
+{% highlight js %}
+jQuery('.mydiv')
+.on('movestart', function(e) {
+  // If the movestart is heading off in an upwards or downwards
+  // direction, prevent it so that the browser scrolls normally.
+  if ((e.distX > e.distY && e.distX < -e.distY) ||
+      (e.distX < e.distY && e.distX > -e.distY)) {
+    e.preventDefault();
+  }
+});{% endhighlight %}
+
+		<p>To see how the example at the top of the page works, view source.</p>
+
+		<h2 id="where">Who made it?</h2>
+		<p>I did. I'm <a href="http://twitter.com/stephband">stephband</a> on twitter, if you're into that sort of thing.</p>
+	</div>
+
+	<footer class="site_footer">
+		<div class="full_wrap wrap">
+			<div class="bio_col col">
+				<h3>Who made this?</h3>
+				<p>I did. I come from Scotland and I live in Lausanne, Switzerland. I make web things at <a href="http://cruncher.ch">Cruncher</a>. I miss Branston Pickle. When I'm not glued to a screen I play music and hike mountains.</p>
+			</div
+			><div class="repo_col col">
+				<h3>More code</h3>
+				<ul class="repo_index index">
+					<li><a href="http://stephband.info/bolt">Bolt</a></li>
+					<li><a href="http://stephband.info/jparallax/">jQuery.parallax</a></li>
+					<li><a href="http://stephband.info/jquery.event.tap/">jQuery.event.tap</a></li>
+					<li><a href="http://stephband.info/jquery.event.move/">jQuery.event.move</a></li>
+					<li><a href="http://stephband.info/jquery.event.swipe/">jQuery.event.swipe</a></li>
+				</ul>
+			</div
+			><div class="social_col col">
+				<h3>Find me on...</h3>
+				<ul class="social_index index">
+					<li><a href="http://twitter.com/stephband">twitter</a></li>
+					<li><a href="http://github.com/stephband">github</a></li>
+					<li><a href="http://plus.google.com/114566808430966059989/photos">google+</a></li>
+					<li><a href="http://www.linkedin.com/profile/view?id=27013870">linkedin</a></li>
+				</ul>
+			</div>
+		</div>
+	</footer>
+
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
+	<script src="http://stephband.info/jquery.event.move/js/jquery.event.move.js"></script>
+	<script src="js/jquery.event.swipe.js"></script>
+	<script>
+		(function(jQuery, undefined) {
+			jQuery(document).ready(function() {
+				var wrap = jQuery('.slides_wrap'),
+				    slides = wrap.find('.img_slide'),
+				    active = slides.filter('.active'),
+				    i = slides.index(active),
+				    width = wrap.width();
+
+				// Listen for swipe events on slides, and use a custom 'activate'
+				// event to add and remove the class 'active' to the previous
+				// or next slide, and to keep the index up-to-date. The class
+				// 'active' uses CSS transitions to make the slide move.
+
+				slides
+
+				.on('swipeleft', function(e) {
+					if (i === slides.length - 1) { return; }
+					slides.eq(i + 1).trigger('activate');
+				})
+
+				.on('swiperight', function(e) {
+					if (i === 0) { return; }
+					slides.eq(i - 1).trigger('activate');
+				})
+
+				.on('activate', function(e) {
+					slides.eq(i).removeClass('active');
+
+					jQuery(e.target).addClass('active');
+
+					// Update the active slide index
+					i = slides.index(e.target);
+				})
+
+				// The code below handles what happens before any swipe event is triggered.
+				// It makes the slides demo on this page work nicely, but really doesn't
+				// have much to do with demonstrating the swipe events themselves. For more
+				// on move events see:
+				//
+				// http://stephband.info/jquery.event.move
+
+				.on('movestart', function(e) {
+					// If the movestart heads off in a upwards or downwards
+					// direction, prevent it so that the browser scrolls normally.
+					if ((e.distX > e.distY && e.distX < -e.distY) ||
+					    (e.distX < e.distY && e.distX > -e.distY)) {
+						e.preventDefault();
+						return;
+					}
+
+					// To allow the slide to keep step with the finger,
+					// temporarily disable transitions.
+					wrap.addClass('notransition');
+				})
+
+				.on('move', function(e) {
+					var left = 100 * e.distX / width;
+
+					// Move slides with the finger
+					if (e.distX < 0) {
+						if (slides[i+1]) {
+							slides[i].style.left = left + '%';
+							slides[i+1].style.left = (left+100)+'%';
+						}
+						else {
+							slides[i].style.left = left/4 + '%';
+						}
+					}
+					if (e.distX > 0) {
+						if (slides[i-1]) {
+							slides[i].style.left = left + '%';
+							slides[i-1].style.left = (left-100)+'%';
+						}
+						else {
+							slides[i].style.left = left/5 + '%';
+						}
+					}
+				})
+
+				.on('moveend', function(e) {
+					wrap.removeClass('notransition');
+					
+					slides[i].style.left = '';
+		
+					if (slides[i+1]) {
+						slides[i+1].style.left = '';
+					}
+					if (slides[i-1]) {
+						slides[i-1].style.left = '';
+					}
+				});
+
+				// Make the buttons work, too. Hijack the id stored in the href and use
+				// it to activate the slide.
+
+				jQuery(document)
+				.on('click', '.slide_button', function(e) {
+					var href = e.currentTarget.hash;
+
+					jQuery(href).trigger('activate');
+
+					e.preventDefault();
+				});
+			});
+		})(jQuery);	
+	</script>
+</body>
+</html>

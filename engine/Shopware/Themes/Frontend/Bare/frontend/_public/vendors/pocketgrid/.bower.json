@@ -1,0 +1,13 @@
+{
+  "name": "pocketgrid",
+  "homepage": "https://github.com/bitbonsai/pocketgrid",
+  "_release": "0d089b1f2c",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "0d089b1f2cb0cce4d07a56765557f3e17286bf53"
+  },
+  "_source": "git://github.com/bitbonsai/pocketgrid.git",
+  "_target": "*",
+  "_originalSource": "pocketgrid"
+}

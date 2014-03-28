@@ -1,0 +1,22 @@
+{
+  "name": "picturefill",
+  "repo": "scottjehl/picturefill",
+  "description": "A Responsive Images approach that you can use today!",
+  "version": "1.2.1",
+  "main": "picturefill.js",
+  "scripts": [
+    "picturefill.js",
+    "external/matchmedia.js"
+  ],
+  "licence": "MIT/GPLv2",
+  "homepage": "https://github.com/scottjehl/picturefill",
+  "_release": "1.2.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.2.1",
+    "commit": "d920123cb974f7e193220fe59d3071aa2e84d118"
+  },
+  "_source": "git://github.com/scottjehl/picturefill.git",
+  "_target": "~1.2.1",
+  "_originalSource": "picturefill"
+}
