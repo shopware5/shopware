@@ -15,12 +15,12 @@
         <input type="hidden" name="sPage" value="1">
 
         {* Per page label *}
-        {block name='frontend_listing_actions_items_per_page'}
+        {block name='frontend_listing_actions_items_per_page_label'}
             <label class="per-page--label action--label">{s name='ListingLabelItemsPerPage'}{/s}</label>
         {/block}
 
         {* Per page field *}
-        {block name='frontend_listing_actions_items_per_page'}
+        {block name='frontend_listing_actions_items_per_page_field'}
             <select name="sPerPage" class="per-page--field action--field">
                 {foreach $sPerPage as $perPage}
                     <option value="{$perPage.value}" {if $perPage.markup}selected="selected"{/if}>{$perPage.value}</option>
