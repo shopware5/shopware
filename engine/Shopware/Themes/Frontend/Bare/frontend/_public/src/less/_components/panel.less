@@ -392,3 +392,139 @@ Example:
     z-index: 11;
   }
 }
+
+/* A paging navigation for pagination content.
+
+Example:
+```
+<div class="panel--paging">
+    <a href=""><i class="icon--arrow-left"></i></a>
+    <a href="">1</a>
+    <a href="">2</a>
+    <a href="">...</a>
+    <a href=""><i class="icon--arrow-right"></i></a>
+</div>
+```
+*/
+.panel--paging {
+  display: inline-block;
+
+  a {
+    display: inline-block;
+    color: @primaryTextColor;
+    font-weight: normal;
+    text-align: center;
+    border: 1px solid #c7cfda;
+    .unitize-padding(0, 10);
+    .unitize-margin(0, 1);
+    .unitize(14, 16, font-size);
+    .unitize(26, 16, line-height);
+    .border-radius(3px);
+    .linear-gradient(#ffffff, #edeff2);
+    .box-shadow(0 1px 1px 0 rgba(0, 0, 0, 0.05));
+
+    i {
+      .unitize(10, 16, font-size);
+    }
+
+    &:hover {
+      color: @darkTextColor;
+    }
+  }
+}
+
+/* A btn for filter options in a filter action panel.
+
+Example:
+```
+<a href="" class="panel--filter-btn">
+  <i class="icon--numbered-list"></i> Weitere Filtermöglichkeiten
+</a>
+```
+*/
+.panel--filter-btn {
+  display: inline-block;
+  color: @primaryTextColor;
+  font-weight: normal;
+  text-align: center;
+  border: 1px solid #c7cfda;
+  .unitize-padding(0, 10);
+  .unitize-margin(0, 10);
+  .unitize(14, 16, font-size);
+  .unitize(26, 16, line-height);
+  .border-radius(3px);
+  .linear-gradient(#ffffff, #edeff2);
+  .box-shadow(0 1px 1px 0 rgba(0, 0, 0, 0.05));
+
+  i {
+    .unitize-margin(0, 10, 0, 0);
+    .unitize(10, 16, font-size);
+  }
+
+  &:hover {
+    color: @primaryColor;
+  }
+}
+
+/* A combobox for a filter selection.
+
+Example:
+```
+<div class="panel--filter-select">
+    <span class="arrow"></span>
+    <select name="selection" size="1">
+        <option>Option 1</option>
+        <option>Option 2</option>
+        <option>Option 3</option>
+    </select>
+</div>
+```
+*/
+.panel--filter-select {
+  display: inline-block;
+  vertical-align: bottom;
+  position: relative;
+  border: 1px solid #c7cfda;
+  overflow: hidden;
+  .unitize-width(160);
+  .unitize-height(28);
+  .unitize(14, 16, font-size);
+  .unitize(26, 16, line-height);
+  .border-radius(3px);
+  .box-sizing();
+  .box-shadow(0 1px 1px 0 rgba(0, 0, 0, 0.05));
+  .linear-gradient(#ffffff, #edeff2);
+
+  .arrow {
+    .unitize-width(34);
+    .unitize(6, 16, font-size);
+    .unitize(28, 16, line-height);
+    display: block;
+    position: absolute; top: 0; right: 0;
+    border-left: 1px solid @borderColor;
+    font-family: 'shopware';
+    text-align: center;
+
+    &:before {
+      content: "\e612";
+    }
+  }
+
+  select {
+    .unitize-width(180);
+    .unitize-padding(0, 0, 0, 10);
+    .unitize(14, 16, font-size);
+    .unitize(26, 16, line-height);
+    .appearance(none);
+    color: @primaryTextColor;
+    background: transparent;
+    border: 0 none;
+  }
+
+  option {
+    .unitize-padding(0, 10);
+    display: block;
+    border: 0 none;
+    background: #fff;
+  }
+}
