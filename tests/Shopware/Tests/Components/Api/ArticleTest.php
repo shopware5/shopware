@@ -338,7 +338,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
             'images' => array(
                 array(
-                    'link' => 'http://lorempixel.com/600/400/'
+                    'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg'
                 ),
                 array(
                     'link' => 'data:image/png;base64,' . require(__DIR__ . '/fixtures/base64image.php')
@@ -414,7 +414,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
                     'images' => array(
                         array(
-                            'link' => 'http://lorempixel.com/600/400/'
+                            'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg'
                         )
                     ),
 
@@ -534,7 +534,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
             'images' => array(
                 array(
-                    'link' => 'http://lorempixel.com/600/400/'
+                    'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg'
                 )
             ),
 
@@ -604,7 +604,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
                     'images' => array(
                         array(
-                            'link' => 'http://lorempixel.com/600/400/'
+                            'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg'
                         )
                     ),
 
@@ -651,17 +651,19 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertCount(2, $article->getImages());
 
         $proportionalSizes = array(
-            '30x30' => '30x20',
-            '57x57' => '57x38',
-            '105x105' => '105x70',
-            '140x140' => '140x93',
-            '285x255' => '285x190',
-            '720x600' => '720x480'
+            '30x30',
+            '57x57',
+            '105x105',
+            '140x140',
+            '255x255',
+            '600x600',
         );
 
         foreach ($article->getImages() as $image) {
             $thumbnails = $image->getMedia()->getThumbnails();
             $this->assertCount(6, $thumbnails);
+
+            $thumbnails = array_values($thumbnails);
 
             foreach ($thumbnails as $key => $thumbnail) {
                 $filePath = Shopware()->OldPath() . $thumbnail;
