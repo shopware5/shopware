@@ -40,7 +40,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     private $config;
 
     /**
-     * @var array The session data
+     * @var Enlight_Components_Session_Namespace The session data
      */
     private $session;
 
@@ -49,16 +49,13 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->module = Shopware()->Modules()->Admin();
-        $this->session = array();
         $this->config = Shopware()->Config();
-        $this->module->sSYSTEM->sCONFIG = &$this->config;
+        $this->session = Shopware()->Session();
+        $this->post = array();
         $this->module->sSYSTEM->sCurrency = Shopware()->Db()->fetchRow('SELECT * FROM s_core_currencies WHERE currency LIKE "EUR"');
-        $this->module->sSYSTEM->_SESSION = &$this->session;
         $this->module->sSYSTEM->sSESSION_ID = null;
         $this->module->sSYSTEM->sLanguage = 1;
         $this->basketModule = Shopware()->Modules()->Basket();
-        $this->basketModule->sSYSTEM = &$this->module->sSYSTEM;
-        $this->basketModule->sDeleteBasket();
 
         // Create a stub for the Shopware_Components_Snippet_Manager class.
         $stub = $this->getMockBuilder('\Enlight_Components_Snippet_Manager')
@@ -296,7 +293,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     public function testsUpdateBilling()
     {
         $customer = $this->createDummyCustomer();
-        $this->session['sUserId'] = $customer->getId();
+        $this->session->offsetSet('sUserId', $customer->getId());
 
         $this->module->sSYSTEM->_POST = array(
             'company' => 'TestCompany',
@@ -408,12 +405,12 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     public function testsGetPreviousAddresses()
     {
         $customer = $this->createDummyCustomer();
-        $this->session['sUserId'] = null;
+        $this->session->offsetSet('sUserId', null);
 
         // Test no user id
         $this->assertFalse($this->module->sGetPreviousAddresses('shipping'));
 
-        $this->session['sUserId'] = $customer->getId();
+        $this->session->offsetSet('sUserId', $customer->getId());
 
         // Test empty argument scenario
         $this->assertFalse($this->module->sGetPreviousAddresses(''));
@@ -425,7 +422,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->deleteDummyCustomer($customer);
 
         // Test with existing demo customer data
-        $this->session['sUserId'] = 1;
+        $this->session->offsetSet('sUserId', 1);
 
         $shippingData = $this->module->sGetPreviousAddresses('shipping');
         $billingData = $this->module->sGetPreviousAddresses('billing');
@@ -482,7 +479,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->module->sUpdateShipping());
 
         $customer = $this->createDummyCustomer();
-        $this->session['sUserId'] = $customer->getId();
+        $this->session->offsetSet('sUserId', $customer->getId());
 
         // With user id but with no data, operation is successful
         $this->assertTrue($this->module->sUpdateShipping());
@@ -540,7 +537,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->module->sUpdatePayment());
 
         $customer = $this->createDummyCustomer();
-        $this->session['sUserId'] = $customer->getId();
+        $this->session->offsetSet('sUserId', $customer->getId());
 
         // Test that operation succeeds even without payment id
         $this->assertTrue($this->module->sUpdatePayment());
@@ -571,7 +568,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->module->sUpdateAccount());
 
         $customer = $this->createDummyCustomer();
-        $this->session['sUserId'] = $customer->getId();
+        $this->session->offsetSet('sUserId', $customer->getId());
         $this->module->sSYSTEM->_POST['email'] = uniqid() . 'test@foobar.com';
 
         $this->assertTrue($this->module->sUpdateAccount());
@@ -793,22 +790,22 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertNull($result['sErrorFlag']);
 
         // Test that session data is correctly set
-        $sessionRegister = $this->session["sRegister"]['auth'];
-        $this->assertEquals(0, $sessionRegister['accountmode']);
-        $this->assertNull($sessionRegister['receiveNewsletter']);
-        $this->assertEquals('foo@failmail.com', $sessionRegister['email']);
-        $this->assertEquals('bcrypt', $sessionRegister['encoderName']);
-        $this->assertArrayHasKey('password', $sessionRegister);
+        $sessionRegister = $this->session->offsetGet('sRegister');
+        $this->assertEquals(0, $sessionRegister['auth']['accountmode']);
+        $this->assertNull($sessionRegister['auth']['receiveNewsletter']);
+        $this->assertEquals('foo@failmail.com', $sessionRegister['auth']['email']);
+        $this->assertEquals('bcrypt', $sessionRegister['auth']['encoderName']);
+        $this->assertArrayHasKey('password', $sessionRegister['auth']);
 
         // Test with skipLogin
         $this->module->sSYSTEM->_POST['skipLogin'] = true;
         $this->module->sValidateStep1();
-        $sessionRegister = $this->session["sRegister"]['auth'];
-        $this->assertEquals(1, $sessionRegister['accountmode']);
-        $this->assertNull($sessionRegister['receiveNewsletter']);
-        $this->assertEquals('foo@failmail.com', $sessionRegister['email']);
-        $this->assertEquals('md5', $sessionRegister['encoderName']);
-        $this->assertArrayHasKey('password', $sessionRegister);
+        $sessionRegister = $this->session->offsetGet('sRegister');
+        $this->assertEquals(1, $sessionRegister['auth']['accountmode']);
+        $this->assertNull($sessionRegister['auth']['receiveNewsletter']);
+        $this->assertEquals('foo@failmail.com', $sessionRegister['auth']['email']);
+        $this->assertEquals('md5', $sessionRegister['auth']['encoderName']);
+        $this->assertArrayHasKey('password', $sessionRegister['auth']);
     }
 
     /**
@@ -834,8 +831,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         // Test with correct basic data, wrong password
         // First, hack session data with correct data
-        $this->session["sUserMail"] = $customer->getEmail();
-        Shopware()->Session()->offsetSet(
+        $this->session->offsetSet('sUserMail', $customer->getEmail());
+        $this->session->offsetSet(
             "sUserPassword",
             Shopware()->PasswordEncoder()->encodePassword("fooobar", 'bcrypt')
         );
@@ -1021,16 +1018,16 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         Shopware()->Db()->update('s_user', array('lastlogin' => '2000-01-01 00:00:00'), 'id = '.$customer->getId());
         $this->assertFalse($this->module->sCheckUser());
 
-        $this->assertEquals($customer->getGroup()->getKey(), $this->session['sUserGroup']);
-        $this->assertInternalType('array', $this->session['sUserGroupData']);
-        $this->assertArrayHasKey('groupkey', $this->session['sUserGroupData']);
-        $this->assertArrayHasKey('description', $this->session['sUserGroupData']);
-        $this->assertArrayHasKey('tax', $this->session['sUserGroupData']);
-        $this->assertArrayHasKey('taxinput', $this->session['sUserGroupData']);
-        $this->assertArrayHasKey('mode', $this->session['sUserGroupData']);
-        $this->assertArrayHasKey('discount', $this->session['sUserGroupData']);
-        $this->assertArrayHasKey('minimumorder', $this->session['sUserGroupData']);
-        $this->assertArrayHasKey('minimumordersurcharge', $this->session['sUserGroupData']);
+        $this->assertEquals($customer->getGroup()->getKey(), $this->session->offsetGet('sUserGroup'));
+        $this->assertInternalType('array', $this->session->offsetGet('sUserGroupData'));
+        $this->assertArrayHasKey('groupkey', $this->session->offsetGet('sUserGroupData'));
+        $this->assertArrayHasKey('description', $this->session->offsetGet('sUserGroupData'));
+        $this->assertArrayHasKey('tax', $this->session->offsetGet('sUserGroupData'));
+        $this->assertArrayHasKey('taxinput', $this->session->offsetGet('sUserGroupData'));
+        $this->assertArrayHasKey('mode', $this->session->offsetGet('sUserGroupData'));
+        $this->assertArrayHasKey('discount', $this->session->offsetGet('sUserGroupData'));
+        $this->assertArrayHasKey('minimumorder', $this->session->offsetGet('sUserGroupData'));
+        $this->assertArrayHasKey('minimumordersurcharge', $this->session->offsetGet('sUserGroupData'));
 
         $this->deleteDummyCustomer($customer);
     }
@@ -1671,12 +1668,12 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     {
         $customer = $this->createDummyCustomer();
 
-        $this->session["sRegisterFinished"] = true;
-        $this->session['sUserMail'] = $customer->getEmail();
-        $this->session['sUserPassword'] = $customer->getPassword();
-        $this->session['sOneTimeAccount'] = true;
+        $this->session->offsetSet('sRegisterFinished', true);
+        $this->session->offsetSet('sUserMail', $customer->getEmail());
+        $this->session->offsetSet('sUserPassword', $customer->getPassword());
+        $this->session->offsetSet('sOneTimeAccount', true);
         $this->assertTrue($this->module->sSaveRegister());
-        $this->assertNotEmpty($this->session["sUserId"]);
+        $this->assertNotEmpty($this->session->offsetGet('sUserId'));
 
         $this->deleteDummyCustomer($customer);
     }
@@ -1688,7 +1685,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     public function testsSaveRegisterWithNoData()
     {
         $this->assertTrue($this->module->sSaveRegister());
-        $this->assertNotEmpty($this->session["sUserId"]);
+        $this->assertNotEmpty($this->session->offsetGet('sUserId'));
     }
 
     /**
@@ -1722,18 +1719,18 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         );
         $this->module->sSYSTEM->sSESSION_ID = uniqid();
 
-        $this->session['sRegister'] = $testData;
+        $this->session->offsetSet('sRegister', $testData);
 
         // Test that login was successful
-        $this->assertEmpty($this->session["sUserId"]);
+        $this->assertEmpty($this->session->offsetGet('sUserId'));
         $this->assertFalse($this->module->sCheckUser());
         $this->assertTrue($this->module->sSaveRegister());
-        $userId = $this->session["sUserId"];
+        $userId = $this->session->offsetGet('sUserId');
         $this->assertEquals(
             $userId,
             Shopware()->Db()->fetchOne('SELECT id FROM s_user WHERE id = ?', array($userId))
         );
-        $this->assertNotEmpty($this->session["sUserId"]);
+        $this->assertNotEmpty($this->session->offsetGet('sUserId'));
         $this->assertTrue($this->module->sCheckUser());
 
         // Logout and delete data
@@ -1749,7 +1746,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     public function testsGetDownloads()
     {
         $customer = $this->createDummyCustomer();
-        $this->session["sUserId"] = $customer->getId();
+        $this->session->offsetSet('sUserId', $customer->getId());
 
         // New customers don't have available downloads
         $downloads = $this->module->sGetDownloads();
@@ -1936,7 +1933,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertCount(0, $data['orderData']);
 
         // Mock a login
-        $this->session["sUserId"] = $customer->getId();
+        $this->session->offsetSet('sUserId', $customer->getId());
 
         // Calling the method should now return the expected data
         $result = $this->module->sGetOpenOrderData();
@@ -1991,7 +1988,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         // Test sGetUserMailById with null and expected cases
         $this->assertNull($this->module->sGetUserMailById());
-        $this->session["sUserId"] = $customer->getId();
+        $this->session->offsetSet('sUserId', $customer->getId());
         $this->assertEquals($customer->getEmail(), $this->module->sGetUserMailById());
 
         // Test sGetUserByMail with null and expected cases
@@ -2024,7 +2021,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             $this->module->sGetUserData()
         );
 
-        $this->session["sCountry"] = 20;
+        $this->session->offsetSet('sCountry', 20);
 
         $this->assertEquals(
             array('additional' =>
@@ -2078,7 +2075,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     public function testsGetUserDataWithLogin()
     {
         $customer = $this->createDummyCustomer();
-        $this->session["sUserId"] = $customer->getId();
+        $this->session->offsetSet('sUserId', $customer->getId());
 
         $result = $this->module->sGetUserData();
 
@@ -2255,7 +2252,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     public function testsManageRisks()
     {
         $customer = $this->createDummyCustomer();
-        $this->session["sUserId"] = $customer->getId();
+        $this->session->offsetSet('sUserId', $customer->getId());
 
         $basket = array(
             'content' => 1,
@@ -2958,6 +2955,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers sAdmin::sGetDispatchBasket
+     * @group wip
      */
     public function testsGetDispatchBasket()
     {
@@ -3061,7 +3059,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         );
 
         // With dispatch method
-        $this->module->sSYSTEM->_SESSION['sDispatch'] = 9;
+        $this->session->offsetSet('sDispatch', 9);
         $result = $this->module->sGetPremiumShippingcosts($germany);
         $this->assertArrayHasKey('brutto', $result);
         $this->assertArrayHasKey('netto', $result);
