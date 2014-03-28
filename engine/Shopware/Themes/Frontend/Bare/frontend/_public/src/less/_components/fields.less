@@ -39,11 +39,10 @@ Example:
 ```
 */
 .combobox {
-  @boxShadowColor: rgba(red(@borderColor), green(@borderColor), blue(@borderColor), .9);
   .border-radius(3px);
   .box-sizing();
   .unitize-width(290);
-  .box-shadow(0 1px 1px @borderColor);
+  .box-shadow(0 1px 1px 0 rgba(0, 0, 0, 0.1));
   .linear-gradient(#ffffff, #f7f8fa);
   display: block;
   position: relative;
