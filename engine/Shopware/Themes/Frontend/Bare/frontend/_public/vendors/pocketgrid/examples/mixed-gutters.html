@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PocketGrid - Mixed gutters</title>
+
+    <!-- Common styles for examples (you do not need to include it in your pages) -->
+    <link rel="stylesheet" href="common.css" />
+
+    <!-- The PocketGrid -->
+    <link rel="stylesheet" href="../pocketgrid.css" />
+
+    <!-- Styles defining the layout -->
+    <style type="text/css">
+      /* Default gutters (paddings on top and left sides) */
+      .block-group { margin: -10px 0 0 -10px; }
+      .block { padding: 10px 0 0 10px; }
+
+      /* Special gutters (paddings all around blocks) */
+      .all-around-gutters .block-group { margin: -5px -5px; }
+      .all-around-gutters .block { padding: 5px 5px; }
+
+
+      /* Layout */
+      .header { width: 100%; }
+      .main { width: 60%; }
+      .menu, .links { width: 20%; line-height: 148px; }
+      /* Width of the numbered blocks */
+      .num { width: 25%; }
+      /* 2 main sub-blocks */
+      .top-left-gutters, .all-around-gutters { width: 50%; }
+
+
+      /* Colors */
+      .block .box { background-color: #DDD !important; }
+      .all-around-gutters .block .box { background-color: #9DF !important; }
+
+      /* Hover effects */
+      .block:hover { background-color: red; }
+      .top-left-gutters, .all-around-gutters { background-color: transparent !important; }
+
+    </style>
+  </head>
+
+  <body>
+
+
+    <div class="block-group">
+      <div class="header block"><div class="box">Header</div></div>
+      <!-- <div class="nav block"><div class="box">Nav</div></div> -->
+      <div class="menu block"><div class="box">Menu</div></div>
+      <div class="main block-group">
+        <!-- Top & left gutters -->
+        <div class="block top-left-gutters">
+          <div class="block-group">
+            <div class="block"><div class="box">Top&nbsp;&amp;&nbsp;left<br/>gutters</div></div>
+            <div class="num block"><div class="box">1</div></div>
+            <div class="num block"><div class="box">2</div></div>
+            <div class="num block"><div class="box">3</div></div>
+            <div class="num block"><div class="box">4</div></div>
+            <div class="num block"><div class="box">5</div></div>
+            <div class="num block"><div class="box">6</div></div>
+            <div class="num block"><div class="box">7</div></div>
+            <div class="num block"><div class="box">8</div></div>
+          </div>
+        </div>
+        <!-- All around gutters -->
+        <div class="block all-around-gutters">
+          <div class="block-group">
+            <div class="block"><div class="box">All&nbsp;around<br/>gutters</div></div>
+            <div class="num block"><div class="box">1</div></div>
+            <div class="num block"><div class="box">2</div></div>
+            <div class="num block"><div class="box">3</div></div>
+            <div class="num block"><div class="box">4</div></div>
+            <div class="num block"><div class="box">5</div></div>
+            <div class="num block"><div class="box">6</div></div>
+            <div class="num block"><div class="box">7</div></div>
+            <div class="num block"><div class="box">8</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="links block"><div class="box">Links</div></div>
+      <div class="footer block"><div class="box">Footer</div></div>
+    </div>
+
+    <div style="margin: 10px 30px;">
+      Legend
+      <p><div style="float: left; background-color: #DDD; width: auto; margin: 0 6px 0 0; padding: 0 4px; color: #999;">Option&nbsp;1</div>All grey blocks only have top and left paddings (even header, menu, links and footer blocks).</p>
+      <p><div style="float: left; background-color: #9DF; width: auto; margin: 0 6px 0 0; padding: 0 4px; color: #999;">Option&nbsp;2</div>All blue blocks have paddings all around blocks.</p>
+      <p>Put your mouse over blocks to see their paddings in red.</p>
+    </div>
+
+
+  </body>
+
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "jquery.transit",
+  "homepage": "https://github.com/rstacruz/jquery.transit",
+  "version": "0.9.9",
+  "_release": "0.9.9",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.9.9",
+    "commit": "8231ed1af5ab877a17aaabc71c1b7a487889fa3e"
+  },
+  "_source": "git://github.com/rstacruz/jquery.transit.git",
+  "_target": "~0.9.9",
+  "_originalSource": "jquery.transit"
+}

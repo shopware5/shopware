@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PocketGrid - Fix for different block heights (nth-child version)</title>
+
+    <!-- Common styles for examples (you do not need to include it in your pages) -->
+    <link rel="stylesheet" href="common.css" />
+
+    <!-- The PocketGrid -->
+    <link rel="stylesheet" href="../pocketgrid.css" />
+    <!-- The example stylesheet -->
+    <link rel="stylesheet" href="fix-for-different-block-heights-nthchild.css" />
+  </head>
+
+  <body>
+
+    <h3>Bad version</h3>
+    <p style="color: red">Each row should have 2 or 4 blocks (according to the screen width).<br/>"Block 5" should be on a new row, but is <i>blocked</i> by the big "Block 3" (because of its height).</p>
+    <div class="block-group">
+      <div class="block demo-bad"><div class="box">Block 1</div></div>
+      <div class="block demo-bad"><div class="box">Block 2</div></div>
+      <div class="block demo-bad">
+        <div class="box">
+          Block 3 is a very long block<br/>
+          on several rows<br/>
+          that could break the layout
+        </div>
+      </div>
+      <div class="block demo-bad"><div class="box">Block 4</div></div>
+      <div class="block demo-bad"><div class="box">Block 5</div></div>
+      <div class="block demo-bad"><div class="box">Block 6</div></div>
+      <div class="block demo-bad"><div class="box">Block 7</div></div>
+      <div class="block demo-bad"><div class="box">Block 8</div></div>
+      <div class="block demo-bad"><div class="box">Block 9</div></div>
+      <div class="block demo-bad"><div class="box">Block 10</div></div>
+    </div>
+
+    <br/>
+    <hr/>
+
+    <h3>Fixed version (using the "<code>clear</code>" property and the "<code>nth-child</code>" selector)</h3>
+    <p style="color: #0C0">With the fix (using the "clear" property), the layout is not broken and blocks are cleanly aligned.</p>
+    <div class="block-group">
+      <div class="block demo-fixed"><div class="box">Block 1</div></div>
+      <div class="block demo-fixed"><div class="box">Block 2</div></div>
+      <div class="block demo-fixed">
+        <div class="box">
+          Block 3 is a very long block<br/>
+          on several rows<br/>
+          that could break the layout
+        </div>
+      </div>
+      <div class="block demo-fixed"><div class="box">Block 4</div></div>
+      <div class="block demo-fixed"><div class="box">Block 5</div></div>
+      <div class="block demo-fixed"><div class="box">Block 6</div></div>
+      <div class="block demo-fixed"><div class="box">Block 7</div></div>
+      <div class="block demo-fixed"><div class="box">Block 8</div></div>
+      <div class="block demo-fixed"><div class="box">Block 9</div></div>
+      <div class="block demo-fixed"><div class="box">Block 10</div></div>
+    </div>
+
+    <div style="background-color: #FFC; margin: 20px; padding: 10px;">
+      <b>Compatibility note: </b> the "<b>nth-child</b>" CSS pseudo-selector is not compatible with IE&gt;9.<br/>
+      To make it compatible with IE6-8, you can use the <a href="http://selectivizr.com/">Selectivizr</a> polyfill (requires another library such as jquery, dojo or prototype).<br/>
+      For example, just add this code at the end of your <code>&lt;body&gt;</code>:
+<pre><code>        &lt;!-- For nth-child support in IE6-8 --&gt;
+        &lt;!--[if (gte IE 6)&amp;(lte IE 8)]&gt;
+          &lt;script type=&quot;text/javascript&quot; src=&quot;http://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js&quot;&gt;&lt;/script&gt;
+          &lt;script type=&quot;text/javascript&quot; src=&quot;http://cdnjs.cloudflare.com/ajax/libs/selectivizr/1.0.2/selectivizr-min.js&quot;&gt;&lt;/script&gt;
+        &lt;![endif]--&gt;</code></pre>
+        (you can see an example right here in the source of this demo)
+    </div>
+
+    <!-- For nth-child support in IE6-8 -->
+    <!--[if (gte IE 6)&(lte IE 8)]>
+      <script type="text/javascript" src="../js/jquery-1.10.2.min.js"></script>
+      <script type="text/javascript" src="../js/selectivizr-min.js"></script>
+      <script type="text/javascript" src="../js/respond.min.js"></script>
+    <![endif]-->
+
+  </body>
+
+</html>

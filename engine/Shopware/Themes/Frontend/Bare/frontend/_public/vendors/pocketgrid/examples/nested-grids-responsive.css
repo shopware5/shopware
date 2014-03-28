@@ -1,0 +1,16 @@
+/* Common to smartphone, tablet and desktop */
+.nav { width: 20%; height: 200px; }
+.main { width: 80%; }
+.item { width: 50%; } /* 2 columns */
+
+/* Tablet version:
+   items are displayed in 4 columns (25% each) */
+@media (min-width: 40em) {
+  .item { width: 25%; } /* 4 columns */
+}
+
+/* Desktop version:
+   items are displayed in 5 columns (20% each) */
+@media (min-width: 60em) {
+  .item { width: 20%; } /* 5 columns */
+}
