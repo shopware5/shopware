@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <!-- Shopware service definitions -->
+
+        <service id="product_service" class="Shopware\Service\Product">
+            <argument type="service" id="product_gateway" />
+            <argument type="service" id="price_service" />
+            <argument type="service" id="translation_service" />
+            <argument type="service" id="global_state_service" />
+            <argument type="service" id="events" />
+        </service>
+
+        <service id="price_service" class="Shopware\Service\Price" />
+        <service id="global_state_service" class="Shopware\Service\GlobalState" />
+        <service id="translation_service" class="Shopware\Service\Translation" />
+
+
+
+
+        <!-- Shopware gateway definitions -->
+
+        <service id="product_gateway" class="Shopware\Gateway\ORM\Product">
+            <argument type="service" id="product_hydrator" />
+        </service>
+
+
+
+        <!-- Shopware hydrator definitions -->
+
+        <service id="product_hydrator" class="Shopware\Hydrator\ORM\Product">
+            <argument type="service" id="price_hydrator" />
+        </service>
+
+        <service id="price_hydrator" class="Shopware\Hydrator\ORM\Price" />
+
+    </services>
+</container>
