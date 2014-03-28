@@ -101,6 +101,32 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     }
 
     /**
+     * Resets the template variable within the shop session
+     * for the passed shop id.
+     */
+    public function resetPreviewSessionAction()
+    {
+        $shopId = $this->Request()->getParam('shopId');
+
+        if (empty($shopId)) {
+            return;
+        }
+
+        /** @var $shop \Shopware\Models\Shop\Shop */
+        $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveById(
+            $shopId
+        );
+
+        if (!$shop instanceof Shop) {
+            return;
+        }
+
+        $shop->registerResources(Shopware()->Bootstrap());
+
+        Shopware()->Session()->template = null;
+    }
+
+    /**
      * Used to generate a new theme.
      *
      * @throws Exception
