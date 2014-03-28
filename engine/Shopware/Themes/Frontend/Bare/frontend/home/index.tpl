@@ -15,11 +15,6 @@
 		{include file='frontend/listing/banner.tpl'}
 	{/block}
 	
-	{block name='frontend_home_index_liveshopping'}
-		{* Liveshopping *}
-		{include file='frontend/listing/liveshopping.tpl'}
-	{/block}
-	
 	{block name='frontend_home_index_text'}
 		{* Category headline *}
 		{if !$hasEmotion}
