@@ -164,7 +164,16 @@ Ext.define('Shopware.apps.Theme.controller.List', {
             me.previewWindow = null;
 
             me.getInfoPanel().previewButton.setText('{s name=preview}Preview theme{/s}');
-            me.removePreviewFlag()
+            me.removePreviewFlag();
+
+            Ext.Ajax.request({
+                url: '{url controller="theme" action="resetPreviewSession"}',
+                method: 'POST',
+                params: {
+                    shopId: shop.get('id')
+                }
+            });
+
         } else {
             url += '?themeId=' + theme.get('id') + '&shopId=' + shop.get('id');
 
