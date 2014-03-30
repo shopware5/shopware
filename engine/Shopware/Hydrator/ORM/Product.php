@@ -15,11 +15,46 @@ class Product
     private $priceHydrator;
 
     /**
-     * @param Price $priceHydrator
+     * @var Manufacturer
      */
-    function __construct(Price $priceHydrator)
+    private $manufacturerHydrator;
+
+    /**
+     * @var Tax
+     */
+    private $taxHydrator;
+
+    /**
+     * @var Unit
+     */
+    private $unitHydrator;
+
+    /**
+     * @var Media
+     */
+    private $mediaHydrator;
+
+
+    /**
+     * @param Price $priceHydrator
+     * @param Manufacturer $manufacturerHydrator
+     * @param Tax $taxHydrator
+     * @param Unit $unitHydrator
+     * @param Media $mediaHydrator
+     */
+    function __construct(
+        Price $priceHydrator,
+        Manufacturer $manufacturerHydrator,
+        Tax $taxHydrator,
+        Unit $unitHydrator,
+        Media $mediaHydrator
+    )
     {
         $this->priceHydrator = $priceHydrator;
+        $this->manufacturerHydrator = $manufacturerHydrator;
+        $this->taxHydrator = $taxHydrator;
+        $this->unitHydrator = $unitHydrator;
+        $this->mediaHydrator = $mediaHydrator;
     }
 
     /**
@@ -33,46 +68,127 @@ class Product
     {
         $product = new Struct\ProductMini();
 
-        $product->setId($data['id']);
+        $this->assignProductData($product, $data);
 
-        $product->setName($data['id']);
+        $this->assignTaxData($product, $data);
 
-        $product->setInStock($data['inStock']);
+        $this->assignMediaData($product, $data);
 
-        if (isset($data['mainProduct'])) {
-            $product->setMainProduct(
-                $this->hydrateMini(
-                    $data['mainProduct']
-                )
-            );
+        if (isset($data['supplier'])) {
+            $this->assignManufacturerData($product, $data);
+        }
+
+        if (isset($data['mainDetail'])) {
+            $mainProduct = $this->hydrateMini($data['mainDetail']);
+            $product->setMainProduct($mainProduct);
         }
 
         if (isset($data['prices'])) {
-            $product->setPrices(
-                $this->iteratePrices($data['prices'])
-            );
+            $this->assignPriceData($product, $data);
         }
+
+        if (isset($data['unit'])) {
+            $this->assignUnitData($product, $data);
+        }
+
+        if (isset($data['attribute'])) {
+            $this->assignAttributeData($product, $data);
+        }
+
         return $product;
     }
 
     /**
-     * Iterates the price array and creates for each
-     * array element a price struct.
+     * Helper function which assigns the shopware article
+     * data to the product. (data of s_articles)
      *
+     * @param Struct\ProductMini $product
      * @param $data
-     * @return array
      */
-    private function iteratePrices($data)
+    private function assignProductData(Struct\ProductMini $product, $data)
+    {
+        $product->setId($data['id']);
+
+        $product->setName($data['name']);
+
+        $product->setNumber($data['number']);
+
+        $product->setShortDescription($data['description']);
+
+        $product->setLongDescription($data['descriptionLong']);
+
+        $product->setShippingTime($data['shippingTime']);
+
+        $product->setShippingFree($data['shippingFree']);
+
+        $product->setCloseouts($data['lastStock']);
+
+        $product->setStock($data['inStock']);
+
+        $product->setPackUnit($data['packUnit']);
+
+        $product->setPurchaseUnit($data['purchaseUnit']);
+
+        $product->setReferenceUnit($data['referenceUnit']);
+
+        $product->setReleaseDate($data['releaseDate']);
+    }
+
+    private function assignManufacturerData(Struct\ProductMini $product, $data)
+    {
+        $manufacturer = $this->manufacturerHydrator->hydrate(
+            $data['supplier']
+        );
+
+        $product->setManufacturer($manufacturer);
+    }
+
+    private function assignPriceData(Struct\ProductMini $product, $data)
     {
         $prices = array();
 
-        foreach($data as $price) {
-            $prices[] = $this->priceHydrator->hydrate(
-                $price
-            );
+        foreach($data['prices'] as $price) {
+            $prices[] = $this->priceHydrator->hydrate($price);
         }
 
-        return $prices;
+        $product->setPrices($prices);
     }
 
+    private function assignTaxData(Struct\ProductMini $product, $data)
+    {
+        $tax = $this->taxHydrator->hydrate($data['tax']);
+
+        $product->setTax($tax);
+    }
+
+    private function assignMediaData(Struct\ProductMini $product, $data)
+    {
+        $media = array();
+
+        foreach($data['images'] as $image) {
+            $media[] = $this->mediaHydrator->hydrateProductImage($image);
+        }
+
+        $product->setMedia($media);
+    }
+
+    private function assignUnitData(Struct\ProductMini $product, $data)
+    {
+        $unit = $this->unitHydrator->hydrate(
+            $data['unit']
+        );
+
+        $product->setUnit($unit);
+    }
+
+    private function assignAttributeData(Struct\ProductMini $product, $data)
+    {
+        $attribute = new Struct\Attribute();
+
+        foreach($data['attribute'] as $key => $value) {
+            $attribute->set($key, $value);
+        }
+
+        $product->addAttribute('core', $attribute);
+    }
 }

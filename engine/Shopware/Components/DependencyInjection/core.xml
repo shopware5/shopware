@@ -27,6 +27,7 @@
 
         <service id="product_gateway" class="Shopware\Gateway\ORM\Product">
             <argument type="service" id="product_hydrator" />
+            <argument type="service" id="models" />
         </service>
 
 
@@ -35,9 +36,17 @@
 
         <service id="product_hydrator" class="Shopware\Hydrator\ORM\Product">
             <argument type="service" id="price_hydrator" />
+            <argument type="service" id="manufacturer_hydrator" />
+            <argument type="service" id="tax_hydrator" />
+            <argument type="service" id="unit_hydrator" />
+            <argument type="service" id="media_hydrator" />
         </service>
 
         <service id="price_hydrator" class="Shopware\Hydrator\ORM\Price" />
+        <service id="manufacturer_hydrator" class="Shopware\Hydrator\ORM\Manufacturer" />
+        <service id="tax_hydrator" class="Shopware\Hydrator\ORM\Tax" />
+        <service id="unit_hydrator" class="Shopware\Hydrator\ORM\Unit" />
+        <service id="media_hydrator" class="Shopware\Hydrator\ORM\Media" />
 
     </services>
 </container>

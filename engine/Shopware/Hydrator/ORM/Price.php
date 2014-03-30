@@ -7,7 +7,7 @@ class Price
 {
     /**
      * @param array $data
-     * @return \Shopware\Struct\ProductMini
+     * @return \Shopware\Struct\Price
      */
     public function hydrate(array $data)
     {
