@@ -2,6 +2,8 @@
 
 namespace Shopware\Gateway\ORM;
 
+use Doctrine\ORM\AbstractQuery;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Hydrator\ORM as Hydrator;
 use Shopware\Struct as Struct;
 
@@ -17,11 +19,18 @@ class Product
     private $hydrator;
 
     /**
-     * @param Hydrator\Product $hydrator
+     * @var \Shopware\Components\Model\ModelManager
      */
-    function __construct(Hydrator\Product $hydrator)
+    private $entityManager;
+
+    /**
+     * @param Hydrator\Product $hydrator
+     * @param \Shopware\Components\Model\ModelManager $entityManager
+     */
+    function __construct(Hydrator\Product $hydrator, ModelManager $entityManager)
     {
         $this->hydrator = $hydrator;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -38,26 +47,88 @@ class Product
      */
     public function getMini($number)
     {
-        $data = array(
-            'name' => 'Test product',
-            'number' => $number,
-            'inStock' => 200,
-            'mainProduct' => array(
-                'name' => 'Test product',
-                'number' => $number . '.1',
-                'inStock' => 30,
-                'prices' => array(
-                    array('from' => 0, 'to' => 20, 'value' => 400.99),
-                    array('from' => 21, 'to' => 'beliebig', 'value' => 300.99),
-                )
-            ),
-            'prices' => array(
-                array('from' => 0, 'to' => 20, 'value' => 200.99),
-                array('from' => 21, 'to' => 'beliebig', 'value' => 100.99),
-            )
-        );
+        $data = $this->getMiniData($number);
+
+//        if ($data['mainDetail']['number'] != $number) {
+//            $data['mainDetail'] = $this->getMiniData(
+//                $data['mainDetail']['number']
+//            );
+//        } else {
+//            unset($data['mainDetail']);
+//        }
 
         return $this->hydrator->hydrateMini($data);
+    }
+
+    private function getMiniData($number)
+    {
+        //selects the minified variant data for the passed number
+        $builder = $this->getMiniQuery()
+            ->where('detail.number = :number')
+            ->setParameter('number', $number);
+
+        $data = $builder->getQuery()->getOneOrNullResult(
+            AbstractQuery::HYDRATE_ARRAY
+        );
+
+        $data['variantId'] = $data['id'];
+
+        //merge article and variant data into one array level.
+        $data = array_merge($data, $data['article']);
+
+        //selects the article images and merge them into the data array.
+        $builder = $this->getImageQuery()
+            ->where('image.articleId = :productId')
+            ->setParameter('productId', $data['id']);
+
+        $data['images'] = $builder->getQuery()->getArrayResult();
+
+        return $data;
+    }
+
+    /**
+     * @return \Shopware\Components\Model\QueryBuilder
+     */
+    private function getMiniQuery()
+    {
+        $builder = $this->entityManager->createQueryBuilder();
+        $builder->select(array(
+            'article', 'detail',
+            'prices', 'unit',
+            'supplier', 'tax',
+            'attribute', 'PARTIAL mainDetail.{id,number}'
+        ));
+
+        $builder->from('Shopware\Models\Article\Detail', 'detail')
+            ->innerJoin('detail.article', 'article')
+            ->innerJoin('article.mainDetail', 'mainDetail')
+            ->innerJoin('detail.prices', 'prices')
+            ->innerJoin('article.tax', 'tax')
+            ->leftJoin('detail.attribute', 'attribute')
+            ->leftJoin('article.supplier', 'supplier')
+            ->leftJoin('detail.unit', 'unit');
+
+        return $builder;
+    }
+
+    /**
+     * @return \Shopware\Components\Model\QueryBuilder
+     */
+    private function getImageQuery()
+    {
+        $builder = $this->entityManager->createQueryBuilder();
+        $builder->select(array(
+            'image', 'media', 'imageAttribute', 'mediaAttribute'
+        ));
+
+        $builder->from('Shopware\Models\Article\Image', 'image')
+            ->innerJoin('image.media', 'media')
+            ->leftJoin('image.attribute', 'imageAttribute')
+            ->leftJoin('media.attribute', 'mediaAttribute')
+            ->orderBy('image.main', 'ASC')
+            ->orderBy('image.position', 'ASC');
+
+        return $builder;
     }
 
     /**

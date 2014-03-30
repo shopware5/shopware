@@ -72,6 +72,10 @@ class Product
      */
     public function getMini($number = 'SW2000')
     {
+        $logger = new \Doctrine\DBAL\Logging\DebugStack();
+        $logger->enabled = true;
+        Shopware()->Models()->getConfiguration()->setSQLLogger($logger);
+
         /**@var $product Struct\ProductMini*/
         $product = Shopware()->Container()->get('product_gateway')->getMini(
             $number
@@ -89,6 +93,9 @@ class Product
             $product,
             $state
         );
+
+        echo '<pre>';
+        print_r($logger->queries);
 
         return $product;
     }
