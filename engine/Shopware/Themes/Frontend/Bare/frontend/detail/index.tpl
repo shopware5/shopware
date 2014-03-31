@@ -46,7 +46,7 @@
 
 	{* Product image *}
 	{block name='frontend_detail_index_image_container'}
-		<div class="product--image-container">
+		<div class="product--image-container{if {config name=sUSEZOOMPLUS}} product--image-zoom{/if}">
 			{include file="frontend/detail/image.tpl"}
 		</div>
 	{/block}
