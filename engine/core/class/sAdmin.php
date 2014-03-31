@@ -3196,10 +3196,12 @@ class sAdmin
         $email = trim(strtolower(stripslashes($email)));
         if(empty($email))
             return array("code"=>6, "message"=>$this->snippetObject->get('NewsletterFailureMail','Enter eMail address'));
-        $reg = "/^(([^<>()[\]\\\\.,;:\s@\"]+(\.[^<>()[\]\\\\.,;:\s@\"]+)*)|(\"([^\"\\\\\r]|(\\\\[\w\W]))*\"))@((\[([0-9]{1,3}\.){3}[0-9]{1,3}\])|(([a-z\-0-9áàäçéèêñóòôöüæøå]+\.)+[a-z]{2,}))$/i";
-        if(!preg_match($reg, $email))
-            return array("code"=>1, "message"=>$this->snippetObject->get('NewsletterFailureInvalid','Enter valid eMail address'));
 
+        $validator = new Zend_Validate_EmailAddress();
+        $validator->getHostnameValidator()->setValidateTld(false);
+        if (!$validator->isValid($email)) {
+            return array("code"=>1, "message"=>$this->snippetObject->get('NewsletterFailureInvalid','Enter valid eMail address'));
+        }
         if (!$unsubscribe) {
             $sql = "SELECT * FROM s_campaigns_mailaddresses WHERE email=?";
             $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($email));
