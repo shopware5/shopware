@@ -22,31 +22,33 @@
  *
  * @category   Shopware
  * @package    Index
- * @subpackage View
+ * @subpackage Store
  * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author shopware AG
  */
 
-/**
- * Base for Shopware 4.x Widgets
- *
- * This file contains a basic class for all widgets in the backend. Please
- * note that this class is just a base file and doesn't contains
- * any logic or functionality.
- */
-Ext.define('Shopware.apps.Index.view.widgets.Base', {
-    extend: 'Ext.panel.Panel',
-    layout: 'fit',
-    anchor: '100%',
-    height: 120,
-    cls: Ext.baseCSSPrefix + 'widget-component',
-    bodyPadding: 10,
-    frame: true,
-    closable: false,
-    collapsible: false,
-    draggable: {
-        ddGroup: 'widget-container',
-        moveOnDrag: false
+//{block name="backend/index/store/widgets"}
+
+Ext.define('Shopware.apps.Index.store.Widgets', {
+
+    extend: 'Ext.data.Store',
+
+    model: 'Shopware.apps.Index.model.Widget',
+
+    batch: true,
+    remoteFilter: true,
+    clearOnLoad: false,
+
+    proxy: {
+        type: 'ajax',
+        url: '{url controller="widgets" action="getWidgets"}',
+        reader: {
+            type: 'json',
+            root: 'data'
+        }
     }
+
 });
+
+//{/block}

@@ -68,6 +68,29 @@ Ext.define('Shopware.apps.Index.view.widgets.Merchant', {
         }
     },
 
+    merchantStore: null,
+
+    constructor: function() {
+        var me = this;
+
+        me.merchantStore = Ext.create('Ext.data.Store', {
+            model: 'Shopware.apps.Index.model.Merchant',
+            remoteFilter: true,
+            clearOnLoad: false,
+
+            proxy: {
+                type: 'ajax',
+                url: '{url controller="widgets" action="getLastMerchant"}',
+                reader: {
+                    type: 'json',
+                    root: 'data'
+                }
+            }
+        }).load();
+
+        me.callParent(arguments);
+    },
+
     /**
      * Initializes the widget.
      *
