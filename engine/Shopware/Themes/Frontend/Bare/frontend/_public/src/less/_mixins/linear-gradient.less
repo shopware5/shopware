@@ -32,8 +32,8 @@
 }
 
 .primary-gradient() {
-	@rgba-color: rgba(red(@primaryContrastColor), green(@primaryContrastColor), blue(@primaryContrastColor), .7);
-	.linear-gradient-multi(0%, @rgba-color, 66%, @primaryColor, 100%, @primaryColor, bottom, top);
+	@gradient-contrast-color: #cc1d00;
+	.linear-gradient-multi(0%, @gradient-contrast-color, 66%, @primaryColor, 100%, @primaryColor, bottom, top);
 }
 .secondary-gradient() {
 	.linear-gradient-multi(0%, @primaryTextColor, 53%, @lightTextColor, 100%, @lightTextColor, bottom, top);
