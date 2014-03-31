@@ -5075,7 +5075,6 @@ INSERT INTO `s_campaigns_templates` (`id`, `path`, `description`) VALUES
 
 
 TRUNCATE TABLE `s_categories_avoid_customergroups`;
-TRUNCATE TABLE `s_cms_content`;
 TRUNCATE TABLE `s_cms_groups`;
 TRUNCATE TABLE `s_cms_static`;
 INSERT INTO `s_cms_static` (`id`, `tpl1variable`, `tpl1path`, `tpl2variable`, `tpl2path`, `tpl3variable`, `tpl3path`, `description`, `html`, `grouping`, `position`, `link`, `target`, `parentID`, `page_title`, `meta_keywords`, `meta_description`) VALUES
