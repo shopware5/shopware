@@ -50,6 +50,11 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     private $session;
 
     /**
+     * @var Shopware_Components_Snippet_Manager Snippet manager
+     */
+    private $snippetManager;
+
+    /**
      * @var Enlight_Controller_Front
      */
     private $front;
@@ -64,24 +69,12 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->config = Shopware()->Config();
         $this->session = Shopware()->Session();
         $this->front = Shopware()->Front();
+        $this->snippetManager = Shopware()->Snippets();
         $this->basketModule = Shopware()->Modules()->Basket();
         $this->systemModule = Shopware()->System();
         $this->systemModule->sCurrency = Shopware()->Db()->fetchRow('SELECT * FROM s_core_currencies WHERE currency LIKE "EUR"');
         $this->systemModule->sSESSION_ID = null;
         $this->systemModule->sLanguage = 1;
-
-        // Create a stub for the Shopware_Components_Snippet_Manager class.
-        $stub = $this->getMockBuilder('\Enlight_Components_Snippet_Manager')
-            ->setMethods(array('get'))
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $stub->expects($this->any())
-            ->method('get')
-            ->will($this->returnArgument(0));
-
-        // Inject the stub, so that tests can be translation independent
-        $this->module->snippetObject = $stub;
     }
 
     /**
@@ -102,19 +95,36 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         // Test that no tax id returns matching error
         $result = $this->module->sValidateVat();
         $this->assertCount(1, $result);
-        $this->assertContains('VatFailureEmpty', $result);
+        $this->assertContains(
+            $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                ->get('VatFailureEmpty', 'Please enter a vat id')
+            , $result
+        );
 
         // Test that wrong tax id returns matching error
         $this->front->Request()->setPost('ustid', -1);
         $result = $this->module->sValidateVat();
         $this->assertCount(1, $result);
-        $this->assertContains('VatFailureInvalid', $result);
+        $this->assertContains(
+            $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                ->get('VatFailureInvalid', 'The vat id entered is invalid')
+            , $result
+        );
 
         // Test that no country id returns matching error
         $this->front->Request()->setPost('ustid', 'DE123456789');
         $result = $this->module->sValidateVat();
         $this->assertCount(1, $result);
-        $this->assertContains('VatFailureErrorField', $result);
+        $this->assertContains(
+            sprintf($this->snippetManager->getNamespace('frontend/account/internalMessages')
+                    ->get(
+                        'VatFailureErrorField',
+                        'The field %s does not match to the vat id entered'
+                    ),
+                'Land'
+            ),
+            $result
+        );
 
         // Test basic validation is ok
         $this->front->Request()->setPost('country', '2');
@@ -124,7 +134,16 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->front->Request()->setPost('country', '18');
         $result = $this->module->sValidateVat();
         $this->assertCount(1, $result);
-        $this->assertContains('VatFailureErrorField', $result);
+        $this->assertContains(
+            sprintf($this->snippetManager->getNamespace('frontend/account/internalMessages')
+                    ->get(
+                        'VatFailureErrorField',
+                        'The field %s does not match to the vat id entered'
+                    ),
+                'Land'
+            ),
+            $result
+        );
     }
 
     /**
@@ -757,7 +776,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('sErrorMessages', $result);
         $this->assertCount(1, $result['sErrorMessages']);
         $this->assertContains(
-            'MailFailure',
+            $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                ->get('MailFailure', 'Please enter a valid mail address'),
             $result['sErrorMessages']
         );
         $this->assertCount(1, $result['sErrorFlag']);
@@ -780,7 +800,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('sErrorMessages', $result);
         $this->assertCount(1, $result['sErrorMessages']);
         $this->assertContains(
-            'MailFailureNotEqual',
+            $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                ->get('MailFailureNotEqual', 'The mail addresses entered are not equal'),
             $result['sErrorMessages']
         );
         $this->assertCount(1, $result['sErrorFlag']);
@@ -883,7 +904,11 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('sErrorFlag', $result);
         $this->assertArrayHasKey('sErrorMessages', $result);
         $this->assertCount(1, $result['sErrorMessages']);
-        $this->assertContains('LoginFailure', $result['sErrorMessages']);
+        $this->assertContains(
+            $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                ->get('LoginFailure', 'Wrong email or password'),
+            $result['sErrorMessages']
+        );
         $this->assertCount(2, $result['sErrorFlag']);
         $this->assertArrayHasKey('email', $result['sErrorFlag']);
         $this->assertArrayHasKey('password', $result['sErrorFlag']);
@@ -898,7 +923,11 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('sErrorFlag', $result);
         $this->assertArrayHasKey('sErrorMessages', $result);
         $this->assertCount(1, $result['sErrorMessages']);
-        $this->assertContains('LoginFailure', $result['sErrorMessages']);
+        $this->assertContains(
+            $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                ->get('LoginFailure', 'Wrong email or password'),
+            $result['sErrorMessages']
+        );
         $this->assertNull($result['sErrorFlag']);
 
         $customer = $this->createDummyCustomer();
@@ -935,7 +964,11 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('sErrorMessages', $result);
         $this->assertNull($result['sErrorFlag']);
         $this->assertCount(1, $result['sErrorMessages']);
-        $this->assertContains('LoginFailure', $result['sErrorMessages']);
+        $this->assertContains(
+            $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                ->get('LoginFailure', 'Wrong email or password'),
+            $result['sErrorMessages']
+        );
 
         // Test correct pre-hashed password
         $this->front->Request()->setPost(array(
@@ -967,7 +1000,14 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('sErrorMessages', $result);
         $this->assertNull($result['sErrorFlag']);
         $this->assertCount(1, $result['sErrorMessages']);
-        $this->assertContains('LoginFailureActive', $result['sErrorMessages']);
+        $this->assertContains(
+            $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                ->get(
+                    'LoginFailureActive',
+                    'Your account is disabled. Please contact us.'
+                ),
+            $result['sErrorMessages']
+        );
 
         // Test brute force lockout
         Shopware()->Db()->update('s_user', array('active' => 1), 'id = '.$customer->getId());
@@ -990,7 +1030,14 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('sErrorMessages', $result);
         $this->assertNull($result['sErrorFlag']);
         $this->assertCount(1, $result['sErrorMessages']);
-        $this->assertContains('LoginFailureLocked', $result['sErrorMessages']);
+        $this->assertContains(
+            $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                ->get(
+                    'LoginFailureLocked',
+                    'Too many failed logins. Your account was temporary deactivated.'
+                ),
+            $result['sErrorMessages']
+        );
 
         $this->deleteDummyCustomer($customer);
     }
@@ -2719,7 +2766,12 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->front->Request()->setPost('newsletter', '');
         $result = $this->module->sNewsletterSubscription('');
         $this->assertEquals(
-            array('code' => 5, 'message' => 'ErrorFillIn', 'sErrorFlag' => array('newsletter' => true)),
+            array(
+                'code' => 5,
+                'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                        ->get('ErrorFillIn','Please fill in all red fields'),
+                'sErrorFlag' => array('newsletter' => true)
+            ),
             $result
         );
     }
@@ -2734,28 +2786,44 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         // Test unsubscribe with non existing email, fail
         $result = $this->module->sNewsletterSubscription(uniqid().'@shopware.com', true);
         $this->assertEquals(
-            array('code' => 4, 'message' => 'NewsletterFailureNotFound'),
+            array(
+                'code' => 4,
+                'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                        ->get('NewsletterFailureNotFound', 'This mail address could not be found')
+            ),
             $result
         );
 
         // Test unsubscribe with empty post field, fail validation
         $result = $this->module->sNewsletterSubscription('', true);
         $this->assertEquals(
-            array('code' => 6, 'message' => 'NewsletterFailureMail'),
+            array(
+                'code' => 6,
+                'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                        ->get('NewsletterFailureMail', 'Enter eMail address')
+            ),
             $result
         );
 
         // Test with empty field, fail validation
         $result = $this->module->sNewsletterSubscription('');
         $this->assertEquals(
-            array('code' => 6, 'message' => 'NewsletterFailureMail'),
+            array(
+                'code' => 6,
+                'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                        ->get('NewsletterFailureMail', 'Enter eMail address')
+            ),
             $result
         );
 
         // Test with malformed email, fail validation
         $result = $this->module->sNewsletterSubscription('thisIsNotAValidEmailAddress');
         $this->assertEquals(
-            array('code' => 1, 'message' => 'NewsletterFailureInvalid'),
+            array(
+                'code' => 1,
+                'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                        ->get('NewsletterFailureInvalid', 'Enter valid eMail address')
+            ),
             $result
         );
 
@@ -2770,7 +2838,11 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         // Test with correct unique email, all ok
         $result = $this->module->sNewsletterSubscription($validAddress);
         $this->assertEquals(
-            array('code' => 3, 'message' => 'NewsletterSuccess'),
+            array(
+                'code' => 3,
+                'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                        ->get('NewsletterSuccess', 'Thank you for receiving our newsletter')
+            ),
             $result
         );
 
@@ -2801,7 +2873,11 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         // Test with same email, fail
         $result = $this->module->sNewsletterSubscription($validAddress);
         $this->assertEquals(
-            array('code' => 2, 'message' => 'NewsletterFailureAlreadyRegistered'),
+            array(
+                'code' => 2,
+                'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                        ->get('NewsletterFailureAlreadyRegistered','You already receive our newsletter')
+            ),
             $result
         );
 
@@ -2809,7 +2885,11 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $groupId = rand(1, 9999);
         $result = $this->module->sNewsletterSubscription($validAddress, false, $groupId);
         $this->assertEquals(
-            array('code' => 2, 'message' => 'NewsletterFailureAlreadyRegistered'),
+            array(
+                'code' => 2,
+                'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                        ->get('NewsletterFailureAlreadyRegistered','You already receive our newsletter')
+            ),
             $result
         );
 
@@ -2846,7 +2926,11 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         // Test unsubscribe the same email, all ok
         $result = $this->module->sNewsletterSubscription($validAddress, true);
         $this->assertEquals(
-            array('code' => 5, 'message' => 'NewsletterMailDeleted'),
+            array(
+                'code' => 5,
+                'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                        ->get('NewsletterMailDeleted', 'Your mail address was deleted')
+            ),
             $result
         );
 
