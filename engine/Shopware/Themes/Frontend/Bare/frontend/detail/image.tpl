@@ -1,32 +1,31 @@
 {block name="frontend_detail_image"}
-	{if $sArticle.image.src.4}
-		{* Main picture *}
-		{block name='frontend_detail_image_main'}
-			{if $sArticle.image.res.relations}
-				<div id="img{$sArticle.image.res.relations}" style="display:none">
-					<a href="{$sArticle.image.src.5}"
-						title="{if $sArticle.image.res.description}{$sArticle.image.res.description}{else}{$sArticle.articleName}{/if}" 
-						{if {config name=sUSEZOOMPLUS}}class="cloud-zoom-gallery"{/if}
-						rel="lightbox">
-						
-			    		<img src="{$sArticle.image.src.4}" alt="{$sArticle.articleName}" title="{if $sArticle.image.res.description}{$sArticle.image.res.description}{else}{$sArticle.articleName}{/if}" />
-			    	</a>
-				</div>
-			{/if}
 
-            <a id="zoom1" href="{$sArticle.image.src.5}" title="{if $sArticle.image.res.description}{$sArticle.image.res.description}{else}{$sArticle.articleName}{/if}" {if {config name=sUSEZOOMPLUS}}class="cloud-zoom"{/if} rel="lightbox[{$sArticle.ordernumber}]">
-				<img src="{$sArticle.image.src.4}" alt="{$sArticle.articleName}" title="{if $sArticle.image.res.description}{$sArticle.image.res.description}{else}{$sArticle.articleName}{/if}" />
-			</a>
-	    {/block}
-	
-	{* No picture available *}
-	{else}
-		{block name='frontend_detail_image_empty'}
-			<img src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{$sArticle.articleName}" />
-		{/block}
-	{/if}
-	
+	{* Product image - Thumbnails *}
 	{block name='frontend_detail_image_thumbs'}
 		{include file="frontend/detail/images.tpl"}
+	{/block}
+
+	{* Product image - uses the picturefill polyfill for the HTML5 "picture" element *}
+	{block name='frontend_detail_image_main'}
+	<span data-picture data-alt="{if $sArticle.image.res.description}{$sArticle.image.res.description}{else}{$sArticle.articleName}{/if}" class="image--element">
+
+		{* Image based on our default media queries *}
+		{block name='frontend_detail_image_default_queries'}
+			<span data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.2}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}"></span>
+			<span data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.3}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" data-media="(min-width: 47.75em)"></span>
+			<span data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" data-media="(min-width: 64em)"></span>
+			<span data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.5}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" data-media="(min-width: 120em)"></span>
+		{/block}
+
+		{* Block to add additional image based on media queries *}
+		{block name='frontend_detail_image_additional_queries'}{/block}
+
+		{* If the browser doesn't support JS, the following image will be used *}
+		{block name='frontend_detail_image_fallback'}
+			<noscript>
+				<img src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" alt="{$sArticle.articleName}">
+			</noscript>
+		{/block}
+	</span>
 	{/block}
 {/block}
