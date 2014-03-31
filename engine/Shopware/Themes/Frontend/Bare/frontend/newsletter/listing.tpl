@@ -19,7 +19,7 @@
 						{block name='frontend_newsletter_listing_entry'}
 							<div class="table_row">
 								<div class="grid_9">
-									{if $sContentItem.date}{$sContentItem.date|date_format:"%d.%m.%Y"} - {/if}{$sContentItem.description}
+									{if $sContentItem.date}{$sContentItem.date|date:"DATE_SHORT"} - {/if}{$sContentItem.description}
 								</div>
 								
 								<div class="grid_3">

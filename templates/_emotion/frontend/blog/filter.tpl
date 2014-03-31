@@ -9,9 +9,9 @@
                 {if !$date.removeProperty}
                     {if $smarty.get.sFilterDate==$date.dateFormatDate}
                         {assign var=filterDateActive value=true}
-                        <li class="active"><a href="{$date.link}" title="{$date.dateFormatDate}" class="active">{$date.dateFormatDate} ({$date.dateCount})</a></li>
+                        <li class="active"><a href="{$date.link}" title="{$date.dateFormatDate}" class="active">{$date.dateFormatDate|date:"DATE_SHORT"} ({$date.dateCount})</a></li>
                     {else}
-                        <li {if $smarty.foreach.filter.last}class="last"{/if}><a href="{$date.link}" title="{$date.dateFormatDate}">{$date.dateFormatDate} ({$date.dateCount})</a></li>
+                        <li {if $smarty.foreach.filter.last}class="last"{/if}><a href="{$date.link}" title="{$date.dateFormatDate}">{$date.dateFormatDate|date:"DATE_SHORT"} ({$date.dateCount})</a></li>
                     {/if}
                 {elseif $filterDateActive}
                     <li class="close"><a href="{$date.link}" title="{s name='FilterLinkDefault' namespace='frontend/listing/filter_properties'}{/s}">{s name='FilterLinkDefault' namespace='frontend/listing/filter_properties'}{/s}</a></li>
