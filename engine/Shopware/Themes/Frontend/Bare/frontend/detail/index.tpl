@@ -10,57 +10,68 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-	<div id="detail" class="grid_16 first last" itemscope itemtype="http://data-vocabulary.org/Product">
+	<div class="content block">
 
-		{* Product navigation - Previous and next arrow button *}
-		{block name="frontend_detail_index_navigation"}
-			{include file="frontend/detail/navigation.tpl"}
+	{* Product navigation - Previous and next arrow button *}
+	{block name="frontend_detail_index_navigation"}
+		{include file="frontend/detail/navigation.tpl"}
+	{/block}
+
+	<header class="product--header block-group">
+
+		{* Product name *}
+		{block name='frontend_detail_index_name'}
+			<h1 class="product--title block">{$sArticle.articleName}</h1>
 		{/block}
+	</header>
 
-		{* General detailbox *}
-		<div id="detailbox"><!-- detailbox -->
+	{* General detailbox *}
+	<div id="detailbox"><!-- detailbox -->
 
-			{* Detailbox left *}
-			<div class="left">
-				<div id="img" class="grid_6 first">
-					<div class="wrapper">
-						{* Images *}
-						{include file="frontend/detail/image.tpl"}
-					</div>
+		{* Detailbox left *}
+		<div class="left">
+			<div id="img" class="grid_6 first">
+				<div class="wrapper">
+					{* Images *}
+					{include file="frontend/detail/image.tpl"}
 				</div>
 			</div>
+		</div>
 
-			<div class="right"><!-- Right -->
-				{* Article name *}
-				{block name='frontend_detail_index_name'}
-					<h1>{$sArticle.articleName}</h1>
+		<div class="right"><!-- Right -->
+			{* Article name *}
+			{block name='frontend_detail_index_name'}
+				<h1>{$sArticle.articleName}</h1>
+			{/block}
+
+			{* Detailbox middle *}
+			<div id="detailbox_middle" class="grid_4">
+
+				{* Article comments - small overview *}
+				{block name="frontend_detail_comments_overview"}
+					{if !{config name=VoteDisable}}
+						<div class="detail_comments">
+							<span class="star star{$sArticle.sVoteAverange.averange}">Star Rating</span>
+							<span class="comment_numbers">(<a href="#write_comment" class="write_comment" rel="nofollow"
+															  title="{s name='DetailLinkReview'}{/s}">{$sArticle.sVoteAverange.count}</a>)</span>
+						</div>
+					{/if}
 				{/block}
 
-				{* Detailbox middle *}
-				<div id="detailbox_middle" class="grid_4">
-
-					{* Article comments - small overview *}
-					{block name="frontend_detail_comments_overview"}
-						{if !{config name=VoteDisable}}
-							<div class="detail_comments">
-								<span class="star star{$sArticle.sVoteAverange.averange}">Star Rating</span>
-								<span class="comment_numbers">(<a href="#write_comment" class="write_comment" rel="nofollow" title="{s name='DetailLinkReview'}{/s}">{$sArticle.sVoteAverange.count}</a>)</span>
-							</div>
-						{/if}
-					{/block}
-
-					{* Additional links *}
-					{block name="frontend_detail_index_actions"}
-						{include file="frontend/detail/actions.tpl"}
-					{/block}
-				</div>
+				{* Additional links *}
+				{block name="frontend_detail_index_actions"}
+					{include file="frontend/detail/actions.tpl"}
+				{/block}
+			</div>
 
 
 
-				{* Detailbox right *}
+			{* Detailbox right *}
 
-				{* Configurator table // div buybox *}
-				{if $sArticle.sConfigurator && $sArticle.sConfiguratorSettings.type==2}<div class="grid_16 first last" id="buybox">{else}<div class="right" id="buybox">{/if}
+			{* Configurator table // div buybox *}
+			{if $sArticle.sConfigurator && $sArticle.sConfiguratorSettings.type==2}
+			<div class="grid_16 first last" id="buybox">{else}
+				<div class="right" id="buybox">{/if}
 					<div id="detail_more"></div>
 
 					{* Article notification *}
@@ -72,13 +83,13 @@
 
 					{* Configurator drop down menu *}
 					{block name="frontend_detail_index_configurator"}
-					{if $sArticle.sConfigurator}
-						{if $sArticle.sConfiguratorSettings.type eq 1}
-							{include file="frontend/detail/config_step.tpl"}
-						{elseif $sArticle.sConfiguratorSettings.type != 2}
-							{include file="frontend/detail/config_upprice.tpl"}
+						{if $sArticle.sConfigurator}
+							{if $sArticle.sConfiguratorSettings.type eq 1}
+								{include file="frontend/detail/config_step.tpl"}
+							{elseif $sArticle.sConfiguratorSettings.type != 2}
+								{include file="frontend/detail/config_upprice.tpl"}
+							{/if}
 						{/if}
-					{/if}
 					{/block}
 
 					{* Supplier name *}
@@ -120,11 +131,14 @@
 					{/block}
 
 
-				</div><!-- //buybox -->
+				</div>
+				<!-- //buybox -->
 
-			</div><!-- //Right -->
+			</div>
+			<!-- //Right -->
 
-		</div> <!-- //detailbox -->
+		</div>
+		<!-- //detailbox -->
 
 
 		<div class="clear">&nbsp;</div>
@@ -132,10 +146,9 @@
 		{* Detailinfo *}
 		{block name="frontend_detail_index_detail"}
 			<div id="detailinfo">
-				{* Bundle *}
-				{block name="frontend_detail_index_bundle"}
-					{include file='frontend/detail/bundle/include.tpl'}
-				{/block}
+
+				{* Product bundle hook point *}
+				{block name="frontend_detail_index_bundle"}{/block}
 
 
 				{block name="frontend_detail_index_tabs"}
@@ -145,51 +158,50 @@
 						{include file="frontend/detail/tabs.tpl"}
 
 						{block name="frontend_detail_index_outer_tabs"}
-						<div class="inner_tabs">
+							<div class="inner_tabs">
 
-							{block name="frontend_detail_index_inner_tabs"}
-								{block name='frontend_detail_index_before_tabs'}{/block}
+								{block name="frontend_detail_index_inner_tabs"}
+									{block name='frontend_detail_index_before_tabs'}{/block}
 
-								{* Article description *}
-								{block name="frontend_detail_index_tabs_description"}
-									{include file="frontend/detail/description.tpl"}
-								{/block}
-
-								{* Article rating *}
-								{if !{config name=VoteDisable}}
-									{block name="frontend_detail_index_tabs_rating"}
-										{include file="frontend/detail/comment.tpl"}
+									{* Article description *}
+									{block name="frontend_detail_index_tabs_description"}
+										{include file="frontend/detail/description.tpl"}
 									{/block}
-								{/if}
 
-								{* Related articles *}
-								{block name="frontend_detail_index_tabs_related"}
-									{include file="frontend/detail/related.tpl"}
+									{* Article rating *}
+									{if !{config name=VoteDisable}}
+										{block name="frontend_detail_index_tabs_rating"}
+											{include file="frontend/detail/comment.tpl"}
+										{/block}
+									{/if}
+
+									{* Related articles *}
+									{block name="frontend_detail_index_tabs_related"}
+										{include file="frontend/detail/related.tpl"}
+									{/block}
+
+									{* Similar articles *}
+									{include file='frontend/detail/similar.tpl'}
+
+									{block name='frontend_detail_index_after_tabs'}{/block}
 								{/block}
-
-								{* Similar articles *}
-								{include file='frontend/detail/similar.tpl'}
-
-								{block name='frontend_detail_index_after_tabs'}{/block}
-							{/block}
-						</div>
+							</div>
 						{/block}
 					</div>
 					<div class="detailinfo_shadow">&nbsp;</div>
-						{* "Customers bought also" slider *}
-						{block name="frontend_detail_index_also_bought_slider"}
-							{if {config name=alsoBoughtShow}}
-								{action module=widgets controller=recommendation action=bought articleId=$sArticle.articleID}
-							{/if}
-						{/block}
+					{* "Customers bought also" slider *}
+					{block name="frontend_detail_index_also_bought_slider"}
+						{if {config name=alsoBoughtShow}}
+							{action module=widgets controller=recommendation action=bought articleId=$sArticle.articleID}
+						{/if}
+					{/block}
 
-						{* "Customers similar viewed slider *}
-						{block name="frontend_detail_index_similar_viewed_slider"}
-							{if {config name=similarViewedShow}}
-								{action module=widgets controller=recommendation action=viewed articleId=$sArticle.articleID}
-							{/if}
-						{/block}
-
+					{* "Customers similar viewed slider *}
+					{block name="frontend_detail_index_similar_viewed_slider"}
+						{if {config name=similarViewedShow}}
+							{action module=widgets controller=recommendation action=viewed articleId=$sArticle.articleID}
+						{/if}
+					{/block}
 					<div class="clear">&nbsp;</div>
 				{/block}
 			</div>
