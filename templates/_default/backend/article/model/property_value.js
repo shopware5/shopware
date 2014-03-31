@@ -47,20 +47,9 @@ Ext.define('Shopware.apps.Article.model.PropertyValue', {
      * @array
      */
     fields: [
-        //{block name="backend/article/model/property_value/fields"}{/block}
-        { name: 'id',
-            type: 'string',
-            convert: function (value) {
-                var intVal = parseInt(value, 10);
-                return isNaN(intVal) ? value : intVal;
-            }
-        },
-        { name: 'optionId', type: 'string',
-            convert: function (value) {
-                var intVal = parseInt(value, 10);
-                return isNaN(intVal) ? value : intVal;
-            }
-        },
+		//{block name="backend/article/model/property_value/fields"}{/block}
+        { name: 'id', type: 'int' },
+        { name: 'optionId', type: 'int' },
         { name: 'value', type: 'string' }
     ]
 
