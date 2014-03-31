@@ -81,6 +81,7 @@ class Product
 
         $this->assignMediaData($product, $data);
 
+
         if (isset($data['supplier'])) {
             $this->assignManufacturerData($product, $data);
         }

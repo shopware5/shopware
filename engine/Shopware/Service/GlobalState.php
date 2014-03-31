@@ -38,6 +38,12 @@ class GlobalState
      */
     public function get()
     {
-        return new Struct\GlobalState();
+        $state = new Struct\GlobalState();
+
+        $state->setCurrentCustomerGroup(new Struct\CustomerGroup());
+        $state->setFallbackCustomerGroup(new Struct\CustomerGroup());
+        $state->setCurrency(new Struct\Currency());
+
+        return $state;
     }
 }
