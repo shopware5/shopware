@@ -3,16 +3,22 @@
 namespace Shopware\Service;
 
 use Shopware\Struct as Struct;
+use Shopware\Gateway\ORM as Gateway;
 
 class Price
 {
+    /**
+     * @var \Shopware\Gateway\ORM\Price
+     */
     private $priceGateway;
 
-    function __construct($priceGateway)
+    /**
+     * @param Gateway\Price $priceGateway
+     */
+    function __construct(Gateway\Price $priceGateway)
     {
         $this->priceGateway = $priceGateway;
     }
-
 
     /**
      * Calculates all prices of the passed product.
@@ -74,7 +80,7 @@ class Price
     {
         $customerGroup = $state->getCurrentCustomerGroup();
 
-        if ($customerGroup->useDicount()
+        if ($customerGroup->getUseDiscount()
             && $customerGroup->getPercentageDiscount()) {
 
             $price = $price - ($price / 100 * $customerGroup->getPercentageDiscount());
@@ -94,6 +100,9 @@ class Price
     }
 
     /**
+     * Calculates the product unit reference price for the passed
+     * product price.
+     *
      * @param Struct\ProductMini $product
      * @param Struct\Price $price
      * @return float
