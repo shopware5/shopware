@@ -1588,8 +1588,14 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $builder->setParameter('searchValue', '%' . $searchValue . '%');
         }
         $statement = $builder->execute();
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($data as & $row) {
+            $row["id"] = (int)$row["id"];
+            $row["optionId"] = (int)$row["optionId"];
+        }
         $this->View()->assign(array(
-            'data' => $statement->fetchAll(PDO::FETCH_ASSOC),
+            'data' => $data,
             'success' => true
         ));
     }

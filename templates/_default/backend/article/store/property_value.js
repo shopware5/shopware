@@ -35,7 +35,7 @@
 Ext.define('Shopware.apps.Article.store.PropertyValue', {
     extend: 'Ext.data.Store',
     alias: 'widget.article-store-property-value',
-    model: 'Shopware.apps.Article.model.PropertyValue',
+    fields: [ 'id', 'value', 'optionId' ],
     proxy: {
         type: 'ajax',
         url: '{url action=getPropertyValues}',
