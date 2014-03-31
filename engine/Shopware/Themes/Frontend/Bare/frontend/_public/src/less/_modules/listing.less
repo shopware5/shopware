@@ -1,0 +1,146 @@
+
+.listing--content {
+  .unitize-padding(10, 10);
+}
+
+.category--teaser {
+  .unitize-margin(0, 0, 10, 0);
+}
+
+.action--filter {
+  .unitize-margin(10, 0);
+
+  .filter--trigger {
+    display: block;
+  }
+}
+
+.action--sort {
+  .unitize-width(220);
+  display: inline-block;
+  float: left;
+
+  label {
+    display: none;
+  }
+
+  .sort--select {
+    .unitize-width(220);
+  }
+}
+
+.action--change-layout {
+  .unitize-width(76);
+  display: inline-block;
+  float: right;
+  white-space: nowrap;
+
+  label {
+    display: none;
+  }
+
+  .action--link {
+    display: inline-block;
+    font-family: 'shopware';
+    text-align: center;
+    color: @primaryTextColor;
+    border: 1px solid @borderColor;
+    float: left;
+    .unitize-width(38);
+    .unitize-height(46);
+    .unitize(46, 16, line-height);
+    .unitize(12, 16, font-size);
+    .linear-gradient(#ffffff, #edeff1);
+
+    &:before {
+      content: "\e606";
+    }
+
+    &:hover {
+      color: @primaryColor;
+    }
+
+    &.link--table-view {
+      border-width: 1px 0 1px 1px;
+      .border-radius-multi(3px, 0, 0, 3px);
+    }
+
+    &.link--list-view {
+      .border-radius-multi(0, 3px, 3px, 0);
+    }
+
+    span {
+      display: none;
+    }
+  }
+}
+
+.action--per-page,
+.listing--paging {
+  display: none;
+}
+
+.product--box {
+  .unitize-margin(10, 0, 10, 0);
+}
+
+.box--image {
+  display: block;
+  border-bottom: 1px solid @borderColor;
+  .unitize-padding(10, 0);
+
+  .image--element {
+    display: block;
+    text-align: center;
+
+    span {
+      img {
+        margin: 0 auto;
+      }
+    }
+  }
+}
+
+.product--title {
+  display: inline-block;
+  color: @darkTextColor;
+  font-weight: bold;
+  .unitize(16, 16, font-size);
+  .unitize-margin(0, 0, 20, 0);
+
+  &:hover {
+    color: @primaryColor;
+  }
+}
+
+.product--description {
+  display: none;
+}
+
+.product--price {
+
+  &.price--default {
+    color: @primaryColor;
+    .unitize(20, 16, font-size);
+  }
+
+  &.price--unit {
+    color: @primaryTextColor;
+    .unitize(13, 16, font-size);
+  }
+}
+
+.product--actions {
+  .unitize-margin(10, 0, 0, 0);
+}
+
+.product--action {
+
+  &.action--buynow {
+    display: none;
+  }
+
+  &.action--more {
+    display: block;
+  }
+}
