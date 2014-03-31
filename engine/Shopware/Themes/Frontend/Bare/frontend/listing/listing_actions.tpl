@@ -2,6 +2,11 @@
 {block name='frontend_listing_actions_top'}
     <div class="listing--actions block-group{block name='frontend_listing_actions_class'}{/block}">
 
+		{* Filter options *}
+		{block name="frontend_listing_actions_filter"}
+			{include file="frontend/listing/actions/action-filter.tpl"}
+		{/block}
+
         {* Order by selection *}
         {block name='frontend_listing_actions_sort'}
             {include file="frontend/listing/actions/action-sorting.tpl"}
