@@ -17,13 +17,39 @@
 		{include file="frontend/detail/navigation.tpl"}
 	{/block}
 
-	<header class="product--header block-group">
+	{* Product header *}
+	{block name='frontend_detail_index_header'}
+		<header class="product--header block-group">
+			<div class="product--info block">
 
-		{* Product name *}
-		{block name='frontend_detail_index_name'}
-			<h1 class="product--title block">{$sArticle.articleName}</h1>
-		{/block}
-	</header>
+				{* Product name *}
+				{block name='frontend_detail_index_name'}
+					<h1 class="product--title">{$sArticle.articleName}</h1>
+				{/block}
+
+				{* Product rating *}
+				{block name="frontend_detail_comments_overview"}
+					{include file='frontend/detail/rating.tpl'}
+				{/block}
+			</div>
+
+			{* Product - Supplier information *}
+			{block name='frontend_detai_supplier_info'}
+				{if $sArticle.supplierImg}
+					<div class="product--supplier block">
+						<img src="{$sArticle.supplierImg}" alt="{$sArticle.supplierName}">
+					</div>
+				{/if}
+			{/block}
+		</header>
+	{/block}
+
+	{* Product image *}
+	{block name='frontend_detail_index_image_container'}
+		<div class="product--image-container">
+			{include file="frontend/detail/image.tpl"}
+		</div>
+	{/block}
 
 	{* General detailbox *}
 	<div id="detailbox"><!-- detailbox -->
@@ -39,10 +65,6 @@
 		</div>
 
 		<div class="right"><!-- Right -->
-			{* Article name *}
-			{block name='frontend_detail_index_name'}
-				<h1>{$sArticle.articleName}</h1>
-			{/block}
 
 			{* Detailbox middle *}
 			<div id="detailbox_middle" class="grid_4">
