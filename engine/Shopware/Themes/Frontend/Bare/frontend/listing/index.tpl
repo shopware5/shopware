@@ -6,7 +6,7 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-<div class="content block">
+<div class="content block listing--content">
 
 	{* Banner *}
 	{block name="frontend_listing_index_banner"}

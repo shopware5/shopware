@@ -1,4 +1,6 @@
-<li class="product--box panel--box{if $lastitem} is--last{/if}{if $firstitem} is--first{/if}">
+<li class="product--box panel{if $lastitem} is--last{/if}{if $firstitem} is--first{/if}">
+
+	<div class="panel--body has--border">
 
     {* Product box badges - highlight, newcomer, ESD product and discount *}
     {block name='frontend_listing_box_article_rating'}
@@ -48,4 +50,6 @@
 	{block name='frontend_listing_box_article_actions'}
         {include file="frontend/listing/product-box/actions.tpl"}
 	{/block}
+
+	</div>
 </li>
