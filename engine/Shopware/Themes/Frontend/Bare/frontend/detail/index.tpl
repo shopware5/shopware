@@ -48,10 +48,100 @@
 
 	{* Product image *}
 	{block name='frontend_detail_index_image_container'}
-		<div class="product--image-container block {if {config name=sUSEZOOMPLUS}} product--image-zoom{/if}">
+		<div class="product--image-container block{if {config name=sUSEZOOMPLUS}} product--image-zoom{/if}">
 			{include file="frontend/detail/image.tpl"}
 		</div>
 	{/block}
+
+	{* "Buy now" box container *}
+	{block name='frontend_detail_index_buy_container'}
+		<div class="product--buybox block">
+
+			{* Product data *}
+			{block name='frontend_detail_index_data'}
+				{include file="frontend/detail/data.tpl" sArticle=$sArticle sView=1}
+			{/block}
+			{block name='frontend_detail_index_after_data'}{/block}
+
+			{* Product actions *}
+			{block name="frontend_detail_index_actions"}
+				<nav class="product--actions">
+					{include file="frontend/detail/actions.tpl"}
+				</nav>
+			{/block}
+
+			{* Product - Base information *}
+			{block name='frontend_detail_index_buy_container_base_info'}
+				<ul class="product--base-info list--unstyled">
+
+					{* Product SKU *}
+					{block name='frontend_detail_data_ordernumber'}
+						<li class="base-info--entry entry--sku">
+
+							{* Product SKU - Label *}
+							{block name='frontend_detail_data_ordernumber_label'}
+								<strong class="entry--label">
+									{s name="DetailDataId" namespace="frontend/detail/data"}{/s}
+								</strong>
+							{/block}
+
+							{* Product SKU - Content *}
+							{block name='frontend_detail_data_ordernumber_content'}
+								<span class="entry--content">
+									{$sArticle.ordernumber}
+								</span>
+							{/block}
+						</li>
+					{/block}
+
+					{* Product attributes fields *}
+					{block name='frontend_detail_data_attributes'}
+
+						{* Product attribute 1 *}
+						{block name='frontend_detail_data_attributes_attr1'}
+							{if $sArticle.attr1}
+								<li class="base-info--entry entry-attribute">
+									<strong class="entry--label">
+										{s name="DetailAttributeField1Label"}Freitextfeld 1{/s}
+									</strong>
+
+									<span class="entry--content">
+										{$sArticle.attr1}
+									</span>
+								</li>
+							{/if}
+						{/block}
+
+						{* Product attribute 1 *}
+						{block name='frontend_detail_data_attributes_attr1'}
+							{if $sArticle.attr2}
+								<li class="base-info--entry entry-attribute">
+									<strong class="entry--label">
+										{s name="DetailAttributeField2Label"}Freitextfeld 2{/s}
+									</strong>
+
+									<span class="entry--content">
+										{$sArticle.attr2}
+									</span>
+								</li>
+							{/if}
+						{/block}
+					{/block}
+				</ul>
+			{/block}
+		</div>
+	{/block}
+
+
+	<hr>
+	<hr>
+	<hr>
+	<hr>
+	<hr>
+	<hr>
+	<hr>
+	<hr>
+	<hr>
 
 	{* General detailbox *}
 	<div id="detailbox"><!-- detailbox -->
