@@ -106,6 +106,8 @@ Ext.define('Enlight.app.Window', {
      */
     isSubWindow: false,
 
+    centerOnStart: true,
+
     /**
      * Provides the window management functionality for
      * the new event bus.
@@ -265,8 +267,11 @@ Ext.define('Enlight.app.Window', {
         }
 
         me.callParent(arguments);
+
+        if(me.centerOnStart) {
+            me.center();
+        }
         me.isWindowOnFront = true;
-        me.center();
 	},
 
     /**

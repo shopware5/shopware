@@ -97,6 +97,7 @@ Ext.define('Shopware.apps.Index.view.Footer', {
 
         me.logoutBtn = me.createLogoutBtn();
         me.windowBtn = me.createWindowManagementMenu();
+        me.widgetBtn = me.createWidgetBtn();
 
         this.items = [
             me.logoutBtn,
@@ -106,7 +107,8 @@ Ext.define('Shopware.apps.Index.view.Footer', {
             me.windowBtn,
             { xtype: 'tbspacer', width: 6 },
             { xtype: 'tbseparator' },
-            { xtype: 'tbspacer', width: 6 }
+            { xtype: 'tbspacer', width: 6 },
+            me.widgetBtn
         ];
 
 	},
@@ -143,6 +145,14 @@ Ext.define('Shopware.apps.Index.view.Footer', {
         }, this);
 
         return logoutBtn;
+    },
+
+    createWidgetBtn: function() {
+        return Ext.create('Ext.button.Button', {
+            cls: 'btn-over',
+            iconCls: 'widget-sidebar',
+            id: 'widgetSidebarBtn'
+        });
     },
 
     /**

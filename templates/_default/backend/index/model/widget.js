@@ -28,34 +28,18 @@
  * @author shopware AG
  */
 
-/**
- * todo@all: Documentation
- */
-//{block name="backend/index/model/album"}
-Ext.define('Shopware.apps.Index.model.Widget', {
-	extend: 'Ext.data.Model',
-	fields: [
-	//{block name="backend/index/model/album/fields"}{/block}
-	'name', 'label', 'views' ],
+//{block name="backend/index/model/widget"}
 
-    /**
-     * Helper method which returns the view data
-     * from the calling model instance.
-     *
-     * @public
-     * @return [array|object] Array, if multiple instance of the same widget are available. If not
-     * the method returns just an plain object of data.
-     */
-    getViewData: function() {
-        var model = this, length;
-        if(!model.data && !model.data.views.length) {
-            return false;
-        }
-        length = model.data.views.length;
-        if(length === 1) {
-            return model.data.views[0];
-        }
-        return model.data.views;
-    }
+Ext.define('Shopware.apps.Index.model.Widget', {
+
+    extend: 'Ext.data.Model',
+
+    fields: [
+        'id',
+        'name',
+        'label',
+        'views'
+    ]
 });
+
 //{/block}

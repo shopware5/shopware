@@ -65,6 +65,33 @@ Ext.define('Shopware.apps.Index.view.widgets.Visitors', {
         }
     },
 
+    visitorsStore: null,
+
+    constructor: function() {
+        var me = this;
+
+        me.visitorsStore = Ext.create('Ext.data.Store', {
+            model: 'Shopware.apps.Index.model.Batch',
+            remoteFilter: true,
+            autoLoad: true,
+            clearOnLoad: false,
+
+            proxy: {
+                type: 'ajax',
+                url: '{url controller="widgets" action="getVisitors"}',
+                reader: {
+                    type: 'json',
+                    root: 'data'
+                }
+            }
+        }).load();
+
+        console.log(me.visitorsStore);
+
+        me.callParent(arguments);
+    },
+
+
     /**
      * Initializes the widget.
      *
@@ -151,7 +178,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Visitors', {
             data: [{
                 visitors: stores.get('currentUsers')
             }]
-        })
+        });
 
         /** Left container */
         containers.push(Ext.create('Ext.container.Container', {

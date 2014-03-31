@@ -48,6 +48,8 @@ Ext.define('Shopware.apps.Index.view.widgets.Notice', {
     extend: 'Shopware.apps.Index.view.widgets.Base',
     alias: 'widget.swag-notice-widget',
 
+    height: 200,
+
     /**
      * Snippets for the widget.
      * @object

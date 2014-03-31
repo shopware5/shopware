@@ -34,20 +34,22 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      * @public
      * @return void
      */
-    public function getListAction()
+    public function getWidgetsAction()
     {
         $auth = Shopware()->Auth();
+
         if (!$auth->hasIdentity()) {
             $this->View()->assign(array('success' => false));
         }
+
         $identity = $auth->getIdentity();
         $userID = (int) $identity->id;
 
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('widget', 'view'))
             ->from('Shopware\Models\Widget\Widget', 'widget')
-            ->leftJoin('widget.views', 'view')
-            ->where('view.authId = ?1')
+            ->leftJoin('widget.views', 'view', 'WITH', 'view.authId = ?1')
+            ->orderBy('view.position')
             ->setParameter(1, $userID);
 
         $data = $builder->getQuery()->getArrayResult();
@@ -55,34 +57,100 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $this->View()->assign(array('success' => !empty($data), 'data' => $data));
     }
 
-    /**
-     * Saves the new position of a widget in the db
-     * and returns an JSON string.
-     *
-     * If truthy the JSON string contains the new column and position, otherwise
-     * the JSON string the error message.
-     *
-     * @public
-     * @return void
-     */
-    public function savePositionAction()
+    public function saveWidgetPositionAction()
     {
-        try {
-            $request = $this->Request();
-            $column = $request->getParam('column');
-            $position = $request->getParam('position');
-            $id = $request->getParam('id');
+        $auth = Shopware()->Auth();
 
-            $model = Shopware()->Models()->find('Shopware\Models\Widget\View', $id);
-            $model->setPosition($position);
-            $model->setColumn($column);
-            Shopware()->Models()->persist($model);
+        if (!$auth->hasIdentity()) {
+            $this->View()->assign(array('success' => false));
+        }
+
+        $request = $this->Request();
+        $data = $request->getParam('data');
+
+        try {
+            foreach($data as $widget) {
+                $model = Shopware()->Models()->find('Shopware\Models\Widget\View', $widget['viewId']);
+                $model->setPosition($widget['position']);
+                Shopware()->Models()->persist($model);
+            }
+
             Shopware()->Models()->flush();
+
         } catch (\Doctrine\ORM\ORMException $e) {
             $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
         }
-        $this->View()->assign(array('success' => true, 'newPosition' => $position, 'newColumn' => $column));
+
+        $this->View()->assign(array('success' => true));
     }
+
+    public function addWidgetViewAction()
+    {
+        $auth = Shopware()->Auth();
+
+        if (!$auth->hasIdentity()) {
+            $this->View()->assign(array('success' => false));
+        }
+
+        $identity = $auth->getIdentity();
+        $userID = (int) $identity->id;
+
+        $request = $this->Request();
+        $widgetId = $request->getParam('id');
+        $label = $request->getParam('label');
+        $column = $request->getParam('column');
+        $position = $request->getParam('position');
+
+        try {
+            $model = new \Shopware\Models\Widget\View();
+            $model->setWidget(
+                Shopware()->Models()->find('Shopware\Models\Widget\Widget', $widgetId)
+            );
+            $model->setAuth(
+                Shopware()->Models()->find('Shopware\Models\User\User', $userID)
+            );
+            $model->setLabel($label);
+            $model->setColumn($column);
+            $model->setPosition($position);
+
+            Shopware()->Models()->persist($model);
+            Shopware()->Models()->flush();
+
+        } catch (\Doctrine\ORM\ORMException $e) {
+            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+        }
+
+        $viewId = $model->getId();
+
+        $this->View()->assign(array('success' => !empty($viewId), 'viewId' => $viewId));
+    }
+
+    public function removeWidgetViewAction()
+    {
+        $auth = Shopware()->Auth();
+
+        if (!$auth->hasIdentity()) {
+            $this->View()->assign(array('success' => false));
+        }
+
+        $request = $this->Request();
+        $views = $request->getParam('views');
+
+        try {
+            foreach($views as $view) {
+                $model = Shopware()->Models()->find('Shopware\Models\Widget\View', $view['id']);
+                Shopware()->Models()->remove($model);
+            }
+
+            Shopware()->Models()->flush();
+
+        } catch (\Doctrine\ORM\ORMException $e) {
+            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+        }
+
+        $this->View()->assign(array('success' => true, 'views' => $views));
+    }
+
 
     /**
      * Gets the turnover and vistors amount for the
@@ -185,9 +253,9 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $result[] = array();
         foreach ($data as $row) {
             $result[] = array(
-            "timestamp" => strtotime($row["date"]),
-            "date" => date('d.m.Y', strtotime($row["date"])),
-            "visitors" => $row["visitors"]
+                "timestamp" => strtotime($row["date"]),
+                "date" => date('d.m.Y', strtotime($row["date"])),
+                "visitors" => $row["visitors"]
             );
         }
 
@@ -459,4 +527,4 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         }
         $this->View()->assign(array('success' => true, 'message' => 'The mail was send successfully.'));
     }
- }
+}

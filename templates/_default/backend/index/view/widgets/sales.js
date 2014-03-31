@@ -60,6 +60,29 @@ Ext.define('Shopware.apps.Index.view.widgets.Sales', {
         }
     },
 
+    turnoverStore: null,
+
+    constructor: function() {
+        var me = this;
+
+        me.turnoverStore = Ext.create('Ext.data.Store', {
+            model: 'Shopware.apps.Index.model.Turnover',
+            remoteFilter: true,
+            clearOnLoad: false,
+
+            proxy: {
+                type: 'ajax',
+                url: '{url controller="widgets" action="getTurnOverVisitors"}',
+                reader: {
+                    type: 'json',
+                    root: 'data'
+                }
+            }
+        }).load();
+
+        me.callParent(arguments);
+    },
+
     /**
      * Initializes the widget.
      *
