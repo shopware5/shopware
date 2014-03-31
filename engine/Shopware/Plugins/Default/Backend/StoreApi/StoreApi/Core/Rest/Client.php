@@ -57,14 +57,6 @@ class Shopware_StoreApi_Core_Rest_Client extends Enlight_Class
     public function startClient($url)
     {
         $this->client = new Zend_Rest_Client($url);
-
-        // Get instance of Zend_Http_Client
-        $httpClient = $this->client->getHttpClient();
-
-        // Change the timeout
-        $httpClient->setConfig(array(
-            "timeout" => 180
-        ));
     }
 
     /**
