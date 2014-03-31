@@ -81,13 +81,6 @@ class Product
         $data = array_merge($data, $data['article']);
         unset($data['article']);
 
-        //selects the article images and merge them into the data array.
-        $builder = $this->getImageQuery()
-            ->where('image.articleId = :productId')
-            ->setParameter('productId', $data['id']);
-
-        $data['images'] = $builder->getQuery()->getArrayResult();
-
         return $data;
     }
 
@@ -99,38 +92,16 @@ class Product
         $builder = $this->entityManager->createQueryBuilder();
         $builder->select(array(
             'article', 'detail',
-            'prices', 'unit',
-            'supplier', 'tax',
-            'attribute'
+            'unit', 'supplier',
+            'tax', 'attribute'
         ));
 
         $builder->from('Shopware\Models\Article\Detail', 'detail')
             ->innerJoin('detail.article', 'article')
-            ->innerJoin('detail.prices', 'prices')
             ->innerJoin('article.tax', 'tax')
             ->leftJoin('detail.attribute', 'attribute')
             ->leftJoin('article.supplier', 'supplier')
             ->leftJoin('detail.unit', 'unit');
-
-        return $builder;
-    }
-
-    /**
-     * @return \Shopware\Components\Model\QueryBuilder
-     */
-    private function getImageQuery()
-    {
-        $builder = $this->entityManager->createQueryBuilder();
-        $builder->select(array(
-            'image', 'media', 'imageAttribute', 'mediaAttribute'
-        ));
-
-        $builder->from('Shopware\Models\Article\Image', 'image')
-            ->innerJoin('image.media', 'media')
-            ->leftJoin('image.attribute', 'imageAttribute')
-            ->leftJoin('media.attribute', 'mediaAttribute')
-            ->orderBy('image.main', 'ASC')
-            ->orderBy('image.position', 'ASC');
 
         return $builder;
     }

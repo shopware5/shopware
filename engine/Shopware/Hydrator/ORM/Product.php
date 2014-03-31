@@ -79,15 +79,8 @@ class Product
 
         $this->assignTaxData($product, $data);
 
-        $this->assignMediaData($product, $data);
-
-
         if (isset($data['supplier'])) {
             $this->assignManufacturerData($product, $data);
-        }
-
-        if (isset($data['prices'])) {
-            $this->assignPriceData($product, $data);
         }
 
         if (isset($data['unit'])) {
@@ -111,6 +104,8 @@ class Product
     private function assignProductData(Struct\ProductMini $product, $data)
     {
         $product->setId($data['id']);
+
+        $product->setVariantId($data['variantId']);
 
         $product->setName($data['name']);
 
@@ -146,33 +141,11 @@ class Product
         $product->setManufacturer($manufacturer);
     }
 
-    private function assignPriceData(Struct\ProductMini $product, $data)
-    {
-        $prices = array();
-
-        foreach($data['prices'] as $price) {
-            $prices[] = $this->priceHydrator->hydrate($price);
-        }
-
-        $product->setPrices($prices);
-    }
-
     private function assignTaxData(Struct\ProductMini $product, $data)
     {
         $tax = $this->taxHydrator->hydrate($data['tax']);
 
         $product->setTax($tax);
-    }
-
-    private function assignMediaData(Struct\ProductMini $product, $data)
-    {
-        $media = array();
-
-        foreach($data['images'] as $image) {
-            $media[] = $this->mediaHydrator->hydrateProductImage($image);
-        }
-
-        $product->setMedia($media);
     }
 
     private function assignUnitData(Struct\ProductMini $product, $data)

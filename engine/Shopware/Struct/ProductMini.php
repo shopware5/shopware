@@ -235,11 +235,6 @@ class ProductMini extends Base implements Extendable
     private $unit;
 
     /**
-     * @var Media[]
-     */
-    private $media;
-
-    /**
      * @var Tax
      */
     private $tax;
@@ -248,6 +243,14 @@ class ProductMini extends Base implements Extendable
      * @var Manufacturer
      */
     private $manufacturer;
+
+    /**
+     * Contains the product cover which displayed
+     * as product image in listings or sliders.
+     *
+     * @var Media
+     */
+    private $cover;
 
     /**
      * Contains an array of attribute structs.
@@ -528,7 +531,7 @@ class ProductMini extends Base implements Extendable
      * @param \Shopware\Struct\Price[] $prices
      *
      */
-    public function setPrices($prices)
+    public function setPrices(array $prices)
     {
         $this->prices = $prices;
 
@@ -597,21 +600,39 @@ class ProductMini extends Base implements Extendable
     }
 
     /**
-     * @return Media[]
+     * @return \Shopware\Struct\Media
      */
-    public function getMedia()
+    public function getCover()
     {
-        return $this->media;
+        return $this->cover;
     }
 
     /**
-     * @param Media[] $media
-     *
+     * @param \Shopware\Struct\Media $cover
+     * @return $this
      */
-    public function setMedia(array $media)
+    public function setCover($cover)
     {
-        $this->media = $media;
+        $this->cover = $cover;
+        return $this;
+    }
 
+    /**
+     * @return \Shopware\Struct\Price
+     */
+    public function getCheapestPrice()
+    {
+        return $this->cheapestPrice;
+    }
+
+    /**
+     * @param \Shopware\Struct\Price $cheapestPrice
+     * @return $this
+     */
+    public function setCheapestPrice($cheapestPrice)
+    {
+        $this->cheapestPrice = $cheapestPrice;
+        return $this;
     }
 
     /**

@@ -72,30 +72,22 @@ class Product
      */
     public function getMini($number)
     {
-//        $logger = new \Doctrine\DBAL\Logging\DebugStack();
-//        $logger->enabled = true;
-//        Shopware()->Models()->getConfiguration()->setSQLLogger($logger);
+        $product = $this->productGateway->getMini($number);
 
-        /**@var $product Struct\ProductMini*/
-        $product = Shopware()->Container()->get('product_gateway')->getMini(
-            $number
+        $state = $this->globalStateService->get();
+
+        $product->setPrices(
+            $this->priceService->getProductPrices($product, $state)
         );
 
-        /**@var $state Struct\GlobalState*/
-        $state = Shopware()->Container()->get('global_state_service')->get();
-
-        Shopware()->Container()->get('price_service')->calculateProduct(
-            $product,
-            $state
+        $product->setCheapestPrice(
+            $this->priceService->getCheapestProductPrice($product, $state)
         );
 
-        Shopware()->Container()->get('translation_service')->translateProductMini(
-            $product,
-            $state
-        );
 
-//        echo '<pre>';
-//        print_r($logger->queries);
+        $this->priceService->calculateProduct($product, $state);
+
+        $this->translationService->translateProduct($product, $state);
 
         return $product;
     }

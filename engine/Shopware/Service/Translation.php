@@ -9,7 +9,7 @@ class Translation
     /**
      * @param Struct\ProductMini $productMini
      */
-    public function translateProductMini(Struct\ProductMini $productMini)
+    public function translateProduct(Struct\ProductMini $productMini)
     {
         $productMini->addState(
             Struct\ProductMini::STATE_TRANSLATED

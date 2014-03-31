@@ -16,7 +16,10 @@
             <argument type="service" id="events" />
         </service>
 
-        <service id="price_service" class="Shopware\Service\Price" />
+        <service id="price_service" class="Shopware\Service\Price" >
+            <argument type="service" id="price_gateway" />
+        </service>
+
         <service id="global_state_service" class="Shopware\Service\GlobalState" />
         <service id="translation_service" class="Shopware\Service\Translation" />
 
@@ -30,6 +33,10 @@
             <argument type="service" id="models" />
         </service>
 
+        <service id="price_gateway" class="Shopware\Gateway\ORM\Price">
+            <argument type="service" id="models" />
+            <argument type="service" id="price_hydrator" />
+        </service>
 
 
         <!-- Shopware hydrator definitions -->
@@ -43,7 +50,11 @@
             <argument type="service" id="attribute_hydrator" />
         </service>
 
-        <service id="price_hydrator" class="Shopware\Hydrator\ORM\Price" />
+        <service id="price_hydrator" class="Shopware\Hydrator\ORM\Price" >
+            <argument type="service" id="customer_group_hydrator" />
+        </service>
+
+        <service id="customer_group_hydrator" class="Shopware\Hydrator\ORM\CustomerGroup" />
         <service id="manufacturer_hydrator" class="Shopware\Hydrator\ORM\Manufacturer" />
         <service id="tax_hydrator" class="Shopware\Hydrator\ORM\Tax" />
         <service id="unit_hydrator" class="Shopware\Hydrator\ORM\Unit" />
