@@ -12,28 +12,13 @@
 {block name='frontend_index_content'}
 	<div id="detail" class="grid_16 first last" itemscope itemtype="http://data-vocabulary.org/Product">
 
-		{block name="frontend_detail_index_navigation"}{/block}
+		{* Product navigation - Previous and next arrow button *}
+		{block name="frontend_detail_index_navigation"}
+			{include file="frontend/detail/navigation.tpl"}
+		{/block}
 
 		{* General detailbox *}
 		<div id="detailbox"><!-- detailbox -->
-
-			{* Previous article *}
-			{block name='frontend_detail_article_back'}
-				{if $sArticle.sNavigation.sPrevious}
-					<div class="article_back">
-						<a href="{$sArticle.sNavigation.sPrevious.link|rewrite:$sArticle.sNavigation.sPrevious.name}" title="{$sArticle.sNavigation.sPrevious.name}" class="article_back">{s name='DetailNavPrevious'}Zurück{/s}</a>
-					</div>
-				{/if}
-			{/block}
-
-			{* Next article *}
-			{block name='frontend_detail_article_next'}
-				{if $sArticle.sNavigation.sNext}
-					<div class="article_next">
-						<a href="{$sArticle.sNavigation.sNext.link|rewrite:$sArticle.sNavigation.sNext.name}" title="{$sArticle.sNavigation.sNext.name}" class="article_next">{s name='DetailNavNext'}Vor{/s}</a>
-					</div>
-				{/if}
-			{/block}
 
 			{* Detailbox left *}
 			<div class="left">
