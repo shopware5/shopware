@@ -1,3 +1,4 @@
+{namespace name="frontend/detail/comment"}
 <div id="comments">
 	{* Response save comment *}
 	{if $sAction == "ratingAction"}
