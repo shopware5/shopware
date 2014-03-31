@@ -1564,7 +1564,7 @@ div#searchresults a.resultall {margin: 0 14px; width: 490px;}
 #detail #detailinfo #comments .answer {margin-bottom: 10px !important;}
 #detail #detailinfo #comments .right_container {width: 420px;}
 
-#detail #detailinfo .ui-tabs-panel .date {font-size: 11px;font-weight: normal;}
+#detail #detailinfo .ui-tabs-panel .date {font-size: 11px;font-weight: normal;padding-right: 10px;}
 
 #left .left_categories_shadow,
 #detail #detailinfo .detailinfo_shadow {width: 898px; height: 3px; background: url(../images/backgrounds/detailinfo_shadow.png) no-repeat 0 0; margin-top: -1px; margin-bottom: 20px;}
