@@ -10,7 +10,7 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-	<div class="content product--details block">
+<div class="content product--details block">
 
 	{* Product navigation - Previous and next arrow button *}
 	{block name="frontend_detail_index_navigation"}
@@ -242,4 +242,5 @@
 		</div>
 	</div>
 	{/block}
+</div>
 {/block}

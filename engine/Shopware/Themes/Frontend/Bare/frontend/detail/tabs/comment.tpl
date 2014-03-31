@@ -123,7 +123,6 @@
 		</h2>
 		<form method="post" action="{url action='rating' sArticle=$sArticle.articleID sCategory=$sArticle.categoryID}">
 			<div>
-				<a name="tabbox"></a>
 
 				<fieldset>
 					{* Name *}
@@ -190,7 +189,7 @@
 						<div class="captcha-placeholder" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
 						<div class="code">
 							<label>{se name="DetailCommentLabelCaptcha"}{/se}</label>
-							<input type="text" name="sCaptcha"class="text {if $sErrorFlag.sCaptcha}instyle_error{/if}" />
+							<input type="text" name="sCaptcha" class="text {if $sErrorFlag.sCaptcha}instyle_error{/if}" />
 							<div class="clear">&nbsp;</div>
 						</div>
 					</div>
