@@ -34,6 +34,14 @@ class Product
     }
 
     /**
+     * @param $number
+     */
+    public function get($number)
+    {
+
+    }
+
+    /**
      * Returns a minified product variant which contains only
      * simplify data of a variant.
      *
@@ -47,19 +55,15 @@ class Product
      */
     public function getMini($number)
     {
-        $data = $this->getMiniData($number);
-
-//        if ($data['mainDetail']['number'] != $number) {
-//            $data['mainDetail'] = $this->getMiniData(
-//                $data['mainDetail']['number']
-//            );
-//        } else {
-//            unset($data['mainDetail']);
-//        }
-
-        return $this->hydrator->hydrateMini($data);
+        return $this->hydrator->hydrateMini(
+            $this->getMiniData($number)
+        );
     }
 
+    /**
+     * @param $number
+     * @return array|mixed
+     */
     private function getMiniData($number)
     {
         //selects the minified variant data for the passed number
@@ -75,6 +79,7 @@ class Product
 
         //merge article and variant data into one array level.
         $data = array_merge($data, $data['article']);
+        unset($data['article']);
 
         //selects the article images and merge them into the data array.
         $builder = $this->getImageQuery()
@@ -96,12 +101,11 @@ class Product
             'article', 'detail',
             'prices', 'unit',
             'supplier', 'tax',
-            'attribute', 'PARTIAL mainDetail.{id,number}'
+            'attribute'
         ));
 
         $builder->from('Shopware\Models\Article\Detail', 'detail')
             ->innerJoin('detail.article', 'article')
-            ->innerJoin('article.mainDetail', 'mainDetail')
             ->innerJoin('detail.prices', 'prices')
             ->innerJoin('article.tax', 'tax')
             ->leftJoin('detail.attribute', 'attribute')
@@ -129,13 +133,5 @@ class Product
             ->orderBy('image.position', 'ASC');
 
         return $builder;
-    }
-
-    /**
-     * @param $number
-     */
-    public function get($number)
-    {
-
     }
 }

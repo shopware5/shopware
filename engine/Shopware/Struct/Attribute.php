@@ -3,7 +3,6 @@
 namespace Shopware\Struct;
 
 /**
- *
  * @package Shopware\Struct
  */
 class Attribute

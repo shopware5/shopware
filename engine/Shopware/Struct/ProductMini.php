@@ -18,10 +18,18 @@ class ProductMini extends Base implements Extendable
     const STATE_TRANSLATED = 'translated';
 
     /**
-     * Unique identifier
+     * Unique identifier of the product (s_articles).
+     *
      * @var int
      */
     private $id;
+
+    /**
+     * Unique identifier of the product variation (s_articles_details).
+     *
+     * @var int
+     */
+    private $variantId;
 
     /**
      * Contains the product name.
@@ -80,8 +88,8 @@ class ProductMini extends Base implements Extendable
      * Example:
      *  reference unit equals 1.0 liter
      *  purchase unit  equals 0.7 liter
-     *  bottle price  7,- €
-     *  unit price    10,- €
+     *  bottle price       7,- €
+     *  reference price    10,- €
      *
      * @var float
      */
@@ -94,8 +102,8 @@ class ProductMini extends Base implements Extendable
      * Example:
      *  reference unit equals 1.0 liter
      *  purchase unit  equals 0.7 liter
-     *  bottle price  7,- €
-     *  unit price    10,- €
+     *  bottle price       7,- €
+     *  reference price    10,- €
      *
      * @var float
      */
@@ -131,54 +139,95 @@ class ProductMini extends Base implements Extendable
      */
     private $closeouts;
 
-
-//    private $createdAt;
-//
-//    private $keyWords;
-//
-//    private $allowsNotification;
-//
-//    private $availableFrom;
-//
-//    private $availableTo;
-//
-//    private $additional;
-//
-//    private $minStock;
-//
-//    private $height;
-//
-//    private $width;
-//
-//    private $len;
-//
-//    private $weight;
-//
-//    private $ean;
-//
-//    private $minPurchase;
-//
-//    private $maxPurchase;
-//
-//    private $purchaseSteps;
-//
-//    private $highlight;
-//
-//    private $voteAverage;
-
-
-
+    /**
+     * Defines the date which the product was created in the
+     * database.
+     *
+     * @var \DateTime
+     */
+    private $createdAt;
 
     /**
-     * @var ProductMini
+     * Defines a list of keywords for this product.
+     *
+     * @var array
      */
-    private $mainProduct;
+    private $keyWords;
+
+    /**
+     * Defines if the customer can be set an email
+     * notification for this product if it is sold out.
+     *
+     * @var boolean
+     */
+    private $allowsNotification;
+
+    /**
+     * Additional information text for the product variation.
+     *
+     * @var string
+     */
+    private $additional;
+
+    /**
+     * Minimal stock value for the product.
+     * @var int
+     */
+    private $minStock;
+
+    /**
+     * Physical height of the product.
+     * Used for area calculation.
+     * @var float
+     */
+    private $height;
+
+    /**
+     * Physical width of the product.
+     * Used for area calculation.
+     * @var float
+     */
+    private $width;
+
+    /**
+     * Physical len of the product.
+     * Used for area calculation.
+     *
+     * @var float
+     */
+    private $len;
+
+    /**
+     * Physical width of the product.
+     * Used for area calculation.
+     * @var float
+     */
+    private $weight;
+
+    private $ean;
+
+    private $minPurchase;
+
+    private $maxPurchase;
+
+    private $purchaseSteps;
+
+    private $isHighlight;
+
+    private $voteAverage;
+
+    /**
+     * Contains the cheapest price for the product.
+     *
+     * @var Price
+     */
+    private $cheapestPrice;
 
     /**
      * Price of the current variant.
      * @var Price[]
      */
-    private $prices;
+    private $prices = array();
 
     /**
      * @var Unit
@@ -205,7 +254,7 @@ class ProductMini extends Base implements Extendable
      *
      * @var Attribute[]
      */
-    private $attributes;
+    private $attributes = array();
 
     /**
      * Contains an offset of product states.
@@ -218,12 +267,11 @@ class ProductMini extends Base implements Extendable
 
     /**
      * @param int $id
-     * @return $this
+     *
      */
     public function setId($id)
     {
         $this->id = $id;
-        return $this;
     }
 
     /**
@@ -235,13 +283,31 @@ class ProductMini extends Base implements Extendable
     }
 
     /**
+     * @return int
+     */
+    public function getVariantId()
+    {
+        return $this->variantId;
+    }
+
+    /**
+     * @param int $variantId
+     *
+     */
+    public function setVariantId($variantId)
+    {
+        $this->variantId = $variantId;
+
+    }
+
+    /**
      * @param string $name
-     * @return $this
+     *
      */
     public function setName($name)
     {
         $this->name = $name;
-        return $this;
+
     }
 
     /**
@@ -262,12 +328,12 @@ class ProductMini extends Base implements Extendable
 
     /**
      * @param mixed $number
-     * @return $this
+     *
      */
     public function setNumber($number)
     {
         $this->number = $number;
-        return $this;
+
     }
 
     /**
@@ -280,22 +346,30 @@ class ProductMini extends Base implements Extendable
 
     /**
      * @param mixed $stock
-     * @return $this
+     *
      */
     public function setStock($stock)
     {
         $this->stock = $stock;
-        return $this;
+
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasStock()
+    {
+        return (bool)($this->stock > 0);
     }
 
     /**
      * @param string $shortDescription
-     * @return $this
+     *
      */
     public function setShortDescription($shortDescription)
     {
         $this->shortDescription = $shortDescription;
-        return $this;
+
     }
 
     /**
@@ -308,12 +382,12 @@ class ProductMini extends Base implements Extendable
 
     /**
      * @param mixed $longDescription
-     * @return $this
+     *
      */
     public function setLongDescription($longDescription)
     {
         $this->longDescription = $longDescription;
-        return $this;
+
     }
 
     /**
@@ -334,12 +408,12 @@ class ProductMini extends Base implements Extendable
 
     /**
      * @param mixed $packUnit
-     * @return $this
+     *
      */
     public function setPackUnit($packUnit)
     {
         $this->packUnit = $packUnit;
-        return $this;
+
     }
 
     /**
@@ -352,12 +426,12 @@ class ProductMini extends Base implements Extendable
 
     /**
      * @param mixed $purchaseUnit
-     * @return $this
+     *
      */
     public function setPurchaseUnit($purchaseUnit)
     {
         $this->purchaseUnit = $purchaseUnit;
-        return $this;
+
     }
 
     /**
@@ -370,12 +444,12 @@ class ProductMini extends Base implements Extendable
 
     /**
      * @param mixed $referenceUnit
-     * @return $this
+     *
      */
     public function setReferenceUnit($referenceUnit)
     {
         $this->referenceUnit = $referenceUnit;
-        return $this;
+
     }
 
     /**
@@ -388,12 +462,12 @@ class ProductMini extends Base implements Extendable
 
     /**
      * @param mixed $releaseDate
-     * @return $this
+     *
      */
     public function setReleaseDate($releaseDate)
     {
         $this->releaseDate = $releaseDate;
-        return $this;
+
     }
 
     /**
@@ -406,58 +480,58 @@ class ProductMini extends Base implements Extendable
 
     /**
      * @param mixed $shippingTime
-     * @return $this
+     *
      */
     public function setShippingTime($shippingTime)
     {
         $this->shippingTime = $shippingTime;
-        return $this;
+
     }
 
     /**
      * @return mixed
      */
-    public function getShippingFree()
+    public function isShippingFree()
     {
         return $this->shippingFree;
     }
 
     /**
      * @param mixed $shippingFree
-     * @return $this
+     *
      */
     public function setShippingFree($shippingFree)
     {
         $this->shippingFree = $shippingFree;
-        return $this;
+
     }
 
     /**
-     * @param \Shopware\Struct\ProductMini $mainProduct
-     * @return $this
+     * @return boolean
      */
-    public function setMainProduct($mainProduct)
+    public function isCloseouts()
     {
-        $this->mainProduct = $mainProduct;
-        return $this;
+        return $this->closeouts;
     }
 
     /**
-     * @return \Shopware\Struct\ProductMini
+     * @param boolean $closeouts
+     *
      */
-    public function getMainProduct()
+    public function setCloseouts($closeouts)
     {
-        return $this->mainProduct;
+        $this->closeouts = $closeouts;
+
     }
 
     /**
      * @param \Shopware\Struct\Price[] $prices
-     * @return $this
+     *
      */
     public function setPrices($prices)
     {
         $this->prices = $prices;
-        return $this;
+
     }
 
     /**
@@ -470,12 +544,12 @@ class ProductMini extends Base implements Extendable
 
     /**
      * @param \Shopware\Struct\Manufacturer $manufacturer
-     * @return $this
+     *
      */
     public function setManufacturer($manufacturer)
     {
         $this->manufacturer = $manufacturer;
-        return $this;
+
     }
 
     /**
@@ -488,12 +562,12 @@ class ProductMini extends Base implements Extendable
 
     /**
      * @param \Shopware\Struct\Tax $tax
-     * @return $this
+     *
      */
     public function setTax($tax)
     {
         $this->tax = $tax;
-        return $this;
+
     }
 
     /**
@@ -506,16 +580,16 @@ class ProductMini extends Base implements Extendable
 
     /**
      * @param \Shopware\Struct\Unit $unit
-     * @return $this
+     *
      */
     public function setUnit($unit)
     {
         $this->unit = $unit;
-        return $this;
+
     }
 
     /**
-     * @return \Shopware\Struct\Unit
+     * @return Unit
      */
     public function getUnit()
     {
@@ -523,7 +597,7 @@ class ProductMini extends Base implements Extendable
     }
 
     /**
-     * @return \Shopware\Struct\Media[]
+     * @return Media[]
      */
     public function getMedia()
     {
@@ -531,13 +605,13 @@ class ProductMini extends Base implements Extendable
     }
 
     /**
-     * @param \Shopware\Struct\Media[] $media
-     * @return $this
+     * @param Media[] $media
+     *
      */
-    public function setMedia($media)
+    public function setMedia(array $media)
     {
         $this->media = $media;
-        return $this;
+
     }
 
     /**
@@ -579,12 +653,12 @@ class ProductMini extends Base implements Extendable
      * Adds a new product state.
      *
      * @param $state
-     * @return $this
+     *
      */
     public function addState($state)
     {
         $this->states[] = $state;
-        return $this;
+
     }
 
     /**
@@ -597,21 +671,5 @@ class ProductMini extends Base implements Extendable
         return in_array($state, $this->states);
     }
 
-    /**
-     * @return boolean
-     */
-    public function getCloseouts()
-    {
-        return $this->closeouts;
-    }
 
-    /**
-     * @param boolean $closeouts
-     * @return $this
-     */
-    public function setCloseouts($closeouts)
-    {
-        $this->closeouts = $closeouts;
-        return $this;
-    }
 }

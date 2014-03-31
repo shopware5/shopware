@@ -70,11 +70,11 @@ class Product
      * @param string $number
      * @return Struct\ProductMini
      */
-    public function getMini($number = 'SW2000')
+    public function getMini($number)
     {
-        $logger = new \Doctrine\DBAL\Logging\DebugStack();
-        $logger->enabled = true;
-        Shopware()->Models()->getConfiguration()->setSQLLogger($logger);
+//        $logger = new \Doctrine\DBAL\Logging\DebugStack();
+//        $logger->enabled = true;
+//        Shopware()->Models()->getConfiguration()->setSQLLogger($logger);
 
         /**@var $product Struct\ProductMini*/
         $product = Shopware()->Container()->get('product_gateway')->getMini(
@@ -84,7 +84,7 @@ class Product
         /**@var $state Struct\GlobalState*/
         $state = Shopware()->Container()->get('global_state_service')->get();
 
-        Shopware()->Container()->get('price_service')->calculateProductMini(
+        Shopware()->Container()->get('price_service')->calculateProduct(
             $product,
             $state
         );
@@ -94,8 +94,8 @@ class Product
             $state
         );
 
-        echo '<pre>';
-        print_r($logger->queries);
+//        echo '<pre>';
+//        print_r($logger->queries);
 
         return $product;
     }

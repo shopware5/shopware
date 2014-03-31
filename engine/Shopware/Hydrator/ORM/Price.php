@@ -5,6 +5,13 @@ use Shopware\Struct as Struct;
 
 class Price
 {
+    private $customerGroupHydrator;
+
+    function __construct($customerGroupHydrator)
+    {
+        $this->customerGroupHydrator = $customerGroupHydrator;
+    }
+
     /**
      * @param array $data
      * @return \Shopware\Struct\Price

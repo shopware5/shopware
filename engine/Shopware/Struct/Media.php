@@ -45,12 +45,12 @@ class Media
 
     /**
      * @param mixed $id
-     * @return $this
+     *
      */
     public function setId($id)
     {
         $this->id = $id;
-        return $this;
+
     }
 
     /**
@@ -63,12 +63,12 @@ class Media
 
     /**
      * @param mixed $name
-     * @return $this
+     *
      */
     public function setName($name)
     {
         $this->name = $name;
-        return $this;
+
     }
 
     /**
@@ -81,12 +81,12 @@ class Media
 
     /**
      * @param mixed $type
-     * @return $this
+     *
      */
     public function setType($type)
     {
         $this->type = $type;
-        return $this;
+
     }
 
     /**
@@ -99,12 +99,12 @@ class Media
 
     /**
      * @param boolean $preview
-     * @return $this
+     *
      */
     public function setPreview($preview)
     {
         $this->preview = $preview;
-        return $this;
+
     }
 
     /**
@@ -117,12 +117,12 @@ class Media
 
     /**
      * @param string $file
-     * @return $this
+     *
      */
     public function setFile($file)
     {
         $this->file = $file;
-        return $this;
+
     }
 
     /**
@@ -135,12 +135,12 @@ class Media
 
     /**
      * @param mixed $description
-     * @return $this
+     *
      */
     public function setDescription($description)
     {
         $this->description = $description;
-        return $this;
+
     }
 
     /**
@@ -153,12 +153,12 @@ class Media
 
     /**
      * @param mixed $extension
-     * @return $this
+     *
      */
     public function setExtension($extension)
     {
         $this->extension = $extension;
-        return $this;
+
     }
 
     /**
@@ -168,7 +168,6 @@ class Media
     {
         return $this->extension;
     }
-
 
 
 }

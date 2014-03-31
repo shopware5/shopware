@@ -13,12 +13,12 @@ class Manufacturer
 
     /**
      * @param mixed $id
-     * @return $this
+     *
      */
     public function setId($id)
     {
         $this->id = $id;
-        return $this;
+
     }
 
     /**
@@ -31,12 +31,12 @@ class Manufacturer
 
     /**
      * @param mixed $name
-     * @return $this
+     *
      */
     public function setName($name)
     {
         $this->name = $name;
-        return $this;
+
     }
 
     /**
@@ -46,7 +46,6 @@ class Manufacturer
     {
         return $this->name;
     }
-
 
 
 }

@@ -34,6 +34,11 @@ class Product
      */
     private $mediaHydrator;
 
+    /**
+     * @var Attribute
+     */
+    private $attributeHydrator;
+
 
     /**
      * @param Price $priceHydrator
@@ -41,20 +46,22 @@ class Product
      * @param Tax $taxHydrator
      * @param Unit $unitHydrator
      * @param Media $mediaHydrator
+     * @param Attribute $attributeHydrator
      */
     function __construct(
         Price $priceHydrator,
         Manufacturer $manufacturerHydrator,
         Tax $taxHydrator,
         Unit $unitHydrator,
-        Media $mediaHydrator
-    )
-    {
+        Media $mediaHydrator,
+        Attribute $attributeHydrator
+    ) {
         $this->priceHydrator = $priceHydrator;
         $this->manufacturerHydrator = $manufacturerHydrator;
         $this->taxHydrator = $taxHydrator;
         $this->unitHydrator = $unitHydrator;
         $this->mediaHydrator = $mediaHydrator;
+        $this->attributeHydrator = $attributeHydrator;
     }
 
     /**
@@ -76,11 +83,6 @@ class Product
 
         if (isset($data['supplier'])) {
             $this->assignManufacturerData($product, $data);
-        }
-
-        if (isset($data['mainDetail'])) {
-            $mainProduct = $this->hydrateMini($data['mainDetail']);
-            $product->setMainProduct($mainProduct);
         }
 
         if (isset($data['prices'])) {
@@ -183,11 +185,9 @@ class Product
 
     private function assignAttributeData(Struct\ProductMini $product, $data)
     {
-        $attribute = new Struct\Attribute();
-
-        foreach($data['attribute'] as $key => $value) {
-            $attribute->set($key, $value);
-        }
+        $attribute = $this->attributeHydrator->hydrate(
+            $data['attribute']
+        );
 
         $product->addAttribute('core', $attribute);
     }
