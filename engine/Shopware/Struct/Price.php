@@ -74,6 +74,14 @@ class Price
     private $calculatedPseudoPrice;
 
     /**
+     * Contains the associated customer group of this price.
+     * Each scaled product price is defined for a single customer group.
+     *
+     * @var CustomerGroup
+     */
+    private $customerGroup;
+
+    /**
      * @param mixed $id
      *
      */
@@ -215,6 +223,24 @@ class Price
     {
         $this->calculatedPseudoPrice = $calculatedPseudoPrice;
 
+    }
+
+    /**
+     * @return \Shopware\Struct\CustomerGroup
+     */
+    public function getCustomerGroup()
+    {
+        return $this->customerGroup;
+    }
+
+    /**
+     * @param \Shopware\Struct\CustomerGroup $customerGroup
+     * @return $this
+     */
+    public function setCustomerGroup($customerGroup)
+    {
+        $this->customerGroup = $customerGroup;
+        return $this;
     }
 
 

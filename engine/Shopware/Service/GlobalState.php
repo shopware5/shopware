@@ -41,7 +41,11 @@ class GlobalState
         $state = new Struct\GlobalState();
 
         $state->setCurrentCustomerGroup(new Struct\CustomerGroup());
+        $state->getCurrentCustomerGroup()->setKey('H');
+
         $state->setFallbackCustomerGroup(new Struct\CustomerGroup());
+        $state->getFallbackCustomerGroup()->setKey('EK');
+
         $state->setCurrency(new Struct\Currency());
 
         return $state;

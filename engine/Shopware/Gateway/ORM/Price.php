@@ -2,7 +2,9 @@
 
 namespace Shopware\Gateway\ORM;
 
+use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Gateway\Exception\NoCustomerGroupPriceFoundException;
 use Shopware\Struct as Struct;
 use Shopware\Hydrator\ORM as Hydrator;
 
@@ -13,25 +15,112 @@ class Price
      */
     private $entityManager;
 
+    /**
+     * @var \Shopware\Hydrator\ORM\Price
+     */
     private $priceHydrator;
 
+    /**
+     * @param ModelManager $entityManager
+     * @param Hydrator\Price $priceHydrator
+     */
     function __construct(ModelManager $entityManager, Hydrator\Price $priceHydrator)
     {
         $this->entityManager = $entityManager;
         $this->priceHydrator = $priceHydrator;
     }
 
-    public function getProductPrices(Struct\ProductMini $product, Struct\GlobalState $state)
+    /**
+     * This function returns the scaled customer group prices for the passed product.
+     * If no prices found the function throws the NoCustomerGroupPriceFoundException exception.
+     *
+     * @param Struct\ProductMini $product
+     * @param Struct\CustomerGroup $customerGroup
+     * @return Struct\Price
+     *
+     * @throws \Shopware\Gateway\Exception\NoCustomerGroupPriceFoundException
+     */
+    public function getProductPrices(Struct\ProductMini $product, Struct\CustomerGroup $customerGroup)
     {
         $builder = $this->getPriceQuery()
-            ->where('price.articleDetailId = :variantId')
+            ->where('price.articleDetailsId = :variantId')
+            ->andWhere('price.customerGroupKey = :customerGroupKey')
             ->orderBy('price.from', 'ASC')
             ->setParameter('variantId', $product->getVariantId());
 
+        $builder->setParameter(
+            'customerGroupKey',
+            $customerGroup->getKey()
+        );
+
         $data = $builder->getQuery()->getArrayResult();
+
+        if (empty($data)) {
+            throw new NoCustomerGroupPriceFoundException(sprintf(
+                'Product %s has no prices for customer group %s',
+                $product->getNumber(),
+                $customerGroup->getKey()
+            ));
+        }
+
+        $prices = array();
+        foreach($data as $price) {
+            $prices[] = $this->priceHydrator->hydrate($price);
+        }
+
+        return $prices;
+    }
+
+    /**
+     * Returns the cheapest product price struct for the passed customer group.
+     *
+     * If no customer group found, the function throws the NoCustomerGroupPriceFoundException
+     * exception.
+     *
+     * @param Struct\ProductMini $product
+     * @param Struct\CustomerGroup $customerGroup
+     * @return Struct\Price
+     * @throws \Shopware\Gateway\Exception\NoCustomerGroupPriceFoundException
+     */
+    public function getCheapestPrice(Struct\ProductMini $product, Struct\CustomerGroup $customerGroup)
+    {
+        $builder = $this->getCheapestPriceQuery()
+            ->where('price.articleId = :productId')
+            ->andWhere('price.customerGroupKey = :customerGroup')
+            ->setParameter('productId', $product->getId())
+            ->setParameter('customerGroup', $customerGroup->getKey());
+
+        $data = $builder->getQuery()->getOneOrNullResult(
+            AbstractQuery::HYDRATE_ARRAY
+        );
+
+        if (empty($data)) {
+            throw new NoCustomerGroupPriceFoundException(sprintf(
+                'Product %s has no prices for customer group %s',
+                $product->getNumber(),
+                $customerGroup->getKey()
+            ));
+        }
 
         return $this->priceHydrator->hydrate($data);
     }
+
+    /**
+     * Creates a query builder which selects the basic image data
+     * and restricts the query to select only the cheapest price.
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    private function getCheapestPriceQuery()
+    {
+        $builder = $this->getPriceQuery()
+            ->orderBy('price.price', 'ASC')
+            ->setFirstResult(0)
+            ->setMaxResults(1);
+
+        return $builder;
+    }
+
 
     /**
      * Helper function which creates the default price selection query.
@@ -49,26 +138,5 @@ class Price
             ->leftJoin('price.attribute', 'attribute');
 
         return $builder;
-    }
-
-    /**
-     * @param Struct\ProductMini $product
-     * @param Struct\GlobalState $state
-     */
-    public function getCheapestPrice(Struct\ProductMini $product, Struct\GlobalState $state)
-    {
-        $builder = $this->entityManager->createQueryBuilder();
-
-        $builder->select(array('price'))
-            ->from('Shopware\Models\Article\Price', 'price')
-            ->where('price.articleId = :productId')
-            ->andWhere('price.customerGroupKey = :customerGroup')
-            ->setParameter('productId', $product->getId())
-            ->orderBy('MIN(price.price)')
-            ->setFirstResult(0)
-            ->setMaxResults(1);
-
-
-
     }
 }
