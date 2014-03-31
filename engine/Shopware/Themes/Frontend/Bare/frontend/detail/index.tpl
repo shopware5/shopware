@@ -14,7 +14,9 @@
 
 	{* Product navigation - Previous and next arrow button *}
 	{block name="frontend_detail_index_navigation"}
-		{include file="frontend/detail/navigation.tpl"}
+		<nav class="product--navigation">
+			{include file="frontend/detail/navigation.tpl"}
+		</nav>
 	{/block}
 
 	{* Product header *}
@@ -46,7 +48,7 @@
 
 	{* Product image *}
 	{block name='frontend_detail_index_image_container'}
-		<div class="product--image-container{if {config name=sUSEZOOMPLUS}} product--image-zoom{/if}">
+		<div class="product--image-container block {if {config name=sUSEZOOMPLUS}} product--image-zoom{/if}">
 			{include file="frontend/detail/image.tpl"}
 		</div>
 	{/block}
