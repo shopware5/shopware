@@ -7,6 +7,11 @@ In this document you will find a changelog of the important changes related to t
 * `sCore::sBuildLink()` second argument removed (dead code)
 * `sCore` no longer returns `null` when calling not implemented functions
 * `sAdmin::sGetDispatch()`, `sAdmin::sGetDispatches()` and `sAdmin::sGetShippingcosts()` were removed.
+* `sCms::sGetDynamicContentByGroup()`, `sCms::sGetDynamicContentById()` and `sCms::sGetDynamicGroupName()` methods deprecated functions removed
+* `sSystem::sPathCmsFiles` and `sSystem::sPathCmsImg` variables removed
+* `Shopware_Controllers_Frontend_Content` legacy controller removed
+* `templates/_default/frontend/content` legacy template files removed
+* `s_cms_content` legacy database table removed
 
 ## 4.2.2
 
