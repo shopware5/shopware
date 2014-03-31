@@ -1,29 +1,3 @@
-<style type="text/css">
-#detail #detailinfo #comments .no_border {
-    border-bottom: 0 none;
-}
-
-#detail #detailinfo #comments .answer {
-    padding: 8px 12px;
-    font-style: italic;
-    margin: 0 0 0 25px;
-    border: 1px dashed;
-}
-#detail #detailinfo #comments .answer .left_container {
-    width: 100px;
-    font-style: normal;
-}
-#detail #detailinfo #comments .answer .right_container {
-    width: 332px
-}
-
-/** colors.css */
-#detail #detailinfo #comments .answer {
-    border-color: #c7c7c7;
-    color: #999;
-}
-</style>
-
 <div id="comments">
 	{* Response save comment *}
 	{if $sAction == "ratingAction"}

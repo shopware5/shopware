@@ -10,7 +10,7 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-	<div class="content block">
+	<div class="content product--details block">
 
 	{* Product navigation - Previous and next arrow button *}
 	{block name="frontend_detail_index_navigation"}
@@ -55,13 +55,18 @@
 
 	{* "Buy now" box container *}
 	{block name='frontend_detail_index_buy_container'}
-		<div class="product--buybox block">
+		<div class="product--buybox block{if $sArticle.sConfigurator && $sArticle.sConfiguratorSettings.type==2} is--wide{/if}">
 
 			{* Product data *}
 			{block name='frontend_detail_index_data'}
 				{include file="frontend/detail/data.tpl" sArticle=$sArticle sView=1}
 			{/block}
 			{block name='frontend_detail_index_after_data'}{/block}
+
+			{* Include buy button and quantity box *}
+			{block name="frontend_detail_index_buybox"}
+				{include file="frontend/detail/buy.tpl"}
+			{/block}
 
 			{* Product actions *}
 			{block name="frontend_detail_index_actions"}
@@ -132,193 +137,109 @@
 		</div>
 	{/block}
 
+	{* Product bundle hook point *}
+	{block name="frontend_detail_index_bundle"}{/block}
 
-	<hr>
-	<hr>
-	<hr>
-	<hr>
-	<hr>
-	<hr>
-	<hr>
-	<hr>
-	<hr>
+	{block name="frontend_detail_index_detail"}
+		<div class="product--additional-info">
 
-	{* General detailbox *}
-	<div id="detailbox"><!-- detailbox -->
+			{* Tab navigation *}
+			{block name="frontend_detail_index_tabs"}
+				<div class="additional-info--tabs">
+					{include file="frontend/detail/tabs.tpl"}
 
-		{* Detailbox left *}
-		<div class="left">
-			<div id="img" class="grid_6 first">
-				<div class="wrapper">
-					{* Images *}
-					{include file="frontend/detail/image.tpl"}
-				</div>
-			</div>
-		</div>
+					{* Tab content *}
+					{block name="frontend_detail_index_outer_tabs"}
+						<div class="tabs--content-container tab--content">
+							{block name="frontend_detail_index_inner_tabs"}
+								{block name='frontend_detail_index_before_tabs'}{/block}
 
-		<div class="right"><!-- Right -->
-
-			{* Detailbox middle *}
-			<div id="detailbox_middle" class="grid_4">
-
-				{* Article comments - small overview *}
-				{block name="frontend_detail_comments_overview"}
-					{if !{config name=VoteDisable}}
-						<div class="detail_comments">
-							<span class="star star{$sArticle.sVoteAverange.averange}">Star Rating</span>
-							<span class="comment_numbers">(<a href="#write_comment" class="write_comment" rel="nofollow"
-															  title="{s name='DetailLinkReview'}{/s}">{$sArticle.sVoteAverange.count}</a>)</span>
-						</div>
-					{/if}
-				{/block}
-
-				{* Additional links *}
-				{block name="frontend_detail_index_actions"}
-					{include file="frontend/detail/actions.tpl"}
-				{/block}
-			</div>
-
-
-
-			{* Detailbox right *}
-
-			{* Configurator table // div buybox *}
-			{if $sArticle.sConfigurator && $sArticle.sConfiguratorSettings.type==2}
-			<div class="grid_16 first last" id="buybox">{else}
-				<div class="right" id="buybox">{/if}
-					<div id="detail_more"></div>
-
-					{* Article notification *}
-					{block name="frontend_detail_index_notification"}
-						{if $sArticle.notification && ($sArticle.instock <= 0 || $sArticle.sVariants) && $ShowNotification}
-							{include file="frontend/plugins/notification/index.tpl"}
-						{/if}
-					{/block}
-
-					{* Configurator drop down menu *}
-					{block name="frontend_detail_index_configurator"}
-						{if $sArticle.sConfigurator}
-							{if $sArticle.sConfiguratorSettings.type eq 1}
-								{include file="frontend/detail/config_step.tpl"}
-							{elseif $sArticle.sConfiguratorSettings.type != 2}
-								{include file="frontend/detail/config_upprice.tpl"}
-							{/if}
-						{/if}
-					{/block}
-
-					{* Supplier name *}
-					{if $sArticle.supplierName}
-						{block name='frontend_detail_index_supplier'}
-							<p class="supplier">{se name="DetailFromNew"}Hersteller:{/se} {$sArticle.supplierName}</p>
-						{/block}
-					{/if}
-
-
-					{* Caching article details for future use *}
-					{if $sArticle.sBundles || $sArticle.sRelatedArticles && $sArticle.crossbundlelook || $sArticle.sVariants}
-						<div id="{$sArticle.ordernumber}" class="displaynone">
-							{include file="frontend/detail/data.tpl" sArticle=$sArticle}
-						</div>
-					{/if}
-
-					{* Caching variant article details *}
-					{if $sArticle.sVariants}
-
-						{foreach name=line from=$sArticle.sVariants item=sVariant}
-							<div id="{$sVariant.ordernumber}" class="displaynone">
-								{include file="frontend/detail/data.tpl" sArticle=$sVariant}
-							</div>
-						{/foreach}
-					{/if}
-
-
-					{* Article data *}
-					{block name='frontend_detail_index_data'}
-						{include file="frontend/detail/data.tpl" sArticle=$sArticle sView=1}
-					{/block}
-					{block name='frontend_detail_index_after_data'}{/block}
-
-
-					{* Include buy button and quantity box *}
-					{block name="frontend_detail_index_buybox"}
-						{include file="frontend/detail/buy.tpl"}
-					{/block}
-
-
-				</div>
-				<!-- //buybox -->
-
-			</div>
-			<!-- //Right -->
-
-		</div>
-		<!-- //detailbox -->
-
-
-		<div class="clear">&nbsp;</div>
-
-		{* Detailinfo *}
-		{block name="frontend_detail_index_detail"}
-			<div id="detailinfo">
-
-				{* Product bundle hook point *}
-				{block name="frontend_detail_index_bundle"}{/block}
-
-
-				{block name="frontend_detail_index_tabs"}
-					{* Tabs *}
-					<div id="tabs">
-						{* Tabsnavigation *}
-						{include file="frontend/detail/tabs.tpl"}
-
-						{block name="frontend_detail_index_outer_tabs"}
-							<div class="inner_tabs">
-
-								{block name="frontend_detail_index_inner_tabs"}
-									{block name='frontend_detail_index_before_tabs'}{/block}
-
-									{* Article description *}
-									{block name="frontend_detail_index_tabs_description"}
-										{include file="frontend/detail/description.tpl"}
-									{/block}
-
-									{* Article rating *}
-									{if !{config name=VoteDisable}}
-										{block name="frontend_detail_index_tabs_rating"}
-											{include file="frontend/detail/comment.tpl"}
-										{/block}
-									{/if}
-
-									{* Related articles *}
-									{block name="frontend_detail_index_tabs_related"}
-										{include file="frontend/detail/related.tpl"}
-									{/block}
-
-									{* Similar articles *}
-									{include file='frontend/detail/similar.tpl'}
-
-									{block name='frontend_detail_index_after_tabs'}{/block}
+								{* Product description *}
+								{block name="frontend_detail_index_tabs_description"}
+									{include file="frontend/detail/tabs/description.tpl"}
 								{/block}
-							</div>
-						{/block}
-					</div>
-					<div class="detailinfo_shadow">&nbsp;</div>
-					{* "Customers bought also" slider *}
-					{block name="frontend_detail_index_also_bought_slider"}
-						{if {config name=alsoBoughtShow}}
-							{action module=widgets controller=recommendation action=bought articleId=$sArticle.articleID}
-						{/if}
-					{/block}
 
-					{* "Customers similar viewed slider *}
-					{block name="frontend_detail_index_similar_viewed_slider"}
-						{if {config name=similarViewedShow}}
-							{action module=widgets controller=recommendation action=viewed articleId=$sArticle.articleID}
-						{/if}
+								{* Article rating *}
+								{block name="frontend_detail_index_tabs_rating"}
+									{if !{config name=VoteDisable}}
+										{include file="frontend/detail/tabs/comment.tpl"}
+									{/if}
+								{/block}
+
+								{* Related articles *}
+								{block name="frontend_detail_index_tabs_related"}
+									{include file="frontend/detail/tabs/related.tpl"}
+								{/block}
+
+								{block name='frontend_detail_index_after_tabs'}{/block}
+							{/block}
+						</div>
 					{/block}
-					<div class="clear">&nbsp;</div>
+				</div>
+			{/block}
+		</div>
+	{/block}
+
+	{block name="frontend_detail_index_recommendation_tabs"}
+	<div class="recommendation-slider--tabs">
+
+		{block name="frontend_detail_index_recommendation_tabs_navigation"}
+			<ul class="tab--navigation">
+
+				{* Similar products *}
+				{block name="frontend_detail_index_recommendation_tabs_entry_similar_products"}
+					<li class="navigation--entry entry--similar-products">
+						<a class="navigation--link" href="#product--similar-products">
+							{s name="DetailRecommendationSimilarLabel"}Ähnliche Artikel{/s}
+						</a>
+					</li>
 				{/block}
-			</div>
+
+				{* Customer also bought *}
+				{block name="frontend_detail_index_recommendation_tabs_entry_also_bought"}
+					<li class="navigation--entry entry--also-bought">
+						<a class="navigation--link" href="#product--also-bought">
+							{s name="DetailRecommendationAlsoBoughtLabel"}Kunden kauften auch{/s}
+						</a>
+					</li>
+				{/block}
+
+				{* Customer also viewed *}
+				{block name="frontend_detail_index_recommendation_tabs_entry_also_viewed"}
+					<li class="navigation--entry entry--customer-viewed">
+						<a class="navigation--link" href="#product--customer-viewed">
+							{s name="DetailRecommendationAlsoBoughtLabel"}Kunden haben sich ebenfalls angesehen{/s}
+						</a>
+					</li>
+				{/block}
+			</ul>
 		{/block}
+
+		<div class="tab--content">
+
+			{* Similar articles *}
+			<div class="content--similar">
+				{include file='frontend/detail/similar.tpl'}
+			</div>
+
+			{* "Customers bought also" slider *}
+			{block name="frontend_detail_index_also_bought_slider"}
+				<div class="content--also-bought">
+					{if {config name=alsoBoughtShow}}
+						{action module=widgets controller=recommendation action=bought articleId=$sArticle.articleID}
+					{/if}
+				</div>
+			{/block}
+
+			{* "Customers similar viewed slider *}
+			{block name="frontend_detail_index_similar_viewed_slider"}
+				<div class="content--customer-viewed">
+					{if {config name=similarViewedShow}}
+						{action module=widgets controller=recommendation action=viewed articleId=$sArticle.articleID}
+					{/if}
+				</div>
+			{/block}
+		</div>
 	</div>
+	{/block}
 {/block}
