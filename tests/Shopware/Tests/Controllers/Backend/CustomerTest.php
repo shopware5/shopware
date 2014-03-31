@@ -238,4 +238,15 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
         $this->assertTrue(strpos($headerLocation, $cookie['value']) !== false);
         $this->assertEquals(0, $cookie['expire']);
     }
+
+    /**
+     * SW-6667 Tests if the customer has an id to check if lazy loading was fetching the data
+     */
+    public function testCustomerId()
+    {
+        $customer = Shopware()->Models()->find('Shopware\Models\Customer\Customer', 1);
+
+        $this->assertInstanceOf('\Shopware\Models\Customer\Customer', $customer);
+        $this->assertEquals('1', $customer->getGroup()->getId());
+    }
 }
