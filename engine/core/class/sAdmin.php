@@ -90,9 +90,11 @@ class sAdmin
     private $systemModule;
 
     /**
+     * The snippet manager
+     *
      * @var Shopware_Components_Snippet_Manager
      */
-    public $snippetObject;
+    private $snippetManager;
 
     /**
      * Check if current active shop has own registration
@@ -112,6 +114,7 @@ class sAdmin
         Enlight_Components_Session_Namespace    $session            = null,
         Enlight_Controller_Front                $front              = null,
         \Shopware\Components\Password\Manager   $passwordEncoder    = null,
+        Shopware_Components_Snippet_Manager     $snippetManager     = null,
         sBasket                                 $basketModule       = null,
         sArticle                                $articleModule      = null,
         sSystem                                 $systemModule       = null
@@ -122,11 +125,11 @@ class sAdmin
         $this->session = $session ? : Shopware()->Session();
         $this->front = $front ? : Shopware()->Front();
         $this->passwordEncoder = $passwordEncoder ? : Shopware()->PasswordEncoder();
+        $this->snippetManager = $snippetManager ? : Shopware()->Snippets();
         $this->basketModule = $basketModule ? : Shopware()->Modules()->Basket();
         $this->articleModule = $articleModule ? : Shopware()->Modules()->Articles();
         $this->systemModule = $systemModule ? : Shopware()->System();
 
-        $this->snippetObject = Shopware()->Snippets()->getNamespace('frontend/account/internalMessages');
         $shop = Shopware()->Shop()->getMain() !== null ? Shopware()->Shop()->getMain() : Shopware()->Shop();
         $this->scopedRegistration = $shop->getCustomerScope();
         $this->subshopId = $shop->getId();
@@ -164,19 +167,26 @@ class sAdmin
         $matchResult = preg_match("#^([A-Z]{2})([0-9A-Z+*.]{2,12})$#", $ustId, $vat);
 
         if (empty($postUstId)) {
-            $messages[] = $this->snippetObject->get('VatFailureEmpty', 'Please enter a vat id');
+            $messages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                ->get('VatFailureEmpty', 'Please enter a vat id');
         } elseif (empty($ustId) || !$matchResult) {
-            $messages[] = $this->snippetObject->get('VatFailureInvalid', 'The vat id entered is invalid');
+            $messages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                ->get('VatFailureInvalid', 'The vat id entered is invalid');
         } elseif (empty($country) || $country != $vat[1]) {
-            $field_names = explode(',', $this->snippetObject->get(
-                'VatFailureErrorFields',
-                'Company,City,Zip,Street,Country'
-            ));
+            $field_names = explode(',', $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                ->get(
+                    'VatFailureErrorFields',
+                    'Company,City,Zip,Street,Country'
+                )
+            );
             $field_name = isset($field_names[4]) ? $field_names[4] : 'Land';
-            $messages[] = sprintf($this->snippetObject->get(
-                'VatFailureErrorField',
-                'The field %s does not match to the vat id entered'
-            ), $field_name);
+            $messages[] = sprintf($this->snippetManager->getNamespace('frontend/account/internalMessages')
+                ->get(
+                    'VatFailureErrorField',
+                    'The field %s does not match to the vat id entered'
+                ),
+                $field_name
+            );
         } elseif ($country == 'DE') {
 
         } elseif (!empty($vatCheckAdvancedNumber)) {
@@ -189,13 +199,13 @@ class sAdmin
 //        } elseif (false && class_exists('SoapClient')) {
 //            $url = 'http://ec.europa.eu/taxation_customs/vies/services/checkVatService.wsdl';
 //            if (!file_get_contents($url)) {
-//                $messages[] = sprintf($this->snippetObject->get('VatFailureUnknownError', 'An unknown error occurs while checking your vat id. Error code %d'), 11);
+//                $messages[] = sprintf($this->snippetObject->getNamespace('frontend/account/internalMessages')->get('VatFailureUnknownError', 'An unknown error occurs while checking your vat id. Error code %d'), 11);
 //            } else {
 //                $client = new SoapClient($url, array('exceptions' => 0, 'connection_timeout' => 5));
 //                $response = $client->checkVat(array('countryCode' => $vat[1], 'vatNumber' => $vat[2]));
 //            }
 //            if (is_soap_fault($response)) {
-//                $messages[] = sprintf($this->snippetObject->get(
+//                $messages[] = sprintf($this->snippetObject->getNamespace('frontend/account/internalMessages')->get(
 //                    'VatFailureUnknownError',
 //                    'An unknown error occurs while checking your vat id. Error code %d'
 //                ), 12);
@@ -204,10 +214,10 @@ class sAdmin
 //                    $messages[] = "SOAP-error: (errorcode: {$response->faultcode}, errormsg: {$response->faultstring})";
 //                }
 //            } elseif (empty($response->valid)) {
-//                $messages[] = $this->snippetObject->get('VatFailureInvalid', 'The vat id entered is invalid');
+//                $messages[] = $this->snippetObject->getNamespace('frontend/account/internalMessages')->get('VatFailureInvalid', 'The vat id entered is invalid');
 //            }
         } else {
-            $messages[] = sprintf($this->snippetObject->get(
+            $messages[] = sprintf($this->snippetManager->getNamespace('frontend/account/internalMessages')->get(
                 'VatFailureUnknownError',
                 'An unknown error occurs while checking your vat id. Error code %d'
             ), 20);
@@ -215,7 +225,7 @@ class sAdmin
 
         $vatCheckRequired = $this->config->get('sVATCHECKREQUIRED');
         if (!empty($messages) && empty($vatCheckRequired)) {
-            $messages[] = $this->snippetObject->get('VatFailureErrorInfo', '');
+            $messages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')->get('VatFailureErrorInfo', '');
         }
         $messages = Enlight()->Events()->filter(
             'Shopware_Modules_Admin_CheckTaxID_MessagesFilter',
@@ -277,7 +287,7 @@ class sAdmin
             $response = array_combine($matches[1], $matches[2]);
             $messages = $this->sCheckVatResponse($response);
         } elseif (empty($vatCheckNoService)) {
-            $messages[] = sprintf($this->snippetObject->get(
+            $messages[] = sprintf($this->snippetManager->getNamespace('frontend/account/internalMessages')->get(
                 'VatFailureUnknownError',
                 'An unknown error occurs while checking your vat id. Error code %d'
             ), 10);
@@ -328,7 +338,7 @@ class sAdmin
                 case 999: $msg = 'Eine Bearbeitung Ihrer Anfrage ist zurzeit nicht möglich. Bitte versuchen Sie es später noch einmal.'; break;
                 case 205: $msg = 'Ihre Anfrage kann derzeit durch den angefragten EU-Mitgliedstaat oder aus anderen Gründen nicht beantwortet werden'; break;
 
-                default:  $msg = sprintf($this->snippetObject->get('VatFailureUnknownError','An unknown error occurs while checking your vat id. Error code %d'), 30); break;
+                default:  $msg = sprintf($this->snippetManager->getNamespace('frontend/account/internalMessages')->get('VatFailureUnknownError','An unknown error occurs while checking your vat id. Error code %d'), 30); break;
             }
         } else {
             switch ($response['ErrorCode']) {
@@ -341,13 +351,13 @@ class sAdmin
                 case 210:
                 case 211:
                 case 212:
-                    $msg = $this->snippetObject->get('VatFailureInvalid', 'The vat id entered is invalid');
+                    $msg = $this->snippetManager->getNamespace('frontend/account/internalMessages')->get('VatFailureInvalid', 'The vat id entered is invalid');
                     break;
                 case 203:
-                    $msg = sprintf($this->snippetObject->get('VatFailureDate', 'The vat id entered is invalid.Is valid from %s'), $response['Gueltig_ab']);
+                    $msg = sprintf($this->snippetManager->getNamespace('frontend/account/internalMessages')->get('VatFailureDate', 'The vat id entered is invalid.Is valid from %s'), $response['Gueltig_ab']);
                     break;
                 default:
-                    $msg = sprintf($this->snippetObject->get('VatFailureUnknownError', 'An unknown error occurs while checking your vat id. Error code %d'), 31);
+                    $msg = sprintf($this->snippetManager->getNamespace('frontend/account/internalMessages')->get('VatFailureUnknownError', 'An unknown error occurs while checking your vat id. Error code %d'), 31);
                     break;
             }
         }
@@ -356,18 +366,22 @@ class sAdmin
             $result[] = $msg;
         } else {
             $fields = array('Erg_Name', 'Erg_Ort', 'Erg_PLZ', 'Erg_Str');
-            $field_names = explode(',', $this->snippetObject->get(
-                'VatFailureErrorFields',
-                'Company,City,Zip,Street,Country'
-            ));
+            $field_names = explode(',', $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                ->get(
+                    'VatFailureErrorFields',
+                    'Company,City,Zip,Street,Country'
+                )
+            );
             foreach ($fields as $key => $field) {
                 if (isset($response[$field])
                     && strpos($this->config->get('sVATCHECKVALIDRESPONSE'), $response[$field]) === false
                 ) {
                     $name = isset($field_names[$key]) ? $field_names[$key] : $field;
-                    $result[] = sprintf($this->snippetObject->get(
-                        'VatFailureErrorField',
-                        'The field %s does not match to the vat id entered'), $name
+                    $result[] = sprintf($this->snippetManager->getNamespace('frontend/account/internalMessages')
+                        ->get(
+                            'VatFailureErrorField',
+                            'The field %s does not match to the vat id entered'
+                        ), $name
                     );
                 }
             }
@@ -636,7 +650,7 @@ class sAdmin
             // Include management class and check input data
             if (!empty($paymentData['class'])) {
                 $sPaymentObject = $this->sInitiatePaymentClass($paymentData);
-                $checkPayment = $sPaymentObject->validate(Shopware()->Front()->Request());
+                $checkPayment = $sPaymentObject->validate($this->front->Request());
             }
             return array(
                 "checkPayment" => $checkPayment,
@@ -783,7 +797,7 @@ class sAdmin
                 $hash = md5(uniqid(rand()));
                 $data = serialize(array("newsletter"=>$email,"subscribeToNewsletter"=>true));
 
-                $link = Shopware()->Front()->Router()->assemble(array(
+                $link = $this->front->Router()->assemble(array(
                         'sViewport' => 'newsletter',
                         'action' => 'index',
                         'sConfirmation' => $hash
@@ -1151,7 +1165,8 @@ class sAdmin
 
         if (count($sErrorFlag)) {
             // Some error occurred
-            $sErrorMessages[] = $this->snippetObject->get('ErrorFillIn', 'Please fill in all red fields');
+            $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                ->get('ErrorFillIn', 'Please fill in all red fields');
         }
 
         if (isset($rules['ustid'])) {
@@ -1227,7 +1242,8 @@ class sAdmin
 
         if (count($sErrorFlag)) {
             // Some error occurred
-            $sErrorMessages[] = $this->snippetObject->get('ErrorFillIn', 'Please fill in all red fields');
+            $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                ->get('ErrorFillIn', 'Please fill in all red fields');
         }
 
         $register = $this->session->offsetGet('sRegister');
@@ -1270,16 +1286,17 @@ class sAdmin
         $postData = $this->front->Request()->getPost();
         $encoderName =  $this->passwordEncoder->getDefaultPasswordEncoderName();
 
+        // Email is present in post data
         if (isset($postData["emailConfirmation"]) || isset($postData["email"])) {
             $postData["email"] = strtolower(trim($postData["email"]));
-            // Check email
 
             $validator = new Zend_Validate_EmailAddress();
 			$validator->getHostnameValidator()->setValidateTld(false);
             
 			if (empty($postData["email"]) || !$validator->isValid($postData["email"])) {
                 $sErrorFlag["email"] = true;
-                $sErrorMessages[] = $this->snippetObject->get('MailFailure', 'Please enter a valid mail address');
+                $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                    ->get('MailFailure', 'Please enter a valid mail address');
             }
 
             // Check email confirmation if needed
@@ -1287,7 +1304,8 @@ class sAdmin
                 $postData["emailConfirmation"] = strtolower(trim($postData["emailConfirmation"]));
                 if ($postData["email"] != $postData["emailConfirmation"]) {
                     $sErrorFlag["emailConfirmation"] = true;
-                    $sErrorMessages[] = $this->snippetObject->get('MailFailureNotEqual', 'The mail addresses entered are not equal');
+                    $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                        ->get('MailFailureNotEqual', 'The mail addresses entered are not equal');
                 }
             }
         } elseif ($edit && empty($postData["email"])) {
@@ -1305,20 +1323,20 @@ class sAdmin
 
         // Check password if account should be created
         if (!$postData["skipLogin"] || $edit) {
-            if ($edit && (!$postData["password"] && !$postData["passwordConfirmation"])) {
-
-            } else {
+            if (!$edit || ($postData["password"] || $postData["passwordConfirmation"])) {
                 if (strlen(trim($postData["password"])) == 0
                     || !$postData["password"]
                     || !$postData["passwordConfirmation"]
                     || (strlen($postData["password"]) < $this->config->get('sMINPASSWORD'))
                 ) {
-                    $sErrorMessages[] = Shopware()->Snippets()->getNamespace("frontend")->get('RegisterPasswordLength','',true);
+                    $sErrorMessages[] = $this->snippetManager->getNamespace("frontend")
+                        ->get('RegisterPasswordLength', '', true);
 
                     $sErrorFlag["password"] = true;
                     $sErrorFlag["passwordConfirmation"] = true;
                 } elseif ($postData["password"] != $postData["passwordConfirmation"]) {
-                    $sErrorMessages[] = Shopware()->Snippets()->getNamespace("frontend")->get('AccountPasswordNotEqual', 'The passwords are not equal', true);
+                    $sErrorMessages[] = $this->snippetManager->getNamespace("frontend")
+                        ->get('AccountPasswordNotEqual', 'The passwords are not equal', true);
                     $sErrorFlag["password"] = true;
                     $sErrorFlag["passwordConfirmation"] = true;
                 }
@@ -1329,7 +1347,6 @@ class sAdmin
             $postData["password"] = md5(uniqid(rand()));
             $encoderName = 'md5';
 
-
             $register["auth"]["accountmode"] = "1";  // Setting account mode to NO_ACCOUNT
         }
         $this->session->offsetSet('sRegister', $register);
@@ -1339,7 +1356,7 @@ class sAdmin
         if ($edit && !empty($accountPasswordCheck)) {
             $password = $postData["currentPassword"];
             $current = $this->session->offsetGet('sUserPassword');
-            $snippet = Shopware()->Snippets()->getNamespace("frontend");
+            $snippet = $this->snippetManager->getNamespace("frontend");
             if (empty($password) || !$this->passwordEncoder->isPasswordValid($password, $current, $encoderName)) {
                 $sErrorFlag['currentPassword'] = true;
                 if ($postData["password"]) {
@@ -1364,7 +1381,8 @@ class sAdmin
             );
             if ($checkIfMailExists && !$postData["skipLogin"]) {
                 $sErrorFlag["email"] = true;
-                $sErrorMessages[] = $this->snippetObject->get('MailFailureAlreadyRegistered', 'This mail address is already registered');
+                $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                    ->get('MailFailureAlreadyRegistered', 'This mail address is already registered');
             }
         }
 
@@ -1445,7 +1463,8 @@ class sAdmin
         }
 
         if (!empty($sErrorFlag)) {
-            $sErrorMessages[] = $this->snippetObject->get('LoginFailure', 'Wrong email or password');
+            $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                ->get('LoginFailure', 'Wrong email or password');
             $this->session->offsetUnset('sUserMail');
             $this->session->offsetUnset('sUserPassword');
             $this->session->offsetUnset('sUserId');
@@ -1552,22 +1571,25 @@ class sAdmin
             $sql = "SELECT id FROM s_user WHERE email=? AND active=0 " . $addScopeSql;
             $getUser = $this->db->fetchOne($sql, array($email));
             if ($getUser) {
-                $sErrorMessages[] = $this->snippetObject->get(
-                    'LoginFailureActive',
-                    'Your account is disabled. Please contact us.'
-                );
+                $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                    ->get(
+                        'LoginFailureActive',
+                        'Your account is disabled. Please contact us.'
+                    );
             } else {
                 $getLockedUntilTime = $this->db->fetchOne(
                     "SELECT 1 FROM s_user WHERE email = ? AND lockeduntil > NOW()",
                     array($email)
                 );
                 if (!empty($getLockedUntilTime)) {
-                    $sErrorMessages[] = $this->snippetObject->get(
-                        'LoginFailureLocked',
-                        'Too many failed logins. Your account was temporary deactivated.'
-                    );
+                    $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                        ->get(
+                            'LoginFailureLocked',
+                            'Too many failed logins. Your account was temporary deactivated.'
+                        );
                 } else {
-                    $sErrorMessages[] = $this->snippetObject->get('LoginFailure', 'Wrong email or password');
+                    $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                        ->get('LoginFailure', 'Wrong email or password');
                 }
             }
 
@@ -2300,7 +2322,7 @@ class sAdmin
         );
 
 
-        $namespace = Shopware()->Snippets()->getNamespace('frontend/account/index');
+        $namespace = $this->snippetManager->getNamespace('frontend/account/index');
         $register = $this->session->offsetGet('sRegister');
         foreach ($register["billing"] as $key => $value) {
             if ($key == "salutation") {
@@ -3669,7 +3691,8 @@ class sAdmin
             if (!empty($errorflag)) {
                 return array(
                     'code' => 5,
-                    'message' => $this->snippetObject->get('ErrorFillIn','Please fill in all red fields'),
+                    'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                            ->get('ErrorFillIn','Please fill in all red fields'),
                     'sErrorFlag' => $errorflag
                 );
             }
@@ -3688,13 +3711,18 @@ class sAdmin
         if(empty($email)) {
             return array(
                 "code" => 6,
-                "message" => $this->snippetObject->get('NewsletterFailureMail', 'Enter eMail address')
+                "message" => $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                        ->get('NewsletterFailureMail', 'Enter eMail address')
             );
         }
         $validator = new Zend_Validate_EmailAddress();
         $validator->getHostnameValidator()->setValidateTld(false);
         if (!$validator->isValid($email)) {
-            return array("code" => 1, "message" => $this->snippetObject->get('NewsletterFailureInvalid', 'Enter valid eMail address'));
+            return array(
+                "code" => 1,
+                "message" => $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                        ->get('NewsletterFailureInvalid', 'Enter valid eMail address')
+            );
         }
         if (!$unsubscribe) {
             $sql = "SELECT * FROM s_campaigns_mailaddresses WHERE email = ?";
@@ -3703,12 +3731,14 @@ class sAdmin
             if ($result === false) {
                 $result = array(
                     "code" => 10,
-                    "message" => $this->snippetObject->get('UnknownError', 'Unknown error')
+                    "message" => $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                            ->get('UnknownError', 'Unknown error')
                 );
             } elseif ($result->rowCount()) {
                 $result = array(
                     "code" => 2,
-                    "message" => $this->snippetObject->get('NewsletterFailureAlreadyRegistered','You already receive our newsletter')
+                    "message" => $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                            ->get('NewsletterFailureAlreadyRegistered','You already receive our newsletter')
                 );
             } else {
                 $customer = $this->db->fetchOne(
@@ -3729,12 +3759,14 @@ class sAdmin
                 if($result === false) {
                     $result = array(
                         "code" => 10,
-                        "message" => $this->snippetObject->get('UnknownError', 'Unknown error')
+                        "message" => $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                                ->get('UnknownError', 'Unknown error')
                     );
                 } else {
                     $result = array(
                         "code" => 3,
-                        "message" => $this->snippetObject->get('NewsletterSuccess', 'Thank you for receiving our newsletter')
+                        "message" => $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                                ->get('NewsletterSuccess', 'Thank you for receiving our newsletter')
                     );
                 }
             }
@@ -3750,19 +3782,22 @@ class sAdmin
             if ($result1 === false || $result2 === false) {
                 $result = array(
                     "code" => 10,
-                    "message" => $this->snippetObject->get('UnknownError','Unknown error')
+                    "message" => $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                            ->get('UnknownError','Unknown error')
                 );
             }
             elseif (empty($result)) {
                 $result = array(
                     "code" => 4,
-                    "message" => $this->snippetObject->get('NewsletterFailureNotFound', 'This mail address could not be found')
+                    "message" => $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                            ->get('NewsletterFailureNotFound', 'This mail address could not be found')
                 );
             }
             else {
                 $result = array(
                     "code" => 5,
-                    "message" => $this->snippetObject->get('NewsletterMailDeleted', 'Your mail address was deleted')
+                    "message" => $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                            ->get('NewsletterMailDeleted', 'Your mail address was deleted')
                 );
             }
         }
