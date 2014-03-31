@@ -1,3 +1,5 @@
+{namespace name="frontend/detail/description"}
+
 {block name="frontend_detail_description"}
 <div id="description">
 	
