@@ -35,6 +35,11 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     private $basketModule;
 
     /**
+     * @var sSystem
+     */
+    private $systemModule;
+
+    /**
      * @var Shopware_Components_Config
      */
     private $config;
@@ -59,10 +64,11 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->config = Shopware()->Config();
         $this->session = Shopware()->Session();
         $this->front = Shopware()->Front();
-        $this->module->sSYSTEM->sCurrency = Shopware()->Db()->fetchRow('SELECT * FROM s_core_currencies WHERE currency LIKE "EUR"');
-        $this->module->sSYSTEM->sSESSION_ID = null;
-        $this->module->sSYSTEM->sLanguage = 1;
         $this->basketModule = Shopware()->Modules()->Basket();
+        $this->systemModule = Shopware()->System();
+        $this->systemModule->sCurrency = Shopware()->Db()->fetchRow('SELECT * FROM s_core_currencies WHERE currency LIKE "EUR"');
+        $this->systemModule->sSESSION_ID = null;
+        $this->systemModule->sLanguage = 1;
 
         // Create a stub for the Shopware_Components_Snippet_Manager class.
         $stub = $this->getMockBuilder('\Enlight_Components_Snippet_Manager')
@@ -1057,7 +1063,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         }
 
         // Test loading all data, should return the test data
-        $this->module->sSYSTEM->sLanguage = 2;
+        $this->systemModule->sLanguage = 2;
         $result = $this->module->sGetCountryTranslation();
         $this->assertCount(2, $result);
         $this->assertArrayHasKey(2, $result);
