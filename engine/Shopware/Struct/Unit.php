@@ -15,12 +15,12 @@ class Unit
 
     /**
      * @param mixed $id
-     * @return $this
+     *
      */
     public function setId($id)
     {
         $this->id = $id;
-        return $this;
+
     }
 
     /**
@@ -33,12 +33,12 @@ class Unit
 
     /**
      * @param mixed $name
-     * @return $this
+     *
      */
     public function setName($name)
     {
         $this->name = $name;
-        return $this;
+
     }
 
     /**
@@ -51,12 +51,12 @@ class Unit
 
     /**
      * @param mixed $unit
-     * @return $this
+     *
      */
     public function setUnit($unit)
     {
         $this->unit = $unit;
-        return $this;
+
     }
 
     /**

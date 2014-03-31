@@ -15,12 +15,12 @@ class Tax
 
     /**
      * @param mixed $id
-     * @return $this
+     *
      */
     public function setId($id)
     {
         $this->id = $id;
-        return $this;
+
     }
 
     /**
@@ -33,12 +33,12 @@ class Tax
 
     /**
      * @param mixed $name
-     * @return $this
+     *
      */
     public function setName($name)
     {
         $this->name = $name;
-        return $this;
+
     }
 
     /**
@@ -50,17 +50,17 @@ class Tax
     }
 
     /**
-     * @param mixed $tax
-     * @return $this
+     * @param float $tax
+     *
      */
     public function setTax($tax)
     {
         $this->tax = $tax;
-        return $this;
+
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getTax()
     {

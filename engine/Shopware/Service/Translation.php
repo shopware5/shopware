@@ -11,8 +11,6 @@ class Translation
      */
     public function translateProductMini(Struct\ProductMini $productMini)
     {
-
-
         $productMini->addState(
             Struct\ProductMini::STATE_TRANSLATED
         );

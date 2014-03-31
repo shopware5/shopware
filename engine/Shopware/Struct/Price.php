@@ -7,22 +7,79 @@ namespace Shopware\Struct;
  */
 class Price
 {
+    /**
+     * @var int
+     */
     private $id;
 
-    private $value;
+    /**
+     * Price value of the product price struct.
+     *
+     * @var float
+     */
+    private $price;
 
+    /**
+     * @var int
+     */
     private $from;
 
+    /**
+     * @var null|int
+     */
     private $to = null;
 
     /**
+     * The pseudo price is used to fake a discount in the store front
+     * without defining a global discount for a customer group.
+     *
+     * @var float
+     */
+    private $pseudoPrice;
+
+    /**
+     * Contains the calculated gross or net price.
+     *
+     * This price will be set from the Shopware price service class
+     * \Shopware\Service\Price
+     *
+     * @var float
+     */
+    private $calculatedPrice;
+
+    /**
+     * Contains the calculated reference unit price.
+     *
+     * This price will be set from the Shopware price service class
+     * \Shopware\Service\Price.
+     *
+     * The reference unit price is calculated over the price value
+     * and the pack and reference unit of the product.
+     *
+     * @var float
+     */
+    private $calculatedReferencePrice;
+
+    /**
+     * Contains the calculated pseudo price.
+     *
+     * This price will be set from the Shopware price service class
+     * \Shopware\Service\Price.
+     *
+     * The pseudo price is used to fake a discount in the store front
+     * without defining a global discount for a customer group.
+     *
+     * @var float
+     */
+    private $calculatedPseudoPrice;
+
+    /**
      * @param mixed $id
-     * @return $this
+     *
      */
     public function setId($id)
     {
         $this->id = $id;
-        return $this;
     }
 
     /**
@@ -34,31 +91,31 @@ class Price
     }
 
     /**
-     * @param mixed $value
-     * @return $this
+     * @param float $price
+     *
      */
-    public function setValue($value)
+    public function setPrice($price)
     {
-        $this->value = $value;
-        return $this;
+        $this->price = $price;
+
     }
 
     /**
-     * @return mixed
+     * @return float
      */
-    public function getValue()
+    public function getPrice()
     {
-        return $this->value;
+        return $this->price;
     }
 
     /**
      * @param mixed $from
-     * @return $this
+     *
      */
     public function setFrom($from)
     {
         $this->from = $from;
-        return $this;
+
     }
 
     /**
@@ -71,12 +128,12 @@ class Price
 
     /**
      * @param null $to
-     * @return $this
+     *
      */
     public function setTo($to)
     {
         $this->to = $to;
-        return $this;
+
     }
 
     /**
@@ -85,6 +142,79 @@ class Price
     public function getTo()
     {
         return $this->to;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPseudoPrice()
+    {
+        return $this->pseudoPrice;
+    }
+
+    /**
+     * @param float $pseudoPrice
+     *
+     */
+    public function setPseudoPrice($pseudoPrice)
+    {
+        $this->pseudoPrice = $pseudoPrice;
+
+    }
+
+
+    /**
+     * @param float $calculatedPrice
+     *
+     */
+    public function setCalculatedPrice($calculatedPrice)
+    {
+        $this->calculatedPrice = $calculatedPrice;
+
+    }
+
+    /**
+     * @return float
+     */
+    public function getCalculatedPrice()
+    {
+        return $this->calculatedPrice;
+    }
+
+    /**
+     * @return float
+     */
+    public function getCalculatedReferencePrice()
+    {
+        return $this->calculatedReferencePrice;
+    }
+
+    /**
+     * @param float $calculatedReferencePrice
+     *
+     */
+    public function setCalculatedReferencePrice($calculatedReferencePrice)
+    {
+        $this->calculatedReferencePrice = $calculatedReferencePrice;
+
+    }
+
+    /**
+     * @return float
+     */
+    public function getCalculatedPseudoPrice()
+    {
+        return $this->calculatedPseudoPrice;
+    }
+
+    /**
+     * @param float $calculatedPseudoPrice
+     *
+     */
+    public function setCalculatedPseudoPrice($calculatedPseudoPrice)
+    {
+        $this->calculatedPseudoPrice = $calculatedPseudoPrice;
+
     }
 
 
