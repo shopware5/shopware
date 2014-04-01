@@ -175,7 +175,12 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      */
     public function downloadsAction()
     {
-        $this->View()->sDownloads = $this->admin->sGetDownloads();
+        $destinationPage = (int)$this->Request()->sPage;
+        $orderData = $this->admin->sGetDownloads($destinationPage);
+        $this->View()->sDownloads = $orderData["orderData"];
+        $this->View()->sNumberPages = $orderData["numberOfPages"];
+        $this->View()->sPages = $orderData["pages"];
+
         //this has to be assigned here because the config method in smarty can't handle array structures
         $this->View()->sDownloadAvailablePaymentStatus = Shopware()->Config()->get('downloadAvailablePaymentStatus');
     }
