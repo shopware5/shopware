@@ -364,8 +364,8 @@ div.orderdata_box div, #newsletterfrm, #frmRegister {background-color: #f7f7f7;}
 #content div.inner .change_shipping div.alternative_shipping, #content div.inner .change_billing .shipping_address {border-color: #dfdfdf;}
 #content .orders .orderoverview_active .lastrow {border-color: #dfdfdf;}
 #content .orders .orderoverview_active .table_foot p.bold, #content .orders .orderoverview_active .table_foot div p {color:#333;}
-#content .orders .listing_actions {width: 760px; padding-left: 10px; padding-right: 10px;}
-#content .orders .listing_actions .bottom {border-top: none;}
+#content .orders .listing_actions, #content .downloads .listing_actions {width: 760px; padding-left: 10px; padding-right: 10px;}
+#content .orders .listing_actions .bottom, #content .downloads .listing_actions .bottom {border-top: none;}
 
 .addresses .inner_container, .addresses .inner_container .select_billing, .addresses .inner_container .select_shipping, .account .password .inner_container {border-color: #dfdfdf;}
 .password .outer {border-color: #dfdfdf;}
