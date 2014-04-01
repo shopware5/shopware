@@ -1,91 +1,136 @@
 {namespace name="frontend/detail/description"}
 
 {block name="frontend_detail_description"}
-<div id="description">
+<div class="content--description">
 	
 	{* Headline *}
 	{block name='frontend_detail_description_title'}
-		<h2>{s name="DetailDescriptionHeader"}{/s} "{$sArticle.articleName}"</h2>
+		<h2 class="content--title">
+			{s name="DetailDescriptionHeader"}{/s} "{$sArticle.articleName}"
+		</h2>
 	{/block}
 	
 	{* Properties *}
-	{if $sArticle.sProperties}
-		{block name='frontend_detail_description_properties'}
-			<ul class="description_properties">
-				{foreach from=$sArticle.sProperties item=sProperty}
-				<li class="article_properties">
-					<span class="property_name">
-						{$sProperty.name}
-					</span>
-					<span class="property_value">
-						{$sProperty.value}
-					</span>
-				</li>
+	{block name='frontend_detail_description_properties'}
+		{if $sArticle.sProperties}
+			<ul class="description--properties">
+
+				{foreach $sArticle.sProperties as $sProperty}
+					<li class="property--entry">
+
+						{* Property label *}
+						{block name='frontend_detail_description_properties_label'}
+							<strong class="property--label">
+								{$sProperty.name}
+							</strong>
+						{/block}
+
+						{* Property content *}
+						{block name='frontend_detail_description_properties_content'}
+							{$sProperty.value}
+						{/block}
+					</li>
 				{/foreach}
 			</ul>
-		{/block}
-	{/if}
-	
-	{* Article description *}
-	{block name='frontend_detail_description_text'}
-	{$sArticle.description_long|replace:"<table":"<table id=\"zebra\""}
+		{/if}
 	{/block}
 	
+	{* Product description *}
+	{block name='frontend_detail_description_text'}
+		{$sArticle.description_long}
+	{/block}
 	
-	{* Links *}
+	{* Product - Further links *}
 	{block name='frontend_detail_description_links'}
 		{if $sArticle.sLinks}
-			<div class="space">&nbsp;</div>
 
-			<h2>{se name="ArticleTipMoreInformation"}{/se} "{$sArticle.articleName}"</h2>
-			{foreach from=$sArticle.sLinks item=information}
-				{if $information.supplierSearch}
-					<a href="{url controller='supplier' sSupplier=$sArticle.supplierID}" target="{$information.target}" class="ico link">
-						{se name="DetailDescriptionLinkInformation"}{/se}
-					</a>
-				{else}
-					<a href="{$information.link}" target="{if $information.target}{$information.target}{else}_blank{/if}" rel="nofollow" class="ico link">
-						{$information.description}
-					</a>
-				{/if}
-			{/foreach}
+			{* Further links title *}
+			{block name='frontend_detail_description_links_title'}
+				<h2 class="content--title">
+					{s name="ArticleTipMoreInformation"}{/s} "{$sArticle.articleName}"
+				</h2>
+			{/block}
+
+			{block name='frontend_detail_description_links'}
+				{foreach $sArticle.sLinks as $information}
+					{if $information.supplierSearch}
+
+						{* Vendor landing page link *}
+						{block name='frontend_detail_description_links_supplier'}
+							<a href="{url controller='supplier' sSupplier=$sArticle.supplierID}" target="{$information.target}" class="content--link link--supplier">
+								{se name="DetailDescriptionLinkInformation"}{/se}
+							</a>
+						{/block}
+					{else}
+
+						{* Links which will be added throught the administration *}
+						{block name='frontend_detail_description_links_link'}
+							<a href="{$information.link}" target="{if $information.target}{$information.target}{else}_blank{/if}" class="content--link link--further-links">
+								{$information.description}
+							</a>
+						{/block}
+					{/if}
+				{/foreach}
+			{/block}
 		{/if}
 	{/block}
 
-    {* Supplier *}
+    {* Product vendor *}
     {block name='frontend_detail_description_supplier'}
-    {if $sArticle.supplierDescription}
-        <div class="space">&nbsp;</div>
+		{if $sArticle.supplierDescription}
 
-        <h2>{se name="DetailDescriptionSupplier"}{/se} "{$sArticle.supplierName}"</h2>
-		{$sArticle.supplierDescription}
-    {/if}
+			{* Vendor title *}
+			{block name='frontend_detail_description_supplier_title'}
+				<h2 class="content--title">
+					{s name="DetailDescriptionSupplier"}{/s} "{$sArticle.supplierName}"
+				</h2>
+			{/block}
+
+			{* Vendor content *}
+			{block name='frontend_detail_description_supplier_content'}
+				{$sArticle.supplierDescription}
+			{/block}
+		{/if}
     {/block}
 
 	{* Downloads *}
 	{block name='frontend_detail_description_downloads'}
-	{if $sArticle.sDownloads}
-		<div class="space">&nbsp;</div>
-		<h2>{se name="DetailDescriptionHeaderDownloads"}{/se}</h2>
-		
-		{foreach from=$sArticle.sDownloads item=download}
-			<a href="{$download.filename}" target="_blank" class="ico link">
-				{se name="DetailDescriptionLinkDownload"}{/se} {$download.description}
-			</a>		
-		{/foreach}
-	{/if}
+		{if $sArticle.sDownloads}
+
+			{* Downloads title *}
+			{block name='frontend_detail_description_downloads_title'}
+				<h2 class="content--title">
+					{s name="DetailDescriptionHeaderDownloads"}{/s}
+				</h2>
+			{/block}
+
+			{block name='frontend_detail_description_downloads_content'}
+				{foreach $sArticle.sDownloads as $download}
+					{block name='frontend_detail_description_downloads_content_link'}
+						<a href="{$download.filename}" target="_blank" class="content--link link--download">
+							{s name="DetailDescriptionLinkDownload"}{/s} {$download.description}
+						</a>
+					{/block}
+				{/foreach}
+			{/block}
+		{/if}
 	{/block}
-	<div class="space">&nbsp;</div>
 		
-	{* Our comment *}
-	{if $sArticle.attr3}
-		{block name='frontend_detail_description_our_comment'}
-		<div class="space">&nbsp;</div>
-		<div id="unser_kommentar">
-			<h2>{se name='DetailDescriptionComment'}{/se} "{$sArticle.articleName}"</h2>
-			<blockquote>{$sArticle.attr3}</blockquote>
-		</div>	
-		{/block}
-	{/if}
+	{* Comment - Item open text fields attr3 *}
+	{block name='frontend_detail_description_our_comment'}
+		{if $sArticle.attr3}
+
+			{* Comment title  *}
+			{block name='frontend_detail_description_our_comment_title'}
+				<h2 class="content--title">
+					{s name='DetailDescriptionComment'}{/s} "{$sArticle.articleName}"
+				</h2>
+			{/block}
+
+			{block name='frontend_detail_description_our_comment_title_content'}
+				<blockquote class="content--quote">{$sArticle.attr3}</blockquote>
+			{/block}
+		{/if}
+	{/block}
 </div>
 {/block}
