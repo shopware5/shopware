@@ -51,26 +51,33 @@
 				</h2>
 			{/block}
 
+			{* Links list *}
 			{block name='frontend_detail_description_links'}
-				{foreach $sArticle.sLinks as $information}
-					{if $information.supplierSearch}
+				<ul class="content--list list--unstyled">
+					{foreach $sArticle.sLinks as $information}
+						{if $information.supplierSearch}
 
-						{* Vendor landing page link *}
-						{block name='frontend_detail_description_links_supplier'}
-							<a href="{url controller='supplier' sSupplier=$sArticle.supplierID}" target="{$information.target}" class="content--link link--supplier">
-								{se name="DetailDescriptionLinkInformation"}{/se}
-							</a>
-						{/block}
-					{else}
+							{* Vendor landing page link *}
+							{block name='frontend_detail_description_links_supplier'}
+								<li class="list--entry">
+									<a href="{url controller='supplier' sSupplier=$sArticle.supplierID}" target="{$information.target}" class="content--link link--supplier">
+										{se name="DetailDescriptionLinkInformation"}{/se}
+									</a>
+								</li>
+							{/block}
+						{else}
 
-						{* Links which will be added throught the administration *}
-						{block name='frontend_detail_description_links_link'}
-							<a href="{$information.link}" target="{if $information.target}{$information.target}{else}_blank{/if}" class="content--link link--further-links">
-								{$information.description}
-							</a>
-						{/block}
-					{/if}
-				{/foreach}
+							{* Links which will be added throught the administration *}
+							{block name='frontend_detail_description_links_link'}
+								<li class="list--entry">
+									<a href="{$information.link}" target="{if $information.target}{$information.target}{else}_blank{/if}" class="content--link link--further-links">
+										{$information.description}
+									</a>
+								</li>
+							{/block}
+						{/if}
+					{/foreach}
+				</ul>
 			{/block}
 		{/if}
 	{/block}
