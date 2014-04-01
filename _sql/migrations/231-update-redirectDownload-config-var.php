@@ -28,7 +28,7 @@ class Migrations_Migration231 Extends Shopware\Components\Migrations\AbstractMig
             );
 
             INSERT IGNORE INTO s_core_config_values (element_id, shop_id, value)
-            SELECT @newElementId as element_id, shop_id, IF(STRCMP(value, 'b:0') = 0,'i:0','i:1') as value
+            SELECT @newElementId as element_id, shop_id, IF(STRCMP(value, 'b:0;') = 0,'i:1;','i:0;') as value
             FROM s_core_config_values
             WHERE element_id = @oldElementId;
 EOD;
