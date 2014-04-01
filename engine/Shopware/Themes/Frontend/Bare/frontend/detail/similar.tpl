@@ -1,13 +1,18 @@
-<div class="similar">
-	<div class="content">
-		{if $sArticle.sSimilarArticles}    
-	        <h3>{s name='DetailSimilarHeader'}{/s}</h3>
+{if $sArticle.sSimilarArticles}
 
-			<ul class="listing">
-				{foreach $sArticle.sSimilarArticles as $sSimilarArticle}
-					{include file="frontend/listing/box_similar.tpl" sArticle=$sSimilarArticle}
-				{/foreach}
-			</ul>
-	    {/if}
-    </div>
-</div>
+	{* Similar products - Title *}
+	{block name="frontend_detail_index_similar_slider_title"}
+		<h3 class="content--title">
+			{s name='DetailSimilarHeader'}{/s}
+		</h3>
+	{/block}
+
+	{* Similar products - Content *}
+	{block name="frontend_detail_index_similar_slider_content"}
+		<ul class="listing">
+			{foreach $sArticle.sSimilarArticles as $sSimilarArticle}
+				{include file="frontend/listing/box_similar.tpl" sArticle=$sSimilarArticle}
+			{/foreach}
+		</ul>
+	{/block}
+{/if}
