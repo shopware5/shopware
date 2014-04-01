@@ -141,43 +141,41 @@
 	{block name="frontend_detail_index_bundle"}{/block}
 
 	{block name="frontend_detail_index_detail"}
-		<div class="product--additional-info">
 
-			{* Tab navigation *}
-			{block name="frontend_detail_index_tabs"}
-				<div class="additional-info--tabs" data-tab-content="true">
-					{include file="frontend/detail/tabs.tpl"}
+		{* Tab navigation *}
+		{block name="frontend_detail_index_tabs"}
+			<div class="additional-info--tabs" data-tab-content="true">
+				{include file="frontend/detail/tabs.tpl"}
 
-					{* Tab content *}
-					{block name="frontend_detail_index_outer_tabs"}
-						<div class="tabs--content-container tab--content">
-							{block name="frontend_detail_index_inner_tabs"}
-								{block name='frontend_detail_index_before_tabs'}{/block}
+				{* Tab content *}
+				{block name="frontend_detail_index_outer_tabs"}
+					<div class="tabs--content-container tab--content">
+						{block name="frontend_detail_index_inner_tabs"}
+							{block name='frontend_detail_index_before_tabs'}{/block}
 
-								{* Product description *}
-								{block name="frontend_detail_index_tabs_description"}
-									{include file="frontend/detail/tabs/description.tpl"}
-								{/block}
-
-								{* Article rating *}
-								{block name="frontend_detail_index_tabs_rating"}
-									{if !{config name=VoteDisable}}
-										{include file="frontend/detail/tabs/comment.tpl"}
-									{/if}
-								{/block}
-
-								{* Related articles *}
-								{block name="frontend_detail_index_tabs_related"}
-									{include file="frontend/detail/tabs/related.tpl"}
-								{/block}
-
-								{block name='frontend_detail_index_after_tabs'}{/block}
+							{* Product description *}
+							{block name="frontend_detail_index_tabs_description"}
+								{include file="frontend/detail/tabs/description.tpl"}
 							{/block}
-						</div>
-					{/block}
-				</div>
-			{/block}
-		</div>
+
+							{* Article rating *}
+							{block name="frontend_detail_index_tabs_rating"}
+								{if !{config name=VoteDisable}}
+									{include file="frontend/detail/tabs/comment.tpl"}
+								{/if}
+							{/block}
+
+							{* Related articles *}
+							{block name="frontend_detail_index_tabs_related"}
+								{include file="frontend/detail/tabs/related.tpl"}
+							{/block}
+
+							{block name='frontend_detail_index_after_tabs'}{/block}
+						{/block}
+					</div>
+				{/block}
+			</div>
+		{/block}
 	{/block}
 
 	{* Recommendation tab panel *}
