@@ -35,7 +35,13 @@
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
-        "phpunit/dbunit": ">=1.2"
+        "phpunit/dbunit": ">=1.2",
+        "behat/behat": "@stable",
+        "behat/mink": "@stable",
+        "behat/mink-extension": "@stable",
+        "behat/mink-sahi-driver": "@stable",
+        "behat/mink-goutte-driver": "@stable",
+        "sensiolabs/behat-page-object-extension": "*"
     },
     "autoload": {
         "psr-0": {
@@ -43,6 +49,9 @@
             "Shopware": "engine/",
             "Enlight": "engine/Library/",
             "Zend": "engine/Library/"
+        },
+        "psr-4": {
+            "Shopware\\Behat\\ShopwareExtension\\": "tests/Mink/Extension/ShopwareExtension"
         },
         "classmap": [
             "engine/core/class/"
