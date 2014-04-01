@@ -208,7 +208,7 @@
 					{block name="frontend_detail_index_recommendation_tabs_entry_also_viewed"}
 						<li class="navigation--entry entry--customer-viewed">
 							<a class="navigation--link" href="#content--customer-viewed">
-								{s name="DetailRecommendationAlsoBoughtLabel"}Kunden haben sich ebenfalls angesehen{/s}
+								{s name="DetailRecommendationAlsoViewedLabel"}Kunden haben sich ebenfalls angesehen{/s}
 							</a>
 						</li>
 					{/block}
@@ -219,7 +219,7 @@
 			{block name="frontend_detail_index_recommendation_tab_content_container"}
 				<div class="tab--content">
 
-					{* Similar articles *}nt
+					{* Similar articles *}
 					{block name="frontend_detail_index_similar_slider"}
 						<div class="content--similar-products">
 							{include file='frontend/detail/similar.tpl'}
