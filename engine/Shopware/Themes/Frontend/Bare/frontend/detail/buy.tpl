@@ -88,11 +88,11 @@
 					{* "Buy now" button *}
 					{block name="frontend_detail_buy"}
 						{if $sArticle.sConfiguratorSettings.type == 1 && !$sArticle.sConfigurator[$sCountConfigurator-1].user_selected}
-							<button class="buybox--button block is--transparent" disabled="disabled" aria-disabled="true" name="{s name="DetailBuyActionAdd"}{/s}"{if $buy_box_display} style="{$buy_box_display}"{/if}>
+							<button class="buybox--button block is--transparent btn btn--primary" disabled="disabled" aria-disabled="true" name="{s name="DetailBuyActionAdd"}{/s}"{if $buy_box_display} style="{$buy_box_display}"{/if}>
 								{s name="DetailBuyActionAdd"}{/s}
 							</button>
 						{else}
-							<button class="buybox--button block" name="{s name="DetailBuyActionAdd"}{/s}"{if $buy_box_display} style="{$buy_box_display}"{/if}>
+							<button class="buybox--button block btn btn--primary" name="{s name="DetailBuyActionAdd"}{/s}"{if $buy_box_display} style="{$buy_box_display}"{/if}>
 								{s name="DetailBuyActionAdd"}{/s}
 							</button>
 						{/if}

@@ -1,6 +1,6 @@
 {* Tab navigation for the product detail page *}
 {block name="frontend_detail_tabs"}
-	<ul class="tab--navigation">
+	<ul class="tab--navigation panel--tab-nav">
 
 		{* Tab navigation - Description *}
 		{block name="frontend_detail_tabs_description"}
