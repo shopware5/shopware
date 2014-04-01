@@ -184,7 +184,7 @@
 
 			{* Tab navigation *}
 			{block name="frontend_detail_index_recommendation_tabs_navigation"}
-				<ul class="tab--navigation">
+				<ul class="tab--navigation panel--tab-nav">
 
 					{* Similar products *}
 					{block name="frontend_detail_index_recommendation_tabs_entry_similar_products"}
