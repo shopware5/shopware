@@ -143,7 +143,6 @@ class ShopwareContext extends SubContext
         $pluginManager->refreshPluginList();
 
         $plugin = $pluginManager->getPluginByName($name);
-        var_dump($plugin);
         $pluginManager->installPlugin($plugin);
         $pluginManager->activatePlugin($plugin);
     }
@@ -161,7 +160,7 @@ class ShopwareContext extends SubContext
             $taxId,
             $supplier
         );
-        Shopware()->Db()->exec($sql);
+        $this->getContainer()->get('db')->exec($sql);
     }
 }
 
