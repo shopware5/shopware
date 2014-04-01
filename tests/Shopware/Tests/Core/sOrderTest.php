@@ -82,7 +82,6 @@ class sOrderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($next, $current + 1);
     }
 
-
     public function testGetOrderAttributes()
     {
         $orderId = $this->createDummyOrder();
@@ -96,6 +95,53 @@ class sOrderTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('attribute1', $attributes);
         $this->assertArrayHasKey('orderID', $attributes);
     }
+
+    /**
+     * @covers sOrder::sendMail()
+     * @ticket SW-8261
+     */
+    public function testSendMailPaymentData()
+    {
+        // First, block email sending, so we don't get an exception or spam someone.
+        $config = $this->invokeMethod(
+            $this->module,
+            'getConfig'
+        );
+
+        $config->offsetSet('sendOrderMail', false);
+
+        $this->invokeMethod(
+            $this->module,
+            'setConfig',
+            array(
+                $config
+            )
+        );
+
+        // Register the event listener, so that we test the value of "$context"
+        Shopware()->Events()->addListener(
+            'Shopware_Modules_Order_SendMail_Create',
+            array($this, 'validatePaymentContextData')
+        );
+
+        $variables = array(
+            'additional' => array(
+                'payment' => Shopware()->Modules()->Admin()->sGetPaymentMeanById(
+                        Shopware()->Db()->fetchRow('SELECT * FROM s_core_paymentmeans WHERE name LIKE "debit"')
+                    )
+            )
+        );
+
+        $this->module->sendMail($variables);
+    }
+
+    public function validatePaymentContextData(Enlight_Event_EventArgs $args)
+    {
+        $context = $args->get('context');
+        $this->assertInternalType('array', $context['sPaymentTable']);
+        $this->assertCount(0, $context['sPaymentTable']);
+    }
+
 
     public function testGetOrderDetailAttributes()
     {
@@ -1179,5 +1225,4 @@ class sOrderTest extends PHPUnit_Framework_TestCase
             ),
         );
     }
-
 }
