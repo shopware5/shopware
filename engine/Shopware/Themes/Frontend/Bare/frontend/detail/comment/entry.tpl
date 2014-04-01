@@ -7,7 +7,7 @@
 		{* Star rating *}
 		{block name="frontend_detail_comment_star_rating"}
 			<div class="product--rating">
-				{$average = $vote.points / 2|round:0}
+				{$average = $vote.points * 2|round:0}
 
 				{for $value=1 to 5}
 					{$cls = 'icon--star'}
