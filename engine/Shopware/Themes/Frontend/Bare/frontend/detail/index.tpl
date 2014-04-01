@@ -219,7 +219,7 @@
 			{block name="frontend_detail_index_recommendation_tab_content_container"}
 				<div class="tab--content">
 
-					{* Similar articles *}
+					{* Similar products slider *}
 					{block name="frontend_detail_index_similar_slider"}
 						<div class="content--similar-products">
 							{include file='frontend/detail/similar.tpl'}
