@@ -2060,19 +2060,18 @@ class sAdmin
 
     }
 
-
-
-
     /**
      * Account - get purchased instant downloads
      * @access public
+     * @param int $destinationPage
+     * @param int $perPage
      * @return array - Data from orders who contains instant downloads
      */
-    public function sGetDownloads()
+    public function sGetDownloads($destinationPage = 1, $perPage = 10)
     {
         $getOrders = $this->sSYSTEM->sDB_CONNECTION->GetAll("
         SELECT id, ordernumber, invoice_amount, invoice_amount_net, invoice_shipping, invoice_shipping_net, DATE_FORMAT(ordertime,'%d.%m.%Y %H:%i') AS datum, status,cleared, comment
-        FROM s_order WHERE userID=? AND s_order.status>=0 ORDER BY ordertime DESC LIMIT 10
+        FROM s_order WHERE userID=? AND s_order.status>=0 ORDER BY ordertime DESC LIMIT 500
         ",array($this->sSYSTEM->_SESSION["sUserId"]));
 
         foreach ($getOrders as $orderKey => $orderValue) {
@@ -2111,7 +2110,6 @@ class sAdmin
                         $getOrderDetails[$orderDetailsKey]["serial"] =  implode(",",$numbers);
                         // Building download-link
                         $getOrderDetails[$orderDetailsKey]["esdLink"] = $this->sSYSTEM->sCONFIG["sBASEFILE"].'?sViewport=account&sAction=download&esdID='.$orderDetailsValue['id'];
-                        //$getOrderDetails[$orderDetailsKey]["esdLink"] = "http://".$this->sSYSTEM->sCONFIG["sBASEPATH"]."/engine/core/php/loadesd.php?id=".$orderDetailsValue["id"];
                     } else {
                         unset($getOrderDetails[$orderDetailsKey]);
                     }
@@ -2127,7 +2125,14 @@ class sAdmin
 
         $getOrders = Enlight()->Events()->filter('Shopware_Modules_Admin_GetDownloads_FilterResult', $getOrders, array('subject'=>$this,'id'=>$this->sSYSTEM->_SESSION["sUserId"]));
 
-        return $getOrders;
+        // Make Array with page-structure to render in template
+        $numberOfPages = ceil(count($getOrders) / $perPage);
+        $offset = ($destinationPage - 1) * $perPage;
+        $orderData["orderData"] = array_slice($getOrders, $offset, $perPage, true);
+        $orderData["numberOfPages"] = $numberOfPages;
+        $orderData["pages"] = $this->getPagerStructure($destinationPage, $numberOfPages);
+
+        return $orderData;
 
     }
 
@@ -2275,6 +2280,7 @@ class sAdmin
      */
     public function getPagerStructure($destinationPage, $numberOfPages, $additionalParams = array())
     {
+        $destinationPage = !empty($destinationPage) ? $destinationPage : 1;
         $pagesStructure = array();
         $baseFile = $this->sSYSTEM->sCONFIG['sBASEFILE'];
         if ($numberOfPages > 1) {
