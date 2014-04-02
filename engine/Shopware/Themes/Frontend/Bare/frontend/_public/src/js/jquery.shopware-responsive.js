@@ -37,5 +37,6 @@ $(function() {
         }
     }]);
 
+    $('*[data-tab-content="true"]').tabContent();
     $('*[data-emotions="true"]').emotions();
 });

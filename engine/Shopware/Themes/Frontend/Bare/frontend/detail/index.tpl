@@ -167,7 +167,7 @@
 
 				{* Tab content *}
 				{block name="frontend_detail_index_outer_tabs"}
-					<div class="tabs--content-container tab--content">
+					<div class="tabs--content-container tab--content panel--body has--border">
 						{block name="frontend_detail_index_inner_tabs"}
 							{block name='frontend_detail_index_before_tabs'}{/block}
 
@@ -220,7 +220,7 @@
 			{/block}
 
 			{block name="frontend_detail_index_recommendation_tab_content_container"}
-				<div class="tab--content">
+				<div class="tab--content panel--body has--border">
 
 					{* Related articles *}
 					{block name="frontend_detail_index_tabs_related"}
@@ -268,7 +268,7 @@
 
 			{* Tab content container *}
 			{block name="frontend_detail_index_recommendation_tab_content_container"}
-				<div class="tab--content">
+				<div class="tab--content panel--body has--border">
 
 					{* "Customers bought also" slider *}
 					{block name="frontend_detail_index_also_bought_slider"}

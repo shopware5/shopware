@@ -1,7 +1,7 @@
 ;(function($, window, document, undefined) {
     "use strict";
 
-    var pluginName = 'slidePanel',
+    var pluginName = 'tabContent',
         isTouch = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0)),
         clickEvt = (isTouch ? (window.navigator.msPointerEnabled ? 'MSPointerDown': 'touchstart') : 'click'),
         defaults = {
@@ -39,17 +39,30 @@
     Plugin.prototype.init = function() {
         var me = this;
 
-        me.$el.on(clickEvt + '.' + pluginName, function(event) {
-            var next = me.$el.next();
+        me.$nav = me.$el.find('.tab--navigation');
+        me.$content = me.$el.find('.tab--content');
+
+        me.registerEventListeners();
+
+        me.$nav.find('.navigation--entry:first-child .navigation--link').trigger(clickEvt + '.' + pluginName);
+    };
+
+    Plugin.prototype.registerEventListeners = function() {
+        var me = this;
+
+        me.$nav.find('.navigation--link').on(clickEvt + '.' + pluginName, function(event) {
+            var $this = $(this),
+                href = $this.attr('href').substring(1);
+
             event.preventDefault();
 
-            if(next.hasClass(me.opts.activeCls)) {
-                me.$el.removeClass(me.opts.activeCls);
-                next.removeClass(me.opts.activeCls);
-            } else {
-                me.$el.addClass(me.opts.activeCls);
-                next.addClass(me.opts.activeCls);
-            }
+            // Hide all content boxes
+            me.$content.children('[class^="content--"]').hide().removeClass(me.opts.activeCls);
+            me.$nav.find('.navigation--link').removeClass(me.opts.activeCls);
+
+            // Activate the selected content
+            me.$content.find('.' + href).show().addClass(me.opts.activeCls);
+            $this.addClass(me.opts.activeCls);
         });
     };
 
