@@ -317,6 +317,9 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             $repository = Shopware()->Models()->getRepository($repository);
             $template = $session->template;
             $template = $repository->findOneBy(array('template' => $template));
+
+            $bootstrap->getResource('Template')->setTemplateDir(array());
+
             if ($template !== null) {
                 $shop->setTemplate($template);
             } else {
@@ -333,6 +336,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             $template = $bootstrap->getResource('Template');
             $template->setCompileId($template->getCompileId() . '_secure');
         }
+
     }
 
     /**
