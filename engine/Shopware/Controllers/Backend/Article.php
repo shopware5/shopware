@@ -1571,6 +1571,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $propertyGroupId = $this->Request()->getParam('propertyGroupId');
         $searchValue = $this->Request()->getParam('query');
+        $optionId = $this->Request()->getParam('optionId');
 
         $builder = Shopware()->Models()->getDBALQueryBuilder();
         $builder->select(array(
@@ -1586,6 +1587,10 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         if (!empty($searchValue)) {
             $builder->where('filterValues.value like :searchValue');
             $builder->setParameter('searchValue', '%' . $searchValue . '%');
+        }
+        if (!empty($optionId)) {
+            $builder->andWhere('filterOptions.id = :optionId');
+            $builder->setParameter('optionId', $optionId);
         }
         $statement = $builder->execute();
         $data = $statement->fetchAll(PDO::FETCH_ASSOC);
