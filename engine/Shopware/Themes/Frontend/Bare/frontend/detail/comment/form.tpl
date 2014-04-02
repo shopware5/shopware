@@ -3,7 +3,7 @@
 {* Display notice if the shop owner needs to unlock a comment before it will be listed *}
 {block name='frontend_detail_comment_post_notice'}
 	{if {config name=VoteUnlock}}
-		<div class="notice">
+		<div class="alert warning">
 			{s name='DetailCommentTextReview'}{/s}
 		</div>
 	{/if}
@@ -39,9 +39,9 @@
 
 		{* Review Rating *}
 		{block name='frontend_detail_comment_input_rating'}
-			<div class="field--select">
+			<div class="field--select review--field">
 				<span class="arrow"></span>
-				<select name="sVoteStars" class="review--field">
+				<select name="sVoteStars">
 					<option value="10">{s name="Rate10"}{/s}</option>
 					<option value="9">{s name="Rate9"}{/s}</option>
 					<option value="8">{s name="Rate8"}{/s}</option>
