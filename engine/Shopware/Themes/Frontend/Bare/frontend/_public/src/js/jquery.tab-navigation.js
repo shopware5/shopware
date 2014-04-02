@@ -42,9 +42,19 @@
         me.$nav = me.$el.find('.tab--navigation');
         me.$content = me.$el.find('.tab--content');
 
+        me._initial = true;
+
         me.registerEventListeners();
 
-        me.$nav.find('.navigation--entry:first-child .navigation--link').trigger(clickEvt + '.' + pluginName);
+        var $activeTab = me.$nav.find('[data-tab-active="true"]');
+
+        if(!$activeTab.length) {
+            me.$nav.find('.navigation--entry:first-child .navigation--link').trigger(clickEvt + '.' + pluginName);
+        } else {
+            $activeTab.trigger(clickEvt + '.' + pluginName);
+        }
+
+        me._initial = false;
     };
 
     Plugin.prototype.registerEventListeners = function() {
@@ -55,6 +65,10 @@
                 href = $this.attr('href').substring(1);
 
             event.preventDefault();
+
+            if(!me._initial) {
+                window.location.hash = href;
+            }
 
             // Hide all content boxes
             me.$content.children('[class^="content--"]').hide().removeClass(me.opts.activeCls);
