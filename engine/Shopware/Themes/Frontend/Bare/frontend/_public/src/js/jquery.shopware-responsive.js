@@ -20,12 +20,14 @@ $(function() {
             $('*[data-offcanvas="true"]').offcanvasMenu();
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
             $('*[data-slide-panel="true"]').slidePanel();
+            $('.product--supplier').appendTo($('.product--info'));
         },
         exit: function() {
             $('.sidebar-main').insertAfter($('.content--breadcrumb'));
             $('*[data-offcanvas="true"]').data('plugin_offcanvasMenu').destroy();
             $('*[data-search-dropdown="true"]').data('plugin_searchFieldDropDown').destroy();
             $('*[data-slide-panel="true"]').data('plugin_slidePanel').destroy();
+            $('.product--header').appendTo($('.product--supplier'));
         }
     }, {
         type:'tablet',

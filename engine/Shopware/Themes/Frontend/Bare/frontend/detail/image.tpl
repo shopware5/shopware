@@ -11,10 +11,7 @@
 
 		{* Image based on our default media queries *}
 		{block name='frontend_detail_image_default_queries'}
-			<span data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.2}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}"></span>
-			<span data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.3}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" data-media="(min-width: 47.75em)"></span>
-			<span data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" data-media="(min-width: 64em)"></span>
-			<span data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.5}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" data-media="(min-width: 120em)"></span>
+			<span data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.5}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}"></span>
 		{/block}
 
 		{* Block to add additional image based on media queries *}

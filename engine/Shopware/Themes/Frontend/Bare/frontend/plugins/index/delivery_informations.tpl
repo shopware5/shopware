@@ -7,33 +7,33 @@
 			</p>
 		{/if}
 		{if isset($sArticle.active)&&!$sArticle.active}
-			<div class="status4">&nbsp;</div>
-			<p class="deliverable2">
+			<div class="delivery--status-icon delivery--status-available">&nbsp;</div>
+			<p class="delivery--text delivery--text-available">
 				{s name="DetailDataInfoNotAvailable"}{/s}
 			</p>
 		{elseif $sArticle.sReleaseDate && $sArticle.sReleaseDate|date_format:"%Y%m%d" > $smarty.now|date_format:"%Y%m%d"}
-			<div class="status0">&nbsp;</div>
-			<p class="deliverable2">
+			<div class="delivery--status-icon delivery--more-is-coming">&nbsp;</div>
+			<p class="delivery--text delivery--text-available">
 				{s name="DetailDataInfoShipping"}{/s} {$sArticle.sReleaseDate|date:'date_long'}
 			</p>
 		{elseif $sArticle.esd}
-			<div class="status2">&nbsp;</div>
-			<p class="deliverable1">
+			<div class="delivery--status-icon delivery--status-available">&nbsp;</div>
+			<p class="delivery--text delivery--text-available">
 				{s name="DetailDataInfoInstantDownload"}{/s}
 			</p>
 		{elseif $sArticle.instock > 0}
-			<div class="status2">&nbsp;</div>
-			<p class="deliverable1">
+			<div class="delivery--status-icon delivery--status-available">&nbsp;</div>
+			<p class="delivery--text delivery--text-available">
 				{s name="DetailDataInfoInstock"}{/s}
 			</p>
 		{elseif $sArticle.shippingtime}
-			<div class="status0">&nbsp;</div>
-			<p class="deliverable2">
+			<div class="delivery--status-icon delivery--status-more-is-coming">&nbsp;</div>
+			<p class="delivery--text delivery--text-more-is-coming">
 				{s name="DetailDataShippingtime"}{/s} {$sArticle.shippingtime} {s name="DetailDataShippingDays"}{/s}
 			</p>
 		{else}
-			<div class="status4">&nbsp;</div>
-			<p class="deliverable3">
+			<div class="delivery--status-icon delivery--status-available">&nbsp;</div>
+			<p class="delivery--text delivery--text-not-available">
 				{s name="DetailDataNotAvailable"}{config name=notavailable}{/s}
 			</p>
 		{/if}

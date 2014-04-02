@@ -1,0 +1,97 @@
+.product--details {
+
+	.product--navigation,
+	.product--actions {
+		display: none
+	}
+
+	.product--header {
+		.clearfix();
+		.unitize-padding(0, 0, 20, 0, 16);
+	}
+
+	// Supplier logo in the header
+	.product--supplier {
+		text-align: right;
+
+		img { display: inline }
+	}
+
+	.product--supplier, .product--rating-container {
+		.unitize-height(35);
+		width: 50%;
+		float: left;
+	}
+
+	// Product title
+	.product--title {
+		.unitize-padding(10, 0);
+		.unitize(21, 16, font-size);
+		margin: 0;
+		font-weight: bold;
+		color: @darkTextColor;
+
+		border-bottom: 1px solid @borderColor;
+	}
+
+	// Customer reviews
+	.product--rating-container {
+		.unitize-margin(5, 0, 0, 0, 16);
+
+		.product--rating-link {
+			.unitize(14, 16, font-size);
+			vertical-align: middle;
+			color: @primaryTextColor;
+		}
+
+		[class^="icon"] {
+			.unitize(16, 16, font-size);
+			// todo - create a variable for the star color
+			color: #ffcb00;
+		}
+	}
+
+	// Price
+	.price--default {
+		.unitize(21, 16, font-size);
+		color: @darkTextColor;
+	}
+	.product--tax {
+		.unitize(12, 16, font-size);
+		margin: 0;
+
+		a { text-decoration: none }
+	}
+
+	// Quanitity box and input
+	.buybox--quantity {
+		margin: 0 2% 0 0;
+		width: 18%;
+
+		input {
+			@boxShadowColor: rgba(red(@borderColor), green(@borderColor), blue(@borderColor), .9);
+			.box-shadow(inset 0 1px 1px @boxShadowColor);
+			.unitize-height(44);
+			.border-radius(3px);
+			.appearance();
+			text-align: center;
+			border: 1px solid @borderColor;
+			border-top-color: darken(@borderColor, 10%);
+		}
+	}
+
+	// "Buy now" button
+	.buybox--button {
+		width: 80%;
+	}
+
+	// Product base information
+	.product--base-info {
+		.unitize-margin(12, 0, 32, 0);
+
+		.entry--label {
+			display: inline-block;
+			width: 35%;
+		}
+	}
+}

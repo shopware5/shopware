@@ -17,6 +17,7 @@
 
 			{* Product rating - Comment counter *}
 			{block name="frontend_detail_index_rating_label"}
+				&nbsp;
 				({$sArticle.sVoteAverange.count})
 			{/block}
 		</a>
