@@ -1,6 +1,6 @@
 {namespace name="frontend/detail/comment"}
 
-<div class="review--entry block-group{if $vote@last} is--last{/if}{if $vote.answer} has--answer{/if}">
+<div class="review--entry block-group{if $isLast} is--last{/if}{if $vote.answer} has--answer{/if}">
 
 	<div class="entry--author block">
 
@@ -43,14 +43,14 @@
 			{* Review publish date label *}
 			{block name='frontend_detail_comment_date_label'}
 				<strong class="content--label">
-					{s name="DetailCommentInfoFrom"}{/s}
+					{s name="DetailCommentInfoAt"}Am:{/s}
 				</strong>
 			{/block}
 
 			{* Review publish date content *}
 			{block name='frontend_detail_comment_date_content'}
 				<span class="content--field">
-					{$vote.datum|date:"DATETIME_MEDIUM"}
+					{$vote.datum|date:"DATE_MEDIUM"}
 				</span>
 			{/block}
 		{/block}
@@ -62,9 +62,9 @@
 
 			{* Headline *}
 			{block name='frontend_detail_comment_headline'}
-				<h3 class="content--title">
+				<h4 class="content--title">
 					{$vote.headline}
-				</h3>
+				</h4>
 			{/block}
 
 			{* Review text *}

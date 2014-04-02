@@ -113,3 +113,103 @@
 		.unitize(12, 16, font-size);
 	}
 }
+
+// Product review listing
+.review--entry {
+	.border-radius(3px);
+	.unitize-margin(0, 0, 10, 0);
+	.unitize(12, 16, font-size);
+	border: 1px solid @borderColor;
+
+	&.is--last {
+		.unitize-margin(0, 0, 32, 0, 16);
+	}
+
+	&.has--answer {
+		.border-radius-multi(3px, 3px, 0, 0);
+		margin: 0;
+	}
+
+	.entry--author, .entry--content {
+		.unitize-padding(10, 35);
+	}
+
+	.entry--author {
+		border-bottom: 1px solid @borderColor;
+		position: relative;
+
+		&::after {
+			.unitize-margin(0, 0, 0, -9);
+			.unitize-width(18);
+			.unitize-height(18);
+			.unitize(-9, 16, bottom);
+			.rotate(45deg);
+			content: '';
+			position: absolute;
+			left: 50%;
+			background: #fff;
+			border: 1px solid @borderColor;
+			border-left: 0 none;
+			border-top: 0 none;
+		}
+	}
+
+	.product--rating {
+		.unitize(16, 16, font-size);
+		// todo - create a variable for the star color
+		color: #ffcb00;
+	}
+
+	.content--label {
+		.unitize-margin(0, 8, 0, 0, 16);
+		float: left;
+	}
+	.content--field {
+		.clearfix();
+	}
+
+	.content--title {
+		.unitize(14, 16, font-size);
+		.unitize-margin(0, 0, 8, 0);
+	}
+
+	.review--content { margin: 0; }
+}
+.review--entry.is--answer {
+	.unitize-margin(0, 12, 10, 12);
+	.border-radius-multi(0, 0, 3px, 3px);
+	border-top: 0;
+	background: @lightGradientEnd;
+
+	&.is--last {
+		.unitize-margin(0, 0, 32, 0, 16);
+	}
+
+	.entry--author {
+		.unitize-padding(10, 35, 0);
+	}
+	.entry--content {
+		.unitize-padding(0, 35, 10, 35);
+	}
+
+	.entry--author {
+		border: 0 none;
+
+		&::after {
+			.rotate(225deg);
+			.unitize(-9, 16, top);
+			background: @lightGradientEnd
+		}
+	}
+
+	.content--field {
+		.unitize-margin(0, 18, 0, 0);
+		float: left;
+	}
+}
+
+.content--product-reviews {
+	.alert {
+		.unitize-margin(0, 0, 16, 0, 16);
+	}
+}
