@@ -34,13 +34,13 @@
 
 			{* Review entry *}
 			{block name="frontend_detail_comment_block"}
-				{include file="frontend/detail/comment/entry.tpl"}
+				{include file="frontend/detail/comment/entry.tpl" isLast=$vote@last}
 			{/block}
 
 			{* Review answer *}
             {block name="frontend_detail_answer_block"}
                 {if $vote.answer}
-					{include file="frontend/detail/comment/answer.tpl"}
+					{include file="frontend/detail/comment/answer.tpl" isLast=$vote@last}
                 {/if}
             {/block}
 		{/foreach}

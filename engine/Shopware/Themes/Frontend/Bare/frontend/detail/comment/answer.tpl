@@ -1,5 +1,5 @@
 {namespace name="frontend/detail/comment"}
-<div class="review--entry block-group is--answer">
+<div class="review--entry block-group is--answer{if $isLast} is--last{/if}">
 
 	{* Author block *}
 	{block name="frontend_detail_answer_author_block"}
@@ -29,7 +29,7 @@
 			{* Review publish date content *}
 			{block name='frontend_detail_answer_date_content'}
 				<span class="content--field">
-					{$vote.answer_date|date:"DATETIME_MEDIUM"}
+					{$vote.answer_date|date:"DATE_MEDIUM"}
 				</span>
 			{/block}
 		</div>
