@@ -41,7 +41,7 @@
 		{block name='frontend_detail_comment_input_rating'}
 			<div class="field--select">
 				<span class="arrow"></span>
-				<select name="sVoteStars" class="review--field" placeholder="{s name="DetailCommentLabelRating"}{/s}*">
+				<select name="sVoteStars" class="review--field">
 					<option value="10">{s name="Rate10"}{/s}</option>
 					<option value="9">{s name="Rate9"}{/s}</option>
 					<option value="8">{s name="Rate8"}{/s}</option>

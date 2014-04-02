@@ -63,6 +63,24 @@
 			{/block}
 			{block name='frontend_detail_index_after_data'}{/block}
 
+			{* Product notification *}
+			{block name="frontend_detail_index_notification"}
+				{if $sArticle.notification && ($sArticle.instock <= 0 || $sArticle.sVariants) && $ShowNotification}
+					{include file="frontend/plugins/notification/index.tpl"}
+				{/if}
+			{/block}
+
+			{* Configurator drop down menu's *}
+			{block name="frontend_detail_index_configurator"}
+				{if $sArticle.sConfigurator}
+					{if $sArticle.sConfiguratorSettings.type eq 1}
+						{include file="frontend/detail/config_step.tpl"}
+					{elseif $sArticle.sConfiguratorSettings.type != 2}
+						{include file="frontend/detail/config_upprice.tpl"}
+					{/if}
+				{/if}
+			{/block}
+
 			{* Include buy button and quantity box *}
 			{block name="frontend_detail_index_buybox"}
 				{include file="frontend/detail/buy.tpl"}
