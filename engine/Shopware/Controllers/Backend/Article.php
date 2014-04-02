@@ -1650,6 +1650,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $option = $models->find('Shopware\Models\Property\Option', $property['id']);
             foreach ((array)$property['value'] as $value) {
                 $propertyValueModel = null;
+                if (!empty($value["raw"])) {
+                    $value = $value["raw"]["id"];
+                }
                 if (is_int($value)) {
                     // search for property id
                     $propertyValueModel = $propertyValueRepository->find($value);

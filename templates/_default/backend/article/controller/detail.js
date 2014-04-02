@@ -842,13 +842,15 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
     onBeforePropertyEdit: function(editor, event) {
         var me = this,
             store = me.getStore('PropertyValue');
-        store.getProxy().extraParams.optionId = event.record.getId();
-        store.load({
-            callback: function() {
-                //reload the store again to convert the ids to values
-                store.load();
-            }
-        });
+        if(event.column.dataIndex == "value") {
+            store.getProxy().extraParams.optionId = event.record.getId();
+            store.load({
+                callback: function() {
+                    //reload the store again to convert the ids to values
+                    store.load();
+                }
+            });
+        }
     },
 
     /**
