@@ -165,11 +165,6 @@
 								{/if}
 							{/block}
 
-							{* Related articles *}
-							{block name="frontend_detail_index_tabs_related"}
-								{include file="frontend/detail/tabs/related.tpl"}
-							{/block}
-
 							{block name='frontend_detail_index_after_tabs'}{/block}
 						{/block}
 					</div>
@@ -178,13 +173,22 @@
 		{/block}
 	{/block}
 
-	{* Recommendation tab panel *}
-	{block name="frontend_detail_index_recommendation_tabs"}
-		<div class="recommendation-slider--tabs" data-tab-content="true">
-
-			{* Tab navigation *}
-			{block name="frontend_detail_index_recommendation_tabs_navigation"}
+	{* Related and similar products tab panel *}
+	{block name="frontend_detail_index_related_similiar_tabs"}
+		<div class="related-slider--tabs" data-tab-content="true">
+			{block name="frontend_detail_index_related_similiar_tabs_navigation"}
 				<ul class="tab--navigation panel--tab-nav">
+
+					{* Tab navigation - Related products *}
+					{block name="frontend_detail_tabs_related"}
+						{if $sArticle.sRelatedArticles && !$sArticle.crossbundlelook}
+							<li class="navigation--entry">
+								<a href="#content--related-products" class="navigation--link">
+									{s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}Zubehör{/s} ({$sArticle.sRelatedArticles|@count})
+								</a>
+							</li>
+						{/if}
+					{/block}
 
 					{* Similar products *}
 					{block name="frontend_detail_index_recommendation_tabs_entry_similar_products"}
@@ -194,6 +198,35 @@
 							</a>
 						</li>
 					{/block}
+				</ul>
+			{/block}
+
+			{block name="frontend_detail_index_recommendation_tab_content_container"}
+				<div class="tab--content">
+
+					{* Related articles *}
+					{block name="frontend_detail_index_tabs_related"}
+						{include file="frontend/detail/tabs/related.tpl"}
+					{/block}
+
+					{* Similar products slider *}
+					{block name="frontend_detail_index_similar_slider"}
+						<div class="content--similar-products">
+							{include file='frontend/detail/similar.tpl'}
+						</div>
+					{/block}
+				</div>
+			{/block}
+		</div>
+	{/block}
+
+	{* Recommendation tab panel *}
+	{block name="frontend_detail_index_recommendation_tabs"}
+		<div class="recommendation-slider--tabs" data-tab-content="true">
+
+			{* Tab navigation *}
+			{block name="frontend_detail_index_recommendation_tabs_navigation"}
+				<ul class="tab--navigation panel--tab-nav">
 
 					{* Customer also bought *}
 					{block name="frontend_detail_index_recommendation_tabs_entry_also_bought"}
@@ -219,13 +252,6 @@
 			{block name="frontend_detail_index_recommendation_tab_content_container"}
 				<div class="tab--content">
 
-					{* Similar products slider *}
-					{block name="frontend_detail_index_similar_slider"}
-						<div class="content--similar-products">
-							{include file='frontend/detail/similar.tpl'}
-						</div>
-					{/block}
-
 					{* "Customers bought also" slider *}
 					{block name="frontend_detail_index_also_bought_slider"}
 						<div class="content--also-bought">
@@ -235,7 +261,7 @@
 						</div>
 					{/block}
 
-					{* "Customers similar viewed slider *}
+					{* "Customers similar viewed" slider *}
 					{block name="frontend_detail_index_similar_viewed_slider"}
 						<div class="content--customer-viewed">
 							{if {config name=similarViewedShow}}
