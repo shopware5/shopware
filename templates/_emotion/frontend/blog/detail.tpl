@@ -7,8 +7,9 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-	<div class="blogbox">
+    <div class="blogbox grid_16 last">
 
+        {* @deprecated no longer in use *}
 	    {block name="frontend_detail_index_navigation"}{/block}
 
 	    <div class="blogdetail">
@@ -38,8 +39,8 @@
 
 	                {* Comments *}
 	                {block name='frontend_blog_detail_comments'}
-	                {if $sArticle.sVoteAverage|round != "0"}
-	                <span>
+	                {if $sArticle.sVoteAverage.averange|round != "0"}
+                    <span class="last">
 	                    <a href="#commentcontainer" title="{s name="BlogLinkComments"}{/s}">
 	                        {if $sArticle.comments|count}{$sArticle.comments|count}{else}0 {/if} {se name="BlogInfoComments"}{/se}
 	                    </a>
@@ -58,12 +59,12 @@
 
 	        <div class="blogdetail_content">
 
-	            {* Description *}
-	            {block name='frontend_blog_detail_description'}
-	                <div class="description">
-	                    {$sArticle.description}
-	                </div>
-	            {/block}
+            {* Description *}
+            {block name='frontend_blog_detail_description'}
+                <div class="description">
+                    {$sArticle.description}
+                </div>
+            {/block}
 
 	            {* Image + Thumbnails *}
 	            {block name='frontend_blog_detail_images'}
@@ -88,7 +89,13 @@
 	                </div>
 	            </div>
 
-	            {* Cross selling *}
+                {* @deprecated no longer in use *}
+                {block name='frontend_blog_detail_links'}{/block}
+
+                {* @deprecated no longer in use go over the mediaselection in the tiny mce to present downloads *}
+                {block name='frontend_blog_detail_downloads'}{/block}
+
+                {* Cross selling *}
 	            {if $sArticle.sRelatedArticles}
 	                <h2 class="headingbox">{s name="BlogHeaderCrossSelling"}{/s}</h2>
 	                <div class="bloglisting" id="listing-blog">

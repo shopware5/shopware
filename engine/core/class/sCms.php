@@ -21,42 +21,75 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 /**
- * Deprecated Shopware Class that handle static shop pages and dynamic content
+ * Deprecated Shopware class that handle static shop pages and dynamic content
+ * Used to handle pages such as "Help", etc
+ *
+ * Used by Frontend_Custom and Frontend_Content controllers
  */
 class sCms
 {
     /**
-    * Pointer to Shopware-Core-public functions
-    *
-    * @var    object
-    * @access private
-    */
-    public $sSYSTEM;
+     * Database connection which used for each database operation in this class.
+     * Injected over the class constructor
+     *
+     * @var Enlight_Components_Db_Adapter_Pdo_Mysql
+     */
+    private $db;
 
     /**
-     * Eine bestimmte, statische Seite auslesen (z.B. AGB etc.)
-     * @access public
-     * @param null $staticId
-     * @return array
+     * Shopware configuration object which used for
+     * each config access in this class.
+     * Injected over the class constructor
+     *
+     * @var Shopware_Components_Config
+     */
+    private $config;
+
+    /**
+     * The Front controller object
+     *
+     * @var Enlight_Controller_Front
+     */
+    private $front;
+
+    /**
+     * Shopware Core core module
+     *
+     * @var sCore
+     */
+    private $coreModule;
+
+    public function __construct($db = null, $config = null, $front = null, $coreModule = null)
+    {
+        $this->db = $db ? : Shopware()->Db();
+        $this->config = $config ? : Shopware()->Config();
+        $this->front = $front ? : Shopware()->Front();
+        $this->coreModule = $coreModule ? : Shopware()->Modules()->Core();
+    }
+
+    /**
+     * Read a specific, static page (E.g. terms and conditions, etc.)
+     *
+     * @param int $staticId The page id
+     * @return array|false Page data, or false if none found by given id
      */
     public function sGetStaticPage($staticId = null)
     {
-        if (empty($staticId) && !empty($this->sSYSTEM->_GET['sCustom'])) {
-            $staticId = (int) $this->sSYSTEM->_GET['sCustom'];
-        } else {
-            $staticId = (int) $staticId;
+        if (empty($staticId)) {
+            $staticId = (int) $this->front->Request()->getQuery('sCustom', $staticId);
         }
         if (empty($staticId)) {
             return false;
         }
-        // Query all information of the static-template
-        $sql = "SELECT * FROM s_cms_static WHERE id=?";
-        $staticPage = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow(
-            $this->sSYSTEM->sCONFIG['sCACHESTATIC'],
-            $sql, array($staticId)
+
+        // Load static page data from database
+        $staticPage = $this->db->fetchRow(
+            "SELECT * FROM s_cms_static WHERE id = ?",
+            array($staticId)
         );
-        if (empty($staticPage)) {
+        if ($staticPage === false) {
             return false;
         }
 
@@ -70,8 +103,7 @@ class sCms
                 WHERE p.parentID = ?
                 ORDER BY p.position
             ';
-            $staticPage['siblingPages'] = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll(
-                $this->sSYSTEM->sCONFIG['sCACHESTATIC'],
+            $staticPage['siblingPages'] = $this->db->fetchAll(
                 $sql, array($staticId, $staticPage['parentID'])
             );
             $sql = '
@@ -79,10 +111,10 @@ class sCms
                 FROM s_cms_static p
                 WHERE p.id = ?
             ';
-            $staticPage['parent'] = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow(
-                $this->sSYSTEM->sCONFIG['sCACHESTATIC'],
+            $staticPage['parent'] = $this->db->fetchRow(
                 $sql, array($staticPage['parentID'])
             );
+            $staticPage['parent'] = $staticPage['parent'] ? : array();
         } else {
             $sql = '
                 SELECT p.id, p.description, p.link, p.target, p.page_title
@@ -90,142 +122,10 @@ class sCms
                 WHERE p.parentID = ?
                 ORDER BY p.position
             ';
-            $staticPage['subPages'] = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll(
-                $this->sSYSTEM->sCONFIG['sCACHESTATIC'],
+            $staticPage['subPages'] = $this->db->fetchAll(
                 $sql, array($staticId)
             );
         }
         return $staticPage;
     }
-
-     /**
-     * Dynamische Inhalte einer Gruppe auslesen
-     * @param int $group Gruppen-ID
-     * @param int $sPage Aktuelle Seite
-     * @access public
-     * @return array
-     */
-    public function sGetDynamicContentByGroup($group,$sPage=1)
-    {
-        // Get count of topics
-        $sql = "
-        SELECT COUNT(id) as countTopics FROM s_cms_content WHERE groupID=? GROUP BY groupID
-        ";
-
-
-        $getCountTopics = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHESTATIC'],$sql,array($group));
-
-        if ($sPage > $getCountTopics["countTopics"] || $sPage <= 0 ) $sPage = 1;
-
-        $limitStart = $sPage * $this->sSYSTEM->sCONFIG["sCONTENTPERPAGE"] - $this->sSYSTEM->sCONFIG["sCONTENTPERPAGE"];
-        $limitEnd = intval($this->sSYSTEM->sCONFIG["sCONTENTPERPAGE"]);
-
-        // Calculate number of pages
-        $numberPages = intval($getCountTopics["countTopics"] / $this->sSYSTEM->sCONFIG["sCONTENTPERPAGE"]) != $getCountTopics["countTopics"] / $this->sSYSTEM->sCONFIG["sCONTENTPERPAGE"] ? intval($getCountTopics["countTopics"] / $this->sSYSTEM->sCONFIG["sCONTENTPERPAGE"])+1 : intval($getCountTopics["countTopics"] / $this->sSYSTEM->sCONFIG["sCONTENTPERPAGE"]);
-
-        // Make Array with page-structure to render in template
-        $pages = array();
-
-        for ($i=1;$i<=$numberPages;$i++) {
-            if ($i==$sPage) {
-                $pages["numbers"][$i]["markup"] = true;
-            } else {
-                $pages["numbers"][$i]["markup"] = false;
-            }
-            $pages["numbers"][$i]["value"] = $i;
-            $pages["numbers"][$i]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'].$this->sSYSTEM->sBuildLink(array("sPage"=>$i),false);
-        }
-
-
-        // Query - Topic
-        $sql = "
-            SELECT id, description,text,img,link,attachment, datum as `date`, DATE_FORMAT(datum,'%d.%m.%Y') AS datumFormated
-            FROM s_cms_content WHERE groupID=?
-            ORDER BY datum DESC
-        ";
-        $sql = Shopware()->Db()->limit($sql, $limitEnd, $limitStart);
-
-        $queryDynamic = Shopware()->Db()->fetchAll($sql, array($group));
-
-        foreach ($queryDynamic as $dynamicKey => $dynamicValue) {
-            $tempDatum = explode(".",$queryDynamic[$dynamicKey]["datum"]);
-
-            // Building Link for more information page (optional)
-            $queryDynamic[$dynamicKey]["linkDetails"] = $this->sSYSTEM->sCONFIG['sBASEFILE'].$this->sSYSTEM->sBuildLink(array("sCid"=>$dynamicValue["id"]),false);
-
-            // Get Image
-            if ($queryDynamic[$dynamicKey]["img"]) {
-                $queryDynamic[$dynamicKey]["imgBig"] = $this->sSYSTEM->sPathCmsImg.$queryDynamic[$dynamicKey]["img"].".jpg";
-                $queryDynamic[$dynamicKey]["img"] = $this->sSYSTEM->sPathCmsImg.$queryDynamic[$dynamicKey]["img"]."Thumb.jpg";
-            }
-            // Get attachment
-            if ($queryDynamic[$dynamicKey]["attachment"]) {
-                $queryDynamic[$dynamicKey]["attachment"] =  "http://".$this->sSYSTEM->sCONFIG["sBASEPATH"].$this->sSYSTEM->sCONFIG["sCMSFILES"]."/".$queryDynamic[$dynamicKey]["attachment"];
-            }
-
-            $queryDynamic[$dynamicKey]["dateExploded"] = $tempDatum;
-        }
-        return array("sContent"=>$queryDynamic,"sPages"=>$pages);
-    }
-
-     /**
-     * Detailinformationen eines Gruppen-Eintrags
-     * @param int $group Gruppen-ID
-     * @param int $id ID des Eintrags
-     * @access public
-     * @return array
-     */
-    public function sGetDynamicContentById($group,$id)
-    {
-        // Query - Topic
-        $sql = "
-        SELECT id, description,text,img,link,attachment,DATE_FORMAT(datum,'%d.%m.%Y') AS datum FROM s_cms_content WHERE groupID=?
-        AND id=?
-        ";
-
-        $queryDynamic = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHESTATIC'],$sql,array($group,$id));
-
-        if ($queryDynamic["id"]) {
-            $tempDatum = explode(".",$queryDynamic["datum"]);
-
-            // Building Link for more information page (optional)
-            $queryDynamic["linkDetails"] = $this->sSYSTEM->sCONFIG['sBASEFILE'].$this->sSYSTEM->sBuildLink(array("sCid"=>$queryDynamic["id"]),false);
-
-            // Get Image
-            if ($queryDynamic["img"]) {
-                $queryDynamic["imgBig"] = $this->sSYSTEM->sPathCmsImg.$queryDynamic["img"].".jpg";
-                $queryDynamic["img"] = $this->sSYSTEM->sPathCmsImg.$queryDynamic["img"]."Thumb.jpg";
-            }
-            // Get attachment
-            if ($queryDynamic["attachment"]) {
-                $queryDynamic["attachment"] =  "http://".$this->sSYSTEM->sCONFIG["sBASEPATH"].$this->sSYSTEM->sCONFIG["sCMSFILES"]."/".$queryDynamic["attachment"];
-            }
-
-            $queryDynamic["dateExploded"] = $tempDatum;
-        } else {
-            // Error-Handler
-            $this->sSYSTEM->E_CORE_WARNING ("sCMS##sGetContentById","Content with id $id not found");
-            return false;
-        }
-
-        return array("sContent"=>$queryDynamic);
-    }
-
-     /**
-     * Name einer Gruppe anhand der ID
-     * @param int $group Gruppen-ID
-     * @access public
-     * @return string Name
-     */
-    public function sGetDynamicGroupName($group)
-    {
-        $sql = "
-        SELECT description FROM s_cms_groups WHERE id=?
-        ";
-
-        $queryDynamic = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHESTATIC'],$sql,array($group));
-
-        return $queryDynamic["description"];
-    }
 }
-?>
