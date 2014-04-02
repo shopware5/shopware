@@ -42,44 +42,50 @@
 	
 	{* Product - Further links *}
 	{block name='frontend_detail_description_links'}
-		{if $sArticle.sLinks}
 
-			{* Further links title *}
-			{block name='frontend_detail_description_links_title'}
-				<h2 class="content--title">
-					{s name="ArticleTipMoreInformation"}{/s} "{$sArticle.articleName}"
-				</h2>
-			{/block}
+		{* Further links title *}
+		{block name='frontend_detail_description_links_title'}
+			<h2 class="content--title">
+				{s name="ArticleTipMoreInformation"}{/s} "{$sArticle.articleName}"
+			</h2>
+		{/block}
 
-			{* Links list *}
-			{block name='frontend_detail_description_links'}
-				<ul class="content--list list--unstyled">
-					{foreach $sArticle.sLinks as $information}
-						{if $information.supplierSearch}
+		{* Links list *}
+		{block name='frontend_detail_description_links'}
+			<ul class="content--list list--unstyled">
+				{block name='frontend_detail_actions_contact'}
+					<li class="list--entry">
+						<a href="{$sInquiry}" rel="nofollow" class="action--link link--contact" title="{s name='DetailLinkContact' namespace="frontend/detail/actions"}{/s}">
+							{s name="DetailLinkContact" namespace="frontend/detail/actions"}{/s}
+						</a>
+					</li>
+				{/block}
 
-							{* Vendor landing page link *}
-							{block name='frontend_detail_description_links_supplier'}
-								<li class="list--entry">
-									<a href="{url controller='supplier' sSupplier=$sArticle.supplierID}" target="{$information.target}" class="content--link link--supplier">
-										{se name="DetailDescriptionLinkInformation"}{/se}
-									</a>
-								</li>
-							{/block}
-						{else}
+				{foreach $sArticle.sLinks as $information}
+					{if $information.supplierSearch}
 
-							{* Links which will be added throught the administration *}
-							{block name='frontend_detail_description_links_link'}
-								<li class="list--entry">
-									<a href="{$information.link}" target="{if $information.target}{$information.target}{else}_blank{/if}" class="content--link link--further-links">
-										{$information.description}
-									</a>
-								</li>
-							{/block}
-						{/if}
-					{/foreach}
-				</ul>
-			{/block}
-		{/if}
+						{* Vendor landing page link *}
+						{block name='frontend_detail_description_links_supplier'}
+							<li class="list--entry">
+								<a href="{url controller='supplier' sSupplier=$sArticle.supplierID}" target="{$information.target}" class="content--link link--supplier">
+									{se name="DetailDescriptionLinkInformation"}{/se}
+								</a>
+							</li>
+						{/block}
+					{else}
+
+						{* Links which will be added throught the administration *}
+						{block name='frontend_detail_description_links_link'}
+							<li class="list--entry">
+								<a href="{$information.link}" target="{if $information.target}{$information.target}{else}_blank{/if}" class="content--link link--further-links">
+									{$information.description}
+								</a>
+							</li>
+						{/block}
+					{/if}
+				{/foreach}
+			</ul>
+		{/block}
 	{/block}
 
     {* Product vendor *}

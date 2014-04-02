@@ -1,9 +1,3 @@
-{* block name='frontend_detail_actions_contact'}
-	<a href="{$sInquiry}" rel="nofollow" class="action--link link--contact" title="{s name='DetailLinkContact'}{/s}">
-		{s name="DetailLinkContact"}{/s}
-	</a>
-{/block *}
-
 {block name='frontend_detail_actions_notepad'}
 	<a href="{url controller='note' action='add' ordernumber=$sArticle.ordernumber}" class="action--link link--notepad" rel="nofollow" title="{s name='DetailLinkNotepad'}{/s}">
 		{s name="DetailLinkNotepad"}{/s}
