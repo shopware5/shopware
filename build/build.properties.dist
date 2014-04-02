@@ -20,5 +20,6 @@ app.dir   = ${basedir}/engine/Shopware
 
 script.mysql    = mysql
 script.phpunit  = ${basedir}/vendor/bin/phpunit
+script.behat    = ${basedir}/vendor/bin/behat
 
 demo.data = ${sql.dir}/demo/latest.sql

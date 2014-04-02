@@ -31,12 +31,6 @@
  */
 class sArticlesTest extends PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        $testHelper = TestHelper::Instance();
-        require $testHelper->DocPath() . 'engine/core/class/sArticles.php';
-    }
-
     protected function assertsArticlesState($sArticles, $categoryId, $translationId, $customerGroupId)
     {
         $this->assertInstanceOf('Shopware\Models\Category\Category', $this->readAttribute($sArticles, 'category'));

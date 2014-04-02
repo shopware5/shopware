@@ -414,7 +414,7 @@ class sExport
 
     public function sGetArticleLink($articleID, $title="")
     {
-        return $this->sSystem->rewriteLink(array(2=>$this->sSYSTEM->sCONFIG["sBASEFILE"]."?sViewport=detail&sArticle=$articleID",3=>$title),true).(empty($this->sSettings["partnerID"])?"":"?sPartner=".urlencode($this->sSettings["partnerID"]));
+        return $this->sSystem->sRewriteLink($this->sSYSTEM->sCONFIG["sBASEFILE"]."?sViewport=detail&sArticle=$articleID",$title).(empty($this->sSettings["partnerID"])?"":"?sPartner=".urlencode($this->sSettings["partnerID"]));
     }
 
     public function sGetImageLink($hash, $imageSize = null)
