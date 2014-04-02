@@ -339,8 +339,10 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         });
         propertyStore.save({
             success: function () {
+                var propertyValueStore = me.getStore('PropertyValue');
+                propertyValueStore.getProxy().extraParams.optionId = '';
                 //reload the property list after finish saving
-                me.getStore('PropertyValue').load({
+                propertyValueStore.load({
                     callback: function () {
                         propertyStore.load();
                     }
@@ -839,16 +841,12 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
      */
     onBeforePropertyEdit: function(editor, event) {
         var me = this,
-            store = me.getStore('PropertyValue'),
-            optionId = event.record.getId();
+            store = me.getStore('PropertyValue');
+        store.getProxy().extraParams.optionId = event.record.getId();
         store.load({
             callback: function() {
-                store.clearFilter();
-                store.filter({
-                    filterFn: function(item) {
-                        return item.get('optionId') === optionId;
-                    }
-                });
+                //reload the store again to convert the ids to values
+                store.load();
             }
         });
     },
