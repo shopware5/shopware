@@ -70,9 +70,13 @@
 					<div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
 				{/block}
 
+				{block name='frontend_detail_comment_input_captcha_label'}
+					<strong class="captcha--notice">{s name="DetailCommentLabelCaptcha"}{/s}</strong>
+				{/block}
+
 				{block name='frontend_detail_comment_input_captcha_code'}
 					<div class="captcha--code">
-						<input type="text" name="sCaptcha" class="review--field{if $sErrorFlag.sCaptcha} has--error{/if}" placeholder="{s name="DetailCommentLabelCaptcha"}{/s}*" />
+						<input type="text" name="sCaptcha" class="review--field{if $sErrorFlag.sCaptcha} has--error{/if}" placeholder="" />
 					</div>
 				{/block}
 			</div>
