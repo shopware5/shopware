@@ -39,4 +39,5 @@ $(function() {
 
     $('*[data-tab-content="true"]').tabContent();
     $('*[data-emotions="true"]').emotions();
+    $('*[data-image-slider="true"]').imageSlider();
 });
