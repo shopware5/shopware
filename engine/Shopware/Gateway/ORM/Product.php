@@ -24,10 +24,10 @@ class Product
     private $entityManager;
 
     /**
-     * @param Hydrator\Product $hydrator
      * @param \Shopware\Components\Model\ModelManager $entityManager
+     * @param Hydrator\Product $hydrator
      */
-    function __construct(Hydrator\Product $hydrator, ModelManager $entityManager)
+    function __construct(ModelManager $entityManager, Hydrator\Product $hydrator)
     {
         $this->hydrator = $hydrator;
         $this->entityManager = $entityManager;

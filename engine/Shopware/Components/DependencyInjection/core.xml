@@ -11,6 +11,7 @@
         <service id="product_service" class="Shopware\Service\Product">
             <argument type="service" id="product_gateway" />
             <argument type="service" id="price_service" />
+            <argument type="service" id="media_service" />
             <argument type="service" id="translation_service" />
             <argument type="service" id="global_state_service" />
             <argument type="service" id="events" />
@@ -20,46 +21,100 @@
             <argument type="service" id="price_gateway" />
         </service>
 
+        <service id="media_service" class="Shopware\Service\Media" >
+            <argument type="service" id="media_gateway" />
+            <argument type="service" id="config" />
+        </service>
+
         <service id="global_state_service" class="Shopware\Service\GlobalState" />
-        <service id="translation_service" class="Shopware\Service\Translation" />
 
-
-
-
-        <!-- Shopware gateway definitions -->
-
-        <service id="product_gateway" class="Shopware\Gateway\ORM\Product">
-            <argument type="service" id="product_hydrator" />
-            <argument type="service" id="models" />
+        <service id="translation_service" class="Shopware\Service\Translation" >
+            <argument type="service" id="translation_gateway" />
         </service>
 
-        <service id="price_gateway" class="Shopware\Gateway\ORM\Price">
-            <argument type="service" id="models" />
-            <argument type="service" id="price_hydrator" />
+
+        <service id="property_service" class="Shopware\Service\Property" >
+            <argument type="service" id="property_gateway" />
+            <argument type="service" id="translation_service" />
         </service>
+
+
+
+
+        <!-- Global shopware gateway definitions -->
+        <!-- This gateways are used in the shopware core. Shopware uses as default the *_orm gateways to select data -->
+
+        <service id="product_gateway" alias="product_gateway_orm" />
+        <service id="price_gateway" alias="price_gateway_orm" />
+        <service id="media_gateway" alias="media_gateway_orm" />
+        <service id="translation_gateway" alias="translation_gateway_orm" />
+        <service id="property_gateway" alias="property_gateway_orm" />
+
+
+
+        <service id="product_gateway_orm" class="Shopware\Gateway\ORM\Product">
+            <argument type="service" id="models" />
+            <argument type="service" id="product_hydrator_orm" />
+        </service>
+
+        <service id="price_gateway_orm" class="Shopware\Gateway\ORM\Price">
+            <argument type="service" id="models" />
+            <argument type="service" id="price_hydrator_orm" />
+        </service>
+
+        <service id="media_gateway_orm" class="Shopware\Gateway\ORM\Media">
+            <argument type="service" id="models" />
+            <argument type="service" id="media_hydrator_orm" />
+            <argument type="service" id="thumbnail_manager" />
+        </service>
+
+
+        <service id="translation_gateway_orm" class="Shopware\Gateway\ORM\Translation">
+            <argument type="service" id="models" />
+            <argument type="service" id="translation_hydrator_orm" />
+        </service>
+
+        <service id="property_gateway_orm" class="Shopware\Gateway\ORM\Property">
+            <argument type="service" id="models" />
+            <argument type="service" id="property_hydrator_orm" />
+        </service>
+
 
 
         <!-- Shopware hydrator definitions -->
 
-        <service id="product_hydrator" class="Shopware\Hydrator\ORM\Product">
-            <argument type="service" id="price_hydrator" />
-            <argument type="service" id="manufacturer_hydrator" />
-            <argument type="service" id="tax_hydrator" />
-            <argument type="service" id="unit_hydrator" />
-            <argument type="service" id="media_hydrator" />
-            <argument type="service" id="attribute_hydrator" />
+        <service id="product_hydrator_orm" class="Shopware\Hydrator\ORM\Product">
+            <argument type="service" id="price_hydrator_orm" />
+            <argument type="service" id="manufacturer_hydrator_orm" />
+            <argument type="service" id="tax_hydrator_orm" />
+            <argument type="service" id="unit_hydrator_orm" />
+            <argument type="service" id="media_hydrator_orm" />
+            <argument type="service" id="attribute_hydrator_orm" />
         </service>
 
-        <service id="price_hydrator" class="Shopware\Hydrator\ORM\Price" >
-            <argument type="service" id="customer_group_hydrator" />
+        <service id="price_hydrator_orm" class="Shopware\Hydrator\ORM\Price" >
+            <argument type="service" id="customer_group_hydrator_orm" />
+            <argument type="service" id="unit_hydrator_orm" />
         </service>
 
-        <service id="customer_group_hydrator" class="Shopware\Hydrator\ORM\CustomerGroup" />
-        <service id="manufacturer_hydrator" class="Shopware\Hydrator\ORM\Manufacturer" />
-        <service id="tax_hydrator" class="Shopware\Hydrator\ORM\Tax" />
-        <service id="unit_hydrator" class="Shopware\Hydrator\ORM\Unit" />
-        <service id="media_hydrator" class="Shopware\Hydrator\ORM\Media" />
-        <service id="attribute_hydrator" class="Shopware\Hydrator\ORM\Attribute" />
+        <service id="translation_hydrator_orm" class="Shopware\Hydrator\ORM\Translation" >
+            <argument type="service" id="product_hydrator_orm" />
+            <argument type="service" id="unit_hydrator_orm" />
+            <argument type="service" id="manufacturer_hydrator_orm" />
+            <argument type="service" id="property_hydrator_orm" />
+        </service>
+
+        <service id="customer_group_hydrator_orm" class="Shopware\Hydrator\ORM\CustomerGroup" />
+        <service id="manufacturer_hydrator_orm" class="Shopware\Hydrator\ORM\Manufacturer" />
+        <service id="tax_hydrator_orm" class="Shopware\Hydrator\ORM\Tax" />
+        <service id="unit_hydrator_orm" class="Shopware\Hydrator\ORM\Unit" />
+        <service id="media_hydrator_orm" class="Shopware\Hydrator\ORM\Media" />
+        <service id="attribute_hydrator_orm" class="Shopware\Hydrator\ORM\Attribute" />
+
+
+
+
+        <service id="property_hydrator_orm" class="Shopware\Hydrator\ORM\Property" />
 
     </services>
 </container>

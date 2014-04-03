@@ -36,9 +36,7 @@ class Price
      *
      * @param Struct\ProductMini $product
      * @param Struct\CustomerGroup $customerGroup
-     * @return Struct\Price
-     *
-     * @throws \Shopware\Gateway\Exception\NoCustomerGroupPriceFoundException
+     * @return Struct\Price[]
      */
     public function getProductPrices(Struct\ProductMini $product, Struct\CustomerGroup $customerGroup)
     {
@@ -56,11 +54,7 @@ class Price
         $data = $builder->getQuery()->getArrayResult();
 
         if (empty($data)) {
-            throw new NoCustomerGroupPriceFoundException(sprintf(
-                'Product %s has no prices for customer group %s',
-                $product->getNumber(),
-                $customerGroup->getKey()
-            ));
+            return array();
         }
 
         $prices = array();
@@ -80,9 +74,8 @@ class Price
      * @param Struct\ProductMini $product
      * @param Struct\CustomerGroup $customerGroup
      * @return Struct\Price
-     * @throws \Shopware\Gateway\Exception\NoCustomerGroupPriceFoundException
      */
-    public function getCheapestPrice(Struct\ProductMini $product, Struct\CustomerGroup $customerGroup)
+    public function getCheapestProductPrice(Struct\ProductMini $product, Struct\CustomerGroup $customerGroup)
     {
         $builder = $this->getCheapestPriceQuery()
             ->where('price.articleId = :productId')
@@ -94,15 +87,12 @@ class Price
             AbstractQuery::HYDRATE_ARRAY
         );
 
+
         if (empty($data)) {
-            throw new NoCustomerGroupPriceFoundException(sprintf(
-                'Product %s has no prices for customer group %s',
-                $product->getNumber(),
-                $customerGroup->getKey()
-            ));
+            return null;
         }
 
-        return $this->priceHydrator->hydrate($data);
+        return $this->priceHydrator->hydrateCheapestPrice($data);
     }
 
     /**
@@ -114,6 +104,9 @@ class Price
     private function getCheapestPriceQuery()
     {
         $builder = $this->getPriceQuery()
+            ->addSelect(array('detail', 'unit'))
+            ->innerJoin('price.detail', 'detail')
+            ->leftJoin('detail.unit', 'unit')
             ->orderBy('price.price', 'ASC')
             ->setFirstResult(0)
             ->setMaxResults(1);

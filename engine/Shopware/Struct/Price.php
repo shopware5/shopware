@@ -5,7 +5,7 @@ namespace Shopware\Struct;
 /**
  * @package Shopware\Struct
  */
-class Price
+class Price extends Base
 {
     /**
      * @var int
@@ -80,6 +80,15 @@ class Price
      * @var CustomerGroup
      */
     private $customerGroup;
+
+    /**
+     * Contains the product unit which is required for the
+     * reference price calculation.
+     *
+     * @var Unit
+     */
+    private $unit;
+
 
     /**
      * @param mixed $id
@@ -240,6 +249,24 @@ class Price
     public function setCustomerGroup($customerGroup)
     {
         $this->customerGroup = $customerGroup;
+        return $this;
+    }
+
+    /**
+     * @return \Shopware\Struct\Unit
+     */
+    public function getUnit()
+    {
+        return $this->unit;
+    }
+
+    /**
+     * @param \Shopware\Struct\Unit $unit
+     * @return $this
+     */
+    public function setUnit($unit)
+    {
+        $this->unit = $unit;
         return $this;
     }
 

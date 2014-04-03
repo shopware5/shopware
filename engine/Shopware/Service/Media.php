@@ -10,10 +10,20 @@ use Shopware\Gateway\ORM as Gateway;
  */
 class Media
 {
+    /**
+     * @var \Shopware\Gateway\ORM\Media
+     */
     private $mediaGateway;
 
+    /**
+     * @var \Shopware_Components_Config
+     */
     private $shopwareConfig;
 
+    /**
+     * @param Gateway\Media $mediaGateway
+     * @param \Shopware_Components_Config $shopwareConfig
+     */
     function __construct(Gateway\Media $mediaGateway, \Shopware_Components_Config $shopwareConfig)
     {
         $this->mediaGateway = $mediaGateway;
@@ -26,6 +36,12 @@ class Media
      */
     public function getProductCover(Struct\ProductMini $product)
     {
-        return $this->mediaGateway->getProductCover($product);
+        if ($this->shopwareConfig->get('forceArticleMainImageInListing')) {
+            $cover = $this->mediaGateway->getProductCover($product);
+        } else {
+            $cover = $this->mediaGateway->getProductCover($product);
+        }
+
+        return $cover;
     }
 }

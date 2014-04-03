@@ -4,6 +4,7 @@ namespace Shopware\Gateway\ORM;
 
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Thumbnail\Manager;
 use Shopware\Hydrator\ORM as Hydrator;
 use Shopware\Struct\ProductMini;
 
@@ -20,13 +21,23 @@ class Media
     private $entityManager;
 
     /**
+     * @var \Shopware\Components\Thumbnail\Manager
+     */
+    private $thumbnailManager;
+
+    /**
      * @param ModelManager $entityManager
      * @param Hydrator\Media $mediaHydrator
+     * @param \Shopware\Components\Thumbnail\Manager $thumbnailManager
      */
-    function __construct(ModelManager $entityManager, Hydrator\Media $mediaHydrator)
-    {
+    function __construct(
+        ModelManager $entityManager,
+        Hydrator\Media $mediaHydrator,
+        Manager $thumbnailManager
+    ) {
         $this->entityManager = $entityManager;
         $this->mediaHydrator = $mediaHydrator;
+        $this->thumbnailManager = $thumbnailManager;
     }
 
     /**
@@ -46,6 +57,16 @@ class Media
             AbstractQuery::HYDRATE_ARRAY
         );
 
+        //required to generate the media thumbnail paths
+        $sizes = explode(';', $data['media']['album']['settings']['thumbnailSize']);
+        $media = new \Shopware\Models\Media\Media();
+        $media->fromArray($data['media']);
+
+        $data['media']['thumbnails'] = $this->thumbnailManager->getMediaThumbnails(
+            $media,
+            $sizes
+        );
+
         return $this->mediaHydrator->hydrateProductImage($data);
     }
 
@@ -59,15 +80,32 @@ class Media
      */
     private function getProductCoverQuery()
     {
-        $builder = $this->entityManager->createQueryBuilder();
-
-        $builder->select(array('image', 'media', 'imageAttribute', 'mediaAttribute'))
-            ->from('Shopware\Models\Article\Image', 'image')
-            ->innerJoin('image.media', 'media')
-            ->leftJoin('image.attribute', 'imageAttribute')
-            ->leftJoin('media.attribute', 'mediaAttribute')
+        $builder = $this->getProductMediaQuery()
             ->where('image.main = :main')
             ->setParameter('main', true);
+
+        return $builder;
+    }
+
+    /**
+     * @return \Shopware\Components\Model\QueryBuilder
+     */
+    private function getProductMediaQuery()
+    {
+        $builder = $this->entityManager->createQueryBuilder();
+
+        $builder->select(array(
+            'image', 'media',
+            'imageAttribute', 'mediaAttribute',
+            'album', 'settings'
+        ));
+
+        $builder->from('Shopware\Models\Article\Image', 'image')
+            ->innerJoin('image.media', 'media')
+            ->innerJoin('media.album', 'album')
+            ->innerJoin('album.settings', 'settings')
+            ->leftJoin('image.attribute', 'imageAttribute')
+            ->leftJoin('media.attribute', 'mediaAttribute');
 
         return $builder;
     }

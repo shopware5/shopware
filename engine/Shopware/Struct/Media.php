@@ -5,7 +5,7 @@ namespace Shopware\Struct;
 /**
  * @package Shopware\Struct
  */
-class Media
+class Media extends Base
 {
     /**
      * @var
@@ -42,6 +42,12 @@ class Media
      * @var
      */
     private $extension;
+
+    /**
+     * Contains the different thumbnail sizes.
+     * @var array
+     */
+    private $thumbnails;
 
     /**
      * @param mixed $id
@@ -167,6 +173,33 @@ class Media
     public function getExtension()
     {
         return $this->extension;
+    }
+
+    /**
+     * @return array
+     */
+    public function getThumbnails()
+    {
+        return $this->thumbnails;
+    }
+
+    /**
+     * @param $index
+     * @return string
+     */
+    public function getThumbnail($index)
+    {
+        return $this->thumbnails[$index];
+    }
+
+    /**
+     * @param array $thumbnails
+     * @return $this
+     */
+    public function setThumbnails($thumbnails)
+    {
+        $this->thumbnails = $thumbnails;
+        return $this;
     }
 
 

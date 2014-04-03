@@ -25,6 +25,8 @@ class Media
 
         $media->setFile($data['path']);
 
+        $media->setThumbnails($data['thumbnails']);
+
         return $media;
     }
 

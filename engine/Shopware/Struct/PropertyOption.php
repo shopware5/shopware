@@ -5,26 +5,31 @@ namespace Shopware\Struct;
 /**
  * @package Shopware\Struct
  */
-class Tax extends Base
+class PropertyOption extends Base
 {
-    private $id;
-
-    private $name;
-
-    private $tax;
 
     /**
-     * @param mixed $id
-     *
+     * @var int
+     */
+    private $id;
+
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @param int $id
+     * @return $this
      */
     public function setId($id)
     {
         $this->id = $id;
-
+        return $this;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getId()
     {
@@ -32,38 +37,20 @@ class Tax extends Base
     }
 
     /**
-     * @param mixed $name
-     *
+     * @param string $name
+     * @return $this
      */
     public function setName($name)
     {
         $this->name = $name;
-
+        return $this;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * @param float $tax
-     *
-     */
-    public function setTax($tax)
-    {
-        $this->tax = $tax;
-
-    }
-
-    /**
-     * @return float
-     */
-    public function getTax()
-    {
-        return $this->tax;
     }
 }

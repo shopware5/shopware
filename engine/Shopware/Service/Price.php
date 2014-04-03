@@ -32,17 +32,47 @@ class Price
      */
     public function getProductPrices(Struct\ProductMini $product, Struct\GlobalState $state)
     {
-        try {
-            return $this->priceGateway->getProductPrices(
-                $product,
-                $state->getCurrentCustomerGroup()
-            );
-        } catch (NoCustomerGroupPriceFoundException $e) {
-            return $this->priceGateway->getProductPrices(
+        $prices = $this->priceGateway->getProductPrices(
+            $product,
+            $state->getCurrentCustomerGroup()
+        );
+
+        if (empty($prices)) {
+            $prices = $this->priceGateway->getProductPrices(
                 $product,
                 $state->getFallbackCustomerGroup()
             );
         }
+
+        foreach($prices as $price) {
+            $price->setUnit($product->getUnit());
+        }
+
+        return $prices;
+    }
+
+    /**
+     * Helper function which iterates the passed prices array
+     * and returns the cheapest price.
+     *
+     * @param \Shopware\Struct\ProductMini $product
+     * @return \Shopware\Struct\Price
+     */
+    public function getCheapestVariantPrice(Struct\ProductMini $product)
+    {
+        $cheapestPrice = null;
+
+        foreach($product->getPrices() as $price) {
+
+            if ($cheapestPrice === null) {
+                $cheapestPrice = $price;
+            }
+
+            if ($price->getCalculatedPrice() < $cheapestPrice->getCalculatedPrice()) {
+                $cheapestPrice = $price;
+            }
+        }
+        return $cheapestPrice;
     }
 
     /**
@@ -56,13 +86,13 @@ class Price
      */
     public function getCheapestProductPrice(Struct\ProductMini $product, Struct\GlobalState $state)
     {
-        try {
-            $cheapestPrice = $this->priceGateway->getCheapestPrice(
-                $product,
-                $state->getCurrentCustomerGroup()
-            );
-        } catch (NoCustomerGroupPriceFoundException $e) {
-            $cheapestPrice = $this->priceGateway->getCheapestPrice(
+        $cheapestPrice = $this->priceGateway->getCheapestProductPrice(
+            $product,
+            $state->getCurrentCustomerGroup()
+        );
+
+        if ($cheapestPrice == null) {
+            $cheapestPrice = $this->priceGateway->getCheapestProductPrice(
                 $product,
                 $state->getFallbackCustomerGroup()
             );
@@ -86,16 +116,14 @@ class Price
     {
         foreach($product->getPrices() as $price) {
             $this->calculatePriceStruct(
-                $product,
                 $price,
                 $state
             );
         }
 
-        if ($product->getCheapestPrice() instanceof Struct\Price) {
+        if ($product->getCheapestProductPrice()) {
             $this->calculatePriceStruct(
-                $product,
-                $product->getCheapestPrice(),
+                $product->getCheapestProductPrice(),
                 $state
             );
         }
@@ -110,15 +138,14 @@ class Price
      * and the cheapest price struct.
      * All price structs will be calculated through this function.
      *
-     * @param Struct\ProductMini $product
      * @param Struct\Price $price
      * @param Struct\GlobalState $state
      */
     private function calculatePriceStruct(
-        Struct\ProductMini $product,
         Struct\Price $price,
         Struct\GlobalState $state
     ) {
+
         //calculates the normal price of the struct.
         $price->setCalculatedPrice(
             $this->calculatePrice($price->getPrice(), $state)
@@ -132,9 +159,9 @@ class Price
         }
 
         //check if the product has unit definitions and calculate the reference price for the unit.
-        if ($product->getReferenceUnit() && $product->getPurchaseUnit()) {
+        if ($price->getUnit() && $price->getUnit()->getPurchaseUnit()) {
             $price->setCalculatedReferencePrice(
-                $this->calculateReferencePrice($product, $price)
+                $this->calculateReferencePrice($price)
             );
         }
     }
@@ -179,12 +206,11 @@ class Price
      * Calculates the product unit reference price for the passed
      * product price.
      *
-     * @param Struct\ProductMini $product
      * @param Struct\Price $price
      * @return float
      */
-    private function calculateReferencePrice(Struct\ProductMini $product, Struct\Price $price)
+    private function calculateReferencePrice(Struct\Price $price)
     {
-        return $price->getCalculatedPrice() / $product->getPurchaseUnit() * $product->getReferenceUnit();
+        return $price->getCalculatedPrice() / $price->getUnit()->getPurchaseUnit() * $price->getUnit()->getReferenceUnit();
     }
 }

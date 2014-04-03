@@ -101,35 +101,51 @@ class Product
      * @param Struct\ProductMini $product
      * @param $data
      */
-    private function assignProductData(Struct\ProductMini $product, $data)
+    public function assignProductData(Struct\ProductMini $product, $data)
     {
-        $product->setId($data['id']);
+        if (isset($data['id'])) {
+            $product->setId($data['id']);
+        }
 
-        $product->setVariantId($data['variantId']);
+        if (isset($data['variantId'])) {
+            $product->setVariantId($data['variantId']);
+        }
 
-        $product->setName($data['name']);
+        if (isset($data['name'])) {
+            $product->setName($data['name']);
+        }
 
-        $product->setNumber($data['number']);
+        if (isset($data['number'])) {
+            $product->setNumber($data['number']);
+        }
 
-        $product->setShortDescription($data['description']);
+        if (isset($data['description'])) {
+            $product->setShortDescription($data['description']);
+        }
 
-        $product->setLongDescription($data['descriptionLong']);
+        if (isset($data['descriptionLong'])) {
+            $product->setLongDescription($data['descriptionLong']);
+        }
 
-        $product->setShippingTime($data['shippingTime']);
+        if (isset($data['shippingTime'])) {
+            $product->setShippingTime($data['shippingTime']);
+        }
 
-        $product->setShippingFree($data['shippingFree']);
+        if (isset($data['shippingFree'])) {
+            $product->setShippingFree($data['shippingFree']);
+        }
 
-        $product->setCloseouts($data['lastStock']);
+        if (isset($data['lastStock'])) {
+            $product->setCloseouts($data['lastStock']);
+        }
 
-        $product->setStock($data['inStock']);
+        if (isset($data['inStock'])) {
+            $product->setStock($data['inStock']);
+        }
 
-        $product->setPackUnit($data['packUnit']);
-
-        $product->setPurchaseUnit($data['purchaseUnit']);
-
-        $product->setReferenceUnit($data['referenceUnit']);
-
-        $product->setReleaseDate($data['releaseDate']);
+        if (isset($data['releaseDate'])) {
+            $product->setReleaseDate($data['releaseDate']);
+        }
     }
 
     private function assignManufacturerData(Struct\ProductMini $product, $data)
@@ -150,6 +166,10 @@ class Product
 
     private function assignUnitData(Struct\ProductMini $product, $data)
     {
+        $data['unit']['packUnit'] = $data['packUnit'];
+        $data['unit']['purchaseUnit'] = $data['purchaseUnit'];
+        $data['unit']['referenceUnit'] = $data['referenceUnit'];
+
         $unit = $this->unitHydrator->hydrate(
             $data['unit']
         );

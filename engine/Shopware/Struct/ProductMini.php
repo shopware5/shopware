@@ -72,44 +72,6 @@ class ProductMini extends Base implements Extendable
     private $longDescription;
 
     /**
-     * Alphanumeric description how the product
-     * units are delivered.
-     *
-     * Example: bottle, box, pair
-     *
-     * @var string
-     */
-    private $packUnit;
-
-    /**
-     * Contains the numeric value of the purchase unit.
-     * Used to calculate the unit price of the product.
-     *
-     * Example:
-     *  reference unit equals 1.0 liter
-     *  purchase unit  equals 0.7 liter
-     *  bottle price       7,- €
-     *  reference price    10,- €
-     *
-     * @var float
-     */
-    private $purchaseUnit;
-
-    /**
-     * Contains the numeric value of the reference unit.
-     * Used to calculate the unit price of the product.
-     *
-     * Example:
-     *  reference unit equals 1.0 liter
-     *  purchase unit  equals 0.7 liter
-     *  bottle price       7,- €
-     *  reference price    10,- €
-     *
-     * @var float
-     */
-    private $referenceUnit;
-
-    /**
      * Defines the date when the product was released / will be
      * released and can be ordered.
      *
@@ -217,11 +179,22 @@ class ProductMini extends Base implements Extendable
     private $voteAverage;
 
     /**
-     * Contains the cheapest price for the product.
+     * Contains the cheapest price of this product variation.
+     * This price is calculated over the shopware price service
+     * getCheapestVariantPrice function.
      *
      * @var Price
      */
-    private $cheapestPrice;
+    private $cheapestVariantPrice;
+
+    /**
+     * Contains the absolute cheapest price of each product variation.
+     * This price is calculated over the shopware price service
+     * getCheapestProductPrice function.
+     *
+     * @var Price
+     */
+    private $cheapestProductPrice;
 
     /**
      * Price of the current variant.
@@ -404,60 +377,6 @@ class ProductMini extends Base implements Extendable
     /**
      * @return mixed
      */
-    public function getPackUnit()
-    {
-        return $this->packUnit;
-    }
-
-    /**
-     * @param mixed $packUnit
-     *
-     */
-    public function setPackUnit($packUnit)
-    {
-        $this->packUnit = $packUnit;
-
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPurchaseUnit()
-    {
-        return $this->purchaseUnit;
-    }
-
-    /**
-     * @param mixed $purchaseUnit
-     *
-     */
-    public function setPurchaseUnit($purchaseUnit)
-    {
-        $this->purchaseUnit = $purchaseUnit;
-
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getReferenceUnit()
-    {
-        return $this->referenceUnit;
-    }
-
-    /**
-     * @param mixed $referenceUnit
-     *
-     */
-    public function setReferenceUnit($referenceUnit)
-    {
-        $this->referenceUnit = $referenceUnit;
-
-    }
-
-    /**
-     * @return mixed
-     */
     public function getReleaseDate()
     {
         return $this->releaseDate;
@@ -618,21 +537,39 @@ class ProductMini extends Base implements Extendable
     }
 
     /**
-     * @return \Shopware\Struct\Price
+     * @param \Shopware\Struct\Price $cheapestVariantPrice
+     * @return $this
      */
-    public function getCheapestPrice()
+    public function setCheapestVariantPrice($cheapestVariantPrice)
     {
-        return $this->cheapestPrice;
+        $this->cheapestVariantPrice = $cheapestVariantPrice;
+        return $this;
     }
 
     /**
-     * @param \Shopware\Struct\Price $cheapestPrice
+     * @return \Shopware\Struct\Price
+     */
+    public function getCheapestVariantPrice()
+    {
+        return $this->cheapestVariantPrice;
+    }
+
+    /**
+     * @param \Shopware\Struct\Price $cheapestProductPrice
      * @return $this
      */
-    public function setCheapestPrice($cheapestPrice)
+    public function setCheapestProductPrice($cheapestProductPrice)
     {
-        $this->cheapestPrice = $cheapestPrice;
+        $this->cheapestProductPrice = $cheapestProductPrice;
         return $this;
+    }
+
+    /**
+     * @return \Shopware\Struct\Price
+     */
+    public function getCheapestProductPrice()
+    {
+        return $this->cheapestProductPrice;
     }
 
     /**
@@ -657,6 +594,18 @@ class ProductMini extends Base implements Extendable
     public function getAttribute($name)
     {
         return $this->attributes[$name];
+    }
+
+    /**
+     * Helper function which checks if an associated
+     * attribute exists.
+     *
+     * @param $name
+     * @return bool
+     */
+    public function hasAttribute($name)
+    {
+        return array_key_exists($name, $this->attributes);
     }
 
     /**
