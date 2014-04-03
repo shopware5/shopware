@@ -45,6 +45,9 @@ Ext.define('Shopware.apps.Base.view.element.Select', {
     initComponent:function () {
         var me = this;
 
+        alert(me.store);
+
+
         if (me.controller && me.action) {
             //me.value = parseInt(me.value);
             me.store = new Ext.data.Store({
