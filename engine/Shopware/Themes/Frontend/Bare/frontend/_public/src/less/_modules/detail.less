@@ -30,7 +30,6 @@
 		margin: 0;
 		font-weight: bold;
 		color: @darkTextColor;
-
 		border-bottom: 1px solid @borderColor;
 	}
 
@@ -44,6 +43,7 @@
 			color: @primaryTextColor;
 		}
 
+		// Star icon styling
 		[class^="icon"] {
 			.unitize(16, 16, font-size);
 			// todo - create a variable for the star color
@@ -53,6 +53,7 @@
 
 	// Price
 	.price--default {
+		.unitize-margin(28, 0, 0, 0);
 		.unitize(24, 16, font-size);
 		color: @darkTextColor;
 	}
@@ -91,11 +92,12 @@
 		}
 	}
 
+	// Product information tabs
 	.additional-info--tabs {
 		.unitize-margin(0, 0, 32, 0, 16);
 	}
 
-	// Headlines
+	// Content headlines
 	.content--title {
 		.unitize(18, 16, font-size);
 		color: @darkTextColor;
@@ -114,7 +116,7 @@
 	}
 }
 
-// Product review listing
+// Product review entry
 .review--entry {
 	.border-radius(3px);
 	.unitize-margin(0, 0, 10, 0);
@@ -138,6 +140,7 @@
 		border-bottom: 1px solid @borderColor;
 		position: relative;
 
+		// Arrow down
 		&::after {
 			.unitize-margin(0, 0, 0, -9);
 			.unitize-width(18);
@@ -164,9 +167,7 @@
 		.unitize-margin(0, 8, 0, 0, 16);
 		float: left;
 	}
-	.content--field {
-		.clearfix();
-	}
+	.content--field { .clearfix(); }
 
 	.content--title {
 		.unitize(14, 16, font-size);
@@ -175,26 +176,23 @@
 
 	.review--content { margin: 0; }
 }
+
+// Product review entry - Administrator answer
 .review--entry.is--answer {
 	.unitize-margin(0, 12, 10, 12);
 	.border-radius-multi(0, 0, 3px, 3px);
 	border-top: 0;
 	background: @lightGradientEnd;
 
-	&.is--last {
-		.unitize-margin(0, 0, 32, 0, 16);
-	}
+	&.is--last { .unitize-margin(0, 0, 32, 0, 16) }
 
-	.entry--author {
-		.unitize-padding(10, 35, 0);
-	}
-	.entry--content {
-		.unitize-padding(0, 35, 10, 35);
-	}
+	.entry--author { .unitize-padding(10, 35, 0) }
+	.entry--content { .unitize-padding(0, 35, 10, 35) }
 
 	.entry--author {
 		border: 0 none;
 
+		// Arrow up
 		&::after {
 			.rotate(225deg);
 			.unitize(-9, 16, top);
