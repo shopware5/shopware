@@ -29,17 +29,6 @@
  */
 class Shopware_Tests_Controllers_Frontend_AccountTest extends Enlight_Components_Test_Controller_TestCase
 {
-
-    /**
-     * Returns the test dataset
-     *
-     * @return PHPUnit_Extensions_Database_DataSet_IDataSet
-     */
-//    protected function getDataSet()
-//    {
-//        return $this->createXMLDataSet(Shopware()->TestPath('DataSets_Partner').'Partner.xml');
-//    }
-
     /**
      * test testPartnerStatistic controller action
      *
