@@ -57,18 +57,18 @@
 	{block name='frontend_detail_index_buy_container'}
 		<div class="product--buybox block{if $sArticle.sConfigurator && $sArticle.sConfiguratorSettings.type==2} is--wide{/if}">
 
+			{* Product eMail notification *}
+			{block name="frontend_detail_index_notification"}
+				{if $sArticle.notification && $sArticle.instock <= 0 && $ShowNotification}
+					{include file="frontend/plugins/notification/index.tpl"}
+				{/if}
+			{/block}
+
 			{* Product data *}
 			{block name='frontend_detail_index_data'}
 				{include file="frontend/detail/data.tpl" sArticle=$sArticle sView=1}
 			{/block}
 			{block name='frontend_detail_index_after_data'}{/block}
-
-			{* Product notification *}
-			{block name="frontend_detail_index_notification"}
-				{if $sArticle.notification && ($sArticle.instock <= 0 || $sArticle.sVariants) && $ShowNotification}
-					{include file="frontend/plugins/notification/index.tpl"}
-				{/if}
-			{/block}
 
 			{* Configurator drop down menu's *}
 			{block name="frontend_detail_index_configurator"}
