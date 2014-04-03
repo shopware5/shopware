@@ -52,4 +52,9 @@ $(function() {
 
         $this.load(requestURL);
     });
+
+    // Auto submitting form
+    $('select[data-auto-submit-form="true"]').on('change', function() {
+        $(this).parents('form').submit();
+    });
 });
