@@ -88,8 +88,8 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
      */
     public function getImageResource($string)
     {
-        $captcha = 'frontend/_resources/images/captcha/background.jpg';
-        $font = 'frontend/_resources/images/captcha/font.ttf';
+        $captcha = 'frontend/_public/src/img/bg--captcha.jpg';
+        $font = 'frontend/_public/src/fonts/captcha.ttf';
 
         $template_dirs = Shopware()->Template()->getTemplateDir();
 

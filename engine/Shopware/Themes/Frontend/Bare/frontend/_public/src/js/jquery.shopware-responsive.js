@@ -40,4 +40,16 @@ $(function() {
     $('*[data-tab-content="true"]').tabContent();
     $('*[data-emotions="true"]').emotions();
     $('*[data-image-slider="true"]').imageSlider();
+
+    // Deferred loading of the captcha
+    $("div.captcha--placeholder[data-src]").each(function() {
+        var $this = $(this),
+            requestURL = $this.attr('data-src') || '';
+
+        if (!requestURL || !requestURL.length) {
+            return false;
+        }
+
+        $this.load(requestURL);
+    });
 });
