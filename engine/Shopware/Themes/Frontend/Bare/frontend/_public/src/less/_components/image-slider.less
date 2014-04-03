@@ -1,0 +1,26 @@
+.slider {
+	position: relative;
+	width: 100%;
+
+	&:hover .panel--arrow {
+		display: block;
+	}
+}
+
+.slides {
+	.clearfix();
+	list-style: none;
+	height: 100%;
+	overflow: hidden;
+	-webkit-backface-visibility: hidden;
+	-webkit-transform-style: preserve-3d;
+}
+
+.slide {
+	height: 100%;
+	float: left;
+	clear: none;
+}
+.product--image-container {
+	.image--thumbnails { display: none }
+}
