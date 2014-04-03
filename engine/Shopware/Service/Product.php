@@ -13,11 +13,6 @@ class Product
     private $productGateway;
 
     /**
-     * @var GlobalState
-     */
-    private $globalStateService;
-
-    /**
      * @var Price
      */
     private $priceService;
@@ -33,23 +28,28 @@ class Product
     private $eventManager;
 
     /**
+     * @var Media
+     */
+    private $mediaService;
+
+    /**
      * @param Gateway\Product $productGateway
      * @param Price $priceService
+     * @param Media $mediaService
      * @param Translation $translationService
-     * @param GlobalState $globalStateService
      * @param \Enlight_Event_EventManager $eventManager
      */
     function __construct(
         Gateway\Product $productGateway,
         Price $priceService,
+        Media $mediaService,
         Translation $translationService,
-        GlobalState $globalStateService,
         \Enlight_Event_EventManager $eventManager
     ) {
         $this->productGateway = $productGateway;
         $this->priceService = $priceService;
+        $this->mediaService = $mediaService;
         $this->translationService = $translationService;
-        $this->globalStateService = $globalStateService;
         $this->eventManager = $eventManager;
     }
 
@@ -68,26 +68,32 @@ class Product
      * To get the whole product data you can use the `get` function.
      *
      * @param string $number
+     * @param \Shopware\Struct\GlobalState $state
      * @return Struct\ProductMini
      */
-    public function getMini($number)
+    public function getMini($number, Struct\GlobalState $state)
     {
         $product = $this->productGateway->getMini($number);
-
-        $state = $this->globalStateService->get();
 
         $product->setPrices(
             $this->priceService->getProductPrices($product, $state)
         );
 
-        $product->setCheapestPrice(
+        $product->setCheapestVariantPrice(
+            $this->priceService->getCheapestVariantPrice($product)
+        );
+
+        $product->setCheapestProductPrice(
             $this->priceService->getCheapestProductPrice($product, $state)
         );
 
+        $product->setCover(
+            $this->mediaService->getProductCover($product)
+        );
 
         $this->priceService->calculateProduct($product, $state);
 
-        $this->translationService->translateProduct($product, $state);
+        $this->translationService->translateProduct($product, $state->getShop());
 
         return $product;
     }

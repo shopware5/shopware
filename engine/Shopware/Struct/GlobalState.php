@@ -5,7 +5,7 @@ namespace Shopware\Struct;
 /**
  * @package Shopware\Struct
  */
-class GlobalState
+class GlobalState extends Base
 {
     /**
      * @var Tax
@@ -28,13 +28,17 @@ class GlobalState
     private $currency;
 
     /**
+     * @var Shop
+     */
+    private $shop;
+
+    /**
      * @param \Shopware\Struct\Tax $tax
      *
      */
     public function setTax($tax)
     {
         $this->tax = $tax;
-
     }
 
     /**
@@ -97,5 +101,23 @@ class GlobalState
     public function getFallbackCustomerGroup()
     {
         return $this->fallbackCustomerGroup;
+    }
+
+    /**
+     * @return \Shopware\Struct\Shop
+     */
+    public function getShop()
+    {
+        return $this->shop;
+    }
+
+    /**
+     * @param \Shopware\Struct\Shop $shop
+     * @return $this
+     */
+    public function setShop($shop)
+    {
+        $this->shop = $shop;
+        return $this;
     }
 }

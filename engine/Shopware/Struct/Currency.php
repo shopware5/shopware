@@ -5,7 +5,7 @@ namespace Shopware\Struct;
 /**
  * @package Shopware\Struct
  */
-class Currency
+class Currency extends Base
 {
     private $id;
 

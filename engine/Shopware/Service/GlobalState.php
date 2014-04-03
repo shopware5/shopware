@@ -40,6 +40,9 @@ class GlobalState
     {
         $state = new Struct\GlobalState();
 
+        $state->setShop(new Struct\Shop());
+        $state->getShop()->setId(2);
+
         $state->setCurrentCustomerGroup(new Struct\CustomerGroup());
         $state->getCurrentCustomerGroup()->setKey('H');
 
@@ -47,6 +50,7 @@ class GlobalState
         $state->getFallbackCustomerGroup()->setKey('EK');
 
         $state->setCurrency(new Struct\Currency());
+        $state->getCurrency()->setFactor(1);
 
         return $state;
     }

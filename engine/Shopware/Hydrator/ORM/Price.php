@@ -10,9 +10,19 @@ class Price
      */
     private $customerGroupHydrator;
 
-    function __construct(CustomerGroup $customerGroupHydrator)
+    /**
+     * @var Unit
+     */
+    private $unitHydrator;
+
+    /**
+     * @param CustomerGroup $customerGroupHydrator
+     * @param Unit $unitHydrator
+     */
+    function __construct(CustomerGroup $customerGroupHydrator, Unit $unitHydrator)
     {
         $this->customerGroupHydrator = $customerGroupHydrator;
+        $this->unitHydrator = $unitHydrator;
     }
 
     /**
@@ -27,6 +37,10 @@ class Price
 
         $price->setFrom($data['from']);
 
+        $price->setPrice(floatval($data['price']));
+
+        $price->setPseudoPrice(floatval($data['pseudoPrice']));
+
         if (strtolower($data['to']) == 'beliebig') {
             $price->setTo(null);
         } else {
@@ -38,6 +52,36 @@ class Price
                 $this->customerGroupHydrator->hydrate($data['customerGroup'])
             );
         }
+
+        return $price;
+    }
+
+
+    /**
+     * Hydrates the data result of the cheapest price query.
+     * This function uses the normally hydrate function of this class
+     * and adds additionally the product unit information to the price.
+     *
+     * @param array $data
+     * @return Struct\Price
+     */
+    public function hydrateCheapestPrice(array $data)
+    {
+        $price = $this->hydrate($data);
+
+        if (empty($data['detail']['unit'])) {
+            return $price;
+        }
+
+        $unit = $data['detail']['unit'];
+
+        $unit['packUnit'] = $data['detail']['packUnit'];
+        $unit['purchaseUnit'] = $data['detail']['purchaseUnit'];
+        $unit['referenceUnit'] = $data['detail']['referenceUnit'];
+
+        $price->setUnit(
+            $this->unitHydrator->hydrate($unit)
+        );
 
         return $price;
     }

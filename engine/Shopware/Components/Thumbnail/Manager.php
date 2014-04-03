@@ -158,6 +158,36 @@ class Manager
     }
 
     /**
+     * Helper function which returns the thumbnail paths of a single
+     * media object.
+     *
+     * @param Media $media
+     * @param array $sizes
+     * @return array
+     */
+    public function getMediaThumbnails(Media $media, array $sizes)
+    {
+        $sizes = $this->uniformThumbnailSizes($sizes);
+
+        $thumbnails = array();
+
+        foreach ($sizes as $size) {
+            $suffix = $size['width'] . 'x' . $size['height'];
+
+            $path = $this->getPathOfMedia($media) . DIRECTORY_SEPARATOR . 'thumbnail' . DIRECTORY_SEPARATOR;
+
+            $thumbnails[] = $path . $media->getName() . '_' . $suffix . '.' . $media->getExtension();
+        }
+
+        return $thumbnails;
+    }
+
+    private function getPathOfMedia(Media $media)
+    {
+        return 'media' . DIRECTORY_SEPARATOR . strtolower($media->getType()) ;
+    }
+
+    /**
      * Returns an array with a jpg and original extension path if its not a jpg
      *
      * @param Media $media
@@ -189,7 +219,13 @@ class Manager
      */
     protected function getThumbnailDir($media)
     {
-        return $this->rootDir . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . strtolower($media->getType()) . DIRECTORY_SEPARATOR . 'thumbnail' . DIRECTORY_SEPARATOR;
+        return $this->rootDir .
+        DIRECTORY_SEPARATOR .
+        'media' .
+        DIRECTORY_SEPARATOR .
+        strtolower($media->getType()) .
+        DIRECTORY_SEPARATOR .
+        'thumbnail' . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -232,6 +268,8 @@ class Manager
 
         return $thumbnailSizes;
     }
+
+
 
     /**
      * Returns an array with width and height gained
