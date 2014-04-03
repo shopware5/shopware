@@ -47,6 +47,7 @@ class Theme extends \Shopware\Components\Theme
 		'vendors/jquery.transit/jquery.transit.js',
 		'vendors/jquery.event.move/js/jquery.event.move.js',
 		'vendors/jquery.event.swipe/js/jquery.event.swipe.js',
+		'vendors/glidejs/dist/jquery.glide.min.js',
 
 		'src/js/jquery.state-manager.js',
 		'src/js/jquery.emotions.js',
