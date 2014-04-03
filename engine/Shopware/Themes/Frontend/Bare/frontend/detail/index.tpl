@@ -125,7 +125,7 @@
 							{if $sArticle.attr1}
 								<li class="base-info--entry entry-attribute">
 									<strong class="entry--label">
-										{s name="DetailAttributeField1Label"}Freitextfeld 1{/s}
+										{s name="DetailAttributeField1Label"}Freitextfeld 1{/s}:
 									</strong>
 
 									<span class="entry--content">
@@ -140,7 +140,7 @@
 							{if $sArticle.attr2}
 								<li class="base-info--entry entry-attribute">
 									<strong class="entry--label">
-										{s name="DetailAttributeField2Label"}Freitextfeld 2{/s}
+										{s name="DetailAttributeField2Label"}Freitextfeld 2{/s}:
 									</strong>
 
 									<span class="entry--content">

@@ -58,7 +58,6 @@
 
 	// Price
 	.price--default {
-
 		.unitize(24, 16, font-size);
 		color: @darkTextColor;
 	}
@@ -93,7 +92,7 @@
 
 		.entry--label {
 			display: inline-block;
-			width: 35%;
+			width: 40%;
 		}
 	}
 
@@ -218,5 +217,24 @@
 	.captcha--notice {
 		.unitize(12, 16, font-size);
 		line-height: 1.2;
+	}
+}
+
+// Product notification
+.product--notification {
+	.unitize-margin(0, 0, 16, 0, 16);
+
+	.alert {
+		.unitize-margin(0, 0, 8, 0, 16);
+		word-wrap: break-word;
+		font-weight: bold;
+	}
+	.notification--field {
+		.border-radius-multi(3px, 0, 0, 3px);
+		width: 80%;
+	}
+	.notification--button {
+		.border-radius-multi(0, 3px, 3px, 0);
+		width: 20%;
 	}
 }
