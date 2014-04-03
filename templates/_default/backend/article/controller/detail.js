@@ -339,8 +339,10 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         });
         propertyStore.save({
             success: function () {
+                var propertyValueStore = me.getStore('PropertyValue');
+                propertyValueStore.getProxy().extraParams.optionId = '';
                 //reload the property list after finish saving
-                me.getStore('PropertyValue').load({
+                propertyValueStore.load({
                     callback: function () {
                         propertyStore.load();
                     }
@@ -837,20 +839,18 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
      * Event listener function of the property grid which fired before the user
      * edit a cell.
      */
-    onBeforePropertyEdit: function(editor, event) {
+    onBeforePropertyEdit: function (editor, event) {
         var me = this,
-            store = me.getStore('PropertyValue'),
-            optionId = event.record.getId();
-        store.load({
-            callback: function() {
-                store.clearFilter();
-                store.filter({
-                    filterFn: function(item) {
-                        return item.get('optionId') === optionId;
-                    }
-                });
-            }
-        });
+            store = me.getStore('PropertyValue');
+        if (event.column.dataIndex == "value") {
+            store.getProxy().extraParams.optionId = event.record.getId();
+            store.load({
+                callback: function () {
+                    //reload the store again to convert the ids to values
+                    store.load();
+                }
+            });
+        }
     },
 
     /**
