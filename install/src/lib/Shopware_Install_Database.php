@@ -83,6 +83,7 @@ class Shopware_Install_Database
         try {
             $this->database = new PDO("mysql:$connectionString", $user, $password, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'"));
             $this->database->exec("SET CHARACTER SET utf8");
+            $this->database->exec("SET @@session.sql_mode = ''");
             $this->database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             $this->setError("Database-Error!: " . $e->getMessage() . "<br/>");
@@ -109,6 +110,7 @@ class Shopware_Install_Database
         try {
             $sql = "SELECT @@SESSION.sql_mode;";
             $result = $this->database->query($sql)->fetchColumn(0);
+
             if (strpos($result, 'STRICT_TRANS_TABLES') !== false || strpos($result, 'STRICT_ALL_TABLES') !== false) {
                 $this->setError("Database-Error!: The MySQL strict mode is active. Please consult your hosting provider to solve this problem.<br/>");
                 return false;
