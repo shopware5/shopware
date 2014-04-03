@@ -74,7 +74,8 @@
             arrowRightClass: 'right--arrow',
             arrowLeftClass: 'left--arrow',
             arrowRightText: '',
-            arrowLeftText: ''
+            arrowLeftText: '',
+            autoplay: false
         });
     };
 
