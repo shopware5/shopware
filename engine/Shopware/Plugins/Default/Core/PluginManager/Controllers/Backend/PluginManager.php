@@ -200,6 +200,23 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             return;
         }
 
+        $user = Shopware()->Auth()->getIdentity();
+        /** @var $locale \Shopware\Models\Shop\Locale */
+        $locale = $user->locale;
+
+        foreach($data['configForms'][0]['elements'] as &$element)
+        {
+            if($element['type'] !== 'select')
+            {
+                continue;
+            }
+
+            foreach($element['options']['store'] as &$row)
+            {
+                $row[1] = $row[1][$locale->toString()];
+            }
+        }
+
         $this->View()->assign(array(
            'success' => true,
            'data' => $data
