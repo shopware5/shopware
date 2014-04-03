@@ -839,13 +839,13 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
      * Event listener function of the property grid which fired before the user
      * edit a cell.
      */
-    onBeforePropertyEdit: function(editor, event) {
+    onBeforePropertyEdit: function (editor, event) {
         var me = this,
             store = me.getStore('PropertyValue');
-        if(event.column.dataIndex == "value") {
+        if (event.column.dataIndex == "value") {
             store.getProxy().extraParams.optionId = event.record.getId();
             store.load({
-                callback: function() {
+                callback: function () {
                     //reload the store again to convert the ids to values
                     store.load();
                 }
