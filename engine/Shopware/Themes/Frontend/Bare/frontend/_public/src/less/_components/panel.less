@@ -324,42 +324,42 @@ See the documentation of the child elements for additional information.
 .panel--tab-nav {
 	list-style: none;
 
-	li {
+	.navigation--entry {
 		display: inline-block;
-
-		a {
-			.unitize-padding(10, 15);
-			.unitize-margin(0, 5, 0, 0);
-			.unitize(24, 16, line-height);
-			.unitize(14, 16, font-size);
-			.linear-gradient(#ffffff, #eff0f3);
-			.border-radius-multi(3px, 3px, 0, 0);
-			display: block;
-			position: relative;
-			z-index: 90;
-			font-weight: bold;
-			text-align: center;
-			color: #748595;
-			border-width: 1px 1px 0 1px;
-			border-style: solid;
-			border-color: @borderColor;
-
-			&.is--active {
-				.unitize(1, 16, top);
-				color: @darkTextColor;
-				background: #fff;
-
-				&:hover {
-					color: @darkTextColor;
-				}
-			}
-
-			&:hover {
-				color: @primaryColor;
-				background: #fff;
-			}
-		}
 	}
+
+    .navigation--link {
+        .unitize-padding(10, 15);
+        .unitize-margin(0, 5, 0, 0);
+        .unitize(24, 16, line-height);
+        .unitize(14, 16, font-size);
+        .linear-gradient(#ffffff, #eff0f3);
+        .border-radius-multi(3px, 3px, 0, 0);
+        display: block;
+        position: relative;
+        z-index: 90;
+        font-weight: bold;
+        text-align: center;
+        color: #748595;
+        border-width: 1px 1px 0 1px;
+        border-style: solid;
+        border-color: @borderColor;
+
+        &.is--active {
+            .unitize(1, 16, top);
+            color: @darkTextColor;
+            background: #fff;
+
+            &:hover {
+                color: @darkTextColor;
+            }
+        }
+
+        &:hover {
+            color: @primaryColor;
+            background: #fff;
+        }
+    }
 }
 
 /* A content box for a tab-content panel.
@@ -523,4 +523,39 @@ See the documentation of the child elements for additional information.
 		border: 0 none;
 		background: #fff;
 	}
+}
+
+.js--mobile-tab-panel {
+    .tab--content { display: none; }
+    .navigation--entry {
+        .unitize-margin(0, 0, 6, 0);
+        display: block;
+
+        & > [class^=content] {
+            .unitize-padding(10, 10);
+            border: 1px solid @borderColor;
+            border-top: 0 none;
+        }
+    }
+    .navigation--link {
+        .unitize-padding(5, 10, 5, 10);
+        text-align: left;
+        font-weight: normal;
+        border: 1px solid @borderColor;
+        margin: 0;
+
+        &::after {
+            .unitize(16, 16, font-size);
+            .unitize(8, 16, right);
+            content: '+';
+            position: absolute;
+            font-weight: bold;
+        }
+
+        &.is--active { top: 0; }
+
+        &.is--active::after {
+            content: '-';
+        }
+    }
 }

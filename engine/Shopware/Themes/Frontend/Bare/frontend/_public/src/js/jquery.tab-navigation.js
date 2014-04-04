@@ -42,23 +42,34 @@
         me.$nav = me.$el.find('.tab--navigation');
         me.$content = me.$el.find('.tab--content');
 
-        me._initial = true;
-
-        me.registerEventListeners();
-
-        var $activeTab = me.$nav.find('[data-tab-active="true"]');
-
-        if(!$activeTab.length) {
-            me.$nav.find('.navigation--entry:first-child .navigation--link').trigger(clickEvt + '.' + pluginName);
+        if(StateManager.isSmartphone()) {
+            me.createMobileView();
         } else {
-            $activeTab.trigger(clickEvt + '.' + pluginName);
+            me.createDesktopView();
         }
 
-        me._initial = false;
+        $(window).on('resize', function() {
+            if(StateManager.isSmartphone()) {
+                me.createMobileView();
+            } else {
+                me.createDesktopView();
+            }
+        });
+
+        me.$nav.find('.navigation--entry:first-child .navigation--link').trigger(clickEvt + '.' + pluginName);
     };
 
-    Plugin.prototype.registerEventListeners = function() {
+    Plugin.prototype.createMobileView = function() {
         var me = this;
+
+        me.$el.addClass('js--mobile-tab-panel').removeClass('js--desktop-tab-panel');
+
+        me.$nav.find('.navigation--link').each(function() {
+            var $this = $(this),
+                href = $this.attr('href').substring(1);
+
+            me.$content.find('.' + href).insertAfter($this);
+        });
 
         me.$nav.find('.navigation--link').on(clickEvt + '.' + pluginName, function(event) {
             var $this = $(this),
@@ -66,9 +77,31 @@
 
             event.preventDefault();
 
-            if(!me._initial) {
-                window.location.hash = href;
-            }
+            // Hide all content boxes
+            me.$nav.find('li > [class^="content--"]').hide().removeClass(me.opts.activeCls);
+            me.$nav.find('.navigation--link').removeClass(me.opts.activeCls);
+
+            // Activate the selected content
+            $this.addClass(me.opts.activeCls).next().show();
+        });
+    };
+
+    Plugin.prototype.createDesktopView = function() {
+        var me = this;
+        me.$el.removeClass('js--mobile-tab-panel').addClass('js--desktop-tab-panel');
+
+        me.$nav.find('.navigation--link').each(function() {
+            var $this = $(this),
+                href = $this.attr('href').substring(1);
+
+            me.$nav.find('.' + href).appendTo(me.$content);
+        });
+
+        me.$nav.find('.navigation--link').on(clickEvt + '.' + pluginName, function(event) {
+            var $this = $(this),
+                href = $this.attr('href').substring(1);
+
+            event.preventDefault();
 
             // Hide all content boxes
             me.$content.children('[class^="content--"]').hide().removeClass(me.opts.activeCls);
@@ -81,7 +114,7 @@
     };
 
     /**
-     * Destroyes the initialized plugin completely, so all event listeners will
+     * Destroys the initialized plugin completely, so all event listeners will
      * be removed and the plugin data, which is stored in-memory referenced to
      * the DOM node.
      *
