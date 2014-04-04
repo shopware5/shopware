@@ -37,7 +37,9 @@
 	
 	{* Product description *}
 	{block name='frontend_detail_description_text'}
-		{$sArticle.description_long}
+        <div class="product--description" itemprop="description">
+            {$sArticle.description_long}
+        </div>
 	{/block}
 	
 	{* Product - Further links *}

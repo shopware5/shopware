@@ -74,7 +74,8 @@
 							{* Regular price *}
 							{block name='frontend_detail_data_price_default'}
 							<strong class="price--content content--default">
-								{if $sArticle.priceStartingFrom && !$sArticle.liveshoppingData}{s name='ListingBoxArticleStartsAt'}{/s} {/if}{$sArticle.price|currency} {s name="Star"}*{/s}
+                                <meta itemprop="price" content="{$sArticle.price|replace:',':'.'}">
+								{if $sArticle.priceStartingFrom && !$sArticle.liveshoppingData}{s name='ListingBoxArticleStartsAt'}{/s} {/if}{$sArticle.price|currency}{s name="Star"}*{/s}
 							</strong>
 							{/block}
 						{/if}
