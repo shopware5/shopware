@@ -14,8 +14,8 @@
 			</p>
 		{elseif $sArticle.sReleaseDate && $sArticle.sReleaseDate|date_format:"%Y%m%d" > $smarty.now|date_format:"%Y%m%d"}
             <link itemprop="availability" href="http://schema.org/PreOrder" />
-			<div class="delivery--status-icon delivery--more-is-coming">&nbsp;</div>
-			<p class="delivery--text delivery--more-is-coming">
+			<div class="delivery--status-icon delivery--status-more-is-coming">&nbsp;</div>
+			<p class="delivery--text delivery--text-more-is-coming">
 				{s name="DetailDataInfoShipping"}{/s} {$sArticle.sReleaseDate|date:'date_long'}
 			</p>
 		{elseif $sArticle.esd}
@@ -38,7 +38,7 @@
 			</p>
 		{else}
             <link itemprop="availability" href="http://schema.org/LimitedAvailability" />
-			<div class="delivery--status-icon delivery--status-available">&nbsp;</div>
+			<div class="delivery--status-icon delivery--status-not-available">&nbsp;</div>
 			<p class="delivery--text delivery--text-not-available">
 				{s name="DetailDataNotAvailable"}{config name=notavailable}{/s}
 			</p>
