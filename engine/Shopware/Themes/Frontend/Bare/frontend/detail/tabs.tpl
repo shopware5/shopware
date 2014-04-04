@@ -13,7 +13,7 @@
 		{block name="frontend_detail_tabs_rating"}
 			{if !{config name=VoteDisable}}
 				<li class="navigation--entry">
-					<a href="#content--product-reviews" class="navigation--link" data-tab-active="true">{s name='DetailTabsRating'}{/s} ({$sArticle.sVoteAverange.count})</a>
+					<a href="#content--product-reviews" class="navigation--link">{s name='DetailTabsRating'}{/s} ({$sArticle.sVoteAverange.count})</a>
 				</li>
 			{/if}
 		{/block}
