@@ -169,12 +169,12 @@
          * Converts EM values to it's pixel counterparts based on the {@link defaultFontSize}
          * of the browser.
          *
-         * @param {String} val - EM value which should be converted.
+         * @param {String} val - EM value which should be converted or just pixel values
          * @returns {String|Number} Either the incoming value, if it's not a EM value or the converted value.
          */
         var convertEmToPx = function(val) {
-            if(val.substr(val.length - 2, 2) !== 'em') {
-                return val;
+            if(val.substr(val.length - 2, 2) === 'px') {
+               return parseFloat(val.substr(0, val.length -2));
             }
 
             return parseFloat(val.substr(0, val.length -2)) * defaultFontSize;
