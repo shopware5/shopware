@@ -188,7 +188,7 @@
 	border-top: 0;
 	background: @lightGradientEnd;
 
-	&.is--last { .unitize-margin(0, 0, 32, 0, 16) }
+	&.is--last { .unitize-margin(0, 12, 32, 10, 16) }
 
 	.entry--author { .unitize-padding(10, 35, 0) }
 	.entry--content { .unitize-padding(0, 35, 10, 35) }
@@ -203,13 +203,9 @@
 			background: @lightGradientEnd
 		}
 	}
-
-	.content--field {
-		.unitize-margin(0, 18, 0, 0);
-		float: left;
-	}
 }
 
+/** Product review form */
 .content--product-reviews {
 	.alert {
 		.unitize-margin(0, 0, 16, 0, 16);
@@ -242,6 +238,7 @@
 // Product configurator
 .confgurator--form {
 	.unitize-margin(16, 0, 0, 0);
+
 	.content--title, .content--description {
 		.unitize(14, 16, font-size);
 		display: inline;
