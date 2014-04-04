@@ -12,6 +12,8 @@ In this document you will find a changelog of the important changes related to t
 * `Shopware_Controllers_Frontend_Content` legacy controller removed
 * `templates/_default/frontend/content` legacy template files removed
 * `s_cms_content` legacy database table removed
+* Removed functions `simpledom_load_file()` and `simpledom_load_string()`
+* Removed class `SimpleDOM` and `Shopware_Components_Xml_SimpleXml`
 
 ## 4.2.2
 
