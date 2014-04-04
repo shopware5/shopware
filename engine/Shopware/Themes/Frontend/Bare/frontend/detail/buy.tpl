@@ -60,11 +60,9 @@
 		{if (!isset($sArticle.active) || $sArticle.active)}
 			{block name='frontend_detail_buy_laststock'}
 				{if $sArticle.laststock}
-					<div id="detailBuyInfoNotAvailable"{if $sArticle.instock > 0} style="display: none;"{/if}>
-						<div class="error bold center">
-							{s name="DetailBuyInfoNotAvailable"}{/s}
-						</div>
-					</div>
+                    <div class="alert error{if $sArticle.instock > 0} is--hidden{/if}">
+                        <strong>{s name="DetailBuyInfoNotAvailable"}{/s}</strong>
+                    </div>
 				{/if}
 			{/block}
 
