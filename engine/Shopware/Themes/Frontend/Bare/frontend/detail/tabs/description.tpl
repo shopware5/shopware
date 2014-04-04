@@ -69,8 +69,8 @@
 						{* Vendor landing page link *}
 						{block name='frontend_detail_description_links_supplier'}
 							<li class="list--entry">
-								<a href="{url controller='supplier' sSupplier=$sArticle.supplierID}" target="{$information.target}" class="content--link link--supplier">
-									{se name="DetailDescriptionLinkInformation"}{/se}
+								<a href="{url controller='supplier' sSupplier=$sArticle.supplierID}" target="{$information.target}" class="content--link link--supplier" title="{s name="DetailDescriptionLinkInformation"}{/s}">
+									{s name="DetailDescriptionLinkInformation"}{/s}
 								</a>
 							</li>
 						{/block}
@@ -122,7 +122,7 @@
 			{block name='frontend_detail_description_downloads_content'}
 				{foreach $sArticle.sDownloads as $download}
 					{block name='frontend_detail_description_downloads_content_link'}
-						<a href="{$download.filename}" target="_blank" class="content--link link--download">
+						<a href="{$download.filename}" target="_blank" class="content--link link--download" title="{s name="DetailDescriptionLinkDownload"}{/s} {$download.description}">
 							{s name="DetailDescriptionLinkDownload"}{/s} {$download.description}
 						</a>
 					{/block}
