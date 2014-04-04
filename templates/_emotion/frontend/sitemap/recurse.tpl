@@ -1,5 +1,8 @@
 
 {foreach from=$sCategoryTree item=categoryTree}
+    {if $categoryTree.hideOnSitemap}
+        {continue}
+    {/if}
     {if $depth==1}
     {elseif $depth==2}
     {/if}
