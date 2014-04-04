@@ -232,49 +232,36 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
     private function readStaticUrls()
     {
         /** @var Shopware\Models\Site\Repository $siteRepository */
-        $siteRepository = Shopware()->Models()->getRepository('Shopware\Models\Site\Site');
-
-        $pageGroups = Shopware()->Shop()->getPages();
+        $siteRepository = $this->get('models')->getRepository('Shopware\Models\Site\Site');
+        $sites = $siteRepository->getSitesByShopId(Shopware()->Shop()->getId());
 
         $staticPages = array();
 
-        foreach ($pageGroups as $pageGroup) {
-            /** @var Doctrine\ORM\Query $query */
-            $query = $siteRepository->getSitesByNodeNameQuery($pageGroup->getKey());
-            $pages = $query->getArrayResult();
+        foreach ($sites as $site) {
+            if (!$this->filterLink($site['link'])) {
+                continue;
+            }
 
-            foreach ($pages as $page) {
+            $staticPages[$site['id']] = $this->getSitemapArray(
+                $site['id'],
+                $site['changed'],
+                'custom',
+                'sCustom',
+                $site['link']
+            );
 
-                if(!$this->filterLink($page['link'])){
+            foreach ($site['children'] as $child) {
+                if (!$this->filterLink($child['link'])) {
                     continue;
                 }
 
-                if (isset($staticPages[$page['id']])) {
-                    continue;
-                }
-
-                $staticPages[$page['id']] = $this->getSitemapArray(
-                    $page['id'],
-                    $page['changed'],
+                $staticPages[$child['id']] = $this->getSitemapArray(
+                    $child['id'],
+                    $child['changed'],
                     'custom',
                     'sCustom',
-                    $page['link']
+                    $child['link']
                 );
-
-                foreach ($page['children'] as $child) {
-
-                    if(!$this->filterLink($child['link'])){
-                        continue;
-                    }
-
-                    $staticPages[$child['id']] = $this->getSitemapArray(
-                        $child['id'],
-                        $child['changed'],
-                        'custom',
-                        'sCustom',
-                        $child['link']
-                    );
-                }
             }
         }
 
@@ -316,7 +303,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
      */
     private function readSupplierUrls()
     {
-        $supplierRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Supplier');
+        $supplierRepository = $this->get('models')->getRepository('Shopware\Models\Article\Supplier');
 
         $builder = $supplierRepository->createQueryBuilder('Supplier');
         $suppliers = $builder->getQuery()->getArrayResult();
@@ -325,7 +312,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
             $this->printCategoryUrl(
                 $this->getSitemapArray(
                     $supplier['id'],
-                    $supplier['modified'],
+                    $supplier['changed'],
                     'supplier',
                     'sSupplier'
                 )
@@ -339,7 +326,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
     private function readLandingPageUrls()
     {
         /** @var Shopware\Models\Emotion\Repository $emotionRepository */
-        $emotionRepository = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
+        $emotionRepository = $this->get('models')->getRepository('Shopware\Models\Emotion\Emotion');
 
         $builder = $emotionRepository->getCampaigns();
         $campaigns = $builder->getQuery()->getArrayResult();

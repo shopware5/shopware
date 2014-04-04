@@ -182,4 +182,52 @@ class Repository extends ModelRepository
                 ->setParameter(1, $siteId);
         return $builder;
     }
+
+    /**
+     * Returns an array of all custom sites of a shop
+     * @param $shopId
+     * @return array
+     */
+    public function getSitesByShopId($shopId)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array('site', 'attribute'))
+            ->from('Shopware\Models\Site\Site', 'site')
+            ->from('Shopware\Models\Shop\Shop', 'shop')
+            ->leftJoin('site.attribute', 'attribute')
+            ->leftJoin('shop.pages', 'siteGroup')
+            ->where(
+                $builder->expr()->orX(
+                    $builder->expr()->eq('site.grouping', 'siteGroup.key'),
+                    $builder->expr()->like('site.grouping', 'CONCAT(\'%|\', siteGroup.key)'),
+                    $builder->expr()->like('site.grouping', 'CONCAT(siteGroup.key, \'|%\')'),
+                    $builder->expr()->like('site.grouping', 'CONCAT(\'%|\', siteGroup.key, \'|%\')')
+                )
+            )
+            ->andWhere('shop.id = :shopId')
+            ->setParameter('shopId', $shopId)
+            ->groupBy('site.id')
+            ->OrderBy('site.parentId')
+            ->AddOrderBy('site.id');
+
+        $result = $builder->getQuery()->getArrayResult();
+
+        $sites = array();
+
+        foreach ($result as $site) {
+            $id = $site['id'];
+            $parentId = $site['parentId'];
+
+            if ($parentId) {
+                if (empty($sites[$parentId])) {
+                    continue;
+                }
+                $sites[$parentId]['children'][$id] = $site;
+            } else {
+                $sites[$id] = $site;
+            }
+        }
+
+        return $sites;
+    }
 }

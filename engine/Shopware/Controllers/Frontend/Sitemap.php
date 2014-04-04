@@ -62,8 +62,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
     {
         /** @var Shopware\Models\Site\Repository $siteRepository */
         $siteRepository = $this->get('models')->getRepository('Shopware\Models\Site\Site');
-
-        $pageGroups = Shopware()->Shop()->getPages();
+        $sites = $siteRepository->getSitesByShopId(Shopware()->Shop()->getId());
 
         $staticPages = array(
             'name' => 'SitemapStaticPages',
@@ -71,46 +70,33 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
             'sub' => array()
         );
 
-        foreach ($pageGroups as $pageGroup) {
-            /** @var Doctrine\ORM\Query $query */
-            $query = $siteRepository->getSitesByNodeNameQuery($pageGroup->getKey());
-            $pages = $query->getArrayResult();
+        foreach ($sites as $site) {
+            $site['hideOnSitemap'] = !$this->filterLink($site['link']);
 
-            foreach ($pages as $page) {
+            $staticPages['sub'][$site['id']] = array_merge(
+                $site,
+                $this->getSitemapArray(
+                    $site['id'],
+                    $site['description'],
+                    'custom',
+                    'sCustom',
+                    $site['link']
+                )
+            );
 
-                if(!$this->filterLink($page['link'])){
-                    continue;
-                }
+            foreach ($site['children'] as $child) {
+                $child['hideOnSitemap'] = !$this->filterLink($child['link']);
 
-                if (isset($staticPages['sub'][$page['id']])) {
-                    continue;
-                }
-
-                $staticPages['sub'][$page['id']] = array_merge(
-                    $page,
+                $staticPages['sub'][$site['id']]['sub'][] = array_merge(
+                    $child,
                     $this->getSitemapArray(
-                        $page['id'],
-                        $page['description'],
-                        'custom',
-                        'sCustom',
-                        $page['link']
-                    )
-                );
-
-                foreach ($page['children'] as $child) {
-
-                    if(!$this->filterLink($child['link'])){
-                        continue;
-                    }
-
-                    $staticPages['sub'][$page['id']]['sub'][] = $this->getSitemapArray(
                         $child['id'],
                         $child['description'],
                         'custom',
                         'sCustom',
                         $child['link']
-                    );
-                }
+                    )
+                );
             }
         }
 
