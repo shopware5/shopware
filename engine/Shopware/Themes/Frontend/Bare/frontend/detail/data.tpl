@@ -46,12 +46,15 @@
 							{* Discount price content *}
 							{block name='frontend_detail_data_pseudo_price_discount_content'}
 								<strong class="price--content content--discount">
-									{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s} <span class="price--line-through"{$sArticle.pseudoprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
+									{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s}
+                                    <span class="price--line-through">
+                                        {$sArticle.pseudoprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
+                                    </span>
 
 									{* Percentage discount *}
 									{block name='frontend_detail_data_pseudo_price_discount_content_percentage'}
 										{if $sArticle.pseudopricePercent.float}
-											({$sArticle.pseudopricePercent.float} % {s name="DetailDataInfoSavePercent"}{/s})
+											&nbsp;({$sArticle.pseudopricePercent.float} % {s name="DetailDataInfoSavePercent"}{/s})
 										{/if}
 									{/block}
 								</strong>
