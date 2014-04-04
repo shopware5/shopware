@@ -10,7 +10,7 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-<div class="content product--details block">
+<div class="content product--details block" itemscope itemtype="http://schema.org/Product">
 
 	{* Product navigation - Previous and next arrow button *}
 	{block name="frontend_detail_index_navigation"}
@@ -26,7 +26,9 @@
 
 				{* Product name *}
 				{block name='frontend_detail_index_name'}
-					<h1 class="product--title">{$sArticle.articleName}</h1>
+					<h1 class="product--title" itemprop="name">
+                        {$sArticle.articleName}
+                    </h1>
 				{/block}
 
 				{* Product rating *}
@@ -57,6 +59,28 @@
 	{block name='frontend_detail_index_buy_container'}
 		<div class="product--buybox block{if $sArticle.sConfigurator && $sArticle.sConfiguratorSettings.type==2} is--wide{/if}">
 
+            <meta itemprop="brand" content="{$sArticle.supplierName}" />
+
+            {if $sArticle.weight}
+                <meta itemprop="weight" content="{$sArticle.weight} kg" />
+            {/if}
+
+            {if $sArticle.height}
+                <meta itemprop="height" content="{$sArticle.height} cm" />
+            {/if}
+
+            {if $sArticle.width}
+                <meta itemprop="width" content="{$sArticle.width} cm" />
+            {/if}
+
+            {if $sArticle.length}
+                <meta itemprop="depth" content="{$sArticle.length} cm" />
+            {/if}
+
+            {if $sArticle.sReleasedate}
+                <meta itemprop="releaseDate" content="{$sArticle.sReleasedate}" />
+            {/if}
+
 			{* Product eMail notification *}
 			{block name="frontend_detail_index_notification"}
 				{if $sArticle.notification && $sArticle.instock <= 0 && $ShowNotification}
@@ -65,26 +89,29 @@
 			{/block}
 
 			{* Product data *}
-			{block name='frontend_detail_index_data'}
-				{include file="frontend/detail/data.tpl" sArticle=$sArticle sView=1}
-			{/block}
-			{block name='frontend_detail_index_after_data'}{/block}
+            <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                {block name='frontend_detail_index_data'}
+                    <meta itemprop="priceCurrency" content="{$Shop->getCurrency()->getCurrency()}" />
+                    {include file="frontend/detail/data.tpl" sArticle=$sArticle sView=1}
+                {/block}
+                {block name='frontend_detail_index_after_data'}{/block}
 
-			{* Configurator drop down menu's *}
-			{block name="frontend_detail_index_configurator"}
-				{if $sArticle.sConfigurator}
-					{if $sArticle.sConfiguratorSettings.type eq 1}
-						{include file="frontend/detail/config_step.tpl"}
-					{elseif $sArticle.sConfiguratorSettings.type != 2}
-						{include file="frontend/detail/config_upprice.tpl"}
-					{/if}
-				{/if}
-			{/block}
+                {* Configurator drop down menu's *}
+                {block name="frontend_detail_index_configurator"}
+                    {if $sArticle.sConfigurator}
+                        {if $sArticle.sConfiguratorSettings.type eq 1}
+                            {include file="frontend/detail/config_step.tpl"}
+                        {elseif $sArticle.sConfiguratorSettings.type != 2}
+                            {include file="frontend/detail/config_upprice.tpl"}
+                        {/if}
+                    {/if}
+                {/block}
 
-			{* Include buy button and quantity box *}
-			{block name="frontend_detail_index_buybox"}
-				{include file="frontend/detail/buy.tpl"}
-			{/block}
+                {* Include buy button and quantity box *}
+                {block name="frontend_detail_index_buybox"}
+                    {include file="frontend/detail/buy.tpl"}
+                {/block}
+            </div>
 
 			{* Product actions *}
 			{block name="frontend_detail_index_actions"}
@@ -110,7 +137,8 @@
 
 							{* Product SKU - Content *}
 							{block name='frontend_detail_data_ordernumber_content'}
-								<span class="entry--content">
+                                <meta itemprop="productID" content="{$sArticle.articleDetailsID}" />
+								<span class="entry--content" itemprop="sku">
 									{$sArticle.ordernumber}
 								</span>
 							{/block}
