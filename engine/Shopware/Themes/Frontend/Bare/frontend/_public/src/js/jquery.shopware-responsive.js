@@ -1,16 +1,16 @@
 $(function() {
     StateManager.init([{
         type: 'smartphone',
-        enter: '0em',
-        exit: '47.7495em'
+        enter: '0px',
+        exit: '763px'
     }, {
         type: 'tablet',
-        enter: '47.75em',
-        exit: '64em'
+        enter: '764px',
+        exit: '1023px'
     }, {
         type: 'desktop',
-        enter: '64em',
-        exit: '320em'
+        enter: '1024px',
+        exit: '5160px'
     }]);
 
     StateManager.registerListener([{
