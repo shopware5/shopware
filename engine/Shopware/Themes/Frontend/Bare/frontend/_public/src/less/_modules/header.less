@@ -193,19 +193,26 @@
 		.navigation--entry {
 			.white-gradient();
 			.unitize-margin(0, 10, 0, 10, 16);
-			.unitize-padding(12, 20, 12, 20, 16);
 			.border-radius();
 			border-right: 1px solid @borderColor;
 			width: auto;
 			float: none;
 			display: inline-block;
 		}
-
 		.entry--cart {
 			.primary-gradient();
+            .unitize-padding(12, 20, 12, 20, 16);
+
+            .entry--link {
+                padding: 0;
+                display: inline-block;
+            }
 		}
 
-		.entry--link { font-weight: normal }
+		.entry--link {
+            .unitize-padding(12, 20, 12, 20, 16);
+            font-weight: normal;
+        }
 		.entry--menu-left, .entry--spacer { display: none }
 
 		.cart--quantity,
@@ -230,7 +237,7 @@
 	.shop--navigation {
 		width: 71.5%;
 
-		.navigation--entry {
+		.navigation--link {
 			.unitize-padding(8, 16, 8, 16, 16);
 		}
 		.entry--cart {
