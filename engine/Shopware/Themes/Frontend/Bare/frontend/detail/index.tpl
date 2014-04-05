@@ -1,11 +1,21 @@
 {extends file='frontend/index/index.tpl'}
 
-{* Hide sidebar left *}
-{block name='frontend_index_content_left'}{/block}
-
 {* Custom header *}
 {block name='frontend_index_header'}
 	{include file="frontend/detail/header.tpl"}
+{/block}
+
+{* Modify the breadcrumb *}
+{block name='frontend_index_breadcrumb_prefix' prepend}
+    {block name="frontend_detail_breadcrumb_overview"}
+        {if !{config name=disableArticleNavigation}}
+            <li class="breadcrumb--button">
+                <a class="btn btn--grey" href="{$sArticle.sNavigation.sCurrent.sCategoryLink|rewrite:$sArticle.sNavigation.sCurrent.sCategoryName}" title="{$sArticle.sNavigation.sCurrent.sCategoryName}">
+                    <i class="icon--arrow-left"></i> {s name='DetailNavIndex' namespace="frontend/detail/navigation"}{/s}
+                </a>
+            </li>
+        {/if}
+    {/block}
 {/block}
 
 {* Main content *}
