@@ -64,6 +64,9 @@ class Theme extends \Shopware\Components\Theme
      */
     public function createConfig(Form\Container\TabContainer $container)
     {
+        $tab = $this->createTab('tab1', 'Basis Konfiguration');
+        $tab->addElement($this->createCheckboxField('debugModeEnabled', 'Debug-Modus', 0, array('attributes' => array('boxLabel' => 'Zeigt ein Resize-Panel an, um die Fenster-Größe und die aktuelle Geräteklasse zu terminieren.'))));
+        $container->addTab($tab);
     }
 
     /**

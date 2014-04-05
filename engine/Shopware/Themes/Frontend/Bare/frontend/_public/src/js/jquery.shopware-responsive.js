@@ -57,4 +57,45 @@ $(function() {
     $('select[data-auto-submit-form="true"]').on('change', function() {
         $(this).parents('form').submit();
     });
+
+    // Debug mode is enabled
+    if($('.debug--panel').length) {
+        var $debugPanel = $('.debug--panel'),
+            $window = $(window), timer;
+
+        $debugPanel.hide();
+        var refreshDebugPanel = function() {
+            var device = 'Device: ';
+            $debugPanel.find('.debug--width').html($window.width());
+            $debugPanel.find('.debug--height').html($window.height());
+
+            $debugPanel.fadeIn('fast');
+
+            if(StateManager.isSmartphone()) {
+                device += 'Smartphone';
+            }
+
+            if(StateManager.isTablet()) {
+                device += 'Tablet';
+            }
+
+            if(StateManager.isDesktop()) {
+                device += 'Desktop';
+            }
+            $debugPanel.find('.debug--device').html(device);
+
+            if(timer) {
+                window.clearTimeout(timer);
+            }
+            timer = window.setTimeout(function() {
+                $debugPanel.fadeOut('fast');
+            }, 1000);
+        };
+
+        $window.on('resize', function() {
+            window.setTimeout(function() {
+                refreshDebugPanel();
+            }, 10);
+        });
+    }
 });

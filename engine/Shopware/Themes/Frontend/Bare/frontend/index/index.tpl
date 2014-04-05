@@ -134,5 +134,17 @@
 	{/block}
 
 {/block}
+
+{* TODO@STP - Remove before release *}
+{if $debugModeEnabled}
+    <div class="debug--panel">
+        <div class="size--panel">
+            <span class="debug--width">0</span> x <span class="debug--height">0</span>px
+        </div>
+        <div class="device--panel">
+            <span class="debug--device">Device not detected</span>
+        </div>
+    </div>
+{/if}
 </body>
 </html>
