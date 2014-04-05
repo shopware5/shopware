@@ -30,9 +30,17 @@ $(function() {
             $('.product--supplier').appendTo($('.product--header'));
         }
     }, {
-        type:'tablet',
+        type: 'tablet',
         enter: function() {
+            $('*[data-search-dropdown="true"]').searchFieldDropDown();
+            $('nav.product--actions').insertBefore($('.additional-info--tabs'));
         },
+        exit: function() {
+            $('*[data-search-dropdown="true"]').data('plugin_searchFieldDropDown').destroy();
+            $('nav.product--actions').insertAfter($('.buybox--form'));
+        }
+    }, {
+        type: 'desktop',
         exit: function() {
         }
     }]);

@@ -94,6 +94,12 @@
 	// "Buy now" button
 	.buybox--button {
 		width: 80%;
+
+        .icon--arrow-right {
+            .unitize-margin(6, 0, 0, 0);
+            .unitize(10, 16, font-size);
+            float: right;
+        }
 	}
 
 	// Product base information
@@ -116,6 +122,11 @@
 		.unitize(18, 16, font-size);
 		color: @darkTextColor;
 	}
+
+    .content--link [class^=icon] {
+        .unitize(10, 16, font-size);
+        .unitize-margin(-2, 8, 0, 0);
+    }
 }
 
 // Product reviews form
@@ -257,4 +268,91 @@
 		.unitize-margin(0, 0, 8, 0);
 		width: 100%;
 	}
+}
+
+@media screen and(min-width: @tabletViewportWidth) {
+    .product--details {
+
+        // Supplier info
+        .product--info { width: 80% }
+        .product--supplier {
+            .unitize(18, 16, margin-top);
+            width: 20%;
+        }
+
+        // Title
+        .product--title {
+            .unitize-padding(18, 0, 0, 0);
+            border: 0 none;
+        }
+
+        // Product review overview
+        .product--rating-container { margin: 0 }
+
+        // Slider arrows
+        .panel--arrow {
+            .unitize(21, 16, font-size);
+            display: block;
+        }
+
+        // Product image
+        .product--image-container {
+            .unitize-max-height(480);
+        }
+        .slides img, .product--image-container img { margin: 0 auto; }
+
+        // Buy box
+        .buybox--inner { float: right }
+
+        // Configurator
+        .confgurator--form {
+            .unitize-padding(8, 0, 0, 0);
+            margin-top: 0;
+            border-top: 1px solid @borderColor;
+        }
+
+        // Product base information
+        .product--base-info {
+            .unitize(45, 16, margin-right);
+
+            .entry--label {
+                .unitize-margin(0, 8, 0, 0);
+                width: auto;
+            }
+        }
+
+        // Product actions
+        .product--actions {
+            .unitize-margin(25, 0, 45, 0);
+            .unitize-padding(10, 0, 0, 0);
+            display: block;
+            border-top: 1px solid @borderColor;
+        }
+
+        // Product action link
+        .action--link {
+            .unitize-margin(0, 35, 0, 0);
+            color: @primaryTextColor;
+
+            &:last-child { margin: 0 }
+
+            // Icon
+            [class^=icon] {
+                .unitize(14, 16, font-size);
+                .unitize-margin(0, 8, 0, 0);
+            }
+        }
+
+        // Tab panel
+        .js--desktop-tab-panel {
+            .unitize-margin(0, -20, 20, -20);
+
+            .panel--tab-nav {
+                .unitize-margin(0, 50);
+            }
+            .panel--body {
+                .unitize-padding(25, 50);
+            }
+        }
+    }
 }

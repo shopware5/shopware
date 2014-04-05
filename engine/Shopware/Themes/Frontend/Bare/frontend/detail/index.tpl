@@ -1,11 +1,21 @@
 {extends file='frontend/index/index.tpl'}
 
-{* Hide sidebar left *}
-{block name='frontend_index_content_left'}{/block}
-
 {* Custom header *}
 {block name='frontend_index_header'}
 	{include file="frontend/detail/header.tpl"}
+{/block}
+
+{* Modify the breadcrumb *}
+{block name='frontend_index_breadcrumb_prefix' prepend}
+    {block name="frontend_detail_breadcrumb_overview"}
+        {if !{config name=disableArticleNavigation}}
+            <li class="breadcrumb--button">
+                <a class="btn btn--grey" href="{$sArticle.sNavigation.sCurrent.sCategoryLink|rewrite:$sArticle.sNavigation.sCurrent.sCategoryName}" title="{$sArticle.sNavigation.sCurrent.sCategoryName}">
+                    <i class="icon--arrow-left"></i> {s name='DetailNavIndex' namespace="frontend/detail/navigation"}{/s}
+                </a>
+            </li>
+        {/if}
+    {/block}
 {/block}
 
 {* Main content *}
@@ -90,7 +100,7 @@
                 {/block}
 
                 {* Product data *}
-                <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                <div itemprop="offers" itemscope itemtype="http://schema.org/Offer" class="buybox--inner">
                     {block name='frontend_detail_index_data'}
                         <meta itemprop="priceCurrency" content="{$Shop->getCurrency()->getCurrency()}" />
                         {include file="frontend/detail/data.tpl" sArticle=$sArticle sView=1}
@@ -112,14 +122,14 @@
                     {block name="frontend_detail_index_buybox"}
                         {include file="frontend/detail/buy.tpl"}
                     {/block}
-                </div>
 
-                {* Product actions *}
-                {block name="frontend_detail_index_actions"}
-                    <nav class="product--actions">
-                        {include file="frontend/detail/actions.tpl"}
-                    </nav>
-                {/block}
+                    {* Product actions *}
+                    {block name="frontend_detail_index_actions"}
+                        <nav class="product--actions">
+                            {include file="frontend/detail/actions.tpl"}
+                        </nav>
+                    {/block}
+                </div>
 
                 {* Product - Base information *}
                 {block name='frontend_detail_index_buy_container_base_info'}
