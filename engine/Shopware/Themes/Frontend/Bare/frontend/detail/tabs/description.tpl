@@ -57,8 +57,8 @@
 			<ul class="content--list list--unstyled">
 				{block name='frontend_detail_actions_contact'}
 					<li class="list--entry">
-						<a href="{$sInquiry}" rel="nofollow" class="action--link link--contact" title="{s name='DetailLinkContact' namespace="frontend/detail/actions"}{/s}">
-							{s name="DetailLinkContact" namespace="frontend/detail/actions"}{/s}
+						<a href="{$sInquiry}" rel="nofollow" class="content--link link--contact" title="{s name='DetailLinkContact' namespace="frontend/detail/actions"}{/s}">
+							<i class="icon--arrow-right"></i> {s name="DetailLinkContact" namespace="frontend/detail/actions"}{/s}
 						</a>
 					</li>
 				{/block}
@@ -70,7 +70,7 @@
 						{block name='frontend_detail_description_links_supplier'}
 							<li class="list--entry">
 								<a href="{url controller='supplier' sSupplier=$sArticle.supplierID}" target="{$information.target}" class="content--link link--supplier" title="{s name="DetailDescriptionLinkInformation"}{/s}">
-									{s name="DetailDescriptionLinkInformation"}{/s}
+                                    <i class="icon--arrow-right"></i> {s name="DetailDescriptionLinkInformation"}{/s}
 								</a>
 							</li>
 						{/block}
@@ -80,7 +80,7 @@
 						{block name='frontend_detail_description_links_link'}
 							<li class="list--entry">
 								<a href="{$information.link}" target="{if $information.target}{$information.target}{else}_blank{/if}" class="content--link link--further-links">
-									{$information.description}
+                                    <i class="icon--arrow-right"></i> {$information.description}
 								</a>
 							</li>
 						{/block}
