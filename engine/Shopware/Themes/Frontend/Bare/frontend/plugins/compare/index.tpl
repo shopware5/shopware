@@ -28,7 +28,7 @@
 {* Compare button 2 *}
 {block name='frontend_detail_actions_notepad' prepend}
 	<a href="{url controller='compare' action='add_article' articleID=$sArticle.articleID}" rel="nofollow" title="{s name='DetailActionLinkCompare'}Artikel vergleichen{/s}" class="action--link action--compare">
-		{s name="DetailActionLinkCompare"}{/s}
+		<i class="icon--compare"></i> {s name="DetailActionLinkCompare"}{/s}
 	</a>
 {/block}
 

@@ -35,7 +35,9 @@ ul {
 .list--unstyled { list-style: none }
 
 .content {
-	.unitize-padding(0, 5, 16);
+    margin: 0 auto;
+    width: 90%;
+    float: none;
 }
 
 // Hide ajax loader by default
@@ -62,6 +64,13 @@ ul {
 ::-moz-placeholder { color: @lightTextColor }
 ::-webkit-input-placeholder { color: @lightTextColor }
 :-ms-input-placeholder { color: @lightTextColor }
+
+@media screen and(min-width: @tabletViewportWidth) {
+    .content {
+        .unitize-padding(0, 20, 16);
+        width: 100%;
+    }
+}
 
 @media screen and (min-width: @desktopViewportWidth) {
 	.page-wrap {
