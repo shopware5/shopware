@@ -117,35 +117,6 @@
             }
         });
 
-        // Swipe gestructure
-        me.$swipe.on((opts.direction === 'fromLeft' ? 'swiperight' : 'swipeleft') + '.' + pluginName, function() {
-            me.$body.addClass((opts.direction === 'fromLeft' ? opts.leftMenuOpenCls : opts.rightMenuOpenCls));
-
-        // Allow the user to swipe themself
-        }).on('movestart.' + pluginName, function(e) {
-
-            // Allows the normal up and down scrolling from the browser
-            if ((e.distX > e.distY && e.distX < -e.distY) || (e.distX < e.distY && e.distX > -e.distY)) {
-                e.preventDefault();
-                return;
-            }
-            me.$pageWrap.addClass(opts.disableTransitionCls);
-        }).on('move.' + pluginName, function(e) {
-            var x = e.distX;
-
-            if(opts.direction === 'fromLeft') {
-                x = (x < 0 ? 0 : x);
-                x = (x > 300 ? 300 : x);
-            } else {
-                x =(x > 0 ? 0 : x);
-                x = (x < -300 ? -300 : x);
-            }
-            me.$pageWrap.css({ translate: [ x, 0] });
-            me.$body.addClass((opts.direction === 'fromLeft' ? opts.leftMenuOpenCls : opts.rightMenuOpenCls));
-        }).on('moveend.' + pluginName, function() {
-            me.$pageWrap.removeAttr('style').removeClass(opts.disableTransitionCls);
-        });
-
         // Allow the user to close the off canvas menu
         $('.entry--close-off-canvas').on(clickEvt + '.' + pluginName, function(event) {
             event.preventDefault();
@@ -154,34 +125,6 @@
                 me.$pageWrap.removeAttr('style');
                 me.$body.removeClass((opts.direction === 'fromLeft' ? opts.leftMenuOpenCls : opts.rightMenuOpenCls));
             });
-        });
-
-        me.$offcanvas.on((opts.direction === 'fromLeft' ? 'swipeleft' : 'swiperight') + '.' + pluginName, function() {
-            me.$pageWrap.transition({ translate: [0, 0] }, 250, function() {
-                me.$pageWrap.removeAttr('style');
-                me.$body.removeClass((opts.direction === 'fromLeft' ? opts.leftMenuOpenCls : opts.rightMenuOpenCls));
-            });
-        }).on('movestart.' + pluginName, function(e) {
-
-            // Allows the normal up and down scrolling from the browser
-            if ((e.distX > e.distY && e.distX < -e.distY) || (e.distX < e.distY && e.distX > -e.distY)) {
-                e.preventDefault();
-                return;
-            }
-            me.$pageWrap.addClass(opts.disableTransitionCls);
-        }).on('move.' + pluginName, function(e) {
-            var x = 300 - Math.abs(e.distX);
-            if(opts.direction === 'fromLeft') {
-                x = (x < 0 ? 0 : x);
-                x = (x > 300 ? 300 : x);
-            } else {
-                x =(x > 0 ? 0 : x);
-                x = (x < -300 ? -300 : x);
-            }
-            me.$pageWrap.css({ translate: [ x, 0] });
-            //me.$body.addClass((opts.direction === 'fromLeft' ? opts.leftMenuOpenCls : opts.rightMenuOpenCls));
-        }).on('moveend.' + pluginName, function() {
-            me.$pageWrap.removeAttr('style').removeClass(opts.disableTransitionCls);
         });
 
         return true;

@@ -1,7 +1,23 @@
 ;(function($, window, document, undefined) {
     "use strict";
 
-    var pluginName = 'slidePanel',
+    /**
+     * Formats a string and replaces the placeholders.
+     *
+     * @example format('<div class="%0"'>%1</div>, [value for %0], [value for %1], ...)
+     *
+     * @param {String} str
+     * @param {Mixed}
+     * @returns {String}
+     */
+    var format = function (str) {
+        for (var i = 1; i < arguments.length; i++) {
+            str = str.replace('%' + (i - 1), arguments[i]);
+        }
+        return str;
+    };
+
+    var pluginName = 'imageSlider',
         isTouch = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0)),
         clickEvt = (isTouch ? (window.navigator.msPointerEnabled ? 'MSPointerDown': 'touchstart') : 'click'),
         defaults = {
@@ -34,23 +50,54 @@
      * Initializes the plugin, sets up event listeners and adds the necessary
      * classes to get the plugin up and running.
      *
-     * @returns {Void}
+     * @returns {Boolean}
      */
     Plugin.prototype.init = function() {
         var me = this;
 
-        me.$el.on(clickEvt + '.' + pluginName, function(event) {
-            var next = me.$el.next();
-            event.preventDefault();
+        me._thumbnailSelector = me.$el.attr('data-thumbnail-selector') || '';
+        me.$thumbnails = me.$el.find(me._thumbnailSelector);
+        me.$img = me.$el.find('.image--element');
 
-            if(next.hasClass(me.opts.activeCls)) {
-                me.$el.removeClass(me.opts.activeCls);
-                next.removeClass(me.opts.activeCls);
-            } else {
-                me.$el.addClass(me.opts.activeCls);
-                next.addClass(me.opts.activeCls);
-            }
+        // We need thumbnails to create
+        if(!me.$thumbnails.length) {
+            return false;
+        }
+
+        me.$slider = me.createSlider();
+        me.$img.replaceWith(me.$slider);
+
+        me.$el.find('.slider').glide({
+            navigationClass: 'panel--dot-nav',
+            navigationCurrentItemClass: 'is--active',
+            arrowMainClass: 'panel--arrow',
+            arrowRightClass: 'right--arrow',
+            arrowLeftClass: 'left--arrow',
+            arrowRightText: '',
+            arrowLeftText: '',
+            autoplay: false
         });
+    };
+
+    Plugin.prototype.createSlider = function() {
+        var me = this,
+            imgs = [];
+
+        me.$thumbnails.each(function() {
+            var $this = $(this),
+                src = $this.attr('data-xlarge-img'),
+                alt = $this.attr('title');
+
+            imgs.push(format('<li class="slide"><img src="%0" alt="%1"></li>', src, alt));
+        });
+
+        return [
+            '<div class="slider">',
+                '<ul class="slides">',
+                    imgs.join(''),
+                '</ul>',
+            '</div>'
+        ].join('');
     };
 
     /**
@@ -62,8 +109,6 @@
      */
     Plugin.prototype.destroy = function() {
         var me = this;
-
-        me.$el.off(clickEvt + '.' + pluginName).removeData('plugin_' + pluginName);
     };
 
     $.fn[pluginName] = function ( options ) {

@@ -1,73 +1,45 @@
-<div id="article_notification">
+<div class="product--notification">
     <input type="hidden" value="{$NotifyHideBasket}" name="notifyHideBasket" id="notifyHideBasket" />
 
-
 	{if $NotifyValid == true}
-		<div class="success">
-			{se name='DetailNotifyInfoValid'}{/se}
+		<div class="alert success">
+			{s name='DetailNotifyInfoValid'}{/s}
 		</div>
 	{elseif $NotifyInvalid == true && $NotifyAlreadyRegistered != true}
-		<div class="notice">
-			{se name='DetailNotifyInfoInvalid'}{/se}
+		<div class="alert warning">
+			{s name='DetailNotifyInfoInvalid'}{/s}
 		</div>
     {elseif $NotifyEmailError == true}
-        <div class="error">
-            {se name='DetailNotifyInfoErrorMail'}{/se}
+        <div class="alert error">
+            {s name='DetailNotifyInfoErrorMail'}{/s}
         </div>
 	{elseif $WaitingForOptInApprovement}
-		<div id="articleNotificationWasSend" class="displaynone">
-			<div class="success">
-				{se name='DetailNotifyInfoSuccess'}{/se}
-			</div>
+		<div class="alert success">
+			{s name='DetailNotifyInfoSuccess'}{/s}
 		</div>
     {elseif $NotifyAlreadyRegistered == true}
-        <div class="success">
-            <div class="center">
-                <strong>
-                    {se name='DetailNotifyAlreadyRegistered'}{/se}
-                </strong>
-            </div>
+        <div class="alert info">
+			{s name='DetailNotifyAlreadyRegistered'}{/s}
         </div>
     {else}
         {if $NotifyValid != true}
-        <div class="notice">
-        <div class="center">
-                <strong>
-                    {se name='DetailNotifyHeader'}{/se}
-                </strong>
-            </div>
+        <div class="alert warning">
+			{s name='DetailNotifyHeader'}{/s}
         </div>
         {/if}
     {/if}
-    <form method="post" action="{url action='notify' sArticle=$sArticle.articleID}" id="sendArticleNotification">
-		<input type="hidden" name="notifyOrdernumber" value="{$sArticle.ordernumber}" id="variantOrdernumber" />
-		<fieldset>
-			
-			<div>
-				<label>{se name='DetailNotifyLabelMail'}{/se}</label>
-				<input name="sNotificationEmail" type="text" id="txtmail" class="text" />
-				
-				<div class="clear">&nbsp;</div>
-				
-				<input type="submit"  value="{s name='DetailNotifyActionSubmit'}{/s}" class="button-right small_right" />
-			</div>
-		</fieldset>
-	</form>
+	{block name="frontend_detail_index_notification_form"}
+		<form method="post" action="{url action='notify' sArticle=$sArticle.articleID}" class="notification--form block-group">
+			<input type="hidden" name="notifyOrdernumber" value="{$sArticle.ordernumber}" />
+			{block name="frontend_detail_index_notification_field"}
+				<input name="sNotificationEmail" type="email" class="notification--field block" placeholder="{s name='DetailNotifyLabelMail'}{/s}" />
+			{/block}
+
+			{block name="frontend_detail_index_notification_button"}
+				<button type="submit" class="btn btn--primary notification--button block">
+					<i class="icon--mail"></i>
+				</button>
+			{/block}
+		</form>
+	{/block}
 </div>
-
-
-<script type="text/javascript">
-var variantOrdernumberArray = new Array();
-{foreach from=$NotificationVariants item=notify}
-	variantOrdernumberArray.push('{$notify}');
-{/foreach}
-var checkVariant = {if !$sArticle.sVariants}false{else}true{/if};
-var checkOrdernumber = '{$sArticle.ordernumber}';
-if (checkVariant==false){
-	$.checkNotification(checkOrdernumber);
-}
-$('#sAdd').change(function() {
-	$.checkNotification($(this).find(':selected').val())
-});
-
-</script>
