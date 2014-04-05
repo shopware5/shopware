@@ -21,6 +21,8 @@ $(function() {
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
             $('*[data-slide-panel="true"]').slidePanel();
             $('.product--supplier').appendTo($('.product--info'));
+            $('*[data-collapse-panel="true"]').collapsePanel();
+            $('*[data-collapse-text="true"]').collapseText();
         },
         exit: function() {
             $('.sidebar-main').insertAfter($('.content--breadcrumb'));
@@ -28,6 +30,8 @@ $(function() {
             $('*[data-search-dropdown="true"]').data('plugin_searchFieldDropDown').destroy();
             $('*[data-slide-panel="true"]').data('plugin_slidePanel').destroy();
             $('.product--supplier').appendTo($('.product--header'));
+            $('*[data-collapse-panel="true"]').data('plugin_collapsePanel').destroy();
+            $('*[data-collapse-text="true"]').data('plugin_collapseText').destroy();
         }
     }, {
         type: 'tablet',
