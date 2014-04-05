@@ -90,7 +90,7 @@
                 {/block}
 
                 {* Product data *}
-                <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                <div itemprop="offers" itemscope itemtype="http://schema.org/Offer" class="buybox--inner">
                     {block name='frontend_detail_index_data'}
                         <meta itemprop="priceCurrency" content="{$Shop->getCurrency()->getCurrency()}" />
                         {include file="frontend/detail/data.tpl" sArticle=$sArticle sView=1}
@@ -112,14 +112,14 @@
                     {block name="frontend_detail_index_buybox"}
                         {include file="frontend/detail/buy.tpl"}
                     {/block}
-                </div>
 
-                {* Product actions *}
-                {block name="frontend_detail_index_actions"}
-                    <nav class="product--actions">
-                        {include file="frontend/detail/actions.tpl"}
-                    </nav>
-                {/block}
+                    {* Product actions *}
+                    {block name="frontend_detail_index_actions"}
+                        <nav class="product--actions">
+                            {include file="frontend/detail/actions.tpl"}
+                        </nav>
+                    {/block}
+                </div>
 
                 {* Product - Base information *}
                 {block name='frontend_detail_index_buy_container_base_info'}
