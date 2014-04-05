@@ -1,34 +1,21 @@
+{* Tab navigation for the product detail page *}
 {block name="frontend_detail_tabs"}
-<a id="write_comment">&nbsp;</a>
-<ul>
+	<ul class="tab--navigation panel--tab-nav">
 
-	{block name="frontend_detail_tabs_description"}
-		<li class="first">
-			<a href="#description">{se name='DetailTabsDescription'}{/se}</a>
-		</li>
-	{/block}
-	
-	{block name="frontend_detail_tabs_rating"}
+		{* Tab navigation - Description *}
+		{block name="frontend_detail_tabs_description"}
+			<li class="navigation--entry">
+				<a class="navigation--link" href="#content--description">{s name='DetailTabsDescription'}{/s}</a>
+			</li>
+		{/block}
 
-	{if !{config name=VoteDisable}}
-		<li>
-			<a href="#comments">
-				<span>
-					{s name='DetailTabsRating'}{/s} ({$sArticle.sVoteAverange.count})
-				</span>
-			</a>
-		</li>
-	{/if}
-	{/block}
-	
-	{block name="frontend_detail_tabs_related"}
-	{if $sArticle.sRelatedArticles && !$sArticle.crossbundlelook}
-		<li>
-			<a href="#related">
-				{s name='DetailTabsAccessories'}Zubehör{/s} [{$sArticle.sRelatedArticles|@count}]
-			</a>
-		</li>
-	{/if}
-	{/block}
-</ul>
+		{* Tab navigation - Product reviews *}
+		{block name="frontend_detail_tabs_rating"}
+			{if !{config name=VoteDisable}}
+				<li class="navigation--entry">
+					<a href="#content--product-reviews" class="navigation--link">{s name='DetailTabsRating'}{/s} ({$sArticle.sVoteAverange.count})</a>
+				</li>
+			{/if}
+		{/block}
+	</ul>
 {/block}

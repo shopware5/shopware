@@ -26,12 +26,10 @@
 {/block}
 
 {* Compare button 2 *}
-{block name='frontend_detail_actions_contact' append}
-	<li>
-		<a href="{url controller='compare' action='add_article' articleID=$sArticle.articleID}" rel="nofollow" title="{s name='DetailActionLinkCompare'}Artikel vergleichen{/s}" class="product--action action--compare">
-			{se name="DetailActionLinkCompare"}{/se}
-		</a>
-	</li>
+{block name='frontend_detail_actions_notepad' prepend}
+	<a href="{url controller='compare' action='add_article' articleID=$sArticle.articleID}" rel="nofollow" title="{s name='DetailActionLinkCompare'}Artikel vergleichen{/s}" class="action--link action--compare">
+		{s name="DetailActionLinkCompare"}{/s}
+	</a>
 {/block}
 
 {* Compare button note *}
