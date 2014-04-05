@@ -94,6 +94,12 @@
 	// "Buy now" button
 	.buybox--button {
 		width: 80%;
+
+        .icon--arrow-right {
+            .unitize-margin(6, 0, 0, 0);
+            .unitize(10, 16, font-size);
+            float: right;
+        }
 	}
 
 	// Product base information
@@ -289,9 +295,21 @@
             display: block;
         }
 
-        .slides img { margin: 0 auto; }
+        // Product image
+        .product--image-container {
+            .unitize-max-height(480);
+        }
+        .slides img, .product--image-container img { margin: 0 auto; }
 
+        // Buy box
         .buybox--inner { float: right }
+
+        // Configurator
+        .confgurator--form {
+            .unitize-padding(8, 0, 0, 0);
+            margin-top: 0;
+            border-top: 1px solid @borderColor;
+        }
 
         // Product base information
         .product--base-info {
