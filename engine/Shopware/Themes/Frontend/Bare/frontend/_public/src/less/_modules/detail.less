@@ -116,6 +116,11 @@
 		.unitize(18, 16, font-size);
 		color: @darkTextColor;
 	}
+
+    .content--link [class^=icon] {
+        .unitize(10, 16, font-size);
+        .unitize-margin(-2, 8, 0, 0);
+    }
 }
 
 // Product reviews form
@@ -294,8 +299,35 @@
         // Product actions
         .product--actions {
             .unitize-margin(25, 0, 45, 0);
+            .unitize-padding(10, 0, 0, 0);
             display: block;
             border-top: 1px solid @borderColor;
+        }
+
+        // Product action link
+        .action--link {
+            .unitize-margin(0, 35, 0, 0);
+            color: @primaryTextColor;
+
+            &:last-child { margin: 0 }
+
+            // Icon
+            [class^=icon] {
+                .unitize(14, 16, font-size);
+                .unitize-margin(0, 8, 0, 0);
+            }
+        }
+
+        // Tab panel
+        .js--desktop-tab-panel {
+            .unitize-margin(0, -20, 20, -20);
+
+            .panel--tab-nav {
+                .unitize-margin(0, 50);
+            }
+            .panel--body {
+                .unitize-padding(35, 50);
+            }
         }
     }
 }
