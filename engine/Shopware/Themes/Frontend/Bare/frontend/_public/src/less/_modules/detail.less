@@ -258,3 +258,44 @@
 		width: 100%;
 	}
 }
+
+@media screen and(min-width: @tabletViewportWidth) {
+    .product--details {
+
+        // Title
+        .product--title {
+            .unitize-padding(18, 0, 0, 0);
+            border: 0 none;
+        }
+
+        // Product review overview
+        .product--rating-container { margin: 0 }
+
+        // Slider arrows
+        .panel--arrow {
+            .unitize(21, 16, font-size);
+            display: block;
+        }
+
+        .slides img { margin: 0 auto; }
+
+        .buybox--inner { float: right }
+
+        // Product base information
+        .product--base-info {
+            .unitize(45, 16, margin-right);
+
+            .entry--label {
+                .unitize-margin(0, 8, 0, 0);
+                width: auto;
+            }
+        }
+
+        // Product actions
+        .product--actions {
+            .unitize-margin(25, 0, 45, 0);
+            display: block;
+            border-top: 1px solid @borderColor;
+        }
+    }
+}
