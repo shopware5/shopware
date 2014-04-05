@@ -50,7 +50,6 @@
         var me = this;
 
         me.$el.on('click.' + pluginName, function(e) {
-            console.log('Toggle Header clicked!');
             e.preventDefault();
             me.toggleCollapse();
         });
