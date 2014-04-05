@@ -6,7 +6,7 @@
     .content--breadcrumb {
         .clearfix();
         .unitize(14, 16, font-size);
-        .unitize-padding(10, 0);
+        .unitize-padding(10, 12);
         display: block;
         border-bottom: 1px solid @borderColor;
 
@@ -31,6 +31,32 @@
         // Active link
         .is--active .breadcrumb--link {
             color: @primaryColor;
+        }
+
+        // Button
+        .breadcrumb--button {
+            .unitize(18, 16, margin-right);
+            float: left;
+            list-style: none;
+
+            .icon--arrow-left {
+                .unitize(10, 16, font-size);
+            }
+        }
+    }
+
+    // Detail page breadcrumb with button
+    .is--ctl-detail {
+        .content--breadcrumb {
+            .unitize-padding(3, 5);
+        }
+
+        .breadcrumb--entry, .breadcrumb--separator {
+            .unitize-margin(10, 8, 0, 8);
+        }
+
+        .breadcrumb--separator {
+            .unitize(15, 16, margin-top);
         }
     }
 }
