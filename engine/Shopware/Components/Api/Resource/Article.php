@@ -983,7 +983,7 @@ class Article extends Resource implements BatchInterface
                 throw new ApiException\CustomValidationException(sprintf("Tax by id %s not found", $data['taxId']));
             }
 
-        } elseif (!empty($data['tax'])) {
+        } elseif (isset($data['tax']) && ($data['tax'] >= 0)) {
             $tax = $this->getManager()->getRepository('Shopware\Models\Tax\Tax')->findOneBy(array('tax' => $data['tax']));
             if (!$tax) {
                 throw new ApiException\CustomValidationException(sprintf("Tax by taxrate %s not found", $data['tax']));
