@@ -5,26 +5,38 @@ namespace Shopware\Struct;
 /**
  * @package Shopware\Struct
  */
-class Tax extends Base
+class Tax
 {
+    /**
+     * Unique identifier of the tax struct.
+     * @var int
+     */
     private $id;
 
+    /**
+     * Contains an alphanumeric tax name.
+     *
+     * @var string
+     */
     private $name;
 
+    /**
+     * Contains the tax rate value.
+     *
+     * @var float
+     */
     private $tax;
 
     /**
-     * @param mixed $id
-     *
+     * @param int $id
      */
     public function setId($id)
     {
         $this->id = $id;
-
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getId()
     {
@@ -32,17 +44,15 @@ class Tax extends Base
     }
 
     /**
-     * @param mixed $name
-     *
+     * @param string $name
      */
     public function setName($name)
     {
         $this->name = $name;
-
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getName()
     {
@@ -51,12 +61,10 @@ class Tax extends Base
 
     /**
      * @param float $tax
-     *
      */
     public function setTax($tax)
     {
         $this->tax = $tax;
-
     }
 
     /**

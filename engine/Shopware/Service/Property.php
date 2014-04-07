@@ -3,7 +3,7 @@
 namespace Shopware\Service;
 
 use Shopware\Struct as Struct;
-use Shopware\Gateway\ORM as Gateway;
+use Shopware\Gateway as Gateway;
 
 /**
  * @package Shopware\Service
@@ -11,7 +11,7 @@ use Shopware\Gateway\ORM as Gateway;
 class Property
 {
     /**
-     * @var \Shopware\Gateway\ORM\Property
+     * @var \Shopware\Gateway\Property
      */
     private $propertyGateway;
 
@@ -37,11 +37,11 @@ class Property
     {
         $set = $this->propertyGateway->getProductSet($product);
 
-        $this->translationService->translatePropertySet($set, $state->getShop());
+        if (!$set) {
+            return null;
+        }
 
-        echo '<pre>';
-        \Doctrine\Common\Util\Debug::dump($set, 22);
-        exit();
+        $this->translationService->translatePropertySet($set, $state->getShop());
 
         return $set;
     }

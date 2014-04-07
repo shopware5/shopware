@@ -1,6 +1,7 @@
 <?php
 
-namespace Shopware\Hydrator\ORM;
+namespace Shopware\Hydrator\DBAL;
+
 use Shopware\Struct as Struct;
 
 class Translation
@@ -12,16 +13,12 @@ class Translation
      * @var array
      */
     private $productMapping = array(
-        'txtshortdescription' => 'shortDescription',
-        'txtlangbeschreibung' => 'longDescription',
+        'txtshortdescription' => 'description',
+        'txtlangbeschreibung' => 'description_long',
         'txtArtikel' => 'name',
-        'txtzusatztxt' => 'additional',
+        'txtzusatztxt' => 'additionaltext',
         'txtkeywords' => 'keywords',
         'txtpackunit' => 'packUnit'
-    );
-
-    private $unitMapping = array(
-        'description' => 'name'
     );
 
     private $propertySetTranslationMapping = array(
@@ -51,7 +48,6 @@ class Translation
      */
     private $manufacturerHydrator;
 
-
     /**
      * @var Property
      */
@@ -76,8 +72,6 @@ class Translation
      */
     public function hydrateProductTranslation(Struct\ProductMini $product, array $data)
     {
-        $data = unserialize($data['data']);
-
         $data = $this->mapArray($data, $this->productMapping);
 
         $this->productHydrator->assignProductData($product, $data);
@@ -102,12 +96,9 @@ class Translation
      */
     public function hydrateUnitTranslation(Struct\Unit $unit, array $data)
     {
-        $data = unserialize($data['data']);
-        $data = $data[1];
-
-        $data = $this->mapArray($data, $this->unitMapping);
-
-        $this->unitHydrator->assignUnitData($unit, $data);
+        $this->unitHydrator->assignUnitData(
+            $unit, $data
+        );
     }
 
     /**
@@ -116,9 +107,7 @@ class Translation
      */
     public function hydrateManufacturerTranslation(Struct\Manufacturer $manufacturer, array $data)
     {
-        $data = unserialize($data['data']);
-
-        $this->manufacturerHydrator->assignManufacturerData(
+        $this->manufacturerHydrator->assignData(
             $manufacturer,
             $data
         );
@@ -148,10 +137,8 @@ class Translation
      */
     public function hydratePropertyTranslation(Struct\PropertySet $set, array $data)
     {
-        $translation = unserialize($data['objectdata']);
-
         $translation = $this->mapArray(
-            $translation,
+            $data,
             $this->propertySetTranslationMapping
         );
 

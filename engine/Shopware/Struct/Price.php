@@ -5,7 +5,7 @@ namespace Shopware\Struct;
 /**
  * @package Shopware\Struct
  */
-class Price extends Base
+class Price extends Extendable
 {
     /**
      * @var int

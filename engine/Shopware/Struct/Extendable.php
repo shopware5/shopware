@@ -7,8 +7,15 @@ namespace Shopware\Struct;
  *
  * @package Shopware\Struct
  */
-interface Extendable
+abstract class Extendable
 {
+    /**
+     * Contains an array of attribute structs.
+     *
+     * @var Attribute[]
+     */
+    protected $attributes = array();
+
     /**
      * Adds a new attribute struct into the class storage.
      * The passed name is used as unique identifier and has to be stored too.
@@ -16,7 +23,10 @@ interface Extendable
      * @param string $name
      * @param Attribute $attribute
      */
-    public function addAttribute($name, Attribute $attribute);
+    public function addAttribute($name, Attribute $attribute)
+    {
+        $this->attributes[$name] = $attribute;
+    }
 
     /**
      * Returns a single attribute struct element of this class.
@@ -25,7 +35,22 @@ interface Extendable
      * @param $name
      * @return Attribute
      */
-    public function getAttribute($name);
+    public function getAttribute($name)
+    {
+        return $this->attributes[$name];
+    }
+
+    /**
+     * Helper function which checks if an associated
+     * attribute exists.
+     *
+     * @param $name
+     * @return bool
+     */
+    public function hasAttribute($name)
+    {
+        return array_key_exists($name, $this->attributes);
+    }
 
     /**
      * Returns all stored attribute structures of this class.
@@ -33,5 +58,8 @@ interface Extendable
      *
      * @return Attribute[]
      */
-    public function getAttributes();
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
 }

@@ -5,36 +5,62 @@ namespace Shopware\Struct;
 /**
  * @package Shopware\Struct
  */
-class GlobalState extends Base
+class GlobalState
 {
     /**
+     * Contains the current tax rule for the global state.
+     * The tax rules are defined per customer group based on the
+     * area, country and state.
+     *
      * @var Tax
      */
     private $tax;
 
     /**
+     * Contains the current customer group for the store front.
+     * If the customer isn't logged in, the current customer group
+     * is equal to the fallback customer group of the shop.
+     *
      * @var CustomerGroup
      */
     private $currentCustomerGroup;
 
     /**
+     * Contains the fallback customer group for the current shop.
+     * This customer group is required for price selections.
+     * If the customer group of the logged in customer has no
+     * own defined product prices, the prices of the fallback customer
+     * group are displayed.
+     *
      * @var CustomerGroup
      */
     private $fallbackCustomerGroup;
 
     /**
+     * Contains the currency of the store front.
+     * This struct is required for the price calculation.
+     *
+     * For example, the shop prices are defined in Euro,
+     * the current store front displays Dollars.
+     * The currency is required to calculate the Dollar
+     * value of 100,- Euro.
+     *
      * @var Currency
      */
     private $currency;
 
     /**
+     * Contains the current shop object of the store front.
+     * The shop is used to build links or to select the
+     * resource translations.
+     *
      * @var Shop
      */
     private $shop;
 
     /**
-     * @param \Shopware\Struct\Tax $tax
      *
+     * @param \Shopware\Struct\Tax $tax
      */
     public function setTax($tax)
     {

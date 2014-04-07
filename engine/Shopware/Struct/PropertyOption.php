@@ -5,7 +5,7 @@ namespace Shopware\Struct;
 /**
  * @package Shopware\Struct
  */
-class PropertyOption extends Base
+class PropertyOption
 {
 
     /**

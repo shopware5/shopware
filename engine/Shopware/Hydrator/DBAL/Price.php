@@ -1,6 +1,6 @@
 <?php
 
-namespace Shopware\Hydrator\ORM;
+namespace Shopware\Hydrator\DBAL;
 use Shopware\Struct as Struct;
 
 class Price
@@ -16,13 +16,24 @@ class Price
     private $unitHydrator;
 
     /**
+     * @var Attribute
+     */
+    private $attributeHydrator;
+
+    /**
      * @param CustomerGroup $customerGroupHydrator
      * @param Unit $unitHydrator
+     * @param Attribute $attributeHydrator
      */
-    function __construct(CustomerGroup $customerGroupHydrator, Unit $unitHydrator)
-    {
+    function __construct(
+        CustomerGroup $customerGroupHydrator,
+        Unit $unitHydrator,
+        Attribute $attributeHydrator
+    ) {
         $this->customerGroupHydrator = $customerGroupHydrator;
         $this->unitHydrator = $unitHydrator;
+        $this->attributeHydrator = $attributeHydrator;
+
     }
 
     /**
@@ -39,7 +50,7 @@ class Price
 
         $price->setPrice(floatval($data['price']));
 
-        $price->setPseudoPrice(floatval($data['pseudoPrice']));
+        $price->setPseudoPrice(floatval($data['pseudoprice']));
 
         if (strtolower($data['to']) == 'beliebig') {
             $price->setTo(null);
@@ -53,9 +64,15 @@ class Price
             );
         }
 
+        if (isset($data['attribute'])) {
+            $price->addAttribute(
+                'core',
+                $this->attributeHydrator->hydrate($data['attribute'])
+            );
+        }
+
         return $price;
     }
-
 
     /**
      * Hydrates the data result of the cheapest price query.
@@ -75,9 +92,9 @@ class Price
 
         $unit = $data['detail']['unit'];
 
-        $unit['packUnit'] = $data['detail']['packUnit'];
-        $unit['purchaseUnit'] = $data['detail']['purchaseUnit'];
-        $unit['referenceUnit'] = $data['detail']['referenceUnit'];
+        $unit['packunit'] = $data['detail']['packunit'];
+        $unit['purchaseunit'] = $data['detail']['purchaseunit'];
+        $unit['referenceunit'] = $data['detail']['referenceunit'];
 
         $price->setUnit(
             $this->unitHydrator->hydrate($unit)

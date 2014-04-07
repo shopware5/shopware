@@ -41,10 +41,10 @@ class GlobalState
         $state = new Struct\GlobalState();
 
         $state->setShop(new Struct\Shop());
-        $state->getShop()->setId(2);
+        $state->getShop()->setId(1);
 
         $state->setCurrentCustomerGroup(new Struct\CustomerGroup());
-        $state->getCurrentCustomerGroup()->setKey('H');
+        $state->getCurrentCustomerGroup()->setKey('EK');
 
         $state->setFallbackCustomerGroup(new Struct\CustomerGroup());
         $state->getFallbackCustomerGroup()->setKey('EK');

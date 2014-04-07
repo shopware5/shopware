@@ -1,6 +1,6 @@
 <?php
 
-namespace Shopware\Hydrator\ORM;
+namespace Shopware\Hydrator\DBAL;
 use Shopware\Struct as Struct;
 
 class Unit
@@ -27,27 +27,27 @@ class Unit
     public function assignUnitData(Struct\Unit $unit, array $data)
     {
         if (isset($data['id'])) {
-            $unit->setId($data['id']);
+            $unit->setId(intval($data['id']));
         }
 
-        if (isset($data['name'])) {
-            $unit->setName($data['name']);
+        if (isset($data['description'])) {
+            $unit->setName($data['description']);
         }
 
         if (isset($data['unit'])) {
             $unit->setUnit($data['unit']);
         }
 
-        if (isset($data['packUnit'])) {
-            $unit->setPackUnit($data['packUnit']);
+        if (isset($data['packunit'])) {
+            $unit->setPackUnit($data['packunit']);
         }
 
-        if (isset($data['purchaseUnit'])) {
-            $unit->setPurchaseUnit(floatval($data['purchaseUnit']));
+        if (isset($data['purchaseunit'])) {
+            $unit->setPurchaseUnit(floatval($data['purchaseunit']));
         }
 
-        if (isset($data['referenceUnit'])) {
-            $unit->setReferenceUnit(floatval($data['referenceUnit']));
+        if (isset($data['referenceunit'])) {
+            $unit->setReferenceUnit(floatval($data['referenceunit']));
         }
 
     }
