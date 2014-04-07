@@ -27,7 +27,6 @@
  */
 class sSystem
 {
-
     public $sCONFIG;		// Pointer to configuration
 
     public $sSESSION_ID;	// Current Session-ID
@@ -84,83 +83,6 @@ class sSystem
     public function __construct()
     {
         $this->sBasePath = dirname(dirname(dirname(dirname(__FILE__)))).'/';
-    }
-
-    /**
-     * @deprecated
-     */
-    public function sPreProcess()
-    {
-
-    }
-
-
-    /**
-     * @deprecated
-     */
-    public function sInitMailer()
-    {
-        // removed mailer initialisation code
-    }
-
-    public function sGetTranslation($data,$id,$object,$language)
-    {
-        return $data;
-    }
-
-    public function sInitAdo()
-    {
-    }
-
-    public function sTranslateConfig()
-    {
-    }
-
-    public function sInitConfig()
-    {
-
-    }
-
-    public function sInitSmarty()
-    {
-    }
-
-    public function sInitSession()
-    {
-    }
-
-    /**
-     * DEPRECATED
-     * @param $hook
-     * @return string
-     */
-    public function sCallHookPoint($hook)
-    {
-        return '';
-    }
-
-    /**
-     * DEPRECATED
-     */
-    public function sLoadHookPoints()
-    {
-    }
-
-    public function sInitFactory()
-    {
-
-    }
-
-    /**
-     * DEPRECATED
-     * @param null $host
-     * @param null $module
-     * @param $key
-     * @return bool
-     */
-    public function sCheckLicense($host=null, $module=null, $key)
-    {
-        return true;
     }
 
     public function E_CORE_ERROR($ERROR_ID,$ERROR_MESSAGE)

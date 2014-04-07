@@ -14,6 +14,25 @@ In this document you will find a changelog of the important changes related to t
 * `s_cms_content` legacy database table removed
 * Removed functions `simpledom_load_file()` and `simpledom_load_string()`
 * Removed class `SimpleDOM` and `Shopware_Components_Xml_SimpleXml`
+* Removed the following deprecated methods
+    * `sArticles::sGetArticleAccessories`
+    * `sArticles::sCreateTranslationTable`
+    * `sArticles::sGetLiveShopping`
+    * `sArticles::sGetArticleBundlesByArticleID`
+    * `sArticles::sGetArticleBundleByID`
+    * `sArticles::sGetBundleBasketDiscount`
+    * `sSystem::sPreProcess`
+    * `sSystem::sInitMailer`
+    * `sSystem::sGetTranslation`
+    * `sSystem::sInitAdo`
+    * `sSystem::sTranslateConfig`
+    * `sSystem::sInitConfig`
+    * `sSystem::sInitSmarty`
+    * `sSystem::sInitSession`
+    * `sSystem::sCallHookPoint`
+    * `sSystem::sLoadHookPoints`
+    * `sSystem::sInitFactory`
+    * `sSystem::sCheckLicense`
 
 ## 4.2.2
 
