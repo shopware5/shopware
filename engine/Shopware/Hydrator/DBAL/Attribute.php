@@ -1,6 +1,6 @@
 <?php
 
-namespace Shopware\Hydrator\ORM;
+namespace Shopware\Hydrator\DBAL;
 use Shopware\Struct as Struct;
 
 class Attribute

@@ -3,7 +3,7 @@
 namespace Shopware\Service;
 
 use Shopware\Struct as Struct;
-use Shopware\Gateway\ORM as Gateway;
+use Shopware\Gateway as Gateway;
 
 class Product
 {
@@ -57,6 +57,7 @@ class Product
     /**
      * Returns a minified product variant which contains only
      * simplify data of a variant.
+     *
      * The product data is fully calculated, which means
      * that the product data is already translated and
      * the product prices are calculated to the current global state
@@ -74,6 +75,10 @@ class Product
     public function getMini($number, Struct\GlobalState $state)
     {
         $product = $this->productGateway->getMini($number);
+
+        if (!$product || !$product->getId()) {
+            return null;
+        }
 
         $product->setPrices(
             $this->priceService->getProductPrices($product, $state)

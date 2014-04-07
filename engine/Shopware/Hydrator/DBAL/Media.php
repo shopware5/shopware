@@ -1,10 +1,23 @@
 <?php
 
-namespace Shopware\Hydrator\ORM;
+namespace Shopware\Hydrator\DBAL;
 use Shopware\Struct as Struct;
 
 class Media
 {
+    /**
+     * @var Attribute
+     */
+    private $attributeHydrator;
+
+    /**
+     * @param Attribute $attributeHydrator
+     */
+    function __construct(Attribute $attributeHydrator)
+    {
+        $this->attributeHydrator = $attributeHydrator;
+    }
+
     /**
      * @param array $data
      * @return Struct\Media
@@ -27,6 +40,13 @@ class Media
 
         $media->setThumbnails($data['thumbnails']);
 
+        if (!empty($data['attribute'])) {
+            $media->addAttribute(
+                'media',
+                $this->attributeHydrator->hydrate($data['attribute'])
+            );
+        }
+
         return $media;
     }
 
@@ -40,6 +60,16 @@ class Media
 
         $media->setPreview(($data['main'] == 1));
 
+        if (!empty($data['imageAttribute'])) {
+            $media->addAttribute(
+                'image',
+                $this->attributeHydrator->hydrate($data['imageAttribute'])
+            );
+        }
+
+
+
         return $media;
     }
+
 }

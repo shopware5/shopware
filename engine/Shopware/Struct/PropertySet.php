@@ -5,7 +5,7 @@ namespace Shopware\Struct;
 /**
  * @package Shopware\Struct
  */
-class PropertySet extends Base
+class PropertySet
 {
     /**
      * @var int
@@ -21,11 +21,6 @@ class PropertySet extends Base
      * @var boolean
      */
     private $comparable;
-
-    /**
-     * @var boolean
-     */
-    private $sortMode;
 
     /**
      * @var PropertyGroup[]
@@ -102,23 +97,5 @@ class PropertySet extends Base
     public function isComparable()
     {
         return $this->comparable;
-    }
-
-    /**
-     * @param boolean $sortMode
-     * @return $this
-     */
-    public function setSortMode($sortMode)
-    {
-        $this->sortMode = $sortMode;
-        return $this;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function getSortMode()
-    {
-        return $this->sortMode;
     }
 }

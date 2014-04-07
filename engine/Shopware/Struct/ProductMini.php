@@ -5,7 +5,7 @@ namespace Shopware\Struct;
 /**
  * @package Shopware\Struct
  */
-class ProductMini extends Base implements Extendable
+class ProductMini extends Extendable
 {
     /**
      * State for a calculated product price
@@ -102,6 +102,18 @@ class ProductMini extends Base implements Extendable
     private $closeouts;
 
     /**
+     * Contains a flag if the product has properties.
+     * @var boolean
+     */
+    private $hasProperties = false;
+
+    /**
+     * Contains a flag if the product has an assigned price group
+     * @var bool
+     */
+    private $hasPriceGroup = false;
+
+    /**
      * Defines the date which the product was created in the
      * database.
      *
@@ -114,7 +126,7 @@ class ProductMini extends Base implements Extendable
      *
      * @var array
      */
-    private $keyWords;
+    private $keywords;
 
     /**
      * Defines if the customer can be set an email
@@ -152,12 +164,12 @@ class ProductMini extends Base implements Extendable
     private $width;
 
     /**
-     * Physical len of the product.
+     * Physical length of the product.
      * Used for area calculation.
      *
      * @var float
      */
-    private $len;
+    private $length;
 
     /**
      * Physical width of the product.
@@ -166,17 +178,44 @@ class ProductMini extends Base implements Extendable
      */
     private $weight;
 
+    /**
+     * Ean code of the product.
+     * @var string
+     */
     private $ean;
 
+    /**
+     * Minimal purchase value for the product.
+     * Used as minimum value to add a product to the basket.
+     *
+     * @var float
+     */
     private $minPurchase;
 
+    /**
+     * Maximal purchase value for the product.
+     * Used as maximum value to add a product to the basket.
+     *
+     * @var float
+     */
     private $maxPurchase;
 
-    private $purchaseSteps;
+    /**
+     * Numeric step value for the purchase.
+     * This value is used to generate the quantity combo box
+     * on the product detail page and in the basket.
+     *
+     * @var float
+     */
+    private $purchaseStep;
 
-    private $isHighlight;
-
-    private $voteAverage;
+    /**
+     * Flag if the product should be displayed
+     * with a teaser flag within listings.
+     *
+     * @var float
+     */
+    private $highlight;
 
     /**
      * Contains the cheapest price of this product variation.
@@ -226,13 +265,6 @@ class ProductMini extends Base implements Extendable
     private $cover;
 
     /**
-     * Contains an array of attribute structs.
-     *
-     * @var Attribute[]
-     */
-    private $attributes = array();
-
-    /**
      * Contains an offset of product states.
      * States defines which processed the product has already passed through,
      * like the price calculation, translation or other states.
@@ -242,8 +274,216 @@ class ProductMini extends Base implements Extendable
     private $states = array();
 
     /**
-     * @param int $id
+     * Adds a new product state.
      *
+     * @param $state
+     */
+    public function addState($state)
+    {
+        $this->states[] = $state;
+    }
+
+    /**
+     * Checks if the product has a specify state
+     * @param $state
+     * @return bool
+     */
+    public function hasState($state)
+    {
+        return in_array($state, $this->states);
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasProperties()
+    {
+        return $this->hasProperties;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isShippingFree()
+    {
+        return $this->shippingFree;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function allowsNotification()
+    {
+        return $this->allowsNotification;
+    }
+
+    /**
+     * @return float
+     */
+    public function highlight()
+    {
+        return $this->highlight;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasPriceGroup()
+    {
+        return $this->hasPriceGroup;
+    }
+
+    /**
+     * @param boolean $hasPriceGroup
+     */
+    public function setHasPriceGroup($hasPriceGroup)
+    {
+        $this->hasPriceGroup = $hasPriceGroup;
+    }
+
+    /**
+     * @param float $highlight
+     */
+    public function setHighlight($highlight)
+    {
+        $this->highlight = $highlight;
+    }
+
+
+    /**
+     * @param boolean $allowsNotification
+     */
+    public function setAllowsNotification($allowsNotification)
+    {
+        $this->allowsNotification = $allowsNotification;
+    }
+
+    /**
+     * @param boolean $shippingFree
+     */
+    public function setShippingFree($shippingFree)
+    {
+        $this->shippingFree = $shippingFree;
+    }
+
+
+    /**
+     * @param \Shopware\Struct\Unit $unit
+     */
+    public function setUnit($unit)
+    {
+        $this->unit = $unit;
+    }
+
+    /**
+     * @return \Shopware\Struct\Unit
+     */
+    public function getUnit()
+    {
+        return $this->unit;
+    }
+
+    /**
+     * @param \Shopware\Struct\Tax $tax
+     */
+    public function setTax($tax)
+    {
+        $this->tax = $tax;
+    }
+
+    /**
+     * @return \Shopware\Struct\Tax
+     */
+    public function getTax()
+    {
+        return $this->tax;
+    }
+
+    /**
+     * @param \Shopware\Struct\Price[] $prices
+     */
+    public function setPrices($prices)
+    {
+        $this->prices = $prices;
+    }
+
+    /**
+     * @return \Shopware\Struct\Price[]
+     */
+    public function getPrices()
+    {
+        return $this->prices;
+    }
+
+    /**
+     * @param \Shopware\Struct\Manufacturer $manufacturer
+     */
+    public function setManufacturer($manufacturer)
+    {
+        $this->manufacturer = $manufacturer;
+    }
+
+    /**
+     * @return \Shopware\Struct\Manufacturer
+     */
+    public function getManufacturer()
+    {
+        return $this->manufacturer;
+    }
+
+    /**
+     * @param \Shopware\Struct\Media $cover
+     */
+    public function setCover($cover)
+    {
+        $this->cover = $cover;
+    }
+
+    /**
+     * @return \Shopware\Struct\Media
+     */
+    public function getCover()
+    {
+        return $this->cover;
+    }
+
+    /**
+     * @param \Shopware\Struct\Price $cheapestVariantPrice
+     */
+    public function setCheapestVariantPrice($cheapestVariantPrice)
+    {
+        $this->cheapestVariantPrice = $cheapestVariantPrice;
+    }
+
+    /**
+     * @return \Shopware\Struct\Price
+     */
+    public function getCheapestVariantPrice()
+    {
+        return $this->cheapestVariantPrice;
+    }
+
+    /**
+     * @param \Shopware\Struct\Price $cheapestProductPrice
+     */
+    public function setCheapestProductPrice($cheapestProductPrice)
+    {
+        $this->cheapestProductPrice = $cheapestProductPrice;
+    }
+
+    /**
+     * @return \Shopware\Struct\Price
+     */
+    public function getCheapestProductPrice()
+    {
+        return $this->cheapestProductPrice;
+    }
+
+
+
+
+    /**
+     * @param int $id
      */
     public function setId($id)
     {
@@ -259,31 +499,27 @@ class ProductMini extends Base implements Extendable
     }
 
     /**
-     * @return int
+     * @param string $number
      */
-    public function getVariantId()
+    public function setNumber($number)
     {
-        return $this->variantId;
+        $this->number = $number;
     }
 
     /**
-     * @param int $variantId
-     *
+     * @return string
      */
-    public function setVariantId($variantId)
+    public function getNumber()
     {
-        $this->variantId = $variantId;
-
+        return $this->number;
     }
 
     /**
      * @param string $name
-     *
      */
     public function setName($name)
     {
         $this->name = $name;
-
     }
 
     /**
@@ -295,137 +531,27 @@ class ProductMini extends Base implements Extendable
     }
 
     /**
-     * @return mixed
+     * @param string $additional
      */
-    public function getNumber()
+    public function setAdditional($additional)
     {
-        return $this->number;
-    }
-
-    /**
-     * @param mixed $number
-     *
-     */
-    public function setNumber($number)
-    {
-        $this->number = $number;
-
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getStock()
-    {
-        return $this->stock;
-    }
-
-    /**
-     * @param mixed $stock
-     *
-     */
-    public function setStock($stock)
-    {
-        $this->stock = $stock;
-
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasStock()
-    {
-        return (bool)($this->stock > 0);
-    }
-
-    /**
-     * @param string $shortDescription
-     *
-     */
-    public function setShortDescription($shortDescription)
-    {
-        $this->shortDescription = $shortDescription;
-
+        $this->additional = $additional;
     }
 
     /**
      * @return string
      */
-    public function getShortDescription()
+    public function getAdditional()
     {
-        return $this->shortDescription;
+        return $this->additional;
     }
 
     /**
-     * @param mixed $longDescription
-     *
+     * @param boolean $closeouts
      */
-    public function setLongDescription($longDescription)
+    public function setCloseouts($closeouts)
     {
-        $this->longDescription = $longDescription;
-
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLongDescription()
-    {
-        return $this->longDescription;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getReleaseDate()
-    {
-        return $this->releaseDate;
-    }
-
-    /**
-     * @param mixed $releaseDate
-     *
-     */
-    public function setReleaseDate($releaseDate)
-    {
-        $this->releaseDate = $releaseDate;
-
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getShippingTime()
-    {
-        return $this->shippingTime;
-    }
-
-    /**
-     * @param mixed $shippingTime
-     *
-     */
-    public function setShippingTime($shippingTime)
-    {
-        $this->shippingTime = $shippingTime;
-
-    }
-
-    /**
-     * @return mixed
-     */
-    public function isShippingFree()
-    {
-        return $this->shippingFree;
-    }
-
-    /**
-     * @param mixed $shippingFree
-     *
-     */
-    public function setShippingFree($shippingFree)
-    {
-        $this->shippingFree = $shippingFree;
-
+        $this->closeouts = $closeouts;
     }
 
     /**
@@ -437,209 +563,269 @@ class ProductMini extends Base implements Extendable
     }
 
     /**
-     * @param boolean $closeouts
-     *
+     * @param string $ean
      */
-    public function setCloseouts($closeouts)
+    public function setEan($ean)
     {
-        $this->closeouts = $closeouts;
-
+        $this->ean = $ean;
     }
 
     /**
-     * @param \Shopware\Struct\Price[] $prices
-     *
+     * @return string
      */
-    public function setPrices(array $prices)
+    public function getEan()
     {
-        $this->prices = $prices;
-
+        return $this->ean;
     }
 
     /**
-     * @return \Shopware\Struct\Price[]
+     * @param float $height
      */
-    public function getPrices()
+    public function setHeight($height)
     {
-        return $this->prices;
+        $this->height = $height;
     }
 
     /**
-     * @param \Shopware\Struct\Manufacturer $manufacturer
-     *
+     * @return float
      */
-    public function setManufacturer($manufacturer)
+    public function getHeight()
     {
-        $this->manufacturer = $manufacturer;
-
+        return $this->height;
     }
 
     /**
-     * @return \Shopware\Struct\Manufacturer
+     * @param array $keyWords
      */
-    public function getManufacturer()
+    public function setKeywords($keywords)
     {
-        return $this->manufacturer;
+        $this->keywords = $keywords;
     }
 
     /**
-     * @param \Shopware\Struct\Tax $tax
-     *
+     * @return array
      */
-    public function setTax($tax)
+    public function getKeywords()
     {
-        $this->tax = $tax;
-
+        return $this->keywords;
     }
 
     /**
-     * @return \Shopware\Struct\Tax
+     * @param float $length
      */
-    public function getTax()
+    public function setLength($length)
     {
-        return $this->tax;
+        $this->length = $length;
     }
 
     /**
-     * @param \Shopware\Struct\Unit $unit
-     *
+     * @return float
      */
-    public function setUnit($unit)
+    public function getLength()
     {
-        $this->unit = $unit;
-
+        return $this->length;
     }
 
     /**
-     * @return Unit
+     * @param string $longDescription
      */
-    public function getUnit()
+    public function setLongDescription($longDescription)
     {
-        return $this->unit;
+        $this->longDescription = $longDescription;
     }
 
     /**
-     * @return \Shopware\Struct\Media
+     * @return string
      */
-    public function getCover()
+    public function getLongDescription()
     {
-        return $this->cover;
+        return $this->longDescription;
     }
 
     /**
-     * @param \Shopware\Struct\Media $cover
-     * @return $this
+     * @param float $maxPurchase
      */
-    public function setCover($cover)
+    public function setMaxPurchase($maxPurchase)
     {
-        $this->cover = $cover;
-        return $this;
+        $this->maxPurchase = $maxPurchase;
     }
 
     /**
-     * @param \Shopware\Struct\Price $cheapestVariantPrice
-     * @return $this
+     * @return float
      */
-    public function setCheapestVariantPrice($cheapestVariantPrice)
+    public function getMaxPurchase()
     {
-        $this->cheapestVariantPrice = $cheapestVariantPrice;
-        return $this;
+        return $this->maxPurchase;
     }
 
     /**
-     * @return \Shopware\Struct\Price
+     * @param float $minPurchase
      */
-    public function getCheapestVariantPrice()
+    public function setMinPurchase($minPurchase)
     {
-        return $this->cheapestVariantPrice;
+        $this->minPurchase = $minPurchase;
     }
 
     /**
-     * @param \Shopware\Struct\Price $cheapestProductPrice
-     * @return $this
+     * @return float
      */
-    public function setCheapestProductPrice($cheapestProductPrice)
+    public function getMinPurchase()
     {
-        $this->cheapestProductPrice = $cheapestProductPrice;
-        return $this;
+        return $this->minPurchase;
     }
 
     /**
-     * @return \Shopware\Struct\Price
+     * @param int $minStock
      */
-    public function getCheapestProductPrice()
+    public function setMinStock($minStock)
     {
-        return $this->cheapestProductPrice;
+        $this->minStock = $minStock;
     }
 
     /**
-     * Adds a new attribute struct into the class storage.
-     * The passed name is used as unique identifier and has to be stored too.
-     *
-     * @param string $name
-     * @param Attribute $attribute
+     * @return int
      */
-    public function addAttribute($name, Attribute $attribute)
+    public function getMinStock()
     {
-        $this->attributes[$name] = $attribute;
+        return $this->minStock;
     }
 
     /**
-     * Returns a single attribute struct element of this class.
-     * The passed name is used as unique identifier.
-     *
-     * @param $name
-     * @return Attribute
+     * @param float $purchaseStep
      */
-    public function getAttribute($name)
+    public function setPurchaseStep($purchaseStep)
     {
-        return $this->attributes[$name];
+        $this->purchaseStep = $purchaseStep;
     }
 
     /**
-     * Helper function which checks if an associated
-     * attribute exists.
-     *
-     * @param $name
-     * @return bool
+     * @return float
      */
-    public function hasAttribute($name)
+    public function getPurchaseStep()
     {
-        return array_key_exists($name, $this->attributes);
+        return $this->purchaseStep;
     }
 
     /**
-     * Returns all stored attribute structures of this class.
-     * The array has to be an associated array with name and attribute instance.
-     *
-     * @return Attribute[]
+     * @param \DateTime $releaseDate
      */
-    public function getAttributes()
+    public function setReleaseDate($releaseDate)
     {
-        return $this->attributes;
+        $this->releaseDate = $releaseDate;
     }
 
     /**
-     * Adds a new product state.
-     *
-     * @param $state
-     *
+     * @return \DateTime
      */
-    public function addState($state)
+    public function getReleaseDate()
     {
-        $this->states[] = $state;
-
+        return $this->releaseDate;
     }
 
     /**
-     * Checks if the product has a specify state
-     * @param $state
-     * @return bool
+     * @param int $shippingTime
      */
-    public function hasState($state)
+    public function setShippingTime($shippingTime)
     {
-        return in_array($state, $this->states);
+        $this->shippingTime = $shippingTime;
     }
+
+    /**
+     * @return int
+     */
+    public function getShippingTime()
+    {
+        return $this->shippingTime;
+    }
+
+    /**
+     * @param string $shortDescription
+     */
+    public function setShortDescription($shortDescription)
+    {
+        $this->shortDescription = $shortDescription;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShortDescription()
+    {
+        return $this->shortDescription;
+    }
+
+    /**
+     * @param int $stock
+     */
+    public function setStock($stock)
+    {
+        $this->stock = $stock;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStock()
+    {
+        return $this->stock;
+    }
+
+    /**
+     * @param int $variantId
+     */
+    public function setVariantId($variantId)
+    {
+        $this->variantId = $variantId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVariantId()
+    {
+        return $this->variantId;
+    }
+
+    /**
+     * @param float $weight
+     */
+    public function setWeight($weight)
+    {
+        $this->weight = $weight;
+    }
+
+    /**
+     * @return float
+     */
+    public function getWeight()
+    {
+        return $this->weight;
+    }
+
+    /**
+     * @param float $width
+     */
+    public function setWidth($width)
+    {
+        $this->width = $width;
+    }
+
+    /**
+     * @return float
+     */
+    public function getWidth()
+    {
+        return $this->width;
+    }
+
+    /**
+     * @param boolean $hasProperties
+     */
+    public function setHasProperties($hasProperties)
+    {
+        $this->hasProperties = $hasProperties;
+    }
+
 
 
 }

@@ -3,12 +3,12 @@
 namespace Shopware\Service;
 
 use Shopware\Struct as Struct;
-use Shopware\Gateway\ORM as Gateway;
+use Shopware\Gateway as Gateway;
 
 class Translation
 {
     /**
-     * @var \Shopware\Gateway\ORM\Translation
+     * @var \Shopware\Gateway\Translation
      */
     private $translationGateway;
 

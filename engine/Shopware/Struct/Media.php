@@ -5,7 +5,7 @@ namespace Shopware\Struct;
 /**
  * @package Shopware\Struct
  */
-class Media extends Base
+class Media extends Extendable
 {
     /**
      * @var

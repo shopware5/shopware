@@ -5,7 +5,7 @@ namespace Shopware\Struct;
 /**
  * @package Shopware\Struct
  */
-class PropertyGroup extends Base
+class PropertyGroup
 {
 
     /**

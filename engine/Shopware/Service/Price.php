@@ -2,14 +2,13 @@
 
 namespace Shopware\Service;
 
-use Shopware\Gateway\Exception\NoCustomerGroupPriceFoundException;
 use Shopware\Struct as Struct;
-use Shopware\Gateway\ORM as Gateway;
+use Shopware\Gateway as Gateway;
 
 class Price
 {
     /**
-     * @var \Shopware\Gateway\ORM\Price
+     * @var \Shopware\Gateway\Price
      */
     private $priceGateway;
 
@@ -22,30 +21,35 @@ class Price
     }
 
     /**
-     * Returns the scaled prices of the passed product for the current global state.
-     * If the customer group of the current user has no own defined prices,
-     * the function returns the scaled prices of the fallback customer group.
+     * This function returns the scaled customer group prices for the passed product.
+     *
+     * The scaled product prices are selected over the s_articles_prices.articledetailsID column.
+     * The id is stored in the Struct\ProductMini::variantId property.
+     * The prices are ordered ascending by the Struct\Price::from property.
      *
      * @param Struct\ProductMini $product
-     * @param Struct\GlobalState $state
+     * @param \Shopware\Struct\GlobalState $state
      * @return Struct\Price[]
      */
     public function getProductPrices(Struct\ProductMini $product, Struct\GlobalState $state)
     {
+        $customerGroup = $state->getCurrentCustomerGroup();
+
         $prices = $this->priceGateway->getProductPrices(
-            $product,
-            $state->getCurrentCustomerGroup()
+            $product, $customerGroup
         );
 
         if (empty($prices)) {
+            $customerGroup =  $state->getFallbackCustomerGroup();
+
             $prices = $this->priceGateway->getProductPrices(
-                $product,
-                $state->getFallbackCustomerGroup()
+                $product, $customerGroup
             );
         }
 
         foreach($prices as $price) {
             $price->setUnit($product->getUnit());
+            $price->setCustomerGroup($customerGroup);
         }
 
         return $prices;
@@ -76,27 +80,40 @@ class Price
     }
 
     /**
-     * Returns the cheapest customer group price for a product.
+     * Returns the cheapest product price struct.
      *
-     * The function selects first the cheapest product price of the scaled prices.
+     * The cheapest product price is selected over all product variations.
+     *
+     * This means that the query uses the s_articles_prices.articleID column for the where condition.
+     * The articleID is stored in the Struct\ProductMini::id property.
+     *
+     * The cheapest price contains the associated product Struct\Unit of the associated product variation.
+     * This means:
+     *  - Current product variation is the SW2000
+     *    - This product variation contains no associated Struct\Unit
+     *  - The cheapest variant price is associated to the SW2000.2
+     *    - This product variation contains an associated Struct\Unit
+     *  - The unit of SW2000.2 is set into the Struct\Price::unit property
      *
      * @param Struct\ProductMini $product
-     * @param Struct\GlobalState $state
+     * @param \Shopware\Struct\GlobalState $state
      * @return Struct\Price
      */
     public function getCheapestProductPrice(Struct\ProductMini $product, Struct\GlobalState $state)
     {
+        $customerGroup = $state->getCurrentCustomerGroup();
         $cheapestPrice = $this->priceGateway->getCheapestProductPrice(
-            $product,
-            $state->getCurrentCustomerGroup()
+            $product, $customerGroup
         );
 
         if ($cheapestPrice == null) {
+            $customerGroup = $state->getFallbackCustomerGroup();
             $cheapestPrice = $this->priceGateway->getCheapestProductPrice(
-                $product,
-                $state->getFallbackCustomerGroup()
+                $product, $customerGroup
             );
         }
+
+        $cheapestPrice->setCustomerGroup($customerGroup);
 
         return $cheapestPrice;
     }
@@ -181,22 +198,59 @@ class Price
      */
     private function calculatePrice($price, Struct\GlobalState $state)
     {
+        /**
+         * Important:
+         * We have to use the current customer group of the current user
+         * and not the customer group of the price.
+         *
+         * The price could be a price of the fallback customer group
+         * but the discounts and gross calculation should be used from
+         * the current customer group!
+         */
         $customerGroup = $state->getCurrentCustomerGroup();
 
+        /**
+         * Basket discount calculation:
+         *
+         * Check if a global basket discount is configured and reduce the price
+         * by the percentage discount value of the current customer group.
+         */
         if ($customerGroup->getUseDiscount()
             && $customerGroup->getPercentageDiscount()) {
 
             $price = $price - ($price / 100 * $customerGroup->getPercentageDiscount());
         }
 
+        /**
+         * Currency calculation:
+         * If the customer is currently in a sub shop with another currency, like dollar,
+         * we have to calculate the the price for the other currency.
+         */
         $price = $price * $state->getCurrency()->getFactor();
+
 
         //check if the customer group should see gross prices.
         if (!$customerGroup->displayGrossPrices()) {
             return $price;
         }
 
-        //example:  20,- €   *   119 (tax)   /   100
+        /**
+         * Gross calculation:
+         *
+         * This line contains the gross price calculation within the store front.
+         *
+         * The passed $state object contains a calculated Struct\Tax object which
+         * defines which tax rules should be used for the tax calculation.
+         *
+         * The tax rules can be defined individual for each customer group and
+         * individual for each area, country and state.
+         *
+         * For example:
+         *  - The EK customer group has different configured HIGH-TAX rules.
+         *  - In area Europe, in country Germany the global tax value are set to 19%
+         *  - But in area Europe, in country Germany, in state Bayern, the tax value are set to 20%
+         *  - But in area Europe, in country Germany, in state Berlin, the tax value are set to 18%
+         */
         $price = $price * (100 + $state->getTax()->getTax()) / 100;
 
         return $price;

@@ -1,11 +1,14 @@
 <?php
 
-namespace Shopware\Hydrator\ORM;
+namespace Shopware\Hydrator\DBAL;
 use Shopware\Struct as Struct;
 
 class Tax
 {
     /**
+     * Creates a new tax struct and assigns the passed
+     * data array.
+     *
      * @param array $data
      * @return \Shopware\Struct\Tax
      */
@@ -14,6 +17,8 @@ class Tax
         $tax = new Struct\Tax();
 
         $tax->setId($data['id']);
+
+        $tax->setName($data['description']);
 
         $tax->setTax($data['tax']);
 

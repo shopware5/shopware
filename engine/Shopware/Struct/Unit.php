@@ -5,7 +5,7 @@ namespace Shopware\Struct;
 /**
  * @package Shopware\Struct
  */
-class Unit extends Base
+class Unit
 {
     /**
      * Unique identifier of the struct.

@@ -5,37 +5,65 @@ namespace Shopware\Struct;
 /**
  * @package Shopware\Struct
  */
-class Manufacturer extends Base
+class Manufacturer extends Extendable
 {
     /**
+     * Unique identifier of the manufacturer
      * @var int
      */
     private $id;
 
     /**
+     * Name of the manufacturer.
+     *
+     * The name isn't translatable.
+     *
      * @var string
      */
     private $name;
 
     /**
+     * Description of the manufacturer.
+     * This value can be translated.
+     *
      * @var string
      */
     private $description;
 
     /**
+     * Title for the seo optimization.
+     *
      * @var string
      */
     private $metaTitle;
 
     /**
+     * Description for the seo optimization.
+     *
      * @var string
      */
     private $metaDescription;
 
     /**
+     * Keywords for the seo optimization.
+     *
      * @var string
      */
     private $metaKeywords;
+
+    /**
+     * Contains the link to the manufacturer home page.
+     *
+     * @var string
+     */
+    private $link;
+
+    /**
+     * Contains the file url for the cover file.
+     *
+     * @var string
+     */
+    private $coverFile;
 
     /**
      * @param string $description
@@ -145,7 +173,35 @@ class Manufacturer extends Base
         return $this->name;
     }
 
+    /**
+     * @return string
+     */
+    public function getLink()
+    {
+        return $this->link;
+    }
 
+    /**
+     * @param string $link
+     */
+    public function setLink($link)
+    {
+        $this->link = $link;
+    }
 
+    /**
+     * @return string
+     */
+    public function getCoverFile()
+    {
+        return $this->coverFile;
+    }
 
+    /**
+     * @param string $coverFile
+     */
+    public function setCoverFile($coverFile)
+    {
+        $this->coverFile = $coverFile;
+    }
 }
