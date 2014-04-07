@@ -184,11 +184,38 @@ class Repository extends ModelRepository
     }
 
     /**
-     * Returns an array of all custom sites of a shop
-     * @param $shopId
+     * Returns an array of all custom sites of a shop and matches children to their parents
+     * @param integer $shopId
      * @return array
      */
     public function getSitesByShopId($shopId)
+    {
+        $builder = $this->getSitesByShopIdBuilder($shopId);
+        $result = $builder->getQuery()->getArrayResult();
+
+        $sites = array();
+
+        foreach ($result as $site) {
+            $id = $site['id'];
+            $parentId = $site['parentId'];
+
+            if ($parentId) {
+                $sites[$parentId]['children'][$id] = $site;
+            } else {
+                $sites[$id] = $site;
+            }
+        }
+
+        return $sites;
+    }
+
+    /**
+     * Helper function to create the query builder for the "getSiteByShopId" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @param integer $shopId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getSitesByShopIdBuilder($shopId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('site', 'attribute'))
@@ -210,24 +237,6 @@ class Repository extends ModelRepository
             ->OrderBy('site.parentId')
             ->AddOrderBy('site.id');
 
-        $result = $builder->getQuery()->getArrayResult();
-
-        $sites = array();
-
-        foreach ($result as $site) {
-            $id = $site['id'];
-            $parentId = $site['parentId'];
-
-            if ($parentId) {
-                if (empty($sites[$parentId])) {
-                    continue;
-                }
-                $sites[$parentId]['children'][$id] = $site;
-            } else {
-                $sites[$id] = $site;
-            }
-        }
-
-        return $sites;
+        return $builder;
     }
 }
