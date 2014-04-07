@@ -32,7 +32,7 @@ use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Image;
 use Shopware\Models\Article\Price;
 use Shopware\Models\Article\Unit;
-use Shopware\Models\Customer\Group as CustomerGroup;
+use Shopware\Models\Customer\Group as CustGroup;
 use Shopware\Models\Media\Media as MediaModel;
 use Shopware\Models\Tax\Tax;
 use Shopware\Components\Api\BatchInterface;
@@ -609,7 +609,7 @@ class Variant extends Resource implements BatchInterface
                 ->findOneBy(array('key' => $priceData['customerGroupKey']));
 
             /** @var CustomerGroup $customerGroup */
-            if (!$customerGroup instanceof CustomerGroup) {
+            if (!$customerGroup instanceof CustGroup) {
                 throw new ApiException\CustomValidationException(sprintf('Customer Group by key %s not found', $priceData['customerGroupKey']));
             }
 
