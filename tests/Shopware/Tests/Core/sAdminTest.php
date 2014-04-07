@@ -122,34 +122,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $result = $this->module->sValidateVat();
         $this->assertCount(1, $result);
         $this->assertContains('VatFailureErrorField', $result);
-
-        /**
-         * Tests using external service
-         */
-
-        // Test with invalid shop vat id
-        $this->config->offsetSet('sVATCHECKADVANCEDNUMBER', 'DE123456789');
-        $result = $this->module->sValidateVat();
-        $this->assertCount(1, $result);
-        $this->assertContains('VatFailureErrorField', $result);
-
-        // Test that fake data throws an error
-        $this->post['company'] = 'TestCompany';
-        $this->post['Ort'] = 'TestLand';
-        $this->post['PLZ'] = '48100';
-        $this->post['Strasse'] = 'TestStreet';
-        $this->post['country'] = '18';
-        $this->post['ustid'] = 'LU20260743';
-        $this->config->offsetSet('sVATCHECKADVANCEDNUMBER', 'DE813028812');
-        $result = $this->module->sValidateVat();
-        $this->assertCount(4, $result);
-        $this->assertContains('VatFailureErrorField', $result);
-
-        // Test that, by default, an unknown error is thrown
-        $this->config->offsetSet('sVATCHECKADVANCEDNUMBER', false);
-        $result = $this->module->sValidateVat();
-        $this->assertCount(1, $result);
-        $this->assertContains('VatFailureUnknownError', $result);
     }
 
     /**
