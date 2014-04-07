@@ -294,6 +294,15 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     public function saveBillingAction()
     {
         if ($this->Request()->isPost()) {
+
+            $requirePhone = false;
+
+            if(intval(Shopware()->Config()->get('showPhoneNumberField'))
+            && intval(Shopware()->Config()->get('requirePhoneField')))
+            {
+                $requirePhone = true;
+            }
+
             $rules = array(
                 'salutation'=>array('required'=>1),
                 'company'=>array('required'=>0),
@@ -303,7 +312,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
                 'streetnumber'=>array('required'=>1),
                 'zipcode'=>array('required'=>1),
                 'city'=>array('required'=>1),
-                'phone'=>array('required'=> intval(Shopware()->Config()->get('requirePhoneField'))),
+                'phone'=>array('required'=> $requirePhone),
                 'fax'=>array('required'=>0),
                 'country'=>array('required'=>1),
                 'department'=>array('required'=>0),

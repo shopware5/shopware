@@ -387,12 +387,27 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $result = $checkData;
         }
 
+        $requirePhone = false;
+        $requireBirthday = false;
+
+        if(intval(Shopware()->Config()->get('showPhoneNumberField'))
+        && intval(Shopware()->Config()->get('requirePhoneField')))
+        {
+            $requirePhone = true;
+        }
+
+        if(intval(Shopware()->Config()->get('showBirthdayField'))
+        && intval(Shopware()->Config()->get('requireBirthdayField')))
+        {
+            $requireBirthday = true;
+        }
+
         $rules = array(
             'customer_type'=>array('required'=>0),
             'salutation'=>array('required'=>1),
             'firstname'=>array('required'=>1),
             'lastname'=>array('required'=>1),
-            'phone'=>array('required'=> intval(Shopware()->Config()->get('requirePhoneField'))),
+            'phone'=>array('required'=> $requirePhone),
             'fax'=>array('required'=>0),
             'text1'=>array('required'=>0),
             'text2'=>array('required'=>0),
@@ -401,9 +416,9 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             'text5'=>array('required'=>0),
             'text6'=>array('required'=>0),
             'sValidation'=>array('required'=>0),
-            'birthyear'=>array('required'=> intval(Shopware()->Config()->get('requireBirthdayField'))),
-            'birthmonth'=>array('required'=> intval(Shopware()->Config()->get('requireBirthdayField'))),
-            'birthday'=>array('required'=> intval(Shopware()->Config()->get('requireBirthdayField'))),
+            'birthyear'=>array('required'=> $requireBirthday),
+            'birthmonth'=>array('required'=> $requireBirthday),
+            'birthday'=>array('required'=> $requireBirthday),
             'dpacheckbox'=>array('required'=>(Shopware()->Config()->get('ACTDPRCHECK'))?1:0)
         );
         $rules = Enlight()->Events()->filter('Shopware_Controllers_Frontend_Register_validatePersonal_FilterRules', $rules, array('subject'=>$this));
