@@ -105,6 +105,14 @@ class Product implements \Shopware\Gateway\Product
             $data['tax'] = $this->getTableRow('s_core_tax', $data['taxID']);
         }
 
+
+        if ($data['pricegroupActive'] && $data['pricegroupID']) {
+            $data['priceGroup'] = $this->getTableRow(
+                's_core_pricegroups',
+                $data['pricegroupID']
+            );
+        }
+
         return $data;
     }
 

@@ -130,8 +130,11 @@ class Product
             $product->setHasProperties($data['filtergroupID'] > 0);
         }
 
-        if (isset($data['pricegroupActive'])) {
-            $product->setHasPriceGroup(boolval($data['pricegroupActive']));
+        if (isset($data['priceGroup'])) {
+            $product->setPriceGroup(new Struct\PriceGroup());
+
+            $product->getPriceGroup()->setId($data['priceGroup']['id']);
+            $product->getPriceGroup()->setName($data['priceGroup']['description']);
         }
 
         if (isset($data['topseller'])) {

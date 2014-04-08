@@ -1,13 +1,13 @@
 <?php
-class Migrations_Migration227 Extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration400 Extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up()
     {
         $sql = <<<'EOD'
-    SET @elementId = (SELECT id FROM s_core_config_elements WHERE name ='forceCanonicalHttp' LIMIT 1);
-
-    INSERT IGNORE INTO `s_core_config_element_translations` (`id` ,`element_id` ,`locale_id` ,`label` ,`description`)
-    VALUES (NULL,  @elementId,  '2',  'Force http canonical url', NULL);
+ALTER TABLE `s_articles_prices` ADD INDEX `all_product_prices_query`
+(`articledetailsID`, `pricegroup`, `from`);
+ALTER TABLE `s_articles_prices` ADD INDEX `cheapest_price_query`
+(`articleID`, `pricegroup`, `price`);
 EOD;
 
         $this->addSql($sql);
