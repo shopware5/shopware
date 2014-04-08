@@ -140,6 +140,18 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     $data['elements'][$elementsKey]['label'] = $array['label'];
                 }
             }
+
+            if($values['type'] !== 'select')
+            {
+                continue;
+            }
+
+            foreach($values['options']['store'] as &$row)
+            {
+                $row[1] = $row[1][$locale->toString()];
+            }
+
+            $data['elements'][$elementsKey]['options'] = $values['options'];
         }
 
         $this->View()->assign(array(
