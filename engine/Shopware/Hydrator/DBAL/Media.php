@@ -56,7 +56,7 @@ class Media
      */
     public function hydrateProductImage(array $data)
     {
-        $media = $this->hydrate($data['media']);
+        $media = $this->hydrate($data);
 
         $media->setPreview(($data['main'] == 1));
 

@@ -43,20 +43,23 @@ class Property implements \Shopware\Gateway\Property
     {
         $set = $this->getSet($product);
 
-        $set['options'] = $this->getPropertiesOfProduct($product, $set['id']);
+        $set['attribute'] = $this->getTableRow(
+            's_filter_attributes',
+            $set['id'],
+            'filterID'
+        );
 
+        $set['options'] = $this->getPropertiesOfProduct($product, $set);
 
-        echo '<pre>';
-        print_r($set);
-        exit();
+        return $this->propertyHydrator->hydrate($set);
     }
 
-    private function getPropertiesOfProduct(Struct\ProductMini $product, $setId)
+    private function getPropertiesOfProduct(Struct\ProductMini $product, $setData)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
 
         $query->select(array(
-            'value.id as valueId',
+            'value.id as value_id',
             'value.value ',
             'value.value_numeric',
 
@@ -73,22 +76,31 @@ class Property implements \Shopware\Gateway\Property
                 'relations',
                 'value.optionID = relations.optionID AND relations.groupID = :setId'
             )
-            ->addOrderBy('value.position', 'ASC')
             ->addOrderBy('relations.position', 'ASC')
             ->where('articles.articleID = :productId')
             ->setParameter(':productId', $product->getId())
-            ->setParameter(':setId', $setId)
-        ;
+            ->setParameter(':setId', $setData['id']);
+
+        switch ($setData['sortmode']) {
+            case self::FILTERS_SORT_ALPHANUMERIC:
+                $query->addOrderBy('value.value');
+                break;
+
+            case self::FILTERS_SORT_NUMERIC:
+                $query->addOrderBy('value.value_numeric');
+                break;
+
+            case self::FILTERS_SORT_ARTICLE_COUNT:
+            case self::FILTERS_SORT_POSITION:
+            default:
+                $query->addOrderBy('value.position');
+                break;
+        }
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
-        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
-
-        echo '<pre>';
-        print_r($data);
-        exit();
-        return $query;
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
 

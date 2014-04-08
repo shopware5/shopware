@@ -5,7 +5,7 @@ namespace Shopware\Struct;
 /**
  * @package Shopware\Struct
  */
-class PropertySet
+class PropertySet extends Extendable
 {
     /**
      * @var int

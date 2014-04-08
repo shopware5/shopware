@@ -108,12 +108,6 @@ class ProductMini extends Extendable
     private $hasProperties = false;
 
     /**
-     * Contains a flag if the product has an assigned price group
-     * @var bool
-     */
-    private $hasPriceGroup = false;
-
-    /**
      * Defines the date which the product was created in the
      * database.
      *
@@ -265,6 +259,11 @@ class ProductMini extends Extendable
     private $cover;
 
     /**
+     * @var PriceGroup
+     */
+    private $priceGroup;
+
+    /**
      * Contains an offset of product states.
      * States defines which processed the product has already passed through,
      * like the price calculation, translation or other states.
@@ -326,29 +325,12 @@ class ProductMini extends Extendable
     }
 
     /**
-     * @return boolean
-     */
-    public function hasPriceGroup()
-    {
-        return $this->hasPriceGroup;
-    }
-
-    /**
-     * @param boolean $hasPriceGroup
-     */
-    public function setHasPriceGroup($hasPriceGroup)
-    {
-        $this->hasPriceGroup = $hasPriceGroup;
-    }
-
-    /**
      * @param float $highlight
      */
     public function setHighlight($highlight)
     {
         $this->highlight = $highlight;
     }
-
 
     /**
      * @param boolean $allowsNotification
@@ -826,6 +808,37 @@ class ProductMini extends Extendable
         $this->hasProperties = $hasProperties;
     }
 
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return \Shopware\Struct\PriceGroup
+     */
+    public function getPriceGroup()
+    {
+        return $this->priceGroup;
+    }
+
+    /**
+     * @param \Shopware\Struct\PriceGroup $priceGroup
+     */
+    public function setPriceGroup($priceGroup)
+    {
+        $this->priceGroup = $priceGroup;
+    }
 
 
 }

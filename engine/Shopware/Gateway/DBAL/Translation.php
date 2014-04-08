@@ -139,9 +139,90 @@ class Translation implements \Shopware\Gateway\Translation
     public function translatePropertySet(
         Struct\PropertySet $set,
         Struct\Shop $shop
-    )
+    ) {
+        $translation = $this->getSingleTranslation(
+            'propertygroup',
+            $set->getId(),
+            $shop->getId()
+        );
+
+        $translation['groups'] = $this->getPropertyGroupTranslations($set, $shop);
+        $translation['options'] = $this->getPropertyOptionTranslations($set, $shop);
+
+        $this->translationHydrator->hydratePropertyTranslation($set, $translation);
+    }
+
+
+    private function getPropertyGroupTranslations(Struct\PropertySet $set, Struct\Shop $shop)
     {
-        // TODO: Implement translatePropertySet() method.
+        $query = $this->getTranslationQuery('propertyoption', $shop->getId())
+            ->select(array('translation.objectkey', 'translation.objectdata'))
+            ->innerJoin('translation', 's_filter_options', 'options', 'options.id = translation.objectkey')
+            ->innerJoin(
+                'options',
+                's_filter_relations',
+                'relations',
+                'relations.optionID = options.id AND relations.groupID = :setId'
+            )
+            ->setParameter(':setId', $set->getId());
+
+        $data = $this->fetchAssociatedArray($query);
+        $data = array_combine(
+            array_keys($data),
+            array_column($data, 'objectdata')
+        );
+
+        if (empty($data)) {
+            return array();
+        }
+
+        return $data;
+    }
+
+    private function getPropertyOptionTranslations(Struct\PropertySet $set, Struct\Shop $shop)
+    {
+        $query = $this->getTranslationQuery('propertyvalue', $shop->getId())
+            ->select(array('translation.objectkey', 'translation.objectdata'))
+            ->innerJoin('translation', 's_filter_values', 'value', 'value.id = translation.objectkey')
+            ->innerJoin('value', 's_filter_options', 'options', 'options.id = value.optionID')
+            ->innerJoin(
+                'options',
+                's_filter_relations',
+                'relations',
+                'relations.optionID = options.id AND relations.groupID = :setId'
+            )
+            ->setParameter(':setId', $set->getId());
+
+        $data = $this->fetchAssociatedArray($query);
+        $data = array_combine(
+            array_keys($data),
+            array_column($data, 'objectdata')
+        );
+
+        if (empty($data)) {
+            return array();
+        }
+
+        return $data;
+    }
+
+    /**
+     * Helper function which uses the first column as array key.
+     *
+     * @param \Doctrine\DBAL\Query\QueryBuilder $query
+     * @return array
+     */
+    private function fetchAssociatedArray(\Doctrine\DBAL\Query\QueryBuilder $query)
+    {
+        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $query->execute();
+
+        $data = $statement->fetchAll(\PDO::FETCH_GROUP);
+        $data = array_combine(
+            array_keys($data),
+            array_column($data, 0)
+        );
+        return $data;
     }
 
     /**

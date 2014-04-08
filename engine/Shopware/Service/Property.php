@@ -26,7 +26,6 @@ class Property
         $this->translationService = $translationService;
     }
 
-
     /**
      * @param \Shopware\Struct\ProductMini $product
      * @param \Shopware\Struct\GlobalState $state

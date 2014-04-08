@@ -21,18 +21,6 @@ class Translation
         'txtpackunit' => 'packUnit'
     );
 
-    private $propertySetTranslationMapping = array(
-        'groupName' => 'name'
-    );
-
-    private $propertyGroupTranslationMapping = array(
-        'optionName' => 'name'
-    );
-
-    private $propertyOptionTranslationMapping = array(
-        'optionValue' => 'name'
-    );
-
     /**
      * @var Product
      */
@@ -137,36 +125,31 @@ class Translation
      */
     public function hydratePropertyTranslation(Struct\PropertySet $set, array $data)
     {
-        $translation = $this->mapArray(
-            $data,
-            $this->propertySetTranslationMapping
-        );
-
-        $this->propertyHydrator->assignSetData($set, $translation);
+        if (isset($data['groupName'])) {
+            $set->setName($data['groupName']);
+        }
 
         foreach($set->getGroups() as $group) {
-            $translation = $this->extractTranslation(
-                $data['groups'],
-                $group->getId(),
-                $this->propertyGroupTranslationMapping
-            );
+            $translation = $data['groups'][$group->getId()];
 
             if ($translation) {
-                $this->propertyHydrator->assignGroupData(
-                    $group, $translation
-                );
+                $translation = unserialize($translation);
+
+                if (isset($translation['optionName'])) {
+                    $group->setName($translation['optionName']);
+                }
             }
 
             foreach($group->getOptions() as $option) {
-                $translation = $this->extractTranslation(
-                    $data['options'],
-                    $option->getId(),
-                    $this->propertyOptionTranslationMapping
-                );
+                $translation = $data['options'][$option->getId()];
 
-                $this->propertyHydrator->assignOptionData(
-                    $option, $translation
-                );
+                if ($translation) {
+                    $translation = unserialize($translation);
+
+                    if (isset($translation['optionValue'])) {
+                        $option->setName($translation['optionValue']);
+                    }
+                }
             }
         }
     }
