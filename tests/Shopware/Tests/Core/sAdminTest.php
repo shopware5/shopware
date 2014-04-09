@@ -44,24 +44,17 @@ class sAdminTest extends PHPUnit_Framework_TestCase
      */
     private $session;
 
-    /**
-     * @var array The post data
-     */
-    private $post;
-
     public function setUp()
     {
         parent::setUp();
 
         $this->module = Shopware()->Modules()->Admin();
         $this->session = array();
-        $this->post = array();
         $this->config = Shopware()->Config();
         $this->module->sSYSTEM->sCONFIG = &$this->config;
         $this->module->sSYSTEM->sCurrency = Shopware()->Db()->fetchRow('SELECT * FROM s_core_currencies WHERE currency LIKE "EUR"');
         $this->module->sSYSTEM->_SESSION = &$this->session;
         $this->module->sSYSTEM->sSESSION_ID = null;
-        $this->module->sSYSTEM->_POST = &$this->post;
         $this->module->sSYSTEM->sLanguage = 1;
         $this->basketModule = Shopware()->Modules()->Basket();
         $this->basketModule->sSYSTEM = &$this->module->sSYSTEM;
@@ -102,23 +95,23 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertContains('VatFailureEmpty', $result);
 
         // Test that wrong tax id returns matching error
-        $this->post['ustid'] = -1;
+        $this->module->sSYSTEM->_POST['ustid'] = -1;
         $result = $this->module->sValidateVat();
         $this->assertCount(1, $result);
         $this->assertContains('VatFailureInvalid', $result);
 
         // Test that no country id returns matching error
-        $this->post['ustid'] = 'DE123456789';
+        $this->module->sSYSTEM->_POST['ustid'] = 'DE123456789';
         $result = $this->module->sValidateVat();
         $this->assertCount(1, $result);
         $this->assertContains('VatFailureErrorField', $result);
 
         // Test basic validation is ok
-        $this->post['country'] = '2';
+        $this->module->sSYSTEM->_POST['country'] = '2';
         $this->assertCount(0, $this->module->sValidateVat());
 
         // Test that non-matching VAT prefix and country id returns error
-        $this->post['country'] = '18';
+        $this->module->sSYSTEM->_POST['country'] = '18';
         $result = $this->module->sValidateVat();
         $this->assertCount(1, $result);
         $this->assertContains('VatFailureErrorField', $result);
@@ -133,8 +126,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     {
         // Posted number is fake
         // Validation should fail
-        $this->post['country'] = '2';
-        $this->post['ustid'] = 'DE123456789';
+        $this->module->sSYSTEM->_POST['country'] = '2';
+        $this->module->sSYSTEM->_POST['ustid'] = 'DE123456789';
         $this->config->offsetSet('sVATCHECKADVANCEDNUMBER', 'DE813028812');
         $this->assertCount(1, $this->module->sValidateVat());
     }
@@ -149,8 +142,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         // Both vat numbers are valid
         // http://services.amazon.de/service/nutzungsbedingungen.html
         // Validation should return true
-        $this->post['country'] = '18';
-        $this->post['ustid'] = 'LU19647148';
+        $this->module->sSYSTEM->_POST['country'] = '18';
+        $this->module->sSYSTEM->_POST['ustid'] = 'LU19647148';
         $this->config->offsetSet('sVATCHECKADVANCEDNUMBER', 'LU20260743');
         $this->assertCount(0, $this->module->sValidateVat());
     }
@@ -277,7 +270,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
      */
     public function testsValidateStep3()
     {
-        $this->post = array(
+        $this->module->sSYSTEM->_POST = array(
             'sPayment' => 2
         );
 
@@ -305,7 +298,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $customer = $this->createDummyCustomer();
         $this->session['sUserId'] = $customer->getId();
 
-        $this->post = array(
+        $this->module->sSYSTEM->_POST = array(
             'company' => 'TestCompany',
             'department' => 'TestDepartment',
             'salutation' => 'TestSalutation',
@@ -344,20 +337,20 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
 
         // Prepare testData for comparison
-        $this->post['countryID'] = $this->post['country'];
-        unset($this->post['country']);
-        $this->post['birthday'] = mktime(
+        $this->module->sSYSTEM->_POST['countryID'] = $this->module->sSYSTEM->_POST['country'];
+        unset($this->module->sSYSTEM->_POST['country']);
+        $this->module->sSYSTEM->_POST['birthday'] = mktime(
             0,0,0,
-            (int) $this->post['birthmonth'],
-            (int) $this->post['birthday'],
-            (int) $this->post['birthyear']
+            (int) $this->module->sSYSTEM->_POST['birthmonth'],
+            (int) $this->module->sSYSTEM->_POST['birthday'],
+            (int) $this->module->sSYSTEM->_POST['birthyear']
         );
-        $this->post['birthday'] = '1998-10-21';
-        unset($this->post['birthmonth']);
-        unset($this->post['birthyear']);
+        $this->module->sSYSTEM->_POST['birthday'] = '1998-10-21';
+        unset($this->module->sSYSTEM->_POST['birthmonth']);
+        unset($this->module->sSYSTEM->_POST['birthyear']);
 
         $this->assertArrayHasKey('id', $result);
-        foreach ($this->post as $key => $value) {
+        foreach ($this->module->sSYSTEM->_POST as $key => $value) {
             $this->assertEquals($value, $result[$key]);
         }
 
@@ -495,7 +488,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->module->sUpdateShipping());
 
         // Setup dummy test data and test with it
-        $this->post = array(
+        $this->module->sSYSTEM->_POST = array(
             'company' => 'Testcompany',
             'department' => 'Testdepartment',
             'salutation' => 'Testsalutation',
@@ -527,11 +520,11 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         ', array($customer->getId()));
 
         // Prepare testData for comparison
-        $this->post['countryID'] = $this->post['country'];
-        unset($this->post['country']);
+        $this->module->sSYSTEM->_POST['countryID'] = $this->module->sSYSTEM->_POST['country'];
+        unset($this->module->sSYSTEM->_POST['country']);
 
         $this->assertArrayHasKey('id', $result);
-        foreach ($this->post as $key => $value) {
+        foreach ($this->module->sSYSTEM->_POST as $key => $value) {
             $this->assertEquals($value, $result[$key]);
         }
 
@@ -557,7 +550,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         );
 
         // Setup dummy test data and test with it
-        $this->post = array(
+        $this->module->sSYSTEM->_POST = array(
             'sPayment' => 2
         );
         $this->assertTrue($this->module->sUpdatePayment());
@@ -579,7 +572,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         $customer = $this->createDummyCustomer();
         $this->session['sUserId'] = $customer->getId();
-        $this->post['email'] = uniqid() . 'test@foobar.com';
+        $this->module->sSYSTEM->_POST['email'] = uniqid() . 'test@foobar.com';
 
         $this->assertTrue($this->module->sUpdateAccount());
 
@@ -589,8 +582,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             Shopware()->Db()->fetchOne('SELECT email FROM s_user WHERE id = ?', array($customer->getId()))
         );
 
-        $this->post['password'] = uniqid() . 'password';
-        $this->post['passwordConfirmation'] = $this->post['password'];
+        $this->module->sSYSTEM->_POST['password'] = uniqid() . 'password';
+        $this->module->sSYSTEM->_POST['passwordConfirmation'] = $this->module->sSYSTEM->_POST['password'];
 
         $this->assertTrue($this->module->sUpdateAccount());
 
@@ -634,7 +627,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
 
         // Setup dummy test data and test with it, see it passes
-        $this->post = array(
+        $this->module->sSYSTEM->_POST = array(
             'testField1' => 'testValue',
             'testField2' => 'testValue',
             'testField3' => 'testValue',
@@ -649,7 +642,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         // Test that using vat id will trigger aux function to validate it
         $this->config->offsetSet('sVATCHECKENDABLED', true);
         $testRuleSet['ustid'] = array('required' => 1);
-        $this->post['ustid'] = '12345';
+        $this->module->sSYSTEM->_POST['ustid'] = '12345';
         $result = $this->module->sValidateStep2($testRuleSet);
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('sErrorFlag', $result);
@@ -691,7 +684,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
 
         // Setup dummy test data and test with it, see it passes
-        $this->post = array(
+        $this->module->sSYSTEM->_POST = array(
             'testField1' => 'testValue',
             'testField2' => 'testValue',
             'testField3' => 'testValue',
@@ -724,7 +717,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('passwordConfirmation', $result['sErrorFlag']);
 
         // Test with diverging password, should fail
-        $this->post = array(
+        $this->module->sSYSTEM->_POST = array(
             'password' => 'password',
             'passwordConfirmation' => 'passwordConfirmation',
         );
@@ -742,7 +735,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('passwordConfirmation', $result['sErrorFlag']);
 
         // Test with matching passwords, should succeed
-        $this->post = array(
+        $this->module->sSYSTEM->_POST = array(
             'password' => 'password',
             'passwordConfirmation' => 'password',
         );
@@ -754,7 +747,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertNull($result['sErrorFlag']);
 
         // Test with invalid email, should fail
-        $this->post['email'] = 'failmail.com';
+        $this->module->sSYSTEM->_POST['email'] = 'failmail.com';
         $result = $this->module->sValidateStep1();
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('sErrorFlag', $result);
@@ -768,7 +761,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('email', $result['sErrorFlag']);
 
         // Test with valid email, should succeed
-        $this->post['email'] = 'foo@failmail.com';
+        $this->module->sSYSTEM->_POST['email'] = 'foo@failmail.com';
         $result = $this->module->sValidateStep1();
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('sErrorFlag', $result);
@@ -777,7 +770,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertNull($result['sErrorFlag']);
 
         // Test with diverging emailConfirmation and email, should fail
-        $this->post['emailConfirmation'] = 'bar@failmail.com';
+        $this->module->sSYSTEM->_POST['emailConfirmation'] = 'bar@failmail.com';
         $result = $this->module->sValidateStep1();
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('sErrorFlag', $result);
@@ -791,7 +784,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('emailConfirmation', $result['sErrorFlag']);
 
         // Test with valid email, should succeed
-        $this->post['emailConfirmation'] = 'foo@failmail.com';
+        $this->module->sSYSTEM->_POST['emailConfirmation'] = 'foo@failmail.com';
         $result = $this->module->sValidateStep1();
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('sErrorFlag', $result);
@@ -808,7 +801,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('password', $sessionRegister);
 
         // Test with skipLogin
-        $this->post['skipLogin'] = true;
+        $this->module->sSYSTEM->_POST['skipLogin'] = true;
         $this->module->sValidateStep1();
         $sessionRegister = $this->session["sRegister"]['auth'];
         $this->assertEquals(1, $sessionRegister['accountmode']);
@@ -847,7 +840,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             Shopware()->PasswordEncoder()->encodePassword("fooobar", 'bcrypt')
         );
         // Then set post with wrong data
-        $this->post = array(
+        $this->module->sSYSTEM->_POST = array(
             'email' => $customer->getEmail(),
             'currentPassword' => 'password',
         );
@@ -865,7 +858,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('currentPassword', $result['sErrorFlag']);
 
         // Now use correct data to test correct behavior
-        $this->post['currentPassword'] = 'fooobar';
+        $this->module->sSYSTEM->_POST['currentPassword'] = 'fooobar';
         $result = $this->module->sValidateStep1(true);
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('sErrorFlag', $result);
@@ -893,7 +886,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('password', $result['sErrorFlag']);
 
         // Test with wrong data, get error
-        $this->post = array(
+        $this->module->sSYSTEM->_POST = array(
             'email' => uniqid() . 'test',
             'password' => uniqid() . 'test',
         );
@@ -908,7 +901,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $customer = $this->createDummyCustomer();
 
         // Test successful login
-        $this->post = array(
+        $this->module->sSYSTEM->_POST = array(
             'email' => $customer->getEmail(),
             'password' => 'fooobar',
         );
@@ -929,7 +922,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'id = '.$customer->getId()
         );
 
-        $this->post = array(
+        $this->module->sSYSTEM->_POST = array(
             'email' => $customer->getEmail(),
             'passwordMD5' => uniqid(),
         );
@@ -942,7 +935,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertContains('LoginFailure', $result['sErrorMessages']);
 
         // Test correct pre-hashed password
-        $this->post = array(
+        $this->module->sSYSTEM->_POST = array(
             'email' => $customer->getEmail(),
             'passwordMD5' => md5('fooobar'),
         );
@@ -975,7 +968,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         // Test brute force lockout
         Shopware()->Db()->update('s_user', array('active' => 1), 'id = '.$customer->getId());
-        $this->post = array(
+        $this->module->sSYSTEM->_POST = array(
             'email' => $customer->getEmail(),
             'password' => 'asasasasas',
         );
@@ -1010,7 +1003,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->module->sCheckUser());
 
         // Test successful login
-        $this->post = array(
+        $this->module->sSYSTEM->_POST = array(
             'email' => $customer->getEmail(),
             'password' => 'fooobar',
         );
@@ -2716,7 +2709,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $validAddress = uniqid().'@shopware.com';
 
         // Test subscribe with empty post field and empty address, fail validation
-        $this->post['newsletter'] = '';
+        $this->module->sSYSTEM->_POST['newsletter'] = '';
         $result = $this->module->sNewsletterSubscription('');
         $this->assertEquals(
             array('code' => 5, 'message' => 'ErrorFillIn', 'sErrorFlag' => array('newsletter' => true)),
@@ -2737,7 +2730,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             $result
         );
 
-        $this->post = array();
+        $this->module->sSYSTEM->_POST = array();
         // Test with empty field, fail validation
         $result = $this->module->sNewsletterSubscription('');
         $this->assertEquals(
