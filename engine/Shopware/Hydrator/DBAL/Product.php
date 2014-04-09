@@ -109,11 +109,11 @@ class Product
         }
 
         if (isset($data['shippingfree'])) {
-            $product->setShippingFree(boolval($data['shippingfree']));
+            $product->setShippingFree((bool)($data['shippingfree']));
         }
 
         if (isset($data['laststock'])) {
-            $product->setCloseouts(boolval($data['laststock']));
+            $product->setCloseouts((bool)($data['laststock']));
         }
 
         if (isset($data['instock'])) {
@@ -138,11 +138,11 @@ class Product
         }
 
         if (isset($data['topseller'])) {
-            $product->setHighlight(boolval($data['topseller']));
+            $product->setHighlight((bool)($data['topseller']));
         }
 
         if (isset($data['notification'])) {
-            $product->setAllowsNotification(boolval($data['notification']));
+            $product->setAllowsNotification((bool)($data['notification']));
         }
 
         if (isset($data['additionaltext'])) {

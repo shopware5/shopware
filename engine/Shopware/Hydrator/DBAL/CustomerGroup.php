@@ -24,7 +24,7 @@ class CustomerGroup
 
         $customerGroup->setName($data['description']);
 
-        $customerGroup->setDisplayGross(boolval($data['tax']));
+        $customerGroup->setDisplayGross((bool)($data['tax']));
 
         $customerGroup->setKey($data['groupkey']);
 
@@ -34,7 +34,7 @@ class CustomerGroup
 
         $customerGroup->setSurcharge(intval($data['minimumordersurcharge']));
 
-        $customerGroup->setUseDiscount(boolval($data['mode']));
+        $customerGroup->setUseDiscount((bool)($data['mode']));
 
         return $customerGroup;
     }

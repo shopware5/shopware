@@ -24,7 +24,7 @@ class Property
 
         $set->setName($data['name']);
 
-        $set->setComparable(boolval($data['comparable']));
+        $set->setComparable((bool)($data['comparable']));
 
         if (isset($data['attribute'])) {
             $set->addAttribute(

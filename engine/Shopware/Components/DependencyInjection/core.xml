@@ -49,10 +49,13 @@
         <service id="media_gateway" alias="media_gateway_dbal" />
         <service id="translation_gateway" alias="translation_gateway_dbal" />
         <service id="property_gateway" alias="property_gateway_dbal" />
+        <service id="search_gateway" alias="search_gateway_dbal" />
 
 
 
-
+        <service id="search_gateway_dbal" class="Shopware\Gateway\DBAL\Search">
+            <argument type="service" id="models" />
+        </service>
 
 
         <!--used for product selection, like listings, minified products or detailed products-->
@@ -89,6 +92,7 @@
 
         <service id="property_gateway_dbal" class="Shopware\Gateway\DBAL\Property">
             <argument type="service" id="models" />
+            <argument type="service" id="property_hydrator_dbal" />
         </service>
 
 
@@ -134,6 +138,9 @@
         <service id="attribute_hydrator_dbal" class="Shopware\Hydrator\DBAL\Attribute" />
         <service id="tax_hydrator_dbal" class="Shopware\Hydrator\DBAL\Tax" />
         <service id="unit_hydrator_dbal" class="Shopware\Hydrator\DBAL\Unit" />
-        <service id="property_hydrator_dbal" class="Shopware\Hydrator\DBAL\Property" />
+
+        <service id="property_hydrator_dbal" class="Shopware\Hydrator\DBAL\Property" >
+            <argument type="service" id="attribute_hydrator_dbal" />
+        </service>
     </services>
 </container>
