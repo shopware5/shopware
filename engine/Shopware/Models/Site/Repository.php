@@ -234,8 +234,8 @@ class Repository extends ModelRepository
             ->andWhere('shop.id = :shopId')
             ->setParameter('shopId', $shopId)
             ->groupBy('site.id')
-            ->OrderBy('site.parentId')
-            ->AddOrderBy('site.id');
+            ->orderBy('site.parentId')
+            ->addOrderBy('site.id');
 
         return $builder;
     }

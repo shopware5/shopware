@@ -37,6 +37,12 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
         $categoryTree = Shopware()->Modules()->sCategories()->sGetWholeCategoryTree();
         $additionalTrees = $this->getAdditionalTrees();
 
+        $additionalTrees = Enlight()->Events()->filter(
+            'Shopware_Modules_Sitemap_indexAction',
+            $additionalTrees,
+            array('subject' => $this)
+        );
+
         $categoryTree = array_merge($categoryTree, $additionalTrees);
         $this->View()->sCategoryTree = $categoryTree;
     }
@@ -54,6 +60,40 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
         );
     }
 
+    private function getSitesByShopId()
+    {
+        $sql = "
+            SELECT groups.key
+            FROM s_core_shop_pages shopPages
+              INNER JOIN s_cms_static_groups groups
+                ON groups.id = shopPages.group_id
+            WHERE shopPages.shop_id = 1
+        ";
+
+        $statement = Shopware()->Db()->executeQuery($sql);
+
+        $keys = $statement->fetchAll(PDO::FETCH_COLUMN);
+
+        /** @var Shopware\Models\Site\Repository $siteRepository */
+        $siteRepository = $this->get('models')->getRepository('Shopware\Models\Site\Site');
+
+        $sites = array();
+        foreach ($keys as $key) {
+            $current = $siteRepository->getSitesByNodeNameQueryBuilder($key)
+                ->resetDQLPart('from')
+                ->from('Shopware\Models\Site\Site', 'sites', 'sites.id')
+                ->getQuery()
+                ->getArrayResult();
+
+            $sites = array_merge_recursive(
+                $sites,
+                $current
+            );
+        }
+
+        return $sites;
+    }
+
     /**
      * Helper function to get all custom pages of the shop
      * @return array
@@ -63,44 +103,48 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
         /** @var Shopware\Models\Site\Repository $siteRepository */
         $siteRepository = $this->get('models')->getRepository('Shopware\Models\Site\Site');
         $sites = $siteRepository->getSitesByShopId(Shopware()->Shop()->getId());
+//        $sites = $this->getSitesByShopId(Shopware()->Shop()->getId());
+
+        foreach ($sites as &$site) {
+            $site = $this->convertSite($site);
+        }
 
         $staticPages = array(
             'name' => 'SitemapStaticPages',
             'link' => '',
-            'sub' => array()
+            'sub' => $sites
         );
 
-        foreach ($sites as $site) {
-            $site['hideOnSitemap'] = !$this->filterLink($site['link']);
+        return $staticPages;
+    }
 
-            $staticPages['sub'][$site['id']] = array_merge(
-                $site,
-                $this->getSitemapArray(
-                    $site['id'],
-                    $site['description'],
-                    'custom',
-                    'sCustom',
-                    $site['link']
-                )
-            );
+    /**
+     * @param $site
+     * @return mixed
+     */
+    private function convertSite($site)
+    {
+        $site['hideOnSitemap'] = !$this->filterLink($site['link']);
 
-            foreach ($site['children'] as $child) {
-                $child['hideOnSitemap'] = !$this->filterLink($child['link']);
+        $site = array_merge(
+            $site,
+            $this->getSitemapArray(
+                $site['id'],
+                $site['description'],
+                'custom',
+                'sCustom',
+                $site['link']
+            )
+        );
 
-                $staticPages['sub'][$site['id']]['sub'][] = array_merge(
-                    $child,
-                    $this->getSitemapArray(
-                        $child['id'],
-                        $child['description'],
-                        'custom',
-                        'sCustom',
-                        $child['link']
-                    )
-                );
+        if (isset($site['children'])) {
+            foreach($site['children'] as &$child) {
+                $child = $this->convertSite($child);
             }
+            $site['sub'] = $site['children'];
         }
 
-        return $staticPages;
+        return $site;
     }
 
     /**
@@ -144,14 +188,8 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
 
         $suppliers = $builder->getQuery()->getArrayResult();
 
-        $supplierPages = array(
-            'name' => 'SitemapSupplierPages',
-            'link' => '',
-            'sub' => array()
-        );
-
-        foreach ($suppliers as $supplier) {
-            $supplierPages['sub'][] = array_merge(
+        foreach ($suppliers as &$supplier) {
+            $supplier = array_merge(
                 $supplier,
                 $this->getSitemapArray(
                     $supplier['id'],
@@ -161,6 +199,12 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
                 )
             );
         }
+
+        $supplierPages = array(
+            'name' => 'SitemapSupplierPages',
+            'link' => '',
+            'sub' => $suppliers
+        );
 
         return $supplierPages;
     }
@@ -175,27 +219,26 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
         $emotionRepository = $this->get('models')->getRepository('Shopware\Models\Emotion\Emotion');
 
         $builder = $emotionRepository->getCampaigns();
-        $campaigns = $builder->getQuery()->getArrayResult();
+        $campaigns = $builder->getQuery()->getScalarResult();
 
-        $landingPages = array(
-            'name' => 'SitemapLandingPages',
-            'link' => '',
-            'sub' => array()
-        );
-
-        foreach ($campaigns as $campaign) {
-            $landingPages['sub'][] = array_merge(
-                $campaign[0],
-                array('categoryId' => $campaign['categoryId']),
+        foreach ($campaigns as &$campaign) {
+            $campaign = array_merge(
+                $campaign,
                 $this->getSitemapArray(
-                    $campaign[0]['id'],
-                    $campaign[0]['name'],
+                    $campaign['emotions_id'],
+                    $campaign['emotions_name'],
                     'campaign',
                     'emotionId',
                     array('sCategory' => $campaign['categoryId'])
                 )
             );
         }
+
+        $landingPages = array(
+            'name' => 'SitemapLandingPages',
+            'link' => '',
+            'sub' => $campaigns
+        );
 
         return $landingPages;
     }

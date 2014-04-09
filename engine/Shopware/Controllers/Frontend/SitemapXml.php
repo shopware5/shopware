@@ -329,13 +329,13 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
         $emotionRepository = $this->get('models')->getRepository('Shopware\Models\Emotion\Emotion');
 
         $builder = $emotionRepository->getCampaigns();
-        $campaigns = $builder->getQuery()->getArrayResult();
+        $campaigns = $builder->getQuery()->getScalarResult();
 
         foreach ($campaigns as $campaign) {
             $this->printCategoryUrl(
                 $this->getSitemapArray(
-                    $campaign[0]['id'],
-                    $campaign[0]['modified'],
+                    $campaign['emotions_id'],
+                    $campaign['emotions_modified'],
                     'campaign',
                     'emotionId',
                     array('sCategory' => $campaign['categoryId'])
