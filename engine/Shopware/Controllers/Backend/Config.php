@@ -148,6 +148,17 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
             foreach($values['options']['store'] as &$row)
             {
+                if(!is_array($row[1]))
+                {
+                    continue;
+                }
+
+                if(empty($row[1][$locale->toString()]))
+                {
+                    $row[1] = array_shift($row[1]);
+                    continue;
+                }
+
                 $row[1] = $row[1][$locale->toString()];
             }
 
