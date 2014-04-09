@@ -45,9 +45,13 @@ class GlobalState
 
         $state->setCurrentCustomerGroup(new Struct\CustomerGroup());
         $state->getCurrentCustomerGroup()->setKey('EK');
+        $state->getCurrentCustomerGroup()->setId(1);
+        $state->getCurrentCustomerGroup()->setUseDiscount(true);
+        $state->getCurrentCustomerGroup()->setPercentageDiscount(10);
 
         $state->setFallbackCustomerGroup(new Struct\CustomerGroup());
         $state->getFallbackCustomerGroup()->setKey('EK');
+        $state->getCurrentCustomerGroup()->setId(1);
 
         $state->setCurrency(new Struct\Currency());
         $state->getCurrency()->setFactor(1);
