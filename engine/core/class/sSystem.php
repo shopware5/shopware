@@ -27,6 +27,7 @@
  */
 class sSystem
 {
+
     public $sCONFIG;		// Pointer to configuration
 
     public $sSESSION_ID;	// Current Session-ID
@@ -50,12 +51,27 @@ class sSystem
     public $sBENCHRESULTS;	// Benchmark-results as array
     public $sBENCHMARK;	// Holds time for benchmark-purposes
 
-    public $_GET;			// Get-Variables
-    public $_POST;			// Post-Variables
-    public $_COOKIE;		// Cookies
+    /**
+     * @var Enlight_Components_Session_Namespace Session data
+     */
     public $_SESSION;		// Session
 
-    // Absolute pathes
+    /**
+     * @var \Shopware\Components\LegacyRequestWrapper\PostWrapper Wrapper for _POST
+     */
+    private $postWrapper;
+
+    /**
+     * @var \Shopware\Components\LegacyRequestWrapper\GetWrapper Wrapper for _GET
+     */
+    private $getWrapper;
+
+    /**
+     * @var \Shopware\Components\LegacyRequestWrapper\CookieWrapper Wrapper for _COOKIE
+     */
+    private $cookieWrapper;
+
+    // Absolute paths
     public $sPathMedia;		// Path to template images
     public $sPathArticleImg;	// Path to article images
     public $sPathBanner;		// Path to banners
@@ -80,9 +96,42 @@ class sSystem
     public $sMailer;			// Pointer to PHP-Mailer Object
     public $sBotSession;		// True if user is identified as bot
 
-    public function __construct()
+    public function __construct(Enlight_Controller_Request_RequestHttp $request = null)
     {
         $this->sBasePath = dirname(dirname(dirname(dirname(__FILE__)))).'/';
+        $this->postWrapper = new \Shopware\Components\LegacyRequestWrapper\PostWrapper($request);
+        $this->getWrapper = new \Shopware\Components\LegacyRequestWrapper\GetWrapper($request);
+        $this->cookieWrapper = new \Shopware\Components\LegacyRequestWrapper\CookieWrapper($request);
+    }
+
+    public function __set($property, $value)
+    {
+        switch ($property) {
+            case '_POST':
+                $this->postWrapper->setAll($value);
+                break;
+            case '_GET':
+                $this->getWrapper->setAll($value);
+                break;
+        }
+    }
+    public function __get($property) {
+
+        switch ($property) {
+            case '_d':
+                return $this;
+                break;
+            case '_POST':
+                return $this->postWrapper;
+                break;
+            case '_GET':
+                return $this->getWrapper;
+                break;
+            case '_COOKIE':
+                return $this->cookieWrapper;
+                break;
+        }
+        return null;
     }
 
     public function E_CORE_ERROR($ERROR_ID,$ERROR_MESSAGE)
@@ -98,15 +147,5 @@ class sSystem
     public function __call($name, $params=null)
     {
         return call_user_func_array(array($this->sMODULES['sCore'], $name), $params);
-    }
-
-    public function __get($name)
-    {
-        switch ($name) {
-            case '_d':
-                return $this;
-            default:
-                return null;
-        }
     }
 }
