@@ -295,13 +295,8 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     {
         if ($this->Request()->isPost()) {
 
-            $requirePhone = false;
-
-            if(intval(Shopware()->Config()->get('showPhoneNumberField'))
-            && intval(Shopware()->Config()->get('requirePhoneField')))
-            {
-                $requirePhone = true;
-            }
+            $requirePhone = (bool) (Shopware()->Config()->get('showPhoneNumberField')
+                && Shopware()->Config()->get('requirePhoneField'));
 
             $rules = array(
                 'salutation'=>array('required'=>1),

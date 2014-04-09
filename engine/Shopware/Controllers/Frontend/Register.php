@@ -387,20 +387,11 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $result = $checkData;
         }
 
-        $requirePhone = false;
-        $requireBirthday = false;
+        $requirePhone = (bool) (Shopware()->Config()->get('showPhoneNumberField')
+            && Shopware()->Config()->get('requirePhoneField'));
 
-        if(intval(Shopware()->Config()->get('showPhoneNumberField'))
-        && intval(Shopware()->Config()->get('requirePhoneField')))
-        {
-            $requirePhone = true;
-        }
-
-        if(intval(Shopware()->Config()->get('showBirthdayField'))
-        && intval(Shopware()->Config()->get('requireBirthdayField')))
-        {
-            $requireBirthday = true;
-        }
+        $requireBirthday = (bool) (Shopware()->Config()->get('showBirthdayField')
+            && Shopware()->Config()->get('requireBirthdayField'));
 
         $rules = array(
             'customer_type'=>array('required'=>0),
