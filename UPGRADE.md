@@ -33,6 +33,7 @@ In this document you will find a changelog of the important changes related to t
     * `sSystem::sLoadHookPoints`
     * `sSystem::sInitFactory`
     * `sSystem::sCheckLicense`
+* `sNewsletter` core class removed
 
 ## 4.2.2
 
