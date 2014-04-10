@@ -8,7 +8,7 @@ class GetWrapper implements \ArrayAccess
 
     public function __construct(\Enlight_Controller_Request_RequestHttp $request)
     {
-        $this->request = $request ? : new \Enlight_Controller_Request_RequestHttp();
+        $this->request = $request;
     }
 
     /**
@@ -57,15 +57,6 @@ class GetWrapper implements \ArrayAccess
      */
     public function offsetSet($offset, $value)
     {
-        if (is_array($value)) {
-            array_walk_recursive($value, function (&$value) {
-                if ($value === null) {
-                    $value = '';
-                }
-            });
-        } elseif (null === $value) {
-            $value = '';
-        }
         $this->request->setQuery($offset, $value);
     }
 

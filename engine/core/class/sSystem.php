@@ -22,6 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\LegacyRequestWrapper\PostWrapper;
+use Shopware\Components\LegacyRequestWrapper\GetWrapper;
+use Shopware\Components\LegacyRequestWrapper\CookieWrapper;
+
 /**
  * Deprecated Shopware Class
  */
@@ -72,16 +76,16 @@ class sSystem
     private $cookieWrapper;
 
     // Absolute paths
-    public $sPathMedia;		// Path to template images
+    public $sPathMedia;		    // Path to template images
     public $sPathArticleImg;	// Path to article images
     public $sPathBanner;		// Path to banners
     public $sPathArticleFiles;	// Path to Article-Downloads
-    public $sPathStart;		// Path to Start
+    public $sPathStart;		    // Path to Start
     public $sBasefile;
     public $sBasePath;
 
-    // Additionals
-    public $sExtractor;		// Strip parts of rewrited urls and append them
+    // Additional
+    public $sExtractor;		    // Strip parts of rewritten urls and append them
     public $sLicenseData;		// License - Data
     public $sLanguageData;		// All active languages
     public $sLanguage;			// Current language
@@ -98,10 +102,11 @@ class sSystem
 
     public function __construct(Enlight_Controller_Request_RequestHttp $request = null)
     {
+        $request = $request ? : new Enlight_Controller_Request_RequestHttp();
         $this->sBasePath = dirname(dirname(dirname(dirname(__FILE__)))).'/';
-        $this->postWrapper = new \Shopware\Components\LegacyRequestWrapper\PostWrapper($request);
-        $this->getWrapper = new \Shopware\Components\LegacyRequestWrapper\GetWrapper($request);
-        $this->cookieWrapper = new \Shopware\Components\LegacyRequestWrapper\CookieWrapper($request);
+        $this->postWrapper = new PostWrapper($request);
+        $this->getWrapper = new GetWrapper($request);
+        $this->cookieWrapper = new CookieWrapper($request);
     }
 
     public function __set($property, $value)

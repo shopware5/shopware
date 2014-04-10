@@ -37,7 +37,6 @@ class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enli
         'Core',
         'Export',
         'Marketing',
-        'Newsletter',
         'Order',
         'RewriteTable'
     );
@@ -49,6 +48,77 @@ class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enli
         $this->dispatch('/');
     }
 
+    /**
+     * @covers GetWrapper::offsetSet()
+     */
+    public function testSet()
+    {
+        Shopware()->Modules()->System()->_GET->offsetSet('foo', 'bar');
+        $this->assertEquals('bar', Shopware()->Front()->Request()->getQuery('foo'));
+
+        Shopware()->Modules()->System()->_GET->offsetSet('foo', null);
+        $this->assertNull(Shopware()->Front()->Request()->getQuery('bar'));
+
+        Shopware()->Modules()->System()->_GET->offsetSet('foo', array());
+        $this->assertEmpty(Shopware()->Front()->Request()->getQuery('bar'));
+        $this->assertInternalType('array', Shopware()->Front()->Request()->getQuery('foo'));
+    }
+
+    /**
+     * @covers GetWrapper::offsetSet()
+     */
+    public function testGet()
+    {
+        Shopware()->Front()->Request()->setQuery('foo', 'bar');
+        $this->assertEquals('bar', Shopware()->Modules()->System()->_GET->offsetGet('foo'));
+
+        Shopware()->Front()->Request()->setQuery('foo', null);
+        $this->assertNull(Shopware()->Modules()->System()->_GET->offsetGet('bar'));
+
+        Shopware()->Front()->Request()->setQuery('foo', array());
+        $this->assertEmpty(Shopware()->Modules()->System()->_GET->offsetGet('bar'));
+        $this->assertInternalType('array', Shopware()->Modules()->System()->_GET->offsetGet('foo'));
+    }
+
+    /**
+     * @covers GetWrapper::offsetUnset()
+     */
+    public function testUnset()
+    {
+        Shopware()->Modules()->System()->_GET->offsetSet('foo', 'bar');
+        $this->assertEquals('bar', Shopware()->Front()->Request()->getQuery('foo'));
+        unset(Shopware()->Modules()->System()->_GET['foo']);
+        $this->assertNull(Shopware()->Front()->Request()->getQuery('foo'));
+    }
+
+    /**
+     * @covers GetWrapper::setAll()
+     */
+    public function testSetAll()
+    {
+        Shopware()->Modules()->System()->_GET->offsetSet('foo', 'bar');
+        $this->assertEquals('bar', Shopware()->Front()->Request()->getQuery('foo'));
+
+        Shopware()->Modules()->System()->_GET = array('foo' => 'too');
+        $this->assertNull(Shopware()->Front()->Request()->getQuery('bar'));
+        $this->assertEquals('too', Shopware()->Front()->Request()->getQuery('foo'));
+    }
+
+    /**
+     * @covers GetWrapper::toArray()
+     */
+    public function testToArray()
+    {
+        Shopware()->Front()->Request()->setQuery('foo', 'bar');
+        $this->assertEquals(array('foo' => 'bar'), Shopware()->Modules()->System()->_GET->toArray());
+    }
+
+    /**
+     * Tests that setting a value inside any core class is equivalent to setting it in the
+     * global $_GET
+     *
+     * @return mixed
+     */
     public function testSetQuery()
     {
         $previousGetData = Shopware()->Front()->Request()->getQuery();
@@ -68,6 +138,11 @@ class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enli
     }
 
     /**
+     * Tests that reseting GET data inside any core class is equivalent to resetting it in the
+     * global $_GET
+     *
+     * @param $getData
+     * @return mixed
      * @depends testSetQuery
      */
     public function testOverwriteAndClearQuery($getData)
@@ -84,6 +159,12 @@ class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enli
         return $getData;
     }
 
+    /**
+     * Tests that getting GET data inside any core class is equivalent to getting it from the
+     * global $_GET
+     *
+     * @depends testSetQuery
+     */
     public function testGetQuery()
     {
         $previousGetData = Shopware()->Front()->Request()->getQuery();
