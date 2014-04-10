@@ -60,50 +60,13 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
         );
     }
 
-    private function getSitesByShopId()
-    {
-        $sql = "
-            SELECT groups.key
-            FROM s_core_shop_pages shopPages
-              INNER JOIN s_cms_static_groups groups
-                ON groups.id = shopPages.group_id
-            WHERE shopPages.shop_id = 1
-        ";
-
-        $statement = Shopware()->Db()->executeQuery($sql);
-
-        $keys = $statement->fetchAll(PDO::FETCH_COLUMN);
-
-        /** @var Shopware\Models\Site\Repository $siteRepository */
-        $siteRepository = $this->get('models')->getRepository('Shopware\Models\Site\Site');
-
-        $sites = array();
-        foreach ($keys as $key) {
-            $current = $siteRepository->getSitesByNodeNameQueryBuilder($key)
-                ->resetDQLPart('from')
-                ->from('Shopware\Models\Site\Site', 'sites', 'sites.id')
-                ->getQuery()
-                ->getArrayResult();
-
-            $sites = array_merge_recursive(
-                $sites,
-                $current
-            );
-        }
-
-        return $sites;
-    }
-
     /**
      * Helper function to get all custom pages of the shop
      * @return array
      */
     private function getCustomPages()
     {
-        /** @var Shopware\Models\Site\Repository $siteRepository */
-        $siteRepository = $this->get('models')->getRepository('Shopware\Models\Site\Site');
-        $sites = $siteRepository->getSitesByShopId(Shopware()->Shop()->getId());
-//        $sites = $this->getSitesByShopId(Shopware()->Shop()->getId());
+        $sites = $this->getSitesByShopId(Shopware()->Shop()->getId());
 
         foreach ($sites as &$site) {
             $site = $this->convertSite($site);
@@ -119,6 +82,42 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
     }
 
     /**
+     * Helper function to read all static pages of a shop from the database
+     * @return array
+     */
+    private function getSitesByShopId($shopId)
+    {
+        $sql = "
+            SELECT groups.key
+            FROM s_core_shop_pages shopPages
+              INNER JOIN s_cms_static_groups groups
+                ON groups.id = shopPages.group_id
+            WHERE shopPages.shop_id = ?
+        ";
+
+        $statement = Shopware()->Db()->executeQuery($sql, array($shopId));
+
+        $keys = $statement->fetchAll(PDO::FETCH_COLUMN);
+
+        /** @var Shopware\Models\Site\Repository $siteRepository */
+        $siteRepository = $this->get('models')->getRepository('Shopware\Models\Site\Site');
+
+        $sites = array();
+        foreach ($keys as $key) {
+            $current = $siteRepository->getSitesByNodeNameQueryBuilder($key)
+                ->resetDQLPart('from')
+                ->from('Shopware\Models\Site\Site', 'sites', 'sites.id')
+                ->getQuery()
+                ->getArrayResult();
+
+            $sites += $current;
+        }
+
+        return $sites;
+    }
+
+    /**
+     * Recursive helper function to convert a site to correct sitemap format
      * @param $site
      * @return mixed
      */
@@ -255,14 +254,13 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
      */
     private function getSitemapArray($id, $name, $viewport, $idParam, $link = '')
     {
-        if(is_array($link) || !strlen($link)){
+        if (is_array($link) || !strlen($link)) {
             $userParams = array(
                 'sViewport' => $viewport,
                 $idParam => $id
             );
 
-            if(is_array($link))
-            {
+            if (is_array($link)) {
                 $userParams = array_merge($userParams, $link);
             }
 

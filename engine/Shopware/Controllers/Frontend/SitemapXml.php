@@ -227,46 +227,75 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
     }
 
     /**
-     * Reads the static pages urls
+     * Helper function to Read the static pages urls
      */
     private function readStaticUrls()
     {
-        /** @var Shopware\Models\Site\Repository $siteRepository */
-        $siteRepository = $this->get('models')->getRepository('Shopware\Models\Site\Site');
-        $sites = $siteRepository->getSitesByShopId(Shopware()->Shop()->getId());
-
-        $staticPages = array();
+        $sites = $this->getSitesByShopId(Shopware()->Shop()->getId());
 
         foreach ($sites as $site) {
-            if (!$this->filterLink($site['link'])) {
-                continue;
-            }
+            $this->printSite($site);
+        }
+    }
 
-            $staticPages[$site['id']] = $this->getSitemapArray(
+    /**
+     * Helper function to read all static pages of a shop from the database
+     * @return array
+     */
+    private function getSitesByShopId($shopId)
+    {
+        $sql = "
+            SELECT groups.key
+            FROM s_core_shop_pages shopPages
+              INNER JOIN s_cms_static_groups groups
+                ON groups.id = shopPages.group_id
+            WHERE shopPages.shop_id = ?
+        ";
+
+        $statement = Shopware()->Db()->executeQuery($sql, array($shopId));
+
+        $keys = $statement->fetchAll(PDO::FETCH_COLUMN);
+
+        /** @var Shopware\Models\Site\Repository $siteRepository */
+        $siteRepository = $this->get('models')->getRepository('Shopware\Models\Site\Site');
+
+        $sites = array();
+        foreach ($keys as $key) {
+            $current = $siteRepository->getSitesByNodeNameQueryBuilder($key)
+                ->resetDQLPart('from')
+                ->from('Shopware\Models\Site\Site', 'sites', 'sites.id')
+                ->getQuery()
+                ->getArrayResult();
+
+            $sites += $current;
+        }
+
+        return $sites;
+    }
+
+    /**
+     * Helper function to print a custom page and its children to sitemap.xml
+     * @param $site
+     * @return mixed
+     */
+    private function printSite($site)
+    {
+        if (!$this->filterLink($site['link'])) {
+            return;
+        }
+
+        $this->printCategoryUrl(
+            $this->getSitemapArray(
                 $site['id'],
                 $site['changed'],
                 'custom',
                 'sCustom',
                 $site['link']
-            );
+            )
+        );
 
-            foreach ($site['children'] as $child) {
-                if (!$this->filterLink($child['link'])) {
-                    continue;
-                }
-
-                $staticPages[$child['id']] = $this->getSitemapArray(
-                    $child['id'],
-                    $child['changed'],
-                    'custom',
-                    'sCustom',
-                    $child['link']
-                );
-            }
-        }
-
-        foreach ($staticPages as $staticPage) {
-            $this->printCategoryUrl($staticPage);
+        foreach($site['children'] as $child) {
+            $this->printSite($child);
         }
     }
 
@@ -299,7 +328,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
     }
 
     /**
-     * Reads the supplier pages urls
+     * Helper function to read the supplier pages urls
      */
     private function readSupplierUrls()
     {
@@ -321,7 +350,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
     }
 
     /**
-     * Reads the landing pages urls
+     * Helper functio to read the landing pages urls
      */
     private function readLandingPageUrls()
     {
