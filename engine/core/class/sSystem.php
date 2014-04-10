@@ -126,9 +126,6 @@ class sSystem
     public function __get($property) {
 
         switch ($property) {
-            case '_d':
-                return $this;
-                break;
             case '_POST':
                 return $this->postWrapper;
                 break;
