@@ -100,6 +100,9 @@ class sSystem
     public $sMailer;			// Pointer to PHP-Mailer Object
     public $sBotSession;		// True if user is identified as bot
 
+    /**
+     * @param Enlight_Controller_Request_RequestHttp $request The request object
+     */
     public function __construct(Enlight_Controller_Request_RequestHttp $request = null)
     {
         $request = $request ? : new Enlight_Controller_Request_RequestHttp();
