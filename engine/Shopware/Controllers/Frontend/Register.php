@@ -425,14 +425,16 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     public function validateBilling()
     {
         $rules = array(
-            'company'=>array('required'=>0),
-            'street'=>array('required'=>1),
-            'streetnumber'=>array('required'=>1),
-            'zipcode'=>array('required'=>1),
-            'city'=>array('required'=>1),
-            'country'=>array('required'=>1),
-            'department'=>array('required'=>0),
-            'shippingAddress'=>array('required'=>0),
+            'company' => array('required' => 0),
+            'street' => array('required' => 1),
+            'streetnumber' => array('required' => 1),
+            'zipcode' => array('required' => 1),
+            'city' => array('required' => 1),
+            'country' => array('required' => 1),
+            'department' => array('required' => 0),
+            'shippingAddress' => array('required' => 0),
+            'additionalAddressLine1' => array('required' => (Shopware()->Config()->requireAdditionAddressLine1) ? 1 : 0),
+            'additionalAddressLine2' => array('required' => (Shopware()->Config()->requireAdditionAddressLine2) ? 1 : 0)
         );
 
         // Check if state selection is required
@@ -483,22 +485,24 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     public function validateShipping()
     {
         $rules = array(
-            'salutation'=>array('required'=>1),
-            'company'=>array('required'=>0),
-            'firstname'=>array('required'=>1),
-            'lastname'=>array('required'=>1),
-            'street'=>array('required'=>1),
-            'streetnumber'=>array('required'=>1),
-            'zipcode'=>array('required'=>1),
-            'city'=>array('required'=>1),
-            'department'=>array('required'=>0),
-            'text1'=>array('required'=>0),
-            'text2'=>array('required'=>0),
-            'text3'=>array('required'=>0),
-            'text4'=>array('required'=>0),
-            'text5'=>array('required'=>0),
-            'text6'=>array('required'=>0),
-            'country'=>array('required'=>(Shopware()->Config()->get('sCOUNTRYSHIPPING'))?1:0)
+            'salutation' => array('required' => 1),
+            'company' => array('required' => 0),
+            'firstname' => array('required' => 1),
+            'lastname' => array('required' => 1),
+            'street' => array('required' => 1),
+            'streetnumber' => array('required' => 1),
+            'zipcode' => array('required' => 1),
+            'city' => array('required' => 1),
+            'department' => array('required' => 0),
+            'text1' => array('required' => 0),
+            'text2' => array('required' => 0),
+            'text3' => array('required' => 0),
+            'text4' => array('required' => 0),
+            'text5' => array('required' => 0),
+            'text6' => array('required' => 0),
+            'country' => array('required' => (Shopware()->Config()->get('sCOUNTRYSHIPPING')) ? 1 : 0),
+            'additionalAddressLine1' => array('required' => (Shopware()->Config()->requireAdditionAddressLine1) ? 1 : 0),
+            'additionalAddressLine2' => array('required' => (Shopware()->Config()->requireAdditionAddressLine2) ? 1 : 0)
         );
 
         // Check if state selection is required
