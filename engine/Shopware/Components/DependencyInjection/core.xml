@@ -13,8 +13,8 @@
             <argument type="service" id="price_service" />
             <argument type="service" id="media_service" />
             <argument type="service" id="translation_service" />
-            <argument type="service" id="global_state_service" />
             <argument type="service" id="events" />
+            <argument type="service" id="vote_gateway" />
         </service>
 
         <service id="price_service" class="Shopware\Service\Price" >
@@ -50,7 +50,7 @@
         <service id="translation_gateway" alias="translation_gateway_dbal" />
         <service id="property_gateway" alias="property_gateway_dbal" />
         <service id="search_gateway" alias="search_gateway_dbal" />
-
+        <service id="vote_gateway" alias="vote_gateway_dbal" />
 
 
         <service id="search_gateway_dbal" class="Shopware\Gateway\DBAL\Search">
@@ -87,6 +87,11 @@
         <service id="translation_gateway_dbal" class="Shopware\Gateway\DBAL\Translation">
             <argument type="service" id="models" />
             <argument type="service" id="translation_hydrator_dbal" />
+        </service>
+
+        <service id="vote_gateway_dbal" class="Shopware\Gateway\DBAL\Vote">
+            <argument type="service" id="models" />
+            <argument type="service" id="vote_hydrator_dbal" />
         </service>
 
 
@@ -138,6 +143,7 @@
         <service id="attribute_hydrator_dbal" class="Shopware\Hydrator\DBAL\Attribute" />
         <service id="tax_hydrator_dbal" class="Shopware\Hydrator\DBAL\Tax" />
         <service id="unit_hydrator_dbal" class="Shopware\Hydrator\DBAL\Unit" />
+        <service id="vote_hydrator_dbal" class="Shopware\Hydrator\DBAL\Vote" />
 
         <service id="property_hydrator_dbal" class="Shopware\Hydrator\DBAL\Property" >
             <argument type="service" id="attribute_hydrator_dbal" />

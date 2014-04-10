@@ -103,18 +103,35 @@ class Price implements \Shopware\Gateway\Price
      * @param Struct\CustomerGroup $customerGroup
      * @return Struct\Price
      */
-    public function getCheapestProductPrice(
+    public function getCheapestPrice(
         Struct\ProductMini $product,
         Struct\CustomerGroup $customerGroup
     ) {
         $query = $this->entityManager->getDBALQueryBuilder();
-        $query->select(array('*'))
-            ->from('s_articles_prices', 'prices')
-            ->where('prices.articleID = :product')
+
+        $query->from('s_articles_prices', 'prices')
+            ->innerJoin('prices', 's_articles_details', 'variant', 'variant.id = prices.articledetailsID')
+            ->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID');
+
+        $query->andWhere('prices.articleID = :product')
             ->andWhere('prices.pricegroup = :customerGroup')
-            ->orderBy('prices.price', 'ASC')
+            ->andWhere('prices.from = 1')
+            ->andWhere('product.active = 1')
+            ->andWhere('variant.active = 1')
             ->setParameter(':product', $product->getId())
-            ->setParameter(':customerGroup', $customerGroup->getKey())
+            ->setParameter(':customerGroup', $customerGroup->getKey());
+
+        if ($product->isCloseouts()) {
+            $query->andWhere('variant.instock >= variant.minpurchase');
+        }
+
+        $query->select(array(
+            'prices.*',
+            '(prices.price * variant.minpurchase) as calculated',
+            '(prices.pseudoprice * variant.minpurchase) as calculatedPseudo'
+        ));
+
+        $query->orderBy('calculated', 'ASC')
             ->setFirstResult(0)
             ->setMaxResults(1);
 
@@ -122,6 +139,9 @@ class Price implements \Shopware\Gateway\Price
         $statement = $query->execute();
 
         $data = $statement->fetch(\PDO::FETCH_ASSOC);
+
+        $data['price'] = $data['calculated'];
+        $data['pseudoprice'] = $data['calculatedPseudo'];
 
         $data['detail'] = $this->getTableRow(
             's_articles_details',
@@ -142,6 +162,37 @@ class Price implements \Shopware\Gateway\Price
         );
 
         return $this->priceHydrator->hydrateCheapestPrice($data);
+    }
+
+    /**
+     * @param Struct\PriceGroup $priceGroup
+     * @param Struct\CustomerGroup $customerGroup
+     * @param $quantity
+     * @return int
+     */
+    public function getPriceGroupDiscount(
+        Struct\PriceGroup $priceGroup,
+        Struct\CustomerGroup $customerGroup,
+        $quantity
+    ) {
+        $query = $this->entityManager->getDBALQueryBuilder();
+        $query->select(array('discounts.discount'))
+            ->from('s_core_pricegroups_discounts', 'discounts')
+            ->andWhere('discounts.groupID = :priceGroup')
+            ->andWhere('discounts.customergroupID = :customerGroup')
+            ->andWhere('discounts.discountstart <= :quantity')
+            ->orderBy('discounts.discount', 'DESC')
+            ->setFirstResult(0)
+            ->setMaxResults(1);
+
+        $query->setParameter(':priceGroup', $priceGroup->getId())
+            ->setParameter(':customerGroup', $customerGroup->getId())
+            ->setParameter(':quantity', $quantity);
+
+        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $query->execute();
+
+        return $statement->fetch(\PDO::FETCH_COLUMN);
     }
 
     /**

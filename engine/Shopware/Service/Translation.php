@@ -26,6 +26,7 @@ class Translation
      */
     public function translateProduct(Struct\ProductMini $product, Struct\Shop $shop)
     {
+
         $this->translationGateway->translateProduct(
             $product,
             $shop
@@ -45,9 +46,9 @@ class Translation
             );
         }
 
-        if ($product->getCheapestProductPrice() && $product->getCheapestProductPrice()->getUnit()) {
+        if ($product->getCheapestPrice() && $product->getCheapestPrice()->getUnit()) {
             $this->translationGateway->translateUnit(
-                $product->getCheapestProductPrice()->getUnit(),
+                $product->getCheapestPrice()->getUnit(),
                 $shop
             );
         }

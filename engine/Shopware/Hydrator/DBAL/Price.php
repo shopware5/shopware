@@ -86,15 +86,15 @@ class Price
     {
         $price = $this->hydrate($data);
 
-        if (empty($data['detail']['unit'])) {
-            return $price;
-        }
-
         $unit = $data['detail']['unit'];
 
         $unit['packunit'] = $data['detail']['packunit'];
         $unit['purchaseunit'] = $data['detail']['purchaseunit'];
         $unit['referenceunit'] = $data['detail']['referenceunit'];
+
+        $unit['minpurchase'] = $data['detail']['minpurchase'];
+        $unit['maxpurchase'] = $data['detail']['maxpurchase'];
+        $unit['purchasesteps'] = $data['detail']['purchasesteps'];
 
         $price->setUnit(
             $this->unitHydrator->hydrate($unit)

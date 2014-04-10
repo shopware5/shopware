@@ -33,24 +33,32 @@ class Product
     private $mediaService;
 
     /**
+     * @var \Shopware\Gateway\Vote
+     */
+    private $voteGateway;
+
+    /**
      * @param Gateway\Product $productGateway
      * @param Price $priceService
      * @param Media $mediaService
      * @param Translation $translationService
      * @param \Enlight_Event_EventManager $eventManager
+     * @param \Shopware\Gateway\Vote $voteGateway
      */
     function __construct(
         Gateway\Product $productGateway,
         Price $priceService,
         Media $mediaService,
         Translation $translationService,
-        \Enlight_Event_EventManager $eventManager
+        \Enlight_Event_EventManager $eventManager,
+        Gateway\Vote $voteGateway
     ) {
         $this->productGateway = $productGateway;
         $this->priceService = $priceService;
         $this->mediaService = $mediaService;
         $this->translationService = $translationService;
         $this->eventManager = $eventManager;
+        $this->voteGateway = $voteGateway;
     }
 
 
@@ -84,12 +92,8 @@ class Product
             $this->priceService->getProductPrices($product, $state)
         );
 
-        $product->setCheapestVariantPrice(
-            $this->priceService->getCheapestVariantPrice($product)
-        );
-
-        $product->setCheapestProductPrice(
-            $this->priceService->getCheapestProductPrice($product, $state)
+        $product->setCheapestPrice(
+            $this->priceService->getCheapestPrice($product, $state)
         );
 
         $product->setCover(
@@ -101,5 +105,16 @@ class Product
         $this->translationService->translateProduct($product, $state->getShop());
 
         return $product;
+    }
+
+    /**
+     * Return a struct object which contains the product vote meta information.
+     *
+     * @param Struct\ProductMini $product
+     * @return \Shopware\Struct\VoteAverage
+     */
+    public function getVoteAverage(Struct\ProductMini $product)
+    {
+        return $this->voteGateway->getAverage($product);
     }
 }

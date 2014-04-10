@@ -148,9 +148,9 @@ class Detail extends ModelEntity
 
     /**
      * @var integer $minPurchase
-     * @ORM\Column(name="minpurchase", type="integer", nullable=true)
+     * @ORM\Column(name="minpurchase", type="integer", nullable=false)
      */
-    private $minPurchase = null;
+    private $minPurchase = 1;
 
     /**
      * @var integer $purchaseSteps
