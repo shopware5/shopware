@@ -6,12 +6,9 @@ class PostWrapper implements \ArrayAccess
 {
     private $request;
 
-    public function __construct(
-        \Enlight_Controller_Request_RequestHttp $request = null
-    )
+    public function __construct(\Enlight_Controller_Request_RequestHttp $request)
     {
-        $this->request = $request ? : Shopware()->Front()->Request();
-        $this->request = $this->request ? : new \Enlight_Controller_Request_RequestHttp();
+        $this->request = $request ? : new \Enlight_Controller_Request_RequestHttp();
     }
 
     /**

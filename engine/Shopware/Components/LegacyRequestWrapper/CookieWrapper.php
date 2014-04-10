@@ -6,11 +6,9 @@ class CookieWrapper implements \ArrayAccess
 {
     private $request;
 
-    public function __construct(
-        \Enlight_Controller_Request_RequestHttp $request = null
-    )
+    public function __construct(\Enlight_Controller_Request_RequestHttp $request)
     {
-        $this->request = $request ? : Shopware()->Front()->Request();
+        $this->request = $request ? : new \Enlight_Controller_Request_RequestHttp();
     }
 
     /**
@@ -27,9 +25,6 @@ class CookieWrapper implements \ArrayAccess
      */
     public function offsetExists($offset)
     {
-        if (!$this->request) {
-            return false;
-        }
         $cookieData = $this->request->getCookie();
         return array_key_exists($offset, $cookieData);
     }
@@ -45,9 +40,6 @@ class CookieWrapper implements \ArrayAccess
      */
     public function offsetGet($offset)
     {
-        if (!$this->request) {
-            return null;
-        }
         return $this->request->getCookie($offset);
     }
 
