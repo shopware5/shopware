@@ -63,7 +63,8 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
     {
         $config = Shopware()->Config();
 
-        $system = new sSystem();
+        $request = Shopware()->Front()->Request();
+        $system = new sSystem($request);
         Shopware()->Bootstrap()->registerResource('System', $system);
 
         $system->sMODULES = Shopware()->Modules();
@@ -72,12 +73,6 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
         $system->sCONFIG = $config;
         $system->sMailer = Shopware()->Mail();
 
-        $request = Shopware()->Front()->Request();
-        if ($request !== null) {
-            $system->_GET = $request->getQuery();
-            $system->_POST = $request->getPost();
-            $system->_COOKIE = $request->getCookie();
-        }
 
         if (Shopware()->Bootstrap()->issetResource('Session')) {
             $system->_SESSION = Shopware()->Session();
