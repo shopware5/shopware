@@ -294,7 +294,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
             )
         );
 
-        foreach($site['children'] as $child) {
+        foreach ($site['children'] as $child) {
             $this->printSite($child);
         }
     }
@@ -314,11 +314,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
         $userParams = parse_url($link, PHP_URL_QUERY);
         parse_str($userParams, $userParams);
 
-        if (empty($userParams['sViewport'])) {
-            return false;
-        }
-
-        $blacklist = array('sitemap', 'sitemapXml');
+        $blacklist = array('', 'sitemap', 'sitemapXml');
 
         if (in_array($userParams['sViewport'], $blacklist)) {
             return false;
@@ -383,23 +379,27 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
      * @param string|array $link
      * @return array
      */
-    private function getSitemapArray($id, $changed, $viewport, $idParam, $link = '')
+    private function getSitemapArray($id, $changed, $viewport, $idParam, $link = null)
     {
-        if(is_array($link) || !strlen($link)){
+        $userParams = array();
+
+        if (is_string($link)) {
+            $userParams = parse_url($link, PHP_URL_QUERY);
+            parse_str($userParams, $userParams);
+        }
+
+        if (empty($userParams)) {
             $userParams = array(
                 'sViewport' => $viewport,
                 $idParam => $id
             );
-
-            if(is_array($link))
-            {
-                $userParams = array_merge($userParams, $link);
-            }
-
-            $link = $userParams;
         }
 
-        $link = $this->Front()->Router()->assemble($link);
+        if (is_array($link)) {
+            $userParams = array_merge($userParams, $link);
+        }
+
+        $link = $this->Front()->Router()->assemble($userParams);
 
         return array(
             'changed' => $changed,
