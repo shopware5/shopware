@@ -63,6 +63,26 @@
 		</div>
 	{/block}
 
+	{* Additional Address Line 1 *}
+	{block name='frontend_register_shipping_fieldset_input_addition_address_line1'}
+		{if {config name=showAdditionAddressLine1}}
+			<div>
+				<label for="additionalAddressLine21" {if !{config name=requireAdditionAddressLine1}}class="normal"{/if}>{se name='RegisterLabelAdditionalAddressLine1'}{/se}{if {config name=requireAdditionAddressLine1}}*{/if}:</label>
+				<input name="register[shipping][additionalAddressLine1]" type="text" id="additionalAddressLine21" value="{$form_data.additionalAddressLine1|escape}" class="text {if {config name=requireAdditionAddressLine1}}required{/if} {if $error_flags.additionalAddressLine1 && {config name=requireAdditionAddressLine1}}instyle_error{/if}" />
+			</div>
+		{/if}
+	{/block}
+
+	{* Additional Address Line 2 *}
+	{block name='frontend_register_shipping_fieldset_input_addition_address_line2'}
+		{if {config name=showAdditionAddressLine2}}
+			<div>
+				<label for="additionalAddressLine22" {if !{config name=requireAdditionAddressLine2}}class="normal"{/if}>{se name='RegisterLabelAdditionalAddressLine2'}{/se}{if {config name=requireAdditionAddressLine2}}*{/if}:</label>
+				<input name="register[shipping][additionalAddressLine2]" type="text" id="additionalAddressLine22" value="{$form_data.additionalAddressLine2|escape}" class="text {if {config name=requireAdditionAddressLine2}}required{/if} {if $error_flags.additionalAddressLine2 && {config name=requireAdditionAddressLine2}}instyle_error{/if}" />
+			</div>
+		{/if}
+	{/block}
+
 	{* Country *}
 	{if {config name=CountryShipping}}
 		{block name='frontend_register_shipping_fieldset_input_country'}

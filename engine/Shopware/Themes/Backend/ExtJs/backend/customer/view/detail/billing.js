@@ -77,6 +77,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Billing', {
         streetNumber:'{s name=address/street_number}Street number{/s}',
         zipCode:'{s name=address/zip_code}Zip code{/s}',
         city:'{s name=address/city}City{/s}',
+        additionalAddressLine1:'{s name=address/additionalAddressLine1}Additional address line 1{/s}',
+        additionalAddressLine2:'{s name=address/additionalAddressLine2}Additional address line 2{/s}',
         birthday:'{s name=address/birthday_label}Day of birth{/s}',
         country:'{s name=address/country}Country{/s}',
         state:'{s name=address/state}State{/s}',
@@ -292,6 +294,12 @@ Ext.define('Shopware.apps.Customer.view.detail.Billing', {
             fieldLabel:me.snippets.city,
             required:true,
             allowBlank:false
+        }, {
+            name:'billing[additionalAddressLine1]',
+            fieldLabel:me.snippets.additionalAddressLine1
+        }, {
+            name:'billing[additionalAddressLine2]',
+            fieldLabel:me.snippets.additionalAddressLine2
         },
             me.countryCombo,
             me.countryStateCombo,

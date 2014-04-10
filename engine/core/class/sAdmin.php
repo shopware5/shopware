@@ -1980,15 +1980,17 @@ class sAdmin
             $userObject["country"],
             empty($userObject["stateID"]) ? 0 : $userObject["stateID"] ,
             empty($userObject["ustid"]) ? "" : $userObject["ustid"],
-            $date
+            $date,
+            empty($userObject["additionalAddressLine1"]) ? null : $userObject["additionalAddressLine1"],
+            empty($userObject["additionalAddressLine2"]) ? null : $userObject["additionalAddressLine2"]
         );
 
         $sqlBilling = "INSERT INTO s_user_billingaddress
             (userID, company, department, salutation, firstname, lastname,
             street, streetnumber, zipcode, city,phone,
-            fax, countryID, stateID, ustid, birthday)
+            fax, countryID, stateID, ustid, birthday, additional_address_line1, additional_address_line2)
             VALUES
-            (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         // Trying to insert
         list($sqlBilling,$data) = Enlight()->Events()->filter(
@@ -2045,9 +2047,9 @@ class sAdmin
     {
         $sqlShipping = "INSERT INTO s_user_shippingaddress
             (userID, company, department, salutation, firstname, lastname,
-            street, streetnumber, zipcode, city, countryID, stateID)
+            street, streetnumber, zipcode, city, countryID, stateID, additional_address_line1, additional_address_line2)
             VALUES
-            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
 
         $sqlShipping = Enlight()->Events()->filter(
             'Shopware_Modules_Admin_SaveRegisterShipping_FilterSql',
@@ -2067,7 +2069,9 @@ class sAdmin
             $userObject["shipping"]["zipcode"],
             $userObject["shipping"]["city"],
             $userObject["shipping"]["country"],
-            $userObject["shipping"]["stateID"]
+            $userObject["shipping"]["stateID"],
+            $userObject["shipping"]["additionalAddressLine1"],
+            $userObject["shipping"]["additionalAddressLine2"]
         );
         // Trying to insert
         $saveUserData = $this->sSYSTEM->sDB_CONNECTION->Execute($sqlShipping, $shippingParams);

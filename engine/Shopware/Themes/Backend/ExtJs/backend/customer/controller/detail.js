@@ -184,6 +184,8 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
         values['shipping[streetNumber]'] =  values['billing[streetNumber]'];
         values['shipping[zipCode]'] =  values['billing[zipCode]'];
         values['shipping[city]'] =  values['billing[city]'];
+        values['shipping[additionalAddressLine1]'] =  values['billing[additionalAddressLine1]'];
+        values['shipping[additionalAddressLine2]'] =  values['billing[additionalAddressLine2]'];
         values['shipping[countryId]'] =  values['billing[countryId]'];
         values['shipping[stateId]'] =  values['billing[stateId]'];
         values['shipping[company]'] =  values['billing[company]'];
