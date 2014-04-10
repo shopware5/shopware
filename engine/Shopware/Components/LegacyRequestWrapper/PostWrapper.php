@@ -8,7 +8,7 @@ class PostWrapper implements \ArrayAccess
 
     public function __construct(\Enlight_Controller_Request_RequestHttp $request)
     {
-        $this->request = $request ? : new \Enlight_Controller_Request_RequestHttp();
+        $this->request = $request;
     }
 
     /**

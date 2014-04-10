@@ -37,7 +37,6 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
         'Core',
         'Export',
         'Marketing',
-        'Newsletter',
         'Order',
         'RewriteTable'
     );
@@ -49,54 +48,136 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
         $this->dispatch('/');
     }
 
+    /**
+     * @covers GetWrapper::offsetSet()
+     */
+    public function testSet()
+    {
+        Shopware()->Modules()->System()->_POST->offsetSet('foo', 'bar');
+        $this->assertEquals('bar', Shopware()->Front()->Request()->getPost('foo'));
+
+        Shopware()->Modules()->System()->_POST->offsetSet('foo', null);
+        $this->assertNull(Shopware()->Front()->Request()->getPost('bar'));
+
+        Shopware()->Modules()->System()->_POST->offsetSet('foo', array());
+        $this->assertEmpty(Shopware()->Front()->Request()->getPost('bar'));
+        $this->assertInternalType('array', Shopware()->Front()->Request()->getPost('foo'));
+    }
+
+    /**
+     * @covers GetWrapper::offsetSet()
+     */
+    public function testGet()
+    {
+        Shopware()->Front()->Request()->setPost('foo', 'bar');
+        $this->assertEquals('bar', Shopware()->Modules()->System()->_POST->offsetGet('foo'));
+
+        Shopware()->Front()->Request()->setPost('foo', null);
+        $this->assertNull(Shopware()->Modules()->System()->_POST->offsetGet('bar'));
+
+        Shopware()->Front()->Request()->setPost('foo', array());
+        $this->assertEmpty(Shopware()->Modules()->System()->_POST->offsetGet('bar'));
+        $this->assertInternalType('array', Shopware()->Modules()->System()->_POST->offsetGet('foo'));
+    }
+
+    /**
+     * @covers GetWrapper::offsetUnset()
+     */
+    public function testUnset()
+    {
+        Shopware()->Modules()->System()->_POST->offsetSet('foo', 'bar');
+        $this->assertEquals('bar', Shopware()->Front()->Request()->getPost('foo'));
+        unset(Shopware()->Modules()->System()->_POST['foo']);
+        $this->assertNull(Shopware()->Front()->Request()->getPost('foo'));
+    }
+
+    /**
+     * @covers GetWrapper::setAll()
+     */
+    public function testSetAll()
+    {
+        Shopware()->Modules()->System()->_POST->offsetSet('foo', 'bar');
+        $this->assertEquals('bar', Shopware()->Front()->Request()->getPost('foo'));
+
+        Shopware()->Modules()->System()->_POST = array('foo' => 'too');
+        $this->assertNull(Shopware()->Front()->Request()->getPost('bar'));
+        $this->assertEquals('too', Shopware()->Front()->Request()->getPost('foo'));
+    }
+
+    /**
+     * @covers GetWrapper::toArray()
+     */
+    public function testToArray()
+    {
+        Shopware()->Front()->Request()->setPost('foo', 'bar');
+        $this->assertEquals(array('foo' => 'bar'), Shopware()->Modules()->System()->_POST->toArray());
+    }
+
+    /**
+     * Tests that setting a value inside any core class is equivalent to setting it in the
+     * global $_POST
+     *
+     * @return mixed
+     */
     public function testSetPost()
     {
-        $previousPostData = Shopware()->Front()->Request()->getPost();
+        $previousGetData = Shopware()->Front()->Request()->getPost();
 
         foreach (self::$resources as $name) {
             Shopware()->Front()->Request()->setPost($name, $name.'Value');
         }
 
-        $postData = Shopware()->Front()->Request()->getPost();
-        $this->assertNotEquals($previousPostData, $postData);
+        $getData = Shopware()->Front()->Request()->getPost();
+        $this->assertNotEquals($previousGetData, $getData);
 
         foreach (self::$resources as $name) {
-            $this->assertEquals($postData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
+            $this->assertEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
         }
 
-        return $postData;
+        return $getData;
     }
 
     /**
+     * Tests that reseting POST data inside any core class is equivalent to resetting it in the
+     * global $_POST
+     *
+     * @param $getData
+     * @return mixed
      * @depends testSetPost
      */
-    public function testOverwriteAndClearPost($postData)
+    public function testOverwriteAndClearPost($getData)
     {
-        $this->assertNotEquals($postData, Shopware()->Front()->Request()->getPost());
+        $this->assertNotEquals($getData, Shopware()->Front()->Request()->getPost());
 
         foreach (self::$resources as $name) {
-            Shopware()->Front()->Request()->setPost($postData);
-            $this->assertEquals($postData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
+            Shopware()->Front()->Request()->setPost($getData);
+            $this->assertEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
             Shopware()->Modules()->getModule($name)->sSYSTEM->_POST = array();
-            $this->assertNotEquals($postData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
+            $this->assertNotEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
         }
 
-        return $postData;
+        return $getData;
     }
 
+    /**
+     * Tests that getting POST data inside any core class is equivalent to getting it from the
+     * global $_POST
+     *
+     * @depends testSetPost
+     */
     public function testGetPost()
     {
-        $previousPostData = Shopware()->Front()->Request()->getPost();
+        $previousGetData = Shopware()->Front()->Request()->getPost();
 
         foreach (self::$resources as $name) {
             Shopware()->Modules()->getModule($name)->sSYSTEM->_POST[$name] = $name.'Value';
         }
 
-        $postData = Shopware()->Front()->Request()->getPost();
-        $this->assertNotEquals($previousPostData, $postData);
+        $getData = Shopware()->Front()->Request()->getPost();
+        $this->assertNotEquals($previousGetData, $getData);
 
         foreach (self::$resources as $name) {
-            $this->assertEquals($postData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
+            $this->assertEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
         }
     }
 }
