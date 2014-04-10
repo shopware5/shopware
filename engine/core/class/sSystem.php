@@ -22,11 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\LegacyRequestWrapper\PostWrapper;
+use Shopware\Components\LegacyRequestWrapper\GetWrapper;
+use Shopware\Components\LegacyRequestWrapper\CookieWrapper;
+
 /**
  * Deprecated Shopware Class
  */
 class sSystem
 {
+
     public $sCONFIG;		// Pointer to configuration
 
     public $sSESSION_ID;	// Current Session-ID
@@ -50,22 +55,37 @@ class sSystem
     public $sBENCHRESULTS;	// Benchmark-results as array
     public $sBENCHMARK;	// Holds time for benchmark-purposes
 
-    public $_GET;			// Get-Variables
-    public $_POST;			// Post-Variables
-    public $_COOKIE;		// Cookies
+    /**
+     * @var Enlight_Components_Session_Namespace Session data
+     */
     public $_SESSION;		// Session
 
-    // Absolute pathes
-    public $sPathMedia;		// Path to template images
+    /**
+     * @var \Shopware\Components\LegacyRequestWrapper\PostWrapper Wrapper for _POST
+     */
+    private $postWrapper;
+
+    /**
+     * @var \Shopware\Components\LegacyRequestWrapper\GetWrapper Wrapper for _GET
+     */
+    private $getWrapper;
+
+    /**
+     * @var \Shopware\Components\LegacyRequestWrapper\CookieWrapper Wrapper for _COOKIE
+     */
+    private $cookieWrapper;
+
+    // Absolute paths
+    public $sPathMedia;		    // Path to template images
     public $sPathArticleImg;	// Path to article images
     public $sPathBanner;		// Path to banners
     public $sPathArticleFiles;	// Path to Article-Downloads
-    public $sPathStart;		// Path to Start
+    public $sPathStart;		    // Path to Start
     public $sBasefile;
     public $sBasePath;
 
-    // Additionals
-    public $sExtractor;		// Strip parts of rewrited urls and append them
+    // Additional
+    public $sExtractor;		    // Strip parts of rewritten urls and append them
     public $sLicenseData;		// License - Data
     public $sLanguageData;		// All active languages
     public $sLanguage;			// Current language
@@ -80,9 +100,43 @@ class sSystem
     public $sMailer;			// Pointer to PHP-Mailer Object
     public $sBotSession;		// True if user is identified as bot
 
-    public function __construct()
+    /**
+     * @param Enlight_Controller_Request_RequestHttp $request The request object
+     */
+    public function __construct(Enlight_Controller_Request_RequestHttp $request = null)
     {
+        $request = $request ? : new Enlight_Controller_Request_RequestHttp();
         $this->sBasePath = dirname(dirname(dirname(dirname(__FILE__)))).'/';
+        $this->postWrapper = new PostWrapper($request);
+        $this->getWrapper = new GetWrapper($request);
+        $this->cookieWrapper = new CookieWrapper($request);
+    }
+
+    public function __set($property, $value)
+    {
+        switch ($property) {
+            case '_POST':
+                $this->postWrapper->setAll($value);
+                break;
+            case '_GET':
+                $this->getWrapper->setAll($value);
+                break;
+        }
+    }
+    public function __get($property) {
+
+        switch ($property) {
+            case '_POST':
+                return $this->postWrapper;
+                break;
+            case '_GET':
+                return $this->getWrapper;
+                break;
+            case '_COOKIE':
+                return $this->cookieWrapper;
+                break;
+        }
+        return null;
     }
 
     public function E_CORE_ERROR($ERROR_ID,$ERROR_MESSAGE)
@@ -98,15 +152,5 @@ class sSystem
     public function __call($name, $params=null)
     {
         return call_user_func_array(array($this->sMODULES['sCore'], $name), $params);
-    }
-
-    public function __get($name)
-    {
-        switch ($name) {
-            case '_d':
-                return $this;
-            default:
-                return null;
-        }
     }
 }
