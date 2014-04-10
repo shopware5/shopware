@@ -67,7 +67,6 @@ class Product
             $this->assignAttributeData($product, $data);
         }
 
-
         return $product;
     }
 
@@ -165,20 +164,8 @@ class Product
             $product->setLength(floatval($data['length']));
         }
 
-        if (isset($data['maxpurchase'])) {
-            $product->setMaxPurchase(intval($data['maxpurchase']));
-        }
-
-        if (isset($data['minpurchase'])) {
-            $product->setMinPurchase(intval($data['minpurchase']));
-        }
-
         if (isset($data['stockmin'])) {
             $product->setMinStock(intval($data['stockmin']));
-        }
-
-        if (isset($data['purchasesteps'])) {
-            $product->setPurchaseStep(intval($data['purchasesteps']));
         }
 
         if (isset($data['weight'])) {
@@ -214,12 +201,15 @@ class Product
         $data['unit']['purchaseunit'] = $data['purchaseunit'];
         $data['unit']['referenceunit'] = $data['referenceunit'];
 
+        $data['unit']['minpurchase'] = $data['minpurchase'];
+        $data['unit']['maxpurchase'] = $data['maxpurchase'];
+        $data['unit']['purchasesteps'] = $data['purchasesteps'];
+
         $unit = $this->unitHydrator->hydrate(
             $data['unit']
         );
 
         $product->setUnit($unit);
-
     }
 
     private function assignAttributeData(Struct\ProductMini $product, $data)

@@ -24,7 +24,6 @@
 
 class sArticles_PromotionByIdTest extends PHPUnit_Framework_TestCase
 {
-
     /**
      * @return \Shopware\Models\Article\Repository
      */
@@ -96,38 +95,53 @@ class sArticles_PromotionByIdTest extends PHPUnit_Framework_TestCase
         }
 
         $shop->registerResources(Shopware()->Bootstrap());
+        Shopware()->Modules()->Articles()->translationId = $shop->getId();
     }
+
 
 
     public function testSimplePromotionById()
     {
         $this->removeArticle('Test-1');
+        $group = $this->createCustomerGroup('TE', 0);
 
         $data = $this->getBaseData();
         $data['mainDetail'] = $this->getSimpleDetail('Test-1');
-        $data['mainDetail']['prices'] = $this->getSimplePrices();
+        $data['mainDetail']['prices'] = $this->getSimplePrices('TE');
 
         $this->getApi()->create($data);
+
+        $this->switchState(
+            $group,
+            $this->getShop(),
+            $this->getHighTax()
+        );
 
         $promotion = $this->getPromotion('Test-1');
 
         $this->assertNotEmpty($promotion);
         $this->assertEquals($data['name'], $promotion['articleName']);
-        $this->assertEquals('Test-1', $promotion['ordernumber']);
-        $this->assertEquals('119,00', $promotion['price']);
-        $this->assertEquals(19.00, $promotion['tax']);
-        $this->assertEquals('EK', $promotion['pricegroup']);
 
+        $this->assertEquals('Test-1', $promotion['ordernumber']);
+
+        $this->assertEquals('119,00', $promotion['price']);
+
+        $this->assertEquals(19.00, $promotion['tax']);
+
+        $this->assertEquals('TE', $promotion['pricegroup']);
+
+        $this->removeCustomerGroup('TE');
         $this->removeArticle('Test-1');
     }
 
     public function testArticleCover()
     {
         $this->removeArticle('Test-2');
+        $group = $this->createCustomerGroup('TE', 0);
 
         $data = $this->getBaseData();
         $data['mainDetail'] = $this->getSimpleDetail('Test-2');
-        $data['mainDetail']['prices'] = $this->getSimplePrices();
+        $data['mainDetail']['prices'] = $this->getSimplePrices('TE');
 
         $data['images'] = $this->getMedia(5);
         $cover = $this->getSpecifyMedia(2);
@@ -137,6 +151,12 @@ class sArticles_PromotionByIdTest extends PHPUnit_Framework_TestCase
         );
 
         $this->getApi()->create($data);
+
+        $this->switchState(
+            $group,
+            $this->getShop(),
+            $this->getHighTax()
+        );
 
         $promotion = $this->getPromotion('Test-2');
 
@@ -154,197 +174,15 @@ class sArticles_PromotionByIdTest extends PHPUnit_Framework_TestCase
         $this->removeArticle('Test-2');
     }
 
-
-
-    public function testCheapestPrice()
-    {
-        $this->removeArticle('CheapestPrice-1');
-
-        $data = $this->getBaseData();
-        $data['mainDetail'] = $this->getSimpleDetail('CheapestPrice-1');
-        $data['mainDetail']['prices'] = $this->getScaledPrices('EK');
-
-        $this->getApi()->create($data);
-
-        $this->switchCustomerGroup('EK');
-        $promotion = $this->getPromotion('CheapestPrice-1');
-
-        $this->assertEquals('500,00', $promotion['price']);
-        $this->assertEquals('500,00', $promotion['priceStartingFrom']);
-        $this->assertEquals('EK', $promotion['pricegroup']);
-
-        $this->removeArticle('CheapestPrice-1');
-
-//        $this->markTestIncomplete(
-//            "Test cheapest price is incomplete. The pseudo price isn't calculated right!"
-//        );
-//
-//        $this->assertEquals('700,00', $promotion['pseudoprice']);
-//        $this->assertEquals(28.57, $promotion['pseudopricePercent']['float']);
-//        $this->assertEquals(29, $promotion['pseudopricePercent']['int']);
-    }
-
-
-    public function testCheapestCustomerGroupPrice()
-    {
-        $this->removeArticle('CheapestPrice-2');
-
-        $data = $this->getBaseData();
-        $data['mainDetail'] = $this->getSimpleDetail('CheapestPrice-2');
-        $data['mainDetail']['prices'] = $this->getScaledPrices('EK', 200);
-        $data['mainDetail']['prices'] = array_merge(
-            $data['mainDetail']['prices'],
-            $this->getScaledPrices('H', 400)
-        );
-
-        $this->getApi()->create($data);
-
-        $this->switchCustomerGroup('H');
-        $promotion = $this->getPromotion('CheapestPrice-2');
-        $this->switchCustomerGroup('EK');
-
-        $this->assertEquals('900,00', $promotion['price']);
-        $this->assertEquals('900,00', $promotion['priceStartingFrom']);
-        $this->assertEquals('H', $promotion['pricegroup']);
-
-        $this->removeArticle('CheapestPrice-2');
-
-//        $this->markTestIncomplete(
-//            "Test cheapest price is incomplete. The pseudo price isn't calculated right!"
-//        );
-//
-//        $this->assertEquals('1100,00', $promotion['pseudoprice']);
-//        $this->assertEquals(18.18, $promotion['pseudopricePercent']['float']);
-//        $this->assertEquals(18, $promotion['pseudopricePercent']['int']);
-    }
-
-
-    public function testBasePrice()
-    {
-        $this->removeArticle('BasePrice-1');
-
-        $data = $this->getBaseData();
-        $data['mainDetail'] = $this->getSimpleDetail('BasePrice-1');
-        $data['mainDetail']['prices'] = $this->getSimplePrices();
-
-        $data['packUnit'] = 'Flaschen';
-        $data['mainDetail']['referenceUnit'] = 1;
-        $data['mainDetail']['purchaseUnit'] = 0.5;
-
-        $this->getApi()->create($data);
-
-        $promotion = $this->getPromotion('BasePrice-1');
-
-        $this->assertEquals(238, $promotion['referenceprice']);
-        $this->removeArticle('BasePrice-1');
-    }
-
-
-    public function testCheapestBasePrice()
-    {
-        $this->removeArticle('BasePrice-2');
-
-        $data = $this->getBaseData();
-        $data['mainDetail'] = $this->getSimpleDetail('BasePrice-2');
-        $data['mainDetail']['prices'] = $this->getScaledPrices('EK');
-        $data['mainDetail']['prices'] = array_merge(
-            $data['mainDetail']['prices'],
-            $this->getScaledPrices('H', 400)
-        );
-        $data['packUnit'] = 'Flaschen';
-        $data['mainDetail']['referenceUnit'] = 1;
-        $data['mainDetail']['purchaseUnit'] = 0.2;
-
-        $this->getApi()->create($data);
-
-        $this->switchCustomerGroup('H');
-        $promotion = $this->getPromotion('BasePrice-2');
-        $this->switchCustomerGroup('EK');
-
-
-        $this->assertEquals('900,00', $promotion['price']);
-        $this->assertEquals(4500, $promotion['referenceprice']);
-
-        $this->removeArticle('BasePrice-2');
-    }
-
-
-    public function testGlobalCustomerDiscount()
-    {
-        $this->removeArticle('CustomerDiscount-1');
-
-        $data = $this->getBaseData();
-        $data['mainDetail'] = $this->getSimpleDetail('CustomerDiscount-1');
-
-        $this->createCustomerGroup('TE');
-        $data['mainDetail']['prices'] = $this->getSimplePrices('TE');
-        $data['mainDetail']['prices'][0]['price'] = 100;
-
-        $this->getApi()->create($data);
-
-        $this->switchCustomerGroup('TE');
-        $promotion = $this->getPromotion('CustomerDiscount-1');
-        $this->switchCustomerGroup('EK');
-
-        $this->removeCustomerGroup('TE');
-        $this->removeArticle('CustomerDiscount-1');
-
-        /**
-         * article price = 100
-         * discount      = 10%
-         * result        = 90 €
-         */
-        $this->assertEquals('90,00', $promotion['price']);
-    }
-
-    public function testCustomerDiscountWithScaledPrices()
-    {
-        $this->removeArticle('CustomerDiscount-2');
-
-        $data = $this->getBaseData();
-        $data['mainDetail'] = $this->getSimpleDetail('CustomerDiscount-2');
-        $data['mainDetail']['prices'] = $this->getScaledPrices('TE');
-
-        $this->createCustomerGroup('TE', 20);
-
-        $this->getApi()->create($data);
-
-        $this->switchCustomerGroup('TE');
-
-        $promotion = $this->getPromotion('CustomerDiscount-2');
-
-        $this->removeCustomerGroup('TE');
-        $this->removeArticle('CustomerDiscount-2');
-
-        $this->assertEquals('400,00', $promotion['price']);
-
-
-//        $this->markTestIncomplete(
-//            "Test cheapest price is incomplete. The pseudo price isn't calculated right!"
-//        );
-//
-//        $this->assertEquals(
-//            '560,00',
-//            $promotion['pseudoprice']
-//        );
-//        $this->assertEquals(
-//            28.57,
-//            $promotion['pseudopricePercent']['float']
-//        );
-//        $this->assertEquals(
-//            29,
-//            $promotion['pseudopricePercent']['int']
-//        );
-    }
-
     public function testProperties()
     {
         $number = 'Properties-1';
         $this->removeArticle($number);
+        $group = $this->createCustomerGroup('TE', 0);
 
         $data = $this->getBaseData();
         $data['mainDetail'] = $this->getSimpleDetail($number);
-        $data['mainDetail']['prices'] = $this->getSimplePrices();
+        $data['mainDetail']['prices'] = $this->getSimplePrices('TE');
 
         $data = array_merge(
             $data,
@@ -353,7 +191,8 @@ class sArticles_PromotionByIdTest extends PHPUnit_Framework_TestCase
 
         $this->getApi()->create($data);
 
-        $this->switchShop(1);
+        $this->switchState($group, $this->getShop(), $this->getHighTax());
+
         $promotion = $this->getPromotion($number);
 
         $this->assertArrayHasKey('sProperties', $promotion);
@@ -375,23 +214,22 @@ class sArticles_PromotionByIdTest extends PHPUnit_Framework_TestCase
         $this->removeArticle($number);
     }
 
-
-
-
     public function testVoteAverage()
     {
         $number = 'Votes-1';
         $this->removeArticle($number);
 
+        $group = $this->createCustomerGroup('TE', 0);
+
         $data = $this->getBaseData();
         $data['mainDetail'] = $this->getSimpleDetail($number);
-        $data['mainDetail']['prices'] = $this->getSimplePrices();
+        $data['mainDetail']['prices'] = $this->getSimplePrices('TE');
 
         $article = $this->getApi()->create($data);
 
         $this->createArticleVotes($article->getId());
 
-        $this->switchCustomerGroup('EK');
+        $this->switchState($group, $this->getShop(), $this->getHighTax());
 
         $promotion = $this->getPromotion($number);
 
@@ -408,18 +246,18 @@ class sArticles_PromotionByIdTest extends PHPUnit_Framework_TestCase
         $number = 'Translation-1';
         $this->removeArticle($number);
 
+        $group = $this->createCustomerGroup('TE', 0);
         $data = $this->getBaseData();
         $data['mainDetail'] = $this->getSimpleDetail($number);
-        $data['mainDetail']['prices'] = $this->getSimplePrices();
+        $data['mainDetail']['prices'] = $this->getSimplePrices('TE');
 
         $article = $this->getApi()->create($data);
 
         $translation = array(
-            'articleName' => 'TEST-EN',
+            'name' => 'TEST-EN',
             'description' => 'TEST-EN',
             'description_long' => 'TEST-EN',
-            'additionaltext' => 'TEST-EN',
-            'keywords' => 'TEST-EN',
+            'additionaltext' => 'TEST-EN'
         );
         $this->getTranslationApi()->create(array(
             'type' => 'article',
@@ -428,47 +266,14 @@ class sArticles_PromotionByIdTest extends PHPUnit_Framework_TestCase
             'data' => $translation
         ));
 
-        $this->switchShop(2);
-        $promotion = $this->getPromotion($number);
-        $this->switchShop(1);
-
-        foreach ($translation as $key => $value) {
-            $this->assertEquals(
-                $value,
-                $promotion[$key],
-                sprintf('Translation for property %s not found', $key)
-            );
-        }
-
-        $this->removeArticle($number);
-    }
-
-    public function testSimpleConfigurator() {
-
-        $number = 'Translation-1';
-        $this->removeArticle($number);
-
-        $data = $this->getBaseData();
-        $data['mainDetail'] = $this->getSimpleDetail($number);
-        $data['mainDetail']['prices'] = $this->getScaledPrices('EK');
-
-        $configurator = $this->getSimpleConfiguratorSet(1, 2);
-        $variants = $this->createConfiguratorVariants($configurator['groups']);
-
-        $data['configuratorSet'] = $configurator;
-        $data['variants'] = $variants;
-
-        $this->getApi()->create($data);
+        $this->switchState($group, $this->getShop(2), $this->getHighTax());
 
         $promotion = $this->getPromotion($number);
 
-        //the main variant contains a scaled price with over 400 € value
-        //the variants are generated with 119,- simple price value
-        //check if the cheapest variant price is used
-        $this->assertEquals('119,00', $promotion['price']);
-
-        $this->assertEquals(1, $promotion['sConfigurator']);
-        $this->assertEquals(1, $promotion['sVariantArticle']);
+        $this->assertEquals('TEST-EN', $promotion['articleName']);
+        $this->assertEquals('TEST-EN', $promotion['description']);
+        $this->assertEquals('TEST-EN', $promotion['description_long']);
+        $this->assertEquals('TEST-EN', $promotion['additionaltext']);
 
         $this->removeArticle($number);
     }
@@ -491,12 +296,15 @@ class sArticles_PromotionByIdTest extends PHPUnit_Framework_TestCase
 
         $number = 'Key-1';
         $this->removeArticle($number);
+        $group = $this->createCustomerGroup('TE', 0);
 
         $data = $this->getBaseData();
         $data['mainDetail'] = $this->getSimpleDetail($number);
-        $data['mainDetail']['prices'] = $this->getSimplePrices();
+        $data['mainDetail']['prices'] = $this->getSimplePrices('TE');
 
         $this->getApi()->create($data);
+
+        $this->switchState($group, $this->getShop(), $this->getHighTax());
 
         $promotion = $this->getPromotion($number);
 
@@ -511,10 +319,11 @@ class sArticles_PromotionByIdTest extends PHPUnit_Framework_TestCase
     {
         $number = 'Properties-1';
         $this->removeArticle($number);
+        $group = $this->createCustomerGroup('TE', 0);
 
         $data = $this->getBaseData();
         $data['mainDetail'] = $this->getSimpleDetail($number);
-        $data['mainDetail']['prices'] = $this->getSimplePrices();
+        $data['mainDetail']['prices'] = $this->getSimplePrices('TE');
 
         $properties = $this->getArticleProperties();
 
@@ -525,10 +334,8 @@ class sArticles_PromotionByIdTest extends PHPUnit_Framework_TestCase
 
         $this->getApi()->create($data);
 
-        $this->switchShop(2);
-        Shopware()->Modules()->Articles()->translationId = 2;
+        $this->switchState($group, $this->getShop(2), $this->getHighTax());
         $promotion = $this->getPromotion($number);
-        $this->switchShop(1);
 
         $this->assertArrayHasKey('sProperties', $promotion);
 
@@ -554,7 +361,6 @@ class sArticles_PromotionByIdTest extends PHPUnit_Framework_TestCase
 
     private function getSimpleConfiguratorSet($groupLimit = 3, $optionLimit = 5)
     {
-
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('groups.id', 'groups.name'))
             ->from('Shopware\Models\Article\Configurator\Group', 'groups')
@@ -582,6 +388,7 @@ class sArticles_PromotionByIdTest extends PHPUnit_Framework_TestCase
             'groups' => $groups
         );
     }
+
     /**
      * Helper function which creates all variants for
      * the passed groups with options.
@@ -711,6 +518,8 @@ class sArticles_PromotionByIdTest extends PHPUnit_Framework_TestCase
         Shopware()->Models()->persist($customer);
         Shopware()->Models()->flush($customer);
         Shopware()->Models()->clear();
+
+        return $customer;
     }
 
     private function removeCustomerGroup($key)
@@ -787,7 +596,7 @@ class sArticles_PromotionByIdTest extends PHPUnit_Framework_TestCase
 
         return array(
             'number' => $number,
-            'inStock' => 20,
+            'inStock' => 200,
             'active' => true
         );
     }
@@ -852,4 +661,99 @@ class sArticles_PromotionByIdTest extends PHPUnit_Framework_TestCase
         );
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    protected function getHighTax()
+    {
+        return Shopware()->Models()->find(
+            'Shopware\Models\Tax\Tax',
+            1
+        );
+    }
+
+
+    /**
+     * @param int $shopId
+     * @return \Shopware\Models\Shop\Shop
+     */
+    protected function getShop($shopId = 1)
+    {
+        return Shopware()->Models()->find(
+            'Shopware\Models\Shop\Shop',
+            $shopId
+        );
+    }
+
+
+    protected function switchState(
+        \Shopware\Models\Customer\Group $group,
+        \Shopware\Models\Shop\Shop $shop,
+        \Shopware\Models\Tax\Tax $tax
+    ) {
+        $state = new \Shopware\Struct\GlobalState();
+
+        $customerGroup = new \Shopware\Struct\CustomerGroup();
+        $customerGroup->setKey($group->getKey());
+        $customerGroup->setUseDiscount(true);
+        $customerGroup->setId($group->getId());
+        $customerGroup->setPercentageDiscount($group->getDiscount());
+        $customerGroup->setDisplayGross($group->getTax());
+
+        $state->setCurrentCustomerGroup($customerGroup);
+        $state->setFallbackCustomerGroup($customerGroup);
+
+        $state->setCurrency(new \Shopware\Struct\Currency());
+        $state->getCurrency()->setFactor(1);
+
+        $state->setShop(new \Shopware\Struct\Shop());
+        $state->getShop()->setId($shop->getId());
+
+        $state->setTax(new \Shopware\Struct\Tax());
+        $state->getTax()->setId($tax->getId());
+        $state->getTax()->setTax($tax->getTax());
+
+        $service = $this->getGlobalStateService();
+
+        $service->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($state));
+
+        Shopware()->Modules()->Articles()->globalStateService = $service;
+
+
+
+        $this->switchCustomerGroup($customerGroup->getKey());
+        $this->switchShop($shop->getId());
+    }
+
+
+    /**
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getGlobalStateService()
+    {
+        return $this->getMockBuilder('Shopware\Service\GlobalState')
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
 }

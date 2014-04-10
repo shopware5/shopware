@@ -56,30 +56,6 @@ class Price
     }
 
     /**
-     * Helper function which iterates the passed prices array
-     * and returns the cheapest price.
-     *
-     * @param \Shopware\Struct\ProductMini $product
-     * @return \Shopware\Struct\Price
-     */
-    public function getCheapestVariantPrice(Struct\ProductMini $product)
-    {
-        $cheapestPrice = null;
-
-        foreach($product->getPrices() as $price) {
-
-            if ($cheapestPrice === null) {
-                $cheapestPrice = $price;
-            }
-
-            if ($price->getCalculatedPrice() < $cheapestPrice->getCalculatedPrice()) {
-                $cheapestPrice = $price;
-            }
-        }
-        return $cheapestPrice;
-    }
-
-    /**
      * Returns the cheapest product price struct.
      *
      * The cheapest product price is selected over all product variations.
@@ -99,23 +75,60 @@ class Price
      * @param \Shopware\Struct\GlobalState $state
      * @return Struct\Price
      */
-    public function getCheapestProductPrice(Struct\ProductMini $product, Struct\GlobalState $state)
+    public function getCheapestPrice(Struct\ProductMini $product, Struct\GlobalState $state)
     {
         $customerGroup = $state->getCurrentCustomerGroup();
-        $cheapestPrice = $this->priceGateway->getCheapestProductPrice(
+        $cheapestPrice = $this->priceGateway->getCheapestPrice(
             $product, $customerGroup
         );
 
         if ($cheapestPrice == null) {
             $customerGroup = $state->getFallbackCustomerGroup();
-            $cheapestPrice = $this->priceGateway->getCheapestProductPrice(
+            $cheapestPrice = $this->priceGateway->getCheapestPrice(
                 $product, $customerGroup
             );
         }
 
+        $this->calculatePriceGroupPrice($product, $cheapestPrice, $state);
+
         $cheapestPrice->setCustomerGroup($customerGroup);
 
         return $cheapestPrice;
+    }
+
+    /**
+     * Reduces the passed price with a configured
+     * price group discount for the min purchase of the
+     * prices unit.
+     *
+     * @param Struct\ProductMini $product
+     * @param Struct\Price $cheapestPrice
+     * @param Struct\GlobalState $state
+     */
+    private function calculatePriceGroupPrice(
+        Struct\ProductMini $product,
+        Struct\Price $cheapestPrice,
+        Struct\GlobalState $state
+    ) {
+
+        //check for price group discounts.
+        if (!$product->getPriceGroup()) {
+            return;
+        }
+
+        //selects the highest price group discount, for the passed quantity.
+        $discount = $this->priceGateway->getPriceGroupDiscount(
+            $product->getPriceGroup(),
+            $state->getCurrentCustomerGroup(),
+            $cheapestPrice->getUnit()->getMinPurchase()
+        );
+
+        //check if the discount is numeric, otherwise use a 0 for calculation.
+        if (!is_numeric($discount)) $discount = 0;
+
+        $cheapestPrice->setPrice(
+            $cheapestPrice->getPrice() / 100 * (100 - $discount)
+        );
     }
 
     /**
@@ -138,9 +151,9 @@ class Price
             );
         }
 
-        if ($product->getCheapestProductPrice()) {
+        if ($product->getCheapestPrice()) {
             $this->calculatePriceStruct(
-                $product->getCheapestProductPrice(),
+                $product->getCheapestPrice(),
                 $state
             );
         }

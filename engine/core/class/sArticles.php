@@ -95,6 +95,13 @@ class sArticles
     const FILTERS_SORT_POSITION = 3;
 
     /**
+     * @var \Shopware\Service\GlobalState
+     */
+    public $globalStateService;
+
+
+
+    /**
      * Helper function to get access to the media repository.
      * @return \Shopware\Models\Media\Repository
      */
@@ -121,13 +128,23 @@ class sArticles
     /**
      * Class constructor.
      */
-    public function __construct(\Shopware\Models\Category\Category $category = null, $translationId = null, $customerGroupId = null)
-    {
+    public function __construct(
+        \Shopware\Models\Category\Category $category = null,
+        $translationId = null,
+        $customerGroupId = null,
+        \Shopware\Service\GlobalState $globalState
+    ) {
         $this->category = ($category) ?: Shopware()->Shop()->getCategory();
         $this->categoryId = $this->category->getId();
 
         $this->translationId = ($translationId)  ?: (!Shopware()->Shop()->getDefault() ? Shopware()->Shop()->getId() : null);
-        $this->customerGroupId = $customerGroupId ?: ((int) Shopware()->Modules()->System()->sUSERGROUPDATA['id']);
+        $this->customerGroupId = $customerGroupId ?: ((int) Shopware()->Modules()->System()->sSYSTEM->sUSERGROUPDATA['id']);
+
+        $this->globalStateService = Shopware()->Container()->get('global_state_service');
+
+        if ($globalState) {
+            $this->globalStateService = $globalState;
+        }
     }
 
     /**
@@ -1109,7 +1126,7 @@ class sArticles
                 ON  c.id = ac.categoryID
                 AND c.active = 1
 
-            JOIN s_articles_attributes AS aAttributes
+            LEFT JOIN s_articles_attributes AS aAttributes
               ON aAttributes.articledetailsID = aDetails.id
 
             JOIN s_core_tax AS aTax
@@ -1272,7 +1289,8 @@ class sArticles
                 $cheapestPrice = $articles[$articleKey]['liveshoppingData']['net_price'];
             } else {
                 $cheapestPrice = $this->sGetCheapestPrice(
-                    $articles[$articleKey]["articleID"], $articles[$articleKey]["pricegroup"],
+                    $articles[$articleKey]["articleID"],
+                    $articles[$articleKey]["pricegroup"],
                     $articles[$articleKey]["pricegroupID"], $articles[$articleKey]["pricegroupActive"],
                     false, true
                 );
@@ -2733,7 +2751,13 @@ class sArticles
                 $foundPrice = true;
             }
 
-            $returnPrice = $this->sGetPricegroupDiscount($this->sSYSTEM->sUSERGROUP, $pricegroup, $basePrice, 99999, false);
+            $returnPrice = $this->sGetPricegroupDiscount(
+                $this->sSYSTEM->sUSERGROUP,
+                $pricegroup,
+                $basePrice,
+                99999,
+                false
+            );
 
             if (!empty($returnPrice) && $foundPrice) {
 
@@ -3536,6 +3560,7 @@ class sArticles
         return $getPromotionResult;
     }
 
+
     /**
      * Get basic article data in various modes (firmly definied by id, random, top,new)
      * @param string $mode Modus (fix, random, top, new)
@@ -3546,6 +3571,8 @@ class sArticles
      */
     public function sGetPromotionById($mode, $category = 0, $value = 0, $withImage = false)
     {
+        return $this->getNew($category, $value);
+
         if (Enlight()->Events()->notifyUntil('Shopware_Modules_Articles_GetPromotionById_Start', array('subject' => $this, 'mode' => $mode, 'category' => $category, 'value' => $value))) {
             return false;
         }
@@ -3713,7 +3740,7 @@ class sArticles
                 JOIN s_articles_details d
                 ON d.id=a.main_detail_id
 
-                JOIN s_articles_attributes at
+                LEFT JOIN s_articles_attributes at
                 ON at.articleID=a.id
 
                 JOIN s_core_tax t
@@ -3768,8 +3795,10 @@ class sArticles
 
 
         $cheapestPrice = $this->sGetCheapestPrice(
-            $getPromotionResult["articleID"], $getPromotionResult["pricegroup"],
-            $getPromotionResult["pricegroupID"], $getPromotionResult["pricegroupActive"],
+            $getPromotionResult["articleID"],
+            $getPromotionResult["pricegroup"],
+            $getPromotionResult["pricegroupID"],
+            $getPromotionResult["pricegroupActive"],
             $mode == "random" ? true : false, true
         );
 
@@ -3792,7 +3821,12 @@ class sArticles
             }
         }
         // Formating prices
-        $getPromotionResult["price"] = $this->sCalculatingPrice($getPromotionResult["price"], $getPromotionResult["tax"], $getPromotionResult["taxID"],$getPromotionResult);
+        $getPromotionResult["price"] = $this->sCalculatingPrice(
+            $getPromotionResult["price"],
+            $getPromotionResult["tax"],
+            $getPromotionResult["taxID"],
+            $getPromotionResult
+        );
 
         if ($getPromotionResult["pseudoprice"]) {
             $getPromotionResult["pseudoprice"] = $this->sCalculatingPrice($getPromotionResult["pseudoprice"], $getPromotionResult["tax"], $getPromotionResult["taxID"], $getPromotionResult);
@@ -4637,4 +4671,240 @@ class sArticles
         }
         return $sArticle;
     }
+
+
+    private  function getNew($category, $value) {
+
+        $number = Shopware()->Db()->fetchOne(
+            "SELECT ordernumber FROM s_articles_details WHERE articleID = ?",
+            array($value)
+        );
+
+        if ($number) {
+            $value = $number;
+        }
+
+        $state = $this->globalStateService->get();
+
+        $product = Shopware()->Container()->get('product_service')->getMini(
+            $value,
+            $state
+        );
+
+        if (!$product) {
+            return null;
+        }
+
+
+        //check if the product has an configured property set which stored in s_filter.
+        //the mini product doesn't contains this data so we have to load this lazy.
+        $propertySet = null;
+        if ($product->hasProperties()) {
+            $propertySet = Shopware()->Container()->get('property_service')->getProductProperty(
+                $product,
+                $state
+            );
+        }
+
+        $average = Shopware()->Container()->get('product_service')->getVoteAverage($product);
+
+        //convert to shopware 3-4 array structure.
+        $promotion = $this->convertProductStruct($product, $category);
+
+        if ($average && $average->getCount()) {
+            $promotion['sVoteAverange'] = array(
+                'averange' => round($average->getAverage()),
+                'count' => $average->getCount(),
+            );
+        }
+
+        if ($propertySet) {
+            $properties = array();
+            foreach($propertySet->getGroups() as $group) {
+                $property = array(
+                    'id' => $group->getId(),
+                    'optionID' => $group->getId(),
+                    'groupID' => $propertySet->getId(),
+                    'groupName' => $propertySet->getName(),
+                    'name' => $group->getName(),
+                    'valueID' => '?',
+                );
+
+                $values = array();
+                foreach($group->getOptions() as $option) {
+                    $values[] = $option->getName();
+                }
+                $property['values'] = $values;
+                $property['value'] = implode(', ', $values);
+                $options = $group->getOptions();
+                $property['valueID'] = $options[0]->getId();
+
+                $properties[$group->getId()] = $property;
+            }
+
+            $promotion['sProperties'] = $properties;
+        }
+
+        return $promotion;
+    }
+
+    private function convertProductStruct(\Shopware\Struct\ProductMini $product, $category = null)
+    {
+        $cheapestPrice = $product->getCheapestPrice();
+
+        $unit = $cheapestPrice->getUnit();
+
+        $price = $this->sFormatPrice(
+            round($cheapestPrice->getCalculatedPrice()),
+            3
+        );
+
+        $pseudoPrice = $this->sFormatPrice(
+            round($cheapestPrice->getCalculatedPseudoPrice()),
+            3
+        );
+
+        $referencePrice = $this->sFormatPrice(
+            round($cheapestPrice->getCalculatedReferencePrice()),
+            3
+        );
+
+        $promotion = array(
+            'articleID' => $product->getId(),
+            'articleDetailsID' => $product->getVariantId(),
+            'ordernumber' => $product->getNumber(),
+            'highlight' => $product->highlight(),
+            'description' => $product->getShortDescription(),
+            'description_long' => $product->getLongDescription(),
+            'supplierName' => $product->getManufacturer()->getName(),
+            'supplierImg' => $product->getManufacturer()->getCoverFile(),
+            'articleName' => $product->getName(),
+            'taxID' => $product->getTax()->getId(),
+            'price' => $price,
+            'pseudoprice' => $pseudoPrice,
+            'tax' => $product->getTax()->getTax(),
+            'instock' => $product->getStock(),
+            'weight' => $product->getWeight(),
+            'shippingtime' => $product->getShippingTime(),
+            'pricegroup' => $cheapestPrice->getCustomerGroup()->getKey(),
+            'pricegroupActive' => false,
+            'pricegroupID' => null,
+            'length' => $product->getLength(),
+            'height' => $product->getHeight(),
+            'width' => $product->getWidth(),
+            'laststock' => $product->isCloseouts(),
+            'additionaltext' => $product->getAdditional(),
+            'topseller' => $product->highlight(),
+            'sReleasedate' => $product->getReleaseDate(),
+            'sReleaseDate' => $product->getReleaseDate(),
+            'referenceprice' => $referencePrice,
+            'datum' => $product->getCreatedAt(),
+            'sVoteAverange' => array(
+                'averange' => 0,
+                'count' => 0,
+            ),
+            'sales' => 0,
+            'filtergroupID' => null,
+            'priceStartingFrom' => null,
+            'pseudopricePercent' => null,
+
+            //flag inside mini product
+            'sVariantArticle' => null,
+            'sConfigurator' => '0',
+            'esd' => '0',
+
+            'newArticle' => '0',
+            'sUpcoming' => '0',
+
+            'mode' => 'fix'
+        );
+
+
+        if ($product->getPriceGroup()) {
+            $promotion['pricegroupActive'] = true;
+            $promotion['pricegroupID'] = $product->getPriceGroup()->getId();
+        }
+
+        if (count($product->getPrices()) > 1) {
+            $promotion['priceStartingFrom'] = $price;
+        }
+
+        if ($cheapestPrice->getCalculatedPseudoPrice()) {
+            $discPseudo = $cheapestPrice->getCalculatedPseudoPrice();
+            $discPrice = $cheapestPrice->getCalculatedPrice();
+
+            $discount = round(($discPrice / $discPseudo * 100) - 100, 2) * -1;
+            $promotion["pseudopricePercent"] = array(
+                "int" => round($discount, 0),
+                "float" => $discount
+            );
+        }
+
+        if ($unit) {
+            $promotion = array_merge($promotion, array(
+                'purchaseunit' => $unit->getPurchaseUnit(),
+                'referenceunit' => $unit->getReferenceUnit(),
+                'unitID' => $unit->getId(),
+                'sUnit' => array(
+                    'unit' => $unit->getUnit(),
+                    'description' => $unit->getName(),
+                )
+            ));
+        }
+
+        if ($product->getAttributes()) {
+            foreach($product->getAttributes() as $attribute) {
+                $promotion = array_merge(
+                    $promotion,
+                    $attribute->toArray()
+                );
+            }
+        }
+
+        if ($product->getCover()) {
+            //now we get the configured image and thumbnail dir.
+            $imageDir = $this->sSYSTEM->sPathArticleImg;
+            $imageDir = str_replace('media/image/', '', $imageDir);
+
+            $src = $product->getCover()->getThumbnails();
+            foreach($src as &$thumbnail) {
+                $thumbnail = $imageDir . $thumbnail;
+            }
+
+            $src['original'] = $imageDir . $product->getCover()->getFile();
+
+            $promotion['image'] = array(
+                'src' => $src,
+                'res' => array(
+                    'original' => array(
+                        'width' => 0,
+                        'height' => 0,
+                    ),
+                    'description' => $product->getCover()->getDescription(),
+                ),
+                'position' => 1,
+                'extension' => $product->getCover()->getExtension(),
+                'main' => $product->getCover()->getPreview(),
+                'id' => $product->getCover()->getId(),
+                'parentId' => NULL,
+                'attribute' => array(),
+            );
+        }
+
+        $promotion["linkBasket"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] .
+            "?sViewport=basket&sAdd=" . $promotion["ordernumber"];
+
+        $promotion["linkDetails"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] .
+            "?sViewport=detail&sArticle=" . $promotion["articleID"];
+
+        if (!empty($category)
+            && $category != $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["parentID"]) {
+
+            $promotion["linkDetails"] .= "&sCategory=$category";
+        }
+
+        return $promotion;
+    }
+
+
 }

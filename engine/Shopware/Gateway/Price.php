@@ -44,8 +44,24 @@ interface Price
      * @param Struct\CustomerGroup $customerGroup
      * @return Struct\Price
      */
-    public function getCheapestProductPrice(
+    public function getCheapestPrice(
         Struct\ProductMini $product,
         Struct\CustomerGroup $customerGroup
+    );
+
+
+    /**
+     * Returns the highest percentage discount for the
+     * customer group of the passed price group and quantity.
+     *
+     * @param Struct\PriceGroup $priceGroup
+     * @param Struct\CustomerGroup $customerGroup
+     * @param $quantity
+     * @return int
+     */
+    public function getPriceGroupDiscount(
+        Struct\PriceGroup $priceGroup,
+        Struct\CustomerGroup $customerGroup,
+        $quantity
     );
 }

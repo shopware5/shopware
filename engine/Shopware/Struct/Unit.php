@@ -67,6 +67,32 @@ class Unit
     private $packUnit;
 
     /**
+     * Minimal purchase value for the product.
+     * Used as minimum value to add a product to the basket.
+     *
+     * @var float
+     */
+    private $minPurchase;
+
+    /**
+     * Maximal purchase value for the product.
+     * Used as maximum value to add a product to the basket.
+     *
+     * @var float
+     */
+    private $maxPurchase;
+
+    /**
+     * Numeric step value for the purchase.
+     * This value is used to generate the quantity combo box
+     * on the product detail page and in the basket.
+     *
+     * @var float
+     */
+    private $purchaseStep;
+
+
+    /**
      * @param int $id
      *
      */
@@ -167,4 +193,55 @@ class Unit
     {
         $this->referenceUnit = $referenceUnit;
     }
+
+    /**
+     * @param float $maxPurchase
+     */
+    public function setMaxPurchase($maxPurchase)
+    {
+        $this->maxPurchase = $maxPurchase;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMaxPurchase()
+    {
+        return $this->maxPurchase;
+    }
+
+    /**
+     * @param float $minPurchase
+     */
+    public function setMinPurchase($minPurchase)
+    {
+        $this->minPurchase = $minPurchase;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMinPurchase()
+    {
+        return $this->minPurchase;
+    }
+
+
+    /**
+     * @param float $purchaseStep
+     */
+    public function setPurchaseStep($purchaseStep)
+    {
+        $this->purchaseStep = $purchaseStep;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPurchaseStep()
+    {
+        return $this->purchaseStep;
+    }
+
+
 }

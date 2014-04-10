@@ -179,31 +179,6 @@ class ProductMini extends Extendable
     private $ean;
 
     /**
-     * Minimal purchase value for the product.
-     * Used as minimum value to add a product to the basket.
-     *
-     * @var float
-     */
-    private $minPurchase;
-
-    /**
-     * Maximal purchase value for the product.
-     * Used as maximum value to add a product to the basket.
-     *
-     * @var float
-     */
-    private $maxPurchase;
-
-    /**
-     * Numeric step value for the purchase.
-     * This value is used to generate the quantity combo box
-     * on the product detail page and in the basket.
-     *
-     * @var float
-     */
-    private $purchaseStep;
-
-    /**
      * Flag if the product should be displayed
      * with a teaser flag within listings.
      *
@@ -211,23 +186,15 @@ class ProductMini extends Extendable
      */
     private $highlight;
 
-    /**
-     * Contains the cheapest price of this product variation.
-     * This price is calculated over the shopware price service
-     * getCheapestVariantPrice function.
-     *
-     * @var Price
-     */
-    private $cheapestVariantPrice;
 
     /**
      * Contains the absolute cheapest price of each product variation.
      * This price is calculated over the shopware price service
-     * getCheapestProductPrice function.
+     * getCheapestPrice function.
      *
      * @var Price
      */
-    private $cheapestProductPrice;
+    private $cheapestPrice;
 
     /**
      * Price of the current variant.
@@ -430,39 +397,20 @@ class ProductMini extends Extendable
     }
 
     /**
-     * @param \Shopware\Struct\Price $cheapestVariantPrice
+     * @param \Shopware\Struct\Price $cheapestPrice
      */
-    public function setCheapestVariantPrice($cheapestVariantPrice)
+    public function setCheapestPrice($cheapestPrice)
     {
-        $this->cheapestVariantPrice = $cheapestVariantPrice;
+        $this->cheapestPrice = $cheapestPrice;
     }
 
     /**
      * @return \Shopware\Struct\Price
      */
-    public function getCheapestVariantPrice()
+    public function getCheapestPrice()
     {
-        return $this->cheapestVariantPrice;
+        return $this->cheapestPrice;
     }
-
-    /**
-     * @param \Shopware\Struct\Price $cheapestProductPrice
-     */
-    public function setCheapestProductPrice($cheapestProductPrice)
-    {
-        $this->cheapestProductPrice = $cheapestProductPrice;
-    }
-
-    /**
-     * @return \Shopware\Struct\Price
-     */
-    public function getCheapestProductPrice()
-    {
-        return $this->cheapestProductPrice;
-    }
-
-
-
 
     /**
      * @param int $id
@@ -624,37 +572,6 @@ class ProductMini extends Extendable
         return $this->longDescription;
     }
 
-    /**
-     * @param float $maxPurchase
-     */
-    public function setMaxPurchase($maxPurchase)
-    {
-        $this->maxPurchase = $maxPurchase;
-    }
-
-    /**
-     * @return float
-     */
-    public function getMaxPurchase()
-    {
-        return $this->maxPurchase;
-    }
-
-    /**
-     * @param float $minPurchase
-     */
-    public function setMinPurchase($minPurchase)
-    {
-        $this->minPurchase = $minPurchase;
-    }
-
-    /**
-     * @return float
-     */
-    public function getMinPurchase()
-    {
-        return $this->minPurchase;
-    }
 
     /**
      * @param int $minStock
@@ -670,22 +587,6 @@ class ProductMini extends Extendable
     public function getMinStock()
     {
         return $this->minStock;
-    }
-
-    /**
-     * @param float $purchaseStep
-     */
-    public function setPurchaseStep($purchaseStep)
-    {
-        $this->purchaseStep = $purchaseStep;
-    }
-
-    /**
-     * @return float
-     */
-    public function getPurchaseStep()
-    {
-        return $this->purchaseStep;
     }
 
     /**

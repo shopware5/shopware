@@ -50,5 +50,16 @@ class Unit
             $unit->setReferenceUnit(floatval($data['referenceunit']));
         }
 
+        if (isset($data['purchasesteps'])) {
+            $unit->setPurchaseStep(intval($data['purchasesteps']));
+        }
+
+        if (isset($data['minpurchase'])) {
+            $unit->setMinPurchase(intval($data['minpurchase']));
+        }
+
+        if (isset($data['maxpurchase'])) {
+            $unit->setMaxPurchase(intval($data['maxpurchase']));
+        }
     }
 }
