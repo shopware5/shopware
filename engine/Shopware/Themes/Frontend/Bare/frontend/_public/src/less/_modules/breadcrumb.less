@@ -6,9 +6,11 @@
     .content--breadcrumb {
         .clearfix();
         .unitize(14, 16, font-size);
-        .unitize-padding(10, 12);
+        .unitize-padding(15, 12);
+        .box-shadow(0 18px 16px -16px rgba(0, 0, 0, 0.1));
         display: block;
-        border-bottom: 1px solid @borderColor;
+        float: none;
+        border-bottom: 1px solid #ebedef;
 
         // Entry styling
         .breadcrumb--entry, .breadcrumb--separator {
@@ -59,4 +61,13 @@
             .unitize(15, 16, margin-top);
         }
     }
+}
+
+
+@media screen and(min-width: @desktopViewportWidth) {
+
+  .content--breadcrumb {
+    .unitize-padding(15, 20, 15, 45);
+  }
+
 }
