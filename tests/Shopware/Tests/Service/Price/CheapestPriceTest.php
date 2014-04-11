@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Shopware_Tests_Service_Price_CheapestPriceTest
+ */
 class Shopware_Tests_Service_Price_CheapestPriceTest extends Shopware_Tests_Service_Base
 {
     public function testVariantPrices()
@@ -15,7 +18,7 @@ class Shopware_Tests_Service_Price_CheapestPriceTest extends Shopware_Tests_Serv
 
         $state = $this->createGlobalState(
             $group,
-            $this->getDefaultShop(),
+            $this->getShop(),
             $this->getHighTax()
         );
 
@@ -25,6 +28,7 @@ class Shopware_Tests_Service_Price_CheapestPriceTest extends Shopware_Tests_Serv
 
         $this->assertInstanceOf('Shopware\Struct\Price', $price);
         $this->assertEquals(1000, $price->getCalculatedPrice());
+        $this->removeArticle($number);
     }
 
     public function testDiscount()
@@ -41,7 +45,7 @@ class Shopware_Tests_Service_Price_CheapestPriceTest extends Shopware_Tests_Serv
 
         $state = $this->createGlobalState(
             $group,
-            $this->getDefaultShop(),
+            $this->getShop(),
             $tax
         );
 
@@ -50,6 +54,7 @@ class Shopware_Tests_Service_Price_CheapestPriceTest extends Shopware_Tests_Serv
 
         $this->assertInstanceOf('Shopware\Struct\Price', $price);
         $this->assertEquals(900, $price->getCalculatedPrice());
+        $this->removeArticle($number);
     }
 
     public function testPriceGroup()
@@ -77,7 +82,7 @@ class Shopware_Tests_Service_Price_CheapestPriceTest extends Shopware_Tests_Serv
 
         $state = $this->createGlobalState(
             $group,
-            $this->getDefaultShop(),
+            $this->getShop(),
             $tax
         );
 
@@ -86,6 +91,7 @@ class Shopware_Tests_Service_Price_CheapestPriceTest extends Shopware_Tests_Serv
         $price = $product->getCheapestPrice();
 
         $this->assertEquals(900, $price->getCalculatedPrice());
+        $this->removeArticle($number);
     }
 
     public function testPriceGroupAndDiscount()
@@ -111,7 +117,7 @@ class Shopware_Tests_Service_Price_CheapestPriceTest extends Shopware_Tests_Serv
 
         $state = $this->createGlobalState(
             $group,
-            $this->getDefaultShop(),
+            $this->getShop(),
             $this->getHighTax()
         );
 
@@ -120,6 +126,7 @@ class Shopware_Tests_Service_Price_CheapestPriceTest extends Shopware_Tests_Serv
         $price = $product->getCheapestPrice();
 
         $this->assertEquals(810, $price->getCalculatedPrice());
+        $this->removeArticle($number);
     }
 
     public function testSimpleConfigurator() {
@@ -148,7 +155,7 @@ class Shopware_Tests_Service_Price_CheapestPriceTest extends Shopware_Tests_Serv
 
         $state = $this->createGlobalState(
             $group,
-            $this->getDefaultShop(),
+            $this->getShop(),
             $this->getHighTax()
         );
 
@@ -157,6 +164,7 @@ class Shopware_Tests_Service_Price_CheapestPriceTest extends Shopware_Tests_Serv
         $price = $product->getCheapestPrice();
 
         $this->assertEquals(400, $price->getCalculatedPrice());
+        $this->removeArticle($number);
     }
 
     public function testMinPurchase()
@@ -176,7 +184,7 @@ class Shopware_Tests_Service_Price_CheapestPriceTest extends Shopware_Tests_Serv
 
         $state = $this->createGlobalState(
             $group,
-            $this->getDefaultShop(),
+            $this->getShop(),
             $tax
         );
 
@@ -185,6 +193,7 @@ class Shopware_Tests_Service_Price_CheapestPriceTest extends Shopware_Tests_Serv
         $price = $product->getCheapestPrice();
 
         $this->assertEquals(2000, $price->getCalculatedPrice());
+        $this->removeArticle($number);
     }
 
     public function testAllCombinations()
@@ -233,7 +242,7 @@ class Shopware_Tests_Service_Price_CheapestPriceTest extends Shopware_Tests_Serv
 
         $state = $this->createGlobalState(
             $group,
-            $this->getDefaultShop(),
+            $this->getShop(),
             $this->getHighTax()
         );
 
@@ -242,5 +251,6 @@ class Shopware_Tests_Service_Price_CheapestPriceTest extends Shopware_Tests_Serv
         $price = $product->getCheapestPrice();
 
         $this->assertEquals(1728, $price->getCalculatedPrice());
+        $this->removeArticle($number);
     }
 }
