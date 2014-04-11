@@ -32,10 +32,10 @@
     Plugin.prototype.init = function() {
         var me = this;
 
-        me.targetElId = me.$el.attr('data-target');
+        me.targetElId = me.$el.attr('data-collapse-target');
 
         if (me.targetElId !== undefined) {
-            me.$targetEl = $('#'+me.targetElId);
+            me.$targetEl = $(me.targetElId);
         } else {
             me.$targetEl = me.$el.next('.collapse--content');
         }
@@ -65,13 +65,10 @@
             me.$el.removeClass('is--active');
             me.$targetEl.slideUp(me.opts.slideSpeed, function() {
                 me.$targetEl.removeClass('is--active');
-
             });
         } else {
             me.$el.addClass('is--active');
-            me.$targetEl.slideDown(me.opts.slideSpeed, function() {
-                me.$targetEl.addClass('is--active');
-            });
+            me.$targetEl.slideDown(me.opts.slideSpeed).addClass('is--active');
         }
     };
 
@@ -83,6 +80,8 @@
     Plugin.prototype.destroy = function() {
         var me = this;
 
+        me.$el.removeClass('is--active');
+        me.$targetEl.removeClass('is--active').hide();
         me.$el.off('click.' + pluginName).removeData('plugin_' + pluginName);
     };
 
