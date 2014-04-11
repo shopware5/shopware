@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Shopware_Tests_Service_Price_BasePriceTest
+ */
 class Shopware_Tests_Service_Price_BasePriceTest extends Shopware_Tests_Service_Base
 {
     public function testSimpleVariant()
@@ -16,7 +19,7 @@ class Shopware_Tests_Service_Price_BasePriceTest extends Shopware_Tests_Service_
 
         $state = $this->createGlobalState(
             $group,
-            $this->getDefaultShop(),
+            $this->getShop(),
             $this->getHighTax()
         );
 
@@ -38,6 +41,7 @@ class Shopware_Tests_Service_Price_BasePriceTest extends Shopware_Tests_Service_
 
         $this->assertEquals(100, $cheapest->getUnit()->getReferenceUnit());
         $this->assertEquals(500, $cheapest->getUnit()->getPurchaseUnit());
+        $this->removeArticle($number);
     }
 
 
@@ -69,7 +73,7 @@ class Shopware_Tests_Service_Price_BasePriceTest extends Shopware_Tests_Service_
 
         $state = $this->createGlobalState(
             $group,
-            $this->getDefaultShop(),
+            $this->getShop(),
             $this->getHighTax()
         );
 
@@ -79,6 +83,8 @@ class Shopware_Tests_Service_Price_BasePriceTest extends Shopware_Tests_Service_
 
         $this->assertEquals(600, $price->getCalculatedPrice());
         $this->assertEquals(120, $price->getCalculatedReferencePrice());
+
+        $this->removeArticle($number);
     }
 
 
@@ -95,7 +101,7 @@ class Shopware_Tests_Service_Price_BasePriceTest extends Shopware_Tests_Service_
 
         $state = $this->createGlobalState(
             $group,
-            $this->getDefaultShop(),
+            $this->getShop(),
             $this->getHighTax()
         );
 
@@ -118,6 +124,7 @@ class Shopware_Tests_Service_Price_BasePriceTest extends Shopware_Tests_Service_
 
         $this->assertEquals(100, $cheapest->getUnit()->getReferenceUnit());
         $this->assertEquals(500, $cheapest->getUnit()->getPurchaseUnit());
+        $this->removeArticle($number);
     }
 
 
@@ -148,7 +155,7 @@ class Shopware_Tests_Service_Price_BasePriceTest extends Shopware_Tests_Service_
 
         $state = $this->createGlobalState(
             $group,
-            $this->getDefaultShop(),
+            $this->getShop(),
             $this->getHighTax()
         );
 
@@ -160,5 +167,6 @@ class Shopware_Tests_Service_Price_BasePriceTest extends Shopware_Tests_Service_
 
         $this->assertEquals(200, $price->getUnit()->getReferenceUnit());
         $this->assertEquals(1600, $price->getUnit()->getPurchaseUnit());
+        $this->removeArticle($number);
     }
 }

@@ -11,17 +11,14 @@ class Shopware_Tests_Service_Base extends Enlight_Components_Test_TestCase
     }
 
     /**
+     * @param int $shopId
      * @return \Shopware\Models\Shop\Shop
      */
-    protected function getDefaultShop()
+    protected function getShop($shopId = 1)
     {
-        $id = Shopware()->Db()->fetchOne(
-            'SELECT id FROM s_core_shops WHERE `default` = 1'
-        );
-
         return Shopware()->Models()->find(
             'Shopware\Models\Shop\Shop',
-            $id
+            $shopId
         );
     }
 
@@ -35,12 +32,22 @@ class Shopware_Tests_Service_Base extends Enlight_Components_Test_TestCase
         return $api;
     }
 
+    /**
+     * @return \Shopware\Components\Api\Resource\Translation
+     */
+    protected function getTranslationApi()
+    {
+        $api = new \Shopware\Components\Api\Resource\Translation();
+        $api->setManager(Shopware()->Models());
+        return $api;
+    }
+
     protected function removeArticle($number)
     {
-        $article = $this->getDetailRepo()->findOneBy(array('number' => $number));
-        if ($article) {
-            Shopware()->Models()->remove($article);
-            Shopware()->Models()->flush($article);
+        $detail = $this->getDetailRepo()->findOneBy(array('number' => $number));
+        if ($detail) {
+            Shopware()->Models()->remove($detail->getArticle());
+            Shopware()->Models()->flush();
             Shopware()->Models()->clear();
         }
     }
@@ -49,6 +56,11 @@ class Shopware_Tests_Service_Base extends Enlight_Components_Test_TestCase
     {
         $this->removeArticle($data['mainDetail']['number']);
         return $this->getApi()->create($data);
+    }
+
+    protected function getPromotion($number)
+    {
+        return Shopware()->Modules()->Articles()->sGetPromotionById('fix', null, $number);
     }
 
     protected function getProduct($number, $state)
@@ -213,7 +225,6 @@ class Shopware_Tests_Service_Base extends Enlight_Components_Test_TestCase
         Shopware()->Models()->clear();
     }
 
-
     protected function removePriceGroup()
     {
         $ids = Shopware()->Db()->fetchCol("SELECT id FROM s_core_pricegroups WHERE description = 'TEST'");
@@ -260,7 +271,7 @@ class Shopware_Tests_Service_Base extends Enlight_Components_Test_TestCase
         return $priceGroup;
     }
 
-    private function removeConfigurator() {
+    protected function removeConfigurator() {
         $ids = Shopware()->Db()->fetchCol(
             "SELECT id from s_article_configurator_groups WHERE name LIKE 'TEST%'"
         );
@@ -444,6 +455,241 @@ class Shopware_Tests_Service_Base extends Enlight_Components_Test_TestCase
         $method->setAccessible(true);
 
         return $method->invokeArgs($object, $parameters);
+    }
+
+    protected function createArticleVotes($articleId, $votePoints = array(3,4,5))
+    {
+        Shopware()->Db()->executeUpdate(
+            "DELETE FROM s_articles_vote WHERE articleID = ?",
+            array($articleId)
+        );
+        foreach ($votePoints as $point) {
+            Shopware()->Db()->insert('s_articles_vote', array(
+                'articleID' => $articleId,
+                'name' => 'Test',
+                'points' => $point,
+                'active' => true
+            ));
+        }
+    }
+
+    protected function getSpecifyMedia($id)
+    {
+        return Shopware()->Models()->find('Shopware\Models\Media\Media', $id);
+    }
+
+    protected function getSimplePrices($group = 'EK')
+    {
+        return array(
+            array(
+                'from' => 1,
+                'to' => 'beliebig',
+                'price' => 119,
+                'pseudoPrice' => 200,
+                'customerGroupKey' => $group
+            )
+        );
+    }
+
+    protected function getMedia($limit = 1)
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select('DISTINCT media.id as mediaId')
+            ->from('Shopware\Models\Media\Media', 'media')
+            ->setFirstResult(0)
+            ->setMaxResults($limit);
+
+        return $builder->getQuery()->getArrayResult();
+    }
+
+    protected function switchState(
+        \Shopware\Models\Customer\Group $group,
+        \Shopware\Models\Shop\Shop $shop,
+        \Shopware\Models\Tax\Tax $tax
+    ) {
+        $state = new \Shopware\Struct\GlobalState();
+
+        $customerGroup = new \Shopware\Struct\CustomerGroup();
+        $customerGroup->setKey($group->getKey());
+        $customerGroup->setUseDiscount(true);
+        $customerGroup->setId($group->getId());
+        $customerGroup->setPercentageDiscount($group->getDiscount());
+        $customerGroup->setDisplayGross($group->getTax());
+
+        $state->setCurrentCustomerGroup($customerGroup);
+        $state->setFallbackCustomerGroup($customerGroup);
+
+        $state->setCurrency(new \Shopware\Struct\Currency());
+        $state->getCurrency()->setFactor(1);
+
+        $state->setShop(new \Shopware\Struct\Shop());
+        $state->getShop()->setId($shop->getId());
+
+        $state->setTax(new \Shopware\Struct\Tax());
+        $state->getTax()->setId($tax->getId());
+        $state->getTax()->setTax($tax->getTax());
+
+        $service = $this->getGlobalStateService();
+
+        $service->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($state));
+
+        Shopware()->Modules()->Articles()->globalStateService = $service;
+
+        $this->switchCustomerGroup($customerGroup->getKey());
+        $this->switchShop($shop->getId());
+
+        return $state;
+    }
+
+    private function switchCustomerGroup($groupKey)
+    {
+        $system = Shopware()->Modules()->Articles()->sSYSTEM;
+
+        $system->sUSERGROUP = $groupKey;
+
+        $group = Shopware()->Db()->fetchRow(
+            'SELECT * FROM s_core_customergroups WHERE groupkey = ?',
+            array($groupKey)
+        );
+
+        $system->sUSERGROUPDATA = $group;
+
+        Shopware()->Modules()->Articles()->sSYSTEM = $system;
+    }
+
+    private function switchShop($id)
+    {
+        $shop = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $id);
+
+        if (!$shop) {
+            throw new Exception(sprintf("Shop not found in unit test! id: %s", $id));
+        }
+
+        $shop->registerResources(Shopware()->Bootstrap());
+        Shopware()->Modules()->Articles()->translationId = $shop->getId();
+    }
+
+
+    /**
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getGlobalStateService()
+    {
+        return $this->getMockBuilder('Shopware\Service\GlobalState')
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+
+    private function removeProperties()
+    {
+        $ids = Shopware()->Db()->fetchCol("SELECT id FROM s_filter WHERE name = 'TEST-SET'");
+        foreach($ids as $id) {
+            Shopware()->Db()->query("DELETE FROM s_filter_relations WHERE groupID = ?", array($id));
+            Shopware()->Db()->query("DELETE FROM s_filter WHERE id = ?", array($id));
+        }
+
+        $ids = Shopware()->Db()->fetchCol("SELECT id FROM s_filter_values WHERE `value` LIKE 'TEST-OPTION%'");
+        foreach($ids as $id) {
+            Shopware()->Db()->query("DELETE FROM s_filter_articles WHERE valueID = ?", array($id));
+        }
+
+
+        Shopware()->Db()->query("DELETE FROM s_filter_options WHERE name LIKE 'TEST-GROUP%'");
+    }
+
+    protected function createProperties($groupCount = 2, $optionCount = 5)
+    {
+        $this->removeProperties();
+
+        Shopware()->Db()->insert('s_filter', array(
+            'name' => 'TEST-SET',
+            'sortmode' => 2,
+            'position' => 0
+        ));
+
+        $set = Shopware()->Db()->fetchRow("SELECT * FROM s_filter WHERE name = 'TEST-SET'");
+
+        $this->getTranslationApi()->create(array(
+            'type' => 'propertygroup',
+            'localeId' => 2,
+            'key' => $set['id'],
+            'data' => array(
+                'groupName' => 'TEST-EN'
+            )
+        ));
+
+        $values = array();
+        for ($i = 1; $i <= $groupCount; $i++) {
+            Shopware()->Db()->insert('s_filter_options', array(
+                'name' => 'TEST-GROUP-' . $i,
+                'filterable' => 1
+            ));
+
+            $groupId = Shopware()->Db()->lastInsertId();
+
+            Shopware()->Db()->insert('s_filter_relations', array(
+                'groupID' => $set['id'],
+                'optionID' => $groupId,
+                'position' => $i
+            ));
+
+            $this->getTranslationApi()->create(array(
+                'type' => 'propertyoption',
+                'localeId' => 2,
+                'key' => $groupId,
+                'data' => array(
+                    'optionName' => 'TEST-EN'
+                )
+            ));
+
+            for($i2 = 1; $i2 <= $optionCount; $i2++) {
+                Shopware()->Db()->insert('s_filter_values', array(
+                    'value' => 'TEST ' . $i2,
+                    'optionID' => $groupId
+                ));
+
+                $optionId = Shopware()->Db()->lastInsertId();
+
+
+                $this->getTranslationApi()->create(array(
+                    'type' => 'propertyvalue',
+                    'localeId' => 2,
+                    'key' => $optionId,
+                    'data' => array(
+                        'optionValue' => 'TEST-EN'
+                    )
+                ));
+
+                $values[] = array(
+                    'optionID' => $groupId,
+                    'id' => $optionId
+                );
+            }
+        }
+
+        return array(
+            'filterGroupId' => $set['id'],
+            'propertyValues' => $values
+        );
+    }
+
+    protected function setUp() {
+        Shopware()->Front()->setRequest(
+            new Enlight_Controller_Request_RequestTestCase()
+        );
+    }
+
+    protected function tearDown()
+    {
+        Shopware()->Modules()->Articles()->globalStateService =
+            Shopware()->Container()->get('global_state_service');
+
+        $this->switchCustomerGroup('EK');
+
+        $this->switchShop(1);
     }
 
 }

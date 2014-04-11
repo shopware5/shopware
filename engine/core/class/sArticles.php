@@ -3571,7 +3571,7 @@ class sArticles
      */
     public function sGetPromotionById($mode, $category = 0, $value = 0, $withImage = false)
     {
-        return $this->getNew($category, $value);
+        return $this->getPromotion($category, $value);
 
         if (Enlight()->Events()->notifyUntil('Shopware_Modules_Articles_GetPromotionById_Start', array('subject' => $this, 'mode' => $mode, 'category' => $category, 'value' => $value))) {
             return false;
@@ -4673,7 +4673,7 @@ class sArticles
     }
 
 
-    private  function getNew($category, $value) {
+    private  function getPromotion($category, $value) {
 
         $number = Shopware()->Db()->fetchOne(
             "SELECT ordernumber FROM s_articles_details WHERE articleID = ?",
@@ -4692,9 +4692,8 @@ class sArticles
         );
 
         if (!$product) {
-            return null;
+            return false;
         }
-
 
         //check if the product has an configured property set which stored in s_filter.
         //the mini product doesn't contains this data so we have to load this lazy.
@@ -4755,18 +4754,15 @@ class sArticles
         $unit = $cheapestPrice->getUnit();
 
         $price = $this->sFormatPrice(
-            round($cheapestPrice->getCalculatedPrice()),
-            3
+            round($cheapestPrice->getCalculatedPrice(), 3)
         );
 
         $pseudoPrice = $this->sFormatPrice(
-            round($cheapestPrice->getCalculatedPseudoPrice()),
-            3
+            round($cheapestPrice->getCalculatedPseudoPrice(), 3)
         );
 
         $referencePrice = $this->sFormatPrice(
-            round($cheapestPrice->getCalculatedReferencePrice()),
-            3
+            round($cheapestPrice->getCalculatedReferencePrice(), 3)
         );
 
         $promotion = array(
@@ -4797,7 +4793,7 @@ class sArticles
             'topseller' => $product->highlight(),
             'sReleasedate' => $product->getReleaseDate(),
             'sReleaseDate' => $product->getReleaseDate(),
-            'referenceprice' => $referencePrice,
+
             'datum' => $product->getCreatedAt(),
             'sVoteAverange' => array(
                 'averange' => 0,
@@ -4818,6 +4814,10 @@ class sArticles
 
             'mode' => 'fix'
         );
+
+        if ($referencePrice) {
+            $promotion['referenceprice'] = $referencePrice;
+        }
 
 
         if ($product->getPriceGroup()) {

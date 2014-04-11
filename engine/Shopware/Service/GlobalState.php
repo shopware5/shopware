@@ -43,15 +43,19 @@ class GlobalState
         $state->setShop(new Struct\Shop());
         $state->getShop()->setId(1);
 
-        $state->setCurrentCustomerGroup(new Struct\CustomerGroup());
-        $state->getCurrentCustomerGroup()->setKey('EK');
-        $state->getCurrentCustomerGroup()->setId(1);
-        $state->getCurrentCustomerGroup()->setUseDiscount(true);
-        $state->getCurrentCustomerGroup()->setPercentageDiscount(10);
+        $state->setCurrentCustomerGroup(
+            Shopware()->Container()->get('customer_group_gateway_dbal')->getByKey('EK')
+        );
 
-        $state->setFallbackCustomerGroup(new Struct\CustomerGroup());
-        $state->getFallbackCustomerGroup()->setKey('EK');
-        $state->getCurrentCustomerGroup()->setId(1);
+        $state->setFallbackCustomerGroup(
+            Shopware()->Container()->get('customer_group_gateway_dbal')->getByKey('EK')
+        );
+
+        $tax = Shopware()->Container()->get('tax_hydrator_dbal')->hydrate(
+            Shopware()->Db()->fetchRow("SELECT * FROM s_core_tax WHERE id = 1")
+        );
+
+        $state->setTax($tax);
 
         $state->setCurrency(new Struct\Currency());
         $state->getCurrency()->setFactor(1);
