@@ -281,7 +281,7 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
         me.paymentPanel = me.createPaymentContainer();
 
         me.customerContainer = Ext.create('Ext.container.Container', {
-            height: 130,
+            height: 150,
             minWidth:250,
             layout: {
                 type: 'hbox',
@@ -335,7 +335,7 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
     createBillingTemplate:function () {
         return new Ext.XTemplate(
             '{literal}<tpl for=".">',
-                '<div class="customer-info-pnl">',
+                '<div class="customeer-info-pnl">',
                     '<div class="base-info">',
                         '<p>',
                             '<span>{company}</span>',
@@ -352,6 +352,16 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
                             '<span>{zipCode}</span>&nbsp;',
                             '<span>{city}</span>',
                         '</p>',
+                        '<tpl if="additionalAddressLine1">',
+                            '<p>',
+                                '<span>{additionalAddressLine1}</span>',
+                            '</p>',
+                        '</tpl>',
+                        '<tpl if="additionalAddressLine2">',
+                            '<p>',
+                                '<span>{additionalAddressLine2}</span>',
+                            '</p>',
+                        '</tpl>',
                         '<tpl for="country">',
                             '<p>',
                                 '<span>{name}</span>',
@@ -464,6 +474,16 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
                             '<span>{zipCode}</span>&nbsp;',
                             '<span>{city}</span>',
                         '</p>',
+                        '<tpl if="additionalAddressLine1">',
+                            '<p>',
+                                '<span>{additionalAddressLine1}</span>',
+                            '</p>',
+                        '</tpl>',
+                        '<tpl if="additionalAddressLine2">',
+                            '<p>',
+                                '<span>{additionalAddressLine2}</span>',
+                            '</p>',
+                        '</tpl>',
                         '<tpl for="country">',
                             '<p>',
                                 '<span>{name}</span>',
