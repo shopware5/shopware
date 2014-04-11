@@ -1,7 +1,7 @@
 # Shopware 4 mink testsuite
 
 ## Usage
-Install shopware with dev requirenments: `php composer.phar install --dev`.
+Install shopware with dev requirements: `php composer.phar install --dev`.
 
 Copy configuration template and adjust `base_url`:
 
