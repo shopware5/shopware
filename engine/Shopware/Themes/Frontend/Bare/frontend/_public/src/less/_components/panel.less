@@ -58,13 +58,14 @@ See the documentation of the child elements for additional information.
 */
 .panel--title {
 	display: block;
-	.unitize-padding(20, 0, 10, 0);
+	.unitize-padding(20, 0, 0, 0);
 	.unitize-margin(0, 20);
 	.unitize(16, 16, font-size);
 	font-weight: bold;
 	color: @darkTextColor;
 
 	&.underline {
+        .unitize-padding(20, 0, 10, 0);
 		border-bottom: 1px solid @borderColor;
 	}
 
