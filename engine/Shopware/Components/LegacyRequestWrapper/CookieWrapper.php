@@ -101,4 +101,14 @@ class CookieWrapper implements \ArrayAccess
     {
         throw new \Exception('Unsupported operation');
     }
+
+    /**
+     * Returns an array with all current values in _COOKIE
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return $this->request->getCookie();
+    }
 }
