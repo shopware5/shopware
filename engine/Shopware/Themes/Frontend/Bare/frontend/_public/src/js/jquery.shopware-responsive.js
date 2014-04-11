@@ -2,14 +2,14 @@ $(function() {
     StateManager.init([{
         type: 'smartphone',
         enter: '0px',
-        exit: '763px'
+        exit: '767px'
     }, {
         type: 'tablet',
-        enter: '764px',
-        exit: '1023px'
+        enter: '768px',
+        exit: '1259px'
     }, {
         type: 'desktop',
-        enter: '1024px',
+        enter: '1260',
         exit: '5160px'
     }]);
 
@@ -21,8 +21,7 @@ $(function() {
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
             $('*[data-slide-panel="true"]').slidePanel();
             $('.product--supplier').appendTo($('.product--info'));
-            $('*[data-collapse-panel="true"]').collapsePanel();
-            $('*[data-collapse-text="true"]').collapseText();
+            $('.category--teaser .hero--text').collapseText();
         },
         exit: function() {
             $('.sidebar-main').insertAfter($('.content--breadcrumb'));
@@ -30,28 +29,36 @@ $(function() {
             $('*[data-search-dropdown="true"]').data('plugin_searchFieldDropDown').destroy();
             $('*[data-slide-panel="true"]').data('plugin_slidePanel').destroy();
             $('.product--supplier').appendTo($('.product--header'));
-            $('*[data-collapse-panel="true"]').data('plugin_collapsePanel').destroy();
-            $('*[data-collapse-text="true"]').data('plugin_collapseText').destroy();
+            $('.category--teaser .hero--text').data('plugin_collapseText').destroy();
         }
     }, {
         type: 'tablet',
         enter: function() {
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
             $('nav.product--actions').insertBefore($('.additional-info--tabs'));
+            $('.filter--trigger').collapsePanel();
         },
         exit: function() {
             $('*[data-search-dropdown="true"]').data('plugin_searchFieldDropDown').destroy();
             $('nav.product--actions').insertAfter($('.buybox--form'));
+            $('.filter--trigger').data('plugin_collapsePanel').destroy();
         }
     }, {
         type: 'desktop',
+        enter: function() {
+            $('.filter--trigger').collapsePanel();
+        },
         exit: function() {
+            $('.filter--trigger').data('plugin_collapsePanel').destroy();
         }
     }]);
 
     $('*[data-tab-content="true"]').tabContent();
     $('*[data-emotions="true"]').emotions();
     $('*[data-image-slider="true"]').imageSlider();
+    $('*[data-collapse-panel="true"]').collapsePanel();
+    $('*[data-collapse-text="true"]').collapseText();
+    $('*[data-auto-submit="true"]').autoSubmit();
 
     // Deferred loading of the captcha
     $("div.captcha--placeholder[data-src]").each(function() {
