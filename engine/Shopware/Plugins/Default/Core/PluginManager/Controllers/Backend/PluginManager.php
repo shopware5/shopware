@@ -203,35 +203,62 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $user = Shopware()->Auth()->getIdentity();
         /** @var $locale \Shopware\Models\Shop\Locale */
         $locale = $user->locale;
+        $language = $locale->toString();
 
-        foreach($data['configForms'][0]['elements'] as &$element)
-        {
-            if($element['type'] !== 'select')
-            {
+        foreach ($data['configForms'][0]['elements'] as &$element) {
+            if (!in_array($element['type'], array('select', 'combo'))) {
                 continue;
             }
 
-            foreach($element['options']['store'] as &$row)
-            {
-                if(!is_array($row[1]))
-                {
-                    continue;
-                }
-
-                if(empty($row[1][$locale->toString()]))
-                {
-                    $row[1] = array_shift($row[1]);
-                    continue;
-                }
-
-                $row[1] = $row[1][$locale->toString()];
-            }
+            $element['options']['store'] = $this->translateStore($language, $element['options']['store']);
         }
 
         $this->View()->assign(array(
            'success' => true,
            'data' => $data
         ));
+    }
+
+    /**
+     * Helper function to translate the store of select- and combo-fields
+     * Store value will be replaced by the value in the correct language.
+     * If there is no matching language in array defined, the first array element will be used.
+     * If the store or a value is not an array, it will not be changed.
+     *
+     * Store should be an array like this:
+     *
+     * $store = array(
+     *              array(1, array('de_DE' => 'Auto', 'en_GB' => 'car')),
+     *              array(2, array('de_DE' => 'Hund', 'en_GB' => 'dog')),
+     *              array(3, array('de_DE' => 'Katze', 'en_GB' => 'cat'))
+     *          );
+     *
+     * @param string $language
+     * @param mixed $store
+     */
+    private function translateStore($language, $store)
+    {
+        if (!is_array($store)) {
+            return $store;
+        }
+
+        foreach ($store as &$row) {
+            $value = array_pop($row);
+
+            if (!is_array($value)) {
+                $row[] = $value;
+                continue;
+            }
+
+            if (!array_key_exists($language, $value)) {
+                $row[] = array_shift($value);
+                continue;
+            }
+
+            $row[] = $value[$language];
+        }
+
+        return $store;
     }
 
     /**
