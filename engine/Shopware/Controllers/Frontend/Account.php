@@ -317,6 +317,8 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
                 'birthyear'=>array('required'=>0),
                 'birthmonth'=>array('required'=>0),
                 'birthday'=>array('required'=>0),
+                'additional_address_line1' => array('required' => (Shopware()->Config()->requireAdditionAddressLine1) ? 1 : 0),
+                'additional_address_line2' => array('required' => (Shopware()->Config()->requireAdditionAddressLine2) ? 1 : 0)
             );
 
             $values = $this->Request()->getPost('register');
@@ -405,7 +407,9 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
                 'text3'=>array('required'=>0),
                 'text4'=>array('required'=>0),
                 'text5'=>array('required'=>0),
-                'text6'=>array('required'=>0)
+                'text6'=>array('required'=>0),
+                'additional_address_line1' => array('required' => (Shopware()->Config()->requireAdditionAddressLine1) ? 1 : 0),
+                'additional_address_line2' => array('required' => (Shopware()->Config()->requireAdditionAddressLine2) ? 1 : 0)
             );
 
             if (Shopware()->Config()->get('sCOUNTRYSHIPPING')) {
