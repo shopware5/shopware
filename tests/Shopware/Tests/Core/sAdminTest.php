@@ -478,7 +478,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         foreach(array($shippingDetails, $billingDetails) as $details) {
             $this->assertInternalType('array', $details);
-            $this->assertCount(13, $details);
+            $this->assertCount(15, $details);
             $this->assertArrayHasKey('company', $details);
             $this->assertArrayHasKey('department', $details);
             $this->assertArrayHasKey('salutation', $details);
@@ -2138,6 +2138,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'stateID' => NULL,
                 'ustid' => '',
                 'birthday' => '1986-12-20',
+                'additional_address_line1' => 'IT-Department',
+                'additional_address_line2' => 'Second Floor'
             ),
             'additional' => array(
                 'country' => array(
@@ -2245,6 +2247,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'city' => '',
                 'countryID' => '0',
                 'stateID' => NULL,
+                'additional_address_line1' => 'Sales-Department',
+                'additional_address_line2' => 'Third Floor'
             ),
         );
 
@@ -3128,7 +3132,9 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                     'text2' => 'Freitext2',
                 ),
                 "zipcode"   => '12345',
-                "countryId" => '2'
+                "countryId" => '2',
+                "additionalAddressLine1" => 'IT-Department',
+                "additionalAddressLine2" => 'Second Floor',
             ),
 
             "shipping" => array(
@@ -3141,6 +3147,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                     'text1'  => 'Freitext1',
                     'text2'  => 'Freitext2',
                 ),
+                "additionalAddressLine1" => 'Sales-Department',
+                "additionalAddressLine2" => 'Third Floor',
             ),
 
             "debit" => array(

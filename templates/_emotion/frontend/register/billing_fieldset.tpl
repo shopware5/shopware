@@ -52,7 +52,7 @@
 		{if {config name=showAdditionAddressLine1}}
 			<div>
 				<label for="additionalAddressLine1" {if !{config name=requireAdditionAddressLine1}}class="normal"{/if}>{se name='RegisterLabelAdditionalAddressLine1'}{/se}{if {config name=requireAdditionAddressLine1}}*{/if}:</label>
-				<input name="register[billing][additionalAddressLine1]" type="text" id="additionalAddressLine1" value="{$form_data.additionalAddressLine1|escape}" class="text {if {config name=requireAdditionAddressLine1}}required{/if} {if $error_flags.additionalAddressLine1 && {config name=requireAdditionAddressLine1}}instyle_error{/if}" />
+				<input name="register[billing][additional_address_line1]" type="text" id="additionalAddressLine1" value="{$form_data.additional_address_line1|escape}" class="text {if {config name=requireAdditionAddressLine1}}required{/if} {if $error_flags.additional_address_line1 && {config name=requireAdditionAddressLine1}}instyle_error{/if}" />
 			</div>
 		{/if}
 	{/block}
@@ -62,7 +62,7 @@
 		{if {config name=showAdditionAddressLine2}}
 			<div>
 				<label for="additionalAddressLine2" {if !{config name=requireAdditionAddressLine2}}class="normal"{/if}>{se name='RegisterLabelAdditionalAddressLine2'}{/se}{if {config name=requireAdditionAddressLine2}}*{/if}:</label>
-				<input name="register[billing][additionalAddressLine2]" type="text" id="additionalAddressLine2" value="{$form_data.additionalAddressLine2|escape}" class="text {if {config name=requireAdditionAddressLine2}}required{/if} {if $error_flags.additionalAddressLine2 && {config name=requireAdditionAddressLine2}}instyle_error{/if}" />
+				<input name="register[billing][additional_address_line2]" type="text" id="additionalAddressLine2" value="{$form_data.additional_address_line2|escape}" class="text {if {config name=requireAdditionAddressLine2}}required{/if} {if $error_flags.additional_address_line2 && {config name=requireAdditionAddressLine2}}instyle_error{/if}" />
 			</div>
 		{/if}
 	{/block}

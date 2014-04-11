@@ -179,6 +179,8 @@
 				{$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}<br />
 				{$sUserData.billingaddress.street} {$sUserData.billingaddress.streetnumber}<br />
 				{$sUserData.billingaddress.zipcode} {$sUserData.billingaddress.city}<br />
+				{if $sUserData.billingaddress.additional_address_line1}{$sUserData.billingaddress.additional_address_line1}<br />{/if}
+				{if $sUserData.billingaddress.additional_address_line2}{$sUserData.billingaddress.additional_address_line2}<br />{/if}
 				{$sUserData.additional.country.countryname}
 			</p>
 			<div class="change">
@@ -207,6 +209,8 @@
 	    	{$sUserData.shippingaddress.firstname} {$sUserData.shippingaddress.lastname}<br />
 			{$sUserData.shippingaddress.street} {$sUserData.shippingaddress.streetnumber}<br />
 			{$sUserData.shippingaddress.zipcode} {$sUserData.shippingaddress.city}<br />
+			{if $sUserData.shippingaddress.additional_address_line1}{$sUserData.shippingaddress.additional_address_line1}<br />{/if}
+			{if $sUserData.shippingaddress.additional_address_line2}{$sUserData.shippingaddress.additional_address_line2}<br />{/if}
 			{$sUserData.additional.countryShipping.countryname}
 			</p>
 			
