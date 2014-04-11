@@ -361,7 +361,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             }
 
             if (!empty($values)) {
-                $this->admin->sSYSTEM->_POST = array_merge($values['personal'], $values['billing'], $this->admin->sSYSTEM->_POST);
+                $this->admin->sSYSTEM->_POST = array_merge($values['personal'], $values['billing'], $this->admin->sSYSTEM->_POST->toArray());
             }
 
 
@@ -450,7 +450,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
 
             if (!empty($values)) {
-                $this->admin->sSYSTEM->_POST = array_merge($values['shipping'], $this->admin->sSYSTEM->_POST);
+                $this->admin->sSYSTEM->_POST = array_merge($values['shipping'], $this->admin->sSYSTEM->_POST->toArray());
             }
 
             $checkData = $this->admin->sValidateStep2ShippingAddress($rules, true);
