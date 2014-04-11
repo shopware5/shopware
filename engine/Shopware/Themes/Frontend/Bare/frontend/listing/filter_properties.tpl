@@ -41,10 +41,20 @@
 			{else}
 				{foreach from=$sPropertiesOptionsOnly item=value key=option}
 					{if $value|@count}
-						<span class="collapse--header{if $value.properties.active} filter--indicator is--active{/if}" data-collapse-panel="true">
-                            {$option} <span class="filter--expand-collapse collapse--toggler"></span>
+					<div class="filter--group">
+						<span class="filter--header collapse--header" data-collapse-panel="true">
+							{if $value.properties.active}
+								{foreach $value.values as $option}
+									{if $option@first}
+										{$option.value} ({$option.count})
+									{/if}
+								{/foreach}
+							{else}
+								{$option}
+							{/if}
+                             <span class="filter--expand-collapse collapse--toggler"></span>
                         </span>
-						<div class="filter--content collapse--content{if $value.properties.active} is--active{/if}">
+						<div class="filter--content collapse--content">
 							<ul class="filter--list">
 								{foreach from=$value.values item=optionValue}
 									{if $optionValue.active}
@@ -69,6 +79,7 @@
 								{/if}
 							</ul>
 						</div>
+					</div>
 					{/if}
 				{/foreach}
 			{/if}

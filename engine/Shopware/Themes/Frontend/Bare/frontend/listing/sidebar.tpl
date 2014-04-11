@@ -9,20 +9,17 @@
 		<div class="filter--container">
 			<h2 class="filter--headline">{s name='FilterHeadline'}Filtern nach:{/s}</h2>
 
-			<div class="filter--content">
+			{* Properties filter *}
+			{if $sPropertiesOptionsOnly|@count}
+				{include file='frontend/listing/filter_properties.tpl'}
+			{/if}
 
-				{* Properties filter *}
-				{if $sPropertiesOptionsOnly|@count}
-					{include file='frontend/listing/filter_properties.tpl'}
+			{block name='frontend_listing_right_filter_supplier'}
+				{* Supplier filter *}
+				{if $sSuppliers|@count>1 && $sCategoryContent.parent != 1}
+					{include file='frontend/listing/filter_supplier.tpl'}
 				{/if}
-
-				{block name='frontend_listing_right_filter_supplier'}
-					{* Supplier filter *}
-					{if $sSuppliers|@count>1 && $sCategoryContent.parent != 1}
-						{include file='frontend/listing/filter_supplier.tpl'}
-					{/if}
-				{/block}
-			</div>
+			{/block}
 		</div>
 	{/if}
 {/block}
