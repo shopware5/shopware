@@ -1289,21 +1289,28 @@ class sBasket
     {
         $datum = date("Y-m-d H:i:s");
 
-        if (!empty($this->sSYSTEM->_COOKIE)&&empty($this->sSYSTEM->_COOKIE["sUniqueID"])) {
-            $this->sSYSTEM->_COOKIE["sUniqueID"] = md5(uniqid(rand()));
-            setcookie("sUniqueID", $this->sSYSTEM->_COOKIE["sUniqueID"], Time()+(86400*360), '/');
+        if (!empty($this->sSYSTEM->_COOKIE->toArray()) && empty($this->sSYSTEM->_COOKIE["sUniqueID"])) {
+            $cookieId = md5(uniqid(rand()));
+            setcookie("sUniqueID", $cookieId, Time()+(86400*360), '/');
+            $_COOKIE["sUniqueID"] = $cookieId;
+        } elseif (!empty($this->sSYSTEM->_COOKIE["sUniqueID"])) {
+            $cookieId = $this->sSYSTEM->_COOKIE["sUniqueID"];
         }
 
         // Check if this article is already noted
         $checkForArticle = $this->sSYSTEM->sDB_CONNECTION->GetRow("
         SELECT id FROM s_order_notes WHERE sUniqueID=? AND ordernumber=?
-        ",array($this->sSYSTEM->_COOKIE["sUniqueID"],$articleOrdernumber));
+        ",array($cookieId,$articleOrdernumber));
 
         if (!$checkForArticle["id"]) {
             $queryNewPrice = $this->sSYSTEM->sDB_CONNECTION->Execute("
             INSERT INTO s_order_notes (sUniqueID, userID,articlename, articleID, ordernumber, datum)
             VALUES (?,?,?,?,?,?)
-            ",array(empty($this->sSYSTEM->_COOKIE["sUniqueID"]) ? $this->sSYSTEM->sSESSION_ID : $this->sSYSTEM->_COOKIE["sUniqueID"],$this->sSYSTEM->_SESSION['sUserId'] ?$this->sSYSTEM->_SESSION['sUserId'] : "0" ,$articleName,$articleID,$articleOrdernumber,$datum));
+            ",array(
+                empty($cookieId) ? $this->sSYSTEM->sSESSION_ID : $cookieId,
+                $this->sSYSTEM->_SESSION['sUserId'] ?$this->sSYSTEM->_SESSION['sUserId'] : "0" ,
+                $articleName, $articleID, $articleOrdernumber, $datum
+            ));
 
             if (!$queryNewPrice) {
                 $this->sSYSTEM->E_CORE_WARNING ("sBasket##sAddNote##01","Error in SQL-query");
