@@ -28,7 +28,7 @@
 	{* Product description *}
 	{block name='frontend_listing_box_article_description'}
         {if $sTemplate eq 'listing-1col'}
-            {$size=270}
+            {$size=240}
         {else}
             {$size=60}
         {/if}

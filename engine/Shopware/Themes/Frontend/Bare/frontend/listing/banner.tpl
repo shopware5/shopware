@@ -1,5 +1,8 @@
 {block name="frontend_listing_banner"}
 {if $sBanner}
+
+	<div class="banner--container">
+
 	{if $sBanner.extension=="swf"}
 		
 		{* @deprecated Flash banner *}
@@ -21,5 +24,8 @@
 	    	{/block}
 	    {/if}
 	{/if}
+
+	</div>
+
 {/if}
 {/block}

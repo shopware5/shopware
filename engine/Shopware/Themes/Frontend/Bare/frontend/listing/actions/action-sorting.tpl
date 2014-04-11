@@ -21,7 +21,7 @@
     {block name='frontend_listing_actions_sort_field'}
 		<div class="sort--select field--select">
 			<span class="arrow"></span>
-			<select name="sSort" class="sort--field action--field">
+			<select name="sSort" class="sort--field action--field" data-auto-submit="true">
 				<option value="1"{if $sSort eq 1} selected="selected"{/if}>{s name='ListingSortRelease'}{/s}</option>
 				<option value="2"{if $sSort eq 2} selected="selected"{/if}>{s name='ListingSortRating'}{/s}</option>
 				<option value="3"{if $sSort eq 3} selected="selected"{/if}>{s name='ListingSortPriceLowest'}{/s}</option>
