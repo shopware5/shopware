@@ -64,16 +64,16 @@ See the documentation of the child elements for additional information.
     font-weight: bold;
     color: @darkTextColor;
 
-    &.underline {
+    &.is--underline {
         .unitize-padding(20, 0, 10, 0);
         border-bottom: 1px solid @borderColor;
     }
 
-    &.secondary {
+    &.is--secondary {
         color: @primaryTextColor;
     }
 
-    &.primary {
+    &.is--primary {
         color: @primaryColor;
     }
 }
@@ -216,11 +216,11 @@ See the documentation of the child elements for additional information.
             border-bottom: 0 none;
         }
 
-        &.secondary {
+        &.is--secondary {
             background: @primaryBackgroundColor;
         }
 
-        &.primary {
+        &.is--primary {
             color: @primaryColor;
         }
     }
@@ -258,7 +258,7 @@ See the documentation of the child elements for additional information.
     &.left--arrow {
         .unitize(10, 16, left);
 
-        &:before {
+        &::before {
             content: "\e611";
         }
     }
@@ -501,7 +501,7 @@ See the documentation of the child elements for additional information.
         font-family: 'shopware';
         text-align: center;
 
-        &:before {
+        &::before {
             content: "\e612";
         }
     }
