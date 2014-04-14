@@ -5,25 +5,25 @@
 ```
 */
 .badge {
-  .unitize-padding(3, 8);
-  .unitize-margin(0, 5);
-  .unitize(12, 16, font-size);
-  .unitize(18, 16, line-height);
-  .border-radius(10px);
-  display: inline-block;
-  font-weight: bold;
-  text-align: center;
-  white-space: nowrap;
-  color: #fff;
-  background: @primaryTextColor;
-
-  &.secondary {
-    color: @primaryTextColor;
-    background: @borderColor;
-  }
-
-  &.primary{
+    .unitize-padding(3, 8);
+    .unitize-margin(0, 5);
+    .unitize(12, 16, font-size);
+    .unitize(18, 16, line-height);
+    .border-radius(10px);
+    display: inline-block;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
     color: #fff;
-    background: @primaryColor;
-  }
+    background: @primaryTextColor;
+
+    &.secondary {
+        color: @primaryTextColor;
+        background: @borderColor;
+    }
+
+    &.primary {
+        color: #fff;
+        background: @primaryColor;
+    }
 }

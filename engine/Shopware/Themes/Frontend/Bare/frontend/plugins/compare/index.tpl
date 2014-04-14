@@ -10,8 +10,14 @@
 
 
 {* Compare button *}
-{block name='frontend_listing_box_article_actions_inline' prepend}
-	<a href="{url controller='compare' action='add_article' articleID=$sArticle.articleID}" rel="nofollow" title="{s name='ListingBoxLinkCompare'}vergleichen{/s}" class="product--action action--compare">{se name='ListingBoxLinkCompare'}{/se}</a>
+{block name='frontend_listing_box_article_actions_buy_now' prepend}
+	<a href="{url controller='compare' action='add_article' articleID=$sArticle.articleID}"
+	   rel="nofollow"
+	   title="{s name='ListingBoxLinkCompare'}vergleichen{/s}"
+	   class="product--action action--compare btn btn--secondary">
+		{se name='ListingBoxLinkCompare'}{/se}
+		<i class="icon--arrow-right is--right is--small"></i>
+	</a>
 {/block}
 
 {* Compare javascript *}
