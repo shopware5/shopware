@@ -1289,7 +1289,8 @@ class sBasket
     {
         $datum = date("Y-m-d H:i:s");
 
-        if (!empty($this->sSYSTEM->_COOKIE->toArray()) && empty($this->sSYSTEM->_COOKIE["sUniqueID"])) {
+        $cookieData = $this->sSYSTEM->_COOKIE->toArray();
+        if (!empty($cookieData) && empty($this->sSYSTEM->_COOKIE["sUniqueID"])) {
             $cookieId = md5(uniqid(rand()));
             setcookie("sUniqueID", $cookieId, Time()+(86400*360), '/');
             $_COOKIE["sUniqueID"] = $cookieId;

@@ -191,7 +191,7 @@ class sAdmin
             $messages[] = $this->snippetObject->get('VatFailureErrorInfo', ''); // todo@all In the case vat is not required in registration, this info message should occur
         }
         $messages = Enlight()->Events()->filter('Shopware_Modules_Admin_CheckTaxID_MessagesFilter', $messages,
-            array('subject' => $this, "post" => $this->sSYSTEM->_POST)
+            array('subject' => $this, "post" => $this->sSYSTEM->_POST->toArray())
         );
         return $messages;
     }
@@ -971,7 +971,7 @@ class sAdmin
                 'edit' => $edit,
                 'rules' => $rules,
                 'subject' => $this,
-                "post" => $this->sSYSTEM->_POST
+                "post" => $this->sSYSTEM->_POST->toArray()
             )
         );
 
@@ -1021,7 +1021,7 @@ class sAdmin
                 'edit' => $edit,
                 'rules' => $rules,
                 'subject' => $this,
-                "post" => $this->sSYSTEM->_POST
+                "post" => $this->sSYSTEM->_POST->toArray()
             )
         );
 
@@ -1090,7 +1090,7 @@ class sAdmin
                 'edit' => $edit,
                 'rules' => $rules,
                 'subject' => $this,
-                "post" => $this->sSYSTEM->_POST
+                "post" => $this->sSYSTEM->_POST->toArray()
             )
         );
 
@@ -1229,7 +1229,7 @@ class sAdmin
         list($sErrorMessages, $sErrorFlag) = Enlight()->Events()->filter(
             'Shopware_Modules_Admin_ValidateStep1_FilterResult',
             array($sErrorMessages, $sErrorFlag),
-            array('edit' => $edit, 'subject' => $this, "post" => $this->sSYSTEM->_POST)
+            array('edit' => $edit, 'subject' => $this, "post" => $this->sSYSTEM->_POST->toArray())
         );
 
         return array("sErrorFlag" => $sErrorFlag, "sErrorMessages" => $sErrorMessages);
@@ -1253,7 +1253,7 @@ class sAdmin
             array(
                 'subject'           => $this,
                 'ignoreAccountMode' => $ignoreAccountMode,
-                'post'              => $this->sSYSTEM->_POST
+                'post'              => $this->sSYSTEM->_POST->toArray()
             )
         )) {
             return false;
