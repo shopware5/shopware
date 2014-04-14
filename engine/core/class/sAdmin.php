@@ -1141,16 +1141,14 @@ class sAdmin
             if ($edit && (!$postData["password"] && !$postData["passwordConfirmation"])) {
 
             } else {
-                if (strlen(trim($postData["password"])) == 0
-                    || !$postData["password"]
-                    || !$postData["passwordConfirmation"]
+				if (strlen(trim($postData["password"])) == 0 
+					|| !$postData["password"] 
                     || (strlen($postData["password"]) < $this->sSYSTEM->sCONFIG['sMINPASSWORD'])
-                ) {
-                    $sErrorMessages[] = Shopware()->Snippets()->getNamespace("frontend")->get('RegisterPasswordLength','',true);
-
+				) {
+    				$sErrorMessages[] = Shopware()->Snippets()->getNamespace("frontend")->get('RegisterPasswordLength','',true);
                     $sErrorFlag["password"] = true;
                     $sErrorFlag["passwordConfirmation"] = true;
-                } elseif ($postData["password"] != $postData["passwordConfirmation"]) {
+                } elseif ((isset($postData["passwordConfirmation"])) && ($postData["password"] != $postData["passwordConfirmation"])) {
                     $sErrorMessages[] = Shopware()->Snippets()->getNamespace("frontend")->get('AccountPasswordNotEqual', 'The passwords are not equal', true);
                     $sErrorFlag["password"] = true;
                     $sErrorFlag["passwordConfirmation"] = true;
