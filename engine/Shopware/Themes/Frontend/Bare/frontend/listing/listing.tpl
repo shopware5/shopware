@@ -6,7 +6,7 @@
 {* Sorting and changing layout *}
 {block name="frontend_listing_top_actions"}
     {if $showListing && !$sOffers}
-        {include file='frontend/listing/listing_actions.tpl' sTemplate=$sTemplate}
+        {include file='frontend/listing/listing_actions.tpl' sTemplate=$sTemplate sAdvancedActions=1}
     {/if}
 {/block}
 
