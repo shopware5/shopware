@@ -1,5 +1,10 @@
 {extends file="frontend/index/index.tpl"}
 
+{* Breadcrumb *}
+{block name='frontend_index_start' prepend}
+    {$sBreadcrumb = [['name'=>"{s name='SitemapTitle'}Sitemap{/s}", 'link'=>{url controller=sitemap}]]}
+{/block}
+
 {block name="frontend_index_content"}
 	<div class="grid_16 sitemap" id="center">
 
