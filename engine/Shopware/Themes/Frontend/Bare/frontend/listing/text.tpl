@@ -12,7 +12,7 @@
         {* Category text *}
         {block name="frontend_listing_text_content"}
             {if $sCategoryContent.cmstext}
-                <div class="hero--text panel--body wide"
+                <div class="hero--text panel--body is--wide"
 					 data-collapse-show-more="{s name='ListingCategoryTeaserShowMore'}{/s}"
 					 data-collapse-show-less="{s name='ListingCategoryTeaserShowLess'}{/s}">
                     {$sCategoryContent.cmstext}
