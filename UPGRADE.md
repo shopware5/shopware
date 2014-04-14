@@ -34,7 +34,7 @@ In this document you will find a changelog of the important changes related to t
     * `sSystem::sInitFactory`
     * `sSystem::sCheckLicense`
 * `sNewsletter` core class removed
-* Access to GET, POST and COOKIES trough sSystem is deprecated.
+* Access to GET, POST and COOKIES through sSystem is deprecated.
     * The current arrays have been replaced with wrappers objects to the global variables
     * This might introduce breaks in some scenarios (eg.: when using array functions like array_merge)
 
