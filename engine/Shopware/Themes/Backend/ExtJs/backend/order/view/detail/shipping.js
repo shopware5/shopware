@@ -88,6 +88,7 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
             ms:'{s name=address/salutation_ms}Mrs{/s}'
         },
         country:'{s name=address/country}Country{/s}',
+        state:'{s name=address/state}State{/s}',
         company:'{s name=address/company}Company{/s}',
         department:'{s name=address/department}Department{/s}',
         copyBilling: '{s name=shipping/copy_billing}For usability purposes, click here to use the billing address as shipping address.{/s}',
@@ -113,6 +114,15 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
         ];
 
         me.items = me.createElements();
+        me.addEvents(
+                /**
+                 * Fired when the user changes his country. Used to fill the state box
+                 * @param field
+                 * @param newValue
+                 */
+                'countryChanged'
+
+        );
         me.callParent(arguments);
     },
 
@@ -211,23 +221,54 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
      */
     createRightElements:function () {
         var me = this;
+
+        me.countryStateCombo = Ext.create('Ext.form.field.ComboBox', {
+            name:'shipping[stateId]',
+            action: 'shippingStateId',
+            fieldLabel:me.snippets.state,
+            valueField: 'id',
+            displayField: 'name',
+            forceSelection: true,
+            labelWidth:120,
+            store: Ext.create('Shopware.store.CountryState').load(),
+            minWidth: 250,
+            editable: false,
+            hidden: true,
+            triggerAction:'all',
+            queryMode: 'local'
+        });
+
+        me.countryCombo = Ext.create('Ext.form.field.ComboBox', {
+            triggerAction:'all',
+            name:'shipping[countryId]',
+            fieldLabel:me.snippets.country,
+            valueField:'id',
+            queryMode: 'local',
+            displayField:'name',
+            forceSelection: true,
+            store:me.countriesStore,
+            labelWidth:120,
+            minWidth:250,
+            required:true,
+            editable:false,
+            allowBlank:false,
+            listeners: {
+                change: function(field, newValue, oldValue, record) {
+                    me.fireEvent('countryChanged', field, newValue, me.countryStateCombo, me.record.getShipping().first());
+                }
+            }
+        });
+
         return [{
             name:'shipping[additionalAddressLine1]',
             fieldLabel:me.snippets.additionalAddressLine1
         }, {
             name:'shipping[additionalAddressLine2]',
             fieldLabel:me.snippets.additionalAddressLine2
-        }, {
-            xtype:'combobox',
-            queryMode: 'local',
-            triggerAction:'all',
-            editable:false,
-            name:'shipping[countryId]',
-            fieldLabel:me.snippets.country,
-            store: me.countriesStore,
-            valueField:'id',
-            displayField:'name'
-        }, {
+        },
+        me.countryCombo,
+        me.countryStateCombo,
+        {
             name:'shipping[company]',
             fieldLabel:me.snippets.company
         }, {

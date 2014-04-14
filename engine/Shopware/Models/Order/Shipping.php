@@ -76,6 +76,13 @@ class Shipping extends ModelEntity
     private $countryId = 0;
 
     /**
+     * Contains the id of the state. Used for billing - state association.
+     * @var integer $stateId
+     * @ORM\Column(name="stateID", type="integer", nullable=true)
+     */
+    private $stateId = null;
+
+    /**
      * If of the associated customer. Used as foreign key for the
      * customer - shipping association.
      *
@@ -522,4 +529,26 @@ class Shipping extends ModelEntity
     {
         return $this->additionalAddressLine1;
     }
+
+    /**
+     * Setter function for the getAdditionalAddressLine1 column property.
+     *
+     * @param int $stateId
+     */
+    public function setStateId($stateId)
+    {
+        $this->stateId = $stateId;
+    }
+
+    /**
+     * Getter function for the getAdditionalAddressLine1 column property.
+     *
+     * @return int
+     */
+    public function getStateId()
+    {
+        return $this->stateId;
+    }
+
+
 }

@@ -76,6 +76,7 @@ Ext.define('Shopware.apps.Order.view.detail.Billing', {
         city:'{s name=address/city}City{/s}',
         additionalAddressLine1:'{s name=address/additionalAddressLine1}Additional address line 1{/s}',
         additionalAddressLine2:'{s name=address/additionalAddressLine2}Additional address line 2{/s}',
+        state:'{s name=address/state}State{/s}',
         birthday:'{s name=address/birthday_label}Day of birth{/s}',
         country:'{s name=address/country}Country{/s}',
         phone:'{s name=address/phone}Phone{/s}',
@@ -104,6 +105,15 @@ Ext.define('Shopware.apps.Order.view.detail.Billing', {
         ];
 
         me.items = me.createElements();
+        me.addEvents(
+                /**
+                 * Fired when the user changes his country. Used to fill the state box
+                 * @param field
+                 * @param newValue
+                 */
+                'countryChanged'
+
+        );
         me.callParent(arguments);
     },
 
@@ -160,6 +170,44 @@ Ext.define('Shopware.apps.Order.view.detail.Billing', {
      */
     createLeftElements:function () {
         var me = this;
+
+        me.countryStateCombo = Ext.create('Ext.form.field.ComboBox', {
+            name:'billing[stateId]',
+            action: 'billingStateId',
+            fieldLabel:me.snippets.state,
+            valueField: 'id',
+            displayField: 'name',
+            forceSelection: true,
+            labelWidth:120,
+            store: Ext.create('Shopware.store.CountryState').load(),
+            minWidth: 250,
+            editable: false,
+            hidden: true,
+            triggerAction:'all',
+            queryMode: 'local'
+        });
+
+        me.countryCombo = Ext.create('Ext.form.field.ComboBox', {
+            triggerAction:'all',
+            name:'billing[countryId]',
+            fieldLabel:me.snippets.country,
+            valueField:'id',
+            queryMode: 'local',
+            displayField:'name',
+            forceSelection: true,
+            store:me.countriesStore,
+            labelWidth:120,
+            minWidth:250,
+            required:true,
+            editable:false,
+            allowBlank:false,
+            listeners: {
+                change: function(field, newValue, oldValue, record) {
+                    me.fireEvent('countryChanged', field, newValue, me.countryStateCombo, me.record.getBilling().first());
+                }
+            }
+        });
+
         return [{
             xtype:'combobox',
             queryMode: 'local',
@@ -209,19 +257,10 @@ Ext.define('Shopware.apps.Order.view.detail.Billing', {
         }, {
             name:'billing[additionalAddressLine2]',
             fieldLabel:me.snippets.additionalAddressLine2
-        }, {
-            xtype:'combobox',
-            queryMode: 'local',
-            triggerAction:'all',
-            name:'billing[countryId]',
-            fieldLabel:me.snippets.country,
-            store:me.countriesStore,
-            valueField:'id',
-            displayField:'name',
-            required:true,
-            editable:false,
-            allowBlank:false
-        }];
+        },
+        me.countryCombo,
+        me.countryStateCombo
+        ];
     },
 
     /**
