@@ -7,18 +7,25 @@
 {block name='frontend_listing_right_filter_properties'}
 	{if $sPropertiesOptionsOnly|@count or $sSuppliers|@count>1 && $sCategoryContent.parent != 1}
 		<div class="filter--container">
-			<h2 class="filter--headline">{s name='FilterHeadline'}Filtern nach:{/s}</h2>
 
-			{* Properties filter *}
-			{if $sPropertiesOptionsOnly|@count}
-				{include file='frontend/listing/filter_properties.tpl'}
-			{/if}
+			{block name='frontend_listing_right_filter_container_inner'}
 
-			{block name='frontend_listing_right_filter_supplier'}
-				{* Supplier filter *}
-				{if $sSuppliers|@count>1 && $sCategoryContent.parent != 1}
-					{include file='frontend/listing/filter_supplier.tpl'}
+				<h2 class="filter--headline">{s name='FilterHeadline'}Filtern nach:{/s}</h2>
+
+				{* Properties filter *}
+				{if $sPropertiesOptionsOnly|@count}
+					{block name="frontend_listing_right_filter_properties_groups"}
+						{include file='frontend/listing/filter_properties.tpl'}
+					{/block}
 				{/if}
+
+				{block name='frontend_listing_right_filter_supplier'}
+					{* Supplier filter *}
+					{if $sSuppliers|@count>1 && $sCategoryContent.parent != 1}
+						{include file='frontend/listing/filter_supplier.tpl'}
+					{/if}
+				{/block}
+
 			{/block}
 		</div>
 	{/if}

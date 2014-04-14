@@ -10,7 +10,9 @@
 
 			{* Properties filter *}
 			{if $sPropertiesOptionsOnly|@count}
-				{include file='frontend/listing/filter_properties.tpl'}
+				{block name="frontend_listing_actions_filter_properties_groups"}
+					{include file='frontend/listing/filter_properties.tpl'}
+				{/block}
 			{/if}
 
 			{block name='frontend_listing_actions_filter_supplier'}
