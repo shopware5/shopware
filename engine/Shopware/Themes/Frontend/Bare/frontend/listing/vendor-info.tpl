@@ -10,7 +10,7 @@
 
         {* Vendor content e.g. description and logo *}
         {block name="frontend_listing_list_filter_supplier_content"}
-            <div class="hero--content panel--body wide">
+            <div class="hero--content panel--body is--wide">
                 {if $sSupplierInfo.description}
                     {if $sSupplierInfo.image}
                         <img class="hero--image" src="{$sSupplierInfo.image}" alt="{$sSupplierInfo.name}">
