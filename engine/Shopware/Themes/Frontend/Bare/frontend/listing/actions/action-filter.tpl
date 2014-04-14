@@ -5,11 +5,11 @@
 
 	{if $sPropertiesOptionsOnly|@count or $sSuppliers|@count>1 && $sCategoryContent.parent != 1}
 
-	<div class="action--filter-btn">
-		<a href="#" class="filter--trigger btn btn--primary" data-collapse-target=".action--filter-options">
-			<i class="icon--compare"></i> {s name='ListingFilterButton'}Filter{/s}
-		</a>
-	</div>
+		<div class="action--filter-btn">
+			<a href="#" class="filter--trigger btn btn--primary" data-collapse-target=".action--filter-options">
+				<i class="icon--compare"></i> {s name='ListingFilterButton'}Filter{/s}
+			</a>
+		</div>
 
 	{/if}
 

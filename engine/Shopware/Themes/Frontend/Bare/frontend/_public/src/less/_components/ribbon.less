@@ -7,56 +7,56 @@
 ```
 */
 .ribbon {
-  .unitize-width(90);
-  .unitize-height(90);
-  position: absolute;
-  overflow: hidden;
-
-  .ribbon--content {
-    .unitize-padding(5, 0);
-    .unitize(12, 16, font-size);
-    .unitize(12, 16, line-height);
-    display: block;
+    .unitize-width(90);
+    .unitize-height(90);
     position: absolute;
-    width: 200%;
-    text-align: center;
-
-    &.green {
-      color: #fff;
-      text-shadow: 0 1px 1px #41b400;
-      border: 1px solid #3ab100;
-      .linear-gradient(#70cb06, #6dca00);
-      .box-shadow(0 0 2px 0 #339d00);
-    }
-
-    &.orange{
-      color: #fff;
-      text-shadow: 0 1px 1px @primaryContrastColor;
-      border: 1px solid @primaryContrastColor;
-      .linear-gradient(@primaryColor, #cc1d00);
-      .box-shadow(0 0 2px 0 @primaryContrastColor);
-    }
-  }
-
-  &.is--left {
-    top: 0;
-    left: 0;
+    overflow: hidden;
 
     .ribbon--content {
-      .rotate(-45deg);
-      top: 26%;
-      right: -40%;
-    }
-  }
+        .unitize-padding(5, 0);
+        .unitize(12, 16, font-size);
+        .unitize(12, 16, line-height);
+        display: block;
+        position: absolute;
+        width: 200%;
+        text-align: center;
 
-  &.is--right {
-    top: 0;
-    right: 0;
+        &.green {
+            .linear-gradient(#70cb06, #6dca00);
+            .box-shadow(0 0 2px 0 #339d00);
+            color: #fff;
+            text-shadow: 0 1px 1px #41b400;
+            border: 1px solid #3ab100;
+        }
 
-    .ribbon--content {
-      .rotate(45deg);
-      top: 26%;
-      left: -40%;
+        &.orange {
+            .linear-gradient(@primaryColor, #cc1d00);
+            .box-shadow(0 0 2px 0 @primaryContrastColor);
+            color: #fff;
+            text-shadow: 0 1px 1px @primaryContrastColor;
+            border: 1px solid @primaryContrastColor;
+        }
     }
-  }
+
+    &.is--left {
+        top: 0;
+        left: 0;
+
+        .ribbon--content {
+            .rotate(-45deg);
+            top: 26%;
+            right: -40%;
+        }
+    }
+
+    &.is--right {
+        top: 0;
+        right: 0;
+
+        .ribbon--content {
+            .rotate(45deg);
+            top: 26%;
+            left: -40%;
+        }
+    }
 }
