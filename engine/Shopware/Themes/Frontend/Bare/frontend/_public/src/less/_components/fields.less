@@ -4,24 +4,24 @@ input[type="text"],
 input[type="search"],
 input[type="password"],
 input[type="email"] {
-	@boxShadowColor: rgba(red(@borderColor), green(@borderColor), blue(@borderColor), .9);
-	.appearance(none);
-	.border-radius(3px);
-	.box-sizing();
+    @boxShadowColor: rgba(red(@borderColor), green(@borderColor), blue(@borderColor), .9);
+    .appearance(none);
+    .border-radius(3px);
+    .box-sizing();
     .unitize-width(290);
-	.unitize-padding(9, 10, 9, 10);
-	.box-shadow(inset 0 1px 1px @boxShadowColor);
-	background: @lightGradientEnd;
-	border: 1px solid @borderColor;
-	border-top-color: darken(@borderColor, 5%);
-	color: @primaryTextColor;
+    .unitize-padding(9, 10, 9, 10);
+    .box-shadow(inset 0 1px 1px @boxShadowColor);
+    background: @lightGradientEnd;
+    border: 1px solid @borderColor;
+    border-top-color: darken(@borderColor, 5%);
+    color: @primaryTextColor;
 
-	&:focus {
-		.box-shadow(0 0 0 transparent);
-		outline: none;
-		border-color: @primaryColor;
-		background: #fff;
-	}
+    &:focus {
+        .box-shadow(0 0 0 transparent);
+        outline: none;
+        border-color: @primaryColor;
+        background: #fff;
+    }
 }
 
 /* A select field.
@@ -38,68 +38,69 @@ input[type="email"] {
 ```
 */
 .field--select {
-  .border-radius(3px);
-  .box-sizing();
-  .unitize-width(290);
-  .linear-gradient(#ffffff, #f7f8fa);
-  display: inline-block;
-  position: relative;
-  border: 1px solid @borderColor;
-  overflow: hidden;
-  line-height: 1;
-
-  .arrow {
-    .unitize-width(34);
-    .unitize(6, 16, font-size);
-    .unitize(46, 16, line-height);
-    display: block;
-    position: absolute; top: 0; right: 0;
-    border-left: 1px solid @borderColor;
-    font-family: 'shopware';
-    text-align: center;
-
-		&:before {
-			content: "\e612";
-		}
-	}
-
-  select {
-    .unitize-padding(10, 0, 10, 10);
-    .appearance(none);
-    width: 120%;
-    color: @primaryTextColor;
-    background: transparent;
-    border: 0 none;
-  }
-
-  option {
-    .unitize-padding(0, 10);
-    display: block;
-    border: 0 none;
-    background: #fff;
-  }
-
-  &.is--disabled {
-    .opacity(.5);
-    cursor: not-allowed;
-  }
-}
-
-
-@media screen and (min-width: @desktopViewportWidth) {
-
-  .field--select {
+    .border-radius(3px);
+    .box-sizing();
     .unitize-width(290);
-    .box-shadow(0 1px 1px 0 rgba(0, 0, 0, 0.1));
+    .linear-gradient(#ffffff, #f7f8fa);
+    display: inline-block;
+    position: relative;
+    border: 1px solid @borderColor;
+    overflow: hidden;
+    line-height: 1;
 
     .arrow {
-      .unitize(32, 16, line-height);
-      display: block;
+        .unitize-width(34);
+        .unitize(6, 16, font-size);
+        .unitize(46, 16, line-height);
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        border-left: 1px solid @borderColor;
+        font-family: 'shopware';
+        text-align: center;
+
+        &:before {
+            content: "\e612";
+        }
     }
 
     select {
-      .unitize-padding(5, 0, 5, 10);
+        .unitize-padding(10, 0, 10, 10);
+        .appearance(none);
+        width: 130%;
+        color: @primaryTextColor;
+        background: transparent;
+        border: 0 none;
     }
-  }
+
+    option {
+        .unitize-padding(0, 10);
+        display: block;
+        border: 0 none;
+        background: #fff;
+    }
+
+    &.is--disabled {
+        .opacity(.5);
+        cursor: not-allowed;
+    }
+}
+
+@media screen and (min-width: @desktopViewportWidth) {
+
+    .field--select {
+        .unitize-width(290);
+        .box-shadow(0 1px 1px 0 rgba(0, 0, 0, 0.1));
+
+        .arrow {
+            .unitize(32, 16, line-height);
+            display: block;
+        }
+
+        select {
+            .unitize-padding(5, 0, 5, 10);
+        }
+    }
 
 }

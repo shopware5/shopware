@@ -2,11 +2,11 @@
 {namespace name="frontend/listing/listing_actions"}
 
 {if $sNumberPages && $sNumberPages > 1}
-    <div class="listing--paging block-group">
+    <div class="listing--paging panel--paging">
 
         {* Pagination label *}
         {block name='frontend_listing_actions_paging_label'}
-            <label class="action--label">{s name='ListingPaging'}{/s}</label>
+            <label class="paging--label action--label">{s name='ListingPaging'}{/s}</label>
         {/block}
 
         {* Pagination - Previous page *}

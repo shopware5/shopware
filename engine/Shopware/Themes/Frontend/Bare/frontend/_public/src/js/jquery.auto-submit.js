@@ -1,10 +1,8 @@
 ;(function($, window, document, undefined) {
     "use strict";
 
-    var pluginName = 'collapsePanel',
-        defaults = {
-            slideSpeed: 400
-        };
+    var pluginName = 'autoSubmit',
+        defaults = {};
 
     /**
      * Plugin constructor which merges the default settings with the user settings.
@@ -32,14 +30,6 @@
     Plugin.prototype.init = function() {
         var me = this;
 
-        me.targetElId = me.$el.attr('data-collapse-target');
-
-        if (me.targetElId !== undefined) {
-            me.$targetEl = $(me.targetElId);
-        } else {
-            me.$targetEl = me.$el.next('.collapse--content');
-        }
-
         me.registerEvents();
     };
 
@@ -49,27 +39,9 @@
     Plugin.prototype.registerEvents = function() {
         var me = this;
 
-        me.$el.on('click.' + pluginName, function(e) {
-            e.preventDefault();
-            me.toggleCollapse();
+        me.$el.on('change.' + pluginName, function () {
+            this.form.submit();
         });
-    };
-
-    /**
-     * Changes the collapse state of the element.
-     */
-    Plugin.prototype.toggleCollapse = function() {
-        var me = this;
-
-        if (me.$targetEl.hasClass('is--active')) {
-            me.$el.removeClass('is--active');
-            me.$targetEl.slideUp(me.opts.slideSpeed, function() {
-                me.$targetEl.removeClass('is--active');
-            });
-        } else {
-            me.$el.addClass('is--active');
-            me.$targetEl.slideDown(me.opts.slideSpeed).addClass('is--active');
-        }
     };
 
     /**
@@ -80,9 +52,7 @@
     Plugin.prototype.destroy = function() {
         var me = this;
 
-        me.$el.removeClass('is--active');
-        me.$targetEl.removeClass('is--active').hide();
-        me.$el.off('click.' + pluginName).removeData('plugin_' + pluginName);
+        me.$el.off('change.' + pluginName).removeData('plugin_' + pluginName);
     };
 
     $.fn[pluginName] = function ( options ) {
