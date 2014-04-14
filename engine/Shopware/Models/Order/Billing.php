@@ -86,6 +86,13 @@ class Billing extends ModelEntity
     private $countryId = 0;
 
     /**
+     * Contains the id of the state. Used for billing - state association.
+     * @var integer $stateId
+     * @ORM\Column(name="stateID", type="integer", nullable=true)
+     */
+    private $stateId = null;
+
+    /**
      * Contains the name of the billing address company
      * @var string $company
      * @ORM\Column(name="company", type="string", length=255, nullable=false)
@@ -638,4 +645,26 @@ class Billing extends ModelEntity
     {
         return $this->additionalAddressLine1;
     }
+
+    /**
+     * Setter function for the stateId column property.
+     *
+     * @param int $stateId
+     */
+    public function setStateId($stateId)
+    {
+        $this->stateId = $stateId;
+    }
+
+    /**
+     * Getter function for the stateId column property.
+     *
+     * @return int
+     */
+    public function getStateId()
+    {
+        return $this->stateId;
+    }
+
+
 }

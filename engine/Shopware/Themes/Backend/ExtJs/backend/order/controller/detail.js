@@ -115,6 +115,13 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                 updateForms: me.onUpdateDetailPage,
                 convertOrder: me.onConvertOrder
             },
+            'order-billing-field-set': {
+                countryChanged: me.onCountryChanged
+            },
+
+            'order-shipping-field-set': {
+                countryChanged: me.onCountryChanged
+            },
             'order-detail-window order-detail-panel': {
                 saveDetails: me.onSaveDetails,
                 updateForms: me.onUpdateDetailPage
@@ -449,6 +456,45 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                 });
             }
         }
+    },
+
+    /**
+     * Called when the user changes the country combobox in the shipping or billing form
+     *
+     * @param countryCombo
+     * @param newValue
+     * @param countryStateCombo
+     * @param record
+     */
+    onCountryChanged: function(countryCombo, newValue, countryStateCombo, record) {
+        var store,
+            oldStateId = record.get('stateId');
+        store = countryStateCombo.store;
+        if (newValue === null) {
+            countryStateCombo.setValue(null);
+            countryStateCombo.hide();
+            return;
+        }
+        store.getProxy().extraParams = {
+            countryId: newValue
+        };
+        countryStateCombo.show();
+        store.load({
+            callback: function() {
+                var record = store.getById(oldStateId);
+                if (store.getCount() === 0) {
+                    countryStateCombo.setValue(null);
+                    countryStateCombo.hide();
+                    return true;
+                }
+                if (record instanceof Ext.data.Model) {
+                    countryStateCombo.setValue(record.get('id'));
+                } else {
+                    countryStateCombo.setValue(null);
+                }
+                countryStateCombo.show();
+            }
+        });
     },
 
     /**
