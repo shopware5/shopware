@@ -53,7 +53,7 @@
 
 		<section class="content-main container block-group">
 
-			{* Breadcrumb *}
+            {* Breadcrumb *}
 			{block name='frontend_index_breadcrumb'}
 				<nav class="content--breadcrumb block">
 					{include file='frontend/index/breadcrumb.tpl'}

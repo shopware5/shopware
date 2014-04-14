@@ -1,18 +1,3 @@
-/** Main navigation of the storefront */
-body > .sidebar-main {
-	.unitize-variable(300, 16);
-	.unitize-width(300, 16);
-	.translate(~"-@{emValue}rem", 0);
-	position: absolute;
-	left: 0; top: 0;
-	height: 100%;
-	border-right: 1px solid rgba(red(@lightTextColor), green(@lightTextColor), blue(@lightTextColor), 50%);
-
-	.logo--trusted-shops {
-		display: none;
-	}
-}
-
 // Will be used for the off canvas animation
 .page-wrap {
 	.transition(all, 0.25s, ease-in-out);
@@ -109,8 +94,4 @@ body > .sidebar-main {
 	.navigation--link {
 		color: @primaryTextColor;
 	}
-}
-
-@media screen and (min-width: @tabletViewportWidth) {
-    .sidebar-main { display: none }
 }
