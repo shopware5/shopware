@@ -1,6 +1,6 @@
 <div class="personal_settings">
 	<h2 class="headingbox_dark largesize">{s name='RegisterPersonalHeadline'}{/s}</h2>
-	
+
 	{* Customer type *}
 	{block name='frontend_register_personal_fieldset_customer_type'}
 		{if $form_data.sValidation}
@@ -15,7 +15,7 @@
 			</div>
 		{/if}
 	{/block}
-	
+
 	{* Salutation *}
 	{block name='frontend_register_personal_fieldset_salutation'}
 		<div class="salutation">
@@ -27,15 +27,15 @@
 			<div class="clear">&nbsp;</div>
 		</div>
 	{/block}
-	
+
 	{* Firstname *}
-	{block name='frontend_register_personal_fieldset_input_firstname'}		
+	{block name='frontend_register_personal_fieldset_input_firstname'}
 		<div>
 			<label for="firstname">{se name='RegisterLabelFirstname'}{/se}</label>
 			<input name="register[personal][firstname]" type="text" id="firstname" value="{$form_data.firstname|escape}" class="text required {if $error_flags.firstname}instyle_error{/if}" />
 		</div>
 	{/block}
-	
+
 	{* Lastname *}
 	{block name='frontend_register_personal_fieldset_input_lastname'}
 		<div>
@@ -43,7 +43,7 @@
 			<input name="register[personal][lastname]" type="text"  id="lastname" value="{$form_data.lastname|escape}" class="text required {if $error_flags.lastname}instyle_error{/if}" />
 		</div>
 	{/block}
-	
+
 	{* Skip login *}
 	{if !$update}
 		{block name='frontend_register_personal_fieldset_skip_login'}
@@ -51,11 +51,11 @@
 		        <div class="check">
 		            <input type="checkbox" value="1" id="register_personal_skipLogin" name="register[personal][skipLogin]" class="chkbox" {if $form_data.skipLogin||$form_data.accountmode || $skipLogin}checked {/if}/>
 		            <label for="register_personal_skipLogin" class="chklabel"><strong>{se name='RegisterLabelNoAccount'}{/se}</strong></label>
-		            <div class="clear">&nbsp;</div>	
+		            <div class="clear">&nbsp;</div>
 		        </div>
 		    {/if}
 	    {/block}
-	    
+
 		{* E-Mail *}
 		{block name='frontend_register_personal_fieldset_input_mail'}
 			<div>
@@ -64,7 +64,7 @@
 			    </label>
 			    <input name="register[personal][email]" type="text" id="register_personal_email" value="{$form_data.email|escape}" class="text required email {if $error_flags.email}instyle_error{/if}" />
 			</div>
-		
+
 			{if {config name=DOUBLEEMAILVALIDATION}}
 			    <div>
 			        <label for="register_personal_emailConfirmation">
@@ -75,7 +75,7 @@
 			{/if}
 		{/block}
 	{/if}
-		
+
 	{if !$update}
 		{* Password *}
 		{block name='frontend_register_personal_fieldset_input_password'}
@@ -84,16 +84,17 @@
 				<input name="register[personal][password]" type="password" id="register_personal_password" class="text required password {if $error_flags.password}instyle_error{/if}" />
 			</div>
 		{/block}
-	
-		{* Password confirmation *}
-		{block name='frontend_register_personal_fieldset_input_password_confirm'}
-			<div class="fade_password">
-			
-				<label for="register_personal_passwordConfirmation">{se name='RegisterLabelPasswordRepeat'}{/se}</label>         
-				<input name="register[personal][passwordConfirmation]"  type="password" id="register_personal_passwordConfirmation" class="text required passwordConfirmation {if $error_flags.passwordConfirmation}instyle_error{/if}" />
-			</div>
-		{/block}
-	
+
+        {* Password confirmation *}
+        {block name='frontend_register_personal_fieldset_input_password_confirm'}
+            {if {config name=doublePasswordValidation}}
+                <div class="fade_password">
+                    <label for="register_personal_passwordConfirmation">{se name='RegisterLabelPasswordRepeat'}{/se}</label>
+                    <input name="register[personal][passwordConfirmation]"  type="password" id="register_personal_passwordConfirmation" class="text required passwordConfirmation {if $error_flags.passwordConfirmation}instyle_error{/if}" />
+                </div>
+            {/if}
+        {/block}
+
 		{* Password description *}
 		{block name='frontend_register_personal_fieldset_password_description'}
 			<div class="fade_password description">
@@ -101,43 +102,47 @@
 			</div>
 		{/block}
 	{/if}
-	
-	{* Phone *}
-	{block name='frontend_register_personal_fieldset_input_phone'}
-		<div>
-			<label for="phone" {if !{config name=requirePhoneField}}class="normal"{/if}>{se name='RegisterLabelPhone'}{/se}</label>
-			<input name="register[personal][phone]" type="text" id="phone" value="{$form_data.phone|escape}" class="text {if {config name=requirePhoneField}}required{/if} {if $error_flags.phone && {config name=requirePhoneField}}instyle_error{/if}" />
-		</div>
-	{/block}
-		
-	{* Birthday *}
-	{if !$form_data.skipLogin && !$update}
-		{block name='frontend_register_personal_fieldset_birthday'}
-			<div id="birthdate">
-				<label for="register_personal_birthdate" class="normal">{s name='RegisterLabelBirthday'}{/s}</label>
-				<select id="register_personal_birthdate" name="register[personal][birthday]">
-					<option value="">--</option>
-					{section name="birthdate" start=1 loop=32 step=1}
-						<option value="{$smarty.section.birthdate.index}" {if $smarty.section.birthdate.index eq $form_data.birthday}selected{/if}>{$smarty.section.birthdate.index}</option>
-					{/section}
-				</select>
 
-				<select name="register[personal][birthmonth]">
-					<option value="">-</option>
-					{section name="birthmonth" start=1 loop=13 step=1}
-						<option value="{$smarty.section.birthmonth.index}" {if $smarty.section.birthmonth.index eq $form_data.birthmonth}selected{/if}>{$smarty.section.birthmonth.index}</option>
-					{/section}
-				</select>
+    {* Phone *}
+    {block name='frontend_register_personal_fieldset_input_phone'}
+        {if {config name=showPhoneNumberField}}
+            <div>
+                <label for="phone" {if !{config name=requirePhoneField}}class="normal"{/if}>{se name='RegisterLabelPhone'}{/se}</label>
+                <input name="register[personal][phone]" type="text" id="phone" value="{$form_data.phone|escape}" class="text {if {config name=requirePhoneField}}required{/if} {if $error_flags.phone && {config name=requirePhoneField}}instyle_error{/if}" />
+            </div>
+        {/if}
+    {/block}
 
-				<select name="register[personal][birthyear]">
-					<option value="">----</option>
-					{section name="birthyear" loop=2000 max=100 step=-1}
-						<option value="{$smarty.section.birthyear.index}" {if $smarty.section.birthyear.index eq $form_data.birthyear}selected{/if}>{$smarty.section.birthyear.index}</option>
-					{/section}
-				</select>
+    {* Birthday *}
+    {if {config name=showBirthdayField}}
+        {if !$form_data.skipLogin && !$update}
+            {block name='frontend_register_personal_fieldset_birthday'}
+                <div id="birthdate">
+                    <label for="register_personal_birthdate" {if !{config name=requireBirthdayField}}class="normal"{/if}>{s name='RegisterLabelBirthday'}{/s}</label>
+                    <select id="register_personal_birthdate" name="register[personal][birthday]" class="{if {config name=requireBirthdayField}}required{/if} {if $error_flags.birthday && {config name=requireBirthdayField}}instyle_error{/if}">
+                        <option value="">--</option>
+                        {section name="birthdate" start=1 loop=32 step=1}
+                            <option value="{$smarty.section.birthdate.index}" {if $smarty.section.birthdate.index eq $form_data.birthday}selected{/if}>{$smarty.section.birthdate.index}</option>
+                        {/section}
+                    </select>
 
-				<div class="clear"></div>
-			</div>
-		{/block}
-	{/if}
+                    <select name="register[personal][birthmonth]" class="{if {config name=requireBirthdayField}}required{/if} {if $error_flags.birthmonth && {config name=requireBirthdayField}}instyle_error{/if}">
+                        <option value="">-</option>
+                        {section name="birthmonth" start=1 loop=13 step=1}
+                            <option value="{$smarty.section.birthmonth.index}" {if $smarty.section.birthmonth.index eq $form_data.birthmonth}selected{/if}>{$smarty.section.birthmonth.index}</option>
+                        {/section}
+                    </select>
+
+                    <select name="register[personal][birthyear]" class="{if {config name=requireBirthdayField}}required{/if} {if $error_flags.birthyear && {config name=requireBirthdayField}}instyle_error{/if}">
+                        <option value="">----</option>
+                        {section name="birthyear" loop=2000 max=100 step=-1}
+                            <option value="{$smarty.section.birthyear.index}" {if $smarty.section.birthyear.index eq $form_data.birthyear}selected{/if}>{$smarty.section.birthyear.index}</option>
+                        {/section}
+                    </select>
+
+                    <div class="clear"></div>
+                </div>
+            {/block}
+        {/if}
+    {/if}
 </div>
