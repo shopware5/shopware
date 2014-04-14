@@ -373,6 +373,8 @@
     }
 
     .listing {
+        .clearfix();
+        .unitize-padding(0, 0, 20, 0);
         margin: -2% 0 0 -2%;
 
         .product--box {
@@ -434,10 +436,17 @@
     }
 
     .listing--actions {
-        .unitize-padding(10, 0, 0, 0);
         .border-radius(3px);
         border: 1px solid @borderColor;
         background: @primaryBackgroundColor;
+
+        &.is--advanced {
+            .unitize-padding(10, 0, 0, 0);
+
+            .listing--paging {
+                border-top: 1px solid @borderColor;
+            }
+        }
     }
 
     .action--filter-btn {
@@ -516,7 +525,6 @@
     .listing--paging {
         .unitize-padding(10, 10);
         display: block;
-        border-top: 1px solid @borderColor;
         float: none;
         clear: both;
 
