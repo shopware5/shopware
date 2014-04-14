@@ -49,7 +49,7 @@ class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enli
     }
 
     /**
-     * @covers GetWrapper::offsetSet()
+     * @covers \Shopware\Components\LegacyRequestWrapper\GetWrapper::offsetSet()
      */
     public function testSet()
     {
@@ -65,7 +65,7 @@ class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enli
     }
 
     /**
-     * @covers GetWrapper::offsetSet()
+     * @covers \Shopware\Components\LegacyRequestWrapper\GetWrapper::offsetSet()
      */
     public function testGet()
     {
@@ -81,7 +81,7 @@ class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enli
     }
 
     /**
-     * @covers GetWrapper::offsetUnset()
+     * @covers \Shopware\Components\LegacyRequestWrapper\GetWrapper::offsetUnset()
      */
     public function testUnset()
     {
@@ -92,7 +92,7 @@ class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enli
     }
 
     /**
-     * @covers GetWrapper::setAll()
+     * @covers \Shopware\Components\LegacyRequestWrapper\GetWrapper::setAll()
      */
     public function testSetAll()
     {
@@ -105,7 +105,7 @@ class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enli
     }
 
     /**
-     * @covers GetWrapper::toArray()
+     * @covers \Shopware\Components\LegacyRequestWrapper\GetWrapper::toArray()
      */
     public function testToArray()
     {
