@@ -6,7 +6,7 @@
 
         {* Pagination label *}
         {block name='frontend_listing_actions_paging_label'}
-            <label class="action--label">{s name='ListingPaging'}{/s}</label>
+            <label class="paging--label action--label">{s name='ListingPaging'}{/s}</label>
         {/block}
 
         {* Pagination - Previous page *}
