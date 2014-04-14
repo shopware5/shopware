@@ -221,6 +221,7 @@
     // Product action button
     .product--action {
 
+        &.action--compare,
         &.action--buynow {
             display: none;
         }
@@ -372,14 +373,13 @@
     }
 
     .listing {
-        .product--box {
-            width: 49%;
-            margin: 0 2% 2% 0;
-            float: left;
+        margin: -2% 0 0 -2%;
 
-            &:nth-child(even) {
-                margin: 0 0 2% 0;
-            }
+        .product--box {
+            width: 50%;
+            padding: 2% 0 0 2%;
+            margin: 0;
+            float: left;
 
             .panel--body {
                 .unitize-height(300);
@@ -535,7 +535,7 @@
     .listing {
         .product--box {
             width: 100%;
-            margin: 0 0 2% 0;
+            margin: 0;
             float: left;
         }
 
@@ -543,7 +543,6 @@
         &.listing--listing-1col {
             .product--box {
                 width: 100%;
-                margin: 0 0 2% 0;
 
                 .panel--body {
                     .clearfix();
@@ -607,12 +606,7 @@
         // Two column listing view
         &.listing--listing-2col {
             .product--box {
-                width: 49%;
-                margin: 0 2% 2% 0;
-
-                &:nth-child(even) {
-                    margin: 0 0 2% 0;
-                }
+                width: 50%;
 
                 &.is--active,
                 &:hover {
@@ -682,12 +676,7 @@
         // Three column listing view
         &.listing--listing-3col {
             .product--box {
-                width: 32%;
-                margin: 0 2% 2% 0;
-
-                &:nth-child(3n+3) {
-                    margin: 0 0 2% 0;
-                }
+                width: 33.3%;
 
                 &.is--active,
                 &:hover {
@@ -719,12 +708,7 @@
         // Four column listing view (Grid-View)
         &.listing--listing {
             .product--box {
-                width: 23.5%;
-                margin: 0 2% 2% 0;
-
-                &:nth-child(4n+4) {
-                    margin: 0 0 2% 0;
-                }
+                width: 25%;
 
                 &.is--active,
                 &:hover {
