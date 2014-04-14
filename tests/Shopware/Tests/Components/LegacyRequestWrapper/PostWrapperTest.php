@@ -49,7 +49,7 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
     }
 
     /**
-     * @covers GetWrapper::offsetSet()
+     * @covers \Shopware\Components\LegacyRequestWrapper\PostWrapper::offsetSet()
      */
     public function testSet()
     {
@@ -65,7 +65,7 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
     }
 
     /**
-     * @covers GetWrapper::offsetSet()
+     * @covers \Shopware\Components\LegacyRequestWrapper\PostWrapper::offsetSet()
      */
     public function testGet()
     {
@@ -81,7 +81,7 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
     }
 
     /**
-     * @covers GetWrapper::offsetUnset()
+     * @covers \Shopware\Components\LegacyRequestWrapper\PostWrapper::offsetUnset()
      */
     public function testUnset()
     {
@@ -92,7 +92,7 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
     }
 
     /**
-     * @covers GetWrapper::setAll()
+     * @covers \Shopware\Components\LegacyRequestWrapper\PostWrapper::setAll()
      */
     public function testSetAll()
     {
@@ -105,7 +105,7 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
     }
 
     /**
-     * @covers GetWrapper::toArray()
+     * @covers \Shopware\Components\LegacyRequestWrapper\PostWrapper::toArray()
      */
     public function testToArray()
     {
@@ -138,7 +138,7 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
     }
 
     /**
-     * Tests that reseting POST data inside any core class is equivalent to resetting it in the
+     * Tests that resetting POST data inside any core class is equivalent to resetting it in the
      * global $_POST
      *
      * @param $getData
