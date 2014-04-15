@@ -28,20 +28,43 @@
 class sBasket
 {
     /**
-     * @var sSystem
+     * Database connection which used for each database operation in this class.
+     * Injected over the class constructor
+     *
+     * @var Enlight_Components_Db_Adapter_Pdo_Mysql
      */
-    public $sSYSTEM;
+    private $db;
 
-    public $sBASKET;
+    /**
+     * The snippet manager
+     *
+     * @var Shopware_Components_Snippet_Manager
+     */
+    private $snippetManager;
 
     /**
      * @var Shopware_Components_Snippet_Namespace
      */
     public $snippetObject;
 
-    public function __construct()
+    /**
+     * Pointer to sSystem object
+     * Used for legacy purposes
+     *
+     * @var sSystem
+     * @deprecated
+     */
+    public $sSYSTEM;
+
+    public function __construct(
+        Enlight_Components_Db_Adapter_Pdo_Mysql $db                 = null,
+        Shopware_Components_Snippet_Manager     $snippetManager     = null,
+        sSystem                                 $systemModule       = null
+    )
     {
-        $this->snippetObject = Shopware()->Snippets()->getNamespace('frontend/basket/internalMessages');
+        $this->db = $db ? : Shopware()->Db();
+        $this->snippetManager = $snippetManager ? : Shopware()->Snippets();
+        $this->sSYSTEM = $systemModule ? : Shopware()->System();
     }
     /**
      * Get total value of current user's cart
@@ -52,12 +75,14 @@ class sBasket
      */
     public function sGetAmount()
     {
-        return $this->sSYSTEM->sDB_CONNECTION->GetRow(
-            "SELECT SUM(quantity*(floor(price * 100 + .55)/100)) AS totalAmount
+        $result = $this->db->fetchRow(
+            'SELECT SUM(quantity*(floor(price * 100 + .55)/100)) AS totalAmount
                 FROM s_order_basket
-                WHERE sessionID = ? GROUP BY sessionID",
+                WHERE sessionID = ? GROUP BY sessionID',
             array($this->sSYSTEM->sSESSION_ID)
         );
+
+       return ($result === false ? array() : $result);
     }
 
     /**
@@ -69,13 +94,15 @@ class sBasket
      */
     private function sGetAmountArticles()
     {
-        return $this->sSYSTEM->sDB_CONNECTION->GetRow(
-            "SELECT SUM(quantity*(floor(price * 100 + .55)/100)) AS totalAmount
+        $result = $this->db->fetchRow(
+            'SELECT SUM(quantity*(floor(price * 100 + .55)/100)) AS totalAmount
                 FROM s_order_basket
                 WHERE sessionID = ? AND modus = 0
-                GROUP BY sessionID",
+                GROUP BY sessionID',
             array($this->sSYSTEM->sSESSION_ID)
         );
+
+        return ($result === false ? array() : $result);
     }
 
     /**
@@ -87,7 +114,7 @@ class sBasket
      */
     public function sCheckBasketQuantities()
     {
-        $result = $this->sSYSTEM->sDB_CONNECTION->GetAll(
+        $result = $this->db->fetchAll(
             'SELECT (d.instock - b.quantity) as diffStock, b.ordernumber,
                 a.laststock, IF(a.active=1, d.active, 0) as active
             FROM s_order_basket b
@@ -143,7 +170,7 @@ class sBasket
             }
             $supplierSQL = "OR s_articles.supplierID = $supplier ";
         }
-        return $this->sSYSTEM->sDB_CONNECTION->GetRow(
+        $result = $this->db->fetchRow(
             "SELECT SUM(quantity*(floor(price * 100 + .55)/100)) AS totalAmount
                 FROM s_order_basket, s_articles
                 WHERE sessionID = ? AND modus = 0 AND s_order_basket.articleID = s_articles.id
@@ -155,6 +182,8 @@ class sBasket
                 GROUP BY sessionID",
             array($this->sSYSTEM->sSESSION_ID)
         );
+
+        return ($result === false ? array() : $result);
     }
 
     /**
@@ -166,20 +195,20 @@ class sBasket
      */
     private function sUpdateVoucher()
     {
-        $voucher = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+        $voucher = $this->db->fetchRow(
             'SELECT id basketID, ordernumber, articleID as voucherID
                 FROM s_order_basket
-                WHERE modus=2 AND sessionID=?',
+                WHERE modus = 2 AND sessionID = ?',
             array($this->sSYSTEM->sSESSION_ID)
         );
-        if (!empty($voucher)) {
-            $voucher['code'] = $this->sSYSTEM->sDB_CONNECTION->GetOne(
-                'SELECT vouchercode FROM s_emarketing_vouchers WHERE ordercode=?',
+        if ($voucher) {
+            $voucher['code'] = $this->db->fetchOne(
+                'SELECT vouchercode FROM s_emarketing_vouchers WHERE ordercode = ?',
                 array($voucher['ordernumber'])
             );
             if (empty($voucher['code'])) {
-                $voucher['code'] = $this->sSYSTEM->sDB_CONNECTION->GetOne(
-                    'SELECT code FROM s_emarketing_voucher_codes WHERE id=?',
+                $voucher['code'] = $this->db->fetchOne(
+                    'SELECT code FROM s_emarketing_voucher_codes WHERE id = ?',
                     array($voucher['voucherID'])
                 );
             }
@@ -198,16 +227,16 @@ class sBasket
     private function sInsertDiscount()
     {
         // Get possible discounts
-        $getDiscounts = $this->sSYSTEM->sDB_CONNECTION->GetAll('
+        $getDiscounts = $this->db->fetchAll('
             SELECT basketdiscount, basketdiscountstart
                 FROM s_core_customergroups_discounts
-                WHERE groupID=?
+                WHERE groupID = ?
                 ORDER BY basketdiscountstart ASC',
             array($this->sSYSTEM->sUSERGROUPDATA["id"])
         );
 
 
-        $this->sSYSTEM->sDB_CONNECTION->Execute(
+        $this->db->query(
             'DELETE FROM s_order_basket WHERE sessionID = ? AND modus = 3',
             array($this->sSYSTEM->sSESSION_ID)
         );
@@ -228,7 +257,7 @@ class sBasket
             $sql,
             array('subject' => $this, 'params' => $params)
         );
-        $basketAmount = Shopware()->Db()->fetchOne($sql, $params);
+        $basketAmount = $this->db->fetchOne($sql, $params);
 
         // If no articles in basket, return
         if (!$basketAmount) {
@@ -279,37 +308,22 @@ class sBasket
 
         $discountName = - $basketDiscount . ' % ' . $this->sSYSTEM->sCONFIG["sDISCOUNTNAME"];
 
-        $params = array(
-            $this->sSYSTEM->sSESSION_ID,
-            $discountName,
-            0,
-            $name,
-            1,
-            $discount,
-            $discountNet,
-            $tax,
-            $insertTime,
-            3,
-            $this->sSYSTEM->sCurrency["factor"]
+        $this->db->insert(
+            's_order_basket',
+            array(
+                'sessionID' => $this->sSYSTEM->sSESSION_ID,
+                'articlename' => $discountName,
+                'articleID' => 0,
+                'ordernumber' => $name,
+                'quantity' => 1,
+                'price' => $discount,
+                'netprice' => $discountNet,
+                'tax_rate' => $tax,
+                'datum' => $insertTime,
+                'modus' => 3,
+                'currencyFactor' => $this->sSYSTEM->sCurrency["factor"]
+            )
         );
-        $sql = "
-        INSERT INTO s_order_basket (
-            sessionID,
-            articlename,
-            articleID,
-            ordernumber,
-            quantity,
-            price,
-            netprice,
-            tax_rate,
-            datum,
-            modus,
-            currencyFactor
-        )
-        VALUES (
-            ?,?,?,?,?,?,?,?,?,?,?)";
-
-        $this->sSYSTEM->sDB_CONNECTION->Execute($sql, $params);
     }
 
     /**
@@ -317,16 +331,16 @@ class sBasket
      * Used only internally in sBasket
      * 
      * @deprecated
-     * @return void
+     * @return bool
      */
     private function sCheckForDiscount()
     {
-        $rs = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+        $rs = $this->db->fetchOne(
             'SELECT id FROM s_order_basket WHERE sessionID = ? AND modus = 3',
             array($this->sSYSTEM->sSESSION_ID)
         );
 
-        return (bool) ($rs["id"]);
+        return (bool) $rs;
     }
 
     /**
@@ -345,7 +359,7 @@ class sBasket
         $sBasketAmount = (float) $sBasketAmount;
 
         if (empty($this->sSYSTEM->_GET["sAddPremium"])) {
-            $deletePremium = Shopware()->Db()->fetchCol(
+            $deletePremium = $this->db->fetchCol(
                 'SELECT basket.id
                 FROM s_order_basket basket
                 LEFT JOIN s_addon_premiums premium
@@ -360,8 +374,10 @@ class sBasket
                 return true;
             }
 
-            $deletePremium = Shopware()->Db()->quote($deletePremium);
-            Shopware()->Db()->query("DELETE FROM s_order_basket WHERE id IN ($deletePremium)");
+            $this->db->delete(
+                's_order_basket',
+                array('id IN (?)' => $deletePremium)
+            );
             return true;
         }
 
@@ -376,28 +392,34 @@ class sBasket
 
         $last_premium = $this->sSYSTEM->_GET["sAddPremium"];
 
-        $this->sSYSTEM->sDB_CONNECTION->Execute("
-            DELETE FROM s_order_basket WHERE sessionID='".$this->sSYSTEM->sSESSION_ID."' AND modus = 1
-        ");
+        $this->db->delete(
+            's_order_basket',
+            array(
+                'sessionID = ?' => $this->sSYSTEM->sSESSION_ID,
+                'modus = 1'
+            )
+        );
 
-        $orderNumber = $this->sSYSTEM->sDB_CONNECTION->qstr($this->sSYSTEM->_GET["sAddPremium"]);
-
-        $premium = $this->sSYSTEM->sDB_CONNECTION->GetRow("
+        $premium = $this->db->fetchRow('
             SELECT premium.id, detail.ordernumber, article.id as articleID, article.name,
-            detail.additionaltext, premium.ordernumber_export, article.configurator_set_id
+              detail.additionaltext, premium.ordernumber_export, article.configurator_set_id
             FROM
                 s_addon_premiums premium,
                 s_articles_details detail,
                 s_articles article,
                 s_articles_details detail2
-            WHERE detail.ordernumber = $orderNumber
-            AND premium.startprice <= $sBasketAmount
+            WHERE detail.ordernumber = ?
+            AND premium.startprice <= ?
             AND premium.ordernumber = detail2.ordernumber
             AND detail2.articleID = detail.articleID
-            AND detail.articleID = article.id
-        ");
+            AND detail.articleID = article.id',
+            array(
+                $this->sSYSTEM->_GET["sAddPremium"],
+                $sBasketAmount
+            )
+        );
 
-        if (empty($premium)) {
+        if (!$premium) {
             return false;
         }
 
@@ -410,44 +432,21 @@ class sBasket
             $number = $premium['ordernumber_export'];
         }
 
-        $sql = "
-            INSERT INTO s_order_basket (
-                sessionID, articlename, articleID, ordernumber, quantity,
-                price, netprice,tax_rate, datum, modus, currencyFactor
-            ) VALUES (
-                  ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?
+        return $this->db->insert(
+            's_order_basket',
+            array(
+                'sessionID' => $this->sSYSTEM->sSESSION_ID,
+                'articlename' => trim($premium["name"] . " " . $premium["additionaltext"]),
+                'articleID' => $premium['id'],
+                'ordernumber' => $number,
+                'quantity' => 1,
+                'price' => 0,
+                'netprice' => 0,
+                'tax_rate' => 0,
+                'datum' => new DateTime(),
+                'modus' => 1,
+                'currencyFactor' => $this->sSYSTEM->sCurrency["factor"]
             )
-        ";
-
-        $data = array(
-            $this->sSYSTEM->sSESSION_ID,
-            trim($premium["name"] . " " . $premium["additionaltext"]),
-            $premium['id'],
-            $number,
-            1,
-            0,
-            0,
-            0,
-            1,
-            $this->sSYSTEM->sCurrency["factor"]
-        );
-        return Shopware()->Db()->query($sql, $data);
-    }
-
-    /**
-     * REPLACE WITH sCountBasket AFTER TESTING IS DONE
-     *
-     * Get the number of elements in the current cart
-     * Used only internally in sBasket
-     *
-     * @deprecated
-     * @return int Number of items in the current cart
-     */
-    private function sCountArticles()
-    {
-        return $this->sSYSTEM->sDB_CONNECTION->GetOne(
-            'SELECT COUNT(*) FROM s_order_basket WHERE modus = 0 AND sessionID = ?',
-            array($this->sSYSTEM->sSESSION_ID)
         );
     }
 
@@ -460,7 +459,7 @@ class sBasket
      */
     public function getMaxTax()
     {
-        return $this->sSYSTEM->sDB_CONNECTION->GetOne(
+        return $this->db->fetchOne(
             'SELECT MAX(tax_rate) as max_tax
                 FROM s_order_basket b
                 WHERE b.sessionID = ? AND b.modus = 0
@@ -491,29 +490,38 @@ class sBasket
         $voucherCode = strtolower($voucherCode);
 
         // Load the voucher details
-        $voucherDetails = $this->sSYSTEM->sDB_CONNECTION->GetRow(
-            'SELECT * FROM s_emarketing_vouchers
-            WHERE modus != 1 AND LOWER(vouchercode)=?
-            AND ((valid_to >= now() AND valid_from <= now()) OR valid_to is NULL)',
+        $voucherDetails = $this->db->fetchRow(
+            'SELECT *
+              FROM s_emarketing_vouchers
+              WHERE modus != 1
+              AND LOWER(vouchercode) = ?
+              AND (
+                (valid_to >= now() AND valid_from <= now())
+                OR valid_to IS NULL
+              )',
             array($voucherCode)
-        );
+        ) ? : array();
 
         // Check if voucher has already been cashed
         if ($this->sSYSTEM->_SESSION["sUserId"] && $voucherDetails["id"]) {
             $userId = $this->sSYSTEM->_SESSION["sUserId"];
-            $sql = "
-            SELECT s_order_details.id AS id
-            FROM s_order, s_order_details
-            WHERE s_order.userID = $userId
-            AND s_order_details.orderID=s_order.id
-            AND s_order_details.articleordernumber = '{$voucherDetails["ordercode"]}'
-            AND s_order_details.ordernumber!='0'
-            ";
 
-            $queryVoucher = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
+            $queryVoucher = $this->db->fetchAll(
+                'SELECT s_order_details.id AS id
+                    FROM s_order, s_order_details
+                    WHERE s_order.userID = ?
+                    AND s_order_details.orderID = s_order.id
+                    AND s_order_details.articleordernumber = ?
+                    AND s_order_details.ordernumber != \'0\'',
+                array(
+                    $userId,
+                    $voucherDetails["ordercode"]
+                )
+            );
+
             if (count($queryVoucher) >= $voucherDetails["numorder"] && !$voucherDetails["modus"]) {
 
-                $sErrorMessages[] = $this->snippetObject->get(
+                $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
                     'VoucherFailureAlreadyUsed',
                     'This voucher was used in an previous order'
                 );
@@ -525,44 +533,45 @@ class sBasket
         if ($voucherDetails["id"]) {
             // If we have voucher details, its a reusable code
             // We need to check how many times it has already been used
-            $usedVoucherCount = $this->sSYSTEM->sDB_CONNECTION->GetRow("
+            $usedVoucherCount = $this->db->fetchRow('
                 SELECT COUNT(id) AS vouchers
                 FROM s_order_details
-                WHERE articleordernumber='{$voucherDetails["ordercode"]}'
-                AND s_order_details.ordernumber!='0'
-            ");
+                WHERE articleordernumber = ?
+                AND s_order_details.ordernumber != \'0\'',
+                array($voucherDetails["ordercode"])
+            ) ? : array();
         } else {
             // If we don't have voucher details yet, need to check if its a one-time code
-            $sql = "
-            SELECT s_emarketing_voucher_codes.id AS id, s_emarketing_voucher_codes.code AS vouchercode,
-            description, numberofunits, customergroup, value, restrictarticles,
-            minimumcharge, shippingfree, bindtosupplier, taxconfig, valid_from,
-            valid_to, ordercode, modus, percental, strict, subshopID
-            FROM s_emarketing_vouchers, s_emarketing_voucher_codes
-            WHERE modus = 1
-            AND s_emarketing_vouchers.id = s_emarketing_voucher_codes.voucherID
-            AND LOWER(code) = ?
-            AND cashed != 1
-            AND (
-                  (s_emarketing_vouchers.valid_to >= now()
-                      AND s_emarketing_vouchers.valid_from<=now()
-                  )
-                  OR s_emarketing_vouchers.valid_to is NULL
-            )
-            ";
-            $voucherDetails = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql, array($voucherCode));
-            $individualCode = (bool) $voucherDetails["description"];
+            $voucherDetails = $this->db->fetchRow(
+                'SELECT s_emarketing_voucher_codes.id AS id, s_emarketing_voucher_codes.code AS vouchercode,
+                    description, numberofunits, customergroup, value, restrictarticles,
+                    minimumcharge, shippingfree, bindtosupplier, taxconfig, valid_from,
+                    valid_to, ordercode, modus, percental, strict, subshopID
+                FROM s_emarketing_vouchers, s_emarketing_voucher_codes
+                WHERE modus = 1
+                AND s_emarketing_vouchers.id = s_emarketing_voucher_codes.voucherID
+                AND LOWER(code) = ?
+                AND cashed != 1
+                AND (
+                      (s_emarketing_vouchers.valid_to >= now()
+                          AND s_emarketing_vouchers.valid_from <= now()
+                      )
+                      OR s_emarketing_vouchers.valid_to is NULL
+                )',
+                array($voucherCode)
+            );
+            $individualCode = ($voucherDetails && $voucherDetails["description"]);
         }
 
         // Interrupt the operation if one of the following occurs:
         // 1 - No voucher details were found (individual or reusable)
         // 2 - No voucher code
         // 3 - Voucher is reusable and has already been used to the limit
-        if (!count($voucherDetails)
+        if (!$voucherDetails
             || !$voucherCode
             || ($voucherDetails["numberofunits"] <= $usedVoucherCount["vouchers"] && !$individualCode)
         ) {
-            $sErrorMessages[] = $this->snippetObject->get(
+            $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
                 'VoucherFailureNotFound',
                 'Voucher could not be found or is not valid anymore'
             );
@@ -574,7 +583,7 @@ class sBasket
         // If voucher is limited to a specific subshop, filter that and return on failure
         if (!empty($voucherDetails["subshopID"])) {
             if ($this->sSYSTEM->sSubShop["id"] != $voucherDetails["subshopID"]) {
-                $sErrorMessages[] = $this->snippetObject->get(
+                $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
                     'VoucherFailureNotFound',
                     'Voucher could not be found or is not valid anymore'
                 );
@@ -583,11 +592,14 @@ class sBasket
         }
 
         // Check if the basket already has a voucher, and break if it does
-        $chkBasket = $this->sSYSTEM->sDB_CONNECTION->GetRow("
-        SELECT id FROM s_order_basket WHERE sessionID='".$this->sSYSTEM->sSESSION_ID."' AND modus = 2
-        ");
-        if (count($chkBasket)) {
-            $sErrorMessages[] = $this->snippetObject->get(
+        $chkBasket = $this->db->fetchRow(
+            'SELECT id
+            FROM s_order_basket
+            WHERE sessionID = ? AND modus = 2',
+            array($this->sSYSTEM->sSESSION_ID)
+        );
+        if ($chkBasket) {
+            $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
                 'VoucherFailureOnlyOnes',
                 'Only one voucher can be processed in order'
             );
@@ -600,18 +612,20 @@ class sBasket
 
             if (!empty($userId)) {
                 // Get customer group
-                $queryCustomerGroup = $this->sSYSTEM->sDB_CONNECTION->GetRow("
-                SELECT s_core_customergroups.id, customergroup
-                FROM s_user, s_core_customergroups WHERE s_user.id=$userId
-                AND s_user.customergroup = s_core_customergroups.groupkey
-                ");
+                $queryCustomerGroup = $this->db->fetchRow(
+                    'SELECT s_core_customergroups.id, customergroup
+                    FROM s_user, s_core_customergroups
+                    WHERE s_user.id = ?
+                    AND s_user.customergroup = s_core_customergroups.groupkey',
+                    array($userId)
+                );
             }
             $customerGroup = $queryCustomerGroup["customergroup"];
             if ($customerGroup != $voucherDetails["customergroup"]
                 && $voucherDetails["customergroup"] != $queryCustomerGroup["id"]
                 && $voucherDetails["customergroup"] != $this->sSYSTEM->sUSERGROUPDATA["id"]
             ) {
-                $sErrorMessages[] = $this->snippetObject->get(
+                $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
                     'VoucherFailureCustomerGroup',
                     'This voucher is not available for your customer group'
                 );
@@ -621,31 +635,21 @@ class sBasket
 
         // Check if the voucher is limited to certain articles, and validate that
         if (!empty($voucherDetails["restrictarticles"]) && strlen($voucherDetails["restrictarticles"]) > 5) {
-            $restrictedArticles = explode(";",$voucherDetails["restrictarticles"]);
-            if (count($restrictedArticles)==0) {
+            $restrictedArticles = explode(";", $voucherDetails["restrictarticles"]);
+            if (count($restrictedArticles) == 0) {
                 $restrictedArticles[] = $voucherDetails["restrictarticles"];
             }
-            foreach ($restrictedArticles as $k => $restrictedArticle) {
-                $restrictedArticles[$k] = (string) $this->sSYSTEM->sDB_CONNECTION->qstr($restrictedArticle);
-            }
 
-            $sql = "
-            SELECT id FROM s_order_basket
-            WHERE sessionID='".$this->sSYSTEM->sSESSION_ID."'
-            AND modus=0
-            AND ordernumber IN (".implode(",",$restrictedArticles).")
-            ";
-
-            $allowedBasketEntriesByArticle = $this->sSYSTEM->sDB_CONNECTION->GetOne($sql);
-            $foundMatchingArticle = false;
-
-            if (!empty($allowedBasketEntriesByArticle)) {
-                $foundMatchingArticle = true;
-            }
+            $foundMatchingArticle = $this->db->fetchOne($this->db
+                ->select()
+                ->from('s_order_basket', 'id')
+                ->where('sessionID = ?', $this->sSYSTEM->sSESSION_ID)
+                ->where('modus = 0')
+                ->where('ordernumber IN (?)', $restrictedArticles)
+            );
 
             if (empty($foundMatchingArticle)) {
-
-                $sErrorMessages[] = $this->snippetObject->get(
+                $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
                     'VoucherFailureProducts',
                     'This voucher is only available in combination with certain products'
                 );
@@ -655,25 +659,26 @@ class sBasket
         // Check if the voucher is limited to certain supplier, and validate that
         if ($voucherDetails["bindtosupplier"]) {
             $allowedSupplierId = $voucherDetails["bindtosupplier"];
-            $sql = "
-            SELECT s_order_basket.id
-            FROM s_order_basket, s_articles, s_articles_supplier
-            WHERE s_order_basket.articleID = s_articles.id
-            AND s_articles.supplierID = $allowedSupplierId
-            AND s_order_basket.sessionID = '".$this->sSYSTEM->sSESSION_ID."'
-            ";
 
-            $allowedBasketEntriesBySupplier = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql);
+            $allowedBasketEntriesBySupplier = $this->db->fetchRow(
+                'SELECT s_order_basket.id
+                FROM s_order_basket, s_articles, s_articles_supplier
+                WHERE s_order_basket.articleID = s_articles.id
+                AND s_articles.supplierID = ?
+                AND s_order_basket.sessionID = ?',
+                array($allowedSupplierId, $this->sSYSTEM->sSESSION_ID)
+            );
 
-            if (!count($allowedBasketEntriesBySupplier)) {
-                $allowedSupplierName = $this->sSYSTEM->sDB_CONNECTION->GetRow(
-                    "SELECT name FROM s_articles_supplier WHERE id = $allowedSupplierId"
+            if (!$allowedBasketEntriesBySupplier) {
+                $allowedSupplierName = $this->db->fetchRow(
+                    'SELECT name FROM s_articles_supplier WHERE id = ?',
+                    array($allowedSupplierId)
                 );
 
                 $sErrorMessages[] = str_replace(
                     "{sSupplier}",
                     $allowedSupplierName["name"],
-                    $this->snippetObject->get(
+                    $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
                         'VoucherFailureSupplier',
                         'This voucher is only available for products from {sSupplier}'
                     )
@@ -702,7 +707,7 @@ class sBasket
             $sErrorMessages[] = str_replace(
                 "{sMinimumCharge}",
                 $voucherDetails["minimumcharge"],
-                $this->snippetObject->get(
+                $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
                     'VoucherFailureMinimumCharge',
                     'The minimum charge for this voucher is {sMinimumCharge}'
                 )
@@ -734,7 +739,7 @@ class sBasket
 
             } elseif (intval($voucherDetails["taxconfig"])) {
                $temporaryTax = $voucherDetails["taxconfig"];
-               $getTaxRate = $this->sSYSTEM->sDB_CONNECTION->getOne(
+               $getTaxRate = $this->db->fetchOne(
                    'SELECT tax FROM s_core_tax WHERE id = ?',
                    array($temporaryTax)
                );
@@ -753,7 +758,7 @@ class sBasket
             } elseif (intval($voucherDetails["taxconfig"])) {
                 // Fix defined tax
                 $temporaryTax = $voucherDetails["taxconfig"];
-                $getTaxRate = $this->sSYSTEM->sDB_CONNECTION->getOne(
+                $getTaxRate = $this->db->fetchOne(
                     'SELECT tax FROM s_core_tax WHERE id = ?',
                     array($temporaryTax)
                 );
@@ -806,7 +811,7 @@ class sBasket
             )
         );
 
-        return (bool) ($this->sSYSTEM->sDB_CONNECTION->Execute($sql, $params));
+        return (bool) ($this->db->query($sql, $params));
     }
 
     /**
@@ -818,20 +823,16 @@ class sBasket
      */
     public function sGetBasketIds()
     {
-        $getArticles = $this->sSYSTEM->sDB_CONNECTION->GetAll(
+        $articles = $this->db->fetchCol(
             'SELECT DISTINCT articleID
                 FROM s_order_basket
-                WHERE sessionID=?
-                AND modus=0
+                WHERE sessionID = ?
+                AND modus = 0
                 ORDER BY modus ASC, datum DESC',
             array($this->sSYSTEM->sSESSION_ID)
         );
 
-        foreach ($getArticles as $article) {
-            $articles[] = $article["articleID"];
-        }
-
-        return $articles;
+        return empty($articles) ? null : $articles;
     }
 
     /**
@@ -867,12 +868,15 @@ class sBasket
         $name = isset($this->sSYSTEM->sCONFIG['sSURCHARGENUMBER']) ? $this->sSYSTEM->sCONFIG['sSURCHARGENUMBER']: "SURCHARGE";
 
         // Delete previous inserted discounts
-        $this->sSYSTEM->sDB_CONNECTION->Execute(
-            'DELETE FROM s_order_basket WHERE sessionID=? AND ordernumber=?',
-            array($this->sSYSTEM->sSESSION_ID, $name)
+        $this->db->delete(
+            's_order_basket',
+            array(
+                'sessionID = ?' => $this->sSYSTEM->sSESSION_ID,
+                'ordernumber = ?' => $name
+            )
         );
 
-        if (!$this->sCountArticles()) {
+        if (!$this->sCountBasket()) {
             return false;
         }
 
@@ -907,33 +911,22 @@ class sBasket
 
                 $surcharge = $this->sSYSTEM->sUSERGROUPDATA["minimumordersurcharge"] * $factor;
 
-                $params = array(
-                    $this->sSYSTEM->sSESSION_ID,
-                    $this->sSYSTEM->sCONFIG["sSURCHARGENAME"],
-                    $name,
-                    $surcharge,
-                    $discountNet,
-                    $tax,
-                    $this->sSYSTEM->sCurrency["factor"]
+                $this->db->insert(
+                    's_order_basket',
+                    $params = array(
+                        'sessionID'      => $this->sSYSTEM->sSESSION_ID,
+                        'articlename'    => $this->sSYSTEM->sCONFIG["sSURCHARGENAME"],
+                        'articleID'      => 0,
+                        'ordernumber'    => $name,
+                        'quantity'       => 1,
+                        'price'          => $surcharge,
+                        'netprice'       => $discountNet,
+                        'tax_rate'       => $tax,
+                        'datum'          => new DateTime(),
+                        'modus'          => 4,
+                        'currencyFactor' => $this->sSYSTEM->sCurrency["factor"]
+                    )
                 );
-
-                $this->sSYSTEM->sDB_CONNECTION->Execute("
-                INSERT INTO s_order_basket (sessionID, articlename, articleID, ordernumber, quantity, price, netprice, tax_rate, datum, modus, currencyFactor)
-                VALUES (
-                ?,
-                ?,
-                0,
-                ?,
-                1,
-                ?,
-                ?,
-                ?,
-                now(),
-                4,
-                ?
-                )
-                ",$params);
-
             }
         }
     }
@@ -951,22 +944,22 @@ class sBasket
             if (!$this->sSYSTEM->_SESSION["sPaymentID"]) {
                 return false;
             } else {
-                $paymentInfo = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+                $paymentInfo = $this->db->fetchRow(
                     'SELECT debit_percent
                     FROM s_core_paymentmeans
-                    WHERE id=?',
+                    WHERE id = ?',
                     array($this->sSYSTEM->_SESSION["sPaymentID"])
-                );
+                ) ? : array();
             }
         } else {
-            $userData =  $this->sSYSTEM->sDB_CONNECTION->GetRow(
-                'SELECT paymentID FROM s_user WHERE id=?',
+            $userData =  $this->db->fetchRow(
+                'SELECT paymentID FROM s_user WHERE id = ?',
                 array(intval($this->sSYSTEM->_SESSION["sUserId"]))
-            );
-            $paymentInfo = $this->sSYSTEM->sDB_CONNECTION->GetRow(
-                'SELECT debit_percent FROM s_core_paymentmeans WHERE id=?',
+            ) ? : array();
+            $paymentInfo = $this->db->fetchRow(
+                'SELECT debit_percent FROM s_core_paymentmeans WHERE id = ?',
                 array($userData["paymentID"])
-            );
+            ) ? : array();
 
         }
 
@@ -974,12 +967,12 @@ class sBasket
         // Depends on payment mean
         $percent = $paymentInfo["debit_percent"];
 
-        $this->sSYSTEM->sDB_CONNECTION->Execute(
-            'DELETE FROM s_order_basket WHERE sessionID=? AND ordernumber=?',
+        $this->db->query(
+            'DELETE FROM s_order_basket WHERE sessionID = ? AND ordernumber = ?',
             array($this->sSYSTEM->sSESSION_ID,$name)
         );
 
-        if (!$this->sCountArticles()) {
+        if (!$this->sCountBasket()) {
             return false;
         }
 
@@ -1010,32 +1003,22 @@ class sBasket
                 $discountNet = round($surcharge / (100+$tax) * 100,3);
             }
 
-            $params = array(
-                $this->sSYSTEM->sSESSION_ID,
-                $surchargename,
-                $name,
-                $surcharge,
-                $discountNet,
-                $tax,
-                $this->sSYSTEM->sCurrency["factor"]
-
-            );
-
-            $this->sSYSTEM->sDB_CONNECTION->Execute("
-                INSERT INTO s_order_basket (sessionID, articlename, articleID, ordernumber, quantity,price,netprice,tax_rate, datum,modus,currencyFactor)
-                VALUES (?,
-                ?,
-                0,
-                ?,
-                1,
-                ?,
-                ?,
-                ?,
-                now(),
-                4,
-                ?
+            $this->db->insert(
+                's_order_basket',
+                array(
+                    'sessionID'      => $this->sSYSTEM->sSESSION_ID,
+                    'articlename'    => $surchargename,
+                    'articleID'      => 0,
+                    'ordernumber'    => $name,
+                    'quantity'       => 1,
+                    'price'          => $surcharge,
+                    'netprice'       => $discountNet,
+                    'tax_rate'       => $tax,
+                    'datum'          => new DateTime(),
+                    'modus'          => 4,
+                    'currencyFactor' => $this->sSYSTEM->sCurrency['factor']
                 )
-                ",$params);
+            );
         }
     }
 
@@ -1048,11 +1031,10 @@ class sBasket
      */
     public function sCountBasket()
     {
-        $getArticles = $this->sSYSTEM->sDB_CONNECTION->GetAll(
-            'SELECT id FROM s_order_basket WHERE sessionID = ? AND modus = 0',
+        return $this->db->fetchOne(
+            'SELECT COUNT(*) FROM s_order_basket WHERE modus = 0 AND sessionID = ?',
             array($this->sSYSTEM->sSESSION_ID)
         );
-        return count($getArticles);
     }
 
     /**
@@ -1071,8 +1053,9 @@ class sBasket
         $totalCount = 0;
 
         // Refresh basket prices
-        $basketData = $this->sSYSTEM->sDB_CONNECTION->GetAll(
-            'SELECT id, modus, quantity FROM s_order_basket
+        $basketData = $this->db->fetchAll(
+            'SELECT id, modus, quantity
+            FROM s_order_basket
             WHERE sessionID = ?',
             array($this->sSYSTEM->sSESSION_ID)
         );
@@ -1087,9 +1070,12 @@ class sBasket
 
         // Delete previous given discounts
         if (empty($this->sSYSTEM->sCONFIG['sPREMIUMSHIPPIUNG'])) {
-            $this->sSYSTEM->sDB_CONNECTION->Execute(
-                'DELETE FROM s_order_basket WHERE sessionID=? AND modus=3',
-                array($this->sSYSTEM->sSESSION_ID)
+            $this->db->delete(
+                's_order_basket',
+                array(
+                    'sessionID = ?' => $this->sSYSTEM->sSESSION_ID,
+                    'modus = 3'
+                )
             );
         }
         // Check for surcharges
@@ -1131,7 +1117,7 @@ class sBasket
             array('subject' => $this)
         );
 
-        $getArticles = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql, array($this->sSYSTEM->sSESSION_ID));
+        $getArticles = $this->db->fetchAll($sql, array($this->sSYSTEM->sSESSION_ID));
         $countItems = count($getArticles);
 
         if (!empty($countItems)) {
@@ -1224,21 +1210,20 @@ class sBasket
                 $netprice = $getArticles[$key]["netprice"];
 
                 if ($value["modus"] == 2) {
-                    $sql = "
-                        SELECT vouchercode,taxconfig
+                    $ticketResult = $this->db->fetchRow(
+                        'SELECT vouchercode,taxconfig
                         FROM s_emarketing_vouchers
-                        WHERE ordercode='{$getArticles[$key]["ordernumber"]}'
-                        ";
-
-                    $ticketResult = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql);
+                        WHERE ordercode = ?',
+                        array($getArticles[$key]["ordernumber"])
+                    ) ? : array();
 
                     if (!$ticketResult["vouchercode"]) {
                         // Query Voucher-Code
-                        $queryVoucher = $this->sSYSTEM->sDB_CONNECTION->GetRow("
+                        $queryVoucher = $this->db->fetchRow("
                             SELECT code FROM s_emarketing_voucher_codes
                             WHERE id = {$getArticles[$key]["articleID"]}
-                            AND cashed!=1
-                            ");
+                            AND cashed != 1
+                            ") ? : array();
                         $ticketResult["vouchercode"] = $queryVoucher["code"];
                     }
                     $this->sDeleteArticle($getArticles[$key]["id"]);
@@ -1356,10 +1341,24 @@ class sBasket
                     // Article-Image
                     if (!empty($getArticles[$key]["ob_attr1"])) {
                         $getArticles[$key]["image"] = $this->sSYSTEM->sMODULES['sArticles']
-                            ->sGetConfiguratorImage($this->sSYSTEM->sMODULES['sArticles']->sGetArticlePictures($getArticles[$key]["articleID"],false,$this->sSYSTEM->sCONFIG['sTHUMBBASKET'],false,true),$getArticles[$key]["ob_attr1"]);
+                            ->sGetConfiguratorImage(
+                                $this->sSYSTEM->sMODULES['sArticles']->sGetArticlePictures(
+                                    $getArticles[$key]["articleID"],
+                                    false,
+                                    $this->sSYSTEM->sCONFIG['sTHUMBBASKET'],
+                                    false,
+                                    true
+                                ),
+                                $getArticles[$key]["ob_attr1"]
+                            );
                     } else {
                         $getArticles[$key]["image"] = $this->sSYSTEM->sMODULES['sArticles']
-                            ->sGetArticlePictures($getArticles[$key]["articleID"],true,$this->sSYSTEM->sCONFIG['sTHUMBBASKET'],$getArticles[$key]["ordernumber"]);
+                            ->sGetArticlePictures(
+                                $getArticles[$key]["articleID"],
+                                true,
+                                $this->sSYSTEM->sCONFIG['sTHUMBBASKET'],
+                                $getArticles[$key]["ordernumber"]
+                            );
                     }
                 }
                 // Links to details, basket
@@ -1418,10 +1417,10 @@ class sBasket
             if (!empty($result["content"])) {
                 foreach ($result["content"] as $key => $value) {
                     if (!empty($value['amountWithTax'])) {
-                        $t = round(str_replace(",",".",$value['amountWithTax']),2);
+                        $t = round(str_replace(",", ".", $value['amountWithTax']), 2);
                     } else {
-                        $t = str_replace(",",".",$value["price"]);
-                        $t = floatval(round($t*$value["quantity"],2));
+                        $t = str_replace(",", ".", $value["price"]);
+                        $t = floatval(round($t * $value["quantity"], 2));
                     }
                     if (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"]) {
                         $p = floatval($this->sSYSTEM->sMODULES['sArticles']->sRound(
@@ -1476,22 +1475,21 @@ class sBasket
         }
 
         // Check if this article is already noted
-        $checkForArticle = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+        $checkForArticleId = $this->db->fetchOne(
             'SELECT id FROM s_order_notes WHERE sUniqueID = ? AND ordernumber = ?',
             array($cookieId, $articleOrderNumber)
         );
 
-        if (!$checkForArticle["id"]) {
-            $queryNewPrice = $this->sSYSTEM->sDB_CONNECTION->Execute(
-                'INSERT INTO s_order_notes (sUniqueID, userID ,articlename, articleID, ordernumber, datum)
-                VALUES (?,?,?,?,?,?)',
+        if (!$checkForArticleId) {
+            $queryNewPrice = $this->db->insert(
+                's_order_notes',
                 array(
-                    empty($cookieId) ? $this->sSYSTEM->sSESSION_ID : $cookieId,
-                    $this->sSYSTEM->_SESSION['sUserId'] ? $this->sSYSTEM->_SESSION['sUserId'] : "0" ,
-                    $articleName,
-                    $articleID,
-                    $articleOrderNumber,
-                    $datum
+                    'sUniqueID'   => empty($cookieId) ? $this->sSYSTEM->sSESSION_ID : $cookieId,
+                    'userID'      => $this->sSYSTEM->_SESSION['sUserId'] ? : "0" ,
+                    'articlename' => $articleName,
+                    'articleID'   => $articleID,
+                    'ordernumber' => $articleOrderNumber,
+                    'datum'       => $datum
                 )
             );
 
@@ -1512,15 +1510,20 @@ class sBasket
      */
     public function sGetNotes()
     {
-        $getArticles = $this->sSYSTEM->sDB_CONNECTION->GetAll('
-            SELECT n.* FROM s_order_notes n, s_articles a
-            WHERE (sUniqueID=? OR (userID!=0 AND userID=?))
-            AND a.id = n.articleID AND a.active = 1
-            ORDER BY n.datum DESC
-        ', array(
-            empty($this->sSYSTEM->_COOKIE['sUniqueID']) ? $this->sSYSTEM->sSESSION_ID : $this->sSYSTEM->_COOKIE['sUniqueID'],
-            isset($this->sSYSTEM->_SESSION['sUserId']) ? $this->sSYSTEM->_SESSION['sUserId'] : 0
-        ));
+        $getArticles = $this->db->fetchAll(
+            'SELECT n.* FROM s_order_notes n, s_articles a
+            WHERE
+              (
+                sUniqueID=?
+                OR (userID!=0 AND userID=?)
+              )
+              AND a.id = n.articleID AND a.active = 1
+            ORDER BY n.datum DESC',
+            array(
+                empty($this->sSYSTEM->_COOKIE['sUniqueID']) ? $this->sSYSTEM->sSESSION_ID : $this->sSYSTEM->_COOKIE['sUniqueID'],
+                isset($this->sSYSTEM->_SESSION['sUserId']) ? $this->sSYSTEM->_SESSION['sUserId'] : 0
+            )
+        );
 
         if (empty($getArticles)) {
             return $getArticles;
@@ -1562,7 +1565,7 @@ class sBasket
      */
     public function sCountNotes()
     {
-        $count = (int) $this->sSYSTEM->sDB_CONNECTION->GetOne('
+        $count = (int) $this->db->fetchOne('
             SELECT COUNT(*) FROM s_order_notes n, s_articles a
             WHERE (sUniqueID = ? OR (userID != 0 AND userID = ?))
             AND a.id = n.articleID AND a.active = 1
@@ -1587,10 +1590,12 @@ class sBasket
 
         if (!empty($id)) {
             $sql = "
-            DELETE FROM s_order_notes WHERE (sUniqueID=? OR (userID = ?  AND userID != 0)) AND id=?
+
             ";
-            $delete = $this->sSYSTEM->sDB_CONNECTION->Execute(
-                $sql,
+            $delete = $this->db->query(
+                'DELETE FROM s_order_notes
+                WHERE (sUniqueID = ? OR (userID = ?  AND userID != 0))
+                AND id=?',
                 array(
                     $this->sSYSTEM->_COOKIE["sUniqueID"],
                     $this->sSYSTEM->_SESSION['sUserId'],
@@ -1634,7 +1639,7 @@ class sBasket
         }
 
         // Query to get minimum surcharge
-        $queryAdditionalInfo = $this->sSYSTEM->sDB_CONNECTION->GetRow("
+        $queryAdditionalInfo = $this->db->fetchRow("
             SELECT s_articles_details.minpurchase, s_articles_details.purchasesteps,
             s_articles_details.maxpurchase, s_articles_details.purchaseunit,
             pricegroupID,pricegroupActive, s_order_basket.ordernumber, s_order_basket.articleID
@@ -1646,7 +1651,7 @@ class sBasket
             AND s_order_basket.sessionID = ?
             ",
             array($id, $this->sSYSTEM->sSESSION_ID)
-        );
+        ) ? : array();
 
         // Check if quantity matches minimum purchase
         if (!$queryAdditionalInfo["minpurchase"]) {
@@ -1682,43 +1687,61 @@ class sBasket
 
         // Price groups
         if ($queryAdditionalInfo["pricegroupActive"]) {
-            $quantitySQL = "AND s_articles_prices.from = 1 LIMIT 1";
+            $quantitySQL = 'AND s_articles_prices.from = 1 LIMIT 1';
         } else {
-            $quantitySQL = "AND s_articles_prices.from <= $quantity AND (s_articles_prices.to >= $quantity OR s_articles_prices.to=0)";
+            $quantitySQL = $this->db->quoteInto(
+                ' AND s_articles_prices.from <= ? AND (s_articles_prices.to >= ? OR s_articles_prices.to = 0)',
+                $quantity
+            );
         }
 
         // Get the order number
-        $sql = "SELECT s_articles_prices.price AS price,taxID,s_core_tax.tax AS tax,tax_rate,s_articles_details.id AS articleDetailsID, s_articles_details.articleID, s_order_basket.config, s_order_basket.ordernumber FROM s_articles_details, s_articles_prices, s_order_basket,
-        s_articles, s_core_tax
-        WHERE s_order_basket.id=$id AND s_order_basket.sessionID='".$this->sSYSTEM->sSESSION_ID."'
-        AND s_order_basket.ordernumber = s_articles_details.ordernumber
-        AND s_articles_details.id=s_articles_prices.articledetailsID
-        AND s_articles_details.articleID = s_articles.id
-        AND s_articles.taxID = s_core_tax.id
-        AND s_articles_prices.pricegroup='".$this->sSYSTEM->sUSERGROUP."'
-        $quantitySQL
-        ";
+        $sql = 'SELECT s_articles_prices.price AS price, taxID, s_core_tax.tax AS tax,
+              tax_rate, s_articles_details.id AS articleDetailsID, s_articles_details.articleID,
+              s_order_basket.config, s_order_basket.ordernumber
+            FROM s_articles_details, s_articles_prices, s_order_basket,
+              s_articles, s_core_tax
+            WHERE s_order_basket.id = ? AND s_order_basket.sessionID = ?
+            AND s_order_basket.ordernumber = s_articles_details.ordernumber
+            AND s_articles_details.id=s_articles_prices.articledetailsID
+            AND s_articles_details.articleID = s_articles.id
+            AND s_articles.taxID = s_core_tax.id
+            AND s_articles_prices.pricegroup = ?';
 
         if (!empty($queryAdditionalInfo["purchaseunit"])) {
             $queryAdditionalInfo["purchaseunit"] = 1;
         }
 
-        $queryNewPrice = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql);
+        $queryNewPrice = $this->db->fetchRow(
+            $sql.' '.$quantitySQL,
+            array(
+                $id,
+                $this->sSYSTEM->sSESSION_ID,
+                $this->sSYSTEM->sUSERGROUP
+            )
+        ) ? : array();
 
         // Load prices from default group if article prices are not defined
         if (!$queryNewPrice["price"]) {
             // In the case no price is available for this customer group, use price of default customer group
-            $sql = "SELECT s_articles_prices.price AS price,taxID,s_core_tax.tax AS tax,s_articles_details.id AS articleDetailsID, s_articles_details.articleID, s_order_basket.config, s_order_basket.ordernumber FROM s_articles_details, s_articles_prices, s_order_basket,
-            s_articles, s_core_tax
-            WHERE s_order_basket.id=$id AND s_order_basket.sessionID='".$this->sSYSTEM->sSESSION_ID."'
+            $sql = 'SELECT s_articles_prices.price AS price, taxID, s_core_tax.tax AS tax,
+              s_articles_details.id AS articleDetailsID, s_articles_details.articleID,
+              s_order_basket.config, s_order_basket.ordernumber
+            FROM s_articles_details, s_articles_prices, s_order_basket,
+              s_articles, s_core_tax
+            WHERE s_order_basket.id = ? AND s_order_basket.sessionID = ?
             AND s_order_basket.ordernumber = s_articles_details.ordernumber
             AND s_articles_details.id=s_articles_prices.articledetailsID
             AND s_articles_details.articleID = s_articles.id
             AND s_articles.taxID = s_core_tax.id
-            AND s_articles_prices.pricegroup='EK'
-            $quantitySQL
-            ";
-            $queryNewPrice = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql);
+            AND s_articles_prices.pricegroup = \'EK\'';
+            $queryNewPrice = $this->db->fetchRow(
+                $sql.' '.$quantitySQL,
+                array(
+                    $id,
+                    $this->sSYSTEM->sSESSION_ID
+                )
+            ) ? : array();
         }
 
         if (empty($queryNewPrice["price"]) && empty($queryNewPrice["config"])) {
@@ -1833,7 +1856,7 @@ class sBasket
             $this->sSYSTEM->sSESSION_ID
         );
 
-        $update = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, $params);
+        $update = $this->db->query($sql, $params);
 
         $this->sUpdateVoucher();
 
@@ -1851,12 +1874,12 @@ class sBasket
      */
     public function sCheckForESD()
     {
-        $getArticles = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+        $getArticlesId = $this->db->fetchOne(
             'SELECT id FROM s_order_basket WHERE sessionID = ? AND esdarticle = 1 LIMIT 1;',
             array($this->sSYSTEM->sSESSION_ID)
         );
 
-        return (bool) $getArticles["id"];
+        return (bool) $getArticlesId;
     }
 
     /**
@@ -1873,9 +1896,9 @@ class sBasket
             return false;
         }
 
-        $this->sSYSTEM->sDB_CONNECTION->Execute(
-            'DELETE FROM s_order_basket WHERE sessionID = ?',
-            array($this->sSYSTEM->sSESSION_ID)
+        $this->db->delete(
+            's_order_basket',
+            array('sessionID = ?' >= $this->sSYSTEM->sSESSION_ID)
         );
     }
 
@@ -1891,19 +1914,21 @@ class sBasket
     public function sDeleteArticle($id)
     {
         $id = (int) $id;
-        $modus = $this->sSYSTEM->sDB_CONNECTION->GetOne(
-            'SELECT `modus` FROM `s_order_basket` WHERE `id`=?',
+        $modus = $this->db->fetchOne(
+            'SELECT modus FROM s_order_basket WHERE id = ?',
             array($id)
         );
 
         if ($id && $id != "voucher") {
-            $sql = 'DELETE FROM s_order_basket WHERE sessionID=? AND id=?';
-            $delete = $this->sSYSTEM->sDB_CONNECTION->Execute(
-                $sql,
-                array($this->sSYSTEM->sSESSION_ID, $id)
+            $delete = $this->db->delete(
+                's_order_basket',
+                array(
+                    'sessionID = ?' => $this->sSYSTEM->sSESSION_ID,
+                    'id = ?' => $id
+                )
             );
             if (!$delete) {
-                $this->sSYSTEM->E_CORE_WARNING("Basket Delete ##01","Could not delete item ($sql)");
+                $this->sSYSTEM->E_CORE_WARNING("Basket Delete ##01","Could not delete item ($id)");
             }
             if (empty($modus)) {
                 $this->sUpdateVoucher();
@@ -1947,8 +1972,8 @@ class sBasket
 
         $sql = "
             SELECT s_articles.id AS articleID, name AS articleName, taxID,
-            additionaltext, s_articles_details.shippingfree, laststock, instock,
-            s_articles_details.id as articledetailsID, ordernumber
+              additionaltext, s_articles_details.shippingfree, laststock, instock,
+              s_articles_details.id as articledetailsID, ordernumber
             FROM s_articles, s_articles_details
             WHERE s_articles_details.ordernumber = ?
             AND s_articles_details.articleID = s_articles.id
@@ -1956,10 +1981,13 @@ class sBasket
             AND (
                 SELECT articleID
                 FROM s_articles_avoid_customergroups
-                WHERE articleID = s_articles.id AND customergroupID = ".$this->sSYSTEM->sUSERGROUPDATA["id"]."
+                WHERE articleID = s_articles.id AND customergroupID = ?
             ) IS NULL
         ";
-        $getArticle = $this->sSYSTEM->sDB_CONNECTION->GetRow($sql, array($id));
+        $getArticle = $this->db->fetchRow(
+            $sql,
+            array($id, $this->sSYSTEM->sUSERGROUPDATA["id"])
+        ) ? : array();
 
         $getName = $this->sSYSTEM->sMODULES["sArticles"]->sGetArticleNameByOrderNumber(
             $getArticle["ordernumber"],
@@ -1975,16 +2003,18 @@ class sBasket
             return false;
         } else {
             // Check if article is already in basket
-            $chkBasketForArticle = $this->sSYSTEM->sDB_CONNECTION->GetRow(
+            $chkBasketForArticle = $this->db->fetchRow(
                 'SELECT id, quantity
                 FROM s_order_basket
-                WHERE articleID=? AND sessionID=? AND ordernumber = ?',
+                WHERE articleID = ?
+                AND sessionID = ?
+                AND ordernumber = ?',
                 array(
                     $getArticle["articleID"],
                     $this->sSYSTEM->sSESSION_ID,
                     $getArticle["ordernumber"]
                 )
-            );
+            ) ? : array();
 
             // Shopware 3.5.0 / sth / laststock - instock check
             if (!empty($chkBasketForArticle["id"])) {
@@ -2014,31 +2044,28 @@ class sBasket
                 return $chkBasketForArticle["id"];
             } else {
                 // Read price from default-price-table
-                $sql = "SELECT price, s_core_tax.tax AS tax
-                FROM s_articles_prices, s_core_tax
-                WHERE s_articles_prices.pricegroup = ?
-                AND s_articles_prices.articledetailsID = ?
-                AND s_core_tax.id=?
-                ";
-                $getPrice = $this->sSYSTEM->sDB_CONNECTION->GetRow(
-                    $sql,
+                $getPrice = $this->db->fetchRow(
+                    'SELECT price, s_core_tax.tax AS tax
+                    FROM s_articles_prices, s_core_tax
+                    WHERE s_articles_prices.pricegroup = ?
+                    AND s_articles_prices.articledetailsID = ?
+                    AND s_core_tax.id = ?',
                     array(
                         $this->sSYSTEM->sUSERGROUP,
                         $getArticle["articledetailsID"],
                         $getArticle["taxID"]
                     )
-                );
+                ) ? : array();
 
                 if (empty($getPrice["price"])) {
-                    $sql = "SELECT price,s_core_tax.tax AS tax FROM s_articles_prices,s_core_tax WHERE
-                    s_articles_prices.pricegroup='EK'
-                    AND s_articles_prices.articledetailsID=?
-                    AND s_core_tax.id=?
-                    ";
-                    $getPrice = $this->sSYSTEM->sDB_CONNECTION->GetRow(
-                        $sql,
+                    $getPrice = $this->db->fetchRow(
+                        'SELECT price, s_core_tax.tax AS tax
+                        FROM s_articles_prices, s_core_tax
+                        WHERE s_articles_prices.pricegroup = \'EK\'
+                        AND s_articles_prices.articledetailsID = ?
+                        AND s_core_tax.id = ?',
                         array($getArticle["articledetailsID"], $getArticle["taxID"])
-                    );
+                    ) ? : array();
                 }
 
 
@@ -2088,23 +2115,16 @@ class sBasket
 
                     // Check if article is an esd-article
                     // - add flag to basket
-                    $sqlGetEsd = "
-                    SELECT s_articles_esd.id AS id, serials
-                    FROM s_articles_esd, s_articles_details
-                    WHERE s_articles_esd.articleID = ?
-                    AND s_articles_esd.articledetailsID = s_articles_details.id
-                    AND s_articles_details.ordernumber = ?
-                    ";
-                    $getEsd = $this->sSYSTEM->sDB_CONNECTION->GetRow(
-                        $sqlGetEsd,
+                    $getEsd = $this->db->fetchRow(
+                        'SELECT s_articles_esd.id AS id, serials
+                        FROM s_articles_esd, s_articles_details
+                        WHERE s_articles_esd.articleID = ?
+                        AND s_articles_esd.articledetailsID = s_articles_details.id
+                        AND s_articles_details.ordernumber = ?',
                         array($getArticle["articleID"], $getArticle["ordernumber"])
                     );
 
-                    if ($getEsd["id"]) {
-                        $sEsd = "1";
-                    } else {
-                        $sEsd = "0";
-                    }
+                    $sEsd = ($getEsd && $getEsd["id"]) ? '1' : '0';
 
                     $quantity = (int) $quantity;
                     $sql = "
@@ -2144,18 +2164,20 @@ class sBasket
                         )
                     );
 
-                    $rs = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, $params);
+                    $rs = $this->db->query($sql, $params);
 
                     if (!$rs) {
                         $this->sSYSTEM->E_CORE_WARNING ("BASKET-INSERT #02", "SQL-Error".$sql);
                     }
-                    $insertId = $this->sSYSTEM->sDB_CONNECTION->Insert_ID();
+                    $insertId = $this->db->lastInsertId();
 
-                    $sql = "
-                        INSERT INTO s_order_basket_attributes (basketID, attribute1)
-                        VALUES (". $insertId .",
-                        ".$this->sSYSTEM->sDB_CONNECTION->qstr(implode($pictureRelations,"$$")).")";
-                    $this->sSYSTEM->sDB_CONNECTION->Execute($sql);
+                    $this->db->insert(
+                        's_order_basket_attributes',
+                        array(
+                            'basketID' => $insertId,
+                            'attribute1' => ''
+                        )
+                    );
 
                     $this->sUpdateArticle($insertId, $quantity);
 

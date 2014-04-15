@@ -415,7 +415,7 @@ class sAdmin
             $user = array();
         }
 
-        $basket = $this->basketModule->sBASKET;
+        $basket = $this->basketModule->sGetBasket();
 
         // Check for risk management
         // If rules match, reset to default payment mean if this payment mean was not
@@ -505,7 +505,7 @@ class sAdmin
      */
     public function sGetPaymentMeans()
     {
-        $basket = $this->basketModule->sBASKET;
+        $basket = $this->basketModule->sGetBasket();
 
         $user = $this->sGetUserData();
 
