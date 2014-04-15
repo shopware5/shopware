@@ -243,7 +243,9 @@ class sBasketTest extends PHPUnit_Framework_TestCase
 
         // Add two articles to the basket
         $randomArticleOne = $this->db->fetchRow(
-            'SELECT * FROM s_articles_details detail
+            'SELECT detail.articleID AS articleID, detail.ordernumber AS ordernumber,
+              article.supplierID AS supplierID
+            FROM s_articles_details detail
             LEFT JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
@@ -251,7 +253,9 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             ORDER BY RAND() LIMIT 1'
         );
         $randomArticleTwo = $this->db->fetchRow(
-            'SELECT * FROM s_articles_details detail
+            'SELECT detail.articleID AS articleID, detail.ordernumber AS ordernumber,
+              article.supplierID AS supplierID
+            FROM s_articles_details detail
             LEFT JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
@@ -505,7 +509,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
 
         // Change the premium article to a premium, succeed
         $this->module->sSYSTEM->_GET['sAddPremium'] = $premiumArticleTwo['ordernumber'];
-        $this->assertInternalType('object', $this->module->sInsertPremium());
+        $this->assertGreaterThan(0, $this->module->sInsertPremium());
         $this->assertEquals(
             3,
             $this->db->fetchOne(
@@ -1376,9 +1380,15 @@ class sBasketTest extends PHPUnit_Framework_TestCase
                 'articleID' => $randomArticles[1]['articleID'],
             )
         );
-        $this->assertEquals(
-            array($randomArticles[0]['articleID'], $randomArticles[1]['articleID']),
-            $this->module->sGetBasketIds()
+
+        $basketIds = $this->module->sGetBasketIds();
+        $this->assertContains(
+            $randomArticles[0]['articleID'],
+            $basketIds
+        );
+        $this->assertContains(
+            $randomArticles[1]['articleID'],
+            $basketIds
         );
 
         // Housekeeping
@@ -1805,7 +1815,8 @@ class sBasketTest extends PHPUnit_Framework_TestCase
 
         // Add another article to the basket
         $randomArticleTwo = $this->db->fetchRow(
-            'SELECT * FROM s_articles_details detail
+            'SELECT detail.articleID, article.name, detail.ordernumber
+            FROM s_articles_details detail
             LEFT JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
@@ -1917,7 +1928,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // Update from 1 to 2, we should get a more expensive cart
         $this->assertNull($this->module->sUpdateArticle($basketId, 2));
         $twoAmount = $this->module->sGetAmount();
-        $this->assertGreaterThan($oneAmount['totalAmount'], $twoAmount['totalAmount']);
+        $this->assertGreaterThanOrEqual($oneAmount['totalAmount'], $twoAmount['totalAmount']);
         $this->assertLessThanOrEqual(2*$oneAmount['totalAmount'], $twoAmount['totalAmount']);
 
         // Housekeeping
@@ -2010,7 +2021,10 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             'SELECT detail.* FROM s_articles_details detail
             LEFT JOIN s_articles article
               ON article.id = detail.articleID
+            LEFT JOIN s_articles_avoid_customergroups avoid
+              ON avoid.articleID = article.id
             WHERE detail.active = 1
+            AND avoid.articleID IS NULL
             ORDER BY RAND() LIMIT 1'
         );
         $this->module->sAddArticle($randomArticle['ordernumber'], 1);
@@ -2037,7 +2051,10 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             'SELECT detail.* FROM s_articles_details detail
             LEFT JOIN s_articles article
               ON article.id = detail.articleID
+            LEFT JOIN s_articles_avoid_customergroups avoid
+              ON avoid.articleID = article.id
             WHERE detail.active = 1
+            AND avoid.articleID IS NULL
             ORDER BY RAND() LIMIT 1'
         );
         $idOne = $this->module->sAddArticle($randomArticle['ordernumber'], 1);
