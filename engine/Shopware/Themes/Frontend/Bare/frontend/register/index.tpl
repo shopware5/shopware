@@ -17,7 +17,7 @@
 {block name='frontend_index_breadcrumb'}<div class="clear"></div>{/block}
 
 {block name="frontend_index_content"}
-	<div class="grid_16 register" id="center">
+	<div class="register--content panel is--border wide">
 
 		{block name='frontend_register_index_dealer_register'}
 			{* Included for compatibility reasons *}
