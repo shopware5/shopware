@@ -113,6 +113,20 @@
         });
     };
 
+    Plugin.prototype.changeTab = function(idx, scroll) {
+        var me = this;
+
+        scroll = scroll || false;
+
+        // The index starting at 0, ```nth-child``` is starting at 1
+        idx += 1;
+
+        me.$nav.find('.navigation--entry:nth-child(' + idx + ') .navigation--link').trigger(clickEvt + '.' + pluginName);
+        $('body').animate({
+            'scrollTop': me.$nav.offset().top - 50
+        }, 500);
+    };
+
     /**
      * Destroys the initialized plugin completely, so all event listeners will
      * be removed and the plugin data, which is stored in-memory referenced to

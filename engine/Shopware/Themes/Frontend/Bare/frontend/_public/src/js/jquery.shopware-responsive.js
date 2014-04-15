@@ -83,6 +83,21 @@ $(function() {
         $(this).parents('form').submit();
     });
 
+    // Change the active tab to the customer reviews, if the url param sAction === rating is set.
+    if($('.is--ctl-detail').length) {
+        var plugin = $('.additional-info--tabs').data('plugin_tabContent');
+
+        $('.product--rating-link').on('click', function(e) {
+            e.preventDefault();
+            plugin.changeTab(1, true);
+        });
+
+        var param = decodeURI((RegExp('sAction' + '=' + '(.+?)(&|$)').exec(location.search) || [,null])[1]);
+        if(param === 'rating') {
+            plugin.changeTab(1, false);
+        }
+    }
+
     // Debug mode is enabled
     if($('.debug--panel').length) {
         var $debugPanel = $('.debug--panel'),
