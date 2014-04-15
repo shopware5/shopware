@@ -217,6 +217,11 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
         $campaigns = $builder->getQuery()->getScalarResult();
 
         foreach ($campaigns as &$campaign) {
+            $campaign['hideOnSitemap'] = !$this->filterCampaign(
+                $campaign['emotions_validFrom'],
+                $campaign['emotions_validTo']
+            );
+
             $campaign = array_merge(
                 $campaign,
                 $this->getSitemapArray(
@@ -236,6 +241,28 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
         );
 
         return $landingPages;
+    }
+
+    /**
+     * Helper function to filter emotion campaigns
+     * Returns false, if the campaign starts later or is outdated
+     * @param null $from
+     * @param null $to
+     * @return bool
+     */
+    private function filterCampaign($from = null, $to = null)
+    {
+        $now = new DateTime();
+
+        if (isset($from) && $now < $from) {
+            return false;
+        }
+
+        if (isset($to) && $now > $to) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

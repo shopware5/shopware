@@ -685,11 +685,13 @@ class Repository extends ModelRepository
     public function getCategoryQueryBuilder()
     {
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('category', 'attribute', 'children', 'childrenAttribute'))
+        $builder->select(array('category', 'attribute', 'media', 'children', 'childrenAttribute', 'childrenMedia'))
             ->from('Shopware\Models\Category\Category', 'category')
             ->leftJoin('category.attribute', 'attribute')
+            ->leftJoin('category.media', 'media')
             ->leftJoin('category.children', 'children')
-            ->leftJoin('children.attribute', 'childrenAttribute');
+            ->leftJoin('children.attribute', 'childrenAttribute')
+            ->leftJoin('children.media', 'childrenMedia');
 
         return $builder;
     }
