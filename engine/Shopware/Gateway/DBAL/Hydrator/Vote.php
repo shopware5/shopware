@@ -1,6 +1,6 @@
 <?php
 
-namespace Shopware\Hydrator\DBAL;
+namespace Shopware\Gateway\DBAL\Hydrator;
 use Shopware\Struct as Struct;
 
 class Vote

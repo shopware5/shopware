@@ -8,7 +8,7 @@ use Shopware\Struct as Struct;
 class Tax implements \Shopware\Gateway\Tax
 {
     /**
-     * @var \Shopware\Hydrator\DBAL\Tax
+     * @var \Shopware\Gateway\DBAL\Hydrator\Tax
      */
     private $taxHydrator;
 
@@ -19,11 +19,11 @@ class Tax implements \Shopware\Gateway\Tax
 
     /**
      * @param \Shopware\Components\Model\ModelManager $entityManager
-     * @param \Shopware\Hydrator\DBAL\Tax $taxHydrator
+     * @param \Shopware\Gateway\DBAL\Hydrator\Tax $taxHydrator
      */
     function __construct(
         ModelManager $entityManager,
-        \Shopware\Hydrator\DBAL\Tax $taxHydrator
+        \Shopware\Gateway\DBAL\Hydrator\Tax $taxHydrator
     )
     {
         $this->entityManager = $entityManager;

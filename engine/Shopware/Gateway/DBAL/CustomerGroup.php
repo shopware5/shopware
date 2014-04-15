@@ -3,12 +3,12 @@
 namespace Shopware\Gateway\DBAL;
 
 use Shopware\Components\Model\ModelManager;
-use Shopware\Hydrator\DBAL as Hydrator;
+use Shopware\Gateway\DBAL\Hydrator as Hydrator;
 
 class CustomerGroup implements \Shopware\Gateway\CustomerGroup
 {
     /**
-     * @var \Shopware\Hydrator\DBAL\CustomerGroup
+     * @var \Shopware\Gateway\DBAL\Hydrator\CustomerGroup
      */
     private $customerGroupHydrator;
 

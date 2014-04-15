@@ -3,7 +3,7 @@
 namespace Shopware\Gateway\DBAL;
 
 use Shopware\Components\Model\ModelManager;
-use Shopware\Hydrator\DBAL as Hydrator;
+use Shopware\Gateway\DBAL\Hydrator as Hydrator;
 use Shopware\Struct;
 
 class Property implements \Shopware\Gateway\Property
@@ -14,7 +14,7 @@ class Property implements \Shopware\Gateway\Property
     private $entityManager;
 
     /**
-     * @var \Shopware\Hydrator\DBAL\Property
+     * @var \Shopware\Gateway\DBAL\Hydrator\Property
      */
     private $propertyHydrator;
 

@@ -4,7 +4,7 @@ namespace Shopware\Gateway\DBAL;
 
 
 use Shopware\Components\Model\ModelManager;
-use Shopware\Hydrator\DBAL as Hydrator;
+use Shopware\Gateway\DBAL\Hydrator as Hydrator;
 use Shopware\Struct;
 
 /**
@@ -15,7 +15,7 @@ use Shopware\Struct;
 class Product implements \Shopware\Gateway\Product
 {
     /**
-     * @var \Shopware\Hydrator\DBAL\Product
+     * @var \Shopware\Gateway\DBAL\Hydrator\Product
      */
     private $hydrator;
 

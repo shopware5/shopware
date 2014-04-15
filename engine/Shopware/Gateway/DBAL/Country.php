@@ -23,11 +23,11 @@ class Country implements \Shopware\Gateway\Country
 
     /**
      * @param ModelManager $entityManager
-     * @param \Shopware\Hydrator\DBAL\Country $countryHydrator
+     * @param \Shopware\Gateway\DBAL\Hydrator\Country $countryHydrator
      */
     function __construct(
         ModelManager $entityManager,
-        \Shopware\Hydrator\DBAL\Country $countryHydrator
+        \Shopware\Gateway\DBAL\Hydrator\Country $countryHydrator
     )
     {
         $this->entityManager = $entityManager;

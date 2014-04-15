@@ -5,7 +5,7 @@ namespace Shopware\Struct;
 /**
  * @package Shopware\Struct
  */
-class Context
+class Context extends Extendable
 {
     /**
      * @var Tax[]
