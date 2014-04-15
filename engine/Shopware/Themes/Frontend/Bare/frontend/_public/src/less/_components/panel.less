@@ -527,6 +527,7 @@ See the documentation of the child elements for additional information.
 
 .js--mobile-tab-panel {
     .tab--content { display: none; }
+
     .navigation--entry {
         .unitize-margin(0, 0, 6, 0);
         display: block;
@@ -537,6 +538,7 @@ See the documentation of the child elements for additional information.
             border-top: 0 none;
         }
     }
+
     .navigation--link {
         .unitize-padding(5, 10, 5, 10);
         text-align: left;
@@ -552,8 +554,7 @@ See the documentation of the child elements for additional information.
             font-weight: bold;
         }
 
-        &.is--active { top: 0; }
-
+        &.is--active { top: 0; cursor: default }
         &.is--active::after {
             content: '-';
         }
