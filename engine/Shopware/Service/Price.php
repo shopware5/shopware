@@ -28,23 +28,26 @@ class Price
      * The prices are ordered ascending by the Struct\Price::from property.
      *
      * @param Struct\ProductMini $product
-     * @param \Shopware\Struct\GlobalState $state
+     * @param \Shopware\Struct\Context $context
      * @return Struct\Price[]
      */
-    public function getProductPrices(Struct\ProductMini $product, Struct\GlobalState $state)
+    public function getProductPrices(Struct\ProductMini $product, Struct\Context $context)
     {
-        $customerGroup = $state->getCurrentCustomerGroup();
-
+        $customerGroup = $context->getCurrentCustomerGroup();
         $prices = $this->priceGateway->getProductPrices(
             $product, $customerGroup
         );
 
         if (empty($prices)) {
-            $customerGroup =  $state->getFallbackCustomerGroup();
+            $customerGroup =  $context->getFallbackCustomerGroup();
 
             $prices = $this->priceGateway->getProductPrices(
                 $product, $customerGroup
             );
+        }
+
+        if (empty($prices)) {
+            //...
         }
 
         foreach($prices as $price) {
@@ -72,24 +75,24 @@ class Price
      *  - The unit of SW2000.2 is set into the Struct\Price::unit property
      *
      * @param Struct\ProductMini $product
-     * @param \Shopware\Struct\GlobalState $state
+     * @param \Shopware\Struct\Context $context
      * @return Struct\Price
      */
-    public function getCheapestPrice(Struct\ProductMini $product, Struct\GlobalState $state)
+    public function getCheapestPrice(Struct\ProductMini $product, Struct\Context $context)
     {
-        $customerGroup = $state->getCurrentCustomerGroup();
+        $customerGroup = $context->getCurrentCustomerGroup();
         $cheapestPrice = $this->priceGateway->getCheapestPrice(
             $product, $customerGroup
         );
 
         if ($cheapestPrice == null) {
-            $customerGroup = $state->getFallbackCustomerGroup();
+            $customerGroup = $context->getFallbackCustomerGroup();
             $cheapestPrice = $this->priceGateway->getCheapestPrice(
                 $product, $customerGroup
             );
         }
 
-        $this->calculatePriceGroupPrice($product, $cheapestPrice, $state);
+        $this->calculatePriceGroupPrice($product, $cheapestPrice, $context);
 
         $cheapestPrice->setCustomerGroup($customerGroup);
 
@@ -103,12 +106,12 @@ class Price
      *
      * @param Struct\ProductMini $product
      * @param Struct\Price $cheapestPrice
-     * @param Struct\GlobalState $state
+     * @param Struct\Context $context
      */
     private function calculatePriceGroupPrice(
         Struct\ProductMini $product,
         Struct\Price $cheapestPrice,
-        Struct\GlobalState $state
+        Struct\Context $context
     ) {
 
         //check for price group discounts.
@@ -119,12 +122,14 @@ class Price
         //selects the highest price group discount, for the passed quantity.
         $discount = $this->priceGateway->getPriceGroupDiscount(
             $product->getPriceGroup(),
-            $state->getCurrentCustomerGroup(),
+            $context->getCurrentCustomerGroup(),
             $cheapestPrice->getUnit()->getMinPurchase()
         );
 
         //check if the discount is numeric, otherwise use a 0 for calculation.
-        if (!is_numeric($discount)) $discount = 0;
+        if (!is_numeric($discount)) {
+            $discount = 0;
+        }
 
         $cheapestPrice->setPrice(
             $cheapestPrice->getPrice() / 100 * (100 - $discount)
@@ -140,21 +145,25 @@ class Price
      * set in the product struct.
      *
      * @param Struct\ProductMini $product
-     * @param Struct\GlobalState $state
+     * @param Struct\Context $context
      */
-    public function calculateProduct(Struct\ProductMini $product, Struct\GlobalState $state)
+    public function calculateProduct(Struct\ProductMini $product, Struct\Context $context)
     {
+        $tax = $context->getTaxRule($product->getTax()->getId());
+
         foreach($product->getPrices() as $price) {
             $this->calculatePriceStruct(
                 $price,
-                $state
+                $tax,
+                $context
             );
         }
 
         if ($product->getCheapestPrice()) {
             $this->calculatePriceStruct(
                 $product->getCheapestPrice(),
-                $state
+                $tax,
+                $context
             );
         }
 
@@ -169,22 +178,24 @@ class Price
      * All price structs will be calculated through this function.
      *
      * @param Struct\Price $price
-     * @param Struct\GlobalState $state
+     * @param \Shopware\Struct\Tax $tax
+     * @param Struct\Context $context
      */
     private function calculatePriceStruct(
         Struct\Price $price,
-        Struct\GlobalState $state
+        Struct\Tax $tax,
+        Struct\Context $context
     ) {
 
         //calculates the normal price of the struct.
         $price->setCalculatedPrice(
-            $this->calculatePrice($price->getPrice(), $state)
+            $this->calculatePrice($price->getPrice(), $tax, $context)
         );
 
         //check if a pseudo price is defined and calculates it too.
         if ($price->getPseudoPrice()) {
             $price->setCalculatedPseudoPrice(
-                $this->calculatePrice($price->getPseudoPrice(), $state)
+                $this->calculatePrice($price->getPseudoPrice(), $tax, $context)
             );
         }
 
@@ -206,10 +217,11 @@ class Price
      * and the pseudo price of a price struct.
      *
      * @param $price
-     * @param Struct\GlobalState $state
+     * @param \Shopware\Struct\Tax $tax
+     * @param Struct\Context $context
      * @return float
      */
-    private function calculatePrice($price, Struct\GlobalState $state)
+    private function calculatePrice($price, Struct\Tax $tax, Struct\Context $context)
     {
         /**
          * Important:
@@ -220,7 +232,7 @@ class Price
          * but the discounts and gross calculation should be used from
          * the current customer group!
          */
-        $customerGroup = $state->getCurrentCustomerGroup();
+        $customerGroup = $context->getCurrentCustomerGroup();
 
         /**
          * Basket discount calculation:
@@ -239,7 +251,7 @@ class Price
          * If the customer is currently in a sub shop with another currency, like dollar,
          * we have to calculate the the price for the other currency.
          */
-        $price = $price * $state->getCurrency()->getFactor();
+        $price = $price * $context->getCurrency()->getFactor();
 
 
         //check if the customer group should see gross prices.
@@ -252,7 +264,7 @@ class Price
          *
          * This line contains the gross price calculation within the store front.
          *
-         * The passed $state object contains a calculated Struct\Tax object which
+         * The passed $context object contains a calculated Struct\Tax object which
          * defines which tax rules should be used for the tax calculation.
          *
          * The tax rules can be defined individual for each customer group and
@@ -264,7 +276,7 @@ class Price
          *  - But in area Europe, in country Germany, in state Bayern, the tax value are set to 20%
          *  - But in area Europe, in country Germany, in state Berlin, the tax value are set to 18%
          */
-        $price = $price * (100 + $state->getTax()->getTax()) / 100;
+        $price = $price * (100 + $tax->getTax()) / 100;
 
         return $price;
     }

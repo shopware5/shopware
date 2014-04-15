@@ -26,11 +26,15 @@ class Translation
      */
     public function translateProduct(Struct\ProductMini $product, Struct\Shop $shop)
     {
-
-        $this->translationGateway->translateProduct(
+        $translation = $this->translationGateway->translateProduct(
             $product,
             $shop
         );
+
+        if ($translation) {
+            // do translate
+        }
+
 
         if ($product->getUnit()) {
             $this->translationGateway->translateUnit(

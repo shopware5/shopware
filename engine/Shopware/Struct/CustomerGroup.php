@@ -5,7 +5,7 @@ namespace Shopware\Struct;
 /**
  * @package Shopware\Struct
  */
-class CustomerGroup
+class CustomerGroup extends Extendable
 {
     /**
      * Unique identifier

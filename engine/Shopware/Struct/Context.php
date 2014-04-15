@@ -5,16 +5,12 @@ namespace Shopware\Struct;
 /**
  * @package Shopware\Struct
  */
-class GlobalState
+class Context
 {
     /**
-     * Contains the current tax rule for the global state.
-     * The tax rules are defined per customer group based on the
-     * area, country and state.
-     *
-     * @var Tax
+     * @var Tax[]
      */
-    private $tax;
+    private $taxRules;
 
     /**
      * Contains the current customer group for the store front.
@@ -59,21 +55,19 @@ class GlobalState
     private $shop;
 
     /**
-     *
-     * @param \Shopware\Struct\Tax $tax
+     * @var Area
      */
-    public function setTax($tax)
-    {
-        $this->tax = $tax;
-    }
+    private $area;
 
     /**
-     * @return \Shopware\Struct\Tax
+     * @var Country
      */
-    public function getTax()
-    {
-        return $this->tax;
-    }
+    private $country;
+
+    /**
+     * @var State
+     */
+    private $state;
 
     /**
      * @param \Shopware\Struct\Currency $currency
@@ -146,4 +140,75 @@ class GlobalState
         $this->shop = $shop;
         return $this;
     }
+
+    /**
+     * @return \Shopware\Struct\Area
+     */
+    public function getArea()
+    {
+        return $this->area;
+    }
+
+    /**
+     * @param \Shopware\Struct\Area $area
+     */
+    public function setArea($area)
+    {
+        $this->area = $area;
+    }
+
+    /**
+     * @return \Shopware\Struct\Country
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param \Shopware\Struct\Country $country
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+    }
+
+    /**
+     * @return \Shopware\Struct\State
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param \Shopware\Struct\State $state
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+    }
+
+    /**
+     * @return \Shopware\Struct\Tax[]
+     */
+    public function getTaxRules()
+    {
+        return $this->taxRules;
+    }
+
+    /**
+     * @param \Shopware\Struct\Tax[] $taxRules
+     */
+    public function setTaxRules($taxRules)
+    {
+        $this->taxRules = $taxRules;
+    }
+
+    public function getTaxRule($taxId)
+    {
+        $key = 'tax_' . $taxId;
+        return $this->taxRules[$key];
+    }
+
 }

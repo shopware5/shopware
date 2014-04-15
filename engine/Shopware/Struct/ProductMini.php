@@ -239,6 +239,8 @@ class ProductMini extends Extendable
      */
     private $states = array();
 
+
+
     /**
      * Adds a new product state.
      *
@@ -740,6 +742,4 @@ class ProductMini extends Extendable
     {
         $this->priceGroup = $priceGroup;
     }
-
-
 }

@@ -26,7 +26,18 @@
             <argument type="service" id="config" />
         </service>
 
-        <service id="global_state_service" class="Shopware\Service\GlobalState" />
+        <service id="global_state_service" class="Shopware\Service\GlobalState">
+            <argument type="service" id="service_container" />
+            <argument type="service" id="customer_group_gateway" />
+            <argument type="service" id="tax_gateway" />
+            <argument type="service" id="country_gateway" />
+        </service>
+
+
+        <service id="tax_service" class="Shopware\Service\Tax" >
+            <argument type="service" id="tax_gateway" />
+        </service>
+
 
         <service id="translation_service" class="Shopware\Service\Translation" >
             <argument type="service" id="translation_gateway" />
@@ -44,14 +55,16 @@
         <!-- Global shopware gateway definitions -->
         <!-- This gateways are used in the shopware core. Shopware uses as default the *_orm gateways to select data -->
 
+        <service id="search_gateway" alias="search_gateway_dbal" />
         <service id="product_gateway" alias="product_gateway_dbal" />
         <service id="price_gateway" alias="price_gateway_dbal" />
         <service id="media_gateway" alias="media_gateway_dbal" />
         <service id="translation_gateway" alias="translation_gateway_dbal" />
         <service id="property_gateway" alias="property_gateway_dbal" />
-        <service id="search_gateway" alias="search_gateway_dbal" />
         <service id="vote_gateway" alias="vote_gateway_dbal" />
-
+        <service id="customer_group_gateway" alias="customer_group_gateway_dbal" />
+        <service id="tax_gateway" alias="tax_gateway_dbal" />
+        <service id="country_gateway" alias="country_gateway_dbal" />
 
         <service id="search_gateway_dbal" class="Shopware\Gateway\DBAL\Search">
             <argument type="service" id="models" />
@@ -94,14 +107,20 @@
             <argument type="service" id="vote_hydrator_dbal" />
         </service>
 
-
         <service id="property_gateway_dbal" class="Shopware\Gateway\DBAL\Property">
             <argument type="service" id="models" />
             <argument type="service" id="property_hydrator_dbal" />
         </service>
 
+        <service id="tax_gateway_dbal" class="Shopware\Gateway\DBAL\Tax">
+            <argument type="service" id="models" />
+            <argument type="service" id="tax_hydrator_dbal" />
+        </service>
 
-
+        <service id="country_gateway_dbal" class="Shopware\Gateway\DBAL\Country">
+            <argument type="service" id="models" />
+            <argument type="service" id="country_hydrator_dbal" />
+        </service>
 
         <!-- Shopware hydrator definitions -->
 
@@ -148,5 +167,10 @@
         <service id="property_hydrator_dbal" class="Shopware\Hydrator\DBAL\Property" >
             <argument type="service" id="attribute_hydrator_dbal" />
         </service>
+
+        <service id="country_hydrator_dbal" class="Shopware\Hydrator\DBAL\Country" >
+            <argument type="service" id="attribute_hydrator_dbal" />
+        </service>
+
     </services>
 </container>
