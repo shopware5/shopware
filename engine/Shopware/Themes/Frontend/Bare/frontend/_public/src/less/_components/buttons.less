@@ -6,17 +6,33 @@
 	.border-radius(4px);
 	.transition();
 	.appearance();
+        .unitize(16, 16, font-size);
 	display: inline-block;
-	font-weight: normal;
+        position: relative;
+	font-weight: bold;
 	text-decoration: none;
-	text-align: center;
-    line-height: normal;
+	text-align: left;
+        line-height: normal;
 	cursor: pointer;
 	border: 1px solid @borderColor;
 	color: @primaryTextColor;
 
     [class^="icon--"] {
-      .unitize-margin(0, 5, 0, 0);
+      .unitize-margin(0, 16, 0, 0);
+
+      &.is--right {
+        display: block;
+        position: absolute;
+        top: 50%;
+        .unitize-height(16);
+        .unitize-margin(-8, 0, 0, 0);
+        .unitize(16, 16, line-height);
+        .unitize(16, 16, right);
+      }
+
+      &.is--small {
+        .unitize(10, 16, font-size);
+      }
     }
 
 	&:active {

@@ -1,0 +1,74 @@
+/* A collapse box for filter groups etc.
+
+```
+<h2 class="collapse--header>The Title</h2>
+<div class="collapse--content">The Content</div>
+```
+*/
+.collapse--header {
+    .unitize-padding(10, 20);
+    .unitize-margin(10, 0, 0, 0);
+    .unitize(16, 16, font-size);
+    .unitize(16, 16, line-height);
+    .linear-gradient(#ffffff, #f7f8fa);
+    .border-radius(3px);
+    .box-shadow(0 1px 1px 0 rgba(236, 238, 241, 0.8));
+    display: block;
+    position: relative;
+    z-index: 11;
+    border: 1px solid @lightDarkBorderColor;
+    cursor: pointer;
+
+    .collapse--toggler {
+        .unitize-height(16);
+        .unitize(10, 16, top);
+        .unitize(20, 16, right);
+        .unitize(6, 16, font-size);
+        .unitize(16, 16, line-height);
+        position: absolute;
+        font-weight: normal;
+        font-family: 'shopware';
+
+        &:before {
+            content: "\e612";
+        }
+    }
+
+    &:hover {
+        color: @primaryColor;
+    }
+
+    &.is--active {
+        .secondary-gradient();
+        .box-shadow(0 1px 3px 0 rgba(95, 114, 133, 0.5));
+        color: #fff;
+        font-weight: bold;
+        border-width: 0 0 1px 0;
+        border-style: solid;
+        border-color: @darkBorderColor;
+
+        .collapse--toggler {
+            &:before {
+                content: "\e610";
+            }
+        }
+    }
+}
+
+.collapse--content {
+    .unitize-padding(5, 0, 0, 0);
+    .unitize(-5, 16, top);
+    .border-radius-multi(0, 0, 3px, 3px);
+    .box-shadow(0 1px 1px 0 rgba(236, 238, 241, 0.8));
+    display: none;
+    position: relative;
+    z-index: 10;
+    background: #fff;
+    border-width: 0 1px 1px 1px;
+    border-style: solid;
+    border-color: @lightDarkBorderColor;
+
+    &.is--active {
+        display: block;
+    }
+}

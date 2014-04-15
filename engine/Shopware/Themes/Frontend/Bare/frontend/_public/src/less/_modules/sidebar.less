@@ -1,0 +1,106 @@
+/** Main navigation of the storefront */
+body > .sidebar-main {
+    .unitize-variable(300, 16);
+    .unitize-width(300, 16);
+    .translate(~"-@{emValue}rem", 0);
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    border-right: 1px solid rgba(red(@lightTextColor), green(@lightTextColor), blue(@lightTextColor), 50%);
+
+    .logo--trusted-shops {
+        display: none;
+    }
+}
+
+@media screen and (min-width: @tabletViewportWidth) {
+    .sidebar-main {
+        display: none
+    }
+}
+
+@media screen and (min-width: @desktopViewportWidth) {
+
+    .sidebar-main {
+        .unitize-padding(45, 0, 45, 45);
+        .unitize-margin(0, 0);
+        display: block;
+        width: 20%;
+
+        .navigation--smartphone,
+        .filter--container {
+            display: none;
+        }
+    }
+
+    .navigation--headline {
+        .unitize-margin(20, 10, 10, 10);
+    }
+
+    .sidebar--navigation {
+        .unitize-margin(0, 0, 10, 0);
+        .border-radius(0);
+
+        .navigation--entry {
+            .unitize-padding(0, 0);
+            .unitize-margin(0, 10);
+
+            &.is--active {
+                .unitize-margin(0, 0);
+            }
+        }
+
+        .navigation--link {
+            .unitize-padding(8, 4);
+            display: block;
+
+            &:hover {
+                color: @primaryColor;
+            }
+
+            &.is--active {
+                .unitize-padding(8, 10);
+                .primary-gradient();
+                color: #fff;
+                font-weight: bold;
+                text-shadow: 0 1px 1px @primaryContrastColor;
+                border-bottom: 1px solid @primaryContrastColor;
+            }
+        }
+
+        .is--level1 {
+            .unitize-margin(5, 0);
+            border: 0 none;
+
+            .navigation--entry {
+                border: 0 none;
+
+                &.is--active {
+                    .unitize-margin(0, 10);
+                }
+            }
+
+            .navigation--link {
+                .unitize-padding(6, 4);
+                .unitize(13, 16, font-size);
+
+                &::before {
+                    .unitize(11, 16, font-size);
+                    .unitize-margin(0, 10, 0, 0);
+                    font-family: 'shopware';
+                    content: "\e60f";
+                }
+
+                &.is--active {
+                    .unitize-padding(6, 4);
+                    font-weight: normal;
+                    text-shadow: none;
+                    color: @primaryColor;
+                    background: transparent;
+                    border: 0 none;
+                }
+            }
+        }
+    }
+}

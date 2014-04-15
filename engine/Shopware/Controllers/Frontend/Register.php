@@ -387,12 +387,18 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $result = $checkData;
         }
 
+        $requirePhone = (bool) (Shopware()->Config()->get('showPhoneNumberField')
+            && Shopware()->Config()->get('requirePhoneField'));
+
+        $requireBirthday = (bool) (Shopware()->Config()->get('showBirthdayField')
+            && Shopware()->Config()->get('requireBirthdayField'));
+
         $rules = array(
             'customer_type'=>array('required'=>0),
             'salutation'=>array('required'=>1),
             'firstname'=>array('required'=>1),
             'lastname'=>array('required'=>1),
-            'phone'=>array('required'=> intval(Shopware()->Config()->get('requirePhoneField'))),
+            'phone'=>array('required'=> $requirePhone),
             'fax'=>array('required'=>0),
             'text1'=>array('required'=>0),
             'text2'=>array('required'=>0),
@@ -401,9 +407,9 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             'text5'=>array('required'=>0),
             'text6'=>array('required'=>0),
             'sValidation'=>array('required'=>0),
-            'birthyear'=>array('required'=>0),
-            'birthmonth'=>array('required'=>0),
-            'birthday'=>array('required'=>0),
+            'birthyear'=>array('required'=> $requireBirthday),
+            'birthmonth'=>array('required'=> $requireBirthday),
+            'birthday'=>array('required'=> $requireBirthday),
             'dpacheckbox'=>array('required'=>(Shopware()->Config()->get('ACTDPRCHECK'))?1:0)
         );
         $rules = Enlight()->Events()->filter('Shopware_Controllers_Frontend_Register_validatePersonal_FilterRules', $rules, array('subject'=>$this));
