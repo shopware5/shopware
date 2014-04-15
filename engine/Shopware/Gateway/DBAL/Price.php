@@ -54,10 +54,20 @@ class Price implements \Shopware\Gateway\Price
         Struct\ProductMini $product,
         Struct\CustomerGroup $customerGroup
     ) {
-        $query = $this->getPriceQuery()
-            ->orderBy('prices.from', 'ASC')
+        $query = $this->entityManager->getDBALQueryBuilder();
+
+        $query->select($this->getPriceFields());
+        $query->addSelect($this->getTableFields('s_articles_prices_attributes', 'attribute'));
+
+        $query->from('s_articles_prices', 'prices')
+            ->leftJoin('prices', 's_articles_prices_attributes', 'attribute', 'attribute.priceID = prices.id');
+
+        $query->where('prices.articledetailsID = :product')
+            ->andWhere('prices.pricegroup = :customerGroup')
             ->setParameter(':product', $product->getVariantId())
             ->setParameter(':customerGroup', $customerGroup->getKey());
+
+        $query->orderBy('prices.from', 'ASC');
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -66,13 +76,7 @@ class Price implements \Shopware\Gateway\Price
 
         $prices = array();
 
-        foreach($data as &$row) {
-            $row['attribute'] = $this->getTableRow(
-                's_articles_prices_attributes',
-                $row['id'],
-                'priceID'
-            );
-
+        foreach ($data as $row) {
             $price = $this->priceHydrator->hydrate($row);
 
             $prices[] = $price;
@@ -109,9 +113,19 @@ class Price implements \Shopware\Gateway\Price
     ) {
         $query = $this->entityManager->getDBALQueryBuilder();
 
+        $query->select($this->getPriceFields())
+            ->addSelect($this->getUnitFields())
+            ->addSelect($this->getTableFields('s_articles_prices_attributes', 'attribute'))
+            ->addSelect(array(
+                '(prices.price * variant.minpurchase) as calculated',
+                '(prices.pseudoprice * variant.minpurchase) as calculatedPseudo'
+            ));
+
         $query->from('s_articles_prices', 'prices')
             ->innerJoin('prices', 's_articles_details', 'variant', 'variant.id = prices.articledetailsID')
-            ->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID');
+            ->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID')
+            ->leftJoin('variant', 's_core_units', 'unit', 'unit.id = variant.unitID')
+            ->leftJoin('prices', 's_articles_prices_attributes', 'attribute', 'attribute.priceID = prices.id');
 
         $query->andWhere('prices.articleID = :product')
             ->andWhere('prices.pricegroup = :customerGroup')
@@ -125,12 +139,6 @@ class Price implements \Shopware\Gateway\Price
             $query->andWhere('variant.instock >= variant.minpurchase');
         }
 
-        $query->select(array(
-            'prices.*',
-            '(prices.price * variant.minpurchase) as calculated',
-            '(prices.pseudoprice * variant.minpurchase) as calculatedPseudo'
-        ));
-
         $query->orderBy('calculated', 'ASC')
             ->setFirstResult(0)
             ->setMaxResults(1);
@@ -142,24 +150,6 @@ class Price implements \Shopware\Gateway\Price
 
         $data['price'] = $data['calculated'];
         $data['pseudoprice'] = $data['calculatedPseudo'];
-
-        $data['detail'] = $this->getTableRow(
-            's_articles_details',
-            $data['articledetailsID']
-        );
-
-        if (isset($data['detail']['unitID'])) {
-            $data['detail']['unit'] = $this->getTableRow(
-                's_core_units',
-                $data['detail']['unitID']
-            );
-        }
-
-        $data['attribute'] = $this->getTableRow(
-            's_articles_prices_attributes',
-            $data['id'],
-            'priceID'
-        );
 
         return $this->priceHydrator->hydrateCheapestPrice($data);
     }
@@ -174,7 +164,8 @@ class Price implements \Shopware\Gateway\Price
         Struct\PriceGroup $priceGroup,
         Struct\CustomerGroup $customerGroup,
         $quantity
-    ) {
+    )
+    {
         $query = $this->entityManager->getDBALQueryBuilder();
         $query->select(array('discounts.discount'))
             ->from('s_core_pricegroups_discounts', 'discounts')
@@ -195,38 +186,52 @@ class Price implements \Shopware\Gateway\Price
         return $statement->fetch(\PDO::FETCH_COLUMN);
     }
 
-    /**
-     * @return \Doctrine\DBAL\Query\QueryBuilder
-     */
-    private function getPriceQuery()
+    private function getUnitFields()
     {
-        $query = $this->entityManager->getDBALQueryBuilder();
-        $query->select(array('*'))
-            ->from('s_articles_prices', 'prices')
-            ->where('prices.articledetailsID = :product')
-            ->andWhere('prices.pricegroup = :customerGroup');
-
-        return $query;
+        return array(
+            'unit.id    as __unit_id',
+            'unit.description    as __unit_description',
+            'unit.unit    as __unit_unit',
+            'variant.packunit as __unit_packunit',
+            'variant.purchaseunit as __unit_purchaseunit',
+            'variant.referenceunit as __unit_referenceunit',
+            'variant.purchasesteps as __unit_purchasesteps',
+            'variant.minpurchase as __unit_minpurchase',
+            'variant.maxpurchase as __unit_maxpurchase',
+        );
     }
 
-    /**
-     * Helper function which selects a whole table by a specify identifier.
-     * @param $table
-     * @param $id
-     * @param string $column
-     * @return mixed
-     */
-    private function getTableRow($table, $id, $column = 'id')
+
+    private function getPriceFields()
     {
-        $query = $this->entityManager->getDBALQueryBuilder();
-        $query->select(array('*'))
-            ->from($table, 'entity')
-            ->where('entity.' . $column .' = :id')
-            ->setParameter(':id', $id);
-
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
-        $statement = $query->execute();
-
-        return $statement->fetch(\PDO::FETCH_ASSOC);
+        return array(
+            'prices.id',
+            'prices.pricegroup',
+            'prices.from',
+            'prices.to',
+            'prices.articleID',
+            'prices.articledetailsID',
+            'prices.price',
+            'prices.pseudoprice',
+            'prices.baseprice',
+            'prices.percent'
+        );
     }
+
+
+    private function getTableFields($table, $alias)
+    {
+        $schemaManager = $this->entityManager->getConnection()->getSchemaManager();
+
+        $tableColumns = $schemaManager->listTableColumns($table);
+        $columns = array();
+
+        foreach ($tableColumns as $column) {
+            $columns[] = $alias . '.' . $column->getName() . ' as __' . $alias . '_' . $column->getName();
+        }
+
+        return $columns;
+    }
+
+
 }

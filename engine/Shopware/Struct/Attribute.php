@@ -42,6 +42,9 @@ class Attribute
                 __CLASS__
             ));
         }
+        if (!$value instanceof \Serializable) {
+            //...
+        }
 
         $this->storage[$name] = $value;
     }

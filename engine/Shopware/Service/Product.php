@@ -77,10 +77,10 @@ class Product
      * To get the whole product data you can use the `get` function.
      *
      * @param string $number
-     * @param \Shopware\Struct\GlobalState $state
+     * @param \Shopware\Struct\Context $context
      * @return Struct\ProductMini
      */
-    public function getMini($number, Struct\GlobalState $state)
+    public function getMini($number, Struct\Context $context)
     {
         $product = $this->productGateway->getMini($number);
 
@@ -89,20 +89,22 @@ class Product
         }
 
         $product->setPrices(
-            $this->priceService->getProductPrices($product, $state)
+            $this->priceService->getProductPrices($product, $context)
         );
 
         $product->setCheapestPrice(
-            $this->priceService->getCheapestPrice($product, $state)
+            $this->priceService->getCheapestPrice($product, $context)
         );
 
         $product->setCover(
             $this->mediaService->getProductCover($product)
         );
 
-        $this->priceService->calculateProduct($product, $state);
+        $this->priceService->calculateProduct($product, $context);
 
-        $this->translationService->translateProduct($product, $state->getShop());
+        if (!$product->hasState(Struct\ProductMini::STATE_TRANSLATED)) {
+            $this->translationService->translateProduct($product, $context->getShop());
+        }
 
         return $product;
     }

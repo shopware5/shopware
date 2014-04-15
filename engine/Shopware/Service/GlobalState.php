@@ -2,6 +2,10 @@
 
 namespace Shopware\Service;
 
+use Shopware\Components\DependencyInjection\Container;
+use Shopware\Gateway;
+use Shopware\Models\Shop\Currency;
+use Shopware\Models\Shop\Shop;
 use Shopware\Struct as Struct;
 
 /**
@@ -9,57 +13,134 @@ use Shopware\Struct as Struct;
  */
 class GlobalState
 {
-    private $globalStateHydrator;
+    private $container;
 
-    private $taxHydrator;
+    private $customerGroupGateway;
 
-    private $customerGroupHydrator;
+    private $taxGateway;
 
-    private $currencyHydrator;
-
-    private $session;
+    private $context = null;
 
     function __construct(
-        $currencyHydrator,
-        $customerGroupHydrator,
-        $globalStateHydrator,
-        $taxHydrator,
-        $session
+        Container $container,
+        Gateway\CustomerGroup $customerGroupGateway,
+        Gateway\Tax $taxGateway,
+        Gateway\Country $countryGateway
     ) {
-        $this->currencyHydrator = $currencyHydrator;
-        $this->customerGroupHydrator = $customerGroupHydrator;
-        $this->globalStateHydrator = $globalStateHydrator;
-        $this->taxHydrator = $taxHydrator;
-        $this->session = $session;
+        $this->container = $container;
+        $this->taxGateway = $taxGateway;
+        $this->countryGateway = $countryGateway;
+        $this->customerGroupGateway = $customerGroupGateway;
+    }
+
+    public function initialize()
+    {
+        $session = $this->container->get('session');
+
+        /**@var $shop Shop*/
+        $shop = $this->container->get('shop');
+
+        $fallback = $shop->getCustomerGroup()->getKey();
+
+        if ($session->offsetExists('sUserGroup') && $session->offsetGet('sUserGroup')) {
+            $key = $session->offsetGet('sUserGroup');
+        } else {
+            $key = $fallback;
+        }
+
+        $context = new Struct\Context();
+
+        $context->setShop(
+            $this->createShopStruct($shop)
+        );
+
+        $context->setCurrentCustomerGroup(
+            $this->customerGroupGateway->getByKey($key)
+        );
+
+        $context->setFallbackCustomerGroup(
+            $this->customerGroupGateway->getByKey($fallback)
+        );
+
+        $area = null;
+        if ($session->offsetGet('sArea')) {
+            $area = $this->countryGateway->getArea(
+                $session->offsetGet('sArea')
+            );
+        }
+
+        $country = null;
+        if ($session->offsetGet('sCountry')) {
+            $country = $this->countryGateway->getCountry(
+                $session->offsetGet('sCountry')
+            );
+        }
+
+        $state = null;
+        if ($session->offsetGet('sState')) {
+            $state = $this->countryGateway->getState(
+                $session->offsetGet('sState')
+            );
+        }
+
+        $rules = $this->taxGateway->getRules(
+            $context->getCurrentCustomerGroup(),
+            $area,
+            $country,
+            $state
+        );
+
+        $context->setArea($area);
+
+        $context->setCountry($country);
+
+        $context->setState($state);
+
+        $context->setTaxRules($rules);
+
+        $context->setCurrency(
+            $this->createCurrencyStruct($shop->getCurrency())
+        );
+
+        $this->context = $context;
     }
 
     /**
-     * @return Struct\GlobalState
+     * @return Struct\Context
      */
     public function get()
     {
-        $state = new Struct\GlobalState();
+        if (!$this->context) {
+            $this->initialize();
+        }
 
-        $state->setShop(new Struct\Shop());
-        $state->getShop()->setId(1);
+        return $this->context;
+    }
 
-        $state->setCurrentCustomerGroup(
-            Shopware()->Container()->get('customer_group_gateway_dbal')->getByKey('EK')
-        );
+    private function createCurrencyStruct(Currency $currency)
+    {
+        $struct = new Struct\Currency();
 
-        $state->setFallbackCustomerGroup(
-            Shopware()->Container()->get('customer_group_gateway_dbal')->getByKey('EK')
-        );
+        $struct->setId($currency->getId());
+        $struct->setName($currency->getName());
+        $struct->setCurrency($currency->getCurrency());
+        $struct->setFactor($currency->getFactor());
+        $struct->setSymbol($currency->getSymbol());
 
-        $tax = Shopware()->Container()->get('tax_hydrator_dbal')->hydrate(
-            Shopware()->Db()->fetchRow("SELECT * FROM s_core_tax WHERE id = 1")
-        );
+        return $struct;
+    }
 
-        $state->setTax($tax);
-
-        $state->setCurrency(new Struct\Currency());
-        $state->getCurrency()->setFactor(1);
-
-        return $state;
+    private function createShopStruct(Shop $shop)
+    {
+        $struct = new Struct\Shop();
+        $struct->setId($shop->getId());
+        $struct->setName($shop->getName());
+        $struct->setHost($shop->getHost());
+        $struct->setPath($shop->getBasePath());
+        $struct->setUrl($shop->getBaseUrl());
+        $struct->setSecure($shop->getSecure());
+        $struct->setSecureHost($shop->getSecureHost());
+        $struct->setSecurePath($struct->getSecurePath());
+        return $struct;
     }
 }

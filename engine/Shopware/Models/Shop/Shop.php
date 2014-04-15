@@ -700,6 +700,8 @@ class Shop extends ModelEntity
             }
         }
 
+        Shopware()->Container()->get('global_state_service')->initialize();
+
         if ($this->getTemplate() !== null) {
             /** @var $template \Enlight_Template_Manager */
             $templateManager = $bootstrap->getResource('Template');

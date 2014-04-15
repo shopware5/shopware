@@ -29,11 +29,11 @@ class Property
 
     /**
      * @param \Shopware\Struct\ProductMini $product
-     * @param \Shopware\Struct\GlobalState $state
+     * @param \Shopware\Struct\Context $context
      *
      * @return array|\Shopware\Struct\PropertySet
      */
-    public function getProductProperty(Struct\ProductMini $product, Struct\GlobalState $state)
+    public function getProductProperty(Struct\ProductMini $product, Struct\Context $context)
     {
         $set = $this->propertyGateway->getProductSet($product);
 
@@ -41,7 +41,7 @@ class Property
             return null;
         }
 
-        $this->translationService->translatePropertySet($set, $state->getShop());
+        $this->translationService->translatePropertySet($set, $context->getShop());
 
         return $set;
     }

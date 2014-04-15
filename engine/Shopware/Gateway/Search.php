@@ -2,11 +2,14 @@
 
 namespace Shopware\Gateway;
 
+use Shopware\Gateway\Search\Criteria;
+use Shopware\Gateway\Search\Result;
+
 interface Search
 {
     /**
-     * @param Condition $condition
+     * @param Search\Criteria $condition
      * @return Result
      */
-    public function search(Condition $condition);
+    public function search(Criteria $condition);
 }
