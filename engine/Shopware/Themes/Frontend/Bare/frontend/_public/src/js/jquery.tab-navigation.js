@@ -77,7 +77,7 @@
             event.preventDefault();
 
             // Hide all content boxes
-            me.$nav.find('li > [class^="content--"]').hide().removeClass(me.opts.activeCls);
+            me.$nav.find('li > div[class^="content--"]').hide().removeClass(me.opts.activeCls);
             me.$nav.find('.navigation--link').removeClass(me.opts.activeCls);
 
             // Activate the selected content
@@ -103,7 +103,7 @@
             event.preventDefault();
 
             // Hide all content boxes
-            me.$content.children('[class^="content--"]').hide().removeClass(me.opts.activeCls);
+            me.$content.children('div[class^="content--"]').hide().removeClass(me.opts.activeCls);
             me.$nav.find('.navigation--link').removeClass(me.opts.activeCls);
 
             // Activate the selected content
@@ -121,6 +121,11 @@
         idx += 1;
 
         me.$nav.find('.navigation--entry:nth-child(' + idx + ') .navigation--link').trigger(clickEvt + '.' + pluginName);
+
+        if(!scroll) {
+            return;
+        }
+
         $('body').animate({
             'scrollTop': me.$nav.offset().top - 50
         }, 500);
