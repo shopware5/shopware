@@ -51,9 +51,11 @@ input[type="email"] {
 	line-height: 1;
 
 	.arrow {
+		.user-select(none);
 		.unitize-width(34);
 		.unitize(6, 16, font-size);
 		.unitize(32, 16, line-height);
+		cursor: pointer;
 		display: block;
 		position: absolute;
 		top: 0;
@@ -74,6 +76,8 @@ input[type="email"] {
 		color: @primaryTextColor;
 		background: transparent;
 		border: 0 none;
+		width: 100%;
+		cursor: pointer;
 	}
 
 	option {

@@ -61,6 +61,23 @@ $(function() {
         $this.load(requestURL);
     });
 
+    // Select box replacement
+    $('.field--select .arrow').on('click', function(event) {
+        event.preventDefault();
+
+        var el =  $(this).parent('div').children('select')[0];
+
+        // Workaround to open the select box drop down
+        if(document.createEvent) {
+            var e = document.createEvent('MouseEvents');
+
+            e.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            el.dispatchEvent(e);
+        } else {
+            el.fireEvent("onmousedown");
+        }
+    });
+
     // Auto submitting form
     $('select[data-auto-submit-form="true"]').on('change', function() {
         $(this).parents('form').submit();
