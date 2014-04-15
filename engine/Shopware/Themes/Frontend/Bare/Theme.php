@@ -56,6 +56,9 @@ class Theme extends \Shopware\Components\Theme
 		'src/js/jquery.slide-panel.js',
 		'src/js/jquery.tab-navigation.js',
 		'src/js/jquery.image-slider.js',
+		'src/js/jquery.collapse-panel.js',
+		'src/js/jquery.collapse-text.js',
+        'src/js/jquery.auto-submit.js',
 		'src/js/jquery.shopware-responsive.js'
 	);
 
