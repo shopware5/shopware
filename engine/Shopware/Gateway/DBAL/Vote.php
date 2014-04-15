@@ -3,14 +3,14 @@
 namespace Shopware\Gateway\DBAL;
 
 use Shopware\Components\Model\ModelManager;
-use Shopware\Hydrator\DBAL as Hydrator;
+use Shopware\Gateway\DBAL\Hydrator as Hydrator;
 use Shopware\Struct as Struct;
 
 class Vote implements \Shopware\Gateway\Vote
 {
 
     /**
-     * @var \Shopware\Hydrator\DBAL\Vote
+     * @var \Shopware\Gateway\DBAL\Hydrator\Vote
      */
     private $voteHydrator;
 

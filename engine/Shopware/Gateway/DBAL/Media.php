@@ -4,13 +4,13 @@ namespace Shopware\Gateway\DBAL;
 
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Thumbnail\Manager;
-use Shopware\Hydrator\DBAL as Hydrator;
+use Shopware\Gateway\DBAL\Hydrator as Hydrator;
 use Shopware\Struct\ProductMini;
 
 class Media implements \Shopware\Gateway\Media
 {
     /**
-     * @var \Shopware\Hydrator\DBAL\Media
+     * @var \Shopware\Gateway\DBAL\Hydrator\Media
      */
     private $mediaHydrator;
 

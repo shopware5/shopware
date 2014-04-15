@@ -126,32 +126,32 @@
 
 
 
-        <service id="product_hydrator_dbal" class="Shopware\Hydrator\DBAL\Product" >
+        <service id="product_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Product" >
             <argument type="service" id="attribute_hydrator_dbal" />
             <argument type="service" id="manufacturer_hydrator_dbal" />
             <argument type="service" id="tax_hydrator_dbal" />
             <argument type="service" id="unit_hydrator_dbal" />
         </service>
 
-        <service id="price_hydrator_dbal" class="Shopware\Hydrator\DBAL\Price" >
+        <service id="price_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Price" >
             <argument type="service" id="customer_group_hydrator_dbal" />
             <argument type="service" id="unit_hydrator_dbal" />
             <argument type="service" id="attribute_hydrator_dbal" />
         </service>
 
-        <service id="manufacturer_hydrator_dbal" class="Shopware\Hydrator\DBAL\Manufacturer">
+        <service id="manufacturer_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Manufacturer">
             <argument type="service" id="attribute_hydrator_dbal" />
         </service>
 
-        <service id="media_hydrator_dbal" class="Shopware\Hydrator\DBAL\Media">
+        <service id="media_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Media">
             <argument type="service" id="attribute_hydrator_dbal" />
         </service>
 
-        <service id="customer_group_hydrator_dbal" class="Shopware\Hydrator\DBAL\CustomerGroup">
+        <service id="customer_group_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\CustomerGroup">
             <argument type="service" id="attribute_hydrator_dbal" />
         </service>
 
-        <service id="translation_hydrator_dbal" class="Shopware\Hydrator\DBAL\Translation" >
+        <service id="translation_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Translation" >
             <argument type="service" id="product_hydrator_dbal" />
             <argument type="service" id="unit_hydrator_dbal" />
             <argument type="service" id="manufacturer_hydrator_dbal" />
@@ -159,16 +159,16 @@
         </service>
 
 
-        <service id="attribute_hydrator_dbal" class="Shopware\Hydrator\DBAL\Attribute" />
-        <service id="tax_hydrator_dbal" class="Shopware\Hydrator\DBAL\Tax" />
-        <service id="unit_hydrator_dbal" class="Shopware\Hydrator\DBAL\Unit" />
-        <service id="vote_hydrator_dbal" class="Shopware\Hydrator\DBAL\Vote" />
+        <service id="attribute_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Attribute" />
+        <service id="tax_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Tax" />
+        <service id="unit_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Unit" />
+        <service id="vote_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Vote" />
 
-        <service id="property_hydrator_dbal" class="Shopware\Hydrator\DBAL\Property" >
+        <service id="property_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Property" >
             <argument type="service" id="attribute_hydrator_dbal" />
         </service>
 
-        <service id="country_hydrator_dbal" class="Shopware\Hydrator\DBAL\Country" >
+        <service id="country_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Country" >
             <argument type="service" id="attribute_hydrator_dbal" />
         </service>
 

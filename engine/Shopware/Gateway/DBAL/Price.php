@@ -4,7 +4,7 @@ namespace Shopware\Gateway\DBAL;
 
 use Shopware\Components\Model\ModelManager;
 use Shopware\Struct as Struct;
-use Shopware\Hydrator\DBAL as Hydrator;
+use Shopware\Gateway\DBAL\Hydrator as Hydrator;
 
 class Price implements \Shopware\Gateway\Price
 {
@@ -14,7 +14,7 @@ class Price implements \Shopware\Gateway\Price
     private $entityManager;
 
     /**
-     * @var \Shopware\Hydrator\DBAL\Price
+     * @var \Shopware\Gateway\DBAL\Hydrator\Price
      */
     private $priceHydrator;
 

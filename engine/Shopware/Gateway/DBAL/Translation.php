@@ -4,7 +4,7 @@ namespace Shopware\Gateway\DBAL;
 
 use Shopware\Components\Model\ModelManager;
 use Shopware\Struct;
-use Shopware\Hydrator\DBAL as Hydrator;
+use Shopware\Gateway\DBAL\Hydrator as Hydrator;
 
 class Translation implements \Shopware\Gateway\Translation
 {
