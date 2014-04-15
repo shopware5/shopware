@@ -357,6 +357,10 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
         $campaigns = $builder->getQuery()->getScalarResult();
 
         foreach ($campaigns as $campaign) {
+            if (!$this->filterCampaign($campaign['emotions_validFrom'], $campaign['emotions_validTo'])) {
+                continue;
+            }
+
             $this->printCategoryUrl(
                 $this->getSitemapArray(
                     $campaign['emotions_id'],
@@ -367,6 +371,28 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
                 )
             );
         }
+    }
+
+    /**
+     * Helper function to filter emotion campaigns
+     * Returns false, if the campaign starts later or is outdated
+     * @param null $from
+     * @param null $to
+     * @return bool
+     */
+    private function filterCampaign($from = null, $to = null)
+    {
+        $now = new DateTime();
+
+        if (isset($from) && $now < $from) {
+            return false;
+        }
+
+        if (isset($to) && $now > $to) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
