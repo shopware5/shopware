@@ -78,7 +78,7 @@
 							{block name='frontend_detail_data_price_default'}
 							<strong class="price--content content--default">
                                 <meta itemprop="price" content="{$sArticle.price|replace:',':'.'}">
-								{if $sArticle.priceStartingFrom && !$sArticle.liveshoppingData}{s name='ListingBoxArticleStartsAt'}{/s} {/if}{$sArticle.price|currency}{s name="Star"}*{/s}
+								{if $sArticle.priceStartingFrom && !$sArticle.liveshoppingData}{s name='ListingBoxArticleStartsAt' namespace="frontend/listing/box_article"}{/s} {/if}{$sArticle.price|currency}{s name="Star" namespace="frontend/listing/box_article"}*{/s}
 							</strong>
 							{/block}
 						{/if}
