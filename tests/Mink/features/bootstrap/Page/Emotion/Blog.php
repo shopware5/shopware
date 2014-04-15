@@ -1,4 +1,5 @@
 <?php
+namespace Emotion;
 
 use Behat\Mink\Driver\SahiDriver;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
@@ -20,7 +21,7 @@ class Blog extends Page
     public function countArticles($count = 0)
     {
         $message = 'There are %d blog articles (should be %d)';
-        $this->getPage('Helper')->countElements('div.blogbox', $message, $count);
+        \Helper::countElements('div.blogbox', $message, $count, $this);
     }
 
 }

@@ -1,4 +1,5 @@
 <?php
+namespace Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page, Behat\Mink\Exception\ExpectationException,
     Behat\Mink\Exception\ResponseTextException,
@@ -55,7 +56,7 @@ class Note extends Page
      * Helper class to click one of the action buttons of the article on the given position
      * @param integer $position
      * @param string $class
-     * @throws Behat\Mink\Exception\ResponseTextException
+     * @throws \\Mink\Exception\ResponseTextException
      */
     private function clickButton($position, $class)
     {
@@ -83,7 +84,7 @@ class Note extends Page
         $this->open();
 
         $message = 'There are %d articles on the note (should be %d)';
-        $articles = $this->getPage('Helper')->countElements('div.table_row', $message, $count);
+        $articles = \Helper::countElements('div.table_row', $message, $count, $this);
 
         return $articles;
     }
@@ -91,7 +92,7 @@ class Note extends Page
     /**
      * Compares the complete note with the given list of articles
      * @param $articles
-     * @throws Behat\Mink\Exception\ResponseTextException
+     * @throws \Behat\Mink\Exception\ResponseTextException
      */
     public function checkList($articles)
     {
@@ -137,7 +138,7 @@ class Note extends Page
                 }
 
                 if (!empty($article['price'])) {
-                    $check[] = $this->getPage('Helper')->toFloat(
+                    $check[] = \Helper::toFloat(
                         array($elements['strong-price']->getText(), $article['price'])
                     );
                 }
@@ -152,7 +153,7 @@ class Note extends Page
                     $check[] = array($elements['a-detail']->getAttribute('href'), $article['link']);
                 }
 
-                $result = $this->getPage('Helper')->checkArray($check);
+                $result = \Helper::checkArray($check);
                 if ($result === true) {
                     unset($articlesOnNote[$articleOnNoteKey]);
                     break;

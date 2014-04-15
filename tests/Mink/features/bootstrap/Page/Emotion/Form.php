@@ -1,4 +1,5 @@
 <?php
+namespace Emotion;
 
 use Behat\Mink\Driver\SahiDriver;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
@@ -12,11 +13,19 @@ class Form extends Page
      */
     protected $path = '?sViewport=ticket&sFid={formId}';
 
+    public $cssLocator = array(
+        'captchaPlaceholder' => 'div.captcha-placeholder',
+        'captchaImage' => 'div.captcha-placeholder img',
+        'captchaHidden' => 'div.captcha-placeholder input'
+    );
+
     public function checkCaptcha()
     {
-        $captchaPlaceholder = $this->find('css', 'div.captcha-placeholder')->getAttribute('data-src');
-        $captchaImage = $this->find('css', 'div.captcha-placeholder img')->getAttribute('src');
-        $captchaHidden = $this->find('css', 'div.captcha-placeholder input')->getValue();
+        $element = \Helper::findElements($this);
+
+        $captchaPlaceholder = $element['captchaPlaceholder']->getAttribute('data-src');
+        $captchaImage = $element['captchaImage']->getAttribute('src');
+        $captchaHidden = $element['captchaHidden']->getValue();
 
         if (($captchaPlaceholder !== '/shopware/widgets/Captcha/refreshCaptcha')
             || (strpos($captchaImage, 'data:image/png;base64') === false)
@@ -26,5 +35,4 @@ class Form extends Page
             throw new ResponseTextException($message, $this->getSession());
         }
     }
-
 }

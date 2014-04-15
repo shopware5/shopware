@@ -3,9 +3,12 @@ default:
         features: features
         bootstrap: %behat.paths.features%/bootstrap
     filters:
-        tags: "~@javascript"
+        tags: "~@noEmotion&&~@javascript"
     extensions:
-        SensioLabs\Behat\PageObjectExtension\Extension: ~
+        SensioLabs\Behat\PageObjectExtension\Extension:
+            namespaces:
+                page: Emotion
+                element: Emotion
         Shopware\Behat\ShopwareExtension\Extension: ~
         Behat\MinkExtension\Extension:
             ## defined in buildscript
@@ -15,3 +18,30 @@ default:
             sahi: ~
             goutte: ~
             browser_name: firefox
+    context:
+        parameters:
+            template: "emotion_orange"
+
+emotion:
+    filters:
+        tags: "~@noEmotion&&~@javascript"
+    extensions:
+        SensioLabs\Behat\PageObjectExtension\Extension:
+            namespaces:
+                page: Emotion
+                element: Emotion
+    context:
+        parameters:
+            template: "emotion_orange"
+
+responsive:
+    filters:
+        tags: "~@noResponsive&&~@javascript"
+    extensions:
+        SensioLabs\Behat\PageObjectExtension\Extension:
+            namespaces:
+                page: Responsive
+                element: Responsive
+    context:
+        parameters:
+            template: "Responsive"

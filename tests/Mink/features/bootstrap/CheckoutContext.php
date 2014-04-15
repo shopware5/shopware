@@ -116,4 +116,15 @@ class CheckoutContext extends SubContext
     {
         $this->getPage('CheckoutConfirm')->proceedToCheckout();
     }
+
+    /**
+     * @Given /^my finished order should look like this:$/
+     */
+    public function myFinishedOrderShouldLookLikeThis(TableNode $positions)
+    {
+        $orderNumber = $this->getPage('CheckoutConfirm')->getOrderNumber();
+        $values = $positions->getHash();
+
+        $this->getPage('Account')->checkOrder($orderNumber, $values);
+    }
 }
