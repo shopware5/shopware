@@ -2,8 +2,7 @@
     "use strict";
 
     var pluginName = 'tabContent',
-        isTouch = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0)),
-        clickEvt = (isTouch ? (window.navigator.msPointerEnabled ? 'MSPointerDown': 'touchstart') : 'click'),
+        clickEvt = 'click',
         defaults = {
             /** @string activeCls Class which will be added when the drop down was triggered */
             activeCls: 'is--active'
