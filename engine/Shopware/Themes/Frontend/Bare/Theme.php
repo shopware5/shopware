@@ -42,7 +42,6 @@ class Theme extends \Shopware\Components\Theme
 	 */
 	protected $javascript = array(
 		'vendors/jquery/dist/jquery.min.js',
-		'vendors/handlebars/handlebars.min.js',
 		'vendors/picturefill/picturefill.js',
 		'vendors/jquery.transit/jquery.transit.js',
 		'vendors/jquery.event.move/js/jquery.event.move.js',
