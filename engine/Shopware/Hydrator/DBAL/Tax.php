@@ -18,10 +18,11 @@ class Tax
 
         $tax->setId($data['id']);
 
-        $tax->setName($data['description']);
+        $tax->setName($data['name']);
 
         $tax->setTax($data['tax']);
 
         return $tax;
     }
+
 }

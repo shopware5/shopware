@@ -58,17 +58,12 @@ class Price
             $price->setTo($data['to']);
         }
 
-        if (isset($data['customerGroup'])) {
-            $price->setCustomerGroup(
-                $this->customerGroupHydrator->hydrate($data['customerGroup'])
+        if (isset($data['__attribute_id'])) {
+            $attribute = $this->attributeHydrator->hydrate(
+                $this->extractFields('__attribute_', $data)
             );
-        }
 
-        if (isset($data['attribute'])) {
-            $price->addAttribute(
-                'core',
-                $this->attributeHydrator->hydrate($data['attribute'])
-            );
+            $price->addAttribute('core', $attribute);
         }
 
         return $price;
@@ -86,20 +81,32 @@ class Price
     {
         $price = $this->hydrate($data);
 
-        $unit = $data['detail']['unit'];
+        $unit = $this->unitHydrator->hydrate(array(
+            'id'            => $data['__unit_id'],
+            'description'   => $data['__unit_description'],
+            'unit'          => $data['__unit_unit'],
+            'packunit'      => $data['__unit_packunit'],
+            'purchaseunit'  => $data['__unit_purchaseunit'],
+            'referenceunit' => $data['__unit_referenceunit'],
+            'purchasesteps' => $data['__unit_purchasesteps'],
+            'minpurchase'   => $data['__unit_minpurchase'],
+            'maxpurchase'   => $data['__unit_maxpurchase'],
+        ));
 
-        $unit['packunit'] = $data['detail']['packunit'];
-        $unit['purchaseunit'] = $data['detail']['purchaseunit'];
-        $unit['referenceunit'] = $data['detail']['referenceunit'];
-
-        $unit['minpurchase'] = $data['detail']['minpurchase'];
-        $unit['maxpurchase'] = $data['detail']['maxpurchase'];
-        $unit['purchasesteps'] = $data['detail']['purchasesteps'];
-
-        $price->setUnit(
-            $this->unitHydrator->hydrate($unit)
-        );
+        $price->setUnit($unit);
 
         return $price;
+    }
+
+    private function extractFields($prefix, $data)
+    {
+        $result = array();
+        foreach($data as $field => $value) {
+            if (strpos($field, $prefix) === 0) {
+                $key = str_replace($prefix, '', $field);
+                $result[$key] = $value;
+            }
+        }
+        return $result;
     }
 }
