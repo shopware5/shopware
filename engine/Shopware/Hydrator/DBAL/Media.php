@@ -40,11 +40,11 @@ class Media
 
         $media->setThumbnails($data['thumbnails']);
 
-        if (!empty($data['attribute'])) {
-            $media->addAttribute(
-                'media',
-                $this->attributeHydrator->hydrate($data['attribute'])
+        if (!empty($data['__attribute_id'])) {
+            $attribute = $this->attributeHydrator->hydrate(
+                $this->extractFields('__attribute_', $data)
             );
+            $media->addAttribute('media', $attribute);
         }
 
         return $media;
@@ -58,18 +58,29 @@ class Media
     {
         $media = $this->hydrate($data);
 
-        $media->setPreview(($data['main'] == 1));
+        $media->setPreview(($data['__image_main'] == 1));
 
-        if (!empty($data['imageAttribute'])) {
-            $media->addAttribute(
-                'image',
-                $this->attributeHydrator->hydrate($data['imageAttribute'])
+        if (!empty($data['__imageAttribute_id'])) {
+            $attribute = $this->attributeHydrator->hydrate(
+                $this->extractFields('__imageAttribute_', $data)
             );
+
+            $media->addAttribute('image', $attribute);
         }
 
-
-
         return $media;
+    }
+
+    private function extractFields($prefix, $data)
+    {
+        $result = array();
+        foreach($data as $field => $value) {
+            if (strpos($field, $prefix) === 0) {
+                $key = str_replace($prefix, '', $field);
+                $result[$key] = $value;
+            }
+        }
+        return $result;
     }
 
 }

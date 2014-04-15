@@ -36,6 +36,26 @@ class CustomerGroup
 
         $customerGroup->setUseDiscount((bool)($data['mode']));
 
+        if (!empty($data['__attribute_id'])) {
+            $attribute = $this->attributeHydrator->hydrate(
+                $this->extractFields('__attribute_', $data)
+            );
+            $customerGroup->addAttribute('core', $attribute);
+        }
+
         return $customerGroup;
     }
+
+    private function extractFields($prefix, $data)
+    {
+        $result = array();
+        foreach($data as $field => $value) {
+            if (strpos($field, $prefix) === 0) {
+                $key = str_replace($prefix, '', $field);
+                $result[$key] = $value;
+            }
+        }
+        return $result;
+    }
+
 }

@@ -55,15 +55,15 @@ class Product
 
         $this->assignTaxData($product, $data);
 
-        if (isset($data['supplier'])) {
+        if (!empty($data['supplierID'])) {
             $this->assignManufacturerData($product, $data);
         }
 
-        if (isset($data['unit'])) {
+        if (!empty($data['unitID'])) {
             $this->assignUnitData($product, $data);
         }
 
-        if (isset($data['attribute'])) {
+        if (!empty($data['__attribute_id'])) {
             $this->assignAttributeData($product, $data);
         }
 
@@ -129,11 +129,10 @@ class Product
             $product->setHasProperties($data['filtergroupID'] > 0);
         }
 
-        if (isset($data['priceGroup'])) {
+        if (!empty($data['__priceGroup_id'])) {
             $product->setPriceGroup(new Struct\PriceGroup());
-
-            $product->getPriceGroup()->setId($data['priceGroup']['id']);
-            $product->getPriceGroup()->setName($data['priceGroup']['description']);
+            $product->getPriceGroup()->setId($data['__priceGroup_id']);
+            $product->getPriceGroup()->setName($data['__priceGroup_description']);
         }
 
         if (isset($data['topseller'])) {
@@ -179,35 +178,49 @@ class Product
 
     private function assignManufacturerData(Struct\ProductMini $product, $data)
     {
-        $manufacturer = $this->manufacturerHydrator->hydrate(
-            $data['supplier']
+        $manufacturer = array(
+            'id' => $data['__manufacturer_id'],
+            'name' => $data['__manufacturer_name'],
+            'img' => $data['__manufacturer_img'],
+            'link' => $data['__manufacturer_link'],
+            'description' => $data['__manufacturer_description'],
+            'meta_title' => $data['__manufacturer_meta_title'],
+            'keywords' => $data['__manufacturer_keywords'],
         );
+
+        if (!empty($data['__manufacturerAttribute_id'])) {
+            $manufacturer['attribute'] = $this->extractFields('__manufacturerAttribute_', $data);
+        }
+
+        $manufacturer = $this->manufacturerHydrator->hydrate($manufacturer);
 
         $product->setManufacturer($manufacturer);
     }
 
     private function assignTaxData(Struct\ProductMini $product, $data)
     {
-        $tax = $this->taxHydrator->hydrate(
-            $data['tax']
-        );
+        $tax = $this->taxHydrator->hydrate(array(
+            'id' => $data['__tax_id'],
+            'tax' => $data['__tax_tax'],
+            'description' => $data['__tax_description'],
+        ));
 
         $product->setTax($tax);
     }
 
     private function assignUnitData(Struct\ProductMini $product, $data)
     {
-        $data['unit']['packunit'] = $data['packunit'];
-        $data['unit']['purchaseunit'] = $data['purchaseunit'];
-        $data['unit']['referenceunit'] = $data['referenceunit'];
-
-        $data['unit']['minpurchase'] = $data['minpurchase'];
-        $data['unit']['maxpurchase'] = $data['maxpurchase'];
-        $data['unit']['purchasesteps'] = $data['purchasesteps'];
-
-        $unit = $this->unitHydrator->hydrate(
-            $data['unit']
-        );
+        $unit = $this->unitHydrator->hydrate(array(
+            'id' => $data['__unit_id'],
+            'description' => $data['__unit_description'],
+            'unit' => $data['__unit_unit'],
+            'packunit' => $data['packunit'],
+            'purchaseunit' => $data['purchaseunit'],
+            'referenceunit' => $data['referenceunit'],
+            'purchasesteps' => $data['purchasesteps'],
+            'minpurchase' => $data['minpurchase'],
+            'maxpurchase' => $data['maxpurchase'],
+        ));
 
         $product->setUnit($unit);
     }
@@ -215,9 +228,21 @@ class Product
     private function assignAttributeData(Struct\ProductMini $product, $data)
     {
         $attribute = $this->attributeHydrator->hydrate(
-            $data['attribute']
+            $this->extractFields('__attribute_', $data)
         );
 
         $product->addAttribute('core', $attribute);
+    }
+
+    private function extractFields($prefix, $data)
+    {
+        $result = array();
+        foreach($data as $field => $value) {
+            if (strpos($field, $prefix) === 0) {
+                $key = str_replace($prefix, '', $field);
+                $result[$key] = $value;
+            }
+        }
+        return $result;
     }
 }

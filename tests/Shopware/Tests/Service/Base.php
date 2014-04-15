@@ -91,7 +91,7 @@ class Shopware_Tests_Service_Base extends Enlight_Components_Test_TestCase
         \Shopware\Models\Shop\Shop $shop,
         \Shopware\Models\Tax\Tax $tax
     ) {
-        $state = new \Shopware\Struct\GlobalState();
+        $state = new \Shopware\Struct\Context();
 
         $customerGroup = new \Shopware\Struct\CustomerGroup();
         $customerGroup->setKey($group->getKey());
@@ -111,9 +111,14 @@ class Shopware_Tests_Service_Base extends Enlight_Components_Test_TestCase
         $state->setShop(new \Shopware\Struct\Shop());
         $state->getShop()->setId($shop->getId());
 
-        $state->setTax(new \Shopware\Struct\Tax());
-        $state->getTax()->setId($tax->getId());
-        $state->getTax()->setTax($tax->getTax());
+
+        $key = 'tax_' . $tax->getId();
+        $high = new \Shopware\Struct\Tax();
+        $high->setId($tax->getId());
+        $high->setTax($tax->getTax());
+        $state->setTaxRules(array(
+            $key => $high
+        ));
 
         return $state;
     }
@@ -507,7 +512,7 @@ class Shopware_Tests_Service_Base extends Enlight_Components_Test_TestCase
         \Shopware\Models\Shop\Shop $shop,
         \Shopware\Models\Tax\Tax $tax
     ) {
-        $state = new \Shopware\Struct\GlobalState();
+        $state = new \Shopware\Struct\Context();
 
         $customerGroup = new \Shopware\Struct\CustomerGroup();
         $customerGroup->setKey($group->getKey());
@@ -525,9 +530,13 @@ class Shopware_Tests_Service_Base extends Enlight_Components_Test_TestCase
         $state->setShop(new \Shopware\Struct\Shop());
         $state->getShop()->setId($shop->getId());
 
-        $state->setTax(new \Shopware\Struct\Tax());
-        $state->getTax()->setId($tax->getId());
-        $state->getTax()->setTax($tax->getTax());
+        $key = 'tax_' . $tax->getId();
+        $high = new \Shopware\Struct\Tax();
+        $high->setId($tax->getId());
+        $high->setTax($tax->getTax());
+        $state->setTaxRules(array(
+            $key => $high
+        ));
 
         $service = $this->getGlobalStateService();
 
