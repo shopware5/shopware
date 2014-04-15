@@ -318,7 +318,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $result['checkPayment']);
         $this->assertCount(2, $result['checkPayment']);
         $this->assertInternalType('array', $result['paymentData']);
-        $this->assertCount(19, $result['paymentData']);
+        $this->assertCount(20, $result['paymentData']);
         $this->assertInternalType('boolean', $result['sProcessed']);
         $this->assertTrue($result['sProcessed']);
         $this->assertInternalType('object', $result['sPaymentObject']);
@@ -2217,6 +2217,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                     'position' => '1',
                     'active' => '1',
                     'esdactive' => '0',
+                    'mobileactive' => '0',
                     'embediframe' => '',
                     'hideprospect' => '0',
                     'action' => NULL,
@@ -2966,6 +2967,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'position' => '4',
                 'active' => '1',
                 'esdactive' => '0',
+                'mobileactive' => '0',
                 'embediframe' => '',
                 'hideprospect' => '0',
                 'action' => '',
