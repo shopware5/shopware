@@ -46,6 +46,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
     extend:'Ext.app.Controller',
     
     refs: [
+        { ref: 'orderList', selector: 'order-list' },
         { ref: 'positionGrid', selector: 'order-detail-window order-position-panel' },
         { ref: 'detailWindow', selector: 'order-detail-window' }
     ],
@@ -632,6 +633,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
         var me = this;
 
         me.saveRecord(record, me.snippets.externalComment.successMessage, me.snippets.externalComment.failureMessage);
+
     },
 
     /**
@@ -665,6 +667,8 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                 } else {
                     Shopware.Notification.createGrowlMessage(me.snippets.failureTitle, errorMessage + '<br> ' + rawData.message, me.snippets.growlMessage)
                 }
+                // reload the order list
+                me.getOrderList().store.load();
             }
         });
     },

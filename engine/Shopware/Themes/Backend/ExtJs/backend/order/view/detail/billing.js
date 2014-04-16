@@ -179,7 +179,7 @@ Ext.define('Shopware.apps.Order.view.detail.Billing', {
             displayField: 'name',
             forceSelection: true,
             labelWidth:120,
-            store: Ext.create('Shopware.store.CountryState').load(),
+            store: Ext.create('Shopware.store.CountryState'),
             minWidth: 250,
             editable: false,
             hidden: true,
@@ -242,6 +242,12 @@ Ext.define('Shopware.apps.Order.view.detail.Billing', {
             required:true,
             allowBlank:false
         }, {
+            name:'billing[additionalAddressLine1]',
+            fieldLabel:me.snippets.additionalAddressLine1
+        }, {
+            name:'billing[additionalAddressLine2]',
+            fieldLabel:me.snippets.additionalAddressLine2
+        }, {
             name:'billing[zipCode]',
             fieldLabel:me.snippets.zipCode,
             required:true,
@@ -251,15 +257,9 @@ Ext.define('Shopware.apps.Order.view.detail.Billing', {
             fieldLabel:me.snippets.city,
             required:true,
             allowBlank:false
-        }, {
-            name:'billing[additionalAddressLine1]',
-            fieldLabel:me.snippets.additionalAddressLine1
-        }, {
-            name:'billing[additionalAddressLine2]',
-            fieldLabel:me.snippets.additionalAddressLine2
         },
-        me.countryCombo,
-        me.countryStateCombo
+        me.countryStateCombo,
+        me.countryCombo
         ];
     },
 

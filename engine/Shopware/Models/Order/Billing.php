@@ -227,6 +227,13 @@ class Billing extends ModelEntity
     private $country;
 
     /**
+     * @ORM\OneToOne(targetEntity="\Shopware\Models\Country\State")
+     * @ORM\JoinColumn(name="stateID", referencedColumnName="id")
+     * @var \Shopware\Models\Country\State
+     */
+    private $state;
+
+    /**
      * INVERSE SIDE
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\OrderBilling", mappedBy="orderBilling", orphanRemoval=true, cascade={"persist"})
      * @var \Shopware\Models\Attribute\OrderBilling
@@ -574,7 +581,9 @@ class Billing extends ModelEntity
     }
 
     /**
-     * @return
+     * Getter for the country association
+     *
+     * @return \Shopware\Models\Country\Country
      */
     public function getCountry()
     {
@@ -582,11 +591,33 @@ class Billing extends ModelEntity
     }
 
     /**
-     * @param  $country
+     * Setter for the country association
+     *
+     * @param \Shopware\Models\Country\Country $country
      */
     public function setCountry($country)
     {
         $this->country = $country;
+    }
+
+    /**
+     * Setter for the state association
+     *
+     * @param \Shopware\Models\Country\State $state
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+    }
+
+    /**
+     * Getter for the state association
+     *
+     * @return \Shopware\Models\Country\State
+     */
+    public function getState()
+    {
+        return $this->state;
     }
 
     /**
@@ -645,26 +676,4 @@ class Billing extends ModelEntity
     {
         return $this->additionalAddressLine1;
     }
-
-    /**
-     * Setter function for the stateId column property.
-     *
-     * @param int $stateId
-     */
-    public function setStateId($stateId)
-    {
-        $this->stateId = $stateId;
-    }
-
-    /**
-     * Getter function for the stateId column property.
-     *
-     * @return int
-     */
-    public function getStateId()
-    {
-        return $this->stateId;
-    }
-
-
 }

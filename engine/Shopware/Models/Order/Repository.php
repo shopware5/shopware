@@ -260,6 +260,7 @@ class Repository extends ModelRepository
                 'payment',
                 'billing',
                 'billingCountry',
+                'billingState',
                 'shop',
                 'dispatch',
                 'paymentStatus',
@@ -276,6 +277,7 @@ class Repository extends ModelRepository
                 ->leftJoin('orders.customer', 'customer')
                 ->leftJoin('orders.details', 'details')
                 ->leftJoin('billing.country', 'billingCountry')
+                ->leftJoin('billing.state', 'billingState')
                 ->leftJoin('orders.shop', 'shop')
                 ->leftJoin('orders.dispatch', 'dispatch')
                 ->leftJoin('billing.attribute', 'billingAttribute')
@@ -316,6 +318,7 @@ class Repository extends ModelRepository
                 'shipping',
                 'shippingAttribute',
                 'shippingCountry',
+                'shippingState',
                 'subShop',
                 'locale'
             ));
@@ -329,6 +332,7 @@ class Repository extends ModelRepository
                 ->leftJoin('customer.debit', 'debit')
                 ->leftJoin('orders.paymentInstances', 'paymentInstances')
                 ->leftJoin('orders.shipping', 'shipping')
+                ->leftJoin('shipping.state', 'shippingState')
                 ->leftJoin('shipping.attribute', 'shippingAttribute')
                 ->leftJoin('shipping.country', 'shippingCountry')
                 ->leftJoin('orders.languageSubShop', 'subShop')

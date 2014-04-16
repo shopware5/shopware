@@ -54,15 +54,6 @@
 		</div>
 	{/block}
 
-	{* Zip + City *}
-	{block name='frontend_register_shipping_fieldset_input_zip_and_city'}
-		<div>
-		    <label for="zipcode2">{se name='RegisterShippingLabelCity'}{/se}</label>
-		    <input name="register[shipping][zipcode]" type="text" id="zipcode2" value="{$form_data.zipcode|escape}"  class="zipcode text required {if $error_flags.zipcode}instyle_error{/if}" />
-		    <input name="register[shipping][city]" type="text"  id="city2" value="{$form_data.city|escape}" size="25" class="city text required {if $error_flags.city}instyle_error{/if}" />
-		</div>
-	{/block}
-
 	{* Additional Address Line 1 *}
 	{block name='frontend_register_shipping_fieldset_input_addition_address_line1'}
 		{if {config name=showAdditionAddressLine1}}
@@ -81,6 +72,15 @@
 				<input name="register[shipping][additional_address_line2]" type="text" id="additionalAddressLine22" value="{$form_data.additional_address_line2|escape}" class="text {if {config name=requireAdditionAddressLine2}}required{/if} {if $error_flags.additional_address_line2 && {config name=requireAdditionAddressLine2}}instyle_error{/if}" />
 			</div>
 		{/if}
+	{/block}
+
+	{* Zip + City *}
+	{block name='frontend_register_shipping_fieldset_input_zip_and_city'}
+		<div>
+		    <label for="zipcode2">{se name='RegisterShippingLabelCity'}{/se}</label>
+		    <input name="register[shipping][zipcode]" type="text" id="zipcode2" value="{$form_data.zipcode|escape}"  class="zipcode text required {if $error_flags.zipcode}instyle_error{/if}" />
+		    <input name="register[shipping][city]" type="text"  id="city2" value="{$form_data.city|escape}" size="25" class="city text required {if $error_flags.city}instyle_error{/if}" />
+		</div>
 	{/block}
 
 	{* Country *}

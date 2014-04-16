@@ -318,20 +318,20 @@ Ext.define('Shopware.apps.Customer.view.detail.Shipping', {
             name:'shipping[streetNumber]',
             fieldLabel:me.snippets.streetNumber
         }, {
-            name:'shipping[zipCode]',
-            fieldLabel:me.snippets.zipCode
-        }, {
-            name:'shipping[city]',
-            fieldLabel:me.snippets.city
-        }, {
             name:'shipping[additionalAddressLine1]',
             fieldLabel:me.snippets.additionalAddressLine1
         }, {
             name:'shipping[additionalAddressLine2]',
             fieldLabel:me.snippets.additionalAddressLine2
+        }, {
+            name:'shipping[zipCode]',
+            fieldLabel:me.snippets.zipCode
+        }, {
+            name:'shipping[city]',
+            fieldLabel:me.snippets.city
         },
-            me.countryCombo,
             me.countryStateCombo,
+            me.countryCombo,
         {
             name:'shipping[company]',
             fieldLabel:me.snippets.company
