@@ -17,7 +17,7 @@
 {block name='frontend_index_breadcrumb'}<div class="clear"></div>{/block}
 
 {block name="frontend_index_content"}
-	<div class="register--content panel is--border wide">
+	<div class="register--content has--border panel">
 
 		{block name='frontend_register_index_dealer_register'}
 			{* Included for compatibility reasons *}
