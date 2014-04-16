@@ -86,8 +86,6 @@ Ext.define('Shopware.apps.Index.view.widgets.Visitors', {
             }
         }).load();
 
-        console.log(me.visitorsStore);
-
         me.callParent(arguments);
     },
 

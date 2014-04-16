@@ -28,24 +28,26 @@
  * @author shopware AG
  */
 
-/**
- * todo@all: Documentation
- */
-//{block name="backend/ubdex/store/widget"}
+//{block name="backend/index/store/widget"}
+
 Ext.define('Shopware.apps.Index.store.Widget', {
+
 	extend: 'Ext.data.Store',
+
 	model: 'Shopware.apps.Index.model.Widget',
+
     batch: true,
     remoteFilter: true,
     clearOnLoad: false,
 
     proxy: {
         type: 'ajax',
-        url: '{url controller="widgets" action="getList"}',
+        url: '{url controller="widgets" action="getWidgets"}',
         reader: {
             type: 'json',
             root: 'data'
         }
     }
 });
+
 //{/block}

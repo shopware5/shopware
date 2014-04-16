@@ -39,13 +39,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
 
     cls: Ext.baseCSSPrefix + 'widget-sidebar',
 
-    layout: 'vbox',
-    width: 330,
-    maxWidth: 330,
-    minWidth: 330,
-    height: 500,
-    maxHeight: 760,
-    minHeight: 150,
+    layout: 'anchor',
     header: false,
     shadow: false,
     footerButton: false,
@@ -56,6 +50,9 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
     minimizable: true,
     collapsible: false,
     autoShow: false,
+    resizable: {
+        floating: true
+    },
     draggable: {
         delegate: 'widget-toolbar'
     },
@@ -63,22 +60,42 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
     x: 10,
     y: 10,
 
+    padding: 10,
+
     widgetStore: null,
+    desktop: null,
 
     toolbar: null,
-    grid: null,
+
+    columnCount: 4,
+    columnsShown: 1,
 
     pinnedOnTop: false,
+
+    containerCollection: null,
 
     initComponent: function() {
         var me = this;
 
-        me.items = [
-            me.createToolbar(),
-            me.createScrollContainer()
+        me.containerCollection = Ext.create('Ext.util.MixedCollection');
+
+        me.toolbar = me.createToolbar();
+
+        me.dockedItems = [
+            me.toolbar
         ];
 
-        me.createWidgets();
+        me.wrapper = me.createWidgetWrapper();
+
+        me.items = [
+            me.wrapper
+        ];
+
+        me.desktop.on('resize', me.onDesktopResize.bind(me));
+
+        me.onDesktopResize(me.desktop, me.desktop.getWidth(), me.desktop.getHeight());
+
+        me.on('resize', me.onResize);
 
         me.addEvents(
             'minimizeWindow',
@@ -89,91 +106,264 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             'removeWidget'
         );
 
-        me.on('resize', function(me, width, height, eOpts) {
-            me.scrollContainer.setHeight(height - 40);
+        me.callParent(arguments);
+
+        me.widgetStore.each(me.createWidget.bind(me));
+    },
+
+    createWidgetWrapper: function () {
+        var me = this,
+            wrapper = Ext.create('Ext.container.Container', {
+                layout: 'hbox'
+            });
+
+        for(var i = 0; i < me.columnCount; i++) {
+            var container = me.createWidgetContainer(i);
+
+            wrapper.add(container);
+            me.containerCollection.add(container);
+        }
+
+        return wrapper;
+    },
+
+    createWidgetContainer: function(column) {
+        var me = this,
+            options = {
+                layout: 'anchor',
+                flex: 1,   // We want same sized columns, so we could use flex
+                padding: '0 10px',
+                cls: Ext.baseCSSPrefix + 'widget-column-container',
+                columnId: column,
+                listeners: {
+                    render: me.createContainerDropZone,
+                    scope: me
+                }
+            };
+
+        return Ext.create('Ext.container.Container', options);
+    },
+
+    createWidget: function (model) {
+        var me = this,
+            views = model.get('views'),
+            name = model.get('name'),
+            holder;
+
+        if(!name || !views.length) {
+            return;
+        }
+
+        Ext.each(views, function(view) {
+            holder = me.containerCollection.getAt(view.column);
+
+            if(!holder) {
+                holder = me.containerCollection.getAt(0);
+            }
+
+            holder.add(
+                Ext.widget(name, {
+                    id: name,
+                    widgetId: model.get('id'),
+                    viewId: view.id,
+                    title: view.label,
+                    position: {
+                        columnId: view.column,
+                        rowId: view.position
+                    },
+                    draggable: {
+                        ddGroup: 'widget-container'
+                    },
+                    $initialId: view.id
+                })
+            );
+        });
+    },
+
+    createContainerDropZone: function(container) {
+        var me = this, dropProxyEl;
+
+        dropProxyEl = Ext.create('Ext.Component', {
+            cls: Ext.baseCSSPrefix + 'widget-proxy-element',
+            hidden: true
         });
 
-        me.callParent(arguments);
+        container.add(dropProxyEl);
+
+        container.dropZone = Ext.create('Ext.dd.DropZone', container.getEl(), {
+            ddGroup: 'widget-container',
+
+            getTargetFromEvent: function() {
+                return container;
+            },
+
+            onNodeEnter: function(target, dd) {
+                var panel = dd.panel;
+                // Always move the drop proxy element to the end of the container
+                target.move(target.items.indexOf(dropProxyEl), target.items.getCount() - 1);
+
+                dropProxyEl.show();
+                dropProxyEl.addCls('active');
+                dropProxyEl.setHeight(panel.height);
+            },
+
+            onNodeOut: function(target) {
+                dropProxyEl.removeCls('active');
+                dropProxyEl.hide();
+            },
+
+            onNodeOver: function() {
+                return false;
+            },
+
+            onNodeDrop: function(target, dd, e, data) {
+                var droppedPanel = dd.panel,
+                    panel = droppedPanel.cloneConfig();
+
+                target.add(panel);
+
+                // We need to timeout the panel destroying due ExtJS needs the dragged element on drop
+                Ext.defer(function() {
+                    droppedPanel.destroy();
+                }, 50);
+
+                // Get new position
+                var newColumn = me.containerCollection.getAt(target.columnId),
+                    newRow = newColumn.items.getCount() - 2;
+
+                panel.position.rowId = newRow;
+
+                // Fire event which saves the new position
+                me.fireEvent('saveWidgetPosition', target.columnId, newRow, panel.widgetId, panel.$initialId);
+
+                return true;
+            }
+        });
+    },
+
+    onDesktopResize: function (desktop, width, height) {
+        var me = this,
+            offset = me.el ? me.getEl().getTop() : 0,
+            maxWidth = width - me.x * 2,
+            maxHeight = height - me.y * 2 - offset,
+            resizer = me.resizer ? me.resizer.resizeTracker : me.resizable,
+            maxColumns;
+
+        me.columnCount = me.getColumnCount(width);
+        me.widthStep = maxWidth / me.columnCount;
+
+        resizer.widthIncrement = me.widthStep;
+        resizer.minWidth = me.widthStep;
+        resizer.maxHeight = maxHeight;
+
+        me.maxHeight = maxHeight;
+        me.minWidth = me.widthStep;
+
+        maxColumns = Math.min(me.columnCount, me.columnsShown);
+
+        me.setWidth(maxColumns * me.widthStep);
+
+        if(me.height > maxHeight) {
+            me.setHeight(maxHeight);
+        }
+
+        me.onResize(me, me.widthStep * maxColumns);
+    },
+
+    getColumnCount: function(width) {
+        if(width > 1440) {
+            if(width > 1920) {
+                return 6;
+            }
+            return 4;
+        }
+        return 2;
+    },
+
+    onResize: function (win, width) {
+        var me = this,
+            container;
+
+        me.containerCollection.each(function(el) {
+            el.hide();
+        });
+
+        me.columnsShown = ~~(width / me.widthStep);
+
+        for(var i = 0; i < me.columnCount; i++) {
+            container = me.containerCollection.getAt(i);
+
+            if(i < me.columnsShown && container.isHidden()) {
+                container.show();
+            }
+        }
     },
 
     createToolbar: function() {
         var me = this;
 
-        return me.toolbar = Ext.create('Ext.toolbar.Toolbar', {
-            width: 300,
-            margin: '0 0 10px 0',
+        return Ext.create('Ext.toolbar.Toolbar', {
+            padding: '0 0 10px 0',
             id: 'widget-toolbar',
             cls: Ext.baseCSSPrefix + 'widget-toolbar',
-            items: [
-                {
-                    xtype: 'button',
-                    cls: 'btn-widget-add',
-                    menu: {
-                        xtype: 'menu',
-                        cls: Ext.baseCSSPrefix + 'widget-menu',
-                        plain: true,
-                        margin: '5px 0 0 0',
-                        defaultAlign: 'tr-br',
-                        items: me.createWidgetMenuItems()
-                    }
-                },
-                '->',
-                {
-                    xtype: 'button',
-                    cls: (me.pinnedOnTop) ? 'btn-widget-pin active' : 'btn-widget-pin',
-                    handler: function() {
-                        me.fireEvent('fixWindow', me, this);
-                    }
-                },
-                {
-                    xtype: 'button',
-                    cls: 'btn-widget-minimize',
-                    handler: function() {
-                        me.fireEvent('minimizeWindow', me);
-                    }
-                },
-                {
-                    xtype: 'button',
-                    cls: 'btn-widget-position',
-                    menu: {
-                        xtype: 'menu',
-                        cls: Ext.baseCSSPrefix + 'widget-position-selection-menu',
-                        plain: true,
-                        margin: '5px 0 0 0',
-                        defaultAlign: 'tr-br',
-                        items: [
-                            {
-                                text: 'links oben',
-                                iconCls: 'sprite-application-dock-180',
-                                handler: function() {
-                                    me.fireEvent('changePosition', me, 'tl');
-                                }
-                            },
-                            {
-                                text: 'links unten',
-                                iconCls: 'sprite-application-dock-180',
-                                handler: function() {
-                                    me.fireEvent('changePosition', me, 'bl');
-                                }
-                            },
-                            {
-                                text: 'rechts oben',
-                                iconCls: 'sprite-application-dock',
-                                handler: function() {
-                                    me.fireEvent('changePosition', me, 'tr');
-                                }
-                            },
-                            {
-                                text: 'rechts unten',
-                                iconCls: 'sprite-application-dock',
-                                handler: function() {
-                                    me.fireEvent('changePosition', me, 'br');
-                                }
-                            }
-                        ]
-                    }
+
+            items: [{
+                xtype: 'button',
+                cls: 'btn-widget-add',
+                menu: {
+                    xtype: 'menu',
+                    cls: Ext.baseCSSPrefix + 'widget-menu',
+                    plain: true,
+                    defaultAlign: 'tr-br',
+                    items: me.createWidgetMenuItems()
                 }
-            ]
+            }, '->', {
+                xtype: 'button',
+                cls: (me.pinnedOnTop) ? 'btn-widget-pin active' : 'btn-widget-pin',
+                handler: function() {
+                    me.fireEvent('fixWindow', me, this);
+                }
+            }, {
+                xtype: 'button',
+                cls: 'btn-widget-minimize',
+                handler: function() {
+                    me.fireEvent('minimizeWindow', me);
+                }
+            }, {
+                xtype: 'button',
+                cls: 'btn-widget-position',
+                menu: {
+                    xtype: 'menu',
+                    cls: Ext.baseCSSPrefix + 'widget-position-selection-menu',
+                    plain: true,
+                    defaultAlign: 'tr-br',
+                    items: [{
+                        text: 'links oben',
+                        iconCls: 'sprite-application-dock-180',
+                        handler: function() {
+                            me.fireEvent('changePosition', me, false, false);
+                        }
+                    }, {
+                        text: 'links unten',
+                        iconCls: 'sprite-application-dock-180',
+                        handler: function() {
+                            me.fireEvent('changePosition', me, false, true);
+                        }
+                    }, {
+                        text: 'rechts oben',
+                        iconCls: 'sprite-application-dock',
+                        handler: function() {
+                            me.fireEvent('changePosition', me, true, false);
+                        }
+                    }, {
+                        text: 'rechts unten',
+                        iconCls: 'sprite-application-dock',
+                        handler: function() {
+                            me.fireEvent('changePosition', me, true, true);
+                        }
+                    }]
+                }
+            }]
         });
     },
 
@@ -187,15 +377,15 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                  text: widget.get('label'),
                  widgetId: widget.get('id'),
                  checked: (widget.get('views').length) ? true : false,
-                 //iconCls: 'sprite-application-dock-180',
                  listeners: {
                      checkchange: function(checkbox, status, eOpts) {
 
                          if (status) {
-                             me.fireEvent('addWidget', widget.get('name'));
-                         } else {
-                             me.fireEvent('removeWidget', widget.get('name'));
+                             me.fireEvent('addWidget', me, widget.get('name'));
+                             return;
                          }
+
+                         me.fireEvent('removeWidget', me, widget.get('name'));
                      }
                  }
              });
@@ -219,192 +409,44 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
 
         me.callParent(arguments);
 
-        me.createCustomScrollbar();
+        me.registerScrollEvent();
     },
 
-    createScrollContainer: function() {
-        var me = this;
-
-        return me.scrollContainer = Ext.create('Ext.container.Container', {
-            cls: Ext.baseCSSPrefix + 'widget-scroll-container',
-            layout: {
-                type: 'column',
-                align: 'stretch'
-            },
-            flex: 1,
-            width: 300,
-            overflowX: 'hidden',
-            overflowY: 'hidden',
-            items: [
-                me.createGrid()
-            ]
-        });
-    },
-
-    createGrid: function() {
-        var me = this;
-
-        return me.grid = Ext.create('Ext.container.Container', {
-            layout: 'anchor',
-            width: 300,
-            defaultType: 'widget',
-            listeners: {
-                afterrender: me.createDropZone,
-                scope: me
-            }
-        });
-    },
-
-    createDropZone: function() {
-        var me = this;
-
-        me.dropPanel = false;
-
-        me.dropProxyEl = Ext.create('Ext.Component', {
-            width: 300,
-            height: 100,
-            cls: Ext.baseCSSPrefix + 'widget-proxy-element',
-            hidden: true
-        });
-        me.grid.add(me.dropProxyEl);
-
-        me.grid.dropZone = Ext.create('Ext.dd.DropZone', me.grid.getEl(), {
-
-            ddGroup: 'widget-container',
-
-            getTargetFromEvent: function() {
-                return me.grid;
-            },
-
-            onNodeEnter: function(container, source, e, data) {
-                var draggedPanel = source.panel,
-                    height = draggedPanel.height;
-
-                me.dropProxyEl.setHeight(height);
-                me.dropProxyEl.addCls('active');
-
-                container.move(
-                    me.grid.items.indexOf(me.dropProxyEl),
-                    me.grid.items.indexOf(draggedPanel)
-                );
-
-                me.dropProxyEl.show();
-            },
-
-            onNodeOver : function(container, source, e, data){
-                var draggedPanel = source.panel,
-                    position = e.getXY(),
-                    moveIndex;
-
-                me.dropPanel = me.getOverPanel(draggedPanel, position);
-
-                if (me.dropPanel != false) {
-
-                    container.move(
-                        me.grid.items.indexOf(me.dropProxyEl),
-                        me.grid.items.indexOf(me.dropPanel)
-                    );
-
-                    return Ext.dd.DropZone.prototype.dropAllowed;
-                }
-            },
-
-            onNodeOut : function(container, source, e, data){
-
-                me.dropProxyEl.removeCls('active');
-                me.dropProxyEl.hide();
-            },
-
-            onNodeDrop : function(container, source, e, data){
-                var droppedPanel = source.panel;
-
-                container.move(
-                    me.grid.items.indexOf(droppedPanel),
-                    me.grid.items.indexOf(me.dropProxyEl)
-                );
-
-                me.dropProxyEl.removeCls('active');
-                me.dropProxyEl.hide();
-
-                me.fireEvent('saveWidgetPosition');
-
-                Ext.defer(function() { me.doLayout(); }, 100);
-
-                return true;
-            }
-        });
-    },
-
-    createWidgets: function() {
-        var me = this;
-
-        me.widgetStore.each(function(widget) {
-            if (widget.get('views').length) {
-                me.grid.add(
-                    Ext.widget(widget.get('name'), {
-                        id: widget.get('name'),
-                        widgetId: widget.get('id'),
-                        viewId: widget.data.views[0].id,
-                        title: widget.get('label')
-                    })
-                );
-            }
-        });
-    },
-
-    getOverPanel: function(draggedPanel, position) {
+    registerScrollEvent: function() {
         var me = this,
-            overPanel = false,
-            panels = me.grid.items.items,
-            panelsCount = panels.length,
-            panelHeight = 0,
-            pos = 0;
-
-        for(panelsCount; pos < panelsCount; pos++) {
-            var panel = panels[pos];
-            panelHeight = panel.el.getHeight();
-
-            if ((panel.el.getY() + (panelHeight / 2)) > position[1]) {
-                overPanel = panel;
-                break;
-            }
-        }
-
-        return overPanel;
-    },
-
-    createCustomScrollbar: function() {
-        var me = this,
-            containerEl = me.scrollContainer.getEl(),
-            widgetContainerEl = me.grid.getEl(),
+            containerEl = me.getEl(),
             mouseWheelEvent = (/Firefox/i.test(navigator.userAgent)) ? 'DOMMouseScroll' : 'mousewheel'; // Mouse wheel browser detection
 
-        var scroll =  function(e) {
-            var delta = (e.wheelDelta) ? e.wheelDelta : e.detail,
-                speed = (e.wheelDelta) ? 0.4 : 10,
-                containerY = containerEl.getY(),
-                containerHeight = containerEl.getHeight(),
-                gridY = widgetContainerEl.getY(),
-                gridHeight = widgetContainerEl.getHeight(),
-                newPosition = gridY - (delta * speed),
-                max = containerY,
-                min = -(gridHeight - containerHeight - containerY);
-
-            newPosition = Math.max(min, Math.min(newPosition, max));
-
-            if (gridHeight > containerHeight) {
-                widgetContainerEl.setY(newPosition);
-            } else {
-                widgetContainerEl.setY(containerY);
-            }
-        };
-
         if (document.attachEvent) {
-            containerEl.dom.attachEvent('on'+mouseWheelEvent, scroll);
+            containerEl.dom.attachEvent('on' + mouseWheelEvent, me.onScroll.bind(me));
         } else if (document.addEventListener) {
-            containerEl.dom.addEventListener(mouseWheelEvent, scroll, false);
+            containerEl.dom.addEventListener(mouseWheelEvent, me.onScroll.bind(me), false);
         }
+    },
+
+    onScroll: function(e) {
+        var me = this,
+            containerEl = me.getEl(),
+            containerHeight = me.getHeight(),
+            widgetContainerEl = me.wrapper.getEl(),
+            widgetContainerY = widgetContainerEl.getY(),
+            widgetContainerHeight = widgetContainerEl.getHeight(),
+            toolbarEl = me.toolbar.getEl(),
+            delta = (e.wheelDelta) ? e.wheelDelta : e.detail,
+            speed = (e.wheelDelta) ? 0.4 : 10,
+            offset = delta * speed,
+            position = widgetContainerY + offset,
+            min = (widgetContainerHeight - containerHeight - containerEl.getTop()) * -1 - 5,
+            max = containerEl.getTop() + toolbarEl.getHeight() + 5;
+
+        if(containerHeight > widgetContainerHeight) {
+            widgetContainerEl.setY(max);
+            return;
+        }
+
+        position = Math.max(min, Math.min(max, position));
+
+        widgetContainerEl.setY(position);
     }
 });
-
 //{/block}

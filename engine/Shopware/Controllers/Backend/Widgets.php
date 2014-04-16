@@ -59,29 +59,30 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
     public function saveWidgetPositionAction()
     {
+        $request = $this->Request();
+        $column = $request->getParam('column');
+        $position = $request->getParam('position');
+        $id = $request->getParam('id');
         $auth = Shopware()->Auth();
 
         if (!$auth->hasIdentity()) {
             $this->View()->assign(array('success' => false));
+            return;
         }
 
-        $request = $this->Request();
-        $data = $request->getParam('data');
+        $model = Shopware()->Models()->find('Shopware\Models\Widget\View', $id);
+        $model->setPosition($position);
+        $model->setColumn($column);
 
         try {
-            foreach($data as $widget) {
-                $model = Shopware()->Models()->find('Shopware\Models\Widget\View', $widget['viewId']);
-                $model->setPosition($widget['position']);
-                Shopware()->Models()->persist($model);
-            }
-
+            Shopware()->Models()->persist($model);
             Shopware()->Models()->flush();
-
         } catch (\Doctrine\ORM\ORMException $e) {
             $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+            return;
         }
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(array('success' => true, 'newPosition' => $position, 'newColumn' => $column));
     }
 
     public function addWidgetViewAction()

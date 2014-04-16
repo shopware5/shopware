@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
 
     widgetStore: null,
 
-    widgetView: false,
+    widgetWindow: false,
 
     snippets: {},
 
@@ -64,7 +64,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
 
         me.desktop = me.viewport.getActiveDesktop();
 
-        me.widgetStore = me.getStore('Widgets').load({
+        me.widgetStore = me.getStore('Widget').load({
             callback: function() {
                 me.renderWidgetBar();
             }
@@ -94,10 +94,11 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
     renderWidgetBar: function() {
         var me = this;
 
-        if (!me.widgetView) {
-            me.widgetView = me.getView('widgets.Window').create({
+        if (!me.widgetWindow) {
+            me.widgetWindow = me.getView('widgets.Window').create({
                 renderTo: me.desktop.getEl(),
-                widgetStore: me.widgetStore
+                widgetStore: me.widgetStore,
+                desktop: me.desktop
             }).toBack().show(me.sideBarBtn);
         }
     },
@@ -108,123 +109,105 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         sidebarWindow.hide(me.sideBarBtn);
     },
 
-    onFixWindow: function(sidebarWindow, pinButton) {
-        var me = this,
-            window = sidebarWindow.getEl();
+    onFixWindow: function(window, pinButton) {
+        var pinned = window.pinnedOnTop,
+            windowEl = window.getEl();
 
-        if(!window) {
-            return false;
+        if(!windowEl) {
+            return;
         }
 
-        if (me.widgetView.pinnedOnTop) {
-            me.widgetView.pinnedOnTop = false;
-            me.widgetView.toBack();
+        window.pinnedOnTop = !pinned;
+
+        if (pinned) {
+            window.toBack();
             pinButton.removeCls('active');
-        } else {
-            me.widgetView.pinnedOnTop = true;
-            me.widgetView.toFront();
-            pinButton.addCls('active');
+            return;
         }
+
+        window.toFront();
+        pinButton.addCls('active');
     },
 
-    onChangePosition: function(sidebarWindow, position) {
+    onChangePosition: function(window, alignRight, alignBottom) {
         var me = this,
-            x, y;
+            xOffset = 10,
+            yOffset = 10,
+            x = xOffset,
+            y = yOffset;
 
-        switch (position) {
-            case 'tl':
-                sidebarWindow.setPosition(10, 10, true);
-                break;
-            case 'bl':
-                x = 10;
-                y = me.desktop.getHeight() - sidebarWindow.getHeight();
-                sidebarWindow.setPosition(x, y, true);
-                break;
-            case 'tr':
-                x = me.desktop.getWidth() - sidebarWindow.getWidth() - 10;
-                y = 10;
-                sidebarWindow.setPosition(x, y, true);
-                break;
-            case 'br':
-                x = me.desktop.getWidth() - sidebarWindow.getWidth() - 10;
-                y = me.desktop.getHeight() - sidebarWindow.getHeight();
-                sidebarWindow.setPosition(x, y, true);
-                break;
-            default:
-                sidebarWindow.setPosition(10, 10, true);
-                break;
+        if (alignRight) {
+            x = me.desktop.getWidth() - window.getWidth() - xOffset;
         }
+
+        if(alignBottom) {
+            y = me.desktop.getHeight() - window.getHeight();
+        }
+
+        window.setPosition(x, y, true);
     },
 
-    onSaveWidgetPosition: function() {
-        var me = this,
-            data = [],
-            panels = me.widgetView.grid.items.items,
-            panelCount = panels.length,
-            i = 0;
-
-        for (panelCount; i < panelCount; i++) {
-            if (panels[i].viewId) {
-                data.push({
-                    viewId: panels[i].viewId,
-                    position: me.widgetView.grid.items.indexOf(panels[i])
-                });
-            }
-        }
-
+    onSaveWidgetPosition: function(column, row, widgetId, internalId) {
         Ext.Ajax.request({
             url: '{url controller=widgets action=saveWidgetPosition}',
-            jsonData: {
-                data: data
+            params: {
+                column: column,
+                position: row,
+                id: internalId
             }
         });
     },
 
-    onAddWidget: function(widgetName) {
+    onAddWidget: function(window, widgetName) {
         var me = this,
-            widget = me.widgetStore.findRecord('name', widgetName);
+            widget = me.widgetStore.findRecord('name', widgetName),
+            firstColumn = window.containerCollection.getAt(0);
 
         Ext.Ajax.request({
             url: '{url controller=widgets action=addWidgetView}',
             jsonData: {
                 id: widget.get('id'),
                 label: widget.get('label'),
-                column: 1,
-                position: me.widgetView.grid.items.items.length + 1
+                column: 0,
+                position: firstColumn.items.items.length + 1
             },
             callback: function(options, success, response) {
-                if (success) {
-                    var data = Ext.JSON.decode(response.responseText);
-
-                    me.widgetStore.reload();
-
-                    me.widgetView.grid.add(
-                        Ext.widget(widget.get('name'), {
-                            id: widget.get('name'),
-                            widgetId: widget.get('id'),
-                            viewId: data.viewId,
-                            title: widget.get('label')
-                        })
-                    );
+                if (!success) {
+                    return;
                 }
+
+                me.widgetStore.reload({
+                    callback: function() {
+                        window.createWidget(me.widgetStore.findRecord('name', widgetName));
+                    }
+                });
             }
         });
     },
 
-    onRemoveWidget: function(widgetName) {
+    onRemoveWidget: function(window, widgetName) {
         var me = this,
-            widget = me.widgetStore.findRecord('name', widgetName);
+            widget = me.widgetStore.findRecord('name', widgetName),
+            views = widget.get('views'),
+            column;
 
         Ext.Ajax.request({
             url: '{url controller=widgets action=removeWidgetView}',
             jsonData: {
-                views: widget.get('views')
+                views: views
             },
             callback: function(options, success, response) {
-                if (success) {
-                    me.widgetStore.reload();
-                    me.widgetView.grid.remove(Ext.getCmp(widget.get('name')));
+                if (!success) {
+                    return;
                 }
+
+                me.widgetStore.reload();
+
+                Ext.each(views, function(view) {
+                    column = window.containerCollection.getAt(view.column);
+
+                    column.remove(Ext.getCmp(widget.get('name')));
+                });
             }
         });
     },
@@ -232,10 +215,10 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
     onSideBarBtn: function() {
         var me = this;
 
-        if (me.widgetView.isVisible()) {
-            me.widgetView.hide(me.sideBarBtn);
+        if (me.widgetWindow.isVisible()) {
+            me.widgetWindow.hide(me.sideBarBtn);
         } else {
-            me.widgetView.show(me.sideBarBtn).toFront();
+            me.widgetWindow.show(me.sideBarBtn).toFront();
         }
     }
 });
