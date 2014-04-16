@@ -51,7 +51,9 @@
 			{block name='frontend_detai_supplier_info'}
 				{if $sArticle.supplierImg}
 					<div class="product--supplier block">
-						<img src="{$sArticle.supplierImg}" alt="{$sArticle.supplierName}">
+						<a href="{url controller='supplier' sSupplier=$sArticle.supplierID}" title="{s name="DetailDescriptionLinkInformation" namespace="frontend/detail/description"}{/s}">
+							<img src="{$sArticle.supplierImg}" alt="{$sArticle.supplierName}">
+						</a>
 					</div>
 				{/if}
 			{/block}
