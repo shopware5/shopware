@@ -71,18 +71,42 @@ Ext.define('Shopware.apps.Index', {
      * Required views for module (subapplication)
      * @array
      */
-    views: [ 'Main', 'Menu', 'Footer', 'Search', 'widgets.Window', 'widgets.Desktop', 'widgets.Sales','widgets.Upload', 'widgets.Visitors',
-        'widgets.Orders', 'widgets.Notice', 'widgets.Merchant', 'widgets.Base', 'merchant.Window' ],
+    views: [
+        'Main',
+        'Menu',
+        'Footer',
+        'Search',
+        'widgets.Window',
+        'widgets.Sales',
+        'widgets.Upload',
+        'widgets.Visitors',
+        'widgets.Orders',
+        'widgets.Notice',
+        'widgets.Merchant',
+        'widgets.Base',
+        'merchant.Window'
+    ],
 
     /**
      * Required models for the module
      * @array
      */
-    models: [ 'Widget', 'Turnover', 'Batch', 'Customers', 'Visitors', 'Orders', 'Merchant', 'MerchantMail' ],
+    models: [
+        'Widget',
+        'Turnover',
+        'Batch',
+        'Customers',
+        'Visitors',
+        'Orders',
+        'Merchant',
+        'MerchantMail'
+    ],
 
     /**
      * Required models for the module
      * @array
      */
-    store: [ 'Widgets' ]
+    store: [
+        'Widget'
+    ]
 });
