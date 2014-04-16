@@ -117,6 +117,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $user = Shopware()->Auth()->getIdentity();
         /** @var $locale \Shopware\Models\Shop\Locale */
         $locale = $user->locale;
+        $language = $locale->toString();
 
         /** @var $builder \Shopware\Components\Model\QueryBuilder */
         $builder = $repository->createQueryBuilder('form')
@@ -127,19 +128,23 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             ->select(array('form', 'element', 'value', 'elementTranslation', 'formTranslation'))
             ->setParameter("localeId",$locale->getId());
 
-
-
         $builder->addOrderBy((array) $this->Request()->getParam('sort', array()))
             ->addFilter((array) $this->Request()->getParam('filter', array()));
 
         $data = $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        foreach ($data['elements'] as $elementsKey => $values) {
-            foreach ($values['translations'] as $translationsKey => $array) {
+        foreach ($data['elements'] as &$values) {
+            foreach ($values['translations'] as $array) {
                 if ($array['label'] !== null) {
-                    $data['elements'][$elementsKey]['label'] = $array['label'];
+                    $values['label'] = $array['label'];
                 }
             }
+
+            if (!in_array($values['type'], array('select', 'combo'))) {
+                continue;
+            }
+
+            $values['options']['store'] = $this->translateStore($language, $values['options']['store']);
         }
 
         $this->View()->assign(array(
@@ -147,6 +152,48 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             'data' => $data,
             'total' => count($data)
         ));
+    }
+
+    /**
+     * Helper function to translate the store of select- and combo-fields
+     * Store value will be replaced by the value in the correct language.
+     * If there is no matching language in array defined, the first array element will be used.
+     * If the store or a value is not an array, it will not be changed.
+     *
+     * Store should be an array like this:
+     *
+     * $store = array(
+     *              array(1, array('de_DE' => 'Auto', 'en_GB' => 'car')),
+     *              array(2, array('de_DE' => 'Hund', 'en_GB' => 'dog')),
+     *              array(3, array('de_DE' => 'Katze', 'en_GB' => 'cat'))
+     *          );
+     *
+     * @param string $language
+     * @param mixed $store
+     */
+    private function translateStore($language, $store)
+    {
+        if (!is_array($store)) {
+            return $store;
+        }
+
+        foreach ($store as &$row) {
+            $value = array_pop($row);
+
+            if (!is_array($value)) {
+                $row[] = $value;
+                continue;
+            }
+
+            if (!array_key_exists($language, $value)) {
+                $row[] = array_shift($value);
+                continue;
+            }
+
+            $row[] = $value[$language];
+        }
+
+        return $store;
     }
 
     /**

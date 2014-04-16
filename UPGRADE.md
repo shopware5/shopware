@@ -62,7 +62,7 @@ In this document you will find a changelog of the important changes related to t
 * Access to GET, POST and COOKIES through sSystem is deprecated.
     * The current arrays have been replaced with wrappers objects to the global variables
     * This might introduce breaks in some scenarios (eg.: when using array functions like array_merge)
-
+* Plugin configuration: Stores of `select` and `combo` elements can now be translated
 
 ## 4.2.2
 
