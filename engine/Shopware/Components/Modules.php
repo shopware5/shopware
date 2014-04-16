@@ -73,7 +73,9 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
             Shopware()->Hooks()->setAlias($name, $name);
             $proxy = Shopware()->Hooks()->getProxy($name);
             $this->modules_container[$name] = new $proxy;
-            $this->modules_container[$name]->sSYSTEM = $this->system;
+            if (property_exists($name, 'sSYSTEM')) {
+                $this->modules_container[$name]->sSYSTEM = $this->system;
+            }
         }
     }
 
