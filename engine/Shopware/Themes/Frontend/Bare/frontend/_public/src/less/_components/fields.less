@@ -97,5 +97,35 @@ input[type="email"] {
 		.opacity(.5);
 		cursor: not-allowed;
 	}
+}
 
+// Quantity field
+.js--quantity-field {
+	.clearfix();
+
+	input[type="number"] {
+		width: 78%;
+		margin: 0 2% 0 0;
+	}
+
+	input[type="number"],
+	.js--quantity-button {
+		float: left;
+	}
+
+	.js--quantity-button {
+		width: 20%;
+	}
+
+	.js--quantity-button > a {
+		.user-select(none);
+		.unitize-height(20, 16);
+		.unitize(18, 16, line-height);
+		display: block;
+		padding: 0;
+		font-weight: bold;
+	}
+	.js--quantity-button-plus {
+		.unitize-margin(0, 0, 4, 0, 16);
+	}
 }

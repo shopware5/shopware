@@ -48,6 +48,7 @@ $(function() {
     $('*[data-tab-content="true"]').tabContent();
     $('*[data-emotions="true"]').emotions();
     $('*[data-image-slider="true"]').imageSlider();
+    $('input[data-quantity-field="true"]').quantityField();
 
     // Deferred loading of the captcha
     $("div.captcha--placeholder[data-src]").each(function() {
