@@ -2,6 +2,31 @@
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
 ## 4.3.0
+* Removed deprecated Zend Framework components:
+    * `Zend_Amf`
+    * `Zend_Application`
+    * `Zend_Barcode`
+    * `Zend_Cloud`
+    * `Zend_CodeGenerator`
+    * `Zend_Console`
+    * `Zend_Gdata`
+    * `Zend_Markup`
+    * `Zend_Measure`
+    * `Zend_Memory`
+    * `Zend_Pdf`
+    * `Zend_Reflection`
+    * `Zend_Search`
+    * `Zend_Serializer`
+    * `Zend_Tag`
+    * `Zend_Test`
+    * `Zend_Tool`
+    * `Zend_EventManager`
+    * `Zend_Feed`
+    * `Zend_Dojo`
+    * `Zend_Mobile`
+    * `Zend_Queue`
+    * `Zend_Captcha`
+    * `Zend_Service`
 
 * `sCore::sCustomRenderer()` removed
 * `sCore::sBuildLink()` second argument removed (dead code)
