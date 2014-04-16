@@ -1,9 +1,31 @@
 .register--content {
 
-    width: 100%;
+    /* Personal Information Fieldset */
+    .register--personal {
 
-    .register--field {
+	.unitize-margin(0,32,0,32,16);
+	border: none;
+	.clearfix();
+
+	}
+
+    .field--select {
+	.unitize-margin(8,0,16);
 	width: 100%;
     }
 
+    .register--field {
+	width: 100%;
+	.unitize(5, 16, margin-bottom);
+    }
+
+    .birthday--label {
+	.clearfix();
+    }
+
+    .birthday--field {
+	.unitize-margin(8,16,8,0,16,);
+	width: 100%;
+	float: left;
+    }
 }

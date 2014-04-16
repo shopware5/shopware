@@ -1,7 +1,7 @@
 {block name='frontend_register_error_messages'}
 	{if $error_messages}
-		<div class="error">
-			<h2>{s name='RegisterErrorHeadline'}{/s}</h2>
+		<div class="alert error">
+			<h2 class="">{s name='RegisterErrorHeadline'}{/s}</h2>
 
 			<ul>
 				{foreach from=$error_messages item=errorItem}
