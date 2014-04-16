@@ -198,6 +198,13 @@ class Shipping extends ModelEntity
     protected $country;
 
     /**
+     * @ORM\OneToOne(targetEntity="\Shopware\Models\Country\State")
+     * @ORM\JoinColumn(name="stateID", referencedColumnName="id")
+     * @var \Shopware\Models\Country\State
+     */
+    private $state;
+
+    /**
      * INVERSE SIDE
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\OrderShipping", mappedBy="orderShipping", orphanRemoval=true, cascade={"persist"})
      * @var \Doctrine\Common\Collections\ArrayCollection
@@ -456,6 +463,25 @@ class Shipping extends ModelEntity
         $this->order = $order;
     }
 
+    /**
+     * Setter for the state association
+     *
+     * @param \Shopware\Models\Country\State $state
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+    }
+
+    /**
+     * Getter for the state association
+     *
+     * @return \Shopware\Models\Country\State
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
 
     /**
      * @return \Shopware\Models\Country\Country
@@ -529,26 +555,4 @@ class Shipping extends ModelEntity
     {
         return $this->additionalAddressLine1;
     }
-
-    /**
-     * Setter function for the getAdditionalAddressLine1 column property.
-     *
-     * @param int $stateId
-     */
-    public function setStateId($stateId)
-    {
-        $this->stateId = $stateId;
-    }
-
-    /**
-     * Getter function for the getAdditionalAddressLine1 column property.
-     *
-     * @return int
-     */
-    public function getStateId()
-    {
-        return $this->stateId;
-    }
-
-
 }

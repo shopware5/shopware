@@ -285,6 +285,12 @@ Ext.define('Shopware.apps.Customer.view.detail.Billing', {
             required:true,
             allowBlank:false
         }, {
+            name:'billing[additionalAddressLine1]',
+            fieldLabel:me.snippets.additionalAddressLine1
+        }, {
+            name:'billing[additionalAddressLine2]',
+            fieldLabel:me.snippets.additionalAddressLine2
+        }, {
             name:'billing[zipCode]',
             fieldLabel:me.snippets.zipCode,
             required:true,
@@ -294,15 +300,9 @@ Ext.define('Shopware.apps.Customer.view.detail.Billing', {
             fieldLabel:me.snippets.city,
             required:true,
             allowBlank:false
-        }, {
-            name:'billing[additionalAddressLine1]',
-            fieldLabel:me.snippets.additionalAddressLine1
-        }, {
-            name:'billing[additionalAddressLine2]',
-            fieldLabel:me.snippets.additionalAddressLine2
         },
-            me.countryCombo,
             me.countryStateCombo,
+            me.countryCombo,
         {
             //define birthday date field with a defined format
             xtype:'datefield',

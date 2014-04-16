@@ -206,11 +206,11 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
             name:'shipping[streetNumber]',
             fieldLabel:me.snippets.streetNumber
         }, {
-            name:'shipping[zipCode]',
-            fieldLabel:me.snippets.zipCode
+            name:'shipping[additionalAddressLine1]',
+            fieldLabel:me.snippets.additionalAddressLine1
         }, {
-            name:'shipping[city]',
-            fieldLabel:me.snippets.city
+            name:'shipping[additionalAddressLine2]',
+            fieldLabel:me.snippets.additionalAddressLine2
         }];
     },
 
@@ -230,7 +230,7 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
             displayField: 'name',
             forceSelection: true,
             labelWidth:120,
-            store: Ext.create('Shopware.store.CountryState').load(),
+            store: Ext.create('Shopware.store.CountryState'),
             minWidth: 250,
             editable: false,
             hidden: true,
@@ -259,15 +259,16 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
             }
         });
 
-        return [{
-            name:'shipping[additionalAddressLine1]',
-            fieldLabel:me.snippets.additionalAddressLine1
+        return [
+        {
+            name:'shipping[zipCode]',
+            fieldLabel:me.snippets.zipCode
         }, {
-            name:'shipping[additionalAddressLine2]',
-            fieldLabel:me.snippets.additionalAddressLine2
+            name:'shipping[city]',
+            fieldLabel:me.snippets.city
         },
-        me.countryCombo,
         me.countryStateCombo,
+        me.countryCombo,
         {
             name:'shipping[company]',
             fieldLabel:me.snippets.company
