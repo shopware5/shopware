@@ -88,9 +88,16 @@ td.head  {
 				{$User.$address.company}<br />
 				{$User.$address.firstname} {$User.$address.lastname}<br />			
 				{$User.$address.street} {$User.$address.streetnumber}<br />
+				{block name="document_index_address_additionalAddressLines"}
+					{$User.$address.additional_address_line1}<br />
+					{$User.$address.additional_address_line2}<br />
+				{/block}
+				{block name="document_index_address_cityZip"}
 				{$User.$address.zipcode} {$User.$address.city}<br />
+				{/block}
+				{block name="document_index_address_countryData"}
 				{if $User.$address.state.shortcode}{$User.$address.state.shortcode} - {/if}{$User.$address.country.countryen}<br />
-
+				{/block}
 			</div>
 		{/if}
 		</div>
