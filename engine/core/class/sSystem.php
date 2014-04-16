@@ -96,7 +96,6 @@ class sSystem
     public $sSubShop;			// Current active subshop
     public $sSubShops;			// Information about licensed subshops
 
-
     public $sMailer;			// Pointer to PHP-Mailer Object
     public $sBotSession;		// True if user is identified as bot
 
@@ -123,6 +122,7 @@ class sSystem
                 break;
         }
     }
+
     public function __get($property) {
 
         switch ($property) {

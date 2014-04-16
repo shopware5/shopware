@@ -131,7 +131,9 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
         $this->assertNotEquals($previousGetData, $getData);
 
         foreach (self::$resources as $name) {
-            $this->assertEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
+            if (property_exists($name, 'sSYSTEM')) {
+                $this->assertEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
+            }
         }
 
         return $getData;
@@ -150,10 +152,12 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
         $this->assertNotEquals($getData, Shopware()->Front()->Request()->getPost());
 
         foreach (self::$resources as $name) {
-            Shopware()->Front()->Request()->setPost($getData);
-            $this->assertEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
-            Shopware()->Modules()->getModule($name)->sSYSTEM->_POST = array();
-            $this->assertNotEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
+            if (property_exists($name, 'sSYSTEM')) {
+                $this->assertEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
+                Shopware()->Modules()->getModule($name)->sSYSTEM->_POST = array();
+                Shopware()->Front()->Request()->setPost($getData);
+                $this->assertNotEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
+            }
         }
 
         return $getData;
@@ -177,7 +181,9 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
         $this->assertNotEquals($previousGetData, $getData);
 
         foreach (self::$resources as $name) {
-            $this->assertEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
+            if (property_exists($name, 'sSYSTEM')) {
+                $this->assertEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
+            }
         }
     }
 }
