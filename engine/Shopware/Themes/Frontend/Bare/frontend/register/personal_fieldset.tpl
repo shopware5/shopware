@@ -1,4 +1,4 @@
-<div class="register--personal panel has--border">
+<div class="panel--body">
 	<h2 class="panel--title underline">{s name='RegisterPersonalHeadline'}{/s}</h2>
 
 	{* Customer type *}
@@ -46,11 +46,11 @@
 	{if !$update}
 		{block name='frontend_register_personal_fieldset_skip_login'}
 			{if !$sEsd && !$form_data.sValidation && !{config name=NoAccountDisable}}
-		        <div class="check">
-		            <input type="checkbox" value="1" id="register_personal_skipLogin" name="register[personal][skipLogin]" class="chkbox" {if $form_data.skipLogin||$form_data.accountmode || $skipLogin}checked {/if}/>
+			<div class="check">
+			    <input type="checkbox" value="1" id="register_personal_skipLogin" name="register[personal][skipLogin]" class="register--checkbox chkbox" {if $form_data.skipLogin||$form_data.accountmode || $skipLogin}checked {/if}/>
 			    <label for="register_personal_skipLogin" class="chklabel"><strong>{s name='RegisterLabelNoAccount'}{/s}</strong></label>
-		            <div class="clear">&nbsp;</div>
-		        </div>
+			    <div class="clear">&nbsp;</div>
+			</div>
 		    {/if}
 	    {/block}
 
@@ -61,7 +61,7 @@
 			</div>
 
 			{if {config name=DOUBLEEMAILVALIDATION}}
-			    <div>
+			    <div class="register--field emailconfirm">
 				<input name="register[personal][emailConfirmation]" type="text" placeholder="{s name='RegisterLabelMailConfirmation'}{/s}" id="register_personal_emailConfirmation" value="{$form_data.emailConfirmation|escape}" class="register--field emailConfirmation required {if $error_flags.emailConfirmation}instyle_error{/if}" />
 			    </div>
 			{/if}
@@ -107,7 +107,7 @@
 	{if !$form_data.skipLogin && !$update}
 		{block name='frontend_register_personal_fieldset_birthday'}
 			<div id="birthdate">
-				<label for="register_personal_birthdate" class="birthday--label normal">{s name='RegisterLabelBirthday'}{/s}</label>
+				<label for="register_personal_birthdate" class="birthday--label qnormal">{s name='RegisterLabelBirthday'}{/s}</label>
 
 				<div class="field--select birthday--field">
 					<span class="arrow"></span>
