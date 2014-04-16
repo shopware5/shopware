@@ -45,44 +45,45 @@
 			{/if}
 		{/block}
 
-			
-		<form method="post" action="{url action=saveRegister}">
-			
-			{include file="frontend/register/error_message.tpl" error_messages=$register->personal->error_messages}
-			{include file="frontend/register/personal_fieldset.tpl" form_data=$register->personal->form_data error_flags=$register->personal->error_flags}
-			
-			{include file="frontend/register/error_message.tpl" error_messages=$register->billing->error_messages}
-			{include file="frontend/register/billing_fieldset.tpl" form_data=$register->billing->form_data error_flags=$register->billing->error_flags country_list=$register->billing->country_list}
-			
-			{include file="frontend/register/error_message.tpl" error_messages=$register->shipping->error_messages}
-			{include file="frontend/register/shipping_fieldset.tpl" form_data=$register->shipping->form_data error_flags=$register->shipping->error_flags country_list=$register->shipping->country_list}
-			
-			<div class="payment_method register_last"></div>
+		<div class="register--form">
+			<form method="post" action="{url action=saveRegister}">
 
-			{* Privacy checkbox *}
-			{if !$update}
-				{if {config name=ACTDPRCHECK}}
-					{block name='frontend_register_index_input_privacy'}
-						<div class="privacy">
-							<input name="register[personal][dpacheckbox]" type="checkbox" id="dpacheckbox"{if $form_data.dpacheckbox} checked="checked"{/if} value="1" class="chkbox" />
-							<label for="dpacheckbox" class="chklabel{if $register->personal->error_flags.dpacheckbox} instyle_error{/if}">{s name='RegisterLabelDataCheckbox'}{/s}</label>
-							<div class="clear">&nbsp;</div>
-						</div>
-					{/block}
+				{include file="frontend/register/error_message.tpl" error_messages=$register->personal->error_messages}
+				{include file="frontend/register/personal_fieldset.tpl" form_data=$register->personal->form_data error_flags=$register->personal->error_flags}
+
+				{include file="frontend/register/error_message.tpl" error_messages=$register->billing->error_messages}
+				{include file="frontend/register/billing_fieldset.tpl" form_data=$register->billing->form_data error_flags=$register->billing->error_flags country_list=$register->billing->country_list}
+
+				{include file="frontend/register/error_message.tpl" error_messages=$register->shipping->error_messages}
+				{include file="frontend/register/shipping_fieldset.tpl" form_data=$register->shipping->form_data error_flags=$register->shipping->error_flags country_list=$register->shipping->country_list}
+
+				<div class="payment_method register_last"></div>
+
+				{* Privacy checkbox *}
+				{if !$update}
+					{if {config name=ACTDPRCHECK}}
+						{block name='frontend_register_index_input_privacy'}
+							<div class="privacy">
+								<input name="register[personal][dpacheckbox]" type="checkbox" id="dpacheckbox"{if $form_data.dpacheckbox} checked="checked"{/if} value="1" class="chkbox" />
+								<label for="dpacheckbox" class="chklabel{if $register->personal->error_flags.dpacheckbox} instyle_error{/if}">{s name='RegisterLabelDataCheckbox'}{/s}</label>
+								<div class="clear">&nbsp;</div>
+							</div>
+						{/block}
+					{/if}
 				{/if}
-			{/if}
-			
-			{* Required fields hint *}
-			<div class="required_fields">
-				{s name='RegisterPersonalRequiredText' namespace='frontend/register/personal_fieldset'}{/s}
-			</div>
-			
-			<div class="actions">
-				<input id="registerbutton" type="submit" class="right" value="{s name='RegisterIndexActionSubmit'}{/s}" />
-				<hr class="clear space" />
-			</div>
-			
-		</form>
+
+				{* Required fields hint *}
+				<div class="required_fields">
+					{s name='RegisterPersonalRequiredText' namespace='frontend/register/personal_fieldset'}{/s}
+				</div>
+
+				{* Submit button *}
+				<div class="register--button actions">
+					<button type="submit" class="btn btn--primary">{s name='RegisterIndexActionSubmit'}{/s} <i class="icon--arrow-right"></i></button>
+				</div>
+
+			</form>
+		</div>
 	</div>
 {/block}
 

@@ -86,10 +86,10 @@
 		<div class="country-area-state-selection">
 			{foreach $country_list as $country}
 				{if $country.states}
-					<div class="selection{if $country.id != $form_data.country} hidden{/if}">
-					<label for="country_{$country.id}_states">{se name='RegisterBillingLabelState'}Bundesstaat:{/se} </label>
-						<select {if $country.id != $form_data.country}disabled="disabled"{/if} name="register[billing][country_state_{$country.id}]" id="country_{$country.id}_states" class="text {if $country.force_state_in_registration}required{/if} {if $error_flags.stateID}instyle_error{/if}">
-						<option value="" selected="selected">{s name='RegisterBillingLabelSelect'}{/s}</option>
+					<div class="field--select selection{if $country.id != $form_data.country} is--disabled{/if}">
+						<span class="arrow"></span>
+						<select {if $country.id != $form_data.country}disabled="disabled"{/if} name="register[billing][country_state_{$country.id}]" id="country_{$country.id}_states" class="{if $country.force_state_in_registration}required{/if} {if $error_flags.stateID}instyle_error{/if}">
+						<option value="" selected="selected">{s name='RegisterBillingLabelState'}Bundesstaat:{/s}</option>
 							{assign var="stateID" value="country_state_`$country.id`"}
 							{foreach from=$country.states item=state}
 								<option value="{$state.id}" {if $state.id eq $form_data[$stateID]}selected="selected"{/if}>{$state.name}</option>
@@ -107,7 +107,6 @@
 				<div class="alt_shipping">
 					<input name="register[billing][shippingAddress]" type="checkbox" id="register_billing_shippingAddress" value="1" class="chkbox" {if $form_data.shippingAddress}checked="checked"{/if} />
 					<label for="register_billing_shippingAddress">{s name='RegisterBillingLabelShipping'}{/s}</label>
-					<div class="clear">&nbsp;</div>
 				</div>
 			{/if}
 		{/block}
