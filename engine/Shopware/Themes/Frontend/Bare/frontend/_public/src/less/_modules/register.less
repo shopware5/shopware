@@ -1,84 +1,124 @@
 .register--content {
 
-    border: 0 none;
+     width: 100%;
+
     .clearfix();
+
+    .has--border {
+	.border-radius(4px);
+    }
 
     .panel--title {
 	.unitize(16,16, margin-bottom);
     }
 
-    .register--button {
+    .panel--body {
+	.unitize-margin(0,16,16);
+    }
+
+    .register--check {
+	.unitize(8,16, padding-bottom);
+    }
+
+    .register--submit {
 	float: right;
+	.unitize-margin(0,26,16,);
+
+	.icon--arrow-right {
+	    .unitize(10,16, font-size);
+	}
+    }
+
+    .register--required-info {
+	.unitize-margin(0,26,16,);
     }
 
     /* Personal Information Fieldset */
     .register--personal {
-
-	.unitize-margin(0,32,0,32,16);
-	border: none;
+	.unitize(32,16, padding-bottom);
 	.clearfix();
-
-	}
-
-    .register--company {
-
-	.unitize-margin(0,16,16);
     }
 
     .field--select {
-	.unitize-margin(8,0,16);
-	width: 100%;
+	.unitize-margin(0,0,6,0,16);
     }
 
     .register--field {
 	width: 100%;
-	.unitize(5, 16, margin-bottom);
+	.unitize-margin(4,0,4,0,16);
+
+	&.street {
+	    margin-right: 2%;
+	    width: 80%;
+	    float: left;
+	}
+	&.streetnumber {
+	    width: 18%;
+	    float: left;
+	}
+	&.zipcode {
+	    margin-right: 2%;
+	    width: 28%;
+	    float: left;
+	}
+	&.city {
+	    width: 70%;
+	    float: left;
+	    .clearfix();
+	}
     }
 
     .birthday--label {
 	.clearfix();
     }
 
-    .register--birthday{
-	.unitize-margin(8,16,8,0,16,);
-	width: 100%;
+    .register--birthday {
+	.unitize(8,16, margin-top);
+	margin-right: 2%;
+	width: 31%;
 	float: left;
     }
 
+    .register--alert {
 
-
-
-
-    .register--address {
-
-	.street {
-	    margin-right: 2%;
-	    width: 80%;
-	    float: left;
-	}
-
-	.streetnumber {
-	    width: 18%;
-	    float: left;
-	}
-
-	.zipcode {
-	    margin-right: 2%;
-	    width: 28%;
-	    float: left;
-	}
-
-	.city {
-	    width: 70%;
-	    float: left;
-	    .clearfix();
+	.alert {
+	    .unitize-padding(16,16);
 	}
 
     }
 
+}
+
+@media screen and(min-width: @tabletViewportWidth) {
 
 
+    .register--content {
+	    width: 90%;
+	.field--select {
+	    .unitize-margin(5,0,16);
 
+	    .register--birthday {
+		margin-right: 2%;
+	    }
+	}
+
+	.register--field {
+	    .unitize-margin(8,0,8,0,16);
+	}
+
+	.register--check {
+	    .unitize(8,16, padding-bottom);
+	}
+    }
+
+
+}
+
+@media screen and (min-width: @desktopViewportWidth) {
+
+    .register--content {
+	    width: 65%;
+    }
 
 
 }

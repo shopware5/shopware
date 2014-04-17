@@ -1,4 +1,4 @@
-<div class="panel register--personal has--border">
+<div class="panel register--personal">
 	<h2 class="panel--title underline">{s name='RegisterPersonalHeadline'}{/s}</h2>
 	<div class="panel--body">
 		{* Customer type *}
@@ -47,7 +47,7 @@
 		{if !$update}
 			{block name='frontend_register_personal_fieldset_skip_login'}
 				{if !$sEsd && !$form_data.sValidation && !{config name=NoAccountDisable}}
-					<div class="check">
+					<div class="register--check">
 						<input type="checkbox" value="1" id="register_personal_skipLogin" name="register[personal][skipLogin]" class="register--checkbox chkbox" {if $form_data.skipLogin||$form_data.accountmode || $skipLogin}checked {/if}/>
 						<label for="register_personal_skipLogin" class="chklabel"><strong>{s name='RegisterLabelNoAccount'}{/s}</strong></label>
 					</div>

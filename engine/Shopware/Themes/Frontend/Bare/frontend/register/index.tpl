@@ -17,7 +17,7 @@
 {block name='frontend_index_breadcrumb'}<div class="clear"></div>{/block}
 
 {block name="frontend_index_content"}
-	<div class="block register--content has--border">
+	<div class="register--content panel content block has--border">
 
 		{block name='frontend_register_index_dealer_register'}
 			{* Included for compatibility reasons *}
@@ -26,7 +26,7 @@
 		{block name='frontend_register_index_cgroup_header'}
 			{if $register.personal.form_data.sValidation}
 			{* Include information related to registration for other customergroups then guest, this block get overridden by b2b essentials plugin *}
-			<div class="panel register--supplier has--border">
+			<div class="panel register--supplier">
 				<h2 class="panel--title underline">{$sShopname} {s name='RegisterHeadlineSupplier' namespace='frontend/register/index'}{/s}</h2>
 				<div class="panel--body">
 					<strong>{s name='RegisterInfoSupplier' namespace='frontend/register/index'}{/s}</strong><br />
@@ -66,12 +66,12 @@
 			{/if}
 
 			{* Required fields hint *}
-			<div class="required_fields">
+			<div class="register--required-info required_fields">
 				{s name='RegisterPersonalRequiredText' namespace='frontend/register/personal_fieldset'}{/s}
 			</div>
 
 			{* Submit button *}
-			<div class="register--button actions">
+			<div class="register--submit actions">
 				<button type="submit" class="btn btn--primary">{s name='RegisterIndexActionSubmit'}{/s} <i class="icon--arrow-right"></i></button>
 			</div>
 
@@ -81,13 +81,15 @@
 
 {* Sidebar right *}
 {block name='frontend_index_content_right'}
-	<div id="right" class="grid_5 register last">
-		<div class="register_info">
-			{s name='RegisterInfoAdvantages'}{/s}
-		</div>
+	<div class="panel register--advantages">
+		<div id="right" class="panel--body">
+			<div class="register_info">
+				{s name='RegisterInfoAdvantages'}{/s}
+			</div>
 
-	    {if {config name=TSID}}
-	        {include file='frontend/plugins/trusted_shops/logo.tpl'}
-	    {/if}
+			{if {config name=TSID}}
+				{include file='frontend/plugins/trusted_shops/logo.tpl'}
+			{/if}
+		</div>
 	</div>
 {/block}
