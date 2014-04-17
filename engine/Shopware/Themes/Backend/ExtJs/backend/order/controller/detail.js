@@ -468,9 +468,8 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
      * @param record
      */
     onCountryChanged: function(countryCombo, newValue, countryStateCombo, record) {
-        var store,
+        var store = countryStateCombo.store,
             oldStateId = record.get('stateId');
-        store = countryStateCombo.store;
         if (newValue === null) {
             countryStateCombo.setValue(null);
             countryStateCombo.hide();
