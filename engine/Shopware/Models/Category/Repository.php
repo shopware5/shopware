@@ -661,4 +661,38 @@ class Repository extends ModelRepository
 
         return $builder;
     }
+
+    /**
+     * Returns the \Doctrine\ORM\Query to select the informations of an category and its children by category id
+     * @param integer $categoryId
+     * @return Query
+     */
+    public function getCategoryByIdQuery($categoryId)
+    {
+        $builder = $this->getCategoryQueryBuilder()
+            ->where('category.id = :categoryId')
+            ->setParameters(array('categoryId' => $categoryId));
+
+        return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getCategoryByIdQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     */
+
+    public function getCategoryQueryBuilder()
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('category', 'attribute', 'media', 'children', 'childrenAttribute', 'childrenMedia'))
+            ->from('Shopware\Models\Category\Category', 'category')
+            ->leftJoin('category.attribute', 'attribute')
+            ->leftJoin('category.media', 'media')
+            ->leftJoin('category.children', 'children')
+            ->leftJoin('children.attribute', 'childrenAttribute')
+            ->leftJoin('children.media', 'childrenMedia');
+
+        return $builder;
+    }
 }
