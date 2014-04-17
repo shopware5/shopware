@@ -28,26 +28,20 @@
  * @author shopware AG
  */
 
-/**
- * todo@all: Documentation
- */
-//{block name="backend/index/model/batch"}
-Ext.define('Shopware.apps.Index.model.Batch', {
-	extend: 'Ext.data.Model',
-    fields: [
-		//{block name="backend/index/model/batch/fields"}{/block}
-		'id',
-        'currentUsers'
-    ],
+//{block name="backend/index/model/widget_settings"}
 
-    /**
-     * Define the associations of the order model.
-     * One order has a customer, many details, billing- & shipping address and a payment information.
-     * @array
-     */
-    associations:[
-        { type:'hasMany', model:'Shopware.apps.Index.model.Visitors', name:'getVisitors', associationKey:'visitors' },
-        { type:'hasMany', model:'Shopware.apps.Index.model.Customers', name:'getCustomers', associationKey:'customers' }
+Ext.define('Shopware.apps.Index.model.WidgetSettings', {
+
+    extend: 'Ext.data.Model',
+
+    fields: [
+        'authId',
+        'height',
+        'columnsShown',
+        'dock',
+        'pinned',
+        'minimized'
     ]
 });
+
 //{/block}

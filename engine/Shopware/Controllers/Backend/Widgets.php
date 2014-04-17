@@ -219,6 +219,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
         $namespace = Shopware()->Snippets()->getNamespace('backend/widget/controller');
         $this->View()->assign(array(
+<<<<<<< HEAD
             'success' => true,
             'data' => array(
                 array('name' => $namespace->get('today', 'Today'), 'turnover' => $fetchAmount["today"], 'visitors' => $fetchVisitors["today"], 'newCustomers' => $fetchCustomers["today"], 'orders' => $fetchOrders["today"]),
@@ -226,6 +227,27 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             ),
             'conversion' => $fetchConversion
         ));
+=======
+                'success' => true,
+                'data' => array(
+                    array(
+                        'name' => $namespace->get('today', 'Today'),
+                        'turnover' => $fetchAmount["today"],
+                        'visitors' => (int) $fetchVisitors["today"],
+                        'newCustomers' => $fetchCustomers["today"],
+                        'orders' => $fetchOrders["today"]
+                    ),
+                    array(
+                        'name' => $namespace->get('yesterday', 'Yesterday'),
+                        'turnover' => $fetchAmount["yesterday"],
+                        'visitors' => (int) $fetchVisitors["yesterday"],
+                        'newCustomers' => $fetchCustomers["yesterday"],
+                        'orders' => $fetchOrders["yesterday"]
+                    )
+                ),
+                'conversion' => $fetchConversion
+            ));
+>>>>>>> SW-6607 - Fixed turnover widget bug so that 0 turnover is not null
     }
 
     /**

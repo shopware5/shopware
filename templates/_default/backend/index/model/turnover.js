@@ -36,6 +36,11 @@ Ext.define('Shopware.apps.Index.model.Turnover', {
 	extend: 'Ext.data.Model',
 	fields: [
 		//{block name="backend/index/model/turnover/fields"}{/block}
-		'name', 'turnover', 'visitors', 'newCustomers', 'orders' ]
+		'name',
+        'turnover',
+        'visitors',
+        'newCustomers',
+        'orders'
+    ]
 });
 //{/block}
