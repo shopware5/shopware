@@ -66,6 +66,8 @@
 		.unitize-margin(0, 0, 28, 0);
 	}
 
+	.slides img, .product--image-container img { margin: 0 auto; }
+
 	// Price
 	.price--default {
 		.unitize(24, 16, font-size);
@@ -81,19 +83,18 @@
 	// Quanitity box and input
 	.buybox--quantity {
 		margin: 0 2% 0 0;
-		width: 18%;
+		width: 30%;
 
 		input[type="number"] {
 			.unitize-height(44);
 			.border-radius(3px);
-			width: 100%;
 			text-align: center;
 		}
 	}
 
 	// "Buy now" button
 	.buybox--button {
-		width: 80%;
+		width: 68%;
 
         .icon--arrow-right {
             .unitize-margin(6, 0, 0, 0);
@@ -107,8 +108,8 @@
 		.unitize-margin(12, 0, 32, 0);
 
 		.entry--label {
+			.unitize-margin(0, 8, 0, 0);
 			display: inline-block;
-			width: 40%;
 		}
 	}
 
@@ -127,6 +128,8 @@
         .unitize(10, 16, font-size);
         .unitize-margin(-2, 8, 0, 0);
     }
+
+	.description--properties { list-style: none }
 }
 
 // Product reviews form
@@ -299,7 +302,6 @@
         .product--image-container {
             .unitize-max-height(480);
         }
-        .slides img, .product--image-container img { margin: 0 auto; }
 
         // Buy box
         .buybox--inner { float: right }

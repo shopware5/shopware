@@ -38,8 +38,8 @@
      */
     Plugin.prototype.init = function() {
         var me = this;
-
-        me.$el.on(clickEvt + '.' + pluginName, function(event) {
+        
+        me.$el.on('click.' + pluginName, function(event) {
             var target = $(event.target);
             event.preventDefault();
             event.stopPropagation();

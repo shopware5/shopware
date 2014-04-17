@@ -56,9 +56,7 @@ $(function() {
     $('*[data-tab-content="true"]').tabContent();
     $('*[data-emotions="true"]').emotions();
     $('*[data-image-slider="true"]').imageSlider();
-    $('*[data-collapse-panel="true"]').collapsePanel();
-    $('*[data-collapse-text="true"]').collapseText();
-    $('*[data-auto-submit="true"]').autoSubmit();
+    $('input[data-quantity-field="true"]').quantityField();
 
     // Deferred loading of the captcha
     $("div.captcha--placeholder[data-src]").each(function() {
@@ -72,10 +70,42 @@ $(function() {
         $this.load(requestURL);
     });
 
+    // Select box replacement
+    $('.field--select .arrow').on('click', function(event) {
+        event.preventDefault();
+
+        var el =  $(this).parent('div').children('select')[0];
+
+        // Workaround to open the select box drop down
+        if(document.createEvent) {
+            var e = document.createEvent('MouseEvents');
+
+            e.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            el.dispatchEvent(e);
+        } else {
+            el.fireEvent("onmousedown");
+        }
+    });
+
     // Auto submitting form
     $('select[data-auto-submit-form="true"]').on('change', function() {
         $(this).parents('form').submit();
     });
+
+    // Change the active tab to the customer reviews, if the url param sAction === rating is set.
+    if($('.is--ctl-detail').length) {
+        var plugin = $('.additional-info--tabs').data('plugin_tabContent');
+
+        $('.product--rating-link').on('click', function(e) {
+            e.preventDefault();
+            plugin.changeTab(1, true);
+        });
+
+        var param = decodeURI((RegExp('sAction' + '=' + '(.+?)(&|$)').exec(location.search) || [,null])[1]);
+        if(param === 'rating') {
+            plugin.changeTab(1, false);
+        }
+    }
 
     // Debug mode is enabled
     if($('.debug--panel').length) {

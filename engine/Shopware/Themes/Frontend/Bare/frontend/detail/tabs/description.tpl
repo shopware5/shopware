@@ -21,7 +21,7 @@
 						{* Property label *}
 						{block name='frontend_detail_description_properties_label'}
 							<strong class="property--label">
-								{$sProperty.name}
+								{$sProperty.name}:
 							</strong>
 						{/block}
 
