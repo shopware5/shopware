@@ -9,3 +9,10 @@
 		text-decoration: underline !important;
 	}
 }
+
+// We need to hide the sidebar using CSS due to the fact that the sidebar is neccessary for smartphone
+@media screen and (min-width: @tabletViewportWidth) {
+	.is--ctl-detail .sidebar-main {
+		display: none !important;
+	}
+}
