@@ -285,7 +285,9 @@ class sExport
         $this->sSmarty->registerPlugin('modifier', 'category', array(&$this,'sGetArticleCategoryPath'));
         $this->sSmarty->registerPlugin('modifier', 'link', array(&$this,'sGetArticleLink'));
         $this->sSmarty->registerPlugin('modifier', 'image', array(&$this,'sGetImageLink'));
+        $this->sSmarty->registerPlugin('modifier', 'articleImages', array(&$this,'sGetArticleImageLinks'));
         $this->sSmarty->registerPlugin('modifier', 'shippingcost', array(&$this,'sGetArticleShippingcost'));
+        $this->sSmarty->registerPlugin('modifier', 'property', array(&$this,'sGetArticleProperties'));
 
         $this->sSmarty->assign("sConfig",$this->sSYSTEM->sCONFIG);
         $this->sSmarty->assign("sLanguage",$this->sLanguage);
@@ -452,6 +454,49 @@ class sExport
         }
 
         return "";
+    }
+
+    /**
+     * Returns the article image links with the frontend logic.
+     * Checks the image restriction of variant articles, too.
+     *
+     * @param $articleId
+     * @param $orderNumber
+     * @param null $imageSize
+     * @param string $separator
+     * @return string
+     */
+    public function sGetArticleImageLinks($articleId, $orderNumber, $imageSize = null, $separator = "|" )
+    {
+        $imageSize = ($imageSize == null) ? "original" : $imageSize;
+        $returnData = array();
+        if (empty($articleId) || empty($orderNumber)) {
+            return "";
+        }
+        $imageData = Shopware()->Modules()->sArticles()->sGetArticlePictures($articleId, false, null, $orderNumber);
+        $cover = Shopware()->Modules()->sArticles()->sGetArticlePictures($articleId, true, null, $orderNumber);
+        $returnData[] = $cover["src"][$imageSize];
+        foreach ($imageData as $image) {
+            $returnData[] = $image["src"][$imageSize];
+        }
+
+        return implode($separator, $returnData);
+    }
+
+    /**
+     * Returns an array with the article property data.
+     * Needs to be parsed over the feed smarty template
+     *
+     * @param $articleId
+     * @param $filterGroupId
+     * @return string
+     */
+    public function sGetArticleProperties($articleId, $filterGroupId  )
+    {
+        if (empty($articleId) || empty($filterGroupId)) {
+            return "";
+        }
+        return Shopware()->Modules()->sArticles()->sGetArticleProperties($articleId, $filterGroupId);
     }
 
     public function sMapTranslation($object,$objectdata)
@@ -674,6 +719,7 @@ class sExport
                 d.purchaseunit,
                 d.referenceunit,
                 a.taxID,
+                a.filtergroupID,
                 a.supplierID,
                 d.unitID,
                 IF(a.changetime!='0000-00-00 00:00:00',a.changetime,'') as `changed`,
