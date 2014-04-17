@@ -1,34 +1,34 @@
-<div class="panel--body">
+<div class="panel register--company has--border">
 	<h2 class="panel--title underline">{s name='RegisterHeaderCompany'}{/s}</h2>
-		<div class="register--company">
+	<div class="panel--body">
 
-			{* Company *}
-			{block name='frontend_register_billing_fieldset_input_company'}
-				<div class="register--companyname">
-					<input name="register[billing][company]" type="text" placeholder="{s name='RegisterLabelCompany'}{/s}" id="register_billing_company" value="{$form_data.company|escape}" class="register--field required {if $error_flags.company}instyle_error{/if}" />
-				</div>
-			{/block}
+		{* Company *}
+		{block name='frontend_register_billing_fieldset_input_company'}
+			<div class="register--companyname">
+				<input name="register[billing][company]" type="text" placeholder="{s name='RegisterLabelCompany'}{/s}" id="register_billing_company" value="{$form_data.company|escape}" class="register--field required {if $error_flags.company}instyle_error{/if}" />
+			</div>
+		{/block}
 
-			{* Department *}
-			{block name='frontend_register_billing_fieldset_input_department'}
-				<div class="register--department">
-					<input name="register[billing][department]" type="text" placeholder="{s name='RegisterLabelDepartment'}{/s}" id="register_billing_department" value="{$form_data.department|escape}" class="register--field" />
-				</div>
-			{/block}
+		{* Department *}
+		{block name='frontend_register_billing_fieldset_input_department'}
+			<div class="register--department">
+				<input name="register[billing][department]" type="text" placeholder="{s name='RegisterLabelDepartment'}{/s}" id="register_billing_department" value="{$form_data.department|escape}" class="register--field" />
+			</div>
+		{/block}
 
-			{* UST Id *}
-			{block name='frontend_register_billing_fieldset_input_ustid'}
-				<div class="register--ustid">
-					<input name="register[billing][ustid]" type="text" placeholder="{s name='RegisterLabelTaxId'}{/s}" id="register_billing_ustid" value="{$form_data.ustid|escape}" class="register--field {if $error_flags.ustid}instyle_error{/if}" />
-				</div>
-			{/block}
+		{* UST Id *}
+		{block name='frontend_register_billing_fieldset_input_ustid'}
+			<div class="register--ustid">
+				<input name="register[billing][ustid]" type="text" placeholder="{s name='RegisterLabelTaxId'}{/s}" id="register_billing_ustid" value="{$form_data.ustid|escape}" class="register--field {if $error_flags.ustid}instyle_error{/if}" />
+			</div>
+		{/block}
 
-		</div>
+	</div>
 </div>
 
-<div class="panel--body">
+<div class="panel register--address has--border">
 	<h2 class="panel--title underline">{s name='RegisterBillingHeadline'}{/s}</h2>
-	<div class="register--address">
+	<div class="panel--body">
 
 		{* Street *}
 		{block name='frontend_register_billing_fieldset_input_street'}
