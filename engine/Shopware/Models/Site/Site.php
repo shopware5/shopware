@@ -155,7 +155,7 @@ class Site extends ModelEntity
      *
      * @ORM\Column(name="changed", type="datetime", nullable=false)
      */
-    private $changed = 'now';
+    private $changed;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
@@ -185,6 +185,11 @@ class Site extends ModelEntity
      * @var \Shopware\Models\Attribute\Site
      */
     protected $attribute;
+
+    public function __construct()
+    {
+        $this->changed = new \DateTime();
+    }
 
     /**
      * Returns the primary-key id

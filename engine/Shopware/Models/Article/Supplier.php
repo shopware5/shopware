@@ -129,7 +129,7 @@ class Supplier extends ModelEntity
      *
      * @ORM\Column(name="changed", type="datetime", nullable=false)
      */
-    private $changed = 'now';
+    private $changed;
 
    /**
     * INVERSE SIDE
@@ -150,6 +150,7 @@ class Supplier extends ModelEntity
     public function __construct()
     {
         $this->articles = new ArrayCollection();
+        $this->changed = new \DateTime();
     }
 
     /**
