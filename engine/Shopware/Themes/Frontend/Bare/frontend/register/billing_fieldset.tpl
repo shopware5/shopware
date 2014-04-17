@@ -1,4 +1,4 @@
-<div class="panel register--company has--border">
+<div class="panel register--company">
 	<h2 class="panel--title underline">{s name='RegisterHeaderCompany'}{/s}</h2>
 	<div class="panel--body">
 
@@ -26,7 +26,7 @@
 	</div>
 </div>
 
-<div class="panel register--address has--border">
+<div class="panel register--address">
 	<h2 class="panel--title underline">{s name='RegisterBillingHeadline'}{/s}</h2>
 	<div class="panel--body">
 

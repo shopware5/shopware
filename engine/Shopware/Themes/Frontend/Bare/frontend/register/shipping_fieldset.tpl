@@ -1,4 +1,4 @@
-<div class="panel register--shipping has--border">
+<div class="panel register--shipping">
 	<h2 class="panel--title underline">{s name='RegisterShippingHeadline'}{/s}</h2>
 	<div class="panel--body">
 		{* Salutation *}
@@ -101,7 +101,7 @@
 				{foreach $country_list as $country}
 					{if $country.states}
 						<div class="field--select selection{if $country.id != $form_data.country} is--disabled{/if}">
-							<span class="arrow"></span>
+							<span class="arrow small"></span>
 							<select {if $country.id != $form_data.country}disabled="disabled"{/if} name="register[shipping][country_shipping_state_{$country.id}]" id="country_{$country.id}_states" class="{if $country.force_state_in_registration}required{/if} {if $error_flags.stateID}instyle_error{/if}">
 							<option value="" selected="selected">{s name='RegisterShippingLabelState'}Bundesstaat:{/s}</option>
 								{assign var="stateID" value="country_shipping_state_`$country.id`"}
