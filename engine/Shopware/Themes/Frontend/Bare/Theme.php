@@ -42,7 +42,6 @@ class Theme extends \Shopware\Components\Theme
 	 */
 	protected $javascript = array(
 		'vendors/jquery/dist/jquery.min.js',
-		'vendors/handlebars/handlebars.min.js',
 		'vendors/picturefill/picturefill.js',
 		'vendors/jquery.transit/jquery.transit.js',
 		'vendors/jquery.event.move/js/jquery.event.move.js',
@@ -56,9 +55,9 @@ class Theme extends \Shopware\Components\Theme
 		'src/js/jquery.slide-panel.js',
 		'src/js/jquery.tab-navigation.js',
 		'src/js/jquery.image-slider.js',
+		'src/js/jquery.quantity-field.js',
 		'src/js/jquery.collapse-panel.js',
 		'src/js/jquery.collapse-text.js',
-        'src/js/jquery.auto-submit.js',
 		'src/js/jquery.shopware-responsive.js'
 	);
 

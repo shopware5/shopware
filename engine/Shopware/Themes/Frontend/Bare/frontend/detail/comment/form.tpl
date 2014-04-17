@@ -22,19 +22,19 @@
 
 		{* Review author name *}
 		{block name='frontend_detail_comment_input_name'}
-			<input name="sVoteName" type="text" value="{$sFormData.sVoteName|escape}" class="review--field{if $sErrorFlag.sVoteName} has--error{/if}" placeholder="{s name="DetailCommentLabelName"}{/s}*" />
+			<input name="sVoteName" type="text" value="{$sFormData.sVoteName|escape}" class="review--field{if $sErrorFlag.sVoteName} has--error{/if}" placeholder="{s name="DetailCommentLabelName"}{/s}*" required="required" aria-required="true" />
 		{/block}
 
 		{* Reviewer eMail address *}
 		{block name='frontend_detail_comment_input_mail'}
 			{if {config name=OptinVote} == true}
-				<input name="sVoteMail" type="email" value="{$sFormData.sVoteMail|escape}" class="review--field{if $sErrorFlag.sVoteMail} has--error{/if}" placeholder="{s name="DetailCommentLabelMail"}{/s}*" />
+				<input name="sVoteMail" type="email" value="{$sFormData.sVoteMail|escape}" class="review--field{if $sErrorFlag.sVoteMail} has--error{/if}" placeholder="{s name="DetailCommentLabelMail"}{/s}*" required="required" aria-required="true" />
 			{/if}
 		{/block}
 
 		{* Review summary *}
 		{block name='frontend_detail_comment_input_summary'}
-			<input name="sVoteSummary" type="text" value="{$sFormData.sVoteSummary|escape}" id="sVoteSummary" class="review--field{if $sErrorFlag.sVoteSummary} has--error{/if}" placeholder="{s name="DetailCommentLabelSummary"}{/s}*" />
+			<input name="sVoteSummary" type="text" value="{$sFormData.sVoteSummary|escape}" id="sVoteSummary" class="review--field{if $sErrorFlag.sVoteSummary} has--error{/if}" placeholder="{s name="DetailCommentLabelSummary"}{/s}*" required="required" aria-required="true" />
 		{/block}
 
 		{* Review Rating *}
@@ -76,7 +76,7 @@
 
 				{block name='frontend_detail_comment_input_captcha_code'}
 					<div class="captcha--code">
-						<input type="text" name="sCaptcha" class="review--field{if $sErrorFlag.sCaptcha} has--error{/if}" placeholder="" />
+						<input type="text" name="sCaptcha" class="review--field{if $sErrorFlag.sCaptcha} has--error{/if}" required="required" aria-required="true" />
 					</div>
 				{/block}
 			</div>

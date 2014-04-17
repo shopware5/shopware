@@ -2,8 +2,7 @@
     "use strict";
 
     var pluginName = 'tabContent',
-        isTouch = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0)),
-        clickEvt = (isTouch ? (window.navigator.msPointerEnabled ? 'MSPointerDown': 'touchstart') : 'click'),
+        clickEvt = 'click',
         defaults = {
             /** @string activeCls Class which will be added when the drop down was triggered */
             activeCls: 'is--active'
@@ -78,7 +77,7 @@
             event.preventDefault();
 
             // Hide all content boxes
-            me.$nav.find('li > [class^="content--"]').hide().removeClass(me.opts.activeCls);
+            me.$nav.find('li > div[class^="content--"]').hide().removeClass(me.opts.activeCls);
             me.$nav.find('.navigation--link').removeClass(me.opts.activeCls);
 
             // Activate the selected content
@@ -104,13 +103,32 @@
             event.preventDefault();
 
             // Hide all content boxes
-            me.$content.children('[class^="content--"]').hide().removeClass(me.opts.activeCls);
+            me.$content.children('div[class^="content--"]').hide().removeClass(me.opts.activeCls);
             me.$nav.find('.navigation--link').removeClass(me.opts.activeCls);
 
             // Activate the selected content
             me.$content.find('.' + href).show().addClass(me.opts.activeCls);
             $this.addClass(me.opts.activeCls);
         });
+    };
+
+    Plugin.prototype.changeTab = function(idx, scroll) {
+        var me = this;
+
+        scroll = scroll || false;
+
+        // The index starting at 0, ```nth-child``` is starting at 1
+        idx += 1;
+
+        me.$nav.find('.navigation--entry:nth-child(' + idx + ') .navigation--link').trigger(clickEvt + '.' + pluginName);
+
+        if(!scroll) {
+            return;
+        }
+
+        $('body').animate({
+            'scrollTop': me.$nav.offset().top - 50
+        }, 500);
     };
 
     /**

@@ -79,7 +79,7 @@
 								{$maxQuantity=$sArticle.instock+1}
 							{/if}
 
-							<input type="number" name="sQuantity" min="{$sArticle.minpurchase}" max="{$maxQuantity - 1}" data-step="{$sArticle.purchasesteps}" value="{$sArticle.minpurchase}" required="required" aria-required="true">
+							<input type="number" data-quantity-field="true" name="sQuantity" min="{$sArticle.minpurchase}" max="{$maxQuantity - 1}" data-step="{$sArticle.purchasesteps}" value="{$sArticle.minpurchase}" required="required" aria-required="true">
 						</div>
 					{/block}
 
