@@ -39,14 +39,11 @@ Ext.define('Shopware.apps.Index.view.widgets.Base', {
     extend: 'Ext.panel.Panel',
     layout: 'fit',
     anchor: '100%',
-    height: 120,
+    height: 200,
+    minHeight: 200,
     cls: Ext.baseCSSPrefix + 'widget-component',
     bodyPadding: 10,
     frame: true,
     closable: false,
-    collapsible: false,
-    draggable: {
-        ddGroup: 'widget-container',
-        moveOnDrag: false
-    }
+    collapsible: false
 });

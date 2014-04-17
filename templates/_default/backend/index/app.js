@@ -93,6 +93,7 @@ Ext.define('Shopware.apps.Index', {
      */
     models: [
         'Widget',
+        'WidgetSettings',
         'Turnover',
         'Batch',
         'Customers',
@@ -103,10 +104,11 @@ Ext.define('Shopware.apps.Index', {
     ],
 
     /**
-     * Required models for the module
+     * Required stores for the module
      * @array
      */
-    store: [
-        'Widget'
+    stores: [
+        'Widget',
+        'WidgetSettings'
     ]
 });

@@ -49,6 +49,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Upload', {
     alias: 'widget.swag-upload-widget',
 
     height: 150,
+    minHeight: 150,
 
     /**
      * Initializes the widget.

@@ -51,7 +51,8 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
     collapsible: false,
     autoShow: false,
     resizable: {
-        floating: true
+        floating: true,
+        handles: 's e se'
     },
     draggable: {
         delegate: 'widget-toolbar'
@@ -64,6 +65,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
 
     widgetStore: null,
     desktop: null,
+    widgetSettings: null,
 
     toolbar: null,
 
@@ -75,7 +77,13 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
     containerCollection: null,
 
     initComponent: function() {
-        var me = this;
+        var me = this,
+            settings = me.widgetSettings;
+
+        me.columnsShown = settings.get('columnsShown');
+        me.height = settings.get('height');
+        me.hidden = settings.get('minimized');
+        me.pinnedOnTop = settings.get('pinned');
 
         me.containerCollection = Ext.create('Ext.util.MixedCollection');
 
@@ -103,7 +111,8 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             'changePosition',
             'saveWidgetPosition',
             'addWidget',
-            'removeWidget'
+            'removeWidget',
+            'saveWindowSize'
         );
 
         me.callParent(arguments);
@@ -132,7 +141,8 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             options = {
                 layout: 'anchor',
                 flex: 1,   // We want same sized columns, so we could use flex
-                padding: '0 10px',
+                padding: '0 5px',
+                minHeight: 200,
                 cls: Ext.baseCSSPrefix + 'widget-column-container',
                 columnId: column,
                 listeners: {
@@ -181,17 +191,16 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
     },
 
     createContainerDropZone: function(container) {
-        var me = this, dropProxyEl;
-
-        dropProxyEl = Ext.create('Ext.Component', {
-            cls: Ext.baseCSSPrefix + 'widget-proxy-element',
-            hidden: true
-        });
+        var me = this,
+            dropProxyEl = Ext.create('Ext.Component', {
+                cls: Ext.baseCSSPrefix + 'widget-proxy-element',
+                hidden: false
+            });
 
         container.add(dropProxyEl);
 
         container.dropZone = Ext.create('Ext.dd.DropZone', container.getEl(), {
-            ddGroup: 'widget-container',
+//            ddGroup: 'widget-container',
 
             getTargetFromEvent: function() {
                 return container;
@@ -213,23 +222,23 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             },
 
             onNodeOver: function() {
-                return false;
+                return Ext.dd.DropZone.prototype.dropAllowed;
             },
 
             onNodeDrop: function(target, dd, e, data) {
                 var droppedPanel = dd.panel,
-                    panel = droppedPanel.cloneConfig();
-
-                target.add(panel);
+                    panel = droppedPanel.cloneConfig(),
+                    newColumn = me.containerCollection.getAt(target.columnId),
+                    newRow = newColumn.items.getCount() - 2;
 
                 // We need to timeout the panel destroying due ExtJS needs the dragged element on drop
                 Ext.defer(function() {
                     droppedPanel.destroy();
                 }, 50);
 
-                // Get new position
-                var newColumn = me.containerCollection.getAt(target.columnId),
-                    newRow = newColumn.items.getCount() - 2;
+                console.log(dd);
+
+                target.add(panel);
 
                 panel.position.rowId = newRow;
 
@@ -277,7 +286,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             }
             return 4;
         }
-        return 2;
+        return 3;
     },
 
     onResize: function (win, width) {
@@ -297,6 +306,12 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                 container.show();
             }
         }
+
+        if(me.el) {
+            me.onScroll({ wheelDelta: 1 });
+        }
+
+        me.fireEvent('saveWindowSize', me.columnsShown, me.height);
     },
 
     createToolbar: function() {
@@ -319,7 +334,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                 }
             }, '->', {
                 xtype: 'button',
-                cls: (me.pinnedOnTop) ? 'btn-widget-pin active' : 'btn-widget-pin',
+                cls: 'btn-widget-pin' + (me.pinnedOnTop ? ' active' : ''),
                 handler: function() {
                     me.fireEvent('fixWindow', me, this);
                 }
@@ -437,14 +452,24 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             offset = delta * speed,
             position = widgetContainerY + offset,
             min = (widgetContainerHeight - containerHeight - containerEl.getTop()) * -1 - 5,
-            max = containerEl.getTop() + toolbarEl.getHeight() + 5;
+            max = containerEl.getTop() + toolbarEl.getHeight() + 5,
+            style = {
+                boxShadow: ''
+            };
 
         if(containerHeight > widgetContainerHeight) {
             widgetContainerEl.setY(max);
+            toolbarEl.setStyle(style);
             return;
         }
 
         position = Math.max(min, Math.min(max, position));
+
+        if(position !== max) {
+            style.boxShadow = '0px 10px 10px -7px rgba(0, 0, 0, 0.33)';
+        }
+
+        toolbarEl.setStyle(style);
 
         widgetContainerEl.setY(position);
     }
