@@ -72,6 +72,12 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 
         $this->readBlogUrls($parentId);
 
+        $this->readStaticUrls();
+
+        $this->readSupplierUrls();
+
+        $this->readLandingPageUrls();
+
         echo "</urlset>\r\n";
     }
 
@@ -218,5 +224,212 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
         $line .= '</url>';
         $line .= "\r\n";
         echo $line;
+    }
+
+    /**
+     * Helper function to Read the static pages urls
+     */
+    private function readStaticUrls()
+    {
+        $sites = $this->getSitesByShopId(Shopware()->Shop()->getId());
+
+        foreach ($sites as $site) {
+            $this->printSite($site);
+        }
+    }
+
+    /**
+     * Helper function to read all static pages of a shop from the database
+     * @return array
+     */
+    private function getSitesByShopId($shopId)
+    {
+        $sql = "
+            SELECT groups.key
+            FROM s_core_shop_pages shopPages
+              INNER JOIN s_cms_static_groups groups
+                ON groups.id = shopPages.group_id
+            WHERE shopPages.shop_id = ?
+        ";
+
+        $statement = Shopware()->Db()->executeQuery($sql, array($shopId));
+
+        $keys = $statement->fetchAll(PDO::FETCH_COLUMN);
+
+        /** @var Shopware\Models\Site\Repository $siteRepository */
+        $siteRepository = $this->get('models')->getRepository('Shopware\Models\Site\Site');
+
+        $sites = array();
+        foreach ($keys as $key) {
+            $current = $siteRepository->getSitesByNodeNameQueryBuilder($key)
+                ->resetDQLPart('from')
+                ->from('Shopware\Models\Site\Site', 'sites', 'sites.id')
+                ->getQuery()
+                ->getArrayResult();
+
+            $sites += $current;
+        }
+
+        return $sites;
+    }
+
+    /**
+     * Helper function to print a custom page and its children to sitemap.xml
+     * @param $site
+     * @return mixed
+     */
+    private function printSite($site)
+    {
+        if (!$this->filterLink($site['link'])) {
+            return;
+        }
+
+        $this->printCategoryUrl(
+            $this->getSitemapArray(
+                $site['id'],
+                $site['changed'],
+                'custom',
+                'sCustom',
+                $site['link']
+            )
+        );
+
+        foreach ($site['children'] as $child) {
+            $this->printSite($child);
+        }
+    }
+
+    /**
+     * Helper function to filter predefined links, which should not be in the sitemap (external links, sitemap links itself)
+     * Returns false, if the link is not allowed
+     * @param string $link
+     * @return bool
+     */
+    private function filterLink($link)
+    {
+        if (empty($link)) {
+            return true;
+        }
+
+        $userParams = parse_url($link, PHP_URL_QUERY);
+        parse_str($userParams, $userParams);
+
+        $blacklist = array('', 'sitemap', 'sitemapXml');
+
+        if (in_array($userParams['sViewport'], $blacklist)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Helper function to read the supplier pages urls
+     */
+    private function readSupplierUrls()
+    {
+        $supplierRepository = $this->get('models')->getRepository('Shopware\Models\Article\Supplier');
+
+        $builder = $supplierRepository->createQueryBuilder('Supplier');
+        $suppliers = $builder->getQuery()->getArrayResult();
+
+        foreach ($suppliers as $supplier) {
+            $this->printCategoryUrl(
+                $this->getSitemapArray(
+                    $supplier['id'],
+                    $supplier['changed'],
+                    'supplier',
+                    'sSupplier'
+                )
+            );
+        }
+    }
+
+    /**
+     * Helper functio to read the landing pages urls
+     */
+    private function readLandingPageUrls()
+    {
+        /** @var Shopware\Models\Emotion\Repository $emotionRepository */
+        $emotionRepository = $this->get('models')->getRepository('Shopware\Models\Emotion\Emotion');
+
+        $builder = $emotionRepository->getCampaigns();
+        $campaigns = $builder->getQuery()->getScalarResult();
+
+        foreach ($campaigns as $campaign) {
+            if (!$this->filterCampaign($campaign['emotions_validFrom'], $campaign['emotions_validTo'])) {
+                continue;
+            }
+
+            $this->printCategoryUrl(
+                $this->getSitemapArray(
+                    $campaign['emotions_id'],
+                    $campaign['emotions_modified'],
+                    'campaign',
+                    'emotionId',
+                    array('sCategory' => $campaign['categoryId'])
+                )
+            );
+        }
+    }
+
+    /**
+     * Helper function to filter emotion campaigns
+     * Returns false, if the campaign starts later or is outdated
+     * @param null $from
+     * @param null $to
+     * @return bool
+     */
+    private function filterCampaign($from = null, $to = null)
+    {
+        $now = new DateTime();
+
+        if (isset($from) && $now < $from) {
+            return false;
+        }
+
+        if (isset($to) && $now > $to) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Helper function to create a sitemap readable array
+     * If $link is an array, it will be used as additional params for link assembling
+     * @param integer $id
+     * @param string $changed
+     * @param string $viewport
+     * @param string $idParam
+     * @param string|array $link
+     * @return array
+     */
+    private function getSitemapArray($id, $changed, $viewport, $idParam, $link = null)
+    {
+        $userParams = array();
+
+        if (is_string($link)) {
+            $userParams = parse_url($link, PHP_URL_QUERY);
+            parse_str($userParams, $userParams);
+        }
+
+        if (empty($userParams)) {
+            $userParams = array(
+                'sViewport' => $viewport,
+                $idParam => $id
+            );
+        }
+
+        if (is_array($link)) {
+            $userParams = array_merge($userParams, $link);
+        }
+
+        $link = $this->Front()->Router()->assemble($userParams);
+
+        return array(
+            'changed' => $changed,
+            'link' => $link
+        );
     }
 }
