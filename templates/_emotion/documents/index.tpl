@@ -89,8 +89,12 @@ td.head  {
 				{$User.$address.firstname} {$User.$address.lastname}<br />			
 				{$User.$address.street} {$User.$address.streetnumber}<br />
 				{block name="document_index_address_additionalAddressLines"}
-					{$User.$address.additional_address_line1}<br />
-					{$User.$address.additional_address_line2}<br />
+					{if {config name=showAdditionAddressLine1}}
+						{$User.$address.additional_address_line1}<br />
+					{/if}
+					{if {config name=showAdditionAddressLine2}}
+						{$User.$address.additional_address_line2}<br />
+					{/if}
 				{/block}
 				{block name="document_index_address_cityZip"}
 				{$User.$address.zipcode} {$User.$address.city}<br />
