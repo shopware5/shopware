@@ -345,6 +345,6 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
             $query = $tmp;
             unset($tmp);
         }
-        return http_build_query($query, '', '&amp;');
+        return http_build_query($query, '', '&');
     }
 }
