@@ -12,13 +12,13 @@ interface Translation
      * stored in the s_core_translations table under the object key
      * `article`
      *
-     * The loaded translations has to be injected in the passed Struct\ProductMini object.
+     * The loaded translations has to be injected in the passed Struct\ListProduct object.
      *
-     * @param Struct\ProductMini $product
+     * @param Struct\ListProduct $product
      * @param Struct\Shop $shop
      */
     public function translateProduct(
-        Struct\ProductMini $product,
+        Struct\ListProduct $product,
         Struct\Shop $shop
     );
 

@@ -24,17 +24,19 @@ class Media
      * @param Gateway\Media $mediaGateway
      * @param \Shopware_Components_Config $shopwareConfig
      */
-    function __construct(Gateway\Media $mediaGateway, \Shopware_Components_Config $shopwareConfig)
-    {
+    function __construct(
+        Gateway\Media $mediaGateway,
+        \Shopware_Components_Config $shopwareConfig
+    ) {
         $this->mediaGateway = $mediaGateway;
         $this->shopwareConfig = $shopwareConfig;
     }
 
     /**
-     * @param Struct\ProductMini $product
+     * @param Struct\ListProduct $product
      * @return Struct\Media
      */
-    public function getProductCover(Struct\ProductMini $product)
+    public function getProductCover(Struct\ListProduct $product)
     {
         if ($this->shopwareConfig->get('forceArticleMainImageInListing')) {
             $cover = $this->mediaGateway->getProductCover($product);

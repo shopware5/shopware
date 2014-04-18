@@ -72,7 +72,7 @@
 
 
         <!--used for product selection, like listings, minified products or detailed products-->
-        <service id="product_gateway_dbal" class="Shopware\Gateway\DBAL\Product">
+        <service id="product_gateway_dbal" class="Shopware\Gateway\DBAL\ListProduct">
             <argument type="service" id="models" />
             <argument type="service" id="product_hydrator_dbal" />
         </service>

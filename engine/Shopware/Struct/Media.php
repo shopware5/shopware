@@ -8,7 +8,7 @@ namespace Shopware\Struct;
 class Media extends Extendable
 {
     /**
-     * @var
+     * @var int
      */
     private $id;
 
@@ -19,7 +19,7 @@ class Media extends Extendable
     private $name;
 
     /**
-     * @var
+     * @var string
      */
     private $description;
 
@@ -29,7 +29,7 @@ class Media extends Extendable
     private $preview;
 
     /**
-     * @var
+     * @var string
      */
     private $type;
 
@@ -39,7 +39,7 @@ class Media extends Extendable
     private $file;
 
     /**
-     * @var
+     * @var string
      */
     private $extension;
 
@@ -50,17 +50,15 @@ class Media extends Extendable
     private $thumbnails;
 
     /**
-     * @param mixed $id
-     *
+     * @param int $id
      */
     public function setId($id)
     {
         $this->id = $id;
-
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getId()
     {
@@ -68,17 +66,15 @@ class Media extends Extendable
     }
 
     /**
-     * @param mixed $name
-     *
+     * @param string $name
      */
     public function setName($name)
     {
         $this->name = $name;
-
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getName()
     {
@@ -86,31 +82,11 @@ class Media extends Extendable
     }
 
     /**
-     * @param mixed $type
-     *
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
      * @param boolean $preview
-     *
      */
     public function setPreview($preview)
     {
         $this->preview = $preview;
-
     }
 
     /**
@@ -122,13 +98,59 @@ class Media extends Extendable
     }
 
     /**
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $extension
+     */
+    public function setExtension($extension)
+    {
+        $this->extension = $extension;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExtension()
+    {
+        return $this->extension;
+    }
+
+    /**
      * @param string $file
-     *
      */
     public function setFile($file)
     {
         $this->file = $file;
-
     }
 
     /**
@@ -137,42 +159,6 @@ class Media extends Extendable
     public function getFile()
     {
         return $this->file;
-    }
-
-    /**
-     * @param mixed $description
-     *
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param mixed $extension
-     *
-     */
-    public function setExtension($extension)
-    {
-        $this->extension = $extension;
-
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getExtension()
-    {
-        return $this->extension;
     }
 
     /**
@@ -196,7 +182,7 @@ class Media extends Extendable
      * @param array $thumbnails
      * @return $this
      */
-    public function setThumbnails($thumbnails)
+    public function setThumbnails(array $thumbnails)
     {
         $this->thumbnails = $thumbnails;
         return $this;

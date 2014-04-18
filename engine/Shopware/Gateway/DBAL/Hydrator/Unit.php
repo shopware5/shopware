@@ -7,11 +7,11 @@ class Unit
 {
     /**
      * @param array $data
-     * @return \Shopware\Struct\Unit
+     * @return \Shopware\Struct\Product\Unit
      */
     public function hydrate(array $data)
     {
-        $unit = new Struct\Unit();
+        $unit = new Struct\Product\Unit();
 
         $this->assignUnitData($unit, $data);
 
@@ -21,10 +21,10 @@ class Unit
     /**
      * Assigns the passed data array to the passed unit instance.
      *
-     * @param Struct\Unit $unit
+     * @param Struct\Product\Unit $unit
      * @param array $data
      */
-    public function assignUnitData(Struct\Unit $unit, array $data)
+    public function assignUnitData(Struct\Product\Unit $unit, array $data)
     {
         if (isset($data['id'])) {
             $unit->setId(intval($data['id']));

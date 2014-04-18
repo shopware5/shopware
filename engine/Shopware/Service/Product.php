@@ -8,7 +8,7 @@ use Shopware\Gateway as Gateway;
 class Product
 {
     /**
-     * @var Gateway\Product
+     * @var Gateway\ListProduct
      */
     private $productGateway;
 
@@ -38,7 +38,7 @@ class Product
     private $voteGateway;
 
     /**
-     * @param Gateway\Product $productGateway
+     * @param Gateway\ListProduct $productGateway
      * @param Price $priceService
      * @param Media $mediaService
      * @param Translation $translationService
@@ -46,7 +46,7 @@ class Product
      * @param \Shopware\Gateway\Vote $voteGateway
      */
     function __construct(
-        Gateway\Product $productGateway,
+        Gateway\ListProduct $productGateway,
         Price $priceService,
         Media $mediaService,
         Translation $translationService,
@@ -78,21 +78,21 @@ class Product
      *
      * @param string $number
      * @param \Shopware\Struct\Context $context
-     * @return Struct\ProductMini
+     * @return Struct\ListProduct
      */
-    public function getMini($number, Struct\Context $context)
+    public function getListProduct($number, Struct\Context $context)
     {
-        $product = $this->productGateway->getMini($number);
+        $product = $this->productGateway->getListProduct($number, $context);
 
         if (!$product || !$product->getId()) {
             return null;
         }
 
-        $product->setPrices(
+        $product->setPriceRules(
             $this->priceService->getProductPrices($product, $context)
         );
 
-        $product->setCheapestPrice(
+        $product->setCheapestPriceRule(
             $this->priceService->getCheapestPrice($product, $context)
         );
 
@@ -102,21 +102,10 @@ class Product
 
         $this->priceService->calculateProduct($product, $context);
 
-        if (!$product->hasState(Struct\ProductMini::STATE_TRANSLATED)) {
+        if (!$product->hasState(Struct\ListProduct::STATE_TRANSLATED)) {
             $this->translationService->translateProduct($product, $context->getShop());
         }
 
         return $product;
-    }
-
-    /**
-     * Return a struct object which contains the product vote meta information.
-     *
-     * @param Struct\ProductMini $product
-     * @return \Shopware\Struct\VoteAverage
-     */
-    public function getVoteAverage(Struct\ProductMini $product)
-    {
-        return $this->voteGateway->getAverage($product);
     }
 }

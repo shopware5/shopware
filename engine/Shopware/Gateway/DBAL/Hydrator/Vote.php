@@ -7,11 +7,11 @@ class Vote
 {
     /**
      * @param array $data
-     * @return \Shopware\Struct\VoteAverage
+     * @return \Shopware\Struct\Product\VoteAverage
      */
     public function hydrateAverage(array $data)
     {
-        $struct = new Struct\VoteAverage();
+        $struct = new Struct\Product\VoteAverage();
 
         $points = 0;
         $total = 0;

@@ -2,8 +2,8 @@
 
 namespace Shopware\Gateway\DBAL\Hydrator;
 
-use Shopware\Struct\Area;
-use Shopware\Struct\State;
+use Shopware\Struct\Country\Area;
+use Shopware\Struct\Country\State;
 
 class Country
 {
@@ -56,6 +56,7 @@ class Country
 
     /**
      * @param array $data
+     * @return \Shopware\Struct\Country\State
      */
     public function hydrateState(array $data)
     {

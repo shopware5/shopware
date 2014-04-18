@@ -2,7 +2,7 @@
 
 namespace Shopware\Struct;
 
-class Product extends ProductMini
+class Product extends ListProduct
 {
 
 }

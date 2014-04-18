@@ -7,24 +7,56 @@ namespace Shopware\Struct;
  */
 class Shop
 {
+    /**
+     * @var int
+     */
     private $id;
 
+    /**
+     * @var string
+     */
     private $name;
 
+    /**
+     * @var string
+     */
     private $host;
 
+    /**
+     * @var string
+     */
     private $path;
 
+    /**
+     * @var string
+     */
     private $url;
 
+    /**
+     * @var boolean
+     */
     private $secure;
 
+    /**
+     * @var string
+     */
     private $secureHost;
 
+    /**
+     * @var string
+     */
     private $securePath;
 
     /**
-     * @return mixed
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int
      */
     public function getId()
     {
@@ -32,17 +64,7 @@ class Shop
     }
 
     /**
-     * @param mixed $id
-     * @return $this
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-        return $this;
-    }
-
-    /**
-     * @param mixed $name
+     * @param string $name
      */
     public function setName($name)
     {
@@ -50,7 +72,7 @@ class Shop
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getName()
     {
@@ -58,7 +80,7 @@ class Shop
     }
 
     /**
-     * @param mixed $path
+     * @param string $path
      */
     public function setPath($path)
     {
@@ -66,7 +88,7 @@ class Shop
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getPath()
     {
@@ -74,39 +96,7 @@ class Shop
     }
 
     /**
-     * @param mixed $url
-     */
-    public function setUrl($url)
-    {
-        $this->url = $url;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    /**
-     * @param mixed $host
-     */
-    public function setHost($host)
-    {
-        $this->host = $host;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getHost()
-    {
-        return $this->host;
-    }
-
-    /**
-     * @param mixed $secure
+     * @param boolean $secure
      */
     public function setSecure($secure)
     {
@@ -114,7 +104,7 @@ class Shop
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
     public function getSecure()
     {
@@ -122,7 +112,7 @@ class Shop
     }
 
     /**
-     * @param mixed $secureHost
+     * @param string $secureHost
      */
     public function setSecureHost($secureHost)
     {
@@ -130,7 +120,7 @@ class Shop
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getSecureHost()
     {
@@ -138,7 +128,7 @@ class Shop
     }
 
     /**
-     * @param mixed $securePath
+     * @param string $securePath
      */
     public function setSecurePath($securePath)
     {
@@ -146,13 +136,44 @@ class Shop
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getSecurePath()
     {
         return $this->securePath;
     }
 
+    /**
+     * @param string $url
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param string $host
+     */
+    public function setHost($host)
+    {
+        $this->host = $host;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHost()
+    {
+        return $this->host;
+    }
 
 
 }

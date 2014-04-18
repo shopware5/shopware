@@ -1,6 +1,7 @@
 <?php
 
-namespace Shopware\Struct;
+namespace Shopware\Struct\Product;
+use Shopware\Struct\Extendable;
 
 /**
  * @package Shopware\Struct

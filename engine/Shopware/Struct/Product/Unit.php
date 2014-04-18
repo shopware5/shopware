@@ -1,6 +1,6 @@
 <?php
 
-namespace Shopware\Struct;
+namespace Shopware\Struct\Product;
 
 /**
  * @package Shopware\Struct
@@ -91,7 +91,6 @@ class Unit
      */
     private $purchaseStep;
 
-
     /**
      * @param int $id
      *
@@ -99,7 +98,6 @@ class Unit
     public function setId($id)
     {
         $this->id = $id;
-
     }
 
     /**
@@ -133,7 +131,6 @@ class Unit
     public function setUnit($unit)
     {
         $this->unit = $unit;
-
     }
 
     /**
@@ -143,7 +140,6 @@ class Unit
     {
         return $this->unit;
     }
-
 
     /**
      * @return string

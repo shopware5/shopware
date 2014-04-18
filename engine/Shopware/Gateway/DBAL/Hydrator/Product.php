@@ -42,14 +42,14 @@ class Product
 
     /**
      * Hydrates the passed data and converts the ORM
-     * array values into a Struct\ProductMini class.
+     * array values into a Struct\ListProduct class.
      *
      * @param array $data
-     * @return Struct\ProductMini
+     * @return Struct\ListProduct
      */
-    public function hydrateMini(array $data)
+    public function hydrateListProduct(array $data)
     {
-        $product = new Struct\ProductMini();
+        $product = new Struct\ListProduct();
 
         $this->assignProductData($product, $data);
 
@@ -74,10 +74,10 @@ class Product
      * Helper function which assigns the shopware article
      * data to the product. (data of s_articles)
      *
-     * @param Struct\ProductMini $product
+     * @param Struct\ListProduct $product
      * @param $data
      */
-    public function assignProductData(Struct\ProductMini $product, $data)
+    public function assignProductData(Struct\ListProduct $product, $data)
     {
         if (isset($data['id'])) {
             $product->setId(intval($data['id']));
@@ -130,7 +130,7 @@ class Product
         }
 
         if (!empty($data['__priceGroup_id'])) {
-            $product->setPriceGroup(new Struct\PriceGroup());
+            $product->setPriceGroup(new Struct\Product\PriceGroup());
             $product->getPriceGroup()->setId($data['__priceGroup_id']);
             $product->getPriceGroup()->setName($data['__priceGroup_description']);
         }
@@ -176,7 +176,7 @@ class Product
         }
     }
 
-    private function assignManufacturerData(Struct\ProductMini $product, $data)
+    private function assignManufacturerData(Struct\ListProduct $product, $data)
     {
         $manufacturer = array(
             'id' => $data['__manufacturer_id'],
@@ -197,7 +197,7 @@ class Product
         $product->setManufacturer($manufacturer);
     }
 
-    private function assignTaxData(Struct\ProductMini $product, $data)
+    private function assignTaxData(Struct\ListProduct $product, $data)
     {
         $tax = $this->taxHydrator->hydrate(array(
             'id' => $data['__tax_id'],
@@ -208,7 +208,7 @@ class Product
         $product->setTax($tax);
     }
 
-    private function assignUnitData(Struct\ProductMini $product, $data)
+    private function assignUnitData(Struct\ListProduct $product, $data)
     {
         $unit = $this->unitHydrator->hydrate(array(
             'id' => $data['__unit_id'],
@@ -225,7 +225,7 @@ class Product
         $product->setUnit($unit);
     }
 
-    private function assignAttributeData(Struct\ProductMini $product, $data)
+    private function assignAttributeData(Struct\ListProduct $product, $data)
     {
         $attribute = $this->attributeHydrator->hydrate(
             $this->extractFields('__attribute_', $data)

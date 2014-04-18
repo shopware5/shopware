@@ -1,13 +1,13 @@
 <?php
 
-namespace Shopware\Struct;
+namespace Shopware\Struct\Country;
+use Shopware\Struct\Extendable;
 
 /**
  * @package Shopware\Struct
  */
-class PropertyOption
+class State extends Extendable
 {
-
     /**
      * @var int
      */
@@ -20,12 +20,10 @@ class PropertyOption
 
     /**
      * @param int $id
-     * @return $this
      */
     public function setId($id)
     {
         $this->id = $id;
-        return $this;
     }
 
     /**
@@ -38,12 +36,10 @@ class PropertyOption
 
     /**
      * @param string $name
-     * @return $this
      */
     public function setName($name)
     {
         $this->name = $name;
-        return $this;
     }
 
     /**
@@ -53,4 +49,6 @@ class PropertyOption
     {
         return $this->name;
     }
+
+
 }

@@ -32,8 +32,8 @@ interface Property
      * The property has to be loaded with all property groups
      * and values of the product.
      *
-     * @param Struct\ProductMini $product
+     * @param Struct\ListProduct $product
      * @return Struct\PropertySet
      */
-    public function getProductSet(Struct\ProductMini $product);
+    public function getProductSet(Struct\ListProduct $product);
 }

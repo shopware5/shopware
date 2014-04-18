@@ -13,14 +13,32 @@ use Shopware\Struct as Struct;
  */
 class GlobalState
 {
+    /**
+     * @var \Shopware\Components\DependencyInjection\Container
+     */
     private $container;
 
+    /**
+     * @var \Shopware\Gateway\CustomerGroup
+     */
     private $customerGroupGateway;
 
+    /**
+     * @var \Shopware\Gateway\Tax
+     */
     private $taxGateway;
 
+    /**
+     * @var Struct\Context
+     */
     private $context = null;
 
+    /**
+     * @param Container $container
+     * @param Gateway\CustomerGroup $customerGroupGateway
+     * @param Gateway\Tax $taxGateway
+     * @param Gateway\Country $countryGateway
+     */
     function __construct(
         Container $container,
         Gateway\CustomerGroup $customerGroupGateway,
@@ -117,6 +135,12 @@ class GlobalState
         return $this->context;
     }
 
+    /**
+     * Converts a currency doctrine model to a currency struct
+     *
+     * @param Currency $currency
+     * @return Struct\Currency
+     */
     private function createCurrencyStruct(Currency $currency)
     {
         $struct = new Struct\Currency();
@@ -130,6 +154,11 @@ class GlobalState
         return $struct;
     }
 
+    /**
+     * Converts a shop doctrine model to a shop struct
+     * @param Shop $shop
+     * @return Struct\Shop
+     */
     private function createShopStruct(Shop $shop)
     {
         $struct = new Struct\Shop();

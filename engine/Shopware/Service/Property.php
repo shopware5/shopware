@@ -26,14 +26,13 @@ class Property
         $this->translationService = $translationService;
     }
 
-
     /**
-     * @param \Shopware\Struct\ProductMini $product
+     * @param \Shopware\Struct\ListProduct $product
      * @param \Shopware\Struct\Context $context
      *
-     * @return array|\Shopware\Struct\PropertySet
+     * @return array|\Shopware\Struct\Property\Set
      */
-    public function getProductProperty(Struct\ProductMini $product, Struct\Context $context)
+    public function getProductProperty(Struct\ListProduct $product, Struct\Context $context)
     {
         $set = $this->propertyGateway->getProductSet($product);
 
