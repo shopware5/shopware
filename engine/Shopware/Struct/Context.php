@@ -1,6 +1,9 @@
 <?php
 
 namespace Shopware\Struct;
+use Shopware\Struct\Country\Area;
+use Shopware\Struct\Country\State;
+use Shopware\Struct\Customer\Group;
 
 /**
  * @package Shopware\Struct
@@ -17,7 +20,7 @@ class Context extends Extendable
      * If the customer isn't logged in, the current customer group
      * is equal to the fallback customer group of the shop.
      *
-     * @var CustomerGroup
+     * @var Group
      */
     private $currentCustomerGroup;
 
@@ -28,7 +31,7 @@ class Context extends Extendable
      * own defined product prices, the prices of the fallback customer
      * group are displayed.
      *
-     * @var CustomerGroup
+     * @var Group
      */
     private $fallbackCustomerGroup;
 
@@ -88,7 +91,7 @@ class Context extends Extendable
     }
 
     /**
-     * @param \Shopware\Struct\CustomerGroup $currentCustomerGroup
+     * @param \Shopware\Struct\Customer\Group $currentCustomerGroup
      * @return $this
      */
     public function setCurrentCustomerGroup($currentCustomerGroup)
@@ -98,7 +101,7 @@ class Context extends Extendable
     }
 
     /**
-     * @return \Shopware\Struct\CustomerGroup
+     * @return \Shopware\Struct\Customer\Group
      */
     public function getCurrentCustomerGroup()
     {
@@ -106,7 +109,7 @@ class Context extends Extendable
     }
 
     /**
-     * @param \Shopware\Struct\CustomerGroup $fallbackCustomerGroup
+     * @param \Shopware\Struct\Customer\Group $fallbackCustomerGroup
      * @return $this
      */
     public function setFallbackCustomerGroup($fallbackCustomerGroup)
@@ -116,7 +119,7 @@ class Context extends Extendable
     }
 
     /**
-     * @return \Shopware\Struct\CustomerGroup
+     * @return \Shopware\Struct\Customer\Group
      */
     public function getFallbackCustomerGroup()
     {
@@ -142,7 +145,7 @@ class Context extends Extendable
     }
 
     /**
-     * @return \Shopware\Struct\Area
+     * @return \Shopware\Struct\Country\Area
      */
     public function getArea()
     {
@@ -150,7 +153,7 @@ class Context extends Extendable
     }
 
     /**
-     * @param \Shopware\Struct\Area $area
+     * @param \Shopware\Struct\Country\Area $area
      */
     public function setArea($area)
     {
@@ -174,7 +177,7 @@ class Context extends Extendable
     }
 
     /**
-     * @return \Shopware\Struct\State
+     * @return \Shopware\Struct\Country\State
      */
     public function getState()
     {
@@ -182,7 +185,7 @@ class Context extends Extendable
     }
 
     /**
-     * @param \Shopware\Struct\State $state
+     * @param \Shopware\Struct\Country\State $state
      */
     public function setState($state)
     {
@@ -205,6 +208,10 @@ class Context extends Extendable
         $this->taxRules = $taxRules;
     }
 
+    /**
+     * @param $taxId
+     * @return Tax
+     */
     public function getTaxRule($taxId)
     {
         $key = 'tax_' . $taxId;

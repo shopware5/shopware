@@ -11,8 +11,8 @@ interface Vote
      * the average value of the rating and the count of each
      * different point rating.
      *
-     * @param Struct\ProductMini $product
-     * @return \Shopware\Struct\VoteAverage
+     * @param Struct\ListProduct $product
+     * @return \Shopware\Struct\Product\VoteAverage
      */
-    public function getAverage(Struct\ProductMini $product);
+    public function getAverage(Struct\ListProduct $product);
 }

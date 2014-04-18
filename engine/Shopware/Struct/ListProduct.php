@@ -1,11 +1,16 @@
 <?php
 
 namespace Shopware\Struct;
+use Shopware\Struct\Product\Manufacturer;
+use Shopware\Struct\Product\Price;
+use Shopware\Struct\Product\PriceGroup;
+use Shopware\Struct\Product\PriceRule;
+use Shopware\Struct\Product\Unit;
 
 /**
  * @package Shopware\Struct
  */
-class ProductMini extends Extendable
+class ListProduct extends Extendable
 {
     /**
      * State for a calculated product price
@@ -186,7 +191,6 @@ class ProductMini extends Extendable
      */
     private $highlight;
 
-
     /**
      * Contains the absolute cheapest price of each product variation.
      * This price is calculated over the shopware price service
@@ -195,6 +199,18 @@ class ProductMini extends Extendable
      * @var Price
      */
     private $cheapestPrice;
+
+    /**
+     * Contains the price rule for the cheapest price.
+     *
+     * @var PriceRule
+     */
+    private $cheapestPriceRule;
+
+    /**
+     * @var PriceRule[]
+     */
+    private $priceRules = array();
 
     /**
      * Price of the current variant.
@@ -238,7 +254,6 @@ class ProductMini extends Extendable
      * @var array
      */
     private $states = array();
-
 
 
     /**
@@ -319,15 +334,15 @@ class ProductMini extends Extendable
 
 
     /**
-     * @param \Shopware\Struct\Unit $unit
+     * @param Unit $unit
      */
-    public function setUnit($unit)
+    public function setUnit(Unit $unit)
     {
         $this->unit = $unit;
     }
 
     /**
-     * @return \Shopware\Struct\Unit
+     * @return Unit
      */
     public function getUnit()
     {
@@ -351,7 +366,7 @@ class ProductMini extends Extendable
     }
 
     /**
-     * @param \Shopware\Struct\Price[] $prices
+     * @param \Shopware\Struct\Product\Price[] $prices
      */
     public function setPrices($prices)
     {
@@ -359,7 +374,7 @@ class ProductMini extends Extendable
     }
 
     /**
-     * @return \Shopware\Struct\Price[]
+     * @return \Shopware\Struct\Product\Price[]
      */
     public function getPrices()
     {
@@ -367,7 +382,7 @@ class ProductMini extends Extendable
     }
 
     /**
-     * @param \Shopware\Struct\Manufacturer $manufacturer
+     * @param \Shopware\Struct\Product\Manufacturer $manufacturer
      */
     public function setManufacturer($manufacturer)
     {
@@ -375,7 +390,7 @@ class ProductMini extends Extendable
     }
 
     /**
-     * @return \Shopware\Struct\Manufacturer
+     * @return \Shopware\Struct\Product\Manufacturer
      */
     public function getManufacturer()
     {
@@ -399,7 +414,7 @@ class ProductMini extends Extendable
     }
 
     /**
-     * @param \Shopware\Struct\Price $cheapestPrice
+     * @param \Shopware\Struct\Product\Price $cheapestPrice
      */
     public function setCheapestPrice($cheapestPrice)
     {
@@ -407,7 +422,7 @@ class ProductMini extends Extendable
     }
 
     /**
-     * @return \Shopware\Struct\Price
+     * @return \Shopware\Struct\Product\Price
      */
     public function getCheapestPrice()
     {
@@ -527,9 +542,9 @@ class ProductMini extends Extendable
     }
 
     /**
-     * @param array $keyWords
+     * @param array $keywords
      */
-    public function setKeywords($keywords)
+    public function setKeywords(array $keywords)
     {
         $this->keywords = $keywords;
     }
@@ -728,7 +743,7 @@ class ProductMini extends Extendable
     }
 
     /**
-     * @return \Shopware\Struct\PriceGroup
+     * @return PriceGroup
      */
     public function getPriceGroup()
     {
@@ -736,10 +751,42 @@ class ProductMini extends Extendable
     }
 
     /**
-     * @param \Shopware\Struct\PriceGroup $priceGroup
+     * @param \Shopware\Struct\Product\PriceGroup $priceGroup
      */
-    public function setPriceGroup($priceGroup)
+    public function setPriceGroup(PriceGroup $priceGroup)
     {
         $this->priceGroup = $priceGroup;
+    }
+
+    /**
+     * @return \Shopware\Struct\Product\PriceRule[]
+     */
+    public function getPriceRules()
+    {
+        return $this->priceRules;
+    }
+
+    /**
+     * @param \Shopware\Struct\Product\PriceRule[] $priceRules
+     */
+    public function setPriceRules($priceRules)
+    {
+        $this->priceRules = $priceRules;
+    }
+
+    /**
+     * @return \Shopware\Struct\Product\PriceRule
+     */
+    public function getCheapestPriceRule()
+    {
+        return $this->cheapestPriceRule;
+    }
+
+    /**
+     * @param \Shopware\Struct\Product\PriceRule $cheapestPriceRule
+     */
+    public function setCheapestPriceRule($cheapestPriceRule)
+    {
+        $this->cheapestPriceRule = $cheapestPriceRule;
     }
 }

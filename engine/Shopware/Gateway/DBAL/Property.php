@@ -36,10 +36,10 @@ class Property implements \Shopware\Gateway\Property
      * The property has to be loaded with all property groups
      * and values of the product.
      *
-     * @param Struct\ProductMini $product
+     * @param Struct\ListProduct $product
      * @return Struct\PropertySet
      */
-    public function getProductSet(Struct\ProductMini $product)
+    public function getProductSet(Struct\ListProduct $product)
     {
         $set = $this->getSet($product);
 
@@ -54,7 +54,7 @@ class Property implements \Shopware\Gateway\Property
         return $this->propertyHydrator->hydrate($set);
     }
 
-    private function getPropertiesOfProduct(Struct\ProductMini $product, $setData)
+    private function getPropertiesOfProduct(Struct\ListProduct $product, $setData)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
 
@@ -104,7 +104,7 @@ class Property implements \Shopware\Gateway\Property
     }
 
 
-    private function getSet(Struct\ProductMini $product)
+    private function getSet(Struct\ListProduct $product)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
 

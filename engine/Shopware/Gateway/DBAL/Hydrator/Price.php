@@ -38,11 +38,11 @@ class Price
 
     /**
      * @param array $data
-     * @return \Shopware\Struct\Price
+     * @return \Shopware\Struct\Product\PriceRule
      */
-    public function hydrate(array $data)
+    public function hydratePriceRule(array $data)
     {
-        $price = new Struct\Price();
+        $price = new Struct\Product\PriceRule();
 
         $price->setId($data['id']);
 
@@ -75,11 +75,11 @@ class Price
      * and adds additionally the product unit information to the price.
      *
      * @param array $data
-     * @return Struct\Price
+     * @return Struct\Product\PriceRule
      */
     public function hydrateCheapestPrice(array $data)
     {
-        $price = $this->hydrate($data);
+        $price = $this->hydratePriceRule($data);
 
         $unit = $this->unitHydrator->hydrate(array(
             'id'            => $data['__unit_id'],

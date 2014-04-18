@@ -5,7 +5,7 @@ namespace Shopware\Gateway\DBAL;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Thumbnail\Manager;
 use Shopware\Gateway\DBAL\Hydrator as Hydrator;
-use Shopware\Struct\ProductMini;
+use Shopware\Struct;
 
 class Media implements \Shopware\Gateway\Media
 {
@@ -46,10 +46,10 @@ class Media implements \Shopware\Gateway\Media
      *
      * The preview image has the flag "main = 1" in the database.
      *
-     * @param \Shopware\Struct\ProductMini $product
+     * @param \Shopware\Struct\ListProduct $product
      * @return \Shopware\Struct\Media
      */
-    public function getProductCover(ProductMini $product)
+    public function getProductCover(Struct\ListProduct $product)
     {
         $covers = $this->getProductCovers(array($product->getId()));
 

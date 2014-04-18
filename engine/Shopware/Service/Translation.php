@@ -21,10 +21,10 @@ class Translation
     }
 
     /**
-     * @param \Shopware\Struct\ProductMini $product
+     * @param \Shopware\Struct\ListProduct $product
      * @param \Shopware\Struct\Shop $shop
      */
-    public function translateProduct(Struct\ProductMini $product, Struct\Shop $shop)
+    public function translateProduct(Struct\ListProduct $product, Struct\Shop $shop)
     {
         $translation = $this->translationGateway->translateProduct(
             $product,
@@ -58,7 +58,7 @@ class Translation
         }
 
         $product->addState(
-            Struct\ProductMini::STATE_TRANSLATED
+            Struct\ListProduct::STATE_TRANSLATED
         );
     }
 

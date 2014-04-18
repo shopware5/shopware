@@ -1,6 +1,6 @@
 <?php
 
-namespace Shopware\Struct;
+namespace Shopware\Struct\Country;
 
 /**
  * @package Shopware\Struct

@@ -1,11 +1,11 @@
 <?php
 
-namespace Shopware\Struct;
+namespace Shopware\Struct\Product;
 
 /**
  * @package Shopware\Struct
  */
-class State extends Extendable
+class PriceGroup
 {
     /**
      * @var int

@@ -4705,7 +4705,7 @@ class sArticles
             );
         }
 
-        $average = Shopware()->Container()->get('product_service')->getVoteAverage($product);
+        $average = Shopware()->Container()->get('vote_gateway')->getAverage($product);
 
         //convert to shopware 3-4 array structure.
         $promotion = $this->convertProductStruct($product, $category);
@@ -4812,6 +4812,7 @@ class sArticles
             'newArticle' => '0',
             'sUpcoming' => '0',
 
+            'image' => array(),
             'mode' => 'fix'
         );
 
@@ -4864,7 +4865,7 @@ class sArticles
         if ($product->getCover()) {
             //now we get the configured image and thumbnail dir.
             $imageDir = $this->sSYSTEM->sPathArticleImg;
-            $imageDir = str_replace('media/image/', '', $imageDir);
+            $imageDir = str_replace('/media/image/', '', $imageDir);
 
             $src = $product->getCover()->getThumbnails();
             foreach($src as &$thumbnail) {
@@ -4889,6 +4890,7 @@ class sArticles
                 'parentId' => NULL,
                 'attribute' => array(),
             );
+
         }
 
         $promotion["linkBasket"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] .

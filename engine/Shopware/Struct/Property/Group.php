@@ -1,12 +1,13 @@
 <?php
 
-namespace Shopware\Struct;
+namespace Shopware\Struct\Property;
 
 /**
  * @package Shopware\Struct
  */
-class PriceGroup
+class Group
 {
+
     /**
      * @var int
      */
@@ -18,11 +19,18 @@ class PriceGroup
     private $name;
 
     /**
+     * @var Property\Option[]
+     */
+    private $options;
+
+    /**
      * @param int $id
+     * @return $this
      */
     public function setId($id)
     {
         $this->id = $id;
+        return $this;
     }
 
     /**
@@ -35,10 +43,12 @@ class PriceGroup
 
     /**
      * @param string $name
+     * @return $this
      */
     public function setName($name)
     {
         $this->name = $name;
+        return $this;
     }
 
     /**
@@ -49,5 +59,21 @@ class PriceGroup
         return $this->name;
     }
 
+    /**
+     * @param \Shopware\Struct\Property\Option[] $options
+     * @return $this
+     */
+    public function setOptions($options)
+    {
+        $this->options = $options;
+        return $this;
+    }
 
+    /**
+     * @return \Shopware\Struct\Property\Option[]
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
 }

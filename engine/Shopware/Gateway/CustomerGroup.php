@@ -16,7 +16,7 @@ interface CustomerGroup
      * which stored in the s_core_customergroups.groupkey column.
      *
      * @param $key
-     * @return \Shopware\Struct\CustomerGroup
+     * @return \Shopware\Struct\Customer\Group
      */
     public function getByKey($key);
 }

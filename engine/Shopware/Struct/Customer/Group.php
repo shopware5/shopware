@@ -1,11 +1,12 @@
 <?php
 
-namespace Shopware\Struct;
+namespace Shopware\Struct\Customer;
+use Shopware\Struct\Extendable;
 
 /**
  * @package Shopware\Struct
  */
-class CustomerGroup extends Extendable
+class Group extends Extendable
 {
     /**
      * Unique identifier
@@ -72,17 +73,15 @@ class CustomerGroup extends Extendable
     private $surcharge;
 
     /**
-     * @param mixed $id
-     *
+     * @param int $id
      */
     public function setId($id)
     {
         $this->id = $id;
-
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getId()
     {
@@ -90,17 +89,15 @@ class CustomerGroup extends Extendable
     }
 
     /**
-     * @param mixed $key
-     *
+     * @param string $key
      */
     public function setKey($key)
     {
         $this->key = $key;
-
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getKey()
     {
@@ -108,17 +105,15 @@ class CustomerGroup extends Extendable
     }
 
     /**
-     * @param mixed $name
-     *
+     * @param string $name
      */
     public function setName($name)
     {
         $this->name = $name;
-
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getName()
     {
@@ -126,51 +121,15 @@ class CustomerGroup extends Extendable
     }
 
     /**
-     * @param $displayGrossPrices
-     */
-    public function setDisplayGross($displayGrossPrices)
-    {
-        $this->displayGrossPrices = $displayGrossPrices;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function displayGrossPrices()
-    {
-        return $this->displayGrossPrices;
-    }
-
-    /**
-     * @param mixed $useDiscount
-     *
-     */
-    public function setUseDiscount($useDiscount)
-    {
-        $this->useDiscount = $useDiscount;
-
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUseDiscount()
-    {
-        return $this->useDiscount;
-    }
-
-    /**
-     * @param mixed $percentageDiscount
-     *
+     * @param float $percentageDiscount
      */
     public function setPercentageDiscount($percentageDiscount)
     {
         $this->percentageDiscount = $percentageDiscount;
-
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getPercentageDiscount()
     {
@@ -178,17 +137,55 @@ class CustomerGroup extends Extendable
     }
 
     /**
-     * @param mixed $minimumOrderValue
-     *
+     * @param float $surcharge
      */
-    public function setMinimumOrderValue($minimumOrderValue)
+    public function setSurcharge($surcharge)
     {
-        $this->minimumOrderValue = $minimumOrderValue;
-
+        $this->surcharge = $surcharge;
     }
 
     /**
-     * @return mixed
+     * @return float
+     */
+    public function getSurcharge()
+    {
+        return $this->surcharge;
+    }
+
+    /**
+     * @param boolean $useDiscount
+     */
+    public function setUseDiscount($useDiscount)
+    {
+        $this->useDiscount = $useDiscount;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function useDiscount()
+    {
+        return $this->useDiscount;
+    }
+
+    /**
+     * @param boolean $displayGrossPrices
+     */
+    public function setDisplayGrossPrices($displayGrossPrices)
+    {
+        $this->displayGrossPrices = $displayGrossPrices;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function displayGrossPrices()
+    {
+        return $this->displayGrossPrices;
+    }
+
+    /**
+     * @return float
      */
     public function getMinimumOrderValue()
     {
@@ -196,21 +193,10 @@ class CustomerGroup extends Extendable
     }
 
     /**
-     * @param mixed $surcharge
-     *
+     * @param float $minimumOrderValue
      */
-    public function setSurcharge($surcharge)
+    public function setMinimumOrderValue($minimumOrderValue)
     {
-        $this->surcharge = $surcharge;
-
+        $this->minimumOrderValue = $minimumOrderValue;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getSurcharge()
-    {
-        return $this->surcharge;
-    }
-
 }

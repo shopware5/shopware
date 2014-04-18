@@ -3,8 +3,7 @@
 namespace Shopware\Gateway\DBAL;
 
 use Shopware\Components\Model\ModelManager;
-use Shopware\Struct\Area;
-use Shopware\Struct\State;
+use Shopware\Gateway\DBAL\Hydrator;
 
 class Country implements \Shopware\Gateway\Country
 {
@@ -23,11 +22,11 @@ class Country implements \Shopware\Gateway\Country
 
     /**
      * @param ModelManager $entityManager
-     * @param \Shopware\Gateway\DBAL\Hydrator\Country $countryHydrator
+     * @param Hydrator\Country $countryHydrator
      */
     function __construct(
         ModelManager $entityManager,
-        \Shopware\Gateway\DBAL\Hydrator\Country $countryHydrator
+        Hydrator\Country $countryHydrator
     )
     {
         $this->entityManager = $entityManager;

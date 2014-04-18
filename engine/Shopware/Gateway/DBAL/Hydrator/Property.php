@@ -18,7 +18,7 @@ class Property
 
     public function hydrate(array $data)
     {
-        $set = new Struct\PropertySet();
+        $set = new Struct\Property\Set();
 
         $set->setId(intval($data['id']));
 
@@ -42,7 +42,7 @@ class Property
                 $group = $groups[$key];
 
                 if (!$group) {
-                    $group = new Struct\PropertyGroup();
+                    $group = new Struct\Property\Group();
 
                     $group->setId(intval($optionData['option_id']));
 
@@ -53,7 +53,7 @@ class Property
 
                 $options = $group->getOptions();
 
-                $option = new Struct\PropertyOption();
+                $option = new Struct\Property\Option();
 
                 $option->setId($optionData['value_id']);
 

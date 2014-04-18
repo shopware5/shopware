@@ -15,16 +15,19 @@ class CustomerGroup
         $this->attributeHydrator = $attributeHydrator;
     }
 
-
+    /**
+     * @param array $data
+     * @return Struct\Customer\Group
+     */
     public function hydrate(array $data)
     {
-        $customerGroup = new Struct\CustomerGroup();
+        $customerGroup = new Struct\Customer\Group();
 
         $customerGroup->setId(intval($data['id']));
 
         $customerGroup->setName($data['description']);
 
-        $customerGroup->setDisplayGross((bool)($data['tax']));
+        $customerGroup->setDisplayGrossPrices((bool)($data['tax']));
 
         $customerGroup->setKey($data['groupkey']);
 
@@ -46,6 +49,11 @@ class CustomerGroup
         return $customerGroup;
     }
 
+    /**
+     * @param $prefix
+     * @param $data
+     * @return array
+     */
     private function extractFields($prefix, $data)
     {
         $result = array();

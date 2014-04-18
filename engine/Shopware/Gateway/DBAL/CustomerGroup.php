@@ -18,6 +18,12 @@ class CustomerGroup implements \Shopware\Gateway\CustomerGroup
     private $entityManager;
 
     /**
+     * Contains the definition of the customer group attributes.
+     * @var array
+     */
+    private $attributeFields = array();
+
+    /**
      * @param ModelManager $entityManager
      * @param Hydrator\CustomerGroup $customerGroupHydrator
      */
@@ -40,7 +46,7 @@ class CustomerGroup implements \Shopware\Gateway\CustomerGroup
      * which stored in the s_core_customergroups.groupkey column.
      *
      * @param array $keys
-     * @return \Shopware\Struct\CustomerGroup[]
+     * @return \Shopware\Struct\Customer\Group[]
      */
     public function getByKeys(array $keys)
     {
@@ -77,7 +83,7 @@ class CustomerGroup implements \Shopware\Gateway\CustomerGroup
      * which stored in the s_core_customergroups.groupkey column.
      *
      * @param $key
-     * @return \Shopware\Struct\CustomerGroup
+     * @return \Shopware\Struct\Customer\Group
      */
     public function getByKey($key)
     {

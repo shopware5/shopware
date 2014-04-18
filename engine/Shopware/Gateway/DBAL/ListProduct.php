@@ -12,7 +12,7 @@ use Shopware\Struct;
  *
  * @package Shopware\Gateway\DBAL
  */
-class Product implements \Shopware\Gateway\Product
+class ListProduct implements \Shopware\Gateway\ListProduct
 {
     /**
      * @var \Shopware\Gateway\DBAL\Hydrator\Product
@@ -43,21 +43,7 @@ class Product implements \Shopware\Gateway\Product
     }
 
     /**
-     * The get function returns a full product struct.
-     *
-     * This function should only be used if all product data
-     * are required, like on the article detail page.
-     *
-     * @param $number
-     * @return Struct\Product
-     */
-    public function get($number)
-    {
-        // TODO: Implement get() method.
-    }
-
-    /**
-     * Returns a list of ProductMini structs which can be used for listings
+     * Returns a list of ListProduct structs which can be used for listings
      * or sliders.
      *
      * A mini product contains only the minified product data.
@@ -71,9 +57,10 @@ class Product implements \Shopware\Gateway\Product
      *  - price group
      *
      * @param array $numbers
-     * @return Struct\ProductMini[]
+     * @param \Shopware\Struct\Context $context
+     * @return Struct\ListProduct[]
      */
-    public function getMinis(array $numbers)
+    public function getListProducts(array $numbers, Struct\Context $context)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
         $query->select($this->getArticleFields())
@@ -91,7 +78,7 @@ class Product implements \Shopware\Gateway\Product
             ->leftJoin('variant', 's_articles_attributes', 'attribute', 'attribute.articledetailsID = variant.id')
             ->leftJoin('variant', 's_core_units', 'unit', 'unit.id = variant.unitID')
             ->leftJoin('product', 's_articles_supplier', 'manufacturer', 'manufacturer.id = product.supplierID')
-            ->leftJoin('product', 's_articles_supplier_attributes', 'manufacturerAttribute',  'manufacturerAttribute.id = product.supplierID')
+            ->leftJoin('product', 's_articles_supplier_attributes', 'manufacturerAttribute', 'manufacturerAttribute.id = product.supplierID')
             ->leftJoin('product', 's_core_pricegroups', 'priceGroup', 'priceGroup.id = product.pricegroupID')
             ->where('variant.ordernumber IN (:numbers)')
             ->setParameter(':numbers', implode(',', $numbers));
@@ -102,15 +89,15 @@ class Product implements \Shopware\Gateway\Product
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         $products = array();
-        foreach($data as $product) {
-            $products[] = $this->hydrator->hydrateMini($product);
+        foreach ($data as $product) {
+            $products[] = $this->hydrator->hydrateListProduct($product);
         }
 
         return $products;
     }
 
     /**
-     * Returns a single of ProductMini struct which can be used for listings
+     * Returns a single of ListProduct struct which can be used for listings
      * or sliders.
      *
      * A mini product contains only the minified product data.
@@ -124,11 +111,12 @@ class Product implements \Shopware\Gateway\Product
      *  - price group
      *
      * @param $number
-     * @return Struct\ProductMini
+     * @param \Shopware\Struct\Context $context
+     * @return Struct\ListProduct
      */
-    public function getMini($number)
+    public function getListProduct($number, Struct\Context $context)
     {
-        $products = $this->getMinis(array($number));
+        $products = $this->getListProducts(array($number), $context);
 
         return array_shift($products);
     }

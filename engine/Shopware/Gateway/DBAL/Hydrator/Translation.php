@@ -55,10 +55,10 @@ class Translation
     }
 
     /**
-     * @param \Shopware\Struct\ProductMini $product
+     * @param \Shopware\Struct\ListProduct $product
      * @param array $data
      */
-    public function hydrateProductTranslation(Struct\ProductMini $product, array $data)
+    public function hydrateProductTranslation(Struct\ListProduct $product, array $data)
     {
         $data = $this->mapArray($data, $this->productMapping);
 
@@ -79,10 +79,10 @@ class Translation
     }
 
     /**
-     * @param Struct\Unit $unit
+     * @param Struct\Product\Unit $unit
      * @param array $data
      */
-    public function hydrateUnitTranslation(Struct\Unit $unit, array $data)
+    public function hydrateUnitTranslation(Struct\Product\Unit $unit, array $data)
     {
         $this->unitHydrator->assignUnitData(
             $unit, $data
@@ -90,10 +90,10 @@ class Translation
     }
 
     /**
-     * @param Struct\Manufacturer $manufacturer
+     * @param Struct\Product\Manufacturer $manufacturer
      * @param array $data
      */
-    public function hydrateManufacturerTranslation(Struct\Manufacturer $manufacturer, array $data)
+    public function hydrateManufacturerTranslation(Struct\Product\Manufacturer $manufacturer, array $data)
     {
         $this->manufacturerHydrator->assignData(
             $manufacturer,
@@ -120,10 +120,10 @@ class Translation
      *       [29] => a:1:{s:11:"optionValue";s:11:"transparent";}
      * )
      *
-     * @param Struct\PropertySet $set
+     * @param Struct\Property\Set $set
      * @param array $data
      */
-    public function hydratePropertyTranslation(Struct\PropertySet $set, array $data)
+    public function hydratePropertyTranslation(Struct\Property\Set $set, array $data)
     {
         if (isset($data['groupName'])) {
             $set->setName($data['groupName']);
@@ -152,30 +152,6 @@ class Translation
                 }
             }
         }
-    }
-
-    /**
-     * Helper function which extracts an object translation for the properties.
-     *
-     * @param $data
-     * @param $key
-     * @param $mapping
-     * @return array
-     */
-    private function extractTranslation($data, $key, $mapping)
-    {
-        $translation = $data[$key];
-
-        if (!$translation) {
-            return array();
-        }
-
-        $translation = unserialize($translation);
-
-        return $this->mapArray(
-            $translation,
-            $mapping
-        );
     }
 
     private function mapArray($data, $mapping)

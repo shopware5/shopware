@@ -1,11 +1,12 @@
 <?php
 
-namespace Shopware\Struct;
+namespace Shopware\Struct\Property;
+use Shopware\Struct\Extendable;
 
 /**
  * @package Shopware\Struct
  */
-class PropertySet extends Extendable
+class Set extends Extendable
 {
     /**
      * @var int
@@ -23,7 +24,7 @@ class PropertySet extends Extendable
     private $comparable;
 
     /**
-     * @var PropertyGroup[]
+     * @var Group[]
      */
     private $groups;
 
@@ -64,7 +65,7 @@ class PropertySet extends Extendable
     }
 
     /**
-     * @param \Shopware\Struct\PropertyGroup[] $groups
+     * @param \Shopware\Struct\Property\Group[] $groups
      * @return $this
      */
     public function setGroups($groups)
@@ -74,7 +75,7 @@ class PropertySet extends Extendable
     }
 
     /**
-     * @return \Shopware\Struct\PropertyGroup[]
+     * @return \Shopware\Struct\Property\Group[]
      */
     public function getGroups()
     {

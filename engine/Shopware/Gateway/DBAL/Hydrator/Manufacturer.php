@@ -18,11 +18,11 @@ class Manufacturer
 
     /**
      * @param array $data
-     * @return Struct\Manufacturer
+     * @return Struct\Product\Manufacturer
      */
     public function hydrate(array $data)
     {
-        $manufacturer = new Struct\Manufacturer();
+        $manufacturer = new Struct\Product\Manufacturer();
 
         $this->assignData($manufacturer, $data);
 
@@ -33,7 +33,7 @@ class Manufacturer
         return $manufacturer;
     }
 
-    public function assignData(Struct\Manufacturer $manufacturer, array $data)
+    public function assignData(Struct\Product\Manufacturer $manufacturer, array $data)
     {
         if (isset($data['id'])) {
             $manufacturer->setId(intval($data['id']));
@@ -68,7 +68,7 @@ class Manufacturer
         }
     }
 
-    private function assignAttribute(Struct\Manufacturer $manufacturer, array $data)
+    private function assignAttribute(Struct\Product\Manufacturer $manufacturer, array $data)
     {
         $attribute = $this->attributeHydrator->hydrate(
             $data['attribute']
@@ -76,6 +76,4 @@ class Manufacturer
 
         $manufacturer->addAttribute('core', $attribute);
     }
-
-
 }

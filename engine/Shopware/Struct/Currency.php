@@ -7,27 +7,41 @@ namespace Shopware\Struct;
  */
 class Currency
 {
+    /**
+     * @var int
+     */
     private $id;
 
+    /**
+     * @var string
+     */
     private $name;
 
+    /**
+     * @var string
+     */
     private $currency;
 
+    /**
+     * @var float
+     */
     private $factor;
 
+    /**
+     * @var string
+     */
     private $symbol;
 
     /**
-     * @param mixed $id
+     * @param int $id
      */
     public function setId($id)
     {
         $this->id = $id;
-
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getId()
     {
@@ -35,17 +49,15 @@ class Currency
     }
 
     /**
-     * @param mixed $name
-     *
+     * @param string $name
      */
     public function setName($name)
     {
         $this->name = $name;
-
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getName()
     {
@@ -53,35 +65,31 @@ class Currency
     }
 
     /**
-     * @param mixed $factor
-     *
+     * @param string $symbol
      */
-    public function setFactor($factor)
+    public function setSymbol($symbol)
     {
-        $this->factor = $factor;
-
+        $this->symbol = $symbol;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getFactor()
+    public function getSymbol()
     {
-        return $this->factor;
+        return $this->symbol;
     }
 
     /**
-     * @param mixed $currency
-     *
+     * @param string $currency
      */
     public function setCurrency($currency)
     {
         $this->currency = $currency;
-
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getCurrency()
     {
@@ -89,21 +97,19 @@ class Currency
     }
 
     /**
-     * @param mixed $symbol
-     *
+     * @param float $factor
      */
-    public function setSymbol($symbol)
+    public function setFactor($factor)
     {
-        $this->symbol = $symbol;
-
+        $this->factor = $factor;
     }
 
     /**
-     * @return mixed
+     * @return float
      */
-    public function getSymbol()
+    public function getFactor()
     {
-        return $this->symbol;
+        return $this->factor;
     }
 
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace Shopware\Struct;
+namespace Shopware\Struct\Property;
 
 /**
  * @package Shopware\Struct
  */
-class PropertyGroup
+class Option
 {
 
     /**
@@ -17,11 +17,6 @@ class PropertyGroup
      * @var string
      */
     private $name;
-
-    /**
-     * @var PropertyOption[]
-     */
-    private $options;
 
     /**
      * @param int $id
@@ -58,25 +53,4 @@ class PropertyGroup
     {
         return $this->name;
     }
-
-    /**
-     * @param \Shopware\Struct\PropertyOption[] $options
-     * @return $this
-     */
-    public function setOptions($options)
-    {
-        $this->options = $options;
-        return $this;
-    }
-
-    /**
-     * @return \Shopware\Struct\PropertyOption[]
-     */
-    public function getOptions()
-    {
-        return $this->options;
-    }
-
-
-
 }

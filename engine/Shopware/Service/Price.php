@@ -24,14 +24,14 @@ class Price
      * This function returns the scaled customer group prices for the passed product.
      *
      * The scaled product prices are selected over the s_articles_prices.articledetailsID column.
-     * The id is stored in the Struct\ProductMini::variantId property.
+     * The id is stored in the Struct\ListProduct::variantId property.
      * The prices are ordered ascending by the Struct\Price::from property.
      *
-     * @param Struct\ProductMini $product
+     * @param Struct\ListProduct $product
      * @param \Shopware\Struct\Context $context
-     * @return Struct\Price[]
+     * @return Struct\Product\PriceRule[]
      */
-    public function getProductPrices(Struct\ProductMini $product, Struct\Context $context)
+    public function getProductPrices(Struct\ListProduct $product, Struct\Context $context)
     {
         $customerGroup = $context->getCurrentCustomerGroup();
         $prices = $this->priceGateway->getProductPrices(
@@ -64,7 +64,7 @@ class Price
      * The cheapest product price is selected over all product variations.
      *
      * This means that the query uses the s_articles_prices.articleID column for the where condition.
-     * The articleID is stored in the Struct\ProductMini::id property.
+     * The articleID is stored in the Struct\ListProduct::id property.
      *
      * The cheapest price contains the associated product Struct\Unit of the associated product variation.
      * This means:
@@ -74,11 +74,11 @@ class Price
      *    - This product variation contains an associated Struct\Unit
      *  - The unit of SW2000.2 is set into the Struct\Price::unit property
      *
-     * @param Struct\ProductMini $product
+     * @param Struct\ListProduct $product
      * @param \Shopware\Struct\Context $context
-     * @return Struct\Price
+     * @return Struct\Product\PriceRule
      */
-    public function getCheapestPrice(Struct\ProductMini $product, Struct\Context $context)
+    public function getCheapestPrice(Struct\ListProduct $product, Struct\Context $context)
     {
         $customerGroup = $context->getCurrentCustomerGroup();
         $cheapestPrice = $this->priceGateway->getCheapestPrice(
@@ -104,13 +104,13 @@ class Price
      * price group discount for the min purchase of the
      * prices unit.
      *
-     * @param Struct\ProductMini $product
-     * @param Struct\Price $cheapestPrice
+     * @param Struct\ListProduct $product
+     * @param Struct\Product\PriceRule $cheapestPrice
      * @param Struct\Context $context
      */
     private function calculatePriceGroupPrice(
-        Struct\ProductMini $product,
-        Struct\Price $cheapestPrice,
+        Struct\ListProduct $product,
+        Struct\Product\PriceRule $cheapestPrice,
         Struct\Context $context
     ) {
 
@@ -144,14 +144,14 @@ class Price
      * This function only calculates the gross and net prices. The cheapest price should already
      * set in the product struct.
      *
-     * @param Struct\ProductMini $product
+     * @param Struct\ListProduct $product
      * @param Struct\Context $context
      */
-    public function calculateProduct(Struct\ProductMini $product, Struct\Context $context)
+    public function calculateProduct(Struct\ListProduct $product, Struct\Context $context)
     {
         $tax = $context->getTaxRule($product->getTax()->getId());
 
-        foreach($product->getPrices() as $price) {
+        foreach($product->getPriceRules() as $price) {
             $this->calculatePriceStruct(
                 $price,
                 $tax,
@@ -159,16 +159,16 @@ class Price
             );
         }
 
-        if ($product->getCheapestPrice()) {
+        if ($product->getCheapestPriceRule()) {
             $this->calculatePriceStruct(
-                $product->getCheapestPrice(),
+                $product->getCheapestPriceRule(),
                 $tax,
                 $context
             );
         }
 
         //add state to the product which can be used to check if the prices are already calculated.
-        $product->addState(Struct\ProductMini::STATE_PRICE_CALCULATED);
+        $product->addState(Struct\ListProduct::STATE_PRICE_CALCULATED);
     }
 
     /**
@@ -177,25 +177,27 @@ class Price
      * and the cheapest price struct.
      * All price structs will be calculated through this function.
      *
-     * @param Struct\Price $price
+     * @param \Shopware\Struct\Product\PriceRule $rule
      * @param \Shopware\Struct\Tax $tax
      * @param Struct\Context $context
      */
     private function calculatePriceStruct(
-        Struct\Price $price,
+        Struct\Product\PriceRule $rule,
         Struct\Tax $tax,
         Struct\Context $context
     ) {
 
+        $price = new Struct\Product\Price($rule);
+
         //calculates the normal price of the struct.
         $price->setCalculatedPrice(
-            $this->calculatePrice($price->getPrice(), $tax, $context)
+            $this->calculatePrice($rule->getPrice(), $tax, $context)
         );
 
         //check if a pseudo price is defined and calculates it too.
-        if ($price->getPseudoPrice()) {
+        if ($rule->getPseudoPrice()) {
             $price->setCalculatedPseudoPrice(
-                $this->calculatePrice($price->getPseudoPrice(), $tax, $context)
+                $this->calculatePrice($rule->getPseudoPrice(), $tax, $context)
             );
         }
 
@@ -240,9 +242,7 @@ class Price
          * Check if a global basket discount is configured and reduce the price
          * by the percentage discount value of the current customer group.
          */
-        if ($customerGroup->getUseDiscount()
-            && $customerGroup->getPercentageDiscount()) {
-
+        if ($customerGroup->useDiscount() && $customerGroup->getPercentageDiscount()) {
             $price = $price - ($price / 100 * $customerGroup->getPercentageDiscount());
         }
 
@@ -285,10 +285,10 @@ class Price
      * Calculates the product unit reference price for the passed
      * product price.
      *
-     * @param Struct\Price $price
+     * @param Struct\Product\Price $price
      * @return float
      */
-    private function calculateReferencePrice(Struct\Price $price)
+    private function calculateReferencePrice(Struct\Product\Price $price)
     {
         return $price->getCalculatedPrice() / $price->getUnit()->getPurchaseUnit() * $price->getUnit()->getReferenceUnit();
     }

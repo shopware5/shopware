@@ -12,8 +12,8 @@ interface Media
      *
      * The preview image has the flag "main = 1" in the database.
      *
-     * @param \Shopware\Struct\ProductMini $product
+     * @param \Shopware\Struct\ListProduct $product
      * @return \Shopware\Struct\Media
      */
-    public function getProductCover(Struct\ProductMini $product);
+    public function getProductCover(Struct\ListProduct $product);
 }
