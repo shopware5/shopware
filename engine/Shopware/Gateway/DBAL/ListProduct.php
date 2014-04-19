@@ -3,6 +3,7 @@
 namespace Shopware\Gateway\DBAL;
 
 
+use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Gateway\DBAL\Hydrator as Hydrator;
 use Shopware\Struct;
@@ -12,25 +13,12 @@ use Shopware\Struct;
  *
  * @package Shopware\Gateway\DBAL
  */
-class ListProduct implements \Shopware\Gateway\ListProduct
+class ListProduct extends Gateway
 {
     /**
      * @var \Shopware\Gateway\DBAL\Hydrator\Product
      */
     private $hydrator;
-
-    /**
-     * @var \Shopware\Components\Model\ModelManager
-     */
-    private $entityManager;
-
-    /**
-     * Contains the selection for the s_articles_attributes table.
-     * This table contains dynamically columns.
-     *
-     * @var array
-     */
-    private $attributeFields = array();
 
     /**
      * @param $hydrator
@@ -60,7 +48,7 @@ class ListProduct implements \Shopware\Gateway\ListProduct
      * @param \Shopware\Struct\Context $context
      * @return Struct\ListProduct[]
      */
-    public function getListProducts(array $numbers, Struct\Context $context)
+    public function getList(array $numbers, Struct\Context $context)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
         $query->select($this->getArticleFields())
@@ -81,7 +69,7 @@ class ListProduct implements \Shopware\Gateway\ListProduct
             ->leftJoin('product', 's_articles_supplier_attributes', 'manufacturerAttribute', 'manufacturerAttribute.id = product.supplierID')
             ->leftJoin('product', 's_core_pricegroups', 'priceGroup', 'priceGroup.id = product.pricegroupID')
             ->where('variant.ordernumber IN (:numbers)')
-            ->setParameter(':numbers', implode(',', $numbers));
+            ->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -114,9 +102,9 @@ class ListProduct implements \Shopware\Gateway\ListProduct
      * @param \Shopware\Struct\Context $context
      * @return Struct\ListProduct
      */
-    public function getListProduct($number, Struct\Context $context)
+    public function get($number, Struct\Context $context)
     {
-        $products = $this->getListProducts(array($number), $context);
+        $products = $this->getList(array($number), $context);
 
         return array_shift($products);
     }
@@ -248,35 +236,4 @@ class ListProduct implements \Shopware\Gateway\ListProduct
             'manufacturer.meta_keywords as __manufacturer_keywords'
         );
     }
-
-    /**
-     * Helper function which generates an array with table column selections
-     * for the passed table.
-     *
-     * @param $table
-     * @param $alias
-     * @return array
-     */
-    private function getTableFields($table, $alias)
-    {
-        $key = $table . '_' . $alias;
-
-        if ($this->attributeFields[$key] !== null) {
-            return $this->attributeFields[$key];
-        }
-
-        $schemaManager = $this->entityManager->getConnection()->getSchemaManager();
-
-        $tableColumns = $schemaManager->listTableColumns($table);
-        $columns = array();
-
-        foreach ($tableColumns as $column) {
-            $columns[] = $alias . '.' . $column->getName() . ' as __' . $alias . '_' . $column->getName();
-        }
-
-        $this->attributeFields[$key] = $columns;
-
-        return $this->attributeFields[$key];
-    }
-
 }

@@ -33,15 +33,24 @@ class Media
     }
 
     /**
+     * @param Struct\ListProduct[] $products
+     * @return \Shopware\Struct\Media[]
+     */
+    public function getCovers(array $products)
+    {
+        return $this->mediaGateway->getCovers($products);
+    }
+
+    /**
      * @param Struct\ListProduct $product
      * @return Struct\Media
      */
-    public function getProductCover(Struct\ListProduct $product)
+    public function getCover(Struct\ListProduct $product)
     {
         if ($this->shopwareConfig->get('forceArticleMainImageInListing')) {
-            $cover = $this->mediaGateway->getProductCover($product);
+            $cover = $this->mediaGateway->getCover($product);
         } else {
-            $cover = $this->mediaGateway->getProductCover($product);
+            $cover = $this->mediaGateway->getCover($product);
         }
 
         return $cover;

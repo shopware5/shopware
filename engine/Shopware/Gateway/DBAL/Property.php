@@ -6,13 +6,8 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Gateway\DBAL\Hydrator as Hydrator;
 use Shopware\Struct;
 
-class Property implements \Shopware\Gateway\Property
+class Property extends Gateway
 {
-    /**
-     * @var \Shopware\Components\Model\ModelManager
-     */
-    private $entityManager;
-
     /**
      * @var \Shopware\Gateway\DBAL\Hydrator\Property
      */
@@ -37,7 +32,7 @@ class Property implements \Shopware\Gateway\Property
      * and values of the product.
      *
      * @param Struct\ListProduct $product
-     * @return Struct\PropertySet
+     * @return Struct\Property\Set
      */
     public function getProductSet(Struct\ListProduct $product)
     {

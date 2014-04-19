@@ -6,10 +6,8 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Struct;
 use Shopware\Gateway\DBAL\Hydrator as Hydrator;
 
-class Translation implements \Shopware\Gateway\Translation
+class Translation extends Gateway
 {
-    private $entityManager;
-
     private $translationHydrator;
 
     function __construct(
@@ -203,25 +201,6 @@ class Translation implements \Shopware\Gateway\Translation
             return array();
         }
 
-        return $data;
-    }
-
-    /**
-     * Helper function which uses the first column as array key.
-     *
-     * @param \Doctrine\DBAL\Query\QueryBuilder $query
-     * @return array
-     */
-    private function fetchAssociatedArray(\Doctrine\DBAL\Query\QueryBuilder $query)
-    {
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
-        $statement = $query->execute();
-
-        $data = $statement->fetchAll(\PDO::FETCH_GROUP);
-        $data = array_combine(
-            array_keys($data),
-            array_column($data, 0)
-        );
         return $data;
     }
 
