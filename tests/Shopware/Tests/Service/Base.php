@@ -66,7 +66,7 @@ class Shopware_Tests_Service_Base extends Enlight_Components_Test_TestCase
     protected function getProduct($number, $state)
     {
         return Shopware()->Container()->get('product_service')
-            ->getMini($number, $state);
+            ->getListProduct($number, $state);
     }
 
     protected function getHighTax()
@@ -93,12 +93,12 @@ class Shopware_Tests_Service_Base extends Enlight_Components_Test_TestCase
     ) {
         $state = new \Shopware\Struct\Context();
 
-        $customerGroup = new \Shopware\Struct\CustomerGroup();
+        $customerGroup = new \Shopware\Struct\Customer\Group();
         $customerGroup->setKey($group->getKey());
         $customerGroup->setUseDiscount(true);
         $customerGroup->setId($group->getId());
         $customerGroup->setPercentageDiscount($group->getDiscount());
-        $customerGroup->setDisplayGross($group->getTax());
+        $customerGroup->setDisplayGrossPrices($group->getTax());
 
 
         $state->setCurrentCustomerGroup($customerGroup);
@@ -514,7 +514,7 @@ class Shopware_Tests_Service_Base extends Enlight_Components_Test_TestCase
     ) {
         $state = new \Shopware\Struct\Context();
 
-        $customerGroup = new \Shopware\Struct\CustomerGroup();
+        $customerGroup = new \Shopware\Struct\Customer\Group();
         $customerGroup->setKey($group->getKey());
         $customerGroup->setUseDiscount(true);
         $customerGroup->setId($group->getId());

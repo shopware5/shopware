@@ -151,20 +151,23 @@ class Price
     {
         $tax = $context->getTaxRule($product->getTax()->getId());
 
-        foreach($product->getPriceRules() as $price) {
-            $this->calculatePriceStruct(
-                $price,
+        $prices = array();
+        foreach($product->getPriceRules() as $rule) {
+            $prices[] = $this->calculatePriceStruct(
+                $rule,
                 $tax,
                 $context
             );
         }
+        $product->setPrices($prices);
 
         if ($product->getCheapestPriceRule()) {
-            $this->calculatePriceStruct(
+            $cheapestPrice = $this->calculatePriceStruct(
                 $product->getCheapestPriceRule(),
                 $tax,
                 $context
             );
+            $product->setCheapestPrice($cheapestPrice);
         }
 
         //add state to the product which can be used to check if the prices are already calculated.
@@ -180,6 +183,7 @@ class Price
      * @param \Shopware\Struct\Product\PriceRule $rule
      * @param \Shopware\Struct\Tax $tax
      * @param Struct\Context $context
+     * @return \Shopware\Struct\Product\Price
      */
     private function calculatePriceStruct(
         Struct\Product\PriceRule $rule,
@@ -207,6 +211,8 @@ class Price
                 $this->calculateReferencePrice($price)
             );
         }
+
+        return $price;
     }
 
 

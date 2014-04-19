@@ -4686,7 +4686,7 @@ class sArticles
 
         $state = $this->globalStateService->get();
 
-        $product = Shopware()->Container()->get('product_service')->getMini(
+        $product = Shopware()->Container()->get('product_service')->getListProduct(
             $value,
             $state
         );
@@ -4747,7 +4747,7 @@ class sArticles
         return $promotion;
     }
 
-    private function convertProductStruct(\Shopware\Struct\ProductMini $product, $category = null)
+    private function convertProductStruct(\Shopware\Struct\ListProduct $product, $category = null)
     {
         $cheapestPrice = $product->getCheapestPrice();
 

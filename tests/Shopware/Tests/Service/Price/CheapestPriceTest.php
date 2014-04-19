@@ -26,7 +26,7 @@ class Shopware_Tests_Service_Price_CheapestPriceTest extends Shopware_Tests_Serv
 
         $price = $product->getCheapestPrice();
 
-        $this->assertInstanceOf('Shopware\Struct\Price', $price);
+        $this->assertInstanceOf('Shopware\Struct\Product\Price', $price);
         $this->assertEquals(1000, $price->getCalculatedPrice());
         $this->removeArticle($number);
     }
@@ -52,7 +52,7 @@ class Shopware_Tests_Service_Price_CheapestPriceTest extends Shopware_Tests_Serv
         $product = $this->getProduct($number, $state);
         $price = $product->getCheapestPrice();
 
-        $this->assertInstanceOf('Shopware\Struct\Price', $price);
+        $this->assertInstanceOf('Shopware\Struct\Product\Price', $price);
         $this->assertEquals(900, $price->getCalculatedPrice());
         $this->removeArticle($number);
     }
