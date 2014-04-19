@@ -2,22 +2,18 @@
 
 namespace Shopware\Gateway\DBAL;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Thumbnail\Manager;
 use Shopware\Gateway\DBAL\Hydrator as Hydrator;
 use Shopware\Struct;
 
-class Media implements \Shopware\Gateway\Media
+class Media extends Gateway
 {
     /**
      * @var \Shopware\Gateway\DBAL\Hydrator\Media
      */
     private $mediaHydrator;
-
-    /**
-     * @var \Shopware\Components\Model\ModelManager
-     */
-    private $entityManager;
 
     /**
      * @var \Shopware\Components\Thumbnail\Manager
@@ -49,9 +45,9 @@ class Media implements \Shopware\Gateway\Media
      * @param \Shopware\Struct\ListProduct $product
      * @return \Shopware\Struct\Media
      */
-    public function getProductCover(Struct\ListProduct $product)
+    public function getCover(Struct\ListProduct $product)
     {
-        $covers = $this->getProductCovers(array($product->getId()));
+        $covers = $this->getCovers(array($product->getId()));
 
         return array_shift($covers);
     }
@@ -62,11 +58,16 @@ class Media implements \Shopware\Gateway\Media
      *
      * The preview images has the flag "main = 1" in the database.
      *
-     * @param array $ids
-     * @return \Shopware\Struct\Media[]
+     * @param Struct\ListProduct[] $products
+     * @return Struct\Media[]
      */
-    public function getProductCovers(array $ids)
+    public function getCovers(array $products)
     {
+        $ids = array();
+        foreach($products as $product) {
+            $ids[] = $product->getId();
+        }
+
         $query = $this->entityManager->getDBALQueryBuilder();
 
         $query->select($this->getMediaFields())
@@ -83,7 +84,7 @@ class Media implements \Shopware\Gateway\Media
 
         $query->where('image.articleID IN (:products)')
             ->andWhere('image.main = 1')
-            ->setParameter(':products', implode(',', $ids));
+            ->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -94,11 +95,11 @@ class Media implements \Shopware\Gateway\Media
         foreach($data as $cover) {
             $cover['thumbnails'] = $this->getMediaThumbnails($cover);
 
-            $covers[] = $this->mediaHydrator->hydrateProductImage($cover);
+            $covers[$cover['__image_articleID']] = $this->mediaHydrator->hydrateProductImage($cover);
         }
-
         return $covers;
     }
+
 
 
     private function getMediaFields()
@@ -121,6 +122,7 @@ class Media implements \Shopware\Gateway\Media
     {
         return array(
             'image.id as __image_id',
+            'image.articleID as __image_articleID',
             'image.img as __image_img',
             'image.main as __image_main',
             'image.description as __image_description',
@@ -141,20 +143,6 @@ class Media implements \Shopware\Gateway\Media
             'settings.thumbnail_size as __settings_thumbnail_size',
             'settings.icon as __settings_icon'
         );
-    }
-
-    private function getTableFields($table, $alias)
-    {
-        $schemaManager = $this->entityManager->getConnection()->getSchemaManager();
-
-        $tableColumns = $schemaManager->listTableColumns($table);
-        $columns = array();
-
-        foreach ($tableColumns as $column) {
-            $columns[] = $alias . '.' . $column->getName() . ' as __' . $alias . '_' . $column->getName();
-        }
-
-        return $columns;
     }
 
     /**

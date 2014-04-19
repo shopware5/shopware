@@ -6,7 +6,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Gateway\DBAL\Hydrator as Hydrator;
 use Shopware\Struct as Struct;
 
-class Vote implements \Shopware\Gateway\Vote
+class Vote extends Gateway
 {
 
     /**
@@ -15,18 +15,14 @@ class Vote implements \Shopware\Gateway\Vote
     private $voteHydrator;
 
     /**
-     * @var \Shopware\Components\Model\ModelManager
-     */
-    private $entityManager;
-
-    /**
      * @param ModelManager $entityManager
      * @param Hydrator\Vote $voteHydrator
      */
     function __construct(
         ModelManager $entityManager,
         Hydrator\Vote $voteHydrator
-    ) {
+    )
+    {
         $this->voteHydrator = $voteHydrator;
         $this->entityManager = $entityManager;
     }

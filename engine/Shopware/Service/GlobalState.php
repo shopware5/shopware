@@ -19,12 +19,12 @@ class GlobalState
     private $container;
 
     /**
-     * @var \Shopware\Gateway\CustomerGroup
+     * @var \Shopware\Gateway\DBAL\CustomerGroup
      */
     private $customerGroupGateway;
 
     /**
-     * @var \Shopware\Gateway\Tax
+     * @var \Shopware\Gateway\DBAL\Tax
      */
     private $taxGateway;
 
@@ -35,15 +35,15 @@ class GlobalState
 
     /**
      * @param Container $container
-     * @param Gateway\CustomerGroup $customerGroupGateway
-     * @param Gateway\Tax $taxGateway
-     * @param Gateway\Country $countryGateway
+     * @param Gateway\DBAL\CustomerGroup $customerGroupGateway
+     * @param Gateway\DBAL\Tax $taxGateway
+     * @param Gateway\DBAL\Country $countryGateway
      */
     function __construct(
         Container $container,
-        Gateway\CustomerGroup $customerGroupGateway,
-        Gateway\Tax $taxGateway,
-        Gateway\Country $countryGateway
+        Gateway\DBAL\CustomerGroup $customerGroupGateway,
+        Gateway\DBAL\Tax $taxGateway,
+        Gateway\DBAL\Country $countryGateway
     ) {
         $this->container = $container;
         $this->taxGateway = $taxGateway;
@@ -65,6 +65,7 @@ class GlobalState
         } else {
             $key = $fallback;
         }
+        $key = 'H';
 
         $context = new Struct\Context();
 

@@ -10,13 +10,8 @@ use Shopware\Gateway\DBAL\QueryGenerator as QueryGenerator;
 use Shopware\Gateway\Search\Criteria;
 use Shopware\Gateway\Search\Result;
 
-class Search implements \Shopware\Gateway\Search
+class Search extends Gateway
 {
-    /**
-     * @var ModelManager
-     */
-    private $entityManager;
-
     /**
      * @var QueryGenerator\DBAL[]
      */

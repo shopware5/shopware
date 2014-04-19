@@ -5,23 +5,12 @@ namespace Shopware\Gateway\DBAL;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Gateway\DBAL\Hydrator as Hydrator;
 
-class CustomerGroup implements \Shopware\Gateway\CustomerGroup
+class CustomerGroup extends Gateway
 {
     /**
      * @var \Shopware\Gateway\DBAL\Hydrator\CustomerGroup
      */
     private $customerGroupHydrator;
-
-    /**
-     * @var \Shopware\Components\Model\ModelManager
-     */
-    private $entityManager;
-
-    /**
-     * Contains the definition of the customer group attributes.
-     * @var array
-     */
-    private $attributeFields = array();
 
     /**
      * @param ModelManager $entityManager
@@ -106,36 +95,5 @@ class CustomerGroup implements \Shopware\Gateway\CustomerGroup
             'customerGroup.minimumordersurcharge'
         );
     }
-
-    /**
-     * Helper function which generates an array with table column selections
-     * for the passed table.
-     *
-     * @param $table
-     * @param $alias
-     * @return array
-     */
-    private function getTableFields($table, $alias)
-    {
-        $key = $table . '_' . $alias;
-
-        if ($this->attributeFields[$key] !== null) {
-            return $this->attributeFields[$key];
-        }
-
-        $schemaManager = $this->entityManager->getConnection()->getSchemaManager();
-
-        $tableColumns = $schemaManager->listTableColumns($table);
-        $columns = array();
-
-        foreach ($tableColumns as $column) {
-            $columns[] = $alias . '.' . $column->getName() . ' as __' . $alias . '_' . $column->getName();
-        }
-
-        $this->attributeFields[$key] = $columns;
-
-        return $this->attributeFields[$key];
-    }
-
 
 }

@@ -4,8 +4,9 @@ namespace Shopware\Gateway\DBAL;
 
 use Shopware\Components\Model\ModelManager;
 use Shopware\Struct as Struct;
+use Shopware\Gateway\DBAL\Hydrator;
 
-class Tax implements \Shopware\Gateway\Tax
+class Tax extends Gateway
 {
     /**
      * @var \Shopware\Gateway\DBAL\Hydrator\Tax
@@ -13,17 +14,12 @@ class Tax implements \Shopware\Gateway\Tax
     private $taxHydrator;
 
     /**
-     * @var \Shopware\Components\Model\ModelManager
-     */
-    private $entityManager;
-
-    /**
      * @param \Shopware\Components\Model\ModelManager $entityManager
-     * @param \Shopware\Gateway\DBAL\Hydrator\Tax $taxHydrator
+     * @param Hydrator\Tax $taxHydrator
      */
     function __construct(
         ModelManager $entityManager,
-        \Shopware\Gateway\DBAL\Hydrator\Tax $taxHydrator
+        Hydrator\Tax $taxHydrator
     )
     {
         $this->entityManager = $entityManager;
@@ -31,17 +27,17 @@ class Tax implements \Shopware\Gateway\Tax
     }
 
     /**
-     * @param Struct\CustomerGroup $customerGroup
-     * @param Struct\Area $area
-     * @param Struct\Country $country
-     * @param Struct\State $state
+     * @param \Shopware\Struct\Customer\Group $customerGroup
+     * @param \Shopware\Struct\Country\Area $area
+     * @param \Shopware\Struct\Country $country
+     * @param \Shopware\Struct\Country\State $state
      * @return Struct\Tax[]
      */
     public function getRules(
-        Struct\CustomerGroup $customerGroup,
-        Struct\Area $area = null,
+        Struct\Customer\Group $customerGroup,
+        Struct\Country\Area $area = null,
         Struct\Country $country = null,
-        Struct\State $state = null
+        Struct\Country\State $state = null
     )
     {
         $query = $this->entityManager->getDBALQueryBuilder();
@@ -58,7 +54,12 @@ class Tax implements \Shopware\Gateway\Tax
 
         $rules = array();
 
-        $query = $this->getAreaQuery($customerGroup, $area, $country, $state);
+        $query = $this->getAreaQuery(
+            $customerGroup,
+            $area,
+            $country,
+            $state
+        );
 
         foreach ($data as $tax) {
             $query->setParameter(':taxId', $tax['id']);
@@ -84,10 +85,10 @@ class Tax implements \Shopware\Gateway\Tax
     }
 
     private function getAreaQuery(
-        Struct\CustomerGroup $customerGroup = null,
-        Struct\Area $area = null,
+        Struct\Customer\Group $customerGroup = null,
+        Struct\Country\Area $area = null,
         Struct\Country $country = null,
-        Struct\State $state = null
+        Struct\Country\State $state = null
     ) {
 
         $query = $this->entityManager->getDBALQueryBuilder();

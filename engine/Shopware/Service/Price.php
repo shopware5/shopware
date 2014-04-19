@@ -8,16 +8,57 @@ use Shopware\Gateway as Gateway;
 class Price
 {
     /**
-     * @var \Shopware\Gateway\Price
+     * @var \Shopware\Gateway\DBAL\Price
      */
     private $priceGateway;
 
     /**
-     * @param Gateway\Price $priceGateway
+     * @param Gateway\DBAL\Price $priceGateway
      */
-    function __construct(Gateway\Price $priceGateway)
+    function __construct(Gateway\DBAL\Price $priceGateway)
     {
         $this->priceGateway = $priceGateway;
+    }
+
+    /**
+     * @param Struct\ListProduct[] $products
+     * @param Struct\Context $context
+     * @return \Shopware\Struct\Product\PriceRule[]
+     */
+    public function getProductPriceList(array $products, Struct\Context $context)
+    {
+        $specify = $this->priceGateway->getProductPriceList(
+            $products,
+            $context->getCurrentCustomerGroup()
+        );
+
+        $fallback = $this->priceGateway->getProductPriceList(
+            $products,
+            $context->getFallbackCustomerGroup()
+        );
+
+        $prices = array();
+
+        foreach($products as $product) {
+            $group = $context->getCurrentCustomerGroup();
+
+            /**@var $productPrices Struct\Product\PriceRule[]*/
+            $productPrices = $specify[$product->getVariantId()];
+
+            if (empty($productPrices)) {
+                $group = $context->getFallbackCustomerGroup();
+                $productPrices = $fallback[$product->getVariantId()];
+            }
+
+            foreach($productPrices as $price) {
+                $price->setUnit($product->getUnit());
+                $price->setCustomerGroup($group);
+            }
+
+            $prices[$product->getId()] = $productPrices;
+        }
+
+        return $prices;
     }
 
     /**
