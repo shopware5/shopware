@@ -7,7 +7,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Struct as Struct;
 use Shopware\Gateway\DBAL\Hydrator as Hydrator;
 
-class Price extends Gateway
+class GraduatedPrices extends Gateway
 {
     /**
      * @var \Shopware\Gateway\DBAL\Hydrator\Price
@@ -21,16 +21,15 @@ class Price extends Gateway
     function __construct(
         ModelManager $entityManager,
         Hydrator\Price $priceHydrator
-    )
-    {
+    ) {
         $this->entityManager = $entityManager;
         $this->priceHydrator = $priceHydrator;
     }
 
     /**
-     * This function returns the scaled customer group prices for the passed product.
+     * This function returns the graduated customer group prices for the passed product.
      *
-     * The scaled product prices are selected over the s_articles_prices.articledetailsID column.
+     * The graduated product prices are selected over the s_articles_prices.articledetailsID column.
      * The id is stored in the Struct\ListProduct::variantId property.
      * Additionally it is important that the prices are ordered ascending by the Struct\Price::from property.
      *
@@ -38,51 +37,24 @@ class Price extends Gateway
      * @param Struct\Customer\Group $customerGroup
      * @return Struct\Product\PriceRule[]
      */
-    public function getProductPrices(
+    public function get(
         Struct\ListProduct $product,
         Struct\Customer\Group $customerGroup
     ) {
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $prices = $this->getList(array($product), $customerGroup);
 
-        $query->select($this->getPriceFields());
-        $query->addSelect($this->getTableFields('s_articles_prices_attributes', 'attribute'));
-
-        $query->from('s_articles_prices', 'prices')
-            ->leftJoin('prices', 's_articles_prices_attributes', 'attribute', 'attribute.priceID = prices.id');
-
-        $query->where('prices.articledetailsID = :product')
-            ->andWhere('prices.pricegroup = :customerGroup')
-            ->setParameter(':product', $product->getVariantId())
-            ->setParameter(':customerGroup', $customerGroup->getKey());
-
-        $query->orderBy('prices.from', 'ASC');
-
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
-        $statement = $query->execute();
-
-        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
-
-        $prices = array();
-
-        foreach ($data as $row) {
-            $price = $this->priceHydrator->hydratePriceRule($row);
-
-            $prices[] = $price;
-        }
-
-        return $prices;
+        return array_shift($prices);
     }
-
 
     /**
      * @param Struct\ListProduct[] $products
      * @param Struct\Customer\Group $customerGroup
      * @return Struct\Product\PriceRule[]
      */
-    public function getProductPriceList(array $products, Struct\Customer\Group $customerGroup)
+    public function getList(array $products, Struct\Customer\Group $customerGroup)
     {
         $ids = array();
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $ids[] = $product->getVariantId();
         }
 
@@ -108,7 +80,7 @@ class Price extends Gateway
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         $prices = array();
-        foreach($data as $row) {
+        foreach ($data as $row) {
             $product = $row['articledetailsID'];
 
             $prices[$product][] = $this->priceHydrator->hydratePriceRule($row);

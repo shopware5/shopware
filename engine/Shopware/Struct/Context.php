@@ -1,6 +1,7 @@
 <?php
 
 namespace Shopware\Struct;
+
 use Shopware\Struct\Country\Area;
 use Shopware\Struct\Country\State;
 use Shopware\Struct\Customer\Group;

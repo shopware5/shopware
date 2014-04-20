@@ -8,168 +8,192 @@
 
         <!-- Shopware service definitions -->
 
-        <service id="product_service" class="Shopware\Service\Product">
-            <argument type="service" id="product_gateway" />
-            <argument type="service" id="price_service" />
+        <service id="global_state_service" class="Shopware\Service\GlobalState">
+            <argument type="service" id="service_container"/>
+            <argument type="service" id="customer_group_gateway"/>
+            <argument type="service" id="tax_gateway"/>
+            <argument type="service" id="country_gateway"/>
+        </service>
+
+        <service id="list_product_service" class="Shopware\Service\ListProduct">
+            <argument type="service" id="list_product_gateway" />
+            <argument type="service" id="graduated_prices_service" />
+            <argument type="service" id="cheapest_price_service" />
+            <argument type="service" id="price_calculation_service" />
             <argument type="service" id="media_service" />
             <argument type="service" id="translation_service" />
             <argument type="service" id="events" />
-            <argument type="service" id="vote_gateway" />
         </service>
 
-        <service id="price_service" class="Shopware\Service\Price" >
-            <argument type="service" id="price_gateway" />
+        <service id="graduated_prices_service" class="Shopware\Service\GraduatedPrices">
+            <argument type="service" id="graduated_prices_gateway" />
         </service>
 
-        <service id="media_service" class="Shopware\Service\Media" >
-            <argument type="service" id="media_gateway" />
-            <argument type="service" id="config" />
+        <service id="price_calculation_service" class="Shopware\Service\PriceCalculation" />
+
+        <service id="cheapest_price_service" class="Shopware\Service\CheapestPrice">
+            <argument type="service" id="cheapest_price_gateway"/>
+            <argument type="service" id="price_group_discount_gateway" />
+            <argument type="service" id="graduated_prices_service" />
         </service>
 
-        <service id="global_state_service" class="Shopware\Service\GlobalState">
-            <argument type="service" id="service_container" />
-            <argument type="service" id="customer_group_gateway" />
-            <argument type="service" id="tax_gateway" />
-            <argument type="service" id="country_gateway" />
+        <service id="media_service" class="Shopware\Service\Media">
+            <argument type="service" id="media_gateway"/>
+            <argument type="service" id="config"/>
         </service>
 
-
-        <service id="tax_service" class="Shopware\Service\Tax" >
-            <argument type="service" id="tax_gateway" />
+        <service id="translation_service" class="Shopware\Service\Translation">
+            <argument type="service" id="translation_gateway"/>
         </service>
 
-
-        <service id="translation_service" class="Shopware\Service\Translation" >
-            <argument type="service" id="translation_gateway" />
+        <service id="property_service" class="Shopware\Service\Property">
+            <argument type="service" id="property_gateway"/>
+            <argument type="service" id="translation_service"/>
         </service>
-
-
-        <service id="property_service" class="Shopware\Service\Property" >
-            <argument type="service" id="property_gateway" />
-            <argument type="service" id="translation_service" />
-        </service>
-
-
 
 
         <!-- Global shopware gateway definitions -->
         <!-- This gateways are used in the shopware core. Shopware uses as default the *_orm gateways to select data -->
 
-        <service id="search_gateway" alias="search_gateway_dbal" />
-        <service id="product_gateway" alias="product_gateway_dbal" />
-        <service id="price_gateway" alias="price_gateway_dbal" />
-        <service id="media_gateway" alias="media_gateway_dbal" />
-        <service id="translation_gateway" alias="translation_gateway_dbal" />
-        <service id="property_gateway" alias="property_gateway_dbal" />
-        <service id="vote_gateway" alias="vote_gateway_dbal" />
-        <service id="customer_group_gateway" alias="customer_group_gateway_dbal" />
-        <service id="tax_gateway" alias="tax_gateway_dbal" />
-        <service id="country_gateway" alias="country_gateway_dbal" />
+        <service id="search_gateway" alias="search_gateway_dbal"/>
+
+        <service id="list_product_gateway" alias="list_product_gateway_dbal"/>
+
+        <service id="graduated_prices_gateway" alias="graduated_prices_gateway_dbal"/>
+
+        <service id="cheapest_price_gateway" alias="cheapest_price_gateway_dbal"/>
+
+        <service id="media_gateway" alias="media_gateway_dbal"/>
+
+        <service id="translation_gateway" alias="translation_gateway_dbal"/>
+
+        <service id="property_gateway" alias="property_gateway_dbal"/>
+
+        <service id="vote_gateway" alias="vote_gateway_dbal"/>
+
+        <service id="customer_group_gateway" alias="customer_group_gateway_dbal"/>
+
+        <service id="tax_gateway" alias="tax_gateway_dbal"/>
+
+        <service id="country_gateway" alias="country_gateway_dbal"/>
+
+        <service id="price_group_discount_gateway" alias="price_group_discount_gateway_dbal"/>
+
+
+        <!-- DBAL gateway classes, which used as shopware default -->
 
         <service id="search_gateway_dbal" class="Shopware\Gateway\DBAL\Search">
-            <argument type="service" id="models" />
+            <argument type="service" id="models"/>
         </service>
 
+        <service id="price_group_discount_gateway_dbal" class="Shopware\Gateway\DBAL\PriceGroupDiscount">
+            <argument type="service" id="models" />
+            <argument type="service" id="price_hydrator_dbal" />
+        </service>
 
         <!--used for product selection, like listings, minified products or detailed products-->
-        <service id="product_gateway_dbal" class="Shopware\Gateway\DBAL\ListProduct">
-            <argument type="service" id="models" />
-            <argument type="service" id="product_hydrator_dbal" />
+        <service id="list_product_gateway_dbal" class="Shopware\Gateway\DBAL\ListProduct">
+            <argument type="service" id="models"/>
+            <argument type="service" id="product_hydrator_dbal"/>
         </service>
 
         <!--used for media selection, like product media or the product cover-->
         <service id="media_gateway_dbal" class="Shopware\Gateway\DBAL\Media">
-            <argument type="service" id="models" />
-            <argument type="service" id="media_hydrator_dbal" />
-            <argument type="service" id="thumbnail_manager" />
+            <argument type="service" id="models"/>
+            <argument type="service" id="media_hydrator_dbal"/>
+            <argument type="service" id="thumbnail_manager"/>
         </service>
 
         <!--used for price selections, like product prices and cheapest price-->
-        <service id="price_gateway_dbal" class="Shopware\Gateway\DBAL\Price">
-            <argument type="service" id="models" />
-            <argument type="service" id="price_hydrator_dbal" />
-            <argument type="service" id="customer_group_gateway_dbal" />
+        <service id="graduated_prices_gateway_dbal" class="Shopware\Gateway\DBAL\GraduatedPrices">
+            <argument type="service" id="models"/>
+            <argument type="service" id="price_hydrator_dbal"/>
+        </service>
+
+        <!--used for price selections, like product prices and cheapest price-->
+        <service id="cheapest_price_gateway_dbal" class="Shopware\Gateway\DBAL\CheapestPrice">
+            <argument type="service" id="models"/>
+            <argument type="service" id="price_hydrator_dbal"/>
         </service>
 
         <!--used to get the customer group data over the DBAL connection-->
         <service id="customer_group_gateway_dbal" class="Shopware\Gateway\DBAL\CustomerGroup">
-            <argument type="service" id="models" />
-            <argument type="service" id="customer_group_hydrator_dbal" />
+            <argument type="service" id="models"/>
+            <argument type="service" id="customer_group_hydrator_dbal"/>
         </service>
 
         <service id="translation_gateway_dbal" class="Shopware\Gateway\DBAL\Translation">
-            <argument type="service" id="models" />
-            <argument type="service" id="translation_hydrator_dbal" />
+            <argument type="service" id="models"/>
+            <argument type="service" id="translation_hydrator_dbal"/>
         </service>
 
         <service id="vote_gateway_dbal" class="Shopware\Gateway\DBAL\Vote">
-            <argument type="service" id="models" />
-            <argument type="service" id="vote_hydrator_dbal" />
+            <argument type="service" id="models"/>
+            <argument type="service" id="vote_hydrator_dbal"/>
         </service>
 
         <service id="property_gateway_dbal" class="Shopware\Gateway\DBAL\Property">
-            <argument type="service" id="models" />
-            <argument type="service" id="property_hydrator_dbal" />
+            <argument type="service" id="models"/>
+            <argument type="service" id="property_hydrator_dbal"/>
         </service>
 
         <service id="tax_gateway_dbal" class="Shopware\Gateway\DBAL\Tax">
-            <argument type="service" id="models" />
-            <argument type="service" id="tax_hydrator_dbal" />
+            <argument type="service" id="models"/>
+            <argument type="service" id="tax_hydrator_dbal"/>
         </service>
 
         <service id="country_gateway_dbal" class="Shopware\Gateway\DBAL\Country">
-            <argument type="service" id="models" />
-            <argument type="service" id="country_hydrator_dbal" />
+            <argument type="service" id="models"/>
+            <argument type="service" id="country_hydrator_dbal"/>
         </service>
 
         <!-- Shopware hydrator definitions -->
 
 
-
-        <service id="product_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Product" >
-            <argument type="service" id="attribute_hydrator_dbal" />
-            <argument type="service" id="manufacturer_hydrator_dbal" />
-            <argument type="service" id="tax_hydrator_dbal" />
-            <argument type="service" id="unit_hydrator_dbal" />
+        <service id="product_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Product">
+            <argument type="service" id="attribute_hydrator_dbal"/>
+            <argument type="service" id="manufacturer_hydrator_dbal"/>
+            <argument type="service" id="tax_hydrator_dbal"/>
+            <argument type="service" id="unit_hydrator_dbal"/>
         </service>
 
-        <service id="price_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Price" >
-            <argument type="service" id="customer_group_hydrator_dbal" />
-            <argument type="service" id="unit_hydrator_dbal" />
-            <argument type="service" id="attribute_hydrator_dbal" />
+        <service id="price_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Price">
+            <argument type="service" id="customer_group_hydrator_dbal"/>
+            <argument type="service" id="unit_hydrator_dbal"/>
+            <argument type="service" id="attribute_hydrator_dbal"/>
         </service>
 
         <service id="manufacturer_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Manufacturer">
-            <argument type="service" id="attribute_hydrator_dbal" />
+            <argument type="service" id="attribute_hydrator_dbal"/>
         </service>
 
         <service id="media_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Media">
-            <argument type="service" id="attribute_hydrator_dbal" />
+            <argument type="service" id="attribute_hydrator_dbal"/>
         </service>
 
         <service id="customer_group_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\CustomerGroup">
-            <argument type="service" id="attribute_hydrator_dbal" />
+            <argument type="service" id="attribute_hydrator_dbal"/>
         </service>
 
-        <service id="translation_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Translation" >
-            <argument type="service" id="product_hydrator_dbal" />
-            <argument type="service" id="unit_hydrator_dbal" />
-            <argument type="service" id="manufacturer_hydrator_dbal" />
-            <argument type="service" id="property_hydrator_dbal" />
+        <service id="translation_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Translation">
+            <argument type="service" id="product_hydrator_dbal"/>
+            <argument type="service" id="unit_hydrator_dbal"/>
+            <argument type="service" id="manufacturer_hydrator_dbal"/>
+            <argument type="service" id="property_hydrator_dbal"/>
         </service>
 
 
-        <service id="attribute_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Attribute" />
-        <service id="tax_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Tax" />
-        <service id="unit_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Unit" />
-        <service id="vote_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Vote" />
+        <service id="attribute_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Attribute"/>
+        <service id="tax_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Tax"/>
+        <service id="unit_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Unit"/>
+        <service id="vote_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Vote"/>
 
-        <service id="property_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Property" >
-            <argument type="service" id="attribute_hydrator_dbal" />
+        <service id="property_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Property">
+            <argument type="service" id="attribute_hydrator_dbal"/>
         </service>
 
-        <service id="country_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Country" >
-            <argument type="service" id="attribute_hydrator_dbal" />
+        <service id="country_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Country">
+            <argument type="service" id="attribute_hydrator_dbal"/>
         </service>
 
     </services>

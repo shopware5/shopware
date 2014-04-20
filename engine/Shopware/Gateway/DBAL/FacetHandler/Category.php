@@ -17,7 +17,12 @@ class Category extends DBAL
         $query->removeTableInclude('s_articles_categories_ro');
         $query->resetQueryPart('groupBy');
 
-        $query->select(array('product_categories.categoryID', 'COUNT(products.id) as total'))
+        $query->select(
+            array(
+                'product_categories.categoryID',
+                'COUNT(products.id) as total'
+            )
+        )
             ->innerJoin(
                 'products',
                 's_articles_categories_ro',
@@ -38,7 +43,7 @@ class Category extends DBAL
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
-        /**@var $facet Facet\Category*/
+        /**@var $facet Facet\Category */
         $facet->categories = $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 

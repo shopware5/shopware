@@ -7,8 +7,11 @@ use Shopware\Components\Model\DBAL\QueryBuilder;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Gateway\DBAL\FacetHandler as FacetHandler;
 use Shopware\Gateway\DBAL\QueryGenerator as QueryGenerator;
+use Shopware\Gateway\Search\Condition;
 use Shopware\Gateway\Search\Criteria;
+use Shopware\Gateway\Search\Facet;
 use Shopware\Gateway\Search\Result;
+use Shopware\Gateway\Search\Sorting;
 
 class Search extends Gateway
 {
@@ -88,27 +91,17 @@ class Search extends Gateway
 
     private function createFacets(Criteria $criteria)
     {
-        foreach($criteria->facets as $facet) {
+        foreach ($criteria->facets as $facet) {
 
             $query = $this->getQuery($criteria);
 
-            $supported = false;
+            $handler = $this->getFacetHandler($facet);
 
-            foreach($this->facetHandlers as $facetHandler) {
-
-                if ($facetHandler->supportsFacet($facet)) {
-
-                    $facetHandler->generateFacet($facet, $query);
-
-                    $supported = true;
-
-                    break;
-                }
-            }
-
-            if (!$supported) {
+            if ($handler === null) {
                 throw new \Exception(sprintf("Facet %s not supported", get_class($facet)));
             }
+
+            $handler->generateFacet($facet, $query);
         }
     }
 
@@ -119,23 +112,14 @@ class Search extends Gateway
      */
     private function addConditions(Criteria $criteria, QueryBuilder $query)
     {
-        foreach($criteria->conditions as $condition) {
-            $supported = false;
+        foreach ($criteria->conditions as $condition) {
+            $generator = $this->getConditionGenerator($condition);
 
-            foreach($this->queryGenerators as $generator) {
-
-                if ($generator->supportsCondition($condition)) {
-                    $supported = true;
-
-                    $generator->generateCondition($condition, $query);
-
-                    break;
-                }
-            }
-
-            if (!$supported) {
+            if ($generator === null) {
                 throw new \Exception(sprintf("Condition %s not supported", get_class($condition)));
             }
+
+            $generator->generateCondition($condition, $query);
         }
     }
 
@@ -146,22 +130,47 @@ class Search extends Gateway
      */
     private function addSorting(Criteria $criteria, QueryBuilder $query)
     {
-        foreach($criteria->sortings as $sorting) {
-            $supported = false;
+        foreach ($criteria->sortings as $sorting) {
 
-            foreach($this->queryGenerators as $generator) {
+            $generator = $this->getSortingGenerator($sorting);
 
-                if ($generator->supportsSorting($sorting)) {
-                    $supported = true;
-                    $generator->generateSorting($sorting, $query);
-                    break;
-                }
-            }
-
-            if (!$supported) {
+            if ($generator === null) {
                 throw new \Exception(sprintf("Sorting %s not supported", get_class($sorting)));
             }
+
+            $generator->generateSorting($sorting, $query);
         }
     }
 
+    private function getSortingGenerator(Sorting $sorting)
+    {
+        foreach ($this->queryGenerators as $generator) {
+            if ($generator->supportsSorting($sorting)) {
+                return $generator;
+            }
+        }
+
+        return null;
+    }
+
+    private function getFacetHandler(Facet $facet)
+    {
+        foreach ($this->facetHandlers as $handler) {
+            if ($handler->supportsFacet($facet)) {
+                return $handler;
+            }
+        }
+        return null;
+    }
+
+    private function getConditionGenerator(Condition $condition)
+    {
+        foreach ($this->queryGenerators as $generator) {
+            if ($generator->supportsCondition($condition)) {
+                return $generator;
+            }
+        }
+
+        return null;
+    }
 }

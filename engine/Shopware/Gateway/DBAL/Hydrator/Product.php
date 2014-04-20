@@ -31,8 +31,7 @@ class Product
         Manufacturer $manufacturerHydrator,
         Tax $taxHydrator,
         Unit $unitHydrator
-    )
-    {
+    ) {
         $this->attributeHydrator = $attributeHydrator;
         $this->manufacturerHydrator = $manufacturerHydrator;
         $this->taxHydrator = $taxHydrator;
@@ -199,28 +198,32 @@ class Product
 
     private function assignTaxData(Struct\ListProduct $product, $data)
     {
-        $tax = $this->taxHydrator->hydrate(array(
-            'id' => $data['__tax_id'],
-            'tax' => $data['__tax_tax'],
-            'description' => $data['__tax_description'],
-        ));
+        $tax = $this->taxHydrator->hydrate(
+            array(
+                'id' => $data['__tax_id'],
+                'tax' => $data['__tax_tax'],
+                'description' => $data['__tax_description'],
+            )
+        );
 
         $product->setTax($tax);
     }
 
     private function assignUnitData(Struct\ListProduct $product, $data)
     {
-        $unit = $this->unitHydrator->hydrate(array(
-            'id' => $data['__unit_id'],
-            'description' => $data['__unit_description'],
-            'unit' => $data['__unit_unit'],
-            'packunit' => $data['packunit'],
-            'purchaseunit' => $data['purchaseunit'],
-            'referenceunit' => $data['referenceunit'],
-            'purchasesteps' => $data['purchasesteps'],
-            'minpurchase' => $data['minpurchase'],
-            'maxpurchase' => $data['maxpurchase'],
-        ));
+        $unit = $this->unitHydrator->hydrate(
+            array(
+                'id' => $data['__unit_id'],
+                'description' => $data['__unit_description'],
+                'unit' => $data['__unit_unit'],
+                'packunit' => $data['packunit'],
+                'purchaseunit' => $data['purchaseunit'],
+                'referenceunit' => $data['referenceunit'],
+                'purchasesteps' => $data['purchasesteps'],
+                'minpurchase' => $data['minpurchase'],
+                'maxpurchase' => $data['maxpurchase'],
+            )
+        );
 
         $product->setUnit($unit);
     }
@@ -237,7 +240,7 @@ class Product
     private function extractFields($prefix, $data)
     {
         $result = array();
-        foreach($data as $field => $value) {
+        foreach ($data as $field => $value) {
             if (strpos($field, $prefix) === 0) {
                 $key = str_replace($prefix, '', $field);
                 $result[$key] = $value;

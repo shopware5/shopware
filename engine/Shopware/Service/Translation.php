@@ -65,7 +65,8 @@ class Translation
     public function translatePropertySet(Struct\PropertySet $set, Struct\Shop $shop)
     {
         $this->translationGateway->translatePropertySet(
-            $set, $shop
+            $set,
+            $shop
         );
     }
 }

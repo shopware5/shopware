@@ -29,8 +29,7 @@ class Media extends Gateway
         ModelManager $entityManager,
         Hydrator\Media $mediaHydrator,
         Manager $thumbnailManager
-    )
-    {
+    ) {
         $this->entityManager = $entityManager;
         $this->mediaHydrator = $mediaHydrator;
         $this->thumbnailManager = $thumbnailManager;
@@ -64,7 +63,7 @@ class Media extends Gateway
     public function getCovers(array $products)
     {
         $ids = array();
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $ids[] = $product->getId();
         }
 
@@ -92,14 +91,16 @@ class Media extends Gateway
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         $covers = array();
-        foreach($data as $cover) {
+        foreach ($data as $cover) {
+            $product = $cover['__image_articleID'];
+
             $cover['thumbnails'] = $this->getMediaThumbnails($cover);
 
-            $covers[$cover['__image_articleID']] = $this->mediaHydrator->hydrateProductImage($cover);
+            $covers[$product] = $this->mediaHydrator->hydrateProductImage($cover);
         }
+
         return $covers;
     }
-
 
 
     private function getMediaFields()

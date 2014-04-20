@@ -53,14 +53,15 @@ class Property extends Gateway
     {
         $query = $this->entityManager->getDBALQueryBuilder();
 
-        $query->select(array(
-            'value.id as value_id',
-            'value.value ',
-            'value.value_numeric',
-
-            'options.id as option_id',
-            'options.name as option_name',
-        ));
+        $query->select(
+            array(
+                'value.id as value_id',
+                'value.value ',
+                'value.value_numeric',
+                'options.id as option_id',
+                'options.name as option_name',
+            )
+        );
 
         $query->from('s_filter_values', 'value')
             ->innerJoin('value', 's_filter_articles', 'articles', 'value.id = articles.valueID')
@@ -129,7 +130,7 @@ class Property extends Gateway
         $query = $this->entityManager->getDBALQueryBuilder();
         $query->select(array('*'))
             ->from($table, 'entity')
-            ->where('entity.' . $column .' = :id')
+            ->where('entity.' . $column . ' = :id')
             ->setParameter(':id', $id);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */

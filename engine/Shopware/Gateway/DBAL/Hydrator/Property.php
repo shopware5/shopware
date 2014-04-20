@@ -1,6 +1,7 @@
 <?php
 
 namespace Shopware\Gateway\DBAL\Hydrator;
+
 use Shopware\Struct as Struct;
 
 class Property
@@ -36,7 +37,7 @@ class Property
         if (isset($data['options'])) {
             $groups = array();
 
-            foreach($data['options'] as $optionData) {
+            foreach ($data['options'] as $optionData) {
                 $key = 'group_' . $optionData['option_id'];
 
                 $group = $groups[$key];

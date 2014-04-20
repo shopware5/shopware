@@ -1,6 +1,7 @@
 <?php
 
 namespace Shopware\Struct\Product;
+
 use Shopware\Struct\Customer\Group;
 use Shopware\Struct\Extendable;
 
@@ -41,7 +42,7 @@ class PriceRule extends Extendable
 
     /**
      * Contains the associated customer group of this price.
-     * Each scaled product price is defined for a single customer group.
+     * Each graduated product price is defined for a single customer group.
      *
      * @var Group
      */

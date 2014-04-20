@@ -1,6 +1,7 @@
 <?php
 
 namespace Shopware\Gateway\DBAL\Hydrator;
+
 use Shopware\Struct as Struct;
 
 class Tax

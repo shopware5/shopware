@@ -2,9 +2,21 @@
 
 namespace Shopware\Gateway\DBAL;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Gateway\DBAL\Hydrator;
+use Shopware\Struct;
 
+/**
+ * The country gateway is used to select areas, countries and
+ * states.
+ *
+ * It supports for each resource a single get function to select
+ * single struct elements and additionally a getList function for
+ * each resource to select a list of the resources.
+ *
+ * @package Shopware\Gateway\DBAL
+ */
 class Country extends Gateway
 {
     /**
@@ -19,30 +31,86 @@ class Country extends Gateway
     function __construct(
         ModelManager $entityManager,
         Hydrator\Country $countryHydrator
-    )
-    {
+    ) {
         $this->entityManager = $entityManager;
         $this->countryHydrator = $countryHydrator;
     }
 
-
+    /**
+     * Returns a single area struct, identified over the unique id property.
+     *
+     * @param int $id
+     * @return Struct\Country\Area
+     */
     public function getArea($id)
+    {
+        $areas = $this->getAreas(array($id));
+
+        return array_shift($areas);
+    }
+
+    /**
+     * Returns a single country struct which identified over the passed id.
+     * @param int $id
+     * @return \Shopware\Struct\Country
+     */
+    public function getCountry($id)
+    {
+        $countries = $this->getCountries(array($id));
+
+        return array_shift($countries);
+    }
+
+    /**
+     * Returns a single state struct which identified over the passed id.
+     *
+     * @param $id
+     * @return Struct\Country\State
+     */
+    public function getState($id)
+    {
+        $states = $this->getStates(array($id));
+
+        return array_shift($states);
+    }
+
+
+    /**
+     * Returns a list of area structs which identified over
+     * the passed ids.
+     *
+     * @param array $ids
+     * @return Struct\Country\Area[]
+     */
+    public function getAreas(array $ids)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
         $query->select($this->getAreaFields());
         $query->from('s_core_countries_areas', 'area');
-        $query->where('area.id = :id')
-            ->setParameter(':id', $id);
+        $query->where('area.id IN (:ids)')
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
-        $data = $statement->fetch(\PDO::FETCH_ASSOC);
+        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        return $this->countryHydrator->hydrateArea($data);
+        $areas = array();
+        foreach ($data as $row) {
+            $areas[] = $this->countryHydrator->hydrateArea($row);
+        }
+
+        return $areas;
     }
 
-    public function getCountry($id)
+    /**
+     * Returns a list of Country structs.
+     * The countries are identified over the passed id array.
+     *
+     * @param array $ids
+     * @return Struct\Country[]
+     */
+    public function getCountries(array $ids)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
         $query->select($this->getCountryFields())
@@ -51,18 +119,30 @@ class Country extends Gateway
         $query->from('s_core_countries', 'country')
             ->leftJoin('country', 's_core_countries_attributes', 'attribute', 'attribute.countryID = country.id');
 
-        $query->where('country.id = :id')
-            ->setParameter(':id', $id);
+        $query->where('country.id IN (:ids)')
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
-        $data = $statement->fetch(\PDO::FETCH_ASSOC);
+        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        return $this->countryHydrator->hydrateCountry($data);
+        $countries = array();
+        foreach ($data as $row) {
+            $countries[] = $this->countryHydrator->hydrateCountry($row);
+        }
+
+        return $countries;
     }
 
-    public function getState($id)
+    /**
+     * Returns a list of country state structs.
+     * The states are identified over the passed unique id array
+     *
+     * @param array $ids
+     * @return Struct\Country\State[]
+     */
+    public function getStates(array $ids)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
         $query->select($this->getStateFields())
@@ -71,15 +151,20 @@ class Country extends Gateway
         $query->from('s_core_countries_states', 'state')
             ->leftJoin('state', 's_core_countries_states_attributes', 'attribute', 'attribute.stateID = state.id');
 
-        $query->where('state.id = :id')
-            ->setParameter(':id', $id);
+        $query->where('state.id IN (:ids)')
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
-        $data = $statement->fetch(\PDO::FETCH_ASSOC);
+        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        return $this->countryHydrator->hydrateState($data);
+        $states = array();
+        foreach ($data as $row) {
+            $states[] = $this->countryHydrator->hydrateState($row);
+        }
+
+        return $states;
     }
 
     private function getAreaFields()

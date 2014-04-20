@@ -1,6 +1,7 @@
 <?php
 
 namespace Shopware\Struct;
+
 use Shopware\Struct\Product\Manufacturer;
 use Shopware\Struct\Product\Price;
 use Shopware\Struct\Product\PriceGroup;

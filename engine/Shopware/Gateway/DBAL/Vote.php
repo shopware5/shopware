@@ -21,12 +21,10 @@ class Vote extends Gateway
     function __construct(
         ModelManager $entityManager,
         Hydrator\Vote $voteHydrator
-    )
-    {
+    ) {
         $this->voteHydrator = $voteHydrator;
         $this->entityManager = $entityManager;
     }
-
 
     /**
      * Selects the aggregated product vote meta information.
@@ -41,10 +39,12 @@ class Vote extends Gateway
     {
         $query = $this->entityManager->getDBALQueryBuilder();
 
-        $query->select(array(
-            'COUNT(id) as total',
-            'points'
-        ));
+        $query->select(
+            array(
+                'COUNT(id) as total',
+                'points'
+            )
+        );
 
         $query->from('s_articles_vote', 'votes')
             ->where('votes.articleID = :product')

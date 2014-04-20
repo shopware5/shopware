@@ -1,6 +1,7 @@
 <?php
 
 namespace Shopware\Gateway\DBAL\Hydrator;
+
 use Shopware\Struct as Struct;
 
 class Attribute
@@ -9,7 +10,7 @@ class Attribute
     {
         $attribute = new Struct\Attribute();
 
-        foreach($data as $key => $value) {
+        foreach ($data as $key => $value) {
             $attribute->set($key, $value);
         }
 

@@ -34,8 +34,7 @@ class Translation extends Gateway
     public function translateProduct(
         Struct\ListProduct $product,
         Struct\Shop $shop
-    )
-    {
+    ) {
         $data = $this->getSingleTranslation(
             'article',
             $product->getId(),
@@ -63,8 +62,7 @@ class Translation extends Gateway
     public function translateUnit(
         Struct\Unit $unit,
         Struct\Shop $shop
-    )
-    {
+    ) {
         $data = $this->getSingleTranslation(
             'config_units',
             $unit->getId(),
@@ -95,8 +93,7 @@ class Translation extends Gateway
     public function translateManufacturer(
         Struct\Manufacturer $manufacturer,
         Struct\Shop $shop
-    )
-    {
+    ) {
         $data = $this->getSingleTranslation(
             'supplier',
             $manufacturer->getId(),
@@ -154,7 +151,12 @@ class Translation extends Gateway
     private function getPropertyGroupTranslations(Struct\PropertySet $set, Struct\Shop $shop)
     {
         $query = $this->getTranslationQuery('propertyoption', $shop->getId())
-            ->select(array('translation.objectkey', 'translation.objectdata'))
+            ->select(
+                array(
+                    'translation.objectkey',
+                    'translation.objectdata'
+                )
+            )
             ->innerJoin('translation', 's_filter_options', 'options', 'options.id = translation.objectkey')
             ->innerJoin(
                 'options',
@@ -180,7 +182,12 @@ class Translation extends Gateway
     private function getPropertyOptionTranslations(Struct\PropertySet $set, Struct\Shop $shop)
     {
         $query = $this->getTranslationQuery('propertyvalue', $shop->getId())
-            ->select(array('translation.objectkey', 'translation.objectdata'))
+            ->select(
+                array(
+                    'translation.objectkey',
+                    'translation.objectdata'
+                )
+            )
             ->innerJoin('translation', 's_filter_values', 'value', 'value.id = translation.objectkey')
             ->innerJoin('value', 's_filter_options', 'options', 'options.id = value.optionID')
             ->innerJoin(
