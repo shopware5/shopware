@@ -19,8 +19,7 @@ class CustomerGroup extends Gateway
     function __construct(
         ModelManager $entityManager,
         Hydrator\CustomerGroup $customerGroupHydrator
-    )
-    {
+    ) {
         $this->customerGroupHydrator = $customerGroupHydrator;
         $this->entityManager = $entityManager;
     }
@@ -37,14 +36,19 @@ class CustomerGroup extends Gateway
      * @param array $keys
      * @return \Shopware\Struct\Customer\Group[]
      */
-    public function getByKeys(array $keys)
+    public function getList(array $keys)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
         $query->select($this->getCustomerGroupFields())
             ->addSelect($this->getTableFields('s_core_customergroups_attributes', 'attribute'));
 
         $query->from('s_core_customergroups', 'customerGroup')
-            ->leftJoin('customerGroup', 's_core_customergroups_attributes', 'attribute', 'attribute.customerGroupID = customerGroup.id');
+            ->leftJoin(
+                'customerGroup',
+                's_core_customergroups_attributes',
+                'attribute',
+                'attribute.customerGroupID = customerGroup.id'
+            );
 
         $query->where('customerGroup.groupkey IN (:keys)')
             ->setParameter(':keys', implode(',', $keys));
@@ -55,7 +59,7 @@ class CustomerGroup extends Gateway
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         $customerGroups = array();
-        foreach($data as $group) {
+        foreach ($data as $group) {
             $customerGroups[] = $this->customerGroupHydrator->hydrate($group);
         }
 
@@ -74,9 +78,9 @@ class CustomerGroup extends Gateway
      * @param $key
      * @return \Shopware\Struct\Customer\Group
      */
-    public function getByKey($key)
+    public function get($key)
     {
-        $groups = $this->getByKeys(array($key));
+        $groups = $this->getList(array($key));
 
         return array_shift($groups);
     }

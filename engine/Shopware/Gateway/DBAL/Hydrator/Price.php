@@ -1,6 +1,7 @@
 <?php
 
 namespace Shopware\Gateway\DBAL\Hydrator;
+
 use Shopware\Struct as Struct;
 
 class Price
@@ -81,27 +82,42 @@ class Price
     {
         $price = $this->hydratePriceRule($data);
 
-        $unit = $this->unitHydrator->hydrate(array(
-            'id'            => $data['__unit_id'],
-            'description'   => $data['__unit_description'],
-            'unit'          => $data['__unit_unit'],
-            'packunit'      => $data['__unit_packunit'],
-            'purchaseunit'  => $data['__unit_purchaseunit'],
-            'referenceunit' => $data['__unit_referenceunit'],
-            'purchasesteps' => $data['__unit_purchasesteps'],
-            'minpurchase'   => $data['__unit_minpurchase'],
-            'maxpurchase'   => $data['__unit_maxpurchase'],
-        ));
+        $unit = $this->unitHydrator->hydrate(
+            array(
+                'id' => $data['__unit_id'],
+                'description' => $data['__unit_description'],
+                'unit' => $data['__unit_unit'],
+                'packunit' => $data['__unit_packunit'],
+                'purchaseunit' => $data['__unit_purchaseunit'],
+                'referenceunit' => $data['__unit_referenceunit'],
+                'purchasesteps' => $data['__unit_purchasesteps'],
+                'minpurchase' => $data['__unit_minpurchase'],
+                'maxpurchase' => $data['__unit_maxpurchase'],
+            )
+        );
 
         $price->setUnit($unit);
 
         return $price;
     }
 
+    public function hydratePriceDiscount(array $data)
+    {
+        $discount = new Struct\Product\PriceDiscount();
+
+        $discount->setId($data['id']);
+
+        $discount->setPercent(floatval($data['discount']));
+
+        $discount->setQuantity(intval($data['discountstart']));
+
+        return $discount;
+    }
+
     private function extractFields($prefix, $data)
     {
         $result = array();
-        foreach($data as $field => $value) {
+        foreach ($data as $field => $value) {
             if (strpos($field, $prefix) === 0) {
                 $key = str_replace($prefix, '', $field);
                 $result[$key] = $value;

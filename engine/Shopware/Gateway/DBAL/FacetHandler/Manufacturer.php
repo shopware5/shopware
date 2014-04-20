@@ -11,14 +11,19 @@ class Manufacturer extends DBAL
     {
         $query->resetQueryPart('groupBy');
 
-        $query->select(array('products.supplierID', 'COUNT(products.id) as total'));
+        $query->select(
+            array(
+                'products.supplierID',
+                'COUNT(products.id) as total'
+            )
+        );
 
         $query->groupBy('products.supplierID');
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
-        /**@var $facet Facet\Manufacturer*/
+        /**@var $facet Facet\Manufacturer */
         $facet->manufacturers = $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 

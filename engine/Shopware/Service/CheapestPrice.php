@@ -3,21 +3,38 @@
 namespace Shopware\Service;
 
 use Shopware\Struct as Struct;
-use Shopware\Gateway as Gateway;
+use Shopware\Gateway\DBAL as Gateway;
 
 class CheapestPrice
 {
     /**
-     * @var \Shopware\Gateway\DBAL\Price
+     * @var Gateway\CheapestPrice
      */
     private $cheapestPriceGateway;
 
     /**
-     * @param Gateway\DBAL\CheapestPrice $cheapestPriceGateway
+     * @var Gateway\PriceGroupDiscount
      */
-    function __construct(Gateway\DBAL\CheapestPrice $cheapestPriceGateway)
-    {
+    private $priceGroupDiscountGateway;
+
+    /**
+     * @var GraduatedPrices
+     */
+    private $graduatedPricesService;
+
+    /**
+     * @param Gateway\CheapestPrice $cheapestPriceGateway
+     * @param Gateway\PriceGroupDiscount $priceGroupDiscountGateway
+     * @param GraduatedPrices $graduatedPricesService
+     */
+    function __construct(
+        Gateway\CheapestPrice $cheapestPriceGateway,
+        Gateway\PriceGroupDiscount $priceGroupDiscountGateway,
+        GraduatedPrices $graduatedPricesService
+    ) {
         $this->cheapestPriceGateway = $cheapestPriceGateway;
+        $this->priceGroupDiscountGateway = $priceGroupDiscountGateway;
+        $this->graduatedPricesService = $graduatedPricesService;
     }
 
     /**
@@ -39,15 +56,21 @@ class CheapestPrice
 
         $prices = array();
 
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $group = $context->getCurrentCustomerGroup();
 
-            /**@var $cheapestPrice Struct\Product\PriceRule*/
+            /**@var $cheapestPrice Struct\Product\PriceRule */
             $cheapestPrice = $specify[$product->getVariantId()];
 
             if (empty($cheapestPrice)) {
                 $group = $context->getFallbackCustomerGroup();
                 $cheapestPrice = $fallback[$product->getVariantId()];
+            }
+
+            if (!$cheapestPrice) {
+                $graduatedPrices = $this->graduatedPricesService->get($product, $context);
+
+                $cheapestPrice = array_shift($graduatedPrices);
             }
 
             $this->calculatePriceGroupPrice(
@@ -84,25 +107,11 @@ class CheapestPrice
      * @param \Shopware\Struct\Context $context
      * @return Struct\Product\PriceRule
      */
-    public function getCheapestPrice(Struct\ListProduct $product, Struct\Context $context)
+    public function get(Struct\ListProduct $product, Struct\Context $context)
     {
-        $customerGroup = $context->getCurrentCustomerGroup();
-        $cheapestPrice = $this->cheapestPriceGateway->get(
-            $product, $customerGroup
-        );
+        $cheapestPrices = $this->getList(array($product), $context);
 
-        if ($cheapestPrice == null) {
-            $customerGroup = $context->getFallbackCustomerGroup();
-            $cheapestPrice = $this->cheapestPriceGateway->get(
-                $product, $customerGroup
-            );
-        }
-
-        $this->calculatePriceGroupPrice($product, $cheapestPrice, $context);
-
-        $cheapestPrice->setCustomerGroup($customerGroup);
-
-        return $cheapestPrice;
+        return array_shift($cheapestPrices);
     }
 
     /**
@@ -126,7 +135,7 @@ class CheapestPrice
         }
 
         //selects the highest price group discount, for the passed quantity.
-        $discount = $this->cheapestPriceGateway->getPriceGroupDiscount(
+        $discount = $this->priceGroupDiscountGateway->getHighestQuantityDiscount(
             $product->getPriceGroup(),
             $context->getCurrentCustomerGroup(),
             $cheapestPrice->getUnit()->getMinPurchase()

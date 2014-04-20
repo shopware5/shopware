@@ -22,21 +22,37 @@ class CheapestPrice extends Gateway
     function __construct(
         ModelManager $entityManager,
         Hydrator\Price $priceHydrator
-    )
-    {
+    ) {
         $this->entityManager = $entityManager;
         $this->priceHydrator = $priceHydrator;
     }
 
     /**
+     * Returns a Struct\Product\PriceRule list which contains the definition of the
+     * cheapest product prices.
+     *
+     * The cheapest product price has to be selected for the passed customer group.
+     *
+     * If no specify price defined for the customer group the function should return null.
+     *
+     * The cheapest price service handles the fallback on the default shop customer group.
+     *
+     * The cheapest price should be selected with the following conditions:
+     *  - Only the first graduated price
+     *  - Select prices variant across
+     *  - Select the purchase data of the cheapest variant.
+     *  - Select the unit of the cheapest variant
+     *  - The variants has to be active
+     *  - Closeout variants can only be selected if the stock > min purchase
+     *
      * @param Struct\ListProduct[] $products
      * @param Struct\Customer\Group $customerGroup
-     * @return Struct\Product\PriceRule
+     * @return Struct\Product\PriceRule[]
      */
     public function getList(array $products, Struct\Customer\Group $customerGroup)
     {
         $ids = array();
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $ids[] = $product->getId();
         }
 
@@ -45,10 +61,12 @@ class CheapestPrice extends Gateway
         $query->select($this->getPriceFields())
             ->addSelect($this->getUnitFields())
             ->addSelect($this->getTableFields('s_articles_prices_attributes', 'attribute'))
-            ->addSelect(array(
-                '(prices.price * variant.minpurchase) as calculated',
-                '(prices.pseudoprice * variant.minpurchase) as calculatedPseudo'
-            ));
+            ->addSelect(
+                array(
+                    '(prices.price * variant.minpurchase) as calculated',
+                    '(prices.pseudoprice * variant.minpurchase) as calculatedPseudo'
+                )
+            );
 
         $query->from('s_articles_prices', 'prices')
             ->innerJoin('prices', 's_articles_details', 'variant', 'variant.id = prices.articledetailsID')
@@ -67,9 +85,9 @@ class CheapestPrice extends Gateway
         /**
          * This part of the query handles the closeout products.
          *
-         * The laststock column contains "1" if the product is a closeout product.
+         * The `laststock` column contains "1" if the product is a closeout product.
          * In the case that the product contains the closeout flag,
-         * the stock and minpurchase are used as the defined in the database
+         * the stock and minpurchase are used as they defined in the database
          *
          * In the case that the product isn't a closeout product,
          * the stock and minpurchase are set to 0
@@ -87,8 +105,9 @@ class CheapestPrice extends Gateway
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         $prices = array();
-        foreach($data as $row) {
+        foreach ($data as $row) {
             $product = $row['articledetailsID'];
+
             $row['price'] = $row['calculated'];
             $row['pseudoprice'] = $row['calculatedPseudo'];
 
@@ -99,22 +118,21 @@ class CheapestPrice extends Gateway
     }
 
     /**
-     * Returns the cheapest product price struct for the passed customer group.
+     * Returns a Struct\Product\PriceRule which contains the definition of the
+     * cheapest product price.
      *
-     * The cheapest product price is selected over all product variations.
+     * The cheapest product price has to be selected for the passed customer group.
      *
-     * This means that the query uses the s_articles_prices.articleID column for the where condition.
-     * The articleID is stored in the Struct\ListProduct::id property.
+     * If no specify price defined for the customer group the function should return null.
      *
-     * It is important that the cheapest price contains the associated product Struct\Unit of the
-     * associated product variation.
+     * The cheapest price service handles the fallback on the default shop customer group.
      *
-     * For example:
-     *  - Current product variation is the SW2000
-     *    - This product variation contains no associated Struct\Unit
-     *  - The cheapest variant price is associated to the SW2000.2
-     *    - This product variation contains an associated Struct\Unit
-     *  - The unit of SW2000.2 has to be set into the Struct\Price::unit property!
+     * The cheapest price should be selected with the following conditions:
+     *  - Only the first graduated price
+     *  - Select prices variant across
+     *  - Select the unit of the cheapest variant
+     *  - The variants has to be active
+     *  - Closeout variants can only be selected if the stock > min purchase
      *
      * @param \Shopware\Struct\ListProduct $product
      * @param Struct\Customer\Group $customerGroup
@@ -122,83 +140,11 @@ class CheapestPrice extends Gateway
      */
     public function get(Struct\ListProduct $product, Struct\Customer\Group $customerGroup)
     {
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $prices = $this->getList(array($product), $customerGroup);
 
-        $query->select($this->getPriceFields())
-            ->addSelect($this->getUnitFields())
-            ->addSelect($this->getTableFields('s_articles_prices_attributes', 'attribute'))
-            ->addSelect(array(
-                '(prices.price * variant.minpurchase) as calculated',
-                '(prices.pseudoprice * variant.minpurchase) as calculatedPseudo'
-            ));
-
-        $query->from('s_articles_prices', 'prices')
-            ->innerJoin('prices', 's_articles_details', 'variant', 'variant.id = prices.articledetailsID')
-            ->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID')
-            ->leftJoin('variant', 's_core_units', 'unit', 'unit.id = variant.unitID')
-            ->leftJoin('prices', 's_articles_prices_attributes', 'attribute', 'attribute.priceID = prices.id');
-
-        $query->andWhere('prices.articleID = :product')
-            ->andWhere('prices.pricegroup = :customerGroup')
-            ->andWhere('prices.from = 1')
-            ->andWhere('product.active = 1')
-            ->andWhere('variant.active = 1')
-            ->setParameter(':product', $product->getId())
-            ->setParameter(':customerGroup', $customerGroup->getKey());
-
-        if ($product->isCloseouts()) {
-            $query->andWhere('variant.instock >= variant.minpurchase');
-        }
-
-        $query->orderBy('calculated', 'ASC')
-            ->setFirstResult(0)
-            ->setMaxResults(1);
-
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
-        $statement = $query->execute();
-
-        $data = $statement->fetch(\PDO::FETCH_ASSOC);
-
-        $data['price'] = $data['calculated'];
-        $data['pseudoprice'] = $data['calculatedPseudo'];
-
-        return $this->priceHydrator->hydrateCheapestPrice($data);
+        return array_shift($prices);
     }
 
-    /**
-     * Returns the highest percentage discount for the
-     * customer group of the passed price group and quantity.
-     *
-     * @param Struct\Product\PriceGroup $priceGroup
-     * @param Struct\Customer\Group $customerGroup
-     * @param $quantity
-     * @return float
-     */
-    public function getPriceGroupDiscount(
-        Struct\Product\PriceGroup $priceGroup,
-        Struct\Customer\Group $customerGroup,
-        $quantity
-    )
-    {
-        $query = $this->entityManager->getDBALQueryBuilder();
-        $query->select(array('discounts.discount'))
-            ->from('s_core_pricegroups_discounts', 'discounts')
-            ->andWhere('discounts.groupID = :priceGroup')
-            ->andWhere('discounts.customergroupID = :customerGroup')
-            ->andWhere('discounts.discountstart <= :quantity')
-            ->orderBy('discounts.discount', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1);
-
-        $query->setParameter(':priceGroup', $priceGroup->getId())
-            ->setParameter(':customerGroup', $customerGroup->getId())
-            ->setParameter(':quantity', $quantity);
-
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
-        $statement = $query->execute();
-
-        return $statement->fetch(\PDO::FETCH_COLUMN);
-    }
 
     private function getPriceFields()
     {

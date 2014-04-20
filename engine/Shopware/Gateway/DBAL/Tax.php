@@ -20,8 +20,7 @@ class Tax extends Gateway
     function __construct(
         ModelManager $entityManager,
         Hydrator\Tax $taxHydrator
-    )
-    {
+    ) {
         $this->entityManager = $entityManager;
         $this->taxHydrator = $taxHydrator;
     }
@@ -38,14 +37,15 @@ class Tax extends Gateway
         Struct\Country\Area $area = null,
         Struct\Country $country = null,
         Struct\Country\State $state = null
-    )
-    {
+    ) {
         $query = $this->entityManager->getDBALQueryBuilder();
-        $query->select(array(
-            'tax.id',
-            'tax.description as name',
-            'tax.tax'
-        ))
+        $query->select(
+            array(
+                'tax.id',
+                'tax.description as name',
+                'tax.tax'
+            )
+        )
             ->from('s_core_tax', 'tax');
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
@@ -93,11 +93,13 @@ class Tax extends Gateway
 
         $query = $this->entityManager->getDBALQueryBuilder();
 
-        $query->select(array(
-            'rule.groupID as id',
-            'rule.tax',
-            'rule.name'
-        ));
+        $query->select(
+            array(
+                'rule.groupID as id',
+                'rule.tax',
+                'rule.name'
+            )
+        );
 
         $query->from('s_core_tax_rules', 'rule');
 
@@ -106,7 +108,7 @@ class Tax extends Gateway
         $stateId = ($state) ? $state->getId() : null;
 
         $query->andWhere('(rule.areaID = :area OR rule.areaID IS NULL)')
-            ->setParameter(':area',$areaId);
+            ->setParameter(':area', $areaId);
 
         $query->andWhere('(rule.countryID = :country OR rule.countryID IS NULL)')
             ->setParameter(':country', $countryId);

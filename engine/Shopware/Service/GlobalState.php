@@ -3,7 +3,7 @@
 namespace Shopware\Service;
 
 use Shopware\Components\DependencyInjection\Container;
-use Shopware\Gateway;
+use Shopware\Gateway\DBAL as Gateway;
 use Shopware\Models\Shop\Currency;
 use Shopware\Models\Shop\Shop;
 use Shopware\Struct as Struct;
@@ -19,12 +19,12 @@ class GlobalState
     private $container;
 
     /**
-     * @var \Shopware\Gateway\DBAL\CustomerGroup
+     * @var Gateway\CustomerGroup
      */
     private $customerGroupGateway;
 
     /**
-     * @var \Shopware\Gateway\DBAL\Tax
+     * @var Gateway\Tax
      */
     private $taxGateway;
 
@@ -35,15 +35,15 @@ class GlobalState
 
     /**
      * @param Container $container
-     * @param Gateway\DBAL\CustomerGroup $customerGroupGateway
-     * @param Gateway\DBAL\Tax $taxGateway
-     * @param Gateway\DBAL\Country $countryGateway
+     * @param Gateway\CustomerGroup $customerGroupGateway
+     * @param Gateway\Tax $taxGateway
+     * @param Gateway\Country $countryGateway
      */
     function __construct(
         Container $container,
-        Gateway\DBAL\CustomerGroup $customerGroupGateway,
-        Gateway\DBAL\Tax $taxGateway,
-        Gateway\DBAL\Country $countryGateway
+        Gateway\CustomerGroup $customerGroupGateway,
+        Gateway\Tax $taxGateway,
+        Gateway\Country $countryGateway
     ) {
         $this->container = $container;
         $this->taxGateway = $taxGateway;
@@ -55,7 +55,7 @@ class GlobalState
     {
         $session = $this->container->get('session');
 
-        /**@var $shop Shop*/
+        /**@var $shop Shop */
         $shop = $this->container->get('shop');
 
         $fallback = $shop->getCustomerGroup()->getKey();
@@ -65,7 +65,6 @@ class GlobalState
         } else {
             $key = $fallback;
         }
-        $key = 'H';
 
         $context = new Struct\Context();
 
@@ -74,11 +73,11 @@ class GlobalState
         );
 
         $context->setCurrentCustomerGroup(
-            $this->customerGroupGateway->getByKey($key)
+            $this->customerGroupGateway->get($key)
         );
 
         $context->setFallbackCustomerGroup(
-            $this->customerGroupGateway->getByKey($fallback)
+            $this->customerGroupGateway->get($fallback)
         );
 
         $area = null;

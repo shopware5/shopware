@@ -85,7 +85,8 @@ class Translation
     public function hydrateUnitTranslation(Struct\Product\Unit $unit, array $data)
     {
         $this->unitHydrator->assignUnitData(
-            $unit, $data
+            $unit,
+            $data
         );
     }
 
@@ -129,7 +130,7 @@ class Translation
             $set->setName($data['groupName']);
         }
 
-        foreach($set->getGroups() as $group) {
+        foreach ($set->getGroups() as $group) {
             $translation = $data['groups'][$group->getId()];
 
             if ($translation) {
@@ -140,7 +141,7 @@ class Translation
                 }
             }
 
-            foreach($group->getOptions() as $option) {
+            foreach ($group->getOptions() as $option) {
                 $translation = $data['options'][$option->getId()];
 
                 if ($translation) {
@@ -156,7 +157,7 @@ class Translation
 
     private function mapArray($data, $mapping)
     {
-        foreach($mapping as $old => $new) {
+        foreach ($mapping as $old => $new) {
             if (!isset($data[$old])) {
                 continue;
             }
@@ -169,7 +170,7 @@ class Translation
 
     private function mergeAttributeTranslation(array $translation, Struct\Attribute $attribute)
     {
-        foreach($translation as $key => $value) {
+        foreach ($translation as $key => $value) {
             if (!$attribute->exists($key)) {
                 continue;
             }

@@ -1,6 +1,7 @@
 <?php
 
 namespace Shopware\Gateway\DBAL\Hydrator;
+
 use Shopware\Struct as Struct;
 
 class Vote
@@ -16,7 +17,7 @@ class Vote
         $points = 0;
         $total = 0;
 
-        foreach($data as $row) {
+        foreach ($data as $row) {
             $points += $row['points'];
             $total += $row['total'];
         }

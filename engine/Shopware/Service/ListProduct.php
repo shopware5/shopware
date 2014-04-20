@@ -3,24 +3,34 @@
 namespace Shopware\Service;
 
 use Shopware\Struct;
-use Shopware\Gateway;
+use Shopware\Gateway\DBAL as Gateway;
 
 class ListProduct
 {
     /**
-     * @var Gateway\DBAL\ListProduct
+     * @var Gateway\ListProduct
      */
     private $productGateway;
 
     /**
-     * @var Price
+     * @var Media
      */
-    private $priceService;
+    private $mediaService;
 
     /**
      * @var CheapestPrice
      */
     private $cheapestPriceService;
+
+    /**
+     * @var GraduatedPrices
+     */
+    private $graduatedPricesService;
+
+    /**
+     * @var PriceCalculation
+     */
+    private $priceCalculationService;
 
     /**
      * @var Translation
@@ -32,43 +42,23 @@ class ListProduct
      */
     private $eventManager;
 
-    /**
-     * @var Media
-     */
-    private $mediaService;
-
-    /**
-     * @var Gateway\DBAL\Vote
-     */
-    private $voteGateway;
-
-    /**
-     * @param Gateway\DBAL\ListProduct $productGateway
-     * @param Price $priceService
-     * @param CheapestPrice $cheapestPriceService
-     * @param Media $mediaService
-     * @param Translation $translationService
-     * @param \Enlight_Event_EventManager $eventManager
-     * @param \Shopware\Gateway\DBAL\Vote $voteGateway
-     */
     function __construct(
-        Gateway\DBAL\ListProduct $productGateway,
-        Price $priceService,
+        Gateway\ListProduct $productGateway,
+        GraduatedPrices $graduatedPricesService,
         CheapestPrice $cheapestPriceService,
+        PriceCalculation $priceCalculationService,
         Media $mediaService,
         Translation $translationService,
-        \Enlight_Event_EventManager $eventManager,
-        Gateway\DBAL\Vote $voteGateway
+        \Enlight_Event_EventManager $eventManager
     ) {
         $this->productGateway = $productGateway;
-        $this->priceService = $priceService;
+        $this->graduatedPricesService = $graduatedPricesService;
+        $this->cheapestPriceService = $cheapestPriceService;
+        $this->priceCalculationService = $priceCalculationService;
         $this->mediaService = $mediaService;
         $this->translationService = $translationService;
         $this->eventManager = $eventManager;
-        $this->voteGateway = $voteGateway;
-        $this->cheapestPriceService = $cheapestPriceService;
     }
-
 
     /**
      * Returns a minified product variant which contains only
@@ -94,20 +84,20 @@ class ListProduct
 
         $covers = $this->mediaService->getCovers($products, $context);
 
-        $prices = $this->priceService->getProductPriceList($products, $context);
+        $graduatedPrices = $this->graduatedPricesService->getList($products, $context);
 
         $cheapestPrices = $this->cheapestPriceService->getList($products, $context);
 
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $key = $product->getVariantId();
 
             $product->setCover($covers[$key]);
 
-            $product->setPriceRules($prices[$key]);
+            $product->setPriceRules($graduatedPrices[$key]);
 
             $product->setCheapestPriceRule($cheapestPrices[$key]);
 
-            $this->priceService->calculateProduct($product, $context);
+            $this->priceCalculationService->calculateProduct($product, $context);
 
             $this->translationService->translateProduct($product, $context->getShop());
         }

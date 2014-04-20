@@ -78,7 +78,7 @@ class Country
     private function extractFields($prefix, $data)
     {
         $result = array();
-        foreach($data as $field => $value) {
+        foreach ($data as $field => $value) {
             if (strpos($field, $prefix) === 0) {
                 $key = str_replace($prefix, '', $field);
                 $result[$key] = $value;

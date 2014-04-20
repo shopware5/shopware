@@ -30,6 +30,32 @@ class ListProduct extends Gateway
         $this->entityManager = $entityManager;
     }
 
+
+    /**
+     * Returns a single of ListProduct struct which can be used for listings
+     * or sliders.
+     *
+     * A mini product contains only the minified product data.
+     * The mini data contains data sources:
+     *  - article
+     *  - variant
+     *  - unit
+     *  - attribute
+     *  - tax
+     *  - manufacturer
+     *  - price group
+     *
+     * @param $number
+     * @param \Shopware\Struct\Context $context
+     * @return Struct\ListProduct
+     */
+    public function get($number, Struct\Context $context)
+    {
+        $products = $this->getList(array($number), $context);
+
+        return array_shift($products);
+    }
+
     /**
      * Returns a list of ListProduct structs which can be used for listings
      * or sliders.
@@ -66,7 +92,12 @@ class ListProduct extends Gateway
             ->leftJoin('variant', 's_articles_attributes', 'attribute', 'attribute.articledetailsID = variant.id')
             ->leftJoin('variant', 's_core_units', 'unit', 'unit.id = variant.unitID')
             ->leftJoin('product', 's_articles_supplier', 'manufacturer', 'manufacturer.id = product.supplierID')
-            ->leftJoin('product', 's_articles_supplier_attributes', 'manufacturerAttribute', 'manufacturerAttribute.id = product.supplierID')
+            ->leftJoin(
+                'product',
+                's_articles_supplier_attributes',
+                'manufacturerAttribute',
+                'manufacturerAttribute.id = product.supplierID'
+            )
             ->leftJoin('product', 's_core_pricegroups', 'priceGroup', 'priceGroup.id = product.pricegroupID')
             ->where('variant.ordernumber IN (:numbers)')
             ->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
@@ -84,30 +115,6 @@ class ListProduct extends Gateway
         return $products;
     }
 
-    /**
-     * Returns a single of ListProduct struct which can be used for listings
-     * or sliders.
-     *
-     * A mini product contains only the minified product data.
-     * The mini data contains data sources:
-     *  - article
-     *  - variant
-     *  - unit
-     *  - attribute
-     *  - tax
-     *  - manufacturer
-     *  - price group
-     *
-     * @param $number
-     * @param \Shopware\Struct\Context $context
-     * @return Struct\ListProduct
-     */
-    public function get($number, Struct\Context $context)
-    {
-        $products = $this->getList(array($number), $context);
-
-        return array_shift($products);
-    }
 
     /**
      * Defines which s_articles fields should be selected.
