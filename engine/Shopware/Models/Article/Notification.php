@@ -23,7 +23,7 @@
  */
 
 namespace Shopware\Models\Article;
-use Shopware\Components\Model\ModelEntity,
+use Shopware\Components\Model\LazyFetchModelEntity,
 Doctrine\ORM\Mapping AS ORM,
 Symfony\Component\Validator\Constraints as Assert,
 Doctrine\Common\Collections\ArrayCollection;
@@ -38,7 +38,7 @@ Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Table(name="s_articles_notification")
  * @ORM\HasLifecycleCallbacks
  */
-class Notification extends ModelEntity
+class Notification extends LazyFetchModelEntity
 {
     /**
      * @var integer $id
@@ -209,5 +209,21 @@ class Notification extends ModelEntity
     public function getShopLink()
     {
         return $this->shopLink;
+    }
+
+    /**
+     * @return \Shopware\Models\Article\Detail
+     */
+    public function getArticleDetail()
+    {
+        return $this->fetchLazy($this->articleDetail, array('ordernumber' => $this->articleNumber));
+    }
+
+    /**
+     * @return \Shopware\Models\Customer\Customer
+     */
+    public function getCustomer()
+    {
+        return $this->fetchLazy($this->customer, array('email' => $this->mail));
     }
 }

@@ -666,6 +666,27 @@ class sAdmin
             ) {
                 return false;
             }
+
+            if (Shopware()->Config()->optinnewsletter) {
+                $hash = md5(uniqid(rand()));
+                $data = serialize(array("newsletter"=>$email,"subscribeToNewsletter"=>true));
+
+                $link = Shopware()->Front()->Router()->assemble(array(
+                        'sViewport' => 'newsletter',
+                        'action' => 'index',
+                        'sConfirmation' => $hash
+                    )
+                );
+
+                $this->sendMail($email, 'sOPTINNEWSLETTER', $link);
+
+                Shopware()->Db()->query('
+                    INSERT INTO s_core_optin (datum, hash, data)
+                    VALUES (now(),?,?)
+                ',array($hash,$data));
+                return true;
+            }
+
             $groupID = $this->sSYSTEM->sCONFIG['sNEWSLETTERDEFAULTGROUP'];
             if (!$groupID) {
                 $groupID = "0";
@@ -685,6 +706,27 @@ class sAdmin
         }
 
         return true;
+    }
+
+    /**
+     * Sends a mail to the given recipient with a given template.
+     * If the optin parameter is set, the sConfirmLink variable will be filled by the optin link.
+     *
+     * @param $recipient
+     * @param $template
+     * @param string $optin
+     */
+    private function sendMail($recipient, $template, $optin='')
+    {
+        $context = array();
+
+        if (!empty($optin)) {
+            $context['sConfirmLink'] = $optin;
+        }
+
+        $mail = Shopware()->TemplateMail()->createMail($template, $context);
+        $mail->addTo($recipient);
+        $mail->send();
     }
 
     /**
@@ -1114,8 +1156,9 @@ class sAdmin
             // Check email
 
             $validator = new Zend_Validate_EmailAddress();
-
-            if (empty($postData["email"]) || !$validator->isValid($postData["email"])) {
+			$validator->getHostnameValidator()->setValidateTld(false);
+            
+			if (empty($postData["email"]) || !$validator->isValid($postData["email"])) {
                 $sErrorFlag["email"] = true;
                 $sErrorMessages[] = $this->snippetObject->get('MailFailure','Please enter a valid mail address');
             }
@@ -2339,10 +2382,11 @@ class sAdmin
     /**
      * Get purchased instant downloads for the current user
      * Used in Account controller to display download available to the user
-     *
+     * @param int $destinationPage
+     * @param int $perPage
      * @return array Data from orders who contains instant downloads
      */
-    public function sGetDownloads()
+    public function sGetDownloads($destinationPage = 1, $perPage = 10)
     {
         $getOrders = $this->sSYSTEM->sDB_CONNECTION->GetAll(
             "SELECT
@@ -2351,7 +2395,7 @@ class sAdmin
                 DATE_FORMAT(ordertime, '%d.%m.%Y %H:%i') AS datum,
                 status, cleared, comment
             FROM s_order WHERE userID = ? AND s_order.status >= 0
-            ORDER BY ordertime DESC LIMIT 10",
+            ORDER BY ordertime DESC LIMIT 500",
             array($this->sSYSTEM->_SESSION["sUserId"])
         );
 
@@ -2412,34 +2456,48 @@ class sAdmin
             array('subject' => $this,'id' => $this->sSYSTEM->_SESSION["sUserId"])
         );
 
-        return $getOrders;
+        // Make Array with page-structure to render in template
+        $numberOfPages = ceil(count($getOrders) / $perPage);
+        $offset = ($destinationPage - 1) * $perPage;
+        $orderData["orderData"] = array_slice($getOrders, $offset, $perPage, true);
+        $orderData["numberOfPages"] = $numberOfPages;
+        $orderData["pages"] = $this->getPagerStructure($destinationPage, $numberOfPages);
+
+        return $orderData;
 
     }
 
     /**
      * Get all orders for the current user
      * Used in the user account in the Frontend
-     *
+     * @param int $destinationPage
+     * @param int $perPage
      * @return array Array with order data / positions
      */
-    public function sGetOpenOrderData()
+    public function sGetOpenOrderData($destinationPage = 1, $perPage = 10)
     {
         $shop = Shopware()->Shop();
         $mainShop = $shop->getMain() !== null ? $shop->getMain() : $shop;
 
+        $destinationPage = !empty($destinationPage) ? $destinationPage : 1;
+        $limitStart = Shopware()->Db()->quote(($destinationPage - 1) * $perPage);
+        $limitEnd = Shopware()->Db()->quote($perPage);
+
         $sql = "
-            SELECT o.*, cu.templatechar as currency_html, DATE_FORMAT(ordertime, '%d.%m.%Y %H:%i') AS datum
+            SELECT SQL_CALC_FOUND_ROWS o.*, cu.templatechar as currency_html, DATE_FORMAT(ordertime, '%d.%m.%Y %H:%i') AS datum
             FROM s_order o
             LEFT JOIN s_core_currencies as cu
             ON o.currency = cu.currency
             WHERE userID = ? AND status != -1
             AND subshopID = ?
-            ORDER BY ordertime DESC LIMIT 10
+            ORDER BY ordertime DESC
+            LIMIT $limitStart, $limitEnd
         ";
         $getOrders = $this->sSYSTEM->sDB_CONNECTION->GetAll(
             $sql,
             array($this->sSYSTEM->_SESSION["sUserId"], $mainShop->getId())
         );
+        $foundOrdersCount = (int)Shopware()->Db()->fetchOne('SELECT FOUND_ROWS()');
 
         foreach ($getOrders as $orderKey => $orderValue) {
 
@@ -2545,9 +2603,59 @@ class sAdmin
             )
         );
 
-        return $getOrders;
+        $orderData["orderData"] = $getOrders;
+
+        // Make Array with page-structure to render in template
+        $numberOfPages = ceil($foundOrdersCount / $limitEnd);
+        $orderData["numberOfPages"] = $numberOfPages;
+
+        $orderData["pages"] = $this->getPagerStructure($destinationPage, $numberOfPages);
+        return $orderData;
     }
 
+    /**
+     * Calculates and returns the pager structure for the frontend
+     *
+     * @param int $destinationPage
+     * @param int $numberOfPages
+     * @param array $additionalParams
+     * @return array
+     */
+    public function getPagerStructure($destinationPage, $numberOfPages, $additionalParams = array())
+    {
+        $destinationPage = !empty($destinationPage) ? $destinationPage : 1;
+        $pagesStructure = array();
+        $baseFile = $this->sSYSTEM->sCONFIG['sBASEFILE'];
+        if ($numberOfPages > 1) {
+            for ($i = 1; $i <= $numberOfPages; $i++) {
+                $pagesStructure["numbers"][$i]["markup"] = ($i == $destinationPage);
+                $pagesStructure["numbers"][$i]["value"] = $i;
+                $pagesStructure["numbers"][$i]["link"] = $baseFile . $this->sSYSTEM->sBuildLink(
+                    $additionalParams + array("sPage" => $i),
+                    false
+                );
+            }
+            // Previous page
+            if ($destinationPage != 1) {
+                $pagesStructure["previous"] = $baseFile . $this->sSYSTEM->sBuildLink(
+                    $additionalParams + array("sPage" => $destinationPage - 1),
+                    false
+                );
+            } else {
+                $pagesStructure["previous"] = null;
+            }
+            // Next page
+            if ($destinationPage != $numberOfPages) {
+                $pagesStructure["next"] = $baseFile . $this->sSYSTEM->sBuildLink(
+                    $additionalParams + array("sPage" => $destinationPage + 1),
+                    false
+                );
+            } else {
+                $pagesStructure["next"] = null;
+            }
+        }
+        return $pagesStructure;
+    }
 
     /**
      * Get the current user's email address
@@ -3460,12 +3568,10 @@ class sAdmin
                 "message" => $this->snippetObject->get('NewsletterFailureMail', 'Enter eMail address')
             );
         }
-        $reg = "/^(([^<>()[\]\\\\.,;:\s@\"]+(\.[^<>()[\]\\\\.,;:\s@\"]+)*)|(\"([^\"\\\\\r]|(\\\\[\w\W]))*\"))@((\[([0-9]{1,3}\.){3}[0-9]{1,3}\])|(([a-z\-0-9áàäçéèêñóòôöüæøå]+\.)+[a-z]{2,}))$/i";
-        if(!preg_match($reg, $email)) {
-            return array(
-                "code" => 1,
-                "message" => $this->snippetObject->get('NewsletterFailureInvalid', 'Enter valid eMail address')
-            );
+        $validator = new Zend_Validate_EmailAddress();
+        $validator->getHostnameValidator()->setValidateTld(false);
+        if (!$validator->isValid($email)) {
+            return array("code" => 1, "message" => $this->snippetObject->get('NewsletterFailureInvalid', 'Enter valid eMail address'));
         }
         if (!$unsubscribe) {
             $sql = "SELECT * FROM s_campaigns_mailaddresses WHERE email = ?";
@@ -3482,8 +3588,10 @@ class sAdmin
                     "message" => $this->snippetObject->get('NewsletterFailureAlreadyRegistered','You already receive our newsletter')
                 );
             } else {
-                $sql = "INSERT INTO s_campaigns_mailaddresses (`groupID`,email) VALUES(?, ?)";
-                $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array($groupID, $email));
+                $customer = Shopware()->Db()->fetchOne('SELECT id FROM s_user WHERE email = ? LIMIT 1', array($email));
+
+                $sql = "INSERT INTO s_campaigns_mailaddresses (customer, `groupID`, email) VALUES(?, ?, ?)";
+                $result = $this->sSYSTEM->sDB_CONNECTION->Execute($sql, array((int) !empty($customer), $groupID, $email));
 
                 if($result === false) {
                     $result = array(

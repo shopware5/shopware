@@ -24,7 +24,7 @@
 
 namespace Shopware\Models\Article;
 
-use Shopware\Components\Model\ModelEntity;
+use Shopware\Components\Model\LazyFetchModelEntity;
 use Doctrine\ORM\Mapping AS ORM;
 
 /**
@@ -35,7 +35,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_articles_prices")
  */
-class Price extends ModelEntity
+class Price extends LazyFetchModelEntity
 {
     /**
      * @var integer $id
@@ -186,7 +186,7 @@ class Price extends ModelEntity
      */
     public function getCustomerGroup()
     {
-        return $this->customerGroup;
+        return $this->fetchLazy($this->customerGroup, array('groupkey' => $this->customerGroupKey));
     }
 
     /**

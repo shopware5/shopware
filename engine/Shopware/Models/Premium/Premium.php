@@ -23,7 +23,7 @@
  */
 
 namespace   Shopware\Models\Premium;
-use         Shopware\Components\Model\ModelEntity,
+use         Shopware\Components\Model\LazyFetchModelEntity,
             Doctrine\ORM\Mapping AS ORM;
 
 /**
@@ -36,7 +36,7 @@ use         Shopware\Components\Model\ModelEntity,
  * @ORM\Table(name="s_addon_premiums")
  * @ORM\HasLifecycleCallbacks
  */
-class Premium extends ModelEntity
+class Premium extends LazyFetchModelEntity
 {
     /**
      * @var integer $id
@@ -201,7 +201,7 @@ class Premium extends ModelEntity
      */
     public function getArticleDetail()
     {
-        return $this->articleDetail;
+        return $this->fetchLazy($this->articleDetail, array('ordernumber' => $this->orderNumber));
     }
 
     /**

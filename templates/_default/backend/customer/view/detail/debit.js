@@ -155,8 +155,33 @@ Ext.define('Shopware.apps.Customer.view.detail.Debit', {
             labelWidth:150,
             minWidth:250,
             editable:false,
+            tpl: Ext.create('Ext.XTemplate',
+                '<tpl for=".">',
+                '<tpl if="this.doHighlight(id)">',
+                '<div class="x-boundlist-item" style="background-color:#F2DEDE; color: #A94442">{literal}{description}{/literal}</div>',
+                '<tpl else>',
+                '<div class="x-boundlist-item">{literal}{description}{/literal}</div>',
+                '</tpl>',
+                '</tpl>',
+                {
+                    doHighlight: function (id) {
+                        //highlight all inactive payment methods of the boundlist
+                        var record = me.paymentCombo.getStore().findRecord('id', id);
+                        return !record.get('active');
+                    }
+                }
+            ),
             listeners:{
                 change:function (field, newValue) {
+                    var store = field.getStore(),
+                        selectedRecord = store.findRecord('id', newValue),
+                        input = Ext.get(field.getEl().down('.x-form-field'));
+                    if(!selectedRecord.get('active')) {
+                        input.setStyle( { 'color': '#A94442','background': '#F2DEDE' } );
+                    }
+                    else {
+                        input.setStyle( { 'background': '', 'color': '' } );
+                    }
                     me.fireEvent('changePayment', newValue, me.fieldContainer);
                 }
             }

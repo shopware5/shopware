@@ -291,7 +291,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $paymentStatus = $this->getRepository()->getPaymentStatusQuery()->getArrayResult();
         $shops = $this->getShopRepository()->getBaseListQuery()->getArrayResult();
         $countries = $this->getCountryRepository()->getCountriesQuery()->getArrayResult();
-        $payments = $this->getPaymentRepository()->getPaymentsQuery()->getArrayResult();
+        $payments = $this->getPaymentRepository()->getAllPaymentsQuery()->getArrayResult();
         $documentTypes = $this->getRepository()->getDocumentTypesQuery()->getArrayResult();
 
         $this->View()->assign(array(

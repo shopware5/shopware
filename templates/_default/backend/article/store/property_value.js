@@ -35,6 +35,7 @@
 Ext.define('Shopware.apps.Article.store.PropertyValue', {
     extend: 'Ext.data.Store',
     alias: 'widget.article-store-property-value',
+    remoteFilter: true,
     fields: [ 'id', 'value', 'optionId' ],
     proxy: {
         type: 'ajax',
