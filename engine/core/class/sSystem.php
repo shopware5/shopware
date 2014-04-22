@@ -46,6 +46,9 @@ class sSystem
 
     public $sDB_CONNECTION;// Current Connection
 
+    /**
+     * @var Shopware_Components_Modules
+     */
     public $sMODULES;		// Pointer to the different modules and its inherits
 
     public $sUSERGROUP;	// Current customer-group (Scope)
