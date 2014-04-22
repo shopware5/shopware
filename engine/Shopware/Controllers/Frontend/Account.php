@@ -261,7 +261,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     /**
      * Login action method
      *
-     * Login account and show login erros
+     * Login account and show login errors
      */
     public function loginAction()
     {
@@ -726,10 +726,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         if (empty(Shopware()->Session()->sRegister)) {
             Shopware()->Session()->sRegister = array();
         }
-
-        $this->admin->sSYSTEM->_POST = array();
-        $this->admin->sSYSTEM->_POST['email'] = $this->Request()->getParam('email');
-        $this->admin->sSYSTEM->_POST['password'] = $this->Request()->getParam('password');
 
         if ($this->Request()->getParam('accountmode')==0 || $this->Request()->getParam('accountmode')==1) {
             Shopware()->Session()->sRegister['auth']['email'] = $this->admin->sSYSTEM->_POST['email'];
