@@ -36,7 +36,7 @@ class sExport
     public $sSettings;
     public $sDB;
     public $sApi;
-    public $sSystem;
+    public $sSYSTEM;
     public $sPath;
     public $sTemplates;
 
@@ -269,16 +269,16 @@ class sExport
 
         $this->shop = $shop;
 
-        $this->sSystem->sCONFIG = Shopware()->Config();
+        $this->sSYSTEM->sCONFIG = Shopware()->Config();
     }
 
     public function sInitSmarty()
     {
-        $this->sSystem->sSMARTY->compile_id = "export_".$this->sFeedID;
+        $this->sSYSTEM->sSMARTY->compile_id = "export_".$this->sFeedID;
 
-        $this->sSystem->sSMARTY->cache_lifetime = 0;
-        $this->sSystem->sSMARTY->debugging = 0;
-        $this->sSystem->sSMARTY->caching = 0;
+        $this->sSYSTEM->sSMARTY->cache_lifetime = 0;
+        $this->sSYSTEM->sSMARTY->debugging = 0;
+        $this->sSYSTEM->sSMARTY->caching = 0;
 
         $this->sSmarty->registerPlugin('modifier', 'format', array(&$this,'sFormatString'));
         $this->sSmarty->registerPlugin('modifier', 'escape', array(&$this,'sEscapeString'));
@@ -287,7 +287,7 @@ class sExport
         $this->sSmarty->registerPlugin('modifier', 'image', array(&$this,'sGetImageLink'));
         $this->sSmarty->registerPlugin('modifier', 'shippingcost', array(&$this,'sGetArticleShippingcost'));
 
-        $this->sSmarty->assign("sConfig",$this->sSystem->sCONFIG);
+        $this->sSmarty->assign("sConfig",$this->sSYSTEM->sCONFIG);
         $this->sSmarty->assign("sLanguage",$this->sLanguage);
         $this->sSmarty->assign("sMultishop",$this->sMultishop);
         $this->sSmarty->assign("sCurrency",$this->sCurrency);
@@ -414,7 +414,7 @@ class sExport
 
     public function sGetArticleLink($articleID, $title="")
     {
-        return $this->sSystem->sRewriteLink($this->sSYSTEM->sCONFIG["sBASEFILE"]."?sViewport=detail&sArticle=$articleID",$title).(empty($this->sSettings["partnerID"])?"":"?sPartner=".urlencode($this->sSettings["partnerID"]));
+        return $this->sSYSTEM->sRewriteLink($this->sSYSTEM->sCONFIG["sBASEFILE"]."?sViewport=detail&sArticle=$articleID",$title).(empty($this->sSettings["partnerID"])?"":"?sPartner=".urlencode($this->sSettings["partnerID"]));
     }
 
     public function sGetImageLink($hash, $imageSize = null)
