@@ -130,6 +130,22 @@
     }
 
 	.description--properties { list-style: none }
+
+	// Block prices
+	.block-prices--table {
+		.unitize-margin(0, 0, 12, 0);
+		border: 1px solid @borderColor;
+		padding: 1px;
+
+		td {
+			.unitize-padding(4px, 10px, 4px, 10px);
+		}
+
+		thead th {
+			color: #fff;
+			background: @lightTextColor;
+		}
+	}
 }
 
 // Product reviews form
@@ -356,5 +372,34 @@
                 .unitize-padding(25, 50);
             }
         }
+
+		// Block prices
+		.block-prices--table {
+			.unitize(12, 16, margin-top);
+		}
     }
+}
+
+// Tablet lanscape - min-width: 1024px
+@media screen and (min-width: @tabletLandscapeViewportWidth) {
+	.product--details {
+
+		// Float the image container to the left
+		.product--image-container {
+			width: 50%;
+			margin-right: 10%;
+		}
+
+		// Float the buy box to the right side of the product details page
+		.product--buybox { width: 40% }
+		.buybox--inner { float: none }
+
+		// Reformat the product actions
+		.product--actions {
+			.unitize-margin(16, 0, 16, 0);
+			.unitize-padding(0, 0, 10, 0);
+			border-top: 0 none;
+			border-bottom: 1px solid @borderColor;
+		}
+	}
 }
