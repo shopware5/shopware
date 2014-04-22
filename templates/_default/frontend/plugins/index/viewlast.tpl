@@ -3,21 +3,24 @@
 	<p class="heading">{s name='WidgetsRecentlyViewedHeadline'}{/s}</p>
 </div>
 <script>
-    jQuery(function($) {
-        var shopId = '{$Shop->getId()}';
-        var basePath = '{$Shop->getBaseUrl()}';
-        var savedArticleCount = localStorage.getItem('lastSeenArticleIndex-' + shopId + '-' + basePath);
-        if(savedArticleCount) {
-            var numberOfArticles = '{config name=lastarticlestoshow}';
+	;(function($, window, document) {
+		$(document).ready(function() {
+			var shopId = '{$Shop->getId()}',
+				basePath = '{$Shop->getBaseUrl()}',
+				localStorage = $.isLocalStorageSupported ? window.localStorage : new StoragePolyFill('local');
 
-            $('.viewlast').lastSeenArticlesDisplayer({
-                numArticles: numberOfArticles,
-                shopId: shopId,
-                basePath: basePath
-            });
-        }
-        else {
-            $('.viewlast').hide();
-        }
-    })
+			if(localStorage.getItem('lastSeenArticleIndex-' + shopId + '-' + basePath)) {
+				var numberOfArticles = '{config name=lastarticlestoshow}';
+
+				$('.viewlast').lastSeenArticlesDisplayer({
+					numArticles: numberOfArticles,
+					shopId: shopId,
+					basePath: basePath
+				});
+			}
+			else {
+				$('.viewlast').hide();
+			}
+		});
+	}(jQuery, window, document));
 </script>

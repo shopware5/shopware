@@ -23,7 +23,7 @@
  */
 
 namespace   Shopware\Models\Newsletter;
-use         Shopware\Components\Model\ModelEntity,
+use         Shopware\Components\Model\LazyFetchModelEntity,
             Doctrine\ORM\Mapping AS ORM;
 
 /**
@@ -32,7 +32,7 @@ use         Shopware\Components\Model\ModelEntity,
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_campaigns_mailaddresses")
  */
-class Address extends ModelEntity
+class Address extends LazyFetchModelEntity
 {
     /**
      * Autoincrement ID
@@ -224,5 +224,13 @@ class Address extends ModelEntity
     public function getGroupId()
     {
         return $this->groupId;
+    }
+
+    /**
+     * @return \Shopware\Models\Customer\Customer
+     */
+    public function getCustomer()
+    {
+        return $this->fetchLazy($this->customer, array('email' => $this->email));
     }
 }

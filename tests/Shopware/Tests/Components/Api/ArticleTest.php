@@ -338,7 +338,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
             'images' => array(
                 array(
-                    'link' => 'http://lorempixel.com/600/400/'
+                    'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg'
                 ),
                 array(
                     'link' => 'data:image/png;base64,' . require(__DIR__ . '/fixtures/base64image.php')
@@ -359,7 +359,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                 ),
 
                 'minPurchase' => 5,
-                'purchaseSteps' => 2,
                 'purchaseSteps' => 2,
 
                 'prices' => array(
@@ -415,7 +414,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
                     'images' => array(
                         array(
-                            'link' => 'http://lorempixel.com/600/400/'
+                            'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg'
                         )
                     ),
 
@@ -492,6 +491,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertInstanceOf('\Shopware\Models\Article\Article', $article);
         $this->assertGreaterThan(0, $article->getId());
 
+
         $this->assertCount(5, $article->getImages());
         foreach ($article->getImages() as $image) {
             $this->assertCount(6, $image->getMedia()->getThumbnails());
@@ -502,6 +502,180 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
         // Cleanup test data
         $this->resource->delete($id);
+    }
+
+    /**
+     * Tests the thumbnail generation and their proportional sizes
+     *
+     * @return int
+     */
+    public function testCreateWithImageShouldCreateThumbnailsWithRightProportions()
+    {
+        $testData = array(
+            'name' => 'Test article with images and right proportions',
+            'description' => 'Test description',
+            'active' => true,
+            'filterGroupId' => 1,
+
+            'propertyValues' => array(
+                array(
+                    'value' => 'grün',
+                    'option' => array(
+                        'name' => 'Farbe'
+                    )
+                ),
+                array(
+                    'value' => 'testWert',
+                    'option' => array(
+                        'name' => 'neueOption' . uniqid()
+                    )
+                )
+            ),
+
+            'images' => array(
+                array(
+                    'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg'
+                )
+            ),
+
+            'mainDetail' => array(
+                'number' => 'swTEST' . uniqid(),
+                'inStock' => 15,
+                'unitId' => 1,
+
+                'attribute' => array(
+                    'attr1' => 'Freitext1',
+                    'attr2' => 'Freitext2',
+                ),
+
+                'minPurchase' => 5,
+                'purchaseSteps' => 2,
+
+                'prices' => array(
+                    array(
+                        'customerGroupKey' => 'EK',
+                        'from' => 1,
+                        'to' => 20,
+                        'price' => 500,
+                    ),
+                    array(
+                        'customerGroupKey' => 'EK',
+                        'from' => 21,
+                        'to' => '-',
+                        'price' => 400,
+                    ),
+                )
+            ),
+
+            'configuratorSet' => array(
+                'name' => 'MeinKonf',
+                'groups' => array(
+                    array(
+                        'name' => 'Farbe',
+                        'options' => array(
+                            array('name' => 'Gelb'),
+                            array('name' => 'grün')
+                        )
+                    ),
+                    array(
+                        'name' => 'Gräße',
+                        'options' => array(
+                            array('name' => 'L'),
+                            array('name' => 'XL')
+                        )
+                    ),
+                )
+            ),
+
+            'variants' => array(
+                array(
+                    'number' => 'swTEST.variant.' . uniqid(),
+                    'inStock' => 17,
+                    // create a new unit
+                    'unit' => array(
+                        'unit' => 'xyz',
+                        'name' => 'newUnit'
+                    ),
+
+                    'attribute' => array(
+                        'attr3' => 'Freitext3',
+                        'attr4' => 'Freitext4',
+                    ),
+
+                    'images' => array(
+                        array(
+                            'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg'
+                        )
+                    ),
+
+                    'configuratorOptions' => array(
+                        array(
+                            'option' => 'Gelb',
+                            'group' => 'Farbe'
+                        ),
+                        array(
+                            'option' => 'XL',
+                            'group' => 'Größe'
+                        )
+
+                    ),
+
+                    'minPurchase' => 5,
+                    'purchaseSteps' => 2,
+
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'H',
+                            'from' => 1,
+                            'to' => 20,
+                            'price' => 500,
+                        ),
+                        array(
+                            'customerGroupKey' => 'H',
+                            'from' => 21,
+                            'to' => '-',
+                            'price' => 400,
+                        ),
+                    )
+
+                )
+            ),
+            'taxId' => 1,
+            'supplierId' => 2,
+        );
+
+        $article = $this->resource->create($testData);
+
+        $this->assertInstanceOf('\Shopware\Models\Article\Article', $article);
+        $this->assertGreaterThan(0, $article->getId());
+        $this->assertCount(2, $article->getImages());
+
+        $proportionalSizes = array(
+            '30x30',
+            '57x57',
+            '105x105',
+            '140x140',
+            '255x255',
+            '600x600',
+        );
+
+        foreach ($article->getImages() as $image) {
+            $thumbnails = $image->getMedia()->getThumbnails();
+            $this->assertCount(6, $thumbnails);
+
+            $thumbnails = array_values($thumbnails);
+
+            foreach ($thumbnails as $key => $thumbnail) {
+                $filePath = Shopware()->OldPath() . $thumbnail;
+                $this->assertFileExists($filePath);
+
+                list($width, $height) = getimagesize($filePath);
+
+                $this->assertSame($proportionalSizes[$key], $width . 'x' . $height);
+            }
+        }
+
+        $this->resource->delete($article);
     }
 
     /**

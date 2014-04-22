@@ -5620,6 +5620,7 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
     "use strict";
 
     var pluginName = 'lastSeenArticlesCollector',
+        localStorage = window.localStorage,
         defaults = {
         };
 
@@ -5631,30 +5632,35 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
     };
 
     function Plugin( element, options ) {
-        this.element = element;
-        this.options = $.extend( {}, defaults, options) ;
-        this._defaults = defaults;
-        this._name = pluginName;
-        this.init(options);
+        var me = this;
+
+        me.element = element;
+        me.options = $.extend( {}, defaults, options) ;
+        me._defaults = defaults;
+        me._name = pluginName;
+        me.init();
     }
 
-    Plugin.prototype.init = function (options) {
+    Plugin.prototype.init = function () {
         var me = this,
             opts = me.options,
-            articleNum = opts.numArticles,
-            index = localStorage.getItem('lastSeenArticleIndex-'+opts.shopId + '-' + opts.basePath) || 0,
-            i = index - articleNum+1, data, article, exists,
-            url = opts.lastArticles.linkDetailsRewrited;
+            articleNum = ~~(opts.numArticles),
+            lastArticle = opts.lastArticles,
+            index = localStorage.getItem('lastSeenArticleIndex-' + opts.shopId + '-' + opts.basePath) || 0,
+            i = index - articleNum + 1,
+            data,
+            article,
+            exists,
+            url = lastArticle.linkDetailsRewrited;
 
         // Remove query string from article url
         if(url.indexOf('?') == -1) {
             // SEO URL does not exists
             if(url.indexOf('/sCategory') != -1) {
-                opts.lastArticles.linkDetailsRewrited = url.substring(0, url.indexOf('/sCategory'));
+                lastArticle.linkDetailsRewrited = url.substring(0, url.indexOf('/sCategory'));
             }
-        }
-        else {
-            opts.lastArticles.linkDetailsRewrited = url.substring(0, url.indexOf('?'));
+        } else {
+            lastArticle.linkDetailsRewrited = url.substring(0, url.indexOf('?'));
         }
 
         // Reset index if not defined
@@ -5662,16 +5668,17 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
             index = 0;
         }
 
-        for(; i < index+1; i++) {
-            data = localStorage.getItem('lastSeenArticle-'+opts.shopId + '-' + opts.basePath + i);
+        for(; i < index + 1; i++) {
+            data = localStorage.getItem('lastSeenArticle-' + opts.shopId + '-' + opts.basePath + i);
+
             if(!data) {
                 continue;
             }
 
             article = JSON.parse(data);
-            exists = (article.articleId == opts.lastArticles.articleId);
+            exists = (article.articleId == lastArticle.articleId);
 
-            // break if the aritcle exists already
+            // break if the article exists already
             if(exists) {
                 break;
             }
@@ -5694,24 +5701,30 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
                 }
 
                 // Adding this article on top index
-                localStorage.setItem('lastSeenArticle-'+opts.shopId + '-' + opts.basePath + index, JSON.stringify(opts.lastArticles));
+                localStorage.setItem('lastSeenArticle-' + opts.shopId + '-' + opts.basePath + index, JSON.stringify(opts.lastArticles));
             }
             return false;
         }
 
-        localStorage.setItem('lastSeenArticleIndex-'+opts.shopId + '-' + opts.basePath, ++index);
-        localStorage.setItem('lastSeenArticle-'+opts.shopId + '-' + opts.basePath + index, JSON.stringify(opts.lastArticles));
-        localStorage.removeItem('lastSeenArticle-'+opts.shopId + '-' + opts.basePath + (index - articleNum));
+        localStorage.setItem('lastSeenArticleIndex-' + opts.shopId + '-' + opts.basePath, ++index);
+        localStorage.setItem('lastSeenArticle-' + opts.shopId + '-' + opts.basePath + index, JSON.stringify(opts.lastArticles));
+        localStorage.removeItem('lastSeenArticle-' + opts.shopId + '-' + opts.basePath + (index - articleNum));
     };
 
-    $.fn[pluginName] = function ( options ) {
-        return this.each(function () {
-            if (!$.data(this, 'plugin_' + pluginName)) {
-                $.data(this, 'plugin_' + pluginName,
-                    new Plugin( this, options ));
-            }
-        });
-    }
+    $(document).ready(function() {
+        if(!$.isLocalStorageSupported) {
+            localStorage = new StoragePolyFill('local');
+        }
+
+        $.fn[pluginName] = function ( options ) {
+            return this.each(function () {
+                if (!$.data(this, 'plugin_' + pluginName)) {
+                    $.data(this, 'plugin_' + pluginName,
+                        new Plugin( this, options ));
+                }
+            });
+        }
+    });
 })( jQuery, window, document );
 
 /**
@@ -5723,6 +5736,7 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
     "use strict";
 
     var pluginName = 'lastSeenArticlesDisplayer',
+        localStorage = window.localStorage,
         defaults = {
         };
 
@@ -5808,14 +5822,20 @@ jQuery.effects||function(a,b){function c(b){var c;return b&&b.constructor==Array
         }
     };
 
-    $.fn[pluginName] = function ( options ) {
-        return this.each(function () {
-            if (!$.data(this, 'plugin_' + pluginName)) {
-                $.data(this, 'plugin_' + pluginName,
-                    new Plugin( this, options ));
-            }
-        });
-    }
+    $(document).ready(function() {
+        if(!$.isLocalStorageSupported) {
+            localStorage = new StoragePolyFill('local');
+        }
+
+        $.fn[pluginName] = function ( options ) {
+            return this.each(function () {
+                if (!$.data(this, 'plugin_' + pluginName)) {
+                    $.data(this, 'plugin_' + pluginName,
+                        new Plugin( this, options ));
+                }
+            });
+        }
+    });
 })(jQuery, window, document);
 
 /**
@@ -6048,34 +6068,36 @@ if (navigator.appVersion.indexOf("MSIE 7.") != -1)
  * @license: MIT http://rem.mit-license.org/
  * @link: https://gist.github.com/remy/350433
  */
-(function () {
+(function ($, window, document, undefined) {
     window.StoragePolyFill = function (type) {
         function createCookie(name, value, days) {
-            var date, expires;
+            var date,
+                expires = '';
 
             if (days) {
                 date = new Date();
-                date.setTime(date.getTime()+(days*24*60*60*1000));
-                expires = "; expires="+date.toGMTString();
-            } else {
-                expires = "";
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = '; expires=' + date.toGMTString();
             }
-            document.cookie = name+"="+value+expires+"; path=/";
+
+            value = encodeURI(value);
+
+            document.cookie = name + '=' + value + expires + '; path=/';
         }
 
         function readCookie(name) {
-            var nameEQ = name + "=",
+            var nameEQ = name + '=',
                 ca = document.cookie.split(';'),
                 i, c;
 
-            for (i=0; i < ca.length; i++) {
+            for (i = 0; i < ca.length; i++) {
                 c = ca[i];
-                while (c.charAt(0)==' ') {
-                    c = c.substring(1,c.length);
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1, c.length);
                 }
 
                 if (c.indexOf(nameEQ) == 0) {
-                    return c.substring(nameEQ.length,c.length);
+                    return decodeURI(c.substring(nameEQ.length, c.length));
                 }
             }
             return null;
@@ -6100,8 +6122,7 @@ if (navigator.appVersion.indexOf("MSIE 7.") != -1)
             return data ? JSON.parse(data) : {};
         }
 
-
-// initialise if there's already data
+        // initialise if there's already data
         var data = getData();
 
         return {
@@ -6115,7 +6136,7 @@ if (navigator.appVersion.indexOf("MSIE 7.") != -1)
                 return data[key] === undefined ? null : data[key];
             },
             key: function (i) {
-// not perfect, but works
+                // not perfect, but works
                 var ctr = 0;
                 for (var k in data) {
                     if (ctr == i) return k;
@@ -6139,4 +6160,30 @@ if (navigator.appVersion.indexOf("MSIE 7.") != -1)
     if (typeof window.localStorage == 'undefined') window.localStorage = new StoragePolyFill('local');
     if (typeof window.sessionStorage == 'undefined') window.sessionStorage = new StoragePolyFill('session');
 
-})();
+    /**
+     * Returns whether or not the given storage is available and works - SW-7524
+     *
+     * @returns { boolean }
+     */
+    function isStorageSupported (storage) {
+        var testKey = 'test';
+
+        if (!storage) {
+            return false;
+        }
+
+        try {
+            storage.setItem(testKey, '1');
+            storage.removeItem(testKey);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    $.extend($, {
+        isLocalStorageSupported: isStorageSupported(window.localStorage),
+        isSessionStorageSupported: isStorageSupported(window.sessionStorage)
+    });
+
+})(jQuery, window, document);

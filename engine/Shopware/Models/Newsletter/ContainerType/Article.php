@@ -23,7 +23,7 @@
  */
 
 namespace   Shopware\Models\Newsletter\ContainerType;
-use         Shopware\Components\Model\ModelEntity,
+use         Shopware\Components\Model\LazyFetchModelEntity,
             Doctrine\ORM\Mapping AS ORM;
 
 /**
@@ -32,7 +32,7 @@ use         Shopware\Components\Model\ModelEntity,
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_campaigns_articles")
  */
-class Article extends ModelEntity
+class Article extends LazyFetchModelEntity
 {
     /**
      * Autoincrement ID
@@ -188,6 +188,6 @@ class Article extends ModelEntity
      */
     public function getArticleDetail()
     {
-        return $this->articleDetail;
+        return $this->fetchLazy($this->articleDetail, array('ordernumber' => $this->number));
     }
 }

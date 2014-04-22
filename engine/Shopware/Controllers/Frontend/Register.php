@@ -556,10 +556,12 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     {
         $error_flags = array();
         $error_messages = array();
+        $validator = new Zend_Validate_EmailAddress();
+        $validator->getHostnameValidator()->setValidateTld(false);
 
         if (empty($this->post['personal']['email'])) {
 
-        } elseif (($validator = new Zend_Validate_EmailAddress()) && !$validator->isValid($this->post['personal']['email'])) {
+        } elseif (!$validator->isValid($this->post['personal']['email'])) {
             $error_messages[] = Shopware()->Snippets()->getNamespace("frontend")->get('RegisterAjaxEmailNotValid', 'Please enter a valid mail address.', true);
             $error_flags['email'] = true;
             if (!empty($this->post['personal']['emailConfirmation'])) {

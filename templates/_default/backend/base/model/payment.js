@@ -88,7 +88,7 @@ Ext.define('Shopware.apps.Base.model.Payment', {
             }
         },
         { name:'position', type: 'int' },
-        { name:'active', type: 'int' }
+        { name:'active', type: 'boolean' }
     ]
 });
 //{/block}
