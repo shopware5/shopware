@@ -224,4 +224,12 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
     {
         return $this->getModule("Core");
     }
+
+    /**
+     * @return sRewriteTable
+     */
+    public function RewriteTable()
+    {
+        return $this->getModule("RewriteTable");
+    }
 }
