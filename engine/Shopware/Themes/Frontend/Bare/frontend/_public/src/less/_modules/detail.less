@@ -419,10 +419,12 @@
             .unitize-margin(0, -20, 20, -20);
 
             .panel--tab-nav {
-                .unitize-margin(0, 50);
+                .unitize-margin(0, 20);
             }
             .panel--body {
-                .unitize-padding(25, 50);
+                .unitize-padding(20, 40);
+				border-left: 0 none;
+				border-right: 0 none;
             }
         }
 
@@ -446,6 +448,17 @@
 		// Float the buy box to the right side of the product details page
 		.product--buybox { width: 40% }
 		.buybox--inner { float: none }
+
+		.js--desktop-tab-panel {
+			.unitize-margin(0, -45, 20, -45);
+
+			.panel--tab-nav {
+				.unitize-margin(0, 45);
+			}
+			.panel--body {
+				.unitize-padding(25, 55, 45);
+			}
+		}
 
 		// Reformat the product actions
 		.product--actions {
