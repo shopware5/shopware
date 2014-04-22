@@ -21,7 +21,7 @@
 								{if $sSupplierInfo.name eq $supplier.name}
 									<img class="filter--image" src="{link file=$supplier.image}" alt="{$supplier.name}">
 								{else}
-									<a class="filter--link" href="{$supplier.link}" title="{$supplier.name}">
+									<a class="filter--link" href="{$supplier.link|escape}" title="{$supplier.name}">
 										<img class="filter--image" src="{link file=$supplier.image}" alt="{$supplier.name}">
 									</a>
 								{/if}
@@ -31,7 +31,7 @@
 								{if $sSupplierInfo.name eq $supplier.name}
 									{$supplier.name} ({$supplier.countSuppliers})
 								{else}
-									<a class="filter--link" href="{$supplier.link}" title="{$supplier.name}">
+									<a class="filter--link" href="{$supplier.link|escape}" title="{$supplier.name}">
                                         {$supplier.name}
 										({$supplier.countSuppliers})
                                     </a>
@@ -44,7 +44,7 @@
 				{if $sSupplierInfo.name}
 					<ul class="filter--list">
 						<li class="filter--entry">
-							<a class="filter--link link--close" href="{$sSupplierInfo.link}" title="{s name='FilterLinkDefault'}Alle Anzeigen{/s}">
+							<a class="filter--link link--close" href="{$sSupplierInfo.link|escape}" title="{s name='FilterLinkDefault'}Alle Anzeigen{/s}">
 								{se name='FilterLinkDefault'}Alle Anzeigen{/se}
 							</a>
 						</li>
