@@ -68,7 +68,9 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
 
         me.desktop = me.viewport.getActiveDesktop();
 
-        me.widgetStore = me.getStore('Widget').load({
+        me.widgetStore = me.getStore('Widget');
+
+        me.widgetStore.load({
             callback: function() {
                 me.widgetSettingsStore = me.getStore('WidgetSettings');
 
@@ -101,20 +103,12 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
 
     onWidgetSettingsLoaded: function() {
         var me = this,
-            settings;
-
-        me.widgetSettingsStore.each(function(record) {
-            if(record.get('authId') === 123) {
-                settings = record;
-                return false;
-            }
-        });
+            authId = ~~(me.widgetStore.getProxy().getReader().jsonData.authId),
+            settings = me.getWidgetSettingsByAuthId(authId);
 
         if(!settings)  {
-            settings = me.widgetSettingsStore.add({
-                // todo@dg implement authId
-
-                authId: 123,
+            me.widgetSettingsStore.add({
+                authId: authId,
                 height: 600,
                 columnsShown: 1,
                 dock: 'left',
@@ -123,6 +117,8 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
             });
 
             me.widgetSettingsStore.sync();
+
+            settings = me.getWidgetSettingsByAuthId(authId);
         }
 
         me.widgetSettings = settings;
@@ -132,6 +128,20 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
             desktop: me.desktop,
             widgetSettings: me.widgetSettings
         });
+    },
+
+    getWidgetSettingsByAuthId: function (authId) {
+        var me = this,
+            settings = null;
+
+        me.widgetSettingsStore.each(function(record) {
+            if(record.get('authId') === authId) {
+                settings = record;
+                return false;
+            }
+        });
+
+        return settings;
     },
 
     onSaveWindowSize: function(columnsShown, height) {
@@ -175,7 +185,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         pinButton.removeCls('active');
     },
 
-    onChangePosition: function(window, alignRight, alignBottom) {
+    onChangePosition: function(win, alignRight, alignBottom) {
         var me = this,
             xOffset = 10,
             yOffset = 10,
@@ -186,35 +196,37 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
             handles = horizontalHandle + ' ' + verticalHandle + ' ' + verticalHandle + horizontalHandle;
 
         if (alignRight) {
-            x = me.desktop.getWidth() - window.getWidth() - xOffset;
+            x = me.desktop.getWidth() - win.getWidth() - xOffset;
         }
 
         if(alignBottom) {
-            y = me.desktop.getHeight() - window.getHeight();
+            y = me.desktop.getHeight() - win.getHeight() - yOffset;
         }
 
-        window.setPosition(x, y, true);
-
-        var resizer = window.resizer ? window.resizer.resizeTracker : window.resizable;
-
-        resizer.handles = handles;
+        win.setPosition(x, y, true);
     },
 
     onSaveWidgetPosition: function(column, row, widgetId, internalId) {
+        var me = this;
+
         Ext.Ajax.request({
             url: '{url controller=widgets action=saveWidgetPosition}',
             params: {
                 column: column,
                 position: row,
                 id: internalId
+            },
+
+            callback: function() {
+                me.widgetStore.load();
             }
         });
     },
 
-    onAddWidget: function(window, widgetName) {
+    onAddWidget: function(win, widgetName) {
         var me = this,
-            widget = me.widgetStore.findRecord('name', widgetName),
-            firstColumn = window.containerCollection.getAt(0);
+            container = win.containerCollection.getAt(0),
+            widget = me.widgetStore.findRecord('name', widgetName);
 
         Ext.Ajax.request({
             url: '{url controller=widgets action=addWidgetView}',
@@ -222,23 +234,25 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
                 id: widget.get('id'),
                 label: widget.get('label'),
                 column: 0,
-                position: firstColumn.items.items.length + 1
+                position: container.items.getCount() - 1
             },
             callback: function(options, success, response) {
                 if (!success) {
                     return;
                 }
 
-                me.widgetStore.reload({
+                me.widgetStore.load({
                     callback: function() {
-                        window.createWidget(me.widgetStore.findRecord('name', widgetName));
+                        widget = me.widgetStore.findRecord('name', widgetName);
+
+                        win.createWidgets(widget);
                     }
                 });
             }
         });
     },
 
-    onRemoveWidget: function(window, widgetName) {
+    onRemoveWidget: function(win, widgetName) {
         var me = this,
             widget = me.widgetStore.findRecord('name', widgetName),
             views = widget.get('views'),
@@ -254,12 +268,12 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
                     return;
                 }
 
-                me.widgetStore.reload();
+                me.widgetStore.load();
 
                 Ext.each(views, function(view) {
-                    column = window.containerCollection.getAt(view.column);
+                    column = win.containerCollection.getAt(view.column);
 
-                    column.remove(Ext.getCmp(widget.get('name')));
+                    column.remove(column.getComponent(view.position));
                 });
             }
         });

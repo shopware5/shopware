@@ -54,7 +54,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
         $data = $builder->getQuery()->getArrayResult();
 
-        $this->View()->assign(array('success' => !empty($data), 'data' => $data));
+        $this->View()->assign(array('success' => !empty($data), 'authId' => $userID, 'data' => $data));
     }
 
     public function saveWidgetPositionAction()

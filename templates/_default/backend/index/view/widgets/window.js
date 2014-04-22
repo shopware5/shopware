@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
     autoShow: false,
     resizable: {
         floating: true,
-        handles: 's e se'
+        handles: 'all'
     },
     draggable: {
         delegate: 'widget-toolbar'
@@ -117,7 +117,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
 
         me.callParent(arguments);
 
-        me.widgetStore.each(me.createWidget.bind(me));
+        me.widgetStore.each(me.createWidgets.bind(me));
     },
 
     createWidgetWrapper: function () {
@@ -154,112 +154,184 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
         return Ext.create('Ext.container.Container', options);
     },
 
-    createWidget: function (model) {
-        var me = this,
-            views = model.get('views'),
-            name = model.get('name'),
-            holder;
-
-        if(!name || !views.length) {
-            return;
-        }
-
-        Ext.each(views, function(view) {
-            holder = me.containerCollection.getAt(view.column);
-
-            if(!holder) {
-                holder = me.containerCollection.getAt(0);
-            }
-
-            holder.add(
-                Ext.widget(name, {
-                    id: name,
-                    widgetId: model.get('id'),
-                    viewId: view.id,
-                    title: view.label,
-                    position: {
-                        columnId: view.column,
-                        rowId: view.position
-                    },
-                    draggable: {
-                        ddGroup: 'widget-container'
-                    },
-                    $initialId: view.id
-                })
-            );
-        });
-    },
-
     createContainerDropZone: function(container) {
         var me = this,
             dropProxyEl = Ext.create('Ext.Component', {
-                cls: Ext.baseCSSPrefix + 'widget-proxy-element',
-                hidden: false
-            });
-
-        container.add(dropProxyEl);
+            cls: Ext.baseCSSPrefix + 'widget-proxy-element',
+            height: 200
+        });
 
         container.dropZone = Ext.create('Ext.dd.DropZone', container.getEl(), {
-//            ddGroup: 'widget-container',
+            ddGroup: 'widget-container',
 
             getTargetFromEvent: function() {
                 return container;
             },
 
             onNodeEnter: function(target, dd) {
-                var panel = dd.panel;
-                // Always move the drop proxy element to the end of the container
-                target.move(target.items.indexOf(dropProxyEl), target.items.getCount() - 1);
-
-                dropProxyEl.show();
                 dropProxyEl.addCls('active');
-                dropProxyEl.setHeight(panel.height);
             },
 
             onNodeOut: function(target) {
-                dropProxyEl.removeCls('active');
-                dropProxyEl.hide();
-            },
+                var dropSource = this,
+                    dropIndex = target.items.indexOf(dropProxyEl),
+                    lastIndex = target.items.getCount() - 1;
 
-            onNodeOver: function() {
-                return Ext.dd.DropZone.prototype.dropAllowed;
+                if(dropIndex != lastIndex) {
+                    target.move(dropIndex, lastIndex);
+                    dropSource.dropIndex = dropIndex;
+                }
+
+                dropProxyEl.removeCls('active');
             },
 
             onNodeDrop: function(target, dd, e, data) {
-                var droppedPanel = dd.panel,
-                    panel = droppedPanel.cloneConfig(),
-                    newColumn = me.containerCollection.getAt(target.columnId),
-                    newRow = newColumn.items.getCount() - 2;
+                var dropSource = this,
+                    newColumn = target.columnId,
+                    newRow = dropSource.dropIndex,
+                    panel = dd.panel.cloneConfig({
+                        position: {
+                            rowId: newRow,
+                            columnId: newColumn
+                        }
+                    });
 
-                // We need to timeout the panel destroying due ExtJS needs the dragged element on drop
-                Ext.defer(function() {
-                    droppedPanel.destroy();
-                }, 50);
-
-                console.log(dd);
-
-                target.add(panel);
-
-                panel.position.rowId = newRow;
+                target.insert(newRow, panel);
 
                 // Fire event which saves the new position
-                me.fireEvent('saveWidgetPosition', target.columnId, newRow, panel.widgetId, panel.$initialId);
+                me.fireEvent('saveWidgetPosition', newColumn, newRow, panel.widgetId, panel.$initialId);
+
+                me.containerCollection.each(function(container) {
+                    container.dropZone.onNodeOut(container);
+                });
 
                 return true;
+            },
+
+            onNodeOver: function (nodeData, source, e, data) {
+                var items = container.items,
+                    posY = source.lastPageY;
+
+                items.each(function(item, i) {
+                    var dropIndex = items.indexOf(dropProxyEl),
+                        itemIndex = items.indexOf(item),
+                        itemY = item.el.getY(),
+                        itemHeight = item.el.getHeight();
+
+                    if(item === dropProxyEl) {
+                        if(posY > itemY + itemHeight) {
+                            container.move(dropIndex, items.getCount() - 1);
+                        }
+                        return true;
+                    }
+
+                    if(posY > itemY + itemHeight && dropIndex <= itemIndex) {
+                        container.move(dropIndex, itemIndex + 1);
+                        return false;
+                    }
+
+                    if(posY < itemY && dropIndex > itemIndex) {
+                        container.move(dropIndex, itemIndex);
+                        return false;
+                    }
+                });
             }
         });
+
+        container.add(dropProxyEl);
+
+        container.dropProxyEl = dropProxyEl;
+    },
+
+    createWidgets: function (model) {
+        var me = this,
+            views = model.get('views'),
+            name = model.get('name'),
+            container,
+            widget;
+
+        if(!name || !views.length) {
+            return;
+        }
+
+        Ext.each(views, function(view) {
+            container = me.containerCollection.getAt(view.column);
+
+            if(!container) {
+                container = me.containerCollection.getAt(0);
+            }
+
+            widget = me.createWidget(name, model.get('id'), view);
+
+            container.insert(widget.position.rowId, widget);
+        });
+    },
+
+    createWidget: function (name, widgetId, record) {
+        var me = this,
+            config = {
+                id: name,
+                widgetId: widgetId,
+                viewId: record.id,
+                title: record.label,
+                position: {
+                    columnId: record.column,
+                    rowId: record.position
+                },
+                $initialId: record.id,
+
+                draggable: me.createWidgetDragZone()
+            };
+
+        return Ext.widget(name, config);
+    },
+
+    createWidgetDragZone: function () {
+        var me = this;
+
+        return {
+            ddGroup: 'widget-container',
+
+            onBeforeDrag: function (data, e) {
+                var dragSource = this,
+                    widget = data.panel;
+
+                dragSource.originalPosition = widget.el.getXY();
+            },
+
+            startDrag: function (e) {
+                var dragSource = this,
+                        widget = dragSource.panel;
+
+                me.containerCollection.each(function(container, i) {
+                    container.dropProxyEl.setHeight(widget.height);
+
+                    if(container.columnId === widget.position.columnId) {
+                        container.remove(widget, false);
+                    }
+                });
+            },
+
+            onInvalidDrop: function (e) {
+                var dragProxy = this,
+                    widget = dragProxy.panel,
+                    container = me.containerCollection.getAt(widget.position.columnId);
+
+                container.insert(widget.position.rowId, widget.cloneConfig());
+            }
+        };
     },
 
     onDesktopResize: function (desktop, width, height) {
         var me = this,
             offset = me.el ? me.getEl().getTop() : 0,
-            maxWidth = width - me.x * 2,
-            maxHeight = height - me.y * 2 - offset,
+            maxWidth = width - 10 * 2,
+            maxHeight = height - 10 * 2 - offset,
             resizer = me.resizer ? me.resizer.resizeTracker : me.resizable,
             maxColumns;
 
         me.columnCount = me.getColumnCount(width);
-        me.widthStep = maxWidth / me.columnCount;
+        me.widthStep = ~~(maxWidth / me.columnCount);
 
         resizer.widthIncrement = me.widthStep;
         resizer.minWidth = me.widthStep;
