@@ -205,12 +205,14 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $locale = $user->locale;
         $language = $locale->toString();
 
-        foreach ($data['configForms'][0]['elements'] as &$element) {
-            if (!in_array($element['type'], array('select', 'combo'))) {
-                continue;
-            }
+        foreach ($data['configForms'] as &$configForm) {
+            foreach ($configForm['elements'] as &$element) {
+                if (!in_array($element['type'], array('select', 'combo'))) {
+                    continue;
+                }
 
-            $element['options']['store'] = $this->translateStore($language, $element['options']['store']);
+                $element['options']['store'] = $this->translateStore($language, $element['options']['store']);
+            }
         }
 
         $this->View()->assign(array(
