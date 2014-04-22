@@ -1752,7 +1752,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->session["sUserId"] = $customer->getId();
 
         // New customers don't have available downloads
-        $this->assertCount(0, $this->module->sGetDownloads());
+        $downloads = $this->module->sGetDownloads();
+        $this->assertCount(0, $downloads['orderData']);
 
         // Inject demo data
         $orderData = array(
@@ -1825,7 +1826,9 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $orderEsdId = Shopware()->Db()->lastInsertId();
 
         // Calling the method should now return the expected data
-        $result = $this->module->sGetDownloads();
+        $downloads = $this->module->sGetDownloads();
+        $result = $downloads['orderData'];
+
         $this->assertCount(1, $result);
         $esd = end($result);
         $this->assertArrayHasKey('id', $esd);
@@ -1929,13 +1932,16 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
 
         // At this point, the user is not logged in so we should have no data
-        $this->assertCount(0, $this->module->sGetOpenOrderData());
+        $data = $this->module->sGetOpenOrderData();
+        $this->assertCount(0, $data['orderData']);
 
         // Mock a login
         $this->session["sUserId"] = $customer->getId();
 
         // Calling the method should now return the expected data
         $result = $this->module->sGetOpenOrderData();
+        $result = $result['orderData'];
+
         $this->assertCount(2, $result);
         foreach ($result as $order) {
             $this->assertArrayHasKey('id', $order);
