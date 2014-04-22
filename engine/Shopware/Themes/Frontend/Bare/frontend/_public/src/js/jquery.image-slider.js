@@ -22,7 +22,9 @@
         clickEvt = (isTouch ? (window.navigator.msPointerEnabled ? 'MSPointerDown': 'touchstart') : 'click'),
         defaults = {
             /** @string activeCls Class which will be added when the drop down was triggered */
-            activeCls: 'is--active'
+            activeCls: 'is--active',
+            iconArrowOpen: 'icon--arrow-right',
+            iconArrowClose: 'icon--arrow-left'
         };
 
     /**
@@ -57,6 +59,7 @@
 
         me._thumbnailSelector = me.$el.attr('data-thumbnail-selector') || '';
         me.$thumbnails = me.$el.find(me._thumbnailSelector);
+        me.$thumbnailsContainer = me.$el.find('div[data-thumbnails="true"]');
         me.$img = me.$el.find('.image--element');
 
         // We need thumbnails to create
@@ -64,10 +67,12 @@
             return false;
         }
 
+        me.initThumbnails(me.$thumbnailsContainer);
+
         me.$slider = me.createSlider();
         me.$img.replaceWith(me.$slider);
 
-        me.$el.find('.slider').glide({
+        me._glide = me.$el.find('.slider').glide({
             navigationClass: 'panel--dot-nav',
             navigationCurrentItemClass: 'is--active',
             arrowMainClass: 'panel--arrow',
@@ -76,6 +81,57 @@
             arrowRightText: '',
             arrowLeftText: '',
             autoplay: false
+        }).data('api_glide');
+    };
+
+    Plugin.prototype.initThumbnails = function($container) {
+        var me = this, $arrow;
+
+        $arrow = $container.find('.thumbnails--arrow i');
+        $container.show();
+        $container.css('left', -$container.outerWidth() + 43 + 'px');
+
+        $(window).resize(function() {
+            $container.css('left', -$container.outerWidth() + 43);
+        });
+
+        $container.on('click', function(event) {
+            event.preventDefault();
+
+            var $target = $(event.target),
+                $link = $target.parent('a');
+
+            if($target.hasClass('thumbnail--image')) {
+                var id = $link.attr('data-slider-index');
+
+                me._glide.jump(id);
+                me.$thumbnailsContainer.find('a').removeClass('is--active');
+
+                $link.addClass('is--active');
+                return false;
+            }
+
+            if(!$container.hasClass(me.opts.activeCls)) {
+                if(!Modernizr.csstransitions) {
+                    $container.css('left', 0);
+                } else {
+                    $container.transition({
+                        'left': 0
+                    }, 500, 'snap');
+                }
+                $arrow.removeClass(me.opts.iconArrowOpen).addClass(me.opts.iconArrowClose);
+                $container.addClass(me.opts.activeCls);
+            } else {
+                if(!Modernizr.csstransitions) {
+                    $container.css('left', -$container.outerWidth() + 43);
+                } else {
+                    $container.transition({
+                        'left': -$container.outerWidth() + 43
+                    }, 500, 'snap');
+                }
+                $arrow.removeClass(me.opts.iconArrowClose).addClass(me.opts.iconArrowOpen);
+                $container.removeClass(me.opts.activeCls);
+            }
         });
     };
 
