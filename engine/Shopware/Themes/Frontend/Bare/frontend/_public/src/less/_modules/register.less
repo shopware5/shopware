@@ -1,6 +1,17 @@
+
+// Header Support Info
+.is--ctl-register {
+
+    .logo--supportinfo {
+	display: none;
+    }
+
+}
+
 .register--content {
 
-     width: 100%;
+    width: 97%;
+    .border-radius();
 
     .clearfix();
 
@@ -22,7 +33,7 @@
 
     .register--submit {
 	float: right;
-	.unitize-margin(0,26,16,);
+	.unitize-margin(0,26,16);
 
 	.icon--arrow-right {
 	    .unitize(10,16, font-size);
@@ -30,7 +41,7 @@
     }
 
     .register--required-info {
-	.unitize-margin(0,26,16,);
+	.unitize-margin(0,26,16);
     }
 
     /* Personal Information Fieldset */
@@ -74,7 +85,7 @@
 
     .register--birthday {
 	.unitize(8,16, margin-top);
-	margin-right: 2%;
+	margin-right: 2% !important;
 	width: 31%;
 	float: left;
     }
@@ -89,16 +100,134 @@
 
 }
 
-@media screen and(min-width: @tabletViewportWidth) {
+// Register advantages entry
+.register--advantages {
+    .clearfix();
 
+    .register--advantages-list {
+	list-style: none;
+	.unitize(40, 16, margin-bottom);
+	float: left;
+    }
 
+    li {
+	.unitize(20, 16, padding-left);
+	display: block;
+	float: left;
+	width: 100%;
+    }
+
+    i[class^=icon] {
+	.unitize(10, 16, font-size);
+	.unitize(10, 16, margin-right);
+    }
+
+}
+
+/* Register Steps */
+.steps--content {
+    border-top: 1px solid @borderColor;
+
+    // General
+    .steps--spacer { display: none }
+
+    .steps--list {
+	.clearfix();
+    }
+
+    .steps--entry {
+	.unitize-padding(0, 16, 0, 16);
+	float: left;
+	list-style: none;
+    }
+
+    // Icon
+    .steps--entry .icon {
+	.secondary-gradient();
+	.border-radius(22px);
+	.unitize-padding(10, 16);
+	.box-shadow();
+	.unitize-width(46, 16);
+	.unitize(20, 16,font-size);
+	display: inline-block;
+	text-align: center;
+	color: #fff;
+	font-weight: bold;
+	float: left;
+    }
+
+    .is--active .icon {
+	.primary-gradient();
+	color:  #fff;
+    }
+
+    // Text
+    .steps--entry .text {
+	.unitize-margin(0, 0, 0, 16);
+	.unitize-height(52);
+	position: relative;
+	top: -2px;
+	display: none;
+
+	&::after {
+	    content: '';
+	    height: 100%;
+	}
+    }
+
+    .is--active .text {
+	display: inline-block;
+	color: @primaryColor;
+	font-weight: bold;
+    }
+
+    .steps--entry .text--inner, .steps--entry .text::after {
+	display: inline-block;
+	vertical-align: middle;
+    }
+
+}
+
+@media screen and (min-width: @tabletViewportWidth) {
+
+    // Header Support Info
+    .is--ctl-register {
+
+	.logo-main {
+	    width: 100%;
+	}
+
+	.logo--shop {
+	    width: 40%
+	}
+
+	.logo--supportinfo {
+	    display: block;
+	    width: 40%;
+	}
+
+	.logo--trusted-shops {
+	    width: 20%;
+
+	    a { float: right; }
+	}
+
+	.header-main {
+	box-shadow: 0 1px 1px #ccc;
+	}
+
+    }
+
+    // General registration form
     .register--content {
-	    width: 90%;
+	.unitize(50, 16, margin-top);
+	width: 90%;
+
 	.field--select {
 	    .unitize-margin(5,0,16);
 
 	    .register--birthday {
-		margin-right: 2%;
+		margin-right: 2% !important;
 	    }
 	}
 
@@ -111,14 +240,68 @@
 	}
     }
 
+    // Register Steps
+    .steps--content {
+	.unitize-padding(30,0,40,0,16);
+	background: transparent;
+	border: none;
+
+	.steps--entry { width: 28% }
+
+	.steps--spacer {
+	    border-bottom: 1px solid @borderColor;;
+	    display: block;
+	    width: 8%;
+	    text-align: center;
+
+	    i[class^=icon] {
+		.unitize-padding(0, 6, 0, 6);
+		.unitize(13, 16, top);
+		position: relative;
+		background: @primaryBackgroundColor;
+	    }
+	}
+
+	.steps--entry .text {
+	    display: inline-block;
+	    width: 63%;
+	    font-weight: bold;
+	}
+    }
+
+    // Register Advantages
+    .register--advantages {
+	width: 90%;
+    }
 
 }
 
 @media screen and (min-width: @desktopViewportWidth) {
 
-    .register--content {
-	    width: 65%;
+    .is--ctl-register {
+	.unitize(48, 16, margin-bottom);
     }
 
+    // General registration form
+    .register--content {
+	width: 65%;
+    }
+
+    // Register Steps
+    .steps--content {
+
+	.steps--entry { width: 20% }
+	.steps--spacer { width: 16% }
+
+    }
+
+    // Register Advantages
+    .register--advantages {
+	width: 65%;
+
+	li {
+	    width: 50%;
+	}
+    }
 
 }
