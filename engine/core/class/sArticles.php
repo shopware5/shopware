@@ -2528,7 +2528,7 @@ class sArticles
      * @param array $articleData current article
      * @param bool $ignore deprecated
      * @access public
-     * @return array
+     * @return array|float|null
      */
     public function sGetPricegroupDiscount($customergroup, $groupID, $listprice, $quantity, $doMatrix = true, $articleData = array(), $ignore = false)
     {
@@ -3371,13 +3371,13 @@ class sArticles
 
     /**
      * Round article price
-     * @param $moneyfloat price
+     *
+     * @param float $moneyFloat price
      * @access public
      * @return float price
      */
     public function sRound($moneyfloat = null)
     {
-
         $money_str = explode(".", $moneyfloat);
         if (empty($money_str[1])) $money_str[1] = 0;
         $money_str[1] = substr($money_str[1], 0, 3); // convert to rounded (to the nearest thousandth) string
@@ -3386,7 +3386,6 @@ class sArticles
 
         return round($money_str, 2);
     }
-
 
     public function sGetProductByOrdernumber($ordernumber)
     {

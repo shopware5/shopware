@@ -36,6 +36,38 @@ class sBasket
     private $db;
 
     /**
+     * Event manager which is used for the event system of shopware.
+     * Injected over the class constructor
+     *
+     * @var Enlight_Event_EventManager
+     */
+    private $eventManager;
+
+    /**
+     * Shopware configuration object which used for
+     * each config access in this class.
+     * Injected over the class constructor
+     *
+     * @var Shopware_Components_Config
+     */
+    private $config;
+
+    /**
+     * Shopware session object.
+     * Injected over the class constructor
+     *
+     * @var Enlight_Components_Session_Namespace
+     */
+    private $session;
+
+    /**
+     * Request wrapper object
+     *
+     * @var Enlight_Controller_Front
+     */
+    private $front;
+
+    /**
      * The snippet manager
      *
      * @var Shopware_Components_Snippet_Manager
@@ -43,9 +75,23 @@ class sBasket
     private $snippetManager;
 
     /**
-     * @var Shopware_Components_Snippet_Namespace
+     * @var Shopware_Components_Snippet_Manager
      */
     public $snippetObject;
+
+    /**
+     * sArticle core class instance
+     *
+     * @var sArticles
+     */
+    private $articleModule;
+
+    /**
+     * sAdmin core class instance
+     *
+     * @var sAdmin
+     */
+    private $adminModule;
 
     /**
      * Pointer to sSystem object
@@ -58,12 +104,24 @@ class sBasket
 
     public function __construct(
         Enlight_Components_Db_Adapter_Pdo_Mysql $db                 = null,
+        Enlight_Event_EventManager              $eventManager       = null,
         Shopware_Components_Snippet_Manager     $snippetManager     = null,
+        Shopware_Components_Config              $config             = null,
+        Enlight_Components_Session_Namespace    $session            = null,
+        Enlight_Controller_Front                $front              = null,
+        sArticles                                $articleModule      = null,
+        sAdmin                                  $adminModule        = null,
         sSystem                                 $systemModule       = null
     )
     {
         $this->db = $db ? : Shopware()->Db();
+        $this->eventManager = $eventManager ? : Shopware()->Events();
         $this->snippetManager = $snippetManager ? : Shopware()->Snippets();
+        $this->config = $config ? : Shopware()->Config();
+        $this->session = $session ? : Shopware()->Session();
+        $this->front = $front ? : Shopware()->Front();
+        $this->articleModule = $articleModule ? : Shopware()->Modules()->Articles();
+        $this->adminModule = $adminModule ? : Shopware()->Modules()->Admin();
         $this->sSYSTEM = $systemModule ? : Shopware()->System();
     }
     /**
@@ -79,7 +137,7 @@ class sBasket
             'SELECT SUM(quantity*(floor(price * 100 + .55)/100)) AS totalAmount
                 FROM s_order_basket
                 WHERE sessionID = ? GROUP BY sessionID',
-            array($this->sSYSTEM->sSESSION_ID)
+            array($this->session->get('sessionId'))
         );
 
        return ($result === false ? array() : $result);
@@ -92,14 +150,14 @@ class sBasket
      * @deprecated
      * @return array Total amount of the user's cart (only products)
      */
-    private function sGetAmountArticles()
+    public function sGetAmountArticles()
     {
         $result = $this->db->fetchRow(
             'SELECT SUM(quantity*(floor(price * 100 + .55)/100)) AS totalAmount
                 FROM s_order_basket
                 WHERE sessionID = ? AND modus = 0
                 GROUP BY sessionID',
-            array($this->sSYSTEM->sSESSION_ID)
+            array($this->session->get('sessionId'))
         );
 
         return ($result === false ? array() : $result);
@@ -126,7 +184,7 @@ class sBasket
             WHERE b.sessionID = ?
               AND b.modus = 0
             GROUP BY b.ordernumber',
-            array($this->sSYSTEM->sSESSION_ID)
+            array($this->session->get('sessionId'))
         );
         $hideBasket = false;
         foreach ($result as $article) {
@@ -151,36 +209,35 @@ class sBasket
      * @param int $supplier Supplier id to filter
      * @return array Amount of articles in current basket that match the current filter
      */
-    private function sGetAmountRestrictedArticles($articles, $supplier)
+    public function sGetAmountRestrictedArticles($articles, $supplier)
     {
         if (!is_array($articles) && empty($supplier)) {
             return $this->sGetAmountArticles();
         }
+
+        $extraConditions = array();
         if (is_array($articles)) {
-            foreach ($articles as $article) {
-                $article = $article;
-                $newArticles[] = $article;
-            }
-            $in = implode(",", $newArticles);
-            $articleSQL = "ordernumber IN ($in) ";
+            $extraConditions[] = $this->db->quoteInto('ordernumber IN (?) ', $articles);
         }
         if (!empty($supplier)) {
-            if (empty($articleSQL)) {
-                $articleSQL = "1 != 1 ";
-            }
-            $supplierSQL = "OR s_articles.supplierID = $supplier ";
+            $extraConditions[] .= $this->db->quoteInto('s_articles.supplierID = ?', $supplier);
         }
+
+        if (count($extraConditions)) {
+            $sqlExtra = ' AND ( '.implode(' OR ', $extraConditions).' ) ';
+        } else {
+            $sqlExtra = '';
+        }
+
         $result = $this->db->fetchRow(
             "SELECT SUM(quantity*(floor(price * 100 + .55)/100)) AS totalAmount
                 FROM s_order_basket, s_articles
-                WHERE sessionID = ? AND modus = 0 AND s_order_basket.articleID = s_articles.id
-                AND
-                (
-                    $articleSQL
-                    $supplierSQL
-                )
+                WHERE sessionID = ?
+                AND modus = 0
+                AND s_order_basket.articleID = s_articles.id
+                $sqlExtra
                 GROUP BY sessionID",
-            array($this->sSYSTEM->sSESSION_ID)
+            array($this->session->get('sessionId'))
         );
 
         return ($result === false ? array() : $result);
@@ -193,13 +250,13 @@ class sBasket
      * @deprecated
      * @return null
      */
-    private function sUpdateVoucher()
+    public function sUpdateVoucher()
     {
         $voucher = $this->db->fetchRow(
             'SELECT id basketID, ordernumber, articleID as voucherID
                 FROM s_order_basket
                 WHERE modus = 2 AND sessionID = ?',
-            array($this->sSYSTEM->sSESSION_ID)
+            array($this->session->get('sessionId'))
         );
         if ($voucher) {
             $voucher['code'] = $this->db->fetchOne(
@@ -224,7 +281,7 @@ class sBasket
      * @deprecated
      * @return Enlight_Components_Adodb_Statement|null
      */
-    private function sInsertDiscount()
+    public function sInsertDiscount()
     {
         // Get possible discounts
         $getDiscounts = $this->db->fetchAll('
@@ -238,7 +295,7 @@ class sBasket
 
         $this->db->query(
             'DELETE FROM s_order_basket WHERE sessionID = ? AND modus = 3',
-            array($this->sSYSTEM->sSESSION_ID)
+            array($this->session->get('sessionId'))
         );
 
         // No discounts
@@ -250,7 +307,7 @@ class sBasket
               FROM s_order_basket
               WHERE sessionID = ? AND modus != 4
               GROUP BY sessionID';
-        $params = array($this->sSYSTEM->sSESSION_ID);
+        $params = array($this->session->get('sessionId'));
 
         $sql = Enlight()->Events()->filter(
             'Shopware_Modules_Basket_InsertDiscount_FilterSql_BasketAmount',
@@ -266,7 +323,7 @@ class sBasket
 
         // Iterate through discounts and find nearly one
         foreach ($getDiscounts as $discountRow) {
-            if ($basketAmount<$discountRow["basketdiscountstart"]) {
+            if ($basketAmount < $discountRow["basketdiscountstart"]) {
                 break;
             } else {
                 $basketDiscount = $discountRow["basketdiscount"];
@@ -277,19 +334,20 @@ class sBasket
             return;
         }
 
-        $insertTime = date("Y-m-d H:i:s");
         $discount = $basketAmount / 100 * $basketDiscount;
         $discount = $discount * -1;
         $discount = round($discount,2);
 
-        if (!empty($this->sSYSTEM->sCONFIG["sTAXAUTOMODE"])) {
-            $tax = $this->sSYSTEM->sMODULES['sBASKET']->getMaxTax();
+        $taxMode = $this->config->get('sTAXAUTOMODE');
+        if (!empty($taxMode)) {
+            $tax = $this->getMaxTax();
         } else {
-            $tax = $this->sSYSTEM->sCONFIG['sDISCOUNTTAX'];
+            $tax = $this->config->get('sDISCOUNTTAX');
         }
 
-        if (!empty($this->sSYSTEM->sCONFIG["sTAXAUTOMODE"])) {
-            $tax = $this->sSYSTEM->sMODULES['sBASKET']->getMaxTax();
+        $taxAutoMode = $this->config->get("sTAXAUTOMODE");
+        if (!empty($taxAutoMode)) {
+            $tax = $this->getMaxTax();
         }
         if (!$tax) {
             $tax = 19;
@@ -301,17 +359,17 @@ class sBasket
             $discountNet = round($discount / (100+$tax) * 100,3);
         }
 
-        // Add discount - info to user-account
         $this->sSYSTEM->sUSERGROUPDATA["basketdiscount"] = $basketDiscount;
-        // --
-        $name = isset($this->sSYSTEM->sCONFIG['sDISCOUNTNUMBER']) ? $this->sSYSTEM->sCONFIG['sDISCOUNTNUMBER']: "DISCOUNT";
 
-        $discountName = - $basketDiscount . ' % ' . $this->sSYSTEM->sCONFIG["sDISCOUNTNAME"];
+        $discountNumber = $this->config->get('sDISCOUNTNUMBER');
+        $name = isset($discountNumber) ? $discountNumber: "DISCOUNT";
+
+        $discountName = - $basketDiscount . ' % ' . $this->config->get('sDISCOUNTNAME');
 
         $this->db->insert(
             's_order_basket',
             array(
-                'sessionID' => $this->sSYSTEM->sSESSION_ID,
+                'sessionID' => $this->session->get('sessionId'),
                 'articlename' => $discountName,
                 'articleID' => 0,
                 'ordernumber' => $name,
@@ -319,7 +377,7 @@ class sBasket
                 'price' => $discount,
                 'netprice' => $discountNet,
                 'tax_rate' => $tax,
-                'datum' => $insertTime,
+                'datum' => date("Y-m-d H:i:s"),
                 'modus' => 3,
                 'currencyFactor' => $this->sSYSTEM->sCurrency["factor"]
             )
@@ -333,14 +391,14 @@ class sBasket
      * @deprecated
      * @return bool
      */
-    private function sCheckForDiscount()
+    public function sCheckForDiscount()
     {
-        $rs = $this->db->fetchOne(
+        $discount = $this->db->fetchOne(
             'SELECT id FROM s_order_basket WHERE sessionID = ? AND modus = 3',
-            array($this->sSYSTEM->sSESSION_ID)
+            array($this->session->get('sessionId'))
         );
 
-        return (bool) $rs;
+        return (bool) $discount;
     }
 
     /**
@@ -352,13 +410,14 @@ class sBasket
      */
     public function sInsertPremium()
     {
-        static $last_premium;
+        static $lastPremium;
 
         $sBasketAmount = $this->sGetAmount();
         $sBasketAmount = empty($sBasketAmount["totalAmount"]) ? 0 : $sBasketAmount["totalAmount"];
         $sBasketAmount = (float) $sBasketAmount;
 
-        if (empty($this->sSYSTEM->_GET["sAddPremium"])) {
+        $addPremium = $this->front->Request()->getQuery('sAddPremium');
+        if (empty($addPremium)) {
             $deletePremium = $this->db->fetchCol(
                 'SELECT basket.id
                 FROM s_order_basket basket
@@ -368,7 +427,7 @@ class sBasket
                 WHERE basket.modus = 1
                 AND premium.id IS NULL
                 AND basket.sessionID = ?',
-                array($sBasketAmount, $this->sSYSTEM->sSESSION_ID)
+                array($sBasketAmount, $this->session->get('sessionId'))
             );
             if (empty($deletePremium)) {
                 return true;
@@ -381,21 +440,16 @@ class sBasket
             return true;
         }
 
-        // This is dead, as its the same as previous 'id', remove after testing
-        if (empty($this->sSYSTEM->_GET["sAddPremium"])) {
+        if (isset($lastPremium) && $lastPremium == $addPremium) {
             return false;
         }
 
-        if (isset($last_premium) && $last_premium == $this->sSYSTEM->_GET["sAddPremium"]) {
-            return false;
-        }
-
-        $last_premium = $this->sSYSTEM->_GET["sAddPremium"];
+        $lastPremium = $addPremium;
 
         $this->db->delete(
             's_order_basket',
             array(
-                'sessionID = ?' => $this->sSYSTEM->sSESSION_ID,
+                'sessionID = ?' => $this->session->get('sessionId'),
                 'modus = 1'
             )
         );
@@ -414,7 +468,7 @@ class sBasket
             AND detail2.articleID = detail.articleID
             AND detail.articleID = article.id',
             array(
-                $this->sSYSTEM->_GET["sAddPremium"],
+                $addPremium,
                 $sBasketAmount
             )
         );
@@ -423,7 +477,7 @@ class sBasket
             return false;
         }
 
-        $premium = $this->sSYSTEM->sMODULES['sArticles']->sGetTranslation(
+        $premium = $this->articleModule->sGetTranslation(
             $premium, $premium["articleID"], "article", $this->sSYSTEM->sLanguage
         );
         if (!empty($premium['configurator_set_id'])) {
@@ -435,7 +489,7 @@ class sBasket
         return $this->db->insert(
             's_order_basket',
             array(
-                'sessionID' => $this->sSYSTEM->sSESSION_ID,
+                'sessionID' => $this->session->get('sessionId'),
                 'articlename' => trim($premium["name"] . " " . $premium["additionaltext"]),
                 'articleID' => $premium['id'],
                 'ordernumber' => $number,
@@ -443,7 +497,7 @@ class sBasket
                 'price' => 0,
                 'netprice' => 0,
                 'tax_rate' => 0,
-                'datum' => new DateTime(),
+                'datum' => new Zend_Date(),
                 'modus' => 1,
                 'currencyFactor' => $this->sSYSTEM->sCurrency["factor"]
             )
@@ -459,12 +513,14 @@ class sBasket
      */
     public function getMaxTax()
     {
+        $sessionId = $this->session->get('sessionId');
+
         return $this->db->fetchOne(
             'SELECT MAX(tax_rate) as max_tax
                 FROM s_order_basket b
                 WHERE b.sessionID = ? AND b.modus = 0
                 GROUP BY b.sessionID',
-            array(empty($this->sSYSTEM->sSESSION_ID) ? session_id() : $this->sSYSTEM->sSESSION_ID)
+            array(empty($sessionId) ? session_id() : $sessionId)
         );
     }
 
@@ -479,7 +535,7 @@ class sBasket
      */
     public function sAddVoucher($voucherCode, $basket = '')
     {
-        if (Enlight()->Events()->notifyUntil(
+        if ($this->eventManager->notifyUntil(
             'Shopware_Modules_Basket_AddVoucher_Start',
             array('subject' => $this, 'code' => $voucherCode, 'basket' => $basket)
         )) {
@@ -502,32 +558,12 @@ class sBasket
             array($voucherCode)
         ) ? : array();
 
+        $userId = $this->session->get('sUserId');
+
         // Check if voucher has already been cashed
-        if ($this->sSYSTEM->_SESSION["sUserId"] && $voucherDetails["id"]) {
-            $userId = $this->sSYSTEM->_SESSION["sUserId"];
-
-            $queryVoucher = $this->db->fetchAll(
-                'SELECT s_order_details.id AS id
-                    FROM s_order, s_order_details
-                    WHERE s_order.userID = ?
-                    AND s_order_details.orderID = s_order.id
-                    AND s_order_details.articleordernumber = ?
-                    AND s_order_details.ordernumber != \'0\'',
-                array(
-                    $userId,
-                    $voucherDetails["ordercode"]
-                )
-            );
-
-            if (count($queryVoucher) >= $voucherDetails["numorder"] && !$voucherDetails["modus"]) {
-
-                $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
-                    'VoucherFailureAlreadyUsed',
-                    'This voucher was used in an previous order'
-                );
-
-                return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
-            }
+        $sErrorMessages = $this->filterUsedVoucher($userId, $voucherDetails);
+        if (!empty($sErrorMessages)) {
+            return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
         }
 
         if ($voucherDetails["id"]) {
@@ -581,14 +617,9 @@ class sBasket
         $restrictDiscount = !empty($voucherDetails["strict"]);
 
         // If voucher is limited to a specific subshop, filter that and return on failure
-        if (!empty($voucherDetails["subshopID"])) {
-            if ($this->sSYSTEM->sSubShop["id"] != $voucherDetails["subshopID"]) {
-                $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
-                    'VoucherFailureNotFound',
-                    'Voucher could not be found or is not valid anymore'
-                );
-                return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
-            }
+        $sErrorMessages = $this->filterSubShopVoucher($voucherDetails);
+        if (!empty($sErrorMessages)) {
+            return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
         }
 
         // Check if the basket already has a voucher, and break if it does
@@ -596,7 +627,7 @@ class sBasket
             'SELECT id
             FROM s_order_basket
             WHERE sessionID = ? AND modus = 2',
-            array($this->sSYSTEM->sSESSION_ID)
+            array($this->session->get('sessionId'))
         );
         if ($chkBasket) {
             $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
@@ -607,87 +638,25 @@ class sBasket
         }
 
         // Check if the voucher is limited to a certain customer group, and validate that
-        if (!empty($voucherDetails["customergroup"])) {
-            $userId = $this->sSYSTEM->_SESSION["sUserId"];
-
-            if (!empty($userId)) {
-                // Get customer group
-                $queryCustomerGroup = $this->db->fetchRow(
-                    'SELECT s_core_customergroups.id, customergroup
-                    FROM s_user, s_core_customergroups
-                    WHERE s_user.id = ?
-                    AND s_user.customergroup = s_core_customergroups.groupkey',
-                    array($userId)
-                );
-            }
-            $customerGroup = $queryCustomerGroup["customergroup"];
-            if ($customerGroup != $voucherDetails["customergroup"]
-                && $voucherDetails["customergroup"] != $queryCustomerGroup["id"]
-                && $voucherDetails["customergroup"] != $this->sSYSTEM->sUSERGROUPDATA["id"]
-            ) {
-                $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
-                    'VoucherFailureCustomerGroup',
-                    'This voucher is not available for your customer group'
-                );
-                return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
-            }
+        $sErrorMessages = $this->filterCustomerGroupVoucher($userId, $voucherDetails);
+        if (!empty($sErrorMessages)) {
+            return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
         }
 
         // Check if the voucher is limited to certain articles, and validate that
-        if (!empty($voucherDetails["restrictarticles"]) && strlen($voucherDetails["restrictarticles"]) > 5) {
-            $restrictedArticles = explode(";", $voucherDetails["restrictarticles"]);
-            if (count($restrictedArticles) == 0) {
-                $restrictedArticles[] = $voucherDetails["restrictarticles"];
-            }
-
-            $foundMatchingArticle = $this->db->fetchOne($this->db
-                ->select()
-                ->from('s_order_basket', 'id')
-                ->where('sessionID = ?', $this->sSYSTEM->sSESSION_ID)
-                ->where('modus = 0')
-                ->where('ordernumber IN (?)', $restrictedArticles)
-            );
-
-            if (empty($foundMatchingArticle)) {
-                $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
-                    'VoucherFailureProducts',
-                    'This voucher is only available in combination with certain products'
-                );
-                return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
-            }
+        list ($sErrorMessages, $restrictedArticles) = $this->filterArticleVoucher($voucherDetails);
+        if (!empty($sErrorMessages)) {
+            return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
         }
+
         // Check if the voucher is limited to certain supplier, and validate that
-        if ($voucherDetails["bindtosupplier"]) {
-            $allowedSupplierId = $voucherDetails["bindtosupplier"];
-
-            $allowedBasketEntriesBySupplier = $this->db->fetchRow(
-                'SELECT s_order_basket.id
-                FROM s_order_basket, s_articles, s_articles_supplier
-                WHERE s_order_basket.articleID = s_articles.id
-                AND s_articles.supplierID = ?
-                AND s_order_basket.sessionID = ?',
-                array($allowedSupplierId, $this->sSYSTEM->sSESSION_ID)
-            );
-
-            if (!$allowedBasketEntriesBySupplier) {
-                $allowedSupplierName = $this->db->fetchRow(
-                    'SELECT name FROM s_articles_supplier WHERE id = ?',
-                    array($allowedSupplierId)
-                );
-
-                $sErrorMessages[] = str_replace(
-                    "{sSupplier}",
-                    $allowedSupplierName["name"],
-                    $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
-                        'VoucherFailureSupplier',
-                        'This voucher is only available for products from {sSupplier}'
-                    )
-                );
-                return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
-            }
+        $sErrorMessages = $this->filterSupplierVoucher($voucherDetails);
+        if (!empty($sErrorMessages)) {
+            return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
         }
 
         // Calculate the amount in the basket
+        $allowedSupplierId = $voucherDetails["bindtosupplier"];
         if (!empty($restrictDiscount) && (!empty($restrictedArticles) || !empty($allowedSupplierId))) {
             $amount = $this->sGetAmountRestrictedArticles($restrictedArticles, $allowedSupplierId);
         } else {
@@ -717,7 +686,7 @@ class sBasket
 
         $timeInsert = date("Y-m-d H:i:s");
 
-        $voucherName = $this->sSYSTEM->sCONFIG['sVOUCHERNAME'];
+        $voucherName = $this->config->get('sVOUCHERNAME');
         if ($voucherDetails["percental"]) {
             $value = $voucherDetails["value"];
             $voucherName .= " ".$value." %";
@@ -725,58 +694,7 @@ class sBasket
         }
 
         // Tax calculation for vouchers
-        $taxRate = 0;
-        if (
-            (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])
-            || $voucherDetails["taxconfig"] == "none"
-        ) {
-            // if net customer group - calculate without tax
-            $tax = $voucherDetails["value"] * -1;
-            if ($voucherDetails["taxconfig"] == "default" || empty($voucherDetails["taxconfig"])) {
-                $taxRate = $this->sSYSTEM->sCONFIG['sVOUCHERTAX'];
-            } elseif ($voucherDetails["taxconfig"] == "auto") {
-                $taxRate =$this->getMaxTax();
-
-            } elseif (intval($voucherDetails["taxconfig"])) {
-               $temporaryTax = $voucherDetails["taxconfig"];
-               $getTaxRate = $this->db->fetchOne(
-                   'SELECT tax FROM s_core_tax WHERE id = ?',
-                   array($temporaryTax)
-               );
-               $taxRate = $getTaxRate;
-            }
-        } else {
-            if ($voucherDetails["taxconfig"] == "default" || empty($voucherDetails["taxconfig"])) {
-                $tax = round($voucherDetails["value"]/(100+$this->sSYSTEM->sCONFIG['sVOUCHERTAX'])*100,3)*-1;
-                $taxRate = $this->sSYSTEM->sCONFIG['sVOUCHERTAX'];
-                // Pre 3.5.4 behaviour
-            } elseif ($voucherDetails["taxconfig"] == "auto") {
-                // Check max. used tax-rate from basket
-                $tax = $this->getMaxTax();
-                $taxRate = $tax;
-                $tax = round($voucherDetails["value"]/(100+$tax)*100,3)*-1;
-            } elseif (intval($voucherDetails["taxconfig"])) {
-                // Fix defined tax
-                $temporaryTax = $voucherDetails["taxconfig"];
-                $getTaxRate = $this->db->fetchOne(
-                    'SELECT tax FROM s_core_tax WHERE id = ?',
-                    array($temporaryTax)
-                );
-                $taxRate = $getTaxRate;
-                $tax = round($voucherDetails["value"]/(100+$getTaxRate)*100,3)*-1;
-            } else {
-                // No tax
-                $tax = $voucherDetails["value"] * -1;
-            }
-        }
-
-        $voucherDetails["value"] = $voucherDetails["value"] * -1;
-
-        if ($voucherDetails["shippingfree"]) {
-            $freeShipping = "1";
-        } else {
-            $freeShipping = "0";
-        }
+        list($taxRate, $tax, $voucherDetails, $freeShipping) = $this->calculateVoucherValues($voucherDetails);
 
         // Finally, add the discount entry to the basket
         $sql = "
@@ -787,7 +705,7 @@ class sBasket
         VALUES (?,?,?,?,?,1,?,?,?,?,2,?)
         ";
         $params = array (
-            $this->sSYSTEM->sSESSION_ID,
+            $this->session->get('sessionId'),
             $voucherName,
             $voucherDetails["id"],
             $voucherDetails["ordercode"],
@@ -798,7 +716,7 @@ class sBasket
             $timeInsert,
             $this->sSYSTEM->sCurrency["factor"]
         );
-        $sql = Enlight()->Events()->filter(
+        $sql = $this->eventManager->filter(
             'Shopware_Modules_Basket_AddVoucher_FilterSql',
             $sql,
             array(
@@ -829,7 +747,7 @@ class sBasket
                 WHERE sessionID = ?
                 AND modus = 0
                 ORDER BY modus ASC, datum DESC',
-            array($this->sSYSTEM->sSESSION_ID)
+            array($this->session->get('sessionId'))
         );
 
         return empty($articles) ? null : $articles;
@@ -844,13 +762,13 @@ class sBasket
      */
     public function sCheckMinimumCharge()
     {
-        if (
-            $this->sSYSTEM->sUSERGROUPDATA["minimumorder"]
-            && !$this->sSYSTEM->sUSERGROUPDATA["minimumordersurcharge"]
-        ) {
+        $minimumOrder = $this->sSYSTEM->sUSERGROUPDATA["minimumorder"];
+        $factor = $this->sSYSTEM->sCurrency["factor"];
+
+        if ($minimumOrder && !$this->sSYSTEM->sUSERGROUPDATA["minimumordersurcharge"] ) {
             $amount = $this->sGetAmount();
-            if ($amount["totalAmount"] < ($this->sSYSTEM->sUSERGROUPDATA["minimumorder"] * $this->sSYSTEM->sCurrency["factor"])) {
-                return ($this->sSYSTEM->sUSERGROUPDATA["minimumorder"] * $this->sSYSTEM->sCurrency["factor"]);
+            if ($amount["totalAmount"] < ($minimumOrder * $factor)) {
+                return ($minimumOrder * $factor);
             }
         }
         return false;
@@ -863,15 +781,15 @@ class sBasket
      * @deprecated
      * @return null|false False on failure, null on success
      */
-    private function sInsertSurcharge()
+    public function sInsertSurcharge()
     {
-        $name = isset($this->sSYSTEM->sCONFIG['sSURCHARGENUMBER']) ? $this->sSYSTEM->sCONFIG['sSURCHARGENUMBER']: "SURCHARGE";
+        $name = $this->config->get('sSURCHARGENUMBER', "SURCHARGE");
 
         // Delete previous inserted discounts
         $this->db->delete(
             's_order_basket',
             array(
-                'sessionID = ?' => $this->sSYSTEM->sSESSION_ID,
+                'sessionID = ?' => $this->session->get('sessionId'),
                 'ordernumber = ?' => $name
             )
         );
@@ -880,16 +798,19 @@ class sBasket
             return false;
         }
 
-        if ($this->sSYSTEM->sUSERGROUPDATA["minimumorder"] && $this->sSYSTEM->sUSERGROUPDATA["minimumordersurcharge"]) {
+        $minimumOrder = $this->sSYSTEM->sUSERGROUPDATA['minimumorder'];
+        $minimumOrderSurcharge = $this->sSYSTEM->sUSERGROUPDATA['minimumordersurcharge'];
+        if ($minimumOrder && $minimumOrderSurcharge) {
 
             $amount = $this->sGetAmount();
 
-            if ($amount["totalAmount"] < $this->sSYSTEM->sUSERGROUPDATA["minimumorder"]) {
+            if ($amount["totalAmount"] < $minimumOrder) {
 
-                if (!empty($this->sSYSTEM->sCONFIG["sTAXAUTOMODE"])) {
-                    $tax = $this->sSYSTEM->sMODULES['sBASKET']->getMaxTax();
+                $taxAutoMode = $this->config->get('sTAXAUTOMODE');
+                if (!empty($taxAutoMode)) {
+                    $tax = $this->getMaxTax();
                 } else {
-                    $tax = $this->sSYSTEM->sCONFIG['sDISCOUNTTAX'];
+                    $tax = $this->config->get('sDISCOUNTTAX');
                 }
 
                 if (empty($tax)) {
@@ -897,9 +818,9 @@ class sBasket
                 }
 
                 if ((!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])) {
-                    $discountNet = $this->sSYSTEM->sUSERGROUPDATA["minimumordersurcharge"];
+                    $discountNet = $minimumOrderSurcharge;
                 } else {
-                    $discountNet = round($this->sSYSTEM->sUSERGROUPDATA["minimumordersurcharge"] / (100+$tax) * 100,3);
+                    $discountNet = round($minimumOrderSurcharge / (100+$tax) * 100,3);
                 }
 
                 if ($this->sSYSTEM->sCurrency["factor"]) {
@@ -909,20 +830,20 @@ class sBasket
                     $factor = 1;
                 }
 
-                $surcharge = $this->sSYSTEM->sUSERGROUPDATA["minimumordersurcharge"] * $factor;
+                $surcharge = $minimumOrderSurcharge * $factor;
 
                 $this->db->insert(
                     's_order_basket',
                     $params = array(
-                        'sessionID'      => $this->sSYSTEM->sSESSION_ID,
-                        'articlename'    => $this->sSYSTEM->sCONFIG["sSURCHARGENAME"],
+                        'sessionID'      => $this->session->get('sessionId'),
+                        'articlename'    => $this->config->get('sSURCHARGENAME'),
                         'articleID'      => 0,
                         'ordernumber'    => $name,
                         'quantity'       => 1,
                         'price'          => $surcharge,
                         'netprice'       => $discountNet,
                         'tax_rate'       => $tax,
-                        'datum'          => new DateTime(),
+                        'datum'          => new Zend_Date(),
                         'modus'          => 4,
                         'currencyFactor' => $this->sSYSTEM->sCurrency["factor"]
                     )
@@ -938,23 +859,23 @@ class sBasket
      * @deprecated
      * @return void|false False on failure, null on success
      */
-    private function sInsertSurchargePercent()
+    public function sInsertSurchargePercent()
     {
-        if (!$this->sSYSTEM->_SESSION["sUserId"]) {
-            if (!$this->sSYSTEM->_SESSION["sPaymentID"]) {
+        if (!$this->session->get('sUserId')) {
+            if (!$this->session->get('sPaymentID')) {
                 return false;
             } else {
                 $paymentInfo = $this->db->fetchRow(
                     'SELECT debit_percent
                     FROM s_core_paymentmeans
                     WHERE id = ?',
-                    array($this->sSYSTEM->_SESSION["sPaymentID"])
+                    array($this->session->get('sPaymentID'))
                 ) ? : array();
             }
         } else {
             $userData =  $this->db->fetchRow(
                 'SELECT paymentID FROM s_user WHERE id = ?',
-                array(intval($this->sSYSTEM->_SESSION["sUserId"]))
+                array(intval($this->session->get('sUserId')))
             ) ? : array();
             $paymentInfo = $this->db->fetchRow(
                 'SELECT debit_percent FROM s_core_paymentmeans WHERE id = ?',
@@ -963,13 +884,13 @@ class sBasket
 
         }
 
-        $name = isset($this->sSYSTEM->sCONFIG['sPAYMENTSURCHARGENUMBER']) ? $this->sSYSTEM->sCONFIG['sPAYMENTSURCHARGENUMBER']: "PAYMENTSURCHARGE";
+        $name = $this->config->get('sPAYMENTSURCHARGENUMBER', 'PAYMENTSURCHARGE');
         // Depends on payment mean
         $percent = $paymentInfo["debit_percent"];
 
         $this->db->query(
             'DELETE FROM s_order_basket WHERE sessionID = ? AND ordernumber = ?',
-            array($this->sSYSTEM->sSESSION_ID,$name)
+            array($this->session->get('sessionId'), $name)
         );
 
         if (!$this->sCountBasket()) {
@@ -980,17 +901,18 @@ class sBasket
             $amount = $this->sGetAmount();
 
             if ($percent >= 0) {
-                $surchargename = $this->sSYSTEM->sCONFIG["sPAYMENTSURCHARGEADD"];
+                $surchargeName = $this->config->get('sPAYMENTSURCHARGEADD');
             } else {
-                $surchargename = $this->sSYSTEM->sCONFIG["sPAYMENTSURCHARGEDEV"];
+                $surchargeName = $this->config->get('sPAYMENTSURCHARGEDEV');
             }
 
             $surcharge = $amount["totalAmount"] / 100 * $percent;
 
-            if (!empty($this->sSYSTEM->sCONFIG["sTAXAUTOMODE"])) {
+            $taxAutoMode = $this->config->get('sTAXAUTOMODE');
+            if (!empty($taxAutoMode)) {
                 $tax = $this->getMaxTax();
             } else {
-                $tax = $this->sSYSTEM->sCONFIG['sDISCOUNTTAX'];
+                $tax = $this->config->get('sDISCOUNTTAX');
             }
 
             if (!$tax) {
@@ -1006,15 +928,15 @@ class sBasket
             $this->db->insert(
                 's_order_basket',
                 array(
-                    'sessionID'      => $this->sSYSTEM->sSESSION_ID,
-                    'articlename'    => $surchargename,
+                    'sessionID'      => $this->session->get('sessionId'),
+                    'articlename'    => $surchargeName,
                     'articleID'      => 0,
                     'ordernumber'    => $name,
                     'quantity'       => 1,
                     'price'          => $surcharge,
                     'netprice'       => $discountNet,
                     'tax_rate'       => $tax,
-                    'datum'          => new DateTime(),
+                    'datum'          => new Zend_Date(),
                     'modus'          => 4,
                     'currencyFactor' => $this->sSYSTEM->sCurrency['factor']
                 )
@@ -1033,7 +955,7 @@ class sBasket
     {
         return $this->db->fetchOne(
             'SELECT COUNT(*) FROM s_order_basket WHERE modus = 0 AND sessionID = ?',
-            array($this->sSYSTEM->sSESSION_ID)
+            array($this->session->get('sessionId'))
         );
     }
 
@@ -1046,18 +968,12 @@ class sBasket
      */
     public function sGetBasket()
     {
-        $discount = 0;
-        $totalAmount = 0;
-        $totalAmountWithTax = 0;
-        $totalAmountNet = 0;
-        $totalCount = 0;
-
         // Refresh basket prices
         $basketData = $this->db->fetchAll(
             'SELECT id, modus, quantity
             FROM s_order_basket
             WHERE sessionID = ?',
-            array($this->sSYSTEM->sSESSION_ID)
+            array($this->session->get('sessionId'))
         );
         foreach ($basketData as $basketContent) {
             if (empty($basketContent["modus"])) {
@@ -1069,25 +985,1105 @@ class sBasket
         $this->sInsertPremium();
 
         // Delete previous given discounts
-        if (empty($this->sSYSTEM->sCONFIG['sPREMIUMSHIPPIUNG'])) {
+        $premiumShipping = $this->config->get('sPREMIUMSHIPPIUNG');
+        if (empty($premiumShipping)) {
             $this->db->delete(
                 's_order_basket',
                 array(
-                    'sessionID = ?' => $this->sSYSTEM->sSESSION_ID,
+                    'sessionID = ?' => $this->session->get('sessionId'),
                     'modus = 3'
                 )
             );
         }
         // Check for surcharges
         $this->sInsertSurcharge();
+
         // Check for skonto / percent surcharges
         $this->sInsertSurchargePercent();
 
         // Calculate global basket discount
         $this->sInsertDiscount();
 
+        $getArticles = $this->loadBasketArticles();
+
+        if (empty($getArticles)) {
+            return array();
+        }
+
+        // Reformatting data, add additional data fields to array
+        list(
+            $getArticles,
+            $totalAmount,
+            $totalAmountWithTax,
+            $totalCount,
+            $totalAmountNet
+        ) = $this->getBasketArticles($getArticles);
+
+        if ($totalAmount < 0 || empty($totalCount)) {
+            return array();
+        }
+
+        $totalAmountNumeric = $totalAmount;
+        $totalAmount = $this->articleModule->sFormatPrice($totalAmount);
+
+        $totalAmountWithTaxNumeric = $totalAmountWithTax;
+        $totalAmountWithTax = $this->articleModule->sFormatPrice($totalAmountWithTax);
+
+        $totalAmountNetNumeric = $totalAmountNet;
+
+        $totalAmountNet = $this->articleModule->sFormatPrice($totalAmountNet);
+
+        $result = array(
+            "content" => $getArticles,
+            "Amount" => $totalAmount,
+            "AmountNet" => $totalAmountNet,
+            "Quantity" => $totalCount,
+            "AmountNumeric" => $totalAmountNumeric,
+            "AmountNetNumeric" => $totalAmountNetNumeric,
+            "AmountWithTax" => $totalAmountWithTax,
+            "AmountWithTaxNumeric" => $totalAmountWithTaxNumeric
+        );
+
+        $lastArticle = $this->session->get('sLastArticle');
+        if (!empty($lastArticle)) {
+            $result["sLastActiveArticle"] = array(
+                "id" => $lastArticle,
+                "link" => $this->config->get('sBASEFILE')
+                    . "?sViewport=detail&sDetails=" . $lastArticle
+            );
+        }
+
+        if (!empty($result["content"])) {
+            foreach ($result["content"] as $key => $value) {
+                if (!empty($value['amountWithTax'])) {
+                    $t = round(str_replace(",", ".", $value['amountWithTax']), 2);
+                } else {
+                    $t = str_replace(",", ".", $value["price"]);
+                    $t = floatval(round($t * $value["quantity"], 2));
+                }
+                if (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"]) {
+                    $p = floatval($this->articleModule->sRound(
+                        $this->articleModule->sRound(
+                            round($value["netprice"], 2) * $value["quantity"])
+                        )
+                    );
+                } else {
+                    $p = floatval($this->articleModule->sRound(
+                        $this->articleModule->sRound(
+                            $value["netprice"] * $value["quantity"])
+                        )
+                    );
+                }
+                $calcDifference = $this->articleModule->sFormatPrice($t - $p);
+                $result["content"][$key]["tax"] = $calcDifference;
+            }
+        }
+        $result = $this->eventManager->filter(
+            'Shopware_Modules_Basket_GetBasket_FilterResult',
+            $result,
+            array('subject' => $this)
+        );
+
+        return $result;
+    }
+
+    /**
+     * Add product to wishlist
+     * Used only in NoteController::addAction()
+     *
+     * @deprecated
+     * @param int $articleID
+     * @param string $articleName
+     * @param string $articleOrderNumber
+     * @throws Enlight_Exception If entry could not be added to database
+     * @return bool If operation was successful
+     */
+    public function sAddNote($articleID, $articleName, $articleOrderNumber)
+    {
+        $cookieData = $this->front->Request()->getCookie();
+        $uniqueId = $this->front->Request()->getCookie('sUniqueID');
+
+        if (!empty($cookieData) && empty($uniqueId)) {
+            $uniqueId = md5(uniqid(rand()));
+            $this->front->Response()->setCookie('sUniqueID', $uniqueId, Time()+(86400*360), '/');
+        }
+
+        // Check if this article is already noted
+        $checkForArticleId = $this->db->fetchOne(
+            'SELECT id FROM s_order_notes WHERE sUniqueID = ? AND ordernumber = ?',
+            array($uniqueId, $articleOrderNumber)
+        );
+
+        if (!$checkForArticleId) {
+            $queryNewPrice = $this->db->insert(
+                's_order_notes',
+                array(
+                    'sUniqueID'   => empty($uniqueId) ? $this->session->get('sessionId') : $uniqueId,
+                    'userID'      => $this->session->get('sUserId') ? : '0' ,
+                    'articlename' => $articleName,
+                    'articleID'   => $articleID,
+                    'ordernumber' => $articleOrderNumber,
+                    'datum'       => date("Y-m-d H:i:s")
+                )
+            );
+
+            if (!$queryNewPrice) {
+                throw new Enlight_Exception("sBasket##sAddNote##01 Error in SQL-query");
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Get all products current on wishlist
+     * Used in AccountController and NoteController
+     *
+     * @deprecated
+     * @return array Article notes
+     */
+    public function sGetNotes()
+    {
+        $responseCookies = $this->front->Response()->getCookies();
+        $uniqueId = $responseCookies['sUniqueID'] ? : $this->front->Request()->getCookie('sUniqueID');
+
+        $getArticles = $this->db->fetchAll(
+            'SELECT n.* FROM s_order_notes n, s_articles a
+            WHERE
+              (
+                sUniqueID=?
+                OR (userID!=0 AND userID=?)
+              )
+              AND a.id = n.articleID AND a.active = 1
+            ORDER BY n.datum DESC',
+            array(
+                empty($uniqueId) ? $this->session->get('sessionId') : $uniqueId,
+                $this->session->get('sUserId', 0)
+            )
+        );
+
+        if (empty($getArticles)) {
+            return $getArticles;
+        }
+
+        // Reformatting data, add additional data fields to array
+        foreach ($getArticles as $key => $value) {
+            // Article image
+            $getArticles[$key] = $this->articleModule->sGetPromotionById(
+                "fix",
+                0,
+                (int) $value["articleID"]
+            );
+            if (empty($getArticles[$key])) {
+                $this->sDeleteNote($value["id"]);
+                unset($getArticles[$key]);
+                continue;
+            }
+            $getArticles[$key]["articlename"] = $getArticles[$key]["articleName"];
+            $getArticles[$key]["image"] = $this->articleModule->getArticleListingCover(
+                $value["articleID"],
+                $this->config->get('forceArticleMainImageInListing')
+            );
+            // Links to details, basket
+            $getArticles[$key]["id"] = $value["id"];
+            $getArticles[$key]["linkBasket"] = $this->config->get('sBASEFILE')."?sViewport=basket&sAdd=".$value["ordernumber"];
+            $getArticles[$key]["linkDelete"] = $this->config->get('sBASEFILE')."?sViewport=note&sDelete=".$value["id"];
+            $getArticles[$key]["datum_add"] = $value["datum"];
+        }
+        return $getArticles;
+    }
+
+    /**
+     * Returns the number of wishlist entries
+     * Used in several locations
+     *
+     * @deprecated
+     * @return int
+     */
+    public function sCountNotes()
+    {
+        $responseCookies = $this->front->Response()->getCookies();
+        $uniqueId = $responseCookies['sUniqueID'] ? : $this->front->Request()->getCookie('sUniqueID');
+
+        $count = (int) $this->db->fetchOne('
+            SELECT COUNT(*) FROM s_order_notes n, s_articles a
+            WHERE (sUniqueID = ? OR (userID != 0 AND userID = ?))
+            AND a.id = n.articleID AND a.active = 1
+        ', array(
+            empty($uniqueId) ? $this->session->get('sessionId') : $uniqueId,
+            $this->session->get('sUserId', 0)
+        ));
+        return $count;
+    }
+
+    /**
+     * Delete a certain position from note
+     * Used internally in sBasket and in NoteController
+     *
+     * @deprecated
+     * @param int $id Id of the wishlist line
+     * @throws Enlight_Exception If entry could not be deleted from database
+     * @return bool if the operation was successful
+     */
+    public function sDeleteNote($id)
+    {
+        $id = (int) $id;
+
+        if (empty($id)) {
+            return false;
+        }
+
+        $delete = $this->db->query(
+            'DELETE FROM s_order_notes
+            WHERE (sUniqueID = ? OR (userID = ?  AND userID != 0))
+            AND id=?',
+            array(
+                $this->front->Request()->getCookie('sUniqueID'),
+                $this->session->get('sUserId'),
+                $id
+            )
+        );
+        if (!$delete) {
+            throw new Enlight_Exception('Basket sDeleteNote ##01 Could not delete item');
+        }
+        return true;
+    }
+
+    /**
+     * Update quantity / price of a certain cart position
+     * Used in several locations
+     *
+     * @deprecated
+     * @param int $id Basket entry id
+     * @param int $quantity Quantity
+     * @throws Enlight_Exception If database could not be updated
+     * @return boolean
+     */
+    public function sUpdateArticle($id, $quantity)
+    {
+        $quantity = intval($quantity);
+        $id = intval($id);
+
+        if (
+            $this->eventManager->notifyUntil(
+                'Shopware_Modules_Basket_UpdateArticle_Start',
+                array('subject' => $this, 'id' => $id, "quantity" => $quantity)
+            )
+        ) {
+            return false;
+        }
+
+        if (!$this->session->get('sessionId') || !$id) {
+            return false;
+        }
+
+        list($queryAdditionalInfo, $quantity) = $this->getAdditionalInfoForUpdateArticle($id, $quantity);
+        $queryNewPrice = $this->getPriceForUpdateArticle($id, $quantity, $queryAdditionalInfo);
+
+
+        if (empty($queryNewPrice["price"]) && empty($queryNewPrice["config"])) {
+            // If no price is set for default customer group, delete article from basket
+            $this->sDeleteArticle($id);
+            return false;
+        }
+
+        list($taxRate, $netPrice, $grossPrice) = $this->getTaxesForUpdateArticle($quantity, $queryNewPrice, $queryAdditionalInfo);
+
         $sql = "
-        SELECT s_order_basket.*, ad.packunit, ad.minpurchase,taxID,ad.instock AS `instock`,
+            UPDATE s_order_basket
+            SET quantity = ?, price = ?, netprice = ?, currencyFactor = ?, tax_rate = ?
+            WHERE id = ? AND sessionID = ? AND modus = 0
+            ";
+        $sql = $this->eventManager->filter(
+            'Shopware_Modules_Basket_UpdateArticle_FilterSqlDefault',
+            $sql, 
+            array(
+                'subject' => $this,
+                'id' => $id,
+                "quantity" => $quantity,
+                "price" => $grossPrice,
+                "netprice" => $netPrice,
+                "currencyFactor" => $this->sSYSTEM->sCurrency["factor"]
+            )
+        );
+
+        if ($taxRate === false) {
+            $taxRate = ($grossPrice == $netPrice) ? 0.00 : $queryNewPrice["tax"];
+        }
+
+        $update = $this->db->query(
+            $sql,
+            array(
+                $quantity,
+                $grossPrice,
+                $netPrice,
+                $this->sSYSTEM->sCurrency["factor"],
+                $taxRate,
+                $id,
+                $this->session->get('sessionId')
+            )
+        );
+
+        $this->sUpdateVoucher();
+
+        if (!$update || !$queryNewPrice) {
+            throw new Enlight_Exception("Basket Update ##01 Could not update quantity".$sql);
+        }
+    }
+
+    /**
+     * Check if the current basket has any ESD article
+     * Used in sAdmin and CheckoutController
+     * 
+     * @deprecated
+     * @return bool If an ESD article is present in the current basket
+     */
+    public function sCheckForESD()
+    {
+        $getArticlesId = $this->db->fetchOne(
+            'SELECT id
+            FROM s_order_basket
+            WHERE sessionID = ?
+            AND esdarticle = 1
+            LIMIT 1;',
+            array($this->session->get('sessionId'))
+        );
+
+        return (bool) $getArticlesId;
+    }
+
+    /**
+     * Truncate cart
+     * Used on sAdmin tests and SwagBonusSystem
+     * See @ticket PT-1845
+     * 
+     * @deprecated
+     * @return void|false False on no session, null otherwise
+     */
+    public function sDeleteBasket()
+    {
+        $sessionId = $this->session->get('sessionId');
+        if (empty($sessionId)) {
+            return false;
+        }
+
+        $this->db->delete(
+            's_order_basket',
+            array('sessionID = ?' >= $sessionId)
+        );
+    }
+
+
+    /**
+     * Delete a certain position from the basket
+     * Used in multiple locations
+     *
+     * @deprecated
+     * @param int $id Id of the basket line
+     * @throws Enlight_Exception If entry could not be deleted from the database
+     * @return null
+     */
+    public function sDeleteArticle($id)
+    {
+        $id = (int) $id;
+        $modus = $this->db->fetchOne(
+            'SELECT modus FROM s_order_basket WHERE id = ?',
+            array($id)
+        );
+
+        if ($id && $id != "voucher") {
+            $delete = $this->db->delete(
+                's_order_basket',
+                array(
+                    'sessionID = ?' => $this->session->get('sessionId'),
+                    'id = ?' => $id
+                )
+            );
+            if (!$delete) {
+                throw new Enlight_Exception("Basket Delete ##01 Could not delete item ($id)");
+            }
+            if (empty($modus)) {
+                $this->sUpdateVoucher();
+            }
+        }
+    }
+
+    /**
+     * Add product to cart
+     * Used in multiple locations
+     *
+     * @deprecated
+     * @param int $id Order number (s_articles_details.ordernumber)
+     * @param int $quantity Amount
+     * @throws Enlight_Exception If no price could be determined, or a database error occurs
+     * @return int|false Id of the inserted basket entry, or false on failure
+     */
+    public function sAddArticle($id, $quantity = 1)
+    {
+        $sessionId = $this->session->get('sessionId');
+        if ($this->session->get('Bot') || empty($sessionId)) {
+            return false;
+        }
+
+        $quantity = (empty($quantity) || !is_numeric($quantity)) ? 1 : (int) $quantity;
+        if ($quantity <= 0) {
+            $quantity = 1;
+        }
+
+        if (
+            $this->eventManager->notifyUntil(
+                'Shopware_Modules_Basket_AddArticle_Start',
+                array(
+                    'subject' => $this,
+                    'id' => $id,
+                    "quantity" => $quantity
+                )
+            )
+        ) {
+            return false;
+        }
+
+        $article = $this->getArticleForAddArticle($id);
+
+        if (!$article) {
+            return false;
+        }
+
+        // Check if article is already in basket
+        $chkBasketForArticle = $this->db->fetchRow(
+            'SELECT id, quantity
+            FROM s_order_basket
+            WHERE articleID = ?
+            AND sessionID = ?
+            AND ordernumber = ?',
+            array(
+                $article["articleID"],
+                $sessionId,
+                $article["ordernumber"]
+            )
+        ) ? : array();
+
+        // Shopware 3.5.0 / sth / laststock - instock check
+        if (!empty($chkBasketForArticle["id"])) {
+            if (
+                $article["laststock"] == true
+                && $article["instock"] < ($chkBasketForArticle["quantity"] + $quantity)
+            ) {
+                $quantity -= $chkBasketForArticle["quantity"];
+            }
+        } else {
+            if ($article["laststock"] == true && $article["instock"] <= $quantity) {
+                $quantity = $article["instock"];
+                if ($quantity <= 0) {
+                    return;
+                }
+            }
+        }
+
+        if ($chkBasketForArticle) {
+            // Article is already in basket, update quantity
+            $quantity += $chkBasketForArticle["quantity"];
+
+            $this->sUpdateArticle($chkBasketForArticle["id"], $quantity);
+            return $chkBasketForArticle["id"];
+        }
+
+        $price = $this->getPriceForAddArticle($article);
+
+        // For variants, extend the article name
+        if ($article["additionaltext"]) {
+            $article["articleName"] .= " " . $article["additionaltext"];
+        }
+
+        if (!$article["shippingfree"]) {
+            $article["shippingfree"] = "0";
+        }
+
+        // Check if article is an esd-article
+        // - add flag to basket
+        $getEsd = $this->db->fetchOne(
+            'SELECT s_articles_esd.id AS id, serials
+            FROM s_articles_esd, s_articles_details
+            WHERE s_articles_esd.articleID = ?
+            AND s_articles_esd.articledetailsID = s_articles_details.id
+            AND s_articles_details.ordernumber = ?',
+            array($article["articleID"], $article["ordernumber"])
+        );
+
+        $sEsd = $getEsd ? '1' : '0';
+
+        $quantity = (int) $quantity;
+        $sql = "
+            INSERT INTO s_order_basket (id, sessionID, userID, articlename, articleID,
+                ordernumber, shippingfree, quantity, price, netprice,
+                datum, esdarticle, partnerID, config)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
+        ";
+
+        $params = array(
+            '',
+            (string) $sessionId,
+            (string) $this->session->get('sUserId'),
+            $article["articleName"],
+            $article["articleID"],
+            (string) $article["ordernumber"],
+            $article["shippingfree"],
+            $quantity,
+            $price["price"],
+            $price["netprice"],
+            date("Y-m-d H:i:s"),
+            $sEsd,
+            (string) $this->session->get('sPartner'),
+            ''
+        );
+
+        $sql = $this->eventManager->filter(
+            'Shopware_Modules_Basket_AddArticle_FilterSql',
+            $sql,
+            array(
+                'subject' => $this,
+                'article' => $article,
+                'price' => $price,
+                'esd' => $sEsd,
+                'quantity' => $quantity,
+                'partner' => $this->session->get('sPartner')
+            )
+        );
+
+        $result = $this->db->query($sql, $params);
+
+        if (!$result) {
+            throw new Enlight_Exception("BASKET-INSERT #02 SQL-Error".$sql);
+        }
+        $insertId = $this->db->lastInsertId();
+
+        $this->db->insert(
+            's_order_basket_attributes',
+            array(
+                'basketID' => $insertId,
+                'attribute1' => ''
+            )
+        );
+
+        $this->sUpdateArticle($insertId, $quantity);
+
+        return $insertId;
+    }
+
+    /**
+     * Refresh basket after login / currency change
+     * Used in multiple locations
+     *
+     * @deprecated
+     * @return null
+     */
+    public function sRefreshBasket()
+    {
+        // Update basket data
+        $this->adminModule->sGetUserData();
+        $this->sGetBasket();
+        $this->adminModule->sGetPremiumShippingcosts();
+
+        // Update basket data in session
+        $this->session->offsetSet('sBasketCurrency', Shopware()->Shop()->getCurrency()->getId());
+        $this->session->offsetSet('sBasketQuantity', $this->sCountBasket());
+        $amount = $this->sGetAmount();
+        $this->session->offsetSet('sBasketAmount', empty($amount) ? 0 : array_shift($amount));
+    }
+
+    /**
+     * Check if voucher has already been cashed
+     *
+     * @param int $userId The current user id
+     * @param array $voucherDetails The voucher details
+     * @return array Messages for detected errors
+     */
+    private function filterUsedVoucher($userId, $voucherDetails)
+    {
+        $sErrorMessages = array();
+        if ($userId && $voucherDetails["id"]) {
+
+            $queryVoucher = $this->db->fetchAll(
+                'SELECT s_order_details.id AS id
+                    FROM s_order, s_order_details
+                    WHERE s_order.userID = ?
+                    AND s_order_details.orderID = s_order.id
+                    AND s_order_details.articleordernumber = ?
+                    AND s_order_details.ordernumber != \'0\'',
+                array(
+                    $userId,
+                    $voucherDetails["ordercode"]
+                )
+            );
+
+            if (count($queryVoucher) >= $voucherDetails["numorder"] && !$voucherDetails["modus"]) {
+                $sErrorMessages[] = $this->snippetManager
+                    ->getNamespace('frontend/basket/internalMessages')->get(
+                        'VoucherFailureAlreadyUsed',
+                        'This voucher was used in an previous order'
+                    );
+                return $sErrorMessages;
+            }
+        }
+        return $sErrorMessages;
+    }
+
+    /**
+     * Filter voucher by subshop
+     *
+     * @param array $voucherDetails
+     * @return array Messages for detected errors
+     */
+    private function filterSubShopVoucher($voucherDetails)
+    {
+        $sErrorMessages = array();
+
+        if (!empty($voucherDetails["subshopID"])) {
+            if ($this->sSYSTEM->sSubShop["id"] != $voucherDetails["subshopID"]) {
+                $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
+                    'VoucherFailureNotFound',
+                    'Voucher could not be found or is not valid anymore'
+                );
+            }
+        }
+
+        return $sErrorMessages;
+    }
+
+    /**
+     * Filter voucher by customer group
+     *
+     * @param int $userId The current user id
+     * @param array $voucherDetails The voucher details
+     * @return array Messages for detected errors
+     */
+    private function filterCustomerGroupVoucher($userId, $voucherDetails)
+    {
+        $sErrorMessages = array();
+
+        if (!empty($voucherDetails["customergroup"])) {
+            if (!empty($userId)) {
+                // Get customer group
+                $queryCustomerGroup = $this->db->fetchRow(
+                    'SELECT s_core_customergroups.id, customergroup
+                    FROM s_user, s_core_customergroups
+                    WHERE s_user.id = ?
+                    AND s_user.customergroup = s_core_customergroups.groupkey',
+                    array($userId)
+                );
+            }
+            $customerGroup = $queryCustomerGroup["customergroup"];
+            if ($customerGroup != $voucherDetails["customergroup"]
+                && $voucherDetails["customergroup"] != $queryCustomerGroup["id"]
+                && $voucherDetails["customergroup"] != $this->sSYSTEM->sUSERGROUPDATA["id"]
+            ) {
+                $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
+                    'VoucherFailureCustomerGroup',
+                    'This voucher is not available for your customer group'
+                );
+            }
+        }
+
+        return $sErrorMessages;
+    }
+
+    /**
+     * Filter voucher by article id
+     *
+     * @param array $voucherDetails The voucher details
+     * @return array Array of arrays, containing messages for detected errors and restricted articles
+     */
+    private function filterArticleVoucher($voucherDetails)
+    {
+        $sErrorMessages = array();
+
+        if (!empty($voucherDetails["restrictarticles"]) && strlen($voucherDetails["restrictarticles"]) > 5) {
+            $restrictedArticles = explode(";", $voucherDetails["restrictarticles"]);
+            if (count($restrictedArticles) == 0) {
+                $restrictedArticles[] = $voucherDetails["restrictarticles"];
+            }
+
+            $foundMatchingArticle = $this->db->fetchOne($this->db
+                    ->select()
+                    ->from('s_order_basket', 'id')
+                    ->where('sessionID = ?', $this->session->get('sessionId'))
+                    ->where('modus = 0')
+                    ->where('ordernumber IN (?)', $restrictedArticles)
+            );
+
+            if (empty($foundMatchingArticle)) {
+                $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
+                    'VoucherFailureProducts',
+                    'This voucher is only available in combination with certain products'
+                );
+            }
+        }
+
+        return array($sErrorMessages, $restrictedArticles);
+    }
+
+    /**
+     * Filter voucher by article id
+     *
+     * @param array $voucherDetails The voucher details
+     * @return array Messages for detected errors
+     */
+    private function filterSupplierVoucher($voucherDetails)
+    {
+        $sErrorMessages = array();
+
+        $allowedSupplierId = $voucherDetails["bindtosupplier"];
+        if ($allowedSupplierId) {
+
+            $allowedBasketEntriesBySupplier = $this->db->fetchRow(
+                'SELECT s_order_basket.id
+                FROM s_order_basket, s_articles, s_articles_supplier
+                WHERE s_order_basket.articleID = s_articles.id
+                AND s_articles.supplierID = ?
+                AND s_order_basket.sessionID = ?',
+                array($allowedSupplierId, $this->session->get('sessionId'))
+            );
+
+            if (!$allowedBasketEntriesBySupplier) {
+                $allowedSupplierName = $this->db->fetchRow(
+                    'SELECT name FROM s_articles_supplier WHERE id = ?',
+                    array($allowedSupplierId)
+                );
+
+                $sErrorMessages[] = str_replace(
+                    "{sSupplier}",
+                    $allowedSupplierName["name"],
+                    $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
+                        'VoucherFailureSupplier',
+                        'This voucher is only available for products from {sSupplier}'
+                    )
+                );
+            }
+        }
+        return $sErrorMessages;
+    }
+
+    /**
+     * @param $voucherDetails
+     * @return array
+     */
+    private function calculateVoucherValues($voucherDetails)
+    {
+        $taxRate = 0;
+        if (
+            (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])
+            || $voucherDetails["taxconfig"] == "none"
+        ) {
+            // if net customer group - calculate without tax
+            $tax = $voucherDetails["value"] * -1;
+            if ($voucherDetails["taxconfig"] == "default" || empty($voucherDetails["taxconfig"])) {
+                $taxRate = $this->config->get('sVOUCHERTAX');
+            } elseif ($voucherDetails["taxconfig"] == "auto") {
+                $taxRate = $this->getMaxTax();
+
+            } elseif (intval($voucherDetails["taxconfig"])) {
+                $temporaryTax = $voucherDetails["taxconfig"];
+                $getTaxRate = $this->db->fetchOne(
+                    'SELECT tax FROM s_core_tax WHERE id = ?',
+                    array($temporaryTax)
+                );
+                $taxRate = $getTaxRate;
+            }
+        } else {
+            if ($voucherDetails["taxconfig"] == "default" || empty($voucherDetails["taxconfig"])) {
+                $tax = round($voucherDetails["value"] / (100 + $this->config->get('sVOUCHERTAX')) * 100, 3) * -1;
+                $taxRate = $this->config->get('sVOUCHERTAX');
+                // Pre 3.5.4 behaviour
+            } elseif ($voucherDetails["taxconfig"] == "auto") {
+                // Check max. used tax-rate from basket
+                $tax = $this->getMaxTax();
+                $taxRate = $tax;
+                $tax = round($voucherDetails["value"] / (100 + $tax) * 100, 3) * -1;
+            } elseif (intval($voucherDetails["taxconfig"])) {
+                // Fix defined tax
+                $temporaryTax = $voucherDetails["taxconfig"];
+                $getTaxRate = $this->db->fetchOne(
+                    'SELECT tax FROM s_core_tax WHERE id = ?',
+                    array($temporaryTax)
+                );
+                $taxRate = $getTaxRate;
+                $tax = round($voucherDetails["value"] / (100 + (intval($getTaxRate))) * 100, 3) * -1;
+            } else {
+                // No tax
+                $tax = $voucherDetails["value"] * -1;
+            }
+        }
+
+        $voucherDetails["value"] = $voucherDetails["value"] * -1;
+
+        if ($voucherDetails["shippingfree"]) {
+            $freeShipping = "1";
+        } else {
+            $freeShipping = "0";
+        }
+        return array($taxRate, $tax, $voucherDetails, $freeShipping);
+    }
+
+    /**
+     * Loads relevant associated data for the provided articles
+     * Used in sGetBasket
+     *
+     * @param $getArticles
+     * @return array
+     */
+    private function getBasketArticles($getArticles)
+    {
+        $totalAmount = 0;
+        $discount = 0;
+        $totalAmountWithTax = 0;
+        $totalAmountNet = 0;
+        $totalCount = 0;
+
+        foreach ($getArticles as $key => $value) {
+            $getArticles[$key] = $this->eventManager->filter(
+                'Shopware_Modules_Basket_GetBasket_FilterItemStart',
+                $getArticles[$key],
+                array('subject' => $this, 'getArticles' => $getArticles)
+            );
+
+            $getArticles[$key]["shippinginfo"] = (empty($getArticles[$key]["modus"]));
+
+            if (
+                !empty($getArticles[$key]["releasedate"])
+                && strtotime($getArticles[$key]["releasedate"]) <= time()
+            ) {
+                $getArticles[$key]["sReleaseDate"] = $getArticles[$key]["releasedate"] = "";
+            }
+            $getArticles[$key]["esd"] = $getArticles[$key]["esdarticle"];
+
+            if (empty($getArticles[$key]["minpurchase"])) {
+                $getArticles[$key]["minpurchase"] = 1;
+            }
+            if (empty($getArticles[$key]["purchasesteps"])) {
+                $getArticles[$key]["purchasesteps"] = 1;
+            }
+            if ($getArticles[$key]["purchasesteps"] <= 0) {
+                unset($getArticles[$key]["purchasesteps"]);
+            }
+
+            if (empty($getArticles[$key]["maxpurchase"])) {
+                $getArticles[$key]["maxpurchase"] = $this->config->get('sMAXPURCHASE');
+            }
+            if (
+                !empty($getArticles[$key]["laststock"])
+                && $getArticles[$key]["instock"] < $getArticles[$key]["maxpurchase"]
+            ) {
+                $getArticles[$key]["maxpurchase"] = $getArticles[$key]["instock"];
+            }
+
+            // Get additional basket meta data for each product
+            if ($getArticles[$key]["modus"] == 0) {
+                $tempArticle = $this->articleModule->sGetProductByOrdernumber($value['ordernumber']);
+
+                if (empty($tempArticle)) {
+                    $getArticles[$key]["additional_details"] = array("properties" => array());
+                } else {
+                    $getArticles[$key]['additional_details'] = $tempArticle;
+                    $properties = '';
+                    foreach ($getArticles[$key]['additional_details']['sProperties'] as $property) {
+                        $properties .= $property['name'] . ':&nbsp;' . $property['value'] . ',&nbsp;';
+                    }
+                    $getArticles[$key]['additional_details']['properties'] = substr($properties, 0, -7);
+                }
+            }
+
+            // If unitID is set, query it
+            if (!empty($getArticles[$key]["unitID"])) {
+                $getUnitData = $this->articleModule->sGetUnit($getArticles[$key]["unitID"]);
+                $getArticles[$key]["itemUnit"] = $getUnitData["description"];
+            } else {
+                unset($getArticles[$key]["unitID"]);
+            }
+
+            if (!empty($getArticles[$key]["packunit"])) {
+                $getPackUnit = $this->articleModule->sGetTranslation(
+                    array(),
+                    $getArticles[$key]["articleID"],
+                    "article",
+                    $this->sSYSTEM->sLanguage
+                );
+                if (!empty($getPackUnit["packunit"])) {
+                    $getArticles[$key]["packunit"] = $getPackUnit["packunit"];
+                }
+            }
+
+            $quantity = $getArticles[$key]["quantity"];
+            $price = $getArticles[$key]["price"];
+            $netprice = $getArticles[$key]["netprice"];
+
+            if ($value["modus"] == 2) {
+                $ticketResult = $this->db->fetchRow(
+                    'SELECT vouchercode,taxconfig
+                    FROM s_emarketing_vouchers
+                    WHERE ordercode = ?',
+                    array($getArticles[$key]["ordernumber"])
+                ) ? : array();
+
+                if (!$ticketResult["vouchercode"]) {
+                    // Query Voucher-Code
+                    $queryVoucher = $this->db->fetchRow(
+                        'SELECT code
+                        FROM s_emarketing_voucher_codes
+                        WHERE id = ? AND cashed != 1',
+                        array($getArticles[$key]["articleID"])
+                    ) ? : array();
+                    $ticketResult["vouchercode"] = $queryVoucher["code"];
+                }
+                $this->sDeleteArticle($getArticles[$key]["id"]);
+
+                //if voucher was deleted, do not restore
+                if ($this->front->Request()->getQuery('sDelete') != 'voucher') {
+                    $this->sAddVoucher($ticketResult["vouchercode"]);
+
+                }
+            }
+
+            $tax = $value["tax_rate"];
+
+            // If shop is in net mode, we have to consider
+            // the tax separately
+            if (
+                ($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA["tax"])
+                || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])
+            ) {
+                if (empty($value["modus"])) {
+
+                    $priceWithTax = round($netprice, 2) / 100 * (100 + $tax);
+
+                    $getArticles[$key]["amountWithTax"] = $quantity * $priceWithTax;
+                    // If basket comprised any discount, calculate brutto-value for the discount
+                    if ($this->sSYSTEM->sUSERGROUPDATA["basketdiscount"] && $this->sCheckForDiscount()) {
+                        $discount += ($getArticles[$key]["amountWithTax"] / 100 * $this->sSYSTEM->sUSERGROUPDATA["basketdiscount"]);
+                    }
+
+                } elseif ($value["modus"] == 3) {
+                    $getArticles[$key]["amountWithTax"] = round(1 * (round($price, 2) / 100 * (100 + $tax)), 2);
+                    // Basket discount
+                } elseif ($value["modus"] == 2) {
+                    $getArticles[$key]["amountWithTax"] = round(1 * (round($price, 2) / 100 * (100 + $tax)), 2);
+
+                    if ($this->sSYSTEM->sUSERGROUPDATA["basketdiscount"] && $this->sCheckForDiscount()) {
+                        $discount += ($getArticles[$key]["amountWithTax"] / 100 * ($this->sSYSTEM->sUSERGROUPDATA["basketdiscount"]));
+                    }
+                } elseif ($value["modus"] == 4 || $value["modus"] == 10) {
+                    $getArticles[$key]["amountWithTax"] = round(1 * ($price / 100 * (100 + $tax)), 2);
+                    if ($this->sSYSTEM->sUSERGROUPDATA["basketdiscount"] && $this->sCheckForDiscount()) {
+                        $discount += ($getArticles[$key]["amountWithTax"] / 100 * $this->sSYSTEM->sUSERGROUPDATA["basketdiscount"]);
+                    }
+                }
+            }
+
+            $getArticles[$key]["amount"] = $quantity * round($price, 2);
+
+            //reset purchaseunit and save the original value in purchaseunitTemp
+            if ($getArticles[$key]["purchaseunit"] > 0) {
+                $getArticles[$key]["purchaseunitTemp"] = $getArticles[$key]["purchaseunit"];
+                $getArticles[$key]["purchaseunit"] = 1;
+            }
+
+            // If price per unit is not referring to 1, calculate base-price
+            // Choose 1000, quantity refers to 500, calculate price / 1000 * 500 as reference
+            if ($getArticles[$key]["purchaseunit"] > 0) {
+                $getArticles[$key]["itemInfo"] = $getArticles[$key]["purchaseunit"] . " {$getUnitData["description"]} / " . $this->articleModule->sFormatPrice($getArticles[$key]["amount"] / $quantity * $getArticles[$key]["purchaseunit"]);
+                $getArticles[$key]["itemInfoArray"]["reference"] = $getArticles[$key]["purchaseunit"];
+                $getArticles[$key]["itemInfoArray"]["unit"] = $getUnitData;
+                $getArticles[$key]["itemInfoArray"]["price"] = $this->articleModule->sFormatPrice($getArticles[$key]["amount"] / $quantity * $getArticles[$key]["purchaseunit"]);
+            }
+
+
+            if ($value["modus"] == 2) {
+                // Gutscheine
+                if (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"]) {
+                    $getArticles[$key]["amountnet"] = $quantity * round($price, 2);
+                } else {
+                    $getArticles[$key]["amountnet"] = $quantity * round($netprice, 2);
+                }
+
+            } else {
+                if (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"]) {
+                    $getArticles[$key]["amountnet"] = $quantity * round($netprice, 2);
+                } else {
+                    $getArticles[$key]["amountnet"] = $quantity * $netprice;
+                }
+            }
+
+            $totalAmount += round($getArticles[$key]["amount"], 2);
+            // Needed if shop is in net-mode
+            $totalAmountWithTax += round($getArticles[$key]["amountWithTax"], 2);
+            // Ignore vouchers and premiums by counting articles
+            if (!$getArticles[$key]["modus"]) {
+                $totalCount++;
+            }
+
+            $totalAmountNet += round($getArticles[$key]["amountnet"], 2);
+
+            $getArticles[$key]["priceNumeric"] = $getArticles[$key]["price"];
+            $getArticles[$key]["price"] = $this->articleModule
+                ->sFormatPrice($getArticles[$key]["price"]);
+            $getArticles[$key]["amount"] = $this->articleModule
+                ->sFormatPrice($getArticles[$key]["amount"]);
+            $getArticles[$key]["amountnet"] = $this->articleModule
+                ->sFormatPrice($getArticles[$key]["amountnet"]);
+
+            if (!empty($getArticles[$key]["purchaseunitTemp"])) {
+                $getArticles[$key]["purchaseunit"] = $getArticles[$key]["purchaseunitTemp"];
+                $getArticles[$key]["itemInfo"] = $getArticles[$key]["purchaseunit"] . " {$getUnitData["description"]} / " . $this->articleModule->sFormatPrice(str_replace(",", ".", $getArticles[$key]["amount"]) / $quantity);
+            }
+
+            if (empty($value["modus"])) {
+                // Article-Image
+                if (!empty($getArticles[$key]["ob_attr1"])) {
+                    $getArticles[$key]["image"] = $this->articleModule
+                        ->sGetConfiguratorImage(
+                            $this->articleModule->sGetArticlePictures(
+                                $getArticles[$key]["articleID"],
+                                false,
+                                $this->config->get('sTHUMBBASKET'),
+                                false,
+                                true
+                            ),
+                            $getArticles[$key]["ob_attr1"]
+                        );
+                } else {
+                    $getArticles[$key]["image"] = $this->articleModule
+                        ->sGetArticlePictures(
+                            $getArticles[$key]["articleID"],
+                            true,
+                            $this->config->get('sTHUMBBASKET'),
+                            $getArticles[$key]["ordernumber"]
+                        );
+                }
+            }
+            // Links to details, basket
+            $getArticles[$key]["linkDetails"] = $this->config->get('sBASEFILE') . "?sViewport=detail&sArticle=" . $getArticles[$key]["articleID"];
+            if ($value["modus"] == 2) {
+                $getArticles[$key]["linkDelete"] = $this->config->get('sBASEFILE') . "?sViewport=basket&sDelete=voucher";
+            } else {
+                $getArticles[$key]["linkDelete"] = $this->config->get('sBASEFILE') . "?sViewport=basket&sDelete=" . $getArticles[$key]["id"];
+            }
+
+            $getArticles[$key]["linkNote"] = $this->config->get('sBASEFILE') . "?sViewport=note&sAdd=" . $getArticles[$key]["ordernumber"];
+
+            $getArticles[$key] = $this->eventManager->filter(
+                'Shopware_Modules_Basket_GetBasket_FilterItemEnd',
+                $getArticles[$key],
+                array('subject' => $this, 'getArticles' => $getArticles)
+            );
+        }
+        return array($getArticles, $totalAmount, $totalAmountWithTax, $totalCount, $totalAmountNet);
+    }
+
+    /**
+     * @return array
+     */
+    private function loadBasketArticles()
+    {
+        $sql = "
+        SELECT s_order_basket.*, ad.packunit, ad.minpurchase, taxID, ad.instock AS instock,
                 suppliernumber,
                 ad.maxpurchase,
                 ad.purchasesteps,
@@ -1111,533 +2107,26 @@ class sBasket
         WHERE sessionID=?
         ORDER BY id ASC, datum DESC
         ";
-        $sql = Enlight()->Events()->filter(
+        $sql = $this->eventManager->filter(
             'Shopware_Modules_Basket_GetBasket_FilterSQL',
             $sql,
             array('subject' => $this)
         );
 
-        $getArticles = $this->db->fetchAll($sql, array($this->sSYSTEM->sSESSION_ID));
-        $countItems = count($getArticles);
+        $getArticles = $this->db->fetchAll($sql, array($this->session->get('sessionId')));
 
-        if (!empty($countItems)) {
-            // Reformatting data, add additional data fields to array
-            foreach ($getArticles as $key => $value) {
-                $getArticles[$key] = Enlight()->Events()->filter(
-                    'Shopware_Modules_Basket_GetBasket_FilterItemStart',
-                    $getArticles[$key],
-                    array('subject' => $this,'getArticles' => $getArticles)
-                );
-
-                $getArticles[$key]["shippinginfo"] = (empty($getArticles[$key]["modus"]));
-
-                if (
-                    !empty($getArticles[$key]["releasedate"])
-                    && strtotime($getArticles[$key]["releasedate"]) <= time()
-                ) {
-                    $getArticles[$key]["sReleaseDate"] = $getArticles[$key]["releasedate"] = "";
-                }
-                $getArticles[$key]["esd"] = $getArticles[$key]["esdarticle"];
-
-                if (empty($getArticles[$key]["minpurchase"])) {
-                    $getArticles[$key]["minpurchase"] = 1;
-                }
-                if (empty($getArticles[$key]["purchasesteps"])) {
-                    $getArticles[$key]["purchasesteps"] = 1;
-                }
-                if ($getArticles[$key]["purchasesteps"]<=0) {
-                    unset($getArticles[$key]["purchasesteps"]);
-                }
-
-                if (empty($getArticles[$key]["maxpurchase"])) {
-                    $getArticles[$key]["maxpurchase"] = $this->sSYSTEM->sCONFIG['sMAXPURCHASE'];
-                }
-                if(
-                    !empty($getArticles[$key]["laststock"])
-                    && $getArticles[$key]["instock"] < $getArticles[$key]["maxpurchase"]
-                ) {
-                    $getArticles[$key]["maxpurchase"] = $getArticles[$key]["instock"];
-                }
-
-                // Get additional basket meta data for each product
-                if ($getArticles[$key]["modus"] == 0) {
-                    /**
-                     {$sBasketItem.additional_details.properties} --> Eigenschaften/Filter
-                     {$sBasketItem.additional_details.description} --> Artikel Kurzbeschreibung
-                     {$sBasketItem.additional_details.description_long} --> Artikel Langbeschreibung
-                     {$sBasketItem.additional_details.attrX} --> Artikel Attribut (X ist zu ersetzen durch das gewünschte Attribut 1-20)
-                     {$sBasketItem.additional_details.purchaseunit} --> Inhalt (Grundpreisberechnung)
-                     {$sBasketItem.additional_details.sUnit.unit} --> Einheit (Grundpreisberechnung)
-                     {$sBasketItem.additional_details.referenceprice|currency} --> Grundpreis
-                     * SELECT a.description, a.description_long, at.*, ad.purchaseunit,
-                     */
-                    $tempArticle = Shopware()->Modules()->Articles()->sGetProductByOrdernumber($value['ordernumber']);
-
-                    if (empty($tempArticle)) {
-                       $getArticles[$key]["additional_details"] = array("properties"=>array());
-                    } else {
-                       $getArticles[$key]['additional_details'] = $tempArticle;
-                       $properties = '';
-                       foreach ($getArticles[$key]['additional_details']['sProperties'] as $property) {
-                           $properties .= $property['name'] . ':&nbsp;' . $property['value'] . ',&nbsp;';
-                       }
-                       $getArticles[$key]['additional_details']['properties'] = substr($properties, 0, -7);
-                    }
-                }
-
-                // If unitID is set, query it
-                if (!empty($getArticles[$key]["unitID"])) {
-                    $getUnitData = $this->sSYSTEM->sMODULES['sArticles']->sGetUnit($getArticles[$key]["unitID"]);
-                    $getArticles[$key]["itemUnit"] = $getUnitData["description"];
-                } else {
-                    unset($getArticles[$key]["unitID"]);
-                }
-
-                if (!empty($getArticles[$key]["packunit"])) {
-                    $getPackUnit = $this->sSYSTEM->sMODULES['sArticles']->sGetTranslation(
-                        array(),
-                        $getArticles[$key]["articleID"],
-                        "article",
-                        $this->sSYSTEM->sLanguage
-                    );
-                    if (!empty($getPackUnit["packunit"])) {
-                        $getArticles[$key]["packunit"] = $getPackUnit["packunit"];
-                    }
-                }
-
-                $quantity = $getArticles[$key]["quantity"];
-                $price = $getArticles[$key]["price"];
-                $netprice = $getArticles[$key]["netprice"];
-
-                if ($value["modus"] == 2) {
-                    $ticketResult = $this->db->fetchRow(
-                        'SELECT vouchercode,taxconfig
-                        FROM s_emarketing_vouchers
-                        WHERE ordercode = ?',
-                        array($getArticles[$key]["ordernumber"])
-                    ) ? : array();
-
-                    if (!$ticketResult["vouchercode"]) {
-                        // Query Voucher-Code
-                        $queryVoucher = $this->db->fetchRow("
-                            SELECT code FROM s_emarketing_voucher_codes
-                            WHERE id = {$getArticles[$key]["articleID"]}
-                            AND cashed != 1
-                            ") ? : array();
-                        $ticketResult["vouchercode"] = $queryVoucher["code"];
-                    }
-                    $this->sDeleteArticle($getArticles[$key]["id"]);
-
-                    //if voucher was deleted, do not restore
-                    if ($this->sSYSTEM->_GET['sDelete'] != 'voucher') {
-                        $this->sAddVoucher($ticketResult["vouchercode"]);
-
-                    }
-                }
-
-                $tax = $value["tax_rate"];
-
-                // If shop is in net mode, we have to consider
-                // the tax separately
-                if (
-                    ($this->sSYSTEM->sCONFIG['sARTICLESOUTPUTNETTO'] && !$this->sSYSTEM->sUSERGROUPDATA["tax"])
-                    || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])
-                ) {
-                    if (empty($value["modus"])) {
-
-                        $priceWithTax = round($netprice, 2) / 100 * (100+$tax);
-
-                        $getArticles[$key]["amountWithTax"] = $quantity * $priceWithTax;
-                        // If basket comprised any discount, calculate brutto-value for the discount
-                        if ($this->sSYSTEM->sUSERGROUPDATA["basketdiscount"] && $this->sCheckForDiscount()) {
-                            $discount += ($getArticles[$key]["amountWithTax"]/100*$this->sSYSTEM->sUSERGROUPDATA["basketdiscount"]);
-                        }
-
-                    } elseif ($value["modus"] == 3) {
-                        $getArticles[$key]["amountWithTax"] = round(1 * (round($price,2) / 100 * (100+$tax)),2);
-                        // Basket discount
-                    } elseif ($value["modus"] == 2) {
-                        $getArticles[$key]["amountWithTax"] = round(1 * (round($price,2) / 100 * (100+$tax)),2);
-
-                        if ($this->sSYSTEM->sUSERGROUPDATA["basketdiscount"] && $this->sCheckForDiscount()) {
-                            $discount += ($getArticles[$key]["amountWithTax"]/100*($this->sSYSTEM->sUSERGROUPDATA["basketdiscount"]));
-                        }
-                    } elseif ($value["modus"] == 4 || $value["modus"] == 10) {
-                        $getArticles[$key]["amountWithTax"] = round(1 * ($price / 100 * (100+$tax)),2);
-                        if ($this->sSYSTEM->sUSERGROUPDATA["basketdiscount"] && $this->sCheckForDiscount()) {
-                            $discount += ($getArticles[$key]["amountWithTax"]/100*$this->sSYSTEM->sUSERGROUPDATA["basketdiscount"]);
-                        }
-                    }
-                }
-
-                $getArticles[$key]["amount"] = $quantity * round($price,2);
-
-                //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-                //reset purchaseunit and save the original value in purchaseunitTemp
-                if ($getArticles[$key]["purchaseunit"]>0) {
-                    $getArticles[$key]["purchaseunitTemp"] = $getArticles[$key]["purchaseunit"];
-                    $getArticles[$key]["purchaseunit"] = 1;
-                }
-
-                //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-                // If price per unit is not referering to 1, calculate base-price
-                // Choose 1000, quantity refers to 500, calculate price / 1000 * 500 as reference
-                if ($getArticles[$key]["purchaseunit"]>0) {
-                    $getArticles[$key]["itemInfo"] = $getArticles[$key]["purchaseunit"]." {$getUnitData["description"]} � ".$this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($getArticles[$key]["amount"] / $quantity * $getArticles[$key]["purchaseunit"]);
-                    $getArticles[$key]["itemInfoArray"]["reference"] = $getArticles[$key]["purchaseunit"];
-                    $getArticles[$key]["itemInfoArray"]["unit"] = $getUnitData;
-                    $getArticles[$key]["itemInfoArray"]["price"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($getArticles[$key]["amount"] / $quantity * $getArticles[$key]["purchaseunit"]);
-                }
-
-
-                if ($value["modus"] == 2) {
-                    // Gutscheine
-                    if (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"]) {
-                        $getArticles[$key]["amountnet"] = $quantity * round($price, 2);
-                    } else {
-                        $getArticles[$key]["amountnet"] = $quantity * round($netprice, 2);
-                    }
-
-                } else {
-                    if (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"]) {
-                        $getArticles[$key]["amountnet"] = $quantity * round($netprice, 2);
-                    } else {
-                        $getArticles[$key]["amountnet"] = $quantity * $netprice;
-                    }
-                }
-
-                $totalAmount += round($getArticles[$key]["amount"], 2);
-                // Needed if shop is in net-mode
-                $totalAmountWithTax += round($getArticles[$key]["amountWithTax"], 2);
-                // Ignore vouchers and premiums by counting articles
-                if (!$getArticles[$key]["modus"]) {
-                    $totalCount++;
-                }
-
-                $totalAmountNet += round($getArticles[$key]["amountnet"], 2);
-
-                $getArticles[$key]["priceNumeric"] = $getArticles[$key]["price"];
-                $getArticles[$key]["price"] = $this->sSYSTEM->sMODULES['sArticles']
-                    ->sFormatPrice($getArticles[$key]["price"]);
-                $getArticles[$key]["amount"] =  $this->sSYSTEM->sMODULES['sArticles']
-                    ->sFormatPrice($getArticles[$key]["amount"]);
-                $getArticles[$key]["amountnet"] = $this->sSYSTEM->sMODULES['sArticles']
-                    ->sFormatPrice($getArticles[$key]["amountnet"]);
-
-                //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-                if (!empty($getArticles[$key]["purchaseunitTemp"])) {
-                    $getArticles[$key]["purchaseunit"] = $getArticles[$key]["purchaseunitTemp"];
-                    $getArticles[$key]["itemInfo"] = $getArticles[$key]["purchaseunit"]." {$getUnitData["description"]} � ".$this->sSYSTEM->sMODULES['sArticles']->sFormatPrice(str_replace(",",".",$getArticles[$key]["amount"]) / $quantity);
-                }
-
-                //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-                if (empty($value["modus"])) {
-                    // Article-Image
-                    if (!empty($getArticles[$key]["ob_attr1"])) {
-                        $getArticles[$key]["image"] = $this->sSYSTEM->sMODULES['sArticles']
-                            ->sGetConfiguratorImage(
-                                $this->sSYSTEM->sMODULES['sArticles']->sGetArticlePictures(
-                                    $getArticles[$key]["articleID"],
-                                    false,
-                                    $this->sSYSTEM->sCONFIG['sTHUMBBASKET'],
-                                    false,
-                                    true
-                                ),
-                                $getArticles[$key]["ob_attr1"]
-                            );
-                    } else {
-                        $getArticles[$key]["image"] = $this->sSYSTEM->sMODULES['sArticles']
-                            ->sGetArticlePictures(
-                                $getArticles[$key]["articleID"],
-                                true,
-                                $this->sSYSTEM->sCONFIG['sTHUMBBASKET'],
-                                $getArticles[$key]["ordernumber"]
-                            );
-                    }
-                }
-                // Links to details, basket
-                $getArticles[$key]["linkDetails"] = $this->sSYSTEM->sCONFIG['sBASEFILE']."?sViewport=detail&sArticle=".$getArticles[$key]["articleID"];
-                if ($value["modus"] == 2) {
-                    $getArticles[$key]["linkDelete"] = $this->sSYSTEM->sCONFIG['sBASEFILE']."?sViewport=basket&sDelete=voucher";
-                } else {
-                    $getArticles[$key]["linkDelete"] = $this->sSYSTEM->sCONFIG['sBASEFILE']."?sViewport=basket&sDelete=".$getArticles[$key]["id"];
-                }
-
-                $getArticles[$key]["linkNote"] = $this->sSYSTEM->sCONFIG['sBASEFILE']."?sViewport=note&sAdd=".$getArticles[$key]["ordernumber"];
-
-                $getArticles[$key] = Enlight()->Events()->filter(
-                    'Shopware_Modules_Basket_GetBasket_FilterItemEnd',
-                    $getArticles[$key],
-                    array('subject' => $this, 'getArticles' => $getArticles)
-                );
-            }
-
-            if ($totalAmount < 0 || empty($totalCount)) {
-                return array();
-            }
-
-            // Total-Amount brutto (or netto if shop-mode is to show net-prices)
-            $totalAmountNumeric = $totalAmount;
-            $totalAmount = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($totalAmount);
-
-            // Total-Amount brutto (in any case)
-            $totalAmountWithTaxNumeric = $totalAmountWithTax;
-            $totalAmountWithTax = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($totalAmountWithTax);
-
-            // Total-Amount netto
-            $totalAmountNetNumeric = $totalAmountNet;
-
-            $totalAmountNet = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($totalAmountNet);
-
-            $result = array(
-                "content" => $getArticles,
-                "Amount" => $totalAmount,
-                "AmountNet" => $totalAmountNet,
-                "Quantity" => $totalCount,
-                "AmountNumeric" => $totalAmountNumeric,
-                "AmountNetNumeric" => $totalAmountNetNumeric,
-                "AmountWithTax" => $totalAmountWithTax,
-                "AmountWithTaxNumeric" => $totalAmountWithTaxNumeric
-            );
-
-
-            if (!empty($this->sSYSTEM->_SESSION["sLastArticle"])) {
-                $result["sLastActiveArticle"] = array(
-                    "id" => $this->sSYSTEM->_SESSION["sLastArticle"],
-                    "link" => $this->sSYSTEM->sCONFIG['sBASEFILE']."?sViewport=detail&sDetails=".$this->sSYSTEM->_SESSION["sLastArticle"]
-                );
-            }
-
-            if (!empty($result["content"])) {
-                foreach ($result["content"] as $key => $value) {
-                    if (!empty($value['amountWithTax'])) {
-                        $t = round(str_replace(",", ".", $value['amountWithTax']), 2);
-                    } else {
-                        $t = str_replace(",", ".", $value["price"]);
-                        $t = floatval(round($t * $value["quantity"], 2));
-                    }
-                    if (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"]) {
-                        $p = floatval($this->sSYSTEM->sMODULES['sArticles']->sRound(
-                            $this->sSYSTEM->sMODULES['sArticles']->sRound(
-                                round($value["netprice"], 2) * $value["quantity"])
-                            )
-                        );
-                    } else {
-                        $p = floatval($this->sSYSTEM->sMODULES['sArticles']->sRound(
-                            $this->sSYSTEM->sMODULES['sArticles']->sRound(
-                                $value["netprice"] * $value["quantity"])
-                            )
-                        );
-                    }
-                    $calcDifference = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($t - $p);
-                    $result["content"][$key]["tax"] = $calcDifference;
-                }
-            }
-            $result = Enlight()->Events()->filter(
-                'Shopware_Modules_Basket_GetBasket_FilterResult',
-                $result,
-                array('subject' => $this)
-            );
-
-            return $result;
-        } else {
-            return array();
-        }
-    }
-
-    /**
-     * Add product to wishlist
-     * Used only in NoteController::addAction()
-     *
-     * @deprecated
-     * @param int $articleID
-     * @param string $articleName
-     * @param string $articleOrderNumber
-     * @return bool If operation was successful
-     */
-    public function sAddNote($articleID, $articleName, $articleOrderNumber)
-    {
-        $datum = date("Y-m-d H:i:s");
-
-        $cookieData = $this->sSYSTEM->_COOKIE->toArray();
-        if (!empty($cookieData) && empty($this->sSYSTEM->_COOKIE["sUniqueID"])) {
-            $cookieId = md5(uniqid(rand()));
-            setcookie("sUniqueID", $cookieId, Time()+(86400*360), '/');
-            $_COOKIE["sUniqueID"] = $cookieId;
-        } elseif (!empty($this->sSYSTEM->_COOKIE["sUniqueID"])) {
-            $cookieId = $this->sSYSTEM->_COOKIE["sUniqueID"];
-        }
-
-        // Check if this article is already noted
-        $checkForArticleId = $this->db->fetchOne(
-            'SELECT id FROM s_order_notes WHERE sUniqueID = ? AND ordernumber = ?',
-            array($cookieId, $articleOrderNumber)
-        );
-
-        if (!$checkForArticleId) {
-            $queryNewPrice = $this->db->insert(
-                's_order_notes',
-                array(
-                    'sUniqueID'   => empty($cookieId) ? $this->sSYSTEM->sSESSION_ID : $cookieId,
-                    'userID'      => $this->sSYSTEM->_SESSION['sUserId'] ? : "0" ,
-                    'articlename' => $articleName,
-                    'articleID'   => $articleID,
-                    'ordernumber' => $articleOrderNumber,
-                    'datum'       => $datum
-                )
-            );
-
-            if (!$queryNewPrice) {
-                $this->sSYSTEM->E_CORE_WARNING ("sBasket##sAddNote##01","Error in SQL-query");
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Get all products current on wishlist
-     * Used in AccountController and NoteController
-     *
-     * @deprecated
-     * @return array Article notes
-     */
-    public function sGetNotes()
-    {
-        $getArticles = $this->db->fetchAll(
-            'SELECT n.* FROM s_order_notes n, s_articles a
-            WHERE
-              (
-                sUniqueID=?
-                OR (userID!=0 AND userID=?)
-              )
-              AND a.id = n.articleID AND a.active = 1
-            ORDER BY n.datum DESC',
-            array(
-                empty($this->sSYSTEM->_COOKIE['sUniqueID']) ? $this->sSYSTEM->sSESSION_ID : $this->sSYSTEM->_COOKIE['sUniqueID'],
-                isset($this->sSYSTEM->_SESSION['sUserId']) ? $this->sSYSTEM->_SESSION['sUserId'] : 0
-            )
-        );
-
-        if (empty($getArticles)) {
-            return $getArticles;
-        }
-
-        // Reformatting data, add additional data fields to array
-        foreach ($getArticles as $key => $value) {
-            // Article image
-            $getArticles[$key] = $this->sSYSTEM->sMODULES['sArticles']->sGetPromotionById(
-                "fix",
-                0,
-                (int) $value["articleID"]
-            );
-            if (empty($getArticles[$key])) {
-                $this->sDeleteNote($value["id"]);
-                unset($getArticles[$key]);
-                continue;
-            }
-            $getArticles[$key]["articlename"] = $getArticles[$key]["articleName"];
-            $getArticles[$key]["image"] = $this->sSYSTEM->sMODULES['sArticles']->getArticleListingCover(
-                $value["articleID"],
-                Shopware()->Config()->get('forceArticleMainImageInListing')
-            );
-            // Links to details, basket
-            $getArticles[$key]["id"] = $value["id"];
-            $getArticles[$key]["linkBasket"] = $this->sSYSTEM->sCONFIG['sBASEFILE']."?sViewport=basket&sAdd=".$value["ordernumber"];
-            $getArticles[$key]["linkDelete"] = $this->sSYSTEM->sCONFIG['sBASEFILE']."?sViewport=note&sDelete=".$value["id"];
-            $getArticles[$key]["datum_add"] = $value["datum"];
-        }
         return $getArticles;
     }
 
     /**
-     * Returns the number of wishlist entries
-     * Used in several locations
+     * Gets article additional info for sUpdateArticle
      *
-     * @deprecated
-     * @return int
+     * @param $id
+     * @param $quantity
+     * @return array
      */
-    public function sCountNotes()
+    private function getAdditionalInfoForUpdateArticle($id, $quantity)
     {
-        $count = (int) $this->db->fetchOne('
-            SELECT COUNT(*) FROM s_order_notes n, s_articles a
-            WHERE (sUniqueID = ? OR (userID != 0 AND userID = ?))
-            AND a.id = n.articleID AND a.active = 1
-        ', array(
-            empty($this->sSYSTEM->_COOKIE['sUniqueID']) ? $this->sSYSTEM->sSESSION_ID : $this->sSYSTEM->_COOKIE['sUniqueID'],
-            isset($this->sSYSTEM->_SESSION['sUserId']) ? $this->sSYSTEM->_SESSION['sUserId'] : 0
-        ));
-        return $count;
-    }
-
-    /**
-     * Delete a certain position from note
-     * Used internally in sBasket and in NoteController
-     *
-     * @deprecated
-     * @param int Id of the wihslist line
-     * @return bool if the operation was successful
-     */
-    public function sDeleteNote($id)
-    {
-        $id = (int) $id;
-
-        if (!empty($id)) {
-            $sql = "
-
-            ";
-            $delete = $this->db->query(
-                'DELETE FROM s_order_notes
-                WHERE (sUniqueID = ? OR (userID = ?  AND userID != 0))
-                AND id=?',
-                array(
-                    $this->sSYSTEM->_COOKIE["sUniqueID"],
-                    $this->sSYSTEM->_SESSION['sUserId'],
-                    $id
-                )
-            );
-            if (!$delete) {
-                $this->sSYSTEM->E_CORE_WARNING("Basket sDeleteNote ##01","Could not delete item ($sql)");
-            }
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Update quantity / price of a certain cart position
-     * Used in several locations
-     *
-     * @deprecated
-     * @param int $id Basket entry id
-     * @param int $quantity Quantity
-     * @return boolean
-     */
-    public function sUpdateArticle($id, $quantity)
-    {
-        $quantity = intval($quantity);
-        $id = intval($id);
-
-        if (
-            Enlight()->Events()->notifyUntil(
-                'Shopware_Modules_Basket_UpdateArticle_Start',
-                array('subject' => $this, 'id' => $id, "quantity" => $quantity)
-            )
-        ) {
-            return false;
-        }
-
-        if (empty($id)) {
-            return false;
-        }
-
         // Query to get minimum surcharge
         $queryAdditionalInfo = $this->db->fetchRow("
             SELECT s_articles_details.minpurchase, s_articles_details.purchasesteps,
@@ -1650,7 +2139,7 @@ class sBasket
             AND s_order_basket.id = ?
             AND s_order_basket.sessionID = ?
             ",
-            array($id, $this->sSYSTEM->sSESSION_ID)
+            array($id, $this->session->get('sessionId'))
         ) ? : array();
 
         // Check if quantity matches minimum purchase
@@ -1667,24 +2156,37 @@ class sBasket
             $queryAdditionalInfo["purchasesteps"] = 1;
         }
 
-        if (($quantity/$queryAdditionalInfo["purchasesteps"]) != intval($quantity / $queryAdditionalInfo["purchasesteps"])) {
-            $quantity = intval($quantity / $queryAdditionalInfo["purchasesteps"])*$queryAdditionalInfo["purchasesteps"];
+        if (($quantity / $queryAdditionalInfo["purchasesteps"]) != intval($quantity / $queryAdditionalInfo["purchasesteps"])) {
+            $quantity = intval($quantity / $queryAdditionalInfo["purchasesteps"]) * $queryAdditionalInfo["purchasesteps"];
         }
 
-        if (empty($queryAdditionalInfo["maxpurchase"]) && !empty($this->sSYSTEM->sCONFIG['sMAXPURCHASE'])) {
-            $queryAdditionalInfo["maxpurchase"] = $this->sSYSTEM->sCONFIG['sMAXPURCHASE'];
+        $maxPurchase = $this->config->get('sMAXPURCHASE');
+        if (empty($queryAdditionalInfo["maxpurchase"]) && !empty($maxPurchase)) {
+            $queryAdditionalInfo["maxpurchase"] = $maxPurchase;
         }
 
         // Check if quantity matches max purchase
-        if ($quantity>$queryAdditionalInfo["maxpurchase"] && !empty($queryAdditionalInfo["maxpurchase"])) {
+        if ($quantity > $queryAdditionalInfo["maxpurchase"] && !empty($queryAdditionalInfo["maxpurchase"])) {
             $quantity = $queryAdditionalInfo["maxpurchase"];
         }
 
-
-        if (!$this->sSYSTEM->sSESSION_ID || !$id) {
-            return false;
+        if (!empty($queryAdditionalInfo["purchaseunit"])) {
+            $queryAdditionalInfo["purchaseunit"] = 1;
         }
 
+        return array($queryAdditionalInfo, $quantity);
+    }
+
+    /**
+     * Gets article base price info for sUpdateArticle
+     *
+     * @param $id
+     * @param $quantity
+     * @param $queryAdditionalInfo
+     * @return array
+     */
+    private function getPriceForUpdateArticle($id, $quantity, $queryAdditionalInfo)
+    {
         // Price groups
         if ($queryAdditionalInfo["pricegroupActive"]) {
             $quantitySQL = 'AND s_articles_prices.from = 1 LIMIT 1';
@@ -1708,15 +2210,11 @@ class sBasket
             AND s_articles.taxID = s_core_tax.id
             AND s_articles_prices.pricegroup = ?';
 
-        if (!empty($queryAdditionalInfo["purchaseunit"])) {
-            $queryAdditionalInfo["purchaseunit"] = 1;
-        }
-
         $queryNewPrice = $this->db->fetchRow(
-            $sql.' '.$quantitySQL,
+            $sql . ' ' . $quantitySQL,
             array(
                 $id,
-                $this->sSYSTEM->sSESSION_ID,
+                $this->session->get('sessionId'),
                 $this->sSYSTEM->sUSERGROUP
             )
         ) ? : array();
@@ -1735,31 +2233,36 @@ class sBasket
             AND s_articles_details.articleID = s_articles.id
             AND s_articles.taxID = s_core_tax.id
             AND s_articles_prices.pricegroup = \'EK\'';
+
             $queryNewPrice = $this->db->fetchRow(
-                $sql.' '.$quantitySQL,
+                $sql . ' ' . $quantitySQL,
                 array(
                     $id,
-                    $this->sSYSTEM->sSESSION_ID
+                    $this->session->get('sessionId')
                 )
             ) ? : array();
         }
+        return $queryNewPrice;
+    }
 
-        if (empty($queryNewPrice["price"]) && empty($queryNewPrice["config"])) {
-            // If no price is set for default customer group, delete article from basket
-            $this->sDeleteArticle($id);
-            return false;
-        }
-
+    /**
+     * Calculates article tax values for sUpdateArticle
+     *
+     * @param $quantity
+     * @param $queryNewPrice
+     * @param $queryAdditionalInfo
+     * @return array
+     */
+    private function getTaxesForUpdateArticle($quantity, $queryNewPrice, $queryAdditionalInfo)
+    {
         // Determinate tax rate for this cart position
-        $taxRate = $this->sSYSTEM->sMODULES['sArticles']->getTaxRateByConditions($queryNewPrice["taxID"]);
+        $taxRate = $this->articleModule->getTaxRateByConditions($queryNewPrice["taxID"]);
 
-        $netprice = $queryNewPrice["price"];
+        $netPrice = $queryNewPrice["price"];
 
-        /*
-        Recalculate Price if purchase unit is set
-        */
-        $brutto = $this->sSYSTEM->sMODULES['sArticles']->sCalculatingPriceNum(
-            $netprice,
+        // Recalculate price if purchase unit is set
+        $grossPrice = $this->articleModule->sCalculatingPriceNum(
+            $netPrice,
             $queryNewPrice["tax"],
             false,
             false,
@@ -1770,25 +2273,23 @@ class sBasket
 
         // Check if tax free
         if (
-            ($this->sSYSTEM->sCONFIG['sARTICLESOUTPUTNETTO'] && !$this->sSYSTEM->sUSERGROUPDATA["tax"])
+            ($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA["tax"])
             || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])
         ) {
-            // Brutto is equal to net - price
-            $netprice = round($brutto, 2);
-
+            $netPrice = round($grossPrice, 2);
         } else {
             // Round to right value, if no purchase unit is set
             if ($queryAdditionalInfo["purchaseunit"] == 1) {
-                $brutto = round($brutto, 2);
+                $grossPrice = round($grossPrice, 2);
             }
             // Consider global discount for net price
-            $netprice = $brutto / (100 + $taxRate) * 100;
+            $netPrice = $grossPrice / (100 + $taxRate) * 100;
         }
 
         // Recalculate price per item, if purchase unit is set
-        if ($queryAdditionalInfo["purchaseunit"]>0) {
-            $brutto = $brutto / $queryAdditionalInfo["purchaseunit"];
-            $netprice = $netprice / $queryAdditionalInfo["purchaseunit"];
+        if ($queryAdditionalInfo["purchaseunit"] > 0) {
+            $grossPrice = $grossPrice / $queryAdditionalInfo["purchaseunit"];
+            $netPrice = $netPrice / $queryAdditionalInfo["purchaseunit"];
         }
 
         if (empty($this->sSYSTEM->sCurrency["factor"])) {
@@ -1796,180 +2297,112 @@ class sBasket
         }
 
         if ($queryAdditionalInfo["pricegroupActive"]) {
-            $brutto = $this->sSYSTEM->sMODULES['sArticles']->sGetPricegroupDiscount(
+            $grossPrice = $this->articleModule->sGetPricegroupDiscount(
                 $this->sSYSTEM->sUSERGROUP,
                 $queryAdditionalInfo["pricegroupID"],
-                $brutto,
+                $grossPrice,
                 $quantity,
                 false
             );
-            $brutto = $this->sSYSTEM->sMODULES['sArticles']->sRound($brutto);
+            $grossPrice = $this->articleModule->sRound($grossPrice);
             if (
-                ($this->sSYSTEM->sCONFIG['sARTICLESOUTPUTNETTO'] && !$this->sSYSTEM->sUSERGROUPDATA["tax"]) ||
+                ($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA["tax"]) ||
                 (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])
             ) {
-                $netprice = $this->sSYSTEM->sMODULES['sArticles']->sRound(
-                    $this->sSYSTEM->sMODULES['sArticles']->sGetPricegroupDiscount(
+                $netPrice = $this->articleModule->sRound(
+                    $this->articleModule->sGetPricegroupDiscount(
                         $this->sSYSTEM->sUSERGROUP,
                         $queryAdditionalInfo["pricegroupID"],
-                        $netprice,
+                        $netPrice,
                         $quantity,
                         false
                     )
                 );
-
             } else {
-                $netprice = $brutto / (100 + $taxRate)* 100;
-                $netprice = number_format($netprice, 3, ".", "");
+                $netPrice = $grossPrice / (100 + $taxRate) * 100;
+                $netPrice = number_format($netPrice, 3, ".", "");
             }
         }
+        return array($taxRate, $netPrice, $grossPrice);
+    }
 
-        $sql = "
-            UPDATE s_order_basket
-            SET quantity = ?, price = ?, netprice = ?, currencyFactor = ?, tax_rate = ?
-            WHERE id = ? AND sessionID = ? AND modus = 0
-            ";
-        $sql = Enlight()->Events()->filter(
-            'Shopware_Modules_Basket_UpdateArticle_FilterSqlDefault',
-            $sql, 
+    /**
+     * @param $article
+     * @return array
+     * @throws Enlight_Exception
+     */
+    private function getPriceForAddArticle($article)
+    {
+        // Read price from default price table
+        $price = $this->db->fetchRow(
+            'SELECT price, s_core_tax.tax AS tax
+            FROM s_articles_prices, s_core_tax
+            WHERE s_articles_prices.pricegroup = ?
+            AND s_articles_prices.articledetailsID = ?
+            AND s_core_tax.id = ?',
             array(
-                'subject' => $this,
-                'id' => $id,
-                "quantity" => $quantity,
-                "price" => $brutto,
-                "netprice" => $netprice,
-                "currencyFactor" => $this->sSYSTEM->sCurrency["factor"]
+                $this->sSYSTEM->sUSERGROUP,
+                $article["articledetailsID"],
+                $article["taxID"]
             )
-        );
+        ) ? : array();
 
-        if ($taxRate === false) {
-            $taxRate = $brutto == $netprice ? 0.00 : $queryNewPrice["tax"];
+        if (empty($price["price"])) {
+            $price = $this->db->fetchRow(
+                'SELECT price, s_core_tax.tax AS tax
+                FROM s_articles_prices, s_core_tax
+                WHERE s_articles_prices.pricegroup = \'EK\'
+                AND s_articles_prices.articledetailsID = ?
+                AND s_core_tax.id = ?',
+                array($article["articledetailsID"], $article["taxID"])
+            ) ? : array();
         }
 
-        $params = array(
-            $quantity,
-            $brutto,
-            $netprice,
-            $this->sSYSTEM->sCurrency["factor"],
-            $taxRate,
-            $id,
-            $this->sSYSTEM->sSESSION_ID
-        );
-
-        $update = $this->db->query($sql, $params);
-
-        $this->sUpdateVoucher();
-
-        if (!$update || !$queryNewPrice) {
-            $this->sSYSTEM->E_CORE_WARNING("Basket Update ##01","Could not update quantity".$sql);
-        }
-    }
-
-    /**
-     * Check if the current basket has any ESD article
-     * Used in sAdmin and CheckoutController
-     * 
-     * @deprecated
-     * @return bool If an ESD article is present in the current basket
-     */
-    public function sCheckForESD()
-    {
-        $getArticlesId = $this->db->fetchOne(
-            'SELECT id FROM s_order_basket WHERE sessionID = ? AND esdarticle = 1 LIMIT 1;',
-            array($this->sSYSTEM->sSESSION_ID)
-        );
-
-        return (bool) $getArticlesId;
-    }
-
-    /**
-     * Truncate cart
-     * Used on sAdmin tests and SwagBonusSystem
-     * See @ticket PT-1845
-     * 
-     * @deprecated
-     * @return void|false False on no session, null otherwise
-     */
-    public function sDeleteBasket()
-    {
-        if (empty($this->sSYSTEM->sSESSION_ID)) {
-            return false;
+        if (!$price["price"] && !$article["free"]) {
+            // No price could acquired
+            throw new Enlight_Exception("BASKET-INSERT #01 No price acquired");
         }
 
-        $this->db->delete(
-            's_order_basket',
-            array('sessionID = ?' >= $this->sSYSTEM->sSESSION_ID)
-        );
-    }
-
-
-    /**
-     * Delete a certain position from the basket
-     * Used in multiple locations
-     *
-     * @deprecated
-     * @param int Id of the basket line
-     * @return null
-     */
-    public function sDeleteArticle($id)
-    {
-        $id = (int) $id;
-        $modus = $this->db->fetchOne(
-            'SELECT modus FROM s_order_basket WHERE id = ?',
-            array($id)
-        );
-
-        if ($id && $id != "voucher") {
-            $delete = $this->db->delete(
-                's_order_basket',
-                array(
-                    'sessionID = ?' => $this->sSYSTEM->sSESSION_ID,
-                    'id = ?' => $id
-                )
-            );
-            if (!$delete) {
-                $this->sSYSTEM->E_CORE_WARNING("Basket Delete ##01","Could not delete item ($id)");
-            }
-            if (empty($modus)) {
-                $this->sUpdateVoucher();
-            }
-        }
-    }
-
-    /**
-     * Add product to cart
-     * Used in multiple locations
-     *
-     * @deprecated
-     * @param int $id Order number (s_articles_details.ordernumber)
-     * @param int $quantity Amount
-     * @return int|false Id of the inserted basket entry, or false on failure
-     */
-    public function sAddArticle($id, $quantity = 1)
-    {
-        if ($this->sSYSTEM->sBotSession || empty($this->sSYSTEM->sSESSION_ID)) {
-            return false;
-        }
-
-        $quantity = (empty($quantity) || !is_numeric($quantity)) ? 1 : (int) $quantity;
-        if ($quantity <= 0) {
-            $quantity = 1;
-        }
-
-
+        // If configuration article
         if (
-            Enlight()->Events()->notifyUntil(
-                'Shopware_Modules_Basket_AddArticle_Start',
-                array(
-                    'subject' => $this,
-                    'id' => $id,
-                    "quantity" => $quantity
-                )
-            )
+            ($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA["tax"])
+            || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])
         ) {
-            return false;
+            // If netto set both values to net-price
+            $price["price"] = $this->articleModule->sCalculatingPriceNum(
+                $price["price"],
+                $price["tax"],
+                false,
+                false,
+                $article["taxID"],
+                false,
+                $article
+            );
+            $price["netprice"] = $price["price"];
+        } else {
+            // If brutto, save net
+            $price["netprice"] = $price["price"];
+            $price["price"] = $this->articleModule->sCalculatingPriceNum(
+                $price["price"],
+                $price["tax"],
+                false,
+                false,
+                $article["taxID"],
+                false,
+                $article
+            );
         }
+        return $price;
+    }
 
+    /**
+     * Get article data for sAddArticle
+     *
+     * @param int $id Article ordernumber
+     * @return array|false Article data, or false if none found
+     */
+    private function getArticleForAddArticle($id)
+    {
         $sql = "
             SELECT s_articles.id AS articleID, name AS articleName, taxID,
               additionaltext, s_articles_details.shippingfree, laststock, instock,
@@ -1984,231 +2417,25 @@ class sBasket
                 WHERE articleID = s_articles.id AND customergroupID = ?
             ) IS NULL
         ";
-        $getArticle = $this->db->fetchRow(
+
+        $article = $this->db->fetchRow(
             $sql,
             array($id, $this->sSYSTEM->sUSERGROUPDATA["id"])
-        ) ? : array();
+        );
 
-        $getName = $this->sSYSTEM->sMODULES["sArticles"]->sGetArticleNameByOrderNumber(
-            $getArticle["ordernumber"],
+        if (!$article) {
+            return false;
+        }
+
+        $name = $this->articleModule->sGetArticleNameByOrderNumber(
+            $article["ordernumber"],
             true
         );
 
-        if (!empty($getName)) {
-            $getArticle["articleName"] = $getName["articleName"];
-            $getArticle["additionaltext"] = $getName["additionaltext"];
+        if (!empty($name)) {
+            $article["articleName"] = $name["articleName"];
+            $article["additionaltext"] = $name["additionaltext"];
         }
-
-        if (!count($getArticle)) {
-            return false;
-        } else {
-            // Check if article is already in basket
-            $chkBasketForArticle = $this->db->fetchRow(
-                'SELECT id, quantity
-                FROM s_order_basket
-                WHERE articleID = ?
-                AND sessionID = ?
-                AND ordernumber = ?',
-                array(
-                    $getArticle["articleID"],
-                    $this->sSYSTEM->sSESSION_ID,
-                    $getArticle["ordernumber"]
-                )
-            ) ? : array();
-
-            // Shopware 3.5.0 / sth / laststock - instock check
-            if (!empty($chkBasketForArticle["id"])) {
-
-                if (
-                    $getArticle["laststock"] == true
-                    && $getArticle["instock"] < ($chkBasketForArticle["quantity"] + $quantity)
-                ) {
-                    $quantity -= $chkBasketForArticle["quantity"];
-                }
-            } else {
-                if ($getArticle["laststock"] == true && $getArticle["instock"] <= $quantity) {
-                    $quantity = $getArticle["instock"];
-                    if ($quantity <= 0) {
-                        return;
-                    }
-                }
-            }
-
-            $insertTime = date("Y-m-d H:i:s");
-
-            if ($chkBasketForArticle && empty($sUpPriceValues)) {
-                // Article is already in basket, update quantity
-                $quantity += $chkBasketForArticle["quantity"];
-
-                $this->sUpdateArticle($chkBasketForArticle["id"], $quantity);
-                return $chkBasketForArticle["id"];
-            } else {
-                // Read price from default-price-table
-                $getPrice = $this->db->fetchRow(
-                    'SELECT price, s_core_tax.tax AS tax
-                    FROM s_articles_prices, s_core_tax
-                    WHERE s_articles_prices.pricegroup = ?
-                    AND s_articles_prices.articledetailsID = ?
-                    AND s_core_tax.id = ?',
-                    array(
-                        $this->sSYSTEM->sUSERGROUP,
-                        $getArticle["articledetailsID"],
-                        $getArticle["taxID"]
-                    )
-                ) ? : array();
-
-                if (empty($getPrice["price"])) {
-                    $getPrice = $this->db->fetchRow(
-                        'SELECT price, s_core_tax.tax AS tax
-                        FROM s_articles_prices, s_core_tax
-                        WHERE s_articles_prices.pricegroup = \'EK\'
-                        AND s_articles_prices.articledetailsID = ?
-                        AND s_core_tax.id = ?',
-                        array($getArticle["articledetailsID"], $getArticle["taxID"])
-                    ) ? : array();
-                }
-
-
-                if (!$getPrice["price"] && !$getArticle["free"]) {
-                    // No price could acquired
-                    $this->sSYSTEM->E_CORE_WARNING("BASKET-INSERT #01","No price acquired");
-                    return;
-                } else {
-
-                    // If configuration article
-                    if (
-                        ($this->sSYSTEM->sCONFIG['sARTICLESOUTPUTNETTO'] && !$this->sSYSTEM->sUSERGROUPDATA["tax"])
-                        || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])
-                    ) {
-                        // If netto set both values to net-price
-                        $getPrice["price"] = $this->sSYSTEM->sMODULES['sArticles']->sCalculatingPriceNum(
-                            $getPrice["price"],
-                            $getPrice["tax"],
-                            false,
-                            false,
-                            $getArticle["taxID"],
-                            false,
-                            $getArticle
-                        );
-                        $getPrice["netprice"] = $getPrice["price"];
-                    } else {
-                        // If brutto, save net
-                        $getPrice["netprice"] = $getPrice["price"];
-                        $getPrice["price"] = $this->sSYSTEM->sMODULES['sArticles']->sCalculatingPriceNum(
-                            $getPrice["price"],
-                            $getPrice["tax"],
-                            false,
-                            false,
-                            $getArticle["taxID"],
-                            false,
-                            $getArticle
-                        );
-                    }
-                    // For variants, extend the article-name
-                    if ($getArticle["additionaltext"]) {
-                        $getArticle["articleName"].= " ".$getArticle["additionaltext"];
-                    }
-
-                    if (!$getArticle["shippingfree"]) {
-                        $getArticle["shippingfree"] = "0";
-                    }
-
-                    // Check if article is an esd-article
-                    // - add flag to basket
-                    $getEsd = $this->db->fetchRow(
-                        'SELECT s_articles_esd.id AS id, serials
-                        FROM s_articles_esd, s_articles_details
-                        WHERE s_articles_esd.articleID = ?
-                        AND s_articles_esd.articledetailsID = s_articles_details.id
-                        AND s_articles_details.ordernumber = ?',
-                        array($getArticle["articleID"], $getArticle["ordernumber"])
-                    );
-
-                    $sEsd = ($getEsd && $getEsd["id"]) ? '1' : '0';
-
-                    $quantity = (int) $quantity;
-                    $sql = "
-                        INSERT INTO s_order_basket (id, sessionID, userID, articlename, articleID,
-                            ordernumber, shippingfree, quantity, price, netprice,
-                            datum, esdarticle, partnerID, config)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
-                    ";
-
-                    $params = array(
-                        '',
-                        (string) $this->sSYSTEM->sSESSION_ID,
-                        (string) $this->sSYSTEM->_SESSION['sUserId'],
-                        $getArticle["articleName"],
-                        $getArticle["articleID"],
-                        (string) $getArticle["ordernumber"],
-                        $getArticle["shippingfree"],
-                        $quantity,
-                        $getPrice["price"],
-                        $getPrice["netprice"],
-                        (string) $insertTime,
-                        $sEsd,
-                        (string) $this->sSYSTEM->_SESSION["sPartner"],
-                        (empty($sUpPriceValues) ? "" : serialize($sUpPriceValues))
-                    );
-
-                    $sql = Enlight()->Events()->filter(
-                        'Shopware_Modules_Basket_AddArticle_FilterSql',
-                        $sql,
-                        array(
-                            'subject' => $this,
-                            'article' => $getArticle,
-                            'price' => $getPrice,
-                            'esd' => $sEsd,
-                            'quantity' => $quantity,
-                            'partner' => $this->sSYSTEM->_SESSION['sPartner']
-                        )
-                    );
-
-                    $rs = $this->db->query($sql, $params);
-
-                    if (!$rs) {
-                        $this->sSYSTEM->E_CORE_WARNING ("BASKET-INSERT #02", "SQL-Error".$sql);
-                    }
-                    $insertId = $this->db->lastInsertId();
-
-                    $this->db->insert(
-                        's_order_basket_attributes',
-                        array(
-                            'basketID' => $insertId,
-                            'attribute1' => ''
-                        )
-                    );
-
-                    $this->sUpdateArticle($insertId, $quantity);
-
-                } // If - Price was found
-            } // If - Article is not in basket
-        } // If - Article was found
-
-        return $insertId;
-    }
-
-    /**
-     * Refresh basket after login / currency change
-     * Used in multiple locations
-     *
-     * @deprecated
-     * @return null
-     */
-    public function sRefreshBasket()
-    {
-        $session = Shopware()->Session();
-        $admin = Shopware()->Modules()->Admin();
-
-        // Update basket data
-        $admin->sGetUserData();
-        $this->sGetBasket();
-        $admin->sGetPremiumShippingcosts();
-
-        // Update basket data in session
-        $session->sBasketCurrency = Shopware()->Shop()->getCurrency()->getId();
-        $session->sBasketQuantity = $this->sCountBasket();
-        $amount = $this->sGetAmount();
-        $session->sBasketAmount = empty($amount) ? 0 : array_shift($amount);
+        return $article;
     }
 }

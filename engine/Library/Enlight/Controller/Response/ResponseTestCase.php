@@ -73,6 +73,14 @@ class Enlight_Controller_Response_ResponseTestCase
     }
 
     /**
+     * @return array
+     */
+    public function getCookies()
+    {
+        return $this->_cookies;
+    }
+
+    /**
      * Gets a cookie value
      *
      * @param string $name
