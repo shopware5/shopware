@@ -16,6 +16,13 @@
 		</div>
 	{/block}
 
+	{* Need Support? *}
+	{block name='frontend_index_logo_supportinfo'}
+			<div class="logo--supportinfo block">
+				{s name='RegisterSupportInfo'}{/s}
+			</div>
+	{/block}
+
 	{* Trusted Shops *}
 	{block name='frontend_index_logo_trusted_shops'}
 		{if {config name=TSID}}

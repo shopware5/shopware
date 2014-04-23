@@ -5,16 +5,45 @@
 	{s name="RegisterTitle"}{/s} | {config name=shopName}
 {/block}
 
-{* Step box *}
-{block name="frontend_index_content_top"}
-	{include file="frontend/register/steps.tpl" sStepActive="register"}
-{/block}
+
+{* Hide everything thats not necessary for the registration *}
 
 {* Hide sidebar left *}
 {block name='frontend_index_content_left'}{/block}
 
 {* Hide breadcrumb *}
 {block name='frontend_index_breadcrumb'}<div class="clear"></div>{/block}
+
+{* Hide shop navigation *}
+{block name='frontend_index_shop_navigation'}<div class="clear"></div>{/block}
+
+{* Hide top bar navigation *}
+{block name='frontend_index_navigation'}
+	<header class="header-main">
+		<div class="container">
+
+			{* Logo container *}
+			{block name='frontend_index_logo_container'}
+				{include file="frontend/index/logo-container.tpl"}
+
+			{/block}
+
+			{* Shop navigation *}
+			{block name='frontend_index_shop_navigation'}
+				{include file="frontend/index/shop-navigation.tpl"}
+			{/block}
+		</div>
+	</header>
+
+	{* Hide maincategories navigation top *}
+	{block name='frontend_index_navigation_categories_top'}<div class="clear"></div>{/block}
+{/block}
+
+
+{* Step box *}
+{block name="frontend_index_navigation_categories_top" append}
+	{include file="frontend/register/steps.tpl" sStepActive="register"}
+{/block}
 
 {block name="frontend_index_content"}
 	<div class="register--content panel content block has--border">
@@ -39,57 +68,91 @@
 			{/if}
 		{/block}
 
-		<form method="post" action="{url action=saveRegister}" class="panel register--form">
+		{block name='frontend_register_index_form'}
+			<form method="post" action="{url action=saveRegister}" class="panel register--form">
 
-			{include file="frontend/register/error_message.tpl" error_messages=$register->personal->error_messages}
-			{include file="frontend/register/personal_fieldset.tpl" form_data=$register->personal->form_data error_flags=$register->personal->error_flags}
+				{block name='frontend_register_index_form_personal_fieldset'}
+					{include file="frontend/register/error_message.tpl" error_messages=$register->personal->error_messages}
+					{include file="frontend/register/personal_fieldset.tpl" form_data=$register->personal->form_data error_flags=$register->personal->error_flags}
+				{/block}
 
-			{include file="frontend/register/error_message.tpl" error_messages=$register->billing->error_messages}
-			{include file="frontend/register/billing_fieldset.tpl" form_data=$register->billing->form_data error_flags=$register->billing->error_flags country_list=$register->billing->country_list}
+				{block name='frontend_register_index_form_billing_fieldset'}
+					{include file="frontend/register/error_message.tpl" error_messages=$register->billing->error_messages}
+					{include file="frontend/register/billing_fieldset.tpl" form_data=$register->billing->form_data error_flags=$register->billing->error_flags country_list=$register->billing->country_list}
+				{/block}
 
-			{include file="frontend/register/error_message.tpl" error_messages=$register->shipping->error_messages}
-			{include file="frontend/register/shipping_fieldset.tpl" form_data=$register->shipping->form_data error_flags=$register->shipping->error_flags country_list=$register->shipping->country_list}
+				{block name='frontend_register_index_form_shipping_fieldset'}
+					{include file="frontend/register/error_message.tpl" error_messages=$register->shipping->error_messages}
+					{include file="frontend/register/shipping_fieldset.tpl" form_data=$register->shipping->form_data error_flags=$register->shipping->error_flags country_list=$register->shipping->country_list}
+				{/block}
 
-			<div class="payment_method register_last"></div>
+				<div class="payment_method register_last"></div>
 
-			{* Privacy checkbox *}
-			{if !$update}
-				{if {config name=ACTDPRCHECK}}
-					{block name='frontend_register_index_input_privacy'}
-						<div class="privacy">
-							<input name="register[personal][dpacheckbox]" type="checkbox" id="dpacheckbox"{if $form_data.dpacheckbox} checked="checked"{/if} value="1" class="chkbox" />
-							<label for="dpacheckbox" class="chklabel{if $register->personal->error_flags.dpacheckbox} instyle_error{/if}">{s name='RegisterLabelDataCheckbox'}{/s}</label>
-							<div class="clear">&nbsp;</div>
-						</div>
-					{/block}
+				{* Privacy checkbox *}
+				{if !$update}
+					{if {config name=ACTDPRCHECK}}
+						{block name='frontend_register_index_input_privacy'}
+							<div class="privacy">
+								<input name="register[personal][dpacheckbox]" type="checkbox" id="dpacheckbox"{if $form_data.dpacheckbox} checked="checked"{/if} value="1" class="chkbox" />
+								<label for="dpacheckbox" class="chklabel{if $register->personal->error_flags.dpacheckbox} instyle_error{/if}">{s name='RegisterLabelDataCheckbox'}{/s}</label>
+								<div class="clear">&nbsp;</div>
+							</div>
+						{/block}
+					{/if}
 				{/if}
-			{/if}
 
-			{* Required fields hint *}
-			<div class="register--required-info required_fields">
-				{s name='RegisterPersonalRequiredText' namespace='frontend/register/personal_fieldset'}{/s}
-			</div>
+				{block name='frntend_register_index_form_regquired'}
+					{* Required fields hint *}
+					<div class="register--required-info required_fields">
+						{s name='RegisterPersonalRequiredText' namespace='frontend/register/personal_fieldset'}{/s}
+					</div>
+				{/block}
 
-			{* Submit button *}
-			<div class="register--submit actions">
-				<button type="submit" class="btn btn--primary">{s name='RegisterIndexActionSubmit'}{/s} <i class="icon--arrow-right"></i></button>
-			</div>
-
-		</form>
+				{block name='frontend_register_index_form_submit'}
+					{* Submit button *}
+					<div class="register--submit actions">
+						<button type="submit" class="btn btn--primary">{s name='RegisterIndexActionSubmit'}{/s} <i class="icon--arrow-right"></i></button>
+					</div>
+				{/block}
+			</form>
+		{/block}
 	</div>
 {/block}
 
-{* Sidebar right *}
+{* Register advantages *}
 {block name='frontend_index_content_right'}
-	<div class="panel register--advantages">
-		<div id="right" class="panel--body">
-			<div class="register_info">
-				{s name='RegisterInfoAdvantages'}{/s}
-			</div>
+	<div class="panel register--advantages container">
+		<div class="panel--body">
+			{block name='frontend_index_content_advantages'}
 
-			{if {config name=TSID}}
-				{include file='frontend/plugins/trusted_shops/logo.tpl'}
-			{/if}
+				<h2 class="panel--title">{s name='RegisterInfoAdvantagesTitle'}{/s}</h2>
+
+				<ul class="register--advantages-list">
+					<li class="register--advantages-entry">
+						<i class="icon--check"></i>
+						{s name='RegisterInfoAdvantagesEntry1'}{/s}
+					</li>
+
+					<li class="register--advantages-entry">
+						<i class="icon--check"></i>
+						{s name='RegisterInfoAdvantagesEntry2'}{/s}
+					</li>
+
+					<li class="register--advantages-entry">
+						<i class="icon--check"></i>
+						{s name='RegisterInfoAdvantagesEntry3'}{/s}
+					</li>
+
+					<li class="register--advantages-entry">
+						<i class="icon--check"></i>
+						{s name='RegisterInfoAdvantagesEntry4'}{/s}
+					</li>
+
+				</ul>
+			{/block}
 		</div>
 	</div>
 {/block}
+
+{* Hide footer *}
+{block name="frontend_index_footer"}<div class="clear"></div>{/block}
