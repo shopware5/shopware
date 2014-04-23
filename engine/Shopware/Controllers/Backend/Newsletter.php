@@ -280,6 +280,17 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
      */
     public function cronAction()
     {
+        if (
+            Shopware()->Plugins()->Core()
+            && !Shopware()->Plugins()->Core()->Cron()->authorizeCronAction($this->Request())
+        ) {
+            $this->Response()
+                ->clearHeaders()
+                ->setHttpResponseCode(403)
+                ->appendBody("Forbidden");
+            return;
+        }
+
         $this->Response()->setHeader('Content-Type', 'text/plain');
         $this->mailAction();
     }
