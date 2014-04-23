@@ -82,4 +82,15 @@ class Enlight_Components_Session_Namespace
     {
         return $this->apply('count');
     }
+
+    /**
+     * @param $name
+     * @param null $default
+     * @return null
+     */
+    public function get($name, $default = null)
+    {
+        $value = $this->offsetGet($name);
+        return $value !== null ? $value : $default;
+    }
 }
