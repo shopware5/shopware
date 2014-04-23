@@ -88,51 +88,81 @@
         var me = this, $arrow;
 
         $arrow = $container.find('.thumbnails--arrow i');
-        $container.show();
-        $container.css('left', -$container.outerWidth() + 43 + 'px');
 
-        $(window).resize(function() {
-            $container.css('left', -$container.outerWidth() + 43);
+        $container.show();
+        window.setTimeout(function() {
+            me.setThumbnailsToOffCanvas($container);
+        }, 200);
+
+        $(window).on('resize.' + pluginName, function() {
+            window.setTimeout(function() {
+                me.setThumbnailsToOffCanvas($container);
+            }, 50);
         });
 
-        $container.on('click', function(event) {
+        $container.on('click.' + pluginName, function(event) {
             event.preventDefault();
 
             var $target = $(event.target),
                 $link = $target.parent('a');
 
             if($target.hasClass('thumbnail--image')) {
-                var id = $link.attr('data-slider-index');
-
-                me._glide.jump(id);
-                me.$thumbnailsContainer.find('a').removeClass('is--active');
-
-                $link.addClass('is--active');
+                me.onJumpToImage($link);
                 return false;
             }
 
             if(!$container.hasClass(me.opts.activeCls)) {
-                if(!Modernizr.csstransitions) {
-                    $container.css('left', 0);
-                } else {
-                    $container.transition({
-                        'left': 0
-                    }, 500, 'snap');
-                }
-                $arrow.removeClass(me.opts.iconArrowOpen).addClass(me.opts.iconArrowClose);
-                $container.addClass(me.opts.activeCls);
+               me.onShowThumbnails($container, $arrow);
             } else {
-                if(!Modernizr.csstransitions) {
-                    $container.css('left', -$container.outerWidth() + 43);
-                } else {
-                    $container.transition({
-                        'left': -$container.outerWidth() + 43
-                    }, 500, 'snap');
-                }
-                $arrow.removeClass(me.opts.iconArrowClose).addClass(me.opts.iconArrowOpen);
-                $container.removeClass(me.opts.activeCls);
+                me.onHideThumbnails($container, $arrow);
             }
         });
+    };
+
+    Plugin.prototype.onJumpToImage = function($link) {
+        var me = this,
+            id = $link.attr('data-slider-index');
+
+        me._glide.jump(parseInt(id, 10));
+        me.$thumbnailsContainer.find('a').removeClass('is--active');
+
+        $link.addClass('is--active');
+    };
+
+    Plugin.prototype.onShowThumbnails = function($container, $arrow) {
+        var me = this;
+
+        if(!Modernizr.csstransitions) {
+            $container.css('left', 0);
+        } else {
+            $container.transition({
+                'left': 0
+            }, 500, 'snap');
+        }
+        $arrow.removeClass(me.opts.iconArrowOpen).addClass(me.opts.iconArrowClose);
+        $container.addClass(me.opts.activeCls);
+
+        return true;
+    };
+
+    Plugin.prototype.onHideThumbnails = function($container, $arrow) {
+        var me = this;
+
+        if(!Modernizr.csstransitions) {
+            $container.css('left', -$container.outerWidth() + 43);
+        } else {
+            $container.transition({
+                'left': -$container.outerWidth() + 43
+            }, 500, 'snap');
+        }
+        $arrow.removeClass(me.opts.iconArrowClose).addClass(me.opts.iconArrowOpen);
+        $container.removeClass(me.opts.activeCls);
+
+        return true;
+    };
+
+    Plugin.prototype.setThumbnailsToOffCanvas = function($container) {
+        $container.css('left', -$container.outerWidth() + 43 + 'px');
     };
 
     Plugin.prototype.createSlider = function() {
@@ -154,6 +184,13 @@
                 '</ul>',
             '</div>'
         ].join('');
+    };
+
+    Plugin.prototype.destroyThumbnails = function() {
+        var me = this;
+
+        $(window).off('resize.' + pluginName);
+        me.$thumbnailsContainer.off('click.' + pluginName);
     };
 
     /**
