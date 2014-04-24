@@ -216,4 +216,12 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
     {
         return $this->getModule("Cms");
     }
+
+    /**
+     * @return sCore
+     */
+    public function Core()
+    {
+        return $this->getModule("Core");
+    }
 }

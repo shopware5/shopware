@@ -126,7 +126,6 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
         $system->sPathBanner = $sPathBase . $config->banner . '/';
         $system->sPathStart = $sPathBase . $config->baseFile;
         $system->sPathArticleFiles = $sPathBase . $config->articleFiles;
-        $system->sBasefile = $config->baseFile;
 
         $config['sCURRENCY'] = $system->sCurrency['currency'];
         $config['sCURRENCYHTML'] = $system->sCurrency['symbol'];

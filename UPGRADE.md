@@ -58,6 +58,20 @@ In this document you will find a changelog of the important changes related to t
     * `sSystem::sLoadHookPoints`
     * `sSystem::sInitFactory`
     * `sSystem::sCheckLicense`
+* Removed the following deprecated variables
+    * `sSystem::sDB_HOST`
+    * `sSystem::sDB_USER`
+    * `sSystem::sDB_PASSWORD`
+    * `sSystem::sDB_DATABASE`
+    * `sSystem::sDB_CONNECTOR`
+    * `sSystem::sDEBUG`
+    * `sSystem::sBENCHRESULTS`
+    * `sSystem::sBENCHMARK`
+    * `sSystem::sPathMedia`
+    * `sSystem::sBasePath`
+    * `sSystem::sBasefile`
+    * `sSystem::sLicenseData`
+    * `sSystem::sCurrencyData`
 * `sNewsletter` core class removed
 * Access to GET, POST and COOKIES through sSystem is deprecated.
     * The current arrays have been replaced with wrappers objects to the global variables

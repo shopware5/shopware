@@ -431,13 +431,13 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
      * Save a new blog comment / voting
      *
      * @param array $commentData
-     * @param int   $blogArticleId
+     * @param int $blogArticleId
+     * @throws Enlight_Exception
      */
     protected function sSaveComment($commentData, $blogArticleId)
     {
         if (empty($commentData)) {
-            Shopware()->System()->E_CORE_WARNING("sSaveComment #00", "Could not save comment");
-            return;
+            throw new Enlight_Exception("sSaveComment #00: Could not save comment");
         }
 
         $blogCommentModel = new \Shopware\Models\Blog\Comment();
