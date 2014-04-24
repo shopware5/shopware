@@ -513,7 +513,6 @@ Ext.define('Shopware.form.field.Media', {
         }
 
         this.value = value;
-        this.updatePreview(value);
     },
 
     /**
