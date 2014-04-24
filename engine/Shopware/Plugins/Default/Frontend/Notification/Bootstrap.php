@@ -127,6 +127,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
         $notifyOrderNumber = $action->Request()->notifyOrdernumber;
         if (!empty($notifyOrderNumber)) {
             $validator = new Zend_Validate_EmailAddress();
+            $validator->getHostnameValidator()->setValidateTld(false);
             if (empty($email) || !$validator->isValid($email)) {
                 $sError = true;
                 $action->View()->NotifyEmailError = true;
@@ -178,7 +179,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                         INSERT INTO s_core_optin (datum, hash, data)
                         VALUES (NOW(), ?, ?)
                     ';
-                    Shopware()->Db()->query($sql, array($hash, serialize(Shopware()->System()->_POST)));
+                    Shopware()->Db()->query($sql, array($hash, serialize(Shopware()->System()->_POST->toArray())));
 
                     $context = array(
                         'sConfirmLink' => $link,

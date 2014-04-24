@@ -93,6 +93,43 @@
 				    {/if}
 			    {/foreach}
 		    {/foreach}
+
+			<div class="space">&nbsp;</div>
+
+			{block name='frontend_account_downloads_actions_paging'}
+				{if $sPages.numbers|@count > 1}
+					<div class="listing_actions normal">
+						<div class="bottom">
+							<div class="paging">
+								<label>{se name='ListingPaging'}Blättern:{/se}</label>
+
+								{if $sPages.previous}
+									<a href="{$sPages.previous}" class="navi prev">
+										{s name="ListingTextPrevious"}&lt;{/s}
+									</a>
+								{/if}
+
+								{foreach from=$sPages.numbers item=page}
+									{if $page.markup}
+										<a title="" class="navi on">{$page.value}</a>
+									{else}
+										<a href="{$page.link}" title="" class="navi">
+											{$page.value}
+										</a>
+									{/if}
+								{/foreach}
+
+								{if $sPages.next}
+									<a href="{$sPages.next}" class="navi more">{s name="ListingTextNext"}&gt;{/s}</a>
+								{/if}
+							</div>
+							<div class="display_sites">
+								{se name="ListingTextSite"}Seite{/se} <strong>{if $sPage}{$sPage}{else}1{/if}</strong> {se name="ListingTextFrom"}von{/se} <strong>{$sNumberPages}</strong>
+							</div>
+						</div>
+					</div>
+				{/if}
+			{/block}
 		    </div> <!-- TABLE END -->
 	    {/if}
 	</div>

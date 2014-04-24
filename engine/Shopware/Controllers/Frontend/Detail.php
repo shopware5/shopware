@@ -92,7 +92,11 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         }
 
         $article = Shopware()->Modules()->Articles()->sGetConfiguratorImage($article);
-        $article['sBundles'] = Shopware()->Modules()->Articles()->sGetArticleBundlesByArticleID($id);
+
+        // Was:
+        // $article['sBundles'] = Shopware()->Modules()->Articles()->sGetArticleBundlesByArticleID($id);
+        // But sGetArticleBundlesByArticleID() always returned false.
+        $article['sBundles'] = false;
 
         if (!empty(Shopware()->Config()->InquiryValue)) {
             $this->View()->sInquiry = $this->Front()->Router()->assemble(array(
@@ -170,7 +174,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             }
         }
         $validator = new Zend_Validate_EmailAddress();
-
+        $validator->getHostnameValidator()->setValidateTld(false);
         if (!empty(Shopware()->Config()->sOPTINVOTE)
             && (empty(Shopware()->System()->_POST['sVoteMail'])
                 || !$validator->isValid(Shopware()->System()->_POST['sVoteMail']))
