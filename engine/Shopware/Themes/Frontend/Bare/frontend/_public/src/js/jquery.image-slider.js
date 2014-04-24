@@ -69,6 +69,31 @@
 
         me.initThumbnails(me.$thumbnailsContainer);
 
+        StateManager.registerListener([{
+            type: 'smartphone',
+            enter: function() {
+                me.$thumbnailsContainer.hide();
+            }
+        }, {
+            type: 'tablet',
+            enter: function() {
+                me.$thumbnailsContainer.show();
+            }
+        }, {
+            type: 'tabletLandscape',
+            enter: function() {
+                me.$thumbnailsContainer.show();
+            }
+        }, {
+            type: 'desktop',
+            enter: function() {
+                me.destroyThumbnails();
+            },
+            exit: function() {
+                me.initThumbnails(me.$thumbnailsContainer);
+            }
+        }]);
+
         me.$slider = me.createSlider();
         me.$img.replaceWith(me.$slider);
 
@@ -89,7 +114,6 @@
 
         $arrow = $container.find('.thumbnails--arrow i');
 
-        $container.show();
         window.setTimeout(function() {
             me.setThumbnailsToOffCanvas($container);
         }, 200);
@@ -162,7 +186,10 @@
     };
 
     Plugin.prototype.setThumbnailsToOffCanvas = function($container) {
-        $container.css('left', -$container.outerWidth() + 43 + 'px');
+        $container.css({
+            'left': -$container.outerWidth() + 43 + 'px',
+            'width': $container.outerWidth()
+        });
     };
 
     Plugin.prototype.createSlider = function() {
@@ -190,7 +217,9 @@
         var me = this;
 
         $(window).off('resize.' + pluginName);
-        me.$thumbnailsContainer.off('click.' + pluginName);
+        me.$thumbnailsContainer.off('click.' + pluginName).css('left', 0).hide();
+
+        return true;
     };
 
     /**
