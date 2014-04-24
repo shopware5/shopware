@@ -623,14 +623,17 @@ Ext.define('Shopware.Notification', {
         };
 
         // Add detail button
-        if(opts.btnDetail && opts.btnDetail.link) {
+        if(opts.btnDetail && (opts.btnDetail.link || opts.btnDetail.callback)) {
             btnContent.add({
                 xtype: 'button',
                 height: 22,
                 ui: 'growl-sticky',
                 text: opts.btnDetail.text || 'Details aufrufen',
                 handler: function() {
-                    window.open(opts.btnDetail.link, target);
+                    if (opts.btnDetail.link) {
+                        window.open(opts.btnDetail.link, target);
+                    }
+
                     detailCB.apply(opts.btnDetail.scope || me, [ growlMsg, msgData ]);
 
                     if(autoClose) {
