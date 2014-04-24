@@ -179,8 +179,18 @@ class sBasket
             return;
         }
 
-        $basketAmount = $this->sSYSTEM->sDB_CONNECTION->GetOne("SELECT SUM(quantity*(floor(price * 100 + .55)/100))
-        AS totalAmount FROM s_order_basket WHERE sessionID=? AND modus!=4 GROUP BY sessionID",array($this->sSYSTEM->sSESSION_ID));
+        $sql = "SELECT SUM(quantity*(floor(price * 100 + .55)/100)) AS totalAmount
+                FROM s_order_basket
+                WHERE sessionID=? AND modus!=4
+                GROUP BY sessionID";
+        $params = array($this->sSYSTEM->sSESSION_ID);
+
+        $sql = Enlight()->Events()->filter(
+            'Shopware_Modules_Basket_InsertDiscount_FilterSql_BasketAmount',
+            $sql,
+            array('subject' => $this, "params" => $params)
+        );
+        $basketAmount = Shopware()->Db()->fetchOne($sql, $params);
 
         if (!$basketAmount) return;	// No articles in basket, return
 
@@ -1182,7 +1192,7 @@ class sBasket
                     $totalCount++;
                 }
 
-                $totalAmountNet += $getArticles[$key]["amountnet"];
+                $totalAmountNet += round($getArticles[$key]["amountnet"], 2);
 
                 $getArticles[$key]["priceNumeric"] = $getArticles[$key]["price"];
                 $getArticles[$key]["price"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($getArticles[$key]["price"]);
@@ -1289,21 +1299,29 @@ class sBasket
     {
         $datum = date("Y-m-d H:i:s");
 
-        if (!empty($this->sSYSTEM->_COOKIE)&&empty($this->sSYSTEM->_COOKIE["sUniqueID"])) {
-            $this->sSYSTEM->_COOKIE["sUniqueID"] = md5(uniqid(rand()));
-            setcookie("sUniqueID", $this->sSYSTEM->_COOKIE["sUniqueID"], Time()+(86400*360), '/');
+        $cookieData = $this->sSYSTEM->_COOKIE->toArray();
+        if (!empty($cookieData) && empty($this->sSYSTEM->_COOKIE["sUniqueID"])) {
+            $cookieId = md5(uniqid(rand()));
+            setcookie("sUniqueID", $cookieId, Time()+(86400*360), '/');
+            $_COOKIE["sUniqueID"] = $cookieId;
+        } elseif (!empty($this->sSYSTEM->_COOKIE["sUniqueID"])) {
+            $cookieId = $this->sSYSTEM->_COOKIE["sUniqueID"];
         }
 
         // Check if this article is already noted
         $checkForArticle = $this->sSYSTEM->sDB_CONNECTION->GetRow("
         SELECT id FROM s_order_notes WHERE sUniqueID=? AND ordernumber=?
-        ",array($this->sSYSTEM->_COOKIE["sUniqueID"],$articleOrdernumber));
+        ",array($cookieId,$articleOrdernumber));
 
         if (!$checkForArticle["id"]) {
             $queryNewPrice = $this->sSYSTEM->sDB_CONNECTION->Execute("
             INSERT INTO s_order_notes (sUniqueID, userID,articlename, articleID, ordernumber, datum)
             VALUES (?,?,?,?,?,?)
-            ",array(empty($this->sSYSTEM->_COOKIE["sUniqueID"]) ? $this->sSYSTEM->sSESSION_ID : $this->sSYSTEM->_COOKIE["sUniqueID"],$this->sSYSTEM->_SESSION['sUserId'] ?$this->sSYSTEM->_SESSION['sUserId'] : "0" ,$articleName,$articleID,$articleOrdernumber,$datum));
+            ",array(
+                empty($cookieId) ? $this->sSYSTEM->sSESSION_ID : $cookieId,
+                $this->sSYSTEM->_SESSION['sUserId'] ?$this->sSYSTEM->_SESSION['sUserId'] : "0" ,
+                $articleName, $articleID, $articleOrdernumber, $datum
+            ));
 
             if (!$queryNewPrice) {
                 $this->sSYSTEM->E_CORE_WARNING ("sBasket##sAddNote##01","Error in SQL-query");

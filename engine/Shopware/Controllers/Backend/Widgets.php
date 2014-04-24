@@ -27,27 +27,6 @@
  */
 class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_ExtJs
 {
-    public $widgetsXml;
-    public $widgetsApi;
-    public $panelApi;
-    public $dir;
-    protected $authCode;
-
-    /**
-     * Create reference to widget-model
-     *
-     * @return void
-     */
-    public function preDispatch()
-    {
-        $this->widgetsXml = Shopware()->DocPath()."files/config/Widgets.xml";
-        $this->widgetsApi = new Shopware_Models_Widgets_Widgets(null, $this->widgetsXml);
-        $this->authCode = 'f0Dbh1jL9RoddLD8lqhYHKYWyUqova'; // Shopware Update-Service Rest-Code
-        $this->dir = Shopware()->DocPath()."files/config";
-
-        parent::preDispatch();
-    }
-
     /**
      * Returns the list of active widgets for the current logged
      * in user as an JSON string.

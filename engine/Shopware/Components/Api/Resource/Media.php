@@ -128,7 +128,7 @@ class Media extends Resource
             /**@var $manager Manager */
             $manager = $this->getContainer()->get('thumbnail_manager');
 
-            $manager->createMediaThumbnail($media);
+            $manager->createMediaThumbnail($media, array(), true);
         }
 
         return $media;
@@ -172,7 +172,7 @@ class Media extends Resource
             /**@var $manager Manager */
             $manager = $this->getContainer()->get('thumbnail_manager');
 
-            $manager->createMediaThumbnail($media);
+            $manager->createMediaThumbnail($media, array(), true);
         }
         return $media;
     }
@@ -310,15 +310,10 @@ class Media extends Resource
         }
 
         if ($media->getType() === MediaModel::TYPE_IMAGE) {
-            $settingSizes = $album->getSettings()->getThumbnailSize();
-            $settingSizes += $media->getDefaultThumbnails();
-
+            /**@var $manager Manager */
             $manager = Shopware()->Container()->get('thumbnail_manager');
-            $manager->createMediaThumbnail(
-                $media,
-                $settingSizes,
-                true
-            );
+
+            $manager->createMediaThumbnail($media, array(), true);
         }
 
         return $media;

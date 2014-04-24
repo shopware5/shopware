@@ -77,7 +77,7 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
             }
 
             $validator = new Zend_Validate_EmailAddress();
-
+            $validator->getHostnameValidator()->setValidateTld(false);
             if (!$validator->isValid($this->Request()->getPost("sRecipient"))) {
                 $variables["sError"] = true;
             }

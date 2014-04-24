@@ -63,7 +63,7 @@ class Shopware_StoreApi_Core_Rest_Client extends Enlight_Class
 
         // Change the timeout
         $httpClient->setConfig(array(
-            "timeout" => 180
+            "timeout" => 7
         ));
     }
 

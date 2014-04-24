@@ -143,7 +143,6 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
         if (!empty($paymentData) && $userId) {
             $paymentObject = $this->admin->sInitiatePaymentClass($paymentData);
-            $this->admin->sSYSTEM->_POST = $this->request->getPost();
             if ($paymentObject instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
                 $paymentObject->savePaymentData($userId, $this->request);
             }
@@ -360,7 +359,6 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $this->View()->register->payment->form_data = $this->request->getPost();
             $this->View()->register->payment->form_data['payment'] = $this->post['payment'];
         }
-        $this->admin->sSYSTEM->_POST = $this->request->getPost();
         $checkData = $this->validatePayment();
         if (!empty($checkData['sErrorMessages'])) {
             $this->error = true;
@@ -564,10 +562,12 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     {
         $error_flags = array();
         $error_messages = array();
+        $validator = new Zend_Validate_EmailAddress();
+        $validator->getHostnameValidator()->setValidateTld(false);
 
         if (empty($this->post['personal']['email'])) {
 
-        } elseif (($validator = new Zend_Validate_EmailAddress()) && !$validator->isValid($this->post['personal']['email'])) {
+        } elseif (!$validator->isValid($this->post['personal']['email'])) {
             $error_messages[] = Shopware()->Snippets()->getNamespace("frontend")->get('RegisterAjaxEmailNotValid', 'Please enter a valid mail address.', true);
             $error_flags['email'] = true;
             if (!empty($this->post['personal']['emailConfirmation'])) {

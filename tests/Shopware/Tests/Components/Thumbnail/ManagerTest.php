@@ -74,6 +74,43 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit_Framework
 
         foreach ($sizes as $size) {
             $this->assertFileExists($path . '_' . $size . '.jpg');
+            $this->assertFileExists($path . '_' . $size . '.png');
+        }
+    }
+
+    public function testGenerationWithoutPassedSizesButProportion()
+    {
+        $manager = Shopware()->Container()->get('thumbnail_manager');
+
+        $media = $this->getMediaModel();
+
+        $sizes = array(
+            '300x310',
+            '320x330',
+            '340x350'
+        );
+
+        $proportionalSizes = array(
+            '300x298',
+            '320x318',
+            '340x337'
+        );
+
+        $media->getAlbum()->getSettings()->setThumbnailSize($sizes);
+
+        $manager->createMediaThumbnail($media, array(), true);
+
+        $thumbnailDir = Shopware()->DocPath('media_' . strtolower($media->getType()) . '_thumbnail');
+
+        $path = $thumbnailDir . $media->getName();
+
+        foreach ($sizes as $key => $size) {
+            $this->assertFileExists($path . '_' . $size . '.jpg');
+            $this->assertFileExists($path . '_' . $size . '.png');
+
+            list($width, $height) = getimagesize($path . '_' . $size . '.jpg');
+
+            $this->assertSame($proportionalSizes[$key], $width . 'x' . $height);
         }
     }
 

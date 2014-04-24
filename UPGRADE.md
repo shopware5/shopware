@@ -2,6 +2,31 @@
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
 ## 4.3.0
+* Removed deprecated Zend Framework components:
+    * `Zend_Amf`
+    * `Zend_Application`
+    * `Zend_Barcode`
+    * `Zend_Cloud`
+    * `Zend_CodeGenerator`
+    * `Zend_Console`
+    * `Zend_Gdata`
+    * `Zend_Markup`
+    * `Zend_Measure`
+    * `Zend_Memory`
+    * `Zend_Pdf`
+    * `Zend_Reflection`
+    * `Zend_Search`
+    * `Zend_Serializer`
+    * `Zend_Tag`
+    * `Zend_Test`
+    * `Zend_Tool`
+    * `Zend_EventManager`
+    * `Zend_Feed`
+    * `Zend_Dojo`
+    * `Zend_Mobile`
+    * `Zend_Queue`
+    * `Zend_Captcha`
+    * `Zend_Service`
 
 * `sCore::sCustomRenderer()` removed
 * `sCore::sBuildLink()` second argument removed (dead code)
@@ -12,13 +37,46 @@ In this document you will find a changelog of the important changes related to t
 * `Shopware_Controllers_Frontend_Content` legacy controller removed
 * `templates/_default/frontend/content` legacy template files removed
 * `s_cms_content` legacy database table removed
+* Removed functions `simpledom_load_file()` and `simpledom_load_string()`
+* Removed class `SimpleDOM` and `Shopware_Components_Xml_SimpleXml`
+* Removed the following deprecated methods
+    * `sArticles::sGetArticleAccessories`
+    * `sArticles::sCreateTranslationTable`
+    * `sArticles::sGetLiveShopping`
+    * `sArticles::sGetArticleBundlesByArticleID`
+    * `sArticles::sGetArticleBundleByID`
+    * `sArticles::sGetBundleBasketDiscount`
+    * `sSystem::sPreProcess`
+    * `sSystem::sInitMailer`
+    * `sSystem::sGetTranslation`
+    * `sSystem::sInitAdo`
+    * `sSystem::sTranslateConfig`
+    * `sSystem::sInitConfig`
+    * `sSystem::sInitSmarty`
+    * `sSystem::sInitSession`
+    * `sSystem::sCallHookPoint`
+    * `sSystem::sLoadHookPoints`
+    * `sSystem::sInitFactory`
+    * `sSystem::sCheckLicense`
+* `sNewsletter` core class removed
+* Access to GET, POST and COOKIES through sSystem is deprecated.
+    * The current arrays have been replaced with wrappers objects to the global variables
+    * This might introduce breaks in some scenarios (eg.: when using array functions like array_merge)
+* Plugin configuration: Stores of `select` and `combo` elements can now be translated
+* Dynamically injecting variables into sSystem is no longer supported
+* `sSystem::sSYSTEM` self-reference was removed
 
 ## 4.2.2
 
 * Remove old payment dummy plugins out of the core: PaymentSofort and PigmbhRatePAYPayment
-* Add a new basic setting to add a possibility to disable the tell a friend feature
+* The tell a friend feature is now disabled by default, due to legal requirements. This will affect new and existing installations. You can enable/re-enable it using a new configuration option in the backend settings menu.
 * [REST API] Add thumbnail generation to article and variant create and update actions
 * Deprecation: The Database Column impressions in s_articles_details in now deprecated. Please use the s_statistics_article_impression table.
+* `Shopware_Components_Plugin_Bootstrap` now has a `addFormTranslations()` method to facilitate translations creation for forms.
+* Removed view variables `sOrders` and `sNotes` from `/engine/Shopware/Controllers/Frontend/Account.php` index action
+* The methods `sGetOpenOrderData` and `sGetDownloads` in `/engine/core/class/sAdmin.php` will now return a different array structure and will accept new optional parameters to provide a pager functionality
+* Added X-Sendfile support for ESD downloads. `redirectDownload` configuration variable is now deprecated, `esdDownloadStrategy` should be used instead
+* Deprecation: `/engine/Shopware/Models/Payment/Repository.php:` `getPaymentsQuery` and `getPaymentsQueryBuilder` use `getActivePaymentsQuery` and `getActivePaymentsQueryBuilder` instead.
 
 ## 4.2.0
 

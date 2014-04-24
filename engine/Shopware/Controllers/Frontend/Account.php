@@ -56,13 +56,9 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
     /**
      * Index action method
-     *
-     * Read orders and notes
      */
     public function indexAction()
     {
-        $this->View()->sOrders = $this->admin->sGetOpenOrderData();
-        $this->View()->sNotes = Shopware()->Modules()->Basket()->sGetNotes();
         if ($this->Request()->getParam('success')) {
             $this->View()->sSuccessAction = $this->Request()->getParam('success');
         }
@@ -162,7 +158,12 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      */
     public function ordersAction()
     {
-        $this->View()->sOpenOrders = $this->admin->sGetOpenOrderData();
+        $destinationPage = (int)$this->Request()->sPage;
+        $orderData = $this->admin->sGetOpenOrderData($destinationPage);
+        $this->View()->sOpenOrders = $orderData["orderData"];
+        $this->View()->sNumberPages = $orderData["numberOfPages"];
+        $this->View()->sPages = $orderData["pages"];
+
         //this has to be assigned here because the config method in smarty can't handle array structures
         $this->View()->sDownloadAvailablePaymentStatus = Shopware()->Config()->get('downloadAvailablePaymentStatus');
     }
@@ -174,7 +175,12 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      */
     public function downloadsAction()
     {
-        $this->View()->sDownloads = $this->admin->sGetDownloads();
+        $destinationPage = (int)$this->Request()->sPage;
+        $orderData = $this->admin->sGetDownloads($destinationPage);
+        $this->View()->sDownloads = $orderData["orderData"];
+        $this->View()->sNumberPages = $orderData["numberOfPages"];
+        $this->View()->sPages = $orderData["pages"];
+
         //this has to be assigned here because the config method in smarty can't handle array structures
         $this->View()->sDownloadAvailablePaymentStatus = Shopware()->Config()->get('downloadAvailablePaymentStatus');
     }
@@ -261,7 +267,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     /**
      * Login action method
      *
-     * Login account and show login erros
+     * Login account and show login errors
      */
     public function loginAction()
     {
@@ -365,7 +371,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             }
 
             if (!empty($values)) {
-                $this->admin->sSYSTEM->_POST = array_merge($values['personal'], $values['billing'], $this->admin->sSYSTEM->_POST);
+                $this->admin->sSYSTEM->_POST = array_merge($values['personal'], $values['billing'], $this->admin->sSYSTEM->_POST->toArray());
             }
 
 
@@ -454,7 +460,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
 
             if (!empty($values)) {
-                $this->admin->sSYSTEM->_POST = array_merge($values['shipping'], $this->admin->sSYSTEM->_POST);
+                $this->admin->sSYSTEM->_POST = array_merge($values['shipping'], $this->admin->sSYSTEM->_POST->toArray());
             }
 
             $checkData = $this->admin->sValidateStep2ShippingAddress($rules, true);
@@ -522,10 +528,15 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      */
     public function saveNewsletterAction()
     {
+
         if ($this->Request()->isPost()) {
             $status = $this->Request()->getPost('newsletter') ? true : false;
             $this->admin->sUpdateNewsletter($status, $this->admin->sGetUserMailById(), true);
-            $this->View()->sSuccessAction = 'newsletter';
+            $successMessage =  $status ? 'newsletter' : 'deletenewsletter';
+            if(Shopware()->Config()->optinnewsletter && $status) {
+                $successMessage = 'optinnewsletter';
+            }
+            $this->View()->sSuccessAction = $successMessage;
         }
         $this->forward('index');
     }
@@ -605,18 +616,41 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             return $this->forward('downloads');
         }
 
-        if (Shopware()->Config()->get("redirectDownload")) {
-            $this->redirect($this->Request()->getBasePath() . '/' .  $file);
-        } else {
-            @set_time_limit(0);
-            $this->Response()
+        switch (Shopware()->Config()->get("esdDownloadStrategy")) {
+            case 0:
+                $this->redirect($this->Request()->getBasePath() . '/' .  $file);
+                break;
+            case 1:
+                @set_time_limit(0);
+                $this->Response()
                     ->setHeader('Content-Type', 'application/octet-stream')
                     ->setHeader('Content-Disposition', 'attachment; filename="'.$download['file'].'"')
                     ->setHeader('Content-Length', filesize($filePath));
 
-            $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+                $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
-            readfile($filePath);
+                readfile($filePath);
+                break;
+            case 2:
+                // Apache2 + X-Sendfile
+                $this->Response()
+                    ->setHeader('Content-Type', 'application/octet-stream')
+                    ->setHeader('Content-Disposition', 'attachment; filename="'.$download['file'].'"')
+                    ->setHeader('X-Sendfile', $filePath);
+
+                $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+
+                break;
+            case 3:
+                // Nginx + X-Accel
+                $this->Response()
+                    ->setHeader('Content-Type', 'application/octet-stream')
+                    ->setHeader('Content-Disposition', 'attachment; filename="'.$download['file'].'"')
+                    ->setHeader('X-Accel-Redirect', '/'.$file);
+
+                $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+
+                break;
         }
     }
 
@@ -730,10 +764,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         if (empty(Shopware()->Session()->sRegister)) {
             Shopware()->Session()->sRegister = array();
         }
-
-        $this->admin->sSYSTEM->_POST = array();
-        $this->admin->sSYSTEM->_POST['email'] = $this->Request()->getParam('email');
-        $this->admin->sSYSTEM->_POST['password'] = $this->Request()->getParam('password');
 
         if ($this->Request()->getParam('accountmode')==0 || $this->Request()->getParam('accountmode')==1) {
             Shopware()->Session()->sRegister['auth']['email'] = $this->admin->sSYSTEM->_POST['email'];
