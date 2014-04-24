@@ -525,7 +525,7 @@ class sArticles
         }
         $this->sSYSTEM->_SESSION['sArticleCommentInserts'][$article] = $insertId;
 
-        unset($this->sSYSTEM->_POST);
+        $this->sSYSTEM->_POST = array();
     }
 
     /**

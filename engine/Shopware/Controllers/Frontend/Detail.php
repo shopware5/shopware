@@ -193,7 +193,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
                     VALUES (NOW(), ?, ?)
                 ';
                 Shopware()->Db()->query($sql, array(
-                    $hash, serialize(Shopware()->System()->_POST)
+                    $hash, serialize(Shopware()->System()->_POST->toArray())
                 ));
 
                 $link = $this->Front()->Router()->assemble(array(
@@ -217,7 +217,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
                 Shopware()->Modules()->Articles()->sSaveComment($id);
             }
         } else {
-            $this->View()->sFormData = Shopware()->System()->_POST;
+            $this->View()->sFormData = Shopware()->System()->_POST->toArray();
             $this->View()->sErrorFlag = $sErrorFlag;
         }
 
