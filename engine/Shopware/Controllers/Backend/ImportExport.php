@@ -260,6 +260,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             'billing.city as billing_city',
             'billing.phone',
             'billing.fax',
+            'billing.additionalAddressLine1 as billing_additional_address_line1',
+            'billing.additionalAddressLine2 as billing_additional_address_line2',
             'billing.countryId as billing_countryID',
             'billing.stateId as billing_stateID',
             'billing.vatId as ustid'
@@ -276,6 +278,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             'shipping.streetNumber as shipping_streetnumber',
             'shipping.zipCode as shipping_zipcode',
             'shipping.city as shipping_city',
+            'shipping.additionalAddressLine1 as shipping_additional_address_line_1',
+            'shipping.additionalAddressLine2 as shipping_additional_address_line2',
             'shipping.countryId as shipping_countryID',
             'shipping.stateId as shipping_stateID'
         ));
@@ -3123,7 +3127,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             'accountmode'    => 'accountMode',
 
             'ustid'          => 'billing_vatId',
-
+            'billing_additional_address_line1' => 'billing_additionalAddressLine1',
+            'billing_additional_address_line2' => 'billing_additionalAddressLine2',
             'billing_text1'  => 'billing_attr_text1',
             'billing_text2'  => 'billing_attr_text2',
             'billing_text3'  => 'billing_attr_text3',
@@ -3131,6 +3136,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             'billing_text5'  => 'billing_attr_text5',
             'billing_text6'  => 'billing_attr_text6',
 
+            'shipping_additional_address_line1' => 'shipping_additionalAddressLine1',
+            'shipping_additional_address_line2' => 'shipping_additionalAddressLine2',
             'shipping_text1'  => 'shipping_attr_text1',
             'shipping_text2'  => 'shipping_attr_text2',
             'shipping_text3'  => 'shipping_attr_text3',

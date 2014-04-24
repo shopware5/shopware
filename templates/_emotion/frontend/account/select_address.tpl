@@ -17,7 +17,10 @@
         {/if}
         {$sAddress.firstname} {$sAddress.lastname}<br />
         {$sAddress.street} {$sAddress.streetnumber}<br />
+		{if $sAddress.additional_address_line1}{$sAddress.additional_address_line1}<br />{/if}
+		{if $sAddress.additional_address_line2}{$sAddress.additional_address_line2}<br />{/if}
         {$sAddress.zipcode} {$sAddress.city}<br />
+		{if $sUserData.additional.stateShipping.name}{$sUserData.additional.stateShipping.name}<br />{/if}
         {$sAddress.countryname}<br />
 	</p>
 	<div class="change">

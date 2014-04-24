@@ -80,12 +80,15 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
         streetNumber:'{s name=address/street_number}Street number{/s}',
         zipCode:'{s name=address/zip_code}Zip code{/s}',
         city:'{s name=address/city}City{/s}',
+        additionalAddressLine1:'{s name=address/additionalAddressLine1}Additional address line 1{/s}',
+        additionalAddressLine2:'{s name=address/additionalAddressLine2}Additional address line 2{/s}',
         salutation:{
             label:'{s name=address/salutation}Salutation{/s}',
             mr:'{s name=address/salutation_mr}Mr{/s}',
             ms:'{s name=address/salutation_ms}Mrs{/s}'
         },
         country:'{s name=address/country}Country{/s}',
+        state:'{s name=address/state}State{/s}',
         company:'{s name=address/company}Company{/s}',
         department:'{s name=address/department}Department{/s}',
         copyBilling: '{s name=shipping/copy_billing}For usability purposes, click here to use the billing address as shipping address.{/s}',
@@ -111,6 +114,15 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
         ];
 
         me.items = me.createElements();
+        me.addEvents(
+                /**
+                 * Fired when the user changes his country. Used to fill the state box
+                 * @param field
+                 * @param newValue
+                 */
+                'countryChanged'
+
+        );
         me.callParent(arguments);
     },
 
@@ -193,6 +205,12 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
         }, {
             name:'shipping[streetNumber]',
             fieldLabel:me.snippets.streetNumber
+        }, {
+            name:'shipping[additionalAddressLine1]',
+            fieldLabel:me.snippets.additionalAddressLine1
+        }, {
+            name:'shipping[additionalAddressLine2]',
+            fieldLabel:me.snippets.additionalAddressLine2
         }];
     },
 
@@ -203,23 +221,55 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
      */
     createRightElements:function () {
         var me = this;
-        return [{
+
+        me.countryStateCombo = Ext.create('Ext.form.field.ComboBox', {
+            name:'shipping[stateId]',
+            action: 'shippingStateId',
+            fieldLabel:me.snippets.state,
+            valueField: 'id',
+            displayField: 'name',
+            forceSelection: true,
+            labelWidth:120,
+            store: Ext.create('Shopware.store.CountryState'),
+            minWidth: 250,
+            editable: false,
+            hidden: true,
+            triggerAction:'all',
+            queryMode: 'local'
+        });
+
+        me.countryCombo = Ext.create('Ext.form.field.ComboBox', {
+            triggerAction:'all',
+            name:'shipping[countryId]',
+            fieldLabel:me.snippets.country,
+            valueField:'id',
+            queryMode: 'local',
+            displayField:'name',
+            forceSelection: true,
+            store:me.countriesStore,
+            labelWidth:120,
+            minWidth:250,
+            required:true,
+            editable:false,
+            allowBlank:false,
+            listeners: {
+                change: function(field, newValue, oldValue, record) {
+                    me.fireEvent('countryChanged', field, newValue, me.countryStateCombo, me.record.getShipping().first());
+                }
+            }
+        });
+
+        return [
+        {
             name:'shipping[zipCode]',
             fieldLabel:me.snippets.zipCode
         }, {
             name:'shipping[city]',
             fieldLabel:me.snippets.city
-        }, {
-            xtype:'combobox',
-            queryMode: 'local',
-            triggerAction:'all',
-            editable:false,
-            name:'shipping[countryId]',
-            fieldLabel:me.snippets.country,
-            store: me.countriesStore,
-            valueField:'id',
-            displayField:'name'
-        }, {
+        },
+        me.countryStateCombo,
+        me.countryCombo,
+        {
             name:'shipping[company]',
             fieldLabel:me.snippets.company
         }, {

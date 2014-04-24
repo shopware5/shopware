@@ -180,6 +180,22 @@ class Billing extends ModelEntity
     protected $birthday;
 
     /**
+     * Contains the additional address line data
+     *
+     * @var string $additionalAddressLine1
+     * @ORM\Column(name="additional_address_line1", type="string", length=255, nullable=true)
+     */
+    protected $additionalAddressLine1 = null;
+
+    /**
+     * Contains the additional address line data 2
+     *
+     * @var string $additionalAddressLine2
+     * @ORM\Column(name="additional_address_line2", type="string", length=255, nullable=true)
+     */
+    protected $additionalAddressLine2 = null;
+
+    /**
      * OWNING SIDE
      * The customer property is the owning side of the association between customer and billing.
      * The association is joined over the billing userID and the customer id
@@ -622,5 +638,45 @@ class Billing extends ModelEntity
     public function getStateId()
     {
         return $this->stateId;
+    }
+
+    /**
+     * Setter function for the setAdditionalAddressLine2 column property.
+     *
+     * @param string $additionalAddressLine2
+     */
+    public function setAdditionalAddressLine2($additionalAddressLine2)
+    {
+        $this->additionalAddressLine2 = $additionalAddressLine2;
+    }
+
+    /**
+     * Getter function for the getAdditionalAddressLine2 column property.
+     *
+     * @return string
+     */
+    public function getAdditionalAddressLine2()
+    {
+        return $this->additionalAddressLine2;
+    }
+
+    /**
+     * Setter function for the setAdditionalAddressLine1 column property.
+     *
+     * @param string $additionalAddressLine1
+     */
+    public function setAdditionalAddressLine1($additionalAddressLine1)
+    {
+        $this->additionalAddressLine1 = $additionalAddressLine1;
+    }
+
+    /**
+     * Getter function for the getAdditionalAddressLine1 column property.
+     *
+     * @return string
+     */
+    public function getAdditionalAddressLine1()
+    {
+        return $this->additionalAddressLine1;
     }
 }

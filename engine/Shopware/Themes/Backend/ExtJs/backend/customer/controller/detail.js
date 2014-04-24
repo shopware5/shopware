@@ -178,22 +178,24 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
         //i tried to realise this over the form record, but the last overrides from the basic form and the form panel prevent it.
         values["shipping[city]"] = values["billing[city]"];
         values['shipping[salutation]'] = values['billing[salutation]'];
-        values['shipping[firstName]'] =  values['billing[firstName]'];
-        values['shipping[lastName]'] =  values['billing[lastName]'];
-        values['shipping[street]'] =  values['billing[street]'];
-        values['shipping[streetNumber]'] =  values['billing[streetNumber]'];
-        values['shipping[zipCode]'] =  values['billing[zipCode]'];
-        values['shipping[city]'] =  values['billing[city]'];
-        values['shipping[countryId]'] =  values['billing[countryId]'];
-        values['shipping[stateId]'] =  values['billing[stateId]'];
-        values['shipping[company]'] =  values['billing[company]'];
-        values['shipping[department]'] =  values['billing[department]'];
-        values['shipping[text1]'] =  values['billing[text1]'];
-        values['shipping[text2]'] =  values['billing[text2]'];
-        values['shipping[text3]'] =  values['billing[text3]'];
-        values['shipping[text4]'] =  values['billing[text4]'];
-        values['shipping[text5]'] =  values['billing[text5]'];
-        values['shipping[text6]'] =  values['billing[text6]'];
+        values['shipping[firstName]'] = values['billing[firstName]'];
+        values['shipping[lastName]'] = values['billing[lastName]'];
+        values['shipping[street]'] = values['billing[street]'];
+        values['shipping[streetNumber]'] = values['billing[streetNumber]'];
+        values['shipping[zipCode]'] = values['billing[zipCode]'];
+        values['shipping[city]'] = values['billing[city]'];
+        values['shipping[additionalAddressLine1]'] = values['billing[additionalAddressLine1]'];
+        values['shipping[additionalAddressLine2]'] = values['billing[additionalAddressLine2]'];
+        values['shipping[countryId]'] = values['billing[countryId]'];
+        values['shipping[stateId]'] = values['billing[stateId]'];
+        values['shipping[company]'] = values['billing[company]'];
+        values['shipping[department]'] = values['billing[department]'];
+        values['shipping[text1]'] = values['billing[text1]'];
+        values['shipping[text2]'] = values['billing[text2]'];
+        values['shipping[text3]'] = values['billing[text3]'];
+        values['shipping[text4]'] = values['billing[text4]'];
+        values['shipping[text5]'] = values['billing[text5]'];
+        values['shipping[text6]'] = values['billing[text6]'];
         basic.setValues(values);
 
 

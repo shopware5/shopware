@@ -46,6 +46,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
     extend:'Ext.app.Controller',
     
     refs: [
+        { ref: 'orderList', selector: 'order-list' },
         { ref: 'positionGrid', selector: 'order-detail-window order-position-panel' },
         { ref: 'detailWindow', selector: 'order-detail-window' }
     ],
@@ -114,6 +115,13 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                 saveOverview: me.onSaveOverview,
                 updateForms: me.onUpdateDetailPage,
                 convertOrder: me.onConvertOrder
+            },
+            'order-billing-field-set': {
+                countryChanged: me.onCountryChanged
+            },
+
+            'order-shipping-field-set': {
+                countryChanged: me.onCountryChanged
             },
             'order-detail-window order-detail-panel': {
                 saveDetails: me.onSaveDetails,
@@ -452,6 +460,44 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
     },
 
     /**
+     * Called when the user changes the country combobox in the shipping or billing form
+     *
+     * @param countryCombo
+     * @param newValue
+     * @param countryStateCombo
+     * @param record
+     */
+    onCountryChanged: function(countryCombo, newValue, countryStateCombo, record) {
+        var store = countryStateCombo.store,
+            oldStateId = record.get('stateId');
+        if (newValue === null) {
+            countryStateCombo.setValue(null);
+            countryStateCombo.hide();
+            return;
+        }
+        store.getProxy().extraParams = {
+            countryId: newValue
+        };
+        countryStateCombo.show();
+        store.load({
+            callback: function() {
+                var record = store.getById(oldStateId);
+                if (store.getCount() === 0) {
+                    countryStateCombo.setValue(null);
+                    countryStateCombo.hide();
+                    return true;
+                }
+                if (record instanceof Ext.data.Model) {
+                    countryStateCombo.setValue(record.get('id'));
+                } else {
+                    countryStateCombo.setValue(null);
+                }
+                countryStateCombo.show();
+            }
+        });
+    },
+
+    /**
      * Event listener method which is fired when the user clicks the preview button
      * on the detail page in the document tab panel.
      *
@@ -586,6 +632,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
         var me = this;
 
         me.saveRecord(record, me.snippets.externalComment.successMessage, me.snippets.externalComment.failureMessage);
+
     },
 
     /**
@@ -619,6 +666,8 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                 } else {
                     Shopware.Notification.createGrowlMessage(me.snippets.failureTitle, errorMessage + '<br> ' + rawData.message, me.snippets.growlMessage)
                 }
+                // reload the order list
+                me.getOrderList().store.load();
             }
         });
     },

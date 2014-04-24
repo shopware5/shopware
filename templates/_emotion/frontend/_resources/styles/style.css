@@ -818,7 +818,7 @@ div.agb_info {height: 30px;font-weight:normal;}
 #content .orders, #content .downloads {margin-left: 20px;}
 #content .account .success, #content .account .error, #content .account .error_msg {width:760px;margin: 0 0 20px;}
 #content .account .error_msg {margin-bottom: 0;}
-.account .billing .inner_container .change, .account .shipping .inner_container .change {position: absolute; top: 150px;}
+.account .billing .inner_container .change, .account .shipping .inner_container .change {position: absolute; top: 200px;}
 .account .billing .inner_container .change a, .account .shipping .inner_container .change a {position: relative;top:auto;}
 
 /* Select */
@@ -827,7 +827,7 @@ div.agb_info {height: 30px;font-weight:normal;}
 .account #userinformations .inner_container, .account #selected_payment .inner_container  {height: 100px;position: relative;}
 .account #userinformations .button-middle, .account #selected_payment .button-middle {position: absolute;bottom: 0px;}
 .account #userinformations .change_mail {left:180px;}
-.account .billing .inner_container, .account .shipping .inner_container {height: 130px;}
+.account .billing .inner_container, .account .shipping .inner_container {height: 170px;}
 .account .newsletter, .account .password, #content .addresses, .account .email {width: 780px;}
 .account .password label, .account .email label {width: 150px;text-align: right;padding-right: 5px;}
 .account .password .button-right, .account .email .button-right {margin: 0 0 0 155px;width: 180px;}
