@@ -151,7 +151,7 @@ Ext.define('Shopware.apps.Index.view.Footer', {
         return Ext.create('Ext.button.Button', {
             cls: 'btn-over',
             iconCls: 'widget-sidebar',
-            id: 'widgetSidebarBtn'
+            id: 'widgetTaskBarBtn'
         });
     },
 

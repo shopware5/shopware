@@ -64,8 +64,6 @@ Ext.define('Shopware.apps.Index.controller.Main', {
         viewport.add(me.menu);
         viewport.add(me.footer);
 
-        //me.getController('Widgets').renderWidgets(me.subApplication);
-
         me.addKeyboardEvents();
         me.checkLoginStatus();
 	},

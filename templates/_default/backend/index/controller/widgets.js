@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,16 +19,15 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Index
- * @subpackage Controller
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     shopware AG
  */
 
-//{namespace name=backend/index/view/widgets}
+/**
+ * Shopware Widget Controller
+ *
+ * This controller handles the widget window, its widgets, settings and events.
+ */
+
+//{namespace name=backend/index/controller/widgets}
 //{block name="backend/index/controller/widgets"}
 
 Ext.define('Shopware.apps.Index.controller.Widgets', {
@@ -55,8 +54,6 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
 
     widgetWindow: false,
 
-    snippets: {},
-
     init: function() {
         var me = this;
 
@@ -69,16 +66,12 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         me.desktop = me.viewport.getActiveDesktop();
 
         me.widgetStore = me.getStore('Widget');
-
         me.widgetStore.load({
-            callback: function() {
-                me.widgetSettingsStore = me.getStore('WidgetSettings');
-
-                me.widgetSettingsStore.load({
-                    callback: me.onWidgetSettingsLoaded.bind(me)
-                });
-            }
+            callback: me.onWidgetStoreLoaded.bind(me)
         });
+
+        me.taskBarBtn = Ext.getCmp('widgetTaskBarBtn');
+        me.taskBarBtn.on('click', me.onTaskBarBtnClick.bind(me));
 
         me.control({
             'widget-sidebar-window': {
@@ -93,12 +86,31 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         });
 
         me.callParent(arguments);
+    },
 
-        me.sideBarBtn = Ext.getCmp('widgetSidebarBtn');
+    onWidgetStoreLoaded: function () {
+        var me = this;
 
-        me.sideBarBtn.on({
-            click: me.onSideBarBtn.bind(me)
+        me.widgetSettingsStore = me.getStore('WidgetSettings');
+
+        me.widgetSettingsStore.load({
+            callback: me.onWidgetSettingsLoaded.bind(me)
         });
+    },
+
+    onTaskBarBtnClick: function() {
+        var me = this,
+                minimized = false;
+
+        if (me.widgetWindow.isVisible()) {
+            me.widgetWindow.hide(me.taskBarBtn);
+            minimized = true;
+        } else {
+            me.widgetWindow.show(me.taskBarBtn).toFront();
+        }
+
+        me.widgetSettings.set('minimized', minimized);
+        me.widgetSettingsStore.sync();
     },
 
     onWidgetSettingsLoaded: function() {
@@ -111,7 +123,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
                 authId: authId,
                 height: 600,
                 columnsShown: 1,
-                dock: 'left',
+                dock: 'tl',
                 pinned: false,
                 minimized: false
             });
@@ -119,6 +131,10 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
             me.widgetSettingsStore.sync();
 
             settings = me.getWidgetSettingsByAuthId(authId);
+        }
+
+        if(!settings) {
+            Ext.Error.raise('Widget settings could not be initialized.');
         }
 
         me.widgetSettings = settings;
@@ -144,66 +160,102 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         return settings;
     },
 
-    onSaveWindowSize: function(columnsShown, height) {
-        var me = this;
-
-        me.widgetSettings.set('columnsShown', columnsShown);
-        me.widgetSettings.set('height', height);
-        me.widgetSettingsStore.sync();
-    },
-
     onMinimizeWindow: function(sidebarWindow) {
         var me = this;
 
-        sidebarWindow.hide(me.sideBarBtn);
+        sidebarWindow.hide(me.taskBarBtn);
 
         me.widgetSettings.set('minimized', true);
         me.widgetSettingsStore.sync();
     },
 
-    onFixWindow: function(window, pinButton) {
+    onFixWindow: function(win, pinButton) {
         var me = this,
-            pinned = !window.pinnedOnTop,
-            windowEl = window.getEl();
+            pinned = !win.pinnedOnTop,
+            windowEl = win.getEl();
 
         if(!windowEl) {
             return;
         }
 
-        window.pinnedOnTop = pinned;
+        win.pinnedOnTop = pinned;
 
         me.widgetSettings.set('pinned', pinned);
         me.widgetSettingsStore.sync();
 
         if (pinned) {
-            window.toFront();
+            win.toFront();
             pinButton.addCls('active');
             return;
         }
 
-        window.toBack();
+        win.toBack();
         pinButton.removeCls('active');
     },
 
-    onChangePosition: function(win, alignRight, alignBottom) {
+    onChangePosition: function(win, align) {
         var me = this,
             xOffset = 10,
             yOffset = 10,
+            desktopEl = me.desktop.el,
+            bottomOffset = (desktopEl.getBottom() - desktopEl.getHeight()) * -1,
             x = xOffset,
             y = yOffset,
-            horizontalHandle = alignRight ? 'w' : 'e',
-            verticalHandle = alignBottom ? 'n' : 's',
-            handles = horizontalHandle + ' ' + verticalHandle + ' ' + verticalHandle + horizontalHandle;
+            verticalHandle = 's',
+            horizontalHandle = 'e',
+            handles = [],
+            resizer = win.resizer,
+            positions, pos, p, i;
 
-        if (alignRight) {
-            x = me.desktop.getWidth() - win.getWidth() - xOffset;
+        if(desktopEl.getBottom() !== window.innerHeight) {
+            bottomOffset = 27;
         }
 
-        if(alignBottom) {
-            y = me.desktop.getHeight() - win.getHeight() - yOffset;
+        if(align.indexOf('b') != -1) {
+            y = (desktopEl.getHeight() + bottomOffset) - win.getHeight() - yOffset;
+            verticalHandle = 'n';
+        }
+
+        if (align.indexOf('r') != -1) {
+            x = me.desktop.getWidth() - win.getWidth() - xOffset;
+            horizontalHandle = 'w';
         }
 
         win.setPosition(x, y, true);
+
+        me.widgetSettings.set('dock', align);
+        me.widgetSettingsStore.sync();
+
+        if(!resizer) {
+            return;
+        }
+
+        positions = resizer.possiblePositions;
+
+        handles.push(verticalHandle);
+        handles.push(horizontalHandle);
+        handles.push(verticalHandle + horizontalHandle);
+
+        /**
+         * All resizer handles will be hidden and only the relevant ones will be shown
+         * It's dirty but it works, the is no cleaner way provided by the resizer
+         */
+        for(p in positions) {
+            if(!positions.hasOwnProperty(p)){
+                continue;
+            }
+
+            pos = positions[p];
+
+            resizer[pos].hide();
+        }
+
+        for(i = 0; i < handles.length; i++) {
+            pos = positions[handles[i]];
+
+            resizer[pos].show();
+        }
+
     },
 
     onSaveWidgetPosition: function(column, row, widgetId, internalId) {
@@ -279,18 +331,11 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         });
     },
 
-    onSideBarBtn: function() {
-        var me = this,
-            minimized = false;
+    onSaveWindowSize: function(columnsShown, height) {
+        var me = this;
 
-        if (me.widgetWindow.isVisible()) {
-            me.widgetWindow.hide(me.sideBarBtn);
-            minimized = true;
-        } else {
-            me.widgetWindow.show(me.sideBarBtn).toFront();
-        }
-
-        me.widgetSettings.set('minimized', minimized);
+        me.widgetSettings.set('columnsShown', columnsShown);
+        me.widgetSettings.set('height', height);
         me.widgetSettingsStore.sync();
     }
 });
