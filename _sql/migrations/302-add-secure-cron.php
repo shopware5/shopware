@@ -25,7 +25,7 @@ class Migrations_Migration302 Extends Shopware\Components\Migrations\AbstractMig
                 VALUES (@formId, '2', 'Cron security', NULL);
 
                 INSERT IGNORE INTO `s_core_config_elements` (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `filters`, `validators`)
-                VALUES (@formId, 'cronSecureAllowedKey', 's:0:"";', 'Gültiger Schlüssel', 'Es werden nur Cron-Anfragen ausgelöst, wenn die eingegebene Zeichenkette über den Schhlüssel ''key'' mit in die Anfrage übergeben wird.', 'text', 0, 0, 0, NULL, NULL);
+                VALUES (@formId, 'cronSecureAllowedKey', 's:0:"";', 'Gültiger Schlüssel', 'Hinterlegen Sie hier einen Key zum Ausführen der Cronjobs.', 'text', 0, 0, 0, NULL, NULL);
 
                 INSERT IGNORE INTO `s_core_config_elements` (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `filters`, `validators`)
                 VALUES (@formId, 'cronSecureAllowedIp', 's:0:"";', 'Zulässige IP(s)', 'Nur angegebene IP-Adressen können die Cron Anfragen auslösen. Mehrere IP-Adressen müssen durch ein '';'' getrennt werden.', 'text', 0, 0, 0, NULL, NULL);

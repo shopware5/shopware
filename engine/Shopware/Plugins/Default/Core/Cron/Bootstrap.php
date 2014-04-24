@@ -56,7 +56,7 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
 
         $form->setElement('text', 'cronSecureAllowedKey', array(
             'label'    => 'Gültiger Schlüssel',
-            'description' => 'Es werden nur Cron-Anfragen ausgelöst, wenn die eingegebene Zeichenkette über den Schhlüssel \'key\' mit in die Anfrage übergeben wird.',
+            'description' => 'Hinterlegen Sie hier einen Key zum Ausführen der Cronjobs.',
             'required' => false,
             'value'    => ''
         ));
