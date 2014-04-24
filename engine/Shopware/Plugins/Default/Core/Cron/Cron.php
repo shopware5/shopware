@@ -34,6 +34,14 @@ class Shopware_Controllers_Backend_Cron extends Enlight_Controller_Action
 
     public function indexAction()
     {
+        if (!Shopware()->Plugins()->Core()->Cron()->authorizeCronAction($this->Request())) {
+            $this->Response()
+                ->clearHeaders()
+                ->setHttpResponseCode(403)
+                ->appendBody("Forbidden");
+            return;
+        }
+
         /** @var $cronManager Enlight_Components_Cron_Manager */
         $cronManager = Shopware()->Cron();
 

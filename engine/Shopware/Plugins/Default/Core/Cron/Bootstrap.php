@@ -22,8 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- */
 class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     protected $results = array();
@@ -42,7 +40,59 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
             'Enlight_Bootstrap_InitResource_Cron',
             'onInitResourceCron'
         );
+
+        $this->createForm();
+
         return true;
+    }
+
+    private function createForm()
+    {
+        $form = $this->Form();
+        $parent = $this->Forms()->findOneBy(array('name' => 'Other'));
+        $form->setParent($parent);
+        $form->setName('CronSecurity');
+        $form->setLabel('Cron-Sicherheit');
+
+        $form->setElement('text', 'cronSecureAllowedKey', array(
+            'label'    => 'Gültiger Schlüssel',
+            'description' => 'Hinterlegen Sie hier einen Key zum Ausführen der Cronjobs.',
+            'required' => false,
+            'value'    => ''
+        ));
+        $form->setElement('text', 'cronSecureAllowedIp', array(
+            'label' => 'Zulässige IP(s)',
+            'description' => 'Nur angegebene IP-Adressen können die Cron Anfragen auslösen. Mehrere IP-Adressen müssen durch ein \';\' getrennt werden.',
+            'required' => false,
+            'value' => ''
+        ));
+        $form->setElement('boolean', 'cronSecureByAccount', array(
+            'label' => 'Durch Benutzerkonto absichern',
+            'description' => 'Es werden nur Anfragen von authentifizierten Administratoren akzeptieren',
+            'value' => false,
+        ));
+
+        $this->addFormTranslations(
+            array(
+                'en_GB' => array(
+                    'plugin_form' => array(
+                        'label' => 'Cron security'
+                    ),
+                    'cronSecureAllowedKey' => array(
+                        'label'    => 'Allowed key',
+                        'description' => 'If provided, cron requests will be executed if the inserted value is provided as \'key\' in the request'
+                    ),
+                    'cronSecureAllowedIp' => array(
+                        'label' => 'Allowed IP(s)',
+                        'description' => 'If provided, cron requests will be executed if triggered from the given IP address(es). Use \';\' to separate multiple addresses.'
+                    ),
+                    'cronSecureByAccount' => array(
+                        'label' => 'Secure using account',
+                        'description' => 'If set, requests received from authenticated admin users will be accepted'
+                    )
+                )
+            )
+        );
     }
 
     public function onGetControllerPath(Enlight_Event_EventArgs $args)
@@ -65,5 +115,57 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
             $adapter, $eventManager, 'Shopware_Components_Cron_CronJob'
         );
         return $manager;
+    }
+
+    /**
+     * Secure cron actions according to system settings
+     *
+     * @param Enlight_Controller_Request_RequestHttp $request
+     * @return bool If cron action is authorized
+     */
+    public function authorizeCronAction($request)
+    {
+        // If called using CLI, always execute the cron tasks
+        if (php_sapi_name() == 'cli') {
+            return true;
+        }
+
+        // At least one of the security policies is enabled.
+        // If at least one of them validates, cron tasks will be executed
+        $cronSecureAllowedKey = Shopware()->Config()->get('cronSecureAllowedKey');
+        $cronSecureAllowedIp = Shopware()->Config()->get('cronSecureAllowedIp');
+        $cronSecureByAccount = Shopware()->Config()->get('cronSecureByAccount');
+
+        // No security policy specified, accept all requests
+        if (empty($cronSecureAllowedKey) && empty($cronSecureAllowedIp) && !$cronSecureByAccount)   {
+            return true;
+        }
+
+        // Validate key
+        if (!empty($cronSecureAllowedKey)) {
+            $urlKey = $request->getParam('key');
+
+            if (strcmp($cronSecureAllowedKey, $urlKey) == 0 ) {
+                return true;
+            }
+        }
+
+        // Validate ip
+        if (!empty($cronSecureAllowedIp)) {
+            $requestIp = $request->getServer('REMOTE_ADDR');
+
+            if (in_array($requestIp, explode(';', $cronSecureAllowedIp))) {
+                return true;
+            }
+        }
+
+        // Validate user auth
+        if ($cronSecureByAccount) {
+            if (Shopware()->Auth()->hasIdentity() === true ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

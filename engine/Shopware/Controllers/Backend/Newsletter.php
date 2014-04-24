@@ -274,12 +274,53 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
     }
 
     /**
+     * Returns plugin bootstrap if plugin exits, is enabled, and active.
+     * Otherwise return null.
+     *
+     * @param string $pluginName
+     * @return Enlight_Plugin_Bootstrap|null
+     */
+    private function getPluginBootstrap($pluginName)
+    {
+        /** @var Shopware_Components_Plugin_Namespace $namespace */
+        $namespace = Shopware()->Plugins()->Core();
+        $pluginBootstrap = $namespace->get($pluginName);
+
+        if (!$pluginBootstrap instanceof Enlight_Plugin_Bootstrap) {
+            return null;
+        }
+
+        /**@var $plugin \Shopware\Models\Plugin\Plugin */
+        $plugin = Shopware()->Models()->find('\Shopware\Models\Plugin\Plugin', $pluginBootstrap->getId());
+        if (!$plugin) {
+            return null;
+        }
+
+        if (!$plugin->getActive() || !$plugin->getInstalled()) {
+            return null;
+        }
+
+        return $pluginBootstrap;
+    }
+
+    /**
      * Cron action method
      *
      * Sends the newsletter emails as a cronjob.
      */
     public function cronAction()
     {
+        /** @var Shopware_Plugins_Core_Cron_Bootstrap $cronBootstrap */
+        $cronBootstrap = $this->getPluginBootstrap('Cron');
+        if ($cronBootstrap && !$cronBootstrap->authorizeCronAction($this->Request())) {
+            $this->Response()
+                 ->clearHeaders()
+                 ->setHttpResponseCode(403)
+                 ->appendBody("Forbidden");
+
+            return;
+        }
+
         $this->Response()->setHeader('Content-Type', 'text/plain');
         $this->mailAction();
     }
