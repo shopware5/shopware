@@ -5,17 +5,14 @@
 	{s name="RegisterTitle"}{/s} | {config name=shopName}
 {/block}
 
-
-{* Hide everything thats not necessary for the registration *}
-
 {* Hide sidebar left *}
 {block name='frontend_index_content_left'}{/block}
 
 {* Hide breadcrumb *}
-{block name='frontend_index_breadcrumb'}<div class="clear"></div>{/block}
+{block name='frontend_index_breadcrumb'}{/block}
 
 {* Hide shop navigation *}
-{block name='frontend_index_shop_navigation'}<div class="clear"></div>{/block}
+{block name='frontend_index_shop_navigation'}{/block}
 
 {* Hide top bar navigation *}
 {block name='frontend_index_navigation'}
@@ -36,14 +33,17 @@
 	</header>
 
 	{* Hide maincategories navigation top *}
-	{block name='frontend_index_navigation_categories_top'}<div class="clear"></div>{/block}
+	{block name='frontend_index_navigation_categories_top'}{/block}
 {/block}
-
 
 {* Step box *}
 {block name="frontend_index_navigation_categories_top" append}
 	{include file="frontend/register/steps.tpl" sStepActive="register"}
 {/block}
+
+{* Hide footer *}
+{block name="frontend_index_footer"}{/block}
+
 
 {block name="frontend_index_content"}
 	<div class="register--content panel content block has--border">
@@ -56,13 +56,16 @@
 			{if $register.personal.form_data.sValidation}
 			{* Include information related to registration for other customergroups then guest, this block get overridden by b2b essentials plugin *}
 			<div class="panel register--supplier">
-				<h2 class="panel--title underline">{$sShopname} {s name='RegisterHeadlineSupplier' namespace='frontend/register/index'}{/s}</h2>
+				<h2 class="panel--title is--underline">{$sShopname} {s name='RegisterHeadlineSupplier' namespace='frontend/register/index'}{/s}</h2>
+
 				<div class="panel--body">
+
 					<strong>{s name='RegisterInfoSupplier' namespace='frontend/register/index'}{/s}</strong><br />
-					<a href="{url controller='account'}" class="account">{s name='RegisterInfoSupplier2' namespace='frontend/register/index'}{/s}</a>
-					<h4 class="bold">{s name='RegisterInfoSupplier3' namespace='frontend/register/index'}{/s}</h4>
-					<h3 class="bold">{s name='RegisterInfoSupplier4' namespace='frontend/register/index'}{/s}</h3>{s name='RegisterInfoSupplier5' namespace='frontend/register/index'}{/s}
-					<h3 class="bold">{s name='RegisterInfoSupplier6' namespace='frontend/register/index'}{/s}</h3>{s name='RegisterInfoSupplier7' namespace='frontend/register/index'}{/s}
+					<a href="{url controller='account'}" class="account">{s name='RegisterInfoSupplier2' namespace='frontend/register/index'}{/s}</a><br />
+					<p class="is--bold">{s name='RegisterInfoSupplier3' namespace='frontend/register/index'}{/s}</p>
+					<h3 class="is--bold">{s name='RegisterInfoSupplier4' namespace='frontend/register/index'}{/s}</h3>{s name='RegisterInfoSupplier5' namespace='frontend/register/index'}{/s}
+					<h3 class="is--bold">{s name='RegisterInfoSupplier6' namespace='frontend/register/index'}{/s}</h3>{s name='RegisterInfoSupplier7' namespace='frontend/register/index'}{/s}
+
 				</div>
 			</div>
 			{/if}
@@ -95,7 +98,6 @@
 							<div class="privacy">
 								<input name="register[personal][dpacheckbox]" type="checkbox" id="dpacheckbox"{if $form_data.dpacheckbox} checked="checked"{/if} value="1" class="chkbox" />
 								<label for="dpacheckbox" class="chklabel{if $register->personal->error_flags.dpacheckbox} instyle_error{/if}">{s name='RegisterLabelDataCheckbox'}{/s}</label>
-								<div class="clear">&nbsp;</div>
 							</div>
 						{/block}
 					{/if}
@@ -127,32 +129,39 @@
 
 				<h2 class="panel--title">{s name='RegisterInfoAdvantagesTitle'}{/s}</h2>
 
-				<ul class="register--advantages-list">
-					<li class="register--advantages-entry">
-						<i class="icon--check"></i>
-						{s name='RegisterInfoAdvantagesEntry1'}{/s}
-					</li>
+				{block name='frontend_index_content_advantages_list'}
+					<ul class="register--advantages-list">
+						{block name='frontend_index_content_advantages_entry1'}
+							<li class="register--advantages-entry">
+								<i class="icon--check"></i>
+								{s name='RegisterInfoAdvantagesEntry1'}{/s}
+							</li>
+						{/block}
 
-					<li class="register--advantages-entry">
-						<i class="icon--check"></i>
-						{s name='RegisterInfoAdvantagesEntry2'}{/s}
-					</li>
+						{block name='frontend_index_content_advantages_entry2'}
+							<li class="register--advantages-entry">
+								<i class="icon--check"></i>
+								{s name='RegisterInfoAdvantagesEntry2'}{/s}
+							</li>
+						{/block}
 
-					<li class="register--advantages-entry">
-						<i class="icon--check"></i>
-						{s name='RegisterInfoAdvantagesEntry3'}{/s}
-					</li>
+						{block name='frontend_index_content_advantages_entry3'}
+							<li class="register--advantages-entry">
+								<i class="icon--check"></i>
+								{s name='RegisterInfoAdvantagesEntry3'}{/s}
+							</li>
+						{/block}
 
-					<li class="register--advantages-entry">
-						<i class="icon--check"></i>
-						{s name='RegisterInfoAdvantagesEntry4'}{/s}
-					</li>
+						{block name='frontend_index_content_advantages_entry4'}
+							<li class="register--advantages-entry">
+								<i class="icon--check"></i>
+								{s name='RegisterInfoAdvantagesEntry4'}{/s}
+							</li>
+						{/block}
+					</ul>
+				{/block}
 
-				</ul>
 			{/block}
 		</div>
 	</div>
 {/block}
-
-{* Hide footer *}
-{block name="frontend_index_footer"}<div class="clear"></div>{/block}
