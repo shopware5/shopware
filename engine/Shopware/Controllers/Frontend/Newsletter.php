@@ -128,7 +128,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
             $this->View()->sUnsubscribe = false;
         }
 
-        $this->View()->_POST = Shopware()->System()->_POST;
+        $this->View()->_POST = Shopware()->System()->_POST->toArray();
 
         if (!isset(Shopware()->System()->_POST["newsletter"])) {
             return;
