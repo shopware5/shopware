@@ -203,8 +203,7 @@ class sArticles
                 ));
 
                 if (!$queryNewPrice) {
-                    $this->sSYSTEM->E_CORE_WARNING("sArticles##sAddComparison##01", "Error in SQL-query");
-                    return false;
+                    throw new Enlight_Exception("sArticles##sAddComparison##01: Error in SQL-query");
                 }
             }
             return true;
@@ -515,8 +514,7 @@ class sArticles
             $active
         ));
         if (empty($insertComment)) {
-            $this->sSYSTEM->E_CORE_WARNING("sSaveComment #00", "Could not save comment");
-            return false;
+            throw new Enlight_Exception("sSaveComment #00: Could not save comment");
         }
 
         $insertId = $this->sSYSTEM->sDB_CONNECTION->Insert_ID();
@@ -733,24 +731,24 @@ class sArticles
                     $pages["numbers"][$i]["markup"] = false;
                 }
                 $pages["numbers"][$i]["value"] = $i;
-                $pages["numbers"][$i]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink(array("sPage" => $i), false);
+                $pages["numbers"][$i]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . Shopware()->Modules()->Core()->sBuildLink(array("sPage" => $i), false);
                 $pages["numbers"][$i]["link"] = str_replace("+", " ", $pages["numbers"][$i]["link"]);
 
             }
             // Previous page
             if ($sPage != 1) {
-                $pages["previous"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink(array("sPage" => $sPage - 1), false);
+                $pages["previous"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . Shopware()->Modules()->Core()->sBuildLink(array("sPage" => $sPage - 1), false);
             } else {
                 $pages["previous"] = null;
             }
             // Next page
             if ($sPage != $numberPages) {
-                $pages["next"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink(array("sPage" => $sPage + 1), false);
+                $pages["next"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . Shopware()->Modules()->Core()->sBuildLink(array("sPage" => $sPage + 1), false);
             } else {
                 $pages["next"] = null;
             }
             // First page
-            $pages["first"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink(array("sPage" => 1), false);
+            $pages["first"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . Shopware()->Modules()->Core()->sBuildLink(array("sPage" => 1), false);
         }
 
         if (!empty($this->sSYSTEM->sCONFIG['sNUMBERARTICLESTOSHOW'])) {
@@ -771,7 +769,7 @@ class sArticles
                     $arrayArticlesToShow[$articlesToShowKey]["markup"] = false;
                 }
                 // Building link
-                $arrayArticlesToShow[$articlesToShowKey]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink(array("sPerPage" => $articlesToShowValue), false) . "";
+                $arrayArticlesToShow[$articlesToShowKey]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . Shopware()->Modules()->Core()->sBuildLink(array("sPerPage" => $articlesToShowValue), false) . "";
                 //echo $arrayArticlesToShow[$articlesToShowKey]["link"]."<br />";
             } // -- for every possible value
         } // -- Building array
@@ -1223,18 +1221,18 @@ class sArticles
                     $pages["numbers"][$i]["markup"] = false;
                 }
                 $pages["numbers"][$i]["value"] = $i;
-                $pages["numbers"][$i]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink($categoryParams + array("sPage" => $i), false);
+                $pages["numbers"][$i]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . Shopware()->Modules()->Core()->sBuildLink($categoryParams + array("sPage" => $i), false);
 
             }
             // Previous page
             if ($sPage != 1) {
-                $pages["previous"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink($categoryParams + array("sPage" => $sPage - 1), false);
+                $pages["previous"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . Shopware()->Modules()->Core()->sBuildLink($categoryParams + array("sPage" => $sPage - 1), false);
             } else {
                 $pages["previous"] = null;
             }
             // Next page
             if ($sPage != $numberPages) {
-                $pages["next"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink($categoryParams + array("sPage" => $sPage + 1), false);
+                $pages["next"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . Shopware()->Modules()->Core()->sBuildLink($categoryParams + array("sPage" => $sPage + 1), false);
             } else {
                 $pages["next"] = null;
             }
@@ -1259,7 +1257,7 @@ class sArticles
                     $arrayArticlesToShow[$articlesToShowKey]["markup"] = false;
                 }
                 // Building link
-                $arrayArticlesToShow[$articlesToShowKey]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink(array("sPerPage" => $articlesToShowValue), false) . "";
+                $arrayArticlesToShow[$articlesToShowKey]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . Shopware()->Modules()->Core()->sBuildLink(array("sPerPage" => $articlesToShowValue), false) . "";
             } // -- for every possible value
         } // -- Building array
 
@@ -1943,7 +1941,7 @@ class sArticles
                 'group' => $property['groupName'],
                 'optionID' => $property['id']
             );
-            $propertyArray["filterOptions"]["grouped"][$property["groupName"]]["default"]["linkSelect"] = $this->sSYSTEM->sCONFIG['sBASEFILE'].$this->sSYSTEM->sBuildLink(array("sFilterGroup"=>$property["groupName"],false));
+            $propertyArray["filterOptions"]["grouped"][$property["groupName"]]["default"]["linkSelect"] = $this->sSYSTEM->sCONFIG['sBASEFILE'].Shopware()->Modules()->Core()->sBuildLink(array("sFilterGroup"=>$property["groupName"],false));
         }
 
         return $propertyArray;
