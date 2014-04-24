@@ -4,8 +4,9 @@ class Migrations_Migration302 Extends Shopware\Components\Migrations\AbstractMig
     public function up()
     {
         $statement = $this->getConnection()->prepare(
-            "SELECT * FROM s_core_plugins WHERE name = 'Cron' AND active = 1"
+            "SELECT * FROM s_core_plugins WHERE name = 'Cron' AND installation_date IS NOT NULL"
         );
+
         $statement->execute();
         $data = $statement->fetchAll();
 
