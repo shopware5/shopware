@@ -1,5 +1,5 @@
 <div class="panel register--company">
-	<h2 class="panel--title underline">{s name='RegisterHeaderCompany'}{/s}</h2>
+	<h2 class="panel--title is--underline">{s name='RegisterHeaderCompany'}{/s}</h2>
 	<div class="panel--body">
 
 		{* Company *}
@@ -27,14 +27,14 @@
 </div>
 
 <div class="panel register--address">
-	<h2 class="panel--title underline">{s name='RegisterBillingHeadline'}{/s}</h2>
+	<h2 class="panel--title is--underline">{s name='RegisterBillingHeadline'}{/s}</h2>
 	<div class="panel--body">
 
 		{* Street *}
 		{block name='frontend_register_billing_fieldset_input_street'}
 			<div class="register--street">
-				<input name="register[billing][street]" type="text" placeholder="{s name='RegisterBillingLabelStreet'}{/s}" id="street" value="{$form_data.street|escape}" class="register--field street required text{if $error_flags.street} instyle_error{/if}" />
-				<input name="register[billing][streetnumber]" type="text" placeholder="{s name='RegisterBillingLabelStreetNumber'}{/s}" id="streetnumber" value="{$form_data.streetnumber|escape}"  class="register--field streetnumber required text{if $error_flags.streetnumber} instyle_error{/if}" />
+				<input name="register[billing][street]" type="text" placeholder="{s name='RegisterBillingLabelStreet'}{/s}" id="street" value="{$form_data.street|escape}" class="register--field register--field-street required text{if $error_flags.street} instyle_error{/if}" />
+				<input name="register[billing][streetnumber]" type="text" placeholder="{s name='RegisterBillingLabelStreetNumber'}{/s}" id="streetnumber" value="{$form_data.streetnumber|escape}"  class="register--field register--field-streetnumber required text{if $error_flags.streetnumber} instyle_error{/if}" />
 			</div>
 		{/block}
 
@@ -58,13 +58,13 @@
 		{/if}
 	{/block}
 
-	{* Zip + City *}
-	{block name='frontend_register_billing_fieldset_input_zip_and_city'}
-		<div class="register--zip-city">
-			<input name="register[billing][zipcode]" type="text" id="zipcode" value="{$form_data.zipcode|escape}" placeholder="{s name='RegisterBillingLabelZipcode'}{/s}"  class="register--field zipcode required text{if $error_flags.zipcode} instyle_error{/if}" />
-			<input name="register[billing][city]" type="text" id="city" value="{$form_data.city|escape}" placeholder="{s name='RegisterBillingLabelCity'}{/s}" size="25" class="register--field city required text{if $error_flags.city} instyle_error{/if} />
-		</div>
-	{/block}
+		{* Zip + City *}
+		{block name='frontend_register_billing_fieldset_input_zip_and_city'}
+			<div class="register--zip-city">
+				<input name="register[billing][zipcode]" type="text" placeholder="{s name='RegisterBillingLabelZipcode'}{/s}" id="zipcode" value="{$form_data.zipcode|escape}" class="register--field zipcode required text{if $error_flags.zipcode} instyle_error{/if}" />
+				<input name="register[billing][city]" type="text" placeholder="{s name='RegisterBillingLabelCity'}{/s}" id="city" value="{$form_data.city|escape}" size="25" class="register--field city required text{if $error_flags.city} instyle_error{/if}" />
+			</div>
+		{/block}
 
 		{* Country *}
 		{block name='frontend_register_billing_fieldset_input_country'}
@@ -72,9 +72,9 @@
 				<span class="arrow"></span>
 				<select name="register[billing][country]" id="country" class="text required {if $error_flags.country}instyle_error{/if}">
 				<option value="" selected="selected">{s name='RegisterBillingLabelCountry'}{/s}</option>
-				{foreach from=$country_list item=country}
+				{foreach $country_list as $country}
 					<option value="{$country.id}" {if $country.id eq $form_data.country}selected="selected"{/if} {if $country.states}stateSelector="country_{$country.id}_states"{/if}>
-					{$country.countryname}
+						{$country.countryname}
 					</option>
 				{/foreach}
 				</select>
@@ -91,8 +91,10 @@
 						<select {if $country.id != $form_data.country}disabled="disabled"{/if} name="register[billing][country_state_{$country.id}]" id="country_{$country.id}_states" class="{if $country.force_state_in_registration}required{/if} {if $error_flags.stateID}instyle_error{/if}">
 						<option value="" selected="selected">{s name='RegisterBillingLabelState'}Bundesstaat:{/s}</option>
 							{assign var="stateID" value="country_state_`$country.id`"}
-							{foreach from=$country.states item=state}
-								<option value="{$state.id}" {if $state.id eq $form_data[$stateID]}selected="selected"{/if}>{$state.name}</option>
+							{foreach $country.states as $state}
+								<option value="{$state.id}" {if $state.id eq $form_data[$stateID]}selected="selected"{/if}>
+									{$state.name}
+								</option>
 							{/foreach}
 						</select>
 					</div>

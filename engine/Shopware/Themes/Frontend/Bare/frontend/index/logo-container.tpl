@@ -16,11 +16,13 @@
 		</div>
 	{/block}
 
-	{* Need Support? *}
+	{* Support Info *}
 	{block name='frontend_index_logo_supportinfo'}
+		{if $Controller == 'register'}
 			<div class="logo--supportinfo block">
-				{s name='RegisterSupportInfo'}{/s}
+				{s name='RegisterSupportInfo' namespace='frontend/register/index'}{/s}
 			</div>
+		{/if}
 	{/block}
 
 	{* Trusted Shops *}

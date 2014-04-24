@@ -1,4 +1,3 @@
-
 // Header Support Info
 .is--ctl-register {
 
@@ -8,12 +7,11 @@
 
 }
 
+// Register Content
 .register--content {
-
-    width: 97%;
     .border-radius();
-
     .clearfix();
+    width: 100%;
 
     .has--border {
 	.border-radius(4px);
@@ -24,7 +22,11 @@
     }
 
     .panel--body {
-	.unitize-margin(0,16,16);
+	.unitize-margin(0, 16, 16);
+    }
+
+    .alert {
+	.unitize-padding(16, 16);
     }
 
     .register--check {
@@ -32,70 +34,81 @@
     }
 
     .register--submit {
+	.unitize-margin(0, 26, 16);
 	float: right;
-	.unitize-margin(0,26,16);
 
 	.icon--arrow-right {
-	    .unitize(10,16, font-size);
+	    .unitize(10, 16, font-size);
 	}
     }
 
     .register--required-info {
-	.unitize-margin(0,26,16);
-    }
-
-    /* Personal Information Fieldset */
-    .register--personal {
-	.unitize(32,16, padding-bottom);
-	.clearfix();
+	.unitize-margin(0, 26, 16);
     }
 
     .field--select {
-	.unitize-margin(0,0,6,0,16);
+	.unitize-margin(0, 0, 6, 0, 16);
     }
 
     .register--field {
+	.unitize-margin(4, 0, 4, 0, 16);
 	width: 100%;
-	.unitize-margin(4,0,4,0,16);
+    }
 
-	&.street {
+    .register--street {
+
+	.register--field-street {
 	    margin-right: 2%;
 	    width: 80%;
 	    float: left;
 	}
-	&.streetnumber {
+
+	.register--field-streetnumber {
 	    width: 18%;
 	    float: left;
 	}
-	&.zipcode {
+
+    }
+
+    .register--zip-city {
+
+	.register--field-zipcode {
 	    margin-right: 2%;
 	    width: 28%;
 	    float: left;
 	}
-	&.city {
+	.register--field-city {
+	    .clearfix();
 	    width: 70%;
 	    float: left;
-	    .clearfix();
 	}
+
     }
 
     .birthday--label {
 	.clearfix();
     }
 
-    .register--birthday {
-	.unitize(8,16, margin-top);
-	margin-right: 2% !important;
-	width: 31%;
-	float: left;
-    }
+    .register--birthdate {
 
-    .register--alert {
-
-	.alert {
-	    .unitize-padding(16,16);
+	.field--select {
+	    .unitize(8, 16, margin-top);
+	    width: 32%;
+	    margin-right: 2%;
+	    float: left;
 	}
 
+	.register--birthyear {
+
+	    .unitize(0, 16, margin-right);
+	}
+
+    }
+
+    // Personal information fieldset
+    .register--personal {
+	.unitize(32,16, padding-bottom);
+	.clearfix();
     }
 
 }
@@ -105,8 +118,8 @@
     .clearfix();
 
     .register--advantages-list {
-	list-style: none;
 	.unitize(40, 16, margin-bottom);
+	list-style: none;
 	float: left;
     }
 
@@ -124,7 +137,7 @@
 
 }
 
-/* Register Steps */
+// Register Steps
 .steps--content {
     border-top: 1px solid @borderColor;
 
@@ -213,7 +226,7 @@
 	}
 
 	.header-main {
-	box-shadow: 0 1px 1px #ccc;
+	    box-shadow: 0 1px 1px #ccc;
 	}
 
     }
@@ -224,25 +237,25 @@
 	width: 90%;
 
 	.field--select {
-	    .unitize-margin(5,0,16);
+	    .unitize-margin(5, 0, 16);
 
 	    .register--birthday {
-		margin-right: 2% !important;
+		margin-right: 2%;
 	    }
 	}
 
 	.register--field {
-	    .unitize-margin(8,0,8,0,16);
+	    .unitize-margin(8, 0, 8, 0, 16);
 	}
 
 	.register--check {
-	    .unitize(8,16, padding-bottom);
+	    .unitize(8, 16, padding-bottom);
 	}
     }
 
     // Register Steps
     .steps--content {
-	.unitize-padding(30,0,40,0,16);
+	.unitize-padding(30, 0, 40, 0, 16);
 	background: transparent;
 	border: none;
 
