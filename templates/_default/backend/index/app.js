@@ -33,6 +33,9 @@
  *
  * This file bootstrapps the complete backend structure.
  */
+
+//{block name="backend/index/application"}
+
 Ext.define('Shopware.apps.Index', {
     /**
      * Extends from our special controller, which handles the
@@ -112,3 +115,5 @@ Ext.define('Shopware.apps.Index', {
         'WidgetSettings'
     ]
 });
+
+//{/block}

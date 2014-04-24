@@ -120,10 +120,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      */
     initComponent: function() {
         var me = this,
-            settings = me.widgetSettings,
-            dock = settings.get('dock'),
-            x = 10,
-            y = 10;
+            settings = me.widgetSettings;
 
         me.columnsShown = settings.get('columnsShown');
         me.height = settings.get('height');
@@ -142,17 +139,6 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
         me.on('resize', me.onResize);
 
         me.onDesktopResize(me.desktop, me.desktop.getWidth(), me.desktop.getHeight());
-
-        if (dock.indexOf('b') !== -1) {
-            y = me.desktop.getHeight() - me.height - 10 + 27;
-        }
-
-        if (dock.indexOf('r') !== -1) {
-            x = me.desktop.getWidth() - me.width - 10;
-        }
-
-        me.x = x;
-        me.y = y;
 
         me.addEvents(
             'minimizeWindow',
@@ -238,7 +224,13 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                         }
                     }]
                 }
-            }]
+            }],
+
+            listeners: {
+                afterrender: function() {
+                    me.fireEvent('changePosition', me, me.widgetSettings.get('dock'), false);
+                }
+            }
         });
     },
 
@@ -314,8 +306,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             },
 
             onNodeOut: function(target) {
-                var dropSource = this,
-                    dropIndex = target.items.indexOf(dropProxyEl),
+                var dropIndex = target.items.indexOf(dropProxyEl),
                     lastIndex = target.items.getCount() - 1;
 
                 if(dropIndex != lastIndex) {
@@ -457,10 +448,15 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
 
             startDrag: function (e) {
                 var dragSource = this,
-                    widget = dragSource.panel;
+                    widget = dragSource.panel,
+                    dropProxyEl;
 
                 me.containerCollection.each(function(container, i) {
-                    container.dropProxyEl.setHeight(widget.height);
+                    dropProxyEl = container.dropProxyEl;
+
+                    if(dropProxyEl.height !== widget.lastBox.height) {
+                        dropProxyEl.setHeight(widget.lastBox.height);
+                    }
 
                     if(container.columnId === widget.position.columnId) {
                         container.remove(widget, false);
