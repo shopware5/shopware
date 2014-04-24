@@ -62,6 +62,8 @@ Ext.define('Shopware.apps.Base.model.Address', {
         { name:'streetNumber', type:'string' },
         { name:'zipCode', type:'string' },
         { name:'city', type:'string' },
+        { name:'additionalAddressLine1', type:'string' },
+        { name:'additionalAddressLine2', type:'string' },
         { name:'countryId', type:'int', useNull: true }
     ]
 

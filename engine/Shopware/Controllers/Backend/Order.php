@@ -1411,6 +1411,14 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             unset($data['countryId']);
         }
 
+        if (isset($data['stateId']) && !empty($data['stateId'])) {
+            $stateModel = Shopware()->Models()->find('Shopware\Models\Country\State', $data['stateId']);
+            if ($stateModel) {
+                $data['state'] = $stateModel;
+            }
+            unset($data['stateId']);
+        }
+
         return $data;
     }
 
