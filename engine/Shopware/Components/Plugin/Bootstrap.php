@@ -463,6 +463,20 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     }
 
     /**
+     * Creates a new widget
+     *
+     * @param $name
+     * @param $label
+     */
+    public function createWidget($name, $label)
+    {
+        Shopware()->Db()->insert('s_core_widgets', array(
+			'name' => $name,
+			'label' => $label,
+		));
+    }
+
+    /**
      * Subscribes a plugin event.
      *
      * {@inheritDoc}

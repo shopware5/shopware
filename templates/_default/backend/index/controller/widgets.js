@@ -193,7 +193,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         pinButton.removeCls('active');
     },
 
-    onChangePosition: function(win, align) {
+    onChangePosition: function(win, align, animate) {
         var me = this,
             xOffset = 10,
             yOffset = 10,
@@ -205,10 +205,12 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
             horizontalHandle = 'e',
             handles = [],
             resizer = win.resizer,
+            anim = animate !== false,
             positions, pos, p, i;
 
         if(desktopEl.getBottom() !== window.innerHeight) {
-            bottomOffset = 27;
+            var domEl = win.toolbar.getEl().dom;
+            bottomOffset = domEl.scrollHeight + domEl.firstChild.scrollHeight;
         }
 
         if(align.indexOf('b') != -1) {
@@ -217,11 +219,11 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         }
 
         if (align.indexOf('r') != -1) {
-            x = me.desktop.getWidth() - win.getWidth() - xOffset;
+            x = desktopEl.getWidth() - win.getWidth() - xOffset;
             horizontalHandle = 'w';
         }
-
-        win.setPosition(x, y, true);
+        
+        win.setPosition(x, y, anim);
 
         me.widgetSettings.set('dock', align);
         me.widgetSettingsStore.sync();
@@ -240,22 +242,17 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
          * All resizer handles will be hidden and only the relevant ones will be shown
          * It's dirty but it works, the is no cleaner way provided by the resizer
          */
-        for(p in positions) {
-            if(!positions.hasOwnProperty(p)){
-                continue;
-            }
-
+        Ext.iterate(positions, function(p) {
             pos = positions[p];
 
             resizer[pos].hide();
-        }
+        });
 
         for(i = 0; i < handles.length; i++) {
             pos = positions[handles[i]];
 
             resizer[pos].show();
         }
-
     },
 
     onSaveWidgetPosition: function(column, row, widgetId, internalId) {
