@@ -420,7 +420,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
                 $this->View()->sAction = $this->Request()->getActionName();
             } else {
-                $this->View()->sFormData = Shopware()->System()->_POST;
+                $this->View()->sFormData = Shopware()->System()->_POST->toArray();
                 $this->View()->sErrorFlag = $sErrorFlag;
             }
         }
