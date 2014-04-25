@@ -5,7 +5,7 @@
 		{* Company *}
 		{block name='frontend_register_billing_fieldset_input_company'}
 			<div class="register--companyname">
-				<input name="register[billing][company]" type="text" placeholder="{s name='RegisterLabelCompany'}{/s}" id="register_billing_company" value="{$form_data.company|escape}" class="register--field is--required {if $error_flags.company}instyle_error{/if}" />
+				<input name="register[billing][company]" type="text" aria-required="true" placeholder="{s name='RegisterLabelCompany'}{/s}" id="register_billing_company" value="{$form_data.company|escape}" class="register--field is--required {if $error_flags.company}has--error{/if}" />
 			</div>
 		{/block}
 
@@ -19,7 +19,7 @@
 		{* UST Id *}
 		{block name='frontend_register_billing_fieldset_input_ustid'}
 			<div class="register--ustid">
-				<input name="register[billing][ustid]" type="text" placeholder="{s name='RegisterLabelTaxId'}{/s}" id="register_billing_ustid" value="{$form_data.ustid|escape}" class="register--field{if $error_flags.ustid} instyle_error{/if}" />
+				<input name="register[billing][ustid]" type="text" placeholder="{s name='RegisterLabelTaxId'}{/s}" id="register_billing_ustid" value="{$form_data.ustid|escape}" class="register--field{if $error_flags.ustid} has--error{/if}" />
 			</div>
 		{/block}
 
@@ -33,8 +33,8 @@
 		{* Street *}
 		{block name='frontend_register_billing_fieldset_input_street'}
 			<div class="register--street">
-				<input name="register[billing][street]" type="text" placeholder="{s name='RegisterBillingLabelStreet'}{/s}" id="street" value="{$form_data.street|escape}" class="register--field register--field-street is--required{if $error_flags.street} instyle_error{/if}" />
-				<input name="register[billing][streetnumber]" type="text" placeholder="{s name='RegisterBillingLabelStreetNumber'}{/s}" id="streetnumber" value="{$form_data.streetnumber|escape}"  class="register--field register--field-streetnumber is--required{if $error_flags.streetnumber} instyle_error{/if}" />
+				<input name="register[billing][street]" type="text" aria-required="true" placeholder="{s name='RegisterBillingLabelStreet'}{/s}" id="street" value="{$form_data.street|escape}" class="register--field register--field-street is--required{if $error_flags.street} has--error{/if}" />
+				<input name="register[billing][streetnumber]" type="text" aria-required="true" placeholder="{s name='RegisterBillingLabelStreetNumber'}{/s}" id="streetnumber" value="{$form_data.streetnumber|escape}"  class="register--field register--field-streetnumber is--required{if $error_flags.streetnumber} has--error{/if}" />
 			</div>
 		{/block}
 
@@ -42,7 +42,7 @@
 		{block name='frontend_register_billing_fieldset_input_addition_address_line1'}
 			{if {config name=showAdditionAddressLine1}}
 				<div class="register--additional-line1">
-					<input name="register[billing][additional_address_line1]" type="text" placeholder="{s name='RegisterLabelAdditionalAddressLine1'}{/s}{if {config name=requireAdditionAddressLine1}}*{/if}" id="additionalAddressLine1" value="{$form_data.additional_address_line1|escape}" class="register--field {if {config name=requireAdditionAddressLine1}}is--required{/if} {if $error_flags.additional_address_line1 && {config name=requireAdditionAddressLine1}}instyle_error{/if}" />
+					<input name="register[billing][additional_address_line1]" type="text" {if {config name=requireAdditionAddressLine1}}aria-required="true"{/if} placeholder="{s name='RegisterLabelAdditionalAddressLine1'}{/s}{if {config name=requireAdditionAddressLine1}}*{/if}" id="additionalAddressLine1" value="{$form_data.additional_address_line1|escape}" class="register--field {if {config name=requireAdditionAddressLine1}}is--required{/if} {if $error_flags.additional_address_line1 && {config name=requireAdditionAddressLine1}}has--error{/if}" />
 				</div>
 			{/if}
 		{/block}
@@ -51,7 +51,7 @@
 		{block name='frontend_register_billing_fieldset_input_addition_address_line2'}
 			{if {config name=showAdditionAddressLine2}}
 				<div class="register--additional-field2">
-					<input name="register[billing][additional_address_line2]" type="text" placeholder="{s name='RegisterLabelAdditionalAddressLine2'}{/s}{if {config name=requireAdditionAddressLine2}}*{/if}" id="additionalAddressLine2" value="{$form_data.additional_address_line2|escape}" class="register--field {if {config name=requireAdditionAddressLine2}}is--required{/if} {if $error_flags.additional_address_line2 && {config name=requireAdditionAddressLine2}}instyle_error{/if}" />
+					<input name="register[billing][additional_address_line2]" type="text" {if {config name=requireAdditionAddressLine2}}aria-required="true"{/if} placeholder="{s name='RegisterLabelAdditionalAddressLine2'}{/s}{if {config name=requireAdditionAddressLine2}}*{/if}" id="additionalAddressLine2" value="{$form_data.additional_address_line2|escape}" class="register--field {if {config name=requireAdditionAddressLine2}}is--required{/if} {if $error_flags.additional_address_line2 && {config name=requireAdditionAddressLine2}}has--error{/if}" />
 				</div>
 			{/if}
 		{/block}
@@ -59,8 +59,8 @@
 		{* Zip + City *}
 		{block name='frontend_register_billing_fieldset_input_zip_and_city'}
 			<div class="register--zip-city">
-				<input name="register[billing][zipcode]" type="text" placeholder="{s name='RegisterBillingLabelZipcode'}{/s}" id="zipcode" value="{$form_data.zipcode|escape}" class="register--field zipcode is--require{if $error_flags.zipcode} instyle_error{/if}" />
-				<input name="register[billing][city]" type="text" placeholder="{s name='RegisterBillingLabelCity'}{/s}" id="city" value="{$form_data.city|escape}" size="25" class="register--field city is--required{if $error_flags.city} instyle_error{/if}" />
+				<input name="register[billing][zipcode]" type="text" aria-required="true" placeholder="{s name='RegisterBillingLabelZipcode'}{/s}" id="zipcode" value="{$form_data.zipcode|escape}" class="register--field zipcode is--required{if $error_flags.zipcode} has--error{/if}" />
+				<input name="register[billing][city]" type="text" aria-required="true" placeholder="{s name='RegisterBillingLabelCity'}{/s}" id="city" value="{$form_data.city|escape}" size="25" class="register--field city is--required{if $error_flags.city} has--error{/if}" />
 			</div>
 		{/block}
 
@@ -68,7 +68,7 @@
 		{block name='frontend_register_billing_fieldset_input_country'}
 			<div class="register--country field--select">
 				<span class="arrow"></span>
-				<select name="register[billing][country]" id="country" class="is--required{if $error_flags.country} instyle_error{/if}">
+				<select name="register[billing][country]" id="country" class="is--required{if $error_flags.country} has--error{/if}">
 				<option value="" selected="selected">{s name='RegisterBillingLabelCountry'}{/s}</option>
 				{foreach $country_list as $country}
 					<option value="{$country.id}" {if $country.id eq $form_data.country}selected="selected"{/if} {if $country.states}stateSelector="country_{$country.id}_states"{/if}>
@@ -86,7 +86,7 @@
 				{if $country.states}
 					<div class="register--state-selection field--select{if $country.id != $form_data.country} is--disabled{/if}">
 						<span class="arrow"></span>
-						<select {if $country.id != $form_data.country}disabled="disabled"{/if} name="register[billing][country_state_{$country.id}]" id="country_{$country.id}_states" class="{if $country.force_state_in_registration}is--required{/if} {if $error_flags.stateID}instyle_error{/if}">
+						<select {if $country.id != $form_data.country}disabled="disabled"{/if} name="register[billing][country_state_{$country.id}]" id="country_{$country.id}_states" class="{if $country.force_state_in_registration}is--required{/if} {if $error_flags.stateID}has--error{/if}">
 						<option value="" selected="selected">{s name='RegisterBillingLabelState'}Bundesstaat:{/s}</option>
 							{assign var="stateID" value="country_state_`$country.id`"}
 							{foreach $country.states as $state}

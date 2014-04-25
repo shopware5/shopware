@@ -1,10 +1,9 @@
 // Header Support Info
-.is--ctl-register {
+.header-main {
 
     .logo--supportinfo {
 	display: none;
     }
-
 }
 
 // Register Content
@@ -22,11 +21,18 @@
     }
 
     .panel--body {
-	.unitize-margin(0, 16, 16);
+	    .unitize-margin(0, 16, 16);
     }
 
     .alert {
-	.unitize-padding(16, 16);
+	    .unitize-padding(16, 16);
+    }
+
+    .register--alert-title {
+	.unitize(0, 16, margin-top);
+    }
+    .register--alert-list {
+	list-style: none;
     }
 
     .register--check {
@@ -34,25 +40,30 @@
     }
 
     .register--submit {
-	.unitize-margin(0, 26, 16);
+	    .unitize-margin(0, 26, 16);
 	float: right;
 
 	.icon--arrow-right {
-	    .unitize(10, 16, font-size);
+		.unitize(10, 16, font-size);
 	}
     }
 
     .register--required-info {
-	.unitize-margin(0, 26, 16);
+	    .unitize-margin(0, 26, 16);
+	.unitize(14, 16, font-size);
     }
 
     .field--select {
-	.unitize-margin(0, 0, 6, 0, 16);
+	    .unitize-margin(0, 0, 6, 0, 16);
     }
 
     .register--field {
-	.unitize-margin(4, 0, 4, 0, 16);
+	    .unitize-margin(4, 0, 4, 0, 16);
 	width: 100%;
+    }
+
+    .register--customertype {
+	display: block;
     }
 
     .register--street {
@@ -63,7 +74,7 @@
 	    float: left;
 	}
 
-	.register--field-streetnumber {
+	    .register--field-streetnumber {
 	    width: 18%;
 	    float: left;
 	}
@@ -72,13 +83,14 @@
 
     .register--zip-city {
 
-	.register--field-zipcode {
+	    .register--field-zipcode {
 	    margin-right: 2%;
 	    width: 28%;
 	    float: left;
 	}
-	.register--field-city {
-	    .clearfix();
+
+	    .register--field-city {
+		.clearfix();
 	    width: 70%;
 	    float: left;
 	}
@@ -99,27 +111,31 @@
 	}
 
 	.register--birthyear {
-
 	    .unitize(0, 16, margin-right);
 	}
 
     }
 
+    .register--privacy {
+	.unitize-margin(0, 26, 16);
+	.unitize(14, 16, font-size);
+    }
+
     // Personal information fieldset
     .register--personal {
-	.unitize(32,16, padding-bottom);
+	.unitize(32, 16, padding-bottom);
 	.clearfix();
     }
 
 }
 
-// Register advantages entry
+// Register advantages
 .register--advantages {
     .clearfix();
 
     .register--advantages-list {
 	.unitize(40, 16, margin-bottom);
-	list-style: none;
+	    list-style: none;
 	float: left;
     }
 
@@ -186,11 +202,12 @@
 	    content: '';
 	    height: 100%;
 	}
+
     }
 
     .is--active .text {
-	display: inline-block;
 	color: @primaryColor;
+	display: inline-block;
 	font-weight: bold;
     }
 
@@ -204,7 +221,8 @@
 @media screen and (min-width: @tabletViewportWidth) {
 
     // Header Support Info
-    .is--ctl-register {
+    .header-main{
+	box-shadow: 0 1px 1px #ccc;
 
 	.logo-main {
 	    width: 100%;
@@ -225,46 +243,43 @@
 	    a { float: right; }
 	}
 
-	.header-main {
-	    box-shadow: 0 1px 1px #ccc;
-	}
-
     }
 
     // General registration form
     .register--content {
 	.unitize(50, 16, margin-top);
+	.unitize(20, 16, padding-top);
 	width: 90%;
 
 	.field--select {
-	    .unitize-margin(5, 0, 16);
+		.unitize-margin(5, 0, 16);
 
 	    .register--birthday {
-		margin-right: 2%;
+			margin-right: 2%;
 	    }
 	}
 
 	.register--field {
-	    .unitize-margin(8, 0, 8, 0, 16);
+		.unitize-margin(8, 0, 8, 0, 16);
 	}
 
 	.register--check {
-	    .unitize(8, 16, padding-bottom);
+		.unitize(8, 16, padding-bottom);
 	}
     }
 
     // Register Steps
     .steps--content {
-	.unitize-padding(30, 0, 40, 0, 16);
+	    .unitize-padding(30, 0, 40, 0, 16);
 	background: transparent;
 	border: none;
 
-	.steps--entry { width: 28% }
+	.steps--entry { width: 25% }
 
 	.steps--spacer {
 	    border-bottom: 1px solid @borderColor;;
 	    display: block;
-	    width: 8%;
+	    width: 12%;
 	    text-align: center;
 
 	    i[class^=icon] {
@@ -276,8 +291,8 @@
 	}
 
 	.steps--entry .text {
+	    width: 60%;
 	    display: inline-block;
-	    width: 63%;
 	    font-weight: bold;
 	}
     }
@@ -303,7 +318,12 @@
     // Register Steps
     .steps--content {
 
-	.steps--entry { width: 20% }
+	.steps--entry {
+	    width: 20%;
+
+	    .text { width: 70%; }
+	}
+
 	.steps--spacer { width: 16% }
 
     }

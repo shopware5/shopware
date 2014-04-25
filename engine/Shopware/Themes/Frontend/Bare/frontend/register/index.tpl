@@ -1,4 +1,4 @@
-{extends file="frontend/index/index.tpl"}
+{extends file="./frontend/index/index.tpl"}
 
 {* Title *}
 {block name='frontend_index_header_title'}
@@ -14,32 +14,13 @@
 {* Hide shop navigation *}
 {block name='frontend_index_shop_navigation'}{/block}
 
-{* Hide top bar navigation *}
-{block name='frontend_index_navigation'}
-	<header class="header-main">
-		<div class="container">
-
-			{* Logo container *}
-			{block name='frontend_index_logo_container'}
-				{include file="frontend/index/logo-container.tpl"}
-
-			{/block}
-
-			{* Shop navigation *}
-			{block name='frontend_index_shop_navigation'}
-				{include file="frontend/index/shop-navigation.tpl"}
-			{/block}
-		</div>
-	</header>
-
-	{* Hide maincategories navigation top *}
-	{block name='frontend_index_navigation_categories_top'}{/block}
-{/block}
-
 {* Step box *}
-{block name="frontend_index_navigation_categories_top" append}
+{block name='frontend_index_navigation_categories_top'}
 	{include file="frontend/register/steps.tpl" sStepActive="register"}
 {/block}
+
+{* Hide top bar *}
+{block name='frontend_index_top_bar_container'}{/block}
 
 {* Hide footer *}
 {block name="frontend_index_footer"}{/block}
@@ -59,13 +40,11 @@
 				<h2 class="panel--title is--underline">{$sShopname} {s name='RegisterHeadlineSupplier' namespace='frontend/register/index'}{/s}</h2>
 
 				<div class="panel--body">
-
 					<strong>{s name='RegisterInfoSupplier' namespace='frontend/register/index'}{/s}</strong><br />
 					<a href="{url controller='account'}" class="account">{s name='RegisterInfoSupplier2' namespace='frontend/register/index'}{/s}</a><br />
 					<p class="is--bold">{s name='RegisterInfoSupplier3' namespace='frontend/register/index'}{/s}</p>
 					<h3 class="is--bold">{s name='RegisterInfoSupplier4' namespace='frontend/register/index'}{/s}</h3>{s name='RegisterInfoSupplier5' namespace='frontend/register/index'}{/s}
 					<h3 class="is--bold">{s name='RegisterInfoSupplier6' namespace='frontend/register/index'}{/s}</h3>{s name='RegisterInfoSupplier7' namespace='frontend/register/index'}{/s}
-
 				</div>
 			</div>
 			{/if}
@@ -89,21 +68,19 @@
 					{include file="frontend/register/shipping_fieldset.tpl" form_data=$register->shipping->form_data error_flags=$register->shipping->error_flags country_list=$register->shipping->country_list}
 				{/block}
 
-				<div class="payment_method register_last"></div>
-
 				{* Privacy checkbox *}
 				{if !$update}
 					{if {config name=ACTDPRCHECK}}
 						{block name='frontend_register_index_input_privacy'}
-							<div class="privacy">
+							<div class="register--privacy">
 								<input name="register[personal][dpacheckbox]" type="checkbox" id="dpacheckbox"{if $form_data.dpacheckbox} checked="checked"{/if} value="1" class="chkbox" />
-								<label for="dpacheckbox" class="chklabel{if $register->personal->error_flags.dpacheckbox} instyle_error{/if}">{s name='RegisterLabelDataCheckbox'}{/s}</label>
+								<label for="dpacheckbox" class="chklabel{if $register->personal->error_flags.dpacheckbox} has--error{/if}">{s name='RegisterLabelDataCheckbox'}{/s}</label>
 							</div>
 						{/block}
 					{/if}
 				{/if}
 
-				{block name='frntend_register_index_form_regquired'}
+				{block name='frontend_register_index_form_required'}
 					{* Required fields hint *}
 					<div class="register--required-info required_fields">
 						{s name='RegisterPersonalRequiredText' namespace='frontend/register/personal_fieldset'}{/s}
