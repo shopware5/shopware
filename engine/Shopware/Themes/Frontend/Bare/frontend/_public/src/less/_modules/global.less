@@ -37,11 +37,9 @@ p {
 
 
 .list--unstyled { list-style: none }
-
-.content {
-    margin: 0 auto;
-    width: 90%;
-    float: none;
+.content-main--inner {
+	.unitize-padding(0, 10, 16);
+	.clearfix();
 }
 
 // Hide ajax loader by default
@@ -71,7 +69,7 @@ p {
 :-ms-input-placeholder { color: @lightTextColor }
 
 @media screen and(min-width: @tabletViewportWidth) {
-    .content {
+    .content-main--inner {
         .unitize-padding(0, 20, 16);
         width: 100%;
     }
@@ -80,5 +78,8 @@ p {
 @media screen and (min-width: @desktopViewportWidth) {
 	.page-wrap {
 		.unitize(14, 16, font-size);
+	}
+	.content-main--inner {
+		.unitize-padding(0, 45, 45, 45);
 	}
 }

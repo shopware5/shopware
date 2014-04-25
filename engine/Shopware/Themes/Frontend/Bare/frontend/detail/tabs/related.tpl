@@ -1,16 +1,18 @@
 {namespace name="frontend/detail/related"}
 {if $sArticle.sRelatedArticles && !$sArticle.crossbundlelook}
-    <div id="related">
-        <h2>{se name='DetailRelatedHeader'}{/se}</h2>
-        <div class="container">
-        	<div class="listing" id="listing">
-	        {foreach from=$sArticle.sRelatedArticles item=sArticleSub key=key name="counter"}
+	{* Related products - Title *}
+	{block name="frontend_detail_index_related_slider_title"}
+		<h2 class="content--title">{s name='DetailRelatedHeader'}{/s}</h2>
+	{/block}
 
-	        	{include file="frontend/listing/box_article.tpl" sArticle=$sArticleSub sTemplate='listing'}
-
-	        {/foreach}
-	        </div>
-        </div>
-        <div class="clear">&nbsp;</div>
-    </div>
+	{* Related products - Content *}
+	{block name="frontend_detail_index_similar_slider_content"}
+		<div class="listing--container">
+			<ul class="listing listing--listing">
+				{foreach $sArticle.sRelatedArticles as $sArticleSub}
+					{include file="frontend/listing/box_article.tpl" sArticle=$sArticleSub sTemplate='listing'}
+				{/foreach}
+			</ul>
+		</div>
+	{/block}
 {/if}

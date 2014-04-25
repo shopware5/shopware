@@ -10,31 +10,30 @@
 		.unitize-margin(0, 5, 0, 10);
 		.unitize-width(9);
 		.unitize-height(9);
-        .unitize(5, 16, top);
 		display: inline-block;
         position: relative;
 	}
 
 	.delivery--status-available {
-		background: #62d100;
+		background: @deliveryAvailableIcon;
 	}
 	.delivery--text-available {
-		color: #449101;
+		color: @deliveryAvailableText;
 	}
 
     .delivery--status-more-is-coming {
-        background: #f0ad4e;
+        background: @deliveryMoreIsComingIcon;
     }
     .delivery--text-more-is-coming {
-        color: #8a6d3b;
+        color: @deliveryMoreIsComingText;
     }
 
     .delivery--status-not-available {
-        background: #f9390a;
+        background: @deliveryNotAvailableIcon;
     }
 
     .delivery--text-not-available {
-        color: #b1001d;
+        color: @deliveryNotAvailableText;
     }
 
 	.delivery--text {
