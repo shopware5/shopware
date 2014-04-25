@@ -34,7 +34,7 @@
 	}
 
 	// Product title
-	.product--title {
+	.product--info .product--title {
 		.unitize-padding(10, 0);
 		.unitize(21, 16, font-size);
 		margin: 0;
@@ -145,6 +145,11 @@
 			color: #fff;
 			background: @lightTextColor;
 		}
+	}
+
+	.listing .product--box .panel--body {
+		border-left: 1px solid @borderColor;
+		border-right: 1px solid @borderColor;
 	}
 }
 
@@ -299,7 +304,7 @@
         }
 
         // Title
-        .product--title {
+        .product--info .product--title {
             .unitize-padding(18, 0, 0, 0);
             border: 0 none;
         }
@@ -421,7 +426,7 @@
             .panel--tab-nav {
                 .unitize-margin(0, 20);
             }
-            .panel--body {
+            .tab--content {
                 .unitize-padding(20, 40);
 				border-left: 0 none;
 				border-right: 0 none;
@@ -455,7 +460,7 @@
 			.panel--tab-nav {
 				.unitize-margin(0, 45);
 			}
-			.panel--body {
+			.tab--content {
 				.unitize-padding(25, 55, 45);
 			}
 		}
