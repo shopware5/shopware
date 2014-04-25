@@ -87,10 +87,10 @@
         }, {
             type: 'desktop',
             enter: function() {
-                me.destroyThumbnails();
-            },
-            exit: function() {
-                me.initThumbnails(me.$thumbnailsContainer);
+                window.setTimeout(function() {
+                    console.log('desktop enter');
+                    me.destroyThumbnails();
+                }, 400);
             }
         }]);
 
@@ -119,9 +119,7 @@
         }, 200);
 
         $(window).on('resize.' + pluginName, function() {
-            window.setTimeout(function() {
-                me.setThumbnailsToOffCanvas($container);
-            }, 50);
+            me.setThumbnailsToOffCanvas($container);
         });
 
         $container.on('click.' + pluginName, function(event) {
@@ -217,7 +215,8 @@
         var me = this;
 
         $(window).off('resize.' + pluginName);
-        me.$thumbnailsContainer.off('click.' + pluginName).css('left', 0).hide();
+        me.$thumbnailsContainer.off('click.' + pluginName).removeAttr('style');
+        me.$thumbnailsContainer.removeAttr('style');
 
         return true;
     };
