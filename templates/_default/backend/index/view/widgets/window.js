@@ -79,7 +79,6 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      *     height: 500,
      *     columnsShown: 3,
      *     dock: 'br', // b-ottom r-ight
-     *     pinned: true,
      *     minimized: false
      * }
      */
@@ -103,14 +102,14 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
     columnsShown: 2,
 
     /**
-     * Flag if the window should set itself to front on the unghosting event
-     */
-    pinnedOnTop: false,
-
-    /**
      * Ext.util.MixedCollection of all widget containers
      */
     containerCollection: null,
+
+    /**
+     * Flag if handles should be initialized
+     */
+    initHandles: true,
 
     /**
      * Initializes the window and sets all flags and settings provided by the widgetSettings store.
@@ -125,7 +124,6 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
         me.columnsShown = settings.get('columnsShown');
         me.height = settings.get('height');
         me.hidden = settings.get('minimized');
-        me.pinnedOnTop = settings.get('pinned');
 
         me.containerCollection = Ext.create('Ext.util.MixedCollection');
 
@@ -142,7 +140,6 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
 
         me.addEvents(
             'minimizeWindow',
-            'fixWindow',
             'changePosition',
             'saveWidgetPosition',
             'addWidget',
@@ -179,12 +176,6 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                     items: me.createWidgetMenuItems()
                 }
             }, '->', {
-                xtype: 'button',
-                cls: 'btn-widget-pin' + (me.pinnedOnTop ? ' active' : ''),
-                handler: function() {
-                    me.fireEvent('fixWindow', me, this);
-                }
-            }, {
                 xtype: 'button',
                 cls: 'btn-widget-minimize',
                 handler: function() {
@@ -232,6 +223,34 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                 }
             }
         });
+    },
+
+    afterLayout: function () {
+        var me = this;
+
+        if(me.resizer && me.initHandles) {
+            var dock = me.widgetSettings.get('dock'),
+                handles =  [],
+                verticalHandle = 's',
+                horizontalHandle = 'e';
+
+
+            if(dock.indexOf('b') != -1) {
+                verticalHandle = 'n';
+            }
+
+            if (dock.indexOf('r') != -1) {
+                horizontalHandle = 'w';
+            }
+
+            handles.push(verticalHandle);
+            handles.push(horizontalHandle);
+            handles.push(verticalHandle + horizontalHandle);
+
+            me.handleResizer(handles);
+
+            me.initHandles = false;
+        }
     },
 
     /**
@@ -399,6 +418,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
 
             if(!container) {
                 container = me.containerCollection.getAt(0);
+                view.column = 0;
             }
 
             widget = me.createWidget(name, model.get('id'), view);
@@ -418,7 +438,6 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
     createWidget: function (name, widgetId, record) {
         var me = this,
             config = {
-                id: name,
                 widgetId: widgetId,
                 viewId: record.id,
                 title: record.label,
@@ -462,6 +481,19 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                         container.remove(widget, false);
                     }
                 });
+            },
+
+            onDrag: function (e) {
+                var dropSource = this,
+                    widget = dropSource.panel,
+                    widgetX = dropSource.lastPageX,
+                    widgetY = dropSource.lastPageY,
+                    winBox = me.getEl().getBox();
+
+                if(widgetX < winBox.x || widgetX > winBox.x + winBox.width || widgetY < winBox.y || widgetY > winBox.y + winBox.height) {
+                    widget.ghostPanel.getEl().setOpacity(0.25, true);
+                    widget.ghostPanel.getEl().setStyle('background', 'red');
+                }
             },
 
             onInvalidDrop: function (e) {
@@ -587,9 +619,8 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                  checked: (widget.get('views').length) ? true : false,
                  listeners: {
                      checkchange: function(checkbox, status, eOpts) {
-
                          if (status) {
-                             me.fireEvent('addWidget', me, widget.get('name'));
+                             me.fireEvent('addWidget', me, widget.get('name'), checkbox);
                              return;
                          }
 
@@ -600,19 +631,6 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
         });
 
         return items;
-    },
-
-    /**
-     * If the window is pinned, it will put itself to the front after other windows have been moved.
-     */
-    unghost: function() {
-        var me = this;
-
-        me.callParent(arguments);
-
-        if (me.pinnedOnTop) {
-            me.toFront();
-        }
     },
 
     /**
@@ -685,6 +703,33 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
         toolbarEl.setStyle(style);
 
         wrapperEl.setY(position);
+    },
+
+
+    /**
+     * All resizer handles will be hidden and only the passed ones will be shown
+     * It's dirty but it works, the is no cleaner way provided by the resizer.
+     *
+     * @param allowedHandles
+     */
+    handleResizer: function(allowedHandles) {
+        var me = this,
+            resizer = me.resizer,
+            positions = resizer.possiblePositions,
+            pos,
+            i;
+
+        Ext.iterate(positions, function(p) {
+            pos = positions[p];
+
+            resizer[pos].hide();
+        });
+
+        for(i = 0; i < allowedHandles.length; i++) {
+            pos = positions[allowedHandles[i]];
+
+            resizer[pos].show();
+        }
     }
 });
 
