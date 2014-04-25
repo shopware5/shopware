@@ -8,7 +8,7 @@
 			{else}
 				<div class="register--customertype field--select">
 					<span class="arrow"></span>
-					<select id="register_personal_customer_type" name="register[personal][customer_type]" class="is--required {if $error_flags.customer_type}instyle_error{/if}">
+					<select id="register_personal_customer_type" name="register[personal][customer_type]" class="is--required {if $error_flags.customer_type}has--error{/if}">
 						<option>{s name='RegisterPersonalLabelType'}{/s}</option>
 						<option value="private"{if $form_data.customer_type eq "private"} selected="selected"{/if}>{s name='RegisterPersonalLabelPrivate'}{/s}</option>
 						<option value="business"{if $form_data.customer_type eq "business" or $form_data.company or $form_data.sValidation} selected="selected"{/if}>{s name='RegisterPersonalLabelBusiness'}{/s}</option>
@@ -21,7 +21,7 @@
 		{block name='frontend_register_personal_fieldset_salutation'}
 			<div class="register--salutation field--select">
 				<span class="arrow"></span>
-				<select name="register[personal][salutation]" id="salutation" class="is--required" {if $error_flags.salutation}instyle_error{/if}">
+				<select name="register[personal][salutation]" id="salutation" class="is--required {if $error_flags.salutation}has--error{/if}">
 					<option>{s name='RegisterLabelSalutation'}{/s}</option>
 					<option value="mr" {if $form_data.salutation eq "mr"}selected="selected"{/if}>{s name='RegisterLabelMr'}{/s}</option>
 					<option value="ms" {if $form_data.salutation eq "ms"}selected="selected"{/if}>{s name='RegisterLabelMs'}{/s}</option>
@@ -32,14 +32,14 @@
 		{* Firstname *}
 		{block name='frontend_register_personal_fieldset_input_firstname'}
 			<div class="register--firstname">
-				<input name="register[personal][firstname]" type="text" placeholder="{s name='RegisterLabelFirstname'}{/s}" id="firstname" value="{$form_data.firstname|escape}" class="register--field is--required {if $error_flags.firstname}instyle_error{/if}" />
+				<input name="register[personal][firstname]" type="text" aria-required="true" placeholder="{s name='RegisterLabelFirstname'}{/s}" id="firstname" value="{$form_data.firstname|escape}" class="register--field is--required {if $error_flags.firstname}has--error{/if}" />
 			</div>
 		{/block}
 
 		{* Lastname *}
 		{block name='frontend_register_personal_fieldset_input_lastname'}
 			<div class="register--lastname">
-				<input name="register[personal][lastname]" type="text" placeholder="{s name='RegisterLabelLastname'}{/s}" id="lastname" value="{$form_data.lastname|escape}" class="register--field is--required {if $error_flags.lastname}instyle_error{/if}" />
+				<input name="register[personal][lastname]" type="text" aria-required="true" placeholder="{s name='RegisterLabelLastname'}{/s}" id="lastname" value="{$form_data.lastname|escape}" class="register--field is--required {if $error_flags.lastname}has--error{/if}" />
 			</div>
 		{/block}
 
@@ -57,12 +57,12 @@
 			{* E-Mail *}
 			{block name='frontend_register_personal_fieldset_input_mail'}
 				<div class="register--email">
-					<input name="register[personal][email]" type="text" placeholder="{s name='RegisterLabelMail'}{/s}" id="register_personal_email" value="{$form_data.email|escape}" class="register--field is--required email {if $error_flags.email}instyle_error{/if}" />
+					<input name="register[personal][email]" type="email" aria-required="true" placeholder="{s name='RegisterLabelMail'}{/s}" id="register_personal_email" value="{$form_data.email|escape}" class="register--field is--required {if $error_flags.email}has--error{/if}" />
 				</div>
 
 				{if {config name=doubleEmailValidation}}
 					<div class="register--emailconfirm">
-						<input name="register[personal][emailConfirmation]" type="text" placeholder="{s name='RegisterLabelMailConfirmation'}{/s}" id="register_personal_emailConfirmation" value="{$form_data.emailConfirmation|escape}" class="register--field emailConfirmation is--required {if $error_flags.emailConfirmation}instyle_error{/if}" />
+						<input name="register[personal][emailConfirmation]" type="email" aria-required="true" placeholder="{s name='RegisterLabelMailConfirmation'}{/s}" id="register_personal_emailConfirmation" value="{$form_data.emailConfirmation|escape}" class="register--field is--required {if $error_flags.emailConfirmation}has--error{/if}" />
 					</div>
 				{/if}
 			{/block}
@@ -72,7 +72,7 @@
 			{* Password *}
 			{block name='frontend_register_personal_fieldset_input_password'}
 				<div class="register--password">
-					<input name="register[personal][password]" type="password" placeholder="{s name='RegisterLabelPassword'}{/s}" id="register_personal_password" class="register--field is--required password {if $error_flags.password}instyle_error{/if}" />
+					<input name="register[personal][password]" type="password" aria-required="true" placeholder="{s name='RegisterLabelPassword'}{/s}" id="register_personal_password" class="register--field is--required {if $error_flags.password}has--error{/if}" />
 				</div>
 			{/block}
 
@@ -80,7 +80,7 @@
 			{block name='frontend_register_personal_fieldset_input_password_confirm'}
 				{if {config name=doublePasswordValidation}}
 					<div class="register--passwordconfirm">
-						<input name="register[personal][passwordConfirmation]" type="password" placeholder="{s name='RegisterLabelPasswordRepeat'}{/s}" id="register_personal_passwordConfirmation" class="register--field is--required passwordConfirmation {if $error_flags.passwordConfirmation}instyle_error{/if}" />
+						<input name="register[personal][passwordConfirmation]" type="password" aria-required="true" placeholder="{s name='RegisterLabelPasswordRepeat'}{/s}" id="register_personal_passwordConfirmation" class="register--field is--required {if $error_flags.passwordConfirmation}has--error{/if}" />
 					</div>
 				{/if}
 			{/block}
@@ -97,7 +97,7 @@
 		{block name='frontend_register_personal_fieldset_input_phone'}
 			{if {config name=showPhoneNumberField}}
 				<div class="register--phone">
-					<input name="register[personal][phone]" type="text" placeholder="{s name='RegisterLabelPhone'}{/s}{if {config name=requirePhoneField}}*{/if}" id="phone" value="{$form_data.phone|escape}" class="register--field {if {config name=requirePhoneField}}is--required{/if} {if $error_flags.phone && {config name=requirePhoneField}}instyle_error{/if}" />
+					<input name="register[personal][phone]" type="text" {if {config name=requirePhoneField}}aria-required="true"{/if} placeholder="{s name='RegisterLabelPhone'}{/s}{if {config name=requirePhoneField}}*{/if}" id="phone" value="{$form_data.phone|escape}" class="register--field {if {config name=requirePhoneField}}is--required{/if} {if $error_flags.phone && {config name=requirePhoneField}}has--error{/if}" />
 				</div>
 			{/if}
 		{/block}
