@@ -44,7 +44,7 @@ class sArticlesTest extends PHPUnit_Framework_TestCase
         $sArticles = new sArticles();
         $categoryId = Shopware()->Shop()->getCategory()->getId();
         $translationId = (!Shopware()->Shop()->getDefault() ? Shopware()->Shop()->getId() : null);
-        $customerGroupId = ((int) Shopware()->Modules()->System()->sSYSTEM->sUSERGROUPDATA['id']);
+        $customerGroupId = ((int) Shopware()->Modules()->System()->sUSERGROUPDATA['id']);
 
         $this->assertsArticlesState($sArticles, $categoryId, $translationId, $customerGroupId);
     }
