@@ -76,7 +76,7 @@ class RequirementsPath implements \IteratorAggregate, \Countable
      */
     public function setFatalError($fatalError)
     {
-        $this->fatalError = (bool)$fatalError;
+        $this->fatalError = (bool) $fatalError;
     }
 
     /**

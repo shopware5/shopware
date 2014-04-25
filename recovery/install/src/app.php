@@ -1,9 +1,13 @@
 <?php
+use Shopware\Recovery\Common\Utils;
+
 $app = new \Slim\Slim(array(
     'templates.path'  => __DIR__ . '/../templates',
     'debug'           => false, // set debug to false so custom error handler is used
 ));
 $app->contentType('text/html; charset=utf-8');
+
+
 
 if (!isset($_SESSION)) {
     $sessionPath = str_replace('index.php','',$app->request()->getScriptName());
@@ -15,6 +19,9 @@ if (!isset($_SESSION)) {
 if (!isset($_SESSION["parameters"])) {
     $_SESSION["parameters"] = array();
 }
+
+
+
 
 /**
  * Load language file
@@ -88,7 +95,7 @@ $app->config('install.language', $selectedLanguage);
 // Set global variables
 $app->view()->setData("selectedLanguage", $selectedLanguage);
 $app->view()->setData("language", $language);
-$app->view()->setData("baseUrl", str_replace('index.php', '', $_SERVER["PHP_SELF"]));
+$app->view()->setData("baseUrl", Utils::getBaseUrl($app));
 $app->view()->setData("app", $app);
 $app->view()->setData("error", false);
 $app->view()->setData("parameters", $_SESSION["parameters"]);

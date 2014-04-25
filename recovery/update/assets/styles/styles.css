@@ -1,0 +1,37 @@
+body.auto header {
+    display: none;
+}
+
+body.auto div.page-header {
+    visibility: hidden;
+}
+
+body.auto div.actions {
+    display: none;
+}
+
+body.auto .wrapper {
+    width: 785px;
+}
+
+body.auto .progress-container {
+    margin: -35px 35px 50px;
+}
+
+body.auto section.content {
+    padding: 25px;
+}
+
+a.big-button {
+    width: 50%;
+    background: #089eff;
+    border-radius: 4px;
+    border: none;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+    margin-right: 10px;
+    padding: 10px 36px;
+    text-align: center;
+    font-size: 15px;
+}
