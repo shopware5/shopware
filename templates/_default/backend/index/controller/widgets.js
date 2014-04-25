@@ -76,7 +76,6 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         me.control({
             'widget-sidebar-window': {
                 minimizeWindow: me.onMinimizeWindow,
-                fixWindow: me.onFixWindow,
                 changePosition: me.onChangePosition,
                 saveWidgetPosition: me.onSaveWidgetPosition,
                 addWidget: me.onAddWidget,
@@ -100,13 +99,18 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
 
     onTaskBarBtnClick: function() {
         var me = this,
-                minimized = false;
+            minimized = false,
+            win = me.widgetWindow,
+            taskBarBtn = me.taskBarBtn,
+            taskBarBtnEl = taskBarBtn.getEl();
 
-        if (me.widgetWindow.isVisible()) {
-            me.widgetWindow.hide(me.taskBarBtn);
+        if (win.isVisible()) {
+            win.hide(taskBarBtn);
+            taskBarBtnEl.removeCls('btn-over');
             minimized = true;
         } else {
-            me.widgetWindow.show(me.taskBarBtn).toFront();
+            win.show(taskBarBtn).toFront();
+            taskBarBtnEl.addCls('btn-over');
         }
 
         me.widgetSettings.set('minimized', minimized);
@@ -124,7 +128,6 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
                 height: 600,
                 columnsShown: 1,
                 dock: 'tl',
-                pinned: false,
                 minimized: false
             });
 
@@ -144,6 +147,10 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
             desktop: me.desktop,
             widgetSettings: me.widgetSettings
         });
+
+        if (!settings.get('minimized')) {
+            me.taskBarBtn.getEl().addCls('btn-over');
+        }
     },
 
     getWidgetSettingsByAuthId: function (authId) {
@@ -169,52 +176,20 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         me.widgetSettingsStore.sync();
     },
 
-    onFixWindow: function(win, pinButton) {
-        var me = this,
-            pinned = !win.pinnedOnTop,
-            windowEl = win.getEl();
-
-        if(!windowEl) {
-            return;
-        }
-
-        win.pinnedOnTop = pinned;
-
-        me.widgetSettings.set('pinned', pinned);
-        me.widgetSettingsStore.sync();
-
-        if (pinned) {
-            win.toFront();
-            pinButton.addCls('active');
-            return;
-        }
-
-        win.toBack();
-        pinButton.removeCls('active');
-    },
-
     onChangePosition: function(win, align, animate) {
         var me = this,
             xOffset = 10,
             yOffset = 10,
             desktopEl = me.desktop.el,
-            bottomOffset = (desktopEl.getBottom() - desktopEl.getHeight()) * -1,
             x = xOffset,
             y = yOffset,
             verticalHandle = 's',
             horizontalHandle = 'e',
             handles = [],
-            resizer = win.resizer,
-            anim = animate !== false,
-            positions, pos, p, i;
-
-        if(desktopEl.getBottom() !== window.innerHeight) {
-            var domEl = win.toolbar.getEl().dom;
-            bottomOffset = domEl.scrollHeight + domEl.firstChild.scrollHeight;
-        }
+            anim = animate !== false;
 
         if(align.indexOf('b') != -1) {
-            y = (desktopEl.getHeight() + bottomOffset) - win.getHeight() - yOffset;
+            y = desktopEl.getHeight() - win.getHeight() - yOffset;
             verticalHandle = 'n';
         }
 
@@ -228,30 +203,12 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         me.widgetSettings.set('dock', align);
         me.widgetSettingsStore.sync();
 
-        if(!resizer) {
-            return;
-        }
+        if(win.resizer) {
+            handles.push(verticalHandle);
+            handles.push(horizontalHandle);
+            handles.push(verticalHandle + horizontalHandle);
 
-        positions = resizer.possiblePositions;
-
-        handles.push(verticalHandle);
-        handles.push(horizontalHandle);
-        handles.push(verticalHandle + horizontalHandle);
-
-        /**
-         * All resizer handles will be hidden and only the relevant ones will be shown
-         * It's dirty but it works, the is no cleaner way provided by the resizer
-         */
-        Ext.iterate(positions, function(p) {
-            pos = positions[p];
-
-            resizer[pos].hide();
-        });
-
-        for(i = 0; i < handles.length; i++) {
-            pos = positions[handles[i]];
-
-            resizer[pos].show();
+            win.handleResizer(handles);
         }
     },
 
@@ -272,10 +229,12 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         });
     },
 
-    onAddWidget: function(win, widgetName) {
+    onAddWidget: function(win, widgetName, menuItem) {
         var me = this,
             container = win.containerCollection.getAt(0),
             widget = me.widgetStore.findRecord('name', widgetName);
+
+        menuItem.disable();
 
         Ext.Ajax.request({
             url: '{url controller=widgets action=addWidgetView}',
@@ -295,6 +254,8 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
                         widget = me.widgetStore.findRecord('name', widgetName);
 
                         win.createWidgets(widget);
+
+                        menuItem.enable();
                     }
                 });
             }
@@ -321,8 +282,17 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
 
                 Ext.each(views, function(view) {
                     column = win.containerCollection.getAt(view.column);
+                    
+                    if (!column) {
+                        column = win.containerCollection.getAt(0);
+                    }
 
-                    column.remove(column.getComponent(view.position));
+                    column.items.each(function(widget) {
+                        if(widget.viewId === view.id) {
+                            column.remove(widget);
+                            return false;
+                        }
+                    });
                 });
             }
         });

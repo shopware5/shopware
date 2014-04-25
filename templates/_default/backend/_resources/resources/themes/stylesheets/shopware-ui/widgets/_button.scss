@@ -161,6 +161,10 @@
 		.window-managment {
 			background: theme-image($theme, 'icon_taskbar_cap_fenster.png') no-repeat center center;
 		}
+		.widget-sidebar {
+			background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAOCAYAAAAi2ky3AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAjdJREFUeNpi/P//PwM1ACM2g5hrryoCqUIg9gZiOajwIyDeCsT9f5u17xM0CGhILgMTc99/ZnYWSQGObyJcrP8ffvzDzs/2/8fj9z94GP/+/MPw728R0LDJOA0CGpL3n4VjorQQ78/J7nxPA9Q4rl95/fv31dd/VMK1OO/suf9TN3XbR+mHbz5zMP75kQ80bBJcM8ggEGaquaLG1HDnL3fX87933v3eCxSzhMpJArE1iH3qyXerV1//bpOf8vInSC1ID1w/zEAhbrb6f6xcTNK8TN/TNz5rBQodh0o9B7r0GBA3tB18/fjgvS8xTAz/foLUgvRguEig4+EHoE0/gOxVQKyB5FIZIF7mtODZbiBfAIhZgXgtSC1ID4aLPv5h5pPlZfwAZIYB8Q1omHEwMDHd+M/GE1lrL3gSKASS/w3EwQp8jO9BemD6WeChzsTE8OH7n5/IMXEkTYmx7MDX33/+MXwR52aajSz39tufXyA9GLGmNev1t/vvfjL/+vrRAcg9DYyRP0AapHIKELMBcQYQ/4G61JCNm/+EohD732tpolwMUIVg4K7AeuvHPyY2JhaWndxsTFpQ4X9AnAXEKUiGSAPVHACpBenBcNHTz3/SzRe8m/Tiyx9Wfoavuz58+3UDW1bgZGNR/sHC6y3Bw/L7WJxQnhw/y0z0BMl55PHP3R4r3lt++/GTieH/PxyZiomBi4P9344IweM2suxuQJFv2LKIGhAvAGJuAnn0KxAnADHcawABBgBWrCxdU/VhFgAAAABJRU5ErkJggg==');
+			background-position: center center;
+		}
 	}
 
 	// Active state
@@ -176,6 +180,9 @@
 		}
 		.window-managment {
 			background: theme-image($theme, 'icon_taskbar_cap_fenster_active.png') no-repeat center center;
+		}
+		.widget-sidebar {
+			background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAOCAYAAAAi2ky3AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAj1JREFUeNpi/P//PwM1ACPMoMiuLXDB5WU+ikCqEIi9gVgOKvwIiLcCcT9Q7X1kQ4DqGZjQTQYK5gKpm0Cc+/P3X873X348+fXn769P337ygsSA1t6anetWhq6PBc2QPCA18feff0+XH7y+e/vZ+/c0ZIQYdBREBNccufXMzUhBIthKLZ6Pi62zOdZGrHbxkRIMrwGBGhBf+/f//8+qhYenPnz1CeSVbUB8D4j5gVgEaNHLqVvOyyW66hzgZGcVXrr/WvjW0/fWoHutGIiZP3399UlSiIcdyF4INQTk0k9AHAtkckgIcj8CGvKKkYGByVhFvBwoJgxSg2yQ549ff55lTts97cSNZ1eBfG6oITJAaimIDwxk7TVHb/2L6tqi/+3n71fyYvyqQHELdIOk337+8Q5Ig/AsIH4BNIQDSF8HRWrf+jN3gTQrEH8D4r9c7KxHOdlZ+IBsFXSD/jMyMnAC6TdIYr+AIXj05Ydvdy89eC0B5J9BkuMB6QFiXvRYuyTKz6XlbaqkGeOoxQL0xh8g/gfyMshFoPAD4k9Q7xoCKfOv3389gmlGdtFyVmYm9nA7jbJj15/ZI8mBbF0GxIuB+B/QEGkgvReI+S7ef30NSL9Ed9E0YPopZGFmFJcR4emfk+d+gpuD9RuW3AAKfF5gYL9fvP/aOSD7CopBQG98nZXr5sPJyHJMTpRPFyikiytf/f33//v0bReXfvz68xWQexYjZadN3gWyQR6IE4CYjUA+/QXEq6A0A0CAAQBWe9zVJVM38QAAAABJRU5ErkJggg==');
 		}
 	}
 }

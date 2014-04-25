@@ -299,7 +299,7 @@ Ext.define('Enlight.app.Window', {
             elDom = el.dom;
 
             // Setting the style with vanilla js to prevent issues with the Ext.ZIndexManager
-            el.dom.style.zIndex = "999999";
+            elDom.style.zIndex = "999999";
         }
     },
 
@@ -394,7 +394,6 @@ Ext.define('Enlight.app.Window', {
             }
         });
 
-        Ext.WindowManager.bringToFront(me);
         if(viewport) {
             viewport.jumpTo(me.desktopPosition, true);
             me.hiddenLayer.setStyle('z-index', null);
@@ -434,9 +433,8 @@ Ext.define('Enlight.app.Window', {
             container = parent ? parent.getTargetEl() : me.container,
             size = container.getViewSize(false);
 
-        size.height = size.height - 20;
         me.setSize(size);
-        me.setPosition.apply(me, [0, 0]);
+        me.setPosition(0, 0);
     },
 
     maximize: function() {
@@ -454,7 +452,6 @@ Ext.define('Enlight.app.Window', {
             }
             me.maximized = true;
             me.el.disableShadow();
-
 
             if (me.dd) {
                 me.dd.disable();
