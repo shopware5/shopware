@@ -469,3 +469,51 @@
 		}
 	}
 }
+
+@media screen and(min-width: @desktopViewportWidth) {
+	.product--details {
+
+		// Product image container and slider styling
+		.product--image-container {
+			margin-right: 5%;
+			width: 55%;
+		}
+
+		.slider { width: 86% }
+
+		.thumbnails--arrow {
+			display: none;
+		}
+
+		.image--thumbnails {
+			display: block;
+			width: 12%;
+			margin-right: 2%;
+			float: left;
+			border: 0 none;
+			padding: 0;
+			position: static;
+			left: auto; top: auto;
+
+			a {
+
+				.unitize-margin(0, 0, 14, 0);
+				display: block;
+				line-height: normal;
+				float: none;
+			}
+
+			img { .border-radius(2px) }
+		}
+
+		// Product actions
+		.action--link {
+			.unitize(20, 16, margin-right);
+		}
+
+		// Tab panel
+		.js--desktop-tab-panel .panel--tab-nav {
+			.unitize-margin(0, 50);
+		}
+	}
+}
