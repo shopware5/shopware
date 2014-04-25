@@ -1,40 +1,37 @@
 {block name='frontend_detail_data_block_prices_start'}
-	<div class="block-prices {$sArticle.ordernumber}{if $hidden && !$sArticle.selected} hidden{/if}">
-		{block name='frontend_detail_data_block_prices_headline'}
-			<div class="space">&nbsp;</div>
-			<h5 class="bold">{se namespace="frontend/detail/data" name="DetailDataHeaderBlockprices"}{/se}</h5>
-		{/block}
+	<div class="block-prices--table {$sArticle.ordernumber}{if $hidden && !$sArticle.selected} is--hidden{/if}">
+
+		{* @deprecated *}
+		{block name='frontend_detail_data_block_prices_headline'}{/block}
 
 		{block name="frontend_detail_data_block_prices_table"}
-			<table width="220" border="0" cellspacing="0" cellpadding="0" class="text">
+			<table class="panel--table">
 				{block name="frontend_detail_data_block_prices_table_head"}
 					<thead>
-					<tr>
-						<td width="160">
-							<strong>{se namespace="frontend/detail/data" name="DetailDataColumnQuantity"}{/se}</strong>
-						</td>
-						<td width='140'>
-							<strong>{se namespace="frontend/detail/data" name="DetailDataColumnPrice"}{/se}</strong>
-						</td>
-					</tr>
+						<tr>
+							<th>
+								{s namespace="frontend/detail/data" name="DetailDataColumnQuantity"}{/s}
+							</th>
+							<th>
+								{s namespace="frontend/detail/data" name="DetailDataColumnPrice"}{/s}
+							</th>
+						</tr>
 					</thead>
 				{/block}
 
 				<tbody>
-				{foreach from=$sArticle.sBlockPrices item=row key=key}
+				{foreach $sArticle.sBlockPrices as $row}
 					{block name='frontend_detail_data_block_prices'}
-						<tr valign="top">
+						<tr class="{cycle values="is--primary,is--secondary"}">
 							<td>
-								{if $row.from=="1"}
-									{se namespace="frontend/detail/data" name="DetailDataInfoUntil"}{/se} {$row.to}
+								{if $row.from == 1}
+									{s namespace="frontend/detail/data" name="DetailDataInfoUntil"}{/s} {$row.to}
 								{else}
-									{se namespace="frontend/detail/data" name="DetailDataInfoFrom"}{/se} {$row.from}
+									{s namespace="frontend/detail/data" name="DetailDataInfoFrom"}{/s} {$row.from}
 								{/if}
 							</td>
 							<td>
-								<strong>
-									{$row.price|currency}*
-								</strong>
+								{$row.price|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
 							</td>
 						</tr>
 					{/block}

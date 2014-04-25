@@ -34,7 +34,7 @@
 	}
 
 	// Product title
-	.product--title {
+	.product--info .product--title {
 		.unitize-padding(10, 0);
 		.unitize(21, 16, font-size);
 		margin: 0;
@@ -56,8 +56,7 @@
 		// Star icon styling
 		[class^="icon"] {
 			.unitize(16, 16, font-size);
-			// todo - create a variable for the star color
-			color: #ffcb00;
+			color: @reviewStarColor;
 		}
 	}
 
@@ -65,6 +64,7 @@
 	.product--image-container {
 		.unitize-margin(0, 0, 28, 0);
 	}
+	.image--thumbnails { display: none }
 
 	.slides img, .product--image-container img { margin: 0 auto; }
 
@@ -130,6 +130,27 @@
     }
 
 	.description--properties { list-style: none }
+
+	// Block prices
+	.block-prices--table {
+		.unitize-margin(0, 0, 12, 0);
+		border: 1px solid @borderColor;
+		padding: 1px;
+
+		td {
+			.unitize-padding(4px, 10px, 4px, 10px);
+		}
+
+		thead th {
+			color: #fff;
+			background: @lightTextColor;
+		}
+	}
+
+	.listing .product--box .panel--body {
+		border-left: 1px solid @borderColor;
+		border-right: 1px solid @borderColor;
+	}
 }
 
 // Product reviews form
@@ -187,8 +208,7 @@
 
 	.product--rating {
 		.unitize(16, 16, font-size);
-		// todo - create a variable for the star color
-		color: #ffcb00;
+		color: @reviewStarColor;
 	}
 
 	.content--label {
@@ -284,7 +304,7 @@
         }
 
         // Title
-        .product--title {
+        .product--info .product--title {
             .unitize-padding(18, 0, 0, 0);
             border: 0 none;
         }
@@ -301,7 +321,61 @@
         // Product image
         .product--image-container {
             .unitize-max-height(480);
+			position: relative;
+			overflow: hidden;
         }
+
+		// Thumbnails
+		.image--thumbnails {
+			.border-radius(3px);
+			.unitize-padding(5, 40, 5, 0);
+			.clearfix();
+			background: #fff;
+			position: absolute;
+			left: 0; bottom: 0;
+			z-index: 1000;
+			border: 1px solid @borderColor;
+			border-left: 0 none;
+		}
+		.image--thumbnails a {
+			.unitize-margin(0, 10, 0, 10);
+			float: left;
+			text-align: center;
+			overflow: auto;
+			line-height: 48px;
+
+			&:first-child {
+				margin-left: 0;
+			}
+
+			&::after {
+				content: '';
+				height: 100%;
+			}
+		}
+		.image--thumbnails a::after,
+		.image--thumbnails img {
+			display: inline-block;
+			vertical-align: middle;
+		}
+		.image--thumbnails img {
+			border: 1px solid @borderColor;
+		}
+		.image--thumbnails .is--active img {
+			border-color: @primaryColor;
+		}
+
+		.thumbnails--arrow {
+			.unitize-padding(0, 20, 0, 20);
+			.unitize(-11, 16, margin-top);
+			top: 50%; right: 0;
+			position: absolute;
+			cursor: pointer;
+
+			& i[class^=icon] {
+				.unitize(10, 16, font-size);
+			}
+		}
 
         // Buy box
         .buybox--inner { float: right }
@@ -350,11 +424,101 @@
             .unitize-margin(0, -20, 20, -20);
 
             .panel--tab-nav {
-                .unitize-margin(0, 50);
+                .unitize-margin(0, 20);
             }
-            .panel--body {
-                .unitize-padding(25, 50);
+            .tab--content {
+                .unitize-padding(20, 40);
+				border-left: 0 none;
+				border-right: 0 none;
             }
         }
+
+		// Block prices
+		.block-prices--table {
+			.unitize(12, 16, margin-top);
+		}
     }
+}
+
+// Tablet lanscape - min-width: 1024px
+@media screen and (min-width: @tabletLandscapeViewportWidth) {
+	.product--details {
+
+		// Float the image container to the left
+		.product--image-container {
+			width: 50%;
+			margin-right: 10%;
+		}
+
+		// Float the buy box to the right side of the product details page
+		.product--buybox { width: 40% }
+		.buybox--inner { float: none }
+
+		.js--desktop-tab-panel {
+			.unitize-margin(0, -45, 20, -45);
+
+			.panel--tab-nav {
+				.unitize-margin(0, 45);
+			}
+			.tab--content {
+				.unitize-padding(25, 55, 45);
+			}
+		}
+
+		// Reformat the product actions
+		.product--actions {
+			.unitize-margin(16, 0, 16, 0);
+			.unitize-padding(0, 0, 10, 0);
+			border-top: 0 none;
+			border-bottom: 1px solid @borderColor;
+		}
+	}
+}
+
+@media screen and(min-width: @desktopViewportWidth) {
+	.product--details {
+
+		// Product image container and slider styling
+		.product--image-container {
+			margin-right: 5%;
+			width: 55%;
+		}
+
+		.slider { width: 86% }
+
+		.thumbnails--arrow {
+			display: none;
+		}
+
+		.image--thumbnails {
+			display: block;
+			width: 12%;
+			margin-right: 2%;
+			float: left;
+			border: 0 none;
+			padding: 0;
+			position: static;
+			left: auto; top: auto;
+
+			a {
+
+				.unitize-margin(0, 0, 14, 0);
+				display: block;
+				line-height: normal;
+				float: none;
+			}
+
+			img { .border-radius(2px) }
+		}
+
+		// Product actions
+		.action--link {
+			.unitize(20, 16, margin-right);
+		}
+
+		// Tab panel
+		.js--desktop-tab-panel .panel--tab-nav {
+			.unitize-margin(0, 50);
+		}
+	}
 }

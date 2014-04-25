@@ -63,23 +63,26 @@
 			{* Content top container *}
 			{block name="frontend_index_content_top"}{/block}
 
-			{* Sidebar left *}
-			{block name='frontend_index_content_left'}
-				{include file='frontend/index/sidebar.tpl'}
-			{/block}
+			<div class="content-main--inner">
+				{* Sidebar left *}
+				{block name='frontend_index_content_left'}
+					{include file='frontend/index/sidebar.tpl'}
+				{/block}
 
-			{* Main content *}
-			{block name='frontend_index_content'}{/block}
+				{* Main content *}
+				{block name='frontend_index_content'}{/block}
 
-			{* Sidebar right *}
-			{block name='frontend_index_content_right'}{/block}
+				{* Sidebar right *}
+				{block name='frontend_index_content_right'}{/block}
 
-			{* Last seen products *}
-			{block name='frontend_index_left_last_articles'}
-				{if $sLastArticlesShow && !$isEmotionLandingPage}
-					{include file="frontend/plugins/index/viewlast.tpl"}
-				{/if}
-			{/block}
+
+				{* Last seen products *}
+				{block name='frontend_index_left_last_articles'}
+					{if $sLastArticlesShow && !$isEmotionLandingPage}
+						{include file="frontend/plugins/index/viewlast.tpl"}
+					{/if}
+				{/block}
+			</div>
 		</section>
 
 		{* Footer *}

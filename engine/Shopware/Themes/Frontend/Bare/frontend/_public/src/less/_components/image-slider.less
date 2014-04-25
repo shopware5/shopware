@@ -1,5 +1,5 @@
 .slider {
-	.unitize-padding(0, 0, 30, 0);
+	.unitize-padding(0, 0, 38, 0);
 	position: relative;
 	overflow: hidden;
 	width: 100%;
@@ -21,4 +21,8 @@
 }
 .product--image-container {
 	.image--thumbnails { display: none }
+}
+
+@media screen and (min-width: @desktopViewportWidth) {
+	.image--thumbnails { display: block }
 }

@@ -22,7 +22,9 @@
         clickEvt = (isTouch ? (window.navigator.msPointerEnabled ? 'MSPointerDown': 'touchstart') : 'click'),
         defaults = {
             /** @string activeCls Class which will be added when the drop down was triggered */
-            activeCls: 'is--active'
+            activeCls: 'is--active',
+            iconArrowOpen: 'icon--arrow-right',
+            iconArrowClose: 'icon--arrow-left'
         };
 
     /**
@@ -57,6 +59,7 @@
 
         me._thumbnailSelector = me.$el.attr('data-thumbnail-selector') || '';
         me.$thumbnails = me.$el.find(me._thumbnailSelector);
+        me.$thumbnailsContainer = me.$el.find('div[data-thumbnails="true"]');
         me.$img = me.$el.find('.image--element');
 
         // We need thumbnails to create
@@ -64,10 +67,36 @@
             return false;
         }
 
+        me.initThumbnails(me.$thumbnailsContainer);
+
+        StateManager.registerListener([{
+            type: 'smartphone',
+            enter: function() {
+                me.$thumbnailsContainer.hide();
+            }
+        }, {
+            type: 'tablet',
+            enter: function() {
+                me.$thumbnailsContainer.show();
+            }
+        }, {
+            type: 'tabletLandscape',
+            enter: function() {
+                me.$thumbnailsContainer.show();
+            }
+        }, {
+            type: 'desktop',
+            enter: function() {
+                window.setTimeout(function() {
+                    me.destroyThumbnails();
+                }, 400);
+            }
+        }]);
+
         me.$slider = me.createSlider();
         me.$img.replaceWith(me.$slider);
 
-        me.$el.find('.slider').glide({
+        me._glide = me.$el.find('.slider').glide({
             navigationClass: 'panel--dot-nav',
             navigationCurrentItemClass: 'is--active',
             arrowMainClass: 'panel--arrow',
@@ -76,6 +105,87 @@
             arrowRightText: '',
             arrowLeftText: '',
             autoplay: false
+        }).data('api_glide');
+    };
+
+    Plugin.prototype.initThumbnails = function($container) {
+        var me = this, $arrow;
+
+        $arrow = $container.find('.thumbnails--arrow i');
+
+        window.setTimeout(function() {
+            me.setThumbnailsToOffCanvas($container);
+        }, 200);
+
+        $(window).on('resize.' + pluginName, function() {
+            me.setThumbnailsToOffCanvas($container);
+        });
+
+        $container.on('click.' + pluginName, function(event) {
+            event.preventDefault();
+
+            var $target = $(event.target),
+                $link = $target.parent('a');
+
+            if($target.hasClass('thumbnail--image')) {
+                me.onJumpToImage($link);
+                return false;
+            }
+
+            if(!$container.hasClass(me.opts.activeCls)) {
+               me.onShowThumbnails($container, $arrow);
+            } else {
+                me.onHideThumbnails($container, $arrow);
+            }
+        });
+    };
+
+    Plugin.prototype.onJumpToImage = function($link) {
+        var me = this,
+            id = $link.attr('data-slider-index');
+
+        me._glide.jump(parseInt(id, 10));
+        me.$thumbnailsContainer.find('a').removeClass('is--active');
+
+        $link.addClass('is--active');
+    };
+
+    Plugin.prototype.onShowThumbnails = function($container, $arrow) {
+        var me = this;
+
+        if(!Modernizr.csstransitions) {
+            $container.css('left', 0);
+        } else {
+            $container.transition({
+                'left': 0
+            }, 500, 'snap');
+        }
+        $arrow.removeClass(me.opts.iconArrowOpen).addClass(me.opts.iconArrowClose);
+        $container.addClass(me.opts.activeCls);
+
+        return true;
+    };
+
+    Plugin.prototype.onHideThumbnails = function($container, $arrow) {
+        var me = this;
+
+        if(!Modernizr.csstransitions) {
+            $container.css('left', -$container.outerWidth() + 43);
+        } else {
+            $container.transition({
+                'left': -$container.outerWidth() + 43
+            }, 500, 'snap');
+        }
+        $arrow.removeClass(me.opts.iconArrowClose).addClass(me.opts.iconArrowOpen);
+        $container.removeClass(me.opts.activeCls);
+
+        return true;
+    };
+
+    Plugin.prototype.setThumbnailsToOffCanvas = function($container) {
+        $container.css({
+            'left': -$container.outerWidth() + 43 + 'px',
+            'width': $container.outerWidth()
         });
     };
 
@@ -98,6 +208,16 @@
                 '</ul>',
             '</div>'
         ].join('');
+    };
+
+    Plugin.prototype.destroyThumbnails = function() {
+        var me = this;
+
+        $(window).off('resize.' + pluginName);
+        me.$thumbnailsContainer.off('click.' + pluginName).removeAttr('style');
+        me.$thumbnailsContainer.removeAttr('style');
+
+        return true;
     };
 
     /**

@@ -6,10 +6,14 @@ $(function() {
     }, {
         type: 'tablet',
         enter: '768px',
+        exit: '1023px'
+    }, {
+        type: 'tabletLandscape',
+        enter: '1024px',
         exit: '1259px'
     }, {
         type: 'desktop',
-        enter: '1260',
+        enter: '1260px',
         exit: '5160px'
     }]);
 
