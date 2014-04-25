@@ -58,6 +58,7 @@ In this document you will find a changelog of the important changes related to t
     * `sSystem::sLoadHookPoints`
     * `sSystem::sInitFactory`
     * `sSystem::sCheckLicense`
+    * `sSystem::E_CORE_ERROR`
 * Removed the following deprecated variables
     * `sSystem::sDB_HOST`
     * `sSystem::sDB_USER`

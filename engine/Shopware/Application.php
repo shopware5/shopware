@@ -106,6 +106,17 @@ class Shopware extends Enlight_Application
     }
 
     /**
+     * Returns the system configuration
+     *
+     * @deprecated sSystem is deprecated
+     * @return sSystem
+     */
+    public function System()
+    {
+        return $this->Bootstrap()->getResource('System');
+    }
+
+    /**
      * Returns front controller instance
      *
      * @return Enlight_Controller_Front

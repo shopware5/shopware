@@ -238,18 +238,6 @@ class sSystem
     /**
      * @deprecated Throw your specific exceptions
      *
-     * @param $ERROR_ID
-     * @param $ERROR_MESSAGE
-     * @throws Enlight_Exception
-     */
-    public function E_CORE_ERROR($ERROR_ID,$ERROR_MESSAGE)
-    {
-        throw new Enlight_Exception($ERROR_ID.': '.$ERROR_MESSAGE);
-    }
-
-    /**
-     * @deprecated Throw your specific exceptions
-     *
      * @param $WARNING_ID
      * @param $WARNING_MESSAGE
      * @throws Enlight_Exception
