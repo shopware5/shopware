@@ -75,6 +75,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->systemModule->sCurrency = Shopware()->Db()->fetchRow('SELECT * FROM s_core_currencies WHERE currency LIKE "EUR"');
         $this->systemModule->sSESSION_ID = null;
         $this->systemModule->sLanguage = 1;
+        $this->session->offsetSet('sessionId', null);
     }
 
     /**
@@ -1520,6 +1521,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             )
         );
         $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+
 
         $result = $this->module->sSaveRegisterMainData($testData);
 
@@ -1771,6 +1774,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             )
         );
         $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         $this->session->offsetSet('sRegister', $testData);
 
@@ -2473,7 +2477,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->module->sManageRisks(2, $basket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
 
-        $this->module->sSYSTEM->sSESSION_ID = rand(111111111, 999999999);
+        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10118.8');
 
         // sRiskATTRIS
@@ -3057,7 +3062,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         // No basket, return false
         $this->assertFalse($this->module->sGetDispatchBasket());
 
-        $this->module->sSYSTEM->sSESSION_ID = rand(111111111, 999999999);
+        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10118.8');
 
         // With the correct data, return properly formatted array
@@ -3096,7 +3102,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         // No basket, return empty array,
         $this->assertEquals(array(), $this->module->sGetPremiumDispatches());
 
-        $this->module->sSYSTEM->sSESSION_ID = rand(111111111, 999999999);
+        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10118.8');
 
         $result = $this->module->sGetPremiumDispatches();
@@ -3119,7 +3126,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         // No basket, return false,
         $this->assertFalse($this->module->sGetPremiumDispatchSurcharge(null));
 
-        $this->module->sSYSTEM->sSESSION_ID = rand(111111111, 999999999);
+        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10010');
         $fullBasket = $this->module->sGetDispatchBasket();
 
@@ -3144,7 +3152,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             }
         }
 
-        $this->module->sSYSTEM->sSESSION_ID = rand(111111111, 999999999);
+        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10010');
 
         // With country data, no dispatch method
