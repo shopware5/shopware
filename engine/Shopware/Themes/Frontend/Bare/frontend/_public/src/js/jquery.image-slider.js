@@ -88,7 +88,6 @@
             type: 'desktop',
             enter: function() {
                 window.setTimeout(function() {
-                    console.log('desktop enter');
                     me.destroyThumbnails();
                 }, 400);
             }
