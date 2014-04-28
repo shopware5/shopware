@@ -1,6 +1,14 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+## 4.4.0
+* Merged `_default` template into the `_emotion` template
+* Removed the template directory `_default` and all it's dependencies
+* Added the ability to show campaign banners in blog categories
+* Refactored the template structure of the compare functionality. The plugin now uses based on a widget.
+* Removed support for flash banners. The associated template block `frontend_listing_swf_banner` is marked as deprecated
+* Removed the template files for the feed functionality, which was marked as deprecated in SW 3.5
+
 ## 4.3.0
 * Removed deprecated Zend Framework components:
     * `Zend_Amf`
