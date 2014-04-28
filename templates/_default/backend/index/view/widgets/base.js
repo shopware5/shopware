@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,24 +19,17 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Index
- * @subpackage View
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 /**
  * Base for Shopware 4.x Widgets
  *
  * This file contains a basic class for all widgets in the backend. Please
- * note that this class is just a base file and doesn't contains
- * any logic or functionality.
+ * note that this class is just a base file and does only contain base logic that applies to all widgets.
  */
 Ext.define('Shopware.apps.Index.view.widgets.Base', {
     extend: 'Ext.panel.Panel',
+    alias: 'widget.widget-base',
     layout: 'fit',
     anchor: '100%',
     minHeight: 200,
@@ -44,5 +37,21 @@ Ext.define('Shopware.apps.Index.view.widgets.Base', {
     bodyPadding: 10,
     frame: true,
     closable: false,
-    collapsible: false
+    collapsible: false,
+
+    initComponent: function() {
+        var me = this,
+            tools = me.tools || [],
+            defaults = [{
+                type: 'close',
+                scope: me,
+                handler: function() {
+                    me.fireEvent('closeWidget', me);
+                }
+            }];
+
+        me.tools = Ext.Array.merge(tools, defaults);
+
+        me.callParent();
+    }
 });
