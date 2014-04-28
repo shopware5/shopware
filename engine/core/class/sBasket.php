@@ -28,7 +28,11 @@
  */
 class sBasket
 {
+    /**
+     * @var sSystem
+     */
     public $sSYSTEM;
+
     public $sBASKET;
 
     /**
@@ -1592,7 +1596,7 @@ class sBasket
      * Check if any esd article is in cart
      * @access public
      * @deprecated
-     * @return void
+     * @return boolean
      */
 
     public function sCheckForESD()
