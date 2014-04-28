@@ -466,11 +466,11 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             return false;
         }
 
-        if (strpos($this->request->getPathInfo(), '/widgets/index/refreshStatistic') === true) {
+        if (strpos($this->request->getPathInfo(), '/widgets/index/refreshStatistic') !== false) {
             return false;
         }
 
-        if (strpos($this->request->getPathInfo(), '/captcha/index/rand/') === true) {
+        if (strpos($this->request->getPathInfo(), '/captcha/index/rand/') !== false) {
             return false;
         }
 
