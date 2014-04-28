@@ -5,32 +5,101 @@
 ```
 */
 .alert {
-  .unitize-padding(10, 10);
-  .unitize(14, 16, font-size);
-  .unitize(24, 16, line-height);
-  border: 1px solid @borderColor;
+	.unitize(14, 16, font-size);
+	.unitize(24, 16, line-height);
+	.clearfix();
+	position: relative;
+	overflow: hidden; // Necessary for faux columns
 
-  &.success {
-    color: @successText;
-    background: @successBackground;
-    border-color: @successBorderColor;
-  }
+	// States
+	&.is--success {
+		color: @successText;
+		background: @successBackground;
+		//border-color: @successBorderColor;
 
-  &.info {
-    color: @infoText;
-    background: @infoBackground;
-    border-color: @infoBorderColor;
-  }
+		.alert--icon {
+			background: @successText;
+		}
+	}
 
-  &.warning {
-    color: @warningText;
-    background: @warningBackground;
-    border-color: @warningBorderColor;
-  }
+	&.is--info {
+		color: @infoText;
+		background: @infoBackground;
+		//border-color: @infoBorderColor;
 
-  &.error {
-    color: @errorText;
-    background: @errorBackground;
-    border-color: @errorBorderColor;
-  }
+		.alert--icon {
+			background: @infoText;
+		}
+	}
+
+	&.is--warning {
+		color: @warningText;
+		background: @warningBackground;
+		//border-color: @warningBorderColor;
+
+		.alert--icon {
+			background: #ffc000;
+		}
+	}
+
+	&.is--error {
+		color: @errorText;
+		background: @errorBackground;
+
+		.alert--icon {
+			background: #f9390a;;
+		}
+	}
+
+	.icon--element {
+		position: absolute;
+		top: 50%; left: 0;
+		width: 15%;
+		margin-top: -9px;
+	}
+
+	// Layout
+	.alert--icon,
+	.alert--content {
+		.unitize-padding(10, 10);
+		float: left;
+	}
+
+	// Icon column
+	.alert--icon {
+		.unitize(18, 16, font-size);
+		.unitize(26, 16, line-height);
+		width: 15%;
+		text-align: center;
+		font-weight: bold;
+		color: #fff;
+
+		// Simple faux column technique
+		padding-bottom: 9999em;
+		margin-bottom: -9999em;
+
+	}
+	.alert--content {
+		width: 85%;
+
+		&.is--strong {
+			font-weight: bold;
+		}
+	}
+
+	// List styling
+	.alert--list {
+		.unitize(26, 16, margin-left);
+	}
+}
+
+@media screen and (min-width: @tabletViewportWidth) {
+	.alert {
+		.alert--icon, .icon--element {
+			width: 8%
+		}
+		.alert--content {
+			width: 92%;
+		}
+	}
 }
