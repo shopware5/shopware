@@ -1063,6 +1063,40 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
+     * Helper function for the category assignment.
+     * This function is used for the category configuration.
+     * If the data key __options_categories => replace is set to true,
+     * the function removes the assigned article categories from the
+     * s_articles_categories and s_articles_categories_ro table.
+     *
+     * @param array $data
+     * @param ArticleModel $article
+     */
+    private function resetArticleCategoryAssignment(array $data, ArticleModel $article)
+    {
+        if (!$article->getId()) {
+            return;
+        }
+
+        $key = '__options_categories';
+
+        //replacement deactivated?
+        if (isset($data[$key]) && $data[$key]['replace'] == false) {
+            return;
+        }
+
+        $this->manager->getConnection()->executeUpdate(
+            "DELETE FROM s_articles_categories WHERE articleID = :articleId",
+            array(':articleId' => $article->getId())
+        );
+
+        $this->manager->getConnection()->executeUpdate(
+            "DELETE FROM s_articles_categories_ro WHERE articleID = :articleId",
+            array(':articleId' => $article->getId())
+        );
+    }
+
+    /**
      * @param array $data
      * @param \Shopware\Models\Article\Article $article
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
@@ -1074,12 +1108,9 @@ class Article extends Resource implements BatchInterface
             return $data;
         }
 
-        $categories = $this->checkDataReplacement(
-            $article->getCategories(),
-            $data,
-            'categories',
-            true
-        );
+        $this->resetArticleCategoryAssignment($data, $article);
+
+        $categories = $article->getCategories();
 
         foreach ($data['categories'] as $categoryData) {
 

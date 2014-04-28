@@ -2513,6 +2513,91 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         return $options;
     }
 
+    public function testCategoryAssignment()
+    {
+        $number = 'CategoryAssignment' . uniqid();
+
+        $data = $this->getSimpleTestData();
+        $data['mainDetail']['number'] = $number;
+        
+        $categories = Shopware()->Db()->fetchAll("SELECT id FROM s_categories WHERE parent = 3 ORDER BY id LIMIT 2");
+        $data['categories'] = $categories;
+
+        $article = $this->resource->create($data);
+
+        $normal = Shopware()->Db()->fetchCol(
+            "SELECT categoryID FROM s_articles_categories WHERE articleID = ?",
+            array($article->getId())
+        );
+
+        $denormalized = Shopware()->Db()->fetchCol(
+            "SELECT categoryID FROM s_articles_categories_ro WHERE articleID = ?",
+            array($article->getId())
+        );
+
+        $this->assertCount(2, $normal);
+        $this->assertCount(4, $denormalized);
+
+        foreach($categories as $category) {
+            $this->assertContains($category['id'], $normal);
+            $this->assertContains($category['id'], $denormalized);
+        }
+
+        $rewriteCategories = Shopware()->Db()->fetchAll("SELECT id FROM s_categories WHERE parent = 3 ORDER BY id LIMIT 2, 2");
+        $data = array(
+            'categories' => $rewriteCategories
+        );
+
+        $this->resource->update($article->getId(), $data);
+
+        $normal = Shopware()->Db()->fetchCol(
+            "SELECT categoryID FROM s_articles_categories WHERE articleID = ?",
+            array($article->getId())
+        );
+
+        $denormalized = Shopware()->Db()->fetchCol(
+            "SELECT categoryID FROM s_articles_categories_ro WHERE articleID = ?",
+            array($article->getId())
+        );
+
+        $this->assertCount(2, $normal);
+        $this->assertCount(4, $denormalized);
+
+        foreach($rewriteCategories as $category) {
+            $this->assertContains($category['id'], $normal);
+            $this->assertContains($category['id'], $denormalized, "Denormalized array contains not the expected category id");
+        }
+
+        $additionally = Shopware()->Db()->fetchAll("SELECT id FROM s_categories WHERE parent = 3 ORDER BY id LIMIT 2");
+        $data = array(
+            '__options_categories' => array('replace' => false),
+            'categories' => $additionally
+        );
+        $this->resource->update($article->getId(), $data);
+
+        $normal = Shopware()->Db()->fetchCol(
+            "SELECT categoryID FROM s_articles_categories WHERE articleID = ?",
+            array($article->getId())
+        );
+
+        $denormalized = Shopware()->Db()->fetchCol(
+            "SELECT categoryID FROM s_articles_categories_ro WHERE articleID = ?",
+            array($article->getId())
+        );
+
+        $this->assertCount(4, $normal);
+        $this->assertCount(8, $denormalized);
+
+        foreach($rewriteCategories as $category) {
+            $this->assertContains($category['id'], $normal);
+            $this->assertContains($category['id'], $denormalized, "Denormalized array contains not the expected category id");
+        }
+
+        foreach($additionally as $category) {
+            $this->assertContains($category['id'], $normal);
+            $this->assertContains($category['id'], $denormalized, "Denormalized array contains not the expected category id");
+        }
+    }
 }
 
 
