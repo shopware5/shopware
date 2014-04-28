@@ -19,8 +19,7 @@
 	{* Empty basket *}
 	{if !$sBasket.content}
 	{block name='frontend_basket_basket_is_empty'}
-		<div class="space">&nbsp;</div>
-		<div class="notice bold center">{se name="CartInfoEmpty"}{/se}</div>
+		{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='CartInfoEmpty'}{/s}"}
 	{/block}
 
 	{* Cross-Selling *}

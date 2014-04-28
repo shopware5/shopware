@@ -3,17 +3,22 @@
 <input type="hidden" name="forceMail" value="{$forceMail|escape}" >
 {/block}
 		{if $sSupport.sErrors.e || $sSupport.sErrors.v}
+			{$errorContent=""}
 			<div class="error">
 				{if $sSupport.sErrors.v}
-				{foreach from=$sSupport.sErrors.v key=sKey item=sError}
-					{if $sKey !=0&&$sSupport.sElements.$sError.error_msg}<br />{/if}
-					{$sSupport.sElements.$sError.error_msg}
-				{/foreach}
-				{if $sSupport.sErrors.e}<br />{/if}
+					{foreach from=$sSupport.sErrors.v key=sKey item=sError}
+						{if $sKey !=0&&$sSupport.sElements.$sError.error_msg}{$errorContent="{$errorContent}<br />"}{/if}
+						{$errorContent="{$errorContent}{$sSupport.sElements.$sError.error_msg}"}
+					{/foreach}
+					{if $sSupport.sErrors.e}
+						{$errorContent="{$errorContent}<br />"}
+					{/if}
 				{/if}
 				{if $sSupport.sErrors.e}
-					{s name='SupportInfoFillRedFields'}{/s}
+					{$errorContent="{$errorContent}{s name='SupportInfoFillRedFields'}{/s}"}
 				{/if}
+
+				{include file="frontend/_includes/messages.tpl" type='error' content=$errorContent}
 			</div>
 		{/if}
 

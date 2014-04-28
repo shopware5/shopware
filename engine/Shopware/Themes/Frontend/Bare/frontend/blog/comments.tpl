@@ -55,14 +55,12 @@
 			{* Output errors *}
 			{block name='frontend_blog_comments_error_messages'}
 			{if $sErrorFlag}
-				<div class="error">
-					{se name="BlogInfoFailureFields"}{/se}
-				</div>
+				{include file="frontend/_includes/messages.tpl" type="error" content="{s name='BlogInfoFailureFields'}{/s}"}
 			{else}
 				{if {config name=OptInVote} && !{$smarty.get.sConfirmation} && !{$userLoggedIn}}
-					<div class="success">{se name="BlogInfoSuccessOptin"}{/se}</div>
+					{include file="frontend/_includes/messages.tpl" type="success" content="{s name='BlogInfoSuccessOptin'}{/s}"}
 				{else}
-					<div class="success">{se name="BlogInfoSuccess"}{/se}</div>
+					{include file="frontend/_includes/messages.tpl" type="success" content="{s name='BlogInfoSuccess'}{/s}"}
 				{/if}
 			{/if}
 			{/block}

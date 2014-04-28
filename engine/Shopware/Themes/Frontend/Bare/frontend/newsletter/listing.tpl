@@ -33,9 +33,7 @@
 			{else}
 				{* Error message *}
 				{block name='frontend_newsletter_listing_error_message'}
-					<div class="notice center bold">
-						{se name='NewsletterListingInfoEmpty'}{/se}
-					</div>
+					{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='NewsletterListingInfoEmpty'}{/s}"}
 				{/block}
 			{/if}
 			<div class="dobulespace">&nbsp;</div>

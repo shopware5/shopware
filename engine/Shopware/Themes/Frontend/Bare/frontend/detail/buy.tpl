@@ -60,9 +60,7 @@
 		{if (!isset($sArticle.active) || $sArticle.active)}
 			{block name='frontend_detail_buy_laststock'}
 				{if $sArticle.laststock}
-                    <div class="alert error{if $sArticle.instock > 0} is--hidden{/if}">
-                        <strong>{s name="DetailBuyInfoNotAvailable"}{/s}</strong>
-                    </div>
+					{include file="frontend/_includes/messages.tpl" type="error" content="{s name='DetailBuyInfoNotAvailable'}{/s}" visible={$sArticle.instock > 0}}
 				{/if}
 			{/block}
 

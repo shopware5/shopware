@@ -72,9 +72,7 @@
     {if !$sPartnerOrders}
         {block name="frontend_account_partner_statistic_info_empty"}
             <fieldset>
-                <div class="notice center bold">
-                    {se name="PartnerStatisticInfoEmpty"}{/se}
-                </div>
+				{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='PartnerStatisticInfoEmpty'}{/s}"}
             </fieldset>
         {/block}
         {else}

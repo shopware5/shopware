@@ -1,6 +1,6 @@
 {block name='frontend_detail_configurator_error'}
 	{if $sArticle.sError && $sArticle.sError.variantNotAvailable}
-		<div class="error">{s name='VariantAreNotAvailable'}Die ausgewählte Variante steht aktuell nicht zur Verfügung{/s}</div>
+		{include file="frontend/_includes/messages.tpl" type="error" content="{s name='VariantAreNotAvailable'}{/s}"}
 	{/if}
 {/block}
 
