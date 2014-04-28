@@ -15,9 +15,7 @@
 		<h1>{se name='OrdersHeadline'}Meine Bestellungen{/se}</h1>
 
 		<fieldset>
-			<div class="notice center bold">
-				{se name="OrdersInfoEmpty"}{/se}
-			</div>
+			{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='OrdersInfoEmpty'}{/s}"}
 		</fieldset>
 	{/block}
 	{else}

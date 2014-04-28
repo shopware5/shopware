@@ -25,13 +25,7 @@
 	{* if the user doesn't have any orders *}
 	{else}
 		{block name="frontend_account_select_billing_info_empty"}
-		<div class="notice center bold">
-			<div class="center">
-				<strong>
-					{se name="SelectBillingInfoEmpty"}{/se}
-				</strong>
-			</div>
-		</div>
+			{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='SelectBillingInfoEmpty'}{/s}"}
 		{/block}
 	{/if}
 	

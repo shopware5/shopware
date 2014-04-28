@@ -15,12 +15,10 @@
 	{* Success message *}
 	{if $sSuccess}
 		{block name='frontend_account_password_success'}
-	    <div class="success">
-	    	<strong>{se name="PasswordInfoSuccess"}{/se}</strong>	
-	    </div>
-	    <p>
-	   		<a href="javascript:history.back();" class="button-left large"><span>{se name="LoginBack"}{/se}</span></a>
-	    </p>
+			{include file="frontend/_includes/messages.tpl" type="success" content="{s name='PasswordInfoSuccess'}{/s}"}
+			<p>
+				<a href="javascript:history.back();" class="button-left large"><span>{se name="LoginBack"}{/se}</span></a>
+			</p>
 	    {/block}
 	{else}
 	
