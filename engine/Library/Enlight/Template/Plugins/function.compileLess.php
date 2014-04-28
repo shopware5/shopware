@@ -60,6 +60,7 @@ function smarty_function_compileLess($params, $template)
     if (!$compile) {
 	    // see: http://stackoverflow.com/a/9473886
         $template->assign($output, $urls);
+        return;
     }
 
     /**@var $compiler \Shopware\Components\Theme\Compiler*/
