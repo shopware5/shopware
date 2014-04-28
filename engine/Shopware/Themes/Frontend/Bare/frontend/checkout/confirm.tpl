@@ -35,7 +35,7 @@
 
 	{* AGB is not accepted by user *}
 	{if $sAGBError}
-		{include file="frontend/_includes/messages.tpl" type="error" content="{s name="ConfirmErrorAGB"}{/s}"}
+		{include file="frontend/_includes/messages.tpl" type="error" content="{s name='ConfirmErrorAGB'}{/s}"}
 	{/if}
 </div>
 {/block}
@@ -338,7 +338,7 @@
                             {/block}
                         {else}
                             {block name='frontend_checkout_confirm_stockinfo'}
-								{include file="frontend/_includes/messages.tpl" type="error" content="{s name="ConfirmErrorStock"}{/s}"}
+								{include file="frontend/_includes/messages.tpl" type="error" content="{s name='ConfirmErrorStock'}{/s}"}
                             {/block}
                         {/if}
                         <div class="clear">&nbsp;</div>
