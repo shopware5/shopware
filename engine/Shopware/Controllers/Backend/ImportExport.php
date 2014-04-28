@@ -635,7 +635,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 a.pricegroupActive,
                 a.laststock,
                 d.suppliernumber,
-                d.impressions,
                 d.sales,
                 IF(e.file IS NULL,0,1) as esd,
                 d.weight,
