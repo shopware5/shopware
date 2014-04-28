@@ -184,7 +184,7 @@ class sSystem
      * Pointer to PHP-Mailer Object
      *
      * @var
-     * @deprecated Use $system->sMailer = Shopware()->Mail();
+     * @deprecated Use Shopware()->Mail()
      */
     public $sMailer;
 
