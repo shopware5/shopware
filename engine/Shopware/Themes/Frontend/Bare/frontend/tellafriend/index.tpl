@@ -10,12 +10,12 @@
 	<div class="content block tellafriend--content">
 
 		{if $sSuccess}
-			<div class="alert success">
+			<div class="alert is--success">
 				<strong>{s name='TellAFriendHeaderSuccess'}{/s}</strong>
 			</div>
 		{else}
 			{if $sError}
-				<div class="alert error">
+				<div class="alert is--error">
 					<strong>{s name='TellAFriendInfoFields'}{/s}</strong>
 				</div>
 			{/if}
@@ -31,7 +31,7 @@
 
 					{* Validation errors *}
 					{if $error}
-						<div class="alert error">
+						<div class="alert is--error">
 							<p>{foreach $error as $error_item}{$error_item}</p>{/foreach}
 						</div>
 					{/if}
@@ -47,21 +47,21 @@
 						{* TellAFriend name *}
 						{block name='frontend_tellafriend_field_name'}
 							<div class="tellafriend--name">
-								<input name="sName" type="text" class="tellafriend--field" placeholder="{s name='TellAFriendLabelName'}{/s}*:" value="{$sName|escape}"/>
+								<input name="sName" type="text" class="tellafriend--field" required="required" aria-required="true" placeholder="{s name='TellAFriendLabelName'}{/s}*" value="{$sName|escape}"/>
 							</div>
 						{/block}
 
 						{* TellAFriend email address *}
 						{block name='frontend_tellafriend_field_email'}
 							<div class="tellafriend--email">
-								<input name="sMail" type="email" class="tellafriend--field" placeholder="{s name='TellAFriendLabelMail'}{/s}" value="{$sMail|escape}"/>
+								<input name="sMail" type="email" class="tellafriend--field" required="required" aria-required="true" placeholder="{s name='TellAFriendLabelMail'}{/s}*" value="{$sMail|escape}"/>
 							</div>
 						{/block}
 
 						{* TellAFriend receiver email address *}
 						{block name='frontend_tellafriend_field_friendsemail'}
 							<div class="tellafriend--receiver-email">
-								<input name="sRecipient" type="email" class="tellafriend--field" placeholder="{s name='TellAFriendLabelFriendsMail'}{/s}*:" value="{$sRecipient|escape}"/>
+								<input name="sRecipient" type="email" class="tellafriend--field" required="required" aria-required="true" placeholder="{s name='TellAFriendLabelFriendsMail'}{/s}*" value="{$sRecipient|escape}"/>
 							</div>
 						{/block}
 
@@ -74,7 +74,7 @@
 
 						{* Captcha *}
 						{block name='frontend_tellafriend_captcha'}
-							<div class="captcha">
+							<div class="tellafriend--captcha">
 
 								{* Deferred loading of the captcha image *}
 								{block name='frontend_tellafriend_captcha_placeholder'}
@@ -82,12 +82,12 @@
 								{/block}
 
 								{block name='frontend_tellafriend_captcha_label'}
-									<strong class="captcha--notice">{s name="TellAFriendLabelCaptcha"}{/s}</strong>
+									<strong class="captcha--notice">{s name="TellAFriendLabelCaptchaInfo"}{/s}</strong>
 								{/block}
 
 								{block name='frontend_tellafriend_captcha_field_code'}
 									<div class="code">
-										<input type="text" name="sCaptcha" class="tellafriend--field{if $sErrorFlag.sCaptcha} has--error{/if}"/>
+										<input type="text" name="sCaptcha" required="required" aria-required="true" placeholder="{s name="TellAFriendLabelCaptcha"}{/s}*" class="tellafriend--field{if $sErrorFlag.sCaptcha} has--error{/if}"/>
 									</div>
 								{/block}
 
@@ -103,7 +103,7 @@
 
 					{* Send recommendation button *}
 					{block name='frontend_tellafriend_captcha_code_actions'}
-						<div class="buttons">
+						<div class="tellafriend--buttons">
 							<a href="{$sArticle.linkDetails}" class="btn btn--secondary is--bold">{s name='TellAFriendLinkBack'}{/s}</a>
 
 							<button type="submit" class="btn btn--primary">
