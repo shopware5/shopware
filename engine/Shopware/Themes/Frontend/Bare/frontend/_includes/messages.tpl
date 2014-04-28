@@ -36,6 +36,13 @@
  * ```
  *    {include file="frontend/_includes/messages.tpl" type="error" content="Your content" bold=false}
  * ```
+ *
+ * If you need to insert the message into the DOM but don't want to display it, you can use the parameter ```visible```
+ * to hide the message on startup. By default the parameter is set to ```true```.
+ *
+ * ```
+ *    {include file="frontend/_includes/messages.tpl" type="error" content="Your content" visible=false}
+ * ```
  *}
 
 {* Icon classes *}
@@ -71,9 +78,17 @@
 	{/if}
 {/block}
 
+{* Support for hiding the message on startup *}
+{block name="frontend_global_messages_visible"}
+	{$isVisible=true}
+	{if isset($visible)}
+		{$isVisible=$visible}
+	{/if}
+{/block}
+
 {* Messages container *}
 {block name="frontend_global_messages_container"}
-	<div class="alert is--{$type}{if $hasBorderRadius && $hasBorderRadius === true} is--rounded{/if}">
+	<div class="alert is--{$type}{if $hasBorderRadius && $hasBorderRadius === true} is--rounded{/if}{if $isVisible === false} is--hidden{/if}">
 
 		{* Icon column *}
 		{block name="frontend_global_messages_icon"}
