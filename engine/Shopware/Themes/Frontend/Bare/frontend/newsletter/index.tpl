@@ -15,13 +15,9 @@
 
 		</div>
 		{if $sStatus.code==3||$sStatus.code==2}
-			<div class="success bold">
-				{$sStatus.message}
-			</div>
+			{include file="frontend/_includes/messages.tpl" type='success' content=$sStatus.message}
 		{elseif $sStatus.code != 0}
-			<div class="error bold">
-				{$sStatus.message}
-			</div>
+			{include file="frontend/_includes/messages.tpl" type='error' content=$sStatus.message}
 		{/if}
 
 		{if $voteConfirmed == false || $sStatus.code == 0}

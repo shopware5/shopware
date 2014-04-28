@@ -1,19 +1,20 @@
 {if $sSuccessAction}
-	<div class="success bold center grid_16">
-		{if $sSuccessAction == 'billing'}
-			{se name='AccountBillingSuccess'}{/se}
-		{elseif $sSuccessAction == 'shipping'}
-			{se name='AccountShippingSuccess'}{/se}
-		{elseif $sSuccessAction == 'payment'}
-			{se name='AccountPaymentSuccess'}{/se}
-		{elseif $sSuccessAction == 'account'}
-			{se name='AccountAccountSuccess'}{/se}
-		{elseif $sSuccessAction == 'newsletter'}
-			{se name='AccountNewsletterSuccess'}{/se}
-		{elseif $sSuccessAction == 'optinnewsletter'}
-			{se namespace="frontend" name='sMailConfirmation'}{/se}
-		{elseif $sSuccessAction == 'deletenewsletter'}
-			{se namespace="frontend/account/internalMessages" name='NewsletterMailDeleted'}{/se}
-		{/if}
-	</div>
+	{$successText=''}
+	{if $sSuccessAction == 'billing'}
+		{$successText="{s name='AccountBillingSuccess'}{/s}"}
+	{elseif $sSuccessAction == 'shipping'}
+		{$successText="{s name='AccountShippingSuccess'}{/s}"}
+	{elseif $sSuccessAction == 'payment'}
+		{$successText="{s name='AccountPaymentSuccess'}{/s}"}
+	{elseif $sSuccessAction == 'account'}
+		{$successText="{s name='AccountAccountSuccess'}{/s}"}
+	{elseif $sSuccessAction == 'newsletter'}
+		{$successText="{s name='AccountNewsletterSuccess'}{/s}"}
+	{elseif $sSuccessAction == 'optinnewsletter'}
+		{$successText="{s name='sMailConfirmation' namespace='frontend'}{/s}"}
+	{elseif $sSuccessAction == 'deletenewsletter'}
+		{$successText="{s name='NewsletterMailDeleted' namespace='frontend/account/internalMessages'}{/s}"}
+	{/if}
+
+	{include file="frontend/_includes/messages.tpl" type="success" content=$successText}
 {/if}

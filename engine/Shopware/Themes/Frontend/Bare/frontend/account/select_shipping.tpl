@@ -26,13 +26,7 @@
 	{* if the user doesn't have any orders *}
 	{else}
 		{block name="frontend_account_select_shipping_info_empty"}
-		<div class="notice">
-			<div class="center">
-				<strong>
-					{s name="SelectShippingInfoEmpty"}{/s}
-				</strong>
-			</div>
-		</div>
+			{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='SelectShippingInfoEmpty'}{/s}"}
 		{/block}
 	{/if}
 	

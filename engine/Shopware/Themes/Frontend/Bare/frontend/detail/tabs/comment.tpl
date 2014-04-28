@@ -4,18 +4,12 @@
 	{if $sAction == "ratingAction"}
 		{block name='frontend_detail_comment_error_messages'}
 			{if $sErrorFlag}
-				<div class="error alert">
-					{s name="DetailCommentInfoFillOutFields"}{/s}
-				</div>
+				{include file="frontend/_includes/messages.tpl" type="error" content="{s name="DetailCommentInfoFillOutFields"}{/s}"}
 			{else}
 				{if {config name="OptinVote"} && !{$smarty.get.sConfirmation}}
-					<div class="success alert">
-						{s name="DetailCommentInfoSuccessOptin"}{/s}
-					</div>
+					{include file="frontend/_includes/messages.tpl" type="success" content="{s name="DetailCommentInfoSuccessOptin"}{/s}"}
 				{else}
-					<div class="success alert">
-						{s name="DetailCommentInfoSuccess"}{/s}
-					</div>
+					{include file="frontend/_includes/messages.tpl" type="success" content="{s name="DetailCommentInfoSuccess"}{/s}"}
 				{/if}
 			{/if}
 		{/block}

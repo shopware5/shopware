@@ -22,9 +22,7 @@
 			
 				{* Error message *}
 				{block name='frontend_newsletter_listing_error_message'}
-				<div class="notice">
-			    	{s name='NewsletterDetailInfoEmpty'}{/s}
-			    </div>
+					{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='NewsletterDetailInfoEmpty'}{/s}"}
 			    {/block}
 			{/if}
 			
