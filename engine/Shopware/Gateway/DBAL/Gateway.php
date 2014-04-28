@@ -62,6 +62,7 @@ abstract class Gateway
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_GROUP);
+
         $data = array_combine(
             array_keys($data),
             array_column($data, 0)

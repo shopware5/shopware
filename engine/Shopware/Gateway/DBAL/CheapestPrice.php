@@ -97,7 +97,7 @@ class CheapestPrice extends Gateway
         );
 
         $query->orderBy('calculated', 'ASC')
-            ->groupBy('product.id');
+            ->groupBy('prices.articleID');
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -106,10 +106,7 @@ class CheapestPrice extends Gateway
 
         $prices = array();
         foreach ($data as $row) {
-            $product = $row['articledetailsID'];
-
-            $row['price'] = $row['calculated'];
-            $row['pseudoprice'] = $row['calculatedPseudo'];
+            $product = $row['articleID'];
 
             $prices[$product] = $this->priceHydrator->hydrateCheapestPrice($row);
         }

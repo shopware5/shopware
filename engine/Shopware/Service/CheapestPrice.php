@@ -13,27 +13,19 @@ class CheapestPrice
     private $cheapestPriceGateway;
 
     /**
-     * @var Gateway\PriceGroupDiscount
-     */
-    private $priceGroupDiscountGateway;
-
-    /**
      * @var GraduatedPrices
      */
     private $graduatedPricesService;
 
     /**
      * @param Gateway\CheapestPrice $cheapestPriceGateway
-     * @param Gateway\PriceGroupDiscount $priceGroupDiscountGateway
      * @param GraduatedPrices $graduatedPricesService
      */
     function __construct(
         Gateway\CheapestPrice $cheapestPriceGateway,
-        Gateway\PriceGroupDiscount $priceGroupDiscountGateway,
         GraduatedPrices $graduatedPricesService
     ) {
         $this->cheapestPriceGateway = $cheapestPriceGateway;
-        $this->priceGroupDiscountGateway = $priceGroupDiscountGateway;
         $this->graduatedPricesService = $graduatedPricesService;
     }
 
@@ -44,44 +36,52 @@ class CheapestPrice
      */
     public function getList(array $products, Struct\Context $context)
     {
-        $specify = $this->cheapestPriceGateway->getList(
-            $products,
-            $context->getCurrentCustomerGroup()
-        );
+        $group = $context->getCurrentCustomerGroup();
 
-        $fallback = $this->cheapestPriceGateway->getList(
-            $products,
-            $context->getFallbackCustomerGroup()
-        );
+        $specify = $this->cheapestPriceGateway->getList($products, $group);
 
         $prices = array();
 
+        $fallback = array();
         foreach ($products as $product) {
-            $group = $context->getCurrentCustomerGroup();
+            $key = $product->getId();
 
             /**@var $cheapestPrice Struct\Product\PriceRule */
-            $cheapestPrice = $specify[$product->getVariantId()];
+            $cheapestPrice = $specify[$key];
 
             if (empty($cheapestPrice)) {
-                $group = $context->getFallbackCustomerGroup();
-                $cheapestPrice = $fallback[$product->getVariantId()];
+                $fallback[] = $product;
+                continue;
             }
-
-            if (!$cheapestPrice) {
-                $graduatedPrices = $this->graduatedPricesService->get($product, $context);
-
-                $cheapestPrice = array_shift($graduatedPrices);
-            }
-
-            $this->calculatePriceGroupPrice(
-                $product,
-                $cheapestPrice,
-                $context
-            );
 
             $cheapestPrice->setCustomerGroup($group);
 
-            $prices[$product->getId()] = $cheapestPrice;
+            $prices[$key] = $cheapestPrice;
+        }
+
+        if (empty($fallback)) {
+            return $prices;
+        }
+
+        //fallback prices for the default customer group of the shop.
+        $group = $context->getFallbackCustomerGroup();
+
+        //fallback array contains at this point a list of product structs
+        $fallback = $this->cheapestPriceGateway->getList($fallback, $group);
+
+        foreach ($products as $product) {
+            $key = $product->getId();
+
+            /**@var $cheapestPrice Struct\Product\PriceRule */
+            $cheapestPrice = $fallback[$key];
+
+            if (empty($cheapestPrice)) {
+                continue;
+            }
+
+            $cheapestPrice->setCustomerGroup($group);
+
+            $prices[$key] = $cheapestPrice;
         }
 
         return $prices;
@@ -113,42 +113,4 @@ class CheapestPrice
 
         return array_shift($cheapestPrices);
     }
-
-    /**
-     * Reduces the passed price with a configured
-     * price group discount for the min purchase of the
-     * prices unit.
-     *
-     * @param Struct\ListProduct $product
-     * @param Struct\Product\PriceRule $cheapestPrice
-     * @param Struct\Context $context
-     */
-    private function calculatePriceGroupPrice(
-        Struct\ListProduct $product,
-        Struct\Product\PriceRule $cheapestPrice,
-        Struct\Context $context
-    ) {
-
-        //check for price group discounts.
-        if (!$product->getPriceGroup()) {
-            return;
-        }
-
-        //selects the highest price group discount, for the passed quantity.
-        $discount = $this->priceGroupDiscountGateway->getHighestQuantityDiscount(
-            $product->getPriceGroup(),
-            $context->getCurrentCustomerGroup(),
-            $cheapestPrice->getUnit()->getMinPurchase()
-        );
-
-        //check if the discount is numeric, otherwise use a 0 for calculation.
-        if (!is_numeric($discount)) {
-            $discount = 0;
-        }
-
-        $cheapestPrice->setPrice(
-            $cheapestPrice->getPrice() / 100 * (100 - $discount)
-        );
-    }
-
 }

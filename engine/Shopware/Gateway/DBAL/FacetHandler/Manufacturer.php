@@ -3,20 +3,27 @@
 namespace Shopware\Gateway\DBAL\FacetHandler;
 
 use Shopware\Components\Model\DBAL\QueryBuilder;
+use Shopware\Gateway\Search\Criteria;
 use Shopware\Gateway\Search\Facet;
 
 class Manufacturer extends DBAL
 {
-    public function generateFacet(Facet $facet, QueryBuilder $query)
-    {
+    public function generateFacet(
+        Facet $facet,
+        QueryBuilder $query,
+        Criteria $criteria
+    ) {
         $query->resetQueryPart('groupBy');
+
+        $query->resetQueryPart('orderBy');
 
         $query->select(
             array(
-                'products.supplierID',
-                'COUNT(products.id) as total'
+                'products.supplierID as id',
+                'COUNT(DISTINCT products.id) as total'
             )
         );
+
 
         $query->groupBy('products.supplierID');
 
@@ -25,6 +32,8 @@ class Manufacturer extends DBAL
 
         /**@var $facet Facet\Manufacturer */
         $facet->manufacturers = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        return $facet;
     }
 
     public function supportsFacet(Facet $facet)

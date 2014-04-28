@@ -65,8 +65,8 @@ class Shopware_Tests_Service_Base extends Enlight_Components_Test_TestCase
 
     protected function getProduct($number, $state)
     {
-        return Shopware()->Container()->get('product_service')
-            ->getListProduct($number, $state);
+        return Shopware()->Container()->get('list_product_service')
+            ->get($number, $state);
     }
 
     protected function getHighTax()

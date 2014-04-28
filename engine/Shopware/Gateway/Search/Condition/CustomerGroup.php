@@ -4,7 +4,7 @@ namespace Shopware\Gateway\Search\Condition;
 
 use Shopware\Gateway\Search\Condition;
 
-class Category extends Condition
+class CustomerGroup extends Condition
 {
     public $id;
 
@@ -15,6 +15,6 @@ class Category extends Condition
 
     public function getName()
     {
-        return 'category';
+        return 'customer_group';
     }
 }

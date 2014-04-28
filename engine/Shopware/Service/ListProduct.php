@@ -89,7 +89,7 @@ class ListProduct
         $cheapestPrices = $this->cheapestPriceService->getList($products, $context);
 
         foreach ($products as $product) {
-            $key = $product->getVariantId();
+            $key = $product->getId();
 
             $product->setCover($covers[$key]);
 
@@ -99,7 +99,7 @@ class ListProduct
 
             $this->priceCalculationService->calculateProduct($product, $context);
 
-            $this->translationService->translateProduct($product, $context->getShop());
+//            $this->translationService->translateProduct($product, $context->getShop());
         }
 
         return $products;
