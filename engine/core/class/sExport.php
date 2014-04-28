@@ -47,6 +47,10 @@ class sExport
 
     public $shop;
 
+    /**
+     * @var Enlight_Template_Manager
+     */
+    public $sSmarty;
 
     /**
      * @var \Shopware\Models\Article\Repository
@@ -196,27 +200,38 @@ class sExport
             die();
 
         $this->sSettings["dec_separator"] = ",";
-        if ($this->sSettings["formatID"]==1) {
-            $this->sSettings["fieldmark"] = "\"";
-            $this->sSettings["escaped_fieldmark"] = "\"\"";
-            $this->sSettings["separator"] = ";";
-            $this->sSettings["escaped_separator"] = ";";
-            $this->sSettings["line_separator"] = "\r\n";
-            $this->sSettings["escaped_line_separator"] = "\r\n";
-        } elseif ($this->sSettings["formatID"]==2) {
-            $this->sSettings["fieldmark"] = "";
-            $this->sSettings["escaped_fieldmark"] = "";
-            $this->sSettings["separator"] = "\t";
-            $this->sSettings["escaped_separator"] = "";
-            $this->sSettings["line_separator"] = "\r\n";
-            $this->sSettings["escaped_line_separator"] = "";
-        } elseif ($this->sSettings["formatID"]==4) {
-            $this->sSettings["fieldmark"] = "";
-            $this->sSettings["escaped_fieldmark"] = "";
-            $this->sSettings["separator"] = "|";
-            $this->sSettings["escaped_separator"] = "";
-            $this->sSettings["line_separator"] = "\r\n";
-            $this->sSettings["escaped_line_separator"] = "";
+        switch ($this->sSettings["formatID"]) {
+            case 1:
+                $this->sSettings["fieldmark"] = "\"";
+                $this->sSettings["escaped_fieldmark"] = "\"\"";
+                $this->sSettings["separator"] = ";";
+                $this->sSettings["escaped_separator"] = ";";
+                $this->sSettings["line_separator"] = "\r\n";
+                $this->sSettings["escaped_line_separator"] = "\r\n";
+                break;
+            case 2:
+                $this->sSettings["fieldmark"] = "";
+                $this->sSettings["escaped_fieldmark"] = "";
+                $this->sSettings["separator"] = "\t";
+                $this->sSettings["escaped_separator"] = "";
+                $this->sSettings["line_separator"] = "\r\n";
+                $this->sSettings["escaped_line_separator"] = "";
+                break;
+            case 4:
+                $this->sSettings["fieldmark"] = "";
+                $this->sSettings["escaped_fieldmark"] = "";
+                $this->sSettings["separator"] = "|";
+                $this->sSettings["escaped_separator"] = "";
+                $this->sSettings["line_separator"] = "\r\n";
+                $this->sSettings["escaped_line_separator"] = "";
+                break;
+            default:
+                $this->sSettings["fieldmark"] = null;
+                $this->sSettings["escaped_fieldmark"] = null;
+                $this->sSettings["separator"] = null;
+                $this->sSettings["escaped_separator"] = null;
+                $this->sSettings["line_separator"] = null;
+                $this->sSettings["escaped_line_separator"] = null;
         }
 
         if (!empty($this->sSettings['encodingID']) && $this->sSettings['encodingID']==2) {
@@ -855,10 +870,17 @@ class sExport
             return;
         }
 
-        // updates the db with the latest informations
-        $count = (int)$result->rowCount();
-        $sql = 'UPDATE s_export SET last_export=NOW(), count_articles=? WHERE id=?';
-        Shopware()->Db()->query($sql, array($count, $this->sFeedID));
+        // Update db with the latest values
+        $count = (int) $result->rowCount();
+        Shopware()->Db()->update(
+            's_export',
+            array(
+                'last_export' => new Zend_Date(),
+                'cache_refreshed' => new Zend_Date(),
+                'count_articles' => $count
+            ),
+            array('id = ?' => $this->sFeedID)
+        );
 
         // fetches all required data to smarty
         $rows = array();

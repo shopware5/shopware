@@ -232,4 +232,12 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
     {
         return $this->getModule("RewriteTable");
     }
+
+    /**
+     * @return sExport
+     */
+    public function Export()
+    {
+        return $this->getModule("Export");
+    }
 }
