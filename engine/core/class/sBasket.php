@@ -80,18 +80,11 @@ class sBasket
     public $snippetObject;
 
     /**
-     * sArticle core class instance
+     * Module manager for core class instances
      *
-     * @var sArticles
+     * @var Shopware_Components_Modules
      */
-    private $articleModule;
-
-    /**
-     * sAdmin core class instance
-     *
-     * @var sAdmin
-     */
-    private $adminModule;
+    private $moduleManager;
 
     /**
      * Pointer to sSystem object
@@ -109,8 +102,7 @@ class sBasket
         Shopware_Components_Config              $config             = null,
         Enlight_Components_Session_Namespace    $session            = null,
         Enlight_Controller_Front                $front              = null,
-        sArticles                                $articleModule      = null,
-        sAdmin                                  $adminModule        = null,
+        Shopware_Components_Modules             $moduleManager      = null,
         sSystem                                 $systemModule       = null
     )
     {
@@ -120,8 +112,7 @@ class sBasket
         $this->config = $config ? : Shopware()->Config();
         $this->session = $session ? : Shopware()->Session();
         $this->front = $front ? : Shopware()->Front();
-        $this->articleModule = $articleModule ? : Shopware()->Modules()->Articles();
-        $this->adminModule = $adminModule ? : Shopware()->Modules()->Admin();
+        $this->moduleManager = $moduleManager ? : Shopware()->Modules();
         $this->sSYSTEM = $systemModule ? : Shopware()->System();
     }
     /**
@@ -477,7 +468,7 @@ class sBasket
             return false;
         }
 
-        $premium = $this->articleModule->sGetTranslation(
+        $premium = $this->moduleManager->Articles()->sGetTranslation(
             $premium, $premium["articleID"], "article", $this->sSYSTEM->sLanguage
         );
         if (!empty($premium['configurator_set_id'])) {
@@ -1024,14 +1015,14 @@ class sBasket
         }
 
         $totalAmountNumeric = $totalAmount;
-        $totalAmount = $this->articleModule->sFormatPrice($totalAmount);
+        $totalAmount = $this->moduleManager->Articles()->sFormatPrice($totalAmount);
 
         $totalAmountWithTaxNumeric = $totalAmountWithTax;
-        $totalAmountWithTax = $this->articleModule->sFormatPrice($totalAmountWithTax);
+        $totalAmountWithTax = $this->moduleManager->Articles()->sFormatPrice($totalAmountWithTax);
 
         $totalAmountNetNumeric = $totalAmountNet;
 
-        $totalAmountNet = $this->articleModule->sFormatPrice($totalAmountNet);
+        $totalAmountNet = $this->moduleManager->Articles()->sFormatPrice($totalAmountNet);
 
         $result = array(
             "content" => $getArticles,
@@ -1062,19 +1053,19 @@ class sBasket
                     $t = floatval(round($t * $value["quantity"], 2));
                 }
                 if (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"]) {
-                    $p = floatval($this->articleModule->sRound(
-                        $this->articleModule->sRound(
+                    $p = floatval($this->moduleManager->Articles()->sRound(
+                        $this->moduleManager->Articles()->sRound(
                             round($value["netprice"], 2) * $value["quantity"])
                         )
                     );
                 } else {
-                    $p = floatval($this->articleModule->sRound(
-                        $this->articleModule->sRound(
+                    $p = floatval($this->moduleManager->Articles()->sRound(
+                        $this->moduleManager->Articles()->sRound(
                             $value["netprice"] * $value["quantity"])
                         )
                     );
                 }
-                $calcDifference = $this->articleModule->sFormatPrice($t - $p);
+                $calcDifference = $this->moduleManager->Articles()->sFormatPrice($t - $p);
                 $result["content"][$key]["tax"] = $calcDifference;
             }
         }
@@ -1168,7 +1159,7 @@ class sBasket
         // Reformatting data, add additional data fields to array
         foreach ($getArticles as $key => $value) {
             // Article image
-            $getArticles[$key] = $this->articleModule->sGetPromotionById(
+            $getArticles[$key] = $this->moduleManager->Articles()->sGetPromotionById(
                 "fix",
                 0,
                 (int) $value["articleID"]
@@ -1179,7 +1170,7 @@ class sBasket
                 continue;
             }
             $getArticles[$key]["articlename"] = $getArticles[$key]["articleName"];
-            $getArticles[$key]["image"] = $this->articleModule->getArticleListingCover(
+            $getArticles[$key]["image"] = $this->moduleManager->Articles()->getArticleListingCover(
                 $value["articleID"],
                 $this->config->get('forceArticleMainImageInListing')
             );
@@ -1579,9 +1570,9 @@ class sBasket
     public function sRefreshBasket()
     {
         // Update basket data
-        $this->adminModule->sGetUserData();
+        $this->moduleManager->Admin()->sGetUserData();
         $this->sGetBasket();
-        $this->adminModule->sGetPremiumShippingcosts();
+        $this->moduleManager->Admin()->sGetPremiumShippingcosts();
 
         // Update basket data in session
         $this->session->offsetSet('sBasketCurrency', Shopware()->Shop()->getCurrency()->getId());
@@ -1877,7 +1868,7 @@ class sBasket
 
             // Get additional basket meta data for each product
             if ($getArticles[$key]["modus"] == 0) {
-                $tempArticle = $this->articleModule->sGetProductByOrdernumber($value['ordernumber']);
+                $tempArticle = $this->moduleManager->Articles()->sGetProductByOrdernumber($value['ordernumber']);
 
                 if (empty($tempArticle)) {
                     $getArticles[$key]["additional_details"] = array("properties" => array());
@@ -1893,14 +1884,14 @@ class sBasket
 
             // If unitID is set, query it
             if (!empty($getArticles[$key]["unitID"])) {
-                $getUnitData = $this->articleModule->sGetUnit($getArticles[$key]["unitID"]);
+                $getUnitData = $this->moduleManager->Articles()->sGetUnit($getArticles[$key]["unitID"]);
                 $getArticles[$key]["itemUnit"] = $getUnitData["description"];
             } else {
                 unset($getArticles[$key]["unitID"]);
             }
 
             if (!empty($getArticles[$key]["packunit"])) {
-                $getPackUnit = $this->articleModule->sGetTranslation(
+                $getPackUnit = $this->moduleManager->Articles()->sGetTranslation(
                     array(),
                     $getArticles[$key]["articleID"],
                     "article",
@@ -1988,10 +1979,10 @@ class sBasket
             // If price per unit is not referring to 1, calculate base-price
             // Choose 1000, quantity refers to 500, calculate price / 1000 * 500 as reference
             if ($getArticles[$key]["purchaseunit"] > 0) {
-                $getArticles[$key]["itemInfo"] = $getArticles[$key]["purchaseunit"] . " {$getUnitData["description"]} / " . $this->articleModule->sFormatPrice($getArticles[$key]["amount"] / $quantity * $getArticles[$key]["purchaseunit"]);
+                $getArticles[$key]["itemInfo"] = $getArticles[$key]["purchaseunit"] . " {$getUnitData["description"]} / " . $this->moduleManager->Articles()->sFormatPrice($getArticles[$key]["amount"] / $quantity * $getArticles[$key]["purchaseunit"]);
                 $getArticles[$key]["itemInfoArray"]["reference"] = $getArticles[$key]["purchaseunit"];
                 $getArticles[$key]["itemInfoArray"]["unit"] = $getUnitData;
-                $getArticles[$key]["itemInfoArray"]["price"] = $this->articleModule->sFormatPrice($getArticles[$key]["amount"] / $quantity * $getArticles[$key]["purchaseunit"]);
+                $getArticles[$key]["itemInfoArray"]["price"] = $this->moduleManager->Articles()->sFormatPrice($getArticles[$key]["amount"] / $quantity * $getArticles[$key]["purchaseunit"]);
             }
 
 
@@ -2022,24 +2013,24 @@ class sBasket
             $totalAmountNet += round($getArticles[$key]["amountnet"], 2);
 
             $getArticles[$key]["priceNumeric"] = $getArticles[$key]["price"];
-            $getArticles[$key]["price"] = $this->articleModule
+            $getArticles[$key]["price"] = $this->moduleManager->Articles()
                 ->sFormatPrice($getArticles[$key]["price"]);
-            $getArticles[$key]["amount"] = $this->articleModule
+            $getArticles[$key]["amount"] = $this->moduleManager->Articles()
                 ->sFormatPrice($getArticles[$key]["amount"]);
-            $getArticles[$key]["amountnet"] = $this->articleModule
+            $getArticles[$key]["amountnet"] = $this->moduleManager->Articles()
                 ->sFormatPrice($getArticles[$key]["amountnet"]);
 
             if (!empty($getArticles[$key]["purchaseunitTemp"])) {
                 $getArticles[$key]["purchaseunit"] = $getArticles[$key]["purchaseunitTemp"];
-                $getArticles[$key]["itemInfo"] = $getArticles[$key]["purchaseunit"] . " {$getUnitData["description"]} / " . $this->articleModule->sFormatPrice(str_replace(",", ".", $getArticles[$key]["amount"]) / $quantity);
+                $getArticles[$key]["itemInfo"] = $getArticles[$key]["purchaseunit"] . " {$getUnitData["description"]} / " . $this->moduleManager->Articles()->sFormatPrice(str_replace(",", ".", $getArticles[$key]["amount"]) / $quantity);
             }
 
             if (empty($value["modus"])) {
                 // Article-Image
                 if (!empty($getArticles[$key]["ob_attr1"])) {
-                    $getArticles[$key]["image"] = $this->articleModule
+                    $getArticles[$key]["image"] = $this->moduleManager->Articles()
                         ->sGetConfiguratorImage(
-                            $this->articleModule->sGetArticlePictures(
+                            $this->moduleManager->Articles()->sGetArticlePictures(
                                 $getArticles[$key]["articleID"],
                                 false,
                                 $this->config->get('sTHUMBBASKET'),
@@ -2049,7 +2040,7 @@ class sBasket
                             $getArticles[$key]["ob_attr1"]
                         );
                 } else {
-                    $getArticles[$key]["image"] = $this->articleModule
+                    $getArticles[$key]["image"] = $this->moduleManager->Articles()
                         ->sGetArticlePictures(
                             $getArticles[$key]["articleID"],
                             true,
@@ -2256,12 +2247,12 @@ class sBasket
     private function getTaxesForUpdateArticle($quantity, $queryNewPrice, $queryAdditionalInfo)
     {
         // Determinate tax rate for this cart position
-        $taxRate = $this->articleModule->getTaxRateByConditions($queryNewPrice["taxID"]);
+        $taxRate = $this->moduleManager->Articles()->getTaxRateByConditions($queryNewPrice["taxID"]);
 
         $netPrice = $queryNewPrice["price"];
 
         // Recalculate price if purchase unit is set
-        $grossPrice = $this->articleModule->sCalculatingPriceNum(
+        $grossPrice = $this->moduleManager->Articles()->sCalculatingPriceNum(
             $netPrice,
             $queryNewPrice["tax"],
             false,
@@ -2297,20 +2288,20 @@ class sBasket
         }
 
         if ($queryAdditionalInfo["pricegroupActive"]) {
-            $grossPrice = $this->articleModule->sGetPricegroupDiscount(
+            $grossPrice = $this->moduleManager->Articles()->sGetPricegroupDiscount(
                 $this->sSYSTEM->sUSERGROUP,
                 $queryAdditionalInfo["pricegroupID"],
                 $grossPrice,
                 $quantity,
                 false
             );
-            $grossPrice = $this->articleModule->sRound($grossPrice);
+            $grossPrice = $this->moduleManager->Articles()->sRound($grossPrice);
             if (
                 ($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA["tax"]) ||
                 (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])
             ) {
-                $netPrice = $this->articleModule->sRound(
-                    $this->articleModule->sGetPricegroupDiscount(
+                $netPrice = $this->moduleManager->Articles()->sRound(
+                    $this->moduleManager->Articles()->sGetPricegroupDiscount(
                         $this->sSYSTEM->sUSERGROUP,
                         $queryAdditionalInfo["pricegroupID"],
                         $netPrice,
@@ -2369,7 +2360,7 @@ class sBasket
             || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])
         ) {
             // If netto set both values to net-price
-            $price["price"] = $this->articleModule->sCalculatingPriceNum(
+            $price["price"] = $this->moduleManager->Articles()->sCalculatingPriceNum(
                 $price["price"],
                 $price["tax"],
                 false,
@@ -2382,7 +2373,7 @@ class sBasket
         } else {
             // If brutto, save net
             $price["netprice"] = $price["price"];
-            $price["price"] = $this->articleModule->sCalculatingPriceNum(
+            $price["price"] = $this->moduleManager->Articles()->sCalculatingPriceNum(
                 $price["price"],
                 $price["tax"],
                 false,
@@ -2427,7 +2418,7 @@ class sBasket
             return false;
         }
 
-        $name = $this->articleModule->sGetArticleNameByOrderNumber(
+        $name = $this->moduleManager->Articles()->sGetArticleNameByOrderNumber(
             $article["ordernumber"],
             true
         );

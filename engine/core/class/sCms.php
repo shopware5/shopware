@@ -55,18 +55,23 @@ class sCms
     private $front;
 
     /**
-     * Shopware Core core module
+     * Module manager for core class instances
      *
-     * @var sCore
+     * @var Shopware_Components_Modules
      */
-    private $coreModule;
+    private $moduleManager;
 
-    public function __construct($db = null, $config = null, $front = null, $coreModule = null)
+    public function __construct(
+        Enlight_Components_Db_Adapter_Pdo_Mysql $db                 = null,
+        Shopware_Components_Config              $config             = null,
+        Enlight_Controller_Front                $front              = null,
+        Shopware_Components_Modules             $moduleManager      = null
+    )
     {
         $this->db = $db ? : Shopware()->Db();
         $this->config = $config ? : Shopware()->Config();
         $this->front = $front ? : Shopware()->Front();
-        $this->coreModule = $coreModule ? : Shopware()->Modules()->Core();
+        $this->moduleManager = $moduleManager ? : Shopware()->Modules();
     }
 
     /**

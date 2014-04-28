@@ -77,27 +77,6 @@ class sAdmin
     private $passwordEncoder;
 
     /**
-     * sBasket core class instance
-     *
-     * @var sBasket
-     */
-    private $basketModule;
-
-    /**
-     * sArticle core class instance
-     *
-     * @var sArticles
-     */
-    private $articleModule;
-
-    /**
-     * sCore core class instance
-     *
-     * @var sCore
-     */
-    private $coreModule;
-
-    /**
      * The snippet manager
      *
      * @var Shopware_Components_Snippet_Manager
@@ -117,6 +96,13 @@ class sAdmin
     public $subshopId;
 
     /**
+     * Module manager for core class instances
+     *
+     * @var Shopware_Components_Modules
+     */
+    private $moduleManager;
+
+    /**
      * Pointer to sSystem object
      * Used for legacy purposes
      *
@@ -133,9 +119,7 @@ class sAdmin
         Enlight_Controller_Front                $front              = null,
         \Shopware\Components\Password\Manager   $passwordEncoder    = null,
         Shopware_Components_Snippet_Manager     $snippetManager     = null,
-        sBasket                                 $basketModule       = null,
-        sArticles                               $articleModule      = null,
-        sCore                                   $coreModule         = null,
+        Shopware_Components_Modules             $moduleManager      = null,
         sSystem                                 $systemModule       = null
     )
     {
@@ -146,9 +130,7 @@ class sAdmin
         $this->front = $front ? : Shopware()->Front();
         $this->passwordEncoder = $passwordEncoder ? : Shopware()->PasswordEncoder();
         $this->snippetManager = $snippetManager ? : Shopware()->Snippets();
-        $this->basketModule = $basketModule ? : Shopware()->Modules()->Basket();
-        $this->articleModule = $articleModule ? : Shopware()->Modules()->Articles();
-        $this->coreModule = $coreModule ? : Shopware()->Modules()->Core();
+        $this->moduleManager = $moduleManager ? : Shopware()->Modules();
         $this->sSYSTEM = $systemModule ? : Shopware()->System();
 
         $shop = Shopware()->Shop()->getMain() !== null ? Shopware()->Shop()->getMain() : Shopware()->Shop();
@@ -409,13 +391,13 @@ class sAdmin
             array($id)
         ) ? : array();
 
-        $sEsd = $this->basketModule->sCheckForESD();
+        $sEsd = $this->moduleManager->Basket()->sCheckForESD();
 
         if (!count($user)) {
             $user = array();
         }
 
-        $basket = $this->basketModule->sGetBasket();
+        $basket = $this->moduleManager->Basket()->sGetBasket();
 
         // Check for risk management
         // If rules match, reset to default payment mean if this payment mean was not
@@ -505,11 +487,11 @@ class sAdmin
      */
     public function sGetPaymentMeans()
     {
-        $basket = $this->basketModule->sGetBasket();
+        $basket = $this->moduleManager->Basket()->sGetBasket();
 
         $user = $this->sGetUserData();
 
-        $sEsd = $this->basketModule->sCheckForESD();
+        $sEsd = $this->moduleManager->Basket()->sCheckForESD();
 
         $countryID = (int) $user['additional']['countryShipping']['id'];
         $subShopID = (int) $this->sSYSTEM->sSubShop['id'];
@@ -2386,14 +2368,14 @@ class sAdmin
             if (($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA["tax"])
                 || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])
             ) {
-                $getOrders[$orderKey]["invoice_amount"] = $this->articleModule
+                $getOrders[$orderKey]["invoice_amount"] = $this->moduleManager->Articles()
                     ->sFormatPrice($orderValue["invoice_amount_net"]);
-                $getOrders[$orderKey]["invoice_shipping"] = $this->articleModule
+                $getOrders[$orderKey]["invoice_shipping"] = $this->moduleManager->Articles()
                     ->sFormatPrice($orderValue["invoice_shipping_net"]);
             } else {
-                $getOrders[$orderKey]["invoice_amount"] = $this->articleModule
+                $getOrders[$orderKey]["invoice_amount"] = $this->moduleManager->Articles()
                     ->sFormatPrice($orderValue["invoice_amount"]);
-                $getOrders[$orderKey]["invoice_shipping"] = $this->articleModule
+                $getOrders[$orderKey]["invoice_shipping"] = $this->moduleManager->Articles()
                     ->sFormatPrice($orderValue["invoice_shipping"]);
             }
 
@@ -2407,9 +2389,9 @@ class sAdmin
             } else {
                 $foundESD = false;
                 foreach ($getOrderDetails as $orderDetailsKey => $orderDetailsValue) {
-                    $getOrderDetails[$orderDetailsKey]["amount"] = $this->articleModule
+                    $getOrderDetails[$orderDetailsKey]["amount"] = $this->moduleManager->Articles()
                         ->sFormatPrice(round($orderDetailsValue["price"] * $orderDetailsValue["quantity"],2));
-                    $getOrderDetails[$orderDetailsKey]["price"] = $this->articleModule
+                    $getOrderDetails[$orderDetailsKey]["price"] = $this->moduleManager->Articles()
                         ->sFormatPrice($orderDetailsValue["price"]);
 
                     // Check for serial
@@ -2502,9 +2484,9 @@ class sAdmin
 
         foreach ($getOrders as $orderKey => $orderValue) {
 
-            $getOrders[$orderKey]["invoice_amount"] = $this->articleModule
+            $getOrders[$orderKey]["invoice_amount"] = $this->moduleManager->Articles()
                 ->sFormatPrice($orderValue["invoice_amount"]);
-            $getOrders[$orderKey]["invoice_shipping"] = $this->articleModule
+            $getOrders[$orderKey]["invoice_shipping"] = $this->moduleManager->Articles()
                 ->sFormatPrice($orderValue["invoice_shipping"]);
 
             $getOrders = $this->processOpenOrderDetails($orderValue, $getOrders, $orderKey);
@@ -2548,14 +2530,14 @@ class sAdmin
             for ($i = 1; $i <= $numberOfPages; $i++) {
                 $pagesStructure["numbers"][$i]["markup"] = ($i == $destinationPage);
                 $pagesStructure["numbers"][$i]["value"] = $i;
-                $pagesStructure["numbers"][$i]["link"] = $baseFile . $this->coreModule->sBuildLink(
+                $pagesStructure["numbers"][$i]["link"] = $baseFile . $this->moduleManager->Core()->sBuildLink(
                     $additionalParams + array("sPage" => $i),
                     false
                 );
             }
             // Previous page
             if ($destinationPage != 1) {
-                $pagesStructure["previous"] = $baseFile . $this->coreModule->sBuildLink(
+                $pagesStructure["previous"] = $baseFile . $this->moduleManager->Core()->sBuildLink(
                     $additionalParams + array("sPage" => $destinationPage - 1),
                     false
                 );
@@ -2564,7 +2546,7 @@ class sAdmin
             }
             // Next page
             if ($destinationPage != $numberOfPages) {
-                $pagesStructure["next"] = $baseFile . $this->coreModule->sBuildLink(
+                $pagesStructure["next"] = $baseFile . $this->moduleManager->Core()->sBuildLink(
                     $additionalParams + array("sPage" => $destinationPage + 1),
                     false
                 );
@@ -3611,7 +3593,7 @@ class sAdmin
             return false;
         }
 
-        $basket["max_tax"] = $this->basketModule->getMaxTax();
+        $basket["max_tax"] = $this->moduleManager->Basket()->getMaxTax();
 
         $postPaymentId = $this->front->Request()->getPost('sPayment');
         $sessionPaymentId = $this->session->offsetGet('sPaymentID');
@@ -3973,7 +3955,7 @@ class sAdmin
         // Determinate tax automatically
         $taxAutoMode = $this->config->get('sTAXAUTOMODE');
         if (!empty($taxAutoMode)) {
-            $discount_tax = $this->basketModule->getMaxTax();
+            $discount_tax = $this->moduleManager->Basket()->getMaxTax();
         } else {
             $discount_tax = $this->config->get('sDISCOUNTTAX');
             $discount_tax = empty($discount_tax) ? 0 : (float) str_replace(',', '.', $discount_tax);
@@ -4090,7 +4072,7 @@ class sAdmin
             $difference = round(($dispatch['shippingfree'] - $basket['amount_display']) * $currencyFactor, 2);
             $result['difference'] = array(
                 "float" => $difference,
-                "formated" => $this->articleModule->sFormatPrice($difference)
+                "formated" => $this->moduleManager->Articles()->sFormatPrice($difference)
             );
         }
         $result['brutto'] = $result['value'];
@@ -4455,12 +4437,12 @@ class sAdmin
         $active = 1;
 
         foreach ($getOrderDetails as $orderDetailsKey => $orderDetailsValue) {
-            $getOrderDetails[$orderDetailsKey]["amount"] = $this->articleModule
+            $getOrderDetails[$orderDetailsKey]["amount"] = $this->moduleManager->Articles()
                 ->sFormatPrice(round($orderDetailsValue["price"] * $orderDetailsValue["quantity"], 2));
-            $getOrderDetails[$orderDetailsKey]["price"] = $this->articleModule
+            $getOrderDetails[$orderDetailsKey]["price"] = $this->moduleManager->Articles()
                 ->sFormatPrice($orderDetailsValue["price"]);
 
-            $tmpArticle = $this->articleModule->sGetProductByOrdernumber(
+            $tmpArticle = $this->moduleManager->Articles()->sGetProductByOrdernumber(
                 $getOrderDetails[$orderDetailsKey]['articleordernumber']
             );
 
