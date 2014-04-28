@@ -57,6 +57,9 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $this->View()->assign(array('success' => !empty($data), 'authId' => $userID, 'data' => $data));
     }
 
+    /**
+     * Sets the position for a single widget
+     */
     public function saveWidgetPositionAction()
     {
         $request = $this->Request();
@@ -70,13 +73,8 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             return;
         }
 
-        $model = Shopware()->Models()->find('Shopware\Models\Widget\View', $id);
-        $model->setPosition($position);
-        $model->setColumn($column);
-
         try {
-            Shopware()->Models()->persist($model);
-            Shopware()->Models()->flush();
+            $this->setWidgetPosition($id, $position, $column);
         } catch (\Doctrine\ORM\ORMException $e) {
             $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
             return;
@@ -85,6 +83,52 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $this->View()->assign(array('success' => true, 'newPosition' => $position, 'newColumn' => $column));
     }
 
+    /**
+     * Sets the positions for all given widget ids
+     */
+    public function saveWidgetPositionsAction()
+    {
+        $request = $this->Request();
+        $widgets = $request->getParam('widgets');
+        $auth = Shopware()->Auth();
+
+        if (!$auth->hasIdentity()) {
+            $this->View()->assign(array('success' => false));
+            return;
+        }
+
+        foreach($widgets as $widget) {
+            try {
+                $this->setWidgetPosition($widget['id'], $widget['position'], $widget['column']);
+            } catch (\Doctrine\ORM\ORMException $e) {
+                $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+                return;
+            }
+        }
+
+        $this->View()->assign(array('success' => true));
+    }
+
+    /**
+     * Gets a widget by id and sets its column / row position
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @param $viewId
+     * @param $position
+     * @param $column
+     */
+    private function setWidgetPosition($viewId, $position, $column) {
+        $model = Shopware()->Models()->find('Shopware\Models\Widget\View', $viewId);
+        $model->setPosition($position);
+        $model->setColumn($column);
+
+        Shopware()->Models()->persist($model);
+        Shopware()->Models()->flush();
+    }
+
+    /**
+     * Creates a new widget for the active backend user.
+     */
     public function addWidgetViewAction()
     {
         $auth = Shopware()->Auth();
@@ -126,6 +170,9 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $this->View()->assign(array('success' => !empty($viewId), 'viewId' => $viewId));
     }
 
+    /**
+     * Removes active widgets by the passed views param
+     */
     public function removeWidgetViewAction()
     {
         $auth = Shopware()->Auth();
@@ -135,21 +182,19 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         }
 
         $request = $this->Request();
-        $views = $request->getParam('views');
+        $id = $request->getParam('id');
 
         try {
-            foreach($views as $view) {
-                $model = Shopware()->Models()->find('Shopware\Models\Widget\View', $view['id']);
-                Shopware()->Models()->remove($model);
-            }
-
+            $model = Shopware()->Models()->find('Shopware\Models\Widget\View', $id);
+            Shopware()->Models()->remove($model);
             Shopware()->Models()->flush();
 
         } catch (\Doctrine\ORM\ORMException $e) {
             $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+            return;
         }
 
-        $this->View()->assign(array('success' => true, 'views' => $views));
+        $this->View()->assign(array('success' => true));
     }
 
 
@@ -219,15 +264,6 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
         $namespace = Shopware()->Snippets()->getNamespace('backend/widget/controller');
         $this->View()->assign(array(
-<<<<<<< HEAD
-            'success' => true,
-            'data' => array(
-                array('name' => $namespace->get('today', 'Today'), 'turnover' => $fetchAmount["today"], 'visitors' => $fetchVisitors["today"], 'newCustomers' => $fetchCustomers["today"], 'orders' => $fetchOrders["today"]),
-                array('name' => $namespace->get('yesterday', 'Yesterday'), 'turnover' => $fetchAmount["yesterday"], 'visitors' => $fetchVisitors["yesterday"], 'newCustomers' => $fetchCustomers["yesterday"], 'orders' => $fetchOrders["yesterday"])
-            ),
-            'conversion' => $fetchConversion
-        ));
-=======
                 'success' => true,
                 'data' => array(
                     array(
@@ -247,7 +283,6 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
                 ),
                 'conversion' => $fetchConversion
             ));
->>>>>>> SW-6607 - Fixed turnover widget bug so that 0 turnover is not null
     }
 
     /**
@@ -494,7 +529,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
     /**
      * Sends the mail to the merchant if the inquiry was
-     * sucessful or was declined.
+     * successful or was declined.
      *
      * @public
      * @return bool

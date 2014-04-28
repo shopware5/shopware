@@ -46,14 +46,30 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
      */
     desktop: null,
 
+    /**
+     * Store of all available widgets
+     */
     widgetStore: null,
 
+    /**
+     * Store of all user widget settings
+     */
     widgetSettingsStore: null,
 
+    /**
+     * Store of the current users widget settings
+     */
     widgetSettings: null,
 
-    widgetWindow: false,
+    /**
+     * The main widget window, will be initialized when the widget and widget settings stores are loaded
+     */
+    widgetWindow: null,
 
+    /**
+     * Initializes the widget controller.
+     * Creates the widget store and binds all needed events.
+     */
     init: function() {
         var me = this;
 
@@ -78,15 +94,23 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
                 minimizeWindow: me.onMinimizeWindow,
                 changePosition: me.onChangePosition,
                 saveWidgetPosition: me.onSaveWidgetPosition,
+                saveWidgetPositions: me.onSaveWidgetPositions,
                 addWidget: me.onAddWidget,
-                removeWidget: me.onRemoveWidget,
                 saveWindowSize: me.onSaveWindowSize
+            },
+
+            'widget-base': {
+                closeWidget: me.onCloseWidget
             }
         });
 
         me.callParent(arguments);
     },
 
+    /**
+     * Called when the available widgets are loaded.
+     * Creates the WidgetSettings store to get all user widget settings.
+     */
     onWidgetStoreLoaded: function () {
         var me = this;
 
@@ -97,6 +121,10 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         });
     },
 
+    /**
+     * Called when the widget button in the task bar was clicked
+     * Toggles the minimizing of the window
+     */
     onTaskBarBtnClick: function() {
         var me = this,
             minimized = false,
@@ -104,12 +132,21 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
             taskBarBtn = me.taskBarBtn,
             taskBarBtnEl = taskBarBtn.getEl();
 
+        taskBarBtn.disable();
+
         if (win.isVisible()) {
-            win.hide(taskBarBtn);
+            win.hide(taskBarBtn, function() {
+                taskBarBtn.enable();
+            });
+
             taskBarBtnEl.removeCls('btn-over');
             minimized = true;
         } else {
-            win.show(taskBarBtn).toFront();
+            win.show(taskBarBtn, function() {
+                taskBarBtn.enable();
+                win.toFront();
+            });
+
             taskBarBtnEl.addCls('btn-over');
         }
 
@@ -117,6 +154,11 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         me.widgetSettingsStore.sync();
     },
 
+    /**
+     * Called when the widget settings were loaded.
+     * Searches for the settings of the current user and if they could not be found, default settings will be created.
+     * After the settings are available, the widget window will be created.
+     */
     onWidgetSettingsLoaded: function() {
         var me = this,
             authId = ~~(me.widgetStore.getProxy().getReader().jsonData.authId),
@@ -153,6 +195,13 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         }
     },
 
+    /**
+     * Returns widgetsettings that have the same authId as the user.
+     * If no settings were found, null will be returned.
+     *
+     * @param authId
+     * @returns { Object }|null
+     */
     getWidgetSettingsByAuthId: function (authId) {
         var me = this,
             settings = null;
@@ -167,20 +216,44 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         return settings;
     },
 
+    /**
+     * Minimizes the window and saves the change to the localStorage.
+     *
+     * @param sidebarWindow
+     */
     onMinimizeWindow: function(sidebarWindow) {
-        var me = this;
+        var me = this,
+            btn = me.taskBarBtn;
 
-        sidebarWindow.hide(me.taskBarBtn);
+        btn.disable();
+
+        sidebarWindow.hide(btn, function() {
+            btn.enable();
+            btn.removeCls('btn-over');
+        });
 
         me.widgetSettings.set('minimized', true);
         me.widgetSettingsStore.sync();
     },
 
+    /**
+     * Moves / aligns the window to a given corner.
+     *
+     * @param { Shopware.apps.Index.view.widgets.Window } win
+     * @param { String } align - on what corner the window should be aligned (tl, tr, bl, br)
+     *
+     *        tl - top left
+     *        tr - top right
+     *        bl - bottom left
+     *        br - bottom right
+     *
+     * @param { Boolean } animate - flag whether or not the position change should be animated
+     */
     onChangePosition: function(win, align, animate) {
         var me = this,
             xOffset = 10,
             yOffset = 10,
-            desktopEl = me.desktop.el,
+            desktopEl = me.desktop.getEl(),
             x = xOffset,
             y = yOffset,
             verticalHandle = 's',
@@ -212,7 +285,14 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         }
     },
 
-    onSaveWidgetPosition: function(column, row, widgetId, internalId) {
+    /**
+     * Saves the position of a single widget.
+     *
+     * @param column
+     * @param row
+     * @param internalId
+     */
+    onSaveWidgetPosition: function(column, row, internalId) {
         var me = this;
 
         Ext.Ajax.request({
@@ -229,6 +309,43 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         });
     },
 
+    /**
+     * Sends an ajax request to save to position changes of multiple widgets.
+     * Expects an array of position informations which should should like the following:
+     *
+     * [
+     *   {
+     *     column: columnIndex,
+     *     position: rowIndex,
+     *     id: widgetId
+     *   }
+     * ]
+     *
+     * @param widgets
+     */
+    onSaveWidgetPositions: function(widgets) {
+        var me = this;
+
+        Ext.Ajax.request({
+            url: '{url controller=widgets action=saveWidgetPositions}',
+            jsonData: {
+                widgets: widgets
+            },
+
+            callback: function() {
+                me.widgetStore.load();
+            }
+        });
+    },
+
+    /**
+     * Add a new widget of the given type to the first (most left) column.
+     * Sends an ajax request to save it server side.
+     *
+     * @param win
+     * @param widgetName
+     * @param menuItem
+     */
     onAddWidget: function(win, widgetName, menuItem) {
         var me = this,
             container = win.containerCollection.getAt(0),
@@ -244,16 +361,20 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
                 column: 0,
                 position: container.items.getCount() - 1
             },
-            callback: function(options, success, response) {
+            callback: function(options, success, res) {
                 if (!success) {
                     return;
                 }
+
+                var response = Ext.decode(res.responseText);
 
                 me.widgetStore.load({
                     callback: function() {
                         widget = me.widgetStore.findRecord('name', widgetName);
 
-                        win.createWidgets(widget);
+                        var newWidget = win.createWidget(widgetName, widget.get('id'), me.getWidgetViewById(widget, response.viewId));
+
+                        container.insert(newWidget.position.rowId, newWidget);
 
                         menuItem.enable();
                     }
@@ -262,42 +383,58 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         });
     },
 
-    onRemoveWidget: function(win, widgetName) {
+    /**
+     * Helper function to get the widget view by the view id in the widget model
+     *
+     * @param widget
+     * @param id
+     */
+    getWidgetViewById: function(widget, id) {
+        var views = widget.get('views'),
+            widgetView = null;
+
+        Ext.each(views, function(view) {
+            if(view.id === id) {
+                widgetView = view;
+            }
+        });
+
+        return widgetView;
+    },
+
+    /**
+     * Closes the widget which contained the close button.
+     * Sends an ajax request to save the closing.
+     */
+    onCloseWidget: function(widget) {
         var me = this,
-            widget = me.widgetStore.findRecord('name', widgetName),
-            views = widget.get('views'),
-            column;
+            container = me.widgetWindow.containerCollection.getAt(widget.position.columnId);
 
         Ext.Ajax.request({
             url: '{url controller=widgets action=removeWidgetView}',
-            jsonData: {
-                views: views
+            params: {
+                id: widget.viewId
             },
             callback: function(options, success, response) {
                 if (!success) {
                     return;
                 }
 
-                me.widgetStore.load();
-
-                Ext.each(views, function(view) {
-                    column = win.containerCollection.getAt(view.column);
-                    
-                    if (!column) {
-                        column = win.containerCollection.getAt(0);
+                me.widgetStore.load({
+                    callback: function() {
+                        container.remove(widget, true);
                     }
-
-                    column.items.each(function(widget) {
-                        if(widget.viewId === view.id) {
-                            column.remove(widget);
-                            return false;
-                        }
-                    });
                 });
             }
         });
     },
 
+    /**
+     * Saves the new shown columns count and height in px to the localStorage
+     *
+     * @param columnsShown
+     * @param height
+     */
     onSaveWindowSize: function(columnsShown, height) {
         var me = this;
 

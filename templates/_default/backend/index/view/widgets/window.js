@@ -84,6 +84,9 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      */
     widgetSettings: null,
 
+    /**
+     * The window toolbar which will be created in the initComponent
+     */
     toolbar: null,
 
     /**
@@ -136,20 +139,20 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
         me.desktop.on('resize', me.onDesktopResize.bind(me));
         me.on('resize', me.onResize);
 
-        me.onDesktopResize(me.desktop, me.desktop.getWidth(), me.desktop.getHeight());
-
         me.addEvents(
             'minimizeWindow',
             'changePosition',
             'saveWidgetPosition',
+            'saveWidgetPositions',
             'addWidget',
-            'removeWidget',
             'saveWindowSize'
         );
 
         me.callParent(arguments);
 
         me.widgetStore.each(me.createWidgets.bind(me));
+
+        me.onDesktopResize(me.desktop, me.desktop.getWidth(), me.desktop.getHeight());
     },
 
     /**
@@ -164,7 +167,8 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             padding: '0 0 10px 0',
             id: 'widget-toolbar',
             cls: Ext.baseCSSPrefix + 'widget-toolbar',
-
+            // IE fix
+            style: 'background: transparent !important; background-color: transparent !important;',
             items: [{
                 xtype: 'button',
                 cls: 'btn-widget-add',
@@ -179,7 +183,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                 xtype: 'button',
                 cls: 'btn-widget-minimize',
                 handler: function() {
-                    me.fireEvent('minimizeWindow', me);
+                    me.fireEvent('minimizeWindow', me, this);
                 }
             }, {
                 xtype: 'button',
@@ -225,6 +229,9 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
         });
     },
 
+    /**
+     * Initializes the Resize handles when the resizer is available
+     */
     afterLayout: function () {
         var me = this;
 
@@ -349,7 +356,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                 target.insert(newRow, panel);
 
                 // Fire event which saves the new position
-                me.fireEvent('saveWidgetPosition', newColumn, newRow, panel.widgetId, panel.$initialId);
+                me.fireEvent('saveWidgetPosition', newColumn, newRow, panel.$initialId);
 
                 me.containerCollection.each(function(container) {
                     container.dropZone.onNodeOut(container);
@@ -433,7 +440,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      * @param name
      * @param widgetId
      * @param record
-     * @returns { * } - New created widget
+     * @returns { Ext.panel.Panel } - New created widget
      */
     createWidget: function (name, widgetId, record) {
         var me = this,
@@ -446,7 +453,6 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                     rowId: record.position
                 },
                 $initialId: record.id,
-
                 draggable: me.createWidgetDragZone()
             };
 
@@ -483,19 +489,6 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                 });
             },
 
-            onDrag: function (e) {
-                var dropSource = this,
-                    widget = dropSource.panel,
-                    widgetX = dropSource.lastPageX,
-                    widgetY = dropSource.lastPageY,
-                    winBox = me.getEl().getBox();
-
-                if(widgetX < winBox.x || widgetX > winBox.x + winBox.width || widgetY < winBox.y || widgetY > winBox.y + winBox.height) {
-                    widget.ghostPanel.getEl().setOpacity(0.25, true);
-                    widget.ghostPanel.getEl().setStyle('background', 'red');
-                }
-            },
-
             onInvalidDrop: function (e) {
                 var dragProxy = this,
                     widget = dragProxy.panel,
@@ -520,10 +513,8 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
         var me = this,
             offsetX = 10,
             offsetY = 10,
-            desktopEl = me.desktop.el,
-            bottomOffset = desktopEl.getBottom() - desktopEl.getHeight(),
             maxWidth = width - offsetX * 2,
-            maxHeight = (height - bottomOffset) - offsetY * 2,
+            maxHeight = (height) - offsetY * 2,
             resizer = me.resizer ? me.resizer.resizeTracker : me.resizable,
             maxColumns;
 
@@ -547,7 +538,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
 
         me.onResize(me, me.widthStep * maxColumns);
 
-        if(me.resizer) {
+        if(me.getEl()) {
             me.fireEvent('changePosition', me, me.widgetSettings.get('dock'));
         }
     },
@@ -555,17 +546,16 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
     /**
      * Returns the amount of maximum shown columns depending the desktop width
      *
+     * width < 1440 = 3
+     * width > 1440 = 4
+     * width > 1920 = 5
+     * width > 2400 = 6
+     *
      * @param width
      * @returns { number } - max amount of columns that can be shown
      */
     getColumnCount: function(width) {
-        if(width > 1440) {
-            if(width > 1920) {
-                return 6;
-            }
-            return 4;
-        }
-        return 3;
+        return Math.min(6, Math.max(3, Math.ceil(width / 480)));
     },
 
     /**
@@ -578,7 +568,8 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      */
     onResize: function (win, width) {
         var me = this,
-            container;
+            container,
+            i;
 
         me.containerCollection.each(function(el) {
             el.hide();
@@ -586,7 +577,9 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
 
         me.columnsShown = ~~(width / me.widthStep);
 
-        for(var i = 0; i < me.columnCount; i++) {
+        me.moveWidgetsToVisibleSpace();
+
+        for(i = 0; i < me.columnCount; i++) {
             container = me.containerCollection.getAt(i);
 
             if(i < me.columnsShown && container.isHidden()) {
@@ -594,11 +587,62 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             }
         }
 
-        if(me.el) {
-            me.onScroll({ wheelDelta: 1 });
+        if(me.getEl()) {
+            me.onScroll({ wheelDelta: me.invertScroll ? -1 : 1 });
         }
 
         me.fireEvent('saveWindowSize', me.columnsShown, me.height);
+    },
+
+    /**
+     * Moves widgets that are in other, not visible, columns into the most right shown column.
+     */
+    moveWidgetsToVisibleSpace: function () {
+        var me = this,
+            column,
+            newColumn,
+            newColumnId,
+            widgetsToUpdate = [],
+            widgetsToMove = [];
+
+        // small hack to fix the widget layouts
+        setTimeout(function() {
+            for(var i = me.columnCount - 1; i > me.columnsShown - 1; i--) {
+                column = me.containerCollection.getAt(i);
+
+                newColumn = me.containerCollection.getAt(i - 1);
+                newColumnId = newColumn.columnId;
+
+                column.items.each(function(widget) {
+                    if(widget === column.dropProxyEl) {
+                        return true;
+                    }
+
+                    var newRowId = newColumn.items.getCount() - 1,
+                        newWidget = widget.cloneConfig({
+                            position: {
+                                columnId: newColumnId,
+                                rowId: newRowId
+                            }
+                        });
+
+                    widgetsToMove.push(newWidget);
+                    newColumn.insert(newRowId, newWidget);
+
+                    widgetsToUpdate.push({
+                        column: newColumnId,
+                        position: newRowId,
+                        id: widget.$initialId
+                    });
+
+                    column.remove(widget, true);
+                });
+            }
+
+            if(widgetsToUpdate.length !== 0) {
+                me.fireEvent('saveWidgetPositions', widgetsToUpdate);
+            }
+        }, 0);
     },
 
     /**
@@ -613,18 +657,12 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
 
         me.widgetStore.each(function(widget) {
              items.push({
-                 xtype: 'menucheckitem',
                  text: widget.get('label'),
                  widgetId: widget.get('id'),
-                 checked: (widget.get('views').length) ? true : false,
+                 iconCls: 'sprite-plus-circle-frame',
                  listeners: {
-                     checkchange: function(checkbox, status, eOpts) {
-                         if (status) {
-                             me.fireEvent('addWidget', me, widget.get('name'), checkbox);
-                             return;
-                         }
-
-                         me.fireEvent('removeWidget', me, widget.get('name'));
+                     click: function(menuItem) {
+                         me.fireEvent('addWidget', me, widget.get('name'), menuItem);
                      }
                  }
              });
@@ -682,8 +720,9 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             speed = (e.wheelDelta) ? 0.4 : 10,
             offset = (delta * speed) * (me.invertScroll ? -1 : 1),
             position = wrapperY + offset,
-            min = (wrapperHeight - winHeight - winEl.getTop()) * -1 - 5,
-            max = winEl.getTop() + toolbarEl.getHeight() + 5,
+            verticalOffset = 5,
+            min = (wrapperHeight - winHeight - winEl.getTop()) * -1 - verticalOffset,
+            max = winEl.getTop() + toolbarEl.getHeight() + verticalOffset,
             style = {
                 boxShadow: ''
             };
@@ -704,7 +743,6 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
 
         wrapperEl.setY(position);
     },
-
 
     /**
      * All resizer handles will be hidden and only the passed ones will be shown
