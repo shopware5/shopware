@@ -64,31 +64,25 @@ class GraduatedPrices
      *
      * @param Struct\ListProduct[] $products
      * @param \Shopware\Struct\Context $context
-     * @return Struct\Product\PriceRule[]
+     * @return array returns an array of Struct\Product\PriceRule[]
      */
     public function getList(array $products, Struct\Context $context)
     {
-        $specify = $this->graduatedPricesGateway->getList(
-            $products,
-            $context->getCurrentCustomerGroup()
-        );
-
-        $fallback = $this->graduatedPricesGateway->getList(
-            $products,
-            $context->getFallbackCustomerGroup()
-        );
+        $group = $context->getCurrentCustomerGroup();
+        $specify = $this->graduatedPricesGateway->getList($products, $group);
 
         $prices = array();
+        $fallback = array();
 
         foreach ($products as $product) {
-            $group = $context->getCurrentCustomerGroup();
+            $key = $product->getId();
 
             /**@var $productPrices Struct\Product\PriceRule[] */
-            $productPrices = $specify[$product->getVariantId()];
+            $productPrices = $specify[$key];
 
             if (empty($productPrices)) {
-                $group = $context->getFallbackCustomerGroup();
-                $productPrices = $fallback[$product->getVariantId()];
+                $fallback[] = $product;
+                continue;
             }
 
             foreach ($productPrices as $price) {
@@ -96,11 +90,35 @@ class GraduatedPrices
                 $price->setCustomerGroup($group);
             }
 
-            $prices[$product->getId()] = $productPrices;
+            $prices[$key] = $productPrices;
+        }
+
+        if (empty($fallback)) {
+            return $prices;
+        }
+
+        $group = $context->getFallbackCustomerGroup();
+        $fallback = $this->graduatedPricesGateway->getList($fallback, $group);
+
+        foreach ($products as $product) {
+            $key = $product->getId();
+
+            /**@var $productPrices Struct\Product\PriceRule[] */
+            $productPrices = $fallback[$key];
+
+            if (empty($productPrices)) {
+                continue;
+            }
+
+            foreach ($productPrices as $price) {
+                $price->setUnit($product->getUnit());
+                $price->setCustomerGroup($group);
+            }
+
+            $prices[$key] = $productPrices;
         }
 
         return $prices;
     }
-
 
 }

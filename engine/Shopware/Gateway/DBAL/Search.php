@@ -2,14 +2,17 @@
 
 namespace Shopware\Gateway\DBAL;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Model\DBAL\QueryBuilder;
 use Shopware\Components\Model\ModelManager;
+
 use Shopware\Gateway\DBAL\FacetHandler as FacetHandler;
+use Shopware\Gateway\DBAL\Hydrator;
 use Shopware\Gateway\DBAL\QueryGenerator as QueryGenerator;
+
 use Shopware\Gateway\Search\Condition;
 use Shopware\Gateway\Search\Criteria;
 use Shopware\Gateway\Search\Facet;
+use Shopware\Gateway\Search\Product;
 use Shopware\Gateway\Search\Result;
 use Shopware\Gateway\Search\Sorting;
 
@@ -26,11 +29,18 @@ class Search extends Gateway
     private $facetHandlers;
 
     /**
-     * @param ModelManager $entityManager
+     * @var Hydrator\Attribute
      */
-    function __construct(ModelManager $entityManager)
+    private $attributeHydrator;
+
+    /**
+     * @param ModelManager $entityManager
+     * @param Hydrator\Attribute $attributeHydrator
+     */
+    function __construct(ModelManager $entityManager, Hydrator\Attribute $attributeHydrator)
     {
         $this->entityManager = $entityManager;
+        $this->attributeHydrator = $attributeHydrator;
     }
 
     /**
@@ -40,27 +50,46 @@ class Search extends Gateway
     public function search(Criteria $criteria)
     {
         $this->queryGenerators[] = new QueryGenerator\CoreGenerator();
-
         $this->facetHandlers[] = new FacetHandler\Manufacturer();
         $this->facetHandlers[] = new FacetHandler\Category();
+        $this->facetHandlers[] = new FacetHandler\Price();
+        $this->facetHandlers[] = new FacetHandler\Property();
 
         $products = $this->getProducts($criteria);
 
-        $this->createFacets($criteria);
+        $total = $this->getTotalCount($criteria);
+
+        $facets = $this->createFacets($criteria);
 
         $result = new Result(
-            array_column($products, 'ordernumber'),
-            100,
-            $criteria->facets
+            $products,
+            intval($total),
+            $facets
         );
 
         return $result;
     }
 
+    private function getTotalCount(Criteria $criteria)
+    {
+        $query = $this->getQuery($criteria);
+
+        $query->resetQueryPart('groupBy')
+            ->resetQueryPart('orderBy');
+
+        $query->select('COUNT(DISTINCT products.id) as count');
+
+        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $query->execute();
+
+        return $statement->fetch(\PDO::FETCH_COLUMN);
+    }
+
     private function getProducts(Criteria $criteria)
     {
         $query = $this->getQuery($criteria)
-            ->select(array('variants.ordernumber'))
+            ->addSelect(array('variants.articleID', 'variants.ordernumber'))
+            ->addGroupBy('products.id')
             ->setFirstResult($criteria->offset)
             ->setMaxResults($criteria->limit);
 
@@ -69,7 +98,25 @@ class Search extends Gateway
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        $products = array();
+
+        foreach($data as $row) {
+            $product = new Product();
+            $product->setNumber($row['ordernumber']);
+
+            unset($row['ordernumber']);
+
+            if (!empty($row)) {
+                $product->addAttribute(
+                    'search',
+                    $this->attributeHydrator->hydrate($row)
+                );
+            }
+            $products[] = $product;
+        }
+        return $products;
     }
 
     /**
@@ -81,8 +128,18 @@ class Search extends Gateway
         $query = $this->entityManager->getDBALQueryBuilder();
 
         $query->from('s_articles', 'products')
-            ->innerJoin('products', 's_articles_details', 'variants', 'variants.id = products.main_detail_id')
-            ->innerJoin('products', 's_core_tax', 'tax', 'tax.id = products.taxID');
+            ->innerJoin(
+                'products',
+                's_articles_details',
+                'variants',
+                'variants.id = products.main_detail_id AND variants.active = 1 AND products.active = 1'
+            )
+            ->innerJoin(
+                'products',
+                's_core_tax',
+                'tax',
+                'tax.id = products.taxID'
+            );
 
         $this->addConditions($criteria, $query);
 
@@ -91,6 +148,8 @@ class Search extends Gateway
 
     private function createFacets(Criteria $criteria)
     {
+        $facets = array();
+
         foreach ($criteria->facets as $facet) {
 
             $query = $this->getQuery($criteria);
@@ -101,8 +160,10 @@ class Search extends Gateway
                 throw new \Exception(sprintf("Facet %s not supported", get_class($facet)));
             }
 
-            $handler->generateFacet($facet, $query);
+            $facets[] = $handler->generateFacet($facet, $query, $criteria);
         }
+
+        return $facets;
     }
 
     /**

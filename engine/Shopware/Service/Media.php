@@ -3,7 +3,7 @@
 namespace Shopware\Service;
 
 use Shopware\Struct as Struct;
-use Shopware\Gateway as Gateway;
+use Shopware\Gateway\DBAL as Gateway;
 
 /**
  * @package Shopware\Service
@@ -11,7 +11,7 @@ use Shopware\Gateway as Gateway;
 class Media
 {
     /**
-     * @var \Shopware\Gateway\Media
+     * @var Gateway\Media
      */
     private $mediaGateway;
 

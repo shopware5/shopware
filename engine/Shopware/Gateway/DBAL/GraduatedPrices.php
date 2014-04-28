@@ -81,7 +81,7 @@ class GraduatedPrices extends Gateway
 
         $prices = array();
         foreach ($data as $row) {
-            $product = $row['articledetailsID'];
+            $product = $row['articleID'];
 
             $prices[$product][] = $this->priceHydrator->hydratePriceRule($row);
         }

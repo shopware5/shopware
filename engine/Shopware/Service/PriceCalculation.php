@@ -3,10 +3,22 @@
 namespace Shopware\Service;
 
 use Shopware\Struct as Struct;
-use Shopware\Gateway as Gateway;
+use Shopware\Gateway\DBAL as Gateway;
 
 class PriceCalculation
 {
+    /**
+     * @var Gateway\PriceGroupDiscount
+     */
+    private $priceGroupDiscountGateway;
+
+    /**
+     * @param $priceGroupDiscountGateway
+     */
+    function __construct($priceGroupDiscountGateway)
+    {
+        $this->priceGroupDiscountGateway = $priceGroupDiscountGateway;
+    }
 
     /**
      * Calculates all prices of the passed product.
@@ -34,16 +46,67 @@ class PriceCalculation
         $product->setPrices($prices);
 
         if ($product->getCheapestPriceRule()) {
-            $cheapestPrice = $this->calculatePriceStruct(
+            $cheapestPrice = $this->calculateCheapestPrice(
+                $product,
                 $product->getCheapestPriceRule(),
-                $tax,
                 $context
             );
+
             $product->setCheapestPrice($cheapestPrice);
         }
 
         //add state to the product which can be used to check if the prices are already calculated.
         $product->addState(Struct\ListProduct::STATE_PRICE_CALCULATED);
+    }
+
+
+    /**
+     * Reduces the passed price with a configured
+     * price group discount for the min purchase of the
+     * prices unit.
+     *
+     * @param Struct\ListProduct $product
+     * @param Struct\Product\PriceRule $cheapestPrice
+     * @param Struct\Context $context
+     * @return \Shopware\Struct\Product\Price
+     */
+    private function calculateCheapestPrice(
+        Struct\ListProduct $product,
+        Struct\Product\PriceRule $cheapestPrice,
+        Struct\Context $context
+    ) {
+
+        $tax = $context->getTaxRule($product->getTax()->getId());
+
+        $cheapestPrice->setPrice(
+            $cheapestPrice->getUnit()->getMinPurchase() * $cheapestPrice->getPrice()
+        );
+
+        $cheapestPrice->setPseudoPrice(
+            $cheapestPrice->getUnit()->getMinPurchase() * $cheapestPrice->getPseudoPrice()
+        );
+
+        //check for price group discounts.
+        if (!$product->getPriceGroup()) {
+            return $this->calculatePriceStruct($cheapestPrice, $tax, $context);
+        }
+
+        //selects the highest price group discount, for the passed quantity.
+        $discount = $this->priceGroupDiscountGateway->getHighestQuantityDiscount(
+            $product->getPriceGroup(),
+            $context->getCurrentCustomerGroup(),
+            $cheapestPrice->getUnit()->getMinPurchase()
+        );
+
+        $cheapestPrice->setPrice(
+            $cheapestPrice->getPrice() / 100 * (100 - $discount->getPercent())
+        );
+
+        return $this->calculatePriceStruct(
+            $cheapestPrice,
+            $tax,
+            $context
+        );
     }
 
     /**
@@ -71,11 +134,9 @@ class PriceCalculation
         );
 
         //check if a pseudo price is defined and calculates it too.
-        if ($rule->getPseudoPrice()) {
-            $price->setCalculatedPseudoPrice(
-                $this->calculatePrice($rule->getPseudoPrice(), $tax, $context)
-            );
-        }
+        $price->setCalculatedPseudoPrice(
+            $this->calculatePrice($rule->getPseudoPrice(), $tax, $context)
+        );
 
         //check if the product has unit definitions and calculate the reference price for the unit.
         if ($price->getUnit() && $price->getUnit()->getPurchaseUnit()) {
@@ -168,7 +229,6 @@ class PriceCalculation
      */
     private function calculateReferencePrice(Struct\Product\Price $price)
     {
-        return $price->getCalculatedPrice() / $price->getUnit()->getPurchaseUnit() * $price->getUnit(
-        )->getReferenceUnit();
+        return $price->getCalculatedPrice() / $price->getUnit()->getPurchaseUnit() * $price->getUnit()->getReferenceUnit();
     }
 }
