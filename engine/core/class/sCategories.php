@@ -94,7 +94,7 @@ class sCategories
         $this->baseUrl = $this->config->get('baseFile') . '?sViewport=cat&sCategory=';
         $this->blogBaseUrl = $this->config->get('baseFile') . '?sViewport=blog&sCategory=';
         $this->baseId = (int) Shopware()->Shop()->get('parentID');
-        $this->customerGroupId = (int) Shopware()->Modules()->System()->sSYSTEM->sUSERGROUPDATA['id'];
+        $this->customerGroupId = (int) Shopware()->Modules()->System()->sUSERGROUPDATA['id'];
     }
 
     /**
