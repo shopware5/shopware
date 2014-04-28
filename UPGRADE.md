@@ -33,7 +33,6 @@ In this document you will find a changelog of the important changes related to t
 * `sCore` no longer returns `null` when calling not implemented functions
 * `sAdmin::sGetDispatch()`, `sAdmin::sGetDispatches()` and `sAdmin::sGetShippingcosts()` were removed.
 * `sCms::sGetDynamicContentByGroup()`, `sCms::sGetDynamicContentById()` and `sCms::sGetDynamicGroupName()` methods deprecated functions removed
-* `sSystem::sPathCmsFiles` and `sSystem::sPathCmsImg` variables removed
 * `Shopware_Controllers_Frontend_Content` legacy controller removed
 * `templates/_default/frontend/content` legacy template files removed
 * `s_cms_content` legacy database table removed
@@ -73,6 +72,8 @@ In this document you will find a changelog of the important changes related to t
     * `sSystem::sBasefile`
     * `sSystem::sLicenseData`
     * `sSystem::sCurrencyData`
+    * `sSystem::sPathCmsFiles`
+    * `sSystem::sPathCmsImg`
 * `sNewsletter` core class removed
 * Access to GET, POST and COOKIES through sSystem is deprecated.
     * The current arrays have been replaced with wrappers objects to the global variables
