@@ -63,7 +63,7 @@ class sMarketing
     {
         $this->category = Shopware()->Shop()->getCategory();
         $this->categoryId = $this->category->getId();
-        $this->customerGroupId = (int) Shopware()->Modules()->System()->sSYSTEM->sUSERGROUPDATA['id'];
+        $this->customerGroupId = (int) Shopware()->Modules()->System()->sUSERGROUPDATA['id'];
     }
 
     public function sGetSimilaryShownArticles($articleId, $limit = 0)
