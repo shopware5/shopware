@@ -63,6 +63,8 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
 
     padding: 10,
 
+    minHeight: 600,
+
     /**
      * Contains all widgets
      */
