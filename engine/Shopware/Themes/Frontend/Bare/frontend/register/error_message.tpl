@@ -8,7 +8,7 @@
 
 					{block name='fronrtend_register_error_messages_list_entry'}
 						{foreach $error_messages as $errorItem}
-							<li class="register--alert-entry" >{$errorItem}</li>
+							<li class="register--alert-entry">{$errorItem}</li>
 						{/foreach}
 					{/block}
 
