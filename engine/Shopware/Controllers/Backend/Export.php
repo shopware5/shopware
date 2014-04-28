@@ -25,8 +25,8 @@
 /**
  * Export controller
  *
- * This controller is used by the ProductFeed modul.
- * The ProductFeed modul will call this controller to export the chosen ProductFeed with all options.
+ * This controller is used by the ProductFeed module.
+ * The ProductFeed module will call this controller to export the chosen ProductFeed with all options.
  * The controller uses the base class sExport for all export relevant methods.
  * Sets a different header to return a downloadable export file.
  */
@@ -57,17 +57,11 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action
          */
         $export = Shopware()->Modules()->Export();
         $export->sSYSTEM = Shopware()->System();
-        $export->sFeedID = (int)$this->Request()->feedID;
+        $export->sFeedID = (int) $this->Request()->feedID;
         $export->sHash = $this->Request()->hash;
         $export->sDB = Shopware()->Adodb();
 
         $export->sInitSettings();
-
-        /**
-         * initialize smarty
-         */
-        $export->sSmarty = $this->View()->Engine();
-        $export->sInitSmarty();
 
         /**
          * set feed specific options to the export and sets
@@ -86,8 +80,48 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action
                 $this->Response()->setHeader('Content-Type', 'text/x-comma-separated-values;charset=iso-8859-1');
             }
         }
+
+        /**
+         * @var $productFeed \Shopware\Models\ProductFeed\ProductFeed
+         */
+        $productFeed = Shopware()->Models()->ProductFeed()->find((int) $this->Request()->feedID);
+        $fileName = $productFeed->getHash() . '_' . $productFeed->getFileName();
+        $dirName = Shopware()->DocPath() . 'cache/productexport/';
+        if (!file_exists($dirName)) {
+            mkdir($dirName, 0777);
+        }
+        $filePath = $dirName . $fileName;
+
+        if ($productFeed->getInterval() != -1) {
+            $lastRefresh = $productFeed->getCacheRefreshed();
+            $lastRefresh = $lastRefresh ? $lastRefresh->getTimestamp() : 0;
+            $now = new DateTime();
+            $now = $now->getTimestamp();
+
+            if ($now-$lastRefresh >= $productFeed->getInterval()) {
+                $cacheFileResource = fopen($filePath, 'w');
+
+                $export->sSmarty = $this->View()->Engine();
+                $export->sInitSmarty();
+
+                // Export the feed
+                $export->executeExport($cacheFileResource);
+
+                $productFeed->setCacheRefreshed('now');
+                Shopware()->Models()->persist($productFeed);
+                Shopware()->Models()->flush($productFeed);
+            }
+        }
+
+        if (!file_exists($filePath)) {
+            $this->Response()
+                ->clearHeaders()
+                ->setHttpResponseCode(204)
+                ->appendBody("Empty feed found.");
+            return;
+        }
+
         $this->Response()->sendHeaders();
-        $handleResource = fopen('php://output', 'w');
-        $export->executeExport($handleResource);
+        readfile($filePath);
     }
 }

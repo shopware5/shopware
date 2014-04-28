@@ -22,61 +22,58 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Shopware Cron to generate the product export files
- */
-class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Components_Plugin_Bootstrap
+namespace Shopware\Commands;
+
+use Shopware\Models\ProductFeed\ProductFeed;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+class GenerateProductFeedCommand extends ShopwareCommand
 {
     /**
-     * @var \Shopware\Models\ProductFeed\Repository
+     * {@inheritdoc}
      */
-    protected $productFeedRepository = null;
-
-    /**
-     * Bootstrap Installation method
-     * @return bool
-     */
-    public function install()
+    protected function configure()
     {
-        $this->subscribeEvent(
-            'Shopware_CronJob_ProductExport',
-            'onRun'
-        );
-        $this->createCronJob("Product Export", "ProductExport", 86400);
-
-        return true;
+        $this
+            ->setName('sw:product:feeds:refresh')
+            ->setDescription('Refreshes product feed cache files.')
+            ->setHelp('The <info>%command.name%</info> refreshes the cached product feed files.');
+        ;
     }
 
     /**
-     * @param Enlight_Components_Cron_EventArgs $job
+     * {@inheritdoc}
      */
-    public function onRun(Enlight_Components_Cron_EventArgs $job)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->exportProductFiles();
-    }
+        $front = $this->container->get('front');
+        if (!$front->Router()) {
+            $front->setRouter('Enlight_Controller_Router_Default');
+        }
+        if (!$front->Request()) {
+            $request = new \Enlight_Controller_Request_RequestHttp();
+            $front->setRequest($request);
+        }
 
-    /**
-     * starts all product export for all active product feeds
-     *
-     * @return string
-     */
-    public function exportProductFiles()
-    {
-        $productFeedRepository = Shopware()->Models()->getRepository(
+        $productFeedRepository = $this->container->get('models')->getRepository(
             'Shopware\Models\ProductFeed\ProductFeed'
         );
         $activeFeeds = $productFeedRepository->getActiveListQuery()->getResult();
 
-        $export = Shopware()->Modules()->Export();
-        $export->sSYSTEM = Shopware()->System();
+        /** @var $export \sExport */
+        $export = $this->container->get('modules')->Export();
+        $export->sSYSTEM = $this->container->get('system');
         $export->sDB = Shopware()->AdoDb();
-        $sSmarty = Shopware()->Template();
+        $sSmarty = $this->container->get('template');
 
         foreach ($activeFeeds as $feedModel) {
-            /** @var $feedModel Shopware\Models\ProductFeed\ProductFeed */
+            /** @var $feedModel ProductFeed */
             if ($feedModel->getInterval() == 0) {
                 continue;
             }
+            $output->writeln(sprintf('Refreshing cache for '.$feedModel->getName()));
+
             $export->sFeedID = $feedModel->getId();
             $export->sHash = $feedModel->getHash();
             $export->sInitSettings();
@@ -87,5 +84,7 @@ class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Compone
             $handleResource = fopen(Shopware()->DocPath() . 'cache/productexport/' . $fileName, 'w');
             $export->executeExport($handleResource);
         }
+
+        $output->writeln(sprintf('Product feed cache successfully refreshed'));
     }
 }
