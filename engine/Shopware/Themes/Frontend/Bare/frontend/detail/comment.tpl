@@ -30,18 +30,12 @@
 		{block name='frontend_detail_comment_error_messages'}
 		<div>
 			{if $sErrorFlag}
-				<div class="error bold center">
-					{se name="DetailCommentInfoFillOutFields"}{/se}
-				</div>
+				{include file="frontend/_includes/messages.tpl" type="error" content="{s name='DetailCommentInfoFillOutFields'}{/s}"}
 			{else}
 				{if {config name="OptinVote"} && !{$smarty.get.sConfirmation}}
-					<div class="success bold center">
-						{se name="DetailCommentInfoSuccessOptin"}{/se}
-					</div>
+					{include file="frontend/_includes/messages.tpl" type="success" content="{s name='DetailCommentInfoSuccessOptin'}{/s}"}
 				{else}
-					<div class="success bold center">
-						{se name="DetailCommentInfoSuccess"}{/se}
-					</div>
+					{include file="frontend/_includes/messages.tpl" type="success" content="{s name='DetailCommentInfoSuccess'}{/s}"}
 				{/if}
 			{/if}
 		</div>
@@ -137,9 +131,7 @@
 
 		{* Display notice if the shop owner needs to unlock a comment before it will'be listed *}
 		{if {config name=VoteUnlock}}
-			<div class="notice">
-				<span>{s name='DetailCommentTextReview'}{/s}</span>
-			</div>
+			{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='DetailCommentTextReview'}{/s}"}
 		{/if}
 
 		{* Write comment *}

@@ -15,23 +15,20 @@
 	    <h1>{se name="DownloadsHeader"}{/se}</h1>
 	    
 	  	{block name="frontend_account_downloads_error_messages"}
-	    {if $sErrorCode}
-			<div class="notice bold center">
-			{if $sErrorCode==1}
-				{se name="DownloadsInfoAccessDenied"}{/se}
-			{else}
-				{se name="DownloadsInfoNotFound"}{/se}
+			{if $sErrorCode}
+				{$errorText="{s name='DownloadsInfoNotFound'}{/s}"}
+				{if $sErrorCode == 1}
+					{$errorText="{s name='DownloadsInfoAccessDenied'}{/s}"}
+				{/if}
+
+				{include file="frontend/_includes/messages.tpl" type="warning" content=$errorText}
 			{/if}
-			</div>
-	    {/if}
 		{/block}
 		
 		{* Missing ESD articles *}
 		{if !$sDownloads}
 			{block name='frontend_account_downloads_info_empty'}
-			<div class="notice bold center">
-				{se name="DownloadsInfoEmpty"}{/se}
-			</div>
+				{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='DownloadsInfoEmpty'}{/s}"}
 			{/block}
 	    {else}
 	    	<div class="table grid_16"> <!-- TABLE START -->

@@ -5,7 +5,7 @@
 	<div class="tablefoot_inner">
 
     {if !$sUserData.additional.charge_vat && {config name=nettonotice}}
-        <div class="grid_15 notice">{se name='CheckoutFinishTaxInformation'}{/se}</div>
+		{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='CheckoutFinishTaxInformation'}{/s}"}
     {/if}
 {/block}
 

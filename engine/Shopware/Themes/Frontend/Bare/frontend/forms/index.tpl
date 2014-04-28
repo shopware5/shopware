@@ -19,9 +19,7 @@
 			{if $sSupport.sElements}
 				{eval var=$sSupport.text}
 			{elseif $sSupport.text2}
-				<div class="success center bold">
-					{eval var=$sSupport.text2}
-				</div>
+				{include file="frontend/_includes/messages.tpl" type="success" content=$sSupport.text2}
 			{/if}
 		</div>
 		<h2 class="headingbox_dark largesize">{$sSupport.name}</h2>

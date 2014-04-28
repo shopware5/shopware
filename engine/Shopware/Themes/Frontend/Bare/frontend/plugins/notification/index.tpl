@@ -2,32 +2,30 @@
     <input type="hidden" value="{$NotifyHideBasket}" name="notifyHideBasket" id="notifyHideBasket" />
 
 	{if $NotifyValid == true}
-		<div class="alert success">
-			{s name='DetailNotifyInfoValid'}{/s}
-		</div>
+		{$messageType="success"}
+		{$messageContent="{s name='DetailNotifyInfoValid'}{/s}"}
 	{elseif $NotifyInvalid == true && $NotifyAlreadyRegistered != true}
-		<div class="alert warning">
-			{s name='DetailNotifyInfoInvalid'}{/s}
-		</div>
+		{$messageType="warning"}
+		{$messageContent="{s name='DetailNotifyInfoInvalid'}{/s}"}
     {elseif $NotifyEmailError == true}
-        <div class="alert error">
-            {s name='DetailNotifyInfoErrorMail'}{/s}
-        </div>
+		{$messageType="error"}
+		{$messageContent="{s name='DetailNotifyInfoErrorMail'}{/s}"}
 	{elseif $WaitingForOptInApprovement}
-		<div class="alert success">
-			{s name='DetailNotifyInfoSuccess'}{/s}
-		</div>
+		{$messageType="success"}
+		{$messageContent="{s name='DetailNotifyInfoSuccess'}{/s}"}
     {elseif $NotifyAlreadyRegistered == true}
-        <div class="alert info">
-			{s name='DetailNotifyAlreadyRegistered'}{/s}
-        </div>
+		{$messageType="warning"}
+		{$messageContent="{s name='DetailNotifyAlreadyRegistered'}{/s}"}
     {else}
         {if $NotifyValid != true}
-        <div class="alert warning">
-			{s name='DetailNotifyHeader'}{/s}
-        </div>
+			{$messageType="warning"}
+			{$messageContent="{s name='DetailNotifyHeader'}{/s}"}
         {/if}
     {/if}
+
+	{* Include the message template component *}
+	{include file="frontend/_includes/messages.tpl" type=$messageType content=$messageContent}
+
 	{block name="frontend_detail_index_notification_form"}
 		<form method="post" action="{url action='notify' sArticle=$sArticle.articleID}" class="notification--form block-group">
 			<input type="hidden" name="notifyOrdernumber" value="{$sArticle.ordernumber}" />
