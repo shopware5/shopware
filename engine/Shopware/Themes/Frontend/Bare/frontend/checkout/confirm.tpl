@@ -122,8 +122,11 @@
                             {/if}
                             {$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}<br />
                             {$sUserData.billingaddress.street} {$sUserData.billingaddress.streetnumber}<br />
+							{if $sUserData.billingaddress.additional_address_line1}{$sUserData.billingaddress.additional_address_line1}<br />{/if}
+							{if $sUserData.billingaddress.additional_address_line2}{$sUserData.billingaddress.additional_address_line2}<br />{/if}
                             {$sUserData.billingaddress.zipcode} {$sUserData.billingaddress.city}<br />
-                            {if $sUserData.additional.state.shortcode}{$sUserData.additional.state.shortcode} - {/if}{$sUserData.additional.country.countryname}
+							{if $sUserData.additional.state.statename}{$sUserData.additional.state.statename}<br />{/if}
+							{$sUserData.additional.country.countryname}
 
 
                         </p>
@@ -158,8 +161,11 @@
                             {/if}
                             {$sUserData.shippingaddress.firstname} {$sUserData.shippingaddress.lastname}<br />
                             {$sUserData.shippingaddress.street} {$sUserData.shippingaddress.streetnumber}<br />
+							{if $sUserData.shippingaddress.additional_address_line1}{$sUserData.shippingaddress.additional_address_line1}<br />{/if}
+							{if $sUserData.shippingaddress.additional_address_line2}{$sUserData.shippingaddress.additional_address_line2}<br />{/if}
                             {$sUserData.shippingaddress.zipcode} {$sUserData.shippingaddress.city}<br />
-                            {if $sUserData.additional.stateShipping.shortcode}{$sUserData.additional.stateShipping.shortcode} - {/if}{$sUserData.additional.countryShipping.countryname}
+							{if $sUserData.additional.stateShipping.statename}{$sUserData.additional.stateShipping.statename}<br />{/if}
+							{$sUserData.additional.countryShipping.countryname}
                         </p>
 
                         {* Action buttons *}
