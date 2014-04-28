@@ -758,12 +758,14 @@ class sAdmin
 
         $sql = '
             SELECT
-                MD5(CONCAT(company, department, salutation, firstname, lastname, street, streetnumber, zipcode, city, countryID)) as hash,
+                MD5(CONCAT(company, department, salutation, firstname, lastname, street, streetnumber, zipcode, city, a.countryID, a.stateId)) as hash,
                 company, department, salutation, firstname, lastname,
-                street, streetnumber, zipcode, city, countryID as country, countryID, countryname, additional_address_line1, additional_address_line2
+                street, streetnumber, zipcode, city, a.countryID as country, a.countryID as countryID, a.stateId as stateId, countryname, cs.name as statename, additional_address_line1, additional_address_line2
             FROM s_order_'.$type.'address AS a
             LEFT JOIN s_core_countries co
             ON a.countryID=co.id
+            LEFT JOIN s_core_countries_states cs
+            ON a.stateId=cs.id
             WHERE a.userID=?
             GROUP BY hash
             ORDER BY MAX(a.id) DESC
@@ -771,14 +773,14 @@ class sAdmin
 
         $addresses = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql, array($this->sSYSTEM->_SESSION['sUserId']));
 
-        foreach ($addresses as $address) {
+        foreach ($addresses as &$address) {
             if (!empty($request_hash) && $address['hash'] == $request_hash) {
                 return $address;
             }
-            $address[$address['hash']]['country'] = array();
-            $address[$address['hash']]['country']['id'] = $address['countryID'];
-            $address[$address['hash']]['country']['countryname'] = $address['countryname'];
-            $address[$address['hash']]['country'] = $this->sGetCountryTranslation($address["country"]);
+            $countryTranslation = $this->sGetCountryTranslation(array('id' => $address['countryID']));
+            $address = array_merge($address, $countryTranslation);
+            $stateTranslation = $this->sGetCountryStateTranslation(array('id' => $address['stateId']));
+            $address = array_merge($address, $stateTranslation);
         }
 
         if (!empty($request_hash)) {
@@ -1757,12 +1759,13 @@ class sAdmin
      * Also includes fallback translations
      * Used internally in sAdmin
      *
+     * @param null $state
      * @return array States translations
      */
-    public function sGetCountryStateTranslation()
+    public function sGetCountryStateTranslation($state = null)
     {
         if (Shopware()->Shop()->get('skipbackend')) {
-            return array();
+            return empty($state) ? array() : $state;
         }
         $language = Shopware()->Shop()->get('isocode');
         $fallback = Shopware()->Shop()->get('fallback');
@@ -1799,7 +1802,16 @@ class sAdmin
                 $translation += $translationFallback;
             }
         }
-        return $translation;
+
+        if (empty($state)) {
+            return $translation;
+        }
+
+        if ($translation[$state["id"]]) {
+            $state["statename"] = $translation[$state["id"]]["name"];
+        }
+
+        return $state;
     }
 
     /**
@@ -2780,7 +2792,9 @@ class sAdmin
 
 
             $userData["additional"]["country"] = $this->sGetCountryTranslation($userData["additional"]["country"]);
+            $userData["additional"]["state"] = $this->sGetCountryStateTranslation($userData["additional"]["state"]);
 
+            
             $additional = $this->sSYSTEM->sDB_CONNECTION->GetRow(
                 "SELECT * FROM s_user WHERE id=?",
                 array($this->sSYSTEM->_SESSION["sUserId"])
@@ -2844,6 +2858,7 @@ class sAdmin
                 "SELECT * FROM s_core_countries_states WHERE id=?",
                 array($userData["shippingaddress"]["stateID"])
             );
+            $userData["additional"]["stateShipping"] = $this->sGetCountryStateTranslation($userData["additional"]["stateShipping"]);
             // Add stateId to session
             $this->sSYSTEM->_SESSION["sState"] = $userData["additional"]["stateShipping"]["id"];
             // Add areaId to session
@@ -2867,9 +2882,6 @@ class sAdmin
             );
             $userData["additional"]["countryShipping"] = $userData["additional"]["country"];
             $userData["additional"]["stateShipping"]["id"] = !empty($this->sSYSTEM->_SESSION["sState"]) ? $this->sSYSTEM->_SESSION["sState"] : 0;
-
-
-            /* todo@all Do we need a translation here? */
         }
 
         $userData = Enlight()->Events()->filter(

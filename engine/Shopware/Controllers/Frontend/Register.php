@@ -437,8 +437,8 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             'country' => array('required' => 1),
             'department' => array('required' => 0),
             'shippingAddress' => array('required' => 0),
-            'additional_address_line1' => array('required' => (Shopware()->Config()->requireAdditionAddressLine1) ? 1 : 0),
-            'additional_address_line2' => array('required' => (Shopware()->Config()->requireAdditionAddressLine2) ? 1 : 0)
+            'additional_address_line1' => array('required' => (Shopware()->Config()->requireAdditionAddressLine1 && Shopware()->Config()->showAdditionAddressLine1) ? 1 : 0),
+            'additional_address_line2' => array('required' => (Shopware()->Config()->requireAdditionAddressLine2 && Shopware()->Config()->showAdditionAddressLine2) ? 1 : 0)
         );
 
         // Check if state selection is required
@@ -505,8 +505,8 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             'text5' => array('required' => 0),
             'text6' => array('required' => 0),
             'country' => array('required' => (Shopware()->Config()->get('sCOUNTRYSHIPPING')) ? 1 : 0),
-            'additional_address_line1' => array('required' => (Shopware()->Config()->requireAdditionAddressLine1) ? 1 : 0),
-            'additional_address_line2' => array('required' => (Shopware()->Config()->requireAdditionAddressLine2) ? 1 : 0)
+            'additional_address_line1' => array('required' => (Shopware()->Config()->requireAdditionAddressLine1 && Shopware()->Config()->showAdditionAddressLine1) ? 1 : 0),
+            'additional_address_line2' => array('required' => (Shopware()->Config()->requireAdditionAddressLine2 && Shopware()->Config()->showAdditionAddressLine2) ? 1 : 0)
         );
 
         // Check if state selection is required

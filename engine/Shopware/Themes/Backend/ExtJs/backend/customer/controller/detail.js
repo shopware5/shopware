@@ -55,7 +55,8 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
     extend:'Ext.app.Controller',
 
     refs: [
-        { ref: 'detailWindow', selector: 'customer-detail-window' }
+        { ref: 'detailWindow', selector: 'customer-detail-window' },
+        { ref: 'countryStateCombo', selector: 'customer-shipping-field-set combobox[action=shippingStateId]' }
     ],
 
     /**
@@ -173,7 +174,8 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
      */
     onCopyAddress:function (form) {
         var basic = form.getForm(),
-            values = basic.getValues();
+            values = basic.getValues(),
+            countryStateCombobox = this.getCountryStateCombo();
 
         //i tried to realise this over the form record, but the last overrides from the basic form and the form panel prevent it.
         values["shipping[city]"] = values["billing[city]"];
@@ -196,9 +198,21 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
         values['shipping[text4]'] = values['billing[text4]'];
         values['shipping[text5]'] = values['billing[text5]'];
         values['shipping[text6]'] = values['billing[text6]'];
+
+        //setting the country state combobox
+        countryStateCombobox.show();
         basic.setValues(values);
-
-
+        var countryStateStore = countryStateCombobox.getStore();
+        countryStateStore.getProxy().extraParams = {
+            countryId: values['shipping[countryId]']
+        };
+        countryStateStore.load({
+            callback: function () {
+                if (values['shipping[stateId]']) {
+                    countryStateCombobox.setValue(values['shipping[stateId]']);
+                }
+            }
+        });
     },
 
     /**
