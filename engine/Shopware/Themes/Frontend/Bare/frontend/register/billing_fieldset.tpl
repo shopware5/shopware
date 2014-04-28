@@ -59,8 +59,8 @@
 		{* Zip + City *}
 		{block name='frontend_register_billing_fieldset_input_zip_and_city'}
 			<div class="register--zip-city">
-				<input name="register[billing][zipcode]" type="text" aria-required="true" placeholder="{s name='RegisterBillingLabelZipcode'}{/s}" id="zipcode" value="{$form_data.zipcode|escape}" class="register--field zipcode is--required{if $error_flags.zipcode} has--error{/if}" />
-				<input name="register[billing][city]" type="text" aria-required="true" placeholder="{s name='RegisterBillingLabelCity'}{/s}" id="city" value="{$form_data.city|escape}" size="25" class="register--field city is--required{if $error_flags.city} has--error{/if}" />
+				<input name="register[billing][zipcode]" type="text" aria-required="true" placeholder="{s name='RegisterBillingLabelZipcode'}{/s}" id="zipcode" value="{$form_data.zipcode|escape}" class="register--field register--field-zipcode is--required{if $error_flags.zipcode} has--error{/if}" />
+				<input name="register[billing][city]" type="text" aria-required="true" placeholder="{s name='RegisterBillingLabelCity'}{/s}" id="city" value="{$form_data.city|escape}" size="25" class="register--field register--field-city is--required{if $error_flags.city} has--error{/if}" />
 			</div>
 		{/block}
 
