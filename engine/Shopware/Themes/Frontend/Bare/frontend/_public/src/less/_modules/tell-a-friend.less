@@ -6,7 +6,7 @@
     }
 
     .tellafriend--field {
-	.unitize-margin(4, 0, 4, 0, 16);
+	    .unitize-margin(4, 0, 4, 0, 16);
         width: 100%;
     }
 
@@ -30,14 +30,22 @@
     .btn--secondary {
         float: left;
     }
+
+    .alert {
+        .unitize(20, 16, margin-top);
+    }
+
+    .review--notice {
+        .unitize-margin(10, 0, 16);
+    }
 }
 
 // Tablet view
 @media screen and(min-width: @tabletViewportWidth) {
 
     .tellafriend--content {
-	.unitize(45, 16, padding-top);
-	width: 100%;
+        .unitize(45, 16, padding-top);
+        width: 100%;
 
         .tellafriend--field {
             .unitize(20, 16, margin-bottom);
@@ -49,7 +57,7 @@
         }
 
         .alert {
-            .unitize(16, 16, margin-bottom);
+            .unitize-margin(0, 0, 16, 0, 16);
         }
     }
 }
@@ -58,7 +66,7 @@
 @media screen and(min-width: @desktopViewportWidth) {
 
     .tellafriend--content {
-	width: 78%;
-	float: right;
+        width: 78%;
+        float: right;
     }
 }
