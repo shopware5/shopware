@@ -240,7 +240,7 @@
 			return outer;
 		}
 	
-		return this.each(function() {
+		return this.not('.no_style').each(function() {
 			var $this = $(this),
 				initalWidth = $this.is(':hidden') ? $this.width() + 3 : $this.width() + 15,
 				selected = $this.find(':selected'),
