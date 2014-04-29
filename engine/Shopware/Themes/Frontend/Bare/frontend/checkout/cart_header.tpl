@@ -8,15 +8,6 @@
             </div>
         {/block}
 
-        {* Delivery information *}
-        {*block name='frontend_checkout_cart_header_availability'}
-            {if {config name=BasketShippingInfo}}
-                <div class="table--column column--dispatch block">
-                    {s name="CartColumnAvailability"}{/s}
-                </div>
-            {/if}
-        {/block*}
-
         {* Unit price *}
         {block name='frontend_checkout_cart_header_price'}
             <div class="table--column column--unit-price block">
@@ -24,15 +15,15 @@
             </div>
         {/block}
 
+        {* Product tax rate *}
+        {block name='frontend_checkout_cart_header_tax'}{/block}
+
         {* Product quantity *}
         {block name='frontend_checkout_cart_header_quantity'}
             <div class="table--column column--quantity block">
                 {s name="CartColumnQuantity"}{/s}
             </div>
         {/block}
-
-        {* Product tax rate *}
-        {block name='frontend_checkout_cart_header_tax'}{/block}
 
         {* Accumulated product price *}
         {block name='frontend_checkout_cart_header_total'}
