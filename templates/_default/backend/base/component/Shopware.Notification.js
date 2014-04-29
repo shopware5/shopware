@@ -543,6 +543,7 @@ Ext.define('Shopware.Notification', {
      *              { Function } opts.btnDetail.callback - Callback method which should be called after the user
      *                           links on the detail link (default: Ext.emptyFn)
      *              { Object }   opts.btnDetail.scope - Scope in which the callback will be fired (default: this)
+*                { Function } opts.onCloseButton - Handler method which called after the user clicked on close button
      *        { Function } caller - Function which calls this method. Only necessary for the logging.
      *        { String }   iconCls - CSS class for the icon which should be displayed. This options is disabled.
      *        { Boolean }  log - Compability parameter. Please use `opts.log` instead of the parameter `log`
@@ -649,7 +650,13 @@ Ext.define('Shopware.Notification', {
             ui: 'growl-sticky',
             text: 'Schließen',
             height: 22,
-            handler: closeHandler
+            handler: function() {
+                closeHandler();
+
+                if(Ext.isFunction(opts.onCloseButton)) {
+                    opts.onCloseButton();
+                }
+            }
         });
 
         me.growlMsgCollection.each(function(growlEl) {
