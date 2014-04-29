@@ -27,7 +27,9 @@
 		{block name='frontend_index_navigation'}
 			<header class="header-main">
 				{* Include the top bar navigation *}
-				{include file="frontend/index/topbar-navigation.tpl"}
+				{block name='frontend_index_top_bar_container'}
+					{include file="frontend/index/topbar-navigation.tpl"}
+				{/block}
 
 				<div class="container">
 

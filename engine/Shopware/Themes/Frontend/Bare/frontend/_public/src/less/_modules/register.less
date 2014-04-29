@@ -1,0 +1,324 @@
+// Header Support Info
+.header-main {
+
+    .logo--supportinfo {
+	    display: none;
+    }
+}
+
+// Register Content
+.register--content {
+    .border-radius();
+    .clearfix();
+    width: 100%;
+
+        .has--border {
+            .border-radius(4px);
+        }
+
+        .alert {
+            .unitize-margin(0, 26, 16);
+        }
+
+        .panel--title {
+            .unitize(16,16, margin-bottom);
+        }
+
+        .panel--body {
+            .unitize-margin(0, 16, 16);
+        }
+
+        .register--check {
+            .unitize(8,16, padding-bottom);
+        }
+
+        .register--submit {
+            .unitize-margin(0, 26, 16);
+            float: right;
+
+        .icon--arrow-right {
+            .unitize(10, 16, font-size);
+        }
+    }
+
+    .register--required-info {
+	    .unitize-margin(0, 26, 16);
+	    .unitize(14, 16, font-size);
+    }
+
+    .field--select {
+	    .unitize(10, 16, margin-bottom);
+    }
+
+    .register--field {
+	    .unitize(10, 16, margin-bottom);
+	    width: 100%;
+    }
+
+    .register--customertype {
+	    display: block;
+    }
+
+    .register--street {
+
+        .register--field-street {
+            margin-right: 2%;
+            width: 80%;
+            float: left;
+        }
+
+        .register--field-streetnumber {
+            width: 18%;
+            float: left;
+        }
+
+    }
+
+    .register--zip-city {
+
+        .register--field-zipcode {
+            margin-right: 2%;
+            width: 28%;
+            float: left;
+        }
+
+        .register--field-city {
+            .clearfix();
+            width: 70%;
+            float: left;
+        }
+
+    }
+
+    .birthday--label {
+	    .clearfix();
+    }
+
+    .register--password-description {
+	    .unitize(20, 16, padding-bottom);
+    }
+
+    .register--birthdate {
+
+        .field--select {
+            .unitize(15, 16, margin-bottom);
+            width: 32%;
+            margin-right: 2%;
+            float: left;
+        }
+
+        .register--birthyear {
+            .unitize(0, 16, margin-right);
+        }
+
+    }
+
+    .register--privacy {
+	    .unitize-margin(0, 26, 16);
+	    .unitize(14, 16, font-size);
+    }
+
+    // Personal information fieldset
+    .register--personal {
+	    .unitize(32, 16, padding-bottom);
+	    .clearfix();
+    }
+
+}
+
+// Register advantages
+.register--advantages {
+    .clearfix();
+
+    .register--advantages-list {
+	    .unitize(40, 16, margin-bottom);
+	    list-style: none;
+	    float: left;
+    }
+
+    li {
+	    .unitize(20, 16, padding-left);
+	    display: block;
+	    float: left;
+	    width: 100%;
+    }
+
+    i[class^=icon] {
+	    .unitize(10, 16, font-size);
+	    .unitize(10, 16, margin-right);
+    }
+
+}
+
+// Register Steps
+.steps--content {
+    border-top: 1px solid @borderColor;
+
+    // General
+    .steps--spacer { display: none }
+
+    .steps--list {
+	    .clearfix();
+    }
+
+    .steps--entry {
+	    .unitize-padding(0, 16, 0, 16);
+	    float: left;
+	    list-style: none;
+    }
+
+    // Icon
+    .steps--entry .icon {
+	    .secondary-gradient();
+	    .border-radius(22px);
+	    .unitize-padding(10, 16);
+	    .box-shadow();
+	    .unitize-width(46, 16);
+	    .unitize(20, 16,font-size);
+	    display: inline-block;
+	    text-align: center;
+	    color: #fff;
+	    font-weight: bold;
+	    float: left;
+    }
+
+    .is--active .icon {
+	    .primary-gradient();
+	    color:  #fff;
+    }
+
+    // Text
+    .steps--entry .text {
+	    .unitize-margin(0, 0, 0, 16);
+	    .unitize-height(52);
+	    position: relative;
+	    top: -2px;
+	    display: none;
+
+	&::after {
+	    content: '';
+	    height: 100%;
+	}
+
+    }
+
+    .is--active .text {
+	    color: @primaryColor;
+	    display: inline-block;
+	    font-weight: bold;
+    }
+
+    .steps--entry .text--inner, .steps--entry .text::after {
+	    display: inline-block;
+	    vertical-align: middle;
+    }
+
+}
+
+@media screen and (min-width: @tabletViewportWidth) {
+
+    // Header Support Info
+    .header-main{
+	    box-shadow: 0 1px 1px #ccc;
+
+        .logo-main {
+            width: 100%;
+        }
+
+        .logo--shop {
+            width: 40%
+        }
+
+        .logo--supportinfo {
+            display: block;
+            width: 40%;
+        }
+
+        .logo--trusted-shops {
+            width: 20%;
+
+            a { float: right; }
+        }
+
+    }
+
+    // General registration form
+    .register--content {
+	    .unitize(50, 16, margin-top);
+	    .unitize(20, 16, padding-top);
+
+        .field--select {
+            .unitize(15, 16, margin-bottom);
+
+            .register--birthday {
+                margin-right: 2%;
+            }
+        }
+
+        .register--field {
+            .unitize(15, 16, margin-bottom);
+        }
+
+        .register--check {
+            .unitize(8, 16, padding-bottom);
+        }
+    }
+
+    // Register Steps
+    .steps--content {
+	    .unitize-padding(30, 0, 40, 0, 16);
+	    background: transparent;
+	    border: none;
+
+        .steps--entry { width: 25% }
+
+        .steps--spacer {
+            border-bottom: 1px solid @borderColor;;
+            display: block;
+            width: 12%;
+            text-align: center;
+
+            i[class^=icon] {
+                .unitize-padding(0, 6, 0, 6);
+                .unitize(13, 16, top);
+                position: relative;
+                background: @primaryBackgroundColor;
+            }
+	    }
+
+        .steps--entry .text {
+            width: 60%;
+            display: inline-block;
+            font-weight: bold;
+        }
+    }
+}
+
+@media screen and (min-width: @desktopViewportWidth) {
+
+    .is--ctl-register {
+	    .unitize(48, 16, margin-bottom);
+    }
+
+    // Register Steps
+    .steps--content {
+
+        .steps--entry {
+            width: 20%;
+
+            .text { width: 70%; }
+        }
+
+        .steps--spacer { width: 16% }
+
+    }
+
+    // Register Advantages
+    .register--advantages {
+
+        li {
+            width: 50%;
+        }
+    }
+
+}
