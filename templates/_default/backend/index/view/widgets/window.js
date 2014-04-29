@@ -117,6 +117,21 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
     initHandles: true,
 
     /**
+     * Snippet texts for multilanguage support
+     */
+    snippets: {
+        toolbar: {
+            minimize: '{s name="window/toolbar/minimize"}Minimize window{/s}',
+            dock: {
+                topLeft: '{s name="window/toolbar/dock/topLeft"}Top left{/s}',
+                topRight: '{s name="window/toolbar/dock/topRight"}Top right{/s}',
+                bottomLeft: '{s name="window/toolbar/dock/bottomLeft"}Bottom left{/s}',
+                bottomRight: '{s name="window/toolbar/dock/bottomRight"}Bottom right{/s}'
+            }
+        }
+    },
+
+    /**
      * Initializes the window and sets all flags and settings provided by the widgetSettings store.
      * Creates a toolbar with all menus and a wrapper which contains all widget containers.
      * Also registers all needed events to handle resizing.
@@ -163,7 +178,8 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      * @returns { Ext.toolbar.Toolbar }
      */
     createToolbar: function() {
-        var me = this;
+        var me = this,
+            snippets = me.snippets.toolbar;
 
         return Ext.create('Ext.toolbar.Toolbar', {
             padding: '0 0 10px 0',
@@ -183,6 +199,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                 }
             }, '->', {
                 xtype: 'button',
+                tooltip: snippets.minimize,
                 cls: 'btn-widget-minimize',
                 handler: function() {
                     me.fireEvent('minimizeWindow', me, this);
@@ -196,25 +213,25 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                     plain: true,
                     defaultAlign: 'tr-br',
                     items: [{
-                        text: 'links oben',
+                        text: snippets.dock.topLeft,
                         iconCls: 'sprite-application-dock-180',
                         handler: function() {
                             me.fireEvent('changePosition', me, 'tl');
                         }
-                    }, {
-                        text: 'links unten',
+                    },  {
+                        text: snippets.dock.topRight,
+                        iconCls: 'sprite-application-dock',
+                        handler: function() {
+                            me.fireEvent('changePosition', me, 'tr');
+                        }
+                    },{
+                        text: snippets.dock.bottomLeft,
                         iconCls: 'sprite-application-dock-180',
                         handler: function() {
                             me.fireEvent('changePosition', me, 'bl');
                         }
                     }, {
-                        text: 'rechts oben',
-                        iconCls: 'sprite-application-dock',
-                        handler: function() {
-                            me.fireEvent('changePosition', me, 'tr');
-                        }
-                    }, {
-                        text: 'rechts unten',
+                        text: snippets.dock.bottomRight,
                         iconCls: 'sprite-application-dock',
                         handler: function() {
                             me.fireEvent('changePosition', me, 'br');
