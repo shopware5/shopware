@@ -1,0 +1,11 @@
+<?php
+class Migrations_Migration303 Extends Shopware\Components\Migrations\AbstractMigration
+{
+    public function up()
+    {
+        $sql = <<<'EOD'
+        ALTER TABLE `s_core_plugins` ADD `capability_secure_uninstall` int(1) NOT NULL DEFAULT 0;
+EOD;
+        $this->addSql($sql);
+    }
+}

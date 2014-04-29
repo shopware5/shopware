@@ -294,6 +294,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             'capability_install' => !empty($capabilities['install']),
             'capability_enable' => !empty($capabilities['enable']),
             'capability_dummy' => !empty($capabilities['dummy']),
+            'capability_secure_uninstall' => !empty($capabilities['secureUninstall']),
             'refresh_date' => Zend_Date::now()
         );
 
@@ -411,15 +412,24 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         $this->Application()->Events()->notify(
             'Shopware_Plugin_PreUninstall',
             array(
-                'subject'  => $this,
-                'plugin'   => $bootstrap,
+                'subject'       => $this,
+                'plugin'        => $bootstrap,
+                'removeData'    => $removeData
             )
         );
 
         $result = $bootstrap->disable();
+        $capabilities = $bootstrap->getCapabilities();
+        $capabilities['secureUninstall'] = !empty($capabilities['secureUninstall']);
         $success = is_bool($result) ? $result : !empty($result['success']);
         if ($success) {
-            if($removeData){
+            if ($capabilities['secureUninstall']) {
+                if ($removeData) {
+                    $result = $bootstrap->uninstall();
+                } else {
+                    $result = $bootstrap->secureUninstall();
+                }
+            } else {
                 $result = $bootstrap->uninstall();
             }
 
@@ -428,6 +438,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
                 array(
                     'subject'     => $this,
                     'plugin'      => $bootstrap,
+                    'removeData'  => $removeData
                 )
             );
 
@@ -449,7 +460,35 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
 
             // Remove form
             if ($bootstrap->hasForm()) {
-                if($removeData) {
+                if ($capabilities['secureUninstall']) {
+                    if ($removeData) {
+                        $form = $bootstrap->Form();
+                        if ($form->getId()) {
+                            $em->remove($form);
+                        } else {
+                            $em->detach($form);
+                        }
+                        $em->flush();
+                    } else {
+                        // Remove element translations
+                        $sql = 'DELETE `s_core_config_element_translations`
+                            FROM `s_core_config_element_translations`
+                            INNER JOIN `s_core_config_elements`
+                               ON `s_core_config_element_translations`.`element_id` = `s_core_config_elements`.`id`
+                            INNER JOIN `s_core_config_forms`
+                               ON `s_core_config_elements`.`form_id` = `s_core_config_forms`.`id`
+                               AND `s_core_config_forms`.`plugin_id` = ?';
+                        $db->query($sql, array($id));
+
+                        // Remove form translations
+                        $sql = 'DELETE `s_core_config_form_translations`
+                            FROM `s_core_config_form_translations`
+                            INNER JOIN `s_core_config_forms`
+                               ON `s_core_config_form_translations`.`form_id` = `s_core_config_forms`.`id`
+                               AND `s_core_config_forms`.`plugin_id` = ?';
+                        $db->query($sql, array($id));
+                    }
+                } else {
                     $form = $bootstrap->Form();
                     if ($form->getId()) {
                         $em->remove($form);
@@ -457,26 +496,6 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
                         $em->detach($form);
                     }
                     $em->flush();
-                }
-                else
-                {
-                    // Remove element translations
-                    $sql = 'DELETE `s_core_config_element_translations`
-                            FROM `s_core_config_element_translations`
-                            INNER JOIN `s_core_config_elements`
-                               ON `s_core_config_element_translations`.`element_id` = `s_core_config_elements`.`id`
-                            INNER JOIN `s_core_config_forms`
-                               ON `s_core_config_elements`.`form_id` = `s_core_config_forms`.`id`
-                               AND `s_core_config_forms`.`plugin_id` = ?';
-                    $db->query($sql, array($id));
-
-                    // Remove form translations
-                    $sql = 'DELETE `s_core_config_form_translations`
-                            FROM `s_core_config_form_translations`
-                            INNER JOIN `s_core_config_forms`
-                               ON `s_core_config_form_translations`.`form_id` = `s_core_config_forms`.`id`
-                               AND `s_core_config_forms`.`plugin_id` = ?';
-                    $db->query($sql, array($id));
                 }
             }
 
