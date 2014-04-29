@@ -22,38 +22,35 @@
 			</div>
 		{/if}
 
-		<div class="supportrequest">
-		    <fieldset>
-		    {foreach from=$sSupport.sElements item=sElement key=sKey}
-		    {if $sSupport.sFields[$sKey]||$sElement.note}
-			        <div {if $sSupport.sElements[$sKey].typ eq 'textarea'}class="textarea"{elseif $sSupport.sElements[$sKey].typ eq 'checkbox'}class="checkbox"{/if}>
-						{$sSupport.sLabels.$sKey}
-						{eval var=$sSupport.sFields[$sKey]}
-					</div>
+		<div class="panel--body">
+			{foreach from=$sSupport.sElements item=sElement key=sKey}
+			{if $sSupport.sFields[$sKey]||$sElement.note}
+				<div class="forms--field{if $sSupport.sElements[$sKey].typ eq 'textarea'} textarea{elseif $sSupport.sElements[$sKey].typ eq 'checkbox'} checkbox{/if}">
+					{$sSupport.sLabels.$sKey}
+					{eval var=$sSupport.sFields[$sKey]}
+				</div>
 
-		            {if $sElement.note}
-		            <p class="description">
-		                {eval var=$sElement.note}
-		            </p>
-		            {/if}
-		    {/if}
-		    {/foreach}
-			<div class="captcha">
-                <div class="captcha-placeholder" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
+				{if $sElement.note}
+					<p class="forms--description">
+						{eval var=$sElement.note}
+					</p>
+				{/if}
+			{/if}
+			{/foreach}
+			<div class="forms--captcha">
+				<div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
 				<div class="code">
 					<label>{s name='SupportLabelCaptcha'}{/s}</label>
-					<input type="text" name="sCaptcha" class="{if $sSupport.sErrors.e.sCaptcha} instyle_error{/if}" />
+					<input type="text" name="sCaptcha" class="{if $sSupport.sErrors.e.sCaptcha} has--error{/if}" />
 				</div>
 			</div>
-		 </fieldset>
 
-		<p class="requiredfields">{s name='SupportLabelInfoFields'}{/s}</p>
+			<p class="forms--requiredfields">{s name='SupportLabelInfoFields'}{/s}</p>
 
-		<div class="space">&nbsp;</div>
+			<div class="space">&nbsp;</div>
 
-		<p class="buttons">
-			<input class="button-right large" type="submit" name="Submit" value="{s name='SupportActionSubmit'}{/s}" />
-		</p>
+			<div class="buttons">
+				<button class="btn btn--primary" type="submit" name="Submit">{s name='SupportActionSubmit'}{/s}<i class="icon--arrow-right"></i></button>
+			</div>
 		</div>
 </form>
-<div class="space">&nbsp;</div>
