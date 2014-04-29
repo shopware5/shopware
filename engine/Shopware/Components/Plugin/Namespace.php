@@ -397,7 +397,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      * @param   Shopware_Components_Plugin_Bootstrap $bootstrap
      * @return  bool
      */
-    public function uninstallPlugin(Shopware_Components_Plugin_Bootstrap $bootstrap)
+    public function uninstallPlugin(Shopware_Components_Plugin_Bootstrap $bootstrap, $removeData = true)
     {
         /** @var \Shopware\Components\Model\ModelManager $em */
         $em = $this->Application()->Models();
@@ -419,7 +419,9 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         $result = $bootstrap->disable();
         $success = is_bool($result) ? $result : !empty($result['success']);
         if ($success) {
-            $result = $bootstrap->uninstall();
+            if($removeData){
+                $result = $bootstrap->uninstall();
+            }
 
             $this->Application()->Events()->notify(
                 'Shopware_Plugin_PostUninstall',
@@ -447,13 +449,35 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
 
             // Remove form
             if ($bootstrap->hasForm()) {
-                $form = $bootstrap->Form();
-                if ($form->getId()) {
-                    $em->remove($form);
-                } else {
-                    $em->detach($form);
+                if($removeData) {
+                    $form = $bootstrap->Form();
+                    if ($form->getId()) {
+                        $em->remove($form);
+                    } else {
+                        $em->detach($form);
+                    }
+                    $em->flush();
                 }
-                $em->flush();
+                else
+                {
+                    // Remove element translations
+                    $sql = 'DELETE `s_core_config_element_translations`
+                            FROM `s_core_config_element_translations`
+                            INNER JOIN `s_core_config_elements`
+                               ON `s_core_config_element_translations`.`element_id` = `s_core_config_elements`.`id`
+                            INNER JOIN `s_core_config_forms`
+                               ON `s_core_config_elements`.`form_id` = `s_core_config_forms`.`id`
+                               AND `s_core_config_forms`.`plugin_id` = ?';
+                    $db->query($sql, array($id));
+
+                    // Remove form translations
+                    $sql = 'DELETE `s_core_config_form_translations`
+                            FROM `s_core_config_form_translations`
+                            INNER JOIN `s_core_config_forms`
+                               ON `s_core_config_form_translations`.`form_id` = `s_core_config_forms`.`id`
+                               AND `s_core_config_forms`.`plugin_id` = ?';
+                    $db->query($sql, array($id));
+                }
             }
 
             // Remove menu-entry
