@@ -5,15 +5,15 @@
 	{$sBreadcrumb = [['name'=>{$sSupport.name}, 'link'=>{url controller=ticket sFid=$sSupport.id}]]}
 {/block}
 
-{* Sidebar left *}
+{* Sidebar left
 {block name='frontend_index_content_left'}
 	{include file="frontend/index/sidebar.tpl"}
 {/block}
 
 {* Main content *}
 {block name='frontend_index_content'}
-	<div id="center" class="grid_16 supportrequest">
-		<div class="col_center_custom">
+	<div class="content block forms--content panel">
+		<div class="panel--body">
 			<h1>{$sSupport.name}</h1>
 
 			{if $sSupport.sElements}
@@ -22,24 +22,29 @@
 				{include file="frontend/_includes/messages.tpl" type="success" content=$sSupport.text2}
 			{/if}
 		</div>
-		<h2 class="headingbox_dark largesize">{$sSupport.name}</h2>
 
-		<div class="inner_container">
-			{if $sSupport.sElements}
-				<div class="space">&nbsp;</div>
-				{block name='frontend_forms_index_elements'}
-					{include file="frontend/forms/elements.tpl"}
-				{/block}
-			{elseif $sSupport.text2}
-				<div class="space">&nbsp;</div>
-				<a href="{url controller='index'}" class="button-left large">{s name='FormsLinkBack'}{/s}</a>
-			{else}
-				<div class="col_center_container">
-					<p>{s name='FormsTextContact'}{/s}</p>
-					<a href="{url controller='index'}" class="button-left large">{s name='FormsLinkBack'}{/s}</a>
-				</div>
-			{/if}
+		<div class="forms--container panel has--border">
+			<h2 class="panel--title is--underline">{$sSupport.name}</h2>
+
+			<div class="panel--body">
+				{if $sSupport.sElements}
+					{block name='frontend_forms_index_elements'}
+						{include file="frontend/forms/elements.tpl"}
+					{/block}
+				{elseif $sSupport.text2}
+					<div class="space">&nbsp;</div>
+					<a href="{url controller='index'}" class="btn btn--primary">{s name='FormsLinkBack'}{/s}</a>
+				{else}
+					<div class="col_center_container">
+						<p>{s name='FormsTextContact'}{/s}</p>
+						<a href="{url controller='index'}" class="btn btn--secondary">{s name='FormsLinkBack'}{/s}</a>
+					</div>
+				{/if}
+			</div>
 		</div>
 		<div class="doublespace">&nbsp;</div>
 	</div>
 {/block}
+
+{* Hide sidebar right *}
+{block name='frontend_index_content_right'}{/block}
