@@ -541,30 +541,24 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
     createCategoryTab: function() {
         var me = this, rightContainer;
 
-        var notice = Ext.String.format(me.snippets.categoryNotice, me.article.get('name'));
-
         me.categoryTree = Ext.create('Shopware.apps.Article.view.category.Tree', {
             store: me.categoryTreeStore,
             region: 'west'
         });
 
-        me.categoryDropZone = Ext.create('Shopware.apps.Article.view.category.DropZone', {
-            flex:1,
-            autoScroll:true,
-            margin: 10
+        me.seoCategoryList = Ext.create('Shopware.apps.Article.view.category.Seo', {
+            flex: 1,
+            store: me.article.getSeoCategories(),
+            margin: 10,
+            autoScroll: true
         });
 
-        me.categoryNotice = Ext.create('Ext.panel.Panel', {
-            title: me.snippets.categoryNoticeTitle,
-            bodyPadding: 10,
-            height: 65,
-            margin: 10,
-            bodyStyle: 'background: #fff',
-            items: [{
-                xtype: 'container',
-                cls: Ext.baseCSSPrefix + 'global-notice-text',
-                html: notice
-            }]
+        me.seoCategoryList.setCategoryStore(me.article.getCategory());
+
+        me.categoryDropZone = Ext.create('Shopware.apps.Article.view.category.DropZone', {
+            height: 120,
+            autoScroll:true,
+            margin: 10
         });
 
         me.categoryList = Ext.create('Shopware.apps.Article.view.category.List', {
@@ -585,7 +579,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
                 type: 'vbox'
             },
             items: [
-                me.categoryNotice, me.categoryDropZone, me.categoryList
+                me.categoryDropZone, me.categoryList, me.seoCategoryList
             ]
         });
 
