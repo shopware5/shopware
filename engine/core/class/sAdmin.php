@@ -1933,7 +1933,7 @@ class sAdmin
             INSERT INTO s_user
             (
                 password, email, paymentID, active, accountmode,
-                validation, firstlogin,sessionID, affiliate, customergroup,
+                validation, firstlogin, sessionID, affiliate, customergroup,
                 language, subshopID, referer, encoder
             )
             VALUES (?,?,?,1,?,?,NOW(),?,?,?,?,?,?,?)
