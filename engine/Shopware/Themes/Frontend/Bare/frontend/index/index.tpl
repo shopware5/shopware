@@ -101,7 +101,7 @@
 
 {* Include jQuery and all other javascript files at the bottom of the page *}
 {block name="frontend_index_header_javascript_jquery_lib"}
-	{compileJavascript timestamp={timestamp} output="javascriptFiles"}
+	{compileJavascript timestamp={themeTimestamp} output="javascriptFiles"}
 	{foreach $javascriptFiles as $file}
 		<script src="{$file}"></script>
 	{/foreach}
