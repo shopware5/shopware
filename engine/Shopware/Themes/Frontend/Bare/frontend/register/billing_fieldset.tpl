@@ -42,7 +42,7 @@
 		{block name='frontend_register_billing_fieldset_input_addition_address_line1'}
 			{if {config name=showAdditionAddressLine1}}
 				<div class="register--additional-line1">
-					<input name="register[billing][additional_address_line1]" type="text"{if {config name=requireAdditionAddressLine1}} required="required" aria-required="true"{/if} placeholder="{s name='RegisterLabelAdditionalAddressLine1'}{/s}{if {config name=requireAdditionAddressLine1}}*{/if}" id="additionalAddressLine1" value="{$form_data.additional_address_line1|escape}" class="register--field{if {config name=requireAdditionAddressLine1}} is--required{/if}{if $error_flags.additional_address_line1 && {config name=requireAdditionAddressLine1}} has--error{/if}" />
+					<input name="register[billing][additional_address_line1]" type="text"{if {config name=requireAdditionAddressLine1}} required="required" aria-required="true"{/if} placeholder="{s name='RegisterLabelAdditionalAddressLine1'}{/s}{if {config name=requireAdditionAddressLine1}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}" id="additionalAddressLine1" value="{$form_data.additional_address_line1|escape}" class="register--field{if {config name=requireAdditionAddressLine1}} is--required{/if}{if $error_flags.additional_address_line1 && {config name=requireAdditionAddressLine1}} has--error{/if}" />
 				</div>
 			{/if}
 		{/block}
@@ -51,7 +51,7 @@
 		{block name='frontend_register_billing_fieldset_input_addition_address_line2'}
 			{if {config name=showAdditionAddressLine2}}
 				<div class="register--additional-field2">
-					<input name="register[billing][additional_address_line2]" type="text"{if {config name=requireAdditionAddressLine2}} required="required" aria-required="true"{/if} placeholder="{s name='RegisterLabelAdditionalAddressLine2'}{/s}{if {config name=requireAdditionAddressLine2}}*{/if}" id="additionalAddressLine2" value="{$form_data.additional_address_line2|escape}" class="register--field{if {config name=requireAdditionAddressLine2}} is--required{/if}{if $error_flags.additional_address_line2 && {config name=requireAdditionAddressLine2}} has--error{/if}" />
+					<input name="register[billing][additional_address_line2]" type="text"{if {config name=requireAdditionAddressLine2}} required="required" aria-required="true"{/if} placeholder="{s name='RegisterLabelAdditionalAddressLine2'}{/s}{if {config name=requireAdditionAddressLine2}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}" id="additionalAddressLine2" value="{$form_data.additional_address_line2|escape}" class="register--field{if {config name=requireAdditionAddressLine2}} is--required{/if}{if $error_flags.additional_address_line2 && {config name=requireAdditionAddressLine2}} has--error{/if}" />
 				</div>
 			{/if}
 		{/block}

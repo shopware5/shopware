@@ -53,7 +53,7 @@
 		{block name='frontend_register_shipping_fieldset_input_addition_address_line1'}
 			{if {config name=showAdditionAddressLine1}}
 				<div class="register--additional-line1">
-					<input name="register[shipping][additional_address_line1]" type="text"{if {config name=requireAdditionAddressLine2}} required="required" aria-required="true"{/if} placeholder="{s name='RegisterLabelAdditionalAddressLine1'}{/s}{if {config name=requireAdditionAddressLine1}}*{/if}" id="additionalAddressLine21" value="{$form_data.additional_address_line1|escape}" class="register--field{if {config name=requireAdditionAddressLine1}} is--required{/if}{if $error_flags.additional_address_line1 && {config name=requireAdditionAddressLine1}} has--error{/if}" />
+					<input name="register[shipping][additional_address_line1]" type="text"{if {config name=requireAdditionAddressLine2}} required="required" aria-required="true"{/if} placeholder="{s name='RegisterLabelAdditionalAddressLine1'}{/s}{if {config name=requireAdditionAddressLine1}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}" id="additionalAddressLine21" value="{$form_data.additional_address_line1|escape}" class="register--field{if {config name=requireAdditionAddressLine1}} is--required{/if}{if $error_flags.additional_address_line1 && {config name=requireAdditionAddressLine1}} has--error{/if}" />
 				</div>
 			{/if}
 		{/block}
@@ -62,7 +62,7 @@
 		{block name='frontend_register_shipping_fieldset_input_addition_address_line2'}
 			{if {config name=showAdditionAddressLine2}}
 				<div class="register--additional-line2">
-					<input name="register[shipping][additional_address_line2]" type="text"{if {config name=requireAdditionAddressLine2}} required="required" aria-required="true"{/if} placeholder="{s name='RegisterLabelAdditionalAddressLine2'}{/s}{if {config name=requireAdditionAddressLine2}}*{/if}" id="additionalAddressLine22" value="{$form_data.additional_address_line2|escape}" class="register--field{if {config name=requireAdditionAddressLine2}} is--required{/if}{if $error_flags.additional_address_line2 && {config name=requireAdditionAddressLine2}} has--error{/if}" />
+					<input name="register[shipping][additional_address_line2]" type="text"{if {config name=requireAdditionAddressLine2}} required="required" aria-required="true"{/if} placeholder="{s name='RegisterLabelAdditionalAddressLine2'}{/s}{if {config name=requireAdditionAddressLine2}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}" id="additionalAddressLine22" value="{$form_data.additional_address_line2|escape}" class="register--field{if {config name=requireAdditionAddressLine2}} is--required{/if}{if $error_flags.additional_address_line2 && {config name=requireAdditionAddressLine2}} has--error{/if}" />
 				</div>
 			{/if}
 		{/block}
@@ -81,7 +81,7 @@
 				<div class="field--select countryfield--select">
 					<span class="arrow"></span>
 					<select name="register[shipping][country]" id="country2" class="is--required{if $error_flags.country} has--error{/if}">
-						<option value="" selected="selected">{s name='RegisterShippingLabelCountry'}{/s}</option>
+						<option value="" selected="selected">{s name='RegisterShippingLabelCountry'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
 
 						{foreach from=$country_list item=country}
 							<option value="{$country.id}"{if $country.id eq $form_data.country} selected="selected"{/if}>
@@ -102,7 +102,7 @@
 						<div class="field--select selection{if $country.id != $form_data.country} is--disabled{/if}">
 							<span class="arrow"></span>
 							<select {if $country.id != $form_data.country}disabled="disabled"{/if} name="register[shipping][country_shipping_state_{$country.id}]" id="country_{$country.id}_states" class="{if $country.force_state_in_registration}is--required{/if}{if $error_flags.stateID} has--error{/if}">
-							<option value="" selected="selected">{s name='RegisterShippingLabelState'}Bundesstaat:{/s}</option>
+							<option value="" selected="selected">{s name='RegisterShippingLabelState'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
 								{assign var="stateID" value="country_shipping_state_`$country.id`"}
 								{foreach from=$country.states item=state}
 									<option value="{$state.id}" {if $state.id eq $form_data[$stateID]}selected="selected"{/if}>{$state.name}</option>
