@@ -77,7 +77,9 @@ Ext.define('Shopware.apps.PluginManager.model.Plugin', {
        { name: 'capabilityDummy', type: 'boolean' },
 
        { name: 'configForms', type: 'array' },
-       { name: 'licenses', type: 'array' }
+       { name: 'licenses', type: 'array' },
+
+       { name: 'removeData', type: 'boolean' }
     ],
 
     /**
