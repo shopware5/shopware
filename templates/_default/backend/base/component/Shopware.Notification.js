@@ -649,7 +649,13 @@ Ext.define('Shopware.Notification', {
             ui: 'growl-sticky',
             text: 'Schließen',
             height: 22,
-            handler: closeHandler
+            handler: function() {
+                closeHandler();
+
+                if(opts.onCloseButton) {
+                    opts.onCloseButton();
+                }
+            }
         });
 
         me.growlMsgCollection.each(function(growlEl) {
