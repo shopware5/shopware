@@ -57,9 +57,40 @@ $(function() {
         }
     }]);
 
+    if (window.widgets !== 'undefined' && window.widgets.length > 0) {
+        $.each(window.widgets, function(index, widget) {
+            StateManager.registerListener([{
+                type: 'smartphone',
+                enter: function() {
+                    $(widget.selector)[widget.plugin](widget.configSmartphone);
+                },
+                exit: function() {
+                    $(widget.selector).data('plugin_' + widget.plugin).destroy();
+                }
+            }, {
+                type: 'tablet',
+                enter: function() {
+                    $(widget.selector)[widget.plugin](widget.configTablet);
+                },
+                exit: function() {
+                    $(widget.selector).data('plugin_' + widget.plugin).destroy();
+                }
+            }, {
+                type: 'desktop',
+                enter: function() {
+                    $(widget.selector)[widget.plugin](widget.configDesktop);
+                },
+                exit: function() {
+                    $(widget.selector).data('plugin_' + widget.plugin).destroy();
+                }
+            }]);
+        });
+    }
+
     $('*[data-tab-content="true"]').tabContent();
     $('*[data-emotions="true"]').emotions();
     $('*[data-image-slider="true"]').imageSlider();
+    $('*[data-collapse-panel="true"]').collapsePanel();
     $('input[data-quantity-field="true"]').quantityField();
 
     // Deferred loading of the captcha
