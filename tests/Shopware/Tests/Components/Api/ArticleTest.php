@@ -2121,6 +2121,52 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertCount(2, $update->getDownloads());
     }
 
+    public function testSeoCategories()
+    {
+        $data = $this->getSimpleTestData();
+
+        $data['categories'] = Shopware()->Db()->fetchAll("SELECT DISTINCT id FROM s_categories LIMIT 5, 10");
+
+        $first = $data['categories'][3];
+        $second = $data['categories'][4];
+
+        $ids = array($first['id'], $second['id']);
+
+        $data['seoCategories'] = array(
+            array('shopId' => 1, 'categoryId' => $first['id']),
+            array('shopId' => 2, 'categoryId' => $second['id']),
+        );
+
+        $article = $this->resource->create($data);
+
+        $this->resource->setResultMode(Shopware\Components\Api\Resource\Resource::HYDRATE_OBJECT);
+
+        /**@var $article Shopware\Models\Article\Article*/
+        $article = $this->resource->getOne($article->getId());
+
+        $this->assertCount(2, $article->getSeoCategories());
+
+        foreach($article->getSeoCategories() as $category) {
+            $this->assertContains($category->getCategory()->getId(), $ids);
+            $this->assertContains($category->getShop()->getId(), array(1,2));
+        }
+
+        $german = Shopware()->Modules()->Categories()->sGetCategoryIdByArticleId(
+            $article->getId(),
+            null,
+            1
+        );
+
+        $english = Shopware()->Modules()->Categories()->sGetCategoryIdByArticleId(
+            $article->getId(),
+            null,
+            2
+        );
+
+        $this->assertEquals($first['id'], $german);
+        $this->assertEquals($second['id'], $english);
+    }
+
     
     public function testArticleGrossPrices()
     {
