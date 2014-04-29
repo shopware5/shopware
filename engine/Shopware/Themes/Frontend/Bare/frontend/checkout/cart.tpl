@@ -1,4 +1,4 @@
-{extends file='frontend/index/index.tpl'}
+{extends file='frontend/index/minimal.tpl'}
 
 {* Title *}
 {block name='frontend_index_header_title'}
@@ -10,26 +10,21 @@
 
 {* Step Box *}
 {block name="frontend_index_content_top"}
-	<div id="stepbox">
-	{block name="frontend_basket_step_box"}
-		{include file="frontend/register/steps.tpl" sStepActive="basket"}
-	{/block}
-	</div>
 
 	{* Empty basket *}
 	{if !$sBasket.content}
-	{block name='frontend_basket_basket_is_empty'}
-		{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='CartInfoEmpty'}{/s}"}
-	{/block}
+        {block name='frontend_basket_basket_is_empty'}
+            {include file="frontend/_includes/messages.tpl" type="warning" content="{s name='CartInfoEmpty'}{/s}"}
+        {/block}
 
-	{* Cross-Selling *}
-	{block name='frontend_checkout_crossselling'}
-		<div class="listing" id="listing">
-			{foreach from=$sCrossSelling item=sArticle key=key name="counter"}
-				{include file="frontend/listing/box_article.tpl"}
-			{/foreach}
-		</div>
-	{/block}
+        {* Cross-Selling *}
+        {block name='frontend_checkout_crossselling'}
+            <div class="listing" id="listing">
+                {foreach from=$sCrossSelling item=sArticle key=key name="counter"}
+                    {include file="frontend/listing/box_article.tpl"}
+                {/foreach}
+            </div>
+        {/block}
 	{/if}
 
 {/block}
