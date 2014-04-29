@@ -8,6 +8,10 @@
 {* Hide breadcrumb *}
 {block name='frontend_index_breadcrumb'}<div class="space">&nbsp;</div>{/block}
 
+{block name='frontend_index_navigation_categories_top'}
+    {include file="frontend/register/steps.tpl" sStepActive="basket"}
+{/block}
+
 {* Step Box *}
 {block name="frontend_index_content_top"}
 
@@ -26,7 +30,6 @@
             </div>
         {/block}
 	{/if}
-
 {/block}
 
 {* Hide sidebar left *}
@@ -35,7 +38,7 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-<div class="grid_16 last" id="basket">
+<div class="content block content--basket content--checkout">
 
 	{* If articles are in the basket... *}
 		{if $sBasket.content}
@@ -55,24 +58,29 @@
 
 		{block name='frontend_checkout_cart_deliveryfree'}{/block}
 
-			<div class="table grid_16 cart">
-			{* Checkout *}
-			<div class="actions">
-				{block name="frontend_checkout_actions_confirm"}
-				{if !$sMinimumSurcharge && !$sDispatchNoOrder}
-					<a href="{url action=confirm}" title="{s name='CheckoutActionsLinkProceed' namespace="frontend/checkout/actions"}{/s}" class="button-right large right checkout" >
-						{se name="CheckoutActionsLinkProceed" namespace="frontend/checkout/actions"}{/se}
-					</a>
-					<div class="clear"></div>
-				{/if}
-				{/block}
-			</div>
-			<div class="space">&nbsp;</div>
+        {* Product table *}
+        <div class="product--table {if {config name=BasketShippingInfo}} has--dispatch-info{/if}">
+            <div class="table--actions">
+                {block name="frontend_checkout_actions_confirm"}
+                    {if !$sMinimumSurcharge && !$sDispatchNoOrder}
+                        <a href="{url action=confirm}" title="{s name='CheckoutActionsLinkProceed' namespace="frontend/checkout/actions"}{/s}" class="btn btn--primary is--right">
+                            {s name="CheckoutActionsLinkProceed" namespace="frontend/checkout/actions"}{/s} <i class="icon--arrow-right"></i>
+                        </a>
+                    {/if}
+                {/block}
+            </div>
 
-			{* Table head *}
-			{block name='frontend_checkout_cart_cart_head'}
-				{include file="frontend/checkout/cart_header.tpl"}
-			{/block}
+            <div class="panel has--border">
+                <div class="panel--body">
+                    {* Product table header *}
+                    {block name='frontend_checkout_cart_cart_head'}
+                        {include file="frontend/checkout/cart_header.tpl"}
+                    {/block}
+                </div>
+            </div>
+        </div>
+
+
 
 			{* Article items *}
 			{foreach name=basket from=$sBasket.content item=sBasketItem key=key}
