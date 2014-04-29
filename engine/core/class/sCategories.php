@@ -166,35 +166,51 @@ class sCategories
      *
      * @param int $articleId Id of the article to look for
      * @param int $parentId Category subtree root id. If null, the shop category is used.
+     * @param null $shopId
      * @return int Id of the leaf category, or 0 if none found.
      */
-    public function sGetCategoryIdByArticleId($articleId, $parentId = null)
+    public function sGetCategoryIdByArticleId($articleId, $parentId = null, $shopId = null)
     {
         if ($parentId === null) {
             $parentId = $this->baseId;
         }
+        if ($shopId === null) {
+            $shopId = Shopware()->Shop()->getId();
+        }
 
-        $sql = '
-            SELECT STRAIGHT_JOIN
-                   ac.categoryID as id
-            FROM s_articles_categories_ro ac  FORCE INDEX (category_id_by_article_id)
-                INNER JOIN s_categories c
-                    ON  ac.categoryID = c.id
-                    AND c.active = 1
-                    AND c.path LIKE ?
+        $id = (int) $this->db->fetchOne(
+            'SELECT category_id
+             FROM s_articles_categories_seo
+             WHERE article_id = :articleId
+             AND shop_id = :shopId',
+            array(':articleId' => $articleId, ':shopId' => $shopId)
+        );
 
-                LEFT JOIN s_categories c2
-                    ON c2.parent = c.id
+        if (!$id) {
+            $sql = '
+                SELECT STRAIGHT_JOIN
+                       ac.categoryID as id
+                FROM s_articles_categories_ro ac  FORCE INDEX (category_id_by_article_id)
+                    INNER JOIN s_categories c
+                        ON  ac.categoryID = c.id
+                        AND c.active = 1
+                        AND c.path LIKE ?
 
-            WHERE ac.articleID = ?
-            AND c2.id IS NULL
-            ORDER BY ac.id
-        ';
+                    LEFT JOIN s_categories c2
+                        ON c2.parent = c.id
 
-        return (int) $this->db->fetchOne($sql, array(
-            '%|' . $parentId . '|%',
-            $articleId
-        ));
+                WHERE ac.articleID = ?
+                AND c2.id IS NULL
+                ORDER BY ac.id
+            ';
+
+            $id = (int) $this->db->fetchOne($sql, array(
+                '%|' . $parentId . '|%',
+                $articleId
+            ));
+        }
+
+        return $id;
     }
 
     /**
