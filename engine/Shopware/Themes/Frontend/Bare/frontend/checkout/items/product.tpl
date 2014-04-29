@@ -10,9 +10,9 @@
                 {* Product image *}
                 {block name='frontend_checkout_cart_item_image'}
                     <div class="table--media">
-                        {if $sBasketItem.image.src.1}
-                            <a href="{$sBasketItem.linkDetails}" title="{$sBasketItem.articlename|strip_tags}" class="table--media">
-                                <img src="{$sBasketItem.image.src.1}" alt="{$sBasketItem.articlename}" />
+                        {if $sBasketItem.image.src.2}
+                            <a href="{$sBasketItem.linkDetails}" title="{$sBasketItem.articlename|strip_tags}" class="table--media-link">
+                                <img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename}" />
                             </a>
                         {else}
                             <img class="table--media" src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{$sBasketItem.articlename}" />
@@ -66,9 +66,9 @@
 
         {* Product quantity *}
         {block name='frontend_checkout_cart_item_quantity'}
-            <div class="table--column column--quantity block">
+            <div class="table--column column--quantity block is--align-right">
                 <input type="hidden" name="sArticle" value="{$sBasketItem.id}" />
-                <select name="sQuantity" class="auto_submit">
+                <select name="sQuantity">
                     {section name="i" start=$sBasketItem.minpurchase loop=$sBasketItem.maxpurchase+1 step=$sBasketItem.purchasesteps}
                         <option value="{$smarty.section.i.index}" {if $smarty.section.i.index==$sBasketItem.quantity}selected="selected"{/if}>
                             {$smarty.section.i.index}
@@ -88,7 +88,7 @@
         {* Remove product from basket *}
         {block name='frontend_checkout_cart_item_delete_article'}
             <div class="table--column column--actions block is--align-right">
-                <a href="{url action='deleteArticle' sDelete=$sBasketItem.id sTargetAction=$sTargetAction}" class="btn" title="{s name='CartItemLinkDelete '}{/s}">
+                <a href="{url action='deleteArticle' sDelete=$sBasketItem.id sTargetAction=$sTargetAction}" class="btn is--small" title="{s name='CartItemLinkDelete '}{/s}">
                     X
                 </a>
             </div>

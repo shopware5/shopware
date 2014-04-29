@@ -1,25 +1,86 @@
-.product--table {
+@media screen and (min-width: @tabletViewportWidth) {
+    .product--table {
 
-    // Basic header styling
-    .table--header {
-        border-bottom: 1px solid @borderColor;
+        // Basic header styling
+        .table--header {
+            .unitize-padding(18, 0, 12, 0);
+            border-bottom: 1px solid @borderColor;
 
+            .table--column {
+                .unitize(14, 16, font-size);
+                font-weight: bold;
+                color: #000;
+            }
+
+            .column--product {
+                .unitize(16, 16, font-size);
+            }
+        }
+
+        // Basic layout
+        .table--row {
+            .unitize-padding(20, 0, 10, 0);
+            border-bottom: 1px solid @borderColor;
+
+            &::before {
+                content: '';
+                display: inline-block;
+                height: 100%;
+                vertical-align: middle;
+            }
+        }
         .table--column {
+            width: 14%;
+            padding-right: 1%;
+        }
+
+        .is--centered {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .column--product {
+            width: 51%;
+        }
+        .column--actions {
+            width: 3%;
+            padding-right: 0;
+        }
+
+        // Media
+        .table--media,
+        .table--content {
+            float: left;
+        }
+        .table--media {
+            width: 20%;
+
+            img {
+                .border-radius();
+                border: 1px solid @borderColor;
+            }
+        }
+        .table--content {
+            width: 72%;
+            margin-left: 2%;
+        }
+
+        // Content styling
+        .content--title {
             .unitize(16, 16, font-size);
             font-weight: bold;
-            color: #000;
+            color: @primaryTextColor;
         }
-    }
+        .column--total-price {
+            font-weight: bold;
+        }
+        .product--delivery {
+            margin: 0;
 
-    // Basic layout
-    .table--column {
-        width: 15%;
-    }
-
-    .column--product {
-        width: 52%;
-    }
-    .column--actions {
-        width: 3%
+            .delivery--status-icon {
+                .unitize(7, 16, top);
+                position: relative;
+            }
+        }
     }
 }
