@@ -349,8 +349,8 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
                 )
             );
 
-            $plugin->setInstalled(new Zend_Date());
-            $plugin->setUpdated(new Zend_Date());
+            $plugin->setInstalled(new DateTime());
+            $plugin->setUpdated(new DateTime());
             $em->flush($plugin);
             $this->write();
 
