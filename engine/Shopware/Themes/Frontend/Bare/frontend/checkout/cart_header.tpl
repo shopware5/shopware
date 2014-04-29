@@ -10,7 +10,7 @@
 
         {* Unit price *}
         {block name='frontend_checkout_cart_header_price'}
-            <div class="table--column column--unit-price block">
+            <div class="table--column column--unit-price block is--align-right">
                 {s name='CartColumnPrice'}{/s}
             </div>
         {/block}
@@ -20,7 +20,7 @@
 
         {* Product quantity *}
         {block name='frontend_checkout_cart_header_quantity'}
-            <div class="table--column column--quantity block">
+            <div class="table--column column--quantity block is--align-right">
                 {s name="CartColumnQuantity"}{/s}
             </div>
         {/block}
