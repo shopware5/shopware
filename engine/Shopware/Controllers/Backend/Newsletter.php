@@ -439,7 +439,9 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
         } else {
             $where = 'cm.status=1';
         }
-        $sql = 'SELECT cm.*, ct.path as template FROM s_campaigns_mailings cm, s_campaigns_templates ct WHERE ct.id=cm.templateID AND '.$where;
+        $sql = 'SELECT cm.*, ct.path as template
+        FROM s_campaigns_mailings cm, s_campaigns_templates ct
+        WHERE ct.id=cm.templateID AND '.$where;
 
         $mailing = Shopware()->Db()->fetchRow($sql);
         return $mailing;
@@ -527,14 +529,13 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
         }
         $customerGroups = implode(' OR ', $customerGroups);
 
-
-        // The second element holds the selected *newsletter* groups for the current newletter
+        // The second element holds the selected *newsletter* groups for the current newsletter
         foreach ($mailing['groups'][1] as $customerGroupKey => $customerGroupValue) {
             $recipientGroups[] = Shopware()->Db()->quoteInto('sc.groupID=?', $customerGroupKey);
         }
         $recipientGroups = implode(' OR ', $recipientGroups);
 
-        // If no customer-/recipientgroup was selected, force the condition to be false
+        // If no customer/recipient group was selected, force the condition to be false
         if (empty($recipientGroups)) {
             $recipientGroups = '1=2';
         }
@@ -561,13 +562,11 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
             AND
             (
                 (
-                su.subshopID = ?
+                su.language = ?
                 AND ($customerGroups)
                 )
             OR
-                (
                 ($recipientGroups)
-                )
             )
             GROUP BY sc.email
         ";
