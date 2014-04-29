@@ -27,9 +27,7 @@
 
 					{* Validation errors *}
 					{if $error}
-						<div class="alert is--error">
-							<p>{foreach $error as $error_item}{$error_item}</p>{/foreach}
-						</div>
+						{include file="frontend/_includes/messages.tpl" type="error" list=$error}
 					{/if}
 
 					{block name='frontend_tellafriend_headline'}
