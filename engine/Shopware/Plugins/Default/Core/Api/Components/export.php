@@ -96,10 +96,10 @@ class sShopwareExport
     }
 
     /**
-     * Export aller gespeicherten Artikel (Nur Stammdaten)
+     * Export of all stored items (only master data)
      *
      * @access public
-     * @return array Array mit allen Artikeln
+     * @return array Array with all articles
      */
     public function sArticles()
     {
@@ -135,7 +135,7 @@ class sShopwareExport
                 a.laststock,
                 d.suppliernumber,
                 d.additionaltext,
-                d.impressions,
+                SUM(sai.impressions) as impressions,
                 d.sales,
                 a.active,
                 d.kind,
@@ -182,6 +182,9 @@ class sShopwareExport
 
             LEFT JOIN s_article_configurator_sets acs
             ON a.configurator_set_id = acs.id
+
+            LEFT JOIN s_statistics_article_impression as sai
+            ON a.id = sai.articleId
 
             WHERE
             a.mode = 0
