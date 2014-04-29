@@ -26,7 +26,6 @@ namespace Shopware\Models\Article;
 
 use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraintegers as Assert;
 
 /**
  * Shopware Article SeoCategory Model
