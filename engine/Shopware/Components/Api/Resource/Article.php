@@ -386,6 +386,13 @@ class Article extends Resource implements BatchInterface
         return $article['related'];
     }
 
+    /**
+     * Returns the configured article seo categories.
+     * This categories are used for the seo url generation.
+     *
+     * @param $articleId
+     * @return array
+     */
     protected function getArticleSeoCategories($articleId)
     {
         $builder = $this->getManager()->createQueryBuilder();
@@ -1152,15 +1159,15 @@ class Article extends Resource implements BatchInterface
                 '\Shopware\Models\Article\SeoCategory'
             );
 
-            if (isset($categoryData['shop_id'])) {
+            if (isset($categoryData['shopId'])) {
                 $shop = $this->manager->find(
                     'Shopware\Models\Shop\Shop',
-                    $categoryData['shop_id']
+                    $categoryData['shopId']
                 );
 
                 if (!$shop) {
                     throw new ApiException\CustomValidationException(
-                        sprintf("Could not find shop by id: %s.", $categoryData['shop_id'])
+                        sprintf("Could not find shop by id: %s.", $categoryData['shopId'])
                     );
                 }
 
@@ -1173,28 +1180,28 @@ class Article extends Resource implements BatchInterface
                 );
             }
 
-            if (isset($categoryData['category_id'])) {
+            if (isset($categoryData['categoryId'])) {
                 $category = $this->manager->find(
                     'Shopware\Models\Category\Category',
-                    $categoryData['category_id']
+                    $categoryData['categoryId']
                 );
 
                 if (!$category) {
                     throw new ApiException\CustomValidationException(
-                        sprintf("Could not find category by id: %s.", $categoryData['category_id'])
+                        sprintf("Could not find category by id: %s.", $categoryData['categoryId'])
                     );
                 }
 
                 $seoCategory->setCategory($category);
                 
-            } else if (isset($categoryData['category_path'])) {
+            } else if (isset($categoryData['categoryPath'])) {
                 $category = $this->getResource('Category')->findCategoryByPath(
-                    $categoryData['category_path'],
+                    $categoryData['categoryPath'],
                     true
                 );
                 if (!$category) {
                     throw new ApiException\CustomValidationException(
-                        sprintf("Could not find category by path: %s.", $categoryData['category_path'])
+                        sprintf("Could not find category by path: %s.", $categoryData['categoryPath'])
                     );
                 }
                 $seoCategory->setCategory($category);

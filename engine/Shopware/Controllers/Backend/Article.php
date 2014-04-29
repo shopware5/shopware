@@ -2944,6 +2944,15 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         return $data;
     }
 
+    /**
+     * Resolves the passed seo category data.
+     * The functions resolves the passed foreign keys for the
+     * assigned category and shop model.
+     *
+     * @param $data
+     * @param Shopware\Models\Article\ $article
+     * @return array
+     */
     protected function prepareSeoCategoryAssociatedData($data, $article)
     {
         if (!isset($data['seoCategories'])) {
