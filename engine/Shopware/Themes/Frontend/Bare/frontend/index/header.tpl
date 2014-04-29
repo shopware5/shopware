@@ -64,7 +64,7 @@
 
 {* Stylesheets *}
 {block name="frontend_index_header_css_screen"}
-	{{compileLess timestamp={timestamp} output="lessFiles"}}
+	{{compileLess timestamp={themeTimestamp} output="lessFiles"}}
 	{foreach $lessFiles as $stylesheet}
 		<link href="{$stylesheet}" media="screen" rel="stylesheet" type="text/css" />
 	{/foreach}
