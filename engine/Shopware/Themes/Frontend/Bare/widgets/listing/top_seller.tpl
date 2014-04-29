@@ -1,41 +1,34 @@
 <script type="text/javascript">
 
-(function($, StateManager) {
+(function() {
 
-	StateManager.registerListener([{
-		type: 'smartphone',
-		enter: function() {
-			$('.topseller--content').productSlider({
-				perPage: 1,
-				perSlide: 1,
-				touchControl: true
-			});
+	window.widgets = (typeof(window.widgets) == 'undefined') ? [] : window.widgets;
+
+	window.widgets.push({
+
+		selector: '.topseller--content',
+
+		plugin: 'productSlider',
+
+		configSmartphone: {
+			perPage: 1,
+			perSlide: 1,
+			touchControl: true
 		},
-		exit: function() {
-			$('.topseller--content').data('plugin_productSlider').destroy();
-		}
-	}, {
-		type: 'tablet',
-		enter: function() {
-			$('.topseller--content').productSlider({
-				perPage: 4,
-				perSlide: 1,
-				touchControl: true
-			});
+
+		configTablet: {
+			perPage: 4,
+			perSlide: 1,
+			touchControl: true
 		},
-		exit: function() {
-			$('.topseller--content').data('plugin_productSlider').destroy();
+
+		configDesktop: {
+			perPage: 5,
+			perSlide: 1
 		}
-	}, {
-		type: 'desktop',
-		enter: function() {
-			$('.topseller--content').productSlider();
-		},
-		exit: function() {
-			$('.topseller--content').data('plugin_productSlider').destroy();
-		}
-	}]);
-})(jQuery, StateManager);
+	});
+
+})();
 
 </script>	
 
