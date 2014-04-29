@@ -1,20 +1,45 @@
 {* Step box *}
-<div class="step_box">
+<div class="steps--content panel--body center container">
 	{block name='frontend_register_steps'}
-	<ul>
-		<li id="first_step" {if $sStepActive=='basket'}class="active"{/if}>
-			{se class="icon" name="CheckoutStepBasketNumber"}{/se}
-			{se class="text" name="CheckoutStepBasketText"}{/se}
-		</li>
-		<li {if $sStepActive=='register'}class="active"{/if}>
-			{se class="icon" name="CheckoutStepRegisterNumber"}{/se}
-			{se class="text" name="CheckoutStepRegisterText"}{/se}
-		</li>
-		<li id="last_step" {if $sStepActive=='finished'}class="active"{elseif !$sUserLoggedIn}class="grey"{/if}>
-			{se class="icon" name="CheckoutStepConfirmNumber"}{/se}
-			{se class="text" name="CheckoutStepConfirmText"}{/se}
-		</li>
-	</ul>
+		<ul class="steps--list">
+
+			{* First Step - Basket *}
+			{block name='frontend_register_steps_basket'}
+				<li class="steps--entry step--basket{if $sStepActive=='basket'} is--active{/if}">
+					<span class="icon">{s name="CheckoutStepBasketNumber"}{/s}</span>
+					<span class="text"><span class="text--inner">{s name="CheckoutStepBasketText"}{/s}</span></span>
+				</li>
+			{/block}
+
+			{* Spacer *}
+			{block name='frontend_register_steps_spacer1'}
+				<li class="steps--entry steps--spacer">
+					<i class="icon--arrow-right"></i>
+				</li>
+			{/block}
+
+			{* Second Step - Registration *}
+			{block name='frontend_register_steps_register'}
+				<li class="steps--entry step--register{if $sStepActive=='register'} is--active{/if}">
+					<span class="icon">{s name="CheckoutStepRegisterNumber"}{/s}</span>
+					<span class="text"><span class="text--inner">{s name="CheckoutStepRegisterText"}{/s}</span></span>
+				</li>
+			{/block}
+
+			{* Spacer *}
+			{block name='frontend_register_steps_spacer2'}
+				<li class="steps--entry steps--spacer">
+					<i class="icon--arrow-right"></i>
+				</li>
+			{/block}
+
+			{* Third Step - Confirmation *}
+			{block name='frontend_register_steps_confirm'}
+				<li class="steps--entry step--confirm{if $sStepActive=='finished'} is--active{/if}">
+					<span class="icon">{s name="CheckoutStepConfirmNumber"}{/s}</span>
+					<span class="text"><span class="text--inner">{s name="CheckoutStepConfirmText"}{/s}</span></span>
+				</li>
+			{/block}
+		</ul>
 	{/block}
 </div>
-<div class="clear">&nbsp;</div>
