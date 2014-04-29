@@ -432,23 +432,24 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
 
         if(record.get('installed') === null) {
             record.set('installed', new Date());
-            me.onInstallPlugin(record, pluginStore);
         } else {
             record.set('installed', null);
+            record.set('removeData', true);
 
-            Ext.MessageBox.confirm(
-                me.snippets.manager.uninstall_title,
-                me.snippets.manager.uninstall_remove_data,
-                function (response) {
-                    if (response === 'yes') {
-                        record.set('removeData', true);
-                    }
-                    else {
-                        record.set('removeData', false);
-                    }
-                    me.onInstallPlugin(record, pluginStore);
-                });
+            if (record.get('capabilitySecureUninstall')) {
+                Ext.MessageBox.confirm(
+                    me.snippets.manager.uninstall_title,
+                    me.snippets.manager.uninstall_remove_data,
+                    function (response) {
+                        if (response !== 'yes') {
+                            record.set('removeData', false);
+                        }
+                        me.onInstallPlugin(record, pluginStore);
+                    });
+                return;
+            }
         }
+        me.onInstallPlugin(record, pluginStore);
     },
 
     onUpdatePluginInfo: function(record, store) {

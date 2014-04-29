@@ -52,10 +52,10 @@ class PluginUninstallCommand extends ShopwareCommand
                 'Name of the plugin to be uninstalled.'
             )
             ->addOption(
-                'keepData',
-                'k',
+                'secure',
+                'S',
                 InputOption::VALUE_NONE,
-                'Keep the saved data of the plugin.'
+                'Keep the saved data of the plugin. (if supported)'
             )
             ->setHelp(<<<EOF
 The <info>%command.name%</info> uninstalls a plugin.
@@ -85,7 +85,7 @@ EOF
             return 1;
         }
 
-        $removeData = !(bool)$input->getOption('KeepData');
+        $removeData = !(bool)$input->getOption('secure');
 
         $pluginManager->uninstallPlugin($plugin, $removeData);
 
