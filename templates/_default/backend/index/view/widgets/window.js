@@ -447,7 +447,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                 view.column = 0;
             }
 
-            widget = me.createWidget(name, model.get('id'), view);
+            widget = me.createWidget(name, model.get('id'), view, model.get('label'));
 
             container.insert(widget.position.rowId, widget);
         });
@@ -461,12 +461,12 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      * @param record
      * @returns { Ext.panel.Panel } - New created widget
      */
-    createWidget: function (name, widgetId, record) {
+    createWidget: function (name, widgetId, record, label) {
         var me = this,
             config = {
                 widgetId: widgetId,
                 viewId: record.id,
-                title: record.label,
+                title: label,
                 position: {
                     columnId: record.column,
                     rowId: record.position

@@ -80,6 +80,7 @@ In this document you will find a changelog of the important changes related to t
 * Plugin configuration: Stores of `select` and `combo` elements can now be translated
 * Dynamically injecting variables into sSystem is no longer supported
 * `sSystem::sSYSTEM` self-reference was removed
+* Removed `Shopware\Models\Widget\View::label` variable, getter and setter, and correspondent `s_core_widget_views::label` database column
 
 ## 4.2.2
 
