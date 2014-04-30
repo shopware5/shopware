@@ -499,6 +499,11 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
                 }
             }
 
+            // Remove snippets
+            if ($capabilities['secureUninstall']) {
+                $bootstrap->removeSnippets($removeData);
+            }
+
             // Remove menu-entry
             $query = 'DELETE FROM Shopware\Models\Menu\Menu m WHERE m.pluginId = ?0';
             $query = $em->createQuery($query);
