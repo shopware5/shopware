@@ -28,7 +28,7 @@ $(function() {
             $('.category--teaser .hero--text').collapseText();
         },
         exit: function() {
-            $('.sidebar-main').insertAfter($('.content--breadcrumb'));
+            $('.sidebar-main').prependTo($('.content-main--inner'));
             $('*[data-offcanvas="true"]').data('plugin_offcanvasMenu').destroy();
             $('*[data-search-dropdown="true"]').data('plugin_searchFieldDropDown').destroy();
             $('*[data-slide-panel="true"]').data('plugin_slidePanel').destroy();
