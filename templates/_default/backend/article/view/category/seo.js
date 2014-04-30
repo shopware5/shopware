@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.Article.view.category.Seo', {
 
     cls: Ext.baseCSSPrefix + 'category-seo-list',
 
-    title: 'Seo categories of the article',
+    title: '{s name=seo_category/list/title}Seo categories of the product{/s}',
 
     initComponent: function() {
         var me = this;
@@ -54,7 +54,20 @@ Ext.define('Shopware.apps.Article.view.category.Seo', {
         me.columns = me.createColumns();
 
         me.rowEditor = Ext.create('Ext.grid.plugin.RowEditing', {
-            clicksToEdit: 1
+            clicksToEdit: 1,
+            listeners: {
+                validateedit: function(editor, e) {
+                    var record = Ext.create('Shopware.apps.Article.model.SeoCategory', e.newValues);
+                    if (!me.isSeoCategoryValid(record)) {
+                        e.cancel = true;
+                    }
+                },
+                canceledit: function(editor, e) {
+                    if (!me.isSeoCategoryValid(e.record)) {
+                        me.getStore().remove(e.record);
+                    }
+                }
+            }
         });
 
         me.plugins = [me.rowEditor];
@@ -64,17 +77,29 @@ Ext.define('Shopware.apps.Article.view.category.Seo', {
         me.callParent(arguments);
     },
 
+    isSeoCategoryValid: function(record) {
+        if (record.get('shopId') <= 0) {
+            return false;
+        }
+
+        if (record.get('categoryId') <= 0) {
+            return false;
+        }
+
+        return true;
+    },
+
     createColumns: function() {
         var me = this;
 
         return [{
-            header: 'Shop',
+            header: '{s name=seo_category/list/shop}Shop{/s}',
             dataIndex: 'shopId',
             editor: me.createShopEditor(),
             renderer: me.shopRenderer,
             flex: 1
         }, {
-            header: 'Category',
+            header: '{s name=seo_category/list/category}Category{/s}',
             dataIndex: 'categoryId',
             editor: me.createCategoryEditor(),
             renderer: me.categoryRenderer,
@@ -177,7 +202,7 @@ Ext.define('Shopware.apps.Article.view.category.Seo', {
         var me = this;
 
         me.addButton = Ext.create('Ext.button.Button', {
-            text: 'Hinzufügen',
+            text: '{s name=seo_category/list/create}Add{/s}',
             iconCls: 'sprite-plus-circle-frame',
             handler: function() {
                 if (me.store.getCount() >= me.shopStore.getCount()) {

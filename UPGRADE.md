@@ -2,6 +2,7 @@
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
 ## 4.3.0
+* Implement new article association for new seo categories. The seo categories can be assigned over the array key seoCategories in the article api resource.
 * Removed deprecated Zend Framework components:
     * `Zend_Amf`
     * `Zend_Application`

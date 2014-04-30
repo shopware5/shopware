@@ -2959,8 +2959,17 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             return $data;
         }
 
+        $categories = array();
         foreach ($data['seoCategories'] as &$categoryData) {
             $categoryData['article'] = $article;
+
+            if (empty($categoryData['shopId'])) {
+                continue;
+            }
+
+            if (empty($categoryData['categoryId'])) {
+                continue;
+            }
 
             $categoryData['shop'] = $this->getManager()->find(
                 'Shopware\Models\Shop\Shop',
@@ -2971,7 +2980,19 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 'Shopware\Models\Category\Category',
                 $categoryData['categoryId']
             );
+
+            if (!($categoryData['shop'] instanceof Shopware\Models\Shop\Shop)) {
+                continue;
+            }
+
+            if (!($categoryData['category'] instanceof Shopware\Models\Category\Category)) {
+                continue;
+            }
+
+            $categories[] = $categoryData;
         }
+
+        $data['seoCategories'] = $categories;
 
         return $data;
     }

@@ -68,7 +68,7 @@ class SeoCategory extends ModelEntity
 
     /**
      * @var \Shopware\Models\Shop\Shop
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Shop\Shop")
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
      */
     protected $shop;
@@ -82,7 +82,7 @@ class SeoCategory extends ModelEntity
 
     /**
      * @var \Shopware\Models\Category\Category
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Category\Category")
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Category\Category")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     protected $category;
