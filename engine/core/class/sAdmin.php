@@ -1836,7 +1836,7 @@ class sAdmin
     public function sGetCountryList()
     {
         $countryList = $this->db->fetchAll(
-            "SELECT * FROM s_core_countries WHERE active = 1 ORDER BY position, countryname ASC"
+            "SELECT * FROM s_core_countries ORDER BY position, countryname ASC"
         );
 
         $countryTranslations = $this->sGetCountryTranslation();
@@ -1846,6 +1846,12 @@ class sAdmin
             if (isset($countryTranslations[$country["id"]]["active"])) {
                 if (!$countryTranslations[$country["id"]]["active"]) {
                     unset($countryList[$key]);
+                    continue;
+                }
+            } else {
+                // Use main config when nothing is set for subshop or if current is main shop (isocode 1)
+                if (!$v["active"]) {
+                    unset($getCountries[$key]);
                     continue;
                 }
             }
