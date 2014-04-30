@@ -357,7 +357,6 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
             url: '{url controller=widgets action=addWidgetView}',
             jsonData: {
                 id: widget.get('id'),
-                label: widget.get('label'),
                 column: 0,
                 position: container.items.getCount() - 1
             },
@@ -372,7 +371,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
                     callback: function() {
                         widget = me.widgetStore.findRecord('name', widgetName);
 
-                        var newWidget = win.createWidget(widgetName, widget.get('id'), me.getWidgetViewById(widget, response.viewId));
+                        var newWidget = win.createWidget(widgetName, widget.get('id'), me.getWidgetViewById(widget, response.viewId), widget.get('label'));
 
                         container.insert(newWidget.position.rowId, newWidget);
 

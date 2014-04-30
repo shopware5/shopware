@@ -54,6 +54,11 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
         $data = $builder->getQuery()->getArrayResult();
 
+        foreach ($data as &$widgetData) {
+            $widgetData['label'] = Shopware()->Snippets()->getNamespace('backend/widget/'.$widgetData['name'])
+                ->get('label', $widgetData['label']);
+        }
+
         $this->View()->assign(array('success' => !empty($data), 'authId' => $userID, 'data' => $data));
     }
 
@@ -142,7 +147,6 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
         $request = $this->Request();
         $widgetId = $request->getParam('id');
-        $label = $request->getParam('label');
         $column = $request->getParam('column');
         $position = $request->getParam('position');
 
@@ -154,7 +158,6 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             $model->setAuth(
                 Shopware()->Models()->find('Shopware\Models\User\User', $userID)
             );
-            $model->setLabel($label);
             $model->setColumn($column);
             $model->setPosition($position);
 
