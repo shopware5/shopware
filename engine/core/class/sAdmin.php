@@ -1850,8 +1850,8 @@ class sAdmin
                 }
             } else {
                 // Use main config when nothing is set for subshop or if current is main shop (isocode 1)
-                if (!$v["active"]) {
-                    unset($getCountries[$key]);
+                if (!$country["active"]) {
+                    unset($countryList[$key]);
                     continue;
                 }
             }
