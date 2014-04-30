@@ -222,6 +222,15 @@ class Plugin extends ModelEntity
     private $templates;
 
     /**
+     * INVERSE SIDE
+     * @var \Shopware\Models\Widget\Widget[]|ArrayCollection $elements
+     * @ORM\OneToMany(targetEntity="\Shopware\Models\Widget\Widget", mappedBy="plugin", cascade={"all"})
+     * @ORM\JoinColumn(name="id", referencedColumnName="plugin_id")
+     * @ORM\OrderBy({"id" = "ASC"})
+     */
+    private $widgets;
+
+    /**
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="Shopware\Models\Plugin\License", mappedBy="plugin")
      * @ORM\OrderBy({"type" = "ASC"})

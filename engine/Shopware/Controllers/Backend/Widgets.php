@@ -28,18 +28,44 @@
 class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_ExtJs
 {
     /**
+     * Registers the different acl permission for the different controller actions.
+     *
+     * @return void
+     */
+    protected function initAcl()
+    {
+        /**
+         * permission to list all notifications
+         */
+        $this->addAclPermission('getListAction', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('saveWidgetPositionAction', 'write', 'Insufficient Permissions');
+        $this->addAclPermission('saveWidgetPositionsAction', 'write', 'Insufficient Permissions');
+        $this->addAclPermission('addWidgetViewAction', 'write', 'Insufficient Permissions');
+        $this->addAclPermission('removeWidgetViewAction', 'write', 'Insufficient Permissions');
+        $this->addAclPermission('getTurnOverVisitorsAction', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('getVisitorsAction', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('getLastOrdersAction', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('getNoticeAction', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('saveNoticeAction', 'write', 'Insufficient Permissions');
+        $this->addAclPermission('getLastMerchantAction', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('requestMerchantFormAction', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('sendMailToMerchantAction', 'write', 'Insufficient Permissions');
+    }
+
+    /**
      * Returns the list of active widgets for the current logged
      * in user as an JSON string.
      *
      * @public
      * @return void
      */
-    public function getWidgetsAction()
+    public function getListAction()
     {
         $auth = Shopware()->Auth();
 
         if (!$auth->hasIdentity()) {
             $this->View()->assign(array('success' => false));
+            return;
         }
 
         $identity = $auth->getIdentity();
@@ -65,13 +91,19 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
     /**
      * Sets the position for a single widget
      */
-    public function saveWidgetPositionAction()
+    public function savePositionAction()
     {
+        $auth = Shopware()->Auth();
+
+        if (!$auth->hasIdentity()) {
+            $this->View()->assign(array('success' => false));
+            return;
+        }
+
         $request = $this->Request();
         $column = $request->getParam('column');
         $position = $request->getParam('position');
         $id = $request->getParam('id');
-        $auth = Shopware()->Auth();
 
         if (!$auth->hasIdentity()) {
             $this->View()->assign(array('success' => false));
@@ -91,16 +123,16 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
     /**
      * Sets the positions for all given widget ids
      */
-    public function saveWidgetPositionsAction()
+    public function savePositionsAction()
     {
-        $request = $this->Request();
-        $widgets = $request->getParam('widgets');
         $auth = Shopware()->Auth();
 
         if (!$auth->hasIdentity()) {
             $this->View()->assign(array('success' => false));
             return;
         }
+
+        $widgets = $this->Request()->getParam('widgets');
 
         foreach($widgets as $widget) {
             try {
@@ -140,6 +172,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
         if (!$auth->hasIdentity()) {
             $this->View()->assign(array('success' => false));
+            return;
         }
 
         $identity = $auth->getIdentity();
@@ -182,6 +215,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
         if (!$auth->hasIdentity()) {
             $this->View()->assign(array('success' => false));
+            return;
         }
 
         $request = $this->Request();
@@ -211,35 +245,81 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
     public function getTurnOverVisitorsAction()
     {
         // Get turnovers
-        $fetchAmount = Shopware()->Db()->fetchRow(" SELECT
-        (SELECT sum(invoice_amount/currencyFactor) AS amount FROM s_order WHERE TO_DAYS(ordertime) = TO_DAYS(now()) AND status != 4 AND status != -1) AS today,
-        (SELECT sum(invoice_amount/currencyFactor) AS amount FROM s_order WHERE TO_DAYS(ordertime) = (TO_DAYS( NOW( ) )-1)  AND status != 4 AND status != -1) AS yesterday
-        ");
+        $fetchAmount = Shopware()->Db()->fetchRow(
+            "SELECT
+                (
+                    SELECT sum(invoice_amount/currencyFactor) AS amount
+                    FROM s_order
+                    WHERE TO_DAYS(ordertime) = TO_DAYS(now())
+                    AND status != 4
+                    AND status != -1
+                ) AS today,
+                (
+                    SELECT sum(invoice_amount/currencyFactor) AS amount
+                    FROM s_order
+                    WHERE TO_DAYS(ordertime) = (TO_DAYS( NOW( ) )-1)
+                    AND status != 4
+                    AND status != -1
+                ) AS yesterday
+            "
+        );
 
-        if (empty($fetchAmount["today"])) $fetchAmount["today"] = 0.00;
-        if (empty($fetchAmount["yesterday"])) $fetchAmount["yesterday"] = 0.00;
+        if (empty($fetchAmount["today"])) {
+            $fetchAmount["today"] = 0.00;
+        }
+        if (empty($fetchAmount["yesterday"])) {
+            $fetchAmount["yesterday"] = 0.00;
+        }
 
         $fetchAmount['today'] = round($fetchAmount['today'], 2);
         $fetchAmount['yesterday'] = round($fetchAmount['yesterday'], 2);
+
         // Get visitors
-        $fetchVisitors = Shopware()->Db()->fetchRow("
-        SELECT
-        (SELECT SUM(uniquevisits) FROM s_statistics_visitors WHERE datum = CURDATE()) AS today,
-        (SELECT SUM(uniquevisits) FROM s_statistics_visitors WHERE datum = DATE_SUB(CURDATE(),INTERVAL 1 DAY)) AS yesterday
+        $fetchVisitors = Shopware()->Db()->fetchRow(
+            "SELECT
+                (
+                    SELECT SUM(uniquevisits)
+                    FROM s_statistics_visitors
+                    WHERE datum = CURDATE()
+                ) AS today,
+                (
+                    SELECT SUM(uniquevisits)
+                    FROM s_statistics_visitors
+                    WHERE datum = DATE_SUB(CURDATE(),INTERVAL 1 DAY)
+                ) AS yesterday
         ");
 
         // Get new customers
-        $fetchCustomers = Shopware()->Db()->fetchRow("
-        SELECT
-        (SELECT COUNT(DISTINCT id) FROM s_user WHERE TO_DAYS( firstlogin ) = TO_DAYS( NOW( ) ) ) AS today,
-        (SELECT COUNT(DISTINCT id) FROM s_user WHERE firstlogin = DATE_SUB(CURDATE(),INTERVAL 1 DAY)) AS yesterday
+        $fetchCustomers = Shopware()->Db()->fetchRow(
+            "SELECT
+                (
+                    SELECT COUNT(DISTINCT id)
+                    FROM s_user
+                    WHERE TO_DAYS( firstlogin ) = TO_DAYS( NOW( ) )
+                ) AS today,
+                (
+                    SELECT COUNT(DISTINCT id)
+                    FROM s_user
+                    WHERE firstlogin = DATE_SUB(CURDATE(),INTERVAL 1 DAY)
+                ) AS yesterday
         ");
 
         // Get order-count
-        $fetchOrders = Shopware()->Db()->fetchRow("
-        SELECT
-        (SELECT COUNT(DISTINCT id) AS orders FROM s_order WHERE TO_DAYS( ordertime ) = TO_DAYS( NOW( ) ) AND status != 4 AND status != -1) AS today,
-        (SELECT COUNT(DISTINCT id) AS orders FROM s_order WHERE TO_DAYS(ordertime) = (TO_DAYS( NOW( ) )-1) AND status != 4 AND status != -1) AS yesterday
+        $fetchOrders = Shopware()->Db()->fetchRow(
+            "SELECT
+                (
+                    SELECT COUNT(DISTINCT id) AS orders
+                    FROM s_order
+                    WHERE TO_DAYS( ordertime ) = TO_DAYS( NOW( ) )
+                    AND status != 4 AND status != -1
+                ) AS today,
+                (
+                    SELECT COUNT(DISTINCT id) AS orders
+                    FROM s_order
+                    WHERE TO_DAYS(ordertime) = (TO_DAYS( NOW( ) )-1)
+                    AND status != 4
+                    AND status != -1
+                ) AS yesterday
         ");
 
 
@@ -260,10 +340,13 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         AND
             status != -1
         GROUP BY
-            DATE_SUB(now(),INTERVAL ? DAY)
+            DATE_SUB(now(), INTERVAL ? DAY)
         ";
-        $fetchConversion = Shopware()->Db()->fetchRow($sql,array($timeBack,$timeBack,$timeBack,$timeBack,$timeBack));
-        $fetchConversion = number_format($fetchConversion["countOrders"] /$fetchConversion["visitors"] * 100,2);
+        $fetchConversion = Shopware()->Db()->fetchRow(
+            $sql,
+            array($timeBack, $timeBack, $timeBack, $timeBack, $timeBack)
+        );
+        $fetchConversion = number_format($fetchConversion["countOrders"] / $fetchConversion["visitors"] * 100, 2);
 
         $namespace = Shopware()->Snippets()->getNamespace('backend/widget/controller');
         $this->View()->assign(array(
@@ -272,14 +355,14 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
                     array(
                         'name' => $namespace->get('today', 'Today'),
                         'turnover' => $fetchAmount["today"],
-                        'visitors' => (int) $fetchVisitors["today"],
+                        'visitors' => $fetchVisitors["today"],
                         'newCustomers' => $fetchCustomers["today"],
                         'orders' => $fetchOrders["today"]
                     ),
                     array(
                         'name' => $namespace->get('yesterday', 'Yesterday'),
                         'turnover' => $fetchAmount["yesterday"],
-                        'visitors' => (int) $fetchVisitors["yesterday"],
+                        'visitors' => $fetchVisitors["yesterday"],
                         'newCustomers' => $fetchCustomers["yesterday"],
                         'orders' => $fetchOrders["yesterday"]
                     )

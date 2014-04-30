@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.Index.store.Widget', {
 
     proxy: {
         type: 'ajax',
-        url: '{url controller="widgets" action="getWidgets"}',
+        url: '{url controller="widgets" action="getList"}',
         reader: {
             type: 'json',
             root: 'data'

@@ -21,6 +21,10 @@ class Migrations_Migration303 Extends Shopware\Components\Migrations\AbstractMig
             WHERE id = @formId;
 
             ALTER TABLE `s_core_widget_views` DROP `label`;
+
+            ALTER TABLE `s_core_widgets` ADD `plugin_id` INT( 11 ) NULL ;
+
+            ALTER TABLE `s_core_widgets` CHANGE `label` `label` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL ;
 EOD;
 
         $this->addSql($sql);
