@@ -186,29 +186,31 @@ class sCategories
             array(':articleId' => $articleId, ':shopId' => $shopId)
         );
 
-        if (!$id) {
-            $sql = '
-                SELECT STRAIGHT_JOIN
-                       ac.categoryID as id
-                FROM s_articles_categories_ro ac  FORCE INDEX (category_id_by_article_id)
-                    INNER JOIN s_categories c
-                        ON  ac.categoryID = c.id
-                        AND c.active = 1
-                        AND c.path LIKE ?
-
-                    LEFT JOIN s_categories c2
-                        ON c2.parent = c.id
-
-                WHERE ac.articleID = ?
-                AND c2.id IS NULL
-                ORDER BY ac.id
-            ';
-
-            $id = (int) $this->db->fetchOne($sql, array(
-                '%|' . $parentId . '|%',
-                $articleId
-            ));
+        if ($id) {
+            return $id;
         }
+
+        $sql = '
+            SELECT STRAIGHT_JOIN
+                   ac.categoryID as id
+            FROM s_articles_categories_ro ac  FORCE INDEX (category_id_by_article_id)
+                INNER JOIN s_categories c
+                    ON  ac.categoryID = c.id
+                    AND c.active = 1
+                    AND c.path LIKE ?
+
+                LEFT JOIN s_categories c2
+                    ON c2.parent = c.id
+
+            WHERE ac.articleID = ?
+            AND c2.id IS NULL
+            ORDER BY ac.id
+        ';
+
+        $id = (int) $this->db->fetchOne($sql, array(
+            '%|' . $parentId . '|%',
+            $articleId
+        ));
 
         return $id;
     }
