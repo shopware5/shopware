@@ -168,7 +168,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             return false;
         }
 
-        return $this->uninstall();
+        return true;
     }
 
     /**
