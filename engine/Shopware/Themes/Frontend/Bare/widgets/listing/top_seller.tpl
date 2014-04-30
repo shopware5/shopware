@@ -17,6 +17,12 @@
 		},
 
 		configTablet: {
+			perPage: 3,
+			perSlide: 1,
+			touchControl: true
+		},
+
+		configTabletLandscape: {
 			perPage: 4,
 			perSlide: 1,
 			touchControl: true
@@ -47,8 +53,8 @@
 
 				{assign var=image value=$article.image.src.2}
 
-				<div class="product-slider--item">
-					<span class="topseller--number badge is--primary">{$article@index + 1}</span>
+				<div class="topseller--product product-slider--item">
+					<span class="topseller--number badge is--secondary">{$article@index + 1}</span>
 
 					<a href="{$article.linkDetails|rewrite:$article.articleName}" title="{$article.articleName}" class="product--image">
 						<span data-picture data-alt="{$article.articleName}" class="image--element">

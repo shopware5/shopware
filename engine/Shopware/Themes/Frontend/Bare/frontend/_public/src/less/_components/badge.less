@@ -1,5 +1,7 @@
 /* A badge for displaying counts.
 
+ToDo@PSC: Refactor badge component - See top seller module
+
 ```
 <p>Text <span class="badge">23</span></p>
 ```
@@ -9,21 +11,23 @@
     .unitize-margin(0, 5);
     .unitize(12, 16, font-size);
     .unitize(18, 16, line-height);
-    .border-radius(10px);
+    .border-radius(12px);
     display: inline-block;
     font-weight: bold;
     text-align: center;
     white-space: nowrap;
-    color: #fff;
-    background: @primaryTextColor;
+    color: @primaryTextColor;
+    background: @borderColor;
 
-    &.secondary {
-        color: @primaryTextColor;
-        background: @borderColor;
+    &.is--secondary {
+        .secondary-gradient();
+        color: #fff;
+        text-shadow: 0 1px 1px #4A5867;
     }
 
-    &.primary {
+    &.is--primary {
+        .primary-gradient();
         color: #fff;
-        background: @primaryColor;
+        text-shadow: 0 1px 1px #AD1200;
     }
 }
