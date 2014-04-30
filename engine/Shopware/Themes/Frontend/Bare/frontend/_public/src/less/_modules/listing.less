@@ -59,7 +59,9 @@
 // Listing actions
 .listing--actions {
     .clearfix();
+    overflow: hidden;
 }
+
 
 .action--filter-btn {
     .unitize-margin(10, 0);
@@ -80,8 +82,8 @@
 
 // Sorting options
 .action--sort {
-    .unitize-width(220);
-    display: inline-block;
+    .unitize(44, 16, line-height);
+    display: block;
     float: left;
 
     .sort--label {
@@ -89,14 +91,14 @@
     }
 
     .sort--select {
-        .unitize-width(220);
+        width: 100%;
     }
 }
 
 // Layout changer
 .action--change-layout {
     .unitize-width(76);
-    display: inline-block;
+    display: none;
     float: right;
     white-space: nowrap;
 
@@ -313,6 +315,19 @@
         .unitize-margin(0, 0, 20, 0);
     }
 
+    .action--sort {
+        .unitize-width(220);
+        display: inline-block;
+
+        .sort--select {
+            .unitize-width(220);
+        }
+    }
+
+    .action--change-layout {
+        display: inline-block;
+    }
+
     .action--filter-btn {
         .unitize-width(190);
         .unitize-margin(0, 20, 10, 0);
@@ -472,6 +487,7 @@
 
     .action--sort {
         .unitize-margin(0, 0, 10, 10);
+        .unitize(36, 16, line-height);
         width: 34%;
 
         .sort--label {
@@ -488,6 +504,7 @@
     }
 
     .action--change-layout {
+        .unitize(36, 16, line-height);
         width: 16%;
         margin-left: 4%;
         float: left;
@@ -501,20 +518,21 @@
         }
 
         .action--link {
-            .unitize-height(32);
-            .unitize(32, 16, line-height);
+            .unitize-height(36);
+            .unitize(34, 16, line-height);
         }
     }
 
     .action--per-page {
         .unitize-margin(0, 10, 0, 0);
+        .unitize(34, 16, line-height);
         width: 24%;
         display: inline-block;
         text-align: right;
         float: right;
 
         .per-page--label {
-            .unitize(34, 16, line-height);
+            .unitize(36, 16, line-height);
             .unitize-margin(0, 10, 0, 0);
             display: inline-block;
             font-weight: bold;
