@@ -296,7 +296,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         var me = this;
 
         Ext.Ajax.request({
-            url: '{url controller=widgets action=saveWidgetPosition}',
+            url: '{url controller=widgets action=savePosition}',
             params: {
                 column: column,
                 position: row,
@@ -327,7 +327,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         var me = this;
 
         Ext.Ajax.request({
-            url: '{url controller=widgets action=saveWidgetPositions}',
+            url: '{url controller=widgets action=savePosition}',
             jsonData: {
                 widgets: widgets
             },

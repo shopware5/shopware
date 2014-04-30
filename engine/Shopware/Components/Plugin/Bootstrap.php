@@ -26,6 +26,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Models\Emotion\Library\Component;
 use Shopware\Models\Config\ElementTranslation;
 use Shopware\Models\Config\FormTranslation;
+use Shopware\Models\Widget\Widget;
 
 /**
  * Shopware Plugin Bootstrap
@@ -466,14 +467,44 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Creates a new widget
      *
      * @param $name
-     * @param $label
      */
-    public function createWidget($name, $label)
+    public function createWidget($name)
     {
-        Shopware()->Db()->insert('s_core_widgets', array(
-			'name' => $name,
-			'label' => $label,
-		));
+        $widget = new Widget();
+        $widget->setName($name);
+        $widget->setPlugin($this->Plugin());
+
+        Shopware()->Models()->persist($widget);
+        Shopware()->Models()->flush();
+    }
+
+    /**
+     * Removes widgets from this plugin
+     *
+     * @param bool $removePreferences If true, user definitions are also removed
+     */
+    public function removeWidgets($removePreferences = false)
+    {
+        $pluginId = $this->getId();
+        if (!$pluginId) {
+            return;
+        }
+
+        if ($removePreferences) {
+            $widgetIds = Shopware()->Db()->fetchCol(
+                'SELECT id FROM s_core_widgets WHERE plugin_id = ?',
+                array($pluginId)
+            );
+            Shopware()->Db()->delete(
+                's_core_widget_views',
+                array('widget_id IN (?)' => $widgetIds)
+            );
+        }
+
+        Shopware()->Db()->delete(
+            's_core_widgets',
+            array('plugin_id = ?' => $pluginId)
+        );
     }
 
     /**
