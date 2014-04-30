@@ -76,6 +76,14 @@ $(function() {
                     $(widget.selector).data('plugin_' + widget.plugin).destroy();
                 }
             }, {
+                type: 'tabletLandscape',
+                enter: function() {
+                    $(widget.selector)[widget.plugin](widget.configTabletLandscape);
+                },
+                exit: function() {
+                    $(widget.selector).data('plugin_' + widget.plugin).destroy();
+                }
+            }, {
                 type: 'desktop',
                 enter: function() {
                     $(widget.selector)[widget.plugin](widget.configDesktop);
