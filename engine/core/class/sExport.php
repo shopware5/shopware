@@ -506,7 +506,7 @@ class sExport
         if (empty($articleId) || empty($filterGroupId)) {
             return "";
         }
-        return Shopware()->Modules()->sArticles()->sGetArticleProperties($articleId, $filterGroupId);
+        return Shopware()->Modules()->Articles()->sGetArticleProperties($articleId, $filterGroupId);
     }
 
     public function sMapTranslation($object,$objectdata)
