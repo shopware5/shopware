@@ -87,5 +87,7 @@ class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Compone
             $handleResource = fopen(Shopware()->DocPath() . 'cache/productexport/' . $fileName, 'w');
             $export->executeExport($handleResource);
         }
+
+        return true;
     }
 }

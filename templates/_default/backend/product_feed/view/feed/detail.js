@@ -117,19 +117,19 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.Detail', {
                     fieldLabel: '{s name=detail_general/field/interval}Caching interval{/s}',
                     store: [
                         [-1, '{s name=detail_general/field/interval/onlyCron}Only cron{/s}'],
-                        [0, '{s name=detail_general/field/interval}None (0 Sec.){/s}'],
-                        [120, '{s name=element/interval/2_minutes}2 Minutes (120 Sec.){/s}'],
-                        [120, '{s name=element/interval/5_minutes}5 Minutes (300 Sec.){/s}'],
-                        [120, '{s name=element/interval/10_minutes}10 Minutes (600 Sec.){/s}'],
-                        [900, '{s name=element/interval/15_minutes}15 Minutes (900 Sec.){/s}'],
-                        [1800, '{s name=element/interval/30_minutes}30 Minutes (1800 Sec.){/s}'],
-                        [3600, '{s name=element/interval/1_hour}1 Hour (3600 Sec.){/s}'],
-                        [7200, '{s name=element/interval/2_hours}2 Hours (7200 Sec.){/s}'],
-                        [14400, '{s name=element/interval/4_hours}4 Hours (14400 Sec.){/s}'],
-                        [28800, '{s name=element/interval/12_hours}12 Hours (28800 Sec.){/s}'],
-                        [86400, '{s name=element/interval/1_day}1 Day (86400 Sec.){/s}'],
-                        [172800, '{s name=element/interval/2_days}2 Days (172800 Sec.){/s}'],
-                        [604800, '{s name=element/interval/1_week}1 Week (604800 Sec.){/s}']
+                        [0, '{s name=detail_general/field/empty_value}None (0 Sec.){/s}'],
+                        [120, '{s name=detail_general/field/interval/2_minutes}2 Minutes (120 Sec.){/s}'],
+                        [300, '{s name=detail_general/field/interval/5_minutes}5 Minutes (300 Sec.){/s}'],
+                        [600, '{s name=detail_general/field/interval/10_minutes}10 Minutes (600 Sec.){/s}'],
+                        [900, '{s name=detail_general/field/interval/15_minutes}15 Minutes (900 Sec.){/s}'],
+                        [1800, '{s name=detail_general/field/interval/30_minutes}30 Minutes (1800 Sec.){/s}'],
+                        [3600, '{s name=detail_general/field/interval/1_hour}1 Hour (3600 Sec.){/s}'],
+                        [7200, '{s name=detail_general/field/interval/2_hours}2 Hours (7200 Sec.){/s}'],
+                        [14400, '{s name=detail_general/field/interval/4_hours}4 Hours (14400 Sec.){/s}'],
+                        [28800, '{s name=detail_general/field/interval/12_hours}12 Hours (28800 Sec.){/s}'],
+                        [86400, '{s name=detail_general/field/interval/1_day}1 Day (86400 Sec.){/s}'],
+                        [172800, '{s name=detail_general/field/interval/2_days}2 Days (172800 Sec.){/s}'],
+                        [604800, '{s name=detail_general/field/interval/1_week}1 Week (604800 Sec.){/s}']
                     ]
                 },
                 {
