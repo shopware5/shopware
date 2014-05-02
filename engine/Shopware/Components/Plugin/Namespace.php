@@ -422,16 +422,6 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         $capabilities = $bootstrap->getCapabilities();
         $capabilities['secureUninstall'] = !empty($capabilities['secureUninstall']);
         $success = is_bool($result) ? $result : !empty($result['success']);
-        if ($success) {
-            if ($capabilities['secureUninstall']) {
-                if ($removeData) {
-                    $result = $bootstrap->uninstall();
-                } else {
-                    $result = $bootstrap->secureUninstall();
-                }
-            } else {
-                $result = $bootstrap->uninstall();
-            }
 
             $this->Application()->Events()->notify(
                 'Shopware_Plugin_PostUninstall',
@@ -442,97 +432,109 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
                 )
             );
 
-            $success = is_bool($result) ? $result : !empty($result['success']);
+        if ($removeData) {
+            $result = $bootstrap->uninstall();
+        } elseif ($capabilities['secureUninstall']) {
+            $result = $bootstrap->secureUninstall();
+        } else {
+            throw new \Exception('Plugin does not support secure uninstall.');
         }
 
-        if ($success) {
-            $plugin->setInstalled(null);
-            $plugin->setActive(false);
-            $em->flush($plugin);
+        $this->Application()->Events()->notify(
+            'Shopware_Plugin_PostUninstall',
+            array(
+                'subject' => $this,
+                'plugin' => $bootstrap,
+                'removeData' => $removeData
+            )
+        );
 
-            // Remove event subscribers
-            $sql = 'DELETE FROM `s_core_subscribes` WHERE `pluginID`=?';
-            $db->query($sql, array($id));
+        $success = is_bool($result) ? $result : !empty($result['success']);
 
-            // Remove crontab-entries
-            $sql = 'DELETE FROM `s_crontab` WHERE `pluginID`=?';
-            $db->query($sql, array($id));
+        if (!$success) {
+            return $result;
+        }
 
-            // Remove form
-            if ($bootstrap->hasForm()) {
-                if ($capabilities['secureUninstall']) {
-                    if ($removeData) {
-                        $form = $bootstrap->Form();
-                        if ($form->getId()) {
-                            $em->remove($form);
-                        } else {
-                            $em->detach($form);
-                        }
-                        $em->flush();
-                    } else {
-                        // Remove element translations
-                        $sql = 'DELETE `s_core_config_element_translations`
-                            FROM `s_core_config_element_translations`
-                            INNER JOIN `s_core_config_elements`
-                               ON `s_core_config_element_translations`.`element_id` = `s_core_config_elements`.`id`
-                            INNER JOIN `s_core_config_forms`
-                               ON `s_core_config_elements`.`form_id` = `s_core_config_forms`.`id`
-                               AND `s_core_config_forms`.`plugin_id` = ?';
-                        $db->query($sql, array($id));
+        $plugin->setInstalled(null);
+        $plugin->setActive(false);
+        $em->flush($plugin);
 
-                        // Remove form translations
-                        $sql = 'DELETE `s_core_config_form_translations`
-                            FROM `s_core_config_form_translations`
-                            INNER JOIN `s_core_config_forms`
-                               ON `s_core_config_form_translations`.`form_id` = `s_core_config_forms`.`id`
-                               AND `s_core_config_forms`.`plugin_id` = ?';
-                        $db->query($sql, array($id));
-                    }
+        // Remove event subscribers
+        $sql = 'DELETE FROM `s_core_subscribes` WHERE `pluginID`=?';
+        $db->query($sql, array($id));
+
+        // Remove crontab-entries
+        $sql = 'DELETE FROM `s_crontab` WHERE `pluginID`=?';
+        $db->query($sql, array($id));
+
+        // Remove form
+        if ($bootstrap->hasForm()) {
+            if ($removeData) {
+                $form = $bootstrap->Form();
+                if ($form->getId()) {
+                    $em->remove($form);
                 } else {
-                    $form = $bootstrap->Form();
-                    if ($form->getId()) {
-                        $em->remove($form);
-                    } else {
-                        $em->detach($form);
-                    }
-                    $em->flush();
+                    $em->detach($form);
                 }
+                $em->flush();
+            } elseif ($capabilities['secureUninstall']) {
+                // Remove element translations
+                $sql = 'DELETE `s_core_config_element_translations`
+                        FROM `s_core_config_element_translations`
+                        INNER JOIN `s_core_config_elements`
+                           ON `s_core_config_element_translations`.`element_id` = `s_core_config_elements`.`id`
+                        INNER JOIN `s_core_config_forms`
+                           ON `s_core_config_elements`.`form_id` = `s_core_config_forms`.`id`
+                           AND `s_core_config_forms`.`plugin_id` = ?';
+                $db->query($sql, array($id));
+
+                // Remove form translations
+                $sql = 'DELETE `s_core_config_form_translations`
+                        FROM `s_core_config_form_translations`
+                        INNER JOIN `s_core_config_forms`
+                           ON `s_core_config_form_translations`.`form_id` = `s_core_config_forms`.`id`
+                           AND `s_core_config_forms`.`plugin_id` = ?';
+                $db->query($sql, array($id));
+            } else {
+                throw new \Exception('Plugin does not support secure uninstall.');
             }
-
-            // Remove snippets
-            if ($capabilities['secureUninstall']) {
-                $bootstrap->removeSnippets($removeData);
-            }
-
-            // Remove menu-entry
-            $query = 'DELETE FROM Shopware\Models\Menu\Menu m WHERE m.pluginId = ?0';
-            $query = $em->createQuery($query);
-            $query->execute(array($id));
-
-            // Remove templates
-            $query = 'DELETE FROM Shopware\Models\Shop\Template t WHERE t.pluginId = ?0';
-            $query = $em->createQuery($query);
-            $query->execute(array($id));
-
-            // Remove emotion-components
-            $sql = "DELETE s_emotion_element
-                    FROM s_emotion_element
-                    INNER JOIN s_library_component
-                        ON s_library_component.id = s_emotion_element.componentID
-                        AND s_library_component.pluginID = :pluginId";
-
-            $db->query($sql, array(':pluginId' => $id));
-
-            $sql = "DELETE s_library_component_field, s_library_component
-                    FROM s_library_component_field
-                    INNER JOIN s_library_component
-                        ON s_library_component.id = s_library_component_field.componentID
-                        AND s_library_component.pluginID = :pluginId";
-
-            $db->query($sql, array(':pluginId' => $id));
-
-            $this->removePluginWidgets($id);
         }
+
+        // Remove snippets
+        if ($capabilities['secureUninstall']) {
+            $bootstrap->removeSnippets($removeData);
+        } else {
+            $bootstrap->removeSnippets(true);
+        }
+
+        // Remove menu-entry
+        $query = 'DELETE FROM Shopware\Models\Menu\Menu m WHERE m.pluginId = ?0';
+        $query = $em->createQuery($query);
+        $query->execute(array($id));
+
+        // Remove templates
+        $query = 'DELETE FROM Shopware\Models\Shop\Template t WHERE t.pluginId = ?0';
+        $query = $em->createQuery($query);
+        $query->execute(array($id));
+
+        // Remove emotion-components
+        $sql = "DELETE s_emotion_element
+                FROM s_emotion_element
+                INNER JOIN s_library_component
+                    ON s_library_component.id = s_emotion_element.componentID
+                    AND s_library_component.pluginID = :pluginId";
+
+        $db->query($sql, array(':pluginId' => $id));
+
+        $sql = "DELETE s_library_component_field, s_library_component
+                FROM s_library_component_field
+                INNER JOIN s_library_component
+                    ON s_library_component.id = s_library_component_field.componentID
+                    AND s_library_component.pluginID = :pluginId";
+
+        $db->query($sql, array(':pluginId' => $id));
+
+        $this->removePluginWidgets($id);
 
         return $result;
     }
