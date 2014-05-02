@@ -445,7 +445,8 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
                             record.set('removeData', false);
                         }
                         me.onInstallPlugin(record, pluginStore);
-                    });
+                    }
+                );
                 return;
             }
         }
