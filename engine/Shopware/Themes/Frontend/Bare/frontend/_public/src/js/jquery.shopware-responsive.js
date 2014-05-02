@@ -48,6 +48,18 @@ $(function() {
             $('.filter--trigger').data('plugin_collapsePanel').destroy();
         }
     }, {
+        type: 'tabletLandscape',
+        enter: function() {
+            $('*[data-search-dropdown="true"]').searchFieldDropDown();
+            $('nav.product--actions').insertBefore($('.additional-info--tabs'));
+            $('.filter--trigger').collapsePanel();
+        },
+        exit: function() {
+            $('*[data-search-dropdown="true"]').data('plugin_searchFieldDropDown').destroy();
+            $('nav.product--actions').insertAfter($('.buybox--form'));
+            $('.filter--trigger').data('plugin_collapsePanel').destroy();
+        }
+    }, {
         type: 'desktop',
         enter: function() {
             $('.filter--trigger').collapsePanel();
