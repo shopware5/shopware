@@ -197,6 +197,10 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                     defaultAlign: 'tr-br',
                     items: me.createWidgetMenuItems()
                 }
+            }, {
+                xtype: 'container',
+                html: '{s name="window/toolbar/headline"}Widgets{/s}',
+                style: 'font-size: 18px; padding-left: 8px; color: #335064'
             }, '->', {
                 xtype: 'button',
                 tooltip: snippets.minimize,
