@@ -425,4 +425,7 @@ Ext.onReady(function() {
     Ext.apply(Ext.form.field.VTypes, {
         missingValidationErrorText: 'The remote vType validation needs a validationErrorMsg property'
     });
+    Ext.apply(Shopware.Notification, {
+        closeText: 'Close'
+    });
 });
