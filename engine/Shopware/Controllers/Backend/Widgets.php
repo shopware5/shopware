@@ -27,30 +27,6 @@
  */
 class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_ExtJs
 {
-    /**
-     * Registers the different acl permission for the different controller actions.
-     *
-     * @return void
-     */
-    protected function initAcl()
-    {
-        /**
-         * permission to list all notifications
-         */
-        $this->addAclPermission('getListAction', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('saveWidgetPositionAction', 'write', 'Insufficient Permissions');
-        $this->addAclPermission('saveWidgetPositionsAction', 'write', 'Insufficient Permissions');
-        $this->addAclPermission('addWidgetViewAction', 'write', 'Insufficient Permissions');
-        $this->addAclPermission('removeWidgetViewAction', 'write', 'Insufficient Permissions');
-        $this->addAclPermission('getTurnOverVisitorsAction', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('getVisitorsAction', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('getLastOrdersAction', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('getNoticeAction', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('saveNoticeAction', 'write', 'Insufficient Permissions');
-        $this->addAclPermission('getLastMerchantAction', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('requestMerchantFormAction', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('sendMailToMerchantAction', 'write', 'Insufficient Permissions');
-    }
 
     /**
      * Returns the list of active widgets for the current logged
@@ -80,12 +56,19 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
         $data = $builder->getQuery()->getArrayResult();
 
+        $widgets = array();
         foreach ($data as &$widgetData) {
+            if (!$this->_isAllowed($widgetData['name'], 'widgets')) {
+                continue;
+            }
+
             $widgetData['label'] = Shopware()->Snippets()->getNamespace('backend/widget/'.$widgetData['name'])
                 ->get('label', $widgetData['label']);
+
+            $widgets[] = $widgetData;
         }
 
-        $this->View()->assign(array('success' => !empty($data), 'authId' => $userID, 'data' => $data));
+        $this->View()->assign(array('success' => !empty($data), 'authId' => $userID, 'data' => $widgets));
     }
 
     /**

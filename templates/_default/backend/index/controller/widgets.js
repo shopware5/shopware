@@ -73,6 +73,8 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
     init: function() {
         var me = this;
 
+        /*{if {acl_is_allowed resource=widgets privilege=read}}*/
+
         me.viewport = Shopware.app.Application.viewport;
 
         if(!me.viewport) {
@@ -103,6 +105,8 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
                 closeWidget: me.onCloseWidget
             }
         });
+
+        /*{/if}*/
 
         me.callParent(arguments);
     },

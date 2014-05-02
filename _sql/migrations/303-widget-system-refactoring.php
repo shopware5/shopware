@@ -25,6 +25,19 @@ class Migrations_Migration303 Extends Shopware\Components\Migrations\AbstractMig
             ALTER TABLE `s_core_widgets` ADD `plugin_id` INT( 11 ) NULL ;
 
             ALTER TABLE `s_core_widgets` CHANGE `label` `label` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL ;
+
+            INSERT INTO s_core_acl_resources (name) VALUES ('widgets');
+
+            SET @resourceId = (SELECT id FROM s_core_acl_resources WHERE name = 'widgets' LIMIT 1);
+
+            INSERT INTO s_core_acl_privileges (resourceID, name) VALUES
+            (@resourceId, 'read'),
+            (@resourceId, 'swag-visitors-customers-widget'),
+            (@resourceId, 'swag-last-orders-widget'),
+            (@resourceId, 'swag-sales-widget'),
+            (@resourceId, 'swag-merchant-widget'),
+            (@resourceId, 'swag-upload-widget'),
+            (@resourceId, 'swag-notice-widget');
 EOD;
 
         $this->addSql($sql);
