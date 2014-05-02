@@ -75,12 +75,6 @@
             touchControl: false,
 
             /**
-             * Adjust the touch gesture detection.
-             * @integer
-             */
-            touchDistance: 60,
-
-            /**
              * Active automatic sliding.
              * @bool
              */
@@ -164,7 +158,7 @@
 
         me.$el.addClass(me.opts.wrapperClass);
 
-        me.createSlideContainer();
+        me.$container = me.createSlideContainer();
         me.createItems();
     }
 
@@ -197,6 +191,10 @@
         me.setPosition();
         me.createArrows();
         me.registerEvents();
+
+        if (me.opts.autoSlide && me.active) {
+            me.startAutoSlide();
+        }
     };
 
     /**
@@ -213,7 +211,7 @@
             }).appendTo(me.$el);
         }
 
-        me.$container = container;
+        return container;
     };
 
     /**
@@ -271,7 +269,8 @@
      * @function callback
      */
     Plugin.prototype.loadItems = function(start, limit, callback) {
-        var me = this;
+        var me = this,
+            cb = callback || function() {};
 
         $.ajax({
             url: me.opts.controllerUrl,
@@ -282,7 +281,7 @@
                 'limit': limit
             },
             success: function(response) {
-                callback(response);
+                cb.call(me, response);
             }
         });
     };
@@ -297,7 +296,7 @@
         me.wrapperWidth = me.$el.outerWidth();
         me.itemsWidth = me.wrapperWidth / me.opts.perPage;
 
-        me.$items.css({width: me.itemsWidth});
+        me.$items.css({ width: me.itemsWidth });
         me.$container.stop(true, true).css({ width: me.itemsCount * me.itemsWidth + 20 });
 
         window.picturefill();
@@ -321,9 +320,7 @@
     Plugin.prototype.registerEvents = function() {
         var me = this;
 
-        $(window).on('resize.' + pluginName, function(e) {
-            me.setSizes();
-        });
+        $(window).on('resize.' + pluginName,  me.setSizes.bind(me));
 
         me.$arrowLeft.on('click.' + pluginName, function(e) {
             e.preventDefault();
@@ -335,23 +332,13 @@
         });
 
         if (me.opts.touchControl && me.active) {
-            me.$el.on({
-                'touchstart MSPointerDown'  : function(e) { me.touchHandler(e, 'start'); },
-                'touchmove MSPointerMove'   : function(e) { me.touchHandler(e, 'move'); },
-                'touchend MSPointerUp'      : function(e) { me.touchHandler(e, 'end'); }
-            });
+            me.$el.on('swipeleft.' + pluginName, me.slideNext.bind(me));
+            me.$el.on('swiperight.' + pluginName, me.slidePrev.bind(me));
         }
 
         if (me.opts.autoSlide && me.active) {
-            me.startAutoSlide();
-
-            me.$el.on('mouseenter.' + pluginName, function(e) {
-                me.stopAutoSlide();
-            });
-
-            me.$el.on('mouseleave.' + pluginName, function(e) {
-                me.startAutoSlide();
-            });
+            me.$el.on('mouseenter.' + pluginName, me.stopAutoSlide.bind(me));
+            me.$el.on('mouseleave.' + pluginName, me.startAutoSlide.bind(me));
         }
     };
 
@@ -384,8 +371,8 @@
     Plugin.prototype.trackArrows = function() {
         var me = this;
 
-        ( me.slideIndex == me.maxIndex ) ? me.$arrowRight.hide() : me.$arrowRight.show();
-        ( me.slideIndex == me.minIndex ) ? me.$arrowLeft.hide() : me.$arrowLeft.show();
+        me.$arrowRight[( me.slideIndex == me.maxIndex ) ? 'hide' : 'show']();
+        me.$arrowLeft[( me.slideIndex == me.minIndex ) ? 'hide' : 'show']();
     };
 
     /**
@@ -407,51 +394,6 @@
         var me = this;
 
         window.clearInterval(me.slideInterval);
-    };
-
-    /**
-     * Handles the touch gesture events.
-     * Calls slideNext() or slidePrev() based on the touch gesture.
-     *
-     * @object event
-     * @string state
-     */
-    Plugin.prototype.touchHandler = function(event, state) {
-        var me = this,
-            touch = event.originalEvent.touches[0] || event.originalEvent.changedTouches[0];
-
-        switch (state) {
-            case 'start':
-                me.touchEvent.startX = touch.pageX;
-                me.touchEvent.startY = touch.pageY;
-                me.touchEvent.touchSin = null;
-                break;
-
-            case 'move':
-                var subX = touch.pageX - me.touchEvent.startX,
-                    subY = touch.pageY - me.touchEvent.startY,
-                    powX = Math.abs( subX << 2),
-                    powY = Math.abs( subY << 2),
-                    touchHypotenuse = Math.sqrt( powX + powY),
-                    touchCathetus = Math.sqrt( powY );
-
-                me.touchEvent.touchSin = Math.asin( touchCathetus/touchHypotenuse );
-
-                if ( (me.touchEvent.touchSin * (180 / Math.PI)) < 45 ) event.preventDefault();
-                break;
-
-            case 'end':
-                var touchDistance = touch.pageX - me.touchEvent.startX;
-
-                if ( (me.touchEvent.touchSin * (180 / Math.PI)) < 45 ) {
-                    if ( touchDistance > me.opts.touchDistance ) {
-                        me.slidePrev();
-                    } else if ( touchDistance < -me.opts.touchDistance ) {
-                        me.slideNext();
-                    }
-                }
-                break;
-        }
     };
 
     /**
@@ -541,6 +483,8 @@
 
         me.$el.off('mouseenter.' + pluginName);
         me.$el.off('mouseleave.' + pluginName);
+        me.$el.off('swipeleft.' + pluginName);
+        me.$el.off('swiperight.' + pluginName);
 
         $(window).off('resize.' + pluginName);
 
