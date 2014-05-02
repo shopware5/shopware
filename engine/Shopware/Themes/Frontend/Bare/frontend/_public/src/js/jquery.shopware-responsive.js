@@ -62,7 +62,7 @@ $(function() {
             StateManager.registerListener([{
                 type: 'smartphone',
                 enter: function() {
-                    $(widget.selector)[widget.plugin](widget.configSmartphone);
+                    $(widget.selector)[widget.plugin](widget.smartphone);
                 },
                 exit: function() {
                     $(widget.selector).data('plugin_' + widget.plugin).destroy();
@@ -70,7 +70,7 @@ $(function() {
             }, {
                 type: 'tablet',
                 enter: function() {
-                    $(widget.selector)[widget.plugin](widget.configTablet);
+                    $(widget.selector)[widget.plugin](widget.tablet);
                 },
                 exit: function() {
                     $(widget.selector).data('plugin_' + widget.plugin).destroy();
@@ -78,7 +78,7 @@ $(function() {
             }, {
                 type: 'tabletLandscape',
                 enter: function() {
-                    $(widget.selector)[widget.plugin](widget.configTabletLandscape);
+                    $(widget.selector)[widget.plugin](widget.tabletLandscape);
                 },
                 exit: function() {
                     $(widget.selector).data('plugin_' + widget.plugin).destroy();
@@ -86,7 +86,7 @@ $(function() {
             }, {
                 type: 'desktop',
                 enter: function() {
-                    $(widget.selector)[widget.plugin](widget.configDesktop);
+                    $(widget.selector)[widget.plugin](widget.desktop);
                 },
                 exit: function() {
                     $(widget.selector).data('plugin_' + widget.plugin).destroy();
