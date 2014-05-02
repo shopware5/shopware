@@ -10,25 +10,25 @@
 
 		plugin: 'productSlider',
 
-		configSmartphone: {
+		smartphone: {
 			perPage: 1,
 			perSlide: 1,
 			touchControl: true
 		},
 
-		configTablet: {
+		tablet: {
 			perPage: 3,
 			perSlide: 1,
 			touchControl: true
 		},
 
-		configTabletLandscape: {
+		tabletLandscape: {
 			perPage: 4,
 			perSlide: 1,
 			touchControl: true
 		},
 
-		configDesktop: {
+		desktop: {
 			perPage: 5,
 			perSlide: 1
 		}
