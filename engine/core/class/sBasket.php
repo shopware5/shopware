@@ -1359,7 +1359,7 @@ class sBasket
 
         $this->db->delete(
             's_order_basket',
-            array('sessionID = ?' >= $sessionId)
+            array('sessionID = ?' => $sessionId)
         );
     }
 
