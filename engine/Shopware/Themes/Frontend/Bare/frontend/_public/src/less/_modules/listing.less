@@ -291,7 +291,7 @@
     }
 }
 
-// Table view
+// Tablet view
 @media screen and(min-width: @tabletViewportWidth) {
 
     .listing--content {
@@ -433,6 +433,93 @@
 
             .product--actions {
                 display: none;
+            }
+        }
+
+        &.listing--listing-1col {
+            .product--box {
+                width: 100%;
+
+                .panel--body {
+                    .clearfix();
+                    .unitize-height(220);
+                    .unitize-padding(0, 280, 0, 0);
+                }
+
+                .box--image {
+                    .unitize-width(180);
+                    .unitize-height(220);
+                    .unitize-padding(20, 20);
+                    .unitize-margin(0, 20, 0, 0);
+                    .unitize(180, 16, line-height);
+                    border-width: 0 1px 0 0;
+                    border-style: solid;
+                    border-color: @borderColor;
+                    float: left;
+                }
+
+                .product--title {
+                    .unitize-margin(30, 10, 10, 200);
+                    .unitize(26, 16, font-size);
+                    .unitize(34, 16, line-height);
+                    display: block;
+                }
+
+                .product--description {
+                    display: none;
+                }
+
+                .product--price {
+                    &.price--default {
+                        margin: 0;
+                        position: relative;
+                        top: 0;
+                        left: 0;
+                    }
+
+                    &.price--unit {
+                        .unitize-margin(0, 10, 0, 200);
+                    }
+                }
+
+                .product--actions {
+                    .unitize-width(220);
+                    .unitize-height(145);
+                    .unitize-padding(10, 10);
+                    .unitize(20, 16, top);
+                    .unitize(20, 16, right);
+                    display: block;
+                    position: absolute;
+
+                    .product--action {
+                        .unitize-padding(8, 16);
+                        .unitize-margin(0, 0, 10, 0);
+                        .unitize(14, 16, font-size);
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Tablet Landscape view
+@media screen and(min-width: @tabletLandscapeViewportWidth) {
+
+    .listing {
+        &.listing--listing-1col {
+            .product--box {
+                .product--title {
+                    .unitize-margin(20, 10, 10, 200);
+                    .unitize(21, 16, font-size);
+                }
+
+                .product--description {
+                    .unitize-margin(0, 0, 10, 200);
+                    .unitize(14, 16, font-size);
+                    .unitize(21, 16, line-height);
+                    display: block;
+                }
             }
         }
     }
@@ -604,15 +691,18 @@
                     display: block;
                 }
 
-                .price--default {
-                    position: relative;
-                    top: 0;
-                    left: 0;
+                .product--price {
+                    &.price--default {
+                        position: relative;
+                        top: 0;
+                        left: 0;
+                    }
+
+                    &.price--unit {
+                        .unitize-margin(0, 10, 0, 200);
+                    }
                 }
 
-                .price--unit {
-                    .unitize-margin(0, 10, 0, 200);
-                }
 
                 .product--actions {
                     .unitize-width(220);
@@ -668,14 +758,17 @@
                     display: block;
                 }
 
-                .price--default {
-                    .unitize(200, 16, left);
-                    .unitize(20, 16, bottom);
+                .product--price {
+                    &.price--default {
+                        .unitize(200, 16, left);
+                        .unitize(20, 16, bottom);
+                    }
+
+                    &.price--unit {
+                        .unitize-margin(0, 10, 0, 200);
+                    }
                 }
 
-                .price--unit {
-                    .unitize-margin(0, 10, 0, 200);
-                }
 
                 .product--actions {
                     .unitize-height(180);
@@ -755,9 +848,11 @@
                     .unitize(16, 16, font-size);
                 }
 
-                .price--unit {
-                    .unitize(11, 16, font-size);
-                    .unitize(14, 16, line-height);
+                .product--price {
+                    &.price--unit {
+                        .unitize(11, 16, font-size);
+                        .unitize(14, 16, line-height);
+                    }
                 }
 
                 .product--actions {
