@@ -470,13 +470,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         // Remove form
         if ($bootstrap->hasForm()) {
             if ($removeData) {
-                $form = $bootstrap->Form();
-                if ($form->getId()) {
-                    $em->remove($form);
-                } else {
-                    $em->detach($form);
-                }
-                $em->flush();
+                $this->removeForm($bootstrap->Form());
             } elseif ($capabilities['secureUninstall']) {
                 // Remove element translations
                 $sql = 'DELETE `s_core_config_element_translations`
@@ -583,6 +577,23 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             ));
         }
 
+    }
+
+    /**
+     * Helper function to remove a plugins form
+     * @param Shopware\Models\Config\Form $form
+     */
+    private function removeForm($form)
+    {
+        /** @var \Shopware\Components\Model\ModelManager $em */
+        $em = $this->Application()->Models();
+
+        if ($form->getId()) {
+            $em->remove($form);
+        } else {
+            $em->detach($form);
+        }
+        $em->flush();
     }
 
     /**
