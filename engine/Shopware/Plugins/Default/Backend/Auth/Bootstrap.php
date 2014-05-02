@@ -361,13 +361,12 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         }
 
         // No match from the browser locales, fallback to default shop locale
-        $defaultShop = Shopware()->Models()->getRepository(
-            'Shopware\Models\Shop\Shop'
-        )->getDefault();
-
-        if ($defaultShop) {
-            $defaultShopLocale = $defaultShop->getLocale()->getId();
-        }
+        $defaultShopLocale = Shopware()->Db()->fetchOne(
+            'SELECT locale_id
+             FROM s_core_shops
+             WHERE `default` = 1 AND active = 1
+             LIMIT 1'
+        );
 
         // if default shop locale is allowed, use it, otherwise use the first allowed locale
         return in_array($defaultShopLocale, $backendLocales) ? $defaultShopLocale : array_shift($backendLocales);
