@@ -293,9 +293,11 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
         var me = this,
             wrapper = Ext.create('Ext.container.Container', {
                 layout: 'hbox'
-            });
+            }),
+            len = me.columnCount,
+            i = 0;
 
-        for(var i = 0; i < me.columnCount; i++) {
+        for(; i < len; i++) {
             var container = me.createWidgetContainer(i);
 
             wrapper.add(container);
@@ -379,7 +381,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                 target.insert(newRow, panel);
 
                 // Fire event which saves the new position
-                me.fireEvent('saveWidgetPosition', newColumn, newRow, panel.$initialId);
+                me.fireEvent('saveWidgetPosition', newColumn, newRow, panel.viewId);
 
                 me.containerCollection.each(function(container) {
                     container.dropZone.onNodeOut(container);
@@ -475,7 +477,6 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                     columnId: record.column,
                     rowId: record.position
                 },
-                $initialId: record.id,
                 draggable: me.createWidgetDragZone()
             };
 
@@ -629,7 +630,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             widgetsToMove = [];
 
         // small hack to fix the widget layouts
-        setTimeout(function() {
+        Ext.defer(function() {
             for(var i = me.columnCount - 1; i > me.columnsShown - 1; i--) {
                 column = me.containerCollection.getAt(i);
 
@@ -655,7 +656,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                     widgetsToUpdate.push({
                         column: newColumnId,
                         position: newRowId,
-                        id: widget.$initialId
+                        id: widget.viewId
                     });
 
                     column.remove(widget, true);
@@ -665,7 +666,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             if(widgetsToUpdate.length !== 0) {
                 me.fireEvent('saveWidgetPositions', widgetsToUpdate);
             }
-        }, 0);
+        }, 1);
     },
 
     /**
@@ -718,11 +719,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
 
         me.invertScroll = invertScroll;
 
-        if (document.attachEvent) {
-            containerEl.dom.attachEvent('on' + mouseWheelEvent, me.onScroll.bind(me));
-        } else if (document.addEventListener) {
-            containerEl.dom.addEventListener(mouseWheelEvent, me.onScroll.bind(me), false);
-        }
+        containerEl.dom.addEventListener(mouseWheelEvent, me.onScroll.bind(me), false);
     },
 
     /**
@@ -746,9 +743,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             verticalOffset = 5,
             min = (wrapperHeight - winHeight - winEl.getTop()) * -1 - verticalOffset,
             max = winEl.getTop() + toolbarEl.getHeight() + verticalOffset,
-            style = {
-                boxShadow: ''
-            };
+            style = me.getPrefixedBoxShadowStyle('');
 
         if(winHeight > wrapperHeight) {
             wrapperEl.setY(max);
@@ -759,12 +754,37 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
         position = Math.max(min, Math.min(max, position));
 
         if(position !== max) {
-            style.boxShadow = '0px 10px 10px -7px rgba(0, 0, 0, 0.33)';
+            style = me.getPrefixedBoxShadowStyle('0px 10px 10px -7px rgba(0, 0, 0, 0.33)');
         }
 
         toolbarEl.setStyle(style);
 
         wrapperEl.setY(position);
+    },
+
+    /**
+     * Helper function to get the vendor prefixed box shadow styles.
+     *
+     * @param style
+     * @returns { object }
+     */
+    getPrefixedBoxShadowStyle: function(style) {
+        var vendors = [
+                '',
+                '-webkit-',
+                '-moz-',
+                '-ms-',
+                '-o-'
+            ],
+            len = vendors.length,
+            i = 0,
+            prefixedStyle = {};
+
+        for(; i < len; i++) {
+            prefixedStyle[vendors[i] + 'box-shadow'] = style || '';
+        }
+
+        return prefixedStyle;
     },
 
     /**
@@ -778,7 +798,8 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             resizer = me.resizer,
             positions = resizer.possiblePositions,
             pos,
-            i;
+            len = allowedHandles.length,
+            i = 0;
 
         Ext.iterate(positions, function(p) {
             pos = positions[p];
@@ -786,7 +807,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             resizer[pos].hide();
         });
 
-        for(i = 0; i < allowedHandles.length; i++) {
+        for(; i < len; i++) {
             pos = positions[allowedHandles[i]];
 
             resizer[pos].show();

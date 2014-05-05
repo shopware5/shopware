@@ -57,6 +57,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Orders', {
             model: 'Shopware.apps.Index.model.Orders',
             remoteFilter: true,
             clearOnLoad: false,
+            autoLoad: true,
 
             proxy: {
                 type: 'ajax',
@@ -66,7 +67,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Orders', {
                     root: 'data'
                 }
             }
-        }).load();
+        });
 
         me.callParent(arguments);
     },

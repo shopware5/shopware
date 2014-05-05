@@ -67,6 +67,16 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
     widgetWindow: null,
 
     /**
+     * Translation snippets for multilanguage usage
+     */
+    snippets: {
+        error: {
+            // todo@dg - add snippets
+            deleteWidget: 'Ein Fehler ist bei dem löschen des Widgets aufgetreten.\n\n'
+        }
+    },
+
+    /**
      * Initializes the widget controller.
      * Creates the widget store and binds all needed events.
      */
@@ -418,8 +428,11 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
             params: {
                 id: widget.viewId
             },
-            callback: function(options, success, response) {
-                if (!success) {
+            callback: function(options, success, res) {
+                var response = Ext.decode(res.responseText);
+
+                if (!response.success) {
+                    Shopware.notification.createGrowlMessage(me.snippets.error.deleteWidget + response.message);
                     return;
                 }
 

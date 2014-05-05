@@ -106,6 +106,10 @@ Ext.define('Enlight.app.Window', {
      */
     isSubWindow: false,
 
+    /**
+     * Whether or not the initial window position should be centered in the current desktop.
+     * @boolean
+     */
     centerOnStart: true,
 
     /**
