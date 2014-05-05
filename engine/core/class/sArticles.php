@@ -822,571 +822,8 @@ class sArticles
      */
     public function sGetArticlesByCategory($categoryId = null)
     {
-        if ($categoryId === null && isset($this->sSYSTEM->_GET['sCategory'])) {
-            $categoryId = $this->sSYSTEM->_GET['sCategory'];
-        }
-
-        if (Enlight()->Events()->notifyUntil('Shopware_Modules_Articles_sGetArticlesByCategory_Start', array(
-            'subject' => $this,
-            'id'      => $categoryId
-        ))) {
-            return false;
-        }
-
-        if (!$this->isHttpCacheActive() && isset($this->sSYSTEM->_SESSION['sCategoryConfig' . $categoryId])) {
-            $sCategoryConfig = $this->sSYSTEM->_SESSION['sCategoryConfig' . $categoryId];
-        } else {
-            $sCategoryConfig = array();
-        }
-
-        $defaultPerPage = (int) $this->sSYSTEM->sCONFIG['sARTICLESPERPAGE'];
-        $defaultSort    = 0;
-
-        // PerPage
-        if (!empty($this->sSYSTEM->_GET['sPerPage'])) {
-            $sCategoryConfig['sPerPage'] = (int) $this->sSYSTEM->_GET['sPerPage'];
-        } elseif (!empty($this->sSYSTEM->_POST['sPerPage'])) {
-            $sCategoryConfig['sPerPage'] = (int) $this->sSYSTEM->_POST['sPerPage'];
-        }
-        if (!empty($sCategoryConfig['sPerPage'])) {
-            $sPerPage = $sCategoryConfig['sPerPage'];
-        } elseif (empty($this->sSYSTEM->_GET['sPerPage'])) {
-            $sPerPage = $defaultPerPage;
-        }
-
-        // Order List by
-        if (isset($this->sSYSTEM->_POST['sSort'])) {
-            $sCategoryConfig['sSort'] = (int) $this->sSYSTEM->_POST['sSort'];
-        } elseif (!empty($this->sSYSTEM->_GET['sSort'])) {
-            $sCategoryConfig['sSort'] = (int) $this->sSYSTEM->_GET['sSort'];
-        }
-        if (!empty($sCategoryConfig['sSort'])) {
-            $this->sSYSTEM->_POST['sSort'] = $sCategoryConfig['sSort'];
-        }
-        $sSort = isset($this->sSYSTEM->_POST['sSort']) ? $this->sSYSTEM->_POST['sSort'] : $defaultSort;
-
-        if (isset($this->sSYSTEM->_GET['sSupplier']) && empty($this->sSYSTEM->_GET['sSupplier'])
-            || !empty($this->sSYSTEM->_GET['sFilterProperties'])
-        ) {
-            unset($sCategoryConfig['sSupplier']);
-            unset($this->sSYSTEM->_GET['sSupplier']);
-        }
-
-        if (isset($sCategoryConfig['sSupplier']) && !isset($this->sSYSTEM->_GET['sSupplier'])) {
-            $this->sSYSTEM->_GET['sSupplier'] = $sCategoryConfig['sSupplier'];
-        }
-        if (isset($this->sSYSTEM->_GET['sSupplier'])) {
-            unset($sCategoryConfig['sFilterProperties']);
-        }
-
-        if (isset($this->sSYSTEM->_GET['sFilterProperties'])) {
-            $sCategoryConfig['sFilterProperties'] = $this->sSYSTEM->_GET['sFilterProperties'];
-        } elseif (isset($sCategoryConfig['sFilterProperties'])
-            && empty($this->sSYSTEM->_GET['sFilterProperties'])) {
-            $this->sSYSTEM->_GET['sFilterProperties'] = $sCategoryConfig['sFilterProperties'];
-        }
-
-        if (!empty($this->sSYSTEM->_GET['sSupplier']) && is_numeric($this->sSYSTEM->_GET['sSupplier'])) {
-            $sCategoryConfig['sSupplier'] = (int) $this->sSYSTEM->_GET['sSupplier'];
-        }
-
-        if (!empty($this->sSYSTEM->_GET['sTemplate'])) {
-            $sCategoryConfig['sTemplate'] = basename($this->sSYSTEM->_GET['sTemplate']);
-        }
-
-        // save category config to session
-        if (!$this->isHttpCacheActive() && !empty($sCategoryConfig)) {
-            $this->sSYSTEM->_SESSION['sCategoryConfig' . $categoryId] = $sCategoryConfig;
-        } else {
-            unset($this->sSYSTEM->_SESSION['sCategoryConfig' . $categoryId]);
-        }
-
-        $sPage = !empty($this->sSYSTEM->_GET['sPage']) ? (int) $this->sSYSTEM->_GET['sPage'] : 1;
-        $sLimitStart = ($sPage - 1) * $sPerPage;
-        $sLimitEnd = $sPerPage;
-
-        //used for the different sorting parameters. In default case the s_articles table is sorted, so we can set this as default
-        $sqlFromPath = "
-            FROM s_articles AS a
-            INNER JOIN s_articles_details AS aDetails
-                ON aDetails.id = a.main_detail_id
-        ";
-
-        $groupBy = 'a.id';
-        switch ($sSort) {
-            case 1:
-                $groupBy = "a.datum, a.changetime, a.id";
-                $orderBy = "a.datum DESC, a.changetime DESC, a.id DESC";
-
-                break;
-            case 2:
-                $groupBy = "aDetails.sales, sai.impressions, aDetails.articleID";
-                $orderBy = "aDetails.sales DESC, sai.impressions DESC, aDetails.articleID DESC";
-                //if the customer want to sort the listing by most sales, we have to use the s_articles_details as base table
-                $sqlFromPath = "
-                    FROM s_articles_details aDetails FORCE INDEX (articles_by_category_sort_popularity)
-                    INNER JOIN s_articles a
-                        ON aDetails.id = a.main_detail_id
-                    LEFT JOIN s_statistics_article_impression sai ON a.id = sai.articleId
-                ";
-                break;
-            case 3:
-                $orderBy = "price ASC, a.id";
-                break;
-            case 4:
-                $orderBy = "price DESC, a.id DESC";
-                break;
-            case 5:
-                $groupBy = "a.name, a.id";
-                $orderBy = "a.name ASC, a.id";
-                $sqlFromPath = "
-                    FROM s_articles AS a FORCE INDEX (articles_by_category_sort_name)
-                    INNER JOIN s_articles_details AS aDetails
-                        ON aDetails.id = a.main_detail_id
-                ";
-                break;
-            case 6:
-                $groupBy = "a.name, a.id";
-                $orderBy = "a.name DESC, a.id DESC";
-                $sqlFromPath = "
-                    FROM s_articles AS a FORCE INDEX (articles_by_category_sort_name)
-                    INNER JOIN s_articles_details AS aDetails
-                        ON aDetails.id = a.main_detail_id
-                ";
-                break;
-            default:
-                $orderBy = $this->sSYSTEM->sCONFIG['sORDERBYDEFAULT'] . ', a.id DESC';
-                if ($this->sSYSTEM->sCONFIG['sORDERBYDEFAULT']  == 'a.datum DESC') {
-                    $groupBy = 'a.datum, a.id';
-                    $sqlFromPath = "
-                        FROM s_articles AS a FORCE INDEX (articles_by_category_sort_release)
-                        INNER JOIN s_articles_details AS aDetails
-                            ON aDetails.id = a.main_detail_id
-                    ";
-                }
-        }
-
-        if (strpos($orderBy, 'price') !== false) {
-            $select_price = "
-                (
-                    SELECT IFNULL(p.price, p2.price) as min_price
-                    FROM s_articles_details d
-
-                    LEFT JOIN s_articles_prices p
-                    ON p.articleDetailsID=d.id
-                    AND p.pricegroup='{$this->sSYSTEM->sUSERGROUP}'
-                    AND p.to='beliebig'
-
-                    LEFT JOIN s_articles_prices p2
-                    ON p2.articledetailsID=d.id
-                    AND p2.pricegroup='EK'
-                    AND p2.to='beliebig'
-
-                    WHERE d.articleID=a.id
-
-                    ORDER BY min_price
-                    LIMIT 1
-                ) * ( (100 - IFNULL(cd.discount, 0) ) / 100)
-            ";
-            $join_price = "
-                LEFT JOIN s_core_customergroups cg
-                    ON cg.groupkey = '{$this->sSYSTEM->sUSERGROUP}'
-
-                LEFT JOIN s_core_pricegroups_discounts cd
-                    ON a.pricegroupActive=1
-                    AND cd.groupID=a.pricegroupID
-                    AND cd.customergroupID=cg.id
-                    AND cd.discountstart=(
-                        SELECT MAX(discountstart)
-                        FROM s_core_pricegroups_discounts
-                        WHERE groupID=a.pricegroupID
-                        AND customergroupID=cg.id
-                    )
-            ";
-        } else {
-            $select_price = 'IFNULL(p.price, p2.price)';
-            $join_price = '';
-        }
-
-        if (!empty($this->sSYSTEM->_GET['sSupplier'])) {
-            $supplierInfo = $this->sGetSupplierById($this->sSYSTEM->_GET['sSupplier']);
-            $supplierSQL = "AND supplierID=" . intval($this->sSYSTEM->_GET['sSupplier']);
-        } else {
-            $supplierSQL = "";
-            $supplierInfo = array();
-        }
-
-        if (!empty($this->sSYSTEM->_GET['sFilterProperties'])) {
-            $activeFilters = preg_split('/\|/', $this->sSYSTEM->_GET["sFilterProperties"], -1, PREG_SPLIT_NO_EMPTY);
-        }
-
-        $addFilterSQL = "";
-        $addFilterWhere = "";
-        if (!empty($activeFilters)) {
-            foreach ($activeFilters as $filter) {
-                $filter = (int) $filter;
-                if ($filter > 0) {
-                    $addFilterSQL .= "
-                        INNER JOIN s_filter_articles fv$filter
-                            ON fv$filter.articleID = a.id
-                            AND fv$filter.valueID = $filter
-                    ";
-                }
-            }
-        }
-
-        $markNew = (int) $this->sSYSTEM->sCONFIG['sMARKASNEW'];
-        $topSeller = (int) $this->sSYSTEM->sCONFIG['sMARKASTOPSELLER'];
-        $now = Shopware()->Db()->quote(date('Y-m-d'));
-
-        $sql = "
-            SELECT
-                STRAIGHT_JOIN
-                a.id as articleID,
-                a.laststock,
-                a.taxID,
-                a.pricegroupID,
-                a.pricegroupActive,
-                a.notification as notification,
-                a.datum,
-                a.description AS description,
-                a.description_long,
-                a.name AS articleName,
-                a.topseller as highlight,
-                (a.configurator_set_id IS NOT NULL) as sConfigurator,
-
-
-                aDetails.id AS articleDetailsID,
-                aDetails.ordernumber,
-                aDetails.releasedate,
-                aDetails.shippingfree,
-                aDetails.shippingtime,
-                aDetails.minpurchase,
-                aDetails.purchasesteps,
-                aDetails.maxpurchase,
-                aDetails.purchaseunit,
-                aDetails.referenceunit,
-                aDetails.unitID,
-                aDetails.weight,
-                aDetails.additionaltext,
-                aDetails.instock,
-                aDetails.sales,
-                IF(aDetails.sales>=$topSeller,1,0) as topseller,
-                IF(aDetails.releasedate>$now,1,0) as sUpcoming,
-                IF(aDetails.releasedate>$now, aDetails.releasedate, '') as sReleasedate,
-
-                aSupplier.name AS supplierName,
-                aSupplier.img AS supplierImg,
-
-                aTax.tax,
-
-                aAttributes.attr1,
-                aAttributes.attr2,
-                aAttributes.attr3,
-                aAttributes.attr4,
-                aAttributes.attr5,
-                aAttributes.attr6,
-                aAttributes.attr7,
-                aAttributes.attr8,
-                aAttributes.attr9,
-                aAttributes.attr10,
-                aAttributes.attr11,
-                aAttributes.attr12,
-                aAttributes.attr13,
-                aAttributes.attr14,
-                aAttributes.attr15,
-                aAttributes.attr16,
-                aAttributes.attr17,
-                aAttributes.attr18,
-                aAttributes.attr19,
-                aAttributes.attr20,
-
-                $select_price as price,
-
-                IF(p.pseudoprice,p.pseudoprice,p2.pseudoprice) as pseudoprice,
-                IFNULL(p.pricegroup,IFNULL(p2.pricegroup,'EK')) as pricegroup,
-                IFNULL((SELECT 1 FROM s_articles_details WHERE articleID=a.id AND kind=2 LIMIT 1), 0) as variants,
-                IFNULL((SELECT 1 FROM s_articles_esd WHERE articleID=a.id LIMIT 1), 0) as esd,
-                IF(DATEDIFF($now, a.datum) <= $markNew,1,0) as newArticle,
-
-                (
-                    SELECT CONCAT(AVG(points), '|',COUNT(*)) as votes
-                    FROM   s_articles_vote
-                    WHERE  s_articles_vote.active=1
-                    AND    s_articles_vote.articleID = a.id
-                ) AS sVoteAverange
-
-            $sqlFromPath
-
-            INNER JOIN s_articles_categories_ro ac
-              ON  ac.articleID = a.id
-              AND ac.categoryID = $categoryId
-
-            INNER JOIN s_categories c
-                ON  c.id = ac.categoryID
-                AND c.active = 1
-
-            LEFT JOIN s_articles_attributes AS aAttributes
-              ON aAttributes.articledetailsID = aDetails.id
-
-            JOIN s_core_tax AS aTax
-              ON aTax.id = a.taxID
-
-            LEFT JOIN s_articles_avoid_customergroups ag
-              ON ag.articleID = a.id
-              AND ag.customergroupID = {$this->customerGroupId}
-
-            LEFT JOIN s_articles_supplier AS aSupplier
-              ON aSupplier.id = a.supplierID
-
-            $addFilterSQL
-
-            LEFT JOIN s_articles_prices p
-              ON p.articleDetailsID = aDetails.id
-              AND p.pricegroup = '{$this->sSYSTEM->sUSERGROUP}'
-              AND p.to = 'beliebig'
-
-            LEFT JOIN s_articles_prices p2
-              ON p2.articledetailsID = aDetails.id
-              AND p2.pricegroup = 'EK'
-              AND p2.to = 'beliebig'
-
-            $join_price
-
-            WHERE ag.articleID IS NULL
-            AND a.active=1
-
-            $addFilterWhere
-            $supplierSQL
-
-            GROUP BY $groupBy
-            ORDER BY $orderBy
-            LIMIT $sLimitStart, $sLimitEnd
-        ";
-
-        $sql = Enlight()->Events()->filter('Shopware_Modules_Articles_sGetArticlesByCategory_FilterSql', $sql, array('subject' => $this, 'id' => $categoryId));
-        $articles = Shopware()->Db()->fetchAssoc($sql);
-
-        if (empty($articles)) {
-            return array();
-        }
-
-        $sql = "
-            SELECT COUNT(DISTINCT a.id) count
-
-            FROM s_articles AS a
-                INNER JOIN s_articles_categories_ro ac
-                    ON  ac.articleID = a.id
-                    AND ac.categoryID = $categoryId
-                INNER JOIN s_categories c
-                    ON  c.id = ac.categoryID
-                    AND c.active = 1
-
-            JOIN s_articles_details AS aDetails
-                ON aDetails.id=a.main_detail_id
-
-            LEFT JOIN s_articles_avoid_customergroups ag
-                ON ag.articleID=a.id
-                AND ag.customergroupID={$this->customerGroupId}
-
-            $addFilterSQL
-
-            WHERE ag.articleID IS NULL
-            AND a.active=1
-
-            $addFilterWhere
-            $supplierSQL
-        ";
-        $numberArticles = Shopware()->Db()->fetchOne($sql);
-
-        // How many pages in this category?
-        $numberPages = ceil($numberArticles / $sLimitEnd);
-
-        // Max-Value for pages (in configuration, default: 12)
-        if ($this->sSYSTEM->sCONFIG['sMAXPAGES'] > 0 && $this->sSYSTEM->sCONFIG['sMAXPAGES'] < $numberPages) {
-            $numberPages = $this->sSYSTEM->sCONFIG['sMAXPAGES'];
-        }
-
-        $categoryParams = array();
-        if ($sSort != $defaultSort) {
-            $categoryParams['sSort'] = $sSort;
-        }
-
-        if ($sPerPage != $defaultPerPage) {
-            $categoryParams['sPerPage'] = $sPerPage;
-        }
-
-        if (isset($sCategoryConfig['sFilterProperties'])) {
-            $categoryParams['sFilterProperties'] = $sCategoryConfig['sFilterProperties'];
-        }
-
-        if (isset($sCategoryConfig['sSupplier'])) {
-            $categoryParams['sSupplier'] = $sCategoryConfig['sSupplier'];
-        }
-
-        if (isset($sCategoryConfig['sTemplate'])) {
-            $categoryParams['sTemplate'] = $sCategoryConfig['sTemplate'];
-        }
-
-        // Make Array with page-structure to render in template
-        $pages = array();
-        if ($numberPages > 1) {
-            for ($i = 1; $i <= $numberPages; $i++) {
-                if ($i == $sPage) {
-                    $pages["numbers"][$i]["markup"] = true;
-                } else {
-                    $pages["numbers"][$i]["markup"] = false;
-                }
-                $pages["numbers"][$i]["value"] = $i;
-                $pages["numbers"][$i]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . Shopware()->Modules()->Core()->sBuildLink($categoryParams + array("sPage" => $i), false);
-
-            }
-            // Previous page
-            if ($sPage != 1) {
-                $pages["previous"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . Shopware()->Modules()->Core()->sBuildLink($categoryParams + array("sPage" => $sPage - 1), false);
-            } else {
-                $pages["previous"] = null;
-            }
-            // Next page
-            if ($sPage != $numberPages) {
-                $pages["next"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . Shopware()->Modules()->Core()->sBuildLink($categoryParams + array("sPage" => $sPage + 1), false);
-            } else {
-                $pages["next"] = null;
-            }
-        }
-
-        // Building array for manage the quantity of articles per page
-        if (isset($this->sSYSTEM->sCONFIG['sNUMBERARTICLESTOSHOW'])) {
-            $this->sSYSTEM->sExtractor[] = "sPerPage";
-            // Load possible values from config
-            $arrayArticlesToShow = explode("|", $this->sSYSTEM->sCONFIG['sNUMBERARTICLESTOSHOW']);
-
-            // Iterate through values and building array for smarty
-            foreach ($arrayArticlesToShow as $articlesToShowKey => $articlesToShowValue) {
-                // Delete previous data
-                $arrayArticlesToShow[$articlesToShowKey] = array();
-                // Setting value
-                $arrayArticlesToShow[$articlesToShowKey]["value"] = $articlesToShowValue;
-                // Setting markup for currencly choosen value
-                if ($articlesToShowValue == $sLimitEnd) {
-                    $arrayArticlesToShow[$articlesToShowKey]["markup"] = true;
-                } else {
-                    $arrayArticlesToShow[$articlesToShowKey]["markup"] = false;
-                }
-                // Building link
-                $arrayArticlesToShow[$articlesToShowKey]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . Shopware()->Modules()->Core()->sBuildLink(array("sPerPage" => $articlesToShowValue), false) . "";
-            } // -- for every possible value
-        } // -- Building array
-
-        $articles = $this->sGetTranslations($articles, "article");
-
-        foreach ($articles as $articleKey => $articleValue) {
-            $articles[$articleKey] = Enlight()->Events()->filter('Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopStart', $articles[$articleKey], array('subject' => $this, 'id' => $categoryId));
-
-            $articles[$articleKey]["sVariantArticle"] = false;
-
-            if (!empty($articles[$articleKey]['liveshoppingData']['net_price'])) {
-                $cheapestPrice = $articles[$articleKey]['liveshoppingData']['net_price'];
-            } else {
-                $cheapestPrice = $this->sGetCheapestPrice(
-                    $articles[$articleKey]["articleID"],
-                    $articles[$articleKey]["pricegroup"],
-                    $articles[$articleKey]["pricegroupID"], $articles[$articleKey]["pricegroupActive"],
-                    false, true
-                );
-            }
-
-            // Reformat the price for further processing
-            if (!is_array($cheapestPrice)) {
-                $cheapestPrice = array(
-                    $cheapestPrice,
-                    0
-                );
-            }
-
-            // Temporary save default price
-            $articles[$articleKey]["priceDefault"] = $articles[$articleKey]["price"];
-
-            // Display always the cheapest price
-            if (!empty($cheapestPrice[0])) {
-                $articles[$articleKey]["price"] = $cheapestPrice[0];
-            }
-
-            // Is not free + Has a cheapest price available / Blockprice > display starting from attribut
-            if ($cheapestPrice[0] != 0 && ($cheapestPrice[1] == 0 || $cheapestPrice[1] > 1)) {
-                $articles[$articleKey]["priceStartingFrom"] = $cheapestPrice[0];
-            } else {
-                $articles[$articleKey]["priceStartingFrom"] = null;
-            }
-
-            // Price-Handling
-            $articles[$articleKey]["price"] = $this->sCalculatingPrice($articles[$articleKey]["price"], $articles[$articleKey]["tax"], $articles[$articleKey]["taxID"], $articles[$articleKey]);
-            $articles[$articleKey]["priceNumeric"] = floatval(str_replace(",", ".", $articles[$articleKey]["price"]));
-            $articles[$articleKey]["pseudoprice"] = (float) $articles[$articleKey]["pseudoprice"];
-
-            if (!empty($articles[$articleKey]["pseudoprice"])) {
-                $articles[$articleKey]["pseudoprice"] = $this->sCalculatingPrice($articles[$articleKey]["pseudoprice"], $articles[$articleKey]["tax"], $articles[$articleKey]["taxID"], $articles[$articleKey]);
-                $discPseudo = str_replace(",", ".", $articles[$articleKey]["pseudoprice"]);
-                $discPrice = str_replace(",", ".", $articles[$articleKey]["price"]);
-                $discount = round(($discPrice / $discPseudo * 100) - 100, 2) * -1;
-                $articles[$articleKey]["pseudopricePercent"] = array("int" => round($discount, 0), "float" => $discount);
-            }
-            // ---
-
-            if (empty($articles[$articleKey]['sVoteAverange'])) {
-                $articles[$articleKey]['sVoteAverange'] = '0.00|00';
-            }
-
-            $articles[$articleKey]['sVoteAverange'] = explode('|', $articles[$articleKey]['sVoteAverange']);
-            $articles[$articleKey]['sVoteAverange'] = array(
-                'averange' => round($articles[$articleKey]['sVoteAverange'][0], 2),
-                'count' => round($articles[$articleKey]['sVoteAverange'][1]),
-            );
-
-            $articles[$articleKey]["articleName"] = $this->sOptimizeText($articles[$articleKey]["articleName"]);
-            if (Shopware()->Config()->get('useShortDescriptionInListing')) {
-                $articles[$articleKey]["description_long"] = strlen($articles[$articleKey]["description"]) > 5 ? $articles[$articleKey]["description"] : $this->sOptimizeText($articles[$articleKey]["description_long"]);
-            }
-
-            // Require Pictures
-            $articles[$articleKey]["image"] = $this->getArticleListingCover($articles[$articleKey]["articleID"], Shopware()->Config()->get('forceArticleMainImageInListing'));
-
-            // Links to details, basket
-            $articles[$articleKey]["linkBasket"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=basket&sAdd=" . $articles[$articleKey]["ordernumber"];
-            $articles[$articleKey]["linkDetails"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sArticle=" . $articles[$articleKey]["articleID"] . "&sCategory=" . $categoryId;
-
-            $calculatedBasePriceData = $this->calculateCheapestBasePriceData(
-                $articles[$articleKey]["price"],
-                $articles[$articleKey]["articleID"],
-                $articles[$articleKey]["pricegroup"],
-                $articles[$articleKey]["pricegroupID"]
-            );
-
-            $articles[$articleKey]["purchaseunit"] = empty($calculatedBasePriceData["purchaseunit"]) ? null: $calculatedBasePriceData["purchaseunit"];
-            $articles[$articleKey]["referenceunit"] = empty($calculatedBasePriceData["referenceunit"]) ? null: $calculatedBasePriceData["referenceunit"];
-            $articles[$articleKey]["sUnit"] = empty($calculatedBasePriceData["sUnit"]) ? null: $calculatedBasePriceData["sUnit"];
-            $articles[$articleKey]["referenceprice"] = empty($calculatedBasePriceData["referenceprice"]) ? null: $calculatedBasePriceData["referenceprice"];
-
-            $articles[$articleKey] = Enlight()->Events()->filter('Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopEnd', $articles[$articleKey], array('subject' => $this, 'id' => $categoryId));
-        } // For every article in this list
-
-        // Build result array
-        $result['sArticles'] = $articles;
-        $result['sPages'] = $pages;
-
-        $result['sPerPage'] = $arrayArticlesToShow;
-        $result['sSupplierInfo'] = $supplierInfo;
-        $result['sNumberArticles'] = $numberArticles;
-        $result['sNumberPages'] = $numberPages;
-        $result['sPage'] = $sPage;
-        $result['categoryParams'] = $categoryParams;
-
-        if (!empty($sCategoryConfig['sTemplate'])) {
-            $result['sTemplate'] = $sCategoryConfig['sTemplate'];
-        }
-        if (!empty($sCategoryConfig['sSort'])) {
-            $result['sSort'] = $sCategoryConfig['sSort'];
-        }
+	$result = $this->getListing($categoryId);
+        
 
         $result = Enlight()->Events()->filter('Shopware_Modules_Articles_sGetArticlesByCategory_FilterResult', $result, array('subject' => $this, 'id' => $categoryId));
 
@@ -4686,7 +4123,7 @@ class sArticles
 
         $state = $this->globalStateService->get();
 
-        $product = Shopware()->Container()->get('product_service')->getListProduct(
+        $product = Shopware()->Container()->get('list_product_service')->get(
             $value,
             $state
         );
@@ -4699,10 +4136,10 @@ class sArticles
         //the mini product doesn't contains this data so we have to load this lazy.
         $propertySet = null;
         if ($product->hasProperties()) {
-            $propertySet = Shopware()->Container()->get('property_service')->getProductProperty(
-                $product,
-                $state
-            );
+//            $propertySet = Shopware()->Container()->get('property_service')->getProductProperty(
+//                $product,
+//                $state
+//            );
         }
 
         $average = Shopware()->Container()->get('vote_gateway')->getAverage($product);
@@ -4908,5 +4345,569 @@ class sArticles
         return $promotion;
     }
 
+    private function getListing($categoryId)
+    {
+        $context = Shopware()->Container()->get('global_state_service')->get();
 
+        $config = $this->loadCategoryConfig($categoryId);
+
+        $config['page'] = !empty($this->sSYSTEM->_GET['sPage']) ? (int)$this->sSYSTEM->_GET['sPage'] : 1;
+
+        $criteria = $this->getListingCriteria(
+            $categoryId,
+            $config,
+            $context
+        );
+        $searchResult = Shopware()->Container()->get('search_gateway_dbal')->search($criteria);
+
+        $articles = $this->getProductsOfSearchResult($categoryId, $searchResult, $context);
+
+        $result = array();
+        foreach ($searchResult->getFacets() as $facet) {
+            switch (true) {
+                case ($facet instanceof \Shopware\Gateway\Search\Facet\Property):
+                    $result['sProperties'] = $this->getFacetProperties($facet, $context, $config);
+                    break;
+
+                case ($facet instanceof \Shopware\Gateway\Search\Facet\Manufacturer):
+                    $suppliers = $this->getFacetManufacturers($facet, $context, $config);
+
+                    $result['sSupplierInfo'] = $this->getActiveListingSupplier($suppliers, $config);
+                    $result['sSuppliers'] = array_values($suppliers);
+                    break;
+            }
+        }
+
+        $result = array_merge($result, array(
+            'sArticles' => $articles,
+            'sNumberArticles' => $searchResult->getTotalCount(),
+            'sPages' => $this->createListingPageLinks($searchResult->getTotalCount(), $config),
+            'sPerPage' => $this->createListingPerPageLinks($config),
+            'sPage' => $config['page'],
+            'categoryParams' => $this->getListingLinkParameters($config)
+        ));
+
+        $result['sNumberPages'] = count($result['sPages']['numbers']);
+
+        if ($config['sTemplate']) {
+            $result['sTemplate'] = $config['sTemplate'];
+        }
+
+        if ($config['sSort']) {
+            $result['sSort'] = $config['sSort'];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Extracts the product result of the passed search result.
+     *
+     * The function collects first all order numbers of the product result
+     * and requests the listing product data over the list_product_service.
+     *
+     * In the second step the function converts the passed data into the shopware 3-4 array structure.
+     *
+     * @param $categoryId
+     * @param \Shopware\Gateway\Search\Result $result
+     * @param \Shopware\Struct\Context $context
+     * @return array
+     */
+    private function getProductsOfSearchResult(
+        $categoryId,
+        \Shopware\Gateway\Search\Result $result,
+        \Shopware\Struct\Context $context
+    ) {
+        $numbers = array();
+        foreach ($result->getProducts() as $product) {
+            $numbers[] = $product->getNumber();
+        }
+
+        $products = Shopware()->Container()->get('list_product_service')
+            ->getList($numbers, $context);
+
+        $articles = array();
+        foreach ($numbers as $number) {
+            $product = $products[$number];
+
+            if (!$product) {
+                continue;
+            }
+
+            $articles[] = $this->convertProductStruct($product, $categoryId);
+        }
+
+        return $articles;
+    }
+
+    /**
+     * @param $categoryId
+     * @param array $config
+     * @param Shopware\Struct\Context $context
+     * @return \Shopware\Gateway\Search\Criteria
+     */
+    private function getListingCriteria($categoryId, array $config, \Shopware\Struct\Context $context)
+    {
+        $criteria = new \Shopware\Gateway\Search\Criteria();
+
+        $criteria->category($categoryId);
+
+        $criteria->customerGroup($context->getCurrentCustomerGroup()->getId());
+
+        $criteria->limit = $config['sPerPage'];
+
+        $criteria->offset = ($config['page'] - 1) * $config['sPerPage'];;
+
+        if (!empty($config['sFilterProperties'])) {
+            $properties = explode('|', $config['sFilterProperties']);
+
+            $criteria->properties($properties);
+        }
+
+        if (!empty($config['sSupplier'])) {
+            $criteria->manufacturer($config['sSupplier']);
+        }
+
+        switch ($config['sSort']) {
+            case 1:
+                $criteria->sortByReleaseDate('DESC');
+                break;
+            case 2:
+                $criteria->sortByPopularity('DESC');
+                break;
+            case 3:
+                $fallback = $context->getFallbackCustomerGroup();
+                $criteria->sortByPrice($fallback->getKey(), 'ASC');
+                break;
+            case 4:
+                $fallback = $context->getFallbackCustomerGroup();
+                $criteria->sortByPrice($fallback->getKey(), 'DESC');
+                break;
+            case 5:
+                $criteria->sortByDescription();
+                break;
+            case 6:
+                $criteria->sortByDescription('DESC');
+                break;
+            default:
+                $criteria->sortByReleaseDate('DESC');
+        }
+        $criteria->propertyFacet();
+
+        $criteria->manufacturerFacet();
+
+        return $criteria;
+    }
+
+    private function getFacetManufacturers(
+        \Shopware\Gateway\Search\Facet\Manufacturer $facet,
+        \Shopware\Struct\Context $context,
+        array $config
+    ) {
+        $ids = array_column($facet->manufacturers, 'id');
+
+        $manufacturers = Shopware()->Container()->get('manufacturer_service')->getList(
+            $ids,
+            $context
+        );
+
+        $data = array();
+        $params = $this->getListingLinkParameters($config);
+
+        foreach ($facet->manufacturers as $info) {
+            $struct = $manufacturers[$info['id']];
+
+            if (!$struct) {
+                continue;
+            }
+
+            $params = array_merge($params, array('sSupplier' => $struct->getId()));
+
+            $manufacturer = $this->convertManufacturerStruct($struct);
+            $manufacturer['supplier_link'] = $manufacturer['link'];
+            $manufacturer['link'] = $this->buildListingLink($params);
+
+            $manufacturer['countSuppliers'] = $info['total'];
+            $data[$info['id']] = $manufacturer;
+        }
+
+        return $data;
+    }
+
+    private function getActiveListingSupplier($suppliers, $config)
+    {
+        if (!$config['sSupplier']) {
+            return array();
+        }
+
+        $activeSupplier = $suppliers[$config['sSupplier']];
+
+        $params = $this->getListingLinkParameters($config);
+
+        $params = array_merge($params, array('sSupplier' => 0));
+
+        $activeSupplier['link'] = $this->buildListingLink($params) . '&s=0';
+
+        return $activeSupplier;
+    }
+
+    private function getFacetProperties(
+        \Shopware\Gateway\Search\Facet\Property $facet,
+        \Shopware\Struct\Context $context,
+        array $config
+    ) {
+        $ids = array_keys($facet->properties);
+        $properties = Shopware()->Container()->get('property_service')->getList(
+            $ids,
+            $context
+        );
+
+        $data = array();
+        foreach ($properties as $propertySet) {
+            $data[] = $this->convertPropertySetStruct(
+                $propertySet,
+                $facet->properties,
+                $config
+            );
+        }
+
+        $filteredOptions = explode('|', $config['sFilterProperties']);
+        $params = $this->getListingLinkParameters($config);
+
+        foreach ($data as &$set) {
+            $activeSetGroups = array();
+
+            foreach ($set['groups'] as &$group) {
+
+                $activeGroupOptions = array();
+
+                foreach ($group['options'] as &$option) {
+                    $currentFilters = array_merge(
+                        $filteredOptions,
+                        array($option['id'])
+                    );
+
+                    $params = array_merge($params, array(
+                        'sFilterProperties' => implode('|', $currentFilters)
+                    ));
+
+                    $option['link'] = $this->buildListingLink($params);
+
+                    $option['active'] = in_array($option['id'], $filteredOptions);
+
+                    $option['total'] = $facet->properties[$option['id']];
+
+                    if ($option['active']) {
+                        $activeGroupOptions[] = $option['id'];
+                    }
+                }
+
+                $group['active'] = (bool)(!empty($activeGroupOptions));
+
+                if ($group['active']) {
+                    $activeSetGroups[] = $group['id'];
+
+                    $removeOptions = array_diff($filteredOptions, $activeGroupOptions);
+
+                    $params = array_merge($params, array(
+                        'sFilterProperties' => implode('|', $removeOptions)
+                    ));
+
+                    $group['removeLink'] = $this->buildListingLink($params);
+                    if (empty($params['sFilterProperties'])) {
+                        $group['removeLink'] .= '&sFilterProperties=0';
+                    }
+                }
+
+                $set['active'] = (bool)(!empty($activeSetGroups));
+            }
+        }
+
+        return $data;
+    }
+
+    private function convertPropertySetStruct(\Shopware\Struct\Property\Set $set)
+    {
+        $data = array(
+            'id' => $set->getId(),
+            'name' => $set->getName(),
+            'isComparable' => $set->isComparable(),
+            'groups' => array()
+        );
+
+        foreach ($set->getAttributes() as $attribute) {
+            $data = array_merge($data, $attribute->toArray());
+        }
+
+        foreach ($set->getGroups() as $group) {
+            $data['groups'][] = $this->convertPropertyGroupStruct($group);
+        }
+
+        return $data;
+    }
+
+    private function convertPropertyGroupStruct(\Shopware\Struct\Property\Group $group)
+    {
+        $data = array(
+            'id' => $group->getId(),
+            'name' => $group->getName(),
+            'isFilterable' => $group->isFilterable(),
+            'options' => array()
+        );
+
+        foreach ($group->getOptions() as $option) {
+            $data['options'][] = $this->convertPropertyOptionStruct($option);
+        }
+
+        return $data;
+    }
+
+    private function convertPropertyOptionStruct(\Shopware\Struct\Property\Option $option)
+    {
+        return array(
+            'id' => $option->getId(),
+            'name' => $option->getName()
+        );
+    }
+
+    private function convertManufacturerStruct(\Shopware\Struct\Product\Manufacturer $manufacturer)
+    {
+        $data = array(
+            'id' => $manufacturer->getId(),
+            'name' => $manufacturer->getName(),
+            'description' => $manufacturer->getDescription(),
+            'metaTitle' => $manufacturer->getMetaTitle(),
+            'metaDescription' => $manufacturer->getMetaDescription(),
+            'metaKeywords' => $manufacturer->getMetaKeywords(),
+            'link' => $manufacturer->getLink(),
+            'image' => $manufacturer->getCoverFile(),
+        );
+
+        $data['attribute'] = array();
+        foreach ($manufacturer->getAttributes() as $attribute) {
+            $data['attribute'] = array_merge(
+                $data['attribute'],
+                $attribute->toArray()
+            );
+        }
+
+        return $data;
+    }
+
+
+    /**
+     * Helper function which builds the listing links with all required parameters.
+     *
+     * @param $params
+     * @return string
+     */
+    private function buildListingLink($params)
+    {
+        return $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink(
+            $params, false
+        );
+    }
+
+    /**
+     * Helper function which returns all category listing configurations
+     * which are required for the listing links like "add filter", "next page", ...
+     *
+     * @param $config
+     * @return array
+     */
+    private function getListingLinkParameters($config)
+    {
+        return array(
+            'sSort' => $config['sSort'],
+            'sFilterProperties' => $config['sFilterProperties'],
+            'sSupplier' => $config['sSupplier'],
+            'sPerPage' => $config['sPerPage'],
+            'sPage' => 1
+        );
+    }
+
+    /**
+     * Generates the template array for the different page sizes of a listing.
+     *
+     * Returns an array for each configured pages size of the settings backend module.
+     *
+     * The sizes are stored in the configuration field sNumberArticlesToShow.
+     *
+     * Each size array contains a field "value" with the page size,
+     * a field "markup" if the size is currently selected and a field
+     * "link" which contains a link to change the page size.
+     *
+     * @param $config
+     * @return array
+     */
+    private function createListingPerPageLinks($config)
+    {
+        $pageSizes = explode("|", $this->sSYSTEM->sCONFIG['sNumberArticlesToShow']);
+
+        $sizes = array();
+
+        $params = $this->getListingLinkParameters($config);
+
+        $currentSize = $config['sPerPage'];
+
+        foreach($pageSizes as $size) {
+            $params = array_merge($params, array('sPerPage' => $size));
+            $sizeData = array(
+                'markup' => (int)($size == $currentSize),
+                'value'  => $size,
+                'link'   => $this->buildListingLink($params +  array('sPerPage' => $size))
+            );
+
+            $sizes[] = $sizeData;
+        }
+        return $sizes;
+    }
+
+    /**
+     * Generates the template array for the different listing pages.
+     *
+     * Returns an array for each available listing page.
+     * The listing page count can be limit over the shopware configuration field "sMaxPages"
+     *
+     * Each page array contains a field "value" with the page number,
+     * a field "markup" if the page is currently selected and a field
+     * "link" which contains a link to change the page.
+     *
+     * @param $totalCount
+     * @param $config
+     * @return array
+     */
+    private function createListingPageLinks($totalCount, $config)
+    {
+        $currentPage = $config['page'];
+
+        $count = ceil($totalCount / $config['sPerPage']);
+
+        $shopwareConfig = $this->sSYSTEM->sCONFIG;
+
+        if ((int)$shopwareConfig['sMaxPages'] > 0 && (int)$shopwareConfig['sMaxPages'] < $count) {
+            $count = (int)$shopwareConfig['sMaxPages'];
+        }
+
+        $params = $this->getListingLinkParameters($config);
+
+        $pages = array();
+        $nextIndex = 1;
+        $previousIndex = 0;
+
+        for ($i = 1; $i <= $count; $i++) {
+            $params = array_merge($params,  array('sPage' => $i));
+
+            $page = array(
+                'markup' => (int)($i == $currentPage),
+                'value'  => $i,
+                'link'   => $this->buildListingLink($params)
+            );
+
+            if ($currentPage == $i) {
+                $nextIndex = $i + 1;
+                $previousIndex = $i - 1;
+            }
+
+            $pages[$i] = $page;
+        }
+
+        return array(
+            'numbers'  => $pages,
+            'previous' => $pages[$previousIndex]['link'],
+            'next'     => $pages[$nextIndex]['link']
+        );
+    }
+
+    /**
+     * Loads the listing configuration for the passed category id.
+     *
+     * @param $categoryId
+     * @return array
+     */
+    private function loadCategoryConfig($categoryId)
+    {
+        $config = array();
+
+        $session = $this->sSYSTEM->_SESSION;
+        $sessionKey = 'sCategoryConfig' . $categoryId;
+
+        if (!$this->isHttpCacheActive() && isset($session[$sessionKey])) {
+            $config = $session[$sessionKey];
+        }
+
+        $config['sSort'] = $this->getConfigParameter(
+            $config,
+            'sSort',
+            0
+        );
+
+        $config['sPerPage'] = $this->getConfigParameter(
+            $config,
+            'sPerPage',
+            (int) $this->sSYSTEM->sCONFIG['sARTICLESPERPAGE']
+        );
+
+        $config['sSupplier'] = $this->getConfigParameter(
+            $config,
+            'sSupplier',
+            null
+        );
+
+        $config['sFilterProperties'] = $this->getConfigParameter(
+            $config,
+            'sFilterProperties',
+            null
+        );
+
+        if (!empty($config['sFilterProperties'])) {
+            $filters = explode('|', $config['sFilterProperties']);
+            if ($filters[0] == 0) {
+                unset($filters[0]);
+            }
+            $config['sFilterProperties'] = implode('|', $filters);
+        }
+
+        $config['sTemplate'] = $this->getConfigParameter(
+            $config,
+            'sTemplate',
+            null
+        );
+
+        $session[$sessionKey] = $config;
+
+        return $config;
+    }
+
+    /**
+     * Helper function which checks the different sources for the category config.
+     *
+     * @param $config
+     * @param $parameter
+     * @param $default
+     * @return null
+     */
+    private function getConfigParameter($config, $parameter, $default)
+    {
+        $value = null;
+
+        $get = $this->sSYSTEM->_GET;
+        $post = $this->sSYSTEM->_POST;
+
+        // Order List by
+        if (isset($post[$parameter])) {
+            $value = $post[$parameter];
+
+        } elseif (isset($get[$parameter])) {
+            $value = $get[$parameter];
+
+        } elseif (isset($config[$parameter])) {
+            $value = $config[$parameter];
+
+        } else {
+            $value = $default;
+        }
+
+        return $value;
+    }
 }

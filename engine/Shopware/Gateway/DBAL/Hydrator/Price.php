@@ -4,7 +4,7 @@ namespace Shopware\Gateway\DBAL\Hydrator;
 
 use Shopware\Struct as Struct;
 
-class Price
+class Price extends Hydrator
 {
     /**
      * @var CustomerGroup
@@ -112,17 +112,5 @@ class Price
         $discount->setQuantity(intval($data['discountstart']));
 
         return $discount;
-    }
-
-    private function extractFields($prefix, $data)
-    {
-        $result = array();
-        foreach ($data as $field => $value) {
-            if (strpos($field, $prefix) === 0) {
-                $key = str_replace($prefix, '', $field);
-                $result[$key] = $value;
-            }
-        }
-        return $result;
     }
 }

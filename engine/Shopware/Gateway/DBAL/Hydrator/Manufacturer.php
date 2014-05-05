@@ -4,7 +4,7 @@ namespace Shopware\Gateway\DBAL\Hydrator;
 
 use Shopware\Struct as Struct;
 
-class Manufacturer
+class Manufacturer extends Hydrator
 {
     /**
      * @var Attribute
@@ -26,7 +26,7 @@ class Manufacturer
 
         $this->assignData($manufacturer, $data);
 
-        if (isset($data['attribute'])) {
+        if (isset($data['__manufacturerAttribute_id'])) {
             $this->assignAttribute($manufacturer, $data);
         }
 
@@ -71,7 +71,7 @@ class Manufacturer
     private function assignAttribute(Struct\Product\Manufacturer $manufacturer, array $data)
     {
         $attribute = $this->attributeHydrator->hydrate(
-            $data['attribute']
+            $this->extractFields('__manufacturerAttribute_', $data)
         );
 
         $manufacturer->addAttribute('core', $attribute);

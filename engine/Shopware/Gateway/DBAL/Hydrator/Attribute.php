@@ -4,7 +4,7 @@ namespace Shopware\Gateway\DBAL\Hydrator;
 
 use Shopware\Struct as Struct;
 
-class Attribute
+class Attribute extends Hydrator
 {
     public function hydrate(array $data)
     {

@@ -160,6 +160,8 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         }
 
         $categoryArticles = Shopware()->Modules()->Articles()->sGetArticlesByCategory($categoryId);
+        $suppliers = $categoryArticles['sSuppliers'];
+        $properties = $categoryArticles['sProperties'];
 
         if(empty($categoryContent['noViewSelect'])
             && !empty($categoryArticles['sTemplate'])
@@ -196,21 +198,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $this->View()->assign($categoryArticles);
 
         $this->View()->assign(array(
-            'sSuppliers' => Shopware()->Modules()->Articles()->sGetAffectedSuppliers($categoryId),
-            'sCategoryContent' => $categoryContent
+            'sSuppliers' => $suppliers,
+            'sCategoryContent' => $categoryContent,
+            'sProperties' => $properties
         ));
-
-        if (empty($categoryContent["hideFilter"]) && $this->displayFiltersInListing()) {
-            $articleProperties = Shopware()->Modules()->Articles()->sGetCategoryProperties($categoryId, $supplierId, null);
-        }
-
-        if (!empty($articleProperties['filterOptions'])) {
-            $this->View()->assign(array(
-                'activeFilterGroup' => $this->request->getQuery('sFilterGroup'),
-                'sPropertiesOptionsOnly' => $articleProperties['filterOptions']['optionsOnly'] ?: array(),
-                'sPropertiesGrouped' => $articleProperties['filterOptions']['grouped'] ?: array()
-            ));
-        }
     }
 
     /**

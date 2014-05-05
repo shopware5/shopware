@@ -4,7 +4,7 @@ namespace Shopware\Gateway\DBAL\Hydrator;
 
 use Shopware\Struct as Struct;
 
-class Product
+class Product extends Hydrator
 {
     /**
      * @var Manufacturer
@@ -177,18 +177,13 @@ class Product
 
     private function assignManufacturerData(Struct\ListProduct $product, $data)
     {
-        $manufacturer = array(
-            'id' => $data['__manufacturer_id'],
-            'name' => $data['__manufacturer_name'],
-            'img' => $data['__manufacturer_img'],
-            'link' => $data['__manufacturer_link'],
-            'description' => $data['__manufacturer_description'],
-            'meta_title' => $data['__manufacturer_meta_title'],
-            'keywords' => $data['__manufacturer_keywords'],
-        );
+        $manufacturer = $this->extractFields('__manufacturer_', $data);
 
         if (!empty($data['__manufacturerAttribute_id'])) {
-            $manufacturer['attribute'] = $this->extractFields('__manufacturerAttribute_', $data);
+            $manufacturer = array_merge(
+                $manufacturer,
+                $this->getFields('__manufacturerAttribute_', $data)
+            );
         }
 
         $manufacturer = $this->manufacturerHydrator->hydrate($manufacturer);
@@ -237,15 +232,4 @@ class Product
         $product->addAttribute('core', $attribute);
     }
 
-    private function extractFields($prefix, $data)
-    {
-        $result = array();
-        foreach ($data as $field => $value) {
-            if (strpos($field, $prefix) === 0) {
-                $key = str_replace($prefix, '', $field);
-                $result[$key] = $value;
-            }
-        }
-        return $result;
-    }
 }

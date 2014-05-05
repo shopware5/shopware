@@ -7,7 +7,6 @@ namespace Shopware\Struct\Property;
  */
 class Group
 {
-
     /**
      * @var int
      */
@@ -19,7 +18,12 @@ class Group
     private $name;
 
     /**
-     * @var Property\Option[]
+     * @var boolean
+     */
+    private $filterable;
+
+    /**
+     * @var Option[]
      */
     private $options;
 
@@ -76,4 +80,21 @@ class Group
     {
         return $this->options;
     }
+
+    /**
+     * @param boolean $filterable
+     */
+    public function setFilterable($filterable)
+    {
+        $this->filterable = $filterable;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isFilterable()
+    {
+        return $this->filterable;
+    }
+
 }

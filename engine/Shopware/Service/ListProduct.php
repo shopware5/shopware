@@ -88,6 +88,7 @@ class ListProduct
 
         $cheapestPrices = $this->cheapestPriceService->getList($products, $context);
 
+        $result = array();
         foreach ($products as $product) {
             $key = $product->getId();
 
@@ -97,12 +98,18 @@ class ListProduct
 
             $product->setCheapestPriceRule($cheapestPrices[$key]);
 
-            $this->priceCalculationService->calculateProduct($product, $context);
+            if (!$product->hasState(Struct\ListProduct::STATE_PRICE_CALCULATED)) {
+                $this->priceCalculationService->calculateProduct($product, $context);
+            }
 
-//            $this->translationService->translateProduct($product, $context->getShop());
+            if (!$product->hasState(Struct\ListProduct::STATE_TRANSLATED)) {
+//                $this->translationService->translateProduct($product, $context->getShop());
+            }
+
+            $result[$product->getNumber()] = $product;
         }
 
-        return $products;
+        return $result;
     }
 
     /**

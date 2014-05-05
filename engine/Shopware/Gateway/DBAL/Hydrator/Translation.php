@@ -4,7 +4,7 @@ namespace Shopware\Gateway\DBAL\Hydrator;
 
 use Shopware\Struct as Struct;
 
-class Translation
+class Translation extends Hydrator
 {
     /**
      * Contains the translation field mapping

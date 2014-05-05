@@ -7,7 +7,6 @@ namespace Shopware\Struct\Property;
  */
 class Option
 {
-
     /**
      * @var int
      */

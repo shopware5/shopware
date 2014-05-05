@@ -79,54 +79,26 @@ class CoreGenerator extends DBAL
     {
         switch (true) {
             case ($sorting instanceof Sorting\ReleaseDate):
-                $query->addOrderBy('products.datum', $sorting->getDirection())
-                    ->addOrderBy('products.changetime', $sorting->getDirection())
-                    ->addOrderBy('products.id', $sorting->getDirection());
-
+                $this->addReleaseSorting($query, $sorting);
                 break;
 
             case ($sorting instanceof Sorting\Popularity):
-                if (!$query->includesTable('s_articles_top_seller')) {
-                    $query->innerJoin(
-                        'products',
-                        's_articles_top_seller_ro',
-                        'topSeller',
-                        'topSeller.article_id = products.id'
-                    );
-                }
-
-                $query->addOrderBy('topSeller.sales', $sorting->getDirection())
-                    ->addOrderBy('topSeller.article_id', $sorting->getDirection());
-
+                $this->addPopularitySorting($query, $sorting);
                 break;
 
-            /**@var $sorting Sorting\Price*/
+            /**@var $sorting Sorting\Price */
             case ($sorting instanceof Sorting\Price):
-                if (!$query->includesTable('s_articles_prices')) {
-                    $query->innerJoin(
-                        'products',
-                        's_articles_prices',
-                        'prices',
-                        "prices.articledetailsID = variants.id
-                         AND prices.from = 1
-                         AND prices.pricegroup = :priceGroupSorting"
-                    );
-                    $query->setParameter(':priceGroupSorting', $sorting->customerGroupKey);
-                }
-
-                $query->addOrderBy('(prices.price * variants.minpurchase)', $sorting->getDirection())
-                    ->addOrderBy('prices.articleID', $sorting->getDirection());
-
+                $this->addPriceSorting($query, $sorting);
                 break;
 
-            /**@var $sorting Sorting\Description*/
+            /**@var $sorting Sorting\Description */
             case ($sorting instanceof Sorting\Description):
-                $query->addOrderBy('products.name', $sorting->getDirection())
-                    ->addOrderBy('products.id', $sorting->getDirection());
+                $this->addDescriptionSorting($query, $sorting);
 
                 break;
         }
     }
+
 
     private function addCustomerGroupCondition(QueryBuilder $query, Condition\CustomerGroup $customerGroup)
     {
@@ -145,7 +117,7 @@ class CoreGenerator extends DBAL
 
     private function addPropertyCondition(QueryBuilder $query, Condition\Property $property)
     {
-        foreach($property->values as $value) {
+        foreach ($property->values as $value) {
             $key = 'value' . $value;
 
             $query->innerJoin(
@@ -209,6 +181,51 @@ class CoreGenerator extends DBAL
         $query->addSelect('prices.price');
     }
 
+    private function addDescriptionSorting(QueryBuilder $query, Sorting\ReleaseDate $sorting)
+    {
+        $query->addOrderBy('products.name', $sorting->getDirection())
+            ->addOrderBy('products.id', $sorting->getDirection());
+    }
 
+    private function addPriceSorting(QueryBuilder $query, Sorting\Price $sorting)
+    {
+        if (!$query->includesTable('s_articles_prices')) {
+            $query->innerJoin(
+                'products',
+                's_articles_prices',
+                'prices',
+                "prices.articledetailsID = variants.id
+                 AND prices.from = 1
+                 AND prices.pricegroup = :priceGroupSorting"
+            );
+            $query->setParameter(':priceGroupSorting', $sorting->customerGroupKey);
+        }
+
+        $query->addOrderBy('(prices.price * variants.minpurchase)', $sorting->getDirection())
+            ->addOrderBy('prices.articleID', $sorting->getDirection());
+    }
+
+    private function addPopularitySorting(QueryBuilder $query, Sorting\ReleaseDate $sorting)
+    {
+        if (!$query->includesTable('s_articles_top_seller')) {
+            $query->innerJoin(
+                'products',
+                's_articles_top_seller_ro',
+                'topSeller',
+                'topSeller.article_id = products.id'
+            );
+        }
+
+        $query->addOrderBy('topSeller.sales', $sorting->getDirection())
+            ->addOrderBy('topSeller.article_id', $sorting->getDirection());
+
+    }
+
+    private function addReleaseSorting(QueryBuilder $query, Sorting\ReleaseDate $sorting)
+    {
+        $query->addOrderBy('products.datum', $sorting->getDirection())
+            ->addOrderBy('products.changetime', $sorting->getDirection())
+            ->addOrderBy('products.id', $sorting->getDirection());
+    }
 
 }

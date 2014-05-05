@@ -2,6 +2,7 @@
 
 namespace Shopware\Gateway\DBAL;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Gateway\DBAL\Hydrator as Hydrator;
 use Shopware\Struct;
@@ -24,6 +25,98 @@ class Property extends Gateway
         $this->propertyHydrator = $propertyHydrator;
         $this->entityManager = $entityManager;
     }
+
+    /**
+     * @param array $ids
+     * @return Struct\Property\Set[]
+     */
+    public function getList(array $ids)
+    {
+        $query = $this->entityManager->getDBALQueryBuilder();
+
+        $query->addSelect($this->getSetFields())
+            ->addSelect($this->getGroupFields())
+            ->addSelect($this->getOptionFields())
+            ->addSelect($this->getTableFields('s_filter_attributes', 'attribute'));
+
+        $query->from('s_filter', 'sets');
+
+        $query->innerJoin(
+            'sets',
+            's_filter_relations',
+            'relations',
+            'relations.groupID = sets.id'
+        );
+
+        $query->leftJoin(
+            'sets',
+            's_filter_attributes',
+            'attribute',
+            'attribute.filterID = sets.id'
+        );
+
+        $query->innerJoin(
+            'relations',
+            's_filter_options',
+            'groups',
+            'relations.optionID = groups.id'
+        );
+
+        $query->innerJoin(
+            'groups',
+            's_filter_values',
+            'options',
+            'options.optionID = groups.id'
+        );
+
+        $query->where('options.id IN (:ids)')
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+
+        $query->addOrderBy('sets.position')
+            ->addOrderBy('relations.position')
+            ->addOrderBy('options.position')
+            ->addOrderBy('options.id');
+
+        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $query->execute();
+
+        $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        return $this->propertyHydrator->hydrateValues($rows);
+    }
+
+    private function getSetFields()
+    {
+        return array(
+            'sets.id',
+            'sets.name',
+            'sets.position',
+            'sets.comparable',
+            'sets.sortmode'
+        );
+    }
+
+    private function getGroupFields()
+    {
+        return array(
+            'groups.id as __groups_id',
+            'groups.name as __groups_name',
+            'groups.filterable as __groups_filterable',
+            'groups.default as __groups_default'
+        );
+    }
+
+    private function getOptionFields()
+    {
+        return array(
+            'options.id as __options_id',
+            'options.optionID as __options_optionID',
+            'options.value as __options_value',
+            'options.position as __options_position',
+            'options.value_numeric as __options_value_numeric'
+        );
+    }
+
 
     /**
      * Returns the property set for the passed product.

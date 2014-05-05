@@ -2,63 +2,106 @@
 
 {* Filter properites *}
 {block name="frontend_listing_filter_properties"}
-{if $sPropertiesOptionsOnly|@count}
-	{block name="frontend_listing_filter_properties_box"}
-	{if $sPropertiesGrouped|@count > 1 && $sCategoryContent.showFilterGroups}
-	 {foreach from=$sPropertiesGrouped item=sPropertyGroup key=name}
-       <a href="{$sPropertyGroup.default.linkSelect}" title="{$sCategoryInfo.name}">
-       <div{if $activeFilterGroup == $name} class="active"{/if}>{$name}</div></a>
-       {if $activeFilterGroup == $name}
-	       {foreach from=$sPropertiesOptionsOnly item=value key=option}
-               {if $value.properties.group === $name}
-                    <h5 class="bold">{$option}</h5>
-                    <ul class="active">
-                        {foreach from=$value.values item=optionValue}
-                            {if $optionValue.active}
-                                <li>{if $optionValue.valueTranslation}{$optionValue.valueTranslation}{else}{$optionValue.value}{/if} ({$optionValue.count})</li>
-                            {else}
-                                <li><a href="{$optionValue.link}" title="{$sCategoryInfo.name}">{if $optionValue.valueTranslation}{$optionValue.valueTranslation}{else}{$optionValue.value}{/if} {if $optionValue.count > 0}({$optionValue.count}){/if}</a></li>
-                            {/if}
-                        {/foreach}
-                    {if $value.properties.active}
-                        <li class="close"><a href="{$value.properties.linkRemoveProperty}" title="{$sCategoryInfo.name}">{s name='FilterLinkDefault'}{/s}</a></li>
+
+{if $sProperties}
+    {foreach $sProperties as $set}
+        {foreach $set.groups as $group}
+
+            <div {if $group.active}class="active"{/if} >
+                {$group.name}
+                <span class="expandcollapse">+</span>
+            </div>
+
+            <div class="slideContainer">
+                <ul>
+                    {foreach $group.options as $option}
+                        {if $option.active}
+                            <li class="active">{$option.name}</li>
+                        {else}
+                            <li>
+                                <a href="{$option.link}" title="{$sCategoryInfo.name}">
+                                    {$option.name} ({$option.total})
+                                </a>
+                            </li>
+                        {/if}
+                    {/foreach}
+                    {if $group.active}
+                        <li class="close">
+                            <a href="{$group.removeLink}" title="{$sCategoryInfo.name}">
+                                {se name='FilterLinkDefault'}{/se}
+                            </a>
+                        </li>
                     {/if}
-                    </ul>
-               {/if}
-			{/foreach}
-       {/if}
+                </ul>
+            </div>
+        {/foreach}
     {/foreach}
-    {else}
-		{foreach from=$sPropertiesOptionsOnly item=value key=option}
-			{if $value|@count}
-				<div{if $value.properties.active} class="active"{/if}>{$option} <span class="expandcollapse">+</span></div>
-				<div class="slideContainer">
-					<ul>
-					{foreach from=$value.values item=optionValue}
-						{if $optionValue.active}
-							<li class="active">
-								{if $optionValue.valueTranslation}{$optionValue.valueTranslation}{else}{$optionValue.value}{/if} {if $optionValue.count > 0}({$optionValue.count}){/if}
-							</li>
-						{else}
-							<li>
-								<a href="{$optionValue.link}" title="{$sCategoryInfo.name}">
-									{if $optionValue.valueTranslation}{$optionValue.valueTranslation}{else}{$optionValue.value}{/if} {if $optionValue.count > 0}({$optionValue.count}){/if}
-								</a>
-							</li>
-						{/if}
-					{/foreach}
-					{if $value.properties.active}
-						<li class="close">
-							<a href="{$value.properties.linkRemoveProperty}" title="{$sCategoryInfo.name}">
-								{se name='FilterLinkDefault'}{/se}
-							</a>
-						</li>
-					{/if}
-					</ul>
-				</div>
-			{/if}
-		{/foreach}
-	{/if}
-	{/block}
 {/if}
+
+    <div style="margin: 40px 0;">OLD FILTERS</div>
+
+
+    {if $sPropertiesOptionsOnly|@count}
+        {block name="frontend_listing_filter_properties_box"}
+
+            {foreach from=$sPropertiesOptionsOnly item=value key=option}
+                {if $value|@count}
+
+                    {if $value.properties.active}
+                        <div class="active">{$option} <span class="expandcollapse">+</span></div>
+                    {else}
+                        <div>{$option} <span class="expandcollapse">+</span></div>
+                    {/if}
+
+                    <div class="slideContainer">
+                        <ul>
+                            {foreach from=$value.values item=optionValue}
+                                {if $optionValue.active}
+                                    <li class="active">
+                                        {if $optionValue.valueTranslation}
+                                            {$optionValue.valueTranslation}
+                                        {else}
+                                            {$optionValue.value}
+
+                                        {/if}
+                                        {if $optionValue.count > 0}
+                                            ({$optionValue.count})
+                                        {/if}
+                                    </li>
+
+                                {else}
+
+                                    <li>
+                                        <a href="{$optionValue.link}" title="{$sCategoryInfo.name}">
+                                            {if $optionValue.valueTranslation}
+                                                {$optionValue.valueTranslation}
+                                            {else}
+                                                {$optionValue.value}
+                                            {/if}
+                                            {if $optionValue.count > 0}
+                                                ({$optionValue.count})
+                                            {/if}
+                                        </a>
+                                    </li>
+                                {/if}
+
+                            {/foreach}
+
+                            {if $value.properties.active}
+                                <li class="close">
+                                    <a href="{$value.properties.linkRemoveProperty}" title="{$sCategoryInfo.name}">
+                                        {se name='FilterLinkDefault'}{/se}
+                                    </a>
+                                </li>
+                            {/if}
+
+                        </ul>
+                    </div>
+                {/if}
+            {/foreach}
+
+        {/block}
+    {/if}
+
+
 {/block}

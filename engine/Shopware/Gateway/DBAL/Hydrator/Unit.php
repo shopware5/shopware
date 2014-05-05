@@ -4,7 +4,7 @@ namespace Shopware\Gateway\DBAL\Hydrator;
 
 use Shopware\Struct as Struct;
 
-class Unit
+class Unit extends Hydrator
 {
     /**
      * @param array $data
