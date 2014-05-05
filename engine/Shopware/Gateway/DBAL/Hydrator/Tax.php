@@ -4,7 +4,7 @@ namespace Shopware\Gateway\DBAL\Hydrator;
 
 use Shopware\Struct as Struct;
 
-class Tax
+class Tax extends Hydrator
 {
     /**
      * Creates a new tax struct and assigns the passed

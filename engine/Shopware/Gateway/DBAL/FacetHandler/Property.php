@@ -66,12 +66,12 @@ class Property extends DBAL
         );
 
         $query->groupBy('propertyOptions.id');
-
+        
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
-        $facet->properties = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $facet->properties = $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
 
         return $facet;
     }

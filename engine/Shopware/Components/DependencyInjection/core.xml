@@ -29,6 +29,10 @@
             <argument type="service" id="graduated_prices_gateway" />
         </service>
 
+        <service id="manufacturer_service" class="Shopware\Service\Manufacturer">
+            <argument type="service" id="manufacturer_gateway" />
+        </service>
+
         <service id="price_calculation_service" class="Shopware\Service\PriceCalculation" >
             <argument type="service" id="price_group_discount_gateway" />
         </service>
@@ -79,6 +83,8 @@
         <service id="country_gateway" alias="country_gateway_dbal"/>
 
         <service id="price_group_discount_gateway" alias="price_group_discount_gateway_dbal"/>
+
+        <service id="manufacturer_gateway" alias="manufacturer_gateway_dbal"/>
 
 
         <!-- DBAL gateway classes, which used as shopware default -->
@@ -147,6 +153,11 @@
         <service id="country_gateway_dbal" class="Shopware\Gateway\DBAL\Country">
             <argument type="service" id="models"/>
             <argument type="service" id="country_hydrator_dbal"/>
+        </service>
+
+        <service id="manufacturer_gateway_dbal" class="Shopware\Gateway\DBAL\Manufacturer">
+            <argument type="service" id="models"/>
+            <argument type="service" id="manufacturer_hydrator_dbal"/>
         </service>
 
         <!-- Shopware hydrator definitions -->

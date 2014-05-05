@@ -3,7 +3,7 @@
 namespace Shopware\Service;
 
 use Shopware\Struct as Struct;
-use Shopware\Gateway as Gateway;
+use Shopware\Gateway\DBAL as Gateway;
 
 /**
  * @package Shopware\Service
@@ -11,7 +11,7 @@ use Shopware\Gateway as Gateway;
 class Property
 {
     /**
-     * @var \Shopware\Gateway\Property
+     * @var \Shopware\Gateway\DBAL\Property
      */
     private $propertyGateway;
 
@@ -24,6 +24,25 @@ class Property
     {
         $this->propertyGateway = $propertyGateway;
         $this->translationService = $translationService;
+    }
+
+    /**
+     * @param array $ids
+     * @param Struct\Context $context
+     * @return Struct\Property\Set[]
+     */
+    public function getList(array $ids, Struct\Context $context)
+    {
+        $properties = $this->propertyGateway->getList($ids);
+
+        return $properties;
+    }
+
+    public function get($id, Struct\Context $context)
+    {
+        $properties = $this->getList(array($id), $context);
+
+        return array_shift($properties);
     }
 
     /**

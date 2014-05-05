@@ -5,7 +5,7 @@ namespace Shopware\Gateway\DBAL\Hydrator;
 use Shopware\Struct\Country\Area;
 use Shopware\Struct\Country\State;
 
-class Country
+class Country extends Hydrator
 {
     /**
      * @var Attribute
@@ -72,18 +72,5 @@ class Country
         }
 
         return $state;
-    }
-
-
-    private function extractFields($prefix, $data)
-    {
-        $result = array();
-        foreach ($data as $field => $value) {
-            if (strpos($field, $prefix) === 0) {
-                $key = str_replace($prefix, '', $field);
-                $result[$key] = $value;
-            }
-        }
-        return $result;
     }
 }
