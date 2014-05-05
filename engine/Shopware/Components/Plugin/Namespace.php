@@ -394,9 +394,12 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
 
     /**
      * Registers a plugin in the collection.
+     * If $removeData is set to false the plugin data will not be removed.
      *
-     * @param   Shopware_Components_Plugin_Bootstrap $bootstrap
-     * @return  bool
+     * @param Shopware_Components_Plugin_Bootstrap $bootstrap
+     * @param bool $removeData
+     * @return bool
+     * @throws Exception
      */
     public function uninstallPlugin(Shopware_Components_Plugin_Bootstrap $bootstrap, $removeData = true)
     {
@@ -468,31 +471,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         $db->query($sql, array($id));
 
         // Remove form
-        if ($bootstrap->hasForm()) {
-            if ($removeData) {
-                $this->removeForm($bootstrap->Form());
-            } elseif ($capabilities['secureUninstall']) {
-                // Remove element translations
-                $sql = 'DELETE `s_core_config_element_translations`
-                        FROM `s_core_config_element_translations`
-                        INNER JOIN `s_core_config_elements`
-                           ON `s_core_config_element_translations`.`element_id` = `s_core_config_elements`.`id`
-                        INNER JOIN `s_core_config_forms`
-                           ON `s_core_config_elements`.`form_id` = `s_core_config_forms`.`id`
-                           AND `s_core_config_forms`.`plugin_id` = ?';
-                $db->query($sql, array($id));
-
-                // Remove form translations
-                $sql = 'DELETE `s_core_config_form_translations`
-                        FROM `s_core_config_form_translations`
-                        INNER JOIN `s_core_config_forms`
-                           ON `s_core_config_form_translations`.`form_id` = `s_core_config_forms`.`id`
-                           AND `s_core_config_forms`.`plugin_id` = ?';
-                $db->query($sql, array($id));
-            } else {
-                throw new \Exception('Plugin does not support secure uninstall.');
-            }
-        }
+        $this->removeForm($bootstrap, $removeData);
 
         // Remove snippets
         if ($capabilities['secureUninstall']) {
@@ -580,20 +559,61 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     }
 
     /**
-     * Helper function to remove a plugins form
-     * @param Shopware\Models\Config\Form $form
+     * Helper function to remove a plugins form or only its translations (if removeData == false)
+     *
+     * @param Shopware_Components_Plugin_Bootstrap $bootstrap
+     * @param bool $removeData
+     * @throws Exception
      */
-    private function removeForm($form)
+    private function removeForm(Shopware_Components_Plugin_Bootstrap $bootstrap, $removeData = true)
     {
-        /** @var \Shopware\Components\Model\ModelManager $em */
-        $em = $this->Application()->Models();
-
-        if ($form->getId()) {
-            $em->remove($form);
-        } else {
-            $em->detach($form);
+        if (!$bootstrap->hasForm()) {
+            return;
         }
-        $em->flush();
+
+        if ($removeData) {
+            /** @var \Shopware\Components\Model\ModelManager $em */
+            $em = $this->Application()->Models();
+            $form = $bootstrap->Form();
+
+            if ($form->getId()) {
+                $em->remove($form);
+            } else {
+                $em->detach($form);
+            }
+            $em->flush();
+
+            return;
+        }
+
+        $capabilities = $bootstrap->getCapabilities();
+
+        if ($capabilities['secureUninstall']) {
+            /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql $db */
+            $db = $this->Application()->Db();
+            $id = $this->getPluginId($bootstrap->getName());
+
+            // Remove element translations
+            $sql = 'DELETE `s_core_config_element_translations`
+                    FROM `s_core_config_element_translations`
+                    INNER JOIN `s_core_config_elements`
+                       ON `s_core_config_element_translations`.`element_id` = `s_core_config_elements`.`id`
+                    INNER JOIN `s_core_config_forms`
+                       ON `s_core_config_elements`.`form_id` = `s_core_config_forms`.`id`
+                       AND `s_core_config_forms`.`plugin_id` = ?';
+            $db->query($sql, array($id));
+
+            // Remove form translations
+            $sql = 'DELETE `s_core_config_form_translations`
+                    FROM `s_core_config_form_translations`
+                    INNER JOIN `s_core_config_forms`
+                       ON `s_core_config_form_translations`.`form_id` = `s_core_config_forms`.`id`
+                       AND `s_core_config_forms`.`plugin_id` = ?';
+            $db->query($sql, array($id));
+
+            return;
+        }
+        throw new \Exception('Plugin does not support secure uninstall.');
     }
 
     /**
