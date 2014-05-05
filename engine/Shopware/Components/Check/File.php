@@ -46,9 +46,20 @@ class Shopware_Components_Check_File
      */
     protected $testDir = '';
 
-    public function __construct($filePath, $testDir = null)
+    /**
+     * @var array
+     */
+    private $skipList = array();
+
+    /**
+     * @param string $filePath
+     * @param string $testDir
+     * @param array $skipList List of filenames to be skipped
+     */
+    public function __construct($filePath, $testDir = null, $skipList = array())
     {
         $this->filePath = $filePath;
+        $this->skipList = $skipList;
 
         if ($testDir !== null) {
             $this->setTestDir($testDir);
@@ -72,6 +83,10 @@ class Shopware_Components_Check_File
 
         foreach ($md5Sums as $row) {
             list($expectedMd5Sum, $file) = explode('  ', trim($row));
+
+            if (in_array($file, $this->skipList)) {
+                continue;
+            }
 
             $fileAvailable = is_file($baseDir . $file);
 
