@@ -88,12 +88,28 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
     {
         $fileName = Shopware()->AppPath() . '/Components/Check/Data/Files.md5sums';
 
+
         if (!is_file($fileName)) {
             $this->View()->assign(array('success' => true, 'data' => array()));
             return;
         }
 
-        $list = new Shopware_Components_Check_File($fileName, Shopware()->DocPath());
+        // skip dummy plugins
+        $skipList = array(
+            'engine/Shopware/Plugins/Default/Backend/HeidelActions/Bootstrap.php',
+            'engine/Shopware/Plugins/Default/Backend/SwagBepado/Bootstrap.php',
+            'engine/Shopware/Plugins/Default/Core/CouchCommerce/Bootstrap.php',
+            'engine/Shopware/Plugins/Default/Frontend/HeidelPayment/Bootstrap.php',
+            'engine/Shopware/Plugins/Default/Frontend/MoptPaymentPayone/Bootstrap.php',
+            'engine/Shopware/Plugins/Default/Frontend/PaymentSkrill/Bootstrap.php',
+            'engine/Shopware/Plugins/Default/Frontend/PigmbhKlarnaPayment/Bootstrap.php',
+            'engine/Shopware/Plugins/Default/Frontend/PiPaymorrowPayment/Bootstrap.php',
+            'engine/Shopware/Plugins/Default/Frontend/SwagPaymentBillsafe/Bootstrap.php',
+            'engine/Shopware/Plugins/Default/Frontend/SwagPaymentPaypal/Bootstrap.php',
+            'engine/Shopware/Plugins/Default/Frontend/SwagTrustedShopsExcellence/Bootstrap.php',
+        );
+
+        $list = new Shopware_Components_Check_File($fileName, Shopware()->DocPath(), $skipList);
 
         $this->View()->assign(array('success' => true, 'data' => $list->toArray()));
     }
