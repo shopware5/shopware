@@ -1633,7 +1633,7 @@ class sArticles
 
         $sql = "
             SELECT STRAIGHT_JOIN DISTINCT
-              a.id AS articleID,
+              d.ordernumber AS number,
               s.sales AS quantity
             FROM s_articles_top_seller_ro s
 
@@ -1668,25 +1668,22 @@ class sArticles
             LIMIT $sLimitChart
         ";
 
+
         $queryChart = Shopware()->Db()->fetchAssoc($sql, array(
             'categoryId'      => $category,
             'customerGroupId' => $this->customerGroupId
         ));
 
         $articles = array();
-        if (!empty($queryChart))
-            foreach ($queryChart as $articleID => $quantity) {
-                $article = $this->sGetPromotionById('fix', 0, (int) $articleID);
-                if (!empty($article["articleID"])) {
-                    $article['quantity'] = $quantity;
-                    $articles[] = $article;
-                }
-            }
+        if (!empty($queryChart)) {
+            $articles = $this->getPromotions(array_keys($queryChart));
+        }
 
         Enlight()->Events()->notify(
             'Shopware_Modules_Articles_GetArticleCharts',
             array('subject' => $this, 'category' => $category, 'articles' => $articles)
         );
+
         return $articles;
     }
 
@@ -3814,8 +3811,32 @@ class sArticles
         return $sArticle;
     }
 
+    private function getPromotions(array $numbers)
+    {
+        if (empty($numbers)) {
+            return array();
+        }
 
-    private  function getPromotion($category, $value) {
+        $state = $this->globalStateService->get();
+
+        $products = Shopware()->Container()->get('list_product_service')->getList(
+            $numbers,
+            $state
+        );
+
+        $promotions = array();
+        foreach($products as $product) {
+            if (!$product || !$product->getNumber()) {
+                continue;
+            }
+
+            $promotions[$product->getNumber()] = $this->convertProductStruct($product);
+        }
+
+        return $promotions;
+    }
+
+    private function getPromotion($category, $value) {
 
         $number = Shopware()->Db()->fetchOne(
             "SELECT ordernumber FROM s_articles_details WHERE articleID = ?",
