@@ -125,7 +125,6 @@ $(function() {
     $('*[data-emotions="true"]').emotions();
     $('*[data-image-slider="true"]').imageSlider();
     $('*[data-collapse-panel="true"]').collapsePanel();
-    $('*[data-collapse-panel="true"]').collapsePanel();
     $('*[data-auto-submit="true"]').autoSubmit();
     $('input[data-quantity-field="true"]').quantityField();
 
