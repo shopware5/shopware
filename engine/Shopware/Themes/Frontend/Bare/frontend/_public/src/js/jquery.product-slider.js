@@ -223,13 +223,9 @@
             loadCount = me.opts.perPage * 2;
 
         if (loadCount < 4) loadCount = 4;
-
-        if (loadCount > me.itemsMaxShow) {
-            loadCount = me.itemsMaxShow;
-        }
+        if (loadCount > me.itemsMaxShow) loadCount = me.itemsMaxShow;
 
         if (me.opts.mode == 'ajax') {
-
             me.loadItems(0, loadCount, function(response) {
                 me.$container.html(response);
                 me.trackItems();
@@ -299,6 +295,7 @@
         me.$items.css({ width: me.itemsWidth });
         me.$container.stop(true, true).css({ width: me.itemsCount * me.itemsWidth + 20 });
 
+        // Also handle new loaded images bye the picturefill
         window.picturefill();
     };
 
