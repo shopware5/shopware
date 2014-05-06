@@ -10,6 +10,7 @@
 
                 {block name='frontend_listing_right_filter_supplier'}
                     {include file='frontend/listing/filter_supplier.tpl'}
+                    {include file='frontend/listing/filter_price.tpl'}
 				{/block}
 			</div>
 		</div>

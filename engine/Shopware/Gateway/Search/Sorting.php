@@ -32,4 +32,6 @@ abstract class Sorting
     {
         return $this->direction;
     }
+
+    abstract function getName();
 }

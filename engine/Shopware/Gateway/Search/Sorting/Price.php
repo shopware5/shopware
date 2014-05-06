@@ -3,15 +3,39 @@
 namespace Shopware\Gateway\Search\Sorting;
 
 use Shopware\Gateway\Search\Sorting;
+use Shopware\Struct\Customer\Group;
 
 class Price extends Sorting
 {
-    public $customerGroupKey;
+    /**
+     * @var \Shopware\Struct\Customer\Group
+     */
+    public $currentCustomerGroup;
 
-    function __construct($direction = 'ASC', $customerGroupKey)
-    {
+    /**
+     * @var \Shopware\Struct\Customer\Group
+     */
+    public $fallbackCustomerGroup;
+
+    /**
+     * @param string $direction
+     * @param Group $currentCustomerGroup
+     * @param Group $fallbackCustomerGroup
+     */
+    function __construct(
+        $direction = 'ASC',
+        Group $currentCustomerGroup,
+        Group $fallbackCustomerGroup
+    ) {
         $this->direction = $direction;
-        $this->customerGroupKey = $customerGroupKey;
+        $this->currentCustomerGroup = $currentCustomerGroup;
+        $this->fallbackCustomerGroup = $fallbackCustomerGroup;
     }
+
+    function getName()
+    {
+        return 'prices';
+    }
+
 
 }

@@ -15,6 +15,7 @@ use Shopware\Gateway\Search\Facet;
 use Shopware\Gateway\Search\Product;
 use Shopware\Gateway\Search\Result;
 use Shopware\Gateway\Search\Sorting;
+use Shopware\Struct\Customer\Group;
 
 class Search extends Gateway
 {
@@ -233,5 +234,21 @@ class Search extends Gateway
         }
 
         return null;
+    }
+
+    public static function getPriceSelection(Group $customerGroup)
+    {
+        $calculation = "(prices.price * variants.minpurchase)";
+
+        if ($customerGroup->displayGrossPrices()) {
+            $calculation .= " * (tax.tax + 100) / 100";
+        }
+
+        if ($customerGroup->useDiscount()) {
+            $discount = (100 - (float) $customerGroup->getPercentageDiscount()) / 100;
+            $calculation .= " * " . $discount;
+        }
+
+        return "(" . $calculation . ")";
     }
 }

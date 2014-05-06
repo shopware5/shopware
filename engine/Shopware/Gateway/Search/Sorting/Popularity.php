@@ -6,5 +6,8 @@ use Shopware\Gateway\Search\Sorting;
 
 class Popularity extends Sorting
 {
-
+    public function getName()
+    {
+        return 'popularity';
+    }
 }

@@ -3,6 +3,7 @@
 namespace Shopware\Gateway\DBAL\QueryGenerator;
 
 use Shopware\Components\Model\DBAL\QueryBuilder;
+use Shopware\Gateway\DBAL\Search;
 use Shopware\Gateway\Search\Condition;
 use Shopware\Gateway\Search\Sorting;
 
@@ -163,6 +164,8 @@ class CoreGenerator extends DBAL
 
     private function addPriceCondition(QueryBuilder $query, Condition\Price $price)
     {
+        $calculation = Search::getPriceSelection($price->currentCustomerGroup);
+
         $query->innerJoin(
             'products',
             's_articles_prices',
@@ -170,10 +173,10 @@ class CoreGenerator extends DBAL
             "prices.articledetailsID = variants.id
              AND prices.from = 1
              AND prices.pricegroup = :priceGroupSelection
-             AND (prices.price * variants.minpurchase) BETWEEN :priceMin AND :priceMax"
+             AND ". $calculation ." BETWEEN :priceMin AND :priceMax"
         );
 
-        $query->setParameter(':priceGroupSelection', $price->customerGroupKey);
+        $query->setParameter(':priceGroupSelection', $price->fallbackCustomerGroup->getKey());
 
         $query->setParameter(':priceMin', $price->min)
             ->setParameter(':priceMax', $price->max);
@@ -198,10 +201,12 @@ class CoreGenerator extends DBAL
                  AND prices.from = 1
                  AND prices.pricegroup = :priceGroupSorting"
             );
-            $query->setParameter(':priceGroupSorting', $sorting->customerGroupKey);
+            $query->setParameter(':priceGroupSorting', $sorting->fallbackCustomerGroup->getKey());
         }
 
-        $query->addOrderBy('(prices.price * variants.minpurchase)', $sorting->getDirection())
+        $calculation = Search::getPriceSelection($sorting->currentCustomerGroup);
+
+        $query->addOrderBy($calculation, $sorting->getDirection())
             ->addOrderBy('prices.articleID', $sorting->getDirection());
     }
 

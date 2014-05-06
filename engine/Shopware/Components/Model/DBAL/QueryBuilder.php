@@ -50,7 +50,6 @@ class QueryBuilder extends \Doctrine\DBAL\Query\QueryBuilder
         $this->resetQueryPart('from')
             ->resetQueryPart('join');
 
-
         foreach($fromParts as $from) {
             $this->from($from['table'], $from['alias']);
         }
@@ -65,6 +64,15 @@ class QueryBuilder extends \Doctrine\DBAL\Query\QueryBuilder
                             $join['joinAlias'],
                             $join['joinCondition']
                         );
+                        break;
+                    case "left":
+                        $this->leftJoin(
+                            $joinFrom,
+                            $join['joinTable'],
+                            $join['joinAlias'],
+                            $join['joinCondition']
+                        );
+                        break;
                 }
             }
         }

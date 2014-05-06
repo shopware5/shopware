@@ -5,6 +5,7 @@ namespace Shopware\Gateway\Search;
 use Shopware\Gateway\Search\Condition;
 use Shopware\Gateway\Search\Facet;
 use Shopware\Gateway\Search\Sorting;
+use Shopware\Struct\Customer\Group;
 
 class Criteria
 {
@@ -52,12 +53,18 @@ class Criteria
     /**
      * @param $min
      * @param $max
-     * @param $customerGroupKey
+     * @param \Shopware\Struct\Customer\Group $currentCustomerGroup
+     * @param \Shopware\Struct\Customer\Group $fallbackCustomerGroup
      * @return $this
      */
-    public function price($min, $max, $customerGroupKey)
+    public function price($min, $max, Group $currentCustomerGroup, Group $fallbackCustomerGroup)
     {
-        $this->conditions[] = new Condition\Price($min, $max, $customerGroupKey);
+        $this->conditions[] = new Condition\Price(
+            $min,
+            $max,
+            $currentCustomerGroup,
+            $fallbackCustomerGroup
+        );
         return $this;
     }
 
@@ -100,12 +107,16 @@ class Criteria
     }
 
     /**
-     * @param $customerGroupKey
+     * @param \Shopware\Struct\Customer\Group $currentCustomerGroup
+     * @param \Shopware\Struct\Customer\Group $fallbackCustomerGroup
      * @return $this
      */
-    public function priceFacet($customerGroupKey)
+    public function priceFacet(Group $currentCustomerGroup, Group $fallbackCustomerGroup)
     {
-        $this->facets[] = new Facet\Price($customerGroupKey);
+        $this->facets[] = new Facet\Price(
+            $currentCustomerGroup,
+            $fallbackCustomerGroup
+        );
         return $this;
     }
 
@@ -139,13 +150,21 @@ class Criteria
     }
 
     /**
-     * @param $customerGroupKey
+     * @param \Shopware\Struct\Customer\Group $currentCustomerGroup
+     * @param \Shopware\Struct\Customer\Group $fallbackCustomerGroup
      * @param string $direction
      * @return $this
      */
-    public function sortByPrice($customerGroupKey, $direction = 'ASC')
-    {
-        $this->sortings[] = new Sorting\Price($direction, $customerGroupKey);
+    public function sortByPrice(
+        Group $currentCustomerGroup,
+        Group $fallbackCustomerGroup,
+        $direction = 'ASC'
+    ) {
+        $this->sortings[] = new Sorting\Price(
+            $direction,
+            $currentCustomerGroup,
+            $fallbackCustomerGroup
+        );
         return $this;
     }
 
