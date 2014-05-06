@@ -1,0 +1,31 @@
+
+.topseller {
+    .clearfix();
+    .unitize-margin(0, 0 , 20, 0);
+}
+
+.topseller--content {
+    .unitize-height(360);
+}
+
+.topseller--product {
+    text-align: center;
+}
+
+.topseller--number {
+    .unitize-margin(0, 0, 5, 0);
+}
+
+@media screen and(min-width: @tabletViewportWidth) {
+
+    .topseller--content {
+        .unitize-height(240);
+    }
+}
+
+@media screen and(min-width: @desktopViewportWidth) {
+
+    .topseller--content {
+        .unitize-height(210);
+    }
+}

@@ -1,46 +1,70 @@
 <script type="text/javascript">
-(function($) {
-    $(document).ready(function() {
-        $('.topseller-slider').ajaxSlider('locale', {
-            'height': 210,
-            'layout': 'horizontal',
-            'scrollWidth': 796,
-            'title': '{s name="TopsellerHeading" namespace=frontend/plugins/index/topseller}{/s}',
-            'titleClass': 'headingbox_nobg',
-            'headline': true,
-            'navigation': true,
-            'showNumbers': false,
-            'containerCSS': {
-                'marginTop': '20px',
-                'marginBottom': '20px'
-            }
-        });
-    });
-})(jQuery);
-</script>	
+
+(function() {
+	window.widgets = (typeof(window.widgets) == 'undefined') ? [] : window.widgets;
+	window.widgets.push({
+		selector: '.topseller--content',
+		plugin: 'productSlider',
+		smartphone: {
+			perPage: 1,
+			perSlide: 1,
+			touchControl: true
+		},
+		tablet: {
+			perPage: 3,
+			perSlide: 1,
+			touchControl: true
+		},
+		tabletLandscape: {
+			perPage: 4,
+			perSlide: 1,
+			touchControl: true
+		},
+		desktop: {
+			perPage: 5,
+			perSlide: 1
+		}
+	});
+})();
+
+</script>
 
 {if $sCharts|@count}
-<div class="topseller-slider">
-    {foreach from=$sCharts item=article}
-        {if $article@index % $perPage == 0}
-            <div class="slide">
-        {/if}
-                
-        {assign var=image value=$article.image.src.2}
-        <div class="article_box{cycle values=",,, noborder"}">
-	        <span class="numbers">{$article@index + 1}</span>
-        {if $image}
-			<a style="background: url({$image}) no-repeat scroll center center transparent;" class="artbox_thumb" title="{$article.articleName|escape}" href="{$article.linkDetails}"></a>
-        {else}
-			<a class="artbox_thumb no_picture" title="{$article.articleName|escape}" href="{$article.linkDetails}"></a>
-        {/if}
-			<a title="{$article.articleName}" class="title" href="{$article.linkDetails}">{$article.articleName|truncate:28}</a>
-        </div>
+<div class="topseller panel has--border">
 
-        {if $article@index % $perPage == ($perPage - 1) || $article@last}
-        </div>
-        {/if}
-    {/foreach}
+	<div class="topseller--title panel--title is--underline">
+		{s name="TopsellerHeading" namespace=frontend/plugins/index/topseller}{/s}
+	</div>
+
+	<div class="topseller--content panel--body product-slider" data-mode="local">
+
+		<div class="product-slider--container">
+
+			{foreach $sCharts as $article}
+
+				{assign var=image value=$article.image.src.2}
+
+				<div class="topseller--product product-slider--item">
+					<span class="topseller--number badge is--secondary">{$article@index + 1}</span>
+
+					<a href="{$article.linkDetails|rewrite:$article.articleName}" title="{$article.articleName}" class="product--image">
+						<span data-picture data-alt="{$article.articleName}" class="image--element">
+							<span class="image--media" data-src="{if isset($article.image.src)}{$article.image.src.4}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}"></span>
+							<span class="image--media" data-src="{if isset($article.image.src)}{$article.image.src.3}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" data-media="(min-width: 48em)"></span>
+							<span class="image--media" data-src="{if isset($article.image.src)}{$article.image.src.2}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" data-media="(min-width: 78.75em)"></span>
+
+							<noscript>
+								<img src="{if isset($article.image.src)}{$article.image.src.2}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" alt="{$article.articleName}">
+							</noscript>
+						</span>
+					</a>
+
+					<a title="{$article.articleName}" class="product--title" href="{$article.linkDetails}">{$article.articleName|truncate:26}</a>
+				</div>
+
+			{/foreach}
+
+		</div>
+	</div>
 </div>
-<div class="space">&nbsp;</div>
 {/if}
