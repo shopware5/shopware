@@ -181,7 +181,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         if(!settings)  {
             me.widgetSettingsStore.add({
                 authId: authId,
-                height: 600,
+                height: 690,
                 columnsShown: 1,
                 dock: 'tl',
                 minimized: false
@@ -341,7 +341,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         var me = this;
 
         Ext.Ajax.request({
-            url: '{url controller=widgets action=savePosition}',
+            url: '{url controller=widgets action=savePositions}',
             jsonData: {
                 widgets: widgets
             },
