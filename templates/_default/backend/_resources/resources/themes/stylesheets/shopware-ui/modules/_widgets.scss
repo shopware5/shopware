@@ -40,6 +40,16 @@
        border: 0 none !important;
     }
 
+	.#{$prefix}window-body.can-scroll:after {
+		content: "";
+		position: absolute;
+		box-shadow: 0 -13px 15px -8px rgba(0,0,0,0.5);
+		bottom: -25px;
+		left: 0;
+		right: 0;
+		height: 25px;
+	}
+
     .#{$prefix}widget-toolbar {
       background: transparent;
       border: 0 none !important;

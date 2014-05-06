@@ -121,6 +121,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      */
     snippets: {
         toolbar: {
+            title: '{s name="window/toolbar/headline"}Widgets{/s}',
             minimize: '{s name="window/toolbar/minimize"}Minimize window{/s}',
             dock: {
                 topLeft: '{s name="window/toolbar/dock/topLeft"}Top left{/s}',
@@ -184,6 +185,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
         return Ext.create('Ext.toolbar.Toolbar', {
             padding: '0 0 10px 0',
             id: 'widget-toolbar',
+            dock: 'top',
             cls: Ext.baseCSSPrefix + 'widget-toolbar',
             // IE fix
             style: 'background: transparent !important; background-color: transparent !important;',
@@ -199,8 +201,8 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                 }
             }, {
                 xtype: 'container',
-                html: '{s name="window/toolbar/headline"}Widgets{/s}',
-                style: 'font-size: 18px; padding-left: 8px; color: #335064'
+                html: snippets.title,
+                style: 'font-size: 16px; padding-left: 8px; color: #335064'
             }, '->', {
                 xtype: 'button',
                 tooltip: snippets.minimize,
@@ -387,6 +389,10 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                     container.dropZone.onNodeOut(container);
                 });
 
+                if(me.getEl()) {
+                    me.onScroll({ wheelDelta: me.invertScroll ? -1 : 1 });
+                }
+
                 return true;
             },
 
@@ -465,6 +471,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      * @param name
      * @param widgetId
      * @param record
+     * @param label
      * @returns { Ext.panel.Panel } - New created widget
      */
     createWidget: function (name, widgetId, record, label) {
@@ -743,21 +750,28 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             verticalOffset = 5,
             min = (wrapperHeight - winHeight - winEl.getTop()) * -1 - verticalOffset,
             max = winEl.getTop() + toolbarEl.getHeight() + verticalOffset,
-            style = me.getPrefixedBoxShadowStyle('');
+            topStyle = me.getPrefixedBoxShadowStyle(''),
+            dropProxyHeight = me.containerCollection.getAt(0).dropProxyEl.getEl().getHeight();
 
         if(winHeight > wrapperHeight) {
             wrapperEl.setY(max);
-            toolbarEl.setStyle(style);
+            toolbarEl.setStyle(topStyle);
             return;
         }
 
         position = Math.max(min, Math.min(max, position));
 
         if(position !== max) {
-            style = me.getPrefixedBoxShadowStyle('0px 10px 10px -7px rgba(0, 0, 0, 0.33)');
+            topStyle = me.getPrefixedBoxShadowStyle('0px 10px 10px -7px rgba(0, 0, 0, 0.5)');
         }
 
-        toolbarEl.setStyle(style);
+        if(position > min + dropProxyHeight) {
+            me.addBodyCls('can-scroll');
+        } else {
+            me.removeBodyCls('can-scroll');
+        }
+
+        toolbarEl.setStyle(topStyle);
 
         wrapperEl.setY(position);
     },
