@@ -1,17 +1,16 @@
 /** Main navigation of the storefront */
 body > .sidebar-main {
-    .unitize-variable(300, 16);
-    .unitize-width(300, 16);
-    .translate(~"-@{emValue}rem", 0);
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
+    .unitize(20, 16, padding-bottom);
     border-right: 1px solid rgba(red(@lightTextColor), green(@lightTextColor), blue(@lightTextColor), 50%);
 
     .logo--trusted-shops {
         display: none;
     }
+}
+
+// Landingpage campaign banner
+.campaign-outer-container {
+    .unitize-margin(20, 0);
 }
 
 @media screen and (min-width: @tabletViewportWidth) {
