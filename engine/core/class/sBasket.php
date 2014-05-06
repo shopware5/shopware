@@ -1135,7 +1135,7 @@ class sBasket
     public function sGetNotes()
     {
         $responseCookies = $this->front->Response()->getCookies();
-        $uniqueId = $responseCookies['sUniqueID'] ? : $this->front->Request()->getCookie('sUniqueID');
+        $uniqueId = $responseCookies['sUniqueID']['value'] ? : $this->front->Request()->getCookie('sUniqueID');
 
         $getArticles = $this->db->fetchAll(
             'SELECT n.* FROM s_order_notes n, s_articles a
@@ -1193,7 +1193,7 @@ class sBasket
     public function sCountNotes()
     {
         $responseCookies = $this->front->Response()->getCookies();
-        $uniqueId = $responseCookies['sUniqueID'] ? : $this->front->Request()->getCookie('sUniqueID');
+        $uniqueId = $responseCookies['sUniqueID']['value'] ? : $this->front->Request()->getCookie('sUniqueID');
 
         $count = (int) $this->db->fetchOne('
             SELECT COUNT(*) FROM s_order_notes n, s_articles a
