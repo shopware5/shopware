@@ -71,11 +71,11 @@ class sRewriteTable
     private $config;
 
     /**
-     * sCategories core class instance
+     * Module manager for core class instances
      *
-     * @var sCategories
+     * @var Shopware_Components_Modules
      */
-    private $categoriesModule;
+    private $moduleManager;
 
     /**
      * Prepared update PDOStatement for the s_core_rewrite_urls table.
@@ -96,7 +96,7 @@ class sRewriteTable
      * @param ModelManager $modelManager
      * @param sSystem $systemModule
      * @param Enlight_Template_Manager $template
-     * @param sCategories $categoriesModule
+     * @param Shopware_Components_Modules $moduleManager
      */
     public function __construct(
         Enlight_Components_Db_Adapter_Pdo_Mysql $db                 = null,
@@ -104,7 +104,7 @@ class sRewriteTable
         ModelManager                            $modelManager       = null,
         sSystem                                 $systemModule       = null,
         Enlight_Template_Manager                $template           = null,
-        sCategories                             $categoriesModule   = null
+        Shopware_Components_Modules             $moduleManager      = null
     )
     {
         $this->db = $db ? : Shopware()->Db();
@@ -112,7 +112,7 @@ class sRewriteTable
         $this->modelManager = $modelManager ? : Shopware()->Models();
         $this->sSYSTEM = $systemModule ? : Shopware()->System();
         $this->template = $template ? : Shopware()->Template();
-        $this->categoriesModule = $categoriesModule ? : Shopware()->Modules()->Categories();
+        $this->moduleManager = $moduleManager ? : Shopware()->Modules();
     }
 
     /**
@@ -742,7 +742,7 @@ class sRewriteTable
      */
     private function sCategoryPathByArticleId($articleId, $parentId = null)
     {
-        $categoryId = $this->categoriesModule->sGetCategoryIdByArticleId(
+        $categoryId = $this->moduleManager->Categories()->sGetCategoryIdByArticleId(
             $articleId,
             $parentId
         );
