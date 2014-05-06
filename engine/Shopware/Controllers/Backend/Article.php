@@ -1745,6 +1745,20 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         return $categories;
     }
 
+    protected function getArticleSeoCategories($articleId)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select(array('seoCategories', 'category', 'shop'))
+            ->from('Shopware\Models\Article\SeoCategory', 'seoCategories')
+            ->innerJoin('seoCategories.shop', 'shop')
+            ->innerJoin('seoCategories.category', 'category')
+            ->where('seoCategories.articleId = :articleId')
+            ->setParameter('articleId', $articleId);
+
+        return $builder->getQuery()->getArrayResult();
+    }
+
+
     /**
      * Used for the article backend module to load the article data into
      * the module. This function selects only some fragments for the whole article
@@ -2000,6 +2014,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $tax = $data[0]['tax'];
 
         $data[0]['categories'] = $this->getArticleCategories($id);
+        $data[0]['seoCategories'] = $this->getArticleSeoCategories($id);
+
         $data[0]['similar'] = $this->getArticleSimilars($id);
         $data[0]['related'] = $this->getArticleRelated($id);
         $data[0]['images'] = $this->getArticleImages($id);
@@ -2706,6 +2722,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         //format the posted extJs article categories associations
         $data = $this->prepareCategoryAssociatedData($data);
 
+        $data = $this->prepareSeoCategoryAssociatedData($data, $article);
+
         //format the posted extJs related article association
         $data = $this->prepareRelatedAssociatedData($data, $article);
 
@@ -2922,6 +2940,59 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             }
         }
         $data['categories'] = $categories;
+
+        return $data;
+    }
+
+    /**
+     * Resolves the passed seo category data.
+     * The functions resolves the passed foreign keys for the
+     * assigned category and shop model.
+     *
+     * @param $data
+     * @param Shopware\Models\Article\ $article
+     * @return array
+     */
+    protected function prepareSeoCategoryAssociatedData($data, $article)
+    {
+        if (!isset($data['seoCategories'])) {
+            return $data;
+        }
+
+        $categories = array();
+        foreach ($data['seoCategories'] as &$categoryData) {
+            $categoryData['article'] = $article;
+
+            if (empty($categoryData['shopId'])) {
+                continue;
+            }
+
+            if (empty($categoryData['categoryId'])) {
+                continue;
+            }
+
+            $categoryData['shop'] = $this->getManager()->find(
+                'Shopware\Models\Shop\Shop',
+                $categoryData['shopId']
+            );
+
+            $categoryData['category'] = $this->getManager()->find(
+                'Shopware\Models\Category\Category',
+                $categoryData['categoryId']
+            );
+
+            if (!($categoryData['shop'] instanceof Shopware\Models\Shop\Shop)) {
+                continue;
+            }
+
+            if (!($categoryData['category'] instanceof Shopware\Models\Category\Category)) {
+                continue;
+            }
+
+            $categories[] = $categoryData;
+        }
+
+        $data['seoCategories'] = $categories;
 
         return $data;
     }

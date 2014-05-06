@@ -166,12 +166,28 @@ class sCategories
      *
      * @param int $articleId Id of the article to look for
      * @param int $parentId Category subtree root id. If null, the shop category is used.
+     * @param null $shopId
      * @return int Id of the leaf category, or 0 if none found.
      */
-    public function sGetCategoryIdByArticleId($articleId, $parentId = null)
+    public function sGetCategoryIdByArticleId($articleId, $parentId = null, $shopId = null)
     {
         if ($parentId === null) {
             $parentId = $this->baseId;
+        }
+        if ($shopId === null) {
+            $shopId = Shopware()->Shop()->getId();
+        }
+
+        $id = (int) $this->db->fetchOne(
+            'SELECT category_id
+             FROM s_articles_categories_seo
+             WHERE article_id = :articleId
+             AND shop_id = :shopId',
+            array(':articleId' => $articleId, ':shopId' => $shopId)
+        );
+
+        if ($id) {
+            return $id;
         }
 
         $sql = '
@@ -191,10 +207,12 @@ class sCategories
             ORDER BY ac.id
         ';
 
-        return (int) $this->db->fetchOne($sql, array(
+        $id = (int) $this->db->fetchOne($sql, array(
             '%|' . $parentId . '|%',
             $articleId
         ));
+
+        return $id;
     }
 
     /**

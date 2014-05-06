@@ -267,6 +267,16 @@ class Article extends ModelEntity
      */
     protected $allCategories;
 
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *      targetEntity="Shopware\Models\Article\SeoCategory",
+     *      mappedBy="article",
+     *      orphanRemoval=true,
+     *      cascade={"persist"}
+     * )
+     */
+    protected $seoCategories;
 
     /**
      * @var ArrayCollection
@@ -474,6 +484,7 @@ class Article extends ModelEntity
     {
         $this->categories = new ArrayCollection();
         $this->allCategories = new ArrayCollection();
+        $this->seoCategories = new ArrayCollection();
         $this->customerGroups = new ArrayCollection();
         $this->propertyValues = new ArrayCollection();
         $this->related = new ArrayCollection();
@@ -1249,5 +1260,27 @@ class Article extends ModelEntity
         $this->setOneToOne($configuratorTemplate, '\Shopware\Models\Article\Configurator\Template\Template', 'configuratorTemplate', 'article');
 
         return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getSeoCategories()
+    {
+        return $this->seoCategories;
+    }
+
+    /**
+     * @param ArrayCollection $seoCategories
+     * @return \Shopware\Components\Model\ModelEntity
+     */
+    public function setSeoCategories($seoCategories)
+    {
+        return $this->setOneToMany(
+            $seoCategories,
+            '\Shopware\Models\Article\SeoCategory',
+            'seoCategories',
+            'article'
+        );
     }
 }
