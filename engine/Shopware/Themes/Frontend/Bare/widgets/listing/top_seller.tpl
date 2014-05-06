@@ -1,42 +1,33 @@
 <script type="text/javascript">
 
 (function() {
-
 	window.widgets = (typeof(window.widgets) == 'undefined') ? [] : window.widgets;
-
 	window.widgets.push({
-
 		selector: '.topseller--content',
-
 		plugin: 'productSlider',
-
 		smartphone: {
 			perPage: 1,
 			perSlide: 1,
 			touchControl: true
 		},
-
 		tablet: {
 			perPage: 3,
 			perSlide: 1,
 			touchControl: true
 		},
-
 		tabletLandscape: {
 			perPage: 4,
 			perSlide: 1,
 			touchControl: true
 		},
-
 		desktop: {
 			perPage: 5,
 			perSlide: 1
 		}
 	});
-
 })();
 
-</script>	
+</script>
 
 {if $sCharts|@count}
 <div class="topseller panel has--border">
