@@ -146,20 +146,4 @@ class Widget extends ModelEntity
     {
         return $this->plugin;
     }
-
-    /**
-     * @param int $pluginId
-     */
-    public function setPluginId($pluginId)
-    {
-        $this->pluginId = $pluginId;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPluginId()
-    {
-        return $this->pluginId;
-    }
 }

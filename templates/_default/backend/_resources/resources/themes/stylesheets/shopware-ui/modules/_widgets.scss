@@ -43,11 +43,11 @@
 	.#{$prefix}window-body.can-scroll:after {
 		content: "";
 		position: absolute;
-		box-shadow: 0 -13px 15px -8px rgba(0,0,0,0.5);
 		bottom: -25px;
 		left: 0;
 		right: 0;
 		height: 25px;
+		@include single-box-shadow(rgba(0,0,0,0.5), 0, -13px, 15px, -8px);
 	}
 
     .#{$prefix}widget-toolbar {
