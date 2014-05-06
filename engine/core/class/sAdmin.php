@@ -1181,6 +1181,10 @@ class sAdmin
             ) {
                 $sErrorFlag[$ruleKey] = true;
             }
+
+            if ($rules[$ruleKey]["in"] && !in_array($postData[$ruleKey], $rules[$ruleKey]["in"])) {
+                $sErrorFlag[$ruleKey] = true;
+            }
         }
 
         if (count($sErrorFlag)) {
@@ -1246,6 +1250,10 @@ class sAdmin
                 }
             } else {
                 if (!$postData[$ruleKey] && $rules[$ruleKey]["required"]) {
+                    $sErrorFlag[$ruleKey] = true;
+                }
+
+                if ($rules[$ruleKey]["in"] && !in_array($postData[$ruleKey], $rules[$ruleKey]["in"])) {
                     $sErrorFlag[$ruleKey] = true;
                 }
 
