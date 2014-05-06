@@ -478,32 +478,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     }
 
     /**
-     * Removes widgets from this plugin
-     */
-    public function removeWidgets()
-    {
-        $pluginId = $this->getId();
-        if (!$pluginId) {
-            return;
-        }
-
-        $widgetIds = Shopware()->Db()->fetchCol(
-            'SELECT id FROM s_core_widgets WHERE plugin_id = ?',
-            array($pluginId)
-        );
-
-        Shopware()->Db()->delete(
-            's_core_widget_views',
-            array('widget_id IN (?)' => $widgetIds)
-        );
-
-        Shopware()->Db()->delete(
-            's_core_widgets',
-            array('plugin_id = ?' => $pluginId)
-        );
-    }
-
-    /**
      * Subscribes a plugin event.
      *
      * {@inheritDoc}
