@@ -475,8 +475,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         $widget->setPlugin($this->Plugin());
 
         $this->Plugin()->getWidgets()->add($widget);
-
-        Shopware()->Models()->persist($widget);
     }
 
     /**

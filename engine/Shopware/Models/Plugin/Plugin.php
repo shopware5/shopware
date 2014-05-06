@@ -70,7 +70,6 @@ class Plugin extends ModelEntity
      */
     private $source;
 
-
     /**
      * @var string $description
      * @ORM\Column(name="description", type="string", nullable=false)
@@ -264,7 +263,7 @@ class Plugin extends ModelEntity
      */
     public function isDummy()
     {
-        return (bool) $this->capabilityDummy;
+        return (bool)$this->capabilityDummy;
     }
 
     /**
@@ -548,7 +547,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Menu\Menu[] $configForms
+     * @param \Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Menu\Menu[] $configForms
      */
     public function setConfigForms($configForms)
     {
@@ -670,14 +669,16 @@ class Plugin extends ModelEntity
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function getWidgets() {
+    public function getWidgets()
+    {
         return $this->widgets;
     }
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection $widgets
      */
-    public function setWidgets($widgets) {
+    public function setWidgets($widgets)
+    {
         $this->widgets = $widgets;
     }
 }
