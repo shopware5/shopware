@@ -3,6 +3,7 @@
 namespace Shopware\Gateway\Search\Facet;
 
 use Shopware\Gateway\Search\Facet;
+use Shopware\Struct\Customer\Group;
 
 class Price extends Facet
 {
@@ -12,13 +13,23 @@ class Price extends Facet
     public $prices;
 
     /**
-     * @var string
+     * @var \Shopware\Struct\Customer\Group
      */
-    public $customerGroupKey;
+    public $currentCustomerGroup;
 
-    function __construct($customerGroupKey)
+    /**
+     * @var \Shopware\Struct\Customer\Group
+     */
+    public $fallbackCustomerGroup;
+
+    /**
+     * @param Group $currentCustomerGroup
+     * @param Group $fallbackCustomerGroup
+     */
+    function __construct(Group $currentCustomerGroup, Group $fallbackCustomerGroup)
     {
-        $this->customerGroupKey = $customerGroupKey;
+        $this->currentCustomerGroup = $currentCustomerGroup;
+        $this->fallbackCustomerGroup = $fallbackCustomerGroup;
     }
 
     public function getName()

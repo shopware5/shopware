@@ -3811,6 +3811,12 @@ class sArticles
         return $sArticle;
     }
 
+
+    /**
+     * Helper function which loads a list of product promotions.
+     * @param array $numbers
+     * @return array
+     */
     private function getPromotions(array $numbers)
     {
         if (empty($numbers)) {
@@ -4101,6 +4107,10 @@ class sArticles
                     $result['sSupplierInfo'] = $this->getActiveListingSupplier($suppliers, $config);
                     $result['sSuppliers'] = array_values($suppliers);
                     break;
+
+                case ($facet instanceof \Shopware\Gateway\Search\Facet\Price):
+                    $result['priceFacet'] = $this->getPriceFacet($facet, $config);
+                    break;
             }
         }
 
@@ -4194,6 +4204,15 @@ class sArticles
             $criteria->manufacturer($config['sSupplier']);
         }
 
+        if ($config['priceMax']) {
+            $criteria->price(
+                (float) $config['priceMin'],
+                (float) $config['priceMax'],
+                $context->getCurrentCustomerGroup(),
+                $context->getFallbackCustomerGroup()
+            );
+        }
+
         switch ($config['sSort']) {
             case 1:
                 $criteria->sortByReleaseDate('DESC');
@@ -4202,12 +4221,18 @@ class sArticles
                 $criteria->sortByPopularity('DESC');
                 break;
             case 3:
-                $fallback = $context->getFallbackCustomerGroup();
-                $criteria->sortByPrice($fallback->getKey(), 'ASC');
+                $criteria->sortByPrice(
+                    $context->getCurrentCustomerGroup(),
+                    $context->getFallbackCustomerGroup(),
+                    'ASC'
+                );
                 break;
             case 4:
-                $fallback = $context->getFallbackCustomerGroup();
-                $criteria->sortByPrice($fallback->getKey(), 'DESC');
+                $criteria->sortByPrice(
+                    $context->getCurrentCustomerGroup(),
+                    $context->getFallbackCustomerGroup(),
+                    'DESC'
+                );
                 break;
             case 5:
                 $criteria->sortByDescription();
@@ -4222,7 +4247,42 @@ class sArticles
 
         $criteria->manufacturerFacet();
 
+        $criteria->priceFacet(
+            $context->getCurrentCustomerGroup(),
+            $context->getFallbackCustomerGroup()
+        );
+
         return $criteria;
+    }
+
+    private function getPriceFacet(\Shopware\Gateway\Search\Facet\Price $facet, $config)
+    {
+        $prices = array();
+        $params = $this->getListingLinkParameters($config);
+
+        foreach($facet->prices as $range) {
+            $priceParams = array_merge($params, array(
+                'priceMin' => $range['priceMin'],
+                'priceMax' => $range['priceMax']
+            ));
+
+            $range['link'] = $this->buildListingLink($priceParams);
+
+            $range['active'] = (bool) ($range['priceMax'] == $config['priceMax']);
+
+            $prices[] = $range;
+        }
+
+        $params = array_merge($params, array(
+            'priceMin' => 0,
+            'priceMax' => 0
+        ));
+
+        return array(
+            'active' => max(array_column($prices, 'active')),
+            'removeLink' => $this->buildListingLink($params) . '&priceMax=0',
+            'prices' => $prices
+        );
     }
 
     private function getFacetManufacturers(
@@ -4443,13 +4503,28 @@ class sArticles
      */
     private function getListingLinkParameters($config)
     {
-        return array(
-            'sSort' => $config['sSort'],
-            'sFilterProperties' => $config['sFilterProperties'],
-            'sSupplier' => $config['sSupplier'],
-            'sPerPage' => $config['sPerPage'],
-            'sPage' => 1
-        );
+        $params = array();
+
+        if ($config['sSort']) {
+            $params['sSort'] = $config['sSort'];
+        }
+        if ($config['sFilterProperties']) {
+            $params['sFilterProperties'] = $config['sFilterProperties'];
+        }
+        if ($config['sSupplier']) {
+            $params['sSupplier'] = $config['sSupplier'];
+        }
+        if ($config['sPerPage']) {
+            $params['sPerPage'] = $config['sPerPage'];
+        }
+        if ($config['priceMin']) {
+            $params['priceMin'] = $config['priceMin'];
+        }
+        if ($config['priceMax']) {
+            $params['priceMax'] = $config['priceMax'];
+        }
+
+        return $params;
     }
 
     /**
@@ -4597,6 +4672,18 @@ class sArticles
         $config['sTemplate'] = $this->getConfigParameter(
             $config,
             'sTemplate',
+            null
+        );
+
+        $config['priceMin'] = $this->getConfigParameter(
+            $config,
+            'priceMin',
+            null
+        );
+
+        $config['priceMax'] = $this->getConfigParameter(
+            $config,
+            'priceMax',
             null
         );
 
