@@ -256,6 +256,7 @@ class Plugin extends ModelEntity
         $this->payments = new ArrayCollection();
         $this->templates = new ArrayCollection();
         $this->licenses = new ArrayCollection();
+        $this->widgets = new ArrayCollection();
     }
 
     /**
@@ -664,5 +665,19 @@ class Plugin extends ModelEntity
     public function setEmotionComponents($emotionComponents)
     {
         $this->emotionComponents = $emotionComponents;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getWidgets() {
+        return $this->widgets;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $widgets
+     */
+    public function setWidgets($widgets) {
+        $this->widgets = $widgets;
     }
 }

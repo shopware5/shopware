@@ -71,8 +71,9 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
      */
     snippets: {
         error: {
-            // todo@dg - add snippets
-            deleteWidget: 'Ein Fehler ist bei dem löschen des Widgets aufgetreten.\n\n'
+            viewportNotLoaded: '{s name="error/viewportNotLoaded"}Viewport is not loaded.{/s}',
+            settingsInitialisation: '{s name="error/settingsInitialisation"}Widget settings could not be initialized.{/s}',
+            deleteWidget: '{s name="error/deleteWidget"}An Error occurred while attempting to delete the widget.\n\n{/s}'
         }
     },
 
@@ -88,7 +89,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         me.viewport = Shopware.app.Application.viewport;
 
         if(!me.viewport) {
-            Ext.Error.raise('Viewport is not loaded');
+            Ext.Error.raise(me.snippets.error.viewportNotLoaded);
         }
 
         me.desktop = me.viewport.getActiveDesktop();
@@ -193,7 +194,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         }
 
         if(!settings) {
-            Ext.Error.raise('Widget settings could not be initialized.');
+            Ext.Error.raise(me.snippets.error.settingsInitialisation);
         }
 
         me.widgetSettings = settings;
