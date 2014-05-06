@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `s_articles_categories_seo` (
   `article_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `shop_article` (`shop_id`,`article_id`)
+  KEY `shop_article` (`shop_id`,`article_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 EOD;
