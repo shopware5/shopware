@@ -1,6 +1,6 @@
 {* Listing actions *}
 {block name='frontend_listing_actions_top'}
-    <div class="listing--actions block-group{if $sAdvancedActions == 1} is--advanced{/if}{block name='frontend_listing_actions_class'}{/block}">
+    <div class="listing--actions block-group{if $sAdvancedActions == 1} is--advanced{elseif $sNumberPages <= 1} no--actions{/if}{block name='frontend_listing_actions_class'}{/block}">
 
 		{if $sAdvancedActions == 1}
 

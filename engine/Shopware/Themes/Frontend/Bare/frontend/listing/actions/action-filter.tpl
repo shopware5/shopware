@@ -6,7 +6,12 @@
 	{if $sPropertiesOptionsOnly|@count or $sSuppliers|@count>1 && $sCategoryContent.parent != 1}
 
 		<div class="action--filter-btn">
-			<a href="#" class="filter--trigger btn btn--primary" data-collapse-target=".action--filter-options">
+			<a href="#"
+			   class="filter--trigger btn btn--primary"
+			   data-collapse-target=".action--filter-options"
+			   data-offcanvas="true"
+			   data-offCanvasSelector=".action--filter-options"
+			   data-closeButtonSelector=".filter--close-btn">
 				<i class="icon--compare"></i> {s name='ListingFilterButton'}Filter{/s}
 			</a>
 		</div>
