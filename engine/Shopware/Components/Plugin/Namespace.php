@@ -364,6 +364,26 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             $this->Application()->Hooks()->getProxyFactory()->clearCache();
         }
 
+        $db = Shopware()->Container()->get('db');
+
+        $resourceId = $db->fetchOne(
+            "SELECT id FROM s_core_acl_resources WHERE name = 'widgets'"
+        );
+
+        if (!$resourceId) {
+            return $result;
+        }
+
+        /**@var $plugin Shopware\Models\Plugin\Plugin*/
+        /**@var $widget Shopware\Models\Widget\Widget*/
+        foreach($plugin->getWidgets() as $widget) {
+            $name = $widget->getName();
+            $db->insert('s_core_acl_privileges', array(
+                'name' => $name,
+                'resourceID' => $resourceId
+            ));
+        }
+
         return $result;
     }
 
@@ -459,24 +479,56 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
 
             $db->query($sql, array(':pluginId' => $id));
 
-            // Remove widgets
-            $widgetIds = Shopware()->Db()->fetchCol(
-                'SELECT id FROM s_core_widgets WHERE plugin_id = ?',
-                array($id)
-            );
-
-            Shopware()->Db()->delete(
-                's_core_widget_views',
-                array('widget_id IN (?)' => $widgetIds)
-            );
-
-            Shopware()->Db()->delete(
-                's_core_widgets',
-                array('plugin_id = ?' => $id)
-            );
+            $this->removePluginWidgets($id);
         }
 
         return $result;
+    }
+
+    /**
+     * Helper function which removes all plugin widgets for the backend widget system.
+     *
+     * The function removes additionally the auto generated acl rules for the widgets.
+     *
+     * @param $pluginId
+     */
+    private function removePluginWidgets($pluginId)
+    {
+        $db = Shopware()->Container()->get('db');
+
+        // Remove widgets
+        $widgets = $db->fetchAll(
+            'SELECT * FROM s_core_widgets WHERE plugin_id = ?',
+            array($pluginId)
+        );
+
+        if (empty($widgets)) {
+            return;
+        }
+
+        $db->delete(
+            's_core_widget_views',
+            array('widget_id IN (?)' => array_column($widgetIds, 'id'))
+        );
+
+        $db->delete(
+            's_core_widgets',
+            array('plugin_id = ?' => $pluginId)
+        );
+
+        $resourceId = $db->fetchOne("SELECT id FROM s_core_acl_resources WHERE name = 'widgets'");
+
+        if (!$resourceId) {
+            return;
+        }
+
+        foreach($widgets as $widget) {
+            $db->query("DELETE FROM s_core_acl_privileges WHERE resourceID = ? AND name = ?", array(
+                $resourceId,
+                $widget['name']
+            ));
+        }
+
     }
 
     /**
