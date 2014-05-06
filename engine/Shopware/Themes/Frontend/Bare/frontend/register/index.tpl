@@ -25,8 +25,8 @@
 {* Hide footer *}
 {block name="frontend_index_footer"}{/block}
 
-
-{block name="frontend_index_content"}
+{* Register content *}
+{block name='frontend_index_content'}
 	<div class="register--content panel content block has--border">
 
 		{block name='frontend_register_index_dealer_register'}
@@ -141,4 +141,8 @@
 			{/block}
 		</div>
 	</div>
+{/block}
+
+{block name='frontend_index_left_last_articles' append}
+	{include file="frontend/register/login.tpl"}
 {/block}
