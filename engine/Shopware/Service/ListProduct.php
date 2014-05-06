@@ -90,8 +90,7 @@ class ListProduct
 
         $result = array();
         foreach ($products as $product) {
-            $key = $product->getId();
-
+            $key = $product->getNumber();
             $product->setCover($covers[$key]);
 
             $product->setPriceRules($graduatedPrices[$key]);

@@ -56,7 +56,7 @@ class CheapestPrice
 
             $cheapestPrice->setCustomerGroup($group);
 
-            $prices[$key] = $cheapestPrice;
+            $prices[$product->getNumber()] = $cheapestPrice;
         }
 
         if (empty($fallback)) {
@@ -81,7 +81,7 @@ class CheapestPrice
 
             $cheapestPrice->setCustomerGroup($group);
 
-            $prices[$key] = $cheapestPrice;
+            $prices[$product->getNumber()] = $cheapestPrice;
         }
 
         return $prices;

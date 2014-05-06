@@ -36,7 +36,5 @@ class Manufacturer
         $manufacturers = $this->getList(array($id), $context);
 
         return array_shift($manufacturers);
-
     }
-
 }

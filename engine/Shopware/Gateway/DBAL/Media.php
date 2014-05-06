@@ -64,7 +64,7 @@ class Media extends Gateway
     {
         $ids = array();
         foreach ($products as $product) {
-            $ids[] = $product->getId();
+            $ids[] = $product->getVariantId();
         }
 
         $query = $this->entityManager->getDBALQueryBuilder();
@@ -72,18 +72,20 @@ class Media extends Gateway
         $query->select($this->getMediaFields())
             ->addSelect($this->getImageFields())
             ->addSelect($this->getSettingFields())
+            ->addSelect('variants.ordernumber as number')
             ->addSelect($this->getTableFields('s_articles_img_attributes', 'imageAttribute'))
             ->addSelect($this->getTableFields('s_media_attributes', 'attribute'));
 
         $query->from('s_articles_img', 'image')
+            ->innerJoin('image', 's_articles_details', 'variants', 'variants.articleID = image.articleID')
             ->innerJoin('image', 's_media', 'media', 'image.media_id = media.id')
             ->innerJoin('media', 's_media_album_settings', 'settings', 'settings.albumID = media.albumID')
             ->leftJoin('image', 's_articles_img_attributes', 'imageAttribute', 'imageAttribute.imageID = image.id')
             ->leftJoin('media', 's_media_attributes', 'attribute', 'attribute.mediaID = image.media_id');
 
-        $query->where('image.articleID IN (:products)')
+        $query->where('variants.id IN (:ids)')
             ->andWhere('image.main = 1')
-            ->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY);
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -92,11 +94,11 @@ class Media extends Gateway
 
         $covers = array();
         foreach ($data as $cover) {
-            $product = $cover['__image_articleID'];
+            $number = $cover['number'];
 
             $cover['thumbnails'] = $this->getMediaThumbnails($cover);
 
-            $covers[$product] = $this->mediaHydrator->hydrateProductImage($cover);
+            $covers[$number] = $this->mediaHydrator->hydrateProductImage($cover);
         }
 
         return $covers;

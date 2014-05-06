@@ -109,7 +109,8 @@ class ListProduct extends Gateway
 
         $products = array();
         foreach ($data as $product) {
-            $products[] = $this->hydrator->hydrateListProduct($product);
+            $key = $product['ordernumber'];
+            $products[$key] = $this->hydrator->hydrateListProduct($product);
         }
 
         return $products;
