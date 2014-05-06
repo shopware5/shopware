@@ -458,6 +458,22 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
                         AND s_library_component.pluginID = :pluginId";
 
             $db->query($sql, array(':pluginId' => $id));
+
+            // Remove widgets
+            $widgetIds = Shopware()->Db()->fetchCol(
+                'SELECT id FROM s_core_widgets WHERE plugin_id = ?',
+                array($id)
+            );
+
+            Shopware()->Db()->delete(
+                's_core_widget_views',
+                array('widget_id IN (?)' => $widgetIds)
+            );
+
+            Shopware()->Db()->delete(
+                's_core_widgets',
+                array('plugin_id = ?' => $id)
+            );
         }
 
         return $result;
