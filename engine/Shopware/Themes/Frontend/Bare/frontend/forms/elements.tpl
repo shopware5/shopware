@@ -25,8 +25,7 @@
 		<div class="panel--body">
 			{foreach from=$sSupport.sElements item=sElement key=sKey}
 			{if $sSupport.sFields[$sKey]||$sElement.note}
-				<div class="forms--field{if $sSupport.sElements[$sKey].typ eq 'textarea'} textarea{elseif $sSupport.sElements[$sKey].typ eq 'checkbox'} checkbox{/if}">
-					{$sSupport.sLabels.$sKey}
+				<div {if $sSupport.sElements[$sKey].typ eq 'textarea'}class="textarea"{elseif $sSupport.sElements[$sKey].typ eq 'checkbox'}class="checkbox"{elseif $sSupport.sElements[$sKey].typ eq 'select'}class="select--box"{/if}>
 					{eval var=$sSupport.sFields[$sKey]}
 				</div>
 
@@ -37,18 +36,16 @@
 				{/if}
 			{/if}
 			{/foreach}
+
 			<div class="forms--captcha">
 				<div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
 				<div class="code">
 					<label>{s name='SupportLabelCaptcha'}{/s}</label>
-					<input type="text" name="sCaptcha" class="{if $sSupport.sErrors.e.sCaptcha} has--error{/if}" />
+					<input type="text" required="required" aria-required="true" name="sCaptcha" class="{if $sSupport.sErrors.e.sCaptcha} has--error{/if}" />
 				</div>
 			</div>
 
 			<p class="forms--requiredfields">{s name='SupportLabelInfoFields'}{/s}</p>
-
-			<div class="space">&nbsp;</div>
-
 			<div class="buttons">
 				<button class="btn btn--primary" type="submit" name="Submit">{s name='SupportActionSubmit'}{/s}<i class="icon--arrow-right"></i></button>
 			</div>

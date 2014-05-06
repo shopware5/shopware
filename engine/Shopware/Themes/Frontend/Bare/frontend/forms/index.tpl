@@ -32,7 +32,6 @@
 						{include file="frontend/forms/elements.tpl"}
 					{/block}
 				{elseif $sSupport.text2}
-					<div class="space">&nbsp;</div>
 					<a href="{url controller='index'}" class="btn btn--primary">{s name='FormsLinkBack'}{/s}</a>
 				{else}
 					<div class="col_center_container">
@@ -42,7 +41,6 @@
 				{/if}
 			</div>
 		</div>
-		<div class="doublespace">&nbsp;</div>
 	</div>
 {/block}
 
