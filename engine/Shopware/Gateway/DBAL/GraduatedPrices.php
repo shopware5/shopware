@@ -61,9 +61,11 @@ class GraduatedPrices extends Gateway
         $query = $this->entityManager->getDBALQueryBuilder();
 
         $query->select($this->getPriceFields());
+        $query->addSelect('variants.ordernumber as number');
         $query->addSelect($this->getTableFields('s_articles_prices_attributes', 'attribute'));
 
         $query->from('s_articles_prices', 'prices')
+            ->innerJoin('prices', 's_articles_details', 'variants', 'variants.id = prices.articledetailsID')
             ->leftJoin('prices', 's_articles_prices_attributes', 'attribute', 'attribute.priceID = prices.id');
 
         $query->where('prices.articledetailsID IN (:products)')
@@ -81,7 +83,7 @@ class GraduatedPrices extends Gateway
 
         $prices = array();
         foreach ($data as $row) {
-            $product = $row['articleID'];
+            $product = $row['number'];
 
             $prices[$product][] = $this->priceHydrator->hydratePriceRule($row);
         }

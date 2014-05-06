@@ -56,6 +56,11 @@
             <argument type="service" id="translation_service"/>
         </service>
 
+        <service id="product_property_service" class="Shopware\Service\ProductProperty">
+            <argument type="service" id="product_property_gateway"/>
+            <argument type="service" id="translation_service"/>
+        </service>
+
 
         <!-- Global shopware gateway definitions -->
         <!-- This gateways are used in the shopware core. Shopware uses as default the *_orm gateways to select data -->
@@ -73,6 +78,8 @@
         <service id="translation_gateway" alias="translation_gateway_dbal"/>
 
         <service id="property_gateway" alias="property_gateway_dbal"/>
+
+        <service id="product_property_gateway" alias="product_property_gateway_dbal"/>
 
         <service id="vote_gateway" alias="vote_gateway_dbal"/>
 
@@ -141,6 +148,11 @@
         </service>
 
         <service id="property_gateway_dbal" class="Shopware\Gateway\DBAL\Property">
+            <argument type="service" id="models"/>
+            <argument type="service" id="property_hydrator_dbal"/>
+        </service>
+
+        <service id="product_property_gateway_dbal" class="Shopware\Gateway\DBAL\ProductProperty">
             <argument type="service" id="models"/>
             <argument type="service" id="property_hydrator_dbal"/>
         </service>

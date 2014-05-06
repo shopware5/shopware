@@ -75,7 +75,7 @@ class GraduatedPrices
         $fallback = array();
 
         foreach ($products as $product) {
-            $key = $product->getId();
+            $key = $product->getNumber();
 
             /**@var $productPrices Struct\Product\PriceRule[] */
             $productPrices = $specify[$key];
@@ -101,7 +101,7 @@ class GraduatedPrices
         $fallback = $this->graduatedPricesGateway->getList($fallback, $group);
 
         foreach ($products as $product) {
-            $key = $product->getId();
+            $key = $product->getNumber();
 
             /**@var $productPrices Struct\Product\PriceRule[] */
             $productPrices = $fallback[$key];
