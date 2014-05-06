@@ -1,3 +1,5 @@
+{namespace name="frontend/listing/listing"}
+
 {* Categorie headline *}
 {block name="frontend_listing_text"}
 	<div class="hero-unit category--teaser panel has--border">
