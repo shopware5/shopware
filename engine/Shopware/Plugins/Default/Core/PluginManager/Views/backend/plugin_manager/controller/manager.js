@@ -479,7 +479,10 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
         var me = this, active = record.get('active');
 
         record.set('installed', null);
-        record.set('removeData', false);
+        record.set('removeData', true);
+        if (record.get('capabilitySecureUninstall')) {
+            record.set('removeData', false);
+        }
         me.onInstallPlugin(record, me.subApplication.pluginStore, {
             callback: function() {
                 record.set('active', active);

@@ -426,14 +426,18 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         $capabilities['secureUninstall'] = !empty($capabilities['secureUninstall']);
         $success = is_bool($result) ? $result : !empty($result['success']);
 
-            $this->Application()->Events()->notify(
-                'Shopware_Plugin_PostUninstall',
-                array(
-                    'subject'     => $this,
-                    'plugin'      => $bootstrap,
-                    'removeData'  => $removeData
-                )
-            );
+        if (!$success) {
+            return $result;
+        }
+
+        $this->Application()->Events()->notify(
+            'Shopware_Plugin_PostUninstall',
+            array(
+                'subject'     => $this,
+                'plugin'      => $bootstrap,
+                'removeData'  => $removeData
+            )
+        );
 
         if ($removeData) {
             $result = $bootstrap->uninstall();
@@ -491,8 +495,10 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         $query->execute(array($id));
 
         // Remove emotion-components
-        $sql = "DELETE s_emotion_element
-                FROM s_emotion_element
+        $sql = "DELETE s_emotion_element_value, s_emotion_element
+                FROM s_emotion_element_value
+                RIGHT JOIN s_emotion_element
+                    ON s_emotion_element.id = s_emotion_element_value.elementID
                 INNER JOIN s_library_component
                     ON s_library_component.id = s_emotion_element.componentID
                     AND s_library_component.pluginID = :pluginId";
