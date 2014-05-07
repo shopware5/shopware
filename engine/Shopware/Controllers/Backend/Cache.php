@@ -65,8 +65,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             $this->cacheManager->getTemplateCacheInfo(),
             $this->cacheManager->getShopwareProxyCacheInfo(),
             $this->cacheManager->getDoctrineFileCacheInfo(),
-            $this->cacheManager->getDoctrineProxyCacheInfo(),
-            $this->cacheManager->getThemeCacheInfo(),
+            $this->cacheManager->getDoctrineProxyCacheInfo()
         );
 
         $this->View()->assign(array(
@@ -130,9 +129,6 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         }
         if ($cache['proxy'] == 'on') {
             $this->cacheManager->clearProxyCache();
-        }
-        if ($cache['theme'] == 'on') {
-            $this->cacheManager->clearThemeCache();
         }
 
         $this->View()->assign(array(
