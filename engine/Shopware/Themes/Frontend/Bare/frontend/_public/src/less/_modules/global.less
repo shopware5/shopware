@@ -1,7 +1,13 @@
 * {
     .box-sizing();
 }
-html, body { overflow-x: hidden }
+
+// Fix the body for off-canvas handling
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
 body {
 	font-family: @bodyFontStack;
 	color: @primaryTextColor;
@@ -35,6 +41,14 @@ p {
   margin: 0;
 }
 
+// Actual body proxy element for the content
+.page-wrap {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
 
 .list--unstyled { list-style: none }
 .content-main--inner {

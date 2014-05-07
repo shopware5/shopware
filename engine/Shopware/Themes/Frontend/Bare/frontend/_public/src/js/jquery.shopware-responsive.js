@@ -20,7 +20,9 @@ $(function() {
     StateManager.registerListener([{
         type: 'smartphone',
         enter: function() {
-            $('.sidebar-main').insertBefore($('.page-wrap'));
+            var pageWrap = $('.page-wrap');
+            $('.sidebar-main').insertBefore(pageWrap);
+            $('.action--filter-options').insertBefore(pageWrap);
             $('*[data-offcanvas="true"]').offcanvasMenu();
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
             $('*[data-slide-panel="true"]').slidePanel();
@@ -28,14 +30,24 @@ $(function() {
             $('.category--teaser .hero--text').collapseText();
         },
         exit: function() {
-            $('.sidebar-main').prependTo($('.content-main--inner'));
-            $('*[data-offcanvas="true"]').data('plugin_offcanvasMenu').destroy();
-            $('*[data-search-dropdown="true"]').data('plugin_searchFieldDropDown').destroy();
-            $('*[data-slide-panel="true"]').data('plugin_slidePanel').destroy();
+            $('*[data-offcanvas="true"]').each(function() {
+                $(this).data('plugin_offcanvasMenu').destroy();
+            });
+            $('*[data-search-dropdown="true"]').each(function() {
+                $(this).data('plugin_searchFieldDropDown').destroy();
+            });
+            $('*[data-slide-panel="true"]').each(function() {
+                $(this).data('plugin_slidePanel').destroy();
+            });
+
             $('.product--supplier').appendTo($('.product--header'));
-            $('.category--teaser .hero--text').data('plugin_collapseText').destroy();
+            $('.sidebar-main').prependTo($('.content-main--inner'));
+            $('.action--filter-options').insertAfter($('.action--per-page'));
+
+            var teaserText = $('.category--teaser .hero--text');
+            if (teaserText.length) teaserText.data('plugin_collapseText').destroy();
         }
-    }, {
+}, {
         type: 'tablet',
         enter: function() {
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
@@ -43,9 +55,29 @@ $(function() {
             $('.filter--trigger').collapsePanel();
         },
         exit: function() {
-            $('*[data-search-dropdown="true"]').data('plugin_searchFieldDropDown').destroy();
+            $('*[data-search-dropdown="true"]').each(function() {
+                $(this).data('plugin_searchFieldDropDown').destroy();
+            });
             $('nav.product--actions').insertAfter($('.buybox--form'));
-            $('.filter--trigger').data('plugin_collapsePanel').destroy();
+
+            var filterTrigger = $('.filter--trigger');
+            if (filterTrigger.length) filterTrigger.data('plugin_collapsePanel').destroy();
+        }
+    }, {
+        type: 'tabletLandscape',
+        enter: function() {
+            $('*[data-search-dropdown="true"]').searchFieldDropDown();
+            $('nav.product--actions').insertBefore($('.additional-info--tabs'));
+            $('.filter--trigger').collapsePanel();
+        },
+        exit: function() {
+            $('*[data-search-dropdown="true"]').each(function() {
+                $(this).data('plugin_searchFieldDropDown').destroy();
+            });
+            $('nav.product--actions').insertAfter($('.buybox--form'));
+
+            var filterTrigger = $('.filter--trigger');
+            if (filterTrigger.length) filterTrigger.data('plugin_collapsePanel').destroy();
         }
     }, {
         type: 'desktop',
@@ -53,7 +85,8 @@ $(function() {
             $('.filter--trigger').collapsePanel();
         },
         exit: function() {
-            $('.filter--trigger').data('plugin_collapsePanel').destroy();
+            var filterTrigger = $('.filter--trigger');
+            if (filterTrigger.length) filterTrigger.data('plugin_collapsePanel').destroy();
         }
     }]);
 
@@ -99,6 +132,7 @@ $(function() {
     $('*[data-emotions="true"]').emotions();
     $('*[data-image-slider="true"]').imageSlider();
     $('*[data-collapse-panel="true"]').collapsePanel();
+    $('*[data-auto-submit="true"]').autoSubmit();
     $('input[data-quantity-field="true"]').quantityField();
 
     // Deferred loading of the captcha
