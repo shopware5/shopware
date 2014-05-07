@@ -243,6 +243,13 @@ class ProductFeed extends ModelEntity
     private $shopId;
 
     /**
+     * @var string $cacheRefreshed
+     *
+     * @ORM\Column(name="cache_refreshed", type="datetime", nullable=true)
+     */
+    private $cacheRefreshed;
+
+    /**
      * @var integer $variantExport
      *
      * @ORM\Column(name="variant_export", type="integer", nullable=false)
@@ -1012,4 +1019,28 @@ class ProductFeed extends ModelEntity
         return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ProductFeed', 'attribute', 'productFeed');
     }
 
+    /**
+     * Set cache refreshed datetime
+     *
+     * @param datetime|string $cacheRefreshed
+     * @return ProductFeed
+     */
+    public function setCacheRefreshed($cacheRefreshed)
+    {
+        if (!$cacheRefreshed instanceof \DateTime) {
+            $cacheRefreshed = new \DateTime($cacheRefreshed);
+        }
+        $this->cacheRefreshed = $cacheRefreshed;
+        return $this;
+    }
+
+    /**
+     * Get cache refreshed datetime
+     *
+     * @return datetime
+     */
+    public function getCacheRefreshed()
+    {
+        return $this->cacheRefreshed;
+    }
 }

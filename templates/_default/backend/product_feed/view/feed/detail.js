@@ -110,18 +110,39 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.Detail', {
                     name:'active'
                 },
                 {
-                    xtype:'combobox',
-                    name:'variantExport',
-                    fieldLabel:'{s name=detail_general/field/variantExport}Export variants{/s}',
-                    store:new Ext.data.SimpleStore({
-                        fields:['id', 'text'], data:this.variantExportData
-                    }),
-                    valueField:'id',
-                    displayField:'text',
-                    mode:'local',
-                    allowBlank:false,
-                    required:true,
-                    editable:false
+                    xtype: 'base-element-interval',
+                    name: 'interval',
+                    helpText:'{s name=detail_general/field/interval/help}When to refresh feed cache. <br>- Only cron: cache is only refreshed by cron<br>- None: new feed is generated with each request{/s}',
+                    allowBlank: false,
+                    fieldLabel: '{s name=detail_general/field/interval}Caching interval{/s}',
+                    store: [
+                        [-1, '{s name=detail_general/field/interval/onlyCron}Only cron{/s}'],
+                        [0, '{s name=detail_general/field/empty_value}None (0 Sec.){/s}'],
+                        [120, '{s name=detail_general/field/interval/2_minutes}2 Minutes (120 Sec.){/s}'],
+                        [300, '{s name=detail_general/field/interval/5_minutes}5 Minutes (300 Sec.){/s}'],
+                        [600, '{s name=detail_general/field/interval/10_minutes}10 Minutes (600 Sec.){/s}'],
+                        [900, '{s name=detail_general/field/interval/15_minutes}15 Minutes (900 Sec.){/s}'],
+                        [1800, '{s name=detail_general/field/interval/30_minutes}30 Minutes (1800 Sec.){/s}'],
+                        [3600, '{s name=detail_general/field/interval/1_hour}1 Hour (3600 Sec.){/s}'],
+                        [7200, '{s name=detail_general/field/interval/2_hours}2 Hours (7200 Sec.){/s}'],
+                        [14400, '{s name=detail_general/field/interval/4_hours}4 Hours (14400 Sec.){/s}'],
+                        [28800, '{s name=detail_general/field/interval/12_hours}12 Hours (28800 Sec.){/s}'],
+                        [86400, '{s name=detail_general/field/interval/1_day}1 Day (86400 Sec.){/s}'],
+                        [172800, '{s name=detail_general/field/interval/2_days}2 Days (172800 Sec.){/s}'],
+                        [604800, '{s name=detail_general/field/interval/1_week}1 Week (604800 Sec.){/s}']
+                    ]
+                },
+                {
+                    name:'lastExport',
+                    fieldLabel: '{s name=detail_general/field/lastExport}Last export{/s}',
+                    xtype: 'displayfield',
+                    renderer: function(value) {
+                        if ( value === Ext.undefined ) {
+                            return value;
+                        }
+
+                        return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeFormat);
+                    }
                 }
             ]
         });
@@ -180,8 +201,33 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.Detail', {
                     helpText:'{s name=detail_general/field/category/help}This will execute the export for the selected category only{/s}',
                     store: me.comboTreeCategoryStore,
                     selectedRecord : me.record
-                }
+                },
+                {
+                    xtype:'combobox',
+                    name:'variantExport',
+                    fieldLabel:'{s name=detail_general/field/variantExport}Export variants{/s}',
+                    store:new Ext.data.SimpleStore({
+                        fields:['id', 'text'], data:this.variantExportData
+                    }),
+                    valueField:'id',
+                    displayField:'text',
+                    mode:'local',
+                    allowBlank:false,
+                    required:true,
+                    editable:false
+                },
+                {
+                    name: 'cacheRefreshed',
+                    xtype: 'displayfield',
+                    fieldLabel: '{s name=detail_general/field/cacheRefresh}Last cache refresh{/s}',
+                    renderer: function(value) {
+                        if ( value === Ext.undefined ) {
+                            return value;
+                        }
 
+                        return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeFormat);
+                    }
+                }
             ]
         });
     }
