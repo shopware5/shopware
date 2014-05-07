@@ -508,7 +508,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
 
         $db->delete(
             's_core_widget_views',
-            array('widget_id IN (?)' => array_column($widgetIds, 'id'))
+            array('widget_id IN (?)' => array_column($widgets, 'id'))
         );
 
         $db->delete(
