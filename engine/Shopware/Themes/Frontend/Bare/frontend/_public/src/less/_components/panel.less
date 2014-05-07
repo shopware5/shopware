@@ -114,6 +114,39 @@ See the documentation of the child elements for additional information.
     }
 }
 
+/* A container for action elements
+
+```
+<div class="panel--actions">
+    <a href="#" class="btn">Action Link</a>
+    <a href="#" class="btn">Action Link</a>
+</div>
+```
+*/
+.panel--actions {
+    .unitize-padding(10, 10);
+    display: block;
+
+    &.has--border {
+        .unitize-margin(10, 0 , 0, 0);
+        .unitize-padding(10, 0, 0, 0);
+        border-top: 1px solid @borderColor;
+    }
+
+    &.is--slim {
+        .unitize-padding(5, 5);
+    }
+
+    &.is--wide {
+        .unitize-padding(20, 20);
+    }
+
+    .btn {
+        .unitize-margin(0, 10, 0, 0);
+    }
+}
+
+
 /* A table in a panel.
 
 ```
