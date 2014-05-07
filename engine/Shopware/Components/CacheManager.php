@@ -117,6 +117,8 @@ class CacheManager
         if ($cacheDir != $compileDir) {
             $this->clearDirectory($cacheDir);
         }
+
+        $this->clearDirectory($this->themePathResolver->getCacheDirectory());
     }
 
     /**
@@ -203,14 +205,6 @@ class CacheManager
     }
 
     /**
-     * Deletes all compiled css and js files.
-     */
-    public function clearThemeCache()
-    {
-        $this->clearDirectory($this->themePathResolver->getCacheDirectory());
-    }
-
-    /**
      * Returns cache information
      *
      * @param null $request
@@ -284,20 +278,6 @@ class CacheManager
         $dir = $this->container->getParameter('shopware.model.proxydir');
         $info = $this->getDirectoryInfo($dir);
         $info['name'] = 'Doctrine Proxies';
-
-        return $info;
-    }
-
-    /**
-     *
-     * @return array
-     */
-    public function getThemeCacheInfo()
-    {
-        $info = $this->getDirectoryInfo(
-            $this->themePathResolver->getCacheDirectory()
-        );
-        $info['name'] = 'Shopware 5 themes';
 
         return $info;
     }
