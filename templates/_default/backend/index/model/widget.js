@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,43 +19,20 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Index
- * @subpackage Model
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
-/**
- * todo@all: Documentation
- */
-//{block name="backend/index/model/album"}
+//{block name="backend/index/model/widget"}
+
 Ext.define('Shopware.apps.Index.model.Widget', {
-	extend: 'Ext.data.Model',
-	fields: [
-	//{block name="backend/index/model/album/fields"}{/block}
-	'name', 'label', 'views' ],
 
-    /**
-     * Helper method which returns the view data
-     * from the calling model instance.
-     *
-     * @public
-     * @return [array|object] Array, if multiple instance of the same widget are available. If not
-     * the method returns just an plain object of data.
-     */
-    getViewData: function() {
-        var model = this, length;
-        if(!model.data && !model.data.views.length) {
-            return false;
-        }
-        length = model.data.views.length;
-        if(length === 1) {
-            return model.data.views[0];
-        }
-        return model.data.views;
-    }
+    extend: 'Ext.data.Model',
+
+    fields: [
+        'id',
+        'name',
+        'label',
+        'views'
+    ]
 });
+
 //{/block}

@@ -51,7 +51,7 @@ Ext.define('Shopware.container.Viewport',
 	 * The parent class that this class extends.
 	 * @string
 	 */
-	extend: 'Ext.container.Container',
+	extend: 'Ext.container.Viewport',
 
 	/**
 	 * Short alias name for class names.
@@ -136,7 +136,7 @@ Ext.define('Shopware.container.Viewport',
 	 * @integer
 	 */
 	defaultDesktopNames: [
-        'Dashboard', 'Administration'
+        'Dashboard'
     ],
 
 	/**
@@ -150,31 +150,6 @@ Ext.define('Shopware.container.Viewport',
 	 * @boolean
 	 */
 	stateId: 'sw4-viewport',
-
-	/**
-	 * Property which holds the desktop switcher.
-	 * @default null
-	 * @object
-	 */
-	desktopSwitcher: null,
-
-    snippets: {
-        title: '{s name=create_desktop_title}Create desktop{/s}',
-        message: '{s name=create_desktop_message}Please choose a title for the new desktop{/s}'
-    },
-
-	/**
-	 * Property which holds a store. The store
-	 * represents the different desktops.
-	 * @object
-	 */
-	desktopSwitcherStore: Ext.create('Ext.data.Store', {
-		fields: [
-			{ name: 'title', type: 'string' },
-			{ name: 'cls', type: 'string' },
-			{ name: 'index', type: 'int' }
-		]
-	}),
 
     afterRender: function() {
         var me = this;
@@ -202,32 +177,36 @@ Ext.define('Shopware.container.Viewport',
 		me.registerEvents();
 		me.callParent(arguments);
 
-		me.el = el = Ext.getBody();
+		el = Ext.getBody();
 		el.setHeight = Ext.emptyFn;
 		el.dom.scroll = 'no';
+        el.dom.scrollWidth = Ext.Element.getViewportWidth();
         html.dom.scroll = 'no';
         html.dom.scrollWidth = Ext.Element.getViewportWidth();
-        el.dom.scrollWidth = Ext.Element.getViewportWidth();
         html.scrollLeft = 0;
 
 		// Prevent ExtJS errors on containers
 		me.allowDomMove = false;
 		Ext.EventManager.onWindowResize(me.fireResize, me);
-		me.renderTo = me.el;
+		me.renderTo = el;
 
+        // Stops the render queue
 		Ext.suspendLayouts();
+
 		html.addCls(me.cssBaseCls);
 		html.setStyle('position', 'relative');
         html.setStyle('left', '0px');
-        el.setStyle('left', '0px');
         html.setStyle('overflow', 'hidden');
+
+        el.setStyle('left', '0px');
 		el.setStyle('overflow', 'hidden');
+
 		Ext.resumeLayouts(true);
 
-		// The viewport is now set up'ed, we can create the default desktops.
+        me.el = el;
+
+		// The viewport is now setup so we can create the default desktop.
 		me.createDefaultDesktops();
-		me.createDesktopSwitcher();
-		me.updateDesktopSwitcher();
 		me.resizeViewport();
 
         me.createHiddenLayer();
@@ -357,8 +336,8 @@ Ext.define('Shopware.container.Viewport',
 		me.setSize(w * (me.getDesktopCount() || 1), h);
 
 		Ext.each(this.desktops.items, function(desktop) {
-            // Create the spacing of the main toolbar using the "-40"
-			desktop.setSize(w, h - 40);
+            // Create the spacing of the main & footer toolbar using the "-80"
+			desktop.setSize(w, h - 80);
 		});
 
         Ext.defer(me._rearrangeVisibleWindows, 5, this);
@@ -399,13 +378,15 @@ Ext.define('Shopware.container.Viewport',
 	 */
 	resizeViewport: function() {
 		var me = this,
-			width = Ext.Element.getViewportWidth() * (me.getDesktopCount() || 1),
-			height = Ext.Element.getViewportHeight();
+            size = me.getViewportSize(),
+            width = size[0],
+            height = size[1];
 
 		me.el.setSize(width, height);
+
 		me.fireEvent('resizeviewport', me, width, height);
 
-		return [ width, height ];
+		return size;
 	},
 
 	/**
@@ -415,94 +396,12 @@ Ext.define('Shopware.container.Viewport',
 	 * @return [array] Array containing the Viewport size.
 	 */
 	getViewportSize: function() {
-		var width = Ext.Element.getViewportWidth() * (this.getDesktopCount() || 1),
+		var me = this,
+            width = Ext.Element.getViewportWidth() * (me.getDesktopCount() || 1),
 			height = Ext.Element.getViewportHeight();
 
-		return [width, height];
+		return [ width, height ];
 	},
-
-
-	createDesktopSwitcher: function() {
-		var me = this,
-			desktopSwitcher;
-
-        var task;
-		desktopSwitcher = Ext.create('Ext.view.View', {
-			renderTo: Ext.getBody(),
-			store: me.desktopSwitcherStore,
-			style: 'position: fixed; bottom: 18px; left: 0; text-align: center; z-index: 10',
-            width: '100%',
-            cls: Ext.baseCSSPrefix + 'desktop-switcher-outer-container',
-			itemSelector: '.x-desktop-switcher-control',
-			tpl: [
-				'{literal}<tpl for=".">',
-					'<a href="#" class="x-desktop-switcher-control {cls}">{title}</a>',
-				'</tpl>',
-                '<a class="add-desktop" href="#">+</a>{/literal}'
-			],
-			listeners: {
-				scope: me,
-				itemclick: function(view, record, item, index) {
-					me.jumpTo(index);
-				}
-			}
-		});
-
-
-        desktopSwitcher.getEl().on('click', function() {
-            var title = me.snippets.title;
-            var message = me.snippets.message;
-            Ext.MessageBox.prompt(title, message, function(response, title) {
-                if(response === 'ok') {
-                    me.createDesktop(title, true);
-                }
-            });
-       }, me, { delegate: '.add-desktop' });
-		return me.desktopSwitcher = desktopSwitcher;
-	},
-
-    /**
-     * Updates the store of the desktop switcher.
-     *
-     * @private
-     * @return void
-     */
-	updateDesktopSwitcher: function() {
-		var me = this;
-
-		me.desktopSwitcherStore.removeAll();
-		Ext.each(this.desktops.items, function(desktop, index) {
-			me.desktopSwitcherStore.add({
-				title: Ext.String.ellipsis(desktop.title, 14),
-				cls: (me.getActiveDesktopPosition() === index) ? 'active' : 'non-active',
-				index: index
-			})
-		});
-	},
-
-    /**
-     * Proxy method which provides an easy to use way to
-     * show the desktop switcher.
-     *
-     * @public
-     * @return boolean
-     */
-    showDesktopSwitcher: function() {
-        this.desktopSwitcher.show();
-        return true;
-    },
-
-    /**
-     * Proxy method which provides an easy to use way to
-     * show the desktop switcher.
-     *
-     * @public
-     * @return boolean
-     */
-    hideDesktopSwitcher: function() {
-        this.desktopSwitcher.hide();
-        return true;
-    },
 
 	/**
 	 * Creates the default desktops.
@@ -512,14 +411,14 @@ Ext.define('Shopware.container.Viewport',
 	 */
 	createDefaultDesktops: function() {
 		var me = this;
+
+        me.activeDesktop = 0;
+
 		Ext.suspendLayouts();
 
-		for(var i = 0; i <= me.defaultDesktopNames.length -1;  i++) {
-			me.createDesktop(me.defaultDesktopNames[i]);
-		}
+        me.createDesktop(me.defaultDesktopNames[me.activeDesktop]);
 
 		Ext.resumeLayouts(true);
-		me.activeDesktop = 0;
 	},
 
 	/**
@@ -561,29 +460,27 @@ Ext.define('Shopware.container.Viewport',
 	 * @param [string] title - title of the desktop
 	 * @return [object] created desktop - Ext.container.Container
 	 */
-	createDesktop: function(title, renderBeforeSwitcher) {
-        renderBeforeSwitcher = renderBeforeSwitcher || false;
-
+	createDesktop: function(title) {
 		var me = this,
 			desktop = Ext.create(me.desktopComponentName, {
-            renderTo: Ext.getBody(),
+            renderTo: me.getEl(),
+            region: 'center',
+            x: 0,
+            y: 40,
 			width: Ext.Element.getViewportWidth(),
-			height: Ext.Element.getViewportHeight() - 106,
+			height: Ext.Element.getViewportHeight() - 80,
             layout: 'fit',
 			title: title,
-			style: 'float: left; top: 40px; position: relative; z-index: 10',
+            floating: true,
+			style: 'z-index: 10',
 			cls: 'desktop-pnl'
 		});
-
-        if(renderBeforeSwitcher) {
-            me.desktopSwitcher.getEl().insertAfter(desktop.getEl());
-        }
 
 		me.desktops.add(desktop);
 
 		me.fireEvent('createdesktop', me, desktop);
+
 		me.resizeViewport();
-        me.updateDesktopSwitcher();
 
 		return desktop;
 	},
@@ -606,7 +503,6 @@ Ext.define('Shopware.container.Viewport',
 		}
 		me.fireEvent('removedesktop', this, removedDesktop);
 		me.resizeViewport();
-        me.updateDesktopSwitcher();
 
 		return desktop;
 	},
@@ -686,7 +582,6 @@ Ext.define('Shopware.container.Viewport',
 					Ext.resumeLayouts(true);
 					me.activeDesktop = pos;
 					me.fireEvent('afterscroll', me, this, pos);
-                    me.updateDesktopSwitcher();
 				}
 			},
 			to: { left: -(width * pos) }
@@ -705,7 +600,6 @@ Ext.define('Shopware.container.Viewport',
             html.setStyle('left', -(width * index));
             me.activeDesktop = index;
             me.fireEvent('afterscroll', me, this, index);
-            me.updateDesktopSwitcher();
             return true;
         }
 
@@ -733,7 +627,6 @@ Ext.define('Shopware.container.Viewport',
 					Ext.resumeLayouts(true);
 					me.activeDesktop = index;
 					me.fireEvent('afterscroll', me, this, index);
-					me.updateDesktopSwitcher();
 
                     Ext.each(activeWindows, function(window) {
                         window.el.shadow.show(window.el);
