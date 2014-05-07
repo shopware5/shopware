@@ -18,7 +18,7 @@
     }
 
     .alert {
-        .unitize-margin(0, 26, 16);
+        .unitize-margin(20, 18, 20, 18, 16);
     }
 
     .register--check {
@@ -125,19 +125,21 @@
 }
 
 // Register Login
-.register--new-customer {
-    .unitize(10, 16, margin-bottom);
+.register--login {
+    .clearfix();
 
-    button {
-        width: 100%;
-        text-align: center;
+    .panel {
+        .border-radius(4px);
     }
 
-}
+    .register--new-customer {
+        .unitize(10, 16, margin-bottom);
 
-.register--login {
-    .border-radius(4px);
-    .clearfix();
+        button {
+            width: 100%;
+            text-align: center;
+        }
+    }
 
     .register--login-field {
         .unitize(10, 16, margin-bottom);
@@ -161,7 +163,7 @@
     }
 }
 
-// Register advantages
+// Register Advantages
 .register--advantages {
     display: none;
 }
@@ -258,7 +260,7 @@
 
     }
 
-    // General registration form
+    // General Register Form
     .register--content {
 	    .unitize(50, 16, margin-top);
         width: 49%;
@@ -312,14 +314,14 @@
     }
 
     // Register Login
-    .register--new-customer {
-        display: none;
-    }
-
     .register--login {
         .unitize(50, 16, margin-top);
         width: 49%;
         float: left;
+
+        .register--new-customer {
+            display: none;
+        }
 
         .register--login-field {
             .unitize(15, 16, margin-bottom);
@@ -344,6 +346,7 @@
 
         li {
             .unitize(5, 16, padding-bottom);
+            .unitize(14, 16, font-size);
             display: block;
             float: left;
             width: 100%;
@@ -355,7 +358,6 @@
         }
 
     }
-
 }
 
 @media screen and (min-width: @desktopViewportWidth) {
