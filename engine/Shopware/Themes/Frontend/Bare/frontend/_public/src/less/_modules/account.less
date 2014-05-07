@@ -1,0 +1,108 @@
+
+.sidebar-account {
+    display: none; // ToDo:PSC Wait for the missing changes from the listing branch
+}
+
+.account--content {
+    .clearfix();
+}
+
+.account--info,
+.account--payment,
+.account--password,
+.account--email,
+.account--newsletter,
+.account--billing,
+.account--shipping {
+    .unitize-margin(0, 0, 20, 0);
+}
+
+.account--password,
+.account--email {
+    input[type="text"],
+    input[type="password"],
+    input[type="email"] {
+        .unitize-margin(0, 0, 10, 0);
+        width: 100%;
+    }
+}
+
+.account--error,
+.account--success {
+    .unitize-margin(0, 0, 20, 0);
+}
+
+@media screen and(min-width: @tabletViewportWidth) {
+
+    .account--content {
+        .unitize-margin(20, 0);
+    }
+
+    .account--info,
+    .account--password,
+    .account--billing {
+        width: 49%;
+        float: left;
+    }
+
+    .account--payment,
+    .account--email,
+    .account--shipping {
+        width: 49%;
+        float: right;
+    }
+
+    .account--newsletter {
+        clear: both;
+    }
+
+    .account--info,
+    .account--payment {
+        .panel--body {
+            .unitize-height(120);
+        }
+    }
+
+    .account--billing,
+    .account--shipping {
+        .panel--body {
+            .unitize-height(180);
+        }
+    }
+}
+
+@media screen and(min-width: @tabletLandscapeViewportWidth) {
+
+}
+
+@media screen and(min-width: @desktopViewportWidth) {
+
+    .sidebar-account {
+        .unitize-margin(45, 0, 0, 0);
+        display: block;
+        width: 20%;
+
+        .sidebar--navigation {
+            border: 0;
+
+            .navigation--entry {
+                margin: 0;
+                border: 0;
+            }
+
+            .navigation--link {
+                .unitize-padding(3, 0);
+            }
+        }
+
+        .navigation--headline {
+            .unitize-margin(0, 20);
+        }
+    }
+
+    .account--content {
+        .unitize-margin(45, 0, 0, 0);
+        width: 78%;
+        float: right;
+    }
+}
