@@ -74,6 +74,11 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
             viewportNotLoaded: '{s name="error/viewportNotLoaded"}Viewport is not loaded.{/s}',
             settingsInitialisation: '{s name="error/settingsInitialisation"}Widget settings could not be initialized.{/s}',
             deleteWidget: '{s name="error/deleteWidget"}An Error occurred while attempting to delete the widget.\n\n{/s}'
+        },
+
+        titles: {
+            allow_merchant: '{s name=titles/allow_merchant}Unlock merchant{/s}',
+            decline_merchant: '{s name=titles/decline_merchant}Decline merchant{/s}'
         }
     },
 
@@ -114,6 +119,15 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
 
             'widget-base': {
                 closeWidget: me.onCloseWidget
+            },
+
+            'swag-merchant-widget': {
+                allowMerchant: function(record) {
+                    me.onOpenMerchantDetail('allow', record);
+                },
+                declineMerchant: function(record) {
+                    me.onOpenMerchantDetail('decline', record);
+                }
             }
         });
 
@@ -458,6 +472,41 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         me.widgetSettings.set('columnsShown', columnsShown);
         me.widgetSettings.set('height', height);
         me.widgetSettingsStore.sync();
+    },
+
+    /**
+     * Event listener method which will be called after the user
+     * clicks on the "allow" or "decline" icon in the action column.
+     *
+     * Opens the detail window to send an email to the customer.
+     *
+     * @public
+     * @event click
+     * @param [string] mode - Allow or decline
+     * @param [object] record - Shopware.apps.Index.model.Merchant
+     * @return void
+     */
+    onOpenMerchantDetail: function(mode, record) {
+        var me = this;
+
+        Ext.Ajax.request({
+            url: '{url controller=widgets action=requestMerchantForm}',
+            params: {
+                id: ~~(1 * record.get('id')),
+                customerGroup: record.get('validation'),
+                mode: mode
+            },
+            success: function(response) {
+                var model =  me.getModel('MerchantMail');
+                response = Ext.decode(response.responseText);
+
+                me.getView('merchant.Window').create({
+                    record: model.create(response.data),
+                    mode: mode,
+                    title: (mode === 'allow') ? me.snippets.titles.allow_merchant : me.snippets.titles.decline_merchant
+                }).show();
+            }
+        });
     }
 });
 
