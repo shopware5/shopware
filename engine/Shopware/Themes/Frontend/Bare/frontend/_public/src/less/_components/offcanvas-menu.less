@@ -21,22 +21,48 @@
 	}
 }
 
-// State - Menu left open
-.js--menu-left--open {
-    .sidebar-main {
-        .translate(0, 0);
+// Is used for the necessary styling of an off-canvas menu
+.off-canvas {
+    .unitize-width(300);
+    .unitize-variable(300, 16);
+    .transition(all, 0.25s, ease-in-out);
+    .transform-style(preverse-3d);
+    position: fixed;
+    top: 0;
+    height: 100%;
+    z-index: 998;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    &.is--left {
+        left: 0;
+        .translate(~"-@{emValue}rem", 0);
     }
-	.page-wrap {
-		.unitize-variable(300, 16);
-		.translate(~"@{emValue}rem", 0);
-	}
+
+    &.is--right {
+        right: 0;
+        .translate(~"@{emValue}rem", 0);
+    }
+
+    &.is--active {
+        .translate(0, 0);
+        z-index: 999;
+    }
+
+    &.js--no-transition {
+        .transition(none, 0s, linear);
+    }
 }
-// State - Menu right open
-.js--menu-right--open {
-	.page-wrap {
-		.unitize-variable(300, 16);
-		.translate(~"-@{emValue}rem", 0);
-	}
+
+.page-wrap {
+    &.is--moved-left {
+        .unitize-variable(300, 16);
+        .translate(~"@{emValue}rem", 0);
+    }
+    &.is--moved-right {
+        .unitize-variable(300, 16);
+        .translate(~"-@{emValue}rem", 0);
+    }
 }
 
 .navigation--smartphone {
@@ -94,4 +120,18 @@
 	.navigation--link {
 		color: @primaryTextColor;
 	}
+}
+
+@media screen and(min-width: @tabletViewportWidth) {
+
+    // Reset the styles of the standard off-canvas elements on higher screen sizes
+    .off-canvas {
+        .translate(0, 0);
+        width: auto;
+        height: auto;
+        position: relative;
+        top: 0;
+        left: 0;
+    }
+
 }

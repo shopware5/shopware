@@ -16,14 +16,22 @@
      * ```
      *     <a href="#" data-offcanvas="true" data-direction="fromRight">Menu</a>
      * ```
+     *
+     * @ToDo: Implement swipe gesture control. The old swipe gesture was removed due to a scrolling bug.
      */
     var pluginName = 'offcanvasMenu',
         isTouch = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0)),
-        clickEvt = (isTouch ? (window.navigator.msPointerEnabled ? 'MSPointerDown': 'touchstart') : 'click'),
+        clickEvt = 'click',
         defaults = {
 
             /** @string wrapSelector Selector for the content wrapper */
             wrapSelector: '.page-wrap',
+
+            /** @string offCanvasSelector Selector of the off-canvas element */
+            offCanvasSelector: '.sidebar-main',
+
+            /** @string closeButtonSelector Selector for an additional button to close the menu */
+            closeButtonSelector: '.entry--close-off-canvas',
 
             /** @string direction Animation direction, `fromLeft` (default) and `fromRight` are possible */
             direction: 'fromLeft',
@@ -31,11 +39,26 @@
             /** @string swipeContainerSelector Container selector which should catch the swipe gestructure */
             swipeContainerSelector: '.page-wrap',
 
-            /** @string leftMenuOpenCls Class which should be added when the menu will be opened on the left side */
-            leftMenuOpenCls: 'js--menu-left--open',
+            /** @string leftMoveCls Class for moving the container to the left */
+            leftMoveCls: 'is--moved-left',
 
-            /** @string rightMenuOpenCls Class which should be added when the menu will be opened on the right side */
-            rightMenuOpenCls: 'js--menu-right--open',
+            /** @string rightMoveCls Class for moving the container to the right */
+            rightMoveCls: 'is--moved-right',
+
+            /** @string offCanvasElementCls Additional class for the off-canvas menu for necessary styling */
+            offCanvasElementCls: 'off-canvas',
+
+            /** @string leftMenuCls Class which should be added when the menu will be opened on the left side */
+            leftMenuCls: 'is--left',
+
+            /** @string rightMenuCls Class which should be added when the menu will be opened on the right side */
+            rightMenuCls: 'is--right',
+
+            /** @string activeMenuCls Class which indicates if the off-canvas menu is visible */
+            activeMenuCls: 'is--active',
+
+            /** @boolean disableTransitions Decide to either use transitions or not */
+            disableTransitions: false,
 
             /** @string disableTransitionCls Class which disables all transitions for a smoother swiping */
             disableTransitionCls: 'js--no-transition'
@@ -56,11 +79,31 @@
         me.$el = $(element);
         me.opts = $.extend({}, defaults, userOpts);
 
+        // Get the settings which are defined by data attributes
+        me.getDataConfig();
+
         me._defaults = defaults;
         me._name = pluginName;
 
         me.init();
     }
+
+    /**
+     * Loads config settings which are set via data attributes and
+     * overrides the old setting with the data attribute of the
+     * same name if defined.
+     */
+    Plugin.prototype.getDataConfig = function() {
+        var me = this,
+            attr;
+
+        $.each(me.opts, function(key, value) {
+            attr = me.$el.attr('data-' + key);
+            if ( attr !== undefined ) {
+                me.opts[key] = attr;
+            }
+        });
+    };
 
     /**
      * Initializes the plugin, sets up event listeners and adds the necessary
@@ -72,28 +115,26 @@
         var me = this,
             opts = me.opts;
 
-        // Cache the neccessary elements
+        // Cache the necessary elements
         me.$pageWrap = $(opts.wrapSelector);
-        me.$body = $('body');
         me.$swipe = $(opts.swipeContainerSelector);
+        me.$offCanvas = $(opts.offCanvasSelector);
+        me.$closeButton = $(opts.closeButtonSelector);
 
-        // Parse the direction, which should be used for the animation
-        var direction = me.$el.attr('data-direction');
-        if(direction && direction.length && direction === 'fromRight') {
-            opts.direction = 'fromRight';
-        }
+        me.$offCanvas.addClass(opts.offCanvasElementCls)
+                     .addClass((opts.direction === 'fromLeft') ? opts.leftMenuCls : opts.rightMenuCls)
+                     .removeAttr('style');
 
-        var selector = me.$el.attr('data-selector');
-        if(selector && selector.length) {
-            opts.offcanvasElement = selector;
+        if (opts.disableTransitions) {
+            me.$pageWrap.addClass(opts.disableTransitionCls);
+            me.$offCanvas.addClass(opts.disableTransitionCls);
         }
-        me.$offcanvas = $(opts.offcanvasElement);
 
         me.registerEventListeners();
     };
 
     /**
-     * Registers all neccessary event listeners for the plugin to proper operate. The
+     * Registers all necessary event listeners for the plugin to proper operate. The
      * method contains the event callback methods as well due to the small amount of
      * code.
      *
@@ -106,28 +147,43 @@
         // Button click
         me.$el.on(clickEvt + '.' + pluginName, function(event) {
             event.preventDefault();
-
-            if(me.$body.hasClass((opts.direction === 'fromLeft' ? opts.leftMenuOpenCls : opts.rightMenuOpenCls))) {
-                me.$pageWrap.transition({ translate: [0, 0] }, 250, function() {
-                    me.$pageWrap.removeAttr('style');
-                    me.$body.removeClass((opts.direction === 'fromLeft' ? opts.leftMenuOpenCls : opts.rightMenuOpenCls));
-                });
-            } else {
-                me.$body.addClass((opts.direction === 'fromLeft' ? opts.leftMenuOpenCls : opts.rightMenuOpenCls));
-            }
+            (me.$offCanvas.hasClass(opts.activeMenuCls)) ? me.closeMenu() : me.openMenu();
         });
 
         // Allow the user to close the off canvas menu
-        $('.entry--close-off-canvas').on(clickEvt + '.' + pluginName, function(event) {
+        me.$closeButton.on(clickEvt + '.' + pluginName, function(event) {
             event.preventDefault();
-
-            me.$pageWrap.transition({ translate: [0, 0] }, 250, function() {
-                me.$pageWrap.removeAttr('style');
-                me.$body.removeClass((opts.direction === 'fromLeft' ? opts.leftMenuOpenCls : opts.rightMenuOpenCls));
-            });
+            me.closeMenu();
         });
 
         return true;
+    };
+
+    /**
+     * Opens the off-canvas menu based on the direction.
+     * Also closes all other off-canvas menus.
+     */
+    Plugin.prototype.openMenu = function() {
+        var me = this,
+            opts = me.opts;
+
+        // Close all other opened off-canvas menus
+        $('.' + opts.offCanvasElementCls).removeClass(opts.activeMenuCls);
+
+        me.$offCanvas.addClass(opts.activeMenuCls);
+        me.$pageWrap.addClass((opts.direction === 'fromLeft') ? me.opts.leftMoveCls : me.opts.rightMoveCls);
+    };
+
+    /**
+     * Closes the menu and slide the content wrapper
+     * back to the normal position.
+     */
+    Plugin.prototype.closeMenu = function() {
+        var me = this,
+            opts = me.opts;
+
+        me.$offCanvas.removeClass(opts.activeMenuCls);
+        me.$pageWrap.removeClass(opts.leftMoveCls + ' ' + opts.rightMoveCls);
     };
 
     /**
@@ -141,11 +197,16 @@
         var me = this,
             opts = me.opts;
 
-        me.$swipe
-            .off((opts.direction === 'fromLeft' ? 'swiperight' : 'swipeleft') + '.' + pluginName)
-            .off('movestart.' + pluginName)
-            .off('move.' + pluginName)
-            .off('moveend.' + pluginName);
+        me.$offCanvas.removeClass(opts.offCanvasElementCls)
+                     .removeClass(opts.disableTransitionCls)
+                     .removeAttr('style');
+
+        me.$pageWrap.off(clickEvt + '.' + pluginName)
+                    .removeClass(opts.leftMoveCls + ' ' + opts.rightMoveCls)
+                    .removeClass(opts.disableTransitionCls)
+                    .removeAttr('style');
+
+        me.$closeButton.off(clickEvt + '.' + pluginName);
 
         me.$el.off(clickEvt + '.' + pluginName).removeData('plugin_' + pluginName);
 

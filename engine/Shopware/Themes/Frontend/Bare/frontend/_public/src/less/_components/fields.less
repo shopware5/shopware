@@ -48,19 +48,19 @@ input[type="email"] {
 	.border-radius(3px);
 	.box-sizing();
 	.unitize-width(290);
+    .unitize(44, 16, line-height);
 	.box-shadow(0 1px 1px 0 rgba(0, 0, 0, 0.1));
 	.linear-gradient(#ffffff, #f7f8fa);
 	display: inline-block;
 	position: relative;
 	border: 1px solid @borderColor;
 	overflow: hidden;
-	line-height: 1;
 
 	.arrow {
 		.user-select(none);
 		.unitize-width(34);
 		.unitize(6, 16, font-size);
-		.unitize(32, 16, line-height);
+		.unitize(44, 16, line-height);
 		cursor: pointer;
 		display: block;
 		position: absolute;
@@ -78,11 +78,12 @@ input[type="email"] {
 	select {
 		.unitize-width(310);
 		.unitize-padding(5, 0, 5, 10);
+        .unitize(32, 16, line-height);
 		.appearance(none);
 		color: @primaryTextColor;
 		background: transparent;
 		border: 0 none;
-		width: 102%;	// Oversize to hide the browser default trigger in FF
+		width: 140%;	// Oversize to hide the browser default trigger in FF
 		cursor: pointer;
 	}
 
@@ -134,15 +135,17 @@ input[type="email"] {
 
     .field--select {
         .unitize-width(290);
+        .unitize(34, 16, line-height);
         .box-shadow(0 1px 1px 0 rgba(0, 0, 0, 0.1));
 
         .arrow {
-            .unitize(32, 16, line-height);
+            .unitize(36, 16, line-height);
             display: block;
         }
 
         select {
             .unitize-padding(5, 0, 5, 10);
+            .unitize(23, 16, line-height);
         }
     }
 
