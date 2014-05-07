@@ -1,6 +1,6 @@
 <div class="panel register--shipping">
 	<h2 class="panel--title is--underline">{s name='RegisterShippingHeadline'}{/s}</h2>
-	<div class="panel--body">
+	<div class="panel--body is--wide">
 		{* Salutation *}
 		{block name='frontend_register_shipping_fieldset_input_salutation'}
 			<div class="register--salutation field--select">

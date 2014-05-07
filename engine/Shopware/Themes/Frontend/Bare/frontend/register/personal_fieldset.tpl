@@ -1,6 +1,6 @@
 <div class="panel register--personal">
 	<h2 class="panel--title is--underline">{s name='RegisterPersonalHeadline'}{/s}</h2>
-	<div class="panel--body">
+	<div class="panel--body is--wide">
 		{* Customer type *}
 		{block name='frontend_register_personal_fieldset_customer_type'}
 			{if $form_data.sValidation}

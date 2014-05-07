@@ -1,6 +1,6 @@
 <div class="panel register--company">
 	<h2 class="panel--title is--underline">{s name='RegisterHeaderCompany'}{/s}</h2>
-	<div class="panel--body">
+	<div class="panel--body is--wide">
 
 		{* Company *}
 		{block name='frontend_register_billing_fieldset_input_company'}
@@ -28,7 +28,7 @@
 
 <div class="panel register--address">
 	<h2 class="panel--title is--underline">{s name='RegisterBillingHeadline'}{/s}</h2>
-	<div class="panel--body">
+	<div class="panel--body is--wide">
 
 		{* Street *}
 		{block name='frontend_register_billing_fieldset_input_street'}
