@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,13 +19,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Index
- * @subpackage App
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 /**
@@ -33,6 +26,9 @@
  *
  * This file bootstrapps the complete backend structure.
  */
+
+//{block name="backend/index/application"}
+
 Ext.define('Shopware.apps.Index', {
     /**
      * Extends from our special controller, which handles the
@@ -54,35 +50,69 @@ Ext.define('Shopware.apps.Index', {
      * controller (server-side)
      * @string
      */
-    loadPath:"{url action=load}",
+    loadPath: '{url action=load}',
 
     /**
      * Required controllers for module (subapplication)
      * @array
      */
-    controllers:[ 'Main', 'Widgets', 'ErrorReporter' ],
+    controllers:[
+        'Main',
+        'Widgets',
+        'ErrorReporter'
+    ],
 
     /**
      * Requires class for the module (subapplication)
      */
-    requires: ['Shopware.container.Viewport'],
+    requires: [
+        'Shopware.container.Viewport'
+    ],
 
     /**
      * Required views for module (subapplication)
      * @array
      */
-    views: [ 'Main', 'Menu', 'Footer', 'Search','widgets.Desktop', 'widgets.Sales','widgets.Upload', 'widgets.Visitors',
-        'widgets.Orders', 'widgets.Notice', 'widgets.Merchant', 'widgets.Base', 'merchant.Window' ],
+    views: [
+        'Main',
+        'Menu',
+        'Footer',
+        'Search',
+        'widgets.Window',
+        'widgets.Sales',
+        'widgets.Upload',
+        'widgets.Visitors',
+        'widgets.Orders',
+        'widgets.Notice',
+        'widgets.Merchant',
+        'widgets.Base',
+        'merchant.Window'
+    ],
 
     /**
      * Required models for the module
      * @array
      */
-    models: [ 'Widget', 'Turnover', 'Batch', 'Customers', 'Visitors', 'Orders', 'Merchant', 'MerchantMail' ],
+    models: [
+        'Widget',
+        'WidgetSettings',
+        'Turnover',
+        'Batch',
+        'Customers',
+        'Visitors',
+        'Orders',
+        'Merchant',
+        'MerchantMail'
+    ],
 
     /**
-     * Required models for the module
+     * Required stores for the module
      * @array
      */
-    store: [ 'Widget', 'Turnover', 'Visitors', 'Orders', 'Merchant' ]
+    stores: [
+        'Widget',
+        'WidgetSettings'
+    ]
 });
+
+//{/block}

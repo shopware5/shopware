@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,22 +19,16 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Index
- * @subpackage Store
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
-/**
- * todo@all: Documentation
- */
-//{block name="backend/ubdex/store/widget"}
+//{block name="backend/index/store/widget"}
+
 Ext.define('Shopware.apps.Index.store.Widget', {
+
 	extend: 'Ext.data.Store',
+
 	model: 'Shopware.apps.Index.model.Widget',
+
     batch: true,
     remoteFilter: true,
     clearOnLoad: false,
@@ -48,4 +42,5 @@ Ext.define('Shopware.apps.Index.store.Widget', {
         }
     }
 });
+
 //{/block}

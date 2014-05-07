@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,30 +19,22 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Config
- * @subpackage Config
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
-/**
- * todo@all: Documentation
- */
-//{block name="backend/config/model/form/widget_view"}
-Ext.define('Shopware.apps.Config.model.form.WidgetView', {
+//{block name="backend/index/model/widget_settings"}
+
+Ext.define('Shopware.apps.Index.model.WidgetSettings', {
+
     extend: 'Ext.data.Model',
+
     fields: [
-		//{block name="backend/config/model/form/widget_view/fields"}{/block}
-        { name: 'id', type: 'int' },
-        { name: 'widgetId', type: 'int', convert: function(v, record) {
-            return v || record.raw && record.raw.widget && record.raw.widget.id;
-        }, useNull: true },
-        { name: 'label', type: 'string' },
-        { name: 'column', type: 'int' },
-        { name: 'position', type: 'int'}
+        'authId',
+        'height',
+        'columnsShown',
+        'dock',
+        'pinned',
+        'minimized'
     ]
 });
+
 //{/block}

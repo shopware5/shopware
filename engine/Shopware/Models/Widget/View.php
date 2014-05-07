@@ -62,12 +62,6 @@ class View extends ModelEntity
     private $authId = null;
 
     /**
-     * @var string $label
-     * @ORM\Column(name="label", type="string", nullable=false)
-     */
-    private $label;
-
-    /**
      * @var integer $column
      * @ORM\Column(name="`column`", type="integer", nullable=false)
      */
@@ -149,21 +143,5 @@ class View extends ModelEntity
     public function setPosition($position)
     {
         $this->position = $position;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLabel()
-    {
-        return $this->label;
-    }
-
-    /**
-     * @param string $label
-     */
-    public function setLabel($label)
-    {
-        $this->label = $label;
     }
 }

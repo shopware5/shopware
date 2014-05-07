@@ -6430,13 +6430,13 @@ INSERT INTO `s_core_widgets` (`id`, `name`, `label`) VALUES
 (6, 'swag-merchant-widget', 'Händlerfreischaltung');
 
 TRUNCATE TABLE `s_core_widget_views`;
-INSERT INTO `s_core_widget_views` (`id`, `widget_id`, `auth_id`, `label`, `column`, `position`) VALUES
-(7, 6, 50, 'Händlerfreischaltung', 0, 1),
-(8, 1, 50, 'Verkäufe heute und gestern', 0, 2),
-(9, 2, 50, 'Drag und Drop Upload', 1, 1),
-(10, 3, 50, 'Kunden online', 1, 2),
-(11, 4, 50, 'Neuste Bestellungen', 2, 1),
-(12, 5, 50, 'Notizbuch', 2, 2);
+INSERT INTO `s_core_widget_views` (`id`, `widget_id`, `auth_id`, `column`, `position`) VALUES
+(7, 6, 50, 0, 1),
+(8, 1, 50, 0, 2),
+(9, 2, 50, 1, 1),
+(10, 3, 50, 1, 2),
+(11, 4, 50, 2, 1),
+(12, 5, 50, 2, 2);
 
 TRUNCATE TABLE `s_emarketing_banners`;
 TRUNCATE TABLE `s_emarketing_banners_attributes`;

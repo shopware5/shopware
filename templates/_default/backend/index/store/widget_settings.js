@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,21 +21,18 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * todo@all: Documentation
- */
+//{block name="backend/index/store/widget_settings"}
 
-//{block name="backend/config/store/form/widget"}
-Ext.define('Shopware.apps.Config.store.form.Widget', {
-    extend: 'Ext.data.Store',
-    model: 'Shopware.apps.Config.model.form.Widget',
+Ext.define('Shopware.apps.Index.store.WidgetSettings', {
+
+	extend: 'Ext.data.Store',
+
+	model: 'Shopware.apps.Index.model.WidgetSettings',
+
     proxy: {
-        type: 'ajax',
-        url: '{url action=getList name=widget}',
-        reader: {
-            type: 'json',
-            root: 'data'
-        }
+        type: 'localstorage',
+        id: 'widget-settings'
     }
 });
+
 //{/block}

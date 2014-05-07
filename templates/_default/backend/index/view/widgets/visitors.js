@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,13 +19,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Index
- * @subpackage View
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 //{namespace name=backend/index/view/widgets}
@@ -65,6 +58,10 @@ Ext.define('Shopware.apps.Index.view.widgets.Visitors', {
         }
     },
 
+    visitorsStore: null,
+
+    height: 225,
+
     /**
      * Initializes the widget.
      *
@@ -74,7 +71,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Visitors', {
     initComponent: function() {
         var me = this;
 
-        me.items = me.createColumnContainers();
+        me.items = [];
 
         me.tools = [{
             type: 'refresh',
@@ -82,8 +79,99 @@ Ext.define('Shopware.apps.Index.view.widgets.Visitors', {
             handler: me.refreshView
         }];
 
-        me.createTaskRunner();
+        me.visitorsStore = Ext.create('Ext.data.Store', {
+            model: 'Shopware.apps.Index.model.Batch',
+            remoteFilter: true,
+            autoLoad: true,
+            clearOnLoad: false,
+
+            proxy: {
+                type: 'ajax',
+                url: '{url controller="widgets" action="getVisitors"}',
+                reader: {
+                    type: 'json',
+                    root: 'data'
+                }
+            }
+        });
+
+        me.visitorsStore.load({
+            callback: function() {
+                me.createColumnContainers();
+
+                me.createTaskRunner();
+            }
+        });
+
         me.callParent(arguments);
+    },
+
+    /**
+     * Creates the necessary containers for the layout.
+     *
+     * @public
+     * @return [array] array of Ext.container.Container's
+     */
+    createColumnContainers: function() {
+        var me = this,
+            stores = me.visitorsStore.first();
+
+        me.dataView = Ext.create('Ext.view.View', {
+            tpl: me.createVisitorsOnlineTemplate(),
+            data: [{
+                visitors: stores.get('currentUsers')
+            }]
+        });
+
+        /** Left container */
+        me.add(Ext.create('Ext.container.Container', {
+            columnWidth: 0.45,
+            height: '100%',
+            items: [
+                me.createLineChart(stores.getVisitorsStore),
+                me.dataView
+            ]
+        }));
+
+        me.gridPanel = Ext.create('Ext.grid.Panel', {
+            border: 0,
+            store: stores.getCustomersStore,
+            columns: me.createColumns(),
+            viewConfig: {
+                hideLoadingMsg: true
+            }
+        });
+
+        /** Right container */
+        me.add(Ext.create('Ext.container.Container', {
+            height: '100%',
+            margin: '20 0 0 10',
+            columnWidth: 0.55,
+            items: [
+                me.gridPanel
+            ]
+        }));
+    },
+
+    /**
+     * Helper method which creates the template
+     * for all current visitors in the shop.
+     *
+     * @public
+     * @return [object] Ext.XTemplate
+     */
+    createVisitorsOnlineTemplate: function() {
+        var me = this;
+
+        return new Ext.XTemplate(
+                '{literal}<tpl for=".">',
+                '<div class="visitors-online">',
+                '<span class="visitors">{visitors}</span>',
+
+                '<strong class="title">' + me.snippets.visitors_online + '</strong>',
+                '</div>',
+                '</tpl>{/literal}'
+        );
     },
 
     /**
@@ -113,10 +201,11 @@ Ext.define('Shopware.apps.Index.view.widgets.Visitors', {
      */
     refreshView: function() {
         var me = this;
+
         me.gridPanel.setLoading(true);
 
         if(!me.visitorsStore) {
-            return false;
+            return;
         }
 
         me.visitorsStore.load({
@@ -124,7 +213,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Visitors', {
                 var stores = me.visitorsStore.first();
 
                 if(!stores || !stores.getCustomersStore || !stores.getVisitorsStore)  {
-                    return false;
+                    return;
                 }
 
                 me.gridPanel.reconfigure(stores.getCustomersStore);
@@ -135,70 +224,6 @@ Ext.define('Shopware.apps.Index.view.widgets.Visitors', {
                 me.gridPanel.setLoading(false);
             }
         });
-    },
-
-    /**
-     * Creates the necessary containers for the layout.
-     *
-     * @public
-     * @return [array] array of Ext.container.Container's
-     */
-    createColumnContainers: function() {
-        var me = this, containers = [], stores = me.visitorsStore.first();
-
-        me.dataView = Ext.create('Ext.view.View', {
-            tpl: me.createVisitorsOnlineTemplate(),
-            data: [{
-                visitors: stores.get('currentUsers')
-            }]
-        })
-
-        /** Left container */
-        containers.push(Ext.create('Ext.container.Container', {
-            columnWidth: 0.45,
-            height: '100%',
-            items: [ me.createLineChart(stores.getVisitorsStore), me.dataView ]
-        }));
-
-        me.gridPanel = Ext.create('Ext.grid.Panel', {
-            border: 0,
-            store: stores.getCustomersStore,
-            columns: me.createColumns(),
-            viewConfig: {
-                hideLoadingMsg: true
-            }
-        });
-
-        /** Right container */
-        containers.push(Ext.create('Ext.container.Container', {
-            height: '100%',
-            margin: '20 0 0 10',
-            columnWidth: 0.55,
-            items: [ me.gridPanel ]
-        }));
-
-        return containers;
-    },
-
-    /**
-     * Helper method which creates the template
-     * for all current visitors in the shop.
-     *
-     * @public
-     * @return [object] Ext.XTemplate
-     */
-    createVisitorsOnlineTemplate: function() {
-        var me = this;
-
-        return new Ext.XTemplate(
-            '{literal}<tpl for=".">',
-                '<div class="visitors-online">',
-                    '<span class="visitors">{visitors}</span>',
-
-                    '<strong class="title">' + me.snippets.visitors_online + '</strong>',
-                '</div>',
-            '</tpl>{/literal}'
-        );
     },
 
     /**
