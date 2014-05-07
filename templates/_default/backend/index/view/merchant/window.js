@@ -30,7 +30,6 @@
 Ext.define('Shopware.apps.Index.view.merchant.Window', {
     extend: 'Enlight.app.Window',
     alias : 'widget.merchant-window',
-    layout: 'border',
     width: 600,
     height: 500,
     stateful: true,

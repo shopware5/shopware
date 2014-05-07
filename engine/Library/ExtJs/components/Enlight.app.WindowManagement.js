@@ -282,8 +282,7 @@ Ext.define('Enlight.app.WindowManagement', {
             }
             return false;
         }
-
-        if(viewport.getActiveDesktopPosition() !== view.desktop) {
+        if(viewport.getActiveDesktop() !== view.desktop) {
             viewport.jumpTo(view.desktopPosition);
         }
 
