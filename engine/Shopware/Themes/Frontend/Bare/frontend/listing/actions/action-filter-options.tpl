@@ -2,16 +2,16 @@
 {namespace name="frontend/listing/listing_actions"}
 
 {block name='frontend_listing_actions_filter'}
+	{if $sPropertiesOptionsOnly|@count or $sSuppliers|@count>1 && $sCategoryContent.parent != 1}
 
-	<div class="action--filter-options off-canvas">
+		<div class="action--filter-options off-canvas">
 
-		{block name='frontend_listing_actions_filter_container'}
+			{block name='frontend_listing_actions_filter_container'}
 
-			<a href="#" class="filter--close-btn">
-				{s name="ListingActionsCloseFilter"}Filter schließen{/s} <i class="icon--arrow-right"></i>
-			</a>
+				<a href="#" class="filter--close-btn">
+					{s name="ListingActionsCloseFilter"}Filter schließen{/s} <i class="icon--arrow-right"></i>
+				</a>
 
-			{if $sPropertiesOptionsOnly|@count or $sSuppliers|@count>1 && $sCategoryContent.parent != 1}
 				<div class="filter--container">
 
 					{block name="frontend_listing_actions_filter_container_inner"}
@@ -35,10 +35,10 @@
 					{/block}
 
 				</div>
-			{/if}
 
-		{/block}
+			{/block}
 
-	</div>
+		</div>
 
+	{/if}
 {/block}
