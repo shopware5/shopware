@@ -289,8 +289,16 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         $productFeed->fromArray($params);
 
         //just for future use
-        $productFeed->setExpiry(date("d-m-Y", time()));
-        $productFeed->setLastChange(date("d-m-Y", time()));
+        $productFeed->setExpiry(new DateTime());
+        $productFeed->setLastChange(new DateTime());
+
+        // Clear feed cache
+        $fileName = $productFeed->getHash() . '_' . $productFeed->getFileName();
+        $filePath = Shopware()->DocPath() . 'cache/productexport/' . $fileName;
+        if (file_exists($filePath) && $productFeed->getInterval() != -1) {
+            unlink($filePath);
+        }
+        $productFeed->setCacheRefreshed('2000-01-01');
 
         try {
             Shopware()->Models()->persist($productFeed);

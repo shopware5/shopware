@@ -82,6 +82,37 @@ class Repository extends ModelRepository
     }
 
     /**
+     * Returns an instance of the \Doctrine\ORM\Query object which select a list of active
+     * product feeds.
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function getActiveListQuery()
+    {
+        $builder = $this->getActiveListQueryBuilder();
+        return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getActiveListQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getActiveListQueryBuilder()
+    {
+        $builder = $this->createQueryBuilder("feeds");
+        $builder->select(
+            array(
+                'feeds',
+            )
+        );
+        $builder->where('feeds.active = 1');
+        return $builder;
+    }
+
+
+    /**
      * Returns an instance of the \Doctrine\ORM\Query object which
      * holds the detail information of the product feed
      *
