@@ -56,6 +56,7 @@ Ext.define('Shopware.apps.Emotion.model.Emotion', {
         { name: 'name', type: 'string' },
 
         { name: 'containerWidth', type: 'int' },
+        { name: 'device', type: 'int' },
         { name: 'categoryId', type: 'int', useNull: true },
         { name: 'validFrom', type: 'date', dateFormat: 'd.m.Y', useNull: true },
         { name: 'validTo', type: 'date', dateFormat: 'd.m.Y', useNull: true },

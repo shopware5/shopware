@@ -136,6 +136,30 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             supportText: '{s name=settings/fieldset/container_width_info}Container width in pixel (px){/s}'
         });
 
+        var devicesStore = Ext.create('Ext.data.Store', {
+            fields: ['abbr', 'name'],
+            data : [{
+                "id" : 0,
+                "name" : "Desktop"
+            }, {
+                "id" : 1,
+                "name" : "Tablet"
+            }, {
+                "id" : 2,
+                "name" : "Mobile"
+            }]
+        });
+
+        var deviceComboBox = Ext.create('Ext.form.field.ComboBox', {
+            fieldLabel: '{s name=settings/fieldset/select_device}Select device{/s}',
+            name: 'device',
+            valueField: 'id',
+            displayField: 'name',
+            store: devicesStore,
+            queryMode: 'local',
+            emptyText: '{s name=settings/fieldset/select_template_empty}Please select...{/s}'
+        });
+
         me.activeComboBox = Ext.create('Ext.form.field.Checkbox', {
             fieldLabel: '{s name=settings/active}Active{/s}',
             boxLabel: '{s name=settings/active_box_label}Emotion will be visible in the store front{/s}',
@@ -155,7 +179,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
         me.timingFieldSet =  me.createTimingFieldSet();
         me.landingPageFieldSet = me.createLandingpageFieldset();
 
-        me.items = [ me.nameField, me.landingPageCheckbox, me.categoryNameField, me.gridComboBox, tplComboBox, me.containerWidthField, me.activeComboBox, me.listingCheckbox, me.timingFieldSet, me.landingPageFieldSet ];
+        me.items = [ me.nameField, me.landingPageCheckbox, me.categoryNameField, me.gridComboBox, tplComboBox, me.containerWidthField, deviceComboBox, me.activeComboBox, me.listingCheckbox, me.timingFieldSet, me.landingPageFieldSet ];
         me.callParent(arguments);
 
         me.loadRecord(me.emotion);
