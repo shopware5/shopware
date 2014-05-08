@@ -128,7 +128,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Notice', {
             handler: function() {
                 me.submitFormPanel();
             }
-        })
+        });
 
         return Ext.create('Ext.toolbar.Toolbar', {
             dock: 'bottom',

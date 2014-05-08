@@ -70,6 +70,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Merchant', {
             model: 'Shopware.apps.Index.model.Merchant',
             remoteFilter: true,
             clearOnLoad: false,
+            autoLoad: true,
 
             proxy: {
                 type: 'ajax',
@@ -79,7 +80,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Merchant', {
                     root: 'data'
                 }
             }
-        }).load();
+        });
 
         me.callParent(arguments);
     },
