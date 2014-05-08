@@ -393,6 +393,10 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                     me.onScroll({ wheelDelta: me.invertScroll ? -1 : 1 });
                 }
 
+                Ext.defer(function() {
+                    dd.panel.destroy();
+                }, 50);
+
                 return true;
             },
 
@@ -545,7 +549,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             offsetX = 10,
             offsetY = 10,
             maxWidth = width - offsetX * 2,
-            maxHeight = (height) - offsetY * 2,
+            maxHeight = Math.max(me.minHeight, (height) - offsetY * 2),
             resizer = me.resizer ? me.resizer.resizeTracker : me.resizable,
             maxColumns;
 
