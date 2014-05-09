@@ -27,7 +27,7 @@
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class Shopware_RegressionTests_Ticket6624 extends Enlight_Components_Test_Plugin_TestCase
+class Shopware_Tests_Controllers_Backend_CanceledOrderTest extends Enlight_Components_Test_Plugin_TestCase
 {
     const FIRST_DUMMY_SESSION_ID = '1231231231231231231231231231231231231320';
     const SECOND_DUMMY_SESSION_ID = '1231231231231231231231231231231231231321';
@@ -70,6 +70,8 @@ class Shopware_RegressionTests_Ticket6624 extends Enlight_Components_Test_Plugin
 
     /**
      * test if the canceled order statistic returns the right values
+     *
+     * @ticket SW-6624
      */
     public function testCanceledOrderSummary()
     {

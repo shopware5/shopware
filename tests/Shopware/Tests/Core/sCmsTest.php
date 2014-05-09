@@ -21,7 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-class sCmsTest extends PHPUnit_Framework_TestCase
+class sCmsTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
      * @var sCms
@@ -30,6 +30,7 @@ class sCmsTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $this->Front()->setRequest($this->Request());
         $this->module = Shopware()->Modules()->Cms();
     }
 
