@@ -89,27 +89,25 @@ class ListProduct
         $cheapestPrices = $this->cheapestPriceService->getList($products, $context);
 
         $result = array();
-        foreach ($products as $product) {
-            $key = $product->getNumber();
-            $product->setCover($covers[$key]);
+        foreach ($numbers as $number) {
+            $product = $products[$number];
 
-            $product->setPriceRules($graduatedPrices[$key]);
+            $product->setCover($covers[$number]);
 
-            $product->setCheapestPriceRule($cheapestPrices[$key]);
+            $product->setPriceRules($graduatedPrices[$number]);
 
-            if (!$product->hasState(Struct\ListProduct::STATE_PRICE_CALCULATED)) {
-                $this->priceCalculationService->calculateProduct($product, $context);
-            }
+            $product->setCheapestPriceRule($cheapestPrices[$number]);
 
-            if (!$product->hasState(Struct\ListProduct::STATE_TRANSLATED)) {
-//                $this->translationService->translateProduct($product, $context->getShop());
-            }
+            $this->priceCalculationService->calculateProduct($product, $context);
 
-            $result[$product->getNumber()] = $product;
+            $this->translationService->translateProduct($product, $context->getShop());
+
+            $result[$number] = $product;
         }
 
         return $result;
     }
+
 
     /**
      * Returns a minified product variant which contains only

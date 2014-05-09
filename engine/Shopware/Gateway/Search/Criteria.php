@@ -31,6 +31,36 @@ class Criteria
     public $sortings = array();
 
     /**
+     * @param $offset
+     * @return $this
+     */
+    public function offset($offset)
+    {
+        $this->offset = $offset;
+        return $this;
+    }
+
+    /**
+     * @param $limit
+     * @return $this
+     */
+    public function limit($limit)
+    {
+        $this->limit = $limit;
+        return $this;
+    }
+
+    /**
+     * @param $search
+     * @return $this
+     */
+    public function query($search)
+    {
+        $this->query = $search;
+        return $this;
+    }
+
+    /**
      * @param $id
      * @return $this
      */

@@ -38,6 +38,12 @@ class Product extends Hydrator
         $this->unitHydrator = $unitHydrator;
     }
 
+    public function hydrateProduct(array $data)
+    {
+        $product = new Struct\Product();
+
+        return $this->assignData($product, $data);
+    }
 
     /**
      * Hydrates the passed data and converts the ORM
@@ -50,6 +56,11 @@ class Product extends Hydrator
     {
         $product = new Struct\ListProduct();
 
+        return $this->assignData($product, $data);
+    }
+
+    protected function assignData(Struct\ListProduct $product, array $data)
+    {
         $this->assignProductData($product, $data);
 
         $this->assignTaxData($product, $data);

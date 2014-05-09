@@ -43,6 +43,7 @@ class PriceCalculation
                 $context
             );
         }
+
         $product->setPrices($prices);
 
         if ($product->getCheapestPriceRule()) {

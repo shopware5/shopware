@@ -18,7 +18,7 @@ class ListProduct extends Gateway
     /**
      * @var \Shopware\Gateway\DBAL\Hydrator\Product
      */
-    private $hydrator;
+    protected $hydrator;
 
     /**
      * @param $hydrator
@@ -76,6 +76,24 @@ class ListProduct extends Gateway
      */
     public function getList(array $numbers, Struct\Context $context)
     {
+        $query = $this->getQuery($numbers, $context);
+
+        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $query->execute();
+
+        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        $products = array();
+        foreach ($data as $product) {
+            $key = $product['ordernumber'];
+            $products[$key] = $this->hydrator->hydrateListProduct($product);
+        }
+
+        return $products;
+    }
+
+    protected function getQuery(array $numbers, Struct\Context $context)
+    {
         $query = $this->entityManager->getDBALQueryBuilder();
         $query->select($this->getArticleFields())
             ->addSelect($this->getVariantFields())
@@ -102,20 +120,8 @@ class ListProduct extends Gateway
             ->where('variant.ordernumber IN (:numbers)')
             ->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
-        $statement = $query->execute();
-
-        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
-
-        $products = array();
-        foreach ($data as $product) {
-            $key = $product['ordernumber'];
-            $products[$key] = $this->hydrator->hydrateListProduct($product);
-        }
-
-        return $products;
+        return $query;
     }
-
 
     /**
      * Defines which s_articles fields should be selected.

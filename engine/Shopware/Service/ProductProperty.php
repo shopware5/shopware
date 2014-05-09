@@ -33,13 +33,13 @@ class ProductProperty
     }
 
     /**
-     * @param array $valueIds
+     * @param Struct\ListProduct[] $products
      * @param Struct\Context $context
      * @return Struct\Property\Set[]
      */
-    public function getList(array $valueIds, Struct\Context $context)
+    public function getList(array $products, Struct\Context $context)
     {
-        $properties = $this->productPropertyGateway->getList($valueIds);
+        $properties = $this->productPropertyGateway->getList($products);
 
         return $properties;
     }

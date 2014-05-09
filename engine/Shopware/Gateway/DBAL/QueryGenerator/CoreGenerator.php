@@ -4,11 +4,25 @@ namespace Shopware\Gateway\DBAL\QueryGenerator;
 
 use Shopware\Components\Model\DBAL\QueryBuilder;
 use Shopware\Gateway\DBAL\Search;
+use Shopware\Gateway\DBAL\SearchPriceHelper;
 use Shopware\Gateway\Search\Condition;
 use Shopware\Gateway\Search\Sorting;
 
 class CoreGenerator extends DBAL
 {
+    /**
+     * @var SearchPriceHelper
+     */
+    private $priceHelper;
+
+    /**
+     * @param SearchPriceHelper $priceHelper
+     */
+    function __construct(SearchPriceHelper $priceHelper)
+    {
+        $this->priceHelper = $priceHelper;
+    }
+
     public function supportsCondition(Condition $condition)
     {
         switch (true) {
@@ -164,7 +178,7 @@ class CoreGenerator extends DBAL
 
     private function addPriceCondition(QueryBuilder $query, Condition\Price $price)
     {
-        $calculation = Search::getPriceSelection($price->currentCustomerGroup);
+        $calculation = $this->priceHelper->getPriceSelection($price->currentCustomerGroup);
 
         $query->innerJoin(
             'products',
@@ -193,7 +207,7 @@ class CoreGenerator extends DBAL
     private function addPriceSorting(QueryBuilder $query, Sorting\Price $sorting)
     {
         if (!$query->includesTable('s_articles_prices')) {
-            $query->innerJoin(
+            $query->leftJoin(
                 'products',
                 's_articles_prices',
                 'prices',
@@ -204,7 +218,7 @@ class CoreGenerator extends DBAL
             $query->setParameter(':priceGroupSorting', $sorting->fallbackCustomerGroup->getKey());
         }
 
-        $calculation = Search::getPriceSelection($sorting->currentCustomerGroup);
+        $calculation = $this->priceHelper->getPriceSelection($sorting->currentCustomerGroup);
 
         $query->addOrderBy($calculation, $sorting->getDirection())
             ->addOrderBy('prices.articleID', $sorting->getDirection());
@@ -213,7 +227,7 @@ class CoreGenerator extends DBAL
     private function addPopularitySorting(QueryBuilder $query, Sorting\ReleaseDate $sorting)
     {
         if (!$query->includesTable('s_articles_top_seller')) {
-            $query->innerJoin(
+            $query->leftJoin(
                 'products',
                 's_articles_top_seller_ro',
                 'topSeller',
