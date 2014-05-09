@@ -51,22 +51,16 @@ class CheapestPrice extends Gateway
      */
     public function getList(array $products, Struct\Customer\Group $customerGroup)
     {
-        $ids = array();
-        foreach ($products as $product) {
-            $ids[] = $product->getId();
-        }
+        /**
+         * Contains the cheapest price logic which product price should be selected.
+         */
+        $ids = $this->getCheapestPriceIds($products, $customerGroup);
 
         $query = $this->entityManager->getDBALQueryBuilder();
 
         $query->select($this->getPriceFields())
             ->addSelect($this->getUnitFields())
-            ->addSelect($this->getTableFields('s_articles_prices_attributes', 'attribute'))
-            ->addSelect(
-                array(
-                    '(prices.price * variant.minpurchase) as calculated',
-                    '(prices.pseudoprice * variant.minpurchase) as calculatedPseudo'
-                )
-            );
+            ->addSelect($this->getTableFields('s_articles_prices_attributes', 'attribute'));
 
         $query->from('s_articles_prices', 'prices')
             ->innerJoin('prices', 's_articles_details', 'variant', 'variant.id = prices.articledetailsID')
@@ -74,30 +68,8 @@ class CheapestPrice extends Gateway
             ->leftJoin('variant', 's_core_units', 'unit', 'unit.id = variant.unitID')
             ->leftJoin('prices', 's_articles_prices_attributes', 'attribute', 'attribute.priceID = prices.id');
 
-        $query->andWhere('prices.articleID IN (:products)')
-            ->andWhere('prices.pricegroup = :customerGroup')
-            ->andWhere('prices.from = 1')
-            ->andWhere('product.active = 1')
-            ->andWhere('variant.active = 1')
-            ->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY)
-            ->setParameter(':customerGroup', $customerGroup->getKey());
-
-        /**
-         * This part of the query handles the closeout products.
-         *
-         * The `laststock` column contains "1" if the product is a closeout product.
-         * In the case that the product contains the closeout flag,
-         * the stock and minpurchase are used as they defined in the database
-         *
-         * In the case that the product isn't a closeout product,
-         * the stock and minpurchase are set to 0
-         */
-        $query->andWhere(
-            '(product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)'
-        );
-
-        $query->orderBy('calculated', 'ASC')
-            ->groupBy('prices.articleID');
+        $query->andWhere('prices.id IN (:ids)')
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -112,6 +84,92 @@ class CheapestPrice extends Gateway
         }
 
         return $prices;
+    }
+
+    /**
+     * Pre selection of the cheapest prices ids.
+     *
+     * @param Struct\ListProduct[] $products
+     * @param Struct\Customer\Group $customerGroup
+     * @return mixed
+     */
+    private function getCheapestPriceIds(array $products, Struct\Customer\Group $customerGroup)
+    {
+        $ids = array();
+        foreach ($products as $product) {
+            $ids[] = $product->getId();
+        }
+
+        $subQuery = $this->entityManager->getDBALQueryBuilder();
+
+        $subQuery->select('prices.id')
+            ->from('s_articles_prices', 'prices');
+
+        /**
+         * joins the product variants for the min purchase calculation.
+         * The cheapest price is defined by prices.price * variant.minpurchase (the real basket price)
+         */
+        $subQuery->innerJoin(
+            'prices',
+            's_articles_details',
+            'variant',
+            'variant.id = prices.articledetailsID'
+        );
+
+        /**
+         * Joins the products for the closeout validation.
+         * Required to select only product prices which product variant can be added to the basket and purchased
+         */
+        $subQuery->innerJoin(
+            'variant',
+            's_articles',
+            'product',
+            'product.id = variant.articleID'
+        );
+
+        $subQuery->where('prices.pricegroup = :customerGroup')
+            ->andWhere('prices.from = 1')
+            ->andWhere('variant.active = 1')
+            ->andWhere('prices.articleID = outerPrices.articleID');
+
+        /**
+         * This part of the query handles the closeout products.
+         *
+         * The `laststock` column contains "1" if the product is a closeout product.
+         * In the case that the product contains the closeout flag,
+         * the stock and minpurchase are used as they defined in the database
+         *
+         * In the case that the product isn't a closeout product,
+         * the stock and minpurchase are set to 0
+         */
+        $subQuery->andWhere(
+            '(product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)'
+        );
+
+        $subQuery->setMaxResults(1);
+
+        /**
+         * Sorting of the cheapest available product price.
+         */
+        $subQuery->orderBy('(prices.price * variant.minpurchase)');
+
+        /**
+         * Creates an outer query which allows to
+         * select multiple cheapest product prices.
+         */
+        $query = $this->entityManager->getDBALQueryBuilder();
+        $query->setParameter(':customerGroup', $customerGroup->getKey());
+
+        $query->select('('. $subQuery->getSQL() .') as priceId')
+            ->from('s_articles_prices', 'outerPrices')
+            ->where('outerPrices.articleID IN (:products)')
+            ->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY)
+            ->groupBy('outerPrices.articleID')
+            ->having('priceId IS NOT NULL');
+
+        $statement = $query->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     /**
