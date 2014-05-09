@@ -105,4 +105,17 @@ class Shopware_Tests_Controllers_Frontend_ListingTest extends Enlight_Components
         return Shopware()->Db()->fetchRow("SELECT * FROM s_categories WHERE description = 'ListingTest' LIMIT 1");
     }
 
+    /**
+     * @group functional
+     * @ticket SW-4611
+     */
+    public function testListingRss()
+    {
+        $this->dispatch('/listing?sCategory=5&sRss=1');
+        if (!preg_match('#<atom:link href="([^"]+)"#msi', $this->Response()->getBody(), $match)) {
+            $this->fail();
+        }
+        $this->assertNotContains('sCoreId', $match[1]);
+        $this->assertLinkExists($match[1]);
+    }
 }

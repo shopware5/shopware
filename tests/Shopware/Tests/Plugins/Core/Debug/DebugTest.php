@@ -27,18 +27,24 @@
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
-class Shopware_RegressionTests_Ticket4709 extends Enlight_Components_Test_Controller_TestCase
+class Shopware_Tests_Plugins_Core_Debug_Debug extends Enlight_Components_Test_Plugin_TestCase
 {
     /**
-     * Test case method
+     * @ticket SW-5148
      */
-    public function testGetAffectedSuppliers()
+    public function testStartDispatch()
     {
-        $this->dispatch('/');
-        $suppliers = Shopware()->Modules()->Articles()->sGetAffectedSuppliers(
-            Shopware()->Config()->BlogCategory
-        );
+        $front = Shopware()->Front();
+        $request  = new \Enlight_Controller_Request_RequestTestCase();
+        $request->setClientIp('127.0.0.1');
+        $front->setRequest($request);
 
-        $this->assertNotNull($suppliers);
+        $eventArgs = $this->createEventArgs()->set('subject', $front);
+
+        $plugin = Shopware()->Plugins()->Core()->Debug();
+        $plugin->Config()->AllowIP = '127.0.0.1';
+        $plugin->onStartDispatch($eventArgs);
+
+        $this->assertInstanceOf('Shopware_Plugins_Core_Debug_Bootstrap', $plugin);
     }
 }

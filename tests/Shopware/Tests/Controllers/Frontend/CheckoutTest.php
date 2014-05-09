@@ -27,14 +27,15 @@
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class Shopware_RegressionTests_Ticket6411 extends Enlight_Components_Test_Plugin_TestCase
+class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
 {
-
     const ARTICLE_NUMBER = 'SW10239';
     const USER_AGENT = 'Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0';
 
     /**
      * reads the user agent black list and test if the bot can add an article
+     *
+     * @ticket SW-6411
      */
     public function testBotAddBasketArticle()
     {
@@ -43,21 +44,33 @@ class Shopware_RegressionTests_Ticket6411 extends Enlight_Components_Test_Plugin
             if(!empty($userAgent)) {
                 $sessionId = $this->addBasketArticle($userAgent);
                 $this->assertNotEmpty($sessionId);
-                $basketId = Shopware()->Db()->fetchOne("SELECT id FROM s_order_basket WHERE sessionID = ?", array($sessionId));
+                $basketId = Shopware()->Db()->fetchOne(
+                    "SELECT id FROM s_order_basket WHERE sessionID = ?",
+                    array($sessionId)
+                );
                 $this->assertEmpty($basketId);
             }
         }
+
+        Shopware()->Modules()->Basket()->sDeleteBasket();
     }
 
     /**
      * test if an normal user can add an article
+     *
+     * @ticket SW-6411
      */
     public function testAddBasketArticle()
     {
         $sessionId = $this->addBasketArticle(self::USER_AGENT);
         $this->assertNotEmpty($sessionId);
-        $basketId = Shopware()->Db()->fetchOne("SELECT id FROM s_order_basket WHERE sessionID = ?", array($sessionId));
+        $basketId = Shopware()->Db()->fetchOne(
+            "SELECT id FROM s_order_basket WHERE sessionID = ?",
+            array($sessionId)
+        );
         $this->assertNotEmpty($basketId);
+
+        Shopware()->Modules()->Basket()->sDeleteBasket();
     }
 
     /**

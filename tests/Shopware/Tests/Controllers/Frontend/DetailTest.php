@@ -27,7 +27,7 @@
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
-class Shopware_RegressionTests_Ticket5116 extends Enlight_Components_Test_Controller_TestCase
+class Shopware_Tests_Controllers_Frontend_DetailTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
      * Test case method
@@ -36,7 +36,7 @@ class Shopware_RegressionTests_Ticket5116 extends Enlight_Components_Test_Contro
     {
         // Request a variant that is not the default one
         $this->Request()
-             ->setMethod('POST');
+            ->setMethod('POST');
 
         $this->dispatch('/beispiele/konfiguratorartikel/202/artikel-mit-standardkonfigurator?c=22');
 
@@ -53,11 +53,11 @@ class Shopware_RegressionTests_Ticket5116 extends Enlight_Components_Test_Contro
     {
         // Request a variant that is not the default one
         $this->Request()
-             ->setMethod('POST')
-             ->setPost('group', array(
-                 6 => 15,
-                 7 => 65,
-             ));
+            ->setMethod('POST')
+            ->setPost('group', array(
+                6 => 15,
+                7 => 65,
+            ));
 
         $this->dispatch('/beispiele/konfiguratorartikel/202/artikel-mit-standardkonfigurator?c=22');
 
