@@ -90,6 +90,9 @@ class ListProduct
 
         $result = array();
         foreach ($numbers as $number) {
+            if (!array_key_exists($number, $products)) {
+                continue;
+            }
             $product = $products[$number];
 
             $product->setCover($covers[$number]);
