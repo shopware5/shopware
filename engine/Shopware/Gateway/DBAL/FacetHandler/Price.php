@@ -4,12 +4,25 @@ namespace Shopware\Gateway\DBAL\FacetHandler;
 
 use Shopware\Components\Model\DBAL\QueryBuilder;
 use Shopware\Gateway\DBAL\Search;
+use Shopware\Gateway\DBAL\SearchPriceHelper;
 use Shopware\Gateway\Search\Criteria;
 use Shopware\Gateway\Search\Facet;
-use Shopware\Struct\Customer\Group;
 
 class Price extends DBAL
 {
+    /**
+     * @var SearchPriceHelper
+     */
+    private $priceHelper;
+
+    /**
+     * @param SearchPriceHelper $priceHelper
+     */
+    function __construct(SearchPriceHelper $priceHelper)
+    {
+        $this->priceHelper = $priceHelper;
+    }
+
     /**
      * @param Facet\Price $facet
      * @param QueryBuilder $query
@@ -77,7 +90,7 @@ class Price extends DBAL
 
     private function joinPrices(QueryBuilder $query, Facet\Price $facet)
     {
-        $calculation = Search::getPriceSelection($facet->currentCustomerGroup);
+        $calculation = $this->priceHelper->getPriceSelection($facet->currentCustomerGroup);
 
         $query->innerJoin(
             'products',

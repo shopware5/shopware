@@ -25,6 +25,20 @@
             <argument type="service" id="events" />
         </service>
 
+        <service id="product_service" class="Shopware\Service\Product">
+            <argument type="service" id="product_gateway" />
+            <argument type="service" id="vote_gateway" />
+            <argument type="service" id="related_products_gateway" />
+            <argument type="service" id="similar_products_gateway" />
+            <argument type="service" id="list_product_service" />
+
+            <argument type="service" id="graduated_prices_service" />
+            <argument type="service" id="price_calculation_service" />
+            <argument type="service" id="media_service" />
+            <argument type="service" id="translation_service" />
+            <argument type="service" id="events" />
+        </service>
+
         <service id="graduated_prices_service" class="Shopware\Service\GraduatedPrices">
             <argument type="service" id="graduated_prices_gateway" />
         </service>
@@ -69,6 +83,12 @@
 
         <service id="list_product_gateway" alias="list_product_gateway_dbal"/>
 
+        <service id="product_gateway" alias="product_gateway_dbal"/>
+
+        <service id="related_products_gateway" alias="related_products_gateway_dbal"/>
+
+        <service id="similar_products_gateway" alias="similar_products_gateway_dbal"/>
+
         <service id="graduated_prices_gateway" alias="graduated_prices_gateway_dbal"/>
 
         <service id="cheapest_price_gateway" alias="cheapest_price_gateway_dbal"/>
@@ -108,6 +128,20 @@
 
         <!--used for product selection, like listings, minified products or detailed products-->
         <service id="list_product_gateway_dbal" class="Shopware\Gateway\DBAL\ListProduct">
+            <argument type="service" id="models"/>
+            <argument type="service" id="product_hydrator_dbal"/>
+        </service>
+
+        <service id="related_products_gateway_dbal" class="Shopware\Gateway\DBAL\RelatedProducts">
+            <argument type="service" id="models"/>
+        </service>
+
+        <service id="similar_products_gateway_dbal" class="Shopware\Gateway\DBAL\SimilarProducts">
+            <argument type="service" id="models"/>
+        </service>
+
+        <!--used for full product selection, only used for detail page-->
+        <service id="product_gateway_dbal" class="Shopware\Gateway\DBAL\Product">
             <argument type="service" id="models"/>
             <argument type="service" id="product_hydrator_dbal"/>
         </service>

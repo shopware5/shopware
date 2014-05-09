@@ -50,11 +50,12 @@ class Search extends Gateway
      */
     public function search(Criteria $criteria)
     {
-        $this->queryGenerators[] = new QueryGenerator\CoreGenerator();
+        $this->queryGenerators[] = new QueryGenerator\CoreGenerator(new SearchPriceHelper());
         $this->facetHandlers[] = new FacetHandler\Manufacturer();
         $this->facetHandlers[] = new FacetHandler\Category();
-        $this->facetHandlers[] = new FacetHandler\Price();
+        $this->facetHandlers[] = new FacetHandler\Price(new SearchPriceHelper());
         $this->facetHandlers[] = new FacetHandler\Property();
+
 
         $products = $this->getProducts($criteria);
 
@@ -234,21 +235,5 @@ class Search extends Gateway
         }
 
         return null;
-    }
-
-    public static function getPriceSelection(Group $customerGroup)
-    {
-        $calculation = "(prices.price * variants.minpurchase)";
-
-        if ($customerGroup->displayGrossPrices()) {
-            $calculation .= " * (tax.tax + 100) / 100";
-        }
-
-        if ($customerGroup->useDiscount()) {
-            $discount = (100 - (float) $customerGroup->getPercentageDiscount()) / 100;
-            $calculation .= " * " . $discount;
-        }
-
-        return "(" . $calculation . ")";
     }
 }
