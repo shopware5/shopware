@@ -117,7 +117,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.Detail', {
                     fieldLabel: '{s name=detail_general/field/interval}Caching interval{/s}',
                     store: [
                         [-1, '{s name=detail_general/field/interval/onlyCron}Only cron{/s}'],
-                        [0, '{s name=detail_general/field/empty_value}None (0 Sec.){/s}'],
+                        [0, '{s name=detail_general/field/interval/empty_value}Live{/s}'],
                         [120, '{s name=detail_general/field/interval/2_minutes}2 Minutes (120 Sec.){/s}'],
                         [300, '{s name=detail_general/field/interval/5_minutes}5 Minutes (300 Sec.){/s}'],
                         [600, '{s name=detail_general/field/interval/10_minutes}10 Minutes (600 Sec.){/s}'],
