@@ -68,7 +68,7 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
         ));
         $form->setElement('boolean', 'cronSecureByAccount', array(
             'label' => 'Durch Benutzerkonto absichern',
-            'description' => 'Es werden nur Anfragen von authentifizierten Administratoren akzeptieren',
+            'description' => 'Es werden nur Anfragen von authentifizierten Backend Benutzern akzeptiert',
             'value' => false,
         ));
 
@@ -88,7 +88,7 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
                     ),
                     'cronSecureByAccount' => array(
                         'label' => 'Secure using account',
-                        'description' => 'If set, requests received from authenticated admin users will be accepted'
+                        'description' => 'If set, requests received from authenticated backend users will be accepted'
                     )
                 )
             )
