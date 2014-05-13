@@ -23,7 +23,7 @@
  */
 
 /**
- * Account controller
+ * Emotion controller
  */
 class Shopware_Controllers_Frontend_Emotion extends Enlight_Controller_Action
 {

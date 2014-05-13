@@ -344,11 +344,13 @@ class Element extends ModelEntity
 
         $this->emotionId = null;
 
-        $this->componentId = null;
-
         $dataArray = array();
         foreach($this->data as $data) {
-            $dataArray[] = clone $data;
+            $newData = clone $data;
+
+            $newData->setElement($this);
+
+            $dataArray[] = $newData;
         }
 
         $this->data = $dataArray;
