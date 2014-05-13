@@ -23,6 +23,13 @@ class CoreGenerator extends DBAL
         $this->priceHelper = $priceHelper;
     }
 
+    /**
+     * Checks if the passed condition class is supported
+     * by the core query generator.
+     *
+     * @param Condition $condition
+     * @return bool
+     */
     public function supportsCondition(Condition $condition)
     {
         switch (true) {
@@ -178,24 +185,20 @@ class CoreGenerator extends DBAL
 
     private function addPriceCondition(QueryBuilder $query, Condition\Price $price)
     {
-        $calculation = $this->priceHelper->getPriceSelection($price->currentCustomerGroup);
-
-        $query->innerJoin(
-            'products',
-            's_articles_prices',
-            'prices',
-            "prices.articledetailsID = variants.id
-             AND prices.from = 1
-             AND prices.pricegroup = :priceGroupSelection
-             AND ". $calculation ." BETWEEN :priceMin AND :priceMax"
+        $selection = $this->priceHelper->getCheapestPriceSelection(
+            $price->currentCustomerGroup
         );
 
-        $query->setParameter(':priceGroupSelection', $price->fallbackCustomerGroup->getKey());
+        $this->priceHelper->joinPrices(
+            $query,
+            $price->currentCustomerGroup,
+            $price->fallbackCustomerGroup
+        );
+
+        $query->andHaving($selection . ' BETWEEN :priceMin AND :priceMax');
 
         $query->setParameter(':priceMin', $price->min)
             ->setParameter(':priceMax', $price->max);
-
-        $query->addSelect('prices.price');
     }
 
     private function addDescriptionSorting(QueryBuilder $query, Sorting\ReleaseDate $sorting)
@@ -204,24 +207,21 @@ class CoreGenerator extends DBAL
             ->addOrderBy('products.id', $sorting->getDirection());
     }
 
+
     private function addPriceSorting(QueryBuilder $query, Sorting\Price $sorting)
     {
-        if (!$query->includesTable('s_articles_prices')) {
-            $query->leftJoin(
-                'products',
-                's_articles_prices',
-                'prices',
-                "prices.articledetailsID = variants.id
-                 AND prices.from = 1
-                 AND prices.pricegroup = :priceGroupSorting"
-            );
-            $query->setParameter(':priceGroupSorting', $sorting->fallbackCustomerGroup->getKey());
-        }
+        $selection = $this->priceHelper->getCheapestPriceSelection($sorting->currentCustomerGroup);
 
-        $calculation = $this->priceHelper->getPriceSelection($sorting->currentCustomerGroup);
+        $this->priceHelper->joinPrices(
+            $query,
+            $sorting->currentCustomerGroup,
+            $sorting->fallbackCustomerGroup
+        );
 
-        $query->addOrderBy($calculation, $sorting->getDirection())
-            ->addOrderBy('prices.articleID', $sorting->getDirection());
+        $query->addSelect($selection . ' as cheapest_price');
+
+        $query->addOrderBy('cheapest_price', $sorting->getDirection())
+            ->addOrderBy('products.id', $sorting->getDirection());
     }
 
     private function addPopularitySorting(QueryBuilder $query, Sorting\ReleaseDate $sorting)

@@ -10,7 +10,7 @@ class Price extends Facet
     /**
      * @var array
      */
-    public $prices;
+    public $range;
 
     /**
      * @var \Shopware\Struct\Customer\Group

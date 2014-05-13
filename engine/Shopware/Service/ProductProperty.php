@@ -47,13 +47,13 @@ class ProductProperty
     /**
      * Returns a single \Struct\Property\Set for the passed value id.
      *
-     * @param $id
+     * @param \Shopware\Struct\ListProduct $product
      * @param Struct\Context $context
      * @return Struct\Property\Set
      */
-    public function get($id, Struct\Context $context)
+    public function get(Struct\ListProduct $product, Struct\Context $context)
     {
-        $properties = $this->getList(array($id), $context);
+        $properties = $this->getList(array($product), $context);
 
         return array_shift($properties);
     }

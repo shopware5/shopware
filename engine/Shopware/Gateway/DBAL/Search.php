@@ -56,7 +56,6 @@ class Search extends Gateway
         $this->facetHandlers[] = new FacetHandler\Price(new SearchPriceHelper());
         $this->facetHandlers[] = new FacetHandler\Property();
 
-
         $products = $this->getProducts($criteria);
 
         $total = $this->getTotalCount($criteria);

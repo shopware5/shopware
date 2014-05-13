@@ -4257,31 +4257,12 @@ class sArticles
 
     private function getPriceFacet(\Shopware\Gateway\Search\Facet\Price $facet, $config)
     {
-        $prices = array();
         $params = $this->getListingLinkParameters($config);
 
-        foreach($facet->prices as $range) {
-            $priceParams = array_merge($params, array(
-                'priceMin' => $range['priceMin'],
-                'priceMax' => $range['priceMax']
-            ));
-
-            $range['link'] = $this->buildListingLink($priceParams);
-
-            $range['active'] = (bool) ($range['priceMax'] == $config['priceMax']);
-
-            $prices[] = $range;
-        }
-
-        $params = array_merge($params, array(
-            'priceMin' => 0,
-            'priceMax' => 0
-        ));
-
         return array(
-            'active' => max(array_column($prices, 'active')),
+            'active' => (isset($config['priceMax']) && $config['priceMax'] > 0),
             'removeLink' => $this->buildListingLink($params) . '&priceMax=0',
-            'prices' => $prices
+            'range' => $facet->range
         );
     }
 
