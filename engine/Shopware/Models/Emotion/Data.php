@@ -234,4 +234,17 @@ class Data extends ModelEntity
     {
         $this->emotionId = $emotionId;
     }
+
+    public function __clone()
+    {
+        $this->id = null;
+
+        $this->emotionId = null;
+
+        $this->elementId = null;
+
+        $this->componentId = null;
+
+        $this->fieldId = null;
+    }
 }

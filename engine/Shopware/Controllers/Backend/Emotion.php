@@ -412,31 +412,14 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             return;
         }
 
+        $new = clone $emotion;
 
-        /** @var \Shopware\Models\Emotion\Emotion $emotion */
-        $newEmotion = new \Shopware\Models\Emotion\Emotion();
+        $new->setDevice($device);
+        $new->setCreateDate(new \DateTime());
+        $new->setModified(new \DateTime());
 
-        $newEmotion->setName($emotion->getName());
-        $newEmotion->setActive($emotion->getActive());
-        $newEmotion->setContainerWidth($emotion->getContainerWidth());
-        $newEmotion->setDevice($device);
-        $newEmotion->setIsLandingPage($emotion->getIsLandingPage());
-        $newEmotion->setLandingPageBlock($emotion->getLandingPageBlock());
-        $newEmotion->setLandingPageTeaser($emotion->getLandingPageTeaser());
-        $newEmotion->setSeoKeywords($emotion->getSeoKeywords());
-        $newEmotion->setSeoDescription($emotion->getSeoDescription());
-        $newEmotion->setShowListing($emotion->getShowListing());
-        $newEmotion->setGrid($emotion->getGrid());
-        $newEmotion->setCategories($emotion->getCategories());
-        $newEmotion->setElements($emotion->getElements());
-        $newEmotion->setTemplate($emotion->getTemplate());
-
-        $newEmotion->setCreateDate(new \DateTime());
-        $newEmotion->setModified(new \DateTime());
-
-        Shopware()->Models()->persist($newEmotion);
+        Shopware()->Models()->persist($new);
         Shopware()->Models()->flush();
-
 
         $this->View()->assign(array('success' => true, 'data' => array()));
     }

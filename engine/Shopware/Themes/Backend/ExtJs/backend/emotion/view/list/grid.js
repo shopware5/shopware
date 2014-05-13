@@ -41,6 +41,12 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
 	extend: 'Ext.grid.Panel',
     alias: 'widget.emotion-list-grid',
 
+    deviceWidth: {
+        desktop: 1260,
+        tablet: 1024,
+        mobile: 768
+    },
+
     /**
      * Initializes the component and builds up the main interface
      *
@@ -169,10 +175,33 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             {
                 iconCls: 'sprite-binocular--arrow',
                 tooltip:'{s name=list/action_column/preview}Preview shopping world{/s}',
-                handler: function(view, rowIndex, colIndex) {
-                    me.fireEvent('previewMotion', me, view, rowIndex, colIndex);
+                handler: function(view, rowIndex, colIndex, record) {
 
-                    alert('new Ext.Window with iframe is following..');
+                    var listStore = view.getStore(),
+                        deviceId = listStore.getAt(rowIndex).get('device'),
+                        emotionId = listStore.getAt(rowIndex).get('id'),
+                        width = me.deviceWidth.desktop;
+
+                    if(deviceId == 1) {
+                        width = me.deviceWidth.tablet;
+                    } else if(deviceId == 2) {
+                        width = me.deviceWidth.mobile;
+                    }
+
+                    new Ext.Window({
+                        title : "Einkaufswelten Vorschau",
+                        width : width,
+                        height: '90%',
+                        layout : 'fit',
+                        items : [{
+                            xtype : "component",
+                            autoEl : {
+                                tag : "iframe",
+                                src : '{url module=frontend controller=emotion action=preview}/?emotionId=' + emotionId
+                            }
+                        }]
+                    }).show();
+
                 }
             }
 			]
@@ -269,8 +298,5 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             return '<div class="sprite-cross-small" style="width: 25px; height: 25px">&nbsp;</div>';
         }
     }
-
-
-
 });
 //{/block}

@@ -40,7 +40,14 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     public function getEmotion($repository)
     {
         $categoryId = (int) $this->Request()->getParam('categoryId');
-        $query = $repository->getCategoryEmotionsQuery($categoryId);
+        $emotionId = (int) $this->Request()->getParam('emotionId');
+
+        if($emotionId) {
+            $query = $repository->getEmotionDetailQuery($emotionId);
+        } else {
+            $query = $repository->getCategoryEmotionsQuery($categoryId);
+        }
+
         $emotions = $query->getArrayResult();
 
         foreach ($emotions as &$emotion) {
@@ -125,7 +132,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
         $emotions = $this->getEmotion($repository);
         //iterate all emotions to select the element data.
-
+        
         foreach ($emotions as &$emotion) {
             //for each emotion we have to iterate the elements to get the element data.
             foreach ($emotion['elements'] as &$element) {
