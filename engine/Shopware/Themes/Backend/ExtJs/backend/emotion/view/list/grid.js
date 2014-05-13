@@ -136,7 +136,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
 			/*{if {acl_is_allowed privilege=delete}}*/
 			{
                 iconCls: 'sprite-minus-circle',
-                tooltip:'{s name=list/action_column/edit}Delete shopping world{/s}',
+                tooltip:'{s name=list/action_column/delete}Delete shopping world{/s}',
                 handler: function (view, rowIndex, colIndex, item, opts, record) {
                     me.fireEvent('deleteemotion', record);
                 }
@@ -145,7 +145,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
 			/*{if {acl_is_allowed privilege=update}}*/
 			{
                 iconCls: 'sprite-pencil',
-                tooltip:'{s name=list/action_column/delete}Edit shopping world{/s}',
+                tooltip:'{s name=list/action_column/edit}Edit shopping world{/s}',
                 handler: function(view, rowIndex, colIndex) {
                     me.fireEvent('editemotion', me, view, rowIndex, colIndex);
                 }
@@ -189,7 +189,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
                     }
 
                     new Ext.Window({
-                        title : "Einkaufswelten Vorschau",
+                        title : "{s name=window/preview/title}Shopping world Preview{/s}",
                         width : width,
                         height: '90%',
                         layout : 'fit',

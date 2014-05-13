@@ -64,12 +64,12 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
             title: '{s name=list/tree/title}Categories{/s}'
         },
         filter: {
-            title:      '{s name=list/filter/title}Filter{/s}',
-            noFilter:      '{s name=list/no_filter}No filter{/s}',
-            onlyDesktop:   '{s name=list/only_desktop}Only desktop devices{/s} <div class="sprite-television" style="width: 16px; height: 16px; display: inline-block">&nbsp;</div>',
-            onlyTablet:     '{s name=list/only_tablet}Only tablet devices{/s} <div class="sprite-e-book-reader" style="width: 16px; height: 16px; display: inline-block">&nbsp;</div>',
-            onlyMobile:     '{s name=list/only_mobile}Only mobile devices{/s} <div class="sprite-mobile-phone-off" style="width: 16px; height: 16px; display: inline-block">&nbsp;</div>',
-            onlyActive:     '{s name=list/only_active}Only active worlds{/s}'
+            title: '{s name=list/filter/title}Filter{/s}',
+            noFilter: '{s name=list/no_filter}No filter{/s}',
+            onlyDesktop: '{s name=list/only_desktop}Only desktop devices{/s} <div class="sprite-television" style="width: 16px; height: 16px; display: inline-block">&nbsp;</div>',
+            onlyTablet: '{s name=list/only_tablet}Only tablet devices{/s} <div class="sprite-e-book-reader" style="width: 16px; height: 16px; display: inline-block">&nbsp;</div>',
+            onlyMobile: '{s name=list/only_mobile}Only mobile devices{/s} <div class="sprite-mobile-phone-off" style="width: 16px; height: 16px; display: inline-block">&nbsp;</div>',
+            onlyActive: '{s name=list/only_active}Only active worlds{/s}'
         }
     },
 

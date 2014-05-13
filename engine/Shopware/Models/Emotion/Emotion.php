@@ -665,10 +665,19 @@ class Emotion extends ModelEntity
         }
 
         $elements = array();
+        /**@var $element Element*/
         foreach($this->getElements() as $element) {
 
             $newElement = clone $element;
             $newElement->setEmotion($this);
+
+            if ($newElement->getData()) {
+                /**@var $data Data*/
+                foreach($newElement->getData() as $data) {
+                    $data->setEmotion($this);
+                }
+            }
+
             $elements[] = $newElement;
         }
 
