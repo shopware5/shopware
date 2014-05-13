@@ -654,4 +654,25 @@ class Emotion extends ModelEntity
     {
         return $this->device;
     }
+
+    public function __clone()
+    {
+        $this->id = null;
+
+        $categories = array();
+        foreach($this->getCategories() as $category) {
+            $categories[] = $category;
+        }
+
+        $elements = array();
+        foreach($this->getElements() as $element) {
+
+            $newElement = clone $element;
+            $newElement->setEmotion($this);
+            $elements[] = $newElement;
+        }
+
+        $this->elements = $elements;
+        $this->categories = $categories;
+    }
 }

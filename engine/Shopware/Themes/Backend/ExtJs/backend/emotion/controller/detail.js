@@ -404,10 +404,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                     Shopware.Notification.createGrowlMessage(me.snippets.growlMessage, '{s name=duplicate/success_msg}The selected emotion was successful duplicated.{/s}');
                 }
 
-                store = me.gridPanel.getStore();
-                store.load();
-
-                me.getStore('Detail').load();
+                listStore.load();
             }
         })
     }
