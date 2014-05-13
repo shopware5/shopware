@@ -4,6 +4,26 @@ namespace Shopware\Components\Model\DBAL;
 
 class QueryBuilder extends \Doctrine\DBAL\Query\QueryBuilder
 {
+    private $states = array();
+
+    /**
+     * @return array
+     */
+    public function getStates()
+    {
+        return $this->states;
+    }
+
+    public function addState($state)
+    {
+        $this->states[] = $state;
+    }
+
+    public function hasState($state)
+    {
+        return in_array($state, $this->states);
+    }
+
     public function includesTable($table)
     {
         foreach($this->getQueryPart('from') as $from) {

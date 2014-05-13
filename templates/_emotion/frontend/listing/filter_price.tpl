@@ -7,20 +7,17 @@
 
 <div class="slideContainer">
     <ul>
-        {foreach $priceFacet.prices as $range}
-
-            {if $range.active}
-                <li class="active">
-                    {$range.priceMin|currency} - {$range.priceMax|currency} ({$range.total})
-                </li>
-            {else}
-                <li>
-                    <a href="{$range.link}" title="{$sCategoryInfo.name}">
-                        {$range.priceMin|currency} - {$range.priceMax|currency} ({$range.total})
-                    </a>
-                </li>
-            {/if}
-        {/foreach}
+        {if $priceFacet.active}
+            <li class="active">
+                {$priceFacet.range.min|currency} - {$priceFacet.range.max|currency}
+            </li>
+        {else}
+            <li>
+                <a href="{$range.link}" title="{$sCategoryInfo.name}">
+                    {$priceFacet.range.min|currency} - {$priceFacet.range.max|currency}
+                </a>
+            </li>
+        {/if}
         {if $priceFacet.active}
             <li class="close">
                 <a href="{$priceFacet.removeLink}" title="{$sCategoryInfo.name}">

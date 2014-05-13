@@ -23,8 +23,13 @@ class Price extends DBAL
         $this->priceHelper = $priceHelper;
     }
 
+    public function supportsFacet(Facet $facet)
+    {
+        return ($facet instanceof Facet\Price);
+    }
+
     /**
-     * @param Facet\Price $facet
+     * @param \Shopware\Gateway\Search\Facet|\Shopware\Gateway\Search\Facet\Price $facet
      * @param QueryBuilder $query
      * @param \Shopware\Gateway\Search\Criteria $criteria
      * @return \Shopware\Gateway\Search\Facet\Category
@@ -34,95 +39,50 @@ class Price extends DBAL
         QueryBuilder $query,
         Criteria $criteria
     ) {
-        $query->removeTableInclude('s_articles_prices');
-
         $query->resetQueryPart('orderBy');
-
         $query->resetQueryPart('groupBy');
 
-        $query->select(array('COUNT(DISTINCT products.id) as total'));
-
-        $graduations = $this->getGraduations($criteria);
-
-        $this->joinPrices($query, $facet);
-
-        $prices = array();
-        foreach($graduations as $graduation) {
-            $query->setParameter(':priceMin', $graduation['priceMin']);
-
-            if ($graduation['priceMax'] === null) {
-                $query->setParameter(':priceMax', 999999999, \PDO::PARAM_INT);
-            } else {
-                $query->setParameter(':priceMax', $graduation['priceMax']);
-            }
-
-            /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
-            $statement = $query->execute();
-
-            $result = $statement->fetch(\PDO::FETCH_ASSOC);
-
-            $total = (int) $result['total'];
-            if ($total <= 0) {
-                continue;
-            }
-
-            $max = $graduation['priceMax'];
-            if ($max == null) {
-                $max = $result['priceMax'];
-            }
-
-            $prices[] = array(
-                'priceMin' => $graduation['priceMin'],
-                'priceMax' => $max,
-                'total' => $total
+        /**@var $condition \Shopware\Gateway\Search\Condition\Price*/
+        if ($condition = $criteria->getCondition('price')) {
+            $facet->range = array(
+                'min' => $condition->min,
+                'max' => $condition->max
             );
+            return $facet;
         }
 
-        $facet->prices = $prices;
+        $this->priceHelper->joinPrices(
+            $query,
+            $facet->currentCustomerGroup,
+            $facet->fallbackCustomerGroup
+        );
+
+        $selection = $this->priceHelper->getCheapestPriceSelection($facet->currentCustomerGroup);
+
+        $query->select(array(
+            $selection . ' as cheapest_price'
+        ));
+
+        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $query->execute();
+
+        $min = $statement->fetch(\PDO::FETCH_COLUMN);
+
+        $query->groupBy('products.id')
+            ->orderBy('cheapest_price', 'DESC')
+            ->setFirstResult(0)
+            ->setMaxResults(1);
+
+        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $query->execute();
+
+        $max = $statement->fetch(\PDO::FETCH_COLUMN);
+
+        $facet->range = array(
+            'min' => $min,
+            'max' => $max
+        );
 
         return $facet;
-    }
-
-    public function supportsFacet(Facet $facet)
-    {
-        return ($facet instanceof Facet\Price);
-    }
-
-    private function joinPrices(QueryBuilder $query, Facet\Price $facet)
-    {
-        $calculation = $this->priceHelper->getPriceSelection($facet->currentCustomerGroup);
-
-        $query->innerJoin(
-            'products',
-            's_articles_prices',
-            'prices',
-            "prices.articledetailsID = variants.id
-             AND prices.from = 1
-             AND prices.pricegroup = :priceGroupFacet
-             AND " . $calculation ." BETWEEN :priceMin AND :priceMax"
-        );
-
-        $query->addSelect('MAX('. $calculation .') as priceMax');
-
-        /**@var $facet Facet\Price*/
-        $query->setParameter(':priceGroupFacet', $facet->fallbackCustomerGroup->getKey());
-    }
-
-    private function getGraduations(Criteria $criteria)
-    {
-        /**@var $price \Shopware\Gateway\Search\Condition\Price*/
-        if ($price = $criteria->getCondition('price')) {
-            return array(
-                array('priceMin' => $price->min, 'priceMax' => $price->max)
-            );
-        }
-
-        return array(
-            array('priceMin' => 0,   'priceMax' => 100),
-            array('priceMin' => 101, 'priceMax' => 200),
-            array('priceMin' => 201, 'priceMax' => 300),
-            array('priceMin' => 301, 'priceMax' => 400),
-            array('priceMin' => 401, 'priceMax' => null)
-        );
     }
 }
