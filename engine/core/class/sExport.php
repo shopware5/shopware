@@ -692,7 +692,7 @@ class sExport
                 d.kind,
                 IF(v.standard=1||kind=1,1,0) as standard,
                 d.additionaltext,
-                SUM(sai.impressions) as impressions,
+                COALESCE(sai.impressions, 0) as impressions,
                 d.sales,
 
 
@@ -779,8 +779,12 @@ class sExport
             AND p.`from`=1
             AND p.pricegroup='EK'
 
-            LEFT JOIN s_statistics_article_impression as sai
-            ON a.id = sai.articleId
+            LEFT JOIN
+            (
+              SELECT articleId AS id, SUM(s.impressions) AS impressions
+              FROM s_statistics_article_impression s
+              GROUP BY articleId
+            ) sai ON sai.id = a.id
 
             $sql_add_join
 

@@ -635,6 +635,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 a.pricegroupActive,
                 a.laststock,
                 d.suppliernumber,
+                COALESCE(sai.impressions, 0) as impressions,
                 d.sales,
                 IF(e.file IS NULL,0,1) as esd,
                 d.weight,
@@ -709,6 +710,13 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
             LEFT JOIN s_article_configurator_sets acs
             ON a.configurator_set_id = acs.id
+
+            LEFT JOIN
+            (
+              SELECT articleId AS id, SUM(s.impressions) AS impressions
+              FROM s_statistics_article_impression s
+              GROUP BY articleId
+            ) sai ON sai.id = a.id
 
             {$joinStatements}
 
