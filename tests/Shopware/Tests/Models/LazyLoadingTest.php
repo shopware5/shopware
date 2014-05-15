@@ -256,4 +256,114 @@ class LazyLoadingTest extends PHPUnit_Framework_TestCase
 
         $this->assertNotEmpty(end($article->getArticles()->toArray())->getId());
     }
+
+    /**
+     * Test LazyLoading for:
+     * - \Shopware\Models\Article\Notification::getArticleDetail()
+     * - \Shopware\Models\Article\Notification::getCustomer()
+     */
+    public function testArticleNotifcation()
+    {
+        $conn = $this->em->getConnection();
+
+        $ordernumber = $conn->fetchColumn('SELECT ordernumber FROM s_articles_details');
+        $email = $conn->fetchColumn('SELECT email FROM s_user');
+
+        $conn->insert('s_articles_notification', array(
+            'ordernumber' => $ordernumber,
+            'mail'        => $email,
+        ));
+
+        $id = $conn->lastInsertId();
+
+        /** @var \Shopware\Models\Article\Notification $notification */
+        $notification = $this->em->getRepository('Shopware\Models\Article\Notification')->find($id);
+        $this->assertEquals($ordernumber, $notification->getArticleDetail()->getNumber());
+        $this->assertEquals($email, $notification->getCustomer()->getEmail());
+
+        $conn->delete('s_articles_notification', array('id' => $id));
+    }
+
+    /**
+     * Test LazyLoading for:
+     * - \Shopware\Models\Article\Price::getCustomerGroup()
+     */
+    public function testArticlePrice()
+    {
+        /** @var \Shopware\Models\Article\Price $price */
+        $price = $this->em->getRepository('Shopware\Models\Article\Price')->findOneBy(array('customerGroupKey' => 'ek'));
+        $group = $price->getCustomerGroup();
+        $this->assertEquals('EK', $group->getKey());
+    }
+
+    /**
+     * Test LazyLoading for:
+     * - \Shopware\Models\Article\Configurator\Template\Price::getCustomerGroup()
+     */
+    public function testTemplatePrice()
+    {
+        $conn = $this->em->getConnection();
+        $conn->insert('s_article_configurator_template_prices', array(
+            'customer_group_key' => 'ek',
+        ));
+        $id = $conn->lastInsertId();
+
+        /** @var \Shopware\Models\Article\Configurator\Template\Price $templatePrice */
+        $templatePrice = $this->em->getRepository('\Shopware\Models\Article\Configurator\Template\Price')->find($id);
+        $this->assertEquals('EK', $templatePrice->getCustomerGroup()->getKey());
+
+        $conn->delete('s_articles_notification', array('id' => $id));
+    }
+
+    /**
+     * Test LazyLoading for:
+     * - \Shopware\Models\Newsletter\Address::getCustomer()
+     */
+    public function testNewsletterAddress()
+    {
+        $conn  = $this->em->getConnection();
+        $email = $conn->fetchColumn('SELECT email FROM s_user');
+        $conn->insert('s_campaigns_mailaddresses', array(
+            'email' => $email,
+        ));
+        $id = $conn->lastInsertId();
+
+        /** @var \Shopware\Models\Newsletter\Address $address */
+        $address = $this->em->getRepository('Shopware\Models\Newsletter\Address')->find($id);
+        $this->assertEquals($email, $address->getCustomer()->getEmail());
+
+        $conn->delete('s_campaigns_mailaddresses', array('id' => $id));
+    }
+
+    /**
+     * Test LazyLoading for:
+     * - \Shopware\Models\Premium\Premium::getArticleDetail()
+     */
+    public function testPremium()
+    {
+        /** @var \Shopware\Models\Premium\Premium $premium */
+        $premium = $this->em->getRepository('Shopware\Models\Premium\Premium')->find(1);
+        $this->assertEquals('SW10209',  $premium->getArticleDetail()->getNumber());
+    }
+
+    /**
+     * Test LazyLoading for:
+     * - \Shopware\Models\Newsletter\ContainerType\Article::getArticleDetail()
+     */
+    public function testArticleContainerType()
+    {
+        $conn = $this->em->getConnection();
+        $ordernumber = $conn->fetchColumn('SELECT ordernumber FROM s_articles_details ORDER by id');
+        $conn->insert('s_campaigns_articles', array(
+            'articleordernumber' => $ordernumber,
+        ));
+
+        $id = $conn->lastInsertId();
+
+        /** @var \Shopware\Models\Newsletter\ContainerType\Article $articleContainerType */
+        $articleContainerType = $this->em->getRepository('Shopware\Models\Newsletter\ContainerType\Article')->find($id);
+        $this->assertEquals($ordernumber, $articleContainerType->getArticleDetail()->getNumber());
+
+        $conn->delete('s_campaigns_articles', array('id' => $id));
+    }
 }
