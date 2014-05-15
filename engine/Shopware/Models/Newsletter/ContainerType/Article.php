@@ -29,7 +29,7 @@ use         Shopware\Components\Model\LazyFetchModelEntity,
 /**
  * Shopware text model represents a text container type.
  *
- * @ORM\Entity(repositoryClass="Repository")
+ * @ORM\Entity
  * @ORM\Table(name="s_campaigns_articles")
  */
 class Article extends LazyFetchModelEntity
@@ -107,6 +107,13 @@ class Article extends LazyFetchModelEntity
      */
     private $position;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * @param \Shopware\Models\Newsletter\Container $container
@@ -116,7 +123,6 @@ class Article extends LazyFetchModelEntity
     {
         $this->container = $container;
         $container->setType('ctArticles');
-//        return $this->setOneToOne($container, '\Shopware\Models\Newsletter\Container', 'container', 'text');
     }
 
     /**
@@ -188,6 +194,6 @@ class Article extends LazyFetchModelEntity
      */
     public function getArticleDetail()
     {
-        return $this->fetchLazy($this->articleDetail, array('ordernumber' => $this->number));
+        return $this->fetchLazy($this->articleDetail, array('number' => $this->number));
     }
 }
