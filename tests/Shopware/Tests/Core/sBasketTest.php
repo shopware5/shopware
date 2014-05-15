@@ -2052,8 +2052,15 @@ class sBasketTest extends PHPUnit_Framework_TestCase
               ON avoid.articleID = article.id
             WHERE detail.active = 1
             AND avoid.articleID IS NULL
+            AND article.id NOT IN (
+              SELECT articleID
+              FROM s_articles_avoid_customergroups
+              WHERE customergroupID = 1
+            )
+            AND (article.laststock = 0 OR detail.instock > 0)
             ORDER BY RAND() LIMIT 1'
         );
+
         $this->module->sAddArticle($randomArticle['ordernumber'], 1);
 
         $this->assertNotEquals(0, $this->module->sCountBasket());
@@ -2083,6 +2090,12 @@ class sBasketTest extends PHPUnit_Framework_TestCase
               ON avoid.articleID = article.id
             WHERE detail.active = 1
             AND avoid.articleID IS NULL
+            AND article.id NOT IN (
+              SELECT articleID
+              FROM s_articles_avoid_customergroups
+              WHERE customergroupID = 1
+            )
+            AND (article.laststock = 0 OR detail.instock > 0)
             ORDER BY RAND() LIMIT 1'
         );
         $idOne = $this->module->sAddArticle($randomArticle['ordernumber'], 1);
@@ -2114,6 +2127,11 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             AND laststock = 1
             AND instock > 3
             AND avoid.articleID IS NULL
+            AND article.id NOT IN (
+              SELECT articleID
+              FROM s_articles_avoid_customergroups
+              WHERE customergroupID = 1
+            )
             ORDER BY RAND() LIMIT 1'
         );
 
@@ -2151,6 +2169,11 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             AND laststock = 0
             AND instock > 20
             AND instock < 70
+            AND article.id NOT IN (
+              SELECT articleID
+              FROM s_articles_avoid_customergroups
+              WHERE customergroupID = 1
+            )
             ORDER BY RAND() LIMIT 1'
         );
 
