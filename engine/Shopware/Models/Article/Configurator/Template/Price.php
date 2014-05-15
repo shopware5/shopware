@@ -151,7 +151,7 @@ class Price extends LazyFetchModelEntity
      */
     public function getCustomerGroup()
     {
-        return $this->fetchLazy($this->customerGroup, array('groupkey' => $this->customerGroupKey));
+        return $this->fetchLazy($this->customerGroup, array('key' => $this->customerGroupKey));
     }
 
     /**
