@@ -60,7 +60,9 @@ class CustomerGroup extends Gateway
 
         $customerGroups = array();
         foreach ($data as $group) {
-            $customerGroups[] = $this->customerGroupHydrator->hydrate($group);
+            $key = $group['groupkey'];
+
+            $customerGroups[$key] = $this->customerGroupHydrator->hydrate($group);
         }
 
         return $customerGroups;
