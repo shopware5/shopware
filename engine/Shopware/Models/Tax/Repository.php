@@ -83,10 +83,11 @@ class Repository extends ModelRepository
             'customerGroupId' => $customerGroupId
         );
 
-        $taxRate = Shopware()->Db()->fetchRow($sql, $parameters);
+        $dbalConnection = $this->getEntityManager()->getConnection();
+        $taxRate = $dbalConnection->fetchAssoc($sql, $parameters);
 
         if (empty($taxRate['id'])) {
-            $taxRate['tax'] = Shopware()->Db()->fetchOne("SELECT tax FROM s_core_tax WHERE id = ?", array($taxId));
+            $taxRate = $dbalConnection->fetchAssoc("SELECT tax FROM s_core_tax WHERE id = ?", array($taxId));
         }
 
         return $taxRate['tax'];
