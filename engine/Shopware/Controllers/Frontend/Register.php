@@ -124,6 +124,11 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             if (empty($this->error)) {
                 $this->saveRegister();
             }
+            // If using the new template, the 'GET' action will be handled
+            // in the Register controller (unified login/register page)
+            if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
+                return $this->redirect(array('action' => 'shippingPayment', 'controller' => 'checkout'));
+            }
         }
         $this->forward('index');
     }
