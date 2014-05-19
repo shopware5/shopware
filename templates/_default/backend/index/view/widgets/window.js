@@ -294,7 +294,10 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
     createWidgetWrapper: function () {
         var me = this,
             wrapper = Ext.create('Ext.container.Container', {
-                layout: 'hbox'
+                layout: {
+                    type: 'hbox',
+                    align: 'stretch'
+                }
             }),
             len = me.columnCount,
             i = 0;
@@ -501,7 +504,9 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      * @returns { Object } - DragZone (draggable) configuration
      */
     createWidgetDragZone: function () {
-        var me = this;
+        var me = this,
+            scrollTimer,
+            delay = 1000;
 
         return {
             ddGroup: 'widget-container',
@@ -522,6 +527,48 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                         container.remove(widget, false);
                     }
                 });
+            },
+
+            onDrag: function (e) {
+                var dragSource = this,
+                    sourceY = dragSource.lastPageY - dragSource.deltaY,
+                    windowBox = me.getEl().getBox(),
+                    tolerance = 100,
+                    speed = 25;
+
+                if (scrollTimer) {
+                    window.clearInterval(scrollTimer);
+                    delay = 1000;
+                }
+
+                if(sourceY > windowBox.y && sourceY < windowBox.y + tolerance) {
+                    dragSource.scrollWrapper(speed);
+                }
+
+                if(sourceY < windowBox.y + windowBox.height && sourceY > windowBox.y + windowBox.height - tolerance) {
+                    dragSource.scrollWrapper(speed * -1);
+                }
+            },
+
+            scrollWrapper: function (scrollDelta) {
+                var dragSource = this;
+
+                delay = 50;
+
+                scrollTimer = Ext.defer(function () {
+                    me.onScroll({
+                        wheelDelta: scrollDelta * (me.invertScroll ? -1 : 1)
+                    });
+
+                    dragSource.scrollWrapper(scrollDelta);
+                }, delay);
+            },
+
+            onMouseUp: function () {
+                if (scrollTimer) {
+                    window.clearInterval(scrollTimer);
+                    delay = 1000;
+                }
             },
 
             onInvalidDrop: function (e) {
@@ -827,7 +874,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      * Handles the scrolling of the window wrapper.
      * Calculates the new position and sets it if its possible.
      *
-     * @param e - Mouse scoll event
+     * @param e - Mouse scroll event
      */
     onScroll: function(e) {
         var me = this,
@@ -850,6 +897,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
         if(winHeight > wrapperHeight) {
             wrapperEl.setY(max);
             toolbarEl.setStyle(topStyle);
+            me.removeBodyCls('can-scroll');
             return;
         }
 
