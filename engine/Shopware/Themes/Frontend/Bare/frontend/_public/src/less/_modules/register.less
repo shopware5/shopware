@@ -11,33 +11,31 @@
     .border-radius();
     .clearfix();
     width: 100%;
+    display: none;
 
-        .has--border {
-            .border-radius(4px);
-        }
+    .has--border {
+        .border-radius(4px);
+    }
 
-        .alert {
-            .unitize-margin(0, 26, 16);
-        }
+    .alert {
+        .unitize-margin(20, 18, 20, 18, 16);
+    }
 
-        .panel--title {
-            .unitize(16,16, margin-bottom);
-        }
+    .register--check {
+        .unitize(8,16, padding-bottom);
+    }
 
-        .panel--body {
-            .unitize-margin(0, 16, 16);
-        }
+    .register--action {
+        .unitize-margin(0, 26, 16);
+        float: right;
 
-        .register--check {
-            .unitize(8,16, padding-bottom);
-        }
-
-        .register--submit {
-            .unitize-margin(0, 26, 16);
+        .btn--primary {
             float: right;
 
-        .icon--arrow-right {
-            .unitize(10, 16, font-size);
+            & [class^=icon] {
+                .unitize(10, 16, font-size);
+                .unitize-margin(-2, 0, 0, 16);
+            }
         }
     }
 
@@ -126,28 +124,48 @@
 
 }
 
-// Register advantages
-.register--advantages {
+// Register Login
+.register--login {
     .clearfix();
 
-    .register--advantages-list {
-	    .unitize(40, 16, margin-bottom);
-	    list-style: none;
-	    float: left;
+    .panel {
+        .border-radius(4px);
     }
 
-    li {
-	    .unitize(20, 16, padding-left);
-	    display: block;
-	    float: left;
-	    width: 100%;
+    .register--new-customer {
+        .unitize(10, 16, margin-bottom);
+
+        button {
+            width: 100%;
+            text-align: center;
+        }
     }
 
-    i[class^=icon] {
-	    .unitize(10, 16, font-size);
-	    .unitize(10, 16, margin-right);
+    .register--login-field {
+        .unitize(10, 16, margin-bottom);
+        width: 100%;
     }
 
+    .register--login-description {
+        .unitize(20, 16, padding-bottom);
+    }
+
+    .register--login-lostpassword {
+        .unitize(20, 16, padding-bottom);
+    }
+
+    .register--login-action {
+
+        & [class^=icon] {
+            .unitize(10, 16, font-size);
+            .unitize-margin(-2, 0, 0, 16);
+        }
+    }
+}
+
+// Register Advantages
+.register--advantages {
+    display: none;
 }
 
 // Register Steps
@@ -195,10 +213,10 @@
 	    top: -2px;
 	    display: none;
 
-	&::after {
-	    content: '';
-	    height: 100%;
-	}
+        &::after {
+            content: '';
+            height: 100%;
+        }
 
     }
 
@@ -242,10 +260,12 @@
 
     }
 
-    // General registration form
+    // General Register Form
     .register--content {
 	    .unitize(50, 16, margin-top);
-	    .unitize(20, 16, padding-top);
+        width: 49%;
+        float: right;
+        display: block;
 
         .field--select {
             .unitize(15, 16, margin-bottom);
@@ -292,10 +312,57 @@
             font-weight: bold;
         }
     }
+
+    // Register Login
+    .register--login {
+        .unitize(50, 16, margin-top);
+        width: 49%;
+        float: left;
+
+        .register--new-customer {
+            display: none;
+        }
+
+        .register--login-field {
+            .unitize(15, 16, margin-bottom);
+        }
+    }
+
+    // Register advantages
+    .register--advantages {
+        .clearfix();
+        display: block;
+        width: 49%;
+        float: left;
+
+        .register--advantages-list {
+            list-style: none;
+            float: left;
+        }
+
+        .panel--title {
+            .unitize-margin(0, 0, 10, 0, 16);
+        }
+
+        li {
+            .unitize(5, 16, padding-bottom);
+            .unitize(14, 16, font-size);
+            display: block;
+            float: left;
+            width: 100%;
+        }
+
+        i[class^=icon] {
+            .unitize(10, 16, font-size);
+            .unitize(10, 16, margin-right);
+        }
+
+    }
 }
 
 @media screen and (min-width: @desktopViewportWidth) {
 
+    // Header Support Info
     .is--ctl-register {
 	    .unitize(48, 16, margin-bottom);
     }
@@ -312,13 +379,4 @@
         .steps--spacer { width: 16% }
 
     }
-
-    // Register Advantages
-    .register--advantages {
-
-        li {
-            width: 50%;
-        }
-    }
-
 }

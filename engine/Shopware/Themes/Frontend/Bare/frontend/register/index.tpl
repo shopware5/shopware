@@ -25,8 +25,8 @@
 {* Hide footer *}
 {block name="frontend_index_footer"}{/block}
 
-
-{block name="frontend_index_content"}
+{* Register content *}
+{block name='frontend_index_content'}
 	<div class="register--content panel content block has--border">
 
 		{block name='frontend_register_index_dealer_register'}
@@ -89,56 +89,59 @@
 
 				{block name='frontend_register_index_form_submit'}
 					{* Submit button *}
-					<div class="register--submit actions">
-						<button type="submit" class="btn btn--primary">{s name='RegisterIndexActionSubmit'}{/s} <i class="icon--arrow-right"></i></button>
+					<div class="register--action">
+						<button type="submit" class="btn btn--primary">{s name='RegisterIndexActionSubmit'}{/s} <i class="icon--arrow-right is--small"></i></button>
 					</div>
 				{/block}
 			</form>
 		{/block}
 	</div>
-{/block}
 
-{* Register advantages *}
-{block name='frontend_index_content_right'}
-	<div class="panel register--advantages container">
-		<div class="panel--body">
-			{block name='frontend_index_content_advantages'}
+	{* Register Login *}
+	{block name='frontend_register_index_login'}
+		{include file="frontend/register/login.tpl"}
+	{/block}
 
-				<h2 class="panel--title">{s name='RegisterInfoAdvantagesTitle'}{/s}</h2>
+	{* Register advantages *}
+	{block name='frontend_register_index_advantages'}
+		<div class="register--advantages block">
+			<h2 class="panel--title">{s name='RegisterInfoAdvantagesTitle'}{/s}</h2>
+			{block name='frontend_index_content_advantages_list'}
+				<ul class="register--advantages-list">
+					{block name='frontend_index_content_advantages_entry1'}
+						<li class="register--advantages-entry">
+							<i class="icon--check"></i>
+							{s name='RegisterInfoAdvantagesEntry1'}{/s}
+						</li>
+					{/block}
 
-				{block name='frontend_index_content_advantages_list'}
-					<ul class="register--advantages-list">
-						{block name='frontend_index_content_advantages_entry1'}
-							<li class="register--advantages-entry">
-								<i class="icon--check"></i>
-								{s name='RegisterInfoAdvantagesEntry1'}{/s}
-							</li>
-						{/block}
+					{block name='frontend_index_content_advantages_entry2'}
+						<li class="register--advantages-entry">
+							<i class="icon--check"></i>
+							{s name='RegisterInfoAdvantagesEntry2'}{/s}
+						</li>
+					{/block}
 
-						{block name='frontend_index_content_advantages_entry2'}
-							<li class="register--advantages-entry">
-								<i class="icon--check"></i>
-								{s name='RegisterInfoAdvantagesEntry2'}{/s}
-							</li>
-						{/block}
+					{block name='frontend_index_content_advantages_entry3'}
+						<li class="register--advantages-entry">
+							<i class="icon--check"></i>
+							{s name='RegisterInfoAdvantagesEntry3'}{/s}
+						</li>
+					{/block}
 
-						{block name='frontend_index_content_advantages_entry3'}
-							<li class="register--advantages-entry">
-								<i class="icon--check"></i>
-								{s name='RegisterInfoAdvantagesEntry3'}{/s}
-							</li>
-						{/block}
-
-						{block name='frontend_index_content_advantages_entry4'}
-							<li class="register--advantages-entry">
-								<i class="icon--check"></i>
-								{s name='RegisterInfoAdvantagesEntry4'}{/s}
-							</li>
-						{/block}
-					</ul>
-				{/block}
-
+					{block name='frontend_index_content_advantages_entry4'}
+						<li class="register--advantages-entry">
+							<i class="icon--check"></i>
+							{s name='RegisterInfoAdvantagesEntry4'}{/s}
+						</li>
+					{/block}
+				</ul>
 			{/block}
 		</div>
-	</div>
+	{/block}
+
 {/block}
+
+
+
+
