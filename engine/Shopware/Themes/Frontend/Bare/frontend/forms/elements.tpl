@@ -26,6 +26,7 @@
 			{foreach from=$sSupport.sElements item=sElement key=sKey}
 			{if $sSupport.sFields[$sKey]||$sElement.note}
 				<div {if $sSupport.sElements[$sKey].typ eq 'textarea'}class="textarea"{elseif $sSupport.sElements[$sKey].typ eq 'checkbox'}class="checkbox"{elseif $sSupport.sElements[$sKey].typ eq 'select'}class="field--select"{/if}>
+					{if $sSupport.sElements[$sKey].typ eq 'select'}<span class="arrow"></span>{/if}
 					{eval var=$sSupport.sFields[$sKey]}
 				</div>
 
@@ -57,7 +58,7 @@
 			{block name='frontend_forms_elements_form_submit'}
 				{* Forms Submit *}
 				<div class="buttons">
-					<button class="btn btn--primary" type="submit" name="Submit">{s name='SupportActionSubmit'}{/s}<i class="icon--arrow-right"></i></button>
+					<button class="btn btn--primary" type="submit" name="Submit" value="submit" >{s name='SupportActionSubmit'}{/s}<i class="icon--arrow-right"></i></button>
 				</div>
 			{/block}
 		</div>
