@@ -48,13 +48,13 @@ those files.
 
     cd build/
     ant configure
-    ant build-config build-composer-install build-database
+    ant build-unit
 
 4.) Download the demo data files and extract them:
 
 Go to the checkout directory and download the demo data files:
 
-	wget -O demo.zip files.shopware.de/download.php?package=demo
+	wget -O demo.zip http://releases.s3.shopware.com/demo_4.2.0.zip
 
 Unzip the files to the checkout directory:
 
