@@ -484,10 +484,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $this->redirect(array('action' => 'index'));
         }
 
-        if ($this->Request()->isPost()) {
-
-        }
-
         $this->View()->sPayment = $this->getSelectedPayment();
         $this->View()->sUserData["payment"] = $this->View()->sPayment;
 
@@ -504,6 +500,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->View()->sAmountWithTax = $this->View()->sBasket['sAmountWithTax'];
         $this->View()->sAmountTax = $this->View()->sBasket['sAmountTax'];
         $this->View()->sAmountNet = $this->View()->sBasket['AmountNetNumeric'];
+        $this->View()->sRegisterFinished = !empty($this->session['sRegisterFinished']);
 
         $this->View()->sTargetAction = 'shippingPayment';
     }
