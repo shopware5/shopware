@@ -2071,6 +2071,9 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // No id, expect null
         $this->assertNull($this->module->sDeleteArticle(null));
 
+        // Random id, expect null
+        $this->assertNull($this->module->sDeleteArticle(9999999));
+
         $this->module->sSYSTEM->sSESSION_ID = uniqid();
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
