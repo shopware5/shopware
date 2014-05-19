@@ -304,7 +304,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     protected function _createInputElement($element, $post = null)
     {
         if ($element['required'] == 1) {
-            $req = "required";
+	    $req = "is--required";
         } else {
             $req = "";
         }

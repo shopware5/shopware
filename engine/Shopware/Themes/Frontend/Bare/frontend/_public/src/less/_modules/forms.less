@@ -2,12 +2,13 @@
 .forms--content {
     width: 100%;
 
-    .alert {
-	.unitize-margin(10, 10, 10, 10, 16);
+    h1 {
+	.unitize(21, 16, font-size);
+	color: @darkTextColor;
     }
 
-    .has--error {
-	background: #000;
+    .alert {
+	.unitize-margin(10, 10, 10, 10, 16);
     }
 
     .has--border {
@@ -47,7 +48,7 @@
     }
 
     .forms--required {
-	.unitize(14, 16, font-size);
+	.unitize(12, 16, font-size);
 	.unitize(10, 16, margin-bottom)
     }
 
@@ -67,10 +68,13 @@
 
 }
 
-
-@media screen and (min-width: @desktopViewportWidth) {
+@media screen and (min-width: @tabletViewportWidth) {
 
     .forms--content {
+
+	input {
+	    .unitize(15, 16, margin-bottom);
+	}
 
 	.forms--captcha {
 
@@ -86,5 +90,15 @@
 
     }
 
+
+}
+
+@media screen and (min-width: @desktopViewportWidth) {
+
+    .forms--content {
+	.unitize(45, 16, margin-top);
+	float: right;
+	width: 78%;
+    }
 
 }
