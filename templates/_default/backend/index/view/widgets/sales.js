@@ -185,16 +185,22 @@ Ext.define('Shopware.apps.Index.view.widgets.Sales', {
      * which calculated the conversation rate.
      *
      * @public
-     * @return [object] Ext.XTemplate
+     * @return { object } Ext.XTemplate
      */
     createConversationRateTemplate: function() {
-        var me = this;
-	    return new Ext.XTemplate(
-	    	'{literal}<tpl for="."><div class="conversation-rate">',
-	    		'<strong class="title">' + me.snippets.conversation_rate + ':</strong>',
-	    		'<span class="rate">{conversationRate}%</span>',
-	    	'</div></tpl>{/literal}'
-	    );
+        var me = this,
+            html = [
+                '{literal}',
+                '<tpl for=".">',
+                    '<div class="conversation-rate">',
+                        '<strong class="title">' + me.snippets.conversation_rate + ':</strong>',
+                        '<span class="rate">{conversationRate}%</span>',
+                    '</div>',
+                '</tpl>',
+                '{/literal}'
+            ];
+
+	    return new Ext.XTemplate(html.join('\n'));
     },
 
     /**

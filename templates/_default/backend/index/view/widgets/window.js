@@ -376,17 +376,17 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                 var dropSource = this,
                     newColumn = target.columnId,
                     newRow = dropSource.dropIndex,
-                    panel = dd.panel.cloneConfig({
-                        position: {
-                            rowId: newRow,
-                            columnId: newColumn
-                        }
-                    });
+                    panel = dd.panel,
+                    newPanel = me.createWidget(panel.xtype, panel.widgetId, {
+                        id: panel.viewId,
+                        column: newColumn,
+                        position: newRow
+                    }, panel.title);
 
-                target.insert(newRow, panel);
+                target.insert(newRow, newPanel);
 
                 // Fire event which saves the new position
-                me.fireEvent('saveWidgetPosition', newColumn, newRow, panel.viewId);
+                me.fireEvent('saveWidgetPosition', newColumn, newRow, newPanel.viewId);
 
                 me.containerCollection.each(function(container) {
                     container.dropZone.onNodeOut(container);
@@ -574,9 +574,15 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             onInvalidDrop: function (e) {
                 var dragProxy = this,
                     widget = dragProxy.panel,
-                    container = me.containerCollection.getAt(widget.position.columnId);
+                    pos = widget.position,
+                    container = me.containerCollection.getAt(widget.position.columnId),
+                    newPanel = me.createWidget(widget.xtype, widget.widgetId, {
+                        id: widget.viewId,
+                        column: pos.columnId,
+                        position: pos.rowId
+                    }, widget.title);
 
-                container.insert(widget.position.rowId, widget.cloneConfig());
+                container.insert(pos.rowId, newPanel);
             }
         };
     },
