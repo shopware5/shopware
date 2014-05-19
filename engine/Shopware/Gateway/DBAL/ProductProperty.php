@@ -34,12 +34,12 @@ class ProductProperty extends Gateway
     {
         $ids = array();
         foreach ($products as $product) {
-            $ids[] = $product->getVariantId();
+            $ids[] = $product->getId();
         }
 
         $query = $this->entityManager->getDBALQueryBuilder();
 
-        $query->addSelect('variants.ordernumber as number')
+        $query->addSelect('products.id as productId')
             ->addSelect($this->getSetFields())
             ->addSelect($this->getGroupFields())
             ->addSelect($this->getOptionFields())
@@ -49,16 +49,9 @@ class ProductProperty extends Gateway
 
         $query->innerJoin(
             'filterArticles',
-            's_articles_details',
-            'variants',
-            'variants.articleID = filterArticles.articleID'
-        );
-
-        $query->innerJoin(
-            'filterArticles',
             's_articles',
             'products',
-            'products.id = variants.articleID'
+            'products.id = filterArticles.articleID'
         );
 
         $query->innerJoin(
@@ -96,7 +89,7 @@ class ProductProperty extends Gateway
             'groups.id = options.optionID AND relations.optionID = groups.id'
         );
 
-        $query->where('variants.id IN (:ids)')
+        $query->where('products.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         $query->orderBy('filterArticles.articleID');
@@ -104,17 +97,17 @@ class ProductProperty extends Gateway
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
-        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $statement->fetchAll(\PDO::FETCH_GROUP);
 
-        $productProperties = array();
-        foreach ($data as $row) {
-            $number = $row['number'];
-            $productProperties[$number][] = $row;
+        $properties = array();
+        foreach($data as $productId => $values) {
+            $properties[$productId] = $this->propertyHydrator->hydrateValues($values);
         }
 
         $result = array();
-        foreach ($productProperties as $key => $productProperty) {
-            $result[$key] = $this->propertyHydrator->hydrateValues($productProperty);
+        foreach($products as $product) {
+            $sets = $properties[$product->getId()];
+            $result[$product->getNumber()] = array_shift($sets);
         }
 
         return $result;

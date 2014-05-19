@@ -103,6 +103,8 @@
 
         <service id="vote_gateway" alias="vote_gateway_dbal"/>
 
+        <service id="vote_average_gateway" alias="vote_average_gateway_dbal"/>
+
         <service id="customer_group_gateway" alias="customer_group_gateway_dbal"/>
 
         <service id="tax_gateway" alias="tax_gateway_dbal"/>
@@ -177,6 +179,11 @@
         </service>
 
         <service id="vote_gateway_dbal" class="Shopware\Gateway\DBAL\Vote">
+            <argument type="service" id="models"/>
+            <argument type="service" id="vote_hydrator_dbal"/>
+        </service>
+
+        <service id="vote_average_gateway_dbal" class="Shopware\Gateway\DBAL\VoteAverage">
             <argument type="service" id="models"/>
             <argument type="service" id="vote_hydrator_dbal"/>
         </service>

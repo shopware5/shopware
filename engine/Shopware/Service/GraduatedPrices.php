@@ -72,7 +72,9 @@ class GraduatedPrices
         $specify = $this->graduatedPricesGateway->getList($products, $group);
 
         $prices = array();
-        $fallback = array();
+
+        /**@var $fallbackProducts Struct\ListProduct[]*/
+        $fallbackProducts = array();
 
         foreach ($products as $product) {
             $key = $product->getNumber();
@@ -81,7 +83,7 @@ class GraduatedPrices
             $productPrices = $specify[$key];
 
             if (empty($productPrices)) {
-                $fallback[] = $product;
+                $fallbackProducts[] = $product;
                 continue;
             }
 
@@ -98,17 +100,17 @@ class GraduatedPrices
         }
 
         $group = $context->getFallbackCustomerGroup();
-        $fallback = $this->graduatedPricesGateway->getList($fallback, $group);
+        $fallback = $this->graduatedPricesGateway->getList($fallbackProducts, $group);
 
-        foreach ($products as $product) {
+        foreach ($fallbackProducts as $product) {
             $key = $product->getNumber();
+
+            if (!array_key_exists($key, $fallback)) {
+                continue;
+            }
 
             /**@var $productPrices Struct\Product\PriceRule[] */
             $productPrices = $fallback[$key];
-
-            if (empty($productPrices)) {
-                continue;
-            }
 
             foreach ($productPrices as $price) {
                 $price->setUnit($product->getUnit());
