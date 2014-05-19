@@ -23,6 +23,11 @@ class Migrations_Migration305 Extends Shopware\Components\Migrations\AbstractMig
                 AND head = '{strip}\nEindeutige Händler-Artikelnummer{#S#}\nPreis in Euro{#S#}\nKategorie{#S#}\nProduktbezeichnung{#S#}\nProduktbeschreibung{#S#}\nLink auf Detailseite{#S#}\nLieferzeit{#S#}\nEAN-Nummer{#S#}\nHersteller-Artikelnummer{#S#}\nLink auf Produktbild{#S#}\nHersteller{#S#}\nVersandVorkasse{#S#}\nVersandNachnahme{#S#}\nVersandLastschrift{#S#}\nVersandKreditkarte{#S#}\nVersandRechnung{#S#}\nVersandPayPal\n{/strip}{#L#}'
                 AND body = '{strip}\n{$sArticle.ordernumber|escape}{#S#}\n{$sArticle.price|escape:"number"|escape}{#S#}\n{$sArticle.articleID|category:">"|escape}{#S#}\n{$sArticle.name|strip_tags|strip|truncate:80:"...":true|escape}{#S#}\n{$sArticle.description_long|strip_tags|strip|trim|truncate:900:"...":true|html_entity_decode|escape}{#S#}\n{$sArticle.articleID|link:$sArticle.name|escape}{#S#}\n{#F#}{if $sArticle.instock}1-3 Werktage{elseif $sArticle.shippingtime}{$sArticle.shippingtime} Tage{else}10 Tage{/if}{#F#}{#S#}\n{$sArticle.ean|escape}{#S#}\n{$sArticle.suppliernumber|escape}{#S#}\n{$sArticle.image|image:2|escape}{#S#}\n{$sArticle.supplier|escape}{#S#}\n{$sArticle|@shippingcost:"prepayment":"de"|escape:"number"|escape}{#S#}\n{$sArticle|@shippingcost:"cash":"de"|escape:"number"|escape}{#S#}\n{$sArticle|@shippingcost:"debit":"de"|escape:"number"|escape}{#S#}\n{""|escape}{#S#}\n{$sArticle|@shippingcost:"invoice":"de"|escape:"number"|escape}{#S#}\n{$sArticle|@shippingcost:"paypal":"de"|escape:"number"|escape}{#S#}\n{/strip}{#L#}'
             ;
+
+            UPDATE s_export
+                SET interval = 0
+                WHERE interval = 3456
+                AND name = 'Google Produktsuche';
 EOD;
 
         $this->addSql($sql);
