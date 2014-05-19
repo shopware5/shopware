@@ -343,9 +343,9 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
     createContainerDropZone: function(container) {
         var me = this,
             dropProxyEl = Ext.create('Ext.Component', {
-            cls: Ext.baseCSSPrefix + 'widget-proxy-element',
-            height: 200
-        });
+                cls: Ext.baseCSSPrefix + 'widget-proxy-element',
+                height: 200
+            });
 
         container.dropZone = Ext.create('Ext.dd.DropZone', container.getEl(), {
             ddGroup: 'widget-container',
@@ -603,6 +603,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      */
     onResize: function (win, width) {
         var me = this,
+            oldColumnCount = me.columnsShown,
             container,
             i;
 
@@ -612,7 +613,9 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
 
         me.columnsShown = ~~(width / me.widthStep);
 
-        me.moveWidgetsToVisibleSpace();
+        if (oldColumnCount > me.columnsShown) {
+            me.moveWidgetsToVisibleSpace(oldColumnCount - me.columnsShown);
+        }
 
         for(i = 0; i < me.columnCount; i++) {
             container = me.containerCollection.getAt(i);
@@ -631,53 +634,140 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
 
     /**
      * Moves widgets that are in other, not visible, columns into the most right shown column.
+     * @param { number } offset - amount of columns changed
      */
-    moveWidgetsToVisibleSpace: function () {
+    moveWidgetsToVisibleSpace: function (offset) {
         var me = this,
-            column,
-            newColumn,
-            newColumnId,
+            moveToRight = me.widgetSettings.get('dock').indexOf('l') === -1,
+            collection = me.containerCollection,
             widgetsToUpdate = [],
-            widgetsToMove = [];
+            i;
 
         // small hack to fix the widget layouts
         Ext.defer(function() {
-            for(var i = me.columnCount - 1; i > me.columnsShown - 1; i--) {
-                column = me.containerCollection.getAt(i);
+            Ext.suspendLayouts();
 
-                newColumn = me.containerCollection.getAt(i - 1);
-                newColumnId = newColumn.columnId;
-
-                column.items.each(function(widget) {
-                    if(widget === column.dropProxyEl) {
-                        return true;
+            if (moveToRight) {
+                for(i = offset; i > 0; i--) {
+                    widgetsToUpdate = widgetsToUpdate.concat(me.prependWidgetsToNewColumn(collection.getAt(i), collection.getAt(i - 1)));
+                }
+                for(i = offset; i < me.columnCount; i++) {
+                    if(collection.getAt(i).items.getCount() <= 1) {
+                        continue;
                     }
-
-                    var newRowId = newColumn.items.getCount() - 1,
-                        newWidget = widget.cloneConfig({
-                            position: {
-                                columnId: newColumnId,
-                                rowId: newRowId
-                            }
-                        });
-
-                    widgetsToMove.push(newWidget);
-                    newColumn.insert(newRowId, newWidget);
-
-                    widgetsToUpdate.push({
-                        column: newColumnId,
-                        position: newRowId,
-                        id: widget.viewId
-                    });
-
-                    column.remove(widget, true);
-                });
+                    widgetsToUpdate = widgetsToUpdate.concat(me.prependWidgetsToNewColumn(collection.getAt(i), collection.getAt(i - offset)));
+                }
+            } else {
+                for(i = me.columnCount - 1; i > me.columnsShown - 1; i--) {
+                    widgetsToUpdate = widgetsToUpdate.concat(me.appendWidgetsToNewColumn(collection.getAt(i), collection.getAt(i - 1)));
+                }
             }
 
-            if(widgetsToUpdate.length !== 0) {
+            Ext.resumeLayouts(true);
+
+            if(widgetsToUpdate && widgetsToUpdate.length !== 0) {
                 me.fireEvent('saveWidgetPositions', widgetsToUpdate);
             }
         }, 1);
+    },
+
+    /**
+     * Appends all widget of the one column into the other.
+     *
+     * @param oldColumn
+     * @param newColumn
+     * @returns { Array }
+     */
+    appendWidgetsToNewColumn: function(oldColumn, newColumn) {
+        var newColumnId = newColumn.columnId,
+            widgetsToUpdate = [],
+            newRowId;
+
+        oldColumn.items.each(function(widget) {
+            if(widget === oldColumn.dropProxyEl) {
+                return true;
+            }
+
+            newRowId = newColumn.items.getCount() - 1;
+
+            var newWidget = widget.cloneConfig({
+                position: {
+                    columnId: newColumnId,
+                    rowId: newRowId
+                }
+            });
+
+            newColumn.insert(newRowId, newWidget);
+
+            widgetsToUpdate.push({
+                column: newColumnId,
+                position: newRowId,
+                id: widget.viewId
+            });
+
+            oldColumn.remove(widget, true);
+        });
+
+        return widgetsToUpdate;
+    },
+
+    /**
+     * Prepends all widget of the one column into the other.
+     *
+     * @param oldColumn
+     * @param newColumn
+     * @returns { Array }
+     */
+    prependWidgetsToNewColumn: function(oldColumn, newColumn) {
+        var newColumnId = newColumn.columnId,
+            widgetsToUpdate = [],
+            newRowId = 0,
+            rowOffset = oldColumn.items.getCount() - 1,
+            newIndex;
+
+        newColumn.items.each(function(widget, index){
+            if(widget === newColumn.dropProxyEl) {
+                return true;
+            }
+
+            newIndex = index + rowOffset;
+
+            widget.position.rowId = newIndex;
+
+            widgetsToUpdate.push({
+                column: newColumnId,
+                position: newIndex,
+                id: widget.viewId
+            });
+        });
+
+        oldColumn.items.each(function(widget, index) {
+            if(widget === oldColumn.dropProxyEl) {
+                return true;
+            }
+
+            newRowId = index;
+
+            var newWidget = widget.cloneConfig({
+                position: {
+                    columnId: newColumnId,
+                    rowId: newRowId
+                }
+            });
+
+            newColumn.insert(newRowId, newWidget);
+
+            widgetsToUpdate.push({
+                column: newColumnId,
+                position: newRowId,
+                id: widget.viewId
+            });
+
+            oldColumn.remove(widget, true);
+
+        });
+
+        return widgetsToUpdate;
     },
 
     /**
@@ -691,16 +781,16 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             items = [];
 
         me.widgetStore.each(function(widget) {
-             items.push({
-                 text: widget.get('label'),
-                 widgetId: widget.get('id'),
-                 iconCls: 'sprite-plus-circle-frame',
-                 listeners: {
-                     click: function(menuItem) {
-                         me.fireEvent('addWidget', me, widget.get('name'), menuItem);
-                     }
-                 }
-             });
+            items.push({
+                text: widget.get('label'),
+                widgetId: widget.get('id'),
+                iconCls: 'sprite-plus-circle-frame',
+                listeners: {
+                    click: function(menuItem) {
+                        me.fireEvent('addWidget', me, widget.get('name'), menuItem);
+                    }
+                }
+            });
         });
 
         return items;
