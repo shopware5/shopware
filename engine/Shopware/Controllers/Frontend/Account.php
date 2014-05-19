@@ -49,7 +49,14 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         if(!in_array($this->Request()->getActionName(), array('login', 'logout', 'password', 'ajax_login', 'ajax_logout'))
             && !$this->admin->sCheckUser())
         {
-            return $this->forward('login');
+            // If using the new template, the 'GET' action will be handled
+            // in the Register controller (unified login/register page)
+            if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
+                return $this->forward('index', 'register');
+            } else {
+                // redirecting to login action should be considered deprecated
+                return $this->forward('login');
+            }
         }
         $this->View()->sUserData = $this->admin->sGetUserData();
     }
@@ -290,6 +297,13 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             }
             $this->redirect(array('controller' => $target));
         }
+
+        // If using the new template, the 'GET' action will be handled
+        // in the Register controller (unified login/register page)
+        if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
+            $this->redirect(array('action' => 'index', 'controller' => 'register'));
+        }
+
     }
 
     /**
@@ -736,6 +750,8 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
     /**
      * Login account by ajax request
+     *
+     * @deprecated only used for SW4.x templates
      */
     public function ajaxLoginAction()
     {

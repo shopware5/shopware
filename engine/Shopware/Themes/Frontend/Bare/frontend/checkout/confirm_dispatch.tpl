@@ -28,9 +28,11 @@
                 {if !{config name='IgnoreAGB'}}
                     <input type="hidden" class="agb-checkbox" name="sAGB" value="{if $sAGBChecked}1{else}0{/if}" />
                 {/if}
-				<div class="actions">
-					<input type="submit" value="{s name='CheckoutDispatchLinkSend'}Ändern{/s}" class="button-middle small" />
-				</div>
+                {if $hideSubmitButton !== true}
+                    <div class="actions">
+                        <input type="submit" value="{s name='CheckoutDispatchLinkSend'}Ändern{/s}" class="button-middle small" />
+                    </div>
+                {/if}
 			{/block}
 		{else}
 			<div class="grid_15 method_last">
