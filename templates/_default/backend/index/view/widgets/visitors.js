@@ -158,20 +158,22 @@ Ext.define('Shopware.apps.Index.view.widgets.Visitors', {
      * for all current visitors in the shop.
      *
      * @public
-     * @return [object] Ext.XTemplate
+     * @return { object } Ext.XTemplate
      */
     createVisitorsOnlineTemplate: function() {
-        var me = this;
-
-        return new Ext.XTemplate(
-                '{literal}<tpl for=".">',
+        var me = this,
+            html = [
+                '{literal}',
+                '<tpl for=".">',
                 '<div class="visitors-online">',
                 '<span class="visitors">{visitors}</span>',
-
                 '<strong class="title">' + me.snippets.visitors_online + '</strong>',
                 '</div>',
-                '</tpl>{/literal}'
-        );
+                '</tpl>',
+                '{/literal}'
+            ];
+
+        return new Ext.XTemplate(html.join('\n'));
     },
 
     /**
