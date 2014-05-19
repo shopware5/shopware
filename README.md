@@ -1,5 +1,7 @@
 # Shopware 4
 
+[![Build Status](https://travis-ci.org/ShopwareAG/shopware-4.svg?branch=master)](https://travis-ci.org/ShopwareAG/shopware-4)
+
 - **License**: Dual license AGPL v3 / Proprietary
 - **Github Repository**: <https://github.com/ShopwareAG/shopware-4>
 - **Issue-Tracker**: <http://jira.shopware.de/jira>
