@@ -353,7 +353,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
         /** @var Shopware\Models\Emotion\Repository $emotionRepository */
         $emotionRepository = $this->get('models')->getRepository('Shopware\Models\Emotion\Emotion');
 
-        $builder = $emotionRepository->getCampaigns();
+        $builder = $emotionRepository->getCampaignsByCategoryId(Shopware()->Shop()->getCategory()->getId());
         $campaigns = $builder->getQuery()->getScalarResult();
 
         foreach ($campaigns as $campaign) {

@@ -279,6 +279,26 @@ class Repository extends ModelRepository
     }
 
     /**
+     * Returns the builder selecting only Campaigns of the given shop category
+     * @param $categoryId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getCampaignsByCategoryId($categoryId)
+    {
+        $builder = $this->getCampaigns();
+        $builder->andWhere(
+            $builder->expr()->orX(
+                $builder->expr()->eq('categories.id', '?1'), // = 3
+                $builder->expr()->like('categories.path', '?2') //like '%|3|
+            )
+        )
+            ->setParameter(1, $categoryId)
+            ->setParameter(2, '%|' . $categoryId . '|');
+
+        return $builder;
+    }
+
+    /**
      * @param integer $id
      * @return \Doctrine\ORM\Query
      */
