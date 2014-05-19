@@ -75,6 +75,9 @@ class Router
             $response->setHttpResponseCode(200);
         } elseif ($method === 'PUT') {
             $action = 'put';
+        } elseif ($method === 'POST' && is_array(json_decode($request->getRawBody(),true)[0])) { # BUGFIX Ticket SW-8517
+            $action = 'batch';									
+            $response->setHttpResponseCode(201);
         } elseif ($method === 'POST') {
             $action = 'post';
             // Set default http status code for successfull request
