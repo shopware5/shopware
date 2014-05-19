@@ -1382,16 +1382,13 @@ class sBasket
         );
 
         if ($id && $id != "voucher") {
-            $delete = $this->db->delete(
+            $this->db->delete(
                 's_order_basket',
                 array(
                     'sessionID = ?' => $this->session->get('sessionId'),
                     'id = ?' => $id
                 )
             );
-            if (!$delete) {
-                throw new Enlight_Exception("Basket Delete ##01 Could not delete item ($id)");
-            }
             if (empty($modus)) {
                 $this->sUpdateVoucher();
             }
