@@ -473,6 +473,42 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     }
 
     /**
+     * Used only for new customers
+     * Action to handle selection of default shipping and payment methods
+     */
+    public function shippingPaymentAction()
+    {
+        // This action is only available for new customers
+        // redirect if we come from an existing account
+        if (!empty($this->session['sRegisterFinished'])) {
+            $this->redirect(array('action' => 'index'));
+        }
+
+        if ($this->Request()->isPost()) {
+
+        }
+
+        $this->View()->sPayment = $this->getSelectedPayment();
+        $this->View()->sUserData["payment"] = $this->View()->sPayment;
+
+        $this->View()->sBasket = $this->getBasket();
+
+        $this->View()->sDispatch = $this->getSelectedDispatch();
+        $this->View()->sPayments = $this->getPayments();
+        $this->View()->sDispatches = $this->getDispatches();
+
+        $this->View()->sLaststock = $this->basket->sCheckBasketQuantities();
+        $this->View()->sShippingcosts = $this->View()->sBasket['sShippingcosts'];
+        $this->View()->sShippingcostsDifference = $this->View()->sBasket['sShippingcostsDifference'];
+        $this->View()->sAmount = $this->View()->sBasket['sAmount'];
+        $this->View()->sAmountWithTax = $this->View()->sBasket['sAmountWithTax'];
+        $this->View()->sAmountTax = $this->View()->sBasket['sAmountTax'];
+        $this->View()->sAmountNet = $this->View()->sBasket['AmountNetNumeric'];
+
+        $this->View()->sTargetAction = 'shippingPayment';
+    }
+
+    /**
      * Get complete user-data as an array to use in view
      *
      * @return array
