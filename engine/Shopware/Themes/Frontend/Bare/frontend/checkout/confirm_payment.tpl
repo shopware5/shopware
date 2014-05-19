@@ -1,4 +1,3 @@
-<pre>{$sTargetAction|print_r}</pre>
 {if !$sRegisterFinished}
     <div class="space"></div>
     <form name="" method="POST" action="{url controller=account action=savePayment sTarget=$sTarget|default:'checkout'}" class="payment">
