@@ -25,7 +25,7 @@
 		<div class="panel--body">
 			{foreach from=$sSupport.sElements item=sElement key=sKey}
 			{if $sSupport.sFields[$sKey]||$sElement.note}
-				<div {if $sSupport.sElements[$sKey].typ eq 'textarea'}class="textarea"{elseif $sSupport.sElements[$sKey].typ eq 'checkbox'}class="checkbox"{elseif $sSupport.sElements[$sKey].typ eq 'select'}class="select--box"{/if}>
+				<div {if $sSupport.sElements[$sKey].typ eq 'textarea'}class="textarea"{elseif $sSupport.sElements[$sKey].typ eq 'checkbox'}class="checkbox"{elseif $sSupport.sElements[$sKey].typ eq 'select'}class="field--select"{/if}>
 					{eval var=$sSupport.sFields[$sKey]}
 				</div>
 
@@ -37,17 +37,28 @@
 			{/if}
 			{/foreach}
 
-			<div class="forms--captcha">
-				<div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
-				<div class="code">
-					<label>{s name='SupportLabelCaptcha'}{/s}</label>
-					<input type="text" required="required" aria-required="true" name="sCaptcha" class="{if $sSupport.sErrors.e.sCaptcha} has--error{/if}" />
-				</div>
-			</div>
 
-			<p class="forms--requiredfields">{s name='SupportLabelInfoFields'}{/s}</p>
-			<div class="buttons">
-				<button class="btn btn--primary" type="submit" name="Submit">{s name='SupportActionSubmit'}{/s}<i class="icon--arrow-right"></i></button>
-			</div>
+			{block name='frontend_forms_elements_form_captcha'}
+				{* Captcha *}
+				<div class="forms--captcha">
+					<div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
+					<strong class="captcha--notice">{s name='SupportLabelCaptcha'}{/s}</strong>
+					<div class="captcha--code">
+						<input type="text" required="required" aria-required="true" name="sCaptcha"{if $sSupport.sErrors.e.sCaptcha} class="has--error"{/if} />
+					</div>
+				</div>
+			{/block}
+
+			{block name='frontend_forms_elements_form_required'}
+				{* Required fields hint *}
+				<div class="forms--required">{s name='SupportLabelInfoFields'}{/s}</div>
+			{/block}
+
+			{block name='frontend_forms_elements_form_submit'}
+				{* Forms Submit *}
+				<div class="buttons">
+					<button class="btn btn--primary" type="submit" name="Submit">{s name='SupportActionSubmit'}{/s}<i class="icon--arrow-right"></i></button>
+				</div>
+			{/block}
 		</div>
 </form>

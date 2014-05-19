@@ -181,7 +181,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             $captcha = str_replace(' ', '', strtolower($this->Request()->sCaptcha));
             $rand = $this->Request()->getPost('sRand');
             if (empty($rand) || $captcha != substr(md5($rand), 0, 5)) {
-                $this->_elements["sCaptcha"]['class'] = " instyle_error";
+		$this->_elements["sCaptcha"]['class'] = " has--error";
                 $this->_errors["e"]["sCaptcha"] = true;
             }
         }
@@ -191,9 +191,9 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 if (isset($this->_errors['e'][$key])) {
                     if ($this->_elements[$key]['typ'] == "text2") {
                         $class = explode(";", $this->_elements[$key]['class']);
-                        $this->_elements[$key]['class'] = implode(" instyle_error;", $class) . " instyle_error";
+			$this->_elements[$key]['class'] = implode(" has--error;", $class) . " has--error";
                     } else {
-                        $this->_elements[$key]['class'] .= " instyle_error";
+			$this->_elements[$key]['class'] .= " has--error";
                     }
                 }
             }
