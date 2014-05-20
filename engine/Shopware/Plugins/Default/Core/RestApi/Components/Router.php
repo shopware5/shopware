@@ -63,6 +63,10 @@ class Router
 
         $method = strtoupper($request->getParam('_method', $request->getMethod()));
         $action = 'invalid';
+        
+        $rawBody = $request->getRawBody(); 
+        $input = json_decode($rawBody,true);
+        $batchAction = is_array($input[0]);
 
         if ($method === 'GET' && $id === false) {
             $action = 'index';
@@ -75,7 +79,7 @@ class Router
             $response->setHttpResponseCode(200);
         } elseif ($method === 'PUT') {
             $action = 'put';
-        } elseif ($method === 'POST' && is_array(json_decode($request->getRawBody(),true)[0])) { # BUGFIX Ticket SW-8517
+        } elseif ($method === 'POST' && $batchAction) { # BUGFIX Ticket SW-8517
             $action = 'batch';									
             $response->setHttpResponseCode(201);
         } elseif ($method === 'POST') {
