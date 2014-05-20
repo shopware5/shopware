@@ -356,6 +356,8 @@ Ext.onReady(function() {
         title: 'Detailed information',
         statics: {
             displayConfig: {
+                model: undefined,
+                fields: { },
                 emptyText: 'No record selected.'
             }
         }
@@ -365,6 +367,9 @@ Ext.onReady(function() {
         override: 'Shopware.window.Detail',
         statics: {
             displayConfig: {
+                eventAlias: undefined,
+                associations: [],
+                hasOwnController: false,
                 cancelButtonText: 'Cancel',
                 saveButtonText: 'Save'
             }
@@ -374,6 +379,10 @@ Ext.onReady(function() {
         override: 'Shopware.window.Progress',
         statics: {
             displayConfig: {
+                infoText: undefined,
+                tasks: [ ],
+                outputProperties: [ 'id', 'number', 'name' ],
+                displayResultGrid: true,
                 cancelButtonText: 'Cancel process',
                 closeButtonText: 'Close window',
                 successHeader: 'Success',
