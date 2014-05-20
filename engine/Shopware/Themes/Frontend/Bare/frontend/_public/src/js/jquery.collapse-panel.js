@@ -3,7 +3,18 @@
 
     var pluginName = 'collapsePanel',
         defaults = {
-            slideSpeed: 400
+
+            // The selector of the target element which should be collapsed.
+            collapseTarget: false,
+
+            // Additional class which will be added to the collapse target.
+            collapseTargetCls: 'js--collapse-target',
+
+            // Decide if sibling collapse panels should be closed when the target is collapsed.
+            closeSiblings: false,
+
+            // The speed of the collapse animation in ms.
+            animationSpeed: 300
         };
 
     /**
@@ -32,15 +43,34 @@
     Plugin.prototype.init = function() {
         var me = this;
 
-        me.targetElId = me.$el.attr('data-collapse-target');
+        me.getDataConfig();
 
-        if (me.targetElId !== undefined) {
-            me.$targetEl = $(me.targetElId);
+        if (me.opts.collapseTarget.length) {
+            me.$targetEl = $(me.opts.collapseTarget);
         } else {
             me.$targetEl = me.$el.next('.collapse--content');
         }
 
+        me.$targetEl.addClass(me.opts.collapseTargetCls);
+
         me.registerEvents();
+    };
+
+    /**
+     * Loads config settings which are set via data attributes and
+     * overrides the old setting with the data attribute of the
+     * same name if defined.
+     */
+    Plugin.prototype.getDataConfig = function() {
+        var me = this,
+            attr;
+
+        $.each(me.opts, function(key, value) {
+            attr = me.$el.attr('data-' + key);
+            if ( attr !== undefined ) {
+                me.opts[key] = attr;
+            }
+        });
     };
 
     /**
@@ -59,16 +89,18 @@
      * Changes the collapse state of the element.
      */
     Plugin.prototype.toggleCollapse = function() {
-        var me = this;
+        var me = this,
+            siblings = $('.'+me.opts.collapseTargetCls).not(me.$targetEl);
 
         if (me.$targetEl.hasClass('is--active')) {
             me.$el.removeClass('is--active');
-            me.$targetEl.slideUp(me.opts.slideSpeed, function() {
+            me.$targetEl.slideUp(me.opts.animationSpeed, function() {
                 me.$targetEl.removeClass('is--active');
             });
         } else {
             me.$el.addClass('is--active');
-            me.$targetEl.slideDown(me.opts.slideSpeed).addClass('is--active');
+            me.$targetEl.slideDown(me.opts.animationSpeed).addClass('is--active');
+            if (me.opts.closeSiblings) siblings.slideUp(me.opts.animationSpeed).removeClass('is--active');
         }
     };
 
@@ -81,7 +113,9 @@
         var me = this;
 
         me.$el.removeClass('is--active');
-        me.$targetEl.removeClass('is--active').hide();
+        me.$targetEl.removeClass('is--active')
+                    .removeClass(me.opts.collapseTargetCls)
+                    .removeAttr('style');
         me.$el.off('click.' + pluginName).removeData('plugin_' + pluginName);
     };
 
