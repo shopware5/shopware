@@ -303,15 +303,17 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      */
     protected function _createInputElement($element, $post = null)
     {
-        if ($element['required'] == 1) {
+	if ($element['required'] == 1) {
 	    $req = "is--required";
-		$reqsnippet = "%*%";
-        } else {
-            $req = "";
-		$reqsnippet = "";
-        }
+	    $reqsnippet = "%*%";
+		$reqaria = 'required="required" aria-required="true"';
+	} else {
+	    $req = "";
+	    $reqsnippet = "";
+		$reqaria = "";
+	}
 
-        switch ($element['typ']) {
+	switch ($element['typ']) {
             case "password":
             case "email":
             case "text":
@@ -344,7 +346,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             case "password":
             case "email":
             case "text":
-		$output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $req\" value=\"{$post}\" id=\"{$element['name']}\" placeholder=\"{$element['label']}$reqsnippet\" name=\"{$element['name']}\"/>\r\n";
+				$output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $req\" $reqaria value=\"{$post}\" id=\"{$element['name']}\" placeholder=\"{$element['label']}$reqsnippet\" name=\"{$element['name']}\"/>\r\n";
                 break;
             case "checkbox":
                 if ($post == $element['value']) {
@@ -352,22 +354,22 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 } else {
                     $checked = "";
                 }
-                $output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $req\" value=\"{$element['value']}\" id=\"{$element['name']}\" name=\"{$element['name']}\"$checked/>\r\n";
+				$output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $req\" $reqaria value=\"{$element['value']}\" id=\"{$element['name']}\" name=\"{$element['name']}\"$checked/>\r\n";
                 break;
             case "file":
-		$output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $req file\" id=\"{$element['name']}\" placeholder=\"{$element['label']}$reqsnippet\" name=\"{$element['name']}\" maxlength=\"100000\" accept=\"{$element['value']}\"/>\r\n";
+				$output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $req file\" $reqaria id=\"{$element['name']}\" placeholder=\"{$element['label']}$reqsnippet\" name=\"{$element['name']}\" maxlength=\"100000\" accept=\"{$element['value']}\"/>\r\n";
                 break;
             case "text2":
                 $element['class'] = explode(";", $element['class']);
                 $element['name'] = explode(";", $element['name']);
-		$output .= "<input type=\"text\" class=\"{$element['class'][0]} $req\" value=\"{$post[0]}\" placeholder=\"{$element['label']}$reqsnippet\" id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][0]}\"/>\r\n";
-		$output .= "<input type=\"text\" class=\"{$element['class'][1]} $req\" value=\"{$post[1]}\" placeholder=\"{$element['label']}$reqsnippet\" id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][1]}\"/>\r\n";
+				$output .= "<input type=\"text\" class=\"{$element['class'][0]} $req\" $reqaria value=\"{$post[0]}\" placeholder=\"{$element['label']}$reqsnippet\" id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][0]}\"/>\r\n";
+				$output .= "<input type=\"text\" class=\"{$element['class'][1]} $req\" $reqaria value=\"{$post[1]}\" placeholder=\"{$element['label']}$reqsnippet\" id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][1]}\"/>\r\n";
                 break;
             case "textarea":
                 if (empty($post) && $element["value"]) {
                     $post = $element["value"];
                 }
-		$output .= "<textarea class=\"{$element['class']} $req\" id=\"{$element['name']}\" placeholder=\"{$element['label']}$reqsnippet\" name=\"{$element['name']}\">{$post}</textarea>\r\n";
+				$output .= "<textarea class=\"{$element['class']} $req\" $reqaria id=\"{$element['name']}\" placeholder=\"{$element['label']}$reqsnippet\" name=\"{$element['name']}\">{$post}</textarea>\r\n";
                 break;
             case "select":
                 $values = explode(";", $element['value']);

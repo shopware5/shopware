@@ -12,7 +12,7 @@
     }
 
     .has--border {
-	.border-radius(4px);
+	.border-radius();
     }
 
     .forms--field {
@@ -27,6 +27,7 @@
 
     textarea {
 	.unitize(10, 16, margin-bottom);
+	.unitize(140, 16, min-height);
 	width: 100%;
     }
 
@@ -84,7 +85,6 @@
 	strong.captcha--notice {
 	    .unitize(8, 16, margin-bottom);
 	    display: block;
-
 	}
 
     }
@@ -113,14 +113,12 @@
 
     }
 
-
 }
 
 @media screen and (min-width: @desktopViewportWidth) {
 
     .forms--content {
 	.unitize(45, 16, margin-top);
-	float: right;
 	width: 78%;
     }
 
