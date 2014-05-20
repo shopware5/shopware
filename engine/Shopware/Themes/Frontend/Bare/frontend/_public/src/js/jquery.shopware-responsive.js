@@ -28,6 +28,8 @@ $(function() {
             $('*[data-slide-panel="true"]').slidePanel();
             $('.product--supplier').appendTo($('.product--info'));
             $('.category--teaser .hero--text').collapseText();
+            $('.btn--password').scroll();
+            $('.btn--email').scroll();
         },
         exit: function() {
             $('*[data-offcanvas="true"]').each(function() {
@@ -46,6 +48,12 @@ $(function() {
 
             var teaserText = $('.category--teaser .hero--text');
             if (teaserText.length) teaserText.data('plugin_collapseText').destroy();
+
+            var btnPassword = $('.btn--password');
+            if (btnPassword.length) btnPassword.data('plugin_scroll').destroy();
+
+            var btnEmail = $('.btn--email');
+            if (btnEmail.length) btnEmail.data('plugin_scroll').destroy();
         }
 }, {
         type: 'tablet',
@@ -53,6 +61,8 @@ $(function() {
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
             $('nav.product--actions').insertBefore($('.additional-info--tabs'));
             $('.filter--trigger').collapsePanel();
+            $('.btn--password').collapsePanel();
+            $('.btn--email').collapsePanel();
         },
         exit: function() {
             $('*[data-search-dropdown="true"]').each(function() {
@@ -62,6 +72,12 @@ $(function() {
 
             var filterTrigger = $('.filter--trigger');
             if (filterTrigger.length) filterTrigger.data('plugin_collapsePanel').destroy();
+
+            var btnPassword = $('.btn--password');
+            if (btnPassword.length) btnPassword.data('plugin_collapsePanel').destroy();
+
+            var btnEmail = $('.btn--email');
+            if (btnEmail.length) btnEmail.data('plugin_collapsePanel').destroy();
         }
     }, {
         type: 'tabletLandscape',
@@ -69,6 +85,8 @@ $(function() {
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
             $('nav.product--actions').insertBefore($('.additional-info--tabs'));
             $('.filter--trigger').collapsePanel();
+            $('.btn--password').collapsePanel();
+            $('.btn--email').collapsePanel();
         },
         exit: function() {
             $('*[data-search-dropdown="true"]').each(function() {
@@ -78,17 +96,33 @@ $(function() {
 
             var filterTrigger = $('.filter--trigger');
             if (filterTrigger.length) filterTrigger.data('plugin_collapsePanel').destroy();
+
+            var btnPassword = $('.btn--password');
+            if (btnPassword.length) btnPassword.data('plugin_collapsePanel').destroy();
+
+            var btnEmail = $('.btn--email');
+            if (btnEmail.length) btnEmail.data('plugin_collapsePanel').destroy();
         }
     }, {
         type: 'desktop',
         enter: function() {
             $('.filter--trigger').collapsePanel();
+            $('.btn--password').collapsePanel();
+            $('.btn--email').collapsePanel();
         },
         exit: function() {
             var filterTrigger = $('.filter--trigger');
             if (filterTrigger.length) filterTrigger.data('plugin_collapsePanel').destroy();
+
+            var btnPassword = $('.btn--password');
+            if (btnPassword.length) btnPassword.data('plugin_collapsePanel').destroy();
+
+            var btnEmail = $('.btn--email');
+            if (btnEmail.length) btnEmail.data('plugin_collapsePanel').destroy();
         }
     }]);
+
+    window.widgets = window.widgets || [];
 
     if (window.widgets !== 'undefined' && window.widgets.length > 0) {
         $.each(window.widgets, function(index, widget) {
