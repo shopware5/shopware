@@ -5,7 +5,7 @@
 	{$sBreadcrumb = [['name'=>{$sSupport.name}, 'link'=>{url controller=ticket sFid=$sSupport.id}]]}
 {/block}
 
-{* Sidebar left
+{* Sidebar left *}
 {block name='frontend_index_content_left'}
 	{include file="frontend/index/sidebar.tpl"}
 {/block}
@@ -32,7 +32,7 @@
 						{include file="frontend/forms/elements.tpl"}
 					{/block}
 				{elseif $sSupport.text2}
-					<a href="{url controller='index'}" class="btn btn--primary">{s name='FormsLinkBack'}{/s}</a>
+					<a href="{url controller='index'}" class="btn btn--secondary">{s name='FormsLinkBack'}{/s}</a>
 				{else}
 					<div class="col_center_container">
 						<p>{s name='FormsTextContact'}{/s}</p>
@@ -41,6 +41,7 @@
 				{/if}
 			</div>
 		</div>
+
 	</div>
 {/block}
 

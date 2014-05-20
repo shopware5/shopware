@@ -305,8 +305,10 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     {
         if ($element['required'] == 1) {
 	    $req = "is--required";
+		$reqsnippet = "%*%";
         } else {
             $req = "";
+		$reqsnippet = "";
         }
 
         switch ($element['typ']) {
@@ -342,7 +344,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             case "password":
             case "email":
             case "text":
-		$output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $req\" value=\"{$post}\" id=\"{$element['name']}\" placeholder=\"{$element['label']}\" name=\"{$element['name']}\"/>\r\n";
+		$output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $req\" value=\"{$post}\" id=\"{$element['name']}\" placeholder=\"{$element['label']}$reqsnippet\" name=\"{$element['name']}\"/>\r\n";
                 break;
             case "checkbox":
                 if ($post == $element['value']) {
@@ -353,23 +355,23 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 $output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $req\" value=\"{$element['value']}\" id=\"{$element['name']}\" name=\"{$element['name']}\"$checked/>\r\n";
                 break;
             case "file":
-		$output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $req file\" id=\"{$element['name']}\" placeholder=\"{$element['label']}\" name=\"{$element['name']}\" maxlength=\"100000\" accept=\"{$element['value']}\"/>\r\n";
+		$output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $req file\" id=\"{$element['name']}\" placeholder=\"{$element['label']}$reqsnippet\" name=\"{$element['name']}\" maxlength=\"100000\" accept=\"{$element['value']}\"/>\r\n";
                 break;
             case "text2":
                 $element['class'] = explode(";", $element['class']);
                 $element['name'] = explode(";", $element['name']);
-		$output .= "<input type=\"text\" class=\"{$element['class'][0]} $req\" value=\"{$post[0]}\" placeholder=\"{$element['label']}\" id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][0]}\"/>\r\n";
-		$output .= "<input type=\"text\" class=\"{$element['class'][1]} $req\" value=\"{$post[1]}\" placeholder=\"{$element['label']}\" id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][1]}\"/>\r\n";
+		$output .= "<input type=\"text\" class=\"{$element['class'][0]} $req\" value=\"{$post[0]}\" placeholder=\"{$element['label']}$reqsnippet\" id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][0]}\"/>\r\n";
+		$output .= "<input type=\"text\" class=\"{$element['class'][1]} $req\" value=\"{$post[1]}\" placeholder=\"{$element['label']}$reqsnippet\" id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][1]}\"/>\r\n";
                 break;
             case "textarea":
                 if (empty($post) && $element["value"]) {
                     $post = $element["value"];
                 }
-		$output .= "<textarea class=\"{$element['class']} $req\" id=\"{$element['name']}\" placeholder=\"{$element['label']}\" name=\"{$element['name']}\">{$post}</textarea>\r\n";
+		$output .= "<textarea class=\"{$element['class']} $req\" id=\"{$element['name']}\" placeholder=\"{$element['label']}$reqsnippet\" name=\"{$element['name']}\">{$post}</textarea>\r\n";
                 break;
             case "select":
                 $values = explode(";", $element['value']);
-                $output .= "<select class=\"{$element['class']} $req\" id=\"{$element['name']}\" name=\"{$element['name']}\">\r\n\t<option selected=\"selected\" value=\"\">" . Shopware()->Snippets()->getNamespace('frontend/newsletter/index')->get('NewsletterLabelSelect') . "</option>";
+		$output .= "<select class=\"{$element['class']} $req\" id=\"{$element['name']}\" name=\"{$element['name']}\">\r\n\t<option selected=\"selected\" value=\"\">" . Shopware()->Snippets()->getNamespace('frontend/newsletter/index')->get('NewsletterLabelSelect') . "$reqsnippet</option>";
                 foreach ($values as $value) {
                     if ($value == $post) {
                         $output .= "<option selected>$value</option>";
