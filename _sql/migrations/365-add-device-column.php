@@ -9,6 +9,3 @@ EOD;
         $this->addSql($sql);
     }
 }
-
-
-
