@@ -743,7 +743,8 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      * @returns { Array }
      */
     appendWidgetsToNewColumn: function (oldColumn, newColumn) {
-        var newColumnId = newColumn.columnId,
+        var me = this,
+            newColumnId = newColumn.columnId,
             widgetsToUpdate = [],
             newRowId;
 
@@ -754,12 +755,11 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
 
             newRowId = newColumn.items.getCount() - 1;
 
-            var newWidget = widget.cloneConfig({
-                position: {
-                    columnId: newColumnId,
-                    rowId: newRowId
-                }
-            });
+            var newWidget = me.createWidget(widget.xtype, widget.widgetId, {
+                id: widget.viewId,
+                column: newColumnId,
+                position: newRowId
+            }, widget.title);
 
             newColumn.insert(newRowId, newWidget);
 
@@ -783,7 +783,8 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      * @returns { Array }
      */
     prependWidgetsToNewColumn: function (oldColumn, newColumn) {
-        var newColumnId = newColumn.columnId,
+        var me = this,
+            newColumnId = newColumn.columnId,
             widgetsToUpdate = [],
             newRowId = 0,
             rowOffset = oldColumn.items.getCount() - 1,
@@ -812,12 +813,11 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
 
             newRowId = index;
 
-            var newWidget = widget.cloneConfig({
-                position: {
-                    columnId: newColumnId,
-                    rowId: newRowId
-                }
-            });
+            var newWidget = me.createWidget(widget.xtype, widget.widgetId, {
+                id: widget.viewId,
+                column: newColumnId,
+                position: newRowId
+            }, widget.title);
 
             newColumn.insert(newRowId, newWidget);
 
