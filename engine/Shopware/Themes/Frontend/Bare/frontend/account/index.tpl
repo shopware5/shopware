@@ -5,8 +5,9 @@
 	{assign var='sBreadcrumb' value=[['name'=>"{s name='AccountTitle'}{/s}", 'link' =>{url action='index'}]]}
 {/block}
 
-{* Account Sidebar *}
-{block name="frontend_index_content_left"}
+{block name="frontend_index_left_categories_my_account"}{/block}
+
+{block name="frontend_index_left_categories" prepend}
 	{block name="frontend_account_sidebar"}
 		{include file="frontend/account/sidebar.tpl"}
 	{/block}
@@ -15,15 +16,6 @@
 {* Account Main Content *}
 {block name='frontend_index_content'}
 	<div class="content block account--content">
-
-		{block name="frontend_account_index_welcome"}
-			<div class="account--welcome panel">
-				<h1 class="panel--title">{s name='AccountHeaderWelcome'}{/s}, {$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}</h1>
-				<div class="panel--body is--wide">
-					<p>{s name='AccountHeaderInfo'}{/s}</p>
-				</div>
-			</div>
-		{/block}
 
 		{* Success messages *}
 		{block name="frontend_account_index_success_messages"}
@@ -37,6 +29,15 @@
 					{include file="frontend/register/error_message.tpl" error_messages=$sErrorMessages}
 				</div>
 			{/if}
+		{/block}
+
+		{block name="frontend_account_index_welcome"}
+			<div class="account--welcome panel">
+				<h1 class="panel--title">{s name='AccountHeaderWelcome'}{/s}, {$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}</h1>
+				<div class="panel--body is--wide">
+					<p>{s name='AccountHeaderInfo'}{/s}</p>
+				</div>
+			</div>
 		{/block}
 
 		{* General user informations *}
@@ -53,8 +54,20 @@
 				</div>
 
 				<div class="panel--actions is--wide">
-					<a href="#" class="btn btn--secondary is--small">{s name="AccountLinkChangePassword"}{/s}</a>
-					<a href="#" class="btn btn--secondary is--small">{s name='AccountLinkChangeMail'}{/s}</a>
+					<a href="#account--password"
+					   class="btn btn--secondary is--small btn--password"
+					   data-collapseTarget="#account--password"
+					   data-closeSiblings="true"
+					   data-scrollTarget="#account--password">
+						{s name="AccountLinkChangePassword"}{/s}
+					</a>
+					<a href="#account--email"
+					   class="btn btn--secondary is--small btn--email"
+					   data-collapseTarget="#account--email"
+					   data-closeSiblings="true"
+					   data-scrollTarget="#account--email">
+						{s name='AccountLinkChangeMail'}{/s}
+					</a>
 				</div>
 			</div>
 		{/block}
@@ -87,7 +100,7 @@
 
 		{* Set new password *}
 		{block name="frontend_account_index_password"}
-			<div class="account--password panel has--border password{if $sErrorFlag.password || $sErrorFlag.passwordConfirmation} is--block{/if}">
+			<div id="account--password" class="account--password panel has--border password{if $sErrorFlag.password || $sErrorFlag.passwordConfirmation || $sErrorFlag.currentPassword} is--block{/if}">
 
 				<h2 class="panel--title is--underline">{s name='AccountLinkChangePassword'}{/s}</h2>
 
@@ -117,7 +130,7 @@
 
 		{* Edit mail address *}
 		{block name="frontend_account_index_email"}
-			<div class="account--email panel has--border email{if $sErrorFlag.email || $sErrorFlag.emailConfirmation} is--block{/if}">
+			<div id="account--email" class="account--email panel has--border email{if $sErrorFlag.email || $sErrorFlag.emailConfirmation} is--block{/if}">
 
 				<h2 class="panel--title is--underline">{s name='AccountLinkChangeMail'}{/s}</h2>
 
@@ -155,7 +168,7 @@
 					<form name="frmRegister" method="post" action="{url action=saveNewsletter}">
 						<fieldset>
 							<p>
-								<input type="checkbox" name="newsletter" value="1" id="newsletter" {if $sUserData.additional.user.newsletter}checked="checked"{/if} />
+								<input type="checkbox" name="newsletter" value="1" id="newsletter" data-auto-submit="true" {if $sUserData.additional.user.newsletter}checked="checked"{/if} />
 								<label for="newsletter">
 									{s name="AccountLabelWantNewsletter"}{/s}
 								</label>
