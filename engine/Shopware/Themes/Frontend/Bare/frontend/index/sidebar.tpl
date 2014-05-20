@@ -3,11 +3,11 @@
 	{block name='frontend_index_left_campaigns_top'}
 		{include file="frontend/campaign/box.tpl" campaignsData=$campaigns.leftTop}
 	{/block}
-	
-	{* Sidebar category tree *}
-	{block name='frontend_index_left_categories'}
-        <div class="navigation--smartphone">
-            <ul class="navigation--list ">
+
+	{* Mobile specific menu actions *}
+	{block name="frontend_index_left_navigation_smartphone"}
+		<div class="navigation--smartphone">
+			<ul class="navigation--list ">
 
 				{* Trigger to close the off canvas menu *}
 				{block name="frontend_index_left_categories_close_menu"}
@@ -26,13 +26,17 @@
 						</a>
 					</li>
 				{/block}
-            </ul>
+			</ul>
+		</div>
+	{/block}
 
-			{* Headline which should only be visible on mobile *}
-			{block name="frontend_index_left_categories_headline"}
-				<h2 class="navigation--headline">{s name="IndexSidebarCategoryHeadline"}Kategorien{/s}</h2>
-			{/block}
-        </div>
+	{* Sidebar category tree *}
+	{block name='frontend_index_left_categories'}
+
+		{* Categories headline *}
+		{block name="frontend_index_left_categories_headline"}
+			<h2 class="categories--headline navigation--headline">{s name="IndexSidebarCategoryHeadline"}Kategorien{/s}</h2>
+		{/block}
 
 		{* Actual include of the categories *}
 		{block name='frontend_index_left_categories_inner'}
