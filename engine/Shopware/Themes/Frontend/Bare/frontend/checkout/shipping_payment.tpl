@@ -53,7 +53,7 @@
         <div class="personal-information grid_16 first">
             <div class="inner_container">
                 {* Payment method *}
-                {include file="frontend/checkout/confirm_payment.tpl" sTarget="shippingPayment"}
+                {include file="frontend/checkout/confirm_payment.tpl" sTarget="shippingPayment" sRegisterFinished=false}
             </div>
             <div class="inner_container">
                 {* Payment method *}
