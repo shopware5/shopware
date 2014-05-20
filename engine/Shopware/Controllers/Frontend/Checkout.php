@@ -480,7 +480,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         // This action is only available for new customers
         // redirect if we come from an existing account
-        if (!empty($this->session['sRegisterFinished'])) {
+        if (empty($this->session['sRegisterFinished'])) {
             $this->redirect(array('action' => 'index'));
         }
 
