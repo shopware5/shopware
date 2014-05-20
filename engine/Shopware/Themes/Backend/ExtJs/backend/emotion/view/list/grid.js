@@ -127,11 +127,15 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             header: '{s name=grid/column/active}Active{/s}',
             dataIndex: 'emotions.status',
             flex: 1,
+            sortable: false,
             renderer: me.statusColumn
-        }, {
+        },
+        {
             xtype: 'actioncolumn',
             header: '{s name=grid/column/action}Actions{/s}',
-            width: 160,
+            width: 80,
+            border: 0,
+            sortable: false,
             items: [
 			/*{if {acl_is_allowed privilege=delete}}*/
 			{
@@ -152,44 +156,27 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             },
             /*{/if}*/
             {
-                iconCls: 'sprite-television',
-                tooltip:'{s name=list/action_column/copy_desktop}Copy shopping world for desktop devices{/s}',
-                handler: function(view, rowIndex, colIndex) {
-                    me.fireEvent('duplicateemotion', me, view, rowIndex, colIndex, 0);
-                }
-            },
-            {
-                iconCls: 'sprite-e-book-reader',
-                tooltip:'{s name=list/action_column/copy_tablet}Copy shopping world for tablet devices{/s}',
-                handler: function(view, rowIndex, colIndex) {
-                    me.fireEvent('duplicateemotion', me, view, rowIndex, colIndex, 1);
-                }
-            },
-            {
-                iconCls: 'sprite-mobile-phone-off',
-                tooltip:'{s name=list/action_column/copy_mobile}Copy shopping world for mobile devices{/s}',
-                handler: function(view, rowIndex, colIndex) {
-                    me.fireEvent('duplicateemotion', me, view, rowIndex, colIndex, 2);
-                }
-            },
-            {
-                iconCls: 'sprite-binocular--arrow',
+                iconCls: 'sprite-globe--arrow',
                 tooltip:'{s name=list/action_column/preview}Preview shopping world{/s}',
                 handler: function(view, rowIndex, colIndex, record) {
 
                     var listStore = view.getStore(),
                         deviceId = listStore.getAt(rowIndex).get('device'),
                         emotionId = listStore.getAt(rowIndex).get('id'),
-                        width = me.deviceWidth.desktop;
+                        emotionName = listStore.getAt(rowIndex).get('name'),
+                        width = me.deviceWidth.desktop,
+                        device = 'Desktop';
 
                     if(deviceId == 1) {
+                        device = 'Tablet';
                         width = me.deviceWidth.tablet;
                     } else if(deviceId == 2) {
+                        device = 'Mobile';
                         width = me.deviceWidth.mobile;
                     }
 
                     new Ext.Window({
-                        title : "{s name=window/preview/title}Shopping world Preview{/s}",
+                        title : "{s name=window/preview/title}Shopping world Preview{/s}: " + emotionName + ' (' + device + ')',
                         width : width,
                         height: '90%',
                         layout : 'fit',
@@ -205,12 +192,57 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
                 }
             }
 			]
-        }];
+        },
+        {
+            xtype: 'buttoncolumn',
+            width: 50,
+            header: '',
+            sortable: false,
+            borderLeftWidth: 0,
+            iconCls: 'sprite-document-copy',
+            buttonText: '',
+            tooltip: 'Einkaufswelt kopieren',
+            handler: function (view, rowIndex, colIndex) {
+                var listStore = view.getStore();
+                var record = listStore.getAt(rowIndex);
+                var device = record.get('device');
+
+                me.fireEvent('duplicateemotion', me, record, device);
+            },
+            stopSelection: true,        //don't select record on button click
+            items: [
+                {
+                    iconCls: 'sprite-television',
+                    text: '{s name="list/action_column/copy_desktop"}Als Desktop Einkaufswelt{/s}',
+                    handler: function (item, scope) {
+                        var record = scope.record;
+                        me.fireEvent('duplicateemotion', me, record, 0);
+                    }
+                },
+                {
+                    iconCls: 'sprite-media-player-phone-horizontal',
+                    text: '{s name="list/action_column/copy_tablet"}Als Tablet Einkaufswelt{/s}',
+                    handler: function (item, scope) {
+                        var record = scope.record;
+                        me.fireEvent('duplicateemotion', me, record, 1);
+                    }
+                },
+                {
+                    iconCls: 'sprite-media-player-phone',
+                    text: '{s name="list/action_column/copy_mobile"}Als mobile Einkaufswelt{/s}',
+                    handler: function (item, scope) {
+                        var record = scope.record;
+                        me.fireEvent('duplicateemotion', me, record, 2);
+                    }
+                }
+            ]
+        }
+        ];
 
         return columns;
     },
 
-    /**
+    /** 
      * Column renderer function for the category name column.
      * @param [string] value    - The field value
      * @param [string] metaData - The model meta data
@@ -249,7 +281,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
         }
 
         var type = '{s name=grid/renderer/emotion}Emotion{/s}',
-            device = '<div class="sprite-television" style="width: 16px; height: 16px; display: inline-block" title="Nur für Desktop Computer sichtbar">&nbsp;</div>';
+            device = '<div class="sprite-television" style="width: 16px; height: 16px; display: inline-block; margin-right:5px" title="Nur für Desktop Computer sichtbar">&nbsp;</div>';
 
         // Type detection
         if(record.get('isLandingPage')) {
@@ -258,12 +290,12 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
 
         // Device detection
         if(record.get('device') == 1) {
-            device = '<div class="sprite-e-book-reader" style="width: 16px; height: 16px; display: inline-block" title="Nur für Tablets sichtbar">&nbsp;</div>';
+            device = '<div class="sprite-media-player-phone-horizontal" style="width: 16px; height: 16px; display: inline-block; margin-right:5px" title="Nur für Tablets sichtbar">&nbsp;</div>';
         } else if(record.get('device') == 2) {
-            device = '<div class="sprite-mobile-phone-off" style="width: 25px; height: 16px; display: inline-block" title="Nur für mobile Geräte sichtbar">&nbsp;</div>';
+            device = '<div class="sprite-media-player-phone" style="width: 16px; height: 16px; display: inline-block; margin-right:5px" title="Nur für mobile Geräte sichtbar">&nbsp;</div>';
         }
 
-        return type + '&nbsp;&nbsp;' + device;
+        return device + type;
     },
 
     /**
