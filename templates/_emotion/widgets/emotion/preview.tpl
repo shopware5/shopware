@@ -1,4 +1,4 @@
-{extends file="frontend/index/index.tpl"}
+{extends file="parent:frontend/index/index.tpl"}
 
 {* hide shop navigation *}
 {block name='frontend_index_navigation'}{/block}

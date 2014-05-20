@@ -599,4 +599,20 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         return array("values" => $data, "pages" => $pages);
     }
+
+    /**
+     * preview action method
+     *
+     * generates the backend iframe emotion preview
+     */
+    public function previewAction()
+    {
+        $emotionId = $this->Request()->getParam('emotionId');
+
+        $this->View()->emotionId = $emotionId;
+
+        //fake to prevent rendering the templates with the widgets module.
+        //otherwise the template engine don't accept to load templates of the `frontend` module
+        $this->Request()->setModuleName('frontend');
+    }
 }

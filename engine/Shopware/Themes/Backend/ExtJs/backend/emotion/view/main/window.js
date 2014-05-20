@@ -141,17 +141,44 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
                 },
                 columns: 1,
                 vertical: true,
-                items: [
-                    { boxLabel: me.snippets.filter.noFilter, name: 'filter', inputValue: 'none', checked: true  },
-                    { boxLabel: me.snippets.filter.onlyDesktop, name: 'filter', inputValue: 'onlyDesktop'  },
-                    { boxLabel: me.snippets.filter.onlyTablet, name: 'filter', inputValue: 'onlyTablet' },
-                    { boxLabel: me.snippets.filter.onlyMobile, name: 'filter', inputValue: 'onlyMobile' },
-                    { boxLabel: me.snippets.filter.onlyActive, name: 'filter', inputValue: 'active' }
-                ]
+                items: me.createFilterData()
             }]
-
-
         });
+    },
+
+    /**
+     * Creates the filter options
+     * for the emotion sidebar
+     */
+    createFilterData: function() {
+        var me = this;
+
+        return [{
+            boxLabel: me.snippets.filter.noFilter,
+            name: 'filter',
+            inputValue: 'none',
+            checked: true
+        },
+        {
+            boxLabel: me.snippets.filter.onlyDesktop,
+            name: 'filter',
+            inputValue: 'onlyDesktop'
+        },
+        {
+            boxLabel: me.snippets.filter.onlyTablet,
+            name: 'filter',
+            inputValue: 'onlyTablet'
+        },
+        {
+            boxLabel: me.snippets.filter.onlyMobile,
+            name: 'filter',
+            inputValue: 'onlyMobile'
+        },
+        {
+            boxLabel: me.snippets.filter.onlyActive,
+            name: 'filter',
+            inputValue: 'active'
+        }]
     },
 
     /**

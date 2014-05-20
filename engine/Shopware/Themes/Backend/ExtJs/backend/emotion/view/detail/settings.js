@@ -138,16 +138,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
 
         var devicesStore = Ext.create('Ext.data.Store', {
             fields: ['abbr', 'name'],
-            data : [{
-                "id" : 0,
-                "name" : "Desktop"
-            }, {
-                "id" : 1,
-                "name" : "Tablet"
-            }, {
-                "id" : 2,
-                "name" : "Mobile"
-            }]
+            data : me.createDeviceData()
         });
 
         var deviceComboBox = Ext.create('Ext.form.field.ComboBox', {
@@ -179,10 +170,36 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
         me.timingFieldSet =  me.createTimingFieldSet();
         me.landingPageFieldSet = me.createLandingpageFieldset();
 
-        me.items = [ me.nameField, me.landingPageCheckbox, me.categoryNameField, me.gridComboBox, tplComboBox, me.containerWidthField, deviceComboBox, me.activeComboBox, me.listingCheckbox, me.timingFieldSet, me.landingPageFieldSet ];
+        me.items = [
+            me.nameField,
+            me.landingPageCheckbox,
+            me.categoryNameField,
+            me.gridComboBox,
+            tplComboBox,
+            me.containerWidthField,
+            deviceComboBox,
+            me.activeComboBox,
+            me.listingCheckbox,
+            me.timingFieldSet,
+            me.landingPageFieldSet
+        ];
+
         me.callParent(arguments);
 
         me.loadRecord(me.emotion);
+    },
+
+    createDeviceData: function() {
+        return [{
+            "id" : 0,
+            "name" : "Desktop"
+        }, {
+            "id" : 1,
+            "name" : "Tablet"
+        }, {
+            "id" : 2,
+            "name" : "Mobile"
+        }];
     },
 
     createTimingFieldSet: function() {
