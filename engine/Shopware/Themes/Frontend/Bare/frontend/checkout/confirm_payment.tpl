@@ -1,6 +1,6 @@
-{if !$sRegisterFinished}
+{if $sRegisterFinished}
     <div class="space"></div>
-    <form name="" method="POST" action="{url controller=account action=savePayment sTarget=$sTarget|default:'checkout'}" class="payment">
+    <form name="" method="POST" action="{url controller=account action=savePayment sTarget=$sTarget|default:'checkout' sTargetAction=$sTargetAction|default:'index'}" class="payment">
         <div class="payment_method">
             <h3 class="underline">{s name='CheckoutPaymentHeadline'}Zahlungsart{/s}</h3>
 
@@ -12,7 +12,7 @@
                         {/if}
                         <input type="hidden" name="sourceCheckoutConfirm" value="1" />
                         <div class="grid_5 first">
-                            <input type="radio" name="register[payment]" class="radio auto_submit"{if $sTarget eq 'shippingPayment'} data-auto-submit="true"{/if} value="{$payment_mean.id}" id="payment_mean{$payment_mean.id}"{if $payment_mean.id eq $sPayment.id} checked="checked"{/if} />
+                            <input type="radio" name="register[payment]" class="radio auto_submit"{if $sTargetAction eq 'shippingPayment'} data-auto-submit="true"{/if} value="{$payment_mean.id}" id="payment_mean{$payment_mean.id}"{if $payment_mean.id eq $sPayment.id} checked="checked"{/if} />
                             <label class="description" for="payment_mean{$payment_mean.id}">{$payment_mean.description}</label>
                         </div>
                     {/block}

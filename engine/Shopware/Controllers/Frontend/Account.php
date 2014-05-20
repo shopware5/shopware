@@ -137,6 +137,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $this->View()->sPaymentMeans = $this->admin->sGetPaymentMeans();
         $this->View()->sFormData = array('payment'=>$this->View()->sUserData['additional']['user']['paymentID']);
         $this->View()->sTarget = $this->Request()->getParam('sTarget', $this->Request()->getControllerName());
+        $this->View()->sTargetAction = $this->Request()->getParam('sTargetAction', 'index');
 
         $getPaymentDetails = $this->admin->sGetPaymentMeanById($this->View()->sFormData['payment']);
 
@@ -493,7 +494,12 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         if (!$target = $this->Request()->getParam('sTarget')) {
             $target = 'account';
         }
-        $this->redirect(array('controller'=>$target, 'action'=>'index', 'success'=>'shipping'));
+        $targetAction = $this->Request()->getParam('sTargetAction', 'index');
+        $this->redirect(array(
+            'controller' => $target,
+            'action' => $targetAction,
+            'success' => 'shipping'
+        ));
     }
 
     /**
@@ -536,7 +542,12 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         if (!$target = $this->Request()->getParam('sTarget')) {
             $target = 'account';
         }
-        $this->redirect(array('controller'=>$target, 'action'=>'index', 'success'=>'payment'));
+        $targetAction = $this->Request()->getParam('sTargetAction', 'index');
+        $this->redirect(array(
+            'controller' => $target,
+            'action' => $targetAction,
+            'success' => 'payment'
+        ));
     }
 
     /**

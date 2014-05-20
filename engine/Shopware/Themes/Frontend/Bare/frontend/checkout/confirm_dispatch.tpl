@@ -1,6 +1,6 @@
 {if $sDispatches}
 <div class="dispatch-methods">
-	<form method="POST" action="{url action='calculateShippingCosts' sTargetAction=$sTargetAction}" class="payment">
+	<form method="POST" action="{url action='calculateShippingCosts' sTargetAction=$sTargetAction sTarget=$sTarget|default:'index'}" class="payment">
 
 		<h3 class="underline">{s name='CheckoutDispatchHeadline'}Versandart{/s}</h3>
 
@@ -9,7 +9,7 @@
 				<div class="grid_15 method">
 					{block name='frontend_checkout_dispatch_fieldset_input_radio'}
 					<div class="grid_5 first">
-						<input id="confirm_dispatch{$dispatch.id}" type="radio" class="radio auto_submit"{if $sTarget eq 'shippingPayment'} data-auto-submit="true"{/if} value="{$dispatch.id}" name="sDispatch" {if $dispatch.id eq $sDispatch.id}checked="checked"{/if} />
+						<input id="confirm_dispatch{$dispatch.id}" type="radio" class="radio auto_submit"{if $sTargetAction eq 'shippingPayment'} data-auto-submit="true"{/if} value="{$dispatch.id}" name="sDispatch" {if $dispatch.id eq $sDispatch.id}checked="checked"{/if} />
 						<label class="description" for="confirm_dispatch{$dispatch.id}">{$dispatch.name}</label>
 					</div>
 					{/block}

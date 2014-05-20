@@ -18,14 +18,14 @@
 		{/block}
 
 		{* Payment form *}
-		<form name="frmRegister" method="post" action="{url action=savePayment sTarget=$sTarget}" class="payment">
+		<form name="frmRegister" method="post" action="{url action=savePayment sTarget=$sTarget sTargetAction=$sTargetAction|default:"index"}" class="payment">
 
 			{include file='frontend/register/payment_fieldset.tpl' form_data=$sFormData error_flags=$sErrorFlag payment_means=$sPaymentMeans}
 
 			{block name="frontend_account_payment_action_buttons"}
 			<div class="actions">
 				{if $sTarget}
-				<a class="button-left large left" href="{url controller=$sTarget}" title="{s name='PaymentLinkBack'}{/s}">
+				<a class="button-left large left" href="{url controller=$sTarget action=$sTargetAction|default:"index"}" title="{s name='PaymentLinkBack'}{/s}">
 					{se name="PaymentLinkBack"}{/se}
 				</a>
 				{/if}
