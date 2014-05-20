@@ -1,14 +1,13 @@
-<aside class="sidebar-account off-canvas panel block has--border">
-
+<div class="account--menu">
 	{block name="frontend_account_menu"}
 
 		{block name="frontend_account_menu_title"}
-			<h2 class="navigation--headline panel--title is--underline">
+			<h2 class="navigation--headline">
 				{s name="AccountHeaderNavigation"}{/s}
 			</h2>
 		{/block}
 
-		<div class="navigation--smartphone panel--body is--wide">
+		<div class="account--menu-container">
 			<ul class="sidebar--navigation navigation--list is--level0">
 
 				{block name="frontend_account_menu_link_overview"}
@@ -84,7 +83,7 @@
 				{block name="frontend_account_menu_link_logout"}
 					<li class="navigation--entry">
 						<a href="{url controller='account' action='logout'}" class="navigation--link logout">
-							{s name="AccountLinkLogout"}{/s}
+							<i class="icon--compare"></i> {s name="AccountLinkLogout"}{/s}
 						</a>
 					</li>
 				{/block}
@@ -92,5 +91,4 @@
 			</ul>
 		</div>
 	{/block}
-
-</aside>
+</div>
