@@ -27,6 +27,9 @@ namespace Shopware\Components\DependencyInjection\Bridge;
 use Shopware\Components\DependencyInjection\Container;
 
 /**
+ * Session Dependency Injection Bridge
+ * Starts and handles the session
+ *
  * @category  Shopware
  * @package   Shopware\Components\DependencyInjection\Bridge
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
