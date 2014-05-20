@@ -4,7 +4,7 @@ class Migrations_Migration365 Extends Shopware\Components\Migrations\AbstractMig
     public function up()
     {
         $sql = <<<'EOD'
-       ALTER TABLE `s_emotion` ADD `device` INT( 1 ) NOT NULL AFTER `container_width` ;
+       ALTER TABLE `s_emotion` ADD `device` INT( 1 ) NOT NULL;
 EOD;
         $this->addSql($sql);
     }

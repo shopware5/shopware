@@ -175,7 +175,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
                         width = me.deviceWidth.mobile;
                     }
 
-                    new Ext.Window({
+                    me.previewWindow = Ext.create('Ext.window.Window', {
                         title : "{s name=window/preview/title}Shopping world Preview{/s}: " + emotionName + ' (' + device + ')',
                         width : width,
                         height: '90%',
@@ -184,7 +184,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
                             xtype : "component",
                             autoEl : {
                                 tag : "iframe",
-                                src : '{url module=frontend controller=emotion action=preview}/?emotionId=' + emotionId
+                                src : '{url module=widgets controller=emotion action=preview}/?emotionId=' + emotionId
                             }
                         }]
                     }).show();
@@ -193,9 +193,21 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             }
 			]
         },
-        {
+        me.createCopyDropdown(),
+        ];
+
+        return columns;
+    },
+
+    /**
+     * Creates the copy split button with the
+     * device copy options.
+     */
+    createCopyDropdown: function() {
+        var me = this;
+        return {
             xtype: 'buttoncolumn',
-            width: 50,
+                width: 50,
             header: '',
             sortable: false,
             borderLeftWidth: 0,
@@ -203,43 +215,40 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
             buttonText: '',
             tooltip: 'Einkaufswelt kopieren',
             handler: function (view, rowIndex, colIndex) {
-                var listStore = view.getStore();
-                var record = listStore.getAt(rowIndex);
-                var device = record.get('device');
+            var listStore = view.getStore();
+            var record = listStore.getAt(rowIndex);
+            var device = record.get('device');
 
-                me.fireEvent('duplicateemotion', me, record, device);
-            },
+            me.fireEvent('duplicateemotion', me, record, device);
+        },
             stopSelection: true,        //don't select record on button click
-            items: [
-                {
-                    iconCls: 'sprite-television',
-                    text: '{s name="list/action_column/copy_desktop"}Als Desktop Einkaufswelt{/s}',
-                    handler: function (item, scope) {
-                        var record = scope.record;
-                        me.fireEvent('duplicateemotion', me, record, 0);
-                    }
-                },
-                {
-                    iconCls: 'sprite-media-player-phone-horizontal',
-                    text: '{s name="list/action_column/copy_tablet"}Als Tablet Einkaufswelt{/s}',
-                    handler: function (item, scope) {
-                        var record = scope.record;
-                        me.fireEvent('duplicateemotion', me, record, 1);
-                    }
-                },
-                {
-                    iconCls: 'sprite-media-player-phone',
-                    text: '{s name="list/action_column/copy_mobile"}Als mobile Einkaufswelt{/s}',
-                    handler: function (item, scope) {
-                        var record = scope.record;
-                        me.fireEvent('duplicateemotion', me, record, 2);
-                    }
+                items: [
+            {
+                iconCls: 'sprite-television',
+                text: '{s name="list/action_column/copy_desktop"}Als Desktop Einkaufswelt{/s}',
+                handler: function (item, scope) {
+                    var record = scope.record;
+                    me.fireEvent('duplicateemotion', me, record, 0);
                 }
-            ]
+            },
+            {
+                iconCls: 'sprite-media-player-phone-horizontal',
+                text: '{s name="list/action_column/copy_tablet"}Als Tablet Einkaufswelt{/s}',
+                handler: function (item, scope) {
+                    var record = scope.record;
+                    me.fireEvent('duplicateemotion', me, record, 1);
+                }
+            },
+            {
+                iconCls: 'sprite-media-player-phone',
+                text: '{s name="list/action_column/copy_mobile"}Als mobile Einkaufswelt{/s}',
+                handler: function (item, scope) {
+                    var record = scope.record;
+                    me.fireEvent('duplicateemotion', me, record, 2);
+                }
+            }
+        ]
         }
-        ];
-
-        return columns;
     },
 
     /** 
