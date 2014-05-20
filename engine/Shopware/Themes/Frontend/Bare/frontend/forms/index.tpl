@@ -7,7 +7,7 @@
 
 {* Sidebar left *}
 {block name='frontend_index_content_left'}
-	{include file="frontend/index/left.tpl"}
+	{include file="frontend/index/sidebar.tpl"}
 {/block}
 
 {* Main content *}
@@ -43,6 +43,3 @@
 		<div class="doublespace">&nbsp;</div>
 	</div>
 {/block}
-
-{* Hide sidebar right *}
-{block name='frontend_index_content_right'}{/block}
