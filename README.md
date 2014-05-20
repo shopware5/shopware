@@ -48,6 +48,10 @@ those files.
 
     cd build/
     ant configure
+  # EDITS 
+
+The ant build requires six arguments to be entered in the command line. While the first four are self explanetory, the last two relating to the app.path and host.path could use some clarification.
+    
     ant build-config build-composer-install build-database
 
 4.) Download the demo data files and extract them:
