@@ -1,0 +1,153 @@
+.account--content {
+    .clearfix();
+}
+
+.account--menu {
+    .link--logout {
+        [class^="icon--"] {
+            display: none;
+        }
+    }
+}
+
+.account--box {
+    .unitize-margin(0, 0, 20, 0);
+}
+
+.account--password,
+.account--email {
+    input[type="text"],
+    input[type="password"],
+    input[type="email"] {
+        .unitize-margin(0, 0, 10, 0);
+        width: 100%;
+    }
+}
+
+.account--welcome {
+    .panel--body {
+        .unitize-padding(10, 20, 20, 20);
+    }
+}
+
+.account--error,
+.account--success {
+    .unitize-margin(0, 0, 20, 0);
+}
+
+@media screen and(min-width: @tabletViewportWidth) {
+
+    .is--ctl-account {
+        .categories--headline,
+        .categories--navigation,
+        .shop-sites--headline,
+        .shop-sites--navigation {
+            display: none;
+        }
+    }
+
+    .account--menu {
+        border: 1px solid @borderColor;
+
+        .navigation--headline {
+            .panel--title;
+            .is--underline;
+        }
+
+        .account--menu-container {
+            .panel--body;
+            .unitize-padding(10, 20);
+        }
+
+        .navigation--list {
+            padding: 0;
+            border: 0 none;
+        }
+
+        .navigation--entry {
+            margin: 0;
+            border: 0 none;
+        }
+
+        .navigation--link {
+            .unitize-padding(5, 0);
+
+            &.link--logout {
+                .unitize-margin(10, 0 , 0, 0);
+                .unitize-padding(10, 0 , 0, 0);
+                border-top: 1px solid @borderColor;
+                font-weight: bold;
+                color: @primaryColor;
+
+                [class^="icon--"] {
+                    .unitize-margin(0, 5, 0, 0);
+                    display: inline-block;
+                }
+
+                &:hover {
+                    color: @primaryContrastColor;
+                }
+            }
+        }
+    }
+
+    .account--content {
+        .unitize-margin(20, 0);
+    }
+
+    .account--welcome {
+        .panel--title {
+            .unitize(28, 16, font-size);
+        }
+    }
+
+    .account--info,
+    .account--billing {
+        width: 49%;
+        float: left;
+    }
+
+    .account--payment,
+    .account--shipping {
+        width: 49%;
+        float: right;
+    }
+
+    .account--email,
+    .account--password {
+        display: none;
+    }
+
+    .account--email,
+    .account--password,
+    .account--newsletter {
+        clear: both;
+    }
+
+    .account--info,
+    .account--payment {
+        .panel--body {
+            .unitize-height(120);
+        }
+    }
+
+    .account--billing,
+    .account--shipping {
+        .panel--body {
+            .unitize-height(180);
+        }
+    }
+}
+
+@media screen and(min-width: @tabletLandscapeViewportWidth) {
+
+}
+
+@media screen and(min-width: @desktopViewportWidth) {
+
+    .account--content {
+        .unitize-margin(45, 0, 0, 0);
+        width: 78%;
+        float: right;
+    }
+}

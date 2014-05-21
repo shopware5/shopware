@@ -16,5 +16,7 @@
 		{$successText="{s name='NewsletterMailDeleted' namespace='frontend/account/internalMessages'}{/s}"}
 	{/if}
 
-	{include file="frontend/_includes/messages.tpl" type="success" content=$successText}
+	<div class="account--success">
+		{include file="frontend/_includes/messages.tpl" type="success" content=$successText}
+	</div>
 {/if}
