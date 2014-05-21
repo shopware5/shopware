@@ -7,8 +7,8 @@
             // The selector of the container which should be scrolled.
             scrollContainerSelector: '.page-wrap',
 
-            // The selector of the target element where the container should be scrolled to.
-            scrollTarget: false,
+            // The selector of the target element or the position in px where the container should be scrolled to.
+            scrollTarget: 0,
 
             // The speed of the scroll animation in ms.
             animationSpeed: 300
@@ -44,7 +44,7 @@
 
         me.$container = $(me.opts.scrollContainerSelector);
 
-        me.$targetEl = $(me.opts.scrollTarget);
+        if (typeof me.opts.scrollTarget == 'string') me.$targetEl = $(me.opts.scrollTarget);
 
         me.registerEvents();
     };
@@ -74,7 +74,12 @@
 
         me.$el.on('click.' + pluginName, function(e) {
             e.preventDefault();
-            me.scrollToElement(me.$targetEl);
+
+            if (typeof me.opts.scrollTarget == 'number') {
+                me.scrollToPosition(me.opts.scrollTarget);
+            } else if (me.$targetEl.length) {
+                me.scrollToElement(me.$targetEl);
+            }
         });
     };
 
