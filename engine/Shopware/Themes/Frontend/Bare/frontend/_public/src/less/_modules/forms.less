@@ -27,7 +27,6 @@
 
     textarea {
 	.unitize(10, 16, margin-bottom);
-	.unitize(140, 16, min-height);
 	width: 100%;
     }
 
@@ -89,6 +88,10 @@
 
     }
 
+    p.forms--description {
+	.unitize-margin(-8, 0, 10, 0, 16);
+    }
+
 }
 
 @media screen and (min-width: @tabletViewportWidth) {
@@ -99,18 +102,21 @@
 	    .unitize(15, 16, margin-bottom);
 	}
 
-	.forms--captcha {
+		textarea {
+			.unitize(15, 16, margin-bottom);
+		}
 
-	    .captcha--placeholder {
-		.unitize(16, 16, margin-bottom);
-	    }
+		.forms--captcha {
 
-	    strong.captcha--notice {
-		.unitize(16, 16, margin-bottom);
-	    }
+			.captcha--placeholder {
+				.unitize(16, 16, margin-bottom);
+			}
 
-	}
+			strong.captcha--notice {
+				.unitize(16, 16, margin-bottom);
+			}
 
+		}
     }
 
 }
