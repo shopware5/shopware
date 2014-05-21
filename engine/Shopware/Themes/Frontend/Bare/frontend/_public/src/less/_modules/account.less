@@ -3,20 +3,14 @@
 }
 
 .account--menu {
-    .logout {
+    .link--logout {
         [class^="icon--"] {
             display: none;
         }
     }
 }
 
-.account--info,
-.account--payment,
-.account--password,
-.account--email,
-.account--newsletter,
-.account--billing,
-.account--shipping {
+.account--box {
     .unitize-margin(0, 0, 20, 0);
 }
 
@@ -78,7 +72,7 @@
         .navigation--link {
             .unitize-padding(5, 0);
 
-            &.logout {
+            &.link--logout {
                 .unitize-margin(10, 0 , 0, 0);
                 .unitize-padding(10, 0 , 0, 0);
                 border-top: 1px solid @borderColor;
