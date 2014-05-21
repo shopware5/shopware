@@ -1,10 +1,10 @@
 {* Static sites *}
 {if $sMenu.gLeft}
 	{block name='frontend_index_left_menu_headline'}
-		<h2 class="navigation--headline">{s name="MenuLeftHeading"}Informationen{/s}</h2>
+		<h2 class="shop-sites--headline navigation--headline">{s name="MenuLeftHeading"}Informationen{/s}</h2>
 	{/block}
 
-	<ul class="sidebar--navigation navigation--list" role="menu">
+	<ul class="shop-sites--navigation sidebar--navigation navigation--list" role="menu">
 		{block name='frontend_index_left_menu_before'}{/block}
 
 		{foreach $sMenu.gLeft as $item}

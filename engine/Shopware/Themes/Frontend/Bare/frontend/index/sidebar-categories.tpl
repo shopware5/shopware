@@ -1,6 +1,6 @@
 {* Maincategories left *}
 {function name=categories level=0}
-	<ul class="sidebar--navigation navigation--list{if !$level} is--drop-down{/if} is--level{$level}" role="menu">
+	<ul class="sidebar--navigation categories--navigation navigation--list{if !$level} is--drop-down{/if} is--level{$level}" role="menu">
 		{* @deprecated The block "frontend_index_categories_left_ul" will be removed in further versions, please use "frontend_index_categories_left_before" *}
 		{block name="frontend_index_categories_left_ul"}{/block}
 

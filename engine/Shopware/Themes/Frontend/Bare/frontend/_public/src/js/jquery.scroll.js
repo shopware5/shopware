@@ -1,19 +1,16 @@
 ;(function($, window, document, undefined) {
     "use strict";
 
-    var pluginName = 'collapsePanel',
+    var pluginName = 'scroll',
         defaults = {
 
-            // The selector of the target element which should be collapsed.
-            collapseTarget: false,
+            // The selector of the container which should be scrolled.
+            scrollContainerSelector: '.page-wrap',
 
-            // Additional class which will be added to the collapse target.
-            collapseTargetCls: 'js--collapse-target',
+            // The selector of the target element or the position in px where the container should be scrolled to.
+            scrollTarget: 0,
 
-            // Decide if sibling collapse panels should be closed when the target is collapsed.
-            closeSiblings: false,
-
-            // The speed of the collapse animation in ms.
+            // The speed of the scroll animation in ms.
             animationSpeed: 300
         };
 
@@ -45,13 +42,9 @@
 
         me.getDataConfig();
 
-        if (me.opts.collapseTarget.length) {
-            me.$targetEl = $(me.opts.collapseTarget);
-        } else {
-            me.$targetEl = me.$el.next('.collapse--content');
-        }
+        me.$container = $(me.opts.scrollContainerSelector);
 
-        me.$targetEl.addClass(me.opts.collapseTargetCls);
+        if (typeof me.opts.scrollTarget == 'string') me.$targetEl = $(me.opts.scrollTarget);
 
         me.registerEvents();
     };
@@ -81,27 +74,39 @@
 
         me.$el.on('click.' + pluginName, function(e) {
             e.preventDefault();
-            me.toggleCollapse();
+
+            if (typeof me.opts.scrollTarget == 'number') {
+                me.scrollToPosition(me.opts.scrollTarget);
+            } else if (me.$targetEl.length) {
+                me.scrollToElement(me.$targetEl);
+            }
         });
     };
 
     /**
-     * Changes the collapse state of the element.
+     * Scrolls to a specific element on the page.
+     *
+     * @param $targetEl - jQuery Element
+     * @param aberration
      */
-    Plugin.prototype.toggleCollapse = function() {
+    Plugin.prototype.scrollToElement = function($targetEl, aberration) {
         var me = this,
-            siblings = $('.'+me.opts.collapseTargetCls).not(me.$targetEl);
+            ab = aberration || 0,
+            offset = $targetEl[0].offsetTop,
+            position = offset + ab;
 
-        if (me.$targetEl.hasClass('is--active')) {
-            me.$el.removeClass('is--active');
-            me.$targetEl.slideUp(me.opts.animationSpeed, function() {
-                me.$targetEl.removeClass('is--active');
-            });
-        } else {
-            me.$el.addClass('is--active');
-            me.$targetEl.slideDown(me.opts.animationSpeed).addClass('is--active');
-            if (me.opts.closeSiblings) siblings.slideUp(me.opts.animationSpeed).removeClass('is--active');
-        }
+        me.scrollToPosition(position);
+    };
+
+    /**
+     * Scrolls the page to the given position.
+     *
+     * @param position
+     */
+    Plugin.prototype.scrollToPosition = function(position) {
+        var me = this;
+
+        me.$container.animate({ scrollTop: position }, me.opts.animationSpeed);
     };
 
     /**
@@ -112,10 +117,6 @@
     Plugin.prototype.destroy = function() {
         var me = this;
 
-        me.$el.removeClass('is--active');
-        me.$targetEl.removeClass('is--active')
-                    .removeClass(me.opts.collapseTargetCls)
-                    .removeAttr('style');
         me.$el.off('click.' + pluginName).removeData('plugin_' + pluginName);
     };
 
