@@ -378,6 +378,48 @@ Ext.onReady(function() {
             dropDownTitle: 'Artikel'
         }
     });
+    Ext.define('Shopware.listing.de.InfoPanel', {
+        override: 'Shopware.listing.InfoPanel',
+        title: 'Detailed information',
+        statics: {
+            displayConfig: {
+                model: undefined,
+                fields: { },
+                emptyText: 'Kein Eintrag selektiert.'
+            }
+        }
+    });
+
+    Ext.define('Shopware.window.de.Detail', {
+        override: 'Shopware.window.Detail',
+        statics: {
+            displayConfig: {
+                eventAlias: undefined,
+                associations: [],
+                hasOwnController: false,
+                cancelButtonText: 'Abbrechen',
+                saveButtonText: 'Speichern'
+            }
+        }
+    });
+    Ext.define('Shopware.window.de.Progress', {
+        override: 'Shopware.window.Progress',
+        statics: {
+            displayConfig: {
+                infoText: undefined,
+                tasks: [ ],
+                outputProperties: [ 'id', 'number', 'name' ],
+                displayResultGrid: true,
+                cancelButtonText: 'Abbrechen',
+                closeButtonText: 'Fenster schließen',
+                successHeader: 'Erfolgreich',
+                requestHeader: 'Request',
+                errorHeader: 'Fehlermeldung',
+                requestResultTitle: 'Request Ergebnis',
+                processCanceledText: 'Prozess wurde an Position [0] von [1] unterbrochen'
+            }
+        }
+    });
     Ext.define('Shopware.form.field.de.TinyMCE', {
         override:'Shopware.form.field.TinyMCE',
 
