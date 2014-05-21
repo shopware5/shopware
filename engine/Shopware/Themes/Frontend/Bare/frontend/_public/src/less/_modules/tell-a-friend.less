@@ -6,16 +6,21 @@
     }
 
     .tellafriend--field {
-	    .unitize-margin(4, 0, 4, 0, 16);
+	    .unitize-margin(0, 0, 10, 0, 16);
         width: 100%;
-    }
-
-    .tellafriend--captcha {
-        .unitize(5, 16, margin-top);
     }
 
     .tellafriend--buttons {
         .clearfix();
+    }
+
+    .captcha--placeholder {
+        .unitize(10, 16, margin-bottom);
+    }
+
+    .captcha--notice {
+        .unitize(10, 16, margin-bottom);
+        display: block;
     }
 
     .btn--primary {
@@ -36,7 +41,8 @@
     }
 
     .review--notice {
-        .unitize-margin(10, 0, 16);
+        .unitize(10, 16, margin-bottom);
+        .unitize(12, 16, font-size);
     }
 }
 
@@ -48,7 +54,7 @@
         width: 100%;
 
         .tellafriend--field {
-            .unitize(20, 16, margin-bottom);
+            .unitize(15, 16, margin-bottom);
         }
 
         .panel {
