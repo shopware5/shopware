@@ -37,8 +37,45 @@ ul {
 	margin: 0;
 	padding: 0;
 }
+
+// Font
+h1, h2, h3, h4, h5, h6 {
+    .unitize(26, 16, line-height);
+    .unitize-margin(28, 0, 10, 0);
+    font-weight: 600;
+}
+
+h1 {
+    .unitize(24, 16, font-size);
+    .unitize(28, 16, line-height);
+    .unitize-margin(34, 0, 20, 0);
+    color: @darkTextColor;
+}
+
+h2 {
+    .unitize(21, 16, font-size);
+}
+
+h3 {
+    .unitize(19, 16, font-size);
+}
+
+h4 {
+    .unitize(17, 16, font-size);
+}
+
+h5 {
+    .unitize(15, 16, font-size);
+}
+
+h6 {
+    .unitize(14, 16, font-size);
+}
+
 p {
-  margin: 0;
+    .unitize(14, 16, font-size);
+    .unitize(24, 16, line-height);
+    .unitize-margin(0, 0, 24, 0);
 }
 
 // Actual body proxy element for the content
