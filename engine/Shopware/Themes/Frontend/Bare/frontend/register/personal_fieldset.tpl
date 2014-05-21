@@ -9,7 +9,6 @@
 				<div class="register--customertype field--select">
 					<span class="arrow"></span>
 					<select id="register_personal_customer_type" name="register[personal][customer_type]" class="is--required{if $error_flags.customer_type} has--error{/if}">
-						<option>{s name='RegisterPersonalLabelType'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
 						<option value="private"{if $form_data.customer_type eq "private"} selected="selected"{/if}>{s name='RegisterPersonalLabelPrivate'}{/s}</option>
 						<option value="business"{if $form_data.customer_type eq "business" or $form_data.company or $form_data.sValidation} selected="selected"{/if}>{s name='RegisterPersonalLabelBusiness'}{/s}</option>
 					</select>
@@ -22,7 +21,7 @@
 			<div class="register--salutation field--select">
 				<span class="arrow"></span>
 				<select name="register[personal][salutation]" id="salutation" class="is--required{if $error_flags.salutation} has--error{/if}">
-					<option>{s name='RegisterLabelSalutation'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
+					<option>{s name='RegisterLabelSelect'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
 					<option value="mr" {if $form_data.salutation eq "mr"}selected="selected"{/if}>{s name='RegisterLabelMr'}{/s}</option>
 					<option value="ms" {if $form_data.salutation eq "ms"}selected="selected"{/if}>{s name='RegisterLabelMs'}{/s}</option>
 				</select>
