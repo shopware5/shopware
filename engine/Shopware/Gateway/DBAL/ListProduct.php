@@ -89,6 +89,14 @@ class ListProduct extends Gateway
             $products[$key] = $this->hydrator->hydrateListProduct($product);
         }
 
+//        $collection = new Struct\Collection\Product();
+//
+//        foreach ($data as $product) {
+//            $collection->add(
+//                $this->hydrator->hydrateListProduct($product)
+//            );
+//        }
+//
         return $products;
     }
 

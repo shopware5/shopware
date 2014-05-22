@@ -9,12 +9,12 @@ class Product extends ListProduct
     /**
      * @var ListProduct[]
      */
-    private $related;
+    private $relatedProducts;
 
     /**
      * @var ListProduct[]
      */
-    private $similar;
+    private $similarProducts;
 
     /**
      * @var Product\Download[]
@@ -40,11 +40,6 @@ class Product extends ListProduct
      * @var Set
      */
     private $propertySet;
-
-    /**
-     * @var Product\Configurator\Set
-     */
-    private $configurator;
 
     /**
      * @var Product\Configurator\Option[]
@@ -100,35 +95,35 @@ class Product extends ListProduct
     }
 
     /**
-     * @param \Shopware\Struct\ListProduct[] $related
+     * @param \Shopware\Struct\ListProduct[] $relatedProducts
      */
-    public function setRelated($related)
+    public function setRelatedProducts($relatedProducts)
     {
-        $this->related = $related;
+        $this->relatedProducts = $relatedProducts;
     }
 
     /**
      * @return \Shopware\Struct\ListProduct[]
      */
-    public function getRelated()
+    public function getRelatedProducts()
     {
-        return $this->related;
+        return $this->relatedProducts;
     }
 
     /**
-     * @param \Shopware\Struct\ListProduct[] $similar
+     * @param \Shopware\Struct\ListProduct[] $similarProducts
      */
-    public function setSimilar($similar)
+    public function setSimilarProducts($similarProducts)
     {
-        $this->similar = $similar;
+        $this->similarProducts = $similarProducts;
     }
 
     /**
      * @return \Shopware\Struct\ListProduct[]
      */
-    public function getSimilar()
+    public function getSimilarProducts()
     {
-        return $this->similar;
+        return $this->similarProducts;
     }
 
     /**
@@ -164,23 +159,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @param \Shopware\Struct\Product\Configurator\Set $configurator
-     */
-    public function setConfigurator($configurator)
-    {
-        $this->configurator = $configurator;
-    }
-
-    /**
-     * @return \Shopware\Struct\Product\Configurator\Set
-     */
-    public function getConfigurator()
-    {
-        return $this->configurator;
-    }
-
-    /**
-     * @param \Shopware\Struct\Product\Configurator\Option[] $configuration
+     * @param \Shopware\Struct\Configurator\Group[] $configuration
      */
     public function setConfiguration($configuration)
     {
@@ -188,7 +167,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @return \Shopware\Struct\Product\Configurator\Option[]
+     * @return \Shopware\Struct\Configurator\Group[]
      */
     public function getConfiguration()
     {

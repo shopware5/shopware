@@ -31,31 +31,26 @@ class SimilarProducts extends Gateway
     public function getList(array $products)
     {
         $ids = array();
-        foreach($products as $product) {
-            $ids[] = $product->getVariantId();
+        foreach ($products as $product) {
+            $ids[] = $product->getId();
         }
 
         $query = $this->entityManager->getDBALQueryBuilder();
 
-        $query->select(array(
-            'mainVariant.ordernumber as variant',
-            'similarVariant.ordernumber as number'
-        ));
+        $query->select(
+            array(
+                'product.id',
+                'similarVariant.ordernumber as number'
+            )
+        );
 
         $query->from('s_articles_similar', 'similar');
 
         $query->innerJoin(
             'similar',
             's_articles',
-            'mainArticle',
-            'mainArticle.id = similar.articleID'
-        );
-
-        $query->innerJoin(
-            'mainArticle',
-            's_articles_details',
-            'mainVariant',
-            'mainVariant.id = mainArticle.main_detail_id'
+            'product',
+            'product.id = similar.articleID'
         );
 
         $query->innerJoin(
@@ -72,18 +67,17 @@ class SimilarProducts extends Gateway
             'similarVariant.id = similarArticles.main_detail_id'
         );
 
-        $query->where('mainVariant.id IN (:ids)')
+        $query->where('product.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
-        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $statement->fetchAll(\PDO::FETCH_GROUP);
 
         $related = array();
-        foreach($data as $row) {
-            $variant = $row['variant'];
-            $related[$variant][] = $row['number'];
+        foreach ($data as $productId => $row) {
+            $related[$productId] = array_column($row, 'number');
         }
 
         return $related;

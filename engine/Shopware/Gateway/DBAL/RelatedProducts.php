@@ -24,37 +24,25 @@ class RelatedProducts extends Gateway
         return array_shift($numbers);
     }
 
-    /**
-     * @param Struct\ListProduct[] $products
-     */
     public function getList(array $products)
     {
         $ids = array();
-        foreach($products as $product) {
-            $ids[] = $product->getVariantId();
+        foreach ($products as $product) {
+            $ids[] = $product->getId();
         }
 
         $query = $this->entityManager->getDBALQueryBuilder();
 
-        $query->select(array(
-            'mainVariant.ordernumber as variant',
-            'relatedVariant.ordernumber as number'
-        ));
+        $query->select(array('product.id'))
+            ->addSelect('relatedVariant.ordernumber as number');
 
         $query->from('s_articles_relationships', 'relation');
 
         $query->innerJoin(
             'relation',
             's_articles',
-            'mainArticle',
-            'mainArticle.id = relation.articleID'
-        );
-
-        $query->innerJoin(
-            'mainArticle',
-            's_articles_details',
-            'mainVariant',
-            'mainVariant.id = mainArticle.main_detail_id'
+            'product',
+            'product.id = relation.articleID'
         );
 
         $query->innerJoin(
@@ -71,18 +59,17 @@ class RelatedProducts extends Gateway
             'relatedVariant.id = relatedArticles.main_detail_id'
         );
 
-        $query->where('mainVariant.id IN (:ids)')
+        $query->where('product.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
-        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $statement->fetchAll(\PDO::FETCH_GROUP);
 
         $related = array();
-        foreach($data as $row) {
-            $variant = $row['variant'];
-            $related[$variant][] = $row['number'];
+        foreach ($data as $productId => $row) {
+            $related[$productId] = array_column($row, 'number');
         }
 
         return $related;

@@ -38,53 +38,35 @@ class CheapestPrice
     {
         $group = $context->getCurrentCustomerGroup();
 
-        $specify = $this->cheapestPriceGateway->getList($products, $group);
+        $rules = $this->cheapestPriceGateway->getList($products, $group);
 
-        $prices = array();
+        $prices = $this->buildPrices($products, $rules, $group);
 
-        $fallback = array();
-        foreach ($products as $product) {
-            $key = $product->getId();
-
-            /**@var $cheapestPrice Struct\Product\PriceRule */
-            $cheapestPrice = $specify[$key];
-
-            if (empty($cheapestPrice)) {
-                $fallback[] = $product;
-                continue;
+        //check if one of the products have no assigned price within the prices variable.
+        $fallbackProducts = array_filter(
+            $products,
+            function (Struct\ListProduct $product) use ($prices) {
+                return !array_key_exists($product->getNumber(), $prices);
             }
+        );
 
-            $cheapestPrice->setCustomerGroup($group);
-
-            $prices[$product->getNumber()] = $cheapestPrice;
-        }
-
-        if (empty($fallback)) {
+        if (empty($fallbackProducts)) {
             return $prices;
         }
 
-        //fallback prices for the default customer group of the shop.
-        $group = $context->getFallbackCustomerGroup();
+        //if some product has no price, we have to load the fallback customer group prices for the fallbackProducts.
+        $fallbackPrices = $this->cheapestPriceGateway->getList(
+            $fallbackProducts,
+            $context->getFallbackCustomerGroup()
+        );
 
-        //fallback array contains at this point a list of product structs
-        $fallback = $this->cheapestPriceGateway->getList($fallback, $group);
+        $fallbackPrices = $this->buildPrices(
+            $fallbackProducts,
+            $fallbackPrices,
+            $context->getFallbackCustomerGroup()
+        );
 
-        foreach ($products as $product) {
-            $key = $product->getId();
-
-            /**@var $cheapestPrice Struct\Product\PriceRule */
-            $cheapestPrice = $fallback[$key];
-
-            if (empty($cheapestPrice)) {
-                continue;
-            }
-
-            $cheapestPrice->setCustomerGroup($group);
-
-            $prices[$product->getNumber()] = $cheapestPrice;
-        }
-
-        return $prices;
+        return array_merge($prices, $fallbackPrices);
     }
 
     /**
@@ -112,5 +94,37 @@ class CheapestPrice
         $cheapestPrices = $this->getList(array($product), $context);
 
         return array_shift($cheapestPrices);
+    }
+
+    /**
+     * Helper function which iterates the products and builds a price array which indexed
+     * with the product order number.
+     *
+     * @param Struct\ListProduct[] $products
+     * @param Struct\Product\PriceRule[] $priceRules
+     * @param \Shopware\Struct\Customer\Group $group
+     * @return array
+     */
+    private function buildPrices(array $products, array $priceRules, Struct\Customer\Group $group)
+    {
+        $prices = array();
+
+        foreach ($products as $product) {
+            $key = $product->getId();
+
+            if (!array_key_exists($key, $priceRules) || empty($priceRules[$key])) {
+                continue;
+            }
+
+            /**@var $cheapestPrice Struct\Product\PriceRule */
+            $cheapestPrice = $priceRules[$key];
+
+            $cheapestPrice->setUnit($product->getUnit());
+            $cheapestPrice->setCustomerGroup($group);
+
+            $prices[$product->getNumber()] = $cheapestPrice;
+        }
+
+        return $prices;
     }
 }

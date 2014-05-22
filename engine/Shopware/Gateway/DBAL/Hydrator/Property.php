@@ -24,7 +24,7 @@ class Property extends Hydrator
     {
         $sets = array();
 
-        foreach($data as $row) {
+        foreach ($data as $row) {
             $setId = $row['id'];
             $groupId = $row['__groups_id'];
             $optionId = $row['__options_id'];
@@ -47,15 +47,15 @@ class Property extends Hydrator
         }
 
         $structs = array();
-        foreach($sets as $setData) {
+        foreach ($sets as $setData) {
             $set = $this->hydrateSet($setData);
 
             $groups = array();
-            foreach($setData['groups'] as $groupData) {
+            foreach ($setData['groups'] as $groupData) {
                 $group = $this->hydrateGroup($groupData);
 
                 $options = array();
-                foreach($groupData['options'] as $optionData) {
+                foreach ($groupData['options'] as $optionData) {
                     $option = $this->hydrateOption($optionData);
                     $options[$option->getId()] = $option;
                 }

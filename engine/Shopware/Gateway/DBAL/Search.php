@@ -103,7 +103,7 @@ class Search extends Gateway
 
         $products = array();
 
-        foreach($data as $row) {
+        foreach ($data as $row) {
             $product = new Product();
             $product->setNumber($row['ordernumber']);
 

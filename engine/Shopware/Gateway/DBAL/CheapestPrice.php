@@ -160,7 +160,7 @@ class CheapestPrice extends Gateway
         $query = $this->entityManager->getDBALQueryBuilder();
         $query->setParameter(':customerGroup', $customerGroup->getKey());
 
-        $query->select('('. $subQuery->getSQL() .') as priceId')
+        $query->select('(' . $subQuery->getSQL() . ') as priceId')
             ->from('s_articles_prices', 'outerPrices')
             ->where('outerPrices.articleID IN (:products)')
             ->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY)

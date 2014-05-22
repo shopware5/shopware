@@ -1,6 +1,7 @@
 <?php
 
 namespace Shopware\Gateway\DBAL;
+
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Gateway\DBAL\Hydrator;
@@ -46,17 +47,19 @@ class VoteAverage extends Gateway
     public function getList(array $products)
     {
         $ids = array();
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $ids[] = $product->getId();
         }
 
         $query = $this->entityManager->getDBALQueryBuilder();
 
-        $query->select(array(
-            'articleID',
-            'COUNT(id) as total',
-            'points'
-        ));
+        $query->select(
+            array(
+                'articleID',
+                'COUNT(id) as total',
+                'points'
+            )
+        );
 
         $query->from('s_articles_vote', 'votes')
             ->where('votes.articleID IN (:products)')
@@ -65,8 +68,7 @@ class VoteAverage extends Gateway
             ->addGroupBy('votes.points')
             ->orderBy('votes.articleID', 'ASC')
             ->addOrderBy('votes.points', 'ASC')
-            ->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY)
-        ;
+            ->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -74,7 +76,7 @@ class VoteAverage extends Gateway
         $data = $statement->fetchAll(\PDO::FETCH_GROUP);
 
         $result = array();
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $key = $product->getNumber();
 
             $votes = $data[$product->getId()];

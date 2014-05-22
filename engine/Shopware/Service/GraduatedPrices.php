@@ -1,6 +1,7 @@
 <?php
 
 namespace Shopware\Service;
+
 use Shopware\Struct;
 use Shopware\Gateway\DBAL as Gateway;
 
@@ -69,48 +70,67 @@ class GraduatedPrices
     public function getList(array $products, Struct\Context $context)
     {
         $group = $context->getCurrentCustomerGroup();
-        $specify = $this->graduatedPricesGateway->getList($products, $group);
+        $specify = $this->graduatedPricesGateway->getList(
+            $products,
+            $group
+        );
 
+        //iterates the passed prices and products and assign the product unit to the prices and the passed customer group
+        $prices = $this->buildPrices(
+            $products,
+            $specify,
+            $group
+        );
+
+        //check if one of the products have no assigned price within the prices variable.
+        $fallbackProducts = array_filter(
+            $products,
+            function (Struct\ListProduct $product) use ($prices) {
+                return !array_key_exists($product->getNumber(), $prices);
+            }
+        );
+
+        if (empty($fallbackProducts)) {
+            return $prices;
+        }
+
+        //if some product has no price, we have to load the fallback customer group prices for the fallbackProducts.
+        $fallbackPrices = $this->graduatedPricesGateway->getList(
+            $fallbackProducts,
+            $context->getFallbackCustomerGroup()
+        );
+
+        $fallbackPrices = $this->buildPrices(
+            $fallbackProducts,
+            $fallbackPrices,
+            $context->getFallbackCustomerGroup()
+        );
+
+        return array_merge($prices, $fallbackPrices);
+    }
+
+    /**
+     * Helper function which iterates the products and builds a price array which indexed
+     * with the product order number.
+     *
+     * @param Struct\ListProduct[] $products
+     * @param Struct\Product\PriceRule[] $priceRules
+     * @param \Shopware\Struct\Customer\Group $group
+     * @return array
+     */
+    private function buildPrices(array $products, array $priceRules, Struct\Customer\Group $group)
+    {
         $prices = array();
-
-        /**@var $fallbackProducts Struct\ListProduct[]*/
-        $fallbackProducts = array();
 
         foreach ($products as $product) {
             $key = $product->getNumber();
 
-            /**@var $productPrices Struct\Product\PriceRule[] */
-            $productPrices = $specify[$key];
-
-            if (empty($productPrices)) {
-                $fallbackProducts[] = $product;
-                continue;
-            }
-
-            foreach ($productPrices as $price) {
-                $price->setUnit($product->getUnit());
-                $price->setCustomerGroup($group);
-            }
-
-            $prices[$key] = $productPrices;
-        }
-
-        if (empty($fallback)) {
-            return $prices;
-        }
-
-        $group = $context->getFallbackCustomerGroup();
-        $fallback = $this->graduatedPricesGateway->getList($fallbackProducts, $group);
-
-        foreach ($fallbackProducts as $product) {
-            $key = $product->getNumber();
-
-            if (!array_key_exists($key, $fallback)) {
+            if (!array_key_exists($key, $priceRules) || empty($priceRules[$key])) {
                 continue;
             }
 
             /**@var $productPrices Struct\Product\PriceRule[] */
-            $productPrices = $fallback[$key];
+            $productPrices = $priceRules[$key];
 
             foreach ($productPrices as $price) {
                 $price->setUnit($product->getUnit());
@@ -122,5 +142,4 @@ class GraduatedPrices
 
         return $prices;
     }
-
 }

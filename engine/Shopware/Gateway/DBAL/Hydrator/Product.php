@@ -69,9 +69,7 @@ class Product extends Hydrator
             $this->assignManufacturerData($product, $data);
         }
 
-        if (!empty($data['unitID'])) {
-            $this->assignUnitData($product, $data);
-        }
+        $this->assignUnitData($product, $data);
 
         if (!empty($data['__attribute_id'])) {
             $this->assignAttributeData($product, $data);
