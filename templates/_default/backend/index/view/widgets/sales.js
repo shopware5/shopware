@@ -292,7 +292,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Sales', {
                         display: 'insideEnd',
                         orientation: 'horizontal',
                         field: 'turnover',
-                        fill: '#475b53',
+                        fill: '#FFFFFF',
                         font: 'bold 12px/16px Arial, sans-serif',
                         'text-anchor': 'middle'
                     },
@@ -300,7 +300,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Sales', {
                     // Color renderer
                     renderer: function (sprite, record, attr, index) {
                         return Ext.apply(attr, {
-                            fill: (index % 2) ? 'rgb(19, 190, 123)' : 'rgb(170, 232, 207)'
+                            fill: (index % 2) ? '#2f79b1' : '#77b3e0'
                         });
                     }
                 }
