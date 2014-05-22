@@ -352,17 +352,17 @@ Ext.define('Shopware.apps.Index.view.widgets.Visitors', {
                         }
                     },
                     style: {
-                        fill: '#c2e6d6'
+                        fill: '#77b3e0'
                     },
                     highlight: {
                         size: 5,
                         radius: 5,
-                        fill: '#13be7b',
-                        stroke: '#13be7b'
+                        fill: '#2f79b1',
+                        stroke: '#2f79b1'
                     },
                     markerConfig: {
                         type: 'circle',
-                        fill: '#13be7b',
+                        fill: '#2f79b1',
                         size: 4,
                         radius: 4,
                         'stroke-width': 0
