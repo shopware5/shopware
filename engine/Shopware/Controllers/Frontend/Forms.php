@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 4
- * Copyright Â© shopware AG
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -131,10 +131,11 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 }
 
                 $fields[$id] = $this->_createInputElement($element, $this->_postData[$id]);
+		$labels[$id] = $this->_createLabelElement($element);
             }
         }
 
-        // prepare formadata for view
+	// prepare form data for view
         $formData = array(
             'id'             => (string) $form->getId(),  // intended string cast to keep compatibility
             'name'           => $form->getName(),
@@ -149,9 +150,11 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 		'sErrors'   => $this->_errors,
 		'sElements' => $this->_elements,
 		'sFields'   => $fields,
-	    ));
+		'sLabels'   => $labels
+	    )
+	);
 
-        $this->View()->rand = md5(uniqid(rand()));
+	$this->View()->rand = md5(uniqid(rand()));
 
         if (!count($this->_errors) && !empty($this->Request()->Submit)) {
             $this->commitForm();
@@ -178,25 +181,25 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         }
 
         if (!empty(Shopware()->Config()->CaptchaColor)) {
-            $captcha = str_replace(' ', '', strtolower($this->Request()->sCaptcha));
-            $rand = $this->Request()->getPost('sRand');
-            if (empty($rand) || $captcha != substr(md5($rand), 0, 5)) {
-		$this->_elements["sCaptcha"]['class'] = " has--error";
-                $this->_errors["e"]["sCaptcha"] = true;
-            }
-        }
+	    $captcha = str_replace(' ', '', strtolower($this->Request()->sCaptcha));
+	    $rand = $this->Request()->getPost('sRand');
+	    if (empty($rand) || $captcha != substr(md5($rand), 0, 5)) {
+		$this->_elements["sCaptcha"]['class'] = " instyle_error has--error";
+		$this->_errors["e"]["sCaptcha"] = true;
+	    }
+	}
 
         if (!empty($this->_errors)) {
             foreach ($this->_errors['e'] as $key => $value) {
-                if (isset($this->_errors['e'][$key])) {
-                    if ($this->_elements[$key]['typ'] == "text2") {
-                        $class = explode(";", $this->_elements[$key]['class']);
-			$this->_elements[$key]['class'] = implode(" has--error;", $class) . " has--error";
-                    } else {
-			$this->_elements[$key]['class'] .= " has--error";
-                    }
-                }
-            }
+		if (isset($this->_errors['e'][$key])) {
+		    if ($this->_elements[$key]['typ'] == "text2") {
+			$class = explode(";", $this->_elements[$key]['class']);
+			$this->_elements[$key]['class'] = implode(" instyle_error has--error;", $class) . " instyle_error has--error";
+		    } else {
+			$this->_elements[$key]['class'] .= " instyle_error has--error";
+		    }
+		}
+	    }
         }
 
         $isSpam = false;
@@ -228,13 +231,13 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     public function commitForm()
     {
         $mail = Shopware()->System()->sMailer;
-        $template = Shopware()->Config()->Templates->sSUPPORT;
-        $mail->IsHTML($template['ishtml']);
+	$template = Shopware()->Config()->Templates->sSUPPORT;
+	$mail->IsHTML($template['ishtml']);
 
-	//eMail field available check
-        foreach ($this->_elements as $element) {
-            if ($element['typ'] == "email") {
-                $postEmail = $this->_postData[$element['id']];
+	//Email field available check
+	foreach ($this->_elements as $element) {
+	    if ($element['typ'] == "email") {
+		$postEmail = $this->_postData[$element['id']];
                 $postEmail = trim($postEmail);
             }
         }
@@ -304,13 +307,13 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     protected function _createInputElement($element, $post = null)
     {
 	if ($element['required'] == 1) {
-	    $req = "is--required";
-	    $reqsnippet = "%*%";
-		$reqaria = 'required="required" aria-required="true"';
+	    $req = "is--required required";
+	    $reqSnippet = "%*%";
+		$reqAria = 'required="required" aria-required="true"';
 	} else {
 	    $req = "";
-	    $reqsnippet = "";
-		$reqaria = "";
+	    $reqSnippet = "";
+	    $reqAria = "";
 	}
 
 	switch ($element['typ']) {
@@ -346,37 +349,37 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             case "password":
             case "email":
             case "text":
-				$output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $req\" $reqaria value=\"{$post}\" id=\"{$element['name']}\" placeholder=\"{$element['label']}$reqsnippet\" name=\"{$element['name']}\"/>\r\n";
+				$output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $req\" $reqAria value=\"{$post}\" id=\"{$element['name']}\" placeholder=\"{$element['label']}$reqSnippet\" name=\"{$element['name']}\"/>\r\n";
                 break;
             case "checkbox":
                 if ($post == $element['value']) {
                     $checked = " checked";
-                } else {
-                    $checked = "";
-                }
-				$output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $req\" $reqaria value=\"{$element['value']}\" id=\"{$element['name']}\" name=\"{$element['name']}\"$checked/>\r\n";
-                break;
-            case "file":
-				$output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $req file\" $reqaria id=\"{$element['name']}\" placeholder=\"{$element['label']}$reqsnippet\" name=\"{$element['name']}\" maxlength=\"100000\" accept=\"{$element['value']}\"/>\r\n";
-                break;
-            case "text2":
-                $element['class'] = explode(";", $element['class']);
-                $element['name'] = explode(";", $element['name']);
-				$output .= "<input type=\"text\" class=\"{$element['class'][0]} $req\" $reqaria value=\"{$post[0]}\" placeholder=\"{$element['label']}$reqsnippet\" id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][0]}\"/>\r\n";
-				$output .= "<input type=\"text\" class=\"{$element['class'][1]} $req\" $reqaria value=\"{$post[1]}\" placeholder=\"{$element['label']}$reqsnippet\" id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][1]}\"/>\r\n";
-                break;
-            case "textarea":
-                if (empty($post) && $element["value"]) {
-                    $post = $element["value"];
-                }
-				$output .= "<textarea class=\"{$element['class']} $req\" $reqaria id=\"{$element['name']}\" placeholder=\"{$element['label']}$reqsnippet\" name=\"{$element['name']}\">{$post}</textarea>\r\n";
-                break;
-            case "select":
-                $values = explode(";", $element['value']);
-		$output .= "<select class=\"{$element['class']} $req\" id=\"{$element['name']}\" name=\"{$element['name']}\">\r\n\t<option selected=\"selected\" value=\"\">" . Shopware()->Snippets()->getNamespace('frontend/newsletter/index')->get('NewsletterLabelSelect') . "$reqsnippet</option>";
-                foreach ($values as $value) {
-                    if ($value == $post) {
-                        $output .= "<option selected>$value</option>";
+		} else {
+		    $checked = "";
+		}
+				$output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $req\" $reqAria value=\"{$element['value']}\" id=\"{$element['name']}\" name=\"{$element['name']}\"$checked/>\r\n";
+		break;
+	    case "file":
+				$output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $req file\" $reqAria id=\"{$element['name']}\" placeholder=\"{$element['label']}$reqSnippet\" name=\"{$element['name']}\" maxlength=\"100000\" accept=\"{$element['value']}\"/>\r\n";
+		break;
+	    case "text2":
+		$element['class'] = explode(";", $element['class']);
+		$element['name'] = explode(";", $element['name']);
+				$output .= "<input type=\"text\" class=\"{$element['class'][0]} $req\" $reqAria value=\"{$post[0]}\" placeholder=\"{$element['label']}$reqSnippet\" id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][0]}\"/>\r\n";
+				$output .= "<input type=\"text\" class=\"{$element['class'][1]} $req\" $reqAria value=\"{$post[1]}\" placeholder=\"{$element['label']}$reqSnippet\" id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][1]}\"/>\r\n";
+		break;
+	    case "textarea":
+		if (empty($post) && $element["value"]) {
+		    $post = $element["value"];
+		}
+				$output .= "<textarea class=\"{$element['class']} $req\" $reqAria id=\"{$element['name']}\" placeholder=\"{$element['label']}$reqSnippet\" name=\"{$element['name']}\">{$post}</textarea>\r\n";
+		break;
+	    case "select":
+		$values = explode(";", $element['value']);
+		$output .= "<select class=\"{$element['class']} $req\" id=\"{$element['name']}\" name=\"{$element['name']}\">\r\n\t<option selected=\"selected\" value=\"\">" . Shopware()->Snippets()->getNamespace('frontend/newsletter/index')->get('NewsletterLabelSelect') . "$reqSnippet</option>";
+		foreach ($values as $value) {
+		    if ($value == $post) {
+			$output .= "<option selected>$value</option>";
                     } else {
                         $output .= "<option>$value</option>";
                     }
