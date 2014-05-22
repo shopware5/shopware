@@ -138,7 +138,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      * Also registers all needed events to handle resizing.
      * After the callParent was called, every active widget will be created.
      */
-    initComponent: function() {
+    initComponent: function () {
         var me = this,
             settings = me.widgetSettings;
 
@@ -178,7 +178,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      *
      * @returns { Ext.toolbar.Toolbar }
      */
-    createToolbar: function() {
+    createToolbar: function () {
         var me = this,
             snippets = me.snippets.toolbar;
 
@@ -189,65 +189,76 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             cls: Ext.baseCSSPrefix + 'widget-toolbar',
             // IE fix
             style: 'background: transparent !important; background-color: transparent !important;',
-            items: [{
-                xtype: 'button',
-                cls: 'btn-widget-add',
-                menu: {
-                    xtype: 'menu',
-                    cls: Ext.baseCSSPrefix + 'widget-menu',
-                    plain: true,
-                    defaultAlign: 'tr-br',
-                    items: me.createWidgetMenuItems()
+            items: [
+                {
+                    xtype: 'button',
+                    cls: 'btn-widget-add',
+                    menu: {
+                        xtype: 'menu',
+                        cls: Ext.baseCSSPrefix + 'widget-menu',
+                        plain: true,
+                        defaultAlign: 'tr-br',
+                        items: me.createWidgetMenuItems()
+                    }
+                },
+                {
+                    xtype: 'container',
+                    html: snippets.title,
+                    style: 'font-size: 16px; padding-left: 8px; color: #335064'
+                },
+                '->',
+                {
+                    xtype: 'button',
+                    tooltip: snippets.minimize,
+                    cls: 'btn-widget-minimize',
+                    handler: function () {
+                        me.fireEvent('minimizeWindow', me, this);
+                    }
+                },
+                {
+                    xtype: 'button',
+                    cls: 'btn-widget-position',
+                    menu: {
+                        xtype: 'menu',
+                        cls: Ext.baseCSSPrefix + 'widget-position-selection-menu',
+                        plain: true,
+                        defaultAlign: 'tr-br',
+                        items: [
+                            {
+                                text: snippets.dock.topLeft,
+                                iconCls: 'sprite-application-dock-180',
+                                handler: function () {
+                                    me.fireEvent('changePosition', me, 'tl');
+                                }
+                            },
+                            {
+                                text: snippets.dock.topRight,
+                                iconCls: 'sprite-application-dock',
+                                handler: function () {
+                                    me.fireEvent('changePosition', me, 'tr');
+                                }
+                            },
+                            {
+                                text: snippets.dock.bottomLeft,
+                                iconCls: 'sprite-application-dock-180',
+                                handler: function () {
+                                    me.fireEvent('changePosition', me, 'bl');
+                                }
+                            },
+                            {
+                                text: snippets.dock.bottomRight,
+                                iconCls: 'sprite-application-dock',
+                                handler: function () {
+                                    me.fireEvent('changePosition', me, 'br');
+                                }
+                            }
+                        ]
+                    }
                 }
-            }, {
-                xtype: 'container',
-                html: snippets.title,
-                style: 'font-size: 16px; padding-left: 8px; color: #335064'
-            }, '->', {
-                xtype: 'button',
-                tooltip: snippets.minimize,
-                cls: 'btn-widget-minimize',
-                handler: function() {
-                    me.fireEvent('minimizeWindow', me, this);
-                }
-            }, {
-                xtype: 'button',
-                cls: 'btn-widget-position',
-                menu: {
-                    xtype: 'menu',
-                    cls: Ext.baseCSSPrefix + 'widget-position-selection-menu',
-                    plain: true,
-                    defaultAlign: 'tr-br',
-                    items: [{
-                        text: snippets.dock.topLeft,
-                        iconCls: 'sprite-application-dock-180',
-                        handler: function() {
-                            me.fireEvent('changePosition', me, 'tl');
-                        }
-                    },  {
-                        text: snippets.dock.topRight,
-                        iconCls: 'sprite-application-dock',
-                        handler: function() {
-                            me.fireEvent('changePosition', me, 'tr');
-                        }
-                    },{
-                        text: snippets.dock.bottomLeft,
-                        iconCls: 'sprite-application-dock-180',
-                        handler: function() {
-                            me.fireEvent('changePosition', me, 'bl');
-                        }
-                    }, {
-                        text: snippets.dock.bottomRight,
-                        iconCls: 'sprite-application-dock',
-                        handler: function() {
-                            me.fireEvent('changePosition', me, 'br');
-                        }
-                    }]
-                }
-            }],
+            ],
 
             listeners: {
-                afterrender: function() {
+                afterrender: function () {
                     me.fireEvent('changePosition', me, me.widgetSettings.get('dock'), false);
                 }
             }
@@ -260,14 +271,14 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
     afterLayout: function () {
         var me = this;
 
-        if(me.resizer && me.initHandles) {
+        if (me.resizer && me.initHandles) {
             var dock = me.widgetSettings.get('dock'),
-                handles =  [],
+                handles = [],
                 verticalHandle = 's',
                 horizontalHandle = 'e';
 
 
-            if(dock.indexOf('b') != -1) {
+            if (dock.indexOf('b') != -1) {
                 verticalHandle = 'n';
             }
 
@@ -294,12 +305,15 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
     createWidgetWrapper: function () {
         var me = this,
             wrapper = Ext.create('Ext.container.Container', {
-                layout: 'hbox'
+                layout: {
+                    type: 'hbox',
+                    align: 'stretch'
+                }
             }),
             len = me.columnCount,
             i = 0;
 
-        for(; i < len; i++) {
+        for (; i < len; i++) {
             var container = me.createWidgetContainer(i);
 
             wrapper.add(container);
@@ -316,7 +330,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      * @param column
      * @returns { Ext.container.Container }
      */
-    createWidgetContainer: function(column) {
+    createWidgetContainer: function (column) {
         var me = this,
             options = {
                 layout: 'anchor',
@@ -340,60 +354,60 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      *
      * @param container
      */
-    createContainerDropZone: function(container) {
+    createContainerDropZone: function (container) {
         var me = this,
             dropProxyEl = Ext.create('Ext.Component', {
-            cls: Ext.baseCSSPrefix + 'widget-proxy-element',
-            height: 200
-        });
+                cls: Ext.baseCSSPrefix + 'widget-proxy-element',
+                height: 200
+            });
 
         container.dropZone = Ext.create('Ext.dd.DropZone', container.getEl(), {
             ddGroup: 'widget-container',
 
-            getTargetFromEvent: function() {
+            getTargetFromEvent: function () {
                 return container;
             },
 
-            onNodeEnter: function(target, dd) {
+            onNodeEnter: function (target, dd) {
                 dropProxyEl.addCls('active');
             },
 
-            onNodeOut: function(target) {
+            onNodeOut: function (target) {
                 var dropIndex = target.items.indexOf(dropProxyEl),
                     lastIndex = target.items.getCount() - 1;
 
-                if(dropIndex != lastIndex) {
+                if (dropIndex != lastIndex) {
                     target.move(dropIndex, lastIndex);
                 }
 
                 dropProxyEl.removeCls('active');
             },
 
-            onNodeDrop: function(target, dd, e, data) {
+            onNodeDrop: function (target, dd, e, data) {
                 var dropSource = this,
                     newColumn = target.columnId,
                     newRow = dropSource.dropIndex,
-                    panel = dd.panel.cloneConfig({
-                        position: {
-                            rowId: newRow,
-                            columnId: newColumn
-                        }
-                    });
+                    panel = dd.panel,
+                    newPanel = me.createWidget(panel.xtype, panel.widgetId, {
+                        id: panel.viewId,
+                        column: newColumn,
+                        position: newRow
+                    }, panel.title);
 
-                target.insert(newRow, panel);
+                target.insert(newRow, newPanel);
 
                 // Fire event which saves the new position
-                me.fireEvent('saveWidgetPosition', newColumn, newRow, panel.viewId);
+                me.fireEvent('saveWidgetPosition', newColumn, newRow, newPanel.viewId);
 
-                me.containerCollection.each(function(container) {
+                me.containerCollection.each(function (container) {
                     container.dropZone.onNodeOut(container);
                 });
 
-                if(me.getEl()) {
+                if (me.getEl()) {
                     me.onScroll({ wheelDelta: me.invertScroll ? -1 : 1 });
                 }
 
-                Ext.defer(function() {
+                Ext.defer(function () {
                     dd.panel.destroy();
                 }, 50);
 
@@ -405,25 +419,25 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                     items = container.items,
                     posY = source.lastPageY;
 
-                items.each(function(item, i) {
+                items.each(function (item, i) {
                     var dropIndex = items.indexOf(dropProxyEl),
                         itemIndex = items.indexOf(item),
                         itemY = item.el.getY(),
                         itemHeight = item.el.getHeight();
 
-                    if(item === dropProxyEl) {
-                        if(posY > itemY + itemHeight && itemIndex !== items.getCount() - 1) {
+                    if (item === dropProxyEl) {
+                        if (posY > itemY + itemHeight && itemIndex !== items.getCount() - 1) {
                             container.move(dropIndex, items.getCount() - 1);
                         }
                         return true;
                     }
 
-                    if(posY > itemY + itemHeight && dropIndex <= itemIndex) {
+                    if (posY > itemY + itemHeight && dropIndex <= itemIndex) {
                         container.move(dropIndex, itemIndex + 1);
                         return false;
                     }
 
-                    if(posY < itemY + (itemHeight / 3) && dropIndex > itemIndex) {
+                    if (posY < itemY + (itemHeight / 3) && dropIndex > itemIndex) {
                         container.move(dropIndex, itemIndex);
                         return false;
                     }
@@ -451,14 +465,14 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             container,
             widget;
 
-        if(!name || !views.length) {
+        if (!name || !views.length) {
             return;
         }
 
-        Ext.each(views, function(view) {
+        Ext.each(views, function (view) {
             container = me.containerCollection.getAt(view.column);
 
-            if(!container) {
+            if (!container) {
                 container = me.containerCollection.getAt(0);
                 view.column = 0;
             }
@@ -501,7 +515,9 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      * @returns { Object } - DragZone (draggable) configuration
      */
     createWidgetDragZone: function () {
-        var me = this;
+        var me = this,
+            scrollTimer,
+            delay = 1000;
 
         return {
             ddGroup: 'widget-container',
@@ -511,25 +527,73 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                     widget = dragSource.panel,
                     dropProxyEl;
 
-                me.containerCollection.each(function(container, i) {
+                me.containerCollection.each(function (container, i) {
                     dropProxyEl = container.dropProxyEl;
 
-                    if(dropProxyEl.height !== widget.lastBox.height) {
+                    if (dropProxyEl.height !== widget.lastBox.height) {
                         dropProxyEl.setHeight(widget.lastBox.height);
                     }
 
-                    if(container.columnId === widget.position.columnId) {
+                    if (container.columnId === widget.position.columnId) {
                         container.remove(widget, false);
                     }
                 });
             },
 
+            onDrag: function (e) {
+                var dragSource = this,
+                    sourceY = dragSource.lastPageY - dragSource.deltaY,
+                    windowBox = me.getEl().getBox(),
+                    tolerance = 100,
+                    speed = 25;
+
+                if (scrollTimer) {
+                    window.clearInterval(scrollTimer);
+                    delay = 1000;
+                }
+
+                if (sourceY > windowBox.y && sourceY < windowBox.y + tolerance) {
+                    dragSource.scrollWrapper(speed);
+                }
+
+                if (sourceY < windowBox.y + windowBox.height && sourceY > windowBox.y + windowBox.height - tolerance) {
+                    dragSource.scrollWrapper(speed * -1);
+                }
+            },
+
+            scrollWrapper: function (scrollDelta) {
+                var dragSource = this;
+
+                delay = 50;
+
+                scrollTimer = Ext.defer(function () {
+                    me.onScroll({
+                        wheelDelta: scrollDelta * (me.invertScroll ? -1 : 1)
+                    });
+
+                    dragSource.scrollWrapper(scrollDelta);
+                }, delay);
+            },
+
+            onMouseUp: function () {
+                if (scrollTimer) {
+                    window.clearInterval(scrollTimer);
+                    delay = 1000;
+                }
+            },
+
             onInvalidDrop: function (e) {
                 var dragProxy = this,
                     widget = dragProxy.panel,
-                    container = me.containerCollection.getAt(widget.position.columnId);
+                    pos = widget.position,
+                    container = me.containerCollection.getAt(widget.position.columnId),
+                    newPanel = me.createWidget(widget.xtype, widget.widgetId, {
+                        id: widget.viewId,
+                        column: pos.columnId,
+                        position: pos.rowId
+                    }, widget.title);
 
-                container.insert(widget.position.rowId, widget.cloneConfig());
+                container.insert(pos.rowId, newPanel);
             }
         };
     },
@@ -567,13 +631,13 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
 
         me.setWidth(maxColumns * me.widthStep);
 
-        if(me.height > maxHeight) {
+        if (me.height > maxHeight) {
             me.setHeight(maxHeight);
         }
 
         me.onResize(me, me.widthStep * maxColumns);
 
-        if(me.getEl()) {
+        if (me.getEl()) {
             me.fireEvent('changePosition', me, me.widgetSettings.get('dock'));
         }
     },
@@ -589,7 +653,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      * @param width
      * @returns { number } - max amount of columns that can be shown
      */
-    getColumnCount: function(width) {
+    getColumnCount: function (width) {
         return Math.min(6, Math.max(3, Math.ceil(width / 480)));
     },
 
@@ -603,26 +667,29 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      */
     onResize: function (win, width) {
         var me = this,
+            oldColumnCount = me.columnsShown,
             container,
             i;
 
-        me.containerCollection.each(function(el) {
+        me.containerCollection.each(function (el) {
             el.hide();
         });
 
         me.columnsShown = ~~(width / me.widthStep);
 
-        me.moveWidgetsToVisibleSpace();
+        if (oldColumnCount > me.columnsShown) {
+            me.moveWidgetsToVisibleSpace(oldColumnCount - me.columnsShown);
+        }
 
-        for(i = 0; i < me.columnCount; i++) {
+        for (i = 0; i < me.columnCount; i++) {
             container = me.containerCollection.getAt(i);
 
-            if(i < me.columnsShown && container.isHidden()) {
+            if (i < me.columnsShown && container.isHidden()) {
                 container.show();
             }
         }
 
-        if(me.getEl()) {
+        if (me.getEl()) {
             me.onScroll({ wheelDelta: me.invertScroll ? -1 : 1 });
         }
 
@@ -631,53 +698,140 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
 
     /**
      * Moves widgets that are in other, not visible, columns into the most right shown column.
+     * @param { number } offset - amount of columns changed
      */
-    moveWidgetsToVisibleSpace: function () {
+    moveWidgetsToVisibleSpace: function (offset) {
         var me = this,
-            column,
-            newColumn,
-            newColumnId,
+            moveToRight = me.widgetSettings.get('dock').indexOf('l') === -1,
+            collection = me.containerCollection,
             widgetsToUpdate = [],
-            widgetsToMove = [];
+            i;
 
         // small hack to fix the widget layouts
-        Ext.defer(function() {
-            for(var i = me.columnCount - 1; i > me.columnsShown - 1; i--) {
-                column = me.containerCollection.getAt(i);
+        Ext.defer(function () {
+            Ext.suspendLayouts();
 
-                newColumn = me.containerCollection.getAt(i - 1);
-                newColumnId = newColumn.columnId;
-
-                column.items.each(function(widget) {
-                    if(widget === column.dropProxyEl) {
-                        return true;
+            if (moveToRight) {
+                for (i = offset; i > 0; i--) {
+                    widgetsToUpdate = widgetsToUpdate.concat(me.prependWidgetsToNewColumn(collection.getAt(i), collection.getAt(i - 1)));
+                }
+                for (i = offset; i < me.columnCount; i++) {
+                    if (collection.getAt(i).items.getCount() <= 1) {
+                        continue;
                     }
-
-                    var newRowId = newColumn.items.getCount() - 1,
-                        newWidget = widget.cloneConfig({
-                            position: {
-                                columnId: newColumnId,
-                                rowId: newRowId
-                            }
-                        });
-
-                    widgetsToMove.push(newWidget);
-                    newColumn.insert(newRowId, newWidget);
-
-                    widgetsToUpdate.push({
-                        column: newColumnId,
-                        position: newRowId,
-                        id: widget.viewId
-                    });
-
-                    column.remove(widget, true);
-                });
+                    widgetsToUpdate = widgetsToUpdate.concat(me.prependWidgetsToNewColumn(collection.getAt(i), collection.getAt(i - offset)));
+                }
+            } else {
+                for (i = me.columnCount - 1; i > me.columnsShown - 1; i--) {
+                    widgetsToUpdate = widgetsToUpdate.concat(me.appendWidgetsToNewColumn(collection.getAt(i), collection.getAt(i - 1)));
+                }
             }
 
-            if(widgetsToUpdate.length !== 0) {
+            Ext.resumeLayouts(true);
+
+            if (widgetsToUpdate && widgetsToUpdate.length !== 0) {
                 me.fireEvent('saveWidgetPositions', widgetsToUpdate);
             }
         }, 1);
+    },
+
+    /**
+     * Appends all widget of the one column into the other.
+     *
+     * @param oldColumn
+     * @param newColumn
+     * @returns { Array }
+     */
+    appendWidgetsToNewColumn: function (oldColumn, newColumn) {
+        var me = this,
+            newColumnId = newColumn.columnId,
+            widgetsToUpdate = [],
+            newRowId;
+
+        oldColumn.items.each(function (widget) {
+            if (widget === oldColumn.dropProxyEl) {
+                return true;
+            }
+
+            newRowId = newColumn.items.getCount() - 1;
+
+            var newWidget = me.createWidget(widget.xtype, widget.widgetId, {
+                id: widget.viewId,
+                column: newColumnId,
+                position: newRowId
+            }, widget.title);
+
+            newColumn.insert(newRowId, newWidget);
+
+            widgetsToUpdate.push({
+                column: newColumnId,
+                position: newRowId,
+                id: widget.viewId
+            });
+
+            oldColumn.remove(widget, true);
+        });
+
+        return widgetsToUpdate;
+    },
+
+    /**
+     * Prepends all widget of the one column into the other.
+     *
+     * @param oldColumn
+     * @param newColumn
+     * @returns { Array }
+     */
+    prependWidgetsToNewColumn: function (oldColumn, newColumn) {
+        var me = this,
+            newColumnId = newColumn.columnId,
+            widgetsToUpdate = [],
+            newRowId = 0,
+            rowOffset = oldColumn.items.getCount() - 1,
+            newIndex;
+
+        newColumn.items.each(function (widget, index) {
+            if (widget === newColumn.dropProxyEl) {
+                return true;
+            }
+
+            newIndex = index + rowOffset;
+
+            widget.position.rowId = newIndex;
+
+            widgetsToUpdate.push({
+                column: newColumnId,
+                position: newIndex,
+                id: widget.viewId
+            });
+        });
+
+        oldColumn.items.each(function (widget, index) {
+            if (widget === oldColumn.dropProxyEl) {
+                return true;
+            }
+
+            newRowId = index;
+
+            var newWidget = me.createWidget(widget.xtype, widget.widgetId, {
+                id: widget.viewId,
+                column: newColumnId,
+                position: newRowId
+            }, widget.title);
+
+            newColumn.insert(newRowId, newWidget);
+
+            widgetsToUpdate.push({
+                column: newColumnId,
+                position: newRowId,
+                id: widget.viewId
+            });
+
+            oldColumn.remove(widget, true);
+
+        });
+
+        return widgetsToUpdate;
     },
 
     /**
@@ -686,21 +840,21 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      *
      * @returns { Array } - Array of menu items
      */
-    createWidgetMenuItems: function() {
+    createWidgetMenuItems: function () {
         var me = this,
             items = [];
 
-        me.widgetStore.each(function(widget) {
-             items.push({
-                 text: widget.get('label'),
-                 widgetId: widget.get('id'),
-                 iconCls: 'sprite-plus-circle-frame',
-                 listeners: {
-                     click: function(menuItem) {
-                         me.fireEvent('addWidget', me, widget.get('name'), menuItem);
-                     }
-                 }
-             });
+        me.widgetStore.each(function (widget) {
+            items.push({
+                text: widget.get('label'),
+                widgetId: widget.get('id'),
+                iconCls: 'sprite-plus-circle-frame',
+                listeners: {
+                    click: function (menuItem) {
+                        me.fireEvent('addWidget', me, widget.get('name'), menuItem);
+                    }
+                }
+            });
         });
 
         return items;
@@ -710,7 +864,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      * After the window was rendered, its element is available,
      * so we setup the event listener for scrolling.
      */
-    afterRender: function() {
+    afterRender: function () {
         var me = this;
 
         me.callParent(arguments);
@@ -722,7 +876,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      * Attaches the event listener for scrolling to the window element.
      * Sets the 'invertScroll' flag whether we need to invert the scrolling because of some browsers.
      */
-    registerScrollEvent: function() {
+    registerScrollEvent: function () {
         var me = this,
             containerEl = me.getEl(),
             invertScroll = /Firefox/i.test(navigator.userAgent),
@@ -737,9 +891,9 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      * Handles the scrolling of the window wrapper.
      * Calculates the new position and sets it if its possible.
      *
-     * @param e - Mouse scoll event
+     * @param e - Mouse scroll event
      */
-    onScroll: function(e) {
+    onScroll: function (e) {
         var me = this,
             winEl = me.getEl(),
             winHeight = me.getHeight(),
@@ -757,19 +911,20 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             topStyle = me.getPrefixedBoxShadowStyle(''),
             dropProxyHeight = me.containerCollection.getAt(0).dropProxyEl.getEl().getHeight();
 
-        if(winHeight > wrapperHeight) {
+        if (winHeight > wrapperHeight) {
             wrapperEl.setY(max);
             toolbarEl.setStyle(topStyle);
+            me.removeBodyCls('can-scroll');
             return;
         }
 
         position = Math.max(min, Math.min(max, position));
 
-        if(position !== max) {
+        if (position !== max) {
             topStyle = me.getPrefixedBoxShadowStyle('0px 10px 10px -7px rgba(0, 0, 0, 0.5)');
         }
 
-        if(position > min + dropProxyHeight) {
+        if (position > min + dropProxyHeight) {
             me.addBodyCls('can-scroll');
         } else {
             me.removeBodyCls('can-scroll');
@@ -786,7 +941,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      * @param style
      * @returns { object }
      */
-    getPrefixedBoxShadowStyle: function(style) {
+    getPrefixedBoxShadowStyle: function (style) {
         var vendors = [
                 '',
                 '-webkit-',
@@ -798,7 +953,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             i = 0,
             prefixedStyle = {};
 
-        for(; i < len; i++) {
+        for (; i < len; i++) {
             prefixedStyle[vendors[i] + 'box-shadow'] = style || '';
         }
 
@@ -811,7 +966,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
      *
      * @param allowedHandles
      */
-    handleResizer: function(allowedHandles) {
+    handleResizer: function (allowedHandles) {
         var me = this,
             resizer = me.resizer,
             positions = resizer.possiblePositions,
@@ -819,13 +974,13 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             len = allowedHandles.length,
             i = 0;
 
-        Ext.iterate(positions, function(p) {
+        Ext.iterate(positions, function (p) {
             pos = positions[p];
 
             resizer[pos].hide();
         });
 
-        for(; i < len; i++) {
+        for (; i < len; i++) {
             pos = positions[allowedHandles[i]];
 
             resizer[pos].show();
