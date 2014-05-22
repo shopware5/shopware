@@ -13,12 +13,12 @@ class Media extends Gateway
     /**
      * @var \Shopware\Gateway\DBAL\Hydrator\Media
      */
-    private $mediaHydrator;
+    protected $mediaHydrator;
 
     /**
      * @var \Shopware\Components\Thumbnail\Manager
      */
-    private $thumbnailManager;
+    protected $thumbnailManager;
 
     /**
      * @param ModelManager $entityManager
@@ -36,17 +36,12 @@ class Media extends Gateway
     }
 
     /**
-     * Returns the product preview image, which used
-     * as product cover in listings or on the detail page.
-     *
-     * The preview image has the flag "main = 1" in the database.
-     *
      * @param \Shopware\Struct\ListProduct $product
      * @return \Shopware\Struct\Media
      */
-    public function getCover(Struct\ListProduct $product)
+    public function get(Struct\ListProduct $product)
     {
-        $covers = $this->getCovers(array($product->getId()));
+        $covers = $this->getList(array($product->getId()));
 
         return array_shift($covers);
     }
@@ -60,52 +55,115 @@ class Media extends Gateway
      * @param Struct\ListProduct[] $products
      * @return Struct\Media[]
      */
-    public function getCovers(array $products)
+    public function getVariantsMedia(array $products)
     {
         $ids = array();
         foreach ($products as $product) {
             $ids[] = $product->getVariantId();
         }
 
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->getProductMediaQuery();
 
-        $query->select($this->getMediaFields())
-            ->addSelect($this->getImageFields())
-            ->addSelect($this->getSettingFields())
-            ->addSelect('variants.ordernumber as number')
-            ->addSelect($this->getTableFields('s_articles_img_attributes', 'imageAttribute'))
-            ->addSelect($this->getTableFields('s_media_attributes', 'attribute'));
+        $query->resetQueryPart('from');
 
-        $query->from('s_articles_img', 'image')
-            ->innerJoin('image', 's_articles_details', 'variants', 'variants.articleID = image.articleID')
-            ->innerJoin('image', 's_media', 'media', 'image.media_id = media.id')
-            ->innerJoin('media', 's_media_album_settings', 'settings', 'settings.albumID = media.albumID')
-            ->leftJoin('image', 's_articles_img_attributes', 'imageAttribute', 'imageAttribute.imageID = image.id')
-            ->leftJoin('media', 's_media_attributes', 'attribute', 'attribute.mediaID = image.media_id');
+        $query->addSelect('variant.ordernumber as number')
+            ->from('s_articles_img', 'variantImage');
 
-        $query->where('variants.id IN (:ids)')
-            ->andWhere('image.main = 1')
-            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+        $query->innerJoin(
+            'variantImage',
+            's_articles_img',
+            'image',
+            'variantImage.parent_id = image.id'
+        );
+
+        $query->innerJoin(
+            'variantImage',
+            's_articles_details',
+            'variant',
+            'variant.id = variantImage.article_detail_id'
+        );
+
+        $query->where('variantImage.article_detail_id IN (:ids)')
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
+            ->orderBy('variantImage.article_detail_id')
+            ->addOrderBy('variantImage.main')
+            ->addOrderBy('variantImage.position');
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $covers = array();
-        foreach ($data as $cover) {
-            $number = $cover['number'];
+        $media = array();
+        foreach ($data as $row) {
+            $key = $row['number'];
+            $imageId = $row['id'];
 
-            $cover['thumbnails'] = $this->getMediaThumbnails($cover);
+            $row['thumbnails'] = $this->getMediaThumbnails($row);
 
-            $covers[$number] = $this->mediaHydrator->hydrateProductImage($cover);
+            $media[$key][$imageId] = $this->mediaHydrator->hydrateProductImage($row);
         }
 
-        return $covers;
+        return $media;
+    }
+
+    /**
+     * @param Struct\ListProduct[] $products
+     * @return array
+     */
+    public function getProductsMedia(array $products)
+    {
+        $ids = array();
+        foreach ($products as $product) {
+            $ids[] = $product->getId();
+        }
+
+        $query = $this->getProductMediaQuery();
+
+        $query->where('image.articleID IN (:ids)')
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
+            ->addOrderBy('image.main')
+            ->addOrderBy('image.position');
+
+        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $query->execute();
+
+        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        $media = array();
+        foreach ($data as $row) {
+            $productId = $row['__image_articleID'];
+            $imageId = $row['id'];
+
+            $row['thumbnails'] = $this->getMediaThumbnails($row);
+
+            $media[$productId][$imageId] = $this->mediaHydrator->hydrateProductImage($row);
+        }
+
+        return $media;
+    }
+
+    protected function getProductMediaQuery()
+    {
+        $query = $this->entityManager->getDBALQueryBuilder();
+
+        $query->select($this->getMediaFields())
+            ->addSelect($this->getImageFields())
+            ->addSelect($this->getSettingFields())
+            ->addSelect($this->getTableFields('s_articles_img_attributes', 'imageAttribute'))
+            ->addSelect($this->getTableFields('s_media_attributes', 'attribute'));
+
+        $query->from('s_articles_img', 'image')
+            ->innerJoin('image', 's_media', 'media', 'image.media_id = media.id')
+            ->innerJoin('media', 's_media_album_settings', 'settings', 'settings.albumID = media.albumID')
+            ->leftJoin('image', 's_articles_img_attributes', 'imageAttribute', 'imageAttribute.imageID = image.id')
+            ->leftJoin('media', 's_media_attributes', 'attribute', 'attribute.mediaID = image.media_id');
+
+        return $query;
     }
 
 
-    private function getMediaFields()
+    protected function getMediaFields()
     {
         return array(
             'media.id',
@@ -121,7 +179,7 @@ class Media extends Gateway
         );
     }
 
-    private function getImageFields()
+    protected function getImageFields()
     {
         return array(
             'image.id as __image_id',
@@ -138,7 +196,7 @@ class Media extends Gateway
         );
     }
 
-    private function getSettingFields()
+    protected function getSettingFields()
     {
         return array(
             'settings.id as __settings_id',
@@ -152,7 +210,7 @@ class Media extends Gateway
      * @param $data
      * @return array
      */
-    private function getMediaThumbnails($data)
+    protected function getMediaThumbnails($data)
     {
         $sizes = explode(';', $data['__settings_thumbnail_size']);
 

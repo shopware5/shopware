@@ -52,6 +52,30 @@ class Product
      */
     private $similarProductsGateway;
 
+    /**
+     * @var Gateway\Download
+     */
+    private $downloadGateway;
+
+    /**
+     * @var Gateway\Link
+     */
+    private $linkGateway;
+
+    /**
+     * @var ProductProperty
+     */
+    private $productPropertyService;
+
+    /**
+     * @var Configurator
+     */
+    private $configuratorService;
+
+    /**
+     * @var CheapestPrice
+     */
+    private $cheapestPriceService;
 
     function __construct(
         Gateway\ListProduct $productGateway,
@@ -60,28 +84,31 @@ class Product
         Gateway\SimilarProducts $similarProductsGateway,
         ListProduct $listProductService,
         GraduatedPrices $graduatedPricesService,
+        CheapestPrice $cheapestPriceService,
         PriceCalculation $priceCalculationService,
         Media $mediaService,
         Translation $translationService,
+        Gateway\Download $downloadGateway,
+        Gateway\Link $linkGateway,
+        ProductProperty $productPropertyService,
+        Configurator $configuratorService,
         \Enlight_Event_EventManager $eventManager
     ) {
         $this->productGateway = $productGateway;
-
         $this->voteGateway = $voteGateway;
-
         $this->relatedProductsGateway = $relatedProductsGateway;
-
         $this->similarProductsGateway = $similarProductsGateway;
+        $this->downloadGateway = $downloadGateway;
+        $this->linkGateway = $linkGateway;
 
         $this->listProductService = $listProductService;
-
         $this->graduatedPricesService = $graduatedPricesService;
-
+        $this->cheapestPriceService = $cheapestPriceService;
         $this->priceCalculationService = $priceCalculationService;
-
         $this->mediaService = $mediaService;
-
+        $this->productPropertyService = $productPropertyService;
         $this->translationService = $translationService;
+        $this->configuratorService = $configuratorService;
 
         $this->eventManager = $eventManager;
     }
@@ -93,28 +120,57 @@ class Product
      */
     public function getList($numbers, Struct\Context $context)
     {
+        //todo@dr get seo category.
+
         $products = $this->productGateway->getList($numbers, $context);
+
+        $graduatedPrices = $this->graduatedPricesService->getList($products, $context);
 
         $votes = $this->voteGateway->getList($products);
 
-        $related = $this->getRelatedProducts($products, $context);
+        $relatedProducts = $this->getRelatedProducts($products, $context);
 
-        $similar = $this->getSimilarProducts($products, $context);
+        $similarProducts = $this->getSimilarProducts($products, $context);
+
+        $downloads = $this->downloadGateway->getList($products);
+
+        $links = $this->linkGateway->getList($products);
+
+        $media = $this->mediaService->getProductsMedia($products, $context);
+
+        $properties = $this->productPropertyService->getList($products, $context);
+
+        $configuration = $this->configuratorService->getProductsConfigurations($products, $context);
+
+        $cheapestPrice = $this->cheapestPriceService->getList($products, $context);
 
         $result = array();
-        foreach($numbers as $number) {
-            if (!array_key_exists($number, $products)) {
-                continue;
-            }
-
-            $product = $products[$number];
+        foreach ($products as $product) {
+            $number = $product->getNumber();
 
             $product->hasState(Struct\ListProduct::STATE_PRICE_CALCULATED);
 
+            $product->setRelatedProducts($relatedProducts[$number]);
 
-            $product->setRelated($related[$number]);
+            $product->setSimilarProducts($similarProducts[$number]);
+
+            $product->setPriceRules($graduatedPrices[$number]);
 
             $product->setVotes($votes[$number]);
+
+            $product->setDownloads($downloads[$number]);
+
+            $product->setLinks($links[$number]);
+
+            $product->setMedia($media[$number]);
+
+            $product->setPropertySet($properties[$number]);
+
+            $product->setConfiguration($configuration[$number]);
+
+            $product->setCheapestPriceRule($cheapestPrice[$number]);
+
+            $this->priceCalculationService->calculateProduct($product, $context);
 
             $result[$number] = $product;
         }
@@ -138,18 +194,17 @@ class Product
         //loads the list product data for the selected numbers.
         //all numbers are joined in the extractNumbers function to prevent that a product will be
         //loaded multiple times
-        $related = $this->listProductService->getList(
+        $listProducts = $this->listProductService->getList(
             $this->extractNumbers($numbers),
             $context
         );
 
         $result = array();
-        foreach($numbers as $key => $relatedProducts) {
-
-            //collects all elements of $related, which order number are stored in the $numbers array
-            $result[$key] = array_filter($related, function (Struct\ListProduct $product) use ($relatedProducts) {
-                return (in_array($product->getNumber(), $relatedProducts));
-            });
+        foreach ($products as $product) {
+            $result[$product->getNumber()] = $this->getProductsByNumbers(
+                $listProducts,
+                $numbers[$product->getId()]
+            );
         }
 
         return $result;
@@ -162,38 +217,29 @@ class Product
      */
     public function getSimilarProducts(array $products, Struct\Context $context)
     {
+        /**
+         * returns an array which is associated with the different product numbers.
+         * Each array contains a list of product numbers which are related to the reference product.
+         */
         $numbers = $this->similarProductsGateway->getList($products);
 
         //loads the list product data for the selected numbers.
         //all numbers are joined in the extractNumbers function to prevent that a product will be
         //loaded multiple times
-        $similar = $this->listProductService->getList(
+        $listProducts = $this->listProductService->getList(
             $this->extractNumbers($numbers),
             $context
         );
 
-        $fallback = array();
         $result = array();
-
-        foreach($products as $product) {
-            $number = $product->getNumber();
-
-            if (!array_key_exists($number, $numbers)) {
-                $fallback[] = $product;
-                continue;
-            }
-
-            $similarNumbers = $numbers[$number];
-
-            $result[$number] = array_filter($similar, function(Struct\ListProduct $similarProduct) use ($similarNumbers) {
-                return in_array($similarProduct->getNumber(), $similarNumbers);
-            });
+        foreach ($products as $product) {
+            $result[$product->getNumber()] = $this->getProductsByNumbers(
+                $listProducts,
+                $numbers[$product->getId()]
+            );
         }
 
-        if (empty($fallback)) {
-            return $result;
-        }
-
+        //todo@dr fallback to same category products.
 //        $similar = $this->similarProductsGateway->getList($fallback);
 //
 //        foreach($fallback as $product) {
@@ -209,6 +255,25 @@ class Product
         return $result;
     }
 
+
+    /**
+     * @param Struct\ListProduct[] $products
+     * @param array $numbers
+     * @return Struct\ListProduct[]
+     */
+    private function getProductsByNumbers(array $products, array $numbers)
+    {
+        $result = array();
+
+        foreach ($products as $product) {
+            if (in_array($product->getNumber(), $numbers)) {
+                $result[] = $product;
+            }
+        }
+        return $result;
+    }
+
+
     /**
      * @param $numbers
      * @return array
@@ -217,7 +282,7 @@ class Product
     {
         //collect all numbers to send a single list product request.
         $related = array();
-        foreach($numbers as $value) {
+        foreach ($numbers as $value) {
             $related = array_merge($related, $value);
         }
 

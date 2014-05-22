@@ -60,7 +60,7 @@ class Manufacturer extends Gateway
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         $manufacturers = array();
-        foreach($data as $row) {
+        foreach ($data as $row) {
             $manufacturers[$row['id']] = $this->manufacturerHydrator->hydrate($row);
         }
 

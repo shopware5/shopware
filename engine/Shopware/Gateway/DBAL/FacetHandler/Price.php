@@ -42,7 +42,7 @@ class Price extends DBAL
         $query->resetQueryPart('orderBy');
         $query->resetQueryPart('groupBy');
 
-        /**@var $condition \Shopware\Gateway\Search\Condition\Price*/
+        /**@var $condition \Shopware\Gateway\Search\Condition\Price */
         if ($condition = $criteria->getCondition('price')) {
             $facet->range = array(
                 'min' => $condition->min,
@@ -59,9 +59,11 @@ class Price extends DBAL
 
         $selection = $this->priceHelper->getCheapestPriceSelection($facet->currentCustomerGroup);
 
-        $query->select(array(
-            $selection . ' as cheapest_price'
-        ));
+        $query->select(
+            array(
+                $selection . ' as cheapest_price'
+            )
+        );
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();

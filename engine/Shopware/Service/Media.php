@@ -11,6 +11,11 @@ use Shopware\Gateway\DBAL as Gateway;
 class Media
 {
     /**
+     * @var Gateway\Cover
+     */
+    private $coverGateway;
+
+    /**
      * @var Gateway\Media
      */
     private $mediaGateway;
@@ -21,13 +26,16 @@ class Media
     private $shopwareConfig;
 
     /**
+     * @param Gateway\Cover $coverGateway
      * @param Gateway\Media $mediaGateway
      * @param \Shopware_Components_Config $shopwareConfig
      */
     function __construct(
+        Gateway\Cover $coverGateway,
         Gateway\Media $mediaGateway,
         \Shopware_Components_Config $shopwareConfig
     ) {
+        $this->coverGateway = $coverGateway;
         $this->mediaGateway = $mediaGateway;
         $this->shopwareConfig = $shopwareConfig;
     }
@@ -36,23 +44,40 @@ class Media
      * @param Struct\ListProduct[] $products
      * @return \Shopware\Struct\Media[]
      */
-    public function getCovers(array $products)
+    public function getProductsCovers(array $products)
     {
-        return $this->mediaGateway->getCovers($products);
+        return $this->coverGateway->getList($products);
     }
 
     /**
-     * @param Struct\ListProduct $product
-     * @return Struct\Media
+     * @param Struct\ListProduct[] $products
+     * @param Context $context
+     * @return array Contains a list of Struct\Media[] classes which indexed with the product order number.
      */
-    public function getCover(Struct\ListProduct $product)
+    public function getProductsMedia(array $products, Context $context)
     {
-        if ($this->shopwareConfig->get('forceArticleMainImageInListing')) {
-            $cover = $this->mediaGateway->getCover($product);
-        } else {
-            $cover = $this->mediaGateway->getCover($product);
+        $specifyMedia = $this->mediaGateway->getVariantsMedia($products);
+
+        $globalMedia = $this->mediaGateway->getProductsMedia($products);
+
+        $result = array();
+
+        foreach ($products as $product) {
+
+            $variantMedia = array();
+
+            if (array_key_exists($product->getNumber(), $specifyMedia)) {
+                $variantMedia = $specifyMedia[$product->getNumber()];
+            }
+
+            $productMedia = $globalMedia[$product->getId()];
+
+            $result[$product->getNumber()] = array_merge(
+                $variantMedia,
+                array_diff_key($productMedia, $variantMedia)
+            );
         }
 
-        return $cover;
+        return $result;
     }
 }

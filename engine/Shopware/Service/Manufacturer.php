@@ -1,6 +1,7 @@
 <?php
 
 namespace Shopware\Service;
+
 use Shopware\Struct;
 use Shopware\Gateway\DBAL as Gateway;
 
@@ -19,6 +20,13 @@ class Manufacturer
         $this->manufacturerGateway = $manufacturerGateway;
     }
 
+    public function get($id, Struct\Context $context)
+    {
+        $manufacturers = $this->getList(array($id), $context);
+
+        return array_shift($manufacturers);
+    }
+
     /**
      * @param array $ids
      * @param Struct\Context $context
@@ -29,12 +37,5 @@ class Manufacturer
         $manufacturers = $this->manufacturerGateway->getList($ids, $context);
 
         return $manufacturers;
-    }
-
-    public function get($id, Struct\Context $context)
-    {
-        $manufacturers = $this->getList(array($id), $context);
-
-        return array_shift($manufacturers);
     }
 }

@@ -230,6 +230,7 @@ class PriceCalculation
      */
     private function calculateReferencePrice(Struct\Product\Price $price)
     {
-        return $price->getCalculatedPrice() / $price->getUnit()->getPurchaseUnit() * $price->getUnit()->getReferenceUnit();
+        return $price->getCalculatedPrice() / $price->getUnit()->getPurchaseUnit() * $price->getUnit(
+        )->getReferenceUnit();
     }
 }

@@ -45,7 +45,7 @@ class Vote extends Gateway
     public function getList(array $products)
     {
         $ids = array();
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $ids[] = $product->getId();
         }
 
@@ -65,13 +65,13 @@ class Vote extends Gateway
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         $votes = array();
-        foreach($data as $row) {
+        foreach ($data as $row) {
             $id = $row['articleID'];
             $votes[$id][] = $this->voteHydrator->hydrate($row);
         }
 
         $result = array();
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $number = $product->getNumber();
             $id = $product->getId();
 

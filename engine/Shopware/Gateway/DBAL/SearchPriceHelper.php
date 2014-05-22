@@ -15,7 +15,8 @@ class SearchPriceHelper
         return '(MIN(' . $this->getSelection($current) . '))';
     }
 
-    public function getSelection(Group $current) {
+    public function getSelection(Group $current)
+    {
 
         $selection = "(
             IF(customer_prices.id, customer_prices.price, default_prices.price)";
@@ -29,7 +30,7 @@ class SearchPriceHelper
         }
 
         if ($current->useDiscount()) {
-            $discount = (100 - (float) $current->getPercentageDiscount()) / 100;
+            $discount = (100 - (float)$current->getPercentageDiscount()) / 100;
             $selection .= " * " . $discount;
         }
 

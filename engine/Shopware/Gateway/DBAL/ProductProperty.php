@@ -92,7 +92,11 @@ class ProductProperty extends Gateway
         $query->where('products.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
-        $query->orderBy('filterArticles.articleID');
+        $query->orderBy('filterArticles.articleID')
+            ->addOrderBy('sets.position')
+            ->addOrderBy('relations.position')
+            ->addOrderBy('options.position')
+            ->addOrderBy('options.id');
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -100,12 +104,12 @@ class ProductProperty extends Gateway
         $data = $statement->fetchAll(\PDO::FETCH_GROUP);
 
         $properties = array();
-        foreach($data as $productId => $values) {
+        foreach ($data as $productId => $values) {
             $properties[$productId] = $this->propertyHydrator->hydrateValues($values);
         }
 
         $result = array();
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $sets = $properties[$product->getId()];
             $result[$product->getNumber()] = array_shift($sets);
         }

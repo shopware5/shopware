@@ -24,10 +24,12 @@ class Property extends DBAL
 
         $query->resetQueryPart('groupBy');
 
-        $query->select(array(
-            'productProperties.valueID as id',
-            'COUNT(DISTINCT products.id) as total'
-        ));
+        $query->select(
+            array(
+                'productProperties.valueID as id',
+                'COUNT(DISTINCT products.id) as total'
+            )
+        );
 
         $query->innerJoin(
             'products',
@@ -66,7 +68,7 @@ class Property extends DBAL
         );
 
         $query->groupBy('propertyOptions.id');
-        
+
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();

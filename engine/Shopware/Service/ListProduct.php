@@ -74,43 +74,16 @@ class ListProduct
      *
      * To get the whole product data you can use the `get` function.
      *
-     * @param array $numbers
+     * @param string $number
      * @param \Shopware\Struct\Context $context
-     * @return Struct\ListProduct[]
+     * @return Struct\ListProduct
      */
-    public function getList(array $numbers, Struct\Context $context)
+    public function get($number, Struct\Context $context)
     {
-        $products = $this->productGateway->getList($numbers, $context);
+        $products = $this->getList(array($number), $context);
 
-        $covers = $this->mediaService->getCovers($products, $context);
-
-        $graduatedPrices = $this->graduatedPricesService->getList($products, $context);
-
-        $cheapestPrices = $this->cheapestPriceService->getList($products, $context);
-
-        $result = array();
-        foreach ($numbers as $number) {
-            if (!array_key_exists($number, $products)) {
-                continue;
-            }
-            $product = $products[$number];
-
-            $product->setCover($covers[$number]);
-
-            $product->setPriceRules($graduatedPrices[$number]);
-
-            $product->setCheapestPriceRule($cheapestPrices[$number]);
-
-            $this->priceCalculationService->calculateProduct($product, $context);
-
-            $this->translationService->translateProduct($product, $context->getShop());
-
-            $result[$number] = $product;
-        }
-
-        return $result;
+        return array_shift($products);
     }
-
 
     /**
      * Returns a minified product variant which contains only
@@ -126,14 +99,36 @@ class ListProduct
      *
      * To get the whole product data you can use the `get` function.
      *
-     * @param string $number
+     * @param array $numbers
      * @param \Shopware\Struct\Context $context
-     * @return Struct\ListProduct
+     * @return Struct\ListProduct[]
      */
-    public function get($number, Struct\Context $context)
+    public function getList(array $numbers, Struct\Context $context)
     {
-        $products = $this->getList(array($number), $context);
+        /**@var $products Struct\Collection\Product */
+        $products = $this->productGateway->getList($numbers, $context);
 
-        return array_shift($products);
+        $covers = $this->mediaService->getProductsCovers($products, $context);
+
+        $graduatedPrices = $this->graduatedPricesService->getList($products, $context);
+
+        $cheapestPrices = $this->cheapestPriceService->getList($products, $context);
+
+        /**@var $product Struct\ListProduct */
+        foreach ($products as $product) {
+            $number = $product->getNumber();
+
+            $product->setCover($covers[$number]);
+
+            $product->setPriceRules($graduatedPrices[$number]);
+
+            $product->setCheapestPriceRule($cheapestPrices[$number]);
+
+            $this->priceCalculationService->calculateProduct($product, $context);
+
+            $this->translationService->translateProduct($product, $context->getShop());
+        }
+
+        return $products;
     }
 }
