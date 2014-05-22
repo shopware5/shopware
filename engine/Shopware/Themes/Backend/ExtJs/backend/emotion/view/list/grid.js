@@ -42,9 +42,9 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
     alias: 'widget.emotion-list-grid',
 
     deviceWidth: {
-        desktop: 1260,
-        tablet: 1024,
-        mobile: 768
+        desktop: 1024,
+        tablet: 768,
+        mobile: 320
     },
 
     /**
