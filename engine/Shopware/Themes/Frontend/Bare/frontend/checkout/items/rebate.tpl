@@ -6,6 +6,13 @@
     {block name='frontend_checkout_cart_item_rebate_name'}
         <div class="table--column column--product block">
 
+			{* Badge *}
+			{block name='frontend_checkout_cart_item_rebate_badge'}
+				<div class="table--media basket--badge">
+					&gt;
+				</div>
+			{/block}
+
             {* Product information *}
             {block name='frontend_checkout_cart_item_rebate_details'}
                 <div class="table--content">
@@ -35,6 +42,12 @@
     {* Accumulated product price *}
     {block name='frontend_checkout_cart_item_rebate_total_sum'}
         <div class="table--column column--total-price block is--align-right">
+			{block name='frontend_checkout_cart_item_rebate_total_sum_label'}
+				<div class="column--label total-price--label">
+					{s name="CartColumnTotal" namespace="frontend/checkout/cart_header"}{/s}
+				</div>
+			{/block}
+
             {if $sBasketItem.itemInfo}
                 {$sBasketItem.itemInfo}
             {else}

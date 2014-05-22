@@ -38,27 +38,44 @@
         </div>
     {/block}
 
-    {* Product tax rate *}
-    {block name='frontend_checkout_cart_item_premium_tax_price'}{/block}
-
-    {* Product quantity *}
+	{* Product quantity *}
     {block name='frontend_checkout_cart_item_premium_quantity'}
-        <div class="table--column column--quantity block">
-            1
+        <div class="table--column column--quantity block is--align-right">
+			{* Label *}
+			{block name='frontend_checkout_cart_item_premium_quantity_label'}
+				<div class="column--label quantity--label">
+					{s name="CartColumnQuantity" namespace="frontend/checkout/cart_header"}{/s}
+				</div>
+			{/block}
+
+			<select name="sQuantity">
+				<option selected="selected" disabled="disabled">
+					1
+				</option>
+			</select>
         </div>
     {/block}
+
+    {* Product tax rate *}
+    {block name='frontend_checkout_cart_item_premium_tax_price'}{/block}
 
     {* Accumulated product price *}
     {block name='frontend_checkout_cart_item_premium_total_sum'}
         <div class="table--column column--total-price block is--align-right">
+			{block name='frontend_checkout_cart_item_premium_total_sum_label'}
+				<div class="column--label total-price--label">
+					{s name="CartColumnTotal" namespace="frontend/checkout/cart_header"}{/s}
+				</div>
+			{/block}
+
             {s name="CartItemInfoFree"}{/s}
         </div>
     {/block}
 
     {* Remove product from basket *}
     {block name='frontend_checkout_cart_item_premium_delete_article'}
-        <div class="table--column column--actions block is--align-right">
-            <a href="{url action='deleteArticle' sDelete=$sBasketItem.id sTargetAction=$sTargetAction}" class="btn" title="{s name='CartItemLinkDelete '}{/s}">
+        <div class="table--column column--actions block">
+            <a href="{url action='deleteArticle' sDelete=$sBasketItem.id sTargetAction=$sTargetAction}" class="btn is--small" title="{s name='CartItemLinkDelete '}{/s}">
                 X
             </a>
         </div>

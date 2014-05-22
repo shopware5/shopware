@@ -52,21 +52,17 @@
             </div>
         {/block}
 
-        {* Product unit price *}
-        {block name='frontend_checkout_cart_item_price'}
-            <div class="table--column column--unit-price block is--align-right">
-                {if !$sBasketItem.modus}{$sBasketItem.price|currency}
-                    {block name='frontend_checkout_cart_tax_symbol'}{s name="Star" namespace="frontend/listing/box_article"}{/s}{/block}
-                {/if}
-            </div>
-        {/block}
-
-        {* Product tax rate *}
-        {block name='frontend_checkout_cart_item_tax_price'}{/block}
-
         {* Product quantity *}
         {block name='frontend_checkout_cart_item_quantity'}
             <div class="table--column column--quantity block is--align-right">
+
+				{* Label *}
+				{block name='frontend_checkout_cart_item_quantity_label'}
+					<div class="column--label quantity--label">
+						{s name="CartColumnQuantity" namespace="frontend/checkout/cart_header"}{/s}
+					</div>
+				{/block}
+
                 <input type="hidden" name="sArticle" value="{$sBasketItem.id}" />
                 <select name="sQuantity">
                     {section name="i" start=$sBasketItem.minpurchase loop=$sBasketItem.maxpurchase+1 step=$sBasketItem.purchasesteps}
@@ -78,16 +74,44 @@
             </div>
         {/block}
 
+		{* Product unit price *}
+        {block name='frontend_checkout_cart_item_price'}
+            <div class="table--column column--unit-price block is--align-right">
+
+                {if !$sBasketItem.modus}
+					{block name='frontend_checkout_cart_item_quantity_label'}
+						<div class="column--label unit-price--label">
+							{s name="CartColumnPrice" namespace="frontend/checkout/cart_header"}{/s}
+						</div>
+					{/block}
+
+					{$sBasketItem.price|currency}
+
+                    {block name='frontend_checkout_cart_tax_symbol'}
+						{s name="Star" namespace="frontend/listing/box_article"}{/s}
+					{/block}
+                {/if}
+            </div>
+        {/block}
+
+        {* Product tax rate *}
+        {block name='frontend_checkout_cart_item_tax_price'}{/block}
+
         {* Accumulated product price *}
         {block name='frontend_checkout_cart_item_total_sum'}
             <div class="table--column column--total-price block is--align-right">
+				{block name='frontend_checkout_cart_item_quantity_label'}
+					<div class="column--label total-price--label">
+						{s name="CartColumnTotal" namespace="frontend/checkout/cart_header"}{/s}
+					</div>
+				{/block}
                 {$sBasketItem.amount|currency} {block name='frontend_checkout_cart_tax_symbol'}{s name="Star" namespace="frontend/listing/box_article"}{/s}{/block}
             </div>
         {/block}
 
         {* Remove product from basket *}
         {block name='frontend_checkout_cart_item_delete_article'}
-            <div class="table--column column--actions block is--align-right">
+            <div class="table--column column--actions block">
                 <a href="{url action='deleteArticle' sDelete=$sBasketItem.id sTargetAction=$sTargetAction}" class="btn is--small" title="{s name='CartItemLinkDelete '}{/s}">
                     X
                 </a>

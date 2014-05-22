@@ -8,6 +8,13 @@
             </div>
         {/block}
 
+		{* Product quantity *}
+		{block name='frontend_checkout_cart_header_quantity'}
+			<div class="table--column column--quantity block is--align-right">
+				{s name="CartColumnQuantity"}{/s}
+			</div>
+		{/block}
+
         {* Unit price *}
         {block name='frontend_checkout_cart_header_price'}
             <div class="table--column column--unit-price block is--align-right">
@@ -17,13 +24,6 @@
 
         {* Product tax rate *}
         {block name='frontend_checkout_cart_header_tax'}{/block}
-
-        {* Product quantity *}
-        {block name='frontend_checkout_cart_header_quantity'}
-            <div class="table--column column--quantity block is--align-right">
-                {s name="CartColumnQuantity"}{/s}
-            </div>
-        {/block}
 
         {* Accumulated product price *}
         {block name='frontend_checkout_cart_header_total'}
