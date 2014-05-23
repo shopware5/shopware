@@ -246,7 +246,9 @@ class sConfigurator
                 return $this->getArticleConfigurator($id, $articleData, true);
 
             } elseif ($settings['type'] == self::TYPE_SELECTION) {
-                array_pop($this->sSYSTEM->_POST["group"]);
+                $group = $this->sSYSTEM->_POST["group"];
+                array_pop($group);
+                $this->sSYSTEM->_POST["group"] = $group;
                 return $this->getArticleConfigurator($id, $articleData, true);
             }
         }
