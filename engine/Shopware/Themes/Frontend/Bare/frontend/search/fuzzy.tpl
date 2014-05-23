@@ -16,13 +16,28 @@
 		{if $sRequests.sSearchOrginal}
 			{* No results found *}
 			{block name='frontend_search_fuzzy_empty'}
-				{include file="frontend/_includes/messages.tpl" type="error" content="{s name='SearchFuzzyHeadlineEmpty'}{/s}"}
+
+
+				<div class="alert is--error is--rounded">
+					<div class="alert--icon">
+						<i class="icon--element icon--cross"></i>
+					</div>
+					<div class="alert--content">
+						{s name='SearchFuzzyHeadlineEmpty'}{/s}
+					</div>
+				</div>
         	{/block}
 		{else}
-		
 			{* Given search term is too short *}
 			{block name='frontend_search_fuzzy_shortterm'}
-				{include file="frontend/_includes/messages.tpl" type="error" content="{s name='SearchFuzzyInfoShortTerm'}{/s}"}
+				<div class="alert is--error is--rounded">
+					<div class="alert--icon">
+						<i class="icon--element icon--cross"></i>
+					</div>
+					<div class="alert--content">
+						{s name='SearchFuzzyInfoShortTerm'}{/s}
+					</div>
+				</div>
         	{/block}
 		{/if}
 	{/if}
