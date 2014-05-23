@@ -104,6 +104,9 @@
             case 'register_personal_passwordConfirmation':
                 action = 'ajax_validate_password';
                 break;
+            default:
+                return false;
+                break;
         }
 
         if (!$el.val()) {
