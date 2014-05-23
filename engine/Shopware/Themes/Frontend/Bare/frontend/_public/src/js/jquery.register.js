@@ -184,10 +184,10 @@
     Plugin.prototype.destroy = function() {
         var me = this;
 
-        me.$typeSelection.on('change.' + pluginName);
-        me.$skipAccount.on('change.' + pluginName);
-        me.$alternativeShipping.on('change.' + pluginName);
-        me.$inputs.on('blur.' + pluginName);
+        me.$typeSelection.off('change.' + pluginName);
+        me.$skipAccount.off('change.' + pluginName);
+        me.$alternativeShipping.off('change.' + pluginName);
+        me.$inputs.off('blur.' + pluginName);
     };
 
     $.fn[pluginName] = function ( options ) {
