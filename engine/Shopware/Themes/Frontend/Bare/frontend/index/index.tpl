@@ -110,7 +110,7 @@
 {/block}
 
 {block name="frontend_index_header_javascript"}
-    {* <script type="text/javascript">
+    <script type="text/javascript">
         //<![CDATA[
         {block name="frontend_index_header_javascript_inline"}
             var timeNow = {time() nocache};
@@ -129,7 +129,6 @@
         {/block}
         //]]>
 	</script>
-	*}
 
 	{block name="frontend_index_header_javascript_jquery"}
 		{* Add the partner statistics widget, if configured *}
