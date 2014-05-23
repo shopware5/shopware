@@ -56,40 +56,42 @@
 			{* E-Mail *}
 			{block name='frontend_register_personal_fieldset_input_mail'}
 				<div class="register--email">
-					<input name="register[personal][email]" type="email" required="required" aria-required="true" placeholder="{s name='RegisterLabelMail'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="register_personal_email" value="{$form_data.email|escape}" class="register--field is--required{if $error_flags.email} has--error{/if}" />
+					<input name="register[personal][email]" type="email" required="required" aria-required="true" placeholder="{s name='RegisterLabelMail'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="register_personal_email" value="{$form_data.email|escape}" class="register--field email is--required{if $error_flags.email} has--error{/if}" />
 				</div>
 
 				{if {config name=doubleEmailValidation}}
 					<div class="register--emailconfirm">
-						<input name="register[personal][emailConfirmation]" type="email" required="required" aria-required="true" placeholder="{s name='RegisterLabelMailConfirmation'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="register_personal_emailConfirmation" value="{$form_data.emailConfirmation|escape}" class="register--field is--required{if $error_flags.emailConfirmation} has--error{/if}" />
+						<input name="register[personal][emailConfirmation]" type="email" required="required" aria-required="true" placeholder="{s name='RegisterLabelMailConfirmation'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="register_personal_emailConfirmation" value="{$form_data.emailConfirmation|escape}" class="register--field emailConfirmation is--required{if $error_flags.emailConfirmation} has--error{/if}" />
 					</div>
 				{/if}
 			{/block}
 		{/if}
 
 		{if !$update}
-			{* Password *}
-			{block name='frontend_register_personal_fieldset_input_password'}
-				<div class="register--password">
-					<input name="register[personal][password]" type="password" required="required" aria-required="true" placeholder="{s name='RegisterLabelPassword'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="register_personal_password" class="register--field is--required{if $error_flags.password} has--error{/if}" />
-				</div>
-			{/block}
-
-			{* Password confirmation *}
-			{block name='frontend_register_personal_fieldset_input_password_confirm'}
-				{if {config name=doublePasswordValidation}}
-					<div class="register--passwordconfirm">
-						<input name="register[personal][passwordConfirmation]" type="password" aria-required="true" placeholder="{s name='RegisterLabelPasswordRepeat'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="register_personal_passwordConfirmation" class="register--field is--required{if $error_flags.passwordConfirmation} has--error{/if}" />
+			<div class="register--account-information">
+				{* Password *}
+				{block name='frontend_register_personal_fieldset_input_password'}
+					<div class="register--password">
+						<input name="register[personal][password]" type="password" required="required" aria-required="true" placeholder="{s name='RegisterLabelPassword'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="register_personal_password" class="register--field password is--required{if $error_flags.password} has--error{/if}" />
 					</div>
-				{/if}
-			{/block}
+				{/block}
 
-			{* Password description *}
-			{block name='frontend_register_personal_fieldset_password_description'}
-				<div class="register--password-description">
-					{s name='RegisterInfoPassword'}{/s}{config name=MinPassword} {s name='RegisterInfoPasswordCharacters'}{/s} {s name='RegisterInfoPassword2'}{/s}
-				</div>
-			{/block}
+				{* Password confirmation *}
+				{block name='frontend_register_personal_fieldset_input_password_confirm'}
+					{if {config name=doublePasswordValidation}}
+						<div class="register--passwordconfirm">
+							<input name="register[personal][passwordConfirmation]" type="password" aria-required="true" placeholder="{s name='RegisterLabelPasswordRepeat'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="register_personal_passwordConfirmation" class="register--field passwordConfirmation is--required{if $error_flags.passwordConfirmation} has--error{/if}" />
+						</div>
+					{/if}
+				{/block}
+
+				{* Password description *}
+				{block name='frontend_register_personal_fieldset_password_description'}
+					<div class="register--password-description">
+						{s name='RegisterInfoPassword'}{/s}{config name=MinPassword} {s name='RegisterInfoPasswordCharacters'}{/s} {s name='RegisterInfoPassword2'}{/s}
+					</div>
+				{/block}
+			</div>
 		{/if}
 
 		{* Phone *}
