@@ -27,7 +27,7 @@
 
 {* Register content *}
 {block name='frontend_index_content'}
-	<div class="register--content panel content block has--border">
+	<div class="register--content panel content block has--border" data-register="true">
 
 		{block name='frontend_register_index_dealer_register'}
 			{* Included for compatibility reasons *}
