@@ -1,4 +1,4 @@
-<div class="panel register--shipping">
+<div class="panel register--shipping is--hidden">
 	<h2 class="panel--title is--underline">{s name='RegisterShippingHeadline'}{/s}</h2>
 	<div class="panel--body is--wide">
 		{* Salutation *}

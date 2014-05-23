@@ -1,4 +1,4 @@
-<div class="panel register--company">
+<div class="panel register--company is--hidden">
 	<h2 class="panel--title is--underline">{s name='RegisterHeaderCompany'}{/s}</h2>
 	<div class="panel--body is--wide">
 
