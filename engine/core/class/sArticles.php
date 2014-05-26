@@ -127,7 +127,7 @@ class sArticles
         $this->categoryId = $this->category->getId();
 
         $this->translationId = ($translationId)  ?: (!Shopware()->Shop()->getDefault() ? Shopware()->Shop()->getId() : null);
-        $this->customerGroupId = $customerGroupId ?: ((int) Shopware()->Modules()->System()->sSYSTEM->sUSERGROUPDATA['id']);
+        $this->customerGroupId = $customerGroupId ?: ((int) Shopware()->Modules()->System()->sUSERGROUPDATA['id']);
     }
 
     /**
@@ -203,8 +203,7 @@ class sArticles
                 ));
 
                 if (!$queryNewPrice) {
-                    $this->sSYSTEM->E_CORE_WARNING("sArticles##sAddComparison##01", "Error in SQL-query");
-                    return false;
+                    throw new Enlight_Exception("sArticles##sAddComparison##01: Error in SQL-query");
                 }
             }
             return true;
@@ -515,8 +514,7 @@ class sArticles
             $active
         ));
         if (empty($insertComment)) {
-            $this->sSYSTEM->E_CORE_WARNING("sSaveComment #00", "Could not save comment");
-            return false;
+            throw new Enlight_Exception("sSaveComment #00: Could not save comment");
         }
 
         $insertId = $this->sSYSTEM->sDB_CONNECTION->Insert_ID();
@@ -525,7 +523,7 @@ class sArticles
         }
         $this->sSYSTEM->_SESSION['sArticleCommentInserts'][$article] = $insertId;
 
-        unset($this->sSYSTEM->_POST);
+        $this->sSYSTEM->_POST = array();
     }
 
     /**
@@ -733,24 +731,24 @@ class sArticles
                     $pages["numbers"][$i]["markup"] = false;
                 }
                 $pages["numbers"][$i]["value"] = $i;
-                $pages["numbers"][$i]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink(array("sPage" => $i), false);
+                $pages["numbers"][$i]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . Shopware()->Modules()->Core()->sBuildLink(array("sPage" => $i), false);
                 $pages["numbers"][$i]["link"] = str_replace("+", " ", $pages["numbers"][$i]["link"]);
 
             }
             // Previous page
             if ($sPage != 1) {
-                $pages["previous"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink(array("sPage" => $sPage - 1), false);
+                $pages["previous"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . Shopware()->Modules()->Core()->sBuildLink(array("sPage" => $sPage - 1), false);
             } else {
                 $pages["previous"] = null;
             }
             // Next page
             if ($sPage != $numberPages) {
-                $pages["next"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink(array("sPage" => $sPage + 1), false);
+                $pages["next"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . Shopware()->Modules()->Core()->sBuildLink(array("sPage" => $sPage + 1), false);
             } else {
                 $pages["next"] = null;
             }
             // First page
-            $pages["first"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink(array("sPage" => 1), false);
+            $pages["first"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . Shopware()->Modules()->Core()->sBuildLink(array("sPage" => 1), false);
         }
 
         if (!empty($this->sSYSTEM->sCONFIG['sNUMBERARTICLESTOSHOW'])) {
@@ -771,7 +769,7 @@ class sArticles
                     $arrayArticlesToShow[$articlesToShowKey]["markup"] = false;
                 }
                 // Building link
-                $arrayArticlesToShow[$articlesToShowKey]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink(array("sPerPage" => $articlesToShowValue), false) . "";
+                $arrayArticlesToShow[$articlesToShowKey]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . Shopware()->Modules()->Core()->sBuildLink(array("sPerPage" => $articlesToShowValue), false) . "";
                 //echo $arrayArticlesToShow[$articlesToShowKey]["link"]."<br />";
             } // -- for every possible value
         } // -- Building array
@@ -1223,18 +1221,18 @@ class sArticles
                     $pages["numbers"][$i]["markup"] = false;
                 }
                 $pages["numbers"][$i]["value"] = $i;
-                $pages["numbers"][$i]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink($categoryParams + array("sPage" => $i), false);
+                $pages["numbers"][$i]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . Shopware()->Modules()->Core()->sBuildLink($categoryParams + array("sPage" => $i), false);
 
             }
             // Previous page
             if ($sPage != 1) {
-                $pages["previous"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink($categoryParams + array("sPage" => $sPage - 1), false);
+                $pages["previous"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . Shopware()->Modules()->Core()->sBuildLink($categoryParams + array("sPage" => $sPage - 1), false);
             } else {
                 $pages["previous"] = null;
             }
             // Next page
             if ($sPage != $numberPages) {
-                $pages["next"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink($categoryParams + array("sPage" => $sPage + 1), false);
+                $pages["next"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . Shopware()->Modules()->Core()->sBuildLink($categoryParams + array("sPage" => $sPage + 1), false);
             } else {
                 $pages["next"] = null;
             }
@@ -1259,7 +1257,7 @@ class sArticles
                     $arrayArticlesToShow[$articlesToShowKey]["markup"] = false;
                 }
                 // Building link
-                $arrayArticlesToShow[$articlesToShowKey]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . $this->sSYSTEM->sBuildLink(array("sPerPage" => $articlesToShowValue), false) . "";
+                $arrayArticlesToShow[$articlesToShowKey]["link"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . Shopware()->Modules()->Core()->sBuildLink(array("sPerPage" => $articlesToShowValue), false) . "";
             } // -- for every possible value
         } // -- Building array
 
@@ -1943,7 +1941,7 @@ class sArticles
                 'group' => $property['groupName'],
                 'optionID' => $property['id']
             );
-            $propertyArray["filterOptions"]["grouped"][$property["groupName"]]["default"]["linkSelect"] = $this->sSYSTEM->sCONFIG['sBASEFILE'].$this->sSYSTEM->sBuildLink(array("sFilterGroup"=>$property["groupName"],false));
+            $propertyArray["filterOptions"]["grouped"][$property["groupName"]]["default"]["linkSelect"] = $this->sSYSTEM->sCONFIG['sBASEFILE'].Shopware()->Modules()->Core()->sBuildLink(array("sFilterGroup"=>$property["groupName"],false));
         }
 
         return $propertyArray;
@@ -2435,102 +2433,6 @@ class sArticles
     }
 
     /**
-     * Get all associated articles from a certain article (relates to multidimensional variants / article configurator)
-     * @param int $id s_articles.id
-     * @access public
-     * @return array
-     */
-    public function sGetArticleAccessories($id)
-    {
-        //todo@dr: Configurator - Implement new configurator accessories after the backend module implemented
-        return false;
-
-        $fetchGroups = $this->sSYSTEM->sDB_CONNECTION->CacheGetAssoc($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], "
-            SELECT groupID as id, groupID, groupname, groupdescription, groupimage FROM s_articles_groups_accessories WHERE articleID=$id ORDER BY groupname ASC
-        ");
-
-        if (empty($fetchGroups))
-            return false;
-
-        foreach ($fetchGroups as $key => $configGroup) {
-            $fetchOptions = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], "
-                SELECT optionID, optionname, ordernumber FROM s_articles_groups_accessories_option
-                WHERE articleID=$id AND groupID={$configGroup["groupID"]} ORDER BY optionID ASC
-                ");
-            if (empty($fetchOptions)) {
-                unset($fetchGroups[$key]);
-            } else {
-                foreach ($fetchOptions as $fetchOptionKey => $fetchOptionValue) {
-                    $article = $this->sGetPromotionById("fix", 0, $fetchOptionValue["ordernumber"]);
-                    if (!$article["price"]) {
-                        unset($fetchOptions[$fetchOptionKey]);
-                    } else {
-                        $fetchOptions[$fetchOptionKey]["price"] = $article["price"];
-                        $fetchOptions[$fetchOptionKey]["sArticle"] = $article;
-                    }
-
-                }
-                $fetchGroups[$key]["childs"] = $fetchOptions;
-            }
-        }
-
-        /*/
-          *   get translation for groups
-          /*/
-        if ($this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"] != "de") {
-            $sql = 'SELECT objectdata FROM s_core_translations WHERE objecttype=? AND objectkey=? AND objectlanguage=?';
-            $data = array('accessorygroup', $id, $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"]);
-            $getGroupTranslations = $this->sSYSTEM->sDB_CONNECTION->CacheGetOne($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sql, $data);
-            if (!empty($getGroupTranslations))
-                $getGroupTranslations = unserialize($getGroupTranslations);
-            if (!empty($getGroupTranslations) && is_array($getGroupTranslations)) {
-                foreach ($fetchGroups as $fetchGroupKey => $fetchGroupValue) {
-                    if ($getGroupTranslations[$fetchGroupValue["groupID"]]) {
-                        if ($getGroupTranslations[$fetchGroupValue["groupID"]]["accessoryName"]) {
-                            $fetchGroups[$fetchGroupKey]["groupname"] = $getGroupTranslations[$fetchGroupValue["groupID"]]["accessoryName"];
-                        }
-                        if ($getGroupTranslations[$fetchGroupValue["groupID"]]["accessoryDescription"]) {
-                            $fetchGroups[$fetchGroupKey]["groupdescription"] = $getGroupTranslations[$fetchGroupValue["groupID"]]["accessoryDescription"];
-                        }
-                    }
-                }
-            }
-        }
-        /*/
-          *   get translation for options
-          /*/
-        if ($this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"] != "de") {
-            $sql = "SELECT objectdata FROM s_core_translations WHERE objecttype='accessoryoption' AND objectkey=$id AND objectlanguage='" . $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["isocode"] . "'";
-            $getOptionTranslations = $this->sSYSTEM->sDB_CONNECTION->CacheGetOne($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sql);
-
-            if (!empty($getOptionTranslations))
-                $getOptionTranslations = unserialize($getOptionTranslations);
-            if (!empty($getOptionTranslations))
-                foreach ($fetchGroups as $key => &$configGroup) {
-                    foreach ($configGroup["childs"] as $fetchGroupValuesKey => $fetchGroupValuesValue) {
-                        if ($getOptionTranslations[$fetchGroupValuesValue["optionID"]]) {
-                            if ($getOptionTranslations[$fetchGroupValuesValue["optionID"]]["accessoryoption"]) {
-                                $configGroup["childs"][$fetchGroupValuesKey]["optionname"] = $getOptionTranslations[$fetchGroupValuesValue["optionID"]]["accessoryoption"];
-                            }
-                        }
-                    }
-                }
-        }
-
-        return $fetchGroups;
-    }
-
-    /**
-     * DEPRECATED Clear and refill the article translation table, needed by fuzzy search
-     * @access public
-     * @return void
-     */
-    public function sCreateTranslationTable()
-    {
-
-    }
-
-    /**
      * Get translations for multidimensional groups and options for a certain article
      * @param int $id - s_articles.id
      * @access public
@@ -2626,7 +2528,7 @@ class sArticles
      * @param array $articleData current article
      * @param bool $ignore deprecated
      * @access public
-     * @return array
+     * @return array|float|null
      */
     public function sGetPricegroupDiscount($customergroup, $groupID, $listprice, $quantity, $doMatrix = true, $articleData = array(), $ignore = false)
     {
@@ -3301,8 +3203,13 @@ class sArticles
             }
 
             $getArticle["sDownloads"] = $getArticleDownloads;
+
             // Load bundled products
-            $getArticle["sAccessories"] = $this->sGetArticleAccessories($getArticle["articleID"]);
+            // was:
+            // $getArticle["sAccessories"] = $this->sGetArticleAccessories($getArticle["articleID"]);
+            // But $this->sGetArticleAccessories() always returned false.
+            $getArticle["sAccessories"] = false;
+
             // Professional - Vote AVG
             $getArticle["sVoteAverange"] = $this->sGetArticlesAverangeVote($getArticle["articleID"]);
             $getArticle["sVoteComments"] = $this->sGetArticlesVotes($getArticle["articleID"]);
@@ -3464,13 +3371,13 @@ class sArticles
 
     /**
      * Round article price
-     * @param $moneyfloat price
+     *
+     * @param float $moneyFloat price
      * @access public
      * @return float price
      */
     public function sRound($moneyfloat = null)
     {
-
         $money_str = explode(".", $moneyfloat);
         if (empty($money_str[1])) $money_str[1] = 0;
         $money_str[1] = substr($money_str[1], 0, 3); // convert to rounded (to the nearest thousandth) string
@@ -3479,7 +3386,6 @@ class sArticles
 
         return round($money_str, 2);
     }
-
 
     public function sGetProductByOrdernumber($ordernumber)
     {
@@ -4730,67 +4636,5 @@ class sArticles
             }
         }
         return $sArticle;
-    }
-
-    /**
-     * DEPRECATED Auslesen von LiveShopping Konfigurationen
-     *
-     * @param string $mode fix|random|new|all
-     * @param int $categoryID KategorieID
-     * @param string $article Artikeldaten
-     * @param bool $loadDetails Artikeldetails laden
-     * @param string $whereAdd ZusÃ¤tzliche Where Bedingungen (ACHTUNG: Wird in der Methode nicht maskiert!)
-     * @param string $orderBy SQL-Order (wird bei $mode=random|new ignoriert) (ACHTUNG: Wird in der Methode nicht maskiert!)
-     * @param int $limit Anzahl der zu ladenen DatensÃ¤tze (0=Keine Begrenzung)
-     * @return $article Aktualisierter Array
-     *
-     * $mode:
-     * - fix > Liest einen Artikel aus ($article muss hierzu 'ordernumber' bzw. 'articleID' beinhalten)
-     * - random > Liest einen oder mehrere zufÃ¤llige Artikel aus
-     * - new > Nach den neuesten Liveshopping Konfigurationen sortiert
-     * - gibt alle Artikel aus
-     */
-    public function sGetLiveShopping($mode, $categoryID = 0, $article = null, $loadDetails = false, $whereAdd = '', $orderBy = '', $limit = 1)
-    {
-        // Deprecated
-        return false;
-    }
-
-    /**
-     * DEPRECATED Gibt alle (aktiven) Bundleartikel eines Artikels zurï¿½ck
-     *
-     * $articleID = s_articles.id
-     * $loadArticleData = true=Laden weitere Artikeldetails der Bundleartikel
-     *
-     **/
-    public function sGetArticleBundlesByArticleID($articleID, $loadArticleData = true)
-    {
-        // Deprecated
-        return false;
-    }
-
-    /**
-     * DEPRECATED Liest die Details eines Bundleartikels aus
-     *
-     * $bundleID = s_articles_bundles.id
-     * $loadArticleData = true=Laden weitere Artikeldetails der Bundleartikel
-     *
-     **/
-    public function sGetArticleBundleByID($bundleID, $loadArticleData = true)
-    {
-        // Deprecated
-        return false;
-    }
-
-    /**
-     * DEPRECATED Get array of images from a certain configurator combination
-     * @param array $sArticle Associative array with all article data
-     * @param string $sCombination Currencly active combination
-     * @return array
-     */
-    public function sGetBundleBasketDiscount($ordernumber, $bundleID)
-    {
-        // Deprecated
-        return false;
     }
 }

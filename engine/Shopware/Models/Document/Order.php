@@ -137,6 +137,9 @@ class
     protected $_shippingCostsAsPosition;
     protected $_discount;
 
+    /** @var \Shopware\Models\Tax\Repository */
+    protected $_taxRepository;
+
     /**
      * Initiate order model
      * @param  $id
@@ -187,6 +190,18 @@ class
 
         $this->processPositions();
         $this->processOrder();
+    }
+
+    /**
+     * Helper function to get access to the tax repository.
+     * @return \Shopware\Models\Tax\Repository
+     */
+    private function getTaxRepository()
+    {
+        if ($this->_taxRepository === null) {
+            $this->_taxRepository = Shopware()->Models()->getRepository('Shopware\Models\Tax\Tax');
+        }
+        return $this->_taxRepository;
     }
 
     /**
@@ -274,22 +289,16 @@ class
      */
     public function processOrder()
     {
-        $sql = "
-                SELECT tax
-                FROM `s_core_tax`
-                WHERE ROUND(?*100/(100+tax),2)=?
-            UNION
-                SELECT tax
-                FROM `s_core_tax_rules`
-                WHERE ROUND(?*100/(100+tax),2)=?
+        // p.e. = 24.99 / 20.83 * 100 - 100 = 19.971195391 (approx. 20% VAT)
+        $approximateTaxRate = $this->_order["invoice_shipping"] / $this->_order["invoice_shipping_net"] * 100 - 100;
+        $taxShipping = $this->getTaxRateByApproximateTaxRate(
+            $approximateTaxRate,
+            $this->_shipping["country"]["areaID"],
+            $this->_shipping["countryID"],
+            $this->_shipping["stateID"],
+            $this->_user['customergroupID']
+        );
 
-        ";
-        $taxShipping = Shopware()->Db()->fetchOne($sql,array(
-            $this->_order["invoice_shipping"],
-            $this->_order["invoice_shipping_net"],
-            $this->_order["invoice_shipping"],
-            $this->_order["invoice_shipping_net"]
-        ));
         if (empty($taxShipping)) {
             $taxShipping = Shopware()->Config()->sTAXSHIPPING;
         }
@@ -337,7 +346,7 @@ class
     {
         $this->_positions = new ArrayObject(Shopware()->Db()->fetchAll("
         SELECT
-            od.*,
+            od.*, a.taxID as articleTaxID,
             at.attr1, at.attr2, at.attr3, at.attr4, at.attr5, at.attr6, at.attr7, at.attr8, at.attr9, at.attr10,
             at.attr11, at.attr12, at.attr13, at.attr14, at.attr15, at.attr16, at.attr17, at.attr18, at.attr19, at.attr20
         FROM  s_order_details od
@@ -349,6 +358,10 @@ class
 
         LEFT JOIN s_articles_attributes at
         ON at.articledetailsID=d.id
+
+        LEFT JOIN s_articles a
+        ON d.articleID = a.id
+
         WHERE od.orderID=?
         ORDER BY od.id ASC
         ",array($this->_id)), ArrayObject::ARRAY_AS_PROPS);
@@ -370,9 +383,13 @@ class
             if ($position["mode"] == 0) {
                 $getTax = $position["tax_rate"];
                 if (empty($getTax)) {
-                    $getTax = Shopware()->Db()->fetchOne("
-                    SELECT tax FROM s_core_tax WHERE id = ?
-                    ",array($position["taxID"]));
+                    $position["tax"] = $this->getTaxRepository()->getTaxRateByConditions(
+                        $position['taxID'],
+                        $this->_shipping["country"]["areaID"],
+                        $this->_shipping["countryID"],
+                        $this->_shipping["stateID"],
+                        $this->_user['customergroupID']
+                    );
                 }
                 if ($getTax > $maxTax) {
                     $maxTax = $getTax;
@@ -420,14 +437,26 @@ class
                 } elseif (empty($position["taxID"])) {
                     // Articles get tax per item configuration
                     if (empty($position["tax_rate"])) {
-                        $position["tax"] = Shopware()->Db()->fetchOne("SELECT s_core_tax.tax AS tax FROM s_core_tax, s_articles WHERE s_articles.id=? AND s_core_tax.id=s_articles.taxID",array($position["articleID"]));
+                        $position["tax"] = $this->getTaxRepository()->getTaxRateByConditions(
+                            $position['articleTaxID'],
+                            $this->_shipping["country"]["areaID"],
+                            $this->_shipping["countryID"],
+                            $this->_shipping["stateID"],
+                            $this->_user['customergroupID']
+                        );
                     } else {
                         $position["tax"] = $position["tax_rate"];
                     }
                 } else {
                     // Bundles tax
                     if (empty($position["tax_rate"])) {
-                        $position["tax"] = Shopware()->Db()->fetchOne("SELECT tax FROM s_core_tax WHERE s_core_tax.id=?",array($position["taxID"]));
+                        $position["tax"] = $this->getTaxRepository()->getTaxRateByConditions(
+                            $position['taxID'],
+                            $this->_shipping["country"]["areaID"],
+                            $this->_shipping["countryID"],
+                            $this->_shipping["stateID"],
+                            $this->_user['customergroupID']
+                        );
                     } else {
                         $position["tax"] = $position["tax_rate"];
                     }
@@ -500,7 +529,13 @@ class
      */
     public function getUser()
     {
-        $user = Shopware()->Db()->fetchRow("SELECT * FROM s_user WHERE id = ?", array($this->_userID));
+        $sql = "
+        SELECT u.*, g.id as customergroupID
+        FROM s_user u
+        LEFT JOIN s_core_customergroups g ON u.customergroup = g.groupkey
+        WHERE u.id = ?";
+
+        $user = Shopware()->Db()->fetchRow($sql, array($this->_userID));
 
         if ($user) {
             $this->_user = new ArrayObject($user, ArrayObject::ARRAY_AS_PROPS);
@@ -654,5 +689,58 @@ class
         } else {
             throw new Enlight_Exception("Property $var_name does not exists");
         }
+    }
+
+    /**
+     * Helper function to Return the nearest tax rate of an approximate tax rate (used in processOrder())
+     * Set $maxDiff to change how big the maximum difference between the approximate and defined tax rates can be
+     *
+     * @param integer|float $approximateTaxRate
+     * @param integer $areaId
+     * @param integer $countryId
+     * @param integer $stateId
+     * @param integer $customerGroupId
+     * @param integer|float $maxDiff
+     * @return string
+     */
+    private function getTaxRateByApproximateTaxRate($approximateTaxRate, $areaId, $countryId, $stateId, $customerGroupId, $maxDiff = 0.1)
+    {
+        $sql = "SELECT tax, ABS(tax - ?) as difference
+                FROM `s_core_tax`
+                WHERE ABS(tax - ?) <= ?
+            UNION
+                SELECT tax, ABS(tax - ?) as difference
+                FROM `s_core_tax_rules`
+                WHERE active = 1 AND ABS(tax - ?) <= ?
+                AND
+                    (areaID = ? OR areaID IS NULL)
+                AND
+                    (countryID = ? OR countryID IS NULL)
+                AND
+                    (stateID = ? OR stateID IS NULL)
+                AND
+                    (customer_groupID = ? OR customer_groupID = 0 OR customer_groupID IS NULL)
+                ORDER BY difference
+                LIMIT 1
+                ";
+
+        $taxRate = Shopware()->Db()->fetchOne($sql, array(
+                $approximateTaxRate, // p.e. 19.971195391 (approx. 20% VAT)
+                $approximateTaxRate,
+                $maxDiff, //default: 0.1
+                $approximateTaxRate,
+                $approximateTaxRate,
+                $maxDiff,
+                $areaId, //p.e. 3 (Europe)
+                $countryId, // p.e. 23 (AT)
+                $stateId, //p.e. 0
+                $customerGroupId //p.e. 1 (EK)
+            ));
+
+        if(!$taxRate) {
+            $taxRate = round($approximateTaxRate);
+        }
+
+        return $taxRate;
     }
 }

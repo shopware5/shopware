@@ -200,10 +200,67 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             return;
         }
 
+        $user = Shopware()->Auth()->getIdentity();
+        /** @var $locale \Shopware\Models\Shop\Locale */
+        $locale = $user->locale;
+        $language = $locale->toString();
+
+        foreach ($data['configForms'] as &$configForm) {
+            foreach ($configForm['elements'] as &$element) {
+                if (!in_array($element['type'], array('select', 'combo'))) {
+                    continue;
+                }
+
+                $element['options']['store'] = $this->translateStore($language, $element['options']['store']);
+            }
+        }
+
         $this->View()->assign(array(
            'success' => true,
            'data' => $data
         ));
+    }
+
+    /**
+     * Helper function to translate the store of select- and combo-fields
+     * Store value will be replaced by the value in the correct language.
+     * If there is no matching language in array defined, the first array element will be used.
+     * If the store or a value is not an array, it will not be changed.
+     *
+     * Store should be an array like this:
+     *
+     * $store = array(
+     *              array(1, array('de_DE' => 'Auto', 'en_GB' => 'car')),
+     *              array(2, array('de_DE' => 'Hund', 'en_GB' => 'dog')),
+     *              array(3, array('de_DE' => 'Katze', 'en_GB' => 'cat'))
+     *          );
+     *
+     * @param string $language
+     * @param mixed $store
+     */
+    private function translateStore($language, $store)
+    {
+        if (!is_array($store)) {
+            return $store;
+        }
+
+        foreach ($store as &$row) {
+            $value = array_pop($row);
+
+            if (!is_array($value)) {
+                $row[] = $value;
+                continue;
+            }
+
+            if (!array_key_exists($language, $value)) {
+                $row[] = array_shift($value);
+                continue;
+            }
+
+            $row[] = $value[$language];
+        }
+
+        return $store;
     }
 
     /**
@@ -939,7 +996,10 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
                     }
                     $file = $dir->getPathname() . DIRECTORY_SEPARATOR . 'Bootstrap.php';
                     if (!file_exists($file)) {
-                        continue;
+                        $file = $dir->getPathname() . DIRECTORY_SEPARATOR . 'BootstrapDummy.php';
+                        if (!file_exists($file)) {
+                            continue;
+                        }
                     }
                     $name = $dir->getFilename();
                     $plugin = $collection->get($name);

@@ -28,34 +28,44 @@
 class sCore
 {
     /**
-    * Pointer to Shopware-Core-Functions
-    *
-    * @var    object
-    * @access private
-    */
-    public $sSYSTEM;
+     * The Front controller object
+     * Needed to retrieve the request and router
+     *
+     * @var Enlight_Controller_Front
+     */
+    private $front;
 
-
-    public function sBuildLink($sVariables, $sUsePost=false)
+    public function __construct($front = null)
     {
-        $cat = array("sCategory","sPage");
+        $this->front = $front ? : Shopware()->Front();
+    }
 
-        $tempGET = $this->sSYSTEM->_GET;
+    /**
+     * Creates query string for an url based on sVariables and Request GET variables
+     *
+     * @param array $sVariables Variables that configure the generated url
+     * @return string
+     */
+    public function sBuildLink($sVariables)
+    {
+        $url = array();
+        $allowedCategoryVariables = array("sCategory", "sPage");
+
+        $tempGET = $this->front->Request() ? $this->front->Request()->getParams() : null;
 
         // If viewport is available, this will be the first variable
         if (!empty($tempGET["sViewport"])) {
             $url['sViewport'] = $tempGET["sViewport"];
-            if ($url["sViewport"]=="cat"
-            ) {
-                foreach ($cat as $catAllowedVariable) {
-                    if (!empty($tempGET[$catAllowedVariable])) {
-                        $url[$catAllowedVariable] = $tempGET[$catAllowedVariable];
-                        unset($tempGET[$catAllowedVariable]);
+            if ($url["sViewport"] === "cat") {
+                foreach ($allowedCategoryVariables as $allowedVariable) {
+                    if (!empty($tempGET[$allowedVariable])) {
+                        $url[$allowedVariable] = $tempGET[$allowedVariable];
+                        unset($tempGET[$allowedVariable]);
                     }
                 }
                 $tempGET = array();
             }
-            unset ($tempGET["sViewport"]);
+            unset($tempGET["sViewport"]);
         }
 
         // Strip new variables from _GET
@@ -67,21 +77,29 @@ class sCore
         unset($tempGET['coreID']);
         unset($tempGET['sPartner']);
 
-
-        if(!empty($tempGET))
         foreach ($tempGET as $getKey => $getValue) {
-            if ($getValue) $url[$getKey] = $getValue;
+            if ($getValue) {
+                $url[$getKey] = $getValue;
+            }
         }
 
-        if(!empty($url))
+        if(!empty($url)) {
             $queryString = '?'.http_build_query($url,"","&");
-        else
+        } else {
             $queryString = '';
+        }
 
         return $queryString;
     }
 
-    public function sRewriteLink($link=null, $title=null)
+    /**
+     * Tries to rewrite the provided link using SEO friendly urls
+     *
+     * @param string $link The link to rewrite.
+     * @param string $title Title of the link or related element.
+     * @return mixed|string Complete url, rewritten if possible
+     */
+    public function sRewriteLink($link = null, $title = null)
     {
         $url = str_replace(',', '=', $link);
         $url = html_entity_decode($url);
@@ -92,22 +110,20 @@ class sCore
             $query['title'] = $title;
         }
         $query['module'] = 'frontend';
-        return Shopware()->Front()->Router()->assemble($query);
+
+        return $this->front->Router()->assemble($query);
     }
 
-    public function __call($name, $params=null)
+    /**
+     * @deprecated Use sRewriteLink instead
+     *
+     * Same as sRewriteLink, but with a different argument structure.
+     *
+     * @param $args
+     * @return mixed|string
+     */
+    public function rewriteLink($args = array())
     {
-        switch ($name) {
-            case 'rewriteLink':
-                return call_user_func(array($this, 'sRewriteLink'), $params[0][2], empty($params[0][3]) ? null : $params[0][3]);
-            default:
-                return null;
-        }
-        return null;
-    }
-
-    public function sCustomRenderer($sRender,$sPath,$sLanguage)
-    {
-        return $sRender;
+        return $this->sRewriteLink($args[2], empty($args[3]) ? null : $args[3]);
     }
 }

@@ -36,7 +36,7 @@ class sExport
     public $sSettings;
     public $sDB;
     public $sApi;
-    public $sSystem;
+    public $sSYSTEM;
     public $sPath;
     public $sTemplates;
 
@@ -45,13 +45,12 @@ class sExport
     public $sLanguage;
     public $sMultishop;
 
-    /**
-     * @var \Enlight_Controller_Request_RequestHttp
-     */
-    public $request;
-
     public $shop;
 
+    /**
+     * @var Enlight_Template_Manager
+     */
+    public $sSmarty;
 
     /**
      * @var \Shopware\Models\Article\Repository
@@ -201,27 +200,38 @@ class sExport
             die();
 
         $this->sSettings["dec_separator"] = ",";
-        if ($this->sSettings["formatID"]==1) {
-            $this->sSettings["fieldmark"] = "\"";
-            $this->sSettings["escaped_fieldmark"] = "\"\"";
-            $this->sSettings["separator"] = ";";
-            $this->sSettings["escaped_separator"] = ";";
-            $this->sSettings["line_separator"] = "\r\n";
-            $this->sSettings["escaped_line_separator"] = "\r\n";
-        } elseif ($this->sSettings["formatID"]==2) {
-            $this->sSettings["fieldmark"] = "";
-            $this->sSettings["escaped_fieldmark"] = "";
-            $this->sSettings["separator"] = "\t";
-            $this->sSettings["escaped_separator"] = "";
-            $this->sSettings["line_separator"] = "\r\n";
-            $this->sSettings["escaped_line_separator"] = "";
-        } elseif ($this->sSettings["formatID"]==4) {
-            $this->sSettings["fieldmark"] = "";
-            $this->sSettings["escaped_fieldmark"] = "";
-            $this->sSettings["separator"] = "|";
-            $this->sSettings["escaped_separator"] = "";
-            $this->sSettings["line_separator"] = "\r\n";
-            $this->sSettings["escaped_line_separator"] = "";
+        switch ($this->sSettings["formatID"]) {
+            case 1:
+                $this->sSettings["fieldmark"] = "\"";
+                $this->sSettings["escaped_fieldmark"] = "\"\"";
+                $this->sSettings["separator"] = ";";
+                $this->sSettings["escaped_separator"] = ";";
+                $this->sSettings["line_separator"] = "\r\n";
+                $this->sSettings["escaped_line_separator"] = "\r\n";
+                break;
+            case 2:
+                $this->sSettings["fieldmark"] = "";
+                $this->sSettings["escaped_fieldmark"] = "";
+                $this->sSettings["separator"] = "\t";
+                $this->sSettings["escaped_separator"] = "";
+                $this->sSettings["line_separator"] = "\r\n";
+                $this->sSettings["escaped_line_separator"] = "";
+                break;
+            case 4:
+                $this->sSettings["fieldmark"] = "";
+                $this->sSettings["escaped_fieldmark"] = "";
+                $this->sSettings["separator"] = "|";
+                $this->sSettings["escaped_separator"] = "";
+                $this->sSettings["line_separator"] = "\r\n";
+                $this->sSettings["escaped_line_separator"] = "";
+                break;
+            default:
+                $this->sSettings["fieldmark"] = null;
+                $this->sSettings["escaped_fieldmark"] = null;
+                $this->sSettings["separator"] = null;
+                $this->sSettings["escaped_separator"] = null;
+                $this->sSettings["line_separator"] = null;
+                $this->sSettings["escaped_line_separator"] = null;
         }
 
         if (!empty($this->sSettings['encodingID']) && $this->sSettings['encodingID']==2) {
@@ -269,25 +279,27 @@ class sExport
 
         $this->shop = $shop;
 
-        $this->sSystem->sCONFIG = Shopware()->Config();
+        $this->sSYSTEM->sCONFIG = Shopware()->Config();
     }
 
     public function sInitSmarty()
     {
-        $this->sSystem->sSMARTY->compile_id = "export_".$this->sFeedID;
+        $this->sSYSTEM->sSMARTY->compile_id = "export_".$this->sFeedID;
 
-        $this->sSystem->sSMARTY->cache_lifetime = 0;
-        $this->sSystem->sSMARTY->debugging = 0;
-        $this->sSystem->sSMARTY->caching = 0;
+        $this->sSYSTEM->sSMARTY->cache_lifetime = 0;
+        $this->sSYSTEM->sSMARTY->debugging = 0;
+        $this->sSYSTEM->sSMARTY->caching = 0;
 
         $this->sSmarty->registerPlugin('modifier', 'format', array(&$this,'sFormatString'));
         $this->sSmarty->registerPlugin('modifier', 'escape', array(&$this,'sEscapeString'));
         $this->sSmarty->registerPlugin('modifier', 'category', array(&$this,'sGetArticleCategoryPath'));
         $this->sSmarty->registerPlugin('modifier', 'link', array(&$this,'sGetArticleLink'));
         $this->sSmarty->registerPlugin('modifier', 'image', array(&$this,'sGetImageLink'));
+        $this->sSmarty->registerPlugin('modifier', 'articleImages', array(&$this,'sGetArticleImageLinks'));
         $this->sSmarty->registerPlugin('modifier', 'shippingcost', array(&$this,'sGetArticleShippingcost'));
+        $this->sSmarty->registerPlugin('modifier', 'property', array(&$this,'sGetArticleProperties'));
 
-        $this->sSmarty->assign("sConfig",$this->sSystem->sCONFIG);
+        $this->sSmarty->assign("sConfig",$this->sSYSTEM->sCONFIG);
         $this->sSmarty->assign("sLanguage",$this->sLanguage);
         $this->sSmarty->assign("sMultishop",$this->sMultishop);
         $this->sSmarty->assign("sCurrency",$this->sCurrency);
@@ -414,7 +426,7 @@ class sExport
 
     public function sGetArticleLink($articleID, $title="")
     {
-        return $this->sSystem->rewriteLink(array(2=>$this->sSYSTEM->sCONFIG["sBASEFILE"]."?sViewport=detail&sArticle=$articleID",3=>$title),true).(empty($this->sSettings["partnerID"])?"":"?sPartner=".urlencode($this->sSettings["partnerID"]));
+        return Shopware()->Modules()->Core()->sRewriteLink($this->sSYSTEM->sCONFIG["sBASEFILE"]."?sViewport=detail&sArticle=$articleID",$title).(empty($this->sSettings["partnerID"])?"":"?sPartner=".urlencode($this->sSettings["partnerID"]));
     }
 
     public function sGetImageLink($hash, $imageSize = null)
@@ -424,7 +436,7 @@ class sExport
         }
 
         // get the image directory
-        $imageDir = 'http://' . $this->shop->getHost() . $this->request->getBasePath() . '/media/image/';
+        $imageDir = 'http://' . $this->shop->getHost() . $this->shop->getBasePath() . '/media/image/';
 
         // if no imageSize was set, return the full image
         if (null === $imageSize) {
@@ -452,6 +464,49 @@ class sExport
         }
 
         return "";
+    }
+
+    /**
+     * Returns the article image links with the frontend logic.
+     * Checks the image restriction of variant articles, too.
+     *
+     * @param $articleId
+     * @param $orderNumber
+     * @param null $imageSize
+     * @param string $separator
+     * @return string
+     */
+    public function sGetArticleImageLinks($articleId, $orderNumber, $imageSize = null, $separator = "|" )
+    {
+        $imageSize = ($imageSize == null) ? "original" : $imageSize;
+        $returnData = array();
+        if (empty($articleId) || empty($orderNumber)) {
+            return "";
+        }
+        $imageData = Shopware()->Modules()->sArticles()->sGetArticlePictures($articleId, false, null, $orderNumber);
+        $cover = Shopware()->Modules()->sArticles()->sGetArticlePictures($articleId, true, null, $orderNumber);
+        $returnData[] = $cover["src"][$imageSize];
+        foreach ($imageData as $image) {
+            $returnData[] = $image["src"][$imageSize];
+        }
+
+        return implode($separator, $returnData);
+    }
+
+    /**
+     * Returns an array with the article property data.
+     * Needs to be parsed over the feed smarty template
+     *
+     * @param $articleId
+     * @param $filterGroupId
+     * @return string
+     */
+    public function sGetArticleProperties($articleId, $filterGroupId  )
+    {
+        if (empty($articleId) || empty($filterGroupId)) {
+            return "";
+        }
+        return Shopware()->Modules()->Articles()->sGetArticleProperties($articleId, $filterGroupId);
     }
 
     public function sMapTranslation($object,$objectdata)
@@ -674,6 +729,7 @@ class sExport
                 d.purchaseunit,
                 d.referenceunit,
                 a.taxID,
+                a.filtergroupID,
                 a.supplierID,
                 d.unitID,
                 IF(a.changetime!='0000-00-00 00:00:00',a.changetime,'') as `changed`,
@@ -795,6 +851,114 @@ class sExport
             $sql .= "LIMIT ".$this->sSettings["count_filter"];
         }
         return  $sql;
+    }
+
+    /**
+     * executes the current product export
+     *
+     * @param resource $handleResource used as a file or the stdout to fetch the smarty output
+     */
+    public function executeExport($handleResource)
+    {
+        fwrite($handleResource, $this->sSmarty->fetch('string:' . $this->sSettings['header'], $this->sFeedID));
+
+        $sql = $this->sCreateSql();
+
+        $result = Shopware()->Db()->query($sql);
+
+        if ($result === false) {
+            return;
+        }
+
+        // Update db with the latest values
+        $count = (int) $result->rowCount();
+        Shopware()->Db()->update(
+            's_export',
+            array(
+                'last_export' => new Zend_Date(),
+                'cache_refreshed' => new Zend_Date(),
+                'count_articles' => $count
+            ),
+            array('id = ?' => $this->sFeedID)
+        );
+
+        // fetches all required data to smarty
+        $rows = array();
+        for ($rowIndex = 1; $row = $result->fetch(); $rowIndex++) {
+
+            if (!empty($row['group_ordernumber_2'])) {
+                $row['group_ordernumber'] = $this->_decode_line($row['group_ordernumber_2']);
+                $row['group_pricenet'] = explode(';', $row['group_pricenet_2']);
+                $row['group_price'] = explode(';', $row['group_price_2']);
+                $row['group_instock'] = explode(';', $row['group_instock_2']);
+                $row['group_active'] = explode(';', $row['group_active_2']);
+                unset($row['group_ordernumber_2'], $row['group_pricenet_2']);
+                unset($row['group_price_2'], $row['group_instock_2'], $row['group_active_2']);
+                for ($i = 1; $i <= 10; $i++) {
+                    if (!empty($row['group_group' . $i])) {
+                        $row['group_group' . $i] = $this->_decode_line($row['group_group' . $i]);
+                    } else {
+                        unset($row['group_group' . $i]);
+                    }
+                    if (!empty($row['group_option' . $i])) {
+                        $row['group_option' . $i] = $this->_decode_line($row['group_option' . $i]);
+                    } else {
+                        unset($row['group_option' . $i]);
+                    }
+                }
+                unset($row['group_additionaltext']);
+            } elseif (!empty($row['group_ordernumber'])) {
+                $row['group_ordernumber'] = $this->_decode_line($row['group_ordernumber']);
+                $row['group_additionaltext'] = $this->_decode_line($row['group_additionaltext']);
+                $row['group_pricenet'] = explode(';', $row['group_pricenet']);
+                $row['group_price'] = explode(';', $row['group_price']);
+                $row['group_instock'] = explode(';', $row['group_instock']);
+                $row['group_active'] = explode(';', $row['group_active']);
+            }
+            if (!empty($row['article_translation'])) {
+                $translation = $this->sMapTranslation('article', $row['article_translation']);
+                $row = array_merge($row, $translation);
+            } elseif (!empty($row['article_translation_fallback'])) {
+                $translation = $this->sMapTranslation('article', $row['article_translation_fallback']);
+                $row = array_merge($row, $translation);
+            }
+            if (!empty($row['detail_translation'])) {
+                $translation = $this->sMapTranslation('detail', $row['detail_translation']);
+                $row = array_merge($row, $translation);
+            } elseif (!empty($row['detail_translation_fallback'])) {
+                $translation = $this->sMapTranslation('detail', $row['detail_translation_fallback']);
+                $row = array_merge($row, $translation);
+            }
+            $row['name'] = htmlspecialchars_decode($row['name']);
+            $row['supplier'] = htmlspecialchars_decode($row['supplier']);
+
+            //cast it to float to prevent the devision by zero warning
+            $row['purchaseunit'] = floatval($row['purchaseunit']);
+            $row['referenceunit'] = floatval($row['referenceunit']);
+            if (!empty($row['purchaseunit']) && !empty($row['referenceunit'])) {
+                $row['referenceprice'] = Shopware()->Modules()->Articles()->calculateReferencePrice(
+                    $row['price'],
+                    $row['purchaseunit'],
+                    $row['referenceunit']
+                );
+            }
+
+            $rows[] = $row;
+
+            if ($rowIndex == $count || count($rows) >= 50) {
+
+                @set_time_limit(30);
+
+                $this->sSmarty->assign('sArticles', $rows);
+                $rows = array();
+
+                $template = 'string:{foreach $sArticles as $sArticle}' . $this->sSettings['body'] . '{/foreach}';
+
+                fwrite($handleResource, $this->sSmarty->fetch($template, $this->sFeedID));
+            }
+        }
+        fwrite($handleResource, $this->sSmarty->fetch('string:' . $this->sSettings['footer'], $this->sFeedID));
+        fclose($handleResource);
     }
 
     public function sGetArticleCategoryPath($articleID, $separator = " > ", $categoryID=null)

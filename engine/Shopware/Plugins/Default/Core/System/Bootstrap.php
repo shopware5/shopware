@@ -63,7 +63,8 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
     {
         $config = Shopware()->Config();
 
-        $system = new sSystem();
+        $request = Shopware()->Front()->Request();
+        $system = new sSystem($request);
         Shopware()->Bootstrap()->registerResource('System', $system);
 
         $system->sMODULES = Shopware()->Modules();
@@ -72,12 +73,6 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
         $system->sCONFIG = $config;
         $system->sMailer = Shopware()->Mail();
 
-        $request = Shopware()->Front()->Request();
-        if ($request !== null) {
-            $system->_GET = $request->getQuery();
-            $system->_POST = $request->getPost();
-            $system->_COOKIE = $request->getCookie();
-        }
 
         if (Shopware()->Bootstrap()->issetResource('Session')) {
             $system->_SESSION = Shopware()->Session();
@@ -123,17 +118,14 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
         }
 
         if ($request !== null) {
-            $system->sPathBase = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
+            $sPathBase = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
         } else {
-            $system->sPathBase = 'http://' . $config->basePath;
+            $sPathBase = 'http://' . $config->basePath;
         }
-        $system->sPathArticleImg = $system->sPathBase . '/media/image/';
-        $system->sPathBanner = $system->sPathBase . $config->banner . '/';
-        $system->sPathSupplierImg = $system->sPathBase . $config->supplierImages . '/';
-        $system->sPathCmsImg = $system->sPathBase . $config->cmsImages . '/';
-        $system->sPathStart = $system->sPathBase . $config->baseFile;
-        $system->sPathArticleFiles = $system->sPathBase . $config->articleFiles;
-        $system->sBasefile = $config->baseFile;
+        $system->sPathArticleImg = $sPathBase . '/media/image/';
+        $system->sPathBanner = $sPathBase . $config->banner . '/';
+        $system->sPathStart = $sPathBase . $config->baseFile;
+        $system->sPathArticleFiles = $sPathBase . $config->articleFiles;
 
         $config['sCURRENCY'] = $system->sCurrency['currency'];
         $config['sCURRENCYHTML'] = $system->sCurrency['symbol'];

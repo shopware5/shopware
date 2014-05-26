@@ -181,6 +181,7 @@ class Article extends Resource implements BatchInterface
             $article['similar'] = $this->getArticleSimilar($id);
             $article['related'] = $this->getArticleRelated($id);
             $article['details'] = $this->getArticleVariants($id);
+            $article['seoCategories'] = $this->getArticleSeoCategories($id);
 
             if (isset($options['considerTaxInput']) && $options['considerTaxInput']) {
                 $article['mainDetail']['prices'] = $this->getTaxPrices(
@@ -383,6 +384,25 @@ class Article extends Resource implements BatchInterface
 
         $article = $this->getSingleResult($builder);
         return $article['related'];
+    }
+
+    /**
+     * Returns the configured article seo categories.
+     * This categories are used for the seo url generation.
+     *
+     * @param $articleId
+     * @return array
+     */
+    protected function getArticleSeoCategories($articleId)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select(array('seoCategories', 'category'))
+            ->from('Shopware\Models\Article\SeoCategory', 'seoCategories')
+            ->innerJoin('seoCategories.category', 'category')
+            ->where('seoCategories.articleId = :articleId')
+            ->setParameter('articleId', $articleId);
+
+        return $builder->getQuery()->getArrayResult();
     }
 
     /**
@@ -686,6 +706,8 @@ class Article extends Resource implements BatchInterface
     {
         $data = $this->prepareArticleAssociatedData($data, $article);
         $data = $this->prepareCategoryAssociatedData($data, $article);
+        $data = $this->prepareSeoCategoryAssociatedData($data, $article);
+
         $data = $this->prepareRelatedAssociatedData($data, $article);
         $data = $this->prepareSimilarAssociatedData($data, $article);
         $data = $this->prepareAvoidCustomerGroups($data, $article);
@@ -1139,6 +1161,103 @@ class Article extends Resource implements BatchInterface
 
         return $data;
     }
+
+    /**
+     * @param array $data
+     * @param \Shopware\Models\Article\Article $article
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @return array
+     */
+    protected function prepareSeoCategoryAssociatedData($data, ArticleModel $article)
+    {
+        if (!isset($data['seoCategories'])) {
+            return $data;
+        }
+
+        $categories = $this->checkDataReplacement(
+            $article->getSeoCategories(),
+            $data,
+            'seoCategories',
+            true
+        );
+
+        foreach ($data['seoCategories'] as $categoryData) {
+
+            /**@var $seoCategory \Shopware\Models\Article\SeoCategory */
+            $seoCategory = $this->getOneToManySubElement(
+                $categories,
+                $categoryData,
+                '\Shopware\Models\Article\SeoCategory'
+            );
+
+            if (isset($categoryData['shopId'])) {
+                $shop = $this->manager->find(
+                    'Shopware\Models\Shop\Shop',
+                    $categoryData['shopId']
+                );
+
+                if (!$shop) {
+                    throw new ApiException\CustomValidationException(
+                        sprintf("Could not find shop by id: %s.", $categoryData['shopId'])
+                    );
+                }
+
+                $seoCategory->setShop($shop);
+            }
+
+            if (!$seoCategory->getShop()) {
+                throw new ApiException\CustomValidationException(
+                    sprintf("An article seo category requires a configured shop")
+                );
+            }
+
+            if (isset($categoryData['categoryId'])) {
+                $category = $this->manager->find(
+                    'Shopware\Models\Category\Category',
+                    $categoryData['categoryId']
+                );
+
+                if (!$category) {
+                    throw new ApiException\CustomValidationException(
+                        sprintf("Could not find category by id: %s.", $categoryData['categoryId'])
+                    );
+                }
+
+                $seoCategory->setCategory($category);
+                
+            } else if (isset($categoryData['categoryPath'])) {
+                $category = $this->getResource('Category')->findCategoryByPath(
+                    $categoryData['categoryPath'],
+                    true
+                );
+                if (!$category) {
+                    throw new ApiException\CustomValidationException(
+                        sprintf("Could not find category by path: %s.", $categoryData['categoryPath'])
+                    );
+                }
+                $seoCategory->setCategory($category);
+            }
+
+            $existing = $this->getCollectionElementByProperty(
+                $data['categories'],
+                'id',
+                $seoCategory->getCategory()->getId()
+            );
+
+            if (!$existing) {
+                throw new ApiException\CustomValidationException(
+                    sprintf("Seo category isn't assigned as normal article category. Only assigned categories can be used as seo category")
+                );
+            }
+
+            $seoCategory->setArticle($article);
+        }
+        
+        $data['seoCategories'] = $categories;
+
+        return $data;
+    }
+
 
     /**
      * @param array $data

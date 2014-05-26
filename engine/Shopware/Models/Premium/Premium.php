@@ -185,8 +185,8 @@ class Premium extends LazyFetchModelEntity
 
     /**
      * Sets the assigned article
-     * \Shopware\Models\Article\Detail
-     * @param $articleDetail
+     *
+     * @param $articleDetail  \Shopware\Models\Article\Detail
      * @return \Shopware\Models\Premium\Premium
      */
     public function setArticleDetail($articleDetail)
@@ -197,11 +197,11 @@ class Premium extends LazyFetchModelEntity
 
     /**
      * Gets the instance of the assigned article
-     * @return mixed
+     * @return \Shopware\Models\Article\Detail
      */
     public function getArticleDetail()
     {
-        return $this->fetchLazy($this->articleDetail, array('ordernumber' => $this->orderNumber));
+        return $this->fetchLazy($this->articleDetail, array('number' => $this->orderNumber));
     }
 
     /**

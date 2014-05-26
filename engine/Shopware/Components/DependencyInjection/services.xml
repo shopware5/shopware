@@ -145,15 +145,15 @@
                  factory-service="shopware.db"
                  factory-method="getConnection" />
 
-        <service id="shopware.db" alias="Db"/>
+        <service id="shopware.db" alias="db"/>
+        <service id="db_factory" class="Shopware\Components\DependencyInjection\Bridge\Db" />
         <service id="db"
                  class="Enlight_Components_Db_Adapter_Pdo_Mysql"
-                 factory-class="Enlight_Components_Db"
+                 factory-service="db_factory"
                  factory-method="factory">
 
             <argument>%shopware.db.adapter%</argument>
             <argument>%shopware.db%</argument>
-            <call method="getConnection"/>
         </service>
 
         <service id="cache_zend"
