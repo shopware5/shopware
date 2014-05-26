@@ -91,6 +91,16 @@ class Repository extends ModelRepository
             $builder->andWhere('emotions.active = 1');
         }
 
+        // filter by landingpages
+        if (isset($filter) && $filter == 'onlyLandingpage') {
+            $builder->andWhere('emotions.isLandingPage = 1');
+        }
+
+        // filter by shopping worlds
+        if (isset($filter) && $filter == 'onlyWorld') {
+            $builder->andWhere('emotions.isLandingPage = 0');
+        }
+
         // filter by categoryId
         if (!empty($categoryId) && $categoryId != 'NaN') {
             $path = '%|' . $categoryId . '|%';

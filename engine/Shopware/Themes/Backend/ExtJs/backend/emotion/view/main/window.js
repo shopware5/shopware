@@ -69,7 +69,9 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
             onlyDesktop: '<div class="sprite-television" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_desktop}Only desktop devices{/s}',
             onlyTablet: '<div class="sprite-media-player-phone-horizontal" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_tablet}Only tablet devices{/s}',
             onlyMobile: '<div class="sprite-media-player-phone" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_mobile}Only mobile devices{/s}',
-            onlyActive: '<div class="sprite-tick-small" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_active}Only active worlds{/s}'
+            onlyActive: '<div class="sprite-tick-small" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name=list/only_active}Only active worlds{/s}',
+            onlyLandingpage: '{s name=list/only_landingpage}Only landingpages{/s}',
+            onlyWorld: '{s name=list/only_world}Only shopping worlds{/s}'
         }
     },
 
@@ -178,6 +180,16 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
             boxLabel: me.snippets.filter.onlyActive,
             name: 'filter',
             inputValue: 'active'
+        },
+        {
+            boxLabel: me.snippets.filter.onlyLandingpage,
+            name: 'filter',
+            inputValue: 'onlyLandingpage'
+        },
+        {
+            boxLabel: me.snippets.filter.onlyWorld,
+            name: 'filter',
+            inputValue: 'onlyWorld'
         }]
     },
 
