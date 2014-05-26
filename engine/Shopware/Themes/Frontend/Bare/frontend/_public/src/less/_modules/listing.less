@@ -59,7 +59,6 @@
 // Listing actions
 .listing--actions {
     .clearfix();
-    overflow: hidden;
 
     &.is--advanced {
         .listing--paging {
@@ -211,6 +210,10 @@
         .unitize(30, 16, line-height);
         float: right;
     }
+}
+
+.listing--container {
+    overflow: hidden;
 }
 
 // Listing product box
@@ -375,10 +378,11 @@
     }
 
     .action--filter-options {
-        .unitize-padding(10, 0);
+        .unitize-padding(0, 0, 10, 0);
         display: none;
         width: auto;
         height: auto;
+        overflow: visible;
         position: relative;
         border: 1px solid @borderColor;
         background: @primaryBackgroundColor;
