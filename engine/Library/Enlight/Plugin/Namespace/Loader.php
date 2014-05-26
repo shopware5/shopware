@@ -109,7 +109,10 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
         foreach ($this->prefixPaths as $path => $prefix) {
             $file = $path . $name . $this->Application()->DS() . 'Bootstrap.php';
             if (!file_exists($file)) {
-                continue;
+                $file = $path . $name . $this->Application()->DS() . 'BootstrapDummy.php';
+                if (!file_exists($file)) {
+                    continue;
+                }
             }
             $this->initPlugin($name, $prefix, $file);
             return $this;
@@ -131,7 +134,10 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
                 }
                 $file = $dir->getPathname() . DIRECTORY_SEPARATOR . 'Bootstrap.php';
                 if (!file_exists($file)) {
-                    continue;
+                    $file = $dir->getPathname() . DIRECTORY_SEPARATOR . 'BootstrapDummy.php';
+                    if (!file_exists($file)) {
+                        continue;
+                    }
                 }
                 $name = $dir->getFilename();
                 $this->initPlugin($name, $prefix, $file);
