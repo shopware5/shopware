@@ -42,8 +42,8 @@ use Shopware\Components\Model\ModelEntity,
  *   - PRIMARY KEY (`id`)
  * </code>
  *
- * @ORM\Entity
  * @ORM\Table(name="s_core_tax")
+ * @ORM\Entity(repositoryClass="Repository")
  */
 class Tax extends ModelEntity
 {
