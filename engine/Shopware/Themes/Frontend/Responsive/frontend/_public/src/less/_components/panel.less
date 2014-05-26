@@ -175,55 +175,55 @@ See the documentation of the child elements for additional information.
     &.has--border {
         border: 1px solid @borderColor;
     }
+}
 
-    .panel--tr {
-        .clearfix();
-        display: block;
-        width: 100%;
-        border-width: 0 0 1px 0;
+.panel--tr {
+    .clearfix();
+    display: block;
+    width: 100%;
+    border-width: 0 0 1px 0;
+    border-style: solid;
+    border-color: @borderColor;
+
+    &:last-child {
+        border-width: 0;
+    }
+
+    &.is--odd {
+        background: #f1f4f7;
+    }
+
+    &.is--secondary {
+        background: @primaryBackgroundColor;
+    }
+
+    &.is--primary {
+        color: @primaryColor;
+    }
+}
+
+.panel--th,
+.panel--td {
+    .unitize-padding(10, 10);
+    .unitize(14, 16, font-size);
+    .unitize(24, 16, line-height);
+    display: inline-block;
+    float: left;
+
+    &.has--border {
+        border-width: 0 1px 0 0;
         border-style: solid;
         border-color: @borderColor;
 
         &:last-child {
             border-width: 0;
         }
-
-        &.is--odd {
-            background: #f1f4f7;
-        }
-
-        &.is--secondary {
-            background: @primaryBackgroundColor;
-        }
-
-        &.is--primary {
-            color: @primaryColor;
-        }
     }
+}
 
-    .panel--th,
-    .panel--td {
-        .unitize-padding(10, 10);
-        .unitize(14, 16, font-size);
-        .unitize(24, 16, line-height);
-        display: inline-block;
-        float: left;
-
-        &.has--border {
-            border-width: 0 1px 0 0;
-            border-style: solid;
-            border-color: @borderColor;
-
-            &:last-child {
-                border-width: 0;
-            }
-        }
-    }
-
-    .panel--th {
-        font-weight: bold;
-        color: @darkTextColor;
-    }
+.panel--th {
+    font-weight: bold;
+    color: @darkTextColor;
 }
 
 /* A list in a panel.
