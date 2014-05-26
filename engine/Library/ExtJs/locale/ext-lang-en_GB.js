@@ -350,50 +350,27 @@ Ext.onReady(function() {
             dropDownTitle: 'Articles'
         }
     });
-
     Ext.define('Shopware.listing.en_GB.InfoPanel', {
         override: 'Shopware.listing.InfoPanel',
         title: 'Detailed information',
-        statics: {
-            displayConfig: {
-                model: undefined,
-                fields: { },
-                emptyText: 'No record selected.'
-            }
-        }
+        emptyText: 'No record selected.'
     });
-
     Ext.define('Shopware.window.en_GB.Detail', {
         override: 'Shopware.window.Detail',
-        statics: {
-            displayConfig: {
-                eventAlias: undefined,
-                associations: [],
-                hasOwnController: false,
-                cancelButtonText: 'Cancel',
-                saveButtonText: 'Save'
-            }
-        }
+        cancelButtonText: 'Cancel',
+        saveButtonText: 'Save'
     });
     Ext.define('Shopware.window.en_GB.Progress', {
         override: 'Shopware.window.Progress',
-        statics: {
-            displayConfig: {
-                infoText: undefined,
-                tasks: [ ],
-                outputProperties: [ 'id', 'number', 'name' ],
-                displayResultGrid: true,
-                cancelButtonText: 'Cancel process',
-                closeButtonText: 'Close window',
-                successHeader: 'Success',
-                requestHeader: 'Request',
-                errorHeader: 'Error message',
-                requestResultTitle: 'Request results',
-                processCanceledText: 'Process canceled at position [0] of [1]'
-            }
-        }
+        title: 'Delete items',
+        cancelButtonText: 'Cancel process',
+        closeButtonText: 'Close window',
+        successHeader: 'Success',
+        requestHeader: 'Request',
+        errorHeader: 'Error message',
+        requestResultTitle: 'Request results',
+        processCanceledText: 'Process canceled at position [0] of [1]'
     });
-
     Ext.define('Shopware.form.field.en_GB.TinyMCE', {
         override:'Shopware.form.field.TinyMCE',
 
@@ -468,5 +445,72 @@ Ext.onReady(function() {
     });
     Ext.apply(Ext.form.field.VTypes, {
         missingValidationErrorText: 'The remote vType validation needs a validationErrorMsg property'
+    });
+    Ext.define('Ext.grid.en_GB.RowEditor', {
+        override:'Ext.grid.RowEditor',
+        saveBtnText: 'Update',
+        cancelBtnText: 'Cancel',
+        errorsText: 'Errors',
+        dirtyText: 'You need to commit or cancel your changes'
+    });
+    Ext.apply(Ext.util.FileUpload, {
+        snippets: {
+            uploadReady: 'file(s) uploaded',
+            messageText: '[0] file(s) uploaded',
+            messageTitle: 'Media manager',
+            legacyMessage: "Your browser doesn't support the necessary feature to support drag & drop uploads.",
+            maxUploadSizeTitle: 'The file exceeds the file size limit',
+            maxUploadSizeText: "The selected file exceeds the configured maximum file size for uploads. Please select another file to upload.",
+            blackListTitle: 'Blacklist',
+            blackListMessage: "File extension [0] isn\'t allowed"
+        }
+    });
+    Ext.define('Shopware.de.Notification', {
+        override: 'Shopware.Notification',
+        closeText: 'Close'
+    });
+    Ext.define('Enlight.app.en_GB.Window', {
+        override: 'Enlight.app.Window',
+
+        closePopupTitle: 'Close module',
+        closePopupMessage: 'This will close all windows of the "__MODULE__" module. Do you want to continue?'
+    });
+    Ext.define('Shopware.detail.en_GB.Controller', {
+        override: 'Shopware.detail.Controller',
+        closeText: 'Close',
+        saveSuccessTitle: 'Success',
+        saveSuccessMessage: 'Item saved successfully',
+        violationErrorTitle: 'Violation errors',
+        invalidFormTitle: 'Form validation error',
+        invalidFormMessage: 'The form contains invalid data, please check the inserted values.'
+    });
+    Ext.define('Shopware.form.field.en_GB.Media', {
+        override: 'Shopware.form.field.Media',
+        selectButtonText: 'Select media',
+        resetButtonText: 'Reset media'
+    });
+    Ext.define('Shopware.grid.en_GB.Association', {
+        override: 'Shopware.grid.Association',
+        searchComboLabel: 'Search for'
+    });
+    Ext.define('Shopware.grid.en_GB.Controller', {
+        override: 'Shopware.grid.Controller',
+        deleteConfirmTitle: 'Delete items',
+        deleteConfirmText: 'Are you sure you want to delete the selected items?',
+        deleteInfoText: '<b>The records will be deleted.</b> <br>To cancel the process, you can use the <b><i>`Cancel process`</i></b> Button. Depending on the selected volume of data may take several seconds to complete this process.',
+        deleteProgressBarText: 'Item [0] of [1]'
+    });
+    Ext.define('Shopware.listing.en_GB.FilterPanel', {
+        override: 'Shopware.listing.FilterPanel',
+        infoTextSnippet: 'Activate the filter fields over the checkbox which displayed for each field. Activated fields will be joined with an AND condition.',
+        filterButtonText: 'Filter result',
+        resetButtonText: 'Reset filters'
+    });
+    Ext.define('Shopware.grid.en_GB.Panel', {
+        override: 'Shopware.grid.Panel',
+        pageSizeLabel: 'Items per page',
+        addButtonText: 'Add item',
+        deleteButtonText: 'Delete all selected',
+        searchFieldText: 'Search...'
     });
 });

@@ -134,6 +134,21 @@ Ext.define('Shopware.form.field.Media', {
     previewContainer: undefined,
 
     /**
+     * Contains the text for the { @link #selectButton }.
+     * The button is used to open the media selection and allows the user to select
+     * a single media.
+     * @type { String }
+     */
+    selectButtonText: '{s name="media_field/select_button_text"}Select media{/s}',
+
+    /**
+     * Contains the text for the { @link #resetButton }.
+     * The reset button is used to remove an already assign media object.
+     * @type { String }
+     */
+    resetButtonText: '{s name="media_field/reset_button_text"}Reset media{/s}',
+
+    /**
      * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
      * is scope-independent and it always returns the class from which it was called, regardless of what
      * this points to during run-time.
@@ -162,20 +177,7 @@ Ext.define('Shopware.form.field.Media', {
          *      });
          */
         displayConfig: {
-            /**
-             * Contains the text for the { @link #selectButton }.
-             * The button is used to open the media selection and allows the user to select
-             * a single media.
-             * @type { String }
-             */
-            selectButtonText: '{s name="media_field/select_button_text"}Select media{/s}',
 
-            /**
-             * Contains the text for the { @link #resetButton }.
-             * The reset button is used to remove an already assign media object.
-             * @type { String }
-             */
-            resetButtonText: '{s name="media_field/reset_button_text"}Reset media{/s}'
         },
 
         /**
@@ -348,7 +350,7 @@ Ext.define('Shopware.form.field.Media', {
         var me = this;
 
         me.selectButton = Ext.create('Ext.button.Button', {
-            text: me.getConfig('selectButtonText'),
+            text: me.selectButtonText,
             iconCls: 'sprite-inbox-image',
             cls: 'secondary small',
             margin: '10 0',
@@ -372,7 +374,7 @@ Ext.define('Shopware.form.field.Media', {
         var me = this;
 
         me.resetButton = Ext.create('Ext.button.Button', {
-            text: me.getConfig('resetButtonText'),
+            text: me.resetButtonText,
             iconCls: 'sprite-inbox--minus',
             cls: 'secondary small',
             handler: function() {
