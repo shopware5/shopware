@@ -73,6 +73,52 @@ Ext.define('Shopware.window.Progress', {
      */
     resultFieldSet: undefined,
 
+    /**
+     * Button text of the { @link #cancelButton }
+     * @type { String }
+     */
+    cancelButtonText: '{s name="progress_window/cancel_button_text"}Cancel process{/s}',
+
+    /**
+     * Button text of the { @link #closeButton }
+     * @type { String }
+     */
+    closeButtonText: '{s name="progress_window/close_button_text"}Close window{/s}',
+
+    /**
+     * Text for the success result grid column header.
+     * @type { String }
+     */
+    successHeader: '{s name="progress_window/success_header"}Success{/s}',
+
+    /**
+     * Text for the request data grid column header.
+     * @type { String }
+     */
+    requestHeader: '{s name="progress_window/request_header"}Request{/s}',
+
+    /**
+     * Text for the error result grid column header.
+     * @type { String }
+     */
+    errorHeader: '{s name="progress_window/error_header"}Error message{/s}',
+
+    /**
+     * Title of the { @link #resultFieldSet }
+     * @type { String }
+     */
+    requestResultTitle: '{s name="progress_window/request_result_title"}Request results{/s}',
+
+    /**
+     * Text for a canceled process.
+     * Can contains two dynamic values which will be displayed in the `[0]` and `[1]` placeholders.
+     * The first value which will be assigned, contains the index of the last iteration of the current task.
+     * The second value which will be assigned, contains the total count of the last iteration of the current task.
+     *
+     * @type { String }
+     */
+    processCanceledText: '{s name="progress_window/process_canceled_text"}Process canceled at position [0] of [1]{/s}',
+
 
     /**
      * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
@@ -147,53 +193,7 @@ Ext.define('Shopware.window.Progress', {
              *
              * @type { boolean }
              */
-            displayResultGrid: true,
-
-            /**
-             * Button text of the { @link #cancelButton }
-             * @type { String }
-             */
-            cancelButtonText: '{s name="progress_window/cancel_button_text"}Cancel process{/s}',
-
-            /**
-             * Button text of the { @link #closeButton }
-             * @type { String }
-             */
-            closeButtonText: '{s name="progress_window/close_button_text"}Close window{/s}',
-
-            /**
-             * Text for the success result grid column header.
-             * @type { String }
-             */
-            successHeader: '{s name="progress_window/success_header"}Success{/s}',
-
-            /**
-             * Text for the request data grid column header.
-             * @type { String }
-             */
-            requestHeader: '{s name="progress_window/request_header"}Request{/s}',
-
-            /**
-             * Text for the error result grid column header.
-             * @type { String }
-             */
-            errorHeader: '{s name="progress_window/error_header"}Error message{/s}',
-
-            /**
-             * Title of the { @link #resultFieldSet }
-             * @type { String }
-             */
-            requestResultTitle: '{s name="progress_window/request_result_title"}Request results{/s}',
-
-            /**
-             * Text for a canceled process.
-             * Can contains two dynamic values which will be displayed in the `[0]` and `[1]` placeholders.
-             * The first value which will be assigned, contains the index of the last iteration of the current task.
-             * The second value which will be assigned, contains the total count of the last iteration of the current task.
-             *
-             * @type { String }
-             */
-            processCanceledText: '{s name="progress_window/process_canceled_text"}Process canceled at position [0] of [1]{/s}'
+            displayResultGrid: true
         },
 
         /**
@@ -536,7 +536,7 @@ Ext.define('Shopware.window.Progress', {
 
         me.cancelButton = Ext.create('Ext.button.Button', {
             cls: 'secondary',
-            text: me.getConfig('cancelButtonText'),
+            text: me.cancelButtonText,
             handler: function() {
                 me.cancelProcess = true;
             }
@@ -544,7 +544,7 @@ Ext.define('Shopware.window.Progress', {
 
         me.closeButton = Ext.create('Ext.button.Button', {
             cls: 'secondary',
-            text: me.getConfig('closeButtonText'),
+            text: me.closeButtonText,
             disabled: true,
             handler: function() { me.destroy() }
         });
@@ -587,7 +587,7 @@ Ext.define('Shopware.window.Progress', {
             collapsed: false,
             flex: 1,
             margin: '20 0 0',
-            title: me.getConfig('requestResultTitle')
+            title: me.requestResultTitle
         });
 
         me.fireEvent('after-result-field-set-created', me, me.resultFieldSet);
@@ -612,9 +612,9 @@ Ext.define('Shopware.window.Progress', {
             border: false,
             columns: [
                 { xtype: 'rownumberer', width: 30 },
-                { header: me.getConfig('successHeader'), dataIndex: 'success', width: 60, renderer: me.successRenderer },
-                { header: me.getConfig('requestHeader'), dataIndex: 'request', flex: 1, renderer: me.requestRenderer, scope: me },
-                { header: me.getConfig('errorHeader'), dataIndex: 'error', flex: 1 }
+                { header: me.successHeader, dataIndex: 'success', width: 60, renderer: me.successRenderer },
+                { header: me.requestHeader, dataIndex: 'request', flex: 1, renderer: me.requestRenderer, scope: me },
+                { header: me.errorHeader, dataIndex: 'error', flex: 1 }
             ],
             store: me.resultStore
         });
@@ -689,7 +689,7 @@ Ext.define('Shopware.window.Progress', {
 
             //if the process canceled over the button, set an info text at which position the process canceled.
             if (me.cancelProcess) {
-                me.updateProgressBar(current, me.getConfig('processCanceledText'));
+                me.updateProgressBar(current, me.processCanceledText);
             }
             me.fireEvent('process-done', me, current, me.cancelProcess);
 

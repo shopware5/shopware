@@ -181,6 +181,33 @@ Ext.define('Shopware.grid.Panel', {
     eventAlias: undefined,
 
     /**
+     * Contains the field label for the { @link #pageSizeCombo }.
+     * The page size combo box is displayed in the grid pagingbar.
+     *
+     * @type { String }
+     */
+    pageSizeLabel: '{s name="grid_panel/page_size_label"}Items per page{/s}',
+
+    /**
+     * Contains the text for the { @link #addButton }.
+     * The add button is displayed in the grid toolbar.
+     * @type { String }
+     */
+    addButtonText: '{s name="grid_panel/add_button_text"}Add item{/s}',
+
+    /**
+     * Contains the text for the { @link #deleteButton }
+     * @type { String }
+     */
+    deleteButtonText: '{s name="grid_panel/delete_button_text"}Delete all selected{/s}',
+
+    /**
+     * Contains the emptyText value for the { @link #searchField }.
+     * @type { String }
+     */
+    searchFieldText: '{s name="grid_panel/search_field_text"}Search ...{/s}',
+
+    /**
      * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
      * is scope-independent and it always returns the class from which it was called, regardless of what
      * this points to during run-time.
@@ -472,34 +499,7 @@ Ext.define('Shopware.grid.Panel', {
              *          description: { header: 'MyOwnDescription' }
              *      }
              */
-            columns: { },
-
-            /**
-             * Contains the field label for the { @link #pageSizeCombo }.
-             * The page size combo box is displayed in the grid pagingbar.
-             *
-             * @type { String }
-             */
-            pageSizeLabel: '{s name="grid_panel/page_size_label"}Items per page{/s}',
-
-            /**
-             * Contains the text for the { @link #addButton }.
-             * The add button is displayed in the grid toolbar.
-             * @type { String }
-             */
-            addButtonText: '{s name="grid_panel/add_button_text"}Add item{/s}',
-
-            /**
-             * Contains the text for the { @link #deleteButton }
-             * @type { String }
-             */
-            deleteButtonText: '{s name="grid_panel/delete_button_text"}Delete all selected{/s}',
-
-            /**
-             * Contains the emptyText value for the { @link #searchField }.
-             * @type { String }
-             */
-            searchFieldText: '{s name="grid_panel/search_field_text"}Search ...{/s}'
+            columns: { }
         },
 
         /**
@@ -1512,7 +1512,7 @@ Ext.define('Shopware.grid.Panel', {
         }
 
         me.pageSizeCombo = Ext.create('Ext.form.field.ComboBox', {
-            fieldLabel: me.getConfig('pageSizeLabel'),
+            fieldLabel: me.pageSizeLabel,
             labelWidth: 110,
             queryMode: 'local',
             value: value,
@@ -1655,7 +1655,7 @@ Ext.define('Shopware.grid.Panel', {
         var me = this;
 
         me.addButton = Ext.create('Ext.button.Button', {
-            text: me.getConfig('addButtonText'),
+            text: me.addButtonText,
             iconCls: 'sprite-plus-circle-frame',
             handler: function () {
                 me.fireEvent(me.eventAlias + '-add-item', me, this);
@@ -1679,7 +1679,7 @@ Ext.define('Shopware.grid.Panel', {
         var me = this;
 
         me.deleteButton = Ext.create('Ext.button.Button', {
-            text: me.getConfig('deleteButtonText'),
+            text: me.deleteButtonText,
             disabled: true,
             iconCls: 'sprite-minus-circle-frame',
             handler: function () {
@@ -1707,7 +1707,7 @@ Ext.define('Shopware.grid.Panel', {
         me.searchField = Ext.create('Ext.form.field.Text', {
             cls: 'searchfield',
             width: 170,
-            emptyText: me.getConfig('searchFieldText'),
+            emptyText: me.searchFieldText,
             enableKeyEvents: true,
             checkChangeBuffer: 500,
             listeners: {

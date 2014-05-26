@@ -37,6 +37,13 @@ Ext.define('Shopware.grid.Association', {
     searchComboBox: undefined,
 
     /**
+     * Field label for the { @link #searchComboBox } , which is displayed in the
+     * grid toolbar.
+     * @type { String }
+     */
+    searchComboLabel: '{s name="association_grid/combo_field_label"}Search for{/s}',
+
+    /**
      * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
      * is scope-independent and it always returns the class from which it was called, regardless of what
      * this points to during run-time.
@@ -161,14 +168,7 @@ Ext.define('Shopware.grid.Association', {
              *
              * @type { boolean }
              */
-            editColumn: false,
-
-            /**
-             * Field label for the { @link #searchComboBox } , which is displayed in the
-             * grid toolbar.
-             * @type { String }
-             */
-            searchComboLabel: '{s name="association_grid/combo_field_label"}Search for{/s}'
+            editColumn: false
         },
 
         /**
@@ -350,7 +350,7 @@ Ext.define('Shopware.grid.Association', {
             pageSize: 20,
             flex: 1,
             subApp: me.subApp,
-            fieldLabel: me.getConfig('searchComboLabel'),
+            fieldLabel: me.searchComboLabel,
             margin: 5,
             listeners: {
                 select: function (combo, records) {

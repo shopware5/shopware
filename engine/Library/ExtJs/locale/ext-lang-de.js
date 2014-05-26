@@ -381,44 +381,23 @@ Ext.onReady(function() {
     Ext.define('Shopware.listing.de.InfoPanel', {
         override: 'Shopware.listing.InfoPanel',
         title: 'Detailed information',
-        statics: {
-            displayConfig: {
-                model: undefined,
-                fields: { },
-                emptyText: 'Kein Eintrag selektiert.'
-            }
-        }
+        emptyText: 'Kein Eintrag selektiert.'
     });
-
     Ext.define('Shopware.window.de.Detail', {
         override: 'Shopware.window.Detail',
-        statics: {
-            displayConfig: {
-                eventAlias: undefined,
-                associations: [],
-                hasOwnController: false,
-                cancelButtonText: 'Abbrechen',
-                saveButtonText: 'Speichern'
-            }
-        }
+        cancelButtonText: 'Abbrechen',
+        saveButtonText: 'Speichern'
     });
     Ext.define('Shopware.window.de.Progress', {
         override: 'Shopware.window.Progress',
-        statics: {
-            displayConfig: {
-                infoText: undefined,
-                tasks: [ ],
-                outputProperties: [ 'id', 'number', 'name' ],
-                displayResultGrid: true,
-                cancelButtonText: 'Abbrechen',
-                closeButtonText: 'Fenster schließen',
-                successHeader: 'Erfolgreich',
-                requestHeader: 'Request',
-                errorHeader: 'Fehlermeldung',
-                requestResultTitle: 'Request Ergebnis',
-                processCanceledText: 'Prozess wurde an Position [0] von [1] unterbrochen'
-            }
-        }
+        title: 'Einträge löschen',
+        cancelButtonText: 'Abbrechen',
+        closeButtonText: 'Fenster schließen',
+        successHeader: 'Erfolgreich',
+        requestHeader: 'Request',
+        errorHeader: 'Fehlermeldung',
+        requestResultTitle: 'Request Ergebnis',
+        processCanceledText: 'Prozess wurde an Position [0] von [1] unterbrochen'
     });
     Ext.define('Shopware.form.field.de.TinyMCE', {
         override:'Shopware.form.field.TinyMCE',
@@ -494,5 +473,71 @@ Ext.onReady(function() {
     });
     Ext.apply(Ext.form.field.VTypes, {
         missingValidationErrorText: 'Die vType Validierung braucht eine ValidationErrorMsg-Eigenschaft'
+    });
+    Ext.define('Ext.grid.de.RowEditor', {
+        override:'Ext.grid.RowEditor',
+        saveBtnText: 'Aktualisieren',
+        cancelBtnText: 'Abbrechen',
+        errorsText: 'Fehler',
+        dirtyText: 'Sie müssen die Änderungen übernehmen oder abbrechen'
+    });
+    Ext.apply(Ext.util.FileUpload, {
+        snippets: {
+            uploadReady: 'Dateien hochgeladen',
+            messageText: '[0] Dateien hochgeladen',
+            messageTitle: 'Medienverwaltung',
+            legacyMessage: "Ihr Browser unterstützt nicht die benötigten Funktionen für einen Drag&Drop-Upload. ",
+            maxUploadSizeTitle: 'Die Datei ist zu groß',
+            maxUploadSizeText: "Die selektierte Datei überschreitet die maximal erlaubte Uploadgröße. Bitte wählen Sie eine andere Datei aus.",
+            blackListTitle: 'Blacklist',
+            blackListMessage: "Die Datei [0] ist nicht erlaubt!"
+        }
+    });
+    Ext.define('Shopware.de.Notification', {
+        override: 'Shopware.Notification',
+        closeText: 'Schließen'
+    });
+    Ext.define('Enlight.app.de.Window', {
+        override: 'Enlight.app.Window',
+        closePopupTitle: 'Modul schließen',
+        closePopupMessage: 'Sollen alle Unterfenster vom "__MODULE__"-Modul geschlossen werden?'
+    });
+    Ext.define('Shopware.detail.de.Controller', {
+        override: 'Shopware.detail.Controller',
+        closeText: 'Schließen',
+        saveSuccessTitle: 'Erfolgreich',
+        saveSuccessMessage: 'Eintrag wurde erfolgreich gespeichert',
+        violationErrorTitle: 'Validierung Fehler',
+        invalidFormTitle: 'Formularvalidierungs Fehler',
+        invalidFormMessage: 'Das Formular beinhaltet invalidate Daten, bitte prüfen Sie ihre Eingabe.'
+    });
+    Ext.define('Shopware.form.field.de.Media', {
+        override: 'Shopware.form.field.Media',
+        selectButtonText: 'Medium selektieren',
+        resetButtonText: 'Medium zurücksetzen'
+    });
+    Ext.define('Shopware.grid.de.Association', {
+        override: 'Shopware.grid.Association',
+        searchComboLabel: 'Suche nach'
+    })
+    Ext.define('Shopware.grid.de.Controller', {
+        override: 'Shopware.grid.Controller',
+        deleteConfirmTitle: 'Einträge löschen',
+        deleteConfirmText: 'Sind Sie sicher, dass Sie die markierten Einträge löschen möchen?',
+        deleteInfoText: '<b>Die Einträge werden gelöscht.</b> <br>Um den Prozess abzubrechen, können Sie den <b><i>`Cancel process`</i></b> Button verwenden. Abhänging von der Datenmenge kann dieser Prozess einige Minuten in Anspruch nehmen.',
+        deleteProgressBarText: 'Eintrag [0] von [1]'
+    });
+    Ext.define('Shopware.listing.de.FilterPanel', {
+        override: 'Shopware.listing.FilterPanel',
+        infoTextSnippet: 'Aktivieren Sie der verschiedenen Felder über die davor angezeigte Checkbox. Aktivierte Felder werden mit einer UND Bedingung verknüpft.',
+        filterButtonText: 'Filter anwenden',
+        resetButtonText: 'Filter zurücksetzen'
+    });
+    Ext.define('Shopware.grid.de.Panel', {
+        override: 'Shopware.grid.Panel',
+        pageSizeLabel: 'Einträge pro Seite',
+        addButtonText: 'Hinzufügen',
+        deleteButtonText: 'Markierte Einträge löschen',
+        searchFieldText: 'Suche...'
     });
 });

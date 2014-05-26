@@ -13,6 +13,44 @@ Ext.define('Shopware.detail.Controller', {
     },
 
     /**
+     * Title of the Shopware growl message, which displayed when a model saved
+     * successfully.
+     * @type { String }
+     */
+    saveSuccessTitle: '{s name="detail_controller/save_success_title"}Success{/s}',
+
+    /**
+     * Message of the Shopware growl message, which displayed when a model saved
+     * successfully.
+     * @type { String }
+     */
+    saveSuccessMessage: '{s name="detail_controller/save_success_message"}Item saved successfully{/s}',
+
+    /**
+     * Title of the Shopware sticky notification message, which displayed when a model
+     * can't be saved and some model violations thrown.
+     * @type { String }
+     */
+    violationErrorTitle: '{s name="detail_controller/violation_error_title"}Violation errors{/s}',
+
+
+    /**
+     * Title of the Shopware growl message, which displayed when the user
+     * tries to save the detail data but the form panel contains invalid data.
+     *
+     * @type { String }
+     */
+    invalidFormTitle: '{s name="detail_controller/invalid_form_title"}Form validation error{/s}',
+
+    /**
+     * Message of the Shopware growl message, which displayed when the user
+     * tries to save the detail data but the form panel contains invalid data.
+     *
+     * @type { String }
+     */
+    invalidFormMessage: '{s name="detail_controller/invalid_form_message"}The form contains invalid data, please check the inserted values.{/s}',
+
+    /**
      * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
      * is scope-independent and it always returns the class from which it was called, regardless of what
      * this points to during run-time.
@@ -67,45 +105,7 @@ Ext.define('Shopware.detail.Controller', {
              *
              * @type { string }
              */
-            eventAlias: undefined,
-
-            /**
-             * Title of the Shopware growl message, which displayed when a model saved
-             * successfully.
-             * @type { String }
-             */
-            saveSuccessTitle: '{s name="detail_controller/save_success_title"}Success{/s}',
-
-            /**
-             * Message of the Shopware growl message, which displayed when a model saved
-             * successfully.
-             * @type { String }
-             */
-            saveSuccessMessage: '{s name="detail_controller/save_success_message"}Item saved successfully{/s}',
-
-            /**
-             * Title of the Shopware sticky notification message, which displayed when a model
-             * can't be saved and some model violations thrown.
-             * @type { String }
-             */
-            violationErrorTitle: '{s name="detail_controller/violation_error_title"}Violation errors{/s}',
-
-
-            /**
-             * Title of the Shopware growl message, which displayed when the user
-             * tries to save the detail data but the form panel contains invalid data.
-             *
-             * @type { String }
-             */
-            invalidFormTitle: '{s name="detail_controller/invalid_form_title"}Form validation error{/s}',
-
-            /**
-             * Message of the Shopware growl message, which displayed when the user
-             * tries to save the detail data but the form panel contains invalid data.
-             *
-             * @type { String }
-             */
-            invalidFormMessage: '{s name="detail_controller/invalid_form_message"}The form contains invalid data, please check the inserted values.{/s}',
+            eventAlias: undefined
         },
 
         /**
@@ -375,8 +375,8 @@ Ext.define('Shopware.detail.Controller', {
         //check if the Ext JS form is valid
         if (!form.getForm().isValid()) {
             Shopware.Notification.createGrowlMessage(
-                me.getConfig('invalidFormTitle'),
-                me.getConfig('invalidFormMessage')
+                me.invalidFormTitle,
+                me.invalidFormMessage
             );
             return false;
         }
@@ -432,8 +432,8 @@ Ext.define('Shopware.detail.Controller', {
                 Shopware.app.Application.fireEvent(me.getEventName('save-successfully'), me, result, window, record, form);
 
                 Shopware.Notification.createGrowlMessage(
-                    me.getConfig('saveSuccessTitle'),
-                    me.getConfig('saveSuccessMessage')
+                    me.saveSuccessTitle,
+                    me.saveSuccessMessage
                 );
             }
         });
@@ -455,7 +455,7 @@ Ext.define('Shopware.detail.Controller', {
 
         template = '<ul>' + template + '</ul>';
         Shopware.Notification.createStickyGrowlMessage({
-            title: me.getConfig('violationErrorTitle'),
+            title: me.violationErrorTitle,
             text: template,
             width: 400
         });
