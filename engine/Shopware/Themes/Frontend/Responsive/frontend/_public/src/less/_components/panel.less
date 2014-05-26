@@ -147,24 +147,27 @@ See the documentation of the child elements for additional information.
     }
 }
 
-
 /* A table in a panel.
 
 ```
-<div class="panel">
-    <table class="panel--table">
-        <tr class="primary">
-            <th></th>
-        </tr>
-        <tr class="has--border">
-            <td></td>
-        </tr>
-    </table>
+<div class="panel--table">
+    <div class="panel--tr">
+        <div class="panel--th></div>
+        <div class="panel--th></div>
+        <div class="panel--th></div>
+    </div>
+    <div class="panel--tr">
+        <div class="panel--td"></div>
+        <div class="panel--td"></div>
+        <div class="panel--td"></div>
+    </div>
 </div>
 ```
 */
 .panel--table {
+    .clearfix();
     width: 100%;
+    display: block;
     border-collapse: collapse;
     border-spacing: 0;
     empty-cells: show;
@@ -173,51 +176,53 @@ See the documentation of the child elements for additional information.
         border: 1px solid @borderColor;
     }
 
-    th, td {
-        .unitize-padding(10, 10);
-        .unitize(14, 16, font-size);
-        .unitize(24, 16, line-height);
+    .panel--tr {
+        .clearfix();
+        display: block;
+        width: 100%;
         border-width: 0 0 1px 0;
         border-style: solid;
         border-color: @borderColor;
-    }
 
-    th {
-        font-weight: bold;
-        text-align: left;
-        color: #38434e;
-        background: @primaryBackgroundColor;
-    }
-
-    tr.is--secondary {
-        th {
-            background: #fff;
+        &:last-child {
+            border-width: 0;
         }
-        td {
+
+        &.is--odd {
+            background: #f1f4f7;
+        }
+
+        &.is--secondary {
             background: @primaryBackgroundColor;
         }
-    }
 
-    tr.is--primary {
-        th, td {
-            background: #fff;
-        }
-    }
-
-    tr.has--border {
-        th, td {
-            border-width: 0 1px 1px 0;
-        }
-        th:last-child,
-        td:last-child {
-            border-width: 0 0 1px 0;
+        &.is--primary {
+            color: @primaryColor;
         }
     }
 
-    tr:last-child {
-        td {
-            border-bottom: 0 none;
+    .panel--th,
+    .panel--td {
+        .unitize-padding(10, 10);
+        .unitize(14, 16, font-size);
+        .unitize(24, 16, line-height);
+        display: inline-block;
+        float: left;
+
+        &.has--border {
+            border-width: 0 1px 0 0;
+            border-style: solid;
+            border-color: @borderColor;
+
+            &:last-child {
+                border-width: 0;
+            }
         }
+    }
+
+    .panel--th {
+        font-weight: bold;
+        color: @darkTextColor;
     }
 }
 
