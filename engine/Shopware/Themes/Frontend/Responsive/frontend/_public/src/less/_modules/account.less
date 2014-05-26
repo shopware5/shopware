@@ -91,34 +91,86 @@
 }
 
 .account--orders-overview {
-    .panel--table {
-        .panel--th {
-            display: none;
-        }
+    border: 1px solid @borderColor;
 
-        .panel--td {
-            .clearfix();
-            display: block;
-            width: 100%;
-            float: none;
-        }
+    .orders--table-header {
+        display: none;
+    }
+
+    .panel--tr {
+        .unitize-padding(10, 0);
+    }
+
+    .panel--td {
+        .clearfix();
+        .unitize-padding(5, 10);
+        display: block;
+        float: none;
+    }
+
+    .column--info-labels,
+    .column--info-data {
+        display: none;
+    }
+
+    .column--summary-labels,
+    .column--summary-data {
+        width: 50%;
+        float: left;
+        text-align: left;
+    }
+
+    .column--summary-data {
+        .unitize-padding(5, 10, 0, 0);
+    }
+
+    .column--label,
+    .column--value {
+        width: 50%;
+        float: left;
+    }
+
+    .column--label {
+        font-weight: 600;
     }
 }
 
-.order--item {
-    .unitize-margin(0, 0, 20, 0);
-    border: 1px solid @borderColor;
+.order--status-icon {
+    .unitize-width(8);
+    .unitize-height(8);
+    .unitize(8, 16, top);
+    display: inline-block;
+    position: relative;
+
+    &.status--0,
+    &.status--1,
+    &.status--6 {
+        background: @deliveryInfoText;
+    }
+
+    &.status--2,
+    &.status--5,
+    &.status--7 {
+        background: @deliveryAvailableText;
+    }
+
+    &.status--4,
+    &.status--8 {
+        background: @deliveryNotAvailableText;
+    }
 }
 
-.column--label,
-.column--value {
-    width: 50%;
-    float: left;
-}
-
-.column--label {
-    font-weight: bold;
+.order--name {
     color: @darkTextColor;
+}
+
+.order--price-unit,
+.order--current-price {
+    display: none;
+}
+
+.order--actions {
+    text-align: center;
 }
 
 .order--details {
@@ -126,6 +178,20 @@
 
     p {
         .unitize-margin(0, 0);
+    }
+}
+
+.order--user-comments,
+.order--shop-comments {
+    border-bottom: 1px solid @borderColor;
+
+    blockquote {
+        .unitize-padding(10, 10);
+        .border-radius(3px);
+        .box-shadow(inset 0 0 3px 0 rgba(0, 0, 0, 0.2));
+        background: @primaryBackgroundColor;
+        text-align: left;
+        margin: 0;
     }
 }
 
@@ -256,40 +322,67 @@
 
 
     .account--orders-overview {
-        border: 1px solid @borderColor;
+        .orders--table-header {
+            display: block;
+        }
+
+        .panel--tr {
+            padding: 0;
+            border-width: 0 0 1px 0;
+        }
+        .panel--td {
+            .unitize-padding(10, 10);
+            display: inline-block;
+            float: left;
+        }
+
+        .column--label {
+            display: none;
+        }
+
+        .column--value {
+            width: 100%;
+            float: none;
+        }
+
+        .column--summary-labels,
+        .column--summary-data {
+            width: 20%;
+            text-align: right;
+        }
+
+        .column--date,
+        .column--id,
+        .column--dispatch { width: 20%; }
+        .column--status { width: 25%; }
+        .column--actions { width: 15%; }
+        .column--name { width: 50%; }
+        .column--quantity { width: 10%; }
+        .column--price { width: 20%; }
+        .column--total { width: 20%; }
+        .column--info-labels { width: 20%; }
+        .column--info-data { width: 40%; }
     }
 
     .order--item {
-
+        margin: 0;
     }
 
-    .order--status-icon {
-        .unitize-width(8);
-        .unitize-height(8);
-        .unitize(8, 16, top);
-        display: inline-block;
-        position: relative;
-
-        &.status--0,
-        &.status--1,
-        &.status--6 {
-            background: @deliveryInfoText;
-        }
-
-        &.status--2,
-        &.status--5,
-        &.status--7 {
-            background: @deliveryAvailableText;
-        }
-
-        &.status--4,
-        &.status--8 {
-            background: @deliveryNotAvailableText;
-        }
+    .order--actions {
+        text-align: right;
     }
 
     .order--pseudo-price {
         .unitize(12, 16, font-size);
+    }
+
+    .order--quantity {
+        text-align: center;
+    }
+
+    .order--price,
+    .order--amount {
+        text-align: right;
     }
 
     .order--repeat {
