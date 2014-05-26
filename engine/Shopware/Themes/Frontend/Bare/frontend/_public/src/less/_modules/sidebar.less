@@ -31,6 +31,25 @@ body > .sidebar-main {
         .filter--container {
             display: none;
         }
+
+        .logo--trusted-shops {
+            .clearfix();
+            .unitize-margin(30, 0);
+            display: block;
+
+            .trusted-shops--link {
+                color: @darkTextColor;
+
+                &:hover {
+                    color: @primaryColor;
+                }
+            }
+
+            .trusted-shops--icon {
+                .unitize-margin(0, 10);
+                float: left;
+            }
+        }
     }
 
     .navigation--headline {
