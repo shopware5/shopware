@@ -453,12 +453,17 @@ See the documentation of the child elements for additional information.
         .linear-gradient(#ffffff, #edeff2);
         .box-shadow(0 1px 1px 0 rgba(0, 0, 0, 0.05));
 
-        i {
+        [class^="icon--"] {
             .unitize(10, 16, font-size);
         }
 
+        &.is--active {
+            font-weight: bold;
+            color: @primaryColor;
+        }
+
         &:hover {
-            color: @darkTextColor;
+            color: @primaryColor;
         }
     }
 }
