@@ -137,7 +137,7 @@ class sBasket
     /**
      * Get total value of current user's cart (only products)
      * Used only internally in sBasket
-     * 
+     *
      * @deprecated
      * @return array Total amount of the user's cart (only products)
      */
@@ -157,7 +157,7 @@ class sBasket
     /**
      * Check if all positions in cart are available
      * Used in CheckoutController
-     * 
+     *
      * @deprecated
      * @return array
      */
@@ -237,7 +237,7 @@ class sBasket
     /**
      * Update vouchers in cart
      * Used only internally in sBasket
-     * 
+     *
      * @deprecated
      * @return null
      */
@@ -378,7 +378,7 @@ class sBasket
     /**
      * Check if any discount is in the cart
      * Used only internally in sBasket
-     * 
+     *
      * @deprecated
      * @return bool
      */
@@ -395,7 +395,7 @@ class sBasket
     /**
      * Add premium products to cart
      * Used internally in sBasket and in CheckoutController
-     * 
+     *
      * @deprecated
      * @return bool|int
      */
@@ -726,7 +726,7 @@ class sBasket
     /**
      * Get articleId of all products from cart
      * Used in CheckoutController
-     * 
+     *
      * @deprecated
      * @return array|null List of article ids in current basket, or null if none
      */
@@ -747,7 +747,7 @@ class sBasket
     /**
      * Check if minimum charging is reached
      * Used only in CheckoutController::getMinimumCharge()
-     * 
+     *
      * @deprecated
      * @return double|false Minimum order value in current currency, or false
      */
@@ -768,7 +768,7 @@ class sBasket
     /**
      * Add surcharge for payment means to cart
      * Used only internally in sBasket::sGetBasket
-     * 
+     *
      * @deprecated
      * @return null|false False on failure, null on success
      */
@@ -846,7 +846,7 @@ class sBasket
     /**
      * Add percentual surcharge
      * Used only internally in sBasket::sGetBasket
-     * 
+     *
      * @deprecated
      * @return void|false False on failure, null on success
      */
@@ -938,7 +938,7 @@ class sBasket
     /**
      * Fetch count of products in basket
      * Used in multiple locations
-     * 
+     *
      * @deprecated
      * @return array Number
      */
@@ -953,7 +953,7 @@ class sBasket
     /**
      * Get all basket positions
      * Used in multiple location
-     * 
+     *
      * @deprecated
      * @return array Basket content
      */
@@ -1011,7 +1011,15 @@ class sBasket
         ) = $this->getBasketArticles($getArticles);
 
         if ($totalAmount < 0 || empty($totalCount)) {
-            return array();
+            if (!$this->eventManager->notifyUntil('Shopware_Modules_Basket_sGetBasket_AllowEmptyBasket', array(
+                'articles' => $getArticles,
+                'totalAmount' => $totalAmount,
+                'totalAmountWithTax' => $totalAmountWithTax,
+                'totalCount' => $totalCount,
+                'totalAmountNet' => $totalAmountNet
+            ))) {
+                return array();
+            }
         }
 
         $totalAmountNumeric = $totalAmount;
@@ -1286,7 +1294,7 @@ class sBasket
             ";
         $sql = $this->eventManager->filter(
             'Shopware_Modules_Basket_UpdateArticle_FilterSqlDefault',
-            $sql, 
+            $sql,
             array(
                 'subject' => $this,
                 'id' => $id,
@@ -1324,7 +1332,7 @@ class sBasket
     /**
      * Check if the current basket has any ESD article
      * Used in sAdmin and CheckoutController
-     * 
+     *
      * @deprecated
      * @return bool If an ESD article is present in the current basket
      */
@@ -1346,7 +1354,7 @@ class sBasket
      * Truncate cart
      * Used on sAdmin tests and SwagBonusSystem
      * See @ticket PT-1845
-     * 
+     *
      * @deprecated
      * @return void|false False on no session, null otherwise
      */
@@ -2230,6 +2238,16 @@ class sBasket
                 )
             ) ? : array();
         }
+
+        $queryNewPrice = $this->eventManager->filter('Shopware_Modules_Basket_getPriceForUpdateArticle_FilterPrice',
+            $queryNewPrice,
+            array(
+                "id" => $id,
+                'subject'=> $this,
+                "quantity" => $quantity
+            )
+        );
+
         return $queryNewPrice;
     }
 
@@ -2409,6 +2427,15 @@ class sBasket
         $article = $this->db->fetchRow(
             $sql,
             array($id, $this->sSYSTEM->sUSERGROUPDATA["id"])
+        );
+
+        $article = $this->eventManager->filter('Shopware_Modules_Basket_getArticleForAddArticle_FilterArticle',
+            $article,
+            array(
+                "id" => $id,
+                'subject'=> $this,
+                "partner" => $this->sSYSTEM->_SESSION["sPartner"]
+            )
         );
 
         if (!$article) {
