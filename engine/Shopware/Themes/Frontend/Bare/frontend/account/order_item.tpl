@@ -69,7 +69,7 @@
 		{/block}
 
 		{block name="frontend_account_order_item_actions"}
-			<div class="order--actions panel--td column--actions is--align-right">
+			<div class="order--actions panel--td column--actions">
 				<a href="#order{$offerPosition.ordernumber}"
 				   title="{s name="OrderActionSlide"}{/s} {$offerPosition.ordernumber}"
 				   class="btn btn--secondary is--small"
@@ -92,7 +92,7 @@
 			{/block}
 
 			{block name="frontend_account_order_item_detail_table_head"}
-				<div class="panel--tr is--secondary">
+				<div class="orders--table-header panel--tr is--secondary">
 					<div class="panel--th column--name">{s name="OrderItemColumnName"}{/s}</div>
 					<div class="panel--th column--quantity is--align-center">{s name="OrderItemColumnQuantity"}{/s}</div>
 					<div class="panel--th column--price is--align-right">{s name="OrderItemColumnPrice"}{/s}</div>
@@ -172,28 +172,35 @@
 							{/block}
 
 							{block name='frontend_account_order_item_quantity'}
-								<div class="panel--td order--quantity column--quantity is--align-center">
-									{$article.quantity}
+								<div class="panel--td order--quantity column--quantity">
+									<div class="column--label">{s name="OrderItemColumnQuantity"}{/s}</div>
+									<div class="column--value">{$article.quantity}</div>
 								</div>
 							{/block}
 
 							{block name='frontend_account_order_item_price'}
-								<div class="panel--td order--price column--price is--align-right">
-									{if $article.price}
-										{$article.price} {$offerPosition.currency_html} *
-									{else}
-										{s name="OrderItemInfoFree"}{/s}
-									{/if}
+								<div class="panel--td order--price column--price">
+									<div class="column--label">{s name="OrderItemColumnPrice"}{/s}</div>
+									<div class="column--value">
+										{if $article.price}
+											{$article.price} {$offerPosition.currency_html} *
+										{else}
+											{s name="OrderItemInfoFree"}{/s}
+										{/if}
+									</div>
 								</div>
 							{/block}
 
 							{block name='frontend_account_order_item_amount'}
-								<div class="panel--td order--amount column--total is--align-right">
-									{if $article.amount}
-										{$article.amount} {$offerPosition.currency_html} *
-									{else}
-										{s name="OrderItemInfoFree"}{/s}
-									{/if}
+								<div class="panel--td order--amount column--total">
+									<div class="column--label">{s name="OrderItemColumnTotal"}{/s}</div>
+									<div class="column--value">
+										{if $article.amount}
+											{$article.amount} {$offerPosition.currency_html} *
+										{else}
+											{s name="OrderItemInfoFree"}{/s}
+										{/if}
+									</div>
 								</div>
 							{/block}
 						</div>
@@ -266,7 +273,7 @@
 				{/block}
 
 				{block name="frontend_account_order_item_detail_summary_labels"}
-					<div class="panel--td column--summary is--align-right">
+					<div class="panel--td column--summary-labels">
 
 						{* Shopping costs label *}
 						<p class="is--strong">{s name="OrderItemShippingcosts"}{/s}</p>
@@ -280,7 +287,7 @@
 				{/block}
 
 				{block name="frontend_account_order_item_detail_summary_data"}
-					<div class="panel--td column--summary is--align-right">
+					<div class="panel--td column--summary-data">
 
 						{* Shopping costs *}
 						{block name="frontend_account_order_item_shippingamount"}
