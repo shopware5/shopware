@@ -65,23 +65,45 @@ class sCategories
     public $customerGroupId;
 
     /**
+     * Database connection which used for each database operation in this class.
+     * Injected over the class constructor
+     *
+     * @var Enlight_Components_Db_Adapter_Pdo_Mysql
+     */
+    private $db;
+
+    /**
+     * Shopware configuration object which used for
+     * each config access in this class.
+     * Injected over the class constructor
+     *
+     * @var Shopware_Components_Config
+     */
+    private $config;
+
+    /**
      * Class constructor.
      */
     public function __construct()
     {
+        $this->db = Shopware()->Db();
+        $this->config = Shopware()->Config();
+
         $this->manager = Shopware()->Models();
         $this->repository = $this->manager->getRepository('Shopware\Models\Category\Category');
-        $this->baseUrl = Shopware()->Config()->get('baseFile') . '?sViewport=cat&sCategory=';
-        $this->blogBaseUrl = Shopware()->Config()->get('baseFile') . '?sViewport=blog&sCategory=';
+        $this->baseUrl = $this->config->get('baseFile') . '?sViewport=cat&sCategory=';
+        $this->blogBaseUrl = $this->config->get('baseFile') . '?sViewport=blog&sCategory=';
         $this->baseId = (int) Shopware()->Shop()->get('parentID');
-        $this->customerGroupId = (int) Shopware()->Modules()->System()->sSYSTEM->sUSERGROUPDATA['id'];
+        $this->customerGroupId = (int) Shopware()->Modules()->System()->sUSERGROUPDATA['id'];
     }
 
     /**
-     * Returns a category path as array for given category id
+     * Returns the category tree from the root until the category
+     * with the provided id. Also loads siblings for elements in the
+     * category path.
      *
-     * @param $id
-     * @return array
+     * @param int $id Id of the category to load
+     * @return array Tree of categories
      */
     public function sGetCategories($id)
     {
@@ -111,8 +133,10 @@ class sCategories
     }
 
     /**
-     * @param $id
-     * @return array
+     * Loads category details from db
+     *
+     * @param int $id Id of the category to load
+     * @return array Category details
      */
     protected function sGetCategoriesByParentId($id)
     {
@@ -137,14 +161,33 @@ class sCategories
     }
 
     /**
-     * @param $articleId
-     * @param $parentId
-     * @return int|null
+     * Returns the leaf category to which the
+     * article belongs, inside the category subtree.
+     *
+     * @param int $articleId Id of the article to look for
+     * @param int $parentId Category subtree root id. If null, the shop category is used.
+     * @param null $shopId
+     * @return int Id of the leaf category, or 0 if none found.
      */
-    public function sGetCategoryIdByArticleId($articleId, $parentId = null)
+    public function sGetCategoryIdByArticleId($articleId, $parentId = null, $shopId = null)
     {
         if ($parentId === null) {
             $parentId = $this->baseId;
+        }
+        if ($shopId === null) {
+            $shopId = Shopware()->Shop()->getId();
+        }
+
+        $id = (int) $this->db->fetchOne(
+            'SELECT category_id
+             FROM s_articles_categories_seo
+             WHERE article_id = :articleId
+             AND shop_id = :shopId',
+            array(':articleId' => $articleId, ':shopId' => $shopId)
+        );
+
+        if ($id) {
+            return $id;
         }
 
         $sql = '
@@ -164,10 +207,12 @@ class sCategories
             ORDER BY ac.id
         ';
 
-        return (int) Shopware()->Db()->fetchOne($sql, array(
+        $id = (int) $this->db->fetchOne($sql, array(
             '%|' . $parentId . '|%',
             $articleId
         ));
+
+        return $id;
     }
 
     /**
@@ -183,8 +228,8 @@ class sCategories
     /**
      * Returns category path for the given category id
      *
-     * @param $id
-     * @return array
+     * @param int $id Id of the category
+     * @return array Array of categories in path
      */
     public function sGetCategoriesByParent($id)
     {
@@ -207,10 +252,11 @@ class sCategories
     }
 
     /**
-     * Return a whole category tree by id
-     * @param  int   $parentId
-     * @param  null  $depth
-     * @return array
+     * Return a the category subtree for the given root
+     *
+     * @param  int $parentId Id of the root category, defaults to the current shop category
+     * @param  int $depth Depth to use, defaults to null (unlimited depth)
+     * @return array Category tree for the provided args
      */
     public function sGetWholeCategoryTree($parentId = null, $depth = null)
     {
@@ -265,7 +311,7 @@ class sCategories
         $detailUrl .= $category['category']['id'];
 
         $canonical = $detailUrl;
-        if (Shopware()->Config()->get('forceCanonicalHttp')) {
+        if ($this->config->get('forceCanonicalHttp')) {
             $canonical = str_replace('https://', 'http://', $canonical);
         }
 
@@ -285,7 +331,7 @@ class sCategories
         ));
 
         if (empty($category['template'])) {
-            $category['template'] = Shopware()->Config()->get('categoryDefaultTpl');
+            $category['template'] = $this->config->get('categoryDefaultTpl');
         }
 
         if (empty($category['template'])) {
@@ -300,10 +346,10 @@ class sCategories
     }
 
     /**
-     * Returns the category path for the given category id
+     * Returns the category path from root to the given category id
      *
-     * @param int|$id
-     * @param  int|null $parentId
+     * @param int $id Category id
+     * @param int|null $parentId If provided
      * @return array
      */
     public function sGetCategoryPath($id, $parentId = null)

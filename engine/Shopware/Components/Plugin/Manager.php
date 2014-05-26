@@ -343,7 +343,10 @@ class Manager
                     }
                     $file = $dir->getPathname() . DIRECTORY_SEPARATOR . 'Bootstrap.php';
                     if (!file_exists($file)) {
-                        continue;
+                        $file = $dir->getPathname() . DIRECTORY_SEPARATOR . 'BootstrapDummy.php';
+                        if (!file_exists($file)) {
+                            continue;
+                        }
                     }
 
                     $name = $dir->getFilename();

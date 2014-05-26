@@ -73,7 +73,9 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
             Shopware()->Hooks()->setAlias($name, $name);
             $proxy = Shopware()->Hooks()->getProxy($name);
             $this->modules_container[$name] = new $proxy;
-            $this->modules_container[$name]->sSYSTEM = $this->system;
+            if (property_exists($name, 'sSYSTEM')) {
+                $this->modules_container[$name]->sSYSTEM = $this->system;
+            }
         }
     }
 
@@ -205,5 +207,37 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
     public function Order()
     {
         return $this->getModule("Order");
+    }
+
+    /**
+     * @return sCms
+     */
+    public function Cms()
+    {
+        return $this->getModule("Cms");
+    }
+
+    /**
+     * @return sCore
+     */
+    public function Core()
+    {
+        return $this->getModule("Core");
+    }
+
+    /**
+     * @return sRewriteTable
+     */
+    public function RewriteTable()
+    {
+        return $this->getModule("RewriteTable");
+    }
+
+    /**
+     * @return sExport
+     */
+    public function Export()
+    {
+        return $this->getModule("Export");
     }
 }

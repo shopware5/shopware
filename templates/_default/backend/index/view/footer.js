@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,13 +19,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Index
- * @subpackage View
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 //{namespace name=backend/index/view/detail}
@@ -97,6 +90,7 @@ Ext.define('Shopware.apps.Index.view.Footer', {
 
         me.logoutBtn = me.createLogoutBtn();
         me.windowBtn = me.createWindowManagementMenu();
+        me.widgetBtn = me.createWidgetBtn();
 
         this.items = [
             me.logoutBtn,
@@ -106,7 +100,8 @@ Ext.define('Shopware.apps.Index.view.Footer', {
             me.windowBtn,
             { xtype: 'tbspacer', width: 6 },
             { xtype: 'tbseparator' },
-            { xtype: 'tbspacer', width: 6 }
+            { xtype: 'tbspacer', width: 6 },
+            me.widgetBtn
         ];
 
 	},
@@ -143,6 +138,13 @@ Ext.define('Shopware.apps.Index.view.Footer', {
         }, this);
 
         return logoutBtn;
+    },
+
+    createWidgetBtn: function() {
+        return Ext.create('Ext.button.Button', {
+            iconCls: 'widget-sidebar',
+            id: 'widgetTaskBarBtn'
+        });
     },
 
     /**

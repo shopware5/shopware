@@ -92,7 +92,11 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         }
 
         $article = Shopware()->Modules()->Articles()->sGetConfiguratorImage($article);
-        $article['sBundles'] = Shopware()->Modules()->Articles()->sGetArticleBundlesByArticleID($id);
+
+        // Was:
+        // $article['sBundles'] = Shopware()->Modules()->Articles()->sGetArticleBundlesByArticleID($id);
+        // But sGetArticleBundlesByArticleID() always returned false.
+        $article['sBundles'] = false;
 
         if (!empty(Shopware()->Config()->InquiryValue)) {
             $this->View()->sInquiry = $this->Front()->Router()->assemble(array(
@@ -189,7 +193,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
                     VALUES (NOW(), ?, ?)
                 ';
                 Shopware()->Db()->query($sql, array(
-                    $hash, serialize(Shopware()->System()->_POST)
+                    $hash, serialize(Shopware()->System()->_POST->toArray())
                 ));
 
                 $link = $this->Front()->Router()->assemble(array(
@@ -213,7 +217,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
                 Shopware()->Modules()->Articles()->sSaveComment($id);
             }
         } else {
-            $this->View()->sFormData = Shopware()->System()->_POST;
+            $this->View()->sFormData = Shopware()->System()->_POST->toArray();
             $this->View()->sErrorFlag = $sErrorFlag;
         }
 

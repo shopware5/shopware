@@ -157,7 +157,7 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
 
         $this->dispatch('backend/ProductFeed/saveFeed');
         $this->assertTrue($this->View()->success);
-        $this->assertCount(34, $this->View()->data);
+        $this->assertCount(35, $this->View()->data);
         $this->assertEquals($params["name"], $this->View()->data["name"]);
 
         return $this->View()->data["id"];
@@ -208,7 +208,7 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
         $this->dispatch('backend/ProductFeed/saveFeed');
 
         $this->assertTrue($this->View()->success);
-        $this->assertCount(34, $this->View()->data);
+        $this->assertCount(35, $this->View()->data);
         $this->assertEquals($params["name"], $this->View()->data["name"]);
 
         return $id;

@@ -44,20 +44,20 @@ if (file_exists('config.php') && strpos(file_get_contents('config.php'), '%db.da
     header('Content-type: text/html; charset=utf-8', true, 503);
 
     echo '<h2>Error</h2>';
-    echo 'Shopware 4 must be configured installed before use. Please run the <a href="install/">installer</a>.';
+    echo 'Shopware 4 must be configured installed before use. Please run the <a href="recovery/install/">installer</a>.';
 
     echo '<h2>Fehler</h2>';
-    echo 'Shopware 4 muss zunächst konfiguriert werden. Bitte führen Sie den <a href="install/">Installer</a>.';
+    echo 'Shopware 4 muss zunächst konfiguriert werden. Bitte führen Sie den <a href="recovery/install/">Installer</a>.';
 
     return;
 }
 
-// Check for update-script
-if (is_dir('update')) {
+// Check for active update
+if (is_file('files/update/update.json')) {
     header('Content-type: text/html; charset=utf-8', true, 503);
     header('Status: 503 Service Temporarily Unavailable');
     header('Retry-After: 1200');
-    echo file_get_contents(__DIR__ . '/update/maintenance.html');
+    echo file_get_contents(__DIR__ . '/recovery/update/maintenance.html');
     return;
 }
 

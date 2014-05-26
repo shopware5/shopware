@@ -106,6 +106,17 @@ class Shopware extends Enlight_Application
     }
 
     /**
+     * Returns the system configuration
+     *
+     * @deprecated sSystem is deprecated
+     * @return sSystem
+     */
+    public function System()
+    {
+        return $this->Bootstrap()->getResource('System');
+    }
+
+    /**
      * Returns front controller instance
      *
      * @return Enlight_Controller_Front
@@ -213,6 +224,26 @@ class Shopware extends Enlight_Application
     public function Plugins()
     {
         return $this->_bootstrap->getResource('plugin_manager');
+    }
+
+    /**
+     * Returns the instance of the snippet manager
+     *
+     * @return Shopware_Components_Snippet_Manager
+     */
+    public function Snippets()
+    {
+        return $this->_bootstrap->getResource('snippets');
+    }
+
+    /**
+     * Returns the instance of the password manager
+     *
+     * @return \Shopware\Components\Password\Manager
+     */
+    public function PasswordEncoder()
+    {
+        return $this->_bootstrap->getResource('PasswordEncoder');
     }
 
     /**

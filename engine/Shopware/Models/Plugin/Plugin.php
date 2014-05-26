@@ -70,7 +70,6 @@ class Plugin extends ModelEntity
      */
     private $source;
 
-
     /**
      * @var string $description
      * @ORM\Column(name="description", type="string", nullable=false)
@@ -222,6 +221,15 @@ class Plugin extends ModelEntity
     private $templates;
 
     /**
+     * INVERSE SIDE
+     * @var \Shopware\Models\Widget\Widget[]|ArrayCollection $elements
+     * @ORM\OneToMany(targetEntity="\Shopware\Models\Widget\Widget", mappedBy="plugin", cascade={"all"})
+     * @ORM\JoinColumn(name="id", referencedColumnName="plugin_id")
+     * @ORM\OrderBy({"id" = "ASC"})
+     */
+    private $widgets;
+
+    /**
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="Shopware\Models\Plugin\License", mappedBy="plugin")
      * @ORM\OrderBy({"type" = "ASC"})
@@ -247,6 +255,7 @@ class Plugin extends ModelEntity
         $this->payments = new ArrayCollection();
         $this->templates = new ArrayCollection();
         $this->licenses = new ArrayCollection();
+        $this->widgets = new ArrayCollection();
     }
 
     /**
@@ -254,7 +263,7 @@ class Plugin extends ModelEntity
      */
     public function isDummy()
     {
-        return (bool) $this->capabilityDummy;
+        return (bool)$this->capabilityDummy;
     }
 
     /**
@@ -538,7 +547,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Menu\Menu[] $configForms
+     * @param \Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Menu\Menu[] $configForms
      */
     public function setConfigForms($configForms)
     {
@@ -655,5 +664,21 @@ class Plugin extends ModelEntity
     public function setEmotionComponents($emotionComponents)
     {
         $this->emotionComponents = $emotionComponents;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getWidgets()
+    {
+        return $this->widgets;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $widgets
+     */
+    public function setWidgets($widgets)
+    {
+        $this->widgets = $widgets;
     }
 }

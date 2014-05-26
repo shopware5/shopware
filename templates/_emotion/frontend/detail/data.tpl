@@ -5,12 +5,12 @@
 
 		{* Supplier name *}
 		{block name="frontend_detail_rich_snippets_brand"}
-			<meta itemprop="brand" content="{$sArticle.supplierName}" />
+			<meta itemprop="brand" content="{$sArticle.supplierName|escape}" />
 		{/block}
 
 		{* Product name *}
 		{block name="frontend_detail_rich_snippets_name"}
-			<meta itemprop="name" content="{$sArticle.articleName}" />
+			<meta itemprop="name" content="{$sArticle.articleName|escape}" />
 		{/block}
 
 		{* Product image *}
@@ -20,7 +20,7 @@
 
 		{* Product description *}
 		{block name="frontend_detail_rich_snippets_description"}
-			<meta itemprop="description" content="{$sArticle.description_long|strip_tags}" />
+			<meta itemprop="description" content="{$sArticle.description_long|strip_tags|escape}" />
 		{/block}
 
 		{* Category path. Google recommend the following format: "Parent category > Child category" *}
@@ -108,7 +108,7 @@
 
                     {* Name of the reviewed product *}
                     {block name="frontend_detail_comment_rich_snippets_name"}
-                        <meta itemprop="itemreviewed" content="{$sArticle.articleName}" />
+                        <meta itemprop="itemreviewed" content="{$sArticle.articleName|escape}" />
                     {/block}
 
                     {* Review date, needs to follow the iso date format *}
@@ -138,17 +138,17 @@
 
                     {* Review summary *}
                     {block name="frontend_detail_comment_rich_snippets_summary"}
-                        <meta itemprop="summary" content="{$vote.headline}" />
+                        <meta itemprop="summary" content="{$vote.headline|escape}" />
                     {/block}
 
                     {* Name of the reviewer *}
                     {block name="frontend_detail_comment_rich_snippets_reviewer"}
-                        <meta itemprop="reviewer" content="{$vote.name}" />
+                        <meta itemprop="reviewer" content="{$vote.name|escape}" />
                     {/block}
 
                     {* Review text *}
                     {block name="frontend_detail_comment_rich_snippets_description"}
-                        <meta itemprop="description" content="{$vote.comment}" />
+                        <meta itemprop="description" content="{$vote.comment|escape}" />
                     {/block}
 
                 </span>

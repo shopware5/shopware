@@ -453,4 +453,7 @@ Ext.onReady(function() {
     Ext.apply(Ext.form.field.VTypes, {
         missingValidationErrorText: 'Die vType Validierung braucht eine ValidationErrorMsg-Eigenschaft'
     });
+    Ext.apply(Shopware.Notification, {
+        closeText: 'Schließen'
+    });
 });

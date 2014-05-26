@@ -26,6 +26,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Models\Emotion\Library\Component;
 use Shopware\Models\Config\ElementTranslation;
 use Shopware\Models\Config\FormTranslation;
+use Shopware\Models\Widget\Widget;
 
 /**
  * Shopware Plugin Bootstrap
@@ -463,6 +464,20 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     }
 
     /**
+     * Creates a new widget
+     *
+     * @param $name
+     */
+    public function createWidget($name)
+    {
+        $widget = new Widget();
+        $widget->setName($name);
+        $widget->setPlugin($this->Plugin());
+
+        $this->Plugin()->getWidgets()->add($widget);
+    }
+
+    /**
      * Subscribes a plugin event.
      *
      * {@inheritDoc}
@@ -657,7 +672,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     final public function getSource()
     {
-        return $this->info->source;
+        return $this->info ? $this->info->source : null;
     }
 
     /**

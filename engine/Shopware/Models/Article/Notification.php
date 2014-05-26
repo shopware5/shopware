@@ -216,7 +216,7 @@ class Notification extends LazyFetchModelEntity
      */
     public function getArticleDetail()
     {
-        return $this->fetchLazy($this->articleDetail, array('ordernumber' => $this->articleNumber));
+        return $this->fetchLazy($this->articleDetail, array('number' => $this->articleNumber));
     }
 
     /**

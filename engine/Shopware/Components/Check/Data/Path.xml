@@ -6,6 +6,7 @@
     <file><name>cache/general/</name></file>
     <file><name>cache/templates/</name></file>
     <file><name>cache/proxies/</name></file>
+    <file><name>cache/productexport/</name></file>
     <file><name>cache/doctrine/filecache/</name></file>
     <file><name>cache/doctrine/proxies/</name></file>
     <file><name>cache/doctrine/attributes/</name></file>

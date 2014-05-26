@@ -274,12 +274,53 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
     }
 
     /**
+     * Returns plugin bootstrap if plugin exits, is enabled, and active.
+     * Otherwise return null.
+     *
+     * @param string $pluginName
+     * @return Enlight_Plugin_Bootstrap|null
+     */
+    private function getPluginBootstrap($pluginName)
+    {
+        /** @var Shopware_Components_Plugin_Namespace $namespace */
+        $namespace = Shopware()->Plugins()->Core();
+        $pluginBootstrap = $namespace->get($pluginName);
+
+        if (!$pluginBootstrap instanceof Enlight_Plugin_Bootstrap) {
+            return null;
+        }
+
+        /**@var $plugin \Shopware\Models\Plugin\Plugin */
+        $plugin = Shopware()->Models()->find('\Shopware\Models\Plugin\Plugin', $pluginBootstrap->getId());
+        if (!$plugin) {
+            return null;
+        }
+
+        if (!$plugin->getActive() || !$plugin->getInstalled()) {
+            return null;
+        }
+
+        return $pluginBootstrap;
+    }
+
+    /**
      * Cron action method
      *
      * Sends the newsletter emails as a cronjob.
      */
     public function cronAction()
     {
+        /** @var Shopware_Plugins_Core_Cron_Bootstrap $cronBootstrap */
+        $cronBootstrap = $this->getPluginBootstrap('Cron');
+        if ($cronBootstrap && !$cronBootstrap->authorizeCronAction($this->Request())) {
+            $this->Response()
+                 ->clearHeaders()
+                 ->setHttpResponseCode(403)
+                 ->appendBody("Forbidden");
+
+            return;
+        }
+
         $this->Response()->setHeader('Content-Type', 'text/plain');
         $this->mailAction();
     }
@@ -398,7 +439,9 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
         } else {
             $where = 'cm.status=1';
         }
-        $sql = 'SELECT cm.*, ct.path as template FROM s_campaigns_mailings cm, s_campaigns_templates ct WHERE ct.id=cm.templateID AND '.$where;
+        $sql = 'SELECT cm.*, ct.path as template
+        FROM s_campaigns_mailings cm, s_campaigns_templates ct
+        WHERE ct.id=cm.templateID AND '.$where;
 
         $mailing = Shopware()->Db()->fetchRow($sql);
         return $mailing;
@@ -486,14 +529,13 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
         }
         $customerGroups = implode(' OR ', $customerGroups);
 
-
-        // The second element holds the selected *newsletter* groups for the current newletter
+        // The second element holds the selected *newsletter* groups for the current newsletter
         foreach ($mailing['groups'][1] as $customerGroupKey => $customerGroupValue) {
             $recipientGroups[] = Shopware()->Db()->quoteInto('sc.groupID=?', $customerGroupKey);
         }
         $recipientGroups = implode(' OR ', $recipientGroups);
 
-        // If no customer-/recipientgroup was selected, force the condition to be false
+        // If no customer/recipient group was selected, force the condition to be false
         if (empty($recipientGroups)) {
             $recipientGroups = '1=2';
         }
@@ -520,13 +562,11 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
             AND
             (
                 (
-                su.subshopID = ?
+                su.language = ?
                 AND ($customerGroups)
                 )
             OR
-                (
                 ($recipientGroups)
-                )
             )
             GROUP BY sc.email
         ";

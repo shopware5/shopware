@@ -12,11 +12,13 @@
             <group>disable</group>
             <group>performance</group>
             <group>functional</group>
+            <group>knownFailing</group>
         </exclude>
     </groups>
 
     <filter>
         <whitelist>
+            <directory suffix=".php">../../engine/core/</directory>
             <directory suffix=".php">../../engine/Shopware/</directory>
             <exclude>
                 <directory>../../engine/Shopware/Plugins/Community</directory>

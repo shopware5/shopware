@@ -1,5 +1,7 @@
 # Shopware 4
 
+[![Build Status](https://travis-ci.org/ShopwareAG/shopware-4.svg?branch=master)](https://travis-ci.org/ShopwareAG/shopware-4)
+
 - **License**: Dual license AGPL v3 / Proprietary
 - **Github Repository**: <https://github.com/ShopwareAG/shopware-4>
 - **Issue-Tracker**: <http://jira.shopware.de/jira>
@@ -48,13 +50,13 @@ those files.
 
     cd build/
     ant configure
-    ant build-config build-composer-install build-database
+    ant build-unit
 
 4.) Download the demo data files and extract them:
 
 Go to the checkout directory and download the demo data files:
 
-	wget -O demo.zip files.shopware.de/download.php?package=demo
+	wget -O demo.zip http://releases.s3.shopware.com/demo_4.2.0.zip
 
 Unzip the files to the checkout directory:
 
@@ -140,5 +142,5 @@ The changelog and all available commits are located under <https://github.com/Sh
 * [Shopware Wiki](http://wiki.shopware.de) - Shopware Wiki
 * [Shopware Forum](http://forum.shopware.de) - Community forum
 * [Shopware Marketplace](http://store.shopware.de) - Shopware Store
-* [Shopware Developer Guide](http://wiki.shopware.de/Developers-Guide_cat_487.html) - Shopware 4 Developer Guide
+* [Shopware Developer Guide](http://wiki.shopware.de/Developers-Guide_cat_796.html) - Shopware 4 Developer Guide
 * [Shopware Designer Guide](http://wiki.shopware.de/Designers-Guide_cat_486.html) - Shopware 4 Designer Guide

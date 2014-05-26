@@ -1,6 +1,98 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+## 4.3.0
+* Removed deprecated Zend Framework components:
+    * `Zend_Amf`
+    * `Zend_Application`
+    * `Zend_Barcode`
+    * `Zend_Cloud`
+    * `Zend_CodeGenerator`
+    * `Zend_Console`
+    * `Zend_Gdata`
+    * `Zend_Markup`
+    * `Zend_Measure`
+    * `Zend_Memory`
+    * `Zend_Pdf`
+    * `Zend_Reflection`
+    * `Zend_Search`
+    * `Zend_Serializer`
+    * `Zend_Tag`
+    * `Zend_Test`
+    * `Zend_Tool`
+    * `Zend_EventManager`
+    * `Zend_Feed`
+    * `Zend_Dojo`
+    * `Zend_Mobile`
+    * `Zend_Queue`
+    * `Zend_Captcha`
+    * `Zend_Service`
+* Removed the following core classes deprecated and/or unused methods
+    * `sArticles::sGetArticleAccessories`
+    * `sArticles::sCreateTranslationTable`
+    * `sArticles::sGetLiveShopping`
+    * `sArticles::sGetArticleBundlesByArticleID`
+    * `sArticles::sGetArticleBundleByID`
+    * `sArticles::sGetBundleBasketDiscount`
+    * `sSystem::sPreProcess`
+    * `sSystem::sInitMailer`
+    * `sSystem::sGetTranslation`
+    * `sSystem::sInitAdo`
+    * `sSystem::sTranslateConfig`
+    * `sSystem::sInitConfig`
+    * `sSystem::sInitSmarty`
+    * `sSystem::sInitSession`
+    * `sSystem::sCallHookPoint`
+    * `sSystem::sLoadHookPoints`
+    * `sSystem::sInitFactory`
+    * `sSystem::sCheckLicense`
+    * `sSystem::E_CORE_ERROR`
+    * `sCms::sGetDynamicContentByGroup`
+    * `sCms::sGetDynamicContentById`
+    * `sCms::sGetDynamicGroupName`
+    * `sAdmin::sGetDispatch`
+    * `sAdmin::sGetDispatches`
+    * `sAdmin::sGetShippingcosts`
+    * `sAdmin::sCheckTaxID`
+    * `sCore::sCustomRenderer`
+* Removed the following core classes deprecated and/or unused variables
+    * `sSystem::sDB_HOST`
+    * `sSystem::sDB_USER`
+    * `sSystem::sDB_PASSWORD`
+    * `sSystem::sDB_DATABASE`
+    * `sSystem::sDB_CONNECTOR`
+    * `sSystem::sDEBUG`
+    * `sSystem::sBENCHRESULTS`
+    * `sSystem::sBENCHMARK`
+    * `sSystem::sPathMedia`
+    * `sSystem::sBasePath`
+    * `sSystem::sBasefile`
+    * `sSystem::sLicenseData`
+    * `sSystem::sCurrencyData`
+    * `sSystem::sPathCmsFiles`
+    * `sSystem::sPathCmsImg`
+* `sCore::sBuildLink()` second argument removed (dead code)
+* `sCore` no longer returns `null` when calling not implemented functions
+* `sSystem::sSYSTEM` self-reference was removed
+* `sNewsletter` core class removed
+* `Shopware_Controllers_Frontend_Content` legacy controller removed
+* `templates/_default/frontend/content` legacy template files removed
+* `s_cms_content` legacy database table removed
+* Removed functions `simpledom_load_file()` and `simpledom_load_string()`
+* Removed class `SimpleDOM` and `Shopware_Components_Xml_SimpleXml`
+* Add new product feed modifier `articleImages` and `property`
+* Create a new product export cronjob to export all active product feeds
+* Implement new article association for new seo categories. The seo categories can be assigned over the array key seoCategories in the article api resource.
+* Access to GET, POST and COOKIES through sSystem is deprecated.
+    * The current arrays have been replaced with wrappers objects to the global variables
+    * This might introduce breaks in some scenarios (eg.: when using array functions like array_merge)
+* Plugin configuration: Stores of `select` and `combo` elements can now be translated
+* Dynamically injecting variables into sSystem is no longer supported
+* Removed `Shopware\Models\Widget\View::label` variable, getter and setter, and correspondent `s_core_widget_views::label` database column
+* Deprecated `Shopware\Models\Widget\Widget::label` variable, getter and setter, and correspondent `s_core_widgets::label` database column
+* Removed deprecated widget settings from the config module. Active widgets and their positions will now be saved automatically.
+* Removed desktop switcher from the `Shopware.container.Viewport` base component.
+
 ## 4.2.2
 
 * Remove old payment dummy plugins out of the core: PaymentSofort and PigmbhRatePAYPayment

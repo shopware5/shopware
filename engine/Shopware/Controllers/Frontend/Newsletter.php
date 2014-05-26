@@ -128,7 +128,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
             $this->View()->sUnsubscribe = false;
         }
 
-        $this->View()->_POST = Shopware()->System()->_POST;
+        $this->View()->_POST = Shopware()->System()->_POST->toArray();
 
         if (!isset(Shopware()->System()->_POST["newsletter"])) {
             return;
@@ -154,7 +154,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
 
                 Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST["newsletter"], true);
                 $hash = md5(uniqid(rand()));
-                $data = serialize(Shopware()->System()->_POST);
+                $data = serialize(Shopware()->System()->_POST->toArray());
 
                 $link = $this->Front()->Router()->assemble(array('sViewport' => 'newsletter', 'action' => 'confirm', 'sConfirmation' => $hash));
 

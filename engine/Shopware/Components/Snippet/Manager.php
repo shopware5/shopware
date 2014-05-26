@@ -92,7 +92,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
      * @return      Enlight_Components_Snippet_Namespace
      * @deprecated  4.0 - 2012/04/01
      */
-    public function getSnippet($namespace)
+    public function getSnippet($namespace = null)
     {
         return parent::getNamespace($namespace);
     }
