@@ -33,7 +33,7 @@
 					{block name="frontend_account_orders_table"}
 						<div class="panel--table">
 							{block name="frontend_account_orders_table_head"}
-								<div class="panel--tr">
+								<div class="orders--table-header panel--tr">
 									<div class="panel--th column--date">{s name="OrderColumnDate"}{/s}</div>
 									<div class="panel--th column--id">{s name="OrderColumnId"}{/s}</div>
 									<div class="panel--th column--dispatch">{s name="OrderColumnDispatch"}{/s}</div>
