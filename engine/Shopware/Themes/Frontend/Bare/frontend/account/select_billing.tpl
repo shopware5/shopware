@@ -7,36 +7,40 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-<div class="grid_16 addresses">
-	{if $sBillingAddresses}
-		<h2 class="headingbox">{se name="SelectBillingHeader"}{/se}</h2>
-		<div class="inner_container">
-			{foreach from=$sBillingAddresses item=sAddress key=key}
-				<form name="frmRegister" method="post" action="{url action=saveBilling}">
-					<input type="hidden" name="sSelectAddress" value="{$sAddress.hash}" />
-					<input type="hidden" name="sTarget" value="{$sTarget|escape}" />
-					
-					{include file='frontend/account/select_address.tpl'}
-				</form>
-			{/foreach}
-			<div class="clear">&nbsp;</div>
-		</div>
-		
-	{* if the user doesn't have any orders *}
-	{else}
-		{block name="frontend_account_select_billing_info_empty"}
-			{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='SelectBillingInfoEmpty'}{/s}"}
+	<div class="account--addresses right">
+
+		{* Billing addresses list *}
+		{block name='frontend_account_select_address_container'}
+			<div class="account--addresses-container">
+				{if $sBillingAddresses}
+					<div class="account--welcome">
+						<h1 class="panel--title">{s name="SelectBillingHeader"}{/s}</h1>
+					</div>
+					{foreach $sBillingAddresses as $sAddress}
+						<div class="address--container{if $sAddress@iteration is even by 1} right{else} left{/if}">
+							<form name="frmRegister" method="post" action="{url action=saveBilling}">
+								<input type="hidden" name="sSelectAddress" value="{$sAddress.hash}" />
+								<input type="hidden" name="sTarget" value="{$sTarget|escape}" />
+
+								{include file='frontend/account/select_address.tpl'}
+							</form>
+						</div>
+					{/foreach}
+
+				{* if the user doesn't have any orders *}
+				{else}
+					{block name='frontend_account_select_billing_info_empty'}
+						{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='SelectBillingInfoEmpty'}{/s}"}
+					{/block}
+				{/if}
+			</div>
 		{/block}
-	{/if}
 
-	<div class="doublespace">&nbsp;</div>
+		{block name='frontend_account_select_billing_action_buttons'}
+				<a class="btn btn--secondary" href="{if $sTarget}{url controller=$sTarget}{else}{url controller='account'}{/if}" title="{s name='SelectBillingLinkBack'}{/s}">
+					{s name="SelectBillingLinkBack"}{/s}
+				</a>
+		{/block}
 
-	{block name="frontend_account_select_billing_action_buttons"}
-	<a class="button-left large" href="{if $sTarget}{url controller=$sTarget}{else}{url controller='account'}{/if}" title="{s name='SelectBillingLinkBack'}{/s}">
-		{se name="SelectBillingLinkBack"}{/se}
-	</a>
-	{/block}
-
-	<div class="doublespace">&nbsp;</div>
-</div>
+	</div>
 {/block}
