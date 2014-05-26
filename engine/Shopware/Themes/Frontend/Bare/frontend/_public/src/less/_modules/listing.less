@@ -169,10 +169,6 @@
         border: 1px solid @borderColor;
         float: left;
 
-        &:before {
-            content: "\e606";
-        }
-
         &:hover {
             color: @primaryColor;
         }
@@ -180,10 +176,18 @@
         &.link--table-view {
             .border-radius-multi(3px, 0, 0, 3px);
             border-width: 1px 0 1px 1px;
+
+            &:before {
+                content: "\e609";
+            }
         }
 
         &.link--list-view {
             .border-radius-multi(0, 3px, 3px, 0);
+
+            &:before {
+                content: "\e608";
+            }
         }
 
         .action--link-text {
