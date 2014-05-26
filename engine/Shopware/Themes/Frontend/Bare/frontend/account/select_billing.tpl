@@ -28,15 +28,15 @@
 			{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='SelectBillingInfoEmpty'}{/s}"}
 		{/block}
 	{/if}
-	
+
 	<div class="doublespace">&nbsp;</div>
-	
+
 	{block name="frontend_account_select_billing_action_buttons"}
 	<a class="button-left large" href="{if $sTarget}{url controller=$sTarget}{else}{url controller='account'}{/if}" title="{s name='SelectBillingLinkBack'}{/s}">
 		{se name="SelectBillingLinkBack"}{/se}
 	</a>
 	{/block}
-	
+
 	<div class="doublespace">&nbsp;</div>
 </div>
 {/block}
