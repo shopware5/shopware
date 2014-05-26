@@ -245,6 +245,7 @@ class Requirements implements \IteratorAggregate, \Countable
 
                 return $match[0];
             }
+
             return $gd['GD Version'];
         } else {
             return false;

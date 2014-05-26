@@ -45,6 +45,7 @@ if (version_compare(PHP_VERSION, '5.3.2', '<')) {
     echo 'Auf Ihrem Server läuft PHP version ' . PHP_VERSION . ', Shopware 4 benötigt mindestens PHP 5.3.2';
     echo '<h2>Error</h2>';
     echo 'Your server is running PHP version ' . PHP_VERSION . ' but Shopware 4 requires at least PHP 5.3.2';
+
     return;
 }
 
@@ -52,10 +53,10 @@ if (version_compare(PHP_VERSION, '5.3.2', '<')) {
 if (!isset($_SERVER['MOD_REWRITE']) && isset($_SERVER['SCRIPT_NAME']) && isset($_SERVER['REQUEST_URI'])) {
     if (empty($_SERVER['PATH_INFO']) && strpos($_SERVER['REQUEST_URI'], $_SERVER['SCRIPT_NAME']) !== 0) {
         header('Location: ' . $_SERVER['SCRIPT_NAME'], true);
+
         return;
     }
 }
 
 $app = require __DIR__ . '/src/app.php';
 $app->run();
-

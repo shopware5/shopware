@@ -3,12 +3,14 @@
     "require": {
         "slim/slim": "~2.4.2",
         "symfony/console": "~2.4.2",
-        "pimple/pimple": "~2.0"
+        "pimple/pimple": "~2.0",
+        "knplabs/gaufrette": "~0.1.7"
     },
     "autoload": {
         "psr-4": {
             "Shopware\\Recovery\\Common\\": "src",
-            "Shopware\\Recovery\\Install\\": "../install/src"
+            "Shopware\\Recovery\\Install\\": "../install/src",
+            "Shopware\\Recovery\\Update\\": "../update/src"
         }
     }
 }

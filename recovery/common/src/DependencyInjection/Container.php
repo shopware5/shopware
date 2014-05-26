@@ -151,5 +151,7 @@ abstract class Container implements ContainerInterface
     {
         $config = $this->pimple->offsetGet('config');
         $config[$name] = $value;
+
+        $this->pimple->offsetSet('config', $config);
     }
 }

@@ -55,6 +55,7 @@ Ext.define('Shopware.apps.Index.view.Menu', {
             success: function(response) {
                 me.items = Ext.decode(response.responseText);
 
+                me.fireEvent('menu-created', me.items);
             }
         });
 
