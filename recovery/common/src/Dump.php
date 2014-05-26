@@ -35,21 +35,24 @@ class Dump implements \SeekableIterator, \Countable
      * @var int
      */
     protected $count;
+
     /**
      * @var resource
      */
     protected $stream;
+
     /**
      * @var int
      */
     protected $position;
+
     /**
      * @var
      */
     protected $current;
 
     /**
-     * @param string $filename
+     * @param  string     $filename
      * @throws \Exception
      */
     public function __construct($filename)
@@ -71,7 +74,7 @@ class Dump implements \SeekableIterator, \Countable
     }
 
     /**
-     * @param int $position
+     * @param  int                   $position
      * @throws \OutOfBoundsException
      */
     public function seek($position)
