@@ -38,6 +38,23 @@
 	color: @errorText;
 }
 
+.account--action {
+    .unitize-margin(0, 20, 20, 16);
+    .clearfix();
+}
+
+.account--headline {
+    .unitize(24, 16, font-size);
+    .unitize(20, 16, margin-bottom);
+}
+
+.account--change-billing.register--content {
+    .clearfix();
+    display: block;
+    width: 100%;
+}
+
+
 .account--password-reset {
     .unitize(20, 16, padding-top);
 
@@ -178,5 +195,9 @@
 
     .account--password-reset {
         padding-top: 0;
+    }
+
+    .account--change-billing.register--content {
+        width: 78%;
     }
 }
