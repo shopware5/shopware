@@ -37,8 +37,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.Ftp', {
     },
 
     width: 360,
-
-    height: 330,
+    height: 380,
 
     initComponent: function () {
         var me = this;
