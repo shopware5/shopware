@@ -168,7 +168,7 @@ Ext.define('Shopware.apps.UserManager.view.user.List', {
 
 		// Row grouping
 		this.groupingFeature = Ext.create('Ext.grid.feature.Grouping', {
-		    groupHeaderTpl: '{literal}Gruppe: {name} ({rows.length}){/literal}'
+		    groupHeaderTpl: '{s name="list_users/group"}Gruppe{/s}{literal}: {name} ({rows.length}){/literal}'
 		});
 		this.features = [ this.groupingFeature ];
 

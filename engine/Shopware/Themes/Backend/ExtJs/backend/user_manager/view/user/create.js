@@ -379,7 +379,7 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
     getUserBaseFieldset: function() {
         return Ext.create('Ext.form.FieldSet',
         {
-            title: 'Stammdaten',
+            title: '{s name=create_user/main_data}Main data{/s}',
             bodyPadding : 10,
             defaults    : {
                 labelWidth: '155px',
@@ -406,7 +406,7 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
                            },
                            {
                                xtype: 'textfield',
-                               fieldLabel: '{s name=create_user/email}Mailadress{/s}',
+                               fieldLabel: '{s name=create_user/email}Email address{/s}',
                                anchor: '100%',
                                vtype: 'email',
                                name: 'email',
@@ -470,7 +470,7 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
     getUserOptionsFieldset: function() {
         return Ext.create('Ext.form.FieldSet',
                 {
-                    title: 'Benutzerindividuelle Optionen',
+                    title: '{s name=create_user/individual_user_options}Individual user options{/s}',
                     bodyPadding : 10,
                     defaults    : {
                         labelWidth: '155px',
