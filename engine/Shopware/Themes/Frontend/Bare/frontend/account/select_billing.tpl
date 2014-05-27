@@ -7,25 +7,31 @@
 
 {* Main content *}
 {block name="frontend_index_content"}
-	<div class="account--content">
+	<div class="account--billing-address account--content">
 
 		{* Billing addresses list *}
-		{block name="frontend_account_select_address_container"}
+		{block name="frontend_account_select_billing_address"}
 			<div class="account--addresses-container">
 				{if $sBillingAddresses}
-					<div class="account--welcome">
-						<h1 class="panel--title">{s name="SelectBillingHeader"}{/s}</h1>
-					</div>
-					{foreach $sBillingAddresses as $key => $sAddress}
-						<div class="address--container{if $sAddress@iteration is even by 1} right{else} left{/if}">
-							<form name="frmRegister" method="post" action="{url action=saveBilling}">
-								<input type="hidden" name="sSelectAddress" value="{$sAddress.hash}" />
-								<input type="hidden" name="sTarget" value="{$sTarget|escape}" />
 
-								{include file="frontend/account/select_address.tpl"}
-							</form>
+					{block name="frontend_account_select_billing_headline"}
+						<div class="account--welcome">
+							<h1 class="panel--title">{s name="SelectBillingHeader"}{/s}</h1>
 						</div>
-					{/foreach}
+					{/block}
+
+					{block name="frontend_account_select_billing_container"}
+						{foreach $sBillingAddresses as $key => $sAddress}
+							<div class="address--container{if $sAddress@iteration is even by 1} right{else} left{/if}">
+								<form name="frmRegister" method="post" action="{url action=saveBilling}">
+									<input type="hidden" name="sSelectAddress" value="{$sAddress.hash}" />
+									<input type="hidden" name="sTarget" value="{$sTarget|escape}" />
+
+									{include file="frontend/account/select_address.tpl"}
+								</form>
+							</div>
+						{/foreach}
+					{/block}
 
 				{* if the user doesn't have any orders *}
 				{else}

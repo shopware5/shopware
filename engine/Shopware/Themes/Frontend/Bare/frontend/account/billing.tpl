@@ -9,7 +9,7 @@
 {block name="frontend_index_content"}
 	<div class="account--change-billing account--content register--content">
 
-		{* Headline *}
+		{* Billing headline *}
 		{block name="frontend_account_billing_headline"}
 			<div class="account--welcome">
 				<h1 class="panel--title">{s name='BillingHeadline'}{/s}</h1>
@@ -41,7 +41,7 @@
 
 							{* Billing actions *}
 							{block name="frontend_account_billing_action_buttons"}
-								<div class="account--action">
+								<div class="account--actions">
 									{if $sTarget}
 										<a class="btn btn--secondary left" href="{url controller=$sTarget}" title="{s name="BillingLinkBack"}{/s}">
 											{s name="BillingLinkBack"}{/s}
