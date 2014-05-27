@@ -7,7 +7,7 @@
 
 {* Main content *}
 {block name="frontend_index_content"}
-	<div class="account--change-billing account--content register--content right">
+	<div class="account--change-billing account--content register--content">
 
 		{* Headline *}
 		{block name="frontend_account_billing_headline"}

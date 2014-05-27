@@ -7,7 +7,7 @@
 
 {* Main content *}
 {block name="frontend_index_content"}
-	<div class="account--content right">
+	<div class="account--content">
 
 		{* Billing addresses list *}
 		{block name="frontend_account_select_address_container"}
