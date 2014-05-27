@@ -89,14 +89,6 @@ class ListProduct extends Gateway
             $products[$key] = $this->hydrator->hydrateListProduct($product);
         }
 
-//        $collection = new Struct\Collection\Product();
-//
-//        foreach ($data as $product) {
-//            $collection->add(
-//                $this->hydrator->hydrateListProduct($product)
-//            );
-//        }
-//
         return $products;
     }
 
@@ -118,15 +110,61 @@ class ListProduct extends Gateway
             ->leftJoin('variant', 's_articles_attributes', 'attribute', 'attribute.articledetailsID = variant.id')
             ->leftJoin('variant', 's_core_units', 'unit', 'unit.id = variant.unitID')
             ->leftJoin('product', 's_articles_supplier', 'manufacturer', 'manufacturer.id = product.supplierID')
-            ->leftJoin(
-                'product',
-                's_articles_supplier_attributes',
-                'manufacturerAttribute',
-                'manufacturerAttribute.id = product.supplierID'
-            )
+            ->leftJoin('product', 's_articles_supplier_attributes', 'manufacturerAttribute', 'manufacturerAttribute.id = product.supplierID')
             ->leftJoin('product', 's_core_pricegroups', 'priceGroup', 'priceGroup.id = product.pricegroupID')
             ->where('variant.ordernumber IN (:numbers)')
             ->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
+
+        $query->leftJoin(
+            'variant',
+            's_core_translations',
+            'productTranslation',
+            'productTranslation.objecttype = :productType AND
+             productTranslation.objectkey = variant.articleID AND
+             productTranslation.objectlanguage = :language'
+        );
+
+        $query->leftJoin(
+            'variant',
+            's_core_translations',
+            'variantTranslation',
+            'variantTranslation.objecttype = :variantType AND
+             variantTranslation.objectkey = variant.id AND
+             variantTranslation.objectlanguage = :language'
+        );
+
+        $query->leftJoin(
+            'manufacturer',
+            's_core_translations',
+            'manufacturerTranslation',
+            'manufacturerTranslation.objecttype = :manufacturerType AND
+             manufacturerTranslation.objectkey = manufacturer.id AND
+             manufacturerTranslation.objectlanguage = :language'
+        );
+
+        $query->leftJoin(
+            'variant',
+            's_core_translations',
+            'unitTranslation',
+            'unitTranslation.objecttype = :unitType AND
+             unitTranslation.objectkey = variant.unitID AND
+             unitTranslation.objectlanguage = :language'
+        );
+
+        $query->setParameter(':productType', 'article')
+            ->setParameter(':variantType', 'variant')
+            ->setParameter(':manufacturerType', 'supplier')
+            ->setParameter(':unitType', 'config_units')
+//            ->setParameter(':language', $context->getShop()->getId())
+            ->setParameter(':language', 2)
+        ;
+
+        $query->addSelect(array(
+            'productTranslation.objectdata as __product_translations',
+            'variantTranslation.objectdata as __variant_translations',
+            'manufacturerTranslation.objectdata as __manufacturer_translations',
+            'unitTranslation.objectdata as __unit_translations'
+        ));
 
         return $query;
     }

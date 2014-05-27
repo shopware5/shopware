@@ -105,7 +105,6 @@ class ListProduct
      */
     public function getList(array $numbers, Struct\Context $context)
     {
-        /**@var $products Struct\Collection\Product */
         $products = $this->productGateway->getList($numbers, $context);
 
         $covers = $this->mediaService->getProductsCovers($products, $context);

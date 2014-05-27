@@ -18,7 +18,7 @@ class Vote extends Hydrator
         $total = 0;
 
         foreach ($data as $row) {
-            $points += $row['points'];
+            $points += $row['points'] * $row['total'];
             $total += $row['total'];
         }
 

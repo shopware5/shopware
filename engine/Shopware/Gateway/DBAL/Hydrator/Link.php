@@ -31,7 +31,7 @@ class Link extends Hydrator
 
         $link->setDescription($data['description']);
 
-        $link->setLink($data['filename']);
+        $link->setLink($data['link']);
 
         $link->setTarget($data['size']);
 

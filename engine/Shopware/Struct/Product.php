@@ -2,6 +2,7 @@
 
 namespace Shopware\Struct;
 
+use Shopware\Struct\Configurator\Group;
 use Shopware\Struct\Property\Set;
 
 class Product extends ListProduct
@@ -42,7 +43,7 @@ class Product extends ListProduct
     private $propertySet;
 
     /**
-     * @var Product\Configurator\Option[]
+     * @var Product\Configurator\Group[]
      */
     private $configuration;
 

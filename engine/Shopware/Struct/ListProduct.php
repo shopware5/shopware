@@ -28,21 +28,21 @@ class ListProduct extends Extendable
      *
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * Unique identifier of the product variation (s_articles_details).
      *
      * @var int
      */
-    private $variantId;
+    protected $variantId;
 
     /**
      * Contains the product name.
      *
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * Unique identifier field.
@@ -52,7 +52,7 @@ class ListProduct extends Extendable
      *
      * @var string
      */
-    private $number;
+    protected $number;
 
     /**
      * Stock value of the product.
@@ -60,7 +60,7 @@ class ListProduct extends Extendable
      *
      * @var int
      */
-    private $stock;
+    protected $stock;
 
     /**
      * Short description of the product.
@@ -68,14 +68,14 @@ class ListProduct extends Extendable
      *
      * @var string
      */
-    private $shortDescription;
+    protected $shortDescription;
 
     /**
      * A long description of the product.
      *
      * @var string
      */
-    private $longDescription;
+    protected $longDescription;
 
     /**
      * Defines the date when the product was released / will be
@@ -83,21 +83,21 @@ class ListProduct extends Extendable
      *
      * @var \DateTime
      */
-    private $releaseDate;
+    protected $releaseDate;
 
     /**
      * Defines the required time in days to deliver the product.
      *
      * @var int
      */
-    private $shippingTime;
+    protected $shippingTime;
 
     /**
      * Defines if the product has no shipping costs.
      *
      * @var boolean
      */
-    private $shippingFree;
+    protected $shippingFree;
 
     /**
      * Defines that the product are no longer
@@ -105,13 +105,13 @@ class ListProduct extends Extendable
      *
      * @var boolean
      */
-    private $closeouts;
+    protected $closeouts;
 
     /**
      * Contains a flag if the product has properties.
      * @var boolean
      */
-    private $hasProperties = false;
+    protected $hasProperties = false;
 
     /**
      * Defines the date which the product was created in the
@@ -119,14 +119,14 @@ class ListProduct extends Extendable
      *
      * @var \DateTime
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * Defines a list of keywords for this product.
      *
      * @var array
      */
-    private $keywords;
+    protected $keywords;
 
     /**
      * Defines if the customer can be set an email
@@ -134,34 +134,34 @@ class ListProduct extends Extendable
      *
      * @var boolean
      */
-    private $allowsNotification;
+    protected $allowsNotification;
 
     /**
      * Additional information text for the product variation.
      *
      * @var string
      */
-    private $additional;
+    protected $additional;
 
     /**
      * Minimal stock value for the product.
      * @var int
      */
-    private $minStock;
+    protected $minStock;
 
     /**
      * Physical height of the product.
      * Used for area calculation.
      * @var float
      */
-    private $height;
+    protected $height;
 
     /**
      * Physical width of the product.
      * Used for area calculation.
      * @var float
      */
-    private $width;
+    protected $width;
 
     /**
      * Physical length of the product.
@@ -169,20 +169,20 @@ class ListProduct extends Extendable
      *
      * @var float
      */
-    private $length;
+    protected $length;
 
     /**
      * Physical width of the product.
      * Used for area calculation.
      * @var float
      */
-    private $weight;
+    protected $weight;
 
     /**
      * Ean code of the product.
      * @var string
      */
-    private $ean;
+    protected $ean;
 
     /**
      * Flag if the product should be displayed
@@ -190,7 +190,7 @@ class ListProduct extends Extendable
      *
      * @var float
      */
-    private $highlight;
+    protected $highlight;
 
     /**
      * Contains the absolute cheapest price of each product variation.
@@ -199,40 +199,40 @@ class ListProduct extends Extendable
      *
      * @var Price
      */
-    private $cheapestPrice;
+    protected $cheapestPrice;
 
     /**
      * Contains the price rule for the cheapest price.
      *
      * @var PriceRule
      */
-    private $cheapestPriceRule;
+    protected $cheapestPriceRule;
 
     /**
      * @var PriceRule[]
      */
-    private $priceRules = array();
+    protected $priceRules = array();
 
     /**
      * Price of the current variant.
      * @var Price[]
      */
-    private $prices = array();
+    protected $prices = array();
 
     /**
      * @var Unit
      */
-    private $unit;
+    protected $unit;
 
     /**
      * @var Tax
      */
-    private $tax;
+    protected $tax;
 
     /**
      * @var Manufacturer
      */
-    private $manufacturer;
+    protected $manufacturer;
 
     /**
      * Contains the product cover which displayed
@@ -240,12 +240,12 @@ class ListProduct extends Extendable
      *
      * @var Media
      */
-    private $cover;
+    protected $cover;
 
     /**
      * @var PriceGroup
      */
-    private $priceGroup;
+    protected $priceGroup;
 
     /**
      * Contains an offset of product states.
@@ -254,7 +254,7 @@ class ListProduct extends Extendable
      *
      * @var array
      */
-    private $states = array();
+    protected $states = array();
 
 
     /**
