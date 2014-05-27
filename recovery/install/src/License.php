@@ -41,7 +41,7 @@ class License
     /**
      * @var string
      */
-    protected $pluginDownloadPath = 'http://store.shopware.de/downloads/get_license_plugin/shopwareVersion/4000';
+    protected $pluginDownloadPath = 'http://store.shopware.de/downloads/get_license_plugin/shopwareVersion/4300';
     /**
      * @var string
      */
