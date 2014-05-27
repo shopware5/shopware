@@ -1,5 +1,6 @@
 .account--content {
     .clearfix();
+    width: 100%;
 }
 
 .account--menu {
@@ -41,15 +42,15 @@
 }
 
 // Change Billing Address
+.account--change-billing {
+    &.register--content {
+        display: block;
+    }
+}
+
 .account--action {
     .unitize-margin(0, 20, 20, 16);
     .clearfix();
-}
-
-.account--change-billing.register--content {
-    .clearfix();
-    display: block;
-    width: 100%;
 }
 
 // Select Billing Address
@@ -68,10 +69,10 @@
 
 .address--container {
     width: 100%;
-}
 
-.address--container.left {
-    clear: both;
+    &.left {
+        clear: both;
+    }
 }
 
 
@@ -149,6 +150,7 @@
 
     .account--content {
         .unitize-margin(20, 0);
+        width: 100%;
     }
 
     .account--welcome {
@@ -194,11 +196,6 @@
         }
     }
 
-    // Change Billing Address
-    .account--change-billing.register--content {
-        .unitize(24, 16, margin-top);
-    }
-
     // Select Billing Address
     .address--container {
         width: 49%;
@@ -227,16 +224,4 @@
     .account--password-reset {
         padding-top: 0;
     }
-
-    // Change Billing Address
-    .account--change-billing.register--content {
-        width: 78%;
-    }
-
-    // Select Billing Address
-    .account--addresses {
-        .unitize(45, 16, margin-top);
-        width: 78%;
-    }
-
 }
