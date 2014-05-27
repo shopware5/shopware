@@ -42,7 +42,7 @@ class Media
 
     /**
      * @param Struct\ListProduct[] $products
-     * @return \Shopware\Struct\Media[]
+     * @return \Shopware\Struct\Media[] Indexed by product number
      */
     public function getProductsCovers(array $products)
     {

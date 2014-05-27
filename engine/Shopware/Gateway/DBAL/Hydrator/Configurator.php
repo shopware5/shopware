@@ -23,11 +23,12 @@ class Configurator extends Hydrator
     public function hydrate(array $data, array $selection = array())
     {
         $set = new Struct\Configurator\Set();
-        $setData = $this->extractFields('__set_', $data);
+        $setData = $this->extractFields('__set_', $data[0]);
 
         $set->setName($setData['name']);
         $set->setId($setData['id']);
         $set->setType($setData['type']);
+
         $set->setGroups(
             $this->hydrateGroups($data, $selection)
         );

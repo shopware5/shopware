@@ -15,7 +15,7 @@ class Cover extends Media
      * The preview images has the flag "main = 1" in the database.
      *
      * @param Struct\ListProduct[] $products
-     * @return Struct\Media[]
+     * @return Struct\Media[] Indexed by product number
      */
     public function getList(array $products)
     {

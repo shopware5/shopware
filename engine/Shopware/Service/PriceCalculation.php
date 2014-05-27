@@ -89,7 +89,11 @@ class PriceCalculation
 
         //check for price group discounts.
         if (!$product->getPriceGroup()) {
-            return $this->calculatePriceStruct($cheapestPrice, $tax, $context);
+            return $this->calculatePriceStruct(
+                $cheapestPrice,
+                $tax,
+                $context
+            );
         }
 
         //selects the highest price group discount, for the passed quantity.

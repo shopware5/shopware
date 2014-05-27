@@ -43,7 +43,6 @@ class Configurator extends Gateway
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
-
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         Shopware()->Template()->assign('raw_data', $data);
@@ -149,7 +148,8 @@ class Configurator extends Gateway
             'variants',
             'variants.id = variantOptions.article_id
              AND variants.active = 1
-             AND variants.articleID = products.id'
+             AND variants.articleID = products.id
+             AND (products.laststock * variants.instock) >= (products.laststock * variants.minpurchase)'
         );
 
         $query->orderBy('options.group_id')

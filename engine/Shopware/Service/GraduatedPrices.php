@@ -13,11 +13,20 @@ class GraduatedPrices
     private $graduatedPricesGateway;
 
     /**
-     * @param Gateway\GraduatedPrices $graduatedPricesGateway
+     * @var Gateway\PriceGroupDiscount
      */
-    function __construct(Gateway\GraduatedPrices $graduatedPricesGateway)
-    {
+    private $priceGroupDiscountGateway;
+
+    /**
+     * @param Gateway\GraduatedPrices $graduatedPricesGateway
+     * @param Gateway\PriceGroupDiscount $priceGroupDiscountGateway
+     */
+    function __construct(
+        Gateway\GraduatedPrices $graduatedPricesGateway,
+        Gateway\PriceGroupDiscount $priceGroupDiscountGateway
+    ) {
         $this->graduatedPricesGateway = $graduatedPricesGateway;
+        $this->priceGroupDiscountGateway = $priceGroupDiscountGateway;
     }
 
     /**
@@ -90,24 +99,124 @@ class GraduatedPrices
             }
         );
 
-        if (empty($fallbackProducts)) {
+        if (!empty($fallbackProducts)) {
+            //if some product has no price, we have to load the fallback customer group prices for the fallbackProducts.
+            $fallbackPrices = $this->graduatedPricesGateway->getList(
+                $fallbackProducts,
+                $context->getFallbackCustomerGroup()
+            );
+
+            $fallbackPrices = $this->buildPrices(
+                $fallbackProducts,
+                $fallbackPrices,
+                $context->getFallbackCustomerGroup()
+            );
+
+            $prices = array_merge($prices, $fallbackPrices);
+        }
+
+        /**
+         * checks if one of the products has a configured price group and loads the different price group discounts.
+         */
+        $discounts = $this->priceGroupDiscountGateway->getProductsDiscounts(
+            $products,
+            $context->getCurrentCustomerGroup()
+        );
+
+        if (empty($discounts)) {
             return $prices;
         }
 
-        //if some product has no price, we have to load the fallback customer group prices for the fallbackProducts.
-        $fallbackPrices = $this->graduatedPricesGateway->getList(
-            $fallbackProducts,
-            $context->getFallbackCustomerGroup()
-        );
+        /**
+         * If one of the products has a configured price group,
+         * the graduated prices has to be build over the defined price group graduations.
+         *
+         * The price group discounts are defined with a percentage discount, which calculated
+         * on the first graduated price of the product.
+         */
+        foreach($products as $product) {
+            $number = $product->getNumber();
 
-        $fallbackPrices = $this->buildPrices(
-            $fallbackProducts,
-            $fallbackPrices,
-            $context->getFallbackCustomerGroup()
-        );
+            if (!array_key_exists($number, $discounts)) {
+                continue;
+            }
 
-        return array_merge($prices, $fallbackPrices);
+            $productDiscounts = $discounts[$number];
+
+            $firstGraduation = $prices[$number][0];
+            
+            $prices[$number] = $this->buildDiscountGraduations(
+                $product,
+                $firstGraduation,
+                $context->getCurrentCustomerGroup(),
+                $productDiscounts
+            );
+        }
+
+        return $prices;
     }
+
+    /**
+     * Helper function which builds the graduated prices
+     * of a product for the passed price group discount array.
+     *
+     * This function is used to override the normal graduated prices
+     * with a definition of the product price group discounts.
+     *
+     * @param Struct\ListProduct $product
+     * @param Struct\Product\PriceRule $reference
+     * @param \Shopware\Struct\Customer\Group $customerGroup
+     * @param Struct\Product\PriceDiscount[] $discounts
+     * @return array
+     */
+    private function buildDiscountGraduations(
+        Struct\ListProduct $product,
+        Struct\Product\PriceRule $reference,
+        Struct\Customer\Group $customerGroup,
+        array $discounts
+    ) {
+        $prices = array();
+
+        $firstDiscount = $discounts[0];
+
+        /**@var $previous Struct\Product\PriceRule*/
+        $previous = null;
+        if ($firstDiscount->getQuantity() > 1) {
+            $firstGraduation = clone $reference;
+            $previous = $firstGraduation;
+
+            $prices[] = $firstGraduation;
+        }
+
+        foreach($discounts as $discount) {
+            $rule = clone $reference;
+
+            $percent = (100 - $discount->getPercent() ) / 100;
+
+            $price = $reference->getPrice() * $percent;
+
+            $pseudo = $reference->getPseudoPrice() * $percent;
+
+            $rule->setPrice($price);
+
+            $rule->setPseudoPrice($pseudo);
+
+            $rule->setFrom($discount->getQuantity());
+
+            $rule->setCustomerGroup($customerGroup);
+
+            $rule->setTo(null);
+            if ($previous) {
+                $previous->setTo($rule->getFrom() - 1);
+            }
+
+            $previous = $rule;
+            $prices[] = $rule;
+        }
+
+        return $prices;
+    }
+
 
     /**
      * Helper function which iterates the products and builds a price array which indexed

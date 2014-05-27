@@ -45,6 +45,7 @@
 
         <service id="graduated_prices_service" class="Shopware\Service\GraduatedPrices">
             <argument type="service" id="graduated_prices_gateway" />
+            <argument type="service" id="price_group_discount_gateway" />
         </service>
 
         <service id="manufacturer_service" class="Shopware\Service\Manufacturer">
