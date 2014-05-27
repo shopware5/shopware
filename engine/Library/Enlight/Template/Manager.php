@@ -129,7 +129,43 @@ class Enlight_Template_Manager extends Smarty
                 unset($template_dir[$k]);
             }
         }
-        return parent::setTemplateDir($template_dir);
+
+        /**
+         * Filter all directories which includes the new shopware themes.
+         */
+        $themeDirectories = array_filter($template_dir, function($themeDir) {
+            return (strpos($themeDir, '/Themes/Frontend/'));
+        });
+
+        /**
+         * If no shopware theme assigned, we have to use the passed inheritance
+         */
+        if (empty($themeDirectories)) {
+            return parent::setTemplateDir($template_dir);
+        }
+
+        /**
+         * Select the plugin directories and the bare theme which used
+         * as base theme for all extensions
+         */
+        $pluginDirs = array_diff($template_dir, $themeDirectories);
+        $bareDir = array_pop($themeDirectories);
+
+        /**
+         * Recreate the inheritance with the theme directories on the first level,
+         * the plugin directories on the second level and the bare theme as
+         * third level.
+         *
+         * This allows to override plugin templates with the different customer themes
+         * like responsive.
+         */
+        $inheritance = array_merge(
+            $themeDirectories,
+            $pluginDirs,
+            array($bareDir)
+        );
+
+        return parent::setTemplateDir($inheritance);
     }
 
     /**
