@@ -16,7 +16,7 @@
 					<div class="account--welcome">
 						<h1 class="panel--title">{s name="SelectBillingHeader"}{/s}</h1>
 					</div>
-					{foreach $sBillingAddresses as $sAddress}
+					{foreach $sBillingAddresses as $key => $sAddress}
 						<div class="address--container{if $sAddress@iteration is even by 1} right{else} left{/if}">
 							<form name="frmRegister" method="post" action="{url action=saveBilling}">
 								<input type="hidden" name="sSelectAddress" value="{$sAddress.hash}" />
