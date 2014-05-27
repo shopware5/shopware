@@ -40,19 +40,28 @@
 	color: @errorText;
 }
 
-// Change Billing Address
-.account--change-billing {
-    &.register--content {
-        display: block;
-    }
-}
-
-.account--action {
+.account--actions {
     .unitize-margin(0, 20, 20, 16);
     .clearfix();
 }
 
-// Select Billing Address
+// Change Address
+.account--change-billing,
+.account--change-shipping {
+    &.register--content {
+        display: block;
+        width: 100%
+    }
+}
+
+.account--billing-address,
+.account--shipping-address {
+    .panel--body {
+        .unitize(200, 16, height)
+    }
+}
+
+// Select Address
 .account--addresses-content {
     .clearfix();
 }
@@ -68,10 +77,6 @@
 
 .address--container {
     width: 100%;
-
-    &.left {
-        clear: both;
-    }
 }
 
 
@@ -194,7 +199,7 @@
         }
     }
 
-    // Select Billing Address
+    // Select Address
     .address--container {
         width: 49%;
     }
@@ -222,4 +227,13 @@
     .account--password-reset {
         padding-top: 0;
     }
+
+    // Change Address
+    .account--change-billing,
+    .account--change-shipping {
+        &.register--content {
+            width: 78%
+        }
+    }
+
 }
