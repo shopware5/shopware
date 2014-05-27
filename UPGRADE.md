@@ -9,6 +9,7 @@ In this document you will find a changelog of the important changes related to t
 * Removed support for flash banners. The associated template block `frontend_listing_swf_banner` is marked as deprecated
 * Removed the template files for the feed functionality, which was marked as deprecated in SW 3.5
 * Added global messages template component to display e.g. error or success messages
+* Added global css classes for different device viewports
 
 ## 4.3.0
 * Removed deprecated Zend Framework components:
