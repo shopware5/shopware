@@ -76,7 +76,7 @@ return array(
     'step6_admin_password_repeat' => 'Repeat admin password (default: demo):', // Admin password repeat
     // Step 7
     'step7_title' => 'Finished', // Finished
-    'step7_info' => 'The installation has been completed successfully<br/><br /> For security reasons, you should now delete the installer (/install directory) from your server via FTP.', // The installation was finished successful
+    'step7_info' => 'The installation has been completed successfully.', // The installation was finished successful
     'step7_frontend' => 'Open shop frontend', // Open shop frontend
     'step7_backend' => 'Open shop backend', // Open shop backend
 

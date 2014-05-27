@@ -37,8 +37,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.Ftp', {
     },
 
     width: 360,
-
-    height: 330,
+    height: 380,
 
     initComponent: function () {
         var me = this;
@@ -96,7 +95,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.Ftp', {
         me.saveButton = Ext.create('Ext.button.Button', {
             cls:'primary',
             name: 'save-article-button',
-            text: 'Update durchführen',
+            text: '{s name="performUpdate"}Update{/s}',
             handler: function() {
                 me.fireEvent('saveFtp', me, me.formPanel);
             }
