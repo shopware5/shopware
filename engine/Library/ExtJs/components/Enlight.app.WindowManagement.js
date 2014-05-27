@@ -327,8 +327,9 @@ Ext.define('Enlight.app.WindowManagement', {
      */
     minimizeAll: function() {
         var wins = this.getActiveWindows();
+
         Ext.each(wins, function(win) {
-          win.minimize();
+            win.minimize();
         });
 
         return true;
@@ -343,9 +344,13 @@ Ext.define('Enlight.app.WindowManagement', {
      * @return [boolean]
      */
     closeAll: function() {
-
         var wins = this.getActiveWindows();
+
         Ext.each(wins, function(win) {
+            if (win.xtype === 'widget-sidebar-window') {
+                return true;
+            }
+
             win.destroy();
         });
 

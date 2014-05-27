@@ -174,6 +174,19 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
     },
 
     /**
+     * Overrides the minimize function of Enlight.app.Window to fix the minimize animation and local storage saving.
+     */
+    minimize: function () {
+        var me = this;
+
+        if (me.minimized) {
+            return;
+        }
+
+        me.fireEvent('minimizeWindow');
+    },
+
+    /**
      * Creates the window toolbar with all its buttons and menus
      *
      * @returns { Ext.toolbar.Toolbar }
@@ -212,7 +225,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
                     tooltip: snippets.minimize,
                     cls: 'btn-widget-minimize',
                     handler: function () {
-                        me.fireEvent('minimizeWindow', me, this);
+                        me.fireEvent('minimizeWindow');
                     }
                 },
                 {
