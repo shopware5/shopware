@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.Ftp', {
         me.saveButton = Ext.create('Ext.button.Button', {
             cls:'primary',
             name: 'save-article-button',
-            text: 'Update durchführen',
+            text: '{s name="performUpdate"}Update{/s}',
             handler: function() {
                 me.fireEvent('saveFtp', me, me.formPanel);
             }
