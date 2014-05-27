@@ -43,7 +43,7 @@
 							{/block}
 
 							{block name="frontend_account_order_item_overview"}
-								{foreach name=orderitems from=$sOpenOrders item=offerPosition}
+								{foreach $sOpenOrders as $offerPosition}
 									{include file="frontend/account/order_item.tpl"}
 								{/foreach}
 							{/block}
@@ -58,7 +58,7 @@
 								</a>
 							{/if}
 
-							{foreach from=$sPages.numbers item=page}
+							{foreach $sPages.numbers as $page}
 								{if $page.markup}
 									<a>{$page.value}</a>
 								{else}
@@ -73,9 +73,9 @@
 							{block name='frontend_account_orders_actions_paging_count'}
 								<div class="pagination--display">
 									{s name="ListingTextSite"}Seite{/s}
-									<strong>{if $sPage}{$sPage}{else}1{/if}</strong>
+									<span class="is--bold">{if $sPage}{$sPage}{else}1{/if}</span>
 									{s name="ListingTextFrom"}von{/s}
-									<strong>{$sNumberPages}</strong>
+									<span class="is--bold">{$sNumberPages}</span>
 								</div>
 							{/block}
 						</div>

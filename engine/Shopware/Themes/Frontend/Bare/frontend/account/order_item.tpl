@@ -101,7 +101,7 @@
 			{/block}
 
 			{block name="frontend_account_order_item_detail_table_rows"}
-				{foreach from=$offerPosition.details item=article}
+				{foreach $offerPosition.details as $article}
 
 					{block name="frontend_account_order_item_detail_table_row"}
 						<div class="panel--tr">
@@ -332,7 +332,7 @@
 			{* Repeat order *}
 			{block name="frontend_account_order_item_repeat_order"}
 				<form method="post" action="{url controller='checkout' action='add_accessories'}">
-					{foreach from=$offerPosition.details item=article}{if $article.modus == 0}
+					{foreach $offerPosition.details as $article}{if $article.modus == 0}
 						<input name="sAddAccessories[]" type="hidden" value="{$article.articleordernumber|escape}" />
 						<input name="sAddAccessoriesQuantity[]" type="hidden" value="{$article.quantity|escape}" />
 					{/if}{/foreach}
