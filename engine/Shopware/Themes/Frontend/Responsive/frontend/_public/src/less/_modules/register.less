@@ -13,6 +13,10 @@
     width: 100%;
     display: none;
 
+    &.is--collapsed {
+        display: block;
+    }
+
     .has--border {
         .border-radius(4px);
     }
@@ -46,6 +50,7 @@
 
     .field--select {
 	    .unitize(10, 16, margin-bottom);
+        width: 100%;
     }
 
     .register--field {
@@ -90,6 +95,9 @@
 
     .birthday--label {
 	    .clearfix();
+        .unitize-margin(0, 0, 5, 0);
+        display: block;
+        font-weight: bold;
     }
 
     .register--password-description {
@@ -118,7 +126,7 @@
 
     // Personal information fieldset
     .register--personal {
-	    .unitize(32, 16, padding-bottom);
+	    .unitize(10, 16, padding-bottom);
 	    .clearfix();
     }
 
@@ -133,9 +141,10 @@
     }
 
     .register--new-customer {
-        .unitize(10, 16, margin-bottom);
+        .unitize-margin(20, 0);
 
-        button {
+        .btn {
+            display: block;
             width: 100%;
             text-align: center;
         }
@@ -170,34 +179,38 @@
 
 // Register Steps
 .steps--content {
+    display: table;
     border-top: 1px solid @borderColor;
-
-    // General
-    .steps--spacer { display: none }
 
     .steps--list {
 	    .clearfix();
+        display: table-row;
     }
 
     .steps--entry {
-	    .unitize-padding(0, 16, 0, 16);
-	    float: left;
+	    .unitize-padding(0, 10);
+	    display: table-cell;
 	    list-style: none;
+        vertical-align: top;
+        text-align: center;
     }
 
-    // Icon
+    .steps--spacer {
+        display: none;
+        vertical-align: middle;
+    }
+
     .steps--entry .icon {
 	    .secondary-gradient();
 	    .border-radius(22px);
 	    .unitize-padding(10, 16);
 	    .box-shadow();
 	    .unitize-width(46, 16);
-	    .unitize(20, 16,font-size);
+	    .unitize(20, 16, font-size);
 	    display: inline-block;
 	    text-align: center;
 	    color: #fff;
 	    font-weight: bold;
-	    float: left;
     }
 
     .is--active .icon {
@@ -207,17 +220,17 @@
 
     // Text
     .steps--entry .text {
-	    .unitize-margin(0, 0, 0, 16);
+	    .unitize-margin(0, 0, 0, 10);
 	    .unitize-height(52);
 	    position: relative;
 	    top: -2px;
 	    display: none;
+        vertical-align: middle;
 
         &::after {
             content: '';
             height: 100%;
         }
-
     }
 
     .is--active .text {
@@ -290,26 +303,17 @@
 	    background: transparent;
 	    border: none;
 
-        .steps--entry { width: 25% }
-
         .steps--spacer {
-            border-bottom: 1px solid @borderColor;;
-            display: block;
-            width: 12%;
+            .unitize-width(80);
+            display: table-cell;
             text-align: center;
-
-            i[class^=icon] {
-                .unitize-padding(0, 6, 0, 6);
-                .unitize(13, 16, top);
-                position: relative;
-                background: @primaryBackgroundColor;
-            }
 	    }
 
-        .steps--entry .text {
-            width: 60%;
-            display: inline-block;
-            font-weight: bold;
+        .steps--entry {
+            .text {
+                display: inline-block;
+                font-weight: bold;
+            }
         }
     }
 
@@ -365,6 +369,12 @@
     // Header Support Info
     .is--ctl-register {
 	    .unitize(48, 16, margin-bottom);
+    }
+
+    .register--content {
+        .field--select {
+            .unitize-width(290);
+        }
     }
 
     // Register Steps
