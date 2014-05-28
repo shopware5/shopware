@@ -6,7 +6,6 @@
 			<div class="register--salutation field--select">
 				<span class="arrow"></span>
 				<select name="register[shipping][salutation]" id="salutation2" class="normal is--required{if $error_flags.salutation} has--error{/if}">
-					<option>{s name='RegisterShippingLabelSelect'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
 					<option value="mr" {if $form_data.salutation eq "mr"}selected="selected"{/if}>{s name='RegisterShippingLabelMr'}{/s}</option>
 					<option value="ms" {if $form_data.salutation eq "ms"}selected="selected"{/if}>{s name='RegisterShippingLabelMrs'}{/s}</option>
 				</select>
