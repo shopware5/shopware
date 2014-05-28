@@ -107,6 +107,7 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
             'engine/Shopware/Plugins/Default/Frontend/SwagPaymentBillsafe/Bootstrap.php',
             'engine/Shopware/Plugins/Default/Frontend/SwagPaymentPaypal/Bootstrap.php',
             'engine/Shopware/Plugins/Default/Frontend/SwagTrustedShopsExcellence/Bootstrap.php',
+            'engine/Shopware/Plugins/Default/Frontend/SwagDhl/BootstrapDummy.php'
         );
 
         $list = new Shopware_Components_Check_File($fileName, Shopware()->DocPath(), $skipList);
