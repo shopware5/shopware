@@ -54,6 +54,9 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      */
     public function assignAction()
     {
+        // Reset preview template
+        $this->resetPreviewSessionAction();
+
         $this->get('theme_service')->assignShopTemplate(
             $this->Request()->getParam('shopId'),
             $this->Request()->getParam('themeId')
