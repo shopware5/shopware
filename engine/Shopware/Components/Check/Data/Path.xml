@@ -22,6 +22,7 @@
     <file><name>engine/Shopware/Plugins/Default/Frontend</name></file>
     <file><name>engine/Shopware/Plugins/Default/Core</name></file>
     <file><name>engine/Shopware/Plugins/Default/Backend</name></file>
+    <file><name>engine/Shopware/Themes/Frontend</name></file>
     <file><name>media/archive/</name></file>
     <file><name>media/image/</name></file>
     <file><name>media/image/thumbnail/</name></file>
