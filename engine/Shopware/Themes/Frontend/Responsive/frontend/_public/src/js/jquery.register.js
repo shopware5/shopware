@@ -47,42 +47,56 @@
 
         me.$inputs = me.$el.find('.is--required:input');
 
+        me.checkType();
+        me.checkSkipAccount();
+        me.checkChangeShipping();
+
         me.registerEvents();
     };
 
     Plugin.prototype.registerEvents = function () {
         var me = this;
 
-        me.$typeSelection.on('change.' + pluginName, $.proxy(me.onChangeType, me));
-        me.$skipAccount.on('change.' + pluginName, $.proxy(me.onSkipAccount, me));
-        me.$alternativeShipping.on('change.' + pluginName, $.proxy(me.onChangeShipping, me));
+        me.$typeSelection.on('change.' + pluginName, $.proxy(me.checkType, me));
+        me.$skipAccount.on('change.' + pluginName, $.proxy(me.checkSkipAccount, me));
+        me.$alternativeShipping.on('change.' + pluginName, $.proxy(me.checkChangeShipping, me));
         me.$inputs.on('blur.' + pluginName, $.proxy(me.onValidateInput, me));
     };
 
-    Plugin.prototype.onChangeType = function (event) {
+    Plugin.prototype.checkType = function () {
         var me = this,
-            $target = $(event.currentTarget),
-            method = ($target.val() === 'business') ? 'removeClass' : 'addClass';
+            status = (me.$typeSelection.val() === 'business'),
+            requiredFields = me.$companyFieldset.find('.is--required'),
+            requiredMethod = (status) ? me.setHtmlRequired : me.removeHtmlRequired,
+            classMethod = (status) ? 'removeClass' : 'addClass';
 
-        me.$companyFieldset[method](me.opts.hiddenCls);
+        requiredMethod(requiredFields);
+
+        me.$companyFieldset[classMethod](me.opts.hiddenCls);
     };
 
-    Plugin.prototype.onSkipAccount = function () {
+    Plugin.prototype.checkSkipAccount = function () {
         var me = this,
-            $target = $(event.currentTarget),
-            isChecked = $target.is(':checked'),
-            method = (isChecked) ? 'addClass' : 'removeClass';
+            isChecked = me.$skipAccount.is(':checked'),
+            requiredFields = me.$accountFieldset.find('.is--required'),
+            requiredMethod = (!isChecked) ? me.setHtmlRequired : me.removeHtmlRequired,
+            classMethod = (isChecked) ? 'addClass' : 'removeClass';
 
-        me.$accountFieldset[method](me.opts.hiddenCls);
+        requiredMethod(requiredFields);
+
+        me.$accountFieldset[classMethod](me.opts.hiddenCls);
     };
 
-    Plugin.prototype.onChangeShipping = function (event) {
+    Plugin.prototype.checkChangeShipping = function () {
         var me = this,
-            $target = $(event.currentTarget),
-            isChecked = $target.is(':checked'),
-            method = (isChecked) ? 'removeClass' : 'addClass';
+            isChecked = me.$alternativeShipping.is(':checked'),
+            requiredFields = me.$shippingFieldset.find('.is--required'),
+            requiredMethod = (isChecked) ? me.setHtmlRequired : me.removeHtmlRequired,
+            classMethod = (isChecked) ? 'removeClass' : 'addClass';
 
-        me.$shippingFieldset[method](me.opts.hiddenCls);
+        requiredMethod(requiredFields);
+
+        me.$shippingFieldset[classMethod](me.opts.hiddenCls);
     };
 
     Plugin.prototype.onValidateInput = function (event) {
@@ -118,6 +132,17 @@
         } else {
             me.setFieldAsSuccess($el);
         }
+    };
+
+    Plugin.prototype.setHtmlRequired = function($inputs) {
+        $inputs.attr({
+            'required': 'required',
+            'aria-required': 'true'
+        });
+    };
+
+    Plugin.prototype.removeHtmlRequired = function($inputs) {
+        $inputs.removeAttr('required aria-required');
     };
 
     Plugin.prototype.setFieldAsError = function ($el) {
