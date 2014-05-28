@@ -27,7 +27,9 @@
 
 {* Register content *}
 {block name='frontend_index_content'}
-	<div class="register--content panel content block has--border" data-register="true">
+	<div class="register--content panel content block has--border{if $register->personal->error_flags || $register->billing->error_flags || $register->shipping->error_flags} is--collapsed{/if}"
+		 id="registration"
+		 data-register="true">
 
 		{block name='frontend_register_index_dealer_register'}
 			{* Included for compatibility reasons *}
@@ -40,7 +42,7 @@
 				<h2 class="panel--title is--underline">{$sShopname} {s name='RegisterHeadlineSupplier' namespace='frontend/register/index'}{/s}</h2>
 
 				<div class="panel--body is--wide">
-					<strong>{s name='RegisterInfoSupplier' namespace='frontend/register/index'}{/s}</strong><br />
+					<span class="is--bold">{s name='RegisterInfoSupplier' namespace='frontend/register/index'}{/s}</span><br />
 					<a href="{url controller='account'}" class="account">{s name='RegisterInfoSupplier2' namespace='frontend/register/index'}{/s}</a><br />
 					<p class="is--bold">{s name='RegisterInfoSupplier3' namespace='frontend/register/index'}{/s}</p>
 					<h3 class="is--bold">{s name='RegisterInfoSupplier4' namespace='frontend/register/index'}{/s}</h3>{s name='RegisterInfoSupplier5' namespace='frontend/register/index'}{/s}
@@ -90,7 +92,7 @@
 				{block name='frontend_register_index_form_submit'}
 					{* Submit button *}
 					<div class="register--action">
-						<button type="submit" class="btn btn--primary">{s name='RegisterIndexActionSubmit'}{/s} <i class="icon--arrow-right is--small"></i></button>
+						<input type="submit" class="btn btn--primary" value="{s name='RegisterIndexActionSubmit'}{/s}" />
 					</div>
 				{/block}
 			</form>
