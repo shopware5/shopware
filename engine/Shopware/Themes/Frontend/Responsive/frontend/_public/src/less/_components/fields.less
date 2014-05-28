@@ -15,13 +15,14 @@ input[type="email"] {
 	background: @lightGradientEnd;
 	border: 1px solid @borderColor;
 	border-top-color: darken(@borderColor, 5%);
-	color: @primaryTextColor;
+	color: @lightTextColor;
 
 	&:focus {
 		.box-shadow(0 0 0 transparent);
 		outline: none;
 		border-color: @primaryColor;
 		background: #fff;
+        color: @primaryTextColor;
 	}
 
 	&.has--error {
@@ -86,6 +87,11 @@ input[type="email"] {
 		border: 0 none;
 		width: 140%;	// Oversize to hide the browser default trigger in FF
 		cursor: pointer;
+
+        &.has--error {
+            color: @errorText;
+            background: @errorBackground;
+        }
 	}
 
 	option {
