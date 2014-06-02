@@ -112,7 +112,7 @@
 							<div class="register--birthday field--select">
 								<span class="arrow"></span>
 								<select id="register_personal_birthdate" name="register[personal][birthday]">
-									<option value="">--</option>
+									<option value="">{s name='RegisterBirthdaySelectDay'}day{/s}</option>
 									{section name="birthdate" start=1 loop=32 step=1}
 										<option value="{$smarty.section.birthdate.index}" {if $smarty.section.birthdate.index eq $form_data.birthday}selected{/if}>{$smarty.section.birthdate.index}</option>
 									{/section}
@@ -122,7 +122,7 @@
 							<div class="register--birthmonth field--select">
 								<span class="arrow"></span>
 								<select name="register[personal][birthmonth]">
-									<option value="">-</option>
+									<option value="">{s name='RegisterBirthdaySelectMonth'}month{/s}</option>
 									{section name="birthmonth" start=1 loop=13 step=1}
 										<option value="{$smarty.section.birthmonth.index}" {if $smarty.section.birthmonth.index eq $form_data.birthmonth}selected{/if}>{$smarty.section.birthmonth.index}</option>
 									{/section}
@@ -132,8 +132,8 @@
 							<div class="register--birthyear field--select">
 								<span class="arrow"></span>
 								<select name="register[personal][birthyear]">
-									<option value="">----</option>
-									{section name="birthyear" loop=2000 max=100 step=-1}
+									<option value="">{s name='RegisterBirthdaySelectYear'}year{/s}</option>
+									{section name="birthyear" loop={$smarty.now|date_format:"%Y"} max={$smarty.now|date_format:"%Y"}-1900 step=-1}
 										<option value="{$smarty.section.birthyear.index}" {if $smarty.section.birthyear.index eq $form_data.birthyear}selected{/if}>{$smarty.section.birthyear.index}</option>
 									{/section}
 								</select>
