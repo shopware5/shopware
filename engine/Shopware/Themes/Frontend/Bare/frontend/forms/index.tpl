@@ -12,26 +12,33 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-	<div class="content block forms--content panel right">
-		<div class="panel--body is--wide">
-			{if $sSupport.sElements}
-				<h1>{$sSupport.name}</h1>
-				{eval var=$sSupport.text}
-			{elseif $sSupport.text2}
-				{include file="frontend/_includes/messages.tpl" type="success" content=$sSupport.text2}
-			{/if}
-		</div>
+	<div class="forms--content content block panel right">
 
-		{if $sSupport.sElements}
-		<div class="forms--container panel has--border">
-			<h2 class="panel--title is--underline">{$sSupport.name}</h2>
-			<div class="panel--body">
-				{block name='frontend_forms_index_elements'}
-					{include file="frontend/forms/elements.tpl"}
-				{/block}
+		{* Forms headline *}
+		{block name='frontend_forms_index_headline'}
+			<div class="forms--headline panel--body is--wide">
+				{if $sSupport.sElements}
+					<h1>{$sSupport.name}</h1>
+					{eval var=$sSupport.text}
+				{elseif $sSupport.text2}
+					{include file="frontend/_includes/messages.tpl" type="success" content=$sSupport.text2}
+				{/if}
 			</div>
-		</div>
-		{/if}
+		{/block}
+
+		{* Forms Content *}
+		{block name='frontend_forms_index_content'}
+			{if $sSupport.sElements}
+				<div class="forms--container panel has--border">
+					<h1 class="panel--title is--underline">{$sSupport.name}</h1>
+					<div class="panel--body">
+						{block name='frontend_forms_index_elements'}
+							{include file="frontend/forms/elements.tpl"}
+						{/block}
+					</div>
+				</div>
+			{/if}
+		{/block}
 
 	</div>
 {/block}
