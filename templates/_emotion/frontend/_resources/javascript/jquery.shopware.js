@@ -332,16 +332,6 @@ jQuery(document).ready(function ($) {
             $(this).parents('form').submit();
         }
     });
-    // submit the partner statistic form
-//    $('.partner_statistic .date-filter input.datePicker').bind('blur', function() {
-//        var $this = $(this);
-//
-//        if($this.val().length < 1) {
-//            return;
-//        }
-//
-//        $this.parents('form').submit();
-//    });
 
     $("div.captcha-placeholder[data-src]").each(function() {
         var $this = $(this),
@@ -350,6 +340,9 @@ jQuery(document).ready(function ($) {
         if (!requestURL || !requestURL.length) {
             return false;
         }
+
+        // fix bfcache from caching the captcha/whole rendered page
+        $(window).unload(function(){ });
 
         $.ajax({
             url: requestURL,
