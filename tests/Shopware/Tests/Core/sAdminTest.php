@@ -438,12 +438,11 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('hash', $shippingDetails);
         $this->assertArrayHasKey('hash', $billingDetails);
 
-        $this->assertEquals($shippingDetails, $this->module->sGetPreviousAddresses('shipping', $shippingDetails['hash']));
-        $this->assertEquals($billingDetails, $this->module->sGetPreviousAddresses('billing', $billingDetails['hash']));
+        $shippingDetailsWithHash = $this->module->sGetPreviousAddresses('shipping', $shippingDetails['hash']);
+        $billingDetailsWithHash = $this->module->sGetPreviousAddresses('billing', $billingDetails['hash']);
 
-        foreach(array($shippingDetails, $billingDetails) as $details) {
+        foreach(array($shippingDetails, $billingDetails, $billingDetailsWithHash, $shippingDetailsWithHash) as $details) {
             $this->assertInternalType('array', $details);
-            $this->assertCount(15, $details);
             $this->assertArrayHasKey('company', $details);
             $this->assertArrayHasKey('department', $details);
             $this->assertArrayHasKey('salutation', $details);
