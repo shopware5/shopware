@@ -1,6 +1,11 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+## 4.4.0
+* Added secureUninstall method for plugins. There will be a message box when capability 'secureUninstall' is set, which uninstall method should be used.
+    * (new) Bootstrap::secureUninstall() -> should be used for removing only non-user data
+    * (old) Bootstrap::uninstall() -> old logic
+
 ## 4.3.0
 * Removed deprecated Zend Framework components:
     * `Zend_Amf`
