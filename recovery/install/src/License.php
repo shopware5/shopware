@@ -253,7 +253,7 @@ class License
                 1, // active
                 'shopware AG', // author,
                 'Copyright © 2012, shopware AG', //copyright
-                '1.0.2', // version
+                '1.0.7', // version
                 1, // capability_update
                 1, // capability_install
                 1 // capability_enable
@@ -305,6 +305,10 @@ class License
         $this->subscribeEvent(
             'Enlight_Controller_Dispatcher_ControllerPath_Backend_License',
             'onGetControllerPathBackend', $pluginId
+        );
+        $this->subscribeEvent(
+            'Shopware_Console_Add_Command',
+            'onAddConsoleCommand', $pluginId
         );
     }
 
