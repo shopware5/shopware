@@ -88,26 +88,20 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
      */
     public function getImageResource($string)
     {
-        $captcha = 'frontend/_public/src/img/bg--captcha.jpg';
-        $font = 'frontend/_public/src/fonts/captcha.ttf';
+        $backgroundPath = 'frontend/_public/src/img/bg--captcha.jpg';
+        $fontPath = 'frontend/_public/src/fonts/captcha.ttf';
 
-        $template_dirs = Shopware()->Template()->getTemplateDir();
-
-        foreach ($template_dirs as $template_dir) {
-            if (file_exists($template_dir . $captcha)) {
-                $captcha = $template_dir . $captcha;
-                break;
-            }
+        if (!$this->captchaFileExists($backgroundPath)) {
+            $backgroundPath = 'frontend/_resources/images/captcha/background.jpg';
+        }
+        if (!$this->captchaFileExists($fontPath)) {
+            $fontPath = 'frontend/_resources/images/captcha/font.ttf';
         }
 
-        foreach ($template_dirs as $template_dir) {
-            if (file_exists($template_dir . $font)) {
-                $font = $template_dir . $font;
-                break;
-            }
-        }
+        $captcha = $this->getCaptchaFile($backgroundPath);
+        $font = $this->getCaptchaFile($fontPath);
 
-        if (file_exists($captcha)) {
+        if ($captcha !== null) {
             $im = imagecreatefromjpeg($captcha);
         } else {
             $im = imagecreatetruecolor(162, 87);
@@ -123,7 +117,7 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
 
         $string = implode(' ', str_split($string));
 
-        if (file_exists($font)) {
+        if ($font !== null) {
             for ($i = 0; $i <= strlen($string); $i++) {
                 $rand1 = rand(35, 40);
                 $rand2 = rand(15, 20);
@@ -142,5 +136,29 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
         }
 
         return $im;
+    }
+
+    private function captchaFileExists($fileName) {
+        $templateDirs = Shopware()->Template()->getTemplateDir();
+
+        foreach ($templateDirs as $templateDir) {
+            if (file_exists($templateDir . $fileName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function getCaptchaFile($fileName) {
+        $templateDirs = Shopware()->Template()->getTemplateDir();
+
+        foreach ($templateDirs as $templateDir) {
+            if (file_exists($templateDir . $fileName)) {
+                return $templateDir . $fileName;
+            }
+        }
+
+        return null;
     }
 }

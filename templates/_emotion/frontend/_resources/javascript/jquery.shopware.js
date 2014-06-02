@@ -351,7 +351,11 @@ jQuery(document).ready(function ($) {
             return false;
         }
 
-        $this.load(requestURL);
+        $.ajax({
+            url: requestURL,
+            cache: false,
+            success: $this.html.bind($this)
+        });
     });
 });
 
