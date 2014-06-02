@@ -278,7 +278,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             'shipping.streetNumber as shipping_streetnumber',
             'shipping.zipCode as shipping_zipcode',
             'shipping.city as shipping_city',
-            'shipping.additionalAddressLine1 as shipping_additional_address_line_1',
+            'shipping.additionalAddressLine1 as shipping_additional_address_line1',
             'shipping.additionalAddressLine2 as shipping_additional_address_line2',
             'shipping.countryId as shipping_countryID',
             'shipping.stateId as shipping_stateID'

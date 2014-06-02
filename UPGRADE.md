@@ -8,6 +8,7 @@ In this document you will find a changelog of the important changes related to t
 * Refactored the template structure of the compare functionality. The plugin now uses based on a widget.
 * Removed support for flash banners. The associated template block `frontend_listing_swf_banner` is marked as deprecated
 * Removed the template files for the feed functionality, which was marked as deprecated in SW 3.5
+* Add new optional address fields to the register account and checkout process
 * Added global messages template component to display e.g. error or success messages
 
 ## 4.3.0
