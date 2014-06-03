@@ -33,11 +33,11 @@
 			{/if}
 			{if $pages}
 				{block name='frontend_custom_article_navigation_list'}
-					<ul class="navigation--list">
+					<ul class="navigation--list panel--tab-nav">
 						{foreach $pages as $subPage}
 							{block name='frontend_custom_article_navigation_entry'}
-								<li class="list--entry">
-									<a class="entry--link" href="{url controller=custom sCustom=$subPage.id}" title="{$subPage.description}"{if $subPage.active} class="is--active"{/if}>
+								<li class="navigation--entry">
+									<a class="navigation--link{if $subPage.active} is--active{/if}" href="{url controller=custom sCustom=$subPage.id}" title="{$subPage.description}">
 										{$subPage.description}
 									</a>
 								</li>
@@ -49,15 +49,23 @@
 		</nav>
 	{/block}
 
-	{* Custom page headline *}
-	{block name='frontend_custom_article_headline'}
-		<h1 class="custom-page--headline">{$sCustomPage.description}</h1>
+	{* Custom page container *}
+	{block name='frontend_custom_article_container'}
+		<div class="panel--body is--wide has--border">
+
+			{* Custom page headline *}
+			{block name='frontend_custom_article_headline'}
+				<h1 class="custom-page--headline">{$sCustomPage.description}</h1>
+			{/block}
+
+			{* Custom page content *}
+			{block name='frontend_custom_article_content'}
+				{$sContent}
+			{/block}
+
+		</div>
 	{/block}
 
-	{* Custom page content *}
-	{block name='frontend_custom_article_content'}
-		{$sContent}
-	{/block}
 </div>
 {/block}
 

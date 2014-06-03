@@ -6,7 +6,7 @@
 {/block}
 
 {block name="frontend_index_content"}
-    <div class="grid_16 sitemap" id="center">
+    <div class="sitemap--" id="center">
 
     <h1>{s name='SitemapHeader'}Sitemap - Alle Kategorien auf einen Blick{/s}</h1>
 
