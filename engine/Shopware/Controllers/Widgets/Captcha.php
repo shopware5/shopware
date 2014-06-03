@@ -53,9 +53,9 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
         imagepng($imgResource, null, 9);
         $img = ob_get_clean();
         imagedestroy($imgResource);
-        $img =  base64_encode($img);
+        $img = base64_encode($img);
 
-        echo '<img src="data:image/png;base64,' . $img. '" alt="Captcha" />';
+        echo '<img src="data:image/png;base64,' . $img . '" alt="Captcha" />';
         echo '<input type="hidden" name="sRand" value="' . $rand . '" />';
     }
 
@@ -107,8 +107,8 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
             $im = imagecreatetruecolor(162, 87);
         }
 
-        if (!empty(Shopware()->Config()->CaptchaColor)) {
-            $colors = explode(',', Shopware()->Config()->CaptchaColor);
+        if (!empty($this->get('config')->CaptchaColor)) {
+            $colors = explode(',', $this->get('config')->CaptchaColor);
         } else {
             $colors = explode(',', '255,0,0');
         }
@@ -138,8 +138,9 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
         return $im;
     }
 
-    private function captchaFileExists($fileName) {
-        $templateDirs = Shopware()->Template()->getTemplateDir();
+    private function captchaFileExists($fileName)
+    {
+        $templateDirs = $this->get('template')->getTemplateDir();
 
         foreach ($templateDirs as $templateDir) {
             if (file_exists($templateDir . $fileName)) {
@@ -150,8 +151,9 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
         return false;
     }
 
-    private function getCaptchaFile($fileName) {
-        $templateDirs = Shopware()->Template()->getTemplateDir();
+    private function getCaptchaFile($fileName)
+    {
+        $templateDirs = $this->get('template')->getTemplateDir();
 
         foreach ($templateDirs as $templateDir) {
             if (file_exists($templateDir . $fileName)) {
