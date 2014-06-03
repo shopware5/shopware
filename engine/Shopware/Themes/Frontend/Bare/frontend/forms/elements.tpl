@@ -1,5 +1,4 @@
-
-ck name='frontend_forms_elements'}
+{block name='frontend_forms_elements'}
 	<form id="support" name="support" class="{$sSupport.class}" method="post" action="{url controller='ticket' action='index' id=$id}" enctype="multipart/form-data">
 	<input type="hidden" name="forceMail" value="{$forceMail|escape}">
 {/block}
@@ -32,13 +31,19 @@ ck name='frontend_forms_elements'}
 
 		{* Form Content *}
 		{block name='frontend_forms_elements_form_content'}
-			<div class="panel--body">
+			<div class="forms--inner-form panel--body">
 				{foreach $sSupport.sElements as $sKey => $sElement}
 					{if $sSupport.sFields[$sKey]||$sElement.note}
 						{block name='frontend_forms_elements_form_builder'}
 							<div {if $sSupport.sElements[$sKey].typ eq 'textarea'}class="textarea"{elseif $sSupport.sElements[$sKey].typ eq 'checkbox'}class="checkbox"{elseif $sSupport.sElements[$sKey].typ eq 'select'}class="field--select"{/if}>
 								{if $sSupport.sElements[$sKey].typ eq 'select'}<span class="arrow"></span>{/if}
+
 								{eval var=$sSupport.sFields[$sKey]|replace:'%*%':"{s name='RequiredField' namespace='frontend/register/index'}{/s}"}
+
+								{if $sSupport.sElements[$sKey].typ eq 'checkbox'}
+									{$sSupport.sLabels.$sKey|replace:':':''}
+								{/if}
+
 							</div>
 						{/block}
 
