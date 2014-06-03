@@ -45,7 +45,10 @@
         me.$accountFieldset = me.$el.find('.register--account-information');
         me.$shippingFieldset = me.$el.find('.register--shipping');
 
-        me.$inputs = me.$el.find('.is--required:input');
+        me.$countySelectFields = me.$el.find('.select--country');
+        me.$stateSelectContainers = $('.register--state-selection');
+
+        me.$inputs = me.$el.find('.is--required');
 
         me.checkType();
         me.checkSkipAccount();
@@ -60,6 +63,7 @@
         me.$typeSelection.on('change.' + pluginName, $.proxy(me.checkType, me));
         me.$skipAccount.on('change.' + pluginName, $.proxy(me.checkSkipAccount, me));
         me.$alternativeShipping.on('change.' + pluginName, $.proxy(me.checkChangeShipping, me));
+        me.$countySelectFields.on('change.' + pluginName, $.proxy(me.onCountryChanged, me));
         me.$inputs.on('blur.' + pluginName, $.proxy(me.onValidateInput, me));
     };
 
@@ -99,6 +103,20 @@
         me.$shippingFieldset[classMethod](me.opts.hiddenCls);
     };
 
+    Plugin.prototype.onCountryChanged = function(event) {
+        var me = this,
+            $countrySelect = $(event.currentTarget),
+            countrySelectID = $countrySelect.attr('id'),
+            countrySelectVal = $countrySelect.val(),
+            $stateSelectParent = $('#' + countrySelectID + '_' + countrySelectVal + '_states'),
+            $stateSelect = $stateSelectParent.find('.select--state');
+
+        me.$stateSelectContainers.addClass('is--disabled').hide();
+        me.$stateSelectContainers.find('.select--state').attr('disabled', 'disabled');
+        $stateSelect.removeAttr('disabled');
+        $stateSelectParent.removeClass('is--disabled').show();
+    };
+
     Plugin.prototype.onValidateInput = function (event) {
         var me = this,
             $el = $(event.currentTarget),
@@ -119,11 +137,13 @@
                 action = 'ajax_validate_password';
                 break;
             default:
-                return false;
                 break;
         }
 
         if (!$el.val()) {
+            me.setFieldAsError($el);
+            return;
+        } else if ($el.attr('type') === 'checkbox' && !$el.is(':checked')) {
             me.setFieldAsError($el);
             return;
         } else if (action) {
