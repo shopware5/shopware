@@ -178,6 +178,9 @@ $(function() {
             return false;
         }
 
+        // fix bfcache from caching the captcha/whole rendered page
+        $(window).unload(function(){ });
+
         $.ajax({
             url: requestURL,
             cache: false,
