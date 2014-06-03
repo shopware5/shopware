@@ -158,6 +158,20 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     }
 
     /**
+     * Secure uninstall plugin method
+     *
+     * @return bool
+     */
+    public function secureUninstall()
+    {
+        if (empty($this->info->capabilities['secureUninstall']) || empty($this->info->capabilities['install'])) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Update plugin method
      *
      * @param string $version
@@ -618,7 +632,8 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             'install' => true,
             'update' => true,
             'enable' => true,
-            'dummy' => false
+            'dummy' => false,
+            'secureUninstall' => false
         );
     }
 

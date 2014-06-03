@@ -69,7 +69,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
 			successful_upload: '{s name=manager/successful_upload}plugin was uploaded successfully{/s}',
 			failed_upload_namespace: '{s name=manager/failed_upload_namespace}The Plugin is not in the specified format. The namespace could not be determined{/s}',
 			failed_upload: '{s name=manager/failed_upload}An error occurred while uploading the plugin{/s}',
-            data_not_available: '{s name=manager/data_not_available}No plugin community store data available{/s}'
+            data_not_available: '{s name=manager/data_not_available}No plugin community store data available{/s}',
+            uninstall_title: '{s name=manager/uninstall_title}The plugin will be uninstalled.{/s}',
+            uninstall_remove_data: '{s name=manager/uninstall_remove_data}The plugin will be uninstalled. Do you also like to remove the saved data of the plugin?{/s}'
 		}
 	},
 
@@ -432,6 +434,21 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
             record.set('installed', new Date());
         } else {
             record.set('installed', null);
+            record.set('removeData', true);
+
+            if (record.get('capabilitySecureUninstall')) {
+                Ext.MessageBox.confirm(
+                    me.snippets.manager.uninstall_title,
+                    me.snippets.manager.uninstall_remove_data,
+                    function (response) {
+                        if (response !== 'yes') {
+                            record.set('removeData', false);
+                        }
+                        me.onInstallPlugin(record, pluginStore);
+                    }
+                );
+                return;
+            }
         }
         me.onInstallPlugin(record, pluginStore);
     },
@@ -462,6 +479,10 @@ Ext.define('Shopware.apps.PluginManager.controller.Manager', {
         var me = this, active = record.get('active');
 
         record.set('installed', null);
+        record.set('removeData', true);
+        if (record.get('capabilitySecureUninstall')) {
+            record.set('removeData', false);
+        }
         me.onInstallPlugin(record, me.subApplication.pluginStore, {
             callback: function() {
                 record.set('active', active);
