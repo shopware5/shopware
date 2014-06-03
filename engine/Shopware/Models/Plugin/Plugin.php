@@ -244,6 +244,12 @@ class Plugin extends ModelEntity
     protected $emotionComponents;
 
     /**
+     * @var boolean $capabilitySecureUninstall
+     * @ORM\Column(name="capability_secure_uninstall", type="boolean")
+     */
+    private $capabilitySecureUninstall = false;
+
+    /**
      * Class constructor.
      */
     public function __construct()

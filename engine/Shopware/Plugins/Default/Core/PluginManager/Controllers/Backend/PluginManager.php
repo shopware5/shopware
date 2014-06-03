@@ -863,7 +863,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
                 if (!empty($data['installed'])) {
                     $result = $namespace->installPlugin($bootstrap);
                 } else {
-                    $result = $namespace->uninstallPlugin($bootstrap);
+                    $result = $namespace->uninstallPlugin($bootstrap, $data['removeData']);
                 }
             } else {
                 if (!empty($data['active'])) {

@@ -126,7 +126,7 @@ class Manager
      * @param Plugin $plugin
      * @throws \Exception
      */
-    public function uninstallPlugin(Plugin $plugin)
+    public function uninstallPlugin(Plugin $plugin, $removeData = true)
     {
         if (!$plugin->getInstalled()) {
             return;
@@ -138,7 +138,7 @@ class Manager
         $namespace = $bootstrap->Collection();
 
         try {
-            $result = $namespace->uninstallPlugin($bootstrap);
+            $result = $namespace->uninstallPlugin($bootstrap, $removeData);
         } catch (\Exception $e) {
             throw new \Exception(sprintf("Unable to uninstall, got exception:\n%s\n", $e->getMessage()), 0, $e);
         }
