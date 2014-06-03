@@ -293,18 +293,19 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         }
 
         if (empty($this->View()->sErrorMessages) && $this->admin->sCheckUser()) {
-            if (!$target = $this->Request()->getParam('sTarget')) {
-                $target = 'account';
-            }
-            $this->redirect(array('controller' => $target));
+            return $this->redirect(
+                array(
+                    'controller' => $this->Request()->getParam('sTarget', 'account'),
+                    'action' => $this->Request()->getParam('sTargetAction', 'index')
+                )
+            );
         }
 
         // If using the new template, the 'GET' action will be handled
         // in the Register controller (unified login/register page)
         if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
-            $this->redirect(array('action' => 'index', 'controller' => 'register'));
+            $this->redirect(array('action' => 'index', 'controller' => 'register', 'sTarget' => $this->View()->sTarget));
         }
-
     }
 
     /**
