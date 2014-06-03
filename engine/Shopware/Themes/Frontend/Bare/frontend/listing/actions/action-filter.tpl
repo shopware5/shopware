@@ -12,7 +12,7 @@
 			   data-offcanvas="true"
 			   data-offCanvasSelector=".action--filter-options"
 			   data-closeButtonSelector=".filter--close-btn">
-				<i class="icon--compare"></i> {s name='ListingFilterButton'}Filter{/s}
+				<i class="icon--filter"></i> {s name='ListingFilterButton'}Filter{/s}
 			</a>
 		</div>
 

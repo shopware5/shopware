@@ -59,7 +59,6 @@
 // Listing actions
 .listing--actions {
     .clearfix();
-    overflow: hidden;
 
     &.is--advanced {
         .listing--paging {
@@ -170,10 +169,6 @@
         border: 1px solid @borderColor;
         float: left;
 
-        &:before {
-            content: "\e606";
-        }
-
         &:hover {
             color: @primaryColor;
         }
@@ -181,10 +176,18 @@
         &.link--table-view {
             .border-radius-multi(3px, 0, 0, 3px);
             border-width: 1px 0 1px 1px;
+
+            &:before {
+                content: "\e609";
+            }
         }
 
         &.link--list-view {
             .border-radius-multi(0, 3px, 3px, 0);
+
+            &:before {
+                content: "\e608";
+            }
         }
 
         .action--link-text {
@@ -211,6 +214,10 @@
         .unitize(30, 16, line-height);
         float: right;
     }
+}
+
+.listing--container {
+    overflow: hidden;
 }
 
 // Listing product box
@@ -375,10 +382,11 @@
     }
 
     .action--filter-options {
-        .unitize-padding(10, 0);
+        .unitize-padding(0, 0, 10, 0);
         display: none;
         width: auto;
         height: auto;
+        overflow: visible;
         position: relative;
         border: 1px solid @borderColor;
         background: @primaryBackgroundColor;
