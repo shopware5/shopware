@@ -68,7 +68,7 @@
 		{block name='frontend_register_billing_fieldset_input_country'}
 			<div class="register--country field--select">
 				<span class="arrow"></span>
-				<select name="register[billing][country]" id="country" class="is--required{if $error_flags.country} has--error{/if}">
+				<select name="register[billing][country]" id="country" required="required" aria-required="true" class="select--country is--required{if $error_flags.country} has--error{/if}">
 				<option value="" selected="selected">{s name='RegisterBillingLabelSelect'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
 				{foreach $country_list as $country}
 					<option value="{$country.id}" {if $country.id eq $form_data.country}selected="selected"{/if} {if $country.states}stateSelector="country_{$country.id}_states"{/if}>
@@ -81,24 +81,24 @@
 
 		{* Country state *}
 		{block name='frontend_register_billing_fieldset_input_country_states'}
-		<div class="country-area-state-selection">
-			{foreach $country_list as $country}
-				{if $country.states}
-					<div class="register--state-selection field--select{if $country.id != $form_data.country} is--disabled{/if}">
-						<span class="arrow"></span>
-						<select {if $country.id != $form_data.country}disabled="disabled"{/if} name="register[billing][country_state_{$country.id}]" id="country_{$country.id}_states" class="{if $country.force_state_in_registration}is--required{/if}{if $error_flags.stateID} has--error{/if}">
-						<option value="" selected="selected">{s name='RegisterBillingLabelSelect'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
-							{assign var="stateID" value="country_state_`$country.id`"}
-							{foreach $country.states as $state}
-								<option value="{$state.id}" {if $state.id eq $form_data[$stateID]}selected="selected"{/if}>
-									{$state.name}
-								</option>
-							{/foreach}
-						</select>
-					</div>
-				{/if}
-			{/foreach}
-		</div>
+			<div class="country-area-state-selection">
+				{foreach $country_list as $country}
+					{if $country.states}
+						<div id="country_{$country.id}_states" class="register--state-selection field--select{if $country.id != $form_data.country} is--disabled{/if}">
+							<span class="arrow"></span>
+							<select {if $country.id != $form_data.country}disabled="disabled"{/if} name="register[billing][country_state_{$country.id}]"{if $country.force_state_in_registration} required="required" aria-required="true"{/if} class="select--state {if $country.force_state_in_registration}is--required{/if}{if $error_flags.stateID} has--error{/if}">
+							<option value="" selected="selected">{s name='RegisterBillingLabelSelect'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
+								{assign var="stateID" value="country_state_`$country.id`"}
+								{foreach $country.states as $state}
+									<option value="{$state.id}" {if $state.id eq $form_data[$stateID]}selected="selected"{/if}>
+										{$state.name}
+									</option>
+								{/foreach}
+							</select>
+						</div>
+					{/if}
+				{/foreach}
+			</div>
 		{/block}
 
 		{* Alternative *}

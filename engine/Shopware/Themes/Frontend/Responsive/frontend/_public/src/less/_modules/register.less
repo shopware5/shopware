@@ -120,14 +120,24 @@
     }
 
     .register--privacy {
-	    .unitize-margin(0, 26, 16);
+        .unitize-padding(20, 20);
+	    .unitize-margin(0, 20, 20);
 	    .unitize(14, 16, font-size);
+        border: 1px solid @borderColor;
+
+        input[type="checkbox"] {
+            .unitize-margin(0, 10, 0, 0);
+        }
     }
 
     // Personal information fieldset
     .register--personal {
 	    .unitize(10, 16, padding-bottom);
 	    .clearfix();
+    }
+
+    .register--state-selection {
+        display: none;
     }
 
 }
