@@ -89,7 +89,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        if ($this->basket->sCountBasket()<1 || empty($this->View()->sUserLoggedIn)) {
+        if ($this->basket->sCountBasket() < 1 || empty($this->View()->sUserLoggedIn)) {
             $this->forward('cart');
         } else {
             $this->forward('confirm');
@@ -140,7 +140,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     public function confirmAction()
     {
         if (empty($this->View()->sUserLoggedIn)) {
-            return $this->forward('login', 'account', null, array('sTarget'=>'checkout'));
+            return $this->forward('login', 'account', null, array('sTarget' => 'checkout'));
         } elseif ($this->basket->sCountBasket() < 1) {
             return $this->forward('cart');
         }

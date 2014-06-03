@@ -88,11 +88,19 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
      */
     public function indexAction()
     {
+        $this->View()->sTarget = $this->Request()->getParam('sTarget');
+
         if (!empty($this->session['sUserId'])) {
-            if ($this->request->getParam('sValidation')||!Shopware()->Modules()->Basket()->sCountBasket()) {
+            if ($this->request->getParam('sValidation') || !Shopware()->Modules()->Basket()->sCountBasket()) {
                 return $this->forward('index', 'account');
             } else {
-                return $this->forward('confirm', 'checkout');
+                // If using the new template, the 'GET' action will be handled
+                // in the Register controller (unified login/register page)
+                if (Shopware()->Shop()->getTemplate()->getVersion() >= 3 && empty($this->session['sRegisterFinished'])) {
+                    return $this->redirect(array('action' => 'shippingPayment', 'controller' => 'checkout'));
+                } else {
+                    return $this->forward('confirm', 'checkout');
+                }
             }
         }
         $skipLogin = $this->request->getParam('skipLogin');
