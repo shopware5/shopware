@@ -31,7 +31,7 @@ Ext.define('Shopware.apps.Index.store.WidgetSettings', {
 
     proxy: {
         type: 'localstorage',
-        id: 'widget-settings'
+        id: 'widget-settings-' + window.location.pathname.replace('/backend/', '')
     }
 });
 
