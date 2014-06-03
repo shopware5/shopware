@@ -2,9 +2,15 @@
 .forms--content {
     width: 100%;
 
-    h1 {
-	.unitize(24, 16, font-size);
-	color: @darkTextColor;
+    .forms--headline {
+
+	h1 {
+	    .unitize(0, 16, margin-top);
+	}
+
+	p {
+	    .unitize(12, 16, margin-bottom);
+	}
     }
 
     .alert {
@@ -17,7 +23,7 @@
 
     .forms--field {
 	.unitize(5, 16, margin-bottom);
-	width: 100%;
+	    width: 100%;
     }
 
     input {
@@ -44,35 +50,39 @@
     }
 
     .buttons {
-	.clearfix();
+	    .clearfix();
     }
 
     .strasse {
-	margin-right: 2%;
-	width: 80%;
+	    margin-right: 2%;
+	    width: 80%;
 	float: left;
     }
 
     .nr {
-	width: 18%;
-	float: left;
+	    width: 18%;
+	    float: left;
     }
 
     .plz {
-	margin-right: 2%;
-	width: 28%;
-	float: left;
+	    margin-right: 2%;
+	    width: 28%;
+	    float: left;
     }
 
     .ort {
-	.clearfix();
-	width: 70%;
-	float: left;
+	    .clearfix();
+	    width: 70%;
+	    float: left;
     }
 
     .forms--required {
-	.unitize(12, 16, font-size);
-	.unitize(10, 16, margin-bottom)
+	    .unitize(12, 16, font-size);
+	    .unitize(10, 16, margin-bottom)
+    }
+
+    .forms--description {
+	.unitize-margin(-8, 0, 10, 0, 16);
     }
 
     .forms--captcha {
@@ -88,9 +98,12 @@
 
     }
 
-    p.forms--description {
-	.unitize-margin(-8, 0, 10, 0, 16);
+    .forms--inner-form {
+	input[type="checkbox"] {
+	    .unitize-width(12, 16)
+	}
     }
+
 
 }
 
