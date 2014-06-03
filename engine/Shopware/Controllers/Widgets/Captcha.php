@@ -53,9 +53,9 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
         imagepng($imgResource, null, 9);
         $img = ob_get_clean();
         imagedestroy($imgResource);
-        $img =  base64_encode($img);
+        $img = base64_encode($img);
 
-        echo '<img src="data:image/png;base64,' . $img. '" alt="Captcha" />';
+        echo '<img src="data:image/png;base64,' . $img . '" alt="Captcha" />';
         echo '<input type="hidden" name="sRand" value="' . $rand . '" />';
     }
 
@@ -88,33 +88,25 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
      */
     public function getImageResource($string)
     {
-        $captcha = 'frontend/_public/src/img/bg--captcha.jpg';
-        $font = 'frontend/_public/src/fonts/captcha.ttf';
+        $captcha = $this->getCaptchaFile('frontend/_public/src/img/bg--captcha.jpg');
+        $font = $this->getCaptchaFile('frontend/_public/src/fonts/captcha.ttf');
 
-        $template_dirs = Shopware()->Template()->getTemplateDir();
-
-        foreach ($template_dirs as $template_dir) {
-            if (file_exists($template_dir . $captcha)) {
-                $captcha = $template_dir . $captcha;
-                break;
-            }
+        if (empty($captcha)) {
+            $captcha = $this->getCaptchaFile('frontend/_resources/images/captcha/background.jpg');
         }
 
-        foreach ($template_dirs as $template_dir) {
-            if (file_exists($template_dir . $font)) {
-                $font = $template_dir . $font;
-                break;
-            }
+        if (empty($font)) {
+            $font = $this->getCaptchaFile('frontend/_resources/images/captcha/font.ttf');
         }
 
-        if (file_exists($captcha)) {
+        if (!empty($captcha)) {
             $im = imagecreatefromjpeg($captcha);
         } else {
             $im = imagecreatetruecolor(162, 87);
         }
 
-        if (!empty(Shopware()->Config()->CaptchaColor)) {
-            $colors = explode(',', Shopware()->Config()->CaptchaColor);
+        if (!empty($this->get('config')->CaptchaColor)) {
+            $colors = explode(',', $this->get('config')->CaptchaColor);
         } else {
             $colors = explode(',', '255,0,0');
         }
@@ -123,7 +115,7 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
 
         $string = implode(' ', str_split($string));
 
-        if (file_exists($font)) {
+        if (!empty($font)) {
             for ($i = 0; $i <= strlen($string); $i++) {
                 $rand1 = rand(35, 40);
                 $rand2 = rand(15, 20);
@@ -142,5 +134,25 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
         }
 
         return $im;
+    }
+
+    /**
+     * Helper function that checks if the file exists in the all available template directories
+     * If the file exists, the full file path will be returned, otherwise null
+     *
+     * @param $fileName
+     * @return null|string
+     */
+    private function getCaptchaFile($fileName)
+    {
+        $templateDirs = $this->get('template')->getTemplateDir();
+
+        foreach ($templateDirs as $templateDir) {
+            if (file_exists($templateDir . $fileName)) {
+                return $templateDir . $fileName;
+            }
+        }
+
+        return null;
     }
 }
