@@ -215,7 +215,7 @@
 
                 {* Payment selection *}
                 {block name='frontend_checkout_confirm_payment'}
-                    {include file='frontend/checkout/confirm_payment.tpl'}
+                    {include file='frontend/checkout/confirm_payment.tpl' sTarget="checkout"}
                 {/block}
             </div>
         </div>

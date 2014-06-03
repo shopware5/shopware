@@ -20,7 +20,7 @@
     </p>
 
     <div class="space"></div>
-    <a href="{url controller=account action=payment sTarget=checkout}" class="button-middle small">
+    <a href="{url controller=account action=payment sTarget=$sTarget|default:"checkout" sTargetAction=$sTargetAction|default:"index"}" class="button-middle small">
         {s name="ConfirmLinkChangePayment" namespace="frontend/checkout/confirm_left"}{/s}
     </a>
 </div>
