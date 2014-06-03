@@ -235,6 +235,7 @@
         me.$typeSelection.off('change.' + pluginName);
         me.$skipAccount.off('change.' + pluginName);
         me.$alternativeShipping.off('change.' + pluginName);
+        me.$countySelectFields.off('change.' + pluginName);
         me.$inputs.off('blur.' + pluginName);
     };
 
