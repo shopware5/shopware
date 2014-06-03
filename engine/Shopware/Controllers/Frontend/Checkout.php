@@ -89,7 +89,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        if ($this->basket->sCountBasket()<1 || empty($this->View()->sUserLoggedIn)) {
+        if ($this->basket->sCountBasket() < 1 || empty($this->View()->sUserLoggedIn)) {
             $this->forward('cart');
         } else {
             $this->forward('confirm');
@@ -140,7 +140,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     public function confirmAction()
     {
         if (empty($this->View()->sUserLoggedIn)) {
-            return $this->forward('login', 'account', null, array('sTarget'=>'checkout'));
+            return $this->forward('login', 'account', null, array('sTarget' => 'checkout'));
         } elseif ($this->basket->sCountBasket() < 1) {
             return $this->forward('cart');
         }
@@ -470,6 +470,39 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         }
 
         $this->forward($this->Request()->getParam('sTargetAction', 'index'));
+    }
+
+    /**
+     * Used only for new customers
+     * Action to handle selection of default shipping and payment methods
+     */
+    public function shippingPaymentAction()
+    {
+        // This action is only available for new customers
+        // redirect if we come from an existing account
+        if (empty($this->session['sRegisterFinished'])) {
+            $this->redirect(array('action' => 'index'));
+        }
+
+        $this->View()->sPayment = $this->getSelectedPayment();
+        $this->View()->sUserData["payment"] = $this->View()->sPayment;
+
+        $this->View()->sBasket = $this->getBasket();
+
+        $this->View()->sDispatch = $this->getSelectedDispatch();
+        $this->View()->sPayments = $this->getPayments();
+        $this->View()->sDispatches = $this->getDispatches();
+
+        $this->View()->sLaststock = $this->basket->sCheckBasketQuantities();
+        $this->View()->sShippingcosts = $this->View()->sBasket['sShippingcosts'];
+        $this->View()->sShippingcostsDifference = $this->View()->sBasket['sShippingcostsDifference'];
+        $this->View()->sAmount = $this->View()->sBasket['sAmount'];
+        $this->View()->sAmountWithTax = $this->View()->sBasket['sAmountWithTax'];
+        $this->View()->sAmountTax = $this->View()->sBasket['sAmountTax'];
+        $this->View()->sAmountNet = $this->View()->sBasket['AmountNetNumeric'];
+        $this->View()->sRegisterFinished = !empty($this->session['sRegisterFinished']);
+
+        $this->View()->sTargetAction = 'shippingPayment';
     }
 
     /**

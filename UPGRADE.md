@@ -11,6 +11,9 @@ In this document you will find a changelog of the important changes related to t
 * Add new optional address fields to the register account and checkout process
 * Added global messages template component to display e.g. error or success messages
 * Added global css classes for different device viewports
+* New checkout process:
+    * `Shopware_Controllers_Frontend_Account::ajaxLoginAction` is deprecated
+    * `Shopware_Controllers_Frontend_Account::loginAction` usage to load a login page is deprecated. Use `Shopware_Controllers_Frontend_Register::indexAction` instead for both registration and login
 
 ## 4.3.0
 * Removed deprecated Zend Framework components:
