@@ -88,20 +88,18 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
      */
     public function getImageResource($string)
     {
-        $backgroundPath = 'frontend/_public/src/img/bg--captcha.jpg';
-        $fontPath = 'frontend/_public/src/fonts/captcha.ttf';
+        $captcha = $this->getCaptchaFile('frontend/_public/src/img/bg--captcha.jpg');
+        $font = $this->getCaptchaFile('frontend/_public/src/fonts/captcha.ttf');
 
-        if (!$this->captchaFileExists($backgroundPath)) {
-            $backgroundPath = 'frontend/_resources/images/captcha/background.jpg';
-        }
-        if (!$this->captchaFileExists($fontPath)) {
-            $fontPath = 'frontend/_resources/images/captcha/font.ttf';
+        if (empty($captcha)) {
+            $captcha = $this->getCaptchaFile('frontend/_resources/images/captcha/background.jpg');
         }
 
-        $captcha = $this->getCaptchaFile($backgroundPath);
-        $font = $this->getCaptchaFile($fontPath);
+        if (empty($font)) {
+            $font = $this->getCaptchaFile('frontend/_resources/images/captcha/font.ttf');
+        }
 
-        if ($captcha !== null) {
+        if (!empty($captcha)) {
             $im = imagecreatefromjpeg($captcha);
         } else {
             $im = imagecreatetruecolor(162, 87);
@@ -117,7 +115,7 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
 
         $string = implode(' ', str_split($string));
 
-        if ($font !== null) {
+        if (!empty($font)) {
             for ($i = 0; $i <= strlen($string); $i++) {
                 $rand1 = rand(35, 40);
                 $rand2 = rand(15, 20);
@@ -138,19 +136,13 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
         return $im;
     }
 
-    private function captchaFileExists($fileName)
-    {
-        $templateDirs = $this->get('template')->getTemplateDir();
-
-        foreach ($templateDirs as $templateDir) {
-            if (file_exists($templateDir . $fileName)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
+    /**
+     * Helper function that checks if the file exists in the all available template directories
+     * If the file exists, the full file path will be returned, otherwise null
+     *
+     * @param $fileName
+     * @return null|string
+     */
     private function getCaptchaFile($fileName)
     {
         $templateDirs = $this->get('template')->getTemplateDir();
