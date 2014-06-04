@@ -38,6 +38,26 @@
 	color: @errorText;
 }
 
+.account--password-reset {
+    .unitize(20, 16, padding-top);
+
+    .password-reset--label {
+        .unitize-margin(10, 0);
+        display: block;
+        font-weight: bold;
+    }
+
+    .password-reset--input {
+        width: 100%;
+    }
+
+    .password-reset--actions {
+        .btn {
+            .unitize(20, 16, margin-bottom);
+        }
+    }
+}
+
 @media screen and(min-width: @tabletViewportWidth) {
 
     .is--ctl-account {
@@ -140,6 +160,12 @@
             .unitize-height(180);
         }
     }
+
+    .account--password-reset {
+        .password-reset--input {
+            .unitize-width(320);
+        }
+    }
 }
 
 @media screen and(min-width: @tabletLandscapeViewportWidth) {
@@ -152,5 +178,9 @@
         .unitize-margin(45, 0, 0, 0);
         width: 78%;
         float: right;
+    }
+
+    .account--password-reset {
+        .unitize(45, 16, padding-top);
     }
 }
