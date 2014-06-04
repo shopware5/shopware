@@ -52,8 +52,10 @@
 		{$iconCls = 'icon--cross'}
 	{elseif $type == 'success'}
 		{$iconCls= 'icon--check'}
+	{elseif $type == 'warning'}
+		{$iconCls = 'icon--info'}
 	{else}
-		{$iconCls = 'icon--information'}
+		{$iconCls = 'icon--question'}
 	{/if}
 
 	{* Support for customized icons *}
