@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Theme.view.create.Theme', {
                         template: {
                             fieldLabel: '{s name=name}Name{/s}',
                             allowBlank: false,
-                            vtype: 'alphanum',
+                            vtype: 'alpha',
                             supportText: '{s name=name_support}Source code name{/s}'
                         },
                         name: {
