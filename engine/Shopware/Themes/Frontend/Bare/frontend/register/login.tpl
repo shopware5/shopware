@@ -36,7 +36,7 @@
 
 						{block name='frontend_register_login_input_lostpassword'}
 							<div class="register--login-lostpassword">
-								<a href="{url action=password}" title="{s name="LoginLinkLostPassword"}{/s}">
+								<a href="{url controller=account action=password}" title="{s name="LoginLinkLostPassword"}{/s}">
 									{s name="LoginLinkLostPassword"}{/s}
 								</a>
 							</div>
