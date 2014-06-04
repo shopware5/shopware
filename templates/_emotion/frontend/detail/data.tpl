@@ -264,7 +264,7 @@
                             <em>{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s} {$sArticle.pseudoprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</em>
                             {if $sArticle.pseudopricePercent.float}
                                 <span>
-                                    ({$sArticle.pseudopricePercent.float} % {se name="DetailDataInfoSavePercent"}{/se})
+                                    ({$sArticle.pseudopricePercent.float}% {se name="DetailDataInfoSavePercent"}{/se})
                                 </span>
                             {/if}
                         </div>
@@ -285,7 +285,7 @@
                         {/block}
                     </div>
 
-                    {* Article price *}
+                    {* Article price *}sudo sadsdas
                     {block name='frontend_detail_data_price_info'}
                     <p class="tax_attention modal_open">
                         {s name="DetailDataPriceInfo"}{/s}
