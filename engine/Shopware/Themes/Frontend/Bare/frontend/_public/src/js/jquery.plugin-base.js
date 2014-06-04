@@ -65,6 +65,12 @@
                 me.init();
             }
 
+            me._on(me.$el, 'click', function() {
+                console.log('element clicked');
+
+                me._off(me.$el, 'click');
+            });
+
             $.publish('/plugin/' + me._name + '/init', [ me ]);
             return me;
         },
@@ -126,15 +132,26 @@
          */
         _off: function (el, event) {
             var me = this,
-                events;
+                events, eventIds = [];
 
             el = $(el);
             event = event + me.eventSuffix;
-            events = $.grep(me._events, function(obj) {
+
+            events = $.grep(me._events, function (obj, index) {
+                eventIds.push(index);
                 return event === obj.event && el[0] === obj.el[0];
             });
-            events = events[0];
-            el.off.apply(el, events.event);
+
+            $.each(events, function (event) {
+                el.off.apply(el, [ event.event ]);
+            });
+
+            $.each(eventIds, function (id) {
+                if(!me._events[id]) {
+                    return true;
+                }
+                delete me._events[id];
+            });
 
             $.publish('/plugin/' + me._name + '/off', [ el, event ]);
             return me;
