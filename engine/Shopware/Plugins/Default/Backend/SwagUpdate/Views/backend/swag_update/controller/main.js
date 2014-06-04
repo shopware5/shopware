@@ -31,12 +31,18 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Main', {
         var me = this;
 
         me.changelogStore = me.getStore('Changelog').load({
-            callback: function() {
+            callback: function(records, operation, success) {
+                if (!success) {
+                    Ext.Msg.alert(
+                        '{s name="connection_error_title"}Connection error{/s}',
+                        '{s name="connection_error_message"}Unable to connect to the update server.<br/>Please check your servers internet connection or try again later.{/s}'
+                    );
+                    return;
+                }
 
                 //check if an update is available
                 if (me.changelogStore.getCount() <= 0) {
                     me.mainWindow = me.getView('NoUpdate').create().show();
-
                 } else {
                     me.pluginsStore = me.getStore('Plugins').load();
                     me.requirementsStore = me.getStore('Requirements').load();

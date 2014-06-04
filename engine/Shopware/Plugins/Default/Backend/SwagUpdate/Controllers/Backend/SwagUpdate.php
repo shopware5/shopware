@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Psr\Log\LoggerInterface;
 use Shopware\Components\Random;
 use ShopwarePlugins\SwagUpdate\Components\ExtJsResultMapper;
 use ShopwarePlugins\SwagUpdate\Components\FeedbackCollector;
@@ -47,7 +48,20 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
 
     public function changelogAction()
     {
-        $data = $this->getCachedVersion();
+        try {
+            $data = $this->getCachedVersion();
+        } catch (\Exception $e) {
+            /** @var LoggerInterface $logger */
+            $logger = $this->get('corelogger');
+            $logger->error($e);
+
+            $this->View()->assign(array(
+                'success' => false,
+                'data'    => array()
+            ));
+
+            return;
+        }
 
         if (!$data instanceof Version || !$data->isNewer) {
             $this->View()->assign(array(
