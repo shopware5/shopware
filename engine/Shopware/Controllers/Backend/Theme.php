@@ -389,7 +389,8 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
         $builder->addSelect('COUNT(elements.id) as hasConfig')
             ->leftJoin('template.elements', 'elements')
-            ->orderBy('template.name')
+            ->orderBy('template.version', 'DESC')
+            ->addOrderBy('template.name')
             ->groupBy('template.id');
 
         return $this->get('events')->filter('Shopware_Theme_Listing_Query_Created', $builder);
