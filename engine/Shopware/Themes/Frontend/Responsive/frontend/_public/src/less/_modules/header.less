@@ -131,6 +131,19 @@
 
 			& > form { float: left; }
 		}
+        .language--flag {
+            .unitize-height(11);
+            .unitize-width(14);
+            .unitize(4, 16, top);
+            background: url("../../img/ico-flags.png") no-repeat 0 0;
+            display: inline-block;
+            text-indent: -9999em;
+            position: relative;
+
+            // We need to work with pixels here
+            &.de_DE { background-position: 0 0; }
+            &.en_GB { background-position: 0 -11px; }
+        }
 
 		.logo-main {
 			.unitize-padding(24, 10, 24, 10, 16);
