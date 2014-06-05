@@ -73,7 +73,6 @@ In this document you will find a changelog of the important changes related to t
     * `sSystem::sPathCmsImg`
 * `sCore::sBuildLink()` second argument removed (dead code)
 * `sCore` no longer returns `null` when calling not implemented functions
-* `sSystem::sSYSTEM` self-reference was removed
 * `sNewsletter` core class removed
 * `Shopware_Controllers_Frontend_Content` legacy controller removed
 * `templates/_default/frontend/content` legacy template files removed

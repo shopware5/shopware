@@ -197,6 +197,14 @@ class sSystem
     public $sBotSession;
 
     /**
+     * Reference to $this, for compability reasons.
+     *
+     * @var sSystem
+     * @deprecated
+     */
+    public $sSYSTEM;
+
+    /**
      * @param Enlight_Controller_Request_RequestHttp $request The request object
      */
     public function __construct(Enlight_Controller_Request_RequestHttp $request = null)
@@ -205,6 +213,7 @@ class sSystem
         $this->postWrapper = new PostWrapper($request);
         $this->getWrapper = new GetWrapper($request);
         $this->cookieWrapper = new CookieWrapper($request);
+        $this->sSYSTEM = $this;
     }
 
     public function __set($property, $value)
@@ -219,8 +228,8 @@ class sSystem
         }
     }
 
-    public function __get($property) {
-
+    public function __get($property)
+    {
         switch ($property) {
             case '_POST':
                 return $this->postWrapper;
@@ -232,6 +241,7 @@ class sSystem
                 return $this->cookieWrapper;
                 break;
         }
+
         return null;
     }
 
