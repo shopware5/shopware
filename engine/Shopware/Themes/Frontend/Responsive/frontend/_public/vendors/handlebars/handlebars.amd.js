@@ -2677,7 +2677,7 @@ define(
     __exports__["default"] = JavaScriptCompiler;
   });
 define(
-  'handlebars',["./handlebars.runtime","./handlebars/compiler/ast","./handlebars/compiler/base","./handlebars/compiler/compiler","./handlebars/compiler/javascript-compiler","exports"],
+  'handlebars',["./handlebars.runtime.js","./handlebars/compiler/ast","./handlebars/compiler/base","./handlebars/compiler/compiler","./handlebars/compiler/javascript-compiler","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __exports__) {
     
     /*globals Handlebars: true */
