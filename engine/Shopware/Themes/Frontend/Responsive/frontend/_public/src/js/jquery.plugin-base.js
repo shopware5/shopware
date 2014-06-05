@@ -61,15 +61,9 @@
             };
 
             // Call the init method of the plugin
-            if (me.hasOwnProperty('init') && typeof me.init === 'function') {
+            if (typeof me.init === 'function') {
                 me.init();
             }
-
-            me._on(me.$el, 'click', function() {
-                console.log('element clicked');
-
-                me._off(me.$el, 'click');
-            });
 
             $.publish('/plugin/' + me._name + '/init', [ me ]);
             return me;
@@ -277,7 +271,7 @@
                 if(!$.data(this, 'plugin-' + name)) {
                     clsObj = $.extend({ _name: name }, clsObj);
                     var cls = $.extend({}, PluginBase.prototype, clsObj);
-                    $.data(this, 'plugin-' + name, Object.create(cls)._init(opts, this));
+                    $.data(this, 'plugin-' + name, cls._init(opts, this));
                 }
             });
         }
