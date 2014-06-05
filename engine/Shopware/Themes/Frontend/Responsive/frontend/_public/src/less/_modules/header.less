@@ -200,6 +200,15 @@
 
         .entry--service {
             position: relative;
+            border-right: 1px solid @borderColor;
+
+            &::after {
+                .unitize(5, 16, font-size);
+                .unitize(-2, 16, top);
+                content: "\e612";
+                font-family: 'shopware';
+                position: relative;
+            }
         }
 		.service--list {
             .unitize-padding(8, 8);
