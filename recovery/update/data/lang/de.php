@@ -49,7 +49,7 @@ return array(
 
     'done_title'    => 'Aktualisierung abgeschlossen',
     'done_info'     => 'Die Aktualisierung wurde erfolgreich abgeschlossen.',
-    'done_delete'   => 'Ihr Shop befindet sich zurzeit im Wartungsmodus.<br/>Bitte löschen Sie den Updater (/update) nun via FTP vom Server.',
+    'done_delete'   => 'Ihr Shop befindet sich zurzeit im Wartungsmodus.<br/>Bitte löschen Sie den Updater (/update-assets) nun via FTP vom Server.',
     'done_frontend' => 'Zum Shop-Frontend',
     'done_backend'  => 'Zum Shop-Backend (Administration)',
 );
