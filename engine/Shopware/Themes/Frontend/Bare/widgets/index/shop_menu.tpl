@@ -5,6 +5,9 @@
             {if $languages|count > 1}
                 <form method="post" action="{$smarty.server.REQUEST_URI|escape}" class="language--form">
                     <div class="field--select">
+                        {if $shop && $languages|count > 1}
+                            <div class="language--flag {$shop->getLocale()->toString()}">{$shop->getName()}</div>
+                        {/if}
                         <select name="__shop" class="language--select" data-auto-submit-form="true">
                             {foreach $languages as $language}
                                 <option value="{$language->getId()}" {if $language->getId() === $shop->getId()}selected="selected"{/if}>
