@@ -29,7 +29,7 @@
                     <select name="__currency" class="currency--select" data-auto-submit-form="true">
                         {foreach $currencies as $currency}
                             <option value="{$currency->getId()}"{if $currency->getId() === $shop->getCurrency()->getId()} selected="selected"{/if}>
-                                {$currency->getCurrency()}
+                                {$currency->getSymbol()} {$currency->getCurrency()}
                             </option>
                         {/foreach}
                     </select>
