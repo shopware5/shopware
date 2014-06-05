@@ -43,6 +43,8 @@ class Theme extends \Shopware\Components\Theme
 	 * @var array
 	 */
 	protected $javascript = array(
+
+        // Third party plugins / libraries
 		'vendors/jquery/dist/jquery.min.js',
 		'vendors/picturefill/picturefill.js',
 		'vendors/jquery.transit/jquery.transit.js',
@@ -50,6 +52,8 @@ class Theme extends \Shopware\Components\Theme
 		'vendors/jquery.event.swipe/js/jquery.event.swipe.js',
 		'vendors/glidejs/dist/jquery.glide.min.js',
 
+        // Shopware specific plugins
+        'src/js/jquery.plugin-base.js',
 		'src/js/jquery.state-manager.js',
 		'src/js/jquery.emotions.js',
 		'src/js/jquery.off-canvas-menu.js',
