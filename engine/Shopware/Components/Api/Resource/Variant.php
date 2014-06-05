@@ -688,9 +688,13 @@ class Variant extends Resource implements BatchInterface
             ));
 
             if (!$option) {
+                if (!$optionData['option']) {
+                    throw new ApiException\CustomValidationException('A new configurator option requires a name');
+                }
+
                 $option = new Option();
                 $option->setPosition(0);
-                $option->setName($option);
+                $option->setName($optionData['option']);
                 $option->setGroup($availableGroup);
                 $this->getManager()->persist($option);
             }
