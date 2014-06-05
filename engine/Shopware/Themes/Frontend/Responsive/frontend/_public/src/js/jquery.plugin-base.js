@@ -271,7 +271,7 @@
                 if(!$.data(this, 'plugin-' + name)) {
                     clsObj = $.extend({ _name: name }, clsObj);
                     var cls = $.extend({}, PluginBase.prototype, clsObj);
-                    $.data(this, 'plugin-' + name, Object.create(cls)._init(opts, this));
+                    $.data(this, 'plugin-' + name, cls._init(opts, this));
                 }
             });
         }
