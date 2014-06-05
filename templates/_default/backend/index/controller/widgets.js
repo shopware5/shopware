@@ -86,14 +86,14 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
      * Initializes the widget controller.
      * Creates the widget store and binds all needed events.
      */
-    init: function() {
+    init: function () {
         var me = this;
 
         /*{if {acl_is_allowed resource=widgets privilege=read}}*/
 
         me.viewport = Shopware.app.Application.viewport;
 
-        if(!me.viewport) {
+        if (!me.viewport) {
             Ext.Error.raise(me.snippets.error.viewportNotLoaded);
         }
 
@@ -105,7 +105,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         });
 
         me.taskBarBtn = Ext.getCmp('widgetTaskBarBtn');
-        me.taskBarBtn.on('click', me.onTaskBarBtnClick.bind(me));
+        me.taskBarBtn.on('click', me.toggleMinimizeWindow.bind(me));
 
         me.control({
             'widget-sidebar-window': {
@@ -122,10 +122,10 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
             },
 
             'swag-merchant-widget': {
-                allowMerchant: function(record) {
+                allowMerchant: function (record) {
                     me.onOpenMerchantDetail('allow', record);
                 },
-                declineMerchant: function(record) {
+                declineMerchant: function (record) {
                     me.onOpenMerchantDetail('decline', record);
                 }
             }
@@ -151,49 +151,17 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
     },
 
     /**
-     * Called when the widget button in the task bar was clicked
-     * Toggles the minimizing of the window
-     */
-    onTaskBarBtnClick: function() {
-        var me = this,
-            minimized = false,
-            win = me.widgetWindow,
-            taskBarBtn = me.taskBarBtn,
-            taskBarBtnEl = taskBarBtn.getEl();
-
-        taskBarBtn.disable();
-
-        if (win.isVisible()) {
-            win.hide(taskBarBtn, function() {
-                taskBarBtn.enable();
-            });
-
-            taskBarBtnEl.removeCls('btn-over');
-            minimized = true;
-        } else {
-            win.show(taskBarBtn, function() {
-                taskBarBtn.enable();
-                win.toFront();
-            });
-
-            taskBarBtnEl.addCls('btn-over');
-        }
-
-        me.widgetSettings.set('minimized', minimized);
-        me.widgetSettingsStore.sync();
-    },
-
-    /**
      * Called when the widget settings were loaded.
      * Searches for the settings of the current user and if they could not be found, default settings will be created.
      * After the settings are available, the widget window will be created.
      */
-    onWidgetSettingsLoaded: function() {
+    onWidgetSettingsLoaded: function () {
         var me = this,
             authId = ~~(me.widgetStore.getProxy().getReader().jsonData.authId),
-            settings = me.getWidgetSettingsByAuthId(authId);
+            settings = me.getWidgetSettingsByAuthId(authId),
+            minimized;
 
-        if(!settings)  {
+        if (!settings) {
             me.widgetSettingsStore.add({
                 authId: authId,
                 height: 690,
@@ -207,19 +175,22 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
             settings = me.getWidgetSettingsByAuthId(authId);
         }
 
-        if(!settings) {
+        if (!settings) {
             Ext.Error.raise(me.snippets.error.settingsInitialisation);
         }
+
+        minimized = settings.get('minimized');
 
         me.widgetSettings = settings;
 
         me.widgetWindow = me.getView('widgets.Window').create({
             widgetStore: me.widgetStore,
             desktop: me.desktop,
-            widgetSettings: me.widgetSettings
+            widgetSettings: me.widgetSettings,
+            minimized: minimized
         });
 
-        if (!settings.get('minimized')) {
+        if (!minimized) {
             me.taskBarBtn.getEl().addCls('btn-over');
         }
     },
@@ -235,8 +206,8 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         var me = this,
             settings = null;
 
-        me.widgetSettingsStore.each(function(record) {
-            if(record.get('authId') === authId) {
+        me.widgetSettingsStore.each(function (record) {
+            if (record.get('authId') === authId) {
                 settings = record;
                 return false;
             }
@@ -247,22 +218,55 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
 
     /**
      * Minimizes the window and saves the change to the localStorage.
-     *
-     * @param sidebarWindow
      */
-    onMinimizeWindow: function(sidebarWindow) {
+    onMinimizeWindow: function () {
         var me = this,
-            btn = me.taskBarBtn;
+            btn = me.taskBarBtn,
+            win = me.widgetWindow;
 
         btn.disable();
 
-        sidebarWindow.hide(btn, function() {
+        win.hide(btn, function () {
+            win.minimized = true;
+
             btn.enable();
             btn.removeCls('btn-over');
         });
 
         me.widgetSettings.set('minimized', true);
         me.widgetSettingsStore.sync();
+    },
+
+    showWindow: function () {
+        var me = this,
+            btn = me.taskBarBtn,
+            win = me.widgetWindow;
+
+        btn.disable();
+
+        win.show(btn, function () {
+            win.minimized = false;
+
+            btn.enable();
+            btn.addCls('btn-over');
+            win.toFront();
+        });
+
+        me.widgetSettings.set('minimized', false);
+        me.widgetSettingsStore.sync();
+    },
+
+    toggleMinimizeWindow: function () {
+        var me = this,
+            win = me.widgetWindow;
+
+        if (win.minimized) {
+            me.showWindow();
+        } else {
+            me.onMinimizeWindow();
+        }
+
+        win.minimized = !win.minimized;
     },
 
     /**
@@ -278,7 +282,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
      *
      * @param { Boolean } animate - flag whether or not the position change should be animated
      */
-    onChangePosition: function(win, align, animate) {
+    onChangePosition: function (win, align, animate) {
         var me = this,
             xOffset = 10,
             yOffset = 10,
@@ -290,7 +294,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
             handles = [],
             anim = animate !== false;
 
-        if(align.indexOf('b') != -1) {
+        if (align.indexOf('b') != -1) {
             y = desktopEl.getHeight() - win.getHeight() - yOffset;
             verticalHandle = 'n';
         }
@@ -299,13 +303,13 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
             x = desktopEl.getWidth() - win.getWidth() - xOffset;
             horizontalHandle = 'w';
         }
-        
+
         win.setPosition(x, y, anim);
 
         me.widgetSettings.set('dock', align);
         me.widgetSettingsStore.sync();
 
-        if(win.resizer) {
+        if (win.resizer) {
             handles.push(verticalHandle);
             handles.push(horizontalHandle);
             handles.push(verticalHandle + horizontalHandle);
@@ -321,7 +325,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
      * @param row
      * @param internalId
      */
-    onSaveWidgetPosition: function(column, row, internalId) {
+    onSaveWidgetPosition: function (column, row, internalId) {
         var me = this;
 
         Ext.Ajax.request({
@@ -332,7 +336,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
                 id: internalId
             },
 
-            callback: function() {
+            callback: function () {
                 me.widgetStore.load();
             }
         });
@@ -352,7 +356,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
      *
      * @param widgets
      */
-    onSaveWidgetPositions: function(widgets) {
+    onSaveWidgetPositions: function (widgets) {
         var me = this;
 
         Ext.Ajax.request({
@@ -361,7 +365,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
                 widgets: widgets
             },
 
-            callback: function() {
+            callback: function () {
                 me.widgetStore.load();
             }
         });
@@ -375,7 +379,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
      * @param widgetName
      * @param menuItem
      */
-    onAddWidget: function(win, widgetName, menuItem) {
+    onAddWidget: function (win, widgetName, menuItem) {
         var me = this,
             container = win.containerCollection.getAt(0),
             widget = me.widgetStore.findRecord('name', widgetName);
@@ -389,7 +393,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
                 column: 0,
                 position: container.items.getCount() - 1
             },
-            callback: function(options, success, res) {
+            callback: function (options, success, res) {
                 if (!success) {
                     return;
                 }
@@ -397,7 +401,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
                 var response = Ext.decode(res.responseText);
 
                 me.widgetStore.load({
-                    callback: function() {
+                    callback: function () {
                         widget = me.widgetStore.findRecord('name', widgetName);
 
                         var newWidget = win.createWidget(widgetName, widget.get('id'), me.getWidgetViewById(widget, response.viewId), widget.get('label'));
@@ -417,12 +421,12 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
      * @param widget
      * @param id
      */
-    getWidgetViewById: function(widget, id) {
+    getWidgetViewById: function (widget, id) {
         var views = widget.get('views'),
             widgetView = null;
 
-        Ext.each(views, function(view) {
-            if(view.id === id) {
+        Ext.each(views, function (view) {
+            if (view.id === id) {
                 widgetView = view;
             }
         });
@@ -434,7 +438,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
      * Closes the widget which contained the close button.
      * Sends an ajax request to save the closing.
      */
-    onCloseWidget: function(widget) {
+    onCloseWidget: function (widget) {
         var me = this,
             container = me.widgetWindow.containerCollection.getAt(widget.position.columnId);
 
@@ -443,7 +447,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
             params: {
                 id: widget.viewId
             },
-            callback: function(options, success, res) {
+            callback: function (options, success, res) {
                 var response = Ext.decode(res.responseText);
 
                 if (!response.success) {
@@ -452,7 +456,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
                 }
 
                 me.widgetStore.load({
-                    callback: function() {
+                    callback: function () {
                         container.remove(widget, true);
                     }
                 });
@@ -466,7 +470,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
      * @param columnsShown
      * @param height
      */
-    onSaveWindowSize: function(columnsShown, height) {
+    onSaveWindowSize: function (columnsShown, height) {
         var me = this;
 
         me.widgetSettings.set('columnsShown', columnsShown);
@@ -486,7 +490,7 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
      * @param [object] record - Shopware.apps.Index.model.Merchant
      * @return void
      */
-    onOpenMerchantDetail: function(mode, record) {
+    onOpenMerchantDetail: function (mode, record) {
         var me = this;
 
         Ext.Ajax.request({
@@ -496,8 +500,8 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
                 customerGroup: record.get('validation'),
                 mode: mode
             },
-            success: function(response) {
-                var model =  me.getModel('MerchantMail');
+            success: function (response) {
+                var model = me.getModel('MerchantMail');
                 response = Ext.decode(response.responseText);
 
                 me.getView('merchant.Window').create({
