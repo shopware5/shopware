@@ -122,6 +122,15 @@ Ext.define('Shopware.apps.Theme.controller.List', {
         shop = me.getSelectedShop();
         theme = me.getSelectedTheme();
 
+        // If preview mode is enabled, disable it
+        if (me.previewWindow) {
+            me.previewWindow.close();
+            me.previewWindow = null;
+
+            me.getInfoPanel().previewButton.setText('{s name=preview}Preview theme{/s}');
+            me.removePreviewFlag();
+        }
+
         Ext.Ajax.request({
             url: '{url controller="theme" action="assign"}',
             method: 'POST',

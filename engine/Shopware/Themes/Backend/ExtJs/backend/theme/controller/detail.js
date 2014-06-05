@@ -62,6 +62,14 @@ Ext.define('Shopware.apps.Theme.controller.Detail', {
             window.destroy();
             me.getListingView().getStore().load();
         });
+
+        Shopware.app.Application.on('theme-save-exception', function(controller, data, window, record, form) {
+            Shopware.Notification.createGrowlMessage(
+                '{s name="application"}Theme manager 2.0{/s}',
+                data.message,
+                'Theme manager'
+            );
+        });
     },
 
     onAssignConfigSets: function(window, theme, formPanel) {
