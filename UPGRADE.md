@@ -14,6 +14,7 @@ In this document you will find a changelog of the important changes related to t
 * New checkout process:
     * `Shopware_Controllers_Frontend_Account::ajaxLoginAction` is deprecated
     * `Shopware_Controllers_Frontend_Account::loginAction` usage to load a login page is deprecated. Use `Shopware_Controllers_Frontend_Register::indexAction` instead for both registration and login
+* New jQuery plugin helper which provides all the basic operations every jQuery plugin needs to do
 
 ## 4.3.0
 * Removed deprecated Zend Framework components:
