@@ -124,6 +124,34 @@ p {
 ::-webkit-input-placeholder { color: @lightTextColor }
 :-ms-input-placeholder { color: @lightTextColor }
 
+/** Topbar switches */
+.top-bar--switches .field--select,
+.top-bar--switches .field--select select {
+    .box-shadow(0 0 0 transparent);
+    padding: 0;
+    border: 0 none;
+    background: transparent;
+    display: inline-block;
+    width: auto;
+    line-height: 1.2;
+}
+.top-bar--switches .field--select {
+    .unitize-padding(0, 8);
+
+    .arrow {
+        .unitize(-2, 16, top);
+        background: transparent;
+        border: 0 none;
+        display: inline-block;
+        width: auto;
+        height: auto;
+        line-height: 1.2;
+        position: relative;
+        right: auto;
+        cursor: pointer;
+    }
+}
+
 @media screen and(min-width: @tabletViewportWidth) {
     .content-main {
         .unitize(20, 16, margin-bottom);
