@@ -32,7 +32,8 @@
         "doctrine/common": "2.4.*",
         "doctrine/dbal": "2.4.1",
         "doctrine/orm": "2.4.1",
-        "oyejorge/less.php": "~1.5"
+        "oyejorge/less.php": "~1.5",
+        "mobiledetect/mobiledetectlib": "2.8.0"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
