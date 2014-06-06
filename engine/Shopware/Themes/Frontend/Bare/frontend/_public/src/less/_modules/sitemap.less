@@ -1,5 +1,16 @@
 .sitemap--content {
-    .unitize(45, 16, margin-top);
+
+    .sitemap--headline {
+
+	.panel--title {
+	    .unitize(24, 16, font-size);
+	}
+
+	.panel--body {
+	    .unitize-padding(10, 20, 20, 20);
+	}
+
+    }
 
     .sitemap--category {
 	.border-radius();
@@ -52,33 +63,39 @@
 
 @media screen and (min-width: @tabletViewportWidth) {
 
-    .sitemap--category {
-	width: 49%;
-	float: left;
-	margin-right: 2%;
+    .sitemap--content {
 
-	&:last-child,
-	&:nth-child(2){ .unitize(0, 16, margin-right); }
+	.sitemap--category {
+	    width: 49%;
+	    float: left;
+	    margin-right: 2%;
+
+	    &:last-child,
+	    &:nth-child(2){ .unitize(0, 16, margin-right); }
+	}
     }
-
 }
 
 @media screen and(min-width: @tabletLandscapeViewportWidth) {
 
-    .sitemap--category {
-	width: 24%;
-	float: left;
-	margin-right: 1.25%;
+    .sitemap--content {
 
-	&:last-child { .unitize(0, 16, margin-right) }
-	&:nth-child(2) { margin-right: 1.25%; }
+	.sitemap--category {
+	    width: 24%;
+	    float: left;
+	    margin-right: 1.25%;
+
+	    &:last-child { .unitize(0, 16, margin-right) }
+	    &:nth-child(2) { margin-right: 1.25%; }
+	}
+
     }
-
 }
 
 @media screen and (min-width: @desktopViewportWidth) {
 
     .sitemap--content {
+	.unitize(45, 16, margin-top);
 	width: 78%;
 	float: right;
     }
