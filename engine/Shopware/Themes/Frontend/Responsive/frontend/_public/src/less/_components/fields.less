@@ -62,6 +62,7 @@ input[type="email"] {
 		.unitize-width(34);
 		.unitize(6, 16, font-size);
 		.unitize(44, 16, line-height);
+        .linear-gradient(#ffffff, #f7f8fa);
 		cursor: pointer;
 		display: block;
 		position: absolute;
@@ -78,14 +79,13 @@ input[type="email"] {
 	}
 
 	select {
-		.unitize-width(310);
 		.unitize-padding(5, 0, 5, 10);
         .unitize(32, 16, line-height);
 		.appearance(none);
 		color: @primaryTextColor;
 		background: transparent;
 		border: 0 none;
-		width: 140%;	// Oversize to hide the browser default trigger in FF
+		width: 100%;
 		cursor: pointer;
 
         &.has--error {
