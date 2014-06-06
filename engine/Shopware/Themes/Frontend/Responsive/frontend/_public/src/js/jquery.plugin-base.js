@@ -76,7 +76,7 @@
     PluginBase.prototype = {
 
         /**
-         * Destroyes the plugin on the {@link HTMLElement}. It removes the instance of the plugin
+         * Destroys the plugin on the {@link HTMLElement}. It removes the instance of the plugin
          * which is bounded to the {@link jQuery} element.
          *
          * If the plugin author has used the {@link PluginBase._on} method, the added event listeners
@@ -112,58 +112,58 @@
          */
         _on: function () {
             var me = this,
-                el = $(arguments[0]),
-                event = arguments[1] + me.eventSuffix,
+                $el = $(arguments[0]),
+                event = me.getEventName(arguments[1]),
                 args = Array.prototype.slice.call(arguments, 2);
 
-            me._events.push({ 'el': el, 'event': event });
+            me._events.push({ 'el': $el, 'event': event });
             args.unshift(event);
-            el.on.apply(el, args);
+            $el.on.apply($el, args);
 
-            $.publish('/plugin/' + me._name + '/on', [ el, event ]);
+            $.publish('/plugin/' + me._name + '/on', [ $el, event ]);
 
             return me;
         },
 
         /**
          * Wrapper method for {@link jQuery.off}, which removes the event listener from the {@link PluginBase._events}
-         * arrary.
-         * @param {jQuery} el - Element, which contains the listener
+         * array.
+         *
+         * @param {jQuery} element - Element, which contains the listener
          * @param {String} event - Name of the event to remove.
          * @returns {PluginBase}
          * @private
          */
-        _off: function (el, event) {
+        _off: function (element, event) {
             var me = this,
-                events, eventIds = [];
+                events = me._events,
+                pluginEvent = me.getEventName(event),
+                eventIds = [],
+                $element = $(element),
+                filteredEvents = $.grep(events, function (obj, index) {
+                    eventIds.push(index);
+                    return pluginEvent === obj.event && $element[0] === obj.el[0];
+                });
 
-            el = $(el);
-            event = event + me.eventSuffix;
-
-            events = $.grep(me._events, function (obj, index) {
-                eventIds.push(index);
-                return event === obj.event && el[0] === obj.el[0];
-            });
-
-            $.each(events, function (event) {
-                el.off.apply(el, [ event.event ]);
+            $.each(filteredEvents, function (event) {
+                $element.off.apply($element, [ event.event ]);
             });
 
             $.each(eventIds, function (id) {
-                if (!me._events[id]) {
-                    return true;
+                if (!events[id]) {
+                    return;
                 }
-                delete me._events[id];
+                delete events[id];
             });
 
-            $.publish('/plugin/' + me._name + '/off', [ el, event ]);
+            $.publish('/plugin/' + me._name + '/off', [ $element, pluginEvent ]);
 
             return me;
         },
 
         /**
          * Returns the name of the plugin.
-         * @returns {String}
+         * @returns {PluginBase._name|String}
          */
         getName: function () {
             return this._name;
@@ -180,7 +180,7 @@
 
         /**
          * Returns the element which registered the plugin.
-         * @returns {jQuery}
+         * @returns {PluginBase.$el}
          */
         getElement: function () {
             return this.$el;
@@ -293,7 +293,7 @@
                         return;
                     }
 
-                    var Plugin = function() {
+                    var Plugin = function () {
                         PluginBase.call(this, name, element, options);
                     };
 
