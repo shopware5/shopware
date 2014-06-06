@@ -1,8 +1,5 @@
 {extends file='frontend/index/index.tpl'}
 
-{* Empty sidebar left *}
-{block name='frontend_index_content_left'}{/block}
-
 {* Main content *}
 {block name='frontend_index_content'}
 	<div class="content block account--password-reset">
@@ -19,8 +16,10 @@
 		{if $sSuccess}
 			{* Success message *}
 			{block name='frontend_account_password_success'}
-				{include file="frontend/_includes/messages.tpl" type="success" content="{s name='PasswordInfoSuccess'}{/s}"}
-				<p><a href="javascript:window.history.back();" class="btn btn--secondary"><span>{s name="LoginBack"}{/s}</span></a></p>
+				<div class="password--success">
+					{include file="frontend/_includes/messages.tpl" type="success" content="{s name='PasswordInfoSuccess'}{/s}"}
+				</div>
+				<a href="javascript:window.history.back();" class="btn btn--secondary"><span>{s name="LoginBack"}{/s}</span></a>
 			{/block}
 		{else}
 			{* Recover password *}
