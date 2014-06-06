@@ -1,6 +1,15 @@
 {namespace name="frontend/account/login"}
 <div class="register--login content block">
 
+	{* Error messages *}
+	{block name='frontend_register_login_error_messages'}
+		{if $sErrorMessages}
+			<div class="account--error">
+				{include file="frontend/register/error_message.tpl" error_messages=$sErrorMessages}
+			</div>
+		{/if}
+	{/block}
+
 	{* New customer *}
 	{block name='frontend_register_login_newcustomer'}
 		<div class="register--new-customer">
