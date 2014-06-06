@@ -70,18 +70,8 @@ class Shopware_Tests_Components_ClientDetectionTest extends PHPUnit_Framework_Te
         $this->assertEquals($expectedDeviceType, $request->headers->get('X-UA-Device'));
     }
 
-    public function invalidCookieDeviceTypesProvider()
-    {
-        return array(
-            array('phone', 'desktop'),
-            array('', 'desktop'),
-            array(false,'desktop'),
-            array(null, 'desktop'),
-        );
-    }
-
     /**
-     * @dataProvider invalidCookieDeviceTypesProvider
+     * @dataProvider invalidDeviceTypesProvider
      */
     public function testInvalidValidCookie($deviceType, $expectedDeviceType)
     {
