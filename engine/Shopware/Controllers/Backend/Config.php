@@ -138,6 +138,9 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 if ($array['label'] !== null) {
                     $values['label'] = $array['label'];
                 }
+                if ($array['description'] !== null) {
+                    $values['description'] = $array['description'];
+                }
             }
 
             if (!in_array($values['type'], array('select', 'combo'))) {
