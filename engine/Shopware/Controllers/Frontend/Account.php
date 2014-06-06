@@ -59,6 +59,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             }
         }
         $this->View()->sUserData = $this->admin->sGetUserData();
+        $this->View()->sUserLoggedIn = $this->admin->sCheckUser();
     }
 
     /**
@@ -304,7 +305,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         // If using the new template, the 'GET' action will be handled
         // in the Register controller (unified login/register page)
         if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
-            $this->redirect(array('action' => 'index', 'controller' => 'register', 'sTarget' => $this->View()->sTarget));
+            $this->forward(array('action' => 'index', 'controller' => 'register', 'sTarget' => $this->View()->sTarget));
         }
     }
 
