@@ -1,4 +1,4 @@
-{extends file="./frontend/index/index.tpl"}
+{extends file="frontend/index/index.tpl"}
 
 {* Title *}
 {block name='frontend_index_header_title'}
@@ -92,7 +92,7 @@
 				{block name='frontend_register_index_form_submit'}
 					{* Submit button *}
 					<div class="register--action">
-						<input type="submit" class="btn btn--primary" value="{s name='RegisterIndexActionSubmit'}{/s}" />
+						<input type="submit" class="register--submit btn btn--primary" value="{s name='RegisterIndexActionSubmit'}{/s}" />
 					</div>
 				{/block}
 			</form>
