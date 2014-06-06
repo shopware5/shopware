@@ -34,11 +34,26 @@
 						<div class="panel--table">
 							{block name="frontend_account_orders_table_head"}
 								<div class="orders--table-header panel--tr">
-									<div class="panel--th column--date">{s name="OrderColumnDate"}{/s}</div>
-									<div class="panel--th column--id">{s name="OrderColumnId"}{/s}</div>
-									<div class="panel--th column--dispatch">{s name="OrderColumnDispatch"}{/s}</div>
-									<div class="panel--th column--status">{s name="OrderColumnStatus"}{/s}</div>
-									<div class="panel--th column--actions is--align-center">{s name="OrderColumnActions"}{/s}</div>
+
+									{block name="frontend_account_orders_table_head_date"}
+										<div class="panel--th column--date">{s name="OrderColumnDate"}{/s}</div>
+									{/block}
+
+									{block name="frontend_account_orders_table_head_id"}
+										<div class="panel--th column--id">{s name="OrderColumnId"}{/s}</div>
+									{/block}
+
+									{block name="frontend_account_orders_table_head_dispatch"}
+										<div class="panel--th column--dispatch">{s name="OrderColumnDispatch"}{/s}</div>
+									{/block}
+
+									{block name="frontend_account_orders_table_head_status"}
+										<div class="panel--th column--status">{s name="OrderColumnStatus"}{/s}</div>
+									{/block}
+
+									{block name="frontend_account_orders_table_head_actions"}
+										<div class="panel--th column--actions is--align-center">{s name="OrderColumnActions"}{/s}</div>
+									{/block}
 								</div>
 							{/block}
 
