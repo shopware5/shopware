@@ -1,3 +1,4 @@
+{if $sUserLoggedIn}
 <div class="account--menu">
 	{block name="frontend_account_menu"}
 
@@ -106,3 +107,4 @@
 		</div>
 	{/block}
 </div>
+{/if}
