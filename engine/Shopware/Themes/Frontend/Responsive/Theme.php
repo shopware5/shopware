@@ -69,6 +69,7 @@ class Theme extends \Shopware\Components\Theme
 		'src/js/jquery.product-slider.js',
 		'src/js/jquery.register.js',
         'src/js/jquery.modal.js',
+        'src/js/jquery.clicker.js',
 		'src/js/jquery.shopware-responsive.js'
 	);
 
