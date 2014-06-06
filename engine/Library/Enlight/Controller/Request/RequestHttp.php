@@ -171,7 +171,7 @@ class Enlight_Controller_Request_RequestHttp
     /**
      * Returns the current device type, or false if detection could not be done
      *
-     * @return String
+     * @return string
      */
     public function getDeviceType()
     {

@@ -53,6 +53,7 @@ class ClientDetectionProcessor
      */
     public static function parseRequest(Request $request)
     {
+        $device = null;
         if ($request->cookies->get('X-UA-Device-force')) {
             $device = $request->cookies->get('X-UA-Device-force');
         } elseif ($request->headers->has("X-UA-Device")) {
