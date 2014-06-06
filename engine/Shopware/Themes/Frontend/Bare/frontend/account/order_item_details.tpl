@@ -10,10 +10,22 @@
 
 	{block name="frontend_account_order_item_detail_table_head"}
 		<div class="orders--table-header panel--tr is--secondary">
-			<div class="panel--th column--name">{s name="OrderItemColumnName"}{/s}</div>
-			<div class="panel--th column--quantity is--align-center">{s name="OrderItemColumnQuantity"}{/s}</div>
-			<div class="panel--th column--price is--align-right">{s name="OrderItemColumnPrice"}{/s}</div>
-			<div class="panel--th column--total is--align-right">{s name="OrderItemColumnTotal"}{/s}</div>
+
+			{block name="frontend_account_order_item_detail_table_head_name"}
+				<div class="panel--th column--name">{s name="OrderItemColumnName"}{/s}</div>
+			{/block}
+
+			{block name="frontend_account_order_item_detail_table_head_quantity"}
+				<div class="panel--th column--quantity is--align-center">{s name="OrderItemColumnQuantity"}{/s}</div>
+			{/block}
+
+			{block name="frontend_account_order_item_detail_table_head_price"}
+				<div class="panel--th column--price is--align-right">{s name="OrderItemColumnPrice"}{/s}</div>
+			{/block}
+
+			{block name="frontend_account_order_item_detail_table_head_total"}
+				<div class="panel--th column--total is--align-right">{s name="OrderItemColumnTotal"}{/s}</div>
+			{/block}
 		</div>
 	{/block}
 
@@ -60,15 +72,15 @@
 								{if $article.currentPrice}
 									<div class="order--current-price">
 										<span>{s name="OrderItemInfoCurrentPrice"}{/s}:</span>
-												<span class="is--soft">
-													{$article.currentPrice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
-												</span>
+										<span class="is--soft">
+											{$article.currentPrice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
+										</span>
 										{if $article.currentPseudoprice}
 											<span class="order--pseudo-price is--italic is--soft is--line-through">
-														{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s}
+												{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s}
 												{$article.currentPseudoprice|currency}
 												{s name="Star" namespace="frontend/listing/box_article"}{/s}
-													</span>
+											</span>
 										{/if}
 									</div>
 								{/if}
@@ -84,43 +96,60 @@
 									</div>
 								{/if}
 							{/block}
-
 						</div>
 					{/block}
 
 					{* Order item quantity *}
 					{block name='frontend_account_order_item_quantity'}
 						<div class="panel--td order--quantity column--quantity">
-							<div class="column--label">{s name="OrderItemColumnQuantity"}{/s}</div>
-							<div class="column--value">{$article.quantity}</div>
+
+							{block name='frontend_account_order_item_quantity_label'}
+								<div class="column--label">{s name="OrderItemColumnQuantity"}{/s}</div>
+							{/block}
+
+							{block name='frontend_account_order_item_quantity_value'}
+								<div class="column--value">{$article.quantity}</div>
+							{/block}
 						</div>
 					{/block}
 
 					{* Order item price *}
 					{block name='frontend_account_order_item_price'}
 						<div class="panel--td order--price column--price">
-							<div class="column--label">{s name="OrderItemColumnPrice"}{/s}</div>
-							<div class="column--value">
-								{if $article.price}
-									{$article.price} {$offerPosition.currency_html} *
-								{else}
-									{s name="OrderItemInfoFree"}{/s}
-								{/if}
-							</div>
+
+							{block name='frontend_account_order_item_price_label'}
+								<div class="column--label">{s name="OrderItemColumnPrice"}{/s}</div>
+							{/block}
+
+							{block name='frontend_account_order_item_price_value'}
+								<div class="column--value">
+									{if $article.price}
+										{$article.price} {$offerPosition.currency_html} *
+									{else}
+										{s name="OrderItemInfoFree"}{/s}
+									{/if}
+								</div>
+							{/block}
 						</div>
 					{/block}
 
 					{* Order item total amount *}
 					{block name='frontend_account_order_item_amount'}
 						<div class="panel--td order--amount column--total">
-							<div class="column--label">{s name="OrderItemColumnTotal"}{/s}</div>
-							<div class="column--value">
-								{if $article.amount}
-									{$article.amount} {$offerPosition.currency_html} *
-								{else}
-									{s name="OrderItemInfoFree"}{/s}
-								{/if}
-							</div>
+
+							{block name='frontend_account_order_item_amount_label'}
+								<div class="column--label">{s name="OrderItemColumnTotal"}{/s}</div>
+							{/block}
+
+							{block name='frontend_account_order_item_amount_value'}
+								<div class="column--value">
+									{if $article.amount}
+										{$article.amount} {$offerPosition.currency_html} *
+									{else}
+										{s name="OrderItemInfoFree"}{/s}
+									{/if}
+								</div>
+							{/block}
 						</div>
 					{/block}
 				</div>
