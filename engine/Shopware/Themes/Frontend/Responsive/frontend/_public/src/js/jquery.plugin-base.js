@@ -19,75 +19,85 @@
 }(jQuery));
 
 ;(function ($) {
+    "use strict";
 
     /**
+     * Constructor method of the PluginBase class. This method will try to
+     * call the ```init```-method, where you can place your custom initialization of the plugin.
+     *
+     * @class PluginBase
      * @constructor
+     * @param {String} name - Plugin name that is used for the events suffixes.
+     * @param {HTMLElement} element - Element which should be used for the plugin.
+     * @param {Object} options - The user settings, which overrides the default settings
      */
-    $.PluginBase = function () {
-
-    };
-
-    $.PluginBase.prototype = {
-
-        /** @string Suffix which will be appended to the eventType to get namespaced events */
-        eventSuffix: '.plugin',
-
-        /** @string Name of the plugin */
-        _name: 'plugin',
-
-        /** @array Registered events listeners. See {@link PluginBase._on} for registration */
-        _events: [],
+    function PluginBase(name, element, options) {
+        var me = this;
 
         /**
-         * Constructor method of the class to set up the event correctly. The method will try to
-         * call the ```init```-method, where you can place your custom initialization of the plugin.
-         *
+         * @property {String} _name - Name of the Plugin
          * @private
-         * @constructor
-         * @param {Object} userOpts - The user settings, which overrides the default settings
-         * @param {jQuery} element - Element which should be used for the plugin.
-         * @returns {$.PluginBase}
          */
-        _init: function (userOpts, element) {
-            var me = this;
+        me._name = name;
 
-            me.$el = $(element);
-            me.opts = $.extend({}, me.defaults || {}, userOpts);
-            me.eventSuffix = '.' + me._name;
+        /**
+         * @property {jQuery} $el - Plugin element wrapped by jQuery
+         */
+        me.$el = $(element);
 
-            // Create new selector for the plugin
-            $.expr[':']['plugin-' + me._name.toLowerCase()] = function (elem) {
-                return !!$.data(elem, 'plugin-' + me._name);
-            };
+        /**
+         * @property {Object} opts - Merged plugin options
+         */
+        me.opts = $.extend({}, me.defaults || {}, options);
 
-            // Call the init method of the plugin
-            if (typeof me.init === 'function') {
-                me.init();
-            }
+        /**
+         * @property {string} eventSuffix - Suffix which will be appended to the eventType to get namespaced events
+         */
+        me.eventSuffix = '.' + name;
 
-            $.publish('/plugin/' + me._name + '/init', [ me ]);
-            return me;
-        },
+        /**
+         * @property {Array} _events Registered events listeners. See {@link PluginBase._on} for registration
+         * @private
+         */
+        me._events = [];
+
+        // Create new selector for the plugin
+        $.expr[':']['plugin-' + name.toLowerCase()] = function (elem) {
+            return !!$.data(elem, 'plugin-' + name);
+        };
+
+        // Call the init method of the plugin
+        if (typeof me.init === 'function') {
+            me.init();
+        }
+
+        $.publish('/plugin/' + name + '/init', [ me ]);
+    }
+
+    PluginBase.prototype = {
 
         /**
          * Destroyes the plugin on the {@link HTMLElement}. It removes the instance of the plugin
          * which is bounded to the {@link jQuery} element.
          *
-         * If the plugin author has used the {@link $.PluginBase._on} method, the added event listeners
+         * If the plugin author has used the {@link PluginBase._on} method, the added event listeners
          * will automatically be cleared.
          *
-         * @returns {$.PluginBase}
          * @private
+         * @method _destroy
+         * @returns {PluginBase}
          */
         _destroy: function () {
-            var me = this;
+            var me = this,
+                name = me.getName();
 
             $.each(me._events, function (i, obj) {
                 obj.el.off(obj.event);
             });
 
-            me.$el.removeData('plugin' + me._name);
-            $.publish('/plugin/' + me._name + '/destroy', [ me ]);
+            me.$el.removeData('plugin' + name);
+
+            $.publish('/plugin/' + name + '/destroy', [ me ]);
 
             return me;
         },
@@ -98,7 +108,7 @@
          *
          * @params {jQuery} Element, which should be used to add the listener
          * @params {String} Event type, you want to register.
-         * @returns {$.PluginBase}
+         * @returns {PluginBase}
          * @private
          */
         _on: function () {
@@ -121,7 +131,7 @@
          * arrary.
          * @param {jQuery} el - Element, which contains the listener
          * @param {String} event - Name of the event to remove.
-         * @returns {$.PluginBase}
+         * @returns {PluginBase}
          * @private
          */
         _off: function (el, event) {
@@ -201,8 +211,11 @@
          * @returns {PluginBase}
          */
         setOption: function (key, value) {
-            this.opts[key] = value;
-            return this;
+            var me = this;
+
+            me.opts[key] = value;
+
+            return me;
         },
 
         /**
@@ -211,20 +224,24 @@
          */
         getDataAttributes: function () {
             var me = this,
+                opts = me.opts,
                 attr;
 
-            $.each(me.opts, function (key) {
+            $.each(opts, function (key) {
                 attr = me.$el.attr('data-' + key);
                 if (attr !== undefined) {
-                    me.opts[key] = attr;
+                    opts[key] = attr;
                 }
             });
 
-            $.publish('/plugin/' + me._name + '/data-attributes', [ me.$el, me.opts ]);
+            $.publish('/plugin/' + me._name + '/data-attributes', [ me.$el, opts ]);
 
-            return me.opts;
+            return opts;
         }
     };
+
+    // Expose the private PluginBase constructor to global jQuery object
+    $.PluginBase = PluginBase;
 
     // Object.create support test, and fallback for browsers without it
     if (typeof Object.create !== 'function') {
@@ -243,7 +260,7 @@
      * do so, please use the {@link PluginBase._on} method to create event listeners.
      *
      * @param {String} name - Name of the plugin
-     * @param {Object} classObj - Plugin implementation
+     * @param {Object|Function} plugin - Plugin implementation
      * @returns {void}
      *
      * @example
@@ -266,38 +283,26 @@
      * // Call the plugin
      * $('.test').yourName();
      */
-    $.plugin = function (name, classObj) {
-
+    $.plugin = function (name, plugin) {
         $.fn[name] = function (options) {
             return this.each(function () {
                 var element = this;
 
                 if (!$.data(element, 'plugin-' + name)) {
-                    function Plugin () {
-                        var me = this;
-
-                        $.PluginBase.call(me);
-
-                        me._init(options, element);
+                    if (typeof plugin === 'function') {
+                        $.data(element, 'plugin-' + name, new plugin());
+                        return;
                     }
 
-                    Plugin.prototype = $.extend(Object.create($.PluginBase.prototype), classObj);
+                    var Plugin = function() {
+                        PluginBase.call(this, name, element, options);
+                    };
 
-                    Plugin.prototype.constructor = $.PluginBase;
+                    Plugin.prototype = $.extend(Object.create(PluginBase.prototype), { constructor: Plugin }, plugin);
 
                     $.data(element, 'plugin-' + name, new Plugin());
                 }
             });
         };
-
-//        $.fn[name] = function (opts) {
-//            return this.each(function () {
-//                if (!$.data(this, 'plugin-' + name)) {
-//                    classObj = $.extend({ _name: name }, classObj);
-//                    var cls = $.extend({}, $.PluginBase.prototype, classObj);
-//                    $.data(this, 'plugin-' + name, cls._init(opts, this));
-//                }
-//            });
-//        }
     };
 })(jQuery);
