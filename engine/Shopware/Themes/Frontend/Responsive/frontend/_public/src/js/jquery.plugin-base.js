@@ -1,5 +1,4 @@
-;
-(function ($) {
+;(function ($) {
 
     /*! Tiny Pub/Sub - v0.7.0 - 2013-01-29
      * https://github.com/cowboy/jquery-tiny-pubsub
