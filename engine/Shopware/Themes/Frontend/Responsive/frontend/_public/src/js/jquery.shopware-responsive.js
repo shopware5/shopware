@@ -271,5 +271,4 @@ $(function() {
         });
     }
 
-    $('.main-search--field').clicker();
 });
