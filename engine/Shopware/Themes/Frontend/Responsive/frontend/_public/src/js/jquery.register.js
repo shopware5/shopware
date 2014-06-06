@@ -37,6 +37,9 @@
     Plugin.prototype.init = function() {
         var me = this;
 
+        me.$form = me.$el.find('.register--form');
+        me.$submitBtn = me.$el.find('.register--submit');
+
         me.$typeSelection = me.$el.find('.register--customertype select');
         me.$skipAccount = me.$el.find('.register--check input');
         me.$alternativeShipping = me.$el.find('.register--alt-shipping input');
@@ -65,6 +68,7 @@
         me.$alternativeShipping.on('change.' + pluginName, $.proxy(me.checkChangeShipping, me));
         me.$countySelectFields.on('change.' + pluginName, $.proxy(me.onCountryChanged, me));
         me.$inputs.on('blur.' + pluginName, $.proxy(me.onValidateInput, me));
+        me.$submitBtn.on('click.' + pluginName, $.proxy(me.onSubmitBtn, me));
     };
 
     Plugin.prototype.checkType = function () {
@@ -115,6 +119,21 @@
         me.$stateSelectContainers.find('.select--state').attr('disabled', 'disabled');
         $stateSelect.removeAttr('disabled');
         $stateSelectParent.removeClass('is--disabled').show();
+    };
+
+    Plugin.prototype.onSubmitBtn = function(event) {
+        var me = this,
+            input,
+            valid = true;
+
+        me.$inputs.each(function() {
+            input = $(this);
+
+            if (!input.val()) {
+                valid = false;
+                me.setFieldAsError(input);
+            }
+        });
     };
 
     Plugin.prototype.onValidateInput = function (event) {
