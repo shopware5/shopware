@@ -46,9 +46,10 @@ class ProductConfiguration
 
     /**
      * @param Struct\ListProduct[] $products
+     * @param \Shopware\Struct\Context $context
      * @return Group
      */
-    public function getList(array $products)
+    public function getList(array $products, Struct\Context $context)
     {
         $ids = array();
         foreach ($products as $product) {
@@ -60,6 +61,9 @@ class ProductConfiguration
             ->addSelect($this->fieldHelper->getConfiguratorGroupFields())
             ->addSelect($this->fieldHelper->getConfiguratorOptionFields())
         ;
+
+        $this->fieldHelper->addConfiguratorTranslation($query);
+        $query->setParameter(':language', $context->getShop()->getId());
 
         $query->where('relations.article_id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);

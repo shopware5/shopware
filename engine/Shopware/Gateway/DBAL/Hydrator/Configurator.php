@@ -74,6 +74,13 @@ class Configurator extends Hydrator
     private function createGroup($data)
     {
         $group = new Struct\Configurator\Group();
+        $translation = $this->getTranslation(
+            $data,
+            '__configuratorGroup_translation',
+            array('name' => '__configuratorGroup_name', 'description' => '__configuratorGroup_description')
+        );
+        $data = array_merge($data, $translation);
+
         $group->setId((int)$data['__configuratorGroup_id']);
         $group->setName($data['__configuratorGroup_name']);
         $group->setDescription($data['__configuratorGroup_description']);
@@ -83,8 +90,33 @@ class Configurator extends Hydrator
     private function createOption($data)
     {
         $option = new Struct\Configurator\Option();
+        $translation = $this->getTranslation(
+            $data,
+            '__configuratorOption_translation',
+            array('name' => '__configuratorOption_name')
+        );
+        $data = array_merge($data, $translation);
+
         $option->setId((int)$data['__configuratorOption_id']);
         $option->setName($data['__configuratorOption_name']);
         return $option;
+    }
+
+    private function getTranslation($data, $arrayKey, $mapping)
+    {
+        if (!isset($data[$arrayKey])
+            || empty($data[$arrayKey])
+        ) {
+
+            return array();
+        }
+
+        $translation = unserialize($data[$arrayKey]);
+
+        if (empty($translation)) {
+            return array();
+        }
+
+        return $this->convertArrayKeys($translation, $mapping);
     }
 }

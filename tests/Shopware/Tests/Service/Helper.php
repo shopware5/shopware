@@ -3,6 +3,9 @@
 namespace Shopware\Tests\Service;
 
 use Shopware\Components\Api\Resource;
+use Shopware\Gateway\DBAL\Configurator;
+use Shopware\Gateway\DBAL\ProductConfiguration;
+use Shopware\Gateway\DBAL\ProductProperty;
 use Shopware\Service;
 use Shopware\Models;
 use Shopware\Struct;
@@ -29,6 +32,11 @@ class Helper
      */
     private $converter;
 
+    /**
+     * @var \Shopware\Components\Api\Resource\Translation
+     */
+    private $translationApi;
+
     function __construct()
     {
         $this->db = Shopware()->Db();
@@ -38,8 +46,50 @@ class Helper
         $api = new Resource\Article();
         $api->setManager($this->entityManager);
         $this->articleApi = $api;
+
+
+        $translation = new Resource\Translation();
+        $translation->setManager($this->entityManager);
+        $this->translationApi = $translation;
     }
 
+    public function getProductConfigurator(
+        Struct\ListProduct $listProduct,
+        Struct\Context $context,
+        ProductConfiguration $productConfigurationGateway = null,
+        Configurator $configuratorGateway = null
+    ) {
+        if ($productConfigurationGateway == null) {
+            $productConfigurationGateway = Shopware()->Container()->get('product_configuration_gateway');
+        }
+        if ($configuratorGateway == null) {
+            $configuratorGateway = Shopware()->Container()->get('configurator_gateway');
+        }
+
+        $service = new Service\Configurator($productConfigurationGateway, $configuratorGateway);
+
+        return $service->getProductConfigurator($listProduct, $context);
+    }
+
+    /**
+     * @param Struct\ListProduct $product
+     * @param Struct\Context $context
+     * @param ProductProperty $productPropertyGateway
+     * @return Struct\Property\Set
+     */
+    public function getProductProperties(
+        Struct\ListProduct $product,
+        Struct\Context $context,
+        ProductProperty $productPropertyGateway = null
+    ) {
+
+        if ($productPropertyGateway === null) {
+            $productPropertyGateway = Shopware()->Container()->get('product_property_gateway');
+        }
+        $service = new Service\Property($productPropertyGateway);
+
+        return $service->get($product, $context);
+    }
 
     /**
      * @param $number
@@ -145,6 +195,108 @@ class Helper
         return $this->articleApi->create($data);
     }
 
+    public function createArticleTranslation($articleId, $shopId)
+    {
+        $data = array(
+            'type' => 'article',
+            'key' => $articleId,
+            'localeId' => $shopId,
+            'data' => $this->getArticleTranslation()
+        );
+        $this->translationApi->create($data);
+    }
+
+    public function createManufacturerTranslation($manufacturerId, $shopId)
+    {
+        $data = array(
+            'type' => 'supplier',
+            'key' => 1,
+            'localeId' => $shopId,
+            'data' => array(
+                $manufacturerId => $this->getManufacturerTranslation()
+            )
+        );
+
+        $this->translationApi->create($data);
+    }
+
+
+    public function createPropertyTranslation($properties, $shopId)
+    {
+        $this->translationApi->create(array(
+            'type' => 'propertygroup',
+            'key' => $properties['id'],
+            'localeId' => $shopId,
+            'data' => array('groupName' => 'Dummy Translation')
+        ));
+
+        foreach($properties['groups'] as $group) {
+            $this->translationApi->create(array(
+                'type' => 'propertyoption',
+                'key' => $group['id'],
+                'localeId' => $shopId,
+                'data' => array('optionName' => 'Dummy Translation group - ' . $group['id'])
+            ));
+
+            foreach($group['options'] as $option) {
+                $this->translationApi->create(array(
+                    'type' => 'propertyvalue',
+                    'key' => $option['id'],
+                    'localeId' => $shopId,
+                    'data' => array('optionValue' => 'Dummy Translation option - ' . $group['id'] . ' - ' . $option['id'])
+                ));
+            }
+        }
+    }
+
+    public function createConfiguratorTranslation($configuratorSet, $shopId)
+    {
+        foreach($configuratorSet['groups'] as $group) {
+            $this->translationApi->create(array(
+                'type' => 'configuratorgroup',
+                'key' => $group['id'],
+                'localeId' => $shopId,
+                'data' => array(
+                    'name' => 'Dummy Translation group - ' . $group['id'],
+                    'description' => 'Dummy Translation description - ' . $group['id']
+                )
+            ));
+
+            foreach($group['options'] as $option) {
+                $this->translationApi->create(array(
+                    'type' => 'configuratoroption',
+                    'key' => $option['id'],
+                    'localeId' => $shopId,
+                    'data' => array(
+                        'name' => 'Dummy Translation option - ' . $group['id'] . ' - ' . $option['id']
+                    )
+                ));
+            }
+        }
+    }
+
+    public function createUnitTranslations(array $unitIds, $shopId, array $translation = array())
+    {
+        $data = array(
+            'type' => 'config_units',
+            'key' => 1,
+            'localeId' => $shopId,
+            'data' => array()
+        );
+
+        foreach($unitIds as $id) {
+            if (isset($translation[$id])) {
+                $data['data'][$id] = array_merge(
+                    $this->getUnitTranslation(),
+                    $translation[$id]
+                );
+            } else {
+                $data['data'][$id] = $this->getUnitTranslation();
+            }
+        }
+
+        $this->translationApi->create($data);
+    }
 
     /**
      * Creates a simple product which contains all required
@@ -220,7 +372,6 @@ class Helper
         );
     }
 
-
     /**
      * @param array $data
      * @return array
@@ -252,7 +403,6 @@ class Helper
             $data
         );
     }
-
 
     public function getVariantData(array $data = array())
     {
@@ -338,12 +488,6 @@ class Helper
         ), $data);
     }
 
-
-    /**
-     * GLOBAL STATE DATA LIKE TAX / CUSTOMER GROUPS / CURRENCIES
-     */
-
-
     /**
      * @param Models\Customer\Group $currentCustomerGroup
      * @param Models\Customer\Group $fallbackCustomerGroup
@@ -391,6 +535,55 @@ class Helper
         return $context;
     }
 
+
+    public function getProperties($groupCount, $optionCount)
+    {
+        $properties = $this->createProperties($groupCount, $optionCount);
+        $options = array();
+        foreach($properties['groups'] as $group) {
+            $options = array_merge($options, $group['options']);
+        }
+
+        return array(
+            'filterGroupId' => $properties['id'],
+            'propertyValues' => $options,
+            'all' => $properties
+        );
+    }
+
+    private function createProperties($groupCount, $optionCount)
+    {
+        Shopware()->Db()->query("DELETE FROM s_filter WHERE name = 'Test-Set'");
+        $this->db->insert('s_filter', array('name' => 'Test-Set', 'comparable' => 1));
+        $data = $this->db->fetchRow("SELECT * FROM s_filter WHERE name = 'Test-Set'");
+
+        Shopware()->Db()->query("DELETE FROM s_filter_options WHERE name LIKE 'Test-Gruppe%'");
+        Shopware()->Db()->query("DELETE FROM s_filter_values WHERE value LIKE 'Test-Option%'");
+
+        for($i=0; $i<$groupCount; $i++) {
+            $this->db->insert('s_filter_options', array(
+                'name' => 'Test-Gruppe-' . $i,
+                'filterable' => 1
+            ));
+            $group = $this->db->fetchRow("SELECT * FROM s_filter_options WHERE name = 'Test-Gruppe-" . $i . "'");
+
+            for($i2=0; $i2 < $optionCount; $i2++) {
+                $this->db->insert('s_filter_values', array(
+                    'value' => 'Test-Option-' . $i . '-' .$i2,
+                    'optionID' => $group['id']
+                ));
+            }
+
+            $group['options'] = Shopware()->Db()->fetchAll("SELECT * FROM s_filter_values WHERE optionID = ?", array($group['id']));
+            $data['groups'][] = $group;
+
+            $this->db->insert('s_filter_relations', array(
+                'optionID' => $group['id'],
+                'groupID' => $data['id']
+            ));
+        }
+        return $data;
+    }
 
     /**
      * @param int $shopId
@@ -483,7 +676,7 @@ class Helper
     }
 
 
-    public function deleteCustomerGroup($key)
+    private function deleteCustomerGroup($key)
     {
         $ids = Shopware()->Db()->fetchCol('SELECT id FROM s_core_customergroups WHERE groupkey = ?', array($key));
         if (!$ids) {
@@ -499,7 +692,7 @@ class Helper
         Shopware()->Models()->clear();
     }
 
-    public function deleteTax($name)
+    private function deleteTax($name)
     {
         $ids = Shopware()->Db()->fetchCol("SELECT id FROM s_core_tax WHERE description = ?", array($name));
         if (empty($ids)) return;
@@ -512,7 +705,7 @@ class Helper
         Shopware()->Models()->clear();
     }
 
-    public function deleteCurrency($name)
+    private function deleteCurrency($name)
     {
         $ids = Shopware()->Db()->fetchCol("SELECT id FROM s_core_currencies WHERE name = ?", array($name));
         if (empty($ids)) return;
@@ -525,7 +718,7 @@ class Helper
         Shopware()->Models()->clear();
     }
 
-    protected function deleteConfigurator()
+    private function deleteConfigurator()
     {
         $ids = Shopware()->Db()->fetchCol(
             "SELECT id from s_article_configurator_groups WHERE name LIKE 'Unit-Test%'"
@@ -579,7 +772,6 @@ class Helper
         return $result;
     }
 
-
     private function createConfigurator($groupCount, $optionCount)
     {
         $this->deleteConfigurator();
@@ -627,7 +819,6 @@ class Helper
             'groups' => $groups
         );
     }
-
 
     /**
      * Helper function which creates all variants for
@@ -681,7 +872,6 @@ class Helper
         return $variants;
     }
 
-
     /**
      * Combinations merge the result of dimensional arrays not perfectly
      * so we have to clean up the first array level.
@@ -711,5 +901,38 @@ class Helper
             $rules[$key] = $struct;
         }
         return $rules;
+    }
+
+
+    private function getUnitTranslation()
+    {
+        return array(
+            'unit' => 'Dummy Translation',
+            'description' => 'Dummy Translation'
+        );
+    }
+
+
+    private function getManufacturerTranslation()
+    {
+        return array(
+            'metaTitle' => 'Dummy Translation',
+            'description' => 'Dummy Translation',
+            'metaDescription' => 'Dummy Translation',
+            'metaKeywords' => 'Dummy Translation',
+        );
+    }
+
+    private function getArticleTranslation()
+    {
+        return array(
+            'txtArtikel' => 'Dummy Translation',
+            'txtshortdescription' => 'Dummy Translation',
+            'txtlangbeschreibung' => 'Dummy Translation',
+            'txtzusatztxt' => 'Dummy Translation',
+            'txtkeywords' => 'Dummy Translation',
+            'txtpackunit' => 'Dummy Translation',
+            'metaTitle' => 'Dummy Translation'
+        );
     }
 }

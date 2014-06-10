@@ -32,7 +32,7 @@ class Configurator
      */
     public function getProductsConfigurations(array $products, Struct\Context $context)
     {
-        $configuration = $this->productConfigurationGateway->getList($products);
+        $configuration = $this->productConfigurationGateway->getList($products, $context);
 
         return $configuration;
     }

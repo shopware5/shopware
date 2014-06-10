@@ -141,20 +141,12 @@ class Country
         $query->from('s_core_countries', 'country')
             ->leftJoin('country', 's_core_countries_attributes', 'countryAttribute', 'countryAttribute.countryID = country.id');
 
-        $query->leftJoin(
-            'country',
-            's_core_translations',
-            'countryTranslation',
-            'countryTranslation.objecttype = :countryType AND
-             countryTranslation.objectkey = 1 AND
-             countryTranslation.objectlanguage = :language'
-        );
-        $query->addSelect('countryTranslation.objectdata as __country_translation');
+        $this->fieldHelper->addCountryTranslation($query);
 
         $query->where('country.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
-            ->setParameter(':language', $context->getShop()->getId())
-            ->setParameter(':countryType', 'config_countries');
+            ->setParameter(':language', $context->getShop()->getId());
+
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -185,20 +177,11 @@ class Country
         $query->from('s_core_countries_states', 'countryState')
             ->leftJoin('countryState', 's_core_countries_states_attributes', 'countryStateAttribute', 'countryStateAttribute.stateID = countryState.id');
 
-        $query->leftJoin(
-            'countryState',
-            's_core_translations',
-            'stateTranslation',
-            'stateTranslation.objecttype = :stateType AND
-             stateTranslation.objectkey = 1 AND
-             stateTranslation.objectlanguage = :language'
-        );
-        $query->addSelect('stateTranslation.objectdata as __countryState_translation');
+        $this->fieldHelper->addCountryStateTranslation($query);
 
         $query->where('countryState.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
             ->setParameter(':language', $context->getShop()->getId())
-            ->setParameter(':stateType', 'config_country_states')
         ;
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */

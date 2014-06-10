@@ -80,6 +80,9 @@ class Product extends Hydrator
      */
     private function assignData(Struct\ListProduct $product, array $data)
     {
+        $translation = $this->getProductTranslation($data);
+        $data = array_merge($data, $translation);
+
         $this->assignProductData($product, $data);
 
         $product->setTax(
@@ -123,9 +126,6 @@ class Product extends Hydrator
      */
     private function assignProductData(Struct\ListProduct $product, $data)
     {
-        $translation = $this->getProductTranslation($data);
-        $data = array_merge($data, $translation);
-
         if (isset($data['__product_id'])) {
             $product->setId(intval($data['__product_id']));
         }

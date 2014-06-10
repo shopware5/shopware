@@ -4306,10 +4306,7 @@ class sArticles
         );
 
         if ($average && $average->getCount()) {
-            $promotion['sVoteAverange'] = array(
-                'averange' => round($average->getAverage()),
-                'count' => $average->getCount(),
-            );
+            $promotion['sVoteAverange'] = $this->convertVoteAverageStruct($average);
         }
 
         //check if the product has an configured property set which stored in s_filter.
@@ -4334,8 +4331,7 @@ class sArticles
                 'optionID' => $group->getId(),
                 'groupID' => $propertySet->getId(),
                 'groupName' => $propertySet->getName(),
-                'name' => $group->getName(),
-                'valueID' => '?',
+                'name' => $group->getName()
             );
 
             $values = array();

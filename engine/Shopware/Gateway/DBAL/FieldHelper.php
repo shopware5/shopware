@@ -2,7 +2,9 @@
 
 namespace Shopware\Gateway\DBAL;
 
+use Shopware\Components\Model\DBAL\QueryBuilder;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Struct\Context;
 
 class FieldHelper
 {
@@ -538,4 +540,182 @@ class FieldHelper
             'vote.answer_date as __vote_answer_date',
         );
     }
+
+    public function addPropertySetTranslation(QueryBuilder $query)
+    {
+        $query->leftJoin(
+            'propertySet',
+            's_core_translations',
+            'propertySetTranslation',
+            'propertySetTranslation.objecttype = :setTranslation AND
+             propertySetTranslation.objectkey = propertySet.id AND
+             propertySetTranslation.objectlanguage = :language'
+        );
+
+        $query->leftJoin(
+            'propertyGroup',
+            's_core_translations',
+            'propertyGroupTranslation',
+            'propertyGroupTranslation.objecttype = :groupTranslation AND
+             propertyGroupTranslation.objectkey = propertyGroup.id AND
+             propertyGroupTranslation.objectlanguage = :language'
+        );
+
+        $query->leftJoin(
+            'propertyOption',
+            's_core_translations',
+            'propertyOptionTranslation',
+            'propertyOptionTranslation.objecttype = :optionTranslation AND
+             propertyOptionTranslation.objectkey = propertyOption.id AND
+             propertyOptionTranslation.objectlanguage = :language'
+        );
+
+        $query->setParameter(':setTranslation', 'propertygroup')
+            ->setParameter(':groupTranslation', 'propertyoption')
+            ->setParameter(':optionTranslation', 'propertyvalue')
+        ;
+
+        $query->addSelect(array(
+            'propertySetTranslation.objectdata as __propertySet_translation',
+            'propertyGroupTranslation.objectdata as __propertyGroup_translation',
+            'propertyOptionTranslation.objectdata as __propertyOption_translation'
+        ));
+    }
+
+    public function addImageTranslation(QueryBuilder $query)
+    {
+        $query->leftJoin(
+            'image',
+            's_core_translations',
+            'imageTranslation',
+            'imageTranslation.objecttype = :imageType AND
+             imageTranslation.objectkey = image.id AND
+             imageTranslation.objectlanguage = :language'
+        );
+        $query->addSelect(array(
+            'imageTranslation.objectdata as __image_translation',
+        ));
+
+        $query->setParameter(':imageType', 'articleimage');
+    }
+
+    public function addConfiguratorTranslation(QueryBuilder $query)
+    {
+        $query->leftJoin(
+            'configuratorGroup',
+            's_core_translations',
+            'configuratorGroupTranslation',
+            'configuratorGroupTranslation.objecttype = :configuratorGroupType AND
+             configuratorGroupTranslation.objectkey = configuratorGroup.id AND
+             configuratorGroupTranslation.objectlanguage = :language'
+        );
+
+        $query->leftJoin(
+            'configuratorOption',
+            's_core_translations',
+            'configuratorOptionTranslation',
+            'configuratorOptionTranslation.objecttype = :configuratorOptionType AND
+             configuratorOptionTranslation.objectkey = configuratorOption .id AND
+             configuratorOptionTranslation.objectlanguage = :language'
+        );
+
+        $query->setParameter(':configuratorGroupType', 'configuratorgroup')
+           ->setParameter(':configuratorOptionType', 'configuratoroption');
+
+        $query->addSelect(array(
+            'configuratorGroupTranslation.objectdata as __configuratorGroup_translation',
+            'configuratorOptionTranslation.objectdata as __configuratorOption_translation'
+        ));
+    }
+
+    public function addUnitTranslation(QueryBuilder $query)
+    {
+        $query->leftJoin(
+            'variant',
+            's_core_translations',
+            'unitTranslation',
+            'unitTranslation.objecttype = :unitType AND
+             unitTranslation.objectkey = 1 AND
+             unitTranslation.objectlanguage = :language'
+        );
+
+        $query->addSelect(array('unitTranslation.objectdata as __unit_translation'))
+            ->setParameter(':unitType', 'config_units');
+    }
+
+    public function addVariantTranslation(QueryBuilder $query)
+    {
+        $query->leftJoin(
+            'variant',
+            's_core_translations',
+            'variantTranslation',
+            'variantTranslation.objecttype = :variantType AND
+             variantTranslation.objectkey = variant.id AND
+             variantTranslation.objectlanguage = :language'
+        );
+
+        $query->addSelect('variantTranslation.objectdata as __variant_translation')
+            ->setParameter(':variantType', 'variant');
+    }
+
+    public function addCountryTranslation(QueryBuilder $query)
+    {
+        $query->leftJoin(
+            'country',
+            's_core_translations',
+            'countryTranslation',
+            'countryTranslation.objecttype = :countryType AND
+             countryTranslation.objectkey = 1 AND
+             countryTranslation.objectlanguage = :language'
+        );
+        $query->addSelect('countryTranslation.objectdata as __country_translation')
+            ->setParameter(':countryType', 'config_countries');
+    }
+
+    public function addCountryStateTranslation(QueryBuilder $query)
+    {
+        $query->leftJoin(
+            'countryState',
+            's_core_translations',
+            'stateTranslation',
+            'stateTranslation.objecttype = :stateType AND
+             stateTranslation.objectkey = 1 AND
+             stateTranslation.objectlanguage = :language'
+        );
+        $query->addSelect('stateTranslation.objectdata as __countryState_translation')
+            ->setParameter(':stateType', 'config_country_states')
+        ;
+    }
+
+    public function addProductTranslation(QueryBuilder $query)
+    {
+        $query->leftJoin(
+            'variant',
+            's_core_translations',
+            'productTranslation',
+            'productTranslation.objecttype = :productType AND
+             productTranslation.objectkey = variant.articleID AND
+             productTranslation.objectlanguage = :language'
+        );
+
+        $query->addSelect(array('productTranslation.objectdata as __product_translation'))
+            ->setParameter(':productType', 'article');
+
+    }
+
+    public function addManufacturerTranslation(QueryBuilder $query)
+    {
+        $query->leftJoin(
+            'manufacturer',
+            's_core_translations',
+            'manufacturerTranslation',
+            'manufacturerTranslation.objecttype = :manufacturerType AND
+             manufacturerTranslation.objectkey = 1 AND
+             manufacturerTranslation.objectlanguage = :language'
+        );
+        $query->addSelect(array('manufacturerTranslation.objectdata as __manufacturer_translation'))
+            ->setParameter(':manufacturerType', 'supplier');
+    }
+
+
 }

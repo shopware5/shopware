@@ -46,9 +46,10 @@ class Property
 
     /**
      * @param array $valueIds
+     * @param \Shopware\Struct\Context $context
      * @return Struct\Property\Set[]
      */
-    public function getList(array $valueIds)
+    public function getList(array $valueIds, Struct\Context $context)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
 
@@ -95,9 +96,12 @@ class Property
             'propertyOption.optionID = propertyGroup.id'
         );
 
+        $this->fieldHelper->addPropertySetTranslation($query, $context);
+
         $query->groupBy('propertyOption.id');
 
         $query->where('propertyOption.id IN (:ids)')
+            ->setParameter(':language', $context->getShop()->getId())
             ->setParameter(':ids', $valueIds, Connection::PARAM_INT_ARRAY);
 
         $query->orderBy('propertySet.position')

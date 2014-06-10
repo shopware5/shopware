@@ -123,7 +123,7 @@ class ListProduct
 
             $result[$number] = $product;
         }
-
+        
         return $result;
     }
 }

@@ -44,7 +44,10 @@ class Property extends DBAL
         /**@var $facet Facet\Property*/
         $valueIds = $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
 
-        $properties = $this->propertyGateway->getList(array_keys($valueIds), $context);
+        $properties = $this->propertyGateway->getList(
+            array_keys($valueIds),
+            $context
+        );
 
         $activeValues = array();
         /**@var $condition \Shopware\Gateway\Search\Condition\Property*/

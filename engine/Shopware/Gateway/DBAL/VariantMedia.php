@@ -74,7 +74,7 @@ class VariantMedia
             $ids[] = $product->getVariantId();
         }
 
-        $query = $this->getQuery();
+        $query = $this->getQuery($context);
 
         $query->andWhere('childImage.article_detail_id IN (:products)')
             ->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY);
@@ -132,7 +132,7 @@ class VariantMedia
             $ids[] = $product->getVariantId();
         }
 
-        $query = $this->getQuery();
+        $query = $this->getQuery($context);
 
         $query->andWhere('childImage.article_detail_id IN (:products)')
             ->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY);
@@ -158,7 +158,7 @@ class VariantMedia
     /**
      * @return \Shopware\Components\Model\DBAL\QueryBuilder
      */
-    private function getQuery()
+    private function getQuery(Struct\Context $context)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
 
@@ -166,6 +166,9 @@ class VariantMedia
             ->addSelect($this->fieldHelper->getMediaFields())
             ->addSelect($this->fieldHelper->getImageFields())
             ->addSelect($this->fieldHelper->getMediaSettingFields());
+
+        $this->fieldHelper->addImageTranslation($query);
+        $query->setParameter(':language', $context->getShop()->getId());
 
         $query->from('s_articles_img', 'image')
             ->innerJoin('image', 's_media', 'media', 'image.media_id = media.id')
