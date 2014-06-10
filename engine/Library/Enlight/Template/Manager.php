@@ -164,6 +164,8 @@ class Enlight_Template_Manager extends Smarty
             $pluginDirs,
             array($bareDir)
         );
+        
+        $inheritance = array_unique($inheritance);
 
         return parent::setTemplateDir($inheritance);
     }
