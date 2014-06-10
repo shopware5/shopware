@@ -7,7 +7,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Gateway\DBAL\Hydrator;
 use Shopware\Struct;
 
-class VoteAverage extends Gateway
+class VoteAverage
 {
     /**
      * @var Hydrator\Vote

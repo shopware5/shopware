@@ -27,7 +27,7 @@ class Set extends Extendable
     /**
      * @var Group[]
      */
-    private $groups;
+    private $groups = array();
 
     /**
      * @param int $id

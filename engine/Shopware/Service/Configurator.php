@@ -13,21 +13,14 @@ class Configurator
     private $productConfigurationGateway;
 
     /**
-     * @var Translation
-     */
-    private $translationService;
-
-    /**
      * @var Gateway\Configurator
      */
     private $configuratorGateway;
 
     function __construct(
         Gateway\ProductConfiguration $productConfigurationGateway,
-        Gateway\Configurator $configuratorGateway,
-        Translation $translationService
+        Gateway\Configurator $configuratorGateway
     ) {
-        $this->translationService = $translationService;
         $this->configuratorGateway = $configuratorGateway;
         $this->productConfigurationGateway = $productConfigurationGateway;
     }
@@ -35,7 +28,7 @@ class Configurator
     /**
      * @param ListProduct[] $products
      * @param \Shopware\Struct\Context $context
-     * @return Struct\Configurator\Group[]
+     * @return array Each array element contains a Struct\Configurator\Group[] array. The first level is indexed with the product number
      */
     public function getProductsConfigurations(array $products, Struct\Context $context)
     {
@@ -50,8 +43,11 @@ class Configurator
      * @param array $selection
      * @return Struct\Configurator\Set
      */
-    public function getProductConfigurator(Struct\ListProduct $product, Struct\Context $context, array $selection)
-    {
+    public function getProductConfigurator(
+        Struct\ListProduct $product,
+        Struct\Context $context,
+        array $selection
+    ) {
         return $this->configuratorGateway->get($product, $context, $selection);
     }
 }

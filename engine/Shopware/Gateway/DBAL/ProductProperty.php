@@ -7,7 +7,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Gateway\DBAL\Hydrator as Hydrator;
 use Shopware\Struct;
 
-class ProductProperty extends Gateway
+class ProductProperty
 {
     /**
      * @var \Shopware\Gateway\DBAL\Hydrator\Property
@@ -15,15 +15,33 @@ class ProductProperty extends Gateway
     private $propertyHydrator;
 
     /**
+     * The FieldHelper class is used for the
+     * different table column definitions.
+     *
+     * This class helps to select each time all required
+     * table data for the store front.
+     *
+     * Additionally the field helper reduce the work, to
+     * select in a second step the different required
+     * attribute tables for a parent table.
+     *
+     * @var FieldHelper
+     */
+    private $fieldHelper;
+
+    /**
      * @param ModelManager $entityManager
+     * @param FieldHelper $fieldHelper
      * @param Hydrator\Property $propertyHydrator
      */
     function __construct(
         ModelManager $entityManager,
+        FieldHelper $fieldHelper,
         Hydrator\Property $propertyHydrator
     ) {
         $this->propertyHydrator = $propertyHydrator;
         $this->entityManager = $entityManager;
+        $this->fieldHelper = $fieldHelper;
     }
 
     /**
@@ -40,10 +58,18 @@ class ProductProperty extends Gateway
         $query = $this->entityManager->getDBALQueryBuilder();
 
         $query->addSelect('products.id as productId')
-            ->addSelect($this->getSetFields())
-            ->addSelect($this->getGroupFields())
-            ->addSelect($this->getOptionFields())
-            ->addSelect($this->getTableFields('s_filter_attributes', 'attribute'));
+            ->addSelect($this->fieldHelper->getPropertySetFields())
+            ->addSelect($this->fieldHelper->getPropertyGroupFields())
+            ->addSelect($this->fieldHelper->getPropertyOptionFields());
+
+        $query->addSelect('
+        (
+            CASE
+                WHEN propertySet.sortmode = 1 THEN propertyOption.value_numeric
+                WHEN propertySet.sortmode = 3 THEN propertyOption.position
+                ELSE propertyOption.value
+            END
+        ) as sortRelevance');
 
         $query->from('s_filter_articles', 'filterArticles');
 
@@ -57,46 +83,46 @@ class ProductProperty extends Gateway
         $query->innerJoin(
             'filterArticles',
             's_filter_values',
-            'options',
-            'options.id = filterArticles.valueID'
+            'propertyOption',
+            'propertyOption.id = filterArticles.valueID'
         );
 
         $query->innerJoin(
             'products',
             's_filter',
-            'sets',
-            'sets.id = products.filtergroupID'
+            'propertySet',
+            'propertySet.id = products.filtergroupID'
         );
 
         $query->leftJoin(
-            'sets',
+            'propertySet',
             's_filter_attributes',
-            'attribute',
-            'attribute.filterID = sets.id'
+            'propertySetAttribute',
+            'propertySetAttribute.filterID = propertySet.id'
         );
 
         $query->innerJoin(
-            'sets',
+            'propertySet',
             's_filter_relations',
             'relations',
-            'relations.groupID = sets.id'
+            'relations.groupID = propertySet.id'
         );
 
         $query->innerJoin(
-            'options',
+            'propertyOption',
             's_filter_options',
-            'groups',
-            'groups.id = options.optionID AND relations.optionID = groups.id'
+            'propertyGroup',
+            'propertyGroup.id = propertyOption.optionID AND relations.optionID = propertyGroup.id'
         );
 
         $query->where('products.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         $query->orderBy('filterArticles.articleID')
-            ->addOrderBy('sets.position')
             ->addOrderBy('relations.position')
-            ->addOrderBy('options.position')
-            ->addOrderBy('options.id');
+            ->addOrderBy('propertyGroup.name')
+            ->addOrderBy('sortRelevance')
+            ->addOrderBy('propertyOption.id');
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -115,37 +141,5 @@ class ProductProperty extends Gateway
         }
 
         return $result;
-    }
-
-    private function getSetFields()
-    {
-        return array(
-            'sets.id',
-            'sets.name',
-            'sets.position',
-            'sets.comparable',
-            'sets.sortmode'
-        );
-    }
-
-    private function getGroupFields()
-    {
-        return array(
-            'groups.id as __groups_id',
-            'groups.name as __groups_name',
-            'groups.filterable as __groups_filterable',
-            'groups.default as __groups_default'
-        );
-    }
-
-    private function getOptionFields()
-    {
-        return array(
-            'options.id as __options_id',
-            'options.optionID as __options_optionID',
-            'options.value as __options_value',
-            'options.position as __options_position',
-            'options.value_numeric as __options_value_numeric'
-        );
     }
 }

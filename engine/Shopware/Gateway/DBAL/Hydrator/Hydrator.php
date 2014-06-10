@@ -4,7 +4,7 @@ namespace Shopware\Gateway\DBAL\Hydrator;
 
 class Hydrator
 {
-    protected function extractFields($prefix, $data)
+    public function extractFields($prefix, $data)
     {
         $result = array();
         foreach ($data as $field => $value) {
@@ -25,5 +25,19 @@ class Hydrator
             }
         }
         return $result;
+    }
+
+    protected function convertArrayKeys($data, $keys)
+    {
+        foreach($keys as $old => $new) {
+            if (!isset($data[$old])) {
+                continue;
+            }
+
+            $data[$new] = $data[$old];
+            unset($data[$old]);
+        }
+
+        return $data;
     }
 }

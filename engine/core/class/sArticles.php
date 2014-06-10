@@ -97,8 +97,7 @@ class sArticles
     /**
      * @var \Shopware\Service\GlobalState
      */
-    public $globalStateService;
-
+    private $contextService;
 
 
     /**
@@ -140,10 +139,10 @@ class sArticles
         $this->translationId = ($translationId)  ?: (!Shopware()->Shop()->getDefault() ? Shopware()->Shop()->getId() : null);
         $this->customerGroupId = $customerGroupId ?: ((int) Shopware()->Modules()->System()->sSYSTEM->sUSERGROUPDATA['id']);
 
-        $this->globalStateService = Shopware()->Container()->get('global_state_service');
+        $this->contextService = Shopware()->Container()->get('global_state_service');
 
         if ($globalState) {
-            $this->globalStateService = $globalState;
+            $this->contextService = $globalState;
         }
     }
 
@@ -2261,468 +2260,779 @@ class sArticles
      * Get one article with all available data
      * @param int $id article id
      * @param null $sCategoryID
+     * @param null $number
+     * @param array $selection
      * @access public
      * @return array
      */
-    public function sGetArticleById($id = 0, $sCategoryID = null)
+    public function sGetArticleById($id = 0, $sCategoryID = null, $number = null, array $selection = null)
     {
+        /**
+         * Validates the passed configuration array for the configurator selection
+         */
+        $configuration = $this->getCurrentConfiguration($selection);
 
-        if (empty($sCategoryID)) {
-            $sCategoryID = intval($this->sSYSTEM->_GET['sCategory']);
-        }
-        if (empty($sCategoryID) || $sCategoryID == $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["parentID"]) {
-            $sCategoryID = $this->sSYSTEM->sMODULES["sCategories"]->sGetCategoryIdByArticleId($id);
-            $this->sSYSTEM->_GET['sCategory'] = $sCategoryID;
-        }
-        $subShopJoin = "";
+        /**
+         * Checks which product id should be used.
+         *
+         * If an order number passed, the id of the order number should be used.
+         */
+        $productId = $this->getCurrentProductId($id, $number);
 
-        // If user is not logged in as admin, add subshop limitation for articles
-        if (empty(Shopware()->Session()->Admin)) {
-            $subShopJoin = "
-                INNER JOIN s_articles_categories_ro ac
-                    ON  ac.articleID = a.id
-                    AND ac.categoryID = {$this->categoryId}
-                INNER JOIN s_categories c
-                    ON  c.id = ac.categoryID
-                    AND c.active = 1
-            ";
-        }
-
-        $sql = "
-            SELECT
-                a.id as articleID,
-                aDetails.id as articleDetailsID,
-                TRIM(ordernumber) as ordernumber,
-                datum,
-                additionaltext,
-                aDetails.shippingtime,
-                aDetails.shippingfree,
-                aDetails.instock,
-                aDetails.minpurchase,
-                notification,
-                aDetails.purchasesteps,
-                aDetails.maxpurchase,
-                aDetails.purchaseunit,
-                aDetails.referenceunit,
-                aDetails.packunit,
-                aDetails.suppliernumber,
-                aDetails.ean,
-                aDetails.width,
-                aDetails.length,
-                aDetails.height,
-                weight,
-                a.laststock,
-                aDetails.unitID,
-                a.template,
-                a.pricegroupID,
-                a.pricegroupActive,
-                a.mode,
-                a.taxID,
-                a.description AS description,
-                a.metaTitle,
-                a.keywords,
-                a.description_long,
-                aSupplier.name AS supplierName,
-                aSupplier.img AS supplierImg,
-                aSupplier.id AS supplierID,
-                aSupplier.description AS supplierDescription,
-                a.name AS articleName,
-                IFNULL(p.price,p2.price) as price,
-                sales,
-                IF(p.pseudoprice,p.pseudoprice,p2.pseudoprice) as pseudoprice,
-                IFNULL(p.pricegroup,p2.pricegroup) as pricegroup,
-                tax,
-                attr1,attr2,attr3,attr4,attr5,attr6,attr7,attr8,attr9,attr10,
-                attr11,attr12,attr13,attr14,attr15,attr16,attr17,attr18,attr19,attr20,
-                filtergroupID,
-                a.crossbundlelook,
-                IF(aDetails.releasedate > CURDATE(), 1, 0) as sUpcoming,
-                IF(aDetails.releasedate > CURDATE(), aDetails.releasedate, '') as sReleasedate
-
-            FROM s_articles a
-
-            $subShopJoin
-
-            JOIN s_articles_details aDetails
-                ON aDetails.id=a.main_detail_id
-
-            JOIN s_core_tax AS aTax
-                ON a.taxID=aTax.id
-
-            JOIN s_articles_attributes AS aAttributes
-                ON aAttributes.articledetailsID=aDetails.id
-
-            LEFT JOIN s_articles_prices AS p
-                ON p.articledetailsID=aDetails.id
-                AND p.pricegroup='" . $this->sSYSTEM->sUSERGROUP . "'
-                AND p.from='1'
-
-            LEFT JOIN s_articles_prices AS p2
-                ON p2.articledetailsID=aDetails.id
-                AND p2.pricegroup='EK'
-                AND p2.from='1'
-
-            LEFT JOIN s_articles_supplier AS aSupplier
-            ON aSupplier.id=a.supplierID
-
-            LEFT JOIN s_articles_avoid_customergroups ag
-            ON ag.articleID=a.id
-            AND ag.customergroupID={$this->customerGroupId}
-
-            WHERE a.id=" . $id . "
-            AND ag.articleID IS NULL
-        ";
-
-        if (empty(Shopware()->Session()->Admin)) {
-            $sql .= "AND a.active=1";
-        }
-
-        $sql = Enlight()->Events()->filter('Shopware_Modules_Articles_GetArticleById_FilterSQL', $sql, array('subject' => $this, 'id' => $id, 'customergroup' => $this->sSYSTEM->sUSERGROUP));
-
-//        $this->sSYSTEM->_SESSION["sLastArticle"] = $this->sSYSTEM->_GET['sArticle']; // r302 save last visited article
-
-        $getArticle = $this->sSYSTEM->sDB_CONNECTION->CacheGetRow($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sql, false, "article_" . $id);
-
-        // If the article is empty at this point, it means something went wrong, and we should skip the following steps
-        if (empty($getArticle)) {
-            return array();
-        }
-
-        // Translate main - data
-        $getArticle = $this->sGetTranslation($getArticle, $id, "article", $this->sSYSTEM->sLanguage);
-
-        //mock a supplier array so we can use sGetTranslation
-        $supplier = array(
-            'description' => $getArticle['supplierDescription']
+        /**
+         * Checks which product number should be loaded. If a configuration passed.
+         */
+        $productNumber = $this->getCurrentProductNumber(
+            $productId,
+            $number,
+            $configuration
         );
-        $supplier = $this->sGetTranslation($supplier, $getArticle['supplierID'], 'supplier', $this->sSYSTEM->sLanguage);
-        $getArticle['supplierDescription'] = $supplier['description'];
 
-        /*
-          Calculating matching price SW 2.1
-          */
-        if ($getArticle["pricegroupActive"]) {
-            $getArticle["priceBeforePriceGroup"] = $getArticle["price"];
-            $getArticle["price"] = $this->sGetPricegroupDiscount($this->sSYSTEM->sUSERGROUP, $getArticle["pricegroupID"], $getArticle["price"], 1, false);
+        /**
+         * Check if a variant should be loaded. And load the configuration for the variant for pre selection.
+         *
+         * Requires the following scenario:
+         * 1. $number has to be set (without a number we can't load a configuration)
+         * 2. $number is equals to $productNumber (if the order number is invalid or inactive fallback to main variant)
+         * 3. $configuration is empty (Customer hasn't not set an own configuration)
+         */
+        if ($number && $number == $productNumber && empty($configuration)) {
+            $configuration = $this->getConfigurationByNumber($number);
         }
 
-        // If the article could found
-        if (count($getArticle) && $getArticle["articleID"]) {
-            $getArticle = Enlight()->Events()->filter('Shopware_Modules_Articles_GetArticleById_FilterArticle', $getArticle, array('subject' => $this, 'id' => $id, 'customergroup' => $this->sSYSTEM->sUSERGROUP));
-
-            // Grap related links
-            $getRelatedLinks = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], "
-                SELECT id, description, link, target FROM s_articles_information
-                WHERE articleID={$getArticle["articleID"]}
-                ", false, "article_" . $getArticle["articleID"]);
-            // Add 'http://' to link (if not set)
-            if (isset($getRelatedLinks[0])) {
-                foreach ($getRelatedLinks as $linkKey => $linkValue) {
-                    // Get possible link - translation
-                    $getRelatedLinks[$linkKey] = $this->sGetTranslation($linkValue, $linkValue["id"], "link", $this->sSYSTEM->sLanguage);
-
-                    if (!preg_match("/http/", $getRelatedLinks[$linkKey]["link"])) {
-                        $getRelatedLinks[$linkKey]["link"] = "http://" . $getRelatedLinks[$linkKey]["link"];
-                    }
-                    //$getRelatedLinks[$linkKey]["target"] = "_blank";	// Open external links in new brower window
-                    $getRelatedLinks[$linkKey]["supplierSearch"] = false;
-                }
-            }
-
-            // Building link 'More articles from this supplier'
-            // =================================================.
-            //
-            // This is most likely dead code. I'll update it for now, as part of SW-6977, but its
-            // not tested nor should it be in use anywhere
-            $link = $this->sSYSTEM->sCONFIG['sBASEFILE']
-                . "sViewport=supplier&sSupplier=" . $getArticle['supplierID']
-                . "&sSearchText=" . urlencode($getArticle['supplierName']);
-
-            $getRelatedLinks[count($getRelatedLinks)] = array("supplierSearch" => true,
-                "description" => $getArticle["supplierName"],
-                "link" => $link, "target" => "_parent");
-
-            $getArticle["sLinks"] = $getRelatedLinks;
-
-            if (function_exists("htmlspecialchars_decode")) {
-                $getArticle["description_long"] = htmlspecialchars_decode($getArticle["description_long"]);
-            }
-            $getArticle["articleName"] = $this->sOptimizeText($getArticle["articleName"]);
-
-            // If the user doesnï¿½t come from category-system, get related category
-            // SHOPWARE 2.1 //
-            // =================================================.
-            $sArticleID = intval($id);
-            if (!empty($sCategoryID)) {
-                $getArticle["categoryID"] = $sCategoryID;
-            }
-
-            // Get article accessories
-            // =================================================.
-            $getRelatedArticles = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], "
-                SELECT relatedarticle FROM s_articles_relationships WHERE articleID={$getArticle["articleID"]}
-                ", false, "article_" . $getArticle["articleID"]);
-            if (count($getRelatedArticles)) {
-                foreach ($getRelatedArticles as $relatedArticleValue) {
-                    $tmpContainer = $this->sGetPromotionById("fix", 0, (int) $relatedArticleValue['relatedarticle']);
-
-                    if (count($tmpContainer) && isset($tmpContainer["articleName"])) {
-                        $getArticle["sRelatedArticles"][] = $tmpContainer;
-                    }
-                }
-            } else {
-                $getArticle["sRelatedArticles"] = array();
-            }
-
-
-            // Get similar articles
-            // =================================================.
-            $getSimilarArticles = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'],
-                "SELECT relatedarticle FROM s_articles_similar WHERE articleID={$getArticle["articleID"]}",
-                array(), "article_" . $getArticle["articleID"]
-            );
-            if (count($getSimilarArticles)) {
-                foreach ($getSimilarArticles as $relatedArticleKey => $relatedArticleValue) {
-                    $tmpContainer = $this->sGetPromotionById("fix", 0, (int) $relatedArticleValue['relatedarticle']);
-                    if (count($tmpContainer) && isset($tmpContainer["articleName"])) {
-                        $getArticle["sSimilarArticles"][] = $tmpContainer;
-                    }
-                }
-            } else {
-
-                if (!empty( $sCategoryID )) {
-                    $similarLimit = $this->sSYSTEM->sCONFIG['sSIMILARLIMIT'] ? $this->sSYSTEM->sCONFIG['sSIMILARLIMIT'] : 3;
-                    $sqlGetCategory = "
-                    SELECT DISTINCT s_articles.id AS relatedarticle FROM s_articles_categories_ro, s_articles, s_articles_details
-                    WHERE s_articles_categories_ro.categoryID=" . $sCategoryID . "
-                    AND s_articles.id=s_articles_categories_ro.articleID AND s_articles.id=s_articles_details.articleID
-                    AND s_articles_details.kind=1
-                    AND s_articles.id!={$getArticle["articleID"]}
-                    AND s_articles.active=1
-                    ORDER BY s_articles_details.sales DESC LIMIT $similarLimit
-                    ";
-
-                    $getSimilarArticles = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sqlGetCategory, false, "article_" . $getArticle["articleID"]);
-
-                    foreach ($getSimilarArticles as $relatedArticleKey => $relatedArticleValue) {
-                        $tmpContainer = $this->sGetPromotionById("fix", 0, (int) $relatedArticleValue['relatedarticle']);
-                        if (count($tmpContainer) && isset($tmpContainer["articleName"])) {
-                            $getArticle["sSimilarArticles"][] = $tmpContainer;
-                        }
-                    }
-                }
-                if (!count($getSimilarArticles)) {
-                    $getArticle["sSimilarArticles"] = array();
-                }
-            }
-            // Check if available as esd-article
-            $getArticle["esd"] = $this->sCheckIfEsd($getArticle["articleID"], $getArticle["articleDetailsID"]);
-
-            // Get blockpricing
-            // =================================================.
-            if ($getArticle["pricegroupActive"]) {
-                // SW 2.1 Pricegroups
-                /*
-                    If prices were calculated via an active pricegroup - build discount matrix dynamicly
-                    */
-                $getArticle["sBlockPrices"] = $this->sGetPricegroupDiscount($this->sSYSTEM->sUSERGROUP, $getArticle["pricegroupID"], $getArticle["priceBeforePriceGroup"], 1, true, $getArticle);
-
-            } else {
-                /*
-                    Load defined discount-rules
-                    --
-                    Check if prices for this customergroup are available
-                    */
-                if ($getArticle["pricegroup"] != $this->sSYSTEM->sUSERGROUP) {
-                    $sql = "
-                        SELECT `from` AS valFrom,`to` AS valTo, price, pseudoprice FROM s_articles_prices WHERE articledetailsID={$getArticle["articleDetailsID"]}
-                        AND (pricegroup='EK')
-                        ORDER BY id ASC
-                        ";
-                } else {
-                    $sql = "
-                        SELECT `from` AS valFrom,`to` AS valTo, price, pseudoprice FROM s_articles_prices WHERE articledetailsID={$getArticle["articleDetailsID"]}
-                        AND (pricegroup='" . $this->sSYSTEM->sUSERGROUP . "')
-                        ORDER BY id ASC
-                        ";
-                }
-
-                $getBlockPricings = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sql, false, "article_" . $getArticle["articleID"]);
-                // If more then one row, there are block-prices
-                if (count($getBlockPricings) > 1) {
-                    foreach ($getBlockPricings as $blockPriceKey => $blockPriceValue) {
-                        $getBlockPricings[$blockPriceKey]["from"] = $blockPriceValue["valFrom"];
-                        $getBlockPricings[$blockPriceKey]["to"] = $blockPriceValue["valTo"];
-                        $getBlockPricings[$blockPriceKey]["price"] = $this->sCalculatingPrice($blockPriceValue["price"], $getArticle["tax"], $getArticle["taxID"], $getArticle);
-                        $getBlockPricings[$blockPriceKey]["pseudoprice"] = $this->sCalculatingPrice($blockPriceValue["pseudoprice"], $getArticle["tax"], $getArticle["taxID"], $getArticle);
-
-                    }
-                    $getArticle["sBlockPrices"] = $getBlockPricings;
-                } // block pricing
-                else {
-                    $getArticle["sBlockPrices"] = array();
-                }
-            }
-
-            $getArticle["sVariants"] = array();
-
-            // Default-values
-            if (!$getArticle["minpurchase"]) $getArticle["minpurchase"] = 1;
-
-            if (!$getArticle["maxpurchase"]) {
-
-                $getArticle["maxpurchase"] = $this->sSYSTEM->sCONFIG['sMAXPURCHASE'];
-            } else {
-
-            }
-            if (!$getArticle["purchasesteps"]) $getArticle["purchasesteps"] = 1;
-
-
-            // Read unit if set
-            if ($getArticle["unitID"]) {
-                $getArticle["sUnit"] = $this->sGetUnit($getArticle["unitID"]);
-            }
-
-            // Get cheapest price
-            $getArticle["priceStartingFrom"] = $this->sGetCheapestPrice($getArticle["articleID"], $getArticle["pricegroup"], $getArticle["pricegroupID"], $getArticle["pricegroupActive"]);
-
-            if ($getArticle["price"]) $getArticle["price"] = $this->sCalculatingPrice($getArticle["price"], $getArticle["tax"], $getArticle["taxID"], $getArticle);
-
-            // Load article-configurations
-            $getArticle = $this->sGetArticleConfig($getArticle["articleID"], $getArticle);
-
-            if ($getArticle["sConfigurator"]) {
-                if ($getArticle["pricegroupActive"]) {
-                    // The default variant's price group price is calculated above and is not overwritten by sGetArticleConfig
-                    if ($getArticle['sConfiguratorSelection']['kind'] !== 1) {
-                        $getArticle["priceBeforePriceGroup"] = $getArticle["price"];
-                        $getArticle["price"] = $this->sFormatPrice($this->sGetPricegroupDiscount($this->sSYSTEM->sUSERGROUP, $getArticle["pricegroupID"], str_replace(",", ".", $getArticle["price"]), 1, false));
-                    }
-                }
-            }
-
-            // Reformat prices
-            // =================================================.
-            if ($getArticle["pseudoprice"]) {
-                $getArticle["pseudoprice"] = $this->sCalculatingPrice(str_replace(",", ".", $getArticle["pseudoprice"]), $getArticle["tax"], $getArticle["taxID"], $getArticle);
-
-                $discPseudo = str_replace(",", ".", $getArticle["pseudoprice"]);
-                $discPrice = str_replace(",", ".", $getArticle["price"]);
-                if ($discPseudo > $discPrice) {
-                    $discount = round(($discPrice / $discPseudo * 100) - 100, 2) * -1;
-                    $getArticle["pseudopricePercent"] = array("int" => round($discount, 0), "float" => $discount);
-                }
-            }
-            if ($getArticle["priceStartingFrom"]) $getArticle["priceStartingFrom"] = $this->sCalculatingPrice($getArticle["priceStartingFrom"], $getArticle["tax"], $getArticle["taxID"], $getArticle);
-
-            // Calculating price for reference-unit
-            if ($getArticle["purchaseunit"] > 0 && $getArticle["referenceunit"]) {
-                $getArticle["purchaseunit"] = (float) $getArticle["purchaseunit"];
-                $getArticle["referenceunit"] = (float) $getArticle["referenceunit"];
-
-                $getArticle["referenceprice"] = $this->calculateReferencePrice(
-                    $getArticle["price"],
-                    $getArticle["purchaseunit"],
-                    $getArticle["referenceunit"]
-                );
-            } else {
-                unset($getArticle["purchaseunit"]);
-            }
-
-            // Get Article images
-            // =================================================.
-            $getArticle["image"] = $this->sGetArticlePictures($getArticle["articleID"], true, 4, $getArticle['ordernumber']);
-            $getArticle["images"] = $this->sGetArticlePictures($getArticle["articleID"], false, 0, $getArticle['ordernumber']);
-
-            // Links
-            // =================================================.
-            $getArticle["linkBasket"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=basket&sAdd=" . $getArticle["ordernumber"];
-            $getArticle["linkDetails"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sArticle=" . $getArticle["articleID"];
-            if (!empty($sCategoryID)) {
-                $getArticle["linkDetails"] .= '&sCategory=' . $sCategoryID;
-            }
-            $getArticle["linkDetailsRewrited"] = $this->sSYSTEM->sMODULES['sCore']->sRewriteLink($getArticle["linkDetails"], $getArticle["articleName"]);
-
-            $getArticle["linkNote"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=note&sAdd=" . $getArticle["ordernumber"];
-            $getArticle["linkTellAFriend"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=tellafriend&sDetails=" . $getArticle["articleID"];
-            $getArticle["linkCheaper"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=cheaper&sDetails=" . $getArticle["articleID"];
-            // PDF - Link
-
-
-//            $getArticle["linkPDF"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sDetails=" . $getArticle["articleID"] . "&sLanguage=" . $this->sSYSTEM->sLanguage . "&sPDF=1";
-
-            // Downloads
-            // =================================================.
-            $sql = "
-                SELECT id, description, filename, size FROM s_articles_downloads WHERE articleID = {$getArticle["articleID"]}
-                ";
-
-            $getArticleDownloads = $this->sSYSTEM->sDB_CONNECTION->CacheGetAll($this->sSYSTEM->sCONFIG['sCACHEARTICLE'], $sql, false, "article_" . $getArticle["articleID"]);
-            foreach ($getArticleDownloads as $articleDownloadKey => $articleDownloadValue) {
-                // Get possible download - translation
-                $getArticleDownloads[$articleDownloadKey] = $this->sGetTranslation($articleDownloadValue, $articleDownloadValue["id"], "download", $this->sSYSTEM->sLanguage);
-                // Construct filename
-                $getArticleDownloads[$articleDownloadKey]["filename"] = $this->sSYSTEM->sPathArticleFiles . "/" . $getArticleDownloads[$articleDownloadKey]["filename"];
-            }
-
-            $getArticle["sDownloads"] = $getArticleDownloads;
-
-            // Load bundled products
-            // was:
-            // $getArticle["sAccessories"] = $this->sGetArticleAccessories($getArticle["articleID"]);
-            // But $this->sGetArticleAccessories() always returned false.
-            $getArticle["sAccessories"] = false;
-
-            // Professional - Vote AVG
-            $getArticle["sVoteAverange"] = $this->sGetArticlesAverangeVote($getArticle["articleID"]);
-            $getArticle["sVoteComments"] = $this->sGetArticlesVotes($getArticle["articleID"]);
-
-
-            if (!empty($getArticle["images"])) {
-                foreach ($getArticle["images"] as &$image) {
-                    if ($image["relations"] == "&{}" || $image["relations"] == "||{}") {
-                        //$getArticle["images"][$key]["relations"] = "";
-                        $image["relations"] = "";
-                    }
-                }
-            }
-
-            if (!empty($getArticle["image"])) {
-                if ($getArticle["image"]["res"]["relations"] == "&{}" || $getArticle["image"]["res"]["relations"] == "||{}") {
-                    $getArticle["image"]["res"]["relations"] = "";
-                }
-            }
-
-            if (!empty($getArticle["filtergroupID"]) && $this->displayFiltersOnArticleDetailPage()) {
-                $getArticle["sProperties"] = $this->sGetArticleProperties($getArticle["articleID"], $getArticle["filtergroupID"]);
-            }
-
-            if ($this->showArticleNavigation()) {
-                $getArticle["sNavigation"] = $this->sGetAllArticlesInCategory($getArticle["articleID"]);
-            }
-
-            //sDescriptionKeywords
-            $string = (strip_tags(html_entity_decode($getArticle["description_long"], null, 'UTF-8')));
-            $string = str_replace(',','',$string);
-            $words = preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);
-            $badwords = explode(",", $this->sSYSTEM->sCONFIG['sBADWORDS']);
-            $words = array_diff($words, $badwords);
-            $words = array_count_values($words);
-            foreach (array_keys($words) as $word)
-                if (strlen($word) < 2)
-                    unset($words[$word]);
-            arsort($words);
-            $getArticle["sDescriptionKeywords"] = htmlspecialchars(implode(", ", array_slice(array_keys($words), 0, 20)), ENT_QUOTES, 'UTF-8', false);
+        $categoryId = (int)$sCategoryID;
+        if (empty($categoryId) || $categoryId == Shopware()->Shop()->getId()) {
+            $categoryId = Shopware()->Modules()->Categories()->sGetCategoryIdByArticleId($id);
         }
 
+        $product = $this->getProduct(
+            $productNumber,
+            $categoryId,
+            $configuration
+        );
 
-        // Deactivate bundle displaying
-        $getArticle['crossbundlelook'] = false;
-
-        $getArticle = Enlight()->Events()->filter('Shopware_Modules_Articles_GetArticleById_FilterResult', $getArticle, array('subject' => $this, 'id' => $id, 'isBlog' => $isBlog, 'customergroup' => $this->sSYSTEM->sUSERGROUP));
-
-        return $getArticle;
+        return $product;
     }
+
+
+    /**
+     * Helper function which loads a full product struct and converts the product struct
+     * to the shopware 3 array structure.
+     *
+     * @param $number
+     * @param $categoryId
+     * @param array $selection
+     * @return array
+     */
+    private function getProduct($number, $categoryId, array $selection)
+    {
+        $products = Shopware()->Container()->get('product_service')->getList(
+            array($number),
+            $this->contextService->get()
+        );
+        
+        /**@var $product \Shopware\Struct\Product */
+        $product = array_shift($products);
+
+        $data = $this->convertFullProduct($product, $categoryId);
+
+        $data['categoryID'] = $categoryId;
+
+        $average = Shopware()->Container()->get('vote_average_gateway')->get($product);
+
+        if ($average instanceof \Shopware\Struct\Product\VoteAverage) {
+            $data['sVoteAverange'] = $this->convertVoteAverageStruct($average);
+        }
+
+        $configurator = Shopware()->Container()->get('configurator_service')->getProductConfigurator(
+            $product,
+            $this->contextService->get(),
+            $selection
+        );
+        
+        $convertedConfigurator = $this->convertConfiguratorStruct($product, $configurator);
+
+        $data = array_merge($data, $convertedConfigurator);
+
+        $data = array_merge($data, $this->getLinksOfProduct($product, $categoryId));
+
+        $data["articleName"] = $this->sOptimizeText($data["articleName"]);
+        $data["description_long"] = htmlspecialchars_decode($data["description_long"]);
+
+        $data["sDescriptionKeywords"] = $this->getDescriptionKeywords(
+            $data["description_long"]
+        );
+
+        if ($this->showArticleNavigation()) {
+            $data["sNavigation"] = $this->sGetAllArticlesInCategory($product->getId());
+        }
+
+        $data['esd'] = $this->sCheckIfEsd($product->getId(), $product->getVariantId());
+
+        return $data;
+    }
+
+    /**
+     * Creates different links for the product like `add to basket`, `add to note`, `view detail page`, ...
+     *
+     * @param \Shopware\Struct\ListProduct $product
+     * @param null $categoryId
+     * @return array
+     */
+    private function getLinksOfProduct(\Shopware\Struct\ListProduct $product, $categoryId = null)
+    {
+        $baseFile = Shopware()->Config()->get('sBaseFile');
+
+        $detail = $baseFile . "?sViewport=detail&sArticle=" . $product->getId();
+        if ($categoryId) {
+            $detail .= '&sCategory=' . $categoryId;
+        }
+        $rewrite = Shopware()->Modules()->Core()->sRewriteLink($detail, $product->getName());
+
+        $basket = $baseFile . "?sViewport=basket&sAdd=" . $product->getNumber();
+        $note =  $baseFile . "?sViewport=note&sAdd=" . $product->getNumber();
+        $friend = $baseFile . "?sViewport=tellafriend&sDetails=" . $product->getId();
+        $pdf = $baseFile . "?sViewport=detail&sDetails=" . $product->getId() . "&sLanguage=" . $this->sSYSTEM->sLanguage . "&sPDF=1";
+
+        return array(
+            'linkBasket' => $basket,
+            'linkDetails' => $detail,
+            'linkDetailsRewrited' => $rewrite,
+            'linkNote' => $note,
+            'linkTellAFriend' => $friend,
+            'linkPDF' => $pdf,
+        );
+    }
+
+    private function getDescriptionKeywords($longDescription)
+    {
+        //sDescriptionKeywords
+        $string = (strip_tags(html_entity_decode($longDescription, null, 'UTF-8')));
+        $string = str_replace(',','',$string);
+        $words = preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);
+        $badwords = explode(",", $this->sSYSTEM->sCONFIG['sBADWORDS']);
+        $words = array_diff($words, $badwords);
+        $words = array_count_values($words);
+        foreach (array_keys($words) as $word)
+            if (strlen($word) < 2)
+                unset($words[$word]);
+        arsort($words);
+
+        return htmlspecialchars(
+            implode(", ", array_slice(array_keys($words), 0, 20)),
+            ENT_QUOTES,
+            'UTF-8',
+            false
+        );
+    }
+
+    /**
+     * Returns a single order number for the passed product configuration selection.
+     * Used for the product detail page.
+     *
+     * @param $productId
+     * @param array $selection
+     * @return mixed
+     */
+    private function getNumberBySelection($productId, array $selection)
+    {
+        $query = Shopware()->Models()->getDBALQueryBuilder();
+        $query->select(array('variant.ordernumber'))
+            ->from('s_articles_details', 'variant')
+            ->where('variant.articleID = :productId')
+            ->andWhere('variant.active = 1')
+            ->setFirstResult(0)
+            ->setMaxResults(1)
+            ->setParameter(':productId', $productId);
+
+        foreach($selection as $optionId) {
+            $alias = 'option_' . (int) $optionId;
+
+            $query->innerJoin(
+                'variant',
+                's_article_configurator_option_relations',
+                $alias,
+                'variant.id = ' . $alias . '.article_id
+                 AND ' . $alias . '.option_id = :' . $alias
+            );
+            $query->setParameter(':' . $alias, (int) $optionId);
+        }
+
+        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $query->execute();
+
+        return $statement->fetch(\PDO::FETCH_COLUMN);
+    }
+
+    /**
+     * Helper function which checks the different parameters which has to
+     * be considered on the product detail page.
+     *
+     * The passed $selection has the highest priority. This property contains
+     * the customer selection of the configuration options.
+     * If the selection isn't empty, the function returns the first possible
+     * variant number for the selection.
+     *
+     * The passed $number parameter has the second priority. If an order number
+     * passed to the product detail page, the detail page should be loaded
+     * directly for the specify product variation.
+     *
+     * At least the passed $id parameter is used to get the order number
+     * of the main variation.
+     *
+     * @param $id
+     * @param $number
+     * @param $selection
+     * @return mixed|string
+     */
+    private function getCurrentProductNumber($id, $number, $selection)
+    {
+        $selected = null;
+        if (!empty($selection)) {
+            $selected = $this->getNumberBySelection($id, $selection);
+        }
+
+        if ($selected) {
+            return $selected;
+        }
+
+        $query = Shopware()->Models()->getDBALQueryBuilder();
+        $query->select(array('variant.ordernumber'));
+        $query->from('s_articles_details', 'variant');
+
+        $query->innerJoin(
+            'variant',
+            's_articles',
+            'product',
+            'product.id = variant.articleID
+             AND (product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)
+             AND variant.active = 1'
+        );
+
+        if ($number !== null) {
+            $query->where('variant.ordernumber = :number')
+                ->setParameter(':number', $number);
+
+            $statement = $query->execute();
+            $selected = $statement->fetch(\PDO::FETCH_COLUMN);
+        }
+        
+        if ($selected) {
+            return $selected;
+        }
+
+        $query->where('variant.id = product.main_detail_id')
+            ->andWhere('product.id = :number')
+            ->setParameter(':number', $id);
+
+        $statement = $query->execute();
+
+        return $statement->fetch(\PDO::FETCH_COLUMN);
+    }
+
+    /**
+     * Helper function which used to get the configuration selection of
+     * the passed product number.
+     * The result array contains a simple array which elements are indexed by
+     * the configurator group id and the value contains the configurator option id.
+     *
+     * This function is required to load different product variations on the product
+     * detail page via order number.
+     *
+     * @param $number
+     * @return array
+     */
+    private function getConfigurationByNumber($number)
+    {
+        $query = Shopware()->Models()->getDBALQueryBuilder();
+        $query->select(array('groups.id', 'options.id'))
+            ->from('s_article_configurator_option_relations', 'configuration');
+
+        $query->innerJoin(
+            'configuration',
+            's_article_configurator_options',
+            'options',
+            'options.id = configuration.option_id'
+        );
+
+        $query->innerJoin(
+            'options',
+            's_article_configurator_groups',
+            'groups',
+            'groups.id = options.group_id'
+        );
+
+        $query->innerJoin(
+            'configuration',
+            's_articles_details',
+            'variant',
+            'variant.id = configuration.article_id
+             AND variant.ordernumber = :number'
+        );
+
+        $query->setParameter(':number', $number);
+
+        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $query->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
+    }
+
+    /**
+     * Helper function which checks which product id should be used.
+     * If only a product number passed to the product detail page,
+     * the function returns the associated product id for the product variation.
+     *
+     * The product id is required for following selections.
+     *
+     * @param $id
+     * @param null $number
+     * @return string
+     */
+    private function getCurrentProductId($id, $number = null)
+    {
+        if ($number == null) {
+            return $id;
+        }
+
+        return Shopware()->Db()->fetchOne(
+            "SELECT articleID FROM s_articles_details WHERE ordernumber = ?",
+            array($number)
+        );
+    }
+
+    /**
+     * Helper function which checks the passed $selection parameter for empty.
+     * If this is the case the function implements the fallback on the legacy
+     * _POST access to get the configuration selection directly of the request object.
+     *
+     * Additionally the function removes empty array elements.
+     * Array elements of the configuration selection can be empty, if the user resets the
+     * different group selections.
+     *
+     * @param $selection
+     * @return mixed
+     */
+    private function getCurrentConfiguration($selection)
+    {
+        if (empty($selection)) {
+            $selection = Shopware()->Front()->Request()->getParam('group');
+        }
+
+        foreach($selection as $groupId => $optionId) {
+            if (!$groupId || !$optionId) {
+                unset($selection[$groupId]);
+            }
+        }
+
+        return $selection;
+    }
+
+
+    private function convertConfiguratorStruct(
+        \Shopware\Struct\ListProduct $product,
+        \Shopware\Struct\Configurator\Set $set
+    ) {
+        $groups = array();
+        foreach ($set->getGroups() as $group) {
+            $groupData = $this->convertConfiguratorGroupStruct($group);
+
+            $options = array();
+            foreach($group->getOptions() as $option) {
+                $optionData = $this->convertConfiguratorOptionStruct(
+                    $group,
+                    $option
+                );
+
+                if ($option->isSelected()) {
+                    $groupData['selected_value'] = $option->getId();
+                }
+
+                $options[$option->getId()] = $optionData;
+            }
+
+            $groupData['values'] = $options;
+            $groups[] = $groupData;
+        }
+
+        $settings = $this->getConfiguratorSettings($set, $product);
+
+        $data = array(
+            'sConfigurator' => $groups,
+            'sConfiguratorSettings' => $settings
+        );
+
+        return $data;
+    }
+
+    /**
+     * Converts a configurator option struct which used for default or selection configurators.
+     *
+     * @param \Shopware\Struct\Configurator\Group $group
+     * @param \Shopware\Struct\Configurator\Option $option
+     * @return array
+     */
+    private function convertConfiguratorOptionStruct(
+        \Shopware\Struct\Configurator\Group $group,
+        \Shopware\Struct\Configurator\Option $option
+    ) {
+        return array(
+            'optionID' => $option->getId(),
+            'groupID' => $group->getId(),
+            'optionname' => $option->getName(),
+            'user_selected' => $option->isSelected(),
+            'selected' => $option->isSelected()
+        );
+    }
+
+    /**
+     * Converts a configurator group struct which used for default or selection configurators.
+     *
+     * @param \Shopware\Struct\Configurator\Group $group
+     * @return array
+     */
+    private function convertConfiguratorGroupStruct(\Shopware\Struct\Configurator\Group $group)
+    {
+        return array(
+            'groupID' => $group->getId(),
+            'groupname' => $group->getName(),
+            'groupdescription' => $group->getDescription(),
+            'selected_value' => null,
+            'selected' => $group->isSelected(),
+            'user_selected' => $group->isSelected()
+        );
+    }
+
+    /**
+     * Creates the settings array for the passed configurator set
+     *
+     * @param \Shopware\Struct\Configurator\Set $set
+     * @param \Shopware\Struct\Product $product
+     * @return array
+     */
+    private function getConfiguratorSettings(
+        \Shopware\Struct\Configurator\Set $set,
+        \Shopware\Struct\Product $product
+    ) {
+        $settings = array(
+            'instock' => $product->isCloseouts(),
+            'articleID' => $product->getId(),
+            'type' => $set->getType()
+        );
+
+        //switch the template for the different configurator types.
+        if ($set->getType() == 1) {
+            //Selection configurator
+            $settings["template"] = "article_config_step.tpl";
+
+        } elseif ($set->getType() == 2) {
+            //Table configurator
+            $settings["template"] = "article_config_table.tpl";
+
+        } else {
+            //Other configurator types
+            $settings["template"] = "article_config_upprice.tpl";
+        }
+
+        return $settings;
+    }
+
+    private function convertFullProduct(\Shopware\Struct\Product $product)
+    {
+        $data = array(
+            'articleID' => $product->getId(),
+            'articleDetailsID' => $product->getVariantId(),
+            'ordernumber' => $product->getNumber(),
+            'metaTitle' => $product->getMetaTitle(),
+            'datum' => $product->getCreatedAt(),
+            'suppliernumber' => $product->getManufacturerNumber(),
+            'additionaltext' => $product->getAdditional(),
+            'filtergroupID' => null,
+            'shippingtime' => $product->getShippingTime(),
+            'categoryID' => null,
+            'shippingfree' => $product->isShippingFree(),
+            'instock' => $product->getStock(),
+            'notification' => $product->allowsNotification(),
+            'ean' => $product->getEan(),
+            'width' => $product->getWidth(),
+            'length' => $product->getLength(),
+            'height' => $product->getHeight(),
+            'weight' => $product->getWeight(),
+            'laststock' => $product->isCloseouts(),
+            'taxID' => $product->getTax()->getId(),
+            'description' => $product->getShortDescription(),
+            'keywords' => $product->getKeywords(),
+            'description_long' => $product->getLongDescription(),
+            'articleName' => $product->getName(),
+            'tax' => $product->getTax()->getTax(),
+            'sReleasedate' => $product->getReleaseDate(),
+        );
+
+        $data = array_merge($data, array(
+            'template' => '',
+            'mode' => '0',
+            'crossbundlelook' => '0',
+            'sUpcoming' => '0'
+        ));
+
+        $data = array_merge(
+            $data,
+            array(
+                'minpurchase' => $product->getUnit()->getMinPurchase(),
+                'maxpurchase' => $product->getUnit()->getMaxPurchase(),
+                'purchasesteps' => $product->getUnit()->getPurchaseStep(),
+                'purchaseunit' => $product->getUnit()->getPurchaseUnit(),
+                'referenceunit' => $product->getUnit()->getReferenceUnit(),
+                'packunit' => $product->getUnit()->getPackUnit(),
+                'unitID' => $product->getUnit()->getId(),
+                'sUnit' => array(
+                    'unit' => $product->getUnit()->getUnit(),
+                    'description' => $product->getUnit()->getName()
+                )
+            )
+        );
+
+        //set defaults for detail page combo box.
+        if (!$data['maxpurchase']) {
+            $data['maxpurchase'] = 100;
+        }
+        if (!$data['purchasesteps']) {
+            $data['purchasesteps'] = 1;
+        }
+
+        $data = array_merge(
+            $data,
+            array(
+                'supplierName' => $product->getManufacturer()->getName(),
+                'supplierImg' => $product->getManufacturer()->getCoverFile(),
+                'supplierID' => $product->getManufacturer()->getId(),
+                'supplierDescription' => $product->getManufacturer()->getDescription(),
+            )
+        );
+
+        foreach ($product->getAttributes() as $attribute) {
+            $data = array_merge($data, $attribute->toArray());
+        }
+
+        if ($product->getPriceGroup()) {
+            $data = array_merge(
+                $data,
+                array(
+                    'pricegroupActive' => 1,
+                    'pricegroupID' => $product->getPriceGroup()->getId()
+                )
+            );
+        }
+
+        /**@var $first \Shopware\Struct\Product\Price */
+        $first = array_shift($product->getPrices());
+
+        $data['price'] = $first->getCalculatedPrice();
+        $data['pseudoprice'] = $first->getCalculatedPseudoPrice();
+        $data['pricegroup'] = $first->getCustomerGroup()->getKey();
+        $data['referenceprice'] = $first->getCalculatedReferencePrice();
+
+        if (count($product->getPrices()) > 1) {
+            foreach ($product->getPrices() as $price) {
+                $data['sBlockPrices'][] = $this->convertPriceStruct(
+                    $price
+                );
+            }
+        }
+
+        //convert all product images and set cover image
+        foreach ($product->getMedia() as $media) {
+            $data['images'][] = $this->convertMediaStruct($media);
+        }
+        $data['image'] = array_shift($data['images']);
+
+        //convert product voting        
+        foreach ($product->getVotes() as $vote) {
+            $data['sVoteComments'][] = $this->convertVoteStruct($vote);
+        }
+
+        $data['sProperties'] = $this->convertProductPropertyStruct(
+            $product->getPropertySet()
+        );
+
+        if ($product->getPropertySet()) {
+            $data['filtergroupID'] = $product->getPropertySet()->getId();
+        }
+
+        foreach ($product->getDownloads() as $download) {
+            $data['sDownloads'][] = array(
+                'id' => $download->getId(),
+                'description' => $download->getDescription(),
+                'filename' => $this->sSYSTEM->sPathArticleFiles . "/" . $download->getFile(),
+                'size' => $download->getSize()
+            );
+        }
+
+        foreach ($product->getLinks() as $link) {
+            $temp = array(
+                'id' => $link->getId(),
+                'description' => $link->getDescription(),
+                'link' => $link->getLink(),
+                'target' => $link->getTarget(),
+                'supplierSearch' => false,
+            );
+
+            if (!preg_match("/http/", $temp['link'])) {
+                $temp["link"] = "http://" . $link->getLink();
+            }
+
+            $data["sLinks"][] = $temp;
+        }
+
+        $data["sLinks"][] = array(
+            'supplierSearch' => true,
+            'description' => $product->getManufacturer()->getName(),
+            'target' => '_parent',
+            'link' => $this->getSupplierListingLink($product->getManufacturer())
+        );
+
+
+        foreach ($product->getRelatedProducts() as $relatedProduct) {
+            $temp = $this->convertProductStruct($relatedProduct);
+
+            //todo@dr promotion by id event here
+
+            $data['sRelatedArticles'][] = $temp;
+        }
+
+        foreach ($product->getSimilarProducts() as $similarProduct) {
+            $temp = $this->convertProductStruct($similarProduct);
+
+            //todo@dr promotion by id event here
+
+            $data['sSimilarArticles'][] = $temp;
+        }
+
+        return $data;
+    }
+
+    private function getSupplierListingLink(\Shopware\Struct\Product\Manufacturer $manufacturer)
+    {
+        return Shopware()->Config()->get('sBaseFile') .
+            "sViewport=supplier&sSupplier=" . $manufacturer->getId() .
+            "&sSearchText=" . urlencode($manufacturer->getName());
+    }
+
+    private function convertProductPropertyStruct(\Shopware\Struct\Property\Set $set)
+    {
+        $data = array();
+        if (!$set) {
+            return $data;
+        }
+        foreach ($set->getGroups() as $group) {
+            $groupData = array(
+                'id' => $group->getId(),
+                'optionID' => $group->getId(),
+                'name' => $group->getName(),
+                'groupID' => $set->getId(),
+                'groupName' => $set->getName(),
+                'values' =>
+                    array(
+                        0 => 'GekÃ¼hlt',
+                        1 => 'Zimmertemperatur',
+                    ),
+            );
+
+            $options = array();
+            foreach ($group->getOptions() as $option) {
+                $options[] = array(
+                    'id' => $option->getId(),
+                    'name' => $option->getName()
+                );
+            }
+
+            $groupData['values'] = array_column($options, 'name');
+            $groupData['value'] = implode(', ', $groupData['values']);
+
+            $data[$group->getId()] = $groupData;
+        }
+        return $data;
+    }
+
+
+    private function convertVoteAverageStruct(\Shopware\Struct\Product\VoteAverage $average)
+    {
+        return array(
+            'averange' => round($average->getAverage()),
+            'count' => $average->getCount(),
+            'pointCount' => $average->getPointCount()
+        );
+    }
+
+    private function convertVoteStruct(\Shopware\Struct\Product\Vote $vote)
+    {
+        $data = array(
+            'id' => $vote->getId(),
+            'name' => $vote->getName(),
+            'headline' => $vote->getHeadline(),
+            'comment' => $vote->getComment(),
+            'points' => $vote->getPoints(),
+            'active' => true,
+            'email' => $vote->getEmail(),
+            'answer' => $vote->getAnswer(),
+            'datum' => '0000-00-00 00:00:00',
+            'answer_date' => '0000-00-00 00:00:00'
+        );
+
+        if ($vote->getCreatedAt() instanceof DateTime) {
+            $data['datum'] = $vote->getCreatedAt()->format('Y-m-d H:i:s');
+        }
+
+        if ($vote->getAnsweredAt() instanceof DateTime) {
+            $data['answer_date'] = $vote->getAnsweredAt()->format('Y-m-d H:i:s');
+        }
+
+        return $data;
+    }
+
+    private function convertPriceStruct(\Shopware\Struct\Product\Price $price)
+    {
+        return array(
+            'valFrom' => $price->getFrom(),
+            'valTo' => $price->getTo(),
+            'from' => $price->getFrom(),
+            'to' => $price->getTo(),
+            'price' => $price->getCalculatedPrice(),
+            'pseudoprice' => $price->getCalculatedPseudoPrice()
+        );
+    }
+
+    private function convertMediaStruct(\Shopware\Struct\Media $media)
+    {
+        //now we get the configured image and thumbnail dir.
+        $imageDir = $this->sSYSTEM->sPathArticleImg;
+        $imageDir = str_replace('/media/image/', DIRECTORY_SEPARATOR, $imageDir);
+
+        $src = $media->getThumbnails();
+        foreach ($src as &$thumbnail) {
+            $thumbnail = $imageDir . $thumbnail;
+        }
+
+        $src['original'] = $imageDir . $media->getFile();
+
+        return array(
+            'id' => $media->getId(),
+            'position' => 1,
+            'extension' => $media->getExtension(),
+            'main' => $media->getPreview(),
+            'parentId' => null,
+            'attribute' => array(),
+            'src' => $src,
+            'res' => array(
+                'original' => array(
+                    'width' => 0,
+                    'height' => 0,
+                ),
+                'description' => $media->getDescription(),
+            )
+        );
+    }
+
 
     /**
      * calculates the reference price with the base price data
@@ -2739,6 +3049,7 @@ class sArticles
         $referenceUnit = (float) $referenceUnit;
 
         $price = floatval(str_replace(",", ".", $price));
+
         return $price / $purchaseUnit * $referenceUnit;
     }
 
@@ -3975,11 +4286,11 @@ class sArticles
 
     private function getPromotion($category, $number)
     {
-        $state = $this->globalStateService->get();
+        $context = $this->contextService->get();
 
         $product = Shopware()->Container()->get('list_product_service')->get(
             $number,
-            $state
+            $context
         );
 
         if (!$product) {
@@ -3989,7 +4300,10 @@ class sArticles
         $promotion = $this->convertProductStruct($product, $category);
 
         /**@var $average \Shopware\Struct\Product\VoteAverage*/
-        $average = Shopware()->Container()->get('vote_average_gateway')->get($product);
+        $average = Shopware()->Container()->get('vote_service')->getAverage(
+            $product,
+            $context
+        );
 
         if ($average && $average->getCount()) {
             $promotion['sVoteAverange'] = array(
@@ -4004,9 +4318,9 @@ class sArticles
             return $promotion;
         }
 
-        $propertySet = Shopware()->Container()->get('product_property_service')->get(
+        $propertySet = Shopware()->Container()->get('property_service')->get(
             $product,
-            $state
+            $context
         );
 
         if (!$propertySet) {
@@ -4042,21 +4356,49 @@ class sArticles
         return $promotion;
     }
 
+    /**
+     * Returns a listing of products. Used for the backward compatibility category listings.
+     * This function calls the new shopware core and converts the result to the old listing structure.
+     *
+     * @param $categoryId
+     * @return array
+     */
     private function getListing($categoryId)
     {
         $context = Shopware()->Container()->get('global_state_service')->get();
 
         $config = $this->loadCategoryConfig($categoryId);
 
-
         $criteria = $this->getListingCriteria(
             $categoryId,
             $config,
             $context
         );
-        $searchResult = Shopware()->Container()->get('search_gateway_dbal')->search($criteria);
+        
+        $searchResult = Shopware()->Container()->get('search_service')->search(
+            $criteria,
+            $context
+        );
 
-        $articles = $this->getProductsOfSearchResult($categoryId, $searchResult, $context);
+        $articles = array();
+
+        $averages = Shopware()->Container()->get('vote_service')->getAverages(
+            $searchResult->getProducts(),
+            $context
+        );
+
+        /**@var $product \Shopware\Struct\ListProduct*/
+        foreach($searchResult->getProducts() as $product) {
+            $article = $this->convertProductStruct($product, $categoryId);
+
+            if (array_key_exists($product->getNumber(), $averages)) {
+                $article['sVoteAverange'] = $this->convertVoteAverageStruct(
+                    $averages[$product->getNumber()]
+                );
+            }
+
+            $articles[] = $article;
+        }
 
         $result = array();
         foreach ($searchResult->getFacets() as $facet) {
@@ -4067,7 +4409,6 @@ class sArticles
 
                 case ($facet instanceof \Shopware\Gateway\Search\Facet\Manufacturer):
                     $suppliers = $this->getFacetManufacturers($facet, $context, $config);
-
                     $result['sSupplierInfo'] = $this->getActiveListingSupplier($suppliers, $config);
                     $result['sSuppliers'] = array_values($suppliers);
                     break;
@@ -4075,6 +4416,9 @@ class sArticles
                 case ($facet instanceof \Shopware\Gateway\Search\Facet\Price):
                     $result['priceFacet'] = $this->getPriceFacet($facet, $config);
                     break;
+
+                default:
+                    $result['facets'][] = $facet;
             }
         }
 
@@ -4112,46 +4456,6 @@ class sArticles
     }
 
     /**
-     * Extracts the product result of the passed search result.
-     *
-     * The function collects first all order numbers of the product result
-     * and requests the listing product data over the list_product_service.
-     *
-     * In the second step the function converts the passed data into the shopware 3-4 array structure.
-     *
-     * @param $categoryId
-     * @param \Shopware\Gateway\Search\Result $result
-     * @param \Shopware\Struct\Context $context
-     * @return array
-     */
-    private function getProductsOfSearchResult(
-        $categoryId,
-        \Shopware\Gateway\Search\Result $result,
-        \Shopware\Struct\Context $context
-    ) {
-        $numbers = array();
-        foreach ($result->getProducts() as $product) {
-            $numbers[] = $product->getNumber();
-        }
-
-        $products = Shopware()->Container()->get('list_product_service')
-            ->getList($numbers, $context);
-
-        $articles = array();
-        foreach ($numbers as $number) {
-            $product = $products[$number];
-
-            if (!$product) {
-                continue;
-            }
-
-            $articles[] = $this->convertProductStruct($product, $categoryId);
-        }
-
-        return $articles;
-    }
-
-    /**
      * @param $categoryId
      * @param array $config
      * @param Shopware\Struct\Context $context
@@ -4161,30 +4465,32 @@ class sArticles
     {
         $criteria = new \Shopware\Gateway\Search\Criteria();
 
-        $criteria->category($categoryId);
+        $criteria->category(array($categoryId));
 
-        $criteria->customerGroup($context->getCurrentCustomerGroup()->getId());
+        $criteria->customerGroup(
+            array($context->getCurrentCustomerGroup()->getId())
+        );
 
         $criteria->limit = $config['sPerPage'];
 
         $criteria->offset = ($config['page'] - 1) * $config['sPerPage'];;
 
         if (!empty($config['sFilterProperties'])) {
-            $properties = explode('|', $config['sFilterProperties']);
-
-            $criteria->properties($properties);
+            $criteria->properties(
+                explode('|', $config['sFilterProperties'])
+            );
         }
 
         if (!empty($config['sSupplier'])) {
-            $criteria->manufacturer($config['sSupplier']);
+            $criteria->manufacturer(
+                array($config['sSupplier'])
+            );
         }
 
         if ($config['priceMax']) {
             $criteria->price(
                 (float) $config['priceMin'],
-                (float) $config['priceMax'],
-                $context->getCurrentCustomerGroup(),
-                $context->getFallbackCustomerGroup()
+                (float) $config['priceMax']
             );
         }
 
@@ -4196,18 +4502,10 @@ class sArticles
                 $criteria->sortByPopularity('DESC');
                 break;
             case 3:
-                $criteria->sortByPrice(
-                    $context->getCurrentCustomerGroup(),
-                    $context->getFallbackCustomerGroup(),
-                    'ASC'
-                );
+                $criteria->sortByCheapestPrice();
                 break;
             case 4:
-                $criteria->sortByPrice(
-                    $context->getCurrentCustomerGroup(),
-                    $context->getFallbackCustomerGroup(),
-                    'DESC'
-                );
+                $criteria->sortByHighestPrice();
                 break;
             case 5:
                 $criteria->sortByDescription();
@@ -4218,14 +4516,10 @@ class sArticles
             default:
                 $criteria->sortByReleaseDate('DESC');
         }
-        $criteria->propertyFacet();
 
-        $criteria->manufacturerFacet();
-
-        $criteria->priceFacet(
-            $context->getCurrentCustomerGroup(),
-            $context->getFallbackCustomerGroup()
-        );
+        $criteria->propertyFacet()
+            ->priceFacet()
+            ->manufacturerFacet();
 
         return $criteria;
     }
@@ -4237,7 +4531,10 @@ class sArticles
         return array(
             'active' => (isset($config['priceMax']) && $config['priceMax'] > 0),
             'removeLink' => $this->buildListingLink($params),
-            'range' => $facet->range
+            'range' => array(
+                'min' => $facet->getMinPrice(),
+                'max' => $facet->getMaxPrice()
+            )
         );
     }
 
@@ -4246,22 +4543,13 @@ class sArticles
         \Shopware\Struct\Context $context,
         array $config
     ) {
-        $ids = array_column($facet->manufacturers, 'id');
-
-        $manufacturers = Shopware()->Container()->get('manufacturer_service')->getList(
-            $ids,
-            $context
-        );
+        $manufacturers = $facet->getManufacturers();
 
         $data = array();
         $params = $this->getListingLinkParameters($config);
 
-        foreach ($facet->manufacturers as $info) {
-            $struct = $manufacturers[$info['id']];
-
-            if (!$struct) {
-                continue;
-            }
+        $filteredManufacturer = null;
+        foreach ($manufacturers as $struct) {
 
             $params = array_merge($params, array('sSupplier' => $struct->getId()));
 
@@ -4269,8 +4557,10 @@ class sArticles
             $manufacturer['supplier_link'] = $manufacturer['link'];
             $manufacturer['link'] = $this->buildListingLink($params);
 
-            $manufacturer['countSuppliers'] = $info['total'];
-            $data[$info['id']] = $manufacturer;
+            $attribute = $struct->getAttribute('facet');
+            $manufacturer['countSuppliers'] = $attribute->get('total');
+            
+            $data[$struct->getId()] = $manufacturer;
         }
 
         return $data;
@@ -4298,17 +4588,14 @@ class sArticles
         \Shopware\Struct\Context $context,
         array $config
     ) {
-        $ids = array_keys($facet->properties);
-        $properties = Shopware()->Container()->get('property_service')->getList(
-            $ids,
-            $context
-        );
+
+        $properties = $facet->getProperties();
 
         $data = array();
         foreach ($properties as $propertySet) {
             $data[] = $this->convertPropertySetStruct(
                 $propertySet,
-                $facet->properties,
+                $properties,
                 $config
             );
         }
@@ -4335,9 +4622,9 @@ class sArticles
 
                     $option['link'] = $this->buildListingLink($params);
 
-                    $option['active'] = in_array($option['id'], $filteredOptions);
+                    $option['active'] = $option['attributes']['facet']['active'];
 
-                    $option['total'] = $facet->properties[$option['id']];
+                    $option['total'] = $option['attributes']['facet']['total'];
 
                     if ($option['active']) {
                         $activeGroupOptions[] = $option['id'];
@@ -4361,7 +4648,6 @@ class sArticles
                 $set['active'] = (bool)(!empty($activeSetGroups));
             }
         }
-
         return $data;
     }
 
@@ -4615,6 +4901,10 @@ class sArticles
      */
     private function convertProductStruct(\Shopware\Struct\ListProduct $product, $category = null)
     {
+        if (!$product instanceof \Shopware\Struct\ListProduct) {
+            return array();
+        }
+
         //required for backward compatibility
         if (!$product->getCheapestPrice()) {
             $cheapestPrice = $product->getPrices();
@@ -4692,7 +4982,6 @@ class sArticles
             $promotion['referenceprice'] = $referencePrice;
         }
 
-
         if ($product->getPriceGroup()) {
             $promotion['pricegroupActive'] = true;
             $promotion['pricegroupID'] = $product->getPriceGroup()->getId();
@@ -4715,14 +5004,14 @@ class sArticles
 
         if ($unit) {
             $promotion = array_merge($promotion, array(
-                    'purchaseunit' => $unit->getPurchaseUnit(),
-                    'referenceunit' => $unit->getReferenceUnit(),
-                    'unitID' => $unit->getId(),
-                    'sUnit' => array(
-                        'unit' => $unit->getUnit(),
-                        'description' => $unit->getName(),
-                    )
-                ));
+                'purchaseunit' => $unit->getPurchaseUnit(),
+                'referenceunit' => $unit->getReferenceUnit(),
+                'unitID' => $unit->getId(),
+                'sUnit' => array(
+                    'unit' => $unit->getUnit(),
+                    'description' => $unit->getName(),
+                )
+            ));
         }
 
         if ($product->getAttributes()) {
@@ -4735,39 +5024,23 @@ class sArticles
         }
 
         if ($product->getCover()) {
-            //now we get the configured image and thumbnail dir.
-            $imageDir = $this->sSYSTEM->sPathArticleImg;
-            $imageDir = str_replace('/media/image/', DIRECTORY_SEPARATOR, $imageDir);
-
-            $src = $product->getCover()->getThumbnails();
-            foreach($src as &$thumbnail) {
-                $thumbnail = $imageDir . $thumbnail;
-            }
-
-            $src['original'] = $imageDir . $product->getCover()->getFile();
-
-            $promotion['image'] = array(
-                'src' => $src,
-                'res' => array(
-                    'original' => array(
-                        'width' => 0,
-                        'height' => 0,
-                    ),
-                    'description' => $product->getCover()->getDescription(),
-                ),
-                'position' => 1,
-                'extension' => $product->getCover()->getExtension(),
-                'main' => $product->getCover()->getPreview(),
-                'id' => $product->getCover()->getId(),
-                'parentId' => NULL,
-                'attribute' => array(),
-            );
+            $promotion['image'] = $this->convertMediaStruct($product->getCover());
         }
 
-        $promotion["linkBasket"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] .
+
+        if ($product->getCreatedAt()) {
+            $markNew = (int) Shopware()->Config()->get('sMarkAsNew');
+            $today = new DateTime();
+            $diff = $today->diff($product->getCreatedAt());
+
+            $promotion['newArticle'] = ($diff->days <= $markNew || $product->getCreatedAt() > $today);
+        }
+
+
+        $promotion["linkBasket"] = Shopware()->Config()->get('sBASEFILE') .
             "?sViewport=basket&sAdd=" . $promotion["ordernumber"];
 
-        $promotion["linkDetails"] = $this->sSYSTEM->sCONFIG['sBASEFILE'] .
+        $promotion["linkDetails"] = Shopware()->Config()->get('sBASEFILE') .
             "?sViewport=detail&sArticle=" . $promotion["articleID"];
 
         if (!empty($category)
@@ -4785,11 +5058,12 @@ class sArticles
             'id' => $set->getId(),
             'name' => $set->getName(),
             'isComparable' => $set->isComparable(),
-            'groups' => array()
+            'groups' => array(),
+            'attributes' => array()
         );
 
-        foreach ($set->getAttributes() as $attribute) {
-            $data = array_merge($data, $attribute->toArray());
+        foreach ($set->getAttributes() as $key => $attribute) {
+            $data['attributes'][$key] = $attribute->toArray();
         }
 
         foreach ($set->getGroups() as $group) {
@@ -4805,8 +5079,13 @@ class sArticles
             'id' => $group->getId(),
             'name' => $group->getName(),
             'isFilterable' => $group->isFilterable(),
-            'options' => array()
+            'options' => array(),
+            'attributes' => array()
         );
+
+        foreach($group->getAttributes() as $key => $attribute) {
+            $data['attributes'][$key] = $attribute->toArray();
+        }
 
         foreach ($group->getOptions() as $option) {
             $data['options'][] = $this->convertPropertyOptionStruct($option);
@@ -4817,10 +5096,17 @@ class sArticles
 
     private function convertPropertyOptionStruct(\Shopware\Struct\Property\Option $option)
     {
-        return array(
+        $data = array(
             'id' => $option->getId(),
-            'name' => $option->getName()
+            'name' => $option->getName(),
+            'attributes' => array()
         );
+
+        foreach($option->getAttributes() as $key => $attribute) {
+            $data['attributes'][$key] = $attribute->toArray();
+        }
+
+        return $data;
     }
 
     private function convertManufacturerStruct(\Shopware\Struct\Product\Manufacturer $manufacturer)

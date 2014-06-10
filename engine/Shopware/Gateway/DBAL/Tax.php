@@ -6,7 +6,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Struct as Struct;
 use Shopware\Gateway\DBAL\Hydrator;
 
-class Tax extends Gateway
+class Tax
 {
     /**
      * @var \Shopware\Gateway\DBAL\Hydrator\Tax
@@ -14,15 +14,33 @@ class Tax extends Gateway
     private $taxHydrator;
 
     /**
+     * The FieldHelper class is used for the
+     * different table column definitions.
+     *
+     * This class helps to select each time all required
+     * table data for the store front.
+     *
+     * Additionally the field helper reduce the work, to
+     * select in a second step the different required
+     * attribute tables for a parent table.
+     *
+     * @var FieldHelper
+     */
+    private $fieldHelper;
+
+    /**
      * @param \Shopware\Components\Model\ModelManager $entityManager
+     * @param FieldHelper $fieldHelper
      * @param Hydrator\Tax $taxHydrator
      */
     function __construct(
         ModelManager $entityManager,
+        FieldHelper $fieldHelper,
         Hydrator\Tax $taxHydrator
     ) {
         $this->entityManager = $entityManager;
         $this->taxHydrator = $taxHydrator;
+        $this->fieldHelper = $fieldHelper;
     }
 
     /**
@@ -39,13 +57,7 @@ class Tax extends Gateway
         Struct\Country\State $state = null
     ) {
         $query = $this->entityManager->getDBALQueryBuilder();
-        $query->select(
-            array(
-                'tax.id',
-                'tax.description as name',
-                'tax.tax'
-            )
-        )
+        $query->select($this->fieldHelper->getTaxFields())
             ->from('s_core_tax', 'tax');
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
@@ -62,22 +74,21 @@ class Tax extends Gateway
         );
 
         foreach ($data as $tax) {
-            $query->setParameter(':taxId', $tax['id']);
+            $query->setParameter(':taxId', $tax['__tax_id']);
 
             /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
             $statement = $query->execute();
 
             $area = $statement->fetch(\PDO::FETCH_ASSOC);
 
-            if (!empty($area['tax'])) {
-                $area['name'] = $tax['name'];
-
-                $rule = $this->taxHydrator->hydrate($area);
+            if (!empty($area['__taxRule_tax'])) {
+                $area['__taxRule_name'] = $tax['__tax_description'];
+                $rule = $this->taxHydrator->hydrateRule($area);
             } else {
                 $rule = $this->taxHydrator->hydrate($tax);
             }
 
-            $key = 'tax_' . $tax['id'];
+            $key = 'tax_' . $tax['__tax_id'];
             $rules[$key] = $rule;
         }
 
@@ -93,39 +104,33 @@ class Tax extends Gateway
 
         $query = $this->entityManager->getDBALQueryBuilder();
 
-        $query->select(
-            array(
-                'rule.groupID as id',
-                'rule.tax',
-                'rule.name'
-            )
-        );
+        $query->select($this->fieldHelper->getTaxRuleFields());
 
-        $query->from('s_core_tax_rules', 'rule');
+        $query->from('s_core_tax_rules', 'taxRule');
 
         $areaId = ($area) ? $area->getId() : null;
         $countryId = ($country) ? $country->getId() : null;
         $stateId = ($state) ? $state->getId() : null;
 
-        $query->andWhere('(rule.areaID = :area OR rule.areaID IS NULL)')
+        $query->andWhere('(taxRule.areaID = :area OR taxRule.areaID IS NULL)')
             ->setParameter(':area', $areaId);
 
-        $query->andWhere('(rule.countryID = :country OR rule.countryID IS NULL)')
+        $query->andWhere('(taxRule.countryID = :country OR taxRule.countryID IS NULL)')
             ->setParameter(':country', $countryId);
 
-        $query->andWhere('(rule.stateID = :state OR rule.stateID IS NULL)')
+        $query->andWhere('(taxRule.stateID = :state OR taxRule.stateID IS NULL)')
             ->setParameter(':state', $stateId);
 
-        $query->andWhere('(rule.customer_groupID = :customerGroup OR rule.customer_groupID IS NULL)')
+        $query->andWhere('(taxRule.customer_groupID = :customerGroup OR taxRule.customer_groupID IS NULL)')
             ->setParameter(':customerGroup', $customerGroup->getId());
 
-        $query->andWhere('rule.groupID = :taxId')
-            ->andWhere('rule.active = 1');
+        $query->andWhere('taxRule.groupID = :taxId')
+            ->andWhere('taxRule.active = 1');
 
-        $query->orderBy('rule.customer_groupID', 'DESC')
-            ->addOrderBy('rule.areaID', 'DESC')
-            ->addOrderBy('rule.countryID', 'DESC')
-            ->addOrderBy('rule.stateID', 'DESC');
+        $query->orderBy('taxRule.customer_groupID', 'DESC')
+            ->addOrderBy('taxRule.areaID', 'DESC')
+            ->addOrderBy('taxRule.countryID', 'DESC')
+            ->addOrderBy('taxRule.stateID', 'DESC');
 
         $query->setFirstResult(0)
             ->setMaxResults(1);

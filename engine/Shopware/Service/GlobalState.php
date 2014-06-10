@@ -72,6 +72,10 @@ class GlobalState
             $this->createShopStruct($shop)
         );
 
+        $context->setCurrency(
+            $this->createCurrencyStruct($shop->getCurrency())
+        );
+
         $context->setCurrentCustomerGroup(
             $this->customerGroupGateway->get($key)
         );
@@ -83,21 +87,24 @@ class GlobalState
         $area = null;
         if ($session->offsetGet('sArea')) {
             $area = $this->countryGateway->getArea(
-                $session->offsetGet('sArea')
+                $session->offsetGet('sArea'),
+                $context
             );
         }
 
         $country = null;
         if ($session->offsetGet('sCountry')) {
             $country = $this->countryGateway->getCountry(
-                $session->offsetGet('sCountry')
+                $session->offsetGet('sCountry'),
+                $context
             );
         }
 
         $state = null;
         if ($session->offsetGet('sState')) {
             $state = $this->countryGateway->getState(
-                $session->offsetGet('sState')
+                $session->offsetGet('sState'),
+                $context
             );
         }
 
@@ -107,7 +114,7 @@ class GlobalState
             $country,
             $state
         );
-
+        
         $context->setArea($area);
 
         $context->setCountry($country);
@@ -115,10 +122,6 @@ class GlobalState
         $context->setState($state);
 
         $context->setTaxRules($rules);
-
-        $context->setCurrency(
-            $this->createCurrencyStruct($shop->getCurrency())
-        );
 
         $this->context = $context;
     }
@@ -163,6 +166,7 @@ class GlobalState
     {
         $struct = new Struct\Shop();
         $struct->setId($shop->getId());
+
         $struct->setName($shop->getName());
         $struct->setHost($shop->getHost());
         $struct->setPath($shop->getBasePath());

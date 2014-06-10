@@ -7,6 +7,7 @@ use Shopware\Gateway\DBAL\Search;
 use Shopware\Gateway\DBAL\SearchPriceHelper;
 use Shopware\Gateway\Search\Criteria;
 use Shopware\Gateway\Search\Facet;
+use Shopware\Struct\Context;
 
 class Price extends DBAL
 {
@@ -30,34 +31,36 @@ class Price extends DBAL
 
     /**
      * @param \Shopware\Gateway\Search\Facet|\Shopware\Gateway\Search\Facet\Price $facet
-     * @param QueryBuilder $query
+     * @param \Shopware\Components\Model\DBAL\QueryBuilder $query
      * @param \Shopware\Gateway\Search\Criteria $criteria
+     * @param Context $context
      * @return \Shopware\Gateway\Search\Facet\Category
      */
     public function generateFacet(
         Facet $facet,
         QueryBuilder $query,
-        Criteria $criteria
+        Criteria $criteria,
+        Context $context
     ) {
         $query->resetQueryPart('orderBy');
         $query->resetQueryPart('groupBy');
 
         /**@var $condition \Shopware\Gateway\Search\Condition\Price */
         if ($condition = $criteria->getCondition('price')) {
-            $facet->range = array(
-                'min' => $condition->min,
-                'max' => $condition->max
-            );
+            $facet->setMinPrice($condition->getMinPrice());
+            $facet->setMaxPrice($condition->getMaxPrice());
             return $facet;
         }
 
         $this->priceHelper->joinPrices(
             $query,
-            $facet->currentCustomerGroup,
-            $facet->fallbackCustomerGroup
+            $context->getCurrentCustomerGroup(),
+            $context->getFallbackCustomerGroup()
         );
 
-        $selection = $this->priceHelper->getCheapestPriceSelection($facet->currentCustomerGroup);
+        $selection = $this->priceHelper->getCheapestPriceSelection(
+            $context->getCurrentCustomerGroup()
+        );
 
         $query->select(
             array(
@@ -80,10 +83,8 @@ class Price extends DBAL
 
         $max = $statement->fetch(\PDO::FETCH_COLUMN);
 
-        $facet->range = array(
-            'min' => $min,
-            'max' => $max
-        );
+        $facet->setMinPrice($min);
+        $facet->setMaxPrice($max);
 
         return $facet;
     }

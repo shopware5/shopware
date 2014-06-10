@@ -140,10 +140,12 @@ class GraduatedPrices
             if (!array_key_exists($number, $discounts)) {
                 continue;
             }
+            if (empty($discounts[$number])) {
+                continue;
+            }
 
             $productDiscounts = $discounts[$number];
-
-            $firstGraduation = $prices[$number][0];
+            $firstGraduation = array_shift($prices[$number]);
             
             $prices[$number] = $this->buildDiscountGraduations(
                 $product,
@@ -152,7 +154,7 @@ class GraduatedPrices
                 $productDiscounts
             );
         }
-
+        
         return $prices;
     }
 
@@ -216,7 +218,6 @@ class GraduatedPrices
 
         return $prices;
     }
-
 
     /**
      * Helper function which iterates the products and builds a price array which indexed

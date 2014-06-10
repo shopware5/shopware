@@ -6,15 +6,31 @@ use Shopware\Gateway\Search\Condition;
 
 class Property extends Condition
 {
-    public $values = array();
+    /**
+     * @var array
+     */
+    private $valueIds = array();
 
-    function __construct(array $values)
+    /**
+     * @param array $valueIds
+     */
+    function __construct(array $valueIds)
     {
-        $this->values = $values;
+        $this->valueIds = $valueIds;
     }
 
     public function getName()
     {
         return 'property';
     }
+
+    /**
+     * @return array
+     */
+    public function getValueIds()
+    {
+        return $this->valueIds;
+    }
+
+
 }

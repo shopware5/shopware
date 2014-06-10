@@ -3,6 +3,8 @@
 namespace Shopware\Gateway\DBAL\Hydrator;
 
 use Shopware\Struct as Struct;
+use Shopware\Components\Thumbnail\Manager;
+use Shopware\Models;
 
 class Media extends Hydrator
 {
@@ -12,11 +14,18 @@ class Media extends Hydrator
     private $attributeHydrator;
 
     /**
-     * @param Attribute $attributeHydrator
+     * @var Manager
      */
-    function __construct(Attribute $attributeHydrator)
+    private $thumbnailManager;
+
+    /**
+     * @param Attribute $attributeHydrator
+     * @param \Shopware\Components\Thumbnail\Manager $thumbnailManager
+     */
+    function __construct(Attribute $attributeHydrator, Manager $thumbnailManager)
     {
         $this->attributeHydrator = $attributeHydrator;
+        $this->thumbnailManager = $thumbnailManager;
     }
 
     /**
@@ -27,23 +36,29 @@ class Media extends Hydrator
     {
         $media = new Struct\Media();
 
-        $media->setId($data['id']);
+        $media->setId($data['__media_id']);
 
-        $media->setName($data['name']);
+        $media->setName($data['__image_description']);
 
-        $media->setDescription($data['description']);
+        $media->setDescription($data['__media_description']);
 
-        $media->setType($data['type']);
+        $media->setType($data['__media_type']);
 
-        $media->setExtension($data['extension']);
+        $media->setExtension($data['__media_extension']);
 
-        $media->setFile($data['path']);
+        $media->setFile($data['__media_path']);
 
-        $media->setThumbnails($data['thumbnails']);
+        if ($media->getType() == Models\Media\Media::TYPE_IMAGE
+            && $data['__mediaSettings_create_thumbnails']) {
 
-        if (!empty($data['__attribute_id'])) {
+            $media->setThumbnails(
+                $this->getMediaThumbnails($data)
+            );
+        }
+
+        if (!empty($data['__mediaAttribute_id'])) {
             $attribute = $this->attributeHydrator->hydrate(
-                $this->extractFields('__attribute_', $data)
+                $this->extractFields('__mediaAttribute_', $data)
             );
             $media->addAttribute('media', $attribute);
         }
@@ -59,7 +74,7 @@ class Media extends Hydrator
     {
         $media = $this->hydrate($data);
 
-        $media->setPreview(($data['__image_main'] == 1));
+        $media->setPreview((bool) ($data['__image_main'] == 1));
 
         if (!empty($data['__imageAttribute_id'])) {
             $attribute = $this->attributeHydrator->hydrate(
@@ -70,6 +85,28 @@ class Media extends Hydrator
         }
 
         return $media;
+    }
+
+
+    /**
+     * @param array $data Contains the array data for the media
+     * @return array
+     */
+    private function getMediaThumbnails(array $data)
+    {
+        $sizes = explode(';', $data['__mediaSettings_thumbnail_size']);
+
+        $entity = new Models\Media\Media();
+        $entity->fromArray(array(
+            'type' => $data['__media_type'],
+            'name' => $data['__media_name'],
+            'extension' => $data['__media_extension']
+        ));
+
+        return $this->thumbnailManager->getMediaThumbnails(
+            $entity,
+            $sizes
+        );
     }
 
 }

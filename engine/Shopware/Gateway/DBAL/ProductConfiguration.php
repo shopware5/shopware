@@ -7,7 +7,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Gateway\DBAL\Hydrator;
 use Shopware\Struct;
 
-class ProductConfiguration extends Gateway
+class ProductConfiguration
 {
     /**
      * @var Hydrator\Configurator
@@ -15,15 +15,33 @@ class ProductConfiguration extends Gateway
     private $configuratorHydrator;
 
     /**
+     * The FieldHelper class is used for the
+     * different table column definitions.
+     *
+     * This class helps to select each time all required
+     * table data for the store front.
+     *
+     * Additionally the field helper reduce the work, to
+     * select in a second step the different required
+     * attribute tables for a parent table.
+     *
+     * @var FieldHelper
+     */
+    private $fieldHelper;
+
+    /**
      * @param ModelManager $entityManager
+     * @param FieldHelper $fieldHelper
      * @param Hydrator\Configurator $configuratorHydrator
      */
     function __construct(
         ModelManager $entityManager,
+        FieldHelper $fieldHelper,
         Hydrator\Configurator $configuratorHydrator
     ) {
         $this->entityManager = $entityManager;
         $this->configuratorHydrator = $configuratorHydrator;
+        $this->fieldHelper = $fieldHelper;
     }
 
     /**
@@ -39,8 +57,9 @@ class ProductConfiguration extends Gateway
 
         $query = $this->getQuery()
             ->select('variants.ordernumber as number')
-            ->addSelect($this->getGroupFields())
-            ->addSelect($this->getOptionFields());
+            ->addSelect($this->fieldHelper->getConfiguratorGroupFields())
+            ->addSelect($this->fieldHelper->getConfiguratorOptionFields())
+        ;
 
         $query->where('relations.article_id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
@@ -74,37 +93,17 @@ class ProductConfiguration extends Gateway
         $query->innerJoin(
             'relations',
             's_article_configurator_options',
-            'options',
-            'options.id = relations.option_id'
+            'configuratorOption',
+            'configuratorOption.id = relations.option_id'
         );
 
         $query->innerJoin(
-            'options',
+            'configuratorOption',
             's_article_configurator_groups',
-            'groups',
-            'groups.id = options.group_id'
+            'configuratorGroup',
+            'configuratorGroup.id = configuratorOption.group_id'
         );
 
         return $query;
     }
-
-    private function getGroupFields()
-    {
-        return array(
-            'groups.id as __group_id',
-            'groups.name as __group_name',
-            'groups.description as __group_description',
-            'groups.position as __group_position'
-        );
-    }
-
-    private function getOptionFields()
-    {
-        return array(
-            'options.id as __option_id',
-            'options.name as __option_name',
-            'options.position as __option_position'
-        );
-    }
-
 }

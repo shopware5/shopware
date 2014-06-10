@@ -22,12 +22,7 @@ class Configurator extends Hydrator
 
     public function hydrate(array $data, array $selection = array())
     {
-        $set = new Struct\Configurator\Set();
-        $setData = $this->extractFields('__set_', $data[0]);
-
-        $set->setName($setData['name']);
-        $set->setId($setData['id']);
-        $set->setType($setData['type']);
+        $set = $this->createSet($data[0]);
 
         $set->setGroups(
             $this->hydrateGroups($data, $selection)
@@ -47,23 +42,17 @@ class Configurator extends Hydrator
         $groups = array();
 
         foreach ($data as $row) {
-            $groupId = $row['__group_id'];
+            $groupId = $row['__configuratorGroup_id'];
 
             if ($groups[$groupId]) {
                 $group = $groups[$groupId];
             } else {
-                $group = $this->createGroup(
-                    $this->extractFields('__group_', $row)
-                );
-
+                $group = $this->createGroup($row);
                 $group->setSelected(isset($selection[$groupId]));
-
                 $groups[$groupId] = $group;
             }
 
-            $option = $this->createOption(
-                $this->extractFields('__option_', $row)
-            );
+            $option = $this->createOption($row);
 
             $option->setSelected(in_array($option->getId(), $selection));
 
@@ -76,26 +65,26 @@ class Configurator extends Hydrator
     private function createSet($data)
     {
         $set = new Struct\Configurator\Set();
-        $set->setId((int)$data['id']);
-        $set->setName($data['name']);
-        $set->setType($data['type']);
+        $set->setId((int)$data['__configuratorSet_id']);
+        $set->setName($data['__configuratorSet_name']);
+        $set->setType($data['__configuratorSet_type']);
         return $set;
     }
 
     private function createGroup($data)
     {
         $group = new Struct\Configurator\Group();
-        $group->setId((int)$data['id']);
-        $group->setName($data['name']);
-        $group->setDescription($data['description']);
+        $group->setId((int)$data['__configuratorGroup_id']);
+        $group->setName($data['__configuratorGroup_name']);
+        $group->setDescription($data['__configuratorGroup_description']);
         return $group;
     }
 
     private function createOption($data)
     {
         $option = new Struct\Configurator\Option();
-        $option->setId((int)$data['id']);
-        $option->setName($data['name']);
+        $option->setId((int)$data['__configuratorOption_id']);
+        $option->setName($data['__configuratorOption_name']);
         return $option;
     }
 }

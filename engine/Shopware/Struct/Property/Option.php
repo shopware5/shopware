@@ -2,10 +2,12 @@
 
 namespace Shopware\Struct\Property;
 
+use Shopware\Struct\Extendable;
+
 /**
  * @package Shopware\Struct
  */
-class Option
+class Option extends Extendable
 {
     /**
      * @var int

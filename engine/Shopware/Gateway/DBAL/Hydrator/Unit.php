@@ -7,6 +7,14 @@ use Shopware\Struct as Struct;
 class Unit extends Hydrator
 {
     /**
+     * @var array
+     */
+    private $translationMapping = array(
+        'unit' => '__unit_unit',
+        'description' => '__unit_description'
+    );
+
+    /**
      * @param array $data
      * @return \Shopware\Struct\Product\Unit
      */
@@ -20,47 +28,78 @@ class Unit extends Hydrator
     }
 
     /**
+     * Extracts and unserialize the unit translation
+     *
+     * @param $data
+     * @return array|mixed
+     */
+    private function getTranslation($data)
+    {
+        $translation = array();
+
+        if (!isset($data['__unit_translation'])) {
+            return $translation;
+        }
+
+        $result = unserialize($data['__unit_translation']);
+
+        $translation = $result[$data['__unit_id']];
+
+        if (!is_array($translation)) {
+            return array();
+        }
+
+        return $this->convertArrayKeys(
+            $translation,
+            $this->translationMapping
+        );
+    }
+
+    /**
      * Assigns the passed data array to the passed unit instance.
      *
      * @param Struct\Product\Unit $unit
      * @param array $data
      */
-    public function assignUnitData(Struct\Product\Unit $unit, array $data)
+    private function assignUnitData(Struct\Product\Unit $unit, array $data)
     {
-        if (isset($data['id'])) {
-            $unit->setId(intval($data['id']));
+        $translation = $this->getTranslation($data);
+        $data = array_merge($data, $translation);
+
+        if (isset($data['__unit_id'])) {
+            $unit->setId(intval($data['__unit_id']));
         }
 
-        if (isset($data['description'])) {
-            $unit->setName($data['description']);
+        if (isset($data['__unit_description'])) {
+            $unit->setName($data['__unit_description']);
         }
 
-        if (isset($data['unit'])) {
-            $unit->setUnit($data['unit']);
+        if (isset($data['__unit_unit'])) {
+            $unit->setUnit($data['__unit_unit']);
         }
 
-        if (isset($data['packunit'])) {
-            $unit->setPackUnit($data['packunit']);
+        if (isset($data['__unit_packunit'])) {
+            $unit->setPackUnit($data['__unit_packunit']);
         }
 
-        if (isset($data['purchaseunit'])) {
-            $unit->setPurchaseUnit(floatval($data['purchaseunit']));
+        if (isset($data['__unit_purchaseunit'])) {
+            $unit->setPurchaseUnit(floatval($data['__unit_purchaseunit']));
         }
 
-        if (isset($data['referenceunit'])) {
-            $unit->setReferenceUnit(floatval($data['referenceunit']));
+        if (isset($data['__unit_referenceunit'])) {
+            $unit->setReferenceUnit(floatval($data['__unit_referenceunit']));
         }
 
-        if (isset($data['purchasesteps'])) {
-            $unit->setPurchaseStep(intval($data['purchasesteps']));
+        if (isset($data['__unit_purchasesteps'])) {
+            $unit->setPurchaseStep(intval($data['__unit_purchasesteps']));
         }
 
-        if (isset($data['minpurchase'])) {
-            $unit->setMinPurchase(intval($data['minpurchase']));
+        if (isset($data['__unit_minpurchase'])) {
+            $unit->setMinPurchase(intval($data['__unit_minpurchase']));
         }
 
-        if (isset($data['maxpurchase'])) {
-            $unit->setMaxPurchase(intval($data['maxpurchase']));
+        if (isset($data['__unit_maxpurchase'])) {
+            $unit->setMaxPurchase(intval($data['__unit_maxpurchase']));
         }
     }
 }

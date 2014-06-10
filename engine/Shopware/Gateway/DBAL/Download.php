@@ -7,7 +7,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Gateway\DBAL\Hydrator;
 use Shopware\Struct;
 
-class Download extends Gateway
+class Download
 {
     /**
      * @var Hydrator\Download
@@ -15,15 +15,33 @@ class Download extends Gateway
     private $downloadHydrator;
 
     /**
+     * The FieldHelper class is used for the
+     * different table column definitions.
+     *
+     * This class helps to select each time all required
+     * table data for the store front.
+     *
+     * Additionally the field helper reduce the work, to
+     * select in a second step the different required
+     * attribute tables for a parent table.
+     *
+     * @var FieldHelper
+     */
+    private $fieldHelper;
+
+    /**
      * @param ModelManager $entityManager
+     * @param FieldHelper $fieldHelper
      * @param Hydrator\Download $downloadHydrator
      */
     function __construct(
         ModelManager $entityManager,
+        FieldHelper $fieldHelper,
         Hydrator\Download $downloadHydrator
     ) {
         $this->entityManager = $entityManager;
         $this->downloadHydrator = $downloadHydrator;
+        $this->fieldHelper = $fieldHelper;
     }
 
     /**
@@ -43,18 +61,17 @@ class Download extends Gateway
 
         $query = $this->entityManager->getDBALQueryBuilder();
 
-        $query->select($this->getDownloadFields())
-            ->addSelect($this->getTableFields('s_articles_downloads_attributes', 'downloadAttribute'));
+        $query->select($this->fieldHelper->getDownloadFields());
 
-        $query->from('s_articles_downloads', 'downloads')
+        $query->from('s_articles_downloads', 'download')
             ->leftJoin(
-                'downloads',
+                'download',
                 's_articles_downloads_attributes',
                 'downloadAttribute',
-                'downloadAttribute.downloadID = downloads.id'
+                'downloadAttribute.downloadID = download.id'
             );
 
-        $query->where('downloads.articleID IN (:ids)')
+        $query->where('download.articleID IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
@@ -67,7 +84,6 @@ class Download extends Gateway
             $key = $row['articleID'];
 
             $download = $this->downloadHydrator->hydrate($row);
-
             $downloads[$key][] = $download;
         }
 
@@ -77,16 +93,5 @@ class Download extends Gateway
         }
 
         return $result;
-    }
-
-    private function getDownloadFields()
-    {
-        return array(
-            'downloads.id',
-            'downloads.articleID',
-            'downloads.description',
-            'downloads.filename',
-            'downloads.size'
-        );
     }
 }

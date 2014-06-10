@@ -30,15 +30,30 @@ class CheapestPrice
     }
 
     /**
+     * Returns the cheapest product price structs for all passed products.
+     *
+     * The cheapest product price is selected over all product variations.
+     *
+     * This means that the query uses the s_articles_prices.articleID column for the where condition.
+     * The articleID is stored in the Struct\ListProduct::id property.
+     *
+     * The cheapest price contains the associated product Struct\Unit of the associated product variation.
+     * This means:
+     *  - Current product variation is the SW2000
+     *    - This product variation contains no associated Struct\Unit
+     *  - The cheapest variant price is associated to the SW2000.2
+     *    - This product variation contains an associated Struct\Unit
+     *  - The unit of SW2000.2 is set into the Struct\Price::unit property
+     *
      * @param Struct\ListProduct[] $products
      * @param Struct\Context $context
-     * @return Struct\Product\PriceRule[]
+     * @return Struct\Product\PriceRule[] Indexed by product number
      */
     public function getList(array $products, Struct\Context $context)
     {
         $group = $context->getCurrentCustomerGroup();
 
-        $rules = $this->cheapestPriceGateway->getList($products, $group);
+        $rules = $this->cheapestPriceGateway->getList($products, $context, $group);
 
         $prices = $this->buildPrices($products, $rules, $group);
 
@@ -57,6 +72,7 @@ class CheapestPrice
         //if some product has no price, we have to load the fallback customer group prices for the fallbackProducts.
         $fallbackPrices = $this->cheapestPriceGateway->getList(
             $fallbackProducts,
+            $context,
             $context->getFallbackCustomerGroup()
         );
 
@@ -115,11 +131,10 @@ class CheapestPrice
             if (!array_key_exists($key, $priceRules) || empty($priceRules[$key])) {
                 continue;
             }
-
+            
             /**@var $cheapestPrice Struct\Product\PriceRule */
             $cheapestPrice = $priceRules[$key];
 
-            $cheapestPrice->setUnit($product->getUnit());
             $cheapestPrice->setCustomerGroup($group);
 
             $prices[$product->getNumber()] = $cheapestPrice;

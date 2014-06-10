@@ -692,6 +692,10 @@ class Detail extends ModelEntity
      */
     public function setMinPurchase($minPurchase)
     {
+        if ($minPurchase <= 0) {
+            $minPurchase = 1;
+        }
+
         $this->minPurchase = $minPurchase;
         return $this;
     }

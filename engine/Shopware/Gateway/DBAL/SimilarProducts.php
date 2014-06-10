@@ -6,7 +6,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Struct;
 
-class SimilarProducts extends Gateway
+class SimilarProducts
 {
     function __construct(ModelManager $entityManager)
     {

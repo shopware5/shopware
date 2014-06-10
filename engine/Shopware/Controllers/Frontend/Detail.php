@@ -77,7 +77,15 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             );
         }
 
-        $article = Shopware()->Modules()->Articles()->sGetArticleById($id);
+        $number = $this->Request()->getParam('number', null);
+        $selection = $this->Request()->getParam('group', array());
+
+        $article = Shopware()->Modules()->Articles()->sGetArticleById(
+            $id,
+            null,
+            $number,
+            $selection
+        );
 
         if (empty($article) || empty($article["articleName"])) {
             return $this->forward('error');

@@ -7,7 +7,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Gateway\DBAL\Hydrator as Hydrator;
 use Shopware\Struct;
 
-class Property extends Gateway
+class Property
 {
     /**
      * @var \Shopware\Gateway\DBAL\Hydrator\Property
@@ -15,67 +15,97 @@ class Property extends Gateway
     private $propertyHydrator;
 
     /**
+     * The FieldHelper class is used for the
+     * different table column definitions.
+     *
+     * This class helps to select each time all required
+     * table data for the store front.
+     *
+     * Additionally the field helper reduce the work, to
+     * select in a second step the different required
+     * attribute tables for a parent table.
+     *
+     * @var FieldHelper
+     */
+    private $fieldHelper;
+
+    /**
      * @param ModelManager $entityManager
+     * @param FieldHelper $fieldHelper
      * @param Hydrator\Property $propertyHydrator
      */
     function __construct(
         ModelManager $entityManager,
+        FieldHelper $fieldHelper,
         Hydrator\Property $propertyHydrator
     ) {
         $this->propertyHydrator = $propertyHydrator;
         $this->entityManager = $entityManager;
+        $this->fieldHelper = $fieldHelper;
     }
 
     /**
-     * @param array $ids
+     * @param array $valueIds
      * @return Struct\Property\Set[]
      */
-    public function getList(array $ids)
+    public function getList(array $valueIds)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
 
-        $query->addSelect($this->getSetFields())
-            ->addSelect($this->getGroupFields())
-            ->addSelect($this->getOptionFields())
-            ->addSelect($this->getTableFields('s_filter_attributes', 'attribute'));
+        $query->addSelect($this->fieldHelper->getPropertySetFields())
+            ->addSelect($this->fieldHelper->getPropertyGroupFields())
+            ->addSelect($this->fieldHelper->getPropertyOptionFields())
+        ;
 
-        $query->from('s_filter', 'sets');
+        $query->addSelect('(
+            CASE
+                WHEN propertySet.sortmode = 1 THEN propertyOption.value_numeric
+                WHEN propertySet.sortmode = 3 THEN propertyOption.position
+                ELSE propertyOption.value
+            END
+        ) as sortRelevance');
+
+        $query->from('s_filter', 'propertySet');
 
         $query->innerJoin(
-            'sets',
+            'propertySet',
             's_filter_relations',
             'relations',
-            'relations.groupID = sets.id'
+            'relations.groupID = propertySet.id'
         );
 
         $query->leftJoin(
-            'sets',
+            'propertySet',
             's_filter_attributes',
-            'attribute',
-            'attribute.filterID = sets.id'
+            'propertySetAttribute',
+            'propertySetAttribute.filterID = propertySet.id'
         );
 
         $query->innerJoin(
             'relations',
             's_filter_options',
-            'groups',
-            'relations.optionID = groups.id'
+            'propertyGroup',
+            'relations.optionID = propertyGroup.id'
         );
 
         $query->innerJoin(
-            'groups',
+            'propertyGroup',
             's_filter_values',
-            'options',
-            'options.optionID = groups.id'
+            'propertyOption',
+            'propertyOption.optionID = propertyGroup.id'
         );
 
-        $query->where('options.id IN (:ids)')
-            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+        $query->groupBy('propertyOption.id');
 
-        $query->addOrderBy('sets.position')
+        $query->where('propertyOption.id IN (:ids)')
+            ->setParameter(':ids', $valueIds, Connection::PARAM_INT_ARRAY);
+
+        $query->orderBy('propertySet.position')
+            ->addOrderBy('propertySet.id')
             ->addOrderBy('relations.position')
-            ->addOrderBy('options.position')
-            ->addOrderBy('options.id');
+            ->addOrderBy('propertyGroup.name')
+            ->addOrderBy('sortRelevance')
+            ->addOrderBy('propertyOption.id');
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -83,152 +113,5 @@ class Property extends Gateway
         $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         return $this->propertyHydrator->hydrateValues($rows);
-    }
-
-    private function getSetFields()
-    {
-        return array(
-            'sets.id',
-            'sets.name',
-            'sets.position',
-            'sets.comparable',
-            'sets.sortmode'
-        );
-    }
-
-    private function getGroupFields()
-    {
-        return array(
-            'groups.id as __groups_id',
-            'groups.name as __groups_name',
-            'groups.filterable as __groups_filterable',
-            'groups.default as __groups_default'
-        );
-    }
-
-    private function getOptionFields()
-    {
-        return array(
-            'options.id as __options_id',
-            'options.optionID as __options_optionID',
-            'options.value as __options_value',
-            'options.position as __options_position',
-            'options.value_numeric as __options_value_numeric'
-        );
-    }
-
-
-    /**
-     * Returns the property set for the passed product.
-     *
-     * The property has to be loaded with all property groups
-     * and values of the product.
-     *
-     * @param Struct\ListProduct $product
-     * @return Struct\Property\Set
-     */
-    public function getProductSet(Struct\ListProduct $product)
-    {
-        $set = $this->getSet($product);
-
-        $set['attribute'] = $this->getTableRow(
-            's_filter_attributes',
-            $set['id'],
-            'filterID'
-        );
-
-        $set['options'] = $this->getPropertiesOfProduct($product, $set);
-
-        return $this->propertyHydrator->hydrate($set);
-    }
-
-    private function getPropertiesOfProduct(Struct\ListProduct $product, $setData)
-    {
-        $query = $this->entityManager->getDBALQueryBuilder();
-
-        $query->select(
-            array(
-                'value.id as value_id',
-                'value.value ',
-                'value.value_numeric',
-                'options.id as option_id',
-                'options.name as option_name',
-            )
-        );
-
-        $query->from('s_filter_values', 'value')
-            ->innerJoin('value', 's_filter_articles', 'articles', 'value.id = articles.valueID')
-            ->innerJoin('value', 's_filter_options', 'options', 'options.id = value.optionID')
-            ->innerJoin(
-                'value',
-                's_filter_relations',
-                'relations',
-                'value.optionID = relations.optionID AND relations.groupID = :setId'
-            )
-            ->addOrderBy('relations.position', 'ASC')
-            ->where('articles.articleID = :productId')
-            ->setParameter(':productId', $product->getId())
-            ->setParameter(':setId', $setData['id']);
-
-        switch ($setData['sortmode']) {
-            case self::FILTERS_SORT_ALPHANUMERIC:
-                $query->addOrderBy('value.value');
-                break;
-
-            case self::FILTERS_SORT_NUMERIC:
-                $query->addOrderBy('value.value_numeric');
-                break;
-
-            case self::FILTERS_SORT_ARTICLE_COUNT:
-            case self::FILTERS_SORT_POSITION:
-            default:
-                $query->addOrderBy('value.position');
-                break;
-        }
-
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
-        $statement = $query->execute();
-
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
-    }
-
-
-    private function getSet(Struct\ListProduct $product)
-    {
-        $query = $this->entityManager->getDBALQueryBuilder();
-
-        $query->select('sets.*')
-            ->from('s_filter', 'sets')
-            ->innerJoin('sets', 's_articles', 'articles', 'articles.filtergroupID = sets.id')
-            ->where('articles.id = :productId')
-            ->setParameter(':productId', $product->getId());
-
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
-        $statement = $query->execute();
-
-        return $statement->fetch(\PDO::FETCH_ASSOC);
-    }
-
-
-    /**
-     * Helper function which selects a whole table by a specify identifier.
-     *
-     * @param $table
-     * @param $id
-     * @param string $column
-     * @return mixed
-     */
-    protected function getTableRow($table, $id, $column = 'id')
-    {
-        $query = $this->entityManager->getDBALQueryBuilder();
-        $query->select(array('*'))
-            ->from($table, 'entity')
-            ->where('entity.' . $column . ' = :id')
-            ->setParameter(':id', $id);
-
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
-        $statement = $query->execute();
-
-        return $statement->fetch(\PDO::FETCH_ASSOC);
     }
 }

@@ -2,13 +2,14 @@
 
 namespace Shopware\Gateway\DBAL\QueryGenerator;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\DBAL\QueryBuilder;
-use Shopware\Gateway\DBAL\Search;
 use Shopware\Gateway\DBAL\SearchPriceHelper;
 use Shopware\Gateway\Search\Condition;
 use Shopware\Gateway\Search\Sorting;
+use Shopware\Struct\Context;
 
-class CoreGenerator extends DBAL
+class CoreGenerator implements DBAL
 {
     /**
      * @var SearchPriceHelper
@@ -53,8 +54,20 @@ class CoreGenerator extends DBAL
         }
     }
 
-    public function generateCondition(Condition $condition, QueryBuilder $query)
-    {
+    /**
+     * Called if the supportsCondition function returns true.
+     * This function extends the passed query builder object with the passed
+     * condition.
+     *
+     * @param Condition $condition
+     * @param QueryBuilder $query
+     * @param \Shopware\Struct\Context $context
+     */
+    public function generateCondition(
+        Condition $condition,
+        QueryBuilder $query,
+        Context $context
+    ) {
         switch (true) {
             case ($condition instanceof Condition\Category):
                 $this->addCategoryCondition($query, $condition);
@@ -65,7 +78,7 @@ class CoreGenerator extends DBAL
                 break;
 
             case ($condition instanceof Condition\Price):
-                $this->addPriceCondition($query, $condition);
+                $this->addPriceCondition($query, $condition, $context);
                 break;
 
             case ($condition instanceof Condition\Property):
@@ -77,6 +90,12 @@ class CoreGenerator extends DBAL
         }
     }
 
+    /**
+     * Checks if the passed sorting class is supported by this handler.
+     *
+     * @param Sorting $sorting
+     * @return bool
+     */
     public function supportsSorting(Sorting $sorting)
     {
         switch (true) {
@@ -97,8 +116,18 @@ class CoreGenerator extends DBAL
         }
     }
 
-    public function generateSorting(Sorting $sorting, QueryBuilder $query)
-    {
+    /**
+     * Extends the passed query builder object with the passed sorting condition.
+     *
+     * @param Sorting $sorting
+     * @param QueryBuilder $query
+     * @param \Shopware\Struct\Context $context
+     */
+    public function generateSorting(
+        Sorting $sorting,
+        QueryBuilder $query,
+        Context $context
+    ) {
         switch (true) {
             case ($sorting instanceof Sorting\ReleaseDate):
                 $this->addReleaseSorting($query, $sorting);
@@ -110,7 +139,7 @@ class CoreGenerator extends DBAL
 
             /**@var $sorting Sorting\Price */
             case ($sorting instanceof Sorting\Price):
-                $this->addPriceSorting($query, $sorting);
+                $this->addPriceSorting($query, $sorting, $context);
                 break;
 
             /**@var $sorting Sorting\Description */
@@ -121,7 +150,13 @@ class CoreGenerator extends DBAL
         }
     }
 
-
+    /**
+     * Extends the query with an customer group check.
+     * This check filters all products which are locked for the passed customer group.
+     *
+     * @param QueryBuilder $query
+     * @param Condition\CustomerGroup $customerGroup
+     */
     private function addCustomerGroupCondition(QueryBuilder $query, Condition\CustomerGroup $customerGroup)
     {
         $query->leftJoin(
@@ -129,17 +164,31 @@ class CoreGenerator extends DBAL
             's_articles_avoid_customergroups',
             'avoidCustomers',
             'avoidCustomers.articleID = products.id
-             AND avoidCustomers.customerGroupId = :customerGroupId'
+             AND avoidCustomers.customerGroupId IN (:customerGroupIds)'
         );
 
-        $query->setParameter(':customerGroupId', $customerGroup->id);
+        $query->setParameter(
+            ':customerGroupIds',
+            $customerGroup->getCustomerGroupIds(),
+            Connection::PARAM_INT_ARRAY
+        );
 
         $query->andWhere('avoidCustomers.articleID IS NULL');
     }
 
+    /**
+     * Extends the query with a product property condition.
+     * The passed property condition contains an array of multiple s_filter_values ids
+     * which has to be assigned on the product.
+     *
+     * The function adds for each id an additional inner join on the s_filter_articles.
+     *
+     * @param QueryBuilder $query
+     * @param Condition\Property $property
+     */
     private function addPropertyCondition(QueryBuilder $query, Condition\Property $property)
     {
-        foreach ($property->values as $value) {
+        foreach ($property->getValueIds() as $value) {
             $key = 'value' . $value;
 
             $query->innerJoin(
@@ -154,21 +203,41 @@ class CoreGenerator extends DBAL
         }
     }
 
-
-    private function addCategoryCondition(QueryBuilder $query, Condition\Category $category)
-    {
+    /**
+     * Extends the query with a category condition.
+     * The passed category condition contains an array of multiple category ids.
+     * The searched product has to be in one of the passed categories.
+     *
+     * @param QueryBuilder $query
+     * @param Condition\Category $category
+     */
+    private function addCategoryCondition(
+        QueryBuilder $query,
+        Condition\Category $category
+    ) {
         $query->innerJoin(
             'products',
             's_articles_categories_ro',
             'product_categories',
             'product_categories.articleID = products.id
-             AND product_categories.categoryID = :category'
+             AND product_categories.categoryID IN (:category)'
         );
 
-        $query->setParameter(':category', $category->id, \PDO::PARAM_INT);
+        $query->setParameter(
+            ':category',
+            $category->getCategoryIds(),
+            Connection::PARAM_INT_ARRAY
+        );
     }
 
-
+    /**
+     * Extends the query with a manufacturer condition.
+     * The passed manufacturer condition contains an array of manufacturer ids.
+     * The searched products have to be assigned on one of the passed manufacturers.
+     *
+     * @param QueryBuilder $query
+     * @param Condition\Manufacturer $manufacturer
+     */
     private function addManufacturerCondition(QueryBuilder $query, Condition\Manufacturer $manufacturer)
     {
         $query->innerJoin(
@@ -176,46 +245,80 @@ class CoreGenerator extends DBAL
             's_articles_supplier',
             'manufacturers',
             'manufacturers.id = products.supplierID
-             AND products.supplierID = :manufacturer'
+             AND products.supplierID IN (:manufacturer)'
         );
 
-        $query->setParameter(':manufacturer', $manufacturer->id, \PDO::PARAM_INT);
+        $query->setParameter(
+            ':manufacturer',
+            $manufacturer->getManufacturerIds(),
+            Connection::PARAM_INT_ARRAY
+        );
     }
 
-
-    private function addPriceCondition(QueryBuilder $query, Condition\Price $price)
-    {
+    /**
+     * Extends the query with a price range condition.
+     * The passed price condition contains a min and max value of the filtered price.
+     * Searched products should have a price within this range.
+     *
+     * @param QueryBuilder $query
+     * @param Condition\Price $price
+     * @param \Shopware\Struct\Context $context
+     */
+    private function addPriceCondition(
+        QueryBuilder $query,
+        Condition\Price $price,
+        Context $context
+    ) {
         $selection = $this->priceHelper->getCheapestPriceSelection(
-            $price->currentCustomerGroup
+            $context->getCurrentCustomerGroup()
         );
 
         $this->priceHelper->joinPrices(
             $query,
-            $price->currentCustomerGroup,
-            $price->fallbackCustomerGroup
+            $context->getCurrentCustomerGroup(),
+            $context->getFallbackCustomerGroup()
         );
 
         $query->andHaving($selection . ' BETWEEN :priceMin AND :priceMax');
 
-        $query->setParameter(':priceMin', $price->min)
-            ->setParameter(':priceMax', $price->max);
+        $query->setParameter(':priceMin', $price->getMinPrice())
+            ->setParameter(':priceMax', $price->getMaxPrice());
     }
 
+    /**
+     * Adds an order by condition to the passed query.
+     * The search result will be sorted by the product description.
+     *
+     * @param QueryBuilder $query
+     * @param Sorting\ReleaseDate $sorting
+     */
     private function addDescriptionSorting(QueryBuilder $query, Sorting\ReleaseDate $sorting)
     {
         $query->addOrderBy('products.name', $sorting->getDirection())
             ->addOrderBy('products.id', $sorting->getDirection());
     }
 
-
-    private function addPriceSorting(QueryBuilder $query, Sorting\Price $sorting)
-    {
-        $selection = $this->priceHelper->getCheapestPriceSelection($sorting->currentCustomerGroup);
+    /**
+     * Adds an order by condition to the passed query.
+     * The search result will be sorted by the cheapest or highest price.
+     *
+     * @param QueryBuilder $query
+     * @param Sorting\Price $sorting
+     * @param \Shopware\Struct\Context $context
+     */
+    private function addPriceSorting(
+        QueryBuilder $query,
+        Sorting\Price $sorting,
+        Context $context
+    ) {
+        $selection = $this->priceHelper->getCheapestPriceSelection(
+            $context->getCurrentCustomerGroup()
+        );
 
         $this->priceHelper->joinPrices(
             $query,
-            $sorting->currentCustomerGroup,
-            $sorting->fallbackCustomerGroup
+            $context->getCurrentCustomerGroup(),
+            $context->getFallbackCustomerGroup()
         );
 
         $query->addSelect($selection . ' as cheapest_price');
@@ -224,6 +327,13 @@ class CoreGenerator extends DBAL
             ->addOrderBy('products.id', $sorting->getDirection());
     }
 
+    /**
+     * Adds an order by condition to the query.
+     * The search result will be sorted by the popularity of the products.
+     *
+     * @param QueryBuilder $query
+     * @param Sorting\ReleaseDate $sorting
+     */
     private function addPopularitySorting(QueryBuilder $query, Sorting\ReleaseDate $sorting)
     {
         if (!$query->includesTable('s_articles_top_seller')) {
@@ -240,6 +350,13 @@ class CoreGenerator extends DBAL
 
     }
 
+    /**
+     * Adds an order by condition to the query.
+     * The search result will be sorted by the release date and the change date of the product.
+     *
+     * @param QueryBuilder $query
+     * @param Sorting\ReleaseDate $sorting
+     */
     private function addReleaseSorting(QueryBuilder $query, Sorting\ReleaseDate $sorting)
     {
         $query->addOrderBy('products.datum', $sorting->getDirection())

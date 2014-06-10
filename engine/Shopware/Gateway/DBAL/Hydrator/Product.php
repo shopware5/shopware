@@ -26,6 +26,16 @@ class Product extends Hydrator
      */
     private $unitHydrator;
 
+    private $translationMapping = array(
+        'metaTitle' => '__product_metaTitle',
+        'txtArtikel' => '__product_name',
+        'txtshortdescription' => '__product_description',
+        'txtlangbeschreibung' => '__product_description_long',
+        'txtzusatztxt' => '__variant_additionaltext',
+        'txtkeywords' => '__product_keywords',
+        'txtpackunit' => '__unit_packunit',
+    );
+
     function __construct(
         Attribute $attributeHydrator,
         Manufacturer $manufacturerHydrator,
@@ -38,6 +48,10 @@ class Product extends Hydrator
         $this->unitHydrator = $unitHydrator;
     }
 
+    /**
+     * @param array $data
+     * @return Struct\ListProduct
+     */
     public function hydrateProduct(array $data)
     {
         $product = new Struct\Product();
@@ -59,23 +73,45 @@ class Product extends Hydrator
         return $this->assignData($product, $data);
     }
 
-    protected function assignData(Struct\ListProduct $product, array $data)
+    /**
+     * @param Struct\ListProduct $product
+     * @param array $data
+     * @return Struct\ListProduct
+     */
+    private function assignData(Struct\ListProduct $product, array $data)
     {
         $this->assignProductData($product, $data);
 
-        $this->assignTaxData($product, $data);
+        $product->setTax(
+            $this->taxHydrator->hydrate($data)
+        );
 
-        if (!empty($data['supplierID'])) {
-            $this->assignManufacturerData($product, $data);
+        $this->assignPriceGroupData($product, $data);
+
+        if ($data['__product_supplierID']) {
+            $product->setManufacturer(
+                $this->manufacturerHydrator->hydrate($data)
+            );
         }
 
-        $this->assignUnitData($product, $data);
+        $product->setUnit(
+            $this->unitHydrator->hydrate($data)
+        );
 
-        if (!empty($data['__attribute_id'])) {
+        if (!empty($data['__productAttribute_id'])) {
             $this->assignAttributeData($product, $data);
         }
 
         return $product;
+    }
+
+    private function assignPriceGroupData(Struct\ListProduct $product, array $data)
+    {
+        if (!empty($data['__priceGroup_id'])) {
+            $product->setPriceGroup(new Struct\Product\PriceGroup());
+            $product->getPriceGroup()->setId($data['__priceGroup_id']);
+            $product->getPriceGroup()->setName($data['__priceGroup_description']);
+        }
     }
 
     /**
@@ -85,160 +121,169 @@ class Product extends Hydrator
      * @param Struct\ListProduct $product
      * @param $data
      */
-    public function assignProductData(Struct\ListProduct $product, $data)
+    private function assignProductData(Struct\ListProduct $product, $data)
     {
-        if (isset($data['id'])) {
-            $product->setId(intval($data['id']));
+        $translation = $this->getProductTranslation($data);
+        $data = array_merge($data, $translation);
+
+        if (isset($data['__product_id'])) {
+            $product->setId(intval($data['__product_id']));
         }
 
-        if (isset($data['variantId'])) {
-            $product->setVariantId(intval($data['variantId']));
+        if (isset($data['__product_name'])) {
+            $product->setName($data['__product_name']);
         }
 
-        if (isset($data['name'])) {
-            $product->setName($data['name']);
+        if (isset($data['__product_description'])) {
+            $product->setShortDescription($data['__product_description']);
         }
 
-        if (isset($data['ordernumber'])) {
-            $product->setNumber($data['ordernumber']);
+        if (isset($data['__product_description_long'])) {
+            $product->setLongDescription($data['__product_description_long']);
         }
 
-        if (isset($data['description'])) {
-            $product->setShortDescription($data['description']);
+        if (isset($data['__product_laststock'])) {
+            $product->setCloseouts((bool)($data['__product_laststock']));
         }
 
-        if (isset($data['description_long'])) {
-            $product->setLongDescription($data['description_long']);
+        if (isset($data['__product_metaTitle'])) {
+            $product->setMetaTitle($data['__product_metaTitle']);
         }
 
-        if (isset($data['shippingtime'])) {
-            $product->setShippingTime($data['shippingtime']);
+        if (isset($data['__product_filtergroupID'])) {
+            $product->setHasProperties($data['__product_filtergroupID'] > 0);
         }
 
-        if (isset($data['shippingfree'])) {
-            $product->setShippingFree((bool)($data['shippingfree']));
+        if (isset($data['__product_topseller'])) {
+            $product->setHighlight((bool)($data['__product_topseller']));
         }
 
-        if (isset($data['laststock'])) {
-            $product->setCloseouts((bool)($data['laststock']));
+        if (isset($data['__product_notification'])) {
+            $product->setAllowsNotification((bool)($data['__product_notification']));
         }
 
-        if (isset($data['instock'])) {
-            $product->setStock(intval($data['instock']));
+        if (isset($data['__product_keywords'])) {
+            $product->setKeywords($data['__product_keywords']);
         }
 
-        if (isset($data['releasedate'])) {
+        if ($data['__product_datum']) {
+            $product->setCreatedAt(
+                new \DateTime($data['__product_datum'])
+            );
+        }
+
+        if (isset($data['__variant_id'])) {
+            $product->setVariantId(intval($data['__variant_id']));
+        }
+
+        if (isset($data['__variant_ordernumber'])) {
+            $product->setNumber($data['__variant_ordernumber']);
+        }
+
+        if (isset($data['__variant_shippingtime'])) {
+            $product->setShippingTime($data['__variant_shippingtime']);
+
+        } else if (isset($data['__product_shippingtime'])) {
+            $product->setShippingTime($data['__product_shippingtime']);
+        }
+
+        if (isset($data['__variant_shippingfree'])) {
+            $product->setShippingFree((bool)($data['__variant_shippingfree']));
+        }
+
+        if (isset($data['__variant_instock'])) {
+            $product->setStock(intval($data['__variant_instock']));
+        }
+
+        if (isset($data['__variant_suppliernumber'])) {
+            $product->setManufacturerNumber($data['__variant_suppliernumber']);
+        }
+
+        if (isset($data['__variant_releasedate'])) {
             $product->setReleaseDate(
-                new \DateTime($data['releasedate'])
+                new \DateTime($data['__variant_releasedate'])
             );
         }
 
-        if (isset($data['filtergroupID'])) {
-            $product->setHasProperties($data['filtergroupID'] > 0);
+        if (isset($data['__variant_additionaltext'])) {
+            $product->setAdditional($data['__variant_additionaltext']);
         }
 
-        if (!empty($data['__priceGroup_id'])) {
-            $product->setPriceGroup(new Struct\Product\PriceGroup());
-            $product->getPriceGroup()->setId($data['__priceGroup_id']);
-            $product->getPriceGroup()->setName($data['__priceGroup_description']);
+        if (isset($data['__variant_ean'])) {
+            $product->setEan($data['__variant_ean']);
         }
 
-        if (isset($data['topseller'])) {
-            $product->setHighlight((bool)($data['topseller']));
+        if (isset($data['__variant_height'])) {
+            $product->setHeight(floatval($data['__variant_height']));
         }
 
-        if (isset($data['notification'])) {
-            $product->setAllowsNotification((bool)($data['notification']));
+        if (isset($data['__variant_length'])) {
+            $product->setLength(floatval($data['__variant_length']));
         }
 
-        if (isset($data['additionaltext'])) {
-            $product->setAdditional($data['additionaltext']);
+        if (isset($data['__variant_stockmin'])) {
+            $product->setMinStock(intval($data['__variant_stockmin']));
         }
 
-        if (isset($data['ean'])) {
-            $product->setEan($data['ean']);
+        if (isset($data['__variant_weight'])) {
+            $product->setWeight(floatval($data['__variant_weight']));
         }
 
-        if (isset($data['height'])) {
-            $product->setHeight(floatval($data['height']));
+        if (isset($data['__variant_width'])) {
+            $product->setWidth(floatval($data['__variant_width']));
         }
 
-        if (isset($data['keywords'])) {
-            $product->setKeywords($data['keywords']);
-        }
-
-        if (isset($data['length'])) {
-            $product->setLength(floatval($data['length']));
-        }
-
-        if (isset($data['stockmin'])) {
-            $product->setMinStock(intval($data['stockmin']));
-        }
-
-        if (isset($data['weight'])) {
-            $product->setWeight(floatval($data['weight']));
-        }
-
-        if (isset($data['width'])) {
-            $product->setWidth(floatval($data['width']));
-        }
     }
 
-    private function assignManufacturerData(Struct\ListProduct $product, $data)
-    {
-        $manufacturer = $this->extractFields('__manufacturer_', $data);
-
-        if (!empty($data['__manufacturerAttribute_id'])) {
-            $manufacturer = array_merge(
-                $manufacturer,
-                $this->getFields('__manufacturerAttribute_', $data)
-            );
-        }
-
-        $manufacturer = $this->manufacturerHydrator->hydrate($manufacturer);
-
-        $product->setManufacturer($manufacturer);
-    }
-
-    private function assignTaxData(Struct\ListProduct $product, $data)
-    {
-        $tax = $this->taxHydrator->hydrate(
-            array(
-                'id' => $data['__tax_id'],
-                'tax' => $data['__tax_tax'],
-                'description' => $data['__tax_description'],
-            )
-        );
-
-        $product->setTax($tax);
-    }
-
-    private function assignUnitData(Struct\ListProduct $product, $data)
-    {
-        $unit = $this->unitHydrator->hydrate(
-            array(
-                'id' => $data['__unit_id'],
-                'description' => $data['__unit_description'],
-                'unit' => $data['__unit_unit'],
-                'packunit' => $data['packunit'],
-                'purchaseunit' => $data['purchaseunit'],
-                'referenceunit' => $data['referenceunit'],
-                'purchasesteps' => $data['purchasesteps'],
-                'minpurchase' => $data['minpurchase'],
-                'maxpurchase' => $data['maxpurchase'],
-            )
-        );
-
-        $product->setUnit($unit);
-    }
-
+    /**
+     * Iterates the attribute data and assigns the attribute struct to the product.
+     *
+     * @param Struct\ListProduct $product
+     * @param $data
+     */
     private function assignAttributeData(Struct\ListProduct $product, $data)
     {
+        $translation = $this->getProductTranslation($data);
+
         $attribute = $this->attributeHydrator->hydrate(
-            $this->extractFields('__attribute_', $data)
+            $this->extractFields('__productAttribute_', $data)
         );
 
+        foreach($translation as $key => $value) {
+            if ($attribute->exists($key)) {
+                $attribute->set($key, $value);
+            }
+        }
+
         $product->addAttribute('core', $attribute);
+    }
+
+    private function getProductTranslation($data)
+    {
+        $translation = array();
+        if (isset($data['__product_translation'])) {
+            $translation = array_merge($translation, unserialize($data['__product_translation']));
+        }
+
+        if (isset($data['__variant_translation'])) {
+            $translation = array_merge($translation, unserialize($data['__variant_translation']));
+        }
+
+        foreach($translation as $key => $value) {
+            if (strpos($key, 'attr') !== false) {
+                $new = '__productAttribute_' . $key;
+                $translation[$new] = $value;
+            }
+        }
+
+        if (empty($translation)) {
+            return $translation;
+        }
+
+        return $this->convertArrayKeys(
+            $translation,
+            $this->translationMapping
+        );
     }
 
 }

@@ -5,7 +5,7 @@ namespace Shopware\Gateway\DBAL;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Gateway\DBAL\Hydrator as Hydrator;
 
-class CustomerGroup extends Gateway
+class CustomerGroup
 {
     /**
      * @var \Shopware\Gateway\DBAL\Hydrator\CustomerGroup
@@ -13,15 +13,33 @@ class CustomerGroup extends Gateway
     private $customerGroupHydrator;
 
     /**
+     * The FieldHelper class is used for the
+     * different table column definitions.
+     *
+     * This class helps to select each time all required
+     * table data for the store front.
+     *
+     * Additionally the field helper reduce the work, to
+     * select in a second step the different required
+     * attribute tables for a parent table.
+     *
+     * @var FieldHelper
+     */
+    private $fieldHelper;
+
+    /**
      * @param ModelManager $entityManager
+     * @param FieldHelper $fieldHelper
      * @param Hydrator\CustomerGroup $customerGroupHydrator
      */
     function __construct(
         ModelManager $entityManager,
+        FieldHelper $fieldHelper,
         Hydrator\CustomerGroup $customerGroupHydrator
     ) {
         $this->customerGroupHydrator = $customerGroupHydrator;
         $this->entityManager = $entityManager;
+        $this->fieldHelper = $fieldHelper;
     }
 
     /**
@@ -39,15 +57,14 @@ class CustomerGroup extends Gateway
     public function getList(array $keys)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
-        $query->select($this->getCustomerGroupFields())
-            ->addSelect($this->getTableFields('s_core_customergroups_attributes', 'attribute'));
+        $query->select($this->fieldHelper->getCustomerGroupFields());
 
         $query->from('s_core_customergroups', 'customerGroup')
             ->leftJoin(
                 'customerGroup',
                 's_core_customergroups_attributes',
-                'attribute',
-                'attribute.customerGroupID = customerGroup.id'
+                'customerGroupAttribute',
+                'customerGroupAttribute.customerGroupID = customerGroup.id'
             );
 
         $query->where('customerGroup.groupkey IN (:keys)')
@@ -85,21 +102,6 @@ class CustomerGroup extends Gateway
         $groups = $this->getList(array($key));
 
         return array_shift($groups);
-    }
-
-    private function getCustomerGroupFields()
-    {
-        return array(
-            'customerGroup.id',
-            'customerGroup.groupkey',
-            'customerGroup.description',
-            'customerGroup.tax',
-            'customerGroup.taxinput',
-            'customerGroup.mode',
-            'customerGroup.discount',
-            'customerGroup.minimumorder',
-            'customerGroup.minimumordersurcharge'
-        );
     }
 
 }

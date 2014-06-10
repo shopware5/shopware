@@ -13,20 +13,42 @@ use Shopware\Struct;
  *
  * @package Shopware\Gateway\DBAL
  */
-class ListProduct extends Gateway
+class ListProduct
 {
     /**
      * @var \Shopware\Gateway\DBAL\Hydrator\Product
      */
     protected $hydrator;
 
+
     /**
-     * @param $hydrator
-     * @param ModelManager $entityManager
+     * The FieldHelper class is used for the
+     * different table column definitions.
+     *
+     * This class helps to select each time all required
+     * table data for the store front.
+     *
+     * Additionally the field helper reduce the work, to
+     * select in a second step the different required
+     * attribute tables for a parent table.
+     *
+     * @var FieldHelper
      */
-    function __construct(ModelManager $entityManager, Hydrator\Product $hydrator)
-    {
+    protected $fieldHelper;
+
+
+    /**
+     * @param ModelManager $entityManager
+     * @param FieldHelper $fieldHelper
+     * @param \Shopware\Gateway\DBAL\Hydrator\Product $hydrator
+     */
+    function __construct(
+        ModelManager $entityManager,
+        FieldHelper $fieldHelper,
+        Hydrator\Product $hydrator
+    ) {
         $this->hydrator = $hydrator;
+        $this->fieldHelper = $fieldHelper;
         $this->entityManager = $entityManager;
     }
 
@@ -70,6 +92,9 @@ class ListProduct extends Gateway
      *  - manufacturer
      *  - price group
      *
+     * Required states:
+     *  - ListProduct::STATE_TRANSLATED
+     *
      * @param array $numbers
      * @param \Shopware\Struct\Context $context
      * @return Struct\ListProduct[]
@@ -85,7 +110,7 @@ class ListProduct extends Gateway
 
         $products = array();
         foreach ($data as $product) {
-            $key = $product['ordernumber'];
+            $key = $product['__variant_ordernumber'];
             $products[$key] = $this->hydrator->hydrateListProduct($product);
         }
 
@@ -95,23 +120,21 @@ class ListProduct extends Gateway
     protected function getQuery(array $numbers, Struct\Context $context)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
-        $query->select($this->getArticleFields())
-            ->addSelect($this->getVariantFields())
-            ->addSelect($this->getUnitFields())
-            ->addSelect($this->getTaxFields())
-            ->addSelect($this->getPriceGroupFields())
-            ->addSelect($this->getManufacturerFields())
-            ->addSelect($this->getTableFields('s_articles_attributes', 'attribute'))
-            ->addSelect($this->getTableFields('s_articles_supplier_attributes', 'manufacturerAttribute'));
+        $query->select($this->fieldHelper->getArticleFields())
+            ->addSelect($this->fieldHelper->getVariantFields())
+            ->addSelect($this->fieldHelper->getUnitFields())
+            ->addSelect($this->fieldHelper->getTaxFields())
+            ->addSelect($this->fieldHelper->getPriceGroupFields())
+            ->addSelect($this->fieldHelper->getManufacturerFields());
 
         $query->from('s_articles_details', 'variant')
             ->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID')
             ->innerJoin('product', 's_core_tax', 'tax', 'tax.id = product.taxID')
-            ->leftJoin('variant', 's_articles_attributes', 'attribute', 'attribute.articledetailsID = variant.id')
             ->leftJoin('variant', 's_core_units', 'unit', 'unit.id = variant.unitID')
             ->leftJoin('product', 's_articles_supplier', 'manufacturer', 'manufacturer.id = product.supplierID')
-            ->leftJoin('product', 's_articles_supplier_attributes', 'manufacturerAttribute', 'manufacturerAttribute.id = product.supplierID')
             ->leftJoin('product', 's_core_pricegroups', 'priceGroup', 'priceGroup.id = product.pricegroupID')
+            ->leftJoin('variant', 's_articles_attributes', 'productAttribute', 'productAttribute.articledetailsID = variant.id')
+            ->leftJoin('product', 's_articles_supplier_attributes', 'manufacturerAttribute', 'manufacturerAttribute.id = product.supplierID')
             ->where('variant.ordernumber IN (:numbers)')
             ->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
 
@@ -147,7 +170,7 @@ class ListProduct extends Gateway
             's_core_translations',
             'unitTranslation',
             'unitTranslation.objecttype = :unitType AND
-             unitTranslation.objectkey = variant.unitID AND
+             unitTranslation.objectkey = 1 AND
              unitTranslation.objectlanguage = :language'
         );
 
@@ -155,145 +178,16 @@ class ListProduct extends Gateway
             ->setParameter(':variantType', 'variant')
             ->setParameter(':manufacturerType', 'supplier')
             ->setParameter(':unitType', 'config_units')
-//            ->setParameter(':language', $context->getShop()->getId())
-            ->setParameter(':language', 2)
+            ->setParameter(':language', $context->getShop()->getId())
         ;
 
         $query->addSelect(array(
-            'productTranslation.objectdata as __product_translations',
-            'variantTranslation.objectdata as __variant_translations',
-            'manufacturerTranslation.objectdata as __manufacturer_translations',
-            'unitTranslation.objectdata as __unit_translations'
+            'productTranslation.objectdata as __product_translation',
+            'variantTranslation.objectdata as __variant_translation',
+            'manufacturerTranslation.objectdata as __manufacturer_translation',
+            'unitTranslation.objectdata as __unit_translation'
         ));
 
         return $query;
-    }
-
-    /**
-     * Defines which s_articles fields should be selected.
-     * @return array
-     */
-    private function getArticleFields()
-    {
-        return array(
-            'product.id',
-            'product.supplierID',
-            'product.name',
-            'product.description',
-            'product.description_long',
-            'product.shippingtime',
-            'product.datum',
-            'product.active',
-            'product.taxID',
-            'product.pseudosales',
-            'product.topseller',
-            'product.metaTitle',
-            'product.keywords',
-            'product.changetime',
-            'product.pricegroupID',
-            'product.pricegroupActive',
-            'product.filtergroupID',
-            'product.laststock',
-            'product.crossbundlelook',
-            'product.notification',
-            'product.template',
-            'product.mode',
-            'product.main_detail_id',
-            'product.available_from',
-            'product.available_to',
-            'product.configurator_set_id'
-        );
-    }
-
-    /**
-     * Defines which s_articles_details fields should be selected.
-     * @return array
-     */
-    private function getVariantFields()
-    {
-        return array(
-            'variant.id as variantId',
-            'variant.ordernumber',
-            'variant.suppliernumber',
-            'variant.kind',
-            'variant.additionaltext',
-            'variant.impressions',
-            'variant.sales',
-            'variant.active',
-            'variant.instock',
-            'variant.stockmin',
-            'variant.weight',
-            'variant.position',
-            'variant.width',
-            'variant.height',
-            'variant.length',
-            'variant.ean',
-            'variant.unitID',
-            'variant.purchasesteps',
-            'variant.maxpurchase',
-            'variant.minpurchase',
-            'variant.purchaseunit',
-            'variant.referenceunit',
-            'variant.packunit',
-            'variant.releasedate',
-            'variant.shippingfree',
-            'variant.shippingtime'
-        );
-    }
-
-    /**
-     * Defines which s_core_units fields should be selected
-     * @return array
-     */
-    private function getUnitFields()
-    {
-        return array(
-            'unit.id as __unit_id',
-            'unit.unit as __unit_unit',
-            'unit.description as __unit_description'
-        );
-    }
-
-    /**
-     * Defines which s_core_tax fields should be selected
-     * @return array
-     */
-    private function getTaxFields()
-    {
-        return array(
-            'tax.id as __tax_id',
-            'tax.tax as __tax_tax',
-            'tax.description as __tax_description'
-        );
-    }
-
-    /**
-     * Defines which s_core_pricegroups fields should be selected
-     * @return array
-     */
-    private function getPriceGroupFields()
-    {
-        return array(
-            'priceGroup.id as __priceGroup_id',
-            'priceGroup.description as __priceGroup_description'
-        );
-    }
-
-    /**
-     * Defines which s_articles_suppliers fields should be selected
-     * @return array
-     */
-    private function getManufacturerFields()
-    {
-        return array(
-            'manufacturer.id as __manufacturer_id',
-            'manufacturer.name as __manufacturer_name',
-            'manufacturer.img as __manufacturer_img',
-            'manufacturer.link as __manufacturer_link',
-            'manufacturer.description as __manufacturer_description',
-            'manufacturer.meta_title as __manufacturer_meta_title',
-            'manufacturer.meta_description as __manufacturer_description',
-            'manufacturer.meta_keywords as __manufacturer_keywords'
-        );
     }
 }

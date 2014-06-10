@@ -2,7 +2,9 @@
 
 namespace Shopware\Gateway\Search;
 
-abstract class Facet
+interface Facet
 {
-    abstract public function getName();
+    public function getName();
+
+    public function isFiltered();
 }

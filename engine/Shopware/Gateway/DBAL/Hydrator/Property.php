@@ -24,77 +24,68 @@ class Property extends Hydrator
     {
         $sets = array();
 
-        foreach ($data as $row) {
-            $setId = $row['id'];
-            $groupId = $row['__groups_id'];
-            $optionId = $row['__options_id'];
+        foreach($data as $row) {
+            $setId = $row['__propertySet_id'];
+            $groupId = $row['__propertyGroup_id'];
+            $optionId = $row['__propertyOption_id'];
 
-            $set = $row;
-            if ($sets[$setId]) {
+            if (isset($sets[$setId])) {
                 $set = $sets[$setId];
-            }
-
-            if ($set['groups'][$groupId]) {
-                $group = $set['groups'][$groupId];
             } else {
-                $group = $this->extractFields('__groups_', $row);
+                $set = $this->hydrateSet($row);
+            }
+            
+            $groups = $set->getGroups();
+            if (isset($groups[$groupId])) {
+                $group = $groups[$groupId];
+            } else {
+                $group = $this->hydrateGroup($row);
             }
 
-            $group['options'][$optionId] = $this->extractFields('__options_', $row);
+            $options = $group->getOptions();
+            $option = $this->hydrateOption($row);
 
-            $set['groups'][$groupId] = $group;
+            $options[$optionId] = $option;
+            $groups[$groupId] = $group;
             $sets[$setId] = $set;
-        }
 
-        $structs = array();
-        foreach ($sets as $setData) {
-            $set = $this->hydrateSet($setData);
-
-            $groups = array();
-            foreach ($setData['groups'] as $groupData) {
-                $group = $this->hydrateGroup($groupData);
-
-                $options = array();
-                foreach ($groupData['options'] as $optionData) {
-                    $option = $this->hydrateOption($optionData);
-                    $options[$option->getId()] = $option;
-                }
-
-                $group->setOptions($options);
-
-                $groups[$group->getId()] = $group;
-            }
+            $group->setOptions($options);
             $set->setGroups($groups);
-
-            $structs[$set->getId()] = $set;
         }
 
-        return $structs;
+        return $sets;
     }
+
 
     private function hydrateSet(array $data)
     {
         $set = new Struct\Property\Set();
-        $set->setId((int)$data['id']);
-        $set->setName($data['name']);
-        $set->setComparable((bool)$data['comparable']);
+        $set->setId((int)$data['__propertySet_id']);
+        $set->setName($data['__propertySet_name']);
+        $set->setComparable((bool)$data['__propertySet_comparable']);
+
+        if ($data['__propertySetAttribute_id']) {
+            $attribute = $this->extractFields('__propertySetAttribute_', $data);
+            $set->addAttribute('core', $this->attributeHydrator->hydrate($attribute));
+        }
+
         return $set;
     }
 
     private function hydrateGroup(array $data)
     {
         $group = new Struct\Property\Group();
-        $group->setId((int)$data['id']);
-        $group->setName($data['name']);
-        $group->setFilterable((bool)$data['filterable']);
+        $group->setId((int)$data['__propertyGroup_id']);
+        $group->setName($data['__propertyGroup_name']);
+        $group->setFilterable((bool)$data['__propertyGroup_filterable']);
         return $group;
     }
 
     private function hydrateOption(array $data)
     {
         $option = new Struct\Property\Option();
-        $option->setId((int)$data['id']);
-        $option->setName($data['value']);
+        $option->setId((int)$data['__propertyOption_id']);
+        $option->setName($data['__propertyOption_value']);
         return $option;
     }
 }

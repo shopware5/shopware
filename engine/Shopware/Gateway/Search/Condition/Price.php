@@ -3,34 +3,48 @@
 namespace Shopware\Gateway\Search\Condition;
 
 use Shopware\Gateway\Search\Condition;
-use Shopware\Struct\Customer\Group;
 
 class Price extends Condition
 {
-    public $min;
-
-    public $max;
 
     /**
-     * @var \Shopware\Struct\Customer\Group
+     * @var float
      */
-    public $currentCustomerGroup;
+    private $minPrice;
 
     /**
-     * @var \Shopware\Struct\Customer\Group
+     * @var float
      */
-    public $fallbackCustomerGroup;
+    private $maxPrice;
 
-    function __construct($min, $max, Group $currentCustomerGroup, Group $fallbackCustomerGroup)
+    /**
+     * @param $minPrice
+     * @param $maxPrice
+     */
+    function __construct($minPrice, $maxPrice)
     {
-        $this->min = $min;
-        $this->max = $max;
-        $this->currentCustomerGroup = $currentCustomerGroup;
-        $this->fallbackCustomerGroup = $fallbackCustomerGroup;
+        $this->minPrice = $minPrice;
+        $this->maxPrice = $maxPrice;
     }
 
     public function getName()
     {
         return 'price';
+    }
+
+    /**
+     * @return float
+     */
+    public function getMinPrice()
+    {
+        return $this->minPrice;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMaxPrice()
+    {
+        return $this->maxPrice;
     }
 }

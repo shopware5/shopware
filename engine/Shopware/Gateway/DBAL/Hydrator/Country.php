@@ -12,10 +12,23 @@ class Country extends Hydrator
      */
     private $attributeHydrator;
 
+    /**
+     * @var array
+     */
+    private $translationCountryFields = array(
+        'countryname' => '__country_countryname',
+        'notice' => '__country_notice'
+    );
+
+    private $translationStateFields = array(
+        'name' => '__countryState_name'
+    );
+
     function __construct(Attribute $attributeHydrator)
     {
         $this->attributeHydrator = $attributeHydrator;
     }
+
 
     /**
      * @param array $data
@@ -25,9 +38,9 @@ class Country extends Hydrator
     {
         $area = new Area();
 
-        $area->setId($data['id']);
+        $area->setId((int)$data['__countryArea_id']);
 
-        $area->setName($data['name']);
+        $area->setName($data['__countryArea_name']);
 
         return $area;
     }
@@ -39,19 +52,86 @@ class Country extends Hydrator
     public function hydrateCountry(array $data)
     {
         $country = new \Shopware\Struct\Country();
+        $translation = $this->getTranslation(
+            $data,
+            '__country_translation',
+            $data['__country_id'],
+            $this->translationCountryFields
+        );
 
-        $country->setId($data['id']);
+        $data = array_merge($data, $translation);
 
-        $country->setName($data['name']);
+        $country->setId($data['__country_id']);
 
-        if ($data['__attribute_id'] !== null) {
+        $country->setName($data['__country_countryname']);
+
+        if (isset($data['__country_countryiso'])) {
+            $country->setIso($data['__country_countryiso']);
+        }
+
+        if (isset($data['__country_iso3'])) {
+            $country->setIso3($data['__country_iso3']);
+        }
+
+        if (isset($data['__country_notice'])) {
+            $country->setDescription($data['__country_notice']);
+        }
+
+        if (isset($data['__country_countryen'])) {
+            $country->setEn($data['__country_countryen']);
+        }
+
+        if (isset($data['__country_display_state_in_registration'])) {
+            $country->setDisplayStateSelection((bool)$data['__country_display_state_in_registration']);
+        }
+
+        if (isset($data['__country_force_state_in_registration'])) {
+            $country->setRequiresStateSelection((bool)$data['__country_force_state_in_registration']);
+        }
+
+        if (isset($data['__country_shippingfree'])) {
+            $country->setShippingFree((bool)$data['__country_shippingfree']);
+        }
+
+        if (isset($data['__country_taxfree'])) {
+            $country->setTaxFree((bool)$data['__country_taxfree']);
+        }
+
+        if (isset($data['__country_taxfree_ustid'])) {
+            $country->setTaxFreeForVatId((bool)$data['__country_taxfree_ustid']);
+        }
+
+        if (isset($data['__country_taxfree_ustid_checked'])) {
+            $country->setVatIdCheck((bool)$data['__country_taxfree_ustid_checked']);
+        }
+
+        if ($data['__countryAttribute_id'] !== null) {
             $attribute = $this->attributeHydrator->hydrate(
-                $this->extractFields('__attribute_', $data)
+                $this->extractFields('__countryAttribute_', $data)
             );
             $country->addAttribute('core', $attribute);
         }
 
         return $country;
+    }
+
+    private function getTranslation($data, $field, $id, $mapping = array())
+    {
+        if (!isset($data[$field])) {
+            return array();
+        }
+
+        $translation = unserialize($data[$field]);
+
+        if (empty($translation[$id])) {
+            return array();
+        }
+        
+        if (empty($mapping)) {
+            return $translation;
+        }
+
+        return $this->convertArrayKeys($translation[$id], $mapping);
     }
 
     /**
@@ -61,12 +141,29 @@ class Country extends Hydrator
     public function hydrateState(array $data)
     {
         $state = new State();
+        
+        $translation = $this->getTranslation(
+            $data,
+            '__countryState_translation',
+            $data['__countryState_id'],
+            $this->translationStateFields
+        );
 
-        $state->setId($data['id']);
+        $data = array_merge($data, $translation);
 
-        if ($data['__attribute_id'] !== null) {
+        $state->setId((int)$data['__countryState_id']);
+
+        if (isset($data['__countryState_name'])) {
+            $state->setName($data['__countryState_name']);
+        }
+
+        if (isset($data['__countryState_shortcode'])) {
+            $state->setCode($data['__countryState_shortcode']);
+        }
+
+        if ($data['__countryStateAttribute_id'] !== null) {
             $attribute = $this->attributeHydrator->hydrate(
-                $this->extractFields('__attribute_', $data)
+                $this->extractFields('__countryStateAttribute_', $data)
             );
             $state->addAttribute('core', $attribute);
         }

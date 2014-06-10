@@ -11,6 +11,12 @@ class Manufacturer extends Hydrator
      */
     private $attributeHydrator;
 
+    private $translationMapping = array(
+        'metaTitle' => 'meta_title',
+        'metaDescription' => 'meta_description',
+        'metaKeywords' => 'meta_keywords',
+    );
+
     function __construct(Attribute $attributeHydrator)
     {
         $this->attributeHydrator = $attributeHydrator;
@@ -35,36 +41,39 @@ class Manufacturer extends Hydrator
 
     public function assignData(Struct\Product\Manufacturer $manufacturer, array $data)
     {
-        if (isset($data['id'])) {
-            $manufacturer->setId(intval($data['id']));
+        $translation = $this->getTranslation($data);
+        $data = array_merge($data, $translation);
+
+        if (isset($data['__manufacturer_id'])) {
+            $manufacturer->setId(intval($data['__manufacturer_id']));
         }
 
-        if (isset($data['name'])) {
-            $manufacturer->setName($data['name']);
+        if (isset($data['__manufacturer_name'])) {
+            $manufacturer->setName($data['__manufacturer_name']);
         }
 
-        if (isset($data['description'])) {
-            $manufacturer->setDescription($data['description']);
+        if (isset($data['__manufacturer_description'])) {
+            $manufacturer->setDescription($data['__manufacturer_description']);
         }
 
-        if (isset($data['meta_title'])) {
-            $manufacturer->setMetaTitle($data['meta_title']);
+        if (isset($data['__manufacturer_meta_title'])) {
+            $manufacturer->setMetaTitle($data['__manufacturer_meta_title']);
         }
 
-        if (isset($data['meta_description'])) {
-            $manufacturer->setMetaDescription($data['meta_description']);
+        if (isset($data['__manufacturer_meta_description'])) {
+            $manufacturer->setMetaDescription($data['__manufacturer_meta_description']);
         }
 
-        if (isset($data['meta_keywords'])) {
-            $manufacturer->setMetaKeywords($data['meta_keywords']);
+        if (isset($data['__manufacturer_meta_keywords'])) {
+            $manufacturer->setMetaKeywords($data['__manufacturer_meta_keywords']);
         }
 
-        if (isset($data['link'])) {
-            $manufacturer->setLink($data['link']);
+        if (isset($data['__manufacturer_link'])) {
+            $manufacturer->setLink($data['__manufacturer_link']);
         }
 
-        if (isset($data['img'])) {
-            $manufacturer->setCoverFile($data['img']);
+        if (isset($data['__manufacturer_img'])) {
+            $manufacturer->setCoverFile($data['__manufacturer_img']);
         }
     }
 
@@ -75,5 +84,25 @@ class Manufacturer extends Hydrator
         );
 
         $manufacturer->addAttribute('core', $attribute);
+    }
+
+    private function getTranslation($data)
+    {
+        $translation = array();
+
+        if (!isset($data['__manufacturer_translation'])) {
+            return $translation;
+        }
+
+        $translation = unserialize($data['__manufacturer_translation']);
+
+        if (empty($translation)) {
+            return array();
+        }
+
+        return $this->convertArrayKeys(
+            $translation,
+            $this->translationMapping
+        );
     }
 }

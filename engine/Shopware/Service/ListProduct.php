@@ -33,11 +33,6 @@ class ListProduct
     private $priceCalculationService;
 
     /**
-     * @var Translation
-     */
-    private $translationService;
-
-    /**
      * @var \Enlight_Event_EventManager
      */
     private $eventManager;
@@ -48,7 +43,6 @@ class ListProduct
         CheapestPrice $cheapestPriceService,
         PriceCalculation $priceCalculationService,
         Media $mediaService,
-        Translation $translationService,
         \Enlight_Event_EventManager $eventManager
     ) {
         $this->productGateway = $productGateway;
@@ -56,7 +50,6 @@ class ListProduct
         $this->cheapestPriceService = $cheapestPriceService;
         $this->priceCalculationService = $priceCalculationService;
         $this->mediaService = $mediaService;
-        $this->translationService = $translationService;
         $this->eventManager = $eventManager;
     }
 
@@ -107,15 +100,18 @@ class ListProduct
     {
         $products = $this->productGateway->getList($numbers, $context);
 
-        $covers = $this->mediaService->getProductsCovers($products, $context);
+        $covers = $this->mediaService->getCovers($products, $context);
 
         $graduatedPrices = $this->graduatedPricesService->getList($products, $context);
 
         $cheapestPrices = $this->cheapestPriceService->getList($products, $context);
 
-        /**@var $product Struct\ListProduct */
-        foreach ($products as $product) {
-            $number = $product->getNumber();
+        $result = array();
+        foreach($numbers as $number) {
+            if (!array_key_exists($number, $products)) {
+                continue;
+            }
+            $product = $products[$number];
 
             $product->setCover($covers[$number]);
 
@@ -125,9 +121,9 @@ class ListProduct
 
             $this->priceCalculationService->calculateProduct($product, $context);
 
-            $this->translationService->translateProduct($product, $context->getShop());
+            $result[$number] = $product;
         }
 
-        return $products;
+        return $result;
     }
 }

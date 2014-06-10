@@ -15,9 +15,10 @@ use Shopware\Gateway\Search\Facet;
 use Shopware\Gateway\Search\Product;
 use Shopware\Gateway\Search\Result;
 use Shopware\Gateway\Search\Sorting;
+use Shopware\Struct\Context;
 use Shopware\Struct\Customer\Group;
 
-class Search extends Gateway
+class Search
 {
     /**
      * @var QueryGenerator\DBAL[]
@@ -46,21 +47,22 @@ class Search extends Gateway
 
     /**
      * @param \Shopware\Gateway\Search\Criteria $criteria
+     * @param Context $context
      * @return Result
      */
-    public function search(Criteria $criteria)
+    public function search(Criteria $criteria, Context $context)
     {
         $this->queryGenerators[] = new QueryGenerator\CoreGenerator(new SearchPriceHelper());
-        $this->facetHandlers[] = new FacetHandler\Manufacturer();
-        $this->facetHandlers[] = new FacetHandler\Category();
-        $this->facetHandlers[] = new FacetHandler\Price(new SearchPriceHelper());
-        $this->facetHandlers[] = new FacetHandler\Property();
+        $this->facetHandlers[] = Shopware()->Container()->get('manufacturer_facet_handler_dbal');
+        $this->facetHandlers[] = Shopware()->Container()->get('category_facet_handler_dbal');
+        $this->facetHandlers[] = Shopware()->Container()->get('price_facet_handler_dbal');
+        $this->facetHandlers[] = Shopware()->Container()->get('property_facet_handler_dbal');
 
-        $products = $this->getProducts($criteria);
+        $products = $this->getProducts($criteria, $context);
 
-        $total = $this->getTotalCount($criteria);
+        $total = $this->getTotalCount($criteria, $context);
 
-        $facets = $this->createFacets($criteria);
+        $facets = $this->createFacets($criteria, $context);
 
         $result = new Result(
             $products,
@@ -71,9 +73,16 @@ class Search extends Gateway
         return $result;
     }
 
-    private function getTotalCount(Criteria $criteria)
+    /**
+     * Calculated the total count of the whole search result.
+     *
+     * @param Criteria $criteria
+     * @param \Shopware\Struct\Context $context
+     * @return mixed
+     */
+    private function getTotalCount(Criteria $criteria, Context $context)
     {
-        $query = $this->getQuery($criteria);
+        $query = $this->getQuery($criteria, $context);
 
         $query->resetQueryPart('groupBy')
             ->resetQueryPart('orderBy');
@@ -86,15 +95,22 @@ class Search extends Gateway
         return $statement->fetch(\PDO::FETCH_COLUMN);
     }
 
-    private function getProducts(Criteria $criteria)
+    /**
+     * Executes the base query to select the products.
+     *
+     * @param Criteria $criteria
+     * @param \Shopware\Struct\Context $context
+     * @return array
+     */
+    private function getProducts(Criteria $criteria, Context $context)
     {
-        $query = $this->getQuery($criteria)
+        $query = $this->getQuery($criteria, $context)
             ->addSelect(array('variants.articleID', 'variants.ordernumber'))
             ->addGroupBy('products.id')
             ->setFirstResult($criteria->offset)
             ->setMaxResults($criteria->limit);
 
-        $this->addSorting($criteria, $query);
+        $this->addSorting($criteria, $query, $context);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -122,9 +138,10 @@ class Search extends Gateway
 
     /**
      * @param Criteria $criteria
+     * @param \Shopware\Struct\Context $context
      * @return QueryBuilder
      */
-    private function getQuery(Criteria $criteria)
+    private function getQuery(Criteria $criteria, Context $context)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
 
@@ -142,18 +159,17 @@ class Search extends Gateway
                 'tax.id = products.taxID'
             );
 
-        $this->addConditions($criteria, $query);
+        $this->addConditions($criteria, $query, $context);
 
         return $query;
     }
 
-    private function createFacets(Criteria $criteria)
+    private function createFacets(Criteria $criteria, Context $context)
     {
         $facets = array();
 
         foreach ($criteria->facets as $facet) {
-
-            $query = $this->getQuery($criteria);
+            $query = $this->getQuery($criteria, $context);
 
             $handler = $this->getFacetHandler($facet);
 
@@ -161,7 +177,7 @@ class Search extends Gateway
                 throw new \Exception(sprintf("Facet %s not supported", get_class($facet)));
             }
 
-            $facets[] = $handler->generateFacet($facet, $query, $criteria);
+            $facets[] = $handler->generateFacet($facet, $query, $criteria, $context);
         }
 
         return $facets;
@@ -170,9 +186,11 @@ class Search extends Gateway
     /**
      * @param Criteria $criteria
      * @param QueryBuilder $query
+     * @param \Shopware\Struct\Context $context
+     *
      * @throws \Exception
      */
-    private function addConditions(Criteria $criteria, QueryBuilder $query)
+    private function addConditions(Criteria $criteria, QueryBuilder $query, Context $context)
     {
         foreach ($criteria->conditions as $condition) {
             $generator = $this->getConditionGenerator($condition);
@@ -181,16 +199,17 @@ class Search extends Gateway
                 throw new \Exception(sprintf("Condition %s not supported", get_class($condition)));
             }
 
-            $generator->generateCondition($condition, $query);
+            $generator->generateCondition($condition, $query, $context);
         }
     }
 
     /**
      * @param Criteria $criteria
      * @param QueryBuilder $query
+     * @param \Shopware\Struct\Context $context
      * @throws \Exception
      */
-    private function addSorting(Criteria $criteria, QueryBuilder $query)
+    private function addSorting(Criteria $criteria, QueryBuilder $query, Context $context)
     {
         foreach ($criteria->sortings as $sorting) {
 
@@ -200,7 +219,7 @@ class Search extends Gateway
                 throw new \Exception(sprintf("Sorting %s not supported", get_class($sorting)));
             }
 
-            $generator->generateSorting($sorting, $query);
+            $generator->generateSorting($sorting, $query, $context);
         }
     }
 
