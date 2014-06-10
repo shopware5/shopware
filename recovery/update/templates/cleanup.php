@@ -2,6 +2,8 @@
 
 <div id="start">
     <form action="<?php echo $app->urlFor('cleanup'); ?>" method="post">
+        <input type="hidden" name="ie11-dummy-payload" value="some-payload" />
+
         <div class="page-header">
             <h2><?php echo $language["cleanup_header"];?></h2>
         </div>

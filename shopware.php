@@ -52,7 +52,7 @@ if (file_exists('config.php') && strpos(file_get_contents('config.php'), '%db.da
     return;
 }
 
-// Check for update-script
+// Check for legacy update-script
 if (is_dir('update')) {
     header('Content-type: text/html; charset=utf-8', true, 503);
     header('Status: 503 Service Temporarily Unavailable');
@@ -61,7 +61,16 @@ if (is_dir('update')) {
     return;
 }
 
-// Check for active update
+// Check for active manual update
+if (is_dir('update-assets')) {
+    header('Content-type: text/html; charset=utf-8', true, 503);
+    header('Status: 503 Service Temporarily Unavailable');
+    header('Retry-After: 1200');
+    echo file_get_contents(__DIR__ . '/recovery/update/maintenance.html');
+    return;
+}
+
+// Check for active auto update
 if (is_file('files/update/update.json')) {
     header('Content-type: text/html; charset=utf-8', true, 503);
     header('Status: 503 Service Temporarily Unavailable');
