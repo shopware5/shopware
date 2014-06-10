@@ -17,7 +17,9 @@
 					{$errorText="{s name='DownloadsInfoAccessDenied'}{/s}"}
 				{/if}
 
-				{include file="frontend/_includes/messages.tpl" type="warning" content=$errorText}
+				<div class="account--error">
+					{include file="frontend/_includes/messages.tpl" type="warning" content=$errorText}
+				</div>
 			{/if}
 		{/block}
 
@@ -38,95 +40,108 @@
 
 		{* Missing ESD articles *}
 		{if !$sDownloads}
-			{block name='frontend_account_downloads_info_empty'}
-				{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='DownloadsInfoEmpty'}{/s}"}
+			{block name="frontend_account_downloads_info_empty"}
+				<div class="account--error">
+					{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='DownloadsInfoEmpty'}{/s}"}
+				</div>
 			{/block}
 	    {else}
-	    	<div class="account--downloads panel--table">
+			{block name="frontend_account_downloads_table"}
+				<div class="account--downloads panel--table">
 
-				{block name="frontend_account_downloads_table_head"}
-					<div class="panel--tr">
-						<div class="panel--th column--date">{s name="DownloadsColumnDate"}{/s}</div>
-						<div class="panel--th column--info">{s name="DownloadsColumnName"}{/s}</div>
-						<div class="panel--th column--actions">{s name="DownloadsColumnLink"}{/s}</div>
-					</div>
-				{/block}
+					{block name="frontend_account_downloads_table_head"}
+						<div class="downloads--table-header panel--tr">
 
-				{foreach from=$sDownloads item=offerPosition}
-					{foreach name=offerdetails from=$offerPosition.details item=article}
-						{if $article.esdarticle}
-
-							{block name="frontend_account_downloads_table_row"}
-								<div class="panel--tr">
-
-									{block name="frontend_account_downloads_date"}
-										<div class="panel--td column--date">
-											{$offerPosition.datum|date}
-										</div>
-									{/block}
-
-									{block name='frontend_account_downloads_info'}
-										<div class="panel--td column--info">
-											{block name='frontend_account_downloads_name'}
-												<span class="is--bold">{$article.name}</span>
-											{/block}
-
-											{block name='frontend_account_downloads_serial'}
-												{if $article.serial && $offerPosition.cleared|in_array:$sDownloadAvailablePaymentStatus}
-													<p>{s name="DownloadsSerialnumber"}{/s} <span class="is--bold">{$article.serial}</span></p>
-												{/if}
-											{/block}
-										</div>
-									{/block}
-
-									{block name='frontend_account_downloads_link'}
-										<div class="panel--td column--actions">
-											{if $article.esdarticle && $offerPosition.cleared|in_array:$sDownloadAvailablePaymentStatus}
-												<a href="{$article.esdLink}" title="{s name="DownloadsLink"}{/s} {$article.name}" class="btn btn--primary is--small">
-													{s name="DownloadsLink"}{/s}
-												</a>
-											{/if}
-										</div>
-									{/block}
-
-								</div>
+							{block name="frontend_account_downloads_table_head_date"}
+								<div class="panel--th column--date">{s name="DownloadsColumnDate"}{/s}</div>
 							{/block}
-						{/if}
+
+							{block name="frontend_account_downloads_table_head_info"}
+								<div class="panel--th column--info">{s name="DownloadsColumnName"}{/s}</div>
+							{/block}
+
+							{block name="frontend_account_downloads_table_head_actions"}
+								<div class="panel--th column--actions">{s name="DownloadsColumnLink"}{/s}</div>
+							{/block}
+						</div>
+					{/block}
+
+					{foreach $sDownloads as $offerPosition}
+						{foreach $offerPosition.details as $article}
+							{if $article.esdarticle}
+
+								{block name="frontend_account_downloads_table_row"}
+									<div class="panel--tr">
+
+										{block name="frontend_account_downloads_date"}
+											<div class="download--date panel--td column--date">
+												{$offerPosition.datum|date}
+											</div>
+										{/block}
+
+										{block name="frontend_account_downloads_info"}
+											<div class="download--name panel--td column--info">
+												{block name="frontend_account_downloads_name"}
+													<p class="is--bold">{$article.name}</p>
+												{/block}
+
+												{block name="frontend_account_downloads_serial"}
+													{if $article.serial && $offerPosition.cleared|in_array:$sDownloadAvailablePaymentStatus}
+														<p class="download--serial">{s name="DownloadsSerialnumber"}{/s} <span class="is--strong">{$article.serial}</span></p>
+													{/if}
+												{/block}
+											</div>
+										{/block}
+
+										{block name="frontend_account_downloads_link"}
+											<div class="download--actions panel--td column--actions">
+												{if $article.esdarticle && $offerPosition.cleared|in_array:$sDownloadAvailablePaymentStatus}
+													<a href="{$article.esdLink}" title="{s name="DownloadsLink"}{/s} {$article.name}" class="btn btn--primary is--small">
+														{s name="DownloadsLink"}{/s}
+													</a>
+												{/if}
+											</div>
+										{/block}
+
+									</div>
+								{/block}
+							{/if}
+						{/foreach}
 					{/foreach}
-				{/foreach}
 
-				{block name='frontend_account_downloads_actions_paging'}
-					{if $sPages.numbers|@count > 1}
-						<div class="panel--paging">
-
-							<label>{s name="ListingPaging"}Blättern:{/s}</label>
-
+					{block name="frontend_account_downloads_actions_paging"}
+						<div class="account--paging panel--paging">
 							{if $sPages.previous}
 								<a href="{$sPages.previous}">
-									{s name="ListingTextPrevious"}&lt;{/s}
+									{s name="ListingTextPrevious" namespace="frontend/listing/listing_actions"}&lt;{/s}
 								</a>
 							{/if}
 
-							{foreach from=$sPages.numbers item=page}
+							{foreach $sPages.numbers as $page}
 								{if $page.markup}
-									<a href="#">{$page.value}</a>
+									<a>{$page.value}</a>
 								{else}
 									<a href="{$page.link}">{$page.value}</a>
 								{/if}
 							{/foreach}
 
 							{if $sPages.next}
-								<a href="{$sPages.next}">{s name="ListingTextNext"}&gt;{/s}</a>
+								<a href="{$sPages.next}">{s name="ListingTextNext" namespace="frontend/listing/listing_actions"}&gt;{/s}</a>
 							{/if}
-							<div class="pagination--display">
-								{s name="ListingTextSite"}Seite{/s} <strong>{if $sPage}{$sPage}{else}1{/if}</strong> {s name="ListingTextFrom"}von{/s} <strong>{$sNumberPages}</strong>
-							</div>
 
+							{block name='frontend_account_downloads_actions_paging_count'}
+								<div class="pagination--display">
+									{s name="ListingTextSite" namespace="frontend/listing/listing_actions"}Seite{/s}
+									<span class="is--bold">{if $sPage}{$sPage}{else}1{/if}</span>
+									{s name="ListingTextFrom" namespace="frontend/listing/listing_actions"}von{/s}
+									<span class="is--bold">{$sNumberPages}</span>
+								</div>
+							{/block}
 						</div>
-					{/if}
-				{/block}
-		    </div>
+					{/block}
 
+				</div>
+			{/block}
 	    {/if}
 	</div>
 {/block}

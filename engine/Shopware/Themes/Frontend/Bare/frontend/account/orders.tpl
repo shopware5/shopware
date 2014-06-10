@@ -65,11 +65,11 @@
 						</div>
 					{/block}
 
-					{block name='frontend_account_orders_actions_paging'}
+					{block name="frontend_account_orders_actions_paging"}
 						<div class="account--paging panel--paging">
 							{if $sPages.previous}
 								<a href="{$sPages.previous}">
-									{s name="ListingTextPrevious"}&lt;{/s}
+									{s name="ListingTextPrevious" namespace="frontend/listing/listing_actions"}&lt;{/s}
 								</a>
 							{/if}
 
@@ -82,14 +82,14 @@
 							{/foreach}
 
 							{if $sPages.next}
-								<a href="{$sPages.next}">{s name="ListingTextNext"}&gt;{/s}</a>
+								<a href="{$sPages.next}">{s name="ListingTextNext" namespace="frontend/listing/listing_actions"}&gt;{/s}</a>
 							{/if}
 
 							{block name='frontend_account_orders_actions_paging_count'}
 								<div class="pagination--display">
-									{s name="ListingTextSite"}Seite{/s}
+									{s name="ListingTextSite" namespace="frontend/listing/listing_actions"}Seite{/s}
 									<span class="is--bold">{if $sPage}{$sPage}{else}1{/if}</span>
-									{s name="ListingTextFrom"}von{/s}
+									{s name="ListingTextFrom" namespace="frontend/listing/listing_actions"}von{/s}
 									<span class="is--bold">{$sNumberPages}</span>
 								</div>
 							{/block}
