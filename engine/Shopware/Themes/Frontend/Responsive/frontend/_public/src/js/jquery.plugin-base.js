@@ -1,93 +1,102 @@
-;(function($) {
+;(function ($) {
 
     /*! Tiny Pub/Sub - v0.7.0 - 2013-01-29
-    * https://github.com/cowboy/jquery-tiny-pubsub
-    * Copyright (c) 2013 "Cowboy" Ben Alman; Licensed MIT */
+     * https://github.com/cowboy/jquery-tiny-pubsub
+     * Copyright (c) 2013 "Cowboy" Ben Alman; Licensed MIT */
     var o = $({});
-    $.subscribe = function() {
+    $.subscribe = function () {
         o.on.apply(o, arguments);
     };
 
-    $.unsubscribe = function() {
+    $.unsubscribe = function () {
         o.off.apply(o, arguments);
     };
 
-    $.publish = function() {
+    $.publish = function () {
         o.trigger.apply(o, arguments);
     };
 }(jQuery));
 
-;(function($) {
+;(function ($) {
+    "use strict";
 
     /**
-     * Plugin base class which is the basement of all available jQuery plugins in the store front.
+     * Constructor method of the PluginBase class. This method will try to
+     * call the ```init```-method, where you can place your custom initialization of the plugin.
      *
-     * @params {Void}
-     * @returns {Void}
+     * @class PluginBase
      * @constructor
+     * @param {String} name - Plugin name that is used for the events suffixes.
+     * @param {HTMLElement} element - Element which should be used for the plugin.
+     * @param {Object} options - The user settings, which overrides the default settings
      */
-    function PluginBase () {}
+    function PluginBase(name, element, options) {
+        var me = this;
+
+        /**
+         * @property {String} _name - Name of the Plugin
+         * @private
+         */
+        me._name = name;
+
+        /**
+         * @property {jQuery} $el - Plugin element wrapped by jQuery
+         */
+        me.$el = $(element);
+
+        /**
+         * @property {Object} opts - Merged plugin options
+         */
+        me.opts = $.extend({}, me.defaults || {}, options);
+
+        /**
+         * @property {string} eventSuffix - Suffix which will be appended to the eventType to get namespaced events
+         */
+        me.eventSuffix = '.' + name;
+
+        /**
+         * @property {Array} _events Registered events listeners. See {@link PluginBase._on} for registration
+         * @private
+         */
+        me._events = [];
+
+        // Create new selector for the plugin
+        $.expr[':']['plugin-' + name.toLowerCase()] = function (elem) {
+            return !!$.data(elem, 'plugin-' + name);
+        };
+
+        // Call the init method of the plugin
+        if (typeof me.init === 'function') {
+            me.init();
+        }
+
+        $.publish('/plugin/' + name + '/init', [ me ]);
+    }
+
     PluginBase.prototype = {
 
-        /** @string Suffix which will be appended to the eventType to get namespaced events */
-        eventSuffix: '.plugin',
-
-        /** @string Name of the plugin */
-        _name: 'plugin',
-
-        /** @array Registered events listeners. See {@link PluginBase._on} for registration */
-        _events: [],
-
         /**
-         * Constructor method of the class to set up the event correctly. The method will try to
-         * call the ```init```-method, where you can place your custom initialization of the plugin.
-         *
-         * @private
-         * @constructor
-         * @param {Object} userOpts - The user settings, which overrides the default settings
-         * @param {jQuery} element - Element which should be used for the plugin.
-         * @returns {PluginBase}
-         */
-        _init: function (userOpts, element) {
-            var me = this;
-
-            me.$el = $(element);
-            me.opts = $.extend({}, me.defaults || {}, userOpts);
-            me.eventSuffix = '.' + me._name;
-
-            // Create new selector for the plugin
-            $.expr[':']['plugin-' + me._name.toLowerCase()] = function(elem) {
-                return !!$.data(elem, 'plugin-' + me._name);
-            };
-
-            // Call the init method of the plugin
-            if (typeof me.init === 'function') {
-                me.init();
-            }
-
-            $.publish('/plugin/' + me._name + '/init', [ me ]);
-            return me;
-        },
-
-        /**
-         * Destroyes the plugin on the {@link HTMLElement}. It removes the instance of the plugin
+         * Destroys the plugin on the {@link HTMLElement}. It removes the instance of the plugin
          * which is bounded to the {@link jQuery} element.
          *
          * If the plugin author has used the {@link PluginBase._on} method, the added event listeners
          * will automatically be cleared.
          *
-         * @returns {PluginBase}
          * @private
+         * @method _destroy
+         * @returns {PluginBase}
          */
         _destroy: function () {
-            var me = this;
+            var me = this,
+                name = me.getName();
 
-            $.each(me._events, function(i, obj) {
+            $.each(me._events, function (i, obj) {
                 obj.el.off(obj.event);
             });
 
-            me.$el.removeData('plugin' + me._name);
-            $.publish('/plugin/' + me._name + '/destroy', [ me ]);
+            me.$el.removeData('plugin' + name);
+
+            $.publish('/plugin/' + name + '/destroy', [ me ]);
 
             return me;
         },
@@ -101,59 +110,60 @@
          * @returns {PluginBase}
          * @private
          */
-        _on: function() {
+        _on: function () {
             var me = this,
-                el = $(arguments[0]),
-                event = arguments[1] + me.eventSuffix,
+                $el = $(arguments[0]),
+                event = me.getEventName(arguments[1]),
                 args = Array.prototype.slice.call(arguments, 2);
 
-            me._events.push({ 'el': el, 'event': event });
+            me._events.push({ 'el': $el, 'event': event });
             args.unshift(event);
-            el.on.apply(el, args);
+            $el.on.apply($el, args);
 
-            $.publish('/plugin/' + me._name + '/on', [ el, event ]);
+            $.publish('/plugin/' + me._name + '/on', [ $el, event ]);
 
             return me;
         },
 
         /**
          * Wrapper method for {@link jQuery.off}, which removes the event listener from the {@link PluginBase._events}
-         * arrary.
-         * @param {jQuery} el - Element, which contains the listener
+         * array.
+         *
+         * @param {jQuery} element - Element, which contains the listener
          * @param {String} event - Name of the event to remove.
          * @returns {PluginBase}
          * @private
          */
-        _off: function (el, event) {
+        _off: function (element, event) {
             var me = this,
-                events, eventIds = [];
+                events = me._events,
+                pluginEvent = me.getEventName(event),
+                eventIds = [],
+                $element = $(element),
+                filteredEvents = $.grep(events, function (obj, index) {
+                    eventIds.push(index);
+                    return pluginEvent === obj.event && $element[0] === obj.el[0];
+                });
 
-            el = $(el);
-            event = event + me.eventSuffix;
-
-            events = $.grep(me._events, function (obj, index) {
-                eventIds.push(index);
-                return event === obj.event && el[0] === obj.el[0];
-            });
-
-            $.each(events, function (event) {
-                el.off.apply(el, [ event.event ]);
+            $.each(filteredEvents, function (event) {
+                $element.off.apply($element, [ event.event ]);
             });
 
             $.each(eventIds, function (id) {
-                if(!me._events[id]) {
-                    return true;
+                if (!events[id]) {
+                    return;
                 }
-                delete me._events[id];
+                delete events[id];
             });
 
-            $.publish('/plugin/' + me._name + '/off', [ el, event ]);
+            $.publish('/plugin/' + me._name + '/off', [ $element, pluginEvent ]);
+
             return me;
         },
 
         /**
          * Returns the name of the plugin.
-         * @returns {String}
+         * @returns {PluginBase._name|String}
          */
         getName: function () {
             return this._name;
@@ -170,7 +180,7 @@
 
         /**
          * Returns the element which registered the plugin.
-         * @returns {jQuery}
+         * @returns {PluginBase.$el}
          */
         getElement: function () {
             return this.$el;
@@ -187,7 +197,7 @@
         /**
          * Returns the value of a single option.
          * @param {String} key - Option key.
-         * @returns {Mixed}
+         * @returns {mixed}
          */
         getOption: function (key) {
             return this.opts[key];
@@ -196,39 +206,46 @@
         /**
          * Sets a plugin option. Deep linking of the options are now supported.
          * @param {String} key - Option key
-         * @param {Mixed} value - Option value
+         * @param {mixed} value - Option value
          * @returns {PluginBase}
          */
-        setOption: function(key, value) {
-            this.opts[key] = value;
-            return this;
+        setOption: function (key, value) {
+            var me = this;
+
+            me.opts[key] = value;
+
+            return me;
         },
 
         /**
          * Fetches the configured options based on the {@link PluginBase.$el}.
-         * @returns {Mixed} configuration
+         * @returns {mixed} configuration
          */
-        getDataAttributes: function() {
+        getDataAttributes: function () {
             var me = this,
+                opts = me.opts,
                 attr;
 
-            $.each(me.opts, function(key) {
+            $.each(opts, function (key) {
                 attr = me.$el.attr('data-' + key);
                 if (attr !== undefined) {
-                    me.opts[key] = attr;
+                    opts[key] = attr;
                 }
             });
 
-            $.publish('/plugin/' + me._name + '/data-attributes', [ me.$el, me.opts ]);
+            $.publish('/plugin/' + me._name + '/data-attributes', [ me.$el, opts ]);
 
-            return me.opts;
+            return opts;
         }
     };
+
+    // Expose the private PluginBase constructor to global jQuery object
+    $.PluginBase = PluginBase;
 
     // Object.create support test, and fallback for browsers without it
     if (typeof Object.create !== 'function') {
         Object.create = function (o) {
-            function F() {}
+            function F() { }
             F.prototype = o;
             return new F();
         };
@@ -242,8 +259,8 @@
      * do so, please use the {@link PluginBase._on} method to create event listeners.
      *
      * @param {String} name - Name of the plugin
-     * @param {Object} clsObj - Plugin implementation
-     * @returns {Void}
+     * @param {Object|Function} plugin - Plugin implementation
+     * @returns {void}
      *
      * @example
      * // Register your plugin
@@ -265,15 +282,26 @@
      * // Call the plugin
      * $('.test').yourName();
      */
-    $.plugin = function (name, clsObj) {
-        $.fn[name] = function (opts) {
+    $.plugin = function (name, plugin) {
+        $.fn[name] = function (options) {
             return this.each(function () {
-                if(!$.data(this, 'plugin-' + name)) {
-                    clsObj = $.extend({ _name: name }, clsObj);
-                    var cls = $.extend({}, PluginBase.prototype, clsObj);
-                    $.data(this, 'plugin-' + name, cls._init(opts, this));
+                var element = this;
+
+                if (!$.data(element, 'plugin-' + name)) {
+                    if (typeof plugin === 'function') {
+                        $.data(element, 'plugin-' + name, new plugin());
+                        return;
+                    }
+
+                    var Plugin = function () {
+                        PluginBase.call(this, name, element, options);
+                    };
+
+                    Plugin.prototype = $.extend(Object.create(PluginBase.prototype), { constructor: Plugin }, plugin);
+
+                    $.data(element, 'plugin-' + name, new Plugin());
                 }
             });
-        }
+        };
     };
 })(jQuery);
