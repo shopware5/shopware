@@ -131,11 +131,11 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 }
 
                 $fields[$id] = $this->_createInputElement($element, $this->_postData[$id]);
-			$labels[$id] = $this->_createLabelElement($element);
+			    $labels[$id] = $this->_createLabelElement($element);
             }
         }
 
-	// prepare form data for view
+	    // prepare form data for view
         $formData = array(
             'id'             => (string) $form->getId(),  // intended string cast to keep compatibility
             'name'           => $form->getName(),
@@ -147,14 +147,13 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         );
 
         $this->View()->sSupport = array_merge($formData, array(
-		'sErrors'   => $this->_errors,
-		'sElements' => $this->_elements,
-		'sFields'   => $fields,
-		'sLabels'   => $labels
-	    )
-	);
+	    'sErrors'   => $this->_errors,
+	    'sElements' => $this->_elements,
+	    'sFields'   => $fields,
+	    'sLabels'   => $labels
+	    ));
 
-	$this->View()->rand = md5(uniqid(rand()));
+	    $this->View()->rand = md5(uniqid(rand()));
 
         if (!count($this->_errors) && !empty($this->Request()->Submit)) {
             $this->commitForm();
@@ -192,14 +191,14 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         if (!empty($this->_errors)) {
             foreach ($this->_errors['e'] as $key => $value) {
 		if (isset($this->_errors['e'][$key])) {
-		    if ($this->_elements[$key]['typ'] == "text2") {
-			$class = explode(";", $this->_elements[$key]['class']);
-			$this->_elements[$key]['class'] = implode(" instyle_error has--error;", $class) . " instyle_error has--error";
-		    } else {
-			$this->_elements[$key]['class'] .= " instyle_error has--error";
+			if ($this->_elements[$key]['typ'] == "text2") {
+			    $class = explode(";", $this->_elements[$key]['class']);
+			    $this->_elements[$key]['class'] = implode(" instyle_error has--error;", $class) . " instyle_error has--error";
+			} else {
+			    $this->_elements[$key]['class'] .= " instyle_error has--error";
+			}
 		    }
 		}
-	    }
         }
 
         $isSpam = false;
@@ -231,8 +230,8 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     public function commitForm()
     {
         $mail = Shopware()->System()->sMailer;
-	$template = Shopware()->Config()->Templates->sSUPPORT;
-	$mail->IsHTML($template['ishtml']);
+	    $template = Shopware()->Config()->Templates->sSUPPORT;
+	    $mail->IsHTML($template['ishtml']);
 
 	//Email field available check
 	foreach ($this->_elements as $element) {
@@ -309,20 +308,20 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 	if ($element['required'] == 1) {
 	    $requiredField = "is--required required";
 	    $requiredFieldSnippet = "%*%";
-		$requiredFieldAria = 'required="required" aria-required="true"';
-    } else {
+	    $requiredFieldAria = 'required="required" aria-required="true"';
+	} else {
 	    $requiredField = "";
 	    $requiredFieldSnippet = "";
 	    $requiredFieldAria = "";
 	}
 
-    $placeholder = "placeholder=\"{$element['label']}$requiredFieldSnippet\"";
-    if (Shopware()->Shop()->getTemplate()->getVersion() < 3) {
-	$placeholder = "";
-	$requiredFieldSnippet = "";
-    }
+	$placeholder = "placeholder=\"{$element['label']}$requiredFieldSnippet\"";
+	if (Shopware()->Shop()->getTemplate()->getVersion() < 3) {
+	    $placeholder = "";
+	    $requiredFieldSnippet = "";
+	}
 
-	switch ($element['typ']) {
+	    switch ($element['typ']) {
             case "password":
             case "email":
             case "text":
@@ -360,32 +359,32 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             case "checkbox":
                 if ($post == $element['value']) {
                     $checked = " checked";
-		} else {
-		    $checked = "";
+			} else {
+			    $checked = "";
+			}
+		$output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $requiredField\" $requiredFieldAria value=\"{$element['value']}\" id=\"{$element['name']}\" name=\"{$element['name']}\"$checked/>\r\n";
+		break;
+		case "file":
+		$output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $requiredField file\" $requiredFieldAria id=\"{$element['name']}\" $placeholder name=\"{$element['name']}\" maxlength=\"100000\" accept=\"{$element['value']}\"/>\r\n";
+			break;
+		case "text2":
+			$element['class'] = explode(";", $element['class']);
+			$element['name'] = explode(";", $element['name']);
+		$output .= "<input type=\"text\" class=\"{$element['class'][0]} $requiredField\" $requiredFieldAria value=\"{$post[0]}\" $placeholder id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][0]}\"/>\r\n";
+		$output .= "<input type=\"text\" class=\"{$element['class'][1]} $requiredField\" $requiredFieldAria value=\"{$post[1]}\" $placeholder id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][1]}\"/>\r\n";
+			break;
+		case "textarea":
+			if (empty($post) && $element["value"]) {
+			    $post = $element["value"];
 		}
-				$output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $requiredField\" $requiredFieldAria value=\"{$element['value']}\" id=\"{$element['name']}\" name=\"{$element['name']}\"$checked/>\r\n";
-		break;
-	    case "file":
-				$output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $requiredField file\" $requiredFieldAria id=\"{$element['name']}\" $placeholder name=\"{$element['name']}\" maxlength=\"100000\" accept=\"{$element['value']}\"/>\r\n";
-		break;
-	    case "text2":
-		$element['class'] = explode(";", $element['class']);
-		$element['name'] = explode(";", $element['name']);
-				$output .= "<input type=\"text\" class=\"{$element['class'][0]} $requiredField\" $requiredFieldAria value=\"{$post[0]}\" $placeholder id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][0]}\"/>\r\n";
-				$output .= "<input type=\"text\" class=\"{$element['class'][1]} $requiredField\" $requiredFieldAria value=\"{$post[1]}\" $placeholder id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][1]}\"/>\r\n";
-		break;
-	    case "textarea":
-		if (empty($post) && $element["value"]) {
-		    $post = $element["value"];
-		}
-				$output .= "<textarea class=\"{$element['class']} $requiredField\" $requiredFieldAria id=\"{$element['name']}\" $placeholder name=\"{$element['name']}\">{$post}</textarea>\r\n";
-		break;
-	    case "select":
-		$values = explode(";", $element['value']);
-		$output .= "<select class=\"{$element['class']} $requiredField\" id=\"{$element['name']}\" name=\"{$element['name']}\">\r\n\t<option selected=\"selected\" value=\"\">" . Shopware()->Snippets()->getNamespace('frontend/newsletter/index')->get('NewsletterLabelSelect') . "$requiredFieldSnippet</option>";
-		foreach ($values as $value) {
-		    if ($value == $post) {
-			$output .= "<option selected>$value</option>";
+		$output .= "<textarea class=\"{$element['class']} $requiredField\" $requiredFieldAria id=\"{$element['name']}\" $placeholder name=\"{$element['name']}\">{$post}</textarea>\r\n";
+			break;
+		case "select":
+			$values = explode(";", $element['value']);
+			$output .= "<select class=\"{$element['class']} $requiredField\" id=\"{$element['name']}\" name=\"{$element['name']}\">\r\n\t<option selected=\"selected\" value=\"\">" . Shopware()->Snippets()->getNamespace('frontend/newsletter/index')->get('NewsletterLabelSelect') . "$requiredFieldSnippet</option>";
+			foreach ($values as $value) {
+			    if ($value == $post) {
+				    $output .= "<option selected>$value</option>";
                     } else {
                         $output .= "<option>$value</option>";
                     }
@@ -400,7 +399,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                     } else {
                         $checked = "";
                     }
-		    $output .= "<input type=\"radio\" class=\"{$element['class']} $requiredField\" value=\"$value\" id=\"{$element['name']}\" name=\"{$element['name']}\"$checked> $value ";
+			    $output .= "<input type=\"radio\" class=\"{$element['class']} $requiredField\" value=\"$value\" id=\"{$element['name']}\" name=\"{$element['name']}\"$checked> $value ";
                 }
                 $output .= "\r\n";
                 break;
