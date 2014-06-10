@@ -48,7 +48,7 @@ class ProductProperty
      * @param Struct\Product[] $products
      * @return Struct\Property\Set[]
      */
-    public function getList(array $products)
+    public function getList(array $products, Struct\Context $context)
     {
         $ids = array();
         foreach ($products as $product) {
@@ -60,7 +60,8 @@ class ProductProperty
         $query->addSelect('products.id as productId')
             ->addSelect($this->fieldHelper->getPropertySetFields())
             ->addSelect($this->fieldHelper->getPropertyGroupFields())
-            ->addSelect($this->fieldHelper->getPropertyOptionFields());
+            ->addSelect($this->fieldHelper->getPropertyOptionFields())
+        ;
 
         $query->addSelect('
         (
@@ -115,7 +116,10 @@ class ProductProperty
             'propertyGroup.id = propertyOption.optionID AND relations.optionID = propertyGroup.id'
         );
 
+        $this->fieldHelper->addPropertySetTranslation($query, $context);
+
         $query->where('products.id IN (:ids)')
+            ->setParameter(':language', $context->getShop()->getId())
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         $query->orderBy('filterArticles.articleID')

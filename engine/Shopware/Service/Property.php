@@ -30,7 +30,7 @@ class Property
      */
     public function getList(array $products, Struct\Context $context)
     {
-        $properties = $this->productPropertyGateway->getList($products);
+        $properties = $this->productPropertyGateway->getList($products, $context);
 
         return $properties;
     }

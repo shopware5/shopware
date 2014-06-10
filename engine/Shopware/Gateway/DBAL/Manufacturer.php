@@ -60,7 +60,7 @@ class Manufacturer
      * @param array $ids
      * @return Struct\Product\Manufacturer[]
      */
-    public function getList(array $ids)
+    public function getList(array $ids, Struct\Context $context)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
 
@@ -76,6 +76,10 @@ class Manufacturer
 
         $query->where('manufacturer.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+
+        $this->fieldHelper->addManufacturerTranslation($query);
+        $query->setParameter(':language', $context->getShop()->getId());
+
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();

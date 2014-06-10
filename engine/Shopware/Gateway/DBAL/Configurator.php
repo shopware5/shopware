@@ -56,16 +56,19 @@ class Configurator
 
         $this->addSelectionCondition($query, $selection);
 
+        $this->fieldHelper->addConfiguratorTranslation(
+            $query,
+            $context
+        );
+
         $query->where('products.id = :id')
+            ->setParameter(':language', $context->getShop()->getId())
             ->setParameter(':id', $product->getId());
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
-
-        Shopware()->Template()->assign('raw_data', $data);
-        Shopware()->Template()->assign('sql', $query->getSQL());
 
         return $this->configuratorHydrator->hydrate($data, $selection);
     }

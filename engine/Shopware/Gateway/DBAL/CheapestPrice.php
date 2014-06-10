@@ -78,11 +78,7 @@ class CheapestPrice
         $query = $this->entityManager->getDBALQueryBuilder();
 
         $query->select($this->fieldHelper->getPriceFields())
-            ->addSelect($this->fieldHelper->getUnitFields())
-            ->addSelect(array(
-                'unitTranslation.objectdata as __unit_translation',
-                'variantTranslation.objectdata as __variant_translation',
-            ));
+            ->addSelect($this->fieldHelper->getUnitFields());
 
         $query->from('s_articles_prices', 'price')
             ->innerJoin('price', 's_articles_details', 'variant', 'variant.id = price.articledetailsID')
@@ -90,28 +86,11 @@ class CheapestPrice
             ->leftJoin('variant', 's_core_units', 'unit', 'unit.id = variant.unitID')
             ->leftJoin('price', 's_articles_prices_attributes', 'priceAttribute', 'priceAttribute.priceID = price.id');
 
-        $query->leftJoin(
-            'unit',
-            's_core_translations',
-            'unitTranslation',
-            'unitTranslation.objecttype = :unitType AND
-             unitTranslation.objectkey = 1 AND
-             unitTranslation.objectlanguage = :language'
-        );
-
-        $query->leftJoin(
-            'variant',
-            's_core_translations',
-            'variantTranslation',
-            'variantTranslation.objecttype = :variantType AND
-             variantTranslation.objectkey = variant.id AND
-             variantTranslation.objectlanguage = :language'
-        );
+        $this->fieldHelper->addUnitTranslation($query);
+        $this->fieldHelper->addVariantTranslation($query);
 
         $query->andWhere('price.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
-            ->setParameter(':unitType', 'config_units')
-            ->setParameter(':variantType', 'variant')
             ->setParameter(':language', $context->getShop()->getId());
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
@@ -122,7 +101,6 @@ class CheapestPrice
         $prices = array();
         foreach ($data as $row) {
             $product = $row['__price_articleID'];
-
             $prices[$product] = $this->priceHydrator->hydrateCheapestPrice($row);
         }
 

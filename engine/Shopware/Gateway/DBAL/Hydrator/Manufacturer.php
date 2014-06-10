@@ -12,9 +12,10 @@ class Manufacturer extends Hydrator
     private $attributeHydrator;
 
     private $translationMapping = array(
-        'metaTitle' => 'meta_title',
-        'metaDescription' => 'meta_description',
-        'metaKeywords' => 'meta_keywords',
+        'description' => '__manufacturer_description',
+        'metaTitle' => '__manufacturer_meta_title',
+        'metaDescription' => '__manufacturer_meta_description',
+        'metaKeywords' => '__manufacturer_meta_keywords',
     );
 
     function __construct(Attribute $attributeHydrator)
@@ -28,6 +29,9 @@ class Manufacturer extends Hydrator
      */
     public function hydrate(array $data)
     {
+        $translation = $this->getTranslation($data);
+        $data = array_merge($data, $translation);
+
         $manufacturer = new Struct\Product\Manufacturer();
 
         $this->assignData($manufacturer, $data);
@@ -39,10 +43,8 @@ class Manufacturer extends Hydrator
         return $manufacturer;
     }
 
-    public function assignData(Struct\Product\Manufacturer $manufacturer, array $data)
+    private function assignData(Struct\Product\Manufacturer $manufacturer, array $data)
     {
-        $translation = $this->getTranslation($data);
-        $data = array_merge($data, $translation);
 
         if (isset($data['__manufacturer_id'])) {
             $manufacturer->setId(intval($data['__manufacturer_id']));
@@ -89,6 +91,7 @@ class Manufacturer extends Hydrator
     private function getTranslation($data)
     {
         $translation = array();
+        $id = $data['__manufacturer_id'];
 
         if (!isset($data['__manufacturer_translation'])) {
             return $translation;
@@ -96,12 +99,12 @@ class Manufacturer extends Hydrator
 
         $translation = unserialize($data['__manufacturer_translation']);
 
-        if (empty($translation)) {
+        if (!isset($translation[$id]) || empty($translation[$id])) {
             return array();
         }
 
         return $this->convertArrayKeys(
-            $translation,
+            $translation[$id],
             $this->translationMapping
         );
     }

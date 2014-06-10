@@ -138,55 +138,13 @@ class ListProduct
             ->where('variant.ordernumber IN (:numbers)')
             ->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
 
-        $query->leftJoin(
-            'variant',
-            's_core_translations',
-            'productTranslation',
-            'productTranslation.objecttype = :productType AND
-             productTranslation.objectkey = variant.articleID AND
-             productTranslation.objectlanguage = :language'
-        );
 
-        $query->leftJoin(
-            'variant',
-            's_core_translations',
-            'variantTranslation',
-            'variantTranslation.objecttype = :variantType AND
-             variantTranslation.objectkey = variant.id AND
-             variantTranslation.objectlanguage = :language'
-        );
+        $this->fieldHelper->addProductTranslation($query);
+        $this->fieldHelper->addVariantTranslation($query);
+        $this->fieldHelper->addManufacturerTranslation($query);
+        $this->fieldHelper->addUnitTranslation($query);
 
-        $query->leftJoin(
-            'manufacturer',
-            's_core_translations',
-            'manufacturerTranslation',
-            'manufacturerTranslation.objecttype = :manufacturerType AND
-             manufacturerTranslation.objectkey = manufacturer.id AND
-             manufacturerTranslation.objectlanguage = :language'
-        );
-
-        $query->leftJoin(
-            'variant',
-            's_core_translations',
-            'unitTranslation',
-            'unitTranslation.objecttype = :unitType AND
-             unitTranslation.objectkey = 1 AND
-             unitTranslation.objectlanguage = :language'
-        );
-
-        $query->setParameter(':productType', 'article')
-            ->setParameter(':variantType', 'variant')
-            ->setParameter(':manufacturerType', 'supplier')
-            ->setParameter(':unitType', 'config_units')
-            ->setParameter(':language', $context->getShop()->getId())
-        ;
-
-        $query->addSelect(array(
-            'productTranslation.objectdata as __product_translation',
-            'variantTranslation.objectdata as __variant_translation',
-            'manufacturerTranslation.objectdata as __manufacturer_translation',
-            'unitTranslation.objectdata as __unit_translation'
-        ));
+        $query->setParameter(':language', $context->getShop()->getId());
 
         return $query;
     }

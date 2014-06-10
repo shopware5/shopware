@@ -36,17 +36,25 @@ class Media extends Hydrator
     {
         $media = new Struct\Media();
 
-        $media->setId($data['__media_id']);
+        if (isset($data['__media_id'])) {
+            $media->setId($data['__media_id']);
+        }
 
-        $media->setName($data['__image_description']);
+        if (isset($data['__media_description'])) {
+            $media->setDescription($data['__media_description']);
+        }
 
-        $media->setDescription($data['__media_description']);
+        if (isset($data['__media_type'])) {
+            $media->setType($data['__media_type']);
+        }
 
-        $media->setType($data['__media_type']);
+        if (isset($data['__media_extension'])) {
+            $media->setExtension($data['__media_extension']);
+        }
 
-        $media->setExtension($data['__media_extension']);
-
-        $media->setFile($data['__media_path']);
+        if (isset($data['__media_path'])) {
+            $media->setFile($data['__media_path']);
+        }
 
         if ($media->getType() == Models\Media\Media::TYPE_IMAGE
             && $data['__mediaSettings_create_thumbnails']) {
@@ -73,6 +81,10 @@ class Media extends Hydrator
     public function hydrateProductImage(array $data)
     {
         $media = $this->hydrate($data);
+
+        $data = array_merge($data, $this->getImageTranslation($data));
+
+        $media->setName($data['__image_description']);
 
         $media->setPreview((bool) ($data['__image_main'] == 1));
 
@@ -109,4 +121,22 @@ class Media extends Hydrator
         );
     }
 
+    private function getImageTranslation($data)
+    {
+        if (!isset($data['__image_translation'])
+            || empty($data['__image_translation'])) {
+
+            return array();
+        }
+
+        $translation = unserialize($data['__image_translation']);
+
+        if (empty($translation)) {
+            return array();
+        }
+
+        return array(
+            '__image_description' => $translation['description']
+        );
+    }
 }

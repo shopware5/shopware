@@ -76,7 +76,7 @@ class ProductMedia
             $ids[] = $product->getId();
         }
 
-        $query = $this->getQuery();
+        $query = $this->getQuery($context);
 
         $query->andWhere('childImage.id IS NULL')
             ->andWhere('image.articleID IN (:products)');
@@ -134,7 +134,7 @@ class ProductMedia
             $ids[] = $product->getId();
         }
 
-        $query = $this->getQuery();
+        $query = $this->getQuery($context);
 
         $query->where('image.main = 1')
             ->andWhere('image.articleID IN (:products)')
@@ -179,15 +179,19 @@ class ProductMedia
     }
 
     /**
+     * @param \Shopware\Struct\Context $context
      * @return \Shopware\Components\Model\DBAL\QueryBuilder
      */
-    private function getQuery()
+    private function getQuery(Struct\Context $context)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
 
         $query->select($this->fieldHelper->getMediaFields())
             ->addSelect($this->fieldHelper->getImageFields())
             ->addSelect($this->fieldHelper->getMediaSettingFields());
+
+        $this->fieldHelper->addImageTranslation($query);
+        $query->setParameter(':language', $context->getShop()->getId());
 
         $query->from('s_articles_img', 'image')
             ->innerJoin('image', 's_media', 'media', 'image.media_id = media.id')
