@@ -204,6 +204,7 @@ See the documentation of the child elements for additional information.
 
 .panel--th,
 .panel--td {
+    .clearfix();
     .unitize-padding(10, 10);
     .unitize(14, 16, font-size);
     .unitize(24, 16, line-height);
@@ -218,6 +219,10 @@ See the documentation of the child elements for additional information.
         &:last-child {
             border-width: 0;
         }
+    }
+
+    p {
+        margin: 0;
     }
 }
 
