@@ -7,7 +7,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Gateway\DBAL\Hydrator;
 use Shopware\Struct;
 
-class Link extends Gateway
+class Link
 {
     /**
      * @var Hydrator\Link
@@ -15,14 +15,32 @@ class Link extends Gateway
     private $linkHydrator;
 
     /**
+     * The FieldHelper class is used for the
+     * different table column definitions.
+     *
+     * This class helps to select each time all required
+     * table data for the store front.
+     *
+     * Additionally the field helper reduce the work, to
+     * select in a second step the different required
+     * attribute tables for a parent table.
+     *
+     * @var FieldHelper
+     */
+    private $fieldHelper;
+
+    /**
      * @param ModelManager $entityManager
+     * @param FieldHelper $fieldHelper
      * @param Hydrator\Link $linkHydrator
      */
     function __construct(
         ModelManager $entityManager,
+        FieldHelper $fieldHelper,
         Hydrator\Link $linkHydrator
     ) {
         $this->entityManager = $entityManager;
+        $this->fieldHelper = $fieldHelper;
         $this->linkHydrator = $linkHydrator;
     }
 
@@ -40,18 +58,17 @@ class Link extends Gateway
 
         $query = $this->entityManager->getDBALQueryBuilder();
 
-        $query->select($this->getLinkFields())
-            ->addSelect($this->getTableFields('s_articles_information_attributes', 'linkAttribute'));
+        $query->select($this->fieldHelper->getLinkFields());
 
-        $query->from('s_articles_information', 'links')
+        $query->from('s_articles_information', 'link')
             ->leftJoin(
-                'links',
+                'link',
                 's_articles_information_attributes',
                 'linkAttribute',
-                'linkAttribute.informationID = links.id'
+                'linkAttribute.informationID = link.id'
             );
 
-        $query->where('links.articleID IN (:ids)')
+        $query->where('link.articleID IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
@@ -74,16 +91,5 @@ class Link extends Gateway
         }
 
         return $result;
-    }
-
-    private function getLinkFields()
-    {
-        return array(
-            'links.id',
-            'links.articleID',
-            'links.description',
-            'links.link',
-            'links.target'
-        );
     }
 }

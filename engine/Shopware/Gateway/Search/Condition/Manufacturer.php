@@ -6,15 +6,26 @@ use Shopware\Gateway\Search\Condition;
 
 class Manufacturer extends Condition
 {
-    public $id;
+    /**
+     * @var array
+     */
+    private $manufacturerIds;
 
-    function __construct($id)
+    function __construct(array $manufacturerIds)
     {
-        $this->id = $id;
+        $this->manufacturerIds = $manufacturerIds;
     }
 
     public function getName()
     {
         return 'manufacturer';
+    }
+
+    /**
+     * @return array
+     */
+    public function getManufacturerIds()
+    {
+        return $this->manufacturerIds;
     }
 }

@@ -7,7 +7,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Gateway\DBAL\Hydrator;
 use Shopware\Struct;
 
-class Configurator extends Gateway
+class Configurator
 {
     /**
      * @var Hydrator\Configurator
@@ -15,15 +15,33 @@ class Configurator extends Gateway
     private $configuratorHydrator;
 
     /**
+     * The FieldHelper class is used for the
+     * different table column definitions.
+     *
+     * This class helps to select each time all required
+     * table data for the store front.
+     *
+     * Additionally the field helper reduce the work, to
+     * select in a second step the different required
+     * attribute tables for a parent table.
+     *
+     * @var FieldHelper
+     */
+    private $fieldHelper;
+
+    /**
      * @param ModelManager $entityManager
+     * @param FieldHelper $fieldHelper
      * @param Hydrator\Configurator $configuratorHydrator
      */
     function __construct(
         ModelManager $entityManager,
+        FieldHelper $fieldHelper,
         Hydrator\Configurator $configuratorHydrator
     ) {
         $this->entityManager = $entityManager;
         $this->configuratorHydrator = $configuratorHydrator;
+        $this->fieldHelper = $fieldHelper;
     }
 
     public function get(Struct\ListProduct $product, Struct\Context $context, array $selection)
@@ -31,9 +49,10 @@ class Configurator extends Gateway
         $query = $this->getQuery();
 
         $query->select('products.id as arrayKey')
-            ->addSelect($this->getSetFields())
-            ->addSelect($this->getGroupFields())
-            ->addSelect($this->getOptionFields());
+            ->addSelect($this->fieldHelper->getConfiguratorSetFields())
+            ->addSelect($this->fieldHelper->getConfiguratorGroupFields())
+            ->addSelect($this->fieldHelper->getConfiguratorOptionFields())
+        ;
 
         $this->addSelectionCondition($query, $selection);
 
@@ -79,14 +98,12 @@ class Configurator extends Gateway
             $previous .= ' AND ' . $tableAlias . '.article_id = ';
 
             $query->andHaving(
-                '(' . $selectAlias . ' IS NOT NULL OR groups.id = :' . $groupFilter . ')'
+                '(' . $selectAlias . ' IS NOT NULL OR configuratorGroup.id = :' . $groupFilter . ')'
             );
 
             $query->setParameter(':' . $optionFilter, (int)$optionId)
                 ->setParameter(':' . $groupFilter, (int)$groupId);
         }
-
-
     }
 
     protected function getQuery()
@@ -95,51 +112,51 @@ class Configurator extends Gateway
 
         $query->from(
             's_article_configurator_sets',
-            'sets'
+            'configuratorSet'
         );
 
         $query->innerJoin(
-            'sets',
+            'configuratorSet',
             's_articles',
             'products',
-            'products.configurator_set_id = sets.id'
+            'products.configurator_set_id = configuratorSet.id'
         );
 
         $query->innerJoin(
-            'sets',
+            'configuratorSet',
             's_article_configurator_set_group_relations',
             'groupRelation',
-            'groupRelation.set_id = sets.id'
+            'groupRelation.set_id = configuratorSet.id'
         );
 
         $query->innerJoin(
             'groupRelation',
             's_article_configurator_groups',
-            'groups',
-            'groups.id = groupRelation.group_id'
+            'configuratorGroup',
+            'configuratorGroup.id = groupRelation.group_id'
         );
 
         $query->innerJoin(
-            'sets',
+            'configuratorSet',
             's_article_configurator_set_option_relations',
             'optionRelation',
-            'optionRelation.set_id = sets.id'
+            'optionRelation.set_id = configuratorSet.id'
         );
 
         $query->innerJoin(
             'optionRelation',
             's_article_configurator_options',
-            'options',
-            'options.id = optionRelation.option_id
+            'configuratorOption',
+            'configuratorOption.id = optionRelation.option_id
              AND
-             options.group_id = groups.id'
+             configuratorOption.group_id = configuratorGroup.id'
         );
 
         $query->innerJoin(
-            'options',
+            'configuratorOption',
             's_article_configurator_option_relations',
             'variantOptions',
-            'variantOptions.option_id = options.id'
+            'variantOptions.option_id = configuratorOption.id'
         );
 
         $query->innerJoin(
@@ -152,38 +169,10 @@ class Configurator extends Gateway
              AND (products.laststock * variants.instock) >= (products.laststock * variants.minpurchase)'
         );
 
-        $query->orderBy('options.group_id')
-            ->groupBy('options.id');
+        $query->orderBy('configuratorOption.group_id')
+            ->groupBy('configuratorOption.id');
 
         return $query;
-    }
-
-    private function getSetFields()
-    {
-        return array(
-            'sets.id as __set_id',
-            'sets.name as __set_name',
-            'sets.type as __set_type'
-        );
-    }
-
-    private function getGroupFields()
-    {
-        return array(
-            'groups.id as __group_id',
-            'groups.name as __group_name',
-            'groups.description as __group_description',
-            'groups.position as __group_position'
-        );
-    }
-
-    private function getOptionFields()
-    {
-        return array(
-            'options.id as __option_id',
-            'options.name as __option_name',
-            'options.position as __option_position'
-        );
     }
 
 }

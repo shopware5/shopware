@@ -28,11 +28,6 @@ class Product
     private $priceCalculationService;
 
     /**
-     * @var Translation
-     */
-    private $translationService;
-
-    /**
      * @var Gateway\Vote
      */
     private $voteGateway;
@@ -63,9 +58,9 @@ class Product
     private $linkGateway;
 
     /**
-     * @var ProductProperty
+     * @var Property
      */
-    private $productPropertyService;
+    private $propertyService;
 
     /**
      * @var Configurator
@@ -87,10 +82,9 @@ class Product
         CheapestPrice $cheapestPriceService,
         PriceCalculation $priceCalculationService,
         Media $mediaService,
-        Translation $translationService,
         Gateway\Download $downloadGateway,
         Gateway\Link $linkGateway,
-        ProductProperty $productPropertyService,
+        Property $propertyService,
         Configurator $configuratorService,
         \Enlight_Event_EventManager $eventManager
     ) {
@@ -106,8 +100,7 @@ class Product
         $this->cheapestPriceService = $cheapestPriceService;
         $this->priceCalculationService = $priceCalculationService;
         $this->mediaService = $mediaService;
-        $this->productPropertyService = $productPropertyService;
-        $this->translationService = $translationService;
+        $this->propertyService = $propertyService;
         $this->configuratorService = $configuratorService;
 
         $this->eventManager = $eventManager;
@@ -120,11 +113,11 @@ class Product
      */
     public function getList($numbers, Struct\Context $context)
     {
-        //todo@dr get seo category.
-
         $products = $this->productGateway->getList($numbers, $context);
 
         $graduatedPrices = $this->graduatedPricesService->getList($products, $context);
+
+        $cheapestPrice = $this->cheapestPriceService->getList($products, $context);
 
         $votes = $this->voteGateway->getList($products);
 
@@ -136,17 +129,21 @@ class Product
 
         $links = $this->linkGateway->getList($products);
 
-        $media = $this->mediaService->getProductsMedia($products, $context);
+        $media = $this->mediaService->getMedia($products, $context);
 
-        $properties = $this->productPropertyService->getList($products, $context);
+        $covers = $this->mediaService->getCovers($products, $context);
+
+        $properties = $this->propertyService->getList($products, $context);
 
         $configuration = $this->configuratorService->getProductsConfigurations($products, $context);
 
-        $cheapestPrice = $this->cheapestPriceService->getList($products, $context);
-
         $result = array();
-        foreach ($products as $product) {
-            $number = $product->getNumber();
+        foreach ($numbers as $number) {
+            if (!array_key_exists($number, $products)) {
+                continue;
+            }
+
+            $product = $products[$number];
 
             $product->hasState(Struct\ListProduct::STATE_PRICE_CALCULATED);
 
@@ -169,6 +166,8 @@ class Product
             $product->setConfiguration($configuration[$number]);
 
             $product->setCheapestPriceRule($cheapestPrice[$number]);
+
+            $product->setCover($covers[$number]);
 
             $this->priceCalculationService->calculateProduct($product, $context);
 

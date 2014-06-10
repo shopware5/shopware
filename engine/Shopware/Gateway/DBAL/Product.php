@@ -13,7 +13,9 @@ class Product extends ListProduct
      */
     public function get($number, Struct\Context $context)
     {
-        return parent::get($number, $context);
+        $products = $this->getList(array($number), $context);
+
+        return array_shift($products);
     }
 
     /**
@@ -22,7 +24,7 @@ class Product extends ListProduct
      *
      * @param array $numbers
      * @param \Shopware\Struct\Context $context
-     * @return Struct\Product[]
+     * @return Struct\Product[] indexed by product number
      */
     public function getList(array $numbers, Struct\Context $context)
     {
@@ -35,7 +37,7 @@ class Product extends ListProduct
 
         $products = array();
         foreach ($data as $product) {
-            $key = $product['ordernumber'];
+            $key = $product['__variant_ordernumber'];
 
             $products[$key] = $this->hydrator->hydrateProduct($product);
         }

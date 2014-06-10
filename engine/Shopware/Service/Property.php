@@ -11,29 +11,26 @@ use Shopware\Gateway\DBAL as Gateway;
 class Property
 {
     /**
-     * @var \Shopware\Gateway\DBAL\Property
+     * @var \Shopware\Gateway\DBAL\ProductProperty
      */
-    private $propertyGateway;
+    private $productPropertyGateway;
 
     /**
-     * @var Translation
+     * @param Gateway\ProductProperty $productPropertyGateway
      */
-    private $translationService;
-
-    function __construct(Gateway\Property $propertyGateway, Translation $translationService)
+    function __construct(Gateway\ProductProperty $productPropertyGateway)
     {
-        $this->propertyGateway = $propertyGateway;
-        $this->translationService = $translationService;
+        $this->productPropertyGateway = $productPropertyGateway;
     }
 
     /**
-     * @param array $valueIds
+     * @param Struct\ListProduct[] $products
      * @param Struct\Context $context
      * @return Struct\Property\Set[]
      */
-    public function getList(array $valueIds, Struct\Context $context)
+    public function getList(array $products, Struct\Context $context)
     {
-        $properties = $this->propertyGateway->getList($valueIds);
+        $properties = $this->productPropertyGateway->getList($products);
 
         return $properties;
     }
@@ -41,33 +38,14 @@ class Property
     /**
      * Returns a single \Struct\Property\Set for the passed value id.
      *
-     * @param $id
+     * @param \Shopware\Struct\ListProduct $product
      * @param Struct\Context $context
      * @return Struct\Property\Set
      */
-    public function get($id, Struct\Context $context)
+    public function get(Struct\ListProduct $product, Struct\Context $context)
     {
-        $properties = $this->getList(array($id), $context);
+        $properties = $this->getList(array($product), $context);
 
         return array_shift($properties);
-    }
-
-    /**
-     * @param \Shopware\Struct\ListProduct $product
-     * @param \Shopware\Struct\Context $context
-     *
-     * @return array|\Shopware\Struct\Property\Set
-     */
-    public function getProductProperty(Struct\ListProduct $product, Struct\Context $context)
-    {
-        $set = $this->propertyGateway->getProductSet($product);
-
-        if (!$set) {
-            return null;
-        }
-
-        $this->translationService->translatePropertySet($set, $context->getShop());
-
-        return $set;
     }
 }

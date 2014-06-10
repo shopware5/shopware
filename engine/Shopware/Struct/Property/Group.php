@@ -2,10 +2,12 @@
 
 namespace Shopware\Struct\Property;
 
+use Shopware\Struct\Extendable;
+
 /**
  * @package Shopware\Struct
  */
-class Group
+class Group extends Extendable
 {
     /**
      * @var int
@@ -25,7 +27,7 @@ class Group
     /**
      * @var Option[]
      */
-    private $options;
+    private $options = array();
 
     /**
      * @param int $id

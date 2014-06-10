@@ -7,7 +7,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Gateway\DBAL\Hydrator;
 use Shopware\Struct;
 
-class PriceGroupDiscount extends Gateway
+class PriceGroupDiscount
 {
     /**
      * @var Hydrator\Price
@@ -15,15 +15,33 @@ class PriceGroupDiscount extends Gateway
     private $priceHydrator;
 
     /**
+     * The FieldHelper class is used for the
+     * different table column definitions.
+     *
+     * This class helps to select each time all required
+     * table data for the store front.
+     *
+     * Additionally the field helper reduce the work, to
+     * select in a second step the different required
+     * attribute tables for a parent table.
+     *
+     * @var FieldHelper
+     */
+    private $fieldHelper;
+
+    /**
      * @param ModelManager $entityManager
+     * @param FieldHelper $fieldHelper
      * @param Hydrator\Price $priceHydrator
      */
     function __construct(
         ModelManager $entityManager,
+        FieldHelper $fieldHelper,
         Hydrator\Price $priceHydrator
     ) {
         $this->entityManager = $entityManager;
         $this->priceHydrator = $priceHydrator;
+        $this->fieldHelper = $fieldHelper;
     }
 
     /**
@@ -41,35 +59,30 @@ class PriceGroupDiscount extends Gateway
         }
 
         $query = $this->entityManager->getDBALQueryBuilder();
-        $query->select(array(
-            'discounts.groupID',
-            'groups.id',
-            'groups.description',
-            'discounts.discount',
-            'discounts.discountstart'
-        ))
-            ->from('s_core_pricegroups_discounts', 'discounts')
+        $query->addSelect($this->fieldHelper->getPriceGroupDiscountFields())
+            ->addSelect($this->fieldHelper->getPriceGroupFields());
+
+        $query->from('s_core_pricegroups_discounts', 'priceGroupDiscount')
             ->innerJoin(
-                'discounts',
+                'priceGroupDiscount',
                 's_core_pricegroups',
-                'groups',
-                'groups.id = discounts.groupID'
+                'priceGroup',
+                'priceGroup.id = priceGroupDiscount.groupID'
             )
             ->innerJoin(
-                'discounts',
+                'priceGroupDiscount',
                 's_articles',
                 'products',
-                'products.pricegroupID = discounts.groupID'
+                'products.pricegroupID = priceGroupDiscount.groupID'
             );
 
-        $query->andWhere('discounts.customergroupID = :customerGroup')
+        $query->andWhere('priceGroupDiscount.customergroupID = :customerGroup')
             ->andWhere('products.id IN (:products)');
 
-        $query->groupBy('discounts.id');
+        $query->groupBy('priceGroupDiscount.id');
 
-        $query->orderBy('discounts.groupID')
-            ->addOrderBy('discounts.discountstart');
-
+        $query->orderBy('priceGroupDiscount.groupID')
+            ->addOrderBy('priceGroupDiscount.discountstart');
 
         $query->setParameter(':customerGroup', $customerGroup->getId())
             ->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY);
@@ -81,10 +94,10 @@ class PriceGroupDiscount extends Gateway
 
         $discounts = array();
         foreach($data as $priceDiscount) {
-            $id = $priceDiscount['id'];
+            $id = $priceDiscount['__priceGroupDiscount_groupID'];
             $discounts[$id][] = $this->priceHydrator->hydratePriceDiscount($priceDiscount);
         }
-
+        
         $result = array();
         foreach($products as $product) {
             if (!$product->getPriceGroup()) {

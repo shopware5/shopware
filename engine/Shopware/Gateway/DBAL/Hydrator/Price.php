@@ -21,6 +21,10 @@ class Price extends Hydrator
      */
     private $attributeHydrator;
 
+    private $translationMapping = array(
+        'txtpackunit' => '__unit_packunit',
+    );
+
     /**
      * @param CustomerGroup $customerGroupHydrator
      * @param Unit $unitHydrator
@@ -45,21 +49,21 @@ class Price extends Hydrator
     {
         $price = new Struct\Product\PriceRule();
 
-        $price->setId($data['id']);
+        $price->setId($data['__price_id']);
 
-        $price->setFrom($data['from']);
+        $price->setFrom($data['__price_from']);
 
-        $price->setPrice(floatval($data['price']));
+        $price->setPrice(floatval($data['__price_price']));
 
-        $price->setPseudoPrice(floatval($data['pseudoprice']));
+        $price->setPseudoPrice(floatval($data['__price_pseudoprice']));
 
-        if (strtolower($data['to']) == 'beliebig') {
+        if (strtolower($data['__price_to']) == 'beliebig') {
             $price->setTo(null);
         } else {
-            $price->setTo($data['to']);
+            $price->setTo($data['__price_to']);
         }
 
-        if (isset($data['__attribute_id'])) {
+        if (isset($data['__price___attribute_id'])) {
             $attribute = $this->attributeHydrator->hydrate(
                 $this->extractFields('__attribute_', $data)
             );
@@ -82,34 +86,45 @@ class Price extends Hydrator
     {
         $price = $this->hydratePriceRule($data);
 
-        $unit = $this->unitHydrator->hydrate(
-            array(
-                'id' => $data['__unit_id'],
-                'description' => $data['__unit_description'],
-                'unit' => $data['__unit_unit'],
-                'packunit' => $data['__unit_packunit'],
-                'purchaseunit' => $data['__unit_purchaseunit'],
-                'referenceunit' => $data['__unit_referenceunit'],
-                'purchasesteps' => $data['__unit_purchasesteps'],
-                'minpurchase' => $data['__unit_minpurchase'],
-                'maxpurchase' => $data['__unit_maxpurchase'],
-            )
+        $data = array_merge(
+            $data,
+            $this->getVariantTranslation($data)
         );
+
+        $unit = $this->unitHydrator->hydrate($data);
 
         $price->setUnit($unit);
 
         return $price;
     }
 
+    private function getVariantTranslation(array $data)
+    {
+        $translation = array();
+
+        if (isset($data['__variant_translation'])) {
+            $translation = unserialize($data['__variant_translation']);
+        }
+
+        if (empty($translation)) {
+            return $translation;
+        }
+
+        return $this->convertArrayKeys(
+            $translation,
+            $this->translationMapping
+        );
+    }
+
     public function hydratePriceDiscount(array $data)
     {
         $discount = new Struct\Product\PriceDiscount();
 
-        $discount->setId($data['id']);
+        $discount->setId($data['__priceGroupDiscount_groupID']);
 
-        $discount->setPercent(floatval($data['discount']));
+        $discount->setPercent(floatval($data['__priceGroupDiscount_discount']));
 
-        $discount->setQuantity(intval($data['discountstart']));
+        $discount->setQuantity(intval($data['__priceGroupDiscount_discountstart']));
 
         return $discount;
     }

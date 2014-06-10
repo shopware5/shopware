@@ -6,13 +6,30 @@ use Shopware\Gateway\Search\Condition;
 
 class Category extends Condition
 {
-    public $id;
+    /**
+     * @var array
+     */
+    private $categoryIds;
 
-    function __construct($id)
+    /**
+     * @param $categoryIds
+     */
+    function __construct(array $categoryIds)
     {
-        $this->id = $id;
+        $this->categoryIds = $categoryIds;
     }
 
+    /**
+     * @return array
+     */
+    public function getCategoryIds()
+    {
+        return $this->categoryIds;
+    }
+
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'category';

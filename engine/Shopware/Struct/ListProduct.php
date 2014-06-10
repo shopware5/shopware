@@ -129,6 +129,14 @@ class ListProduct extends Extendable
     protected $keywords;
 
     /**
+     * Defines the meta title of the product.
+     * This title is used for the title tag within the header.
+     *
+     * @var string
+     */
+    protected $metaTitle;
+
+    /**
      * Defines if the customer can be set an email
      * notification for this product if it is sold out.
      *
@@ -191,6 +199,11 @@ class ListProduct extends Extendable
      * @var float
      */
     protected $highlight;
+
+    /**
+     * @var string
+     */
+    protected $manufacturerNumber;
 
     /**
      * Contains the absolute cheapest price of each product variation.
@@ -652,7 +665,11 @@ class ListProduct extends Extendable
      */
     public function getShortDescription()
     {
-        return $this->shortDescription;
+        if (!$this->translation || !$this->translation->getShortDescription()) {
+            return $this->shortDescription;
+        }
+
+        return $this->translation->getShortDescription();
     }
 
     /**
@@ -789,5 +806,37 @@ class ListProduct extends Extendable
     public function setCheapestPriceRule($cheapestPriceRule)
     {
         $this->cheapestPriceRule = $cheapestPriceRule;
+    }
+
+    /**
+     * @return string
+     */
+    public function getManufacturerNumber()
+    {
+        return $this->manufacturerNumber;
+    }
+
+    /**
+     * @param string $manufacturerNumber
+     */
+    public function setManufacturerNumber($manufacturerNumber)
+    {
+        $this->manufacturerNumber = $manufacturerNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaTitle()
+    {
+        return $this->metaTitle;
+    }
+
+    /**
+     * @param string $metaTitle
+     */
+    public function setMetaTitle($metaTitle)
+    {
+        $this->metaTitle = $metaTitle;
     }
 }

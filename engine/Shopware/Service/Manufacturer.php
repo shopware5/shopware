@@ -20,13 +20,6 @@ class Manufacturer
         $this->manufacturerGateway = $manufacturerGateway;
     }
 
-    public function get($id, Struct\Context $context)
-    {
-        $manufacturers = $this->getList(array($id), $context);
-
-        return array_shift($manufacturers);
-    }
-
     /**
      * @param array $ids
      * @param Struct\Context $context

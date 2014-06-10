@@ -60,7 +60,6 @@ class PriceCalculation
         $product->addState(Struct\ListProduct::STATE_PRICE_CALCULATED);
     }
 
-
     /**
      * Reduces the passed price with a configured
      * price group discount for the min purchase of the
@@ -76,7 +75,6 @@ class PriceCalculation
         Struct\Product\PriceRule $cheapestPrice,
         Struct\Context $context
     ) {
-
         $tax = $context->getTaxRule($product->getTax()->getId());
 
         $cheapestPrice->setPrice(
@@ -86,7 +84,7 @@ class PriceCalculation
         $cheapestPrice->setPseudoPrice(
             $cheapestPrice->getUnit()->getMinPurchase() * $cheapestPrice->getPseudoPrice()
         );
-
+        
         //check for price group discounts.
         if (!$product->getPriceGroup()) {
             return $this->calculatePriceStruct(
@@ -130,7 +128,6 @@ class PriceCalculation
         Struct\Tax $tax,
         Struct\Context $context
     ) {
-
         $price = new Struct\Product\Price($rule);
 
         //calculates the normal price of the struct.
@@ -197,8 +194,9 @@ class PriceCalculation
          */
         $price = $price * $context->getCurrency()->getFactor();
 
-
-        //check if the customer group should see gross prices.
+        /**
+         * check if the customer group should see gross prices.
+         */
         if (!$customerGroup->displayGrossPrices()) {
             return $price;
         }
@@ -234,7 +232,6 @@ class PriceCalculation
      */
     private function calculateReferencePrice(Struct\Product\Price $price)
     {
-        return $price->getCalculatedPrice() / $price->getUnit()->getPurchaseUnit() * $price->getUnit(
-        )->getReferenceUnit();
+        return $price->getCalculatedPrice() / $price->getUnit()->getPurchaseUnit() * $price->getUnit()->getReferenceUnit();
     }
 }

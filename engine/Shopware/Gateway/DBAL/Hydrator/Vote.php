@@ -33,23 +33,23 @@ class Vote extends Hydrator
     {
         $struct = new Struct\Product\Vote();
 
-        $struct->setId((int)$data['id']);
+        $struct->setId((int)$data['__vote_id']);
 
-        $struct->setName($data['name']);
+        $struct->setName($data['__vote_name']);
 
-        $struct->setPoints((float)$data['points']);
+        $struct->setPoints((float)$data['__vote_points']);
 
-        $struct->setComment($data['comment']);
+        $struct->setComment($data['__vote_comment']);
 
-        $struct->setCreatedAt($data['datum']);
+        $struct->setCreatedAt($data['__vote_datum']);
 
-        $struct->setEmail($data['email']);
+        $struct->setEmail($data['__vote_email']);
 
-        $struct->setHeadline($data['headline']);
+        $struct->setHeadline($data['__vote_headline']);
 
-        $struct->setAnswer($data['answer']);
+        $struct->setAnswer($data['__vote_answer']);
 
-        $struct->setAnsweredAt($data['answer_date']);
+        $struct->setAnsweredAt($data['__vote_answer_date']);
 
         return $struct;
     }

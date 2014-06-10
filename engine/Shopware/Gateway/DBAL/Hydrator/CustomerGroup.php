@@ -24,25 +24,25 @@ class CustomerGroup extends Hydrator
     {
         $customerGroup = new Struct\Customer\Group();
 
-        $customerGroup->setId(intval($data['id']));
+        $customerGroup->setId(intval($data['__customerGroup_id']));
 
-        $customerGroup->setName($data['description']);
+        $customerGroup->setName($data['__customerGroup_description']);
 
-        $customerGroup->setDisplayGrossPrices((bool)($data['tax']));
+        $customerGroup->setDisplayGrossPrices((bool)($data['__customerGroup_tax']));
 
-        $customerGroup->setKey($data['groupkey']);
+        $customerGroup->setKey($data['__customerGroup_groupkey']);
 
-        $customerGroup->setMinimumOrderValue($data['minimumorder']);
+        $customerGroup->setMinimumOrderValue((float)$data['__customerGroup_minimumorder']);
 
-        $customerGroup->setPercentageDiscount(intval($data['discount']));
+        $customerGroup->setPercentageDiscount((float)$data['__customerGroup_discount']);
 
-        $customerGroup->setSurcharge(intval($data['minimumordersurcharge']));
+        $customerGroup->setSurcharge((float)$data['__customerGroup_minimumordersurcharge']);
 
-        $customerGroup->setUseDiscount((bool)($data['mode']));
+        $customerGroup->setUseDiscount((bool)($data['__customerGroup_mode']));
 
-        if (!empty($data['__attribute_id'])) {
+        if (!empty($data['__customerGroupAttribute_id'])) {
             $attribute = $this->attributeHydrator->hydrate(
-                $this->extractFields('__attribute_', $data)
+                $this->extractFields('__customerGroupAttribute_', $data)
             );
             $customerGroup->addAttribute('core', $attribute);
         }

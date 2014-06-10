@@ -61,60 +61,54 @@ class Criteria
     }
 
     /**
-     * @param $id
+     * @param array $categoryIds
      * @return $this
      */
-    public function category($id)
+    public function category(array $categoryIds)
     {
-        $this->conditions[] = new Condition\Category($id);
+        $this->conditions[] = new Condition\Category($categoryIds);
         return $this;
     }
 
     /**
-     * @param $id
+     * @param array $manufacturerIds
      * @return $this
      */
-    public function manufacturer($id)
+    public function manufacturer(array $manufacturerIds)
     {
-        $this->conditions[] = new Condition\Manufacturer($id);
+        $this->conditions[] = new Condition\Manufacturer($manufacturerIds);
         return $this;
     }
 
     /**
      * @param $min
      * @param $max
-     * @param \Shopware\Struct\Customer\Group $currentCustomerGroup
-     * @param \Shopware\Struct\Customer\Group $fallbackCustomerGroup
+     *
      * @return $this
      */
-    public function price($min, $max, Group $currentCustomerGroup, Group $fallbackCustomerGroup)
+    public function price($min, $max)
     {
-        $this->conditions[] = new Condition\Price(
-            $min,
-            $max,
-            $currentCustomerGroup,
-            $fallbackCustomerGroup
-        );
+        $this->conditions[] = new Condition\Price($min, $max);
         return $this;
     }
 
     /**
-     * @param array $values
+     * @param array $valueIds
      * @return $this
      */
-    public function properties(array $values)
+    public function properties(array $valueIds)
     {
-        $this->conditions[] = new Condition\Property($values);
+        $this->conditions[] = new Condition\Property($valueIds);
         return $this;
     }
 
     /**
-     * @param $key
+     * @param array $customerGroupIds
      * @return $this
      */
-    public function customerGroup($key)
+    public function customerGroup(array $customerGroupIds)
     {
-        $this->conditions[] = new Condition\CustomerGroup($key);
+        $this->conditions[] = new Condition\CustomerGroup($customerGroupIds);
         return $this;
     }
 
@@ -137,16 +131,11 @@ class Criteria
     }
 
     /**
-     * @param \Shopware\Struct\Customer\Group $currentCustomerGroup
-     * @param \Shopware\Struct\Customer\Group $fallbackCustomerGroup
      * @return $this
      */
-    public function priceFacet(Group $currentCustomerGroup, Group $fallbackCustomerGroup)
+    public function priceFacet()
     {
-        $this->facets[] = new Facet\Price(
-            $currentCustomerGroup,
-            $fallbackCustomerGroup
-        );
+        $this->facets[] = new Facet\Price();
         return $this;
     }
 
@@ -180,21 +169,20 @@ class Criteria
     }
 
     /**
-     * @param \Shopware\Struct\Customer\Group $currentCustomerGroup
-     * @param \Shopware\Struct\Customer\Group $fallbackCustomerGroup
-     * @param string $direction
      * @return $this
      */
-    public function sortByPrice(
-        Group $currentCustomerGroup,
-        Group $fallbackCustomerGroup,
-        $direction = 'ASC'
-    ) {
-        $this->sortings[] = new Sorting\Price(
-            $direction,
-            $currentCustomerGroup,
-            $fallbackCustomerGroup
-        );
+    public function sortByCheapestPrice()
+    {
+        $this->sortings[] = new Sorting\Price('ASC');
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function sortByHighestPrice()
+    {
+        $this->sortings[] = new Sorting\Price('DESC');
         return $this;
     }
 

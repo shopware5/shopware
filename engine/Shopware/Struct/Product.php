@@ -43,7 +43,7 @@ class Product extends ListProduct
     private $propertySet;
 
     /**
-     * @var Product\Configurator\Group[]
+     * @var Group[]
      */
     private $configuration;
 

@@ -17,11 +17,27 @@ class Tax extends Hydrator
     {
         $tax = new Struct\Tax();
 
-        $tax->setId($data['id']);
+        $tax->setId((int)$data['__tax_id']);
+        $tax->setName($data['__tax_description']);
+        $tax->setTax((float)$data['__tax_tax']);
 
-        $tax->setName($data['name']);
+        return $tax;
+    }
 
-        $tax->setTax($data['tax']);
+    /**
+     * Creates a new tax struct and assigns the passed
+     * data array.
+     *
+     * @param array $data
+     * @return \Shopware\Struct\Tax
+     */
+    public function hydrateRule(array $data)
+    {
+        $tax = new Struct\Tax();
+
+        $tax->setId((int)$data['__taxRule_groupID']);
+        $tax->setName($data['__taxRule_name']);
+        $tax->setTax((float)$data['__taxRule_tax']);
 
         return $tax;
     }

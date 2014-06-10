@@ -7,7 +7,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Struct as Struct;
 use Shopware\Gateway\DBAL\Hydrator as Hydrator;
 
-class GraduatedPrices extends Gateway
+class GraduatedPrices
 {
     /**
      * @var \Shopware\Gateway\DBAL\Hydrator\Price
@@ -15,15 +15,33 @@ class GraduatedPrices extends Gateway
     private $priceHydrator;
 
     /**
+     * The FieldHelper class is used for the
+     * different table column definitions.
+     *
+     * This class helps to select each time all required
+     * table data for the store front.
+     *
+     * Additionally the field helper reduce the work, to
+     * select in a second step the different required
+     * attribute tables for a parent table.
+     *
+     * @var FieldHelper
+     */
+    private $fieldHelper;
+
+    /**
      * @param ModelManager $entityManager
+     * @param FieldHelper $fieldHelper
      * @param Hydrator\Price $priceHydrator
      */
     function __construct(
         ModelManager $entityManager,
+        FieldHelper $fieldHelper,
         Hydrator\Price $priceHydrator
     ) {
         $this->entityManager = $entityManager;
         $this->priceHydrator = $priceHydrator;
+        $this->fieldHelper = $fieldHelper;
     }
 
     /**
@@ -60,21 +78,20 @@ class GraduatedPrices extends Gateway
 
         $query = $this->entityManager->getDBALQueryBuilder();
 
-        $query->select($this->getPriceFields());
+        $query->select($this->fieldHelper->getPriceFields());
         $query->addSelect('variants.ordernumber as number');
-        $query->addSelect($this->getTableFields('s_articles_prices_attributes', 'attribute'));
 
-        $query->from('s_articles_prices', 'prices')
-            ->innerJoin('prices', 's_articles_details', 'variants', 'variants.id = prices.articledetailsID')
-            ->leftJoin('prices', 's_articles_prices_attributes', 'attribute', 'attribute.priceID = prices.id');
+        $query->from('s_articles_prices', 'price')
+            ->innerJoin('price', 's_articles_details', 'variants', 'variants.id = price.articledetailsID')
+            ->leftJoin('price', 's_articles_prices_attributes', 'priceAttribute', 'priceAttribute.priceID = price.id');
 
-        $query->where('prices.articledetailsID IN (:products)')
-            ->andWhere('prices.pricegroup = :customerGroup')
+        $query->where('price.articledetailsID IN (:products)')
+            ->andWhere('price.pricegroup = :customerGroup')
             ->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY)
             ->setParameter(':customerGroup', $customerGroup->getKey());
 
-        $query->orderBy('prices.articledetailsID', 'ASC')
-            ->addOrderBy('prices.from', 'ASC');
+        $query->orderBy('price.articledetailsID', 'ASC')
+            ->addOrderBy('price.from', 'ASC');
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -89,21 +106,5 @@ class GraduatedPrices extends Gateway
         }
 
         return $prices;
-    }
-
-    private function getPriceFields()
-    {
-        return array(
-            'prices.id',
-            'prices.pricegroup',
-            'prices.from',
-            'prices.to',
-            'prices.articleID',
-            'prices.articledetailsID',
-            'prices.price',
-            'prices.pseudoprice',
-            'prices.baseprice',
-            'prices.percent'
-        );
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+
+
 class Shopware_Tests_Service_Base extends Enlight_Components_Test_TestCase
 {
     /**
@@ -275,6 +277,9 @@ class Shopware_Tests_Service_Base extends Enlight_Components_Test_TestCase
 
         return $priceGroup;
     }
+
+
+
 
     protected function removeConfigurator() {
         $ids = Shopware()->Db()->fetchCol(

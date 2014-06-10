@@ -9,7 +9,6 @@ class SearchPriceHelper
 {
     const STATE_INCLUDES_CHEAPEST_PRICE = 'cheapest_price';
 
-
     public function getCheapestPriceSelection(Group $current)
     {
         return '(MIN(' . $this->getSelection($current) . '))';
@@ -17,7 +16,6 @@ class SearchPriceHelper
 
     public function getSelection(Group $current)
     {
-
         $selection = "(
             IF(customer_prices.id, customer_prices.price, default_prices.price)";
 

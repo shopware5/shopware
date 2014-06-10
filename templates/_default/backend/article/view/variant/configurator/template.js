@@ -471,6 +471,8 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
             }, {
                 xtype: 'numberfield',
                 name: 'minPurchase',
+                minValue: 1,
+                value: 1,
                 fieldLabel: me.snippets.settings.minimumOrder
             }, {
                 xtype: 'numberfield',

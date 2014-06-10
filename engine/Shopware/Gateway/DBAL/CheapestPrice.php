@@ -8,7 +8,7 @@ use Shopware\Struct;
 use Shopware\Gateway\DBAL\Hydrator as Hydrator;
 
 
-class CheapestPrice extends Gateway
+class CheapestPrice
 {
     /**
      * @var \Shopware\Gateway\DBAL\Hydrator\Price
@@ -16,15 +16,33 @@ class CheapestPrice extends Gateway
     private $priceHydrator;
 
     /**
+     * The FieldHelper class is used for the
+     * different table column definitions.
+     *
+     * This class helps to select each time all required
+     * table data for the store front.
+     *
+     * Additionally the field helper reduce the work, to
+     * select in a second step the different required
+     * attribute tables for a parent table.
+     *
+     * @var FieldHelper
+     */
+    private $fieldHelper;
+
+    /**
      * @param ModelManager $entityManager
+     * @param FieldHelper $fieldHelper
      * @param Hydrator\Price $priceHydrator
      */
     function __construct(
         ModelManager $entityManager,
+        FieldHelper $fieldHelper,
         Hydrator\Price $priceHydrator
     ) {
         $this->entityManager = $entityManager;
         $this->priceHydrator = $priceHydrator;
+        $this->fieldHelper = $fieldHelper;
     }
 
     /**
@@ -46,10 +64,11 @@ class CheapestPrice extends Gateway
      *  - Closeout variants can only be selected if the stock > min purchase
      *
      * @param Struct\ListProduct[] $products
+     * @param \Shopware\Struct\Context $context
      * @param Struct\Customer\Group $customerGroup
      * @return Struct\Product\PriceRule[]
      */
-    public function getList(array $products, Struct\Customer\Group $customerGroup)
+    public function getList(array $products, Struct\Context $context, Struct\Customer\Group $customerGroup)
     {
         /**
          * Contains the cheapest price logic which product price should be selected.
@@ -58,18 +77,42 @@ class CheapestPrice extends Gateway
 
         $query = $this->entityManager->getDBALQueryBuilder();
 
-        $query->select($this->getPriceFields())
-            ->addSelect($this->getUnitFields())
-            ->addSelect($this->getTableFields('s_articles_prices_attributes', 'attribute'));
+        $query->select($this->fieldHelper->getPriceFields())
+            ->addSelect($this->fieldHelper->getUnitFields())
+            ->addSelect(array(
+                'unitTranslation.objectdata as __unit_translation',
+                'variantTranslation.objectdata as __variant_translation',
+            ));
 
-        $query->from('s_articles_prices', 'prices')
-            ->innerJoin('prices', 's_articles_details', 'variant', 'variant.id = prices.articledetailsID')
+        $query->from('s_articles_prices', 'price')
+            ->innerJoin('price', 's_articles_details', 'variant', 'variant.id = price.articledetailsID')
             ->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID')
             ->leftJoin('variant', 's_core_units', 'unit', 'unit.id = variant.unitID')
-            ->leftJoin('prices', 's_articles_prices_attributes', 'attribute', 'attribute.priceID = prices.id');
+            ->leftJoin('price', 's_articles_prices_attributes', 'priceAttribute', 'priceAttribute.priceID = price.id');
 
-        $query->andWhere('prices.id IN (:ids)')
-            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+        $query->leftJoin(
+            'unit',
+            's_core_translations',
+            'unitTranslation',
+            'unitTranslation.objecttype = :unitType AND
+             unitTranslation.objectkey = 1 AND
+             unitTranslation.objectlanguage = :language'
+        );
+
+        $query->leftJoin(
+            'variant',
+            's_core_translations',
+            'variantTranslation',
+            'variantTranslation.objecttype = :variantType AND
+             variantTranslation.objectkey = variant.id AND
+             variantTranslation.objectlanguage = :language'
+        );
+
+        $query->andWhere('price.id IN (:ids)')
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
+            ->setParameter(':unitType', 'config_units')
+            ->setParameter(':variantType', 'variant')
+            ->setParameter(':language', $context->getShop()->getId());
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -78,7 +121,7 @@ class CheapestPrice extends Gateway
 
         $prices = array();
         foreach ($data as $row) {
-            $product = $row['articleID'];
+            $product = $row['__price_articleID'];
 
             $prices[$product] = $this->priceHydrator->hydrateCheapestPrice($row);
         }
@@ -199,37 +242,4 @@ class CheapestPrice extends Gateway
 
         return array_shift($prices);
     }
-
-
-    private function getPriceFields()
-    {
-        return array(
-            'prices.id',
-            'prices.pricegroup',
-            'prices.from',
-            'prices.to',
-            'prices.articleID',
-            'prices.articledetailsID',
-            'prices.price',
-            'prices.pseudoprice',
-            'prices.baseprice',
-            'prices.percent'
-        );
-    }
-
-    private function getUnitFields()
-    {
-        return array(
-            'unit.id    as __unit_id',
-            'unit.description    as __unit_description',
-            'unit.unit    as __unit_unit',
-            'variant.packunit as __unit_packunit',
-            'variant.purchaseunit as __unit_purchaseunit',
-            'variant.referenceunit as __unit_referenceunit',
-            'variant.purchasesteps as __unit_purchasesteps',
-            'variant.minpurchase as __unit_minpurchase',
-            'variant.maxpurchase as __unit_maxpurchase',
-        );
-    }
-
 }
