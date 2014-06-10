@@ -54,7 +54,6 @@
 		{* Custom page container *}
 		{block name='frontend_custom_article_container'}
 			<div class="tabs--content-container tab--content panel--body is--wide has--border">
-
 				<div class="custom-page--content">
 
 					{* Custom page headline *}
@@ -68,7 +67,6 @@
 					{/block}
 
 				</div>
-
 			</div>
 		{/block}
 
