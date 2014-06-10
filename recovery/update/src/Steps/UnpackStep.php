@@ -25,7 +25,7 @@
 namespace Shopware\Recovery\Update\Steps;
 
 use Gaufrette\Filesystem;
-use Shopware\Recovery\Update\PathBuilder;
+use Shopware\Recovery\Update\pathBuilder;
 
 class UnpackStep
 {
@@ -42,7 +42,7 @@ class UnpackStep
     /**
      * @var PathBuilder
      */
-    private $PathBuilder;
+    private $pathBuilder;
 
     /**
      * @var bool
@@ -52,14 +52,14 @@ class UnpackStep
     /**
      * @param Filesystem  $localFilesyste
      * @param Filesystem  $remoteFilesyste
-     * @param PathBuilder $PathBuilder
+     * @param PathBuilder $pathBuilder
      * @param bool        $isDebug
      */
-    public function __construct(Filesystem $localFilesyste, Filesystem $remoteFilesyste, PathBuilder $PathBuilder, $isDebug = false)
+    public function __construct(Filesystem $localFilesyste, Filesystem $remoteFilesyste, PathBuilder $pathBuilder, $isDebug = false)
     {
         $this->localFilesyste  = $localFilesyste;
         $this->remoteFilesyste = $remoteFilesyste;
-        $this->PathBuilder     = $PathBuilder;
+        $this->pathBuilder     = $pathBuilder;
         $this->isDebug         = $isDebug;
     }
 
@@ -72,7 +72,7 @@ class UnpackStep
      */
     public function run($offset, $total)
     {
-        $inflector = $this->PathBuilder;
+        $inflector = $this->pathBuilder;
 
         $remoteFs = $this->remoteFilesyste;
         $localFs  = $this->localFilesyste;

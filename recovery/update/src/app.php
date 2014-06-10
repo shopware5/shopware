@@ -39,18 +39,20 @@ $app = $container->get('app');
 $app->hook('slim.before.dispatch', function () use ($app, $container) {
     $baseUrl = \Shopware\Recovery\Common\Utils::getBaseUrl($app);
 
-    if (!is_file(UPDATE_META_FILE)) {
-        $shopPath = str_replace('/recovery/update', '/', $app->request()->getRootUri());
-        $app->response()->redirect($shopPath);
-        $app->response()->status(302);
-        $app->stop();
+    $lang = null;
+    if (!UPDATE_IS_MANUAL) {
+        if (!is_file(UPDATE_META_FILE)) {
+            $shopPath = str_replace('/recovery/update', '/', $app->request()->getRootUri());
+            $app->response()->redirect($shopPath);
+            $app->response()->status(302);
+            $app->stop();
+        }
+
+        $file = file_get_contents(UPDATE_META_FILE);
+        $updateConfig = json_decode($file, true);
+        $container->setParameter('update.config', $updateConfig);
+        $lang = substr($updateConfig['locale'], 0, 2);
     }
-
-    $file = file_get_contents(UPDATE_META_FILE);
-    $updateConfig = json_decode($file, true);
-    $container->setParameter('update.config', $updateConfig);
-
-    $lang = substr($updateConfig['locale'], 0, 2);
 
     session_set_cookie_params(7200, $baseUrl);
 
@@ -60,12 +62,9 @@ $app->hook('slim.before.dispatch', function () use ($app, $container) {
 
     $selectedLanguage = Utils::getLanguage($app->request, $lang);
     $language = require __DIR__ .  "/../data/lang/$selectedLanguage.php";
-    $_SESSION["language"] = $language;
 
     $clientIp = Utils::getRealIpAddr();
 
-    $app->view()->set('version', $updateConfig['version']);
-    $app->view()->set('app', $app);
     $app->view()->set('app', $app);
     $app->view()->set('clientIp', $clientIp);
     $app->view()->set('baseUrl', $baseUrl);
@@ -119,9 +118,8 @@ $app->map('/noaccess', function () use ($app) {
 $app->map('/', function () use ($app) {
     $app->render('welcome.php');
 
-    if (isset($_SESSION['language'])) {
+    if (!UPDATE_IS_MANUAL) {
         $app->redirect($app->urlFor("checks"));
-
         return;
     }
 })->via('GET', 'POST')->name("welcome");
@@ -273,7 +271,11 @@ $app->map('/cleanup', function () use ($app) {
 })->via('GET', 'POST')->name('cleanup');
 
 $app->map('/done', function () use ($app) {
-    $app->render('done.php');
+    if (UPDATE_IS_MANUAL) {
+        $app->render('done_manual.php');
+    } else {
+        $app->render('done.php');
+    }
 })->via('GET', 'POST')->name('done');
 
 $app->get('/redirect/:target', function ($target) use ($app) {

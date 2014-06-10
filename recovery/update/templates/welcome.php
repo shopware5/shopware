@@ -6,10 +6,11 @@
     </div>
 
     <form action="<?php echo $app->urlFor('checks', array()); ?>" method="POST">
+        <input type="hidden" class="hidden-action" value="<?php echo $app->urlFor('welcome', array()); ?>" />
+
         <label><?php echo $language["select_language"];?></label>
 
         <select name="language" class="language-selection">
-            <option value="0"><?php echo $language["select_language_choose"];?></option>
             <option value="de"<?php if ($selectedLanguage == "de") { ?>
                     selected="selected"<?php } ?>><?php echo $language["select_language_de"];?></option>
             <option value="en"<?php if ($selectedLanguage == "en") { ?>

@@ -102,7 +102,6 @@
         });
     };
 
-
     $(document).ajaxError(function(event, jqxhr, settings, exception) {
         $('body').removeClass('auto');
 
@@ -129,12 +128,8 @@
             });
         });
 
-        $button.trigger('click');
-        if (location.hash && location.hash.length) {
-            var hash = location.hash;
-            if (hash === '#autostart') {
-               $button.trigger('click');
-            }
+        if ($("body").hasClass("auto")) {
+            $button.trigger('click');
         }
 
         $('.language-selection').bind('change', function() {

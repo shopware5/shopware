@@ -23,15 +23,9 @@
         }
     </script>
 </head>
-<body class="<?php echo ($tab == "dbmigration" || $tab == "done") ? 'auto' : '' ?>">
-
+<body class="<?php echo (!UPDATE_IS_MANUAL && $tab == "dbmigration" || !UPDATE_IS_MANUAL && $tab == "done") ? 'auto' : '' ?>">
 <div class="info">
     <img src="<?php echo $baseUrl ?>assets/images/logo_updater.png" alt="<?php echo $language['title']; ?>" class="logo"/>
-    <div class="meta">
-        <p>
-            <?php echo $language['meta_text']; ?> <?php echo $version ?>
-        </p>
-    </div>
 </div>
 
 <div class="wrapper">
