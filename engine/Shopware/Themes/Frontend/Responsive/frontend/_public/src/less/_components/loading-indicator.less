@@ -1,0 +1,22 @@
+.js--loading-indicator {
+    .unitize-padding(20, 20, 20, 20, 16);
+    .unitize-margin(-20, 0, 0, -20, 16);
+    background: white;
+    position: absolute;
+    display: none;
+    left: 50%;
+    top: 50%;
+    border: 1px solid black;
+
+    div[class^="icon-"] {
+        display: block;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+    }
+
+    .icon-default {
+        background-image: url(../../img/icons/loading-indicator.gif);
+        .unitize-height(25, 16);
+        .unitize-width(25, 16);
+    }
+}
