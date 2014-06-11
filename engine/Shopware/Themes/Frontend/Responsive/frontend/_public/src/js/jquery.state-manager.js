@@ -57,7 +57,7 @@
             listenersInit = [],
 
             // Browser specific font size, used for converting EM based values to it's corresponding pixel value.
-            defaultFontSize = Number(window.getComputedStyle(document.body, null).fontSize.replace(/[^\d]/g, '')),
+            defaultFontSize = 16, // todo@stp - Calculate the browser default font-size instead of using a hard-coded one
             resizeWidth = 0,
 
             // Caches the current and previous state.
