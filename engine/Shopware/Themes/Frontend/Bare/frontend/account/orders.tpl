@@ -6,7 +6,7 @@
 {/block}
 
 {* Main content *}
-{block name='frontend_index_content'}
+{block name="frontend_index_content"}
 	<div class="content block account--content">
 
         {if !$sOpenOrders}
