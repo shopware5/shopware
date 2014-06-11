@@ -37,18 +37,20 @@
 
 		{block name='frontend_register_index_cgroup_header'}
 			{if $register.personal.form_data.sValidation}
-			{* Include information related to registration for other customergroups then guest, this block get overridden by b2b essentials plugin *}
-			<div class="panel register--supplier">
-				<h2 class="panel--title is--underline">{$sShopname} {s name='RegisterHeadlineSupplier' namespace='frontend/register/index'}{/s}</h2>
+				{* Include information related to registration for other customergroups then guest, this block get overridden by b2b essentials plugin *}
+				<div class="panel register--supplier">
+					<h2 class="panel--title is--underline">{$sShopname} {s name='RegisterHeadlineSupplier' namespace='frontend/register/index'}{/s}</h2>
 
-				<div class="panel--body is--wide">
-					<span class="is--bold">{s name='RegisterInfoSupplier' namespace='frontend/register/index'}{/s}</span><br />
-					<a href="{url controller='account'}" class="account">{s name='RegisterInfoSupplier2' namespace='frontend/register/index'}{/s}</a><br />
-					<p class="is--bold">{s name='RegisterInfoSupplier3' namespace='frontend/register/index'}{/s}</p>
-					<h3 class="is--bold">{s name='RegisterInfoSupplier4' namespace='frontend/register/index'}{/s}</h3>{s name='RegisterInfoSupplier5' namespace='frontend/register/index'}{/s}
-					<h3 class="is--bold">{s name='RegisterInfoSupplier6' namespace='frontend/register/index'}{/s}</h3>{s name='RegisterInfoSupplier7' namespace='frontend/register/index'}{/s}
+					<div class="panel--body is--wide">
+						<p class="is--bold">{s name='RegisterInfoSupplier3' namespace='frontend/register/index'}{/s}</p>
+
+						<h3 class="is--bold">{s name='RegisterInfoSupplier4' namespace='frontend/register/index'}{/s}</h3>
+						<p>{s name='RegisterInfoSupplier5' namespace='frontend/register/index'}{/s}</p>
+
+						<h3 class="is--bold">{s name='RegisterInfoSupplier6' namespace='frontend/register/index'}{/s}</h3>
+						<p>{s name='RegisterInfoSupplier7' namespace='frontend/register/index'}{/s}</p>
+					</div>
 				</div>
-			</div>
 			{/if}
 		{/block}
 
