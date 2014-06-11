@@ -220,7 +220,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
 
     /**
-     * Gets the turnover and vistors amount for the
+     * Gets the turnover and visitors amount for the
      * chart and the grid in the "Turnover - Yesterday and today"-widget.
      *
      * @public
@@ -548,22 +548,28 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
     }
 
     /**
-     * Gets the last registered merchant for the "merchant unlock"-widget.
+     * Gets the last registered merchant for the "merchant unlock" widget.
      *
      * @public
      * @return void
      */
     public function getLastMerchantAction()
     {
-        // Fetch all users that needs to get unlocked
-        $sql = "SELECT DISTINCT s_user.active AS active, customergroup,validation,email,s_core_customergroups.description AS customergroup_name, validation AS customergroup_id, s_user.id AS id, lastlogin AS date, company AS company_name, customernumber, CONCAT(firstname,' ',lastname) AS customer
-        FROM s_user LEFT JOIN s_core_customergroups
-        ON groupkey = validation,
+        // Fetch all users that are pending approval
+        $sql = "SELECT DISTINCT s_user.active AS active, customergroup,
+            validation, email, s_core_customergroups.description AS customergroup_name,
+            validation AS customergroup_id, s_user.id AS id, lastlogin AS date,
+            company AS company_name, customernumber, CONCAT(firstname,' ',lastname) AS customer
+        FROM s_user
+        LEFT JOIN s_core_customergroups
+            ON groupkey = validation,
         s_user_billingaddress
         WHERE
-        s_user.id = s_user_billingaddress.userID
-        AND validation != '' AND validation != '0'
+            s_user.id = s_user_billingaddress.userID
+            AND validation != ''
+            AND validation != '0'
         ORDER BY s_user.firstlogin DESC";
+
         $fetchUsersToUnlock = Shopware()->Container()->get('db')->fetchAll($sql);
 
         foreach ($fetchUsersToUnlock as &$user) {
@@ -571,7 +577,6 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             $user["company_name"] = htmlentities($user["company_name"], null, "UTF-8");
             $user["customer"] = htmlentities($user["customer"], null, "UTF-8");
         }
-
 
         $this->View()->assign(array('success' => true, 'data' => $fetchUsersToUnlock));
     }
@@ -585,48 +590,72 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      */
     public function requestMerchantFormAction()
     {
-        $customergroup = (string)$this->Request()->getParam('customerGroup');
-        $userId = (int)$this->Request()->getParam('id');
-        $mode = (string)$this->Request()->getParam('mode');
+        $customerGroup = (string) $this->Request()->getParam('customerGroup');
+        $userId = (int) $this->Request()->getParam('id');
+        $mode = (string) $this->Request()->getParam('mode');
 
         if ($mode === 'allow') {
             $tplMail = 'sCUSTOMERGROUP%sACCEPTED';
         } else {
             $tplMail = 'sCUSTOMERGROUP%sREJECTED';
         }
-        $tplMail = sprintf($tplMail, $customergroup);
+        $tplMail = sprintf($tplMail, $customerGroup);
 
-        $builder = Shopware()->Container()->get('models')->createQueryBuilder();
-        $builder->select(array('mail'))
-            ->from('Shopware\Models\Mail\Mail', 'mail')
-            ->where('mail.name = ?1')
-            ->setParameter(1, $tplMail);
-
-        $mail = $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        if (empty($mail)) {
-            $this->View()->assign(
-                array('success' => false, 'message' => 'There is no mail for the specific customer group')
-            );
-            return false;
-        }
-
-        $builder = Shopware()->Container()->get('models')->createQueryBuilder();
-        $builder->select(array('customer.email'))
+        $builder = $this->container->get('models')->createQueryBuilder();
+        $builder->select(array('customer.email', 'customer.languageId'))
             ->from('Shopware\Models\Customer\Customer', 'customer')
             ->where('customer.id = ?1')
             ->setParameter(1, $userId);
 
-        $email = $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        if (empty($email)) {
-            $this->View()->assign(array('success' => false, 'message' => 'There is no user for the specific user id'));
+        $customer = $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        if (empty($customer) || empty($customer['email'])) {
+            $this->View()->assign(
+                array(
+                    'success' => false,
+                    'message' => $this->container->get('snippets')->getNamespace('backend/widget/controller')
+                            ->get('merchantNoUserId', 'There is no user for the specific user id')
+                )
+            );
             return false;
         }
 
-        $mail['toMail'] = $email['email'];
-        $mail['content'] = nl2br($mail['content']);
-        $mail['userId'] = $userId;
-        $mail['status'] = ($mode === 'allow' ? 'accepted' : 'rejected');
-        $this->View()->assign(array('success' => true, 'data' => $mail));
+        /** @var \Shopware\Models\Mail\Mail $mailModel */
+        $mailModel = $this->getModelManager()->getRepository('Shopware\Models\Mail\Mail')->findOneBy(
+            array('name' => $tplMail)
+        );
+
+        if (empty($mailModel)) {
+            $this->View()->assign(
+                array(
+                    'success' => true,
+                    'data' => array(
+                        'content' => '',
+                        'fromMail' => '{config name=mail}',
+                        'fromName' => '{config name=shopName}',
+                        'subject' => '',
+                        'toMail' => $customer['email'],
+                        'userId' => $userId,
+                        'status' => ($mode === 'allow' ? 'accepted' : 'rejected')
+                    )
+                )
+            );
+            return true;
+        }
+
+        $translationReader = new Shopware_Components_Translation();
+        $translation = $translationReader->read($customer['languageId'], 'config_mails', $mailModel->getId());
+        $mailModel->setTranslation($translation);
+
+        $mailData = array(
+            'content' => nl2br($mailModel->getContent()) ? : '',
+            'fromMail' => $mailModel->getFromMail() ? : '{config name=mail}',
+            'fromName' => $mailModel->getFromName() ? : '{config name=shopName}',
+            'subject' => $mailModel->getSubject(),
+            'toMail' => $customer['email'],
+            'userId' => $userId,
+            'status' => ($mode === 'allow' ? 'accepted' : 'rejected')
+        );
+        $this->View()->assign(array('success' => true, 'data' => $mailData));
     }
 
     /**
