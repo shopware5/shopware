@@ -284,7 +284,6 @@
 
             a { float: right; }
         }
-
     }
 
     // General Register Form
@@ -389,7 +388,43 @@
             .unitize(10, 16, font-size);
             .unitize(10, 16, margin-right);
         }
+    }
 
+    .payment--selection {
+        .unitize-padding(20, 20);
+        width: 20%;
+
+        input[type="radio"] {
+            .unitize-margin(0, 10, 0, 0);
+        }
+
+        .payment--selection-label {
+            cursor: pointer;
+
+            &:hover {
+                color: @primaryColor;
+            }
+        }
+    }
+
+    .payment--description {
+        .unitize-padding(20, 20);
+        width: 80%;
+    }
+
+    .payment--content {
+        .clearfix();
+        .unitize-padding(20, 20);
+        width: 80%;
+        margin-left: 20%;
+        clear: both;
+
+        label {
+            .unitize(40, 16, line-height);
+            display: block;
+            width: 20%;
+            float: left;
+        }
     }
 }
 
