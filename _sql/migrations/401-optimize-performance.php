@@ -18,7 +18,7 @@ sSort=o';
                 $statement->execute(array(serialize($value), $config['id']));
             }
 
-            $statement = $this->connection->prepare("SELECT * FROM s_core_config_values WHERE elementID = ?");
+            $statement = $this->connection->prepare("SELECT * FROM s_core_config_values WHERE element_id = ?");
             $statement->execute(array($config['id']));
             $values = $statement->fetchAll(PDO::FETCH_ASSOC);
 
