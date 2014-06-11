@@ -73,7 +73,8 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
         error: {
             viewportNotLoaded: '{s name="error/viewportNotLoaded"}Viewport is not loaded.{/s}',
             settingsInitialisation: '{s name="error/settingsInitialisation"}Widget settings could not be initialized.{/s}',
-            deleteWidget: '{s name="error/deleteWidget"}An Error occurred while attempting to delete the widget.\n\n{/s}'
+            deleteWidget: '{s name="error/deleteWidget"}An Error occurred while attempting to delete the widget.\n\n{/s}',
+            merchantWidgetError: '{s name="error/merchantWidgetError"}An error occurred in the merchants widget{/s}'
         },
 
         titles: {
@@ -504,11 +505,25 @@ Ext.define('Shopware.apps.Index.controller.Widgets', {
                 var model = me.getModel('MerchantMail');
                 response = Ext.decode(response.responseText);
 
-                me.getView('merchant.Window').create({
-                    record: model.create(response.data),
-                    mode: mode,
-                    title: (mode === 'allow') ? me.snippets.titles.allow_merchant : me.snippets.titles.decline_merchant
-                }).show();
+                if (response.success === true) {
+                    me.getView('merchant.Window').create({
+                        record: model.create(response.data),
+                        mode: mode,
+                        title: (mode === 'allow') ? me.snippets.titles.allow_merchant : me.snippets.titles.decline_merchant
+                    }).show();
+                } else {
+                    if (response.message) {
+                        message = response.message;
+                    } else {
+                        message = me.snippets.error.merchantWidgetError;
+                    }
+
+                    Shopware.Notification.createStickyGrowlMessage({
+                        title: (mode === 'allow') ? me.snippets.titles.allow_merchant : me.snippets.titles.decline_merchant,
+                        text: message,
+                        log: true
+                    });
+                }
             }
         });
     }

@@ -97,7 +97,7 @@
 		{* Password description *}
 		{block name='frontend_register_personal_fieldset_password_description'}
 			<div class="fade_password description">
-				{se name='RegisterInfoPassword'}{/se}{config name=MinPassword} {se name='RegisterInfoPasswordCharacters'}{/se}<br /> {se name='RegisterInfoPassword2'}{/se}
+				{se name='RegisterInfoPassword'}{/se} {config name=MinPassword} {se name='RegisterInfoPasswordCharacters'}{/se}<br /> {se name='RegisterInfoPassword2'}{/se}
 			</div>
 		{/block}
 	{/if}
