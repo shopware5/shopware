@@ -55,6 +55,8 @@ In this document you will find a changelog of the important changes related to t
     * `sAdmin::sGetShippingcosts`
     * `sAdmin::sCheckTaxID`
     * `sCore::sCustomRenderer`
+    * `sBasket::sCountArticles`
+    * `sBasket::sGetBasketWeight`
 * Removed the following core classes deprecated and/or unused variables
     * `sSystem::sDB_HOST`
     * `sSystem::sDB_USER`
@@ -71,6 +73,7 @@ In this document you will find a changelog of the important changes related to t
     * `sSystem::sCurrencyData`
     * `sSystem::sPathCmsFiles`
     * `sSystem::sPathCmsImg`
+    * `sBasket::sBASKET`
 * `sCore::sBuildLink()` second argument removed (dead code)
 * `sCore` no longer returns `null` when calling not implemented functions
 * `sNewsletter` core class removed
