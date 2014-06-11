@@ -207,7 +207,7 @@
 
         if (!container.length) {
             container = $('<div>', {
-                class: me.opts.containerClass
+                'class': me.opts.containerClass
             }).appendTo(me.$el);
         }
 
@@ -346,11 +346,11 @@
         var me = this;
 
         me.$arrowLeft = $('<a>', {
-            class: me.opts.arrowClassLeft
+            'class': me.opts.arrowClassLeft
         });
 
         me.$arrowRight = $('<a>', {
-            class: me.opts.arrowClassRight
+            'class': me.opts.arrowClassRight
         });
 
         if (me.opts.showArrows && me.active) {
