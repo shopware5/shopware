@@ -1,10 +1,7 @@
 .clearfix() {
-    &::before, &::after {
-        display: table;
+    &:after {
         content: "";
-        line-height: 0;
-    }
-    &::after {
+        display: table;
         clear: both;
     }
 }
