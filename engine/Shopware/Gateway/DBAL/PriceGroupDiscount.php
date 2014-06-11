@@ -128,12 +128,12 @@ class PriceGroupDiscount
         $quantity
     ) {
         $query = $this->entityManager->getDBALQueryBuilder();
-        $query->select(array('discounts.discount'))
-            ->from('s_core_pricegroups_discounts', 'discounts')
-            ->andWhere('discounts.groupID = :priceGroup')
-            ->andWhere('discounts.customergroupID = :customerGroup')
-            ->andWhere('discounts.discountstart <= :quantity')
-            ->orderBy('discounts.discount', 'DESC')
+        $query->select($this->fieldHelper->getPriceGroupDiscountFields())
+            ->from('s_core_pricegroups_discounts', 'priceGroupDiscount')
+            ->andWhere('priceGroupDiscount.groupID = :priceGroup')
+            ->andWhere('priceGroupDiscount.customergroupID = :customerGroup')
+            ->andWhere('priceGroupDiscount.discountstart <= :quantity')
+            ->orderBy('priceGroupDiscount.discount', 'DESC')
             ->setFirstResult(0)
             ->setMaxResults(1);
 
@@ -144,8 +144,12 @@ class PriceGroupDiscount
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
-        $data = $statement->fetch(\PDO::FETCH_COLUMN);
+        $data = $statement->fetch(\PDO::FETCH_ASSOC);
 
+        if (empty($data)) {
+            return null;
+        }
+        
         return $this->priceHydrator->hydratePriceDiscount(
             $data
         );

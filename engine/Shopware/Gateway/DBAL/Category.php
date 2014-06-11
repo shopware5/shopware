@@ -32,7 +32,6 @@ class Category
     /**
      * @param ModelManager $entityManager
      * @param FieldHelper $fieldHelper
-     * @param MediaHelper $mediaHelper
      * @param Hydrator\Category $categoryHydrator
      */
     function __construct(

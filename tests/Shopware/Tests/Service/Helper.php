@@ -2,6 +2,7 @@
 
 namespace Shopware\Tests\Service;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Components\Api\Resource;
 use Shopware\Gateway\DBAL\Configurator;
 use Shopware\Gateway\DBAL\ProductConfiguration;
@@ -37,6 +38,11 @@ class Helper
      */
     private $translationApi;
 
+    /**
+     * @var Resource\Variant
+     */
+    private $variantApi;
+
     function __construct()
     {
         $this->db = Shopware()->Db();
@@ -47,6 +53,9 @@ class Helper
         $api->setManager($this->entityManager);
         $this->articleApi = $api;
 
+        $variantApi = new Resource\Variant();
+        $variantApi->setManager($this->entityManager);
+        $this->variantApi = $variantApi;
 
         $translation = new Resource\Translation();
         $translation->setManager($this->entityManager);
@@ -56,6 +65,7 @@ class Helper
     public function getProductConfigurator(
         Struct\ListProduct $listProduct,
         Struct\Context $context,
+        array $selection = array(),
         ProductConfiguration $productConfigurationGateway = null,
         Configurator $configuratorGateway = null
     ) {
@@ -68,7 +78,7 @@ class Helper
 
         $service = new Service\Configurator($productConfigurationGateway, $configuratorGateway);
 
-        return $service->getProductConfigurator($listProduct, $context);
+        return $service->getProductConfigurator($listProduct, $context, $selection);
     }
 
     /**
@@ -173,16 +183,16 @@ class Helper
      */
     public function removeArticle($number)
     {
-        $detail = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail')
+        $detail = $this->entityManager->getRepository('Shopware\Models\Article\Detail')
             ->findOneBy(array('number' => $number));
 
         if (!$detail) {
             return;
         }
 
-        Shopware()->Models()->remove($detail->getArticle());
-        Shopware()->Models()->flush();
-        Shopware()->Models()->clear();
+        $this->entityManager->remove($detail->getArticle());
+        $this->entityManager->flush();
+        $this->entityManager->clear();
     }
 
     /**
@@ -219,7 +229,6 @@ class Helper
 
         $this->translationApi->create($data);
     }
-
 
     public function createPropertyTranslation($properties, $shopId)
     {
@@ -332,44 +341,175 @@ class Helper
         return $data;
     }
 
-
     /**
-     * Helper function which creates a configurator set in the database
-     * and generates the variants and the required configurator set for
-     * the rest api.
-     *
-     * @param \Shopware\Models\Customer\Group $customerGroup
-     * @param array $variantData
-     * @param int $groupCount
-     * @param int $optionCount
+     * @param Models\Customer\Group $customerGroup used for the price definition
+     * @param string $number
+     * @param array $data Contains nested configurator group > option array.
      * @return array
      */
     public function getConfigurator(
         Models\Customer\Group $customerGroup,
-        $groupCount = 1,
-        $optionCount = 3,
-        $variantData = array()
+        $number,
+        array $data = array()
     ) {
-        $configurator = $this->createConfigurator($groupCount, $optionCount);
+        if (empty($data)) {
+            $data = array(
+                'Farbe' => array('rot', 'gelb', 'blau')
+            );
+        }
+        $groups = $this->insertConfiguratorData($data);
 
-        $data = array_merge(array(
+        $configurator = $this->createConfiguratorSet($groups);
+
+        $variants = array_merge(array(
             'prices' => $this->getGraduatedPrices($customerGroup->getKey())
         ), $this->getUnitData());
 
-        $data = array_merge(
-            $data,
-            $variantData
-        );
-
         $variants = $this->generateVariants(
             $configurator['groups'],
-            $data
+            $number,
+            $variants
         );
 
         return array(
             'configuratorSet' => $configurator,
             'variants' => $variants
         );
+    }
+
+    public function updateConfiguratorVariants($articleId, $data)
+    {
+        foreach($data as $updateInformation) {
+            $options = $updateInformation['options'];
+            $variantData = $updateInformation['data'];
+
+            $variants = $this->getVariantsByOptions($articleId, $options);
+
+            if (empty($variants)) {
+                continue;
+            }
+
+            foreach($variants as $variantId) {
+                $this->variantApi->update($variantId, $variantData);
+            }
+        }
+    }
+
+    private function getVariantsByOptions($articleId, $options)
+    {
+        $ids = $this->getProductOptionsByName($articleId, $options);
+        $ids = array_column($ids, 'id');
+
+        $query = $this->entityManager->getDBALQueryBuilder();
+        $query->select(array(
+            'relation.article_id',
+            "CONCAT('|', GROUP_CONCAT(relation.option_id SEPARATOR '|'), '|') as options"
+        ));
+
+        $query->from('s_article_configurator_option_relations', 'relation')
+            ->innerJoin('relation', 's_articles_details', 'variant', 'variant.id = relation.article_id')
+            ->where('variant.articleID = :article')
+            ->groupBy('relation.article_id')
+            ->setParameter(':article', $articleId);
+
+
+        foreach($ids as $id) {
+            $query->andHaving("options LIKE '%|". (int) $id."|%'");
+        }
+
+        $statement = $query->execute();
+        $ids = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        return array_column($ids, 'article_id');
+    }
+
+    public function getProductOptionsByName($articleId, $optionNames) {
+
+        $query = $this->entityManager->getDBALQueryBuilder();
+        $query->select(array('options.id', 'options.group_id', 'options.name', 'options.position'))
+            ->from('s_article_configurator_options', 'options')
+            ->innerJoin(
+                'options',
+                's_article_configurator_option_relations',
+                'relation',
+                'relation.option_id = options.id'
+            )
+            ->innerJoin(
+                'relation',
+                's_articles_details',
+                'variant',
+                'variant.id = relation.article_id AND variant.articleID = :article'
+            )
+            ->groupBy('options.id')
+            ->where('options.name IN (:names)')
+            ->setParameter('article', $articleId)
+            ->setParameter(':names', $optionNames, Connection::PARAM_STR_ARRAY);
+
+        $statement = $query->execute();
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * @param Models\Article\Configurator\Group[] $groups
+     * @return array
+     */
+    private function createConfiguratorSet(array $groups)
+    {
+        $data = array();
+
+        foreach($groups as $group) {
+            $options = array();
+            foreach($group->getOptions() as $option) {
+                $options[] =  array(
+                    'id' => $option->getId(),
+                    'name' => $option->getName()
+                );
+            }
+            $data[] = array(
+                'id' => $group->getId(),
+                'name' => $group->getName(),
+                'options' => $options
+            );
+        }
+        return array(
+            'name' => 'Unit test configurator set',
+            'groups' => $data
+        );
+    }
+
+    private function insertConfiguratorData($groups)
+    {
+        $pos = 1;
+        $data = array();
+
+        foreach($groups as $groupName => $options) {
+            $group = new Models\Article\Configurator\Group();
+            $group->setName($groupName);
+            $group->setPosition($groups);
+            $this->db->executeQuery("DELETE FROM s_article_configurator_groups WHERE name = ?", array($groupName));
+
+            $collection = array();
+            $optionPos = 1;
+            foreach($options as $optionName) {
+                $this->db->executeQuery("DELETE FROM s_article_configurator_options WHERE name = ?", array($optionName));
+
+                $option = new Models\Article\Configurator\Option();
+                $option->setName($optionName);
+                $option->setPosition($optionPos);
+                $collection[] = $option;
+                $optionPos++;
+            }
+            $group->setOptions($collection);
+            $pos++;
+
+            $data[] = $group;
+
+            $this->entityManager->persist($group);
+            $this->entityManager->flush();
+            $this->entityManager->clear();
+        }
+
+        return $data;
     }
 
     /**
@@ -553,12 +693,12 @@ class Helper
 
     private function createProperties($groupCount, $optionCount)
     {
-        Shopware()->Db()->query("DELETE FROM s_filter WHERE name = 'Test-Set'");
+        $this->db->query("DELETE FROM s_filter WHERE name = 'Test-Set'");
         $this->db->insert('s_filter', array('name' => 'Test-Set', 'comparable' => 1));
         $data = $this->db->fetchRow("SELECT * FROM s_filter WHERE name = 'Test-Set'");
 
-        Shopware()->Db()->query("DELETE FROM s_filter_options WHERE name LIKE 'Test-Gruppe%'");
-        Shopware()->Db()->query("DELETE FROM s_filter_values WHERE value LIKE 'Test-Option%'");
+        $this->db->query("DELETE FROM s_filter_options WHERE name LIKE 'Test-Gruppe%'");
+        $this->db->query("DELETE FROM s_filter_values WHERE value LIKE 'Test-Option%'");
 
         for($i=0; $i<$groupCount; $i++) {
             $this->db->insert('s_filter_options', array(
@@ -574,7 +714,7 @@ class Helper
                 ));
             }
 
-            $group['options'] = Shopware()->Db()->fetchAll("SELECT * FROM s_filter_values WHERE optionID = ?", array($group['id']));
+            $group['options'] = $this->db->fetchAll("SELECT * FROM s_filter_values WHERE optionID = ?", array($group['id']));
             $data['groups'][] = $group;
 
             $this->db->insert('s_filter_relations', array(
@@ -591,10 +731,59 @@ class Helper
      */
     public function getShop($shopId = 1)
     {
-        return Shopware()->Models()->find(
+        return $this->entityManager->find(
             'Shopware\Models\Shop\Shop',
             $shopId
         );
+    }
+
+    public function createPriceGroup($discounts = array())
+    {
+        if (empty($discounts)) {
+            $discounts = array(
+                array('key' => 'PHP', 'quantity' => 1,  'discount' => 10),
+                array('key' => 'PHP', 'quantity' => 5,  'discount' => 20),
+                array('key' => 'PHP', 'quantity' => 10, 'discount' => 30),
+            );
+        }
+
+        $this->removePriceGroup();
+
+        $priceGroup = new \Shopware\Models\Price\Group();
+        $priceGroup->setName('TEST-GROUP');
+
+        $repo = $this->entityManager->getRepository('Shopware\Models\Customer\Group');
+        $collection = array();
+        foreach($discounts as $data) {
+            $discount = new \Shopware\Models\Price\Discount();
+            $discount->setCustomerGroup(
+                $repo->findOneBy(array('key' => $data['key']))
+            );
+
+            $discount->setGroup($priceGroup);
+            $discount->setStart($data['quantity']);
+            $discount->setDiscount($data['discount']);
+            
+            $collection[] = $discount;
+        }
+        $priceGroup->setDiscounts($collection);
+
+        $this->entityManager->persist($priceGroup);
+        $this->entityManager->flush();
+        $this->entityManager->clear();
+
+        return $priceGroup;
+    }
+
+    private function removePriceGroup()
+    {
+        $ids = $this->db->fetchCol("SELECT id FROM s_core_pricegroups WHERE description = 'TEST-GROUP'");
+        foreach($ids as $id) {
+            $group = $this->entityManager->find('Shopware\Models\Price\Group', $id);
+            $this->entityManager->remove($group);
+            $this->entityManager->flush();
+            $this->entityManager->clear();
+        }
     }
 
     /**
@@ -620,9 +809,9 @@ class Helper
         $customer = new Models\Customer\Group();
         $customer->fromArray($data);
 
-        Shopware()->Models()->persist($customer);
-        Shopware()->Models()->flush($customer);
-        Shopware()->Models()->clear();
+        $this->entityManager->persist($customer);
+        $this->entityManager->flush($customer);
+        $this->entityManager->clear();
 
         return $customer;
     }
@@ -642,9 +831,9 @@ class Helper
         $tax = new Models\Tax\Tax();
         $tax->fromArray($data);
 
-        Shopware()->Models()->persist($tax);
-        Shopware()->Models()->flush();
-        Shopware()->Models()->clear();
+        $this->entityManager->persist($tax);
+        $this->entityManager->flush();
+        $this->entityManager->clear();
 
         return $tax;
     }
@@ -668,79 +857,53 @@ class Helper
 
         $currency->fromArray($data);
 
-        Shopware()->Models()->persist($currency);
-        Shopware()->Models()->flush();
-        Shopware()->Models()->clear();
+        $this->entityManager->persist($currency);
+        $this->entityManager->flush();
+        $this->entityManager->clear();
 
         return $currency;
     }
 
-
     private function deleteCustomerGroup($key)
     {
-        $ids = Shopware()->Db()->fetchCol('SELECT id FROM s_core_customergroups WHERE groupkey = ?', array($key));
+        $ids = $this->db->fetchCol('SELECT id FROM s_core_customergroups WHERE groupkey = ?', array($key));
         if (!$ids) {
             return;
         }
 
         foreach ($ids as $id) {
-            $customer = Shopware()->Models()->find('Shopware\Models\Customer\Group', $id);
+            $customer = $this->entityManager->find('Shopware\Models\Customer\Group', $id);
             if (!$customer) continue;
-            Shopware()->Models()->remove($customer);
-            Shopware()->Models()->flush($customer);
+            $this->entityManager->remove($customer);
+            $this->entityManager->flush($customer);
         }
-        Shopware()->Models()->clear();
+        $this->entityManager->clear();
     }
 
     private function deleteTax($name)
     {
-        $ids = Shopware()->Db()->fetchCol("SELECT id FROM s_core_tax WHERE description = ?", array($name));
+        $ids = $this->db->fetchCol("SELECT id FROM s_core_tax WHERE description = ?", array($name));
         if (empty($ids)) return;
 
         foreach ($ids as $id) {
-            $tax = Shopware()->Models()->find('Shopware\Models\Tax\Tax', $id);
-            Shopware()->Models()->remove($tax);
-            Shopware()->Models()->flush();
+            $tax = $this->entityManager->find('Shopware\Models\Tax\Tax', $id);
+            $this->entityManager->remove($tax);
+            $this->entityManager->flush();
         }
-        Shopware()->Models()->clear();
+        $this->entityManager->clear();
     }
 
     private function deleteCurrency($name)
     {
-        $ids = Shopware()->Db()->fetchCol("SELECT id FROM s_core_currencies WHERE name = ?", array($name));
+        $ids = $this->db->fetchCol("SELECT id FROM s_core_currencies WHERE name = ?", array($name));
         if (empty($ids)) return;
 
         foreach ($ids as $id) {
-            $tax = Shopware()->Models()->find('Shopware\Models\Shop\Currency', $id);
-            Shopware()->Models()->remove($tax);
-            Shopware()->Models()->flush();
+            $tax = $this->entityManager->find('Shopware\Models\Shop\Currency', $id);
+            $this->entityManager->remove($tax);
+            $this->entityManager->flush();
         }
-        Shopware()->Models()->clear();
-    }
-
-    private function deleteConfigurator()
-    {
-        $ids = Shopware()->Db()->fetchCol(
-            "SELECT id from s_article_configurator_groups WHERE name LIKE 'Unit-Test%'"
-        );
-
-        foreach ($ids as $id) {
-            $group = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Group', $id);
-            Shopware()->Models()->remove($group);
-            Shopware()->Models()->flush();
-            Shopware()->Models()->clear();
-        }
-
-        $ids = Shopware()->Db()->fetchCol(
-            "SELECT id from s_article_configurator_options WHERE name LIKE 'Unit-Test%'"
-        );
-
-        foreach ($ids as $id) {
-            $group = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Option', $id);
-            Shopware()->Models()->remove($group);
-            Shopware()->Models()->flush();
-            Shopware()->Models()->clear();
-        }
+        $this->entityManager->clear();
     }
 
     /**
@@ -772,83 +935,28 @@ class Helper
         return $result;
     }
 
-    private function createConfigurator($groupCount, $optionCount)
-    {
-        $this->deleteConfigurator();
-
-        $groups = array();
-
-        for ($i = 1; $i <= $groupCount; $i++) {
-
-            $group = new Models\Article\Configurator\Group();
-            $group->setName('Unit-Test' . $i);
-            $group->setPosition($i);
-
-            $options = array();
-            for ($i2 = 1; $i2 <= $optionCount; $i2++) {
-
-                $option = new Models\Article\Configurator\Option();
-                $option->setName('Unit-Test' . $i2);
-                $option->setPosition($i2);
-                $option->setGroup($group);
-
-                $options[] = $option;
-            }
-            $group->setOptions($options);
-
-            Shopware()->Models()->persist($group);
-            Shopware()->Models()->flush();
-            Shopware()->Models()->clear();
-
-            $options = array();
-            foreach ($group->getOptions() as $option) {
-                $options[] = array(
-                    'id' => $option->getId(),
-                    'name' => $option->getName()
-                );
-            }
-            $groups[] = array(
-                'id' => $group->getId(),
-                'name' => $group->getName(),
-                'options' => $options
-            );
-        }
-
-        return array(
-            'name' => 'Unit test configurator set',
-            'groups' => $groups
-        );
-    }
-
     /**
      * Helper function which creates all variants for
      * the passed groups with options.
      *
      * @param $groups
+     * @param null $numberPrefix
      * @param array $data
-     * @param array $groupMapping
-     * @param array $optionMapping
      * @return array
      */
     private function generateVariants(
         $groups,
-        $data = array(),
-        $groupMapping = array('key' => 'groupId', 'value' => 'id'),
-        $optionMapping = array('key' => 'option', 'value' => 'name')
+        $numberPrefix = null,
+        $data = array()
     ) {
         $options = array();
-
-        $groupArrayKey = $groupMapping['key'];
-        $groupValuesKey = $groupMapping['value'];
-        $optionArrayKey = $optionMapping['key'];
-        $optionValuesKey = $optionMapping['value'];
 
         foreach ($groups as $group) {
             $groupOptions = array();
             foreach ($group['options'] as $option) {
                 $groupOptions[] = array(
-                    $groupArrayKey => $group[$groupValuesKey],
-                    $optionArrayKey => $option[$optionValuesKey]
+                    'groupId' => $group['id'],
+                    'option' => $option['name']
                 );
             }
             $options[] = $groupOptions;
@@ -858,9 +966,19 @@ class Helper
         $combinations = $this->cleanUpCombinations($combinations);
 
         $variants = array();
+        $count = 1;
+        if (!$numberPrefix) {
+            $numberPrefix = 'Unit-Test-Variant-';
+        }
+
+        $this->db->executeQuery(
+            "DELETE FROM s_articles_details WHERE ordernumber LIKE ?",
+            array($numberPrefix . '%')
+        );
+
         foreach ($combinations as $combination) {
             $variantData = array_merge(
-                array('number' => 'Unit-Test-Variant-' . uniqid(),),
+                array('number' => $numberPrefix . $count),
                 $data
             );
 
@@ -868,6 +986,8 @@ class Helper
 
             $variant['configuratorOptions'] = $combination;
             $variants[] = $variant;
+
+            $count++;
         }
         return $variants;
     }
