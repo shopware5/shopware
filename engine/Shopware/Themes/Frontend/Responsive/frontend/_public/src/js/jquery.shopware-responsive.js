@@ -169,6 +169,9 @@ $(function() {
     $('*[data-auto-submit="true"]').autoSubmit();
     $('input[data-quantity-field="true"]').quantityField();
 
+    // Start up the placeholder polyfill, see ```jquery.ie-fixes.js```
+    $('input, textarea').placeholder();
+
     // Deferred loading of the captcha
     $("div.captcha--placeholder[data-src]").each(function() {
         var $this = $(this),
