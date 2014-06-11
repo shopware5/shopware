@@ -113,12 +113,13 @@
             countrySelectID = $countrySelect.attr('id'),
             countrySelectVal = $countrySelect.val(),
             $stateSelectParent = $('#' + countrySelectID + '_' + countrySelectVal + '_states'),
-            $stateSelect = $stateSelectParent.find('.select--state');
+            $stateSelect = $stateSelectParent.find('.select--state'),
+            $siblingFields = $stateSelectParent.siblings('.register--state-selection');
 
-        me.$stateSelectContainers.addClass('is--disabled').hide();
-        me.$stateSelectContainers.find('.select--state').attr('disabled', 'disabled');
+        $siblingFields.addClass('is--hidden');
+        $siblingFields.find('.select--state').attr('disabled', 'disabled');
         $stateSelect.removeAttr('disabled');
-        $stateSelectParent.removeClass('is--disabled').show();
+        $stateSelectParent.removeClass('is--hidden');
     };
 
     Plugin.prototype.onSubmitBtn = function(event) {

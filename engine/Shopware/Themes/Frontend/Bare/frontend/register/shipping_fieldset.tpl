@@ -98,7 +98,7 @@
 			<div class="country-area-state-selection">
 				{foreach $country_list as $country}
 					{if $country.states}
-						<div id="country_shipping_{$country.id}_states" class="register--state-selection field--select{if $country.id != $form_data.country} is--disabled{/if}">
+						<div id="country_shipping_{$country.id}_states" class="register--state-selection field--select{if $country.id != $form_data.country} is--hidden{/if}">
 							<span class="arrow"></span>
 							<select {if $country.id != $form_data.country}disabled="disabled"{/if} name="register[shipping][country_shipping_state_{$country.id}]"{if $country.force_state_in_registration} required="required" aria-required="true"{/if} class="select--state {if $country.force_state_in_registration}is--required{/if}{if $error_flags.stateID} has--error{/if}">
 							<option value="" selected="selected">{s name='RegisterShippingLabelSelect'}{/s}{if $country.force_state_in_registration}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}</option>
