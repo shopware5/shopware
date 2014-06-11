@@ -88,6 +88,7 @@ p {
 }
 
 .list--unstyled { list-style: none }
+
 .content-main--inner {
 	.unitize-padding(0, 10, 16);
 	.clearfix();
@@ -121,6 +122,10 @@ p {
 :-ms-input-placeholder { color: @lightTextColor }
 
 @media screen and(min-width: @tabletViewportWidth) {
+    .content-main {
+        .unitize(20, 16, margin-bottom);
+        .box-shadow(0 0 4px 1px @borderColor);
+    }
     .content-main--inner {
         .unitize-padding(0, 20, 16);
         width: 100%;
@@ -131,6 +136,9 @@ p {
 	.page-wrap {
 		.unitize(14, 16, font-size);
 	}
+    .content-main {
+        .unitize(45, 16, margin-bottom);
+    }
 	.content-main--inner {
 		.unitize-padding(0, 45, 45, 45);
 	}
