@@ -10,12 +10,15 @@ use Shopware\Tests\Service\Helper;
 
 class CoverTest extends \Enlight_Components_Test_TestCase
 {
+    /**
+     * @var Helper
+     */
     private $helper;
 
-    function __construct($name = null, array $data = array(), $dataName = '')
+    protected function setUp()
     {
-        $this->helper = new Helper();
-        parent::__construct($name, $data, $dataName);
+        $this->helper = new \Shopware\Tests\Service\Helper();
+        parent::setUp();
     }
 
     public function testProductWithOneImage()
@@ -274,7 +277,11 @@ class CoverTest extends \Enlight_Components_Test_TestCase
 
         $data = array_merge(
             $data,
-            $this->helper->getConfigurator($customerGroup, 1, 2)
+            $this->helper->getConfigurator(
+                $customerGroup,
+                $number,
+                array('Farbe' => array('rot', 'gelb'))
+            )
         );
 
         $data['variants'][0]['images'] = array($this->helper->getImageData('sasse-korn.jpg'));

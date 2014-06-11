@@ -7,11 +7,15 @@ use Shopware\Tests\Service\Helper;
 
 class TranslationTest extends \Enlight_Components_Test_TestCase
 {
+    /**
+     * @var Helper
+     */
     private $helper;
 
-    function __construct()
+    protected function setUp()
     {
-        $this->helper = new Helper();
+        $this->helper = new \Shopware\Tests\Service\Helper();
+        parent::setUp();
     }
 
     /**
@@ -106,8 +110,8 @@ class TranslationTest extends \Enlight_Components_Test_TestCase
             $product,
             $this->helper->getConfigurator(
                 $context->getCurrentCustomerGroup(),
-                1,
-                2
+                $number,
+                array('Farbe' => array('rot', 'gelb'))
             )
         );
 
@@ -208,8 +212,11 @@ class TranslationTest extends \Enlight_Components_Test_TestCase
 
         $configurator = $this->helper->getConfigurator(
             $context->getCurrentCustomerGroup(),
-            2,
-            2
+            $number,
+            array(
+                'Farbe' => array('rot', 'gelb'),
+                'Größe' => array('L', 'M')
+            )
         );
 
         $product = array_merge($product, $configurator);

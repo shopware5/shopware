@@ -2,17 +2,23 @@
 
 namespace Shopware\Tests\Service\Product;
 
+use PHPUnit_Framework_TestCase;
 use Shopware\Struct\Context;
 use Shopware\Tests\Service\Helper;
 
 class ListProductTest extends \Enlight_Components_Test_TestCase
 {
+    /**
+     * @var Helper
+     */
     private $helper;
 
-    function __construct()
+    protected function setUp()
     {
-        $this->helper = new Helper();
+        $this->helper = new \Shopware\Tests\Service\Helper();
+        parent::setUp();
     }
+
 
     private function getListProduct($number, Context $context)
     {
@@ -40,7 +46,8 @@ class ListProductTest extends \Enlight_Components_Test_TestCase
         );
 
         $data = array_merge($data, $this->helper->getConfigurator(
-            $customerGroup
+            $customerGroup,
+            $number
         ));
 
         $this->helper->createArticle($data);

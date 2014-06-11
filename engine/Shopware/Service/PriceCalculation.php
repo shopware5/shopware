@@ -101,9 +101,11 @@ class PriceCalculation
             $cheapestPrice->getUnit()->getMinPurchase()
         );
 
-        $cheapestPrice->setPrice(
-            $cheapestPrice->getPrice() / 100 * (100 - $discount->getPercent())
-        );
+        if ($discount) {
+            $cheapestPrice->setPrice(
+                $cheapestPrice->getPrice() / 100 * (100 - $discount->getPercent())
+            );
+        }
 
         return $this->calculatePriceStruct(
             $cheapestPrice,
@@ -198,7 +200,7 @@ class PriceCalculation
          * check if the customer group should see gross prices.
          */
         if (!$customerGroup->displayGrossPrices()) {
-            return $price;
+            return round($price, 3);
         }
 
         /**
@@ -220,7 +222,7 @@ class PriceCalculation
          */
         $price = $price * (100 + $tax->getTax()) / 100;
 
-        return $price;
+        return round($price, 3);
     }
 
     /**
@@ -232,6 +234,7 @@ class PriceCalculation
      */
     private function calculateReferencePrice(Struct\Product\Price $price)
     {
-        return $price->getCalculatedPrice() / $price->getUnit()->getPurchaseUnit() * $price->getUnit()->getReferenceUnit();
+        $value = $price->getCalculatedPrice() / $price->getUnit()->getPurchaseUnit() * $price->getUnit()->getReferenceUnit();
+        return round($value, 3);
     }
 }

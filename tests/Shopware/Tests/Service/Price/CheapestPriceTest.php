@@ -1,256 +1,303 @@
 <?php
 
-/**
- * Class Shopware_Tests_Service_Price_CheapestPriceTest
- */
-class Shopware_Tests_Service_Price_CheapestPriceTest extends Shopware_Tests_Service_Base
+namespace Shopware\Tests\Service\Price;
+
+use Shopware\Struct\Context;
+
+class CheapestPriceTest extends \Enlight_Components_Test_TestCase
 {
-    public function testVariantPrices()
+    /**
+     * @var \Shopware\Tests\Service\Helper
+     */
+    private $helper;
+
+    protected function setUp()
     {
-        $number = 'VariantPrice';
-        $group = $this->createCustomerGroup('TEST', 0);
-
-        $data = $this->getBaseData();
-        $data['mainDetail'] = $this->getSimpleDetail($number);
-        $data['mainDetail']['prices'] = $this->getScaledPrices($group->getKey());
-
-        $this->createArticle($data);
-
-        $state = $this->createGlobalState(
-            $group,
-            $this->getShop(),
-            $this->getHighTax()
-        );
-
-        $product = $this->getProduct($number, $state);
-
-        $price = $product->getCheapestPrice();
-
-        $this->assertInstanceOf('Shopware\Struct\Product\Price', $price);
-        $this->assertEquals(1000, $price->getCalculatedPrice());
-        $this->removeArticle($number);
+        $this->helper = new \Shopware\Tests\Service\Helper();
+        parent::setUp();
     }
 
-    public function testDiscount()
+    /**
+     * @return Context
+     */
+    private function getContext()
     {
-        $number = 'Discount';
-        $group = $this->createCustomerGroup('TEST', 10);
+        $tax = $this->helper->createTax();
+        $customerGroup = $this->helper->createCustomerGroup();
+        $shop = $this->helper->getShop();
 
-        $data = $this->getBaseData();
-        $data['mainDetail'] = $this->getSimpleDetail($number);
-        $data['mainDetail']['prices'] = $this->getScaledPrices($group->getKey());
-
-        $this->createArticle($data);
-        $tax = $this->getHighTax();
-
-        $state = $this->createGlobalState(
-            $group,
-            $this->getShop(),
-            $tax
+        return $this->helper->createContext(
+            $customerGroup,
+            $shop,
+            array($tax)
         );
-
-        $product = $this->getProduct($number, $state);
-        $price = $product->getCheapestPrice();
-
-        $this->assertInstanceOf('Shopware\Struct\Product\Price', $price);
-        $this->assertEquals(900, $price->getCalculatedPrice());
-        $this->removeArticle($number);
     }
 
-    public function testPriceGroup()
+    private function getConfiguratorProduct($number, Context $context)
     {
-        $number = 'PriceGroup';
-        $group = $this->createCustomerGroup('TEST', 0);
-
-        $priceGroup = $this->createPriceGroup(array(
-            array(
-                'customerGroup' => 'TEST',
-                'quantity' => 1,
-                'discount' => 10
-            )
-        ));
-
-        $data = $this->getBaseData();
-        $data['mainDetail'] = $this->getSimpleDetail($number);
-        $data['mainDetail']['prices'] = $this->getScaledPrices($group->getKey());
-        $data['priceGroupActive'] = true;
-        $data['priceGroupId'] = $priceGroup->getId();
-
-        $this->createArticle($data);
-
-        $tax = $this->getHighTax();
-
-        $state = $this->createGlobalState(
-            $group,
-            $this->getShop(),
-            $tax
+        $product = $this->helper->getSimpleProduct(
+            $number,
+            array_shift($context->getTaxRules()),
+            $context->getCurrentCustomerGroup()
         );
 
-        $product = $this->getProduct($number, $state);
-
-        $price = $product->getCheapestPrice();
-
-        $this->assertEquals(900, $price->getCalculatedPrice());
-        $this->removeArticle($number);
-    }
-
-    public function testPriceGroupAndDiscount()
-    {
-        $number = 'PriceGroupAndDiscount';
-        $group = $this->createCustomerGroup('TEST', 10);
-
-        $priceGroup = $this->createPriceGroup(array(
-            array(
-                'customerGroup' => 'TEST',
-                'quantity' => 1,
-                'discount' => 10
-            )
-        ));
-
-        $data = $this->getBaseData();
-        $data['mainDetail'] = $this->getSimpleDetail($number);
-        $data['mainDetail']['prices'] = $this->getScaledPrices($group->getKey());
-        $data['priceGroupActive'] = true;
-        $data['priceGroupId'] = $priceGroup->getId();
-
-        $this->createArticle($data);
-
-        $state = $this->createGlobalState(
-            $group,
-            $this->getShop(),
-            $this->getHighTax()
+        $configurator = $this->helper->getConfigurator(
+            $context->getCurrentCustomerGroup(),
+            $number,
+            array('farbe' => array('rot', 'blau', 'grün', 'schwarz', 'weiß'))
         );
+        $product = array_merge($product, $configurator);
 
-        $product = $this->getProduct($number, $state);
+        foreach($product['variants'] as $index => &$variant) {
+            $offset = ($index + 1) * -10;
 
-        $price = $product->getCheapestPrice();
-
-        $this->assertEquals(810, $price->getCalculatedPrice());
-        $this->removeArticle($number);
-    }
-
-    public function testSimpleConfigurator() {
-
-        $number = 'Configurator-1';
-        $group = 'TEST';
-
-        $this->removeArticle($number);
-        $group = $this->createCustomerGroup($group, 0);
-
-        $configurator = $this->getSimpleConfigurator(1, 3);
-        $variants = $this->generateVariants(
-            $configurator['groups'],
-            array(
-                'prices' => $this->getScaledPrices($group->getKey(), -600)
-            )
-        );
-
-        $data = $this->getBaseData();
-        $data['mainDetail'] = $this->getSimpleDetail($number);
-        $data['mainDetail']['prices'] = $this->getScaledPrices($group->getKey());
-        $data['configuratorSet'] = $configurator;
-        $data['variants'] = $variants;
-
-        $this->createArticle($data);
-
-        $state = $this->createGlobalState(
-            $group,
-            $this->getShop(),
-            $this->getHighTax()
-        );
-
-        $product = $this->getProduct($number, $state);
-
-        $price = $product->getCheapestPrice();
-
-        $this->assertEquals(400, $price->getCalculatedPrice());
-        $this->removeArticle($number);
-    }
-
-    public function testMinPurchase()
-    {
-        $number = 'PurchasePrice';
-        $group = $this->createCustomerGroup('TEST', 0);
-
-        $data = $this->getBaseData();
-        $data['mainDetail'] = $this->getSimpleDetail($number);
-        $data['mainDetail']['prices'] = $this->getScaledPrices(
-            $group->getKey()
-        );
-        $data['mainDetail']['minPurchase'] = 2;
-
-        $this->createArticle($data);
-        $tax = $this->getHighTax();
-
-        $state = $this->createGlobalState(
-            $group,
-            $this->getShop(),
-            $tax
-        );
-
-        $product = $this->getProduct($number, $state);
-
-        $price = $product->getCheapestPrice();
-
-        $this->assertEquals(2000, $price->getCalculatedPrice());
-        $this->removeArticle($number);
-    }
-
-    public function testAllCombinations()
-    {
-        $number = 'Combination-1';
-        $group = 'TEST';
-
-        $this->removeArticle($number);
-
-        $group = $this->createCustomerGroup($group, 10);
-
-        $priceGroup = $this->createPriceGroup(array(
-            array(
-                'customerGroup' => $group->getKey(),
-                'quantity' => 1,
-                'discount' => 10
-            ),
-            array(
-                'customerGroup' => $group->getKey(),
-                'quantity' => 4,
-                'discount' => 20
-            )
-        ));
-
-        $configurator = $this->getSimpleConfigurator(1, 3);
-        $variants = $this->generateVariants(
-            $configurator['groups'],
-            array('prices' => $this->getScaledPrices($group->getKey(), -400))
-        );
-
-        foreach($variants as &$variant) {
-            $variant['minpurchase'] = 4;
+            $variant['prices'] = $this->helper->getGraduatedPrices(
+                $context->getCurrentCustomerGroup()->getKey(),
+                $offset
+            );
         }
 
-        $data = $this->getBaseData();
-        $data['mainDetail'] = $this->getSimpleDetail($number);
+        return $product;
+    }
+
+    public function testCheapestPriceWithVariants()
+    {
+        $number = __FUNCTION__;
+        $context = $this->getContext();
+        $data = $this->getConfiguratorProduct($number, $context);
+
+        $this->helper->createArticle($data);
+        $listProduct = $this->helper->getListProduct($number, $context);
+
+        $cheapestPrice = $listProduct->getCheapestPrice();
+        $this->assertEquals(50, $cheapestPrice->getCalculatedPrice());
+        $this->assertEquals(60, $cheapestPrice->getCalculatedPseudoPrice());
+        $this->assertEquals(100, $cheapestPrice->getCalculatedReferencePrice());
+    }
+
+    public function testCheapestWithInactiveVariants()
+    {
+        $number = 'testCheapestWithInactiveVariants';
+        $context = $this->getContext();
+        $data = $this->getConfiguratorProduct($number, $context);
+
+        $count = count($data['variants']) - 1;
+        
+        $data['variants'][$count]['active'] = false;
+        $data['variants'][$count - 1]['active'] = false;
+
+        $this->helper->createArticle($data);
+        $listProduct = $this->helper->getListProduct($number, $context);
+        $cheapestPrice = $listProduct->getCheapestPrice();
+
+        $this->assertEquals(70, $cheapestPrice->getCalculatedPrice());
+        $this->assertEquals(80, $cheapestPrice->getCalculatedPseudoPrice());
+        $this->assertEquals(140, $cheapestPrice->getCalculatedReferencePrice());
+    }
+
+    public function testCheapestWithCloseout()
+    {
+        $number = __FUNCTION__;
+        $context = $this->getContext();
+        $data = $this->getConfiguratorProduct($number, $context);
+
+        $count = count($data['variants']) - 1;
+
+        $data['lastStock'] = true;
+        $data['variants'][$count]['inStock'] = 0;
+        $data['variants'][$count - 1]['inStock'] = 0;
+        $data['variants'][$count - 2]['inStock'] = 0;
+
+        $this->helper->createArticle($data);
+        $listProduct = $this->helper->getListProduct($number, $context);
+        $cheapestPrice = $listProduct->getCheapestPrice();
+        $this->assertEquals(80, $cheapestPrice->getCalculatedPrice());
+        $this->assertEquals(90, $cheapestPrice->getCalculatedPseudoPrice());
+        $this->assertEquals(160, $cheapestPrice->getCalculatedReferencePrice());
+
+    }
+
+    public function testCheapestWithMinPurchase()
+    {
+        $number = __FUNCTION__;
+        $context = $this->getContext();
+        $data = $this->getConfiguratorProduct($number, $context);
+
+        $last = array_pop($data['variants']);
+        $last['prices'] = array(array(
+            'from' => 1,
+            'to' => null,
+            'price' => 5,
+            'customerGroupKey' => $context->getCurrentCustomerGroup()->getKey(),
+            'pseudoPrice' => 6
+        ));
+        $last['minPurchase'] = 3;
+        $data['variants'][] = $last;
+
+        $this->helper->createArticle($data);
+        $listProduct = $this->helper->getListProduct($number, $context);
+        $cheapestPrice = $listProduct->getCheapestPrice();
+
+        /**
+         * Expect price * minPurchase calculation
+         */
+        $this->assertEquals(15, $cheapestPrice->getCalculatedPrice());
+        $this->assertEquals(18, $cheapestPrice->getCalculatedPseudoPrice());
+        $this->assertEquals(30, $cheapestPrice->getCalculatedReferencePrice());
+    }
+
+    public function testCheapestWithMinPurchaseAndCloseout()
+    {
+        $number = __FUNCTION__;
+        $context = $this->getContext();
+        $data = $this->getConfiguratorProduct($number, $context);
+
+        $last = array_pop($data['variants']);
+        $last['prices'] = array(array(
+            'from' => 1,
+            'to' => null,
+            'price' => 5,
+            'customerGroupKey' => $context->getCurrentCustomerGroup()->getKey(),
+            'pseudoPrice' => 6
+        ));
+
+        /**
+         * Variant isn't active because minPurchase > inStock
+         */
+        $last['minPurchase'] = 3;
+        $last['inStock'] = 2;
+        $data['variants'][] = $last;
+
+        $this->helper->createArticle($data);
+        $listProduct = $this->helper->getListProduct($number, $context);
+
+        $cheapestPrice = $listProduct->getCheapestPrice();
+        $this->assertEquals(60, $cheapestPrice->getCalculatedPrice());
+        $this->assertEquals(70, $cheapestPrice->getCalculatedPseudoPrice());
+        $this->assertEquals(120, $cheapestPrice->getCalculatedReferencePrice());
+    }
+
+    public function testCheapestForCustomerGroup()
+    {
+        $number = __FUNCTION__;
+        $context = $this->getContext();
+        $data = $this->getConfiguratorProduct($number, $context);
+        $this->helper->createCustomerGroup(array('key' => 'FORCE'));
+
+        /**
+         * Creates a 1€ price for the customer group FORCE
+         * This is the "whole" cheapest price for all customer groups
+         */
+        foreach($data['variants'] as &$variant) {
+            $variant['prices'][] = array(
+                'from' => 1,
+                'to' => null,
+                'price' => 1,
+                'customerGroupKey' => 'FORCE',
+                'pseudoPrice' => 2
+            );
+        }
+
+        $this->helper->createArticle($data);
+        $listProduct = $this->helper->getListProduct($number, $context);
+        $cheapestPrice = $listProduct->getCheapestPrice();
+
+        /**
+         * Expect that the cheapest price calculation works
+         * correctly with only the fallback and current customer group
+         *
+         * PHP Cheapest price = 50,-€  (current customer group)
+         * FORCE price = 1,-€
+         *
+         */
+        $this->assertEquals('PHP', $cheapestPrice->getCustomerGroup()->getKey());
+        $this->assertEquals(50, $cheapestPrice->getCalculatedPrice());
+        $this->assertEquals(60, $cheapestPrice->getCalculatedPseudoPrice());
+        $this->assertEquals(100, $cheapestPrice->getCalculatedReferencePrice());
+    }
+
+    public function testCheapestWithFallback()
+    {
+        $number = __FUNCTION__;
+        $context = $this->getContext();
+        $data = $this->getConfiguratorProduct($number, $context);
+
+        /**
+         * Switch customer group key, this customer group has
+         * no defined product prices.
+         */
+        $customerGroup = $context->getCurrentCustomerGroup();
+        $customerGroup->setKey('FORCE-FALLBACK');
+
+        $this->helper->createArticle($data);
+        $listProduct = $this->helper->getListProduct($number, $context);
+
+        $cheapestPrice = $listProduct->getCheapestPrice();
+
+        /**
+         * Expect that no FORCE-FALLBACK customer group prices found.
+         */
+        $this->assertEquals('PHP', $cheapestPrice->getCustomerGroup()->getKey());
+        $this->assertEquals(50, $cheapestPrice->getCalculatedPrice());
+        $this->assertEquals(60, $cheapestPrice->getCalculatedPseudoPrice());
+        $this->assertEquals(100, $cheapestPrice->getCalculatedReferencePrice());
+    }
+
+    public function testCheapestWithPriceGroup()
+    {
+        $number = __FUNCTION__;
+        $context = $this->getContext();
+        $data = $this->getConfiguratorProduct($number, $context);
+
+        $priceGroup = $this->helper->createPriceGroup();
+
         $data['priceGroupActive'] = true;
         $data['priceGroupId'] = $priceGroup->getId();
-        $data['mainDetail']['minpurchase'] = 4;
 
-        $data['mainDetail']['prices'] = $this->getScaledPrices($group->getKey());
-        $data['configuratorSet'] = $configurator;
-        $data['variants'] = $variants;
+        $this->helper->createArticle($data);
 
-        $this->createArticle($data);
+        $listProduct = $this->helper->getListProduct($number, $context);
+        $cheapestPrice = $listProduct->getCheapestPrice();
 
-        $state = $this->createGlobalState(
-            $group,
-            $this->getShop(),
-            $this->getHighTax()
-        );
+        /**
+         * Expect cheapest variant 50€
+         * And price group discount 10%
+         */
+        $this->assertEquals(45, $cheapestPrice->getCalculatedPrice());
+    }
 
-        $product = $this->getProduct($number, $state);
+    public function testCheapestWithPriceGroupAndCloseout()
+    {
+        $number = __FUNCTION__;
+        $context = $this->getContext();
+        $data = $this->getConfiguratorProduct($number, $context);
 
-        $price = $product->getCheapestPrice();
+        $priceGroup = $this->helper->createPriceGroup();
 
-        $this->assertEquals(1728, $price->getCalculatedPrice());
-        $this->removeArticle($number);
+        $data['priceGroupActive'] = true;
+        $data['priceGroupId'] = $priceGroup->getId();
+
+
+        $count = count($data['variants']) - 1;
+        $data['lastStock'] = true;
+
+        /**
+         * Cheapest variant is now 80,- €
+         */
+        $data['variants'][$count]['inStock'] = 0;
+        $data['variants'][$count - 1]['inStock'] = 0;
+        $data['variants'][$count - 2]['inStock'] = 0;
+
+        $this->helper->createArticle($data);
+
+        $listProduct = $this->helper->getListProduct($number, $context);
+        $cheapestPrice = $listProduct->getCheapestPrice();
+
+        /**
+         * Expect cheapest variant 80,- €
+         * And price group discount 10%
+         */
+        $this->assertEquals(72, $cheapestPrice->getCalculatedPrice());
+        $this->assertEquals(144, $cheapestPrice->getCalculatedReferencePrice());
     }
 }
