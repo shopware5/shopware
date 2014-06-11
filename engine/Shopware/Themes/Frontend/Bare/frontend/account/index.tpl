@@ -15,7 +15,7 @@
 {/block}
 
 {* Account Main Content *}
-{block name='frontend_index_content'}
+{block name="frontend_index_content"}
 	<div class="content block account--content">
 
 		{* Success messages *}
@@ -24,7 +24,7 @@
 		{/block}
 
 		{* Error messages *}
-		{block name='frontend_account_index_error_messages'}
+		{block name="frontend_account_index_error_messages"}
 			{if $sErrorMessages}
 				<div class="account--error">
 					{include file="frontend/register/error_message.tpl" error_messages=$sErrorMessages}
@@ -192,14 +192,14 @@
 		{/block}
 
 		{* Newsletter settings *}
-		{block name='frontend_account_index_newsletter_settings'}
+		{block name="frontend_account_index_newsletter_settings"}
 			<div class="account--newsletter account--box panel has--border newsletter">
 
-				{block name='frontend_account_index_newsletter_settings_headline'}
+				{block name="frontend_account_index_newsletter_settings_headline"}
 					<h2 class="panel--title is--underline">{s name="AccountHeaderNewsletter"}{/s}</h2>
 				{/block}
 
-				{block name='frontend_account_index_newsletter_settings_content'}
+				{block name="frontend_account_index_newsletter_settings_content"}
 					<div class="panel--body is--wide">
 						<form name="frmRegister" method="post" action="{url action=saveNewsletter}">
 							<fieldset>
