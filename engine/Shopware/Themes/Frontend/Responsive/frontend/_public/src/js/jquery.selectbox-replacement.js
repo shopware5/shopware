@@ -7,22 +7,25 @@
         defaults: {
 
             /** @property {String} Basic class name for the plugin. */
-            baseCls: 'js--fancy-select',
+            'baseCls': 'js--fancy-select',
 
             /** @property {String} Focus class. */
-            focusCls: 'js--is--focused',
+            'focusCls': 'js--is--focused',
 
             /** @property {String} Text / html content for the trigger field. */
-            triggerText: '<i class="icon--arrow-down"></i>',
+            'triggerText': '<i class="icon--arrow-down"></i>',
 
             /** @property {String} Class which indicates that the field is disabled. */
-            disabledCls: 'is--disabled',
+            'disabledCls': 'is--disabled',
 
             /** @property {String} Class which indicates that the field has an error. */
-            errorCls: 'has--error',
+            'errorCls': 'has--error',
 
             /** @property {boolean} Truthy to set all the classes on the parent element to the wrapper element. */
-            compatibility: true
+            'compatibility': true,
+
+            /** @property {String} Additional css class for styling purpose */
+            'class': ''
         },
 
         /**
@@ -67,7 +70,8 @@
             var me = this,
                 wrapEl;
 
-            wrapEl = me._formatString('<div class="{0}"></div>', me.opts.baseCls);
+            // We need to use the array syntax here due to the fact that ```class``` is a reserved keyword in IE and Safari
+            wrapEl = me._formatString('<div class="{0}"></div>', me.opts.baseCls + ' ' + me['class']);
             wrapEl = $el.wrap(wrapEl).parents('.' + me.opts.baseCls);
 
             me.$textEl = $('<div>', { 'class': me.opts.baseCls + '-text' }).appendTo(wrapEl);
