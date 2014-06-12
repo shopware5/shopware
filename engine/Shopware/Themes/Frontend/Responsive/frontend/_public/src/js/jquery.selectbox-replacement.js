@@ -5,12 +5,27 @@
 
         /** @property {Object} Default settings for the plugin **/
         defaults: {
+
+            /** @property {String} Basic class name for the plugin. */
             baseCls: 'js--fancy-select',
+
+            /** @property {String} Focus class. */
             focusCls: 'js--is--focused',
+
+            /** @property {String} Text / html content for the trigger field. */
             triggerText: '<i class="icon--arrow-down"></i>',
+
+            /** @property {String} Class which indicates that the field is disabled. */
             disabledCls: 'is--disabled',
+
+            /** @property {String} Class which indicates that the field has an error. */
             errorCls: 'has--error',
-            submit: true
+
+            /** @property {boolean} Truthy to auto-submit the underlying form, otherwise falsy. */
+            submit: true,
+
+            /** @property {boolean} Truthy to set all the classes on the parent element to the wrapper element. */
+            compatibility: true
         },
 
         /**
@@ -32,8 +47,14 @@
                 me.setDisabled();
             }
 
+            // Support marking the field as error
             if (me.$el.hasClass(me.opts.errorCls)) {
                 me.setError();
+            }
+
+            // Set the compatibility classes
+            if (me.opts.compatibility) {
+                me._setCompatibilityClasses();
             }
 
             return me;
@@ -253,6 +274,29 @@
             var me = this;
 
             me.$wrapEl.removeClass(me.opts.focusCls);
+        },
+
+        /**
+         * Applies all the classes from the ```field--select``` parent element to the {@link me.$wrapEl}.
+         *
+         * @returns {boolean}
+         * @private
+         */
+        _setCompatibilityClasses: function () {
+            var me = this,
+                $el = me.$el,
+                $parent = $el.parents('.field--select'),
+                classList;
+
+            if(!$parent || !$parent.length) {
+                return false;
+            }
+            classList = $parent.attr('class').split(/\s+/);
+            $.each(classList, function () {
+                me.$wrapEl.addClass(this);
+            });
+
+            return true;
         },
 
         /**
