@@ -6,7 +6,14 @@
 
     <services>
         <service id="JSMin" class="JSMin" />
-        <service id="less_compiler" class="Less_Parser" />
+
+        <service id="less_compiler" alias="oyejorge_compiler" />
+
+        <service id="oyejorge_compiler" class="Shopware\Components\Theme\LessCompiler\Oyejorge">
+            <argument type="service" id="oyejorge_compiler_lib" />
+        </service>
+        <service id="oyejorge_compiler_lib" class="Less_Parser" />
+
         <service id="file_system" class="Symfony\Component\Filesystem\Filesystem" />
 
         <service id="js_compressor" class="Shopware\Components\Theme\Compressor\Js">
@@ -71,6 +78,7 @@
             <argument type="service" id="theme_service" />
             <argument type="service" id="js_compressor" />
             <argument type="service" id="events" />
+            <argument type="service" id="models" />
         </service>
 
         <service id="theme_backend_registration" class="Shopware\Components\Theme\EventListener\BackendTheme">

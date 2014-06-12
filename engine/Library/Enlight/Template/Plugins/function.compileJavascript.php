@@ -34,6 +34,9 @@ function smarty_function_compileJavascript($params, $template)
 
     /**@var $shop \Shopware\Models\Shop\Shop*/
     $shop = Shopware()->Container()->get('shop');
+    if ($shop->getMain()) {
+        $shop = $shop->getMain();
+    }
 
     /**@var $settings \Shopware\Models\Theme\Settings*/
     $settings = Shopware()->Container()->get('theme_service')->getSystemConfiguration(
