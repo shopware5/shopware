@@ -21,9 +21,6 @@
             /** @property {String} Class which indicates that the field has an error. */
             errorCls: 'has--error',
 
-            /** @property {boolean} Truthy to auto-submit the underlying form, otherwise falsy. */
-            submit: true,
-
             /** @property {boolean} Truthy to set all the classes on the parent element to the wrapper element. */
             compatibility: true
         },
@@ -194,20 +191,6 @@
         },
 
         /**
-         * Submits the underlying form element which holds
-         * off the select box.
-         *
-         * @returns {Plugin}
-         */
-        submitField: function () {
-            var me = this;
-
-            me.$el.parents('form').submit();
-
-            return me;
-        },
-
-        /**
          * Event listener method which will be fired when the user
          * changes the value of the select box.
          *
@@ -219,15 +202,6 @@
             var me = this;
 
             me.setSelectedOnTextElement();
-
-            if(!me.opts.submit) {
-                return;
-            }
-
-            // We need to set a timeout to display the currently selected option in the text element of the select box.
-            window.setTimeout(function () {
-                me.submitField();
-            }, 10);
         },
 
         /**
