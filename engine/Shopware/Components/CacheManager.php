@@ -119,6 +119,8 @@ class CacheManager
         }
 
         $this->clearDirectory($this->themePathResolver->getCacheDirectory());
+
+        $this->container->get('theme_compiler')->preCompile();
     }
 
     /**
