@@ -36,11 +36,11 @@
         init: function () {
             var me = this;
 
-            me.$wrapEl = me.createTemplate(me.$el);
-            me.registerEventListeners();
-
             // Update the plugin configuration with the HTML5 data-attributes
             me.getDataAttributes();
+
+            me.$wrapEl = me.createTemplate(me.$el);
+            me.registerEventListeners();
 
             // Disable the select box
             if (me.$el.attr('disabled') !== undefined) {
@@ -71,7 +71,7 @@
                 wrapEl;
 
             // We need to use the array syntax here due to the fact that ```class``` is a reserved keyword in IE and Safari
-            wrapEl = me._formatString('<div class="{0}"></div>', me.opts.baseCls + ' ' + me['class']);
+            wrapEl = me._formatString('<div class="{0}"></div>', me.opts.baseCls + ' ' + me.opts['class']);
             wrapEl = $el.wrap(wrapEl).parents('.' + me.opts.baseCls);
 
             me.$textEl = $('<div>', { 'class': me.opts.baseCls + '-text' }).appendTo(wrapEl);
