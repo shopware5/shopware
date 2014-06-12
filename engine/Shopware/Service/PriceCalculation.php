@@ -84,7 +84,7 @@ class PriceCalculation
         $cheapestPrice->setPseudoPrice(
             $cheapestPrice->getUnit()->getMinPurchase() * $cheapestPrice->getPseudoPrice()
         );
-        
+
         //check for price group discounts.
         if (!$product->getPriceGroup()) {
             return $this->calculatePriceStruct(

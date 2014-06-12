@@ -4,6 +4,7 @@ namespace Shopware\Service;
 
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Gateway\DBAL as Gateway;
+use Shopware\Models\Category\Category;
 use Shopware\Models\Shop\Currency;
 use Shopware\Models\Shop\Shop;
 use Shopware\Struct as Struct;
@@ -114,7 +115,7 @@ class GlobalState
             $country,
             $state
         );
-        
+
         $context->setArea($area);
 
         $context->setCountry($country);
@@ -174,6 +175,28 @@ class GlobalState
         $struct->setSecure($shop->getSecure());
         $struct->setSecureHost($shop->getSecureHost());
         $struct->setSecurePath($struct->getSecurePath());
+
+        if ($shop->getCategory()) {
+            $struct->setCategory(
+                $this->convertCategoryStruct($shop->getCategory())
+            );
+        }
+
+        return $struct;
+    }
+
+    /**
+     * @param Category $category
+     * @return Struct\Category
+     */
+    private function convertCategoryStruct(Category $category)
+    {
+        $struct = new Struct\Category();
+
+        $struct->setId($category->getId());
+        $struct->setName($category->getName());
+        $struct->setPath($category->getPath());
+
         return $struct;
     }
 }

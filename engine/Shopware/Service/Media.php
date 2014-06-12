@@ -60,7 +60,7 @@ class Media
         );
 
         $fallback = array();
-        foreach($products as $product) {
+        foreach ($products as $product) {
             if (!array_key_exists($product->getNumber(), $covers)) {
                 $fallback[] = $product;
             }

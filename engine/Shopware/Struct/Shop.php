@@ -48,6 +48,11 @@ class Shop
     private $securePath;
 
     /**
+     * @var Category
+     */
+    protected $category;
+
+    /**
      * @param int $id
      */
     public function setId($id)
@@ -173,6 +178,22 @@ class Shop
     public function getHost()
     {
         return $this->host;
+    }
+
+    /**
+     * @return \Shopware\Struct\Category
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param \Shopware\Struct\Category $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
     }
 
 

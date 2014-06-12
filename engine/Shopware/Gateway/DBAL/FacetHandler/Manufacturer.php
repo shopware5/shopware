@@ -61,7 +61,7 @@ class Manufacturer extends DBAL
         /**@var $condition \Shopware\Gateway\Search\Condition\Manufacturer*/
         $condition = $criteria->getCondition('manufacturer');
 
-        foreach($data as $row) {
+        foreach ($data as $row) {
             $manufacturer = $manufacturers[$row['id']];
 
             $attribute = new Attribute();

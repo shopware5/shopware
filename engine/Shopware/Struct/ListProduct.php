@@ -201,6 +201,11 @@ class ListProduct extends Extendable
     protected $highlight;
 
     /**
+     * @var int
+     */
+    protected $sales;
+
+    /**
      * @var string
      */
     protected $manufacturerNumber;
@@ -269,6 +274,10 @@ class ListProduct extends Extendable
      */
     protected $states = array();
 
+    /**
+     * @var bool
+     */
+    protected $hasConfigurator;
 
     /**
      * Adds a new product state.
@@ -838,5 +847,37 @@ class ListProduct extends Extendable
     public function setMetaTitle($metaTitle)
     {
         $this->metaTitle = $metaTitle;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasConfigurator()
+    {
+        return $this->hasConfigurator;
+    }
+
+    /**
+     * @param boolean $hasConfigurator
+     */
+    public function setHasConfigurator($hasConfigurator)
+    {
+        $this->hasConfigurator = $hasConfigurator;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSales()
+    {
+        return $this->sales;
+    }
+
+    /**
+     * @param int $sales
+     */
+    public function setSales($sales)
+    {
+        $this->sales = $sales;
     }
 }

@@ -72,7 +72,7 @@ class ProductMedia
     public function getList(array $products, Struct\Context $context)
     {
         $ids = array();
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $ids[] = $product->getId();
         }
 
@@ -92,7 +92,7 @@ class ProductMedia
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         $result = array();
-        foreach($data as $row) {
+        foreach ($data as $row) {
             $productId = $row['__image_articleID'];
             $imageId   = $row['__image_id'];
 
@@ -130,7 +130,7 @@ class ProductMedia
     public function getCovers(array $products, Struct\Context $context)
     {
         $ids = array();
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $ids[] = $product->getId();
         }
 
@@ -146,12 +146,12 @@ class ProductMedia
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         $covers = array();
-        foreach($data as $row) {
+        foreach ($data as $row) {
             $id = $row['__image_articleID'];
 
             $covers[$id] = $this->hydrator->hydrateProductImage($row);
         }
-        
+
         return $this->assignProductMedia($covers, $products);
     }
 
@@ -163,7 +163,7 @@ class ProductMedia
     private function assignProductMedia(array $media, array $products)
     {
         $result = array();
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $number = $product->getNumber();
 
             $productMedia = $media[$product->getId()];

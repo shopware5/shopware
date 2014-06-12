@@ -26,19 +26,37 @@
 
         <service id="product_service" class="Shopware\Service\Product">
             <argument type="service" id="product_gateway" />
-            <argument type="service" id="vote_gateway" />
-            <argument type="service" id="related_products_gateway" />
-            <argument type="service" id="similar_products_gateway" />
+            <argument type="service" id="vote_service" />
+            <argument type="service" id="related_products_service" />
+            <argument type="service" id="similar_products_service" />
             <argument type="service" id="list_product_service" />
             <argument type="service" id="graduated_prices_service" />
             <argument type="service" id="cheapest_price_service" />
             <argument type="service" id="price_calculation_service" />
             <argument type="service" id="media_service" />
-            <argument type="service" id="download_gateway" />
-            <argument type="service" id="link_gateway" />
+            <argument type="service" id="product_download_service" />
+            <argument type="service" id="product_link_service" />
             <argument type="service" id="property_service" />
             <argument type="service" id="configurator_service" />
             <argument type="service" id="events" />
+        </service>
+
+        <service id="product_download_service" class="Shopware\Service\ProductDownload">
+            <argument type="service" id="download_gateway" />
+        </service>
+
+        <service id="product_link_service" class="Shopware\Service\ProductLink">
+            <argument type="service" id="link_gateway" />
+        </service>
+
+        <service id="related_products_service" class="Shopware\Service\RelatedProducts">
+            <argument type="service" id="related_products_gateway" />
+            <argument type="service" id="list_product_service" />
+        </service>
+
+        <service id="similar_products_service" class="Shopware\Service\SimilarProducts">
+            <argument type="service" id="similar_products_gateway" />
+            <argument type="service" id="list_product_service" />
         </service>
 
         <service id="graduated_prices_service" class="Shopware\Service\GraduatedPrices">
@@ -256,6 +274,7 @@
 
         <service id="similar_products_gateway_dbal" class="Shopware\Gateway\DBAL\SimilarProducts">
             <argument type="service" id="models"/>
+            <argument type="service" id="config" />
         </service>
 
         <service id="download_gateway_dbal" class="Shopware\Gateway\DBAL\Download">

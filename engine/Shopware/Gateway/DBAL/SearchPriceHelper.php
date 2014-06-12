@@ -28,7 +28,7 @@ class SearchPriceHelper
         }
 
         if ($current->useDiscount()) {
-            $discount = (100 - (float)$current->getPercentageDiscount()) / 100;
+            $discount = (100 - (float) $current->getPercentageDiscount()) / 100;
             $selection .= " * " . $discount;
         }
 
@@ -48,7 +48,7 @@ class SearchPriceHelper
             'default_prices',
             'default_prices.articleID = products.id
              AND default_prices.pricegroup = :fallbackCustomerGroup
-		     AND default_prices.from = 1'
+             AND default_prices.from = 1'
         );
 
         $query->innerJoin(
@@ -56,7 +56,7 @@ class SearchPriceHelper
             's_articles_details',
             'priceVariant',
             'priceVariant.id = default_prices.articledetailsID
-		     AND (products.laststock * priceVariant.instock) >= (products.laststock * priceVariant.minpurchase)'
+             AND (products.laststock * priceVariant.instock) >= (products.laststock * priceVariant.minpurchase)'
         );
 
         $query->leftJoin(

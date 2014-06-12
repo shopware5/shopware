@@ -65,7 +65,7 @@ class Configurator extends Hydrator
     private function createSet($data)
     {
         $set = new Struct\Configurator\Set();
-        $set->setId((int)$data['__configuratorSet_id']);
+        $set->setId((int) $data['__configuratorSet_id']);
         $set->setName($data['__configuratorSet_name']);
         $set->setType($data['__configuratorSet_type']);
         return $set;
@@ -81,7 +81,7 @@ class Configurator extends Hydrator
         );
         $data = array_merge($data, $translation);
 
-        $group->setId((int)$data['__configuratorGroup_id']);
+        $group->setId((int) $data['__configuratorGroup_id']);
         $group->setName($data['__configuratorGroup_name']);
         $group->setDescription($data['__configuratorGroup_description']);
         return $group;
@@ -97,7 +97,7 @@ class Configurator extends Hydrator
         );
         $data = array_merge($data, $translation);
 
-        $option->setId((int)$data['__configuratorOption_id']);
+        $option->setId((int) $data['__configuratorOption_id']);
         $option->setName($data['__configuratorOption_name']);
         return $option;
     }

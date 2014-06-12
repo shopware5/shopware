@@ -104,6 +104,13 @@ class FieldHelper
 
     }
 
+    public function getTopSellerFields()
+    {
+        return array(
+            'topSeller.sales as __topSeller_sales'
+        );
+    }
+
     /**
      * Defines which s_articles_details fields should be selected.
      * @return array

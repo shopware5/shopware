@@ -66,9 +66,9 @@ class Property extends Hydrator
         );
         $data = array_merge($data, $translation);
 
-        $set->setId((int)$data['__propertySet_id']);
+        $set->setId((int) $data['__propertySet_id']);
         $set->setName($data['__propertySet_name']);
-        $set->setComparable((bool)$data['__propertySet_comparable']);
+        $set->setComparable((bool) $data['__propertySet_comparable']);
 
         if ($data['__propertySetAttribute_id']) {
             $attribute = $this->extractFields('__propertySetAttribute_', $data);
@@ -88,9 +88,9 @@ class Property extends Hydrator
         );
         $data = array_merge($data, $translation);
 
-        $group->setId((int)$data['__propertyGroup_id']);
+        $group->setId((int) $data['__propertyGroup_id']);
         $group->setName($data['__propertyGroup_name']);
-        $group->setFilterable((bool)$data['__propertyGroup_filterable']);
+        $group->setFilterable((bool) $data['__propertyGroup_filterable']);
         return $group;
     }
 
@@ -104,7 +104,7 @@ class Property extends Hydrator
         );
         $data = array_merge($data, $translation);
 
-        $option->setId((int)$data['__propertyOption_id']);
+        $option->setId((int) $data['__propertyOption_id']);
         $option->setName($data['__propertyOption_value']);
         return $option;
     }

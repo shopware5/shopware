@@ -71,7 +71,7 @@ class Search
      */
     private function assignAttributes($products, $searchProducts)
     {
-        foreach($searchProducts as $searchProduct) {
+        foreach ($searchProducts as $searchProduct) {
             $number = $searchProduct->getNumber();
 
             $product = $products[$number];
@@ -80,7 +80,7 @@ class Search
                 continue;
             }
 
-            foreach($searchProduct->getAttributes() as $key => $attribute) {
+            foreach ($searchProduct->getAttributes() as $key => $attribute) {
                 $product->addAttribute($key, $attribute);
             }
         }

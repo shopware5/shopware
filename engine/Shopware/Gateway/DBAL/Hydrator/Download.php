@@ -26,13 +26,13 @@ class Download extends Hydrator
     {
         $download = new Struct\Product\Download();
 
-        $download->setId((int)$data['__download_id']);
+        $download->setId((int) $data['__download_id']);
 
         $download->setDescription($data['__download_description']);
 
         $download->setFile($data['__download_filename']);
 
-        $download->setSize((float)$data['__download_size']);
+        $download->setSize((float) $data['__download_size']);
 
         if (!empty($data['__downloadAttribute_id'])) {
             $attribute = $this->extractFields('__downloadAttribute_', $data);

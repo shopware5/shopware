@@ -17,9 +17,9 @@ class Tax extends Hydrator
     {
         $tax = new Struct\Tax();
 
-        $tax->setId((int)$data['__tax_id']);
+        $tax->setId((int) $data['__tax_id']);
         $tax->setName($data['__tax_description']);
-        $tax->setTax((float)$data['__tax_tax']);
+        $tax->setTax((float) $data['__tax_tax']);
 
         return $tax;
     }
@@ -35,9 +35,9 @@ class Tax extends Hydrator
     {
         $tax = new Struct\Tax();
 
-        $tax->setId((int)$data['__taxRule_groupID']);
+        $tax->setId((int) $data['__taxRule_groupID']);
         $tax->setName($data['__taxRule_name']);
-        $tax->setTax((float)$data['__taxRule_tax']);
+        $tax->setTax((float) $data['__taxRule_tax']);
 
         return $tax;
     }

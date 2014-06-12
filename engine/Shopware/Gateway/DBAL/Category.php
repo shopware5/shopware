@@ -77,7 +77,7 @@ class Category
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         $categories = array();
-        foreach($data as $row) {
+        foreach ($data as $row) {
             $id = $row['__category_id'];
 
             $categories[$id] = $this->categoryHydrator->hydrate($row);

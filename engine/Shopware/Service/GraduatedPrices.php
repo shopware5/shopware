@@ -134,7 +134,7 @@ class GraduatedPrices
          * The price group discounts are defined with a percentage discount, which calculated
          * on the first graduated price of the product.
          */
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $number = $product->getNumber();
 
             if (!array_key_exists($number, $discounts)) {
@@ -146,7 +146,7 @@ class GraduatedPrices
 
             $productDiscounts = $discounts[$number];
             $firstGraduation = array_shift($prices[$number]);
-            
+
             $prices[$number] = $this->buildDiscountGraduations(
                 $product,
                 $firstGraduation,
@@ -154,7 +154,7 @@ class GraduatedPrices
                 $productDiscounts
             );
         }
-        
+
         return $prices;
     }
 
@@ -190,7 +190,7 @@ class GraduatedPrices
             $prices[] = $firstGraduation;
         }
 
-        foreach($discounts as $discount) {
+        foreach ($discounts as $discount) {
             $rule = clone $reference;
 
             $percent = (100 - $discount->getPercent() ) / 100;
