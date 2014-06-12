@@ -1,4 +1,4 @@
-{extends file="./frontend/index/index.tpl"}
+{extends file="frontend/index/index.tpl"}
 
 {* Title *}
 {block name='frontend_index_header_title'}
@@ -27,7 +27,9 @@
 
 {* Register content *}
 {block name='frontend_index_content'}
-	<div class="register--content panel content block has--border" data-register="true">
+	<div class="register--content panel content block has--border{if $register->personal->error_flags || $register->billing->error_flags || $register->shipping->error_flags} is--collapsed{/if}"
+		 id="registration"
+		 data-register="true">
 
 		{block name='frontend_register_index_dealer_register'}
 			{* Included for compatibility reasons *}
@@ -35,18 +37,20 @@
 
 		{block name='frontend_register_index_cgroup_header'}
 			{if $register.personal.form_data.sValidation}
-			{* Include information related to registration for other customergroups then guest, this block get overridden by b2b essentials plugin *}
-			<div class="panel register--supplier">
-				<h2 class="panel--title is--underline">{$sShopname} {s name='RegisterHeadlineSupplier' namespace='frontend/register/index'}{/s}</h2>
+				{* Include information related to registration for other customergroups then guest, this block get overridden by b2b essentials plugin *}
+				<div class="panel register--supplier">
+					<h2 class="panel--title is--underline">{$sShopname} {s name='RegisterHeadlineSupplier' namespace='frontend/register/index'}{/s}</h2>
 
-				<div class="panel--body is--wide">
-					<strong>{s name='RegisterInfoSupplier' namespace='frontend/register/index'}{/s}</strong><br />
-					<a href="{url controller='account'}" class="account">{s name='RegisterInfoSupplier2' namespace='frontend/register/index'}{/s}</a><br />
-					<p class="is--bold">{s name='RegisterInfoSupplier3' namespace='frontend/register/index'}{/s}</p>
-					<h3 class="is--bold">{s name='RegisterInfoSupplier4' namespace='frontend/register/index'}{/s}</h3>{s name='RegisterInfoSupplier5' namespace='frontend/register/index'}{/s}
-					<h3 class="is--bold">{s name='RegisterInfoSupplier6' namespace='frontend/register/index'}{/s}</h3>{s name='RegisterInfoSupplier7' namespace='frontend/register/index'}{/s}
+					<div class="panel--body is--wide">
+						<p class="is--bold">{s name='RegisterInfoSupplier3' namespace='frontend/register/index'}{/s}</p>
+
+						<h3 class="is--bold">{s name='RegisterInfoSupplier4' namespace='frontend/register/index'}{/s}</h3>
+						<p>{s name='RegisterInfoSupplier5' namespace='frontend/register/index'}{/s}</p>
+
+						<h3 class="is--bold">{s name='RegisterInfoSupplier6' namespace='frontend/register/index'}{/s}</h3>
+						<p>{s name='RegisterInfoSupplier7' namespace='frontend/register/index'}{/s}</p>
+					</div>
 				</div>
-			</div>
 			{/if}
 		{/block}
 
@@ -73,7 +77,7 @@
 					{if {config name=ACTDPRCHECK}}
 						{block name='frontend_register_index_input_privacy'}
 							<div class="register--privacy">
-								<input name="register[personal][dpacheckbox]" type="checkbox" id="dpacheckbox"{if $form_data.dpacheckbox} checked="checked"{/if} value="1" class="chkbox" />
+								<input name="register[personal][dpacheckbox]" type="checkbox" id="dpacheckbox"{if $form_data.dpacheckbox} checked="checked"{/if} required="required" aria-required="true" value="1" class="chkbox is--required" />
 								<label for="dpacheckbox" class="chklabel{if $register->personal->error_flags.dpacheckbox} has--error{/if}">{s name='RegisterLabelDataCheckbox'}{/s}</label>
 							</div>
 						{/block}
@@ -90,7 +94,7 @@
 				{block name='frontend_register_index_form_submit'}
 					{* Submit button *}
 					<div class="register--action">
-						<button type="submit" class="btn btn--primary">{s name='RegisterIndexActionSubmit'}{/s} <i class="icon--arrow-right is--small"></i></button>
+						<input type="submit" class="register--submit btn btn--primary" value="{s name='RegisterIndexActionSubmit'}{/s}" />
 					</div>
 				{/block}
 			</form>

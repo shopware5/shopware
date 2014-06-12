@@ -37,6 +37,9 @@
     Plugin.prototype.init = function() {
         var me = this;
 
+        me.$form = me.$el.find('.register--form');
+        me.$submitBtn = me.$el.find('.register--submit');
+
         me.$typeSelection = me.$el.find('.register--customertype select');
         me.$skipAccount = me.$el.find('.register--check input');
         me.$alternativeShipping = me.$el.find('.register--alt-shipping input');
@@ -45,7 +48,14 @@
         me.$accountFieldset = me.$el.find('.register--account-information');
         me.$shippingFieldset = me.$el.find('.register--shipping');
 
-        me.$inputs = me.$el.find('.is--required:input');
+        me.$countySelectFields = me.$el.find('.select--country');
+        me.$stateSelectContainers = $('.register--state-selection');
+
+        me.$inputs = me.$el.find('.is--required');
+
+        me.checkType();
+        me.checkSkipAccount();
+        me.checkChangeShipping();
 
         me.registerEvents();
     };
@@ -53,36 +63,78 @@
     Plugin.prototype.registerEvents = function () {
         var me = this;
 
-        me.$typeSelection.on('change.' + pluginName, $.proxy(me.onChangeType, me));
-        me.$skipAccount.on('change.' + pluginName, $.proxy(me.onSkipAccount, me));
-        me.$alternativeShipping.on('change.' + pluginName, $.proxy(me.onChangeShipping, me));
+        me.$typeSelection.on('change.' + pluginName, $.proxy(me.checkType, me));
+        me.$skipAccount.on('change.' + pluginName, $.proxy(me.checkSkipAccount, me));
+        me.$alternativeShipping.on('change.' + pluginName, $.proxy(me.checkChangeShipping, me));
+        me.$countySelectFields.on('change.' + pluginName, $.proxy(me.onCountryChanged, me));
         me.$inputs.on('blur.' + pluginName, $.proxy(me.onValidateInput, me));
+        me.$submitBtn.on('click.' + pluginName, $.proxy(me.onSubmitBtn, me));
     };
 
-    Plugin.prototype.onChangeType = function (event) {
+    Plugin.prototype.checkType = function () {
         var me = this,
-            $target = $(event.currentTarget),
-            method = ($target.val() === 'business') ? 'removeClass' : 'addClass';
+            status = (me.$typeSelection.val() === 'private'),
+            requiredFields = me.$companyFieldset.find('.is--required'),
+            requiredMethod = (!status) ? me.setHtmlRequired : me.removeHtmlRequired,
+            classMethod = (!status) ? 'removeClass' : 'addClass';
 
-        me.$companyFieldset[method](me.opts.hiddenCls);
+        requiredMethod(requiredFields);
+
+        me.$companyFieldset[classMethod](me.opts.hiddenCls);
     };
 
-    Plugin.prototype.onSkipAccount = function () {
+    Plugin.prototype.checkSkipAccount = function () {
         var me = this,
-            $target = $(event.currentTarget),
-            isChecked = $target.is(':checked'),
-            method = (isChecked) ? 'addClass' : 'removeClass';
+            isChecked = me.$skipAccount.is(':checked'),
+            requiredFields = me.$accountFieldset.find('.is--required'),
+            requiredMethod = (!isChecked) ? me.setHtmlRequired : me.removeHtmlRequired,
+            classMethod = (isChecked) ? 'addClass' : 'removeClass';
 
-        me.$accountFieldset[method](me.opts.hiddenCls);
+        requiredMethod(requiredFields);
+
+        me.$accountFieldset[classMethod](me.opts.hiddenCls);
     };
 
-    Plugin.prototype.onChangeShipping = function (event) {
+    Plugin.prototype.checkChangeShipping = function () {
         var me = this,
-            $target = $(event.currentTarget),
-            isChecked = $target.is(':checked'),
-            method = (isChecked) ? 'removeClass' : 'addClass';
+            isChecked = me.$alternativeShipping.is(':checked'),
+            requiredFields = me.$shippingFieldset.find('.is--required'),
+            requiredMethod = (isChecked) ? me.setHtmlRequired : me.removeHtmlRequired,
+            classMethod = (isChecked) ? 'removeClass' : 'addClass';
 
-        me.$shippingFieldset[method](me.opts.hiddenCls);
+        requiredMethod(requiredFields);
+
+        me.$shippingFieldset[classMethod](me.opts.hiddenCls);
+    };
+
+    Plugin.prototype.onCountryChanged = function(event) {
+        var me = this,
+            $countrySelect = $(event.currentTarget),
+            countrySelectID = $countrySelect.attr('id'),
+            countrySelectVal = $countrySelect.val(),
+            $stateSelectParent = $('#' + countrySelectID + '_' + countrySelectVal + '_states'),
+            $stateSelect = $stateSelectParent.find('.select--state'),
+            $siblingFields = $stateSelectParent.siblings('.register--state-selection');
+
+        $siblingFields.addClass('is--hidden');
+        $siblingFields.find('.select--state').attr('disabled', 'disabled');
+        $stateSelect.removeAttr('disabled');
+        $stateSelectParent.removeClass('is--hidden');
+    };
+
+    Plugin.prototype.onSubmitBtn = function(event) {
+        var me = this,
+            input,
+            valid = true;
+
+        me.$inputs.each(function() {
+            input = $(this);
+
+            if (!input.val()) {
+                valid = false;
+                me.setFieldAsError(input);
+            }
+        });
     };
 
     Plugin.prototype.onValidateInput = function (event) {
@@ -105,11 +157,13 @@
                 action = 'ajax_validate_password';
                 break;
             default:
-                return false;
                 break;
         }
 
         if (!$el.val()) {
+            me.setFieldAsError($el);
+            return;
+        } else if ($el.attr('type') === 'checkbox' && !$el.is(':checked')) {
             me.setFieldAsError($el);
             return;
         } else if (action) {
@@ -118,6 +172,17 @@
         } else {
             me.setFieldAsSuccess($el);
         }
+    };
+
+    Plugin.prototype.setHtmlRequired = function($inputs) {
+        $inputs.attr({
+            'required': 'required',
+            'aria-required': 'true'
+        });
+    };
+
+    Plugin.prototype.removeHtmlRequired = function($inputs) {
+        $inputs.removeAttr('required aria-required');
     };
 
     Plugin.prototype.setFieldAsError = function ($el) {
@@ -190,6 +255,7 @@
         me.$typeSelection.off('change.' + pluginName);
         me.$skipAccount.off('change.' + pluginName);
         me.$alternativeShipping.off('change.' + pluginName);
+        me.$countySelectFields.off('change.' + pluginName);
         me.$inputs.off('blur.' + pluginName);
     };
 

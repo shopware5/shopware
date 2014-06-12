@@ -1999,13 +1999,13 @@ class sAdmin
      */
     public function sSaveRegisterBilling($userID, $userObject)
     {
-        if ($userObject["billing"]["birthmonth"] == "-") {
+        if (!is_numeric($userObject["billing"]["birthmonth"])) {
             unset($userObject["billing"]["birthmonth"]);
         }
-        if ($userObject["billing"]["birthday"] == "--") {
+        if (!is_numeric($userObject["billing"]["birthday"])) {
             unset($userObject["billing"]["birthday"]);
         }
-        if ($userObject["billing"]["birthyear"] == "----") {
+        if (!is_numeric($userObject["billing"]["birthyear"])) {
             unset($userObject["billing"]["birthyear"]);
         }
 

@@ -1,10 +1,19 @@
 {namespace name="frontend/account/login"}
 <div class="register--login content block">
 
+	{* Error messages *}
+	{block name='frontend_register_login_error_messages'}
+		{if $sErrorMessages}
+			<div class="account--error">
+				{include file="frontend/register/error_message.tpl" error_messages=$sErrorMessages}
+			</div>
+		{/if}
+	{/block}
+
 	{* New customer *}
 	{block name='frontend_register_login_newcustomer'}
 		<div class="register--new-customer">
-			<button type="button" class="btn btn--secondary">{s name="LoginLinkRegister2"}{/s}</button>
+			<a href="#registration" class="btn btn--secondary" id="new-customer-action" data-collapseTarget="#registration">{s name="LoginLinkRegister2"}{/s}</a>
 		</div>
 	{/block}
 
@@ -36,7 +45,7 @@
 
 						{block name='frontend_register_login_input_lostpassword'}
 							<div class="register--login-lostpassword">
-								<a href="{url action=password}" title="{s name="LoginLinkLostPassword"}{/s}">
+								<a href="{url controller=account action=password}" title="{s name="LoginLinkLostPassword"}{/s}">
 									{s name="LoginLinkLostPassword"}{/s}
 								</a>
 							</div>
