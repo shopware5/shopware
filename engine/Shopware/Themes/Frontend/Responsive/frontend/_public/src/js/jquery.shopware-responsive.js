@@ -28,6 +28,7 @@ $(function() {
             $('*[data-slide-panel="true"]').slidePanel();
             $('.product--supplier').appendTo($('.product--info'));
             $('.category--teaser .hero--text').collapseText();
+            $('#new-customer-action').collapsePanel();
             $('.btn--password').scroll();
             $('.btn--email').scroll();
         },
@@ -54,8 +55,11 @@ $(function() {
 
             var btnEmail = $('.btn--email');
             if (btnEmail.length) btnEmail.data('plugin_scroll').destroy();
+
+            var btnRegistration = $('#new-customer-action');
+            if (btnRegistration.length) btnRegistration.data('plugin_collapsePanel').destroy();
         }
-}, {
+    }, {
         type: 'tablet',
         enter: function() {
             $('*[data-search-dropdown="true"]').searchFieldDropDown();
@@ -189,23 +193,6 @@ $(function() {
             cache: false,
             success: $this.html.bind($this)
         });
-    });
-
-    // Select box replacement
-    $('.field--select .arrow').on('click', function(event) {
-        event.preventDefault();
-
-        var el =  $(this).parent('div').children('select')[0];
-
-        // Workaround to open the select box drop down
-        if(document.createEvent) {
-            var e = document.createEvent('MouseEvents');
-
-            e.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-            el.dispatchEvent(e);
-        } else {
-            el.fireEvent("onmousedown");
-        }
     });
 
     // Auto submitting form

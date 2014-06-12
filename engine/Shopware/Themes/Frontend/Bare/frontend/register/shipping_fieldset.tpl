@@ -6,7 +6,6 @@
 			<div class="register--salutation field--select">
 				<span class="arrow"></span>
 				<select name="register[shipping][salutation]" id="salutation2" class="normal is--required{if $error_flags.salutation} has--error{/if}">
-					<option>{s name='RegisterShippingLabelSelect'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
 					<option value="mr" {if $form_data.salutation eq "mr"}selected="selected"{/if}>{s name='RegisterShippingLabelMr'}{/s}</option>
 					<option value="ms" {if $form_data.salutation eq "ms"}selected="selected"{/if}>{s name='RegisterShippingLabelMrs'}{/s}</option>
 				</select>
@@ -78,9 +77,9 @@
 		{* Country *}
 		{if {config name=CountryShipping}}
 			{block name='frontend_register_shipping_fieldset_input_country'}
-				<div class="field--select countryfield--select">
+				<div class="register--shipping-country field--select">
 					<span class="arrow"></span>
-					<select name="register[shipping][country]" id="country2" class="is--required{if $error_flags.country} has--error{/if}">
+					<select name="register[shipping][country]" id="country_shipping" required="required" aria-required="true" class="select--country is--required{if $error_flags.country} has--error{/if}">
 						<option value="" selected="selected">{s name='RegisterShippingLabelSelect'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
 
 						{foreach from=$country_list item=country}
@@ -99,12 +98,12 @@
 			<div class="country-area-state-selection">
 				{foreach $country_list as $country}
 					{if $country.states}
-						<div class="field--select selection{if $country.id != $form_data.country} is--disabled{/if}">
+						<div id="country_shipping_{$country.id}_states" class="register--state-selection field--select{if $country.id != $form_data.country} is--hidden{/if}">
 							<span class="arrow"></span>
-							<select {if $country.id != $form_data.country}disabled="disabled"{/if} name="register[shipping][country_shipping_state_{$country.id}]" id="country_{$country.id}_states" class="{if $country.force_state_in_registration}is--required{/if}{if $error_flags.stateID} has--error{/if}">
-							<option value="" selected="selected">{s name='RegisterShippingLabelSelect'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
+							<select {if $country.id != $form_data.country}disabled="disabled"{/if} name="register[shipping][country_shipping_state_{$country.id}]"{if $country.force_state_in_registration} required="required" aria-required="true"{/if} class="select--state {if $country.force_state_in_registration}is--required{/if}{if $error_flags.stateID} has--error{/if}">
+							<option value="" selected="selected">{s name='RegisterShippingLabelSelect'}{/s}{if $country.force_state_in_registration}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}</option>
 								{assign var="stateID" value="country_shipping_state_`$country.id`"}
-								{foreach from=$country.states item=state}
+								{foreach $country.states as $state}
 									<option value="{$state.id}" {if $state.id eq $form_data[$stateID]}selected="selected"{/if}>{$state.name}</option>
 								{/foreach}
 							</select>
