@@ -173,6 +173,8 @@ $(function() {
     $('*[data-auto-submit="true"]').autoSubmit();
     $('input[data-quantity-field="true"]').quantityField();
 
+    $('select:not([data-no-fancy-select="true"])').selectboxReplacement();
+
     // Start up the placeholder polyfill, see ```jquery.ie-fixes.js```
     $('input, textarea').placeholder();
 
