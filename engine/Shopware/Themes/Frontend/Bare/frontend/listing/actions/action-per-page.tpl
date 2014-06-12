@@ -21,15 +21,12 @@
 
         {* Per page field *}
         {block name='frontend_listing_actions_items_per_page_field'}
-			<div class="per-page--select field--select">
-				<span class="arrow"></span>
-				<select name="sPerPage" class="per-page--field action--field" data-auto-submit="true">
-					{foreach $sPerPage as $perPage}
-						<option value="{$perPage.value}" {if $perPage.markup}selected="selected"{/if}>{$perPage.value}</option>
-					{/foreach}
-					{block name='frontend_listing_actions_per_page_values'}{/block}
-				</select>
-			</div>
+			<select name="sPerPage" class="per-page--field action--field" data-auto-submit="true" data-class="per-page--select">
+				{foreach $sPerPage as $perPage}
+					<option value="{$perPage.value}" {if $perPage.markup}selected="selected"{/if}>{$perPage.value}</option>
+				{/foreach}
+				{block name='frontend_listing_actions_per_page_values'}{/block}
+			</select>
         {/block}
     </form>
 {/if}
