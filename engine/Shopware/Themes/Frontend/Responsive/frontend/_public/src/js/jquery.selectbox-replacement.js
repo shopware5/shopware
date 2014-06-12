@@ -38,10 +38,10 @@
                 wrapEl;
 
             wrapEl = me._formatString('<div class="{0}"></div>', me.opts.baseCls);
-            wrapEl = $el.wrap(wrapEl).parents('.' + me.options.baseCls);
+            wrapEl = $el.wrap(wrapEl).parents('.' + me.opts.baseCls);
 
-            me.$textEl = $('<div>', { 'class': me.options.baseCls + '-text' }).appendTo(wrapEl);
-            me.$triggerEl =$('<div>', { 'class': me.options.baseCls + '-trigger' }).appendTo(wrapEl);
+            me.$textEl = $('<div>', { 'class': me.opts.baseCls + '-text' }).appendTo(wrapEl);
+            me.$triggerEl =$('<div>', { 'class': me.opts.baseCls + '-trigger' }).appendTo(wrapEl);
 
             me.selected = me.$el.find(':selected');
             me.$textEl.html(me.selected.html());
