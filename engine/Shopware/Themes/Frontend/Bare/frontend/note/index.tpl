@@ -14,7 +14,7 @@
 
 {* Main content *}
 {block name="frontend_index_content"}
-	<div class="content block account--content">
+	<div class="content block note--content">
 
 		{* Infotext *}
 		{block name="frontend_note_index_welcome"}
@@ -33,23 +33,23 @@
 		{/block}
 
 		{block name="frontend_note_index_overview"}
-			<div class="note--content">
+			<div class="note--overview">
 				{if $sNotes}
 					{block name="frontend_note_index_table"}
-						<div class="note--overview panel--table">
+						<div class="note--table panel--table has--border">
 
 							{* Table head *}
 							{block name="frontend_note_index_table_head"}
-								<div class="panel--tr">
+								<div class="note--table-head panel--tr">
 
 									{* Article informations *}
 									{block name="frontend_note_index_table_head_name"}
-										<div class="panel--th">{s name="NoteColumnName"}{/s}</div>
+										<div class="panel--th note--info">{s name="NoteColumnName"}{/s}</div>
 									{/block}
 
 									{* Unit price *}
 									{block name="frontend_note_index_table_head_price"}
-										<div class="panel--th">{s name="NoteColumnPrice"}{/s}</div>
+										<div class="panel--th note--sale">{s name="NoteColumnPrice"}{/s}</div>
 									{/block}
 
 									{block name="frontend_note_index_table_columns"}{/block}

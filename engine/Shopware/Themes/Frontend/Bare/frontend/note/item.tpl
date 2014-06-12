@@ -7,10 +7,10 @@
 
 				{* Article picture *}
 				{block name="frontend_note_item_image"}
-					<div class="note--image">
+					<div class="note--image-container">
 						{if $sBasketItem.image.src.0}
 							<a href="{$sBasketItem.linkDetails}" title="{$sBasketItem.articlename}" class="note--image-link">
-								<img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename}" />
+								<img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename}" class="note--image" />
 							</a>
 							{* Zoom picture *}
 							<a href="{$sBasketItem.image.src.5}" rel="lightbox" class="note--zoom">
@@ -18,19 +18,10 @@
 							</a>
 						{else}
 							<a href="{$sBasketItem.linkDetails}" title="{$sBasketItem.articlename}" class="note--image-link">
-								<img src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{$sBasketItem.articlename}" />
+								<img src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{$sBasketItem.articlename}" class="note--image" />
 							</a>
 						{/if}
 					</div>
-				{/block}
-
-				{* Reviews *}
-				{block name="frontend_note_item_rating"}
-					{if !{config name=VoteDisable}}
-						<div class="note--rating">
-							<div class="star star{($sBasketItem.sVoteAverange.averange*2)|round}"></div>
-						</div>
-					{/if}
 				{/block}
 
 				{* Article details *}
@@ -42,6 +33,22 @@
 							<a class="note--title" href="{$sBasketItem.linkDetails}" title="{$sBasketItem.articlename}">
 								{$sBasketItem.articlename|truncate:40}
 							</a>
+						{/block}
+
+						{* Reviews *}
+						{block name="frontend_note_item_rating"}
+							{if !{config name=VoteDisable}}
+								<div class="note--rating product--rating" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+									{$average = $sBasketItem.sVoteAverange.averange|round:0}
+									{for $value=1 to 5}
+										{$cls = 'icon--star'}
+										{if $value > $average}
+											{$cls = 'icon--star-empty'}
+										{/if}
+										<i class="{$cls}"></i>
+									{/for}
+								</div>
+							{/if}
 						{/block}
 
 						{* Supplier name *}
@@ -76,29 +83,6 @@
 							{/if}
 						{/block}
 
-						{* Article description *}
-						{block name="frontend_note_item_details_description"}
-							<div class="note--desc">
-								{$sBasketItem.description_long|strip_tags|trim|truncate:160}
-							</div>
-						{/block}
-
-						{* Unit price *}
-						{block name="frontend_note_item_unitprice"}
-							{if $sBasketItem.purchaseunit}
-								<div class="note--price-unit">
-									<p>
-										<span class="is--strong">{s name="NoteUnitPriceContent"}{/s}:</span> {$sBasketItem.purchaseunit} {$sBasketItem.sUnit.description}
-										{if $sBasketItem.purchaseunit != $sBasketItem}
-											{if $sBasketItem.referenceunit}
-												({$sBasketItem.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s} / {$sBasketItem.referenceunit} {$sBasketItem.sUnit.description})
-											{/if}
-										{/if}
-									</p>
-								</div>
-							{/if}
-						{/block}
-
 						{block name="frontend_note_index_items"}{/block}
 					</div>
 				{/block}
@@ -106,14 +90,30 @@
 		{/block}
 
 		{block name="frontend_note_item_sale"}
-			<div class="note--price panel--td">
+			<div class="note--sale panel--td">
 
-				{* Unit price *}
+				{* Price *}
 				{block name="frontend_note_item_price"}
 					{if $sBasketItem.itemInfo}
 						{$sBasketItem.itemInfo}
 					{else}
-						<span class="price is--bold">{if $sBasketItem.priceStartingFrom}{s namespace='frontend/listing/box_article' name='ListingBoxArticleStartsAt'}{/s} {/if}{$sBasketItem.price|currency}*</span>
+						<div class="note--price">{if $sBasketItem.priceStartingFrom}{s namespace='frontend/listing/box_article' name='ListingBoxArticleStartsAt'}{/s} {/if}{$sBasketItem.price|currency}*</div>
+					{/if}
+				{/block}
+
+				{* Price unit *}
+				{block name="frontend_note_item_unitprice"}
+					{if $sBasketItem.purchaseunit}
+						<div class="note--price-unit">
+							<p>
+								<span class="is--strong">{s name="NoteUnitPriceContent"}{/s}:</span> {$sBasketItem.purchaseunit} {$sBasketItem.sUnit.description}
+								{if $sBasketItem.purchaseunit != $sBasketItem}
+									{if $sBasketItem.referenceunit}
+										({$sBasketItem.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s} / {$sBasketItem.referenceunit} {$sBasketItem.sUnit.description})
+									{/if}
+								{/if}
+							</p>
+						</div>
 					{/if}
 				{/block}
 
@@ -122,7 +122,7 @@
 					<div class="note--actions">
 						{* Place article in basket *}
 						{if !$sBasketItem.sConfigurator && !$sBasketItem.sVariantArticle}
-							<a href="{url controller=checkout action=addArticle sAdd=$sBasketItem.ordernumber}" class="btn btn--primary" title="{s name='NoteLinkBuy'}{/s}">
+							<a href="{url controller=checkout action=addArticle sAdd=$sBasketItem.ordernumber}" class="action--buy btn btn--primary" title="{s name='NoteLinkBuy'}{/s}">
 								{s name="NoteLinkBuy"}{/s}
 							</a>
 						{/if}
@@ -131,7 +131,7 @@
 						{block name="frontend_note_item_actions_compare"}{/block}
 
 						{* Article Details *}
-						<a href="{$sBasketItem.linkDetails}" class="btn btn--secondary" title="{$sBasketItem.articlename}">
+						<a href="{$sBasketItem.linkDetails}" class="action--details btn btn--secondary" title="{$sBasketItem.articlename}">
 							{s name="NoteLinkDetails"}{/s}
 						</a>
 					</div>
@@ -142,7 +142,7 @@
 		{* Remove article *}
 		{block name="frontend_note_item_delete"}
 			<a href="{url controller='note' action='delete' sDelete=$sBasketItem.id}" title="{s name='NoteLinkDelete'}{/s}" class="note--delete">
-				{s name="NoteLinkDelete"}{/s}
+				<i class="icon--cross"></i>
 			</a>
 		{/block}
 	</div>
