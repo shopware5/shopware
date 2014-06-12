@@ -67,26 +67,24 @@ input[type="email"] {
 		}
 	}
 
-	.js--fancy-select-text,
-	.js--fancy-select-trigger {
-		float: left;
-	}
-
 	.js--fancy-select-text {
-		.unitize-padding(0, 10);
+		.unitize-padding(0, 40, 0, 10);
 		border-right: 1px solid #fff;
 		font-weight: bold;
-		width: 85%;
+		width: 100%;
 
 		// CSS truncating
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
+
 	.js--fancy-select-trigger {
 		.unitize(6, 16, font-size);
+		.unitize-width(30);
+		position: absolute;
+		right: 0; top: 0;
 		border-left: 1px solid @borderColor;
-		width: 15%;
 		text-align: center;
 		text-shadow: 0 1px 0 #fff;
 		font-weight: bold;
