@@ -6,7 +6,10 @@
         /** @property {Object} Default settings for the plugin **/
         defaults: {
             baseCls: 'js--fancy-select',
-            focusCls: 'js--is--fo3cused',
+            focusCls: 'js--is--focused',
+            triggerText: '<i class="icon--arrow-down"></i>',
+            disabledCls: 'is--disabled',
+            errorCls: 'has--error',
             submit: true
         },
 
@@ -23,6 +26,15 @@
 
             // Update the plugin configuration with the HTML5 data-attributes
             me.getDataAttributes();
+
+            // Disable the select box
+            if (me.$el.attr('disabled') !== undefined) {
+                me.setDisabled();
+            }
+
+            if (me.$el.hasClass(me.opts.errorCls)) {
+                me.setError();
+            }
 
             return me;
         },
@@ -41,12 +53,92 @@
             wrapEl = $el.wrap(wrapEl).parents('.' + me.opts.baseCls);
 
             me.$textEl = $('<div>', { 'class': me.opts.baseCls + '-text' }).appendTo(wrapEl);
-            me.$triggerEl =$('<div>', { 'class': me.opts.baseCls + '-trigger' }).appendTo(wrapEl);
+            me.$triggerEl =$('<div>', { 'class': me.opts.baseCls + '-trigger', 'html': me.opts.triggerText }).appendTo(wrapEl);
 
             me.selected = me.$el.find(':selected');
             me.$textEl.html(me.selected.html());
 
             return wrapEl;
+        },
+
+        /**
+         * Disables the select box
+         * @returns {jQuery|Plugin.$el|*|PluginBase.$el}
+         */
+        setDisabled: function () {
+            var me = this;
+
+            me.$wrapEl.addClass(me.opts.disabledCls);
+            me.$el.attr('disabled', 'disabled');
+
+            return me.$el;
+        },
+
+        /**
+         * Enables the select box
+         * @returns {jQuery|Plugin.$el|*|PluginBase.$el}
+         */
+        setEnabled: function () {
+            var me = this;
+
+            me.$wrapEl.removeClass(me.opts.disabledCls);
+            me.$el.removeAttr('disabled');
+
+            return me.$el;
+        },
+
+        /**
+         * Marks the field as error.
+         * @returns {jQuery}
+         */
+        setError: function () {
+            var me = this;
+            return me.$el.addClass(me.opts.errorCls);
+        },
+
+        /**
+         * Removes the error mark of the field.
+         * @returns {jQuery}
+         */
+        removeError: function () {
+            var me = this;
+            return me.$el.removeClass(me.opts.errorCls);
+        },
+
+        /**
+         * Wrapper method for jQuery's ```val``` method.
+         * @returns {jQuery}
+         */
+        val: function() {
+            var me = this, val;
+
+            val = me.$el.val.apply(me.$el, arguments);
+
+            if(typeof arguments[0] !== 'function') {
+                me.setSelectedOnTextElement();
+            }
+
+            return val;
+        },
+
+        /**
+         * Wrapper method for jQuery's ```show``` method.
+         * @returns {jQuery}
+         */
+        show: function() {
+            var me = this;
+
+            return me.$wrapEl.show.apply(me.$wrapEl, arguments);
+        },
+
+        /**
+         * Wrapper method for jQuery's ```hide``` method.
+         * @returns {jQuery}
+         */
+        hide: function() {
+            var me = this;
+
+            return me.$wrapEl.hide.apply(me.$wrapEl, arguments);
         },
 
         /**
