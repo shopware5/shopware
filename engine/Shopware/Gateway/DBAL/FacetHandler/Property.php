@@ -73,13 +73,13 @@ class Property extends DBAL
         $baseAttribute = new Attribute();
         $baseAttribute->set('active', false);
 
-        foreach($properties as $set) {
+        foreach ($properties as $set) {
             $setAttribute = clone $baseAttribute;
 
-            foreach($set->getGroups() as $group) {
+            foreach ($set->getGroups() as $group) {
                 $groupAttribute = clone $baseAttribute;
 
-                foreach($group->getOptions() as $option) {
+                foreach ($group->getOptions() as $option) {
                     $count = $valueIds[$option->getId()];
 
                     $attribute = clone $baseAttribute;

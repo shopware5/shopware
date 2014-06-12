@@ -143,7 +143,7 @@ class Product extends Hydrator
         }
 
         if (isset($data['__product_laststock'])) {
-            $product->setCloseouts((bool)($data['__product_laststock']));
+            $product->setCloseouts((bool) ($data['__product_laststock']));
         }
 
         if (isset($data['__product_metaTitle'])) {
@@ -155,11 +155,11 @@ class Product extends Hydrator
         }
 
         if (isset($data['__product_topseller'])) {
-            $product->setHighlight((bool)($data['__product_topseller']));
+            $product->setHighlight((bool) ($data['__product_topseller']));
         }
 
         if (isset($data['__product_notification'])) {
-            $product->setAllowsNotification((bool)($data['__product_notification']));
+            $product->setAllowsNotification((bool) ($data['__product_notification']));
         }
 
         if (isset($data['__product_keywords'])) {
@@ -170,6 +170,16 @@ class Product extends Hydrator
             $product->setCreatedAt(
                 new \DateTime($data['__product_datum'])
             );
+        }
+
+        if (isset($data['__product_configurator_set_id'])) {
+            $product->setHasConfigurator(
+                ($data['__product_configurator_set_id'] > 0)
+            );
+        }
+
+        if (isset($data['__topSeller_sales'])) {
+            $product->setSales((int) $data['__topSeller_sales']);
         }
 
         if (isset($data['__variant_id'])) {
@@ -188,7 +198,7 @@ class Product extends Hydrator
         }
 
         if (isset($data['__variant_shippingfree'])) {
-            $product->setShippingFree((bool)($data['__variant_shippingfree']));
+            $product->setShippingFree((bool) ($data['__variant_shippingfree']));
         }
 
         if (isset($data['__variant_instock'])) {
@@ -249,7 +259,7 @@ class Product extends Hydrator
             $this->extractFields('__productAttribute_', $data)
         );
 
-        foreach($translation as $key => $value) {
+        foreach ($translation as $key => $value) {
             if ($attribute->exists($key)) {
                 $attribute->set($key, $value);
             }
@@ -269,7 +279,7 @@ class Product extends Hydrator
             $translation = array_merge($translation, unserialize($data['__variant_translation']));
         }
 
-        foreach($translation as $key => $value) {
+        foreach ($translation as $key => $value) {
             if (strpos($key, 'attr') !== false) {
                 $new = '__productAttribute_' . $key;
                 $translation[$new] = $value;

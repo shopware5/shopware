@@ -59,7 +59,7 @@ class Category extends Hydrator
     private function assignCategoryData(Struct\Category $category, array $data)
     {
         if (isset($data['__category_id'])) {
-            $category->setId((int)$data['__category_id']);
+            $category->setId((int) $data['__category_id']);
         }
 
         if (isset($data['__category_path'])) {
@@ -96,7 +96,7 @@ class Category extends Hydrator
         }
 
         if (isset($data['__category_noviewselect'])) {
-            $category->setAllowViewSelect((bool)!$data['__category_noviewselect']);
+            $category->setAllowViewSelect((bool) !$data['__category_noviewselect']);
         }
 
         if (isset($data['__category_blog'])) {
@@ -104,7 +104,7 @@ class Category extends Hydrator
         }
 
         if (isset($data['__category_showfiltergroups'])) {
-            $category->setDisplayPropertySets((bool)$data['__category_showfiltergroups']);
+            $category->setDisplayPropertySets((bool) $data['__category_showfiltergroups']);
         }
 
         if (isset($data['__category_external'])) {
@@ -112,7 +112,7 @@ class Category extends Hydrator
         }
 
         if (isset($data['__category_hidefilter'])) {
-            $category->setDisplayFacets((bool)!$data['__category_hidefilter']);
+            $category->setDisplayFacets((bool) !$data['__category_hidefilter']);
         }
 
         if (isset($data['__category_hidetop'])) {

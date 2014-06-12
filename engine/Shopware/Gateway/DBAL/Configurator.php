@@ -77,10 +77,10 @@ class Configurator
     {
         $previous = null;
         foreach ($selection as $groupId => $optionId) {
-            $tableAlias = 'group_table_' . (int)$groupId;
-            $optionFilter = 'option_id_' . (int)$optionId;
-            $groupFilter = 'group_' . (int)$groupId;
-            $selectAlias = 'groupFilter_' . (int)$groupId;
+            $tableAlias = 'group_table_' . (int) $groupId;
+            $optionFilter = 'option_id_' . (int) $optionId;
+            $groupFilter = 'group_' . (int) $groupId;
+            $selectAlias = 'groupFilter_' . (int) $groupId;
 
             $query->addSelect(
                 'GROUP_CONCAT(' . $tableAlias . '.article_id) as ' . $selectAlias
@@ -104,8 +104,8 @@ class Configurator
                 '(' . $selectAlias . ' IS NOT NULL OR configuratorGroup.id = :' . $groupFilter . ')'
             );
 
-            $query->setParameter(':' . $optionFilter, (int)$optionId)
-                ->setParameter(':' . $groupFilter, (int)$groupId);
+            $query->setParameter(':' . $optionFilter, (int) $optionId)
+                ->setParameter(':' . $groupFilter, (int) $groupId);
         }
     }
 

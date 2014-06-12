@@ -28,17 +28,17 @@ class CustomerGroup extends Hydrator
 
         $customerGroup->setName($data['__customerGroup_description']);
 
-        $customerGroup->setDisplayGrossPrices((bool)($data['__customerGroup_tax']));
+        $customerGroup->setDisplayGrossPrices((bool) ($data['__customerGroup_tax']));
 
         $customerGroup->setKey($data['__customerGroup_groupkey']);
 
-        $customerGroup->setMinimumOrderValue((float)$data['__customerGroup_minimumorder']);
+        $customerGroup->setMinimumOrderValue((float) $data['__customerGroup_minimumorder']);
 
-        $customerGroup->setPercentageDiscount((float)$data['__customerGroup_discount']);
+        $customerGroup->setPercentageDiscount((float) $data['__customerGroup_discount']);
 
-        $customerGroup->setSurcharge((float)$data['__customerGroup_minimumordersurcharge']);
+        $customerGroup->setSurcharge((float) $data['__customerGroup_minimumordersurcharge']);
 
-        $customerGroup->setUseDiscount((bool)($data['__customerGroup_mode']));
+        $customerGroup->setUseDiscount((bool) ($data['__customerGroup_mode']));
 
         if (!empty($data['__customerGroupAttribute_id'])) {
             $attribute = $this->attributeHydrator->hydrate(

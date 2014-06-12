@@ -131,7 +131,7 @@ class CheapestPrice
             if (!array_key_exists($key, $priceRules) || empty($priceRules[$key])) {
                 continue;
             }
-            
+
             /**@var $cheapestPrice Struct\Product\PriceRule */
             $cheapestPrice = $priceRules[$key];
 

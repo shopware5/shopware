@@ -27,7 +27,7 @@ class Link extends Hydrator
     {
         $link = new Struct\Product\Link();
 
-        $link->setId((int)$data['__link_id']);
+        $link->setId((int) $data['__link_id']);
 
         $link->setDescription($data['__link_description']);
 

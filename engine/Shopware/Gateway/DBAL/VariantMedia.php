@@ -70,7 +70,7 @@ class VariantMedia
     public function getList(array $products, Struct\Context $context)
     {
         $ids = array();
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $ids[] = $product->getVariantId();
         }
 
@@ -88,7 +88,7 @@ class VariantMedia
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         $result = array();
-        foreach($data as $row) {
+        foreach ($data as $row) {
             $productId = $row['number'];
             $imageId   = $row['__image_id'];
 
@@ -128,7 +128,7 @@ class VariantMedia
     public function getCovers(array $products, Struct\Context $context)
     {
         $ids = array();
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $ids[] = $product->getVariantId();
         }
 
@@ -146,7 +146,7 @@ class VariantMedia
         $data = $statement->fetchAll(\PDO::FETCH_GROUP);
 
         $result = array();
-        foreach($data as $number => $row) {
+        foreach ($data as $number => $row) {
             $cover = array_shift($row);
 
             $result[$number] = $this->hydrator->hydrateProductImage($cover);

@@ -29,7 +29,7 @@ class Hydrator
 
     protected function convertArrayKeys($data, $keys)
     {
-        foreach($keys as $old => $new) {
+        foreach ($keys as $old => $new) {
             if (!isset($data[$old])) {
                 continue;
             }

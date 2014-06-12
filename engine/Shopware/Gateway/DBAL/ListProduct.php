@@ -121,6 +121,7 @@ class ListProduct
     {
         $query = $this->entityManager->getDBALQueryBuilder();
         $query->select($this->fieldHelper->getArticleFields())
+            ->addSelect($this->fieldHelper->getTopSellerFields())
             ->addSelect($this->fieldHelper->getVariantFields())
             ->addSelect($this->fieldHelper->getUnitFields())
             ->addSelect($this->fieldHelper->getTaxFields())
@@ -135,6 +136,7 @@ class ListProduct
             ->leftJoin('product', 's_core_pricegroups', 'priceGroup', 'priceGroup.id = product.pricegroupID')
             ->leftJoin('variant', 's_articles_attributes', 'productAttribute', 'productAttribute.articledetailsID = variant.id')
             ->leftJoin('product', 's_articles_supplier_attributes', 'manufacturerAttribute', 'manufacturerAttribute.id = product.supplierID')
+            ->leftJoin('product', 's_articles_top_seller_ro', 'topSeller', 'topSeller.article_id = product.id')
             ->where('variant.ordernumber IN (:numbers)')
             ->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
 

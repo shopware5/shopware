@@ -38,7 +38,7 @@ class Country extends Hydrator
     {
         $area = new Area();
 
-        $area->setId((int)$data['__countryArea_id']);
+        $area->setId((int) $data['__countryArea_id']);
 
         $area->setName($data['__countryArea_name']);
 
@@ -82,27 +82,27 @@ class Country extends Hydrator
         }
 
         if (isset($data['__country_display_state_in_registration'])) {
-            $country->setDisplayStateSelection((bool)$data['__country_display_state_in_registration']);
+            $country->setDisplayStateSelection((bool) $data['__country_display_state_in_registration']);
         }
 
         if (isset($data['__country_force_state_in_registration'])) {
-            $country->setRequiresStateSelection((bool)$data['__country_force_state_in_registration']);
+            $country->setRequiresStateSelection((bool) $data['__country_force_state_in_registration']);
         }
 
         if (isset($data['__country_shippingfree'])) {
-            $country->setShippingFree((bool)$data['__country_shippingfree']);
+            $country->setShippingFree((bool) $data['__country_shippingfree']);
         }
 
         if (isset($data['__country_taxfree'])) {
-            $country->setTaxFree((bool)$data['__country_taxfree']);
+            $country->setTaxFree((bool) $data['__country_taxfree']);
         }
 
         if (isset($data['__country_taxfree_ustid'])) {
-            $country->setTaxFreeForVatId((bool)$data['__country_taxfree_ustid']);
+            $country->setTaxFreeForVatId((bool) $data['__country_taxfree_ustid']);
         }
 
         if (isset($data['__country_taxfree_ustid_checked'])) {
-            $country->setVatIdCheck((bool)$data['__country_taxfree_ustid_checked']);
+            $country->setVatIdCheck((bool) $data['__country_taxfree_ustid_checked']);
         }
 
         if ($data['__countryAttribute_id'] !== null) {
@@ -126,7 +126,7 @@ class Country extends Hydrator
         if (empty($translation[$id])) {
             return array();
         }
-        
+
         if (empty($mapping)) {
             return $translation;
         }
@@ -141,7 +141,7 @@ class Country extends Hydrator
     public function hydrateState(array $data)
     {
         $state = new State();
-        
+
         $translation = $this->getTranslation(
             $data,
             '__countryState_translation',
@@ -151,7 +151,7 @@ class Country extends Hydrator
 
         $data = array_merge($data, $translation);
 
-        $state->setId((int)$data['__countryState_id']);
+        $state->setId((int) $data['__countryState_id']);
 
         if (isset($data['__countryState_name'])) {
             $state->setName($data['__countryState_name']);

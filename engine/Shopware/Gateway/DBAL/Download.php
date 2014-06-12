@@ -52,7 +52,7 @@ class Download
      * @return Struct\Product\Download[] returns an array which indexed with the product number, each array contains an
      * additionally Download struct array.
      */
-    public function getList(array $products)
+    public function getList(array $products, Struct\Context $context)
     {
         $ids = array();
         foreach ($products as $product) {

@@ -107,7 +107,7 @@ class ListProduct
         $cheapestPrices = $this->cheapestPriceService->getList($products, $context);
 
         $result = array();
-        foreach($numbers as $number) {
+        foreach ($numbers as $number) {
             if (!array_key_exists($number, $products)) {
                 continue;
             }
@@ -123,7 +123,7 @@ class ListProduct
 
             $result[$number] = $product;
         }
-        
+
         return $result;
     }
 }

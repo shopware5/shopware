@@ -8,9 +8,26 @@ use Shopware\Struct;
 
 class SimilarProducts
 {
-    function __construct(ModelManager $entityManager)
-    {
+    /**
+     * @var \Shopware\Components\Model\ModelManager
+     */
+    private $entityManager;
+
+    /**
+     * @var \Shopware_Components_Config
+     */
+    private $config;
+
+    /**
+     * @param ModelManager $entityManager
+     * @param \Shopware_Components_Config $config
+     */
+    function __construct(
+        ModelManager $entityManager,
+        \Shopware_Components_Config $config
+    ) {
         $this->entityManager = $entityManager;
+        $this->config = $config;
     }
 
     /**
@@ -81,5 +98,77 @@ class SimilarProducts
         }
 
         return $related;
+    }
+
+    /**
+     * @param Struct\ListProduct[] $products
+     * @param Struct\Context $context
+     * @return array
+     */
+    public function getSimilarByCategory(array $products, Struct\Context $context)
+    {
+        $ids = array();
+        foreach ($products as $product) {
+            $ids[] = $product->getId();
+        }
+
+        $categoryId = 1;
+        if ($context->getShop() && $context->getShop()->getCategory()) {
+            $categoryId = $context->getShop()->getCategory()->getId();
+        }
+
+        $query = $this->entityManager->getDBALQueryBuilder();
+
+        $query->select(array(
+            'main.articleID',
+            "GROUP_CONCAT(subVariant.ordernumber SEPARATOR '|') as similar"
+        ));
+
+        $query->from('s_articles_categories', 'main');
+
+        $query->innerJoin(
+            'main',
+            's_articles_categories',
+            'sub',
+            'sub.categoryID = main.categoryID AND sub.articleID != main.articleID'
+        );
+
+        $query->innerJoin(
+            'sub',
+            's_articles_details',
+            'subVariant',
+            'subVariant.articleID = sub.articleID AND subVariant.kind = 1'
+        );
+
+        $query->innerJoin(
+            'main',
+            's_categories',
+            'category',
+            'category.id = sub.categoryID AND category.id = main.categoryID'
+        );
+
+        $query->where('main.articleID IN (:ids)')
+            ->andWhere('category.path LIKE :path');
+
+        $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
+            ->setParameter(':path', '%|'. (int) $categoryId.'|');
+
+        $query->groupBy('main.articleID');
+
+        $statement = $query->execute();
+        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        $limit = 3;
+        if ($this->config->offsetExists('similarLimit') && $this->config->get('similarLimit') > 0) {
+            $limit = (int) $this->config->get('similarLimit');
+        }
+
+        $result = array();
+        foreach ($data as $row) {
+            $similar = explode('|', $row['similar']);
+            $result[$row['articleID']] = array_slice($similar, 0, $limit);
+        }
+
+        return $result;
     }
 }

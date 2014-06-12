@@ -54,7 +54,7 @@ class PriceGroupDiscount
         Struct\Customer\Group $customerGroup
     ) {
         $ids = array();
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $ids[] = $product->getId();
         }
 
@@ -93,13 +93,13 @@ class PriceGroupDiscount
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         $discounts = array();
-        foreach($data as $priceDiscount) {
+        foreach ($data as $priceDiscount) {
             $id = $priceDiscount['__priceGroupDiscount_groupID'];
             $discounts[$id][] = $this->priceHydrator->hydratePriceDiscount($priceDiscount);
         }
-        
+
         $result = array();
-        foreach($products as $product) {
+        foreach ($products as $product) {
             if (!$product->getPriceGroup()) {
                 continue;
             }
@@ -149,7 +149,7 @@ class PriceGroupDiscount
         if (empty($data)) {
             return null;
         }
-        
+
         return $this->priceHydrator->hydratePriceDiscount(
             $data
         );
