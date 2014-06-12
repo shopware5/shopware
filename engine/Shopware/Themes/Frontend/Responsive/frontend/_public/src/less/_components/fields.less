@@ -32,78 +32,88 @@ input[type="email"] {
 	}
 }
 
-/* A select field.
-
-```
-<div class="field--select">
-    <span class="arrow"></span>
-    <select name="selection" size="1">
-        <option>Option 1</option>
-        <option>Option 2</option>
-        <option>Option 3</option>
-    </select>
-</div>
-```
-*/
-.field--select {
+.js--fancy-select {
 	.border-radius(3px);
 	.box-sizing();
 	.unitize-width(290);
     .unitize(44, 16, line-height);
 	.box-shadow(0 1px 1px 0 rgba(0, 0, 0, 0.1));
 	.linear-gradient(#ffffff, #f7f8fa);
+	.clearfix();
 	display: inline-block;
 	position: relative;
 	border: 1px solid @borderColor;
 	overflow: hidden;
+	cursor: pointer;
 
-	.arrow {
-		.user-select(none);
-		.unitize-width(34);
-		.unitize(6, 16, font-size);
-		.unitize(44, 16, line-height);
-        .linear-gradient(#ffffff, #f7f8fa);
-		cursor: pointer;
-		display: block;
-		position: absolute;
-		top: 0;
-		right: 0;
-		border-left: 1px solid @borderColor;
-		font-family: 'shopware';
-		text-align: center;
-        pointer-events: none;
-
-		&:before {
-			content: "\e612";
-		}
+	&:hover {
+		.linear-gradient(#f7f8fa, #ffffff);
 	}
 
 	select {
-		.unitize-padding(5, 0, 5, 10);
-        .unitize(32, 16, line-height);
+		.unitize-height(44);
 		.appearance(none);
-		color: @primaryTextColor;
-		background: transparent;
-		border: 0 none;
+		.opacity(0);
+		position: absolute;
+		top: 0; left: 0;
 		width: 100%;
+		display: block;
 		cursor: pointer;
 
-        &.has--error {
-            color: @errorText;
-            background: @errorBackground;
-        }
+		// Removes the blue glow around the select field
+		// see: http://www.faridesign.net/2012/02/remove-border-around-input-chrome-safari/
+		&:focus {
+			outline: none;
+		}
 	}
 
-	option {
+	.js--fancy-select-text,
+	.js--fancy-select-trigger {
+		float: left;
+	}
+
+	.js--fancy-select-text {
 		.unitize-padding(0, 10);
-		display: block;
-		border: 0 none;
-		background: #fff;
+		border-right: 1px solid #fff;
+		font-weight: bold;
+		width: 85%;
+
+		// CSS truncating
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.js--fancy-select-trigger {
+		.unitize(6, 16, font-size);
+		border-left: 1px solid @borderColor;
+		width: 15%;
+		text-align: center;
+		text-shadow: 0 1px 0 #fff;
+		font-weight: bold;
 	}
 
+	// State disabled
 	&.is--disabled {
 		.opacity(.5);
-		cursor: not-allowed;
+
+		select {
+			cursor: not-allowed;
+		}
+	}
+
+	// Error state
+	&.has--error {
+		color: @errorText;
+		border-color: @errorBorderColor;
+  		background: @errorBackground;
+
+		.js--fancy-select-trigger {
+			border-color: @errorBorderColor;
+		}
+
+		.js--fancy-select-text {
+			border-color: lighten(@errorBorderColor, 10%);
+		}
 	}
 }
 
@@ -140,20 +150,14 @@ input[type="email"] {
 }
 @media screen and (min-width: @desktopViewportWidth) {
 
-    .field--select {
+	.js--fancy-select {
         .unitize-width(290);
         .unitize(34, 16, line-height);
         .box-shadow(0 1px 1px 0 rgba(0, 0, 0, 0.1));
 
-        .arrow {
-            .unitize(36, 16, line-height);
-            display: block;
-        }
-
-        select {
-            .unitize-padding(5, 0, 5, 10);
-            .unitize(23, 16, line-height);
-        }
+		select {
+			.unitize-height(34);
+		}
     }
 
 }
