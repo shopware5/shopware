@@ -115,7 +115,7 @@
          */
         setError: function () {
             var me = this;
-            return me.$el.addClass(me.opts.errorCls);
+            return me.$wrapEl.addClass(me.opts.errorCls);
         },
 
         /**
@@ -124,7 +124,7 @@
          */
         removeError: function () {
             var me = this;
-            return me.$el.removeClass(me.opts.errorCls);
+            return me.$wrapEl.removeClass(me.opts.errorCls);
         },
 
         /**
