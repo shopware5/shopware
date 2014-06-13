@@ -7,7 +7,7 @@
 
 {* Main content *}
 {block name="frontend_index_content"}
-	<div class="account--change-shipping account--content register--content">
+	<div class="account--change-shipping account--content register--content" data-register="true">
 
 		{* Shipping headline *}
 		{block name="frontend_account_shipping_headline"}
@@ -28,6 +28,10 @@
 				{block name="frontend_account_shipping_form"}
 					<div class="account--shipping-form">
 						<form name="frmRegister" method="post" action="{url action=saveShipping sTarget=$sTarget}">
+
+							<div class="register--alt-shipping is--hidden">
+								<input type="checkbox" value="1" checked="checked" />
+							</div>
 
 							{* Shipping fieldset *}
 							{block name="frontend_account_shipping_fieldset"}
