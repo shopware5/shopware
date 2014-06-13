@@ -1,7 +1,7 @@
-@form
+@form @noResponsive
 Feature: forms
 
-  @javascript
+  @captcha @javascript
   Scenario Outline: Each form has its captcha
     Given I am on form <formId>
     Then I should see "<formTitle>"
@@ -16,7 +16,7 @@ Feature: forms
     | 16     | Anfrage-Formular   |
     | 22     | Support beantragen |
 
-  @javascript
+  @captcha @javascript
   Scenario: Also the customer evaluation form on a detail page has a captcha
     Given I am on the detail page for article 167
     Then  I should see "Sonnenbrille Speed Eyes"

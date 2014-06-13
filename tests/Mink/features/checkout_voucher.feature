@@ -1,4 +1,4 @@
-@checkout
+@checkout @registration @noResponsive
 Feature: Checkout articles with voucher
 
   Scenario: I can use vouchers in my basket and pay as new customer via prepayment

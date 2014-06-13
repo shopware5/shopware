@@ -6,8 +6,9 @@ Feature: Blog
     Then I should see "Blogfunktion"
     And I should see 3 blog articles
 
+  @filter
   Scenario Outline: I can filter the blog articles by its date
-    Given I follow "<date> (<count>)"
+    Given I follow "<date>"
     Then I should see <count> blog articles
     And I should see "<title>"
 
@@ -17,7 +18,7 @@ Feature: Blog
     | 2012-08-18 | Sonnenschutz - so gehören Sie zur Crème de la Crème | 1     |
     | 2012-08-08 | Ich packe meinen Koffer                             | 1     |
 
-
+  @crossselling
   Scenario Outline: I can see some matching articles on each blog article page
     Given I follow "<title>"
     Then I should see "Passende Artikel"
@@ -29,7 +30,7 @@ Feature: Blog
     | Sonnenschutz - so gehören Sie zur Crème de la Crème | 5     |
     | Ich packe meinen Koffer                             | 5     |
 
-  @javascript
+  @captcha @javascript @noResponsive
   Scenario Outline: I can see a captcha on each blog article page
     Given I follow "<title>"
     Then I should see "Kommentar schreiben"
@@ -40,4 +41,3 @@ Feature: Blog
     | Der Sommer wird bunt                                |
     | Sonnenschutz - so gehören Sie zur Crème de la Crème |
     | Ich packe meinen Koffer                             |
-

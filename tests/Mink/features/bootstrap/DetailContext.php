@@ -48,5 +48,15 @@ class DetailContext extends SubContext
         $this->getPage('Detail')->checkEvaluations($average, $evaluations);
     }
 
+    /**
+     * @When /^I choose the following article configuration:$/
+     */
+    public function iChooseTheFollowingArticleConfiguration(TableNode $configuration)
+    {
+        $configuration = $configuration->getHash();
+
+        $this->getPage('Detail')->configure($configuration);
+    }
+
 }
 

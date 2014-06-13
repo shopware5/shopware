@@ -26,7 +26,7 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Given /^I log in as "(?P<email>[^"]*)" with password "(?P<password>[^"]*)"$/
+     * @Given /^I log in with email "(?P<email>[^"]*)" and password "(?P<password>[^"]*)"$/
      */
     public function iLogInAsWithPassword($email, $password)
     {
@@ -34,12 +34,20 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Given /^I log in successful as "(?P<email>[^"]*)" with password "(?P<password>[^"]*)"$/
+     * @Given /^I log in successful as "(?P<username>[^"]*)" with email "(?P<email>[^"]*)" and password "(?P<password>[^"]*)"$/
      */
-    public function iLogInSuccessfulAsWithPassword($email, $password)
+    public function iLogInSuccessfulAsWithPassword($username, $email, $password)
     {
         $this->getPage('Account')->login($email, $password);
-        $this->getPage('Account')->verifyLogin();
+        $this->getPage('Account')->verifyLogin($username);
+    }
+
+    /**
+     * @When /^I log me out$/
+     */
+    public function iLogMeOut()
+    {
+        $this->getPage('Account')->logout();
     }
 
     /**
@@ -56,6 +64,36 @@ class AccountContext extends SubContext
     public function iChangeMyPasswordFromToWithConfirmation($currentPassword, $password, $passwordConfirmation)
     {
         $this->getPage('Account')->changePassword($currentPassword, $password, $passwordConfirmation);
+    }
+
+    /**
+     * @When /^my current payment method is "(?P<payment>[^"]*)"$/
+     * @Given /^my current payment method should be "(?P<payment>[^"]*)"$/
+     */
+    public function myCurrentPaymentMethodShouldBe($payment)
+    {
+        $this->getPage('Account')->checkPayment($payment);
+    }
+
+    /**
+     * @When /^I change my payment method to (?P<method>\d+)$/
+     */
+    public function iChangeMyPaymentMethodTo($value)
+    {
+        $this->getPage('Account')->changePayment($value);
+    }
+
+    /**
+     * @When /^I change my payment method to debit 2 using account of "(?P<name>[^"]*)" \(no\. "(?P<account>\d+)"\) of bank "(?P<bank>[^"]*)" \(code "(?P<code>\d+)"\)$/
+     */
+    public function iChangeMyPaymentMethodToDebitUsingAccountOfNoOfBankCode($name, $kto, $bank, $blz)
+    {
+        $data = array('kontonr' => $kto,
+            'blz' => $blz,
+            'bank' => $bank,
+            'bank2' => $name);
+
+        $this->getPage('Account')->changePayment(2, $data);
     }
 
     /**
@@ -76,5 +114,21 @@ class AccountContext extends SubContext
         $values = $fieldValues->getHash();
 
         $this->getPage('Account')->changeShipping($values);
+    }
+
+    /**
+     * @When /^I want to choose an other "([^"]*)" address$/
+     */
+    public function iWantToChooseAnOtherAddress($type)
+    {
+        $this->getPage('Account')->chooseAddress($type);
+    }
+
+    /**
+     * @Given /^the "([^"]*)" address should be "([^"]*)"$/
+     */
+    public function theAddressShouldBe($type, $address)
+    {
+        $this->getPage('Account')->checkAddress($type, $address);
     }
 }
