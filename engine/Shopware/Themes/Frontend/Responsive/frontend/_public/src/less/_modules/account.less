@@ -19,16 +19,15 @@
     input[type="text"],
     input[type="password"],
     input[type="email"] {
-        .unitize-margin(0, 0, 10, 0);
         width: 100%;
     }
 }
 
 .account--welcome {
-    .unitize(10, 16, margin-bottom);
+    .unitize(20, 16, margin-bottom);
 
     .panel--body {
-        .unitize-padding(10, 20, 20, 20);
+        .unitize-padding(10, 20, 0, 20);
     }
 }
 
@@ -58,6 +57,15 @@
 .account--shipping-address {
     .panel--body {
         .unitize(200, 16, height)
+    }
+}
+
+.account--newsletter {
+    p {
+        margin: 0;
+    }
+    input[type="checkbox"] {
+        .unitize-margin(0, 10, 0, 0);
     }
 }
 
@@ -400,6 +408,10 @@
     .order--price-unit,
     .order--current-price {
         display: block;
+    }
+
+    .order--download {
+        .unitize-margin(10, 0, 0, 0);
     }
 
     .order--quantity {
