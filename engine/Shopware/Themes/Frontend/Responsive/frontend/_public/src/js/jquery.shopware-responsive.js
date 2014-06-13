@@ -203,9 +203,7 @@ $(function() {
     }
 
     // Initialize the registration plugin
-    if($('body').hasClass('is--ctl-register')) {
-        $('div[data-register="true"]').register();
-    }
+    $('div[data-register="true"]').register();
 
     // Debug mode is enabled
     if($('.debug--panel').length) {
