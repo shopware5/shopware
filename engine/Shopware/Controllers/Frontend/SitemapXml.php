@@ -41,11 +41,6 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
      */
     public function init()
     {
-        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
-
-        $this->Front()->setParam('disableOutputBuffering', true);
-        $this->Front()->returnResponse(true);
-
         $this->Response()->setHeader('Content-Type', 'text/xml; charset=utf-8');
         $this->Response()->sendResponse();
 
@@ -61,24 +56,16 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n";
-        echo "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\r\n";
-
         $parentId = Shopware()->Shop()->get('parentID');
 
-        $this->readCategoryUrls($parentId);
-
-        $this->readArticleUrls($parentId);
-
-        $this->readBlogUrls($parentId);
-
-        $this->readStaticUrls();
-
-        $this->readSupplierUrls();
-
-        $this->readLandingPageUrls();
-
-        echo "</urlset>\r\n";
+        $this->View()->sitemap = array(
+            'categories' => $this->readCategoryUrls($parentId),
+            'articles' => $this->readArticleUrls($parentId),
+            'blogs' => $this->readBlogUrls($parentId),
+            'customPages' => $this->readStaticUrls(),
+            'suppliers' => $this->readSupplierUrls(),
+            'landingPages' => $this->readLandingPageUrls()
+        );
     }
 
     /**
@@ -90,49 +77,21 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
     {
         $categories = $this->repository->getActiveChildrenList($parentId);
 
-        foreach ($categories as $category) {
-            if (!empty($category['external'])) {
-                continue;
+        foreach ($categories as &$category) {
+            $category['show'] = empty($category['external']);
+
+            $category['urlParams'] = array(
+                'sViewport' => 'cat',
+                'sCategory' => $category['id'],
+                'title' => $category['name']
+            );
+
+            if ($category['blog']) {
+                $category['urlParams']['sViewport'] = 'blog';
             }
-
-            //use a different link if it is a blog category
-            if (!empty($category['blog'])) {
-                $category['link'] = $this->Front()->Router()->assemble(array(
-                    'sViewport' => 'blog',
-                    'sCategory' => $category['id'],
-                    'title' => $category['name']
-                ));
-            } else {
-                $category['link'] = $this->Front()->Router()->assemble(array(
-                    'sViewport' => 'cat',
-                    'sCategory' => $category['id'],
-                    'title' => $category['name']
-                ));
-            }
-
-            $this->printCategoryUrl(array(
-                'changed' => $category['changed'],
-                'link' => $category['link']
-            ));
         }
-    }
 
-    /**
-     * Print category url
-     *
-     * @param array $url
-     */
-    public function printCategoryUrl($url)
-    {
-        $line = '<url>';
-        $line .= '<loc>' . $url['link'] . '</loc>';
-        if (!empty($url['changed'])) {
-            $line .= '<lastmod>' . $url['changed']->format('Y-m-d') . '</lastmod>';
-        }
-        $line .= '<changefreq>weekly</changefreq><priority>0.5</priority>';
-        $line .= '</url>';
-        $line .= "\r\n";
-        echo $line;
+        return $categories;
     }
 
     /**
@@ -142,6 +101,8 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
      */
     public function readArticleUrls($parentId)
     {
+        $articles = array();
+
         $sql = "
             SELECT
                 a.id,
@@ -157,16 +118,18 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
             GROUP BY a.id
         ";
         $result = Shopware()->Db()->query($sql, array($parentId));
-        if (!$result->rowCount()) {
-            return;
-        }
-        while ($url = $result->fetch()) {
-            $url['link'] = $this->Front()->Router()->assemble(array(
+
+        while ($article = $result->fetch()) {
+            $article['changed'] = new DateTime($article['changed']);
+            $article['urlParams'] = array(
                 'sViewport' => 'detail',
-                'sArticle'  => $url['id']
-            ));
-            $this->printArticleUrls($url);
+                'sArticle'  => $article['id']
+            );
+
+            $articles[] = $article;
         }
+
+        return $articles;
     }
 
     /**
@@ -176,6 +139,8 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
      */
     public function readBlogUrls($parentId)
     {
+        $blogs = array();
+
         $query = $this->repository->getBlogCategoriesByParentQuery($parentId);
         $blogCategories = $query->getArrayResult();
 
@@ -184,7 +149,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
             $blogIds[] = $blogCategory["id"];
         }
         if (empty($blogIds)) {
-            return;
+            return $blogs;
         }
         $blogIds = Shopware()->Db()->quote($blogIds);
 
@@ -194,36 +159,20 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
             WHERE active = 1 AND category_id IN($blogIds)
             ";
         $result = Shopware()->Db()->query($sql);
-        if (!$result->rowCount()) {
-            return;
-        }
-        while ($blogUrlData = $result->fetch()) {
-            $blogUrlData['link'] = $this->Front()->Router()->assemble(array(
+
+        while ($blog = $result->fetch()) {
+            $blog['changed'] = new DateTime($blog['changed']);
+            $blog['urlParams'] = array(
                 'sViewport' => 'blog',
                 'sAction' => 'detail',
-                'sCategory' => $blogUrlData['category_id'],
-                'blogArticle' => $blogUrlData['id']
-            ));
-            $this->printArticleUrls($blogUrlData);
-        }
-    }
+                'sCategory' => $blog['category_id'],
+                'blogArticle' => $blog['id']
+            );
 
-    /**
-     * Print article url
-     *
-     * @param array $url
-     */
-    public function printArticleUrls($url)
-    {
-        $line = '<url>';
-        $line .= '<loc>' . $url['link'] . '</loc>';
-        if (!empty($url['changed'])) {
-            $line .= '<lastmod>' . $url['changed'] . '</lastmod>';
+            $blogs[] = $blog;
         }
-        $line .= '<changefreq>weekly</changefreq><priority>0.5</priority>';
-        $line .= '</url>';
-        $line .= "\r\n";
-        echo $line;
+
+        return $blogs;
     }
 
     /**
@@ -234,10 +183,28 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
         $sites = $this->getSitesByShopId(Shopware()->Shop()->getId());
 
         foreach ($sites as $site) {
-            $this->printSite($site);
+            if(!empty($site['children'])) {
+                $sites = array_merge($sites, $site['children']);
+            }
         }
-    }
 
+        foreach ($sites as &$site) {
+
+            $site['urlParams'] = array(
+                'sViewport' => 'custom',
+                'sCustom' => $site['id']
+            );
+
+            if (!empty($site['link'])) {
+                $userParams = parse_url($site['link'], PHP_URL_QUERY);
+                parse_str($userParams, $site['urlParams']);
+            }
+
+            $site['show'] = $this->filterLink($site['link']);
+        }
+
+        return $sites;
+    }
     /**
      * Helper function to read all static pages of a shop from the database
      * @return array
@@ -274,32 +241,6 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
     }
 
     /**
-     * Helper function to print a custom page and its children to sitemap.xml
-     * @param $site
-     * @return mixed
-     */
-    private function printSite($site)
-    {
-        if (!$this->filterLink($site['link'])) {
-            return;
-        }
-
-        $this->printCategoryUrl(
-            $this->getSitemapArray(
-                $site['id'],
-                $site['changed'],
-                'custom',
-                'sCustom',
-                $site['link']
-            )
-        );
-
-        foreach ($site['children'] as $child) {
-            $this->printSite($child);
-        }
-    }
-
-    /**
      * Helper function to filter predefined links, which should not be in the sitemap (external links, sitemap links itself)
      * Returns false, if the link is not allowed
      * @param string $link
@@ -333,20 +274,18 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
         $builder = $supplierRepository->createQueryBuilder('Supplier');
         $suppliers = $builder->getQuery()->getArrayResult();
 
-        foreach ($suppliers as $supplier) {
-            $this->printCategoryUrl(
-                $this->getSitemapArray(
-                    $supplier['id'],
-                    $supplier['changed'],
-                    'supplier',
-                    'sSupplier'
-                )
+        foreach ($suppliers as &$supplier) {
+            $supplier['urlParams'] = array(
+                'sViewport' => 'supplier',
+                'sSupplier' => $supplier['id']
             );
         }
+
+        return $suppliers;
     }
 
     /**
-     * Helper functio to read the landing pages urls
+     * Helper function to read the landing pages urls
      */
     private function readLandingPageUrls()
     {
@@ -356,21 +295,16 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
         $builder = $emotionRepository->getCampaignsByCategoryId(Shopware()->Shop()->getCategory()->getId());
         $campaigns = $builder->getQuery()->getArrayResult();
 
-        foreach ($campaigns as $campaign) {
-            if (!$this->filterCampaign($campaign[0]['validFrom'], $campaign[0]['validTo'])) {
-                continue;
-            }
-
-            $this->printCategoryUrl(
-                $this->getSitemapArray(
-                    $campaign[0]['id'],
-                    $campaign[0]['modified'],
-                    'campaign',
-                    'emotionId',
-                    array('sCategory' => $campaign['categoryId'])
-                )
+        foreach ($campaigns as &$campaign) {
+            $campaign['show'] = $this->filterCampaign($campaign[0]['validFrom'], $campaign[0]['validTo']);
+            $campaign['urlParams'] = array(
+                'sViewport' => 'campaign',
+                'emotionId' => $campaign[0]['id'],
+                'sCategory' => $campaign['categoryId']
             );
         }
+
+        return $campaigns;
     }
 
     /**
@@ -393,43 +327,5 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
         }
 
         return true;
-    }
-
-    /**
-     * Helper function to create a sitemap readable array
-     * If $link is an array, it will be used as additional params for link assembling
-     * @param integer $id
-     * @param string $changed
-     * @param string $viewport
-     * @param string $idParam
-     * @param string|array $link
-     * @return array
-     */
-    private function getSitemapArray($id, $changed, $viewport, $idParam, $link = null)
-    {
-        $userParams = array();
-
-        if (is_string($link)) {
-            $userParams = parse_url($link, PHP_URL_QUERY);
-            parse_str($userParams, $userParams);
-        }
-
-        if (empty($userParams)) {
-            $userParams = array(
-                'sViewport' => $viewport,
-                $idParam => $id
-            );
-        }
-
-        if (is_array($link)) {
-            $userParams = array_merge($userParams, $link);
-        }
-
-        $link = $this->Front()->Router()->assemble($userParams);
-
-        return array(
-            'changed' => $changed,
-            'link' => $link
-        );
     }
 }
