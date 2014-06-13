@@ -134,8 +134,6 @@
             areaSelection.removeClass('is--hidden');
             plugin.setEnabled();
         }
-
-        console.log(areaSelection);
     };
 
     Plugin.prototype.onSubmitBtn = function(event) {
