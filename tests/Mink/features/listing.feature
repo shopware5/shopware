@@ -1,6 +1,7 @@
 @listing
 Feature: Show Listing
 
+  @currency @noResponsive
   Scenario Outline: I can change the currency and check the ab-prices in euro and dollar
     Given I am on the listing page:
       | parameter | value |
@@ -26,13 +27,12 @@ Feature: Show Listing
   Scenario: I can change the view method
     Given I am on the listing page:
       | parameter | value |
-    Then  the response should contain "table-view active"
-    But   the response should not contain "list-view active"
+    Then  the articles should be shown in a table-view
 
     When  I follow "Listen-Ansicht"
-    Then  the response should contain "list-view active"
-    But   the response should not contain "table-view active"
+    Then  the articles should be shown in a list-view
 
+  @filter
   Scenario: I can filter the articles by supplier
     Given I am on the listing page:
       | parameter | value |
@@ -50,6 +50,7 @@ Feature: Show Listing
     When I reset all filters
     Then I should see 48 articles
 
+  @filter
   Scenario: I can filter the articles by custom filters
     Given I am on the listing page:
       | parameter | value |
@@ -70,7 +71,7 @@ Feature: Show Listing
     When I reset all filters
     Then I should see 10 articles
 
-  @javascript
+  @javascript @noResponsive
   Scenario: I can change the sort
     Given I am on the listing page:
       | parameter | value |
@@ -96,7 +97,7 @@ Feature: Show Listing
     Then  I should see "Kundengruppen Brutto / Nettopreise"
     But   I should not see "Artikel mit Abverkauf"
 
-  @javascript
+  @javascript @noResponsive
   Scenario Outline: I can change the articles per page
     Given I am on the listing page:
       | parameter | value  |
@@ -113,7 +114,7 @@ Feature: Show Listing
     | 36   | 48 |
     | 48   | 12 |
 
-  @javascript
+  @language @javascript @noResponsive
   Scenario: I can change the language
     Given I am on the listing page:
       | parameter | value |
@@ -132,3 +133,24 @@ Feature: Show Listing
 
     When  I select "Deutsch" from "__shop"
     Then  I should see "Reisekoffer Set"
+
+  @customergroups
+  Scenario:
+    Given the password of user "mustermann@b2b.de" is "shopware"
+    And   I log in successful as "Händler Kundengruppe-Netto" with email "mustermann@b2b.de" and password "shopware"
+    And   I am on the listing page:
+      | parameter | value |
+      | sCategory | 30    |
+
+    Then  The price of the article on position 1 should be "16,81 €"
+    And   The price of the article on position 2 should be "42,02 €"
+    And   The price of the article on position 3 should be "6,71 €"
+
+    When  I log me out
+    And   I am on the listing page:
+      | parameter | value |
+      | sCategory | 30    |
+
+    Then  The price of the article on position 1 should be "20,00 €"
+    And   The price of the article on position 2 should be "50,00 €"
+    And   The price of the article on position 3 should be "7,99 €"

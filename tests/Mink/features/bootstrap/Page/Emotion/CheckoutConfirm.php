@@ -1,4 +1,5 @@
 <?php
+namespace Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Behat\Behat\Context\Step;
@@ -99,5 +100,15 @@ class CheckoutConfirm extends Page
 
         $this->checkField('sAGB');
         $this->pressButton('basketButton');
+    }
+
+    public function getOrderNumber()
+    {
+        $orderDetails = $this->find('css', 'div#finished div.orderdetails')->getText();
+
+        preg_match("/\d+/",$orderDetails,$orderNumber);
+        $orderNumber = intval($orderNumber[0]);
+
+        return $orderNumber;
     }
 }

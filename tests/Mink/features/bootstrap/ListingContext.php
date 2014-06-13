@@ -48,4 +48,28 @@ class ListingContext extends SubContext
     {
         $this->getPage('Listing')->countArticles($count);
     }
+
+    /**
+     * @Then /^the articles should be shown in a table-view$/
+     */
+    public function theArticlesShouldBeShownInATableView()
+    {
+        $this->getPage('Listing')->checkView('table');
+    }
+
+    /**
+     * @Then /^the articles should be shown in a list-view$/
+     */
+    public function theArticlesShouldBeShownInAListView()
+    {
+        $this->getPage('Listing')->checkView('list');
+    }
+
+    /**
+     * @When /^I order the article on position (\d+)$/
+     */
+    public function iOrderTheArticleOnPosition($position)
+    {
+        $this->getPage('Listing')->orderArticle($position);
+    }
 }
