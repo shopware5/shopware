@@ -10,36 +10,34 @@
 		</h2>
 	{/block}
 	
-	{* Properties *}
-	{block name='frontend_detail_description_properties'}
-		{if $sArticle.sProperties}
-			<ul class="description--properties">
-
-				{foreach $sArticle.sProperties as $sProperty}
-					<li class="property--entry">
-
-						{* Property label *}
-						{block name='frontend_detail_description_properties_label'}
-							<strong class="property--label">
-								{$sProperty.name}:
-							</strong>
-						{/block}
-
-						{* Property content *}
-						{block name='frontend_detail_description_properties_content'}
-							{$sProperty.value}
-						{/block}
-					</li>
-				{/foreach}
-			</ul>
-		{/if}
-	{/block}
-	
 	{* Product description *}
 	{block name='frontend_detail_description_text'}
         <div class="product--description" itemprop="description">
             {$sArticle.description_long}
         </div>
+	{/block}
+
+	{* Properties *}
+	{block name='frontend_detail_description_properties'}
+		{if $sArticle.sProperties}
+			<div class="panel has--border">
+			    <table class="panel--table">
+					{foreach $sArticle.sProperties as $sProperty}
+						<tr>
+							{* Property label *}
+							{block name='frontend_detail_description_properties_label'}
+								<th>{$sProperty.name}:</th>
+							{/block}
+
+							{* Property content *}
+							{block name='frontend_detail_description_properties_content'}
+								<td>{$sProperty.value}</td>
+							{/block}
+						</tr>
+					{/foreach}
+			    </table>
+			</div>
+		{/if}
 	{/block}
 	
 	{* Product - Further links *}
