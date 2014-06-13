@@ -691,6 +691,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $basket = $this->basket->sGetBasket();
 
+        $basket['sCurrencyId'] = Shopware()->Shop()->getCurrency()->getId();
+        $basket['sCurrencyName'] = Shopware()->Shop()->getCurrency()->getCurrency();
         $basket['sShippingcostsWithTax'] = $shippingcosts['brutto'];
         $basket['sShippingcostsNet'] = $shippingcosts['netto'];
         $basket['sShippingcostsTax'] = $shippingcosts['tax'];

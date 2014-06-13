@@ -40,6 +40,7 @@ class Shopware_Plugins_Frontend_Google_Bootstrap extends Shopware_Components_Plu
         );
 
         $form = $this->Form();
+        /** @var \Shopware\Models\Config\Form $parent */
         $parent = $this->Forms()->findOneBy(array('name' => 'Interface'));
         $form->setParent($parent);
         $form->setElement('text', 'tracking_code', array(
@@ -57,6 +58,39 @@ class Shopware_Plugins_Frontend_Google_Bootstrap extends Shopware_Components_Plu
             'value' => true,
             'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
         ));
+        $form->setElement('combo', 'trackingLib', array(
+            'label' => 'Tracking Bibliothek',
+            'value' => 'ga',
+            'store' => array(
+                array('ga', 'Google Analytics'),
+                array('ua', 'Universal Analytics'),
+            ),
+            'description' => 'Welche Tracking Bibliothek soll benutzt werden? Standardmäßig wird die veraltete Google Analytics verwendet. Der Wechsel zur Universal-Analytics-Bibliothek erfordert, das Sie Ihre Google Analytics Einstellungen aktualisieren. Für mehr Informationen besuchen Sie die offizielle Google-Dokumentation.',
+            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
+        ));
+
+        $this->addFormTranslations(
+            array(
+                'en_GB' => array(
+                    'plugin_form' => array(
+                        'label' => 'Google Analytics'
+                    ),
+                    'trackingLib' => array(
+                        'label' => 'Tracking library',
+                        'description' => 'Tracking library to use. Defaults to legacy Google Analytics. Switching to Universal Analytics requires that you update you settings in your Google Analytics Admin page. Please check Google\'s official documentation for more info.'
+                    ),
+                    'tracking_code' => array(
+                        'label' => 'Google Analytics ID'
+                    ),
+                    'conversion_code' => array(
+                        'label' => 'Google Conversion ID'
+                    ),
+                    'anonymize_ip' => array(
+                        'label' => 'Anonymous IP address'
+                    ),
+                )
+            )
+        );
 
         return true;
     }
@@ -67,7 +101,8 @@ class Shopware_Plugins_Frontend_Google_Bootstrap extends Shopware_Components_Plu
     public function getInfo()
     {
         return array(
-            'label' => 'Google Analytics'
+            'version'   => $this->getVersion(),
+            'label'     => 'Google Analytics'
         );
     }
 
@@ -106,6 +141,16 @@ class Shopware_Plugins_Frontend_Google_Bootstrap extends Shopware_Components_Plu
         if (!empty($config->tracking_code)) {
             $view->GoogleTrackingID = $config->tracking_code;
             $view->GoogleAnonymizeIp = $config->anonymize_ip;
+            $view->GoogleTrackingLibrary = $config->trackingLib;
         }
+    }
+
+    /**
+     * Returns the version of the plugin as a string
+     *
+     * @return string
+     */
+    public function getVersion() {
+        return '2.0.0';
     }
 }
