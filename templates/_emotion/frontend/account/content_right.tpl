@@ -1,3 +1,4 @@
+{namespace name="frontend/account/sidebar"}
 
 <h2 class="headingbox largesize">{se name="AccountHeaderNavigation"}{/se}</h2>
 <div class="adminbox">
