@@ -119,14 +119,19 @@
 				</h2>
 			{/block}
 
+			{* Downloads list *}
 			{block name='frontend_detail_description_downloads_content'}
-				{foreach $sArticle.sDownloads as $download}
-					{block name='frontend_detail_description_downloads_content_link'}
-						<a href="{$download.filename}" target="_blank" class="content--link link--download" title="{s name="DetailDescriptionLinkDownload"}{/s} {$download.description}">
-                            <i class="icon--arrow-right"></i> {s name="DetailDescriptionLinkDownload"}{/s} {$download.description}
-						</a>
-					{/block}
-				{/foreach}
+				<ul class="content--list list--unstyled">
+					{foreach $sArticle.sDownloads as $download}
+						{block name='frontend_detail_description_downloads_content_link'}
+							<li class="list--entry">
+								<a href="{$download.filename}" target="_blank" class="content--link link--download" title="{s name="DetailDescriptionLinkDownload"}{/s} {$download.description}">
+									<i class="icon--arrow-right"></i> {s name="DetailDescriptionLinkDownload"}{/s} {$download.description}
+								</a>
+							</li>
+						{/block}
+					{/foreach}
+				</ul>
 			{/block}
 		{/if}
 	{/block}
