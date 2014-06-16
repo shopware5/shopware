@@ -280,7 +280,7 @@
 
         &.price--default {
             .unitize(20, 16, font-size);
-            .unitize-margin(10, 0, 0, 0);
+            .unitize-margin(10, 0, 20, 0);
             color: @primaryColor;
         }
 
@@ -471,12 +471,17 @@
                     .unitize(10, 16, left);
                     .unitize(10, 16, bottom);
                     position: absolute;
+                    margin: 0;
                 }
 
                 &.price--unit {
-                    .unitize-height(24px);
                     .unitize(24, 16, line-height);
                     .unitize(14, 16, font-size);
+                    .unitize(10, 16, left);
+                    .unitize(35, 16, bottom);
+                    .unitize(10, 16, padding-right);
+                    position: absolute;
+                    margin: 0;
                 }
             }
 
@@ -532,14 +537,18 @@
 
             .product--price {
                 &.price--default {
+                    .unitize(20, 16, bottom);
+                    .unitize(200, 16, left);
                     margin: 0;
-                    position: relative;
-                    top: 0;
-                    left: 0;
+                    position: absolute;
+                    top: auto;
                 }
 
                 &.price--unit {
-                    .unitize-margin(0, 10, 10, 200);
+                    .unitize(45, 16, bottom);
+                    .unitize(200, 16, left);
+                    position: absolute;
+                    margin: 0;
                 }
             }
         }
@@ -756,18 +765,6 @@
                 .unitize(14, 16, font-size);
                 .unitize(21, 16, line-height);
                 display: block;
-            }
-
-            .product--price {
-                &.price--default {
-                    position: relative;
-                    top: 0;
-                    left: 0;
-                }
-
-                &.price--unit {
-                    .unitize-margin(0, 10, 0, 200);
-                }
             }
 
             .product--actions {
