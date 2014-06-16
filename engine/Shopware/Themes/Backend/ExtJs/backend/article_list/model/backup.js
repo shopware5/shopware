@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,22 +19,15 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    ArticleList
- * @subpackage Article
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 /**
- * shopware AG (c) 2012. All rights reserved.
+ * Shopware Model - backup model
  *
- * todo@all: Documentation
+ * Represents a single backup
  */
-//{block name="backend/article_list/model/list"}
-Ext.define('Shopware.apps.ArticleList.model.List', {
+//{block name="backend/article_list/model/backup"}
+Ext.define('Shopware.apps.ArticleList.model.Backup', {
     /**
      * Extends the standard Ext Model
      * @string
@@ -46,33 +39,26 @@ Ext.define('Shopware.apps.ArticleList.model.List', {
      * @array
      */
     fields: [
-		//{block name="backend/article_list/model/list/fields"}{/block}
-        { name: 'id', type: 'int' },
-        { name: 'articleId', type: 'int' },
-
-        { name: 'number',   type: 'string' },
-        { name: 'name',     type: 'string' },
-        { name: 'supplier', type: 'string' },
-        { name: 'additionalText', type: 'string' },
-
-        { name: 'tax',      type: 'string' },
-        { name: 'price',    type: 'string' },
-
-        { name: 'active',   type: 'boolean' },
-        { name: 'inStock',  type: 'int' },
-        { name: 'imageSrc', type: 'string' },
-
-        { name: 'hasVariants',      type: 'boolean' },
-        { name: 'hasConfigurator',  type: 'boolean' },
-        { name: 'hasCategories',    type: 'boolean' }
+		//{block name="backend/article_list/model/backup/fields"}{/block}
+        { name: 'id', type: 'int', useNull: true },
+        { name: 'date', type: 'datetime', dateFormat: 'Y-m-d H:i:s' },
+        { name: 'items', type: 'int' },
+        { name: 'size', type: 'int' },
+        { name: 'path', type: 'string' },
+        { name: 'filterString', type: 'string' },
+        { name: 'operationString', type: 'string' }
     ],
 
     /**
      * Configure the data communication
      * @object
      */
-    proxy: {
-        type: 'ajax',
+    proxy:{
+        /**
+         * Set proxy type to ajax
+         * @string
+         */
+        type:'ajax',
 
         /**
          * Configure the url mapping for the different
@@ -80,19 +66,19 @@ Ext.define('Shopware.apps.ArticleList.model.List', {
          * @object
          */
         api: {
-            read:    '{url action="list"}',
-            update:  '{url action="update"}',
-            destroy: '{url action="delete"}'
+            destroy: '{url controller="ArticleList" action="delete"}'
         },
 
         /**
          * Configure the data reader
          * @object
          */
-        reader: {
-            type: 'json',
-            root: 'data'
+        reader:{
+            type:'json',
+            root:'data',
+            totalProperty:'total'
         }
     }
+
 });
 //{/block}

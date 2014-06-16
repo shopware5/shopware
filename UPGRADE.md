@@ -27,6 +27,7 @@ In this document you will find a changelog of the important changes related to t
 * Added secureUninstall method for plugins. There will be a message box when capability 'secureUninstall' is set, which uninstall method should be used.
     * (new) Bootstrap::secureUninstall() -> should be used for removing only non-user data
     * (old) Bootstrap::uninstall() -> old logic
+* The ArticleList was merged with the former MultiEdit plugin. Plugins hooking the ArticleList-Controller or extending the ArticleList backend module will most probably break
 * When using `selection` configurator type, shipping estimations will only be displayed when the user selects a value for all groups
 * It's no longer possible to disable variant support for article that still have variants
 * Added a new Theme Manager 2.0 with the possibility to create custom themes from the backend
