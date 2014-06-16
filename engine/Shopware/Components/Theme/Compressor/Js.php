@@ -35,19 +35,6 @@ namespace Shopware\Components\Theme\Compressor;
 class Js implements CompressorInterface
 {
     /**
-     * @var \JSMin
-     */
-    private $compressor;
-
-    /**
-     * @param \JSMin $compressor
-     */
-    function __construct(\JSMin $compressor)
-    {
-        $this->compressor = $compressor;
-    }
-
-    /**
      * Compress the passed content and returns
      * the compressed content.
      *
@@ -56,6 +43,6 @@ class Js implements CompressorInterface
      */
     public function compress($content)
     {
-        return $this->compressor->minify($content);
+        return \JSMin::minify($content);
     }
 }

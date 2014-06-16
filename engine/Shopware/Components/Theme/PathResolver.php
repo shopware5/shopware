@@ -241,10 +241,9 @@ class PathResolver
         return $this->rootDir . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR . 'cache';
     }
 
-
     public function formatPathToUrl($path, Shop\Shop $shop)
     {
-        return str_replace($this->rootDir, $shop->getBaseUrl(), $path);
+        return str_replace($this->rootDir, $shop->getBasePath(), $path);
     }
 
     /**
