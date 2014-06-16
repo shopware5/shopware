@@ -38,7 +38,7 @@
                 <div class="captcha-placeholder" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
 				<div class="code">
 					<label>{s name='SupportLabelCaptcha'}{/s}</label>
-					<input type="text" name="sCaptcha" class="{if $sSupport.sErrors.e.sCaptcha} instyle_error{/if}" />
+					<input type="text" required="required" aria-required="true" name="sCaptcha" {if $sSupport.sErrors.e.sCaptcha}class="instyle_error"{/if} />
 				</div>
 			</div>
 		 </fieldset>
