@@ -23,7 +23,7 @@
  */
 
 /**
- * Returns the current action's name
+ * Returns the current controller's name
  *
  * The params array knows the following keys
  * - name : The name of the action to call
@@ -34,7 +34,7 @@
  * @return string
  * @throws Exception
  */
-function smarty_function_controller_action($params, Enlight_Template_Default $template)
+function smarty_function_controllerName($params, Enlight_Template_Default $template)
 {
     /** @var $front Enlight_Controller_Front */
     $front = Enlight_Application::Instance()->Front();
@@ -47,5 +47,5 @@ function smarty_function_controller_action($params, Enlight_Template_Default $te
         throw $e;
     }
 
-    return $request->getActionName();
+    return $request->getControllerName();
 }
