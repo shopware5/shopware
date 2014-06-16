@@ -4,7 +4,13 @@
 {block name='frontend_listing_actions_filter'}
 	{if $sPropertiesOptionsOnly|@count or $sSuppliers|@count>1 && $sCategoryContent.parent != 1}
 
-		<div class="action--filter-options off-canvas">
+		{foreach $sPropertiesOptionsOnly as $property}
+			{if $property.properties.active}
+				{$activeFilters = 1}
+			{/if}
+		{/foreach}
+
+		<div class="action--filter-options off-canvas{if $activeFilters} is--collapsed{/if}">
 
 			{block name='frontend_listing_actions_filter_container'}
 
