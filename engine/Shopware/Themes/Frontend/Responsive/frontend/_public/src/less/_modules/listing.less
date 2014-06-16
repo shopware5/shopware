@@ -398,7 +398,12 @@
 
         .filter--container {
             .clearfix();
-            padding: 0 0 0 2%;
+            .unitize(10, 16, padding-top);
+            padding-left: 2%;
+        }
+
+        .filter--headline {
+            display: none;
         }
 
         .filter--group {
@@ -426,11 +431,6 @@
             width: 100%;
             position: absolute;
             left: 0;
-            z-index: 10;
-
-            &.is--active {
-                z-index: 14;
-            }
         }
     }
 
