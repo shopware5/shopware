@@ -25,7 +25,7 @@
          */
         defaults: {
             loaderCls: 'js--loading-indicator',
-            iconCls: 'icon-default',
+            iconCls: 'icon--default',
             animationSpeed: 500,
             closeOnClick: true
         },
