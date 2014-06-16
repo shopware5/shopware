@@ -34,9 +34,7 @@ class Shopware_Tests_Controllers_Frontend_SitemapXmlTest extends Enlight_Compone
      */
     public function testIndex()
     {
-        ob_start();
         $this->dispatch('/SitemapXml');
-        $content = ob_get_clean();
 
         $this->assertEquals(200, $this->Response()->getHttpResponseCode());
     }
@@ -48,9 +46,8 @@ class Shopware_Tests_Controllers_Frontend_SitemapXmlTest extends Enlight_Compone
      */
     public function testCount()
     {
-        ob_start();
-        $this->dispatch('/SitemapXml');
-        $content = ob_get_clean();
+        $response = $this->dispatch('/SitemapXml');
+        $content = $response->getBody();
 
         $this->assertSelectCount('url', array('>=' => 40), $content);
     }
