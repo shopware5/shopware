@@ -218,7 +218,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     }
 
     /**
-     * Commit Formular via email (default) or database (ticket-system)
+     * Commit form via email (default) or database (ticket  system)
      *
      * @throws Enlight_Exception
      * @return void
