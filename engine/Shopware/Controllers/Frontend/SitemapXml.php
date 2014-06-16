@@ -31,10 +31,73 @@
  */
 class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 {
+    /** @var  \Shopware\Models\Category\Repository */
+    private $categoryRepository;
+
+    /** @var  \Shopware\Models\Site\Repository */
+    private $siteRepository;
+
+    /** @var  \Shopware\Components\Model\ModelRepository */
+    private $supplierRepository;
+
+    /** @var  \Shopware\Models\Emotion\Repository */
+    private $emotionRepository;
+
     /**
-     * @var \Shopware\Models\Category\Repository
+     * Helper function to get the category repository
+     *
+     * @return \Shopware\Models\Category\Repository
      */
-    protected $repository;
+    private function getCategoryRepository()
+    {
+        if (empty($this->categoryRepository)) {
+            $this->categoryRepository = $this->get('models')->getRepository('Shopware\Models\Category\Category');
+        }
+
+        return $this->categoryRepository;
+    }
+
+    /**
+     * Helper function to get the site repository
+     *
+     * @return \Shopware\Models\Site\Repository
+     */
+    private function getSiteRepository()
+    {
+        if (empty($this->siteRepository)) {
+            $this->siteRepository = $this->get('models')->getRepository('Shopware\Models\Site\Site');
+        }
+
+        return $this->siteRepository;
+    }
+
+    /**
+     * Helper function to get the supplier repository
+     *
+     * @return \Shopware\Components\Model\ModelRepository
+     */
+    private function getSupplierRepository()
+    {
+        if (empty($this->supplierRepository)) {
+            $this->supplierRepository = $this->get('models')->getRepository('Shopware\Models\Article\Supplier');
+        }
+
+        return $this->supplierRepository;
+    }
+
+    /**
+     * Helper function to get the emotion repository
+     *
+     * @return \Shopware\Models\Emotion\Repository
+     */
+    private function getEmotionRepository()
+    {
+        if (empty($this->emotionRepository)) {
+            $this->emotionRepository = $this->get('models')->getRepository('Shopware\Models\Emotion\Emotion');
+        }
+
+        return $this->emotionRepository;
+    }
 
     /**
      * Init controller method
@@ -44,10 +107,6 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
         $this->Response()->setHeader('Content-Type', 'text/xml; charset=utf-8');
         $this->Response()->sendResponse();
 
-        $this->repository = Shopware()->Models()->getRepository(
-            'Shopware\Models\Category\Category'
-        );
-
         set_time_limit(0);
     }
 
@@ -56,7 +115,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        $parentId = Shopware()->Shop()->get('parentID');
+        $parentId = $this->get('shop')->get('parentID');
 
         $this->View()->sitemap = array(
             'categories' => $this->readCategoryUrls($parentId),
@@ -70,12 +129,13 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 
     /**
      * Print category urls
-     *
-     * @param int $parentId
+     * 
+     * @param integer $parentId
+     * @return array
      */
     public function readCategoryUrls($parentId)
     {
-        $categories = $this->repository->getActiveChildrenList($parentId);
+        $categories = $this->getCategoryRepository()->getActiveChildrenList($parentId);
 
         foreach ($categories as &$category) {
             $category['show'] = empty($category['external']);
@@ -96,8 +156,9 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 
     /**
      * Read article urls
-     *
-     * @param int $parentId
+     * 
+     * @param integer $parentId
+     * @return array
      */
     public function readArticleUrls($parentId)
     {
@@ -117,7 +178,8 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
             WHERE a.active = 1
             GROUP BY a.id
         ";
-        $result = Shopware()->Db()->query($sql, array($parentId));
+        /** @var Zend_Db_Statement_Pdo $result */
+        $result = $this->get('db')->query($sql, array($parentId));
 
         while ($article = $result->fetch()) {
             $article['changed'] = new DateTime($article['changed']);
@@ -134,14 +196,15 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 
     /**
      * Reads the blog item urls
-     *
-     * @param $parentId
+     * 
+     * @param integer $parentId
+     * @return array
      */
     public function readBlogUrls($parentId)
     {
         $blogs = array();
 
-        $query = $this->repository->getBlogCategoriesByParentQuery($parentId);
+        $query = $this->getCategoryRepository()->getBlogCategoriesByParentQuery($parentId);
         $blogCategories = $query->getArrayResult();
 
         $blogIds = array();
@@ -151,14 +214,15 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
         if (empty($blogIds)) {
             return $blogs;
         }
-        $blogIds = Shopware()->Db()->quote($blogIds);
+        $blogIds = $this->get('db')->quote($blogIds);
 
         $sql = "
             SELECT id, category_id, DATE(display_date) as changed
             FROM s_blog
             WHERE active = 1 AND category_id IN($blogIds)
             ";
-        $result = Shopware()->Db()->query($sql);
+        /** @var Zend_Db_Statement_Pdo $result */
+        $result = $this->get('db')->query($sql);
 
         while ($blog = $result->fetch()) {
             $blog['changed'] = new DateTime($blog['changed']);
@@ -177,10 +241,12 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 
     /**
      * Helper function to Read the static pages urls
+     * 
+     * @return array
      */
     private function readStaticUrls()
     {
-        $sites = $this->getSitesByShopId(Shopware()->Shop()->getId());
+        $sites = $this->getSitesByShopId($this->get('shop')->getId());
 
         foreach ($sites as $site) {
             if(!empty($site['children'])) {
@@ -195,18 +261,16 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
                 'sCustom' => $site['id']
             );
 
-            if (!empty($site['link'])) {
-                $userParams = parse_url($site['link'], PHP_URL_QUERY);
-                parse_str($userParams, $site['urlParams']);
-            }
-
-            $site['show'] = $this->filterLink($site['link']);
+            $site['show'] = $this->filterLink($site['link'], $site['urlParams']);
         }
 
         return $sites;
     }
+
     /**
      * Helper function to read all static pages of a shop from the database
+     * 
+     * @param integer $shopId
      * @return array
      */
     private function getSitesByShopId($shopId)
@@ -219,16 +283,14 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
             WHERE shopPages.shop_id = ?
         ";
 
-        $statement = Shopware()->Db()->executeQuery($sql, array($shopId));
+        /** @var Zend_Db_Statement_Pdo $statement */
+        $statement = $this->get('db')->executeQuery($sql, array($shopId));
 
         $keys = $statement->fetchAll(PDO::FETCH_COLUMN);
 
-        /** @var Shopware\Models\Site\Repository $siteRepository */
-        $siteRepository = $this->get('models')->getRepository('Shopware\Models\Site\Site');
-
         $sites = array();
         foreach ($keys as $key) {
-            $current = $siteRepository->getSitesByNodeNameQueryBuilder($key)
+            $current = $this->getSiteRepository()->getSitesByNodeNameQueryBuilder($key)
                 ->resetDQLPart('from')
                 ->from('Shopware\Models\Site\Site', 'sites', 'sites.id')
                 ->getQuery()
@@ -243,10 +305,12 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
     /**
      * Helper function to filter predefined links, which should not be in the sitemap (external links, sitemap links itself)
      * Returns false, if the link is not allowed
+     * 
      * @param string $link
+     * @param array $userParams
      * @return bool
      */
-    private function filterLink($link)
+    private function filterLink($link, &$userParams)
     {
         if (empty($link)) {
             return true;
@@ -266,12 +330,12 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 
     /**
      * Helper function to read the supplier pages urls
+     * 
+     * @return array
      */
     private function readSupplierUrls()
     {
-        $supplierRepository = $this->get('models')->getRepository('Shopware\Models\Article\Supplier');
-
-        $builder = $supplierRepository->createQueryBuilder('Supplier');
+        $builder = $this->getSupplierRepository()->createQueryBuilder('Supplier');
         $suppliers = $builder->getQuery()->getArrayResult();
 
         foreach ($suppliers as &$supplier) {
@@ -286,13 +350,12 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
 
     /**
      * Helper function to read the landing pages urls
+     * 
+     * @return array
      */
     private function readLandingPageUrls()
     {
-        /** @var Shopware\Models\Emotion\Repository $emotionRepository */
-        $emotionRepository = $this->get('models')->getRepository('Shopware\Models\Emotion\Emotion');
-
-        $builder = $emotionRepository->getCampaignsByCategoryId(Shopware()->Shop()->getCategory()->getId());
+        $builder = $this->getEmotionRepository()->getCampaignsByCategoryId($this->get('shop')->getCategory()->getId());
         $campaigns = $builder->getQuery()->getArrayResult();
 
         foreach ($campaigns as &$campaign) {
@@ -310,6 +373,7 @@ class Shopware_Controllers_Frontend_SitemapXml extends Enlight_Controller_Action
     /**
      * Helper function to filter emotion campaigns
      * Returns false, if the campaign starts later or is outdated
+     * 
      * @param null $from
      * @param null $to
      * @return bool
