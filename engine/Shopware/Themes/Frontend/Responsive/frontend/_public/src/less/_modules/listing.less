@@ -326,7 +326,8 @@
 
 // Discount Badge
 .badge--discount {
-    .unitize-padding(2, 10);
+    .unitize-width(30);
+    .unitize-padding(3, 0);
     .unitize(20, 16, font-size);
     .unitize(20, 16, line-height);
     .unitize(20, 16, top);
@@ -339,6 +340,43 @@
     text-shadow: 0 1px 1px #5f0000;
     background: #990000;
     border: 1px solid #850000;
+}
+
+.badge--newcomer {
+    .unitize-height(30);
+    .unitize-padding(0, 10);
+    .unitize(15, 16, font-size);
+    .unitize(30, 16, line-height);
+    .unitize(110, 16, top);
+    .unitize(-1, 16, left);
+    .border-radius-multi(0, 0, 3px, 3px);
+    .rotate(-90deg);
+    .transform-origin(top left 0);
+    position: absolute;
+    color: #fff;
+    font-weight: 600;
+    text-shadow: 0 1px 1px #850000;
+    text-align: center;
+    background: @primaryColor;
+    border: 1px solid #cf2302;
+}
+
+.badge--esd {
+    .unitize-padding(4, 10);
+    .unitize(12, 16, font-size);
+    .unitize(20, 16, line-height);
+    .unitize(0, 16, top);
+    .unitize(60, 16, left);
+    .border-radius-multi(0, 0, 3px, 3px);
+    .linear-gradient(@primaryBackgroundColor, @borderColor);
+    position: absolute;
+    border-width: 0 1px 1px 1px;
+    border-style: solid;
+    border-color: @borderColor;
+
+    [class^="icon--"] {
+        .unitize(5, 16, margin-right);
+    }
 }
 
 // Tablet view
@@ -498,7 +536,7 @@
             .panel--body {
                 .clearfix();
                 .unitize-height(240);
-                .unitize-padding(0, 20, 0, 0);
+                .unitize-padding(0, 40, 0, 0);
             }
 
             .box--image {
@@ -561,7 +599,7 @@
     .listing--listing-1col {
         .product--box {
             .panel--body {
-                .unitize-padding(0, 260, 0, 0);
+                .unitize-padding(0, 270, 0, 0);
             }
 
             .product--title {
@@ -580,8 +618,8 @@
                 .unitize-width(220);
                 .unitize-height(145);
                 .unitize-padding(10, 10);
-                .unitize(20, 16, top);
-                .unitize(20, 16, right);
+                .unitize(40, 16, top);
+                .unitize(30, 16, right);
                 display: block;
                 position: absolute;
 
@@ -771,8 +809,8 @@
                 .unitize-width(220);
                 .unitize-height(145);
                 .unitize-padding(10, 10);
-                .unitize(40, 16, top);
-                .unitize(20, 16, right);
+                .unitize(38, 16, top);
+                .unitize(30, 16, right);
                 display: block;
                 position: absolute;
 
