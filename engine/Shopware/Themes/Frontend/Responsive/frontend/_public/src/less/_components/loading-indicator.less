@@ -8,26 +8,57 @@
     top: 50%;
     border: 1px solid black;
 
-    div[class^="icon-"] {
+    div[class^="icon--"] {
         display: block;
-        width: 26px;
-        height: 26px;
+        .unitize-width(26);
+        .unitize-height(26);
     }
+    .icon--default::before {
+        .unitize-width(22);
+        .unitize-height(22);
+        .border-radius(100%);
+        .animation(keyframe--spin 1s linear infinite);
 
-    .icon-default {
-        &:before {
+        display: block;
+        content: "";
+
+        border: 2px solid #ccc;
+        border-top: 2px solid #333;
+    }
+}
+.has--cssanimations {
+    .js--loading-indicator {
+        div[class^="icon--"] {
             display: block;
-
-            width: 22px;
-            height: 22px;
-
+            .unitize-width(26);
+            .unitize-height(26);
+        }
+        .icon--default::before {
+            .unitize-width(22);
+            .unitize-height(22);
+            .border-radius(100%);
+            .animation(keyframe--spin 1s linear infinite);
+            display: block;
+            content: "";
             border: 2px solid #ccc;
             border-top: 2px solid #333;
+        }
+    }
+}
 
-            content: "";
-
-            .animation(keyframe--spin 1s linear infinite);
-            border-radius: 100%;
+.has--no-cssanimations {
+    .js--loading-indicator {
+        div[class^="icon--"] {
+            .unitize-width(16);
+            .unitize-height(16);
+            display: block;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+        .icon--default {
+            .unitize-height(16, 16);
+            .unitize-width(16, 16);
+            background-image: url(../../img/icons/loading-indicator.gif);
         }
     }
 }
