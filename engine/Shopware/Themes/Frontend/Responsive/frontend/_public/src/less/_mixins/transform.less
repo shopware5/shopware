@@ -1,0 +1,12 @@
+/**
+ * The mixins provides you a cross-browser compatible method to set a transformation.
+ *
+ * Please refer to <http://caniuse.com/transforms2d> to see the browser support table of the feature.
+ * @param: {String} properties: The transformation(s) that should be applied
+ */
+.transform(@transformation) {
+	-webkit-transform: @transformation;
+	-moz-transform: @transformation;
+	-o-transform: @transformation;
+    transform: @transformation;
+}
