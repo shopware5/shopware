@@ -26,27 +26,19 @@
  * Returns the current time measured in the number of seconds
  * since the Unix Epoch (January 1 1970 00:00:00 GMT).
  */
-class Smarty_Compiler_ThemeTimestamp extends Smarty_Internal_CompileBase
+function smarty_function_themeTimestamp($params, $template)
 {
-    /**
-     * @param $args
-     * @param $compiler
-     * @return int
-     */
-    public function compile($args, $compiler)
-    {
-        /**@var $pathResolver \Shopware\Components\Theme\PathResolver*/
-        $pathResolver = Shopware()->Container()->get('theme_path_resolver');
+    /**@var $pathResolver \Shopware\Components\Theme\PathResolver*/
+    $pathResolver = Shopware()->Container()->get('theme_path_resolver');
 
-        $file = $pathResolver->getCacheDirectory() . DIRECTORY_SEPARATOR . 'timestamp.txt';
+    $file = $pathResolver->getCacheDirectory() . DIRECTORY_SEPARATOR . 'timestamp.txt';
 
-        if (file_exists($file)) {
-            $timestamp = file_get_contents($file);
-        } else {
-            $timestamp = time();
-            file_put_contents($file, $timestamp);
-        }
-
-        return $timestamp;
+    if (file_exists($file)) {
+        $timestamp = file_get_contents($file);
+    } else {
+        $timestamp = time();
+        file_put_contents($file, $timestamp);
     }
+
+    return $timestamp;
 }
