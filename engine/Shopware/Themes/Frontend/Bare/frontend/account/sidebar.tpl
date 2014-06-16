@@ -77,6 +77,11 @@
 								{s name="sTicketSysSupportManagement"}{/s}
 							</a>
 						</li>
+						<li class="navigation--entry">
+							<a href="{url controller='ticket' action='request'}" class="navigation--link">
+								{s name="TicketLinkSupport"}{/s}
+							</a>
+						</li>
 					{/if}
 				{/block}
 
