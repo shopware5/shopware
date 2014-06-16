@@ -1,6 +1,6 @@
 .js--loading-indicator {
     .unitize-padding(20, 20, 20, 20, 16);
-    .unitize-margin(-28, 0, 0, -28, 16);
+    .unitize-margin(-33, 0, 0, -33, 16);
     background: white;
     position: absolute;
     display: none;
@@ -10,13 +10,24 @@
 
     div[class^="icon-"] {
         display: block;
-        background-size: 100% 100%;
-        background-repeat: no-repeat;
+        width: 26px;
+        height: 26px;
     }
 
     .icon-default {
-        background-image: url(../../img/icons/loading-indicator.gif);
-        .unitize-height(16, 16);
-        .unitize-width(16, 16);
+        &:before {
+            display: block;
+
+            width: 22px;
+            height: 22px;
+
+            border: 2px solid #ccc;
+            border-top: 2px solid #333;
+
+            content: "";
+
+            .animation(keyframe--spin 1s linear infinite);
+            border-radius: 100%;
+        }
     }
 }
