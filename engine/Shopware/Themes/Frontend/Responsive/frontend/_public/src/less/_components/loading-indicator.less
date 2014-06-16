@@ -1,6 +1,5 @@
 .js--loading-indicator {
-    .unitize-padding(20, 20, 20, 20, 16);
-    .unitize-margin(-33, 0, 0, -33, 16);
+    .unitize-padding(20, 20, 20, 20);
     background: white;
     position: absolute;
     display: none;
@@ -13,6 +12,7 @@
         .unitize-width(26);
         .unitize-height(26);
     }
+
     .icon--default::before {
         .unitize-width(22);
         .unitize-height(22);
@@ -28,11 +28,14 @@
 }
 .has--cssanimations {
     .js--loading-indicator {
+        .unitize-margin(-33, 0, 0, -33);
+
         div[class^="icon--"] {
             display: block;
             .unitize-width(26);
             .unitize-height(26);
         }
+
         .icon--default::before {
             .unitize-width(22);
             .unitize-height(22);
@@ -48,6 +51,8 @@
 
 .has--no-cssanimations {
     .js--loading-indicator {
+        .unitize-margin(-28, 0, 0, -28);
+
         div[class^="icon--"] {
             .unitize-width(16);
             .unitize-height(16);
@@ -55,6 +60,7 @@
             background-repeat: no-repeat;
             background-size: 100% 100%;
         }
+
         .icon--default {
             .unitize-height(16, 16);
             .unitize-width(16, 16);
