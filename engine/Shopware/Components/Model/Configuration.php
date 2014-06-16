@@ -86,6 +86,8 @@ class Configuration extends BaseConfiguration
 
         $this->addCustomStringFunction('DATE_FORMAT', 'Shopware\Components\Model\Query\Mysql\DateFormat');
         $this->addCustomStringFunction('IFNULL', 'Shopware\Components\Model\Query\Mysql\IfNull');
+        $this->addCustomStringFunction('RegExp', 'Shopware\Components\Model\Query\Mysql\RegExp');
+        $this->addCustomStringFunction('Replace', 'Shopware\Components\Model\Query\Mysql\Replace');
 
         if (isset($options['cacheProvider'])) {
             $this->setCacheProvider($options['cacheProvider']);

@@ -276,6 +276,54 @@
             <argument type="service" id="events" />
         </service>
 
+        <service id="multi_edit.product" class="Shopware\Components\MultiEdit\Resource\Product">
+            <argument type="service" id="multi_edit.product.dql_helper" />
+            <argument type="service" id="multi_edit.product.grammar" />
+            <argument type="service" id="multi_edit.product.value" />
+            <argument type="service" id="multi_edit.product.filter" />
+            <argument type="service" id="multi_edit.product.batch_process" />
+            <argument type="service" id="multi_edit.product.queue" />
+            <argument type="service" id="multi_edit.product.backup" />
+        </service>
+
+        <service id="multi_edit.product.value" class="Shopware\Components\MultiEdit\Resource\Product\Value">
+            <argument type="service" id="multi_edit.product.dql_helper" />
+        </service>
+
+        <service id="multi_edit.product.dql_helper" class="Shopware\Components\MultiEdit\Resource\Product\DqlHelper">
+            <argument type="service" id="shopware.db" />
+            <argument type="service" id="models" />
+            <argument type="service" id="events" />
+        </service>
+
+        <service id="multi_edit.product.backup" class="Shopware\Components\MultiEdit\Resource\Product\Backup">
+            <argument type="service" id="multi_edit.product.dql_helper" />
+            <argument type="service" id="config" />
+        </service>
+
+        <service id="multi_edit.product.filter" class="Shopware\Components\MultiEdit\Resource\Product\Filter">
+            <argument type="service" id="multi_edit.product.dql_helper" />
+        </service>
+
+        <service id="multi_edit.product.queue" class="Shopware\Components\MultiEdit\Resource\Product\Queue">
+            <argument type="service" id="multi_edit.product.dql_helper" />
+            <argument type="service" id="multi_edit.product.filter" />
+            <argument type="service" id="multi_edit.product.backup" />
+        </service>
+
+        <service id="multi_edit.product.batch_process" class="Shopware\Components\MultiEdit\Resource\Product\BatchProcess">
+            <argument type="service" id="multi_edit.product.dql_helper" />
+            <argument type="service" id="multi_edit.product.filter" />
+            <argument type="service" id="multi_edit.product.queue" />
+            <argument type="service" id="config" />
+        </service>
+
+        <service id="multi_edit.product.grammar" class="Shopware\Components\MultiEdit\Resource\Product\Grammar">
+            <argument type="service" id="multi_edit.product.dql_helper" />
+            <argument type="service" id="events" />
+        </service>
+
+
 
         <service id="legacy_struct_converter" class="Shopware\Components\Compatibility\LegacyStructConverter">
             <argument type="service" id="config" />

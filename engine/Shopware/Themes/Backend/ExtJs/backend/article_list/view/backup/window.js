@@ -22,8 +22,8 @@
  */
 
 //{namespace name=backend/article_list/main}
-//{block name="backend/article_list/view/main/window"}
-Ext.define('Shopware.apps.ArticleList.view.main.Window', {
+//{block name="backend/article_list/view/backup/window"}
+Ext.define('Shopware.apps.ArticleList.view.Backup.Window', {
     /**
      * Define that the plugin manager main window is an extension of the enlight application window
      * @string
@@ -34,7 +34,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Window', {
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias: 'widget.multiedit-main-window',
+    alias: 'widget.multi-edit-backup-window',
 
     /**
      * Set no border for the window
@@ -43,28 +43,21 @@ Ext.define('Shopware.apps.ArticleList.view.main.Window', {
     border: false,
 
     /**
-     * True to automatically show the component upon creation.
-     * @boolean
-     */
-    autoShow: true,
-
-    /**
      * Set border layout for the window
      * @string
      */
-    layout: 'border',
 
     /**
      * Define window width
      * @integer
      */
-    width: 1000,
+    width: 820,
 
     /**
      * Define window height
      * @integer
      */
-    height: '90%',
+    height: 400,
 
     /**
      * True to display the 'maximize' tool button and allow the user to maximize the window, false to hide the button and disallow maximizing the window.
@@ -81,20 +74,21 @@ Ext.define('Shopware.apps.ArticleList.view.main.Window', {
     /**
      * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
      */
-    stateful: true,
-
-    /**
-     * The unique id for this object to use for state management purposes.
-     */
-    stateId: 'shopware-multiedit-main-window',
+    stateful: false,
 
     /**
      * Title of the window.
      * @string
      */
-    base_title: '{s name=main_window_title}Product overview{/s}',
+    title: '{s name=backup/windowTitle}Revert changes{/s}',
 
     resizable: true,
+
+    /**
+     * Set the windows layout to "fit"
+     */
+    layout: 'fit',
+
 
     /**
      * Initializes the component.
@@ -105,34 +99,59 @@ Ext.define('Shopware.apps.ArticleList.view.main.Window', {
     initComponent: function () {
         var me = this;
 
+
         me.items = [{
-            xtype: 'multi-edit-main-grid',
-            region: 'center',
-            columnConfig: me.columnConfig
-        }, {
-            xtype: 'multi-edit-sidebar',
-            region: 'west'
-
+            xtype: 'container',
+            layout: {
+                type: 'vbox',
+                pack: 'start',
+                align: 'stretch'
+            },
+            items: [
+                me.getNotificationBox(),
+                me.getLabel(),
+                {
+                    xtype: 'multi-edit-backup-grid',
+                    store: me.backupStore,
+                    flex: 1,
+                    border: 0
+                }
+            ]
         }];
-
-        me.title = me.base_title;
 
         me.callParent(arguments);
     },
 
     /**
-     *  Set the window title
+     * Returns a label with additional descriptions
      *
-     * @param addition
+     * @returns { { xtype: string, margin: string, items: Array } }
      */
-    setWindowTitle: function(addition) {
+    getLabel: function() {
         var me = this;
 
-        if (addition) {
-            me.setTitle(me.base_title + ' - ' + Ext.util.Format.stripTags(addition));
-        } else {
-            me.setTitle(me.base_title);
-        }
+        return {
+            xtype: 'container',
+            margin: '0 10 10 10',
+            items: [{
+                xtype: 'label',
+                html: '{s name=backup/description}A revert is not a full database backup. Only those fields modified during the batch edit will be reverted.{/s}'
+            }]
+        };
+    },
+
+    /**
+     * Returns a warning block-message
+     *
+     * @returns Ext.container.Container
+     */
+    getNotificationBox: function() {
+        var me = this,
+            notification = Shopware.Notification.createBlockMessage('{s name=backup/notice}This functionality is not a replacement for backups{/s}', 'error');
+
+        notification.margin = '10 5';
+
+        return notification;
     }
 });
 //{/block}
