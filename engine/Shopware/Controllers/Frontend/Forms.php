@@ -188,20 +188,20 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 	    }
 	}
 
-        if (!empty($this->_errors)) {
-            foreach ($this->_errors['e'] as $key => $value) {
+	if (!empty($this->_errors)) {
+	    foreach ($this->_errors['e'] as $key => $value) {
 		if (isset($this->_errors['e'][$key])) {
-			if ($this->_elements[$key]['typ'] == "text2") {
-			    $class = explode(";", $this->_elements[$key]['class']);
-			    $this->_elements[$key]['class'] = implode(" instyle_error has--error;", $class) . " instyle_error has--error";
-			} else {
-			    $this->_elements[$key]['class'] .= " instyle_error has--error";
-			}
+		    if ($this->_elements[$key]['typ'] == "text2") {
+			$class = explode(";", $this->_elements[$key]['class']);
+			$this->_elements[$key]['class'] = implode(" instyle_error has--error;", $class) . " instyle_error has--error";
+		    } else {
+			$this->_elements[$key]['class'] .= " instyle_error has--error";
 		    }
 		}
-        }
+	    }
+	}
 
-        $isSpam = false;
+	$isSpam = false;
         foreach ($this->_postData as $value) {
             if (is_array($value)) {
                 continue;
