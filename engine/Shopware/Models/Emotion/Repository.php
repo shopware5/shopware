@@ -288,12 +288,12 @@ class Repository extends ModelRepository
         $builder = $this->getCampaigns();
         $builder->andWhere(
             $builder->expr()->orX(
-                $builder->expr()->eq('categories.id', '?1'), // = 3
-                $builder->expr()->like('categories.path', '?2') //like '%|3|
+                $builder->expr()->eq('categories.id', ':categoryId'), // = 3
+                $builder->expr()->like('categories.path', ':categoryPath') //like '%|3|
             )
         )
-            ->setParameter(1, $categoryId)
-            ->setParameter(2, '%|' . $categoryId . '|');
+            ->setParameter('categoryId', $categoryId)
+            ->setParameter('categoryPath', '%|' . $categoryId . '|');
 
         return $builder;
     }
