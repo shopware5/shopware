@@ -10,16 +10,24 @@
 	}
 }
 
-// Safari has problems with small "rem"-values which results in an much bigger font as declared.
+// Webkit based has problems with small "rem"-values which results in an much bigger font as declared.
 // To fix the behavior we need to set the icon size using "px"-values
 .js--fancy-select-trigger,
 .js--fancy-select-trigger i {
-    font-size: 6px;
+    font-size: 5px;
 }
 
-// We need to hide the sidebar using CSS due to the fact that the sidebar is neccessary for smartphone
+
 @media screen and (min-width: @tabletViewportWidth) {
-	.is--ctl-detail .sidebar-main {
+
+    // We need to hide the sidebar using CSS due to the fact that the sidebar is neccessary for smartphone
+    .is--ctl-detail .sidebar-main {
 		display: none !important;
 	}
+
+    // Webkit based has problems with small "rem"-values which results in an much bigger font as declared.
+    // To fix the behavior we need to set the icon size using "px"-values
+    .top-bar--navigation .entry--service::after {
+        font-size: 5px;
+    }
 }
