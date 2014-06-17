@@ -1,5 +1,7 @@
 {extends file='frontend/index/index.tpl'}
 
+{namespace name="frontend/account/ajax_logout"}
+
 {* Breadcrumb *}
 {block name='frontend_index_start' append}
 	{$sBreadcrumb = [['name'=>"{s name='AccountLogoutTitle'}{/s}", 'link'=>{url}]]}
