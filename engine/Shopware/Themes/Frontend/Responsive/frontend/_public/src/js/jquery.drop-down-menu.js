@@ -17,6 +17,10 @@
         onClickMenu: function (event) {
             var me = this;
 
+            if ($(event.target).hasClass('service--link')) {
+                return;
+            }
+
             if (me.opts.preventDefault) {
                 event.preventDefault();
             }
