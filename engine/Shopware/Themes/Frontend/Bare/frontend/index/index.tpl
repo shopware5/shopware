@@ -11,7 +11,7 @@
 	{include file='frontend/index/header.tpl'}
 {/block}
 
-<body class="is--ctl-{controllerName} is--act-{controllerAction}">
+<body class="is--ctl-{controllerName} is--act-{controllerAction}{if $sUserLoggedIn} is--user{/if}">
 	<div class="page-wrap">
 
 		{* Message if javascript is disabled *}
