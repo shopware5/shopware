@@ -80,7 +80,7 @@
             ret;
 
         /**
-         * Returns the window window, supporting the W3C suggested implementation
+         * Returns the window width, supporting the W3C suggested implementation
          * as well as the implementation of the Internet Explorer in standard and quirks mode.
          *
          * @returns {Number} Window width in pixels.
@@ -89,7 +89,7 @@
             var w = 0;
 
             // IE condition due to the weird quirks mode
-            if(typeof(window.innerWidth) !== 'number') {
+            if(typeof window.innerWidth !== 'number') {
 
                 // Handle the IE implementation *sigh*
                 if(document.documentElement.clientWidth !== 0) {
@@ -107,10 +107,35 @@
         };
 
         /**
+         * Returns the window height, supporting the W3C suggested implementation
+         * as well as the implementation of the Internet Explorer in standard and quirks mode.
+         *
+         * @returns {Number} Window height in pixels.
+         */
+        var getWindowHeight = function() {
+            var h = 0;
+
+            // IE condition due to the weird quirks mode
+            if(typeof window.innerHeight !== 'number') {
+
+                // Handle the IE implementation *sigh*
+                if(document.documentElement.clientHeight !== 0) {
+                    // Strict mode
+                    h = document.documentElement.clientHeight;
+                } else {
+                    // Quirks mode
+                    h = document.body.clientHeight;
+                }
+            } else {
+                h = window.innerHeight;
+            }
+
+            return h;
+        };
+
+        /**
          * Self-calling method that checks the browser width and delegate
          * if it detects a change on the width.
-         *
-         * @returns {Void}
          */
         var checkResize = function() {
             var width = getWindowWidth();
@@ -127,7 +152,6 @@
          * Checks for a corresponding breakpoint against the {@link listeners} collection.
          *
          * @param {Number} width - Window width in pixels.
-         * @returns {Void}
          */
         var checkBreakpoints = function(width) {
             var foundBreakpoint = false,
@@ -195,8 +219,6 @@
          * and determines what should be fired.
          *
          * The method supports the usage of wildcard characters.
-         *
-         * @returns {Void}
          */
         var cycleThroughBreakpointListeners = function() {
             var enterFnArr = [],
@@ -281,7 +303,7 @@
                 ret = true;
 
             // ..just a single breakpoint listener
-            } else if(typeof(type) === 'string') {
+            } else if(typeof type === 'string') {
                 if(type === curr) {
                     ret = true;
                 }
@@ -295,7 +317,6 @@
          * as well if the newly added listener needs to be fired based on the {@link curr} state.
          *
          * @param {Object} listener Listener object which should be added.
-         * @returns {Void}
          */
         var registerListenerToStack = function(listener) {
             var type = listener.type,
@@ -319,7 +340,6 @@
              * declaration and starts the listing of the resize of the browser window.
              *
              * @param {Object|Array} userBreakPoints - User defined breakpoints.
-             * @returns {Void}
              */
             init: function(userBreakPoints) {
                 breakPoints = userBreakPoints;
@@ -341,7 +361,6 @@
              * Adds a breakpoint to check against, after the {@link StateManger.init} was called.
              *
              * @param {Object|Array} breakpoint One or more breakpoints.
-             * @returns {Void}
              */
             add: function(breakpoint) {
 
@@ -352,10 +371,7 @@
                         conflict = false;
 
                     $.each(breakPoints, function(i, item) {
-                        if(item.type === type) {
-                            conflict = true;
-                            return false;
-                        }
+                        return !(item.type === type && (conflict = true));
                     });
 
                     if(conflict) {
@@ -376,9 +392,7 @@
              * @param {String} type Type which should be removed
              * @returns {Boolean}
              */
-            remove: function(type, removeListener) {
-                removeListener = removeListener || false;
-
+            remove: function(type) {
                 $.each(breakPoints, function(i, item) {
                     var itemType = item.type,
                         prettyType = capitaliseFirstLetter((type === '*' ? 'wildcard' : type));
@@ -398,10 +412,9 @@
              * state / type.
              *
              * @param {Object|Array} listener
-             * @returns {Void}
              */
             registerListener: function(listener) {
-                if(typeof(listener) === 'string') {
+                if(typeof listener === 'object') {
                     registerListenerToStack(listener);
                 } else {
                     var i = 0,
@@ -452,12 +465,21 @@
             },
 
             /**
-             * Gets the viewport width.
+             * Returns the viewport width.
              *
              * @returns {Number} The width of the viewport in pixels.
              */
             getViewportWidth: function() {
                 return getWindowWidth();
+            },
+
+            /**
+             * Returns the viewport height.
+             *
+             * @returns {Number} The height of the viewport in pixels.
+             */
+            getViewportHeight: function() {
+                return getWindowHeight();
             },
 
             /**
@@ -467,7 +489,7 @@
              * @returns {Number} The device pixel ratio.
              */
             getDevicePixelRatio: function() {
-                return ( 'devicePixelRatio' in window && window.devicePixelRatio ? window.devicePixelRatio : 1);
+                return ('devicePixelRatio' in window && window.devicePixelRatio) || 1;
             }
         };
 
