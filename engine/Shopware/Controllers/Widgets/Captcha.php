@@ -53,9 +53,9 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
         imagepng($imgResource, null, 9);
         $img = ob_get_clean();
         imagedestroy($imgResource);
-	$img =  base64_encode($img);
+        $img = base64_encode($img);
 
-	echo '<img src="data:image/png;base64,' . $img. '" alt="Captcha" />';
+        echo '<img src="data:image/png;base64,' . $img . '" alt="Captcha" />';
         echo '<input type="hidden" name="sRand" value="' . $rand . '" />';
     }
 
@@ -88,25 +88,25 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
      */
     public function getImageResource($string)
     {
-	$captcha = $this->getCaptchaFile('frontend/_public/src/img/bg--captcha.jpg');
-	$font = $this->getCaptchaFile('frontend/_public/src/fonts/captcha.ttf');
+        $captcha = $this->getCaptchaFile('frontend/_public/src/img/bg--captcha.jpg');
+        $font = $this->getCaptchaFile('frontend/_public/src/fonts/captcha.ttf');
 
         if (empty($captcha)) {
             $captcha = $this->getCaptchaFile('frontend/_resources/images/captcha/background.jpg');
         }
 
-	if (empty($font)) {
-	    $font = $this->getCaptchaFile('frontend/_resources/images/captcha/font.ttf');
+        if (empty($font)) {
+            $font = $this->getCaptchaFile('frontend/_resources/images/captcha/font.ttf');
         }
 
-	if (!empty($captcha)) {
+        if (!empty($captcha)) {
             $im = imagecreatefromjpeg($captcha);
         } else {
             $im = imagecreatetruecolor(162, 87);
         }
 
-	if (!empty($this->get('config')->CaptchaColor)) {
-	    $colors = explode(',', $this->get('config')->CaptchaColor);
+        if (!empty($this->get('config')->CaptchaColor)) {
+            $colors = explode(',', $this->get('config')->CaptchaColor);
         } else {
             $colors = explode(',', '255,0,0');
         }
@@ -115,7 +115,7 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
 
         $string = implode(' ', str_split($string));
 
-	if (!empty($font)) {
+        if (!empty($font)) {
             for ($i = 0; $i <= strlen($string); $i++) {
                 $rand1 = rand(35, 40);
                 $rand2 = rand(15, 20);
