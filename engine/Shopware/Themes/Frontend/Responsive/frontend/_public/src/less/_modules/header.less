@@ -161,7 +161,6 @@
             .unitize-margin(0, 0, 0, 5);
             .unitize-height(11);
             .unitize-width(14);
-            .unitize(1, 16, top);
             background: url("../../img/ico-flags.png") no-repeat 0 0;
             display: inline-block;
             text-indent: -9999em;
@@ -246,6 +245,10 @@
             z-index: 1000;
             border: 1px solid @borderColor;
             border-top-color: #fff;
+
+            .service--entry {
+                .unitize-padding(4, 0);
+            }
         }
         .js--is--dropdown-active .service--list {
             display: block;
