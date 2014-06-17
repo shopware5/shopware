@@ -25,14 +25,14 @@
 
             font-weight: 700;
         }
+    }
 
-        .modal--close {
-            .unitize-padding(5, 5, 5, 5);
-            .unitize(10, 16, right);
-            .unitize(10, 16, top);
+    .modal--close {
+        .unitize-padding(5, 5, 5, 5);
+        .unitize(10, 16, right);
+        .unitize(10, 16, top);
 
-            position: absolute;
-        }
+        position: absolute;
     }
 
     .content {
@@ -62,5 +62,15 @@
     &.fixed {
         max-height: none !important;
         max-width: none !important;
+    }
+
+    &.no--header {
+        .header {
+            display: none;
+        }
+
+        .content {
+            top: 0;
+        }
     }
 }

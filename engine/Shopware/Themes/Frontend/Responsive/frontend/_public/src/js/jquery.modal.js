@@ -49,6 +49,8 @@
 
             me.$modalBox.toggleClass('fixed', opts.sizing === 'fixed');
 
+            me.$modalBox.toggleClass('no--header', opts.title.length === 0);
+
             me.setWidth(opts.width);
             me.setHeight(opts.height);
             me.setTitle(opts.title);
@@ -107,15 +109,15 @@
                 'class': 'title'
             }).appendTo(me.$header);
 
-            me.$closeButton = $('<div>', {
-                'class': 'btn icon--cross is--small btn--grey modal--close'
-            }).appendTo(me.$header);
-
-            me.$closeButton.on('click.modal', me.close.bind(me));
-
             me.$content = $('<div>', {
                 'class': 'content'
             }).appendTo(me.$modalBox);
+
+            me.$closeButton = $('<div>', {
+                'class': 'btn icon--cross is--small btn--grey modal--close'
+            }).appendTo(me.$modalBox);
+
+            me.$closeButton.on('click.modal', me.close.bind(me));
 
             $('body').append(me.$modalBox);
 
