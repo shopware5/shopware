@@ -6,9 +6,8 @@
 			{if $form_data.sValidation}
 				<input type="hidden" name="register[personal][sValidation]" value="{$form_data.sValidation|escape}" />
 			{else}
-				<div class="register--customertype field--select">
-					<span class="arrow"></span>
-					<select id="register_personal_customer_type" name="register[personal][customer_type]" class="is--required{if $error_flags.customer_type} has--error{/if}">
+				<div class="register--customertype">
+					<select id="register_personal_customer_type" name="register[personal][customer_type]" required="required" class="is--required{if $error_flags.customer_type} has--error{/if}">
 						<option value="private"{if $form_data.customer_type eq "private"} selected="selected"{/if}>{s name='RegisterPersonalLabelPrivate'}{/s}</option>
 						<option value="business"{if $form_data.customer_type eq "business" or $form_data.company or $form_data.sValidation} selected="selected"{/if}>{s name='RegisterPersonalLabelBusiness'}{/s}</option>
 					</select>
