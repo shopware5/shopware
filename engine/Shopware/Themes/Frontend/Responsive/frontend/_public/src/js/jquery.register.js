@@ -108,18 +108,32 @@
     };
 
     Plugin.prototype.onCountryChanged = function(event) {
-        var me = this,
-            $countrySelect = $(event.currentTarget),
-            countrySelectID = $countrySelect.attr('id'),
-            countrySelectVal = $countrySelect.val(),
-            $stateSelectParent = $('#' + countrySelectID + '_' + countrySelectVal + '_states'),
-            $stateSelect = $stateSelectParent.find('.select--state'),
-            $siblingFields = $stateSelectParent.siblings('.register--state-selection');
+        var $select = $(event.currentTarget),
+            selectId = $select.attr('id'),
+            val = $select.val(),
+            parent = $select.parents('.panel--body'),
+            areaSelection = parent.find('#' + selectId + '_' + val + '_states'),
+            select, plugin;
 
-        $siblingFields.addClass('is--hidden');
-        $siblingFields.find('.select--state').attr('disabled', 'disabled');
-        $stateSelect.removeAttr('disabled');
-        $stateSelectParent.removeClass('is--hidden');
+        parent.find('.register--state-selection').addClass('is--hidden');
+        select = areaSelection.find('select');
+        plugin = select.data('pluginSelectboxReplacement');
+
+        plugin.$el.addClass('is--hidden');
+        plugin.$wrapEl.addClass('is--hidden');
+        areaSelection.addClass('is--hidden');
+        plugin.setDisabled();
+
+        if (areaSelection.length) {
+            // We have a state selection
+            select = areaSelection.find('select');
+            plugin = select.data('pluginSelectboxReplacement');
+
+            plugin.$el.removeClass('is--hidden');
+            plugin.$wrapEl.removeClass('is--hidden');
+            areaSelection.removeClass('is--hidden');
+            plugin.setEnabled();
+        }
     };
 
     Plugin.prototype.onSubmitBtn = function(event) {
@@ -188,7 +202,12 @@
     Plugin.prototype.setFieldAsError = function ($el) {
         var me = this;
 
-        $el.addClass(me.opts.errorCls);
+        if ($el.is(':plugin-selectboxreplacement')) {
+            var plugin = $el.data('pluginSelectboxReplacement');
+            plugin.setError();
+        } else {
+            $el.addClass(me.opts.errorCls);
+        }
     };
 
     Plugin.prototype.validateUsingAjax = function ($el, action) {
@@ -239,7 +258,12 @@
     Plugin.prototype.setFieldAsSuccess = function ($el) {
         var me = this;
 
-        $el.removeClass(me.opts.errorCls);
+        if ($el.is(':plugin-selectboxreplacement')) {
+            var plugin = $el.data('pluginSelectboxReplacement');
+            plugin.removeError();
+        } else {
+            $el.removeClass(me.opts.errorCls);
+        }
     };
 
     /**
