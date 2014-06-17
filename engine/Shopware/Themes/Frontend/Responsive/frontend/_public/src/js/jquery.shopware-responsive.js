@@ -172,6 +172,7 @@ $(function() {
     $('*[data-collapse-panel="true"]').collapsePanel();
     $('*[data-auto-submit="true"]').autoSubmit();
     $('input[data-quantity-field="true"]').quantityField();
+    $('*[data-drop-down-menu="true"]').dropdownMenu();
 
     $('select:not([data-no-fancy-select="true"])').selectboxReplacement();
 
