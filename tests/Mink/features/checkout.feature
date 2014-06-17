@@ -2,12 +2,10 @@
 Feature: Checkout articles
 
   Background: I can login as a user with correct credentials
-    Given I log in successful as "Max Mustermann" with email "test@example.com" and password "shopware"
-    When  I follow "Zahlungsart ändern"
-    Then  I change my payment method to 5
-    Then  I should see "Ihre Zahlungsweise wurde erfolgreich gespeichert"
+    Given I am on the page "Account"
+    And   I log in successful as "Max Mustermann" with email "test@example.com" and password "shopware"
 
-    Given I am on the detail page for article 167
+    When  I am on the detail page for article 167
     Then  I should see "Sonnenbrille Speed Eyes"
 
     When  I put the article "3" times into the basket

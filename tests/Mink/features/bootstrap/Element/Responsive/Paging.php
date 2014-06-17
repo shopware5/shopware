@@ -5,15 +5,15 @@ namespace Responsive;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 
-class SearchForm extends \Emotion\SearchForm
+class Paging extends \Emotion\Paging
 {
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'form.main-search--form');
+    protected $selector = array('css' => 'div.listing--paging');
 
     public $cssLocator = array(
-        'textInput' => 'input.main-search--field',
-        'submitButton' => 'input.main-search--button'
+        'previous' => 'a.pagination--link.paging--prev',
+        'next' => 'a.pagination--link.paging--next'
     );
 }

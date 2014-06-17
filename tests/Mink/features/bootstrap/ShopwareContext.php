@@ -148,6 +148,5 @@ class ShopwareContext extends SubContext
     {
         $this->getElement('HeaderCart')->checkCart($quantity, $amount);
     }
-
 }
 

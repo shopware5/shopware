@@ -18,14 +18,6 @@ class ListingContext extends SubContext
     }
 
     /**
-     * @Then /^The price of the article on position (?P<num>\d+) should be "([^"]*)"$/
-     */
-    public function thePriceOfTheArticleOnPositionShouldBe($position, $price)
-    {
-        $this->getPage('Listing')->checkPrice($position, $price);
-    }
-
-    /**
      * @When /^I set the filter to:$/
      * @When /^I reset all filters$/
      */
@@ -66,10 +58,101 @@ class ListingContext extends SubContext
     }
 
     /**
-     * @When /^I order the article on position (\d+)$/
+     * @Then /^the article on position (?P<num>\d+) should have this properties:$/
+     */
+    public function theArticleOnPositionShouldHaveThisProperties($position, TableNode $properties = null)
+    {
+        $properties = $properties->getHash();
+
+        Helper::getMultipleElement($this, 'ArticleBox', $position)->checkProperties($properties);
+    }
+
+    /**
+     * @Then /^The price of the article on position (?P<num>\d+) should be "([^"]*)"$/
+     */
+    public function thePriceOfTheArticleOnPositionShouldBe($position, $price)
+    {
+        $this->getPage('Listing')->checkPrice($position, $price);
+    }
+
+    /**
+     * @When /^I order the article on position (?P<position>\d+)$/
      */
     public function iOrderTheArticleOnPosition($position)
     {
-        $this->getPage('Listing')->orderArticle($position);
+        $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();
+        Helper::getMultipleElement($this, 'ArticleBox', $position)->clickActionLink('order', $language);
     }
+
+    /**
+     * @When /^I set the article on position (?P<position>\d+) to the comparison list$/
+     */
+    public function iSetTheArticleOnPositionToTheComparisonList($position)
+    {
+        $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();
+        Helper::getMultipleElement($this, 'ArticleBox', $position)->clickActionLink('compare', $language);
+    }
+
+    /**
+     * @When /^I go to the detail page of the article on position (?P<position>\d+)$/
+     */
+    public function iGoToTheDetailPageOfTheArticleOnPosition($position)
+    {
+        $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();
+
+        /** @var \Emotion\ArticleBox $articleBox */
+        $articleBox = Helper::getMultipleElement($this, 'ArticleBox', $position);
+//        var_dump($articleBox->getXpath());
+        $articleBox->clickActionLink('details', $language);
+    }
+
+    /**
+     * @When /^I browse to "([^"]*)" page$/
+     * @When /^I browse to "([^"]*)" page (\d+) times$/
+     */
+    public function iBrowseTimesToPage($direction, $steps = 1)
+    {
+        $this->getElement('Paging')->moveDirection($direction, $steps);
+    }
+
+    /**
+     * @Then /^I should not be able to browse to "([^"]*)" page$/
+     */
+    public function iShouldNotBeAbleToBrowseToPage($direction)
+    {
+        $this->getElement('Paging')->noElement($direction);
+    }
+
+    /**
+     * @When /^I browse to page (\d+)$/
+     */
+    public function iBrowseToPage($page)
+    {
+        $this->getElement('Paging')->moveToPage($page);
+    }
+
+    /**
+     * @Given /^I should not be able to browse to page (\d+)$/
+     */
+    public function iShouldNotBeAbleToBrowseToPage2($page)
+    {
+        $this->getElement('Paging')->noElement($page);
+    }
+
+    /**
+     * @Then /^I should see the article "([^"]*)" in listing$/
+     */
+    public function iShouldSeeTheArticleInListing($name)
+    {
+        $this->getPage('Listing')->checkListing($name);
+    }
+
+    /**
+     * @Given /^I should not see the article "([^"]*)" in listing$/
+     */
+    public function iShouldNotSeeTheArticleInListing($name)
+    {
+        $this->getPage('Listing')->checkListing($name, true);
+    }
+
 }

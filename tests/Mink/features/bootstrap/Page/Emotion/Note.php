@@ -13,66 +13,6 @@ class Note extends Page
     protected $path = '/note';
 
     /**
-     * Removes the article on the given position from the note
-     * @param integer $position
-     */
-    public function removeArticle($position)
-    {
-        $this->open();
-        $this->clickButton($position, 'a.delete');
-    }
-
-    /**
-     * Put the article on the given position in the cart
-     * @param integer $position
-     */
-    public function buyArticle($position)
-    {
-        $this->open();
-        $this->clickButton($position, 'a.basket');
-    }
-
-    /**
-     * Add the article on the given position to the comparision list
-     * @param integer $position
-     */
-    public function compareArticle($position)
-    {
-        $this->open();
-        $this->clickButton($position, 'a.compare_add_article');
-    }
-
-    /**
-     * Visit the detail page of the article on the given position
-     * @param integer $position
-     */
-    public function visitArticleDetails($position)
-    {
-        $this->open();
-        $this->clickButton($position, 'a.detail');
-    }
-
-    /**
-     * Helper class to click one of the action buttons of the article on the given position
-     * @param integer $position
-     * @param string $class
-     * @throws \\Mink\Exception\ResponseTextException
-     */
-    private function clickButton($position, $class)
-    {
-        $class = sprintf('div.table_row:nth-of-type(%d) %s', $position + 1, $class);
-
-        $button = $this->find('css', $class);
-
-        if (empty($button)) {
-            $message = sprintf('Note page has no article on position %d', $position);
-            throw new ResponseTextException($message, $this->getSession());
-        }
-
-        $button->click();
-    }
-
-    /**
      * Counts the articles on the note
      * If the number is not equal to $count, the helper function will throw an exception $message.
      * If the number is equal to $count, the function will return an array of all articles on the note.
@@ -83,10 +23,13 @@ class Note extends Page
     {
         $this->open();
 
-        $message = 'There are %d articles on the note (should be %d)';
-        $articles = \Helper::countElements('div.table_row', $message, $count, $this);
+        $result = \Helper::countElements($this, 'div.table_row', $count);
 
-        return $articles;
+        if($result !== true)
+        {
+            $message = sprintf('There are %d articles on the note (should be %d)', $result, $count);
+            \Helper::throwException(array($message));
+        }
     }
 
     /**
@@ -96,7 +39,9 @@ class Note extends Page
      */
     public function checkList($articles)
     {
-        $articlesOnNote = $this->countArticles(count($articles));
+        $this->countArticles(count($articles));
+
+        $articlesOnNote = $this->findAll('css', 'div.table_row');
 
         foreach ($articles as $articleKey => $article) {
             foreach ($articlesOnNote as $articleOnNoteKey => $articleOnNote) {

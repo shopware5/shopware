@@ -39,7 +39,7 @@ class Detail extends Page
     /**
      * Verify if we're on an expected page. Throw an exception if not.
      */
-    protected function verifyPage()
+    public function verifyPage()
     {
         if (!$this->hasButton('In den Warenkorb')) {
             throw new \Exception('Detail page has no basket button');

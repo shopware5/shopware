@@ -1,9 +1,7 @@
 <?php
 namespace Emotion;
 
-use Behat\Mink\Driver\SahiDriver;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
-use Behat\Mink\Exception\ResponseTextException;
 use Behat\Behat\Context\Step;
 
 class Blog extends Page
@@ -20,8 +18,11 @@ class Blog extends Page
      */
     public function countArticles($count = 0)
     {
-        $message = 'There are %d blog articles (should be %d)';
-        \Helper::countElements('div.blogbox', $message, $count, $this);
-    }
+        $result = \Helper::countElements($this, 'div.blogbox', $count);
 
+        if ($result !== true) {
+            $message = sprintf('There are %d blog articles (should be %d)', $result, $count);
+            \Helper::throwException(array($message));
+        }
+    }
 }

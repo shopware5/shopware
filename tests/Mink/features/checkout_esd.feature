@@ -3,7 +3,8 @@ Feature: Checkout esd article
 
   @esd @account @payment @search @listing
     Scenario: I can buy an esd article and download it from my account
-      Given I log in successful as "Max Mustermann" with email "test@example.com" and password "shopware"
+      Given I am on the page "Account"
+      And   I log in successful as "Max Mustermann" with email "test@example.com" and password "shopware"
       Then  my current payment method should be "Vorkasse"
 
       When  I follow "Zahlungsart ändern"
