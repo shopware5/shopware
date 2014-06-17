@@ -65,28 +65,31 @@ class Helper
 
     /**
      * Helper function to count a HTML-Element on a page.
-     * If the number is not equal to $count, the function will throw an exception $message.
-     * If the number is equal to $count, the function will return an array of all matching elements.
-     * @param string $locator
-     * @param string $message
+     * If the number is equal to $count, the function will return true.
+     * If the number is not equal to $count, the function will return the count of the element.
+     *
+     * @param Element $parent
+     * @param string $elementLocator
      * @param int $count
-     * @return array
-     * @throws ExpectationException
+     * @return bool|int
      */
-    public static function countElements($locator, $message, $count = 0, $parent)
+    public static function countElements($parent, $elementLocator, $count = 0)
     {
-        $articles = $parent->findAll('css', $locator);
+        $locator = array('element' => $elementLocator);
+        $elements = self::findElements($parent, array(), $locator, true, false);
 
-        if (count($articles) !== intval($count)) {
-            $message = sprintf($message, count($articles), intval($count));
-            throw new \Exception($message);
+        $countElements = count($elements['element']);
+
+        if ($countElements === intval($count)) {
+            return true;
         }
 
-        return $articles;
+        return $countElements;
     }
 
     /**
      * Recursive Helper function to compare two arrays over all their levels
+     *
      * @param array $array1
      * @param array $array2
      * @return array|bool
@@ -186,7 +189,7 @@ class Helper
         }
 
         foreach ($locators as $key => $locator) {
-            //each locator can have some variables in it, so they have to be filled with values of $keys array
+            //each locator can have some variables in it, so they have to be filleTest'd with values of $keys array
             $oldErrorReporting = error_reporting(0);
             $locator = vsprintf($locator, $keys[$key]);
             error_reporting($oldErrorReporting);
@@ -198,7 +201,7 @@ class Helper
                 continue;
             }
 
-            //find the element mathching to the css locator
+            //find the element matching to the css locator
             if ($all) {
                 $element = $parent->findAll('css', $locator);
             } else {
@@ -207,6 +210,7 @@ class Helper
 
             if (empty($element)) {
                 $missingElements['notFound'][] = $key;
+                $elements[$key] = array();
                 continue;
             }
 
@@ -270,5 +274,23 @@ class Helper
 ',
             $messages
         ));
+    }
+
+    /**
+     * @param SubContext $parent
+     * @param string $elementName
+     * @param integer $position
+     * @return MultipleElement
+     */
+    public static function getMultipleElement(SubContext $parent, $elementName, $position = 1)
+    {
+        /** @var MultipleElement $element */
+        $element = $parent->getElement($elementName);
+
+        $element->setContext($parent);
+
+        $element = $element->getInstance($position);
+
+        return $element;
     }
 }

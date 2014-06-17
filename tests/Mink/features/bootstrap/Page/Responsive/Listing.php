@@ -1,8 +1,7 @@
 <?php
 namespace Responsive;
 
-use SensioLabs\Behat\PageObjectExtension\PageObject\Page, Behat\Mink\Exception\ResponseTextException,
-    Behat\Behat\Context\Step;
+use Behat\Behat\Context\Step;
 
 class Listing extends \Emotion\Listing
 {
@@ -16,8 +15,8 @@ class Listing extends \Emotion\Listing
         'filterGroups' => 'div > span.filter--header',
         'filterProperties' => 'div.filter--group:nth-of-type(%d) > div > ul > li > a.filter--link',
         'articleBox' => 'li.product--box.panel',
-        'articleOrderButton' => 'li.product--box.panel:nth-of-type(%d) div.product--actions a.action--buynow',
-        'articlePrice' => 'li.product--box.panel:nth-of-type(%d) div.product--price'
+        'articlePrice' => 'li.product--box.panel:nth-of-type(%d) div.product--price',
+        'listingBox' => 'div.listing--container'
     );
 
     protected $viewSwitchCount = 1;

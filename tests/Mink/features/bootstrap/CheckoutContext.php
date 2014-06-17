@@ -49,7 +49,11 @@ class CheckoutContext extends SubContext
      */
     public function iRemoveTheArticleOnPosition($position)
     {
-        $this->getPage('CheckoutCart')->removeArticle($position);
+        $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();
+
+        /** @var \Emotion\CartPosition $cartPosition */
+        $cartPosition = Helper::getMultipleElement($this, 'CartPosition', $position + 3);
+        $cartPosition->clickActionLink('remove', $language);
     }
 
     /**
@@ -126,5 +130,14 @@ class CheckoutContext extends SubContext
         $values = $positions->getHash();
 
         $this->getPage('Account')->checkOrder($orderNumber, $values);
+    }
+
+    /**
+     * @Given /^the aggregations should look like this:$/
+     */
+    public function theAggregationsShouldLookLikeThis(TableNode $aggregations)
+    {
+        $aggregations = $aggregations->getHash();
+        $this->getPage('CheckoutCart')->checkAggregation($aggregations);
     }
 }

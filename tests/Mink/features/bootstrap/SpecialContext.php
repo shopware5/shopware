@@ -41,23 +41,18 @@ class SpecialContext extends SubContext
     }
 
     /**
-     * @Given /^the password of user "(?P<email>[^"]*)" is "(?P<password>[^"]*)"$/
+     * @Given /^I am on the page "(?P<page>[^"]*)"$/
      */
-    public function thePasswordOfUserIs($email, $password)
+    public function iAmOnThePage($page)
     {
-        $email = filter_var($email, FILTER_VALIDATE_EMAIL);
-        $password = md5($password);
+        $this->getPage($page)->open();
+    }
 
-        if (empty($email)) {
-            Helper::throwException(array('The email-address is invalid!'));
-        }
-
-        $sql = sprintf(
-            'UPDATE s_user SET password = "%s", encoder = "md5" WHERE email = "%s"',
-            $password,
-            $email
-        );
-
-        $this->getContainer()->get('db')->exec($sql);
+    /**
+     * @Then /^I should be on the page "(?P<page>[^"]*)"$/
+     */
+    public function iShouldBeOnThePage($page)
+    {
+        $this->getPage($page)->verifyPage();
     }
 }

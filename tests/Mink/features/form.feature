@@ -1,4 +1,4 @@
-@form @noResponsive
+@form
 Feature: forms
 
   @captcha @javascript
