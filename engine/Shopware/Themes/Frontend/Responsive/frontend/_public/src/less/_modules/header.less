@@ -125,16 +125,43 @@
 			.clearfix();
 			width: 25%;
 		}
-		// @todo - needs reformatting due to a select box which should be visible
+
+        .top-bar--switches .js--fancy-select {
+            .reset-border-radius();
+            .reset-box-shadow();
+            .unitize(5, 16, margin-right);
+            background: #fff;
+            line-height: normal;
+            width: auto;
+            border: 0 none;
+            border-right: 1px solid @borderColor;
+
+            &.js--is--focused {
+                border-color: @borderColor;
+            }
+
+            select { height: auto; }
+        }
+        .top-bar--switches .js--fancy-select-text {
+            .unitize-padding(0, 30, 0, 5);
+            font-weight: normal;
+        }
+        .top-bar--switches .js--fancy-select-trigger {
+            .unitize(7, 16, top);
+            border-left: 0 none;
+        }
+
 		.top-bar--language, .top-bar--currency {
 			float: left;
+            max-width: 50%;
 
 			& > form { float: left; }
 		}
         .language--flag {
+            .unitize-margin(0, 0, 0, 5);
             .unitize-height(11);
             .unitize-width(14);
-            .unitize(4, 16, top);
+            .unitize(1, 16, top);
             background: url("../../img/ico-flags.png") no-repeat 0 0;
             display: inline-block;
             text-indent: -9999em;
