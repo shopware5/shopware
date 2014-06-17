@@ -88,5 +88,7 @@ if ($kernel->isHttpCacheEnabled()) {
 }
 
 $request = Request::createFromGlobals();
+\Shopware\Components\ClientDetection\ClientDetectionProcessor::parseRequest($request);
+
 $kernel->handle($request)
        ->send();
