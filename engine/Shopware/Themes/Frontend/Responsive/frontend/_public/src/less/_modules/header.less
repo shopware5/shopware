@@ -123,14 +123,53 @@
 		}
 		.top-bar--switches {
 			.clearfix();
-			width: 25%;
+			width: 50%
 		}
-		// @todo - needs reformatting due to a select box which should be visible
+
+        .top-bar--switches .js--fancy-select {
+            .reset-border-radius();
+            .reset-box-shadow();
+            .unitize(5, 16, margin-right);
+            background: #fff;
+            line-height: normal;
+            width: auto;
+            border: 0 none;
+            border-right: 1px solid @borderColor;
+
+            &.js--is--focused {
+                border-color: @borderColor;
+            }
+
+            select { height: auto; }
+        }
+        .top-bar--switches .js--fancy-select-text {
+            .unitize-padding(0, 30, 0, 5);
+            font-weight: normal;
+        }
+        .top-bar--switches .js--fancy-select-trigger {
+            .unitize(8, 16, top);
+            border-left: 0 none;
+        }
+
 		.top-bar--language, .top-bar--currency {
 			float: left;
+            max-width: 50%;
 
 			& > form { float: left; }
 		}
+        .language--flag {
+            .unitize-margin(0, 0, 0, 5);
+            .unitize-height(11);
+            .unitize-width(14);
+            background: url("../../img/ico-flags.png") no-repeat 0 0;
+            display: inline-block;
+            text-indent: -9999em;
+            position: relative;
+
+            // We need to work with pixels here
+            &.de_DE { background-position: 0 0; }
+            &.en_GB { background-position: 0 -11px; }
+        }
 
 		.logo-main {
 			.unitize-padding(24, 10, 24, 10, 16);
@@ -156,7 +195,7 @@
 	}
 
 	.top-bar--navigation {
-		width: 75%;
+		width: 50%;
 		text-align: right;
 
 		.navigation--entry {
@@ -180,7 +219,42 @@
 			}
 		}
 
-		.service--list { display: none; }
+        .entry--service {
+            .unitize-width(160);
+            position: relative;
+            border-right: 1px solid @borderColor;
+
+            &::after {
+                .unitize(-2, 16, top);
+                content: "\e612";
+                font-family: 'shopware';
+                position: relative;
+            }
+        }
+		.service--list {
+            .unitize-width(160);
+            .unitize-padding(8, 8);
+            .unitize(22, 16, top);
+            .unitize(-1, 16, left);
+            text-align: left;
+            position: absolute;
+            display: none;
+            list-style: none;
+            background: #fff;
+            z-index: 1000;
+            border: 1px solid @borderColor;
+            border-top-color: #fff;
+
+            .service--entry {
+                .unitize-padding(4, 0);
+            }
+        }
+        .js--is--dropdown-active .service--list {
+            display: block;
+
+            .service--link { color: @primaryTextColor }
+            .service--link:hover { color: @primaryColor }
+        }
 	}
 
 	.shop--navigation {
