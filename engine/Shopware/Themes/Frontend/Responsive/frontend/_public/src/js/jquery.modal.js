@@ -1,33 +1,5 @@
 ;(function ($) {
-    $.plugin('ajaxModal', {
-        init: function () {
-            var me = this;
-
-            me._on(me.$el, 'click', me.onClick.bind(me));
-        },
-
-        onClick: function (event) {
-            var me = this,
-                data = $.extend({
-                    mode: 'ajax'
-                }, me.$el.data());
-
-            switch (data.mode) {
-                case 'ajax':
-                    $.modal.open(me.$el.attr('href'), data);
-                    break;
-                case 'iframe':
-                    $.modal.open(me.$el.attr('src'), data);
-                    break;
-                case 'content':
-                default:
-                    $.modal.open(me.$el.html(), data);
-                    break;
-            }
-
-            event.preventDefault();
-        }
-    });
+    "use strict";
 
     $.modal = {
         $modalBox: null,
@@ -38,12 +10,15 @@
 
         defaults: {
             mode: 'local',
+            sizing: 'auto',
             width: 600,
             height: 600,
             overlay: true,
-            nonClosing: true,
+            closeOnOverlay: true,
+            showCloseButton: true,
             animationSpeed: 500,
-            title: ''
+            title: '',
+            src: ''
         },
 
         options: {},
@@ -56,12 +31,12 @@
 
             if (opts.overlay) {
                 $.overlay.open({
-                    closeOnClick: !opts.nonClosing
+                    closeOnClick: opts.closeOnOverlay
                 });
 
                 $.overlay.removeListener('click.modal');
 
-                if (!opts.nonClosing) {
+                if (opts.closeOnOverlay) {
                     $.overlay.addListener('click.modal', me.close.bind(me));
                 }
             }
@@ -70,22 +45,107 @@
                 me._initModalBox();
             }
 
-            me.setWidth(opts.width, false);
-            me.setHeight(opts.height, false);
+            me.$closeButton.toggle(opts.showCloseButton);
+
+            me.$modalBox.toggleClass('fixed', opts.sizing === 'fixed');
+
+            me.setWidth(opts.width);
+            me.setHeight(opts.height);
             me.setTitle(opts.title);
+
+            me.$modalBox.show();
 
             switch (opts.mode) {
                 case 'ajax':
                     me.$content.load(content);
+                    me.options.src = content;
                     break;
                 case 'iframe':
-                    me.setContent('<iframe src="' + content + '">');
+                    me.setContent('<iframe src="' + content + '"></iframe>');
+                    me.options.src = content;
                     break;
-                case 'local':
-                default: me.setContent(content);
+                default:
+                    me.setContent(content);
+                    break;
             }
 
-            me.$modalBox.fadeIn(opts.animationSpeed);
+            me.setTransition({
+                opacity: 1
+            }, me.options.animationSpeed, 'linear');
+        },
+
+        close: function () {
+            var me = this,
+                opts = me.options;
+
+            if (opts.overlay) {
+                $.overlay.close();
+            }
+
+            if (me.$modalBox !== null) {
+                me.setTransition({
+                    opacity: 0
+                }, me.options.animationSpeed, 'linear', function () {
+                    me.$content.html('');
+                    me.$modalBox.hide();
+                });
+            }
+        },
+
+        _initModalBox: function () {
+            var me = this;
+
+            me.$modalBox = $('<div>', {
+                'class': 'js--modal'
+            });
+
+            me.$header = $('<div>', {
+                'class': 'header'
+            }).appendTo(me.$modalBox);
+
+            me.$title = $('<div>', {
+                'class': 'title'
+            }).appendTo(me.$header);
+
+            me.$closeButton = $('<div>', {
+                'class': 'btn icon--cross is--small btn--grey modal--close'
+            }).appendTo(me.$header);
+
+            me.$closeButton.on('click.modal', me.close.bind(me));
+
+            me.$content = $('<div>', {
+                'class': 'content'
+            }).appendTo(me.$modalBox);
+
+            $('body').append(me.$modalBox);
+
+            StateManager.registerListener({
+                type: 'smartphone',
+                enter: function() {
+                    me.$modalBox.addClass('is--fullscreen');
+                },
+                exit: function () {
+                    me.$modalBox.removeClass('is--fullscreen');
+                }
+            });
+        },
+
+        setTransition: function (css, duration, animation, callback) {
+            var me = this,
+                opts = $.extend({
+                    animation: 'ease',
+                    duration: me.options.animationSpeed
+                }, {
+                    animation: animation,
+                    duration: duration
+                });
+
+            if (!$.support.transition) {
+                me.$modalBox.animate(css, opts.duration, opts.animation, callback);
+                return;
+            }
+
+            me.$modalBox.transition(css, opts.duration, opts.animation, callback);
         },
 
         setTitle: function (title) {
@@ -100,139 +160,16 @@
             me.$content.html(content);
         },
 
-        setWidth: function (width, animate) {
-            var me = this,
-                css = {
-                    width: ~~(width),
-                    marginLeft: ~~(width / 2) * -1
-                };
-
-            me.options.width = ~~(width);
-
-            if(animate !== false) {
-                me.$modalBox.transition(css, me.options.animationSpeed, 'ease');
-                return;
-            }
-
-            me.$modalBox.css(css);
-        },
-
-        setHeight: function (height, animate) {
-            var me = this,
-                css = {
-                    height: ~~(height),
-                    marginTop: ~~(height / 2) * -1
-                };
-
-            me.options.height = ~~(height);
-
-            if(animate !== false) {
-                me.setTransition(css);
-                return;
-            }
-
-            me.$modalBox.css(css);
-        },
-
-        _initModalBox: function () {
-            var me = this,
-                opts = me.options;
-
-            me.$modalBox = $('<div>', {
-                class: 'js--modal'
-            });
-
-            me.$header = $('<div>', {
-                class: 'header'
-            }).appendTo(me.$modalBox);
-
-            me.$title = $('<div>', {
-                class: 'title'
-            }).appendTo(me.$header);
-
-            me.$closeButton = $('<div>', {
-                class: 'btn icon--cross is--small btn--grey modal--close'
-            }).appendTo(me.$header);
-
-            me.$closeButton.on('click', me.close.bind(me));
-
-            me.$content = $('<div>', {
-                class: 'content'
-            }).appendTo(me.$modalBox);
-
-            $('body').append(me.$modalBox);
-
-            StateManager.registerListener({
-                type: 'smartphone',
-                enter: function() {
-                    me.enterFullScreen(true);
-                },
-                exit: function () {
-                    me.leaveFullScreen();
-                }
-            });
-        },
-
-        enterFullScreen: function (animate) {
-            var me = this,
-                css = {
-                    height: '100%',
-                    width: '100%',
-                    marginTop: 0,
-                    marginLeft: 0,
-                    top: 0,
-                    left: 0
-                };
-
-            if(animate !== false) {
-                me.setTransition(css);
-                return;
-            }
-
-            me.$modalBox.css(css);
-        },
-
-        setTransition: function (css, duration, animation) {
+        setWidth: function (width) {
             var me = this;
 
-            me.$modalBox.transition(css, duration || me.options.animationSpeed, animation || 'ease');
+            me.$modalBox.css('width', ~~(width));
         },
 
-        leaveFullScreen: function (animate) {
-            var me = this,
-                opts = me.options,
-                width = ~~(opts.width),
-                height = ~~(opts.height),
-                css = {
-                    width: width,
-                    marginLeft: ~~(width / 2) * -1,
-                    height: height,
-                    marginTop: ~~(height / 2) * -1,
-                    top: '50%',
-                    left: '50%'
-                };
+        setHeight: function (height) {
+            var me = this;
 
-            if(animate !== false) {
-                me.$modalBox.transition(css, me.options.animationSpeed, 'ease');
-                return;
-            }
-
-            me.$modalBox.css(css);
-        },
-
-        close: function () {
-            var me = this,
-                opts = me.options;
-
-            if (opts.overlay) {
-                $.overlay.close();
-            }
-
-            if (me.$modalBox !== null) {
-                me.$modalBox.fadeOut(opts.animationSpeed, function () {
-                    me.$content.html('');
-                });
-            }
+            me.$modalBox.css('height', ~~(height));
         }
     }
 })(jQuery);
