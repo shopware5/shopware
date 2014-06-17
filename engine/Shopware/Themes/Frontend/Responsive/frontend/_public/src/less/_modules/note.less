@@ -126,6 +126,20 @@
 
 @media screen and(min-width: @tabletViewportWidth) {
 
+    .is--ctl-note {
+        .categories--headline,
+        .categories--navigation,
+        .shop-sites--headline,
+        .shop-sites--navigation,
+        .logo--trusted-shops {
+            display: none;
+        }
+
+        .sidebar-main {
+            display: none;
+        }
+    }
+
     .note--content {
         .unitize-margin(20, 0);
     }
@@ -235,6 +249,14 @@
 }
 
 @media screen and(min-width: @desktopViewportWidth) {
+
+    .is--ctl-note {
+        &.is--user {
+            .sidebar-main {
+                display: block;
+            }
+        }
+    }
 
     .note--content {
         .unitize-margin(45, 0, 0, 0);
