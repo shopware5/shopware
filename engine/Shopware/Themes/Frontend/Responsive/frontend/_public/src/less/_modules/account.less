@@ -224,7 +224,7 @@
 }
 
 .account--password-reset {
-    .unitize(20, 16, padding-top);
+    .unitize(20, 16, margin-top);
 
     .password-reset--input {
         .unitize-margin(10, 0);
@@ -240,7 +240,6 @@
 
 @media screen and(min-width: @tabletViewportWidth) {
 
-    .is--ctl-note,
     .is--ctl-account {
         .categories--headline,
         .categories--navigation,
@@ -248,6 +247,13 @@
         .shop-sites--navigation,
         .logo--trusted-shops {
             display: none;
+        }
+
+        &.is--act-logout,
+        &.is--act-password {
+            .sidebar-main {
+                display: none;
+            }
         }
     }
 
@@ -504,7 +510,7 @@
     }
 
     .account--password-reset {
-        padding-top: 0;
+        .unitize-margin(45, 0, 0, 0);
     }
 
     // Change Address
