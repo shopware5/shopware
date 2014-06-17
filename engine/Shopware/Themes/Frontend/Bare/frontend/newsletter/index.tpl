@@ -6,12 +6,11 @@
 {/block}
 
 {block name="frontend_index_content"}
-	<div class="grid_16 tellafriend custom" id="center">
-		<div class="col_center_custom">
+	<div class="newsletter--content c">
+		<div class="newsletter--headline panel--body is--wide">
 
-			<h1>{s name=NewsletterRegisterHeadline}{/s}</h1>
-
-			<p>{s name=sNewsletterInfo}{/s}</p>
+			<h1>{s name="NewsletterRegisterHeadline"}{/s}</h1>
+			<p>{s name="sNewsletterInfo"}{/s}</p>
 
 		</div>
 		{if $sStatus.code==3||$sStatus.code==2}
@@ -21,68 +20,53 @@
 		{/if}
 
 		{if $voteConfirmed == false || $sStatus.code == 0}
-			<div class="contact_box register">
-				<h2 class="headingbox_dark largesize">{s name=NewsletterRegisterHeadline}{/s}</h2>
+			<div class="newsletter--form panel has--border">
+				<h1 class="panel--title is--underline">{s name="NewsletterRegisterHeadline"}{/s}</h1>
 
 				<form action="{url controller='newsletter'}" method="post" id="letterForm">
-					<fieldset>
-						<div>
-							<label>{s name=NewsletterLabelSelect}{/s}</label>
-							<select id="chkmail" name="subscribeToNewsletter" class="text" onchange="refreshAction();">
-								<option value="1">{s name=sNewsletterOptionSubscribe}{/s}</option>
-								<option value="-1"
-										{if $_POST.subscribeToNewsletter eq -1 || (!$_POST.subscribeToNewsletter && $sUnsubscribe == true)}selected{/if}>{s name=sNewsletterOptionUnsubscribe}{/s}</option>
+					<div class="panel--body is--wide">
+
+						<div class="newsletter--subscription">
+							<select name="subscribeToNewsletter" required="required" class="field--select" onchange="refreshAction();">
+								<option value="1">{s name="sNewsletterOptionSubscribe"}{/s}</option>
+								<option value="-1" {if $_POST.subscribeToNewsletter eq -1 || (!$_POST.subscribeToNewsletter && $sUnsubscribe == true)}selected{/if}>{s name="sNewsletterOptionUnsubscribe"}{/s}</option>
 							</select>
 						</div>
-						<div>
-							<label for="newsletter">{s name=sNewsletterLabelMail}{/s}</label>
-							<input name="newsletter" type="text" id="newsletter"
-								   value="{if $_POST.newsletter}{$_POST.newsletter}{elseif $_GET.sNewsletter}{$_GET.sNewsletter|escape}{/if}"
-								   class="text {if $sStatus.sErrorFlag.newsletter}instyle_error{/if}"/>
+
+						<div class="newsletter--email">
+							<input name="newsletter" type="text" placeholder="{s name="sNewsletterLabelMail"}{/s}" required="required" aria-required="true" id="newsletter" value="{if $_POST.newsletter}{$_POST.newsletter}{elseif $_GET.sNewsletter}{$_GET.sNewsletter|escape}{/if}" class="newsletter--field is--required{if $sStatus.sErrorFlag.newsletter} has--error{/if}"/>
 						</div>
+
 						{if {config name=NewsletterExtendedFields}}
 							<div id="sAdditionalForm">
-								<div>
-									<label for="salutation">{s name=NewsletterRegisterLabelSalutation}{/s}</label>
-									<select name="salutation" id="salutation"
-											class="text{if $sStatus.sErrorFlag.salutation} instyle_error{/if}">
-										<option value="">{s name=NewsletterRegisterPleaseChoose}{/s}</option>
-										<option value="mr"
-												{if $_POST.salutation eq "mr"}selected{/if}>{s name=NewsletterRegisterLabelMr}{/s}</option>
-										<option value="ms"
-												{if $_POST.salutation eq "ms"}selected{/if}>{s name=NewsletterRegisterLabelMs}{/s}</option>
+								<div class="newsletter--salutation">
+									<select name="salutation" id="salutation" required="required" class="field--select{if $sStatus.sErrorFlag.salutation} has--error{/if}">
+										<option value="">{s name="NewsletterRegisterPleaseChoose"}{/s}</option>
+										<option value="mr" {if $_POST.salutation eq "mr"}selected{/if}>{s name="NewsletterRegisterLabelMr"}{/s}</option>
+										<option value="ms" {if $_POST.salutation eq "ms"}selected{/if}>{s name="NewsletterRegisterLabelMs"}{/s}</option>
 									</select>
 								</div>
 
-								<div>
-									<label for="firstname">{s name=NewsletterRegisterLabelFirstname}{/s}</label>
-									<input name="firstname" type="text" id="firstname" value="{$_POST.firstname|escape}"
-										   class="text {if $sStatus.sErrorFlag.firstname}instyle_error{/if}"/>
+								<div class="newsletter--firstname">
+									<input name="firstname" type="text" placeholder="{s name="NewsletterRegisterLabelFirstname"}{/s}" id="firstname" value="{$_POST.firstname|escape}" class="newsletter--field{if $sStatus.sErrorFlag.firstname} has--error{/if}"/>
 								</div>
 
-								<div>
-									<label for="lastname">{s name=NewsletterRegisterLabelLastname}{/s}</label>
-									<input name="lastname" type="text" id="lastname" value="{$_POST.lastname|escape}"
-										   class="text {if $sStatus.sErrorFlag.lastname}instyle_error{/if}"/>
+								<div class="newsletter--lastname">
+									<input name="lastname" type="text" placeholder="{s name="NewsletterRegisterLabelLastname"}{/s}" id="lastname" value="{$_POST.lastname|escape}" class="newsletter--field{if $sStatus.sErrorFlag.lastname} has--error{/if}"/>
 								</div>
 
-								<div>
-									<label for="street">{s name=NewsletterRegisterBillingLabelStreet}{/s}</label>
-									<input name="street" type="text" id="street" value="{$_POST.street|escape}"
-										   class="street text {if $sStatus.sErrorFlag.street}instyle_error{/if}"/>
-									<input name="streetnumber" type="text" id="streetnumber"
-										   value="{$_POST.streetnumber|escape}"
-										   class="number text {if $sStatus.sErrorFlag.streetnumber}instyle_error{/if}"/>
+								<div class="newsletter--street">
+									<input name="street" type="text" placeholder="{s name="NewsletterRegisterBillingLabelStreet"}{/s}" id="street" value="{$_POST.street|escape}" class="newsletter--field newsletter--field-street{if $sStatus.sErrorFlag.street} has--error{/if}"/>
+									<input name="streetnumber" type="text" placeholder="" id="streetnumber" value="{$_POST.streetnumber|escape}" class="newsletter--field newsletter--field-streetnumber{if $sStatus.sErrorFlag.streetnumber} has--error{/if}"/>
 								</div>
 
-								<div>
-									<label for="zipcode">{s name=NewsletterRegisterBillingLabelCity}{/s}</label>
-									<input name="zipcode" type="text" id="zipcode" value="{$_POST.zipcode|escape}"
-										   class="zipcode text {if $sStatus.sErrorFlag.zipcode}instyle_error{/if}"/>
-									<input name="city" type="text" id="city" value="{$_POST.city|escape}" size="25"
-										   class="city text {if $sStatus.sErrorFlag.city}instyle_error{/if}"/>
+								<div class="newsletter--zip-city">
+									<input name="zipcode" type="text" placeholder="{s name="NewsletterRegisterBillingLabelCity"}{/s}" id="zipcode" value="{$_POST.zipcode|escape}" class="newsletter--field newsletter--field-zipcode{if $sStatus.sErrorFlag.zipcode} has--error{/if}"/>
+									<input name="city" type="text" id="city" value="{$_POST.city|escape}" size="25" class="newsletter--field newsletter--field-city{if $sStatus.sErrorFlag.city} has--error{/if}"/>
 								</div>
+
 							</div>
+
 							{* @TODO - Move to a javascript file *}
 							{literal}
 								<script type="text/javascript">
@@ -98,17 +82,16 @@
 								</script>
 							{/literal}
 						{/if}
-						<div class="clear">&nbsp;</div>
 
 						{* Required fields hint *}
-						<div class="required_fields">
-							{s name='RegisterPersonalRequiredText' namespace='frontend/register/personal_fieldset'}{/s}
+						<div class="newsletter--required-info">
+							{s name='RegisterPersonalRequiredText' namespace="frontend/register/personal_fieldset"}{/s}
 						</div>
 
-						<input type="submit" value="{s name=sNewsletterButton}{/s}" class="button-right large"/>
-					</fieldset>
+						<input type="submit" value="{s name="sNewsletterButton"}{/s}" class="btn btn--primary right"/>
+
+					</div>
 				</form>
-				<div class="clear"></div>
 			</div>
 		{/if}
 	</div>
