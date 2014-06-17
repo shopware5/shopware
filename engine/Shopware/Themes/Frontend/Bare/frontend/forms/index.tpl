@@ -12,34 +12,36 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-	<div id="center" class="grid_16 supportrequest">
-		<div class="col_center_custom">
-			<h1>{$sSupport.name}</h1>
+	<div class="forms--content content block panel right">
 
-			{if $sSupport.sElements}
-				{eval var=$sSupport.text}
-			{elseif $sSupport.text2}
-				{include file="frontend/_includes/messages.tpl" type="success" content=$sSupport.text2}
-			{/if}
-		</div>
-		<h2 class="headingbox_dark largesize">{$sSupport.name}</h2>
+		{* Forms headline *}
+		{block name='frontend_forms_index_headline'}
+			<div class="forms--headline panel--body is--wide">
+				{if $sSupport.sElements}
+					<h1>{$sSupport.name}</h1>
+					{eval var=$sSupport.text}
+				{elseif $sSupport.text2}
+					{include file="frontend/_includes/messages.tpl" type="success" content=$sSupport.text2}
+				{/if}
+			</div>
+		{/block}
 
-		<div class="inner_container">
+		{* Forms Content *}
+		{block name='frontend_forms_index_content'}
 			{if $sSupport.sElements}
-				<div class="space">&nbsp;</div>
-				{block name='frontend_forms_index_elements'}
-					{include file="frontend/forms/elements.tpl"}
-				{/block}
-			{elseif $sSupport.text2}
-				<div class="space">&nbsp;</div>
-				<a href="{url controller='index'}" class="button-left large">{s name='FormsLinkBack'}{/s}</a>
-			{else}
-				<div class="col_center_container">
-					<p>{s name='FormsTextContact'}{/s}</p>
-					<a href="{url controller='index'}" class="button-left large">{s name='FormsLinkBack'}{/s}</a>
+				<div class="forms--container panel has--border">
+					<h1 class="panel--title is--underline">{$sSupport.name}</h1>
+					<div class="panel--body">
+						{block name='frontend_forms_index_elements'}
+							{include file="frontend/forms/elements.tpl"}
+						{/block}
+					</div>
 				</div>
 			{/if}
-		</div>
-		<div class="doublespace">&nbsp;</div>
+		{/block}
+
 	</div>
 {/block}
+
+{* Hide sidebar right *}
+{block name='frontend_index_content_right'}{/block}
