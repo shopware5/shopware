@@ -1,3 +1,40 @@
+.newsletter--content {
+    .clearfix();
+
+    .newsletter--headline {
+        .newsletter--title {
+            .unitize(10, 16, margin-top);
+        }
+      
+        .newsletter--info {
+            margin: 0;
+        }
+    }
+
+    .js--fancy-select {
+        .unitize(10, 16, margin-bottom);
+        width: 100%;
+    }
+
+    .newsletter--error-messages { .unitize(20, 16, margin-bottom); }
+    .newsletter--form { .border-radius(); }
+    .newsletter--required-info { .unitize(16, 16, margin-bottom); }
+
+    .newsletter--action {
+        .clearfix();
+
+        .btn--primary {
+            float: right;
+
+            & [class^=icon] {
+                .unitize(10, 16, font-size);
+                .unitize-margin(-2, 0, 0, 16);
+            }
+        }
+    }
+
+}
+
 // Newsletter listing
 .newsletter-listing--content {
 
@@ -70,6 +107,11 @@
 
 @media screen and (min-width: @tabletViewportWidth) {
 
+    .newsletter--content .js--fancy-select {
+        .unitize(15, 16, margin-bottom);
+        .unitize-width(290);
+    }
+    
     // Newsletter listing
     .newsletter-listing--content {
 
@@ -99,6 +141,17 @@
 
 @media screen and (min-width: @desktopViewportWidth) {
 
+    .newsletter--content {
+        .unitize(45, 16, margin-top);
+        width: 78%;
+        float: right;
+
+        .newsletter--headline .newsletter--title {
+            .unitize(0, 16, margin-top);
+        }
+
+    }
+    
     // Newsletter listing
     .newsletter-listing--content {
         .unitize(45, 16, margin-top);
