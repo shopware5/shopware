@@ -6,8 +6,9 @@
 // @param: {String} duration: Duration of the transition including the unit (Default: 0.3s)
 // @param: {String} easing: The easing which should be used for the transition (Default: ease-out)
 .transition(@properties: all, @duration: 0.3s, @easing: ease-out) {
-	-webkit-transition: @arguments;
-	-moz-transition: @arguments;
-	-o-transition: @arguments;
-	transition: @arguments;
+    -webkit-transition: @arguments;
+    -moz-transition: @arguments;
+    -ms-transition: @arguments;
+    -o-transition: @arguments;
+    transition: @arguments;
 }
