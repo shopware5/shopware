@@ -30,6 +30,35 @@ input[type="email"] {
 		background: @errorBackground;
 		border-color: @errorBorderColor;
 	}
+
+    // Input field spacing
+    &.input--field {
+	.unitize(10, 16, margin-bottom);
+	width: 100%;
+
+	&.input--field-street {
+	    margin-right: 2%;
+	    width: 78%;
+	    float: left;
+	}
+
+	&.input--field-streetnumber {
+	    width: 20%;
+	    float: left;
+	}
+
+	&.input--field-zipcode {
+	    margin-right: 2%;
+	    width: 28%;
+	    float: left;
+	}
+
+	&.input--field-city {
+	    width: 70%;
+	    float: left;
+	}
+    }
+
 }
 
 .js--fancy-select {
@@ -150,7 +179,64 @@ input[type="email"] {
 		.unitize-margin(0, 0, 4, 0, 16);
 	}
 }
+@media screen and (min-width: @tabletViewportWidth) {
+
+   /* Standard input fields. */
+    textarea,
+    input[type="text"],
+    input[type="search"],
+    input[type="password"],
+    input[type="number"],
+    input[type="email"] {
+
+	&.input--field {
+	    .unitize(15, 16, margin-bottom);
+
+	    &.input--field-street {
+		margin-right: 2%;
+		width: 84%;
+		float: left;
+	    }
+
+	    &.input--field-streetnumber {
+		width: 14%;
+		float: left;
+	    }
+
+	    &.input--field-zipcode {
+		margin-right: 2%;
+		width: 20%;
+		float: left;
+	    }
+
+	    &.input--field-city {
+		width: 78%;
+		float: left;
+	    }
+
+	}
+    }
+
+}
+
 @media screen and (min-width: @desktopViewportWidth) {
+
+    // Input field styling
+    textarea,
+    input[type="text"],
+    input[type="search"],
+    input[type="password"],
+    input[type="number"],
+    input[type="email"] {
+
+	.input--field {
+	    .unitize(15, 16, margin-bottom);
+	}
+
+    }
+
+
+
 
 	.js--fancy-select {
         .unitize-width(290);
