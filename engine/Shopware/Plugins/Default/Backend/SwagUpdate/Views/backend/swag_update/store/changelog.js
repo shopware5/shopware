@@ -32,5 +32,8 @@ Ext.define('Shopware.apps.SwagUpdate.store.Changelog', {
      * Define the used model for this store
      * @string
      */
-    model : 'Shopware.apps.SwagUpdate.model.Changelog'
+    model : 'Shopware.apps.SwagUpdate.model.Changelog',
+
+
+    pageSize: 999
 });
