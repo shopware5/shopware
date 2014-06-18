@@ -27,7 +27,9 @@
 									<input type="hidden" name="sSelectAddress" value="{$sAddress.hash}" />
 									<input type="hidden" name="sTarget" value="{$sTarget|escape}" />
 
-									{include file="frontend/account/select_address.tpl"}
+									{block name="frontend_account_select_shipping_address_fieldset"}
+										{include file="frontend/account/select_address.tpl"}
+									{/block}
 								</form>
 							</div>
 						{/foreach}

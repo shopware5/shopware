@@ -57,14 +57,8 @@
 							{/block}
 
 							{block name="frontend_note_index_table_items"}
-								{foreach from=$sNotes item=sBasketItem name=noteitems}
-									{if $smarty.foreach.noteitems.last}
-										{assign var=lastrow value=1}
-									{else}
-										{assign var=lastrow value=0}
-									{/if}
-
-									{include file="frontend/note/item.tpl" lastrow=$lastrow}
+								{foreach $sNotes as $sBasketItem}
+									{include file="frontend/note/item.tpl"}
 								{/foreach}
 							{/block}
 						</div>

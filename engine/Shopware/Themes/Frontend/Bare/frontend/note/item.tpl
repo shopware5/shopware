@@ -13,9 +13,11 @@
 								<img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename}" class="note--image" />
 							</a>
 							{* Zoom picture *}
-							<a href="{$sBasketItem.image.src.5}" rel="lightbox" class="note--zoom">
-								{s name="NoteLinkZoom"}{/s}
-							</a>
+							{block name="frontend_note_item_image_zoom"}
+								<a href="{$sBasketItem.image.src.5}" rel="lightbox" class="note--zoom">
+									{s name="NoteLinkZoom"}{/s}
+								</a>
+							{/block}
 						{else}
 							<a href="{$sBasketItem.linkDetails}" title="{$sBasketItem.articlename}" class="note--image-link">
 								<img src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{$sBasketItem.articlename}" class="note--image" />
