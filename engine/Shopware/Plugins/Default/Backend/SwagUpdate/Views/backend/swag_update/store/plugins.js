@@ -32,5 +32,7 @@ Ext.define('Shopware.apps.SwagUpdate.store.Plugins', {
      * Define the used model for this store
      * @string
      */
-    model : 'Shopware.apps.SwagUpdate.model.Plugins'
+    model : 'Shopware.apps.SwagUpdate.model.Plugins',
+
+    pageSize: 999
 });

@@ -22,5 +22,7 @@
  */
 Ext.define('Shopware.apps.SwagUpdate.store.Requirements', {
     extend: 'Ext.data.Store',
-    model : 'Shopware.apps.SwagUpdate.model.Requirement'
+    model : 'Shopware.apps.SwagUpdate.model.Requirement',
+
+    pageSize: 999
 });
