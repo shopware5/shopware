@@ -276,31 +276,34 @@
 
     // Product price info
     .product--price {
-        .unitize(24, 16, line-height);
+        .unitize-margin(20, 0);
+        display: block;
 
-        &.price--default {
+        .price--default {
             .unitize(20, 16, font-size);
-            .unitize-margin(10, 0, 20, 0);
+            .unitize(24, 16, line-height);
+            .unitize-margin(10, 0, 0, 0);
             color: @primaryColor;
         }
 
-        &.price--unit {
+        .price--unit {
             .unitize(12, 16, font-size);
             .unitize(16, 16, line-height);
             color: @primaryTextColor;
         }
 
-        &.price--discount {
+        .price--discount {
             .content--default {
                 color: #990000;
             }
 
             .content--discount {
                 .unitize(12, 16, font-size);
-                .unitize(14, 16, line-height);
+                .unitize(16, 16, line-height);
                 color: @primaryTextColor;
                 font-weight: normal;
                 text-decoration: line-through;
+                white-space: nowrap;
             }
         }
     }
@@ -322,18 +325,27 @@
             display: block;
         }
     }
+
+    .product--badges {
+        .unitize-width(30px);
+        .unitize(20, 16, top);
+        .unitize(0, 16, left);
+        display: block;
+        position: absolute;
+    }
 }
 
 // Discount Badge
 .badge--discount {
     .unitize-width(30);
     .unitize-padding(3, 0);
+    .unitize-margin(0, 0, 5, 0);
     .unitize(20, 16, font-size);
     .unitize(20, 16, line-height);
-    .unitize(20, 16, top);
     .unitize(-1, 16, left);
     .border-radius-multi(0, 3px, 3px, 0);
-    position: absolute;
+    display: block;
+    position: relative;
     color: #fff;
     font-weight: 600;
     text-align: center;
@@ -347,12 +359,14 @@
     .unitize-padding(0, 10);
     .unitize(15, 16, font-size);
     .unitize(30, 16, line-height);
-    .unitize(110, 16, top);
     .unitize(-1, 16, left);
+    .unitize(5, 16, top);
     .border-radius-multi(0, 0, 3px, 3px);
     .rotate(-90deg);
     .transform-origin(top left 0);
-    position: absolute;
+    display: block;
+    position: relative;
+    margin-top: 100%;
     color: #fff;
     font-weight: 600;
     text-shadow: 0 1px 1px #850000;
@@ -362,21 +376,19 @@
 }
 
 .badge--esd {
-    .unitize-padding(4, 10);
-    .unitize(12, 16, font-size);
+    .unitize-width(30);
+    .unitize-padding(3, 0);
+    .unitize-margin(0, 0, 5, 0);
+    .unitize(18, 16, font-size);
     .unitize(20, 16, line-height);
-    .unitize(0, 16, top);
-    .unitize(60, 16, left);
-    .border-radius-multi(0, 0, 3px, 3px);
-    .linear-gradient(@primaryBackgroundColor, @borderColor);
-    position: absolute;
-    border-width: 0 1px 1px 1px;
+    .border-radius-multi(0, 3px, 3px, 0);
+    background: @primaryBackgroundColor;
+    display: block;
+    position: relative;
+    border-width: 1px 1px 1px 0;
     border-style: solid;
     border-color: @borderColor;
-
-    [class^="icon--"] {
-        .unitize(5, 16, margin-right);
-    }
+    text-align: center;
 }
 
 // Tablet view
@@ -505,22 +517,11 @@
             }
 
             .product--price {
-                &.price--default {
-                    .unitize(10, 16, left);
-                    .unitize(10, 16, bottom);
-                    position: absolute;
-                    margin: 0;
-                }
-
-                &.price--unit {
-                    .unitize(24, 16, line-height);
-                    .unitize(14, 16, font-size);
-                    .unitize(10, 16, left);
-                    .unitize(35, 16, bottom);
-                    .unitize(10, 16, padding-right);
-                    position: absolute;
-                    margin: 0;
-                }
+                .unitize(10, 16, left);
+                .unitize(10, 16, bottom);
+                .unitize(10, 16, padding-right);
+                position: absolute;
+                margin: 0;
             }
 
             .product--actions {
@@ -574,20 +575,10 @@
             }
 
             .product--price {
-                &.price--default {
-                    .unitize(20, 16, bottom);
-                    .unitize(200, 16, left);
-                    margin: 0;
-                    position: absolute;
-                    top: auto;
-                }
-
-                &.price--unit {
-                    .unitize(45, 16, bottom);
-                    .unitize(200, 16, left);
-                    position: absolute;
-                    margin: 0;
-                }
+                .unitize(20, 16, bottom);
+                .unitize(200, 16, left);
+                position: absolute;
+                margin: 0;
             }
         }
     }
@@ -805,6 +796,14 @@
                 display: block;
             }
 
+            .product--price {
+                .unitize(15, 16, bottom);
+
+                .price--default {
+                    .unitize-margin(5, 0, 0, 0);
+                }
+            }
+
             .product--actions {
                 .unitize-width(220);
                 .unitize-height(145);
@@ -864,13 +863,11 @@
             }
 
             .product--price {
-                &.price--default {
-                    .unitize(200, 16, left);
-                    .unitize(20, 16, bottom);
-                }
+                .unitize(200, 16, left);
+                .unitize(20, 16, bottom);
 
-                &.price--unit {
-                    .unitize-margin(0, 10, 0, 200);
+                .price--default {
+                    .unitize-margin(5, 0, 0, 0);
                 }
             }
 
@@ -896,6 +893,10 @@
                     .unitize(14, 16, font-size);
                     display: block;
                 }
+            }
+
+            .badge--highlight {
+                .unitize(265, 16, right);
             }
         }
     }
@@ -929,6 +930,12 @@
 
             .product--title {
                 .unitize(30, 16, line-height);
+            }
+
+            .product--price {
+                .price--default {
+                    .unitize-margin(5, 0, 0, 0);
+                }
             }
 
             .product--actions {
@@ -983,7 +990,10 @@
             }
 
             .product--price {
-                &.price--unit {
+                .price--default {
+                    .unitize-margin(5, 0, 0, 0);
+                }
+                .price--unit {
                     .unitize(11, 16, font-size);
                     .unitize(14, 16, line-height);
                 }
