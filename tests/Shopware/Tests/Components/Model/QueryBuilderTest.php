@@ -205,4 +205,49 @@ class Shopware_Tests_Components_Model_QueryBuilderTest extends PHPUnit_Framework
         );
         $this->assertEquals($expectedResult, $params);
     }
+
+    public function testAddFilterArrayOfValues()
+    {
+        $testValues = array(
+            'testArrayOfNumbers' => array(
+                'type' => Doctrine\DBAL\Connection::PARAM_INT_ARRAY,
+                'parameterName' => 'numbers',
+                'values' => array(1, 2, 3)
+            ),
+            'testArrayOfStrings' => array(
+                'type' => Doctrine\DBAL\Connection::PARAM_STR_ARRAY,
+                'parameterName' => 'strings',
+                'values' => array('A', 'B', 'C')
+            )
+        );
+
+        $filter = array();
+        foreach ($testValues as $testValue) {
+            $filter[] = array(
+                'property'   => $testValue['parameterName'],
+                'value'      => $testValue['values']
+            );
+        }
+
+        $this->querybuilder->addFilter($filter);
+
+        /** @var $expression \Doctrine\ORM\Query\Expr\Andx */
+        $expression = $this->querybuilder->getDQLPart('where');
+        $parts = $expression->getParts();
+
+        $expectedResult = array();
+        foreach ($testValues as $testValue) {
+            $expectedResult[] = new Doctrine\ORM\Query\Expr\Comparison($testValue['parameterName'], 'IN', '(:'.$testValue['parameterName'].')');
+        }
+
+        $this->assertEquals($expectedResult, $parts);
+
+        $params = $this->querybuilder->getParameters()->toArray();
+        $expectedResult = array();
+        foreach ($testValues as $testValue) {
+            $expectedResult[] = new \Doctrine\ORM\Query\Parameter(':'.$testValue['parameterName'], $testValue['values'], $testValue['type']);
+        }
+
+        $this->assertEquals($expectedResult, $params);
+    }
 }
