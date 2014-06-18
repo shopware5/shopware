@@ -9,27 +9,39 @@
     {/if}
 {/block}
 
-{* Newcomer badge *}
-{block name='frontend_listing_box_article_new'}
-    {if $sArticle.newArticle}
-        <div class="product--badge badge--newcomer">
-			{s name="ListingBoxNew"}{/s}
-        </div>
-    {/if}
+{* Small product badges on the left *}
+{block name="frontend_listing_box_article_badges"}
+	<div class="product--badges">
+
+		{* ESD product badge *}
+		{block name='frontend_listing_box_article_esd'}
+			{if $sArticle.esd}
+				<div class="product--badge badge--esd">
+					<i class="icon--download"></i>
+				</div>
+			{/if}
+		{/block}
+
+		{* Discount badge *}
+		{block name='frontend_listing_box_article_discount'}
+			{if $sArticle.pseudoprice}
+				<div class="product--badge badge--discount">%</div>
+			{/if}
+		{/block}
+
+		{* Newcomer badge *}
+		{block name='frontend_listing_box_article_new'}
+			{if $sArticle.newArticle}
+				<div class="product--badge badge--newcomer">
+					{s name="ListingBoxNew"}{/s}
+				</div>
+			{/if}
+		{/block}
+	</div>
 {/block}
 
-{* ESD product badge *}
-{block name='frontend_listing_box_article_esd'}
-    {if $sArticle.esd}
-        <div class="product--badge badge--esd">
-			<i class="icon--download"></i> {s name="ListingBoxInstantDownload"}{/s}
-        </div>
-    {/if}
-{/block}
 
-{* Discount badge *}
-{block name='frontend_listing_box_article_discount'}
-    {if $sArticle.pseudoprice}
-        <div class="product--badge badge--discount">%</div>
-    {/if}
-{/block}
+
+
+
+

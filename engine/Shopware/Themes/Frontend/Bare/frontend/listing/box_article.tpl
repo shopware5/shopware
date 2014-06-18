@@ -36,14 +36,19 @@
 			{include file="frontend/listing/product-box/description.tpl" size=$size}
 		{/block}
 
-		{* Product price - Unit price *}
-		{block name='frontend_listing_box_article_unit'}
-			{include file="frontend/listing/product-box/unit-price.tpl"}
-		{/block}
+		{block name='frontend_listing_box_article_price_info'}
+			<div class="product--price">
 
-		{* Product price - Default and discount price *}
-		{block name='frontend_listing_box_article_price'}
-			{include file="frontend/listing/product-box/price.tpl"}
+				{* Product price - Unit price *}
+				{block name='frontend_listing_box_article_unit'}
+					{include file="frontend/listing/product-box/unit-price.tpl"}
+				{/block}
+
+				{* Product price - Default and discount price *}
+				{block name='frontend_listing_box_article_price'}
+					{include file="frontend/listing/product-box/price.tpl"}
+				{/block}
+			</div>
 		{/block}
 
 		{* Product actions - Compare product, more information, buy now *}
