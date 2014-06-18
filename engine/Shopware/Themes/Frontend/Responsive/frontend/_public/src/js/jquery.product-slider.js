@@ -295,6 +295,8 @@
         me.$items.css({ width: me.itemsWidth });
         me.$container.stop(true, true).css({ width: me.itemsCount * me.itemsWidth + 20 });
 
+        me.setPosition(me.slideIndex);
+
         // Also handle new loaded images bye the picturefill
         window.picturefill();
     };
