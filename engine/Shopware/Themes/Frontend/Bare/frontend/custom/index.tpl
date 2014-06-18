@@ -25,7 +25,7 @@
 
 		{* Custom page container *}
 		{block name="frontend_custom_content"}
-			<div class="custom-page--container" data-tab-content="true">
+			<div class="custom-page--container" data-tab-content="true" data-mode="remote">
 
 				{* Custom page tab navigation *}
 				{block name="frontend_custom_tab_navigation"}
@@ -37,13 +37,28 @@
 						{/if}
 						{if $pages}
 							{block name="frontend_custom_tab_navigation_list"}
+								{$isSubPageActive=false}
+								{foreach $pages as $subPage}
+									{if $subPage.active}
+										{$isSubPageActive=true}
+										{break}
+									{/if}
+								{/foreach}
 								<ul class="tab--navigation panel--tab-nav">
+									<li class="navigation--entry">
+										<a class="navigation--link{if !$isSubPageActive} is--active{/if}" href="{url controller=custom sCustom=$sCustomPage.id}" title="{$sCustomPage.description}">
+											{$sCustomPage.description}
+										</a>
+									</li>
 									{foreach $pages as $subPage}
 										{block name="frontend_custom_tab_navigation_entry"}
 											<li class="navigation--entry">
-												<a class="navigation--link{if $subPage.active} is--active{/if}" href="{url controller=custom sCustom=$subPage.id}" title="{$subPage.description}">
-													{$subPage.description}
-												</a>
+
+												{block name="frontend_custom_tab_navigation_entry"}
+													<a class="navigation--link{if $subPage.active} is--active{/if}" href="{url controller=custom sCustom=$subPage.id}" title="{$subPage.description}">
+														{$subPage.description}
+													</a>
+												{/block}
 											</li>
 										{/block}
 									{/foreach}
@@ -57,19 +72,19 @@
 				{block name="frontend_custom_article"}
 					<div class="tabs--content-container tab--content panel--body is--wide has--border">
 
-						{* Custom page tab headline *}
-						{block name="frontend_custom_article_headline"}
-							<h1 class="custom-page--tab-headline">{$sCustomPage.description}</h1>
-						{/block}
+						<div class="content--custom">
+							{* Custom page tab headline *}
+							{block name="frontend_custom_article_headline"}
+								<h1 class="custom-page--tab-headline">{$sCustomPage.description}</h1>
+							{/block}
 
-						{* Custom page tab inner content *}
-						{block name="frontend_custom_article_content"}
-							{$sContent}
-						{/block}
-
+							{* Custom page tab inner content *}
+							{block name="frontend_custom_article_content"}
+								{$sContent}
+							{/block}
+						</div>
 					</div>
 				{/block}
-
 			</div>
 		{/block}
 
