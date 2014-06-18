@@ -112,6 +112,76 @@
 	.main-search--button { display: none; }
 }
 
+.main-search--results {
+  width: 100%;
+  position: absolute;
+  display: none;
+  background: white;
+  border: 1px solid #d8dce5;
+  box-shadow: 0 2px 3px 1px #d8dce5;
+  padding: 20px 20px 10px 20px;
+  .unitize-padding(20, 20, 10, 20);
+  .unitize(110, 16, top);
+  z-index: 100;
+  left: 0;
+
+  &::after {
+    .rotate(135deg);
+    display: block;
+    content: '';
+    position: absolute;
+    height: 15px;
+    width: 15px;
+    background: #fff;
+    left: 48%;
+    top: -9px;
+    border-bottom: 1px solid #D8DCE5;
+    border-left: 1px solid #D8DCE5;
+  }
+
+  .search-results--inner {
+
+    ul {
+      display: table;
+      width: 100%;
+      border-bottom: 1px solid #d8dce5;
+    }
+
+    ul:last-child {
+      border-bottom: 0;
+    }
+
+    li {
+      display: table-cell;
+      table-layout: fixed;
+      border-spacing: 5px;
+      text-align: left;
+      padding: 12px 0;
+      vertical-align: middle;
+
+      a {
+        color: #5F7285;
+      }
+    }
+
+    li:first-child {
+      width: 10%;
+    }
+
+    li:last-child {
+      text-align: right;
+      width: 20%;
+      color: @primaryColor
+    }
+
+    a.resultall {
+      float: left;
+      margin-top: 12px;
+      font-weight: normal;
+    }
+  }
+}
+
 // Tablet styling for the global shop header
 @media screen and (min-width: @tabletViewportWidth) {
 	.header-main {
@@ -305,7 +375,50 @@
         }
 
 		.cart--quantity { color: #fff; font-weight: normal }
+
+        // Search entry
+        .entry--search {
+          .unitize(14, 16, font-size);
+          margin-right: 7%;
+          background: #fff;
+          padding: 0;
+          border: 0 none;
+          width: 30%;
+
+          .icon--search {
+            .unitize(14, 16, top);
+            .unitize(14, 16, left);
+          }
+
+          .entry--trigger { display: none }
+        }
+
+        // Search form
+        .main-search--form {
+          .box-shadow(0 0 0 transparent);
+          display: block;
+          padding: 0;
+          border: 0 none;
+        }
+
+        // search results
+        .main-search--results {
+          .unitize-width(500, 16);
+          .unitize(80, 16, top);
+
+        }
+
 	}
+}
+
+@media screen and (min-width: @tabletLandscapeViewportWidth) {
+
+    .shop--navigation {
+
+        // Search entry
+        .entry--search { width: 45%; }
+    }
+
 }
 
 // Desktop styling for the global shop header
@@ -332,27 +445,7 @@
 
 		// Search entry
 		.entry--search {
-			.unitize(14, 16, font-size);
-			margin-right: 7%;
-			background: #fff;
-			padding: 0;
-			border: 0 none;
 			width: 35%;
-
-			.icon--search {
-				.unitize(14, 16, top);
-				.unitize(14, 16, left);
-			}
-
-			.entry--trigger { display: none }
-		}
-
-		// Search form
-		.main-search--form {
-			.box-shadow(0 0 0 transparent);
-			display: block;
-			padding: 0;
-			border: 0 none;
 		}
 	}
 
