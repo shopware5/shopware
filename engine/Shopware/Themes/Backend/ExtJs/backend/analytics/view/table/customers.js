@@ -64,10 +64,19 @@ Ext.define('Shopware.apps.Analytics.view.table.Customers', {
 
         return [
             {
+                xtype: 'datecolumn',
                 dataIndex: 'week',
+                text: '{s name="table/customers/day"}Day{/s}',
+                format: timeFormat,
                 width: 120,
                 align: 'left',
-                text: '{s name="table/customers/day"}Day{/s}'
+                renderer: function(value) {
+                    if (value == null) {
+                        var date = new Date(2000,1,1,1,0,0);
+                        return Ext.util.Format.date(date);
+                    }
+                    return Ext.util.Format.date(value);
+                }
             },
             {
                 dataIndex: 'orderCount',

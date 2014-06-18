@@ -91,7 +91,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         parent::init();
         $currency = Shopware()->Db()->fetchRow(
-            'SELECT templatechar as sign, (symbol_position < 32) currencyAtEnd
+            'SELECT templatechar as sign, (symbol_position = 16) currencyAtEnd
             FROM s_core_currencies
             WHERE standard = 1'
         );
@@ -154,7 +154,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             'c.currency',
             'c.name AS currencyName',
             'c.templateChar AS currencyChar',
-            '(c.symbol_position < 32) currencyAtEnd'
+            '(c.symbol_position = 16) currencyAtEnd'
         ))
             ->from('s_core_shops', 's')
             ->leftJoin('s', 's_core_currencies', 'c', 's.currency_id = c.id')
