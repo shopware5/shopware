@@ -202,7 +202,7 @@ $(function() {
     $('select:not([data-no-fancy-select="true"])').selectboxReplacement();
 
     // Start up the placeholder polyfill, see ```jquery.ie-fixes.js```
-    $('input, textarea').placeholder();
+    //$('input, textarea').placeholder();
 
     // Deferred loading of the captcha
     $('div.captcha--placeholder[data-src]').captcha();
@@ -288,5 +288,7 @@ $(function() {
             }, 10);
         });
     }
+
+    $('.main-search--field').liveSearch();
 
 });
