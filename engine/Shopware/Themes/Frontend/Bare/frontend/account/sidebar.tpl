@@ -69,22 +69,6 @@
 					</li>
 				{/block}
 
-				{* Link to the ticket system *}
-				{block name="frontend_account_menu_link_support"}
-					{if $sTicketLicensed}
-						<li class="navigation--entry">
-							<a href="{url controller='ticket' action='listing'}" class="navigation--link">
-								{s name="sTicketSysSupportManagement"}{/s}
-							</a>
-						</li>
-						<li class="navigation--entry">
-							<a href="{url controller='ticket' action='request'}" class="navigation--link">
-								{s name="TicketLinkSupport"}{/s}
-							</a>
-						</li>
-					{/if}
-				{/block}
-
 				{* Link to the user product notes *}
 				{block name="frontend_account_menu_link_notes"}
 					<li class="navigation--entry">
