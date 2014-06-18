@@ -19,10 +19,15 @@
 
 			{block name="frontend_account_orders_welcome"}
 				<div class="account--welcome panel">
-					<h1 class="panel--title">{s name="OrdersHeader"}{/s}</h1>
-					<div class="panel--body is--wide">
-						<p>{s name="OrdersWelcomeText"}{/s}</p>
-					</div>
+					{block name="frontend_account_orders_welcome_headline"}
+						<h1 class="panel--title">{s name="OrdersHeader"}{/s}</h1>
+					{/block}
+
+					{block name="frontend_account_orders_welcome_content"}
+						<div class="panel--body is--wide">
+							<p>{s name="OrdersWelcomeText"}{/s}</p>
+						</div>
+					{/block}
 				</div>
 			{/block}
 

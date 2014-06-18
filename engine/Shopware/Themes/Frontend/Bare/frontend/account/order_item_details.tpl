@@ -53,16 +53,21 @@
 							{block name='frontend_account_order_item_unitprice'}
 								{if $article.purchaseunit}
 									<div class="order--price-unit">
-										<p>{s name="OrderItemInfoContent"}{/s}: {$article.purchaseunit} {$article.sUnit.description}</p>
-										{if $article.purchaseunit != $article.referenceunit}
-											<p>
-												{if $article.referenceunit}
-													<span class="order--base-price">{s name="OrderItemInfoBaseprice"}{/s}:</span>
-													{$article.referenceunit} {$article.sUnit.description} = {$article.referenceprice|currency}
-													{s name="Star" namespace="frontend/listing/box_article"}{/s}
-												{/if}
-											</p>
-										{/if}
+										{block name='frontend_account_order_item_purchaseunit'}
+											<p>{s name="OrderItemInfoContent"}{/s}: {$article.purchaseunit} {$article.sUnit.description}</p>
+										{/block}
+
+										{block name="frontend_account_order_item_referenceunit"}
+											{if $article.purchaseunit != $article.referenceunit}
+												<p>
+													{if $article.referenceunit}
+														<span class="order--base-price">{s name="OrderItemInfoBaseprice"}{/s}:</span>
+														{$article.referenceunit} {$article.sUnit.description} = {$article.referenceprice|currency}
+														{s name="Star" namespace="frontend/listing/box_article"}{/s}
+													{/if}
+												</p>
+											{/if}
+										{/block}
 									</div>
 								{/if}
 							{/block}
@@ -71,17 +76,25 @@
 							{block name='frontend_account_order_item_currentprice'}
 								{if $article.currentPrice}
 									<div class="order--current-price">
-										<span>{s name="OrderItemInfoCurrentPrice"}{/s}:</span>
-										<span class="is--soft">
-											{$article.currentPrice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
-										</span>
-										{if $article.currentPseudoprice}
-											<span class="order--pseudo-price is--italic is--soft is--line-through">
-												{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s}
-												{$article.currentPseudoprice|currency}
-												{s name="Star" namespace="frontend/listing/box_article"}{/s}
+										{block name="frontend_account_order_item_currentprice_label"}
+											<span>{s name="OrderItemInfoCurrentPrice"}{/s}:</span>
+										{/block}
+
+										{block name="frontend_account_order_item_currentprice_value"}
+											<span class="is--soft">
+												{$article.currentPrice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
 											</span>
-										{/if}
+										{/block}
+
+										{block name="frontend_account_order_item_pseudo_price"}
+											{if $article.currentPseudoprice}
+												<span class="order--pseudo-price is--italic is--soft is--line-through">
+													{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s}
+													{$article.currentPseudoprice|currency}
+													{s name="Star" namespace="frontend/listing/box_article"}{/s}
+												</span>
+											{/if}
+										{/block}
 									</div>
 								{/if}
 							{/block}
@@ -224,14 +237,18 @@
 		{block name="frontend_account_order_item_detail_summary_labels"}
 			<div class="panel--td column--summary-labels">
 
-				{* Shopping costs label *}
-				<p class="is--strong">{s name="OrderItemShippingcosts"}{/s}</p>
+				{* Shipping costs label *}
+				{block name="frontend_account_order_item_detail_shipping_costs_label"}
+					<p class="is--strong">{s name="OrderItemShippingcosts"}{/s}</p>
+				{/block}
 
-				{if $offerPosition.taxfree}
-					<p class="is--strong">{s name="OrderItemNetTotal"}{/s}</p>
-				{else}
-					<p class="is--strong">{s name="OrderItemTotal"}{/s}</p>
-				{/if}
+				{block name="frontend_account_order_item_detail_shipping_costs"}
+					{if $offerPosition.taxfree}
+						<p class="is--strong">{s name="OrderItemNetTotal"}{/s}</p>
+					{else}
+						<p class="is--strong">{s name="OrderItemTotal"}{/s}</p>
+					{/if}
+				{/block}
 			</div>
 		{/block}
 
@@ -258,10 +275,15 @@
 	{block name="frontend_account_order_item_user_comment"}
 		{if $offerPosition.customercomment}
 			<div class="order--user-comments panel">
-				<div class="panel--title">{s name="OrderItemCustomerComment"}Ihr Kommentar{/s}</div>
-				<div class="panel--body is--wide">
-					<blockquote>{$offerPosition.customercomment}</blockquote>
-				</div>
+				{block name="frontend_account_order_item_user_comment_title"}
+					<div class="panel--title">{s name="OrderItemCustomerComment"}Ihr Kommentar{/s}</div>
+				{/block}
+
+				{block name="frontend_account_order_item_user_comment_content"}
+					<div class="panel--body is--wide">
+						<blockquote>{$offerPosition.customercomment}</blockquote>
+					</div>
+				{/block}
 			</div>
 		{/if}
 	{/block}
@@ -270,10 +292,15 @@
 	{block name="frontend_account_order_item_shop_comment"}
 		{if $offerPosition.comment}
 			<div class="order--shop-comments panel">
-				<div class="panel--title">{s name="OrderItemComment"}Unser Kommentar{/s}</div>
-				<div class="panel--body is--wide">
-					<blockquote>{$offerPosition.comment}</blockquote>
-				</div>
+				{block name="frontend_account_order_item_shop_comment_title"}
+					<div class="panel--title">{s name="OrderItemComment"}Unser Kommentar{/s}</div>
+				{/block}
+
+				{block name="frontend_account_order_item_shop_comment_content"}
+					<div class="panel--body is--wide">
+						<blockquote>{$offerPosition.comment}</blockquote>
+					</div>
+				{/block}
 			</div>
 		{/if}
 	{/block}
