@@ -38,7 +38,7 @@ class Esd extends Hydrator
         }
 
         if (isset($data['__esd_serials'])) {
-            $esd->setHasSerials((bool)$data['__esd_serials']);
+            $esd->setHasSerials((bool) $data['__esd_serials']);
         }
 
         return $esd;
