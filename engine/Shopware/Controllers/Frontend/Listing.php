@@ -197,6 +197,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $this->View()->assign(array(
             'sCategoryContent' => $categoryContent,
+            'activeFilterGroup' => $this->request->getQuery('sFilterGroup')
         ));
     }
 
