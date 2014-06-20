@@ -1,0 +1,58 @@
+.js--loading-indicator {
+    .unitize-padding(20, 20, 20, 20);
+
+    background: white;
+    position: absolute;
+    display: none;
+    left: 50%;
+    top: 50%;
+    border: 1px solid black;
+    z-index: 950;
+}
+
+.has--cssanimations {
+    .js--loading-indicator {
+        .unitize-margin(-33, 0, 0, -33);
+
+        div[class^="icon--"] {
+            .unitize-width(26);
+            .unitize-height(26);
+
+            display: block;
+        }
+
+        .icon--default::before {
+            .unitize-width(22);
+            .unitize-height(22);
+            .border-radius(100%);
+            .animation(keyframe--spin 1s linear infinite);
+
+            display: block;
+            content: "";
+            border: 2px solid #ccc;
+            border-top: 2px solid #333;
+        }
+    }
+}
+
+.has--no-cssanimations {
+    .js--loading-indicator {
+        .unitize-margin(-28, 0, 0, -28);
+
+        div[class^="icon--"] {
+            .unitize-width(16);
+            .unitize-height(16);
+
+            display: block;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+
+        .icon--default {
+            .unitize-height(16, 16);
+            .unitize-width(16, 16);
+
+            background-image: url(../../img/icons/loading-indicator.gif);
+        }
+    }
+}

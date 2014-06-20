@@ -72,6 +72,8 @@ class Theme extends \Shopware\Components\Theme
 		'src/js/jquery.modal.js',
 		'src/js/jquery.selectbox-replacement.js',
         'src/js/jquery.drop-down-menu.js',
+        'src/js/jquery.loading-indicator.js',
+        'src/js/jquery.overlay.js',
 		'src/js/jquery.shopware-responsive.js'
 	);
 
