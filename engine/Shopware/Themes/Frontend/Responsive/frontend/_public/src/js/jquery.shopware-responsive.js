@@ -180,23 +180,7 @@ $(function() {
     $('input, textarea').placeholder();
 
     // Deferred loading of the captcha
-    $("div.captcha--placeholder[data-src]").each(function() {
-        var $this = $(this),
-            requestURL = $this.attr('data-src') || '';
-
-        if (!requestURL || !requestURL.length) {
-            return false;
-        }
-
-        // fix bfcache from caching the captcha/whole rendered page
-        $(window).unload(function(){ });
-
-        $.ajax({
-            url: requestURL,
-            cache: false,
-            success: $this.html.bind($this)
-        });
-    });
+    $('div.captcha--placeholder[data-src]').captcha();
 
     // Auto submitting form
     $('select[data-auto-submit-form="true"]').on('change', function() {

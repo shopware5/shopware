@@ -335,14 +335,24 @@ jQuery(document).ready(function ($) {
 
     $("div.captcha-placeholder[data-src]").each(function() {
         var $this = $(this),
-            requestURL = $this.attr('data-src') || '';
+            requestURL = $this.attr('data-src') || '',
+            $window = $(window);
 
         if (!requestURL || !requestURL.length) {
             return false;
         }
 
         // fix bfcache from caching the captcha/whole rendered page
-        $(window).unload(function(){ });
+        $window.unload(function(){ });
+        $window.on('pageshow', function (event) {
+            if (event.originalEvent.persisted) {
+                $.ajax({
+                    url: requestURL,
+                    cache: false,
+                    success: $this.html.bind($this)
+                });
+            }
+        });
 
         $.ajax({
             url: requestURL,

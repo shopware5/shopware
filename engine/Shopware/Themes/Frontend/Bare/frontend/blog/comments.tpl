@@ -126,7 +126,7 @@
 		{block name='frontend_blog_comments_input_captcha'}
 		<div class="captcha">
 			<div class="grid_4 first last">
-                <div class="captcha-placeholder" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
+                <div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
             </div>
 			<div class="grid_4 first last">
 				<label>{se name="BlogLabelCaptcha"}{/se}</label>
