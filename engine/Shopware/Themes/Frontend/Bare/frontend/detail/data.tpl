@@ -54,7 +54,7 @@
 									{* Percentage discount *}
 									{block name='frontend_detail_data_pseudo_price_discount_content_percentage'}
 										{if $sArticle.pseudopricePercent.float}
-											&nbsp;({$sArticle.pseudopricePercent.float} % {s name="DetailDataInfoSavePercent"}{/s})
+											&nbsp;({$sArticle.pseudopricePercent.float}% {s name="DetailDataInfoSavePercent"}{/s})
 										{/if}
 									{/block}
 								</strong>

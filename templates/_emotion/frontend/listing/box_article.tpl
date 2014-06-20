@@ -36,7 +36,7 @@
 		{else}
 			{assign var=image value=$sArticle.image.src.2}
 		{/if}
-		<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName}" class="artbox_thumb" {if isset($sArticle.image.src)} 
+		<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName}" class="artbox_thumb" {if isset($sArticle.image.src)}
 			style="background: url({$image}) no-repeat center center"{/if}>
 		{if !isset($sArticle.image.src)}<img src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{s name='ListingBoxNoPicture'}{/s}" />{/if}</a>
 		{/block}
@@ -86,7 +86,7 @@
 		{block name='frontend_listing_box_article_price'}
 			<p class="{if $sArticle.pseudoprice}pseudoprice{else}price{/if}{if !$sArticle.pseudoprice} both{/if}">
 			    {if $sArticle.pseudoprice}
-			    	<span class="pseudo">{s name="reducedPrice"}Statt: {/s}{$sArticle.pseudoprice|currency} {s name="Star"}*{/s}</span>
+			    	<span class="pseudo">{s name="reducedPrice"}Statt:{/s} {$sArticle.pseudoprice|currency} {s name="Star"}*{/s}</span>
 			    {/if}
 			    <span class="price">{if $sArticle.priceStartingFrom && !$sArticle.liveshoppingData}{s name='ListingBoxArticleStartsAt'}{/s} {/if}{$sArticle.price|currency} {s name="Star"}*{/s}</span>
 			</p>

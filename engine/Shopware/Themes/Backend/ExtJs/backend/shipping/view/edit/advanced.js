@@ -298,7 +298,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
                 allowDecimals: true,
                 minValue: 0,
                 name: 'bindPriceFrom',
-                fieldLabel: '{s name=bind_price_from_label}Price to{/s}',
+                fieldLabel: '{s name=bind_price_from_label}Price from{/s}',
                 labelStyle: 'font-weight: 700; text-align: left;',
                 labelWidth: 120,
                 minWidth: 80,

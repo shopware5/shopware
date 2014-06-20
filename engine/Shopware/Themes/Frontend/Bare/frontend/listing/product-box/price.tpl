@@ -16,7 +16,7 @@
 			{* Discount price content *}
 			{block name='frontend_listing_box_article_price_discount_content'}
 				<strong class="price--content content--discount">
-					{s name="reducedPrice"}Statt: {/s} {$sArticle.pseudoprice|currency} {s name="Star"}*{/s}
+					{s name="reducedPrice"}Statt:{/s} {$sArticle.pseudoprice|currency} {s name="Star"}*{/s}
 				</strong>
 			{/block}
 		{/if}
