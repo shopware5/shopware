@@ -204,7 +204,7 @@
 					{* Captcha *}
 					{block name='frontend_detail_comment_input_captcha'}
 					<div class="captcha">
-						<div class="captcha-placeholder" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
+						<div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
 						<div class="code">
 							<label>{se name="DetailCommentLabelCaptcha"}{/se}</label>
 							<input type="text" name="sCaptcha"class="text {if $sErrorFlag.sCaptcha}instyle_error{/if}" />
