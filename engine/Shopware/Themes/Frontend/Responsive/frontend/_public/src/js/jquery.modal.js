@@ -23,16 +23,14 @@
 
         options: {},
 
-        open: function (content, options) {
+        open: function (content, options, overlayOptions) {
             var me = this,
                 opts;
 
             me.options = opts = $.extend({}, me.defaults, options);
 
             if (opts.overlay) {
-                $.overlay.open({
-                    closeOnClick: opts.closeOnOverlay
-                });
+                $.overlay.open($.extend({}, overlayOptions, { closeOnClick: opts.closeOnOverlay }));
 
                 $.overlay.removeListener('click.modal');
 
