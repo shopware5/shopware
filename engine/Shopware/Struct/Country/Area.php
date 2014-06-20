@@ -2,10 +2,12 @@
 
 namespace Shopware\Struct\Country;
 
+use Shopware\Struct\Extendable;
+
 /**
  * @package Shopware\Struct
  */
-class Area
+class Area extends Extendable
 {
     /**
      * @var int

@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 4
+ * Copyright © shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Gateway\DBAL;
 
@@ -6,7 +28,10 @@ use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Struct;
 
-class SimilarProducts
+/**
+ * @package Shopware\Gateway\DBAL
+ */
+class SimilarProducts implements \Shopware\Gateway\SimilarProducts
 {
     /**
      * @var \Shopware\Components\Model\ModelManager
@@ -31,21 +56,19 @@ class SimilarProducts
     }
 
     /**
-     * @param \Shopware\Struct\ListProduct $product
-     * @return array Array of order numbers
+     * @inheritdoc
      */
-    public function get(Struct\ListProduct $product)
+    public function get(Struct\ListProduct $product, Struct\Context $context)
     {
-        $numbers = $this->getList(array($product));
+        $numbers = $this->getList(array($product), $context);
 
         return array_shift($numbers);
     }
 
     /**
-     * @param Struct\ListProduct[] $products
-     * @return array
+     * @inheritdoc
      */
-    public function getList(array $products)
+    public function getList(array $products, Struct\Context $context)
     {
         $ids = array();
         foreach ($products as $product) {
@@ -101,11 +124,18 @@ class SimilarProducts
     }
 
     /**
-     * @param Struct\ListProduct[] $products
-     * @param Struct\Context $context
-     * @return array
+     * @inheritdoc
      */
-    public function getSimilarByCategory(array $products, Struct\Context $context)
+    public function getByCategory(Struct\ListProduct $product, Struct\Context $context)
+    {
+        $products = $this->getByListCategory(array($product), $context);
+        return array_shift($products);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getByListCategory(array $products, Struct\Context $context)
     {
         $ids = array();
         foreach ($products as $product) {

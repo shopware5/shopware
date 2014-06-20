@@ -26,6 +26,11 @@ class Product extends Hydrator
      */
     private $unitHydrator;
 
+    /**
+     * @var Esd
+     */
+    private $esdHydrator;
+
     private $translationMapping = array(
         'metaTitle' => '__product_metaTitle',
         'txtArtikel' => '__product_name',
@@ -40,12 +45,14 @@ class Product extends Hydrator
         Attribute $attributeHydrator,
         Manufacturer $manufacturerHydrator,
         Tax $taxHydrator,
-        Unit $unitHydrator
+        Unit $unitHydrator,
+        Esd $esdHydrator
     ) {
         $this->attributeHydrator = $attributeHydrator;
         $this->manufacturerHydrator = $manufacturerHydrator;
         $this->taxHydrator = $taxHydrator;
         $this->unitHydrator = $unitHydrator;
+        $this->esdHydrator = $esdHydrator;
     }
 
     /**
@@ -94,6 +101,12 @@ class Product extends Hydrator
         if ($data['__product_supplierID']) {
             $product->setManufacturer(
                 $this->manufacturerHydrator->hydrate($data)
+            );
+        }
+
+        if ($data['__esd_id']) {
+            $product->setEsd(
+                $this->esdHydrator->hydrate($data)
             );
         }
 
@@ -175,6 +188,12 @@ class Product extends Hydrator
         if (isset($data['__product_configurator_set_id'])) {
             $product->setHasConfigurator(
                 ($data['__product_configurator_set_id'] > 0)
+            );
+        }
+
+        if (isset($data['__product_has_esd'])) {
+            $product->setHasEsd(
+                (bool) $data['__product_has_esd']
             );
         }
 

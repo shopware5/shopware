@@ -1,11 +1,36 @@
 <?php
+/**
+ * Shopware 4
+ * Copyright © shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Gateway\DBAL;
 
 use Shopware\Components\Model\ModelManager;
 use Shopware\Gateway\DBAL\Hydrator as Hydrator;
 
-class CustomerGroup
+/**
+ * @package Shopware\Gateway\DBAL
+ */
+class CustomerGroup implements \Shopware\Gateway\CustomerGroup
 {
     /**
      * @var \Shopware\Gateway\DBAL\Hydrator\CustomerGroup
@@ -43,16 +68,17 @@ class CustomerGroup
     }
 
     /**
-     * Returns a list of Struct\CustomerGroup object.
-     *
-     * The customer groups should be loaded with the CustomerGroup attributes.
-     * Otherwise the customer group data isn't extendable.
-     *
-     * The passed $keys parameter contains the alphanumeric customer group identifier
-     * which stored in the s_core_customergroups.groupkey column.
-     *
-     * @param array $keys
-     * @return \Shopware\Struct\Customer\Group[]
+     * @inheritdoc
+     */
+    public function get($key)
+    {
+        $groups = $this->getList(array($key));
+
+        return array_shift($groups);
+    }
+
+    /**
+     * @inheritdoc
      */
     public function getList(array $keys)
     {
@@ -83,25 +109,6 @@ class CustomerGroup
         }
 
         return $customerGroups;
-    }
-
-    /**
-     * Returns a single Struct\CustomerGroup object.
-     *
-     * The customer group should be loaded with the CustomerGroup attributes.
-     * Otherwise the customer group data isn't extendable.
-     *
-     * The passed $key parameter contains the alphanumeric customer group identifier
-     * which stored in the s_core_customergroups.groupkey column.
-     *
-     * @param $key
-     * @return \Shopware\Struct\Customer\Group
-     */
-    public function get($key)
-    {
-        $groups = $this->getList(array($key));
-
-        return array_shift($groups);
     }
 
 }

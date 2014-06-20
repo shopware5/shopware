@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 4
+ * Copyright © shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Gateway\DBAL;
 
@@ -7,8 +29,10 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Struct;
 use Shopware\Gateway\DBAL\Hydrator as Hydrator;
 
-
-class CheapestPrice
+/**
+ * @package Shopware\Gateway\DBAL
+ */
+class CheapestPrice implements \Shopware\Gateway\CheapestPrice
 {
     /**
      * @var \Shopware\Gateway\DBAL\Hydrator\Price
@@ -46,27 +70,17 @@ class CheapestPrice
     }
 
     /**
-     * Returns a Struct\Product\PriceRule list which contains the definition of the
-     * cheapest product prices.
-     *
-     * The cheapest product price has to be selected for the passed customer group.
-     *
-     * If no specify price defined for the customer group the function should return null.
-     *
-     * The cheapest price service handles the fallback on the default shop customer group.
-     *
-     * The cheapest price should be selected with the following conditions:
-     *  - Only the first graduated price
-     *  - Select prices variant across
-     *  - Select the purchase data of the cheapest variant.
-     *  - Select the unit of the cheapest variant
-     *  - The variants has to be active
-     *  - Closeout variants can only be selected if the stock > min purchase
-     *
-     * @param Struct\ListProduct[] $products
-     * @param \Shopware\Struct\Context $context
-     * @param Struct\Customer\Group $customerGroup
-     * @return Struct\Product\PriceRule[]
+     * @inheritdoc
+     */
+    public function get(Struct\ListProduct $product, Struct\Customer\Group $customerGroup)
+    {
+        $prices = $this->getList(array($product), $customerGroup);
+
+        return array_shift($prices);
+    }
+
+    /**
+     * @inheritdoc
      */
     public function getList(array $products, Struct\Context $context, Struct\Customer\Group $customerGroup)
     {
@@ -193,31 +207,5 @@ class CheapestPrice
         return $statement->fetchAll(\PDO::FETCH_COLUMN);
     }
 
-    /**
-     * Returns a Struct\Product\PriceRule which contains the definition of the
-     * cheapest product price.
-     *
-     * The cheapest product price has to be selected for the passed customer group.
-     *
-     * If no specify price defined for the customer group the function should return null.
-     *
-     * The cheapest price service handles the fallback on the default shop customer group.
-     *
-     * The cheapest price should be selected with the following conditions:
-     *  - Only the first graduated price
-     *  - Select prices variant across
-     *  - Select the unit of the cheapest variant
-     *  - The variants has to be active
-     *  - Closeout variants can only be selected if the stock > min purchase
-     *
-     * @param \Shopware\Struct\ListProduct $product
-     * @param Struct\Customer\Group $customerGroup
-     * @return Struct\Product\PriceRule
-     */
-    public function get(Struct\ListProduct $product, Struct\Customer\Group $customerGroup)
-    {
-        $prices = $this->getList(array($product), $customerGroup);
 
-        return array_shift($prices);
-    }
 }

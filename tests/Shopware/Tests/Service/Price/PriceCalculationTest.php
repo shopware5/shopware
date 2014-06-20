@@ -2,7 +2,9 @@
 
 namespace Shopware\Tests\Service\Price;
 
+use Shopware\Service\PriceCalculation;
 use Shopware\Struct\Context;
+use Shopware\Struct\ListProduct;
 
 class PriceCalculationTest extends \Enlight_Components_Test_TestCase
 {
@@ -84,6 +86,7 @@ class PriceCalculationTest extends \Enlight_Components_Test_TestCase
     {
         $number = __FUNCTION__;
         $context = $this->getContext(false);
+        
         $data = $this->getProduct($number, $context);
 
         $this->helper->createArticle($data);
@@ -96,7 +99,7 @@ class PriceCalculationTest extends \Enlight_Components_Test_TestCase
         75  = 63.025210084      50.4201680672   * 2
         85  = 71.4285714286     57.1428571429
         
-        50  = 42.0168067227     33.6134453782   * 2
+        50  = 42.0168067227     33.6134453782   * 2   67.2268907564
         60  = 50.4201680672     40.3361344538
         */
 
@@ -170,15 +173,15 @@ class PriceCalculationTest extends \Enlight_Components_Test_TestCase
 
         /*
 
-        INPUT	TAX	        DISCOUNT	CURRENCY	UNIT	    RESULT
-        100	    84,03361	58,82353	70,58824	141,17647	141,17647
-        110	    92,43697	64,70588	77,64706	155,29412	155,29412
+        INPUT	TAX	        DISCOUNT	CURRENCY	UNIT	    
+        100	    84,03361	58,82353	70,58824	141,17647	
+        110	    92,43697	64,70588	77,64706	
 
-        75	    63,02521	44,11765	52,94118	105,88235	105,88235
-        85	    71,42857	50,00000	60,00000	120,00000	120,00000
+        75	    63,02521	44,11765	52,94118	105,88235	
+        85	    71,42857	50,00000	60,00000	
 
-        50	    42,01681	29,41176	35,29412	70,58824	70,58824
-        60	    50,42017	35,29412	42,35294	84,70588	84,70588
+        50	    42,01681	29,41176	35,29412	70,58824	
+        60	    50,42017	35,29412	42,35294	
         */
 
         $cheapest = $listProduct->getCheapestPrice();

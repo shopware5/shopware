@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 4
+ * Copyright © shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Gateway\DBAL;
 
@@ -7,7 +29,10 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Struct;
 use Shopware\Gateway\DBAL\Hydrator;
 
-class VariantMedia
+/**
+ * @package Shopware\Gateway\DBAL
+ */
+class VariantMedia implements \Shopware\Gateway\VariantMedia
 {
     /**
      * @var ModelManager
@@ -35,37 +60,25 @@ class VariantMedia
     }
 
     /**
-     * Returns an array of \Shopware\Struct\Media elements for the passed products.
-     * The returned array is indexed with the product order number.
-     *
-     * This function returns only assigned media structs which has a configurator configuration.
-     * Media structs which have a configurator configuration displayed only in the store front
-     * if the customer selects the specify variant configuration.
-     *
-     * The returned array has to be indexed with the product number.
-     *
-     * The passed $products array contains in some case two variations of the same product.
-     * For example:
-     *  - Product.1  (white / XL)
-     *  - Product.2  (black / L)
-     *
-     * The
-     * <php>
-     * array(
-     *     'Product.1' => array(
-     *          Shopware\Struct\Media(id=3)  (configuration: color=white / size=XL)
-     *          Shopware\Struct\Media(id=4)  (configuration: color=white)
-     *      ),
-     *     'Product.2' => array(
-     *          Shopware\Struct\Media(id=1)  (configuration: color=black)
-     *          Shopware\Struct\Media(id=2)  (configuration: size=L)
-     *      )
-     * )
-     * </php>
-     *
-     * @param Struct\ListProduct[] $products
-     * @param Struct\Context $context
-     * @return array
+     * @inheritdoc
+     */
+    public function get(Struct\ListProduct $product, Struct\Context $context)
+    {
+        $media = $this->getList(array($product), $context);
+        return array_shift($media);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCover(Struct\ListProduct $product, Struct\Context $context)
+    {
+        $covers = $this->getCovers(array($product), $context);
+        return array_shift($covers);
+    }
+
+    /**
+     * @inheritdoc
      */
     public function getList(array $products, Struct\Context $context)
     {
@@ -99,31 +112,7 @@ class VariantMedia
     }
 
     /**
-     * Returns an array of \Shopware\Struct\Media elements for the passed products.
-     * The returned array is indexed with the product order number.
-     *
-     * This function returns only assigned media structs which has a configurator configuration.
-     * Media structs which have a configurator configuration displayed only in the store front
-     * if the customer selects the specify variant configuration.
-     *
-     * The returned array has to be indexed with the product number.
-     *
-     * The passed $products array contains in some case two variations of the same product.
-     * For example:
-     *  - Product.1  (white / XL)
-     *  - Product.2  (black / L)
-     *
-     * The
-     * <php>
-     * array(
-     *     'Product.1' => Shopware\Struct\Media(id=4)  (configuration: color=white)
-     *     'Product.2' => Shopware\Struct\Media(id=1)  (configuration: color=black)
-     * )
-     * </php>
-     *
-     * @param Struct\ListProduct[] $products
-     * @param Struct\Context $context
-     * @return Struct\Media[]
+     * @inheritdoc
      */
     public function getCovers(array $products, Struct\Context $context)
     {
@@ -156,6 +145,7 @@ class VariantMedia
     }
 
     /**
+     * @param \Shopware\Struct\Context $context
      * @return \Shopware\Components\Model\DBAL\QueryBuilder
      */
     private function getQuery(Struct\Context $context)

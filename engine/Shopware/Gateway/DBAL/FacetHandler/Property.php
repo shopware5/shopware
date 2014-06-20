@@ -5,20 +5,20 @@ namespace Shopware\Gateway\DBAL\FacetHandler;
 use Shopware\Components\Model\DBAL\QueryBuilder;
 use Shopware\Gateway\Search\Criteria;
 use Shopware\Gateway\Search\Facet;
-use Shopware\Struct\Attribute;
 use Shopware\Struct\Context;
+use Shopware\Struct\CoreAttribute;
 
 class Property extends DBAL
 {
     /**
      * @var \Shopware\Service\Property
      */
-    private $propertyService;
+    private $propertyGateway;
 
     /**
-     * @param \Shopware\Gateway\DBAL\Property $propertyGateway
+     * @param \Shopware\Gateway\Property $propertyGateway
      */
-    function __construct(\Shopware\Gateway\DBAL\Property $propertyGateway)
+    function __construct(\Shopware\Gateway\Property $propertyGateway)
     {
         $this->propertyGateway = $propertyGateway;
     }
@@ -70,7 +70,7 @@ class Property extends DBAL
      */
     private function addAttributes(array $properties, array $valueIds, array $activeValues)
     {
-        $baseAttribute = new Attribute();
+        $baseAttribute = new CoreAttribute();
         $baseAttribute->set('active', false);
 
         foreach ($properties as $set) {
@@ -152,8 +152,6 @@ class Property extends DBAL
 
         $query->groupBy('productProperties.valueID');
     }
-
-
 
     public function supportsFacet(Facet $facet)
     {

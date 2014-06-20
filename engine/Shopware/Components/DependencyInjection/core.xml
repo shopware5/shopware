@@ -8,23 +8,24 @@
 
         <!-- Shopware service definitions -->
 
-        <service id="global_state_service" class="Shopware\Service\GlobalState">
+        <service id="global_state_service" class="Shopware\Service\Core\GlobalState">
             <argument type="service" id="service_container"/>
             <argument type="service" id="customer_group_gateway"/>
             <argument type="service" id="tax_gateway"/>
             <argument type="service" id="country_gateway"/>
         </service>
 
-        <service id="list_product_service" class="Shopware\Service\ListProduct">
+        <service id="list_product_service" class="Shopware\Service\Core\ListProduct">
             <argument type="service" id="list_product_gateway" />
             <argument type="service" id="graduated_prices_service" />
             <argument type="service" id="cheapest_price_service" />
             <argument type="service" id="price_calculation_service" />
             <argument type="service" id="media_service" />
+            <argument type="service" id="marketing_service" />
             <argument type="service" id="events" />
         </service>
 
-        <service id="product_service" class="Shopware\Service\Product">
+        <service id="product_service" class="Shopware\Service\Core\Product">
             <argument type="service" id="product_gateway" />
             <argument type="service" id="vote_service" />
             <argument type="service" id="related_products_service" />
@@ -38,72 +39,77 @@
             <argument type="service" id="product_link_service" />
             <argument type="service" id="property_service" />
             <argument type="service" id="configurator_service" />
+            <argument type="service" id="marketing_service" />
             <argument type="service" id="events" />
         </service>
 
-        <service id="product_download_service" class="Shopware\Service\ProductDownload">
+        <service id="marketing_service" class="Shopware\Service\Core\Marketing">
+            <argument type="service" id="config" />
+        </service>
+
+        <service id="product_download_service" class="Shopware\Service\Core\ProductDownload">
             <argument type="service" id="download_gateway" />
         </service>
 
-        <service id="product_link_service" class="Shopware\Service\ProductLink">
+        <service id="product_link_service" class="Shopware\Service\Core\ProductLink">
             <argument type="service" id="link_gateway" />
         </service>
 
-        <service id="related_products_service" class="Shopware\Service\RelatedProducts">
+        <service id="related_products_service" class="Shopware\Service\Core\RelatedProducts">
             <argument type="service" id="related_products_gateway" />
             <argument type="service" id="list_product_service" />
         </service>
 
-        <service id="similar_products_service" class="Shopware\Service\SimilarProducts">
+        <service id="similar_products_service" class="Shopware\Service\Core\SimilarProducts">
             <argument type="service" id="similar_products_gateway" />
             <argument type="service" id="list_product_service" />
         </service>
 
-        <service id="graduated_prices_service" class="Shopware\Service\GraduatedPrices">
+        <service id="graduated_prices_service" class="Shopware\Service\Core\GraduatedPrices">
             <argument type="service" id="graduated_prices_gateway" />
             <argument type="service" id="price_group_discount_gateway" />
         </service>
 
-        <service id="manufacturer_service" class="Shopware\Service\Manufacturer">
+        <service id="manufacturer_service" class="Shopware\Service\Core\Manufacturer">
             <argument type="service" id="manufacturer_gateway" />
         </service>
 
-        <service id="price_calculation_service" class="Shopware\Service\PriceCalculation" >
+        <service id="price_calculation_service" class="Shopware\Service\Core\PriceCalculation" >
             <argument type="service" id="price_group_discount_gateway" />
         </service>
 
-        <service id="cheapest_price_service" class="Shopware\Service\CheapestPrice">
+        <service id="cheapest_price_service" class="Shopware\Service\Core\CheapestPrice">
             <argument type="service" id="cheapest_price_gateway"/>
             <argument type="service" id="graduated_prices_service" />
         </service>
 
-        <service id="media_service" class="Shopware\Service\Media">
+        <service id="media_service" class="Shopware\Service\Core\Media">
             <argument type="service" id="product_media_gateway" />
             <argument type="service" id="variant_media_gateway" />
             <argument type="service" id="config"/>
         </service>
 
-        <service id="property_service" class="Shopware\Service\Property">
+        <service id="property_service" class="Shopware\Service\Core\Property">
             <argument type="service" id="product_property_gateway"/>
         </service>
 
-        <service id="configurator_service" class="Shopware\Service\Configurator">
+        <service id="configurator_service" class="Shopware\Service\Core\Configurator">
             <argument type="service" id="product_configuration_gateway"/>
             <argument type="service" id="configurator_gateway"/>
         </service>
 
-        <service id="category_service" class="Shopware\Service\Category">
+        <service id="category_service" class="Shopware\Service\Core\Category">
             <argument type="service" id="category_gateway" />
         </service>
 
-        <service id="vote_service" class="Shopware\Service\Vote">
+        <service id="vote_service" class="Shopware\Service\Core\Vote">
             <argument type="service" id="vote_gateway" />
             <argument type="service" id="vote_average_gateway" />
         </service>
 
 
         <!-- Search -->
-        <service id="search_service" class="Shopware\Service\Search">
+        <service id="search_service" class="Shopware\Service\Core\Search">
             <argument type="service" id="list_product_service" />
             <argument type="service" id="search_gateway" />
         </service>
@@ -326,6 +332,7 @@
             <argument type="service" id="manufacturer_hydrator_dbal"/>
             <argument type="service" id="tax_hydrator_dbal"/>
             <argument type="service" id="unit_hydrator_dbal"/>
+            <argument type="service" id="esd_hydrator_dbal"/>
         </service>
 
         <service id="price_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Price">
@@ -377,6 +384,10 @@
         </service>
 
         <service id="country_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Country">
+            <argument type="service" id="attribute_hydrator_dbal"/>
+        </service>
+
+        <service id="esd_hydrator_dbal" class="Shopware\Gateway\DBAL\Hydrator\Esd">
             <argument type="service" id="attribute_hydrator_dbal"/>
         </service>
 

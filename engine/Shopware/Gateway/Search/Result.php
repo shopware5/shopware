@@ -15,7 +15,7 @@ class Result
     protected $totalCount;
 
     /**
-     * @var array
+     * @var Facet[]
      */
     protected $facets;
 
@@ -35,7 +35,7 @@ class Result
     }
 
     /**
-     * @return array
+     * @return Facet[]
      */
     public function getFacets()
     {

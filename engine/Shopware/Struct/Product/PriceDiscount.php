@@ -3,8 +3,9 @@
 namespace Shopware\Struct\Product;
 
 use Shopware\Struct\Customer\Group;
+use Shopware\Struct\Extendable;
 
-class PriceDiscount
+class PriceDiscount extends Extendable
 {
     /**
      * @var int
