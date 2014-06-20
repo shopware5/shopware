@@ -353,7 +353,7 @@ Ext.onReady(function() {
     Ext.define('Shopware.listing.en_GB.InfoPanel', {
         override: 'Shopware.listing.InfoPanel',
         title: 'Detailed information',
-        emptyText: 'No record selected.'
+        emptyText: 'No entry selected.'
     });
     Ext.define('Shopware.window.en_GB.Detail', {
         override: 'Shopware.window.Detail',
@@ -453,7 +453,8 @@ Ext.onReady(function() {
         errorsText: 'Errors',
         dirtyText: 'You need to commit or cancel your changes'
     });
-    Ext.apply(Ext.util.FileUpload, {
+    Ext.define('Ext.util.en_GB.FileUpload', {
+        override:'Ext.util.FileUpload',
         snippets: {
             uploadReady: 'file(s) uploaded',
             messageText: '[0] file(s) uploaded',

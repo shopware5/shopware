@@ -99,7 +99,8 @@ Ext.define('Shopware.apps.Article.view.image.NewRule', {
     snippets: {
         title: '{s name=image/rule/title}Create new image mapping{/s}',
         cancel: '{s name=cancel_button}Cancel{/s}',
-        save: '{s name=general/save_button}Save{/s}'
+        save: '{s name=general/save_button}Save{/s}',
+        notice: '{s name=general/notice}Hier haben Sie die Möglichkeit ein weiteres Image Mapping zu hinterlegen. <br>Bitte selektieren sie pro Gruppe nur eine Option. <br>Das Bild wird alle Artikel Varianten zugeordnet, die mit den ausgewählten Optionen erzeugt wurden.{/s}'
     },
 
     /**
@@ -123,7 +124,7 @@ Ext.define('Shopware.apps.Article.view.image.NewRule', {
         var me = this;
 
         return Ext.create('Ext.container.Container', {
-            html: 'Hier haben Sie die Möglichkeit eine weitere Image Mapping zu hinterlegen. <br>Bitte selektieren sie pro Gruppe nur eine Option. <br>Das Bild wird alle Artikel Varianten zugeordnet, die mit den ausgewählten Optionen erzeugt wurden.',
+            html: me.snippets.notice,
             style: 'color: #999; font-style: italic; margin: 0 0 15px 0; text-align: center;',
             height: 70
         });

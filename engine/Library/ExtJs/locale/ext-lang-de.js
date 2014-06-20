@@ -380,8 +380,8 @@ Ext.onReady(function() {
     });
     Ext.define('Shopware.listing.de.InfoPanel', {
         override: 'Shopware.listing.InfoPanel',
-        title: 'Detailed information',
-        emptyText: 'Kein Eintrag selektiert.'
+        title: 'Detaillierte Informationen',
+        emptyText: 'Kein Eintrag selektiert'
     });
     Ext.define('Shopware.window.de.Detail', {
         override: 'Shopware.window.Detail',
@@ -481,7 +481,8 @@ Ext.onReady(function() {
         errorsText: 'Fehler',
         dirtyText: 'Sie müssen die Änderungen übernehmen oder abbrechen'
     });
-    Ext.apply(Ext.util.FileUpload, {
+    Ext.define('Ext.util.de.FileUpload', {
+        override:'Ext.util.FileUpload',
         snippets: {
             uploadReady: 'Dateien hochgeladen',
             messageText: '[0] Dateien hochgeladen',
