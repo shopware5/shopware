@@ -198,7 +198,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
                 fieldLabel:'{s name=detail_general/field/number_of_units}Number of units{/s}',
                 name:'numberOfUnits',
                 xtype:'numberfield',
-                decimalSeparator:'.',
+                allowDecimals:false,
                 allowBlank:false,
                 hideTrigger:true,
                 keyNavEnabled:false,
@@ -211,7 +211,6 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
                 name:'minimumCharge',
                 allowBlank:false,
                 hideTrigger:true,
-                decimalSeparator:'.',
                 keyNavEnabled:false,
                 mouseWheelEnabled:false,
                 helpText:'{s name=detail_general/field/minimum_charge/help}The minimum basket value for this voucher{/s}',
@@ -296,17 +295,18 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
                 xtype:'numberfield',
                 allowBlank:false,
                 hideTrigger:true,
-                decimalSeparator:'.',
                 keyNavEnabled:false,
                 mouseWheelEnabled:false,
                 required:true,
-                helpText:'{s name=detail_general/field/value/help}This is the percental or absolute value that will be deducted based on the [Discharge] field.{/s}',
+                helpText:'{s name=detail_general/field/value/help}This is the percentual or absolute value that will be deducted based on the [Discharge] field.{/s}',
                 validator:function (value) {
                     var form = me.getForm();
+                    var validationValue = value.replace(Ext.util.Format.decimalSeparator, '.');
+
                     if (form.getFieldValues().percental == 1) {
-                        return (value <= 100 && value > 0) ? true : '{s name=detail_general/field/value/error/percental}The value has to be in the range of 1 to 100%{/s}';
+                        return (validationValue <= 100 && validationValue > 0) ? true : '{s name=detail_general/field/value/error/percental}The value has to be in the range of 1 to 100%{/s}';
                     } else {
-                        return (value >= 0 ) ? true : '{s name=detail_general/field/value/error/bigger_zero}The Value has to be >= 0{/s}';
+                        return (validationValue >= 0 ) ? true : '{s name=detail_general/field/value/error/bigger_zero}The Value has to be >= 0{/s}';
                     }
                 }
             },
@@ -314,7 +314,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
                 fieldLabel:'{s name=detail_general/field/redeemable_per_customer}Number of redeemable vouchers per customer{/s}',
                 name:'numOrder',
                 xtype:'numberfield',
-                decimalSeparator:'.',
+                allowDecimals:false,
                 allowBlank:false,
                 hideTrigger:true,
                 keyNavEnabled:false,
