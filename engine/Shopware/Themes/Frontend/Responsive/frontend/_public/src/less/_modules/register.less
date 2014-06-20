@@ -8,6 +8,7 @@
 
 // Register Content
 .register--content {
+    .unitize-margin(10, 0);
     .border-radius();
     .clearfix();
     width: 100%;
@@ -30,11 +31,11 @@
     }
 
     .register--action {
-        .unitize-margin(0, 26, 16);
-        float: right;
+        .unitize-margin(20, 20);
 
         .btn--primary {
-            float: right;
+            width: 100%;
+            text-align: center;
 
             & [class^=icon] {
                 .unitize(10, 16, font-size);
@@ -108,8 +109,7 @@
 
         .js--fancy-select {
             .unitize(15, 16, margin-bottom);
-            width: 32%;
-            margin-right: 2%;
+            width: 100%;
             float: left;
         }
 
@@ -308,6 +308,21 @@
 
         .register--check {
             .unitize(8, 16, padding-bottom);
+        }
+
+        .register--birthdate {
+            .js--fancy-select {
+                width: 32%;
+                margin-right: 2%;
+            }
+        }
+
+        .register--action {
+            text-align: right;
+
+            .btn--primary {
+                width: auto;
+            }
         }
     }
 
