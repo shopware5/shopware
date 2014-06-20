@@ -22,12 +22,7 @@ class Category implements Service\Category
     }
 
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the @see \Shopware\Gateway\Category::get()
-     *
-     * @param $id
-     * @param Struct\Context $context
-     * @return Struct\Category
+     * @inheritdoc
      */
     public function get($id, Struct\Context $context)
     {
@@ -36,12 +31,7 @@ class Category implements Service\Category
     }
 
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the @see \Shopware\Gateway\Category::getList()
-     *
-     * @param $ids
-     * @param Struct\Context $context
-     * @return Struct\Category[]
+     * @inheritdoc
      */
     public function getList($ids, Struct\Context $context)
     {

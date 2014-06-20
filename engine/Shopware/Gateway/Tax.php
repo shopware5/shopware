@@ -1,17 +1,32 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: oliverdenter
- * Date: 18.06.14
- * Time: 14:52
+ * Shopware 4
+ * Copyright © shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 namespace Shopware\Gateway;
 
 use Shopware\Struct;
 
-
 /**
- * @package Shopware\Gateway\DBAL
+ * @package Shopware\Gateway
  */
 interface Tax
 {
@@ -27,10 +42,10 @@ interface Tax
      *  - State
      * - The above rules are prioritized, from first to last.
      *
-     * @param \Shopware\Struct\Customer\Group $customerGroup
-     * @param \Shopware\Struct\Country\Area $area
-     * @param \Shopware\Struct\Country $country
-     * @param \Shopware\Struct\Country\State $state
+     * @param Struct\Customer\Group $customerGroup
+     * @param Struct\Country\Area $area
+     * @param Struct\Country $country
+     * @param Struct\Country\State $state
      * @return Struct\Tax[] Indexed by 'tax_' + id
      */
     public function getRules(

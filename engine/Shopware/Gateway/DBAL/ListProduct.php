@@ -36,7 +36,7 @@ use Shopware\Struct;
 class ListProduct implements \Shopware\Gateway\ListProduct
 {
     /**
-     * @var \Shopware\Gateway\DBAL\Hydrator\Product
+     * @var \Shopware\Gateway\Hydrator\Product
      */
     protected $hydrator;
 
