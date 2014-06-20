@@ -3789,7 +3789,8 @@ class sArticles
         foreach ($searchResult->getFacets() as $facet) {
             switch (true) {
                 case ($facet instanceof \Shopware\Gateway\Search\Facet\Property):
-                    $result['sProperties'] = $this->getFacetProperties($facet, $context, $config);
+                    $properties = $this->getFacetProperties($facet, $context, $config);
+                    $result = array_merge($result, $properties);
                     break;
 
                 case ($facet instanceof \Shopware\Gateway\Search\Facet\Manufacturer):
@@ -4051,12 +4052,17 @@ class sArticles
         $filteredOptions = explode('|', $config['sFilterProperties']);
         $params = $this->getListingLinkParameters($config);
 
+        $grouped = array();
+        $flat = array();
+
         foreach ($data as &$set) {
             $activeSetGroups = array();
 
+            $groups = array();
             foreach ($set['groups'] as &$group) {
 
                 $activeGroupOptions = array();
+                $options = array();
 
                 foreach ($group['options'] as &$option) {
                     $currentFilters = array_merge(
@@ -4080,6 +4086,17 @@ class sArticles
                     if ($option['active']) {
                         $activeGroupOptions[] = $option['id'];
                     }
+
+                    //legacy convert
+                    $options[$option['name']] = array(
+                        'name' => $group['name'],
+                        'value' => $option['name'],
+                        'count' => $option['total'],
+                        'group' => $set['name'],
+                        'optionID' => $group['id'],
+                        'link' => $option['link'],
+                        'active' => $option['active']
+                    );
                 }
 
                 $group['active'] = (bool) (!empty($activeGroupOptions));
@@ -4089,22 +4106,47 @@ class sArticles
 
                     $removeOptions = array_diff($filteredOptions, $activeGroupOptions);
 
-                    $params = array_merge(
-                        $params,
-                        array(
-                            'sFilterProperties' => implode('|', $removeOptions)
-                        )
-                    );
+                    $params = array_merge($params, array(
+                        'sFilterProperties' => implode('|', $removeOptions)
+                    ));
 
                     $group['removeLink'] = $this->buildListingLink($params);
                 }
 
                 $set['active'] = (bool) (!empty($activeSetGroups));
-            }
-        }
-        return $data;
-    }
 
+                //legacy convert
+                $groups[$group['name']] = $options;
+                $flat[$group['name']] = array(
+                    'properties' => array(
+                        'active' => $group['active'],
+                        'group' => $set['name'],
+                        'linkRemoveProperty' => $group['removeLink']
+                    ),
+                    'values' => $options
+                );
+            }
+
+            //legacy convert
+            $params = $this->getListingLinkParameters($config);
+            unset($params['sFilterProperties']);
+            $params['sFilterGroup'] = $set['name'];
+            $grouped[$set['name']] = array(
+                'options' => $groups,
+                'default' => array(
+                    'linkSelect' => $this->buildListingLink($params)
+                )
+            );
+        }
+
+        $result = array(
+            'sPropertiesOptionsOnly' => $flat,
+            'sPropertiesGrouped' => $grouped,
+            'sProperties' => $data
+        );
+
+        return $result;
+    }
 
     /**
      * Helper function which builds the listing links with all required parameters.
