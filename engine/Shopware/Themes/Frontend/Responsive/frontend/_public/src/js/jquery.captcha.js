@@ -1,6 +1,16 @@
 ;(function($, window) {
     "use strict";
 
+    /**
+     * Shopware Captcha Plugin.
+     *
+     * @example
+     *
+     * Call the plugin on a node with a "data-src" attribute.
+     * This attribute should provide the url for retrieving the captcha.
+     *
+     * $('div.captcha--placeholder[data-src]').captcha();
+     */
     $.plugin('captcha', {
         /**
          * Initializes the plugin and adds the necessary
