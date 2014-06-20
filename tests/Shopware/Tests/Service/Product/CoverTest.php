@@ -4,7 +4,7 @@ namespace Shopware\Tests\Service\Product;
 
 use Shopware\Models\Customer\Group;
 use Shopware\Models\Tax\Tax;
-use Shopware\Service\Media;
+use Shopware\Service\Core\Media;
 use Shopware\Struct;
 use Shopware\Tests\Service\Helper;
 

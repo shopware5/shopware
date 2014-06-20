@@ -76,7 +76,7 @@ class Helper
             $configuratorGateway = Shopware()->Container()->get('configurator_gateway');
         }
 
-        $service = new Service\Configurator($productConfigurationGateway, $configuratorGateway);
+        $service = new Service\Core\Configurator($productConfigurationGateway, $configuratorGateway);
 
         return $service->getProductConfigurator($listProduct, $context, $selection);
     }
@@ -96,7 +96,7 @@ class Helper
         if ($productPropertyGateway === null) {
             $productPropertyGateway = Shopware()->Container()->get('product_property_gateway');
         }
-        $service = new Service\Property($productPropertyGateway);
+        $service = new Service\Core\Property($productPropertyGateway);
 
         return $service->get($product, $context);
     }
@@ -155,6 +155,7 @@ class Helper
         $cheapestPriceService = null,
         $priceCalculationService = null,
         $mediaService = null,
+        $marketingService = null,
         $eventManager = null
     ) {
 
@@ -163,14 +164,16 @@ class Helper
         if ($cheapestPriceService === null)     $cheapestPriceService = Shopware()->Container()->get('cheapest_price_service');
         if ($priceCalculationService === null)  $priceCalculationService = Shopware()->Container()->get('price_calculation_service');
         if ($mediaService === null)             $mediaService = Shopware()->Container()->get('media_service');
+        if ($marketingService === null)         $marketingService = Shopware()->Container()->get('marketing_service');
         if ($eventManager === null)             $eventManager = Shopware()->Container()->get('events');
 
-        $service = new Service\ListProduct(
+        $service = new Service\Core\ListProduct(
             $productGateway,
             $graduatedPricesService,
             $cheapestPriceService,
             $priceCalculationService,
             $mediaService,
+            $marketingService,
             $eventManager
         );
 
