@@ -414,7 +414,7 @@
              * @param {Object|Array} listener
              */
             registerListener: function(listener) {
-                if(typeof listener === 'object') {
+                if(!(listener instanceof Array)) {
                     registerListenerToStack(listener);
                 } else {
                     var i = 0,
