@@ -36,7 +36,7 @@
                 {if $article.pseudoprice}
                     <span class="pseudo">
                     <em>
-                    	{s name="reducedPrice"}Statt: {/s}{$article.pseudoprice|currency} {s name="Star"}*{/s}
+                    	{s name="reducedPrice"}Statt:{/s} {$article.pseudoprice|currency} {s name="Star"}*{/s}
                     </em>
                     </span>
                 {/if}
