@@ -333,7 +333,6 @@ Ext.define('Shopware.apps.Order.view.detail.Position', {
                 editor: {
                     xtype: 'numberfield',
                     allowBlank: false,
-                    decimalSeparator: ',',
                     decimalPrecision: 2
                 }
             },
