@@ -1,17 +1,32 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: oliverdenter
- * Date: 18.06.14
- * Time: 14:47
+ * Shopware 4
+ * Copyright © shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 namespace Shopware\Gateway;
 
 use Shopware\Struct;
 
-
 /**
- * @package Shopware\Gateway\DBAL
+ * @package Shopware\Gateway
  */
 interface PriceGroupDiscount
 {
@@ -27,7 +42,7 @@ interface PriceGroupDiscount
      * @param Struct\Product\PriceGroup $priceGroup
      * @param Struct\Customer\Group $customerGroup
      * @param $quantity
-     * @return \Shopware\Struct\Product\PriceDiscount
+     * @return Struct\Product\PriceDiscount
      */
     public function getHighestQuantityDiscount(
         Struct\Product\PriceGroup $priceGroup,
@@ -36,12 +51,14 @@ interface PriceGroupDiscount
     );
 
     /**
-     * To get detailed information about the structure and content of the returned object,
-     * please refer to the @see \Shopware\Gateway\DBAL\PriceGroupDiscount::getProductDiscount()
+     * To get detailed information about the selection conditions, structure and content of the returned object,
+     * please refer to the linked classes.
+     *
+     * @see \Shopware\Gateway\PriceGroupDiscount::getProductDiscount()
      *
      * @param Struct\ListProduct[] $products
      * @param Struct\Customer\Group $customerGroup
-     * @param \Shopware\Struct\Context $context
+     * @param Struct\Context $context
      * @return array Indexed by the product number. Each element contains a Struct\Product\PriceDiscount array.
      */
     public function getProductsDiscounts(
@@ -59,7 +76,7 @@ interface PriceGroupDiscount
      *
      * @param Struct\ListProduct $product
      * @param Struct\Customer\Group $customerGroup
-     * @param \Shopware\Struct\Context $context
+     * @param Struct\Context $context
      * @return Struct\Product\PriceDiscount[]
      */
     public function getProductDiscount(

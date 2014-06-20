@@ -23,11 +23,7 @@ class Marketing implements Service\Marketing
     }
 
     /**
-     * Builds a \Shopware\Struct\Product\MarketingAttribute object,
-     * which contains additionally marketing data about the product.
-     *
-     * @param Struct\ListProduct $product
-     * @return Struct\Product\MarketingAttribute
+     * @inheritdoc
      */
     public function getProductAttribute(Struct\ListProduct $product)
     {

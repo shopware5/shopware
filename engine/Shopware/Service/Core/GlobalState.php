@@ -53,18 +53,7 @@ class GlobalState implements Service\GlobalState
     }
 
     /**
-     * The \Shopware\Struct\Context requires the following data:
-     * - Current shop
-     * - Current language
-     * - Current customer group
-     * - Fallback customer group of the current shop
-     * - Current country data (area, country, state)
-     * - The currency of the shop
-     * - Different tax rules for the current context
-     *
-     * Required conditions for the selection:
-     * - Use the `shop` service of the di container for the language and current category
-     * - Use the `session` service of the di container for the current user data.
+     * @inheritdoc
      */
     public function initialize()
     {
@@ -142,12 +131,7 @@ class GlobalState implements Service\GlobalState
     }
 
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Gateway\GlobaleState::initialize()
-     *
-     * @return Struct\Context
+     * @inheritdoc
      */
     public function get()
     {

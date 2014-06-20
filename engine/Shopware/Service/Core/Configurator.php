@@ -31,14 +31,7 @@ class Configurator implements Service\Configurator
     }
 
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Gateway\ProductConfiguration::get()
-     *
-     * @param Struct\ListProduct $product
-     * @param Struct\Context $context
-     * @return Struct\Configurator\Group[]
+     * @inheritdoc
      */
     public function getProductConfiguration(Struct\ListProduct $product, Struct\Context $context)
     {
@@ -47,14 +40,7 @@ class Configurator implements Service\Configurator
     }
 
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Gateway\ProductConfiguration::getList()
-     *
-     * @param Struct\ListProduct[] $products
-     * @param Struct\Context $context
-     * @return array Each array element contains a Struct\Configurator\Group[] array. The first level is indexed with the product number
+     * @inheritdoc
      */
     public function getProductsConfigurations(array $products, Struct\Context $context)
     {
@@ -64,15 +50,7 @@ class Configurator implements Service\Configurator
     }
 
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Gateway\Configurator::get()
-     *
-     * @param Struct\ListProduct $product
-     * @param Struct\Context $context
-     * @param array $selection
-     * @return Struct\Configurator\Set
+     * @inheritdoc
      */
     public function getProductConfigurator(
         Struct\ListProduct $product,

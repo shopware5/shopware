@@ -13,7 +13,9 @@ interface Category
 {
     /**
      * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the @see \Shopware\Gateway\Category::getList()
+     * please refer to the linked classes.
+     *
+     * @see \Shopware\Gateway\Category::getList()
      *
      * @param $ids
      * @param Struct\Context $context
@@ -23,7 +25,9 @@ interface Category
 
     /**
      * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the @see \Shopware\Gateway\Category::get()
+     * please refer to the linked classes.
+     *
+     * @see \Shopware\Gateway\Category::get()
      *
      * @param $id
      * @param Struct\Context $context

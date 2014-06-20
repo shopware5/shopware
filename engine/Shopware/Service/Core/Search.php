@@ -31,12 +31,7 @@ class Search implements Service\Search
     }
 
     /**
-     * Creates a search request on the internal search gateway to
-     * get the product result for the passed criteria object.
-     *
-     * @param Gateway\Search\Criteria $criteria
-     * @param Context $context
-     * @return Gateway\Search\Result
+     * @inheritdoc
      */
     public function search(Gateway\Search\Criteria $criteria, Context $context)
     {

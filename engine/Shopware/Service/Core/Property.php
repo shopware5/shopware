@@ -25,14 +25,7 @@ class Property implements Service\Property
     }
 
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Gateway\ProductProperty::get()
-     *
-     * @param Struct\ListProduct $product
-     * @param Struct\Context $context
-     * @return Struct\Property\Set
+     * @inheritdoc
      */
     public function get(Struct\ListProduct $product, Struct\Context $context)
     {
@@ -42,14 +35,7 @@ class Property implements Service\Property
     }
 
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Service\Property::get()
-     *
-     * @param Struct\ListProduct[] $products
-     * @param Struct\Context $context
-     * @return Struct\Property\Set[]
+     * @inheritdoc
      */
     public function getList(array $products, Struct\Context $context)
     {
