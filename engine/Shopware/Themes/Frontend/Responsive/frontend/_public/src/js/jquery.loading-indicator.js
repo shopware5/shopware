@@ -111,10 +111,10 @@
         _createLoader: function () {
             var me = this,
                 loader = $('<div>', {
-                    class: me.options.loaderCls
+                    'class': me.options.loaderCls
                 }),
                 icon = $('<div>', {
-                    class: me.options.iconCls
+                    'class': me.options.iconCls
                 });
 
             loader.append(icon);

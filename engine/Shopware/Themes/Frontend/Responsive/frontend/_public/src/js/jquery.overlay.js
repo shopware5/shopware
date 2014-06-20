@@ -50,7 +50,7 @@
 
             if (me.$overlay === null) {
                 me.$overlay = $('<div>', {
-                    class: 'js--overlay'
+                    'class': 'js--overlay'
                 });
 
                 $('body').append(me.$overlay);
