@@ -66,8 +66,8 @@ class Helper
         Struct\ListProduct $listProduct,
         Struct\Context $context,
         array $selection = array(),
-        ProductConfiguration $productConfigurationGateway = null,
-        Configurator $configuratorGateway = null
+        \Shopware\Gateway\ProductConfiguration $productConfigurationGateway = null,
+        \Shopware\Gateway\Configurator $configuratorGateway = null
     ) {
         if ($productConfigurationGateway == null) {
             $productConfigurationGateway = Shopware()->Container()->get('product_configuration_gateway');
@@ -84,13 +84,13 @@ class Helper
     /**
      * @param Struct\ListProduct $product
      * @param Struct\Context $context
-     * @param ProductProperty $productPropertyGateway
+     * @param \Shopware\Gateway\ProductProperty $productPropertyGateway
      * @return Struct\Property\Set
      */
     public function getProductProperties(
         Struct\ListProduct $product,
         Struct\Context $context,
-        ProductProperty $productPropertyGateway = null
+        \Shopware\Gateway\ProductProperty $productPropertyGateway = null
     ) {
 
         if ($productPropertyGateway === null) {

@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 4
+ * Copyright © shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Gateway\DBAL;
 
@@ -12,13 +34,15 @@ use Shopware\Gateway\DBAL\QueryGenerator as QueryGenerator;
 use Shopware\Gateway\Search\Condition;
 use Shopware\Gateway\Search\Criteria;
 use Shopware\Gateway\Search\Facet;
-use Shopware\Gateway\Search\Product;
+use Shopware\Gateway\Search\Product as SearchProduct;
 use Shopware\Gateway\Search\Result;
 use Shopware\Gateway\Search\Sorting;
 use Shopware\Struct\Context;
-use Shopware\Struct\Customer\Group;
 
-class Search
+/**
+ * @package Shopware\Gateway\DBAL
+ */
+class Search implements \Shopware\Gateway\Search
 {
     /**
      * @var QueryGenerator\DBAL[]
@@ -46,6 +70,13 @@ class Search
     }
 
     /**
+     * Creates a product search result for the passed criteria object.
+     * The criteria object contains different core conditions and plugin conditions.
+     * This conditions has to be handled over the different condition handlers.
+     *
+     * The search gateway has to implement an event which plugin can be listened to,
+     * to add their own handler classes.
+     *
      * @param \Shopware\Gateway\Search\Criteria $criteria
      * @param Context $context
      * @return Result
@@ -120,7 +151,7 @@ class Search
         $products = array();
 
         foreach ($data as $row) {
-            $product = new Product();
+            $product = new SearchProduct();
             $product->setNumber($row['ordernumber']);
 
             unset($row['ordernumber']);

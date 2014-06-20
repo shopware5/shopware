@@ -2,7 +2,9 @@
 
 namespace Shopware\Struct\Product;
 
-class Vote
+use Shopware\Struct\Extendable;
+
+class Vote extends Extendable
 {
     /**
      * @var int

@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 4
+ * Copyright © shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Gateway\DBAL;
 
@@ -7,7 +29,10 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Gateway\DBAL\Hydrator;
 use Shopware\Struct;
 
-class Download
+/**
+ * @package Shopware\Gateway\DBAL
+ */
+class Download implements \Shopware\Gateway\Download
 {
     /**
      * @var Hydrator\Download
@@ -45,12 +70,16 @@ class Download
     }
 
     /**
-     * Returns a list of product downloads for each passed ListProduct struct.
-     * This function is used in the core by the Service\Product class.
-     *
-     * @param Struct\ListProduct[] $products
-     * @return Struct\Product\Download[] returns an array which indexed with the product number, each array contains an
-     * additionally Download struct array.
+     * @inheritdoc
+     */
+    public function get(Struct\ListProduct $product, Struct\Context $context)
+    {
+        $downloads = $this->getList(array($product), $context);
+        return array_shift($downloads);
+    }
+
+    /**
+     * @inheritdoc
      */
     public function getList(array $products, Struct\Context $context)
     {

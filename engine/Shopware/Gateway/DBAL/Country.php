@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 4
+ * Copyright © shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Gateway\DBAL;
 
@@ -8,16 +30,9 @@ use Shopware\Gateway\DBAL\Hydrator;
 use Shopware\Struct;
 
 /**
- * The country gateway is used to select areas, countries and
- * states.
- *
- * It supports for each resource a single get function to select
- * single struct elements and additionally a getList function for
- * each resource to select a list of the resources.
- *
  * @package Shopware\Gateway\DBAL
  */
-class Country
+class Country implements \Shopware\Gateway\Country
 {
     /**
      * @var Hydrator\Country
@@ -55,11 +70,7 @@ class Country
     }
 
     /**
-     * Returns a single area struct, identified over the unique id property.
-     *
-     * @param int $id
-     * @param \Shopware\Struct\Context $context
-     * @return Struct\Country\Area
+     * @inheritdoc
      */
     public function getArea($id, Struct\Context $context)
     {
@@ -69,11 +80,7 @@ class Country
     }
 
     /**
-     * Returns a single country struct which identified over the passed id.
-     *
-     * @param int $id
-     * @param \Shopware\Struct\Context $context
-     * @return \Shopware\Struct\Country
+     * @inheritdoc
      */
     public function getCountry($id, Struct\Context $context)
     {
@@ -83,11 +90,7 @@ class Country
     }
 
     /**
-     * Returns a single state struct which identified over the passed id.
-     *
-     * @param $id
-     * @param \Shopware\Struct\Context $context
-     * @return Struct\Country\State
+     * @inheritdoc
      */
     public function getState($id, Struct\Context $context)
     {
@@ -97,16 +100,12 @@ class Country
     }
 
     /**
-     * Returns a list of area structs which identified over
-     * the passed ids.
-     *
-     * @param array $ids
-     * @param \Shopware\Struct\Context $context
-     * @return Struct\Country\Area[]
+     * @inheritdoc
      */
     public function getAreas(array $ids, Struct\Context $context)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
+
         $query->select($this->fieldHelper->getAreaFields());
         $query->from('s_core_countries_areas', 'countryArea');
         $query->where('countryArea.id IN (:ids)')
@@ -126,18 +125,13 @@ class Country
     }
 
     /**
-     * Returns a list of Country structs.
-     * The countries are identified over the passed id array.
-     *
-     * @param array $ids
-     * @param \Shopware\Struct\Context $context
-     * @return Struct\Country[]
+     * @inheritdoc
      */
     public function getCountries(array $ids, Struct\Context $context)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
-        $query->select($this->fieldHelper->getCountryFields());
 
+        $query->select($this->fieldHelper->getCountryFields());
         $query->from('s_core_countries', 'country')
             ->leftJoin('country', 's_core_countries_attributes', 'countryAttribute', 'countryAttribute.countryID = country.id');
 
@@ -146,7 +140,6 @@ class Country
         $query->where('country.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
             ->setParameter(':language', $context->getShop()->getId());
-
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -162,12 +155,7 @@ class Country
     }
 
     /**
-     * Returns a list of country state structs.
-     * The states are identified over the passed unique id array
-     *
-     * @param array $ids
-     * @param \Shopware\Struct\Context $context
-     * @return Struct\Country\State[]
+     * @inheritdoc
      */
     public function getStates(array $ids, Struct\Context $context)
     {

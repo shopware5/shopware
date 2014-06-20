@@ -206,6 +206,16 @@ class ListProduct extends Extendable
     protected $sales;
 
     /**
+     * @var bool
+     */
+    protected $hasConfigurator;
+
+    /**
+     * @var bool
+     */
+    protected $hasEsd;
+
+    /**
      * @var string
      */
     protected $manufacturerNumber;
@@ -275,9 +285,9 @@ class ListProduct extends Extendable
     protected $states = array();
 
     /**
-     * @var bool
+     * @var Esd
      */
-    protected $hasConfigurator;
+    protected $esd;
 
     /**
      * Adds a new product state.
@@ -674,11 +684,7 @@ class ListProduct extends Extendable
      */
     public function getShortDescription()
     {
-        if (!$this->translation || !$this->translation->getShortDescription()) {
-            return $this->shortDescription;
-        }
-
-        return $this->translation->getShortDescription();
+        return $this->shortDescription;
     }
 
     /**
@@ -879,5 +885,37 @@ class ListProduct extends Extendable
     public function setSales($sales)
     {
         $this->sales = $sales;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasEsd()
+    {
+        return $this->hasEsd;
+    }
+
+    /**
+     * @param boolean $hasEsd
+     */
+    public function setHasEsd($hasEsd)
+    {
+        $this->hasEsd = $hasEsd;
+    }
+
+    /**
+     * @return \Shopware\Struct\Esd
+     */
+    public function getEsd()
+    {
+        return $this->esd;
+    }
+
+    /**
+     * @param \Shopware\Struct\Esd $esd
+     */
+    public function setEsd($esd)
+    {
+        $this->esd = $esd;
     }
 }

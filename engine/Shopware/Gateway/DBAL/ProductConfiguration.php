@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 4
+ * Copyright © shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Gateway\DBAL;
 
@@ -7,7 +29,10 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Gateway\DBAL\Hydrator;
 use Shopware\Struct;
 
-class ProductConfiguration
+/**
+ * @package Shopware\Gateway\DBAL
+ */
+class ProductConfiguration implements \Shopware\Gateway\ProductConfiguration
 {
     /**
      * @var Hydrator\Configurator
@@ -45,9 +70,16 @@ class ProductConfiguration
     }
 
     /**
-     * @param Struct\ListProduct[] $products
-     * @param \Shopware\Struct\Context $context
-     * @return Group
+     * @inheritdoc
+     */
+    public function get(Struct\ListProduct $product, Struct\Context $context)
+    {
+        $groups = $this->getList(array($product), $context);
+        return array_shift($groups);
+    }
+
+    /**
+     * @inheritdoc
      */
     public function getList(array $products, Struct\Context $context)
     {
@@ -81,7 +113,7 @@ class ProductConfiguration
         return $result;
     }
 
-    protected function getQuery()
+    private function getQuery()
     {
         $query = $this->entityManager->getDBALQueryBuilder();
 

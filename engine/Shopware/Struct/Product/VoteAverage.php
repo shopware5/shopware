@@ -2,10 +2,12 @@
 
 namespace Shopware\Struct\Product;
 
+use Shopware\Struct\Extendable;
+
 /**
  * @package Shopware\Struct
  */
-class VoteAverage
+class VoteAverage extends Extendable
 {
     /**
      * @var int

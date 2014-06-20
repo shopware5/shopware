@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 4
+ * Copyright © shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Gateway\DBAL;
 
@@ -7,7 +29,10 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Gateway\DBAL\Hydrator;
 use Shopware\Struct;
 
-class PriceGroupDiscount
+/**
+ * @package Shopware\Gateway\DBAL
+ */
+class PriceGroupDiscount implements \Shopware\Gateway\PriceGroupDiscount
 {
     /**
      * @var Hydrator\Price
@@ -45,13 +70,24 @@ class PriceGroupDiscount
     }
 
     /**
-     * @param Struct\ListProduct[] $products
-     * @param Struct\Customer\Group $customerGroup
-     * @return array
+     * @inheritdoc
+     */
+    public function getProductDiscount(
+        Struct\ListProduct $product,
+        Struct\Customer\Group $customerGroup,
+        Struct\Context $context
+    ) {
+        $discounts = $this->getProductsDiscounts(array($product), $customerGroup, $context);
+        return array_shift($discounts);
+    }
+
+    /**
+     * @inheritdoc
      */
     public function getProductsDiscounts(
         array $products,
-        Struct\Customer\Group $customerGroup
+        Struct\Customer\Group $customerGroup,
+        Struct\Context $context
     ) {
         $ids = array();
         foreach ($products as $product) {
@@ -114,13 +150,7 @@ class PriceGroupDiscount
     }
 
     /**
-     * Returns the highest percentage discount for the
-     * customer group of the passed price group and quantity.
-     *
-     * @param Struct\Product\PriceGroup $priceGroup
-     * @param Struct\Customer\Group $customerGroup
-     * @param $quantity
-     * @return Struct\Product\PriceDiscount
+     * @inheritdoc
      */
     public function getHighestQuantityDiscount(
         Struct\Product\PriceGroup $priceGroup,

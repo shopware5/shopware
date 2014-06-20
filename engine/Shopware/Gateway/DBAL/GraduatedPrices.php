@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 4
+ * Copyright © shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Gateway\DBAL;
 
@@ -7,7 +29,10 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Struct as Struct;
 use Shopware\Gateway\DBAL\Hydrator as Hydrator;
 
-class GraduatedPrices
+/**
+ * @package Shopware\Gateway\DBAL
+ */
+class GraduatedPrices implements \Shopware\Gateway\GraduatedPrices
 {
     /**
      * @var \Shopware\Gateway\DBAL\Hydrator\Price
@@ -45,15 +70,7 @@ class GraduatedPrices
     }
 
     /**
-     * This function returns the graduated customer group prices for the passed product.
-     *
-     * The graduated product prices are selected over the s_articles_prices.articledetailsID column.
-     * The id is stored in the Struct\ListProduct::variantId property.
-     * Additionally it is important that the prices are ordered ascending by the Struct\Price::from property.
-     *
-     * @param Struct\ListProduct $product
-     * @param Struct\Customer\Group $customerGroup
-     * @return Struct\Product\PriceRule[]
+     * @inheritdoc
      */
     public function get(
         Struct\ListProduct $product,
@@ -65,9 +82,7 @@ class GraduatedPrices
     }
 
     /**
-     * @param Struct\ListProduct[] $products
-     * @param Struct\Customer\Group $customerGroup
-     * @return Struct\Product\PriceRule[]
+     * @inheritdoc
      */
     public function getList(array $products, Struct\Customer\Group $customerGroup)
     {

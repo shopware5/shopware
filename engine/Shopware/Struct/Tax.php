@@ -5,7 +5,7 @@ namespace Shopware\Struct;
 /**
  * @package Shopware\Struct
  */
-class Tax
+class Tax extends Extendable
 {
     /**
      * Unique identifier of the tax struct.

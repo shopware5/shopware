@@ -6,9 +6,9 @@ use Shopware\Components\Model\DBAL\QueryBuilder;
 use Shopware\Gateway\Search\Criteria;
 use Shopware\Gateway\Search\Facet;
 use Shopware\Gateway\Search\Condition;
-use Shopware\Struct\Attribute;
 use Shopware\Service;
 use Shopware\Struct\Context;
+use Shopware\Struct\CoreAttribute;
 
 class Manufacturer extends DBAL
 {
@@ -64,7 +64,7 @@ class Manufacturer extends DBAL
         foreach ($data as $row) {
             $manufacturer = $manufacturers[$row['id']];
 
-            $attribute = new Attribute();
+            $attribute = new CoreAttribute();
             $attribute->set('total', $row['total']);
             $attribute->set('active', false);
 

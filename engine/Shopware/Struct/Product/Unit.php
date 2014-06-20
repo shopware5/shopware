@@ -2,10 +2,12 @@
 
 namespace Shopware\Struct\Product;
 
+use Shopware\Struct\Extendable;
+
 /**
  * @package Shopware\Struct
  */
-class Unit
+class Unit extends Extendable
 {
     /**
      * Unique identifier of the struct.

@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 4
+ * Copyright © shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Gateway\DBAL;
 
@@ -9,11 +31,9 @@ use Shopware\Gateway\DBAL\Hydrator as Hydrator;
 use Shopware\Struct;
 
 /**
- * Class Product gateway.
- *
  * @package Shopware\Gateway\DBAL
  */
-class ListProduct
+class ListProduct implements \Shopware\Gateway\ListProduct
 {
     /**
      * @var \Shopware\Gateway\DBAL\Hydrator\Product
@@ -36,7 +56,6 @@ class ListProduct
      */
     protected $fieldHelper;
 
-
     /**
      * @param ModelManager $entityManager
      * @param FieldHelper $fieldHelper
@@ -52,24 +71,8 @@ class ListProduct
         $this->entityManager = $entityManager;
     }
 
-
     /**
-     * Returns a single of ListProduct struct which can be used for listings
-     * or sliders.
-     *
-     * A mini product contains only the minified product data.
-     * The mini data contains data sources:
-     *  - article
-     *  - variant
-     *  - unit
-     *  - attribute
-     *  - tax
-     *  - manufacturer
-     *  - price group
-     *
-     * @param $number
-     * @param \Shopware\Struct\Context $context
-     * @return Struct\ListProduct
+     * @inheritdoc
      */
     public function get($number, Struct\Context $context)
     {
@@ -79,25 +82,7 @@ class ListProduct
     }
 
     /**
-     * Returns a list of ListProduct structs which can be used for listings
-     * or sliders.
-     *
-     * A mini product contains only the minified product data.
-     * The mini data contains data sources:
-     *  - article
-     *  - variant
-     *  - unit
-     *  - attribute
-     *  - tax
-     *  - manufacturer
-     *  - price group
-     *
-     * Required states:
-     *  - ListProduct::STATE_TRANSLATED
-     *
-     * @param array $numbers
-     * @param \Shopware\Struct\Context $context
-     * @return Struct\ListProduct[]
+     * @inheritdoc
      */
     public function getList(array $numbers, Struct\Context $context)
     {
@@ -119,6 +104,8 @@ class ListProduct
 
     protected function getQuery(array $numbers, Struct\Context $context)
     {
+        $esdQuery = $this->getEsdQuery();
+
         $query = $this->entityManager->getDBALQueryBuilder();
         $query->select($this->fieldHelper->getArticleFields())
             ->addSelect($this->fieldHelper->getTopSellerFields())
@@ -126,7 +113,9 @@ class ListProduct
             ->addSelect($this->fieldHelper->getUnitFields())
             ->addSelect($this->fieldHelper->getTaxFields())
             ->addSelect($this->fieldHelper->getPriceGroupFields())
-            ->addSelect($this->fieldHelper->getManufacturerFields());
+            ->addSelect($this->fieldHelper->getManufacturerFields())
+            ->addSelect($this->fieldHelper->getEsdFields())
+            ->addSelect('(' . $esdQuery->getSQL() . ') as __product_has_esd');
 
         $query->from('s_articles_details', 'variant')
             ->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID')
@@ -137,9 +126,10 @@ class ListProduct
             ->leftJoin('variant', 's_articles_attributes', 'productAttribute', 'productAttribute.articledetailsID = variant.id')
             ->leftJoin('product', 's_articles_supplier_attributes', 'manufacturerAttribute', 'manufacturerAttribute.id = product.supplierID')
             ->leftJoin('product', 's_articles_top_seller_ro', 'topSeller', 'topSeller.article_id = product.id')
+            ->leftJoin('variant', 's_articles_esd', 'esd', 'esd.articledetailsID = variant.id')
+            ->leftJoin('esd', 's_articles_esd_attributes', 'esdAttribute', 'esdAttribute.esdID = esd.id')
             ->where('variant.ordernumber IN (:numbers)')
             ->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
-
 
         $this->fieldHelper->addProductTranslation($query);
         $this->fieldHelper->addVariantTranslation($query);
@@ -147,6 +137,18 @@ class ListProduct
         $this->fieldHelper->addUnitTranslation($query);
 
         $query->setParameter(':language', $context->getShop()->getId());
+
+        return $query;
+    }
+
+    private function getEsdQuery()
+    {
+        $query = $this->entityManager->getDBALQueryBuilder();
+
+        $query->select('1')
+            ->from('s_articles_esd', 'esd')
+            ->where('esd.articleID = product.id')
+            ->setMaxResults(1);
 
         return $query;
     }

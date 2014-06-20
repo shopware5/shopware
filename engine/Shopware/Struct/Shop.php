@@ -5,7 +5,7 @@ namespace Shopware\Struct;
 /**
  * @package Shopware\Struct
  */
-class Shop
+class Shop extends Extendable
 {
     /**
      * @var int

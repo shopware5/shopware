@@ -151,7 +151,6 @@ class sArticles
         \Shopware\Models\Category\Category $category = null,
         $translationId = null,
         $customerGroupId = null,
-
         \Shopware\Service\GlobalState $contextService = null,
         Shopware_Components_Config $config = null,
         \Shopware\Service\ListProduct $listProductService = null,
@@ -920,9 +919,17 @@ class sArticles
      */
     public function sGetArticlesByCategory($categoryId = null)
     {
-	    $result = $this->getListing($categoryId);
-        
-        $result = Enlight()->Events()->filter('Shopware_Modules_Articles_sGetArticlesByCategory_FilterResult', $result, array('subject' => $this, 'id' => $categoryId));
+        if (Enlight()->Events()->notifyUntil('Shopware_Modules_Articles_sGetArticlesByCategory_Start', array(
+                'subject' => $this,
+                'id'      => $categoryId
+            ))) {
+            return false;
+        }
+
+        $result = $this->getListing($categoryId);
+
+
+        $result = $this->fireArticlesByCategoryEvents($result, $categoryId);
 
         return $result;
     }
@@ -1142,7 +1149,6 @@ class sArticles
         return $builder;
     }
 
-
     /**
      * Helper function to add the article count select for the filter queries.
      *
@@ -1296,7 +1302,6 @@ class sArticles
 
         return $filters;
     }
-
 
     /**
      * Helper function to get the sort mode condition for the passed category id.
@@ -1762,7 +1767,7 @@ class sArticles
             LIMIT $sLimitChart
         ";
 
-        
+
         $queryChart = Shopware()->Db()->fetchAssoc($sql, array(
             'categoryId'      => $category,
             'customerGroupId' => $this->customerGroupId
@@ -2373,7 +2378,6 @@ class sArticles
 
         /**
          * Checks which product id should be used.
-         *
          * If an order number passed, the id of the order number should be used.
          */
         $productId = $this->getCurrentProductId($id, $number);
@@ -2399,7 +2403,7 @@ class sArticles
             $configuration = $this->getConfigurationByNumber($number);
         }
 
-        $categoryId = (int)$sCategoryID;
+        $categoryId = (int) $sCategoryID;
         if (empty($categoryId) || $categoryId == Shopware()->Shop()->getId()) {
             $categoryId = Shopware()->Modules()->Categories()->sGetCategoryIdByArticleId($id);
         }
@@ -2409,6 +2413,8 @@ class sArticles
             $categoryId,
             $configuration
         );
+
+        $product = $this->fireArticleByIdEvents($product);
 
         return $product;
     }
@@ -2699,6 +2705,35 @@ class sArticles
      */
     public function sGetPromotionById($mode, $category = 0, $value = 0, $withImage = false)
     {
+        $notifyUntil = $this->eventManager->notifyUntil(
+            'Shopware_Modules_Articles_GetPromotionById_Start',
+            array(
+                'subject' => $this,
+                'mode' => $mode,
+                'category' => $category,
+                'value' => $value
+            )
+        );
+
+        if ($notifyUntil) {
+            return false;
+        }
+
+        $value = $this->getPromotionNumberByMode($mode, $category, $value, $withImage);
+
+        if (!$value) {
+            return false;
+        }
+
+        $result = $this->getPromotion($category, $value);
+
+        $result = $this->firePromotionByIdEvents($result);
+
+        return $result;
+    }
+
+    private function getPromotionNumberByMode($mode, $category, $value, $withImage)
+    {
         switch ($mode) {
             case 'top':
             case 'new':
@@ -2732,15 +2767,7 @@ class sArticles
             $value = $number;
         }
 
-        $result = $this->getPromotion($category, $value);
-
-        $result = Enlight()->Events()->filter(
-            'Shopware_Modules_Articles_GetPromotionById_FilterResult',
-            $result,
-            array('subject' => $this, 'mode' => $mode, 'category' => $category, 'value' => $value)
-        );
-
-        return $result;
+        return $value;
     }
 
     private function getPremiumArticle($mode, $category = 0, $value = 0)
@@ -3660,12 +3687,19 @@ class sArticles
         return $sArticle;
     }
 
-
+    /**
+     * Returns a minified product which can be used for listings,
+     * sliders or emotions.
+     *
+     * @param $category
+     * @param $number
+     * @return array|bool
+     */
     private function getPromotion($category, $number)
     {
         $context = $this->contextService->get();
 
-        $product = Shopware()->Container()->get('list_product_service')->get(
+        $product = $this->listProductService->get(
             $number,
             $context
         );
@@ -3677,7 +3711,7 @@ class sArticles
         $promotion = $this->convertProductStruct($product, $category);
 
         /**@var $average \Shopware\Struct\Product\VoteAverage */
-        $average = Shopware()->Container()->get('vote_service')->getAverage(
+        $average = $this->voteService->getAverage(
             $product,
             $context
         );
@@ -3692,7 +3726,7 @@ class sArticles
             return $promotion;
         }
 
-        $propertySet = Shopware()->Container()->get('property_service')->get(
+        $propertySet = $this->propertyService->get(
             $product,
             $context
         );
@@ -3701,30 +3735,8 @@ class sArticles
             return $promotion;
         }
 
-        $properties = array();
-        foreach ($propertySet->getGroups() as $group) {
-            $property = array(
-                'id' => $group->getId(),
-                'optionID' => $group->getId(),
-                'groupID' => $propertySet->getId(),
-                'groupName' => $propertySet->getName(),
-                'name' => $group->getName()
-            );
-
-            $values = array();
-            foreach ($group->getOptions() as $option) {
-                $values[] = $option->getName();
-            }
-            $property['values'] = $values;
-            $property['value'] = implode(', ', $values);
-            $options = $group->getOptions();
-
-            $first = array_shift($options);
-            $property['valueID'] = $first->getId();
-            $properties[$group->getId()] = $property;
-        }
-
-        $promotion['sProperties'] = $properties;
+        $properties = $this->convertPropertySetStruct($propertySet);
+        $promotion['sProperties'] = $this->getFlatPropertyArray($properties);
 
         return $promotion;
     }
@@ -3738,7 +3750,7 @@ class sArticles
      */
     private function getListing($categoryId)
     {
-        $context = Shopware()->Container()->get('global_state_service')->get();
+        $context = $this->contextService->get();
 
         $config = $this->loadCategoryConfig($categoryId);
 
@@ -3748,14 +3760,14 @@ class sArticles
             $context
         );
 
-        $searchResult = Shopware()->Container()->get('search_service')->search(
+        $searchResult = $this->searchService->search(
             $criteria,
             $context
         );
 
         $articles = array();
 
-        $averages = Shopware()->Container()->get('vote_service')->getAverages(
+        $averages = $this->voteService->getAverages(
             $searchResult->getProducts(),
             $context
         );
@@ -3832,6 +3844,62 @@ class sArticles
     }
 
     /**
+     * Helper function which loads a full product struct and converts the product struct
+     * to the shopware 3 array structure.
+     *
+     * @param $number
+     * @param $categoryId
+     * @param array $selection
+     * @return array
+     */
+    private function getProduct($number, $categoryId, array $selection)
+    {
+        $context = $this->contextService->get();
+        $products = $this->productService->getList(
+            array($number),
+            $context
+        );
+
+        /**@var $product \Shopware\Struct\Product */
+        $product = array_shift($products);
+
+        $data = $this->convertFullProduct($product, $categoryId);
+
+        $data['categoryID'] = $categoryId;
+
+        $average = $this->voteService->getAverage($product, $context);
+
+        if ($average instanceof \Shopware\Struct\Product\VoteAverage) {
+            $data['sVoteAverange'] = $this->convertVoteAverageStruct($average);
+        }
+
+        $configurator = $this->configuratorService->getProductConfigurator(
+            $product,
+            $context,
+            $selection
+        );
+
+        $convertedConfigurator = $this->convertConfiguratorStruct($product, $configurator);
+
+        $data = array_merge($data, $convertedConfigurator);
+
+        $data = array_merge($data, $this->getLinksOfProduct($product, $categoryId));
+
+        $data["articleName"] = $this->sOptimizeText($data["articleName"]);
+        $data["description_long"] = htmlspecialchars_decode($data["description_long"]);
+
+        $data["sDescriptionKeywords"] = $this->getDescriptionKeywords(
+            $data["description_long"]
+        );
+
+        if ($this->showArticleNavigation()) {
+            $data["sNavigation"] = $this->sGetAllArticlesInCategory($product->getId());
+        }
+        
+        return $data;
+    }
+
+    /**
      * @param $categoryId
      * @param array $config
      * @param Shopware\Struct\Context $context
@@ -3865,8 +3933,8 @@ class sArticles
 
         if ($config['priceMax']) {
             $criteria->price(
-                (float)$config['priceMin'],
-                (float)$config['priceMax']
+                (float) $config['priceMin'],
+                (float) $config['priceMax']
             );
         }
 
@@ -3938,8 +4006,12 @@ class sArticles
 
             $data[$struct->getId()] = $manufacturer;
         }
+        $limit = 30;
+        if ($this->config->get('maxSuppliersCategory')) {
+            $limit = (int) $this->config->get('maxSuppliersCategory');
+        }
 
-        return $data;
+        return array_slice($data, 0, $limit);
     }
 
     private function getActiveListingSupplier($suppliers, $config)
@@ -4010,7 +4082,7 @@ class sArticles
                     }
                 }
 
-                $group['active'] = (bool)(!empty($activeGroupOptions));
+                $group['active'] = (bool) (!empty($activeGroupOptions));
 
                 if ($group['active']) {
                     $activeSetGroups[] = $group['id'];
@@ -4027,7 +4099,7 @@ class sArticles
                     $group['removeLink'] = $this->buildListingLink($params);
                 }
 
-                $set['active'] = (bool)(!empty($activeSetGroups));
+                $set['active'] = (bool) (!empty($activeSetGroups));
             }
         }
         return $data;
@@ -4106,7 +4178,7 @@ class sArticles
      */
     private function createListingPerPageLinks($config)
     {
-        $pageSizes = explode("|", $this->sSYSTEM->sCONFIG['sNumberArticlesToShow']);
+        $pageSizes = explode("|", $this->config->get('numberArticlesToShow'));
 
         $sizes = array();
 
@@ -4118,7 +4190,7 @@ class sArticles
             $params = array_merge($params, array('sPerPage' => $size));
 
             $sizeData = array(
-                'markup' => (int)($size == $currentSize),
+                'markup' => (int) ($size == $currentSize),
                 'value' => $size,
                 'link' => $this->buildListingLink($params)
             );
@@ -4148,10 +4220,8 @@ class sArticles
 
         $count = ceil($totalCount / $config['sPerPage']);
 
-        $shopwareConfig = $this->sSYSTEM->sCONFIG;
-
-        if ((int)$shopwareConfig['sMaxPages'] > 0 && (int)$shopwareConfig['sMaxPages'] < $count) {
-            $count = (int)$shopwareConfig['sMaxPages'];
+        if ((int) $this->config->get('maxPages') > 0 && (int) $this->config->get('maxPages') < $count) {
+            $count = (int) $this->config->get('maxPages');
         }
 
         $params = $this->getListingLinkParameters($config);
@@ -4164,7 +4234,7 @@ class sArticles
             $params = array_merge($params, array('sPage' => $i));
 
             $page = array(
-                'markup' => (int)($i == $currentPage),
+                'markup' => (int) ($i == $currentPage),
                 'value' => $i,
                 'link' => $this->buildListingLink($params)
             );
@@ -4201,7 +4271,7 @@ class sArticles
 
         $config['sPerPage'] = $this->getConfigParameter(
             'sPerPage',
-            (int)$this->sSYSTEM->sCONFIG['sARTICLESPERPAGE']
+            (int) $this->config->get('articlesPerPage')
         );
 
         $config['sSupplier'] = $this->getConfigParameter(
@@ -4275,7 +4345,7 @@ class sArticles
 
     private function getSupplierListingLink(\Shopware\Struct\Product\Manufacturer $manufacturer)
     {
-        return Shopware()->Config()->get('sBaseFile') .
+        return $this->config->get('baseFile') .
         "sViewport=supplier&sSupplier=" . $manufacturer->getId() .
         "&sSearchText=" . urlencode($manufacturer->getName());
     }
@@ -4287,7 +4357,7 @@ class sArticles
      * @param null $category
      * @return array
      */
-    private function convertProductStruct(\Shopware\Struct\ListProduct $product, $category = null)
+    public function convertProductStruct(\Shopware\Struct\ListProduct $product, $category = null)
     {
         if (!$product instanceof \Shopware\Struct\ListProduct) {
             return array();
@@ -4304,56 +4374,24 @@ class sArticles
         $unit = $cheapestPrice->getUnit();
 
         $price = $this->sFormatPrice(
-            round($cheapestPrice->getCalculatedPrice(), 3)
+            $cheapestPrice->getCalculatedPrice()
         );
 
         $pseudoPrice = $this->sFormatPrice(
-            round($cheapestPrice->getCalculatedPseudoPrice(), 3)
+            $cheapestPrice->getCalculatedPseudoPrice()
         );
 
         $referencePrice = $this->sFormatPrice(
-            round($cheapestPrice->getCalculatedReferencePrice(), 3)
+            $cheapestPrice->getCalculatedReferencePrice()
         );
 
-        $promotion = array(
-            'articleID' => $product->getId(),
-            'articleDetailsID' => $product->getVariantId(),
-            'ordernumber' => $product->getNumber(),
-            'highlight' => $product->highlight(),
-            'description' => $product->getShortDescription(),
-            'description_long' => $product->getLongDescription(),
-            'supplierName' => $product->getManufacturer()->getName(),
-            'supplierImg' => $product->getManufacturer()->getCoverFile(),
-            'articleName' => $product->getName(),
-            'taxID' => $product->getTax()->getId(),
+        $promotion = $this->convertListProductStruct($product);
+
+        $promotion = array_merge($promotion, array(
             'price' => $price,
             'pseudoprice' => $pseudoPrice,
-            'tax' => $product->getTax()->getTax(),
-            'instock' => $product->getStock(),
-            'weight' => $product->getWeight(),
-            'shippingtime' => $product->getShippingTime(),
             'pricegroup' => $cheapestPrice->getCustomerGroup()->getKey(),
-            'pricegroupActive' => false,
-            'pricegroupID' => null,
-            'length' => $product->getLength(),
-            'height' => $product->getHeight(),
-            'width' => $product->getWidth(),
-            'laststock' => $product->isCloseouts(),
-            'additionaltext' => $product->getAdditional(),
-            'datum' => $product->getCreatedAt(),
-            'sVoteAverange' => array(
-                'averange' => 0,
-                'count' => 0,
-            ),
-            'sales' => 0,
-            'filtergroupID' => null,
-            'priceStartingFrom' => null,
-            'pseudopricePercent' => null,
-            //flag inside mini product
-            'sVariantArticle' => null,
-            'sConfigurator' => $product->hasConfigurator(),
-            'mode' => 'fix'
-        );
+        ));
 
         if ($referencePrice) {
             $promotion['referenceprice'] = $referencePrice;
@@ -4380,61 +4418,17 @@ class sArticles
         }
 
         if ($unit) {
-            $promotion = array_merge(
-                $promotion,
-                array(
-                    'purchaseunit' => $unit->getPurchaseUnit(),
-                    'referenceunit' => $unit->getReferenceUnit(),
-                    'unitID' => $unit->getId(),
-                    'sUnit' => array(
-                        'unit' => $unit->getUnit(),
-                        'description' => $unit->getName(),
-                    )
-                )
-            );
-        }
-
-        if ($product->getAttributes()) {
-            foreach ($product->getAttributes() as $attribute) {
-                $promotion = array_merge(
-                    $promotion,
-                    $attribute->toArray()
-                );
-            }
+            $promotion = array_merge($promotion, $this->convertUnitStruct($unit));
         }
 
         if ($product->getCover()) {
             $promotion['image'] = $this->convertMediaStruct($product->getCover());
         }
 
-        $today = new DateTime();
-
-        if ($product->getCreatedAt()) {
-            $markNew = (int)Shopware()->Config()->get('sMarkAsNew');
-            $diff = $today->diff($product->getCreatedAt());
-            $promotion['newArticle'] = ($diff->days <= $markNew || $product->getCreatedAt() > $today);
-        }
-
-        if ($product->getReleaseDate()) {
-            $promotion['sUpcoming'] = (bool)($product->getReleaseDate() > $today);
-
-            if ($product->getReleaseDate() > $today) {
-                $promotion['sReleasedate'] = $product->getReleaseDate()->format('Y-m-d');
-            }
-        }
-
-        $topSellerMarker = (int)$this->sSYSTEM->sCONFIG['markAsTopSeller'];
-
-        if ($product->getSales() >= $topSellerMarker) {
-            $promotion['topseller'] = 1;
-        }
-
-        $promotion['esd'] = $this->sCheckIfEsd($product->getId());
-
-        $promotion["linkBasket"] = Shopware()->Config()->get('sBASEFILE') .
+        $promotion["linkBasket"] = $this->config->get('baseFile') .
             "?sViewport=basket&sAdd=" . $promotion["ordernumber"];
 
-        $promotion["linkDetails"] = Shopware()->Config()->get('sBASEFILE') .
+        $promotion["linkDetails"] = $this->config->get('baseFile') .
             "?sViewport=detail&sArticle=" . $promotion["articleID"];
 
         if (!empty($category)
@@ -4445,6 +4439,117 @@ class sArticles
         }
 
         return $promotion;
+    }
+
+    private function convertListProductStruct(\Shopware\Struct\ListProduct $product)
+    {
+        $data = array(
+            'articleID' => $product->getId(),
+            'articleDetailsID' => $product->getVariantId(),
+            'ordernumber' => $product->getNumber(),
+            'highlight' => $product->highlight(),
+            'description' => $product->getShortDescription(),
+            'description_long' => $product->getLongDescription(),
+            'esd' => $product->hasEsd(),
+            'articleName' => $product->getName(),
+            'taxID' => $product->getTax()->getId(),
+            'tax' => $product->getTax()->getTax(),
+            'instock' => $product->getStock(),
+            'weight' => $product->getWeight(),
+            'shippingtime' => $product->getShippingTime(),
+
+            'pricegroupActive' => false,
+            'pricegroupID' => null,
+            'length' => $product->getLength(),
+            'height' => $product->getHeight(),
+            'width' => $product->getWidth(),
+            'laststock' => $product->isCloseouts(),
+            'additionaltext' => $product->getAdditional(),
+            'datum' => $product->getCreatedAt(),
+            'sales' => $product->getSales(),
+            'filtergroupID' => null,
+            'priceStartingFrom' => null,
+            'pseudopricePercent' => null,
+
+            //flag inside mini product
+            'sVariantArticle' => null,
+            'sConfigurator' => $product->hasConfigurator(),
+
+            //only used for full products
+            'metaTitle' => $product->getMetaTitle(),
+            'shippingfree' => $product->isShippingFree(),
+            'suppliernumber' => $product->getManufacturerNumber(),
+            'notification' => $product->allowsNotification(),
+            'ean' => $product->getEan(),
+            'keywords' => $product->getKeywords(),
+            'sReleasedate' => $product->getReleaseDate(),
+        );
+
+        if ($product->hasAttribute('core')) {
+            $data = array_merge($data, $product->getAttribute('core')->toArray());
+        }
+
+        $data['attributes'] = $product->getAttributes();
+
+        if ($product->getManufacturer()) {
+            $data = array_merge($data, array(
+                'supplierName' => $product->getManufacturer()->getName(),
+                'supplierImg' => $product->getManufacturer()->getCoverFile(),
+                'supplierID' => $product->getManufacturer()->getId(),
+                'supplierDescription' => $product->getManufacturer()->getDescription(),
+            ));
+
+            $data['supplier_attributes'] = $product->getManufacturer()->getAttributes();
+        }
+
+        if ($product->hasAttribute('marketing')) {
+            /**@var $marketing \Shopware\Struct\Product\MarketingAttribute*/
+            $marketing = $product->getAttribute('marketing');
+            $promotion['newArticle'] = $marketing->isNew();
+            $promotion['sUpcoming'] = $marketing->comingSoon();
+            $promotion['topseller'] = $marketing->isTopSeller();
+        }
+
+        $today = new DateTime();
+        if ($product->getReleaseDate() && $product->getReleaseDate() > $today) {
+            $promotion['sReleasedate'] = $product->getReleaseDate()->format('Y-m-d');
+        }
+
+        return $data;
+    }
+
+    private function getFlatPropertyArray(array $propertySet)
+    {
+        $data = array();
+        foreach($propertySet['groups'] as $group) {
+            $groupData = array(
+                'id' => $group['id'],
+                'optionID' => $group['id'],
+                'name' => $group['name'],
+                'groupID' => $propertySet['id'],
+                'groupName' => $propertySet['name'],
+                'values' => array(),
+                'attributes' => $group['attributes']
+            );
+
+            $options = array();
+            foreach ($group['options'] as $option) {
+                $options[] = array(
+                    'id' => $option['id'],
+                    'name' => $option['name'],
+                    'attributes' => $option['attributes']
+                );
+            }
+
+            $groupData['values'] = array_column($options, 'name');
+            $groupData['value'] = implode(', ', $groupData['values']);
+
+            $first = array_shift($options);
+            $groupData['valueID'] = $first['id'];
+
+            $data[$groupData['id']] = $groupData;
+        }
+        return $data;
     }
 
     private function convertPropertySetStruct(\Shopware\Struct\Property\Set $set)
@@ -4637,85 +4742,20 @@ class sArticles
         );
     }
 
-
-    private function convertFullProduct(\Shopware\Struct\Product $product)
+    public function convertFullProduct(\Shopware\Struct\Product $product)
     {
-        $data = array(
-            'articleID' => $product->getId(),
-            'articleDetailsID' => $product->getVariantId(),
-            'ordernumber' => $product->getNumber(),
-            'metaTitle' => $product->getMetaTitle(),
-            'datum' => $product->getCreatedAt(),
-            'suppliernumber' => $product->getManufacturerNumber(),
-            'additionaltext' => $product->getAdditional(),
-            'filtergroupID' => null,
-            'shippingtime' => $product->getShippingTime(),
-            'categoryID' => null,
-            'shippingfree' => $product->isShippingFree(),
-            'instock' => $product->getStock(),
-            'notification' => $product->allowsNotification(),
-            'ean' => $product->getEan(),
-            'width' => $product->getWidth(),
-            'length' => $product->getLength(),
-            'height' => $product->getHeight(),
-            'weight' => $product->getWeight(),
-            'laststock' => $product->isCloseouts(),
-            'taxID' => $product->getTax()->getId(),
-            'description' => $product->getShortDescription(),
-            'keywords' => $product->getKeywords(),
-            'description_long' => $product->getLongDescription(),
-            'articleName' => $product->getName(),
-            'tax' => $product->getTax()->getTax(),
-            'sReleasedate' => $product->getReleaseDate(),
-        );
+        $data = $this->convertListProductStruct($product);
 
-        $data = array_merge(
-            $data,
-            array(
-                'template' => '',
-                'mode' => '0',
-                'crossbundlelook' => '0',
-                'sUpcoming' => '0'
-            )
-        );
-
-        $data = array_merge(
-            $data,
-            array(
-                'minpurchase' => $product->getUnit()->getMinPurchase(),
-                'maxpurchase' => $product->getUnit()->getMaxPurchase(),
-                'purchasesteps' => $product->getUnit()->getPurchaseStep(),
-                'purchaseunit' => $product->getUnit()->getPurchaseUnit(),
-                'referenceunit' => $product->getUnit()->getReferenceUnit(),
-                'packunit' => $product->getUnit()->getPackUnit(),
-                'unitID' => $product->getUnit()->getId(),
-                'sUnit' => array(
-                    'unit' => $product->getUnit()->getUnit(),
-                    'description' => $product->getUnit()->getName()
-                )
-            )
-        );
+        if ($product->getUnit()) {
+            $data = array_merge($data, $this->convertUnitStruct($product->getUnit()));
+        }
 
         //set defaults for detail page combo box.
         if (!$data['maxpurchase']) {
-            $data['maxpurchase'] = Shopware()->Config()->get('maxPurchase');
+            $data['maxpurchase'] = $this->config->get('maxPurchase');
         }
         if (!$data['purchasesteps']) {
             $data['purchasesteps'] = 1;
-        }
-
-        $data = array_merge(
-            $data,
-            array(
-                'supplierName' => $product->getManufacturer()->getName(),
-                'supplierImg' => $product->getManufacturer()->getCoverFile(),
-                'supplierID' => $product->getManufacturer()->getId(),
-                'supplierDescription' => $product->getManufacturer()->getDescription(),
-            )
-        );
-
-        foreach ($product->getAttributes() as $attribute) {
-            $data = array_merge($data, $attribute->toArray());
         }
 
         if ($product->getPriceGroup()) {
@@ -4755,12 +4795,11 @@ class sArticles
             $data['sVoteComments'][] = $this->convertVoteStruct($vote);
         }
 
-        $data['sProperties'] = $this->convertProductPropertyStruct(
-            $product->getPropertySet()
-        );
-
         if ($product->getPropertySet()) {
             $data['filtergroupID'] = $product->getPropertySet()->getId();
+            $data['sProperties'] = $this->getFlatPropertyArray(
+                $this->convertPropertySetStruct($product->getPropertySet())
+            );
         }
 
         foreach ($product->getDownloads() as $download) {
@@ -4799,7 +4838,7 @@ class sArticles
         foreach ($product->getRelatedProducts() as $relatedProduct) {
             $temp = $this->convertProductStruct($relatedProduct);
 
-            //todo@dr promotion by id event here
+            $temp = $this->firePromotionByIdEvents($temp, null);
 
             $data['sRelatedArticles'][] = $temp;
         }
@@ -4807,7 +4846,7 @@ class sArticles
         foreach ($product->getSimilarProducts() as $similarProduct) {
             $temp = $this->convertProductStruct($similarProduct);
 
-            //todo@dr promotion by id event here
+            $temp = $this->firePromotionByIdEvents($temp, null);
 
             $data['sSimilarArticles'][] = $temp;
         }
@@ -4815,45 +4854,17 @@ class sArticles
         return $data;
     }
 
-    private function convertProductPropertyStruct(\Shopware\Struct\Property\Set $set)
-    {
-        $data = array();
-        if (!$set) {
-            return $data;
-        }
-        foreach ($set->getGroups() as $group) {
-            $groupData = array(
-                'id' => $group->getId(),
-                'optionID' => $group->getId(),
-                'name' => $group->getName(),
-                'groupID' => $set->getId(),
-                'groupName' => $set->getName(),
-                'values' => array()
-            );
-
-            $options = array();
-            foreach ($group->getOptions() as $option) {
-                $options[] = array(
-                    'id' => $option->getId(),
-                    'name' => $option->getName()
-                );
-            }
-
-            $groupData['values'] = array_column($options, 'name');
-            $groupData['value'] = implode(', ', $groupData['values']);
-
-            $data[$group->getId()] = $groupData;
-        }
-        return $data;
-    }
-
     private function convertVoteAverageStruct(\Shopware\Struct\Product\VoteAverage $average)
     {
-        return array(
+        $data = array(
             'averange' => round($average->getAverage()),
             'count' => $average->getCount(),
             'pointCount' => $average->getPointCount()
         );
+
+        $data['attributes'] = $average->getAttributes();
+
+        return $data;
     }
 
     private function convertVoteStruct(\Shopware\Struct\Product\Vote $vote)
@@ -4879,19 +4890,26 @@ class sArticles
             $data['answer_date'] = $vote->getAnsweredAt()->format('Y-m-d H:i:s');
         }
 
+        $data['attributes'] = $vote->getAttributes();
+
         return $data;
     }
 
     private function convertPriceStruct(\Shopware\Struct\Product\Price $price)
     {
-        return array(
+        $data = array(
             'valFrom' => $price->getFrom(),
             'valTo' => $price->getTo(),
             'from' => $price->getFrom(),
             'to' => $price->getTo(),
             'price' => $price->getCalculatedPrice(),
-            'pseudoprice' => $price->getCalculatedPseudoPrice()
+            'pseudoprice' => $price->getCalculatedPseudoPrice(),
+            'referenceprice' => $price->getCalculatedReferencePrice()
         );
+
+        $data['attributes'] = $price->getAttributes();
+
+        return $data;
     }
 
     private function convertMediaStruct(\Shopware\Struct\Media $media)
@@ -4907,13 +4925,12 @@ class sArticles
 
         $src['original'] = $imageDir . $media->getFile();
 
-        return array(
+        $data = array(
             'id' => $media->getId(),
             'position' => 1,
             'extension' => $media->getExtension(),
             'main' => $media->getPreview(),
             'parentId' => null,
-            'attribute' => array(),
             'src' => $src,
             'res' => array(
                 'original' => array(
@@ -4923,11 +4940,36 @@ class sArticles
                 'description' => $media->getDescription(),
             )
         );
+
+        $data['attributes'] = $media->getAttributes();
+
+        return $data;
+    }
+
+    private function convertUnitStruct(\Shopware\Struct\Product\Unit $unit)
+    {
+        $data = array(
+            'minpurchase' => $unit->getMinPurchase(),
+            'maxpurchase' => $unit->getMaxPurchase(),
+            'purchasesteps' => $unit->getPurchaseStep(),
+            'purchaseunit' => $unit->getPurchaseUnit(),
+            'referenceunit' => $unit->getReferenceUnit(),
+            'packunit' => $unit->getPackUnit(),
+            'unitID' => $unit->getId(),
+            'sUnit' => array(
+                'unit' => $unit->getUnit(),
+                'description' => $unit->getName()
+            )
+        );
+
+        $data['unit_attributes'] = $unit->getAttributes();
+
+        return $data;
     }
 
     private function getShortParameters()
     {
-        $config = Shopware()->Config()->SeoQueryAlias;
+        $config = $this->config->get('seoQueryAlias');
         $config = explode(',', $config);
 
         $params = array();
@@ -4954,64 +4996,6 @@ class sArticles
         return $params;
     }
 
-
-    /**
-     * Helper function which loads a full product struct and converts the product struct
-     * to the shopware 3 array structure.
-     *
-     * @param $number
-     * @param $categoryId
-     * @param array $selection
-     * @return array
-     */
-    private function getProduct($number, $categoryId, array $selection)
-    {
-        $products = Shopware()->Container()->get('product_service')->getList(
-            array($number),
-            $this->contextService->get()
-        );
-
-        /**@var $product \Shopware\Struct\Product */
-        $product = array_shift($products);
-
-        $data = $this->convertFullProduct($product, $categoryId);
-
-        $data['categoryID'] = $categoryId;
-
-        $average = Shopware()->Container()->get('vote_average_gateway')->get($product);
-
-        if ($average instanceof \Shopware\Struct\Product\VoteAverage) {
-            $data['sVoteAverange'] = $this->convertVoteAverageStruct($average);
-        }
-
-        $configurator = Shopware()->Container()->get('configurator_service')->getProductConfigurator(
-            $product,
-            $this->contextService->get(),
-            $selection
-        );
-
-        $convertedConfigurator = $this->convertConfiguratorStruct($product, $configurator);
-
-        $data = array_merge($data, $convertedConfigurator);
-
-        $data = array_merge($data, $this->getLinksOfProduct($product, $categoryId));
-
-        $data["articleName"] = $this->sOptimizeText($data["articleName"]);
-        $data["description_long"] = htmlspecialchars_decode($data["description_long"]);
-
-        $data["sDescriptionKeywords"] = $this->getDescriptionKeywords(
-            $data["description_long"]
-        );
-
-        if ($this->showArticleNavigation()) {
-            $data["sNavigation"] = $this->sGetAllArticlesInCategory($product->getId());
-        }
-
-        $data['esd'] = $this->sCheckIfEsd($product->getId(), $product->getVariantId());
-
-        return $data;
-    }
-
     /**
      * Creates different links for the product like `add to basket`, `add to note`, `view detail page`, ...
      *
@@ -5021,7 +5005,7 @@ class sArticles
      */
     private function getLinksOfProduct(\Shopware\Struct\ListProduct $product, $categoryId = null)
     {
-        $baseFile = Shopware()->Config()->get('sBaseFile');
+        $baseFile = $this->config->get('baseFile');
 
         $detail = $baseFile . "?sViewport=detail&sArticle=" . $product->getId();
         if ($categoryId) {
@@ -5032,8 +5016,7 @@ class sArticles
         $basket = $baseFile . "?sViewport=basket&sAdd=" . $product->getNumber();
         $note = $baseFile . "?sViewport=note&sAdd=" . $product->getNumber();
         $friend = $baseFile . "?sViewport=tellafriend&sDetails=" . $product->getId();
-        $pdf = $baseFile . "?sViewport=detail&sDetails=" . $product->getId(
-            ) . "&sLanguage=" . $this->sSYSTEM->sLanguage . "&sPDF=1";
+        $pdf = $baseFile . "?sViewport=detail&sDetails=" . $product->getId() . "&sLanguage=" . $this->sSYSTEM->sLanguage . "&sPDF=1";
 
         return array(
             'linkBasket' => $basket,
@@ -5051,7 +5034,7 @@ class sArticles
         $string = (strip_tags(html_entity_decode($longDescription, null, 'UTF-8')));
         $string = str_replace(',', '', $string);
         $words = preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);
-        $badwords = explode(",", $this->sSYSTEM->sCONFIG['sBADWORDS']);
+        $badwords = explode(",", $this->config->get('badwords'));
         $words = array_diff($words, $badwords);
         $words = array_count_values($words);
         foreach (array_keys($words) as $word) {
@@ -5089,7 +5072,7 @@ class sArticles
             ->setParameter(':productId', $productId);
 
         foreach ($selection as $optionId) {
-            $alias = 'option_' . (int)$optionId;
+            $alias = 'option_' . (int) $optionId;
 
             $query->innerJoin(
                 'variant',
@@ -5098,7 +5081,7 @@ class sArticles
                 'variant.id = ' . $alias . '.article_id
                  AND ' . $alias . '.option_id = :' . $alias
             );
-            $query->setParameter(':' . $alias, (int)$optionId);
+            $query->setParameter(':' . $alias, (int) $optionId);
         }
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
@@ -5238,7 +5221,7 @@ class sArticles
             return $id;
         }
 
-        return Shopware()->Db()->fetchOne(
+        return $this->db->fetchOne(
             "SELECT articleID FROM s_articles_details WHERE ordernumber = ?",
             array($number)
         );
@@ -5258,7 +5241,7 @@ class sArticles
      */
     private function getCurrentConfiguration($selection)
     {
-        if (empty($selection)) {
+        if (empty($selection) && Shopware()->Front() && Shopware()->Front()->Request()) {
             $selection = Shopware()->Front()->Request()->getParam('group');
         }
 
@@ -5269,6 +5252,672 @@ class sArticles
         }
 
         return $selection;
+    }
+
+    /**
+     * Following events are deprecated and only implemented for backward compatibility to shopware 4
+     * Removed with shopware 5.1
+     *
+     * @deprecated
+     * @param array $result
+     * @param $categoryId
+     * @return mixed
+     */
+    private function fireArticlesByCategoryEvents(array $result, $categoryId)
+    {
+        foreach($result['sArticles'] as &$article) {
+            $cheapestPrice = $this->eventManager->filter(
+                'sArticles::sGetCheapestPrice::replace',
+                $article["price"],
+                array(
+                    'subject' => $this,
+                    'article' => $article['articleID'],
+                    'group' => $article["pricegroup"],
+                    'pricegroup' => $article["pricegroupID"],
+                    'usepricegroups' => $article["pricegroupActive"],
+                    'realtime' => false,
+                    'returnArrayIfConfigurator' => true
+                )
+            );
+
+            // Reformat the price for further processing
+            if (!is_array($cheapestPrice)) {
+                $cheapestPrice = array(
+                    $cheapestPrice,
+                    0
+                );
+            }
+
+            // Temporary save default price
+            $article["priceDefault"] = $article["price"];
+
+            // Display always the cheapest price
+            if (!empty($cheapestPrice[0])) {
+                $article["price"] = $cheapestPrice[0];
+            }
+
+            $article["price"] = $this->eventManager->filter(
+                'sArticles::sCalculatingPrice::replace',
+                $article["price"],
+                array(
+                    'subject' => $this,
+                    'price' => $article["price"],
+                    'tax' => $article["tax"],
+                    'taxId' => $article["taxID"],
+                    'article' => $article
+                )
+            );
+
+            if (!empty($article["pseudoprice"])) {
+                $article["pseudoprice"] = $this->eventManager->filter(
+                    'sArticles::sCalculatingPrice::replace',
+                    $article["pseudoprice"],
+                    array(
+                        'subject' => $this,
+                        'price' => $article["pseudoprice"],
+                        'tax' => $article["tax"],
+                        'taxId' => $article["taxID"],
+                        'article' => $article
+                    )
+                );
+            }
+
+            $article["image"] = $this->eventManager->filter(
+                'sArticles::getArticleListingCover::replace',
+                $article["image"],
+                array(
+                    'subject' => $this,
+                    'articleId' => $article['articleID'],
+                    'forceMainImage' => $this->config->get('forceArticleMainImageInListing')
+                )
+            );
+
+            $calculatedBasePriceData = $this->eventManager->filter(
+                'sArticles::calculateCheapestBasePriceData::replace',
+                null,
+                array(
+                    'price' => $article["price"],
+                    'articleId' => $article["articleID"],
+                    'priceGroup' => $article["pricegroup"],
+                    'priceGroupId' => $article["pricegroupID"]
+                )
+            );
+
+            if (!empty($calculatedBasePriceData)) {
+                $article["purchaseunit"] = empty($calculatedBasePriceData["purchaseunit"]) ? null: $calculatedBasePriceData["purchaseunit"];
+                $article["referenceunit"] = empty($calculatedBasePriceData["referenceunit"]) ? null: $calculatedBasePriceData["referenceunit"];
+                $article["sUnit"] = empty($calculatedBasePriceData["sUnit"]) ? null: $calculatedBasePriceData["sUnit"];
+                $article['referenceprice'] = empty($calculatedBasePriceData["referenceprice"]) ? null: $calculatedBasePriceData["referenceprice"];
+            }
+
+            $article = Enlight()->Events()->filter(
+                'Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopEnd',
+                $article,
+                array(
+                    'subject' => $this,
+                    'id' => $categoryId
+                )
+            );
+        }
+
+        return $this->eventManager->filter(
+            'Shopware_Modules_Articles_sGetArticlesByCategory_FilterResult',
+            $result,
+            array(
+                'subject' => $this,
+                'id' => $categoryId
+            )
+        );
+    }
+
+    /**
+     * Following events are deprecated and only implemented for backward compatibility to shopware 4
+     * Removed with shopware 5.1
+     *
+     * @deprecated
+     * @param array $result
+     * @param $category
+     * @return array
+     */
+    private function firePromotionByIdEvents($result, $category)
+    {
+        $articleId = $result['articleID'];
+
+        $result["sProperties"] = $this->eventManager->filter(
+            'sArticles::sGetArticleProperties::replace',
+            $result["sProperties"],
+            array(
+                'subject' => $this,
+                'articleId' => $articleId,
+                'filterGroupId' => $result['filtergroupID']
+            )
+        );
+
+        $result["sProperties"] = $this->eventManager->filter(
+            'sArticles::sGetArticleProperties::after',
+            $result["sProperties"],
+            array(
+                'subject' => $this,
+                'articleId' => $articleId,
+                'filterGroupId' => $result['filtergroupID']
+            )
+        );
+
+        $cheapestPrice = $this->eventManager->filter(
+            'sArticles::sGetCheapestPrice::replace',
+            $result['priceStartingFrom'],
+            array(
+                'subject' => $this,
+                'article' => $articleId,
+                'group' => $result["pricegroup"],
+                'pricegroup' => $result["pricegroupID"],
+                'usepricegroups' => $result["pricegroupActive"],
+            )
+        );
+
+        $cheapestPrice = $this->eventManager->filter(
+            'sArticles::sGetCheapestPrice::after',
+            $cheapestPrice,
+            array(
+                'subject' => $this,
+                'article' => $articleId,
+                'group' => $result["pricegroup"],
+                'pricegroup' => $result["pricegroupID"],
+                'usepricegroups' => $result["pricegroupActive"],
+            )
+        );
+
+        if (!is_array($cheapestPrice)) {
+            $cheapestPrice = array(
+                $cheapestPrice,
+                0
+            );
+        }
+        $result['priceStartingFrom'] = $cheapestPrice[0];
+
+        $result["image"] = $this->eventManager->filter(
+            'sArticles::getArticleListingCover::replace',
+            $result["image"],
+            array(
+                'subject' => $this,
+                'articleId' => $articleId,
+                'forceMainImage' => $this->config->get('forceArticleMainImageInListing')
+            )
+        );
+
+        $result["image"] = $this->eventManager->filter(
+            'sArticles::sGetArticlePictures::replace',
+            $result["image"],
+            array(
+                'subject' => $this,
+                'sArticleID' => $articleId,
+                'onlyCover' => true,
+                'pictureSize' => 0,
+                'ordernumber' => null,
+                'allImages' => null,
+                'realtime' => null,
+                'forceMainImage' => $this->config->get('forceArticleMainImageInListing')
+            )
+        );
+
+        $result["image"] = $this->eventManager->filter(
+            'sArticles::sGetArticlePictures::after',
+            $result["image"],
+            array(
+                'subject' => $this,
+                'sArticleID' => $articleId,
+                'onlyCover' => true,
+                'pictureSize' => 0,
+                'ordernumber' => null,
+                'allImages' => null,
+                'realtime' => null,
+                'forceMainImage' => $this->config->get('forceArticleMainImageInListing')
+            )
+        );
+
+        $result["image"] = $this->eventManager->filter(
+            'sArticles::getArticleListingCover::after',
+            $result["image"],
+            array(
+                'subject' => $this,
+                'articleId' => $articleId,
+                'forceMainImage' => $this->config->get('forceArticleMainImageInListing')
+            )
+        );
+
+        $result["priceStartingFrom"] = $this->eventManager->filter(
+            'sArticles::sCalculatingPrice::replace',
+            $result["priceStartingFrom"],
+            array(
+                'subject' => $this,
+                'price' => $result["priceStartingFrom"],
+                'tax' => $result["tax"],
+                'taxId' => $result["taxID"],
+                'article' => $result
+            )
+        );
+
+        $result["priceStartingFrom"] = $this->eventManager->filter(
+            'sArticles::sCalculatingPrice::after',
+            $result["priceStartingFrom"],
+            array(
+                'subject' => $this,
+                'price' => $result["priceStartingFrom"],
+                'tax' => $result["tax"],
+                'taxId' => $result["taxID"],
+                'article' => $result
+            )
+        );
+
+        $result["price"] = $this->eventManager->filter(
+            'sArticles::sCalculatingPrice::replace',
+            $result["price"],
+            array(
+                'subject' => $this,
+                'price' => $result["price"],
+                'tax' => $result["tax"],
+                'taxId' => $result["taxID"],
+                'article' => $result
+            )
+        );
+
+        $result["price"] = $this->eventManager->filter(
+            'sArticles::sCalculatingPrice::after',
+            $result["price"],
+            array(
+                'subject' => $this,
+                'price' => $result["price"],
+                'tax' => $result["tax"],
+                'taxId' => $result["taxID"],
+                'article' => $result
+            )
+        );
+
+        if ($result["pseudoprice"]) {
+            $result["pseudoprice"] = $this->eventManager->filter(
+                'sArticles::sCalculatingPrice::replace',
+                $result["pseudoprice"],
+                array(
+                    'subject' => $this,
+                    'price' => $result["pseudoprice"],
+                    'tax' => $result["tax"],
+                    'taxId' => $result["taxID"],
+                    'article' => $result
+                )
+            );
+
+            $result["pseudoprice"] = $this->eventManager->filter(
+                'sArticles::sCalculatingPrice::after',
+                $result["pseudoprice"],
+                array(
+                    'subject' => $this,
+                    'price' => $result["pseudoprice"],
+                    'tax' => $result["tax"],
+                    'taxId' => $result["taxID"],
+                    'article' => $result
+                )
+            );
+        }
+
+        $calculatedBasePriceData = $this->eventManager->filter(
+            'sArticles::calculateCheapestBasePriceData::replace',
+            null,
+            array(
+                'price' => $result["price"],
+                'articleId' => $articleId,
+                'priceGroup' => $result["pricegroup"],
+                'priceGroupId' => $result["pricegroupID"]
+            )
+        );
+
+        $calculatedBasePriceData = $this->eventManager->filter(
+            'sArticles::calculateCheapestBasePriceData::after',
+            $calculatedBasePriceData,
+            array(
+                'price' => $result["price"],
+                'articleId' => $articleId,
+                'priceGroup' => $result["pricegroup"],
+                'priceGroupId' => $result["pricegroupID"]
+            )
+        );
+
+        if (!empty($calculatedBasePriceData)) {
+            $result["purchaseunit"] = empty($calculatedBasePriceData["purchaseunit"]) ? null: $calculatedBasePriceData["purchaseunit"];
+            $result["referenceunit"] = empty($calculatedBasePriceData["referenceunit"]) ? null: $calculatedBasePriceData["referenceunit"];
+            $result["sUnit"] = empty($calculatedBasePriceData["sUnit"]) ? null: $calculatedBasePriceData["sUnit"];
+            $result['referenceprice'] = empty($calculatedBasePriceData["referenceprice"]) ? null: $calculatedBasePriceData["referenceprice"];
+        }
+
+        return Enlight()->Events()->filter(
+            'Shopware_Modules_Articles_GetPromotionById_FilterResult',
+            $result,
+            array(
+                'subject' => $this,
+                'mode' => 'fix',
+                'category' => $category,
+                'value' => $result['articleID']
+            )
+        );
+    }
+
+    /**
+     * Following events are deprecated and only implemented for backward compatibility to shopware 4
+     * Removed with shopware 5.1
+     *
+     * @param array $product
+     * @return array|mixed
+     */
+    private function fireArticleByIdEvents(array $product)
+    {
+        $getArticle = $product;
+        $context = $this->contextService->get();
+
+        if ($getArticle["pricegroupActive"]) {
+            $getArticle["priceBeforePriceGroup"] = $getArticle["price"];
+
+            $getArticle["price"] = $this->eventManager->filter(
+                'sArticles::sGetPricegroupDiscount::replace',
+                $getArticle["price"],
+                array(
+                    'subject' => $this,
+                    'customergroup' => $context->getCurrentCustomerGroup()->getKey(),
+                    'groupID' => $getArticle["pricegroupID"],
+                    'listprice' => $getArticle["price"],
+                    'quantity' => 1,
+                    'doMatrix' => false
+                )
+            );
+
+            $getArticle["price"] = $this->eventManager->filter(
+                'sArticles::sGetPricegroupDiscount::after',
+                $getArticle["price"],
+                array(
+                    'subject' => $this,
+                    'customergroup' => $context->getCurrentCustomerGroup()->getKey(),
+                    'groupID' => $getArticle["pricegroupID"],
+                    'listprice' => $getArticle["price"],
+                    'quantity' => 1,
+                    'doMatrix' => false
+                )
+            );
+
+
+            $getArticle["sBlockPrices"] = $this->eventManager->filter(
+                'sArticles::sGetPricegroupDiscount::replace',
+                $getArticle["sBlockPrices"],
+                array(
+                    'subject' => $this,
+                    'customergroup' => $context->getCurrentCustomerGroup()->getKey(),
+                    'groupID' => $getArticle["pricegroupID"],
+                    'listprice' => $getArticle["price"],
+                    'quantity' => 1,
+                    'doMatrix' => true
+                )
+            );
+
+            $getArticle["sBlockPrices"] = $this->eventManager->filter(
+                'sArticles::sGetPricegroupDiscount::after',
+                $getArticle["sBlockPrices"],
+                array(
+                    'subject' => $this,
+                    'customergroup' => $context->getCurrentCustomerGroup()->getKey(),
+                    'groupID' => $getArticle["pricegroupID"],
+                    'listprice' => $getArticle["price"],
+                    'quantity' => 1,
+                    'doMatrix' => true
+                )
+            );
+        } else {
+            foreach($getArticle["sBlockPrices"] as &$blockPrice) {
+                $blockPrice["price"] = $this->eventManager->filter(
+                    'sArticles::sCalculatingPrice::replace',
+                    $blockPrice["price"],
+                    array(
+                        'subject' => $this,
+                        'price' => $blockPrice["price"],
+                        'tax' => $getArticle["tax"],
+                        'taxId' => $getArticle["taxID"],
+                        'article' => $getArticle
+                    )
+                );
+                $blockPrice["price"] = $this->eventManager->filter(
+                    'sArticles::sCalculatingPrice::after',
+                    $blockPrice["price"],
+                    array(
+                        'subject' => $this,
+                        'price' => $blockPrice["price"],
+                        'tax' => $getArticle["tax"],
+                        'taxId' => $getArticle["taxID"],
+                        'article' => $getArticle
+                    )
+                );
+
+                if (!$blockPrice['pseudoprice']) {
+                    continue;
+                }
+
+                $blockPrice["pseudoprice"] = $this->eventManager->filter(
+                    'sArticles::sCalculatingPrice::replace',
+                    $blockPrice["pseudoprice"],
+                    array(
+                        'subject' => $this,
+                        'price' => $blockPrice["pseudoprice"],
+                        'tax' => $getArticle["tax"],
+                        'taxId' => $getArticle["taxID"],
+                        'article' => $getArticle
+                    )
+                );
+
+                $blockPrice["pseudoprice"] = $this->eventManager->filter(
+                    'sArticles::sCalculatingPrice::after',
+                    $blockPrice["pseudoprice"],
+                    array(
+                        'subject' => $this,
+                        'price' => $blockPrice["pseudoprice"],
+                        'tax' => $getArticle["tax"],
+                        'taxId' => $getArticle["taxID"],
+                        'article' => $getArticle
+                    )
+                );
+
+            }
+        }
+
+        $getArticle = Enlight()->Events()->filter(
+            'Shopware_Modules_Articles_GetArticleById_FilterArticle',
+            $getArticle,
+            array(
+                'subject' => $this,
+                'id' => $product['articleID'],
+                'customergroup' => $context->getCurrentCustomerGroup()->getKey()
+            )
+        );
+
+        if ($getArticle["unitID"]) {
+            $getArticle["sUnit"] = $this->eventManager->filter(
+                'sArticles::sGetUnit::replace',
+                $getArticle["sUnit"],
+                array(
+                    'subject' => $this,
+                    'id' => $getArticle["unitID"]
+                )
+            );
+            $getArticle["sUnit"] = $this->eventManager->filter(
+                'sArticles::sGetUnit::after',
+                $getArticle["sUnit"],
+                array(
+                    'subject' => $this,
+                    'id' => $getArticle["unitID"]
+                )
+            );
+        }
+
+        // Get cheapest price
+        $getArticle["priceStartingFrom"] = $this->eventManager->filter(
+            'sArticles::sGetCheapestPrice::replace',
+            $getArticle["priceStartingFrom"],
+            array(
+                'subject' => $this,
+                'article' => $getArticle["articleID"],
+                'group' => $getArticle["pricegroup"],
+                'pricegroup' => $getArticle["pricegroupID"],
+                'usepricegroups' => $getArticle["pricegroupActive"]
+            )
+        );
+
+        // Get cheapest price
+        $getArticle["priceStartingFrom"] = $this->eventManager->filter(
+            'sArticles::sGetCheapestPrice::after',
+            $getArticle["priceStartingFrom"],
+            array(
+                'subject' => $this,
+                'article' => $getArticle["articleID"],
+                'group' => $getArticle["pricegroup"],
+                'pricegroup' => $getArticle["pricegroupID"],
+                'usepricegroups' => $getArticle["pricegroupActive"]
+            )
+        ) ;
+
+        if ($getArticle["price"]) {
+            $getArticle["price"] = $this->eventManager->filter(
+                'sArticles::sCalculatingPrice::replace',
+                $getArticle["price"],
+                array(
+                    'subject' => $this,
+                    'price' => $getArticle["price"],
+                    'tax' => $getArticle["tax"],
+                    'taxId' => $getArticle["taxID"],
+                    'article' => $getArticle
+                )
+            );
+            $getArticle["price"] = $this->eventManager->filter(
+                'sArticles::sCalculatingPrice::after',
+                $getArticle["price"],
+                array(
+                    'subject' => $this,
+                    'price' => $getArticle["price"],
+                    'tax' => $getArticle["tax"],
+                    'taxId' => $getArticle["taxID"],
+                    'article' => $getArticle
+                )
+            );
+        }
+
+        $getArticle["image"] = $this->eventManager->filter(
+            'sArticles::sGetArticlePictures::replace',
+            $getArticle["image"],
+            array(
+                'subject' => $this,
+                'sArticleID'  => $getArticle["articleID"],
+                'onlyCover'   => true,
+                'pictureSize' => 4,
+                'ordernumber' => $getArticle['ordernumber']
+            )
+        );
+        $getArticle["image"] = $this->eventManager->filter(
+            'sArticles::sGetArticlePictures::after',
+            $getArticle["image"],
+            array(
+                'subject' => $this,
+                'sArticleID'  => $getArticle["articleID"],
+                'onlyCover'   => true,
+                'pictureSize' => 4,
+                'ordernumber' => $getArticle['ordernumber']
+            )
+        );
+
+        $getArticle["images"] = $this->eventManager->filter(
+            'sArticles::sGetArticlePictures::replace',
+            $getArticle["images"],
+            array(
+                'subject' => $this,
+                'sArticleID'  => $getArticle["articleID"],
+                'onlyCover'   => false,
+                'pictureSize' => 0,
+                'ordernumber' => $getArticle['ordernumber']
+            )
+        );
+        $getArticle["images"] = $this->eventManager->filter(
+            'sArticles::sGetArticlePictures::after',
+            $getArticle["images"],
+            array(
+                'subject' => $this,
+                'sArticleID'  => $getArticle["articleID"],
+                'onlyCover'   => false,
+                'pictureSize' => 0,
+                'ordernumber' => $getArticle['ordernumber']
+            )
+        );
+
+        $getArticle["sVoteAverange"] = $this->eventManager->filter(
+            'sArticles::sGetArticlesAverangeVote::replace',
+            $getArticle["sVoteAverange"],
+            array(
+                'subject' => $this,
+                'article' => $getArticle["articleID"]
+            )
+        );
+
+        $getArticle["sVoteAverange"] = $this->eventManager->filter(
+            'sArticles::sGetArticlesAverangeVote::after',
+            $getArticle["sVoteAverange"],
+            array(
+                'subject' => $this,
+                'article' => $getArticle["articleID"]
+            )
+        );
+
+        $getArticle["sVoteComments"] = $this->eventManager->filter(
+            'sArticles::sGetArticlesVotes::replace',
+            $getArticle["sVoteComments"],
+            array(
+                'subject' => $this,
+                'article' => $getArticle["articleID"]
+            )
+        );
+
+        $getArticle["sVoteComments"] = $this->eventManager->filter(
+            'sArticles::sGetArticlesVotes::after',
+            $getArticle["sVoteComments"],
+            array(
+                'subject' => $this,
+                'article' => $getArticle["articleID"]
+            )
+        );
+
+        if (!empty($getArticle["filtergroupID"]) && $this->displayFiltersOnArticleDetailPage()) {
+            $getArticle["sProperties"] = $this->eventManager->filter(
+                'sArticles::sGetArticleProperties::replace',
+                $getArticle["sProperties"],
+                array(
+                    'subject' => $this,
+                    'articleId' => $getArticle["articleID"],
+                    'filterGroupId' => $getArticle["filtergroupID"]
+                )
+            );
+            $getArticle["sProperties"] = $this->eventManager->filter(
+                'sArticles::sGetArticleProperties::after',
+                $getArticle["sProperties"],
+                array(
+                    'subject' => $this,
+                    'articleId' => $getArticle["articleID"],
+                    'filterGroupId' => $getArticle["filtergroupID"]
+                )
+            );
+        }
+
+        $getArticle = Enlight()->Events()->filter(
+            'Shopware_Modules_Articles_GetArticleById_FilterResult',
+            $getArticle,
+            array(
+                'subject' => $this,
+                'id' => $getArticle["articleID"],
+                'isBlog' => false,
+                'customergroup' => $context->getCurrentCustomerGroup()->getKey()
+            )
+        );
+
+        return $getArticle;
     }
 
 }

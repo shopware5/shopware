@@ -1,0 +1,114 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: oliverdenter
+ * Date: 18.06.14
+ * Time: 14:53
+ */
+namespace Shopware\Gateway;
+
+use Shopware\Struct;
+
+
+/**
+ * @package Shopware\Gateway\DBAL
+ */
+interface ProductMedia
+{
+    /**
+     * To get detailed information about the structure and content of the returned object,
+     * please refer to the @see \Shopware\Gateway\DBAL\ProductMedia::get()
+     *
+     * The passed $products array contains in some cases two variations of the same product.
+     * For example:
+     *  - Product.1  (white)
+     *  - Product.2  (black)
+     *
+     * The function has to return an array which contains all product media structs for each passed product variation.
+     * Product white & black shares the product media, so the function returns the following result:
+     *
+     * <php>
+     * array(
+     *     'Product.1' => array(
+     *          Shopware\Struct\Media(id=1)
+     *          Shopware\Struct\Media(id=2)
+     *      ),
+     *     'Product.2' => array(
+     *          Shopware\Struct\Media(id=1)
+     *          Shopware\Struct\Media(id=2)
+     *      )
+     * )
+     * </php>
+     *
+     * @param Struct\ListProduct[] $products
+     * @param Struct\Context $context
+     * @return array Indexed by the product order number. Each element contains a \Shopware\Struct\Media array.
+     */
+    public function getList(array $products, Struct\Context $context);
+
+    /**
+     * The \Shopware\Struct\Media requires the following data:
+     * - Product image data
+     * - Media data
+     * - Core attribute of the product image
+     * - Core attribute of the media
+     *
+     * Required translation in the provided context language:
+     * - Product image
+     *
+     * Required conditions for the selection:
+     * - Selects only product media which has no configurator configuration and the main flag equals 1
+     * - Sorted ascending by the image position
+     *
+     * @param Struct\ListProduct $product
+     * @param Struct\Context $context
+     * @return Struct\Media
+     */
+    public function getCover(Struct\ListProduct $product, Struct\Context $context);
+
+    /**
+     * The \Shopware\Struct\Media requires the following data:
+     * - Product image data
+     * - Media data
+     * - Core attribute of the product image
+     * - Core attribute of the media
+     *
+     * Required translation in the provided context language:
+     * - Product image
+     *
+     * Required conditions for the selection:
+     * - Selects only product media which has no configurator configuration
+     * - Sorted ascending by the image main flag and image position
+     *
+     *
+     * @param Struct\ListProduct $product
+     * @param Struct\Context $context
+     * @return Struct\Media[]
+     */
+    public function get(Struct\ListProduct $product, Struct\Context $context);
+
+    /**
+     * To get detailed information about the structure and content of the returned object,
+     * please refer to the @see \Shopware\Gateway\DBAL\ProductMedia::getCover()
+     *
+     * The passed $products array contains in some case two variations of the same product.
+     * For example:
+     *  - Product.1  (white)
+     *  - Product.2  (black)
+     *
+     * The function has to return an array which contains a cover for each passed product variation.
+     * Product white & black shares the product cover, so the function returns the following result:
+     *
+     * <php>
+     * array(
+     *     'Product.1' => Shopware\Struct\Media(id=1)
+     *     'Product.2' => Shopware\Struct\Media(id=1)
+     * )
+     * </php>
+     *
+     * @param Struct\ListProduct[] $products
+     * @param Struct\Context $context
+     * @return Struct\Media[] Indexed by the product number
+     */
+    public function getCovers(array $products, Struct\Context $context);
+}
