@@ -113,7 +113,12 @@ Ext.define('Shopware.apps.Theme.view.list.Window', {
             labelStyle: 'margin-top: 2px',
             store: me.shopStore,
             displayField: 'name',
-            valueField: 'id'
+            valueField: 'id',
+            listeners: {
+                select: function() {
+                    me.fireEvent('shop-changed', me);
+                }
+            }
         });
 
         return me.shopCombo;
