@@ -25,12 +25,14 @@
 namespace Shopware\Gateway\Search;
 
 /**
+ * Defines the search result of the search gateway.
+ *
  * @package Shopware\Gateway\Search
  */
 class Result
 {
     /**
-     * @var Product[]
+     * @var Product[] Indexed by the product order number
      */
     protected $products;
 
@@ -44,6 +46,11 @@ class Result
      */
     protected $facets;
 
+    /**
+     * @param Product[] $products Indexed by the product order number
+     * @param int $totalCount
+     * @param Facet[] $facets
+     */
     function __construct(array $products, $totalCount, $facets)
     {
         $this->products = $products;
@@ -52,7 +59,7 @@ class Result
     }
 
     /**
-     * @return \Shopware\Gateway\Search\Product[]
+     * @return \Shopware\Gateway\Search\Product[] Indexed by the product order number
      */
     public function getProducts()
     {
@@ -74,6 +81,4 @@ class Result
     {
         return $this->totalCount;
     }
-
-
 }
