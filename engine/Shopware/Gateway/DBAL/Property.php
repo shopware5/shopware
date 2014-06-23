@@ -35,6 +35,26 @@ use Shopware\Struct;
 class Property implements \Shopware\Gateway\Property
 {
     /**
+     * Constant for the alphanumeric sort configuration of the category filters
+     */
+    const FILTERS_SORT_ALPHANUMERIC = 0;
+
+    /**
+     * Constant for the numeric sort configuration of the category filters
+     */
+    const FILTERS_SORT_NUMERIC = 1;
+
+    /**
+     * Constant for the article count sort configuration of the category filters
+     */
+    const FILTERS_SORT_ARTICLE_COUNT = 2;
+
+    /**
+     * Constant for the position sort configuration of the category filters
+     */
+    const FILTERS_SORT_POSITION = 3;
+
+    /**
      * @var \Shopware\Gateway\DBAL\Hydrator\Property
      */
     private $propertyHydrator;
@@ -55,19 +75,33 @@ class Property implements \Shopware\Gateway\Property
     private $fieldHelper;
 
     /**
+     * @var \Shopware_Components_Config
+     */
+    private $config;
+
+    /**
+     * @var \Shopware\Components\Model\ModelManager
+     */
+    private $entityManager;
+
+    /**
      * @param ModelManager $entityManager
      * @param FieldHelper $fieldHelper
      * @param Hydrator\Property $propertyHydrator
+     * @param \Shopware_Components_Config $config
      */
     function __construct(
         ModelManager $entityManager,
         FieldHelper $fieldHelper,
-        Hydrator\Property $propertyHydrator
+        Hydrator\Property $propertyHydrator,
+        \Shopware_Components_Config $config
     ) {
         $this->propertyHydrator = $propertyHydrator;
         $this->entityManager = $entityManager;
         $this->fieldHelper = $fieldHelper;
+        $this->config = $config;
     }
+
 
     /**
      * @inheritdoc
@@ -76,18 +110,12 @@ class Property implements \Shopware\Gateway\Property
     {
         $query = $this->entityManager->getDBALQueryBuilder();
 
+        $sortMode = $this->getSortMode(array_keys($valueIds));
+
         $query->addSelect($this->fieldHelper->getPropertySetFields())
             ->addSelect($this->fieldHelper->getPropertyGroupFields())
             ->addSelect($this->fieldHelper->getPropertyOptionFields())
         ;
-
-        $query->addSelect('(
-            CASE
-                WHEN propertySet.sortmode = 1 THEN propertyOption.value_numeric
-                WHEN propertySet.sortmode = 3 THEN propertyOption.position
-                ELSE propertyOption.value
-            END
-        ) as sortRelevance');
 
         $query->from('s_filter', 'propertySet');
 
@@ -130,9 +158,34 @@ class Property implements \Shopware\Gateway\Property
         $query->orderBy('propertySet.position')
             ->addOrderBy('propertySet.id')
             ->addOrderBy('relations.position')
-            ->addOrderBy('propertyGroup.name')
-            ->addOrderBy('sortRelevance')
-            ->addOrderBy('propertyOption.id');
+            ->addOrderBy('propertyGroup.name');
+
+        switch($sortMode) {
+            case self::FILTERS_SORT_NUMERIC:
+                $query->addOrderBy('propertyOption.value_numeric');
+                break;
+
+            case self::FILTERS_SORT_ARTICLE_COUNT:
+                $query->innerJoin(
+                    'propertyOption',
+                    's_filter_articles',
+                    'productProperty',
+                    'productProperty.valueID = propertyOption.id'
+                );
+
+                $query->addOrderBy('COUNT(DISTINCT productProperty.articleID)', 'DESC');
+                $query->addOrderBy('propertyOption.value');
+                break;
+
+            case self::FILTERS_SORT_POSITION:
+                $query->addOrderBy('propertyOption.position');
+                break;
+
+            default:
+                $query->addOrderBy('propertyOption.value');
+        }
+
+        $query->addOrderBy('propertyOption.id');
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -140,5 +193,47 @@ class Property implements \Shopware\Gateway\Property
         $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         return $this->propertyHydrator->hydrateValues($rows);
+    }
+
+    /**
+     * Returns the sort mode for the passed value ids.
+     * If the value ids contains more than one property set, the
+     * globale fallback sort mode is used.
+     *
+     * @param array $valueIds
+     * @return int
+     */
+    private function getSortMode(array $valueIds)
+    {
+        $query = $this->entityManager->getDBALQueryBuilder();
+        $query->select('propertySet.sortmode')
+            ->from('s_filter', 'propertySet');
+
+        $query->innerJoin(
+            'propertySet',
+            's_filter_relations',
+            'relations',
+            'relations.groupID = propertySet.id'
+        );
+
+        $query->innerJoin(
+            'relations',
+            's_filter_values',
+            'propertyOption',
+            'relations.optionID = propertyOption.optionID'
+        );
+
+        $query->groupBy('propertySet.id');
+
+        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $query->execute();
+
+        $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        if (count($rows) > 1) {
+            return $this->config->get('defaultFilterSort', self::FILTERS_SORT_POSITION);
+        } else {
+            return $rows[0]['sortmode'];
+        }
     }
 }

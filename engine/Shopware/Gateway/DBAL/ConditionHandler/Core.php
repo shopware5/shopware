@@ -1,6 +1,6 @@
 <?php
 
-namespace Shopware\Gateway\DBAL\QueryGenerator;
+namespace Shopware\Gateway\DBAL\ConditionHandler;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\DBAL\QueryBuilder;
@@ -9,7 +9,7 @@ use Shopware\Gateway\Search\Condition;
 use Shopware\Gateway\Search\Sorting;
 use Shopware\Struct\Context;
 
-class CoreGenerator implements DBAL
+class Core implements DBAL
 {
     /**
      * @var SearchPriceHelper
@@ -47,6 +47,9 @@ class CoreGenerator implements DBAL
                 return true;
 
             case ($condition instanceof Condition\CustomerGroup):
+                return true;
+
+            case ($condition instanceof Condition\ShippingFree):
                 return true;
 
             default:
@@ -87,6 +90,11 @@ class CoreGenerator implements DBAL
 
             case ($condition instanceof Condition\CustomerGroup):
                 $this->addCustomerGroupCondition($query, $condition);
+                break;
+
+            case ($condition instanceof Condition\ShippingFree):
+                $this->addShippingFreeCondition($query, $condition);
+                break;
         }
     }
 
@@ -174,6 +182,17 @@ class CoreGenerator implements DBAL
         );
 
         $query->andWhere('avoidCustomers.articleID IS NULL');
+    }
+
+    /**
+     * Extends the query that only products with the shippingfree flag are selected.
+     *
+     * @param QueryBuilder $query
+     * @param Condition\ShippingFree $condition
+     */
+    public function addShippingFreeCondition(QueryBuilder $query, Condition\ShippingFree $condition)
+    {
+        $query->andWhere('variants.shippingfree = 1');
     }
 
     /**

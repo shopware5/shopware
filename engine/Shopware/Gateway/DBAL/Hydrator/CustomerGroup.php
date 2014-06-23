@@ -24,7 +24,7 @@ class CustomerGroup extends Hydrator
     {
         $customerGroup = new Struct\Customer\Group();
 
-        $customerGroup->setId(intval($data['__customerGroup_id']));
+        $customerGroup->setId((int) $data['__customerGroup_id']);
 
         $customerGroup->setName($data['__customerGroup_description']);
 

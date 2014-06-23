@@ -49,18 +49,18 @@ class Price extends Hydrator
     {
         $price = new Struct\Product\PriceRule();
 
-        $price->setId($data['__price_id']);
+        $price->setId((int) $data['__price_id']);
 
-        $price->setFrom($data['__price_from']);
+        $price->setFrom((int) $data['__price_from']);
 
-        $price->setPrice(floatval($data['__price_price']));
+        $price->setPrice((float) $data['__price_price']);
 
-        $price->setPseudoPrice(floatval($data['__price_pseudoprice']));
+        $price->setPseudoPrice((float) $data['__price_pseudoprice']);
 
         if (strtolower($data['__price_to']) == 'beliebig') {
             $price->setTo(null);
         } else {
-            $price->setTo($data['__price_to']);
+            $price->setTo((int) $data['__price_to']);
         }
 
         if (isset($data['__price___attribute_id'])) {
@@ -120,11 +120,11 @@ class Price extends Hydrator
     {
         $discount = new Struct\Product\PriceDiscount();
 
-        $discount->setId($data['__priceGroupDiscount_groupID']);
+        $discount->setId((int) $data['__priceGroupDiscount_groupID']);
 
-        $discount->setPercent(floatval($data['__priceGroupDiscount_discount']));
+        $discount->setPercent((float) $data['__priceGroupDiscount_discount']);
 
-        $discount->setQuantity(intval($data['__priceGroupDiscount_discountstart']));
+        $discount->setQuantity((int) $data['__priceGroupDiscount_discountstart']);
 
         return $discount;
     }

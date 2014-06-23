@@ -3803,6 +3803,10 @@ class sArticles
                     $result['priceFacet'] = $this->getPriceFacet($facet, $config);
                     break;
 
+                case ($facet instanceof \Shopware\Gateway\Search\Facet\ShippingFree):
+                    $result['shippingFreeFacet'] = $this->getShippingFreeFacet($facet, $config);
+                    break;
+
                 default:
                     $result['facets'][] = $facet;
             }
@@ -3926,6 +3930,10 @@ class sArticles
             );
         }
 
+        if ($config['shippingFree']) {
+            $criteria->shippingFree();
+        }
+
         if (!empty($config['sSupplier'])) {
             $criteria->manufacturer(
                 array($config['sSupplier'])
@@ -3964,14 +3972,29 @@ class sArticles
 
         $criteria->propertyFacet()
             ->priceFacet()
+            ->shippingFreeFacet()
             ->manufacturerFacet();
 
         return $criteria;
     }
 
+    private function getShippingFreeFacet(\Shopware\Gateway\Search\Facet\ShippingFree $facet, $config)
+    {
+        $params = $this->getListingLinkParameters($config);
+        unset($params['shippingFree']);
+
+        return array(
+            'active' => ($config['shippingFree']),
+            'removeLink' => $this->buildListingLink($params),
+            'total' => $facet->getTotal()
+        );
+    }
+
     private function getPriceFacet(\Shopware\Gateway\Search\Facet\Price $facet, $config)
     {
         $params = $this->getListingLinkParameters($config);
+        unset($params['priceMin']);
+        unset($params['priceMax']);
 
         return array(
             'active' => (isset($config['priceMax']) && $config['priceMax'] > 0),
@@ -4021,7 +4044,12 @@ class sArticles
             return array();
         }
 
-        $activeSupplier = $suppliers[$config['sSupplier']];
+        $activeSupplier = array();
+        foreach($suppliers as $supplier) {
+            if ($supplier['id'] == $config['sSupplier']) {
+                $activeSupplier = $supplier;
+            }
+        }
 
         $params = $this->getListingLinkParameters($config);
 
@@ -4201,6 +4229,10 @@ class sArticles
             $params['sTemplate'] = $config['sTemplate'];
         }
 
+        if ($config['shippingFree']) {
+            $params['shippingFree'] = $config['shippingFree'];
+        }
+
         return $params;
     }
 
@@ -4347,6 +4379,11 @@ class sArticles
         $config['priceMax'] = $this->getConfigParameter(
             'priceMax',
             null
+        );
+
+        $config['shippingFree'] = $this->getConfigParameter(
+            'shippingFree',
+            false
         );
 
         $config['page'] = $this->getConfigParameter(

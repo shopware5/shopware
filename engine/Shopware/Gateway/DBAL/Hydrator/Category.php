@@ -100,7 +100,7 @@ class Category extends Hydrator
         }
 
         if (isset($data['__category_blog'])) {
-            $category->setBlog($data['__category_blog']);
+            $category->setBlog((bool) $data['__category_blog']);
         }
 
         if (isset($data['__category_showfiltergroups'])) {

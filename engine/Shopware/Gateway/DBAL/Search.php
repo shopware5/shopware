@@ -24,20 +24,17 @@
 
 namespace Shopware\Gateway\DBAL;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Model\DBAL\QueryBuilder;
 use Shopware\Components\Model\ModelManager;
-
-use Shopware\Gateway\DBAL\FacetHandler as FacetHandler;
-use Shopware\Gateway\DBAL\Hydrator;
-use Shopware\Gateway\DBAL\QueryGenerator as QueryGenerator;
-
+use Shopware\Gateway\DBAL as Gateway;
 use Shopware\Gateway\Search\Condition;
 use Shopware\Gateway\Search\Criteria;
 use Shopware\Gateway\Search\Facet;
-use Shopware\Gateway\Search\Product as SearchProduct;
 use Shopware\Gateway\Search\Result;
 use Shopware\Gateway\Search\Sorting;
 use Shopware\Struct\Context;
+use Shopware\Gateway\Search\Product as SearchProduct;
 
 /**
  * @package Shopware\Gateway\DBAL
@@ -45,28 +42,85 @@ use Shopware\Struct\Context;
 class Search implements \Shopware\Gateway\Search
 {
     /**
-     * @var QueryGenerator\DBAL[]
+     * @var Gateway\ConditionHandler\DBAL[]
      */
-    private $queryGenerators;
+    private $conditionHandlers;
 
     /**
-     * @var FacetHandler\DBAL[]
+     * @var Gateway\FacetHandler\DBAL[]
      */
     private $facetHandlers;
 
     /**
-     * @var Hydrator\Attribute
+     * @var Gateway\Hydrator\Attribute
      */
     private $attributeHydrator;
 
     /**
+     * @var \Enlight_Event_EventManager
+     */
+    private $eventManager;
+
+    /**
+     * @var Gateway\ConditionHandler\Core
+     */
+    private $coreHandler;
+
+    /**
+     * @var Gateway\FacetHandler\Category
+     */
+    private $categoryHandler;
+
+    /**
+     * @var Gateway\FacetHandler\Manufacturer
+     */
+    private $manufacturerHandler;
+
+    /**
+     * @var Gateway\FacetHandler\Price
+     */
+    private $priceHandler;
+
+    /**
+     * @var Gateway\FacetHandler\Property
+     */
+    private $propertyHandler;
+
+    /**
+     * @var Gateway\FacetHandler\ShippingFree
+     */
+    private $shippingFreeHandler;
+
+    /**
      * @param ModelManager $entityManager
      * @param Hydrator\Attribute $attributeHydrator
+     * @param \Enlight_Event_EventManager $eventManager
+     * @param ConditionHandler\Core $coreHandler
+     * @param FacetHandler\Manufacturer $manufacturerHandler
+     * @param FacetHandler\Category $categoryHandler
+     * @param FacetHandler\Price $priceHandler
+     * @param FacetHandler\Property $propertyHandler
      */
-    function __construct(ModelManager $entityManager, Hydrator\Attribute $attributeHydrator)
-    {
+    function __construct(
+        ModelManager $entityManager,
+        Hydrator\Attribute $attributeHydrator,
+        \Enlight_Event_EventManager $eventManager,
+        Gateway\ConditionHandler\Core $coreHandler,
+        Gateway\FacetHandler\Manufacturer $manufacturerHandler,
+        Gateway\FacetHandler\Category $categoryHandler,
+        Gateway\FacetHandler\Price $priceHandler,
+        Gateway\FacetHandler\Property $propertyHandler,
+        Gateway\FacetHandler\ShippingFree $shippingFreeHandler
+    ) {
         $this->entityManager = $entityManager;
         $this->attributeHydrator = $attributeHydrator;
+        $this->eventManager = $eventManager;
+        $this->coreHandler = $coreHandler;
+        $this->categoryHandler = $categoryHandler;
+        $this->manufacturerHandler = $manufacturerHandler;
+        $this->priceHandler = $priceHandler;
+        $this->propertyHandler = $propertyHandler;
+        $this->shippingFreeHandler = $shippingFreeHandler;
     }
 
     /**
@@ -77,17 +131,15 @@ class Search implements \Shopware\Gateway\Search
      * The search gateway has to implement an event which plugin can be listened to,
      * to add their own handler classes.
      *
-     * @param \Shopware\Gateway\Search\Criteria $criteria
+     * @param Criteria $criteria
      * @param Context $context
-     * @return Result
+     * @return \Shopware\Gateway\Search\Result
      */
     public function search(Criteria $criteria, Context $context)
     {
-        $this->queryGenerators[] = new QueryGenerator\CoreGenerator(new SearchPriceHelper());
-        $this->facetHandlers[] = Shopware()->Container()->get('manufacturer_facet_handler_dbal');
-        $this->facetHandlers[] = Shopware()->Container()->get('category_facet_handler_dbal');
-        $this->facetHandlers[] = Shopware()->Container()->get('price_facet_handler_dbal');
-        $this->facetHandlers[] = Shopware()->Container()->get('property_facet_handler_dbal');
+        $this->conditionHandlers = $this->registerConditionHandlers();
+
+        $this->facetHandlers = $this->registerFacetHandlers();
 
         $products = $this->getProducts($criteria, $context);
 
@@ -105,10 +157,45 @@ class Search implements \Shopware\Gateway\Search
     }
 
     /**
+     * @return Gateway\ConditionHandler\DBAL[]
+     */
+    private function registerConditionHandlers()
+    {
+        $conditionHandlers = new ArrayCollection();
+        $conditionHandlers = $this->eventManager->collect(
+            'Shopware_Search_Gateway_DBAL_Collect_Condition_Handlers',
+            $conditionHandlers
+        );
+
+        $conditionHandlers[] = $this->coreHandler;
+        return $conditionHandlers;
+    }
+
+    /**
+     * @return Gateway\FacetHandler\DBAL[]
+     */
+    private function registerFacetHandlers()
+    {
+        $facetHandlers = new ArrayCollection();
+        $facetHandlers = $this->eventManager->collect(
+            'Shopware_Search_Gateway_DBAL_Collect_Facet_Handlers',
+            $facetHandlers
+        );
+
+        $facetHandlers[] = $this->manufacturerHandler;
+        $facetHandlers[] = $this->propertyHandler;
+        $facetHandlers[] = $this->priceHandler;
+        $facetHandlers[] = $this->categoryHandler;
+        $facetHandlers[] = $this->shippingFreeHandler;
+
+        return $facetHandlers;
+    }
+
+    /**
      * Calculated the total count of the whole search result.
      *
      * @param Criteria $criteria
-     * @param \Shopware\Struct\Context $context
+     * @param Context $context
      * @return mixed
      */
     private function getTotalCount(Criteria $criteria, Context $context)
@@ -130,7 +217,7 @@ class Search implements \Shopware\Gateway\Search
      * Executes the base query to select the products.
      *
      * @param Criteria $criteria
-     * @param \Shopware\Struct\Context $context
+     * @param Context $context
      * @return array
      */
     private function getProducts(Criteria $criteria, Context $context)
@@ -169,7 +256,7 @@ class Search implements \Shopware\Gateway\Search
 
     /**
      * @param Criteria $criteria
-     * @param \Shopware\Struct\Context $context
+     * @param Context $context
      * @return QueryBuilder
      */
     private function getQuery(Criteria $criteria, Context $context)
@@ -195,6 +282,12 @@ class Search implements \Shopware\Gateway\Search
         return $query;
     }
 
+    /**
+     * @param Criteria $criteria
+     * @param Context $context
+     * @return Facet[]
+     * @throws \Exception
+     */
     private function createFacets(Criteria $criteria, Context $context)
     {
         $facets = array();
@@ -217,14 +310,14 @@ class Search implements \Shopware\Gateway\Search
     /**
      * @param Criteria $criteria
      * @param QueryBuilder $query
-     * @param \Shopware\Struct\Context $context
+     * @param Context $context
      *
      * @throws \Exception
      */
     private function addConditions(Criteria $criteria, QueryBuilder $query, Context $context)
     {
         foreach ($criteria->conditions as $condition) {
-            $generator = $this->getConditionGenerator($condition);
+            $generator = $this->getConditionHandler($condition);
 
             if ($generator === null) {
                 throw new \Exception(sprintf("Condition %s not supported", get_class($condition)));
@@ -237,7 +330,7 @@ class Search implements \Shopware\Gateway\Search
     /**
      * @param Criteria $criteria
      * @param QueryBuilder $query
-     * @param \Shopware\Struct\Context $context
+     * @param Context $context
      * @throws \Exception
      */
     private function addSorting(Criteria $criteria, QueryBuilder $query, Context $context)
@@ -254,17 +347,25 @@ class Search implements \Shopware\Gateway\Search
         }
     }
 
+    /**
+     * @param Sorting $sorting
+     * @return null|ConditionHandler\DBAL
+     */
     private function getSortingGenerator(Sorting $sorting)
     {
-        foreach ($this->queryGenerators as $generator) {
-            if ($generator->supportsSorting($sorting)) {
-                return $generator;
+        foreach ($this->conditionHandlers as $handler) {
+            if ($handler->supportsSorting($sorting)) {
+                return $handler;
             }
         }
 
         return null;
     }
 
+    /**
+     * @param Facet $facet
+     * @return null|FacetHandler\DBAL
+     */
     private function getFacetHandler(Facet $facet)
     {
         foreach ($this->facetHandlers as $handler) {
@@ -275,11 +376,15 @@ class Search implements \Shopware\Gateway\Search
         return null;
     }
 
-    private function getConditionGenerator(Condition $condition)
+    /**
+     * @param Condition $condition
+     * @return null|ConditionHandler\DBAL
+     */
+    private function getConditionHandler(Condition $condition)
     {
-        foreach ($this->queryGenerators as $generator) {
-            if ($generator->supportsCondition($condition)) {
-                return $generator;
+        foreach ($this->conditionHandlers as $handler) {
+            if ($handler->supportsCondition($condition)) {
+                return $handler;
             }
         }
 

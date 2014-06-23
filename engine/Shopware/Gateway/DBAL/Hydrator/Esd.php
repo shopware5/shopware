@@ -26,7 +26,7 @@ class Esd extends Hydrator
         $esd = new \Shopware\Struct\Product\Esd();
 
         if (isset($data['__esd_id'])) {
-            $esd->setId($data['__esd_id']);
+            $esd->setId((int) $data['__esd_id']);
         }
 
         if (isset($data['__esd_datum'])) {

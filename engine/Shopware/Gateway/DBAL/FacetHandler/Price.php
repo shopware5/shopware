@@ -9,7 +9,7 @@ use Shopware\Gateway\Search\Criteria;
 use Shopware\Gateway\Search\Facet;
 use Shopware\Struct\Context;
 
-class Price extends DBAL
+class Price implements DBAL
 {
     /**
      * @var SearchPriceHelper

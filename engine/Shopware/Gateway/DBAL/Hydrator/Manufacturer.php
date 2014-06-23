@@ -47,7 +47,7 @@ class Manufacturer extends Hydrator
     {
 
         if (isset($data['__manufacturer_id'])) {
-            $manufacturer->setId(intval($data['__manufacturer_id']));
+            $manufacturer->setId((int) $data['__manufacturer_id']);
         }
 
         if (isset($data['__manufacturer_name'])) {

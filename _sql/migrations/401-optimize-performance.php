@@ -12,6 +12,9 @@ class Migrations_Migration401 Extends Shopware\Components\Migrations\AbstractMig
             $value = unserialize($config['value']);
             if (strpos($value, 'sSort') === false) {
                 $value .= ',
+priceMin=min,
+priceMax=max,
+shippingFree=free,
 sSort=o';
 
                 $statement = $this->connection->prepare("UPDATE s_core_config_elements SET value = ? WHERE id = ?");
@@ -33,6 +36,9 @@ sSort=o';
                 }
 
                 $value .= ',
+priceMin=min,
+priceMax=max,
+shippingFree=free,
 sSort=o';
 
                 $statement = $this->connection->prepare("UPDATE s_core_config_values SET value = ? WHERE id = ?");
