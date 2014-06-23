@@ -102,6 +102,12 @@ class Criteria
         return $this;
     }
 
+    public function shippingFree()
+    {
+        $this->conditions[] = new Condition\ShippingFree();
+        return $this;
+    }
+
     /**
      * @param array $customerGroupIds
      * @return $this
@@ -127,6 +133,12 @@ class Criteria
     public function categoryFacet()
     {
         $this->facets[] = new Facet\Category();
+        return $this;
+    }
+
+    public function shippingFreeFacet()
+    {
+        $this->facets[] = new Facet\ShippingFree();
         return $this;
     }
 

@@ -125,7 +125,7 @@ class Product extends Hydrator
     {
         if (!empty($data['__priceGroup_id'])) {
             $product->setPriceGroup(new Struct\Product\PriceGroup());
-            $product->getPriceGroup()->setId($data['__priceGroup_id']);
+            $product->getPriceGroup()->setId((int) $data['__priceGroup_id']);
             $product->getPriceGroup()->setName($data['__priceGroup_description']);
         }
     }
@@ -140,7 +140,7 @@ class Product extends Hydrator
     private function assignProductData(Struct\ListProduct $product, $data)
     {
         if (isset($data['__product_id'])) {
-            $product->setId(intval($data['__product_id']));
+            $product->setId((int) $data['__product_id']);
         }
 
         if (isset($data['__product_name'])) {
@@ -202,7 +202,7 @@ class Product extends Hydrator
         }
 
         if (isset($data['__variant_id'])) {
-            $product->setVariantId(intval($data['__variant_id']));
+            $product->setVariantId((int) $data['__variant_id']);
         }
 
         if (isset($data['__variant_ordernumber'])) {
@@ -211,7 +211,6 @@ class Product extends Hydrator
 
         if (isset($data['__variant_shippingtime'])) {
             $product->setShippingTime($data['__variant_shippingtime']);
-
         } else if (isset($data['__product_shippingtime'])) {
             $product->setShippingTime($data['__product_shippingtime']);
         }
@@ -221,7 +220,7 @@ class Product extends Hydrator
         }
 
         if (isset($data['__variant_instock'])) {
-            $product->setStock(intval($data['__variant_instock']));
+            $product->setStock((int) $data['__variant_instock']);
         }
 
         if (isset($data['__variant_suppliernumber'])) {
@@ -243,23 +242,23 @@ class Product extends Hydrator
         }
 
         if (isset($data['__variant_height'])) {
-            $product->setHeight(floatval($data['__variant_height']));
+            $product->setHeight((float) $data['__variant_height']);
         }
 
         if (isset($data['__variant_length'])) {
-            $product->setLength(floatval($data['__variant_length']));
+            $product->setLength((float) $data['__variant_length']);
         }
 
         if (isset($data['__variant_stockmin'])) {
-            $product->setMinStock(intval($data['__variant_stockmin']));
+            $product->setMinStock((int) $data['__variant_stockmin']);
         }
 
         if (isset($data['__variant_weight'])) {
-            $product->setWeight(floatval($data['__variant_weight']));
+            $product->setWeight((float) $data['__variant_weight']);
         }
 
         if (isset($data['__variant_width'])) {
-            $product->setWidth(floatval($data['__variant_width']));
+            $product->setWidth((float) $data['__variant_width']);
         }
 
     }

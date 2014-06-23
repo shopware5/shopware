@@ -10,7 +10,7 @@ use Shopware\Service;
 use Shopware\Struct\Context;
 use Shopware\Struct\CoreAttribute;
 
-class Manufacturer extends DBAL
+class Manufacturer implements DBAL
 {
 
     /**

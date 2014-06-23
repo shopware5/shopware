@@ -7,24 +7,28 @@ use Shopware\Gateway\Search\Criteria;
 use Shopware\Gateway\Search\Facet;
 use Shopware\Struct\Context;
 
-abstract class DBAL
+interface DBAL
 {
     /**
+     * Generates the facet data for the passed query, criteria and context object.
+     *
      * @param Facet $facet
      * @param QueryBuilder $query
      * @param Criteria $criteria
      * @param Context $context
      * @return Facet
      */
-    abstract public function generateFacet(
+    public function generateFacet(
         Facet $facet,
         QueryBuilder $query,
         Criteria $criteria,
         Context $context
     );
 
-    public function supportsFacet(Facet $facet)
-    {
-        return false;
-    }
+    /**
+     * Checks if the passed facet can be handled by this class.
+     * @param Facet $facet
+     * @return bool
+     */
+    public function supportsFacet(Facet $facet);
 }

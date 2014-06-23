@@ -229,6 +229,7 @@
             <argument type="service" id="models"/>
             <argument type="service" id="field_helper_dbal"/>
             <argument type="service" id="property_hydrator_dbal"/>
+            <argument type="service" id="config" />
         </service>
 
         <service id="product_property_gateway_dbal" class="Shopware\Gateway\DBAL\ProductProperty">
@@ -290,8 +291,16 @@
         <service id="search_gateway_dbal" class="Shopware\Gateway\DBAL\Search">
             <argument type="service" id="models"/>
             <argument type="service" id="attribute_hydrator_dbal"/>
+            <argument type="service" id="events" />
+            <argument type="service" id="core_condition_handler_dbal" />
+            <argument type="service" id="manufacturer_facet_handler_dbal" />
+            <argument type="service" id="category_facet_handler_dbal" />
+            <argument type="service" id="price_facet_handler_dbal" />
+            <argument type="service" id="property_facet_handler_dbal" />
+            <argument type="service" id="shipping_free_facet_handler_dbal" />
         </service>
 
+        <service id="shipping_free_facet_handler_dbal" class="Shopware\Gateway\DBAL\FacetHandler\ShippingFree" />
 
         <!-- Facet handler classes for the dbal gateway -->
         <service id="manufacturer_facet_handler_dbal" class="Shopware\Gateway\DBAL\FacetHandler\Manufacturer">
@@ -310,6 +319,9 @@
             <argument type="service" id="search_price_helper_dbal"/>
         </service>
 
+        <service id="core_condition_handler_dbal" class="Shopware\Gateway\DBAL\ConditionHandler\Core">
+            <argument type="service" id="search_price_helper_dbal" />
+        </service>
 
         <!-- Helper classes -->
         <service id="field_helper_dbal" class="Shopware\Gateway\DBAL\FieldHelper">

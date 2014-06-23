@@ -37,7 +37,7 @@ class Media extends Hydrator
         $media = new Struct\Media();
 
         if (isset($data['__media_id'])) {
-            $media->setId($data['__media_id']);
+            $media->setId((int) $data['__media_id']);
         }
 
         if (isset($data['__media_description'])) {

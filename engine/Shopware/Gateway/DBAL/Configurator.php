@@ -200,8 +200,13 @@ class Configurator implements \Shopware\Gateway\Configurator
              AND (products.laststock * variants.instock) >= (products.laststock * variants.minpurchase)'
         );
 
-        $query->orderBy('configuratorOption.group_id')
-            ->groupBy('configuratorOption.id');
+        $query->addOrderBy('configuratorGroup.position')
+            ->addOrderBy('configuratorGroup.name')
+            ->addOrderBy('configuratorOption.position')
+            ->addOrderBy('configuratorOption.name');
+
+
+        $query->groupBy('configuratorOption.id');
 
         return $query;
     }

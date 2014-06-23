@@ -100,6 +100,42 @@ In this document you will find a changelog of the important changes related to t
 * Deprecated `Shopware\Models\Widget\Widget::label` variable, getter and setter, and correspondent `s_core_widgets::label` database column
 * Removed deprecated widget settings from the config module. Active widgets and their positions will now be saved automatically.
 * Removed desktop switcher from the `Shopware.container.Viewport` base component.
+* The new shopware core selects now all required data for the sGetArticleById, sGetPromotionById and sGetArticlesByCategory. The following events and internal function are no more used in this functions:
+    * sGetPromotionById events
+        * Shopware_Modules_Articles_GetPromotionById_FilterSql
+    * sGetPromotionById functions
+        * sGetTranslation
+        * sGetArticleProperties
+        * sGetCheapestPrice
+        * sCalculatingPrice
+        * calculateCheapestBasePriceData
+        * getArticleListingCover
+    * sGetAritcleById events
+        * Shopware_Modules_Articles_GetArticleById_FilterSQL
+    * sGetAritcleById functions
+        * sGetTranslation
+        * sGetPricegroupDiscount
+        * sGetPromotionById (for similar and related products)
+        * sCheckIfEsd
+        * sGetPricegroupDiscount
+        * sCalculatingPrice
+        * sGetCheapestPrice
+        * sGetArticleConfig
+        * calculateReferencePrice
+        * sGetArticlePictures
+        * sGetArticlesVotes
+        * sGetArticlesAverangeVote
+        * sGetArticleProperties
+    * sGetArticlesByCategory events
+        * Shopware_Modules_Articles_sGetArticlesByCategory_FilterSql
+        * Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopStart
+        * Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopEnd
+    * sGetArticlesByCategory functions
+        * sGetSupplierById
+        * sGetCheapestPrice
+        * sCalculatingPrice
+        * calculateCheapestBasePriceData
+
 
 ## 4.2.2
 

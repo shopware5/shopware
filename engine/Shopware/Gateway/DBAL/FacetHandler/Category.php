@@ -8,7 +8,7 @@ use Shopware\Gateway\Search\Criteria;
 use Shopware\Gateway\Search\Facet;
 use Shopware\Struct\Context;
 
-class Category extends DBAL
+class Category implements DBAL
 {
     /**
      * @var \Shopware\Service\Category
@@ -25,7 +25,13 @@ class Category extends DBAL
 
 
     /**
-     * @param Facet $facet
+     * Generates the facet for the \Shopware\Gateway\Search\Facet\Category class.
+     * Displays how many products are assigned to the children categories.
+     *
+     * The handler use the category ids of the \Shopware\Gateway\Search\Condition\Category.
+     * If no \Shopware\Gateway\Search\Condition\Category is set, the handler uses as default the id 1.
+     *
+     * @param Facet|\Shopware\Gateway\Search\Facet\Category $facet
      * @param QueryBuilder $query
      * @param \Shopware\Gateway\Search\Criteria $criteria
      * @param Context $context

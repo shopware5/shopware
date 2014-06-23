@@ -2,6 +2,7 @@
     <div class="error">{s name='VariantAreNotAvailable'}Die ausgewählte Variante steht aktuell nicht zur Verfügung{/s}</div>
 {/if}
 <form method="post" action="{url sArticle=$sArticle.articleID sCategory=$sArticle.categoryID}" class="config_select">
+    <input type="hidden" name="new" value="{$new}" />
 	{foreach from=$sArticle.sConfigurator item=sConfigurator name=group key=groupID}
 	
 		{* Group name *}
@@ -13,29 +14,40 @@
 		
 		{* Group description *}
 		{block name='frontend_detail_group_description'}
-		{if $sConfigurator.groupdescription}	
+		{if $sConfigurator.groupdescription}
 		<p class="groupdescription">
 			{$sConfigurator.groupdescription}
 		</p>
 		{/if}
 		{/block}
-		
-		{assign var="pregroupID" value=$groupID-1}
-		<select {if $groupID gt 0&&empty($sArticle.sConfigurator[$pregroupID].user_selected)}disabled="disabled"{/if}name="group[{$sConfigurator.groupID}]" onChange="this.form.submit();">
-			
-			{* Please select... *}
-			{if empty($sConfigurator.user_selected)}
-				<option value="" selected="selected">{s name="DetailConfigValueSelect"}{/s}</option>
-			{/if}
-		
-			{foreach from=$sConfigurator.values item=configValue name=option key=optionID}
-				{if !isset($configValue.active)||$configValue.active==1}
-					<option {if $configValue.selected&&$sConfigurator.user_selected}selected="selected"{/if} value="{$configValue.optionID}">
-						{$configValue.optionname}{if $configValue.upprice && !$configValue.reset} {if $configValue.upprice > 0}{/if}{/if}
-					</option>
-				{/if}
-			{/foreach}
-		</select>
+
+        <select name="group[{$sConfigurator.groupID}]" onChange="this.form.submit();">
+
+            {* Please select... *}
+            {if !$sConfigurator.user_selected}
+                <option value="" selected="selected">{s name="DetailConfigValueSelect"}{/s}</option>
+            {else}
+                <option value="">{s name="DetailConfigValueReset"}{/s}</option>
+            {/if}
+
+            {foreach from=$sConfigurator.values item=configValue name=option key=optionID}
+                {if $configValue.selected}
+                    <option value="{$configValue.optionID}" selected="selected">
+                        {$configValue.optionname}
+                        {if $configValue.upprice && !$configValue.reset}
+                            {if $configValue.upprice > 0}{/if}
+                        {/if}
+                    </option>
+                {else}
+                    <option value="{$configValue.optionID}">
+                        {$configValue.optionname}
+                        {if $configValue.upprice && !$configValue.reset}
+                            {if $configValue.upprice > 0}{/if}
+                        {/if}
+                    </option>
+                {/if}
+            {/foreach}
+        </select>
 	{/foreach}
 	
 	<noscript>

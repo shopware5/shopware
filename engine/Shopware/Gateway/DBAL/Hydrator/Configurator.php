@@ -67,7 +67,7 @@ class Configurator extends Hydrator
         $set = new Struct\Configurator\Set();
         $set->setId((int) $data['__configuratorSet_id']);
         $set->setName($data['__configuratorSet_name']);
-        $set->setType($data['__configuratorSet_type']);
+        $set->setType((int) $data['__configuratorSet_type']);
         return $set;
     }
 

@@ -3,12 +3,13 @@
 namespace Shopware\Gateway\DBAL\FacetHandler;
 
 use Shopware\Components\Model\DBAL\QueryBuilder;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Gateway\Search\Criteria;
 use Shopware\Gateway\Search\Facet;
 use Shopware\Struct\Context;
 use Shopware\Struct\CoreAttribute;
 
-class Property extends DBAL
+class Property implements DBAL
 {
     /**
      * @var \Shopware\Service\Property
@@ -18,8 +19,9 @@ class Property extends DBAL
     /**
      * @param \Shopware\Gateway\Property $propertyGateway
      */
-    function __construct(\Shopware\Gateway\Property $propertyGateway)
-    {
+    function __construct(
+        \Shopware\Gateway\Property $propertyGateway
+    ) {
         $this->propertyGateway = $propertyGateway;
     }
 

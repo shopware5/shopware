@@ -67,7 +67,7 @@ class Unit extends Hydrator
         $data = array_merge($data, $translation);
 
         if (isset($data['__unit_id'])) {
-            $unit->setId(intval($data['__unit_id']));
+            $unit->setId((int) $data['__unit_id']);
         }
 
         if (isset($data['__unit_description'])) {
@@ -83,23 +83,23 @@ class Unit extends Hydrator
         }
 
         if (isset($data['__unit_purchaseunit'])) {
-            $unit->setPurchaseUnit(floatval($data['__unit_purchaseunit']));
+            $unit->setPurchaseUnit((float) $data['__unit_purchaseunit']);
         }
 
         if (isset($data['__unit_referenceunit'])) {
-            $unit->setReferenceUnit(floatval($data['__unit_referenceunit']));
+            $unit->setReferenceUnit((float) $data['__unit_referenceunit']);
         }
 
         if (isset($data['__unit_purchasesteps'])) {
-            $unit->setPurchaseStep(intval($data['__unit_purchasesteps']));
+            $unit->setPurchaseStep((int) $data['__unit_purchasesteps']);
         }
 
         if (isset($data['__unit_minpurchase'])) {
-            $unit->setMinPurchase(intval($data['__unit_minpurchase']));
+            $unit->setMinPurchase((int) $data['__unit_minpurchase']);
         }
 
         if (isset($data['__unit_maxpurchase'])) {
-            $unit->setMaxPurchase(intval($data['__unit_maxpurchase']));
+            $unit->setMaxPurchase((int) $data['__unit_maxpurchase']);
         }
     }
 }
