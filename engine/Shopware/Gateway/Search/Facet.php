@@ -29,7 +29,15 @@ namespace Shopware\Gateway\Search;
  */
 interface Facet
 {
+    /**
+     * Defines the unique name for the facet for re identification.
+     * @return string
+     */
     public function getName();
 
+    /**
+     * Returns true if the search result is filtered by this facet.
+     * @return bool
+     */
     public function isFiltered();
 }

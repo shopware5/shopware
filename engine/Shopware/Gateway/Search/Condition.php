@@ -25,6 +25,12 @@
 namespace Shopware\Gateway\Search;
 
 /**
+ * Defines a condition which can be added to the
+ * \Shopware\Gateway\Search\Criteria class.
+ *
+ * Each condition is handled by his own condition handler
+ * which defined in the specify gateway engines.
+ *
  * @package Shopware\Gateway\Search
  */
 interface Condition

@@ -100,6 +100,7 @@ class Search implements \Shopware\Gateway\Search
      * @param FacetHandler\Category $categoryHandler
      * @param FacetHandler\Price $priceHandler
      * @param FacetHandler\Property $propertyHandler
+     * @param FacetHandler\ShippingFree $shippingFreeHandler
      */
     function __construct(
         ModelManager $entityManager,
@@ -249,7 +250,7 @@ class Search implements \Shopware\Gateway\Search
                     $this->attributeHydrator->hydrate($row)
                 );
             }
-            $products[] = $product;
+            $products[$product->getNumber()] = $product;
         }
         return $products;
     }
@@ -268,7 +269,10 @@ class Search implements \Shopware\Gateway\Search
                 'products',
                 's_articles_details',
                 'variants',
-                'variants.id = products.main_detail_id AND variants.active = 1 AND products.active = 1'
+                'variants.id = products.main_detail_id
+                 AND variants.active = 1
+                 AND products.active = 1
+                 AND (products.laststock * variants.instock) >= (products.laststock * variants.minpurchase)'
             )
             ->innerJoin(
                 'products',

@@ -30,14 +30,34 @@ use Shopware\Gateway\Search\Sorting;
 use Shopware\Struct\Customer\Group;
 
 /**
+ * The criteria object is used for the search gateway.
+ *
+ * The sorting, facet and condition classes are defined global and has
+ * to be compatible with all gateway engines.
+ *
+ * Each of this sorting, facet and condition classes are handled by their
+ * own handler classes which implemented for each gateway engine.
+ *
  * @package Shopware\Gateway\Search
  */
 class Criteria
 {
+    /**
+     * Query string for the search.
+     * @var string
+     */
     public $query;
 
+    /**
+     * Offset for the limitation
+     * @var int
+     */
     public $offset;
 
+    /**
+     * Count of result
+     * @var int
+     */
     public $limit;
 
     /**

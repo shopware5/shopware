@@ -27,11 +27,17 @@ namespace Shopware\Gateway\Search;
 use Shopware\Struct\Extendable;
 
 /**
+ * Specify class for the search result.
+ * Contains the unique product order number
+ * and additionally attribute classes which can be used
+ * by the different gateway engines.
+ *
  * @package Shopware\Gateway\Search
  */
 class Product extends Extendable
 {
     /**
+     * Order number of the product
      * @var string
      */
     private $number;

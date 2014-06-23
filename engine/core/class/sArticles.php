@@ -3970,10 +3970,13 @@ class sArticles
                 $criteria->sortByReleaseDate('DESC');
         }
 
-        $criteria->propertyFacet()
-            ->priceFacet()
+        $criteria->priceFacet()
             ->shippingFreeFacet()
             ->manufacturerFacet();
+
+        if ($this->config->get('displayFiltersInListings', true)) {
+            $criteria->propertyFacet();
+        }
 
         return $criteria;
     }
@@ -4336,7 +4339,13 @@ class sArticles
      */
     private function loadCategoryConfig($categoryId)
     {
-        $config = array();
+        $session = Shopware()->Session();
+        $key = 'sCategoryConfig' . $categoryId;
+        if (!$this->isHttpCacheActive() && $session->offsetExists($key)) {
+            $config = $session->get($key);
+        } else {
+            $config = array();
+        }
 
         $config['sSort'] = $this->getConfigParameter(
             'sSort',
@@ -4390,6 +4399,8 @@ class sArticles
             'sPage',
             1
         );
+
+        $session->offsetSet($key, $config);
 
         return $config;
     }
