@@ -61,6 +61,7 @@
                 {/block}
             </div>
 
+			{* Deliveryfree dispatch notification *}
 			{block name='frontend_checkout_cart_deliveryfree'}
 				{if $sShippingcostsDifference}
 					{$shippingDifferenceContent="<strong>{s name='CartInfoFreeShipping'}{/s}</strong> {s name='CartInfoFreeShippingDifference'}{/s}"}
@@ -68,8 +69,10 @@
 				{/if}
 			{/block}
 
+			{* Product table content *}
             <div class="panel has--border">
                 <div class="panel--body">
+
                     {* Product table header *}
                     {block name='frontend_checkout_cart_cart_head'}
                         {include file="frontend/checkout/cart_header.tpl"}
@@ -81,6 +84,11 @@
                             {include file='frontend/checkout/cart_item.tpl'}
                         {/block}
                     {/foreach}
+
+					{* Product table footer *}
+					{block name='frontend_checkout_cart_cart_footer'}
+						{include file="frontend/checkout/cart_footer.tpl"}
+					{/block}
                 </div>
             </div>
         </div>
