@@ -198,6 +198,7 @@ $(function() {
     $('*[data-auto-submit="true"]').autoSubmit();
     $('input[data-quantity-field="true"]').quantityField();
     $('*[data-drop-down-menu="true"]').dropdownMenu();
+    $('*[data-newsletter="true"]').newsletter();
 
     $('select:not([data-no-fancy-select="true"])').selectboxReplacement();
 

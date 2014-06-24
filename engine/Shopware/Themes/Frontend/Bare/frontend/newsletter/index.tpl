@@ -35,7 +35,7 @@
 		{* Newsletter content *}
 		{block name="frontend_newsletter_content"}
 			{if $voteConfirmed == false || $sStatus.code == 0}
-			<div class="newsletter--form panel has--border">
+			<div class="newsletter--form panel has--border" data-newsletter="true">
 
 				{* Newsletter headline *}
 				{block name="frontend_newsletter_content_headline"}
@@ -50,7 +50,7 @@
 							{* Subscription option *}
 							{block name="frontend_newsletter_form_input_subscription"}
 								<div class="newsletter--subscription">
-									<select name="subscribeToNewsletter" id="newsletter--checkmail" required="required" class="field--select" onchange="refreshAction();">
+									<select name="subscribeToNewsletter" id="newsletter--checkmail" required="required" class="field--select">
 										<option value="1">{s name="sNewsletterOptionSubscribe"}{/s}</option>
 										<option value="-1" {if $_POST.subscribeToNewsletter eq -1 || (!$_POST.subscribeToNewsletter && $sUnsubscribe == true)}selected{/if}>{s name="sNewsletterOptionUnsubscribe"}{/s}</option>
 									</select>
@@ -111,20 +111,6 @@
 
 									</div>
 
-									{* @TODO - Move to a javascript file *}
-									{literal}
-										<script type="text/javascript">
-											function refreshAction() {
-												if ($('#newsletter--checkmail').val() == -1) {
-													$('#newsletter--additional-form').hide();
-												}
-												else {
-													$('#newsletter--additional-form').show();
-												}
-											}
-											refreshAction();
-										</script>
-									{/literal}
 								{/if}
 							{/block}
 
