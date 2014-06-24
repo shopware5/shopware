@@ -8,7 +8,7 @@
 		{/block}
 
 		{block name='frontend_index_search_field'}
-        	<input type="search" name="sSearch" class="main-search--field" autocomplete="off" placeholder="{s name="IndexSearchFieldPlaceholder"}Suchbegriff...{/s}" maxlength="30"  />
+        	<input type="search" name="sSearch" class="main-search--field" autocomplete="off" autocapitalize="off" placeholder="{s name="IndexSearchFieldPlaceholder"}Suchbegriff...{/s}" maxlength="30"  />
 		{/block}
 
 		{block name='frontend_index_search_field_submit'}
