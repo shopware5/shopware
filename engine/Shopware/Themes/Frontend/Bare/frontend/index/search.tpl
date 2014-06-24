@@ -12,15 +12,13 @@
 		{/block}
 
 		{block name='frontend_index_search_field_submit'}
-        	<input type="submit" class="main-search--button" value="1{s name="IndexSearchFieldSubmit"}Suchen{/s}" />
-            <div class="loading-indicator"></div>
+        	<input type="submit" class="main-search--button" value="{s name="IndexSearchFieldSubmit"}Suchen{/s}" />
+            {* Ajax loader *}
+            {block name='frontend_index_search_ajax_loader'}
+                <div class="form--ajax-loader">&nbsp;</div>
+            {/block}
 		{/block}
     </form>
-
-    {* Ajax loader *}
-	{block name='frontend_index_search_ajax_loader'}
-		<div class="ajax-loader">&nbsp;</div>
-	{/block}
 
     {* Search results *}
     {block name='frontend_index_search_results'}

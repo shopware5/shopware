@@ -5,7 +5,8 @@
 
         defaults: {
             /** @string activeCls Class which will be added when the drop down was triggered */
-            activeCls: 'is--active'
+            activeCls: 'is--active',
+            searchFieldCls: 'main-search--field'
         },
 
         init: function () {
@@ -17,10 +18,10 @@
             StateManager.registerListener([{
                 type: 'smartphone',
                 enter: function() {
-                    me.$el.addClass('is--active');
+                    me.$el.addClass(me.defaults.activeCls);
                 },
                 exit: function() {
-                    me.$el.removeClass('is--active');
+                    me.$el.removeClass(me.defaults.activeCls);
                 }
             }]);
 
@@ -33,17 +34,17 @@
             event.preventDefault();
             event.stopPropagation();
 
-            if(target.hasClass('main-search--field') || !StateManager.isSmartphone()) {
+            if(target.hasClass(me.defaults.searchFieldCls) || !StateManager.isSmartphone()) {
                 return;
             }
 
             if(me.$el.hasClass(me.opts.activeCls)) {
                 me.$el.removeClass(me.opts.activeCls);
-                me.$el.find('.main-search--field').delay(150).blur();
+                me.$el.find(me.defaults.searchFieldCls).delay(150).blur();
             } else {
                 me.$el.addClass(me.opts.activeCls);
-                me.$el.find('.main-search--field').delay(150).focus();
+                me.$el.find(me.defaults.searchFieldCls).delay(150).focus();
             }
         }
     });
-}(jQuery, window));
+})(jQuery, window);
