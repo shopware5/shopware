@@ -92,6 +92,11 @@ class Search implements \Shopware\Gateway\Search
     private $shippingFreeHandler;
 
     /**
+     * @var FacetHandler\InStock
+     */
+    private $inStockHandler;
+
+    /**
      * @param ModelManager $entityManager
      * @param Hydrator\Attribute $attributeHydrator
      * @param \Enlight_Event_EventManager $eventManager
@@ -101,6 +106,7 @@ class Search implements \Shopware\Gateway\Search
      * @param FacetHandler\Price $priceHandler
      * @param FacetHandler\Property $propertyHandler
      * @param FacetHandler\ShippingFree $shippingFreeHandler
+     * @param FacetHandler\InStock $inStockHandler
      */
     function __construct(
         ModelManager $entityManager,
@@ -111,7 +117,8 @@ class Search implements \Shopware\Gateway\Search
         Gateway\FacetHandler\Category $categoryHandler,
         Gateway\FacetHandler\Price $priceHandler,
         Gateway\FacetHandler\Property $propertyHandler,
-        Gateway\FacetHandler\ShippingFree $shippingFreeHandler
+        Gateway\FacetHandler\ShippingFree $shippingFreeHandler,
+        Gateway\FacetHandler\InStock $inStockHandler
     ) {
         $this->entityManager = $entityManager;
         $this->attributeHydrator = $attributeHydrator;
@@ -122,6 +129,7 @@ class Search implements \Shopware\Gateway\Search
         $this->priceHandler = $priceHandler;
         $this->propertyHandler = $propertyHandler;
         $this->shippingFreeHandler = $shippingFreeHandler;
+        $this->inStockHandler = $inStockHandler;
     }
 
     /**
@@ -188,6 +196,7 @@ class Search implements \Shopware\Gateway\Search
         $facetHandlers[] = $this->priceHandler;
         $facetHandlers[] = $this->categoryHandler;
         $facetHandlers[] = $this->shippingFreeHandler;
+        $facetHandlers[] = $this->inStockHandler;
 
         return $facetHandlers;
     }
@@ -271,8 +280,7 @@ class Search implements \Shopware\Gateway\Search
                 'variants',
                 'variants.id = products.main_detail_id
                  AND variants.active = 1
-                 AND products.active = 1
-                 AND (products.laststock * variants.instock) >= (products.laststock * variants.minpurchase)'
+                 AND products.active = 1'
             )
             ->innerJoin(
                 'products',

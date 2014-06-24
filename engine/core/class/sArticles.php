@@ -3934,6 +3934,10 @@ class sArticles
             $criteria->shippingFree();
         }
 
+        if ($config['inStock']) {
+            $criteria->inStock();
+        }
+
         if (!empty($config['sSupplier'])) {
             $criteria->manufacturer(
                 array($config['sSupplier'])
@@ -3972,6 +3976,7 @@ class sArticles
 
         $criteria->priceFacet()
             ->shippingFreeFacet()
+            ->inStockFacet()
             ->manufacturerFacet();
 
         if ($this->config->get('displayFiltersInListings', true)) {
@@ -3984,11 +3989,15 @@ class sArticles
     private function getShippingFreeFacet(\Shopware\Gateway\Search\Facet\ShippingFree $facet, $config)
     {
         $params = $this->getListingLinkParameters($config);
+        $params['shippingFree'] = 1;
+        $link = $this->buildListingLink($params);
+
         unset($params['shippingFree']);
 
         return array(
             'active' => ($config['shippingFree']),
             'removeLink' => $this->buildListingLink($params),
+            'link' => $link,
             'total' => $facet->getTotal()
         );
     }
@@ -4339,14 +4348,7 @@ class sArticles
      */
     private function loadCategoryConfig($categoryId)
     {
-        $session = Shopware()->Session();
-        $key = 'sCategoryConfig' . $categoryId;
-        if (!$this->isHttpCacheActive() && $session->offsetExists($key)) {
-            $config = $session->get($key);
-        } else {
-            $config = array();
-        }
-
+        $config = array();
         $config['sSort'] = $this->getConfigParameter(
             'sSort',
             0
@@ -4395,12 +4397,17 @@ class sArticles
             false
         );
 
+        $config['inStock'] = $this->getConfigParameter(
+            'inStock',
+            false
+        );
+
         $config['page'] = $this->getConfigParameter(
             'sPage',
             1
         );
 
-        $session->offsetSet($key, $config);
+        Shopware()->Session()->offsetSet('sCategoryConfig' . $categoryId, $config);
 
         return $config;
     }

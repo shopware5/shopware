@@ -147,9 +147,21 @@ class Criteria
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function shippingFree()
     {
         $this->conditions[] = new Condition\ShippingFree();
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function inStock()
+    {
+        $this->conditions[] = new Condition\InStock();
         return $this;
     }
 
@@ -193,6 +205,15 @@ class Criteria
     public function priceFacet()
     {
         $this->facets[] = new Facet\Price();
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function inStockFacet()
+    {
+        $this->facets[] = new Facet\InStock();
         return $this;
     }
 

@@ -77,6 +77,9 @@ class Core implements DBAL
             case ($condition instanceof Condition\ShippingFree):
                 return true;
 
+            case ($condition instanceof Condition\InStock):
+                return true;
+
             default:
                 return false;
         }
@@ -119,6 +122,10 @@ class Core implements DBAL
 
             case ($condition instanceof Condition\ShippingFree):
                 $this->addShippingFreeCondition($query, $condition);
+                break;
+
+            case ($condition instanceof Condition\InStock):
+                $this->addInStockCondition($query, $condition);
                 break;
         }
     }
@@ -327,6 +334,20 @@ class Core implements DBAL
 
         $query->setParameter(':priceMin', $price->getMinPrice())
             ->setParameter(':priceMax', $price->getMaxPrice());
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param Condition\InStock $condition
+     */
+    private function addInStockCondition(
+        QueryBuilder $query,
+        Condition\InStock $condition
+    ) {
+
+        $query->andWhere(
+            '(products.laststock * variants.instock) >= (products.laststock * variants.minpurchase)'
+        );
     }
 
     /**
