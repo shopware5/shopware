@@ -94,10 +94,11 @@
 .main-search--form {
 	.unitize-padding(8, 10, 8, 10, 16);
 	.box-shadow(0 6px 6px -6px @lightTextColor);
-	position: relative;
 	background: #fff;
 	border-bottom: 1px solid @borderColor;
 	width: 100%;
+    left: 0;
+    position: absolute;
 
 	.icon--search {
 		.unitize(22, 16, top);
@@ -110,76 +111,124 @@
 		width: 100%;
 	}
 	.main-search--button { display: none; }
+
+    .form--ajax-loader {
+        .unitize(10, 16, top);
+        .unitize(10, 16, right);
+        position: absolute;
+        display: none;
+
+        &::before {
+            .unitize-width(16);
+            .unitize-height(16);
+            .border-radius(100%);
+            .animation(keyframe--spin 1s linear infinite);
+
+            display: block;
+            content: "";
+            border: 2px solid #ccc;
+            border-top: 2px solid #333;
+        }
+    }
 }
 
 .main-search--results {
-  width: 100%;
-  position: absolute;
-  display: none;
-  background: white;
-  border: 1px solid #d8dce5;
-  box-shadow: 0 2px 3px 1px #d8dce5;
-  padding: 20px 20px 10px 20px;
-  .unitize-padding(20, 20, 10, 20);
-  .unitize(110, 16, top);
-  z-index: 100;
-  left: 0;
-
-  &::after {
-    .rotate(135deg);
-    display: block;
-    content: '';
+    .clearfix();
+    .unitize(107, 16, top);
     position: absolute;
-    height: 15px;
-    width: 15px;
+    width: 100%;
+    left: 0;
     background: #fff;
-    left: 48%;
-    top: -9px;
-    border-bottom: 1px solid #D8DCE5;
-    border-left: 1px solid #D8DCE5;
-  }
+    text-align: left;
+    z-index: 100;
+}
 
-  .search-results--inner {
+.results--list {
+    .unitize-padding(10, 15);
+    .box-shadow(0 2px 3px 1px lighten(@borderColor, 5%));
+    border-top: 1px solid @borderColor;
+    border-bottom: 1px solid @borderColor;
+    background: #fff;
 
-    ul {
-      display: table;
-      width: 100%;
-      border-bottom: 1px solid #d8dce5;
+    &::after {
+        .rotate(135deg);
+        .unitize-width(15);
+        .unitize-height(15);
+        .unitize(-8, 16, top);
+        content: '';
+        display: block;
+        position: absolute;
+        background: #fff;
+        left: 48%;
+        border: 1px solid @borderColor;
+        border-top: 0 none;
+        border-right: 0 none;
     }
 
-    ul:last-child {
-      border-bottom: 0;
+    .list--entry,
+    .entry--all-results {
+        .unitize-padding(6, 0);
     }
 
-    li {
-      display: table-cell;
-      table-layout: fixed;
-      border-spacing: 5px;
-      text-align: left;
-      padding: 12px 0;
-      vertical-align: middle;
+    .list--entry {
+        .unitize(30, 16, line-height);
+        border-bottom: 1px solid @borderColor;
 
-      a {
-        color: #5F7285;
-      }
+        &:last-child {
+            border: 0 none;
+        }
     }
 
-    li:first-child {
-      width: 10%;
+    .entry--no-results {
+        width: 100%;
+        text-align: center;
+        list-style: none;
+        font-weight: normal;
     }
 
-    li:last-child {
-      text-align: right;
-      width: 20%;
-      color: @primaryColor
+    .is-active {
+        background: lighten(@borderColor, 10%);
+        color: @primaryColor;
+
+        .entry--name a { color: @primaryColor }
     }
 
-    a.resultall {
-      float: left;
-      margin-top: 12px;
-      font-weight: normal;
+    .entry--media { width: 10%; min-width:10% }
+
+    .entry--name {
+        width: 60%;
+
+        a { color: @primaryTextColor }
     }
-  }
+
+    .entry--price,
+    .entry--all-results-number {
+        width: 30%;
+        text-align: right;
+    }
+
+    .entry--all-results-link,
+    .entry--all-results-number {
+        display: block;
+    }
+    .entry--all-results {
+        .unitize(10, 16, padding-top);
+        font-weight: normal;
+    }
+
+    .entry--all-results-link {
+        width: 70%;
+
+        .icon--arrow-right {
+            .unitize(-1, 16, top);
+            .unitize-margin(0, 8, 0, 0);
+            position: relative;
+        }
+    }
+
+    .entry--all-results-number {
+        font-weight: normal;
+    }
 }
 
 // Tablet styling for the global shop header
@@ -384,6 +433,7 @@
           padding: 0;
           border: 0 none;
           width: 30%;
+          position: relative;
 
           .icon--search {
             .unitize(14, 16, top);
@@ -400,15 +450,37 @@
           padding: 0;
           border: 0 none;
         }
-
-        // search results
-        .main-search--results {
-          .unitize-width(500, 16);
-          .unitize(80, 16, top);
-
-        }
-
 	}
+
+    .main-search--form {
+        position: relative;
+        left: auto;
+    }
+
+    .main-search--results {
+        .clearfix();
+        .unitize-width(450);
+        .unitize(-225, 16, margin-left);
+        .unitize(60, 16, top);
+        position: absolute;
+        z-index: 100;
+        left: 50%;
+        text-align: left;
+    }
+
+    .results--list {
+        .border-radius();
+        .unitize-padding(10, 15);
+        .box-shadow(0 2px 3px 1px lighten(@borderColor, 5%));
+        border: 1px solid @borderColor;
+        background: #fff;
+
+
+        .list--entry,
+        .entry--all-results {
+            .unitize-padding(6, 0);
+        }
+    }
 }
 
 @media screen and (min-width: @tabletLandscapeViewportWidth) {

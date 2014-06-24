@@ -1,111 +1,155 @@
-$.plugin('liveSearch', {
+;(function($, window, undefined) {
+    "use strict";
 
-    /** Your default options */
-    defaults: {
-        minLength: 3
-    },
+    $.plugin('liveSearch', {
 
-    /** Plugin constructor */
-    init: function () {
-        var me = this;
+        /** Your default options */
+        defaults: {
+            minLength: 3,
+            searchDelay: 250,
+            keyEnter: 13,
+            keyArrowUp: 38,
+            keyArrowDown: 40,
+            activeCls: 'is-active',
+            resultsCls: 'main-search--results'
+        },
 
-        StateManager.registerListener([{
-            type: 'tabletLandscape',
-            exit: function() {
-                if(me.$el.hasClass('entry-is--active')) {
-                    me.$el.removeClass('entry-is--active');
-                }
-            }
-        }]);
+        /** Plugin constructor */
+        init: function () {
+            var me = this;
 
-        /** Register event listener */
-        me._on(me.$el, 'keyup', $.proxy(me.onKeyUp, me));
+            me.$search = me.$el.closest('.entry--search');
+            me.$results = me.$search.find('.main-search--results');
+            me.$loader = me.$search.find('.form--ajax-loader');
 
-        me._on(me.$el, 'blur', $.proxy(me.onBlur, me));
+            /** Register event listener */
+            me._on(me.$el, 'keyup', $.proxy(me.onKeyUp, me));
 
-        me._on(me.$el, 'click', $.proxy(me.onClickSearchBar, me));
+            me._on(me.$el, 'blur', $.proxy(me.onBlur, me));
 
-        me._on($('.main-search--results'), 'mousedown', $.proxy(me.onClickSearchResults, me));
+            me._on(me.$el, 'click', $.proxy(me.onClickSearchBar, me));
 
-    },
+            me._on(me.$results, 'mousedown', $.proxy(me.onClickSearchResults, me));
+        },
 
-    /** Event listener method */
-    onKeyUp: function (event)  {
-        var me = this,
-            term = me.$el.val(),
-            termLength = term.length;
+        /** Event listener method */
+        onKeyUp: function (event)  {
+            var me = this,
+                term = me.$el.val(),
+                termLength = term.length;
 
-        if(me._timeout) {
-            window.clearTimeout(me._timeout);
-        }
+            if(me.$results.is(':visible')) {
 
-        me._timeout = window.setTimeout(function() {
+                if(event.keyCode == me.defaults.keyArrowDown) {
+                    var selected = me.$results.find('.' + me.defaults.activeCls);
 
-            // check for minimum characters
-            if(me.defaults.minLength && termLength < me.defaults.minLength) {
-                $('.main-search--results').hide();
-                return;
-            }
+                    $("." + me.defaults.resultsCls + " li").removeClass(me.defaults.activeCls);
+                    if (selected.next().length == 0) {
+                        selected.siblings().first().addClass(me.defaults.activeCls);
+                    } else {
+                        selected.next().addClass(me.defaults.activeCls);
+                    }
 
-            $('.loading-indicator').fadeIn();
-
-            // Ajax Search
-            $.ajax({
-                url: $.controller.ajax_search,
-                data: {
-                    sSearch: term
-                }
-            }).done(function(results) {
-
-                $('.loading-indicator').fadeOut();
-
-                if(!results) {
-                    $('.main-search--results').hide();
                     return;
                 }
 
-                $('.main-search--results').html(results).show();
-            });
+                if(event.keyCode == me.defaults.keyArrowUp) {
+                    var selected = me.$results.find('.' + me.defaults.activeCls);
 
-        }, 250);
+                    $("." + me.defaults.resultsCls + " li").removeClass(me.defaults.activeCls);
+                    if (selected.prev().length == 0) {
+                        selected.siblings().last().addClass(me.defaults.activeCls);
+                    } else {
+                        selected.prev().addClass(me.defaults.activeCls);
+                    }
 
-    },
+                    return;
+                }
 
-    onBlur: function (event) {
-        var $target = $(event.target);
-        
-        if(!$('.main-search--results').is(':visible')) {
-            return;
-        }
+                if(event.keyCode == me.defaults.keyEnter) {
+                    var selected = me.$results.find('.' + me.defaults.activeCls);
 
-        $('.main-search--results').hide();
-    },
+                    event.preventDefault();
 
-    onClickSearchBar: function (event) {
-        var me = this,
-            term = me.$el.val(),
-            termLength = term.length;
+                    location.href = selected.find('a').attr('href');
+                    return;
+                }
+            }
 
-        if(termLength) {
-            $('.main-search--results').show();
-        }
-    },
+            if(me._timeout) {
+                window.clearTimeout(me._timeout);
+            }
 
-    onClickSearchResults: function (event) {
+            me._timeout = window.setTimeout(function() {
+
+                // check for minimum characters
+                if(me.defaults.minLength && termLength < me.defaults.minLength) {
+                    me.$results.hide();
+                    return;
+                }
+
+                me.$loader.fadeIn();
+
+                $.ajax({
+                    url: $.controller.ajax_search,
+                    data: {
+                        sSearch: term
+                    }
+                }).done(function(results) {
+
+                    me.$loader.fadeOut();
+
+                    if(!results) {
+                        me.$results.hide();
+                        return;
+                    }
+
+                    console.log(me);
+                    console.log(me.$results);
+
+
+                    me.$results.html(results).show();
+                });
+
+            }, me.defaults.searchDelay);
+
+        },
+
+        onBlur: function (event) {
+            var me = this;
+
+            if(!me.$results.is(':visible')) {
+                return;
+            }
+
+            me.$results.hide();
+        },
+
+        onClickSearchBar: function (event) {
+            var me = this,
+                term = me.$el.val(),
+                termLength = term.length;
+
+            if(termLength) {
+                me.$results.show();
+            }
+        },
+
         // Prevent closing search results
-        var $target = $(event.target);
-        
-        if($target.is('a')) {
-            console.log('target is a link');
-            location.href = $target[0]['baseURI'];
-            return;
-        }
-        
-        event.preventDefault();
-    },
+        onClickSearchResults: function (event) {
+            var $target = $(event.target);
 
-    /** Destroys the plugin */
-    destroy: function () {
-        this._destroy();
-    }
-});
+            if(!$target.is('a')) {
+                event.preventDefault();
+                return;
+            }
+
+            location.href = $target.attr('href');
+        },
+
+        /** Destroys the plugin */
+        destroy: function () {
+            this._destroy();
+        }
+    });
+})(jQuery, window);
