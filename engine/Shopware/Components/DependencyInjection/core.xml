@@ -298,9 +298,11 @@
             <argument type="service" id="price_facet_handler_dbal" />
             <argument type="service" id="property_facet_handler_dbal" />
             <argument type="service" id="shipping_free_facet_handler_dbal" />
+            <argument type="service" id="in_stock_facet_handler_dbal" />
         </service>
 
         <service id="shipping_free_facet_handler_dbal" class="Shopware\Gateway\DBAL\FacetHandler\ShippingFree" />
+        <service id="in_stock_facet_handler_dbal" class="Shopware\Gateway\DBAL\FacetHandler\InStock" />
 
         <!-- Facet handler classes for the dbal gateway -->
         <service id="manufacturer_facet_handler_dbal" class="Shopware\Gateway\DBAL\FacetHandler\Manufacturer">
