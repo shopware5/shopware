@@ -104,10 +104,6 @@
                         return;
                     }
 
-                    console.log(me);
-                    console.log(me.$results);
-
-
                     me.$results.html(results).show();
                 });
 
