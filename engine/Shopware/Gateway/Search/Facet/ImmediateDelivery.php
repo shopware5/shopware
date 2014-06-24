@@ -29,7 +29,7 @@ use Shopware\Gateway\Search\Facet;
 /**
  * @package Shopware\Gateway\Search\Facet
  */
-class InStock implements Facet
+class ImmediateDelivery implements Facet
 {
     /**
      * @var int
@@ -46,7 +46,7 @@ class InStock implements Facet
      */
     public function getName()
     {
-        return 'in_stock';
+        return 'immediate_delivery';
     }
 
     /**

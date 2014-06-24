@@ -3807,6 +3807,9 @@ class sArticles
                     $result['shippingFreeFacet'] = $this->getShippingFreeFacet($facet, $config);
                     break;
 
+                case ($facet instanceof \Shopware\Gateway\Search\Facet\ImmediateDelivery):
+                    $result['immediateDeliveryFacet'] = $this->getImmediateDeliveryFacet($facet, $config);
+                    break;
                 default:
                     $result['facets'][] = $facet;
             }
@@ -3934,8 +3937,8 @@ class sArticles
             $criteria->shippingFree();
         }
 
-        if ($config['inStock']) {
-            $criteria->inStock();
+        if ($config['immediateDelivery']) {
+            $criteria->immediateDelivery();
         }
 
         if (!empty($config['sSupplier'])) {
@@ -3976,7 +3979,7 @@ class sArticles
 
         $criteria->priceFacet()
             ->shippingFreeFacet()
-            ->inStockFacet()
+            ->immediateDeliveryFacet()
             ->manufacturerFacet();
 
         if ($this->config->get('displayFiltersInListings', true)) {
@@ -3984,6 +3987,22 @@ class sArticles
         }
 
         return $criteria;
+    }
+
+    private function getImmediateDeliveryFacet(\Shopware\Gateway\Search\Facet\ImmediateDelivery $facet, $config)
+    {
+        $params = $this->getListingLinkParameters($config);
+        $params['immediateDelivery'] = 1;
+        $link = $this->buildListingLink($params);
+
+        unset($params['immediateDelivery']);
+
+        return array(
+            'active' => ($config['immediateDelivery']),
+            'removeLink' => $this->buildListingLink($params),
+            'link' => $link,
+            'total' => $facet->getTotal()
+        );
     }
 
     private function getShippingFreeFacet(\Shopware\Gateway\Search\Facet\ShippingFree $facet, $config)
@@ -4397,8 +4416,8 @@ class sArticles
             false
         );
 
-        $config['inStock'] = $this->getConfigParameter(
-            'inStock',
+        $config['immediateDelivery'] = $this->getConfigParameter(
+            'immediateDelivery',
             false
         );
 
