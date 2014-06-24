@@ -29,10 +29,10 @@ use Shopware\Gateway\Search\Condition;
 /**
  * @package Shopware\Gateway\Search\Condition
  */
-class InStock implements Condition
+class ImmediateDelivery implements Condition
 {
     public function getName()
     {
-        return 'in_stock';
+        return 'immediate_delivery';
     }
 }

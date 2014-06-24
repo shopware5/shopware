@@ -159,9 +159,9 @@ class Criteria
     /**
      * @return $this
      */
-    public function inStock()
+    public function immediateDelivery()
     {
-        $this->conditions[] = new Condition\InStock();
+        $this->conditions[] = new Condition\ImmediateDelivery();
         return $this;
     }
 
@@ -211,9 +211,9 @@ class Criteria
     /**
      * @return $this
      */
-    public function inStockFacet()
+    public function immediateDeliveryFacet()
     {
-        $this->facets[] = new Facet\InStock();
+        $this->facets[] = new Facet\ImmediateDelivery();
         return $this;
     }
 

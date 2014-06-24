@@ -92,9 +92,9 @@ class Search implements \Shopware\Gateway\Search
     private $shippingFreeHandler;
 
     /**
-     * @var FacetHandler\InStock
+     * @var FacetHandler\ImmediateDelivery
      */
-    private $inStockHandler;
+    private $immediateDeliveryHandler;
 
     /**
      * @param ModelManager $entityManager
@@ -106,7 +106,7 @@ class Search implements \Shopware\Gateway\Search
      * @param FacetHandler\Price $priceHandler
      * @param FacetHandler\Property $propertyHandler
      * @param FacetHandler\ShippingFree $shippingFreeHandler
-     * @param FacetHandler\InStock $inStockHandler
+     * @param FacetHandler\ImmediateDelivery $immediateDeliveryHandler
      */
     function __construct(
         ModelManager $entityManager,
@@ -118,7 +118,7 @@ class Search implements \Shopware\Gateway\Search
         Gateway\FacetHandler\Price $priceHandler,
         Gateway\FacetHandler\Property $propertyHandler,
         Gateway\FacetHandler\ShippingFree $shippingFreeHandler,
-        Gateway\FacetHandler\InStock $inStockHandler
+        Gateway\FacetHandler\ImmediateDelivery $immediateDeliveryHandler
     ) {
         $this->entityManager = $entityManager;
         $this->attributeHydrator = $attributeHydrator;
@@ -129,7 +129,7 @@ class Search implements \Shopware\Gateway\Search
         $this->priceHandler = $priceHandler;
         $this->propertyHandler = $propertyHandler;
         $this->shippingFreeHandler = $shippingFreeHandler;
-        $this->inStockHandler = $inStockHandler;
+        $this->immediateDeliveryHandler = $immediateDeliveryHandler;
     }
 
     /**
@@ -196,7 +196,7 @@ class Search implements \Shopware\Gateway\Search
         $facetHandlers[] = $this->priceHandler;
         $facetHandlers[] = $this->categoryHandler;
         $facetHandlers[] = $this->shippingFreeHandler;
-        $facetHandlers[] = $this->inStockHandler;
+        $facetHandlers[] = $this->immediateDeliveryHandler;
 
         return $facetHandlers;
     }

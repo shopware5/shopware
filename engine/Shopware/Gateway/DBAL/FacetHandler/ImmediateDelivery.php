@@ -32,7 +32,7 @@ use Shopware\Struct\Context;
 /**
  * @package Shopware\Gateway\DBAL\FacetHandler
  */
-class InStock implements DBAL
+class ImmediateDelivery implements DBAL
 {
     /**
      * Generates the facet data for the passed query, criteria and context object.
@@ -57,7 +57,7 @@ class InStock implements DBAL
         ));
 
         $query->andWhere(
-            '(products.laststock * variants.instock) >= (products.laststock * variants.minpurchase)'
+            'variants.instock >= variants.minpurchase'
         );
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
@@ -67,7 +67,7 @@ class InStock implements DBAL
 
         $facet->setTotal($total);
 
-        if ($criteria->getCondition('in_stock')) {
+        if ($criteria->getCondition('immediate_delivery')) {
             $facet->setIsFiltered(true);
         }
 
@@ -81,7 +81,7 @@ class InStock implements DBAL
      */
     public function supportsFacet(Facet $facet)
     {
-        return ($facet instanceof Facet\InStock);
+        return ($facet instanceof Facet\ImmediateDelivery);
     }
 
 }
