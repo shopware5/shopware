@@ -1,24 +1,34 @@
 .custom-page--content {
     .unitize(14, 16, margin-top);
 
-    h1 {
+    .custom-page--headline {
+	.unitize(24, 16, font-size);
+	.unitize(24, 16, margin-bottom);
+    }
+
+    .content--custom {
+	&.panel--body {
+	    .unitize(0, 16, padding);
+	}
+    }
+    .custom-page--tab-headline {
 	.unitize(12, 16, margin-top);
     }
-}
 
-
-@media screen and (min-width: @tabletViewportWidth) {
-
-    .custom-page--content {
-	.unitize(45, 16, margin-top);
+    .is--active-parent {
+	display: block;
     }
 }
+
+
+@media screen and (min-width: @tabletViewportWidth) { }
 
 @media screen and (min-width: @desktopViewportWidth) {
 
     .custom-page--content {
-	width: 78%;
-	float: right;
+	.unitize(45, 16, margin-top);
+	    width: 78%;
+	    float: right;
     }
 
 }

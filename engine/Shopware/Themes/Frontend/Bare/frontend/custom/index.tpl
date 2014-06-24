@@ -27,6 +27,17 @@
 		{block name="frontend_custom_content"}
 			<div class="custom-page--container" data-tab-content="true" data-mode="remote">
 
+				{* Custom page headline*}
+				{block name="frontend_cusrton"}
+					<h1 class="custom-page--headline panel--title">
+						{if $sCustomPage.parent}
+							{$sCustomPage.parent.description}
+						{else}
+							{$sCustomPage.description}
+						{/if}
+					</h1>
+				{/block}
+
 				{* Custom page tab navigation *}
 				{block name="frontend_custom_tab_navigation"}
 					<nav class="custom-page--navigation">
@@ -37,19 +48,7 @@
 						{/if}
 						{if $pages}
 							{block name="frontend_custom_tab_navigation_list"}
-								{$isSubPageActive=false}
-								{foreach $pages as $subPage}
-									{if $subPage.active}
-										{$isSubPageActive=true}
-										{break}
-									{/if}
-								{/foreach}
 								<ul class="tab--navigation panel--tab-nav">
-									<li class="navigation--entry">
-										<a class="navigation--link{if !$isSubPageActive} is--active{/if}" href="{url controller=custom sCustom=$sCustomPage.id}" title="{$sCustomPage.description}">
-											{$sCustomPage.description}
-										</a>
-									</li>
 									{foreach $pages as $subPage}
 										{block name="frontend_custom_tab_navigation_entry"}
 											<li class="navigation--entry">
@@ -70,9 +69,9 @@
 
 				{* Custom page tab content *}
 				{block name="frontend_custom_article"}
-					<div class="tabs--content-container tab--content panel--body is--wide has--border">
+					<div class="tabs--content-container tab--content panel--body is--wide has--border{if !is_array($sCustomPage.parent)} is--active-parent{/if}">
 
-						<div class="content--custom">
+						<div class="content--custom panel--body">
 							{* Custom page tab headline *}
 							{block name="frontend_custom_article_headline"}
 								<h1 class="custom-page--tab-headline">{$sCustomPage.description}</h1>
