@@ -1,3 +1,9 @@
+.content--basket {
+	.alert {
+		.unitize-margin(15, 0);
+	}
+}
+
 .product--table {
 
 	.panel {
@@ -81,6 +87,12 @@
 
 	.column--total-price {
 		font-weight: bold;
+	}
+
+	.column--quantity .js--fancy-select {
+		.unitize(100, 16, min-width);
+		.unitize(160, 16, max-width);
+		width: auto;
 	}
 
 	.basket--badge {
