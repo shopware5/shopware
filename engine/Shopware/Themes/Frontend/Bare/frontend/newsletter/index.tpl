@@ -11,8 +11,13 @@
 		{* Newsletter headline *}
 		{block name="frontend_newsletter_headline"}
 			<div class="newsletter--headline panel--body is--wide">
-				<h1>{s name="NewsletterRegisterHeadline"}{/s}</h1>
-				<p>{s name="sNewsletterInfo"}{/s}</p>
+				{block name="frontend_newsletter_headline_title"}
+					<h1 class="newsletter--title">{s name="NewsletterRegisterHeadline"}{/s}</h1>
+				{/block}
+
+				{block name="frontend_newsletter_headline_info"}
+					<p class="newsletter--info">{s name="sNewsletterInfo"}{/s}</p>
+				{/block}
 			</div>
 		{/block}
 
@@ -31,7 +36,11 @@
 		{block name="frontend_newsletter_content"}
 			{if $voteConfirmed == false || $sStatus.code == 0}
 			<div class="newsletter--form panel has--border">
-				<h1 class="panel--title is--underline">{s name="NewsletterRegisterHeadline"}{/s}</h1>
+
+				{* Newsletter headline *}
+				{block name="frontend_newsletter_content_headline"}
+					<h1 class="panel--title is--underline">{s name="NewsletterRegisterHeadline"}{/s}</h1>
+				{/block}
 
 				{* Newsletter form *}
 				{block name="frontend_newsletter_form"}
@@ -58,7 +67,7 @@
 							{* Additonal fields *}
 							{block name="frontend_newsletter_form_additionalfields"}
 								{if {config name=NewsletterExtendedFields}}
-									<div id="newsletter--additional-form">
+									<div class="newsletter--additional-form">
 
 										{* Salutation *}
 										{block name="frontend_newsletter_form_input_salutation"}
@@ -87,7 +96,7 @@
 										{* Street *}
 										{block name="frontend_newsletter_form_input_street"}
 											<div class="newsletter--street">
-												<input name="street" type="text" placeholder="{s name="NewsletterRegisterBillingLabelStreet"}{/s}" id="street" value="{$_POST.street|escape}" class="input--field input--field-street{if $sStatus.sErrorFlag.street} has--error{/if}"/>
+												<input name="street" type="text" placeholder="{s name="NewsletterRegisterBillingLabelStreetname"}{/s}" id="street" value="{$_POST.street|escape}" class="input--field input--field-street{if $sStatus.sErrorFlag.street} has--error{/if}"/>
 												<input name="streetnumber" type="text" placeholder="{s name="NewsletterRegisterBillingLabelStreetNumber"}{/s}" id="streetnumber" value="{$_POST.streetnumber|escape}" class="input--field input--field-streetnumber{if $sStatus.sErrorFlag.streetnumber} has--error{/if}"/>
 											</div>
 										{/block}
@@ -96,7 +105,7 @@
 										{block name="frontend_newsletter_form_input_zip_and_city"}
 											<div class="newsletter--zip-city">
 												<input name="zipcode" type="text" placeholder="{s name="NewsletterRegisterBillingLabelZipcode"}{/s}" id="zipcode" value="{$_POST.zipcode|escape}" class="input--field input--field-zipcode{if $sStatus.sErrorFlag.zipcode} has--error{/if}"/>
-												<input name="city" type="text" placeholder="{s name="NewsletterRegisterBillingLabelCity"}{/s}" id="city" value="{$_POST.city|escape}" size="25" class="input--field input--field-city{if $sStatus.sErrorFlag.city} has--error{/if}"/>
+												<input name="city" type="text" placeholder="{s name="NewsletterRegisterBillingLabelCityname"}{/s}" id="city" value="{$_POST.city|escape}" size="25" class="input--field input--field-city{if $sStatus.sErrorFlag.city} has--error{/if}"/>
 											</div>
 										{/block}
 
