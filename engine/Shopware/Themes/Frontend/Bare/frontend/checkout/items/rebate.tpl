@@ -9,7 +9,7 @@
 			{* Badge *}
 			{block name='frontend_checkout_cart_item_rebate_badge'}
 				<div class="table--media basket--badge">
-					&gt;
+					<i class="icon--arrow-right"></i>
 				</div>
 			{/block}
 
