@@ -24,6 +24,7 @@
 
 namespace Shopware\Gateway\DBAL;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\DBAL\QueryBuilder;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Gateway\DBAL\Hydrator;
@@ -75,12 +76,14 @@ class Configurator implements \Shopware\Gateway\Configurator
     public function get(Struct\ListProduct $product, Struct\Context $context, array $selection)
     {
         $query = $this->getQuery();
+        $mediaQuery = $this->getMediaQuery();
 
-        $query->select('products.id as arrayKey')
-            ->addSelect($this->fieldHelper->getConfiguratorSetFields())
+        $query->addSelect($this->fieldHelper->getConfiguratorSetFields())
             ->addSelect($this->fieldHelper->getConfiguratorGroupFields())
             ->addSelect($this->fieldHelper->getConfiguratorOptionFields())
         ;
+
+        $query->addSelect('('. $mediaQuery->getSQL() .') as __configuratorOption_media');
 
         $this->addSelectionCondition($query, $selection);
 
@@ -98,7 +101,63 @@ class Configurator implements \Shopware\Gateway\Configurator
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
+        $mediaIds = array_column($data, '__configuratorOption_media');
+        $mediaIds = array_filter($mediaIds);
+
+        if (!empty($mediaIds)) {
+            $media = $this->getMedia($mediaIds);
+
+            foreach($data as &$option) {
+                $id = $option['__configuratorOption_media'];
+
+                if (isset($media[$id])) {
+                    $option = array_merge($option, $media[$id][0]);
+                }
+            }
+        }
+
         return $this->configuratorHydrator->hydrate($data, $selection);
+    }
+
+    private function getMedia(array $ids)
+    {
+        $query = $this->entityManager->getDBALQueryBuilder();
+
+        $query->select('media.id as arrayKey')
+            ->addSelect($this->fieldHelper->getMediaFields())
+            ->addSelect($this->fieldHelper->getMediaSettingFields());
+
+        $query->from('s_media', 'media')
+            ->innerJoin('media', 's_media_album_settings', 'mediaSettings', 'mediaSettings.albumID = media.albumID')
+            ->leftJoin('media', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = media.id');
+
+        $query->where('media.id IN (:ids)')
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+
+        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $query->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_GROUP);
+    }
+
+    private function getMediaQuery()
+    {
+        $query = $this->entityManager->getDBALQueryBuilder();
+
+        $query->select('media.id')
+            ->from('s_articles_img', 'image')
+            ->innerJoin('image', 's_article_img_mappings', 'mapping', 'mapping.image_id = image.id')
+            ->innerJoin('mapping', 's_article_img_mapping_rules', 'rules', 'rules.mapping_id = mapping.id')
+            ->innerJoin('image', 's_media', 'media', 'media.id = image.media_id');
+
+        $query->where('image.parent_id IS NULL')
+            ->andWhere('image.articleID = products.id')
+            ->andWhere('rules.option_id = configuratorOption.id');
+
+        $query->orderBy('image.position')
+            ->setMaxResults(1);
+
+        return $query;
     }
 
     private function addSelectionCondition(QueryBuilder $query, array $selection)

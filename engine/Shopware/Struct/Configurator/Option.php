@@ -25,6 +25,7 @@
 namespace Shopware\Struct\Configurator;
 
 use Shopware\Struct\Extendable;
+use Shopware\Struct\Media;
 
 /**
  * @package Shopware\Struct\Configurator
@@ -45,6 +46,11 @@ class Option extends Extendable
      * @var bool
      */
     private $selected;
+
+    /**
+     * @var Media
+     */
+    private $media;
 
     /**
      * @param int $id
@@ -92,5 +98,21 @@ class Option extends Extendable
     public function setSelected($selected)
     {
         $this->selected = $selected;
+    }
+
+    /**
+     * @return \Shopware\Struct\Media
+     */
+    public function getMedia()
+    {
+        return $this->media;
+    }
+
+    /**
+     * @param \Shopware\Struct\Media $media
+     */
+    public function setMedia($media)
+    {
+        $this->media = $media;
     }
 }
