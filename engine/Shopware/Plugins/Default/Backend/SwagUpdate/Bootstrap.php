@@ -137,6 +137,20 @@ class Shopware_Plugins_Backend_SwagUpdate_Bootstrap extends Shopware_Components_
             'value' => '', // value will be populated on first access
             'hidden' => true,
         ));
+
+        $this->addFormTranslations(
+            array('de_DE' => array(
+                'update-code' => array(
+                    'label' => 'Aktionscode'
+                ),
+                'update-send-feedback' => array(
+                    'label' => 'Feedback senden'
+                ),
+                'update-channel' => array(
+                    'label' => 'Update Kanal'
+                ),
+            ))
+        );
     }
 
     /**
