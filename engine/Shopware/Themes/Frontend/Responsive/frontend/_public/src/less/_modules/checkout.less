@@ -128,16 +128,19 @@
 	}
 
 	// Add product using the sku
-	.add-product--form {
+	.add-product--form,
+	.add-voucher--form{
 		.unitize-margin(12, 0);
 	}
 
-	.add-product--field {
+	.add-product--field,
+	.add-voucher--field {
 		width: 90%;
 		.border-radius-multi(3px, 0, 0, 3px);
 	}
 
-	.add-product--button {
+	.add-product--button,
+	.add-voucher--button {
 		.unitize-padding(11, 0);
 		.border-radius-multi(0, 3px, 3px, 0);
 		width: 10%;
@@ -147,6 +150,16 @@
 			padding: 0;
 			margin: 0;
 		}
+	}
+
+	.table--aggregation {
+		.unitize-margin(0, -20);
+		.unitize-padding(0, 20);
+		background: @primaryBackgroundColor;
+		border: 1px solid @borderColor;
+		border-left: 0 none;
+		border-right: 0 none;
+
 	}
 }
 
