@@ -1,5 +1,3 @@
-<h2 class="headingbox largesize">{se name="ShippingHeader"}{/se}</h2>
-
 <form id="recalcShipping" method="POST" action="{url action='calculateShippingCosts' sTargetAction=$sTargetAction}">
 
 {* Delivery country *}
