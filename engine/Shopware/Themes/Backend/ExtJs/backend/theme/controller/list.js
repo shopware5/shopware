@@ -57,7 +57,8 @@ Ext.define('Shopware.apps.Theme.controller.List', {
             'theme-list-window': {
                 'search-theme': me.onSearchTheme,
                 'refresh-list': me.onRefreshList,
-                'create-theme': me.onCreateTheme
+                'create-theme': me.onCreateTheme,
+                'shop-changed': me.onShopChange
             },
             'theme-listing-info-panel' : {
                 'assign-theme': me.onAssignTheme,
@@ -69,6 +70,18 @@ Ext.define('Shopware.apps.Theme.controller.List', {
     },
 
     onRefreshList: function() {
+        this.getListingView().getStore().load();
+    },
+
+    onShopChange: function() {
+        var me = this,
+            combo = me.getShopCombo();
+
+        if (!combo) {
+            return;
+        }
+
+        this.getListingView().getStore().getProxy().extraParams.shopId = me.getShopCombo().getValue();
         this.getListingView().getStore().load();
     },
 
