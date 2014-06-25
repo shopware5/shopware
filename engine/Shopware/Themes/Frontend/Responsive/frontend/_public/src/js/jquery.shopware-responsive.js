@@ -187,6 +187,16 @@ $(function() {
         $(this).parents('form').submit();
     });
 
+    $('.add-voucher--checkbox').on('change', function(event) {
+        var method = 'addClass';
+        event.preventDefault();
+
+        if($(this).is(':checked')) {
+            method = 'removeClass';
+        }
+        $('.add-voucher--panel')[method]('is--hidden');
+    });
+
     // Change the active tab to the customer reviews, if the url param sAction === rating is set.
     if($('.is--ctl-detail').length) {
         var plugin = $('.additional-info--tabs').data('plugin_tabContent');
