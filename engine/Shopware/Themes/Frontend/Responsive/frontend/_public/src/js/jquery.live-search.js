@@ -7,9 +7,6 @@
         defaults: {
             minLength: 3,
             searchDelay: 250,
-            keyEnter: 13,
-            keyArrowUp: 38,
-            keyArrowDown: 40,
             activeCls: 'is-active',
             resultsCls: 'main-search--results'
         },
@@ -34,47 +31,62 @@
 
         /** Event listener method */
         onKeyUp: function (event)  {
+            var me = this;
+
+            if(me.$results.is(':visible') && (event.keyCode == 13 || event.keyCode == 38 || event.keyCode == 40)) {
+                me.keyboardNavigation(event);
+            } else {
+                me.search();
+            }
+        },
+        
+        keyboardNavigation: function (event) {
+            var me = this;
+            var selected = me.$results.find('.' + me.defaults.activeCls);
+
+            if(event.keyCode == 40) {
+                if(!selected.length) {
+                    me.$results.find('li').first().addClass(me.defaults.activeCls);
+                    return;
+                }
+
+                me.$results.find('li').removeClass(me.defaults.activeCls);
+                if(selected.next().length != 0) {
+                    selected.next().addClass(me.defaults.activeCls);
+                    return;
+                }
+
+                selected.siblings().first().addClass(me.defaults.activeCls);
+                return;
+            }
+
+            if(event.keyCode == 38) {
+                if(!selected.length) {
+                    me.$results.find('li').last().addClass(me.defaults.activeCls);
+                    return;
+                }
+
+                me.$results.find('li').removeClass(me.defaults.activeCls);
+                if (selected.prev().length != 0) {
+                    selected.prev().addClass(me.defaults.activeCls);
+                    return;
+                }
+
+                selected.siblings().last().addClass(me.defaults.activeCls);
+                return;
+            }
+
+            if(event.keyCode == 13 && selected.length) {
+                event.preventDefault();
+
+                window.location.href = selected.find('a').attr('href');
+            }
+        },
+        
+        search: function () {
             var me = this,
                 term = me.$el.val(),
                 termLength = term.length;
-
-            if(me.$results.is(':visible')) {
-
-                if(event.keyCode == me.defaults.keyArrowDown) {
-                    var selected = me.$results.find('.' + me.defaults.activeCls);
-
-                    $("." + me.defaults.resultsCls + " li").removeClass(me.defaults.activeCls);
-                    if (selected.next().length == 0) {
-                        selected.siblings().first().addClass(me.defaults.activeCls);
-                    } else {
-                        selected.next().addClass(me.defaults.activeCls);
-                    }
-
-                    return;
-                }
-
-                if(event.keyCode == me.defaults.keyArrowUp) {
-                    var selected = me.$results.find('.' + me.defaults.activeCls);
-
-                    $("." + me.defaults.resultsCls + " li").removeClass(me.defaults.activeCls);
-                    if (selected.prev().length == 0) {
-                        selected.siblings().last().addClass(me.defaults.activeCls);
-                    } else {
-                        selected.prev().addClass(me.defaults.activeCls);
-                    }
-
-                    return;
-                }
-
-                if(event.keyCode == me.defaults.keyEnter) {
-                    var selected = me.$results.find('.' + me.defaults.activeCls);
-
-                    event.preventDefault();
-
-                    location.href = selected.find('a').attr('href');
-                    return;
-                }
-            }
 
             if(me._timeout) {
                 window.clearTimeout(me._timeout);
@@ -108,7 +120,6 @@
                 });
 
             }, me.defaults.searchDelay);
-
         },
 
         onBlur: function (event) {
