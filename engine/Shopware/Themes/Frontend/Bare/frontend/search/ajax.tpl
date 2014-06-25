@@ -2,7 +2,7 @@
 
     {block name="search_ajax_inner_no_results"}
         <ul class="results--list">
-            <li class="list--entry entry--no-results">Keine Surchgebnisse vorhanden</li>
+            <li class="list--entry entry--no-results">{s name="SearchAjaxNoResults"}Keine Suchergenisse gefunden{/s}</li>
         </ul>
     {/block}
 
@@ -10,11 +10,11 @@
 
     {block name="search_ajax_inner"}
         <ul class="results--list">
-            {foreach from=$sSearchResults.sResults item=search_result name=results}
+            {foreach $sSearchResults.sResults as $search_result}
 
                 {* Each product in the search result *}
                 {block name="search_ajax_list_entry"}
-                    <li class="list--entry block-group {if $smarty.foreach.results.iteration == 1}is-active{/if}">
+                    <li class="list--entry block-group">
 
                         {* Product image *}
                         {block name="search_ajax_list_entry_media"}

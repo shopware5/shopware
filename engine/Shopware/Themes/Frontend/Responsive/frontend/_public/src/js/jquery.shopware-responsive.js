@@ -289,6 +289,6 @@ $(function() {
         });
     }
 
-    $('.main-search--field').liveSearch();
+    $('*[data-live-search="true"]').liveSearch();
 
 });
