@@ -112,7 +112,7 @@ class PriceHelper
             'priceGroup',
             'priceGroup.groupID = products.pricegroupID
              AND priceGroup.discountstart = 1
-             AND pricegroup.customergroupID = :priceGroupCustomerGroup
+             AND priceGroup.customergroupID = :priceGroupCustomerGroup
              AND products.pricegroupActive = 1'
         );
 
