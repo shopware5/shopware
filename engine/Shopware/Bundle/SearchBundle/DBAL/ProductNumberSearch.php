@@ -48,6 +48,11 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
     private $facetHandlers;
 
     /**
+     * @var SortingHandlerInterface[]
+     */
+    private $sortingHandlers;
+
+    /**
      * @var AttributeHydrator
      */
     private $attributeHydrator;
@@ -56,11 +61,6 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
      * @var \Enlight_Event_EventManager
      */
     private $eventManager;
-
-    /**
-     * @var ConditionHandler\CoreConditionHandler
-     */
-    private $coreHandler;
 
     /**
      * @var FacetHandler\CategoryFacetHandler
@@ -96,36 +96,15 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
      * @param ModelManager $entityManager
      * @param AttributeHydrator $attributeHydrator
      * @param \Enlight_Event_EventManager $eventManager
-     * @param ConditionHandler\CoreConditionHandler $coreHandler
-     * @param FacetHandler\ManufacturerFacetHandler $manufacturerHandler
-     * @param FacetHandler\CategoryFacetHandler $categoryHandler
-     * @param FacetHandler\PriceFacetHandler $priceHandler
-     * @param FacetHandler\PropertyFacetHandler $propertyHandler
-     * @param FacetHandler\ShippingFreeFacetHandler $shippingFreeHandler
-     * @param FacetHandler\ImmediateDeliveryFacetHandler $immediateDeliveryHandler
      */
     function __construct(
         ModelManager $entityManager,
         AttributeHydrator $attributeHydrator,
-        \Enlight_Event_EventManager $eventManager,
-        ConditionHandler\CoreConditionHandler $coreHandler,
-        FacetHandler\ManufacturerFacetHandler $manufacturerHandler,
-        FacetHandler\CategoryFacetHandler $categoryHandler,
-        FacetHandler\PriceFacetHandler $priceHandler,
-        FacetHandler\PropertyFacetHandler $propertyHandler,
-        FacetHandler\ShippingFreeFacetHandler $shippingFreeHandler,
-        FacetHandler\ImmediateDeliveryFacetHandler $immediateDeliveryHandler
+        \Enlight_Event_EventManager $eventManager
     ) {
         $this->entityManager = $entityManager;
         $this->attributeHydrator = $attributeHydrator;
         $this->eventManager = $eventManager;
-        $this->coreHandler = $coreHandler;
-        $this->categoryHandler = $categoryHandler;
-        $this->manufacturerHandler = $manufacturerHandler;
-        $this->priceHandler = $priceHandler;
-        $this->propertyHandler = $propertyHandler;
-        $this->shippingFreeHandler = $shippingFreeHandler;
-        $this->immediateDeliveryHandler = $immediateDeliveryHandler;
     }
 
     /**
@@ -145,6 +124,8 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
         $this->conditionHandlers = $this->registerConditionHandlers();
 
         $this->facetHandlers = $this->registerFacetHandlers();
+
+        $this->sortingHandlers = $this->registerSortingHandlers();
 
         $products = $this->getProducts($criteria, $context);
 
@@ -172,7 +153,14 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
             $conditionHandlers
         );
 
-        $conditionHandlers[] = $this->coreHandler;
+
+        $conditionHandlers[] = Shopware()->Container()->get('category_condition_handler_dbal');
+        $conditionHandlers[] = Shopware()->Container()->get('customer_group_condition_handler_dbal');
+        $conditionHandlers[] = Shopware()->Container()->get('immediate_delivery_condition_handler_dbal');
+        $conditionHandlers[] = Shopware()->Container()->get('manufacturer_condition_handler_dbal');
+        $conditionHandlers[] = Shopware()->Container()->get('property_condition_handler_dbal');
+        $conditionHandlers[] = Shopware()->Container()->get('shipping_free_condition_handler_dbal');
+
         return $conditionHandlers;
     }
 
@@ -195,6 +183,26 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
         $facetHandlers[] = $this->immediateDeliveryHandler;
 
         return $facetHandlers;
+    }
+
+
+    /**
+     * @return SortingHandlerInterface[]
+     */
+    private function registerSortingHandlers()
+    {
+        $sortingHandlers = new ArrayCollection();
+        $sortingHandlers = $this->eventManager->collect(
+            'Shopware_Search_Gateway_DBAL_Collect_Sorting_Handlers',
+            $sortingHandlers
+        );
+
+        $sortingHandlers[] = Shopware()->Container()->get('description_sorting_handler_dbal');
+        $sortingHandlers[] = Shopware()->Container()->get('popularity_sorting_handler_dbal');
+        $sortingHandlers[] = Shopware()->Container()->get('price_sorting_handler_sorting_handler_dbal');
+        $sortingHandlers[] = Shopware()->Container()->get('release_date_sorting_handler_dbal');
+
+        return $sortingHandlers;
     }
 
     /**
@@ -325,13 +333,13 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
     private function addConditions(SearchBundle\Criteria $criteria, QueryBuilder $query, Context $context)
     {
         foreach ($criteria->getConditions() as $condition) {
-            $generator = $this->getConditionHandler($condition);
+            $handler = $this->getConditionHandler($condition);
 
-            if ($generator === null) {
+            if ($handler === null) {
                 throw new \Exception(sprintf("Condition %s not supported", get_class($condition)));
             }
 
-            $generator->generateCondition($condition, $query, $context);
+            $handler->generateCondition($condition, $query, $context);
         }
     }
 
@@ -345,23 +353,23 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
     {
         foreach ($criteria->getSortings() as $sorting) {
 
-            $generator = $this->getSortingGenerator($sorting);
+            $handler = $this->getSortingHandler($sorting);
 
-            if ($generator === null) {
+            if ($handler === null) {
                 throw new \Exception(sprintf("Sorting %s not supported", get_class($sorting)));
             }
 
-            $generator->generateSorting($sorting, $query, $context);
+            $handler->generateSorting($sorting, $query, $context);
         }
     }
 
     /**
      * @param SearchBundle\SortingInterface $sorting
-     * @return ConditionHandlerInterface
+     * @return SortingHandlerInterface
      */
-    private function getSortingGenerator(SearchBundle\SortingInterface $sorting)
+    private function getSortingHandler(SearchBundle\SortingInterface $sorting)
     {
-        foreach ($this->conditionHandlers as $handler) {
+        foreach ($this->sortingHandlers as $handler) {
             if ($handler->supportsSorting($sorting)) {
                 return $handler;
             }

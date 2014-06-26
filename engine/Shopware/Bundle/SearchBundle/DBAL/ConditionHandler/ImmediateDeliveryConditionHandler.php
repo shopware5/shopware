@@ -22,16 +22,15 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundle\DBAL;
+namespace Shopware\Bundle\SearchBundle\DBAL\ConditionHandler;
 
-use Shopware\Components\Model\DBAL\QueryBuilder;
+use Shopware\Bundle\SearchBundle\Condition\ImmediateDeliveryCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundle\DBAL\ConditionHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Components\Model\DBAL\QueryBuilder;
 
-/**
- * @package Shopware\Bundle\SearchBundle\DBAL
- */
-interface ConditionHandlerInterface
+class ImmediateDeliveryConditionHandler implements ConditionHandlerInterface
 {
     /**
      * Checks if the passed condition can be handled by this class.
@@ -39,7 +38,10 @@ interface ConditionHandlerInterface
      * @param ConditionInterface $condition
      * @return bool
      */
-    public function supportsCondition(ConditionInterface $condition);
+    public function supportsCondition(ConditionInterface $condition)
+    {
+        return ($condition instanceof ImmediateDeliveryCondition);
+    }
 
     /**
      * Handles the passed condition object.
@@ -55,5 +57,7 @@ interface ConditionHandlerInterface
         ConditionInterface $condition,
         QueryBuilder $query,
         Context $context
-    );
+    ) {
+        $query->andWhere('variants.instock >= variants.minpurchase');
+    }
 }

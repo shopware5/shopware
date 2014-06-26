@@ -22,16 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundle\DBAL;
+namespace Shopware\Bundle\SearchBundle\DBAL\ConditionHandler;
 
-use Shopware\Components\Model\DBAL\QueryBuilder;
+use Doctrine\DBAL\Connection;
+use Shopware\Bundle\SearchBundle\Condition\ManufacturerCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundle\DBAL\ConditionHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Components\Model\DBAL\QueryBuilder;
 
-/**
- * @package Shopware\Bundle\SearchBundle\DBAL
- */
-interface ConditionHandlerInterface
+class ManufacturerConditionHandler implements ConditionHandlerInterface
 {
     /**
      * Checks if the passed condition can be handled by this class.
@@ -39,14 +39,17 @@ interface ConditionHandlerInterface
      * @param ConditionInterface $condition
      * @return bool
      */
-    public function supportsCondition(ConditionInterface $condition);
+    public function supportsCondition(ConditionInterface $condition)
+    {
+        return ($condition instanceof ManufacturerCondition);
+    }
 
     /**
-     * Handles the passed condition object.
-     * Extends the provided query builder with the specify conditions.
-     * Should use the andWhere function, otherwise other conditions would be overwritten.
+     * Extends the query with a manufacturer condition.
+     * The passed manufacturer condition contains an array of manufacturer ids.
+     * The searched products have to be assigned on one of the passed manufacturers.
      *
-     * @param ConditionInterface $condition
+     * @param ConditionInterface|ManufacturerCondition $condition
      * @param QueryBuilder $query
      * @param Context $context
      * @return void
@@ -55,5 +58,19 @@ interface ConditionHandlerInterface
         ConditionInterface $condition,
         QueryBuilder $query,
         Context $context
-    );
+    ) {
+        $query->innerJoin(
+            'products',
+            's_articles_supplier',
+            'manufacturers',
+            'manufacturers.id = products.supplierID
+             AND products.supplierID IN (:manufacturer)'
+        );
+
+        $query->setParameter(
+            ':manufacturer',
+            $condition->getManufacturerIds(),
+            Connection::PARAM_INT_ARRAY
+        );
+    }
 }

@@ -25,34 +25,34 @@
 namespace Shopware\Bundle\SearchBundle\DBAL;
 
 use Shopware\Components\Model\DBAL\QueryBuilder;
+use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 
 /**
  * @package Shopware\Bundle\SearchBundle\DBAL
  */
-interface ConditionHandlerInterface
+interface SortingHandlerInterface
 {
     /**
-     * Checks if the passed condition can be handled by this class.
-     *
-     * @param ConditionInterface $condition
+     * Checks if the passed sorting can be handled by this class
+     * @param SortingInterface $sorting
      * @return bool
      */
-    public function supportsCondition(ConditionInterface $condition);
+    public function supportsSorting(SortingInterface $sorting);
 
     /**
-     * Handles the passed condition object.
-     * Extends the provided query builder with the specify conditions.
-     * Should use the andWhere function, otherwise other conditions would be overwritten.
+     * Handles the passed sorting object.
+     * Extends the passed query builder with the specify sorting.
+     * Should use the addOrderBy function, otherwise other sortings would be overwritten.
      *
-     * @param ConditionInterface $condition
+     * @param SortingInterface $sorting
      * @param QueryBuilder $query
      * @param Context $context
      * @return void
      */
-    public function generateCondition(
-        ConditionInterface $condition,
+    public function generateSorting(
+        SortingInterface $sorting,
         QueryBuilder $query,
         Context $context
     );
