@@ -213,20 +213,20 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
         /** @var Shopware\Models\Emotion\Repository $emotionRepository */
         $emotionRepository = $this->get('models')->getRepository('Shopware\Models\Emotion\Emotion');
 
-        $builder = $emotionRepository->getCampaigns();
-        $campaigns = $builder->getQuery()->getScalarResult();
+        $builder = $emotionRepository->getCampaignsByCategoryId(Shopware()->Shop()->getCategory()->getId());
+        $campaigns = $builder->getQuery()->getArrayResult();
 
         foreach ($campaigns as &$campaign) {
             $campaign['hideOnSitemap'] = !$this->filterCampaign(
-                $campaign['emotions_validFrom'],
-                $campaign['emotions_validTo']
+                $campaign[0]['validFrom'],
+                $campaign[0]['validTo']
             );
 
             $campaign = array_merge(
                 $campaign,
                 $this->getSitemapArray(
-                    $campaign['emotions_id'],
-                    $campaign['emotions_name'],
+                    $campaign[0]['id'],
+                    $campaign[0]['name'],
                     'campaign',
                     'emotionId',
                     array('sCategory' => $campaign['categoryId'])
