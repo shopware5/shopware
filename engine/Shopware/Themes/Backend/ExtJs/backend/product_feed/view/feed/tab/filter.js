@@ -68,7 +68,6 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Filter', {
             {
                 fieldLabel:'{s name=tab/filter/field/price_less}Price higher than{/s}',
                 name:'priceFilter',
-                decimalSeparator:'.',
                 hideTrigger:true,
                 keyNavEnabled:false,
                 mouseWheelEnabled:false

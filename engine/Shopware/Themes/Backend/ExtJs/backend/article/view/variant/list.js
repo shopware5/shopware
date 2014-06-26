@@ -308,7 +308,6 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                 editor: {
                     xtype: 'numberfield',
                     allowBlank: false,
-                    decimalSeparator: ',',
                     decimalPrecision: 2
                 }
             } , {
