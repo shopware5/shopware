@@ -3,7 +3,7 @@
 namespace Shopware\Tests\Service;
 
 use Shopware\Models;
-use Shopware\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 
 class Converter
 {

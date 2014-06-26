@@ -1,0 +1,212 @@
+<?php
+/**
+ * Shopware 4
+ * Copyright © shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
+namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
+
+use Doctrine\DBAL\Connection;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
+use Shopware\Bundle\StoreFrontBundle\Gateway;
+
+/**
+ * @package Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ */
+class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
+{
+    /**
+     * @var Hydrator\PriceHydrator
+     */
+    private $priceHydrator;
+
+    /**
+     * The FieldHelper class is used for the
+     * different table column definitions.
+     *
+     * This class helps to select each time all required
+     * table data for the store front.
+     *
+     * Additionally the field helper reduce the work, to
+     * select in a second step the different required
+     * attribute tables for a parent table.
+     *
+     * @var FieldHelper
+     */
+    private $fieldHelper;
+
+    /**
+     * @param ModelManager $entityManager
+     * @param FieldHelper $fieldHelper
+     * @param Hydrator\PriceHydrator $priceHydrator
+     */
+    function __construct(
+        ModelManager $entityManager,
+        FieldHelper $fieldHelper,
+        Hydrator\PriceHydrator $priceHydrator
+    ) {
+        $this->entityManager = $entityManager;
+        $this->priceHydrator = $priceHydrator;
+        $this->fieldHelper = $fieldHelper;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function get(Struct\ListProduct $product, Struct\Context $context, Struct\Customer\Group $customerGroup)
+    {
+        $prices = $this->getList(array($product), $context, $customerGroup);
+
+        return array_shift($prices);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getList($products, Struct\Context $context, Struct\Customer\Group $customerGroup)
+    {
+        /**
+         * Contains the cheapest price logic which product price should be selected.
+         */
+        $ids = $this->getCheapestPriceIds($products, $customerGroup);
+
+        $query = $this->entityManager->getDBALQueryBuilder();
+
+        $query->select($this->fieldHelper->getPriceFields())
+            ->addSelect($this->fieldHelper->getUnitFields());
+
+        $query->from('s_articles_prices', 'price')
+            ->innerJoin('price', 's_articles_details', 'variant', 'variant.id = price.articledetailsID')
+            ->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID')
+            ->leftJoin('variant', 's_core_units', 'unit', 'unit.id = variant.unitID')
+            ->leftJoin('price', 's_articles_prices_attributes', 'priceAttribute', 'priceAttribute.priceID = price.id');
+
+        $this->fieldHelper->addUnitTranslation($query);
+        $this->fieldHelper->addVariantTranslation($query);
+
+        $query->andWhere('price.id IN (:ids)')
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
+            ->setParameter(':language', $context->getShop()->getId());
+
+        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $query->execute();
+
+        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        $prices = array();
+        foreach ($data as $row) {
+            $product = $row['__price_articleID'];
+            $prices[$product] = $this->priceHydrator->hydrateCheapestPrice($row);
+        }
+
+        return $prices;
+    }
+
+    /**
+     * Pre selection of the cheapest prices ids.
+     *
+     * @param Struct\ListProduct[] $products
+     * @param Struct\Customer\Group $customerGroup
+     * @return mixed
+     */
+    private function getCheapestPriceIds($products, Struct\Customer\Group $customerGroup)
+    {
+        $ids = array();
+        foreach ($products as $product) {
+            $ids[] = $product->getId();
+        }
+
+        $subQuery = $this->entityManager->getDBALQueryBuilder();
+
+        $subQuery->select('prices.id')
+            ->from('s_articles_prices', 'prices');
+
+        /**
+         * joins the product variants for the min purchase calculation.
+         * The cheapest price is defined by prices.price * variant.minpurchase (the real basket price)
+         */
+        $subQuery->innerJoin(
+            'prices',
+            's_articles_details',
+            'variant',
+            'variant.id = prices.articledetailsID'
+        );
+
+        /**
+         * Joins the products for the closeout validation.
+         * Required to select only product prices which product variant can be added to the basket and purchased
+         */
+        $subQuery->innerJoin(
+            'variant',
+            's_articles',
+            'product',
+            'product.id = variant.articleID'
+        );
+
+        $subQuery->where('prices.pricegroup = :customerGroup')
+            ->andWhere('prices.from = 1')
+            ->andWhere('variant.active = 1')
+            ->andWhere('prices.articleID = outerPrices.articleID');
+
+        /**
+         * This part of the query handles the closeout products.
+         *
+         * The `laststock` column contains "1" if the product is a closeout product.
+         * In the case that the product contains the closeout flag,
+         * the stock and minpurchase are used as they defined in the database
+         *
+         * In the case that the product isn't a closeout product,
+         * the stock and minpurchase are set to 0
+         */
+        $subQuery->andWhere(
+            '(product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)'
+        );
+
+        $subQuery->setMaxResults(1);
+
+        /**
+         * Sorting of the cheapest available product price.
+         */
+        $subQuery->orderBy('(prices.price * variant.minpurchase)');
+
+        /**
+         * Creates an outer query which allows to
+         * select multiple cheapest product prices.
+         */
+        $query = $this->entityManager->getDBALQueryBuilder();
+        $query->setParameter(':customerGroup', $customerGroup->getKey());
+
+        $query->select('(' . $subQuery->getSQL() . ') as priceId')
+            ->from('s_articles_prices', 'outerPrices')
+            ->where('outerPrices.articleID IN (:products)')
+            ->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY)
+            ->groupBy('outerPrices.articleID')
+            ->having('priceId IS NOT NULL');
+
+        $statement = $query->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_COLUMN);
+    }
+
+
+}

@@ -137,9 +137,6 @@ class Shopware_Tests_Modules_Articles_TestBasePriceCalculation extends Enlight_C
     {
         $this->dispatch("/");
         $articleDetailData = Shopware()->Modules()->Articles()->sGetArticleById(2);
-
-        $this->assertEquals(1.5000, $articleDetailData["sConfiguratorSelection"]["purchaseunit"]);
-        $this->assertEquals(1.000, $articleDetailData["sConfiguratorSelection"]["referenceunit"]);
         $this->assertEquals(39.98, $articleDetailData["referenceprice"]);
     }
 

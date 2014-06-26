@@ -1,0 +1,56 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="product_search" alias="product_search_core"/>
+        <service id="product_number_search" alias="product_number_search_dbal"/>
+
+        <service id="product_search_core" class="Shopware\Bundle\SearchBundle\ProductSearch">
+            <argument type="service" id="list_product_service"/>
+            <argument type="service" id="product_number_search"/>
+        </service>
+
+        <service id="product_number_search_dbal" class="Shopware\Bundle\SearchBundle\DBAL\ProductNumberSearch">
+            <argument type="service" id="models"/>
+            <argument type="service" id="attribute_hydrator_dbal"/>
+            <argument type="service" id="events" />
+            <argument type="service" id="core_condition_handler_dbal" />
+            <argument type="service" id="manufacturer_facet_handler_dbal" />
+            <argument type="service" id="category_facet_handler_dbal" />
+            <argument type="service" id="price_facet_handler_dbal" />
+            <argument type="service" id="property_facet_handler_dbal" />
+            <argument type="service" id="shipping_free_facet_handler_dbal" />
+            <argument type="service" id="immediate_delivery_facet_handler_dbal" />
+        </service>
+
+        <service id="shipping_free_facet_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\FacetHandler\ShippingFreeFacetHandler" />
+
+        <service id="immediate_delivery_facet_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\FacetHandler\ImmediateDeliveryFacetHandler" />
+
+        <service id="manufacturer_facet_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\FacetHandler\ManufacturerFacetHandler">
+            <argument type="service" id="manufacturer_service"/>
+        </service>
+
+        <service id="property_facet_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\FacetHandler\PropertyFacetHandler">
+            <argument type="service" id="property_gateway"/>
+        </service>
+
+        <service id="category_facet_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\FacetHandler\CategoryFacetHandler">
+            <argument type="service" id="category_service"/>
+        </service>
+
+        <service id="price_facet_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\FacetHandler\PriceFacetHandler">
+            <argument type="service" id="search_price_helper_dbal"/>
+        </service>
+
+        <service id="core_condition_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\ConditionHandler\CoreConditionHandler">
+            <argument type="service" id="search_price_helper_dbal" />
+        </service>
+
+        <service id="search_price_helper_dbal" class="Shopware\Bundle\SearchBundle\DBAL\PriceHelper"/>
+
+    </services>
+</container>

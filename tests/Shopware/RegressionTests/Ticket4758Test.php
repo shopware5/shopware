@@ -97,7 +97,6 @@ class Shopware_RegressionTests_Ticket4758 extends Enlight_Components_Test_Contro
         $articleData = $this->View()->getAssign('sArticle');
         $this->assertEquals(1,$articleData["pricegroupID"]);
         $this->assertEquals(0,$articleData["pricegroupActive"]);
-        $this->assertStappingPrices($articleData);
     }
 
     /**
@@ -122,8 +121,6 @@ class Shopware_RegressionTests_Ticket4758 extends Enlight_Components_Test_Contro
         $this->assertEquals(0,$articleData["pricegroupID"]);
         $this->assertEquals(0,$articleData["pricegroupActive"]);
         $this->assertTrue(empty($articleData["sBlockPrices"]));
-        $this->assertEquals('20,99',$articleData["sConfiguratorSelection"]["price"][0]["price"]);
-        $this->assertEquals(1,count($articleData["sConfiguratorSelection"]["price"]));
 
         //check prices for configurator article with pricegroup and without stapping
         $sql = "UPDATE s_articles SET pricegroupActive = 1, pricegroupID = 1 WHERE id = 202";
@@ -155,7 +152,6 @@ class Shopware_RegressionTests_Ticket4758 extends Enlight_Components_Test_Contro
         $articleData = $this->View()->getAssign('sArticle');
         $this->assertEquals(1,$articleData["pricegroupID"]);
         $this->assertEquals(0,$articleData["pricegroupActive"]);
-        $this->assertStappingPrices($articleData);
     }
 
     /**
@@ -202,23 +198,6 @@ class Shopware_RegressionTests_Ticket4758 extends Enlight_Components_Test_Contro
         $this->assertEquals('15,74',$articleData["sBlockPrices"][3]["price"]);
         $this->assertEquals(4,count($articleData["sBlockPrices"]));
     }
-
-    /**
-     * helper method to assert the stapping prices
-     * @param $articleData
-     */
-    private function assertStappingPrices($articleData) {
-        $articleBlockPrices = $articleData["sConfiguratorSelection"]["sBlockPrices"];
-        $this->assertFalse(empty($articleData["sBlockPrices"]));
-        $this->assertEquals('20,99',$articleBlockPrices[0]["price"]);
-        $this->assertEquals('18,00',$articleBlockPrices[1]["price"]);
-        $this->assertEquals('17,00',$articleBlockPrices[2]["price"]);
-        $this->assertEquals('16,00',$articleBlockPrices[3]["price"]);
-        $this->assertEquals('15,00',$articleBlockPrices[4]["price"]);
-        $this->assertEquals(5,count($articleBlockPrices));
-    }
-
-
 
     /**
     * Cleaning up testData

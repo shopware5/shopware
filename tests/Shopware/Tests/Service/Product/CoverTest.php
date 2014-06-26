@@ -4,8 +4,8 @@ namespace Shopware\Tests\Service\Product;
 
 use Shopware\Models\Customer\Group;
 use Shopware\Models\Tax\Tax;
-use Shopware\Service\Core\Media;
-use Shopware\Struct;
+use Shopware\Bundle\StoreFrontBundle\Service\Core\MediaService;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Tests\Service\Helper;
 
 class CoverTest extends \Enlight_Components_Test_TestCase
@@ -168,7 +168,7 @@ class CoverTest extends \Enlight_Components_Test_TestCase
             ->method('get')
             ->will($this->returnValue(true));
 
-        $mediaService = new Media(
+        $mediaService = new MediaService(
             Shopware()->Container()->get('product_media_gateway'),
             Shopware()->Container()->get('variant_media_gateway'),
             $config
@@ -235,7 +235,7 @@ class CoverTest extends \Enlight_Components_Test_TestCase
 
     private function assertMediaFile($expected, Struct\Media $media)
     {
-        $this->assertInstanceOf('Shopware\Struct\Media', $media);
+        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Media', $media);
         $this->assertNotEmpty($media->getThumbnails());
 
         $matcher = $this->stringContains($expected);
