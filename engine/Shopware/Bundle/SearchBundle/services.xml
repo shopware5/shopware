@@ -46,11 +46,25 @@
             <argument type="service" id="search_price_helper_dbal"/>
         </service>
 
-        <service id="core_condition_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\ConditionHandler\CoreConditionHandler">
+        <service id="search_price_helper_dbal" class="Shopware\Bundle\SearchBundle\DBAL\PriceHelper"/>
+
+        <service id="category_condition_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\ConditionHandler\CategoryConditionHandler" />
+        <service id="customer_group_condition_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\ConditionHandler\CustomerGroupConditionHandler" />
+        <service id="immediate_delivery_condition_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\ConditionHandler\ImmediateDeliveryConditionHandler" />
+        <service id="manufacturer_condition_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\ConditionHandler\ManufacturerConditionHandler" />
+        <service id="property_condition_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\ConditionHandler\PropertyConditionHandler" />
+        <service id="shipping_free_condition_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\ConditionHandler\ShippingFreeConditionHandler" />
+        <service id="price_condition_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\ConditionHandler\PriceConditionHandler" >
             <argument type="service" id="search_price_helper_dbal" />
         </service>
 
-        <service id="search_price_helper_dbal" class="Shopware\Bundle\SearchBundle\DBAL\PriceHelper"/>
+
+        <service id="description_sorting_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\SortingHandler\DescriptionSortingHandler" />
+        <service id="popularity_sorting_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\SortingHandler\PopularitySortingHandler" />
+        <service id="release_date_sorting_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\SortingHandler\ReleaseDateSortingHandler" />
+        <service id="price_sorting_handler_sorting_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\SortingHandler\PriceSortingHandler" >
+            <argument type="service" id="search_price_helper_dbal" />
+        </service>
 
     </services>
 </container>

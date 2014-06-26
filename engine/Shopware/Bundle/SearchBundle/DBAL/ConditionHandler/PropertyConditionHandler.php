@@ -22,16 +22,15 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundle\DBAL;
+namespace Shopware\Bundle\SearchBundle\DBAL\ConditionHandler;
 
-use Shopware\Components\Model\DBAL\QueryBuilder;
+use Shopware\Bundle\SearchBundle\Condition\PropertyCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundle\DBAL\ConditionHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Components\Model\DBAL\QueryBuilder;
 
-/**
- * @package Shopware\Bundle\SearchBundle\DBAL
- */
-interface ConditionHandlerInterface
+class PropertyConditionHandler implements ConditionHandlerInterface
 {
     /**
      * Checks if the passed condition can be handled by this class.
@@ -39,14 +38,17 @@ interface ConditionHandlerInterface
      * @param ConditionInterface $condition
      * @return bool
      */
-    public function supportsCondition(ConditionInterface $condition);
+    public function supportsCondition(ConditionInterface $condition)
+    {
+        ($condition instanceof PropertyCondition);
+    }
 
     /**
      * Handles the passed condition object.
      * Extends the provided query builder with the specify conditions.
      * Should use the andWhere function, otherwise other conditions would be overwritten.
      *
-     * @param ConditionInterface $condition
+     * @param ConditionInterface|PropertyCondition $condition
      * @param QueryBuilder $query
      * @param Context $context
      * @return void
@@ -55,5 +57,19 @@ interface ConditionHandlerInterface
         ConditionInterface $condition,
         QueryBuilder $query,
         Context $context
-    );
+    ) {
+        foreach ($condition->getValueIds() as $value) {
+            $key = 'value' . $value;
+
+            $query->innerJoin(
+                'products',
+                's_filter_articles',
+                $key,
+                'products.id = ' . $key . '.articleID
+                 AND ' . $key . '.valueID = :' . $key
+            );
+
+            $query->setParameter(':' . $key, $value, \PDO::PARAM_INT);
+        }
+    }
 }
