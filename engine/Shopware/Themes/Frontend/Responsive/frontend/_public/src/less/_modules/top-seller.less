@@ -10,6 +10,17 @@
 
 .topseller--product {
     text-align: center;
+
+    &:hover {
+        .badge {
+            .primary-gradient();
+            color: #fff;
+            text-shadow: 0 1px 1px #AD1200;
+        }
+        .product--title {
+            color: @primaryColor;
+        }
+    }
 }
 
 .topseller--number {

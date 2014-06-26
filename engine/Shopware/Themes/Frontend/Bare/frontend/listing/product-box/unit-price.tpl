@@ -1,7 +1,7 @@
 {namespace name="frontend/listing/box_article"}
 
 {if $sArticle.purchaseunit}
-    <div class="product--price price--unit">
+    <div class="price--unit">
 
         {* Price is based on the purchase unit *}
         {if $sArticle.purchaseunit && $sArticle.purchaseunit != 0}

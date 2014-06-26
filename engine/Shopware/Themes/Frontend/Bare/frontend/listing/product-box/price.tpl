@@ -1,6 +1,6 @@
 {namespace name="frontend/listing/box_article"}
 
-<div class="product--price price--default{if $sArticle.pseudoprice} price--discount{/if}">
+<div class="price--default{if $sArticle.pseudoprice} price--discount{/if}">
 
     {* Default price *}
     {block name='frontend_listing_box_article_price_default'}
@@ -16,7 +16,7 @@
 			{* Discount price content *}
 			{block name='frontend_listing_box_article_price_discount_content'}
 				<strong class="price--content content--discount">
-					{s name="reducedPrice"}Statt:{/s} {$sArticle.pseudoprice|currency} {s name="Star"}*{/s}
+					<span class="is--nowrap">{s name="reducedPrice"}Statt: {/s} {$sArticle.pseudoprice|currency} {s name="Star"}*{/s}</span>
 				</strong>
 			{/block}
 		{/if}

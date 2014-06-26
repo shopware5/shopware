@@ -14,6 +14,13 @@
 .category--teaser {
     .unitize-margin(0, 0, 20, 0);
 
+    .hero--headline {
+        .unitize(20, 16, margin-bottom);
+    }
+    .hero--text {
+        padding-top: 0;
+    }
+
     .category--preview-text,
     .category--full-text {
         display: none;
@@ -269,28 +276,30 @@
 
     // Product price info
     .product--price {
-        .unitize(24, 16, line-height);
+        .unitize-margin(20, 0);
+        display: block;
 
-        &.price--default {
+        .price--default {
             .unitize(20, 16, font-size);
+            .unitize(24, 16, line-height);
             .unitize-margin(10, 0, 0, 0);
             color: @primaryColor;
         }
 
-        &.price--unit {
+        .price--unit {
             .unitize(12, 16, font-size);
             .unitize(16, 16, line-height);
             color: @primaryTextColor;
         }
 
-        &.price--discount {
+        .price--discount {
             .content--default {
                 color: #990000;
             }
 
             .content--discount {
                 .unitize(12, 16, font-size);
-                .unitize(14, 16, line-height);
+                .unitize(16, 16, line-height);
                 color: @primaryTextColor;
                 font-weight: normal;
                 text-decoration: line-through;
@@ -315,23 +324,70 @@
             display: block;
         }
     }
+
+    .product--badges {
+        .unitize-width(30px);
+        .unitize(20, 16, top);
+        .unitize(0, 16, left);
+        display: block;
+        position: absolute;
+    }
 }
 
 // Discount Badge
 .badge--discount {
-    .unitize-padding(2, 10);
+    .unitize-width(30);
+    .unitize-padding(3, 0);
+    .unitize-margin(0, 0, 5, 0);
     .unitize(20, 16, font-size);
     .unitize(20, 16, line-height);
-    .unitize(20, 16, top);
     .unitize(-1, 16, left);
     .border-radius-multi(0, 3px, 3px, 0);
-    position: absolute;
+    display: block;
+    position: relative;
     color: #fff;
     font-weight: 600;
     text-align: center;
     text-shadow: 0 1px 1px #5f0000;
     background: #990000;
     border: 1px solid #850000;
+}
+
+.badge--newcomer {
+    .unitize-height(30);
+    .unitize-padding(0, 10);
+    .unitize(15, 16, font-size);
+    .unitize(30, 16, line-height);
+    .unitize(-1, 16, left);
+    .unitize(5, 16, top);
+    .border-radius-multi(0, 0, 3px, 3px);
+    .rotate(-90deg);
+    .transform-origin(top, left, 0);
+    display: block;
+    position: relative;
+    margin-top: 100%;
+    color: #fff;
+    font-weight: 600;
+    text-shadow: 0 1px 1px #850000;
+    text-align: center;
+    background: @primaryColor;
+    border: 1px solid #cf2302;
+}
+
+.badge--esd {
+    .unitize-width(30);
+    .unitize-padding(3, 0);
+    .unitize-margin(0, 0, 5, 0);
+    .unitize(18, 16, font-size);
+    .unitize(20, 16, line-height);
+    .border-radius-multi(0, 3px, 3px, 0);
+    background: @primaryBackgroundColor;
+    display: block;
+    position: relative;
+    border-width: 1px 1px 1px 0;
+    border-style: solid;
+    border-color: @borderColor;
+    text-align: center;
 }
 
 // Tablet view
@@ -398,7 +454,12 @@
 
         .filter--container {
             .clearfix();
-            padding: 0 0 0 2%;
+            .unitize(10, 16, padding-top);
+            padding-left: 2%;
+        }
+
+        .filter--headline {
+            display: none;
         }
 
         .filter--group {
@@ -426,11 +487,6 @@
             width: 100%;
             position: absolute;
             left: 0;
-            z-index: 10;
-
-            &.is--active {
-                z-index: 14;
-            }
         }
     }
 
@@ -460,17 +516,11 @@
             }
 
             .product--price {
-                &.price--default {
-                    .unitize(10, 16, left);
-                    .unitize(10, 16, bottom);
-                    position: absolute;
-                }
-
-                &.price--unit {
-                    .unitize-height(24px);
-                    .unitize(24, 16, line-height);
-                    .unitize(14, 16, font-size);
-                }
+                .unitize(10, 16, left);
+                .unitize(10, 16, bottom);
+                .unitize(10, 16, padding-right);
+                position: absolute;
+                margin: 0;
             }
 
             .product--actions {
@@ -486,7 +536,7 @@
             .panel--body {
                 .clearfix();
                 .unitize-height(240);
-                .unitize-padding(0, 20, 0, 0);
+                .unitize-padding(0, 40, 0, 0);
             }
 
             .box--image {
@@ -524,16 +574,10 @@
             }
 
             .product--price {
-                &.price--default {
-                    margin: 0;
-                    position: relative;
-                    top: 0;
-                    left: 0;
-                }
-
-                &.price--unit {
-                    .unitize-margin(0, 10, 10, 200);
-                }
+                .unitize(20, 16, bottom);
+                .unitize(200, 16, left);
+                position: absolute;
+                margin: 0;
             }
         }
     }
@@ -545,7 +589,7 @@
     .listing--listing-1col {
         .product--box {
             .panel--body {
-                .unitize-padding(0, 260, 0, 0);
+                .unitize-padding(0, 270, 0, 0);
             }
 
             .product--title {
@@ -564,8 +608,8 @@
                 .unitize-width(220);
                 .unitize-height(145);
                 .unitize-padding(10, 10);
-                .unitize(20, 16, top);
-                .unitize(20, 16, right);
+                .unitize(40, 16, top);
+                .unitize(30, 16, right);
                 display: block;
                 position: absolute;
 
@@ -752,14 +796,10 @@
             }
 
             .product--price {
-                &.price--default {
-                    position: relative;
-                    top: 0;
-                    left: 0;
-                }
+                .unitize(15, 16, bottom);
 
-                &.price--unit {
-                    .unitize-margin(0, 10, 0, 200);
+                .price--default {
+                    .unitize-margin(5, 0, 0, 0);
                 }
             }
 
@@ -767,8 +807,8 @@
                 .unitize-width(220);
                 .unitize-height(145);
                 .unitize-padding(10, 10);
-                .unitize(40, 16, top);
-                .unitize(20, 16, right);
+                .unitize(38, 16, top);
+                .unitize(30, 16, right);
                 display: block;
                 position: absolute;
 
@@ -822,13 +862,11 @@
             }
 
             .product--price {
-                &.price--default {
-                    .unitize(200, 16, left);
-                    .unitize(20, 16, bottom);
-                }
+                .unitize(200, 16, left);
+                .unitize(20, 16, bottom);
 
-                &.price--unit {
-                    .unitize-margin(0, 10, 0, 200);
+                .price--default {
+                    .unitize-margin(5, 0, 0, 0);
                 }
             }
 
@@ -854,6 +892,10 @@
                     .unitize(14, 16, font-size);
                     display: block;
                 }
+            }
+
+            .badge--highlight {
+                .unitize(265, 16, right);
             }
         }
     }
@@ -887,6 +929,12 @@
 
             .product--title {
                 .unitize(30, 16, line-height);
+            }
+
+            .product--price {
+                .price--default {
+                    .unitize-margin(5, 0, 0, 0);
+                }
             }
 
             .product--actions {
@@ -941,7 +989,10 @@
             }
 
             .product--price {
-                &.price--unit {
+                .price--default {
+                    .unitize-margin(5, 0, 0, 0);
+                }
+                .price--unit {
                     .unitize(11, 16, font-size);
                     .unitize(14, 16, line-height);
                 }
