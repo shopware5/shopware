@@ -4260,6 +4260,10 @@ class sArticles
             $params['shippingFree'] = $config['shippingFree'];
         }
 
+        if ($config['immediateDelivery']) {
+            $params['immediateDelivery'] = $config['immediateDelivery'];
+        }
+
         return $params;
     }
 
@@ -4792,13 +4796,19 @@ class sArticles
         StoreFrontBundle\Struct\Configurator\Group $group,
         StoreFrontBundle\Struct\Configurator\Option $option
     ) {
-        return array(
+        $data = array(
             'optionID' => $option->getId(),
             'groupID' => $group->getId(),
             'optionname' => $option->getName(),
             'user_selected' => $option->isSelected(),
             'selected' => $option->isSelected()
         );
+
+        if ($option->getMedia()) {
+            $data['media'] = $this->convertMediaStruct($option->getMedia());
+        }
+
+        return $data;
     }
 
 
@@ -4826,7 +4836,7 @@ class sArticles
 
         } elseif ($set->getType() == 2) {
             //Table configurator
-            $settings["template"] = "article_config_table.tpl";
+            $settings["template"] = "article_config_picture.tpl";
 
         } else {
             //Other configurator types

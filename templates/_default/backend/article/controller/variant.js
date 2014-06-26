@@ -171,7 +171,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             },
             //global event of the configurator tab
             'article-detail-window article-variant-configurator': {
-                typeChanged: me.onTypeChanged,
                 displaySetSaveWindow: me.onDisplaySetSaveWindow,
                 displaySetLoadWindow: me.onDisplaySetLoadWindow,
                 groupClick: me.onGroupClick,
@@ -348,26 +347,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         window.show();
     },
 
-
-    /**
-     * Event listener function of the type combo box in the configurator tab. Fired when the user change the combo box value.
-     * Checks if the user select "table" type and check if more than 2 groups are active, if the user has more
-     * than one group active, the old combo box value will be set to prevent the event.
-     * @param field
-     * @param value
-     * @param oldValue
-     */
-    onTypeChanged: function(field, value, oldValue) {
-        var me = this,
-            activeGroups = me.getActiveGroups();
-
-        //check if more than two groups are active and the user select "table" as configurator type
-        if (activeGroups.length > 2 && value === 2) {
-            //if this is the case, we have to abort the change because the a "table" configurator, can only have two groups.
-            Shopware.Notification.createGrowlMessage(me.snippets.failure.title, me.snippets.messages.tableConfigurator, me.snippets.growlMessage);
-            field.setValue(oldValue);
-        }
-    },
 
     /**
      * Internal helper function to find all active groups.
@@ -772,16 +751,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
     onGroupSelect: function(record, configurator) {
         var me = this;
 
-        //creates an array with all active groups.
-        var activeGroups = me.getActiveGroups();
-
-        //check if more than two groups are active and the user select "table" as configurator type
-        if (activeGroups.length >= 2 && me.getConfiguratorTypeCombo().getValue() === 2) {
-            //if this is the case, we have to abort the change because the a "table" configurator, can only have two groups.
-            Shopware.Notification.createGrowlMessage(me.snippets.failure.title, me.snippets.messages.tableConfigurator, me.snippets.growlMessage);
-            return false;
-        }
-
         if (record) {
             record.set('active', true);
             me.sortGroupGrid();
@@ -827,13 +796,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
 
         //creates an array with all active groups.
         var activeGroups = me.getActiveGroups();
-
-        //check if more than two groups are active and the user select "table" as configurator type
-        if (activeGroups.length >= 2 && me.getConfiguratorTypeCombo().getValue() === 2) {
-            //if this is the case, we have to abort the change because the a "table" configurator, can only have two groups.
-            Shopware.Notification.createGrowlMessage(me.snippets.failure.title, me.snippets.messages.tableConfigurator, me.snippets.growlMessage);
-            return false;
-        }
 
         source.set('active', target.get('active'));
         if (source.get('active')) {
@@ -1065,13 +1027,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
 
         //creates an array with all active groups.
         var activeGroups = me.getActiveGroups();
-
-        //check if more than two groups are active and the user select "table" as configurator type
-        if (activeGroups.length >= 2 && me.getConfiguratorTypeCombo().getValue() === 2 && activate) {
-            //if this is the case, we have to abort the change because the a "table" configurator, can only have two groups.
-            Shopware.Notification.createGrowlMessage(me.snippets.failure.title, me.snippets.messages.tableConfigurator, me.snippets.growlMessage);
-            activate = false;
-        }
 
         groupListing.getStore().each(function(item) {
             //check the new position for the created group.

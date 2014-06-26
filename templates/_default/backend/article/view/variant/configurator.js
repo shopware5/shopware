@@ -100,7 +100,7 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
         types: {
             standard:'{s name=variant/configurator/types/standard}Standard{/s}',
             selection:'{s name=variant/configurator/types/selection}Selection{/s}',
-            table:'{s name=variant/configurator/types/table}Table{/s}',
+            picture:'{s name=variant/configurator/types/picture}Picture{/s}',
             surcharge:'{s name=variant/configurator/types/surcharge}Surcharge{/s}'
         }
     },
@@ -125,7 +125,7 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
         me.typeData = [
             [0, me.snippets.types.standard],
             [1, me.snippets.types.selection],
-            [2, me.snippets.types.table]
+            [2, me.snippets.types.picture]
         ];
 
         me.items = me.createItems();
