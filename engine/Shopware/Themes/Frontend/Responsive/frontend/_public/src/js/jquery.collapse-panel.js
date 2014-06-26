@@ -92,15 +92,15 @@
         var me = this,
             siblings = $('.'+me.opts.collapseTargetCls).not(me.$targetEl);
 
-        if (me.$targetEl.hasClass('is--active')) {
+        if (me.$targetEl.hasClass('is--collapsed')) {
             me.$el.removeClass('is--active');
             me.$targetEl.slideUp(me.opts.animationSpeed, function() {
-                me.$targetEl.removeClass('is--active');
+                me.$targetEl.removeClass('is--collapsed');
             });
         } else {
             me.$el.addClass('is--active');
-            me.$targetEl.slideDown(me.opts.animationSpeed).addClass('is--active');
-            if (me.opts.closeSiblings) siblings.slideUp(me.opts.animationSpeed).removeClass('is--active');
+            me.$targetEl.slideDown(me.opts.animationSpeed).addClass('is--collapsed');
+            if (me.opts.closeSiblings) siblings.slideUp(me.opts.animationSpeed).removeClass('is--collapsed');
         }
     };
 

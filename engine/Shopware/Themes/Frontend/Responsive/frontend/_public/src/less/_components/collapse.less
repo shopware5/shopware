@@ -46,6 +46,7 @@
         border-width: 0 0 1px 0;
         border-style: solid;
         border-color: @darkBorderColor;
+        z-index: 15;
 
         .collapse--toggler {
             &:before {
@@ -68,7 +69,14 @@
     border-style: solid;
     border-color: @lightDarkBorderColor;
 
-    &.is--active {
+    &.is--collapsed {
+        display: block;
+        z-index: 14;
+    }
+}
+
+.js--collapse-target {
+    &.is--collapsed {
         display: block;
     }
 }
