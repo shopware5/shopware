@@ -24,6 +24,7 @@
 
 namespace Shopware;
 
+use Shopware\Bundle\SearchBundle\DependencyInjection\Compiler\DBALCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
 use Shopware\Components\ConfigLoader;
@@ -450,6 +451,7 @@ class Kernel implements HttpKernelInterface
 
         $container->addCompilerPass(new EventListenerCompilerPass());
         $container->addCompilerPass(new DoctrineEventSubscriberCompilerPass());
+        $container->addCompilerPass(new DBALCompilerPass());
 
         return $container;
     }

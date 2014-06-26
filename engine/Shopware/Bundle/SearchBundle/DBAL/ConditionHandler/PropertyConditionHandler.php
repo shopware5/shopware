@@ -40,7 +40,7 @@ class PropertyConditionHandler implements ConditionHandlerInterface
      */
     public function supportsCondition(ConditionInterface $condition)
     {
-        ($condition instanceof PropertyCondition);
+        return ($condition instanceof PropertyCondition);
     }
 
     /**
