@@ -223,7 +223,6 @@ Ext.define('Shopware.apps.Tax.view.main.Rules', {
            editor: {
                 xtype: 'numberfield',
                 allowBlank: false,
-                decimalSeparator: '.',
                 decimalPrecision: 2
            }
         },

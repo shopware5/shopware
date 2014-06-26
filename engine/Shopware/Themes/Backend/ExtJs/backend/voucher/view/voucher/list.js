@@ -329,9 +329,9 @@ Ext.define('Shopware.apps.Voucher.view.voucher.List', {
      */
     valueRenderer:function (value,p,r) {
         if(r.data.percental == 1){
-            return value+" %";
+            return value.replace(/[.,]/, Ext.util.Format.decimalSeparator)+" %";
         }
-        return value;
+        return value.replace(/[.,]/, Ext.util.Format.decimalSeparator);
     },
     /**
      * Name Renderer Method

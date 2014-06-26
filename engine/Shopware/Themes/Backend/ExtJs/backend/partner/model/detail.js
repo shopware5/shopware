@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.Partner.model.Detail', {
         { name : 'active', type : 'int' }
     ],
 	/**
-	* If the name of the field is 'id' extjs assumes autmagical that
+	* If the name of the field is 'id' ExtJs assumes automatically that
 	* this field is an unique identifier. 
 	*/
     idProperty : 'id',
