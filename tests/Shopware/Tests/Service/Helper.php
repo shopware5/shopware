@@ -4,12 +4,12 @@ namespace Shopware\Tests\Service;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Api\Resource;
-use Shopware\Gateway\DBAL\Configurator;
-use Shopware\Gateway\DBAL\ProductConfiguration;
-use Shopware\Gateway\DBAL\ProductProperty;
-use Shopware\Service;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorGateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductConfigurationGateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductPropertyGateway;
+use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Models;
-use Shopware\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 
 class Helper
 {
@@ -29,7 +29,7 @@ class Helper
     private $articleApi;
 
     /**
-     * @var \Shopware\Service\Converter
+     * @var Converter
      */
     private $converter;
 
@@ -66,8 +66,8 @@ class Helper
         Struct\ListProduct $listProduct,
         Struct\Context $context,
         array $selection = array(),
-        \Shopware\Gateway\ProductConfiguration $productConfigurationGateway = null,
-        \Shopware\Gateway\Configurator $configuratorGateway = null
+        ProductConfigurationGateway $productConfigurationGateway = null,
+        ConfiguratorGateway $configuratorGateway = null
     ) {
         if ($productConfigurationGateway == null) {
             $productConfigurationGateway = Shopware()->Container()->get('product_configuration_gateway');
@@ -76,7 +76,7 @@ class Helper
             $configuratorGateway = Shopware()->Container()->get('configurator_gateway');
         }
 
-        $service = new Service\Core\Configurator($productConfigurationGateway, $configuratorGateway);
+        $service = new Service\Core\ConfiguratorService($productConfigurationGateway, $configuratorGateway);
 
         return $service->getProductConfigurator($listProduct, $context, $selection);
     }
@@ -84,26 +84,26 @@ class Helper
     /**
      * @param Struct\ListProduct $product
      * @param Struct\Context $context
-     * @param \Shopware\Gateway\ProductProperty $productPropertyGateway
+     * @param ProductPropertyGateway $productPropertyGateway
      * @return Struct\Property\Set
      */
     public function getProductProperties(
         Struct\ListProduct $product,
         Struct\Context $context,
-        \Shopware\Gateway\ProductProperty $productPropertyGateway = null
+        ProductPropertyGateway $productPropertyGateway = null
     ) {
 
         if ($productPropertyGateway === null) {
             $productPropertyGateway = Shopware()->Container()->get('product_property_gateway');
         }
-        $service = new Service\Core\Property($productPropertyGateway);
+        $service = new Service\Core\PropertyService($productPropertyGateway);
 
         return $service->get($product, $context);
     }
 
     /**
      * @param $number
-     * @param Context $context
+     * @param Struct\Context $context
      * @param null $productGateway
      * @param null $graduatedPricesService
      * @param null $cheapestPriceService
@@ -114,7 +114,7 @@ class Helper
      */
     public function getListProduct(
         $number,
-        Context $context,
+        Struct\Context $context,
         $productGateway = null,
         $graduatedPricesService = null,
         $cheapestPriceService = null,
@@ -144,6 +144,7 @@ class Helper
      * @param null $cheapestPriceService
      * @param null $priceCalculationService
      * @param null $mediaService
+     * @param null $marketingService
      * @param null $eventManager
      * @return Struct\ListProduct[]
      */
@@ -167,7 +168,7 @@ class Helper
         if ($marketingService === null)         $marketingService = Shopware()->Container()->get('marketing_service');
         if ($eventManager === null)             $eventManager = Shopware()->Container()->get('events');
 
-        $service = new Service\Core\ListProduct(
+        $service = new Service\Core\ListProductService(
             $productGateway,
             $graduatedPricesService,
             $cheapestPriceService,
@@ -638,7 +639,7 @@ class Helper
      * @param array $taxes
      * @param Models\Shop\Currency $currency
      *
-     * @return \Shopware\Struct\Context
+     * @return Struct\Context
      */
     public function createContext(
         Models\Customer\Group $currentCustomerGroup,

@@ -435,8 +435,11 @@ class Kernel implements HttpKernelInterface
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/Components/DependencyInjection/'));
         $loader->load('services.xml');
-        $loader->load('core.xml');
         $loader->load('logger.xml');
+
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/Bundle/'));
+        $loader->load('SearchBundle/services.xml');
+        $loader->load('StoreFrontBundle/services.xml');
 
         if (is_file($file = __DIR__ . '/Components/DependencyInjection/services_local.xml')) {
             $loader->load($file);

@@ -100,7 +100,8 @@ In this document you will find a changelog of the important changes related to t
 * Deprecated `Shopware\Models\Widget\Widget::label` variable, getter and setter, and correspondent `s_core_widgets::label` database column
 * Removed deprecated widget settings from the config module. Active widgets and their positions will now be saved automatically.
 * Removed desktop switcher from the `Shopware.container.Viewport` base component.
-* The new shopware core selects now all required data for the sGetArticleById, sGetPromotionById and sGetArticlesByCategory. The following events and internal function are no more used in this functions:
+* sGetArticleById result no longer contains the sConfiguratorSelection property. sConfiguratorSelection previously contained the selected variant data, which can now be accessed directly in the first level of the sGetArticleById result.
+* The new shopware core selects all required data for sGetArticleById, sGetPromotionById and sGetArticlesByCategory. The following events and internal functions not used in these functions any more
     * sGetPromotionById events
         * Shopware_Modules_Articles_GetPromotionById_FilterSql
     * sGetPromotionById functions

@@ -22,6 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\SearchBundle;
+use Shopware\Bundle\StoreFrontBundle;
+
 /**
  * Deprecated Shopware Class that handle articles
  *
@@ -95,7 +98,7 @@ class sArticles
     const FILTERS_SORT_POSITION = 3;
 
     /**
-     * @var \Shopware\Service\GlobalState
+     * @var StoreFrontBundle\Service\ContextServiceInterface
      */
     private $contextService;
 
@@ -105,32 +108,32 @@ class sArticles
     private $config;
 
     /**
-     * @var Shopware\Service\ListProduct
+     * @var StoreFrontBundle\Service\ListProductServiceInterface
      */
     private $listProductService;
 
     /**
-     * @var Shopware\Service\Product
+     * @var StoreFrontBundle\Service\ProductServiceInterface
      */
     private $productService;
 
     /**
-     * @var Shopware\Service\Vote
+     * @var StoreFrontBundle\Service\VoteServiceInterface
      */
     private $voteService;
 
     /**
-     * @var Shopware\Service\Configurator
+     * @var StoreFrontBundle\Service\ConfiguratorServiceInterface
      */
     private $configuratorService;
 
     /**
-     * @var Shopware\Service\Property
+     * @var StoreFrontBundle\Service\PropertyServiceInterface
      */
     private $propertyService;
 
     /**
-     * @var Shopware\Service\Search
+     * @var SearchBundle\ProductSearch
      */
     private $searchService;
 
@@ -144,21 +147,19 @@ class sArticles
      */
     private $db;
 
-    /**
-     * Class constructor.
-     */
+
     public function __construct(
         \Shopware\Models\Category\Category $category = null,
         $translationId = null,
         $customerGroupId = null,
-        \Shopware\Service\GlobalState $contextService = null,
+        StoreFrontBundle\Service\ContextServiceInterface $contextService = null,
         Shopware_Components_Config $config = null,
-        \Shopware\Service\ListProduct $listProductService = null,
-        \Shopware\Service\Product $productService = null,
-        \Shopware\Service\Vote $voteService = null,
-        \Shopware\Service\Configurator $configuratorService = null,
-        \Shopware\Service\Property $propertyService = null,
-        \Shopware\Service\Search $searchService = null,
+        StoreFrontBundle\Service\ListProductServiceInterface $listProductService = null,
+        StoreFrontBundle\Service\ProductServiceInterface $productService = null,
+        StoreFrontBundle\Service\VoteServiceInterface $voteService = null,
+        StoreFrontBundle\Service\ConfiguratorServiceInterface $configuratorService = null,
+        StoreFrontBundle\Service\PropertyServiceInterface $propertyService = null,
+        SearchBundle\ProductSearchInterface $searchService = null,
         Enlight_Event_EventManager $eventManager = null,
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null
     ) {
@@ -180,7 +181,7 @@ class sArticles
         $this->db = $db;
 
         if ($this->contextService == null) {
-            $this->contextService = Shopware()->Container()->get('global_state_service');
+            $this->contextService = Shopware()->Container()->get('context_service');
         }
 
         if ($this->config == null) {
@@ -208,7 +209,7 @@ class sArticles
         }
 
         if ($this->searchService == null) {
-            $this->searchService = Shopware()->Container()->get('search_service');
+            $this->searchService = Shopware()->Container()->get('product_search');
         }
 
         if ($this->db == null) {
@@ -2727,7 +2728,7 @@ class sArticles
 
         $result = $this->getPromotion($category, $value);
 
-        $result = $this->firePromotionByIdEvents($result);
+        $result = $this->firePromotionByIdEvents($result, $category);
 
         return $result;
     }
@@ -3710,7 +3711,7 @@ class sArticles
 
         $promotion = $this->convertProductStruct($product, $category);
 
-        /**@var $average \Shopware\Struct\Product\VoteAverage */
+        /**@var $average StoreFrontBundle\Struct\Product\VoteAverage */
         $average = $this->voteService->getAverage(
             $product,
             $context
@@ -3759,7 +3760,7 @@ class sArticles
             $config,
             $context
         );
-
+        
         $searchResult = $this->searchService->search(
             $criteria,
             $context
@@ -3772,7 +3773,7 @@ class sArticles
             $context
         );
 
-        /**@var $product \Shopware\Struct\ListProduct */
+        /**@var $product StoreFrontBundle\Struct\ListProduct */
         foreach ($searchResult->getProducts() as $product) {
             $article = $this->convertProductStruct($product, $categoryId);
 
@@ -3788,26 +3789,26 @@ class sArticles
         $result = array();
         foreach ($searchResult->getFacets() as $facet) {
             switch (true) {
-                case ($facet instanceof \Shopware\Gateway\Search\Facet\Property):
-                    $properties = $this->getFacetProperties($facet, $context, $config);
+                case ($facet instanceof SearchBundle\Facet\PropertyFacet):
+                    $properties = $this->getFacetProperties($facet, $config);
                     $result = array_merge($result, $properties);
                     break;
 
-                case ($facet instanceof \Shopware\Gateway\Search\Facet\Manufacturer):
-                    $suppliers = $this->getFacetManufacturers($facet, $context, $config);
+                case ($facet instanceof SearchBundle\Facet\ManufacturerFacet):
+                    $suppliers = $this->getFacetManufacturers($facet, $config);
                     $result['sSupplierInfo'] = $this->getActiveListingSupplier($suppliers, $config);
                     $result['sSuppliers'] = array_values($suppliers);
                     break;
 
-                case ($facet instanceof \Shopware\Gateway\Search\Facet\Price):
+                case ($facet instanceof SearchBundle\Facet\PriceFacet):
                     $result['priceFacet'] = $this->getPriceFacet($facet, $config);
                     break;
 
-                case ($facet instanceof \Shopware\Gateway\Search\Facet\ShippingFree):
+                case ($facet instanceof SearchBundle\Facet\ShippingFreeFacet):
                     $result['shippingFreeFacet'] = $this->getShippingFreeFacet($facet, $config);
                     break;
 
-                case ($facet instanceof \Shopware\Gateway\Search\Facet\ImmediateDelivery):
+                case ($facet instanceof SearchBundle\Facet\ImmediateDeliveryFacet):
                     $result['immediateDeliveryFacet'] = $this->getImmediateDeliveryFacet($facet, $config);
                     break;
                 default:
@@ -3863,13 +3864,10 @@ class sArticles
     private function getProduct($number, $categoryId, array $selection)
     {
         $context = $this->contextService->get();
-        $products = $this->productService->getList(
-            array($number),
+        $product = $this->productService->get(
+            $number,
             $context
         );
-
-        /**@var $product \Shopware\Struct\Product */
-        $product = array_shift($products);
 
         $data = $this->convertFullProduct($product, $categoryId);
 
@@ -3877,7 +3875,7 @@ class sArticles
 
         $average = $this->voteService->getAverage($product, $context);
 
-        if ($average instanceof \Shopware\Struct\Product\VoteAverage) {
+        if ($average instanceof StoreFrontBundle\Struct\Product\VoteAverage) {
             $data['sVoteAverange'] = $this->convertVoteAverageStruct($average);
         }
 
@@ -3910,12 +3908,12 @@ class sArticles
     /**
      * @param $categoryId
      * @param array $config
-     * @param Shopware\Struct\Context $context
-     * @return \Shopware\Gateway\Search\Criteria
+     * @param StoreFrontBundle\Struct\Context $context
+     * @return SearchBundle\Criteria
      */
-    private function getListingCriteria($categoryId, array $config, \Shopware\Struct\Context $context)
+    private function getListingCriteria($categoryId, array $config, StoreFrontBundle\Struct\Context $context)
     {
-        $criteria = new \Shopware\Gateway\Search\Criteria();
+        $criteria = new SearchBundle\Criteria();
 
         $criteria->category(array($categoryId));
 
@@ -3923,9 +3921,9 @@ class sArticles
             array($context->getCurrentCustomerGroup()->getId())
         );
 
-        $criteria->limit = $config['sPerPage'];
+        $criteria->limit($config['sPerPage']);
 
-        $criteria->offset = ($config['page'] - 1) * $config['sPerPage'];;
+        $criteria->offset(($config['page'] - 1) * $config['sPerPage']);
 
         if (!empty($config['sFilterProperties'])) {
             $criteria->properties(
@@ -3989,7 +3987,7 @@ class sArticles
         return $criteria;
     }
 
-    private function getImmediateDeliveryFacet(\Shopware\Gateway\Search\Facet\ImmediateDelivery $facet, $config)
+    private function getImmediateDeliveryFacet(SearchBundle\Facet\ImmediateDeliveryFacet $facet, $config)
     {
         $params = $this->getListingLinkParameters($config);
         $params['immediateDelivery'] = 1;
@@ -4005,7 +4003,7 @@ class sArticles
         );
     }
 
-    private function getShippingFreeFacet(\Shopware\Gateway\Search\Facet\ShippingFree $facet, $config)
+    private function getShippingFreeFacet(SearchBundle\Facet\ShippingFreeFacet $facet, $config)
     {
         $params = $this->getListingLinkParameters($config);
         $params['shippingFree'] = 1;
@@ -4021,7 +4019,7 @@ class sArticles
         );
     }
 
-    private function getPriceFacet(\Shopware\Gateway\Search\Facet\Price $facet, $config)
+    private function getPriceFacet(SearchBundle\Facet\PriceFacet $facet, $config)
     {
         $params = $this->getListingLinkParameters($config);
         unset($params['priceMin']);
@@ -4038,8 +4036,7 @@ class sArticles
     }
 
     private function getFacetManufacturers(
-        \Shopware\Gateway\Search\Facet\Manufacturer $facet,
-        \Shopware\Struct\Context $context,
+        SearchBundle\Facet\ManufacturerFacet $facet,
         array $config
     ) {
         $manufacturers = $facet->getManufacturers();
@@ -4092,8 +4089,7 @@ class sArticles
     }
 
     private function getFacetProperties(
-        \Shopware\Gateway\Search\Facet\Property $facet,
-        \Shopware\Struct\Context $context,
+        SearchBundle\Facet\PropertyFacet $facet,
         array $config
     ) {
 
@@ -4459,7 +4455,7 @@ class sArticles
         return $value;
     }
 
-    private function getSupplierListingLink(\Shopware\Struct\Product\Manufacturer $manufacturer)
+    private function getSupplierListingLink(StoreFrontBundle\Struct\Product\Manufacturer $manufacturer)
     {
         return $this->config->get('baseFile') .
         "sViewport=supplier&sSupplier=" . $manufacturer->getId() .
@@ -4469,13 +4465,13 @@ class sArticles
     /**
      * Converts the passed ListProduct struct to a shopware 3-4 array structure.
      *
-     * @param \Shopware\Struct\ListProduct $product
+     * @param StoreFrontBundle\Struct\ListProduct $product
      * @param null $category
      * @return array
      */
-    public function convertProductStruct(\Shopware\Struct\ListProduct $product, $category = null)
+    public function convertProductStruct(StoreFrontBundle\Struct\ListProduct $product, $category = null)
     {
-        if (!$product instanceof \Shopware\Struct\ListProduct) {
+        if (!$product instanceof StoreFrontBundle\Struct\ListProduct) {
             return array();
         }
 
@@ -4557,7 +4553,7 @@ class sArticles
         return $promotion;
     }
 
-    private function convertListProductStruct(\Shopware\Struct\ListProduct $product)
+    private function convertListProductStruct(StoreFrontBundle\Struct\ListProduct $product)
     {
         $data = array(
             'articleID' => $product->getId(),
@@ -4619,7 +4615,7 @@ class sArticles
         }
 
         if ($product->hasAttribute('marketing')) {
-            /**@var $marketing \Shopware\Struct\Product\MarketingAttribute*/
+            /**@var $marketing StoreFrontBundle\Struct\Product\MarketingAttribute*/
             $marketing = $product->getAttribute('marketing');
             $promotion['newArticle'] = $marketing->isNew();
             $promotion['sUpcoming'] = $marketing->comingSoon();
@@ -4668,7 +4664,7 @@ class sArticles
         return $data;
     }
 
-    private function convertPropertySetStruct(\Shopware\Struct\Property\Set $set)
+    private function convertPropertySetStruct(StoreFrontBundle\Struct\Property\Set $set)
     {
         $data = array(
             'id' => $set->getId(),
@@ -4689,7 +4685,7 @@ class sArticles
         return $data;
     }
 
-    private function convertPropertyGroupStruct(\Shopware\Struct\Property\Group $group)
+    private function convertPropertyGroupStruct(StoreFrontBundle\Struct\Property\Group $group)
     {
         $data = array(
             'id' => $group->getId(),
@@ -4710,7 +4706,7 @@ class sArticles
         return $data;
     }
 
-    private function convertPropertyOptionStruct(\Shopware\Struct\Property\Option $option)
+    private function convertPropertyOptionStruct(StoreFrontBundle\Struct\Property\Option $option)
     {
         $data = array(
             'id' => $option->getId(),
@@ -4725,7 +4721,7 @@ class sArticles
         return $data;
     }
 
-    private function convertManufacturerStruct(\Shopware\Struct\Product\Manufacturer $manufacturer)
+    private function convertManufacturerStruct(StoreFrontBundle\Struct\Product\Manufacturer $manufacturer)
     {
         $data = array(
             'id' => $manufacturer->getId(),
@@ -4750,8 +4746,8 @@ class sArticles
     }
 
     private function convertConfiguratorStruct(
-        \Shopware\Struct\ListProduct $product,
-        \Shopware\Struct\Configurator\Set $set
+        StoreFrontBundle\Struct\ListProduct $product,
+        StoreFrontBundle\Struct\Configurator\Set $set
     ) {
         $groups = array();
         foreach ($set->getGroups() as $group) {
@@ -4788,13 +4784,13 @@ class sArticles
     /**
      * Converts a configurator option struct which used for default or selection configurators.
      *
-     * @param \Shopware\Struct\Configurator\Group $group
-     * @param \Shopware\Struct\Configurator\Option $option
+     * @param StoreFrontBundle\Struct\Configurator\Group $group
+     * @param StoreFrontBundle\Struct\Configurator\Option $option
      * @return array
      */
     private function convertConfiguratorOptionStruct(
-        \Shopware\Struct\Configurator\Group $group,
-        \Shopware\Struct\Configurator\Option $option
+        StoreFrontBundle\Struct\Configurator\Group $group,
+        StoreFrontBundle\Struct\Configurator\Option $option
     ) {
         return array(
             'optionID' => $option->getId(),
@@ -4809,13 +4805,13 @@ class sArticles
     /**
      * Creates the settings array for the passed configurator set
      *
-     * @param \Shopware\Struct\Configurator\Set $set
-     * @param \Shopware\Struct\Product $product
+     * @param StoreFrontBundle\Struct\Configurator\Set $set
+     * @param StoreFrontBundle\Struct\Product $product
      * @return array
      */
     private function getConfiguratorSettings(
-        \Shopware\Struct\Configurator\Set $set,
-        \Shopware\Struct\Product $product
+        StoreFrontBundle\Struct\Configurator\Set $set,
+        StoreFrontBundle\Struct\Product $product
     ) {
         $settings = array(
             'instock' => $product->isCloseouts(),
@@ -4843,10 +4839,10 @@ class sArticles
     /**
      * Converts a configurator group struct which used for default or selection configurators.
      *
-     * @param \Shopware\Struct\Configurator\Group $group
+     * @param StoreFrontBundle\Struct\Configurator\Group $group
      * @return array
      */
-    private function convertConfiguratorGroupStruct(\Shopware\Struct\Configurator\Group $group)
+    private function convertConfiguratorGroupStruct(StoreFrontBundle\Struct\Configurator\Group $group)
     {
         return array(
             'groupID' => $group->getId(),
@@ -4858,7 +4854,7 @@ class sArticles
         );
     }
 
-    public function convertFullProduct(\Shopware\Struct\Product $product)
+    public function convertFullProduct(StoreFrontBundle\Struct\Product $product)
     {
         $data = $this->convertListProductStruct($product);
 
@@ -4884,12 +4880,19 @@ class sArticles
             );
         }
 
-        /**@var $first \Shopware\Struct\Product\Price */
+        /**@var $first StoreFrontBundle\Struct\Product\Price */
         $first = array_shift($product->getPrices());
 
-        $data['price'] = $first->getCalculatedPrice();
-        $data['pseudoprice'] = $first->getCalculatedPseudoPrice();
+        $data['price'] = $this->sFormatPrice(
+            $first->getCalculatedPrice()
+        );
+
+        $data['pseudoprice'] = $this->sFormatPrice(
+            $first->getCalculatedPseudoPrice()
+        );
+
         $data['pricegroup'] = $first->getCustomerGroup()->getKey();
+
         $data['referenceprice'] = $first->getCalculatedReferencePrice();
 
         if (count($product->getPrices()) > 1) {
@@ -4904,7 +4907,12 @@ class sArticles
         foreach ($product->getMedia() as $media) {
             $data['images'][] = $this->convertMediaStruct($media);
         }
-        $data['image'] = array_shift($data['images']);
+
+        if (empty($data['images'])) {
+            $data['image'] = $this->convertMediaStruct($product->getCover());
+        } else {
+            $data['image'] = array_shift($data['images']);
+        }
 
         //convert product voting
         foreach ($product->getVotes() as $vote) {
@@ -4951,6 +4959,7 @@ class sArticles
         );
 
 
+        $data['sRelatedArticles'] = array();
         foreach ($product->getRelatedProducts() as $relatedProduct) {
             $temp = $this->convertProductStruct($relatedProduct);
 
@@ -4959,6 +4968,7 @@ class sArticles
             $data['sRelatedArticles'][] = $temp;
         }
 
+        $data['sSimilarArticles'] = array();
         foreach ($product->getSimilarProducts() as $similarProduct) {
             $temp = $this->convertProductStruct($similarProduct);
 
@@ -4970,7 +4980,7 @@ class sArticles
         return $data;
     }
 
-    private function convertVoteAverageStruct(\Shopware\Struct\Product\VoteAverage $average)
+    private function convertVoteAverageStruct(StoreFrontBundle\Struct\Product\VoteAverage $average)
     {
         $data = array(
             'averange' => round($average->getAverage()),
@@ -4983,7 +4993,7 @@ class sArticles
         return $data;
     }
 
-    private function convertVoteStruct(\Shopware\Struct\Product\Vote $vote)
+    private function convertVoteStruct(StoreFrontBundle\Struct\Product\Vote $vote)
     {
         $data = array(
             'id' => $vote->getId(),
@@ -5011,7 +5021,7 @@ class sArticles
         return $data;
     }
 
-    private function convertPriceStruct(\Shopware\Struct\Product\Price $price)
+    private function convertPriceStruct(StoreFrontBundle\Struct\Product\Price $price)
     {
         $data = array(
             'valFrom' => $price->getFrom(),
@@ -5028,7 +5038,7 @@ class sArticles
         return $data;
     }
 
-    private function convertMediaStruct(\Shopware\Struct\Media $media)
+    private function convertMediaStruct(StoreFrontBundle\Struct\Media $media)
     {
         //now we get the configured image and thumbnail dir.
         $imageDir = $this->sSYSTEM->sPathArticleImg;
@@ -5062,7 +5072,7 @@ class sArticles
         return $data;
     }
 
-    private function convertUnitStruct(\Shopware\Struct\Product\Unit $unit)
+    private function convertUnitStruct(StoreFrontBundle\Struct\Product\Unit $unit)
     {
         $data = array(
             'minpurchase' => $unit->getMinPurchase(),
@@ -5115,11 +5125,11 @@ class sArticles
     /**
      * Creates different links for the product like `add to basket`, `add to note`, `view detail page`, ...
      *
-     * @param \Shopware\Struct\ListProduct $product
+     * @param StoreFrontBundle\Struct\ListProduct $product
      * @param null $categoryId
      * @return array
      */
-    private function getLinksOfProduct(\Shopware\Struct\ListProduct $product, $categoryId = null)
+    private function getLinksOfProduct(StoreFrontBundle\Struct\ListProduct $product, $categoryId = null)
     {
         $baseFile = $this->config->get('baseFile');
 
