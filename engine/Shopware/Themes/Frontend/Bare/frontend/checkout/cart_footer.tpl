@@ -43,6 +43,15 @@
 
     {* Shipping costs pre-calculation *}
     {if $sBasket.content && !$sUserLoggedIn && !$sUserData.additional.user.id}
-        {include file="frontend/checkout/shipping_costs.tpl"}
+
+        {block name='frontend_checkout_shipping_costs_country_trigger'}
+            <a href="#show-hide--shipping-costs" class="table--shipping-costs-trigger">
+                <i class="icon--arrow-right"></i> {s name='CheckoutFooterEstimatedShippingCosts'}{/s}
+            </a>
+        {/block}
+
+        {block name='frontend_checkout_shipping_costs_country_include'}
+            {include file="frontend/checkout/shipping_costs.tpl"}
+        {/block}
     {/if}
 </div>

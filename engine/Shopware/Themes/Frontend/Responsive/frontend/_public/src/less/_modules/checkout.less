@@ -132,8 +132,7 @@
 	}
 
 	// Add product using the sku
-	.add-product--form,
-	.add-voucher--form{
+	.add-product--form {
 		.unitize-margin(12, 0);
 	}
 
@@ -156,19 +155,31 @@
 		}
 	}
 
+    .add-voucher--form {
+        .unitize-margin(0, 0, 12, 0);
+    }
+
 	.add-voucher--panel {
 		.unitize-margin(10, 0, 0, 0);
 	}
 
 	.table--aggregation {
 		.unitize-margin(0, -20);
-		.unitize-padding(0, 20);
+		.unitize-padding(12, 20);
 		background: @primaryBackgroundColor;
 		border: 1px solid @borderColor;
 		border-left: 0 none;
 		border-right: 0 none;
 
 	}
+
+    .table--shipping-costs .js--fancy-select {
+        width: 100%;
+    }
+
+    .table--shipping-costs-trigger {
+        font-weight: bold;
+    }
 }
 
 @media screen and (min-width: @tabletViewportWidth) {
