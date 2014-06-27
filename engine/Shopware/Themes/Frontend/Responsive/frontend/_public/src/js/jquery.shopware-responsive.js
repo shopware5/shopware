@@ -197,6 +197,19 @@ $(function() {
         $('.add-voucher--panel')[method]('is--hidden');
     });
 
+    $('.table--shipping-costs-trigger').on('click', function(event) {
+        event.preventDefault();
+
+        var $this = $(this),
+            $next = $this.next();
+
+        if($next.hasClass('is--hidden')) {
+            $next.removeClass('is--hidden');
+        } else {
+            $next.addClass('is--hidden');
+        }
+    });
+
     // Change the active tab to the customer reviews, if the url param sAction === rating is set.
     if($('.is--ctl-detail').length) {
         var plugin = $('.additional-info--tabs').data('plugin_tabContent');
