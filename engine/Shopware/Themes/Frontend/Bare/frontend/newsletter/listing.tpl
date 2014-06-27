@@ -54,7 +54,7 @@
 											{* Newsletter entry button *}
 											{block name="frontend_newsletter_listing_entry_button"}
 												<div class="newsletter-listing--entry-button">
-													<a href="{$sContentItem.link}" class="btn btn--secondary is--small">{s name='NewsletterListingLinkDetails'}{/s}</a>
+													<a href="{$sContentItem.link}" class="btn btn--secondary is--small right">{s name='NewsletterListingLinkDetails'}{/s}</a>
 												</div>
 											{/block}
 										</div>
