@@ -1,15 +1,15 @@
-;(function($, window, document, undefined) {
+;(function ($, window, document, undefined) {
     "use strict";
 
     var pluginName = 'tabContent',
-        clickEvt = 'click',
-        defaults = {
-            /** @string activeCls Class which will be added when the drop down was triggered */
-	    activeCls: 'is--active',
+	    clickEvt = 'click',
+	    defaults = {
+		/** @string activeCls Class which will be added when the drop down was triggered */
+		activeCls: 'is--active',
 
-	    /** @string mode The mode which should be used by the plugin */
-	    mode: 'local'
-        };
+		/** @string mode The mode which should be used by the plugin */
+		mode: 'local'
+	    };
 
     /**
      * Plugin constructor which merges the default settings with the user settings
@@ -42,20 +42,20 @@
      *
      * @returns {Void}
      */
-    Plugin.prototype.init = function() {
+    Plugin.prototype.init = function () {
         var me = this;
 
         me.$nav = me.$el.find('.tab--navigation');
         me.$content = me.$el.find('.tab--content');
 
-        if(StateManager.isSmartphone()) {
+	if (StateManager.isSmartphone()) {
             me.createMobileView();
         } else {
             me.createDesktopView();
         }
 
-        $(window).on('resize', function() {
-            if(StateManager.isSmartphone()) {
+	$(window).on('resize', function () {
+	    if (StateManager.isSmartphone()) {
                 me.createMobileView();
             } else {
                 me.createDesktopView();
@@ -67,22 +67,22 @@
 	}
     };
 
-    Plugin.prototype.createMobileView = function() {
+    Plugin.prototype.createMobileView = function () {
         var me = this;
 
         me.$el.addClass('js--mobile-tab-panel').removeClass('js--desktop-tab-panel');
 
-	if(me.opts.mode !== 'remote') {
-	    me.$nav.find('.navigation--link').each(function() {
+	if (me.opts.mode !== 'remote') {
+	    me.$nav.find('.navigation--link').each(function () {
 		var $this = $(this),
-		    href = $this.attr('href').substring(1);
+			href = $this.attr('href').substring(1);
 
 		me.$content.find('.' + href).insertAfter($this);
 	    });
 
-	    me.$nav.find('.navigation--link').on(clickEvt + '.' + pluginName, function(event) {
+	    me.$nav.find('.navigation--link').on(clickEvt + '.' + pluginName, function (event) {
 		var $this = $(this),
-		    href = $this.attr('href').substring(1);
+			href = $this.attr('href').substring(1);
 
 		event.preventDefault();
 
@@ -99,21 +99,21 @@
 	}
     };
 
-    Plugin.prototype.createDesktopView = function() {
+    Plugin.prototype.createDesktopView = function () {
         var me = this;
         me.$el.removeClass('js--mobile-tab-panel').addClass('js--desktop-tab-panel');
 
-	if(me.opts.mode !== 'remote') {
-	    me.$nav.find('.navigation--link').each(function() {
+	if (me.opts.mode !== 'remote') {
+	    me.$nav.find('.navigation--link').each(function () {
 		var $this = $(this),
-		    href = $this.attr('href').substring(1);
+			href = $this.attr('href').substring(1);
 
 		me.$nav.find('.' + href).appendTo(me.$content);
 	    });
 
-	    me.$nav.find('.navigation--link').on(clickEvt + '.' + pluginName, function(event) {
+	    me.$nav.find('.navigation--link').on(clickEvt + '.' + pluginName, function (event) {
 		var $this = $(this),
-		    href = $this.attr('href').substring(1);
+			href = $this.attr('href').substring(1);
 
 		event.preventDefault();
 
@@ -130,7 +130,7 @@
 	}
     };
 
-    Plugin.prototype.changeTab = function(idx, scroll) {
+    Plugin.prototype.changeTab = function (idx, scroll) {
         var me = this;
 
         scroll = scroll || false;
@@ -140,7 +140,7 @@
 
         me.$nav.find('.navigation--entry:nth-child(' + idx + ') .navigation--link').trigger(clickEvt + '.' + pluginName);
 
-        if(!scroll) {
+	if (!scroll) {
             return;
         }
 
@@ -156,17 +156,17 @@
      *
      * @returns {Boolean}
      */
-    Plugin.prototype.destroy = function() {
+    Plugin.prototype.destroy = function () {
         var me = this;
 
         me.$el.off(clickEvt + '.' + pluginName).removeData('plugin_' + pluginName);
     };
 
-    $.fn[pluginName] = function ( options ) {
+    $.fn[pluginName] = function (options) {
         return this.each(function () {
             if (!$.data(this, 'plugin_' + pluginName)) {
                 $.data(this, 'plugin_' + pluginName,
-                new Plugin( this, options ));
+			new Plugin(this, options));
             }
         });
     };
