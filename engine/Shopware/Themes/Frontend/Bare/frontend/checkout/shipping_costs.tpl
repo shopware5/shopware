@@ -4,7 +4,7 @@
 {block name='frontend_checkout_shipping_costs_country'}
 	<div class="basket_country">
 		<p>
-			<label for="basket_country_list">{se name="ShippingLabelDeliveryCountry"}{/se}</label>
+			<label for="basket_country_list">{s name="ShippingLabelDeliveryCountry"}{/s}</label>
 		</p>
 		<select id="basket_country_list" name="sCountry" class="auto_submit">
 			{foreach from=$sCountryList item=country}
@@ -19,7 +19,7 @@
 		{if $country.states}
 			<div class="basket_country country_states {if $country.id != $sCountry.id}hidden{/if}">
 				<p>
-					<label for="country_{$country.id}_states">{se name='RegisterBillingLabelState'}{/se}</label>
+					<label for="country_{$country.id}_states">{s name='RegisterBillingLabelState'}{/s}</label>
 				</p>
 
 				<select {if $country.id != $sCountry.id}disabled="disabled"{/if} name="sState" id="country_{$country.id}_states" class="auto_submit text">
@@ -39,7 +39,7 @@
 {block name='frontend_checkout_shipping_costs_payment'}
 	<div class="basket_payment">
 		<p>
-			<label for="basket_payment_list">{se name="ShippingLabelPayment"}{/se}</label>
+			<label for="basket_payment_list">{s name="ShippingLabelPayment"}{/s}</label>
 		</p>
 
 		<select id="basket_payment_list" name="sPayment" class="auto_submit">
@@ -56,7 +56,7 @@
 {block name='frontend_checkout_shipping_costs_dispatch'}
 	<div class="basket_dispatch">
 		<p>
-			<label for="basket_dispatch_list">{se name="ShipppingLabelDispatch"}{/se}</label>
+			<label for="basket_dispatch_list">{s name="ShipppingLabelDispatch"}{/s}</label>
 		</p>
 		<select id="basket_dispatch_list" name="sDispatch" class="auto_submit">
 		{if $sDispatches}

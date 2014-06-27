@@ -40,4 +40,9 @@
 			</div>
 		</form>
 	{/block}
+
+    {* Shipping costs pre-calculation *}
+    {if $sBasket.content && !$sUserLoggedIn && !$sUserData.additional.user.id}
+        {include file="frontend/checkout/shipping_costs.tpl"}
+    {/if}
 </div>
