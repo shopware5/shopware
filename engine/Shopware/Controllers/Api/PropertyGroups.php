@@ -83,7 +83,7 @@ class Shopware_Controllers_Api_PropertyGroups extends Shopware_Controllers_Api_R
         );
 
         $this->View()->assign(array('success' => true, 'data' => $data));
-        $this->Response()->setHeader('Location', $location);
+        $this->Response()->setRedirect($location, 201);
     }
 
     /**
@@ -105,7 +105,6 @@ class Shopware_Controllers_Api_PropertyGroups extends Shopware_Controllers_Api_R
         );
 
         $this->View()->assign(array('success' => true, 'data' => $data));
-        $this->Response()->setHeader('Location', $location);
     }
 
     /**
