@@ -41,7 +41,7 @@
 	// Second footer with the shopware logo and vat notice
 	.footer--bottom {
 		.unitize(12, 16, font-size);
-		.unitize-padding(0, 12, 0, 12, 12);
+		.unitize-padding(16, 12, 0, 12, 12);
 		text-align: center;
 	}
 	.footer--logo {
@@ -74,11 +74,15 @@
 	.newsletter--button {
 		.box-shadow(0 0 0 transparent);
 		.border-radius-multi(0, 3px, 3px, 0);
-		.unitize-padding(9, 5, 9, 5, 16);
+	.unitize-padding(12, 5, 8, 5, 16);
 		width: 12.5%;
+	text-align: center;
 		float: left;
 
-		.icon--mail { .unitize(12, 16, font-size); }
+		.icon--mail {
+	    .unitize(16, 16, font-size);
+	    .unitize(0, 16, margin-right);
+	}
 		.button--text { display: none }
 	}
 }
@@ -125,6 +129,10 @@
 		}
 		.newsletter--button {
 			width: 20%;
+
+	    .icon--mail {
+		.unitize(12, 16, font-size);
+	    }
 		}
 	}
 }
@@ -139,5 +147,13 @@
 		.footer--logo {
 			.unitize-padding(10, 0, 10, 0, 16);
 		}
+
+	.newsletter--button {
+	    .unitize-padding(9, 5, 8, 5, 16);
+
+	    .icon--mail {
+		.unitize(14, 16, font-size);
+	    }
+	}
 	}
 }
