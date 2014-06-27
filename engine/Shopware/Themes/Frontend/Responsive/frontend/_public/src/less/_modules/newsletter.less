@@ -1,3 +1,69 @@
 // Newsletter listing
+.newsletter-listing--content {
 
-.newsletter-listing--content {}
+    .newsletter-listing--table {
+	.border-radius();
+    }
+
+    .newsletter-listing--table-headline {
+	.clearfix();
+
+	.newsletter-listing--headline-name {
+	    width: 65%;
+	    float: left;
+	}
+
+	.newsletter-listing--headline-button {
+	    width: 35%;
+	    float: left;
+	}
+    }
+
+    .newsletter-listing--entry {
+	.clearfix();
+	.unitize-padding(10, 0, 10, 0, 16);
+	border-bottom: 1px solid @borderColor;
+
+	.newsletter-listing--entry-description {
+	    width: 65%;
+	    float: left;
+	}
+
+	.newsletter-listing--entry-button {
+	    width: 35%;
+	    float: left;
+	}
+
+	.btn {
+	    float: right;
+	}
+
+	&:last-child { border: none; }
+    }
+}
+
+@media screen and (min-width: @tabletViewportWidth) {
+
+    .newsletter-listing--content {
+
+	.newsletter-listing--table-headline {
+	    .newsletter-listing--headline-name { width: 80%; }
+	    .newsletter-listing--headline-button { width: 20%; }
+	}
+	.newsletter-listing--entry {
+	    .newsletter-listing--entry-description { width: 80%; }
+	    .newsletter-listing--entry-button { width: 20%; }
+	}
+    }
+}
+
+@media screen and (min-width: @desktopViewportWidth) {
+
+    .newsletter-listing--content {
+	.unitize(45, 16, margin-top);
+	width: 78%;
+	float: right
+
+    }
+
+}
