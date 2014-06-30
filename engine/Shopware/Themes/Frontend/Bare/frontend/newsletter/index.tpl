@@ -52,7 +52,7 @@
 								<div class="newsletter--subscription">
 									<select name="subscribeToNewsletter" id="newsletter--checkmail" required="required" class="field--select">
 										<option value="1">{s name="sNewsletterOptionSubscribe"}{/s}</option>
-										<option value="-1" {if $_POST.subscribeToNewsletter eq -1 || (!$_POST.subscribeToNewsletter && $sUnsubscribe == true)}selected{/if}>{s name="sNewsletterOptionUnsubscribe"}{/s}</option>
+										<option value="-1" {if $_POST.subscribeToNewsletter eq -1 || (!$_POST.subscribeToNewsletter && $sUnsubscribe == true)}selected="selected"{/if}>{s name="sNewsletterOptionUnsubscribe"}{/s}</option>
 									</select>
 								</div>
 							{/block}

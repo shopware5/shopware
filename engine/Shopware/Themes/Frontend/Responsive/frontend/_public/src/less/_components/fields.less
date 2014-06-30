@@ -5,36 +5,36 @@ input[type="search"],
 input[type="password"],
 input[type="number"],
 input[type="email"] {
-	@boxShadowColor: rgba(red(@borderColor), green(@borderColor), blue(@borderColor), .9);
-	.appearance(none);
-	.border-radius(3px);
-	.box-sizing();
-	.unitize-width(290);
-	.unitize-padding(9, 10, 10, 10);
-	.box-shadow(inset 0 1px 1px @boxShadowColor);
-	background: @lightGradientEnd;
-	border: 1px solid @borderColor;
-	border-top-color: darken(@borderColor, 5%);
-	color: @lightTextColor;
+    @boxShadowColor: rgba(red(@borderColor), green(@borderColor), blue(@borderColor), .9);
+    .appearance(none);
+    .border-radius(3px);
+    .box-sizing();
+    .unitize-width(290);
+    .unitize-padding(9, 10, 10, 10);
+    .box-shadow(inset 0 1px 1px @boxShadowColor);
+    background: @lightGradientEnd;
+    border: 1px solid @borderColor;
+    border-top-color: darken(@borderColor, 5%);
+    color: @lightTextColor;
 
-	&:focus {
-		.box-shadow(0 0 0 transparent);
-		outline: none;
-		border-color: @primaryColor;
-		background: #fff;
-        color: @primaryTextColor;
-	}
+    &:focus {
+	.box-shadow(0 0 0 transparent);
+	outline: none;
+	border-color: @primaryColor;
+	background: #fff;
+	color: @primaryTextColor;
+    }
 
-	&.has--error {
-		color: @errorText;
-		background: @errorBackground;
-		border-color: @errorBorderColor;
-	}
+    &.has--error {
+	color: @errorText;
+	background: @errorBackground;
+	border-color: @errorBorderColor;
+    }
 
     // Input field spacing
     &.input--field {
-	    .unitize(10, 16, margin-bottom);
-	    width: 100%;
+	.unitize(10, 16, margin-bottom);
+	width: 100%;
 
 	&.input--field-street {
 	    margin-right: 2%;
@@ -49,12 +49,12 @@ input[type="email"] {
 
 	&.input--field-zipcode {
 	    margin-right: 2%;
-	    width: 28%;
+	    width: 20%;
 	    float: left;
 	}
 
 	&.input--field-city {
-	    width: 70%;
+	    width: 78%;
 	    float: left;
 	}
     }
@@ -62,158 +62,146 @@ input[type="email"] {
 }
 
 .js--fancy-select {
-	.border-radius(3px);
-	.box-sizing();
-	.unitize-width(290);
+    .border-radius(3px);
+    .box-sizing();
+    .unitize-width(290);
     .unitize(44, 16, line-height);
-	.box-shadow(0 1px 1px 0 rgba(0, 0, 0, 0.1));
-	.linear-gradient(#ffffff, #f7f8fa);
-	.clearfix();
-	display: inline-block;
-	position: relative;
-	border: 1px solid @borderColor;
-	overflow: hidden;
-	cursor: pointer;
+    .box-shadow(0 1px 1px 0 rgba(0, 0, 0, 0.1));
+    .linear-gradient(#ffffff, #f7f8fa);
+    .clearfix();
+    display: inline-block;
+    position: relative;
+    border: 1px solid @borderColor;
+    overflow: hidden;
+    cursor: pointer;
 
-	&:hover {
-		.linear-gradient(#f7f8fa, #ffffff);
-	}
-
-    &.js--is--focused {
-        border-color: @primaryColor;
+    &:hover {
+	.linear-gradient(#f7f8fa, #ffffff);
     }
 
-	select {
-		.unitize-height(44);
-		.appearance(none);
-		.opacity(0);
-		position: absolute;
-		top: 0; left: 0;
-		width: 100%;
-		display: block;
-		cursor: pointer;
-		z-index: 1000;
+    &.js--is--focused {
+	border-color: @primaryColor;
+    }
 
-		// Removes the blue glow around the select field
-		// see: http://www.faridesign.net/2012/02/remove-border-around-input-chrome-safari/
-		&:focus {
-			outline: none;
-		}
+    select {
+	.unitize-height(44);
+	.appearance(none);
+	.opacity(0);
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	display: block;
+	cursor: pointer;
+	z-index: 1000;
+
+	// Removes the blue glow around the select field
+	// see: http://www.faridesign.net/2012/02/remove-border-around-input-chrome-safari/
+	&:focus {
+	    outline: none;
+	}
+    }
+
+    .js--fancy-select-text {
+	.unitize-padding(0, 40, 0, 10);
+	border-right: 1px solid #fff;
+	font-weight: bold;
+	width: 100%;
+
+	// CSS truncating
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+    }
+
+    .js--fancy-select-trigger {
+	.unitize-width(30);
+	position: absolute;
+	right: 0;
+	top: 0;
+	border-left: 1px solid @borderColor;
+	text-align: center;
+	text-shadow: 0 1px 0 #fff;
+	font-weight: bold;
+    }
+
+    // State disabled
+    &.is--disabled {
+	.opacity(.5);
+
+	select {
+	    cursor: not-allowed;
+	}
+    }
+
+    // Error state
+    &.has--error {
+	color: @errorText;
+	border-color: @errorBorderColor;
+	background: @errorBackground;
+
+	.js--fancy-select-trigger {
+	    border-color: @errorBorderColor;
 	}
 
 	.js--fancy-select-text {
-		.unitize-padding(0, 40, 0, 10);
-		border-right: 1px solid #fff;
-		font-weight: bold;
-		width: 100%;
-
-		// CSS truncating
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
+	    border-color: lighten(@errorBorderColor, 10%);
 	}
-
-	.js--fancy-select-trigger {
-		.unitize-width(30);
-		position: absolute;
-		right: 0; top: 0;
-		border-left: 1px solid @borderColor;
-		text-align: center;
-		text-shadow: 0 1px 0 #fff;
-		font-weight: bold;
-	}
-
-	// State disabled
-	&.is--disabled {
-		.opacity(.5);
-
-		select {
-			cursor: not-allowed;
-		}
-	}
-
-	// Error state
-	&.has--error {
-		color: @errorText;
-		border-color: @errorBorderColor;
-  		background: @errorBackground;
-
-		.js--fancy-select-trigger {
-			border-color: @errorBorderColor;
-		}
-
-		.js--fancy-select-text {
-			border-color: lighten(@errorBorderColor, 10%);
-		}
-	}
+    }
 }
 
 // Quantity field
 .js--quantity-field {
-	.clearfix();
+    .clearfix();
 
-	input[type="number"] {
-		width: 78%;
-		margin: 0 2% 0 0;
-	}
+    input[type="number"] {
+	width: 78%;
+	margin: 0 2% 0 0;
+    }
 
-	input[type="number"],
-	.js--quantity-button {
-		float: left;
-	}
+    input[type="number"],
+    .js--quantity-button {
+	float: left;
+    }
 
-	.js--quantity-button {
-		width: 20%;
-	}
+    .js--quantity-button {
+	width: 20%;
+    }
 
-	.js--quantity-button > a {
-		.user-select(none);
-		.unitize-height(20, 16);
-		.unitize(18, 16, line-height);
-		display: block;
-		padding: 0;
-		font-weight: bold;
-		text-align: center;
-	}
-	.js--quantity-button-plus {
-		.unitize-margin(0, 0, 4, 0, 16);
-	}
+    .js--quantity-button > a {
+	.user-select(none);
+	.unitize-height(20, 16);
+	.unitize(18, 16, line-height);
+	display: block;
+	padding: 0;
+	font-weight: bold;
+	text-align: center;
+    }
+    .js--quantity-button-plus {
+	.unitize-margin(0, 0, 4, 0, 16);
+    }
 }
+
 @media screen and (min-width: @tabletViewportWidth) {
 
-   /* Standard input fields. */
-    textarea,
-    input[type="text"],
-    input[type="search"],
-    input[type="password"],
-    input[type="number"],
-    input[type="email"] {
+    /* Standard input fields. */
+    .input--field {
+	.unitize(15, 16, margin-bottom);
 
-	&.input--field {
-	    .unitize(15, 16, margin-bottom);
-	}
-
-	&.input--field-street {
+	.input--field-street {
 	    margin-right: 2%;
-	    width: 84%;
-	    float: left;
+	    width: 86%;
 	}
-
-	&.input--field-streetnumber {
-	    width: 14%;
-	    float: left;
+	.input--field-streetnumber {
+	    width: 12%;
 	}
-
-	&.input--field-zipcode {
+	.input--field-zipcode {
 	    margin-right: 2%;
 	    width: 20%;
-	    float: left;
 	}
-
-	&.input--field-city {
-	      width: 78%;
-	      float: left;
-	  }
+	.input--field-city {
+	    width: 78%;
+	}
     }
 
 }
@@ -221,30 +209,18 @@ input[type="email"] {
 @media screen and (min-width: @desktopViewportWidth) {
 
     // Input field styling
-    textarea,
-    input[type="text"],
-    input[type="search"],
-    input[type="password"],
-    input[type="number"],
-    input[type="email"] {
-
-	.input--field {
-	    .unitize(15, 16, margin-bottom);
-	}
-
+    .input--field {
+	.unitize(15, 16, margin-bottom);
     }
 
-
-
-
-	.js--fancy-select {
+    .js--fancy-select {
         .unitize-width(290);
         .unitize(34, 16, line-height);
         .box-shadow(0 1px 1px 0 rgba(0, 0, 0, 0.1));
 
-		select {
-			.unitize-height(34);
-		}
+	select {
+	    .unitize-height(34);
+	}
     }
 
 }
