@@ -10,10 +10,16 @@
 
 	{block name="frontend_sitemap_headline"}
 		<div class="sitemap--headline panel">
-			<h1 class="panel--title">{s name='SitemapTitle'}Sitemap{/s}</h1>
-			<div class="panel--body is--wide">
-				<p class="sitemap--headline-text">{s name='SitemapSubHeader'}Alle Kategorien auf einen Blick{/s}</p>
-			</div>
+
+			{block name="frontend_sitemap_headline_title"}
+				<h1 class="panel--title">{s name='SitemapTitle'}Sitemap{/s}</h1>
+			{/block}
+
+			{block name="frontend_sitemap_headline_text"}
+				<div class="panel--body is--wide">
+					<p class="sitemap--headline-text">{s name='SitemapSubHeader'}Alle Kategorien auf einen Blick{/s}</p>
+				</div>
+			{/block}
 		</div>
 	{/block}
 
