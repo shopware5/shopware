@@ -37,8 +37,8 @@
 								<div class="payment_logo_{$payment_mean.name}"></div>
 
 								{if "frontend/plugins/payment/`$payment_mean.template`"|template_exists}
-									<div class="payment--content">
-										{include file="frontend/plugins/payment/`$payment_mean.template`"}
+									<div class="payment--content{if $payment_mean.id != $form_data.payment} is--hidden{/if}">
+                                        {include file="frontend/plugins/payment/`$payment_mean.template`" checked = ($payment_mean.id == $form_data.payment)}
 									</div>
 								{/if}
 							{/block}

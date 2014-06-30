@@ -40,6 +40,7 @@
 					{block name="frontend_account_select_shipping_info_empty"}
 						{include file="frontend/_includes/messages.tpl" type="warning" content="{s name="SelectShippingInfoEmpty"}{/s}"}
 					{/block}
+                    <div class="space">&nbsp;</div>
 				{/if}
 			</div>
 		{/block}

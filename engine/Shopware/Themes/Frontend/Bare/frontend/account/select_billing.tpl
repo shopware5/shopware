@@ -38,6 +38,7 @@
 					{block name="frontend_account_select_billing_info_empty"}
 						{include file="frontend/_includes/messages.tpl" type="warning" content="{s name="SelectBillingInfoEmpty"}{/s}"}
 					{/block}
+                    <div class="space">&nbsp;</div>
 				{/if}
 			</div>
 		{/block}

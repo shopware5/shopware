@@ -8,7 +8,7 @@
 
 {* Main content *}
 {block name="frontend_index_content"}
-	<div class="content block account--content">
+	<div class="content block account--content" data-register="true">
 
 		{* Error messages *}
 		{block name="frontend_account_payment_error_messages"}
@@ -36,14 +36,21 @@
 					{include file='frontend/register/payment_fieldset.tpl' form_data=$sFormData error_flags=$sErrorFlag payment_means=$sPaymentMeans}
 				{/block}
 
+                {block name='frontend_account_payment_required'}
+                    {* Required fields hint *}
+                    <div class="register--required-info required_fields">
+                        {s name='RegisterPersonalRequiredText' namespace='frontend/register/personal_fieldset'}{/s}
+                    </div>
+                {/block}
+
 				{block name="frontend_account_payment_action_buttons"}
 					<div class="panel--actions">
 						{if $sTarget}
-							<a class="btn btn--secondary" href="{url controller=$sTarget action=$sTargetAction|default:"index"}" title="{s name='PaymentLinkBack'}{/s}">
+							<a class="btn btn--secondary left" href="{url controller=$sTarget action=$sTargetAction|default:"index"}" title="{s name='PaymentLinkBack'}{/s}">
 								{s name="PaymentLinkBack"}{/s}
 							</a>
 						{/if}
-						<input type="submit" value="{s name='PaymentLinkSend'}{/s}" class="btn btn--primary" />
+						<input type="submit" value="{s name='PaymentLinkSend'}{/s}" class="btn btn--primary register--submit right" />
 					</div>
 				{/block}
 			</form>

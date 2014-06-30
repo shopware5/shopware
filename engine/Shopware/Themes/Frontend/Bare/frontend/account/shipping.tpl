@@ -38,6 +38,13 @@
 								{include file="frontend/register/shipping_fieldset.tpl" form_data=$sFormData error_flags=$sErrorFlag country_list=$sCountryList}
 							{/block}
 
+                            {block name='frontend_account_shipping_required'}
+                                {* Required fields hint *}
+                                <div class="register--required-info required_fields">
+                                    {s name='RegisterPersonalRequiredText' namespace='frontend/register/personal_fieldset'}{/s}
+                                </div>
+                            {/block}
+
 							{* Shipping actions *}
 							{block name="frontend_account_shipping_action_buttons"}
 								<div class="account--actions">
@@ -46,7 +53,7 @@
 											{s name="ShippingLinkBack"}{/s}
 										</a>
 									{/if}
-									<input type="submit" value="{s name="ShippingLinkSend"}{/s}" class="btn btn--primary right" />
+									<input type="submit" value="{s name="ShippingLinkSend"}{/s}" class="btn btn--primary register--submit right" />
 								</div>
 							{/block}
 
