@@ -83,7 +83,7 @@ class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
         );
 
         $this->View()->assign(array('success' => true, 'data' => $data));
-        $this->Response()->setHeader('Location', $location);
+        $this->Response()->setRedirect($location, 201);
     }
 
     /**
