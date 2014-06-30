@@ -62,10 +62,10 @@ class PropertyConditionHandler implements ConditionHandlerInterface
             $key = 'value' . $value;
 
             $query->innerJoin(
-                'products',
+                'product',
                 's_filter_articles',
                 $key,
-                'products.id = ' . $key . '.articleID
+                'product.id = ' . $key . '.articleID
                  AND ' . $key . '.valueID = :' . $key
             );
 

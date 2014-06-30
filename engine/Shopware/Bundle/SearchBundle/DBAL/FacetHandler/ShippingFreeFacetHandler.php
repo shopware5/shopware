@@ -56,10 +56,10 @@ class ShippingFreeFacetHandler implements FacetHandlerInterface
         $query->resetQueryPart('groupBy');
 
         $query->select(array(
-            'COUNT(DISTINCT products.id) as total'
+            'COUNT(DISTINCT product.id) as total'
         ));
 
-        $query->andWhere('variants.shippingfree = 1');
+        $query->andWhere('variant.shippingfree = 1');
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();

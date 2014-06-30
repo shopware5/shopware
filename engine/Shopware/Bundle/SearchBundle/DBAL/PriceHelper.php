@@ -50,7 +50,7 @@ class PriceHelper
     public function getSelection(Struct\Customer\Group $current)
     {
         $selection = "(
-            IF(customer_prices.id, customer_prices.price, default_prices.price)";
+            IF(customerPrice.id, customerPrice.price, defaultPrice.price)";
 
         $selection .= "* (priceVariant.minpurchase)";
 
@@ -80,40 +80,40 @@ class PriceHelper
         }
 
         $query->innerJoin(
-            'products',
+            'product',
             's_articles_prices',
-            'default_prices',
-            'default_prices.articleID = products.id
-             AND default_prices.pricegroup = :fallbackCustomerGroup
-             AND default_prices.from = 1'
+            'defaultPrice',
+            'defaultPrice.articleID = product.id
+             AND defaultPrice.pricegroup = :fallbackCustomerGroup
+             AND defaultPrice.from = 1'
         );
 
         $query->innerJoin(
-            'default_prices',
+            'defaultPrice',
             's_articles_details',
             'priceVariant',
-            'priceVariant.id = default_prices.articledetailsID
-             AND (products.laststock * priceVariant.instock) >= (products.laststock * priceVariant.minpurchase)'
+            'priceVariant.id = defaultPrice.articledetailsID
+             AND (product.laststock * priceVariant.instock) >= (product.laststock * priceVariant.minpurchase)'
         );
 
         $query->leftJoin(
-            'products',
+            'product',
             's_articles_prices',
-            'customer_prices',
-            'customer_prices.articleID = products.id
-             AND customer_prices.pricegroup = :currentCustomerGroup
-             AND customer_prices.from = 1
-             AND priceVariant.id = customer_prices.articledetailsID'
+            'customerPrice',
+            'customerPrice.articleID = product.id
+             AND customerPrice.pricegroup = :currentCustomerGroup
+             AND customerPrice.from = 1
+             AND priceVariant.id = customerPrice.articledetailsID'
         );
 
         $query->leftJoin(
-            'products',
+            'product',
             's_core_pricegroups_discounts',
             'priceGroup',
-            'priceGroup.groupID = products.pricegroupID
+            'priceGroup.groupID = product.pricegroupID
              AND priceGroup.discountstart = 1
              AND priceGroup.customergroupID = :priceGroupCustomerGroup
-             AND products.pricegroupActive = 1'
+             AND product.pricegroupActive = 1'
         );
 
         $query->setParameter(':currentCustomerGroup', $current->getKey())

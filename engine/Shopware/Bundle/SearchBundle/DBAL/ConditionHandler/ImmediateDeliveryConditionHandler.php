@@ -58,6 +58,6 @@ class ImmediateDeliveryConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         Context $context
     ) {
-        $query->andWhere('variants.instock >= variants.minpurchase');
+        $query->andWhere('variant.instock >= variant.minpurchase');
     }
 }

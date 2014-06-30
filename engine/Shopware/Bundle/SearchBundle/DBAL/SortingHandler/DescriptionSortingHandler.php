@@ -35,8 +35,8 @@ class DescriptionSortingHandler implements SortingHandlerInterface
         QueryBuilder $query,
         Context $context
     ) {
-        $query->addOrderBy('products.name', $sorting->getDirection())
-            ->addOrderBy('products.id', $sorting->getDirection());
+        $query->addOrderBy('product.name', $sorting->getDirection())
+            ->addOrderBy('product.id', $sorting->getDirection());
     }
 
 }

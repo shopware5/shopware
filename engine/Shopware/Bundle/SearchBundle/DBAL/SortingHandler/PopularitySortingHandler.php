@@ -37,10 +37,10 @@ class PopularitySortingHandler implements SortingHandlerInterface
     ) {
         if (!$query->includesTable('s_articles_top_seller')) {
             $query->leftJoin(
-                'products',
+                'product',
                 's_articles_top_seller_ro',
                 'topSeller',
-                'topSeller.article_id = products.id'
+                'topSeller.article_id = product.id'
             );
         }
 

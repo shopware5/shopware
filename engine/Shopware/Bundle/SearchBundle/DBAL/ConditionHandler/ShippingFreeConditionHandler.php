@@ -58,6 +58,6 @@ class ShippingFreeConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         Context $context
     ) {
-        $query->andWhere('variants.shippingfree = 1');
+        $query->andWhere('variant.shippingfree = 1');
     }
 }

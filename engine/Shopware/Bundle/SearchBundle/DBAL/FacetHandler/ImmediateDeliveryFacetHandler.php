@@ -56,11 +56,11 @@ class ImmediateDeliveryFacetHandler implements FacetHandlerInterface
         $query->resetQueryPart('groupBy');
 
         $query->select(array(
-            'COUNT(DISTINCT products.id) as total'
+            'COUNT(DISTINCT product.id) as total'
         ));
 
         $query->andWhere(
-            'variants.instock >= variants.minpurchase'
+            'variant.instock >= variant.minpurchase'
         );
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */

@@ -24,18 +24,31 @@ class QueryBuilder extends \Doctrine\DBAL\Query\QueryBuilder
         return in_array($state, $this->states);
     }
 
+    /**
+     * @param $table
+     * @return array|bool
+     */
     public function includesTable($table)
     {
         foreach($this->getQueryPart('from') as $from) {
             if ($from['table'] == $table) {
-                return true;
+                return array(
+                    'type'  => 'from',
+                    'table' => $from['table'],
+                    'alias' => $from['alias']
+                );
             }
         }
 
         foreach($this->getQueryPart('join') as $joinFrom) {
             foreach($joinFrom as $join) {
                 if ($join['joinTable'] == $table) {
-                    return true;
+                    return array(
+                        'type'  => $join['joinType'],
+                        'table' => $join['joinTable'],
+                        'alias' => $join['joinAlias'],
+                        'condition' => $join['joinCondition']
+                    );
                 }
             }
         }

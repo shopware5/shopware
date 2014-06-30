@@ -60,11 +60,11 @@ class ManufacturerConditionHandler implements ConditionHandlerInterface
         Context $context
     ) {
         $query->innerJoin(
-            'products',
+            'product',
             's_articles_supplier',
-            'manufacturers',
-            'manufacturers.id = products.supplierID
-             AND products.supplierID IN (:manufacturer)'
+            'manufacturer',
+            'manufacturer.id = product.supplierID
+             AND product.supplierID IN (:manufacturer)'
         );
 
         $query->setParameter(

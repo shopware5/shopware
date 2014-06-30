@@ -62,7 +62,7 @@ class PriceSortingHandler implements SortingHandlerInterface
         $query->addSelect($selection . ' as cheapest_price');
 
         $query->addOrderBy('cheapest_price', $sorting->getDirection())
-            ->addOrderBy('products.id', $sorting->getDirection());
+            ->addOrderBy('product.id', $sorting->getDirection());
     }
 
 }

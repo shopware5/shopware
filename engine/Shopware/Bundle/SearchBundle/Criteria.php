@@ -110,8 +110,9 @@ class Criteria
      */
     public function category(array $categoryIds)
     {
-        $this->conditions[] = new Condition\CategoryCondition($categoryIds);
-        return $this;
+        return $this->addCondition(
+            new Condition\CategoryCondition($categoryIds)
+        );
     }
 
     /**
@@ -120,8 +121,9 @@ class Criteria
      */
     public function manufacturer(array $manufacturerIds)
     {
-        $this->conditions[] = new Condition\ManufacturerCondition($manufacturerIds);
-        return $this;
+        return $this->addCondition(
+            new Condition\ManufacturerCondition($manufacturerIds)
+        );
     }
 
     /**
@@ -132,8 +134,9 @@ class Criteria
      */
     public function price($min, $max)
     {
-        $this->conditions[] = new Condition\PriceCondition($min, $max);
-        return $this;
+        return $this->addCondition(
+            new Condition\PriceCondition($min, $max)
+        );
     }
 
     /**
@@ -142,8 +145,9 @@ class Criteria
      */
     public function properties(array $valueIds)
     {
-        $this->conditions[] = new Condition\PropertyCondition($valueIds);
-        return $this;
+        return $this->addCondition(
+            new Condition\PropertyCondition($valueIds)
+        );
     }
 
     /**
@@ -151,8 +155,9 @@ class Criteria
      */
     public function shippingFree()
     {
-        $this->conditions[] = new Condition\ShippingFreeCondition();
-        return $this;
+        return $this->addCondition(
+            new Condition\ShippingFreeCondition()
+        );
     }
 
     /**
@@ -160,8 +165,9 @@ class Criteria
      */
     public function immediateDelivery()
     {
-        $this->conditions[] = new Condition\ImmediateDeliveryCondition();
-        return $this;
+        return $this->addCondition(
+            new Condition\ImmediateDeliveryCondition()
+        );
     }
 
     /**
@@ -170,8 +176,9 @@ class Criteria
      */
     public function customerGroup(array $customerGroupIds)
     {
-        $this->conditions[] = new Condition\CustomerGroupCondition($customerGroupIds);
-        return $this;
+        return $this->addCondition(
+            new Condition\CustomerGroupCondition($customerGroupIds)
+        );
     }
 
     /**
@@ -179,8 +186,9 @@ class Criteria
      */
     public function manufacturerFacet()
     {
-        $this->facets[] = new Facet\ManufacturerFacet();
-        return $this;
+        return $this->addFacet(
+            new Facet\ManufacturerFacet()
+        );
     }
 
     /**
@@ -188,14 +196,16 @@ class Criteria
      */
     public function categoryFacet()
     {
-        $this->facets[] = new Facet\CategoryFacet();
-        return $this;
+        return $this->addFacet(
+            new Facet\CategoryFacet()
+        );
     }
 
     public function shippingFreeFacet()
     {
-        $this->facets[] = new Facet\ShippingFreeFacet();
-        return $this;
+        return $this->addFacet(
+            new Facet\ShippingFreeFacet()
+        );
     }
 
     /**
@@ -203,8 +213,9 @@ class Criteria
      */
     public function priceFacet()
     {
-        $this->facets[] = new Facet\PriceFacet();
-        return $this;
+        return $this->addFacet(
+            new Facet\PriceFacet()
+        );
     }
 
     /**
@@ -212,8 +223,9 @@ class Criteria
      */
     public function immediateDeliveryFacet()
     {
-        $this->facets[] = new Facet\ImmediateDeliveryFacet();
-        return $this;
+        return $this->addFacet(
+            new Facet\ImmediateDeliveryFacet()
+        );
     }
 
     /**
@@ -221,8 +233,9 @@ class Criteria
      */
     public function propertyFacet()
     {
-        $this->facets[] = new Facet\PropertyFacet();
-        return $this;
+        return $this->addFacet(
+            new Facet\PropertyFacet()
+        );
     }
 
     /**
@@ -231,8 +244,9 @@ class Criteria
      */
     public function sortByReleaseDate($direction = 'ASC')
     {
-        $this->sortings[] = new Sorting\ReleaseDateSorting($direction);
-        return $this;
+        return $this->addSorting(
+            new Sorting\ReleaseDateSorting($direction)
+        );
     }
 
     /**
@@ -241,8 +255,9 @@ class Criteria
      */
     public function sortByPopularity($direction = 'ASC')
     {
-        $this->sortings[] = new Sorting\PopularitySorting($direction);
-        return $this;
+        return $this->addSorting(
+            new Sorting\PopularitySorting($direction)
+        );
     }
 
     /**
@@ -250,8 +265,9 @@ class Criteria
      */
     public function sortByCheapestPrice()
     {
-        $this->sortings[] = new Sorting\PriceSorting('ASC');
-        return $this;
+        return $this->addSorting(
+            new Sorting\PriceSorting('ASC')
+        );
     }
 
     /**
@@ -259,8 +275,9 @@ class Criteria
      */
     public function sortByHighestPrice()
     {
-        $this->sortings[] = new Sorting\PriceSorting('DESC');
-        return $this;
+        return $this->addSorting(
+            new Sorting\PriceSorting('DESC')
+        );
     }
 
     /**
@@ -269,8 +286,9 @@ class Criteria
      */
     public function sortByDescription($direction = 'ASC')
     {
-        $this->sortings[] = new Sorting\DescriptionSorting($direction);
-        return $this;
+        return $this->addSorting(
+            new Sorting\DescriptionSorting($direction)
+        );
     }
 
     /**
@@ -279,7 +297,7 @@ class Criteria
      */
     public function addFacet(FacetInterface $facet)
     {
-        $this->facets[] = $facet;
+        $this->facets[$facet->getName()] = $facet;
         return $this;
     }
 
@@ -289,7 +307,7 @@ class Criteria
      */
     public function addCondition(ConditionInterface $condition)
     {
-        $this->conditions[] = $condition;
+        $this->conditions[$condition->getName()] = $condition;
         return $this;
     }
 
@@ -299,7 +317,7 @@ class Criteria
      */
     public function addSorting(SortingInterface $sorting)
     {
-        $this->sortings[] = $sorting;
+        $this->sortings[$sorting->getName()] = $sorting;
         return $this;
     }
 
@@ -309,12 +327,7 @@ class Criteria
      */
     public function getCondition($name)
     {
-        foreach ($this->conditions as $condition) {
-            if ($condition->getName() == $name) {
-                return $condition;
-            }
-        }
-        return null;
+        return $this->conditions[$name];
     }
 
     /**
@@ -323,12 +336,7 @@ class Criteria
      */
     public function getFacet($name)
     {
-        foreach ($this->facets as $facet) {
-            if ($facet->getName() == $name) {
-                return $facet;
-            }
-        }
-        return null;
+        return $this->facets[$name];
     }
 
     /**
@@ -337,12 +345,7 @@ class Criteria
      */
     public function getSorting($name)
     {
-        foreach ($this->sortings as $sorting) {
-            if ($sorting->getName() == $name) {
-                return $sorting;
-            }
-        }
-        return null;
+        return $this->sortings[$name];
     }
 
     /**
@@ -368,6 +371,4 @@ class Criteria
     {
         return $this->sortings;
     }
-
-
 }

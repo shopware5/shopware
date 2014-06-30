@@ -35,9 +35,9 @@ class ReleaseDateSortingHandler implements SortingHandlerInterface
         QueryBuilder $query,
         Context $context
     ) {
-        $query->addOrderBy('products.datum', $sorting->getDirection())
-            ->addOrderBy('products.changetime', $sorting->getDirection())
-            ->addOrderBy('products.id', $sorting->getDirection());
+        $query->addOrderBy('product.datum', $sorting->getDirection())
+            ->addOrderBy('product.changetime', $sorting->getDirection())
+            ->addOrderBy('product.id', $sorting->getDirection());
     }
 
 }

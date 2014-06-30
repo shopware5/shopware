@@ -129,48 +129,48 @@ class PropertyFacetHandler implements FacetHandlerInterface
 
         $query->select(
             array(
-                'productProperties.valueID as id',
-                'COUNT(DISTINCT products.id) as total'
+                'productProperty.valueID as id',
+                'COUNT(DISTINCT product.id) as total'
             )
         );
 
         $query->innerJoin(
-            'products',
+            'product',
             's_filter',
             'propertySet',
-            'propertySet.id = products.filtergroupID'
+            'propertySet.id = product.filtergroupID'
         );
 
         $query->innerJoin(
-            'products',
+            'product',
             's_filter_articles',
-            'productProperties',
-            'productProperties.articleID = products.id'
+            'productProperty',
+            'productProperty.articleID = product.id'
         );
 
         $query->innerJoin(
-            'productProperties',
+            'productProperty',
             's_filter_values',
-            'propertyOptions',
-            'propertyOptions.id = productProperties.valueID'
+            'propertyOption',
+            'propertyOption.id = productProperty.valueID'
         );
 
         $query->innerJoin(
-            'propertyOptions',
+            'propertyOption',
             's_filter_options',
-            'propertyGroups',
-            'propertyGroups.id = propertyOptions.optionID
-             AND propertyGroups.filterable = 1'
+            'propertyGroup',
+            'propertyGroup.id = propertyOption.optionID
+             AND propertyGroup.filterable = 1'
         );
 
         $query->innerJoin(
-            'propertyOptions',
+            'propertyOption',
             's_filter_relations',
-            'propertyRelations',
-            'propertyRelations.optionID = propertyGroups.id'
+            'propertyRelation',
+            'propertyRelation.optionID = propertyGroup.id'
         );
 
-        $query->groupBy('productProperties.valueID');
+        $query->groupBy('productProperty.valueID');
     }
 
     public function supportsFacet(FacetInterface $facet)
