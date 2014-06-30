@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Week', {
                 position: 'bottom',
                 fields: ['date'],
                 title: '{s name=chart/week/titleBottom}Date{/s}',
-                dateFormat: '\\K\\W W, Y',
+                dateFormat: '{s name=chart/week/week_format}\\\\C\\\\W{/s} W, Y',
                 minorTickSteps: 6,
                 step: [Ext.Date.HOUR, 7 * 24],
                 label: {
@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Week', {
                                 (me.subApp.currencyAtEnd == 1)
                             );
                             this.setTitle(
-                                Ext.Date.format(storeItem.get('date'), '\\K\\W W, Y') + '<br><br>&nbsp;' +
+                                Ext.Date.format(storeItem.get('date'), '{s name=chart/week/week_format}\\\\C\\\\W{/s} W, Y') + '<br><br>&nbsp;' +
                                 value
                             );
                         }
@@ -127,7 +127,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Week', {
                                 (me.subApp.currencyAtEnd == 1)
                             );
                             this.setTitle(
-                                Ext.Date.format(storeItem.get('date'), '\\K\\W W, Y') + '<br><br>&nbsp;' +
+                                Ext.Date.format(storeItem.get('date'), '{s name=chart/week/week_format}\\\\C\\\\W{/s} W, Y') + '<br><br>&nbsp;' +
                                 value
                             )
 
