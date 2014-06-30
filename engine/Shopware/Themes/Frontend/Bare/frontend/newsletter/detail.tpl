@@ -32,8 +32,14 @@
 		{* Newsletter detail buttons *}
 		{block name="frontend_newsletter_detail_buttons"}
 			<div class="newsletter-detail--buttons">
-				<a href="{$sBackLink}" class="btn btn--secondary left"><i class="icon--arrow-left is--small"></i>{s name='NewsletterDetailLinkBack'}{/s}</a>
-				<a href="{$sContentItem.link}" class="btn btn--primary right" target="_blank">{s name='NewsletterDetailLinkNewWindow'}{/s}<i class="icon--arrow-right is--small"></i></a>
+
+				{block name="frontend_newsletter_detail_buttons_window"}
+					<a href="{$sContentItem.link}" class="newsletter-detail--window btn btn--primary right" target="_blank">{s name='NewsletterDetailLinkNewWindow'}{/s}<i class="icon--arrow-right is--small"></i></a>
+				{/block}
+
+				{block name="frontend_newsletter_detail_buttons_backlink"}
+					<a href="{$sBackLink}" class="newsletter-detail--backlink btn btn--secondary left"><i class="icon--arrow-left is--small"></i>{s name='NewsletterDetailLinkBack'}{/s}</a>
+				{/block}
 			</div>
 		{/block}
 

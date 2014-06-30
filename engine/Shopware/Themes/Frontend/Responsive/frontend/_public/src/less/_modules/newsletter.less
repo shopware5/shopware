@@ -1,10 +1,7 @@
 // Newsletter listing
 .newsletter-listing--content {
 
-    .newsletter-listing--table {
-	.border-radius();
-    }
-
+    .newsletter-listing--table { .border-radius(); }
     .newsletter-listing--table-headline {
 	.clearfix();
 
@@ -12,28 +9,27 @@
 	    width: 65%;
 	    float: left;
 	}
-
 	.newsletter-listing--headline-button {
 	    width: 35%;
 	    float: left;
 	}
     }
-
     .newsletter-listing--entry {
 	.unitize-padding(10, 0, 10, 0, 16);
 	.clearfix();
 	border-bottom: 1px solid @borderColor;
 
 	.newsletter-listing--entry-description {
+	    .unitize(4, 16, margin-top);
 	    width: 65%;
 	    float: left;
 	}
-
 	.newsletter-listing--entry-button {
 	    width: 35%;
 	    float: left;
-	}
 
+	    .btn { float: right; }
+	}
 	&:last-child { border: none; }
     }
 }
@@ -53,9 +49,16 @@
 	    }
 	}
     }
-
     .newsletter-detail--buttons {
 	.unitize(16, 16, margin-top);
+
+	// Icon
+	.newsletter-detail--window {
+	    .unitize(10, 16, margin-bottom);
+	    text-align: center;
+
+	    [class^=icon] { .unitize-margin(-2, 0, 0, 16); }
+	}
     }
 }
 
@@ -75,10 +78,7 @@
     }
 
     // Newsletter detail
-    .newsletter-detail--content {
-	.unitize(20, 16, margin-top);
-    }
-
+    .newsletter-detail--content { .unitize(20, 16, margin-top); }
 }
 
 @media screen and (min-width: @desktopViewportWidth) {
@@ -87,13 +87,22 @@
     .newsletter-listing--content {
 	.unitize(45, 16, margin-top);
 	width: 78%;
-	float: right
+	float: right;
+
+	.newsletter-listing--table-headline {
+	    .newsletter-listing--headline-name { width: 90%; }
+	    .newsletter-listing--headline-button { width: 10%; }
+	}
+	.newsletter-listing--entry {
+	    .newsletter-listing--entry-description { width: 90%; }
+	    .newsletter-listing--entry-button { width: 10%; }
+	}
     }
 
     // Newsletter detail
     .newsletter-detail--content {
 	.unitize(45, 16, margin-top);
 	width: 78%;
-	float: right
+	float: right;
     }
 }
