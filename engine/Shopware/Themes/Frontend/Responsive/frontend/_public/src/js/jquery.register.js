@@ -51,6 +51,8 @@
         me.$countySelectFields = me.$el.find('.select--country');
         me.$stateSelectContainers = $('.register--state-selection');
 
+        me.$paymentMethods = me.$el.find('.payment--method');
+
         me.$inputs = me.$el.find('.is--required');
 
         me.checkType();
@@ -67,6 +69,7 @@
         me.$skipAccount.on('change.' + pluginName, $.proxy(me.checkSkipAccount, me));
         me.$alternativeShipping.on('change.' + pluginName, $.proxy(me.checkChangeShipping, me));
         me.$countySelectFields.on('change.' + pluginName, $.proxy(me.onCountryChanged, me));
+        me.$paymentMethods.on('change.' + pluginName, $.proxy(me.onPaymentChanged, me));
         me.$inputs.on('blur.' + pluginName, $.proxy(me.onValidateInput, me));
         me.$submitBtn.on('click.' + pluginName, $.proxy(me.onSubmitBtn, me));
     };
@@ -134,6 +137,29 @@
             areaSelection.removeClass('is--hidden');
             plugin.setEnabled();
         }
+    };
+
+    Plugin.prototype.onPaymentChanged = function() {
+        var me = this,
+            isChecked,
+            requiredFields,
+            requiredMethod,
+            classMethod;
+
+        $.each(me.$paymentMethods, function( index, value ) {
+            var radio = $(value).find('.payment--selection input');
+            isChecked = radio[0].checked;
+
+            requiredFields = $(value).find('.is--required');
+            requiredMethod = (isChecked) ? me.setHtmlRequired : me.removeHtmlRequired;
+            classMethod = (!isChecked) ? 'addClass' : 'removeClass';
+
+            requiredMethod(requiredFields);
+
+            var fieldset = $(value).find('.payment--content');
+
+            fieldset[classMethod](me.opts.hiddenCls);
+        });
     };
 
     Plugin.prototype.onSubmitBtn = function(event) {

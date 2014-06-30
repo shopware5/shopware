@@ -39,6 +39,13 @@
 								{include file="frontend/register/billing_fieldset.tpl" update=true form_data=$sFormData error_flags=$sErrorFlag country_list=$sCountryList}
 							{/block}
 
+                            {block name='frontend_account_billing_required'}
+                                {* Required fields hint *}
+                                <div class="register--required-info required_fields">
+                                    {s name='RegisterPersonalRequiredText' namespace='frontend/register/personal_fieldset'}{/s}
+                                </div>
+                            {/block}
+
 							{* Billing actions *}
 							{block name="frontend_account_billing_action_buttons"}
 								<div class="account--actions">
@@ -47,7 +54,7 @@
 											{s name="BillingLinkBack"}{/s}
 										</a>
 									{/if}
-									<input type="submit" value="{s name='BillingLinkSend'}{/s}" class="btn btn--primary right"/>
+									<input type="submit" value="{s name='BillingLinkSend'}{/s}" class="btn btn--primary register--submit right"/>
 								</div>
 							{/block}
 
