@@ -22,8 +22,6 @@
                                 <a href="{$search_result.link}" title="{$search_result.name|escape:'html'}">
                                     {if $search_result.thumbNails.0 && file_exists($search_result.thumbNails.0)}
                                         <img src="{$search_result.thumbNails.0}" class="media--image">
-                                    {else}
-                                        &nbsp;
                                     {/if}
                                 </a>
                             </div>
