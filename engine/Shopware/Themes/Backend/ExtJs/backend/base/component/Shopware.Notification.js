@@ -179,6 +179,8 @@ Ext.define('Shopware.Notification', {
      */
     _validTypes: /(notice|info|success|error)/i,
 
+    closeText: 'Schließen',
+
     /**
      * Sets the default type of the alert and block message.
      *
@@ -644,7 +646,7 @@ Ext.define('Shopware.Notification', {
         btnContent.add({
             xtype: 'button',
             ui: 'growl-sticky',
-            text: 'Schließen',
+            text: me.closeText,
             height: 22,
             handler: closeHandler
         });

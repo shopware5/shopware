@@ -110,6 +110,18 @@ Ext.define('Shopware.window.Detail', {
     saveButton: undefined,
 
     /**
+     * Button text for the { @link #cancelButton }.
+     * @type { String }
+     */
+    cancelButtonText: '{s name="detail_window/cancel_button_text"}Cancel{/s}',
+
+    /**
+     * Button text for the { @link #saveButton }.
+     * @type { String }
+     */
+    saveButtonText: '{s name="detail_window/save_button_text"}Save{/s}',
+
+    /**
      * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
      * is scope-independent and it always returns the class from which it was called, regardless of what
      * this points to during run-time.
@@ -160,19 +172,7 @@ Ext.define('Shopware.window.Detail', {
              *
              * @optional
              */
-            hasOwnController: false,
-
-            /**
-             * Button text for the { @link #cancelButton }.
-             * @type { String }
-             */
-            cancelButtonText: '{s name="detail_window/cancel_button_text"}Cancel{/s}',
-
-            /**
-             * Button text for the { @link #saveButton }.
-             * @type { String }
-             */
-            saveButtonText: '{s name="detail_window/save_button_text"}Save{/s}'
+            hasOwnController: false
         },
 
         /**
@@ -803,7 +803,7 @@ Ext.define('Shopware.window.Detail', {
         me.cancelButton = Ext.create('Ext.button.Button', {
             cls: 'secondary',
             name: 'cancel-button',
-            text: me.getConfig('cancelButtonText'),
+            text: me.cancelButtonText,
             handler: function () {
                 me.onCancel();
             }
@@ -825,7 +825,7 @@ Ext.define('Shopware.window.Detail', {
         me.saveButton = Ext.create('Ext.button.Button', {
             cls: 'primary',
             name: 'detail-save-button',
-            text: me.getConfig('saveButtonText'),
+            text: me.saveButtonText,
             handler: function () {
                 me.onSave();
             }

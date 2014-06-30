@@ -62,7 +62,7 @@ Ext.define('Enlight.app.WindowManagement', {
     extend: 'Ext.app.Controller',
 
     /**
-     * Requires class object for is neccessary for this
+     * Requires class object for is necessary for this
      * class to work
      *
      * @array
@@ -84,7 +84,7 @@ Ext.define('Enlight.app.WindowManagement', {
     defaultIconCls: 'closeable',
 
     /**
-     * Indicates if the controller initalizes the neccessary view
+     * Indicates if the controller initializes the necessary view
      *
      * @private
      * @boolean

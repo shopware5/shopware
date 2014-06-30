@@ -69,6 +69,41 @@ Ext.define('Shopware.grid.Controller', {
     },
 
     /**
+     * Title of the confirm message box.
+     * The confirm box will be displayed when the user try to delete some grid items.
+     *
+     * @type { string }
+     */
+    deleteConfirmTitle: '{s name="grid_controller/delete_confirm_title"}Delete items{/s}',
+
+    /**
+     * Message of the confirm message box.
+     * The confirm box will be displayed when the user try to delete some grid items.
+     *
+     * @type { string }
+     */
+    deleteConfirmText: '{s name="grid_controller/delete_confirm_text"}Are you sure you want to delete the selected items?{/s}',
+
+    /**
+     * Info text of the { @link Shopware.window.Progress }.
+     * The { @link Shopware.window.Progress } window will be displayed when the user
+     * try to delete some grid items.
+     *
+     * @type { string }
+     */
+    deleteInfoText: '{s name="grid_controller/delete_info_text"}<b>The records will be deleted.</b> <br>To cancel the process, you can use the <b><i>`Cancel process`</i></b> Button. Depending on the selected volume of data may take several seconds to complete this process.{/s}',
+
+    /**
+     * The progress bar text of the { @link Shopware.window.Progress }.
+     * The snippet contains two placeholders which will be replaced at runtime.
+     * The first placeholder will be replaced with the current index and
+     * the second placeholder with the total count of records.
+     *
+     * @type { string }
+     */
+    deleteProgressBarText: '{s name="grid_controller/delete_progress_bar_text"}Item [0] of [1]{/s}',
+
+    /**
      * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
      * is scope-independent and it always returns the class from which it was called, regardless of what
      * this points to during run-time.
@@ -124,42 +159,7 @@ Ext.define('Shopware.grid.Controller', {
              *
              * @type { string }
              */
-            eventAlias: undefined,
-
-            /**
-             * Title of the confirm message box.
-             * The confirm box will be displayed when the user try to delete some grid items.
-             *
-             * @type { string }
-             */
-            deleteConfirmTitle: '{s name="grid_controller/delete_confirm_title"}Delete items{/s}',
-
-            /**
-             * Message of the confirm message box.
-             * The confirm box will be displayed when the user try to delete some grid items.
-             *
-             * @type { string }
-             */
-            deleteConfirmText: '{s name="grid_controller/delete_confirm_text"}Are you sure you want to delete the selected items?{/s}',
-
-            /**
-             * Info text of the { @link Shopware.window.Progress }.
-             * The { @link Shopware.window.Progress } window will be displayed when the user
-             * try to delete some grid items.
-             *
-             * @type { string }
-             */
-            deleteInfoText: '{s name="grid_controller/delete_info_text"}<b>The records will be deleted.</b> <br>To cancel the process, you can use the <b><i>`Cancel process`</i></b> Button. Depending on the selected volume of data may take several seconds to complete this process.{/s}',
-
-            /**
-             * The progress bar text of the { @link Shopware.window.Progress }.
-             * The snippet contains two placeholders which will be replaced at runtime.
-             * The first placeholder will be replaced with the current index and
-             * the second placeholder with the total count of records.
-             *
-             * @type { string }
-             */
-            deleteProgressBarText: '{s name="grid_controller/delete_progress_bar_text"}Item [0] of [1]{/s}'
+            eventAlias: undefined
         },
 
         /**
@@ -559,8 +559,8 @@ Ext.define('Shopware.grid.Controller', {
      */
     onDeleteItems: function (grid, records, button) {
         var me = this, window,
-            text = me.getConfig('deleteConfirmText'),
-            title = me.getConfig('deleteConfirmTitle');
+            text = me.deleteConfirmText,
+            title = me.deleteConfirmTitle;
 
         if (!Shopware.app.Application.fireEvent('before-delete-items', me, records, grid, title, text)) {
             return false;
@@ -579,11 +579,11 @@ Ext.define('Shopware.grid.Controller', {
             window = Ext.create('Shopware.window.Progress', {
                 configure: function() {
                     return {
-                        infoText: me.getConfig('deleteInfoText'),
+                        infoText: me.deleteInfoText,
                         subApp: me.subApplication,
                         tasks: [
                             {
-                                text: me.getConfig('deleteProgressBarText'),
+                                text: me.deleteProgressBarText,
                                 event: me.getConfig('eventAlias') + '-batch-delete-item',
                                 totalCount: records.length,
                                 data: records
