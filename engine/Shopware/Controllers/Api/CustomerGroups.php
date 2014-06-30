@@ -105,7 +105,6 @@ class Shopware_Controllers_Api_CustomerGroups extends Shopware_Controllers_Api_R
         );
 
         $this->View()->assign(array('success' => true, 'data' => $data));
-        $this->Response()->setHeader('Location', $location);
     }
 
     /**
