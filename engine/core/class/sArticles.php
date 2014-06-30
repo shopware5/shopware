@@ -3760,7 +3760,7 @@ class sArticles
             $config,
             $context
         );
-        
+
         $searchResult = $this->searchService->search(
             $criteria,
             $context
@@ -3901,7 +3901,7 @@ class sArticles
         if ($this->showArticleNavigation()) {
             $data["sNavigation"] = $this->sGetAllArticlesInCategory($product->getId());
         }
-        
+
         return $data;
     }
 
@@ -4073,7 +4073,7 @@ class sArticles
         }
 
         $activeSupplier = array();
-        foreach($suppliers as $supplier) {
+        foreach ($suppliers as $supplier) {
             if ($supplier['id'] == $config['sSupplier']) {
                 $activeSupplier = $supplier;
             }
@@ -4637,7 +4637,7 @@ class sArticles
     private function getFlatPropertyArray(array $propertySet)
     {
         $data = array();
-        foreach($propertySet['groups'] as $group) {
+        foreach ($propertySet['groups'] as $group) {
             $groupData = array(
                 'id' => $group['id'],
                 'optionID' => $group['id'],
@@ -5401,7 +5401,7 @@ class sArticles
      */
     private function fireArticlesByCategoryEvents(array $result, $categoryId)
     {
-        foreach($result['sArticles'] as &$article) {
+        foreach ($result['sArticles'] as &$article) {
             $cheapestPrice = $this->eventManager->filter(
                 'sArticles::sGetCheapestPrice::replace',
                 $article["price"],
@@ -5804,7 +5804,7 @@ class sArticles
                 )
             );
         } else {
-            foreach($getArticle["sBlockPrices"] as &$blockPrice) {
+            foreach ($getArticle["sBlockPrices"] as &$blockPrice) {
                 $blockPrice["price"] = $this->eventManager->filter(
                     'sArticles::sCalculatingPrice::replace',
                     $blockPrice["price"],

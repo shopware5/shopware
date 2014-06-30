@@ -85,7 +85,7 @@ class CountryHydrator extends Hydrator
 
         $data = array_merge($data, $translation);
 
-        $country->setId((int)$data['__country_id']);
+        $country->setId((int) $data['__country_id']);
 
         $country->setName($data['__country_countryname']);
 

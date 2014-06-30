@@ -108,7 +108,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
         if (!empty($mediaIds)) {
             $media = $this->getMedia($mediaIds);
 
-            foreach($data as &$option) {
+            foreach ($data as &$option) {
                 $id = $option['__configuratorOption_media'];
 
                 if (isset($media[$id])) {

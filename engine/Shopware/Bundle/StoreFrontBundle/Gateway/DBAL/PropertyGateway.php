@@ -161,7 +161,7 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
             ->addOrderBy('relations.position')
             ->addOrderBy('propertyGroup.name');
 
-        switch($sortMode) {
+        switch ($sortMode) {
             case self::FILTERS_SORT_NUMERIC:
                 $query->addOrderBy('propertyOption.value_numeric');
                 break;
