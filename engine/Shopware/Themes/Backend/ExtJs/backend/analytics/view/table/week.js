@@ -66,7 +66,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Week', {
                 xtype: 'datecolumn',
                 dataIndex: 'date',
                 text: '{s name=table/week/week}Week{/s}',
-                format: '\\K\\W W, Y'
+                format: '{s name=table/week/week_format}\\\\C\\\\W{/s} W, Y'
             },
             {
                 xtype: 'numbercolumn',

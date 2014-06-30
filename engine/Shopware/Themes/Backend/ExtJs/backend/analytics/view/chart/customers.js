@@ -49,14 +49,17 @@ Ext.define('Shopware.apps.Analytics.view.chart.Customers', {
         },
         {
             type: 'Category',
+            title: '{s name=chart/customers/days/title}Days{/s}',
             position: 'bottom',
             fields: ['week'],
             label: {
                 rotate: {
                     degrees: 315
+                },
+                renderer:function (value) {
+                    return Ext.util.Format.date(value);
                 }
-            },
-            title: '{s name=chart/customers/days/title}Days{/s}'
+            }
         }
     ],
 
@@ -72,7 +75,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Customers', {
                     height: 45,
                     renderer: function(storeItem) {
                         var data = Ext.util.Format.number(storeItem.get('newCustomersPercent'), '0.00') + ' %';
-                        this.setTitle(storeItem.get('week') + ': ' + data);
+                        this.setTitle(Ext.util.Format.date(storeItem.get('week')) + ': ' + data);
                     }
                 }
             ),
@@ -83,7 +86,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Customers', {
                     height: 45,
                     renderer: function(storeItem) {
                         var data = Ext.util.Format.number(storeItem.get('oldCustomersPercent'), '0.00') + ' %';
-                        this.setTitle(storeItem.get('week') + ': ' + data);
+                        this.setTitle(Ext.util.Format.date(storeItem.get('week')) + ': ' + data);
                     }
                 }
             )

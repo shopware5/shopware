@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 fields: ['datum'],
                 title: '{s name=chart/visitors/titleBottom}Month{/s}',
                 step: [ Ext.Date.DAY, 1 ],
-                dateFormat: 'D, M, Y',
+                dateFormat: Ext.util.Format.dateFormat,
                 label: {
                     rotate: {
                         degrees: 315
@@ -116,7 +116,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 renderer: function (storeItem) {
                     this.setTitle(
                         '{s name=chart/visitors/legend_impression}Total impressions{/s} ' +
-                        Ext.Date.format(storeItem.get('datum'), 'D, M, Y')
+                            Ext.util.Format.date(storeItem.get('datum'))
                     );
                     me.getSubShopData(storeItem, 'totalImpressions');
                 }
@@ -133,7 +133,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 renderer: function (storeItem) {
                     this.setTitle(
                         '{s name=chart/visitors/legend_visits}Total visits{/s} ' +
-                        Ext.Date.format(storeItem.get('datum'), 'D, M, Y')
+                            Ext.util.Format.date(storeItem.get('datum'))
                     );
                     me.getSubShopData(storeItem, 'totalVisits');
                 }
@@ -145,7 +145,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 height: 30,
                 renderer: function(storeItem) {
                     this.setTitle(
-                        Ext.Date.format(storeItem.get('datum'), 'D, M, Y') + ':&nbsp;' +
+                        Ext.util.Format.date(storeItem.get('datum')) + ':&nbsp;' +
                         storeItem.get('totalVisits')
                     )
                 }
@@ -156,7 +156,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 height: 30,
                 renderer: function(storeItem) {
                     this.setTitle(
-                        Ext.Date.format(storeItem.get('datum'), 'D, M, Y') + ':&nbsp;' +
+                        Ext.util.Format.date(storeItem.get('datum')) + ':&nbsp;' +
                         storeItem.get('totalImpressions')
                     )
                 }

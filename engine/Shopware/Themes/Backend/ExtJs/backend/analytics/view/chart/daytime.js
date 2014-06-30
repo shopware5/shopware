@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Daytime', {
                 fields: ['date'],
                 title: '{s name=chart/daytime/titleBottom}Time{/s}',
                 step: [Ext.Date.HOUR, 1],
-                dateFormat: 'H:00'
+                dateFormat: timeFormat
             }
         ];
 
@@ -125,8 +125,10 @@ Ext.define('Shopware.apps.Analytics.view.chart.Daytime', {
             (me.subApp.currencyAtEnd == 1)
         );
 
+        var timeValue = storeItem.get('date');
+        timeValue.setMinutes(0);
         tip.setTitle(
-            Ext.Date.format(storeItem.get('date'), 'H:00')+
+            Ext.util.Format.date(timeValue, timeFormat)+
             '<br><br>&nbsp;' + sales
         );
     }
