@@ -47,7 +47,7 @@ if (file_exists('config.php') && strpos(file_get_contents('config.php'), '%db.da
     echo 'Shopware 4 must be configured installed before use. Please run the <a href="recovery/install/">installer</a>.';
 
     echo '<h2>Fehler</h2>';
-    echo 'Shopware 4 muss zunächst konfiguriert werden. Bitte führen Sie den <a href="recovery/install/">Installer</a>.';
+    echo 'Shopware 4 muss zunächst konfiguriert werden. Bitte führen Sie den <a href="recovery/install/">Installer</a> aus.';
 
     return;
 }
