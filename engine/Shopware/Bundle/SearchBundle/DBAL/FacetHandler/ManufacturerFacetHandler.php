@@ -69,11 +69,11 @@ class ManufacturerFacetHandler implements FacetHandlerInterface
         $query->resetQueryPart('orderBy');
 
         $query->select(array(
-            'products.supplierID as id',
-            'COUNT(DISTINCT products.id) as total'
+            'product.supplierID as id',
+            'COUNT(DISTINCT product.id) as total'
         ));
 
-        $query->groupBy('products.supplierID');
+        $query->groupBy('product.supplierID');
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();

@@ -99,7 +99,7 @@ class PriceFacetHandler implements FacetHandlerInterface
 
         $min = $statement->fetch(\PDO::FETCH_COLUMN);
 
-        $query->groupBy('products.id')
+        $query->groupBy('product.id')
             ->orderBy('cheapest_price', 'DESC')
             ->setFirstResult(0)
             ->setMaxResults(1);

@@ -177,7 +177,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
         $query->resetQueryPart('groupBy')
             ->resetQueryPart('orderBy');
 
-        $query->select('COUNT(DISTINCT products.id) as count');
+        $query->select('COUNT(DISTINCT product.id) as count');
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -195,8 +195,8 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
     private function getProducts(SearchBundle\Criteria $criteria, Context $context)
     {
         $query = $this->getQuery($criteria, $context)
-            ->addSelect(array('variants.articleID', 'variants.ordernumber'))
-            ->addGroupBy('products.id')
+            ->addSelect(array('variant.articleID', 'variant.ordernumber'))
+            ->addGroupBy('product.id')
             ->setFirstResult($criteria->getOffset())
             ->setMaxResults($criteria->getLimit());
 
@@ -235,23 +235,25 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
     {
         $query = $this->entityManager->getDBALQueryBuilder();
 
-        $query->from('s_articles', 'products')
+        $query->from('s_articles', 'product')
             ->innerJoin(
-                'products',
+                'product',
                 's_articles_details',
-                'variants',
-                'variants.id = products.main_detail_id
-                 AND variants.active = 1
-                 AND products.active = 1'
+                'variant',
+                'variant.id = product.main_detail_id
+                 AND variant.active = 1
+                 AND product.active = 1'
             )
             ->innerJoin(
-                'products',
+                'product',
                 's_core_tax',
                 'tax',
-                'tax.id = products.taxID'
+                'tax.id = product.taxID'
             );
 
         $this->addConditions($criteria, $query, $context);
+
+        $query->includesTable('s_articles_details');
 
         return $query;
     }

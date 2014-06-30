@@ -60,11 +60,11 @@ class CategoryConditionHandler implements ConditionHandlerInterface
         Context $context
     ) {
         $query->innerJoin(
-            'products',
+            'product',
             's_articles_categories_ro',
-            'product_categories',
-            'product_categories.articleID = products.id
-             AND product_categories.categoryID IN (:category)'
+            'productCategory',
+            'productCategory.articleID = product.id
+             AND productCategory.categoryID IN (:category)'
         );
 
         $query->setParameter(

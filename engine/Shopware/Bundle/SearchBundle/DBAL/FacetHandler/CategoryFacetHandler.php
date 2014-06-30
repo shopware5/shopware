@@ -79,28 +79,28 @@ class CategoryFacetHandler implements FacetHandlerInterface
 
         $query->select(
             array(
-                'product_categories.categoryID as id',
-                'COUNT(DISTINCT products.id) as total'
+                'productCategory.categoryID as id',
+                'COUNT(DISTINCT product.id) as total'
             )
         );
 
         $query->innerJoin(
-            'products',
+            'product',
             's_articles_categories_ro',
-            'product_categories',
-            'product_categories.articleID = products.id'
+            'productCategory',
+            'productCategory.articleID = product.id'
         );
 
         $query->innerJoin(
-            'product_categories',
+            'productCategory',
             's_categories',
-            'categories',
-            'categories.id = product_categories.categoryID
-             AND categories.parent IN (:category)
-             AND categories.active = 1'
+            'category',
+            'category.id = productCategory.categoryID
+             AND category.parent IN (:category)
+             AND category.active = 1'
         );
 
-        $query->groupBy('product_categories.categoryID');
+        $query->groupBy('productCategory.categoryID');
 
         if (!$query->getParameter(':category')) {
             $query->setParameter(

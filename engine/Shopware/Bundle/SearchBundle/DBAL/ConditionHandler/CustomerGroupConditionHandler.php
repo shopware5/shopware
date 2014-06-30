@@ -60,11 +60,11 @@ class CustomerGroupConditionHandler implements ConditionHandlerInterface
         Context $context
     ) {
         $query->leftJoin(
-            'products',
+            'product',
             's_articles_avoid_customergroups',
-            'avoidCustomers',
-            'avoidCustomers.articleID = products.id
-             AND avoidCustomers.customerGroupId IN (:customerGroupIds)'
+            'avoidCustomerGroup',
+            'avoidCustomerGroup.articleID = product.id
+             AND avoidCustomerGroup.customerGroupId IN (:customerGroupIds)'
         );
 
         $query->setParameter(
@@ -73,6 +73,6 @@ class CustomerGroupConditionHandler implements ConditionHandlerInterface
             Connection::PARAM_INT_ARRAY
         );
 
-        $query->andWhere('avoidCustomers.articleID IS NULL');
+        $query->andWhere('avoidCustomerGroup.articleID IS NULL');
     }
 }
