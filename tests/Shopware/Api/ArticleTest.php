@@ -387,9 +387,16 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
         $this->assertEquals(200, $response->getStatus());
+        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
+        $this->assertNull(
+            $response->getHeader('Set-Cookie'),
+            'There should be no set-cookie header set.'
+        );
+        $this->assertNull(
+            $response->getHeader('location',
+            'There should be no location header set.'
+        ));
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
@@ -410,6 +417,7 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
         $result = Zend_Json::decode($result);
 
         $article = $result['data'];
+
 
         $this->assertEquals($id, $article['id']);
         $this->assertEquals($testData['description'], $article['description']);
@@ -626,7 +634,7 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('success', $result);
         $this->assertTrue($result['success']);
-        
+
         $this->assertEquals('create', $result['data'][0]['operation']);
         $this->assertEquals('create', $result['data'][1]['operation']);
         $this->assertEquals('create', $result['data'][2]['operation']);
