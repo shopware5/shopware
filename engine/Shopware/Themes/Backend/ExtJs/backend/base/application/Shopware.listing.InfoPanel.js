@@ -62,6 +62,11 @@ Ext.define('Shopware.listing.InfoPanel', {
     title: '{s name="info_panel/title"}Detailed information{/s}',
 
     /**
+     * Configuration text for the info panel if no record is selected.
+     */
+    emptyText: '{s name="info_panel/empty_text"}No record selected.{/s}',
+
+    /**
      * Get the reference to the class from which this object was instantiated.
      * Note that unlike self, this.statics() is scope-independent and it always
      * returns the class from which it was called, regardless of what this points to during run-time
@@ -135,12 +140,7 @@ Ext.define('Shopware.listing.InfoPanel', {
              *  2. A object => The object can be an Ext.XTemplate
              *  3. A function => The configured function will be called to create the info field.
              */
-            fields: { },
-
-            /**
-             * Configuration text for the info panel if no record is selected.
-             */
-            emptyText: '{s name="info_panel/empty_text"}No record selected.{/s}'
+            fields: { }
         },
 
         /**
@@ -307,7 +307,7 @@ Ext.define('Shopware.listing.InfoPanel', {
             autoScroll: true,
             padding: 5,
             style: 'color: #6c818f;font-size:11px',
-            emptyText: '<div style="font-size:13px; text-align: center;">' + me.getConfig('emptyText') + '</div>',
+            emptyText: '<div style="font-size:13px; text-align: center;">' + me.emptyText + '</div>',
             deferEmptyText: false,
             itemSelector: 'div.item',
             renderData: []

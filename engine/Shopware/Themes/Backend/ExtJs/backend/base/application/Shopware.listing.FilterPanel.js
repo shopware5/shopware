@@ -120,6 +120,25 @@ Ext.define('Shopware.listing.FilterPanel', {
     fieldAssociations: [ ],
 
     /**
+     * Contains the text value for the { @link #infoContainer }.
+     * This container is displayed at the top of the filter panel.
+     * @type { String }
+     */
+    infoTextSnippet: '{s name="filter_panel/info_text"}Activate the filter fields over the checkbox which displayed for each field. Activated fields will be joined with an AND condition.{/s}',
+
+    /**
+     * Contains the text for the { @link #filterButton }.
+     * @type { String }
+     */
+    filterButtonText: '{s name="filter_panel/filter_button_text"}Filter result{/s}',
+
+    /**
+     * Contains the text for the { @link #resetButton }.
+     * @type { String }
+     */
+    resetButtonText: '{s name="filter_panel/reset_button_text"}Reset filters{/s}',
+
+    /**
      * Get the reference to the class from which this object was instantiated.
      * Note that unlike self, this.statics() is scope-independent and it always
      * returns the class from which it was called, regardless of what this points to during run-time
@@ -234,26 +253,7 @@ Ext.define('Shopware.listing.FilterPanel', {
              *
              *    createProductNameField: function() { ... }
              */
-            fields: { },
-
-            /**
-             * Contains the text value for the { @link #infoContainer }.
-             * This container is displayed at the top of the filter panel.
-             * @type { String }
-             */
-            infoText: '{s name="filter_panel/info_text"}Activate the filter fields over the checkbox which displayed for each field. Activated fields will be joined with an AND condition.{/s}',
-
-            /**
-             * Contains the text for the { @link #filterButton }.
-             * @type { String }
-             */
-            filterButtonText: '{s name="filter_panel/filter_button_text"}Filter result{/s}',
-
-            /**
-             * Contains the text for the { @link #resetButton }.
-             * @type { String }
-             */
-            resetButtonText: '{s name="filter_panel/reset_button_text"}Reset filters{/s}'
+            fields: { }
         },
 
         /**
@@ -456,7 +456,7 @@ Ext.define('Shopware.listing.FilterPanel', {
         var me = this;
 
         me.infoText = Ext.create('Ext.container.Container', {
-            html: me.getConfig('infoText'),
+            html: me.infoTextSnippet,
             style: 'color: #6c818f; font-size: 11px; line-height: 14px;',
             margin: '0 0 10'
         });
@@ -566,7 +566,7 @@ Ext.define('Shopware.listing.FilterPanel', {
         me.filterButton = Ext.create('Ext.button.Button', {
             cls: 'secondary small',
             iconCls: 'sprite-funnel',
-            text: me.getConfig('filterButtonText'),
+            text: me.filterButtonText,
             handler: function() {
                 me.filterGridStore();
             }
@@ -587,7 +587,7 @@ Ext.define('Shopware.listing.FilterPanel', {
         me.resetButton = Ext.create('Ext.button.Button', {
             cls: 'secondary small',
             iconCls: 'sprite-funnel--minus',
-            text: me.getConfig('resetButtonText'),
+            text: me.resetButtonText,
             handler: function() {
                 me.getForm().reset();
                 me.gridPanel.getStore().clearFilter(true);

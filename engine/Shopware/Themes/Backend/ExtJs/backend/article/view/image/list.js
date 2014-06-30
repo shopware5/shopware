@@ -73,7 +73,12 @@ Ext.define('Shopware.apps.Article.view.image.List', {
         previewButton: '{s name=image/list/preview_button}Mark selected image as preview image{/s}',
         removeButton: '{s name=image/list/remove_button}Remove selected image{/s}',
         configButton: '{s name=image/list/config_button}Open configuration{/s}',
-        mainImage:'{s name=image/list/main_image}Preview{/s}'
+        mainImage:'{s name=image/list/main_image}Preview{/s}',
+        sizes: {
+            small: '{s name=image/list/size_small}Small{/s}',
+            middle: '{s name=image/list/size_medium}Medium{/s}',
+            big: '{s name=image/list/size_large}Large{/s}'
+        }
     },
 
     dragOverCls: 'drag-over',
@@ -326,7 +331,7 @@ Ext.define('Shopware.apps.Article.view.image.List', {
             minValue: 0,
             maxValue: 2,
             tipText: function(thumb){
-                return Ext.String.format('<b>[0]</b>', me.sizes[thumb.value]);
+                return Ext.String.format('<b>[0]</b>', me.snippets.sizes[me.sizes[thumb.value]]);
             },
             listeners: {
                 changecomplete: function(slider, newValue) {
