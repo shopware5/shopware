@@ -112,6 +112,9 @@
 	}
 	.main-search--button { display: none; }
 
+}
+
+.has--cssanimations {
     .form--ajax-loader {
         .unitize(10, 16, top);
         .unitize(10, 16, right);
@@ -129,6 +132,18 @@
             border: 2px solid #ccc;
             border-top: 2px solid #333;
         }
+    }
+}
+
+.has--no-cssanimations {
+    .form--ajax-loader {
+        .unitize(14, 16, top);
+        .unitize(10, 16, right);
+        .unitize-width(16);
+        .unitize-height(16);
+        position: absolute;
+        display: none;
+        background-image: url('../../img/icons/loading-indicator.gif');
     }
 }
 
