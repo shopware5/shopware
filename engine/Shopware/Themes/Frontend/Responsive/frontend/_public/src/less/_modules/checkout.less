@@ -166,7 +166,7 @@
 	.table--aggregation {
 		.unitize-margin(0, -20);
 		.unitize-padding(12, 20);
-		background: @primaryBackgroundColor;
+		background: @primaryLightBackgroundColor;
 		border: 1px solid @borderColor;
 		border-left: 0 none;
 		border-right: 0 none;
@@ -181,6 +181,28 @@
         font-weight: bold;
     }
 }
+
+.aggregation--list {
+	.unitize-margin(0, -20);
+	.unitize-padding(12, 20);
+	background: @primaryLightBackgroundColor;
+	border-bottom: 1px solid @borderColor;
+
+	.entry--label {
+		width: 70%;
+	}
+	.entry--value {
+		width: 30%;
+		font-weight: bold;
+		text-align: right;
+	}
+
+	.entry--total {
+		font-weight: bold;
+		color: #000;
+	}
+}
+
 
 @media screen and (min-width: @tabletViewportWidth) {
 	.product--table {
@@ -261,25 +283,5 @@
 				position: relative;
 			}
 		}
-	}
-}
-.aggregation--list {
-	.unitize-margin(0, -20);
-	.unitize-padding(12, 20);
-	background: @primaryBackgroundColor;
-	border-bottom: 1px solid @borderColor;
-
-	.entry--label {
-		width: 70%;
-	}
-	.entry--value {
-		width: 30%;
-		font-weight: bold;
-		text-align: right;
-	}
-
-	.entry--total {
-		font-weight: bold;
-		color: #000;
 	}
 }
