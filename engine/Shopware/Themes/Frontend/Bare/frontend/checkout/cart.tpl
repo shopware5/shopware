@@ -89,6 +89,24 @@
 					{block name='frontend_checkout_cart_cart_footer'}
 						{include file="frontend/checkout/cart_footer.tpl"}
 					{/block}
+
+					{* Premium products *}
+					{block name='frontend_checkout_cart_premium'}
+						{if $sPremiums}
+
+							{* Headline *}
+							{block name='frontend_checkout_cart_premium_headline'}
+								<div class="panel--header secondary">
+									{s name="CartPremiumsHeadline"}{/s}
+								</div>
+							{/block}
+
+							{* Actual listing *}
+							{block name='frontend_checkout_cart_premium_products'}
+								{include file='frontend/checkout/premiums.tpl'}
+							{/block}
+						{/if}
+					{/block}
                 </div>
             </div>
         </div>
