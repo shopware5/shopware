@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,13 +19,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Snippet
- * @subpackage Model
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 /**
@@ -53,35 +46,6 @@ Ext.define('Shopware.apps.Snippet.model.Snippet', {
         { name: 'name',      type: 'string' },
         { name: 'shopId',    type: 'int' },
         { name: 'localeId',  type: 'int' }
-    ],
-
-    /**
-     * Configure the data communication
-     * @object
-     */
-    proxy: {
-        type: 'ajax',
-
-        /**
-         * Configure the url mapping for the different
-         * store operations based on
-         * @object
-         */
-        api: {
-            read: '{url controller="snippet" action="getSnippets"}',
-            create: '{url controller="snippet" action="createSnippet"}',
-            update: '{url controller="snippet" action="updateSnippet" targetField=snippets}',
-            destroy: '{url controller="snippet" action="removeSnippet"}'
-        },
-
-        /**
-         * Configure the data reader
-         * @object
-         */
-        reader: {
-            type: 'json',
-            root: 'data'
-        }
-    }
+    ]
 });
 //{/block}

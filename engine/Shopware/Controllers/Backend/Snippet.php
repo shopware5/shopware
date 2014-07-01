@@ -57,7 +57,11 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         // Get locales from s_core_shops. Join over snippets in order to get default snippets referring onto main-shop
         // as well as snippets which have no own shop
         $locales = Shopware()->Db()->fetchAll("
-            SELECT DISTINCT s.id as shopId, IFNULL(sn.localeID, s.locale_id) as localeId, CONCAT(IF(s.id=1, 'Default', s.name), ' / ', IFNULL(l.locale, l2.locale)) as displayName FROM s_core_shops s
+            SELECT
+              DISTINCT s.id as shopId,
+              IFNULL(sn.localeID, s.locale_id) as localeId,
+              CONCAT(IF(s.id=1, 'Default', s.name), ' / ', IFNULL(l.locale, l2.locale)) as displayName
+            FROM s_core_shops s
             LEFT JOIN s_core_snippets sn ON s.id = sn.shopID
             LEFT JOIN s_core_locales l ON sn.localeID=l.id
             LEFT JOIN s_core_locales l2 ON s.locale_id=l2.id
@@ -121,9 +125,10 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
     {
         $start        = (int) $this->Request()->getParam('start', 0);
         $limit        = (int) $this->Request()->getParam('limit', 20);
-        $localeId     = (int) $this->Request()->getParam('localeId', 1);
-        $shopId       = (int) $this->Request()->getParam('shopId', 1);
+        $localeId     = (int) $this->Request()->getParam('localeId');
+        $shopId       = (int) $this->Request()->getParam('shopId');
         $namespace    = $this->Request()->getParam('namespace');
+        $name    = $this->Request()->getParam('name');
         $filterParams = $this->Request()->getParam('filter');
 
         $order = $this->Request()->getParam('sort', array());
@@ -161,20 +166,23 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         $secondStmt->where('s2.id IS NULL');
 
         $stmt = Shopware()->Db()
-                          ->select()
-                          ->from(array('s' => 's_core_snippets'), array('id', 'namespace', 'name', 'value', 'value as defaultValue', 'shopId', 'localeId'));
+          ->select()
+          ->from(
+                array('s' => 's_core_snippets'),
+                array('id', 'namespace', 'name', 'value', 'value as defaultValue', 'shopId', 'localeId')
+            );
 
-        // Filter for locale
+        // Filter by locale
         if (!empty($localeId)) {
             $stmt->where('s.localeId = ?', $localeId);
         }
 
-        // Filter for shop
+        // Filter by shop
         if (!empty($shopId)) {
             $stmt->where('s.shopID = ?', $shopId);
         }
 
-        // Filter for namespace
+        // Filter by namespace
         if (!empty($namespace)) {
             $namespaceWildcard = $namespace . '/%';
             $stmt->where(
@@ -187,6 +195,17 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
                 Shopware()->Db()->quoteInto('s1.namespace LIKE ?', $namespace) .
                 ' OR ' .
                 Shopware()->Db()->quoteInto('s1.namespace LIKE ?', $namespaceWildcard)
+            );
+        }
+
+        // Filter by name
+        if (!empty($name)) {
+            $stmt->where(
+                Shopware()->Db()->quoteInto('s.name IN (?)', $name)
+            );
+
+            $secondStmt->where(
+                Shopware()->Db()->quoteInto('s1.name IN (?)', $name)
             );
         }
 
@@ -234,22 +253,31 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
      */
     public function createSnippetAction()
     {
-        $params = $this->Request()->getPost();
+        $snippets = $this->Request()->getPost();
+        $result = array();
 
-        $snippet = new Snippet();
-        $snippet->fromArray($params);
-        $snippet->setDirty(true);
-
-        try {
-            Shopware()->Models()->persist($snippet);
-            Shopware()->Models()->flush();
-        } catch (Exception $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
-            return;
+        if (array_key_exists('namespace', $snippets)) {
+            $snippets = array($snippets);
         }
 
-        $data = Shopware()->Models()->toArray($snippet);
-        $this->View()->assign(array('success' => true, 'data' => $data));
+
+        foreach ($snippets as $params) {
+            $snippet = new Snippet();
+            $snippet->fromArray($params);
+            $snippet->setDirty(true);
+
+            try {
+                Shopware()->Models()->persist($snippet);
+                Shopware()->Models()->flush();
+            } catch (Exception $e) {
+                $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+                return;
+            }
+
+            $result[$snippet->getId()] = Shopware()->Models()->toArray($snippet);
+        }
+
+        $this->View()->assign(array('success' => true, 'data' => $result));
     }
 
     /**
