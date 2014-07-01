@@ -8,8 +8,6 @@
 {* Hide breadcrumb *}
 {block name='frontend_index_breadcrumb'}{/block}
 
-{block name='frontend_index_navigation_categories_top'}{/block}
-
 {* Step Box *}
 {block name="frontend_index_content_top"}
 
