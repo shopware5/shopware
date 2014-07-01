@@ -46,11 +46,11 @@ class EsdHydrator extends Hydrator
 
     /**
      * @param array $data
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Esd
+     * @return Struct\Product\Esd
      */
     public function hydrate(array $data)
     {
-        $esd = new \Shopware\Bundle\StoreFrontBundle\Struct\Product\Esd();
+        $esd = new Struct\Product\Esd();
 
         if (isset($data['__esd_id'])) {
             $esd->setId((int) $data['__esd_id']);

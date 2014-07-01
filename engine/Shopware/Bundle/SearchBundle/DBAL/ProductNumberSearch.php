@@ -209,7 +209,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
                 'SQL_CALC_FOUND_ROWS variant.ordernumber'
             ));
 
-            foreach($select as $selection) {
+            foreach ($select as $selection) {
                 $query->addSelect($selection);
             }
         } else {
@@ -217,7 +217,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
                 'variant.ordernumber'
             ));
         }
-        
+
         $query->addGroupBy('product.id')
             ->setFirstResult($criteria->getOffset())
             ->setMaxResults($criteria->getLimit());
