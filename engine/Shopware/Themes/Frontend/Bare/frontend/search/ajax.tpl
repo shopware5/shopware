@@ -61,8 +61,8 @@
                     {* Result of all founded products *}
                     {block name="search_ajax_all_results_number"}
                         <span class="entry--all-results-number block">
-                                {$sSearchResults.sArticlesCount} {s name='SearchAjaxInfoResults'}Treffer{/s}
-                            </span>
+                            {$sSearchResults.sArticlesCount} {s name='SearchAjaxInfoResults'}Treffer{/s}
+                        </span>
                     {/block}
                 </li>
             {/block}
