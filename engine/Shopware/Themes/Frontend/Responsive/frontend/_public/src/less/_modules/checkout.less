@@ -12,13 +12,21 @@
 
 	// Actions above the actual table body
 	.table--actions {
+		.clearfix();
 		.unitize-padding(8, 0, 0);
+
+		.btn--primary i {
+			font-size: 8px;
+			margin: 0 0 0 6px;
+			vertical-align: middle;
+		}
 	}
 
 	// Hide the table header due to the labels inline for smartphones
 	.table--header { display: none }
 
-	.table--row {
+	.table--row,
+	.table-premium--list .list--entry {
 		.unitize-padding(10, 0);
 		.clearfix();
 		position: relative;
@@ -72,8 +80,8 @@
 		text-align: center;
 
 		.btn {
+			.white-gradient();
 			.unitize-padding(10, 14);
-			background: #fff;
 		}
 	}
 
@@ -86,7 +94,7 @@
 	}
 
 	.row--rebate .column--label {
-		margin: 0 0 0 23.5%;
+		margin: 0 0 0 26.5%;
 	}
 
 	.column--total-price {
@@ -105,8 +113,7 @@
 		.border-radius(128px);
 		.unitize-height(48);
 		.unitize-width(48);
-		margin-left: 3%;
-		margin-right: 6.25%;
+		margin-right: 9.25%;
 		background: @borderColor;
 		text-align: center;
 		font-weight: bold;
@@ -128,6 +135,7 @@
 	}
 
 	.content--sku {
+		.unitize(13, 16, font-size);
 		margin: 0;
 	}
 
@@ -180,6 +188,16 @@
     .table--shipping-costs-trigger {
         font-weight: bold;
     }
+
+	.btn--inquiry {
+		width: 100%;
+		display: block;
+	}
+
+	.main--actions {
+		.unitize-margin(0, 0, 8, 0);
+		.clearfix();
+	}
 }
 
 .aggregation--list {
@@ -208,6 +226,32 @@
 
 	.list--entry {
 		.unitize-margin(6, 0);
+	}
+
+	.entry--name {
+		display: block;
+	}
+
+	.btn--primary {
+		.unitize-padding(8, 10, 8, 10);
+	}
+	.table--difference {
+		.border-radius();
+		border: 1px solid @borderColor;
+		text-align: center;
+	}
+	.table--badge {
+		.border-radius();
+		.unitize-padding(4, 8, 4, 8);
+		display: inline-block;
+		border: 1px solid @deliveryAvailableText;
+		color: @deliveryAvailableText;
+		text-transform: uppercase;
+	}
+
+	.js--fancy-select {
+		.unitize-margin(0, 0, 8, 0);
+		width: 100%;
 	}
 }
 
