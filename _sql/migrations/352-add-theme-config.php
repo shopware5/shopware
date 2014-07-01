@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS `s_core_theme_settings` (
   `compiler_create_source_map` int(1) NOT NULL,
   `compiler_compress_css` int(1) NOT NULL,
   `compiler_compress_js` int(1) NOT NULL,
+  `force_reload_snippets` int(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 

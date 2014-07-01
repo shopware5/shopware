@@ -147,6 +147,12 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             throw new Exception('Each theme requires a defined readable name!');
         }
 
+        if ($this->getRepository()->findOneByTemplate($template)) {
+            throw new Exception(
+                'A theme with that name already exists'
+            );
+        }
+
         $parent = null;
         if ($parentId) {
             $parent = $this->getRepository()->find($parentId);
