@@ -35,17 +35,14 @@ class PopularitySortingHandler implements SortingHandlerInterface
         QueryBuilder $query,
         Context $context
     ) {
-        if (!$query->includesTable('s_articles_top_seller')) {
-            $query->leftJoin(
-                'product',
-                's_articles_top_seller_ro',
-                'topSeller',
-                'topSeller.article_id = product.id'
-            );
-        }
+        $query->leftJoin(
+            'product',
+            's_articles_top_seller_ro',
+            'topSeller',
+            'topSeller.article_id = product.id'
+        );
 
         $query->addOrderBy('topSeller.sales', $sorting->getDirection())
             ->addOrderBy('topSeller.article_id', $sorting->getDirection());
     }
-
 }

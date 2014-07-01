@@ -43,6 +43,11 @@ class Helper
      */
     private $variantApi;
 
+    /**
+     * @var \Shopware\Components\Api\Resource\Category
+     */
+    private $categoryApi;
+
     function __construct()
     {
         $this->db = Shopware()->Db();
@@ -60,6 +65,10 @@ class Helper
         $translation = new Resource\Translation();
         $translation->setManager($this->entityManager);
         $this->translationApi = $translation;
+
+        $categoryApi = new Resource\Category();
+        $categoryApi->setManager($this->entityManager);
+        $this->categoryApi = $categoryApi;
     }
 
     public function getProductConfigurator(
@@ -346,6 +355,31 @@ class Helper
     }
 
     /**
+     * @param array $data
+     * @return Models\Category\Category
+     */
+    public function createCategory(array $data = array())
+    {
+        $data = array_merge($this->getCategoryData(), $data);
+
+        return $this->categoryApi->create($data);
+    }
+
+    /**
+     * @param array $data
+     * @return Models\Article\Supplier
+     */
+    public function createManufacturer(array $data = array())
+    {
+        $data = array_merge($this->getManufacturerData(), $data);
+        $manufacturer = new Models\Article\Supplier();
+        $manufacturer->fromArray($data);
+        $this->entityManager->persist($manufacturer);
+        $this->entityManager->flush();
+        return $manufacturer;
+    }
+
+    /**
      * @param Models\Customer\Group $customerGroup used for the price definition
      * @param string $number
      * @param array $data Contains nested configurator group > option array.
@@ -547,6 +581,22 @@ class Helper
             $data
         );
     }
+
+    public function getCategoryData()
+    {
+        return array(
+            'parent' => 3,
+            'name' => 'Test-Category'
+        );
+    }
+
+    public function getManufacturerData()
+    {
+        return array(
+            'name' => 'Test-Manufacturer'
+        );
+    }
+
 
     public function getVariantData(array $data = array())
     {

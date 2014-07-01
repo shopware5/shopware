@@ -174,6 +174,10 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
     {
         $query = $this->getQuery($criteria, $context);
 
+        if ($query->getQueryPart('having')) {
+            return $this->entityManager->getConnection()->fetchColumn('SELECT FOUND_ROWS()');
+        }
+
         $query->resetQueryPart('groupBy')
             ->resetQueryPart('orderBy');
 
@@ -194,13 +198,29 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
      */
     private function getProducts(SearchBundle\Criteria $criteria, Context $context)
     {
-        $query = $this->getQuery($criteria, $context)
-            ->addSelect(array('variant.articleID', 'variant.ordernumber'))
-            ->addGroupBy('product.id')
-            ->setFirstResult($criteria->getOffset())
-            ->setMaxResults($criteria->getLimit());
+        $query = $this->getQuery($criteria, $context);
 
         $this->addSorting($criteria, $query, $context);
+
+        if ($query->getQueryPart('having')) {
+            $select = $query->getQueryPart('select');
+
+            $query->select(array(
+                'SQL_CALC_FOUND_ROWS variant.ordernumber'
+            ));
+
+            foreach($select as $selection) {
+                $query->addSelect($selection);
+            }
+        } else {
+            $query->addSelect(array(
+                'variant.ordernumber'
+            ));
+        }
+        
+        $query->addGroupBy('product.id')
+            ->setFirstResult($criteria->getOffset())
+            ->setMaxResults($criteria->getLimit());
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -249,6 +269,12 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
                 's_core_tax',
                 'tax',
                 'tax.id = product.taxID'
+            )
+            ->innerJoin(
+                'variant',
+                's_articles_attributes',
+                'variantAttribute',
+                'variantAttribute.articledetailsID = variant.id'
             );
 
         $this->addConditions($criteria, $query, $context);

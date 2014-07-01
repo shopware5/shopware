@@ -80,13 +80,13 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
             )
         );
 
-        $query->from('s_articles_vote', 'votes')
-            ->where('votes.articleID IN (:products)')
-            ->andWhere('votes.active = 1')
-            ->groupBy('votes.articleID')
-            ->addGroupBy('votes.points')
-            ->orderBy('votes.articleID', 'ASC')
-            ->addOrderBy('votes.points', 'ASC')
+        $query->from('s_articles_vote', 'vote')
+            ->where('vote.articleID IN (:products)')
+            ->andWhere('vote.active = 1')
+            ->groupBy('vote.articleID')
+            ->addGroupBy('vote.points')
+            ->orderBy('vote.articleID', 'ASC')
+            ->addOrderBy('vote.points', 'ASC')
             ->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */

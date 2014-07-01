@@ -40,7 +40,7 @@ class PriceHelper
      */
     public function getCheapestPriceSelection(Struct\Customer\Group $current)
     {
-        return '(MIN(' . $this->getSelection($current) . '))';
+        return 'MIN(' . $this->getSelection($current) . ')';
     }
 
     /**
@@ -49,8 +49,7 @@ class PriceHelper
      */
     public function getSelection(Struct\Customer\Group $current)
     {
-        $selection = "(
-            IF(customerPrice.id, customerPrice.price, defaultPrice.price)";
+        $selection = "ROUND(IF(customerPrice.id, customerPrice.price, defaultPrice.price)";
 
         $selection .= "* (priceVariant.minpurchase)";
 
@@ -65,7 +64,7 @@ class PriceHelper
             $selection .= " * " . $discount;
         }
 
-        return $selection . ')';
+        return $selection . ', 2)';
     }
 
     /**
