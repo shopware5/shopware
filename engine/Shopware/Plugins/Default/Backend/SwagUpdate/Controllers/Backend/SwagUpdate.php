@@ -352,6 +352,9 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         foreach ($iterator as $file) {
             $sourceFile = $file->getPathname();
             $destinationFile = Shopware()->DocPath() . str_replace($fileDir, '', $file->getPathname());
+
+            $destinationDirectory = dirname($destinationFile);
+            $fs->mkdir($destinationDirectory);
             $fs->rename($sourceFile, $destinationFile, true);
         }
     }
