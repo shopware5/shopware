@@ -90,6 +90,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
      *
      * @param array|null|string $config
      * @param array|bool $options
+     * @throws Enlight_Config_Exception
      * @return \Enlight_Config
      */
     public function __construct($config, $options = null)
@@ -225,6 +226,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
      *
      * @param string $name
      * @param mixed $value
+     * @throws Enlight_Config_Exception
      */
     public function __set($name, $value)
     {

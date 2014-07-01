@@ -38,13 +38,26 @@ Ext.define('Shopware.apps.Theme.view.settings.Settings', {
     padding: 15,
     flex: 1,
     layout: {
-        type: 'hbox',
+        type: 'vbox',
         align: 'stretch'
     },
 
     configure: function() {
         return {
             fieldSets: [
+                {
+                    title: '{s name=general_configuration}General configuration{/s}',
+                    padding: 15,
+                    layout: 'anchor',
+                    height: 75,
+                    flex: 0,
+                    fields: {
+                        reloadSnippets: {
+                            fieldLabel: '{s name=reload_snippets}Force snippet reload{/s}',
+                            labelWidth: 250
+                        }
+                    }
+                },
                 {
                     title: '{s name=compiler_configuration}Compiler configuration{/s}',
                     padding: 15,
