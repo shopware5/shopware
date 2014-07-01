@@ -16,7 +16,11 @@
 	{* Empty basket *}
 	{if !$sBasket.content}
         {block name='frontend_basket_basket_is_empty'}
-            {include file="frontend/_includes/messages.tpl" type="warning" content="{s name='CartInfoEmpty'}{/s}"}
+			<div class="panel">
+				<div class="panel--body">
+					{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='CartInfoEmpty'}{/s}"}
+				</div>
+			</div>
         {/block}
 	{/if}
 {/block}
