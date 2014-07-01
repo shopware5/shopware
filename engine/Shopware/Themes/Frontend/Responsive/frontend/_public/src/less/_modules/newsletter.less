@@ -3,30 +3,19 @@
 
     .newsletter-listing--table { .border-radius(); }
     .newsletter-listing--table-headline {
-	.clearfix();
-
-	.newsletter-listing--headline-name {
-	    width: 65%;
-	    float: left;
-	}
-	.newsletter-listing--headline-button {
-	    width: 35%;
-	    float: left;
-	}
+	.newsletter-listing--headline-name { width: 65%; }
+	.newsletter-listing--headline-button { width: 35%; }
     }
     .newsletter-listing--entry {
 	.unitize-padding(10, 0, 10, 0, 16);
-	.clearfix();
 	border-bottom: 1px solid @borderColor;
 
 	.newsletter-listing--entry-description {
 	    .unitize(4, 16, margin-top);
 	    width: 65%;
-	    float: left;
 	}
 	.newsletter-listing--entry-button {
 	    width: 35%;
-	    float: left;
 
 	    .btn { float: right; }
 	}
@@ -46,6 +35,8 @@
 	    iframe {
 		width: 100%;
 		min-height: 50%;
+		border: none;
+		outline: none;
 	    }
 	}
     }
@@ -57,7 +48,7 @@
 	    .unitize(10, 16, margin-bottom);
 	    text-align: center;
 
-	    [class^=icon] { .unitize-margin(-2, 0, 0, 16); }
+	    i[class^=icon] { .unitize-margin(0, 0, 0, 16); }
 	}
     }
 }
