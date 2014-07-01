@@ -96,7 +96,8 @@ class VoteGateway implements Gateway\VoteGatewayInterface
 
         $query->from('s_articles_vote', 'vote')
             ->where('vote.articleID IN (:ids)')
-            ->orderBy('vote.articleID')
+            ->andWhere('vote.active = 1')
+            ->orderBy('vote.articleID', 'DESC')
             ->addOrderBy('vote.datum', 'DESC')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 

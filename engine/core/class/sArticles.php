@@ -3812,7 +3812,7 @@ class sArticles
                     $result['immediateDeliveryFacet'] = $this->getImmediateDeliveryFacet($facet, $config);
                     break;
                 default:
-                    $result['facets'][] = $facet;
+                    $result['facets'][$facet->getName()] = $facet;
             }
         }
 
@@ -3823,7 +3823,7 @@ class sArticles
                 'sNumberArticles' => $searchResult->getTotalCount(),
                 'sPages' => $this->createListingPageLinks($searchResult->getTotalCount(), $config),
                 'sPerPage' => $this->createListingPerPageLinks($config),
-                'sPage' => $config['page']
+                'sPage' => $config['sPage']
             )
         );
 
@@ -3923,7 +3923,7 @@ class sArticles
 
         $criteria->limit($config['sPerPage']);
 
-        $criteria->offset(($config['page'] - 1) * $config['sPerPage']);
+        $criteria->offset(($config['sPage'] - 1) * $config['sPerPage']);
 
         if (!empty($config['sFilterProperties'])) {
             $criteria->properties(
@@ -3984,7 +3984,10 @@ class sArticles
             $criteria->propertyFacet();
         }
 
-        return $criteria;
+        return $this->eventManager->filter('Shopware_Listing_Filter_Criteria', $criteria, array(
+            'categoryConfig' => $config,
+            'context' => $context
+        ));
     }
 
     private function getImmediateDeliveryFacet(SearchBundle\Facet\ImmediateDeliveryFacet $facet, $config)
@@ -4196,8 +4199,7 @@ class sArticles
 
         $result = array(
             'sPropertiesOptionsOnly' => $flat,
-            'sPropertiesGrouped' => $grouped,
-            'sProperties' => $data
+            'sPropertiesGrouped' => $grouped
         );
 
         return $result;
@@ -4264,7 +4266,9 @@ class sArticles
             $params['immediateDelivery'] = $config['immediateDelivery'];
         }
 
-        return $params;
+        return $this->eventManager->filter('Shopware_Listing_Filter_Listing_Link_Parameters', $params, array(
+            'config' => $config
+        ));
     }
 
     /**
@@ -4367,26 +4371,27 @@ class sArticles
      */
     private function loadCategoryConfig($categoryId)
     {
+        $setup = array(
+            'sSort' => 0,
+            'sPerPage' => (int) $this->config->get('articlesPerPage'),
+            'sSupplier' => null,
+            'sFilterProperties' => null,
+            'sTemplate' => null,
+            'priceMin' => null,
+            'priceMax' => null,
+            'shippingFree' => false,
+            'immediateDelivery' => false,
+            'sPage' => 1,
+        );
+
+        $setup = $this->eventManager->filter('Shopware_Listing_Filter_Config_Setup', $setup, array(
+            'categoryId' => $categoryId
+        ));
+
         $config = array();
-        $config['sSort'] = $this->getConfigParameter(
-            'sSort',
-            0
-        );
-
-        $config['sPerPage'] = $this->getConfigParameter(
-            'sPerPage',
-            (int) $this->config->get('articlesPerPage')
-        );
-
-        $config['sSupplier'] = $this->getConfigParameter(
-            'sSupplier',
-            null
-        );
-
-        $config['sFilterProperties'] = $this->getConfigParameter(
-            'sFilterProperties',
-            null
-        );
+        foreach($setup as $key => $default) {
+            $config[$key] = $this->getConfigParameter($key, $default);
+        }
 
         if (!empty($config['sFilterProperties'])) {
             $filters = explode('|', $config['sFilterProperties']);
@@ -4395,36 +4400,6 @@ class sArticles
             }
             $config['sFilterProperties'] = implode('|', $filters);
         }
-
-        $config['sTemplate'] = $this->getConfigParameter(
-            'sTemplate',
-            null
-        );
-
-        $config['priceMin'] = $this->getConfigParameter(
-            'priceMin',
-            null
-        );
-
-        $config['priceMax'] = $this->getConfigParameter(
-            'priceMax',
-            null
-        );
-
-        $config['shippingFree'] = $this->getConfigParameter(
-            'shippingFree',
-            false
-        );
-
-        $config['immediateDelivery'] = $this->getConfigParameter(
-            'immediateDelivery',
-            false
-        );
-
-        $config['page'] = $this->getConfigParameter(
-            'sPage',
-            1
-        );
 
         Shopware()->Session()->offsetSet('sCategoryConfig' . $categoryId, $config);
 
