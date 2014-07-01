@@ -60,7 +60,7 @@ class CountryHydrator extends Hydrator
      */
     public function hydrateArea(array $data)
     {
-        $area = new Area();
+        $area = new Struct\Country\Area();
 
         $area->setId((int) $data['__countryArea_id']);
 
@@ -71,11 +71,11 @@ class CountryHydrator extends Hydrator
 
     /**
      * @param array $data
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Country
+     * @return Struct\Country
      */
     public function hydrateCountry(array $data)
     {
-        $country = new \Shopware\Bundle\StoreFrontBundle\Struct\Country();
+        $country = new Struct\Country();
         $translation = $this->getTranslation(
             $data,
             '__country_translation',
@@ -164,7 +164,7 @@ class CountryHydrator extends Hydrator
      */
     public function hydrateState(array $data)
     {
-        $state = new State();
+        $state = new Struct\Country\State();
 
         $translation = $this->getTranslation(
             $data,

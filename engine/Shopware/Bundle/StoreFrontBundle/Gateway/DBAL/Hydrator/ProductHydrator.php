@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class ProductHydrator extends Hydrator
 {
     /**
-     * @var Manufacturer
+     * @var ManufacturerHydrator
      */
     private $manufacturerHydrator;
 
@@ -42,17 +42,17 @@ class ProductHydrator extends Hydrator
     private $attributeHydrator;
 
     /**
-     * @var Tax
+     * @var TaxHydrator
      */
     private $taxHydrator;
 
     /**
-     * @var Unit
+     * @var UnitHydrator
      */
     private $unitHydrator;
 
     /**
-     * @var Esd
+     * @var EsdHydrator
      */
     private $esdHydrator;
 

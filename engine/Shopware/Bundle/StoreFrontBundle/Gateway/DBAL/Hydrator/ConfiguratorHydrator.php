@@ -43,6 +43,7 @@ class ConfiguratorHydrator extends Hydrator
 
     /**
      * @param AttributeHydrator $attributeHydrator
+     * @param MediaHydrator $mediaHydrator
      */
     function __construct(AttributeHydrator $attributeHydrator, MediaHydrator $mediaHydrator)
     {
