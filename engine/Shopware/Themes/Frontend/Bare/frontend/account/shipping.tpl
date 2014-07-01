@@ -29,9 +29,11 @@
 					<div class="account--shipping-form">
 						<form name="frmRegister" method="post" action="{url action=saveShipping sTarget=$sTarget}">
 
-							<div class="register--alt-shipping is--hidden">
-								<input type="checkbox" value="1" checked="checked" />
-							</div>
+                            {block name="frontend_account_shipping_hidden"}
+                                <div class="register--alt-shipping is--hidden">
+                                    <input type="checkbox" value="1" checked="checked" />
+                                </div>
+                            {/block}
 
 							{* Shipping fieldset *}
 							{block name="frontend_account_shipping_fieldset"}
@@ -48,12 +50,16 @@
 							{* Shipping actions *}
 							{block name="frontend_account_shipping_action_buttons"}
 								<div class="account--actions">
-									{if $sTarget}
-										<a class="btn btn--secondary left" href="{url controller=$sTarget}" title="{s name="ShippingLinkBack"}{/s}">
-											{s name="ShippingLinkBack"}{/s}
-										</a>
-									{/if}
-									<input type="submit" value="{s name="ShippingLinkSend"}{/s}" class="btn btn--primary register--submit right" />
+                                    {block name="frontend_account_shipping_action_button_back"}
+                                        {if $sTarget}
+                                            <a class="btn btn--secondary left" href="{url controller=$sTarget}" title="{s name="ShippingLinkBack"}{/s}">
+                                                {s name="ShippingLinkBack"}{/s}
+                                            </a>
+                                        {/if}
+                                    {/block}
+                                    {block name="frontend_account_shipping_action_button_send"}
+									    <input type="submit" value="{s name="ShippingLinkSend"}{/s}" class="btn btn--primary register--submit right" />
+                                    {/block}
 								</div>
 							{/block}
 

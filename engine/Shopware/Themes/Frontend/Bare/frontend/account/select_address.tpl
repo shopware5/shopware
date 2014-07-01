@@ -1,4 +1,4 @@
-<div class="account--billing-address account--box panel has--border">
+<div class="account--billing-address panel has--border">
 	
 	{block name="frontend_account_select_billing_address"}
 		{block name="frontend_account_select_headline"}
