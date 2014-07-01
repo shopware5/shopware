@@ -725,7 +725,7 @@ class Shop extends ModelEntity
                 );
 
                 $templateManager->setTemplateDir($path);
-                $templateManager->assign($config);
+                $templateManager->assign('theme', $config);
 
             } else if ($template->getVersion() == 2) {
                 $templateManager->addTemplateDir(array(
