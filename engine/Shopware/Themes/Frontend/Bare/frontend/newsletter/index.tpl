@@ -73,8 +73,8 @@
 										{block name="frontend_newsletter_form_input_salutation"}
 											<div class="newsletter--salutation">
 												<select name="salutation" id="salutation" required="required" class="field--select{if $sStatus.sErrorFlag.salutation} has--error{/if}">
-													<option value="mr" {if $_POST.salutation eq "mr"}selected{/if}>{s name="NewsletterRegisterLabelMr"}{/s}</option>
-													<option value="ms" {if $_POST.salutation eq "ms"}selected{/if}>{s name="NewsletterRegisterLabelMs"}{/s}</option>
+													<option value="mr" {if $_POST.salutation eq "mr"}selected="selected"{/if}>{s name="NewsletterRegisterLabelMr"}{/s}</option>
+													<option value="ms" {if $_POST.salutation eq "ms"}selected="selected"{/if}>{s name="NewsletterRegisterLabelMs"}{/s}</option>
 												</select>
 											</div>
 										{/block}
@@ -104,7 +104,7 @@
 										{* Zip + City *}
 										{block name="frontend_newsletter_form_input_zip_and_city"}
 											<div class="newsletter--zip-city">
-												<input name="zipcode" type="text" placeholder="{s name="NewsletterRegisterBillingLabelZipcode"}{/s}" id="zipcode" value="{$_POST.zipcode|escape}" class="input--field input--field-zipcode{if $sStatus.sErrorFlag.zipcode} has--error{/if}"/>
+												<input name="zipcode" type="number" placeholder="{s name="NewsletterRegisterBillingLabelZipcode"}{/s}" id="zipcode" value="{$_POST.zipcode|escape}" class="input--field input--field-zipcode{if $sStatus.sErrorFlag.zipcode} has--error{/if}"/>
 												<input name="city" type="text" placeholder="{s name="NewsletterRegisterBillingLabelCityname"}{/s}" id="city" value="{$_POST.city|escape}" size="25" class="input--field input--field-city{if $sStatus.sErrorFlag.city} has--error{/if}"/>
 											</div>
 										{/block}
