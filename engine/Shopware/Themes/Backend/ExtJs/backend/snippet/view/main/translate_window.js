@@ -26,46 +26,62 @@
 /**
  * todo@all: Documentation
  */
-//{block name="backend/snippet/view/main/snippet_panel"}
-Ext.define('Shopware.apps.Snippet.view.main.SnippetPanel', {
-    extend: 'Ext.tab.Panel',
-    alias: 'widget.snippet-main-snippetPanel',
-    plain: true,
+//{block name="backend/snippet/view/main/edit_form"}
+Ext.define('Shopware.apps.Snippet.view.main.TranslateWindow', {
+    extend: 'Enlight.app.Window',
+    alias: 'widget.snippet-main-translateWindow',
+
+    layout: 'fit',
+    width: 860,
+    height: 600,
 
     /**
-     * Initializes the component
+     * Root snippet (the one the user clicked)
      *
-     * @public
-     * @return void
+     * @object
      */
-    initComponent: function() {
-        var me    = this,
-            items = [];
+    rootSnippet: {},
 
-        me.shoplocaleStore.each(function(record) {
-            items.push({
-                title: record.get('displayName'),
-                xtype: 'snippet-main-grid',
-                store: me.snippetStore,
-                shoplocale: record
-            });
-        });
+    /**
+     * Shop/locale store
+     *
+     * @object
+     */
+    shopLocaleStore: {},
 
-        me.items = items;
+    /**
+     * Snippet store
+     *
+     * @object
+     */
+    snippetStore: {},
 
-        me.callParent(arguments);
+    /**
+     * Contains all snippets for this view
+     * @object
+     */
+    snippets: {
+        titleTranslateWindow: '{s name=title_translate_window}Translate snippet{/s}'
     },
 
     /**
-     * @param boolean - enabled
+     * Sets up the ui component
+     *
      * @return void
      */
-    enableExpertMode: function(enabled) {
+    initComponent: function() {
         var me = this;
 
-        me.items.each(function(item) {
-            item.enableExpertMode(enabled);
-        });
+        me.title = me.snippets.titleTranslateWindow;
+
+        me.items = [{
+            xtype: 'snippet-main-translateForm',
+            rootSnippet: me.rootSnippet,
+            snippetStore: me.snippetStore,
+            shopLocaleStore: me.shopLocaleStore
+        }];
+
+        me.callParent(arguments);
     }
 });
 //{/block}

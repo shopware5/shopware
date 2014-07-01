@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,13 +19,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Snippet
- * @subpackage View
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 /**
@@ -84,7 +77,18 @@ Ext.define('Shopware.apps.Snippet', {
      * Required views
      * @array
      */
-    views: [ 'main.Window', 'main.Navigation', 'main.SnippetPanel', 'main.Grid', 'main.Form', 'main.ImportExport', 'main.CreateForm', 'main.EditForm' ],
+    views: [
+        'main.Window',
+        'main.Navigation',
+        'main.SnippetPanel',
+        'main.Grid',
+        'main.Form',
+        'main.ImportExport',
+        'main.CreateForm',
+        'main.EditForm',
+        'main.TranslateWindow',
+        'main.TranslateForm'
+    ],
 
     /**
      * Returns the main application window for this is expected
