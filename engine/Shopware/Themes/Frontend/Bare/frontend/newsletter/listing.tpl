@@ -20,16 +20,16 @@
 
 						{* Newsletter table header *}
 						{block name="frontend_newsletter_listing_table_headline"}
-							<div class="newsletter-listing--table-headline panel--title is--underline">
+							<div class="newsletter-listing--table-headline panel--title is--underline block-group">
 
 								{block name="frontend_newsletter_listing_header_name"}
-									<div class="newsletter-listing--headline-name">
+									<div class="newsletter-listing--headline-name block">
 										{s name="NewsletterListingHeaderName"}Name{/s}
 									</div>
 								{/block}
 
 								{block name="frontend_newsletter_listing_header_button"}
-									<div class="newsletter-listing--headline-button">
+									<div class="newsletter-listing--headline-button block">
 										&nbsp;
 									</div>
 								{/block}
@@ -43,18 +43,18 @@
 
 									{* Newsletter entry *}
 									{block name='frontend_newsletter_listing_entry'}
-										<div class="newsletter-listing--entry">
+										<div class="newsletter-listing--entry block-group">
 
 											{* Newsletter entry description *}
 											{block name="frontend_newsletter_listing_entry_description"}
-												<div class="newsletter-listing--entry-description">
+												<div class="newsletter-listing--entry-description block">
 													{if $sContentItem.date}{$sContentItem.date|date:"DATE_SHORT"} - {/if}{$sContentItem.description}
 												</div>
 											{/block}
 
 											{* Newsletter entry button *}
 											{block name="frontend_newsletter_listing_entry_button"}
-												<div class="newsletter-listing--entry-button">
+												<div class="newsletter-listing--entry-button block">
 													<a href="{$sContentItem.link}" class="btn btn--secondary is--small">{s name='NewsletterListingLinkDetails'}{/s}</a>
 												</div>
 											{/block}
