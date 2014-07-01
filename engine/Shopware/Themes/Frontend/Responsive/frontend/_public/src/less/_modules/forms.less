@@ -4,12 +4,12 @@
 
     .forms--headline {
 
-		h1 {
+		.forms--title {
 			.unitize(0, 16, margin-top);
 		}
 
-		p {
-			.unitize(12, 16, margin-bottom);
+	    .forms--text {
+			p { .unitize(12, 16, margin-bottom); }
 		}
     }
 
@@ -37,11 +37,11 @@
     }
 
 		.field--select {
-		.unitize(10, 16, margin-bottom);
+		    .unitize(10, 16, margin-bottom);
     }
 
     .btn--primary {
-	float: right;
+	    float: right;
 
 		& [class^=icon] {
 			.unitize(10, 16, font-size);
@@ -83,7 +83,7 @@
 
     .forms--description {
 		.unitize-margin(-8, 0, 10, 0, 16);
-	clear: both;
+	    clear: both;
     }
 
     .forms--captcha {
