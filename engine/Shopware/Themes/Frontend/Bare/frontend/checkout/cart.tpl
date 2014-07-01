@@ -53,10 +53,22 @@
         <div class="product--table {if {config name=BasketShippingInfo}} has--dispatch-info{/if}">
             <div class="table--actions">
                 {block name="frontend_checkout_actions_confirm"}
+					{* Contiune shopping *}
+					{if $sBasket.sLastActiveArticle.link}
+						{block name="frontend_checkout_actions_link_last"}
+							 <a href="{$sBasket.sLastActiveArticle.link}" title="{s name='CheckoutActionsLinkLast' namespace="frontend/checkout/actions"}{/s}" class="btn btn--secondary is--left">
+								 {s name="CheckoutActionsLinkLast" namespace="frontend/checkout/actions"}{/s}
+							 </a>
+						 {/block}
+					{/if}
+
+					{* Forward to the checkout *}
                     {if !$sMinimumSurcharge && !$sDispatchNoOrder}
-                        <a href="{url action=confirm}" title="{s name='CheckoutActionsLinkProceed' namespace="frontend/checkout/actions"}{/s}" class="btn btn--primary is--right">
-                            {s name="CheckoutActionsLinkProceed" namespace="frontend/checkout/actions"}{/s} <i class="icon--arrow-right"></i>
-                        </a>
+						{block name="frontend_checkout_actions_checkout"}
+							<a href="{url action=confirm}" title="{s name='CheckoutActionsLinkProceedShort' namespace="frontend/checkout/actions"}{/s}" class="btn btn--primary right">
+								{s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions"}{/s} <i class="icon--arrow-right"></i>
+							</a>
+						{/block}
                     {/if}
                 {/block}
             </div>
@@ -109,6 +121,38 @@
 					{/block}
                 </div>
             </div>
+
+			<div class="table--actions actions--bottom">
+				{block name="frontend_checkout_actions_confirm_bottom"}
+					<div class="main--actions">
+						{* Contiune shopping *}
+						{if $sBasket.sLastActiveArticle.link}
+							{block name="frontend_checkout_actions_link_last_bottom"}
+								 <a href="{$sBasket.sLastActiveArticle.link}" title="{s name='CheckoutActionsLinkLast' namespace="frontend/checkout/actions"}{/s}" class="btn btn--secondary is--left">
+									 {s name="CheckoutActionsLinkLast" namespace="frontend/checkout/actions"}{/s}
+								 </a>
+							 {/block}
+						{/if}
+
+						{* Forward to the checkout *}
+						{if !$sMinimumSurcharge && !$sDispatchNoOrder}
+							{block name="frontend_checkout_actions_confirm_bottom_checkout"}
+								<a href="{url action=confirm}" title="{s name='CheckoutActionsLinkProceedShort' namespace="frontend/checkout/actions"}{/s}" class="btn btn--primary right">
+									{s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions"}{/s} <i class="icon--arrow-right"></i>
+								</a>
+							{/block}
+						{/if}
+					</div>
+
+					{if !$sMinimumSurcharge && ($sInquiry || $sDispatchNoOrder)}
+						{block name="frontend_checkout_actions_inquiry"}
+							<a href="{$sInquiryLink}" title="{s name='CheckoutActionsLinkOffer' namespace="frontend/checkout/actions"}{/s}" class="btn btn--secondary btn--inquiry">
+								{s name="CheckoutActionsLinkOffer" namespace="frontend/checkout/actions"}{/s}
+							</a>
+						{/block}
+					{/if}
+				{/block}
+			</div>
         </div>
 	{/if}
 </div>

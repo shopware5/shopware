@@ -23,7 +23,7 @@
 
 							{* Product name *}
 							{block name='frontend_checkout_premium_active_info_name'}
-								<a href="{$premium.sArticle.linkDetails}" title="{$premium.sArticle.articleName}">
+								<a href="{$premium.sArticle.linkDetails}" title="{$premium.sArticle.articleName}" class="entry--name">
 									{$premium.sArticle.articleName}
 								</a>
 							{/block}
@@ -34,7 +34,7 @@
 
 									{block name='frontend_checkout_premium_select_article'}
 										{if $premium.sVariants && $premium.sVariants|@count > 1}
-											<select class="variant" id="sAddPremium{$key}" name="sAddPremium">
+											<select class="premium--selection" id="sAddPremium{$key}" name="sAddPremium">
 												<option value="">{s name="PremiumInfoSelect"}{/s}</option>
 												{foreach from=$premium.sVariants item=variant}
 													<option value="{$variant.ordernumber}">{$variant.additionaltext}</option>
@@ -76,7 +76,7 @@
 
 							{* Product name *}
 							{block name='frontend_checkout_premium_info_name'}
-								<a href="{$premium.sArticle.linkDetails}" title="{$premium.sArticle.articleName}">
+								<a href="{$premium.sArticle.linkDetails}" title="{$premium.sArticle.articleName}" class="entry--name">
 									{$premium.sArticle.articleName}
 								</a>
 							{/block}
@@ -87,7 +87,7 @@
 
 									{block name='frontend_checkout_premium_select_article'}
 										{if $premium.sVariants && $premium.sVariants|@count > 1}
-											<select class="variant" id="sAddPremium{$key}" name="sAddPremium">
+											<select class="premium--selection" id="sAddPremium{$key}" name="sAddPremium">
 												<option value="">{s name="PremiumInfoSelect"}{/s}</option>
 												{foreach from=$premium.sVariants item=variant}
 													<option value="{$variant.ordernumber}">{$variant.additionaltext}</option>
@@ -98,7 +98,8 @@
 										{/if}
 
 										{block name='frontend_checkout_premium_info_button'}
-											<input type="submit" class="btn btn--primary is--small" title="{$premium.sArticle.articleName}"
+											<span class="table--badge">GRATIS</span>
+											<input type="submit" class="btn btn--primary is--small right" title="{$premium.sArticle.articleName}"
 												   value="{s name='PremiumActionAdd'}{/s}"/>
 										{/block}
 									{/block}
@@ -107,8 +108,10 @@
 
 								{* Show difference between the necessary basket value to collect the premium product and the actucal basket value *}
 								{block name='frontend_checkout_premium_info_difference'}
-									{s name="PremiumsInfoAtAmount"}{/s} {$premium.startprice|currency}
-									{s name="PremiumsInfoDifference"}{/s} {$premium.sDifference|currency}
+									<div class="table--difference">
+										{s name="PremiumsInfoAtAmount"}{/s} {$premium.startprice|currency}
+										{s name="PremiumsInfoDifference"}{/s} {$premium.sDifference|currency}
+									</div>
 								{/block}
 							{/if}
 						</div>
