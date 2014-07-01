@@ -22,7 +22,7 @@
 
 					{block name="frontend_account_select_shipping_container"}
 						{foreach $sShippingAddresses as $key => $sAddress}
-							<div class="address--container{if $sAddress@iteration is even by 1} right{else} left{/if}">
+							<div class="address--container">
 								<form name="frmRegister" method="post" action="{url action=saveShipping}">
 									<input type="hidden" name="sSelectAddress" value="{$sAddress.hash}" />
 									<input type="hidden" name="sTarget" value="{$sTarget|escape}" />
@@ -40,15 +40,16 @@
 					{block name="frontend_account_select_shipping_info_empty"}
 						{include file="frontend/_includes/messages.tpl" type="warning" content="{s name="SelectShippingInfoEmpty"}{/s}"}
 					{/block}
-                    <div class="space">&nbsp;</div>
 				{/if}
 			</div>
 		{/block}
 
 		{block name="frontend_account_select_shipping_action_buttons"}
-			<a class="btn btn--secondary left" href="{if $sTarget}{url controller=$sTarget}{else}{url controller="account"}{/if}" title="{s name="SelectShippingLinkBack"}{/s}">
-				{s name="SelectShippingLinkBack"}{/s}
-			</a>
+            <div class="panel--actions">
+                <a class="btn btn--secondary left" href="{if $sTarget}{url controller=$sTarget}{else}{url controller="account"}{/if}" title="{s name="SelectShippingLinkBack"}{/s}">
+                    {s name="SelectShippingLinkBack"}{/s}
+                </a>
+            </div>
 		{/block}
 
 	</div>

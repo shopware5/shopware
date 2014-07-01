@@ -8,7 +8,7 @@
 
 		{block name="frontend_register_payment_fieldset"}
 			<div class="panel--table">
-				{foreach from=$payment_means item=payment_mean name=register_payment_mean}
+				{foreach $payment_means as $payment_mean}
 
 					{block name="frontend_register_payment_method"}
 						<div class="payment--method panel--tr">
@@ -16,7 +16,7 @@
 							{block name="frontend_register_payment_fieldset_input"}
 								<div class="payment--selection panel--td">
 									{block name="frontend_register_payment_fieldset_input_radio"}
-										<input type="radio" name="register[payment]" value="{$payment_mean.id}" id="payment_mean{$payment_mean.id}"{if $payment_mean.id eq $form_data.payment or (!$form_data && !$smarty.foreach.register_payment_mean.index)} checked="checked"{/if} />
+										<input type="radio" name="register[payment]" value="{$payment_mean.id}" id="payment_mean{$payment_mean.id}"{if $payment_mean.id eq $form_data.payment or (!$form_data && !$payment_mean@index)} checked="checked"{/if} />
 									{/block}
 
 									{block name="frontend_register_payment_fieldset_input_label"}

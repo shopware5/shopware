@@ -203,12 +203,10 @@
 					<div class="panel--body is--wide">
 						<form name="frmRegister" method="post" action="{url action=saveNewsletter}">
 							<fieldset>
-								<p>
-									<input type="checkbox" name="newsletter" value="1" id="newsletter" data-auto-submit="true" {if $sUserData.additional.user.newsletter}checked="checked"{/if} />
-									<label for="newsletter">
-										{s name="AccountLabelWantNewsletter"}{/s}
-									</label>
-								</p>
+                                <input type="checkbox" name="newsletter" value="1" id="newsletter" data-auto-submit="true" {if $sUserData.additional.user.newsletter}checked="checked"{/if} />
+                                <label for="newsletter">
+                                    {s name="AccountLabelWantNewsletter"}{/s}
+                                </label>
 							</fieldset>
 						</form>
 					</div>
