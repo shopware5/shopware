@@ -18,15 +18,6 @@
         {block name='frontend_basket_basket_is_empty'}
             {include file="frontend/_includes/messages.tpl" type="warning" content="{s name='CartInfoEmpty'}{/s}"}
         {/block}
-
-        {* Cross-Selling *}
-        {block name='frontend_checkout_crossselling'}
-            <div class="listing" id="listing">
-                {foreach from=$sCrossSelling item=sArticle key=key name="counter"}
-                    {include file="frontend/listing/box_article.tpl"}
-                {/foreach}
-            </div>
-        {/block}
 	{/if}
 {/block}
 
