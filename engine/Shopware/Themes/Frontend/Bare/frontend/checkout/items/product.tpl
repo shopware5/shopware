@@ -33,7 +33,7 @@
 
                         {* Product SKU number *}
                         {block name='frontend_checkout_cart_item_details_sku'}
-                            <p class="content--sku">
+                            <p class="content--sku content">
                                 {s name="CartItemInfoId"}{/s} {$sBasketItem.ordernumber}
                             </p>
                         {/block}
@@ -113,7 +113,7 @@
         {block name='frontend_checkout_cart_item_delete_article'}
             <div class="table--column column--actions block">
                 <a href="{url action='deleteArticle' sDelete=$sBasketItem.id sTargetAction=$sTargetAction}" class="btn is--small" title="{s name='CartItemLinkDelete '}{/s}">
-                    X
+                	<i class="icon--cross"></i>
                 </a>
             </div>
         {/block}
