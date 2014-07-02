@@ -14,11 +14,26 @@
 	.table--actions {
 		.clearfix();
 		.unitize-padding(8, 0, 0);
+		position: relative;
+
+		.main--actions {
+			float: right;
+		}
+
+		.btn--primary,
+		.btn--secondary {
+			.unitize-padding(10, 15, 10, 15);
+			float: left;
+		}
 
 		.btn--primary i {
+			.unitize-margin(0, 0, 0, 6);
 			font-size: 8px;
-			margin: 0 0 0 6px;
 			vertical-align: middle;
+		}
+
+		.btn--secondary {
+			.unitize(5, 16, margin-right);
 		}
 	}
 
@@ -380,8 +395,9 @@
 		}
 
 		.basket--footer {
-			.clearfix();
 			.unitize-margin(0, -10, -10, -10);
+			.unitize(28, 16, padding-bottom);
+			.clearfix();
 			border-top: 1px solid @borderColor;
 			background: @primaryLightBackgroundColor;
 
@@ -397,6 +413,27 @@
 		}
 		.table--aggregation {
 			width: 44.5%
+		}
+
+		.table--actions {
+
+			.btn--primary {
+				.unitize-padding(10, 16, 10, 50);
+
+				i {
+					.unitize(40, 16, margin-left);
+				}
+			}
+
+			.btn--secondary {
+				.unitize-padding(10, 50, 10, 50);
+				.unitize(20, 16, margin-right);
+			}
+		}
+		.btn--inquiry {
+			.unitize(20, 16, top);
+			width: auto;
+			position: absolute;
 		}
 	}
 }
