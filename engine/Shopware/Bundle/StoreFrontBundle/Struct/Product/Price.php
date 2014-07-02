@@ -40,7 +40,7 @@ class Price extends Extendable
      *
      * @var float
      */
-    private $calculatedPrice;
+    protected $calculatedPrice;
 
     /**
      * Contains the calculated reference unit price.
@@ -53,7 +53,7 @@ class Price extends Extendable
      *
      * @var float
      */
-    private $calculatedReferencePrice;
+    protected $calculatedReferencePrice;
 
     /**
      * Contains the calculated pseudo price.
@@ -66,12 +66,12 @@ class Price extends Extendable
      *
      * @var float
      */
-    private $calculatedPseudoPrice;
+    protected $calculatedPseudoPrice;
 
     /**
      * @var PriceRule
      */
-    private $rule;
+    protected $rule;
 
     /**
      * @param PriceRule $rule

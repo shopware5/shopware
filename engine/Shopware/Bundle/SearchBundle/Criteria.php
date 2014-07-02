@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle;
 
+use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
 use Shopware\Bundle\SearchBundle\Facet;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\SearchBundle\Sorting;
@@ -108,7 +109,7 @@ class Criteria
      * @param array $categoryIds
      * @return $this
      */
-    public function category(array $categoryIds)
+    public function addCategoryCondition(array $categoryIds)
     {
         return $this->addCondition(
             new Condition\CategoryCondition($categoryIds)
@@ -119,7 +120,7 @@ class Criteria
      * @param array $manufacturerIds
      * @return $this
      */
-    public function manufacturer(array $manufacturerIds)
+    public function addManufacturerCondition(array $manufacturerIds)
     {
         return $this->addCondition(
             new Condition\ManufacturerCondition($manufacturerIds)
@@ -132,7 +133,7 @@ class Criteria
      *
      * @return $this
      */
-    public function price($min, $max)
+    public function addPriceCondition($min, $max)
     {
         return $this->addCondition(
             new Condition\PriceCondition($min, $max)
@@ -143,7 +144,7 @@ class Criteria
      * @param array $valueIds
      * @return $this
      */
-    public function properties(array $valueIds)
+    public function addPropertyCondition(array $valueIds)
     {
         return $this->addCondition(
             new Condition\PropertyCondition($valueIds)
@@ -153,7 +154,7 @@ class Criteria
     /**
      * @return $this
      */
-    public function shippingFree()
+    public function addShippingFreeCondition()
     {
         return $this->addCondition(
             new Condition\ShippingFreeCondition()
@@ -163,7 +164,7 @@ class Criteria
     /**
      * @return $this
      */
-    public function immediateDelivery()
+    public function addImmediateDeliveryCondition()
     {
         return $this->addCondition(
             new Condition\ImmediateDeliveryCondition()
@@ -174,17 +175,24 @@ class Criteria
      * @param array $customerGroupIds
      * @return $this
      */
-    public function customerGroup(array $customerGroupIds)
+    public function addCustomerGroupCondition(array $customerGroupIds)
     {
         return $this->addCondition(
             new Condition\CustomerGroupCondition($customerGroupIds)
         );
     }
 
+    public function addProductAttributeCondition($field, $operator, $value)
+    {
+        return $this->addCondition(
+            new ProductAttributeCondition($field, $operator, $value)
+        );
+    }
+
     /**
      * @return $this
      */
-    public function manufacturerFacet()
+    public function addManufacturerFacet()
     {
         return $this->addFacet(
             new Facet\ManufacturerFacet()
@@ -194,14 +202,14 @@ class Criteria
     /**
      * @return $this
      */
-    public function categoryFacet()
+    public function addCategoryFacet()
     {
         return $this->addFacet(
             new Facet\CategoryFacet()
         );
     }
 
-    public function shippingFreeFacet()
+    public function addShippingFreeFacet()
     {
         return $this->addFacet(
             new Facet\ShippingFreeFacet()
@@ -211,7 +219,7 @@ class Criteria
     /**
      * @return $this
      */
-    public function priceFacet()
+    public function addPriceFacet()
     {
         return $this->addFacet(
             new Facet\PriceFacet()
@@ -221,7 +229,7 @@ class Criteria
     /**
      * @return $this
      */
-    public function immediateDeliveryFacet()
+    public function addImmediateDeliveryFacet()
     {
         return $this->addFacet(
             new Facet\ImmediateDeliveryFacet()
@@ -231,10 +239,22 @@ class Criteria
     /**
      * @return $this
      */
-    public function propertyFacet()
+    public function addPropertyFacet()
     {
         return $this->addFacet(
             new Facet\PropertyFacet()
+        );
+    }
+
+    /**
+     * @param $field
+     * @param string $mode
+     * @return $this
+     */
+    public function addProductAttributeFacet($field, $mode = Facet\ProductAttributeFacet::MODE_VALUES)
+    {
+        return $this->addFacet(
+            new Facet\ProductAttributeFacet($field, $mode)
         );
     }
 
@@ -288,6 +308,18 @@ class Criteria
     {
         return $this->addSorting(
             new Sorting\DescriptionSorting($direction)
+        );
+    }
+
+    /**
+     * @param $field
+     * @param string $direction
+     * @return $this
+     */
+    public function sortByProductAttribute($field, $direction = 'ASC')
+    {
+        return $this->addSorting(
+            new Sorting\ProductAttributeSorting($field, $direction)
         );
     }
 
@@ -370,5 +402,16 @@ class Criteria
     public function getSortings()
     {
         return $this->sortings;
+    }
+
+    /**
+     * Allows to reset the internal sorting collection.
+     *
+     * @return $this
+     */
+    public function resetSorting()
+    {
+        $this->sortings = array();
+        return $this;
     }
 }

@@ -6,7 +6,7 @@ use Shopware\Bundle\SearchBundle\DBAL\SortingHandlerInterface;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
-use Shopware\Components\Model\DBAL\QueryBuilder;
+use Shopware\Bundle\SearchBundle\DBAL\QueryBuilder;
 
 class PopularitySortingHandler implements SortingHandlerInterface
 {

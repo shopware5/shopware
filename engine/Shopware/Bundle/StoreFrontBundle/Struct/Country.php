@@ -32,62 +32,62 @@ class Country extends Extendable
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      */
-    private $iso;
+    protected $iso;
 
     /**
      * @var string
      */
-    private $en;
+    protected $en;
 
     /**
      * @var string
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      */
-    private $iso3;
+    protected $iso3;
 
     /**
      * @var boolean
      */
-    private $shippingFree;
+    protected $shippingFree;
 
     /**
      * @var boolean
      */
-    private $taxFree;
+    protected $taxFree;
 
     /**
      * @var boolean
      */
-    private $taxFreeForVatId;
+    protected $taxFreeForVatId;
 
     /**
      * @var boolean
      */
-    private $vatIdCheck;
+    protected $vatIdCheck;
 
     /**
      * @var boolean
      */
-    private $displayStateSelection;
+    protected $displayStateSelection;
 
     /**
      * @var boolean
      */
-    private $requiresStateSelection;
+    protected $requiresStateSelection;
 
 
     /**

@@ -35,24 +35,24 @@ class PriceRule extends Extendable
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * Price value of the product price struct.
      *
      * @var float
      */
-    private $price;
+    protected $price;
 
     /**
      * @var int
      */
-    private $from;
+    protected $from;
 
     /**
      * @var null|int
      */
-    private $to = null;
+    protected $to = null;
 
     /**
      * The pseudo price is used to fake a discount in the store front
@@ -60,7 +60,7 @@ class PriceRule extends Extendable
      *
      * @var float
      */
-    private $pseudoPrice;
+    protected $pseudoPrice;
 
     /**
      * Contains the associated customer group of this price.
@@ -68,12 +68,12 @@ class PriceRule extends Extendable
      *
      * @var Group
      */
-    private $customerGroup;
+    protected $customerGroup;
 
     /**
      * @var Unit
      */
-    private $unit;
+    protected $unit;
 
     /**
      * @param int $id

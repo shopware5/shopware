@@ -32,44 +32,44 @@ class Media extends Extendable
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * Name of the media file
      * @var string $name
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      */
-    private $description;
+    protected $description;
 
     /**
      * @var boolean
      */
-    private $preview;
+    protected $preview;
 
     /**
      * @var string
      */
-    private $type;
+    protected $type;
 
     /**
      * @var string
      */
-    private $file;
+    protected $file;
 
     /**
      * @var string
      */
-    private $extension;
+    protected $extension;
 
     /**
      * Contains the different thumbnail sizes.
      * @var array
      */
-    private $thumbnails;
+    protected $thumbnails;
 
     /**
      * @param int $id
@@ -210,5 +210,8 @@ class Media extends Extendable
         return $this;
     }
 
-
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }

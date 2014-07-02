@@ -77,10 +77,10 @@ class CategoryConditionTest extends TestCase
         }
 
         $criteria = new Criteria();
-        $criteria->category(array($category->getId()));
+        $criteria->addCategoryCondition(array($category->getId()));
 
         /**@var $result ProductNumberSearchResult*/
-        $result = Shopware()->Container()->get('product_number_search')->search($criteria, $context);
+        $result = Shopware()->Container()->get('product_number_search_dbal')->search($criteria, $context);
 
         $this->assertSearchResult(
             $result,
@@ -106,10 +106,10 @@ class CategoryConditionTest extends TestCase
         }
 
         $criteria = new Criteria();
-        $criteria->category(array($category->getId(), $second->getId()));
+        $criteria->addCategoryCondition(array($category->getId(), $second->getId()));
 
         /**@var $result ProductNumberSearchResult*/
-        $result = Shopware()->Container()->get('product_number_search')->search($criteria, $context);
+        $result = Shopware()->Container()->get('product_number_search_dbal')->search($criteria, $context);
 
         $this->assertSearchResult(
             $result,

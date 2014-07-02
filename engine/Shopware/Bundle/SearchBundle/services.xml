@@ -14,7 +14,7 @@
         </service>
 
         <service id="product_number_search_dbal" class="Shopware\Bundle\SearchBundle\DBAL\ProductNumberSearch">
-            <argument type="service" id="models"/>
+            <argument type="service" id="dbal_query_builder_factory"/>
             <argument type="service" id="attribute_hydrator_dbal"/>
             <argument type="service" id="events" />
             <argument type="collection" />
@@ -26,6 +26,10 @@
 
         <!-- Facet handler -->
         <service id="shipping_free_facet_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\FacetHandler\ShippingFreeFacetHandler">
+            <tag name="facet_handler_dbal"/>
+        </service>
+
+        <service id="product_attribute_facet_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\FacetHandler\ProductAttributeFacetHandler">
             <tag name="facet_handler_dbal"/>
         </service>
 
@@ -55,6 +59,10 @@
 
         <!-- Condition handler -->
         <service id="category_condition_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\ConditionHandler\CategoryConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="product_attribute_condition_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\ConditionHandler\ProductAttributeConditionHandler">
             <tag name="condition_handler_dbal"/>
         </service>
 
@@ -92,6 +100,10 @@
             <tag name="sorting_handler_dbal"/>
         </service>
 
+        <service id="product_attribute_sorting_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\SortingHandler\ProductAttributeSortingHandler">
+            <tag name="sorting_handler_dbal"/>
+        </service>
+
         <service id="release_date_sorting_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\SortingHandler\ReleaseDateSortingHandler">
             <tag name="sorting_handler_dbal"/>
         </service>
@@ -99,6 +111,10 @@
         <service id="price_sorting_handler_sorting_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\SortingHandler\PriceSortingHandler" >
             <argument type="service" id="search_price_helper_dbal" />
             <tag name="sorting_handler_dbal"/>
+        </service>
+
+        <service id="dbal_query_builder_factory" class="Shopware\Bundle\SearchBundle\DBAL\QueryBuilderFactory">
+            <argument type="service" id="dbal_connection" />
         </service>
     </services>
 </container>

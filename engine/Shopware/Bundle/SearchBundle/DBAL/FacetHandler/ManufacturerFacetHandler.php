@@ -25,12 +25,12 @@
 namespace Shopware\Bundle\SearchBundle\DBAL\FacetHandler;
 
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Components\Model\DBAL\QueryBuilder;
+use Shopware\Bundle\SearchBundle\DBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundle\Facet;
 use Shopware\Bundle\SearchBundle\Condition;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
-use Shopware\Bundle\StoreFrontBundle\Struct\CoreAttribute;
+use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\SearchBundle\DBAL\FacetHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ManufacturerServiceInterface;
 
@@ -90,7 +90,7 @@ class ManufacturerFacetHandler implements FacetHandlerInterface
         foreach ($data as $row) {
             $manufacturer = $manufacturers[$row['id']];
 
-            $attribute = new CoreAttribute();
+            $attribute = new Attribute();
             $attribute->set('total', $row['total']);
             $attribute->set('active', false);
 

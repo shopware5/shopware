@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundle\DBAL\FacetHandler;
 
 use Shopware\Bundle\SearchBundle\FacetInterface;
-use Shopware\Components\Model\DBAL\QueryBuilder;
+use Shopware\Bundle\SearchBundle\DBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet;
 use Shopware\Bundle\SearchBundle\DBAL\FacetHandlerInterface;
@@ -90,7 +90,7 @@ class PropertyFacetHandler implements FacetHandlerInterface
      */
     private function addAttributes(array $properties, array $valueIds, array $activeValues)
     {
-        $baseAttribute = new Struct\CoreAttribute();
+        $baseAttribute = new Struct\Attribute();
         $baseAttribute->set('active', false);
 
         foreach ($properties as $set) {
@@ -124,7 +124,6 @@ class PropertyFacetHandler implements FacetHandlerInterface
     private function rebuildQuery(QueryBuilder $query)
     {
         $query->resetQueryPart('orderBy');
-
         $query->resetQueryPart('groupBy');
 
         $query->select(

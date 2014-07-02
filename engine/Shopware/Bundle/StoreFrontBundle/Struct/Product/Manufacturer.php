@@ -35,7 +35,7 @@ class Manufacturer extends Extendable
      * Unique identifier of the manufacturer
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * Name of the manufacturer.
@@ -44,7 +44,7 @@ class Manufacturer extends Extendable
      *
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * Description of the manufacturer.
@@ -52,42 +52,42 @@ class Manufacturer extends Extendable
      *
      * @var string
      */
-    private $description;
+    protected $description;
 
     /**
      * Title for the seo optimization.
      *
      * @var string
      */
-    private $metaTitle;
+    protected $metaTitle;
 
     /**
      * Description for the seo optimization.
      *
      * @var string
      */
-    private $metaDescription;
+    protected $metaDescription;
 
     /**
      * Keywords for the seo optimization.
      *
      * @var string
      */
-    private $metaKeywords;
+    protected $metaKeywords;
 
     /**
      * Contains the link to the manufacturer home page.
      *
      * @var string
      */
-    private $link;
+    protected $link;
 
     /**
      * Contains the file url for the cover file.
      *
      * @var string
      */
-    private $coverFile;
+    protected $coverFile;
 
     /**
      * @param string $description

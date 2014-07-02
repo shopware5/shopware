@@ -35,20 +35,20 @@ class Group extends Extendable
      * Unique identifier
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * Alphanumeric unique identifier.
      *
      * @var string
      */
-    private $key;
+    protected $key;
 
     /**
      * Name of the customer group
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * Defines if the customer group
@@ -57,7 +57,7 @@ class Group extends Extendable
      *
      * @var boolean
      */
-    private $displayGrossPrices;
+    protected $displayGrossPrices;
 
     /**
      * Defines if the display price
@@ -66,14 +66,14 @@ class Group extends Extendable
      *
      * @var boolean
      */
-    private $useDiscount;
+    protected $useDiscount;
 
     /**
      * Percentage global discount value
      * for this customer group.
      * @var float
      */
-    private $percentageDiscount;
+    protected $percentageDiscount;
 
     /**
      * Minimal order value for the customer group.
@@ -83,7 +83,7 @@ class Group extends Extendable
      *
      * @var float
      */
-    private $minimumOrderValue;
+    protected $minimumOrderValue;
 
     /**
      * Numeric surcharge value for the customer group.
@@ -93,7 +93,7 @@ class Group extends Extendable
      *
      * @var float
      */
-    private $surcharge;
+    protected $surcharge;
 
     /**
      * @param int $id

@@ -7,7 +7,7 @@ use Shopware\Bundle\SearchBundle\DBAL\SortingHandlerInterface;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
-use Shopware\Components\Model\DBAL\QueryBuilder;
+use Shopware\Bundle\SearchBundle\DBAL\QueryBuilder;
 
 class PriceSortingHandler implements SortingHandlerInterface
 {

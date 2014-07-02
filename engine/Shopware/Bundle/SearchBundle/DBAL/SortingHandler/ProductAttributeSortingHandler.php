@@ -22,42 +22,46 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundle\DBAL\ConditionHandler;
+namespace Shopware\Bundle\SearchBundle\DBAL\SortingHandler;
 
-use Shopware\Bundle\SearchBundle\Condition\ShippingFreeCondition;
-use Shopware\Bundle\SearchBundle\ConditionInterface;
-use Shopware\Bundle\SearchBundle\DBAL\ConditionHandlerInterface;
+use Shopware\Bundle\SearchBundle\DBAL\SortingHandlerInterface;
+use Shopware\Bundle\SearchBundle\Sorting\ProductAttributeSorting;
+use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\SearchBundle\DBAL\QueryBuilder;
 
-class ShippingFreeConditionHandler implements ConditionHandlerInterface
+class ProductAttributeSortingHandler implements SortingHandlerInterface
 {
     /**
-     * Checks if the passed condition can be handled by this class.
-     *
-     * @param ConditionInterface $condition
+     * Checks if the passed sorting can be handled by this class
+     * @param SortingInterface $sorting
      * @return bool
      */
-    public function supportsCondition(ConditionInterface $condition)
+    public function supportsSorting(SortingInterface $sorting)
     {
-        return ($condition instanceof ShippingFreeCondition);
+        return ($sorting instanceof ProductAttributeSorting);
     }
 
     /**
-     * Handles the passed condition object.
-     * Extends the provided query builder with the specify conditions.
-     * Should use the andWhere function, otherwise other conditions would be overwritten.
+     * Handles the passed sorting object.
+     * Extends the passed query builder with the specify sorting.
+     * Should use the addOrderBy function, otherwise other sortings would be overwritten.
      *
-     * @param ConditionInterface $condition
+     * @param SortingInterface|ProductAttributeSorting $sorting
      * @param QueryBuilder $query
      * @param Context $context
+     * @throws \Exception
      * @return void
      */
-    public function generateCondition(
-        ConditionInterface $condition,
+    public function generateSorting(
+        SortingInterface $sorting,
         QueryBuilder $query,
         Context $context
     ) {
-        $query->andWhere('variant.shippingfree = 1');
+        if (!$sorting->getField()) {
+            throw new \Exception('ProductAttributeSorting class requires a defined attribute field!');
+        }
+
+        $query->addOrderBy('productAttribute.' . $sorting->getField(), $sorting->getDirection());
     }
 }

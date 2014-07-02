@@ -36,7 +36,7 @@ class Unit extends Extendable
      *
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * Contains a name of the unit.
@@ -44,12 +44,12 @@ class Unit extends Extendable
      *
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      */
-    private $unit;
+    protected $unit;
 
     /**
      * Contains the numeric value of the purchase unit.
@@ -64,7 +64,7 @@ class Unit extends Extendable
      *
      * @var float
      */
-    private $purchaseUnit;
+    protected $purchaseUnit;
 
     /**
      * Contains the numeric value of the reference unit.
@@ -78,7 +78,7 @@ class Unit extends Extendable
      *
      * @var float
      */
-    private $referenceUnit;
+    protected $referenceUnit;
 
     /**
      * Alphanumeric description how the product
@@ -88,7 +88,7 @@ class Unit extends Extendable
      *
      * @var string
      */
-    private $packUnit;
+    protected $packUnit;
 
     /**
      * Minimal purchase value for the product.
@@ -96,7 +96,7 @@ class Unit extends Extendable
      *
      * @var float
      */
-    private $minPurchase;
+    protected $minPurchase;
 
     /**
      * Maximal purchase value for the product.
@@ -104,7 +104,7 @@ class Unit extends Extendable
      *
      * @var float
      */
-    private $maxPurchase;
+    protected $maxPurchase;
 
     /**
      * Numeric step value for the purchase.
@@ -113,7 +113,7 @@ class Unit extends Extendable
      *
      * @var float
      */
-    private $purchaseStep;
+    protected $purchaseStep;
 
     /**
      * @param int $id

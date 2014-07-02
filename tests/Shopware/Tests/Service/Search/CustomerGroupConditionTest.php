@@ -87,11 +87,11 @@ class CustomerGroupConditionTest extends TestCase
         }
 
         $criteria = new Criteria();
-        $criteria->category(array($category->getId()));
-        $criteria->customerGroup(array($customerGroup->getId()));
+        $criteria->addCategoryCondition(array($category->getId()));
+        $criteria->addCustomerGroupCondition(array($customerGroup->getId()));
 
         /**@var $result ProductNumberSearchResult*/
-        $result = Shopware()->Container()->get('product_number_search')->search($criteria, $context);
+        $result = Shopware()->Container()->get('product_number_search_dbal')->search($criteria, $context);
 
         $this->assertSearchResult(
             $result,
@@ -119,11 +119,11 @@ class CustomerGroupConditionTest extends TestCase
         }
 
         $criteria = new Criteria();
-        $criteria->category(array($category->getId()));
-        $criteria->customerGroup(array($customerGroup->getId(), $second->getId()));
+        $criteria->addCategoryCondition(array($category->getId()));
+        $criteria->addCustomerGroupCondition(array($customerGroup->getId(), $second->getId()));
 
         /**@var $result ProductNumberSearchResult*/
-        $result = Shopware()->Container()->get('product_number_search')->search($criteria, $context);
+        $result = Shopware()->Container()->get('product_number_search_dbal')->search($criteria, $context);
 
         $this->assertSearchResult(
             $result,

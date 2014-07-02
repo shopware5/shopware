@@ -34,22 +34,22 @@ class Group extends Extendable
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var boolean
      */
-    private $filterable;
+    protected $filterable;
 
     /**
      * @var Option[]
      */
-    private $options = array();
+    protected $options = array();
 
     /**
      * @param int $id

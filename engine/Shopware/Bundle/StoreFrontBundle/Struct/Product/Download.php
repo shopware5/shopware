@@ -34,22 +34,22 @@ class Download extends Extendable
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      */
-    private $file;
+    protected $file;
 
     /**
      * @var float
      */
-    private $size;
+    protected $size;
 
     /**
      * @param int $id

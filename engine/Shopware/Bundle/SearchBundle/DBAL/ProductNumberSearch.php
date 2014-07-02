@@ -24,10 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle\DBAL;
 
-use Shopware\Components\Model\DBAL\QueryBuilder;
-use Shopware\Components\Model\ModelManager;
 use Doctrine\Common\Collections\ArrayCollection;
-
 use Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator;
@@ -39,6 +36,11 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator;
  */
 class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
 {
+    /**
+     * @var \Shopware\Bundle\SearchBundle\DBAL\QueryBuilderFactory
+     */
+    private $queryBuilderFactory;
+
     /**
      * @var ConditionHandlerInterface[]
      */
@@ -65,22 +67,22 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
     private $eventManager;
 
     /**
-     * @param ModelManager $entityManager
-     * @param AttributeHydrator $attributeHydrator
+     * @param \Shopware\Bundle\SearchBundle\QueryBuilderFactory $queryBuilderFactory
+     * @param \Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator $attributeHydrator
      * @param \Enlight_Event_EventManager $eventManager
-     * @param ConditionHandlerInterface[] $conditionHandlers
-     * @param SortingHandlerInterface[] $sortingHandlers
-     * @param FacetHandlerInterface[] $facetHandlers
+     * @param array $conditionHandlers
+     * @param array $sortingHandlers
+     * @param array $facetHandlers
      */
     function __construct(
-        ModelManager $entityManager,
+        SearchBundle\QueryBuilderFactory $queryBuilderFactory,
         AttributeHydrator $attributeHydrator,
         \Enlight_Event_EventManager $eventManager,
         $conditionHandlers = array(),
         $sortingHandlers = array(),
         $facetHandlers = array()
     ) {
-        $this->entityManager = $entityManager;
+        $this->queryBuilderFactory = $queryBuilderFactory;
         $this->attributeHydrator = $attributeHydrator;
         $this->eventManager = $eventManager;
         $this->conditionHandlers = $conditionHandlers;
@@ -175,7 +177,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
         $query = $this->getQuery($criteria, $context);
 
         if ($query->getQueryPart('having')) {
-            return $this->entityManager->getConnection()->fetchColumn('SELECT FOUND_ROWS()');
+            return $query->getConnection()->fetchColumn('SELECT FOUND_ROWS()');
         }
 
         $query->resetQueryPart('groupBy')
@@ -249,11 +251,11 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
     /**
      * @param SearchBundle\Criteria $criteria
      * @param Context $context
-     * @return QueryBuilder
+     * @return \Shopware\Bundle\SearchBundle\DBAL\QueryBuilder
      */
     private function getQuery(SearchBundle\Criteria $criteria, Context $context)
     {
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $query = $this->queryBuilderFactory->createQueryBuilder();
 
         $query->from('s_articles', 'product')
             ->innerJoin(
@@ -273,8 +275,8 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
             ->innerJoin(
                 'variant',
                 's_articles_attributes',
-                'variantAttribute',
-                'variantAttribute.articledetailsID = variant.id'
+                'productAttribute',
+                'productAttribute.articledetailsID = variant.id'
             );
 
         $this->addConditions($criteria, $query, $context);

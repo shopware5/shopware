@@ -83,12 +83,12 @@ class ImmediateDeliveryConditionTest extends TestCase
         }
 
         $criteria = new Criteria();
-        $criteria->category(array($category->getId()));
-        $criteria->immediateDelivery();
+        $criteria->addCategoryCondition(array($category->getId()));
+        $criteria->addImmediateDeliveryCondition();
 
 
         /**@var $result ProductNumberSearchResult*/
-        $result = Shopware()->Container()->get('product_number_search')->search($criteria, $context);
+        $result = Shopware()->Container()->get('product_number_search_dbal')->search($criteria, $context);
 
         $this->assertSearchResult(
             $result,
@@ -113,11 +113,11 @@ class ImmediateDeliveryConditionTest extends TestCase
         }
 
         $criteria = new Criteria();
-        $criteria->category(array($category->getId()));
-        $criteria->immediateDelivery();
+        $criteria->addCategoryCondition(array($category->getId()));
+        $criteria->addImmediateDeliveryCondition();
 
         /**@var $result ProductNumberSearchResult*/
-        $result = Shopware()->Container()->get('product_number_search')->search($criteria, $context);
+        $result = Shopware()->Container()->get('product_number_search_dbal')->search($criteria, $context);
 
         $this->assertSearchResult(
             $result,

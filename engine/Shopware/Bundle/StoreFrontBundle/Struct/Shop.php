@@ -32,42 +32,42 @@ class Shop extends Extendable
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      */
-    private $host;
+    protected $host;
 
     /**
      * @var string
      */
-    private $path;
+    protected $path;
 
     /**
      * @var string
      */
-    private $url;
+    protected $url;
 
     /**
      * @var boolean
      */
-    private $secure;
+    protected $secure;
 
     /**
      * @var string
      */
-    private $secureHost;
+    protected $secureHost;
 
     /**
      * @var string
      */
-    private $securePath;
+    protected $securePath;
 
     /**
      * @var Category

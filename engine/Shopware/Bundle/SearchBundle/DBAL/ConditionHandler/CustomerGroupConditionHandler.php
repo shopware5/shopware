@@ -29,7 +29,7 @@ use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\DBAL\ConditionHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
-use Shopware\Components\Model\DBAL\QueryBuilder;
+use Shopware\Bundle\SearchBundle\DBAL\QueryBuilder;
 
 class CustomerGroupConditionHandler implements ConditionHandlerInterface
 {

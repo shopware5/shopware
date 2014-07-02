@@ -28,7 +28,7 @@ use Shopware\Bundle\SearchBundle\Condition\PropertyCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\DBAL\ConditionHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
-use Shopware\Components\Model\DBAL\QueryBuilder;
+use Shopware\Bundle\SearchBundle\DBAL\QueryBuilder;
 
 class PropertyConditionHandler implements ConditionHandlerInterface
 {
