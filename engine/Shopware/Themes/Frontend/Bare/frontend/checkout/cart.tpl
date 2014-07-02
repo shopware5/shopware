@@ -44,6 +44,15 @@
 
         {* Product table *}
         <div class="product--table {if {config name=BasketShippingInfo}} has--dispatch-info{/if}">
+
+			{* Deliveryfree dispatch notification *}
+			{block name='frontend_checkout_cart_deliveryfree'}
+				{if $sShippingcostsDifference}
+					{$shippingDifferenceContent="<strong>{s name='CartInfoFreeShipping'}{/s}</strong> {s name='CartInfoFreeShippingDifference'}{/s}"}
+					{include file="frontend/_includes/messages.tpl" type="warning" content="{$shippingDifferenceContent}"}
+				{/if}
+			{/block}
+
             <div class="table--actions">
                 {block name="frontend_checkout_actions_confirm"}
 					{* Contiune shopping *}
@@ -65,14 +74,6 @@
                     {/if}
                 {/block}
             </div>
-
-			{* Deliveryfree dispatch notification *}
-			{block name='frontend_checkout_cart_deliveryfree'}
-				{if $sShippingcostsDifference}
-					{$shippingDifferenceContent="<strong>{s name='CartInfoFreeShipping'}{/s}</strong> {s name='CartInfoFreeShippingDifference'}{/s}"}
-					{include file="frontend/_includes/messages.tpl" type="warning" content="{$shippingDifferenceContent}"}
-				{/if}
-			{/block}
 
 			{* Product table content *}
             <div class="panel has--border">

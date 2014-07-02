@@ -8,9 +8,12 @@
 
             {* Badge *}
             {block name='frontend_checkout_cart_item_premium_image'}
-                <div class="table--media basket--badge is--green">
-                    {s name="CartItemInfoFree"}{/s}
-                </div>
+				<div class="table--media">
+					<div class="basket--badge">
+						{s name="CartItemInfoFree"}{/s}
+					</div>
+				</div>
+
             {/block}
 
             {* Product information *}
@@ -26,7 +29,7 @@
 
                     {* Product SKU number *}
                     {block name='frontend_checkout_cart_item_premium_details_sku'}
-                        <p class="content--thank-you">
+                        <p class="content--thank-you content">
                             {s name="CartItemInfoPremium"}{/s}
                         </p>
                     {/block}
@@ -76,7 +79,7 @@
     {block name='frontend_checkout_cart_item_premium_delete_article'}
         <div class="table--column column--actions block">
             <a href="{url action='deleteArticle' sDelete=$sBasketItem.id sTargetAction=$sTargetAction}" class="btn is--small" title="{s name='CartItemLinkDelete '}{/s}">
-                X
+				<i class="icon--cross"></i>
             </a>
         </div>
     {/block}

@@ -8,8 +8,10 @@
 
 			{* Badge *}
 			{block name='frontend_checkout_cart_item_rebate_badge'}
-				<div class="table--media basket--badge">
-					<i class="icon--arrow-right"></i>
+				<div class="table--media">
+					<div class="basket--badge">
+						<i class="icon--arrow-right"></i>
+					</div>
 				</div>
 			{/block}
 
@@ -24,7 +26,7 @@
 
                     {* Product SKU number *}
                     {block name='frontend_checkout_cart_item_rebate_details_sku'}
-                        <p class="content--sku">
+                        <p class="content--sku content">
                             {s name="CartItemInfoId"}{/s} {$sBasketItem.ordernumber}
                         </p>
                     {/block}
@@ -33,6 +35,24 @@
                     {block name='frontend_checkout_cart_item_rebate_details_inline'}{/block}
                 </div>
             {/block}
+        </div>
+    {/block}
+
+	{* Product quantity *}
+    {block name='frontend_checkout_cart_item_voucher_quantity'}
+        <div class="table--column column--quantity block is--align-right">
+			{* Label *}
+			{block name='frontend_checkout_cart_item_premium_quantity_label'}
+				<div class="column--label quantity--label">
+					{s name="CartColumnQuantity" namespace="frontend/checkout/cart_header"}{/s}
+				</div>
+			{/block}
+
+			<select name="sQuantity">
+				<option selected="selected" disabled="disabled">
+					1
+				</option>
+			</select>
         </div>
     {/block}
 
