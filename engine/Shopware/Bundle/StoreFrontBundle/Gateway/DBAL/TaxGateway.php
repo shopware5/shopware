@@ -122,7 +122,7 @@ class TaxGateway implements Gateway\TaxGatewayInterface
      * @param Struct\Country\Area $area
      * @param Struct\Country $country
      * @param Struct\Country\State $state
-     * @return \Shopware\Components\Model\DBAL\QueryBuilder
+     * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     private function getAreaQuery(
         Struct\Customer\Group $customerGroup = null,

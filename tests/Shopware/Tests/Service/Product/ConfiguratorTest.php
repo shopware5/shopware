@@ -19,6 +19,11 @@ class ConfiguratorTest extends \Enlight_Components_Test_TestCase
         parent::setUp();
     }
 
+    protected function tearDown()
+    {
+        $this->helper->cleanUp();
+        parent::tearDown();
+    }
 
     /**
      * @return Context

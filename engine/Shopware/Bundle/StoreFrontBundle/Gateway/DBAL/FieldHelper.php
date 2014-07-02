@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
-use Shopware\Components\Model\DBAL\QueryBuilder;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;

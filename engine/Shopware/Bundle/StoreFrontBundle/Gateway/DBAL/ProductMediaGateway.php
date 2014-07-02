@@ -170,7 +170,7 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
 
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Struct\Context $context
-     * @return \Shopware\Components\Model\DBAL\QueryBuilder
+     * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     private function getQuery(Struct\Context $context)
     {

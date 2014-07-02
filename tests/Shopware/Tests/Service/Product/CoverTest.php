@@ -21,6 +21,12 @@ class CoverTest extends \Enlight_Components_Test_TestCase
         parent::setUp();
     }
 
+    protected function tearDown()
+    {
+        $this->helper->cleanUp();
+        parent::tearDown();
+    }
+
     public function testProductWithOneImage()
     {
         $number = 'Cover-Test';
