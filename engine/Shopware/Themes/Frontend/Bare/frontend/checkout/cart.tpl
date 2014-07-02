@@ -54,25 +54,27 @@
 			{/block}
 
             <div class="table--actions">
-                {block name="frontend_checkout_actions_confirm"}
-					{* Contiune shopping *}
-					{if $sBasket.sLastActiveArticle.link}
-						{block name="frontend_checkout_actions_link_last"}
-							 <a href="{$sBasket.sLastActiveArticle.link}" title="{s name='CheckoutActionsLinkLast' namespace="frontend/checkout/actions"}{/s}" class="btn btn--secondary is--left">
-								 {s name="CheckoutActionsLinkLast" namespace="frontend/checkout/actions"}{/s}
-							 </a>
-						 {/block}
-					{/if}
+				<div class="main--actions">
+					{block name="frontend_checkout_actions_confirm"}
+						{* Contiune shopping *}
+						{if $sBasket.sLastActiveArticle.link}
+							{block name="frontend_checkout_actions_link_last"}
+								 <a href="{$sBasket.sLastActiveArticle.link}" title="{s name='CheckoutActionsLinkLast' namespace="frontend/checkout/actions"}{/s}" class="btn btn--secondary is--left">
+									 {s name="CheckoutActionsLinkLast" namespace="frontend/checkout/actions"}{/s}
+								 </a>
+							 {/block}
+						{/if}
 
-					{* Forward to the checkout *}
-                    {if !$sMinimumSurcharge && !$sDispatchNoOrder}
-						{block name="frontend_checkout_actions_checkout"}
-							<a href="{url action=confirm}" title="{s name='CheckoutActionsLinkProceedShort' namespace="frontend/checkout/actions"}{/s}" class="btn btn--primary right">
-								{s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions"}{/s} <i class="icon--arrow-right"></i>
-							</a>
-						{/block}
-                    {/if}
-                {/block}
+						{* Forward to the checkout *}
+						{if !$sMinimumSurcharge && !$sDispatchNoOrder}
+							{block name="frontend_checkout_actions_checkout"}
+								<a href="{url action=confirm}" title="{s name='CheckoutActionsLinkProceedShort' namespace="frontend/checkout/actions"}{/s}" class="btn btn--primary right">
+									{s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions"}{/s} <i class="icon--arrow-right"></i>
+								</a>
+							{/block}
+						{/if}
+					{/block}
+				</div>
             </div>
 
 			{* Product table content *}
