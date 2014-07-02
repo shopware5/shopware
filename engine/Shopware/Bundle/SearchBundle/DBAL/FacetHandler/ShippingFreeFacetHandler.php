@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundle\DBAL\FacetHandler;
 
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Components\Model\DBAL\QueryBuilder;
+use Shopware\Bundle\SearchBundle\DBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundle\DBAL\FacetHandlerInterface;
 use Shopware\Bundle\SearchBundle\Facet;
 use Shopware\Bundle\SearchBundle\FacetInterface;
@@ -52,7 +52,6 @@ class ShippingFreeFacetHandler implements FacetHandlerInterface
         Context $context
     ) {
         $query->resetQueryPart('orderBy');
-
         $query->resetQueryPart('groupBy');
 
         $query->select(array(

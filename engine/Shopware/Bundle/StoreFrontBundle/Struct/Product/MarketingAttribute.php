@@ -29,22 +29,22 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 /**
  * @package Shopware\Bundle\StoreFrontBundle\Struct\Product
  */
-class MarketingAttribute implements Attribute
+class MarketingAttribute extends Attribute
 {
     /**
      * @var bool
      */
-    private $isNew = false;
+    protected $isNew = false;
 
     /**
      * @var bool
      */
-    private $isTopSeller = false;
+    protected $isTopSeller = false;
 
     /**
      * @var bool
      */
-    private $comingSoon = false;
+    protected $comingSoon = false;
 
     /**
      * @param boolean $comingSoon

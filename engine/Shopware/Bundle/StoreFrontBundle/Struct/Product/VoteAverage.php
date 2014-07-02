@@ -34,17 +34,17 @@ class VoteAverage extends Extendable
     /**
      * @var int
      */
-    private $count;
+    protected $count;
 
     /**
      * @var float
      */
-    private $average;
+    protected $average;
 
     /**
      * @var array
      */
-    private $pointCount;
+    protected $pointCount;
 
     /**
      * @param float $average

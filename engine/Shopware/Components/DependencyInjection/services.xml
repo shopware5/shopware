@@ -219,6 +219,11 @@
             <argument type="service" id="shopware.model_annotations" />
          </service>
 
+        <service id="dbal_connection"
+                 class="Doctrine\DBAL\Connection"
+                 factory-service="models"
+                 factory-method="getConnection" />
+
         <service id="model_annotations_factory" class="Shopware\Components\DependencyInjection\Bridge\ModelAnnotation" />
         <service id="shopware.model_annotations" alias="ModelAnnotations" />
         <service id="ModelAnnotations"

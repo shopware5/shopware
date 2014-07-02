@@ -3915,9 +3915,9 @@ class sArticles
     {
         $criteria = new SearchBundle\Criteria();
 
-        $criteria->category(array($categoryId));
+        $criteria->addCategoryCondition(array($categoryId));
 
-        $criteria->customerGroup(
+        $criteria->addCustomerGroupCondition(
             array($context->getCurrentCustomerGroup()->getId())
         );
 
@@ -3926,27 +3926,27 @@ class sArticles
         $criteria->offset(($config['sPage'] - 1) * $config['sPerPage']);
 
         if (!empty($config['sFilterProperties'])) {
-            $criteria->properties(
+            $criteria->addPropertyCondition(
                 explode('|', $config['sFilterProperties'])
             );
         }
 
         if ($config['shippingFree']) {
-            $criteria->shippingFree();
+            $criteria->addShippingFreeCondition();
         }
 
         if ($config['immediateDelivery']) {
-            $criteria->immediateDelivery();
+            $criteria->addImmediateDeliveryCondition();
         }
 
         if (!empty($config['sSupplier'])) {
-            $criteria->manufacturer(
+            $criteria->addManufacturerCondition(
                 array($config['sSupplier'])
             );
         }
 
         if ($config['priceMax']) {
-            $criteria->price(
+            $criteria->addPriceCondition(
                 (float) $config['priceMin'],
                 (float) $config['priceMax']
             );
@@ -3954,10 +3954,10 @@ class sArticles
 
         switch ($config['sSort']) {
             case 1:
-                $criteria->sortByReleaseDate('DESC');
+                $criteria->sortByReleaseDate(SearchBundle\SortingInterface::SORT_DESC);
                 break;
             case 2:
-                $criteria->sortByPopularity('DESC');
+                $criteria->sortByPopularity(SearchBundle\SortingInterface::SORT_DESC);
                 break;
             case 3:
                 $criteria->sortByCheapestPrice();
@@ -3969,19 +3969,19 @@ class sArticles
                 $criteria->sortByDescription();
                 break;
             case 6:
-                $criteria->sortByDescription('DESC');
+                $criteria->sortByDescription(SearchBundle\SortingInterface::SORT_DESC);
                 break;
             default:
-                $criteria->sortByReleaseDate('DESC');
+                $criteria->sortByReleaseDate(SearchBundle\SortingInterface::SORT_DESC);
         }
 
-        $criteria->priceFacet()
-            ->shippingFreeFacet()
-            ->immediateDeliveryFacet()
-            ->manufacturerFacet();
+        $criteria->addPriceFacet()
+            ->addShippingFreeFacet()
+            ->addImmediateDeliveryFacet()
+            ->addManufacturerFacet();
 
         if ($this->config->get('displayFiltersInListings', true)) {
-            $criteria->propertyFacet();
+            $criteria->addPropertyFacet();
         }
 
         return $this->eventManager->filter('Shopware_Listing_Filter_Criteria', $criteria, array(
@@ -4325,7 +4325,7 @@ class sArticles
      */
     private function createListingPageLinks($totalCount, $config)
     {
-        $currentPage = $config['page'];
+        $currentPage = $config['sPage'];
 
         $count = ceil($totalCount / $config['sPerPage']);
 
@@ -4381,7 +4381,7 @@ class sArticles
             'priceMax' => null,
             'shippingFree' => false,
             'immediateDelivery' => false,
-            'sPage' => 1,
+            'sPage' => 1
         );
 
         $setup = $this->eventManager->filter('Shopware_Listing_Filter_Config_Setup', $setup, array(

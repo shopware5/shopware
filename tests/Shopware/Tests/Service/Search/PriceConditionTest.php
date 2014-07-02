@@ -95,11 +95,11 @@ class PriceConditionTest extends TestCase
         }
 
         $criteria = new Criteria();
-        $criteria->category(array($category->getId()));
-        $criteria->price(10, 20);
+        $criteria->addCategoryCondition(array($category->getId()));
+        $criteria->addPriceCondition(10, 20);
 
         /**@var $result ProductNumberSearchResult*/
-        $result = Shopware()->Container()->get('product_number_search')->search($criteria, $context);
+        $result = Shopware()->Container()->get('product_number_search_dbal')->search($criteria, $context);
 
         $this->assertSearchResult(
             $result,
@@ -123,11 +123,11 @@ class PriceConditionTest extends TestCase
         }
 
         $criteria = new Criteria();
-        $criteria->category(array($category->getId()));
-        $criteria->price(10, 20);
+        $criteria->addCategoryCondition(array($category->getId()));
+        $criteria->addPriceCondition(10, 20);
 
         /**@var $result ProductNumberSearchResult*/
-        $result = Shopware()->Container()->get('product_number_search')->search($criteria, $context);
+        $result = Shopware()->Container()->get('product_number_search_dbal')->search($criteria, $context);
 
         $this->assertSearchResult(
             $result,
@@ -183,11 +183,11 @@ class PriceConditionTest extends TestCase
         }
 
         $criteria = new Criteria();
-        $criteria->category(array($category->getId()));
-        $criteria->price(10, 20);
+        $criteria->addCategoryCondition(array($category->getId()));
+        $criteria->addPriceCondition(10, 20);
 
         /**@var $result ProductNumberSearchResult*/
-        $result = Shopware()->Container()->get('product_number_search')->search($criteria, $context);
+        $result = Shopware()->Container()->get('product_number_search_dbal')->search($criteria, $context);
 
         $this->assertSearchResult(
             $result,

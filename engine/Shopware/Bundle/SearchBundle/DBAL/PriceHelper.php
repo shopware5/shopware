@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\SearchBundle\DBAL;
 
-use Shopware\Components\Model\DBAL\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**

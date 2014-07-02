@@ -34,22 +34,22 @@ class Set extends Extendable
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var boolean
      */
-    private $comparable;
+    protected $comparable;
 
     /**
      * @var Group[]
      */
-    private $groups = array();
+    protected $groups = array();
 
     /**
      * @param int $id

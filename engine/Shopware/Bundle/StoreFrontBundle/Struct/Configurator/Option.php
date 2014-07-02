@@ -35,22 +35,22 @@ class Option extends Extendable
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var bool
      */
-    private $selected;
+    protected $selected;
 
     /**
      * @var Media
      */
-    private $media;
+    protected $media;
 
     /**
      * @param int $id

@@ -32,27 +32,27 @@ class Currency extends Extendable
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      */
-    private $currency;
+    protected $currency;
 
     /**
      * @var float
      */
-    private $factor;
+    protected $factor;
 
     /**
      * @var string
      */
-    private $symbol;
+    protected $symbol;
 
     /**
      * @param int $id

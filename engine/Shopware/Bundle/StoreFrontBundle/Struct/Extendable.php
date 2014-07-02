@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
 /**
  * @package Shopware\Bundle\StoreFrontBundle\Struct
  */
-abstract class Extendable
+abstract class Extendable extends Struct
 {
     /**
      * Contains an array of attribute structs.
@@ -53,7 +53,7 @@ abstract class Extendable
      * The passed name is used as unique identifier.
      *
      * @param $name
-     * @return CoreAttribute
+     * @return Attribute
      */
     public function getAttribute($name)
     {

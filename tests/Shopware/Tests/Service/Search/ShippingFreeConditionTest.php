@@ -80,11 +80,11 @@ class ShippingFreeConditionTest extends TestCase
         }
 
         $criteria = new Criteria();
-        $criteria->category(array($category->getId()));
-        $criteria->shippingFree();
+        $criteria->addCategoryCondition(array($category->getId()));
+        $criteria->addShippingFreeCondition();
 
         /**@var $result ProductNumberSearchResult*/
-        $result = Shopware()->Container()->get('product_number_search')->search($criteria, $context);
+        $result = Shopware()->Container()->get('product_number_search_dbal')->search($criteria, $context);
 
         $this->assertSearchResult(
             $result,

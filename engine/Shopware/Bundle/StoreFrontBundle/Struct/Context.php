@@ -36,7 +36,7 @@ class Context extends Extendable
     /**
      * @var Tax[]
      */
-    private $taxRules;
+    protected $taxRules;
 
     /**
      * Contains the current customer group for the store front.
@@ -45,7 +45,7 @@ class Context extends Extendable
      *
      * @var Group
      */
-    private $currentCustomerGroup;
+    protected $currentCustomerGroup;
 
     /**
      * Contains the fallback customer group for the current shop.
@@ -56,7 +56,7 @@ class Context extends Extendable
      *
      * @var Group
      */
-    private $fallbackCustomerGroup;
+    protected $fallbackCustomerGroup;
 
     /**
      * Contains the currency of the store front.
@@ -69,7 +69,7 @@ class Context extends Extendable
      *
      * @var Currency
      */
-    private $currency;
+    protected $currency;
 
     /**
      * Contains the current shop object of the store front.
@@ -78,22 +78,22 @@ class Context extends Extendable
      *
      * @var Shop
      */
-    private $shop;
+    protected $shop;
 
     /**
      * @var Area
      */
-    private $area;
+    protected $area;
 
     /**
      * @var Country
      */
-    private $country;
+    protected $country;
 
     /**
      * @var State
      */
-    private $state;
+    protected $state;
 
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Struct\Currency $currency

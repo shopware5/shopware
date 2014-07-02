@@ -32,77 +32,77 @@ class Category extends Extendable
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var array
      */
-    private $path;
+    protected $path;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      */
-    private $metaKeywords;
+    protected $metaKeywords;
 
     /**
      * @var string
      */
-    private $metaDescription;
+    protected $metaDescription;
 
     /**
      * @var string
      */
-    private $cmsHeadline;
+    protected $cmsHeadline;
 
     /**
      * @var string
      */
-    private $cmsText;
+    protected $cmsText;
 
     /**
      * @var string
      */
-    private $template;
+    protected $template;
 
     /**
      * @var boolean
      */
-    private $blog;
+    protected $blog;
 
     /**
      * @var boolean
      */
-    private $allowViewSelect;
+    protected $allowViewSelect;
 
     /**
      * @var boolean
      */
-    private $displayPropertySets;
+    protected $displayPropertySets;
 
     /**
      * @var boolean
      */
-    private $displayFacets;
+    protected $displayFacets;
 
     /**
      * @var boolean
      */
-    private $displayInNavigation;
+    protected $displayInNavigation;
 
     /**
      * @var string
      */
-    private $externalLink;
+    protected $externalLink;
 
     /**
      * @var Media
      */
-    private $media;
+    protected $media;
 
     /**
      * @param int $id

@@ -941,4 +941,9 @@ class ListProduct extends Extendable
     {
         $this->esd = $esd;
     }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }

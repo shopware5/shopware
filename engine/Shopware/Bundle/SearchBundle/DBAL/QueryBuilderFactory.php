@@ -22,56 +22,30 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\StoreFrontBundle\Struct\Country;
+namespace Shopware\Bundle\SearchBundle\DBAL;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
+use Doctrine\DBAL\Connection;
 
-/**
- * @package Shopware\Bundle\StoreFrontBundle\Struct\Country
- */
-class Area extends Extendable
+class QueryBuilderFactory
 {
     /**
-     * @var int
+     * @var Connection
      */
-    protected $id;
+    private $connection;
 
     /**
-     * @var string
+     * @param Connection $connection
      */
-    protected $name;
-
-    /**
-     * @param int $id
-     */
-    public function setId($id)
+    function __construct(Connection $connection)
     {
-        $this->id = $id;
+        $this->connection = $connection;
     }
 
     /**
-     * @return int
+     * @return QueryBuilder
      */
-    public function getId()
+    public function createQueryBuilder()
     {
-        return $this->id;
+        return new QueryBuilder($this->connection);
     }
-
-    /**
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-
 }

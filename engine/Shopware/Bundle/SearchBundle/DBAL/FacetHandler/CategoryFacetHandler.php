@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundle\DBAL\FacetHandler;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Components\Model\DBAL\QueryBuilder;
+use Shopware\Bundle\SearchBundle\DBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet;
 use Shopware\Bundle\SearchBundle\FacetInterface;
@@ -60,10 +60,10 @@ class CategoryFacetHandler implements FacetHandlerInterface
      * If no \Shopware\Bundle\SearchBundle\Condition\Category is set, the handler uses as default the id 1.
      *
      * @param \Shopware\Bundle\SearchBundle\FacetInterface $facet
-     * @param \Shopware\Components\Model\DBAL\QueryBuilder $query
+     * @param \Shopware\Bundle\SearchBundle\DBAL\QueryBuilder $query
      * @param \Shopware\Bundle\SearchBundle\Criteria $criteria
      * @param \Shopware\Bundle\StoreFrontBundle\Struct\Context $context
-     * @return \Shopware\Bundle\SearchBundle\FacetInterface||\Shopware\Bundle\SearchBundle\Facet\CategoryFacet
+     * @return \Shopware\Bundle\SearchBundle\Facet\CategoryFacet|\Shopware\Bundle\SearchBundle\FacetInterface
      */
     public function generateFacet(
         FacetInterface $facet,
@@ -76,6 +76,7 @@ class CategoryFacetHandler implements FacetHandlerInterface
         $query->removeTableInclude('s_articles_categories_ro');
 
         $query->resetQueryPart('orderBy');
+        $query->resetQueryPart('groupBy');
 
         $query->select(
             array(

@@ -33,7 +33,7 @@ class AttributeHydrator extends Hydrator
 {
     public function hydrate(array $data)
     {
-        $attribute = new Struct\CoreAttribute();
+        $attribute = new Struct\Attribute();
 
         foreach ($data as $key => $value) {
             $attribute->set($key, $value);

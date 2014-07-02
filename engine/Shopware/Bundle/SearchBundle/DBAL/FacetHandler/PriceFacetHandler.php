@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundle\DBAL\FacetHandler;
 
 use Shopware\Bundle\SearchBundle\FacetInterface;
-use Shopware\Components\Model\DBAL\QueryBuilder;
+use Shopware\Bundle\SearchBundle\DBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\DBAL\PriceHelper;
 use Shopware\Bundle\SearchBundle\DBAL\FacetHandlerInterface;

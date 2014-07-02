@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\SearchBundle\DBAL;
 
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Components\Model\DBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 

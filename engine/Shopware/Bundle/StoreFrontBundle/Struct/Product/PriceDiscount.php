@@ -32,27 +32,27 @@ class PriceDiscount extends Extendable
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var Group
      */
-    private $customerGroup;
+    protected $customerGroup;
 
     /**
      * @var PriceGroup
      */
-    private $priceGroup;
+    protected $priceGroup;
 
     /**
      * @var int
      */
-    private $quantity;
+    protected $quantity;
 
     /**
      * @var float
      */
-    private $percent;
+    protected $percent;
 
     /**
      * @param int $id

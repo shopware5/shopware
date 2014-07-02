@@ -22,47 +22,19 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\StoreFrontBundle\Struct\Country;
+namespace Shopware\Bundle\SearchBundle\Sorting;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
-
-/**
- * @package Shopware\Bundle\StoreFrontBundle\Struct\Country
- */
-class Area extends Extendable
+class ProductAttributeSorting extends Sorting
 {
-    /**
-     * @var int
-     */
-    protected $id;
-
     /**
      * @var string
      */
-    protected $name;
+    private $field;
 
-    /**
-     * @param int $id
-     */
-    public function setId($id)
+    function __construct($field, $direction = 'ASC')
     {
-        $this->id = $id;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
+        $this->field = $field;
+        parent::__construct($direction);
     }
 
     /**
@@ -70,8 +42,22 @@ class Area extends Extendable
      */
     public function getName()
     {
-        return $this->name;
+        return 'product_attribute_' . $this->field;
     }
 
+    /**
+     * @param string $field
+     */
+    public function setField($field)
+    {
+        $this->field = $field;
+    }
 
+    /**
+     * @return string
+     */
+    public function getField()
+    {
+        return $this->field;
+    }
 }

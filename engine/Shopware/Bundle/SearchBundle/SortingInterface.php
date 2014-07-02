@@ -35,5 +35,8 @@ namespace Shopware\Bundle\SearchBundle;
  */
 interface SortingInterface
 {
+    const SORT_ASC = 'ASC';
+    const SORT_DESC = 'DESC';
+
     public function getName();
 }

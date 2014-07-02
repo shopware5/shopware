@@ -33,21 +33,21 @@ class Tax extends Extendable
      * Unique identifier of the tax struct.
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * Contains an alphanumeric tax name.
      *
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * Contains the tax rate value.
      *
      * @var float
      */
-    private $tax;
+    protected $tax;
 
     /**
      * @param int $id

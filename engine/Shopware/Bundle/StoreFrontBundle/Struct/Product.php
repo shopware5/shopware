@@ -35,42 +35,42 @@ class Product extends ListProduct
     /**
      * @var ListProduct[]
      */
-    private $relatedProducts;
+    protected $relatedProducts;
 
     /**
      * @var ListProduct[]
      */
-    private $similarProducts;
+    protected $similarProducts;
 
     /**
      * @var Product\Download[]
      */
-    private $downloads;
+    protected $downloads;
 
     /**
      * @var Product\Link[]
      */
-    private $links;
+    protected $links;
 
     /**
      * @var Media[]
      */
-    private $media;
+    protected $media;
 
     /**
      * @var Product\Vote[]
      */
-    private $votes;
+    protected $votes;
 
     /**
      * @var Set
      */
-    private $propertySet;
+    protected $propertySet;
 
     /**
      * @var Group[]
      */
-    private $configuration;
+    protected $configuration;
 
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Struct\Media[] $media
@@ -199,6 +199,4 @@ class Product extends ListProduct
     {
         return $this->configuration;
     }
-
-
 }

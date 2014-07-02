@@ -34,47 +34,47 @@ class Vote extends Extendable
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      */
-    private $headline;
+    protected $headline;
 
     /**
      * @var string
      */
-    private $comment;
+    protected $comment;
 
     /**
      * @var float
      */
-    private $points;
+    protected $points;
 
     /**
      * @var \DateTime
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @var string
      */
-    private $email;
+    protected $email;
 
     /**
      * @var string
      */
-    private $answer;
+    protected $answer;
 
     /**
      * @var \DateTime
      */
-    private $answeredAt;
+    protected $answeredAt;
 
     /**
      * @param int $id

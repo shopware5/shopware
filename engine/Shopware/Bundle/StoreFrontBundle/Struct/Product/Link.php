@@ -34,22 +34,22 @@ class Link extends Extendable
     /**
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      */
-    private $link;
+    protected $link;
 
     /**
      * @var string
      */
-    private $target;
+    protected $target;
 
     /**
      * @param int $id
