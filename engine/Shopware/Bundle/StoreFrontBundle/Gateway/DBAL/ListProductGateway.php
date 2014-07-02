@@ -130,6 +130,8 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
             ->leftJoin('variant', 's_articles_esd', 'esd', 'esd.articledetailsID = variant.id')
             ->leftJoin('esd', 's_articles_esd_attributes', 'esdAttribute', 'esdAttribute.esdID = esd.id')
             ->where('variant.ordernumber IN (:numbers)')
+            ->andWhere('variant.active = 1')
+            ->andWhere('product.active = 1')
             ->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
 
         $this->fieldHelper->addProductTranslation($query);

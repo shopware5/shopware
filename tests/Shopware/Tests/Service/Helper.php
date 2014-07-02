@@ -48,6 +48,14 @@ class Helper
      */
     private $categoryApi;
 
+    private $createdProducts = array();
+    private $createdManufacturers = array();
+    private $createdCategories = array();
+    private $createdCustomerGroups = array();
+    private $createdTaxes = array();
+    private $createdCurrencies = array();
+    private $createdConfiguratorGroups = array();
+
     function __construct()
     {
         $this->db = Shopware()->Db();
@@ -190,6 +198,89 @@ class Helper
         return $service->getList($numbers, $context);
     }
 
+    /**
+     * Creates a simple product which contains all required
+     * data for an quick product creation.
+     *
+     * @param $number
+     * @param Models\Tax\Tax $tax
+     * @param Models\Customer\Group $customerGroup
+     * @param float $priceOffset
+     * @return array
+     */
+    public function getSimpleProduct(
+        $number,
+        Models\Tax\Tax $tax,
+        Models\Customer\Group $customerGroup,
+        $priceOffset = 0.00
+    ) {
+        $data = $this->getProductData(array(
+                'taxId' => $tax->getId()
+            ));
+
+        $data['mainDetail'] = $this->getVariantData(array(
+                'number' => $number
+            ));
+
+        $data['mainDetail']['prices'] = $this->getGraduatedPrices(
+            $customerGroup->getKey(),
+            $priceOffset
+        );
+
+        $data['mainDetail'] += $this->getUnitData();
+
+        return $data;
+    }
+
+    public function cleanUp()
+    {
+        $this->deleteProperties();
+        $this->removePriceGroup();
+        foreach($this->createdProducts as $number) {
+            $this->removeArticle($number);
+        }
+
+        foreach($this->createdCustomerGroups as $key) {
+            $this->deleteCustomerGroup($key);
+        }
+
+        foreach($this->createdTaxes as $tax) {
+            $this->deleteTax($tax);
+        }
+
+        foreach($this->createdCurrencies as $currency) {
+            $this->deleteCurrency($currency);
+        }
+
+        foreach($this->createdCategories as $category) {
+            try {
+                $this->categoryApi->delete($category);
+            } catch (Exception $e) {
+            }
+        }
+
+        foreach($this->createdManufacturers as $manufacturerId) {
+            try {
+                $manufacturer = $this->entityManager->find('Shopware\Models\Article\Supplier', $manufacturerId);
+                if (!$manufacturer) {
+                    continue;
+                }
+
+                $this->entityManager->remove($manufacturer);
+                $this->entityManager->flush();
+            } catch (Exception $e) {
+            }
+        }
+
+        foreach($this->createdConfiguratorGroups as $groupId) {
+            $group = $this->entityManager->find('Shopware\Models\Article\Configurator\Group', $groupId);
+            if (!$group) {
+                continue;
+            }
+            $this->entityManager->remove($group);
+            $this->entityManager->flush();
+        }
+    }
 
     /**
      * @param $number
@@ -215,6 +306,8 @@ class Helper
     public function createArticle(array $data)
     {
         $this->removeArticle($data['mainDetail']['number']);
+        $this->createdProducts[] = $data['mainDetail']['number'];
+
         return $this->articleApi->create($data);
     }
 
@@ -320,38 +413,159 @@ class Helper
         $this->translationApi->create($data);
     }
 
-    /**
-     * Creates a simple product which contains all required
-     * data for an quick product creation.
-     *
-     * @param $number
-     * @param Models\Tax\Tax $tax
-     * @param Models\Customer\Group $customerGroup
-     * @param float $priceOffset
-     * @return array
-     */
-    public function getSimpleProduct(
-        $number,
-        Models\Tax\Tax $tax,
-        Models\Customer\Group $customerGroup,
-        $priceOffset = 0.00
-    ) {
-        $data = $this->getProductData(array(
-            'taxId' => $tax->getId()
-        ));
+    private function createProperties($groupCount, $optionCount)
+    {
+        $this->db->insert('s_filter', array('name' => 'Test-Set', 'comparable' => 1));
+        $data = $this->db->fetchRow("SELECT * FROM s_filter WHERE name = 'Test-Set'");
 
-        $data['mainDetail'] = $this->getVariantData(array(
-            'number' => $number
-        ));
+        for($i=0; $i<$groupCount; $i++) {
+            $this->db->insert('s_filter_options', array(
+                'name' => 'Test-Gruppe-' . $i,
+                'filterable' => 1
+            ));
+            $group = $this->db->fetchRow("SELECT * FROM s_filter_options WHERE name = 'Test-Gruppe-" . $i . "'");
 
-        $data['mainDetail']['prices'] = $this->getGraduatedPrices(
-            $customerGroup->getKey(),
-            $priceOffset
+            for($i2=0; $i2 < $optionCount; $i2++) {
+                $this->db->insert('s_filter_values', array(
+                    'value' => 'Test-Option-' . $i . '-' .$i2,
+                    'optionID' => $group['id']
+                ));
+            }
+
+            $group['options'] = $this->db->fetchAll("SELECT * FROM s_filter_values WHERE optionID = ?", array($group['id']));
+
+            $data['groups'][] = $group;
+
+            $this->db->insert('s_filter_relations', array(
+                'optionID' => $group['id'],
+                'groupID' => $data['id']
+            ));
+        }
+        return $data;
+    }
+
+    private function deleteProperties()
+    {
+        $this->db->query("DELETE FROM s_filter WHERE name = 'Test-Set'");
+        $this->db->query("DELETE FROM s_filter_options WHERE name LIKE 'Test-Gruppe%'");
+        $this->db->query("DELETE FROM s_filter_values WHERE value LIKE 'Test-Option%'");
+    }
+
+    public function createPriceGroup($discounts = array())
+    {
+        if (empty($discounts)) {
+            $discounts = array(
+                array('key' => 'PHP', 'quantity' => 1,  'discount' => 10),
+                array('key' => 'PHP', 'quantity' => 5,  'discount' => 20),
+                array('key' => 'PHP', 'quantity' => 10, 'discount' => 30),
+            );
+        }
+
+        $this->removePriceGroup();
+
+        $priceGroup = new \Shopware\Models\Price\Group();
+        $priceGroup->setName('TEST-GROUP');
+
+        $repo = $this->entityManager->getRepository('Shopware\Models\Customer\Group');
+        $collection = array();
+        foreach($discounts as $data) {
+            $discount = new \Shopware\Models\Price\Discount();
+            $discount->setCustomerGroup(
+                $repo->findOneBy(array('key' => $data['key']))
+            );
+
+            $discount->setGroup($priceGroup);
+            $discount->setStart($data['quantity']);
+            $discount->setDiscount($data['discount']);
+
+            $collection[] = $discount;
+        }
+        $priceGroup->setDiscounts($collection);
+
+        $this->entityManager->persist($priceGroup);
+        $this->entityManager->flush();
+        $this->entityManager->clear();
+
+        return $priceGroup;
+    }
+
+    public function createCustomerGroup($data = array())
+    {
+        $data = array_merge(
+            array(
+                'key' => 'PHP',
+                'name' => 'Unit test',
+                'tax' => true,
+                'taxInput' => true,
+                'mode' => false, //use discounts?
+                'discount' => 0 //percentage discount
+            ),
+            $data
         );
 
-        $data['mainDetail'] += $this->getUnitData();
+        $this->deleteCustomerGroup($data['key']);
 
-        return $data;
+        $customer = new Models\Customer\Group();
+        $customer->fromArray($data);
+
+        $this->entityManager->persist($customer);
+        $this->entityManager->flush($customer);
+        $this->entityManager->clear();
+
+        $this->createdCustomerGroups[] = $customer->getKey();
+        return $customer;
+    }
+
+    public function createTax($data = array())
+    {
+        $data = array_merge(
+            array(
+                'tax' => 19.00,
+                'name' => 'PHP UNIT'
+            ),
+            $data
+        );
+
+        $this->deleteTax($data['name']);
+
+        $tax = new Models\Tax\Tax();
+        $tax->fromArray($data);
+
+        $this->entityManager->persist($tax);
+        $this->entityManager->flush();
+        $this->entityManager->clear();
+
+        $this->createdTaxes[] = $data['name'];
+
+        return $tax;
+    }
+
+    public function createCurrency(array $data = array())
+    {
+        $currency = new Models\Shop\Currency();
+
+        $data = array_merge(
+            array(
+                'currency' => 'PHP',
+                'factor' => 1,
+                'name' => 'PHP',
+                'default' => false,
+                'symbol' => 'PHP',
+            ),
+            $data
+        );
+
+        $this->deleteCurrency($data['name']);
+
+        $currency->fromArray($data);
+
+        $this->entityManager->persist($currency);
+        $this->entityManager->flush();
+        $this->entityManager->clear();
+
+        $this->createdCurrencies[] = $data['name'];
+
+        return $currency;
     }
 
     /**
@@ -362,7 +576,11 @@ class Helper
     {
         $data = array_merge($this->getCategoryData(), $data);
 
-        return $this->categoryApi->create($data);
+        $category = $this->categoryApi->create($data);
+
+        $this->createdCategories[] = $category->getId();
+
+        return $category;
     }
 
     /**
@@ -376,6 +594,9 @@ class Helper
         $manufacturer->fromArray($data);
         $this->entityManager->persist($manufacturer);
         $this->entityManager->flush();
+
+        $this->createdManufacturers[] = $manufacturer->getId();
+
         return $manufacturer;
     }
 
@@ -497,6 +718,7 @@ class Helper
 
         foreach($groups as $group) {
             $options = array();
+            /**@var $option Models\Article\Configurator\Option*/
             foreach($group->getOptions() as $option) {
                 $options[] =  array(
                     'id' => $option->getId(),
@@ -545,6 +767,8 @@ class Helper
             $this->entityManager->persist($group);
             $this->entityManager->flush();
             $this->entityManager->clear();
+
+            $this->createdConfiguratorGroups[] = $group->getId();
         }
 
         return $data;
@@ -596,7 +820,6 @@ class Helper
             'name' => 'Test-Manufacturer'
         );
     }
-
 
     public function getVariantData(array $data = array())
     {
@@ -729,7 +952,6 @@ class Helper
         return $context;
     }
 
-
     public function getProperties($groupCount, $optionCount)
     {
         $properties = $this->createProperties($groupCount, $optionCount);
@@ -745,40 +967,6 @@ class Helper
         );
     }
 
-    private function createProperties($groupCount, $optionCount)
-    {
-        $this->db->query("DELETE FROM s_filter WHERE name = 'Test-Set'");
-        $this->db->insert('s_filter', array('name' => 'Test-Set', 'comparable' => 1));
-        $data = $this->db->fetchRow("SELECT * FROM s_filter WHERE name = 'Test-Set'");
-
-        $this->db->query("DELETE FROM s_filter_options WHERE name LIKE 'Test-Gruppe%'");
-        $this->db->query("DELETE FROM s_filter_values WHERE value LIKE 'Test-Option%'");
-
-        for($i=0; $i<$groupCount; $i++) {
-            $this->db->insert('s_filter_options', array(
-                'name' => 'Test-Gruppe-' . $i,
-                'filterable' => 1
-            ));
-            $group = $this->db->fetchRow("SELECT * FROM s_filter_options WHERE name = 'Test-Gruppe-" . $i . "'");
-
-            for($i2=0; $i2 < $optionCount; $i2++) {
-                $this->db->insert('s_filter_values', array(
-                    'value' => 'Test-Option-' . $i . '-' .$i2,
-                    'optionID' => $group['id']
-                ));
-            }
-
-            $group['options'] = $this->db->fetchAll("SELECT * FROM s_filter_values WHERE optionID = ?", array($group['id']));
-            $data['groups'][] = $group;
-
-            $this->db->insert('s_filter_relations', array(
-                'optionID' => $group['id'],
-                'groupID' => $data['id']
-            ));
-        }
-        return $data;
-    }
-
     /**
      * @param int $shopId
      * @return \Shopware\Models\Shop\Shop
@@ -789,133 +977,6 @@ class Helper
             'Shopware\Models\Shop\Shop',
             $shopId
         );
-    }
-
-    public function createPriceGroup($discounts = array())
-    {
-        if (empty($discounts)) {
-            $discounts = array(
-                array('key' => 'PHP', 'quantity' => 1,  'discount' => 10),
-                array('key' => 'PHP', 'quantity' => 5,  'discount' => 20),
-                array('key' => 'PHP', 'quantity' => 10, 'discount' => 30),
-            );
-        }
-
-        $this->removePriceGroup();
-
-        $priceGroup = new \Shopware\Models\Price\Group();
-        $priceGroup->setName('TEST-GROUP');
-
-        $repo = $this->entityManager->getRepository('Shopware\Models\Customer\Group');
-        $collection = array();
-        foreach($discounts as $data) {
-            $discount = new \Shopware\Models\Price\Discount();
-            $discount->setCustomerGroup(
-                $repo->findOneBy(array('key' => $data['key']))
-            );
-
-            $discount->setGroup($priceGroup);
-            $discount->setStart($data['quantity']);
-            $discount->setDiscount($data['discount']);
-            
-            $collection[] = $discount;
-        }
-        $priceGroup->setDiscounts($collection);
-
-        $this->entityManager->persist($priceGroup);
-        $this->entityManager->flush();
-        $this->entityManager->clear();
-
-        return $priceGroup;
-    }
-
-    private function removePriceGroup()
-    {
-        $ids = $this->db->fetchCol("SELECT id FROM s_core_pricegroups WHERE description = 'TEST-GROUP'");
-        foreach($ids as $id) {
-            $group = $this->entityManager->find('Shopware\Models\Price\Group', $id);
-            $this->entityManager->remove($group);
-            $this->entityManager->flush();
-            $this->entityManager->clear();
-        }
-    }
-
-    /**
-     * @param array $data
-     * @return Models\Customer\Group
-     */
-    public function createCustomerGroup($data = array())
-    {
-        $data = array_merge(
-            array(
-                'key' => 'PHP',
-                'name' => 'Unit test',
-                'tax' => true,
-                'taxInput' => true,
-                'mode' => false, //use discounts?
-                'discount' => 0 //percentage discount
-            ),
-            $data
-        );
-
-        $this->deleteCustomerGroup($data['key']);
-
-        $customer = new Models\Customer\Group();
-        $customer->fromArray($data);
-
-        $this->entityManager->persist($customer);
-        $this->entityManager->flush($customer);
-        $this->entityManager->clear();
-
-        return $customer;
-    }
-
-    public function createTax($data = array())
-    {
-        $data = array_merge(
-            array(
-                'tax' => 19.00,
-                'name' => 'PHP UNIT'
-            ),
-            $data
-        );
-
-        $this->deleteTax($data['name']);
-
-        $tax = new Models\Tax\Tax();
-        $tax->fromArray($data);
-
-        $this->entityManager->persist($tax);
-        $this->entityManager->flush();
-        $this->entityManager->clear();
-
-        return $tax;
-    }
-
-    public function createCurrency(array $data = array())
-    {
-        $currency = new Models\Shop\Currency();
-
-        $data = array_merge(
-            array(
-                'currency' => 'PHP',
-                'factor' => 1,
-                'name' => 'PHP',
-                'default' => false,
-                'symbol' => 'PHP',
-            ),
-            $data
-        );
-
-        $this->deleteCurrency($data['name']);
-
-        $currency->fromArray($data);
-
-        $this->entityManager->persist($currency);
-        $this->entityManager->flush();
-        $this->entityManager->clear();
-
-        return $currency;
     }
 
     private function deleteCustomerGroup($key)
@@ -958,6 +1019,17 @@ class Helper
             $this->entityManager->flush();
         }
         $this->entityManager->clear();
+    }
+
+    private function removePriceGroup()
+    {
+        $ids = $this->db->fetchCol("SELECT id FROM s_core_pricegroups WHERE description = 'TEST-GROUP'");
+        foreach($ids as $id) {
+            $group = $this->entityManager->find('Shopware\Models\Price\Group', $id);
+            $this->entityManager->remove($group);
+            $this->entityManager->flush();
+            $this->entityManager->clear();
+        }
     }
 
     /**
@@ -1077,7 +1149,6 @@ class Helper
         return $rules;
     }
 
-
     private function getUnitTranslation()
     {
         return array(
@@ -1085,7 +1156,6 @@ class Helper
             'description' => 'Dummy Translation'
         );
     }
-
 
     private function getManufacturerTranslation()
     {

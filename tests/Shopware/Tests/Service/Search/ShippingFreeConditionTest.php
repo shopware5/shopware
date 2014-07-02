@@ -21,6 +21,12 @@ class ShippingFreeConditionTest extends TestCase
         parent::setUp();
     }
 
+    protected function tearDown()
+    {
+        $this->helper->cleanUp();
+        parent::tearDown();
+    }
+
     /**
      * @return Context
      */
