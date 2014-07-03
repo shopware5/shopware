@@ -3784,14 +3784,6 @@ class sArticles
             $context
         );
 
-        $criteria->addProductAttributeCondition(
-            'attr2',
-            SearchBundle\Condition\ProductAttributeCondition::IN,
-            array(1, 2, 3)
-        );
-
-        $criteria->sortByProductAttribute('attr2', SearchBundle\SortingInterface::SORT_ASC);
-
         $searchResult = $this->searchService->search(
             $criteria,
             $context
@@ -3914,6 +3906,24 @@ class sArticles
         }
 
         $data = $this->legacyStructConverter->convertFullProduct($product, $categoryId);
+
+        $relatedArticles = array();
+        foreach($data['sRelatedArticles'] as $related) {
+            $related = $this->legacyEventManager->firePromotionByIdEvents($related, null, $this);
+            if ($related) {
+                $relatedArticles[] = $related;
+            }
+        }
+        $data['sRelatedArticles'] = $relatedArticles;
+
+        $similarArticles = array();
+        foreach($data['sSimilarArticles'] as $similar) {
+            $similar = $this->legacyEventManager->firePromotionByIdEvents($similar, null, $this);
+            if ($similar) {
+                $similarArticles[] = $similar;
+            }
+        }
+        $data['sSimilarArticles'] = $similarArticles;
 
         $data['categoryID'] = $categoryId;
 
