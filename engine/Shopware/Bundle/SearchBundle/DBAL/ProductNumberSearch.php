@@ -67,15 +67,15 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
     private $eventManager;
 
     /**
-     * @param \Shopware\Bundle\SearchBundle\QueryBuilderFactory $queryBuilderFactory
-     * @param \Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator $attributeHydrator
+     * @param QueryBuilderFactory         $queryBuilderFactory
+     * @param AttributeHydrator           $attributeHydrator
      * @param \Enlight_Event_EventManager $eventManager
-     * @param array $conditionHandlers
-     * @param array $sortingHandlers
-     * @param array $facetHandlers
+     * @param ConditionHandlerInterface[] $conditionHandlers
+     * @param SortingHandlerInterface[]   $sortingHandlers
+     * @param FacetHandlerInterface[]     $facetHandlers
      */
     function __construct(
-        SearchBundle\QueryBuilderFactory $queryBuilderFactory,
+        QueryBuilderFactory $queryBuilderFactory,
         AttributeHydrator $attributeHydrator,
         \Enlight_Event_EventManager $eventManager,
         $conditionHandlers = array(),

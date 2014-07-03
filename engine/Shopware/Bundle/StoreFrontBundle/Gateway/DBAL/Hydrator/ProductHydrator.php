@@ -68,10 +68,10 @@ class ProductHydrator extends Hydrator
 
     function __construct(
         AttributeHydrator $attributeHydrator,
-        Manufacturer $manufacturerHydrator,
-        Tax $taxHydrator,
-        Unit $unitHydrator,
-        Esd $esdHydrator
+        ManufacturerHydrator $manufacturerHydrator,
+        TaxHydrator $taxHydrator,
+        UnitHydrator $unitHydrator,
+        EsdHydrator $esdHydrator
     ) {
         $this->attributeHydrator = $attributeHydrator;
         $this->manufacturerHydrator = $manufacturerHydrator;

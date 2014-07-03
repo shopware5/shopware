@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Models\Country\Area;
 
 /**
  * @package Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
