@@ -134,8 +134,8 @@ class Shopware_RegressionTests_Ticket5052 extends Enlight_Components_Test_Contro
 
         $this->assertEquals($set['id'], $expected['id'], 'Configurator set id not matched  article =>' . $article['id']);
         $this->assertEquals($set['name'], $expected['name'], 'Configurator set name not matched  article =>' . $article['id']);
-        $this->assertCount($expected['groups'], $set['groups']);
-        $this->assertCount($expected['options'], $set['options']);
+        $this->assertCount($expected['groups'], $set['groups'], 'Configurator group count not matched article => ' . $article['id']);
+        $this->assertCount($expected['options'], $set['options'], 'Configurator option count not matched article => ' . $article['id']);
     }
 
     protected function checkCategories($data, $article) {

@@ -26,8 +26,6 @@
         <service id="category_service" alias="category_service_core"/>
         <service id="vote_service" alias="vote_service_core"/>
 
-
-
         <service id="list_product_gateway" alias="list_product_gateway_dbal"/>
         <service id="product_gateway" alias="product_gateway_dbal"/>
         <service id="product_configuration_gateway" alias="product_configuration_gateway_dbal"/>

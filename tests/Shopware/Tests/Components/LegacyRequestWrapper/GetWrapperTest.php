@@ -33,7 +33,6 @@ class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enli
         'Basket',
         'Categories',
         'cms',
-        'Configurator',
         'Core',
         'Export',
         'Marketing',
