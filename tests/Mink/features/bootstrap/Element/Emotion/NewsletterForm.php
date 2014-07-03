@@ -2,10 +2,9 @@
 
 namespace Emotion;
 
-use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
-use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+require_once('tests/Mink/features/bootstrap/Element/TextInputForm.php');
 
-class NewsletterForm extends Element
+class NewsletterForm extends \TextInputForm
 {
     /**
      * @var array $selector
@@ -13,20 +12,7 @@ class NewsletterForm extends Element
     protected $selector = array('css' => 'div#footer');
 
     public $cssLocator = array(
-        'newsletterInput' => 'input#newsletter_input',
-        'newsletterButton' => 'input#newsletter'
+        'textInput' => 'input#newsletter_input',
+        'submitButton' => 'input#newsletter'
     );
-
-    /**
-     * @param string $keywords
-     *
-     * @return Page
-     */
-    public function subscribe($email)
-    {
-        $element = \Helper::findElements($this);
-
-        $element['newsletterInput']->setValue($email);
-        $element['newsletterButton']->press();
-    }
 }

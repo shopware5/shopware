@@ -13,6 +13,8 @@ class Account extends Page
     protected $path = '/account';
 
     public $cssLocator = array(
+        'pageIdentifier1'  => 'div#content > div > div.account',
+        'pageIdentifier2'  => 'div#login',
         'payment' => 'div#selected_payment strong',
         'logout' => 'div.adminbox a.logout'
     );
@@ -24,8 +26,6 @@ class Account extends Page
      */
     public function login($email, $password)
     {
-        $this->open();
-
         $this->fillField('email', $email);
         $this->fillField('password', $password);
 
@@ -44,20 +44,25 @@ class Account extends Page
         $assert->pageTextContains('Willkommen, '.$username);
     }
 
-//    /**
-//     * Verify if we're on an expected page. Throw an exception if not.
-//     */
-//    protected function verifyPage()
-//    {
-//        if ($this->logout())
-//        {
-//            $this->open();
-//            return;
-//        }
-//
-//        $assert = new \Behat\Mink\WebAssert($this->getSession());
-//        $assert->pageTextContains('Sie besitzen bereits ein Kundenkonto');
-//    }
+    /**
+     * Verify if we're on an expected page. Throw an exception if not.
+     */
+    public function verifyPage()
+    {
+        $locators = array('pageIdentifier1', 'pageIdentifier2');
+        $elements = \Helper::findElements($this, $locators, $this->cssLocator, false, false);
+
+        if(!empty($elements['pageIdentifier1'])) {
+            return;
+        }
+
+        if(!empty($elements['pageIdentifier2'])) {
+            return;
+        }
+
+        $message = array('You are not on Account page!', 'Current URL: '.$this->getSession()->getCurrentUrl());
+        \Helper::throwException($message);
+    }
 
     /**
      * Logout a customer (important by using the Sahi driver)
@@ -65,8 +70,6 @@ class Account extends Page
      */
     public function logout()
     {
-        $this->open();
-
         $locators = array('logout');
         $elements = \Helper::findElements($this, $locators, $this->cssLocator, false, false);
 

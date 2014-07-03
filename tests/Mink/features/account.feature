@@ -2,7 +2,8 @@
 Feature: My account (without changing login data)
 
   Background:
-    Given I log in successful as "Max Mustermann" with email "test@example.com" and password "shopware"
+    Given I am on the page "Account"
+    And   I log in successful as "Max Mustermann" with email "test@example.com" and password "shopware"
 
   @password
   Scenario Outline: I can't change my password, when something is wrong
