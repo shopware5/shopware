@@ -11,6 +11,10 @@
 			{se name='AccountAccountSuccess'}{/se}
 		{elseif $sSuccessAction == 'newsletter'}
 			{se name='AccountNewsletterSuccess'}{/se}
+		{elseif $sSuccessAction == 'optinnewsletter'}
+			{s name='sMailConfirmation' namespace='frontend'}{/s}
+		{elseif $sSuccessAction == 'deletenewsletter'}
+			{s name='NewsletterMailDeleted' namespace='frontend/account/internalMessages'}{/s}
 		{/if}
 	</div>
 {/if}

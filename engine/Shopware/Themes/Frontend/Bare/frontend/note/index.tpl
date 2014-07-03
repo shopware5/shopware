@@ -5,69 +5,67 @@
 	{$sBreadcrumb = [['name'=>"{s name='NoteTitle'}{/s}", 'link'=>{url}]]}
 {/block}
 
-{* Empty sidebar left *}
-{block name='frontend_index_content_left'}{/block}
+{* Account Sidebar *}
+{block name="frontend_index_left_categories" prepend}
+	{block name="frontend_account_sidebar"}
+		{include file="frontend/account/sidebar.tpl"}
+	{/block}
+{/block}
 
 {* Main content *}
 {block name="frontend_index_content"}
-	<div id="notes" class="grid_16">
+	<div class="content block{if $sUserLoggedIn} account--content{else} note--content{/if}">
 
-		{* Infobox *}
-		<div class="cat_text grid_16{if !$sUserLoggedIn} full_length{/if}">
-			<div class="inner_container">
-				<h1>{s name='NoteHeadline'}{/s}</h1>
-				<p>
-					{s name='NoteText'}{/s}
-				</p>
-				<p>
-					{s name='NoteText2'}{/s}
-				</p>
-			</div>
-		</div>
+		{* Infotext *}
+		{block name="frontend_note_index_welcome"}
+			<div class="account--welcome panel">
+				{block name="frontend_note_index_welcome_headline"}
+					<h1 class="panel--title">{s name="NoteHeadline"}{/s}</h1>
+				{/block}
 
-		<div class="space">&nbsp;</div>
-
-		<div class="note{if !$sUserLoggedIn} full_length{/if}">
-
-			{if $sNotes}
-				<div class="table note{if !$sUserLoggedIn} full_length{/if}">
-				{* Table head *}
-				<div class="table_head">
-
-					{* Article informations *}
-					<div class="grid_12">
-						{s name='NoteColumnName'}{/s}
+				{block name="frontend_note_index_welcome_content"}
+					<div class="panel--body is--wide">
+						<p>{s name="NoteText"}{/s}</p>
+						<p>{s name="NoteText2"}{/s}</p>
 					</div>
-
-					{* Unit price *}
-					<div class="grid_3">
-						{s name='NoteColumnPrice'}{/s}
-					</div>
-					{block name="frontend_note_index_columns"}{/block}
-				</div>
-
-				{foreach from=$sNotes item=sBasketItem name=noteitems}
-					{if $smarty.foreach.noteitems.last}
-						{assign var=lastrow value=1}
-					{else}
-						{assign var=lastrow value=0}
-					{/if}
-
-					{include file="frontend/note/item.tpl" lastrow=$lastrow}
-
-				{/foreach}
+				{/block}
 			</div>
-			{/if}
-		</div>
-		<div class="doublespace">&nbsp;</div>
-	</div>
-{/block}
+		{/block}
 
-{* Sidebar right *}
-{block name="frontend_index_content_right"}
-{if $sUserLoggedIn}
-	<div id="right_account" class="grid_4 last">
-		{include file="frontend/account/content_right.tpl"}
+		{block name="frontend_note_index_overview"}
+			<div class="note--overview">
+				{if $sNotes}
+					{block name="frontend_note_index_table"}
+						<div class="note--table panel--table has--border">
+
+							{* Table head *}
+							{block name="frontend_note_index_table_head"}
+								<div class="note--table-head panel--tr">
+
+									{* Article informations *}
+									{block name="frontend_note_index_table_head_name"}
+										<div class="panel--th note--info">{s name="NoteColumnName"}{/s}</div>
+									{/block}
+
+									{* Unit price *}
+									{block name="frontend_note_index_table_head_price"}
+										<div class="panel--th note--sale">{s name="NoteColumnPrice"}{/s}</div>
+									{/block}
+
+									{block name="frontend_note_index_table_columns"}{/block}
+								</div>
+							{/block}
+
+							{block name="frontend_note_index_table_items"}
+								{foreach $sNotes as $sBasketItem}
+									{include file="frontend/note/item.tpl"}
+								{/foreach}
+							{/block}
+						</div>
+					{/block}
+				{/if}
+			</div>
+		{/block}
+
 	</div>
-{/if}
 {/block}

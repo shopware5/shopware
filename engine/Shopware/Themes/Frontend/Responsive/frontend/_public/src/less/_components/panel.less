@@ -31,9 +31,10 @@ See the documentation of the child elements for additional information.
 ```
 */
 .panel--header {
-    display: block;
     .unitize-padding(10, 10);
     .unitize(14, 16, font-size);
+    display: block;
+    margin: 0;
     font-weight: bold;
     color: @primaryTextColor;
     background: @primaryBackgroundColor;
@@ -147,24 +148,27 @@ See the documentation of the child elements for additional information.
     }
 }
 
-
 /* A table in a panel.
 
 ```
-<div class="panel">
-    <table class="panel--table">
-        <tr class="primary">
-            <th></th>
-        </tr>
-        <tr class="has--border">
-            <td></td>
-        </tr>
-    </table>
+<div class="panel--table">
+    <div class="panel--tr">
+        <div class="panel--th></div>
+        <div class="panel--th></div>
+        <div class="panel--th></div>
+    </div>
+    <div class="panel--tr">
+        <div class="panel--td"></div>
+        <div class="panel--td"></div>
+        <div class="panel--td"></div>
+    </div>
 </div>
 ```
 */
 .panel--table {
+    .clearfix();
     width: 100%;
+    display: block;
     border-collapse: collapse;
     border-spacing: 0;
     empty-cells: show;
@@ -172,53 +176,60 @@ See the documentation of the child elements for additional information.
     &.has--border {
         border: 1px solid @borderColor;
     }
+}
 
-    th, td {
-        .unitize-padding(10, 10);
-        .unitize(14, 16, font-size);
-        .unitize(24, 16, line-height);
-        border-width: 0 0 1px 0;
-        border-style: solid;
-        border-color: @borderColor;
+.panel--tr {
+    .clearfix();
+    display: block;
+    width: 100%;
+    border-width: 0 0 1px 0;
+    border-style: solid;
+    border-color: @borderColor;
+
+    &:last-child {
+        border-width: 0;
     }
 
-    th {
-        font-weight: bold;
-        text-align: left;
-        color: #38434e;
+    &.is--odd {
+        background: @softBackgroundColor;
+    }
+
+    &.is--secondary {
         background: @primaryBackgroundColor;
     }
 
-    tr.is--secondary {
-        th {
-            background: #fff;
-        }
-        td {
-            background: @primaryBackgroundColor;
+    &.is--primary {
+        color: @primaryColor;
+    }
+}
+
+.panel--th,
+.panel--td {
+    .clearfix();
+    .unitize-padding(10, 10);
+    .unitize(14, 16, font-size);
+    .unitize(24, 16, line-height);
+    display: inline-block;
+    float: left;
+
+    &.has--border {
+        border-width: 0 1px 0 0;
+        border-style: solid;
+        border-color: @borderColor;
+
+        &:last-child {
+            border-width: 0;
         }
     }
 
-    tr.is--primary {
-        th, td {
-            background: #fff;
-        }
+    p {
+        margin: 0;
     }
+}
 
-    tr.has--border {
-        th, td {
-            border-width: 0 1px 1px 0;
-        }
-        th:last-child,
-        td:last-child {
-            border-width: 0 0 1px 0;
-        }
-    }
-
-    tr:last-child {
-        td {
-            border-bottom: 0 none;
-        }
-    }
+.panel--th {
+    font-weight: bold;
+    color: @darkTextColor;
 }
 
 /* A list in a panel.

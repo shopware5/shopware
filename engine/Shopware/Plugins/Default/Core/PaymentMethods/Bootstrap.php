@@ -144,9 +144,23 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
      */
     public function addPaths(Enlight_Event_EventArgs $arguments)
     {
-        // Add templates folder
+        $template = 'emotion';
+        $module = $arguments->getRequest()->getParam('module');
+
+        if (empty($module)) {
+            $module = 'frontend';
+        }
+
+        if ($module === 'frontend') {
+            if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
+                $template = 'responsive';
+            }
+        }
+
         $this->Application()->Template()->addTemplateDir(
-            $this->Path() . 'Views/', 'payment', Enlight_Template_Manager::POSITION_APPEND
+            $this->Path() . 'Views/' . $template . '/',
+            'payment',
+            Enlight_Template_Manager::POSITION_APPEND
         );
     }
 
