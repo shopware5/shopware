@@ -56,7 +56,7 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
 
         //get the template id
         $sql = sprintf(
-            'SELECT COALESCE(parent_id, id) as id, template FROM `s_core_templates` WHERE template = "%s"',
+            'SELECT id FROM `s_core_templates` WHERE template = "%s"',
             self::$template
         );
 
@@ -69,6 +69,39 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
         );
 
         self::$statickernel->getContainer()->get('db')->exec($sql);
+    }
+
+    /** @BeforeScenario */
+    public function before($event)
+    {
+        if ($event instanceof Behat\Behat\Event\OutlineExampleEvent && $event->getIteration()) {
+            return;
+        }
+
+        //set "shopware" as password for all users and make sure they can login, additionally set "Vorkasse" as payment method
+        $sql = sprintf(
+            'UPDATE s_user SET password = "%s", encoder = "md5", paymentID = 5, failedlogins = 0, lockeduntil = NULL',
+            md5('shopware')
+        );
+
+        $this->getContainer()->get('db')->exec($sql);
+
+        //Remove all articles from basket
+        $sql = 'TRUNCATE s_order_basket_attributes';
+        $this->getContainer()->get('db')->exec($sql);
+
+        $sql = 'DELETE FROM s_order_basket';
+        $this->getContainer()->get('db')->exec($sql);
+
+        $sql = 'ALTER TABLE s_order_basket AUTO_INCREMENT = 1';
+        $this->getContainer()->get('db')->exec($sql);
+
+        //Remove all articles from notes and comparisons
+        $sql = 'TRUNCATE s_order_notes';
+        $this->getContainer()->get('db')->exec($sql);
+
+        $sql = 'TRUNCATE s_order_comparisons';
+        $this->getContainer()->get('db')->exec($sql);
     }
 
     /**

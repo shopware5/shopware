@@ -51,7 +51,7 @@ class Homepage extends Page
      */
     public function searchFor($searchTerm)
     {
-        $this->getElement('SearchForm')->searchFor($searchTerm);
+        $this->getElement('SearchForm')->submit($searchTerm);
         $this->verifyResponse();
     }
 
@@ -93,7 +93,7 @@ class Homepage extends Page
             $image = $elements['bannerImage']->getAttribute($this->srcAttribute);
             $mapping = null;
 
-            if (isset($elements['bannerLink'])) {
+            if (!empty($elements['bannerLink'])) {
                 $mapping = $elements['bannerLink']->getAttribute('href');
             } elseif (is_array($links)) {
                 $locators = array('bannerMapping');
@@ -514,13 +514,14 @@ class Homepage extends Page
      */
     public function checkComparison($articles)
     {
-        $message = 'There are %d articles in the comparison (should be %d)';
-        $articlesInComparison = \Helper::countElements(
-            'div.compare_article',
-            $message,
-            count($articles),
-            $this
-        );
+        $result = \Helper::countElements($this, 'div.compare_article', count($articles));
+
+        if($result !== true) {
+            $message = sprintf('There are %d articles in the comparison (should be %d)', $result, count($articles));
+            \Helper::throwException(array($message));
+        }
+
+        $articlesInComparison = $this->findAll('css', 'div.compare_article');
 
         foreach ($articles as $articleKey => $article) {
             foreach ($articlesInComparison as $articleInComparisonKey => $articleInComparison) {
@@ -587,10 +588,13 @@ class Homepage extends Page
         }
     }
 
+    /**
+     * @param $email
+     */
     public function subscribeNewsletter($email)
     {
         $this->open();
-        $this->getElement('NewsletterForm')->subscribe($email);
+        $this->getElement('NewsletterForm')->submit($email);
         $this->verifyResponse();
     }
 }

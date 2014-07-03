@@ -2,6 +2,7 @@
 namespace Emotion;
 
 use Behat\Mink\Element\NodeElement;
+use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page, Behat\Mink\Exception\ResponseTextException,
     Behat\Behat\Context\Step;
 
@@ -22,8 +23,8 @@ class Listing extends Page
         'filterGroups' => 'div > div:not(.slideContainer)',
         'filterProperties' => 'div.slideContainer:nth-of-type(%d) > ul > li > a',
         'articleBox' => 'div.artbox',
-        'articleOrderButton' => 'div.listing div.artbox:nth-of-type(%d) div.actions > a.buynow',
-        'articlePrice' => 'div.listing div.artbox:nth-of-type(%d) p.price'
+        'articlePrice' => 'div.listing div.artbox:nth-of-type(%d) p.price',
+        'listingBox' => 'div.listing'
     );
 
     protected $viewSwitchCount = 2;
@@ -112,24 +113,21 @@ class Listing extends Page
 
         $filterGroups = array();
 
-        foreach($elements['filterGroups'] as $filterGroup)
-        {
+        foreach ($elements['filterGroups'] as $filterGroup) {
             $filterGroups[] = $this->getElementName($filterGroup, $this->filterGroupsHasBrackets);
         }
 
         foreach ($properties as $property) {
             $filterKey = array_search($property['filter'], $filterGroups, true);
 
-            if($filterKey === false)
-            {
+            if ($filterKey === false) {
                 $message = sprintf('The filter "%s" was not found!', $property['filter']);
                 throw new ResponseTextException($message, $this->getSession());
             }
 
             $success = $this->setFilterProperty($filterKey, $property['value'], $filterContainer);
 
-            if(!$success)
-            {
+            if (!$success) {
                 $message = sprintf('The value "%s" was not found for filter "%s"!', $property['value'], $property['filter']);
                 throw new ResponseTextException($message, $this->getSession());
             }
@@ -150,12 +148,10 @@ class Listing extends Page
         $locators = array('filterProperties' => $filterKey);
         $elements = \Helper::findElements($filterContainer, $locators, $this->cssLocator, true);
 
-        foreach($elements['filterProperties'] as $property)
-        {
+        foreach ($elements['filterProperties'] as $property) {
             $propertyName = $this->getElementName($property);
 
-            if($propertyName === $value)
-            {
+            if ($propertyName === $value) {
                 $property->click();
                 return true;
             }
@@ -197,8 +193,12 @@ class Listing extends Page
      */
     public function countArticles($count = 0)
     {
-        $message = 'There are %d articles in the listing (should be %d)';
-        \Helper::countElements($this->cssLocator['articleBox'], $message, $count, $this);
+        $result = \Helper::countElements($this, $this->cssLocator['articleBox'], $count);
+
+        if ($result !== true) {
+            $message = sprintf('There are %d articles in the listing (should be %d)', $result, $count);
+            \Helper::throwException(array($message));
+        }
     }
 
     /**
@@ -207,26 +207,55 @@ class Listing extends Page
      */
     public function checkView($view)
     {
-        foreach($this->cssLocator['view'] as $key => $viewCssLocator)
-        {
+        foreach ($this->cssLocator['view'] as $key => $viewCssLocator) {
             $message = sprintf('The %s-view is active! (should be %s-view)', $key, $view);
             $count = 0;
 
-            if($key === $view)
-            {
+            if ($key === $view) {
                 $message = sprintf('The %s-view is not active!', $view);
                 $count = $this->viewSwitchCount;
             }
 
-            \Helper::countElements($viewCssLocator.$this->cssLocator['active'], $message, $count, $this);
+            $result = \Helper::countElements($this, $viewCssLocator . $this->cssLocator['active'], $count);
+
+            if ($result !== true) {
+                \Helper::throwException(array($message));
+            }
         }
     }
 
-    public function orderArticle($position)
+    /**
+     * Checks, whether an article is in the listing or not, is $negation is true, it checks whether an article is NOT in the listing
+     *
+     * @param $name
+     * @param bool $negation
+     */
+    public function checkListing($name, $negation = false)
     {
-        $locators = array('articleOrderButton' => $position);
-        $elements = \Helper::findElements($this, $locators);
+        $result = $this->isArticleInListing($name);
 
-        $elements['articleOrderButton']->click();
+        if ($negation) {
+            $result = !$result;
+        }
+
+        if (!$result) {
+            $message = sprintf(
+                'The article "%s" is%s in the listing, but should%s.',
+                $name,
+                ($negation) ? '' : ' not',
+                ($negation) ? ' not' : ''
+            );
+            \Helper::throwException(array($message));
+        }
+    }
+
+    private function isArticleInListing($name)
+    {
+        $locator = array('listingBox');
+        $elements = \Helper::findElements($this, $locator);
+
+        /** @var Element $listingBox */
+        $listingBox = $elements['listingBox'];
+        return $listingBox->hasLink($name);
     }
 }

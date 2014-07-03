@@ -30,7 +30,7 @@ Feature: Blog
     | Sonnenschutz - so gehören Sie zur Crème de la Crème | 5     |
     | Ich packe meinen Koffer                             | 5     |
 
-  @captcha @javascript @noResponsive
+  @captcha @javascript
   Scenario Outline: I can see a captcha on each blog article page
     Given I follow "<title>"
     Then I should see "Kommentar schreiben"

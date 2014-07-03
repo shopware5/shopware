@@ -2,10 +2,9 @@
 
 namespace Emotion;
 
-use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
-use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+require_once('tests/Mink/features/bootstrap/Element/TextInputForm.php');
 
-class SearchForm extends Element
+class SearchForm extends \TextInputForm
 {
     /**
      * @var array $selector
@@ -13,22 +12,9 @@ class SearchForm extends Element
     protected $selector = array('css' => 'div#searchcontainer');
 
     public $cssLocator = array(
-        'searchInput' => 'input#searchfield',
-        'searchButton' => 'input#submit_search_btn'
+        'textInput' => 'input#searchfield',
+        'submitButton' => 'input#submit_search_btn'
     );
-
-    /**
-     * @param string $keywords
-     *
-     * @return Page
-     */
-    public function searchFor($searchTerm)
-    {
-        $element = \Helper::findElements($this);
-
-        $element['searchInput']->setValue($searchTerm);
-        $element['searchButton']->press();
-    }
 
     /**
      * Search the given term using live search
@@ -36,10 +22,10 @@ class SearchForm extends Element
      */
     public function receiveSearchResultsFor($searchTerm)
     {
-        $elements = array('searchInput');
+        $elements = array('textInput');
         $element = \Helper::findElements($this, $elements);
 
-        $element['searchInput']->setValue($searchTerm);
+        $element['textInput']->setValue($searchTerm);
         $this->getSession()->wait(5000, "$('ul.searchresult').children().length > 0");
     }
 }

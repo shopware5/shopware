@@ -14,7 +14,7 @@ class NewsletterForm extends \Emotion\NewsletterForm
     protected $selector = array('css' => 'div.footer--column.column--newsletter');
 
     public $cssLocator = array(
-        'newsletterInput' => 'input.newsletter--field',
-        'newsletterButton' => 'button.newsletter--button'
+        'textInput' => 'input.newsletter--field',
+        'submitButton' => 'button.newsletter--button'
     );
 }
