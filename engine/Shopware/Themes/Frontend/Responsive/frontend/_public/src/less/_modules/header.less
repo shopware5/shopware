@@ -118,8 +118,8 @@
 // Loading indicator for css animations supported browsers
 .has--cssanimations {
     .form--ajax-loader {
-        .unitize(10, 16, top);
-        .unitize(10, 16, right);
+        .unitize(20, 16, top);
+        .unitize(20, 16, right);
         position: absolute;
         display: none;
 
@@ -140,8 +140,8 @@
 // Loading indicator for non css animations supported browsers
 .has--no-cssanimations {
     .form--ajax-loader {
-        .unitize(14, 16, top);
-        .unitize(10, 16, right);
+        .unitize(24, 16, top);
+        .unitize(20, 16, right);
         .unitize-width(16);
         .unitize-height(16);
         position: absolute;
@@ -507,6 +507,22 @@
         .list--entry,
         .entry--all-results {
             .unitize-padding(6, 0);
+        }
+    }
+
+    .has--cssanimations {
+        .form--ajax-loader {
+            .unitize(10, 16, top);
+            .unitize(10, 16, right);
+            position: absolute;
+        }
+    }
+
+    .has--no-cssanimations {
+        .form--ajax-loader {
+            .unitize(14, 16, top);
+            .unitize(10, 16, right);
+            position: absolute;
         }
     }
 }
