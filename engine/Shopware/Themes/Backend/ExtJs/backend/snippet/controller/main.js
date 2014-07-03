@@ -225,8 +225,9 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
                 return false;
             }
 
-            //grid.setLoading(true);
-            record.destroy({
+            me.getStore('Snippet').remove(record)
+
+            me.getStore('Snippet').sync({
                 success: function() {
                     Shopware.Notification.createGrowlMessage(me.snippets.deleteSuccessTitle, me.snippets.deleteSuccessMessage, me.snippets.growlMessage);
                 },
