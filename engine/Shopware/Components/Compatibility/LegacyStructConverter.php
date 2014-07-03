@@ -169,23 +169,14 @@ class LegacyStructConverter
             'link' => $this->getSupplierListingLink($product->getManufacturer())
         );
 
-
         $data['sRelatedArticles'] = array();
         foreach ($product->getRelatedProducts() as $relatedProduct) {
-            $temp = $this->convertProductStruct($relatedProduct);
-
-            $temp = $this->legacyEventManager->firePromotionByIdEvents($temp, null);
-
-            $data['sRelatedArticles'][] = $temp;
+            $data['sRelatedArticles'][] = $this->convertProductStruct($relatedProduct);
         }
 
         $data['sSimilarArticles'] = array();
         foreach ($product->getSimilarProducts() as $similarProduct) {
-            $temp = $this->convertProductStruct($similarProduct);
-
-            $temp = $this->legacyEventManager->firePromotionByIdEvents($temp, null);
-
-            $data['sSimilarArticles'][] = $temp;
+            $data['sSimilarArticles'][] = $this->convertProductStruct($similarProduct);
         }
 
         return $data;
