@@ -41,6 +41,7 @@ class DebitPaymentMethod extends GenericPaymentMethod
      */
     public function validate(\Enlight_Controller_Request_Request $request)
     {
+        $sErrorFlag = array();
         $fields = array(
             'sDebitAccount',
             'sDebitBankcode',
@@ -54,7 +55,6 @@ class DebitPaymentMethod extends GenericPaymentMethod
 
             if (empty($value)) {
                 $sErrorFlag[$field] = true;
-                continue;
             }
         }
 
