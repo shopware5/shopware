@@ -469,6 +469,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $this->session['sState'] = (int) $this->Request()->getPost('sState');
         }
 
+	    $this->View()->assign('calculateShippingCosts', true);
+
         $this->forward($this->Request()->getParam('sTargetAction', 'index'));
     }
 

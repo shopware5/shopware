@@ -1,4 +1,4 @@
-<form class="table--shipping-costs is--hidden" method="POST" action="{url action='calculateShippingCosts' sTargetAction=$sTargetAction}">
+<form class="table--shipping-costs{if !$calculateShippingCosts} is--hidden{/if}" method="POST" action="{url action='calculateShippingCosts' sTargetAction=$sTargetAction}">
 
     {* Delivery country *}
     {block name='frontend_checkout_shipping_costs_country'}
