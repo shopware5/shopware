@@ -56,7 +56,7 @@
         {* Sorting and changing layout *}
         {block name="fuzzy_search_actions"}
             <div class="results--paging panel">
-                {include file='frontend/search/paging.tpl' sTemplate=$sTemplate sAdvancedActions=1}
+                {include file='frontend/search/fuzzy-paging.tpl' sTemplate=$sTemplate sAdvancedActions=1}
             </div>
         {/block}
 
