@@ -34,10 +34,11 @@
 
         /** Event listener method */
         onKeyUp: function (event)  {
-            var me = this;
+            var me = this,
+                keyCode = event.which;
 
             // Enable keyboard navigation if results are visible and enter, arrow up or arrow down pressed
-            if(me.$results.is(':visible') && (event.keyCode == 13 || event.keyCode == 38 || event.keyCode == 40)) {
+            if(me.$results.is(':visible') && (keyCode == 13 || keyCode == 38 || keyCode == 40)) {
                 me.keyboardNavigation(event);
             } else {
                 me.search();
@@ -45,11 +46,12 @@
         },
         
         keyboardNavigation: function (event) {
-            var me = this;
-            var selected = me.$results.find('.' + me.defaults.activeCls);
+            var me = this,
+                keyCode = event.which,
+                selected = me.$results.find('.' + me.defaults.activeCls);
 
             // On arrow down
-            if(event.keyCode == 40) {
+            if(keyCode == 40) {
                 if(!selected.length) {
                     me.$results.find('li').first().addClass(me.defaults.activeCls);
                     return;
@@ -66,7 +68,7 @@
             }
 
             // On arrow up
-            if(event.keyCode == 38) {
+            if(keyCode == 38) {
                 if(!selected.length) {
                     me.$results.find('li').last().addClass(me.defaults.activeCls);
                     return;
@@ -82,11 +84,14 @@
                 return;
             }
 
-            // On enter
-            if(event.keyCode == 13 && selected.length) {
-                event.preventDefault();
+            // On enter without result
+            if(keyCode == 13) {
+                if (selected.length) {
+                    window.location.href = selected.find('a').attr('href');
+                    return;
+                }
 
-                window.location.href = selected.find('a').attr('href');
+                me.$el.closest('form').submit();
             }
         },
         
