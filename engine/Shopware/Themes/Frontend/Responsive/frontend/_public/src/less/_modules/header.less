@@ -93,6 +93,7 @@
 
 // Default ajax search form
 .main-search--form {
+    background: red;
 	.unitize-padding(8, 10, 8, 10, 16);
 	.box-shadow(0 6px 6px -6px @lightTextColor);
 	background: #fff;
@@ -196,6 +197,14 @@
         &:last-child {
             border: 0 none;
         }
+
+        &:hover {
+            background: lighten(@borderColor, 10%);
+            color: @primaryColor;
+
+            .entry--name a { color: @primaryColor }
+        }
+
     }
 
     .entry--no-results {
@@ -224,6 +233,7 @@
     .entry--all-results-number {
         width: 30%;
         text-align: right;
+        color: @primaryColor;
     }
 
     .entry--all-results-link,
