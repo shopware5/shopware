@@ -132,9 +132,9 @@
 
 	{block name="frontend_index_header_javascript_jquery"}
 		{* Add the partner statistics widget, if configured *}
-		{* if !{config name=disableShopwareStatistics} }
+		{if !{config name=disableShopwareStatistics} }
 			{include file='widgets/index/statistic_include.tpl'}
-		{/if *}
+		{/if}
 	{/block}
 
 {/block}
