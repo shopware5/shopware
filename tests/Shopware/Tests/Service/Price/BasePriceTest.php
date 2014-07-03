@@ -3,8 +3,7 @@
 namespace Shopware\Tests\Service\Price;
 
 
-use Shopware\Struct\Context;
-use Shopware\Struct\Product\Price;
+use Shopware\Bundle\StoreFrontBundle;
 
 class BasePriceTest extends \Enlight_Components_Test_TestCase
 {

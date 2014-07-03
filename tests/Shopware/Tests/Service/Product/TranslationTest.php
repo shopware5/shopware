@@ -2,7 +2,8 @@
 
 namespace Shopware\Tests\Service\Product;
 
-use Shopware\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Models\Article\Detail;
 use Shopware\Tests\Service\Helper;
 
 class TranslationTest extends \Enlight_Components_Test_TestCase
@@ -14,7 +15,7 @@ class TranslationTest extends \Enlight_Components_Test_TestCase
 
     protected function setUp()
     {
-        $this->helper = new \Shopware\Tests\Service\Helper();
+        $this->helper = new Helper();
         parent::setUp();
     }
 
@@ -132,6 +133,7 @@ class TranslationTest extends \Enlight_Components_Test_TestCase
         $article = $this->helper->createArticle($product);
 
         $unit = null;
+        /**@var $detail Detail*/
         foreach($article->getDetails() as $detail) {
             if ($variant['number'] === $detail->getNumber()) {
                 $unit = $detail->getUnit();

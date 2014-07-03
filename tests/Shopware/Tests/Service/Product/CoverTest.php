@@ -17,7 +17,7 @@ class CoverTest extends \Enlight_Components_Test_TestCase
 
     protected function setUp()
     {
-        $this->helper = new \Shopware\Tests\Service\Helper();
+        $this->helper = new Helper();
         parent::setUp();
     }
 
@@ -157,8 +157,6 @@ class CoverTest extends \Enlight_Components_Test_TestCase
 
         $data = $this->getVariantImageProduct($number, $tax, $customerGroup);
         $this->helper->createArticle($data);
-
-        $numbers = array_column($data['variants'], 'number');
 
         $context = $this->helper->createContext(
             $customerGroup,

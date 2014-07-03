@@ -2,8 +2,8 @@
 
 namespace Shopware\Tests\Service\Price;
 
-use Shopware\Struct\Context;
-use Shopware\Struct\Product\Price;
+use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
 
 class GraduatedPricesTest extends \Enlight_Components_Test_TestCase
 {

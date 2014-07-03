@@ -2,8 +2,8 @@
 
 namespace Shopware\Tests\Service\Product;
 
-use PHPUnit_Framework_TestCase;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Tests\Service\Helper;
 
 class ListProductTest extends \Enlight_Components_Test_TestCase
@@ -15,7 +15,7 @@ class ListProductTest extends \Enlight_Components_Test_TestCase
 
     protected function setUp()
     {
-        $this->helper = new \Shopware\Tests\Service\Helper();
+        $this->helper = new Helper();
         parent::setUp();
     }
 
@@ -26,6 +26,11 @@ class ListProductTest extends \Enlight_Components_Test_TestCase
     }
 
 
+    /**
+     * @param $number
+     * @param Context $context
+     * @return ListProduct
+     */
     private function getListProduct($number, Context $context)
     {
         return Shopware()->Container()->get('list_product_service')

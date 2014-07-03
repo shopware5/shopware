@@ -2,18 +2,19 @@
 
 namespace Shopware\Tests\Service\Price;
 
-use Shopware\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Tests\Service\Helper;
 
 class CheapestPriceTest extends \Enlight_Components_Test_TestCase
 {
     /**
-     * @var \Shopware\Tests\Service\Helper
+     * @var Helper
      */
     private $helper;
 
     protected function setUp()
     {
-        $this->helper = new \Shopware\Tests\Service\Helper();
+        $this->helper = new Helper();
         parent::setUp();
     }
 

@@ -2,8 +2,8 @@
 
 namespace Shopware\Tests\Service\Product;
 
-use Shopware\Struct\Context;
-use Shopware\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Tests\Service\Helper;
 
 class ConfiguratorTest extends \Enlight_Components_Test_TestCase

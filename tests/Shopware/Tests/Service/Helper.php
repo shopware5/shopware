@@ -4,12 +4,8 @@ namespace Shopware\Tests\Service;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Api\Resource;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorGateway;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductConfigurationGateway;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductPropertyGateway;
-use Shopware\Bundle\StoreFrontBundle\Service;
+use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Models;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 
 class Helper
 {
@@ -80,58 +76,61 @@ class Helper
     }
 
     public function getProductConfigurator(
-        Struct\ListProduct $listProduct,
-        Struct\Context $context,
+        StoreFrontBundle\Struct\ListProduct $listProduct,
+        StoreFrontBundle\Struct\Context $context,
         array $selection = array(),
         ProductConfigurationGateway $productConfigurationGateway = null,
         ConfiguratorGateway $configuratorGateway = null
     ) {
         if ($productConfigurationGateway == null) {
-            $productConfigurationGateway = Shopware()->Container()->get('product_configuration_gateway');
+            $productConfigurationGateway = Shopware()->Container()->get('product_configuration_gateway_dbal');
         }
         if ($configuratorGateway == null) {
-            $configuratorGateway = Shopware()->Container()->get('configurator_gateway');
+            $configuratorGateway = Shopware()->Container()->get('configurator_gateway_dbal');
         }
 
-        $service = new Service\Core\ConfiguratorService($productConfigurationGateway, $configuratorGateway);
+        $service = new StoreFrontBundle\Service\Core\ConfiguratorService(
+            $productConfigurationGateway,
+            $configuratorGateway
+        );
 
         return $service->getProductConfigurator($listProduct, $context, $selection);
     }
 
     /**
-     * @param Struct\ListProduct $product
-     * @param Struct\Context $context
-     * @param ProductPropertyGateway $productPropertyGateway
-     * @return Struct\Property\Set
+     * @param StoreFrontBundle\Struct\ListProduct $product
+     * @param StoreFrontBundle\Struct\Context $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductPropertyGateway $productPropertyGateway
+     * @return StoreFrontBundle\Struct\Property\Set
      */
     public function getProductProperties(
-        Struct\ListProduct $product,
-        Struct\Context $context,
-        ProductPropertyGateway $productPropertyGateway = null
+        StoreFrontBundle\Struct\ListProduct $product,
+        StoreFrontBundle\Struct\Context $context,
+        StoreFrontBundle\Gateway\DBAL\ProductPropertyGateway $productPropertyGateway = null
     ) {
 
         if ($productPropertyGateway === null) {
-            $productPropertyGateway = Shopware()->Container()->get('product_property_gateway');
+            $productPropertyGateway = Shopware()->Container()->get('product_property_gateway_dbal');
         }
-        $service = new Service\Core\PropertyService($productPropertyGateway);
+        $service = new StoreFrontBundle\Service\Core\PropertyService($productPropertyGateway);
 
         return $service->get($product, $context);
     }
 
     /**
      * @param $number
-     * @param Struct\Context $context
+     * @param StoreFrontBundle\Struct\Context $context
      * @param null $productGateway
      * @param null $graduatedPricesService
      * @param null $cheapestPriceService
      * @param null $priceCalculationService
      * @param null $mediaService
      * @param null $eventManager
-     * @return Struct\ListProduct
+     * @return StoreFrontBundle\Struct\ListProduct
      */
     public function getListProduct(
         $number,
-        Struct\Context $context,
+        StoreFrontBundle\Struct\Context $context,
         $productGateway = null,
         $graduatedPricesService = null,
         $cheapestPriceService = null,
@@ -163,7 +162,7 @@ class Helper
      * @param null $mediaService
      * @param null $marketingService
      * @param null $eventManager
-     * @return Struct\ListProduct[]
+     * @return StoreFrontBundle\Struct\ListProduct[]
      */
     public function getListProducts(
         $numbers,
@@ -177,15 +176,15 @@ class Helper
         $eventManager = null
     ) {
 
-        if ($productGateway === null)           $productGateway = Shopware()->Container()->get('list_product_gateway');
-        if ($graduatedPricesService === null)   $graduatedPricesService = Shopware()->Container()->get('graduated_prices_service');
-        if ($cheapestPriceService === null)     $cheapestPriceService = Shopware()->Container()->get('cheapest_price_service');
-        if ($priceCalculationService === null)  $priceCalculationService = Shopware()->Container()->get('price_calculation_service');
-        if ($mediaService === null)             $mediaService = Shopware()->Container()->get('media_service');
-        if ($marketingService === null)         $marketingService = Shopware()->Container()->get('marketing_service');
+        if ($productGateway === null)           $productGateway = Shopware()->Container()->get('list_product_gateway_dbal');
+        if ($graduatedPricesService === null)   $graduatedPricesService = Shopware()->Container()->get('graduated_prices_service_core');
+        if ($cheapestPriceService === null)     $cheapestPriceService = Shopware()->Container()->get('cheapest_price_service_core');
+        if ($priceCalculationService === null)  $priceCalculationService = Shopware()->Container()->get('price_calculation_service_core');
+        if ($mediaService === null)             $mediaService = Shopware()->Container()->get('media_service_core');
+        if ($marketingService === null)         $marketingService = Shopware()->Container()->get('marketing_service_core');
         if ($eventManager === null)             $eventManager = Shopware()->Container()->get('events');
 
-        $service = new Service\Core\ListProductService(
+        $service = new StoreFrontBundle\Service\Core\ListProductService(
             $productGateway,
             $graduatedPricesService,
             $cheapestPriceService,
@@ -469,7 +468,7 @@ class Helper
         $repo = $this->entityManager->getRepository('Shopware\Models\Customer\Group');
         $collection = array();
         foreach($discounts as $data) {
-            $discount = new \Shopware\Models\Price\Discount();
+            $discount = new Models\Price\Discount();
             $discount->setCustomerGroup(
                 $repo->findOneBy(array('key' => $data['key']))
             );
@@ -912,7 +911,7 @@ class Helper
      * @param array $taxes
      * @param Models\Shop\Currency $currency
      *
-     * @return Struct\Context
+     * @return StoreFrontBundle\Struct\Context
      */
     public function createContext(
         Models\Customer\Group $currentCustomerGroup,
@@ -921,7 +920,7 @@ class Helper
         Models\Customer\Group $fallbackCustomerGroup = null,
         Models\Shop\Currency $currency = null
     ) {
-        $context = new Struct\Context();
+        $context = new StoreFrontBundle\Struct\Context();
 
         $context->setTaxRules($this->buildTaxRules($taxes));
 
@@ -1136,7 +1135,7 @@ class Helper
 
     /**
      * @param Models\Tax\Tax[] $taxes
-     * @return Struct\Tax[]
+     * @return StoreFrontBundle\Struct\Tax[]
      */
     private function buildTaxRules(array $taxes)
     {
