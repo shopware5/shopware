@@ -27,10 +27,10 @@ namespace Shopware\Bundle\SearchBundle\Sorting;
 /**
  * @package Shopware\Bundle\SearchBundle\Sorting
  */
-class DescriptionSorting extends Sorting
+class ProductNameSorting extends Sorting
 {
     public function getName()
     {
-        return 'description';
+        return 'product_name';
     }
 }

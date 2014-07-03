@@ -89,7 +89,7 @@ class ProductAttributeConditionHandler implements ConditionHandlerInterface
                 $query->setParameter($placeholder, '%' . $condition->getValue() . '%');
                 break;
 
-            case ($condition->getOperator() === ProductAttributeCondition::OPERATOR_START_WITH):
+            case ($condition->getOperator() === ProductAttributeCondition::OPERATOR_STARTS_WITH):
                 $query->andWhere('productAttribute.' . $condition->getField() . ' LIKE ' . $placeholder);
                 $query->setParameter($placeholder, $condition->getValue() . '%');
                 break;
