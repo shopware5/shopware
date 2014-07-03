@@ -278,6 +278,13 @@ class Order extends ModelEntity
     private $remoteAddress;
 
     /**
+     * @var string $deviceType
+     *
+     * @ORM\Column(name="deviceType", type="string", length=50, nullable=true)
+     */
+    private $deviceType = 'desktop';
+
+    /**
      * @var
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Customer", inversedBy="orders")
      * @ORM\JoinColumn(name="userID", referencedColumnName="id")
@@ -1131,7 +1138,7 @@ class Order extends ModelEntity
 
 
     /**
-     * @param \Shopware\Models\Shop\Shop $shop
+     * @param \Shopware\Models\Shop\Shop $languageSubShop
      */
     public function setLanguageSubShop($languageSubShop)
     {
@@ -1160,5 +1167,21 @@ class Order extends ModelEntity
     public function getPaymentInstances()
     {
         return $this->paymentInstances;
+    }
+
+    /**
+     * @param string $deviceType
+     */
+    public function setDeviceType($deviceType)
+    {
+        $this->deviceType = $deviceType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeviceType()
+    {
+        return $this->deviceType;
     }
 }

@@ -115,6 +115,8 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
             ->setClientIp('127.0.0.1', false)
             ->setRequestUri('/');
 
+        $request->setDeviceType('desktop');
+
         $this->Plugin()->refreshCurrentUsers($request);
 
         $sql = 'SELECT `id` FROM `s_statistics_currentusers` WHERE `remoteaddr`=? AND `page`=?';

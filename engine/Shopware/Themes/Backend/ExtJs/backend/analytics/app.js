@@ -80,6 +80,7 @@ Ext.define('Shopware.apps.Analytics', {
         'navigation.ShippingMethods',
         'navigation.Time',
         'navigation.Vendors',
+        'navigation.DeviceTypes',
         'navigation.Visitors',
         'navigation.Weekdays',
         'navigation.Rating',
@@ -125,6 +126,7 @@ Ext.define('Shopware.apps.Analytics', {
         'chart.Customers',
         'chart.CustomerGroup',
         'chart.PartnerRevenue',
+        'chart.DeviceTypes',
         'chart.Visitors',
 
         'table.Week',
@@ -144,6 +146,7 @@ Ext.define('Shopware.apps.Analytics', {
         'table.Rating',
         'table.ReferrerRevenue',
         'table.PartnerRevenue',
+        'table.DeviceTypes',
         'table.ReferrerVisitors',
         'table.ArticleSales',
         'table.Customers',
