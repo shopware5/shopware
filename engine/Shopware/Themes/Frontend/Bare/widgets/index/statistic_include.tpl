@@ -1,5 +1,5 @@
 <script>
-jQuery(document).ready(function($) {
+(function($) {
     var cok = document.cookie.match(/session-{$Shop->getId()}=([^;])+/g),
         sid = (cok && cok[0]) ? cok[0] : null,
         par = document.location.search.match(/sPartner=([^&])+/g),
@@ -14,12 +14,13 @@ jQuery(document).ready(function($) {
     if(sid) { url += '&' + sid; }
     if(pid) { url += '&partner=' + pid; }
     if(ref) { url += '&referer=' + encodeURI(ref); }
-{if $sArticle.articleID}
+    {if $sArticle.articleID}
     url += '&articleId=' + encodeURI("{$sArticle.articleID}");
-{/if}
-	url = url.replace('https:', '');
-	url = url.replace('http:', '');
+    {/if}
+    url = url.replace('https:', '');
+    url = url.replace('http:', '');
     //url += '&x-shopware-nocache=' + (new Date()).getTime();
+
     $.ajax({ url: url, dataType: 'jsonp'});
-});
+})(jQuery);
 </script>
