@@ -3729,7 +3729,7 @@ class sArticles
             return false;
         }
 
-        $promotion = $this->legacyStructConverter->convertProductStruct($product);
+        $promotion = $this->legacyStructConverter->convertListProductStruct($product);
         if (!empty($category) && $category != $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["parentID"]) {
             $promotion["linkDetails"] .= "&sCategory=$category";
         }
@@ -3798,7 +3798,7 @@ class sArticles
 
         /**@var $product StoreFrontBundle\Struct\ListProduct */
         foreach ($searchResult->getProducts() as $product) {
-            $article = $this->legacyStructConverter->convertProductStruct($product);
+            $article = $this->legacyStructConverter->convertListProductStruct($product);
 
             if (!empty($categoryId) && $categoryId != $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["parentID"]) {
                 $article["linkDetails"] .= "&sCategory=$categoryId";
@@ -3905,7 +3905,7 @@ class sArticles
             return array();
         }
 
-        $data = $this->legacyStructConverter->convertFullProduct($product, $categoryId);
+        $data = $this->legacyStructConverter->convertProductStruct($product, $categoryId);
 
         $relatedArticles = array();
         foreach($data['sRelatedArticles'] as $related) {
