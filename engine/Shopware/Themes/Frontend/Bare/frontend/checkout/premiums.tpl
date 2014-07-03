@@ -2,7 +2,7 @@
 	<ul class="table-premium--list">
 		{foreach $sPremiums as $premium}
 			{if $premium.sArticle.active}
-				<li class="list--entry block-group">
+				<li class="list--entry block-group{if $premium@index % 2} is--even{/if}{if $premium@index + 1 == $premium@total || $premium@index + 2 == $premium@total} is--last-row{/if}">
 
 					{* Product image *}
 					{block name='frontend_checkout_premium_active_image'}
@@ -24,7 +24,7 @@
 							{* Product name *}
 							{block name='frontend_checkout_premium_active_info_name'}
 								<a href="{$premium.sArticle.linkDetails}" title="{$premium.sArticle.articleName}" class="entry--name">
-									{$premium.sArticle.articleName}
+									{$premium.sArticle.articleName|truncate:60}
 								</a>
 							{/block}
 
@@ -55,8 +55,7 @@
 					{/block}
 				</li>
 			{else}
-				<li class="list--entry block-group is--disabled">
-
+				<li class="list--entry block-group is--disabled{if $premium@index % 2} is--even{/if}{if $premium@index + 1 == $premium@total || $premium@index + 2 == $premium@total} is--last-row{/if}">
 					{* Product image *}
 					{block name='frontend_checkout_premium_image'}
 						<a class="table--media block" href="{$premium.sArticle.linkDetails}" title="{$premium.sArticle.articleName}">
@@ -77,7 +76,7 @@
 							{* Product name *}
 							{block name='frontend_checkout_premium_info_name'}
 								<a href="{$premium.sArticle.linkDetails}" title="{$premium.sArticle.articleName}" class="entry--name">
-									{$premium.sArticle.articleName}
+									{$premium.sArticle.articleName|truncate:60}
 								</a>
 							{/block}
 

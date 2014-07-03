@@ -432,6 +432,32 @@
 			width: auto;
 			position: absolute;
 		}
+
+		.table-premium--list {
+			.clearfix();
+		}
+
+		.table-premium--list .list--entry {
+			.unitize(162, 16, min-height);
+			.unitize-padding(12, 12, 12, 12);
+			float: left;
+			width: 50%;
+			margin: 0;
+
+			&.is--even {
+				border-left: 1px solid @borderColor;
+			}
+
+			&.is--last-row {
+				padding-bottom: 0;
+				border-bottom: 0 none;
+			}
+		}
+	}
+
+	.basket--footer + .premium--headline {
+		.unitize-margin(10, -10, 0, -10);
+		border-top: 1px solid @borderColor;
 	}
 }
 
