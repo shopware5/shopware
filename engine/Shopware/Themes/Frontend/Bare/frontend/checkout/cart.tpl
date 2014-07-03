@@ -104,7 +104,7 @@
 
 							{* Headline *}
 							{block name='frontend_checkout_cart_premium_headline'}
-								<div class="panel--header secondary">
+								<div class="panel--header secondary premium--headline">
 									{s name="CartPremiumsHeadline"}{/s}
 								</div>
 							{/block}
