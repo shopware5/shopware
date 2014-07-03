@@ -7,6 +7,7 @@ In this document you will find a changelog of the important changes related to t
     * (old) Bootstrap::uninstall() -> old logic
 
 ## 4.3.0
+* Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
 * Removed deprecated Zend Framework components:
     * `Zend_Amf`
     * `Zend_Application`
@@ -60,6 +61,8 @@ In this document you will find a changelog of the important changes related to t
     * `sAdmin::sGetShippingcosts`
     * `sAdmin::sCheckTaxID`
     * `sCore::sCustomRenderer`
+    * `sBasket::sCountArticles`
+    * `sBasket::sGetBasketWeight`
 * Removed the following core classes deprecated and/or unused variables
     * `sSystem::sDB_HOST`
     * `sSystem::sDB_USER`
@@ -76,9 +79,9 @@ In this document you will find a changelog of the important changes related to t
     * `sSystem::sCurrencyData`
     * `sSystem::sPathCmsFiles`
     * `sSystem::sPathCmsImg`
+    * `sBasket::sBASKET`
 * `sCore::sBuildLink()` second argument removed (dead code)
 * `sCore` no longer returns `null` when calling not implemented functions
-* `sSystem::sSYSTEM` self-reference was removed
 * `sNewsletter` core class removed
 * `Shopware_Controllers_Frontend_Content` legacy controller removed
 * `templates/_default/frontend/content` legacy template files removed

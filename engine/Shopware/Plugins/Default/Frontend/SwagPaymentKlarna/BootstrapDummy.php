@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 4
  * Copyright © shopware AG
@@ -20,19 +21,22 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-Ext.define('Shopware.apps.SwagUpdate.store.Plugins', {
 
+/**
+ * @category  Shopware
+ * @package   Shopware\Plugins\Frontend\SwagPaymentKlarna
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
+class Shopware_Plugins_Frontend_SwagPaymentKlarna_BootstrapDummy extends Shopware_Components_DummyPlugin_Bootstrap
+{
     /**
-     * Extend for the standard ExtJS 4
-     * @string
+     * @return array
      */
-    extend: 'Ext.data.Store',
-
-    /**
-     * Define the used model for this store
-     * @string
-     */
-    model : 'Shopware.apps.SwagUpdate.model.Plugins',
-
-    pageSize: 999
-});
+    public function getInfo()
+    {
+        return array(
+            'version'   => $this->getVersion(),
+            'label'     => 'Klarna Checkout',
+        );
+    }
+}

@@ -29,7 +29,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.NoUpdate', {
 
     alias: 'widget.update-no-update',
 
-    title: 'Softwareaktualisierung',
+    title: '{s name=window_title}Software Update{/s}',
 
     layout: 'fit',
 

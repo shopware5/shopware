@@ -160,6 +160,7 @@ class Download
         curl_setopt($ch, CURLOPT_RANGE, $range);
         curl_setopt($ch, CURLOPT_URL, $sourceUri);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, false );
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_BINARYTRANSFER, true );
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_NOPROGRESS, FALSE);
