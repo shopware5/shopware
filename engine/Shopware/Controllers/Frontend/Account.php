@@ -185,6 +185,11 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     public function downloadsAction()
     {
         $destinationPage = (int)$this->Request()->sPage;
+
+        if(empty($destinationPage)) {
+            $destinationPage = 1;
+        }
+
         $orderData = $this->admin->sGetDownloads($destinationPage);
         $this->View()->sDownloads = $orderData["orderData"];
         $this->View()->sNumberPages = $orderData["numberOfPages"];
@@ -379,14 +384,15 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
                 }
             }
 
-
-
-            if ((!empty($values['personal']['customer_type'])&&$values['personal']['customer_type']=='private')) {
-                $values['billing']['company'] = '';
-                $values['billing']['department'] = '';
-                $values['billing']['ustid'] = '';
-            } elseif ((!empty($values['personal']['customer_type'])||!empty($values['billing']['company']))) {
-                $rules['ustid'] = array('required'=>0);
+            if (!empty($values['personal']['customer_type'])) {
+                if ($values['personal']['customer_type'] === 'private') {
+                    $values['billing']['company'] = '';
+                    $values['billing']['department'] = '';
+                    $values['billing']['ustid'] = '';
+                } else {
+                    $rules['company'] = array('required' => 1);
+                    $rules['ustid'] = array('required' => 0);
+                }
             }
 
             if (!empty($values)) {

@@ -78,6 +78,15 @@ p {
     .unitize-margin(0, 0, 24, 0);
 }
 
+blockquote {
+  .unitize-padding(10, 10);
+  .border-radius(3px);
+  .box-shadow(inset 0 0 3px 0 rgba(0, 0, 0, 0.2));
+  background: @primaryBackgroundColor;
+  text-align: left;
+  margin: 0;
+}
+
 // Actual body proxy element for the content
 .page-wrap {
     width: 100%;
@@ -113,10 +122,17 @@ p {
 .is--align-right { text-align: right !important; }
 .is--align-center { text-align: center !important; }
 .is--underline { text-decoration: underline !important; }
+.is--line-through { text-decoration: line-through !important; }
 .is--uppercase { text-transform: uppercase !important; }
+.is--strong { font-weight: 600 !important; }
 .is--bold { font-weight: bold !important; }
+.is--italic { font-style: italic; }
 .is--required { font-weight: 700 !important; }
 .is--nowrap { white-space: nowrap !important; }
+
+.is--dark { color: @darkTextColor !important; }
+.is--light { color: @lightTextColor !important; }
+.is--soft { color: @softTextColor !important; }
 
 .left { float: left; }
 .right { float: right; }

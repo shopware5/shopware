@@ -1,29 +1,44 @@
-<div class="select_billing grid_6">
+<div class="account--billing-address panel has--border">
 	
-	{block name="frontend_account_select_billing_address"}	
-	<h5 class="bold">{$key+1}. {if $sAddress.company}{$sAddress.company},{/if}{$sAddress.firstname} {$sAddress.lastname}</h5>
-	
-	{if $sAddress.company}
-		<p>
-	    	{$sAddress.company}{if $sAddress.department} - {$sAddress.department}{/if}
-		</p>
-	{/if}
-    <p>
-        {if $sAddress.salutation eq "mr"}
-        	{se name="SelectAddressSalutationMr"}{/se}
-        {else}
-        	{se name="SelectAddressSalutationMs"}{/se}
-        {/if}
-        {$sAddress.firstname} {$sAddress.lastname}<br />
-        {$sAddress.street} {$sAddress.streetnumber}<br />
-		{if $sAddress.additional_address_line1}{$sAddress.additional_address_line1}<br />{/if}
-		{if $sAddress.additional_address_line2}{$sAddress.additional_address_line2}<br />{/if}
-        {$sAddress.zipcode} {$sAddress.city}<br />
-		{if {$sAddress.statename}}{$sAddress.statename}<br />{/if}
-        {$sAddress.countryname}<br />
-	</p>
-	<div class="change">
-		<input type="submit" class="button-right small" value="{s name='SelectAddressSubmit'}{/s}" />
-	</div>
+	{block name="frontend_account_select_billing_address"}
+		{block name="frontend_account_select_headline"}
+			<h5 class="panel--title is--underline">{$key+1}. {if $sAddress.company}{$sAddress.company},{/if} {$sAddress.firstname} {$sAddress.lastname}</h5>
+		{/block}
+
+		{block name="frontend_account_select_content"}
+			<div class="panel--body is--wide">
+				{if $sAddress.company}
+					{block name="frontend_account_select_company_address"}
+						<p class="is--bold">
+							{$sAddress.company}{if $sAddress.department} - {$sAddress.department}{/if}
+						</p>
+					{/block}
+				{/if}
+				{block name="frontend_account_select_address_information"}
+					<p>
+						{if $sAddress.salutation eq "mr"}
+							{s name="SelectAddressSalutationMr"}{/s}
+						{else}
+							{s name="SelectAddressSalutationMs"}{/s}
+						{/if}
+						{$sAddress.firstname} {$sAddress.lastname}<br />
+						{$sAddress.street} {$sAddress.streetnumber}<br />
+						{if $sAddress.additional_address_line1}{$sAddress.additional_address_line1}<br />{/if}
+						{if $sAddress.additional_address_line2}{$sAddress.additional_address_line2}<br />{/if}
+						{$sAddress.zipcode} {$sAddress.city}<br />
+						{if $sUserData.additional.stateShipping.name}{$sUserData.additional.stateShipping.name}<br />{/if}
+						{$sAddress.countryname}<br />
+					</p>
+				{/block}
+			</div>
+		{/block}
+
+		{block name="frontend_account_select_actions"}
+			<div class="panel--actions is--wide">
+				<input type="submit" class="btn btn--secondary is--small" value="{s name="SelectAddressSubmit"}{/s}" />
+			</div>
+		{/block}
+
 	{/block}
+
 </div>

@@ -105,7 +105,7 @@
 		{block name='frontend_register_billing_fieldset_different_shipping'}
 			{if !$update}
 				<div class="register--alt-shipping">
-					<input name="register[billing][shippingAddress]" type="checkbox" id="register_billing_shippingAddress" value="1" class="chkbox" {if $form_data.shippingAddress}checked="checked"{/if} />
+					<input name="register[billing][shippingAddress]" type="checkbox" id="register_billing_shippingAddress" value="1" {if $form_data.shippingAddress}checked="checked"{/if} />
 					<label for="register_billing_shippingAddress">{s name='RegisterBillingLabelShipping'}{/s}</label>
 				</div>
 			{/if}
