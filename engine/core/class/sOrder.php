@@ -499,7 +499,7 @@ class sOrder
             invoice_shipping,invoice_shipping_net, ordertime, status,
             cleared, paymentID, transactionID, customercomment,
             net,taxfree, partnerID,temporaryID,referer,language,dispatchID,
-            currency,currencyFactor,subshopID,remote_addr
+            currency,currencyFactor,subshopID,remote_addr, deviceType
         ) VALUES ('".$orderNumber."',
             ".$this->sUserData["additional"]["user"]["id"].",
             ".$this->sBasketData["AmountWithTaxNumeric"].",
@@ -522,7 +522,8 @@ class sOrder
             '".$this->sSYSTEM->sCurrency["currency"]."',
             '".$this->sSYSTEM->sCurrency["factor"]."',
             '".$mainShop->getId()."',
-            ".$this->db->quote((string) $_SERVER['REMOTE_ADDR'])."
+            ".$this->db->quote((string) $_SERVER['REMOTE_ADDR']).",
+            ".$this->db->quote((string) $_SERVER['HTTP_X_UA_DEVICE'])."
         )
         ";
 

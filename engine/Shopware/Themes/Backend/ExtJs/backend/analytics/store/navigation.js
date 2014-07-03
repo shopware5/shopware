@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
         children: [
             {
                 id: 'overview',
-                text: '{s name=nav/quick_overview}Ouick-Overview{/s}',
+                text: '{s name=nav/quick_overview}Quick overview{/s}',
                 store: 'analytics-store-navigation-overview',
                 iconCls: 'sprite-chart',
                 comparable: true,
@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
             },
             {
                 id: 'rating',
-                text: '{s name=nav/rating_overview}Conversion-Overview{/s}',
+                text: '{s name=nav/rating_overview}Conversion overview{/s}',
                 store: 'analytics-store-navigation-rating',
                 iconCls: 'sprite-star',
                 comparable: true,
@@ -187,6 +187,15 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
                 leaf: true
             },
             {
+                id: 'device_types',
+                text: '{s name=nav/device_types}Turnover by device types{/s}',
+                store: 'analytics-store-navigation-device-types',
+                iconCls: 'sprite-media-player-phone',
+                comparable: true,
+                leaf: true,
+                multiShop: true
+            },
+            {
                 id: 'search',
                 text: '{s name=nav/search}Popular search terms{/s}',
                 store: 'analytics-store-navigation-search',
@@ -204,7 +213,7 @@ Ext.define('Shopware.apps.Analytics.store.Navigation', {
             },
             {
                 id: 'article_impression',
-                text: '{s name=nav/article_impressions}Item by calls(Impressions){/s}',
+                text: '{s name=nav/article_impressions}Item by calls (impressions){/s}',
                 store: 'analytics-store-navigation-article_impressions',
                 iconCls: 'sprite-chart-up-color',
                 comparable: true,

@@ -22,6 +22,8 @@ In this document you will find a changelog of the important changes related to t
     * Added `Enlight_Controller_Request_RequestHttp::getDeviceType()`
     * Added `device` Smarty function
 * The sitemap.xml uses now a smarty template
+    * Added `Turnover by device type` in the backend statistics module
+    * Added device type details to `Impressions` and `Visitors` in the backend statistics module
 
 ## 4.3.0
 * Removed deprecated Zend Framework components:

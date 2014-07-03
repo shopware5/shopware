@@ -22,7 +22,7 @@
  */
 
 /**
- * Analytics Payment Table
+ * Analytics Device Type Table
  *
  * @category   Shopware
  * @package    Analytics
@@ -30,10 +30,10 @@
  *
  */
 //{namespace name=backend/analytics/view/main}
-//{block name="backend/analytics/view/table/payment"}
-Ext.define('Shopware.apps.Analytics.view.table.Payment', {
+//{block name="backend/analytics/view/table/device_types"}
+Ext.define('Shopware.apps.Analytics.view.table.DeviceTypes', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
-    alias: 'widget.analytics-table-payment',
+    alias: 'widget.analytics-table-device_types',
 
     initComponent: function () {
         var me = this;
@@ -64,8 +64,8 @@ Ext.define('Shopware.apps.Analytics.view.table.Payment', {
 
         return [
             {
-                dataIndex: 'name',
-                text: '{s name=table/payment/payment}Payment{/s}'
+                dataIndex: 'deviceTypeHuman',
+                text: '{s name=table/device_types/device_type}Device type{/s}'
             },
             {
                 xtype: 'numbercolumn',
@@ -86,6 +86,5 @@ Ext.define('Shopware.apps.Analytics.view.table.Payment', {
             (me.subApp.currencyAtEnd == 1)
         );
     }
-
 });
 //{/block}

@@ -195,4 +195,12 @@ class Enlight_Controller_Request_RequestTestCase
     {
         return $this->getHeader('X-UA-Device');
     }
+
+    /**
+     * Sets the current device type
+     */
+    public function setDeviceType($deviceType)
+    {
+        $this->setHeader('X-UA-Device', $deviceType);
+    }
 }

@@ -65,8 +65,32 @@ Ext.define('Shopware.apps.Analytics.view.table.Visitors', {
                 text: '{s name=table/visitors/date}Date{/s}'
             },
             {
+                dataIndex: 'desktopVisits',
+                text: '{s name=table/visitors/desktop_visits}Desktop visits{/s}'
+            },
+            {
+                dataIndex: 'tabletVisits',
+                text: '{s name=table/visitors/tablet_visits}Tablet visits{/s}'
+            },
+            {
+                dataIndex: 'mobileVisits',
+                text: '{s name=table/visitors/mobile_visits}Mobile visits{/s}'
+            },
+            {
                 dataIndex: 'totalVisits',
                 text: '{s name=table/visitors/totalVisits}Total visits{/s}'
+            },
+            {
+                dataIndex: 'desktopImpressions',
+                text: '{s name=table/visitors/desktop_impressions}Desktop impressions{/s}'
+            },
+            {
+                dataIndex: 'tabletImpressions',
+                text: '{s name=table/visitors/tablet_impressions}Tablet impressions{/s}'
+            },
+            {
+                dataIndex: 'mobileImpressions',
+                text: '{s name=table/visitors/mobile_impressions}Mobile impressions{/s}'
             },
             {
                 dataIndex: 'totalImpressions',

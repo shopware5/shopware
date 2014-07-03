@@ -22,29 +22,37 @@
  */
 
 /**
- * Analytics ArticleImpressions Store
+ * Analytics Device Types Store
  *
  * @category   Shopware
  * @package    Analytics
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  */
-Ext.define('Shopware.apps.Analytics.store.navigation.ArticleImpressions', {
+Ext.define('Shopware.apps.Analytics.store.navigation.DeviceTypes', {
     extend: 'Ext.data.Store',
-    alias: 'widget.analytics-store-navigation-article_impressions',
+    alias: 'widget.analytics-store-navigation-device-types',
     remoteSort: true,
     fields: [
-        'articleId',
-        'articleName',
-        { name: 'desktopImpressions', type: 'int' },
-        { name: 'tabletImpressions', type: 'int' },
-        { name: 'mobileImpressions', type: 'int' },
-        { name: 'totalImpressions', type: 'int' }
-    ],
+        { name: 'deviceType', type: 'string' },
+        {
+            name : 'deviceTypeHuman',
+            type: 'string',
+            convert: function(value, record) {
+                var deviceType = record.get('deviceType');
 
+                if (deviceType.length) {
+                    return deviceType.charAt(0).toUpperCase() + deviceType.slice(1);
+                } else {
+                    return deviceType;
+                }
+            }
+        },
+        { name: 'turnover', type: 'float' }
+    ],
     proxy: {
         type: 'ajax',
-        url: '{url controller=analytics action=getArticleImpressions}',
+        url: '{url controller=analytics action=getDevice}',
         reader: {
             type: 'json',
             root: 'data',
@@ -58,10 +66,7 @@ Ext.define('Shopware.apps.Analytics.store.navigation.ArticleImpressions', {
 
         if (config.shopStore) {
             config.shopStore.each(function (shop) {
-                config.fields.push('desktopImpressions' + shop.data.id);
-                config.fields.push('tabletImpressions' + shop.data.id);
-                config.fields.push('mobileImpressions' + shop.data.id);
-                config.fields.push('totalImpressions' + shop.data.id);
+                config.fields.push('turnover' + shop.data.id);
             });
         }
 

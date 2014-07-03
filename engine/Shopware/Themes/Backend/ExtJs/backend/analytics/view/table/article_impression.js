@@ -83,9 +83,24 @@ Ext.define('Shopware.apps.Analytics.view.table.ArticleImpression', {
                 ]
             },
             {
+                dataIndex: 'desktopImpressions',
+                align: 'right',
+                text: '{s name=table/article_impression/desktop_impressions}Desktop impressions{/s}'
+            },
+            {
+                dataIndex: 'tabletImpressions',
+                align: 'right',
+                text: '{s name=table/article_impression/tablet_impressions}Tablet impressions{/s}'
+            },
+            {
+                dataIndex: 'mobileImpressions',
+                align: 'right',
+                text: '{s name=table/article_impression/mobile_impressions}Mobile impressions{/s}'
+            },
+            {
                 dataIndex: 'totalImpressions',
                 align: 'right',
-                text: '{s name=table/article_impression/shop}Impressions{/s}'
+                text: '{s name=table/article_impression/total_impressions}Total impressions{/s}'
             }
         ];
     }
