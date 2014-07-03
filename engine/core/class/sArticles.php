@@ -4020,10 +4020,10 @@ class sArticles
                 $criteria->sortByHighestPrice();
                 break;
             case 5:
-                $criteria->sortByDescription();
+                $criteria->sortByProductName();
                 break;
             case 6:
-                $criteria->sortByDescription(SearchBundle\SortingInterface::SORT_DESC);
+                $criteria->sortByProductName(SearchBundle\SortingInterface::SORT_DESC);
                 break;
             default:
                 $criteria->sortByReleaseDate(SearchBundle\SortingInterface::SORT_DESC);

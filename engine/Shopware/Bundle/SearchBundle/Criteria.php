@@ -251,8 +251,12 @@ class Criteria
      * @param string $mode
      * @return $this
      */
-    public function addProductAttributeFacet($field, $mode = Facet\ProductAttributeFacet::MODE_VALUES)
+    public function addProductAttributeFacet($field, $mode = null)
     {
+        if ($mode === null) {
+            $mode = Facet\ProductAttributeFacet::MODE_VALUES;
+        }
+
         return $this->addFacet(
             new Facet\ProductAttributeFacet($field, $mode)
         );
@@ -304,10 +308,10 @@ class Criteria
      * @param string $direction
      * @return $this
      */
-    public function sortByDescription($direction = 'ASC')
+    public function sortByProductName($direction = 'ASC')
     {
         return $this->addSorting(
-            new Sorting\DescriptionSorting($direction)
+            new Sorting\ProductNameSorting($direction)
         );
     }
 

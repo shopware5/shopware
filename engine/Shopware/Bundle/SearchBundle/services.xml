@@ -92,7 +92,7 @@
         </service>
 
          <!-- Sorting handler -->
-        <service id="description_sorting_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\SortingHandler\DescriptionSortingHandler">
+        <service id="product_name_sorting_handler_dbal" class="Shopware\Bundle\SearchBundle\DBAL\SortingHandler\ProductNameSortingHandler">
             <tag name="sorting_handler_dbal"/>
         </service>
 
