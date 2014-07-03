@@ -2041,18 +2041,6 @@ class sArticles
     }
 
     /**
-     * Get all multidimensional groups, options and properties for a certain article
-     * @param int $id - s_articles.id
-     * @param array $article - copy of the array object, will be filled with the configurator data and returned
-     * @access public
-     * @return array $article
-     */
-    public function sGetArticleConfig($id, $article)
-    {
-        return $this->sSYSTEM->sMODULES['sConfigurator']->sGetArticleConfig($id, $article);
-    }
-
-    /**
      * Checks if a certain article is multidimensional configurable
      * @param int $id s_articles.id
      * @param bool $realtime deprecated
@@ -3795,6 +3783,14 @@ class sArticles
             $config,
             $context
         );
+
+        $criteria->addProductAttributeCondition(
+            'attr2',
+            SearchBundle\Condition\ProductAttributeCondition::IN,
+            array(1, 2, 3)
+        );
+
+        $criteria->sortByProductAttribute('attr2', SearchBundle\SortingInterface::SORT_ASC);
 
         $searchResult = $this->searchService->search(
             $criteria,

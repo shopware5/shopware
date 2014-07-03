@@ -101,6 +101,7 @@ In this document you will find a changelog of the important changes related to t
 * Removed deprecated widget settings from the config module. Active widgets and their positions will now be saved automatically.
 * Removed desktop switcher from the `Shopware.container.Viewport` base component.
 * sGetArticleById result no longer contains the sConfiguratorSelection property. sConfiguratorSelection previously contained the selected variant data, which can now be accessed directly in the first level of the sGetArticleById result.
+* sConfigurator class exist no more. The configurator data can now selected over the Shopware\Bundle\StoreFrontBundle\Service\Core\ConfiguratorService.php. To modify the configurator data you can use the sGetArticleById events.
 * The new shopware core selects all required data for sGetArticleById, sGetPromotionById and sGetArticlesByCategory. The following events and internal functions not used in these functions any more
     * sGetPromotionById events
         * Shopware_Modules_Articles_GetPromotionById_FilterSql

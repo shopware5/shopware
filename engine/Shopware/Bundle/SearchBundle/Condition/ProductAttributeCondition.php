@@ -35,8 +35,8 @@ class ProductAttributeCondition implements ConditionInterface
     const OPERATOR_GT = '>';
     const OPERATOR_GTE = '>=';
     const OPERATOR_IN = 'IN';
-    const OPERATOR_START_WITH = 'START WITH';
-    const OPERATOR_ENDS_WITH = 'ENDS WITH';
+    const OPERATOR_STARTS_WITH = 'STARTS_WITH';
+    const OPERATOR_ENDS_WITH = 'ENDS_WITH';
     const OPERATOR_CONTAINS = 'CONTAINS';
 
     /**
