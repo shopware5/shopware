@@ -3811,6 +3811,7 @@ class sArticles
         /**@var $product StoreFrontBundle\Struct\ListProduct */
         foreach ($searchResult->getProducts() as $product) {
             $article = $this->legacyStructConverter->convertProductStruct($product);
+
             if (!empty($categoryId) && $categoryId != $this->sSYSTEM->sLanguageData[$this->sSYSTEM->sLanguage]["parentID"]) {
                 $article["linkDetails"] .= "&sCategory=$categoryId";
             }
@@ -3820,6 +3821,11 @@ class sArticles
                     $averages[$product->getNumber()]
                 );
             }
+
+            if ($this->config->get('useShortDescriptionInListing') && strlen($article['description']) > 5) {
+                $article["description_long"] = $article['description'];
+            }
+            $article['description_long'] = $this->sOptimizeText($article['description_long']);
 
             $articles[] = $article;
         }

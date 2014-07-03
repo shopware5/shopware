@@ -2,20 +2,19 @@
 
 namespace Shopware\Tests\Service\Price;
 
-use Shopware\Service\PriceCalculation;
-use Shopware\Struct\Context;
-use Shopware\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Tests\Service\Helper;
 
 class PriceCalculationTest extends \Enlight_Components_Test_TestCase
 {
     /**
-     * @var \Shopware\Tests\Service\Helper
+     * @var Helper
      */
     private $helper;
 
     protected function setUp()
     {
-        $this->helper = new \Shopware\Tests\Service\Helper();
+        $this->helper = new Helper();
         parent::setUp();
     }
 
@@ -29,7 +28,7 @@ class PriceCalculationTest extends \Enlight_Components_Test_TestCase
      * @param bool $displayGross
      * @param int $discount
      * @param int $currencyFactor
-     * @return Context
+     * @return StoreFrontBundle\Struct\Context
      */
     private function getContext($displayGross = true, $discount = 20, $currencyFactor = 1)
     {
@@ -60,7 +59,7 @@ class PriceCalculationTest extends \Enlight_Components_Test_TestCase
         );
     }
 
-    private function getProduct($number, Context $context)
+    private function getProduct($number, StoreFrontBundle\Struct\Context $context)
     {
         return $this->helper->getSimpleProduct(
             $number,
@@ -219,15 +218,15 @@ class PriceCalculationTest extends \Enlight_Components_Test_TestCase
 
 
         /*
-INPUT	TAX	        DISCOUNT	CURRENCY	UNIT
-100	    100.00000	85.00000	122.4	    244.80000
-110	    110.00000	93.50000	134.64
+        INPUT	TAX	        DISCOUNT	CURRENCY	UNIT
+        100	    100.00000	85.00000	122.4	    244.80000
+        110	    110.00000	93.50000	134.64
 
-75	    75.00000	63.75000	91.8	    183.60000
-85	    85.00000	72.25000	104.04
+        75	    75.00000	63.75000	91.8	    183.60000
+        85	    85.00000	72.25000	104.04
 
-50	    50.00000	42.50000	61.2	    122.40000
-60	    60.00000	51.00000	73.44
+        50	    50.00000	42.50000	61.2	    122.40000
+        60	    60.00000	51.00000	73.44
         */
 
         $cheapest = $listProduct->getCheapestPrice();
