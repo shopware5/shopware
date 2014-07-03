@@ -36,7 +36,7 @@ interface ProductPropertyGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductPropertyGatewayInterface::get()
      *
-     * @param Struct\Product[] $products
+     * @param Struct\ListProduct[] $products
      * @param Struct\Context $context
      * @return Struct\Property\Set[] Indexed by the product order number
      */
