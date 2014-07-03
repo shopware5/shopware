@@ -68,6 +68,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         $config['filter']['propertyGroup'] = $this->Request()->sFilter_propertygroup;
         $config['filter']['propertygroup'] = $config['filter']['propertyGroup'];
         $config['sFilter']['propertygroup']= $config['filter']['propertyGroup'];
+        $config['sTemplate'] = $this->Request()->sTemplate;
 
         $config['sortSearchResultsBy'] = $config["sSort"] = (int) $this->Request()->sSort;
         $config['sortSearchResultsByDirection'] = (int) $this->Request()->sOrder;
@@ -271,6 +272,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         $links['sPage'] = $links['sLink'];
         $links['sPerPage'] = $links['sLink'];
         $links['sSort'] = $links['sLink'];
+        $links['sTemplate'] = $links['sTemplate'];
 
         $links['sFilter']['category'] = $links['sLink'];
         $links['sFilter']['supplier'] = $links['sLink'];

@@ -1,74 +1,75 @@
 {extends file='frontend/index/index.tpl'}
 
-{* Sidebar left *}
-{block name='frontend_index_content_left'}
-	{if $sSearchResults.sArticles}
-		{include file='frontend/search/fuzzy_left.tpl'}
-	{else}
-		{$smarty.block.parent}
-	{/if}
+{* Breadcrumb *}
+{block name='frontend_index_start' prepend}
+    {$sBreadcrumb = [['name'=>"{s name="SearchResultsFor"}Suchergebnis für {$sRequests.sSearch}{/s}", 'link'=>{url}]]}
 {/block}
+
+
+{* Sidebar left *}
+{block name='frontend_index_content_left'}{/block}
 
 {* Main content *}
 {block name='frontend_index_content'}
-<div class="grid_13 fuzzy" id="center">
-	{if !$sSearchResults.sArticles}
-		{if $sRequests.sSearchOrginal}
-			{* No results found *}
-			{block name='frontend_search_fuzzy_empty'}
+<div class="content search--results">
 
+    {if !$sSearchResults.sArticles}
+        {if $sRequests.sSearchOrginal}
+            {* No results found *}
+            {block name='frontend_search_fuzzy_empty'}
+                <div class="alert is--error is--rounded">
+                    <div class="alert--icon">
+                        <i class="icon--element icon--info"></i>
+                    </div>
+                    <div class="alert--content">
+                        {s name='SearchFuzzyHeadlineEmpty'}{/s}
+                    </div>
+                </div>
+            {/block}
+        {else}
 
-				<div class="alert is--error is--rounded">
-					<div class="alert--icon">
-						<i class="icon--element icon--cross"></i>
-					</div>
-					<div class="alert--content">
-						{s name='SearchFuzzyHeadlineEmpty'}{/s}
-					</div>
-				</div>
-        	{/block}
-		{else}
-			{* Given search term is too short *}
-			{block name='frontend_search_fuzzy_shortterm'}
-				<div class="alert is--error is--rounded">
-					<div class="alert--icon">
-						<i class="icon--element icon--cross"></i>
-					</div>
-					<div class="alert--content">
-						{s name='SearchFuzzyInfoShortTerm'}{/s}
-					</div>
-				</div>
-        	{/block}
-		{/if}
-	{/if}
-	{if $sSearchResults.sArticles}
-		{block name='frontend_search_fuzzy_result'}
-		
-		<div class="result_box">
-			{s name='SearchHeadline'}Zu "{$sRequests.sSearch}" wurden {$sSearchResults.sArticlesCount} Artikel gefunden!{/s}
-		</div>
-		
-		{include file='frontend/search/filter_category.tpl'}
-		
-		<div class="grid_13 first last">
-			
-			{* Listing Actions *}
-			{include file='frontend/search/paging.tpl' sTemplate='listing'}
-			
-			{* Actual listing *}
-			<div class="listing" id="listing">
-				{foreach from=$sSearchResults.sArticles item=sArticle key=key name=list}
-					{include file='frontend/listing/box_article.tpl' sTemplate='listing'}
-				{/foreach}
-				<div class="clear">&nbsp;</div>
-			</div>
-			
-			{* Pagination *}
-			{include file='./frontend/search/paging.tpl'}
-			
-		</div>
-		{/block}
-		
-	{/if}
+            {* Given search term is too short *}
+            {block name='frontend_search_fuzzy_shortterm'}
+                <div class="alert is--error is--rounded">
+                    <div class="alert--icon">
+                        <i class="icon--element icon--info"></i>
+                    </div>
+                    <div class="alert--content">
+                        {s name='SearchFuzzyInfoShortTerm'}{/s}
+                    </div>
+                </div>
+            {/block}
+        {/if}
+    {/if}
+
+    {if $sSearchResults.sArticles}
+        {* Results count headline *}
+        {block name='fuzzy_search_headline'}
+            <h1>{s name='SearchHeadline'}Zu "{$sRequests.sSearch}" wurden {$sSearchResults.sArticlesCount} Artikel gefunden{/s}</h1>
+        {/block}
+
+        {* Search reults filter elements *}
+        {block name="fuzzy_search_filter"}
+            {include file='frontend/search/fuzzy-filter.tpl'}
+        {/block}
+
+        {* Sorting and changing layout *}
+        {block name="fuzzy_search_actions"}
+            <div class="results--paging panel">
+                {include file='frontend/search/paging.tpl' sTemplate=$sTemplate sAdvancedActions=1}
+            </div>
+        {/block}
+
+        {* Search results listing *}
+        {block name="fuzzy_search_results"}
+            <div class="results--articles panel">
+                <ul class="listing listing--{if $sRequests.sTemplate eq 'list'}listing-2col{else}listing{/if}">
+                    {foreach $sSearchResults.sArticles as $key => $sArticle}
+                        {include file='frontend/listing/box_article.tpl'}
+                    {/foreach}
+                </ul>
+            <div>
+        {/block}
+    {/if}
 </div>
 {/block}

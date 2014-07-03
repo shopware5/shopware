@@ -1,0 +1,67 @@
+.search--results {
+
+    h1 {
+        text-align: center;
+    }
+
+    .alert {
+        .unitize(30, 16, margin-top);
+    }
+
+    // Filter search results by category
+    .results--filter {
+
+        .filter--category {
+            .unitize-padding(20, 20);
+            width: 100%;
+            display: block;
+
+            .category--list { width: 100% }
+            .supplier--list { width: 100% }
+            .price--list { width: 100% }
+
+            .block ul {
+                list-style: none;
+            }
+
+            .block h3 {
+                margin-top: 0;
+            }
+        }
+    }
+
+    // Paginator, table view and sort switcher
+    .results--paging {
+        .unitize(20, 16, margin-top)
+    }
+
+    .results--articles {
+        .unitize(25, 16, margin-top);
+        width: 100%;
+
+    }
+}
+
+@media screen and (min-width: @tabletViewportWidth) {
+    .search--results {
+        .results--filter {
+            .filter--category {
+                .category--list { width: 50% }
+                .supplier--list { width: 50% }
+                .price--list { width: 100% }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: @tabletLandscapeViewportWidth) {
+    .search--results {
+        .results--filter {
+            .filter--category {
+                .category--list { width: 33% }
+                .supplier--list { width: 33% }
+                .price--list { width: 33% }
+            }
+        }
+    }
+}
