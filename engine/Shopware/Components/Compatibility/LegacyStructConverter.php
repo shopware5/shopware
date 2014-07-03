@@ -64,10 +64,95 @@ class LegacyStructConverter
             'user_selected' => $group->isSelected()
         );
     }
-
-    public function convertFullProduct(StoreFrontBundle\Struct\Product $product)
+    /**
+     * Converts the passed ListProduct struct to a shopware 3-4 array structure.
+     *
+     * @param StoreFrontBundle\Struct\ListProduct $product
+     * @return array
+     */
+    public function convertListProductStruct(StoreFrontBundle\Struct\ListProduct $product)
     {
-        $data = $this->convertListProductStruct($product);
+        if (!$product instanceof StoreFrontBundle\Struct\ListProduct) {
+            return array();
+        }
+
+        //required for backward compatibility
+        if (!$product->getCheapestPrice()) {
+            $cheapestPrice = $product->getPrices();
+            $cheapestPrice = array_shift($cheapestPrice);
+        } else {
+            $cheapestPrice = $product->getCheapestPrice();
+        }
+
+        $unit = $cheapestPrice->getUnit();
+
+        $price = $this->sFormatPrice(
+            $cheapestPrice->getCalculatedPrice()
+        );
+
+        $pseudoPrice = $this->sFormatPrice(
+            $cheapestPrice->getCalculatedPseudoPrice()
+        );
+
+        $referencePrice = $this->sFormatPrice(
+            $cheapestPrice->getCalculatedReferencePrice()
+        );
+
+        $promotion = $this->getListProductData($product);
+
+        $promotion = array_merge(
+            $promotion,
+            array(
+                'price' => $price,
+                'pseudoprice' => $pseudoPrice,
+                'pricegroup' => $cheapestPrice->getCustomerGroup()->getKey(),
+            )
+        );
+
+        if ($referencePrice) {
+            $promotion['referenceprice'] = $referencePrice;
+        }
+
+        if ($product->getPriceGroup()) {
+            $promotion['pricegroupActive'] = true;
+            $promotion['pricegroupID'] = $product->getPriceGroup()->getId();
+        }
+
+        if (count($product->getPrices()) > 1) {
+            $promotion['priceStartingFrom'] = $price;
+        }
+
+        if ($cheapestPrice->getCalculatedPseudoPrice()) {
+            $discPseudo = $cheapestPrice->getCalculatedPseudoPrice();
+            $discPrice = $cheapestPrice->getCalculatedPrice();
+
+            $discount = round(($discPrice / $discPseudo * 100) - 100, 2) * -1;
+            $promotion["pseudopricePercent"] = array(
+                "int" => round($discount, 0),
+                "float" => $discount
+            );
+        }
+
+        if ($unit) {
+            $promotion = array_merge($promotion, $this->convertUnitStruct($unit));
+        }
+
+        if ($product->getCover()) {
+            $promotion['image'] = $this->convertMediaStruct($product->getCover());
+        }
+
+        $promotion["linkBasket"] = $this->config->get('baseFile') .
+            "?sViewport=basket&sAdd=" . $promotion["ordernumber"];
+
+        $promotion["linkDetails"] = $this->config->get('baseFile') .
+            "?sViewport=detail&sArticle=" . $promotion["articleID"];
+
+        return $promotion;
+    }
+
+    public function convertProductStruct(StoreFrontBundle\Struct\Product $product)
+    {
+        $data = $this->getListProductData($product);
 
         if ($product->getUnit()) {
             $data = array_merge($data, $this->convertUnitStruct($product->getUnit()));
@@ -171,12 +256,12 @@ class LegacyStructConverter
 
         $data['sRelatedArticles'] = array();
         foreach ($product->getRelatedProducts() as $relatedProduct) {
-            $data['sRelatedArticles'][] = $this->convertProductStruct($relatedProduct);
+            $data['sRelatedArticles'][] = $this->convertListProductStruct($relatedProduct);
         }
 
         $data['sSimilarArticles'] = array();
         foreach ($product->getSimilarProducts() as $similarProduct) {
-            $data['sSimilarArticles'][] = $this->convertProductStruct($similarProduct);
+            $data['sSimilarArticles'][] = $this->convertListProductStruct($similarProduct);
         }
 
         return $data;
@@ -300,169 +385,6 @@ class LegacyStructConverter
         return $this->config->get('baseFile') .
         "sViewport=supplier&sSupplier=" . $manufacturer->getId() .
         "&sSearchText=" . urlencode($manufacturer->getName());
-    }
-
-    /**
-     * Converts the passed ListProduct struct to a shopware 3-4 array structure.
-     *
-     * @param StoreFrontBundle\Struct\ListProduct $product
-     * @return array
-     */
-    public function convertProductStruct(StoreFrontBundle\Struct\ListProduct $product)
-    {
-        if (!$product instanceof StoreFrontBundle\Struct\ListProduct) {
-            return array();
-        }
-
-        //required for backward compatibility
-        if (!$product->getCheapestPrice()) {
-            $cheapestPrice = $product->getPrices();
-            $cheapestPrice = array_shift($cheapestPrice);
-        } else {
-            $cheapestPrice = $product->getCheapestPrice();
-        }
-
-        $unit = $cheapestPrice->getUnit();
-
-        $price = $this->sFormatPrice(
-            $cheapestPrice->getCalculatedPrice()
-        );
-
-        $pseudoPrice = $this->sFormatPrice(
-            $cheapestPrice->getCalculatedPseudoPrice()
-        );
-
-        $referencePrice = $this->sFormatPrice(
-            $cheapestPrice->getCalculatedReferencePrice()
-        );
-
-        $promotion = $this->convertListProductStruct($product);
-
-        $promotion = array_merge(
-            $promotion,
-            array(
-                'price' => $price,
-                'pseudoprice' => $pseudoPrice,
-                'pricegroup' => $cheapestPrice->getCustomerGroup()->getKey(),
-            )
-        );
-
-        if ($referencePrice) {
-            $promotion['referenceprice'] = $referencePrice;
-        }
-
-        if ($product->getPriceGroup()) {
-            $promotion['pricegroupActive'] = true;
-            $promotion['pricegroupID'] = $product->getPriceGroup()->getId();
-        }
-
-        if (count($product->getPrices()) > 1) {
-            $promotion['priceStartingFrom'] = $price;
-        }
-
-        if ($cheapestPrice->getCalculatedPseudoPrice()) {
-            $discPseudo = $cheapestPrice->getCalculatedPseudoPrice();
-            $discPrice = $cheapestPrice->getCalculatedPrice();
-
-            $discount = round(($discPrice / $discPseudo * 100) - 100, 2) * -1;
-            $promotion["pseudopricePercent"] = array(
-                "int" => round($discount, 0),
-                "float" => $discount
-            );
-        }
-
-        if ($unit) {
-            $promotion = array_merge($promotion, $this->convertUnitStruct($unit));
-        }
-
-        if ($product->getCover()) {
-            $promotion['image'] = $this->convertMediaStruct($product->getCover());
-        }
-
-        $promotion["linkBasket"] = $this->config->get('baseFile') .
-            "?sViewport=basket&sAdd=" . $promotion["ordernumber"];
-
-        $promotion["linkDetails"] = $this->config->get('baseFile') .
-            "?sViewport=detail&sArticle=" . $promotion["articleID"];
-
-        return $promotion;
-    }
-
-    public function convertListProductStruct(StoreFrontBundle\Struct\ListProduct $product)
-    {
-        $data = array(
-            'articleID' => $product->getId(),
-            'articleDetailsID' => $product->getVariantId(),
-            'ordernumber' => $product->getNumber(),
-            'highlight' => $product->highlight(),
-            'description' => $product->getShortDescription(),
-            'description_long' => $product->getLongDescription(),
-            'esd' => $product->hasEsd(),
-            'articleName' => $product->getName(),
-            'taxID' => $product->getTax()->getId(),
-            'tax' => $product->getTax()->getTax(),
-            'instock' => $product->getStock(),
-            'weight' => $product->getWeight(),
-            'shippingtime' => $product->getShippingTime(),
-            'pricegroupActive' => false,
-            'pricegroupID' => null,
-            'length' => $product->getLength(),
-            'height' => $product->getHeight(),
-            'width' => $product->getWidth(),
-            'laststock' => $product->isCloseouts(),
-            'additionaltext' => $product->getAdditional(),
-            'datum' => $product->getCreatedAt(),
-            'sales' => $product->getSales(),
-            'filtergroupID' => null,
-            'priceStartingFrom' => null,
-            'pseudopricePercent' => null,
-            //flag inside mini product
-            'sVariantArticle' => null,
-            'sConfigurator' => $product->hasConfigurator(),
-            //only used for full products
-            'metaTitle' => $product->getMetaTitle(),
-            'shippingfree' => $product->isShippingFree(),
-            'suppliernumber' => $product->getManufacturerNumber(),
-            'notification' => $product->allowsNotification(),
-            'ean' => $product->getEan(),
-            'keywords' => $product->getKeywords(),
-            'sReleasedate' => $product->getReleaseDate(),
-        );
-
-        if ($product->hasAttribute('core')) {
-            $data = array_merge($data, $product->getAttribute('core')->toArray());
-        }
-
-        $data['attributes'] = $product->getAttributes();
-
-        if ($product->getManufacturer()) {
-            $data = array_merge(
-                $data,
-                array(
-                    'supplierName' => $product->getManufacturer()->getName(),
-                    'supplierImg' => $product->getManufacturer()->getCoverFile(),
-                    'supplierID' => $product->getManufacturer()->getId(),
-                    'supplierDescription' => $product->getManufacturer()->getDescription(),
-                )
-            );
-
-            $data['supplier_attributes'] = $product->getManufacturer()->getAttributes();
-        }
-
-        if ($product->hasAttribute('marketing')) {
-            /**@var $marketing StoreFrontBundle\Struct\Product\MarketingAttribute */
-            $marketing = $product->getAttribute('marketing');
-            $promotion['newArticle'] = $marketing->isNew();
-            $promotion['sUpcoming'] = $marketing->comingSoon();
-            $promotion['topseller'] = $marketing->isTopSeller();
-        }
-
-        $today = new \DateTime();
-        if ($product->getReleaseDate() && $product->getReleaseDate() > $today) {
-            $promotion['sReleasedate'] = $product->getReleaseDate()->format('Y-m-d');
-        }
-
-        return $data;
     }
 
     public function getFlatPropertyArray(array $propertySet)
@@ -722,4 +644,89 @@ class LegacyStructConverter
 
         return round($money_str, 2);
     }
+
+    /**
+     * Internal function which converts only the data of a list product.
+     * Associated data won't converted.
+     *
+     * @param StoreFrontBundle\Struct\ListProduct $product
+     * @return array
+     */
+    private function getListProductData(StoreFrontBundle\Struct\ListProduct $product)
+    {
+        $data = array(
+            'articleID' => $product->getId(),
+            'articleDetailsID' => $product->getVariantId(),
+            'ordernumber' => $product->getNumber(),
+            'highlight' => $product->highlight(),
+            'description' => $product->getShortDescription(),
+            'description_long' => $product->getLongDescription(),
+            'esd' => $product->hasEsd(),
+            'articleName' => $product->getName(),
+            'taxID' => $product->getTax()->getId(),
+            'tax' => $product->getTax()->getTax(),
+            'instock' => $product->getStock(),
+            'weight' => $product->getWeight(),
+            'shippingtime' => $product->getShippingTime(),
+            'pricegroupActive' => false,
+            'pricegroupID' => null,
+            'length' => $product->getLength(),
+            'height' => $product->getHeight(),
+            'width' => $product->getWidth(),
+            'laststock' => $product->isCloseouts(),
+            'additionaltext' => $product->getAdditional(),
+            'datum' => $product->getCreatedAt(),
+            'sales' => $product->getSales(),
+            'filtergroupID' => null,
+            'priceStartingFrom' => null,
+            'pseudopricePercent' => null,
+            //flag inside mini product
+            'sVariantArticle' => null,
+            'sConfigurator' => $product->hasConfigurator(),
+            //only used for full products
+            'metaTitle' => $product->getMetaTitle(),
+            'shippingfree' => $product->isShippingFree(),
+            'suppliernumber' => $product->getManufacturerNumber(),
+            'notification' => $product->allowsNotification(),
+            'ean' => $product->getEan(),
+            'keywords' => $product->getKeywords(),
+            'sReleasedate' => $product->getReleaseDate(),
+        );
+
+        if ($product->hasAttribute('core')) {
+            $data = array_merge($data, $product->getAttribute('core')->toArray());
+        }
+
+        $data['attributes'] = $product->getAttributes();
+
+        if ($product->getManufacturer()) {
+            $data = array_merge(
+                $data,
+                array(
+                    'supplierName' => $product->getManufacturer()->getName(),
+                    'supplierImg' => $product->getManufacturer()->getCoverFile(),
+                    'supplierID' => $product->getManufacturer()->getId(),
+                    'supplierDescription' => $product->getManufacturer()->getDescription(),
+                )
+            );
+
+            $data['supplier_attributes'] = $product->getManufacturer()->getAttributes();
+        }
+
+        if ($product->hasAttribute('marketing')) {
+            /**@var $marketing StoreFrontBundle\Struct\Product\MarketingAttribute */
+            $marketing = $product->getAttribute('marketing');
+            $promotion['newArticle'] = $marketing->isNew();
+            $promotion['sUpcoming'] = $marketing->comingSoon();
+            $promotion['topseller'] = $marketing->isTopSeller();
+        }
+
+        $today = new \DateTime();
+        if ($product->getReleaseDate() && $product->getReleaseDate() > $today) {
+            $promotion['sReleasedate'] = $product->getReleaseDate()->format('Y-m-d');
+        }
+
+        return $data;
+    }
+
 }
