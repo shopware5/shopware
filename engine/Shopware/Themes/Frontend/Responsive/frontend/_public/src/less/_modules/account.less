@@ -1,5 +1,10 @@
-.account--content {
+.account--content,
+.payment_logo_debit{
     .clearfix();
+}
+
+.payment--content {
+  .unitize-padding(10, 10);
 }
 
 .account--menu {
@@ -45,10 +50,12 @@
 }
 
 // Change Address
-.account--change-billing .register--content,
-.account--change-shipping .register--content {
+.account--change-billing,
+.account--change-shipping {
+  &.register--content {
     display: block;
     width: 100%
+  }
 }
 
 .account--billing-address,
@@ -222,7 +229,7 @@
         .shop-sites--headline,
         .shop-sites--navigation,
         .logo--trusted-shops {
-            display: block;
+            display: none;
         }
 
         &.is--act-logout,
@@ -474,10 +481,4 @@
             .unitize-width(320);
         }
     }
-}
-
-@media screen and(min-width: @desktopViewportWidth) {
-
-
-
 }
