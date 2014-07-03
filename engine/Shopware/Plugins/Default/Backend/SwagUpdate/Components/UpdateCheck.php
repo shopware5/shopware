@@ -106,7 +106,7 @@ class UpdateCheck
         $url = $this->apiEndpoint . '/release/update';
 
         $client = new \Zend_Http_Client($url, array(
-            'timeout' => 1,
+            'timeout'   => 5,
             'useragent' => 'Shopware/' . \Shopware::VERSION
         ));
 

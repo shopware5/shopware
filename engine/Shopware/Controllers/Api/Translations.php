@@ -103,7 +103,6 @@ class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Res
         );
 
         $this->View()->assign(array('success' => true, 'data' => $data));
-        $this->Response()->setHeader('Location', $location);
     }
 
     /**

@@ -78,7 +78,7 @@ return array(
     'step6_admin_password_repeat' => 'Admin Passwort Wdh. (Standard: demo):', // Admin password repeat
     // Step 7
     'step7_title' => 'Basis-Einrichtung abgeschlossen', // Finished
-    'step7_info' => 'Die Installation wurde erfolgreich abgeschlossen.<br /><br />Aus Sicherheitsgründen sollten Sie den Installer (/install) nun via FTP vom Server löschen.', // The installation was finished successful
+    'step7_info' => 'Die Installation wurde erfolgreich abgeschlossen.', // The installation was finished successful
     'step7_frontend' => 'Zum Shop-Frontend', // Open shop frontend
     'step7_backend' => 'Zum Shop-Backend (Administration)', // Open shop backend
 

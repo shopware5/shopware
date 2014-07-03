@@ -41,7 +41,18 @@ class FileSystem
     {
         $errors = array();
 
-        if (!is_dir($directory) || !is_writable($directory)) {
+        if (!is_dir($directory)) {
+            $errors[] = $directory;
+
+            return $errors;
+        }
+
+        if ($fixPermission && !is_writable($directory)) {
+            $fileInfo = new \SplFileInfo($directory);
+            $this->fixDirectoryPermission($fileInfo);
+        }
+
+        if (!is_writable($directory)) {
             $errors[] = $directory;
 
             return $errors;
@@ -96,11 +107,11 @@ class FileSystem
 
         // set owner-bit to writable
         $newPermission[1] = '7';
-        // set owner-bit to writable
+        // set group-bit to writable
         $newPermission[2] = '7';
 
         $newPermission = octdec($newPermission);
-        @chmod($fileInfo->getPathname(), $newPermission);
+        chmod($fileInfo->getPathname(), $newPermission);
         clearstatcache(false, $fileInfo->getPathname());
     }
 
@@ -120,11 +131,11 @@ class FileSystem
 
         // set owner-bit to writable
         $newPermission[1] = '6';
-        // set owner-bit to writable
+        // set group-bit to writable
         $newPermission[2] = '6';
 
         $newPermission = octdec($newPermission);
-        @chmod($fileInfo->getPathname(), $newPermission);
+        chmod($fileInfo->getPathname(), $newPermission);
         clearstatcache(false, $fileInfo->getPathname());
     }
 }

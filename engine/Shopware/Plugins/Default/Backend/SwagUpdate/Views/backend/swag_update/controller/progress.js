@@ -139,9 +139,19 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Progress', {
                     text: "{s name=progress/timeOut}The server could not handle the request. Please choose a smaller batch size.{/s}"
                 });
 
-                me.onProcessFinish(win);
+                me.onProcessFailure(win);
             }
         });
+    },
+
+    /**
+     * @param win
+     */
+    onProcessFailure: function (win) {
+        var me = this;
+
+        win.cancelButton.hide();
+        win.closeButton.enable();
     },
 
     /**

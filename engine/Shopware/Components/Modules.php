@@ -30,8 +30,7 @@
 class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
 {
     /**
-     * Name of system class
-     * @var string
+     * @var sSystem
      */
     protected $system;
 
@@ -40,15 +39,6 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
      * @var array
      */
     protected $modules_container = array();
-
-    /**
-     * Initiate class parameters
-     * @deprecated 4.2
-     * @return void
-     */
-    public function init()
-    {
-    }
 
     /**
      * Set class property
@@ -64,24 +54,30 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
      * Possible values for $name - sBasket, sAdmin etc.
      * @param $name
      */
-    public function loadModule($name)
+    private function loadModule($name)
     {
-        if (!isset($this->modules_container[$name])) {
-            $this->modules_container[$name] = null;
-            $name = basename($name);
-
-            Shopware()->Hooks()->setAlias($name, $name);
-            $proxy = Shopware()->Hooks()->getProxy($name);
-            $this->modules_container[$name] = new $proxy;
-            if (property_exists($name, 'sSYSTEM')) {
-                $this->modules_container[$name]->sSYSTEM = $this->system;
-            }
+        if (isset($this->modules_container[$name])) {
+            return;
         }
+
+        $this->modules_container[$name] = null;
+        $name = basename($name);
+
+        if ($name == 'sSystem') {
+            $this->modules_container[$name] = $this->system;
+            return;
+        }
+
+        Shopware()->Hooks()->setAlias($name, $name);
+        $proxy = Shopware()->Hooks()->getProxy($name);
+        $this->modules_container[$name] = new $proxy;
+        $this->modules_container[$name]->sSYSTEM = $this->system;
     }
 
     /**
      * Reformat module name and return reference to module
-     * @param $name
+     *
+     * @param string $name
      * @return mixed
      */
     public function getModule($name)
