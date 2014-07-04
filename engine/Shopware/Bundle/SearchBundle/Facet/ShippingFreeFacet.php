@@ -46,7 +46,7 @@ class ShippingFreeFacet implements FacetInterface
      */
     public function getName()
     {
-        return 'shipping_free';
+        return 'shipping_free_facet';
     }
 
     /**

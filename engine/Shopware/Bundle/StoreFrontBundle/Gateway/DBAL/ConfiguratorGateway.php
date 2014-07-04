@@ -77,16 +77,25 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
     public function get(Struct\ListProduct $product, Struct\Context $context, array $selection)
     {
         $query = $this->getQuery();
+
         $mediaQuery = $this->getMediaQuery();
+
+        $configuratorType = $this->getConfiguratorType($product);
 
         $query->addSelect($this->fieldHelper->getConfiguratorSetFields())
             ->addSelect($this->fieldHelper->getConfiguratorGroupFields())
             ->addSelect($this->fieldHelper->getConfiguratorOptionFields())
         ;
 
-        $query->addSelect('('. $mediaQuery->getSQL() .') as __configuratorOption_media');
+        switch ($configuratorType) {
+            case 1:
+                $this->addSelectionCondition($query, $selection);
+                break;
 
-        $this->addSelectionCondition($query, $selection);
+            case 2:
+                $query->addSelect('('. $mediaQuery->getSQL() .') as __configuratorOption_media');
+                break;
+        }
 
         $this->fieldHelper->addConfiguratorTranslation(
             $query,
@@ -117,7 +126,31 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
             }
         }
 
-        return $this->configuratorHydrator->hydrate($data, $selection);
+        $configurator = $this->configuratorHydrator->hydrate($data, $selection);
+
+        return $configurator;
+    }
+
+    private function getConfiguratorType(Struct\ListProduct $product)
+    {
+        $query = $this->entityManager->getDBALQueryBuilder();
+
+        $query->select(array('configuratorSet.type'))
+            ->from('s_article_configurator_sets', 'configuratorSet')
+            ->innerJoin(
+                'configuratorSet',
+                's_articles',
+                'product',
+                'configuratorSet.id = product.configurator_set_id'
+            );
+
+        $query->where('product.id = :id')
+            ->setParameter(':id', $product->getId());
+
+        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $query->execute();
+
+        return $statement->fetch(\PDO::FETCH_COLUMN);
     }
 
     private function getMedia(array $ids)

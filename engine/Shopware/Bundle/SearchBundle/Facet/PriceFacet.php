@@ -49,7 +49,7 @@ class PriceFacet implements FacetInterface
 
     public function getName()
     {
-        return 'price';
+        return 'price_facet';
     }
 
     /**

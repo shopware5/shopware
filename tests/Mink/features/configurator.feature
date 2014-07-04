@@ -1,17 +1,6 @@
 @configurator
 Feature: Configurator articles
 
-	Scenario: I can choose a table configurator article
-		Given I am on the detail page for article 204
-		Then  I should see "Artikel mit Tabellenkonfigurator"
-
-		When  I select "SW10203.13" from "sAdd"
-		Then  I put the article "2 Stück" times into the basket
-		Then  the total sum should be "31,90 €"
-		And   I should see "Artikel mit Tabellenkonfigurator pink / L"
-		And   I should see "SW10203.13"
-
-
 	Scenario Outline: I can choose a standard configurator article
 		Given I am on the detail page for article 202
 		Then  I should see "Artikel mit Standardkonfigurator"
@@ -78,9 +67,21 @@ Feature: Configurator articles
 		And   I press "recalc"
 		When  I select <size> from "group[7]"
 		And   I press "recalc"
-		Then  I should see "Diese Auswahl steht nicht zur Verfügung!"
+		Then  I should see "nicht zur Verfügung!"
 
 	Examples:
 		| article | name                               | color  | size    |
 		| 202     | "Artikel mit Standardkonfigurator" | "blau" | "36"    |
-		| 203     | "Artikel mit Auswahlkonfigurator"  | "blau" | "41/42" |
+
+
+  Scenario Outline: I can't select a disabled configurator variant
+    Given I am on the detail page for article <article>
+    Then  I should see <name>
+
+    When  I select <color> from "group[6]"
+    And   I press "recalc"
+    Then  I can not select <size> from "group[7]"
+
+  Examples:
+    | article | name                               | color  | size    |
+    | 203     | "Artikel mit Auswahlkonfigurator"  | "blau" | "41/42" |

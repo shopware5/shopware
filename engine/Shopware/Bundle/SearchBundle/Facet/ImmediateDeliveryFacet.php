@@ -46,7 +46,7 @@ class ImmediateDeliveryFacet implements FacetInterface
      */
     public function getName()
     {
-        return 'immediate_delivery';
+        return 'immediate_delivery_facet';
     }
 
     /**
@@ -80,6 +80,4 @@ class ImmediateDeliveryFacet implements FacetInterface
     {
         $this->total = $total;
     }
-
-
 }

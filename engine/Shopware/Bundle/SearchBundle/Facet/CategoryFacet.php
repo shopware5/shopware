@@ -48,7 +48,7 @@ class CategoryFacet implements FacetInterface
      */
     public function getName()
     {
-        return 'category';
+        return 'category_facet';
     }
 
     /**
@@ -82,5 +82,4 @@ class CategoryFacet implements FacetInterface
     {
         $this->categories = $categories;
     }
-
 }

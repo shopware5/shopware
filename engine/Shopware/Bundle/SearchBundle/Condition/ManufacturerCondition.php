@@ -35,6 +35,9 @@ class ManufacturerCondition implements ConditionInterface
      */
     private $manufacturerIds;
 
+    /**
+     * @param array $manufacturerIds
+     */
     function __construct(array $manufacturerIds)
     {
         $this->manufacturerIds = $manufacturerIds;
