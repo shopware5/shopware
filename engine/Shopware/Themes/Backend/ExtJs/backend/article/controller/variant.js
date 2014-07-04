@@ -100,7 +100,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             variantRemove: '{s name=variant/failure/variant_removed}An error occurred while removing the article variant [0]:{/s}',
             variantsRemove: '{s name=variant/failure/variants_removed}The article variants removed{/s}',
             fieldsViolation: '{s name=variant/failure/fields_violation}The following fields are not valid:{/s}',
-            generateNumbers: '{s name=variant/failure/generate_number}An error occured while regenerate the order number:{/s}',
+            generateNumbers: '{s name=variant/failure/generate_number}An error occurred while regenerate the order number:{/s}'
         },
         messages: {
             tableConfigurator: '{s name=variant/message/notice}A table configurator can only have two active groups!{/s}',
@@ -1986,7 +1986,8 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         if (record.get('prices') === false &&
             record.get('basePrice') === false &&
             record.get('attributes') === false &&
-            record.get('settings') === false) {
+            record.get('settings') === false &&
+            record.get('translations') === false) {
             return;
         }
 

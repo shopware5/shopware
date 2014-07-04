@@ -103,12 +103,13 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Mapping', {
     snippets: {
         title: '{s name=variant/configurator/mapping/title}Take over master data{/s}',
         notice: '{s name=variant/configurator/mapping/notice}In this area you have the option to transfer selectable article information to the selected variant articles. If there is no selected variant article, the selected article information will be applied to all variant articles.{/s}',
-        attribute: '{s name=variant/configurator/mapping/attribute}Take over attribute configuration{/s}',
-        prices: '{s name=variant/configurator/mapping/prices}Take over price configuration{/s}',
-        basePrice: '{s name=variant/configurator/mapping/basePrice}Take over base price configuration{/s}',
-        settings: '{s name=variant/configurator/mapping/settings}Take over settings configuration{/s}',
+        attribute: '{s name=variant/configurator/mapping/attribute}Apply attribute configuration{/s}',
+        prices: '{s name=variant/configurator/mapping/prices}Apply price configuration{/s}',
+        basePrice: '{s name=variant/configurator/mapping/basePrice}Apply base price configuration{/s}',
+        settings: '{s name=variant/configurator/mapping/settings}Apply settings configuration{/s}',
+        translations: '{s name=variant/configurator/mapping/translations}Apply translations{/s}',
         save: '{s name=variant/configurator/mapping/save}Save{/s}',
-        cancel: '{s name=variant/configurator/mapping/cancel}Cancel{/s}',
+        cancel: '{s name=variant/configurator/mapping/cancel}Cancel{/s}'
     },
 
     /**
@@ -183,6 +184,9 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Mapping', {
         } , {
             name: 'attributes',
             fieldLabel: me.snippets.attribute
+        } , {
+            name: 'translations',
+            fieldLabel: me.snippets.translations
         }];
     },
 
