@@ -302,6 +302,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
             $facets[] = $handler->generateFacet($facet, $query, $criteria, $context);
         }
 
+
         return $facets;
     }
 

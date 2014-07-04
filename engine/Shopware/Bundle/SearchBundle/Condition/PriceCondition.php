@@ -31,7 +31,6 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
  */
 class PriceCondition implements ConditionInterface
 {
-
     /**
      * @var float
      */

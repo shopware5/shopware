@@ -56,6 +56,4 @@ class PropertyCondition implements ConditionInterface
     {
         return $this->valueIds;
     }
-
-
 }

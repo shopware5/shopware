@@ -48,7 +48,7 @@ class ManufacturerFacet implements FacetInterface
      */
     public function getName()
     {
-        return 'manufacturer';
+        return 'manufacturer_facet';
     }
 
     /**

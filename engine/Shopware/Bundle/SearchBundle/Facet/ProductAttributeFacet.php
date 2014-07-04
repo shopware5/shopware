@@ -69,7 +69,7 @@ class ProductAttributeFacet implements FacetInterface
      */
     public function getName()
     {
-        return 'product_attribute_' . $this->field;
+        return 'product_attribute_facet_' . $this->field;
     }
 
     /**

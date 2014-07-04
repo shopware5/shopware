@@ -2402,6 +2402,8 @@ class sArticles
             $configuration
         );
 
+        $type = $this->getConfiguratorType($productId);
+
         /**
          * Check if a variant should be loaded. And load the configuration for the variant for pre selection.
          *
@@ -2410,8 +2412,8 @@ class sArticles
          * 2. $number is equals to $productNumber (if the order number is invalid or inactive fallback to main variant)
          * 3. $configuration is empty (Customer hasn't not set an own configuration)
          */
-        if ($number && $number == $productNumber && empty($configuration)) {
-            $configuration = $this->getConfigurationByNumber($number);
+        if ($number && $number == $productNumber && empty($configuration) || $type == 0) {
+            $configuration = $this->getConfigurationByNumber($productNumber);
         }
 
         $categoryId = (int) $sCategoryID;
@@ -2424,12 +2426,24 @@ class sArticles
             $categoryId,
             $configuration
         );
-
+        
         if ($product) {
             $product = $this->legacyEventManager->fireArticleByIdEvents($product, $this);
         }
 
         return $product;
+    }
+
+    private function getConfiguratorType($productId)
+    {
+        return $this->db->fetchOne(
+            'SELECT type
+             FROM s_article_configurator_sets configuratorSet
+              INNER JOIN s_articles product
+                ON product.configurator_set_id = configuratorSet.id
+             WHERE product.id = ?',
+            array($productId)
+        );
     }
 
     /**

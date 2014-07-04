@@ -48,7 +48,7 @@ class PropertyFacet implements FacetInterface
      */
     public function getName()
     {
-        return 'manufacturer';
+        return 'property_facet';
     }
 
     /**

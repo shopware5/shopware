@@ -126,4 +126,29 @@ class Detail extends Page
             throw new ResponseTextException($message, $this->getSession());
         }
     }
+
+    public function canNotSelectConfiguratorOption($configuratorOption, $configuratorGroup)
+    {
+        $form = $this->find(
+            'css',
+            'form.config_select'
+        );
+
+        $group = $form->findField(
+            'group[7]'
+        );
+
+        $options = $group->findAll(
+            'css',
+            'option'
+        );
+
+        foreach($options as $option) {
+            if ($option->getText() == $configuratorOption) {
+                throw new Exception(
+                    sprintf('Configurator option %s founded but should not', $configuratorOption)
+                );
+            }
+        }
+    }
 }

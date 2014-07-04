@@ -48,5 +48,13 @@ class DetailContext extends SubContext
         $this->getPage('Detail')->checkEvaluations($average, $evaluations);
     }
 
+    /**
+     * @Then /^I can not select "([^"]*)" from "([^"]*)"$/
+     */
+    public function iCanNotSelectFrom($configuratorOption, $configuratorGroup)
+    {
+        $this->getPage('Detail')->canNotSelectConfiguratorOption($configuratorOption, $configuratorGroup);
+    }
+
 }
 
