@@ -8,6 +8,21 @@
 {block name='frontend_index_content'}
 	<div class="blog--content">
 
+		<div class="action--filter-btn">
+			<a href="#"
+			   class="filter--trigger btn btn--primary"
+			   data-collapseTarget=".action--filter-options"
+			   data-offcanvas="true"
+			   data-offCanvasSelector=".action--filter-options"
+			   data-closeButtonSelector=".filter--close-btn">
+				<i class="icon--filter"></i> {s name='ListingFilterButton'}Filter{/s}
+			</a>
+		</div>
+
+		{block name="frontend_blog_listing_sidebar"}
+			{include file='frontend/blog/listing_sidebar.tpl'}
+		{/block}
+
 		{* Banner *}
 		{block name='frontend_blog_index_banner'}
 			{include file="frontend/listing/banner.tpl"}
@@ -19,6 +34,3 @@
 		{/block}
 	</div>
 {/block}
-
-{* Hide sidebar left *}
-{block name='frontend_index_content_left'}{/block}

@@ -64,3 +64,126 @@
 
 
 }
+
+@media screen and(min-width: @tabletViewportWidth) {
+
+    .blog--content {
+
+	.listing--content {
+	    .unitize-margin(30, 0);
+	    margin-left: auto;
+	    margin-right: auto;
+	}
+
+	.hero--unit{
+	    .clearfix();
+	}
+
+	.vendor--info {
+	    .hero--image {
+		.unitize-margin(0, 20, 20, 0);
+		float: left;
+	    }
+
+	    .hero--text {
+		.unitize-margin(0, 0, 10, 0);
+	    }
+	}
+
+	.listing--actions {
+	    .unitize-margin(0, 0, 20, 0);
+	}
+
+	.action--sort {
+	    .unitize-width(220);
+	    display: inline-block;
+
+	    .sort--select {
+		.unitize-width(220);
+	    }
+	}
+
+	.action--change-layout {
+	    display: inline-block;
+	}
+
+	.action--filter-btn {
+	    .unitize-width(190);
+	    .unitize-margin(0, 20, 10, 0);
+	    float: left;
+
+	    .filter--trigger {
+		.unitize(24, 16, line-height);
+	    }
+	}
+
+	.action--filter-options {
+	    .unitize-padding(0, 0, 10, 0);
+	    display: none;
+	    width: auto;
+	    height: auto;
+	    overflow: visible;
+	    position: relative;
+	    border: 1px solid @borderColor;
+	    background: @primaryBackgroundColor;
+	    clear: both;
+
+	    .filter--close-btn {
+		display: none;
+	    }
+
+	    .filter--container {
+		.clearfix();
+		.unitize(10, 16, padding-top);
+		padding-left: 2%;
+	    }
+
+	    .filter--headline {
+		display: none;
+	    }
+
+	    .filter--group {
+		.unitize-height(38);
+		width: 31%;
+		margin: 0 2% 2% 0;
+		position: relative;
+		float: left;
+	    }
+
+	    .filter--header {
+		width: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 11;
+
+		&.is--active {
+		    z-index: 15;
+		}
+	    }
+
+	    .filter--content {
+		.unitize(38, 16, top);
+		width: 100%;
+		position: absolute;
+		left: 0;
+	    }
+	}
+    }
+
+}
+
+@media screen and (min-width: @tabletLandscapeViewportWidth) {}
+
+@media screen and(min-width: @desktopViewportWidth) {
+    .is--ctl-blog {
+	.sidebar-main {
+	    display: none;
+	}
+    }
+
+    .blog--content {
+
+    }
+
+}
