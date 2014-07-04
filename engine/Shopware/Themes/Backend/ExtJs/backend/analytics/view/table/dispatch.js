@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Dispatch', {
             }
         };
 
-        me.initStoreIndices('turnover', '{s name=general/turnover}Turnover{/s}', {
+        me.initStoreIndices('turnover', '{s name=general/turnover}Turnover{/s}: [0]', {
             xtype: 'numbercolumn',
             renderer: me.currencyRenderer
         });
@@ -54,6 +54,11 @@ Ext.define('Shopware.apps.Analytics.view.table.Dispatch', {
         me.callParent(arguments);
     },
 
+    /**
+     * Creates the grid columns
+     *
+     * @return [array] grid columns
+     */
     getColumns: function () {
         var me = this;
 
