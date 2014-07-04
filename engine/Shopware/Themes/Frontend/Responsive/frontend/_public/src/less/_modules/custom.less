@@ -6,18 +6,32 @@
 	.unitize(24, 16, margin-bottom);
     }
 
-    .content--custom {
-	&.panel--body {
-	    .unitize(0, 16, padding);
-	}
-    }
     .custom-page--tab-headline {
 	.unitize(12, 16, margin-top);
+    }
+
+    .content--custom {
+	&.panel--body {
+	    .unitize(20, 16, padding);
+	}
     }
 
     .is--active-parent {
 	display: block;
     }
+}
+
+@media screen and (min-width: @desktopViewportWidth) {
+
+    .custom-page--content {
+
+	.content--custom {
+	    &.panel--body {
+		.unitize(0, 16, padding);
+	    }
+	}
+    }
+
 }
 
 @media screen and (min-width: @desktopViewportWidth) {
