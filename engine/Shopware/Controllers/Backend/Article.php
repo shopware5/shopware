@@ -574,6 +574,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $this->duplicateArticleCustomerGroups($articleId, $newArticleId);
             $this->duplicateArticleRelated($articleId, $newArticleId);
             $this->duplicateArticleSimilar($articleId, $newArticleId);
+            $this->duplicateArticleTranslations($articleId, $newArticleId);
             $this->duplicateArticleDetails($articleId, $newArticleId, $mailDetailId);
             $this->duplicateArticleLinks($articleId, $newArticleId);
             $this->duplicateArticleImages($articleId, $newArticleId);
@@ -716,6 +717,52 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             Shopware()->Models()->persist($link);
         }
         Shopware()->Models()->flush();
+    }
+
+    /**
+     * Internal helper function to duplicate the article translations from the passed article
+     * to the new article.
+     * @param $articleId
+     * @param $newArticleId
+     */
+    protected function duplicateArticleTranslations($articleId, $newArticleId)
+    {
+        $coreTranslations = Shopware()->Db()->fetchAll(
+            'SELECT * FROM s_core_translations
+            WHERE objecttype = \'article\'
+            AND objectkey = :objectkey',
+            array(
+                'objectkey' => $articleId
+            )
+        );
+
+        foreach ($coreTranslations as $coreTranslation) {
+            unset($coreTranslation['id']);
+            $coreTranslation['objectkey'] = $newArticleId;
+
+            Shopware()->Db()->insert(
+                's_core_translations',
+                $coreTranslation
+            );
+        }
+
+        $articleTranslations = Shopware()->Db()->fetchAll(
+            'SELECT * FROM s_articles_translations
+            WHERE articleID = :articleID',
+            array(
+                'articleID' => $articleId
+            )
+        );
+
+        foreach ($articleTranslations as $articleTranslation) {
+            unset($articleTranslation['id']);
+            $articleTranslation['articleID'] = $newArticleId;
+
+            Shopware()->Db()->insert(
+                's_articles_translations',
+                $articleTranslation
+            );
+        }
     }
 
     /**
@@ -870,7 +917,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             }
             $data['prices'] = $prices;
 
-            // unset configuratorOptions and images. These are variantspecific and are going to be recreated later
+            // unset configuratorOptions and images. These are variant specific and are going to be recreated later
             unset($data['images']);
             unset($data['configuratorOptions']);
 
@@ -888,6 +935,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
             $detail->fromArray($data);
             Shopware()->Models()->persist($detail);
+            if ($detail->getAttribute()) {
+                Shopware()->Models()->persist($detail->getAttribute());
+            }
         }
         Shopware()->Models()->flush();
 
