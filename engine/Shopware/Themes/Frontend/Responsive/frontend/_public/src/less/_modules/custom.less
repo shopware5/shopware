@@ -2,43 +2,55 @@
     .unitize(14, 16, margin-top);
 
     .custom-page--headline {
-	.unitize(24, 16, font-size);
-	.unitize(24, 16, margin-bottom);
+        .unitize(24, 16, font-size);
+        .unitize(24, 16, margin-bottom);
     }
 
     .custom-page--tab-headline {
-	.unitize(12, 16, margin-top);
+        .unitize(12, 16, margin-top);
     }
 
     .content--custom {
-	&.panel--body {
-	    .unitize(20, 16, padding);
-	}
+        &.panel--body {
+            .unitize(20, 16, padding);
+        }
     }
 
     .is--active-parent {
-	display: block;
+        display: block;
     }
+}
+
+@media screen and (min-width: @tabletViewportWidth) {
+
+    .is--ctl-custom {
+        .sidebar-main {
+            display: none;
+        }
+    }
+
+    .custom-page--content {
+
+        .content--custom {
+            &.panel--body {
+                .unitize(0, 16, padding);
+            }
+        }
+    }
+
 }
 
 @media screen and (min-width: @desktopViewportWidth) {
 
-    .custom-page--content {
-
-	.content--custom {
-	    &.panel--body {
-		.unitize(0, 16, padding);
-	    }
-	}
+    .is--ctl-custom {
+        .sidebar-main {
+            display: block;
+        }
     }
 
-}
-
-@media screen and (min-width: @desktopViewportWidth) {
-
     .custom-page--content {
-	.unitize(45, 16, margin-top);
-	    width: 78%;
-	    float: right;
+        .unitize(45, 16, margin-top);
+        width: 78%;
+        float: right;
     }
 }
