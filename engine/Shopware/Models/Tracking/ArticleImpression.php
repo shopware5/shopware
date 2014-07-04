@@ -89,14 +89,22 @@ class ArticleImpression extends ModelEntity
     private $impressions;
 
     /**
+     * @var string $deviceType
+     *
+     * @ORM\Column(name="deviceType", type="string", length=50, nullable=true)
+     */
+    private $deviceType;
+
+    /**
      * Constructor
      *
      * @param $articleId
      * @param $shopId
      * @param $date
      * @param int $impressions
+     * @param string $deviceType
      */
-    public function __construct($articleId, $shopId, $date = null, $impressions = 1)
+    public function __construct($articleId, $shopId, $date = null, $impressions = 1, $deviceType = null)
     {
         if ($date === null) {
             $date = new \DateTime();
@@ -105,6 +113,7 @@ class ArticleImpression extends ModelEntity
         $this->setShopId($shopId);
         $this->setDate($date);
         $this->setImpressions($impressions);
+        $this->setDeviceType($deviceType);
     }
 
     /**
@@ -205,5 +214,21 @@ class ArticleImpression extends ModelEntity
     {
         $this->impressions++;
         return $this;
+    }
+
+    /**
+     * @param string $deviceType
+     */
+    public function setDeviceType($deviceType)
+    {
+        $this->deviceType = $deviceType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeviceType()
+    {
+        return $this->deviceType;
     }
 }

@@ -110,6 +110,9 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             amountEuro: '{s name=overview/details/amount_euro}Total amount (in Euro){/s}',
             dispatch: '{s name=overview/details/dispatch}Chosen shipping type{/s}',
             remoteAddress: '{s name=overview/details/remote_address}IP address{/s}',
+            referer: '{s name=overview/details/referer}Referer{/s}',
+            deviceType: '{s name=overview/details/device_type}Device type{/s}',
+            partnerId: '{s name=overview/details/partner_id}Partner ID{/s}',
             text1: '{s name=overview/details/text_1}Free text 1{/s}',
             text2: '{s name=overview/details/text_2}Free text 2{/s}',
             text3: '{s name=overview/details/text_3}Free text 3{/s}',
@@ -622,7 +625,9 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             { name:'number', fieldLabel:me.snippets.details.number },
             { name:'currency', fieldLabel:me.snippets.details.currency },
             { name:'invoiceAmount', fieldLabel:me.snippets.details.amount, renderer: me.renderInvoiceAmount },
-            { name:'dispatch[name]', fieldLabel:me.snippets.details.dispatch }
+            { name:'dispatch[name]', fieldLabel:me.snippets.details.dispatch },
+            { name:'partnerId', fieldLabel:me.snippets.details.partnerId },
+            { name:'referer', fieldLabel:me.snippets.details.referer }
         ];
         if (me.record.get('currencyFactor') !== 1) {
             fields.push({ name:'invoiceAmountEuro', fieldLabel:me.snippets.details.amountEuro, renderer: me.renderInvoiceAmount });
@@ -652,6 +657,7 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
 
         return [
             {  name:'remoteAddressConverted', fieldLabel:me.snippets.details.remoteAddress },
+            {  name:'deviceTypeHuman', fieldLabel:me.snippets.details.deviceType },
             {  name:'attribute[attribute1]', fieldLabel:me.snippets.details.text1 },
             {  name:'attribute[attribute2]', fieldLabel:me.snippets.details.text2 },
             {  name:'attribute[attribute3]', fieldLabel:me.snippets.details.text3 },

@@ -667,6 +667,23 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         );
     }
 
+    /**
+     * Returns the sales amount grouped per device type
+     */
+    public function getDeviceAction()
+    {
+        $result = $this->getRepository()->getProductAmountPerDevice(
+            $this->getFromDate(),
+            $this->getToDate(),
+            $this->getSelectedShopIds()
+        );
+
+        $this->send(
+            $this->formatOrderAnalyticsData($result->getData()),
+            $result->getTotalCount()
+        );
+    }
+
     public function getSearchTermsAction()
     {
         $result = $this->getRepository()->getSearchTerms(

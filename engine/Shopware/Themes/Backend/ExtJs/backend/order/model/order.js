@@ -73,6 +73,22 @@ Ext.define('Shopware.apps.Order.model.Order', {
         { name : 'currencyFactor', type: 'float' },
         { name : 'shopId', type: 'int' },
         { name : 'remoteAddress', type: 'string' },
+        { name : 'deviceType', type: 'string' },
+        {
+            name : 'deviceTypeHuman',
+            type: 'string',
+            convert: function(value, record) {
+                var deviceType = record.get('deviceType');
+
+                if (deviceType.length) {
+                    return deviceType.charAt(0).toUpperCase() + deviceType.slice(1);
+                } else {
+                    return deviceType;
+                }
+            }
+        },
+        { name : 'referer', type: 'string' },
+        { name : 'partnerId', type: 'string' },
         { name : 'invoiceAmount', type: 'float' },
         { name : 'invoiceShipping', type: 'float' },
         { name : 'orderTime', type: 'date' },

@@ -36,7 +36,13 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Visitors', {
     fields: [
         'name',
         { name: 'datum', type: 'date' },
+        { name: 'desktopImpressions', type: 'int' },
+        { name: 'tabletImpressions', type: 'int' },
+        { name: 'mobileImpressions', type: 'int' },
         { name: 'totalImpressions', type: 'int' },
+        { name: 'desktopVisits', type: 'int' },
+        { name: 'tabletVisits', type: 'int' },
+        { name: 'mobileVisits', type: 'int' },
         { name: 'totalVisits', type: 'int' }
     ],
     proxy: {
@@ -54,7 +60,14 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Visitors', {
 
         if (config.shopStore) {
             config.shopStore.each(function (shop) {
+                config.fields.push('desktopVisits' + shop.data.id);
+                config.fields.push('tabletVisits' + shop.data.id);
+                config.fields.push('mobileVisits' + shop.data.id);
                 config.fields.push('totalVisits' + shop.data.id);
+
+                config.fields.push('desktopImpressions' + shop.data.id);
+                config.fields.push('tabletImpressions' + shop.data.id);
+                config.fields.push('mobileImpressions' + shop.data.id);
                 config.fields.push('totalImpressions' + shop.data.id);
             });
         }

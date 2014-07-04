@@ -39,7 +39,15 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
 
 
     initComponent: function () {
-        var me = this, impressionTip = { }, visitTip = { };
+        var me = this,
+            desktopImpressionTip = { },
+            tabletImpressionTip = { },
+            mobileImpressionTip = { },
+            totalImpressionTip = { },
+            desktopVisitTip = { },
+            tabletVisitTip = { },
+            mobileVisitTip = { },
+            totalVisitTip = { };
 
         me.axes = [
             {
@@ -105,11 +113,59 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 ]
             };
 
-            impressionTip = {
+            desktopImpressionTip = {
                 width: 580,
                 height: 130,
                 items: {
                 xtype: 'container',
+                    layout: 'fit',
+                    items: [ me.impressionGrid ]
+                },
+                renderer: function (storeItem) {
+                    this.setTitle(
+                        '{s name=chart/visitors/legend_desktop_impression}Desktop impressions{/s} ' +
+                            Ext.util.Format.date(storeItem.get('datum'))
+                    );
+                    me.getSubShopData(storeItem, 'desktopImpressions');
+                }
+            };
+            tabletImpressionTip = {
+                width: 580,
+                height: 130,
+                items: {
+                    xtype: 'container',
+                    layout: 'fit',
+                    items: [ me.impressionGrid ]
+                },
+                renderer: function (storeItem) {
+                    this.setTitle(
+                        '{s name=chart/visitors/legend_tablet_impression}Tablet impressions{/s} ' +
+                            Ext.util.Format.date(storeItem.get('datum'))
+                    );
+                    me.getSubShopData(storeItem, 'tabletImpressions');
+                }
+            };
+            mobileImpressionTip = {
+                width: 580,
+                height: 130,
+                items: {
+                    xtype: 'container',
+                    layout: 'fit',
+                    items: [ me.impressionGrid ]
+                },
+                renderer: function (storeItem) {
+                    this.setTitle(
+                        '{s name=chart/visitors/legend_mobile_impression}Mobile impressions{/s} ' +
+                            Ext.util.Format.date(storeItem.get('datum'))
+                    );
+                    me.getSubShopData(storeItem, 'mobileImpressions');
+                }
+            };
+            totalImpressionTip = {
+                width: 580,
+                height: 130,
+                items: {
+                    xtype: 'container',
                     layout: 'fit',
                     items: [ me.impressionGrid ]
                 },
@@ -122,7 +178,55 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 }
             };
 
-            visitTip = {
+            desktopVisitTip = {
+                width: 580,
+                height: 130,
+                items: {
+                    xtype: 'container',
+                    layout: 'fit',
+                    items: [ me.visitsGrid ]
+                },
+                renderer: function (storeItem) {
+                    this.setTitle(
+                        '{s name=chart/visitors/legend_desktop_visit}Desktop visits{/s} ' +
+                            Ext.util.Format.date(storeItem.get('datum'))
+                    );
+                    me.getSubShopData(storeItem, 'desktopVisits');
+                }
+            };
+            tabletVisitTip = {
+                width: 580,
+                height: 130,
+                items: {
+                    xtype: 'container',
+                    layout: 'fit',
+                    items: [ me.visitsGrid ]
+                },
+                renderer: function (storeItem) {
+                    this.setTitle(
+                        '{s name=chart/visitors/legend_tablet_visit}Tablet visits{/s} ' +
+                            Ext.util.Format.date(storeItem.get('datum'))
+                    );
+                    me.getSubShopData(storeItem, 'tabletVisits');
+                }
+            };
+            mobileVisitTip = {
+                width: 580,
+                height: 130,
+                items: {
+                    xtype: 'container',
+                    layout: 'fit',
+                    items: [ me.visitsGrid ]
+                },
+                renderer: function (storeItem) {
+                    this.setTitle(
+                        '{s name=chart/visitors/legend_mobile_visit}Mobile visits{/s} ' +
+                            Ext.util.Format.date(storeItem.get('datum'))
+                    );
+                    me.getSubShopData(storeItem, 'mobileVisits');
+                }
+            };
+            totalVisitTip = {
                 width: 580,
                 height: 130,
                 items: {
@@ -140,7 +244,37 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
             };
 
         } else {
-            visitTip = {
+            desktopVisitTip = {
+                width: 180,
+                height: 30,
+                renderer: function(storeItem) {
+                    this.setTitle(
+                        Ext.util.Format.date(storeItem.get('datum')) + ':&nbsp;' +
+                        storeItem.get('desktopVisits')
+                    )
+                }
+            };
+            tabletVisitTip = {
+                width: 180,
+                height: 30,
+                renderer: function(storeItem) {
+                    this.setTitle(
+                        Ext.util.Format.date(storeItem.get('datum')) + ':&nbsp;' +
+                        storeItem.get('tabletVisits')
+                    )
+                }
+            };
+            mobileVisitTip = {
+                width: 180,
+                height: 30,
+                renderer: function(storeItem) {
+                    this.setTitle(
+                        Ext.util.Format.date(storeItem.get('datum')) + ':&nbsp;' +
+                        storeItem.get('mobileVisits')
+                    )
+                }
+            };
+            totalVisitTip = {
                 width: 180,
                 height: 30,
                 renderer: function(storeItem) {
@@ -151,13 +285,44 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                 }
             };
 
-            impressionTip = {
+            desktopImpressionTip = {
                 width: 180,
                 height: 30,
                 renderer: function(storeItem) {
                     this.setTitle(
                         Ext.util.Format.date(storeItem.get('datum')) + ':&nbsp;' +
-                        storeItem.get('totalImpressions')
+                        storeItem.get('desktopImpressions')
+                    )
+                }
+            };
+            tabletImpressionTip = {
+                width: 180,
+                height: 30,
+                renderer: function(storeItem) {
+                    this.setTitle(
+                        Ext.util.Format.date(storeItem.get('datum')) + ':&nbsp;' +
+                            storeItem.get('tabletImpressions')
+                    )
+                }
+            };
+
+            mobileImpressionTip = {
+                width: 180,
+                height: 30,
+                renderer: function(storeItem) {
+                    this.setTitle(
+                        Ext.util.Format.date(storeItem.get('datum')) + ':&nbsp;' +
+                            storeItem.get('mobileImpressions')
+                    )
+                }
+            };
+            totalImpressionTip = {
+                width: 180,
+                height: 30,
+                renderer: function(storeItem) {
+                    this.setTitle(
+                        Ext.util.Format.date(storeItem.get('datum')) + ':&nbsp;' +
+                            storeItem.get('totalImpressions')
                     )
                 }
             };
@@ -167,10 +332,58 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
             me.createLineSeries(
                 {
                     xField: 'datum',
+                    yField: 'desktopImpressions',
+                    title: '{s name=chart/visitors/legend_desktop_impression}Desktop impressions{/s}'
+                },
+                desktopImpressionTip
+            ),
+            me.createLineSeries(
+                {
+                    xField: 'datum',
+                    yField: 'tabletImpressions',
+                    title: '{s name=chart/visitors/legend_tablet_impression}Tablet impressions{/s}'
+                },
+                tabletImpressionTip
+            ),
+            me.createLineSeries(
+                {
+                    xField: 'datum',
+                    yField: 'mobileImpressions',
+                    title: '{s name=chart/visitors/legend_mobile_impression}Mobile impressions{/s}'
+                },
+                mobileImpressionTip
+            ),
+            me.createLineSeries(
+                {
+                    xField: 'datum',
                     yField: 'totalImpressions',
                     title: '{s name=chart/visitors/legend_impression}Total impressions{/s}'
                 },
-                impressionTip
+                totalImpressionTip
+            ),
+            me.createLineSeries(
+                {
+                    xField: 'datum',
+                    yField: 'desktopVisits',
+                    title: '{s name=chart/visitors/legend_desktop_visit}Desktop visits{/s}'
+                },
+                desktopVisitTip
+            ),
+            me.createLineSeries(
+                {
+                    xField: 'datum',
+                    yField: 'tabletVisits',
+                    title: '{s name=chart/visitors/legend_tablet_visit}Tablet visits{/s}'
+                },
+                tabletVisitTip
+            ),
+            me.createLineSeries(
+                {
+                    xField: 'datum',
+                    yField: 'mobileVisits',
+                    title: '{s name=chart/visitors/legend_mobile_visit}Mobile visits{/s}'
+                },
+                mobileVisitTip
             ),
             me.createLineSeries(
                 {
@@ -178,7 +391,7 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
                     yField: 'totalVisits',
                     title: '{s name=chart/visitors/legend_visits}Total visits{/s}'
                 },
-                visitTip
+                totalVisitTip
             )
         ];
 
@@ -186,7 +399,10 @@ Ext.define('Shopware.apps.Analytics.view.chart.Visitors', {
             type: 'Numeric',
             grid: true,
             position: 'left',
-            fields: ['totalImpressions', 'totalVisits'],
+            fields: [
+                'desktopImpressions', 'tabletImpressions', 'mobileImpressions', 'totalImpressions',
+                'desktopVisits', 'tabletVisits', 'mobileVisits', 'totalVisits'
+            ],
             title: '{s name=chart/visitors/count}Count{/s}'
         });
 
