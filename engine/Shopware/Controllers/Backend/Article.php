@@ -428,6 +428,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                     Shopware()->Models()->persist($variant);
                 }
                 Shopware()->Models()->flush();
+                if ($data['translations']) {
+                    $this->overrideVariantTranslations($articleId, $variants);
+                }
             }
             $this->View()->assign(array('success' => true));
         } catch (Exception $e) {
@@ -538,6 +541,32 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
 
         return $mainData;
+    }
+
+    /**
+     * Replaces the variant's translations with the article's.
+     * @param $articleId
+     * @param $variants array
+     */
+    protected function overrideVariantTranslations($articleId, $variants)
+    {
+        $coreTranslations = $this->getTranslationComponent()->readBatch(null, 'article', $articleId);
+
+        foreach ($variants as $variant) {
+            $this->getTranslationComponent()->delete(null, 'variant', $variant->getId());
+
+            foreach ($coreTranslations as &$coreTranslation) {
+                unset($coreTranslation['objectdata']['metaTitle']);
+                unset($coreTranslation['objectdata']['name']);
+                unset($coreTranslation['objectdata']['description']);
+                unset($coreTranslation['objectdata']['descriptionLong']);
+                unset($coreTranslation['objectdata']['keywords']);
+                $coreTranslation['objectkey'] = $variant->getId();
+                $coreTranslation['objecttype'] = 'variant';
+            }
+
+            $this->getTranslationComponent()->writeBatch($coreTranslations);
+        }
     }
 
     /**
@@ -727,42 +756,13 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function duplicateArticleTranslations($articleId, $newArticleId)
     {
-        $coreTranslations = Shopware()->Db()->fetchAll(
-            'SELECT * FROM s_core_translations
-            WHERE objecttype = \'article\'
-            AND objectkey = :objectkey',
-            array(
-                'objectkey' => $articleId
-            )
-        );
+        $coreTranslations = $this->getTranslationComponent()->readBatch(null, 'article', $articleId);
 
-        foreach ($coreTranslations as $coreTranslation) {
-            unset($coreTranslation['id']);
+        foreach ($coreTranslations as &$coreTranslation) {
             $coreTranslation['objectkey'] = $newArticleId;
-
-            Shopware()->Db()->insert(
-                's_core_translations',
-                $coreTranslation
-            );
         }
 
-        $articleTranslations = Shopware()->Db()->fetchAll(
-            'SELECT * FROM s_articles_translations
-            WHERE articleID = :articleID',
-            array(
-                'articleID' => $articleId
-            )
-        );
-
-        foreach ($articleTranslations as $articleTranslation) {
-            unset($articleTranslation['id']);
-            $articleTranslation['articleID'] = $newArticleId;
-
-            Shopware()->Db()->insert(
-                's_articles_translations',
-                $articleTranslation
-            );
-        }
+        $this->getTranslationComponent()->writeBatch($coreTranslations);
     }
 
     /**

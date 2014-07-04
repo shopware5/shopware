@@ -166,7 +166,86 @@ class Shopware_Components_Translation
     }
 
     /**
-     * Reads translation data from the storage.
+     * Reads multiple translation data from storage.
+     *
+     * @param   $language
+     * @param   $type
+     * @param   int $key
+     * @param   bool $merge
+     * @return  array
+     */
+    public function readBatch($language, $type, $key = 1, $merge = false)
+    {
+        if ($type == 'variantMain') {
+            $type = 'article';
+        }
+
+        $queryBuilder = Shopware()->Models()->getDBALQueryBuilder()
+            ->select('objectdata, objectlanguage, objecttype, objectkey')
+            ->from('s_core_translations', 't');
+
+        if ($language) {
+            $queryBuilder
+                ->andWhere('t.objectlanguage = :objectLanguage')
+                ->setParameter('objectLanguage', $language);
+        }
+        if ($type) {
+            $queryBuilder
+                ->andWhere('t.objecttype = :objectType')
+                ->setParameter('objectType', $type);
+        }
+        if ($key) {
+            $queryBuilder
+                ->andWhere('t.objectkey = :objectKey')
+                ->setParameter('objectKey', $merge ? 1 : $key);
+        }
+
+        $data = $queryBuilder->execute()->fetchAll();
+
+        foreach ($data as &$translation) {
+            $translation['objectdata'] = $this->unFilterData(
+                $translation['objecttype'],
+                $translation['objectdata'],
+                $merge ? $translation['objectkey'] : null
+            );
+        }
+        return $data;
+    }
+
+    /**
+     * Deletes translations from storage.
+     *
+     * @param   $language
+     * @param   $type
+     * @param   int $key
+     * @return  array
+     */
+    public function delete($language, $type, $key = 1)
+    {
+        $queryBuilder = Shopware()->Models()->getDBALQueryBuilder()
+            ->delete('s_core_translations');
+
+        if ($language) {
+            $queryBuilder
+                ->andWhere('objectlanguage = :objectLanguage')
+                ->setParameter('objectLanguage', $language);
+        }
+        if ($type) {
+            $queryBuilder
+                ->andWhere('objecttype = :objectType')
+                ->setParameter('objectType', $type);
+        }
+        if ($key) {
+            $queryBuilder
+                ->andWhere('objectkey = :objectKey')
+                ->setParameter('objectKey', $key);
+        }
+
+        $queryBuilder->execute();
+    }
+
+    /**
+     * Reads a single translation data from the storage.
      *
      * @param   $language
      * @param   $type
@@ -194,6 +273,31 @@ class Shopware_Components_Translation
         ));
 
         return $this->unFilterData($type, $data, $merge ? $key : null);
+    }
+
+    /**
+     * Writes multiple translation data to storage.
+     *
+     * @param mixed $data
+     * @param bool $merge
+     */
+    public function writeBatch($data, $merge = false)
+    {
+        $requiredKeys = array('objectdata', 'objectlanguage', 'objecttype', 'objectkey');
+
+        foreach ($data as $translation) {
+            if(count(array_intersect_key(array_flip($requiredKeys), $translation)) !== count($requiredKeys)) {
+                continue;
+            }
+
+            $this->write(
+                $translation['objectlanguage'],
+                $translation['objecttype'],
+                $translation['objectkey'] ? : 1,
+                $translation['objectdata'],
+                $merge
+            );
+        }
     }
 
     /**
