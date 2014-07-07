@@ -4,11 +4,11 @@
     var pluginName = 'tabContent',
 	    clickEvt = 'click',
 	    defaults = {
-		/** @string activeCls Class which will be added when the drop down was triggered */
-		activeCls: 'is--active',
+            /** @string activeCls Class which will be added when the drop down was triggered */
+            activeCls: 'is--active',
 
-		/** @string mode The mode which should be used by the plugin */
-		mode: 'local'
+            /** @string mode The mode which should be used by the plugin */
+            mode: 'local'
 	    };
 
     /**
@@ -26,9 +26,9 @@
         me.$el = $(element);
         me.opts = $.extend({}, defaults, userOpts);
 
-	if (me.$el.attr('data-mode') && me.$el.attr('data-mode').length) {
-	    me.opts.mode = me.$el.attr('data-mode');
-	}
+        if (me.$el.attr('data-mode') && me.$el.attr('data-mode').length) {
+            me.opts.mode = me.$el.attr('data-mode');
+        }
 
         me._defaults = defaults;
         me._name = pluginName;
