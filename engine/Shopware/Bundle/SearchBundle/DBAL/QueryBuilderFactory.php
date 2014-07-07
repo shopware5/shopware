@@ -26,6 +26,11 @@ namespace Shopware\Bundle\SearchBundle\DBAL;
 
 use Doctrine\DBAL\Connection;
 
+/**
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle\DBAL
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
 class QueryBuilderFactory
 {
     /**
@@ -36,7 +41,7 @@ class QueryBuilderFactory
     /**
      * @param Connection $connection
      */
-    function __construct(Connection $connection)
+    public function __construct(Connection $connection)
     {
         $this->connection = $connection;
     }

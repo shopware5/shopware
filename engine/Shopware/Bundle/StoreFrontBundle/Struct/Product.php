@@ -28,7 +28,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Property\Set;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Struct
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Struct
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Product extends ListProduct
 {

@@ -27,11 +27,12 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
 {
@@ -50,7 +51,12 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
      */
     private $hydrator;
 
-    function __construct(
+    /**
+     * @param ModelManager $entityManager
+     * @param FieldHelper $fieldHelper
+     * @param Hydrator\MediaHydrator $hydrator
+     */
+    public function __construct(
         ModelManager $entityManager,
         FieldHelper $fieldHelper,
         Hydrator\MediaHydrator $hydrator
@@ -66,6 +72,7 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
     public function get(Struct\ListProduct $product, Struct\Context $context)
     {
         $media = $this->getList(array($product), $context);
+
         return array_shift($media);
     }
 
@@ -75,6 +82,7 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
     public function getCover(Struct\ListProduct $product, Struct\Context $context)
     {
         $covers = $this->getCovers(array($product), $context);
+
         return array_shift($covers);
     }
 

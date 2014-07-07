@@ -27,7 +27,9 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct\Property;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Struct\Property
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Struct\Property
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Set extends Extendable
 {
@@ -58,6 +60,7 @@ class Set extends Extendable
     public function setId($id)
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -76,6 +79,7 @@ class Set extends Extendable
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -94,6 +98,7 @@ class Set extends Extendable
     public function setGroups($groups)
     {
         $this->groups = $groups;
+
         return $this;
     }
 
@@ -112,6 +117,7 @@ class Set extends Extendable
     public function setComparable($comparable)
     {
         $this->comparable = $comparable;
+
         return $this;
     }
 

@@ -28,7 +28,9 @@ use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class VoteService implements Service\VoteServiceInterface
 {
@@ -46,7 +48,7 @@ class VoteService implements Service\VoteServiceInterface
      * @param Gateway\VoteGatewayInterface $voteGateway
      * @param Gateway\VoteAverageGatewayInterface $voteAverageGateway
      */
-    function __construct(
+    public function __construct(
         Gateway\VoteGatewayInterface $voteGateway,
         Gateway\VoteAverageGatewayInterface $voteAverageGateway
     ) {
@@ -60,6 +62,7 @@ class VoteService implements Service\VoteServiceInterface
     public function get(Struct\ListProduct $product, Struct\Context $context)
     {
         $votes = $this->getList(array($product), $context);
+
         return array_shift($votes);
     }
 
@@ -69,6 +72,7 @@ class VoteService implements Service\VoteServiceInterface
     public function getAverage(Struct\ListProduct $product, Struct\Context $context)
     {
         $average = $this->getAverages(array($product), $context);
+
         return array_shift($average);
     }
 

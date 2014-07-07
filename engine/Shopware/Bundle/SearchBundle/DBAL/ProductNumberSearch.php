@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator;
 
 /**
  * @category  Shopware
- * @package   \Shopware\Bundle\SearchBundle\DBAL
+ * @package   Shopware\Bundle\SearchBundle\DBAL
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
@@ -74,7 +74,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
      * @param SortingHandlerInterface[]   $sortingHandlers
      * @param FacetHandlerInterface[]     $facetHandlers
      */
-    function __construct(
+    public function __construct(
         QueryBuilderFactory $queryBuilderFactory,
         AttributeHydrator $attributeHydrator,
         \Enlight_Event_EventManager $eventManager,
@@ -245,6 +245,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
             }
             $products[$product->getNumber()] = $product;
         }
+
         return $products;
     }
 
@@ -301,7 +302,6 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
             $handler = $this->getFacetHandler($facet);
             $facets[] = $handler->generateFacet($facet, $query, $criteria, $context);
         }
-
 
         return $facets;
     }

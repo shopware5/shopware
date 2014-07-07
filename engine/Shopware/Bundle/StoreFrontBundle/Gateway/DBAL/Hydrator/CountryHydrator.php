@@ -28,7 +28,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Models\Country\Area;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CountryHydrator extends Hydrator
 {
@@ -45,15 +47,20 @@ class CountryHydrator extends Hydrator
         'notice' => '__country_notice'
     );
 
+    /**
+     * @var array
+     */
     private $translationStateFields = array(
         'name' => '__countryState_name'
     );
 
-    function __construct(AttributeHydrator $attributeHydrator)
+    /**
+     * @param AttributeHydrator $attributeHydrator
+     */
+    public function __construct(AttributeHydrator $attributeHydrator)
     {
         $this->attributeHydrator = $attributeHydrator;
     }
-
 
     /**
      * @param array $data
@@ -140,6 +147,13 @@ class CountryHydrator extends Hydrator
         return $country;
     }
 
+    /**
+     * @param $data
+     * @param $field
+     * @param $id
+     * @param array $mapping
+     * @return array|mixed
+     */
     private function getTranslation($data, $field, $id, $mapping = array())
     {
         if (!isset($data[$field])) {

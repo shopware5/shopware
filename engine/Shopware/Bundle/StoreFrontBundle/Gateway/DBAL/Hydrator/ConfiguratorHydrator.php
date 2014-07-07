@@ -27,7 +27,9 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ConfiguratorHydrator extends Hydrator
 {
@@ -45,13 +47,17 @@ class ConfiguratorHydrator extends Hydrator
      * @param AttributeHydrator $attributeHydrator
      * @param MediaHydrator $mediaHydrator
      */
-    function __construct(AttributeHydrator $attributeHydrator, MediaHydrator $mediaHydrator)
+    public function __construct(AttributeHydrator $attributeHydrator, MediaHydrator $mediaHydrator)
     {
         $this->attributeHydrator = $attributeHydrator;
         $this->mediaHydrator = $mediaHydrator;
     }
 
-
+    /**
+     * @param array $data
+     * @param array $selection
+     * @return Struct\Configurator\Set
+     */
     public function hydrate(array $data, array $selection = array())
     {
         $set = $this->createSet($data[0]);
@@ -90,19 +96,28 @@ class ConfiguratorHydrator extends Hydrator
 
             $group->addOption($option);
         }
+
         return array_values($groups);
     }
 
-
+    /**
+     * @param $data
+     * @return Struct\Configurator\Set
+     */
     private function createSet($data)
     {
         $set = new Struct\Configurator\Set();
         $set->setId((int) $data['__configuratorSet_id']);
         $set->setName($data['__configuratorSet_name']);
         $set->setType((int) $data['__configuratorSet_type']);
+
         return $set;
     }
 
+    /**
+     * @param array $data
+     * @return Struct\Configurator\Group
+     */
     private function createGroup($data)
     {
         $group = new Struct\Configurator\Group();
@@ -116,9 +131,14 @@ class ConfiguratorHydrator extends Hydrator
         $group->setId((int) $data['__configuratorGroup_id']);
         $group->setName($data['__configuratorGroup_name']);
         $group->setDescription($data['__configuratorGroup_description']);
+
         return $group;
     }
 
+    /**
+     * @param array $data
+     * @return Struct\Configurator\Option
+     */
     private function createOption($data)
     {
         $option = new Struct\Configurator\Option();
@@ -139,12 +159,17 @@ class ConfiguratorHydrator extends Hydrator
         return $option;
     }
 
+    /**
+     * @param $data
+     * @param $arrayKey
+     * @param $mapping
+     * @return array
+     */
     private function getTranslation($data, $arrayKey, $mapping)
     {
         if (!isset($data[$arrayKey])
             || empty($data[$arrayKey])
         ) {
-
             return array();
         }
 

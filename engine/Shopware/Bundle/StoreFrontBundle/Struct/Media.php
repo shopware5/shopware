@@ -25,7 +25,9 @@
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Struct
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Struct
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Media extends Extendable
 {
@@ -207,11 +209,7 @@ class Media extends Extendable
     public function setThumbnails(array $thumbnails)
     {
         $this->thumbnails = $thumbnails;
-        return $this;
-    }
 
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
+        return $this;
     }
 }

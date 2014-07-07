@@ -26,11 +26,12 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class FieldHelper
 {
@@ -50,7 +51,7 @@ class FieldHelper
     /**
      * @param ModelManager $entityManager
      */
-    function __construct(ModelManager $entityManager)
+    public function __construct(ModelManager $entityManager)
     {
         $this->entityManager = $entityManager;
     }
@@ -59,8 +60,8 @@ class FieldHelper
      * Helper function which generates an array with table column selections
      * for the passed table.
      *
-     * @param $table
-     * @param $alias
+     * @param string $table
+     * @param string $alias
      * @return array
      */
     public function getTableFields($table, $alias)
@@ -84,7 +85,6 @@ class FieldHelper
 
         return $this->attributeFields[$key];
     }
-
 
     /**
      * Defines which s_articles fields should be selected.
@@ -130,6 +130,9 @@ class FieldHelper
 
     }
 
+    /**
+     * @return array
+     */
     public function getTopSellerFields()
     {
         return array(
@@ -167,6 +170,9 @@ class FieldHelper
         );
     }
 
+    /**
+     * @return array
+     */
     public function getEsdFields()
     {
         $fields = array (
@@ -238,6 +244,9 @@ class FieldHelper
         return $fields;
     }
 
+    /**
+     * @return array
+     */
     public function getCategoryFields()
     {
         $fields = array(
@@ -265,7 +274,9 @@ class FieldHelper
         return $fields;
     }
 
-
+    /**
+     * @return array
+     */
     public function getPriceFields()
     {
         $fields = array(
@@ -289,6 +300,9 @@ class FieldHelper
         return $fields;
     }
 
+    /**
+     * @return array
+     */
     public function getUnitFields()
     {
         return array(
@@ -304,6 +318,9 @@ class FieldHelper
         );
     }
 
+    /**
+     * @return array
+     */
     public function getConfiguratorSetFields()
     {
         return array(
@@ -313,6 +330,9 @@ class FieldHelper
         );
     }
 
+    /**
+     * @return array
+     */
     public function getConfiguratorGroupFields()
     {
         return array(
@@ -323,6 +343,9 @@ class FieldHelper
         );
     }
 
+    /**
+     * @return array
+     */
     public function getConfiguratorOptionFields()
     {
         return array(
@@ -332,7 +355,9 @@ class FieldHelper
         );
     }
 
-
+    /**
+     * @return array
+     */
     public function getAreaFields()
     {
         return array(
@@ -342,6 +367,9 @@ class FieldHelper
         );
     }
 
+    /**
+     * @return array
+     */
     public function getCountryFields()
     {
         $fields = array(
@@ -370,6 +398,9 @@ class FieldHelper
         return $fields;
     }
 
+    /**
+     * @return array
+     */
     public function getStateFields()
     {
         $fields = array(
@@ -385,10 +416,13 @@ class FieldHelper
             $fields,
             $this->getTableFields('s_core_countries_states_attributes', 'countryStateAttribute')
         );
+
         return $fields;
     }
 
-
+    /**
+     * @return string[]
+     */
     public function getCustomerGroupFields()
     {
         $fields = array(
@@ -411,7 +445,9 @@ class FieldHelper
         return $fields;
     }
 
-
+    /**
+     * @return string[]
+     */
     public function getDownloadFields()
     {
         $fields = array(
@@ -430,7 +466,9 @@ class FieldHelper
         return $fields;
     }
 
-
+    /**
+     * @return string[]
+     */
     public function getLinkFields()
     {
         $fields = array(
@@ -449,6 +487,9 @@ class FieldHelper
         return $fields;
     }
 
+    /**
+     * @return string[]
+     */
     public function getImageFields()
     {
         $fields = array(
@@ -469,6 +510,7 @@ class FieldHelper
             $fields,
             $this->getTableFields('s_articles_img_attributes', 'imageAttribute')
         );
+
         return $fields;
     }
 
@@ -519,6 +561,9 @@ class FieldHelper
         );
     }
 
+    /**
+     * @return string[]
+     */
     public function getPriceGroupDiscountFields()
     {
         return array(
@@ -528,7 +573,9 @@ class FieldHelper
         );
     }
 
-
+    /**
+     * @return string[]
+     */
     public function getPropertySetFields()
     {
         $fields = array(
@@ -547,6 +594,9 @@ class FieldHelper
         return $fields;
     }
 
+    /**
+     * @return string[]
+     */
     public function getPropertyGroupFields()
     {
         return array(
@@ -557,6 +607,9 @@ class FieldHelper
         );
     }
 
+    /**
+     * @return string[]
+     */
     public function getPropertyOptionFields()
     {
         return array(
@@ -568,6 +621,9 @@ class FieldHelper
         );
     }
 
+    /**
+     * @return string[]
+     */
     public function getTaxRuleFields()
     {
         return array(
@@ -577,7 +633,9 @@ class FieldHelper
         );
     }
 
-
+    /**
+     * @return string[]
+     */
     public function getVoteFields()
     {
         return array(
@@ -595,6 +653,9 @@ class FieldHelper
         );
     }
 
+    /**
+     * @param QueryBuilder $query
+     */
     public function addPropertySetTranslation(QueryBuilder $query)
     {
         $query->leftJoin(
@@ -636,6 +697,9 @@ class FieldHelper
         ));
     }
 
+    /**
+     * @param QueryBuilder $query
+     */
     public function addImageTranslation(QueryBuilder $query)
     {
         $query->leftJoin(
@@ -653,6 +717,9 @@ class FieldHelper
         $query->setParameter(':imageType', 'articleimage');
     }
 
+    /**
+     * @param QueryBuilder $query
+     */
     public function addConfiguratorTranslation(QueryBuilder $query)
     {
         $query->leftJoin(
@@ -682,6 +749,9 @@ class FieldHelper
         ));
     }
 
+    /**
+     * @param QueryBuilder $query
+     */
     public function addUnitTranslation(QueryBuilder $query)
     {
         $query->leftJoin(
@@ -697,6 +767,9 @@ class FieldHelper
             ->setParameter(':unitType', 'config_units');
     }
 
+    /**
+     * @param QueryBuilder $query
+     */
     public function addVariantTranslation(QueryBuilder $query)
     {
         $query->leftJoin(
@@ -712,6 +785,9 @@ class FieldHelper
             ->setParameter(':variantType', 'variant');
     }
 
+    /**
+     * @param QueryBuilder $query
+     */
     public function addCountryTranslation(QueryBuilder $query)
     {
         $query->leftJoin(
@@ -726,6 +802,9 @@ class FieldHelper
             ->setParameter(':countryType', 'config_countries');
     }
 
+    /**
+     * @param QueryBuilder $query
+     */
     public function addCountryStateTranslation(QueryBuilder $query)
     {
         $query->leftJoin(
@@ -741,6 +820,9 @@ class FieldHelper
         ;
     }
 
+    /**
+     * @param QueryBuilder $query
+     */
     public function addProductTranslation(QueryBuilder $query)
     {
         $query->leftJoin(
@@ -757,6 +839,9 @@ class FieldHelper
 
     }
 
+    /**
+     * @param QueryBuilder $query
+     */
     public function addManufacturerTranslation(QueryBuilder $query)
     {
         $query->leftJoin(
@@ -770,6 +855,5 @@ class FieldHelper
         $query->addSelect(array('manufacturerTranslation.objectdata as __manufacturer_translation'))
             ->setParameter(':manufacturerType', 'supplier');
     }
-
 
 }

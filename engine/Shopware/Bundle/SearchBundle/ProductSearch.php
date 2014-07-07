@@ -21,12 +21,15 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\SearchBundle;
 
 use Shopware\Bundle\StoreFrontBundle;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ProductSearch implements ProductSearchInterface
 {
@@ -44,7 +47,7 @@ class ProductSearch implements ProductSearchInterface
      * @param StoreFrontBundle\Service\ListProductServiceInterface $productService
      * @param ProductNumberSearchInterface $searchGateway
      */
-    function __construct(
+    public function __construct(
         StoreFrontBundle\Service\ListProductServiceInterface $productService,
         ProductNumberSearchInterface $searchGateway
     ) {
@@ -80,7 +83,6 @@ class ProductSearch implements ProductSearchInterface
             $result->getFacets()
         );
     }
-
 
     /**
      * @param StoreFrontBundle\Struct\ListProduct[] $products

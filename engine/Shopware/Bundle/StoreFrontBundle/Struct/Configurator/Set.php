@@ -27,7 +27,9 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct\Configurator;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Struct\Configurator
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Struct\Configurator
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Set extends Extendable
 {

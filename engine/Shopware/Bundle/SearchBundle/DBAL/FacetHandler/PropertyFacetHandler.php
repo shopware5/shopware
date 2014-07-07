@@ -33,7 +33,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway\PropertyGatewayInterface;
 
 /**
- * @package Shopware\Bundle\SearchBundle\Platform\DBAL\FacetHandler
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle\DBAL\FacetHandler
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PropertyFacetHandler implements FacetHandlerInterface
 {
@@ -45,11 +47,18 @@ class PropertyFacetHandler implements FacetHandlerInterface
     /**
      * @param PropertyGatewayInterface $propertyGateway
      */
-    function __construct(PropertyGatewayInterface $propertyGateway)
+    public function __construct(PropertyGatewayInterface $propertyGateway)
     {
         $this->propertyGateway = $propertyGateway;
     }
 
+    /**
+     * @param FacetInterface $facet
+     * @param QueryBuilder $query
+     * @param Criteria $criteria
+     * @param Struct\Context $context
+     * @return Facet\PropertyFacet|FacetInterface
+     */
     public function generateFacet(
         FacetInterface $facet,
         QueryBuilder $query,
@@ -121,6 +130,9 @@ class PropertyFacetHandler implements FacetHandlerInterface
         }
     }
 
+    /**
+     * @param QueryBuilder $query
+     */
     private function rebuildQuery(QueryBuilder $query)
     {
         $query->resetQueryPart('orderBy');
@@ -172,6 +184,9 @@ class PropertyFacetHandler implements FacetHandlerInterface
         $query->groupBy('productProperty.valueID');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function supportsFacet(FacetInterface $facet)
     {
         return ($facet instanceof Facet\PropertyFacet);

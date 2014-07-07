@@ -24,6 +24,11 @@
 
 namespace Shopware\Bundle\SearchBundle\Sorting;
 
+/**
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle\Sorting
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
 class ProductAttributeSorting extends Sorting
 {
     /**
@@ -31,14 +36,18 @@ class ProductAttributeSorting extends Sorting
      */
     private $field;
 
-    function __construct($field, $direction = 'ASC')
+    /**
+     * @param string $field
+     * @param string $direction
+     */
+    public function __construct($field, $direction = 'ASC')
     {
         $this->field = $field;
         parent::__construct($direction);
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {

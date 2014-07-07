@@ -27,7 +27,9 @@ namespace Shopware\Bundle\SearchBundle;
 /**
  * Defines the search result of the search gateway.
  *
- * @package Shopware\Bundle\SearchBundle
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ProductNumberSearchResult
 {
@@ -51,7 +53,7 @@ class ProductNumberSearchResult
      * @param int $totalCount
      * @param FacetInterface[] $facets
      */
-    function __construct($products, $totalCount, $facets)
+    public function __construct($products, $totalCount, $facets)
     {
         $this->products = $products;
         $this->totalCount = $totalCount;

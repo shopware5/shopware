@@ -35,7 +35,9 @@ use Shopware\Bundle\SearchBundle\DBAL\FacetHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ManufacturerServiceInterface;
 
 /**
- * @package Shopware\Bundle\SearchBundle\DBAL\FacetHandler
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle\DBAL\FacetHandler
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ManufacturerFacetHandler implements FacetHandlerInterface
 {
@@ -47,7 +49,7 @@ class ManufacturerFacetHandler implements FacetHandlerInterface
     /**
      * @param ManufacturerServiceInterface $manufacturerService
      */
-    function __construct(ManufacturerServiceInterface $manufacturerService)
+    public function __construct(ManufacturerServiceInterface $manufacturerService)
     {
         $this->manufacturerService = $manufacturerService;
     }
@@ -109,7 +111,9 @@ class ManufacturerFacetHandler implements FacetHandlerInterface
         return $facet;
     }
 
-
+    /**
+     * {@inheritdoc}
+     */
     public function supportsFacet(FacetInterface $facet)
     {
         return ($facet instanceof Facet\ManufacturerFacet);

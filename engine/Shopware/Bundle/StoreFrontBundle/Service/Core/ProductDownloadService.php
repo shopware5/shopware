@@ -28,7 +28,9 @@ use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ProductDownloadService implements Service\ProductDownloadServiceInterface
 {
@@ -40,7 +42,7 @@ class ProductDownloadService implements Service\ProductDownloadServiceInterface
     /**
      * @param Gateway\DownloadGatewayInterface $gateway
      */
-    function __construct(Gateway\DownloadGatewayInterface $gateway)
+    public function __construct(Gateway\DownloadGatewayInterface $gateway)
     {
         $this->gateway = $gateway;
     }
@@ -51,6 +53,7 @@ class ProductDownloadService implements Service\ProductDownloadServiceInterface
     public function get(Struct\ListProduct $product, Struct\Context $context)
     {
         $downloads = $this->getList(array($product), $context);
+
         return array_shift($downloads);
     }
 

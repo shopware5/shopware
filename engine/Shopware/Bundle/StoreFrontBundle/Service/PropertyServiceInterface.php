@@ -26,9 +26,10 @@ namespace Shopware\Bundle\StoreFrontBundle\Service;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
-
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Service
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Service
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface PropertyServiceInterface
 {

@@ -27,11 +27,12 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class GraduatedPricesGateway implements Gateway\GraduatedPricesGatewayInterface
 {
@@ -60,7 +61,7 @@ class GraduatedPricesGateway implements Gateway\GraduatedPricesGatewayInterface
      * @param FieldHelper $fieldHelper
      * @param Hydrator\PriceHydrator $priceHydrator
      */
-    function __construct(
+    public function __construct(
         ModelManager $entityManager,
         FieldHelper $fieldHelper,
         Hydrator\PriceHydrator $priceHydrator

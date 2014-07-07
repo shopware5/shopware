@@ -27,7 +27,9 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ManufacturerHydrator extends Hydrator
 {
@@ -36,6 +38,9 @@ class ManufacturerHydrator extends Hydrator
      */
     private $attributeHydrator;
 
+    /**
+     * @var array
+     */
     private $translationMapping = array(
         'description' => '__manufacturer_description',
         'metaTitle' => '__manufacturer_meta_title',
@@ -43,7 +48,10 @@ class ManufacturerHydrator extends Hydrator
         'metaKeywords' => '__manufacturer_meta_keywords',
     );
 
-    function __construct(AttributeHydrator $attributeHydrator)
+    /**
+     * @param AttributeHydrator $attributeHydrator
+     */
+    public function __construct(AttributeHydrator $attributeHydrator)
     {
         $this->attributeHydrator = $attributeHydrator;
     }
@@ -68,6 +76,10 @@ class ManufacturerHydrator extends Hydrator
         return $manufacturer;
     }
 
+    /**
+     * @param Struct\Product\Manufacturer $manufacturer
+     * @param array $data
+     */
     private function assignData(Struct\Product\Manufacturer $manufacturer, array $data)
     {
 
@@ -104,6 +116,10 @@ class ManufacturerHydrator extends Hydrator
         }
     }
 
+    /**
+     * @param Struct\Product\Manufacturer $manufacturer
+     * @param array $data
+     */
     private function assignAttribute(Struct\Product\Manufacturer $manufacturer, array $data)
     {
         $attribute = $this->attributeHydrator->hydrate(
@@ -113,6 +129,10 @@ class ManufacturerHydrator extends Hydrator
         $manufacturer->addAttribute('core', $attribute);
     }
 
+    /**
+     * @param $data
+     * @return array|mixed
+     */
     private function getTranslation($data)
     {
         $translation = array();

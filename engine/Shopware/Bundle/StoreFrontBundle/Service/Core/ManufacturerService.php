@@ -28,7 +28,9 @@ use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ManufacturerService implements Service\ManufacturerServiceInterface
 {
@@ -40,7 +42,7 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
     /**
      * @param Gateway\ManufacturerGatewayInterface $manufacturerGateway
      */
-    function __construct(Gateway\ManufacturerGatewayInterface $manufacturerGateway)
+    public function __construct(Gateway\ManufacturerGatewayInterface $manufacturerGateway)
     {
         $this->manufacturerGateway = $manufacturerGateway;
     }
@@ -51,6 +53,7 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
     public function get($id, Struct\Context $context)
     {
         $manufacturers = $this->getList(array($id), $context);
+
         return $manufacturers;
     }
 

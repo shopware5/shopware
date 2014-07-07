@@ -27,7 +27,9 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct\Product;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Struct\Product
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Struct\Product
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class MarketingAttribute extends Attribute
 {
@@ -93,6 +95,5 @@ class MarketingAttribute extends Attribute
     {
         return $this->isTopSeller;
     }
-
 
 }

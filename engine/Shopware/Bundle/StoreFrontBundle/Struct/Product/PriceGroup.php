@@ -27,7 +27,9 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct\Product;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Struct\Product
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Struct\Product
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PriceGroup extends Extendable
 {
@@ -72,6 +74,5 @@ class PriceGroup extends Extendable
     {
         return $this->name;
     }
-
 
 }

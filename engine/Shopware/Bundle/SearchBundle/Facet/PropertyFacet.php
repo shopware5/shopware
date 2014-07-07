@@ -28,7 +28,9 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @package Shopware\Bundle\SearchBundle\Facet
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle\Facet
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PropertyFacet implements FacetInterface
 {

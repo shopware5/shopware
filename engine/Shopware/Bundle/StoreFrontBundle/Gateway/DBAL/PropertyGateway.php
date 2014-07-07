@@ -26,12 +26,13 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PropertyGateway implements Gateway\PropertyGatewayInterface
 {
@@ -91,7 +92,7 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
      * @param Hydrator\PropertyHydrator $propertyHydrator
      * @param \Shopware_Components_Config $config
      */
-    function __construct(
+    public function __construct(
         ModelManager $entityManager,
         FieldHelper $fieldHelper,
         Hydrator\PropertyHydrator $propertyHydrator,
@@ -102,7 +103,6 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
         $this->fieldHelper = $fieldHelper;
         $this->config = $config;
     }
-
 
     /**
      * @inheritdoc

@@ -26,6 +26,11 @@ namespace Shopware\Bundle\SearchBundle\Facet;
 
 use Shopware\Bundle\SearchBundle\FacetInterface;
 
+/**
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle\Facet
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
 class ProductAttributeFacet implements FacetInterface
 {
     const MODE_NOT_EMPTY = 'not_null';
@@ -58,7 +63,7 @@ class ProductAttributeFacet implements FacetInterface
      * @param $field
      * @param string $mode
      */
-    function __construct($field, $mode = self::MODE_VALUES)
+    public function __construct($field, $mode = self::MODE_VALUES)
     {
         $this->field = $field;
         $this->mode = $mode;

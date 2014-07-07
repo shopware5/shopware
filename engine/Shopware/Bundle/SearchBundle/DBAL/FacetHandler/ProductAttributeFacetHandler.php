@@ -31,6 +31,11 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\SearchBundle\DBAL\QueryBuilder;
 
+/**
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle\DBAL\FacetHandler
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
 class ProductAttributeFacetHandler implements FacetHandlerInterface
 {
     /**
@@ -88,9 +93,7 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
     }
 
     /**
-     * Checks if the passed facet can be handled by this class.
-     * @param FacetInterface $facet
-     * @return bool
+     * {@inheritdoc}
      */
     public function supportsFacet(FacetInterface $facet)
     {

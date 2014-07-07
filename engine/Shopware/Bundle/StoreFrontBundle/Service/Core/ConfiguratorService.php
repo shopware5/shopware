@@ -28,7 +28,9 @@ use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ConfiguratorService implements Service\ConfiguratorServiceInterface
 {
@@ -46,7 +48,7 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
      * @param Gateway\ProductConfigurationGatewayInterface $productConfigurationGateway
      * @param Gateway\ConfiguratorGatewayInterface $configuratorGateway
      */
-    function __construct(
+    public function __construct(
         Gateway\ProductConfigurationGatewayInterface $productConfigurationGateway,
         Gateway\ConfiguratorGatewayInterface $configuratorGateway
     ) {
@@ -60,6 +62,7 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
     public function getProductConfiguration(Struct\ListProduct $product, Struct\Context $context)
     {
         $configuration = $this->getProductsConfigurations(array($product), $context);
+
         return array_shift($configuration);
     }
 

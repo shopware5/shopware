@@ -28,7 +28,9 @@ use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class MediaService implements Service\MediaServiceInterface
 {
@@ -52,7 +54,7 @@ class MediaService implements Service\MediaServiceInterface
      * @param Gateway\VariantMediaGatewayInterface $variantMedia
      * @param \Shopware_Components_Config $shopwareConfig
      */
-    function __construct(
+    public function __construct(
         Gateway\ProductMediaGatewayInterface $productMedia,
         Gateway\VariantMediaGatewayInterface $variantMedia,
         \Shopware_Components_Config $shopwareConfig
@@ -68,6 +70,7 @@ class MediaService implements Service\MediaServiceInterface
     public function getCover(Struct\ListProduct $product, Struct\Context $context)
     {
         $covers = $this->getCovers(array($product), $context);
+
         return array_shift($covers);
     }
 
@@ -106,6 +109,7 @@ class MediaService implements Service\MediaServiceInterface
     public function getProductMedia(Struct\ListProduct $product, Struct\Context $context)
     {
         $media = $this->getProductsMedia(array($product), $context);
+
         return array_shift($media);
     }
 

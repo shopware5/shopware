@@ -27,7 +27,9 @@ namespace Shopware\Bundle\SearchBundle\DBAL;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @package Shopware\Bundle\SearchBundle\DBAL
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle\DBAL
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PriceHelper
 {

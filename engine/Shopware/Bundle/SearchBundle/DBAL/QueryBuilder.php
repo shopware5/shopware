@@ -24,28 +24,47 @@
 
 namespace Shopware\Bundle\SearchBundle\DBAL;
 
+/**
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle\DBAL
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
 class QueryBuilder extends \Doctrine\DBAL\Query\QueryBuilder
 {
+    /**
+     * @var string[]
+     */
     private $states = array();
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getStates()
     {
         return $this->states;
     }
 
+    /**
+     * @param string $state
+     */
     public function addState($state)
     {
         $this->states[] = $state;
     }
 
+    /**
+     * @param string $state
+     * @return bool
+     */
     public function hasState($state)
     {
         return in_array($state, $this->states);
     }
 
+    /**
+     * @param $table
+     * @return array|bool
+     */
     public function includesTable($table)
     {
         foreach ($this->getQueryPart('from') as $from) {
@@ -74,6 +93,9 @@ class QueryBuilder extends \Doctrine\DBAL\Query\QueryBuilder
         return false;
     }
 
+    /**
+     * @param $table
+     */
     public function removeTableInclude($table)
     {
         $fromParts = $this->getQueryPart('from');

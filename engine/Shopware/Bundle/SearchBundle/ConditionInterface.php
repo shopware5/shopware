@@ -31,9 +31,14 @@ namespace Shopware\Bundle\SearchBundle;
  * Each condition is handled by his own condition handler
  * which defined in the specify gateway engines.
  *
- * @package Shopware\Bundle\SearchBundle
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface ConditionInterface
 {
+    /**
+     * @return string
+     */
     public function getName();
 }

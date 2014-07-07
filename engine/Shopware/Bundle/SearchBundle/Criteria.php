@@ -25,9 +25,6 @@
 namespace Shopware\Bundle\SearchBundle;
 
 use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
-use Shopware\Bundle\SearchBundle\Facet;
-use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Bundle\SearchBundle\Sorting;
 
 /**
  * The criteria object is used for the search gateway.
@@ -38,7 +35,9 @@ use Shopware\Bundle\SearchBundle\Sorting;
  * Each of this sorting, facet and condition classes are handled by their
  * own handler classes which implemented for each gateway engine.
  *
- * @package Shopware\Bundle\SearchBundle
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Criteria
 {
@@ -76,6 +75,7 @@ class Criteria
     public function offset($offset)
     {
         $this->offset = $offset;
+
         return $this;
     }
 
@@ -86,6 +86,7 @@ class Criteria
     public function limit($limit)
     {
         $this->limit = $limit;
+
         return $this;
     }
 
@@ -182,6 +183,12 @@ class Criteria
         );
     }
 
+    /**
+     * @param $field
+     * @param $operator
+     * @param $value
+     * @return $this
+     */
     public function addProductAttributeCondition($field, $operator, $value)
     {
         return $this->addCondition(
@@ -209,6 +216,9 @@ class Criteria
         );
     }
 
+    /**
+     * @return $this
+     */
     public function addShippingFreeFacet()
     {
         return $this->addFacet(
@@ -334,6 +344,7 @@ class Criteria
     public function addFacet(FacetInterface $facet)
     {
         $this->facets[$facet->getName()] = $facet;
+
         return $this;
     }
 
@@ -344,6 +355,7 @@ class Criteria
     public function addCondition(ConditionInterface $condition)
     {
         $this->conditions[$condition->getName()] = $condition;
+
         return $this;
     }
 
@@ -354,6 +366,7 @@ class Criteria
     public function addSorting(SortingInterface $sorting)
     {
         $this->sortings[$sorting->getName()] = $sorting;
+
         return $this;
     }
 
@@ -416,6 +429,7 @@ class Criteria
     public function resetSorting()
     {
         $this->sortings = array();
+
         return $this;
     }
 }

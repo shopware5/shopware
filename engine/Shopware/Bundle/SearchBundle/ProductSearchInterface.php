@@ -27,7 +27,9 @@ namespace Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Service
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface ProductSearchInterface
 {

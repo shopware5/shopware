@@ -32,7 +32,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Struct
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Struct
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ListProduct extends Extendable
 {
@@ -357,7 +359,7 @@ class ListProduct extends Extendable
     }
 
     /**
-     * @return float
+     * @return boolean
      */
     public function highlight()
     {
@@ -365,7 +367,7 @@ class ListProduct extends Extendable
     }
 
     /**
-     * @param float $highlight
+     * @param boolean $highlight
      */
     public function setHighlight($highlight)
     {
@@ -387,7 +389,6 @@ class ListProduct extends Extendable
     {
         $this->shippingFree = $shippingFree;
     }
-
 
     /**
      * @param Unit $unit
@@ -644,7 +645,6 @@ class ListProduct extends Extendable
     {
         return $this->longDescription;
     }
-
 
     /**
      * @param int $minStock
@@ -940,10 +940,5 @@ class ListProduct extends Extendable
     public function setEsd(Esd $esd)
     {
         $this->esd = $esd;
-    }
-
-    public function jsonSerialize()
-    {
-        return get_object_vars($this);
     }
 }

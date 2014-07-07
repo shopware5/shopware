@@ -26,7 +26,9 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Gateway
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Gateway
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface CountryGatewayInterface
 {

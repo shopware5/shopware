@@ -30,14 +30,16 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class RelatedProductsGateway implements Gateway\RelatedProductsGatewayInterface
 {
     /**
      * @param ModelManager $entityManager
      */
-    function __construct(ModelManager $entityManager)
+    public function __construct(ModelManager $entityManager)
     {
         $this->entityManager = $entityManager;
     }

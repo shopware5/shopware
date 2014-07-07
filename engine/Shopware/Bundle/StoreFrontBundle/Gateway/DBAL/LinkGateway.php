@@ -26,12 +26,13 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class LinkGateway implements Gateway\LinkGatewayInterface
 {
@@ -60,7 +61,7 @@ class LinkGateway implements Gateway\LinkGatewayInterface
      * @param FieldHelper $fieldHelper
      * @param Hydrator\LinkHydrator $linkHydrator
      */
-    function __construct(
+    public function __construct(
         ModelManager $entityManager,
         FieldHelper $fieldHelper,
         Hydrator\LinkHydrator $linkHydrator
@@ -76,6 +77,7 @@ class LinkGateway implements Gateway\LinkGatewayInterface
     public function get(Struct\ListProduct $product, Struct\Context $context)
     {
         $links = $this->getList(array($product), $context);
+
         return array_shift($links);
     }
 

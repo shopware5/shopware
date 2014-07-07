@@ -27,7 +27,9 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PropertyHydrator extends Hydrator
 {
@@ -36,7 +38,10 @@ class PropertyHydrator extends Hydrator
      */
     private $attributeHydrator;
 
-    function __construct(AttributeHydrator $attributeHydrator)
+    /**
+     * @param AttributeHydrator $attributeHydrator
+     */
+    public function __construct(AttributeHydrator $attributeHydrator)
     {
         $this->attributeHydrator = $attributeHydrator;
     }
@@ -81,6 +86,10 @@ class PropertyHydrator extends Hydrator
         return $sets;
     }
 
+    /**
+     * @param array $data
+     * @return Struct\Property\Set
+     */
     private function hydrateSet(array $data)
     {
         $set = new Struct\Property\Set();
@@ -103,6 +112,10 @@ class PropertyHydrator extends Hydrator
         return $set;
     }
 
+    /**
+     * @param array $data
+     * @return Struct\Property\Group
+     */
     private function hydrateGroup(array $data)
     {
         $group = new Struct\Property\Group();
@@ -116,9 +129,14 @@ class PropertyHydrator extends Hydrator
         $group->setId((int) $data['__propertyGroup_id']);
         $group->setName($data['__propertyGroup_name']);
         $group->setFilterable((bool) $data['__propertyGroup_filterable']);
+
         return $group;
     }
 
+    /**
+     * @param array $data
+     * @return Struct\Property\Option
+     */
     private function hydrateOption(array $data)
     {
         $option = new Struct\Property\Option();
@@ -131,15 +149,21 @@ class PropertyHydrator extends Hydrator
 
         $option->setId((int) $data['__propertyOption_id']);
         $option->setName($data['__propertyOption_value']);
+
         return $option;
     }
 
+    /**
+     * @param $data
+     * @param $arrayKey
+     * @param $mapping
+     * @return array
+     */
     private function getTranslation($data, $arrayKey, $mapping)
     {
         if (!isset($data[$arrayKey])
             || empty($data[$arrayKey])
         ) {
-
             return array();
         }
 

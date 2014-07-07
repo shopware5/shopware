@@ -34,7 +34,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
 
 /**
- * @package Shopware\Bundle\SearchBundle\Platform\DBAL\FacetHandler
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle\DBAL\FacetHandler
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CategoryFacetHandler implements FacetHandlerInterface
 {
@@ -46,11 +48,10 @@ class CategoryFacetHandler implements FacetHandlerInterface
     /**
      * @param CategoryServiceInterface $categoryService
      */
-    function __construct(CategoryServiceInterface $categoryService)
+    public function __construct(CategoryServiceInterface $categoryService)
     {
         $this->categoryService = $categoryService;
     }
-
 
     /**
      * Generates the facet for the \Shopware\Bundle\SearchBundle\Facet;\Category class.
@@ -126,6 +127,9 @@ class CategoryFacetHandler implements FacetHandlerInterface
         return $facet;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function supportsFacet(FacetInterface $facet)
     {
         return ($facet instanceof Facet\CategoryFacet);

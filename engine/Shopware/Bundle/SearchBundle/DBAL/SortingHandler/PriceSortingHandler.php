@@ -9,6 +9,11 @@ use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\SearchBundle\DBAL\QueryBuilder;
 
+/**
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle\DBAL\SortingHandler
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
 class PriceSortingHandler implements SortingHandlerInterface
 {
     /**
@@ -19,15 +24,13 @@ class PriceSortingHandler implements SortingHandlerInterface
     /**
      * @param PriceHelper $priceHelper
      */
-    function __construct(PriceHelper $priceHelper)
+    public function __construct(PriceHelper $priceHelper)
     {
         $this->priceHelper = $priceHelper;
     }
 
     /**
-     * Checks if the passed sorting can be handled by this class
-     * @param SortingInterface $sorting
-     * @return bool
+     * {@inheritdoc}
      */
     public function supportsSorting(SortingInterface $sorting)
     {

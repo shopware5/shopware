@@ -27,7 +27,9 @@ namespace Shopware\Bundle\SearchBundle\Sorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 
 /**
- * @package Shopware\Bundle\SearchBundle\Sorting
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle\Sorting
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 abstract class Sorting implements SortingInterface
 {
@@ -39,7 +41,7 @@ abstract class Sorting implements SortingInterface
     /**
      * @param string $direction
      */
-    function __construct($direction = SortingInterface::SORT_ASC)
+    public function __construct($direction = SortingInterface::SORT_ASC)
     {
         $this->direction = $direction;
     }

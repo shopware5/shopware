@@ -28,7 +28,9 @@ use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 
 /**
- * @package Shopware\Bundle\SearchBundle\DBAL
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle\DBAL
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface SortingHandlerInterface
 {

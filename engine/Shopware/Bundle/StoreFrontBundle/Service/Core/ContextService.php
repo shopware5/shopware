@@ -30,7 +30,9 @@ use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Models;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ContextService implements Service\ContextServiceInterface
 {
@@ -60,7 +62,7 @@ class ContextService implements Service\ContextServiceInterface
      * @param Gateway\TaxGatewayInterface $taxGateway
      * @param Gateway\CountryGatewayInterface $countryGateway
      */
-    function __construct(
+    public function __construct(
         Container $container,
         Gateway\CustomerGroupGatewayInterface $customerGroupGateway,
         Gateway\TaxGatewayInterface $taxGateway,

@@ -27,7 +27,9 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ProductHydrator extends Hydrator
 {
@@ -56,6 +58,9 @@ class ProductHydrator extends Hydrator
      */
     private $esdHydrator;
 
+    /**
+     * @var array
+     */
     private $translationMapping = array(
         'metaTitle' => '__product_metaTitle',
         'txtArtikel' => '__product_name',
@@ -66,7 +71,14 @@ class ProductHydrator extends Hydrator
         'txtpackunit' => '__unit_packunit',
     );
 
-    function __construct(
+    /**
+     * @param AttributeHydrator $attributeHydrator
+     * @param ManufacturerHydrator $manufacturerHydrator
+     * @param TaxHydrator $taxHydrator
+     * @param UnitHydrator $unitHydrator
+     * @param EsdHydrator $esdHydrator
+     */
+    public function __construct(
         AttributeHydrator $attributeHydrator,
         ManufacturerHydrator $manufacturerHydrator,
         TaxHydrator $taxHydrator,
@@ -146,6 +158,10 @@ class ProductHydrator extends Hydrator
         return $product;
     }
 
+    /**
+     * @param Struct\ListProduct $product
+     * @param array $data
+     */
     private function assignPriceGroupData(Struct\ListProduct $product, array $data)
     {
         if (!empty($data['__priceGroup_id'])) {
@@ -236,7 +252,7 @@ class ProductHydrator extends Hydrator
 
         if (isset($data['__variant_shippingtime'])) {
             $product->setShippingTime($data['__variant_shippingtime']);
-        } else if (isset($data['__product_shippingtime'])) {
+        } elseif (isset($data['__product_shippingtime'])) {
             $product->setShippingTime($data['__product_shippingtime']);
         }
 
@@ -311,6 +327,10 @@ class ProductHydrator extends Hydrator
         $product->addAttribute('core', $attribute);
     }
 
+    /**
+     * @param $data
+     * @return array
+     */
     private function getProductTranslation($data)
     {
         $translation = array();
