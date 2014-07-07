@@ -217,6 +217,16 @@
 		.unitize-margin(0, 0, 8, 0);
 		.clearfix();
 	}
+
+    .table--footer {
+        display: none;
+    }
+
+    .benefit--headline {
+        .unitize(14, 16, font-size);
+        color: @primaryTextColor;
+        font-weight: bold;
+    }
 }
 
 .aggregation--list {
@@ -277,7 +287,6 @@
 @media screen and (min-width: @tabletViewportWidth) {
 	.product--table {
 		.unitize-margin(50, 0, 50, 0);
-
 
 		.panel--body {
 			border: 1px solid @borderColor;
@@ -453,12 +462,22 @@
 				border-bottom: 0 none;
 			}
 		}
+
+        .table--footer {
+            display: block;
+        }
 	}
 
 	.basket--footer + .premium--headline {
 		.unitize-margin(10, -10, 0, -10);
 		border-top: 1px solid @borderColor;
 	}
+
+    .footer--benefit {
+        .unitize(14, 16, font-size);
+        .unitize-padding(0, 20, 0, 20);
+        width: 33.33332%;
+    }
 }
 
 @media screen and (min-width: @tabletLandscapeViewportWidth) {
