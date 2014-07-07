@@ -27,12 +27,13 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
 {
@@ -61,7 +62,7 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
      * @param FieldHelper $fieldHelper
      * @param Hydrator\ConfiguratorHydrator $configuratorHydrator
      */
-    function __construct(
+    public function __construct(
         ModelManager $entityManager,
         FieldHelper $fieldHelper,
         Hydrator\ConfiguratorHydrator $configuratorHydrator
@@ -131,6 +132,10 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
         return $configurator;
     }
 
+    /**
+     * @param Struct\ListProduct $product
+     * @return mixed
+     */
     private function getConfiguratorType(Struct\ListProduct $product)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
@@ -153,6 +158,10 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
         return $statement->fetch(\PDO::FETCH_COLUMN);
     }
 
+    /**
+     * @param array $ids
+     * @return array
+     */
     private function getMedia(array $ids)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
@@ -174,6 +183,9 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
         return $statement->fetchAll(\PDO::FETCH_GROUP);
     }
 
+    /**
+     * @return QueryBuilder
+     */
     private function getMediaQuery()
     {
         $query = $this->entityManager->getDBALQueryBuilder();
@@ -194,6 +206,10 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
         return $query;
     }
 
+    /**
+     * @param QueryBuilder $query
+     * @param array $selection
+     */
     private function addSelectionCondition(QueryBuilder $query, array $selection)
     {
         $previous = null;
@@ -230,6 +246,9 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
         }
     }
 
+    /**
+     * @return QueryBuilder
+     */
     private function getQuery()
     {
         $query = $this->entityManager->getDBALQueryBuilder();
@@ -297,7 +316,6 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
             ->addOrderBy('configuratorGroup.name')
             ->addOrderBy('configuratorOption.position')
             ->addOrderBy('configuratorOption.name');
-
 
         $query->groupBy('configuratorOption.id');
 

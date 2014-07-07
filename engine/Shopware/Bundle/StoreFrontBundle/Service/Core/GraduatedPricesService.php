@@ -28,7 +28,9 @@ use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
 {
@@ -46,7 +48,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
      * @param Gateway\GraduatedPricesGatewayInterface $graduatedPricesGateway
      * @param Gateway\PriceGroupDiscountGatewayInterface $priceGroupDiscountGateway
      */
-    function __construct(
+    public function __construct(
         Gateway\GraduatedPricesGatewayInterface $graduatedPricesGateway,
         Gateway\PriceGroupDiscountGatewayInterface $priceGroupDiscountGateway
     ) {

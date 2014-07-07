@@ -27,7 +27,9 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct\Product;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Struct\Product
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Struct\Product
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Unit extends Extendable
 {
@@ -246,7 +248,6 @@ class Unit extends Extendable
         return $this->minPurchase;
     }
 
-
     /**
      * @param float $purchaseStep
      */
@@ -262,6 +263,5 @@ class Unit extends Extendable
     {
         return $this->purchaseStep;
     }
-
 
 }

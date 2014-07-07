@@ -26,12 +26,13 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
 {
@@ -44,7 +45,7 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
      * @param \Shopware\Components\Model\ModelManager $entityManager
      * @param Hydrator\VoteHydrator $voteHydrator
      */
-    function __construct(ModelManager $entityManager, Hydrator\VoteHydrator $voteHydrator)
+    public function __construct(ModelManager $entityManager, Hydrator\VoteHydrator $voteHydrator)
     {
         $this->entityManager = $entityManager;
         $this->voteHydrator = $voteHydrator;

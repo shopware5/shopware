@@ -31,6 +31,11 @@ use Shopware\Bundle\SearchBundle\DBAL\PriceHelper;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\SearchBundle\DBAL\QueryBuilder;
 
+/**
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle\DBAL\ConditionHandler
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
 class PriceConditionHandler implements ConditionHandlerInterface
 {
     /**
@@ -41,16 +46,13 @@ class PriceConditionHandler implements ConditionHandlerInterface
     /**
      * @param PriceHelper $priceHelper
      */
-    function __construct(PriceHelper $priceHelper)
+    public function __construct(PriceHelper $priceHelper)
     {
         $this->priceHelper = $priceHelper;
     }
 
     /**
-     * Checks if the passed condition can be handled by this class.
-     *
-     * @param ConditionInterface $condition
-     * @return bool
+     * {@inheritdoc}
      */
     public function supportsCondition(ConditionInterface $condition)
     {

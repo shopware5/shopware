@@ -24,13 +24,18 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
-
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Hydrator
 {
+    /**
+     * @param string $prefix
+     * @param array  $data
+     * @return array
+     */
     public function extractFields($prefix, $data)
     {
         $result = array();
@@ -40,9 +45,15 @@ class Hydrator
                 $result[$key] = $value;
             }
         }
+
         return $result;
     }
 
+    /**
+     * @param string $prefix
+     * @param array  $data
+     * @return array
+     */
     protected function getFields($prefix, $data)
     {
         $result = array();
@@ -51,9 +62,15 @@ class Hydrator
                 $result[$field] = $value;
             }
         }
+
         return $result;
     }
 
+    /**
+     * @param array $data
+     * @param array $keys
+     * @return array
+     */
     protected function convertArrayKeys($data, $keys)
     {
         foreach ($keys as $old => $new) {

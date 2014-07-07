@@ -29,7 +29,9 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @package Shopware\Bundle\SearchBundle\DBAL\FacetHandler
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle\DBAL
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface FacetHandlerInterface
 {

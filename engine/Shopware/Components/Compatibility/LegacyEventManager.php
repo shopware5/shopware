@@ -26,6 +26,11 @@ namespace Shopware\Components\Compatibility;
 
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 
+/**
+ * @category  Shopware
+ * @package   Shopware\Components\Compatibility
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
 class LegacyEventManager
 {
     /**
@@ -728,6 +733,9 @@ class LegacyEventManager
         return $getArticle;
     }
 
+    /**
+     * @return null
+     */
     private function displayFiltersOnArticleDetailPage()
     {
         return $this->config->get('displayFiltersOnDetailPage', true);

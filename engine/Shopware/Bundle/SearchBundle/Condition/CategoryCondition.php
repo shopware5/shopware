@@ -27,7 +27,9 @@ namespace Shopware\Bundle\SearchBundle\Condition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 /**
- * @package Shopware\Bundle\SearchBundle\Condition
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle\Condition
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CategoryCondition implements ConditionInterface
 {
@@ -39,7 +41,7 @@ class CategoryCondition implements ConditionInterface
     /**
      * @param $categoryIds
      */
-    function __construct(array $categoryIds)
+    public function __construct(array $categoryIds)
     {
         $this->categoryIds = $categoryIds;
     }
@@ -53,7 +55,7 @@ class CategoryCondition implements ConditionInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {

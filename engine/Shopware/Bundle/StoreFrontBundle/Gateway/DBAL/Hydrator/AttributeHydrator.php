@@ -27,10 +27,16 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class AttributeHydrator extends Hydrator
 {
+    /**
+     * @param array $data
+     * @return Struct\Attribute
+     */
     public function hydrate(array $data)
     {
         $attribute = new Struct\Attribute();

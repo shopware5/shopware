@@ -29,7 +29,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 /**
  * Defines the search result of the search gateway.
  *
- * @package Shopware\Bundle\SearchBundle
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ProductSearchResult extends ProductNumberSearchResult
 {
@@ -43,7 +45,7 @@ class ProductSearchResult extends ProductNumberSearchResult
      * @param int $totalCount
      * @param FacetInterface[] $facets
      */
-    function __construct($products, $totalCount, $facets)
+    public function __construct($products, $totalCount, $facets)
     {
         $this->products = $products;
         $this->totalCount = $totalCount;

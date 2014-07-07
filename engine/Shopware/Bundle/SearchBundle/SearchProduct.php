@@ -32,7 +32,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  * and additionally attribute classes which can be used
  * by the different gateway engines.
  *
- * @package Shopware\Bundle\SearchBundle
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SearchProduct extends Extendable
 {

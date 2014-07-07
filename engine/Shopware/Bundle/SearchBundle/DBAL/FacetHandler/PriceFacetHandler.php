@@ -33,7 +33,9 @@ use Shopware\Bundle\SearchBundle\Facet;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 
 /**
- * @package Shopware\Bundle\SearchBundle\DBAL\FacetHandler
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle\DBAL\FacetHandler
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PriceFacetHandler implements FacetHandlerInterface
 {
@@ -45,11 +47,14 @@ class PriceFacetHandler implements FacetHandlerInterface
     /**
      * @param PriceHelper $priceHelper
      */
-    function __construct(PriceHelper $priceHelper)
+    public function __construct(PriceHelper $priceHelper)
     {
         $this->priceHelper = $priceHelper;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function supportsFacet(FacetInterface $facet)
     {
         return ($facet instanceof Facet\PriceFacet);
@@ -75,6 +80,7 @@ class PriceFacetHandler implements FacetHandlerInterface
         if ($condition = $criteria->getCondition('price')) {
             $facet->setMinPrice($condition->getMinPrice());
             $facet->setMaxPrice($condition->getMaxPrice());
+
             return $facet;
         }
 

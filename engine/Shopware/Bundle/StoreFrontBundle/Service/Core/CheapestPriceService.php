@@ -28,7 +28,9 @@ use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CheapestPriceService implements Service\CheapestPriceServiceInterface
 {
@@ -40,7 +42,7 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
     /**
      * @param Gateway\CheapestPriceGatewayInterface $cheapestPriceGateway
      */
-    function __construct(Gateway\CheapestPriceGatewayInterface $cheapestPriceGateway)
+    public function __construct(Gateway\CheapestPriceGatewayInterface $cheapestPriceGateway)
     {
         $this->cheapestPriceGateway = $cheapestPriceGateway;
     }

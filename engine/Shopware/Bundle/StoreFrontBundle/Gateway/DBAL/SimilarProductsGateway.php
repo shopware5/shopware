@@ -30,7 +30,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
 {
@@ -48,7 +50,7 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
      * @param ModelManager $entityManager
      * @param \Shopware_Components_Config $config
      */
-    function __construct(
+    public function __construct(
         ModelManager $entityManager,
         \Shopware_Components_Config $config
     ) {
@@ -130,6 +132,7 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
     public function getByCategory(Struct\ListProduct $product, Struct\Context $context)
     {
         $products = $this->getByListCategory(array($product), $context);
+
         return array_shift($products);
     }
 

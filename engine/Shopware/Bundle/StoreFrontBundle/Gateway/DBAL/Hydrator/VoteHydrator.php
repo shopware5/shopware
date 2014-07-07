@@ -27,7 +27,9 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class VoteHydrator extends Hydrator
 {
@@ -54,6 +56,10 @@ class VoteHydrator extends Hydrator
         return $struct;
     }
 
+    /**
+     * @param array $data
+     * @return Struct\Product\Vote
+     */
     public function hydrate(array $data)
     {
         $struct = new Struct\Product\Vote();

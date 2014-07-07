@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\StoreFrontBundle;
 
@@ -271,7 +272,6 @@ class sArticles
     /**
      * Delete articles from comparision chart
      * @param int $article Unique article id - refers to s_articles.id
-     * @access public
      */
     public function sDeleteComparison($article)
     {
@@ -285,7 +285,6 @@ class sArticles
 
     /**
      * Delete all articles from comparision chart
-     * @access public
      */
     public function sDeleteComparisons()
     {
@@ -298,7 +297,6 @@ class sArticles
     /**
      * Insert articles in comparision chart
      * @param int $article s_articles.id
-     * @access public
      * @return bool true/false
      */
     public function sAddComparison($article)
@@ -350,7 +348,6 @@ class sArticles
 
     /**
      * Get all articles from comparision chart
-     * @access public
      * @return array Associative array with all articles or empty array
      */
     public function sGetComparisons()
@@ -379,7 +376,6 @@ class sArticles
 
     /**
      * Get all articles and a table of their properties as an array
-     * @access public
      * @return array Associative array with all articles or empty array
      */
     public function sGetComparisonList()
@@ -567,7 +563,6 @@ class sArticles
     /**
      * Get the average rating from one article
      * @param int $article - s_articles.id
-     * @access public
      * @return array
      */
     public function sGetArticlesAverangeVote($article)
@@ -598,7 +593,6 @@ class sArticles
      * Save a new article comment / voting
      * Reads several values directly from _POST
      * @param int $article - s_articles.id
-     * @access public
      * @return null
      */
     public function sSaveComment($article)
@@ -667,7 +661,6 @@ class sArticles
     /**
      * Read all article comments / votings
      * @param int $article - s_articles.id
-     * @access public
      * @return array
      */
     public function sGetArticlesVotes($article)
@@ -693,7 +686,6 @@ class sArticles
     /**
      * Get id from all articles, that belongs to a specific supplier
      * @param int $supplierID Supplier id (s_articles.supplierID)
-     * @access public
      * @return array
      */
     public function sGetArticlesBySupplier($supplierID = null)
@@ -715,7 +707,6 @@ class sArticles
      * @param int $category Filter by category id
      * @param string $mode
      * @param string $search searchterm
-     * @access public
      * @return array
      */
     public function sGetArticlesByName($orderBy = "a.topseller DESC", $category = 0, $mode = "", $search = "")
@@ -952,7 +943,7 @@ class sArticles
 
         $result = $this->getListing($categoryId);
 
-        $result = $this->legacyEventManager->fireArticlesByCategoryEvents($result, $categoryId);
+        $result = $this->legacyEventManager->fireArticlesByCategoryEvents($result, $categoryId, $this);
 
         return $result;
     }
@@ -966,7 +957,6 @@ class sArticles
      * TestCase: /_tests/Shopware/Tests/Modules/Articles/SuppliersTest.php
      *
      * @param int $id - s_articles_supplier.id
-     * @access public
      * @return array
      */
     public function sGetSupplierById($id)
@@ -1010,11 +1000,11 @@ class sArticles
      * The function expects the s_articles table with the alias "articles" to
      * join the s_filter_articles over the articleID column.
      *
-     * @param $builder \Shopware\Components\Model\DBAL\QueryBuilder
+     * @param $builder QueryBuilder
      * @param $activeFilters
-     * @return \Shopware\Components\Model\DBAL\QueryBuilder
+     * @return QueryBuilder
      */
-    protected function addActiveFilterCondition($builder, $activeFilters)
+    protected function addActiveFilterCondition(QueryBuilder $builder, $activeFilters)
     {
         foreach ($activeFilters as $valueId) {
             if ($valueId <= 0) {
@@ -1069,11 +1059,11 @@ class sArticles
      *  -   Shopware_Modules_Articles_GetFilterQuery
      *
      * @param null $activeFilters
-     * @return \Doctrine\DBAL\Query\QueryBuilder
+     * @return QueryBuilder
      */
     protected function getFilterQuery($activeFilters = null)
     {
-        /**@var $builder \Doctrine\DBAL\Query\QueryBuilder */
+        /**@var $builder QueryBuilder */
         $builder = Shopware()->Models()->getDBALQueryBuilder();
 
         $builder->select(array(
@@ -1175,11 +1165,10 @@ class sArticles
     /**
      * Helper function to add the article count select for the filter queries.
      *
-     * @param $builder \Shopware\Components\Model\DBAL\QueryBuilder
-     *
-     * @return \Shopware\Components\Model\DBAL\QueryBuilder
+     * @param $builder QueryBuilder
+     * @return QueryBuilder
      */
-    protected function addArticleCountSelect($builder)
+    protected function addArticleCountSelect(QueryBuilder $builder)
     {
         $builder->groupBy('filterValues.id');
 
@@ -1199,11 +1188,11 @@ class sArticles
      *  - s_filter_values  = filterValues
      *  - s_filter_options = filterOptions
      *
-     * @param $builder \Shopware\Components\Model\DBAL\QueryBuilder
+     * @param $builder QueryBuilder
      * @param $translationId
-     * @return \Shopware\Components\Model\DBAL\QueryBuilder
+     * @return QueryBuilder
      */
-    protected function addFilterTranslation($builder, $translationId)
+    protected function addFilterTranslation(QueryBuilder $builder, $translationId)
     {
         $builder->addSelect(array(
             'valueTranslation.objectdata AS valueTranslation',
@@ -1530,7 +1519,6 @@ class sArticles
     /**
      * Get all available suppliers from a specific category
      * @param int $id - category id
-     * @access public
      * @return array
      */
     public function sGetAffectedSuppliers($id = null, $limit = null)
@@ -1601,7 +1589,6 @@ class sArticles
      * @param double $price
      * @param double $tax
      * @param array $article article data as an array
-     * @access public
      * @return double $price formated price
      */
     public function sCalculatingPrice($price, $tax, $taxId = 0, $article = array())
@@ -1692,7 +1679,6 @@ class sArticles
      * @param bool $donotround
      * @param array $article article data as an array
      * @param bool $ignoreCurrency
-     * @access public
      * @return double $price  price unformated
      */
     public function sCalculatingPriceNum($price, $tax, $doNotRound = false, $ignoreTax = false, $taxId = 0, $ignoreCurrency = false, $article = array())
@@ -1739,7 +1725,6 @@ class sArticles
     /**
      * Get article topsellers for a specific category
      * @param $category int category id
-     * @access public
      * @return array
      */
     public function sGetArticleCharts($category = null)
@@ -1820,7 +1805,6 @@ class sArticles
      * @param int $id s_articles.id
      * @param int $detailsID s_articles_details.id
      * @param bool $realtime deprecated
-     * @access public
      * @return bool
      */
     public function sCheckIfEsd($id, $detailsID, $realtime = false)
@@ -2018,7 +2002,6 @@ class sArticles
     /**
      * Get translations for multidimensional groups and options for a certain article
      * @param int $id - s_articles.id
-     * @access public
      * @return array
      */
     public function sGetArticleConfigTranslation($id)
@@ -2044,7 +2027,6 @@ class sArticles
      * Checks if a certain article is multidimensional configurable
      * @param int $id s_articles.id
      * @param bool $realtime deprecated
-     * @access public
      * @return bool
      */
     public function sCheckIfConfig($id, $realtime = false)
@@ -2063,7 +2045,6 @@ class sArticles
     /**
      * Read the unit types from a certain article
      * @param int $id s_articles.id
-     * @access public
      * @return array
      */
     public function sGetUnit($id)
@@ -2098,7 +2079,6 @@ class sArticles
      * @param bool $doMatrix Return array with all block prices
      * @param array $articleData current article
      * @param bool $ignore deprecated
-     * @access public
      * @return array|float|null
      */
     public function sGetPricegroupDiscount($customergroup, $groupID, $listprice, $quantity, $doMatrix = true, $articleData = array(), $ignore = false)
@@ -2203,7 +2183,6 @@ class sArticles
      * @param int $group customer group id
      * @param int $pricegroup pricegroup id
      * @param bool $usepricegroups consider pricegroups
-     * @access public
      * @return float cheapest price or null
      */
     public function sGetCheapestPrice($article, $group, $pricegroup, $usepricegroups, $realtime = false, $returnArrayIfConfigurator = false, $checkLiveshopping = false)
@@ -2377,7 +2356,6 @@ class sArticles
      * @param null $sCategoryID
      * @param null $number
      * @param array $selection
-     * @access public
      * @return array
      */
     public function sGetArticleById($id = 0, $sCategoryID = null, $number = null, array $selection = null)
@@ -2426,7 +2404,7 @@ class sArticles
             $categoryId,
             $configuration
         );
-        
+
         if ($product) {
             $product = $this->legacyEventManager->fireArticleByIdEvents($product, $this);
         }
@@ -2524,7 +2502,6 @@ class sArticles
 
     /**
      * Formats article prices
-     * @access public
      * @param float $price
      * @return float price
      */
@@ -2559,7 +2536,6 @@ class sArticles
      * Round article price
      *
      * @param float $moneyFloat price
-     * @access public
      * @return float price
      */
     public function sRound($moneyfloat = null)
@@ -2935,7 +2911,6 @@ class sArticles
     /**
      * Optimize text, strip html tags etc.
      * @param string $text
-     * @access public
      * @return string $text
      */
     public function sOptimizeText($text)
@@ -3094,7 +3069,6 @@ class sArticles
 
     /**
      * Get all pictures from a certain article
-     * @access public
      * @param        $sArticleID
      * @param bool $onlyCover
      * @param int $pictureSize | unused variable
@@ -3188,7 +3162,6 @@ class sArticles
     /**
      * Get article id by ordernumber
      * @param string $ordernumber
-     * @access public
      * @return int $id or false
      */
     public function sGetArticleIdByOrderNumber($ordernumber)
@@ -3208,7 +3181,6 @@ class sArticles
      * Get name from a certain article by ordernumber
      * @param string $ordernumber
      * @param bool $returnAll return only name or additional data, too
-     * @access public
      * @return string or array
      */
     public function sGetArticleNameByOrderNumber($ordernumber, $returnAll = false)
@@ -3235,8 +3207,7 @@ class sArticles
 
     /**
      * Get article name by s_articles.id
-     * @param $id article id
-     * @access public
+     * @param int $articleId
      * @return string name
      */
     public function sGetArticleNameByArticleId($articleId, $returnAll = false)
@@ -3249,8 +3220,7 @@ class sArticles
 
     /**
      * Get article taxrate by id
-     * @param $id article id
-     * @access public
+     * @param int $id article id
      * @return float tax or false
      */
     public function sGetArticleTaxById($id)
@@ -3335,7 +3305,6 @@ class sArticles
     /**
      * Get list of all promotions from a certain category
      * @param int $category category id
-     * @access public
      * @return array
      */
     public function sGetPromotions($category)
@@ -3401,7 +3370,6 @@ class sArticles
      * @param $ids
      * @param $object
      * @param $language
-     * @access public
      * @return array
      */
     public function sGetTranslations($data, $object)

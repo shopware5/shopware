@@ -27,7 +27,9 @@ namespace Shopware\Bundle\SearchBundle\Condition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 /**
- * @package Shopware\Bundle\SearchBundle\Condition
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle\Condition
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PropertyCondition implements ConditionInterface
 {
@@ -39,11 +41,14 @@ class PropertyCondition implements ConditionInterface
     /**
      * @param array $valueIds
      */
-    function __construct(array $valueIds)
+    public function __construct(array $valueIds)
     {
         $this->valueIds = $valueIds;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'property';

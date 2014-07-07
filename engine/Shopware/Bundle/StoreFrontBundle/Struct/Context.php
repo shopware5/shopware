@@ -29,7 +29,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Struct
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Struct
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Context extends Extendable
 {
@@ -120,6 +122,7 @@ class Context extends Extendable
     public function setCurrentCustomerGroup($currentCustomerGroup)
     {
         $this->currentCustomerGroup = $currentCustomerGroup;
+
         return $this;
     }
 
@@ -138,6 +141,7 @@ class Context extends Extendable
     public function setFallbackCustomerGroup($fallbackCustomerGroup)
     {
         $this->fallbackCustomerGroup = $fallbackCustomerGroup;
+
         return $this;
     }
 
@@ -164,6 +168,7 @@ class Context extends Extendable
     public function setShop($shop)
     {
         $this->shop = $shop;
+
         return $this;
     }
 
@@ -238,6 +243,7 @@ class Context extends Extendable
     public function getTaxRule($taxId)
     {
         $key = 'tax_' . $taxId;
+
         return $this->taxRules[$key];
     }
 

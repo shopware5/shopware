@@ -27,7 +27,9 @@ namespace Shopware\Bundle\SearchBundle\Condition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 /**
- * @package Shopware\Bundle\SearchBundle\Condition
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle\Condition
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CustomerGroupCondition implements ConditionInterface
 {
@@ -39,11 +41,14 @@ class CustomerGroupCondition implements ConditionInterface
     /**
      * @param array $customerGroupIds
      */
-    function __construct(array $customerGroupIds)
+    public function __construct(array $customerGroupIds)
     {
         $this->customerGroupIds = $customerGroupIds;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'customer_group';

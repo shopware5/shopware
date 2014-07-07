@@ -25,11 +25,16 @@
 namespace Shopware\Bundle\SearchBundle\Sorting;
 
 /**
- * @package Shopware\Bundle\SearchBundle\Sorting
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle\Sorting
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ReleaseDateSorting extends Sorting
 {
-    function getName()
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
     {
         return 'release_date';
     }

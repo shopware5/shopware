@@ -27,7 +27,9 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct\Property;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Struct\Property
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Struct\Property
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Option extends Extendable
 {
@@ -48,6 +50,7 @@ class Option extends Extendable
     public function setId($id)
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -66,6 +69,7 @@ class Option extends Extendable
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 

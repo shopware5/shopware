@@ -28,7 +28,9 @@ use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class RelatedProductsService implements Service\RelatedProductsServiceInterface
 {
@@ -46,7 +48,7 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
      * @param Gateway\RelatedProductsGatewayInterface $gateway
      * @param Service\ListProductServiceInterface $listProductService
      */
-    function __construct(
+    public function __construct(
         Gateway\RelatedProductsGatewayInterface $gateway,
         Service\ListProductServiceInterface $listProductService
     ) {
@@ -60,6 +62,7 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
     public function get(Struct\ListProduct $product, Struct\Context $context)
     {
         $related = $this->getList(array($product), $context);
+
         return array_shift($related);
     }
 
@@ -107,6 +110,7 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
                 $result[$product->getNumber()] = $product;
             }
         }
+
         return $result;
     }
 
@@ -124,6 +128,7 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
 
         //filter duplicate numbers to prevent duplicate data requests and iterations.
         $unique = array_unique($related);
+
         return array_values($unique);
     }
 }

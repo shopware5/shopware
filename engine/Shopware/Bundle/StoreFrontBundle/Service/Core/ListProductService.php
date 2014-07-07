@@ -28,7 +28,9 @@ use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ListProductService implements Service\ListProductServiceInterface
 {
@@ -76,7 +78,7 @@ class ListProductService implements Service\ListProductServiceInterface
      * @param Service\MarketingServiceInterface $marketingService
      * @param \Enlight_Event_EventManager $eventManager
      */
-    function __construct(
+    public function __construct(
         Gateway\ListProductGatewayInterface $productGateway,
         Service\GraduatedPricesServiceInterface $graduatedPricesService,
         Service\CheapestPriceServiceInterface $cheapestPriceService,

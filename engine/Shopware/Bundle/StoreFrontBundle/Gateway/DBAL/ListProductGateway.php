@@ -24,15 +24,15 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
-
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ListProductGateway implements Gateway\ListProductGatewayInterface
 {
@@ -40,7 +40,6 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
      * @var Hydrator\ProductHydrator
      */
     protected $hydrator;
-
 
     /**
      * The FieldHelper class is used for the
@@ -62,7 +61,7 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
      * @param FieldHelper $fieldHelper
      * @param Hydrator\ProductHydrator $hydrator
      */
-    function __construct(
+    public function __construct(
         ModelManager $entityManager,
         FieldHelper $fieldHelper,
         Hydrator\ProductHydrator $hydrator
@@ -103,6 +102,11 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
         return $products;
     }
 
+    /**
+     * @param array $numbers
+     * @param Struct\Context $context
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
     protected function getQuery(array $numbers, Struct\Context $context)
     {
         $esdQuery = $this->getEsdQuery();
@@ -144,6 +148,9 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
         return $query;
     }
 
+    /**
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
     private function getEsdQuery()
     {
         $query = $this->entityManager->getDBALQueryBuilder();

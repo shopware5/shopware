@@ -27,7 +27,9 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PriceHydrator extends Hydrator
 {
@@ -46,6 +48,9 @@ class PriceHydrator extends Hydrator
      */
     private $attributeHydrator;
 
+    /**
+     * @var array
+     */
     private $translationMapping = array(
         'txtpackunit' => '__unit_packunit',
     );
@@ -55,7 +60,7 @@ class PriceHydrator extends Hydrator
      * @param UnitHydrator $unitHydrator
      * @param AttributeHydrator $attributeHydrator
      */
-    function __construct(
+    public function __construct(
         CustomerGroupHydrator $customerGroupHydrator,
         UnitHydrator $unitHydrator,
         AttributeHydrator $attributeHydrator
@@ -123,6 +128,10 @@ class PriceHydrator extends Hydrator
         return $price;
     }
 
+    /**
+     * @param array $data
+     * @return array|mixed
+     */
     private function getVariantTranslation(array $data)
     {
         $translation = array();
@@ -141,6 +150,10 @@ class PriceHydrator extends Hydrator
         );
     }
 
+    /**
+     * @param array $data
+     * @return Struct\Product\PriceDiscount
+     */
     public function hydratePriceDiscount(array $data)
     {
         $discount = new Struct\Product\PriceDiscount();

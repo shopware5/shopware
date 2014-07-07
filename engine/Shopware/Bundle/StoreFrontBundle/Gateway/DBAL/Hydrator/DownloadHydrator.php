@@ -27,7 +27,9 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class DownloadHydrator extends Hydrator
 {
@@ -36,7 +38,10 @@ class DownloadHydrator extends Hydrator
      */
     private $attributeHydrator;
 
-    function __construct(AttributeHydrator $attributeHydrator)
+    /**
+     * @param AttributeHydrator $attributeHydrator
+     */
+    public function __construct(AttributeHydrator $attributeHydrator)
     {
         $this->attributeHydrator = $attributeHydrator;
     }

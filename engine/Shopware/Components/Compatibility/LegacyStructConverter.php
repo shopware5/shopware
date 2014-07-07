@@ -27,6 +27,11 @@ namespace Shopware\Components\Compatibility;
 use Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\StoreFrontBundle;
 
+/**
+ * @category  Shopware
+ * @package   Shopware\Components\Compatibility
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
 class LegacyStructConverter
 {
     /**
@@ -39,6 +44,10 @@ class LegacyStructConverter
      */
     private $legacyEventManager;
 
+    /**
+     * @param \Shopware_Components_Config $config
+     * @param LegacyEventManager $legacyEventManager
+     */
     function __construct(
         \Shopware_Components_Config $config,
         LegacyEventManager $legacyEventManager
@@ -150,6 +159,10 @@ class LegacyStructConverter
         return $promotion;
     }
 
+    /**
+     * @param StoreFrontBundle\Struct\Product $product
+     * @return array
+     */
     public function convertProductStruct(StoreFrontBundle\Struct\Product $product)
     {
         $data = $this->getListProductData($product);
@@ -267,6 +280,10 @@ class LegacyStructConverter
         return $data;
     }
 
+    /**
+     * @param StoreFrontBundle\Struct\Product\VoteAverage $average
+     * @return array
+     */
     public function convertVoteAverageStruct(StoreFrontBundle\Struct\Product\VoteAverage $average)
     {
         $data = array(
@@ -280,6 +297,10 @@ class LegacyStructConverter
         return $data;
     }
 
+    /**
+     * @param StoreFrontBundle\Struct\Product\Vote $vote
+     * @return array
+     */
     public function convertVoteStruct(StoreFrontBundle\Struct\Product\Vote $vote)
     {
         $data = array(
@@ -308,6 +329,10 @@ class LegacyStructConverter
         return $data;
     }
 
+    /**
+     * @param StoreFrontBundle\Struct\Product\Price $price
+     * @return array
+     */
     public function convertPriceStruct(StoreFrontBundle\Struct\Product\Price $price)
     {
         $data = array(
@@ -325,6 +350,10 @@ class LegacyStructConverter
         return $data;
     }
 
+    /**
+     * @param StoreFrontBundle\Struct\Media $media
+     * @return array
+     */
     public function convertMediaStruct(StoreFrontBundle\Struct\Media $media)
     {
         //now we get the configured image and thumbnail dir.
@@ -359,6 +388,10 @@ class LegacyStructConverter
         return $data;
     }
 
+    /**
+     * @param StoreFrontBundle\Struct\Product\Unit $unit
+     * @return array
+     */
     public function convertUnitStruct(StoreFrontBundle\Struct\Product\Unit $unit)
     {
         $data = array(
@@ -380,6 +413,10 @@ class LegacyStructConverter
         return $data;
     }
 
+    /**
+     * @param StoreFrontBundle\Struct\Product\Manufacturer $manufacturer
+     * @return string
+     */
     public function getSupplierListingLink(StoreFrontBundle\Struct\Product\Manufacturer $manufacturer)
     {
         return $this->config->get('baseFile') .
@@ -387,6 +424,10 @@ class LegacyStructConverter
         "&sSearchText=" . urlencode($manufacturer->getName());
     }
 
+    /**
+     * @param array $propertySet
+     * @return array
+     */
     public function getFlatPropertyArray(array $propertySet)
     {
         $data = array();
@@ -421,6 +462,10 @@ class LegacyStructConverter
         return $data;
     }
 
+    /**
+     * @param StoreFrontBundle\Struct\Property\Set $set
+     * @return array
+     */
     public function convertPropertySetStruct(StoreFrontBundle\Struct\Property\Set $set)
     {
         $data = array(
@@ -442,6 +487,10 @@ class LegacyStructConverter
         return $data;
     }
 
+    /**
+     * @param StoreFrontBundle\Struct\Property\Group $group
+     * @return array
+     */
     public function convertPropertyGroupStruct(StoreFrontBundle\Struct\Property\Group $group)
     {
         $data = array(
@@ -463,6 +512,10 @@ class LegacyStructConverter
         return $data;
     }
 
+    /**
+     * @param StoreFrontBundle\Struct\Property\Option $option
+     * @return array
+     */
     public function convertPropertyOptionStruct(StoreFrontBundle\Struct\Property\Option $option)
     {
         $data = array(
@@ -478,6 +531,10 @@ class LegacyStructConverter
         return $data;
     }
 
+    /**
+     * @param StoreFrontBundle\Struct\Product\Manufacturer $manufacturer
+     * @return array
+     */
     public function convertManufacturerStruct(StoreFrontBundle\Struct\Product\Manufacturer $manufacturer)
     {
         $data = array(
@@ -502,6 +559,11 @@ class LegacyStructConverter
         return $data;
     }
 
+    /**
+     * @param StoreFrontBundle\Struct\ListProduct $product
+     * @param StoreFrontBundle\Struct\Configurator\Set $set
+     * @return array
+     */
     public function convertConfiguratorStruct(
         StoreFrontBundle\Struct\ListProduct $product,
         StoreFrontBundle\Struct\Configurator\Set $set
@@ -543,12 +605,12 @@ class LegacyStructConverter
      * Creates the settings array for the passed configurator set
      *
      * @param StoreFrontBundle\Struct\Configurator\Set $set
-     * @param StoreFrontBundle\Struct\Product $product
+     * @param StoreFrontBundle\Struct\ListProduct $product
      * @return array
      */
     public function getConfiguratorSettings(
         StoreFrontBundle\Struct\Configurator\Set $set,
-        StoreFrontBundle\Struct\Product $product
+        StoreFrontBundle\Struct\ListProduct $product
     ) {
         $settings = array(
             'instock' => $product->isCloseouts(),
@@ -632,6 +694,10 @@ class LegacyStructConverter
         return $price;
     }
 
+    /**
+     * @param null $moneyfloat
+     * @return float
+     */
     private function sRound($moneyfloat = null)
     {
         $money_str = explode(".", $moneyfloat);

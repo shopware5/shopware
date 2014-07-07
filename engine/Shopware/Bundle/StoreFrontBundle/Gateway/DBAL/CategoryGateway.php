@@ -27,11 +27,12 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CategoryGateway implements Gateway\CategoryGatewayInterface
 {
@@ -60,7 +61,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
      * @param FieldHelper $fieldHelper
      * @param Hydrator\CategoryHydrator $categoryHydrator
      */
-    function __construct(
+    public function __construct(
         ModelManager $entityManager,
         FieldHelper $fieldHelper,
         Hydrator\CategoryHydrator $categoryHydrator
@@ -76,6 +77,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
     public function get($id, Struct\Context $context)
     {
         $categories = $this->getList($id, $context);
+
         return array_shift($categories);
     }
 

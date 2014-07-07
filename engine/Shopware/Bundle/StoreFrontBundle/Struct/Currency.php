@@ -25,7 +25,9 @@
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Struct
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Struct
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Currency extends Extendable
 {
@@ -133,6 +135,5 @@ class Currency extends Extendable
     {
         return $this->factor;
     }
-
 
 }

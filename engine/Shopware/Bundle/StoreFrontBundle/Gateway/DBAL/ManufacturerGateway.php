@@ -26,12 +26,13 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
 {
@@ -60,7 +61,7 @@ class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
      * @param FieldHelper $fieldHelper
      * @param Hydrator\ManufacturerHydrator $manufacturerHydrator
      */
-    function __construct(
+    public function __construct(
         ModelManager $entityManager,
         FieldHelper $fieldHelper,
         Hydrator\ManufacturerHydrator $manufacturerHydrator
@@ -69,7 +70,6 @@ class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
         $this->manufacturerHydrator = $manufacturerHydrator;
         $this->fieldHelper = $fieldHelper;
     }
-
 
     /**
      * @inheritdoc
@@ -103,7 +103,6 @@ class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
 
         $this->fieldHelper->addManufacturerTranslation($query);
         $query->setParameter(':language', $context->getShop()->getId());
-
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();

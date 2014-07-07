@@ -25,7 +25,9 @@
 namespace Shopware\Bundle\SearchBundle;
 
 /**
- * @package Shopware\Bundle\SearchBundle
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface FacetInterface
 {

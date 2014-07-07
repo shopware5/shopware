@@ -28,7 +28,9 @@ use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ProductService implements Service\ProductServiceInterface
 {
@@ -119,7 +121,7 @@ class ProductService implements Service\ProductServiceInterface
      * @param Service\MarketingServiceInterface $marketingService
      * @param \Enlight_Event_EventManager $eventManager
      */
-    function __construct(
+    public function __construct(
         Gateway\ListProductGatewayInterface $productGateway,
         Service\VoteServiceInterface $voteService,
         Service\RelatedProductsServiceInterface $relatedProductsService,
@@ -160,6 +162,7 @@ class ProductService implements Service\ProductServiceInterface
     public function get($number, Struct\Context $context)
     {
         $products = $this->getList(array($number), $context);
+
         return array_shift($products);
     }
 

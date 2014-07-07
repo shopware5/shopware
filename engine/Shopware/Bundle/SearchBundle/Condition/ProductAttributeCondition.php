@@ -26,6 +26,11 @@ namespace Shopware\Bundle\SearchBundle\Condition;
 
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
+/**
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle\Condition
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
 class ProductAttributeCondition implements ConditionInterface
 {
     const OPERATOR_EQ = '=';
@@ -55,11 +60,11 @@ class ProductAttributeCondition implements ConditionInterface
     private $operator;
 
     /**
-     * @param $field
-     * @param $operator
-     * @param $value
+     * @param string $field
+     * @param string $operator
+     * @param string $value
      */
-    function __construct($field, $operator, $value)
+    public function __construct($field, $operator, $value)
     {
         $this->field = $field;
         $this->value = $value;
@@ -67,7 +72,7 @@ class ProductAttributeCondition implements ConditionInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -121,5 +126,4 @@ class ProductAttributeCondition implements ConditionInterface
     {
         $this->operator = $operator;
     }
-
 }

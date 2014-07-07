@@ -27,8 +27,9 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct\Country;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
- * Class State
- * @package Shopware\Bundle\StoreFrontBundle\Struct\Country
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Struct\Country
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class State extends Extendable
 {
@@ -94,6 +95,5 @@ class State extends Extendable
     {
         $this->code = $code;
     }
-
 
 }

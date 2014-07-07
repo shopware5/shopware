@@ -29,7 +29,9 @@ use Shopware\Components\Thumbnail\Manager;
 use Shopware\Models;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class MediaHydrator extends Hydrator
 {
@@ -47,7 +49,7 @@ class MediaHydrator extends Hydrator
      * @param AttributeHydrator $attributeHydrator
      * @param \Shopware\Components\Thumbnail\Manager $thumbnailManager
      */
-    function __construct(AttributeHydrator $attributeHydrator, Manager $thumbnailManager)
+    public function __construct(AttributeHydrator $attributeHydrator, Manager $thumbnailManager)
     {
         $this->attributeHydrator = $attributeHydrator;
         $this->thumbnailManager = $thumbnailManager;
@@ -124,7 +126,6 @@ class MediaHydrator extends Hydrator
         return $media;
     }
 
-
     /**
      * @param array $data Contains the array data for the media
      * @return array
@@ -146,11 +147,14 @@ class MediaHydrator extends Hydrator
         );
     }
 
+    /**
+     * @param $data
+     * @return array
+     */
     private function getImageTranslation($data)
     {
         if (!isset($data['__image_translation'])
             || empty($data['__image_translation'])) {
-
             return array();
         }
 

@@ -31,13 +31,15 @@ use Shopware\Bundle\SearchBundle\DBAL\ConditionHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\SearchBundle\DBAL\QueryBuilder;
 
+/**
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle\DBAL\ConditionHandler
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
 class ManufacturerConditionHandler implements ConditionHandlerInterface
 {
     /**
-     * Checks if the passed condition can be handled by this class.
-     *
-     * @param ConditionInterface $condition
-     * @return bool
+     * {@inheritdoc}
      */
     public function supportsCondition(ConditionInterface $condition)
     {

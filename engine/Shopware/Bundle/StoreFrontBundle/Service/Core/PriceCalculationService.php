@@ -28,7 +28,9 @@ use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PriceCalculationService implements Service\PriceCalculationServiceInterface
 {
@@ -40,7 +42,7 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
     /**
      * @param Gateway\PriceGroupDiscountGatewayInterface $priceGroupDiscountGateway
      */
-    function __construct(Gateway\PriceGroupDiscountGatewayInterface $priceGroupDiscountGateway)
+    public function __construct(Gateway\PriceGroupDiscountGatewayInterface $priceGroupDiscountGateway)
     {
         $this->priceGroupDiscountGateway = $priceGroupDiscountGateway;
     }
@@ -169,7 +171,6 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
         return $price;
     }
 
-
     /**
      * Helper function which calculates a single price value.
      * The function subtracts the percentage customer group discount if
@@ -252,6 +253,7 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
     private function calculateReferencePrice(Struct\Product\Price $price)
     {
         $value = $price->getCalculatedPrice() / $price->getUnit()->getPurchaseUnit() * $price->getUnit()->getReferenceUnit();
+
         return round($value, 3);
     }
 }

@@ -28,7 +28,9 @@ use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ProductLinkService implements Service\ProductLinkServiceInterface
 {
@@ -40,7 +42,7 @@ class ProductLinkService implements Service\ProductLinkServiceInterface
     /**
      * @param Gateway\LinkGatewayInterface $gateway
      */
-    function __construct(Gateway\LinkGatewayInterface $gateway)
+    public function __construct(Gateway\LinkGatewayInterface $gateway)
     {
         $this->gateway = $gateway;
     }
@@ -51,6 +53,7 @@ class ProductLinkService implements Service\ProductLinkServiceInterface
     public function get(Struct\ListProduct $product, Struct\Context $context)
     {
         $downloads = $this->getList(array($product), $context);
+
         return array_shift($downloads);
     }
 

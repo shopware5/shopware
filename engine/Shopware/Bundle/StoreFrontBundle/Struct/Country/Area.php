@@ -27,7 +27,9 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct\Country;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Struct\Country
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Struct\Country
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Area extends Extendable
 {
@@ -72,6 +74,5 @@ class Area extends Extendable
     {
         return $this->name;
     }
-
 
 }

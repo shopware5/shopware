@@ -28,7 +28,9 @@ use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CategoryService implements Service\CategoryServiceInterface
 {
@@ -40,7 +42,7 @@ class CategoryService implements Service\CategoryServiceInterface
     /**
      * @param Gateway\CategoryGatewayInterface $categoryGateway
      */
-    function __construct(Gateway\CategoryGatewayInterface $categoryGateway)
+    public function __construct(Gateway\CategoryGatewayInterface $categoryGateway)
     {
         $this->categoryGateway = $categoryGateway;
     }
@@ -51,6 +53,7 @@ class CategoryService implements Service\CategoryServiceInterface
     public function get($id, Struct\Context $context)
     {
         $categories = $this->getList(array($id), $context);
+
         return array_shift($categories);
     }
 

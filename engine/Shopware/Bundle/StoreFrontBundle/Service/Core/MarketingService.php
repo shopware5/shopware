@@ -25,10 +25,11 @@ namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class MarketingService implements Service\MarketingServiceInterface
 {
@@ -40,7 +41,7 @@ class MarketingService implements Service\MarketingServiceInterface
     /**
      * @param \Shopware_Components_Config $config
      */
-    function __construct(\Shopware_Components_Config $config)
+    public function __construct(\Shopware_Components_Config $config)
     {
         $this->config = $config;
     }

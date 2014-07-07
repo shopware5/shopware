@@ -32,7 +32,9 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 
 /**
- * @package Shopware\Bundle\SearchBundle\DBAL\FacetHandler
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle\DBAL\FacetHandler
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ShippingFreeFacetHandler implements FacetHandlerInterface
 {
@@ -75,9 +77,7 @@ class ShippingFreeFacetHandler implements FacetHandlerInterface
     }
 
     /**
-     * Checks if the passed facet can be handled by this class.
-     * @param FacetInterface $facet
-     * @return bool
+     * {@inheritdoc}
      */
     public function supportsFacet(FacetInterface $facet)
     {

@@ -27,7 +27,9 @@ namespace Shopware\Bundle\SearchBundle\Condition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 /**
- * @package Shopware\Bundle\SearchBundle\Condition
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle\Condition
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PriceCondition implements ConditionInterface
 {
@@ -45,12 +47,15 @@ class PriceCondition implements ConditionInterface
      * @param $minPrice
      * @param $maxPrice
      */
-    function __construct($minPrice, $maxPrice)
+    public function __construct($minPrice, $maxPrice)
     {
         $this->minPrice = $minPrice;
         $this->maxPrice = $maxPrice;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'price';

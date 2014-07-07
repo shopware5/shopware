@@ -27,7 +27,9 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct\Product;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Struct\Product
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Struct\Product
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Manufacturer extends Extendable
 {
@@ -96,6 +98,7 @@ class Manufacturer extends Extendable
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -114,6 +117,7 @@ class Manufacturer extends Extendable
     public function setId($id)
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -132,6 +136,7 @@ class Manufacturer extends Extendable
     public function setMetaDescription($metaDescription)
     {
         $this->metaDescription = $metaDescription;
+
         return $this;
     }
 
@@ -150,6 +155,7 @@ class Manufacturer extends Extendable
     public function setMetaKeywords($metaKeywords)
     {
         $this->metaKeywords = $metaKeywords;
+
         return $this;
     }
 
@@ -168,6 +174,7 @@ class Manufacturer extends Extendable
     public function setMetaTitle($metaTitle)
     {
         $this->metaTitle = $metaTitle;
+
         return $this;
     }
 
@@ -186,6 +193,7 @@ class Manufacturer extends Extendable
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 

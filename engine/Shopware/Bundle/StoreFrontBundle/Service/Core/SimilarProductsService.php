@@ -28,7 +28,9 @@ use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
- * @package Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @category  Shopware
+ * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SimilarProductsService implements Service\SimilarProductsServiceInterface
 {
@@ -46,7 +48,7 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
      * @param Gateway\SimilarProductsGatewayInterface $gateway
      * @param Service\ListProductServiceInterface $listProductService
      */
-    function __construct(
+    public function __construct(
         Gateway\SimilarProductsGatewayInterface $gateway,
         Service\ListProductServiceInterface $listProductService
     ) {
@@ -60,6 +62,7 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
     public function get(Struct\ListProduct $product, Struct\Context $context)
     {
         $similar = $this->getList(array($product), $context);
+
         return array_shift($similar);
     }
 
@@ -136,6 +139,7 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
                 $result[$product->getNumber()] = $product;
             }
         }
+
         return $result;
     }
 
