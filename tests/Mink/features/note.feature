@@ -44,7 +44,7 @@ Feature: Note
 			| Sonnenbrille-Damen-rot_105x105.jpg | Sonnenbrille Big Eyes   | 0       | Caput. Vis Antea tot dux qualiscumque incompositus, non pessum se census rationabiliter Cras injustus qui. Sis canalis sententiosus Mico, fio eo | 9,99 €  | /sommerwelten/166/sonnenbrille-big-eyes   |
 			| Sonnenbrille-gruen_105x105.jpg     | Sonnenbrille Speed Eyes | 0       | N sui ut glorificus, voro subdo flos alter laxe novem orbus sesquimellesimus, eruo ivi sero trimodus insuadibilis sus ver Jugiter episcopalis    | 13,49 € | /sommerwelten/167/sonnenbrille-speed-eyes |
 
-		When  I move backward one page
+		When  I go to my note
 		And  I follow "Vergleich löschen"
 		And  I go to my note
 		Then  I should not see "Artikel vergleichen"
