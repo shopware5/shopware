@@ -32,9 +32,12 @@
 	.clearfix();
 
 	.newsletter-detail--iframe {
+	    overflow: auto;
+	    -webkit-overflow-scrolling:touch;
+
 	    iframe {
+		.unitize(500, 16, min-height);
 		width: 100%;
-		min-height: 50%;
 		border: none;
 		outline: none;
 	    }
