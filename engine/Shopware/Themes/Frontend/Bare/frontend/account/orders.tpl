@@ -9,28 +9,28 @@
 {block name="frontend_index_content"}
 	<div class="content block account--content">
 
+        {* Welcome text *}
+        {block name="frontend_account_orders_welcome"}
+            <div class="account--welcome panel">
+                {block name="frontend_account_orders_welcome_headline"}
+                    <h1 class="panel--title">{s name="OrdersHeader"}{/s}</h1>
+                {/block}
+
+                {block name="frontend_account_orders_welcome_content"}
+                    <div class="panel--body is--wide">
+                        <p>{s name="OrdersWelcomeText"}{/s}</p>
+                    </div>
+                {/block}
+            </div>
+        {/block}
+
         {if !$sOpenOrders}
             {block name="frontend_account_orders_info_empty"}
-				<div class="account--no-orders-info">
-					{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='OrdersInfoEmpty'}{/s}"}
-				</div>
+                <div class="account--no-orders-info">
+                    {include file="frontend/_includes/messages.tpl" type="warning" content="{s name='OrdersInfoEmpty'}{/s}"}
+                </div>
             {/block}
         {else}
-
-			{block name="frontend_account_orders_welcome"}
-				<div class="account--welcome panel">
-					{block name="frontend_account_orders_welcome_headline"}
-						<h1 class="panel--title">{s name="OrdersHeader"}{/s}</h1>
-					{/block}
-
-					{block name="frontend_account_orders_welcome_content"}
-						<div class="panel--body is--wide">
-							<p>{s name="OrdersWelcomeText"}{/s}</p>
-						</div>
-					{/block}
-				</div>
-			{/block}
-
 			{* Orders overview *}
 			{block name="frontend_account_orders_overview"}
 				<div class="account--orders-overview panel">
