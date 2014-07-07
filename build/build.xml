@@ -229,6 +229,14 @@
         </exec>
     </target>
 
+    <target name="start-server">
+        <exec executable="${script.server.start}" />
+    </target>
+
+    <target name="stop-server">
+        <exec executable="${script.server.stop}" />
+    </target>
+
     <target name="mink-shopware-continuous">
         <exec executable="${script.behat}" dir="${test.dir}/Mink">
             <env key="MINK_EXTENSION_PARAMS" value="base_url=http://${app.host}${app.path}"/>

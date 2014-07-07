@@ -1,0 +1,15 @@
+#!/bin/bash
+## Simple start script to run php Built-in web server
+BASEDIR=$(readlink -f ${BASH_SOURCE[0]})
+BASEDIR=$(dirname $BASEDIR)
+
+$BASEDIR/stop_server
+
+PHP=$(which php)
+if [ $? != 0 ] ; then
+    echo "Unable to find PHP"
+    exit 1
+fi
+
+cd $BASEDIR/../../
+nohup $PHP -S 0.0.0.0:8080 $BASEDIR/router.php > /dev/null 2>&1 & echo $! > $BASEDIR/server.pid
