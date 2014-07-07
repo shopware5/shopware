@@ -35,7 +35,7 @@
 								<div class="blog--subscribe is--rounded block">
 
 									{block name="frontend_blog_index_subscribe_headline"}
-										<h1 class="blog--subscribe-headline panel--title is--underline collapse--header" data-collapse-panel="true">{s name="BlogSubscribe"}Subscribe{/s}</h1>
+										<h1 class="blog--subscribe-headline panel--title is--underline collapse--header" data-collapse-panel="true">{s name="BlogSubscribe"}Subscribe{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
 									{/block}
 
 									{block name="frontend_blog_index_subscribe_content"}
@@ -46,7 +46,7 @@
 												{/block}
 
 												{block name="frontend_blog_index_subscribe_entry_atom"}
-													<li class="last"><a class="atom" href="{$sCategoryContent.atomFeed}" title="{$sCategoryContent.description}">{s namespace="frontend/blog/index" name="BlogLinkAtom"}{/s}</a></li>
+													<li class="filter--entry last"><a class="atom" href="{$sCategoryContent.atomFeed}" title="{$sCategoryContent.description}">{s namespace="frontend/blog/index" name="BlogLinkAtom"}{/s}</a></li>
 												{/block}
 											</ul>
 										</div>

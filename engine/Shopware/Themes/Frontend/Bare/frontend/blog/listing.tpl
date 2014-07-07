@@ -1,4 +1,4 @@
-<div class="listing-blog">
+<div class="blog--listing block">
 	{if $sCategoryContent.cmsheadline || $sCategoryContent.cmstext}
 		{include file="frontend/listing/text.tpl"}
 	{/if}
