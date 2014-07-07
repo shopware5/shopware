@@ -2,7 +2,7 @@
 
 {block name="frontend_listing_actions_class"}
 	{if $sNumberPages && $sNumberPages > 1}
-		<div class="listing_actions normal">
+		<div class="blog--listing-actions">
 	{/if}
 {/block}
 

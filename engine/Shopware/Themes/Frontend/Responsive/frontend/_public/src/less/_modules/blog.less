@@ -32,20 +32,6 @@
 	    &.is--wide {
 		.unitize(0, 16, padding-bottom);
 	    }
-
-	    &.is--active::after {
-		content: '-';
-	    }
-
-	    &::after {
-		.unitize-margin(-3.5, 0, 0, 0, 16);
-		.unitize(24, 16);
-		color: @primaryTextColor;
-		content: '+';
-		font-weight: bold;
-		float: right;
-	    }
-
 	}
 
 	.blog--subscribe,
@@ -59,7 +45,6 @@
 	.blog--filter-tags {
 	    .clearfix();
 	}
-
     }
 
 
