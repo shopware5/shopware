@@ -94,6 +94,7 @@ Ext.define('Shopware.apps.Article', {
         'variant.configurator.Dependency',
         'variant.configurator.Sets',
         'variant.configurator.GroupEdit',
+        'variant.configurator.OptionEdit',
         'variant.configurator.Mapping',
         'variant.configurator.Template',
         'esd.List',

@@ -514,4 +514,10 @@ Ext.onReady(function() {
         deleteButtonText: 'Delete all selected',
         searchFieldText: 'Search...'
     });
+    Ext.define('Shopware.grid.plugin.en_GB.Translation', {
+        override: 'Shopware.grid.plugin.Translation',
+        snippets: {
+            tooltip: "Translate"
+        }
+    });
 });
