@@ -1,10 +1,16 @@
 // Newsletter listing
 .newsletter-listing--content {
 
-    .newsletter-listing--table { .border-radius(); }
+    .newsletter-listing--table {
+	.border-radius();
+    }
     .newsletter-listing--table-headline {
-	.newsletter-listing--headline-name { width: 65%; }
-	.newsletter-listing--headline-button { width: 35%; }
+	.newsletter-listing--headline-name {
+	    width: 65%;
+	}
+	.newsletter-listing--headline-button {
+	    width: 35%;
+	}
     }
     .newsletter-listing--entry {
 	.unitize-padding(10, 0, 10, 0, 16);
@@ -17,9 +23,13 @@
 	.newsletter-listing--entry-button {
 	    width: 35%;
 
-	    .btn { float: right; }
+	    .btn {
+		float: right;
+	    }
 	}
-	&:last-child { border: none; }
+	&:last-child {
+	    border: none;
+	}
     }
 }
 
@@ -33,7 +43,7 @@
 
 	.newsletter-detail--iframe {
 	    overflow: auto;
-	    -webkit-overflow-scrolling:touch;
+	    -webkit-overflow-scrolling: touch;
 
 	    iframe {
 		.unitize(500, 16, min-height);
@@ -51,7 +61,9 @@
 	    .unitize(10, 16, margin-bottom);
 	    text-align: center;
 
-	    i[class^=icon] { .unitize-margin(0, 0, 0, 16); }
+	    i[class^=icon] {
+		.unitize-margin(0, 0, 0, 16);
+	    }
 	}
     }
 }
@@ -62,17 +74,27 @@
     .newsletter-listing--content {
 
 	.newsletter-listing--table-headline {
-	    .newsletter-listing--headline-name { width: 80%; }
-	    .newsletter-listing--headline-button { width: 20%; }
+	    .newsletter-listing--headline-name {
+		width: 80%;
+	    }
+	    .newsletter-listing--headline-button {
+		width: 20%;
+	    }
 	}
 	.newsletter-listing--entry {
-	    .newsletter-listing--entry-description { width: 80%; }
-	    .newsletter-listing--entry-button { width: 20%; }
+	    .newsletter-listing--entry-description {
+		width: 80%;
+	    }
+	    .newsletter-listing--entry-button {
+		width: 20%;
+	    }
 	}
     }
 
     // Newsletter detail
-    .newsletter-detail--content { .unitize(20, 16, margin-top); }
+    .newsletter-detail--content {
+	.unitize(20, 16, margin-top);
+    }
 }
 
 @media screen and (min-width: @desktopViewportWidth) {
@@ -84,12 +106,20 @@
 	float: right;
 
 	.newsletter-listing--table-headline {
-	    .newsletter-listing--headline-name { width: 90%; }
-	    .newsletter-listing--headline-button { width: 10%; }
+	    .newsletter-listing--headline-name {
+		width: 90%;
+	    }
+	    .newsletter-listing--headline-button {
+		width: 10%;
+	    }
 	}
 	.newsletter-listing--entry {
-	    .newsletter-listing--entry-description { width: 90%; }
-	    .newsletter-listing--entry-button { width: 10%; }
+	    .newsletter-listing--entry-description {
+		width: 90%;
+	    }
+	    .newsletter-listing--entry-button {
+		width: 10%;
+	    }
 	}
     }
 
