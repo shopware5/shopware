@@ -12,14 +12,14 @@
 		{* Billing addresses list *}
 		{block name="frontend_account_select_billing_address"}
 			<div class="account--addresses-container">
-				{if $sBillingAddresses}
 
-					{block name="frontend_account_select_billing_headline"}
-						<div class="account--welcome">
-							<h1 class="panel--title">{s name="SelectBillingHeader"}{/s}</h1>
-						</div>
-					{/block}
+                {block name="frontend_account_select_billing_headline"}
+                    <div class="account--welcome">
+                        <h1 class="panel--title">{s name="SelectBillingHeader"}{/s}</h1>
+                    </div>
+                {/block}
 
+                {if $sBillingAddresses}
 					{block name="frontend_account_select_billing_container"}
 						{foreach $sBillingAddresses as $key => $sAddress}
 							<div class="address--container">
