@@ -69,7 +69,7 @@
 
 				{* Custom page tab content *}
 				{block name="frontend_custom_article"}
-					<div class="tabs--content-container tab--content panel--body is--wide has--border{if !is_array($sCustomPage.parent)} is--active-parent{/if}">
+					<div class="tabs--content-container tab--content panel has--border{if !is_array($sCustomPage.parent)} is--active-parent{/if}">
 
 						<div class="content--custom panel--body">
 							{* Custom page tab headline *}

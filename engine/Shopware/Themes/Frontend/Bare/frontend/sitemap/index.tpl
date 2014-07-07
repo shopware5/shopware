@@ -31,52 +31,52 @@
 				<div class="block-group">
 			{/if}
 
-				{block name="frontend_sitemap_category"}
-					<div class="sitemap--category block">
+			{block name="frontend_sitemap_category"}
+				<div class="sitemap--category block">
 
-						{block name="frontend_sitemap_navigation"}
-							<ul class="sitemap--navigation list--unstyled">
+					{block name="frontend_sitemap_navigation"}
+						<ul class="sitemap--navigation list--unstyled">
 
-								{block name="frontend_sitemap_navigation_headline"}
-									<li class="sitemap--navigation-head is--bold">
+							{block name="frontend_sitemap_navigation_headline"}
+								<li class="sitemap--navigation-head is--bold">
 
-										{if $categoryTree.name == 'SitemapStaticPages'}
-											{block name="frontend_sitemap_navigation_staticpages"}
-												<a href="{$categoryTree.link}" title="{s name='SitemapStaticPages'}Statische Seiten{/s}" class="sitemap--navigation-head-link is--active">
-													{s name='SitemapStaticPages'}Statische Seiten{/s}
-												</a>
-											{/block}
-										{elseif $categoryTree.name == 'SitemapSupplierPages'}
-											{block name="frontend_sitemap_navigation_supplierpages"}
-												<a href="{$categoryTree.link}" title="{s name='SitemapSupplierPages'}Herstellerseiten{/s}" class="sitemap--navigation-head-link is--active">
-													{s name='SitemapSupplierPages'}Herstellerseiten{/s}
-												</a>
-											{/block}
-										{elseif $categoryTree.name == 'SitemapLandingPages'}
-											{block name="frontend_sitemap_navigation_landingpages"}
-												<a href="{$categoryTree.link}" title="{s name='SitemapLandingPages'}Landingpages{/s}" class="sitemap--navigation-head-link is--active">
-													{s name='SitemapLandingPages'}Landingpages{/s}
-												</a>
-											{/block}
-										{else}
-											{block name="frontend_sitemap_navigation_defaultpages"}
-												<a href="{$categoryTree.link}" title="{$categoryTree.name}" class="sitemap--navigation-head-link is--active">
-													{$categoryTree.name}
-												</a>
-											{/block}
-										{/if}
+									{if $categoryTree.name == 'SitemapStaticPages'}
+										{block name="frontend_sitemap_navigation_staticpages"}
+											<a href="{$categoryTree.link}" title="{s name='SitemapStaticPages'}Statische Seiten{/s}" class="sitemap--navigation-head-link is--active">
+												{s name='SitemapStaticPages'}Statische Seiten{/s}
+											</a>
+										{/block}
+									{elseif $categoryTree.name == 'SitemapSupplierPages'}
+										{block name="frontend_sitemap_navigation_supplierpages"}
+											<a href="{$categoryTree.link}" title="{s name='SitemapSupplierPages'}Herstellerseiten{/s}" class="sitemap--navigation-head-link is--active">
+												{s name='SitemapSupplierPages'}Herstellerseiten{/s}
+											</a>
+										{/block}
+									{elseif $categoryTree.name == 'SitemapLandingPages'}
+										{block name="frontend_sitemap_navigation_landingpages"}
+											<a href="{$categoryTree.link}" title="{s name='SitemapLandingPages'}Landingpages{/s}" class="sitemap--navigation-head-link is--active">
+												{s name='SitemapLandingPages'}Landingpages{/s}
+											</a>
+										{/block}
+									{else}
+										{block name="frontend_sitemap_navigation_defaultpages"}
+											<a href="{$categoryTree.link}" title="{$categoryTree.name}" class="sitemap--navigation-head-link is--active">
+												{$categoryTree.name}
+											</a>
+										{/block}
+									{/if}
 
-									</li>
-								{/block}
+								</li>
+							{/block}
 
-								{if $categoryTree.sub}
-									{include file="frontend/sitemap/recurse.tpl" sCategoryTree=$categoryTree.sub depth=1}
-								{/if}
-							</ul>
-						{/block}
+							{if $categoryTree.sub}
+								{include file="frontend/sitemap/recurse.tpl" sCategoryTree=$categoryTree.sub depth=1}
+							{/if}
+						</ul>
+					{/block}
 
-					</div>
-				{/block}
+				</div>
+			{/block}
 
 			{if $categoryTree@index % 4 == 3 || $categoryTree@last}
 				</div>
