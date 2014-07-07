@@ -5,9 +5,9 @@ namespace Shopware\Tests\Service\Search;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\PriceFacet;
-use Shopware\Bundle\SearchBundle\Sorting\DescriptionSorting;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
+use Shopware\Bundle\SearchBundle\Sorting\ProductNameSorting;
 
 class CriteriaTest extends TestCase
 {
@@ -39,7 +39,7 @@ class CriteriaTest extends TestCase
     {
         $sortings = array(
             new PriceSorting(),
-            new DescriptionSorting(),
+            new ProductNameSorting(),
             new PopularitySorting()
         );
 
