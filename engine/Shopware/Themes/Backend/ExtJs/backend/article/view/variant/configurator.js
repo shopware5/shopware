@@ -92,6 +92,7 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
                 label: '{s name=variant/configurator/option/name_label}Create option{/s}',
                 empty: '{s name=variant/configurator/option/name_empty}Yellow{/s}'
             },
+            edit: '{s name=variant/configurator/option/edit_column}Edit option{/s}',
             remove: '{s name=variant/configurator/option/remove_column}Delete option{/s}',
             name: '{s name=variant/configurator/option/name_column}Option name{/s}',
             activeOptions: '{s name=variant/configurator/option/active_options_header}Active options{/s}',
@@ -209,6 +210,10 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
              * @param record - The selected grid record
              */
             'deleteOption',
+            /**
+             * Event will be fired when the user clicks the edit column in the option grid.
+             */
+            'editOption',
             /**
              * Event will be fired when the user drag and drops a configurator group
              */
@@ -568,7 +573,7 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
             } , {
                 iconCls:'sprite-pencil',
                 action:'editGroup',
-                tooltip:me.snippets.groups.edit,
+                tooltip:me.snippets.groups,
                 handler:function (view, rowIndex, colIndex, item, opts, record) {
                     me.fireEvent('editGroup', record);
                 }
@@ -826,14 +831,23 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
              */
             xtype:'actioncolumn',
             width: 70,
-            items:[{
-                iconCls:'sprite-minus-circle-frame',
-                action:'deleteOption',
-                tooltip:me.snippets.options.remove,
-                handler: function (view, rowIndex, colIndex, item, opts, record) {
-                    me.fireEvent('deleteOption', record);
+            items:[
+                {
+                    iconCls:'sprite-minus-circle-frame',
+                    action:'deleteOption',
+                    tooltip:me.snippets.options.remove,
+                    handler: function (view, rowIndex, colIndex, item, opts, record) {
+                        me.fireEvent('deleteOption', record);
+                    }
+                }, {
+                    iconCls:'sprite-pencil',
+                    action:'editOption',
+                    tooltip: me.snippets.options.edit,
+                    handler:function (view, rowIndex, colIndex, item, opts, record) {
+                        me.fireEvent('editOption', record);
+                    }
                 }
-            }]
+            ]
         }];
     },
 

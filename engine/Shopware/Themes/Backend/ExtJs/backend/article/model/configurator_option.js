@@ -70,6 +70,7 @@ Ext.define('Shopware.apps.Article.model.ConfiguratorOption', {
          * @object
          */
         api: {
+            update: '{url action="saveConfiguratorOption"}',
             destroy: '{url action="deleteConfiguratorOption"}'
         }
     }

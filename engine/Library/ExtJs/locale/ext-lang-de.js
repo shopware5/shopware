@@ -541,4 +541,10 @@ Ext.onReady(function() {
         deleteButtonText: 'Markierte Einträge löschen',
         searchFieldText: 'Suche...'
     });
+    Ext.define('Shopware.grid.plugin.de.Translation', {
+        override: 'Shopware.grid.plugin.Translation',
+        snippets: {
+            tooltip: "Übersetzen"
+        }
+    });
 });
