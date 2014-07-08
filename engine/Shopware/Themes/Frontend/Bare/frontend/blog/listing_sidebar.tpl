@@ -42,11 +42,11 @@
 										<div class="blog--subscribe-content panel--body is--wide collapse--content">
 											<ul class="filter--list list--unstyled">
 												{block name="frontend_blog_index_subscribe_entry_rss"}
-													<li class="filter--entry"><a class="rss" href="{$sCategoryContent.rssFeed}" title="{$sCategoryContent.description}">{s namespace="frontend/blog/index" name="BlogLinkRSS"}{/s}</a></li>
+													<li class="filter--entry"><a class="filter--entry-link" href="{$sCategoryContent.rssFeed}" title="{$sCategoryContent.description}">{s namespace="frontend/blog/index" name="BlogLinkRSS"}{/s}</a></li>
 												{/block}
 
 												{block name="frontend_blog_index_subscribe_entry_atom"}
-													<li class="filter--entry last"><a class="atom" href="{$sCategoryContent.atomFeed}" title="{$sCategoryContent.description}">{s namespace="frontend/blog/index" name="BlogLinkAtom"}{/s}</a></li>
+													<li class="filter--entry is--last"><a class="filter--entry-link" href="{$sCategoryContent.atomFeed}" title="{$sCategoryContent.description}">{s namespace="frontend/blog/index" name="BlogLinkAtom"}{/s}</a></li>
 												{/block}
 											</ul>
 										</div>
