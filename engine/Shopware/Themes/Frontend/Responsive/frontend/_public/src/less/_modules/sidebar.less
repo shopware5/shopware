@@ -18,7 +18,7 @@ body > .sidebar-main {
     .sidebar-main {
         .unitize(45, 16, padding-top);
         .unitize-margin(0, 0);
-        display: block;
+        display: none;
         width: 20%;
 
         .navigation--smartphone,
@@ -118,5 +118,11 @@ body > .sidebar-main {
                 }
             }
         }
+    }
+}
+
+@media screen and (min-width: @desktopViewportWidth) {
+    .sidebar-main {
+        display: block;
     }
 }
