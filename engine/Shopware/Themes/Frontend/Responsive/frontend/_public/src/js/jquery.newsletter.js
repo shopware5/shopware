@@ -14,10 +14,10 @@
 
 	refreshAction: function (event) {
 	    var me = this,
-		$el = $(event.currentTarget),
-		val = $el.val();
+		    $el = $(event.currentTarget),
+		    val = $el.val();
 
-	    if(val == -1) {
+	    if (val == -1) {
 		me.$addionalForm.hide();
 	    } else {
 		me.$addionalForm.show();
@@ -28,4 +28,4 @@
 	    this._destroy();
 	}
     });
-}( jQuery ));
+}(jQuery));
