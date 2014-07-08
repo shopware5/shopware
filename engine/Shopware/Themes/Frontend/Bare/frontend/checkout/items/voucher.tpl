@@ -38,24 +38,6 @@
         </div>
     {/block}
 
-	{* Product quantity *}
-    {block name='frontend_checkout_cart_item_voucher_quantity'}
-        <div class="table--column column--quantity block is--align-right">
-			{* Label *}
-			{block name='frontend_checkout_cart_item_premium_quantity_label'}
-				<div class="column--label quantity--label">
-					{s name="CartColumnQuantity" namespace="frontend/checkout/cart_header"}{/s}
-				</div>
-			{/block}
-
-			<select name="sQuantity">
-				<option selected="selected" disabled="disabled">
-					1
-				</option>
-			</select>
-        </div>
-    {/block}
-
     {* Product tax rate *}
     {block name='frontend_checkout_cart_item_voucher_tax_price'}{/block}
 
@@ -71,7 +53,7 @@
             {if $sBasketItem.itemInfo}
                 {$sBasketItem.itemInfo}
             {else}
-                {$sBasketItem.price|currency} {block name='frontend_checkout_cart_tax_symbol'}{s name="Star" namespace="frontend/listing/box_article"}{/s}{/block}
+                {$sBasketItem.price|currency}{block name='frontend_checkout_cart_tax_symbol'}{s name="Star" namespace="frontend/listing/box_article"}{/s}{/block}
             {/if}
         </div>
     {/block}

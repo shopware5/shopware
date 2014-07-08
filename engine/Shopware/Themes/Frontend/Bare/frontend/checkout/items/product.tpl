@@ -105,7 +105,7 @@
 						{s name="CartColumnTotal" namespace="frontend/checkout/cart_header"}{/s}
 					</div>
 				{/block}
-                {$sBasketItem.amount|currency} {block name='frontend_checkout_cart_tax_symbol'}{s name="Star" namespace="frontend/listing/box_article"}{/s}{/block}
+                {$sBasketItem.amount|currency}{block name='frontend_checkout_cart_tax_symbol'}{s name="Star" namespace="frontend/listing/box_article"}{/s}{/block}
             </div>
         {/block}
 

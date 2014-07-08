@@ -72,7 +72,7 @@
 
 					{block name='frontend_checkout_cart_footer_field_labels_sum_value'}
 						<div class="entry--value block">
-							{$sBasket.Amount|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
+							{$sBasket.Amount|currency}{s name="Star" namespace="frontend/listing/box_article"}{/s}
 						</div>
 					{/block}
 				</li>
@@ -90,7 +90,7 @@
 
 					{block name='frontend_checkout_cart_footer_field_labels_shipping_value'}
 						<div class="entry--value block">
-							{$sShippingcosts|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
+							{$sShippingcosts|currency}{s name="Star" namespace="frontend/listing/box_article"}{/s}
 						</div>
 					{/block}
 				</li>
@@ -107,7 +107,7 @@
 					{/block}
 
 					{block name='frontend_checkout_cart_footer_field_labels_total_value'}
-						<div class="entry--value block">
+						<div class="entry--value block is--no-star">
 							{if $sAmountWithTax && $sUserData.additional.charge_vat}{$sAmountWithTax|currency}{else}{$sAmount|currency}{/if}
 						</div>
 					{/block}
@@ -126,7 +126,7 @@
 						{/block}
 
 						{block name='frontend_checkout_cart_footer_field_labels_totalnet_value'}
-							<div class="entry--value block">
+							<div class="entry--value block is--no-star">
 								{$sAmountNet|currency}
 							</div>
 						{/block}
@@ -148,7 +148,7 @@
 							{/block}
 
 							{block name='frontend_checkout_cart_footer_field_labels_taxes_value'}
-								<div class="entry--value block">
+								<div class="entry--value block is--no-star">
 									{$value|currency}
 								</div>
 							{/block}
