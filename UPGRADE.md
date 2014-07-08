@@ -58,6 +58,9 @@ In this document you will find a changelog of the important changes related to t
     * Will be removed in the next minor release.
     * Use `http_client` from container instead.
 * Increased minimum required PHP version to PHP >= 5.4.0.
+* When duplicating articles in the backend, attributes and translations will also be copied
+* When applying main data to variants, translations will also be overwritten, if selected
+* It is now possible to rename variant configurator options
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
