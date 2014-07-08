@@ -1,64 +1,59 @@
-.blog--content {
 
-    .blog--sidebar {
-	width: 100%;
-	background-color: @lightGradientEnd;
+// Sidebar
+.blog--sidebar {
+    width: 100%;
 
-	.block-group { width: 100%; }
+    .block-group { width: 100%; }
 
-	.blog--navigation {
-
-	    & .last-child {
-		.is--underline {
-		    border: none;
-		}
-	    }
+    .blog--navigation {
+	.collapse--header {
+	    .unitize-padding(10, 20, 10, 20, 16);
+	    .unitize(5, 16, margin-bottom);
+	    font-weight: normal;
+	    color: @primaryTextColor;
 	}
 
-	.blog--filter-content,
-	.blog--subscribe-content {
-	    display: none;
-
-	    &.is--active {
-		display: block;
-	    }
-	}
-	.blog--filter-headline,
-	.blog--subscribe-headline {
-	    &.panel--title {
-		.unitize-padding(10, 0, 10, 0, 16);
-		border-bottom: 1px solid @borderColor;
-	    }
-	    &.is--wide {
-		.unitize(0, 16, padding-bottom);
-	    }
+	& :hover { color: @primaryColor; }
+	& .is--active {
+	    color: #fff;
+	    font-weight: bold;
 	}
 
-	.blog--subscribe,
-	.blog--filter-date,
-	.blog--filter-tags,
-	.blog--filter-author {
-	    width: 100%;
-	    float: left;
-	}
+	.collapse--content {
+	    .unitize-padding(0, 0, 0, 0, 16);
 
-	.blog--filter-tags {
-	    .clearfix();
+	    .filter--entry-link {
+		color: @primaryTextColor;
+	    }
+	    .filter--entry-link:hover {
+		color: @primaryColor;
+	    }
 	}
     }
 
+    .blog--filter-content,
+    .blog--subscribe-content {
+	display: none;
 
+	&.is--active { display: block; }
+    }
+
+    .blog--subscribe,
+    .blog--filter-date,
+    .blog--filter-tags,
+    .blog--filter-author {
+	width: 100%;
+	float: left;
+    }
+
+    .blog--filter-tags {
+	.clearfix();
+    }
 }
 
 @media screen and(min-width: @tabletViewportWidth) {
 
     .blog--content {
-
-	.listing--content {
-	    .unitize-margin(30, 0);
-	    margin-left: auto;
-	    margin-right: auto;
-	}
 
 	.hero--unit{
 	    .clearfix();
@@ -161,11 +156,8 @@
 @media screen and (min-width: @tabletLandscapeViewportWidth) {}
 
 @media screen and(min-width: @desktopViewportWidth) {
-    .is--ctl-blog {
-	.sidebar-main {
-	    display: none;
-	}
-    }
+
+    .is--ctl-blog .sidebar-main { display: none; }
 
     .blog--content {
 
