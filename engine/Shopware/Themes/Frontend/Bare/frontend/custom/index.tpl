@@ -27,17 +27,6 @@
 		{block name="frontend_custom_content"}
 			<div class="custom-page--container" data-tab-content="true" data-mode="remote">
 
-				{* Custom page headline*}
-				{block name="frontend_cusrton"}
-					<h1 class="custom-page--headline panel--title">
-						{if $sCustomPage.parent}
-							{$sCustomPage.parent.description}
-						{else}
-							{$sCustomPage.description}
-						{/if}
-					</h1>
-				{/block}
-
 				{* Custom page tab navigation *}
 				{block name="frontend_custom_tab_navigation"}
 					<nav class="custom-page--navigation">
