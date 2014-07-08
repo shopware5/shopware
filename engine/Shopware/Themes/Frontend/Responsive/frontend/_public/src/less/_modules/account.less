@@ -225,6 +225,11 @@
 @media screen and(min-width: @tabletViewportWidth) {
 
     .is--ctl-account {
+        .sidebar-main {
+            .unitize-padding(20, 0, 0, 0);
+            display: block;
+        }
+
         .categories--headline,
         .categories--navigation,
         .shop-sites--headline,
@@ -242,7 +247,7 @@
     }
 
     .account--content {
-        .unitize-margin(45, 0, 0, 0);
+        .unitize-margin(20, 0, 0, 0);
         width: 78%;
         float: right;
 
@@ -306,10 +311,6 @@
                 }
             }
         }
-    }
-
-    .account--content {
-        .unitize-margin(20, 0);
     }
 
     .account--welcome {
@@ -531,6 +532,19 @@
     .account--password-reset {
         .password-reset--input {
             .unitize-width(320);
+        }
+    }
+}
+
+@media screen and(min-width: @desktopViewportWidth) {
+
+    .account--content {
+        .unitize-margin(45, 0, 0, 0);
+    }
+
+    .is--ctl-account {
+        .sidebar-main {
+            .unitize-padding(45, 0, 0, 0);
         }
     }
 }
