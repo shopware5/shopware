@@ -2,7 +2,7 @@
 
 	{* Filter by date *}
 	{block name='frontend_blog_filter_date'}
-		<div class="blog--filter blog--filter-date block">
+		<div class="blog--filter blog--filter-date panel has--border is--rounded filter--group block">
 
 			{block name="frontend_blog_filter_date_headline"}
 				<h1 class="blog--filter-headline panel--title is--underline collapse--header" data-collapse-panel="true">{s name="BlogHeaderFilterDate"}{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
@@ -34,7 +34,7 @@
 
 	{* Filter by author *}
 	{block name='frontend_blog_filter_author'}
-		<div class="blog--filter blog--filter-author block">
+		<div class="blog--filter blog--filter-author panel has--border is--rounded filter--group block">
 
 			{block name="frontend_blog_filter_author_headline"}
 				<h1 class="blog--filter-headline panel--title is--underline collapse--header" data-collapse-panel="true">{s name="BlogHeaderFilterAuthor"}{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
@@ -66,7 +66,7 @@
 
     {* Filter by tags *}
     {block name='frontend_blog_filter_tags'}
-		<div class="blog--filter blog--filter-tags block">
+		<div class="blog--filter blog--filter-tags panel has--border is--rounded filter--group block">
 			{block name="frontend_blog_filter_tags_headline"}
 				<h1 class="blog--filter-headline panel--title is--underline collapse--header" data-collapse-panel="true">{s name="BlogHeaderFilterTags"}{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
 			{/block}

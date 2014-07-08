@@ -6,7 +6,7 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-	<div class="blog--content">
+	<div class="blog--content block-group">
 
 		<div class="action--filter-btn">
 			<a href="#"

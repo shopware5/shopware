@@ -1,8 +1,5 @@
 {* Blog listing sidebar right *}
 {block name='frontend_index_content_right'}
-
-
-
 	<div class="action--filter-options off-canvas{if $activeFilters} is--collapsed{/if}">
 
 		{block name='frontend_listing_actions_filter_container'}
@@ -32,7 +29,7 @@
 
 							{* Subscribe Atom + RSS *}
 							{block name='frontend_blog_index_subscribe'}
-								<div class="blog--subscribe is--rounded block">
+								<div class="blog--subscribe panel has--border is--rounded filter--group block">
 
 									{block name="frontend_blog_index_subscribe_headline"}
 										<h1 class="blog--subscribe-headline panel--title is--underline collapse--header" data-collapse-panel="true">{s name="BlogSubscribe"}Subscribe{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
