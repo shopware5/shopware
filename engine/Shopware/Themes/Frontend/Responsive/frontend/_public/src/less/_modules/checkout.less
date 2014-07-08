@@ -20,14 +20,9 @@
 		.unitize-padding(8, 0, 0);
 		position: relative;
 
-		.main--actions {
-			float: right;
-		}
-
 		.btn--primary,
 		.btn--secondary {
 			.unitize-padding(10, 15, 10, 15);
-			float: left;
 		}
 
 		.btn--primary i {
@@ -289,6 +284,8 @@
 }
 
 @media screen and (min-width: @tabletViewportWidth) {
+
+    .sidebar-main { display: none }
 	.product--table {
 		.unitize-margin(50, 0, 50, 0);
 
@@ -439,11 +436,15 @@
 				.unitize-padding(10, 50, 10, 50);
 				.unitize(20, 16, margin-right);
 			}
-		}
-		.btn--inquiry {
-			.unitize(20, 16, top);
-			width: auto;
-			position: absolute;
+
+            .btn--inquiry {
+                .unitize(-130,  16, margin-left);
+                .unitize(20, 16, top);
+                .unitize-width(260);
+                position: absolute;
+                left: 50%;
+                text-align: center;
+            }
 		}
 
 		.table-premium--list {
@@ -488,5 +489,4 @@
 	.product--table .add-product--form {
 		width: 25%;
 	}
-    .sidebar-main { display: none }
 }
