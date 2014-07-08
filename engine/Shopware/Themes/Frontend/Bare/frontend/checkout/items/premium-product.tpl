@@ -13,7 +13,6 @@
 						{s name="CartItemInfoFree"}{/s}
 					</div>
 				</div>
-
             {/block}
 
             {* Product information *}
@@ -71,7 +70,9 @@
 				</div>
 			{/block}
 
-            {s name="CartItemInfoFree"}{/s}
+            {block name='frontend_checkout_cart_item_premium_total_sum_display'}
+                {s name="CartItemInfoFree"}{/s}
+            {/block}
         </div>
     {/block}
 
