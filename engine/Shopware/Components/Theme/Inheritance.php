@@ -71,7 +71,8 @@ class Inheritance
         'theme-em-field',
         'theme-percent-field',
         'theme-pixel-field',
-        'theme-select-field'
+        'theme-select-field',
+        'theme-text-field'
     );
 
     /**
@@ -432,7 +433,8 @@ class Inheritance
         $builder->select(array(
             'element.name',
             'values.value',
-            'element.defaultValue'
+            'element.defaultValue',
+            'element.type'
         ));
 
         $builder->from('Shopware\Models\Shop\TemplateConfig\Element', 'element')
