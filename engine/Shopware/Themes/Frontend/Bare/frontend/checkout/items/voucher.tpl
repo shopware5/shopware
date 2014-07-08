@@ -50,11 +50,13 @@
 				</div>
 			{/block}
 
-            {if $sBasketItem.itemInfo}
-                {$sBasketItem.itemInfo}
-            {else}
-                {$sBasketItem.price|currency}{block name='frontend_checkout_cart_tax_symbol'}{s name="Star" namespace="frontend/listing/box_article"}{/s}{/block}
-            {/if}
+            {block name='frontend_checkout_cart_item_voucher_total_sum_display'}
+                {if $sBasketItem.itemInfo}
+                    {$sBasketItem.itemInfo}
+                {else}
+                    {$sBasketItem.price|currency}{block name='frontend_checkout_cart_tax_symbol'}{s name="Star" namespace="frontend/listing/box_article"}{/s}{/block}
+                {/if}
+            {/block}
         </div>
     {/block}
 
