@@ -1,12 +1,15 @@
-;(function($, window, document, undefined) {
+;(function ($, window, document, undefined) {
     "use strict";
 
     var pluginName = 'tabContent',
-        clickEvt = 'click',
-        defaults = {
+	    clickEvt = 'click',
+	    defaults = {
             /** @string activeCls Class which will be added when the drop down was triggered */
-            activeCls: 'is--active'
-        };
+            activeCls: 'is--active',
+
+            /** @string mode The mode which should be used by the plugin */
+            mode: 'local'
+	    };
 
     /**
      * Plugin constructor which merges the default settings with the user settings
@@ -23,6 +26,10 @@
         me.$el = $(element);
         me.opts = $.extend({}, defaults, userOpts);
 
+        if (me.$el.attr('data-mode') && me.$el.attr('data-mode').length) {
+            me.opts.mode = me.$el.attr('data-mode');
+        }
+
         me._defaults = defaults;
         me._name = pluginName;
 
@@ -35,84 +42,95 @@
      *
      * @returns {Void}
      */
-    Plugin.prototype.init = function() {
+    Plugin.prototype.init = function () {
         var me = this;
 
         me.$nav = me.$el.find('.tab--navigation');
         me.$content = me.$el.find('.tab--content');
 
-        if(StateManager.isSmartphone()) {
+	if (StateManager.isSmartphone()) {
             me.createMobileView();
         } else {
             me.createDesktopView();
         }
 
-        $(window).on('resize', function() {
-            if(StateManager.isSmartphone()) {
+	$(window).on('resize', function () {
+	    if (StateManager.isSmartphone()) {
                 me.createMobileView();
             } else {
                 me.createDesktopView();
             }
         });
 
-        me.$nav.find('.navigation--entry:first-child .navigation--link').trigger(clickEvt + '.' + pluginName);
+	if (me.opts.mode == 'local') {
+	    me.$nav.find('.navigation--entry:first-child .navigation--link').trigger(clickEvt + '.' + pluginName);
+	}
     };
 
-    Plugin.prototype.createMobileView = function() {
+    Plugin.prototype.createMobileView = function () {
         var me = this;
 
         me.$el.addClass('js--mobile-tab-panel').removeClass('js--desktop-tab-panel');
 
-        me.$nav.find('.navigation--link').each(function() {
-            var $this = $(this),
-                href = $this.attr('href').substring(1);
+	if (me.opts.mode !== 'remote') {
+	    me.$nav.find('.navigation--link').each(function () {
+		var $this = $(this),
+			href = $this.attr('href').substring(1);
 
-            me.$content.find('.' + href).insertAfter($this);
-        });
+		me.$content.find('.' + href).insertAfter($this);
+	    });
 
-        me.$nav.find('.navigation--link').on(clickEvt + '.' + pluginName, function(event) {
-            var $this = $(this),
-                href = $this.attr('href').substring(1);
+	    me.$nav.find('.navigation--link').on(clickEvt + '.' + pluginName, function (event) {
+		var $this = $(this),
+			href = $this.attr('href').substring(1);
 
-            event.preventDefault();
+		event.preventDefault();
 
-            // Hide all content boxes
-            me.$nav.find('li > div[class^="content--"]').hide().removeClass(me.opts.activeCls);
-            me.$nav.find('.navigation--link').removeClass(me.opts.activeCls);
+		// Hide all content boxes
+		me.$nav.find('li > div[class^="content--"]').hide().removeClass(me.opts.activeCls);
+		me.$nav.find('.navigation--link').removeClass(me.opts.activeCls);
 
-            // Activate the selected content
-            $this.addClass(me.opts.activeCls).next().show();
-        });
+		// Activate the selected content
+		$this.addClass(me.opts.activeCls).next().show();
+	    });
+	} else {
+	    var active = me.$nav.find('.is--active');
+	    me.$el.find('.content--custom').insertAfter(active);
+	}
     };
 
-    Plugin.prototype.createDesktopView = function() {
+    Plugin.prototype.createDesktopView = function () {
         var me = this;
         me.$el.removeClass('js--mobile-tab-panel').addClass('js--desktop-tab-panel');
 
-        me.$nav.find('.navigation--link').each(function() {
-            var $this = $(this),
-                href = $this.attr('href').substring(1);
+	if (me.opts.mode !== 'remote') {
+	    me.$nav.find('.navigation--link').each(function () {
+		var $this = $(this),
+			href = $this.attr('href').substring(1);
 
-            me.$nav.find('.' + href).appendTo(me.$content);
-        });
+		me.$nav.find('.' + href).appendTo(me.$content);
+	    });
 
-        me.$nav.find('.navigation--link').on(clickEvt + '.' + pluginName, function(event) {
-            var $this = $(this),
-                href = $this.attr('href').substring(1);
+	    me.$nav.find('.navigation--link').on(clickEvt + '.' + pluginName, function (event) {
+		var $this = $(this),
+			href = $this.attr('href').substring(1);
 
-            event.preventDefault();
+		event.preventDefault();
 
-            // Hide all content boxes
-            me.$content.children('div[class^="content--"]').hide().removeClass(me.opts.activeCls);
-            me.$nav.find('.navigation--link').removeClass(me.opts.activeCls);
+		// Hide all content boxes
+		me.$content.children('div[class^="content--"]').hide().removeClass(me.opts.activeCls);
+		me.$nav.find('.navigation--link').removeClass(me.opts.activeCls);
 
-            // Activate the selected content
-            me.$content.find('.' + href).show().addClass(me.opts.activeCls);
-            $this.addClass(me.opts.activeCls);
-        });
+		// Activate the selected content
+		me.$content.find('.' + href).show().addClass(me.opts.activeCls);
+		$this.addClass(me.opts.activeCls);
+	    });
+	} else {
+	    me.$nav.find('.content--custom').appendTo(me.$content);
+	}
     };
 
-    Plugin.prototype.changeTab = function(idx, scroll) {
+    Plugin.prototype.changeTab = function (idx, scroll) {
         var me = this;
 
         scroll = scroll || false;
@@ -122,7 +140,7 @@
 
         me.$nav.find('.navigation--entry:nth-child(' + idx + ') .navigation--link').trigger(clickEvt + '.' + pluginName);
 
-        if(!scroll) {
+	if (!scroll) {
             return;
         }
 
@@ -138,17 +156,17 @@
      *
      * @returns {Boolean}
      */
-    Plugin.prototype.destroy = function() {
+    Plugin.prototype.destroy = function () {
         var me = this;
 
         me.$el.off(clickEvt + '.' + pluginName).removeData('plugin_' + pluginName);
     };
 
-    $.fn[pluginName] = function ( options ) {
+    $.fn[pluginName] = function (options) {
         return this.each(function () {
             if (!$.data(this, 'plugin_' + pluginName)) {
                 $.data(this, 'plugin_' + pluginName,
-                new Plugin( this, options ));
+			new Plugin(this, options));
             }
         });
     };

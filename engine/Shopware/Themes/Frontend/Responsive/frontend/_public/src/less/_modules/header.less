@@ -220,7 +220,7 @@
 		}
 
         .entry--service {
-            .unitize-width(160);
+	        .unitize-width(166);
             position: relative;
             border-right: 1px solid @borderColor;
 
@@ -232,7 +232,7 @@
             }
         }
 		.service--list {
-            .unitize-width(160);
+	        .unitize-width(166);
             .unitize-padding(8, 8);
             .unitize(22, 16, top);
             .unitize(-1, 16, left);
@@ -343,6 +343,12 @@
 			border: 0 none;
 		}
 	}
+
+    // Topbar navigation
+    .top-bar--navigation {
+	.entry--service,
+	.service--list { .unitize-width(152); }
+    }
 
 	// Cart link
 	.cart--link {
