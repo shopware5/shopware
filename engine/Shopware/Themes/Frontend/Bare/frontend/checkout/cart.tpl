@@ -38,7 +38,8 @@
 		{/block}
 
         {* Product table *}
-        <div class="product--table {if {config name=BasketShippingInfo}} has--dispatch-info{/if}">
+        {block name='frontend_checkout_cart_table'}
+            <div class="product--table {if {config name=BasketShippingInfo}} has--dispatch-info{/if}">
 
 			{* Deliveryfree dispatch notification *}
 			{block name='frontend_checkout_cart_deliveryfree'}
@@ -231,6 +232,7 @@
             </footer>
             {/block}
         </div>
+        {/block}
 	{/if}
 </div>
 {/block}
