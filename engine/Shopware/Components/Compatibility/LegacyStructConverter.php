@@ -189,6 +189,7 @@ class LegacyStructConverter
             );
         }
 
+
         /**@var $first StoreFrontBundle\Struct\Product\Price */
         $first = array_shift($product->getPrices());
 
@@ -218,7 +219,9 @@ class LegacyStructConverter
         }
 
         if (empty($data['images'])) {
-            $data['image'] = $this->convertMediaStruct($product->getCover());
+            if ($product->getCover()) {
+                $data['image'] = $this->convertMediaStruct($product->getCover());
+            }
         } else {
             $data['image'] = array_shift($data['images']);
         }
@@ -794,5 +797,4 @@ class LegacyStructConverter
 
         return $data;
     }
-
 }
