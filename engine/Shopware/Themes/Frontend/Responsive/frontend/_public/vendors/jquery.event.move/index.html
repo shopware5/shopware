@@ -1,0 +1,478 @@
+---
+title: jQuery.event.move
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="author" content="">
+	<meta name="description" content="">
+	
+	<title>jQuery.event.move</title>
+	
+	<script>document.documentElement.className = 'js';</script>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.5">
+	<!-- Force latest IE rendering engine & Chrome Frame -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<!-- Make IE recognise HTML5 elements for styling -->
+	<!--[if lte IE 8]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	
+	<link rel="icon" type="image/png" href="images/favicon.png" />
+	<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+	
+	<link rel="stylesheet" type="text/css" href="http://stephband.info/css/template.min.css" />
+	<link rel="stylesheet" type="text/css" href="http://stephband.info/css/template.theme.min.css" />
+	
+	<link rel="stylesheet" type="text/css" href="http://stephband.github.com/css/site.layout.css" />
+	<link rel="stylesheet" type="text/css" href="http://stephband.github.com/css/docs.classes.css" />
+	<link rel="stylesheet" type="text/css" href="http://stephband.github.com/css/site.highlight.light.css" />
+	
+	<!--[if lte IE 8]><link rel="stylesheet" type="text/css" href="http://stephband.github.com/template/css/template.ie.css" /><![endif]-->
+	<!--[if IE 8]><link rel="stylesheet" type="text/css" href="http://stephband.github.com/template/css/template.ie8.css" /><![endif]-->
+	<!--[if IE 7]><link rel="stylesheet" type="text/css" href="http://stephband.github.com/template/css/template.ie7.css" /><![endif]-->
+	
+	<style>
+		.test_wrap {
+			height: 200px;
+			margin-bottom: 2em;
+		}
+
+		.test {
+			position: absolute;
+			left: 0;
+			top: 0;
+			background-color: red;
+			width: 200px;
+			height: 200px;
+		}
+
+		.resize, .rotate {
+		  position: absolute;
+		  width: 32px;
+		  height: 32px;
+		}
+		
+		.resize {
+		  bottom: 10px;
+		  right: 10px;
+		  background: yellow;
+		}
+		
+		.rotate {
+		  top: 10px;
+		  right: 10px;
+		  background: orange;
+		}
+		
+		.centre_mark,
+		.origin_mark,
+		.phantom_mark {
+			position: absolute;
+			top: 0;
+			left: 0;
+			background: orange;
+			width: 8px;
+			height: 8px;
+			margin-left: -4px;
+			margin-top: -4px;
+			-webkit-border-radius: 4px;
+			   -moz-border-radius: 4px;
+			        border-radius: 4px;
+			line-height: 8px;
+			text-transform: uppercase;
+			font-size: 10px;
+			font-family: Helvetica;
+			color: rgba(128,128,128,0.6);
+			text-indent: 8px;
+			border: 1px solid black;
+		}
+		
+		.origin_mark {
+			background: rgba(128,128,128,0.6);
+		}
+
+		.phantom_mark {
+			background: rgba(128,128,128,0.6);
+		}
+	</style>
+</head>
+
+<body>
+	<header class="site_header" id="page_header">
+		<div class="site_wrap wrap">
+			<a class="logo_thumb thumb" href="http://stephband.info" title="stephband" rel="index">
+				<h1>stephband.info</h1>
+			</a>
+		</div>
+	</header>
+
+	<div class="site_wrap wrap">
+		<h1>jQuery.event.move</h1>
+	
+		<div class="test_wrap wrap">
+			<div class="test">
+			 <div class="resize"></div>
+			 <div class="rotate"></div>
+			</div>
+			
+			<div class="centre_mark"></div>
+			<div class="origin_mark"></div>
+		</div>
+		
+		<h2>Project</h2>
+		
+		<ul>
+			<li>Github: <a href="http://github.com/stephband/jquery.event.move">github.com/stephband/jquery.event.move</a></li>
+			<li>Issues: <a href="http://github.com/stephband/jquery.event.move/issues">github.com/stephband/jquery.event.move/issues</a></li>
+		</ul>
+		
+		<h2 id="what">Move events</h2>
+	
+		<dl>
+			<dt>movestart</dt>
+			<dd>Fired following touchmove or mousemove, when the touch (or mouse) crosses a threshold distance from the position of the mousedown or touchstart.</dd>
+			
+			<dt>move</dt>
+			<dd>Fired on every animation frame where a touchmove or mousemove has changed position.</dd>
+			
+			<dt>moveend</dt>
+			<dd>Fired following mouseup or touchend, after the last move event, and in the case of touch events when the finger that started the move has been lifted.</dd>
+		</dl>
+		
+		<p>Move event objects are augmented with the properties:</p>
+		
+		<dl>
+		  <dt>e.pageX, e.pageY</dt>
+		  <dd>Current page coordinates of pointer.</dd>
+		  
+		  <dt>e.startX, e.startY</dt>
+		  <dd>Page coordinates the pointer had at movestart.</dd>
+		  
+		  <dt>e.distX, e.distY</dt>
+		  <dd>Distance the pointer has moved since movestart.</dd>
+	
+		  <dt>e.deltaX, e.deltaY</dt>
+		  <dd>Distance the pointer has moved since last move event.</dd>
+	
+		  <dt>e.velocityX, e.velocityY</dt>
+		  <dd>Velocity in pixels/ms, averaged over the last few events.</dd>
+		</dl>
+		
+		
+		<h2 id="how">How to use move events</h2>
+		
+{% highlight js %}
+jQuery('.mydiv')
+.bind('move', function(e) {
+  // move .mydiv horizontally
+  jQuery(this).css({ left: e.startX + e.distX });
+})
+.bind('moveend', function() {
+  // move is complete!
+});{% endhighlight %}
+		
+		<h2 id="why1">Why not just use raw mouse or touch events?</h2>
+		
+		<p>Well, yes, you could. But jquery.event.move abstracts away the details that need attention when writing this kind of interaction model with mouse and touch events:</p>
+		
+		<ul>
+			<li>Supports mouse and touch devices, exposing the same event API for both</li>
+			<li>Throttles moves to animation frames, preventing unneccesary calls</li>
+			<li>Ignores the right mouse button and clicks with modifier keys</li>
+			<li>Prevents text selection while moving</li>
+			<li>Prevents scrolling of touch interfaces while moving</li>
+			<li>Handles multiple touches</li>
+			<li>Deals with bug (Chrome, possibly all Android) where changedTouches includes touches which haven't changed</li>
+			<li>Handles browser differences where touches in iOS are live objects, where in Android they are static</li>
+			<li>Does not bork interaction with form inputs inside moveable nodes</li>
+			<li>Suppresses drag and drop events</li>
+		</ul>
+	
+		<p>Move events are intended as 'building blocks' for helping to build interactions.
+		They track individual fingers or a single mouse, and expose properties on their event objects that are useful for detecting gestures.</p>
+		
+		
+		<h2 id="why2">What about drag events?</h2>
+		
+		<p>Move events are designed to compliment drag events, where the two have different meanings: drag events are for transferring data while move events are for making interactive interfaces.
+		That said, <code>movestart</code>, <code>move</code> and <code>moveend</code> events deliberately echo <code>dragstart</code>, <code>drag</code> and <code>dragend</code> events, with one significant difference:
+		where the <code>drag</code> event fires continuously whether you have moved the pointer or not, the <code>move</code> event fires only after the pointer has been moved.</p>
+		
+		<p>Where both a <code>dragstart</code> and any move event are bound to the same node, drag events are suppressed.</p>
+		
+		
+		<h2 id="where">Where is jquery.event.move being used?</h2>
+		
+		<p>It's part of my front-end toolkit, <a href="http://stephband.info/bolt">Bolt</a>. It's also used for:</p>
+	
+		<ul>
+			<li><a href="http://www.webdoc.com">webdoc.com</a></li>
+			<li><a href="http://stephband.info/jquery.event.swipe">jquery.event.swipe</a></li>
+		</ul>
+		
+		<p>Do let me know at <a href="http://twitter.com/stephband">@stephband</a> if you use it in your project. Cheers!</p>
+	</div>
+
+	<footer class="site_footer">
+		<div class="full_wrap wrap">
+			<div class="bio_col col">
+				<h3>Who made this?</h3>
+				<p>I did. I come from Scotland and I live in Lausanne, Switzerland. I make web things at <a href="http://cruncher.ch">Cruncher</a>. I miss Branston Pickle. When I'm not glued to a screen I play music and hike mountains.</p>
+			</div
+			><div class="repo_col col">
+				<h3>More code</h3>
+				<ul class="repo_index index">
+					<li><a href="http://stephband.info/bolt">Bolt</a></li>
+					<li><a href="http://stephband.info/jparallax/">jQuery.parallax</a></li>
+					<li><a href="http://stephband.info/jquery.event.tap/">jQuery.event.tap</a></li>
+					<li><a href="http://stephband.info/jquery.event.move/">jQuery.event.move</a></li>
+					<li><a href="http://stephband.info/jquery.event.swipe/">jQuery.event.swipe</a></li>
+				</ul>
+			</div
+			><div class="social_col col">
+				<h3>Find me on...</h3>
+				<ul class="social_index index">
+					<li><a href="http://twitter.com/stephband">twitter</a></li>
+					<li><a href="http://github.com/stephband">github</a></li>
+					<li><a href="http://plus.google.com/114566808430966059989/photos">google+</a></li>
+					<li><a href="http://www.linkedin.com/profile/view?id=27013870">linkedin</a></li>
+				</ul>
+			</div>
+		</div>
+	</footer>
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.js"></script>
+	<script src="js/jquery.event.move.js"></script>
+	<script>
+		Number.prototype.deg = function() { return this * 57.295779513; }
+		Number.prototype.rad = function() { return this / 57.295779513; }
+		Number.prototype.limit = function(min, max) { return this > max ? max : this < min ? min : this ; }
+		Number.prototype.wrap = function(min, max) { return (this < min ? max : min) + (this - min) % (max - min); }
+
+		// FUNCTIONS
+		
+		// Converts cartesian [x, y] to polar [distance, angle] coordinates,
+		// downward, anti-clockwise, angle in radians.
+		
+		var pi = Math.PI,
+				pi2 = pi * 2;
+		
+		function toPolar(cart) {
+			var x = cart[0],
+					y = cart[1];
+			
+			// Detect quadrant and work out vector
+			if (y === 0) 	{ return x === 0 ? [0, 0] : x > 0 ? [x, 0.5 * pi] : [-x, 1.5 * pi] ; }
+			if (y < 0) 		{ return x === 0 ? [-y, pi] : [Math.sqrt(x*x + y*y), Math.atan(x/y) + pi] ; }
+			if (y > 0) 		{ return x === 0 ? [y, 0] : [Math.sqrt(x*x + y*y), (x > 0) ? Math.atan(x/y) : pi2 + Math.atan(x/y)] ; }
+		}
+		
+		// Converts [distance, angle] vector to cartesian [x, y] coordinates.
+		
+		function toCartesian(vect) {
+			var d = vect[0],
+					a = vect[1];
+			
+			// Work out cartesian coordinates
+			return [ Math.sin(a) * d, Math.cos(a) * d ];
+		}
+		
+		// log event objects
+		
+		function logEvent(e){ window.console && console.log(e.type, e); }
+		
+		jQuery(document)
+		//.bind('mousedown mouseup', logEvent)
+		.ready(function(){
+			var start,
+					box = jQuery('.test'),
+					resize = jQuery('.resize'),
+					rotate = jQuery('.rotate'),
+					centreMark = jQuery('.centre_mark'),
+					originMark = jQuery('.origin_mark');
+			
+			// Test setup and teardown with multiple binds and unbinds...
+			
+			box
+			.bind('movestart move moveend', logEvent)
+			.unbind('movestart')
+			.unbind('move')
+			.unbind('moveend')
+			//.bind('movestart move moveend', logEvent)
+			.bind('movestart', function(e){
+				// Only listen to one finger
+				if (e.targetTouches && e.targetTouches.length > 1) {
+					e.preventDefault();
+					return;
+				}
+
+				if (e.target == e.currentTarget) {
+					start = {
+					  x: parseInt(box.css('left')),
+					  y: parseInt(box.css('top'))
+					};
+				}
+			})
+			.bind('move', function(e){
+				if (e.target == e.currentTarget) {
+					box.css({
+						left: start.x + e.distX,
+						top: start.y + e.distY
+					});
+					
+					// Guides
+					
+					originMark.css({
+						left: start.x + e.distX,
+						top: start.y + e.distY
+					});
+					
+					centreMark.css({
+						left: start.x + e.distX + box.width()/2,
+						top: start.y + e.distY + box.height()/2
+					});
+				}
+			});
+			
+			(function(){
+				// Test for correct deltaX and deltaY values
+				
+				var distX = 0, distY = 0, pageX = 0, pageY = 0;
+				
+				box
+				.bind('movestart', function(e) {
+					distX = e.distX;
+					distY = e.distY;
+					pageX = e.pageX;
+					pageY = e.pageY;
+				})
+				.bind('move', function(e){
+					// All these statements should be true
+					console.log(e.deltaX === e.distX - distX,
+					            e.deltaY === e.distY - distY,
+					            e.deltaX === e.pageX - pageX,
+					            e.deltaY === e.pageY - pageY);
+					
+					if ((e.deltaX === e.distX - distX) +
+					    (e.deltaY === e.distY - distY) +
+					    (e.deltaX === e.pageX - pageX) +
+					    (e.deltaY === e.pageY - pageY) !== 4) {
+						console.log('X', distX, e.distX, pageX, e.pageX, e.deltaX);
+						console.log('Y', distY, e.distY, pageY, e.pageY, e.deltaY);
+					}
+					
+					distY = e.distY;
+					distX = e.distX;
+					pageX = e.pageX;
+					pageY = e.pageY;
+				});
+			})();
+			
+			var rotation = 0;
+			
+			(function(){
+				var start, rotatedOrigin, distX, distY;
+				
+				resize
+				.bind('movestart', function(e){
+					var polarOrigin;
+					
+					start = {
+						left: parseInt(box.css('left')),
+						top: parseInt(box.css('top')),
+					  width: box.width(),
+					  height: box.height()
+					};
+				})
+				.bind('move', function(e){
+					var polarDelta = toPolar([e.distX, e.distY]),
+							normalisedDelta, originDelta, width, height;
+					
+					// Comments are useless. I can't describe what's going
+					// on here without a pencil and paper. Sorry, but basically,
+					// we're undoing the rotate transform to work out where
+					// the rotated origin lies.
+					polarDelta[1] += rotation.rad();
+					normalisedDelta = toCartesian(polarDelta);
+					
+					width = start.width + normalisedDelta[0];
+					height = start.height + normalisedDelta[1];
+					
+					width = width >= 0 ? width : 0;
+					height = height >= 0 ? height : 0;
+					
+					originDelta = [
+						e.distX/2 - (width === 0 ? -start.width/2 : normalisedDelta[0]/2),
+						e.distY/2 - (height === 0 ? -start.height/2 : normalisedDelta[1]/2)
+					];
+					
+					box.css({
+						left: start.left + originDelta[0],
+						top: start.top + originDelta[1],
+						width: width,
+						height: height
+					});
+					
+					// Guides
+					
+					originMark.css({
+						left: start.left + originDelta[0],
+						top: start.top + originDelta[1]
+					});
+					
+					centreMark.css({
+						left: start.left + originDelta[0] + width/2,
+						top: start.top + originDelta[1] + height/2
+					})
+				});
+			})();
+			
+			(function(){
+				var centre, startRotate, startAngle, positionParent, offset;
+				
+				rotate
+				.bind('movestart', function(e){
+					
+					positionParent = box.parent();
+					offset = positionParent.offset();
+					
+					centre = {
+					  x: parseInt(box.css('left')) + box.width()/2,
+					  y: parseInt(box.css('top')) + box.height()/2
+					};
+					
+					startRotate = rotation;
+					startAngle = toPolar([e.pageX - offset.left - centre.x, e.pageY - offset.top - centre.y])[1];
+					
+					// Guides
+					
+					originMark.css({
+						left: box.css('left'),
+						top: box.css('top')
+					});
+					
+					centreMark.css({
+						left: centre.x,
+						top: centre.y
+					});
+				})
+				.bind('move', function(e){
+					var nowAngle = toPolar([e.pageX - offset.left - centre.x, e.pageY - offset.top - centre.y])[1],
+							deltaRotate = nowAngle - startAngle,
+							transform;
+					
+					rotation = parseInt(startRotate - deltaRotate.deg());
+					transform = 'rotate(' + rotation + 'deg)';
+					
+					box.css({
+						transform: transform,
+						WebkitTransform: transform,
+						MozTransform: transform
+					});
+				});
+			})();
+		});
+	</script>
+</body>
+</html>

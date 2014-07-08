@@ -49,9 +49,17 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         if(!in_array($this->Request()->getActionName(), array('login', 'logout', 'password', 'ajax_login', 'ajax_logout'))
             && !$this->admin->sCheckUser())
         {
-            return $this->forward('login');
+            // If using the new template, the 'GET' action will be handled
+            // in the Register controller (unified login/register page)
+            if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
+                return $this->forward('index', 'register');
+            } else {
+                // redirecting to login action should be considered deprecated
+                return $this->forward('login');
+            }
         }
         $this->View()->sUserData = $this->admin->sGetUserData();
+        $this->View()->sUserLoggedIn = $this->admin->sCheckUser();
     }
 
     /**
@@ -130,6 +138,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $this->View()->sPaymentMeans = $this->admin->sGetPaymentMeans();
         $this->View()->sFormData = array('payment'=>$this->View()->sUserData['additional']['user']['paymentID']);
         $this->View()->sTarget = $this->Request()->getParam('sTarget', $this->Request()->getControllerName());
+        $this->View()->sTargetAction = $this->Request()->getParam('sTargetAction', 'index');
 
         $getPaymentDetails = $this->admin->sGetPaymentMeanById($this->View()->sFormData['payment']);
 
@@ -176,6 +185,11 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     public function downloadsAction()
     {
         $destinationPage = (int)$this->Request()->sPage;
+
+        if(empty($destinationPage)) {
+            $destinationPage = 1;
+        }
+
         $orderData = $this->admin->sGetDownloads($destinationPage);
         $this->View()->sDownloads = $orderData["orderData"];
         $this->View()->sNumberPages = $orderData["numberOfPages"];
@@ -285,10 +299,18 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         }
 
         if (empty($this->View()->sErrorMessages) && $this->admin->sCheckUser()) {
-            if (!$target = $this->Request()->getParam('sTarget')) {
-                $target = 'account';
-            }
-            $this->redirect(array('controller' => $target));
+            return $this->redirect(
+                array(
+                    'controller' => $this->Request()->getParam('sTarget', 'account'),
+                    'action' => $this->Request()->getParam('sTargetAction', 'index')
+                )
+            );
+        }
+
+        // If using the new template, the 'GET' action will be handled
+        // in the Register controller (unified login/register page)
+        if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
+            $this->forward(array('action' => 'index', 'controller' => 'register', 'sTarget' => $this->View()->sTarget));
         }
     }
 
@@ -303,6 +325,9 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             $countryData = $this->admin->sGetCountryList();
             $countryIds = array_column($countryData, 'id');
 
+            $requirePhone = (bool) (Shopware()->Config()->get('showPhoneNumberField')
+                && Shopware()->Config()->get('requirePhoneField'));
+
             $rules = array(
                 'salutation'=>array('required'=>1),
                 'company'=>array('required'=>0),
@@ -312,9 +337,9 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
                 'streetnumber'=>array('required'=>1),
                 'zipcode'=>array('required'=>1),
                 'city'=>array('required'=>1),
-                'phone'=>array('required'=> intval(Shopware()->Config()->get('requirePhoneField'))),
+                'phone'=>array('required'=> $requirePhone),
                 'fax'=>array('required'=>0),
-                'country'=>array(
+             'country'=>array(
                     'required' => 1,
                     'in' => $countryIds
                 ),
@@ -329,6 +354,8 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
                 'birthyear'=>array('required'=>0),
                 'birthmonth'=>array('required'=>0),
                 'birthday'=>array('required'=>0),
+                'additional_address_line1' => array('required' => (Shopware()->Config()->requireAdditionAddressLine1 && Shopware()->Config()->showAdditionAddressLine1) ? 1 : 0),
+                'additional_address_line2' => array('required' => (Shopware()->Config()->requireAdditionAddressLine2 && Shopware()->Config()->showAdditionAddressLine2) ? 1 : 0)
             );
 
             $values = $this->Request()->getPost('register');
@@ -371,14 +398,15 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
                 }
             }
 
-
-
-            if ((!empty($values['personal']['customer_type'])&&$values['personal']['customer_type']=='private')) {
-                $values['billing']['company'] = '';
-                $values['billing']['department'] = '';
-                $values['billing']['ustid'] = '';
-            } elseif ((!empty($values['personal']['customer_type'])||!empty($values['billing']['company']))) {
-                $rules['ustid'] = array('required'=>0);
+            if (!empty($values['personal']['customer_type'])) {
+                if ($values['personal']['customer_type'] === 'private') {
+                    $values['billing']['company'] = '';
+                    $values['billing']['department'] = '';
+                    $values['billing']['ustid'] = '';
+                } else {
+                    $rules['company'] = array('required' => 1);
+                    $rules['ustid'] = array('required' => 0);
+                }
             }
 
             if (!empty($values)) {
@@ -432,9 +460,16 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
                 'text3'=>array('required'=>0),
                 'text4'=>array('required'=>0),
                 'text5'=>array('required'=>0),
-                'text6'=>array('required'=>0)
+                'text6'=>array('required'=>0),
+                'additional_address_line1' => array('required' => (Shopware()->Config()->requireAdditionAddressLine1 && Shopware()->Config()->showAdditionAddressLine1) ? 1 : 0),
+                'additional_address_line2' => array('required' => (Shopware()->Config()->requireAdditionAddressLine2 && Shopware()->Config()->showAdditionAddressLine2) ? 1 : 0)
             );
 
+            if (Shopware()->Config()->get('sCOUNTRYSHIPPING')) {
+                $rules['country'] = array('required'=>1);
+            } else {
+                $rules['country'] = array('required'=>0);
+            }
 
             if ($this->Request()->getParam('sSelectAddress')) {
                 $address = $this->admin->sGetPreviousAddresses('shipping', $this->Request()->getParam('sSelectAddress'));
@@ -494,7 +529,12 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         if (!$target = $this->Request()->getParam('sTarget')) {
             $target = 'account';
         }
-        $this->redirect(array('controller'=>$target, 'action'=>'index', 'success'=>'shipping'));
+        $targetAction = $this->Request()->getParam('sTargetAction', 'index');
+        $this->redirect(array(
+            'controller' => $target,
+            'action' => $targetAction,
+            'success' => 'shipping'
+        ));
     }
 
     /**
@@ -537,7 +577,12 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         if (!$target = $this->Request()->getParam('sTarget')) {
             $target = 'account';
         }
-        $this->redirect(array('controller'=>$target, 'action'=>'index', 'success'=>'payment'));
+        $targetAction = $this->Request()->getParam('sTargetAction', 'index');
+        $this->redirect(array(
+            'controller' => $target,
+            'action' => $targetAction,
+            'success' => 'payment'
+        ));
     }
 
     /**
@@ -751,6 +796,8 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
     /**
      * Login account by ajax request
+     *
+     * @deprecated only used for SW4.x templates
      */
     public function ajaxLoginAction()
     {

@@ -1,0 +1,122 @@
+/** Main navigation of the storefront */
+body > .sidebar-main {
+    .unitize(20, 16, padding-bottom);
+    border-right: 1px solid rgba(red(@lightTextColor), green(@lightTextColor), blue(@lightTextColor), 50%);
+
+    .logo--trusted-shops {
+        display: none;
+    }
+}
+
+// Landingpage campaign banner
+.campaign-outer-container {
+    .unitize-margin(20, 0);
+}
+
+@media screen and (min-width: @tabletViewportWidth) {
+
+    .sidebar-main {
+        .unitize(45, 16, padding-top);
+        .unitize-margin(0, 0);
+        display: block;
+        width: 20%;
+
+        .navigation--smartphone,
+        .filter--container {
+            display: none;
+        }
+
+        .logo--trusted-shops {
+            .clearfix();
+            .unitize-margin(30, 0);
+            display: block;
+
+            .trusted-shops--link {
+                color: @darkTextColor;
+
+                &:hover {
+                    color: @primaryColor;
+                }
+            }
+
+            .trusted-shops--icon {
+                .unitize-margin(0, 10);
+                float: left;
+            }
+        }
+    }
+
+    .navigation--headline {
+        .unitize-margin(20, 10, 10, 10);
+    }
+
+    .categories--headline {
+        display: none;
+    }
+
+    .sidebar--navigation {
+        .unitize-margin(0, 0, 10, 0);
+        .border-radius(0);
+
+        .navigation--entry {
+            .unitize-padding(0, 0);
+            .unitize-margin(0, 10);
+
+            &.is--active {
+                .unitize-margin(0, 0);
+            }
+        }
+
+        .navigation--link {
+            .unitize-padding(8, 4);
+            display: block;
+
+            &:hover {
+                color: @primaryColor;
+            }
+
+            &.is--active {
+                .unitize-padding(8, 10);
+                .primary-gradient();
+                color: #fff;
+                font-weight: bold;
+                text-shadow: 0 1px 1px @primaryContrastColor;
+                border-bottom: 1px solid @primaryContrastColor;
+            }
+        }
+
+        .is--level1 {
+            .unitize-margin(5, 0);
+            border: 0 none;
+
+            .navigation--entry {
+                border: 0 none;
+
+                &.is--active {
+                    .unitize-margin(0, 10);
+                }
+            }
+
+            .navigation--link {
+                .unitize-padding(6, 4);
+                .unitize(13, 16, font-size);
+
+                &::before {
+                    .unitize(11, 16, font-size);
+                    .unitize-margin(0, 10, 0, 0);
+                    font-family: 'shopware';
+                    content: "\e60f";
+                }
+
+                &.is--active {
+                    .unitize-padding(6, 4);
+                    font-weight: normal;
+                    text-shadow: none;
+                    color: @primaryColor;
+                    background: transparent;
+                    border: 0 none;
+                }
+            }
+        }
+    }
+}

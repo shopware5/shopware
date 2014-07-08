@@ -167,4 +167,14 @@ class Enlight_Controller_Request_RequestHttp
         $_SERVER['HTTP_' . $temp] = $value;
         return $this;
     }
+
+    /**
+     * Returns the current device type, or false if detection could not be done
+     *
+     * @return string
+     */
+    public function getDeviceType()
+    {
+        return $this->getHeader('X-UA-Device');
+    }
 }

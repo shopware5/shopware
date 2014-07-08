@@ -87,7 +87,7 @@ class Smarty_Compiler_Url extends Smarty_Internal_CompileBase
         }
 
         if (isset($extractParams) && empty($_attr)) {
-            return '<?php echo Enlight_Application::Instance()->Front()->Router()->assemble((array) ' . $extractParams . '); ?>';
+            return '<?php echo htmlspecialchars(Enlight_Application::Instance()->Front()->Router()->assemble((array) ' . $extractParams . ')); ?>';
         }
 
         $params = array();
@@ -99,9 +99,9 @@ class Smarty_Compiler_Url extends Smarty_Internal_CompileBase
                 }
 
                 if (isset($extractParams)) {
-                    return '<?php echo Enlight_Application::Instance()->Front()->Router()->assemble(array(' . $params . ')+(array) ' . $extractParams . '); ?>';
+                    return '<?php echo htmlspecialchars(Enlight_Application::Instance()->Front()->Router()->assemble(array(' . $params . ')+(array) ' . $extractParams . ')); ?>';
                 } else {
-                    return '<?php echo Enlight_Application::Instance()->Front()->Router()->assemble(array(' . $params . ')); ?>';
+                    return '<?php echo htmlspecialchars(Enlight_Application::Instance()->Front()->Router()->assemble(array(' . $params . '))); ?>';
                 }
             }
             $params[$index] = is_numeric($param) ? $param : substr($param, 1, -1);
@@ -109,6 +109,6 @@ class Smarty_Compiler_Url extends Smarty_Internal_CompileBase
 
         $url = Enlight_Application::Instance()->Front()->Router()->assemble($params);
 
-        return '<?php echo ' . var_export($url, true) . ';?>';
+        return '<?php echo ' . var_export(htmlspecialchars($url), true) . ';?>';
     }
 }

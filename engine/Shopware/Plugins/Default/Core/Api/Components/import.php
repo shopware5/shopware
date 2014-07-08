@@ -354,8 +354,6 @@ class sShopwareImport
             $article['suppliernumber'] = $this->sDB->qstr($this->sValDescription($article['suppliernumber']));
         if(isset($article["additionaltext"]))
             $article['additionaltext'] = $this->sDB->qstr((string) $article['additionaltext']);
-        if(isset($article['impressions']))
-            $article['impressions'] = intval($article['impressions']);
         if(isset($article['sales']))
             $article['sales'] = intval($article['sales']);
         if(isset($article['active']))
@@ -629,7 +627,6 @@ class sShopwareImport
             "suppliernumber",
             "kind",
             "additionaltext",
-            "impressions",
             "sales",
             "active",
             "instock",

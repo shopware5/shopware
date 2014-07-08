@@ -394,25 +394,25 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
         // Get current users online
         $currentUsers = Shopware()->Container()->get('db')->fetchOne(
-            "SELECT COUNT(DISTINCT remoteaddr) FROM s_statistics_currentusers WHERE time > DATE_SUB(NOW(), INTERVAL 3 MINUTE)"
+            "SELECT COUNT(DISTINCT remoteaddr)
+            FROM s_statistics_currentusers
+            WHERE time > DATE_SUB(NOW(), INTERVAL 3 MINUTE)"
         );
         if (empty($currentUsers)) {
             $currentUsers = 0;
         }
 
         // Get current users logged in
-        $fetchLoggedInUsers = Shopware()->Container()->get('db')->fetchAll(
-            "
-                    SELECT s.userID,
-                    (SELECT SUM(quantity * price) AS amount FROM s_order_basket WHERE userID = s.userID GROUP BY sessionID ORDER BY id DESC LIMIT 1) AS amount,
-                    (SELECT IF(ub.company,ub.company,CONCAT(ub.firstname,' ',ub.lastname)) FROM s_user_billingaddress AS ub WHERE ub.userID = s.userID) AS customer
-                    FROM s_statistics_currentusers s
-                    WHERE userID != 0
-                    GROUP BY remoteaddr
-                    ORDER BY amount DESC
-                    LIMIT 6
-                    "
-        );
+        $fetchLoggedInUsers = Shopware()->Container()->get('db')->fetchAll("
+            SELECT s.userID,
+            (SELECT SUM(quantity * price) AS amount FROM s_order_basket WHERE userID = s.userID GROUP BY sessionID ORDER BY id DESC LIMIT 1) AS amount,
+            (SELECT IF(ub.company,ub.company,CONCAT(ub.firstname,' ',ub.lastname)) FROM s_user_billingaddress AS ub WHERE ub.userID = s.userID) AS customer
+            FROM s_statistics_currentusers s
+            WHERE userID != 0
+            GROUP BY remoteaddr
+            ORDER BY amount DESC
+            LIMIT 6
+        ");
 
         foreach ($fetchLoggedInUsers as &$user) {
             $user["customer"] = htmlentities($user["customer"], null, "UTF-8");

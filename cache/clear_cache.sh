@@ -12,6 +12,7 @@ rm -rf $DIR/doctrine/filecache/*
 rm -rf $DIR/doctrine/proxies/*
 rm -rf $DIR/mpdf/tmp/*
 rm -rf $DIR/mpdf/ttfontdata/*
+rm -rf $DIR/../web/cache/*
 
 if [[ $1 = "-f" ]] || [[ $1 = "--force" ]]; then
     echo "Clearing attributes"

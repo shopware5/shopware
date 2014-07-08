@@ -1,4 +1,3 @@
-	
 {* Delivery informations *}
 {block name='frontend_widgets_delivery_infos'}
 	<div class="delivery_container">

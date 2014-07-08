@@ -68,9 +68,9 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Given /^I should see a categorie teaser "(?P<title>[^"]*)" with image "(?P<image>[^"]*)" to "(?P<link>[^"]*)"$/
+     * @Given /^I should see a category teaser "(?P<title>[^"]*)" with image "(?P<image>[^"]*)" to "(?P<link>[^"]*)"$/
      */
-    public function iShouldSeeACategorieTeaserWithImageTo($title, $image, $link)
+    public function iShouldSeeACategoryTeaserWithImageTo($title, $image, $link)
     {
         $this->getPage('Homepage')->checkCategoryTeaser($title, $image, $link);
     }
@@ -134,33 +134,19 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Given /^the "(?P<name>[^"]*)" plugin is enabled$/
+     * @Given /^I subscribe to the newsletter on frontpage with "(?P<email>[^"]*)"$/
      */
-    public function thePluginIsEnabled($name)
+    public function iSubscribeToTheNewsletterOnFrontpageWith($email)
     {
-        /** @var \Shopware\Components\Plugin\Manager $pluginManager */
-        $pluginManager = $this->getContainer()->get('shopware.plugin_Manager');
-        $pluginManager->refreshPluginList();
-
-        $plugin = $pluginManager->getPluginByName($name);
-        $pluginManager->installPlugin($plugin);
-        $pluginManager->activatePlugin($plugin);
+        $this->getPage('Homepage')->subscribeNewsletter($email);
     }
 
     /**
-     * @Given /^the articles from "(?P<name>[^"]*)" have tax id (?P<num>\d+)$/
+     * @Then /^the cart should contain (?P<quantity>\d+) articles with a value of "(?P<amount>[^"]*)"$/
      */
-    public function theArticlesFromHaveTaxId($supplier, $taxId)
+    public function theCartShouldContainArticlesWithAValueOf($quantity, $amount)
     {
-        $taxId = intval($taxId);
-
-        $sql = sprintf(
-            'UPDATE s_articles SET taxID = %d WHERE supplierID =
-                    (SELECT id FROM s_articles_supplier WHERE name = "%s")',
-            $taxId,
-            $supplier
-        );
-        $this->getContainer()->get('db')->exec($sql);
+        $this->getElement('HeaderCart')->checkCart($quantity, $amount);
     }
 }
 

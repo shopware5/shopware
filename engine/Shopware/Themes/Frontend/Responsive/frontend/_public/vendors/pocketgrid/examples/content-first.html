@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PocketGrid - Content-first / Swap columns</title>
+
+    <!-- Common styles for examples (you do not need to include it in your pages) -->
+    <link rel="stylesheet" href="common.css" />
+
+    <!-- The PocketGrid -->
+    <link rel="stylesheet" href="../pocketgrid.css" />
+
+    <!-- Styles defining the layout -->
+    <style type="text/css">
+      .content {
+        width: 70%;
+        float: right; /* "float:right" makes it swap with the second block. */
+      }
+      .second { width: 30%; }
+    </style>
+  </head>
+
+  <body class="block-group">
+
+    <div class="content block"><div class="box">Content, first in source (float:right)</div></div>
+    <div class="second block"><div class="box">Second</div></div>
+
+  </body>
+
+</html>

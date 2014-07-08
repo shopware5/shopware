@@ -710,7 +710,9 @@ class sAdmin
             'countryID',
             'stateID',
             'ustid',
-            'birthday'
+            'birthday',
+            'additional_address_line1',
+            'additional_address_line2'
         );
 
         $data = array();
@@ -893,27 +895,29 @@ class sAdmin
 
         $sql = '
             SELECT
-                MD5(CONCAT(company, department, salutation, firstname, lastname, street, streetnumber, zipcode, city, countryID)) as hash,
+                MD5(CONCAT(company, department, salutation, firstname, lastname, street, streetnumber, zipcode, city, a.countryID, a.stateId)) as hash,
                 company, department, salutation, firstname, lastname,
-                street, streetnumber, zipcode, city, countryID as country, countryID, countryname
+                street, streetnumber, zipcode, city, a.countryID as country, a.countryID as countryID, a.stateId as stateId, countryname, cs.name as statename, additional_address_line1, additional_address_line2
             FROM s_order_'.$type.'address AS a
             LEFT JOIN s_core_countries co
             ON a.countryID=co.id
-            WHERE a.userID = ?
+            LEFT JOIN s_core_countries_states cs
+            ON a.stateId=cs.id
+            WHERE a.userID=?
             GROUP BY hash
             ORDER BY MAX(a.id) DESC
         ';
 
         $addresses = $this->db->fetchAll($sql, array($userId));
 
-        foreach ($addresses as $address) {
+        foreach ($addresses as &$address) {
             if (!empty($request_hash) && $address['hash'] == $request_hash) {
                 return $address;
             }
-            $address[$address['hash']]['country'] = array();
-            $address[$address['hash']]['country']['id'] = $address['countryID'];
-            $address[$address['hash']]['country']['countryname'] = $address['countryname'];
-            $address[$address['hash']]['country'] = $this->sGetCountryTranslation($address["country"]);
+            $countryTranslation = $this->sGetCountryTranslation(array('id' => $address['countryID']));
+            $address = array_merge($address, $countryTranslation);
+            $stateTranslation = $this->sGetCountryStateTranslation(array('id' => $address['stateId']));
+            $address = array_merge($address, $stateTranslation);
         }
 
         if (!empty($request_hash)) {
@@ -955,7 +959,9 @@ class sAdmin
             'zipcode',
             'city',
             'countryID',
-            'stateID'
+            'stateID',
+            'additional_address_line1',
+            'additional_address_line2'
         );
 
         $updateData = array();
@@ -1778,12 +1784,13 @@ class sAdmin
      * Also includes fallback translations
      * Used internally in sAdmin
      *
+     * @param null $state
      * @return array States translations
      */
-    public function sGetCountryStateTranslation()
+    public function sGetCountryStateTranslation($state = null)
     {
         if (Shopware()->Shop()->get('skipbackend')) {
-            return array();
+            return empty($state) ? array() : $state;
         }
         $language = Shopware()->Shop()->get('isocode');
         $fallback = Shopware()->Shop()->get('fallback');
@@ -1815,7 +1822,16 @@ class sAdmin
                 $translation += $translationFallback;
             }
         }
-        return $translation;
+
+        if (empty($state)) {
+            return $translation;
+        }
+
+        if ($translation[$state["id"]]) {
+            $state["statename"] = $translation[$state["id"]]["name"];
+        }
+
+        return $state;
     }
 
     /**
@@ -2005,13 +2021,13 @@ class sAdmin
      */
     public function sSaveRegisterBilling($userID, $userObject)
     {
-        if ($userObject["billing"]["birthmonth"] == "-") {
+        if (!is_numeric($userObject["billing"]["birthmonth"])) {
             unset($userObject["billing"]["birthmonth"]);
         }
-        if ($userObject["billing"]["birthday"] == "--") {
+        if (!is_numeric($userObject["billing"]["birthday"])) {
             unset($userObject["billing"]["birthday"]);
         }
-        if ($userObject["billing"]["birthyear"] == "----") {
+        if (!is_numeric($userObject["billing"]["birthyear"])) {
             unset($userObject["billing"]["birthyear"]);
         }
 
@@ -2043,15 +2059,17 @@ class sAdmin
             $userObject["country"],
             empty($userObject["stateID"]) ? 0 : $userObject["stateID"] ,
             empty($userObject["ustid"]) ? "" : $userObject["ustid"],
-            $date
+            $date,
+            empty($userObject["additional_address_line1"]) ? null : $userObject["additional_address_line1"],
+            empty($userObject["additional_address_line2"]) ? null : $userObject["additional_address_line2"]
         );
 
         $sqlBilling = "INSERT INTO s_user_billingaddress
             (userID, company, department, salutation, firstname, lastname,
             street, streetnumber, zipcode, city,phone,
-            fax, countryID, stateID, ustid, birthday)
+            fax, countryID, stateID, ustid, birthday, additional_address_line1, additional_address_line2)
             VALUES
-            (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         // Trying to insert
         list($sqlBilling, $data) = $this->eventManager->filter(
@@ -2108,9 +2126,9 @@ class sAdmin
     {
         $sqlShipping = "INSERT INTO s_user_shippingaddress
             (userID, company, department, salutation, firstname, lastname,
-            street, streetnumber, zipcode, city, countryID, stateID)
+            street, streetnumber, zipcode, city, countryID, stateID, additional_address_line1, additional_address_line2)
             VALUES
-            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
 
         $sqlShipping = $this->eventManager->filter(
             'Shopware_Modules_Admin_SaveRegisterShipping_FilterSql',
@@ -2130,7 +2148,10 @@ class sAdmin
             $userObject["shipping"]["zipcode"],
             $userObject["shipping"]["city"],
             $userObject["shipping"]["country"],
-            $userObject["shipping"]["stateID"]
+            $userObject["shipping"]["stateID"],
+            $userObject["shipping"]["additional_address_line1"],
+            $userObject["shipping"]["additional_address_line2"]
+
         );
         // Trying to insert
         $saveUserData = $this->db->query($sqlShipping, $shippingParams);
@@ -4177,15 +4198,13 @@ class sAdmin
                 // Validate password
                 if (strlen(trim($postData["password"])) == 0
                     || !$postData["password"]
-                    || !$postData["passwordConfirmation"]
                     || (strlen($postData["password"]) < $this->config->get('sMINPASSWORD'))
                 ) {
-                    $sErrorMessages[] = $this->snippetManager->getNamespace("frontend")
-                        ->get('RegisterPasswordLength', '', true);
-
+                    $sErrorMessages[] = $this->snippetManager
+                        ->getNamespace("frontend")->get('RegisterPasswordLength', '', true);
                     $sErrorFlag["password"] = true;
                     $sErrorFlag["passwordConfirmation"] = true;
-                } elseif ($postData["password"] != $postData["passwordConfirmation"]) {
+                } elseif ((isset($postData["passwordConfirmation"])) && ($postData["password"] != $postData["passwordConfirmation"])) {
                     $sErrorMessages[] = $this->snippetManager->getNamespace("frontend")
                         ->get('AccountPasswordNotEqual', 'The passwords are not equal', true);
                     $sErrorFlag["password"] = true;
@@ -4216,8 +4235,8 @@ class sAdmin
                     $sErrorFlag['email'] = true;
                 }
                 $sErrorMessages[] = $snippet->get(
-                    'AccountCurrentPassword', 
-                    'Das aktuelle Passwort stimmt nicht!', 
+                    'AccountCurrentPassword',
+                    'Das aktuelle Passwort stimmt nicht!',
                     true
                 );
             }
@@ -4547,6 +4566,7 @@ class sAdmin
         $userData["additional"]["state"] = $userData["additional"]["state"] ? : array();
 
         $userData["additional"]["country"] = $this->sGetCountryTranslation($userData["additional"]["country"]);
+        $userData["additional"]["state"] = $this->sGetCountryStateTranslation($userData["additional"]["state"]);
 
         $additional = $this->db->fetchRow(
             "SELECT * FROM s_user WHERE id = ?",
@@ -4617,6 +4637,7 @@ class sAdmin
             array($userData["shippingaddress"]["stateID"])
         );
         $userData["additional"]["stateShipping"] = $userData["additional"]["stateShipping"] ? : array();
+        $userData["additional"]["stateShipping"] = $this->sGetCountryStateTranslation($userData["additional"]["stateShipping"]);
         // Add stateId to session
         $this->session->offsetSet('sState', $userData["additional"]["stateShipping"]["id"]);
         // Add areaId to session

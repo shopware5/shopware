@@ -1,0 +1,15 @@
+/* Smartphone version
+   Nothing to do: blocks are stacked by default. */
+
+/* Tablet version */
+@media (min-width: 768px) {
+  .nav { width: 20%; }
+  .main { width: 80%; }
+}
+
+/* Desktop version */
+@media (min-width: 960px) {
+  .nav { width: 20%; }
+  .main { width: 60%; }
+  .links { width: 20%; }
+}

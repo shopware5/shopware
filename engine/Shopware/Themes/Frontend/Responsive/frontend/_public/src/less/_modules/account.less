@@ -1,0 +1,536 @@
+.account--content,
+.payment_logo_debit {
+    .clearfix();
+}
+
+.payment--content {
+    .unitize-padding(10, 10);
+}
+
+.account--menu {
+    .link--logout {
+        [class^="icon--"] {
+            display: none;
+        }
+    }
+}
+
+.account--box {
+    .unitize-margin(0, 0, 20, 0);
+}
+
+.account--password,
+.account--email {
+    input[type="text"],
+    input[type="password"],
+    input[type="email"] {
+        width: 100%;
+    }
+}
+
+.account--welcome {
+    .unitize(20, 16, margin-bottom);
+
+    .panel--body {
+        .unitize-padding(10, 20, 0, 20);
+    }
+}
+
+.account--error,
+.account--success {
+    .unitize-margin(0, 0, 20, 0);
+}
+
+.register--error-msg {
+    color: @errorText;
+}
+
+.account--actions {
+    .unitize-margin(0, 20, 20, 16);
+    .clearfix();
+}
+
+// Change Address
+.account--change-billing,
+.account--change-shipping {
+    &.register--content {
+        display: block;
+        width: 100%
+    }
+}
+
+.account--billing-address,
+.account--shipping-address {
+    .panel--body {
+        .unitize(200, 16, height)
+    }
+}
+
+.account--newsletter input[type="checkbox"] {
+    .unitize-margin(0, 10, 0, 0);
+}
+
+// Select Address
+.account--addresses-content,
+.account--addresses-container {
+    .clearfix();
+}
+
+.account--addresses {
+    .clearfix();
+    width: 100%;
+}
+
+.address--container {
+    width: 100%;
+    padding: 2% 0 0 0;
+}
+
+.account--paging {
+    .clearfix();
+    .unitize-padding(10, 10);
+    display: block;
+    background: @primaryBackgroundColor;
+
+    .pagination--display {
+        float: right;
+    }
+}
+
+.account--orders-overview {
+    border: 1px solid @borderColor;
+
+    .orders--table-header {
+        display: none;
+    }
+
+    .panel--tr {
+        .unitize-padding(10, 0);
+    }
+
+    .panel--td {
+        .clearfix();
+        .unitize-padding(5, 10);
+        display: block;
+        float: none;
+    }
+
+    .column--info-labels,
+    .column--info-data {
+        display: none;
+    }
+
+    .column--summary-labels,
+    .column--summary-data {
+        width: 50%;
+        float: left;
+        text-align: left;
+    }
+
+    .column--summary-data {
+        .unitize-padding(5, 10, 0, 0);
+    }
+
+    .column--label,
+    .column--value {
+        width: 50%;
+        float: left;
+    }
+
+    .column--label {
+        font-weight: 600;
+    }
+}
+
+.order--status-icon {
+    .unitize-width(8);
+    .unitize-height(8);
+    .unitize(8, 16, top);
+    display: inline-block;
+    position: relative;
+
+    &.status--0,  //The order has not been processed yet.
+    &.status--1,  //The order is in process
+    &.status--3,  //Partially completed
+    &.status--6 { //The order has been sent in part
+        background: @deliveryInfoText;
+    }
+
+    &.status--2,  //Completed
+    &.status--5,  //Ready for shipping
+    &.status--7 { //The order has been sent
+        background: @deliveryAvailableText;
+    }
+
+    &.status--4,  //The order has been cancelled
+    &.status--8 { //Clarification needed
+        background: @deliveryNotAvailableText;
+    }
+}
+
+.order--name {
+    color: @darkTextColor;
+}
+
+.order--details,
+.order--download,
+.order--price-unit,
+.order--current-price {
+    display: none;
+}
+
+.order--actions {
+    .is--align-center;
+}
+
+.order--user-comments,
+.order--shop-comments {
+    border-bottom: 1px solid @borderColor;
+}
+
+.account--downloads {
+    border: 1px solid @borderColor;
+
+    .downloads--table-header {
+        display: none;
+    }
+
+    .panel--tr {
+        .unitize-padding(10, 0);
+    }
+
+    .panel--td {
+        .clearfix();
+        .unitize-padding(5, 10);
+        display: block;
+        float: none;
+    }
+}
+
+.account--password-reset {
+    .unitize(20, 16, margin-top);
+
+    .password-reset--input {
+        .unitize-margin(10, 0);
+        width: 100%;
+    }
+
+    .password-reset--actions {
+        .btn {
+            .unitize(20, 16, margin-bottom);
+        }
+    }
+}
+
+@media screen and(min-width: @tabletViewportWidth) {
+
+    .is--ctl-account {
+        .categories--headline,
+        .categories--navigation,
+        .shop-sites--headline,
+        .shop-sites--navigation,
+        .logo--trusted-shops {
+            display: none;
+        }
+
+        &.is--act-logout,
+        &.is--act-password {
+            .sidebar-main {
+                display: none;
+            }
+        }
+    }
+
+    .account--content {
+        .unitize-margin(45, 0, 0, 0);
+        width: 78%;
+        float: right;
+
+        &.is--wide {
+            width: 100%;
+        }
+    }
+
+    .account--password-reset {
+        .unitize-margin(45, 0, 0, 0);
+    }
+
+    // Change Address
+    .account--change-billing,
+    .account--change-shipping {
+        &.register--content {
+            width: 78%
+        }
+    }
+
+    .account--menu {
+        border: 1px solid @borderColor;
+
+        .navigation--headline {
+            .panel--title;
+            .is--underline;
+        }
+
+        .account--menu-container {
+            .panel--body;
+            .unitize-padding(10, 20);
+        }
+
+        .navigation--list {
+            padding: 0;
+            border: 0 none;
+        }
+
+        .navigation--entry {
+            margin: 0;
+            border: 0 none;
+        }
+
+        .navigation--link {
+            .unitize-padding(5, 0);
+
+            &.link--logout {
+                .unitize-margin(10, 0, 0, 0);
+                .unitize-padding(10, 0, 0, 0);
+                border-top: 1px solid @borderColor;
+                font-weight: bold;
+                color: @primaryColor;
+
+                [class^="icon--"] {
+                    .unitize-margin(0, 5, 0, 0);
+                    display: inline-block;
+                }
+
+                &:hover {
+                    color: @primaryContrastColor;
+                }
+            }
+        }
+    }
+
+    .account--content {
+        .unitize-margin(20, 0);
+    }
+
+    .account--welcome {
+        .panel--title {
+            .unitize(28, 16, font-size);
+        }
+    }
+
+    .account--info,
+    .account--billing {
+        width: 49%;
+        float: left;
+    }
+
+    .account--payment,
+    .account--shipping {
+        width: 49%;
+        float: right;
+    }
+
+    .account--email,
+    .account--password {
+        display: none;
+    }
+
+    .account--email,
+    .account--password,
+    .account--newsletter {
+        clear: both;
+    }
+
+    .account--info,
+    .account--payment {
+        .panel--body {
+            .unitize-height(120);
+        }
+    }
+
+    .account--billing,
+    .account--shipping {
+        .panel--body {
+            .unitize-height(220);
+        }
+    }
+
+    // Select Address
+    .address--container {
+        width: 50%;
+        float: left;
+        padding: 2% 0 0 2%;
+    }
+
+    .account--orders-overview {
+        .orders--table-header {
+            display: block;
+        }
+
+        .panel--tr {
+            padding: 0;
+            border-width: 0 0 1px 0;
+        }
+        .panel--td {
+            .unitize-padding(10, 10);
+            display: inline-block;
+            float: left;
+        }
+
+        .column--label {
+            display: none;
+        }
+
+        .column--value {
+            width: 100%;
+            float: none;
+        }
+
+        .column--summary-labels,
+        .column--summary-data {
+            width: 20%;
+            text-align: right;
+        }
+
+        .column--date,
+        .column--id,
+        .column--dispatch {
+            width: 20%;
+        }
+        .column--status {
+            width: 25%;
+        }
+        .column--actions {
+            width: 15%;
+        }
+        .column--name {
+            width: 50%;
+        }
+        .column--quantity {
+            width: 10%;
+        }
+        .column--price {
+            width: 20%;
+        }
+        .column--total {
+            width: 20%;
+        }
+        .column--info-labels {
+            width: 20%;
+        }
+        .column--info-data {
+            width: 40%;
+        }
+    }
+
+    .order--item {
+        margin: 0;
+    }
+
+    .order--pseudo-price {
+        .unitize(12, 16, font-size);
+    }
+
+    .order--download,
+    .order--price-unit,
+    .order--current-price {
+        .is--block;
+    }
+
+    .order--download {
+        .unitize-margin(10, 0, 0, 0);
+    }
+
+    .order--quantity {
+        .is--align-center;
+    }
+
+    .order--actions,
+    .order--price,
+    .order--amount {
+        .is--align-right;
+    }
+
+    .order--repeat {
+        .unitize-padding(20, 20);
+        text-align: center;
+        background: @softBackgroundColor;
+        border-bottom: 1px solid @borderColor;
+    }
+
+    .account--downloads {
+        .downloads--table-header {
+            .is--block;
+        }
+
+        .panel--tr {
+            padding: 0;
+            border-width: 0 0 1px 0;
+        }
+        .panel--td {
+            .unitize-padding(10, 10);
+            display: inline-block;
+            float: left;
+        }
+
+        .column--date,
+        .column--actions {
+            width: 20%;
+        }
+        .column--info {
+            width: 60%;
+        }
+    }
+
+    .column--label {
+        display: none;
+    }
+
+    .column--date,
+    .column--id,
+    .column--dispatch {
+        width: 20%;
+    }
+
+    .column--status {
+        width: 25%;
+    }
+
+    .column--actions {
+        width: 15%;
+    }
+
+    .column--name {
+        width: 50%;
+    }
+
+    .column--quantity {
+        width: 10%;
+    }
+
+    .column--price {
+        width: 20%;
+    }
+
+    .column--total {
+        width: 20%;
+    }
+
+    .column--info-labels {
+        width: 20%;
+    }
+
+    .column--info-data {
+        width: 40%;
+    }
+
+    .column--summary {
+        width: 20%;
+    }
+
+    .account--password-reset {
+        .password-reset--input {
+            .unitize-width(320);
+        }
+    }
+}

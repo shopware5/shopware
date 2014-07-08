@@ -1,0 +1,138 @@
+// Will be used for the off canvas animation
+.page-wrap {
+	.transition(all, 0.25s, ease-in-out);
+	.transform-style(preverse-3d);
+    min-height: 100%;
+
+	&::before {
+		.unitize(-8, 16, left);
+		.unitize-width(8, 16);
+		.box-shadow(inset -5px 0 5px -5px @lightTextColor);
+		content: '';
+		display: block;
+		height: 100%;
+		position: absolute;
+		top: 0;
+	}
+
+	// Disables the transition, so the user can slide
+	&.js--no-transition {
+		.transition(none, 0s, linear);
+	}
+}
+
+// Is used for the necessary styling of an off-canvas menu
+.off-canvas {
+    .unitize-width(300);
+    .unitize-variable(300, 16);
+    .transition(all, 0.25s, ease-in-out);
+    .transform-style(preverse-3d);
+    position: fixed;
+    top: 0;
+    height: 100%;
+    z-index: 998;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    &.is--left {
+        left: 0;
+        .translate(~"-@{emValue}rem", 0);
+    }
+
+    &.is--right {
+        right: 0;
+        .translate(~"@{emValue}rem", 0);
+    }
+
+    &.is--active {
+        .translate(0, 0);
+        z-index: 999;
+    }
+
+    &.js--no-transition {
+        .transition(none, 0s, linear);
+    }
+}
+
+.page-wrap {
+    &.is--moved-left {
+        .unitize-variable(300, 16);
+        .translate(~"@{emValue}rem", 0);
+    }
+    &.is--moved-right {
+        .unitize-variable(300, 16);
+        .translate(~"-@{emValue}rem", 0);
+    }
+}
+
+.navigation--smartphone {
+	.navigation--entry {
+		.unitize-padding(12, 10, 12, 10, 16);
+		background: #fff;
+		border-bottom: 1px solid @borderColor;
+	}
+	.navigation--link {
+		display: block;
+	}
+
+	.entry--close-off-canvas {
+		.linear-gradient(@lightTextColor, @primaryTextColor);
+		border-bottom: 1px solid @darkBorderColor;
+
+		.navigation--link {
+			.clearfix();
+			color: #fafafa;
+			font-weight: bold;
+			text-shadow: 1px 1px 0 @darkTextColor;
+
+			&:active {
+				color: #eeeeff;
+			}
+		}
+		.icon--arrow-right {
+			.unitize-margin(3, 0, 0, 0, 16);
+			float: right;
+		}
+	}
+}
+
+.navigation--headline,
+.sidebar--navigation {
+	.unitize-margin(0, 10, 0, 10, 16);
+}
+.navigation--headline {
+	.unitize-margin(16, 10, 16, 10, 16);
+	font-size: 1em;
+}
+.sidebar--navigation {
+	.border-radius();
+	background: #fff;
+	border: 1px solid @borderColor;
+
+	.navigation--entry {
+		.unitize-padding(10, 20, 10, 20, 16);
+		border-bottom: 1px solid @borderColor;
+
+		&:last-child {
+			border-bottom: 0 none;
+		}
+	}
+	.navigation--link {
+		color: @primaryTextColor;
+	}
+}
+
+@media screen and(min-width: @tabletViewportWidth) {
+
+    // Reset the styles of the standard off-canvas elements on higher screen sizes
+    .off-canvas {
+        .translate(0, 0);
+        .transition(none);
+        width: auto;
+        height: auto;
+        position: relative;
+        top: 0;
+        left: 0;
+    }
+
+}
