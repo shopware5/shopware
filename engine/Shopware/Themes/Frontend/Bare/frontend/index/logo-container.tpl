@@ -5,11 +5,13 @@
 		<div class="logo--shop block">
 			<a href="{url controller='index'}" title="{config name=shopName} - {s name='IndexLinkDefault'}{/s}">
 				<span data-picture data-alt="{config name=shopName} - {s name='IndexLinkDefault' namespace="frontend/index/index"}{/s}">
-					<span data-src="{link file='frontend/_public/src/img/logos/logo--mobile.png'}"></span>
-					<span data-src="{link file='frontend/_public/src/img/logos/logo--tablet.png'}" data-media="(min-width: 47.75em)"></span>
+					<span data-src="{link file=$theme.mobileLogo}"></span>
+					<span data-src="{link file=$theme.tabletLogo}" data-media="(min-width: 48em)"></span>
+                    <span data-src="{link file=$theme.tabletLandscapeLogo}" data-media="(min-width: 64em)"></span>
+                    <span data-src="{link file=$theme.desktopLogo}" data-media="(min-width: 78.75em)"></span>
 
 					<noscript>
-						<img src="{link file='frontend/_public/src/img/logos/logo--mobile.png'}" alt="{config name=shopName} - {s name='IndexLinkDefault'}{/s}">
+						<img src="{link file=$theme.mobileLogo}" alt="{config name=shopName} - {s name='IndexLinkDefault'}{/s}">
 					</noscript>
 				</span>
 			</a>
