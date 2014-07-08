@@ -1,11 +1,17 @@
-
 // Sidebar
 .blog--sidebar {
     width: 100%;
 
-    .block-group { width: 100%; }
+    .block-group {
+	width: 100%;
+    }
 
     .blog--navigation {
+
+	.has--border {
+	    border: none;
+	}
+
 	.collapse--header {
 	    .unitize-padding(10, 20, 10, 20, 16);
 	    .unitize(5, 16, margin-bottom);
@@ -13,7 +19,10 @@
 	    color: @primaryTextColor;
 	}
 
-	& :hover { color: @primaryColor; }
+	& :hover {
+	    color: @primaryColor;
+	}
+
 	& .is--active {
 	    color: #fff;
 	    font-weight: bold;
@@ -35,15 +44,9 @@
     .blog--subscribe-content {
 	display: none;
 
-	&.is--active { display: block; }
-    }
-
-    .blog--subscribe,
-    .blog--filter-date,
-    .blog--filter-tags,
-    .blog--filter-author {
-	width: 100%;
-	float: left;
+	&.is--active {
+	    display: block;
+	}
     }
 
     .blog--filter-tags {
@@ -52,115 +55,154 @@
 }
 
 @media screen and(min-width: @tabletViewportWidth) {
-
     .blog--content {
 
-	.hero--unit{
-	    .clearfix();
-	}
-
-	.vendor--info {
-	    .hero--image {
-		.unitize-margin(0, 20, 20, 0);
-		float: left;
-	    }
-
-	    .hero--text {
-		.unitize-margin(0, 0, 10, 0);
-	    }
-	}
-
-	.listing--actions {
-	    .unitize-margin(0, 0, 20, 0);
-	}
-
-	.action--sort {
-	    .unitize-width(220);
-	    display: inline-block;
-
-	    .sort--select {
-		.unitize-width(220);
-	    }
-	}
-
-	.action--change-layout {
-	    display: inline-block;
+	.blog--listing {
+	    .unitize(16, 16, margin-top);
 	}
 
 	.action--filter-btn {
-	    .unitize-width(190);
-	    .unitize-margin(0, 20, 10, 0);
-	    float: left;
-
-	    .filter--trigger {
-		.unitize(24, 16, line-height);
-	    }
+	    .unitize-margin(20, 0, 10, 0, 16);
 	}
 
-	.action--filter-options {
-	    .unitize-padding(0, 0, 10, 0);
-	    display: none;
-	    width: auto;
-	    height: auto;
-	    overflow: visible;
-	    position: relative;
-	    border: 1px solid @borderColor;
-	    background: @primaryBackgroundColor;
-	    clear: both;
-
-	    .filter--close-btn {
+	.blog--sidebar {
+	    .action--filter-options {
+		.unitize-padding(0, 0, 10, 0);
 		display: none;
-	    }
-
-	    .filter--container {
-		.clearfix();
-		.unitize(10, 16, padding-top);
-		padding-left: 2%;
-	    }
-
-	    .filter--headline {
-		display: none;
-	    }
-
-	    .filter--group {
-		.unitize-height(38);
-		width: 31%;
-		margin: 0 2% 2% 0;
+		width: auto;
+		height: auto;
+		overflow: visible;
 		position: relative;
-		float: left;
-	    }
+		border: 1px solid @borderColor;
+		background: @primaryBackgroundColor;
+		clear: both;
 
-	    .filter--header {
-		width: 100%;
-		position: absolute;
-		top: 0;
-		left: 0;
-		z-index: 11;
-
-		&.is--active {
-		    z-index: 15;
+		.filter--close-btn {
+		    display: none;
 		}
-	    }
 
-	    .filter--content {
-		.unitize(38, 16, top);
-		width: 100%;
-		position: absolute;
-		left: 0;
+		.filter--container {
+		    .clearfix();
+		    .unitize(10, 16, padding-top);
+		    padding-left: 2%;
+		}
+
+		.filter--headline {
+		    display: none;
+		}
+
+		.filter--group {
+		    .unitize-height(38);
+		    width: 31%;
+		    margin: 0 2% 2% 0;
+		    position: relative;
+		    float: left;
+		}
+
+		.filter--header {
+		    width: 100%;
+		    position: absolute;
+		    top: 0;
+		    left: 0;
+		    z-index: 11;
+
+		    &.is--active {
+			z-index: 15;
+		    }
+		}
+
+		.filter--content {
+		    .unitize(38, 16, top);
+		    width: 100%;
+		    position: absolute;
+		    left: 0;
+		}
 	    }
 	}
     }
-
 }
 
-@media screen and (min-width: @tabletLandscapeViewportWidth) {}
+@media screen and (min-width: @tabletLandscapeViewportWidth) {
+}
 
 @media screen and(min-width: @desktopViewportWidth) {
 
-    .is--ctl-blog .sidebar-main { display: none; }
-
-    .blog--content {
-
+    .is--ctl-blog .sidebar-main {
+	display: none;
     }
 
+    .blog--content {
+	.unitize(45, 16, margin-top);
+
+	.blog--navigation {
+	    .unitize-padding(0, 0, 0, 0, 16);
+
+	    .has--border {
+		border: 1px solid @borderColor;
+	    }
+
+	    .panel--title {
+		.unitize-padding(20, 0, 10, 0, 16);
+		.unitize-margin(0, 20, 0, 20, 16);
+		color: @darkTextColor;
+		border-width: 0 0 0 0;
+		display: block;
+		font-weight: bold;
+		background: none;
+		box-shadow: none;
+		cursor: default;
+
+		& .is--underline {
+		    border-color: @borderColor;
+		    border-width: 0 0 1px 0;
+		}
+	    }
+
+	    .panel--body {
+		.unitize-padding(20, 20, 20, 20, 16);
+		border: 0 none;
+		box-shadow: none;
+	    }
+
+	    .blog--subscribe-content,
+	    .blog--filter-content {
+		display: block !important;
+	    }
+
+	}
+
+	.filter--container {
+	    .unitize-padding(0, 0, 0, 0, 16);
+	}
+
+	.action--filter-btn { display: none; }
+
+	.action--filter-options {
+	    display: block !important;
+	    float: right;
+	    width: 20%;
+	    border: none;
+
+	    .filter--group {
+		.unitize-margin(0, 0, 16, 0, 16);
+		width: 100%;
+		height: auto;
+	    }
+	    .filter--entry {
+		.unitize-padding(0, 0, 0, 0, 16);
+		.unitize(14, 16, font-size);
+		border: 0 none;
+	    }
+	}
+
+	.filter--expand-collapse {
+	    display: none;
+	}
+
+	.blog--listing {
+	    .unitize(0, 16, margin-top);
+	    width: 78%;
+	    float: left;
+	}
+    }
 }
