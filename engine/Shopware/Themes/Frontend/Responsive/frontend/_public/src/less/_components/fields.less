@@ -67,7 +67,7 @@ input[type="email"] {
     .unitize-width(290);
     .unitize(44, 16, line-height);
     .box-shadow(0 1px 1px 0 rgba(0, 0, 0, 0.1));
-    .linear-gradient(#ffffff, #f7f8fa);
+    .linear-gradient(@lightGradientStart, @primaryLightBackgroundColor);
     .clearfix();
     display: inline-block;
     position: relative;
@@ -76,7 +76,7 @@ input[type="email"] {
     cursor: pointer;
 
     &:hover {
-	.linear-gradient(#f7f8fa, #ffffff);
+	.linear-gradient(@primaryLightBackgroundColor, @lightGradientStart);
     }
 
     &.js--is--focused {
