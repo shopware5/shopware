@@ -64,13 +64,15 @@
 				{/block}
 
                 <input type="hidden" name="sArticle" value="{$sBasketItem.id}" />
-                <select name="sQuantity" data-auto-submit-form="true">
-                    {section name="i" start=$sBasketItem.minpurchase loop=$sBasketItem.maxpurchase+1 step=$sBasketItem.purchasesteps}
-                        <option value="{$smarty.section.i.index}" {if $smarty.section.i.index==$sBasketItem.quantity}selected="selected"{/if}>
-                            {$smarty.section.i.index}
-                        </option>
-                    {/section}
-                </select>
+                {block name='frontend_checkout_cart_item_quantity_selection'}
+                    <select name="sQuantity" data-auto-submit-form="true">
+                        {section name="i" start=$sBasketItem.minpurchase loop=$sBasketItem.maxpurchase+1 step=$sBasketItem.purchasesteps}
+                            <option value="{$smarty.section.i.index}" {if $smarty.section.i.index==$sBasketItem.quantity}selected="selected"{/if}>
+                                {$smarty.section.i.index}
+                            </option>
+                        {/section}
+                    </select>
+                {/block}
             </div>
         {/block}
 
