@@ -188,26 +188,21 @@ $(function() {
     });
 
     $('.add-voucher--checkbox').on('change', function(event) {
-        var method = 'addClass';
+        var method = ($(this).is(':checked')) ? 'addClass' : 'removeClass';
         event.preventDefault();
 
-        if($(this).is(':checked')) {
-            method = 'removeClass';
-        }
         $('.add-voucher--panel')[method]('is--hidden');
     });
 
     $('.table--shipping-costs-trigger').on('click', function(event) {
+
         event.preventDefault();
 
         var $this = $(this),
-            $next = $this.next();
+            $next = $this.next(),
+            method = ($next.hasClass('is--hidden')) ? 'removeClass' : 'addClass';
 
-        if($next.hasClass('is--hidden')) {
-            $next.removeClass('is--hidden');
-        } else {
-            $next.addClass('is--hidden');
-        }
+        $next[method]('is--hidden');
     });
 
     // Change the active tab to the customer reviews, if the url param sAction === rating is set.
