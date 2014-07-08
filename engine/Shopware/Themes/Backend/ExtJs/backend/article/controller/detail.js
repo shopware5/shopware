@@ -65,6 +65,11 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
     ],
 
     snippets: {
+        disableVariantForbidden: {
+            title: '{s name=disable_variant_forbidden/title}Disable variants{/s}',
+            message: '{s name=disable_variant_forbidden/message}To disable variant support you must delete all non-main variants first{/s}',
+            error: '{s name=disable_variant_forbidden/error}An error occurred while disabling variant support{/s}'
+        },
         growlMessage: '{s name=growl_message}Article{/s}',
         existTitle: '{s name=sidebar/accessory/already_assigned_title}Already exists{/s}',
         similar: {
@@ -150,16 +155,42 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
     },
 
     /**
+     * Deprecated. Use onChangeConfigurator instead
+     * @param field
+     * @param newValue
+     */
+    onEnableConfigurator: function(field, newValue) {
+        this.onChangeConfigurator(field, newValue);
+    },
+
+    /**
      * Event listener function of the configurator checkbox in the detail tab.
      * Enables or disables the variant tab.
      * @param field
      * @param newValue
      */
-    onEnableConfigurator: function(field, newValue) {
+    onChangeConfigurator: function(field, newValue) {
         var me = this,
             mainWindow = me.getMainWindow(),
             article = me.subApplication.article,
             variantTab = mainWindow.variantTab;
+
+        if (newValue === false) {
+            var variantStore = me.getStore('Variant');
+            variantStore.getProxy().extraParams.articleId = article.get('id');
+
+            variantStore.load({
+                callback: function(records, operation, success) {
+                    if (success && records.length > 1) {
+                        Shopware.Notification.createGrowlMessage(me.snippets.disableVariantForbidden.title, me.snippets.disableVariantForbidden.message, me.snippets.growlMessage);
+                        field.setValue(true);
+                    } else if (!success) {
+                        Shopware.Notification.createGrowlMessage(me.snippets.disableVariantForbidden.title, me.snippets.disableVariantForbidden.error, me.snippets.growlMessage);
+                        field.setValue(true);
+                    }
+                }
+            });
+        }
 
         if (me.subApplication.splitViewActive) {
             variantTab.setDisabled(true)
