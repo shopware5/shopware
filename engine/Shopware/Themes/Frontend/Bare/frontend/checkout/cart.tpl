@@ -54,16 +54,18 @@
 			{/block}
 
             <div class="table--actions">
+
 				<div class="main--actions">
+                    {* Contiune shopping *}
+                    {if $sBasket.sLastActiveArticle.link}
+                        {block name="frontend_checkout_actions_link_last"}
+                            <a href="{$sBasket.sLastActiveArticle.link}" title="{s name='CheckoutActionsLinkLast' namespace="frontend/checkout/actions"}{/s}" class="btn btn--secondary is--left">
+                                {s name="CheckoutActionsLinkLast" namespace="frontend/checkout/actions"}{/s}
+                            </a>
+                        {/block}
+                    {/if}
+
 					{block name="frontend_checkout_actions_confirm"}
-						{* Contiune shopping *}
-						{if $sBasket.sLastActiveArticle.link}
-							{block name="frontend_checkout_actions_link_last"}
-								 <a href="{$sBasket.sLastActiveArticle.link}" title="{s name='CheckoutActionsLinkLast' namespace="frontend/checkout/actions"}{/s}" class="btn btn--secondary is--left">
-									 {s name="CheckoutActionsLinkLast" namespace="frontend/checkout/actions"}{/s}
-								 </a>
-							 {/block}
-						{/if}
 
 						{* Forward to the checkout *}
 						{if !$sMinimumSurcharge && !$sDispatchNoOrder}
@@ -120,15 +122,17 @@
 
 			<div class="table--actions actions--bottom">
 				{block name="frontend_checkout_actions_confirm_bottom"}
+
 					<div class="main--actions">
-						{* Contiune shopping *}
-						{if $sBasket.sLastActiveArticle.link}
-							{block name="frontend_checkout_actions_link_last_bottom"}
-								 <a href="{$sBasket.sLastActiveArticle.link}" title="{s name='CheckoutActionsLinkLast' namespace="frontend/checkout/actions"}{/s}" class="btn btn--secondary is--left">
-									 {s name="CheckoutActionsLinkLast" namespace="frontend/checkout/actions"}{/s}
-								 </a>
-							 {/block}
-						{/if}
+
+                        {* Contiune shopping *}
+                        {if $sBasket.sLastActiveArticle.link}
+                            {block name="frontend_checkout_actions_link_last_bottom"}
+                                <a href="{$sBasket.sLastActiveArticle.link}" title="{s name='CheckoutActionsLinkLast' namespace="frontend/checkout/actions"}{/s}" class="btn btn--secondary is--left">
+                                    {s name="CheckoutActionsLinkLast" namespace="frontend/checkout/actions"}{/s}
+                                </a>
+                            {/block}
+                        {/if}
 
 						{* Forward to the checkout *}
 						{if !$sMinimumSurcharge && !$sDispatchNoOrder}
