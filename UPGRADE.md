@@ -1,6 +1,9 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+## Next
+* Fixed name used as reference when setting attributes of an order document.
+
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
 * Removed deprecated Zend Framework components:
