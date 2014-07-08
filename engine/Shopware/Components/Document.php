@@ -96,7 +96,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
      *
      * @var string
      */
-    public $_defaultPath = "templates/_default";
+    public $_defaultPath = "templates/_emotion";
 
     /**
      * Generate preview only
@@ -436,8 +436,8 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
         $this->_template->setTemplateDir(array(
                 'custom' => $path,
-                'local' => '_local',
-                'emotion' => '_default',
+                'local' => '_emotion_local',
+                'emotion' => '_emotion',
             ));
 
         $this->_template->setCompileId(str_replace('/', '_', $path).'_'.$this->_subshop['id']);

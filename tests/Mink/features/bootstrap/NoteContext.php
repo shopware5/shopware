@@ -16,11 +16,12 @@ class NoteContext extends SubContext
     }
 
     /**
+     * @When /^I remove the article from my note$/
      * @When /^I remove the article on position (?P<num>\d+) of my note$/
      */
-    public function iRemoveTheArticleOnPositionOfMyNote($position)
+    public function iRemoveTheArticleOnPositionOfMyNote($position = 1)
     {
-        $this->getPage('Note')->removeArticle($position);
+        $this->clickActionLink($position, 'remove');
     }
 
     /**
@@ -28,7 +29,7 @@ class NoteContext extends SubContext
      */
     public function iPutTheArticleOnPositionOfMyNoteInTheBasket($position)
     {
-        $this->getPage('Note')->buyArticle($position);
+        $this->clickActionLink($position, 'order');
     }
 
     /**
@@ -36,7 +37,7 @@ class NoteContext extends SubContext
      */
     public function iCompareTheArticleOnPositionOfMyNote($position)
     {
-        $this->getPage('Note')->compareArticle($position);
+        $this->clickActionLink($position, 'compare');
     }
 
     /**
@@ -44,7 +45,7 @@ class NoteContext extends SubContext
      */
     public function iVisitTheDetailPageOfTheArticleOnPositionOfMyNote($position)
     {
-        $this->getPage('Note')->visitArticleDetails($position);
+        $this->clickActionLink($position, 'details');
     }
 
     /**
@@ -64,5 +65,14 @@ class NoteContext extends SubContext
     public function myNoteShouldBeEmpty($count = 0)
     {
         $this->getPage('Note')->countArticles($count);
+    }
+
+    private function clickActionLink($position, $name)
+    {
+        $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();
+
+        /** @var \Emotion\NotePosition $notePosition */
+        $notePosition = Helper::getMultipleElement($this, 'NotePosition', $position + 1);
+        $notePosition->clickActionLink($name, $language);
     }
 }

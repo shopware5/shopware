@@ -1,4 +1,4 @@
-@note
+@note @noResponsive
 Feature: Note
 
 	Background:
@@ -15,7 +15,7 @@ Feature: Note
 		When  I press "EUR"
 		Then  I should see "13,49"
 
-		When  I follow "Löschen"
+		When  I remove the article from my note
 		Then  I should see "Merkzettel"
 		But  I should not see "Sonnenbrille Speed Eyes"
 
@@ -37,6 +37,7 @@ Feature: Note
 			| Sonnenbrille Speed Eyes | Sun Smile and Protect | SW10167     | N sui ut glorificus, voro subdo flos alter laxe novem orbus sesquimellesimus, eruo ivi sero trimodus insuadibilis sus ver Jugiter episcopalis. Humilitas   | 13,49 € | Sonnenbrille-gruen     | /sommerwelten/167/sonnenbrille-speed-eyes |
 
 		When  I compare the article on position 1 of my note
+        And  I move backward one page
 		And  I compare the article on position 2 of my note
 		And  I follow "Vergleich starten"
 		Then  The comparison should look like this:

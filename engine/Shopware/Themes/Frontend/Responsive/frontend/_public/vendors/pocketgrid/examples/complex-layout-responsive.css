@@ -1,0 +1,19 @@
+/* Smartphone version:
+   nothing to do: all blocks are stacked by default (width: 100%) */
+
+/* Tablet version:
+   all stacked except main and links side-by-side */
+@media (min-width: 40em) and (max-width: 60em) {
+  .main { width: 70%; }
+  .links { width: 30%; }
+}
+
+/* Desktop version:
+   header and nav side-by-side, main and links side-by-side */
+@media (min-width: 60em) {
+  .header { width: 50%; }
+  .nav { width: 50%; }
+
+  .main { width: 80%; }
+  .links { width: 20%; }
+}

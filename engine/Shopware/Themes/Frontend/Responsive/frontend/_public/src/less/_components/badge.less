@@ -1,0 +1,31 @@
+/* A badge for displaying counts.
+
+```
+<p>Text <span class="badge">23</span></p>
+```
+*/
+.badge {
+    .unitize-padding(3, 8);
+    .unitize-margin(0, 5);
+    .unitize(12, 16, font-size);
+    .unitize(18, 16, line-height);
+    .border-radius(12px);
+    display: inline-block;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+    color: @primaryTextColor;
+    background: @borderColor;
+
+    &.is--secondary {
+        .secondary-gradient();
+        color: #fff;
+        text-shadow: 0 1px 1px #4A5867;
+    }
+
+    &.is--primary {
+        .primary-gradient();
+        color: #fff;
+        text-shadow: 0 1px 1px #AD1200;
+    }
+}

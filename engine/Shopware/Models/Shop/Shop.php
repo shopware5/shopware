@@ -27,6 +27,7 @@ namespace Shopware\Models\Shop;
 use Shopware\Components\Model\ModelEntity,
     Doctrine\ORM\Mapping as ORM,
     Doctrine\Common\Collections\ArrayCollection;
+use Shopware\Components\Theme\Inheritance;
 
 /**
  *
@@ -134,8 +135,15 @@ class Shop extends ModelEntity
     private $secureBaseUrl;
 
     /**
+     * @var $template int
+     * @ORM\Column(name="template_id", type="integer", nullable=true)
+     */
+    private $templateId;
+
+    /**
      * @var Template $template
-     * @ORM\ManyToOne(targetEntity="Template")
+     * @ORM\ManyToOne(targetEntity="Template", inversedBy="shops")
+     * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
      */
     private $template;
 
@@ -701,22 +709,36 @@ class Shop extends ModelEntity
         }
 
         if ($this->getTemplate() !== null) {
-            /** @var $template \Enlight_Template_Manager */
+            /** @var $templateManager \Enlight_Template_Manager */
             $templateManager = $bootstrap->getResource('Template');
             $template = $this->getTemplate();
             $localeName = $this->getLocale()->toString();
 
-            if ($template->getVersion() == 2) {
+            if ($template->getVersion() == 3) {
+                /**@var $inheritance Inheritance*/
+                $inheritance = Shopware()->Container()->get('theme_inheritance');
+                $config = $inheritance->buildConfig($template, $this, false);
+                $path = $inheritance->getTemplateDirectories($template);
+
+                $templateManager->addPluginsDir(
+                    $inheritance->getSmartyDirectories($template)
+                );
+
+                $templateManager->setTemplateDir($path);
+                $templateManager->assign('theme', $config);
+
+            } else if ($template->getVersion() == 2) {
                 $templateManager->addTemplateDir(array(
                     'custom' => $template->toString(),
                     'local' => '_emotion_local',
                     'emotion' => '_emotion',
+                    'include_dir' => '.'
                 ));
             } else {
-                $templateManager->addTemplateDir(array(
-                    'custom' => $template->toString(),
-                    'local' => '_local',
-                    'emotion' => '_default',
+                throw new \Exception(sprintf(
+                    'Tried to load unsupported template version %s for template: %s',
+                    $template->getVersion(),
+                    $template->getName()
                 ));
             }
 

@@ -1,38 +1,15 @@
 @listing
 Feature: Show Listing
 
-  Scenario Outline: I can change the currency and check the ab-prices in euro and dollar
-    Given I am on the listing page:
-      | parameter | value |
-      | sPerPage  | 24    |
-      | sSort     | 5     |
-    And  I press "USD"
-    Then  The price of the article on position <pos> should be <price_dollar>
-
-    When  I press "EUR"
-    Then  The price of the article on position <pos> should be <price_euro>
-
-  Examples:
-    | pos | price_euro | price_dollar |
-    | 2   | "11,40 €"  | "15,53 $"    |
-    | 3   | "12,80 €"  | "17,44 $"    |
-    | 4   | "17,90 €"  | "24,39 $"    |
-    | 5   | "12,80 €"  | "17,44 $"    |
-    | 6   | "21,40 €"  | "29,16 $"    |
-    | 11  | "119,00 €" | "162,14 $"   |
-    | 15  | "50,00 €"  | "68,13 $"    |
-
-
   Scenario: I can change the view method
     Given I am on the listing page:
       | parameter | value |
-    Then  the response should contain "table-view active"
-    But   the response should not contain "list-view active"
+    Then  the articles should be shown in a table-view
 
     When  I follow "Listen-Ansicht"
-    Then  the response should contain "list-view active"
-    But   the response should not contain "table-view active"
+    Then  the articles should be shown in a list-view
 
+  @filter
   Scenario: I can filter the articles by supplier
     Given I am on the listing page:
       | parameter | value |
@@ -50,6 +27,7 @@ Feature: Show Listing
     When I reset all filters
     Then I should see 48 articles
 
+  @filter
   Scenario: I can filter the articles by custom filters
     Given I am on the listing page:
       | parameter | value |
@@ -70,33 +48,35 @@ Feature: Show Listing
     When I reset all filters
     Then I should see 10 articles
 
-  @javascript
+  @sort @javascript
   Scenario: I can change the sort
     Given I am on the listing page:
       | parameter | value |
+      | sPerPage  | 12    |
+      | sSort     | 1     |
     Then I should see "Kundengruppen Brutto / Nettopreise"
 
     When  I select "Beliebtheit" from "sSort"
-    Then  I should see "ESD Download Artikel"
-    But  I should not see "Kundengruppen Brutto / Nettopreise"
+    Then  I should see the article "ESD Download Artikel" in listing
+    But  I should not see the article "Kundengruppen Brutto / Nettopreise" in listing
 
     When  I select "Niedrigster Preis" from "sSort"
-    Then  I should see "Fliegenklatsche lila"
-    But   I should not see "ESD Download Artikel"
+    Then  I should see the article "Fliegenklatsche lila" in listing
+    But   I should not see the article "ESD Download Artikel" in listing
 
     When  I select "Höchster Preis" from "sSort"
-    Then  I should see "Dart Automat Standgerät"
-    But   I should not see "Fliegenklatsche lila"
+    Then  I should see the article "Dart Automat Standgerät" in listing
+    But   I should not see the article "Fliegenklatsche lila" in listing
 
     When  I select "Artikelbezeichnung" from "sSort"
-    Then  I should see "Artikel mit Abverkauf"
-    But   I should not see "Dart Automat Standgerät"
+    Then  I should see the article "Artikel mit Abverkauf" in listing
+    But   I should not see the article "Dart Automat Standgerät" in listing
 
     When  I select "Erscheinungsdatum" from "sSort"
-    Then  I should see "Kundengruppen Brutto / Nettopreise"
-    But   I should not see "Artikel mit Abverkauf"
+    Then  I should see the article "Kundengruppen Brutto / Nettopreise" in listing
+    But   I should not see the article "Artikel mit Abverkauf" in listing
 
-  @javascript
+  @perPage @javascript
   Scenario Outline: I can change the articles per page
     Given I am on the listing page:
       | parameter | value  |
@@ -113,7 +93,7 @@ Feature: Show Listing
     | 36   | 48 |
     | 48   | 12 |
 
-  @javascript
+  @language @javascript
   Scenario: I can change the language
     Given I am on the listing page:
       | parameter | value |
@@ -132,3 +112,53 @@ Feature: Show Listing
 
     When  I select "Deutsch" from "__shop"
     Then  I should see "Reisekoffer Set"
+
+  @customergroups
+  Scenario:
+    Given I am on the page "Account"
+    And   I log in successful as "Händler Kundengruppe-Netto" with email "mustermann@b2b.de" and password "shopware"
+    And   I am on the listing page:
+      | parameter | value |
+      | sCategory | 30    |
+
+    Then  The price of the article on position 1 should be "16,81 €"
+    And   The price of the article on position 2 should be "42,02 €"
+    And   The price of the article on position 3 should be "6,71 €"
+
+    When  I am on the page "Account"
+    And   I log me out
+    And   I am on the listing page:
+      | parameter | value |
+      | sCategory | 30    |
+
+    Then  The price of the article on position 1 should be "20,00 €"
+    And   The price of the article on position 2 should be "50,00 €"
+    And   The price of the article on position 3 should be "7,99 €"
+
+  @browsing
+  Scenario Outline: I can browse through the listing
+    Given I am on the listing page:
+      | parameter | value     |
+      | sPage     | 4         |
+      | sPerPage  | <perPage> |
+
+    Then I should see <perPage> articles
+
+    When I browse to "previous" page 3 times
+    Then I should not be able to browse to "previous" page
+
+    When I browse to "next" page <countNextPage> times
+    Then I should see "ESD Download Artikel"
+    And I should see "Sonnenbrille Speed Eyes"
+
+    When I browse to page <lastPage>
+    Then I should see <countLastPage> articles
+    And  I should not be able to browse to "next" page
+    And  I should not be able to browse to page 1
+
+  Examples:
+    | perPage | countNextPage | lastPage | countLastPage |
+    | 12      | 6             | 8        | 12            |
+    | 24      | 3             | 8        | 24            |
+    | 36      | 2             | 6        | 16            |
+    | 48      | 1             | 5        | 4             |

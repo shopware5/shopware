@@ -1,0 +1,382 @@
+// Basic header
+.header-main {
+	background: #fff;
+
+	// Hide the currency and language switcher
+	.top-bar { display: none }
+
+	// Logo
+	.logo-main {
+		.unitize-padding(10, 10, 10, 10, 16);
+	}
+	.logo--shop { width: 50% }
+	.logo--trusted-shops { width: 50% }
+
+	.trusted-shops--link {
+		.unitize-width(24, 16);
+		.unitize-height(24, 16);
+		float: right;
+		display: block;
+	}
+}
+
+.shop--navigation {
+	position: relative;
+
+	.navigation--list {
+		.linear-gradient(@lightGradientStart, @lightGradientEnd);
+		width: 100%;
+	}
+	.navigation--entry {
+		width: 15%;
+        display: block;
+        border: 1px solid @borderColor;
+        border-right: 0 none;
+	}
+	.entry--link {
+        .unitize-padding(12, 10, 12, 10, 16);
+        display: block;
+        text-align: center;
+		font-weight: bold;
+		color: @primaryTextColor;
+		text-decoration: none;
+	}
+
+	.main-search--form,
+	.cart--display,
+	.cart--quantity,
+	.cart--amount,
+	.search--display,
+	.entry--account {
+		display: none;
+	}
+
+	.entry--cart {
+		.primary-gradient();
+		border-top: 1px solid @primaryColor;
+		border-bottom: 1px solid darken(@secondaryColor, 10%);
+		border-left: 0 none;
+
+		.entry--link {
+			color: #fff;
+		}
+	}
+	.entry--spacer {
+		.unitize-height(48, 16);
+		width: 40%;
+		border-left: 0 none;
+	}
+
+	.entry--menu-left {
+		border-right: 1px solid @borderColor;
+		border-left: 0 none;
+		width: 30%;
+	}
+
+	.entry--search {
+		font-weight: bold;
+
+		&.is--active {
+			background: #fff;
+			border-bottom-color: #fff;
+
+			.main-search--form {
+				.unitize(48, 16, top);
+				left: 0;
+				display: block;
+				position: absolute;
+			}
+		}
+	}
+}
+
+.main-search--form {
+	.unitize-padding(8, 10, 8, 10, 16);
+	.box-shadow(0 6px 6px -6px @lightTextColor);
+	position: relative;
+	background: #fff;
+	border-bottom: 1px solid @borderColor;
+	width: 100%;
+
+	.icon--search {
+		.unitize(22, 16, top);
+		.unitize(22, 16, left);
+		position: absolute;
+	}
+
+	.main-search--field {
+		.unitize-padding(10, 10, 10, 38, 16);
+		width: 100%;
+	}
+	.main-search--button { display: none; }
+}
+
+// Tablet styling for the global shop header
+@media screen and (min-width: @tabletViewportWidth) {
+	.header-main {
+		.container { .clearfix() }
+
+		.top-bar {
+			.unitize-padding(4, 0, 4, 0, 16);
+			display: block;
+			border-bottom: 1px solid @borderColor;
+		}
+		.top-bar--switches {
+			.clearfix();
+			width: 50%
+		}
+
+        .top-bar--switches .js--fancy-select {
+            .reset-border-radius();
+            .reset-box-shadow();
+            .unitize(5, 16, margin-right);
+            background: #fff;
+            line-height: normal;
+            width: auto;
+            border: 0 none;
+            border-right: 1px solid @borderColor;
+
+            &.js--is--focused {
+                border-color: @borderColor;
+            }
+
+            select { height: auto; }
+        }
+        .top-bar--switches .js--fancy-select-text {
+            .unitize-padding(0, 30, 0, 5);
+            font-weight: normal;
+        }
+        .top-bar--switches .js--fancy-select-trigger {
+            .unitize(8, 16, top);
+            border-left: 0 none;
+        }
+
+		.top-bar--language, .top-bar--currency {
+			float: left;
+            max-width: 50%;
+
+			& > form { float: left; }
+		}
+        .language--flag {
+            .unitize-margin(0, 0, 0, 5);
+            .unitize-height(11);
+            .unitize-width(14);
+            background: url("../../img/ico-flags.png") no-repeat 0 0;
+            display: inline-block;
+            text-indent: -9999em;
+            position: relative;
+
+            // We need to work with pixels here
+            &.de_DE { background-position: 0 0; }
+            &.en_GB { background-position: 0 -11px; }
+        }
+
+		.logo-main {
+			.unitize-padding(24, 10, 24, 10, 16);
+			width: 35%;
+		}
+		.logo--shop { width: 82% }
+		.logo--trusted-shops { width: 18% }
+
+		.trusted-shops--link {
+			.unitize-height(43, 16);
+			.unitize-width(43, 16);
+			float: left;
+		}
+	}
+
+	.logo-main, .shop--navigation {
+		float: left;
+	}
+	.shop--navigation {
+		.unitize-padding(16, 0, 16, 0, 16);
+
+		.entry--account { width: 25% }
+	}
+
+	.top-bar--navigation {
+		width: 50%;
+		text-align: right;
+
+		.navigation--entry {
+			.unitize-padding(0, 16, 0, 16, 16);
+			display: inline-block;
+			border-left: 1px solid @borderColor;
+
+			i { .unitize-padding(0, 5, 0, 0, 16); }
+
+			&:first-child {
+				border-left: 0 none;
+			}
+		}
+
+		.navigation--entry, .navigation--link {
+			color: @primaryTextColor;
+			cursor: pointer;
+
+			&:hover {
+				color: @primaryColor;
+			}
+		}
+
+        .entry--service {
+            .unitize-width(160);
+            position: relative;
+            border-right: 1px solid @borderColor;
+
+            &::after {
+                .unitize(-2, 16, top);
+                content: "\e612";
+                font-family: 'shopware';
+                position: relative;
+            }
+        }
+		.service--list {
+            .unitize-width(160);
+            .unitize-padding(8, 8);
+            .unitize(22, 16, top);
+            .unitize(-1, 16, left);
+            text-align: left;
+            position: absolute;
+            display: none;
+            list-style: none;
+            background: #fff;
+            z-index: 1000;
+            border: 1px solid @borderColor;
+            border-top-color: #fff;
+
+            .service--entry {
+                .unitize-padding(4, 0);
+            }
+        }
+        .js--is--dropdown-active .service--list {
+            display: block;
+
+            .service--link { color: @primaryTextColor }
+            .service--link:hover { color: @primaryColor }
+        }
+	}
+
+	.shop--navigation {
+		width: 65%;
+
+		.navigation--list {
+			background-image: none;
+			text-align: right;
+		}
+		.navigation--entry {
+			.white-gradient();
+			.unitize-margin(0, 10, 0, 10, 16);
+			.border-radius();
+			border-right: 1px solid @borderColor;
+			width: auto;
+			float: none;
+			display: inline-block;
+		}
+		.entry--cart {
+			.primary-gradient();
+            .unitize-padding(12, 20, 12, 20, 16);
+
+            .entry--link {
+                padding: 0;
+                display: inline-block;
+            }
+		}
+
+		.entry--link {
+            .unitize-padding(12, 20, 12, 20, 16);
+            font-weight: normal;
+        }
+		.entry--menu-left, .entry--spacer { display: none }
+
+		.cart--quantity,
+		.search--display,
+		.entry--account { display: inline-block }
+
+		.cart--quantity { color: #fff; font-weight: normal }
+	}
+}
+
+// Desktop styling for the global shop header
+@media screen and (min-width: @desktopViewportWidth) {
+
+	.header-main {
+		.top-bar { .unitize-margin(0, 0, 8, 0, 16) }
+		.logo-main { width: 28.5% }
+		.logo--shop { width: 75% }
+		.logo--trusted-shops { width: 25%; }
+	}
+
+	// General shop navigation
+	.shop--navigation {
+		width: 71.5%;
+
+		.navigation--link {
+			.unitize-padding(8, 16, 8, 16, 16);
+		}
+		.entry--cart {
+			.unitize-padding(8, 16, 8, 16, 16);
+		}
+
+		// Search entry
+		.entry--search {
+			.unitize(14, 16, font-size);
+			margin-right: 7%;
+			background: #fff;
+			padding: 0;
+			border: 0 none;
+			width: 35%;
+
+			.icon--search {
+				.unitize(14, 16, top);
+				.unitize(14, 16, left);
+			}
+
+			.entry--trigger { display: none }
+		}
+
+		// Search form
+		.main-search--form {
+			.box-shadow(0 0 0 transparent);
+			display: block;
+			padding: 0;
+			border: 0 none;
+		}
+	}
+
+	// Cart link
+	.cart--link {
+		text-shadow: 0 1px 0 @primaryContrastColor;
+
+		.cart--quantity { display: none; }
+
+		.cart--display,
+		.cart--amount { display: inline-block; }
+	}
+
+	.cart--display {
+		.unitize-margin(0, 25, 0, 5, 16);
+		font-weight: bold;
+		color: #fff;
+	}
+	.cart--amount {
+		.border-radius(3px);
+		.unitize-padding(3, 5, 3, 10, 16);
+		background: #fff;
+		color: @primaryTextColor;
+		position: relative;
+		text-shadow: 0 0 0 transparent;
+
+		// Arrow at the amout display
+		&::after {
+			.unitize(-5, 16, left);
+			.unitize(8, 16, top);
+			.unitize-height(10, 16);
+			.unitize-width(10, 16);
+			.rotate(45deg);
+			content: '';
+			background: #fff;
+			position: absolute;
+		}
+	}
+}

@@ -1,0 +1,26 @@
+/*** BAD VERSION ***/
+
+/* Tablet version: 2 blocks per row */
+@media only screen and (min-width: 768px) and (max-width: 959px) {
+    .demo-bad { width: 50%; }
+}
+
+/* Desktop version: 4 blocks per row */
+@media (min-width: 960px) {
+    .demo-bad { width: 25%; }
+}
+
+
+/*** FIXED VERSION ***/
+
+/* Tablet version: 2 blocks per row */
+@media only screen and (min-width: 768px) and (max-width: 959px) {
+    .demo-fixed { width: 50%; }
+    .demo-fixed:nth-child(2n+1) { clear: left; } /* force a new row every 2 blocks */
+}
+
+/* Desktop version: 4 blocks per row */
+@media (min-width: 960px) {
+    .demo-fixed { width: 25%; }
+    .demo-fixed:nth-child(4n+1) { clear: left; } /* force a new row every 4 blocks */
+}

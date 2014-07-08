@@ -1,0 +1,73 @@
+.emotion--container {
+	width: 100%;
+
+	&.js--fullscreen-active {
+		overflow-y: scroll;
+		-webkit-overflow-scrolling: touch;
+	}
+}
+
+.emotion--header {
+	.unitize-padding(20, 20, 20, 20, 16);
+	.clearfix();
+
+	.header--link {
+		display: inline-block;
+		float: right;
+		.unitize-margin(14, 0, 0, 0, 16);
+	}
+	.header--headline {
+		float: left;
+		margin: 0;
+	}
+}
+
+.emotion--list {
+	.clearfix();
+	position: relative;
+}
+.emotion--element {
+	position: absolute;
+	display: block;
+	list-style: none;
+}
+
+/** Element styles */
+.emotion--element-banner {
+	height: 100%; width: 100%;
+	position: relative;
+
+	// see: http://css-tricks.com/perfect-full-page-background-image/
+	background-position: 0 15%;
+	background-repeat: no-repeat;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+
+	.element-banner--mapping {
+		position: absolute;
+	}
+	.element-banner--link {
+		display: block;
+		height: 100%;
+		width: 100%;
+	}
+}
+
+.emotion--element-video-inner {
+	overflow: hidden;
+	position: relative;
+}
+.emotion--element-video--text {
+	position: absolute;
+	left: 20%;
+	top: 20%;
+}
+
+/** Horizontal emotion world */
+.emotion--horizontal {
+	overflow: hidden;
+
+	.emotion--list { .clearfix(); }
+}

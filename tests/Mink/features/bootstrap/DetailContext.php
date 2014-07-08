@@ -15,9 +15,10 @@ class DetailContext extends SubContext
     }
 
     /**
+     * @When /^I put the article into the basket$/
      * @When /^I put the article "(?P<quantity>[^"]*)" times into the basket$/
      */
-    public function iPutTheArticleTimesIntoTheBasket($quantity)
+    public function iPutTheArticleTimesIntoTheBasket($quantity = 1)
     {
         $this->getPage('Detail')->toBasket($quantity);
     }
@@ -48,5 +49,22 @@ class DetailContext extends SubContext
         $this->getPage('Detail')->checkEvaluations($average, $evaluations);
     }
 
+    /**
+     * @When /^I choose the following article configuration:$/
+     */
+    public function iChooseTheFollowingArticleConfiguration(TableNode $configuration)
+    {
+        $configuration = $configuration->getHash();
+
+        $this->getPage('Detail')->configure($configuration);
+    }
+
+    /**
+     * @When /^I subscribe to the notifier with "([^"]*)"$/
+     */
+    public function iSubscribeToTheNotifierWith($email)
+    {
+        $this->getElement('Notifier')->submit($email);
+    }
 }
 

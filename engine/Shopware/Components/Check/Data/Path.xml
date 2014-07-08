@@ -12,6 +12,7 @@
     <file><name>cache/doctrine/attributes/</name></file>
     <file><name>cache/mpdf/tmp/</name></file>
     <file><name>cache/mpdf/ttfontdata/</name></file>
+    <file><name>web/cache/</name></file>
     <file><name>files/documents/</name></file>
     <file><name>files/downloads/</name></file>
     <file><name>engine/Shopware/Plugins/Community/</name></file>
@@ -22,6 +23,7 @@
     <file><name>engine/Shopware/Plugins/Default/Frontend</name></file>
     <file><name>engine/Shopware/Plugins/Default/Core</name></file>
     <file><name>engine/Shopware/Plugins/Default/Backend</name></file>
+    <file><name>engine/Shopware/Themes/Frontend</name></file>
     <file><name>media/archive/</name></file>
     <file><name>media/image/</name></file>
     <file><name>media/image/thumbnail/</name></file>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PocketGrid - Fix for different block heights</title>
+
+    <!-- Common styles for examples (you do not need to include it in your pages) -->
+    <link rel="stylesheet" href="common.css" />
+
+    <!-- The PocketGrid -->
+    <link rel="stylesheet" href="../pocketgrid.css" />
+    <!-- The example stylesheet -->
+    <link rel="stylesheet" href="fix-for-different-block-heights.css" />
+  </head>
+
+  <body>
+
+    <h3>Bad version</h3>
+    <p style="color: red">Each row should have 5 blocks.<br/>"Block 6" should be on a new row, but is <i>blocked</i> by the big "Block 3" (because of its height).</p>
+    <div class="bad block-group"> <!-- BAD VERSION! -->
+      <div class="block bad-b1"><div class="box">Block 1</div></div>
+      <div class="block bad-b2"><div class="box">Block 2</div></div>
+      <div class="block bad-b3">
+        <div class="box">
+          Block 3 is a very long block<br/>
+          on several rows<br/>
+          that could break the layout
+        </div>
+      </div>
+      <div class="block bad-b4"><div class="box">Block 4</div></div>
+      <div class="block bad-b5"><div class="box">Block 5</div></div>
+      <div class="block bad-b6"><div class="box">Block 6</div></div>
+      <div class="block bad-b7"><div class="box">Block 7</div></div>
+      <div class="block bad-b8"><div class="box">Block 8</div></div>
+      <div class="block bad-b9"><div class="box">Block 9</div></div>
+      <div class="block bad-b10"><div class="box">Block 10</div></div>
+    </div>
+
+    <br/>
+    <hr/>
+
+    <h3>Fixed version (using the "<code>clear</code>" property)</h3>
+    <p style="color: #0C0">With the <code>clear</code> property, "Block 6" is on a new row: each row has 5 blocks cleanly aligned.</p>
+    <div class="fixed block-group"> <!-- FIXED VERSION -->
+      <div class="block fixed-b1"><div class="box">Block 1</div></div>
+      <div class="block fixed-b2"><div class="box">Block 2</div></div>
+      <div class="block fixed-b3">
+        <div class="box">
+          Block 3 is a very long block<br/>
+          on several rows<br/>
+          that could break the layout
+        </div>
+      </div>
+      <div class="block fixed-b4"><div class="box">Block 4</div></div>
+      <div class="block fixed-b5"><div class="box">Block 5</div></div>
+      <div class="block fixed-b6"><div class="box">Block 6</div></div>
+      <div class="block fixed-b7"><div class="box">Block 7</div></div>
+      <div class="block fixed-b8"><div class="box">Block 8</div></div>
+      <div class="block fixed-b9"><div class="box">Block 9</div></div>
+      <div class="block fixed-b10"><div class="box">Block 10</div></div>
+    </div>
+
+    <!-- For nth-child support in IE6-8 -->
+    <!--[if (gte IE 6)&(lte IE 8)]>
+      <script type="text/javascript" src="../js/jquery-1.10.2.min.js"></script>
+      <script type="text/javascript" src="../js/selectivizr-min.js"></script>
+    <![endif]-->
+
+  </body>
+
+</html>

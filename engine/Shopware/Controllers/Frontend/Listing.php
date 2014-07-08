@@ -245,4 +245,104 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         return $this->translator;
     }
+
+    /**
+     * Gets a Callback-Function (callback) and the Id of an category (categoryID) from Request and read its first child-level
+     */
+    public function getCategoryAction()
+    {
+        $callback = $this->Request()->getParam('callback');
+
+        if (empty($callback)) {
+            $this->returnJsonCallback('');
+            return;
+        }
+
+        $categoryId = $this->Request()->getParam('categoryId');
+        $categoryId = intval($categoryId);
+
+        if (empty($categoryId)) {
+            $this->returnJsonCallback($callback);
+            return;
+        }
+
+        $category = $this->getCategoryById($categoryId);
+
+        $this->returnJsonCallback($callback, $category);
+    }
+
+    /**
+     * Helper function to return the category information by category id
+     * @param integer $categoryId
+     * @return mixed
+     */
+    private function getCategoryById($categoryId)
+    {
+        /** @var \Shopware\Models\Category\Repository $categoryRepository */
+        $categoryRepository = $this->get('models')->getRepository('Shopware\Models\Category\Category');
+        $category = $categoryRepository->getCategoryByIdQuery($categoryId)->getArrayResult();
+
+        if (empty($category)) {
+            return array();
+        }
+
+        $category = $category[0];
+
+        $category['link'] = $this->getCategoryLink($categoryId, $category['name'], $category['blog']);
+
+        foreach ($category['children'] as &$child) {
+            $child['link'] = $this->getCategoryLink($child['id'], $child['name'], $child['blog']);
+        }
+
+        return $category;
+    }
+
+    /**
+     * Helper function to create a category link
+     * @param integer $categoryId
+     * @param string $categoryName
+     * @param bool $blog
+     * @return mixed|string
+     */
+    private function getCategoryLink($categoryId, $categoryName, $blog = false)
+    {
+        $sViewport = 'cat';
+
+        if ($blog) {
+            $sViewport = 'blog';
+        }
+
+        $link = $this->Front()->Router()->assemble(
+            array(
+                'sViewport' => $sViewport,
+                'sCategory' => $categoryId,
+                'title' => $categoryName
+            )
+        );
+
+        return $link;
+    }
+
+    /**
+     * Helper function to return a JSON-Callback
+     * @param string $callback
+     * @param array $data
+     */
+    private function returnJsonCallback($callback, $data = array())
+    {
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+
+        $this->Front()->setParam('disableOutputBuffering', true);
+        $this->Front()->returnResponse(true);
+
+        $this->Response()->setHeader('Content-Type', 'text/javascript; charset=utf-8');
+        $this->Response()->sendResponse();
+
+        $jsonArray = array(
+            'success' => !empty($data),
+            'data' => $data
+        );
+
+        echo $callback . "('" . json_encode($jsonArray) . "')";
+    }
 }
