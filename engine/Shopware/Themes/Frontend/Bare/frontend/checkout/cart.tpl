@@ -83,45 +83,47 @@
                 {/block}
 
                 {* Product table content *}
-                <div class="panel has--border">
-                    <div class="panel--body">
+                {block name='frontend_checkout_cart_panel'}
+                    <div class="panel has--border">
+                        <div class="panel--body">
 
-                        {* Product table header *}
-                        {block name='frontend_checkout_cart_cart_head'}
-                            {include file="frontend/checkout/cart_header.tpl"}
-                        {/block}
-
-                        {* Basket items *}
-                        {foreach $sBasket.content as $sBasketItem}
-                            {block name='frontend_checkout_cart_item'}
-                                {include file='frontend/checkout/cart_item.tpl'}
+                            {* Product table header *}
+                            {block name='frontend_checkout_cart_cart_head'}
+                                {include file="frontend/checkout/cart_header.tpl"}
                             {/block}
-                        {/foreach}
 
-                        {* Product table footer *}
-                        {block name='frontend_checkout_cart_cart_footer'}
-                            {include file="frontend/checkout/cart_footer.tpl"}
-                        {/block}
-
-                        {* Premium products *}
-                        {block name='frontend_checkout_cart_premium'}
-                            {if $sPremiums}
-
-                                {* Headline *}
-                                {block name='frontend_checkout_cart_premium_headline'}
-                                    <div class="panel--header secondary premium--headline">
-                                        {s name="CartPremiumsHeadline"}{/s}
-                                    </div>
+                            {* Basket items *}
+                            {foreach $sBasket.content as $sBasketItem}
+                                {block name='frontend_checkout_cart_item'}
+                                    {include file='frontend/checkout/cart_item.tpl'}
                                 {/block}
+                            {/foreach}
 
-                                {* Actual listing *}
-                                {block name='frontend_checkout_cart_premium_products'}
-                                    {include file='frontend/checkout/premiums.tpl'}
-                                {/block}
-                            {/if}
-                        {/block}
+                            {* Product table footer *}
+                            {block name='frontend_checkout_cart_cart_footer'}
+                                {include file="frontend/checkout/cart_footer.tpl"}
+                            {/block}
+
+                            {* Premium products *}
+                            {block name='frontend_checkout_cart_premium'}
+                                {if $sPremiums}
+
+                                    {* Headline *}
+                                    {block name='frontend_checkout_cart_premium_headline'}
+                                        <div class="panel--header secondary premium--headline">
+                                            {s name="CartPremiumsHeadline"}{/s}
+                                        </div>
+                                    {/block}
+
+                                    {* Actual listing *}
+                                    {block name='frontend_checkout_cart_premium_products'}
+                                        {include file='frontend/checkout/premiums.tpl'}
+                                    {/block}
+                                {/if}
+                            {/block}
+                        </div>
                     </div>
-                </div>
+                {/block}
 
                 {block name='frontend_checkout_cart_table_actions_bottom'}
                     <div class="table--actions actions--bottom">
