@@ -340,4 +340,5 @@ $(function () {
 
     // Initialize the menu scroller plugin
     $('*[data-menu-scroller="true"]').menuScroller();
+    $('body').httpCacheFilters();
 });
