@@ -1,7 +1,7 @@
 <div class="debit">
     <p class="none">
         <label for="kontonr">{s namespace='frontend/plugins/payment/debit' name='PaymentDebitLabelAccount'}{/s}</label>
-        <input name="sDebitAccount" type="text" id="kontonr" value="Hmm?{$form_data.sDebitAccount|escape}"
+        <input name="sDebitAccount" type="text" id="kontonr" value="{$form_data.sDebitAccount|escape}"
                class="text {if $error_flags.sDebitAccount}instyle_error{/if}"/>
     </p>
 
