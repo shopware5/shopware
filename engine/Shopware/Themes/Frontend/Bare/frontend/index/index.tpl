@@ -81,7 +81,14 @@
 				{* Last seen products *}
 				{block name='frontend_index_left_last_articles'}
 					{if $sLastArticlesShow && !$isEmotionLandingPage}
-						{include file="frontend/plugins/index/viewlast.tpl"}
+                        {* Last seen products *}
+                        <div class="last-seen-products" data-last-seen-products="true">
+                            <div class="last-seen-products--slider">
+                                <div class="last-seen-products--container">
+
+                                </div>
+                            </div>
+                        </div>
 					{/if}
 				{/block}
 			</div>
@@ -125,6 +132,23 @@
                 'checkout': '{url controller="checkout"}',
                 'ajax_logout': '{url controller="account" action="ajax_logout"}',
                 'ajax_validate': '{url controller="register"}'
+            {rdelim};
+
+            var lastSeenProductsConfig = lastSeenProductsConfig || {ldelim}
+                'title': '{s namespace="frontend/plugins/index/viewlast" name='WidgetsRecentlyViewedHeadline'}{/s}',
+                'baseUrl': '{$Shop->getBaseUrl()}',
+                'shopId': '{$Shop->getId()}',
+                'productLimit': ~~('{config name="lastarticlestoshow"}'),
+                'currentArticle': {ldelim}{if $sArticle}
+                    {foreach $sLastArticlesConfig as $key => $value}
+                        '{$key}': '{$value}',
+                    {/foreach}
+                    'articleId': ~~('{$sArticle.articleID}'),
+                    'linkDetailsRewritten': '{$sArticle.linkDetailsRewrited}',
+                    'articleName': '{$sArticle.articleName|escape:"javascript"}',
+                    'thumbnail': '{$sArticle.image.src[{config name=thumb}]}'
+                    {/if}
+                {rdelim}
             {rdelim};
         {/block}
         //]]>

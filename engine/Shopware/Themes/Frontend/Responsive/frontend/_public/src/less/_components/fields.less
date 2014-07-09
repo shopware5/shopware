@@ -150,62 +150,6 @@ input[type="email"] {
     }
 }
 
-// Quantity field
-.js--quantity-field {
-    .clearfix();
-
-    input[type="number"] {
-        width: 78%;
-        margin: 0 2% 0 0;
-    }
-
-    input[type="number"],
-    .js--quantity-button {
-        float: left;
-    }
-
-    .js--quantity-button {
-        width: 20%;
-    }
-
-    .js--quantity-button > a {
-        .user-select(none);
-        .unitize-height(20, 16);
-        .unitize(18, 16, line-height);
-        display: block;
-        padding: 0;
-        font-weight: bold;
-        text-align: center;
-    }
-    .js--quantity-button-plus {
-        .unitize-margin(0, 0, 4, 0, 16);
-    }
-}
-
-@media screen and (min-width: @tabletViewportWidth) {
-
-    /* Standard input fields. */
-    .input--field {
-        .unitize(15, 16, margin-bottom);
-
-        .input--field-street {
-            margin-right: 2%;
-            width: 86%;
-        }
-        .input--field-streetnumber {
-            width: 12%;
-        }
-        .input--field-zipcode {
-            margin-right: 2%;
-            width: 20%;
-        }
-        .input--field-city {
-            width: 78%;
-        }
-    }
-
-}
-
 @media screen and (min-width: @desktopViewportWidth) {
 
     // Input field styling
