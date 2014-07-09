@@ -1,124 +1,95 @@
 {block name='frontend_checkout_premium_body'}
-	<ul class="table-premium--list">
-		{foreach $sPremiums as $premium}
-			{if $premium.sArticle.active}
-                {block name='frontend_checkout_premium_entry_active'}
-                    <li class="list--entry block-group{if $premium@iteration is odd by 1} is--even{/if}{if $premium@index + 1 == $premium@total || $premium@index + 2 == $premium@total} is--last-row{/if}">
 
-                        {* Product image *}
-                        {block name='frontend_checkout_premium_active_image'}
-                            <a class="table--media block" href="{$premium.sArticle.linkDetails}" title="{$premium.sArticle.articleName}">
-                                {if $premium.sArticle.image.src}
-                                    <img src="{$premium.sArticle.image.src.3}" alt="{$premium.sArticle.articleName}"
-                                         title="{$premium.sArticle.articleName}">
-                                {else}
-                                    <img src="{link file='frontend/_resources/images/no_picture.jpg'}"
-                                         alt="{s name="PremiumInfoNoPicture"}{/s}">
-                                {/if}
-                            </a>
-                        {/block}
+    {if $sPremiums|@count}
+        <div class="premium-product panel has--border">
 
-                        {* Product information *}
-                        {block name='frontend_checkout_premium_active_info'}
-                            <div class="entry--info block">
+            {* Headline *}
+            {block name='frontend_checkout_cart_premium_headline'}
+                <div class="premium-product--title panel--title is--underline">
+                    {s name="CartPremiumsHeadline" namespace="frontend/checkout/cart"}{/s}
+                </div>
+            {/block}
 
-                                {* Product name *}
-                                {block name='frontend_checkout_premium_active_info_name'}
-                                    <a href="{$premium.sArticle.linkDetails}" title="{$premium.sArticle.articleName}" class="entry--name">
-                                        {$premium.sArticle.articleName|truncate:60}
-                                    </a>
-                                {/block}
+            {* Product slider *}
+            {block name='frontend_checkout_premium_slider'}
+                <div class="premium-product--content panel--body product-slider" data-mode="local">
 
-                                {if $premium.available}
-                                    <form action="{url action='addPremium' sTargetAction=$sTargetAction}" method="post" id="sAddPremiumForm{$key}" name="sAddPremiumForm{$key}">
+                    {* Product slider container *}
+                    {block name='frontend_checkout_premium_slider_container'}
+                        <div class="product-slider--container">
+                            {foreach $sPremiums as $premium}
 
-                                        {block name='frontend_checkout_premium_select_article'}
-                                            {if $premium.sVariants && $premium.sVariants|@count > 1}
-                                                <select class="premium--selection" id="sAddPremium{$key}" name="sAddPremium">
-                                                    <option value="">{s name="PremiumInfoSelect"}{/s}</option>
-                                                    {foreach from=$premium.sVariants item=variant}
-                                                        <option value="{$variant.ordernumber}">{$variant.additionaltext}</option>
-                                                    {/foreach}
-                                                </select>
+                                {* Product slider item *}
+                                {block name='frontend_checkout_premium_slider_item'}
+                                    <div class="premium-product--product product-slider--item">
+
+                                        <div class="product--inner">
+                                            {if $premium.available}
+                                                {block name='frontend_checkout_premium_info_button'}
+                                                    <p class="premium-product--free">{s name="PremiumInfoFreeProduct"}{/s}</p>
+                                                {/block}
                                             {else}
-                                                <input type="hidden" name="sAddPremium" value="{$premium.sArticle.ordernumber}"/>
+                                                {block name='frontend_checkout_premium_info_difference'}
+                                                    <p class="premium-product--info">{s name="PremiumsInfoAtAmount"}{/s} {$premium.startprice|currency} {s name="PremiumInfoBasketValue"}{/s}</p>
+                                                {/block}
                                             {/if}
 
-                                            {block name='frontend_checkout_premium_active_info_button'}
-                                                <input type="submit" class="btn btn--primary is--small" title="{$premium.sArticle.articleName}"
-                                                       value="{s name='PremiumActionAdd'}{/s}"/>
+                                            {* Product image *}
+                                            {block name='frontend_checkout_premium_image'}
+                                                <a href="{$premium.sArticle.linkDetails}" title="{$premium.sArticle.articleName}" class="product--image">
+                                                    {if $premium.available}
+                                                        <div class="premium-product--badge">
+                                                            <i class="icon--check"></i>
+                                                        </div>
+                                                    {/if}
+
+                                                    {if $premium.sArticle.image.src}
+                                                        <img src="{$premium.sArticle.image.src.3}" alt="{$premium.sArticle.articleName}"
+                                                             title="{$premium.sArticle.articleName}">
+                                                    {else}
+                                                        <img src="{link file='frontend/_resources/images/no_picture.jpg'}"
+                                                             alt="{s name="PremiumInfoNoPicture"}{/s}">
+                                                    {/if}
+                                                </a>
                                             {/block}
-                                        {/block}
-                                    </form>
-                                {/if}
-                            </div>
-                        {/block}
-                    </li>
-                {/block}
-			{else}
-                {block name='frontend_checkout_premium_entry_inactive'}
-                    <li class="list--entry block-group is--disabled{if $premium@iteration is odd by 1} is--even{/if}{if $premium@index + 1 == $premium@total || $premium@index + 2 == $premium@total} is--last-row{/if}">
-                        {* Product image *}
-                        {block name='frontend_checkout_premium_image'}
-                            <a class="table--media block" href="{$premium.sArticle.linkDetails}" title="{$premium.sArticle.articleName}">
-                                {if $premium.sArticle.image.src}
-                                    <img src="{$premium.sArticle.image.src.3}" alt="{$premium.sArticle.articleName}"
-                                         title="{$premium.sArticle.articleName}">
-                                {else}
-                                    <img src="{link file='frontend/_resources/images/no_picture.jpg'}"
-                                         alt="{s name="PremiumInfoNoPicture"}{/s}">
-                                {/if}
-                            </a>
-                        {/block}
 
-                        {* Product information *}
-                        {block name='frontend_checkout_premium_info'}
-                            <div class="table--content block">
+                                            {if $premium.available}
+                                                {block name='frontend_checkout_premium_form'}
+                                                    <form action="{url action='addPremium' sTargetAction=$sTargetAction}" method="post" id="sAddPremiumForm{$key}" name="sAddPremiumForm{$key}">
+                                                        {block name='frontend_checkout_premium_select_article'}
+                                                            {if $premium.sVariants && $premium.sVariants|@count > 1}
+                                                                <select class="premium--selection" id="sAddPremium{$key}" name="sAddPremium">
+                                                                    <option value="">{s name="PremiumInfoSelect"}{/s}</option>
+                                                                    {foreach from=$premium.sVariants item=variant}
+                                                                        <option value="{$variant.ordernumber}">{$variant.additionaltext}</option>
+                                                                    {/foreach}
+                                                                </select>
+                                                            {else}
+                                                                <input type="hidden" name="sAddPremium" value="{$premium.sArticle.ordernumber}"/>
+                                                            {/if}
+                                                        {/block}
 
-                                {* Product name *}
-                                {block name='frontend_checkout_premium_info_name'}
-                                    <a href="{$premium.sArticle.linkDetails}" title="{$premium.sArticle.articleName}" class="entry--name">
-                                        {$premium.sArticle.articleName|truncate:60}
-                                    </a>
-                                {/block}
-
-                                {if $premium.available}
-                                    <form action="{url action='addPremium' sTargetAction=$sTargetAction}" method="post" id="sAddPremiumForm{$premium@key}" name="sAddPremiumForm{$premium@key}">
-
-                                        {block name='frontend_checkout_premium_select_article'}
-                                            {if $premium.sVariants && $premium.sVariants|@count > 1}
-                                                <select class="premium--selection" id="sAddPremium{$key}" name="sAddPremium">
-                                                    <option value="">{s name="PremiumInfoSelect"}{/s}</option>
-                                                    {foreach from=$premium.sVariants item=variant}
-                                                        <option value="{$variant.ordernumber}">{$variant.additionaltext}</option>
-                                                    {/foreach}
-                                                </select>
+                                                        {block name='frontend_checkout_premium_info_button'}
+                                                            <button class="btn btn--primary is--align-center" type="submit">
+                                                                {s name='PremiumActionAdd'}{/s}
+                                                                <i class="icon--arrow-right"></i>
+                                                            </button>
+                                                        {/block}
+                                                    </form>
+                                                {/block}
                                             {else}
-                                                <input type="hidden" name="sAddPremium" value="{$premium.sArticle.ordernumber}"/>
+                                                <div class="premium-product--difference is--align-center">
+                                                    {s name="PremiumsInfoDifference"}{/s} <span class="difference--price">{$premium.sDifference|currency}</span>
+                                                </div>
                                             {/if}
-
-                                            {block name='frontend_checkout_premium_info_button'}
-                                                <span class="table--badge">GRATIS</span>
-                                                <input type="submit" class="btn btn--primary is--small right" title="{$premium.sArticle.articleName}"
-                                                       value="{s name='PremiumActionAdd'}{/s}"/>
-                                            {/block}
-                                        {/block}
-                                    </form>
-                                {else}
-
-                                    {* Show difference between the necessary basket value to collect the premium product and the actucal basket value *}
-                                    {block name='frontend_checkout_premium_info_difference'}
-                                        <div class="table--difference">
-                                            {s name="PremiumsInfoAtAmount"}{/s} {$premium.startprice|currency}
-                                            {s name="PremiumsInfoDifference"}{/s} {$premium.sDifference|currency}
                                         </div>
-                                    {/block}
-                                {/if}
-                            </div>
-                        {/block}
-                    </li>
-                {/block}
-			{/if}
-		{/foreach}
-	</ul>
+                                    </div>
+                                {/block}
+                            {/foreach}
+                        </div>
+                    {/block}
+                </div>
+            {/block}
+        </div>
+    {/if}
 {/block}

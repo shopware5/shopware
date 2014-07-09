@@ -12,6 +12,9 @@
 	.panel {
 		border: 0 none;
 	}
+    .premium-product.panel {
+        border: 1px solid @borderColor;
+    }
 
     .delivery--status-icon {
         display: none;
@@ -20,7 +23,7 @@
 	// Actions above the actual table body
 	.table--actions {
 		.clearfix();
-		.unitize-padding(8, 0, 0);
+        .unitize-padding(20, 0, 0);
 		position: relative;
 
 		.btn--primary,
@@ -42,8 +45,7 @@
 	// Hide the table header due to the labels inline for smartphones
 	.table--header { display: none }
 
-	.table--row,
-	.table-premium--list .list--entry {
+	.table--row {
 		.unitize-padding(10, 0);
 		.clearfix();
 		position: relative;
@@ -255,38 +257,91 @@
 	}
 }
 
-.table-premium--list {
-	.unitize-margin(12, 0);
+.premium-product.panel {
+    .unitize-margin(10, 0);
+}
+.premium-product--content {
+    .unitize-height(360);
 
-	.list--entry {
-		.unitize-margin(6, 0);
-	}
+    .product-slider--container {
+        padding: 0;
+    }
+}
+.premium-product {
 
-	.entry--name {
-		display: block;
-	}
+    p {
+        .unitize-margin(0, 0, 16);
+    }
 
-	.btn--primary {
-		.unitize-padding(8, 10, 8, 10);
-	}
-	.table--difference {
-		.border-radius();
-		border: 1px solid @borderColor;
-		text-align: center;
-	}
-	.table--badge {
-		.border-radius();
-		.unitize-padding(4, 8, 4, 8);
-		display: inline-block;
-		border: 1px solid @deliveryAvailableText;
-		color: @deliveryAvailableText;
-		text-transform: uppercase;
-	}
+    .premium-product--difference {
+        .unitize-padding(10, 16, 10, 16, 16);
+        .border-radius();
+        .white-gradient();
+        font-color: @primaryTextColor;
+        border: 1px solid @borderColor;
+        font-weight: bold;
+        display: block;
+        text-shadow: 0 1px 0 #fff;
 
-	.js--fancy-select {
-		.unitize-margin(0, 0, 8, 0);
-		width: 100%;
-	}
+        .difference--price {
+            .unitize(18, 16, font-size);
+        }
+    }
+
+    .product--inner {
+        .unitize-padding(5, 30);
+        .unitize-margin(0, 0, 10);
+
+        .product--image {
+            .border-radius();
+            .unitize(175, 16, min-height);
+            .unitize-margin(0, 0, 15, 0);
+            display: block;
+            border: 1px solid @borderColor;
+            position: relative;
+            text-align: center;
+
+            &::before {
+                content: '';
+                display: inline-block;
+                height: 100%;
+                vertical-align: middle;
+            }
+        }
+
+        .premium-product--badge {
+            .box-shadow();
+            .border-radius(38px);
+            .unitize-height(38);
+            .unitize-width(38);
+            .unitize(38, 16, line-height);
+            .unitize(-19, 16, top);
+            .unitize(-19, 16, right);
+            background: @primaryColor;
+            position: absolute;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .premium-product--free {
+            color: @successText;
+            font-weight: bold;
+        }
+
+        .btn {
+            .unitize(15, 16, font-size);
+            width: 100%;
+            font-weight: normal;
+
+            .icon--arrow-right {
+                .unitize(8, 16, margin-top);
+                float: right;
+            }
+        }
+        .js--fancy-select {
+            width: 100%;
+        }
+    }
 }
 
 @media screen and (min-width: @tabletViewportWidth) {
@@ -301,9 +356,9 @@
 			border: 1px solid @borderColor;
 		}
 
-		.table--actions {
-			.unitize-padding(20, 0);
-		}
+        .premium-product--content {
+            border: 0 none;
+        }
 
 		.column--actions {
 			position: static;
@@ -458,35 +513,9 @@
             }
 		}
 
-		.table-premium--list {
-			.clearfix();
-		}
-
-		.table-premium--list .list--entry {
-			.unitize(162, 16, min-height);
-			.unitize-padding(12, 12, 12, 12);
-			float: left;
-			width: 50%;
-			margin: 0;
-
-			&.is--even {
-				border-right: 1px solid @borderColor;
-			}
-
-			&.is--last-row {
-				padding-bottom: 0;
-				border-bottom: 0 none;
-			}
-		}
-
         .table--footer {
             display: block;
         }
-	}
-
-	.basket--footer + .premium--headline {
-		.unitize-margin(10, -10, 0, -10);
-		border-top: 1px solid @borderColor;
 	}
 
     .footer--benefit {
