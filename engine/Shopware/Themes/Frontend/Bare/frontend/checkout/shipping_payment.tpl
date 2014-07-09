@@ -31,7 +31,7 @@
     <div class="grid_20 first">
 
         {* Step box *}
-        {include file="frontend/register/steps.tpl" sStepActive="finished"}
+        {include file="frontend/register/steps.tpl" sStepActive="payment"}
     </div>
 {/block}
 
