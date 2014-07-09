@@ -213,7 +213,7 @@ $(function() {
     });
 
     $('.add-voucher--checkbox').on('change', function(event) {
-        var method = ($(this).is(':checked')) ? 'addClass' : 'removeClass';
+        var method = (!$(this).is(':checked')) ? 'addClass' : 'removeClass';
         event.preventDefault();
 
         $('.add-voucher--panel')[method]('is--hidden');
