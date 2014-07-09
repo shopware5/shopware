@@ -237,7 +237,6 @@ $(function () {
     $('*[data-image-slider="true"]').imageSlider();
     $('*[data-collapse-panel="true"]').collapsePanel();
     $('*[data-auto-submit="true"]').autoSubmit();
-    $('input[data-quantity-field="true"]').quantityField();
     $('*[data-drop-down-menu="true"]').dropdownMenu();
     $('*[data-newsletter="true"]').newsletter();
 
