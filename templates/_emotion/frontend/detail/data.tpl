@@ -192,7 +192,10 @@
 
 	{block name="frontend_detail_data_delivery"}
 		{* Delivery informations *}
-		{include file="frontend/plugins/index/delivery_informations.tpl" sArticle=$sArticle}
+        {assign var="sCountConfigurator" value=$sArticle.sConfigurator|@count}
+        {if $sArticle.sConfiguratorSettings.type != 1 || $sArticle.sConfigurator[$sCountConfigurator-1].user_selected}
+            {include file="frontend/plugins/index/delivery_informations.tpl" sArticle=$sArticle}
+        {/if}
 	{/block}
 
 	{if !$sArticle.liveshoppingData.valid_to_ts}
@@ -285,7 +288,7 @@
                         {/block}
                     </div>
 
-                    {* Article price *}sudo sadsdas
+                    {* Article price *}
                     {block name='frontend_detail_data_price_info'}
                     <p class="tax_attention modal_open">
                         {s name="DetailDataPriceInfo"}{/s}
