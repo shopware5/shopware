@@ -40,24 +40,6 @@
         </div>
     {/block}
 
-	{* Product quantity *}
-    {block name='frontend_checkout_cart_item_premium_quantity'}
-        <div class="table--column column--quantity block is--align-right">
-			{* Label *}
-			{block name='frontend_checkout_cart_item_premium_quantity_label'}
-				<div class="column--label quantity--label">
-					{s name="CartColumnQuantity" namespace="frontend/checkout/cart_header"}{/s}
-				</div>
-			{/block}
-
-			<select name="sQuantity">
-				<option selected="selected" disabled="disabled">
-					1
-				</option>
-			</select>
-        </div>
-    {/block}
-
     {* Product tax rate *}
     {block name='frontend_checkout_cart_item_premium_tax_price'}{/block}
 
