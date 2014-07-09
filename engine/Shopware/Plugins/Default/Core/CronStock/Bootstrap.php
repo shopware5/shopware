@@ -58,7 +58,7 @@ class Shopware_Plugins_Core_CronStock_Bootstrap extends Shopware_Components_Plug
             d.suppliernumber,
             d.kind,
             d.additionaltext,
-            SUM(sai.impressions) as impressions,
+            COALESCE(sai.impressions, 0) as impressions,
             d.sales,
             d.active,
             d.instock,
@@ -84,8 +84,12 @@ class Shopware_Plugins_Core_CronStock_Bootstrap extends Shopware_Components_Plug
         LEFT JOIN s_core_tax as t
         ON a.taxID = t.id
 
-        LEFT JOIN s_statistics_article_impression as sai
-        ON a.id = sai.articleId
+        LEFT JOIN
+            (
+              SELECT articleId AS id, SUM(s.impressions) AS impressions
+              FROM s_statistics_article_impression s
+              GROUP BY articleId
+            ) sai ON sai.id = a.id
 
         WHERE d.articleID = a.id
         AND d.id = at.articledetailsID
