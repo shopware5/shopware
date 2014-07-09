@@ -28,6 +28,7 @@ In this document you will find a changelog of the important changes related to t
 * Added secureUninstall method for plugins. There will be a message box when capability 'secureUninstall' is set, which uninstall method should be used.
     * (new) Bootstrap::secureUninstall() -> should be used for removing only non-user data
     * (old) Bootstrap::uninstall() -> old logic
+* It's no longer possible to disable variant support for article that still have variants
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
