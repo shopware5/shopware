@@ -138,8 +138,6 @@
 
             me.applyDataAttributes();
 
-            console.log(me.$el.data());
-
             /**
              * Current left offset in px.
              *
