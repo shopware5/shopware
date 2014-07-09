@@ -135,7 +135,7 @@ class sShopwareExport
                 a.laststock,
                 d.suppliernumber,
                 d.additionaltext,
-                SUM(sai.impressions) as impressions,
+                COALESCE(sai.impressions, 0) as impressions,
                 d.sales,
                 a.active,
                 d.kind,
@@ -183,8 +183,12 @@ class sShopwareExport
             LEFT JOIN s_article_configurator_sets acs
             ON a.configurator_set_id = acs.id
 
-            LEFT JOIN s_statistics_article_impression as sai
-            ON a.id = sai.articleId
+            LEFT JOIN
+            (
+              SELECT articleId AS id, SUM(s.impressions) AS impressions
+              FROM s_statistics_article_impression s
+              GROUP BY articleId
+            ) sai ON sai.id = a.id
 
             WHERE
             a.mode = 0
