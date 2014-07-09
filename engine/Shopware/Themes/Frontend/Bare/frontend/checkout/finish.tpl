@@ -19,6 +19,8 @@
 				<a href="#" class="button-right large" onclick="self.print()" title="{s name='FinishLinkPrint'}{/s}">
 					{s name="FinishLinkPrint"}{/s}
 				</a>
+
+                <a href="{url controller="checkout" action="return"}">{s name="ConfirmReturn"}Return to shop{/s}</a>
 			</div>
 			<div class="clear">&nbsp;</div>
 		</div>

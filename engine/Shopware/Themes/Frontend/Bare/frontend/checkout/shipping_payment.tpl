@@ -25,14 +25,11 @@
 {/block}
 
 {* Hide breadcrumb *}
-{block name='frontend_index_breadcrumb'}<hr class="clear" />{/block}
+{block name='frontend_index_breadcrumb'}{/block}
 
 {block name="frontend_index_content_top"}
-    <div class="grid_20 first">
-
-        {* Step box *}
-        {include file="frontend/register/steps.tpl" sStepActive="payment"}
-    </div>
+    {* Step box *}
+    {include file="frontend/register/steps.tpl" sStepActive="paymentShipping"}
 {/block}
 
 {* Hide sidebar left *}
@@ -41,30 +38,6 @@
 {* Main content *}
 {block name="frontend_index_content"}
     <div id="confirm" class="grid_16 push_2 first">
-
-    {* Error messages *}
-    {block name='frontend_checkout_confirm_error_messages'}
-        {include file="frontend/checkout/error_messages.tpl"}
-    {/block}
-
-    <div class="outer-confirm-container">
-
-        {* Personal information *}
-        <div class="personal-information grid_16 first">
-            <div class="inner_container">
-                {* Payment method *}
-                {include file="frontend/checkout/confirm_payment.tpl" sTargetAction="shippingPayment" sTarget="checkout"}
-            </div>
-            <div class="inner_container">
-                {* Payment method *}
-                {include file="frontend/checkout/confirm_dispatch.tpl" hideSubmitButton=true}
-            </div>
-            <div class="inner_container">
-                {* Payment method *}
-                {include file="frontend/checkout/cart_footer.tpl"}
-            </div>
-        </div>
-
-        <a href="{url controller='checkout' action='index'}">{s name='NextButton'}Next{/s}</a>
+        {include file="frontend/checkout/shipping_payment_core.tpl"}
     </div>
 {/block}

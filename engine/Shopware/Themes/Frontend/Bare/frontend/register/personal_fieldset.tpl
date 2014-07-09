@@ -45,7 +45,7 @@
 		{* Skip login *}
 		{if !$update}
 			{block name='frontend_register_personal_fieldset_skip_login'}
-				{if !$sEsd && !$form_data.sValidation && !{config name=NoAccountDisable}}
+				{if $showNoAccount && !$sEsd && !$form_data.sValidation && !{config name=NoAccountDisable}}
 					<div class="register--check">
 						<input type="checkbox" value="1" id="register_personal_skipLogin" name="register[personal][skipLogin]" class="register--checkbox chkbox" {if $form_data.skipLogin || $form_data.accountmode || $skipLogin}checked {/if}/>
 						<label for="register_personal_skipLogin" class="chklabel is--bold">{s name='RegisterLabelNoAccount'}{/s}</label>

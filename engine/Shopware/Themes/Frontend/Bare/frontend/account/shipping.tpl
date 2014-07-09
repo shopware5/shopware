@@ -69,6 +69,5 @@
 
 			</div>
 		{/block}
-
 	</div>
 {/block}

@@ -140,7 +140,12 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     public function confirmAction()
     {
         if (empty($this->View()->sUserLoggedIn)) {
-            return $this->forward('login', 'account', null, array('sTarget' => 'checkout'));
+            return $this->forward(
+                'login',
+                'account',
+                null,
+                array('sTarget' => 'checkout', 'sTargetAction' => 'confirm', 'showNoAccount' => true)
+            );
         } elseif ($this->basket->sCountBasket() < 1) {
             return $this->forward('cart');
         }
@@ -246,6 +251,20 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     }
 
     /**
+     * Used during the checkout process
+     * Returns the user to the shop homepage
+     * If the user has a noAccount account, it is automatically logged out
+     */
+    public function returnAction()
+    {
+        if ($this->View()->sUserData['additional']['user']['accountmode'] == 1) {
+            Shopware()->Session()->unsetAll();
+            Shopware()->Modules()->Basket()->sRefreshBasket();
+        }
+        return $this->redirect(array('controller'=> 'index'));
+    }
+
+    /**
      * If any external payment mean chooses by customer
      * Forward to payment page after order submitting
      */
@@ -334,7 +353,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             }
         }
 
-        if ($this->request->isXmlHttpRequest()||!empty($this->Request()->callback)) {
+        if ($this->request->isXmlHttpRequest() || !empty($this->Request()->callback)) {
             $this->Request()->setParam('sTargetAction', 'ajax_add_article');
         }
 
@@ -342,13 +361,17 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         if ($this->Request()->getParam('sAddAccessories')) {
             $this->forward('addAccessories');
         } else {
-            $this->forward($this->Request()->getParam('sTargetAction', 'index'));
+            if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
+                $this->forward($this->Request()->getParam('sTargetAction', 'cart'));
+            } else {
+                $this->forward($this->Request()->getParam('sTargetAction', 'index'));
+            }
         }
     }
 
     /**
      * Add more then one article directly from cart / confirm view
-     * @param sAddAccessories = List of article ordernumbers separated by ;
+     * @param sAddAccessories = List of article order numbers separated by ;
      * @param sAddAccessoriesQuantity = List of article quantities separated by ;
      */
     public function addAccessoriesAction()
@@ -476,25 +499,34 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     }
 
     /**
-     * Used only for new customers
-     * Action to handle selection of default shipping and payment methods
+     * Action to handle selection of shipping and payment methods
      */
     public function shippingPaymentAction()
     {
-        // This action is only available for new customers
-        // redirect if we come from an existing account
-        if (empty($this->session['sRegisterFinished'])) {
-            $this->redirect(array('action' => 'index'));
-        }
+        // Load payment options, select option and details
+        $this->View()->sPayments = $this->getPayments();
+        $this->View()->sFormData = array('payment' => $this->View()->sUserData['additional']['user']['paymentID']);
+        $getPaymentDetails = $this->admin->sGetPaymentMeanById($this->View()->sFormData['payment']);
 
-        $this->View()->sPayment = $this->getSelectedPayment();
-        $this->View()->sUserData["payment"] = $this->View()->sPayment;
+        $paymentClass = $this->admin->sInitiatePaymentClass($getPaymentDetails);
+        if ($paymentClass instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
+            $data = $paymentClass->getCurrentPaymentDataAsArray(Shopware()->Session()->sUserId);
+            if (!empty($data)) {
+                $this->View()->sFormData += $data;
+            }
+        }
+        if ($this->Request()->isPost()) {
+            $values = $this->Request()->getPost();
+            $values['payment'] = $this->Request()->getPost('payment');
+            $values['isPost'] = true;
+            $this->View()->sFormData = $values;
+        }
 
         $this->View()->sBasket = $this->getBasket();
 
+        // Load current and all shipping methods
         $this->View()->sDispatch = $this->getSelectedDispatch();
-        $this->View()->sPayments = $this->getPayments();
-        $this->View()->sDispatches = $this->getDispatches();
+        $this->View()->sDispatches = $this->getDispatches($this->View()->sFormData['payment']);
 
         $this->View()->sLaststock = $this->basket->sCheckBasketQuantities();
         $this->View()->sShippingcosts = $this->View()->sBasket['sShippingcosts'];
@@ -506,6 +538,91 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->View()->sRegisterFinished = !empty($this->session['sRegisterFinished']);
 
         $this->View()->sTargetAction = 'shippingPayment';
+
+        if ($this->Request()->isXmlHttpRequest()) {
+            return $this->View()->loadTemplate('frontend/checkout/shipping_payment_core.tpl');
+        }
+    }
+
+    /**
+     * Action to simultaneously save shipping and payment details
+     */
+    public function saveShippingPaymentAction()
+    {
+        if ($this->Request()->isPost()) {
+            $isAjaxRequest = $this->Request()->isXmlHttpRequest();
+            $sErrorFlag = array();
+            $sErrorMessages = array();
+
+            // Load data from request
+            $dispatch = $this->Request()->getPost('sDispatch');
+            $payment = $this->Request()->getPost('payment');
+
+            // If request is ajax, we skip the validation, because the user is still editing
+            if (!$isAjaxRequest) {
+                if (is_null($dispatch)) {
+                    $sErrorFlag['sDispatch'] = true;
+                    $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/checkout/error_messages')
+                        ->get('ShippingPaymentSelectShipping', 'Please select a shipping method');
+                }
+                if (is_null($payment)) {
+                    $sErrorFlag['payment'] = true;
+                    $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/checkout/error_messages')
+                        ->get('ShippingPaymentSelectPayment', 'Please select a payment method');
+                }
+
+                // If any basic info is missing, return error messages
+                if (!empty($sErrorFlag) || !empty($sErrorMessages)) {
+                    $this->View()->assign('sErrorFlag', $sErrorFlag);
+                    $this->View()->assign('sErrorMessages', $sErrorMessages);
+                    return $this->forward('shippingPayment');
+                }
+
+                // Validate the payment details
+                Shopware()->Modules()->Admin()->sSYSTEM->_POST['sPayment'] = $payment;
+                $checkData = $this->admin->sValidateStep3();
+
+                // Problem with the payment details, return error
+                if (!empty($checkData['checkPayment']['sErrorMessages']) || empty($checkData['sProcessed'])) {
+                    $this->View()->assign('sErrorFlag', $checkData['checkPayment']['sErrorFlag']);
+                    $this->View()->assign('sErrorMessages', $checkData['checkPayment']['sErrorMessages']);
+                    return $this->forward('shippingPayment');
+                }
+
+                // Save payment method details db
+                if ($checkData['sPaymentObject'] instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
+                    $checkData['sPaymentObject']->savePaymentData(Shopware()->Session()->sUserId, $this->Request());
+                }
+
+                // Save the payment info
+                $previousPayment = Shopware()->Modules()->Admin()->sGetUserData();
+                $previousPayment = $previousPayment['additional']['user']['paymentID'];
+
+                $previousPayment = $this->admin->sGetPaymentMeanById($previousPayment);
+                if ($previousPayment['paymentTable']) {
+                    Shopware()->Db()->delete(
+                        $previousPayment['paymentTable'],
+                        array('userID = ?' => Shopware()->Session()->sUserId)
+                    );
+                }
+            }
+
+            // Save payment and shipping method data.
+            $this->admin->sUpdatePayment($payment);
+            $this->setDispatch($dispatch, $payment);
+
+        } else {
+            return $this->forward('shippingPayment');
+        }
+
+        if ($isAjaxRequest) {
+            return $this->forward('shippingPayment');
+        } else {
+            $this->redirect(array(
+                'controller' => $this->Request()->getParam('sTarget', 'checkout'),
+                'action' => $this->Request()->getParam('sTargetAction', 'confirm')
+            ));
+        }
     }
 
     /**
@@ -939,9 +1056,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     /**
      * Get all dispatches available in selected country from sAdmin object
      *
+     * @param null $paymentId
      * @return array list of dispatches
      */
-    public function getDispatches()
+    public function getDispatches($paymentId = null)
     {
         $country = $this->getSelectedCountry();
         $state = $this->getSelectedState();
@@ -949,7 +1067,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             return false;
         }
         $stateId = !empty($state['id']) ? $state['id'] : null;
-        return $this->admin->sGetPremiumDispatches($country['id'], null, $stateId);
+        return $this->admin->sGetPremiumDispatches($country['id'], $paymentId, $stateId);
     }
 
     /**
@@ -1062,6 +1180,31 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $dispatch = reset($dispatches);
         $this->session['sDispatch'] = (int) $dispatch['id'];
         return $dispatch;
+    }
+
+    /**
+     * Set the provided dispatch method
+     *
+     * @param $dispatchId ID of the dispatch method to set
+     * @param int|null $paymentId Payment id to validate
+     * @return int set dispatch method id
+     */
+    public function setDispatch($dispatchId, $paymentId = null)
+    {
+        $supportedDispatches = $this->getDispatches($paymentId);
+
+        // Iterate over supported dispatches, look for the provided one
+        foreach ($supportedDispatches as $dispatch) {
+            if ($dispatch['id'] == $dispatchId) {
+                $this->session['sDispatch'] = $dispatchId;
+                return $dispatchId;
+            }
+        }
+
+        // If it was not found, we fallback to the default (head of supported)
+        $defaultDispatch = array_shift($supportedDispatches);
+        $this->session['sDispatch'] = $defaultDispatch['id'];
+        return $this->session['sDispatch'];
     }
 
     /**

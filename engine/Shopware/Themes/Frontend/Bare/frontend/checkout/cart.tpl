@@ -10,7 +10,6 @@
 
 {* Step Box *}
 {block name="frontend_index_content_top"}
-
 	{* Empty basket *}
 	{if !$sBasket.content}
         {block name='frontend_basket_basket_is_empty'}

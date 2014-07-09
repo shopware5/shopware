@@ -4,13 +4,13 @@
         {block name='frontend_register_steps'}
             <ul class="steps--list">
 
-				{* First Step - Registration *}
-				{block name='frontend_register_steps_register'}
-					<li class="steps--entry step--register{if $sStepActive=='register'} is--active{/if}">
-						<span class="icon">{s name="CheckoutStepLoginNumber"}{/s}</span>
-						<span class="text"><span class="text--inner">{s name="CheckoutStepRegisterText"}{/s}</span></span>
-					</li>
-				{/block}
+                {* First Step - Address *}
+                {block name='frontend_register_steps_basket'}
+                    <li class="steps--entry step--basket{if $sStepActive=='address'} is--active{/if}">
+                        <span class="icon">{s name="CheckoutStepAddressNumber"}{/s}</span>
+                        <span class="text"><span class="text--inner">{s name="CheckoutStepAddressText"}{/s}</span></span>
+                    </li>
+                {/block}
 
                 {* Spacer *}
                 {block name='frontend_register_steps_spacer1'}
@@ -20,10 +20,10 @@
                 {/block}
 
                 {* Second Step - Payment *}
-                {block name='frontend_register_steps_payment'}
-                    <li class="steps--entry step--payment{if $sStepActive=='payment'} is--active{/if}">
-                        <span class="icon">{s name="CheckoutStepPaymentNumber"}{/s}</span>
-                        <span class="text"><span class="text--inner">{s name="CheckoutStepPaymentText"}{/s}</span></span>
+                {block name='frontend_register_steps_register'}
+                    <li class="steps--entry step--register{if $sStepActive=='paymentShipping'} is--active{/if}">
+                        <span class="icon">{s name="CheckoutStepPaymentShippingNumber"}{/s}</span>
+                        <span class="text"><span class="text--inner">{s name="CheckoutStepPaymentShippingText"}{/s}</span></span>
                     </li>
                 {/block}
 

@@ -96,7 +96,7 @@
 				{* The tag is still open due to a template issue in the frontend/checkout/shipping_costs which has a unclosed div-tag *}
 				<div class="table_row non">
 					<div class="table_row shipping">
-					{if $sBasket.content && !$sUserLoggedIn}
+					{if $sBasket.content && !$sUserLoggedIn && {config name=basketShowCalculation}}
 						{if !$sUserData.additional.user.id}
 							{include file="frontend/checkout/shipping_costs.tpl"}
 						{/if}
