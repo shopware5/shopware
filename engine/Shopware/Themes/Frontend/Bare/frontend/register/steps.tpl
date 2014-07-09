@@ -4,13 +4,13 @@
         {block name='frontend_register_steps'}
             <ul class="steps--list">
 
-                {* First Step - Basket *}
-                {block name='frontend_register_steps_basket'}
-                    <li class="steps--entry step--basket{if $sStepActive=='basket'} is--active{/if}">
-                        <span class="icon">{s name="CheckoutStepBasketNumber"}{/s}</span>
-                        <span class="text"><span class="text--inner">{s name="CheckoutStepBasketText"}{/s}</span></span>
-                    </li>
-                {/block}
+				{* First Step - Registration *}
+				{block name='frontend_register_steps_register'}
+					<li class="steps--entry step--register{if $sStepActive=='register'} is--active{/if}">
+						<span class="icon">{s name="CheckoutStepLoginNumber"}{/s}</span>
+						<span class="text"><span class="text--inner">{s name="CheckoutStepRegisterText"}{/s}</span></span>
+					</li>
+				{/block}
 
                 {* Spacer *}
                 {block name='frontend_register_steps_spacer1'}
@@ -19,11 +19,11 @@
                     </li>
                 {/block}
 
-                {* Second Step - Registration *}
-                {block name='frontend_register_steps_register'}
-                    <li class="steps--entry step--register{if $sStepActive=='register'} is--active{/if}">
-                        <span class="icon">{s name="CheckoutStepRegisterNumber"}{/s}</span>
-                        <span class="text"><span class="text--inner">{s name="CheckoutStepRegisterText"}{/s}</span></span>
+                {* Second Step - Payment *}
+                {block name='frontend_register_steps_payment'}
+                    <li class="steps--entry step--payment{if $sStepActive=='payment'} is--active{/if}">
+                        <span class="icon">{s name="CheckoutStepPaymentNumber"}{/s}</span>
+                        <span class="text"><span class="text--inner">{s name="CheckoutStepPaymentText"}{/s}</span></span>
                     </li>
                 {/block}
 
