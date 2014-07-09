@@ -128,6 +128,31 @@ $(function() {
 
     window.widgets = window.widgets || [];
 
+    // Premium products
+    window.widgets.push({
+        selector: '.premium-product--content',
+        plugin: 'productSlider',
+        smartphone: {
+            perPage: 1,
+            perSlide: 1,
+            touchControl: true
+        },
+        tablet: {
+            perPage: 2,
+            perSlide: 1,
+            touchControl: true
+        },
+        tabletLandscape: {
+            perPage: 3,
+            perSlide: 1,
+            touchControl: true
+        },
+        desktop: {
+            perPage: 4,
+            perSlide: 1
+        }
+    });
+
     if (window.widgets !== 'undefined' && window.widgets.length > 0) {
         $.each(window.widgets, function(index, widget) {
             StateManager.registerListener([{
