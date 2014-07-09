@@ -79,6 +79,7 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.menu-scroller.js',
         'src/js/jquery.image-scroller.js',
         'src/js/jquery.lightbox.js',
+        'src/js/jquery.http-cache-filters.js',
 	    'src/js/jquery.newsletter.js',
 		'src/js/jquery.shopware-responsive.js'
 	);
