@@ -1,19 +1,35 @@
-<div class="table_row{if $lastitem} lastrow{/if}">
+<div class="panel--tr">
 
 	{block name='frontend_account_partner_statistic_item_overview_row'}
-	<div class="grid_3">
+	<div class="panel--td column--date">
+        <div class="column--label">
+            {s name="PartnerStatisticColumnDate" namespace="frontend/account/partner_statistic"}{/s}:
+        </div>
+
 		{$partnerOrder.orderTime|date:datetime}
 	</div>
 	
-	<div class="grid_2 prefix_1 bold">
+	<div class="panel--td column--id is--bold">
+        <div class="column--label">
+            {s name="PartnerStatisticColumnId" namespace="frontend/account/partner_statistic"}{/s}:
+        </div>
+
 		{$partnerOrder.number}
 	</div>
 
-    <div class="grid_2 prefix_2">
+    <div class="panel--td column--price">
+        <div class="column--label">
+            {s name="PartnerStatisticColumnNetAmount" namespace="frontend/account/partner_statistic"}{/s}:
+        </div>
+
 		{$partnerOrder.netTurnOver|currency}
 	</div>
 
-    <div class="grid_2 prefix_2">
+    <div class="panel--td column--total">
+        <div class="column--label">
+            {s name="PartnerStatisticColumnProvision" namespace="frontend/account/partner_statistic"}{/s}:
+        </div>
+
         {$partnerOrder.provision|currency}
     </div>
 
@@ -21,27 +37,19 @@
 </div>
 
 {if $lastitem}
-<div class="table_foot">
+<div class="panel--tr is--odd is--bold">
     {block name='frontend_account_partner_statistic_item_overview_row'}
 
-        <div class="grid_2 bold textright">
-            <div class="textright">
-                <strong>
-                    {se name="PartnerStatisticItemSum"}{/se}
-                </strong>
-            </div>
+        <div class="panel--td column--item-sum">
+            {se name="PartnerStatisticItemSum"}{/se}
         </div>
 
-        <div class="grid_4 prefix_6">
-            <strong>
+        <div class="panel--td column--price">
             {$sTotalPartnerAmount.netTurnOver|currency}
-            </strong>
         </div>
 
-        <div class="grid_1">
-            <strong>
+        <div class="panel--td column--total">
             {$sTotalPartnerAmount.provision|currency}
-            </strong>
         </div>
 
     {/block}
