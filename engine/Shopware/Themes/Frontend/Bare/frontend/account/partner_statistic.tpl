@@ -9,11 +9,15 @@
     {rdelim};
 {/block}
 
+{block name="frontend_index_header_css_screen" append}
+    <link href="{link file='frontend/_public/vendors/jquery.ui.datepicker/datepicker.css'}" media="screen" rel="stylesheet" type="text/css" />
+{/block}
 
 {block name="frontend_index_header_javascript" append}
-    <script type="text/javascript" src="{link file='frontend/_resources/javascript/plugins/raphael/raphael.js'}"></script>
-    <script type="text/javascript" src="{link file='frontend/_resources/javascript/plugins/raphael/popup.js'}"></script>
-    <script type="text/javascript" src="{link file='frontend/_resources/javascript/plugins/raphael/analytics.js'}"></script>
+    <script type="text/javascript" src="{link file='frontend/_public/vendors/raphael/raphael.js'}"></script>
+    <script type="text/javascript" src="{link file='frontend/_public/vendors/raphael/popup.js'}"></script>
+    <script type="text/javascript" src="{link file='frontend/_public/vendors/raphael/analytics.js'}"></script>
+    <script type="text/javascript" src="{link file='frontend/_public/vendors/jquery.ui.datepicker/jquery.ui.datepicker.js'}"></script>
 {/block}
 
 
@@ -35,15 +39,14 @@
                 {block name="frontend_account_partner_statistic_listing_date"}
                     <form method="post" action="{url controller='account' action='partnerStatistic'}">
                         <div class="date-filter">
-                            <label>{s name='PartnerStatisticLabelFromDate'}{/s}</label>
-                            <input id="datePickerFrom" class="datePicker" name="fromDate" type="text" value="{$partnerStatisticFromDate}" class="text" />
+                            <label for="datePickerFrom">{s name='PartnerStatisticLabelFromDate'}{/s}</label>
+                            <input id="datePickerFrom" class="datePicker text" name="fromDate" type="text" value="{$partnerStatisticFromDate}"/>
                         </div>
                         <div class="date-filter">
-                            <label>{s name='PartnerStatisticLabelToDate'}{/s}</label>
-                            <input id="datePickerTo" class="datePicker" name="toDate" type="text" value="{$partnerStatisticToDate}" class="text" />
+                            <label for="datePickerTo">{s name='PartnerStatisticLabelToDate'}{/s}</label>
+                            <input id="datePickerTo" class="datePicker text" name="toDate" type="text" value="{$partnerStatisticToDate}"/>
                         </div>
                         <input type="submit" class="button-right small_right partner_statistic"  value="{s name="PartnerStatisticSubmitFilter"}{/s}" />
-
                     </form>
                 {/block}
             </div>
