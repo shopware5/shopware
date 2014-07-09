@@ -32,5 +32,12 @@
 		{block name='frontend_blog_index_listing'}
 			{include file="frontend/blog/listing.tpl"}
 		{/block}
+
+		{* Blog Pagination *}
+		{block name='frontend_blog_index_pagination'}
+			<div class="blog--paging block">
+				{include file='frontend/listing/actions/action-pagination.tpl'}
+			</div>
+		{/block}
 	</div>
 {/block}
