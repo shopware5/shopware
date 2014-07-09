@@ -1,131 +1,177 @@
-;(function($, window, document, undefined) {
-    "use strict";
+;(function ($) {
+    'use strict';
 
-    var pluginName = 'collapsePanel',
-        defaults = {
+    /**
+     * Shopware Collapse Panel Plugin.
+     *
+     * @example
+     *
+     * HTML:
+     *
+     * <div data-src="CAPTCHA_REFRESH_URL" data-captcha="true"></div>
+     *
+     * JS:
+     *
+     * $('*[data-captcha="true"]').captcha();
+     *
+     */
+    $.plugin('collapsePanel', {
 
-            // The selector of the target element which should be collapsed.
-            collapseTarget: false,
+        /**
+         * Default options for the collapse panel plugin.
+         *
+         * @public
+         * @property defaults
+         * @type {Object}
+         */
+        defaults: {
 
-            // Additional class which will be added to the collapse target.
+            /**
+             * The selector of the target element which should be collapsed.
+             *
+             * @type {String|HTMLElement}
+             */
+            collapseTarget: null,
+
+            /**
+             * Additional class which will be added to the collapse target.
+             *
+             * @type {String}
+             */
             collapseTargetCls: 'js--collapse-target',
 
-            // Decide if sibling collapse panels should be closed when the target is collapsed.
+            /**
+             * Decide if sibling collapse panels should be closed when the target is collapsed.
+             *
+             * @type {Boolean}
+             */
             closeSiblings: false,
 
-            // The speed of the collapse animation in ms.
+            /**
+             * The speed of the collapse animation in ms.
+             *
+             * @type {Number}
+             */
             animationSpeed: 300
-        };
+        },
 
-    /**
-     * Plugin constructor which merges the default settings with the user settings.
-     *
-     * @param {HTMLElement} element - Element which should be used in the plugin
-     * @param {Object} userOpts - User settings for the plugin
-     * @constructor
-     */
-    function Plugin(element, userOpts) {
-        var me = this;
+        /**
+         * Default plugin initialisation function.
+         * Sets all needed properties, adds classes
+         * and registers all needed event listeners.
+         *
+         * @public
+         * @method init
+         */
+        init: function () {
+            var me = this,
+                options = me.opts;
 
-        me.$el = $(element);
-        me.opts = $.extend({}, defaults, userOpts);
+            me.getDataAttributes();
 
-        me._defaults = defaults;
-        me._name = pluginName;
-
-        me.init();
-    }
-
-    /**
-     * Initializes the plugin and adds the necessary
-     * classes to get the plugin up and running.
-     */
-    Plugin.prototype.init = function() {
-        var me = this;
-
-        me.getDataConfig();
-
-        if (me.opts.collapseTarget.length) {
-            me.$targetEl = $(me.opts.collapseTarget);
-        } else {
-            me.$targetEl = me.$el.next('.collapse--content');
-        }
-
-        me.$targetEl.addClass(me.opts.collapseTargetCls);
-
-        me.registerEvents();
-    };
-
-    /**
-     * Loads config settings which are set via data attributes and
-     * overrides the old setting with the data attribute of the
-     * same name if defined.
-     */
-    Plugin.prototype.getDataConfig = function() {
-        var me = this,
-            attr;
-
-        $.each(me.opts, function(key, value) {
-            attr = me.$el.attr('data-' + key);
-            if ( attr !== undefined ) {
-                me.opts[key] = attr;
+            if (options.collapseTarget.length !== 0) {
+                me.$targetEl = $(options.collapseTarget);
+            } else {
+                me.$targetEl = me.$el.next('.collapse--content');
             }
-        });
-    };
 
-    /**
-     * Registers all necessary event handlers.
-     */
-    Plugin.prototype.registerEvents = function() {
-        var me = this;
+            me.$targetEl.addClass(options.collapseTargetCls);
 
-        me.$el.on('click.' + pluginName, function(e) {
-            e.preventDefault();
-            me.toggleCollapse();
-        });
-    };
+            me.registerEvents();
+        },
 
-    /**
-     * Changes the collapse state of the element.
-     */
-    Plugin.prototype.toggleCollapse = function() {
-        var me = this,
-            siblings = $('.'+me.opts.collapseTargetCls).not(me.$targetEl);
+        /**
+         * Registers all necessary event handlers.
+         *
+         * @public
+         * @method registerEvents
+         */
+        registerEvents: function () {
+            var me = this;
 
-        if (me.$targetEl.hasClass('is--collapsed')) {
-            me.$el.removeClass('is--active');
-            me.$targetEl.slideUp(me.opts.animationSpeed, function() {
-                me.$targetEl.removeClass('is--collapsed');
+            me._on(me.$el, 'click', function (e) {
+                e.preventDefault();
+                me.toggleCollapse();
             });
-        } else {
-            me.$el.addClass('is--active');
-            me.$targetEl.slideDown(me.opts.animationSpeed).addClass('is--collapsed');
-            if (me.opts.closeSiblings) siblings.slideUp(me.opts.animationSpeed).removeClass('is--collapsed');
-        }
-    };
+        },
 
-    /**
-     * Destroys the initialized plugin completely, so all event listeners will
-     * be removed and the plugin data, which is stored in-memory referenced to
-     * the DOM node.
-     */
-    Plugin.prototype.destroy = function() {
-        var me = this;
+        /**
+         * Toggles the collapse state of the element.
+         *
+         * @public
+         * @method toggleCollapse
+         */
+        toggleCollapse: function () {
+            var me = this,
+                $targetEl = me.$targetEl;
 
-        me.$el.removeClass('is--active');
-        me.$targetEl.removeClass('is--active')
-                    .removeClass(me.opts.collapseTargetCls)
-                    .removeAttr('style');
-        me.$el.off('click.' + pluginName).removeData('plugin_' + pluginName);
-    };
-
-    $.fn[pluginName] = function ( options ) {
-        return this.each(function () {
-            if (!$.data(this, 'plugin_' + pluginName)) {
-                $.data(this, 'plugin_' + pluginName,
-                    new Plugin( this, options ));
+            if ($targetEl.hasClass('is--active')) {
+                me.closePanel();
+                return;
             }
-        });
-    };
 
-})(jQuery, window, document);
+            me.openPanel();
+        },
+
+        /**
+         * Opens the panel by sliding it down.
+         *
+         * @public
+         * @method openPanel
+         */
+        openPanel: function () {
+            var me = this,
+                options = me.opts,
+                $targetEl = me.$targetEl,
+                siblings = $('.' + options.collapseTargetCls).not($targetEl);
+
+            me.$el.toggleClass('is--active', true);
+
+            $targetEl.slideDown(options.duration, function () {
+                $targetEl.toggleClass('is--active', true);
+            });
+
+            if (options.closeSiblings) {
+                siblings.slideUp(options.duration, function () {
+                    siblings.removeClass('is--active');
+                });
+            }
+        },
+
+        /**
+         * Closes the panel by sliding it up.
+         *
+         * @public
+         * @method openPanel
+         */
+        closePanel: function () {
+            var me = this,
+                $targetEl = me.$targetEl;
+
+            me.$el.toggleClass('is--active', false);
+
+            $targetEl.slideUp(me.opts.duration, function () {
+                $targetEl.toggleClass('is--active', false);
+            });
+        },
+
+        /**
+         * Destroys the initialized plugin completely, so all event listeners will
+         * be removed and the plugin data, which is stored in-memory referenced to
+         * the DOM node.
+         *
+         * @public
+         * @method destroy
+         */
+        destroy: function () {
+            var me = this;
+
+            me.$el.removeClass('is--active');
+            me.$targetEl.removeClass('is--active')
+                .removeClass(me.opts.collapseTargetCls)
+                .removeAttr('style');
+
+            me._destroy();
+        }
+    });
+})(jQuery);
