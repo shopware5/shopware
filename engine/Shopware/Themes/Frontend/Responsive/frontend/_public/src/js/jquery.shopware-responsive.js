@@ -272,6 +272,12 @@ $(function() {
     $('*[data-pseudo-text="true"]').pseudoText();
 
     $('input[data-form-polyfill="true"], button[data-form-polyfill="true"]').formPolyfill();
+    $('.datePicker').datepicker({
+        dateFormat: 'dd.mm.yy',
+        onSelect: function (dateText, inst) {
+            $(this).parents('form').submit();
+        }
+    });
 
     $('select:not([data-no-fancy-select="true"])').selectboxReplacement();
 
