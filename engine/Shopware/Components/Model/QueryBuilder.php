@@ -190,7 +190,11 @@ class QueryBuilder extends BaseQueryBuilder
                 }
             }
 
-            $expression = new Expr\Comparison($exprKey, $expression, $where !== null ? (':' . $parameterKey) : null);
+            $exprParameterKey = ':' . $parameterKey;
+            if (is_array($where)) {
+                $exprParameterKey = '('.$exprParameterKey.')' ;
+            }
+            $expression = new Expr\Comparison($exprKey, $expression, $where !== null ? $exprParameterKey : null);
 
             if (isset($operator)) {
                 $this->orWhere($expression);
