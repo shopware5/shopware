@@ -66,14 +66,39 @@
         };
 
         // Call the init method of the plugin
-        if (typeof me.init === 'function') {
-            me.init();
-        }
+        me.init();
 
         $.publish('/plugin/' + name + '/init', [ me ]);
     }
 
     PluginBase.prototype = {
+
+        /**
+         * Template function for the plugin initialisation.
+         * Should be overridden for custom initialisation logic or an error will be thrown.
+         *
+         * @public
+         * @method init
+         */
+        init: function () {
+            throw new Error('Plugin ' + this.getName() + ' has to have an init function!');
+        },
+
+        /**
+         * Template function for the plugin destruction.
+         * Should be overridden for custom destruction code.
+         *
+         * @public
+         * @method destroy
+         */
+        destroy: function () {
+
+            if (typeof console !== 'undefined' && typeof console.warn === 'function') {
+                console.warn('Plugin ' + this.getName() + ' should have a custom destroy method!');
+            }
+
+            this._destroy();
+        },
 
         /**
          * Destroys the plugin on the {@link HTMLElement}. It removes the instance of the plugin
@@ -94,7 +119,12 @@
                 obj.el.off(obj.event);
             });
 
-            me.$el.removeData('plugin' + name);
+            // remove all references of extern plugins
+            $.each(me.opts, function (o) {
+                delete me.opts[o];
+            });
+
+            me.$el.removeData('plugin-' + name);
 
             $.publish('/plugin/' + name + '/destroy', [ me ]);
 
@@ -108,7 +138,6 @@
          * @params {jQuery} Element, which should be used to add the listener
          * @params {String} Event type, you want to register.
          * @returns {PluginBase}
-         * @private
          */
         _on: function () {
             var me = this,
@@ -142,11 +171,11 @@
                 $element = $(element),
                 filteredEvents = $.grep(events, function (obj, index) {
                     eventIds.push(index);
-                    return pluginEvent === obj.event && $element[0] === obj.el[0];
+                    return typeof obj !== 'undefined' && pluginEvent === obj.event && $element[0] === obj.el[0];
                 });
 
             $.each(filteredEvents, function (event) {
-                $element.off.apply($element, [ event.event ]);
+                $element.off.call($element, event.event);
             });
 
             $.each(eventIds, function (id) {
@@ -175,7 +204,17 @@
          * @returns {String}
          */
         getEventName: function (event) {
-            return event + this.eventSuffix;
+            var me = this,
+                suffix = me.eventSuffix,
+                parts = event.split(' '),
+                len = parts.length,
+                i = 0;
+
+            for (; i < len; i++) {
+                parts[i] += suffix;
+            }
+
+            return parts.join(' ');
         },
 
         /**
@@ -221,13 +260,13 @@
          * Fetches the configured options based on the {@link PluginBase.$el}.
          * @returns {mixed} configuration
          */
-        getDataAttributes: function () {
+        applyDataAttributes: function () {
             var me = this,
                 opts = me.opts,
                 attr;
 
             $.each(opts, function (key) {
-                attr = me.$el.attr('data-' + key);
+                attr = me.$el.data(key);
                 if (attr !== undefined) {
                     opts[key] = attr;
                 }
@@ -285,21 +324,23 @@
     $.plugin = function (name, plugin) {
         $.fn[name] = function (options) {
             return this.each(function () {
-                var element = this;
+                var element = this,
+                    pluginData = $.data(element, 'plugin-' + name);
 
-                if (!$.data(element, 'plugin-' + name)) {
+                if (!pluginData) {
                     if (typeof plugin === 'function') {
-                        $.data(element, 'plugin-' + name, new plugin());
-                        return;
+                        pluginData = new plugin();
+                    } else {
+                        var Plugin = function () {
+                            PluginBase.call(this, name, element, options);
+                        };
+
+                        Plugin.prototype = $.extend(Object.create(PluginBase.prototype), { constructor: Plugin }, plugin);
+
+                        pluginData = new Plugin();
                     }
 
-                    var Plugin = function () {
-                        PluginBase.call(this, name, element, options);
-                    };
-
-                    Plugin.prototype = $.extend(Object.create(PluginBase.prototype), { constructor: Plugin }, plugin);
-
-                    $.data(element, 'plugin-' + name, new Plugin());
+                    $.data(element, 'plugin-' + name, pluginData);
                 }
             });
         };

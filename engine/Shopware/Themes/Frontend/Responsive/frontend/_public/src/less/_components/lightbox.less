@@ -1,0 +1,67 @@
+.js--lightbox {
+    width: 100%;
+    height: 100%;
+
+    .image--wrapper {
+        .unitize(160, 16, bottom);
+        left: 0;
+        right: 0;
+        top: 0;
+        position: absolute;
+    }
+
+    .thumbnails--wrapper {
+        .unitize-padding(16, 16);
+        .unitize-height(160);
+        width: 100%;
+        overflow: hidden;
+        position: absolute;
+        bottom: 0;
+    }
+
+    &.full--image {
+        .image--wrapper {
+            bottom: 0;
+        }
+
+        .thumbnails--wrapper {
+            display: none;
+        }
+    }
+
+    .thumbnail--list {
+        .transition(left, 0.5s, ease);
+        white-space: nowrap;
+        position: relative;
+
+        .thumbnail {
+            .unitize-margin(0, 5);
+            .border-radius(5px);
+            .unitize-width(128);
+            .unitize-height(128);
+            border: 1px solid @lightDarkBorderColor;
+            position: relative;
+            display: inline-block;
+            outline: none;
+            cursor: pointer;
+
+            &.is--active {
+                border-color: @primaryColor;
+            }
+        }
+
+        .thumbnail--link {
+            outline: none;
+        }
+
+        .thumbnail--image {
+            .unitize-padding(5, 5);
+            margin: auto;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+        }
+    }
+}
