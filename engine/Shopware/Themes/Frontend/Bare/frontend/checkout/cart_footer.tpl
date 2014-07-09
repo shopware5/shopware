@@ -44,7 +44,7 @@
             {/block}
 
             {* Shipping costs pre-calculation *}
-            {if $sBasket.content && !$sUserLoggedIn && !$sUserData.additional.user.id}
+            {if $sBasket.content && !$sUserLoggedIn && !$sUserData.additional.user.id && {config name=basketShowCalculation}}
 
                 {block name='frontend_checkout_shipping_costs_country_trigger'}
                     <a href="#show-hide--shipping-costs" class="table--shipping-costs-trigger">

@@ -136,9 +136,11 @@
                             <a href="{url controller=account action=billing sTarget=checkout}" class="button-middle small">
                                 {s name="ConfirmLinkChangeBilling" namespace="frontend/checkout/confirm_left"}{/s}
                             </a>
-                            <a href="{url controller=account action=selectBilling sTarget=checkout}" class="button-middle small">
-                                {s name="ConfirmLinkSelectBilling" namespace="frontend/checkout/confirm_left"}{/s}
-                            </a>
+                            {if $sUserData.additional.user.accountmode != 1}
+                                <a href="{url controller=account action=selectBilling sTarget=checkout}" class="button-middle small">
+                                    {s name="ConfirmLinkSelectBilling" namespace="frontend/checkout/confirm_left"}{/s}
+                                </a>
+                            {/if}
                         </div>
                     </div>
                 {/block}
@@ -174,48 +176,38 @@
                                 {s name="ConfirmLinkChangeShipping" namespace="frontend/checkout/confirm_left"}{/s}
                             </a>
 
-                            <a href="{url controller=account action=selectShipping sTarget=checkout}" class="button-middle small">
-                                {s name="ConfirmLinkSelectShipping" namespace="frontend/checkout/confirm_left"}{/s}
-                            </a>
+                            {if $sUserData.additional.user.accountmode != 1}
+                                <a href="{url controller=account action=selectShipping sTarget=checkout}" class="button-middle small">
+                                    {s name="ConfirmLinkSelectShipping" namespace="frontend/checkout/confirm_left"}{/s}
+                                </a>
+                            {/if}
                         </div>
                     </div>
                 {/block}
 
-                {* Payment method *}
-                {block name='frontend_checkout_confirm_left_payment_method'}
-                    {if !$sRegisterFinished}
-                        <div class="payment-display">
-                            <h3 class="underline">{s name="ConfirmHeaderPayment" namespace="frontend/checkout/confirm_left"}{/s}</h3>
-                            <p>
-                                <strong>{$sUserData.additional.payment.description}</strong><br />
+                {* Payment and shipping methods *}
+                {block name='frontend_checkout_confirm_left_shipping_payment_methods'}
+                    <div class="payment-display">
+                        <h3 class="underline">{s name="ConfirmTextShippingPayment" namespace="frontend/checkout/confirm_left"}Shipping and payment methods{/s}</h3>
+                        <p>
+                            <strong>{$sUserData.additional.payment.description}</strong><br />
 
-                                {if !$sUserData.additional.payment.esdactive}
-                                    {s name="ConfirmInfoInstantDownload" namespace="frontend/checkout/confirm_left"}{/s}
-                                {/if}
-                            </p>
+                            {if !$sUserData.additional.payment.esdactive}
+                                {s name="ConfirmInfoInstantDownload" namespace="frontend/checkout/confirm_left"}{/s}
+                            {/if}
+                        </p>
 
-                            {* Action buttons *}
-                            <div class="actions">
-                                <a href="{url controller=account action=payment sTarget=checkout}" class="button-middle small">
-                                    {s name="ConfirmLinkChangePayment" namespace="frontend/checkout/confirm_left"}{/s}
-                                </a>
-                            </div>
+                        <p>
+                            <strong>{$sDispatch.name}</strong><br />
+                        </p>
+
+                        {* Change button *}
+                        <div class="actions">
+                            <a href="{url controller=checkout action=shippingPayment sTarget=checkout}" class="button-middle small">
+                                {s name="ConfirmLinkChangeShippingPayment" namespace="frontend/checkout/confirm"}{/s}
+                            </a>
                         </div>
-                    {/if}
-                {/block}
-
-                {* Clear floating and add a spacing *}
-                <div class="clear"></div>
-                <div class="space"></div>
-
-                {* Dispatch selection *}
-                {block name='frontend_checkout_confirm_shipping'}
-                    {include file="frontend/checkout/confirm_dispatch.tpl"}
-                {/block}
-
-                {* Payment selection *}
-                {block name='frontend_checkout_confirm_payment'}
-                    {include file='frontend/checkout/confirm_payment.tpl' sTarget="checkout"}
+                    </div>
                 {/block}
             </div>
         </div>
