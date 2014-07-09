@@ -56,6 +56,7 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.ie-fixes.js',
         'src/js/jquery.plugin-base.js',
 		'src/js/jquery.state-manager.js',
+		'src/js/jquery.storage-manager.js',
 		'src/js/jquery.emotions.js',
 		'src/js/jquery.off-canvas-menu.js',
 		'src/js/jquery.search-field.js',
