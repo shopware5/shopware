@@ -92,11 +92,11 @@ $(function () {
 		});
 		$('nav.product--actions').insertAfter($('.buybox--form'));
 
-		var filterTrigger = $('.filter--trigger');
-		if (filterTrigger.length) filterTrigger.data('plugin_collapsePanel').destroy();
+            var filterTrigger = $('.filter--trigger');
+            if (filterTrigger.length) filterTrigger.data('plugin_collapsePanel').destroy();
 
-		var btnPassword = $('.btn--password');
-		if (btnPassword.length) btnPassword.data('plugin_collapsePanel').destroy();
+            var btnPassword = $('.btn--password');
+            if (btnPassword.length) btnPassword.data('plugin_collapsePanel').destroy();
 
 		var btnEmail = $('.btn--email');
 		if (btnEmail.length) btnEmail.data('plugin_collapsePanel').destroy();
@@ -250,7 +250,7 @@ $(function () {
     $('div.captcha--placeholder[data-src]').captcha();
 
     // Auto submitting form
-    $('select[data-auto-submit-form="true"]').on('change', function () {
+    $('select[data-auto-submit-form="true"]').on('change', function() {
         $(this).parents('form').submit();
     });
 
@@ -273,16 +273,16 @@ $(function () {
     });
 
     // Change the active tab to the customer reviews, if the url param sAction === rating is set.
-    if ($('.is--ctl-detail').length) {
+    if($('.is--ctl-detail').length) {
         var plugin = $('.additional-info--tabs').data('plugin_tabContent');
 
-	$('.product--rating-link').on('click', function (e) {
+        $('.product--rating-link').on('click', function(e) {
             e.preventDefault();
             plugin.changeTab(1, true);
         });
 
-	var param = decodeURI((RegExp('sAction' + '=' + '(.+?)(&|$)').exec(location.search) || [, null])[1]);
-	if (param === 'rating') {
+        var param = decodeURI((RegExp('sAction' + '=' + '(.+?)(&|$)').exec(location.search) || [,null])[1]);
+        if(param === 'rating') {
             plugin.changeTab(1, false);
         }
     }
@@ -291,41 +291,41 @@ $(function () {
     $('div[data-register="true"]').register();
 
     // Debug mode is enabled
-    if ($('.debug--panel').length) {
+    if($('.debug--panel').length) {
         var $debugPanel = $('.debug--panel'),
-		$window = $(window), timer;
+            $window = $(window), timer;
 
         $debugPanel.hide();
-	var refreshDebugPanel = function () {
+        var refreshDebugPanel = function() {
             var device = 'Device: ';
             $debugPanel.find('.debug--width').html($window.width());
             $debugPanel.find('.debug--height').html($window.height());
 
             $debugPanel.fadeIn('fast');
 
-	    if (StateManager.isSmartphone()) {
+            if(StateManager.isSmartphone()) {
                 device += 'Smartphone';
             }
 
-	    if (StateManager.isTablet()) {
+            if(StateManager.isTablet()) {
                 device += 'Tablet';
             }
 
-	    if (StateManager.isDesktop()) {
+            if(StateManager.isDesktop()) {
                 device += 'Desktop';
             }
             $debugPanel.find('.debug--device').html(device);
 
-	    if (timer) {
+            if(timer) {
                 window.clearTimeout(timer);
             }
-	    timer = window.setTimeout(function () {
+            timer = window.setTimeout(function() {
                 $debugPanel.fadeOut('fast');
             }, 1000);
         };
 
-	$window.on('resize', function () {
-	    window.setTimeout(function () {
+        $window.on('resize', function() {
+            window.setTimeout(function() {
                 refreshDebugPanel();
             }, 10);
         });
@@ -333,4 +333,11 @@ $(function () {
 
     $('*[data-live-search="true"]').liveSearch();
 
+    $('*[data-last-seen-products="true"]').lastSeenProducts($.extend({}, lastSeenProductsConfig));
+    
+    // Initialize the image slider plugin
+    $('*[data-image-slider="true"]').imageSlider();
+
+    // Initialize the menu scroller plugin
+    $('*[data-menu-scroller="true"]').menuScroller();
 });

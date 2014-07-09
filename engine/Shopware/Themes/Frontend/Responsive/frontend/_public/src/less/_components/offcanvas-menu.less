@@ -4,7 +4,8 @@
 	.transform-style(preverse-3d);
     min-height: 100%;
 
-	&::before {
+    &:before,
+    &::before {
 		.unitize(-8, 16, left);
 		.unitize-width(8, 16);
 		.box-shadow(inset -5px 0 5px -5px @lightTextColor);
