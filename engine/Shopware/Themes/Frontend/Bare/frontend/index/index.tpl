@@ -11,7 +11,7 @@
 	{include file='frontend/index/header.tpl'}
 {/block}
 
-<body class="is--ctl-{controllerName} is--act-{controllerAction}{if $sUserLoggedIn} is--user{/if}">
+<body class="{if $Controller}is--ctl-{$Controller}{/if}">
 	<div class="page-wrap">
 
 		{* Message if javascript is disabled *}
@@ -132,9 +132,9 @@
 
 	{block name="frontend_index_header_javascript_jquery"}
 		{* Add the partner statistics widget, if configured *}
-		{if !{config name=disableShopwareStatistics} }
+		{* if !{config name=disableShopwareStatistics} }
 			{include file='widgets/index/statistic_include.tpl'}
-		{/if}
+		{/if *}
 	{/block}
 
 {/block}

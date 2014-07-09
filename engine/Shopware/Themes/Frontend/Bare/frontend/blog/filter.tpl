@@ -9,7 +9,7 @@
 			{/block}
 
 			{block name="frontend_blog_filter_date_content"}
-				<div class="blog--filter-content panel--body is--wide collapse--content">
+				<div class="blog--filter-content panel--body is--wide collapse--content filter--trigger">
 					<ul class="filter--list list--unstyled">
 						{foreach name=filter from=$sFilterDate item=date}
 							{if !$date.removeProperty}
@@ -41,7 +41,7 @@
 			{/block}
 
 			{block name="frontend_blog_filter_author_content"}
-				<div class="blog--filter-content panel--body is--wide collapse--content {if $filterAuthorActive}is--active{/if}">
+				<div class="blog--filter-content panel--body is--wide collapse--content filter--trigger {if $filterAuthorActive}is--active{/if}">
 					<ul class="filter--list list--unstyled">
 						{foreach name=filterAuthor from=$sFilterAuthor item=author}
 							{if !$author.removeProperty}
@@ -72,7 +72,7 @@
 			{/block}
 
 			{block name="frontend_blog_filter_tags_content"}
-				<div class="blog--filter-content panel--body is--wide collapse--content">
+				<div class="blog--filter-content panel--body is--wide collapse--content filter--trigger">
 					<ul class="filter--list list--unstyled">
 						{foreach name=filterTags from=$sFilterTags item=tag}
 							{if !$tag.removeProperty}
