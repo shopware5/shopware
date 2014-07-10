@@ -113,7 +113,7 @@ class DownloadGateway implements Gateway\DownloadGatewayInterface
 
         $downloads = array();
         foreach ($data as $row) {
-            $key = $row['articleID'];
+            $key = $row['__download_articleID'];
 
             $download = $this->downloadHydrator->hydrate($row);
             $downloads[$key][] = $download;
