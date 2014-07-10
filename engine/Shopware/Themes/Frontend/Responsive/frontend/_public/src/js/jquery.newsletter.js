@@ -5,7 +5,7 @@
 	init: function () {
 	    var me = this;
 
-	    me.$checkMail = me.$el.find('#newsletter--checkmail');
+	    me.$checkMail = me.$el.find('.newsletter--checkmail');
 	    me.$addionalForm = me.$el.find('.newsletter--additional-form');
 
 	    me._on(me.$checkMail, 'change', $.proxy(me.refreshAction, me));

@@ -50,7 +50,7 @@
 							{* Subscription option *}
 							{block name="frontend_newsletter_form_input_subscription"}
 								<div class="newsletter--subscription">
-									<select name="subscribeToNewsletter" required="required" class="field--select">
+									<select name="subscribeToNewsletter" required="required" class="field--select newsletter--checkmail">
 										<option value="1">{s name="sNewsletterOptionSubscribe"}{/s}</option>
 										<option value="-1" {if $_POST.subscribeToNewsletter eq -1 || (!$_POST.subscribeToNewsletter && $sUnsubscribe == true)}selected="selected"{/if}>{s name="sNewsletterOptionUnsubscribe"}{/s}</option>
 									</select>
