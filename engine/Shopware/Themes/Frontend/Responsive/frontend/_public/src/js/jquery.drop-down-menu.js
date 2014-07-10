@@ -15,7 +15,9 @@
         },
 
         onClickMenu: function (event) {
-            var me = this;
+            var me = this,
+                touchEvent = me.getEventName('touchstart'),
+                clickEvent = me.getEventName('click');
 
             if ($(event.target).hasClass('service--link')) {
                 return;
@@ -33,7 +35,7 @@
 
             if (me.opts.closeOnBody) {
                 event.stopPropagation();
-                $('body').one(me.getEventName('click'), $.proxy(me.onClickBody, me));
+                $('body').one(clickEvent + ' ' + touchEvent, $.proxy(me.onClickBody, me));
             }
         },
 
