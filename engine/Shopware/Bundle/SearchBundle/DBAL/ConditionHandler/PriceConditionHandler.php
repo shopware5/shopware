@@ -84,9 +84,15 @@ class PriceConditionHandler implements ConditionHandlerInterface
             $context->getFallbackCustomerGroup()
         );
 
-        $query->andHaving($selection . ' BETWEEN :priceMin AND :priceMax');
+        if ($condition->getMaxPrice() > 0) {
+            $query->andHaving($selection . ' BETWEEN :priceMin AND :priceMax');
+            $query->setParameter(':priceMin', $condition->getMinPrice());
+            $query->setParameter(':priceMax', $condition->getMaxPrice());
+        }
 
-        $query->setParameter(':priceMin', $condition->getMinPrice())
-            ->setParameter(':priceMax', $condition->getMaxPrice());
+        if ($condition->getMinPrice() > 0) {
+            $query->andHaving($selection . ' >= :priceMin');
+            $query->setParameter(':priceMin', $condition->getMinPrice());
+        }
     }
 }

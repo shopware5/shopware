@@ -3981,7 +3981,7 @@ class sArticles
             );
         }
 
-        if ($config['priceMax']) {
+        if ($config['priceMax'] || $config['priceMin']) {
             $criteria->addPriceCondition(
                 (float) $config['priceMin'],
                 (float) $config['priceMax']
