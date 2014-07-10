@@ -46,13 +46,17 @@
                     <form method="post" action="{url controller='account' action='partnerStatistic'}">
                         <div class="date-filter">
                             <label for="datePickerFrom">{s name='PartnerStatisticLabelFromDate'}{/s}</label>
-                            <input id="datePickerFrom" class="datePicker text" name="fromDate" type="text" value="{$partnerStatisticFromDate}"/>
+                            <div>
+                                <input id="datePickerFrom" class="datePicker text" name="fromDate" type="text" value="{$partnerStatisticFromDate}"/>
+                            </div>
                         </div>
                         <div class="date-filter">
                             <label for="datePickerTo">{s name='PartnerStatisticLabelToDate'}{/s}</label>
-                            <input id="datePickerTo" class="datePicker text" name="toDate" type="text" value="{$partnerStatisticToDate}"/>
+                            <div>
+                                <input id="datePickerTo" class="datePicker text" name="toDate" type="text" value="{$partnerStatisticToDate}"/>
+                            </div>
                         </div>
-                        <input type="submit" class="btn btn--secondary is--small"  value="{s name="PartnerStatisticSubmitFilter"}{/s}" />
+                        <input type="submit" class="btn btn--primary is--small"  value="{s name="PartnerStatisticSubmitFilter"}{/s}" />
                     </form>
                 {/block}
             </div>

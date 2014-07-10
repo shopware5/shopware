@@ -157,17 +157,20 @@
         .unitize(14, 16, font-size);
 
         label {
-            width: 50%;
+            width: 40px;
             display: block;
             float: left;
             .unitize-padding(9, 0, 10, 0);
         }
 
+        div {
+            width: auto;
+            margin-left: 40px;
+        }
+
         #datePickerFrom,
         #datePickerTo {
-            width: 50%;
-            display: block;
-            float: left;
+            width: 100%;
         }
     }
 
@@ -182,18 +185,35 @@
     }
 
     #holder {
-        width: 100%;
-        .is--align-center;
         display: none;
     }
 
-    .orders--table-header {
-        display: none;
-    }
-
+    .panel--th,
     .panel--td {
-        display:block;
-        float: none;
+        width:25%;
+        text-align: right;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &:first-child {
+            text-align: left;
+        }
+    }
+
+    .is--odd {
+        .column--price,
+        .column--total {
+            width:100%;
+        }
+    }
+
+    .column--label {
+        text-align: left;
+    }
+
+    .column--value {
+        text-align: right;
     }
 
     .column--label,
@@ -205,7 +225,6 @@
     .column--item-sum {
         .column--label {
             .is--block;
-            .is--align-left;
         }
     }
 }
@@ -655,35 +674,22 @@
             height:40px;
         }
 
-        .orders--table-header {
-            display: block;
-        }
-
-        .panel--th,
-        .panel--td {
-            display: inline-block;
-            float: left;
-            width: 25%;
-        }
-
-        .column--price,
-        .column--total {
-            .is--align-right;
-        }
-
-        .column--label,
-        .column--value {
-            width: 100%;
-            float: none;
-        }
-
         .column--item-sum {
-            width: 75%;
+            width: 75% !important;
 
             .column--label,
             .column--value {
                 float: left;
                 width: 50%;
+            }
+        }
+
+        .is--odd .column--total {
+            width: 25%;
+            float: left !important;
+
+            .column--value {
+                width:100%;
             }
         }
     }
@@ -692,6 +698,8 @@
 @media screen and(min-width: @tabletLandscapeViewportWidth) {
     .is--act-partnerStatistic {
         #holder {
+            width: 100%;
+            .is--align-center;
             .is--block;
         }
     }
