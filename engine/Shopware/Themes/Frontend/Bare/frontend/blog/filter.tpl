@@ -5,11 +5,11 @@
 		<div class="blog--filter blog--filter-date panel has--border is--rounded filter--group block">
 
 			{block name="frontend_blog_filter_date_headline"}
-				<h1 class="blog--filter-headline panel--title is--underline collapse--header" data-collapse-panel="true">{s name="BlogHeaderFilterDate"}{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
+				<h1 class="blog--filter-headline panel--title is--underline collapse--header blog-filter--trigger">{s name="BlogHeaderFilterDate"}{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
 			{/block}
 
 			{block name="frontend_blog_filter_date_content"}
-				<div class="blog--filter-content panel--body is--wide collapse--content filter--trigger">
+				<div class="blog--filter-content panel--body is--wide collapse--content">
 					<ul class="filter--list list--unstyled">
 						{foreach name=filter from=$sFilterDate item=date}
 							{if !$date.removeProperty}
@@ -37,11 +37,11 @@
 		<div class="blog--filter blog--filter-author panel has--border is--rounded filter--group block">
 
 			{block name="frontend_blog_filter_author_headline"}
-				<h1 class="blog--filter-headline panel--title is--underline collapse--header" data-collapse-panel="true">{s name="BlogHeaderFilterAuthor"}{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
+				<h1 class="blog--filter-headline panel--title is--underline collapse--header blog-filter--trigger">{s name="BlogHeaderFilterAuthor"}{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
 			{/block}
 
 			{block name="frontend_blog_filter_author_content"}
-				<div class="blog--filter-content panel--body is--wide collapse--content filter--trigger {if $filterAuthorActive}is--active{/if}">
+				<div class="blog--filter-content panel--body is--wide collapse--content {if $filterAuthorActive}is--active{/if}">
 					<ul class="filter--list list--unstyled">
 						{foreach name=filterAuthor from=$sFilterAuthor item=author}
 							{if !$author.removeProperty}
@@ -67,12 +67,13 @@
     {* Filter by tags *}
     {block name='frontend_blog_filter_tags'}
 		<div class="blog--filter blog--filter-tags panel has--border is--rounded filter--group block">
+
 			{block name="frontend_blog_filter_tags_headline"}
-				<h1 class="blog--filter-headline panel--title is--underline collapse--header" data-collapse-panel="true">{s name="BlogHeaderFilterTags"}{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
+				<h1 class="blog--filter-headline panel--title is--underline collapse--header blog-filter--trigger">{s name="BlogHeaderFilterTags"}{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
 			{/block}
 
 			{block name="frontend_blog_filter_tags_content"}
-				<div class="blog--filter-content panel--body is--wide collapse--content filter--trigger">
+				<div class="blog--filter-content panel--body is--wide collapse--content">
 					<ul class="filter--list list--unstyled">
 						{foreach name=filterTags from=$sFilterTags item=tag}
 							{if !$tag.removeProperty}

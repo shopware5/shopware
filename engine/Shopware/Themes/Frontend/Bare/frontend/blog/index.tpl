@@ -8,22 +8,26 @@
 {block name='frontend_index_content'}
 	<div class="blog--content block-group">
 
-		<div class="action--filter-btn">
-			<a href="#"
-			   class="filter--trigger btn btn--primary"
-			   data-collapseTarget=".action--filter-options"
-			   data-offcanvas="true"
-			   data-offCanvasSelector=".action--filter-options"
-			   data-closeButtonSelector=".filter--close-btn">
-				<i class="icon--filter"></i> {s name='ListingFilterButton'}Filter{/s}
-			</a>
-		</div>
+		{* Blog Filter Button *}
+		{block name='frontend_blog_listing_filter_button'}
+			<div class="blog--filter-btn">
+				<a href="#"
+				   class="filter--trigger btn btn--primary"
+				   data-collapseTarget=".blog--filter-options"
+				   data-offcanvas="true"
+				   data-offCanvasSelector=".blog--filter-options"
+				   data-closeButtonSelector=".blog--filter-close-btn">
+					<i class="icon--filter"></i> {s name='ListingFilterButton'}Filter{/s}
+				</a>
+			</div>
+		{/block}
 
-		{block name="frontend_blog_listing_sidebar"}
+		{* Blog Sidebar *}
+		{block name='frontend_blog_listing_sidebar'}
 			{include file='frontend/blog/listing_sidebar.tpl'}
 		{/block}
 
-		{* Banner *}
+		{* Blog Banner *}
 		{block name='frontend_blog_index_banner'}
 			{include file="frontend/listing/banner.tpl"}
 		{/block}

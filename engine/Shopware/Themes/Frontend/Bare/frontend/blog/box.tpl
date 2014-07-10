@@ -17,33 +17,45 @@
 					<div class="blog--box-metadata">
 
 						{* Author *}
-						{if $sArticle.author.name}
-							<span class="blog--metadata-author is--first">{s name="BlogInfoFrom"}{/s} {$sArticle.author.name}</span>
-						{/if}
+						{block name='frontend_blog_col_meta_data_name'}
+							{if $sArticle.author.name}
+								<span class="blog--metadata-author is--first">{s name="BlogInfoFrom"}{/s} {$sArticle.author.name}</span>
+							{/if}
+						{/block}
 
 						{* Date *}
-						{if $sArticle.displayDate}
-							<span class="blog--metadata-date{if !$sArticle.author.name} is--first{/if}">{$sArticle.displayDate|date:"DATETIME_SHORT"}</span>
-						{/if}
+						{block name='frontend_blog_col_meta_data_date'}
+							{if $sArticle.displayDate}
+								<span class="blog--metadata-date{if !$sArticle.author.name} is--first{/if}">{$sArticle.displayDate|date:"DATETIME_SHORT"}</span>
+							{/if}
+						{/block}
 
 						{* Description *}
-						{if $sArticle.categoryInfo.description}
-							<span class="blog--metadata-description">
-								{if $sArticle.categoryInfo.linkCategory}
-									<a href="{$sArticle.categoryInfo.linkCategory}" title="{$sArticle.categoryInfo.description}">{$sArticle.categoryInfo.description}</a>
-								{else}
-									{$sArticle.categoryInfo.description}
-								{/if}
-							</span>
-						{/if}
-							<span class="blog--metadata-description{if $sArticle.sVoteAverage|round ==0} is--last{/if}">
+						{block name='frontend_blog_col_meta_data_description'}
+							{if $sArticle.categoryInfo.description}
+								<span class="blog--metadata-description">
+									{if $sArticle.categoryInfo.linkCategory}
+										<a href="{$sArticle.categoryInfo.linkCategory}" title="{$sArticle.categoryInfo.description}">{$sArticle.categoryInfo.description}</a>
+									{else}
+										{$sArticle.categoryInfo.description}
+									{/if}
+								</span>
+							{/if}
+						{/block}
+
+						{* Comments *}
+						{block name='frontend_blog_col_meta_data_comments'}
+							<span class="blog--metadata-comments{if $sArticle.sVoteAverage|round ==0} is--last{/if}">
 								<a href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}#commentcontainer" title="{$sArticle.articleName}">{if $sArticle.numberOfComments}{$sArticle.numberOfComments}{else}0{/if} {s name="BlogInfoComments"}{/s}</a>
 							</span>
+						{/block}
 
 						{* Rating *}
-						{if $sArticle.sVoteAverage|round !=0}
-							<span class="blog--metadata-rating is--last star star{$sArticle.sVoteAverage|round}">{s name="BlogInfoRating"}{/s}</span>
-						{/if}
+						{block name='frontend_blog_col_meta_data_rating'}
+							{if $sArticle.sVoteAverage|round !=0}
+								<span class="blog--metadata-rating is--last star star{$sArticle.sVoteAverage|round}">{s name="BlogInfoRating"}{/s}</span>
+							{/if}
+						{/block}
 					</div>
 				{/block}
 
@@ -54,7 +66,7 @@
 		{block name='frontend_blog_col_box_content'}
 			<div class="blog--box-content panel--body is--wide block">
 
-				{* Blog Article pictures *}
+				{* Article pictures *}
 				{block name='frontend_blog_col_article_picture'}
 					{if $sArticle.preview.thumbNails.2}
 						<div class="blog--box-picture">
@@ -66,7 +78,12 @@
 				{* Article Description *}
 				{block name='frontend_blog_col_description'}
 					<div class="blog--box-description">
-						<p>{if $sArticle.shortDescription}{$sArticle.shortDescription|nl2br}{else}{$sArticle.shortDescription}{/if}</p>
+
+						{block name='frontend_blog_col_description_short'}
+							<div class="blog--box-description-short">
+								{if $sArticle.shortDescription}{$sArticle.shortDescription|nl2br}{else}{$sArticle.shortDescription}{/if}
+							</div>
+						{/block}
 
 						{* Read more button *}
 						{block name='frontend_blog_col_read_more'}
@@ -75,7 +92,7 @@
 							</div>
 						{/block}
 
-						{* Read more button *}
+						{* Tags *}
 						{block name='frontend_blog_col_tags'}
 							<div class="blog--box-tags">
 								{if $sArticle.tags|@count > 1}

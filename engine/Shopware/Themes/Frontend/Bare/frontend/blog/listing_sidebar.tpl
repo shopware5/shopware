@@ -1,15 +1,17 @@
 {* Blog listing sidebar right *}
 {block name='frontend_index_content_right'}
-	<div class="blog-action--filter-options off-canvas{if $activeFilters} is--collapsed{/if}">
+	<div class="blog--filter-options" off-canvas{if $activeFilters} is--collapsed{/if}">
 
+		{* Filter container *}
 		{block name='frontend_listing_actions_filter_container'}
 
-			<a href="#" class="filter--close-btn">
-				{s name="ListingActionsCloseFilter"}Filter schließen{/s} <i class="icon--arrow-right"></i>
-			</a>
+			{block name='frontend_listing_actions_filter_closebtn'}
+				<a href="#" class="blog--filter-close-btn">{s name="ListingActionsCloseFilter"}Filter schließen{/s} <i class="icon--arrow-right"></i></a>
+			{/block}
 
 			<div class="filter--container">
 
+				{* Filter headline *}
 				{block name="frontend_listing_actions_filter_container_inner"}
 					<h2 class="filter--headline">{s name='FilterHeadline'}Filtern nach:{/s}</h2>
 				{/block}
@@ -29,10 +31,12 @@
 							{block name='frontend_blog_index_subscribe'}
 								<div class="blog--subscribe panel has--border is--rounded filter--group block">
 
+									{* Subscribe headline *}
 									{block name="frontend_blog_index_subscribe_headline"}
-										<h1 class="blog--subscribe-headline panel--title is--underline collapse--header filter--trigger" data-collapse-panel="true">{s name="BlogSubscribe"}Subscribe{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
+										<h1 class="blog--subscribe-headline panel--title is--underline collapse--header blog-filter--trigger">{s name="BlogSubscribe"}Subscribe{/s}<span class="filter--expand-collapse collapse--toggler"></span></h1>
 									{/block}
 
+									{* Subscribe Content *}
 									{block name="frontend_blog_index_subscribe_content"}
 										<div class="blog--subscribe-content panel--body is--wide collapse--content">
 											<ul class="filter--list list--unstyled">
