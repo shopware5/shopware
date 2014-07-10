@@ -20,19 +20,19 @@
 {elseif $sBasketItem.modus == $IS_VOUCHER}
 
     {* Voucher *}
-    {block name='frontend_checkout_cart_item_product'}
+    {block name='frontend_checkout_cart_item_voucher'}
         {include file="frontend/checkout/items/voucher.tpl"}
     {/block}
 {elseif $sBasketItem.modus == $IS_REBATE}
 
     {* Basket rebate *}
-    {block name='frontend_checkout_cart_item_product'}
+    {block name='frontend_checkout_cart_item_rebate'}
         {include file="frontend/checkout/items/rebate.tpl"}
     {/block}
 {elseif $sBasketItem.modus == $IS_SURCHARGE_DISCOUNT}
 
     {* Surcharge / discount *}
-    {block name='frontend_checkout_cart_item_product'}
+    {block name='frontend_checkout_cart_item_surcharge_discount'}
         {include file="frontend/checkout/items/rebate.tpl"}
     {/block}
 {else}
