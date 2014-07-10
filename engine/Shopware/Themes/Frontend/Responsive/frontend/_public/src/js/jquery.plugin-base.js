@@ -261,20 +261,18 @@
          * @returns {mixed} configuration
          */
         applyDataAttributes: function () {
-            var me = this,
-                opts = me.opts,
-                attr;
+            var me = this, attr;
 
-            $.each(opts, function (key) {
-                attr = me.$el.data(key);
-                if (attr !== undefined) {
-                    opts[key] = attr;
+            $.each(me.opts, function(key, value) {
+                attr = me.$el.attr('data-' + key);
+                if ( attr !== undefined ) {
+                    me.opts[key] = attr;
                 }
             });
 
-            $.publish('/plugin/' + me._name + '/data-attributes', [ me.$el, opts ]);
+            $.publish('/plugin/' + me._name + '/data-attributes', [ me.$el, me.opts ]);
 
-            return opts;
+            return me.opts;
         }
     };
 
