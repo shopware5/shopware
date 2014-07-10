@@ -32,6 +32,9 @@ In this document you will find a changelog of the important changes related to t
 * Added a new Theme Manager 2.0 with the possibility to create custom themes from the backend
     * Themes now support specific snippets that are used exclusively in the theme to which they belong
 * The snippet module in the backend now supports editing multiple translations for a single snippet at once
+* Forms: elements of type `text2` now support `;` as a separator between labels for the first and second field:
+    * Responsive template: labels are used separately as `placeholder` attribute for each `input` element
+    * legacy templates: `;` is replaced with a `/` and used in a single `label` element (old behaviour)
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
