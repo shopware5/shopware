@@ -570,6 +570,23 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     }
 
     /**
+     * Copies translations from a configurator template into a variant
+     * @param $template The configurator template
+     * @param $detail \Shopware\Models\Article\Detail Variant
+     */
+    protected function copyConfigurationTemplateTranslations($template, $detail)
+    {
+        $templateTranslations = $this->getTranslationComponent()->readBatch(null, 'configuratorTemplate', $template['id']);
+
+        foreach ($templateTranslations as &$templateTranslation) {
+            $templateTranslation['objectkey'] = $detail->getId();
+            $templateTranslation['objecttype'] = 'variant';
+        }
+
+        $this->getTranslationComponent()->writeBatch($templateTranslations);
+    }
+
+    /**
      * Event listener function of the article backend module. Fired when the user clicks the "duplicate article" button
      * on the detail page to duplicate the whole article configuration for a new article.
      */
@@ -2293,7 +2310,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function prepareGeneratorData($groups, $offset, $limit)
     {
-
         //we have to iterate all passed groups to check the activated options.
         $activeGroups = array();
         //we need a second array with all group ids to iterate them easily in the sql generation
@@ -2476,10 +2492,12 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
                 $detail->fromArray($data);
                 $detail->setArticle($article);
+                Shopware()->Models()->flush();
+
+                $this->copyConfigurationTemplateTranslations($detailData, $detail);
                 $offset++;
             }
 
-            Shopware()->Models()->flush();
             Shopware()->Models()->clear();
 
             $article = $this->getRepository()->find($articleId);
