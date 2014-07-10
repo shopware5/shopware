@@ -49,7 +49,7 @@ class VoteHydrator extends Hydrator
             $total += $row['total'];
         }
 
-        $struct->setAverage($points / $total);
+        $struct->setAverage($points / $total * 2);
         $struct->setCount($total);
         $struct->setPointCount($data);
 
