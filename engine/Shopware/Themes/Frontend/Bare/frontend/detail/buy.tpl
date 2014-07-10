@@ -77,7 +77,11 @@
 								{$maxQuantity=$sArticle.instock+1}
 							{/if}
 
-							<input type="number" name="sQuantity" min="{$sArticle.minpurchase}" max="{$maxQuantity - 1}" data-step="{$sArticle.purchasesteps}" value="{$sArticle.minpurchase}" required="required" aria-required="true">
+							<select id="sQuantity" name="sQuantity" class="quantity--select">
+								{section name="i" start=$sArticle.minpurchase loop=$maxQuantity step=$sArticle.purchasesteps}
+									<option value="{$smarty.section.i.index}">{$smarty.section.i.index}{if $sArticle.packunit} {$sArticle.packunit}{/if}</option>
+								{/section}
+							</select>
 						</div>
 					{/block}
 
