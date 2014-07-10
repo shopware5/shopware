@@ -151,8 +151,30 @@
     }
 
     .date-filter {
-        display: inline;
-        .unitize-margin(0, 20, 0, 20);
+        display: block;
+        width: 100%;
+        height: 50px;
+        .unitize(14, 16, font-size);
+
+        label {
+            width: 50%;
+            display: block;
+            float: left;
+            .unitize-padding(9, 0, 10, 0);
+        }
+
+        #datePickerFrom,
+        #datePickerTo {
+            width: 50%;
+            display: block;
+            float: left;
+        }
+    }
+
+    .btn {
+        width: 100%;
+        text-align: center;
+        margin: 0;
     }
 
     #data {
@@ -602,6 +624,37 @@
 	}
 
     .is--act-partnerStatistic {
+        .listing--actions {
+            .border-radius(3px);
+            -webkit-background-clip: padding-box;
+            -moz-background-clip: padding;
+            background-clip: padding-box;
+            border: 1px solid #d8dde5;
+            background: #eceef1;
+        }
+
+        .date-filter {
+            width: 40%;
+            float: left;
+            height: auto;
+            .unitize-padding(0, 10, 0, 10);
+
+            label {
+                width:20%;
+            }
+
+            #datePickerFrom,
+            #datePickerTo {
+                width: 80%;
+            }
+        }
+
+        .btn {
+            width: 20%;
+            float: left;
+            height:40px;
+        }
+
         .orders--table-header {
             display: block;
         }
@@ -612,7 +665,7 @@
             float: left;
             width: 25%;
         }
-        
+
         .column--price,
         .column--total {
             .is--align-right;
