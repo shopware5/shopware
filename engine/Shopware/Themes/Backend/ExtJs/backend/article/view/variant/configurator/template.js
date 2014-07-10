@@ -297,7 +297,14 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
             bodyPadding: 10,
             defaults: {
                 labelWidth: 155
-            }
+            },
+            plugins: [{
+                ptype: 'translation',
+                pluginId: 'translation',
+                translationType: 'configuratorTemplate',
+                translationMerge: false,
+                translationKey: null
+            }]
         });
 
         return [me.formPanel];
