@@ -536,7 +536,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->View()->sAmountTax = $this->View()->sBasket['sAmountTax'];
         $this->View()->sAmountNet = $this->View()->sBasket['AmountNetNumeric'];
         $this->View()->sRegisterFinished = !empty($this->session['sRegisterFinished']);
-
         $this->View()->sTargetAction = 'shippingPayment';
 
         if ($this->Request()->isXmlHttpRequest()) {
@@ -549,80 +548,80 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function saveShippingPaymentAction()
     {
-        if ($this->Request()->isPost()) {
-            $isAjaxRequest = $this->Request()->isXmlHttpRequest();
-            $sErrorFlag = array();
-            $sErrorMessages = array();
+        if (!$this->Request()->isPost()) {
+            return $this->forward('shippingPayment');
+        }
 
-            // Load data from request
-            $dispatch = $this->Request()->getPost('sDispatch');
-            $payment = $this->Request()->getPost('payment');
+        // Load data from request
+        $dispatch = $this->Request()->getPost('sDispatch');
+        $payment = $this->Request()->getPost('payment');
 
-            // If request is ajax, we skip the validation, because the user is still editing
-            if (!$isAjaxRequest) {
-                if (is_null($dispatch)) {
-                    $sErrorFlag['sDispatch'] = true;
-                    $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/checkout/error_messages')
-                        ->get('ShippingPaymentSelectShipping', 'Please select a shipping method');
-                }
-                if (is_null($payment)) {
-                    $sErrorFlag['payment'] = true;
-                    $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/checkout/error_messages')
-                        ->get('ShippingPaymentSelectPayment', 'Please select a payment method');
-                }
-
-                // If any basic info is missing, return error messages
-                if (!empty($sErrorFlag) || !empty($sErrorMessages)) {
-                    $this->View()->assign('sErrorFlag', $sErrorFlag);
-                    $this->View()->assign('sErrorMessages', $sErrorMessages);
-                    return $this->forward('shippingPayment');
-                }
-
-                // Validate the payment details
-                Shopware()->Modules()->Admin()->sSYSTEM->_POST['sPayment'] = $payment;
-                $checkData = $this->admin->sValidateStep3();
-
-                // Problem with the payment details, return error
-                if (!empty($checkData['checkPayment']['sErrorMessages']) || empty($checkData['sProcessed'])) {
-                    $this->View()->assign('sErrorFlag', $checkData['checkPayment']['sErrorFlag']);
-                    $this->View()->assign('sErrorMessages', $checkData['checkPayment']['sErrorMessages']);
-                    return $this->forward('shippingPayment');
-                }
-
-                // Save payment method details db
-                if ($checkData['sPaymentObject'] instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
-                    $checkData['sPaymentObject']->savePaymentData(Shopware()->Session()->sUserId, $this->Request());
-                }
-
-                // Save the payment info
-                $previousPayment = Shopware()->Modules()->Admin()->sGetUserData();
-                $previousPayment = $previousPayment['additional']['user']['paymentID'];
-
-                $previousPayment = $this->admin->sGetPaymentMeanById($previousPayment);
-                if ($previousPayment['paymentTable']) {
-                    Shopware()->Db()->delete(
-                        $previousPayment['paymentTable'],
-                        array('userID = ?' => Shopware()->Session()->sUserId)
-                    );
-                }
-            }
-
+        // If request is ajax, we skip the validation, because the user is still editing
+        if ($this->Request()->isXmlHttpRequest()) {
             // Save payment and shipping method data.
             $this->admin->sUpdatePayment($payment);
             $this->setDispatch($dispatch, $payment);
 
-        } else {
             return $this->forward('shippingPayment');
         }
 
-        if ($isAjaxRequest) {
-            return $this->forward('shippingPayment');
-        } else {
-            $this->redirect(array(
-                'controller' => $this->Request()->getParam('sTarget', 'checkout'),
-                'action' => $this->Request()->getParam('sTargetAction', 'confirm')
-            ));
+        $sErrorFlag = array();
+        $sErrorMessages = array();
+
+        if (is_null($dispatch)) {
+            $sErrorFlag['sDispatch'] = true;
+            $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/checkout/error_messages')
+                ->get('ShippingPaymentSelectShipping', 'Please select a shipping method');
         }
+        if (is_null($payment)) {
+            $sErrorFlag['payment'] = true;
+            $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/checkout/error_messages')
+                ->get('ShippingPaymentSelectPayment', 'Please select a payment method');
+        }
+
+        // If any basic info is missing, return error messages
+        if (!empty($sErrorFlag) || !empty($sErrorMessages)) {
+            $this->View()->assign('sErrorFlag', $sErrorFlag);
+            $this->View()->assign('sErrorMessages', $sErrorMessages);
+            return $this->forward('shippingPayment');
+        }
+
+        // Validate the payment details
+        Shopware()->Modules()->Admin()->sSYSTEM->_POST['sPayment'] = $payment;
+        $checkData = $this->admin->sValidateStep3();
+
+        // Problem with the payment details, return error
+        if (!empty($checkData['checkPayment']['sErrorMessages']) || empty($checkData['sProcessed'])) {
+            $this->View()->assign('sErrorFlag', $checkData['checkPayment']['sErrorFlag']);
+            $this->View()->assign('sErrorMessages', $checkData['checkPayment']['sErrorMessages']);
+            return $this->forward('shippingPayment');
+        }
+
+        // Save payment method details db
+        if ($checkData['sPaymentObject'] instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
+            $checkData['sPaymentObject']->savePaymentData(Shopware()->Session()->sUserId, $this->Request());
+        }
+
+        // Save the payment info
+        $previousPayment = Shopware()->Modules()->Admin()->sGetUserData();
+        $previousPayment = $previousPayment['additional']['user']['paymentID'];
+
+        $previousPayment = $this->admin->sGetPaymentMeanById($previousPayment);
+        if ($previousPayment['paymentTable']) {
+            Shopware()->Db()->delete(
+                $previousPayment['paymentTable'],
+                array('userID = ?' => Shopware()->Session()->sUserId)
+            );
+        }
+
+        // Save payment and shipping method data.
+        $this->admin->sUpdatePayment($payment);
+        $this->setDispatch($dispatch, $payment);
+
+        $this->redirect(array(
+            'controller' => $this->Request()->getParam('sTarget', 'checkout'),
+            'action' => $this->Request()->getParam('sTargetAction', 'confirm')
+        ));
     }
 
     /**
