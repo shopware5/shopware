@@ -3,17 +3,6 @@
 
     /**
      * Shopware Collapse Panel Plugin.
-     *
-     * @example
-     *
-     * HTML:
-     *
-     * <div data-src="CAPTCHA_REFRESH_URL" data-captcha="true"></div>
-     *
-     * JS:
-     *
-     * $('*[data-captcha="true"]').captcha();
-     *
      */
     $.plugin('collapsePanel', {
 
@@ -31,7 +20,7 @@
              *
              * @type {String|HTMLElement}
              */
-            collapseTarget: null,
+            collapseTarget: false,
 
             /**
              * Additional class which will be added to the collapse target.
@@ -64,18 +53,17 @@
          * @method init
          */
         init: function () {
-            var me = this,
-                options = me.opts;
+            var me = this;
 
-            me.getDataAttributes();
+            me.applyDataAttributes();
 
-            if (options.collapseTarget.length !== 0) {
-                me.$targetEl = $(options.collapseTarget);
+            if (me.opts.collapseTarget.length) {
+                me.$targetEl = $(me.opts.collapseTarget);
             } else {
                 me.$targetEl = me.$el.next('.collapse--content');
             }
 
-            me.$targetEl.addClass(options.collapseTargetCls);
+            me.$targetEl.addClass(me.opts.collapseTargetCls);
 
             me.registerEvents();
         },
@@ -102,10 +90,9 @@
          * @method toggleCollapse
          */
         toggleCollapse: function () {
-            var me = this,
-                $targetEl = me.$targetEl;
+            var me = this;
 
-            if ($targetEl.hasClass('is--active')) {
+            if (me.$targetEl.hasClass('is--collapsed')) {
                 me.closePanel();
                 return;
             }
@@ -125,15 +112,13 @@
                 $targetEl = me.$targetEl,
                 siblings = $('.' + options.collapseTargetCls).not($targetEl);
 
-            me.$el.toggleClass('is--active', true);
+            me.$el.addClass('is--active');
 
-            $targetEl.slideDown(options.duration, function () {
-                $targetEl.toggleClass('is--active', true);
-            });
+            $targetEl.slideDown(options.duration).addClass('is--collapsed');
 
             if (options.closeSiblings) {
                 siblings.slideUp(options.duration, function () {
-                    siblings.removeClass('is--active');
+                    siblings.removeClass('is--collapsed');
                 });
             }
         },
@@ -145,14 +130,10 @@
          * @method openPanel
          */
         closePanel: function () {
-            var me = this,
-                $targetEl = me.$targetEl;
+            var me = this;
 
-            me.$el.toggleClass('is--active', false);
-
-            $targetEl.slideUp(me.opts.duration, function () {
-                $targetEl.toggleClass('is--active', false);
-            });
+            me.$el.removeClass('is--active');
+            me.$targetEl.slideUp(me.opts.duration).removeClass('is--collapsed');
         },
 
         /**
@@ -167,7 +148,7 @@
             var me = this;
 
             me.$el.removeClass('is--active');
-            me.$targetEl.removeClass('is--active')
+            me.$targetEl.removeClass('is--collapsed')
                 .removeClass(me.opts.collapseTargetCls)
                 .removeAttr('style');
 
