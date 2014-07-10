@@ -8,7 +8,7 @@ $.plugin('shippingPayment', {
     registerEvents: function () {
         var me = this;
 
-        me.$el.find('input.auto_submit[type=radio]').on('change', me.onInputChanged.bind(me));
+        me.$el.delegate('input.auto_submit[type=radio]', 'change', me.onInputChanged.bind(me));
     },
 
     onInputChanged: function () {
@@ -25,7 +25,6 @@ $.plugin('shippingPayment', {
             success: function(res) {
                 $('#confirm').empty().html(res);
                 $.loadingIndicator.close();
-                me.registerEvents();
             }
         })
     }

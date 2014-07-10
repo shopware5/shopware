@@ -3,7 +3,7 @@
     {include file="frontend/register/error_message.tpl" error_messages=$sErrorMessages}
 {/block}
 
-<div class="outer-confirm-container" data-ajax-shipping-payment="true">
+<div class="outer-confirm-container">
     <form id="shippingPaymentForm" name="shippingPaymentForm" method="post" action="{url controller='checkout' action='saveShippingPayment' sTarget='checkout' sTargetAction='index'}" class="payment">
         <div class="shipping-payment-information grid_16 first">
             {* Payment method *}
