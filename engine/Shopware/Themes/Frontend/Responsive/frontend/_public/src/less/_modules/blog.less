@@ -101,6 +101,7 @@
             .filter--entry-link {
                 color: @primaryTextColor;
             }
+
             .filter--entry-link:hover {
                 color: @primaryColor;
             }
@@ -115,6 +116,7 @@
             display: block;
         }
     }
+
     .blog--filter-tags {
         .clearfix();
     }
@@ -157,9 +159,11 @@
         height: auto;
         width: 100%;
     }
+
     .blog--picture-preview {
         width: 100%;
     }
+
     .blog--box-description {
         .unitize(16, 16, margin-top);
 
@@ -171,6 +175,150 @@
     .blog--box-tags {
         .unitize(8, 16, margin-top);
         .unitize(12, 16, font-size);
+    }
+}
+
+// Blog Detail
+.blog--detail {
+    .unitize(10, 16, margin-top);
+
+    .listing {
+        margin: 0
+    }
+
+    // Article
+    .blog--box {
+        margin-bottom: 0;
+    }
+
+    .blog--detail-box-headline {
+        .unitize(18, 16, font-size);
+    }
+
+    .js--fancy-select {
+        width: 100%;
+    }
+
+    .blog--rating-link {
+        .unitize(14, 16, font-size);
+        vertical-align: middle;
+        color: @primaryTextColor;
+
+        i[class^=icon] {
+            color: @reviewStarColor;
+        }
+    }
+
+    // Bookmarks
+    .blog--bookmarks-icons {
+        .unitize(10, 16, margin-top);
+        float: right;
+    }
+
+    .blog--bookmark {
+        .unitize(40, 16, font-size);
+    }
+
+    // Thumbnails & Image
+    .blog--detail-thumbnails {
+        .unitize(10, 16, margin-bottom);
+
+        .blog--thumbnail-image {
+            margin: 0 auto;
+        }
+
+        .block {
+            .unitize(80, 16, height);
+            width: 23%;
+        }
+    }
+
+    .blog--image {
+        .unitize-padding(10, 10, 10, 10, 16);
+        width: 100%;
+    }
+
+    .blog--thumbnail {
+        .unitize-padding(5, 5, 5, 5, 16);
+        margin: 2% 1%;
+        display: block;
+        float: left;
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+
+    // Cross Selling
+    .blog--crossselling-headline {
+        color: @darkTextColor;
+        margin-top: 0;
+    }
+
+    .blog--crossseling-listing {
+        .product--box {
+            padding-left: 0;
+        }
+    }
+
+    // Comments
+    .blog--comments-headline {
+        .unitize(21, 16, font-size);
+        .unitize-margin(0, 0, 20, 0, 16);
+    }
+
+    .blog--comments-entry {
+        .unitize(20, 16, margin-bottom);
+
+        &:last-child {
+            margin: 0;
+        }
+    }
+
+    .blog--comments-entry-left {
+        .unitize-padding(20, 40, 16);
+        border-bottom: 1px solid @borderColor;
+
+        // Arrow down
+        &::after {
+            .unitize-margin(0, 0, 0, -9);
+            .unitize-width(18);
+            .unitize-height(18);
+            .unitize(-9, 16, bottom);
+            .rotate(45deg);
+            content: '';
+            position: absolute;
+            left: 50%;
+            background: #fff;
+            border: 1px solid @borderColor;
+            border-left: 0 none;
+            border-top: 0 none;
+        }
+    }
+
+    .blog--comments-rating {
+        .unitize(18, 16, font-size);
+        color: @reviewStarColor;
+    }
+
+    .blog--comments-entry-right {
+        .unitize-padding(20, 40, 16);
+    }
+
+    .blog--comments-entry-headline {
+        .unitize(16, 16, font-size);
+        color: @darkTextColor;
+        margin-top: 0;
+    }
+
+    // Comments form
+    .blog--comments-form-errors {
+        .unitize-margin(20, 20, 0, 20);
+    }
+
+    .blog--comments-voting {
+        .unitize(10, 16, margin-bottom);
+        line-height: 1;
     }
 }
 
@@ -189,6 +337,7 @@
         .action--filter-btn {
             .unitize-margin(20, 0, 10, 0, 16);
         }
+
         .filter--trigger {
             .unitize(24, 16, line-height);
         }
@@ -210,7 +359,7 @@
         background: @primaryBackgroundColor;
         clear: both;
 
-        .blog--filter-close-btn {
+        .blog--filter-close-btn, .filter--headline {
             display: none;
         }
 
@@ -262,17 +411,60 @@
         .blog--box-metadata {
             .unitize(14, 16, font-size);
         }
+
         .blog--box-picture {
             width: 20%;
             float: left;
         }
+
         .blog--box-description {
+            padding-top: 0;
             margin-top: 0;
             width: 76%;
             float: right;
         }
+
         .blog--box-tags {
             .unitize(14, 16, font-size);
+        }
+    }
+
+    // Blog Detail
+    .blog--detail {
+        .unitize-margin(20, 0, 0, 0, 16);
+
+        .blog--detail-headline {
+            .unitize(18, 16, font-size);
+            .unitize(5, 16, margin-bottom)
+        }
+
+        // Thumbnails & Image
+        .blog--detail-thumbnails {
+            .unitize(10, 16, margin-bottom);
+
+            .blog--thumbnail-image {
+                margin: 0 auto;
+            }
+
+            .block {
+                .unitize(60, 16, height);
+                width: 18%;
+            }
+        }
+    }
+}
+
+@media screen and(min-width: @tabletLandscapeViewportWidth) {
+
+    .blog--detail {
+        .blog--detail-description {
+            width: 100%;
+        }
+
+        .blog--detail-image-container {
+            width: 40%;
+            margin: 0 0 3% 3%;
+            float: right;
         }
     }
 }
@@ -283,9 +475,11 @@
         display: none;
     }
 
+    // Blog Content
     .blog--content {
         .unitize(45, 16, margin-top);
 
+        // Blog Navigation
         .blog--navigation {
             .unitize-padding(0, 0, 0, 0, 16);
 
@@ -315,10 +509,13 @@
                 .unitize-padding(20, 20, 20, 20, 16);
                 border: 0 none;
                 box-shadow: none;
+                -webkit-box-shadow: none;
+                -moz-box-shadow: none;
+                box-shadow: none
             }
 
             .collapse--header:hover {
-                color: @darkTextColor;
+                color: @darkTextColor;  
             }
 
             .blog--subscribe {
@@ -332,6 +529,7 @@
 
         }
 
+        // Blog Filter Options
         .filter--container {
             padding: 0;
         }
@@ -352,6 +550,7 @@
                 width: 100%;
                 height: auto;
             }
+
             .filter--entry {
                 .unitize(14, 16, font-size);
                 padding: 0;
@@ -375,6 +574,7 @@
             .blog--box-headline {
                 .unitize(18, 16, font-size);
             }
+
             .blog--box-metadata {
                 .unitize(5, 16, padding-top);
             }
@@ -382,7 +582,18 @@
             .blog--box-content .blog--box-description {
                 width: 74%;
             }
+        }
+    }
 
+    // Blog Detail
+    .blog--detail {
+
+        .blog--detail-headline {
+            .unitize(21, 16, font-size);
+        }
+
+        .blog--bookmark {
+            .unitize(32, 16, font-size);
         }
     }
 }

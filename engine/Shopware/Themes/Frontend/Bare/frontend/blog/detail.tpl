@@ -1,119 +1,153 @@
 {extends file='frontend/index/index.tpl'}
 
-
 {block name='frontend_index_header'}
     {include file='frontend/blog/header.tpl'}
 {/block}
 
 {* Main content *}
 {block name='frontend_index_content'}
-	<div class="blogbox">
+	<div class="blog--detail panel has--border is--rounded block-group listing listing--listing-1col">
 
-	    {block name="frontend_detail_index_navigation"}{/block}
+		{* Content *}
+		{block name='frontend_blog_detail_content'}
+			<div class="blog--detail-content blog--box block">
 
-	    <div class="blogdetail">
-	        <div class="blogdetail_header">
-	            {* Article name *}
-	            {block name='frontend_blog_detail_title'}
-	                <h1>{$sArticle.title}</h1>
-	            {/block}
-	            <p class="post_metadata">
+				{* Detail Box Header *}
+				{block name='frontend_blog_detail_box_header'}
+					<div class="blog--detail-header" itemscope itemtype="https://schema.org/BlogPosting">
 
-	                {* Author *}
-	                {block name='frontend_blog_detail_author'}
-	                {if $sArticle.author.name}
-	                <span class="first">
-	                    {se name="BlogInfoFrom"}{/se}: {$sArticle.author.name}
-	                </span>
-	                {/if}
-	                {/block}
+						{* Article name *}
+						{block name='frontend_blog_detail_title'}
+							<h1 class="blog--detail-headline panel--title" itemprop="name">{$sArticle.title}</h1>
+						{/block}
 
-	                {* Date *}
-	                {block name='frontend_blog_detail_date'}
-	                <span>{$sArticle.displayDate|date:"DATETIME_SHORT"}</span>
-	                {/block}
+						{* Metadata *}
+						{block name='frontend_blog_detail_metadata'}
+							<div class="blog--box-metadata">
 
-	                {* Category *}
-	                {block name='frontend_blog_detail_category'}{/block}
+								{* Author *}
+								{block name='frontend_blog_detail_author'}
+									{if $sArticle.author.name}
+										<span class="blog--metadata-author blog--metadata is--first" itemprop="author">{s name="BlogInfoFrom"}{/s}: {$sArticle.author.name}</span>
+									{/if}
+								{/block}
 
-	                {* Comments *}
-	                {block name='frontend_blog_detail_comments'}
-	                {if $sArticle.sVoteAverage|round != "0"}
-	                <span>
-	                    <a href="#commentcontainer" title="{s name="BlogLinkComments"}{/s}">
-	                        {if $sArticle.comments|count}{$sArticle.comments|count}{else}0 {/if} {se name="BlogInfoComments"}{/se}
-	                    </a>
-	                </span>
-	                {/if}
-	                {/block}
+								{* Date *}
+								{block name='frontend_blog_detail_date'}
+									<span class="blog--metadata-date blog--metadata{if !$sArticle.author.name} is--first{/if}" itemprop="dateCreated">{$sArticle.displayDate|date:"DATETIME_SHORT"}</span>
+								{/block}
 
-	                {* Rating*}
-	                {block name='frontend_blog_detail_rating'}
-	                <span class="rating last">{se name="BlogHeaderRating"}{/se}:
-	                    <span class="star star{$sArticle.sVoteAverage|round}">{se name="BlogHeaderRating"}{/se}</span>
-	                </span>
-	                {/block}
-	            </p>
-	        </div>
+								{* Category *}
+								{block name='frontend_blog_detail_category'}{/block}
 
-	        <div class="blogdetail_content">
+								{* Comments *}
+								{block name='frontend_blog_detail_comments'}
+									{if $sArticle.sVoteAverage|round != "0"}
+										<span class="blog--metadata-comments blog--metadata">
+											<a href="#commentcontainer" title="{s name="BlogLinkComments"}{/s}">{if $sArticle.comments|count}{$sArticle.comments|count}{else}0 {/if} {s name="BlogInfoComments"}{/s}</a>
+										</span>
+									{/if}
+								{/block}
 
-	            {* Description *}
-	            {block name='frontend_blog_detail_description'}
-	                <div class="description">
-	                    {$sArticle.description}
-	                </div>
-	            {/block}
+								{* Rating *}
+								{block name='frontend_blog_detail_rating'}
+									<span class="blog--metadata-rating blog--metadata is--last">
+										<a href="#commentcontainer" class="blog--rating-link" rel="nofollow" title="{s name='DetailLinkReview'}{/s}" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+											{$average = $sArticle.sVoteAverage / 2|round:0}
+											<meta itemprop="ratingValue" content="{$average}">
 
-	            {* Image + Thumbnails *}
-	            {block name='frontend_blog_detail_images'}
-	                {include file="frontend/blog/images.tpl"}
-	            {/block}
-	            <div class="clear">&nbsp;</div>
+											{for $value=1 to 5}
+												{$cls = 'icon--star'}
 
-	            {* Tags *}
-	            <div class="blog_tags">
-	                {if $sArticle.tags}
-	                    <strong>{se name="BlogInfoTags"}{/se}:</strong>
-	                    {foreach $sArticle.tags as $tag}
-	                    <a href="{url controller=blog sCategory=$sArticle.categoryId sFilterTags=$tag.name}" title="{$tag.name}">{$tag.name}</a>{if !$tag@last}, {/if}
-	                    {/foreach}
-	                {/if}
+												{if $value > $average}
+													{$cls = 'icon--star-empty'}
+												{/if}
 
-	                <div class="right">
-	                {* Bookmarks *}
-	                {block name='frontend_blog_detail_bookmarks'}
-	                    {include file="frontend/blog/bookmarks.tpl"}
-	                {/block}
-	                </div>
-	            </div>
+												<i class="{$cls}"></i>
+											{/for}
 
-	            {* Cross selling *}
-	            {if $sArticle.sRelatedArticles}
-	                <h2 class="headingbox">{s name="BlogHeaderCrossSelling"}{/s}</h2>
-	                <div class="bloglisting" id="listing-blog">
-	                    {foreach from=$sArticle.sRelatedArticles item=related name=relatedarticle}
-	                        {if $smarty.foreach.relatedarticle.last}
-	                            {assign var=lastitem value=1}
-	                        {else}
-	                            {assign var=lastitem value=0}
-	                        {/if}
-	                        {include file="frontend/listing/box_blog.tpl" sArticle=$related lastitem=$lastitem}
-	                    {/foreach}
-	                </div>
-	            {/if}
+											{* Product rating - Comment counter *}
+											{block name="frontend_blog_detail_rating_label"}
+												(<span itemprop="ratingCount">{$sArticle.comments|count}</span>)
+											{/block}
+										</a>
+									</span>
+								{/block}
 
-	            {* Comments *}
-	            {block name='frontend_blog_detail_comments'}
-	                {include file="frontend/blog/comments.tpl"}
-	            {/block}
-	        </div>
-	    </div>
+							</div>
+						{/block}
+					</div>
+				{/block}
+
+				{* Detail Box Content *}
+				{block name='frontend_blog_detail_box_content'}
+					<div class="blog--detail-box-content panel--body is--wide block" itemscope itemtype="http://schema.org/BlogPosting">
+
+						{* Description *}
+						{block name='frontend_blog_detail_description'}
+							<div class="blog--detail-description block" itemprop="articleBody">
+
+								{* Image + Thumbnails *}
+								{block name='frontend_blog_detail_images'}
+									{include file="frontend/blog/images.tpl"}
+								{/block}
+
+								{$sArticle.description}
+							</div>
+						{/block}
+
+						{* Tags *}
+						{block name='frontend_blog_detail_tags'}
+							<div class="blog--detail-tags block">
+								{if $sArticle.tags}
+									<span class="is--bold">{s name="BlogInfoTags"}{/s}:</span>
+									{foreach $sArticle.tags as $tag}
+										<a href="{url controller=blog sCategory=$sArticle.categoryId sFilterTags=$tag.name}" title="{$tag.name}">{$tag.name}</a>{if !$tag@last}, {/if}
+									{/foreach}
+								{/if}
+							</div>
+
+							{* Bookmarks *}
+							{block name='frontend_blog_detail_bookmarks'}
+								{include file="frontend/blog/bookmarks.tpl"}
+							{/block}
+
+						{/block}
+					</div>
+				{/block}
+			</div>
+		{/block}
+
+		{* Cross selling *}
+		{block name='frontend_blog_detail_crossselling'}
+			{if $sArticle.sRelatedArticles}
+				<div class="blog--crossselling panel--body is--wide block">
+
+					{* Headline *}
+					{block name='frontend_blog_detail_crossselling_headline'}
+						<h2 class="blog--crossselling-headline">{s name="BlogHeaderCrossSelling"}{/s}</h2>
+					{/block}
+
+					{* Listing *}
+					{block name='frontend_blog_detail_crossselling_listing'}
+						<div class="blog--crossseling-listing">
+							{foreach $sArticle.sRelatedArticles as $related}
+								{if $relatedarticle@last}
+									{$lastitem=true}
+								{else}
+									{$lastitem=false}
+								{/if}
+								{include file="frontend/listing/box_blog.tpl" sArticle=$related lastitem=$lastitem}
+							{/foreach}
+						</div>
+					{/block}
+				</div>
+			{/if}
+		{/block}
+
+		{* Comments *}
+		{block name='frontend_blog_detail_comments'}
+			{include file="frontend/blog/comments.tpl"}
+		{/block}
 	</div>
 {/block}
-
-{* Empty sidebar right *}
-{block name='frontend_index_content_right'}{/block}
-
-{* Empty sidebar left *}
-{block name='frontend_index_content_left'}{/block}
