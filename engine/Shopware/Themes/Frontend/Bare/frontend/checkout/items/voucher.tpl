@@ -10,7 +10,7 @@
 			{block name='frontend_checkout_cart_item_voucher_badge'}
 				<div class="table--media">
 					<div class="basket--badge">
-						<i class="icon--code"></i>
+						<i class="icon--arrow-right"></i>
 					</div>
 				</div>
 			{/block}

@@ -26,13 +26,6 @@
                         </span>
                     {/block}
 
-                    {* Product SKU number *}
-                    {block name='frontend_checkout_cart_item_premium_details_sku'}
-                        <p class="content--thank-you content">
-                            {s name="CartItemInfoPremium"}{/s}
-                        </p>
-                    {/block}
-
                     {* Additional product information *}
                     {block name='frontend_checkout_cart_item_premium_details_inline'}{/block}
                 </div>
