@@ -8,5 +8,5 @@ if [ ! -f $PIDFILE ]; then
     exit 0
 fi
 
-kill $(cat $PIDFILE)
+kill $(cat $PIDFILE) > /dev/null 2>&1
 rm $PIDFILE
