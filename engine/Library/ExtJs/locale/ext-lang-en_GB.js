@@ -466,7 +466,7 @@ Ext.onReady(function() {
             blackListMessage: "File extension [0] isn\'t allowed"
         }
     });
-    Ext.define('Shopware.de.Notification', {
+    Ext.define('Shopware.en_GB.Notification', {
         override: 'Shopware.Notification',
         closeText: 'Close'
     });
