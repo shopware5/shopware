@@ -146,8 +146,13 @@
 }
 
 .is--act-partnerStatistic {
+    .content-main--inner {
+        .unitize-padding(0, 0, 16, 0);
+    }
+
     .listing--actions {
-        .unitize-padding(10, 10, 10, 10);
+        .unitize-padding(10, 18, 24, 18);
+        border-bottom: 1px solid @borderColor;
     }
 
     .date-filter {
@@ -191,6 +196,7 @@
     .panel--th,
     .panel--td {
         width:25%;
+        .unitize-padding(8, 10, 7, 10);
         text-align: right;
         white-space: nowrap;
         overflow: hidden;
@@ -201,10 +207,20 @@
         }
     }
 
+    .panel--th {
+        .unitize-padding(3, 10, 2, 10);
+        .unitize(12, 16, font-size);
+        color: @primaryTextColor;
+    }
+
     .is--odd {
+        .unitize-padding(0, 0, 9, 0);
+        border-bottom: 1px solid @borderColor;
+
         .column--price,
         .column--total {
             width:100%;
+            .unitize-padding(8, 10, 12, 10);
         }
     }
 
@@ -643,13 +659,18 @@
 	}
 
     .is--act-partnerStatistic {
+        .content-main--inner {
+            .unitize-padding(0, 20, 16, 20);
+        }
+
         .listing--actions {
+            .unitize-padding(10, 10, 10, 10);
             .border-radius(3px);
             -webkit-background-clip: padding-box;
             -moz-background-clip: padding;
             background-clip: padding-box;
-            border: 1px solid #d8dde5;
-            background: #eceef1;
+            border: 1px solid @borderColor;
+            background: @primaryBackgroundColor;
         }
 
         .date-filter {
@@ -674,6 +695,17 @@
             height:40px;
         }
 
+        #holder {
+            width: 100%;
+            .is--align-center;
+            .is--block;
+        }
+
+        .panel--th,
+        .panel--td {
+            .unitize-padding(10, 10, 10, 10);
+        }
+
         .column--item-sum {
             width: 75% !important;
 
@@ -682,6 +714,11 @@
                 float: left;
                 width: 50%;
             }
+        }
+
+        .is--odd {
+            border: 0;
+            padding: 0;
         }
 
         .is--odd .column--total {
@@ -695,17 +732,12 @@
     }
 }
 
-@media screen and(min-width: @tabletLandscapeViewportWidth) {
+@media screen and(min-width: @desktopViewportWidth) {
     .is--act-partnerStatistic {
-        #holder {
-            width: 100%;
-            .is--align-center;
-            .is--block;
+        .content-main--inner {
+            .unitize-padding(0, 45, 45, 45);
         }
     }
-}
-
-@media screen and(min-width: @desktopViewportWidth) {
 
     .account--content {
         .unitize-margin(45, 0, 0, 0);

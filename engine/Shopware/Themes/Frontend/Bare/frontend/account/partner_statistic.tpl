@@ -68,7 +68,7 @@
             <tbody>
                 <tr>
                     {foreach from=$sPartnerOrderChartData item=chartItem}
-                        <td>{$chartItem.netTurnOver}</td>
+                        <td>{$chartItem.netTurnOver|number_format:2:".":""}</td>
                     {/foreach}
                 </tr>
             </tbody>
