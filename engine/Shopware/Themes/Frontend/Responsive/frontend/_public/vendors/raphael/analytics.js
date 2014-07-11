@@ -51,20 +51,21 @@ window.onload = function () {
     });
 
     // Draw
-    var width = 780,
+    var width = 900,
             height = 250,
             leftgutter = 0,
             bottomgutter = 35,
             topgutter = 20,
             colorhue = .6 || Math.random(),
             color = "hsl(" + [colorhue, .5, .6] + ")",
-            r = Raphael("holder", width, height),
+            r = Raphael("holder", '100%', height),
             txt = {font: '12px Helvetica, Arial', fill: "#FFF"},
             txt1 = {font: '10px Helvetica, Arial', fill: "#000"},
             txt2 = {font: '12px Helvetica, Arial', fill: "#000"},
             X = (width - leftgutter) / labels.length,
             max = Math.max.apply(Math, data),
             Y = (height - bottomgutter - topgutter) / max;
+    r.setViewBox('0', '0', width, height, true);
     r.drawGrid(leftgutter + X * .5 + .5, topgutter + .5, width - leftgutter - X, height - topgutter - bottomgutter, 10, 10, "#CCC");
     var path = r.path().attr({stroke: color, "stroke-width": 4, "stroke-linejoin": "round"}),
             bgp = r.path().attr({stroke: "none", opacity: .3, fill: color}),
