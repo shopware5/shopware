@@ -24,13 +24,6 @@
                         <span class="content--title">{$sBasketItem.articlename|strip_tags|truncate:60}</span>
                     {/block}
 
-                    {* Product SKU number *}
-                    {block name='frontend_checkout_cart_item_rebate_details_sku'}
-                        <p class="content--sku content">
-                            {s name="CartItemInfoId"}{/s} {$sBasketItem.ordernumber}
-                        </p>
-                    {/block}
-
                     {* Additional product information *}
                     {block name='frontend_checkout_cart_item_rebate_details_inline'}{/block}
                 </div>
