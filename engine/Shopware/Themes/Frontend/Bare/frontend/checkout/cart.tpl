@@ -94,7 +94,7 @@
                             {* Basket items *}
                             {foreach $sBasket.content as $sBasketItem}
                                 {block name='frontend_checkout_cart_item'}
-                                    {include file='frontend/checkout/cart_item.tpl'}
+                                    {include file='frontend/checkout/cart_item.tpl' isLast=$sBasketItem@last}
                                 {/block}
                             {/foreach}
 

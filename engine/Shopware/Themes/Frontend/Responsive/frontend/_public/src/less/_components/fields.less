@@ -62,6 +62,15 @@ input[type="tel"]{
 
 }
 
+textarea {
+    resize: vertical; // Just allow vertical resizing of the text area
+}
+
+label.has--error {
+    color: @errorText;
+    background: @errorBackground;
+}
+
 .js--fancy-select {
     .border-radius(3px);
     .box-sizing();
