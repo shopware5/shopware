@@ -8,6 +8,52 @@ body > .sidebar-main {
     }
 }
 
+.mobile--switches {
+    .unitize-padding(10, 10);
+    display: block;
+
+    .top-bar--currency,
+    .top-bar--language {
+        display: inline-block;
+
+        .js--fancy-select {
+            width: 100%;
+        }
+
+        .js--fancy-select-text {
+            font-weight: normal;
+        }
+    }
+
+    .top-bar--currency {
+        width: 40%;
+    }
+
+    .top-bar--language {
+        width: 30%;
+        margin-right: 2%;
+
+        .field--select {
+            position: relative;
+        }
+
+        .language--flag {
+            .unitize(18, 16, top);
+            .unitize(12, 16, left);
+            position: absolute;
+            z-index: 90;
+        }
+
+        .js--fancy-select-text {
+            text-indent: -9999em;
+        }
+    }
+
+    .language--flag {
+        .unitize-margin(0, 0, 0, 5);
+    }
+}
+
 // Landingpage campaign banner
 .campaign-outer-container {
     .unitize-margin(20, 0);
@@ -20,6 +66,10 @@ body > .sidebar-main {
         .unitize-margin(0, 0);
         display: none;
         width: 20%;
+
+        .mobile--switches {
+            display: none;
+        }
 
         .navigation--smartphone,
         .filter--container {
