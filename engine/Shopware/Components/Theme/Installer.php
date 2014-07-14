@@ -75,19 +75,33 @@ class Installer
      */
     private $repository;
 
+    /**
+     * @var Service
+     */
+    private $service;
+
+    /**
+     * @var array The config options provided in the global config.php file
+     */
+    protected $snippetConfig;
+
     function __construct(
         ModelManager $entityManager,
         Configurator $configurator,
         PathResolver $pathResolver,
         Util $util,
-        DatabaseHandler $snippetWriter)
-    {
+        DatabaseHandler $snippetWriter,
+        Service $service,
+        $snippetConfig = array()
+    ) {
         $this->configurator = $configurator;
         $this->entityManager = $entityManager;
         $this->pathResolver = $pathResolver;
         $this->snippetWriter = $snippetWriter;
         $this->util = $util;
         $this->repository = $entityManager->getRepository('Shopware\Models\Shop\Template');
+        $this->service = $service;
+        $this->snippetConfig = $snippetConfig;
     }
 
     /**
@@ -123,13 +137,13 @@ class Installer
             $this->pathResolver->getFrontendThemeDirectory()
         );
 
-        //synchronize the default themes which stored in the engine/Shopware/Themes directory.
+        //synchronize the default themes which are stored in the engine/Shopware/Themes directory.
         $themes = $this->synchronizeThemeDirectories($directories);
 
-        //to prevent inconsistent data, themes which removed from the file system has to be removed.
+        //to prevent inconsistent data, themes that were removed from the file system have to be removed.
         $this->removeDeletedThemes();
 
-        //before the inheritance can be build, the plugin themes has to be initialed.
+        //before the inheritance can be built, the plugin themes have to be initialized.
         $pluginThemes = $this->synchronizePluginThemes();
 
         $themes = array_merge($themes, $pluginThemes);
@@ -190,11 +204,16 @@ class Installer
      * and registers all stored themes within the directory as \Shopware\Models\Shop\Template.
      *
      * @param \DirectoryIterator $directories
+     * @param \Shopware\Models\Plugin\Plugin $plugin
      * @return Theme[]
      */
-    private function synchronizeThemeDirectories(\DirectoryIterator $directories)
+    private function synchronizeThemeDirectories(\DirectoryIterator $directories, Plugin $plugin = null)
     {
         $themes = array();
+
+        $settings = $this->service->getSystemConfiguration(
+            AbstractQuery::HYDRATE_OBJECT
+        );
 
         /**@var $directory \DirectoryIterator */
         foreach ($directories as $directory) {
@@ -214,14 +233,20 @@ class Installer
 
             if (!$template instanceof Shop\Template) {
                 $template = new Shop\Template();
+
+                if ($plugin) {
+                    $template->setPlugin($plugin);
+                }
+
                 $this->entityManager->persist($template);
             }
 
             $template->fromArray($data);
+            if (!$template->getId() || $settings->getReloadSnippets()) {
+                $this->synchronizeSnippets($template);
+            }
 
             $this->entityManager->flush($template);
-
-            $this->synchronizeSnippets($template);
 
             $themes[] = $theme;
         }
@@ -265,7 +290,7 @@ class Installer
             );
 
             //the synchronizeThemeDirectories function create for each theme directory a shop template.
-            $pluginThemes = $this->synchronizeThemeDirectories($directories);
+            $pluginThemes = $this->synchronizeThemeDirectories($directories, $plugin);
 
             if (empty($pluginThemes)) {
                 continue;
@@ -273,18 +298,6 @@ class Installer
 
             //merge the plugin themes into the already detected plugin themes.
             $themes = array_merge($themes, $pluginThemes);
-
-            //iterate themes to set the plugin id.
-            /**@var $theme Theme */
-            foreach ($themes as $theme) {
-
-                /**@var $template Shop\Template */
-                $template = $this->repository->findOneBy(array(
-                    'template' => $theme->getTemplate()
-                ));
-
-                $template->setPlugin($plugin);
-            }
 
             $this->entityManager->flush();
         }
@@ -302,7 +315,7 @@ class Installer
     {
         $directory = $this->pathResolver->getSnippetDirectory($template);
 
-        if (!file_exists($directory)) {
+        if (!file_exists($directory) || !$this->snippetConfig['writeToDb']) {
             return;
         }
 

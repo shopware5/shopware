@@ -15,7 +15,7 @@ In this document you will find a changelog of the important changes related to t
     * `Shopware_Controllers_Frontend_Account::ajaxLoginAction` is deprecated
     * `Shopware_Controllers_Frontend_Account::loginAction` usage to load a login page is deprecated. Use `Shopware_Controllers_Frontend_Register::indexAction` instead for both registration and login
 * New jQuery plugin helper which provides all the basic operations every jQuery plugin needs to do
-* Added serveral javascript libraries that enhances the supported features of the IE 8 and above
+* Added several javascript libraries that enhance the supported features of the IE 8 and above
 * Added `controller_action` and `controller_name` smarty functions that return the correspondent variable values
 * Added device type detection support. Supports external detection (ie. varnish, apache, recommended) or internal using 3rd party lib
     * Added Mobile Detect (http://mobiledetect.net/) library to composer dependencies for internal mobile detection.
@@ -24,12 +24,13 @@ In this document you will find a changelog of the important changes related to t
 * The sitemap.xml uses now a smarty template
     * Added `Turnover by device type` in the backend statistics module
     * Added device type details to `Impressions` and `Visitors` in the backend statistics module
-
 * Added secureUninstall method for plugins. There will be a message box when capability 'secureUninstall' is set, which uninstall method should be used.
     * (new) Bootstrap::secureUninstall() -> should be used for removing only non-user data
     * (old) Bootstrap::uninstall() -> old logic
-* When using `selection` configurator type, shipping extimations will only be displayed when the user selects a value for all groups
+* When using `selection` configurator type, shipping estimations will only be displayed when the user selects a value for all groups
 * It's no longer possible to disable variant support for article that still have variants
+* Added a new Theme Manager 2.0 with the possibility to create custom themes from the backend
+    * Themes now support specific snippets that are used exclusively in the theme to which they belong
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
