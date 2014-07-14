@@ -59,9 +59,9 @@ window.onload = function () {
             colorhue = .6 || Math.random(),
             color = "hsl(" + [colorhue, .5, .6] + ")",
             r = Raphael("holder", '100%', height),
-            txt = {font: '12px Helvetica, Arial', fill: "#FFF"},
-            txt1 = {font: '10px Helvetica, Arial', fill: "#000"},
-            txt2 = {font: '12px Helvetica, Arial', fill: "#000"},
+            txt = {font: '12px Helvetica, Arial', fill: "#D8DDE5"},
+            txt1 = {font: '12px Helvetica, Arial', fill: "#000"},
+            txt2 = {font: '12px Helvetica, Arial', fill: "#C9D0DB"},
             X = (width - leftgutter) / labels.length,
             max = Math.max.apply(Math, data),
             Y = (height - bottomgutter - topgutter) / max;
@@ -75,7 +75,7 @@ window.onload = function () {
             leave_timer,
             blanket = r.set();
     label.push(r.text(60, 12, "24 test").attr(txt));
-    label.push(r.text(60, 27, "22 September 2008").attr(txt1).attr({fill: color}));
+    label.push(r.text(60, 27, "22 September 2008").attr(txt2));
     label.hide();
     var frame = r.popup(100, 100, label, "right").attr({fill: "#000", stroke: "#666", "stroke-width": 2, "fill-opacity": .7}).hide();
 

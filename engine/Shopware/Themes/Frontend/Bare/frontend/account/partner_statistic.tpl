@@ -8,10 +8,6 @@
     {rdelim};
 {/block}
 
-{block name="frontend_index_header_css_screen" append}
-    <link href="{link file='frontend/_public/vendors/jquery.ui.datepicker/datepicker.css'}" media="screen" rel="stylesheet" type="text/css" />
-{/block}
-
 {block name="frontend_index_header_javascript" append}
     <script type="text/javascript" src="{link file='frontend/_public/vendors/raphael/raphael.js'}"></script>
     <script type="text/javascript" src="{link file='frontend/_public/vendors/raphael/popup.js'}"></script>
