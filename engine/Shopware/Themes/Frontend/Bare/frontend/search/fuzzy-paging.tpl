@@ -75,6 +75,7 @@
     {/if}
 {/block}
 
+{* Paging for listing actions *}
 {block name='frontend_listing_actions_paging'}
 
     {if $sPages.pages|@count != 0}

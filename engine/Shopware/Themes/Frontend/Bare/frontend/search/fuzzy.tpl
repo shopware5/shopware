@@ -5,7 +5,6 @@
     {$sBreadcrumb = [['name'=>"{s name="SearchResultsFor"}Suchergebnis für {$sRequests.sSearch}{/s}", 'link'=>{url}]]}
 {/block}
 
-
 {* Sidebar left *}
 {block name='frontend_index_content_left'}{/block}
 
@@ -44,24 +43,24 @@
 
     {if $sSearchResults.sArticles}
         {* Results count headline *}
-        {block name='fuzzy_search_headline'}
+        {block name='frontend_search_fuzzy_headline'}
             <h1>{s name='SearchHeadline'}Zu "{$sRequests.sSearch}" wurden {$sSearchResults.sArticlesCount} Artikel gefunden{/s}</h1>
         {/block}
 
         {* Search reults filter elements *}
-        {block name="fuzzy_search_filter"}
+        {block name="frontend_search_fuzzy_filter"}
             {include file='frontend/search/fuzzy-filter.tpl'}
         {/block}
 
         {* Sorting and changing layout *}
-        {block name="fuzzy_search_actions"}
+        {block name="frontend_search_fuzzy_actions"}
             <div class="results--paging panel">
                 {include file='frontend/search/fuzzy-paging.tpl' sTemplate=$sTemplate sAdvancedActions=1}
             </div>
         {/block}
 
         {* Search results listing *}
-        {block name="fuzzy_search_results"}
+        {block name="frontend_search_fuzzy_results"}
             <div class="results--articles panel">
                 <ul class="listing listing--{if $sRequests.sTemplate eq 'list'}listing-2col{else}listing{/if}">
                     {foreach $sSearchResults.sArticles as $key => $sArticle}
