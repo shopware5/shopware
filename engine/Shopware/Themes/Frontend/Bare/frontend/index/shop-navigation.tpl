@@ -47,7 +47,7 @@
 		{* Cart entry *}
 		{block name='frontend_index_checkout_actions'}
 			<li class="navigation--entry entry--cart block" role="menuitem">
-				<a class="entry--link entry--trigger" href="#show-hide--search" title="{s name="IndexTitleCartToggle"}Warenkorb anzeigen / ausblenden{/s}">
+				<a class="entry--link entry--trigger" href="{url controller='checkout' action='cart'}" title="{s name="IndexTitleCartToggle"}Warenkorb anzeigen / ausblenden{/s}">
 					<i class="icon--basket"></i>
 				</a>
 

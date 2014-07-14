@@ -6,44 +6,29 @@
 {/block}
 
 {* Hide breadcrumb *}
-{block name='frontend_index_breadcrumb'}<div class="space">&nbsp;</div>{/block}
+{block name='frontend_index_breadcrumb'}{/block}
 
 {* Step Box *}
 {block name="frontend_index_content_top"}
-	<div id="stepbox">
-	{block name="frontend_basket_step_box"}
-		{include file="frontend/register/steps.tpl" sStepActive="basket"}
-	{/block}
-	</div>
 
 	{* Empty basket *}
 	{if !$sBasket.content}
-	{block name='frontend_basket_basket_is_empty'}
-		{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='CartInfoEmpty'}{/s}"}
-	{/block}
-
-	{* Cross-Selling *}
-	{block name='frontend_checkout_crossselling'}
-		<div class="listing" id="listing">
-			{foreach from=$sCrossSelling item=sArticle key=key name="counter"}
-				{include file="frontend/listing/box_article.tpl"}
-			{/foreach}
-		</div>
-	{/block}
+        {block name='frontend_basket_basket_is_empty'}
+			<div class="panel">
+				<div class="panel--body">
+					{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='CartInfoEmpty'}{/s}"}
+				</div>
+			</div>
+        {/block}
 	{/if}
-
 {/block}
-
-{* Hide sidebar left *}
-{block name='frontend_index_content_left'}{/block}
-
 
 {* Main content *}
 {block name='frontend_index_content'}
-<div class="grid_16 last" id="basket">
+<div class="content block content--basket content--checkout">
 
 	{* If articles are in the basket... *}
-		{if $sBasket.content}
+	{if $sBasket.content}
 
 		{* Add article informations *}
 		{block name='frontend_checkout_add_article'}
@@ -52,83 +37,201 @@
 			</noscript>
 		{/block}
 
-		{* Error messages *}
-		{block name='frontend_checkout_cart_error_messages'}
-			{include file="frontend/checkout/error_messages.tpl"}
-		{/block}
+        {* Product table *}
+        {block name='frontend_checkout_cart_table'}
+            <div class="product--table {if {config name=BasketShippingInfo}} has--dispatch-info{/if}">
 
+                {* Deliveryfree dispatch notification *}
+                {block name='frontend_checkout_cart_deliveryfree'}
+                    {if $sShippingcostsDifference}
+                        {$shippingDifferenceContent="<strong>{s name='CartInfoFreeShipping'}{/s}</strong> {s name='CartInfoFreeShippingDifference'}{/s}"}
+                        {include file="frontend/_includes/messages.tpl" type="warning" content="{$shippingDifferenceContent}"}
+                    {/if}
+                {/block}
 
-		{block name='frontend_checkout_cart_deliveryfree'}{/block}
+                {* Error messages *}
+                {block name='frontend_checkout_cart_error_messages'}
+                    {include file="frontend/checkout/error_messages.tpl"}
+                {/block}
 
-			<div class="table grid_16 cart">
-			{* Checkout *}
-			<div class="actions">
-				{block name="frontend_checkout_actions_confirm"}
-				{if !$sMinimumSurcharge && !$sDispatchNoOrder}
-					<a href="{url action=confirm}" title="{s name='CheckoutActionsLinkProceed' namespace="frontend/checkout/actions"}{/s}" class="button-right large right checkout" >
-						{se name="CheckoutActionsLinkProceed" namespace="frontend/checkout/actions"}{/se}
-					</a>
-					<div class="clear"></div>
-				{/if}
-				{/block}
-			</div>
-			<div class="space">&nbsp;</div>
+                {block name='frontend_checkout_cart_table_actions'}
+                    <div class="table--actions">
 
-			{* Table head *}
-			{block name='frontend_checkout_cart_cart_head'}
-				{include file="frontend/checkout/cart_header.tpl"}
-			{/block}
+                        <div class="main--actions">
+                            {* Contiune shopping *}
+                            {if $sBasket.sLastActiveArticle.link}
+                                {block name="frontend_checkout_actions_link_last"}
+                                    <a href="{$sBasket.sLastActiveArticle.link}" title="{s name='CheckoutActionsLinkLast' namespace="frontend/checkout/actions"}{/s}" class="btn btn--secondary is--left">
+                                        {s name="CheckoutActionsLinkLast" namespace="frontend/checkout/actions"}{/s}
+                                    </a>
+                                {/block}
+                            {/if}
 
-			{* Article items *}
-			{foreach name=basket from=$sBasket.content item=sBasketItem key=key}
-				{block name='frontend_checkout_cart_item'}
-				{include file='frontend/checkout/cart_item.tpl'}
-				{/block}
-			{/foreach}
+                            {block name="frontend_checkout_actions_confirm"}
 
-			{* Premium articles *}
-			{block name='frontend_checkout_cart_premiums'}
-				<div class="table_row noborder">
-					{include file='frontend/checkout/cart_footer_left.tpl'}
-				</div>
+                                {* Forward to the checkout *}
+                                {if !$sMinimumSurcharge && !$sDispatchNoOrder}
+                                    {block name="frontend_checkout_actions_checkout"}
+                                        <a href="{url action=confirm}" title="{s name='CheckoutActionsLinkProceedShort' namespace="frontend/checkout/actions"}{/s}" class="btn btn--primary right">
+                                            {s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions"}{/s} <i class="icon--arrow-right"></i>
+                                        </a>
+                                    {/block}
+                                {/if}
+                            {/block}
+                        </div>
+                    </div>
+                {/block}
 
-				{* The tag is still open due to a template issue in the frontend/checkout/shipping_costs which has a unclosed div-tag *}
-				<div class="table_row non">
-					<div class="table_row shipping">
-					{if $sBasket.content && !$sUserLoggedIn}
-						{if !$sUserData.additional.user.id}
-							{include file="frontend/checkout/shipping_costs.tpl"}
-						{/if}
-					{/if}
-				</div>
-			{/block}
+                {* Product table content *}
+                {block name='frontend_checkout_cart_panel'}
+                    <div class="panel has--border">
+                        <div class="panel--body">
 
-			{* Table foot *}
-			{block name='frontend_checkout_cart_cart_footer'}
+                            {* Product table header *}
+                            {block name='frontend_checkout_cart_cart_head'}
+                                {include file="frontend/checkout/cart_header.tpl"}
+                            {/block}
 
-			{include file="frontend/checkout/cart_footer.tpl"}
+                            {* Basket items *}
+                            {foreach $sBasket.content as $sBasketItem}
+                                {block name='frontend_checkout_cart_item'}
+                                    {include file='frontend/checkout/cart_item.tpl'}
+                                {/block}
+                            {/foreach}
 
-			</div>
+                            {* Product table footer *}
+                            {block name='frontend_checkout_cart_cart_footer'}
+                                {include file="frontend/checkout/cart_footer.tpl"}
+                            {/block}
+                        </div>
+                    </div>
+                {/block}
 
-			<div class="space">&nbsp;</div>
-			{* Action Buttons *}
-			{include file="frontend/checkout/actions.tpl"}
-			<div class="space">&nbsp;</div>
+                {* Premium products *}
+                {block name='frontend_checkout_cart_premium'}
+                    {if $sPremiums}
 
+                        {* Actual listing *}
+                        {block name='frontend_checkout_cart_premium_products'}
+                            {include file='frontend/checkout/premiums.tpl'}
+                        {/block}
+                    {/if}
+                {/block}
 
-			<div class="clear"></div>
-			<div class="doublespace"></div>
+                {block name='frontend_checkout_cart_table_actions_bottom'}
+                    <div class="table--actions actions--bottom">
+                        {block name="frontend_checkout_actions_confirm_bottom"}
 
-			{if $sPremiums}
-			<div class="table_head">
-				<div class="grid_19">{s name="sCartPremiumsHeadline" namespace="frontend/checkout/premiums"}Bitte w&auml;hlen Sie zwischen den folgenden Pr&auml;mien{/s}</div>
-			</div>
-			{/if}
-			{* Premium articles *}
-			{include file='frontend/checkout/premiums.tpl'}
-			{/block}
-		</div>
+                            <div class="main--actions">
+
+                                {* Contiune shopping *}
+                                {if $sBasket.sLastActiveArticle.link}
+                                    {block name="frontend_checkout_actions_link_last_bottom"}
+                                        <a href="{$sBasket.sLastActiveArticle.link}" title="{s name='CheckoutActionsLinkLast' namespace="frontend/checkout/actions"}{/s}" class="btn btn--secondary is--left">
+                                            {s name="CheckoutActionsLinkLast" namespace="frontend/checkout/actions"}{/s}
+                                        </a>
+                                    {/block}
+                                {/if}
+
+                                {* Forward to the checkout *}
+                                {if !$sMinimumSurcharge && !$sDispatchNoOrder}
+                                    {block name="frontend_checkout_actions_confirm_bottom_checkout"}
+                                        <a href="{url action=confirm}" title="{s name='CheckoutActionsLinkProceedShort' namespace="frontend/checkout/actions"}{/s}" class="btn btn--primary right">
+                                            {s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions"}{/s} <i class="icon--arrow-right"></i>
+                                        </a>
+                                    {/block}
+                                {/if}
+                            </div>
+
+                            {if !$sMinimumSurcharge && ($sInquiry || $sDispatchNoOrder)}
+                                {block name="frontend_checkout_actions_inquiry"}
+                                    <a href="{$sInquiryLink}" title="{s name='CheckoutActionsLinkOffer' namespace="frontend/checkout/actions"}{/s}" class="btn btn--secondary btn--inquiry">
+                                        {s name="CheckoutActionsLinkOffer" namespace="frontend/checkout/actions"}{/s}
+                                    </a>
+                                {/block}
+                            {/if}
+                        {/block}
+                    </div>
+                {/block}
+
+                {block name="frontend_checkout_footer"}
+                    <footer class="table--footer block-group">
+
+                        {* Benefits *}
+                        {block name="frontend_checkout_footer_benefits"}
+                            <div class="footer--benefit block">
+                                {block name="frontend_checkout_footer_headline_benefit"}
+                                    <h4 class="benefit--headline">{s name="CheckoutFooterBenefitHeadlineForYou"}Unserer Vorteil für Sie{/s}</h4>
+                                {/block}
+
+                                {block name="frontend_checkout_footer_benefits_list"}
+                                    <ul class="list--unstyled benefit--list">
+
+                                        {block name="frontend_checkout_footer_benefits_list_entry_1"}
+                                            <li class="list--entry">
+                                                <i class="icon--check"></i>
+                                                {s name='RegisterInfoAdvantagesEntry1' namespace="frontend/register/index"}{/s}
+                                            </li>
+                                        {/block}
+
+                                        {block name="frontend_checkout_footer_benefits_list_entry_2"}
+                                            <li class="list--entry">
+                                                <i class="icon--check"></i>
+                                                {s name='RegisterInfoAdvantagesEntry2' namespace="frontend/register/index"}{/s}
+                                            </li>
+                                        {/block}
+
+                                        {block name="frontend_checkout_footer_benefits_list_entry_3"}
+                                            <li class="list--entry">
+                                                <i class="icon--check"></i>
+                                                {s name='RegisterInfoAdvantagesEntry3' namespace="frontend/register/index"}{/s}
+                                            </li>
+                                        {/block}
+
+                                        {block name="frontend_checkout_footer_benefits_list_entry_4"}
+                                            <li class="list--entry">
+                                                <i class="icon--check"></i>
+                                                {s name='RegisterInfoAdvantagesEntry4' namespace="frontend/register/index"}{/s}
+                                            </li>
+                                        {/block}
+                                    </ul>
+                                {/block}
+                            </div>
+                        {/block}
+
+                        {* Supported dispatch services *}
+                        {block name="frontend_checkout_footer_dispatch"}
+                            <div class="footer--benefit block">
+                                {block name="frontend_checkout_footer_headline_dispatch"}
+                                    <h4 class="benefit--headline">{s name="CheckoutFooterBenefitHeadlineDispatch"}Wir verschicken mit{/s}</h4>
+                                {/block}
+
+                                {block name="frontend_checkout_footer_text_dispatch"}
+                                    <p class="benefit--text">
+                                        {s name="CheckoutFooterBenefitTextDispatch"}Ihre Versandanbieter-Logos{/s}
+                                    </p>
+                                {/block}
+                            </div>
+                        {/block}
+
+                        {* Supported payment services *}
+                        {block name="frontend_checkout_footer_payment"}
+                            <div class="footer--benefit block">
+                                {block name="frontend_checkout_footer_headline_payment"}
+                                    <h4 class="benefit--headline">{s name="CheckoutFooterBenefitHeadlinePayment"}Zahlungsmethoden{/s}</h4>
+                                {/block}
+
+                                {block name="frontend_checkout_footer_text_payment"}
+                                    <p class="benefit--text">
+                                        {s name="CheckoutFooterBenefitTextPayment"}Ihre Zahlungsanbieter-Logos{/s}
+                                    </p>
+                                {/block}
+                            </div>
+                        {/block}
+                    </footer>
+                {/block}
+            </div>
+        {/block}
 	{/if}
 </div>
 {/block}
-{block name='frontend_index_content_right'}{/block}

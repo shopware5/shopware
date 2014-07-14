@@ -1,17 +1,14 @@
 {* Basket informations *}
 {block name='frontend_checkout_error_messages_basket_error'}
-{if $sBasketInfo}
-	{include file="frontend/_includes/messages.tpl" type="error" content=$sBasketInfo}
-	<div class="error center bold">
-		{$sBasketInfo}
-	</div>
-{/if}
+	{if $sBasketInfo}
+		{include file="frontend/_includes/messages.tpl" type="error" content=$sBasketInfo}
+	{/if}
 {/block}
 
 {block name='frontend_checkout_error_messages_voucher_error'}
 	{* Voucher error *}
 	{if $sVoucherError}
-		{include file="frontend/_includes/messages.tpl" type="error" list=$sVoucherError}
+		{include file="frontend/_includes/messages.tpl" type="error" content=$sVoucherError}
 	{/if}
 {/block}
 
