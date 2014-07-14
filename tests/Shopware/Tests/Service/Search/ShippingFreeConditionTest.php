@@ -81,7 +81,7 @@ class ShippingFreeConditionTest extends TestCase
             $this->getDefaultProduct('testShippingFree-2', $category, $context, false),
         );
 
-        foreach($articles as $article) {
+        foreach ($articles as $article) {
             $this->helper->createArticle($article);
         }
 

@@ -96,7 +96,7 @@ class PriceConditionTest extends TestCase
             $this->getDefaultProduct('testSimplePriceRange-4', $category, $context, 20),
         );
 
-        foreach($articles as $article) {
+        foreach ($articles as $article) {
             $this->helper->createArticle($article);
         }
 
@@ -124,7 +124,7 @@ class PriceConditionTest extends TestCase
             $this->getDefaultProduct('testDecimalPriceRange-4', $category, $context, 19.98),
         );
 
-        foreach($articles as $article) {
+        foreach ($articles as $article) {
             $this->helper->createArticle($article);
         }
 
@@ -184,7 +184,7 @@ class PriceConditionTest extends TestCase
         );
         $articles[] = $product;
 
-        foreach($articles as $article) {
+        foreach ($articles as $article) {
             $this->helper->createArticle($article);
         }
 

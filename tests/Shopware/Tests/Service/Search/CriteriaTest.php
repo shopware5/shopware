@@ -8,6 +8,7 @@ use Shopware\Bundle\SearchBundle\Facet\PriceFacet;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ProductNameSorting;
+use Shopware\Bundle\SearchBundle\SortingInterface;
 
 class CriteriaTest extends TestCase
 {
@@ -37,6 +38,7 @@ class CriteriaTest extends TestCase
 
     public function testIndexedSorting()
     {
+        /** @var SortingInterface[] $sortings */
         $sortings = array(
             new PriceSorting(),
             new ProductNameSorting(),
@@ -44,11 +46,11 @@ class CriteriaTest extends TestCase
         );
 
         $criteria = new Criteria();
-        foreach($sortings as $sort) {
+        foreach ($sortings as $sort) {
             $criteria->addSorting($sort);
         }
 
-        foreach($sortings as $expected) {
+        foreach ($sortings as $expected) {
             $sorting = $criteria->getSorting($expected->getName());
             $this->assertEquals($expected, $sorting);
         }

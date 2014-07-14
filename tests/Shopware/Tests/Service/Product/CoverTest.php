@@ -6,6 +6,7 @@ use Shopware\Models\Customer\Group;
 use Shopware\Models\Tax\Tax;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\MediaService;
 use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Tests\Service\Converter;
 use Shopware\Tests\Service\Helper;
 
 class CoverTest extends \Enlight_Components_Test_TestCase
@@ -15,9 +16,15 @@ class CoverTest extends \Enlight_Components_Test_TestCase
      */
     private $helper;
 
+    /**
+     * @var Converter
+     */
+    private $converter;
+
     protected function setUp()
     {
         $this->helper = new Helper();
+        $this->converter = new Converter();
         parent::setUp();
     }
 
@@ -38,7 +45,7 @@ class CoverTest extends \Enlight_Components_Test_TestCase
 
         $context = $this->helper->createContext($customerGroup, $this->helper->getShop(), array($tax));
         $product = $this->helper->getListProduct($number, $context);
-        
+
         $this->assertMediaFile('sasse-korn', $product->getCover());
     }
 
@@ -70,6 +77,7 @@ class CoverTest extends \Enlight_Components_Test_TestCase
             'test-spachtelmasse.jpg',
             array('main' => 1)
         );
+
         $product2['images'][0] = $this->helper->getImageData(
             'sasse-korn.jpg',
             array('main' => 1)
@@ -87,7 +95,7 @@ class CoverTest extends \Enlight_Components_Test_TestCase
 
         $this->assertCount(2, $products);
 
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $expected = 'test-spachtelmasse';
             if ($product->getNumber() == $number . '-2') {
                 $expected = 'sasse-korn';
@@ -128,7 +136,7 @@ class CoverTest extends \Enlight_Components_Test_TestCase
             $context
         );
 
-        foreach($variants as $variant) {
+        foreach ($variants as $variant) {
             $expected = 'bienen_teaser';
             if ($variant->getNumber() == $data['variants'][0]['number']) {
                 $expected = 'sasse-korn';
@@ -188,7 +196,7 @@ class CoverTest extends \Enlight_Components_Test_TestCase
             $mediaService
         );
 
-        foreach($variants as $variant) {
+        foreach ($variants as $variant) {
             $this->assertMediaFile('sasse-korn', $variant->getCover());
         }
     }
@@ -227,7 +235,7 @@ class CoverTest extends \Enlight_Components_Test_TestCase
             $context
         );
 
-        foreach($variants as $variant) {
+        foreach ($variants as $variant) {
             $expected = 'bienen_teaser';
             if ($variant->getNumber() == $data['variants'][0]['number']) {
                 $expected = 'sasse-korn';
@@ -245,13 +253,15 @@ class CoverTest extends \Enlight_Components_Test_TestCase
         $matcher = $this->stringContains($expected);
         $matcher->evaluate($media->getFile());
 
-        foreach($media->getThumbnails() as $thumbnail) {
+        foreach ($media->getThumbnails() as $thumbnail) {
             $matcher->evaluate($thumbnail);
         }
     }
 
     private function getDefaultProduct($number, $imageCount, Tax $tax, Group $customerGroup)
     {
+        $customerGroup = $this->converter->convertCustomerGroup($customerGroup);
+
         $data = $this->helper->getSimpleProduct(
             $number,
             $tax,
@@ -263,7 +273,7 @@ class CoverTest extends \Enlight_Components_Test_TestCase
             array('main' => 1)
         );
 
-        for($i=0; $i < $imageCount - 2; $i++) {
+        for ($i=0; $i < $imageCount - 2; $i++) {
             $data['images'][] = $this->helper->getImageData();
         }
 
@@ -279,6 +289,8 @@ class CoverTest extends \Enlight_Components_Test_TestCase
             $customerGroup
         );
 
+
+        $customerGroup = $this->converter->convertCustomerGroup($customerGroup);
         $data = array_merge(
             $data,
             $this->helper->getConfigurator(

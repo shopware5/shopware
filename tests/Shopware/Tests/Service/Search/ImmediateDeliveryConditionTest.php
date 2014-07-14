@@ -84,7 +84,7 @@ class ImmediateDeliveryConditionTest extends TestCase
             $this->getDefaultProduct('testNoStock-4', $category, $context, array('inStock' => 2, 'minPurchase' => 1)),
         );
 
-        foreach($articles as $article) {
+        foreach ($articles as $article) {
             $this->helper->createArticle($article);
         }
 
@@ -114,7 +114,7 @@ class ImmediateDeliveryConditionTest extends TestCase
             $this->getDefaultProduct('testMinPurchaseEquals-4', $category, $context, array('inStock' => 20, 'minPurchase' => 20)),
         );
 
-        foreach($articles as $article) {
+        foreach ($articles as $article) {
             $this->helper->createArticle($article);
         }
 

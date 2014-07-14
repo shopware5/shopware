@@ -3,7 +3,6 @@
 namespace Shopware\Tests\Service\Search;
 
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Models\Category\Category;
@@ -59,7 +58,7 @@ class CategoryConditionTest extends TestCase
         );
 
         $product['categories'] = array();
-        foreach($categories as $category) {
+        foreach ($categories as $category) {
             $product['categories'][] = array('id' => $category->getId());
         }
 
@@ -78,7 +77,7 @@ class CategoryConditionTest extends TestCase
             $this->getDefaultProduct('testSingleCategory-4', array(), $context),
         );
 
-        foreach($articles as $article) {
+        foreach ($articles as $article) {
             $this->helper->createArticle($article);
         }
 
@@ -107,7 +106,7 @@ class CategoryConditionTest extends TestCase
             $this->getDefaultProduct('testMultipleCategories-4', array($second), $context),
         );
 
-        foreach($articles as $article) {
+        foreach ($articles as $article) {
             $this->helper->createArticle($article);
         }
 

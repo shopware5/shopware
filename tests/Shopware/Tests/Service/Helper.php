@@ -3,9 +3,13 @@
 namespace Shopware\Tests\Service;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorGateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductConfigurationGateway;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware\Components\Api\Resource;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Models;
+use Shopware\Models\Tax\Tax;
 
 class Helper
 {
@@ -52,7 +56,7 @@ class Helper
     private $createdCurrencies = array();
     private $createdConfiguratorGroups = array();
 
-    function __construct()
+    public function __construct()
     {
         $this->db = Shopware()->Db();
         $this->entityManager = Shopware()->Models();
@@ -202,24 +206,24 @@ class Helper
      * data for an quick product creation.
      *
      * @param $number
-     * @param Models\Tax\Tax $tax
-     * @param Models\Customer\Group $customerGroup
+     * @param Tax $tax
+     * @param Group $customerGroup
      * @param float $priceOffset
      * @return array
      */
     public function getSimpleProduct(
         $number,
-        Models\Tax\Tax $tax,
-        Models\Customer\Group $customerGroup,
+        Tax $tax,
+        Group $customerGroup,
         $priceOffset = 0.00
     ) {
         $data = $this->getProductData(array(
-                'taxId' => $tax->getId()
-            ));
+            'taxId' => $tax->getId()
+        ));
 
         $data['mainDetail'] = $this->getVariantData(array(
-                'number' => $number
-            ));
+            'number' => $number
+        ));
 
         $data['mainDetail']['prices'] = $this->getGraduatedPrices(
             $customerGroup->getKey(),
@@ -235,30 +239,30 @@ class Helper
     {
         $this->deleteProperties();
         $this->removePriceGroup();
-        foreach($this->createdProducts as $number) {
+        foreach ($this->createdProducts as $number) {
             $this->removeArticle($number);
         }
 
-        foreach($this->createdCustomerGroups as $key) {
+        foreach ($this->createdCustomerGroups as $key) {
             $this->deleteCustomerGroup($key);
         }
 
-        foreach($this->createdTaxes as $tax) {
+        foreach ($this->createdTaxes as $tax) {
             $this->deleteTax($tax);
         }
 
-        foreach($this->createdCurrencies as $currency) {
+        foreach ($this->createdCurrencies as $currency) {
             $this->deleteCurrency($currency);
         }
 
-        foreach($this->createdCategories as $category) {
+        foreach ($this->createdCategories as $category) {
             try {
                 $this->categoryApi->delete($category);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
             }
         }
 
-        foreach($this->createdManufacturers as $manufacturerId) {
+        foreach ($this->createdManufacturers as $manufacturerId) {
             try {
                 $manufacturer = $this->entityManager->find('Shopware\Models\Article\Supplier', $manufacturerId);
                 if (!$manufacturer) {
@@ -267,11 +271,11 @@ class Helper
 
                 $this->entityManager->remove($manufacturer);
                 $this->entityManager->flush();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
             }
         }
 
-        foreach($this->createdConfiguratorGroups as $groupId) {
+        foreach ($this->createdConfiguratorGroups as $groupId) {
             $group = $this->entityManager->find('Shopware\Models\Article\Configurator\Group', $groupId);
             if (!$group) {
                 continue;
@@ -344,7 +348,7 @@ class Helper
             'data' => array('groupName' => 'Dummy Translation')
         ));
 
-        foreach($properties['groups'] as $group) {
+        foreach ($properties['groups'] as $group) {
             $this->translationApi->create(array(
                 'type' => 'propertyoption',
                 'key' => $group['id'],
@@ -352,7 +356,7 @@ class Helper
                 'data' => array('optionName' => 'Dummy Translation group - ' . $group['id'])
             ));
 
-            foreach($group['options'] as $option) {
+            foreach ($group['options'] as $option) {
                 $this->translationApi->create(array(
                     'type' => 'propertyvalue',
                     'key' => $option['id'],
@@ -365,7 +369,7 @@ class Helper
 
     public function createConfiguratorTranslation($configuratorSet, $shopId)
     {
-        foreach($configuratorSet['groups'] as $group) {
+        foreach ($configuratorSet['groups'] as $group) {
             $this->translationApi->create(array(
                 'type' => 'configuratorgroup',
                 'key' => $group['id'],
@@ -376,7 +380,7 @@ class Helper
                 )
             ));
 
-            foreach($group['options'] as $option) {
+            foreach ($group['options'] as $option) {
                 $this->translationApi->create(array(
                     'type' => 'configuratoroption',
                     'key' => $option['id'],
@@ -398,7 +402,7 @@ class Helper
             'data' => array()
         );
 
-        foreach($unitIds as $id) {
+        foreach ($unitIds as $id) {
             if (isset($translation[$id])) {
                 $data['data'][$id] = array_merge(
                     $this->getUnitTranslation(),
@@ -417,14 +421,14 @@ class Helper
         $this->db->insert('s_filter', array('name' => 'Test-Set', 'comparable' => 1));
         $data = $this->db->fetchRow("SELECT * FROM s_filter WHERE name = 'Test-Set'");
 
-        for($i=0; $i<$groupCount; $i++) {
+        for ($i=0; $i<$groupCount; $i++) {
             $this->db->insert('s_filter_options', array(
                 'name' => 'Test-Gruppe-' . $i,
                 'filterable' => 1
             ));
             $group = $this->db->fetchRow("SELECT * FROM s_filter_options WHERE name = 'Test-Gruppe-" . $i . "'");
 
-            for($i2=0; $i2 < $optionCount; $i2++) {
+            for ($i2=0; $i2 < $optionCount; $i2++) {
                 $this->db->insert('s_filter_values', array(
                     'value' => 'Test-Option-' . $i . '-' .$i2,
                     'optionID' => $group['id']
@@ -462,12 +466,12 @@ class Helper
 
         $this->removePriceGroup();
 
-        $priceGroup = new \Shopware\Models\Price\Group();
+        $priceGroup = new Models\Price\Group();
         $priceGroup->setName('TEST-GROUP');
 
         $repo = $this->entityManager->getRepository('Shopware\Models\Customer\Group');
         $collection = array();
-        foreach($discounts as $data) {
+        foreach ($discounts as $data) {
             $discount = new Models\Price\Discount();
             $discount->setCustomerGroup(
                 $repo->findOneBy(array('key' => $data['key']))
@@ -512,6 +516,7 @@ class Helper
         $this->entityManager->clear();
 
         $this->createdCustomerGroups[] = $customer->getKey();
+
         return $customer;
     }
 
@@ -600,13 +605,13 @@ class Helper
     }
 
     /**
-     * @param Models\Customer\Group $customerGroup used for the price definition
+     * @param Group $customerGroup used for the price definition
      * @param string $number
      * @param array $data Contains nested configurator group > option array.
      * @return array
      */
     public function getConfigurator(
-        Models\Customer\Group $customerGroup,
+        Group $customerGroup,
         $number,
         array $data = array()
     ) {
@@ -637,7 +642,7 @@ class Helper
 
     public function updateConfiguratorVariants($articleId, $data)
     {
-        foreach($data as $updateInformation) {
+        foreach ($data as $updateInformation) {
             $options = $updateInformation['options'];
             $variantData = $updateInformation['data'];
 
@@ -647,7 +652,7 @@ class Helper
                 continue;
             }
 
-            foreach($variants as $variantId) {
+            foreach ($variants as $variantId) {
                 $this->variantApi->update($variantId, $variantData);
             }
         }
@@ -671,7 +676,7 @@ class Helper
             ->setParameter(':article', $articleId);
 
 
-        foreach($ids as $id) {
+        foreach ($ids as $id) {
             $query->andHaving("options LIKE '%|". (int) $id."|%'");
         }
 
@@ -681,8 +686,8 @@ class Helper
         return array_column($ids, 'article_id');
     }
 
-    public function getProductOptionsByName($articleId, $optionNames) {
-
+    public function getProductOptionsByName($articleId, $optionNames)
+    {
         $query = $this->entityManager->getDBALQueryBuilder();
         $query->select(array('options.id', 'options.group_id', 'options.name', 'options.position'))
             ->from('s_article_configurator_options', 'options')
@@ -715,10 +720,10 @@ class Helper
     {
         $data = array();
 
-        foreach($groups as $group) {
+        foreach ($groups as $group) {
             $options = array();
             /**@var $option Models\Article\Configurator\Option*/
-            foreach($group->getOptions() as $option) {
+            foreach ($group->getOptions() as $option) {
                 $options[] =  array(
                     'id' => $option->getId(),
                     'name' => $option->getName()
@@ -741,7 +746,7 @@ class Helper
         $pos = 1;
         $data = array();
 
-        foreach($groups as $groupName => $options) {
+        foreach ($groups as $groupName => $options) {
             $group = new Models\Article\Configurator\Group();
             $group->setName($groupName);
             $group->setPosition($groups);
@@ -749,7 +754,7 @@ class Helper
 
             $collection = array();
             $optionPos = 1;
-            foreach($options as $optionName) {
+            foreach ($options as $optionName) {
                 $this->db->executeQuery("DELETE FROM s_article_configurator_options WHERE name = ?", array($optionName));
 
                 $option = new Models\Article\Configurator\Option();
@@ -955,7 +960,7 @@ class Helper
     {
         $properties = $this->createProperties($groupCount, $optionCount);
         $options = array();
-        foreach($properties['groups'] as $group) {
+        foreach ($properties['groups'] as $group) {
             $options = array_merge($options, $group['options']);
         }
 
@@ -1023,7 +1028,7 @@ class Helper
     private function removePriceGroup()
     {
         $ids = $this->db->fetchCol("SELECT id FROM s_core_pricegroups WHERE description = 'TEST-GROUP'");
-        foreach($ids as $id) {
+        foreach ($ids as $id) {
             $group = $this->entityManager->find('Shopware\Models\Price\Group', $id);
             $this->entityManager->remove($group);
             $this->entityManager->flush();

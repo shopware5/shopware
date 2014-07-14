@@ -134,7 +134,7 @@ class TranslationTest extends \Enlight_Components_Test_TestCase
 
         $unit = null;
         /**@var $detail Detail*/
-        foreach($article->getDetails() as $detail) {
+        foreach ($article->getDetails() as $detail) {
             if ($variant['number'] === $detail->getNumber()) {
                 $unit = $detail->getUnit();
                 break;
@@ -165,7 +165,7 @@ class TranslationTest extends \Enlight_Components_Test_TestCase
         $this->assertEquals('Dummy Translation', $listProduct->getUnit()->getUnit());
         $this->assertEquals('Dummy Translation', $listProduct->getUnit()->getName());
 
-        foreach($listProduct->getPrices() as $price) {
+        foreach ($listProduct->getPrices() as $price) {
             $this->assertEquals('Dummy Translation', $price->getUnit()->getUnit());
             $this->assertEquals('Dummy Translation', $price->getUnit()->getName());
         }
@@ -195,11 +195,11 @@ class TranslationTest extends \Enlight_Components_Test_TestCase
 
         $this->assertEquals('Dummy Translation', $property->getName());
 
-        foreach($property->getGroups() as $group) {
+        foreach ($property->getGroups() as $group) {
             $expected = 'Dummy Translation group - ' . $group->getId();
             $this->assertEquals($expected, $group->getName());
 
-            foreach($group->getOptions() as $option) {
+            foreach ($group->getOptions() as $option) {
                 $expected = 'Dummy Translation option - ' . $group->getId() . ' - ' . $option->getId();
                 $this->assertEquals($expected, $option->getName());
             }
@@ -243,14 +243,14 @@ class TranslationTest extends \Enlight_Components_Test_TestCase
             $context
         );
 
-        foreach($configurator->getGroups() as $group) {
+        foreach ($configurator->getGroups() as $group) {
             $expected = 'Dummy Translation group - ' . $group->getId();
             $this->assertEquals($expected, $group->getName());
 
             $expected = 'Dummy Translation description - ' . $group->getId();
             $this->assertEquals($expected, $group->getDescription());
 
-            foreach($group->getOptions() as $option) {
+            foreach ($group->getOptions() as $option) {
                 $expected = 'Dummy Translation option - ' . $group->getId() . ' - ' . $option->getId();
                 $this->assertEquals($expected, $option->getName());
             }

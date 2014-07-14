@@ -15,7 +15,7 @@ class ConfiguratorTest extends \Enlight_Components_Test_TestCase
 
     protected function setUp()
     {
-        $this->helper = new \Shopware\Tests\Service\Helper();
+        $this->helper = new Helper();
         parent::setUp();
     }
 
@@ -69,6 +69,25 @@ class ConfiguratorTest extends \Enlight_Components_Test_TestCase
         return $product;
     }
 
+
+    public function testLegacyFioo()
+    {
+        $number = __FUNCTION__;
+        $context = $this->getContext();
+        $data = $this->getProduct($number, $context);
+
+        $this->helper->createArticle($data);
+
+        $listProduct = $this->helper->getListProduct($number, $context);
+
+        $configurator = $this->helper->getProductConfigurator($listProduct, $context);
+
+        $this->assertCount(3, $configurator->getGroups());
+        foreach ($configurator->getGroups() as $group) {
+            $this->assertCount(3, $group->getOptions());
+        }
+    }
+
     public function testProductConfigurator()
     {
         $number = __FUNCTION__;
@@ -82,7 +101,7 @@ class ConfiguratorTest extends \Enlight_Components_Test_TestCase
         $configurator = $this->helper->getProductConfigurator($listProduct, $context);
 
         $this->assertCount(3, $configurator->getGroups());
-        foreach($configurator->getGroups() as $group) {
+        foreach ($configurator->getGroups() as $group) {
             $this->assertCount(3, $group->getOptions());
         }
     }
@@ -95,7 +114,7 @@ class ConfiguratorTest extends \Enlight_Components_Test_TestCase
         );
 
         $selection = array();
-        foreach($options as $option) {
+        foreach ($options as $option) {
             $groupId = $option['group_id'];
             $selection[$groupId] = $option['id'];
         }
@@ -133,8 +152,8 @@ class ConfiguratorTest extends \Enlight_Components_Test_TestCase
             $this->createSelection($listProduct, array('rot'))
         );
 
-        foreach($configurator->getGroups() as $group) {
-            foreach($group->getOptions() as $option) {
+        foreach ($configurator->getGroups() as $group) {
+            foreach ($group->getOptions() as $option) {
                 $this->assertNotEquals('schwarz', $option->getName());
                 $this->assertNotEquals('L', $option->getName());
             }
@@ -147,8 +166,8 @@ class ConfiguratorTest extends \Enlight_Components_Test_TestCase
             $this->createSelection($listProduct, array('schwarz'))
         );
 
-        foreach($configurator->getGroups() as $group) {
-            foreach($group->getOptions() as $option) {
+        foreach ($configurator->getGroups() as $group) {
+            foreach ($group->getOptions() as $option) {
                 $this->assertNotEquals('rot', $option->getName());
                 $this->assertNotEquals('L', $option->getName());
             }
@@ -185,8 +204,8 @@ class ConfiguratorTest extends \Enlight_Components_Test_TestCase
             $this->createSelection($listProduct, array('weiß'))
         );
 
-        foreach($configurator->getGroups() as $group) {
-            foreach($group->getOptions() as $option) {
+        foreach ($configurator->getGroups() as $group) {
+            foreach ($group->getOptions() as $option) {
                 $this->assertNotEquals('blau', $option->getName());
                 $this->assertNotEquals('M', $option->getName());
             }
@@ -198,8 +217,8 @@ class ConfiguratorTest extends \Enlight_Components_Test_TestCase
             $this->createSelection($listProduct, array('blau'))
         );
 
-        foreach($configurator->getGroups() as $group) {
-            foreach($group->getOptions() as $option) {
+        foreach ($configurator->getGroups() as $group) {
+            foreach ($group->getOptions() as $option) {
                 $this->assertNotEquals('weiß', $option->getName());
                 $this->assertNotEquals('M', $option->getName());
             }

@@ -55,7 +55,7 @@ class CheapestPriceTest extends \Enlight_Components_Test_TestCase
         );
         $product = array_merge($product, $configurator);
 
-        foreach($product['variants'] as $index => &$variant) {
+        foreach ($product['variants'] as $index => &$variant) {
             $offset = ($index + 1) * -10;
 
             $variant['prices'] = $this->helper->getGraduatedPrices(
@@ -89,7 +89,7 @@ class CheapestPriceTest extends \Enlight_Components_Test_TestCase
         $data = $this->getConfiguratorProduct($number, $context);
 
         $count = count($data['variants']) - 1;
-        
+
         $data['variants'][$count]['active'] = false;
         $data['variants'][$count - 1]['active'] = false;
 
@@ -195,7 +195,7 @@ class CheapestPriceTest extends \Enlight_Components_Test_TestCase
          * Creates a 1€ price for the customer group FORCE
          * This is the "whole" cheapest price for all customer groups
          */
-        foreach($data['variants'] as &$variant) {
+        foreach ($data['variants'] as &$variant) {
             $variant['prices'][] = array(
                 'from' => 1,
                 'to' => null,

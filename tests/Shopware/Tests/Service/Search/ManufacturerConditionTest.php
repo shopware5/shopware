@@ -82,7 +82,7 @@ class ManufacturerConditionTest extends TestCase
             $this->getDefaultProduct('testSingleManufacturer-2', $category, $manufacturer, $context),
         );
 
-        foreach($articles as $article) {
+        foreach ($articles as $article) {
             $this->helper->createArticle($article);
         }
 
@@ -113,7 +113,7 @@ class ManufacturerConditionTest extends TestCase
             $this->getDefaultProduct('testMultipleManufacturers-3', $category, $second, $context),
         );
 
-        foreach($articles as $article) {
+        foreach ($articles as $article) {
             $this->helper->createArticle($article);
         }
 
