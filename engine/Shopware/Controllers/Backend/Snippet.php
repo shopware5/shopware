@@ -884,7 +884,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             $string = mb_convert_encoding($string, 'HTML-ENTITIES', mb_detect_encoding($string, array('utf-8', 'iso-8859-1', 'iso-8859-15', 'windows-1251')));
         }
 
-        $string = html_entity_decode($string, ENT_NOQUOTES);
+        $string = html_entity_decode($string, ENT_NOQUOTES, 'UTF-8');
 
         return $string;
     }
