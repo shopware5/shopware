@@ -31,6 +31,7 @@ In this document you will find a changelog of the important changes related to t
 * It's no longer possible to disable variant support for article that still have variants
 * Added a new Theme Manager 2.0 with the possibility to create custom themes from the backend
     * Themes now support specific snippets that are used exclusively in the theme to which they belong
+* The snippet module in the backend now supports editing multiple translations for a single snippet at once
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
