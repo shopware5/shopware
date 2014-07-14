@@ -1,0 +1,524 @@
+.product--details {
+
+	.product--navigation,
+	.product--actions {
+		display: none
+	}
+
+	.product--header {
+		.clearfix();
+		.unitize-padding(0, 0, 20, 0, 16);
+	}
+
+	// Supplier logo in the header
+	.product--supplier {
+		text-align: right;
+
+		img { display: inline }
+	}
+
+    .content--discount {
+        .unitize(12, 16, font-size);
+        display: block;
+        font-weight: normal;
+        color: @lightTextColor;
+    }
+    .price--line-through {
+        text-decoration: line-through;
+    }
+
+	.product--supplier, .product--rating-container {
+		.unitize-height(35);
+		width: 50%;
+		float: left;
+	}
+
+	// Product title
+	.product--info .product--title {
+		.unitize-padding(10, 0);
+		.unitize(21, 16, font-size);
+		margin: 0;
+		font-weight: bold;
+		color: @darkTextColor;
+		border-bottom: 1px solid @borderColor;
+	}
+
+	// Customer reviews
+	.product--rating-container {
+		.unitize-margin(5, 0, 0, 0, 16);
+
+		.product--rating-link {
+			.unitize(14, 16, font-size);
+			vertical-align: middle;
+			color: @primaryTextColor;
+		}
+
+		// Star icon styling
+		[class^="icon"] {
+			.unitize(16, 16, font-size);
+			color: @reviewStarColor;
+		}
+	}
+
+	// Image container
+	.product--image-container {
+		.unitize-margin(0, 0, 28, 0);
+	}
+	.image--thumbnails { display: none }
+
+	.slides img, .product--image-container img { margin: 0 auto; }
+
+	// Price
+	.price--default {
+		.unitize(24, 16, font-size);
+		color: @darkTextColor;
+	}
+	.product--tax {
+		.unitize(12, 16, font-size);
+		margin: 0;
+
+		a { text-decoration: none }
+	}
+
+	// Quanitity box and input
+	.buybox--quantity {
+		margin: 0 2% 0 0;
+		width: 30%;
+
+		input[type="number"] {
+			.unitize-height(44);
+			.border-radius(3px);
+			text-align: center;
+		}
+	}
+
+	// "Buy now" button
+	.buybox--button {
+		width: 68%;
+
+        .icon--arrow-right {
+            .unitize-margin(6, 0, 0, 0);
+            .unitize(10, 16, font-size);
+            float: right;
+        }
+	}
+
+	// Product base information
+	.product--base-info {
+		.unitize-margin(12, 0, 32, 0);
+
+		.entry--label {
+			.unitize-margin(0, 8, 0, 0);
+			display: inline-block;
+		}
+	}
+
+	// Product information tabs
+	.additional-info--tabs {
+		.unitize-margin(0, 0, 32, 0, 16);
+	}
+
+	// Content headlines
+	.content--title {
+		.unitize(18, 16, font-size);
+		color: @darkTextColor;
+	}
+
+    .content--link [class^=icon] {
+        .unitize(10, 16, font-size);
+        .unitize-margin(-2, 8, 0, 0);
+    }
+
+	.description--properties { list-style: none }
+
+	// Block prices
+	.block-prices--table {
+		.unitize-margin(0, 0, 12, 0);
+		border: 1px solid @borderColor;
+		padding: 1px;
+
+		td {
+			.unitize-padding(4px, 10px, 4px, 10px);
+		}
+
+		thead th {
+			color: #fff;
+			background: @lightTextColor;
+		}
+	}
+
+	.listing .product--box .panel--body {
+		border-left: 1px solid @borderColor;
+		border-right: 1px solid @borderColor;
+	}
+}
+
+// Product reviews form
+.review--form {
+	.review--field {
+		.unitize-margin(0, 0, 10, 0);
+		width: 100%;
+	}
+
+	.review--notice {
+		.unitize(12, 16, font-size);
+	}
+}
+
+// Product review entry
+.review--entry {
+	.border-radius(3px);
+	.unitize-margin(0, 0, 10, 0);
+	.unitize(12, 16, font-size);
+	border: 1px solid @borderColor;
+
+	&.is--last {
+		.unitize-margin(0, 0, 32, 0, 16);
+	}
+
+	&.has--answer {
+		.border-radius-multi(3px, 3px, 0, 0);
+		margin: 0;
+	}
+
+	.entry--author, .entry--content {
+		.unitize-padding(10, 35);
+	}
+
+	.entry--author {
+		border-bottom: 1px solid @borderColor;
+		position: relative;
+
+		// Arrow down
+		&::after {
+			.unitize-margin(0, 0, 0, -9);
+			.unitize-width(18);
+			.unitize-height(18);
+			.unitize(-9, 16, bottom);
+			.rotate(45deg);
+			content: '';
+			position: absolute;
+			left: 50%;
+			background: #fff;
+			border: 1px solid @borderColor;
+			border-left: 0 none;
+			border-top: 0 none;
+		}
+	}
+
+	.product--rating {
+		.unitize(16, 16, font-size);
+		color: @reviewStarColor;
+	}
+
+	.content--label {
+		.unitize-margin(0, 8, 0, 0, 16);
+		float: left;
+	}
+	.content--field { .clearfix(); }
+
+	.content--title {
+		.unitize(14, 16, font-size);
+		.unitize-margin(0, 0, 8, 0);
+	}
+
+	.review--content { margin: 0; }
+}
+
+// Product review entry - Administrator answer
+.review--entry.is--answer {
+	.unitize-margin(0, 12, 10, 12);
+	.border-radius-multi(0, 0, 3px, 3px);
+	border-top: 0;
+	background: @lightGradientEnd;
+
+	&.is--last { .unitize-margin(0, 12, 32, 10, 16) }
+
+	.entry--author { .unitize-padding(10, 35, 0) }
+	.entry--content { .unitize-padding(0, 35, 10, 35) }
+
+	.entry--author {
+		border: 0 none;
+
+		// Arrow up
+		&::after {
+			.rotate(225deg);
+			.unitize(-9, 16, top);
+			background: @lightGradientEnd
+		}
+	}
+}
+
+/** Product review form */
+.content--product-reviews {
+	.alert {
+		.unitize-margin(0, 0, 16, 0, 16);
+	}
+	.captcha--notice {
+		.unitize(12, 16, font-size);
+		line-height: 1.2;
+	}
+}
+
+// Product notification
+.product--notification {
+	.unitize-margin(0, 0, 16, 0, 16);
+
+	.alert {
+		.unitize-margin(0, 0, 8, 0, 16);
+		word-wrap: break-word;
+		font-weight: bold;
+	}
+	.notification--field {
+		.border-radius-multi(3px, 0, 0, 3px);
+		width: 80%;
+	}
+	.notification--button {
+		.border-radius-multi(0, 3px, 3px, 0);
+		width: 20%;
+	}
+}
+
+// Product configurator
+.confgurator--form {
+	.unitize-margin(16, 0, 0, 0);
+
+	.content--title, .content--description {
+		.unitize(14, 16, font-size);
+		display: inline;
+	}
+	.js--fancy-select {
+		.unitize-margin(0, 0, 8, 0);
+		width: 100%;
+	}
+}
+
+@media screen and(min-width: @tabletViewportWidth) {
+    .product--details {
+
+        // Supplier info
+        .product--info { width: 80% }
+        .product--supplier {
+            .unitize(18, 16, margin-top);
+            width: 20%;
+        }
+
+        // Title
+        .product--info .product--title {
+            .unitize-padding(18, 0, 0, 0);
+            border: 0 none;
+        }
+
+        // Product review overview
+        .product--rating-container { margin: 0 }
+
+        // Slider arrows
+        .panel--arrow {
+            .unitize(21, 16, font-size);
+            display: block;
+        }
+
+        // Product image
+        .product--image-container {
+            .unitize-max-height(480);
+			position: relative;
+			overflow: hidden;
+        }
+
+		// Thumbnails
+		.image--thumbnails {
+			.border-radius(3px);
+			.unitize-padding(5, 40, 5, 0);
+			.clearfix();
+			background: #fff;
+			position: absolute;
+			left: 0; bottom: 0;
+			z-index: 1000;
+			border: 1px solid @borderColor;
+			border-left: 0 none;
+		}
+		.image--thumbnails a {
+			.unitize-margin(0, 10, 0, 10);
+			float: left;
+			text-align: center;
+			overflow: auto;
+			line-height: 48px;
+
+			&:first-child {
+				margin-left: 0;
+			}
+
+			&::after {
+				content: '';
+				height: 100%;
+			}
+		}
+		.image--thumbnails a::after,
+		.image--thumbnails img {
+			display: inline-block;
+			vertical-align: middle;
+		}
+		.image--thumbnails img {
+			border: 1px solid @borderColor;
+		}
+		.image--thumbnails .is--active img {
+			border-color: @primaryColor;
+		}
+
+		.thumbnails--arrow {
+			.unitize-padding(0, 20, 0, 20);
+			.unitize(-11, 16, margin-top);
+			top: 50%; right: 0;
+			position: absolute;
+			cursor: pointer;
+
+			& i[class^=icon] {
+				.unitize(10, 16, font-size);
+			}
+		}
+
+        // Buy box
+        .buybox--inner { float: right }
+
+        // Configurator
+        .confgurator--form {
+            .unitize-padding(8, 0, 0, 0);
+            margin-top: 0;
+            border-top: 1px solid @borderColor;
+        }
+
+        // Product base information
+        .product--base-info {
+            .unitize(45, 16, margin-right);
+
+            .entry--label {
+                .unitize-margin(0, 8, 0, 0);
+                width: auto;
+            }
+        }
+
+        // Product actions
+        .product--actions {
+            .unitize-margin(25, 0, 45, 0);
+            .unitize-padding(10, 0, 0, 0);
+            display: block;
+            border-top: 1px solid @borderColor;
+        }
+
+        // Product action link
+        .action--link {
+            .unitize-margin(0, 35, 0, 0);
+            color: @primaryTextColor;
+
+            &:last-child { margin: 0 }
+
+            // Icon
+            [class^=icon] {
+                .unitize(14, 16, font-size);
+                .unitize-margin(0, 8, 0, 0);
+            }
+        }
+
+        // Tab panel
+        .js--desktop-tab-panel {
+            .unitize-margin(0, -20, 20, -20);
+
+            .panel--tab-nav {
+                .unitize-margin(0, 20);
+            }
+            .tab--content {
+                .unitize-padding(20, 40);
+				border-left: 0 none;
+				border-right: 0 none;
+            }
+        }
+
+		// Block prices
+		.block-prices--table {
+			.unitize(12, 16, margin-top);
+		}
+    }
+}
+
+// Tablet lanscape - min-width: 1024px
+@media screen and (min-width: @tabletLandscapeViewportWidth) {
+	.product--details {
+
+		// Float the image container to the left
+		.product--image-container {
+			width: 50%;
+			margin-right: 10%;
+		}
+
+		// Float the buy box to the right side of the product details page
+		.product--buybox { width: 40% }
+		.buybox--inner { float: none }
+
+		.js--desktop-tab-panel {
+			.unitize-margin(0, -45, 20, -45);
+
+			.panel--tab-nav {
+				.unitize-margin(0, 45);
+			}
+			.tab--content {
+				.unitize-padding(25, 55, 45);
+			}
+		}
+
+		// Reformat the product actions
+		.product--actions {
+			.unitize-margin(16, 0, 16, 0);
+			.unitize-padding(0, 0, 10, 0);
+			border-top: 0 none;
+			border-bottom: 1px solid @borderColor;
+		}
+	}
+}
+
+@media screen and(min-width: @desktopViewportWidth) {
+	.product--details {
+
+		// Product image container and slider styling
+		.product--image-container {
+			margin-right: 5%;
+			width: 55%;
+		}
+
+		.slider { width: 86% }
+
+		.thumbnails--arrow {
+			display: none;
+		}
+
+		.image--thumbnails {
+			display: block;
+			width: 12%;
+			margin-right: 2%;
+			float: left;
+			border: 0 none;
+			padding: 0;
+			position: static;
+			left: auto; top: auto;
+
+			a {
+
+				.unitize-margin(0, 0, 14, 0);
+				display: block;
+				line-height: normal;
+				float: none;
+			}
+
+			img { .border-radius(2px) }
+		}
+
+		// Product actions
+		.action--link {
+			.unitize(20, 16, margin-right);
+		}
+
+		// Tab panel
+		.js--desktop-tab-panel .panel--tab-nav {
+			.unitize-margin(0, 50);
+		}
+	}
+}

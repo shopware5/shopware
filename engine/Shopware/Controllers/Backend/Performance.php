@@ -291,19 +291,19 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         return array(
             array(
                 'id' => 1,
-                'name' => 'APCu aktiviert',
+                'name' => Shopware()->Snippets()->getNamespace('backend/performance/main')->get('cache/apc'),
                 'value' => extension_loaded('apcu'),
                 'valid' => extension_loaded('apcu') === true
             ),
             array(
                 'id' => 3,
-                'name' => 'Zend OPcache aktiviert',
+                'name' => Shopware()->Snippets()->getNamespace('backend/performance/main')->get('cache/zend'),
                 'value' => extension_loaded('Zend OPcache'),
                 'valid' => extension_loaded('Zend OPcache') === true
             ),
             array(
                 'id' => 4,
-                'name' => 'PHP Version',
+                'name' => Shopware()->Snippets()->getNamespace('backend/performance/main')->get('cache/php_version'),
                 'value' => phpversion(),
                 'valid' => version_compare(phpversion(), '5.4.0', '>=')
             )

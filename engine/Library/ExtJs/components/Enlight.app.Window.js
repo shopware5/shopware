@@ -50,6 +50,9 @@ Ext.define('Enlight.app.Window', {
     minimized: false,
     focusable: true,
 
+    closePopupTitle: 'Close module',
+    closePopupMessage: 'This will close all windows of the "__MODULE__" module. Do you want to continue?',
+
     /**
      * Property which indicates that the window should first just set to hidden before destroying it.
      * @boolean
@@ -208,14 +211,19 @@ Ext.define('Enlight.app.Window', {
             return true;
         }
 
-        Ext.Msg.confirm('Modul schließen', 'Sollen alle Unterfenster vom "' + me.title + '"-Modul geschlossen werden?', function (button) {
-            if (button == 'yes') {
-                me.closeSubWindows(subWindows, windowManager);
-                me.destroy();
-            }
-        });
 
-        // Prevent the event to continue to the the fact that we're triggering the destroying programmically...
+        Ext.Msg.confirm(
+            me.closePopupTitle,
+            me.closePopupMessage.replace('__MODULE__', me.title),
+            function (button) {
+                if (button == 'yes') {
+                    me.closeSubWindows(subWindows, windowManager);
+                    me.destroy();
+                }
+            }
+        );
+
+        // Prevent the event to continue to the the fact that we're triggering the destroying programatically...
         return false;
     },
 
@@ -418,8 +426,13 @@ Ext.define('Enlight.app.Window', {
      */
     onMouseDown: function() {
         var me = this,
-            subApp = me.subApplication || me.subApp,
-            windowManager = subApp.windowManager;
+            subApp = me.subApplication || me.subApp;
+
+        if (!subApp) {
+            return;
+        }
+
+        var windowManager = subApp.windowManager;
 
         // We need a try & catch here to prevent errors if the will be activated and
         // destroyed immediately after that.

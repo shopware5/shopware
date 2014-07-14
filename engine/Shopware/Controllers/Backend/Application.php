@@ -1048,7 +1048,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *
      * @param Doctrine\ORM\QueryBuilder $builder
      * @param int $hydrationMode
-     * @return Paginator
+     * @return \Doctrine\ORM\Tools\Pagination\Paginator
      */
     protected function getQueryPaginator(
         \Doctrine\ORM\QueryBuilder $builder,

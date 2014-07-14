@@ -1,0 +1,8 @@
+// The mixins provides you a cross-browser compatible method to set the appearance of the element.
+//
+// @param {String} type The type you want to use.
+.appearance(@type: none) {
+	-webkit-appearance: @type;
+	-moz-appearance: @type;
+	appearance: @type;
+}

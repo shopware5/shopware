@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PocketGrid - Content-first / Swap columns</title>
+
+    <!-- Common styles for examples (you do not need to include it in your pages) -->
+    <link rel="stylesheet" href="common.css" />
+
+    <!-- The PocketGrid -->
+    <link rel="stylesheet" href="../pocketgrid.css" />
+
+    <!-- Styles defining the layout -->
+    <style type="text/css">
+      .b1, .b2, .b3, .b4, .b5, .b6, .b7, .b8, .b9, .b10, .b11, .b12 {
+        width: 20%;
+      }
+      /* Left offset: just give the margin-left the size you want!
+      Note: For IE6 compatibility, you have to put "!important" also. */
+      .b3 { margin-left: 20% !important; }
+      /* Right offset: just give the margin-right the size you want! */
+      .b11 { margin-right: 40% !important; }
+      
+      /* Some styles for better readability */
+      .b3 .box { background-color: #CDF; font-size: .8em; }
+      .b11 .box { background-color: #CFC; font-size: .8em; }
+    </style>
+  </head>
+
+  <body class="block-group">
+
+    <div class="b1 block"><div class="box">B1</div></div>
+    <div class="b2 block"><div class="box">B2</div></div>
+    <div class="b3 block"><div class="box" title="margin-left: 20%">Left&nbsp;offset</div></div>
+    <div class="b4 block"><div class="box">B4</div></div>
+    <div class="b5 block"><div class="box">B5</div></div>
+    <div class="b6 block"><div class="box">B6</div></div>
+    <div class="b7 block"><div class="box">B7</div></div>
+    <div class="b8 block"><div class="box">B8</div></div>
+    <div class="b9 block"><div class="box">B9</div></div>
+    <div class="b10 block"><div class="box">B10</div></div>
+    <div class="b11 block"><div class="box" title="margin-right: 20%">Right&nbsp;offset</div></div>
+    <div class="b12 block"><div class="box">B12</div></div>
+
+  </body>
+
+</html>

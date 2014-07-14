@@ -185,4 +185,22 @@ class Enlight_Controller_Request_RequestTestCase
         $_SERVER['HTTPS'] = $value ? 'on' : null;
         return $this;
     }
+
+    /**
+     * Returns the current device type, or false if detection could not be done
+     *
+     * @return string
+     */
+    public function getDeviceType()
+    {
+        return $this->getHeader('X-UA-Device');
+    }
+
+    /**
+     * Sets the current device type
+     */
+    public function setDeviceType($deviceType)
+    {
+        $this->setHeader('X-UA-Device', $deviceType);
+    }
 }

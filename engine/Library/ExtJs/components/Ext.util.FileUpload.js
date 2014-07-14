@@ -846,7 +846,14 @@ Ext.define('Ext.util.FileUpload', {
                 if (response.success) {
                     //show info how much files uploaded
                     Shopware.Msg.createGrowlMessage(me.snippets.messageTitle, Ext.String.format(me.snippets.messageText, count), 'Media-Manager');
-                }else{
+
+                //check if error message send
+                } else if (response.error) {
+                    Shopware.Msg.createGrowlMessage(
+                        me.snippets.messageTitle,
+                        response.error
+                    );
+                } else {
 					// Throw alert box
 					Ext.Msg.alert(me.snippets.maxUploadSizeTitle, me.snippets.maxUploadSizeText);
 				}

@@ -211,7 +211,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         if ((rand() % 10) == 0) {
             $sql = 'DELETE FROM s_statistics_currentusers WHERE time < DATE_SUB(NOW(), INTERVAL 3 MINUTE)';
             Shopware()->Db()->query($sql);
-            $sql = 'DELETE FROM s_statistics_pool WHERE datum!=CURDATE()';
+            $sql = 'DELETE FROM s_statistics_pool WHERE datum != CURDATE()';
             Shopware()->Db()->query($sql);
         }
     }
@@ -223,11 +223,14 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
      */
     public function refreshCurrentUsers($request)
     {
-        $sql = 'INSERT INTO s_statistics_currentusers (`remoteaddr`, `page`, `time`, `userID`) VALUES (?, ?, NOW(), ?)';
+        $sql = '
+        INSERT INTO s_statistics_currentusers (remoteaddr, page, `time`, userID, deviceType)
+        VALUES (?, ?, NOW(), ?, ?)';
         Shopware()->Db()->query($sql, array(
             $request->getClientIp(false),
             $request->getParam('requestPage', $request->getRequestUri()),
-            empty(Shopware()->Session()->sUserId) ? 0 : (int) Shopware()->Session()->sUserId
+            empty(Shopware()->Session()->sUserId) ? 0 : (int) Shopware()->Session()->sUserId,
+            $request->getDeviceType()
         ));
     }
 
@@ -239,27 +242,49 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
     public function refreshLog($request)
     {
         $ip = $request->getClientIp(false);
+        $deviceType = $request->getDeviceType();
 
         $shopId = Shopware()->Shop()->getId();
 
-        $sql = 'SELECT id FROM s_statistics_visitors WHERE datum=CURDATE() AND shopID = ?';
-        $result = Shopware()->Db()->fetchOne($sql, array($shopId));
+        $sql = '
+            SELECT id
+            FROM s_statistics_visitors
+            WHERE datum = CURDATE()
+            AND shopID = :shopId
+            AND deviceType = :deviceType';
+        $result = Shopware()->Db()->fetchOne(
+            $sql,
+            array(
+                'shopId' => $shopId,
+                'deviceType' => $deviceType
+            )
+        );
         if (empty($result)) {
-            $sql = 'INSERT INTO s_statistics_visitors (`datum`,`shopID`, `pageimpressions`, `uniquevisits`) VALUES(NOW(),?, 1, 1)';
-            Shopware()->Db()->query($sql, array($shopId));
+            $sql = '
+                INSERT INTO s_statistics_visitors
+                (datum, shopID, pageimpressions, uniquevisits, deviceType)
+                VALUES(NOW(), :shopId, 1, 1, :deviceType)
+            ';
+            Shopware()->Db()->query(
+                $sql,
+                array(
+                    'shopId' => $shopId,
+                    'deviceType' => $deviceType
+                )
+            );
             return;
         }
 
-        $sql = 'SELECT id FROM s_statistics_pool WHERE datum=CURDATE() AND remoteaddr=?';
+        $sql = 'SELECT id FROM s_statistics_pool WHERE datum = CURDATE() AND remoteaddr = ?';
         $result = Shopware()->Db()->fetchOne($sql, array($ip));
         if (empty($result)) {
             $sql = 'INSERT INTO s_statistics_pool (`remoteaddr`, `datum`) VALUES (?, NOW())';
             Shopware()->Db()->query($sql, array($ip));
-            $sql = 'UPDATE s_statistics_visitors SET pageimpressions=pageimpressions+1, uniquevisits=uniquevisits+1 WHERE datum=CURDATE() AND shopID = ?';
-            Shopware()->Db()->query($sql, array($shopId));
+            $sql = 'UPDATE s_statistics_visitors SET pageimpressions=pageimpressions+1, uniquevisits=uniquevisits+1 WHERE datum=CURDATE() AND shopID = ? AND deviceType = ?';
+            Shopware()->Db()->query($sql, array($shopId, $deviceType));
         } else {
-            $sql = 'UPDATE s_statistics_visitors SET pageimpressions=pageimpressions+1 WHERE datum=CURDATE() AND shopID = ?';
-            Shopware()->Db()->query($sql, array($shopId));
+            $sql = 'UPDATE s_statistics_visitors SET pageimpressions=pageimpressions+1 WHERE datum=CURDATE() AND shopID = ? AND deviceType = ?';
+            Shopware()->Db()->query($sql, array($shopId, $deviceType));
         }
     }
 
@@ -300,19 +325,20 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
     public function refreshArticleImpression($request)
     {
         $articleId = $request->getParam('articleId');
+        $deviceType = $request->getDeviceType();
         if (empty($articleId)) {
             return;
         }
         $shopId = Shopware()->Shop()->getId();
         /** @var $repository \Shopware\Models\Tracking\Repository */
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Tracking\ArticleImpression');
-        $articleImpressionQuery = $repository->getArticleImpressionQuery($articleId, $shopId);
+        $articleImpressionQuery = $repository->getArticleImpressionQuery($articleId, $shopId, null, $deviceType);
         /** @var  $articleImpression \Shopware\Models\Tracking\ArticleImpression */
         $articleImpression = $articleImpressionQuery->getOneOrNullResult();
 
         // If no Entry for this day exists - create a new one
         if ($articleImpression === null) {
-            $articleImpression = new \Shopware\Models\Tracking\ArticleImpression($articleId, $shopId);
+            $articleImpression = new \Shopware\Models\Tracking\ArticleImpression($articleId, $shopId, null, 1, $deviceType);
             Shopware()->Models()->persist($articleImpression);
         } else {
             $articleImpression->increaseImpressions();

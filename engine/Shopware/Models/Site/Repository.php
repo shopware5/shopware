@@ -107,10 +107,11 @@ class Repository extends ModelRepository
     public function getSitesByNodeNameQueryBuilder($nodeName)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('sites', 'children', 'attribute'))
+        $builder->select(array('sites', 'children', 'attribute', 'childrenAttribute'))
                 ->from('Shopware\Models\Site\Site', 'sites')
                 ->leftJoin('sites.attribute', 'attribute')
                 ->leftJoin('sites.children', 'children')
+                ->leftJoin('children.attribute', 'childrenAttribute')
                 ->where($builder->expr()->eq('sites.parentId',0))
                 ->andWhere(
                     $builder->expr()->orX(

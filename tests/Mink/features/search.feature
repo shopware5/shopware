@@ -25,7 +25,7 @@ Feature: Search things
 		When I search for "foo"
 		Then I should see "Leider wurden zu \"foo\" keine Artikel gefunden"
 
-      @javascript
+    @javascript @noResponsive
     Scenario Outline: Live-Search with hits
         When I received the search-results for "<searchTerm>"
         Then I should see "(<hits> Treffer)"
@@ -38,7 +38,7 @@ Feature: Search things
         | arti       | 15   |
         | tee        | 20   |
 
-  @javascript
-  Scenario: Live-Search with no hits
-    When I received the search-results for "foo"
-    Then I should not see "Treffer"
+    @javascript @noResponsive
+    Scenario: Live-Search with no hits
+        When I received the search-results for "foo"
+        Then I should not see "Treffer"

@@ -192,7 +192,10 @@
 
 	{block name="frontend_detail_data_delivery"}
 		{* Delivery informations *}
-		{include file="frontend/plugins/index/delivery_informations.tpl" sArticle=$sArticle}
+        {assign var="sCountConfigurator" value=$sArticle.sConfigurator|@count}
+        {if $sArticle.sConfiguratorSettings.type != 1 || $sArticle.sConfigurator[$sCountConfigurator-1].user_selected}
+            {include file="frontend/plugins/index/delivery_informations.tpl" sArticle=$sArticle}
+        {/if}
 	{/block}
 
 	{if !$sArticle.liveshoppingData.valid_to_ts}
@@ -264,7 +267,7 @@
                             <em>{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s} {$sArticle.pseudoprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</em>
                             {if $sArticle.pseudopricePercent.float}
                                 <span>
-                                    ({$sArticle.pseudopricePercent.float} % {se name="DetailDataInfoSavePercent"}{/se})
+                                    ({$sArticle.pseudopricePercent.float}% {se name="DetailDataInfoSavePercent"}{/se})
                                 </span>
                             {/if}
                         </div>

@@ -240,7 +240,19 @@
     <target name="mink-shopware-continuous">
         <exec executable="${script.behat}" dir="${test.dir}/Mink">
             <env key="MINK_EXTENSION_PARAMS" value="base_url=http://${app.host}${app.path}"/>
-            <arg value="--tags=~@javascript"/>
+            <arg value="--no-ansi"/>
+            <arg value="--tags=~@noEmotion&amp;&amp;~@javascript"/>
+            <arg value="--format=pretty,junit,html"/>
+            <arg value="--out=,${log.dir}/mink,${log.dir}/mink-report.html"/>
+        </exec>
+    </target>
+
+    <target name="mink-shopware-continuous-responsive">
+        <exec executable="${script.behat}" dir="${test.dir}/Mink">
+            <env key="MINK_EXTENSION_PARAMS" value="base_url=http://${app.host}${app.path}"/>
+            <arg value="--no-ansi"/>
+            <arg value="--profile=responsive"/>
+            <arg value="--tags=~@noResponsive&amp;&amp;~@javascript"/>
             <arg value="--format=pretty,junit,html"/>
             <arg value="--out=,${log.dir}/mink,${log.dir}/mink-report.html"/>
         </exec>
@@ -376,7 +388,7 @@
         sudo gem install compass
     -->
     <target name="compile-extjs">
-        <exec executable="compass" dir="${basedir}/templates/_default/backend/_resources">
+        <exec executable="compass" dir="${basedir}/engine/Shopware/Themes/Backend/ExtJs/backend/_resources">
             <arg value="compile"/>
             <arg value="--force"/>
             <arg value="resources/sass/"/>
@@ -384,7 +396,7 @@
     </target>
 
     <target name="watch-extjs">
-        <exec executable="compass" dir="${basedir}/templates/_default/backend/_resources">
+        <exec executable="compass" dir="${basedir}/engine/Shopware/Themes/Backend/ExtJs/backend/_resources">
             <arg value="watch"/>
             <arg value="resources/sass/"/>
         </exec>

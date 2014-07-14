@@ -765,4 +765,4 @@ div#notes .table_row a.zoom_picture {background-image: url(../images/icons/ico_z
 .ajaxSlider .leftArrow, .ajaxSlider .rightArrow, .bannerSlider .leftArrow, .bannerSlider .rightArrow {
 	background-image: url(../images/sprite_slider_arrows.png);
 }
-.small {background: url(../../../../_default/frontend/_resources/images/buttons/button_middle-small.png) repeat-x center center;}
+.small {background: url(../../../../_emotion/frontend/_resources/images/buttons/button_middle-small.png) repeat-x center center;}

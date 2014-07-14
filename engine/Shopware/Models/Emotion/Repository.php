@@ -266,13 +266,34 @@ class Repository extends ModelRepository
     public function getCampaigns($offset=null, $limit=null)
     {
         $builder = $this->createQueryBuilder('emotions');
-        $builder->select(array('emotions','categories.id AS categoryId'))
+        $builder->select(array('emotions','categories.id AS categoryId', 'attribute'))
                 ->innerJoin('emotions.categories','categories')
+                ->leftJoin('emotions.attribute','attribute')
                 ->where('emotions.isLandingPage = 1 ')
                 ->andWhere('emotions.active = 1');
 
         $builder->setFirstResult($offset)
             ->setMaxResults($limit);
+
+        return $builder;
+    }
+
+    /**
+     * Returns the builder selecting only Campaigns of the given shop category
+     * @param $categoryId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getCampaignsByCategoryId($categoryId)
+    {
+        $builder = $this->getCampaigns();
+        $builder->andWhere(
+            $builder->expr()->orX(
+                $builder->expr()->eq('categories.id', ':categoryId'), // = 3
+                $builder->expr()->like('categories.path', ':categoryPath') //like '%|3|
+            )
+        )
+            ->setParameter('categoryId', $categoryId)
+            ->setParameter('categoryPath', '%|' . $categoryId . '|');
 
         return $builder;
     }

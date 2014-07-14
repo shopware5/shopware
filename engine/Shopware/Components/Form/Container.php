@@ -26,6 +26,7 @@ namespace Shopware\Components\Form;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Form\Interfaces\Container as ContainerInterface;
+use Shopware\Components\Form\Interfaces\Element;
 
 /**
  * Class Container
@@ -63,7 +64,6 @@ class Container extends Base implements ContainerInterface
         return $this->attributes;
     }
 
-
     /**
      * Initials the elements collection.
      */
@@ -90,9 +90,11 @@ class Container extends Base implements ContainerInterface
 
     /**
      * @param $element
+     * @return $this
      */
-    public function addElement(Base $element)
+    public function addElement(Element $element)
     {
         $this->elements->add($element);
+        return $this;
     }
 }

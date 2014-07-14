@@ -41,18 +41,21 @@ class DebitPaymentMethod extends GenericPaymentMethod
      */
     public function validate(\Enlight_Controller_Request_Request $request)
     {
-        if (!$request->getParam("sDebitAccount")) {
-            $sErrorFlag["sDebitAccount"] = true;
-        }
-        if (!$request->getParam("sDebitBankcode")) {
-            $sErrorFlag["sDebitBankcode"] = true;
-        }
-        if (!$request->getParam("sDebitBankName")) {
-            $sErrorFlag["sDebitBankName"] = true;
-        }
-        $bankHolder = $request->getParam("sDebitBankHolder");
-        if (empty($bankHolder) && isset($bankHolder)) {
-            $sErrorFlag["sDebitBankHolder"] = true;
+        $sErrorFlag = array();
+        $fields = array(
+            'sDebitAccount',
+            'sDebitBankcode',
+            'sDebitBankName',
+            'sDebitBankHolder'
+        );
+
+        foreach ($fields as $field) {
+            $value = $request->getParam($field, '');
+            $value = trim($value);
+
+            if (empty($value)) {
+                $sErrorFlag[$field] = true;
+            }
         }
 
         if (count($sErrorFlag)) {

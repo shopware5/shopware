@@ -251,7 +251,7 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         }
 
         if (strpos($link, self::$baseFile) !== 0) {
-            return $link;
+            return htmlspecialchars($link);
         }
 
         $url = str_replace(',', '=', $link);
@@ -263,7 +263,7 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
             $query['title'] = $title;
         }
 
-        return Shopware()->Front()->Router()->assemble($query);
+        return htmlspecialchars(Shopware()->Front()->Router()->assemble($query));
     }
 
     /**
