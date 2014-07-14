@@ -87,11 +87,7 @@
 						</div>
 					{/block}
 
-					{$sBasketItem.price|currency}
-
-                    {block name='frontend_checkout_cart_tax_symbol'}
-						{s name="Star" namespace="frontend/listing/box_article"}{/s}
-					{/block}
+					{$sBasketItem.price|currency}{block name='frontend_checkout_cart_tax_symbol'}{s name="Star" namespace="frontend/listing/box_article"}{/s}{/block}
                 {/if}
             </div>
         {/block}
