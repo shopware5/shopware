@@ -330,6 +330,15 @@
             me.slideNext();
         });
 
+        // If the movestart is heading off in an upwards or downwards
+        // direction, prevent it so that the browser scrolls normally.
+        me.$el.on('movestart.' + pluginName, function(e) {
+            if ((e.distX > e.distY && e.distX < -e.distY) ||
+                (e.distX < e.distY && e.distX > -e.distY)) {
+                e.preventDefault();
+            }
+        });
+
         if (me.opts.touchControl && me.active) {
             me.$el.on('swipeleft.' + pluginName, me.slideNext.bind(me));
             me.$el.on('swiperight.' + pluginName, me.slidePrev.bind(me));

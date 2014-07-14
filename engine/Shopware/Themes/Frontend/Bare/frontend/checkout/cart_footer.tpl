@@ -1,95 +1,165 @@
-<div class="table_foot">
-	{block name='frontend_checkout_cart_footer_tax_information'}{/block}
+{* Add product using the sku *}
+{block name='frontend_checkout_cart_footer_add_product'}
+	<form method="post" action="{url action='addArticle' sTargetAction=$sTargetAction}" class="table--add-product add-product--form block-group">
 
-	{block name='frontend_checkout_cart_footer_left'}{/block}
-							
-	{* Field labels *}
-	{block name='frontend_checkout_cart_footer_field_labels'}
-		<div id="aggregation_left" class="grid_4">
-			<p>
-				<strong>{se name="CartFooterSum"}{/se}</strong>
-			</p>
-			<div class="border">
-			<p>
-				<strong>{se name="CartFooterShipping"}{/se}</strong>
-			</p>
-			</div>
-			<div class="totalamount border">
-				<p>
-					<strong>{se name="CartFooterTotal"}{/se}</strong>
-				</p>
-			</div>
-			{if $sUserData.additional.charge_vat}
-			<div class="tax">
-			<p>
-				<strong>{se name="CartFooterTotalNet"}{/se}</strong>
-			</p>
-			</div>
-			{foreach $sBasket.sTaxRates as $rate=>$value}
-				<div>
-				<p>
-					<strong>{se name="CartFooterTotalTax"}{/se}</strong>
-				</p>
-			</div>
-			{/foreach}
-			{/if}
-		</div>
-	{/block}
-	
-	{* Aggregation *}
-	<div id="aggregation" class="grid_2">
-		
-		{* Basket sum *}
-		{block name='frontend_checkout_cart_footer_basket_sum'}
-		<p class="textright">
-			<strong>{$sBasket.Amount|currency}*</strong>
-		</p>
-		{/block}
-		
-		{* Shipping costs *}
-		{block name='frontend_checkout_cart_footer_shipping_costs'}
-			<div class="border">
-				<p class="textright">
-					<strong>{$sShippingcosts|currency}*</strong>
-				</p>
-			</div>
-		{/block}
-		
-		{* Total sum *}
-		{block name='frontend_checkout_cart_footer_total_sum'}
-		<div class="totalamount border">
-			<p class="textright">
-				<strong>
-					{if $sAmountWithTax && $sUserData.additional.charge_vat}{$sAmountWithTax|currency}{else}{$sAmount|currency}{/if}
-				</strong>
-			</p>
-		</div>
+		{block name='frontend_checkout_cart_footer_add_product_field'}
+			<input name="sAdd" class="add-product--field block" type="text" placeholder="{s name='CheckoutFooterAddProductPlaceholder' namespace='frontend/checkout/cart_footer_left'}{/s}" />
 		{/block}
 
+		{block name='frontend_checkout_cart_footer_add_product_button'}
+			<button type="submit" class="add-product--button btn btn--primary is--small block">
+				<i class="icon--arrow-right"></i>
+			</button>
+		{/block}
+	</form>
+{/block}
 
-		{* Total net *}
-		{block name='frontend_checkout_cart_footer_total_net'}
-		{if $sUserData.additional.charge_vat}
-		<div class="tax">
-		<p class="textright">
-			<strong>{$sAmountNet|currency}</strong>
-		</p>
-		</div>
-		{/if}
-		{/block}
-		
-		{* Total tax *}
-		{block name='frontend_checkout_cart_footer_tax_rates'}
-		{if $sUserData.additional.charge_vat}
-			{foreach $sBasket.sTaxRates as $rate=>$value}
-			<div>
-				<p class="textright">
-					<strong>{$value|currency}</strong>
-				</p>
-			</div>
-			{/foreach}
-		{/if}
-		{/block}
-	</div>
-	<div class="clear">&nbsp;</div>
-</div>
+{block name='frontend_checkout_cart_footer_element'}
+    <div class="basket--footer">
+        <div class="table--aggregation">
+            {* Add product using a voucher *}
+            {block name='frontend_checkout_cart_footer_add_voucher'}
+                <form method="post" action="{url action='addVoucher' sTargetAction=$sTargetAction}" class="table--add-voucher add-voucher--form">
+
+                    {block name='frontend_checkout_cart_footer_add_voucher_trigger'}
+                        <input type="checkbox" id="add-voucher--trigger" class="add-voucher--checkbox">
+                    {/block}
+
+                    {block name='frontend_checkout_cart_footer_add_voucher_label'}
+                        <label for="add-voucher--trigger" class="add-voucher--label">{s name="CheckoutFooterVoucherTrigger"}Ich habe einen Gutschein{/s}</label>
+                    {/block}
+
+                    <div class="add-voucher--panel is--hidden block-group">
+                        {block name='frontend_checkout_cart_footer_add_voucher_field'}
+                            <input type="text" class="add-voucher--field block" name="sVoucher" placeholder="{s name='CheckoutFooterAddVoucherLabelInline'}{/s}" />
+                        {/block}
+
+                        {block name='frontend_checkout_cart_footer_add_voucher_button'}
+                            <button type="submit" class="add-voucher--button btn btn--primary is--small block">
+                                <i class="icon--arrow-right"></i>
+                            </button>
+                        {/block}
+                    </div>
+                </form>
+            {/block}
+
+            {* Shipping costs pre-calculation *}
+            {if $sBasket.content && !$sUserLoggedIn && !$sUserData.additional.user.id}
+
+                {block name='frontend_checkout_shipping_costs_country_trigger'}
+                    <a href="#show-hide--shipping-costs" class="table--shipping-costs-trigger">
+                        <i class="icon--arrow-right"></i> {s name='CheckoutFooterEstimatedShippingCosts'}{/s}
+                    </a>
+                {/block}
+
+                {block name='frontend_checkout_shipping_costs_country_include'}
+                    {include file="frontend/checkout/shipping_costs.tpl"}
+                {/block}
+            {/if}
+        </div>
+
+        {block name='frontend_checkout_cart_footer_field_labels'}
+            <ul class="aggregation--list">
+
+                {* Basket sum *}
+                {block name='frontend_checkout_cart_footer_field_labels_sum'}
+                    <li class="list--entry block-group entry--sum">
+
+                        {block name='frontend_checkout_cart_footer_field_labels_sum_label'}
+                            <div class="entry--label block">
+                                {s name="CartFooterSum"}{/s}
+                            </div>
+                        {/block}
+
+                        {block name='frontend_checkout_cart_footer_field_labels_sum_value'}
+                            <div class="entry--value block">
+                                {$sBasket.Amount|currency}{s name="Star" namespace="frontend/listing/box_article"}{/s}
+                            </div>
+                        {/block}
+                    </li>
+                {/block}
+
+                {* Shipping costs *}
+                {block name='frontend_checkout_cart_footer_field_labels_shipping'}
+                    <li class="list--entry block-group entry--shipping">
+
+                        {block name='frontend_checkout_cart_footer_field_labels_shipping_label'}
+                            <div class="entry--label block">
+                                {s name="CartFooterShipping"}{/s}
+                            </div>
+                        {/block}
+
+                        {block name='frontend_checkout_cart_footer_field_labels_shipping_value'}
+                            <div class="entry--value block">
+                                {$sShippingcosts|currency}{s name="Star" namespace="frontend/listing/box_article"}{/s}
+                            </div>
+                        {/block}
+                    </li>
+                {/block}
+
+                {* Total sum *}
+                {block name='frontend_checkout_cart_footer_field_labels_total'}
+                    <li class="list--entry block-group entry--total">
+
+                        {block name='frontend_checkout_cart_footer_field_labels_total_label'}
+                            <div class="entry--label block">
+                                {s name="CartFooterTotal"}{/s}
+                            </div>
+                        {/block}
+
+                        {block name='frontend_checkout_cart_footer_field_labels_total_value'}
+                            <div class="entry--value block is--no-star">
+                                {if $sAmountWithTax && $sUserData.additional.charge_vat}{$sAmountWithTax|currency}{else}{$sAmount|currency}{/if}
+                            </div>
+                        {/block}
+                    </li>
+                {/block}
+
+                {* Total net *}
+                {block name='frontend_checkout_cart_footer_field_labels_totalnet'}
+                    {if $sUserData.additional.charge_vat}
+                        <li class="list--entry block-group entry--totalnet">
+
+                            {block name='frontend_checkout_cart_footer_field_labels_totalnet_label'}
+                                <div class="entry--label block">
+                                    {s name="CartFooterTotalNet"}{/s}
+                                </div>
+                            {/block}
+
+                            {block name='frontend_checkout_cart_footer_field_labels_totalnet_value'}
+                                <div class="entry--value block is--no-star">
+                                    {$sAmountNet|currency}
+                                </div>
+                            {/block}
+                        </li>
+                    {/if}
+                {/block}
+
+                {* Taxes *}
+                {block name='frontend_checkout_cart_footer_field_labels_taxes'}
+                    {if $sUserData.additional.charge_vat}
+                        {foreach $sBasket.sTaxRates as $rate => $value}
+
+                            {block name='frontend_checkout_cart_footer_field_labels_taxes_entry'}
+                                <li class="list--entry block-group entry--taxes">
+
+                                    {block name='frontend_checkout_cart_footer_field_labels_taxes_label'}
+                                        <div class="entry--label block">
+                                            {s name="CartFooterTotalTax"}{/s}
+                                        </div>
+                                    {/block}
+
+                                    {block name='frontend_checkout_cart_footer_field_labels_taxes_value'}
+                                        <div class="entry--value block is--no-star">
+                                            {$value|currency}
+                                        </div>
+                                    {/block}
+                                </li>
+                            {/block}
+                        {/foreach}
+                    {/if}
+                {/block}
+            </ul>
+        {/block}
+    </div>
+{/block}

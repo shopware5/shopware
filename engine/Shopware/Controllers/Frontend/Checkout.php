@@ -469,6 +469,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $this->session['sState'] = (int) $this->Request()->getPost('sState');
         }
 
+        // We need an indicator in the view to expand the shipping costs pre-calculation on page load
+	    $this->View()->assign('calculateShippingCosts', true);
+
         $this->forward($this->Request()->getParam('sTargetAction', 'index'));
     }
 
