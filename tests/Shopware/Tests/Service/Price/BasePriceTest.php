@@ -4,17 +4,20 @@ namespace Shopware\Tests\Service\Price;
 
 
 use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
+use Shopware\Tests\Service\Helper;
 
 class BasePriceTest extends \Enlight_Components_Test_TestCase
 {
     /**
-     * @var \Shopware\Tests\Service\Helper
+     * @var Helper
      */
     private $helper;
 
     protected function setUp()
     {
-        $this->helper = new \Shopware\Tests\Service\Helper();
+        $this->helper = new Helper();
         parent::setUp();
     }
 
@@ -60,11 +63,12 @@ class BasePriceTest extends \Enlight_Components_Test_TestCase
 
         $product = $this->helper->getListProduct($number, $context);
 
-        /**@var $first Price*/
+        /** @var Price $first */
         $first = array_shift($product->getPrices());
         $this->assertEquals(100, $first->getCalculatedPrice());
         $this->assertEquals(200, $first->getCalculatedReferencePrice());
 
+        /** @var Price $last */
         $last = array_pop($product->getPrices());
         $this->assertEquals(50, $last->getCalculatedPrice());
         $this->assertEquals(100, $last->getCalculatedReferencePrice());

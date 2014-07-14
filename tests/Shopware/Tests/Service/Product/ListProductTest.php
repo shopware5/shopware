@@ -4,6 +4,7 @@ namespace Shopware\Tests\Service\Product;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Tests\Service\Converter;
 use Shopware\Tests\Service\Helper;
 
 class ListProductTest extends \Enlight_Components_Test_TestCase
@@ -13,9 +14,16 @@ class ListProductTest extends \Enlight_Components_Test_TestCase
      */
     private $helper;
 
+    /**
+     * @var Converter
+     */
+    private $converter;
+
     protected function setUp()
     {
         $this->helper = new Helper();
+        $this->converter = new Converter();
+
         parent::setUp();
     }
 
@@ -50,14 +58,16 @@ class ListProductTest extends \Enlight_Components_Test_TestCase
             array($tax)
         );
 
+        $customerGroupStruct = $this->converter->convertCustomerGroup($customerGroup);
+
         $data = $this->helper->getSimpleProduct(
             $number,
             $tax,
-            $customerGroup
+            $customerGroupStruct
         );
 
         $data = array_merge($data, $this->helper->getConfigurator(
-            $customerGroup,
+            $customerGroupStruct,
             $number
         ));
 
@@ -80,13 +90,13 @@ class ListProductTest extends \Enlight_Components_Test_TestCase
 
         $this->assertNotEmpty($product->getPrices());
         $this->assertNotEmpty($product->getPriceRules());
-        foreach($product->getPrices() as $price) {
+        foreach ($product->getPrices() as $price) {
             $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Price', $price);
             $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit', $price->getUnit());
             $this->assertGreaterThanOrEqual(1, $price->getUnit()->getMinPurchase());
         }
 
-        foreach($product->getPriceRules() as $price) {
+        foreach ($product->getPriceRules() as $price) {
             $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule', $price);
         }
 

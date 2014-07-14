@@ -68,7 +68,7 @@ class CustomerGroupConditionTest extends TestCase
         );
 
         $product['customerGroups'] = array();
-        foreach($customerGroups as $customerGroup) {
+        foreach ($customerGroups as $customerGroup) {
             $product['customerGroups'][] = array('id' => $customerGroup->getId());
         }
 
@@ -88,7 +88,7 @@ class CustomerGroupConditionTest extends TestCase
             $this->getDefaultProduct('testSingleCustomerGroup-4', array(), $category, $context),
         );
 
-        foreach($articles as $article) {
+        foreach ($articles as $article) {
             $this->helper->createArticle($article);
         }
 
@@ -120,7 +120,7 @@ class CustomerGroupConditionTest extends TestCase
             $this->getDefaultProduct('testSingleCustomerGroup-4', array(), $category, $context),
         );
 
-        foreach($articles as $article) {
+        foreach ($articles as $article) {
             $this->helper->createArticle($article);
         }
 

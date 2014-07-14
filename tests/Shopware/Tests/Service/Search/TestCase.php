@@ -11,7 +11,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
         $this->assertCount(count($expectedNumbers), $result->getProducts());
         $this->assertEquals(count($expectedNumbers), $result->getTotalCount());
 
-        foreach($result->getProducts() as $product) {
+        foreach ($result->getProducts() as $product) {
             $this->assertContains(
                 $product->getNumber(),
                 $expectedNumbers

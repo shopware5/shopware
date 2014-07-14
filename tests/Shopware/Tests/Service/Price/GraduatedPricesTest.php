@@ -4,17 +4,18 @@ namespace Shopware\Tests\Service\Price;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
+use Shopware\Tests\Service\Helper;
 
 class GraduatedPricesTest extends \Enlight_Components_Test_TestCase
 {
     /**
-     * @var \Shopware\Tests\Service\Helper
+     * @var Helper
      */
     private $helper;
 
     protected function setUp()
     {
-        $this->helper = new \Shopware\Tests\Service\Helper();
+        $this->helper = new Helper();
         parent::setUp();
     }
 
@@ -73,7 +74,7 @@ class GraduatedPricesTest extends \Enlight_Components_Test_TestCase
         $graduation = $listProduct->getPrices();
 
         $this->assertCount(3, $graduation);
-        foreach($graduation as $price) {
+        foreach ($graduation as $price) {
             $this->assertEquals('PHP', $price->getCustomerGroup()->getKey());
             $this->assertGreaterThan(0, $price->getCalculatedPrice());
         }
@@ -93,7 +94,7 @@ class GraduatedPricesTest extends \Enlight_Components_Test_TestCase
         $graduation = $listProduct->getPrices();
 
         $this->assertCount(3, $graduation);
-        foreach($graduation as $price) {
+        foreach ($graduation as $price) {
             $this->assertEquals('BACK', $price->getCustomerGroup()->getKey());
             $this->assertGreaterThan(0, $price->getCalculatedPrice());
         }
@@ -111,7 +112,7 @@ class GraduatedPricesTest extends \Enlight_Components_Test_TestCase
         );
         $data = array_merge($data, $configurator);
 
-        foreach($data['variants'] as &$variant) {
+        foreach ($data['variants'] as &$variant) {
             $variant['prices'] = $this->helper->getGraduatedPrices(
                 $context->getCurrentCustomerGroup()->getKey(),
                 100
@@ -141,7 +142,7 @@ class GraduatedPricesTest extends \Enlight_Components_Test_TestCase
     {
         $number = __FUNCTION__;
         $context = $this->getContext();
-        
+
         $data = $this->getProduct($number, $context);
         $data['mainDetail']['prices'] = array(array(
             'from' => 1,
