@@ -77,6 +77,8 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.live-search.js',
         'src/js/jquery.loading-indicator.js',
         'src/js/jquery.overlay.js',
+        'src/js/jquery.form-polyfill.js',
+        'src/js/jquery.pseudo-text.js',
         'src/js/jquery.last-seen-products.js',
         'src/js/jquery.lightbox.js',
         'src/js/jquery.http-cache-filters.js',

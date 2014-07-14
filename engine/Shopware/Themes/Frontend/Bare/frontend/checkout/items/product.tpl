@@ -1,6 +1,6 @@
 {namespace name="frontend/checkout/cart_item"}
 
-<div class="table--row block-group row--product">
+<div class="table--row block-group row--product{if $isLast} is--last-row{/if}">
     <form name="basket_change_quantity{$sBasketItem.id}" method="post" action="{url action='changeQuantity' sTargetAction=$sTargetAction}">
 
         {if $sBasketItem.additional_details.sConfigurator}
