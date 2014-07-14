@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,13 +19,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Snippet
- * @subpackage Controller
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 //{namespace name=backend/snippet/controller/main}
@@ -115,7 +108,8 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
                 edit:         me.onEdit,
                 beforeedit:   me.onBeforeEdit,
                 deleteSingle: me.onDeleteSingle,
-                editSelectedSnippets: me.onOpenEditSnippetWindow
+                editSelectedSnippets: me.onOpenEditSnippetWindow,
+                translateSnippet: me.onTranslate
             },
 
             'snippet-main-snippetPanel': {
@@ -128,6 +122,10 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
 
             'snippet-main-editForm button[action=save]': {
                 click: me.onSaveForm
+            },
+
+            'snippet-main-translateForm button[action=save]': {
+                click: me.onSaveTranslationForm
             },
 
             'snippet-main-window button[action=expert]': {
@@ -227,8 +225,9 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
                 return false;
             }
 
-            //grid.setLoading(true);
-            record.destroy({
+            me.getStore('Snippet').remove(record)
+
+            me.getStore('Snippet').sync({
                 success: function() {
                     Shopware.Notification.createGrowlMessage(me.snippets.deleteSuccessTitle, me.snippets.deleteSuccessMessage, me.snippets.growlMessage);
                 },
@@ -262,8 +261,9 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
         }
 
         form.updateRecord(record);
+        me.getStore('Snippet').add(record)
 
-        record.save({
+        me.getStore('Snippet').sync({
             success : function() {
                 Shopware.Notification.createGrowlMessage(me.snippets.createSuccessTitle, me.snippets.createSuccessMessage, me.snippets.growlMessage);
             },
@@ -303,7 +303,7 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
 
         Ext.iterate(values, function(internalId, value) {
             store.each(function(item) {
-                // double equals instead of tripple equals intented
+                // double equals instead of triple equals intended
                 if (item.internalId == internalId) {
                     record = item;
                     record.set('value', value);
@@ -324,6 +324,64 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
         store.sync({
             success : function() {
                 Shopware.Notification.createGrowlMessage(me.snippets.saveSuccessTitle, me.snippets.saveSuccessMessage, me.snippets.growlMessage);
+                me.getStore('Snippet').reload();
+            },
+            failure: function() {
+                Shopware.Notification.createGrowlMessage(me.snippets.saveErrorTitle, me.snippets.saveErrorMessage, me.snippets.growlMessage);
+            }
+        });
+
+        // some more cleanup to do?
+        win.destroy();
+    },
+
+
+    /**
+     * Function to save a form
+     *
+     * @event click
+     * @param [object] btn Contains the clicked button
+     * @return void
+     */
+    onSaveTranslationForm: function(btn) {
+        var me         = this,
+            win        = btn.up('window'),
+            formPanel  = win.down('form'),
+            form       = formPanel.getForm(),
+            values     = form.getValues(false, true),
+            store      = formPanel.snippetStore,
+            record     = null,
+            newRecords = false;
+
+        if (!form.isValid()) {
+            return;
+        }
+
+        Ext.iterate(values, function(internalId, value) {
+            store.each(function(item) {
+                // double equals instead of triple equals intended
+                if (item.internalId == internalId) {
+
+                    record = item;
+                    record.set('value', value);
+
+                    if (record.get('id') === null) {
+                        // set phantom true to call create event instead of update
+                        record.phantom = true;
+                        newRecords = true;
+                    }
+                    return false;
+                }
+            });
+        });
+
+        // if the store contains new records disable batch mode
+        store.getProxy().batchActions = !newRecords;
+
+        store.sync({
+            success : function() {
+                Shopware.Notification.createGrowlMessage(me.snippets.saveSuccessTitle, me.snippets.saveSuccessMessage, me.snippets.growlMessage);
+                me.getStore('Snippet').reload();
             },
             failure: function() {
                 Shopware.Notification.createGrowlMessage(me.snippets.saveErrorTitle, me.snippets.saveErrorMessage, me.snippets.growlMessage);
@@ -410,6 +468,32 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
         me.getView('main.EditForm').create({
             selectedSnippets: selectedSnippets
         }).show();
+    },
+
+    /**
+     * Fires when the 'Translate snippets' button is clicked
+     *
+     * @event click
+     * @param [object] record
+     * @return void
+     */
+    onTranslate: function(snippet) {
+        var me = this,
+            snippetStore = Ext.create("Shopware.apps.Snippet.store.Snippet");
+
+        snippetStore.proxy.extraParams = {};
+        snippetStore.proxy.extraParams.name = snippet.get('name');
+        snippetStore.proxy.extraParams.namespace = snippet.get('namespace');
+
+        snippetStore.load({
+            callback: function() {
+                me.getView('main.TranslateWindow').create({
+                    rootSnippet: snippet,
+                    snippetStore: snippetStore,
+                    shopLocaleStore: me.getStore('Shoplocale')
+                }).show();
+            }
+        });
     },
 
     /**
@@ -562,7 +646,7 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
         }
 
         view.setLoading(true);
-        record.save({
+        me.getStore('Snippet').sync({
             callback: function() {
                 view.setLoading(false);
 
@@ -576,7 +660,7 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
     },
 
     /**
-     * Reloads the Navigationtree
+     * Reloads the Navigation tree
      *
      * Reloads the store and expands the path to the previously selected node
      * and selects it without firing the select event

@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,13 +19,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Snippet
- * @subpackage View
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 //{namespace name=backend/snippet/view/main}
@@ -54,8 +47,8 @@ Ext.define('Shopware.apps.Snippet.view.main.Grid', {
      * @object
      */
     snippets: {
-        tooltipEditSnippet:   '{s name=tooltip_edit_snippet}Edit this Snippet{/s}',
-        tooltipDeleteSnippet: '{s name=tooltip_delete_snippet}Delete this Snippet{/s}',
+        tooltipTranslateSnippet:   '{s name=tooltip_translate_snippet}Translate this snippet{/s}',
+        tooltipDeleteSnippet: '{s name=tooltip_delete_snippet}Delete this snippet{/s}',
 
         columnNamespace: '{s name=column_namespace}Namespace{/s}',
         columnName:      '{s name=column_name}Name{/s}',
@@ -63,7 +56,7 @@ Ext.define('Shopware.apps.Snippet.view.main.Grid', {
 
         buttonFilterEmpty:  '{s name=button_filter_empty}Show only empty snippets{/s}',
         buttonEditSelected: '{s name=button_edit_selected}Edit selected snippets{/s}',
-        buttonAddSnippet:   '{s name=button_add_snippet}Add Snippet{/s}',
+        buttonAddSnippet:   '{s name=button_add_snippet}Add snippet{/s}',
 
         emptyTextSearch:   '{s name=empty_text_search}search...{/s}'
     },
@@ -93,7 +86,15 @@ Ext.define('Shopware.apps.Snippet.view.main.Grid', {
              * @event editSelectedSnippets
              * @param [array]
              */
-            'editSelectedSnippets'
+            'editSelectedSnippets',
+
+            /**
+             * Event will be fired when the user clicks the translate button for a snippet
+             *
+             * @event translateSnippet
+             * @param [object] record
+             */
+            'translateSnippet'
         );
     },
 
@@ -134,9 +135,9 @@ Ext.define('Shopware.apps.Snippet.view.main.Grid', {
 
         var actionColum = me.down('actioncolumn');
         if (enabled) {
-            actionColum.width = 26 * 2;
+            actionColum.width += 26;
         } else {
-            actionColum.width = 26;
+            actionColum.width -= 26;
         }
 
         if (me.isVisible()) {
@@ -184,23 +185,24 @@ Ext.define('Shopware.apps.Snippet.view.main.Grid', {
      */
     getColumns: function() {
         var me               = this,
-            actionColumItems = [];
+            actionColumnItems = [];
 
         /*{if {acl_is_allowed privilege=update}}*/
-        actionColumItems.push({
-            action: 'edit',
-            cls: 'editBtn',
-            iconCls: 'sprite-pencil',
-            tooltip: me.snippets.tooltipEditSnippet,
-            handler: function(grid, rowIndex) {
-                var record = grid.getStore().getAt(rowIndex);
-                me.editor.startEdit(record, 0);
+        actionColumnItems.push({
+                action: 'translate',
+                cls: 'translateBtn',
+                iconCls: 'sprite-globe',
+                tooltip: me.snippets.tooltipTranslateSnippet,
+                handler: function(grid, rowIndex) {
+                    var record = grid.getStore().getAt(rowIndex);
+                    me.fireEvent('translateSnippet', record);
+                }
             }
-        });
+        );
         /*{/if}*/
 
         /*{if {acl_is_allowed privilege=delete}}*/
-        actionColumItems.push({
+        actionColumnItems.push({
             action: 'delete',
             cls: 'deleteBtn',
             hideMode: 'display',
@@ -247,7 +249,7 @@ Ext.define('Shopware.apps.Snippet.view.main.Grid', {
              */
             xtype: 'actioncolumn',
             width: 26,
-            items: actionColumItems
+            items: actionColumnItems
         }];
 
         return columns;
