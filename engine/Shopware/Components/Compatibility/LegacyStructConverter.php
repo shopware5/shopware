@@ -131,6 +131,11 @@ class LegacyStructConverter
             $promotion['priceStartingFrom'] = $price;
         }
 
+        $realPrice = array_shift($product->getPrices())->getCalculatedPrice();
+        if ($realPrice > $cheapestPrice->getCalculatedPrice()) {
+            $promotion['priceStartingFrom'] = $cheapestPrice->getCalculatedPrice();
+        }
+
         if ($cheapestPrice->getCalculatedPseudoPrice()) {
             $discPseudo = $cheapestPrice->getCalculatedPseudoPrice();
             $discPrice = $cheapestPrice->getCalculatedPrice();
