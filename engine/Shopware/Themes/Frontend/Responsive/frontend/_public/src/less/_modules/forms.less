@@ -1,0 +1,144 @@
+// General
+.forms--content {
+    width: 100%;
+
+    .forms--headline {
+
+		.forms--title {
+			.unitize(0, 16, margin-top);
+		}
+
+	    .forms--text {
+			p { .unitize(12, 16, margin-bottom); }
+		}
+    }
+
+    .alert {
+		.unitize-margin(10, 10, 10, 10, 16);
+    }
+
+    .has--border {
+		.border-radius();
+    }
+
+    .forms--field {
+		.unitize(5, 16, margin-bottom);
+	    width: 100%;
+    }
+
+    input {
+		.unitize(10, 16, margin-bottom);
+		width: 100%;
+    }
+
+    textarea {
+		.unitize(10, 16, margin-bottom);
+		width: 100%;
+    }
+
+		.field--select {
+		    .unitize(10, 16, margin-bottom);
+    }
+
+    .btn--primary {
+	    float: right;
+
+		& [class^=icon] {
+			.unitize(10, 16, font-size);
+			.unitize-margin(-2, 0, 0, 16);
+		}
+    }
+
+    .buttons {
+	    .clearfix();
+    }
+
+    .strasse {
+	    margin-right: 2%;
+	    width: 80%;
+		float: left;
+    }
+
+    .nr {
+	    width: 18%;
+	    float: left;
+    }
+
+    .plz {
+	    margin-right: 2%;
+	    width: 28%;
+	    float: left;
+    }
+
+    .ort {
+	    .clearfix();
+	    width: 70%;
+	    float: left;
+    }
+
+    .forms--required {
+	    .unitize(12, 16, font-size);
+	    .unitize(10, 16, margin-bottom)
+    }
+
+    .forms--description {
+		.unitize-margin(-8, 0, 10, 0, 16);
+	    clear: both;
+    }
+
+    .forms--captcha {
+
+		.captcha--placeholder {
+			.unitize(8, 16, margin-bottom);
+		}
+
+		strong.captcha--notice {
+			.unitize(8, 16, margin-bottom);
+			display: block;
+		}
+
+    }
+
+    .forms--inner-form {
+		input[type="checkbox"] {
+			.unitize-width(12, 16)
+		}
+    }
+
+}
+
+@media screen and (min-width: @tabletViewportWidth) {
+
+    .forms--content {
+
+		input {
+			.unitize(15, 16, margin-bottom);
+		}
+
+		textarea {
+			.unitize(15, 16, margin-bottom);
+		}
+
+		.forms--captcha {
+
+			.captcha--placeholder {
+				.unitize(16, 16, margin-bottom);
+			}
+
+			strong.captcha--notice {
+				.unitize(16, 16, margin-bottom);
+			}
+
+		}
+    }
+
+}
+
+@media screen and (min-width: @desktopViewportWidth) {
+
+    .forms--content {
+		.unitize(45, 16, margin-top);
+		width: 78%;
+    }
+
+}

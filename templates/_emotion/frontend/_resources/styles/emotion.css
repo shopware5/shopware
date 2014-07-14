@@ -1566,7 +1566,7 @@ div#searchresults a.resultall {margin: 0 14px; width: 490px;}
 #detail #detailinfo #comments .answer {margin-bottom: 10px !important;}
 #detail #detailinfo #comments .right_container {width: 420px;}
 
-#detail #detailinfo .ui-tabs-panel .date {font-size: 11px;font-weight: normal;}
+#detail #detailinfo .ui-tabs-panel .date {font-size: 11px;font-weight: normal;padding-right: 10px;}
 
 #left .left_categories_shadow,
 #detail #detailinfo .detailinfo_shadow {width: 898px; height: 3px; background: url(../images/backgrounds/detailinfo_shadow.png) no-repeat 0 0; margin-top: -1px; margin-bottom: 20px;}
@@ -1835,7 +1835,7 @@ div#article_details .delivery_container p {color: #999;}
 div.table_foot input.button_tablefoot {background: url(../images/buttons/button_tablefoot.png) no-repeat right top !important;}
 #supplierfilter a.button-right {margin-top: 10px;}
 
-.small {background: url(../../../../_default/frontend/_resources/images/buttons/button_middle-small.png) repeat-x center center;}
+.small {background: url(../../../../_emotion/frontend/_resources/images/buttons/button_middle-small.png) repeat-x center center;}
 
 /* EMOTIONS
 	------------------------ */
@@ -3732,7 +3732,7 @@ body #content .banner-slider-emotion .ajaxSlider .slide_navigation {
 .slider-manufacturer .sliding_container .supplier a img { max-width: 100%; display: block; width: 100% \0/; height: 85px; margin: 0 auto;}
 */
 .slider-manufacturer .sliding_container .supplier .text {
-    background: url(../../../../_default/frontend/_resources/images/backgrounds/bg_supplier_slider_text.png) repeat-x;
+    background: url(../../../../_emotion/frontend/_resources/images/backgrounds/bg_supplier_slider_text.png) repeat-x;
     display: block;
     border: 1px solid #C7C7C7;
     padding: 13px 0 14px;

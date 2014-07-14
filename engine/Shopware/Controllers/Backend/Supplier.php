@@ -173,6 +173,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
 
         // set data to model and overwrite the image field
         $supplierModel->fromArray($params);
+        $supplierModel->setChanged();
 
         $mediaData = $this->Request()->get('media-manager-selection');
         if (!empty($mediaData) && !is_null($mediaData)) {

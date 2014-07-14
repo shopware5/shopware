@@ -152,7 +152,6 @@ class FieldHelper
             'variant.suppliernumber as __variant_suppliernumber',
             'variant.kind as __variant_kind',
             'variant.additionaltext as __variant_additionaltext',
-            'variant.impressions as __variant_impressions',
             'variant.sales as __variant_sales',
             'variant.active as __variant_active',
             'variant.instock as __variant_instock',

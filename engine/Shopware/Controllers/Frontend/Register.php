@@ -88,11 +88,19 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
      */
     public function indexAction()
     {
+        $this->View()->sTarget = $this->Request()->getParam('sTarget');
+
         if (!empty($this->session['sUserId'])) {
-            if ($this->request->getParam('sValidation')||!Shopware()->Modules()->Basket()->sCountBasket()) {
+            if ($this->request->getParam('sValidation') || !Shopware()->Modules()->Basket()->sCountBasket()) {
                 return $this->forward('index', 'account');
             } else {
-                return $this->forward('confirm', 'checkout');
+                // If using the new template, the 'GET' action will be handled
+                // in the Register controller (unified login/register page)
+                if (Shopware()->Shop()->getTemplate()->getVersion() >= 3 && empty($this->session['sRegisterFinished'])) {
+                    return $this->redirect(array('action' => 'shippingPayment', 'controller' => 'checkout'));
+                } else {
+                    return $this->forward('confirm', 'checkout');
+                }
             }
         }
         $skipLogin = $this->request->getParam('skipLogin');
@@ -123,6 +131,12 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             }
             if (empty($this->error)) {
                 $this->saveRegister();
+
+                // If using the new template, the 'GET' action will be handled
+                // in the Register controller (unified login/register page)
+                if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
+                    return $this->redirect(array('action' => 'shippingPayment', 'controller' => 'checkout'));
+                }
             }
         }
         $this->forward('index');
@@ -385,12 +399,18 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $result = $checkData;
         }
 
+        $requirePhone = (bool) (Shopware()->Config()->get('showPhoneNumberField')
+            && Shopware()->Config()->get('requirePhoneField'));
+
+        $requireBirthday = (bool) (Shopware()->Config()->get('showBirthdayField')
+            && Shopware()->Config()->get('requireBirthdayField'));
+
         $rules = array(
             'customer_type'=>array('required'=>0),
             'salutation'=>array('required'=>1),
             'firstname'=>array('required'=>1),
             'lastname'=>array('required'=>1),
-            'phone'=>array('required'=> intval(Shopware()->Config()->get('requirePhoneField'))),
+            'phone'=>array('required'=> $requirePhone),
             'fax'=>array('required'=>0),
             'text1'=>array('required'=>0),
             'text2'=>array('required'=>0),
@@ -399,9 +419,9 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             'text5'=>array('required'=>0),
             'text6'=>array('required'=>0),
             'sValidation'=>array('required'=>0),
-            'birthyear'=>array('required'=>0),
-            'birthmonth'=>array('required'=>0),
-            'birthday'=>array('required'=>0),
+            'birthyear'=>array('required'=> $requireBirthday),
+            'birthmonth'=>array('required'=> $requireBirthday),
+            'birthday'=>array('required'=> $requireBirthday),
             'dpacheckbox'=>array('required'=>(Shopware()->Config()->get('ACTDPRCHECK'))?1:0)
         );
         $rules = Enlight()->Events()->filter('Shopware_Controllers_Frontend_Register_validatePersonal_FilterRules', $rules, array('subject'=>$this));
@@ -426,17 +446,19 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         $countryIds = array_column($countryData, 'id');
 
         $rules = array(
-            'company'=>array('required'=>0),
-            'street'=>array('required'=>1),
-            'streetnumber'=>array('required'=>1),
-            'zipcode'=>array('required'=>1),
-            'city'=>array('required'=>1),
-            'country'=>array(
+            'company' => array('required' => 0),
+            'street' => array('required' => 1),
+            'streetnumber' => array('required' => 1),
+            'zipcode' => array('required' => 1),
+            'city' => array('required' => 1),
+            'country' => array(
                 'required' => 1,
                 'in' => $countryIds
             ),
-            'department'=>array('required'=>0),
-            'shippingAddress'=>array('required'=>0),
+            'department' => array('required' => 0),
+            'shippingAddress' => array('required' => 0),
+            'additional_address_line1' => array('required' => (Shopware()->Config()->requireAdditionAddressLine1 && Shopware()->Config()->showAdditionAddressLine1) ? 1 : 0),
+            'additional_address_line2' => array('required' => (Shopware()->Config()->requireAdditionAddressLine2 && Shopware()->Config()->showAdditionAddressLine2) ? 1 : 0)
         );
 
         // Check if state selection is required
@@ -496,25 +518,27 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         $countryIds = array_column($countryData, 'id');
 
         $rules = array(
-            'salutation'=>array('required'=>1),
-            'company'=>array('required'=>0),
-            'firstname'=>array('required'=>1),
-            'lastname'=>array('required'=>1),
-            'street'=>array('required'=>1),
-            'streetnumber'=>array('required'=>1),
-            'zipcode'=>array('required'=>1),
-            'city'=>array('required'=>1),
-            'department'=>array('required'=>0),
-            'text1'=>array('required'=>0),
-            'text2'=>array('required'=>0),
-            'text3'=>array('required'=>0),
-            'text4'=>array('required'=>0),
-            'text5'=>array('required'=>0),
-            'text6'=>array('required'=>0),
-            'country'=>array(
+            'salutation' => array('required' => 1),
+            'company' => array('required' => 0),
+            'firstname' => array('required' => 1),
+            'lastname' => array('required' => 1),
+            'street' => array('required' => 1),
+            'streetnumber' => array('required' => 1),
+            'zipcode' => array('required' => 1),
+            'city' => array('required' => 1),
+            'department' => array('required' => 0),
+            'text1' => array('required' => 0),
+            'text2' => array('required' => 0),
+            'text3' => array('required' => 0),
+            'text4' => array('required' => 0),
+            'text5' => array('required' => 0),
+            'text6' => array('required' => 0),
+            'country' => array(
                 'required' => (Shopware()->Config()->get('sCOUNTRYSHIPPING')) ? 1 : 0,
                 'in' => $countryIds
             ),
+            'additional_address_line1' => array('required' => (Shopware()->Config()->requireAdditionAddressLine1 && Shopware()->Config()->showAdditionAddressLine1) ? 1 : 0),
+            'additional_address_line2' => array('required' => (Shopware()->Config()->requireAdditionAddressLine2 && Shopware()->Config()->showAdditionAddressLine2) ? 1 : 0)
         );
 
         // Check if state selection is required

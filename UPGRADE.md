@@ -2,9 +2,34 @@
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
 ## 4.4.0
+* Merged `_default` template into the `_emotion` template
+* Removed the template directory `_default` and all it's dependencies
+* Added the ability to show campaign banners in blog categories
+* Refactored the template structure of the compare functionality. The plugin now uses based on a widget.
+* Removed support for flash banners. The associated template block `frontend_listing_swf_banner` is marked as deprecated
+* Removed the template files for the feed functionality, which was marked as deprecated in SW 3.5
+* Add new optional address fields to the register account and checkout process
+* Added global messages template component to display e.g. error or success messages
+* Added global css classes for different device viewports
+* New checkout process:
+    * `Shopware_Controllers_Frontend_Account::ajaxLoginAction` is deprecated
+    * `Shopware_Controllers_Frontend_Account::loginAction` usage to load a login page is deprecated. Use `Shopware_Controllers_Frontend_Register::indexAction` instead for both registration and login
+* New jQuery plugin helper which provides all the basic operations every jQuery plugin needs to do
+* Added serveral javascript libraries that enhances the supported features of the IE 8 and above
+* Added `controller_action` and `controller_name` smarty functions that return the correspondent variable values
+* Added device type detection support. Supports external detection (ie. varnish, apache, recommended) or internal using 3rd party lib
+    * Added Mobile Detect (http://mobiledetect.net/) library to composer dependencies for internal mobile detection.
+    * Added `Enlight_Controller_Request_RequestHttp::getDeviceType()`
+    * Added `device` Smarty function
+* The sitemap.xml uses now a smarty template
+    * Added `Turnover by device type` in the backend statistics module
+    * Added device type details to `Impressions` and `Visitors` in the backend statistics module
+
 * Added secureUninstall method for plugins. There will be a message box when capability 'secureUninstall' is set, which uninstall method should be used.
     * (new) Bootstrap::secureUninstall() -> should be used for removing only non-user data
     * (old) Bootstrap::uninstall() -> old logic
+* When using `selection` configurator type, shipping extimations will only be displayed when the user selects a value for all groups
+* It's no longer possible to disable variant support for article that still have variants
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).

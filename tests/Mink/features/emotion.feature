@@ -1,8 +1,12 @@
 @emotion
 Feature: Emotion
 
-	Scenario: Check all standard emotion elements
-		Given I am on the frontpage
+    Background:
+        Given I am on the frontpage
+
+    @slider @banner @blog
+	Scenario: Check the frontpage emotions
+
 		Then I should see a banner slider:
 			| image                   |
 			| beach1503f8532d4648.jpg |
@@ -32,13 +36,15 @@ Feature: Emotion
 			| Sonnenschutz - so gehören Sie zur | Blog-Sonnencreme-Sonne-Schulter5037264a3173e_720x600.jpg | /trends-news/sonnenschutz-so-gehoeren-sie-zur-creme-de-la-creme | Sonnencreme richtig auftragen – Darauf müssen Sie achten Strand , Meer und Sonne - Genießen Sie auch  |
 			| Ich packe meinen Koffer           | Blog-Koffer503736edaded3_720x600.jpg                     | /trends-news/ich-packe-meinen-koffer                            | Der Urlaub ist die schönste Zeit im Jahr. Ob Sonne, Strand und Meer oder wandern im Gebirge - Es soll |
 
+    @banner @category-teaser @slider @noResponsive
+    Scenario: Check emotions on category "Genusswelten"
 		When I follow "Genusswelten"
 
 		Then I should see a banner "genuss_top_banner.jpg"
 
-		And I should see a categorie teaser "Tees und Zubehör" with image "genuss_tees_banner.jpg" to "/genusswelten/tees-und-zubehoer/"
-		And I should see a categorie teaser "Edelbrände" with image "genuss_wein_banner.jpg" to "/genusswelten/edelbraende/"
-		And I should see a categorie teaser "Köstlichkeiten" with image "genuss_deli_banner.jpg" to "/genusswelten/koestlichkeiten/"
+		And I should see a category teaser "Tees und Zubehör" with image "genuss_tees_banner.jpg" to "/genusswelten/tees-und-zubehoer/"
+		And I should see a category teaser "Edelbrände" with image "genuss_wein_banner.jpg" to "/genusswelten/edelbraende/"
+		And I should see a category teaser "Köstlichkeiten" with image "genuss_deli_banner.jpg" to "/genusswelten/koestlichkeiten/"
 
 		And I should see an article slider:
 			| image                                 | link                                                           | name                              | price   |
@@ -49,6 +55,8 @@ Feature: Emotion
 			| Tee-weiss-Silver-Yin-Zhen_285x255.jpg | /genusswelten/tees-und-zubeh/tees/14/silver-yin-zhen-tee-weiss | Silver Yin Zhen Tee weiss         | 3,80 €  |
 			| Tee-gruen-Lung-Ching_285x255.jpg      | /genusswelten/tees-und-zubeh/tees/15/lung-ching-gruener-tee    | LUNG CHING grüner Tee             | 2,40 €  |
 
+    @banner @youtube @article @html @noResponsive
+    Scenario: Check landing page "Stop The Water While Using Me"
 		When go to "/campaign/index/emotionId/5"
 
 		Then I should see a banner "teaserbanner_stopthewater_landing.png"

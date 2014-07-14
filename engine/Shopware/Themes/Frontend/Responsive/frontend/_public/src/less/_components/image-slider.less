@@ -1,0 +1,28 @@
+.slider {
+	.unitize-padding(0, 0, 38, 0);
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+}
+
+.slides {
+	.clearfix();
+	list-style: none;
+	height: 100%;
+	overflow: hidden;
+	-webkit-backface-visibility: hidden;
+	-webkit-transform-style: preserve-3d;
+}
+
+.slide {
+	height: 100%;
+	float: left;
+	clear: none;
+}
+.product--image-container {
+	.image--thumbnails { display: none }
+}
+
+@media screen and (min-width: @desktopViewportWidth) {
+	.image--thumbnails { display: block }
+}

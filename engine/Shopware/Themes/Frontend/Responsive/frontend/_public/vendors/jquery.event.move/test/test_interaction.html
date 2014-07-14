@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	
+	<!-- Make IE recognise HTML5 elements (for styling - must stay in the head, before elements are used) -->
+	<!--[if IE]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	
+	<title>Drag test</title>
+	
+	<style type="text/css">
+		html, body {
+			height: 100%;
+			margin: 0;
+			padding: 0;
+		}
+		
+		body {
+			padding-left:  1.6667em;
+			padding-right: 1.6667em;
+			font-family: Helvetica, Arial, sans-serif;
+		}
+		
+		section {
+			position: relative;
+		}
+		
+		/* .col */
+		
+		.col {
+			/* This inline-block method produces nice flow, but is susceptible to
+			   rounding errors and requires spaceless html. */
+			display: inline-block;
+			vertical-align: top;
+			
+			/* Stop content pushing column wider than it should be */
+			overflow: visible;
+			
+			position: relative;
+			width: 100%;
+			margin-right: -100%;
+		}
+
+		.col             { width: 50%;      margin-right: -50%; }
+		
+		.first_col       { left: 0; }
+		.second_col      { left: 100%; margin-right: 0; margin-left: -50%; }
+		
+		.last_col        { margin-right: 100%; }
+		
+		.test {
+			position: absolute;
+			background-color: red;
+			width:  360px;
+			height: 100px;
+			padding: 20px;
+		  left: 1.6667em;
+		  
+		  color: white;
+		  text-decoration: none;
+		}
+		
+		.first_test {
+			top: 200px;
+		}
+		
+		.second_test {
+			top: 360px;
+		}
+		
+		.third_test {
+			top: 520px;
+		}
+		
+		.third_test.active {
+			background-color: orange;
+		}
+	</style>
+</head>
+
+<body>
+	<section class="first_col col" id="move_tests">
+		<header>
+			<h1>Move tests</h1>
+			<p>What happens when we bind movestart, move and moveend events?</p>
+			<p>Does text get selected while moving?</p>
+			<p>Can you still interact with form elements inside the div?</p>
+			<p>Does a click on a moveable node blur a form element? (Todo!)</p>
+		</header>
+		
+		<div class="first_test test">
+			Moveable node.
+		</div>
+		
+		<div class="second_test test">
+			<textarea>Textarea</textarea>
+			
+			<select>
+			  <option>blue</option>
+			  <option>green</option>
+			  <option>red</option>
+			</select>
+			
+			<input value="Input" />
+		</div>
+	</section>
+
+	<section class="second_col col" id="drag_tests">
+		<header>
+			<h1>Drag tests</h1>
+			<p>What happens when we drag a draggable node, when no move handlers have been bound?</p>
+			<p>What happens if it is removed from the DOM while dragging?</p>
+			<p>What happens if a node is draggable AND has move events bound?</p>
+		</header>
+		
+		<a href="#" class="first_test test" draggable="true">Draggable node.</a>
+		<a href="#" class="second_test test" draggable="true">Draggable node that gets removed on dragend.</a>
+		<a href="#" class="third_test test" draggable="true">
+			Moveable and draggable node.<br/><br/>
+			Should not be draggable because move events should take precedence.
+		</a>
+	</section>
+	
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"></script>
+	<script src="../js/jquery.event.move.js"></script>
+	<script type="text/javascript">
+    var doc = jQuery(document);
+    
+    function logEvent(e){ console.log(e.type, e); }
+    
+    
+		// Moveable tests
+		
+		jQuery(document)
+		.ready(function(){
+			var start,
+					wrap = jQuery('#move_tests'),
+					box = wrap.find('.test');
+			
+			wrap.bind('mousedown mouseup click select focusin focusout', logEvent);
+			
+			box
+			.bind('movestart move moveend', logEvent)
+			.bind('movestart', function(e){
+				var elem = jQuery(this);
+				
+				start = {
+					x: parseInt(elem.css('left')),
+					y: parseInt(elem.css('top'))
+				};
+			})
+			.bind('move', function(e){
+				jQuery(this).css({
+					left: start.x + e.deltaX,
+					top: start.y + e.deltaY
+				})
+			})
+			.unbind('movestart move moveend', logEvent)
+			.unbind('movestart')
+			.unbind('move');
+		});
+    
+    
+    // Draggable tests
+    
+    function dropEffectNone(e) {
+      e.originalEvent.dataTransfer.dropEffect = 'none';
+    }
+    
+    function cancelDrag(elem) {
+      // Bind drag cancellers.
+      doc.bind('dragenter dragover', dropEffectNone);
+      
+      // But remove the elem and the drag cancellers when the
+      // user releases the elem.
+      elem.bind('dragend', function() {
+        doc
+        .unbind('dragenter', dropEffectNone)
+        .unbind('dragover', dropEffectNone);
+        
+        console.log('Remove elem from DOM.');
+        elem.remove();
+      });
+    }
+    
+    doc.ready(function(){
+      var wrap = jQuery('#drag_tests');
+      
+      wrap.find('.test').bind('dragstart', function(e) {
+        // Data must be set to make the node draggable in FF.
+        e.originalEvent.dataTransfer.setData("application/json", "Drag text");
+      });
+      
+      // The second test node's drag is cancelled, and it is
+      // removed from the DOM on dragend.
+      wrap.find('.second_test').bind('dragstart', function(e) {  
+        var elem = jQuery(e.target);
+        
+      	cancelDrag(elem);
+      });
+      
+      wrap.find('.third_test')
+      .bind('movestart', function() {
+      	jQuery(this).addClass('active');
+      })
+      .bind('moveend', function() {
+      	jQuery(this).removeClass('active');
+      })
+      .bind('movestart move moveend', logEvent);
+    });
+	</script>
+</body>
+</html>

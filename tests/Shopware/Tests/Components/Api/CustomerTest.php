@@ -74,6 +74,8 @@ class Shopware_Tests_Components_Api_CustomerTest extends Shopware_Tests_Componen
                 "firstName" => "Max",
                 "lastName"  => "Mustermann",
                 "birthday"  => $birthday,
+                "additionalAddressLine1"  => "Address Billing Addition 1",
+                "additionalAddressLine2"  => "Address Billing Addition 2",
                 "attribute" => array(
                     'text1' => 'Freitext1',
                     'text2' => 'Freitext2',
@@ -85,6 +87,8 @@ class Shopware_Tests_Components_Api_CustomerTest extends Shopware_Tests_Componen
                 "company"    => "Widgets Inc.",
                 "firstName"  => "Max",
                 "lastName"   => "Mustermann",
+                "additionalAddressLine1"  => "Address Shipping Addition 1",
+                "additionalAddressLine2"  => "Address Shipping Addition 2",
                 "attribute" => array(
                     'text1' => 'Freitext1',
                     'text2' => 'Freitext2',
@@ -115,6 +119,12 @@ class Shopware_Tests_Components_Api_CustomerTest extends Shopware_Tests_Componen
         $this->assertEquals($customer->getBilling()->getAttribute()->getText1(), $testData['billing']['attribute']['text1']);
         $this->assertEquals($customer->getShipping()->getFirstName(), $testData['shipping']['firstName']);
         $this->assertEquals($customer->getShipping()->getAttribute()->getText1(), $testData['shipping']['attribute']['text1']);
+
+        //test additional address lines
+        $this->assertEquals($customer->getShipping()->getAdditionalAddressLine1(), $testData['shipping']['additionalAddressLine1']);
+        $this->assertEquals($customer->getShipping()->getAdditionalAddressLine2(), $testData['shipping']['additionalAddressLine2']);
+        $this->assertEquals($customer->getBilling()->getAdditionalAddressLine1(), $testData['billing']['additionalAddressLine1']);
+        $this->assertEquals($customer->getBilling()->getAdditionalAddressLine2(), $testData['billing']['additionalAddressLine2']);
 
         return $customer->getId();
     }
@@ -212,6 +222,12 @@ class Shopware_Tests_Components_Api_CustomerTest extends Shopware_Tests_Componen
             'billing' => array(
                 'firstName' => 'Max Update',
                 'lastName'  => 'Mustermann Update',
+                'additionalAddressLine1'  => 'additional billing address Line 1',
+                'additionalAddressLine2'  => 'additional billing address Line 2',
+            ),
+            'shipping' => array(
+                'additionalAddressLine1'  => 'additional shipping address Line 1',
+                'additionalAddressLine2'  => 'additional shipping address Line 2',
             ),
         );
 
@@ -222,6 +238,13 @@ class Shopware_Tests_Components_Api_CustomerTest extends Shopware_Tests_Componen
 
         $this->assertEquals($customer->getEmail(), $testData['email']);
         $this->assertEquals($customer->getBilling()->getFirstName(), $testData['billing']['firstName']);
+
+        //test additional fields
+        $this->assertEquals($customer->getBilling()->getAdditionalAddressLine1(), $testData['billing']['additionalAddressLine1']);
+        $this->assertEquals($customer->getBilling()->getAdditionalAddressLine2(), $testData['billing']['additionalAddressLine2']);
+
+        $this->assertEquals($customer->getShipping()->getAdditionalAddressLine1(), $testData['shipping']['additionalAddressLine1']);
+        $this->assertEquals($customer->getShipping()->getAdditionalAddressLine2(), $testData['shipping']['additionalAddressLine2']);
 
         return $id;
     }

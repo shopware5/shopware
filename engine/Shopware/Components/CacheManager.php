@@ -25,6 +25,7 @@
 namespace Shopware\Components;
 
 use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\Theme\PathResolver;
 
 /**
  * @category  Shopware
@@ -64,6 +65,11 @@ class CacheManager
     private $events;
 
     /**
+     * @var PathResolver
+     */
+    private $themePathResolver;
+
+    /**
      * @param Container $container
      */
     public function __construct(Container $container)
@@ -75,6 +81,7 @@ class CacheManager
         $this->db       = $container->get('db');
         $this->config   = $container->get('config');
         $this->events   = $container->get('events');
+        $this->themePathResolver = $container->get('theme_path_resolver');
     }
 
     /**
@@ -110,6 +117,8 @@ class CacheManager
         if ($cacheDir != $compileDir) {
             $this->clearDirectory($cacheDir);
         }
+
+        $this->clearDirectory($this->themePathResolver->getCacheDirectory());
     }
 
     /**

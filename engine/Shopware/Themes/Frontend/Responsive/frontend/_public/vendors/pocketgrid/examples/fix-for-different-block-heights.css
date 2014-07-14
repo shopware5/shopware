@@ -1,0 +1,5 @@
+.block {
+  width: 20%;
+}
+/* Fix: force a clean new row for Block 6 */
+.fixed-b6 { clear: left; }

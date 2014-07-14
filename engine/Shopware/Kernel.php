@@ -130,9 +130,9 @@ class Kernel implements HttpKernelInterface
         /** @var $front \Enlight_Controller_Front **/
         $front = $this->container->get('front');
 
-        // alays return response from front controller
+        // always return response from front controller
         // the response will be transformed to a symfony response
-        // this is required for the http-cache to work
+        // this is required for the http cache to work
         $front->returnResponse(true);
 
         $request = $this->transformSymfonyRequestToEnlightRequest($request);
@@ -436,6 +436,7 @@ class Kernel implements HttpKernelInterface
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/Components/DependencyInjection/'));
         $loader->load('services.xml');
+        $loader->load('theme.xml');
         $loader->load('logger.xml');
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/Bundle/'));
