@@ -1,0 +1,33 @@
+.tagcloud {
+    border: 1px solid @borderColor;
+    .border-radius(3px);
+    .unitize-padding(10, 10, 10, 10);
+
+    a {
+        color: @primaryTextColor;
+        .unitize-padding(0, 5, 0, 5)
+    }
+
+    .tag0 {
+        .unitize(9, 16, font-size);
+        .unitize(10, 16, line-height);
+        color: @lightTextColor;
+    }
+
+    .tag1 {
+        .unitize(12, 16, font-size);
+        .unitize(10, 16, line-height);
+        font-weight: bold;
+    }
+
+    .tag2 {
+        .unitize(10, 16, font-size);
+        .unitize(14, 16, line-height);
+    }
+
+    .tag3 {
+        .unitize(15, 16, font-size);
+        .unitize(15, 16, line-height);
+        font-weight: bold;
+    }
+}
