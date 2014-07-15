@@ -33,6 +33,7 @@ Thumbs.db
 # Caches/Proxies
 /tests/Shopware/TempFiles/
 /cache/
+/web/cache/
 
 # Log files
 /logs/
