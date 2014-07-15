@@ -36,8 +36,7 @@ Feature: Checkout articles with voucher
       | email         | test@example.com |
       | phone         | 05555 / 555555   |
       | company       | Muster GmbH      |
-      | street        | Musterstr.       |
-      | streetnumber  | 55               |
+      | street        | Musterstr. 55    |
       | zipcode       | 55555            |
       | city          | Musterhausen     |
       | country       | Deutschland      |

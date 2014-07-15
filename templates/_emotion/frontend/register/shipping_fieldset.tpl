@@ -49,8 +49,7 @@
 	{block name='frontend_register_shipping_fieldset_input_street'}
 		<div>
 		    <label for="street2">{se name='RegisterShippingLabelStreet'}{/se}</label>
-		    <input name="register[shipping][street]" type="text"  id="street2" value="{$form_data.street|escape}" class="street text required {if $error_flags.street}instyle_error{/if}" />
-		    <input name="register[shipping][streetnumber]" type="text"  id="streetnumber2" value="{$form_data.streetnumber|escape}" class="number text required {if $error_flags.streetnumber}instyle_error{/if}" />
+		    <input name="register[shipping][street]" type="text"  id="street2" value="{$form_data.street|escape}" class="text required {if $error_flags.street}instyle_error{/if}" />
 		</div>
 	{/block}
 

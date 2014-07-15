@@ -79,13 +79,6 @@ class Partner extends ModelEntity
     private $street;
 
     /**
-     * @var string $streetNumber
-     *
-     * @ORM\Column(name="streetNumber", type="string", length=35, nullable=false)
-     */
-    private $streetNumber;
-
-    /**
      * @var string $zipCode
      *
      * @ORM\Column(name="zipCode", type="string", length=15, nullable=false)
@@ -318,31 +311,6 @@ class Partner extends ModelEntity
     {
 
         return $this->street;
-    }
-
-    /**
-     * Set streetNumber
-     *
-     * @param string $streetNumber
-     * @return Partner
-     */
-    public function setStreetNumber($streetNumber)
-    {
-
-        $this->streetNumber = $streetNumber;
-
-        return $this;
-    }
-
-    /**
-     * Get streetNumber
-     *
-     * @return string
-     */
-    public function getStreetNumber()
-    {
-
-        return $this->streetNumber;
     }
 
     /**

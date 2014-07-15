@@ -47,8 +47,7 @@ Feature: Checkout articles (scenario origin is account without articles in baske
       | passwordConfirmation | shopware        |
       | phone                | 05555 / 555555  |
       | company              | Muster GmbH     |
-      | street               | Musterstr.      |
-      | streetnumber         | 55              |
+      | street               | Musterstr. 55   |
       | zipcode              | 55555           |
       | city                 | Musterhausen    |
       | country              | Deutschland     |

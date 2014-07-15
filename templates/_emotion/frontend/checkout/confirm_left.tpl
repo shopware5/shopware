@@ -33,7 +33,7 @@
 			<p>
 				{if $sUserData.billingaddress.salutation eq "mr"}{s name="ConfirmSalutationMr"}{/s}{else}{s name="ConfirmSalutationMs"}{/s}{/if}
 				{$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}<br />
-				{$sUserData.billingaddress.street} {$sUserData.billingaddress.streetnumber}<br />
+				{$sUserData.billingaddress.street}<br />
 				{$sUserData.billingaddress.zipcode} {$sUserData.billingaddress.city}<br />
                 {if $sUserData.additional.state.shortcode}{$sUserData.additional.state.shortcode} - {/if} {$sUserData.additional.country.countryname}
 			</p>
@@ -65,7 +65,7 @@
 	       		{s name="ConfirmSalutationMs"}{/s}
 	        {/if}
 	    	{$sUserData.shippingaddress.firstname} {$sUserData.shippingaddress.lastname}<br />
-			{$sUserData.shippingaddress.street} {$sUserData.shippingaddress.streetnumber}<br />
+			{$sUserData.shippingaddress.street}<br />
 			{$sUserData.shippingaddress.zipcode} {$sUserData.shippingaddress.city}<br />
             {if $sUserData.additional.stateShipping.shortcode}{$sUserData.additional.stateShipping.shortcode} - {/if}{$sUserData.additional.countryShipping.countryname}
 			</p>

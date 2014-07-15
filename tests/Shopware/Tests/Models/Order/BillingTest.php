@@ -34,10 +34,10 @@ class Shopware_Tests_Models_Order_BillingTest extends Enlight_Components_Test_Te
         $billing = $this->getRandomBilling();
 
         $billingId = $billing->getId();
-        $originalStreetNumber = $billing->getStreetNumber();
+        $originalStreet = $billing->getStreet();
         $originalZipCode = $billing->getZipCode();
 
-        $billing->setStreetNumber('This is a really really really long city name'); //
+        $billing->setStreet('This is a really really really long city name'); //
         $billing->setZipCode('This is a really really really long zip code');
 
         Shopware()->Models()->persist($billing);
@@ -45,10 +45,10 @@ class Shopware_Tests_Models_Order_BillingTest extends Enlight_Components_Test_Te
         Shopware()->Models()->clear();
 
         $billing = Shopware()->Models()->getRepository('Shopware\Models\Order\Billing')->find($billingId);
-        $this->assertEquals('This is a really really really long city name', $billing->getStreetNumber());
+        $this->assertEquals('This is a really really really long city name', $billing->getStreet());
         $this->assertEquals('This is a really really really long zip code', $billing->getZipCode());
 
-        $billing->setStreetNumber($originalStreetNumber);
+        $billing->setStreet($originalStreet);
         $billing->setZipCode($originalZipCode);
 
         Shopware()->Models()->persist($billing);

@@ -22,7 +22,7 @@
 							{s name="SelectAddressSalutationMs"}{/s}
 						{/if}
 						{$sAddress.firstname} {$sAddress.lastname}<br />
-						{$sAddress.street} {$sAddress.streetnumber}<br />
+						{$sAddress.street}<br />
 						{if $sAddress.additional_address_line1}{$sAddress.additional_address_line1}<br />{/if}
 						{if $sAddress.additional_address_line2}{$sAddress.additional_address_line2}<br />{/if}
 						{$sAddress.zipcode} {$sAddress.city}<br />

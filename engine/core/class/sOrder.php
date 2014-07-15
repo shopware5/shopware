@@ -1232,7 +1232,6 @@ class sOrder
             firstname,
             lastname,
             street,
-            streetnumber,
             zipcode,
             city,
             phone,
@@ -1244,7 +1243,6 @@ class sOrder
             additional_address_line2
         )
         VALUES (
-            ?,
             ?,
             ?,
             ?,
@@ -1276,7 +1274,6 @@ class sOrder
             $address["firstname"],
             $address["lastname"],
             $address["street"],
-            $address["streetnumber"],
             $address["zipcode"],
             $address["city"],
             $address["phone"],
@@ -1327,7 +1324,6 @@ class sOrder
             firstname,
             lastname,
             street,
-            streetnumber,
             zipcode,
             city,
             countryID,
@@ -1336,7 +1332,6 @@ class sOrder
             additional_address_line2
         )
         VALUES (
-            ?,
             ?,
             ?,
             ?,
@@ -1363,7 +1358,6 @@ class sOrder
             $address["firstname"],
             $address["lastname"],
             $address["street"],
-            $address["streetnumber"],
             $address["zipcode"],
             $address["city"],
             $address["countryID"],

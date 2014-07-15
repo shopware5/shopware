@@ -2828,9 +2828,6 @@ input.instyle_error[type="text"], input.instyle_error[type="password"],
 .register .salutation label {width: 206px;}
 .register .salutation span label {width: 60px;}
 
-.register .street {width:247px;}
-.register .number {margin-left: 3px;}
-
 .register .zipcode {width: 97px;}
 .register .city {margin-left: 3px;}
 

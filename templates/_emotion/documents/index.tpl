@@ -87,7 +87,7 @@ td.head  {
 				<p class="sender">{$Containers.Header_Sender.value}</p>
 				{$User.$address.company}<br />
 				{$User.$address.firstname} {$User.$address.lastname}<br />			
-				{$User.$address.street} {$User.$address.streetnumber}<br />
+				{$User.$address.street}<br />
 				{block name="document_index_address_additionalAddressLines"}
 					{if {config name=showAdditionAddressLine1}}
 						{$User.$address.additional_address_line1}<br />

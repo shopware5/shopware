@@ -34,7 +34,6 @@
 		{block name='frontend_register_billing_fieldset_input_street'}
 			<div class="register--street">
 				<input name="register[billing][street]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterBillingLabelStreet'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="street" value="{$form_data.street|escape}" class="register--field register--field-street is--required{if $error_flags.street} has--error{/if}" />
-				<input name="register[billing][streetnumber]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterBillingLabelStreetNumber'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="streetnumber" value="{$form_data.streetnumber|escape}" class="register--field register--field-streetnumber is--required{if $error_flags.streetnumber} has--error{/if}" />
 			</div>
 		{/block}
 

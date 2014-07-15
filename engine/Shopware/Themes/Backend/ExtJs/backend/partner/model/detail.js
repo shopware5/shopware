@@ -53,7 +53,6 @@ Ext.define('Shopware.apps.Partner.model.Detail', {
         { name : 'company', type : 'string' },
         { name : 'contact', type : 'string' },
         { name : 'street', type : 'string' },
-        { name : 'streetNumber', type : 'string' },
         { name : 'zipCode', type : 'string' },
         { name : 'city', type : 'string' },
         { name : 'phone', type : 'string' },

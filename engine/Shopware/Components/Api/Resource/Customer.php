@@ -350,6 +350,33 @@ class Customer extends Resource
     protected function prepareAssociatedData($data, CustomerModel $customer)
     {
         $data = $this->prepareCustomerPaymentData($data, $customer);
+        $data = $this->prepareCustomerAddressData($data);
+
+        return $data;
+    }
+
+    /**
+     * Legacy support
+     * Merges streetNumber into street in billing and shipping addresses
+     * If no street is provided, streetNumber is dropped
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function prepareCustomerAddressData($data)
+    {
+        if (isset($data['billing']) && isset($data['billing']['streetNumber'])) {
+            if (isset($data['billing']['street'])) {
+                $data['billing']['street'] .= ' '.$data['billing']['streetNumber'];
+            }
+            unset($data['billing']['streetNumber']);
+        }
+        if (isset($data['shipping']) && isset($data['shipping']['streetNumber'])) {
+            if (isset($data['shipping']['street'])) {
+                $data['shipping']['street'] .= ' '.$data['shipping']['streetNumber'];
+            }
+            unset($data['shipping']['streetNumber']);
+        }
 
         return $data;
     }
