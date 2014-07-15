@@ -618,7 +618,6 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
             IFNULL(ub.firstname, nd.firstname) as firstname,
             IFNULL(ub.lastname, nd.lastname) as lastname,
             IFNULL(ub.street, nd.street) as street,
-            IFNULL(ub.streetnumber, nd.streetnumber) as streetnumber,
             IFNULL(ub.zipcode, nd.zipcode) as zipcode,
             IFNULL(ub.city, nd.city) as city,
             customer,

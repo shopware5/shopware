@@ -93,16 +93,9 @@ class ContactData extends ModelEntity
     /**
      * @var string $street
      *
-     * @ORM\Column(name="street", type="string", nullable=true)
+     * @ORM\Column(name="street", type="string", length=255, nullable=true)
      */
     protected $street;
-
-    /**
-     * @var string $streetNumber
-     *
-     * @ORM\Column(name="streetNumber", type="string", nullable=true)
-     */
-    protected $streetNumber;
 
     /**
      * @var string $zipCode
@@ -282,22 +275,6 @@ class ContactData extends ModelEntity
     public function getStreet()
     {
         return $this->street;
-    }
-
-    /**
-     * @param string $streetNumber
-     */
-    public function setStreetNumber($streetNumber)
-    {
-        $this->streetNumber = $streetNumber;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStreetNumber()
-    {
-        return $this->streetNumber;
     }
 
     /**

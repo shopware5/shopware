@@ -97,7 +97,6 @@
 										{block name="frontend_newsletter_form_input_street"}
 											<div class="newsletter--street">
 												<input name="street" type="text" placeholder="{s name="NewsletterRegisterBillingLabelStreetname"}{/s}" value="{$_POST.street|escape}" class="input--field input--field-street{if $sStatus.sErrorFlag.street} has--error{/if}"/>
-												<input name="streetnumber" type="text" placeholder="{s name="NewsletterRegisterBillingLabelStreetNumber"}{/s}" value="{$_POST.streetnumber|escape}" class="input--field input--field-streetnumber{if $sStatus.sErrorFlag.streetnumber} has--error{/if}"/>
 											</div>
 										{/block}
 

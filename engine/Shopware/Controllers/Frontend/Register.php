@@ -446,19 +446,22 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         $countryIds = array_column($countryData, 'id');
 
         $rules = array(
-            'company' => array('required' => 0),
-            'street' => array('required' => 1),
-            'streetnumber' => array('required' => 1),
-            'zipcode' => array('required' => 1),
-            'city' => array('required' => 1),
-            'country' => array(
+            'company'       => array('required' => 0),
+            'street'        => array('required' => 1),
+            'zipcode'       => array('required' => 1),
+            'city'          => array('required' => 1),
+            'country'       => array(
                 'required' => 1,
                 'in' => $countryIds
             ),
-            'department' => array('required' => 0),
+            'department'    => array('required' => 0),
             'shippingAddress' => array('required' => 0),
-            'additional_address_line1' => array('required' => (Shopware()->Config()->requireAdditionAddressLine1 && Shopware()->Config()->showAdditionAddressLine1) ? 1 : 0),
-            'additional_address_line2' => array('required' => (Shopware()->Config()->requireAdditionAddressLine2 && Shopware()->Config()->showAdditionAddressLine2) ? 1 : 0)
+            'additional_address_line1' => array(
+                'required' => (Shopware()->Config()->requireAdditionAddressLine1 && Shopware()->Config()->showAdditionAddressLine1) ? 1 : 0
+            ),
+            'additional_address_line2' => array(
+                'required' => (Shopware()->Config()->requireAdditionAddressLine2 && Shopware()->Config()->showAdditionAddressLine2) ? 1 : 0
+            )
         );
 
         // Check if state selection is required
@@ -518,27 +521,30 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         $countryIds = array_column($countryData, 'id');
 
         $rules = array(
-            'salutation' => array('required' => 1),
-            'company' => array('required' => 0),
-            'firstname' => array('required' => 1),
-            'lastname' => array('required' => 1),
-            'street' => array('required' => 1),
-            'streetnumber' => array('required' => 1),
-            'zipcode' => array('required' => 1),
-            'city' => array('required' => 1),
-            'department' => array('required' => 0),
-            'text1' => array('required' => 0),
-            'text2' => array('required' => 0),
-            'text3' => array('required' => 0),
-            'text4' => array('required' => 0),
-            'text5' => array('required' => 0),
-            'text6' => array('required' => 0),
+            'salutation'    => array('required' => 1),
+            'company'       => array('required' => 0),
+            'firstname'     => array('required' => 1),
+            'lastname'      => array('required' => 1),
+            'street'        => array('required' => 1),
+            'zipcode'       => array('required' => 1),
+            'city'          => array('required' => 1),
+            'department'    => array('required' => 0),
+            'text1'         => array('required' => 0),
+            'text2'         => array('required' => 0),
+            'text3'         => array('required' => 0),
+            'text4'         => array('required' => 0),
+            'text5'         => array('required' => 0),
+            'text6'         => array('required' => 0),
             'country' => array(
                 'required' => (Shopware()->Config()->get('sCOUNTRYSHIPPING')) ? 1 : 0,
                 'in' => $countryIds
             ),
-            'additional_address_line1' => array('required' => (Shopware()->Config()->requireAdditionAddressLine1 && Shopware()->Config()->showAdditionAddressLine1) ? 1 : 0),
-            'additional_address_line2' => array('required' => (Shopware()->Config()->requireAdditionAddressLine2 && Shopware()->Config()->showAdditionAddressLine2) ? 1 : 0)
+            'additional_address_line1' => array(
+                'required' => (Shopware()->Config()->requireAdditionAddressLine1 && Shopware()->Config()->showAdditionAddressLine1) ? 1 : 0
+            ),
+            'additional_address_line2' => array(
+                'required' => (Shopware()->Config()->requireAdditionAddressLine2 && Shopware()->Config()->showAdditionAddressLine2) ? 1 : 0
+            )
         );
 
         // Check if state selection is required
@@ -688,18 +694,17 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     public function ajaxValidateBillingAction()
     {
         $rules = array(
-            'salutation'=>array('required'=>1),
-            'company'=>array('required'=>0),
-            'firstname'=>array('required'=>1),
-            'lastname'=>array('required'=>1),
-            'street'=>array('required'=>1),
-            'streetnumber'=>array('required'=>1),
-            'zipcode'=>array('required'=>1),
-            'city'=>array('required'=>1),
-            'country'=>array('required'=>1),
-            'department'=>array('required'=>0),
+            'salutation'    => array('required' => 1),
+            'company'       => array('required' => 0),
+            'firstname'     => array('required' => 1),
+            'lastname'      => array('required' => 1),
+            'street'        => array('required' => 1),
+            'zipcode'       => array('required' => 1),
+            'city'          => array('required' => 1),
+            'country'       => array('required' => 1),
+            'department'    => array('required' => 0),
         );
-        if (!empty($this->post['personal']['customer_type'])&&$this->post['personal']['customer_type']=='business') {
+        if (!empty($this->post['personal']['customer_type']) && $this->post['personal']['customer_type'] == 'business') {
             $rules['company']['required'] = 1;
         }
         $this->admin->sSYSTEM->_POST = array_merge($this->post['personal'], $this->post['billing']);
@@ -718,6 +723,12 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $error_flags[$field] = !empty($checkData['sErrorFlag'][$field]);
         }
 
-        echo Zend_Json::encode(array('success'=>empty($error_messages), 'error_flags'=>$error_flags, 'error_messages'=>$error_messages));
+        echo Zend_Json::encode(
+            array(
+                'success' => empty($error_messages),
+                'error_flags' => $error_flags,
+                'error_messages' => $error_messages
+            )
+        );
     }
 }

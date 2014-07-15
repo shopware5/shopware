@@ -291,10 +291,6 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
                 name:'street'
             },
             {
-                fieldLabel:'{s name=detail_general/field/street_number}Street number{/s}',
-                name:'streetNumber'
-            },
-            {
                 fieldLabel:'{s name=detail_general/field/zip_code}Zip code{/s}',
                 name:'zipCode'
             },

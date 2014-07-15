@@ -73,10 +73,7 @@
 								<div>
 									<label for="street">{s name=NewsletterRegisterBillingLabelStreet}{/s}</label>
 									<input name="street" type="text" id="street" value="{$_POST.street|escape}"
-										   class="street text {if $sStatus.sErrorFlag.street}instyle_error{/if}"/>
-									<input name="streetnumber" type="text" id="streetnumber"
-										   value="{$_POST.streetnumber|escape}"
-										   class="number text {if $sStatus.sErrorFlag.streetnumber}instyle_error{/if}"/>
+										   class="text {if $sStatus.sErrorFlag.street}instyle_error{/if}"/>
 								</div>
 
 								<div>

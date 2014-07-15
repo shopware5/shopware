@@ -59,7 +59,6 @@ Ext.define('Shopware.apps.Base.model.Address', {
         { name:'firstName', type:'string' },
         { name:'lastName', type:'string' },
         { name:'street', type:'string' },
-        { name:'streetNumber', type:'string' },
         { name:'zipCode', type:'string' },
         { name:'city', type:'string' },
         { name:'additionalAddressLine1', type:'string' },
