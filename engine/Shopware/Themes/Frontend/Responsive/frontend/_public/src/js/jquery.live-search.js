@@ -1,6 +1,12 @@
 ;(function($, window, undefined) {
     "use strict";
 
+    /**
+     * Shopware Live Search Plugin.
+     *
+     * The plugin fires the ajax search request, render the results inside the modal
+     * and controlling the keyboard navigation inside the search results.
+     */
     $.plugin('liveSearch', {
 
         /** Your default options */
@@ -15,7 +21,11 @@
             resultsCls: 'main-search--results'
         },
 
-        /** Plugin constructor */
+        /**
+         * Initializes the plugin
+         *
+         * @returns {Plugin}
+         */
         init: function () {
             var me = this;
 
@@ -32,7 +42,12 @@
             me._on(me.$results, 'mousedown', $.proxy(me.onClickSearchResults, me));
         },
 
-        /** Event listener method */
+        /**
+         * onKeyUp event for displaying search results
+         * or trigger the keyboard navigation
+         *
+         * @param event
+         */
         onKeyUp: function (event)  {
             var me = this,
                 keyCode = event.which;
@@ -44,7 +59,13 @@
                 me.search();
             }
         },
-        
+
+        /**
+         * keyboardNavigation function for navigation
+         * inside the search results by keyboard
+         *
+         * @param event
+         */
         keyboardNavigation: function (event) {
             var me = this,
                 keyCode = event.which,
@@ -94,7 +115,11 @@
                 me.$el.closest('form').submit();
             }
         },
-        
+
+        /**
+         * search function for ajax search request
+         * and rendering the search results
+         */
         search: function () {
             var me = this,
                 term = me.$el.val(),
@@ -134,7 +159,12 @@
             }, me.defaults.searchDelay);
         },
 
-        // Close search results if input focus is lost
+        /**
+         * onBlur event for closing the search results modal
+         * if the focus of the input is lost
+         *
+         * @param event
+         */
         onBlur: function (event) {
 
             var me = this;
@@ -145,6 +175,11 @@
             me.$results.hide();
         },
 
+        /**
+         * onClickSearchBar event for opening existing results
+         *
+         * @param event
+         */
         onClickSearchBar: function (event) {
             var me = this,
                 term = me.$el.val(),
@@ -155,7 +190,12 @@
             }
         },
 
-        // Prevent closing search results
+        /**
+         * onClickSearchResults event to prevent closing
+         * the search results
+         *
+         * @param event
+         */
         onClickSearchResults: function (event) {
             var $target = $(event.target);
 

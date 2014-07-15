@@ -6,7 +6,7 @@
 {/block}
 
 {* Sidebar left *}
-{block name='frontend_index_content_left'}{/block}
+{*{block name='frontend_index_content_left'}{/block}*}
 
 {* Main content *}
 {block name='frontend_index_content'}
@@ -16,14 +16,8 @@
         {if $sRequests.sSearchOrginal}
             {* No results found *}
             {block name='frontend_search_fuzzy_empty'}
-                <div class="alert is--error is--rounded">
-                    <div class="alert--icon">
-                        <i class="icon--element icon--info"></i>
-                    </div>
-                    <div class="alert--content">
-                        {s name='SearchFuzzyHeadlineEmpty'}{/s}
-                    </div>
-                </div>
+                {*{s name="SearchFuzzyHeadlineEmpty"}{/s}*}
+                {include file="frontend/_includes/messages.tpl" type="error" content="Keine Suchergebnisse"}
             {/block}
         {else}
 
@@ -44,7 +38,7 @@
     {if $sSearchResults.sArticles}
         {* Results count headline *}
         {block name='frontend_search_fuzzy_headline'}
-            <h1>{s name='SearchHeadline'}Zu "{$sRequests.sSearch}" wurden {$sSearchResults.sArticlesCount} Artikel gefunden{/s}</h1>
+            <h1 class="results-headline">{s name='SearchHeadline'}Zu "{$sRequests.sSearch}" wurden {$sSearchResults.sArticlesCount} Artikel gefunden{/s}</h1>
         {/block}
 
         {* Search reults filter elements *}
