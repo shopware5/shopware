@@ -153,7 +153,7 @@
 // Search results modal
 .main-search--results {
     .clearfix();
-    .unitize(107, 16, top);
+    .unitize(110, 16, top);
     position: absolute;
     width: 100%;
     left: 0;
@@ -196,14 +196,6 @@
         &:last-child {
             border: 0 none;
         }
-
-        &:hover {
-            background: lighten(@borderColor, 10%);
-            color: @primaryColor;
-
-            .entry--name a { color: @primaryColor }
-        }
-
     }
 
     .entry--no-results {
@@ -213,7 +205,7 @@
         font-weight: normal;
     }
 
-    .is-active {
+    .is-active, .list--entry:hover {
         background: lighten(@borderColor, 10%);
         color: @primaryColor;
 

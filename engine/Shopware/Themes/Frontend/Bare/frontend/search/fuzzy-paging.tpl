@@ -28,19 +28,14 @@
     </form>
 {/block}
 
+{* View label *}
+{block name="frontend_listing_actions_change_layout_label"}{/block}
+
 {* Link - Table view *}
-{block name="frontend_listing_actions_change_layout_link_table"}
-    <a href="{url action=index sSearch=$sRequests.sSearch sPage=1 sPerPage=$sRequests.sPerPage sTemplate='table'}" class="action--link link--table-view {if $sRequests.sTemplate=='table' || !$sRequests.sTemplate}is--active{/if}" title="{s name='ListingActionsSettingsTable'}Tabellen-Ansicht{/s}">
-        <span class="action--link-text">{s name='ListingActionsSettingsTable'}Tabellen-Ansicht{/s}</span>
-    </a>
-{/block}
+{block name="frontend_listing_actions_change_layout_link_table"}{/block}
 
 {* Link - List view *}
-{block name="frontend_listing_actions_change_layout_link_list"}
-    <a href="{url action=index sSearch=$sRequests.sSearch sPage=1 sPerPage=$sRequests.sPerPage sTemplate='list'}" class="action--link link--list-view {if $sRequests.sTemplate=='list'}is--active{/if}" title="{s name='ListingActionsSettingsList'}Listen-Ansicht{/s}">
-        <span class="action--link-text">{s name='ListingActionsSettingsList'}Listen-Ansicht{/s}</span>
-    </a>
-{/block}
+{block name="frontend_listing_actions_change_layout_link_list"}{/block}
 
 {* Articles per page *}
 {block name='frontend_listing_actions_items_per_page'}

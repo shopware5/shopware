@@ -1,6 +1,6 @@
 .search--results {
 
-    h1 {
+    .results-headline {
         text-align: center;
     }
 
@@ -11,27 +11,30 @@
     // Filter search results by category
     .results--filter {
         .unitize(20, 16, margin-top);
-
-        .filter--category {
-            .unitize-padding(20, 20);
-            width: 100%;
-            display: block;
-
-            .category--list { width: 100% }
-            .supplier--list { width: 100% }
-            .price--list { width: 100% }
-
-            .block ul {
-                list-style: none;
-            }
-
-            .block h3 {
-                margin-top: 0;
-            }
-
-            .link--reset { display: block }
-        }
     }
+
+    .filter--types {
+        .unitize-padding(20, 20);
+        width: 100%;
+        display: block;
+
+        .types--list {
+            .unitize(10, 16, margin-top);
+            width: 100%;
+            list-style: none;
+        }
+
+        .list--headline {
+            margin-top: 0;
+        }
+
+        .list--entry {
+            list-style: none;
+        }
+
+        .link--reset { display: block }
+    }
+
 
     // Paginator, table view and sort switcher
     .results--paging {
@@ -47,11 +50,13 @@
 
 @media screen and (min-width: @tabletViewportWidth) {
     .search--results {
-        .results--filter {
-            .filter--category {
-                .category--list { width: 50% }
-                .supplier--list { width: 50% }
-                .price--list { width: 100% }
+        .filter--types {
+            .types--list {
+                width: 50%;
+            }
+
+            .types--list:last-child {
+                .unitize(10, 16, margin-top);
             }
         }
     }
@@ -59,12 +64,16 @@
 
 @media screen and (min-width: @tabletLandscapeViewportWidth) {
     .search--results {
-        .results--filter {
-            .filter--category {
-                .category--list { width: 33% }
-                .supplier--list { width: 33% }
-                .price--list { width: 33% }
+        .filter--types {
+            .types--list {
+                width: 33%;
             }
         }
+    }
+}
+
+@media screen and (min-width: @desktopViewportWidth) {
+    .sidebar-main {
+        display: none;
     }
 }

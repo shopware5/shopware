@@ -1,5 +1,6 @@
 {if !$sSearchResults.sResults}
 
+    {* no search results *}
     {block name="search_ajax_inner_no_results"}
         <ul class="results--list">
             <li class="list--entry entry--no-results">{s name="SearchAjaxNoResults"}Keine Suchergenisse gefunden{/s}</li>
