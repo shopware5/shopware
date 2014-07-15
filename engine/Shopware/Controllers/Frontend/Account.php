@@ -729,7 +729,9 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             return array('sErrorMessages' => array($snippets->get('ErrorForgotMailUnknown')));
         }
 
-        $password = substr(md5(uniqid(rand())), 0, 6);
+        $password = \Shopware\Components\Random::getAlphanumericString(
+            (int) Shopware()->Config()->get('minpassword', 6)
+        );
 
         $encoderName = Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
         $hash     = Shopware()->PasswordEncoder()->encodePassword($password, $encoderName);
