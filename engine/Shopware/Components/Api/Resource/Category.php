@@ -201,12 +201,9 @@ class Category extends Resource
             throw new ApiException\CustomValidationException("A name is required");
         }
         
-        if(isset($params['mediaId']) and !isset($params['media'])){
-			$params['media'] = Shopware()->Models()->getRepository('Shopware\Models\Media\Media')->find($params['mediaId']);
-		}		
-		elseif(isset($params['media'])){
-			$params['media'] = Shopware()->Models()->getRepository('Shopware\Models\Media\Media')->find($params['media']);
-		}
+        if(isset($params['mediaId'])){
+            $params['media'] = Shopware()->Models()->getRepository('Shopware\Models\Media\Media')->find($params['mediaId']);
+	}
 
         // in order to have a consistent interface within the REST Api, one might want
         // to set the parent category by using 'parentId' instead of 'parent'
