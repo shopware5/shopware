@@ -1145,6 +1145,9 @@ div.listing {width: 808px;}
 	color: #e1540f;
 	text-decoration: underline !important;
 }
+
+.newsletter_listing .listing_actions { height: 40px }
+
 #listing .artbox {width: 190px;}
 #listing .artbox .inner {width: 160px;}
 #listing .artbox p.desc {margin: 0 0 10px; word-wrap: break-word; }
