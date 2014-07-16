@@ -60,6 +60,17 @@ class ImmediateDeliveryConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         Context $context
     ) {
-        $query->andWhere('variant.instock >= variant.minpurchase');
+
+        $subSquery = <<<EOT
+(
+    SELECT count(id)
+    FROM s_articles_details
+    WHERE s_articles_details.articleID = product.id
+    AND s_articles_details.active = 1
+    AND s_articles_details.instock >= s_articles_details.minpurchase
+) >= 1
+EOT;
+
+        $query->andWhere($subSquery);
     }
 }
