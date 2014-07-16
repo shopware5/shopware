@@ -53,7 +53,23 @@
 						{* Rating *}
 						{block name='frontend_blog_col_meta_data_rating'}
 							{if $sArticle.sVoteAverage|round !=0}
-								<span class="blog--metadata-rating is--last star star{$sArticle.sVoteAverage|round}">{s name="BlogInfoRating"}{/s}</span>
+								<div class="blog--metadata-rating is--last" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+									{$average = $vote.points * 2|round:0}
+
+									<meta itemprop="worstRating" content="1">
+									<meta itemprop="ratingValue" content="{$vote.points}">
+									<meta itemprop="bestRating" content="5">
+
+									{for $value=1 to 5}
+										{$cls = 'icon--star'}
+
+										{if $value > $average}
+											{$cls = 'icon--star-empty'}
+										{/if}
+
+										<i class="{$cls}"></i>
+									{/for}
+								</div>
 							{/if}
 						{/block}
 					</div>
