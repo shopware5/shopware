@@ -8,5 +8,5 @@ class CartPosition extends \Emotion\CartPosition
     /**
      * @var array $selector
      */
-    protected $selector = array('css' => 'div.table_row');
+    protected $selector = array('css' => 'div.table--row');
 }
