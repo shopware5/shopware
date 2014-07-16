@@ -124,7 +124,7 @@
                 delete me.opts[o];
             });
 
-            me.$el.removeData('plugin-' + name);
+            me.$el.removeData('plugin_' + name);
 
             $.publish('/plugin/' + name + '/destroy', [ me ]);
 
@@ -270,7 +270,7 @@
                 }
             });
 
-            $.publish('/plugin/' + me._name + '/data-attributes', [ me.$el, me.opts ]);
+            $.publish('/plugin/' + me._name + '/onDataAttributes', [ me.$el, me.opts ]);
 
             return me.opts;
         }
@@ -324,6 +324,8 @@
             return this.each(function () {
                 var element = this,
                     pluginData = $.data(element, 'plugin_' + name);
+
+                console.log(pluginData);
 
                 if (!pluginData) {
                     if (typeof plugin === 'function') {
