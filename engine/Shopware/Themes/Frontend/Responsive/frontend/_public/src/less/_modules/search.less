@@ -49,26 +49,18 @@
 }
 
 @media screen and (min-width: @tabletViewportWidth) {
-    .search--results {
-        .filter--types {
-            .types--list {
-                width: 50%;
-            }
+    .search--results .filter--types .types--list {
+        width: 50%;
 
-            .types--list:last-child {
-                .unitize(10, 16, margin-top);
-            }
+        &:last-child {
+            .unitize(10, 16, margin-top);
         }
     }
 }
 
 @media screen and (min-width: @tabletLandscapeViewportWidth) {
-    .search--results {
-        .filter--types {
-            .types--list {
-                width: 33%;
-            }
-        }
+    .search--results .filter--types .types--list {
+        width: 50%;
     }
 }
 

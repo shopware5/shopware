@@ -98,7 +98,7 @@
                                     {/if}
                                 {else}
                                     <li class="is--active">{$sSearchResults.sSuppliers[$sRequests.sFilter.supplier].name}</li>
-                                    <li>
+                                    <li class="list--entry">
                                         <a class="link--reset" href="{$sLinks.sFilter.supplier}" title="{s name='SearchFilterLinkDefault'}Alle Kategorien anzeigen{/s}">
                                             {s name='SearchFilterLinkDefault'}Alle Kategorien anzeigen{/s}
                                         </a>
@@ -133,7 +133,7 @@
                                     {/foreach}
                                 {else}
                                     <li class="is--active">{$sPriceFilter[$sRequests.sFilter.price].start|currency} - {$sPriceFilter[$sRequests.sFilter.price].end|currency}</li>
-                                    <li>
+                                    <li class="list--entry">
                                         <a class="link--reset" href="{$sLinks.sFilter.price}" title="{s name='SearchFilterLinkDefault'}Alle Kategorien anzeigen{/s}">
                                             {s name='SearchFilterLinkDefault'}Alle Kategorien anzeigen{/s}
                                         </a>

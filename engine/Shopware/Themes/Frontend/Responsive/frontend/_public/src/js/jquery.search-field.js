@@ -1,14 +1,25 @@
 ;(function ($, window) {
     "use strict";
 
+    /**
+     * Shopware Search Field Plugin.
+     *
+     * The plugin controlling the search field behaviour in all possible states
+     */
     $.plugin('searchFieldDropDown', {
 
         defaults: {
             /** @string activeCls Class which will be added when the drop down was triggered */
             activeCls: 'is--active',
+            /** @string searchFieldCls Class which will be used for generating search results */
             searchFieldCls: 'main-search--field'
         },
 
+        /**
+         * Initializes the plugin
+         *
+         * @returns {Plugin}
+         */
         init: function () {
      
             var me = this,
@@ -28,6 +39,12 @@
             me._on(me.$el, 'click', $.proxy(me.onClickSearchTrigger, me));
         },
 
+        /**
+         * onClickSearchTrigger event for displaying and hiding
+         * the search field
+         *
+         * @param event
+         */
         onClickSearchTrigger: function(event) {
             var me = this;
             var target = $(event.target);
