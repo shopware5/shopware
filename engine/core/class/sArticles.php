@@ -3790,6 +3790,9 @@ class sArticles
                 $article['sVoteAverange'] = $this->legacyStructConverter->convertVoteAverageStruct(
                     $averages[$product->getNumber()]
                 );
+
+                // the listing pages use a 0 - 5 based average
+                $article['sVoteAverange']['averange'] = $article['sVoteAverange']['averange'] / 2;
             }
 
             if ($this->config->get('useShortDescriptionInListing') && strlen($article['description']) > 5) {
