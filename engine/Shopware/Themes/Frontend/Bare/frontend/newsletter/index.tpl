@@ -104,7 +104,7 @@
 										{* Zip + City *}
 										{block name="frontend_newsletter_form_input_zip_and_city"}
 											<div class="newsletter--zip-city">
-												<input name="zipcode" type="number" placeholder="{s name="NewsletterRegisterBillingLabelZipcode"}{/s}" value="{$_POST.zipcode|escape}" class="input--field input--field-zipcode{if $sStatus.sErrorFlag.zipcode} has--error{/if}"/>
+												<input name="zipcode" type="text" placeholder="{s name="NewsletterRegisterBillingLabelZipcode"}{/s}" value="{$_POST.zipcode|escape}" class="input--field input--field-zipcode{if $sStatus.sErrorFlag.zipcode} has--error{/if}"/>
 												<input name="city" type="text" placeholder="{s name="NewsletterRegisterBillingLabelCityname"}{/s}" value="{$_POST.city|escape}" size="25" class="input--field input--field-city{if $sStatus.sErrorFlag.city} has--error{/if}"/>
 											</div>
 										{/block}
