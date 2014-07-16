@@ -1,0 +1,30 @@
+
+.js--img-zoom--container {
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+.js--img-zoom--lens {
+    display: none;
+    background: rgba(255, 255, 255, 0.4);
+    border: 2px solid @borderColor;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 90;
+    pointer-events: none;
+}
+
+.js--img-zoom--flyout {
+    .unitize-width(520);
+    .unitize-height(400);
+    .unitize(-540, 16, right);
+    display: none;
+    position: absolute;
+    top: 0;
+    z-index: 950;
+    overflow: hidden;
+    background: @primaryColor;
+    border: 2px solid @borderColor;
+}
