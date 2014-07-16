@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -29,8 +29,8 @@ class Shopware_StoreApi_Models_Query_Criterion_Category extends Shopware_StoreAp
      */
     public function __construct($categoryModels)
     {
-        if(is_array($categoryModels) || $categoryModels instanceof Shopware_StoreApi_Core_Response_SearchResult) {
-            foreach($categoryModels as $categoryModel) {
+        if (is_array($categoryModels) || $categoryModels instanceof Shopware_StoreApi_Core_Response_SearchResult) {
+            foreach ($categoryModels as $categoryModel) {
                 $this->addCategory($categoryModel);
             }
         } else {
@@ -44,7 +44,7 @@ class Shopware_StoreApi_Models_Query_Criterion_Category extends Shopware_StoreAp
      */
     public function addCategory(Shopware_StoreApi_Models_Category $categoryModel)
     {
-        if($categoryModel instanceof Shopware_StoreApi_Models_Category) {
+        if ($categoryModel instanceof Shopware_StoreApi_Models_Category) {
             $this->collection[] = $categoryModel;
             return true;
         } else {
@@ -54,11 +54,11 @@ class Shopware_StoreApi_Models_Query_Criterion_Category extends Shopware_StoreAp
 
     public function getCriterionStatement()
     {
-        if(empty($this->collection)) {
+        if (empty($this->collection)) {
             return false;
         } else {
             $categoryIds = array();
-            foreach($this->collection as $collection) {
+            foreach ($this->collection as $collection) {
                 $categoryIds[] = $collection->getId();
             }
 

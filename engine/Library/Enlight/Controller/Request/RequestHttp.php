@@ -47,8 +47,31 @@ class Enlight_Controller_Request_RequestHttp
         if (!is_array($spec) && $value === null) {
             unset($_GET[$spec]);
             return $this;
+        } elseif (is_array($spec) && empty($spec)) {
+            $_GET = array();
+            return $this;
         }
         return parent::setQuery($spec, $value);
+    }
+
+    /**
+     * Set POST values method
+     *
+     * @param  string|array $spec
+     * @param  null|mixed   $value
+     * @return Zend_Controller_Request_Http
+     */
+    public function setPost($spec, $value = null)
+    {
+        if (!is_array($spec) && $value === null) {
+            unset($_POST[$spec]);
+            return $this;
+        } elseif (is_array($spec) && empty($spec)) {
+            $_POST = array();
+            return $this;
+        }
+
+        return parent::setPost($spec, $value);
     }
 
     /**
@@ -60,6 +83,19 @@ class Enlight_Controller_Request_RequestHttp
     public function setSecure($value = true)
     {
         $_SERVER['HTTPS'] = $value ? 'on' : null;
+        return $this;
+    }
+
+    /**
+     * Set SERVER remote address
+     *
+     * @param string $address
+     * @return Enlight_Controller_Request_RequestHttp
+     */
+    public function setRemoteAddress($address)
+    {
+        $_SERVER['REMOTE_ADDR'] = $address;
+
         return $this;
     }
 
@@ -111,7 +147,7 @@ class Enlight_Controller_Request_RequestHttp
             return $_SERVER['HTTP_' . $temp];
         }
 
-        if(strpos($temp, 'CONTENT_') === 0 && isset($_SERVER[$temp])) {
+        if (strpos($temp, 'CONTENT_') === 0 && isset($_SERVER[$temp])) {
             return $_SERVER[$temp];
         }
 

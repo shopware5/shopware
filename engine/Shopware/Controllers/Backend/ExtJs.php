@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -27,7 +27,7 @@
  *
  * @category  Shopware
  * @package   Shopware\Controllers\Backend
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
 {
@@ -159,8 +159,27 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-	    $identity = Shopware()->Auth()->getIdentity();
-		$this->View()->assign('user', $identity, true);
+        $identity = Shopware()->Auth()->getIdentity();
+        $this->View()->assign('user', $identity, true);
+
+        if ($this->Request()->get('file') == 'bootstrap') {
+            $this->View()->assign('tinymceLang', $this->getTinyMceLang($identity), true);
+        }
+    }
+
+    protected function getTinyMceLang($identity)
+    {
+        if (!$identity || !$identity->locale) {
+            return 'en';
+        }
+
+        $attemptedLanguage = substr($identity->locale->getLocale(), 0, 2);
+
+        if (file_exists(Shopware()->OldPath() . "engine/Library/TinyMce/langs/".$attemptedLanguage.".js")) {
+            return $attemptedLanguage;
+        }
+
+        return 'en';
     }
 
     /**
@@ -222,10 +241,10 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
                 'controller' => $this->Request()->getControllerName(),
                 'file' => $fileName)
             );
-            if($this->View()->templateExists($templateBase)) {
+            if ($this->View()->templateExists($templateBase)) {
                 $template .= '{include file="' . $templateBase. '"}' . "\n";
             }
-            if($this->View()->templateExists($templateExtend)) {
+            if ($this->View()->templateExists($templateExtend)) {
                 $template .= '{include file="' . $templateExtend. '"}' . "\n";
             }
         }
@@ -240,5 +259,4 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
         $template = str_replace($toFind, $toReplace, $template);
         echo $template;
     }
-
 }

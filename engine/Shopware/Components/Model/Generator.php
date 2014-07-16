@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components_Model
- * @subpackage Model
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Oliver Denter
- * @author     $Author$
  */
 
 namespace Shopware\Components\Model;
@@ -49,8 +41,8 @@ class Generator
      */
     const SHOPWARE_LICENCE = '
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -69,12 +61,6 @@ class Generator
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Attribute
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @author     shopware AG
  */
 ';
 
@@ -260,6 +246,10 @@ class %className% extends ModelEntity
         return $this->tableMapping;
     }
 
+    /**
+     * @param string $tableName
+     * @return int
+     */
     public function getSourceCodeForTable($tableName)
     {
         $table = $this->getSchemaManager()->listTableDetails($tableName);
@@ -289,7 +279,7 @@ class %className% extends ModelEntity
 
         $errors = array();
         /**@var $table \Doctrine\DBAL\Schema\Table*/
-        foreach($this->getSchemaManager()->listTables() as $table) {
+        foreach ($this->getSchemaManager()->listTables() as $table) {
             if (!empty($tableNames) && !in_array($table->getName(), $tableNames)) {
                 continue;
             }
@@ -330,8 +320,8 @@ class %className% extends ModelEntity
         }
 
         $result = file_put_contents($file, $sourceCode);
-        return ($result !== false);
 
+        return ($result !== false);
     }
 
     /**
@@ -346,9 +336,9 @@ class %className% extends ModelEntity
     }
 
     /**
-     * The generate model function create the doctrine model for 
+     * The generate model function create the doctrine model for
      * the passed table name.
-     * 
+     *
      * @param $table \Doctrine\DBAL\Schema\Table
      * @return int
      */
@@ -416,7 +406,7 @@ class %className% extends ModelEntity
             $className = $this->getClassNameOfTableName($parentClass);
 
             //if the passed table is not an attribute table, we have to check if the table is already declared
-        } else if (array_key_exists($table->getName(), $this->getTableMapping())) {
+        } elseif (array_key_exists($table->getName(), $this->getTableMapping())) {
 
             //if this is the case we will use the already declared class name
             $className = $this->tableMapping[$table->getName()]['class'];
@@ -467,7 +457,7 @@ class %className% extends ModelEntity
     {
         $columns = array();
         /**@var $column \Doctrine\DBAL\Schema\Column*/
-        foreach($table->getColumns() as $column) {
+        foreach ($table->getColumns() as $column) {
             $columns[] = $this->getColumnProperty($table,$column);
         }
         return $columns;
@@ -523,7 +513,6 @@ class %className% extends ModelEntity
      */
     protected function getPropertyNameOfColumnName($table, $column)
     {
-        $filter = new \Zend_Filter_Word_UnderscoreToCamelCase();
         $foreignKey = $this->getColumnForeignKey($table, $column);
         if ($foreignKey instanceof \Doctrine\DBAL\Schema\ForeignKeyConstraint) {
             $table = $foreignKey->getForeignTableName();
@@ -531,8 +520,21 @@ class %className% extends ModelEntity
             $fullName = $this->getClassNameOfTableName($table);
             return lcfirst($fullName) . 'Id';
         } else {
-            return lcfirst($filter->filter($column->getName()));
+            return lcfirst($this->underscoreToCamelCase($column->getName()));
         }
+    }
+
+    /**
+     * Converts underscore separated string into a camelCase separated string
+     *
+     * @param string $str
+     * @return string
+     */
+    protected function underscoreToCamelCase($str)
+    {
+        $func = create_function('$c', 'return strtoupper($c[1]);');
+
+        return preg_replace_callback('/_([a-zA-Z])/', $func, $str);
     }
 
     /**
@@ -548,8 +550,8 @@ class %className% extends ModelEntity
     protected function getColumnForeignKey($table, $column)
     {
         /**@var $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint*/
-        foreach($table->getForeignKeys() as $foreignKey) {
-            foreach($foreignKey->getLocalColumns() as $foreignKeyColumn) {
+        foreach ($table->getForeignKeys() as $foreignKey) {
+            foreach ($foreignKey->getLocalColumns() as $foreignKeyColumn) {
                 if ($foreignKeyColumn === $column->getName()) {
                     return $foreignKey;
                 }
@@ -606,7 +608,7 @@ class %className% extends ModelEntity
         if ($table->getPrimaryKey() === null) {
             return false;
         }
-        foreach($table->getPrimaryKey()->getColumns() as $primaryColumn) {
+        foreach ($table->getPrimaryKey()->getColumns() as $primaryColumn) {
             if ($column->getName() === $primaryColumn) {
                 return true;
             }
@@ -626,7 +628,7 @@ class %className% extends ModelEntity
     {
         $associations = array();
         /**@var $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint*/
-        foreach($table->getForeignKeys() as $foreignKey) {
+        foreach ($table->getForeignKeys() as $foreignKey) {
             $associations[] = $this->getAssociationProperty($table, $foreignKey);
         }
         return $associations;
@@ -674,7 +676,7 @@ class %className% extends ModelEntity
     protected function getColumnsFunctions($table)
     {
         $functions = array();
-        foreach($table->getColumns() as $column) {
+        foreach ($table->getColumns() as $column) {
             $functions[] = $this->getColumnFunctions($table, $column);
         }
         return $functions;
@@ -712,7 +714,7 @@ class %className% extends ModelEntity
     {
         $columns = array();
         /**@var $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint*/
-        foreach($table->getForeignKeys() as $foreignKey) {
+        foreach ($table->getForeignKeys() as $foreignKey) {
             $columns[] = $this->getAssociationFunctions($foreignKey);
         }
         return $columns;
@@ -750,8 +752,8 @@ class %className% extends ModelEntity
 
         $classes = array();
 
-        /**@var $file SplFileInfo*/
-        foreach($iterator as $file) {
+        /**@var $file \SplFileInfo*/
+        foreach ($iterator as $file) {
             $extension = pathinfo($file->getFilename(), PATHINFO_EXTENSION);
             if ($file->isDir() || $extension !== 'php') {
                 continue;

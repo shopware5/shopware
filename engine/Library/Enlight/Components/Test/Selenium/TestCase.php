@@ -65,7 +65,7 @@ abstract class Enlight_Components_Test_Selenium_TestCase extends PHPUnit_Extensi
         }
         parent::setUp();
     }
-    
+
     /**
      * Verify text method
      *
@@ -76,7 +76,7 @@ abstract class Enlight_Components_Test_Selenium_TestCase extends PHPUnit_Extensi
     {
         $this->assertElementContainsText($selector, $content);
     }
-    
+
     /**
      * Verify text present method
      *
@@ -96,7 +96,7 @@ abstract class Enlight_Components_Test_Selenium_TestCase extends PHPUnit_Extensi
     {
         return $this->getScreenshotPath() . $this->testId . '.png';
     }
-    
+
     /**
      * Returns the screen shot url
      *
@@ -114,7 +114,7 @@ abstract class Enlight_Components_Test_Selenium_TestCase extends PHPUnit_Extensi
      */
     protected function getDriver(array $browser)
     {
-        if($browser['host'] == 'localhost' && isset($_SERVER['REMOTE_ADDR'])) {
+        if ($browser['host'] == 'localhost' && isset($_SERVER['REMOTE_ADDR'])) {
             $browser['host'] = $_SERVER['REMOTE_ADDR'];
         }
         return parent::getDriver($browser);

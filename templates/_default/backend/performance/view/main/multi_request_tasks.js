@@ -115,7 +115,8 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
             emotion: '{s name=progress/emotion}[0] of [1] emotion urls{/s}',
             blog: '{s name=progress/blog}[0] of [1] blog urls{/s}',
             statistic: '{s name=progress/statistic}[0] of [1] statistic urls{/s}',
-            content: '{s name=progress/content}[0] of [1] content urls{/s}'
+            content: '{s name=progress/content}[0] of [1] content urls{/s}',
+            supplier: '{s name=progress/supplier}[0] of [1] supplier urls{/s}'
         }
     },
 
@@ -169,6 +170,7 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
         me.statisticProgress = me.createProgressBar('statistic', 'Statistics ...');
         me.blogProgress = me.createProgressBar('blog', 'Blogs ...');
         me.contentProgress = me.createProgressBar('content', 'Contents ...');
+        me.supplierProgress = me.createProgressBar('supplier', 'Suppliers ...');
 
         return [
             me.createShopCombo(),
@@ -181,7 +183,8 @@ Ext.define('Shopware.apps.Performance.view.main.MultiRequestTasks', {
                     me.emotionProgress,
                     me.blogProgress,
                     me.statisticProgress,
-                    me.contentProgress
+                    me.contentProgress,
+                    me.supplierProgress
                 ]
             },
             me.createBatchSizeCombo(),

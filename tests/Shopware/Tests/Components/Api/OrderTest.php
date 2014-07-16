@@ -130,4 +130,30 @@ class Shopware_Tests_Components_Api_OrderTest extends Shopware_Tests_Components_
     {
         $this->resource->update('', array());
     }
+
+
+
+    public function testUpdateOrderPositionStatusShouldBeSuccessful()
+    {
+        // Get existing order
+        $this->resource->setResultMode(\Shopware\Components\Api\Resource\Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
+
+        // Update the order details of that order
+        $updateArray = array();
+        foreach ($order['details'] as $detail) {
+            $updateArray['details'][$detail['id']] = array('id' => $detail['id'], 'status' => rand(0, 3), 'shipped' => 1);
+        }
+        $this->resource->update($this->order['id'],$updateArray);
+
+        // Reload the order and check the result
+        $this->resource->setResultMode(\Shopware\Components\Api\Resource\Resource::HYDRATE_ARRAY);
+        $order = $this->resource->getOne($this->order['id']);
+        foreach ($order['details'] as $detail) {
+            $currentId = $detail['id'];
+
+            $this->assertEquals($updateArray['details'][$currentId]['status'], $detail['statusId']);
+            $this->assertEquals($updateArray['details'][$currentId]['shipped'], $detail['shipped']);
+        }
+    }
 }

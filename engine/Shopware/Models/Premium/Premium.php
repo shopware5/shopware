@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,18 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Premium
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Patrick Stahl
- * @author     $Author$
  */
 
 namespace   Shopware\Models\Premium;
-use         Shopware\Components\Model\ModelEntity,
+use         Shopware\Components\Model\LazyFetchModelEntity,
             Doctrine\ORM\Mapping AS ORM;
 
 /**
@@ -44,7 +36,7 @@ use         Shopware\Components\Model\ModelEntity,
  * @ORM\Table(name="s_addon_premiums")
  * @ORM\HasLifecycleCallbacks
  */
-class Premium extends ModelEntity
+class Premium extends LazyFetchModelEntity
 {
     /**
      * @var integer $id
@@ -193,8 +185,8 @@ class Premium extends ModelEntity
 
     /**
      * Sets the assigned article
-     * \Shopware\Models\Article\Detail
-     * @param $articleDetail
+     *
+     * @param $articleDetail  \Shopware\Models\Article\Detail
      * @return \Shopware\Models\Premium\Premium
      */
     public function setArticleDetail($articleDetail)
@@ -205,30 +197,30 @@ class Premium extends ModelEntity
 
     /**
      * Gets the instance of the assigned article
-     * @return mixed
+     * @return \Shopware\Models\Article\Detail
      */
     public function getArticleDetail()
     {
-        return $this->articleDetail;
+        return $this->fetchLazy($this->articleDetail, array('number' => $this->orderNumber));
     }
 
-	/**
-	 * Sets the shopId of a premium-article
-	 * @param $shopId int Contains the shopId
-	 * @return \Shopware\Models\Premium\Premium
-	 */
-	public function setShopId($shopId)
-	{
-		$this->shopId = $shopId;
-		return $this;
-	}
+    /**
+     * Sets the shopId of a premium-article
+     * @param $shopId int Contains the shopId
+     * @return \Shopware\Models\Premium\Premium
+     */
+    public function setShopId($shopId)
+    {
+        $this->shopId = $shopId;
+        return $this;
+    }
 
-	/**
-	 * Sets the shopId of a premium-article
-	 * @return int
-	 */
-	public function getShopId()
-	{
-		return $this->shopId;
-	}
+    /**
+     * Sets the shopId of a premium-article
+     * @return int
+     */
+    public function getShopId()
+    {
+        return $this->shopId;
+    }
 }

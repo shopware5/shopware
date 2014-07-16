@@ -1,0 +1,61 @@
+{
+    "name": "shopware-ag/shopware",
+    "description": "Shopware 4 is the next generation of open source e-commerce software made in Germany",
+    "keywords": ["shopware", "shop"],
+    "homepage": "http://http://www.shopware.de",
+    "type": "project",
+    "license": [
+        "AGPL-3.0",
+        "proprietary"
+    ],
+    "support": {
+        "forum": "http://forum.shopware.de",
+        "wiki": "http://wiki.shopware.de",
+        "source": "https://github.com/ShopwareAG/shopware-4",
+        "issues": "http://jira.shopware.de"
+    },
+    "require": {
+        "php": ">=5.3.2",
+        "ext-curl": "*",
+        "ext-mbstring": "*",
+        "ext-gd": "*",
+        "symfony/http-kernel": "2.4.2",
+        "symfony/config": "2.4.2",
+        "symfony/dependency-injection": "2.4.2",
+        "symfony/validator": "2.4.2",
+        "symfony/filesystem": "2.4.2",
+        "symfony/finder": "2.4.2",
+        "symfony/console": "2.4.2",
+        "monolog/monolog": "1.6.0",
+        "ircmaxell/password-compat": "1.0.3",
+        "rhumsaa/array_column": "~1.1",
+        "doctrine/common": "2.4.1",
+        "doctrine/dbal": "2.4.1",
+        "doctrine/orm": "2.4.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "@stable",
+        "phpunit/dbunit": "@stable",
+        "behat/behat": "@stable",
+        "behat/mink": "@stable",
+        "behat/mink-extension": "@stable",
+        "behat/mink-sahi-driver": "@stable",
+        "behat/mink-goutte-driver": "@stable",
+        "sensiolabs/behat-page-object-extension": "*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Doctrine\\ORM\\Persisters\\BasicEntityPersister": "engine/Library/",
+            "Shopware": "engine/",
+            "Enlight": "engine/Library/",
+            "Zend": "engine/Library/"
+        },
+        "psr-4": {
+            "Shopware\\Behat\\ShopwareExtension\\": "tests/Mink/Extension/ShopwareExtension"
+        },
+        "classmap": [
+            "engine/core/class/"
+        ],
+        "files": ["engine/Shopware/Application.php"]
+    }
+}

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,18 +20,9 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Error
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     Stefan Hamann
  */
 
 /**
- * todo@all: Documentation
  */
 class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action
 {
@@ -50,7 +41,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action
      */
     public function preDispatch()
     {
-        if($this->Request()->getActionName() !== 'service') {
+        if ($this->Request()->getActionName() !== 'service') {
             if (strpos($this->Request()->getHeader('Content-Type'), 'application/json') === 0) {
                 $this->Front()->Plugins()->Json()->setRenderer();
                 $this->View()->assign('success', false);
@@ -108,7 +99,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action
                     break;
             }
 
-            if($this->View()->getAssign('success') !== null) {
+            if ($this->View()->getAssign('success') !== null) {
                 $this->Response()->setHttpResponseCode(200);
                 $this->View()->clearAssign('exception');
                 $this->View()->assign('message', $error->exception->getMessage());

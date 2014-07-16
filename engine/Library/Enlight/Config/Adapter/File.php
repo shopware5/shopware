@@ -81,13 +81,13 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
             switch ($key) {
                 case 'exclusiveLock':
                 case 'skipExtends':
-                    $this->{'_' . $key} = (bool)$option;
+                    $this->{'_' . $key} = (bool) $option;
                     break;
                 case 'configDir':
-                    $this->{'_' . $key} = (array)$option;
+                    $this->{'_' . $key} = (array) $option;
                     break;
                 case 'configType':
-                    $this->{'_' . $key} = (string)$option;
+                    $this->{'_' . $key} = (string) $option;
                     break;
                 default:
                     break;
@@ -134,18 +134,14 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
      */
     protected function readBase($filename)
     {
-        try {
-            if (file_exists($filename)) {
-                $reader = 'Zend_Config_' . ucfirst($this->_configType);
-                $base = new $reader($filename, null, array(
-                        'skipExtends' => true,
-                        'allowModifications' => true)
-                );
-            } else {
-                $base = new Enlight_Config(array(), true);
-            }
-        } catch (Zend_Exception $e) {
-            throw new Enlight_Config_Exception($e->getMessage(), $e->getCode(), $e);
+        if (file_exists($filename)) {
+            $reader = 'Enlight_Config_Format_' . ucfirst($this->_configType);
+            $base = new $reader($filename, null, array(
+                    'skipExtends' => true,
+                    'allowModifications' => true)
+            );
+        } else {
+            $base = new Enlight_Config(array(), true);
         }
         return $base;
     }
@@ -161,10 +157,10 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
         $section = $config->getSection();
         $name = $this->getFilename($config->getName());
         if (file_exists($name)) {
-            $reader = 'Zend_Config_' . ucfirst($this->_configType);
+            $reader = 'Enlight_Config_Format_' . ucfirst($this->_configType);
             while (true) {
                 try {
-                    /** @var $reader Zend_Config_Ini */
+                    /** @var $reader Enlight_Config_Format_Ini */
                     $reader = new $reader($name, $section, array(
                             'skipExtends' => $this->_skipExtends)
                     );
@@ -194,12 +190,15 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
      * @throws Enlight_Config_Exception
      * @return Enlight_Config_Adapter_File
      */
-    public function write(Enlight_Config $config)
+    public function write(Enlight_Config $config, $forceWrite = false)
     {
+        if (!$this->_allowWrites) {
+            return $this;
+        }
         $section = $config->getSection();
         $filename = $this->getFilename($config->getName());
 
-        if (!$config->isDirty()) {
+        if (!$config->isDirty() && !$forceWrite) {
             return $this;
         }
 
@@ -217,7 +216,7 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
                     $extendingSection = $extendedSection;
                 }
             } else {
-                $sectionName = (string)$section;
+                $sectionName = (string) $section;
             }
             $base->$sectionName = $config;
         } else {
@@ -236,17 +235,13 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
             return $this;
         }
 
-        try {
-            $writer = 'Zend_Config_Writer_' . ucfirst($this->_configType);
-            /** @var $writer Zend_Config_Writer */
-            $writer = new $writer(array(
-                    'config' => $base,
-                    'filename' => $filename)
-            );
-            $writer->write();
-        } catch (Zend_Exception $e) {
-            throw new Enlight_Config_Exception($e->getMessage(), $e->getCode(), $e);
-        }
+        $writer = 'Enlight_Config_Writer_' . ucfirst($this->_configType);
+        /** @var $writer Enlight_Config_Writer_Writer */
+        $writer = new $writer(array(
+            'config' => $base,
+            'filename' => $filename)
+        );
+        $writer->write();
         return $this;
     }
 }

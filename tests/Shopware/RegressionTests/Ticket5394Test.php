@@ -815,9 +815,26 @@ class Shopware_RegressionTests_Ticket5394 extends Enlight_Components_Test_Contro
             $this->dispatch($expected['url']);
             $article = $this->View()->getAssign('sArticle');
 
-            $this->assertEquals($expected['sConfigurator'], $article['sConfigurator']);
-//            the api test cases modifies price ids and configurator options and groups.
-            $this->assertEquals($expected['sConfiguratorSettings'], $article['sConfiguratorSettings']);
+            foreach($expected['sConfigurator'] as $key => $expectedConfigurator) {
+                $properties = array('groupID','groupname','groupnameOrig','groupdescription','groupdescriptionOrig','groupimage','selected_value','selected','user_selected');
+
+                $actualConfigurator =  $article['sConfigurator'][$key];
+                $this->checkArrayValues($expectedConfigurator, $actualConfigurator, $properties);
+
+                foreach($expectedConfigurator['values'] as $optionKey => $expectedOption) {
+                    $optionProperties = array('optionID','groupID','optionnameOrig','optionname','optionactive','user_selected','selected');
+                    $actualOption = $actualConfigurator['values'][$optionKey];
+
+                    $this->checkArrayValues($expectedOption, $actualOption, $optionProperties);
+                }
+            }
+        }
+    }
+
+    protected function checkArrayValues($expected, $actual, $properties)
+    {
+        foreach($properties as $property) {
+            $this->assertEquals($expected[$property], $actual[$property]);
         }
     }
 }

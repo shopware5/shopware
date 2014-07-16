@@ -99,6 +99,7 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
             form.getElements().each(function(element) {
                 value = element.getValues().find('shopId', shop.getId());
                 value = element.getValues().getAt(value);
+                var initialValue = value;
                 if(!value && shop.getId() != 1) {
                     value = element.getValues().find('shopId', 1);
                     value = element.getValues().getAt(value);
@@ -126,7 +127,7 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
                     }
                 }
 
-                fields.push(Ext.applyIf({
+                var field = Ext.applyIf({
                     xtype: type,
                     name: name,
                     elementName: elementName,
@@ -136,7 +137,13 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
                     emptyText: shop.get('default') ? null : element.get('value'),
                     disabled: !element.get('scope') && !shop.get('default'),
                     allowBlank: !element.get('required') || !shop.get('default')
-                }, options));
+                }, options);
+
+                if (field.xtype == "config-element-boolean" || field.xtype == "config-element-checkbox") {
+                    field = me.convertCheckBoxToComboBox(field, shop, initialValue);
+                }
+
+                fields.push(field);
             });
             if(fields.length > 0) {
                 tabs.push({
@@ -150,7 +157,6 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
         if(tabs.length > 1) {
             items.push({
                 xtype: 'tabpanel',
-                //todo@stp CSS
                 bodyStyle: 'background-color: transparent !important',
                 border: false,
                 activeTab: 0,
@@ -164,7 +170,6 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
             }
             items.push({
                 xtype: 'panel',
-                //todo@stp CSS
                 bodyStyle: 'background-color: transparent !important',
                 border: false,
                 layout: 'fit',
@@ -172,6 +177,38 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
             });
         }
         return items;
+    },
+
+    /**
+     * helper method to convert the checkbox to a combobox
+     * this is done to support the not selected values by the customer
+     * cause checkboxes only have two states
+     *
+     * @param { Shopware.apps.Base.view.element.BooleanSelect } field
+     * @param { Shopware.apps.Base.model.Shop } shop
+     * @param { int } initialValue
+     * @returns Shopware.apps.Base.view.element.BooleanSelect
+     */
+    convertCheckBoxToComboBox: function (field, shop, initialValue) {
+        var booleanSelectValue = field.value;
+
+        if (shop.get('id') != 1 && initialValue === undefined) {
+            // set empty string only for foreign shops as a fallback to the default shop
+            // the default shop always got a value
+            booleanSelectValue = '';
+        }
+        else {
+            //cast the value to boolean
+            booleanSelectValue = Boolean(field.value);
+        }
+
+        Ext.apply(field, {
+            xtype: "base-element-boolean-select",
+            value: booleanSelectValue,
+            emptyText: ""
+        });
+
+        return field;
     }
 });
 //{/block}

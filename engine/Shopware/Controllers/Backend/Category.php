@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -31,7 +31,7 @@
  *
  * @category  Shopware
  * @package   Shopware\Controllers\Backend
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend_ExtJs
 {
@@ -134,7 +134,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     {
         /** @var $filter array */
         $filter = $this->Request()->getParam('filter', array());
-        $node = (int)$this->Request()->getParam('node');
+        $node = (int) $this->Request()->getParam('node');
         $preselectedNodes = $this->Request()->getParam('preselected');
 
         if (empty($filter)) {
@@ -156,7 +156,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         foreach ($data as $key => $category) {
             $data[$key]['text'] = $category['name'];
             $data[$key]['cls'] = 'folder';
-            $data[$key]['childrenCount'] = (int)$category['childrenCount'];
+            $data[$key]['childrenCount'] = (int) $category['childrenCount'];
             $data[$key]['leaf'] = empty($data[$key]['childrenCount']);
             $data[$key]['allowDrag'] = true;
             if ($preselectedNodes !== null) {
@@ -284,12 +284,12 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     {
         $node = $this->Request()->getParam('node', 1);
         if ($node !== null) {
-            $node = is_numeric($node) ? (int)$node : 1;
+            $node = is_numeric($node) ? (int) $node : 1;
             $filter[] = array('property' => 'c.parentId', 'value' => $node);
         }
         $query = $this->getRepository()->getBackendDetailQuery($node)->getQuery();
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getModelManager()->createPaginator($query);
         $data = $paginator->getIterator()->getArrayCopy();
         $data = $data[0];
 
@@ -315,7 +315,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             }
         } else {
             $query = $this->Request()->getParam('query');
-            $parents = (bool)$this->Request()->getParam('parents', false);
+            $parents = (bool) $this->Request()->getParam('parents', false);
             $result = $this->getPathByQuery($query, $separator, $parents);
         }
 
@@ -333,7 +333,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     public function getIdPathAction()
     {
         $separator = $this->Request()->getParam('separator', '/');
-        $categoryIds = (array)$this->Request()->getParam('categoryIds', array());
+        $categoryIds = (array) $this->Request()->getParam('categoryIds', array());
 
         $data = array();
         if (empty($categoryIds)) {
@@ -354,12 +354,12 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      * @param bool $parents
      * @return array
      */
-    function getPathByQuery($query = null, $separator = '>', $parents = false)
+    public function getPathByQuery($query = null, $separator = '>', $parents = false)
     {
         if (empty($query)) {
             $where = 'parent=1';
         } elseif (is_numeric($query)) {
-            $where = 'parent=' . (int)$query;
+            $where = 'parent=' . (int) $query;
         } else {
             $where = 'description LIKE ' . Shopware()->Db()->quote('%' . trim($query) . '%');
         }
@@ -492,7 +492,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array(
-	        'articles.id as articleId',
+            'articles.id as articleId',
             'articles.name',
             'details.number',
             'suppliers.name as supplierName'
@@ -516,7 +516,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getModelManager()->createPaginator($query);
 
         $data = $paginator->getIterator()->getArrayCopy();
         $count = $paginator->count();
@@ -682,7 +682,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $categoryId = $categoryModel->getId();
             $query = $this->getRepository()->getBackendDetailQuery($categoryId)->getQuery();
             $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-            $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+            $paginator = $this->getModelManager()->createPaginator($query);
             $data = $paginator->getIterator()->getArrayCopy();
             $data = $data[0];
             $data["imagePath"] = $data["media"]["path"];

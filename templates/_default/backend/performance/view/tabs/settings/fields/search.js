@@ -127,12 +127,29 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Search', {
                     {
                         fieldLabel:  '{s name=fieldset/search/last_update}Last index update{/s}',
                         name: 'search[fuzzysearchlastupdate]',
-                        xtype: 'displayfield'
-                    }
+                        xtype: 'displayfield',
+                        renderer: function(value) {
+                            var date = me.createNewDate(value);
 
+                            if ( date === Ext.undefined ) {
+                                return date;
+                            }
+
+                            return Ext.util.Format.date(date) + ' ' + Ext.util.Format.date(date, timeFormat);
+                        }
+                    }
                 ]
             }
         ];
+    },
+
+    createNewDate: function(date) {
+        date = date.replace(' ', 'T');
+        date += '+00:00';
+        date = new Date(date);
+        date = new Date((date.getTime() + (date.getTimezoneOffset() * 60 * 1000)));
+
+        return date;
     }
 
 });

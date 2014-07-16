@@ -53,7 +53,6 @@ Ext.define('Shopware.apps.ProductFeed.model.Detail', {
         { name : 'hash', type : 'string' },
         { name : 'active', type : 'int' },
         { name : 'variantExport', type : 'int', useNull:true },
-        { name : 'shopId', type : 'int', useNull:true},
         { name : 'customerGroupId', type : 'int', useNull:true },
         { name : 'languageId', type : 'int', useNull:true },
         { name : 'categoryId', type : 'int', useNull:true },
@@ -61,7 +60,7 @@ Ext.define('Shopware.apps.ProductFeed.model.Detail', {
         { name : 'show', type : 'int' },
         { name : 'countArticles', type : 'int' },
         { name : 'expiry', type : 'date' },
-        { name : 'interval', type : 'int' },
+        { name : 'interval', type : 'int', useNull: true },
         { name : 'informTemplate', type : 'int' },
         { name : 'informMail', type : 'int' },
         { name : 'encodingId', type : 'int'},
@@ -75,7 +74,9 @@ Ext.define('Shopware.apps.ProductFeed.model.Detail', {
         { name : 'activeFilter', type : 'int'},
         { name : 'imageFilter', type : 'int'},
         { name : 'ownFilter', type : 'string'},
-        { name : 'formatId', type : 'int'}
+        { name : 'formatId', type : 'int'},
+        { name : 'lastExport' },
+        { name : 'cacheRefreshed' }
     ],
 	/**
 	* If the name of the field is 'id' extjs assumes autmagical that

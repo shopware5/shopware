@@ -83,11 +83,21 @@ class Shopware_RegressionTests_Ticket4788 extends Enlight_Components_Test_Plugin
      */
     public function testArticleLongDescriptionForCategoryListing()
     {
+        $oldValue = Shopware()->Config()->get('useShortDescriptionInListing');
+        Shopware()->Db()->query("UPDATE s_core_config_elements SET value = 'b:1;' WHERE name = 'useShortDescriptionInListing'");
+        Shopware()->Cache()->clean();
 
         // Count occurrences in category listing
         $this->dispatch("/cat/index/sCategory/23");
         $count = substr_count($this->Response()->getBody(), $this->longDescriptionStripped);
         $this->assertEquals(2, $count);
+
+        $oldValue = 'b:' . $oldValue . ';';
+        Shopware()->Db()->query(
+            "UPDATE s_core_config_elements SET value = ? WHERE name = 'useShortDescriptionInListing'",
+            array($oldValue)
+        );
+
         $this->reset();
 
     }

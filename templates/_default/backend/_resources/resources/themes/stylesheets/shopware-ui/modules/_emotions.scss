@@ -223,8 +223,13 @@ div[id^=emotion-main-window] {
 			}
 
 			.#{$prefix}emotion-banner-preview-inner {
-				@include filter-gradient(#e7f5ff, #e7f5ff, horizontal); // IE6-9
-				@include background-image(linear-gradient(left, rgba(231,245,255,1) 0%,rgba(231,245,255,0.6) 20%,rgba(255,255,255,0.01) 50%,rgba(231,245,255,0.6) 80%,rgba(231,245,255,1) 100%));
+                background: svg-linear-gradient(0%, 0%, 100%, 0%, (
+                                  svg-color-stop(rgba(231,245,255,1), 0%, 1),
+                                  svg-color-stop(rgba(231,245,255,0.6), 20%, 0.6),
+                                  svg-color-stop(rgba(255,255,255,0.01), 50%, 0.01),
+                                  svg-color-stop(rgba(231,245,255,0.6), 80%, 0.6),
+                                  svg-color-stop(rgba(231,245,255,1), 100%, 1)
+                                )) center center no-repeat transparent;
 				width: 100%;
 				height: 100%;
 				position: absolute;

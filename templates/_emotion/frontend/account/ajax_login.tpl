@@ -18,7 +18,7 @@
 	<div class="new_customer">
 		<h2>{se name="LoginLabelNew"}{/se}</h2>
 		
-		<form method="post" name="new_customer" class="new_customer_form" action="{url controller='register'}">
+		<form method="get" name="new_customer" class="new_customer_form" action="{url controller='register'}">
 		<p>
 			{se name="LoginInfoNew"}{/se}
 		</p>

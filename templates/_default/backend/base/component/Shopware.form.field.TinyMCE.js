@@ -124,7 +124,7 @@ Ext.define('Shopware.form.field.TinyMCE',
             convert_urls : false,
             media_strict : false,
             relative_urls : true,
-            language: Ext.editorLang.substring(0,2),
+            language: "{$tinymceLang}",
             mode: "textareas",
             theme: "advanced",
             skin: "o2k7",
@@ -203,6 +203,11 @@ Ext.define('Shopware.form.field.TinyMCE',
      * @return void
      */
     autoSize: Ext.emptyFn,
+
+    /**
+     * String with the error message for when no source files are included
+     */
+    noSourceErrorText: "The TinyMCE editor source files aren't included in the project",
 
     /**
      * Initializes the component and sets it up to
@@ -312,7 +317,7 @@ Ext.define('Shopware.form.field.TinyMCE',
 
         // Check if the TinyMCE editor files are included
         if(!window.tinyMCE) {
-            Ext.Error.raise("The TinyMCE editor source files aren't included in the project");
+            Ext.Error.raise(me.noSourceErrorText);
         }
 
         // Merge user settings with our default settings
@@ -385,6 +390,13 @@ Ext.define('Shopware.form.field.TinyMCE',
 
         // Fire the "afterrendereditor" event
         me.fireEvent('afterrendereditor', me, me.tinymce, input.id, me.config.editor);
+
+        window.setTimeout(function() {
+            me.changeSniffer = window.setInterval(function() {
+                var value = me.tinymce.getContent();
+                me.setRawValue(value);
+            }, 300);
+        }, 500);
     },
 
     /**
@@ -591,8 +603,11 @@ Ext.define('Shopware.form.field.TinyMCE',
      * @return void
      */
     destroy: function() {
-        this.callParent(arguments);
-        Ext.destroyMembers(this, 'tinymce');
+        var me = this;
+        me.callParent(arguments);
+
+        clearInterval(me.changeSniffer);
+        Ext.destroyMembers(me, 'tinymce');
     },
 
     /**

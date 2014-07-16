@@ -20,22 +20,22 @@
 		{/if}
 
         {if !$sSuccess}
-	
+
 		<form name="mailtofriend" action="" method="post">
-			<input type="hidden" name="sMailTo" value="1" />	
-			<input type="hidden" name="sDetails" value="{$sArticle.articleID}" />	
-			
+			<input type="hidden" name="sMailTo" value="1" />
+			<input type="hidden" name="sDetails" value="{$sArticle.articleID}" />
+
 			{* Validation errors *}
 			{if $error}
 			    <div class="error">
 			   		<p>{foreach from=$error item=error_item}{$error_item}</p>{/foreach}
 			    </div>
 			{/if}
-			
+
 			<h2 class="headingbox_dark largesize">
 				<a href="{$sArticle.linkDetails}" title="{$sArticle.articleName}">{$sArticle.articleName}</a> {s name='TellAFriendHeadline'}{/s}
 			</h2>
-			
+
 			<fieldset>
 			   <div>
 			    	<label>{s name='TellAFriendLabelName'}{/s}*:</label>
@@ -56,27 +56,26 @@
 			    	<label for="comment">{s name='TellAFriendLabelComment'}{/s}</label>
 			    	<textarea name="sComment" id="comment" >{$sComment|escape}</textarea>
 				</div>
-				
+
 				<div class="space">&nbsp;</div>
-				
+
 				<div class="captcha grid_4">
-					<img src="{url controller='captcha' rand=$rand}" alt="" />
-					<input type="hidden" name="sRand"  value="{$rand}" />
+                    <div class="captcha-placeholder" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
 				</div>
-				
+
 				<div class="code">
 					<label for="sCaptcha">{s name='TellAFriendLabelCaptcha'}{/s}</label>
 					<input type="text" name="sCaptcha" class="text{if $sErrorFlag.sCaptcha} instyle_error{/if}" />
-				</div>		
-				
+				</div>
+
 				<div class="clear">&nbsp;</div>
-				
+
 				<div class="buttons">
 					<a href="{$sArticle.linkDetails}" class="button-left large left">{s name='TellAFriendLinkBack'}{/s}</a>
 					<input type="submit" value="{s name='TellAFriendActionSubmit'}{/s}" class="button-right large right" />
 					<div class="space">&nbsp;</div>
 				</div>
-						
+
 			</fieldset>
 		</form>{/if}
 		<div class="doublespace">&nbsp;</div>

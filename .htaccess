@@ -3,6 +3,10 @@ RewriteEngine on
 
 #RewriteBase /shopware/
 
+# Https config for the backend
+#RewriteCond %{HTTPS} !=on
+#RewriteRule backend/(.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
 RewriteRule shopware.dll shopware.php
 RewriteRule files/documents/.* engine [NC,L]
 RewriteRule backend/media/(.*) media/$1 [NC,L]
@@ -12,6 +16,9 @@ RewriteCond %{REQUEST_URI} !(\/media\/(archive|banner|image|music|pdf|unknown|vi
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ shopware.php [PT,L,QSA]
+
+# Fix missing authorization-header on fast_cgi installations
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
 </IfModule>
 
 # Staging-Rules start

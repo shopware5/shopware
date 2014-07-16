@@ -23,11 +23,85 @@
         <antcall target="test-unit-continuous"/>
     </target>
 
-    <target name="build-unit" depends="build-database, build-config, build-cache-dir" />
+    <target name="build-unit" depends="build-composer-install, build-config, build-database, build-snippets-deploy, build-cache-dir" />
 
     <target name="test-unit" depends="unit-library, unit-shopware"/>
 
     <target name="test-unit-continuous" depends="unit-shopware-continuous"/>
+
+    <target name="configure" description="Set up build-variables">
+        <input message="Please enter db-host:"
+               addproperty="user.db.host"
+               defaultvalue="${db.host}" />
+
+        <input message="Please enter db-name:"
+               addproperty="user.db.name"
+               defaultvalue="${db.name}" />
+
+        <input message="Please enter db-username:"
+               addproperty="user.db.user"
+               defaultvalue="${db.user}" />
+
+        <input message="Please enter db-password:"
+               addproperty="user.db.password">
+            <handler type="secure"/>
+        </input>
+
+        <input message="Please enter app.host:"
+               addproperty="user.app.host"
+               defaultvalue="${app.host}" />
+
+        <input message="Please enter app.path:"
+               addproperty="user.app.path"
+               defaultvalue="${app.path}" />
+
+        <propertyfile
+                file="${build.dir}/build.properties"
+                comment="Project properties">
+            <entry  key="db.host"     value="${user.db.host}"/>
+            <entry  key="db.name"     value="${user.db.name}"/>
+            <entry  key="db.user"     value="${user.db.user}"/>
+            <entry  key="db.password" value="${user.db.password}"/>
+            <entry  key="app.path"    value="${user.app.path}"/>
+            <entry  key="app.host"    value="${user.app.host}"/>
+        </propertyfile>
+    </target>
+
+    <target name="check-composer-binary">
+        <available file="${basedir}/composer.phar" property="composer.binary.present"/>
+    </target>
+
+    <target name="install-composer-binary" depends="check-composer-binary"  unless="composer.binary.present">
+        <exec executable="bash" failonerror="true">
+            <arg value="-c" />
+            <arg value="curl -s http://getcomposer.org/installer | php" />
+        </exec>
+    </target>
+
+    <target name="update-composer-binary" depends="install-composer-binary">
+        <exec executable="php">
+            <arg value="composer.phar" />
+            <arg value="self-update" />
+            <arg value="--no-interaction" />
+        </exec>
+    </target>
+
+    <target name="build-composer-install" depends="update-composer-binary">
+        <exec executable="php" failonerror="true">
+            <arg value="composer.phar" />
+            <arg value="install" />
+            <arg value="--no-interaction" />
+            <arg value="--optimize-autoloader" />
+        </exec>
+    </target>
+
+    <target name="build-composer-update" depends="update-composer-binary">
+        <exec executable="php" failonerror="true">
+            <arg value="composer.phar" />
+            <arg value="update" />
+            <arg value="--no-interaction" />
+        </exec>
+    </target>
 
     <target name="build-database">
         <concat destfile="${build.dir}/scripts/deploy.template.sql">
@@ -59,7 +133,7 @@
 
     <target name="build-demodata-deploy">
         <concat destfile="${build.dir}/scripts/demo.template.sql">
-            <fileset file="${sql.dir}/demo/next.sql"/>
+            <fileset file="${demo.data}"/>
             <fileset file="${build.dir}/scripts/deploy.shopconfig.sql"/>
         </concat>
 
@@ -93,30 +167,41 @@
         </exec>
     </target>
 
+    <target name="build-snippets-deploy">
+        <exec executable="php" dir="${basedir}/bin" failonerror="true">
+            <arg line="console sw:generate:attributes"/>
+        </exec>
+
+        <exec executable="php" dir="${basedir}/bin" failonerror="true">
+            <arg line="console sw:snippets:to:db --include-plugins"/>
+        </exec>
+    </target>
+
     <target name="build-cache-dir">
         <exec executable="chmod" os="Linux">
             <arg value="-R"/>
             <arg value="0777"/>
             <arg value="${cache.dir}/templates/"/>
             <arg value="${cache.dir}/general/"/>
-            <arg value="${proxy.dir}"/>
+            <arg value="${cache.dir}/proxies/"/>
         </exec>
 
         <delete includeEmptyDirs="true">
             <fileset dir="${cache.dir}/templates/" includes="**/*.*"/>
-            <fileset dir="${cache.dir}/general/" includes="**/*"/>
+            <fileset dir="${cache.dir}/general/"   includes="**/*"/>
+            <fileset dir="${cache.dir}/proxies"    includes="**/*.*"/>
             <fileset dir="${test.dir.shopware}/TempFiles/" includes="**/*.*"/>
-            <fileset dir="${proxy.dir}" includes="**/*.*"/>
         </delete>
     </target>
 
     <target name="build-config">
-        <copy file="${app.dir}/Configs/Custom.php.dist" toFile="${app.dir}/Configs/Custom.php" overwrite="true">
+        <copy file="${basedir}/config.php.dist" toFile="${app.dir}/Configs/Custom.php" overwrite="true">
             <filterset begintoken="%" endtoken="%">
-                <filter token="db.name" value="${db.name}"/>
-                <filter token="db.host" value="${db.host}"/>
-                <filter token="db.user" value="${db.user}"/>
+                <filter token="db.database" value="${db.name}"/>
+                <filter token="db.host"     value="${db.host}"/>
+                <filter token="db.user"     value="${db.user}"/>
                 <filter token="db.password" value="${db.password}"/>
+                <filter token="db.port"     value=""/>
             </filterset>
         </copy>
     </target>
@@ -131,7 +216,7 @@
     <target name="unit-library"/>
 
     <target name="unit-shopware" depends="build-unit">
-        <exec executable="${script.phpunit}" failonerror="false" dir="${build.dir}">
+        <exec executable="${script.phpunit}" failonerror="false" dir="${test.dir.shopware}">
             <arg value="--log-junit=${log.dir}/junit.xml"/>
             <arg value="--coverage-clover=${log.dir}/clover.xml"/>
             <arg value="--coverage-html=${log.dir}/coverage"/>
@@ -139,8 +224,25 @@
     </target>
 
     <target name="unit-shopware-continuous" depends="build-unit">
-        <exec executable="${script.phpunit}" dir="${build.dir}">
+        <exec executable="${script.phpunit}" dir="${test.dir.shopware}">
             <arg value="--log-junit=${log.dir}/junit.xml"/>
+        </exec>
+    </target>
+
+    <target name="mink-shopware-continuous">
+        <exec executable="${script.behat}" dir="${test.dir}/Mink">
+            <env key="MINK_EXTENSION_PARAMS" value="base_url=http://${app.host}${app.path}"/>
+            <arg value="--tags=~@javascript"/>
+            <arg value="--format=pretty,junit,html"/>
+            <arg value="--out=,${log.dir}/mink,${log.dir}/mink-report.html"/>
+        </exec>
+    </target>
+
+    <target name="mink-shopware-continuous-functional">
+        <exec executable="${script.behat}" dir="${test.dir}/Mink">
+            <env key="MINK_EXTENSION_PARAMS" value="base_url=http://${app.host}${app.path}"/>
+            <arg value="--format=pretty,junit,html"/>
+            <arg value="--out=,${log.dir}/mink,${log.dir}/mink-report.html"/>
         </exec>
     </target>
 
@@ -180,15 +282,11 @@
             <arg value="codesize,design,unusedcode"/>
             <arg value="--reportfile"/>
             <arg value="${log.dir}/pmd.xml"/>
-            <arg value="--exclude"/>
-            <arg value="${proxy.dir}"/>
         </exec>
     </target>
 
     <target name="static-phpcpd" description="PHP Copy/Paste Detector">
         <exec executable="phpcpd" failonerror="false" output="/dev/null" error="${log.dir}/error.log" append="true">
-            <arg value="--exclude"/>
-            <arg value="${proxy.dir}"/>
             <arg value="--log-pmd"/>
             <arg value="${log.dir}/cpd.xml"/>
             <arg value="${app.dir}/"/>
@@ -201,8 +299,6 @@
             <arg value="${log.dir}/loc.xml"/>
             <arg value="--log-csv"/>
             <arg value="${log.dir}/loc.csv"/>
-            <arg value="--exclude"/>
-            <arg value="${proxy.dir}"/>
             <arg value="--count-tests"/>
             <arg value="${app.dir}/"/>
         </exec>
@@ -217,8 +313,6 @@
             <arg value="${log.dir}/checkstyle/"/>
             <arg value="-d"/>
             <arg value="${app.dir}"/>
-            <arg value="-i"/>
-            <arg value="${proxy.dir}"/>
             <arg value="-q"/>
         </exec>
         <replaceregexp file="${log.dir}/checkstyle/checkstyle.xml"
@@ -234,7 +328,6 @@
             <arg value="--summary-xml=${log.dir}/depend/summary.xml"/>
             <arg value="--jdepend-chart=${log.dir}/depend/jdepend.svg"/>
             <arg value="--overview-pyramid=${log.dir}/depend/pyramid.svg"/>
-            <arg value="--ignore=${proxy.dir}"/>
             <arg value="${app.dir}"/>
         </exec>
     </target>
@@ -244,7 +337,6 @@
             <arg value="-l${log.dir}"/>
             <arg value="-o${log.dir}/code-browser"/>
             <arg value="-s${app.dir}"/>
-            <arg value="-i${proxy.dir}"/>
         </exec>
     </target>
 
@@ -253,7 +345,7 @@
             <arg value="project:run"/>
             <arg value="-d${app.dir}"/>
             <arg value="-t${log.dir}/api"/>
-            <arg value="-i${proxy.dir},${app.dir}/Plugins/Default/*Payment*"/>
+            <arg value="-i${app.dir}/Plugins/Default/*Payment*"/>
             <arg value="--template"/>
             <arg value="shopware"/>
             <arg value="--title"/>
@@ -296,7 +388,6 @@
             <fileset dir="${basedir}/engine/Library/TinyMce/" includes="tiny_mce.js" />
             <fileset dir="${basedir}/engine/Library/TinyMce/" includes="themes/advanced/langs/en.js" />
             <fileset dir="${basedir}/engine/Library/TinyMce/" includes="themes/advanced/langs/de.js" />
-
             <fileset dir="${basedir}/engine/Library/TinyMce/" includes="plugins/media_selection/editor_plugin.js" />
             <fileset dir="${basedir}/engine/Library/TinyMce/" includes="plugins/fullscreen/editor_plugin.js" />
         </concat>

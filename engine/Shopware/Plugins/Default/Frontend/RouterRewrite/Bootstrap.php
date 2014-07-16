@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Plugins
- * @subpackage Frontend
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
- * @author     Heiner Lohaus
  */
 
 /**
@@ -236,7 +228,7 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
                 $orgQuery['sArticle'] = $query['sArticle'];
                 break;
             case 'blog':
-                if(!empty($query['sAction'])) {
+                if (!empty($query['sAction'])) {
                     $orgQuery['sAction'] = $query['sAction'];
                     $orgQuery ['sCategory'] = $query['sCategory'];
                     $orgQuery['blogArticle'] = $query['blogArticle'];
@@ -246,6 +238,9 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
                 break;
             case 'cat':
                 $orgQuery ['sCategory'] = $query['sCategory'];
+                break;
+            case 'supplier':
+                $orgQuery ['sSupplier'] = $query['sSupplier'];
                 break;
             case 'campaign':
                 $orgQuery ['sCategory'] = $query['sCategory'];

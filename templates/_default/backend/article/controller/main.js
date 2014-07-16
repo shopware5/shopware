@@ -63,7 +63,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
     refs: [
         { ref: 'variantListing', selector: 'article-detail-window article-variant-list' },
         { ref: 'variantTab', selector: 'article-detail-window container[name=variant-tab]' },
-
+        { ref: 'mediaInfo', selector:'article-detail-window article-image-info' },
         { ref: 'esdListing', selector: 'article-detail-window article-esd-list' },
         { ref: 'esdTab', selector: 'article-detail-window container[name=esd-tab]' },
 
@@ -388,7 +388,20 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                 }
                 break;
             case 'date':
-                field = Ext.create('Ext.form.field.Date');
+                field = Ext.create('Ext.form.field.Date', {
+                    submitFormat: 'd.m.Y',
+                    setValue: function(value) {
+                        var me = this;
+
+                        var val = me.safeParse(value, me.submitFormat);
+                        if (val) {
+                            me.setRawValue(me.valueToRaw(val));
+                            return this;
+                        }
+
+                        return me.superclass.setValue.apply(this, arguments);
+                    }
+                });
                 break;
             case 'number':
                 field = Ext.create('Ext.form.field.Number');
@@ -403,7 +416,18 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                 break;
             case 'time':
                 field = Ext.create('Ext.form.field.Time', {
-                    increment: 10
+                    increment: 10,
+                    submitFormat: 'H:i',
+                    setValue: function(value) {
+                        var me = this;
+
+                        var val = me.safeParse(value, me.submitFormat);
+                        if (val) {
+                            return me.superclass.setValue.apply(this, [val]);
+                        } else {
+                            return me.superclass.setValue.apply(this, arguments);
+                        }
+                    }
                 });
                 break;
             case 'html':
@@ -542,6 +566,8 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                 mainWindow.changeTitle();
                 mainWindow.saveButton.setDisabled(false);
 
+                me.getMediaInfo().thumbnail.update();
+                me.getMediaInfo().loadRecord(Ext.create('Shopware.apps.Article.model.Media'));
 
                 var variantStore = Ext.create('Shopware.apps.Article.store.Variant');
                 variantStore.getProxy().extraParams.articleId = options.articleId;

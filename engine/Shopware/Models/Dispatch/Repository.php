@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0 - Repository
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Backend, Dispatch
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     J.Schwehn
- * @author     $Author$
  */
 
 namespace   Shopware\Models\Dispatch;
@@ -49,13 +41,14 @@ class Repository extends ModelRepository
      * @param $limit
      * @return \Doctrine\ORM\Query
      */
-    public function getDispatchesQuery($filter = null, $order = null, $offset = null, $limit = null) {
-    	$builder = $this->getDispatchesQueryBuilder($filter, $order);
+    public function getDispatchesQuery($filter = null, $order = null, $offset = null, $limit = null)
+    {
+        $builder = $this->getDispatchesQueryBuilder($filter, $order);
         if ($offset !== null && $limit !== null) {
             $builder->setFirstResult($offset)
                     ->setMaxResults($limit);
         }
-    	return $builder->getQuery();
+        return $builder->getQuery();
     }
 
     /**
@@ -65,7 +58,8 @@ class Repository extends ModelRepository
      * @param null $order
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getDispatchesQueryBuilder($filter = null, $order = null) {
+    public function getDispatchesQueryBuilder($filter = null, $order = null)
+    {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'id' => 'dispatches.id',
@@ -83,7 +77,7 @@ class Repository extends ModelRepository
         if (!empty($order)) {
             $builder->addOrderBy($order);
         }
-    	return $builder;
+        return $builder;
     }
 
     /**

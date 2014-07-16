@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Productfeed
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Marcel Schmäing
- * @author     $Author$
  */
 
 namespace Shopware\Models\ProductFeed;
@@ -251,6 +243,13 @@ class ProductFeed extends ModelEntity
     private $shopId;
 
     /**
+     * @var string $cacheRefreshed
+     *
+     * @ORM\Column(name="cache_refreshed", type="datetime", nullable=true)
+     */
+    private $cacheRefreshed;
+
+    /**
      * @var integer $variantExport
      *
      * @ORM\Column(name="variant_export", type="integer", nullable=false)
@@ -291,7 +290,7 @@ class ProductFeed extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ProductFeed", mappedBy="productFeed", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ProductFeed", mappedBy="productFeed", orphanRemoval=true, cascade={"persist"})
      * @var \Shopware\Models\Attribute\ProductFeed
      */
     protected $attribute;
@@ -1020,4 +1019,28 @@ class ProductFeed extends ModelEntity
         return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ProductFeed', 'attribute', 'productFeed');
     }
 
+    /**
+     * Set cache refreshed datetime
+     *
+     * @param datetime|string $cacheRefreshed
+     * @return ProductFeed
+     */
+    public function setCacheRefreshed($cacheRefreshed)
+    {
+        if (!$cacheRefreshed instanceof \DateTime) {
+            $cacheRefreshed = new \DateTime($cacheRefreshed);
+        }
+        $this->cacheRefreshed = $cacheRefreshed;
+        return $this;
+    }
+
+    /**
+     * Get cache refreshed datetime
+     *
+     * @return datetime
+     */
+    public function getCacheRefreshed()
+    {
+        return $this->cacheRefreshed;
+    }
 }

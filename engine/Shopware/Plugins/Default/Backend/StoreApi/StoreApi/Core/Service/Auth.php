@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -42,12 +42,12 @@ class Shopware_StoreApi_Core_Service_Auth extends Enlight_Class
 
     public function isTokenValid(Shopware_StoreApi_Models_Auth $authModel)
     {
-        if(!$authModel instanceof Shopware_StoreApi_Models_Auth) {
+        if (!$authModel instanceof Shopware_StoreApi_Models_Auth) {
             return false;
         }
 
         $array = $this->gateway->isTokenValid($authModel->getShopwareId(), $authModel->getToken());
-        if($array['authorized'] == true) {
+        if ($array['authorized'] == true) {
             return true;
         } else {
             return false;

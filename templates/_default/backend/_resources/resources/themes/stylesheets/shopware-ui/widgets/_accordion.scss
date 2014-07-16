@@ -74,15 +74,12 @@
 // Collpased accordion header
 .#{$prefix}accordion-item.#{$prefix}panel-collapsed {
 	.#{$prefix}accordion-hd {
-		@include inner-border(1px, #fff);
-        @include filter-gradient(#f6f7f6, #d0d4d8, vertical);
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #F6F7F6), color-stop(100%, #D0D4D8)) !important;
-        background: -webkit-linear-gradient(top, #F6F7F6 0%, #D0D4D8 100%) !important;
-        background: -moz-linear-gradient(top, #F6F7F6 0%, #D0D4D8 100%) !important;
-        background: -ms-linear-gradient(top, #F6F7F6 0%, #D0D4D8 100%) !important;
-        background: -o-linear-gradient(top, #F6F7F6 0%, #D0D4D8 100%) !important;
-        background: linear-gradient(top, #F6F7F6 0%, #D0D4D8 100%) !important;
+	     background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                      svg-color-stop(#F6F7F6, 0%, 1),
+                      svg-color-stop(#D0D4D8, 100%, 1)
+                    )) center center no-repeat transparent !important;
 		border-color: #a4b4c0 !important;
+		border-bottom: 1px solid #a4b4c0;
 		
 		.#{$prefix}panel-header-text {
 			color: $font-color;

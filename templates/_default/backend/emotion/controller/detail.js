@@ -56,6 +56,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         errorTitle: '{s name=save/error/title}Error{/s}',
         saveSuccessMessage: '{s name=save/success/message}The emotion [0] has been saved.{/s}',
         saveErrorMessage: '{s name=save/error/message}An error has occurred while saving the emotion:{/s}',
+        onSaveChangesNotValid: '{s name=save/error/not_valid}All required fields have not been filled{/s}',
         removeSuccessMessage: '{s name=remove/success/message}Emotion(s) has been removed{/s}',
         removeErrorMessage: '{s name=remove/error/message}An error has occurred while removing the emotion(s):{/s}',
 		growlMessage: '{s name=growlMessage}Emotion{/s}',
@@ -210,11 +211,23 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
     getFieldData: function(field, record) {
         if (field.getName() === 'bannerMapping') {
+            var recordData = record.get('data'),
+                mapping = record.get('mapping');
+
+            if(!mapping) {
+                Ext.each(recordData, function(el) {
+                    if(el.key === 'bannerMapping') {
+                        mapping = el.value;
+                        return false;
+                    }
+                });
+            }
+
             return {
                 id: field.fieldId,
                 type: field.valueType,
                 key: field.getName(),
-                value: record.get('mapping')
+                value: mapping
             };
         } else if(field.getName() === 'banner_slider') {
             return {
@@ -256,6 +269,11 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         var me = this, form = me.getSettingsForm(), win = me.getDetailWindow();
 
         form.getForm().updateRecord(record);
+
+        if (!form.getForm().isValid()) {
+            Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.onSaveChangesNotValid);
+            return;
+        }
 
         var elements = dataViewStore.getAt(0).get('elements');
         record.getElements().removeAll();
@@ -360,7 +378,6 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
         element.set('mapping', mapping);
         view.destroy();
-
     },
 
     onDuplicateEmotion: function(scope, record) {

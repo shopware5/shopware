@@ -58,14 +58,26 @@ class Enlight_Hook_HookManager extends Enlight_Class
      */
     protected $aliases = array();
 
-    public function __construct (Enlight_Application $application, $options = array())
+    /**
+     * @var Enlight_Event_EventManager
+     */
+    protected $eventManager;
+
+    /**
+     * @param Enlight_Event_EventManager $eventManager
+     * @param array $options
+     * @throws Exception
+     */
+    public function __construct(\Enlight_Event_EventManager $eventManager, \Enlight_Loader $loader, $options)
     {
-        $this->application = $application;
-        if(!isset($options['proxyNamespace'])) {
-            $options['proxyNamespace'] = $application->App() . '_Proxies';
+        $this->eventManager = $eventManager;
+
+        if (!isset($options['proxyNamespace'])) {
+            throw new \Exception('proxyNamespace has to be set.');
         }
-        if(!isset($options['proxyDir'])) {
-            $options['proxyDir'] = $application->AppPath('Proxies');
+
+        if (!isset($options['proxyDir'])) {
+            throw new \Exception('proxyDir has to be set.');
         }
 
         $this->proxyFactory = new Enlight_Hook_ProxyFactory(
@@ -74,7 +86,7 @@ class Enlight_Hook_HookManager extends Enlight_Class
             $options['proxyDir']
         );
 
-        $this->application->Loader()->registerNamespace(
+        $loader->registerNamespace(
             $options['proxyNamespace'],
             $this->proxyFactory->getProxyDir()
         );
@@ -98,7 +110,7 @@ class Enlight_Hook_HookManager extends Enlight_Class
      */
     public function hasHooks($class, $method)
     {
-        $eventManager = $this->application->Events();
+        $eventManager = $this->eventManager;
 
         return $eventManager->hasListeners($this->getHookEvent($class, $method, 'replace'))
             || $eventManager->hasListeners($this->getHookEvent($class, $method, 'before'))
@@ -113,7 +125,7 @@ class Enlight_Hook_HookManager extends Enlight_Class
      * @param   $type
      * @return  array
      */
-    public function getHookEvent($class, $method , $type)
+    public function getHookEvent($class, $method, $type)
     {
         $class = isset($this->aliases[$class]) ? $this->aliases[$class] : $class;
         $event = $class . '::' . $method . '::' . $type;
@@ -164,7 +176,7 @@ class Enlight_Hook_HookManager extends Enlight_Class
             'method' => $method,
         ), $args));
         $className = get_parent_class($class);
-        $eventManager = Shopware()->Events();
+        $eventManager = $this->eventManager;
 
         $event = $this->getHookEvent($className, $method, 'before');
         $eventManager->notify($event, $args);

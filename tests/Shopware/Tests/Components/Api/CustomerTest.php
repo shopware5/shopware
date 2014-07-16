@@ -318,4 +318,150 @@ class Shopware_Tests_Components_Api_CustomerTest extends Shopware_Tests_Componen
     {
         $this->resource->delete('');
     }
+
+
+    /**
+     * Tests that a Post with debit info also creates a PaymentData instance
+     * Can be removed after s_user_debit is removed
+     *
+     * @return int
+     */
+    public function testPostCustomersWithDebitShouldCreatePaymentData()
+    {
+        $date = new DateTime();
+        $date->modify('-10 days');
+        $firstlogin = $date->format(DateTime::ISO8601);
+
+        $date->modify('+2 day');
+        $lastlogin = $date->format(DateTime::ISO8601);
+
+        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ISO8601);
+
+        $requestData = array(
+            "password" => "fooobar",
+            "active"   => true,
+            "email"    => uniqid() . 'test1@foobar.com',
+
+            "firstlogin" => $firstlogin,
+            "lastlogin"  => $lastlogin,
+
+            "billing" => array(
+                "firstName" => "Max",
+                "lastName"  => "Mustermann",
+                "birthday"  => $birthday,
+            ),
+
+            "shipping" => array(
+                "salutation" => "Mr",
+                "company"    => "Widgets Inc.",
+                "firstName"  => "Max",
+                "lastName"   => "Mustermann",
+            ),
+
+            "debit" => array(
+                "account"       => "Fake Account",
+                "bankCode"      => "55555555",
+                "bankName"      => "Fake Bank",
+                "accountHolder" => "Max Mustermann",
+            ),
+        );
+
+
+        $customer = $this->resource->create($requestData);
+        $identifier = $customer->getId();
+
+        $this->resource->getManager()->clear();
+        $customer = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($identifier);
+
+        $paymentData = array_shift($customer->getPaymentData()->toArray());
+        $debitData = $customer->getDebit();
+
+        $this->assertNotNull($paymentData);
+        $this->assertEquals('Max Mustermann', $paymentData->getAccountHolder());
+        $this->assertEquals('Fake Account', $paymentData->getAccountNumber());
+        $this->assertEquals('Fake Bank', $paymentData->getBankName());
+        $this->assertEquals('55555555', $paymentData->getBankCode());
+
+        $this->assertNotNull($debitData);
+        $this->assertEquals('Max Mustermann', $debitData->getAccountHolder());
+        $this->assertEquals('Fake Account', $debitData->getAccount());
+        $this->assertEquals('Fake Bank', $debitData->getBankName());
+        $this->assertEquals('55555555', $debitData->getBankCode());
+
+        $this->testDeleteShouldBeSuccessful($identifier);
+    }
+
+    /**
+     * Tests that a Post with payment data info for debit also creates debit data in s_user_debit
+     * Can be removed after s_user_debit is removed
+     *
+     * @return int
+     */
+    public function testPostCustomersWithDebitPaymentDataShouldCreateDebitData()
+    {
+        $date = new DateTime();
+        $date->modify('-10 days');
+        $firstlogin = $date->format(DateTime::ISO8601);
+
+        $date->modify('+2 day');
+        $lastlogin = $date->format(DateTime::ISO8601);
+
+        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ISO8601);
+
+        $requestData = array(
+            "password" => "fooobar",
+            "active"   => true,
+            "email"    => uniqid() . 'test2@foobar.com',
+
+            "firstlogin" => $firstlogin,
+            "lastlogin"  => $lastlogin,
+
+            "billing" => array(
+                "firstName" => "Max",
+                "lastName"  => "Mustermann",
+                "birthday"  => $birthday,
+            ),
+
+            "shipping" => array(
+                "salutation" => "Mr",
+                "company"    => "Widgets Inc.",
+                "firstName"  => "Max",
+                "lastName"   => "Mustermann",
+            ),
+
+            "paymentData" => array(
+                array(
+                    "paymentMeanId"   => 2,
+                    "accountNumber" => "Fake Account",
+                    "bankCode"      => "55555555",
+                    "bankName"      => "Fake Bank",
+                    "accountHolder" => "Max Mustermann",
+                ),
+            ),
+        );
+
+        $customer = $this->resource->create($requestData);
+        $identifier = $customer->getId();
+
+        $this->resource->getManager()->clear();
+        $customer = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($identifier);
+
+        $paymentData = array_shift($customer->getPaymentData()->toArray());
+        $debitData = $customer->getDebit();
+
+        $this->assertNotNull($paymentData);
+        $this->assertEquals('Max Mustermann', $paymentData->getAccountHolder());
+        $this->assertEquals('Fake Account', $paymentData->getAccountNumber());
+        $this->assertEquals('Fake Bank', $paymentData->getBankName());
+        $this->assertEquals('55555555', $paymentData->getBankCode());
+
+        $this->assertNotNull($debitData);
+        $this->assertEquals('Max Mustermann', $debitData->getAccountHolder());
+        $this->assertEquals('Fake Account', $debitData->getAccount());
+        $this->assertEquals('Fake Bank', $debitData->getBankName());
+        $this->assertEquals('55555555', $debitData->getBankCode());
+
+        $this->testDeleteShouldBeSuccessful($identifier);
+    }
+
 }

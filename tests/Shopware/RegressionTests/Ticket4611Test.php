@@ -30,6 +30,8 @@
 class Shopware_RegressionTests_Ticket4611 extends Enlight_Components_Test_Plugin_TestCase
 {
     /**
+     * @group functional
+     *
      * Test case method
      */
     public function testListingRss()

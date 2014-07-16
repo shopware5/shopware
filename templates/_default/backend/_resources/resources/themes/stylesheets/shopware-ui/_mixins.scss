@@ -85,3 +85,99 @@
 	-o-box-shadow: 0 0 0 0 transparent;
 	box-shadow: 0 0 0 0 transparent;
 }
+
+
+// --- SVG Box Shadow --- //
+
+/**
+ * SVG Box Shadow Background
+ *
+ * Returns the svg url for a box-shadow background
+ *
+ * $offset-x        the x offset of the shadow (int)
+ * $offset-y        the y offset of the shadow (int)
+ * $blur            the range of the shadow (int)
+ * $opacity         the opacity of the shadow in decimal percentage (0.5 = 50%)
+ * $color           the color of the shadow (hex / rgba)
+ */
+@function svg-box-shadow-bg($offset-x, $offset-y, $blur, $opacity, $color) {
+  @return url('data:image/svg+xml;charset=utf-8;base64,'
+  + base64Encode('
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%">
+      <defs>
+          <filter id="dropshadow" width="200%" height="200%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="' + $blur + '"/>
+              <feOffset dx="' + $offset-x + '" dy="' + $offset-y + '" result="offsetBlur"/>
+              <feMerge>
+                  <feMergeNode/>
+                  <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+          </filter>
+      </defs>
+      <rect width="90%" height="90%" x="5%" y="5%" rx="5" ry="5" fill="' + $color + '" filter="url(#dropshadow)" style="opacity:' + $opacity + ';" />
+    </svg>'
+  ));
+}
+
+
+// --- SVG Gradients --- //
+
+/**
+ * SVG Linear Gradient
+ *
+ * $from-x          horizontal start position of the gradient in percentage
+ * $from-y          vertical start position of the gradient in percentage
+ * $to-x            horizontal end position of the gradient in percentage
+ * $to-y            vertical end position of the gradient in percentage
+ *
+ * $color-stops     expects a list of "svg-color-stop"
+ *
+ * Examples:
+ * Vertical gradient from top to bottom: svg-linear-gradient(0%, 0%, 0%, 100%, ...)
+ * Horizontal gradient from left to right: svg-linear-gradient(0%, 0%, 100%, 0%, ...)
+ * Tilt vertical gradient from top-left to bottom-right: svg-linear-gradient(0%, 0%, 100%, 100%, ...)
+ */
+@function svg-linear-gradient($from-x, $from-y, $to-x, $to-y, $color-stops) {
+  @return url('data:image/svg+xml;charset=utf-8;base64,'
+    + base64Encode('
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%">
+      <linearGradient id="gradient" x1="' + $from-x + '" y1="' + $from-y + '" x2="' + $to-x + '" y2="' + $to-y + '">' + $color-stops + '</linearGradient>
+      <rect width="100%" height="100%" fill="url(#gradient)" />
+    </svg>
+    '));
+}
+
+/**
+ * SVG Radial Gradient
+ *
+ * $center-x        the x position of the circle center
+ * $center-y        the y position if the circle center
+ * $radius          the radius of the circle
+ * $inner-x         the x position of the innermost circle
+ * $inner-y         the y position of the innermost circle
+ *
+ * Examples:
+ * Radial gradient from the center to the outer: svg-radial-gradient(50%, 50%, 50%, 50%, 50%, ...)
+ */
+@function svg-radial-gradient($center-x, $center-y, $radius, $inner-x, $inner-y, $color-stops) {
+  @return url('data:image/svg+xml;charset=utf-8;base64,'
+    + base64Encode('
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%">
+      <radialGradient id="gradient" cx="' + $center-x + '" cy="' + $center-y + '" r="' + $center-x + '" fx="' + $inner-x + '" fy="' + $inner-y + '">' + $color-stops + '</radialGradient>
+      <rect width="100%" height="100%" fill="url(#gradient)" />
+    </svg>
+    '));
+}
+
+/**
+ * SVG Color Stop Helper Function
+ *
+ * returns a svg color-stop for svg gradient mixins
+ *
+ * $color         the color of the stop
+ * $offset        the position of the stop in percentage
+ * $opacity       the opacity of the stop in decimal percentage (0.5 = 50%)
+ */
+@function svg-color-stop($color, $offset, $opacity) {
+  @return '<stop offset="' + $offset + '" style="stop-color:' + $color + ';stop-opacity:' + $opacity + '" />';
+}

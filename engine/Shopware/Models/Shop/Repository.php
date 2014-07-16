@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,13 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Shop
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
 
 namespace Shopware\Models\Shop;
+use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Model\ModelRepository;
 
 /**
- * todo@all: Documentation
  */
 class Repository extends ModelRepository
 {
@@ -76,7 +69,7 @@ class Repository extends ModelRepository
         if ($filter !== null) {
             $builder->addFilter($filter);
         }
-        if($order !== null) {
+        if ($order !== null) {
             $builder->addOrderBy($order);
         }
 
@@ -132,7 +125,7 @@ class Repository extends ModelRepository
         if ($filter !== null) {
             $builder->addFilter($filter);
         }
-        if($order !== null) {
+        if ($order !== null) {
             $builder->addOrderBy($order);
         }
 
@@ -256,7 +249,7 @@ class Repository extends ModelRepository
         $builder->setParameter('shopId', $id);
         $shop = $builder->getQuery()->getOneOrNullResult();
 
-        if($shop !== null) {
+        if ($shop !== null) {
             $this->fixActive($shop);
         }
 
@@ -264,7 +257,7 @@ class Repository extends ModelRepository
     }
 
     /**
-     * Returns the default shop
+     * Returns the default shop with additional data
      *
      * @return \Shopware\Models\Shop\Shop
      */
@@ -274,11 +267,39 @@ class Repository extends ModelRepository
         $builder->where('shop.default = 1');
         $shop = $builder->getQuery()->getOneOrNullResult();
 
-        if($shop !== null) {
+        if ($shop !== null) {
             $this->fixActive($shop);
         }
 
         return $shop;
+    }
+
+    /**
+     * Returns only the default shop model
+     *
+     * @return \Shopware\Models\Shop\Shop
+     */
+    public function getDefault()
+    {
+        $builder = $this->createQueryBuilder('shop');
+        $builder->where('shop.default = 1');
+        $shop = $builder->getQuery()->getOneOrNullResult();
+
+        return $shop;
+    }
+
+    /**
+     * Returns the active shops
+     *
+     * @return mixed
+     */
+    public function getActiveShops($hydrationMode = AbstractQuery::HYDRATE_OBJECT)
+    {
+        $builder = $this->createQueryBuilder('shop');
+        $builder->where('shop.active = 1');
+        $shops = $builder->getQuery()->getResult($hydrationMode);
+
+        return $shops;
     }
 
     /**
@@ -290,14 +311,14 @@ class Repository extends ModelRepository
         /** @var $shop \Shopware\Models\Shop\Shop */
         $shop = null;
         $host = $request->getHttpHost();
-        if(empty($host)) {
+        if (empty($host)) {
             return $shop;
         }
         $requestPath = $request->getRequestUri();
 
         $builder = $this->getActiveQueryBuilder();
         $builder->andWhere("shop.host=:host OR (shop.host IS NULL AND main.host=:host)");
-        if($request->isSecure()) {
+        if ($request->isSecure()) {
             $builder->orWhere("shop.secureHost=:host OR (shop.secureHost IS NULL AND main.secureHost=:host)");
         }
         $builder->setParameter('host', $host);
@@ -308,19 +329,9 @@ class Repository extends ModelRepository
         foreach ($shops as $currentShop) {
             $this->fixActive($currentShop);
         }
-        foreach ($shops as $currentShop) {
-            if ($currentShop->getBaseUrl() == $currentShop->getBasePath()) {
-                if ($shop === null) {
-                    $shop = $currentShop;
-                }
-            } elseif (strpos($requestPath, $currentShop->getBaseUrl()) === 0) {
-                $shop = $currentShop;
-                break;
-            } elseif ($currentShop->getSecure() && strpos($requestPath, $currentShop->getSecureBaseUrl()) === 0) {
-                $shop = $currentShop;
-                break;
-            }
-        }
+
+        //returns the right shop depending on the url
+        $shop = $this->getShopByRequest($shops, $requestPath);
 
         if ($shop !== null) {
             return $shop;
@@ -366,14 +377,65 @@ class Repository extends ModelRepository
             $shop->setSecureHost($shop->getSecureHost()?: $shop->getHost());
             $shop->setSecureBasePath($shop->getSecureBasePath()?: $shop->getBasePath());
             $baseUrl = $shop->getSecureBasePath();
-            if($shop->getBaseUrl() != $shop->getBasePath()) {
-                if(!$shop->getBasePath()) {
+            if ($shop->getBaseUrl() != $shop->getBasePath()) {
+                if (!$shop->getBasePath()) {
                     $baseUrl .= $shop->getBaseUrl();
-                } elseif(strpos($shop->getBaseUrl(), $shop->getBasePath()) === 0) {
+                } elseif (strpos($shop->getBaseUrl(), $shop->getBasePath()) === 0) {
                     $baseUrl .= substr($shop->getBaseUrl(), strlen($shop->getBasePath()));
                 }
             }
             $shop->setSecureBaseUrl($baseUrl);
         }
+    }
+
+    /**
+     * returns the right shop depending on the request object
+     *
+     * @param \Shopware\Models\Shop\Shop[] $shops
+     * @param string $requestPath
+     * @return null|\Shopware\Models\Shop\Shop $shop
+     */
+    protected function getShopByRequest($shops, $requestPath)
+    {
+        $shop = null;
+        foreach ($shops as $currentShop) {
+            if ($currentShop->getBaseUrl() == $currentShop->getBasePath()) {
+                //if the base url matches exactly the basePath we have found the main shop but the loop will continue
+                if ($shop === null) {
+                    $shop = $currentShop;
+                }
+            } elseif ($requestPath == $currentShop->getBaseUrl()
+                || (strpos($requestPath, $currentShop->getBaseUrl()) === 0
+                && in_array($requestPath[strlen($currentShop->getBaseUrl())], array('/', '?')))
+            ) {
+                /*
+                 * Check if the url is the same as the (sub)shop url
+                 * or if its the beginning of it, followed by / or ?
+                 *
+                 * f.e. this will match: localhost/en/blog/blogId=3 but this won't: localhost/entsorgung/
+                 */
+                if (!$shop || $currentShop->getBaseUrl() > $shop->getBaseUrl()) {
+                    $shop = $currentShop;
+                }
+            } elseif ($currentShop->getSecure()
+                && ($requestPath == $currentShop->getSecureBaseUrl()
+                || (strpos($requestPath, $currentShop->getSecureBaseUrl()) === 0
+                && in_array($requestPath[strlen($currentShop->getSecureBaseUrl())], array('/', '?'))))
+            ) {
+                /*
+                 * Only if the shop is used in secure (ssl) mode
+                 *
+                 * Check if the url is the same as the (sub)shop url
+                 * or if its the beginning of it, followed by / or ?
+                 *
+                 * f.e. this will match: localhost/en/blog/blogId=3 but this won't: localhost/entsorgung/
+                 */
+                if (!$shop || $currentShop->getSecureBaseUrl() > $shop->getSecureBaseUrl()) {
+                    $shop = $currentShop;
+                }
+            }
+        }
+
+        return $shop;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0 - Dispatch
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,18 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Backend, Newsletter
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Daniel Nögel
- * @author     $Author$
  */
 
 namespace   Shopware\Models\Newsletter;
-use         Shopware\Components\Model\ModelEntity,
+use         Shopware\Components\Model\LazyFetchModelEntity,
             Doctrine\ORM\Mapping AS ORM;
 
 /**
@@ -40,7 +32,7 @@ use         Shopware\Components\Model\ModelEntity,
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_campaigns_mailaddresses")
  */
-class Address extends ModelEntity
+class Address extends LazyFetchModelEntity
 {
     /**
      * Autoincrement ID
@@ -127,6 +119,14 @@ class Address extends ModelEntity
      * @ORM\Column(name="lastread", type="integer", length=11, nullable=false)
      */
     private $lastReadId = 0;
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * @param string $email
@@ -225,5 +225,12 @@ class Address extends ModelEntity
     {
         return $this->groupId;
     }
-}
 
+    /**
+     * @return \Shopware\Models\Customer\Customer
+     */
+    public function getCustomer()
+    {
+        return $this->fetchLazy($this->customer, array('email' => $this->email));
+    }
+}

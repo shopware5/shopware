@@ -28,11 +28,11 @@
  * @author shopware AG
  */
 @mixin shopware-viewport {
-    .#{$prefix}viewport, .#{$prefix}viewport body, body {
+    .#{$prefix}body {
         margin: 0;
         padding: 0;
         border: 0 none;
-        background: theme-image($theme, 'background.jpg') fixed center center;
+        background: theme-image($theme, 'background-compressed.jpg') fixed center center;
         overflow: hidden;
         height: 100%;
     }

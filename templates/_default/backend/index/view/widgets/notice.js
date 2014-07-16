@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,13 +19,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Index
- * @subpackage View
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 //{namespace name=backend/index/view/widgets}
@@ -47,6 +40,10 @@
 Ext.define('Shopware.apps.Index.view.widgets.Notice', {
     extend: 'Shopware.apps.Index.view.widgets.Base',
     alias: 'widget.swag-notice-widget',
+
+    resizable: {
+        handles: 's'
+    },
 
     /**
      * Snippets for the widget.
@@ -131,7 +128,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Notice', {
             handler: function() {
                 me.submitFormPanel();
             }
-        })
+        });
 
         return Ext.create('Ext.toolbar.Toolbar', {
             dock: 'bottom',

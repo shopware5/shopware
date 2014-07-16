@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,19 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Components
- * @subpackage Plugin
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Oliver Denter
  */
 
 /**
  * Shopware Plugin Manager
- *
- * todo@all: Documentation
  */
 class CommunityStore
 {
@@ -300,11 +291,15 @@ class CommunityStore
      *
      * @param        $file
      * @param string $source
+     * @throws Enlight_Exception
      */
     public function decompressFile($file, $source = 'Community')
     {
         $target = Shopware()->AppPath('Plugins_' . $source);
 
+        if (!$this->isPluginDirectoryWritable($target, true)) {
+            throw new Enlight_Exception("A directory or a file in ". $target ." is not writable, please change the permissions recursively");
+        }
         $filter = new Zend_Filter_Decompress(array(
             'adapter' => 'Zip',
             'options' => array(
@@ -349,7 +344,7 @@ class CommunityStore
         /**@var $feedback Shopware_StoreApi_Core_Response_SearchResult*/
         $iterator = $feedback->getIterator();
         $votes = array();
-        foreach($iterator as $data) {
+        foreach ($iterator as $data) {
             $votes[] = $data->getRawData();
         }
         return array('success' => true, 'data' => $votes);
@@ -388,7 +383,7 @@ class CommunityStore
             $products = array();
 
             /**@var $product Shopware_StoreApi_Models_Licence */
-            foreach($resultSet->getIterator() as $product) {
+            foreach ($resultSet->getIterator() as $product) {
                 $data = $product->getRawData();
 
                 $payed = (int) $data['payed'];
@@ -447,7 +442,7 @@ class CommunityStore
         $categories = array();
 
         /**@var $categoryModel Shopware_StoreApi_Models_Category */
-        foreach($iterator as $categoryModel) {
+        foreach ($iterator as $categoryModel) {
             $categories[] = $categoryModel->getRawData();
         }
         return $categories;
@@ -476,7 +471,7 @@ class CommunityStore
         $products = array();
 
         /**@var $product Shopware_StoreApi_Models_Product */
-        foreach($iterator as $product) {
+        foreach ($iterator as $product) {
             $data  = $product->getRawData();
             $data['details'] = $product->getDetails();
             $products[] = $data;
@@ -532,7 +527,7 @@ class CommunityStore
         $categories = array();
 
         /**@var $model Shopware_StoreApi_Models_Category */
-        foreach($iterator as $model) {
+        foreach ($iterator as $model) {
             $category = $model->getRawData();
             $productResult = $model->getProducts();
             if ($productResult instanceof Shopware_StoreApi_Exception_Response) {
@@ -540,7 +535,7 @@ class CommunityStore
             } else {
                 $products = array();
                 /**@var $productModel Shopware_StoreApi_Models_Product*/
-                foreach($productResult as $productModel) {
+                foreach ($productResult as $productModel) {
                     $product = $productModel->getRawData();
                     $product['details'] = $productModel->getDetails();
                     $products[] = $product;
@@ -574,7 +569,7 @@ class CommunityStore
         $productQuery->setOrderBy(Shopware_StoreApi_Models_Query_Product::ORDER_BY_PLUGIN_NAME);
         $productQuery->setOrderDirection(Shopware_StoreApi_Models_Query_Product::ORDER_DIRECTION_ASC);
         if (!empty($orderBy)) {
-            switch(strtolower($orderBy['property'])) {
+            switch (strtolower($orderBy['property'])) {
                 case "datum":
                     $productQuery->setOrderBy(Shopware_StoreApi_Models_Query_Product::ORDER_BY_CREATION_DATE);
                     $productQuery->setOrderDirection($orderBy['direction']);
@@ -591,7 +586,7 @@ class CommunityStore
 
         if (!empty($filters)) {
             $values = array();
-            foreach($filters as $filter) {
+            foreach ($filters as $filter) {
                 $values[] = $filter['value'];
             }
             $productQuery->addCriterion(
@@ -601,7 +596,8 @@ class CommunityStore
         return $productQuery;
     }
 
-    public function getDomainMessage() {
+    public function getDomainMessage()
+    {
         $url = 'store.shopware.de';
         if ($this->getIdentity()) {
             $url = $this->getIdentity()->getAccountUrl();
@@ -644,7 +640,7 @@ class CommunityStore
         $query->setOrderBy(Shopware_StoreApi_Models_Query_Product::ORDER_BY_PLUGIN_NAME);
         $query->setOrderDirection(Shopware_StoreApi_Models_Query_Product::ORDER_DIRECTION_ASC);
         if (!empty($orderBy)) {
-            switch(strtolower($orderBy['property'])) {
+            switch (strtolower($orderBy['property'])) {
                 case "datum":
                     $query->setOrderBy(Shopware_StoreApi_Models_Query_Product::ORDER_BY_CREATION_DATE);
                     $query->setOrderDirection($orderBy['direction']);
@@ -661,7 +657,7 @@ class CommunityStore
 
         if (!empty($filters)) {
             $values = array();
-            foreach($filters as $filter) {
+            foreach ($filters as $filter) {
                 $values[] = $filter['value'];
             }
             $query->addCriterion(
@@ -677,7 +673,7 @@ class CommunityStore
         $products = array();
 
         /**@var $product Shopware_StoreApi_Models_Product */
-        foreach($iterator as $product) {
+        foreach ($iterator as $product) {
             $data  = $product->getRawData();
             $data['details'] = $product->getDetails();
             $products[] = $data;
@@ -764,7 +760,7 @@ class CommunityStore
                 );
             }
         } else {
-            foreach($resultSet as $key => &$plugin) {
+            foreach ($resultSet as $key => &$plugin) {
                 if (array_key_exists($key, $plugins)) {
                     $plugin['pluginId'] = $plugins[$key]['pluginId'];
                 }
@@ -825,7 +821,7 @@ class CommunityStore
             }
         } else {
             // mark returned plugins as compatible
-            foreach($resultSet as  $productModel) {
+            foreach ($resultSet as  $productModel) {
                 $names  = $productModel->getPluginNames();
                 foreach ($names as $name) {
                     $results[$name] = true;
@@ -881,6 +877,34 @@ class CommunityStore
                 'data' => $resultSet,
                 'total' => count($resultSet)
             );
+        }
+    }
+
+    /**
+     * helper method to check if the directory is writable
+     * Used to check if a plugin can be extracted in this directory
+     *
+     * @param $directory | the directory in which the permissions are checked
+     * @param bool $recursive | if true, the directory will be checked recursively
+     *
+     * @return bool
+     */
+    protected function isPluginDirectoryWritable($directory, $recursive = false)
+    {
+        if (!$recursive) {
+            return is_writable($directory);
+        } else {
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($directory),
+                RecursiveIteratorIterator::CHILD_FIRST
+            );
+
+            foreach ($iterator as $path) {
+                if (!is_writable($path->__toString())) {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

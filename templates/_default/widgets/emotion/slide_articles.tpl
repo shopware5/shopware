@@ -9,11 +9,9 @@
             <a class="article-thumb-wrapper" title="{$article.articleName}" href="{$article.linkDetails}">
                 <img src="{$image}" title="{$article.articleName}" />
             </a>
-            </a>
             {else}
             <a class="article-thumb-wrapper" title="{$article.articleName}" href="{$article.linkDetails}">
                 <img src="{link file="frontend/_resources/images/no_picture.jpg"}" title="{$article.articleName}" />
-            </a>
             </a>
             {/if}
             <a title="{$article.articleName}" class="title" href="{$article.linkDetails}">{$article.articleName|truncate:35}</a>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,18 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Customer
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Oliver Denter
- * @author     $Author$
  */
 
 namespace   Shopware\Models\Customer;
-use         Shopware\Components\Model\ModelEntity,
+use         Shopware\Components\Model\LazyFetchModelEntity,
             Symfony\Component\Validator\Constraints as Assert,
             Doctrine\ORM\Mapping AS ORM;
 
@@ -64,7 +56,7 @@ use         Shopware\Components\Model\ModelEntity,
  * @ORM\Table(name="s_user")
  * @ORM\HasLifecycleCallbacks
  */
-class Customer extends ModelEntity
+class Customer extends LazyFetchModelEntity
 {
     /**
      * The id property is an identifier property which means
@@ -267,7 +259,7 @@ class Customer extends ModelEntity
      * @Assert\Valid
      *
      * @var \Shopware\Models\Customer\Billing
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Customer\Billing", mappedBy="customer", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Customer\Billing", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
      */
     protected $billing;
 
@@ -279,7 +271,7 @@ class Customer extends ModelEntity
      * @Assert\Valid
      *
      * @var \Shopware\Models\Customer\Shipping
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Customer\Shipping", mappedBy="customer", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Customer\Shipping", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
      */
     protected $shipping;
 
@@ -289,7 +281,7 @@ class Customer extends ModelEntity
      * The association is joined over the debit userID field and the id field of the customer.
      *
      * @var \Shopware\Models\Customer\Debit
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Customer\Debit", mappedBy="customer", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Customer\Debit", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
      * @Assert\Valid
      */
     protected $debit;
@@ -300,7 +292,7 @@ class Customer extends ModelEntity
      * The association is joined over the group id field and the groupkey field of the customer.
      *
      * @var \Shopware\Models\Customer\Group $group
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Customer\Group", inversedBy="customers", cascade={"persist", "update"})
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Customer\Group", inversedBy="customers", cascade={"persist"})
      * @ORM\JoinColumn(name="customergroup", referencedColumnName="groupkey")
      */
     protected $group;
@@ -328,7 +320,7 @@ class Customer extends ModelEntity
      * INVERSE SIDE
      * @var \Shopware\Models\Attribute\Customer
      * @Assert\Valid
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Customer", mappedBy="customer", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Customer", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
      */
     protected $attribute;
 
@@ -353,6 +345,20 @@ class Customer extends ModelEntity
     protected $notifications;
 
     /**
+     * @var \Doctrine\Common\Collections\ArrayCollection $paymentInstances
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\PaymentInstance", mappedBy="customer")
+     */
+    protected $paymentInstances;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection $paymentData
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\PaymentData", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
+     */
+    protected $paymentData;
+
+    /**
      * Class constructor. Initials the orders array and the date fields.
      */
     public function __construct()
@@ -361,6 +367,8 @@ class Customer extends ModelEntity
         $this->firstLogin = new \DateTime();
         $this->lastLogin  = new \DateTime();
         $this->notifications = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->paymentInstances = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->paymentData = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -891,7 +899,7 @@ class Customer extends ModelEntity
      */
     public function getGroup()
     {
-        return $this->group;
+        return $this->fetchLazy($this->group, array('key' => $this->groupKey));
     }
 
     /**
@@ -1023,9 +1031,12 @@ class Customer extends ModelEntity
         $this->priceGroup = $priceGroup;
     }
 
-    public function setLanguageSubShop($languageSubShop)
+    public function setLanguageSubShop(\Shopware\Models\Shop\Shop $languageSubShop)
     {
         $this->languageSubShop = $languageSubShop;
+
+        $subShop = ($languageSubShop->getMain()) ? $languageSubShop->getMain() : $languageSubShop;
+        $this->setShop($subShop);
     }
 
     public function getLanguageSubShop()
@@ -1039,5 +1050,55 @@ class Customer extends ModelEntity
     public function getLanguageId()
     {
         return $this->languageId;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $paymentInstances
+     */
+    public function setPaymentInstances($paymentInstances)
+    {
+        $this->paymentInstances = $paymentInstances;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getPaymentInstances()
+    {
+        return $this->paymentInstances;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $paymentData
+     */
+    public function setPaymentData($paymentData)
+    {
+        $this->paymentData = $paymentData;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getPaymentData()
+    {
+        return $this->paymentData;
+    }
+
+    /**
+     * @param \Shopware\Models\Customer\PaymentData $paymentData
+     */
+    public function addPaymentData(PaymentData $paymentData)
+    {
+        $paymentData->setCustomer($this);
+
+        $this->paymentData[] = $paymentData;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGroupKey()
+    {
+        return $this->groupKey;
     }
 }

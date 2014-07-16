@@ -23,27 +23,16 @@
  */
 
 /**
- * @group disable
  * @category  Shopware
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Frontend_AccountTest extends Enlight_Components_Test_Controller_TestCase
 {
-
-    /**
-     * Returns the test dataset
-     *
-     * @return PHPUnit_Extensions_Database_DataSet_IDataSet
-     */
-    protected function getDataSet()
-    {
-        return $this->createXMLDataSet(Shopware()->TestPath('DataSets_Partner').'Partner.xml');
-    }
-
     /**
      * test testPartnerStatistic controller action
      *
+     * @group disable
      * @return array|int|string $id
      */
     public function testPartnerStatistic()
@@ -58,19 +47,63 @@ class Shopware_Tests_Controllers_Frontend_AccountTest extends Enlight_Components
         $this->reset();
 
         //setting date range
-        $params["fromDate"] = "01.01.2000";
-        $params["toDate"] = "01.01.2222";
+        $params['fromDate'] = '01.01.2000';
+        $params['toDate'] = '01.01.2222';
         $this->Request()->setParams($params);
         Shopware()->Session()->partnerId = 1;
 
         $this->dispatch('/account/partnerStatistic');
-        $this->assertEquals("01.01.2000", $this->View()->partnerStatisticFromDate);
-        $this->assertEquals("01.01.2222", $this->View()->partnerStatisticToDate);
+        $this->assertEquals('01.01.2000', $this->View()->partnerStatisticFromDate);
+        $this->assertEquals('01.01.2222', $this->View()->partnerStatisticToDate);
         $chartData = $this->View()->sPartnerOrderChartData[0];
 
-        $this->assertTrue(($chartData["date"] instanceof \DateTime));
-        $this->assertTrue(!empty($chartData["timeScale"]));
-        $this->assertTrue(!empty($chartData["netTurnOver"]));
-        $this->assertTrue(!empty($chartData["provision"]));
+        $this->assertInstanceOf('\DateTime', $chartData['date']);
+        $this->assertTrue(!empty($chartData['timeScale']));
+        $this->assertTrue(!empty($chartData['netTurnOver']));
+        $this->assertTrue($chartData['provision'] !== '0' ? !empty($chartData['provision']) : empty($chartData['provision']));
+    }
+
+    /**
+     * SW-8258 - check if email addresses with new domains like .berlin are valid
+     */
+    public function testValidEmailAddresses()
+    {
+        $emailAddresses = array(
+            // old domains
+            'test@example.de',
+            'test@example.com',
+            'test@example.org',
+
+            // new released domains
+            'test@example.berlin',
+            'test@example.email',
+            'test@example.systems',
+
+            // new non released domains
+            'test@example.active',
+            'test@example.love',
+            'test@example.video'
+        );
+
+        $invalidEmailAddresses = array(
+            'test',
+            'test@example',
+            'test@.de',
+            '@example',
+            '@example.de',
+            '@.',
+            ' @ .de',
+        );
+
+        $validator = new Zend_Validate_EmailAddress();
+        $validator->getHostnameValidator()->setValidateTld(false);
+
+        foreach($emailAddresses as $email) {
+            $this->assertTrue($validator->isValid($email));
+        }
+
+        foreach($invalidEmailAddresses as $email) {
+            $this->assertFalse($validator->isValid($email));
+        }
     }
 }

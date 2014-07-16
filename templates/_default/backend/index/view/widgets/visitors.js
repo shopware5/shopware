@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,13 +19,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Index
- * @subpackage View
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 //{namespace name=backend/index/view/widgets}
@@ -65,25 +58,125 @@ Ext.define('Shopware.apps.Index.view.widgets.Visitors', {
         }
     },
 
+    visitorsStore: null,
+
+    height: 225,
+
     /**
      * Initializes the widget.
      *
      * @public
      * @return void
      */
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
-        me.items = me.createColumnContainers();
+        me.items = [];
 
-        me.tools = [{
-            type: 'refresh',
-            scope: me,
-            handler: me.refreshView
-        }];
+        me.tools = [
+            {
+                type: 'refresh',
+                scope: me,
+                handler: me.refreshView
+            }
+        ];
 
-        me.createTaskRunner();
+        me.visitorsStore = Ext.create('Ext.data.Store', {
+            model: 'Shopware.apps.Index.model.Batch',
+            remoteFilter: true,
+            autoLoad: true,
+            clearOnLoad: false,
+
+            proxy: {
+                type: 'ajax',
+                url: '{url controller="widgets" action="getVisitors"}',
+                reader: {
+                    type: 'json',
+                    root: 'data'
+                }
+            }
+        });
+
+        me.visitorsStore.load({
+            callback: function () {
+                me.createColumnContainers();
+
+                me.createTaskRunner();
+            }
+        });
+
         me.callParent(arguments);
+    },
+
+    /**
+     * Creates the necessary containers for the layout.
+     *
+     * @public
+     * @return [array] array of Ext.container.Container's
+     */
+    createColumnContainers: function () {
+        var me = this,
+            stores = me.visitorsStore.first();
+
+        me.dataView = Ext.create('Ext.view.View', {
+            tpl: me.createVisitorsOnlineTemplate(),
+            data: [
+                {
+                    visitors: stores.get('currentUsers')
+                }
+            ]
+        });
+
+        /** Left container */
+        me.add(Ext.create('Ext.container.Container', {
+            columnWidth: 0.45,
+            height: '100%',
+            items: [
+                me.createLineChart(stores.getVisitorsStore),
+                me.dataView
+            ]
+        }));
+
+        me.gridPanel = Ext.create('Ext.grid.Panel', {
+            border: 0,
+            store: stores.getCustomersStore,
+            columns: me.createColumns(),
+            viewConfig: {
+                hideLoadingMsg: true
+            }
+        });
+
+        /** Right container */
+        me.add(Ext.create('Ext.container.Container', {
+            height: '100%',
+            margin: '20 0 0 10',
+            columnWidth: 0.55,
+            items: [
+                me.gridPanel
+            ]
+        }));
+    },
+
+    /**
+     * Helper method which creates the template
+     * for all current visitors in the shop.
+     *
+     * @public
+     * @return { object } Ext.XTemplate
+     */
+    createVisitorsOnlineTemplate: function () {
+        var me = this;
+
+        return new Ext.XTemplate(
+            '{literal}',
+            '<tpl for=".">',
+                '<div class="visitors-online">',
+                    '<span class="visitors">{visitors}</span>',
+                    '<strong class="title">' + me.snippets.visitors_online + '</strong>',
+                '</div>',
+            '</tpl>',
+            '{/literal}'
+        );
     },
 
     /**
@@ -93,7 +186,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Visitors', {
      * @public
      * @return void
      */
-    createTaskRunner: function() {
+    createTaskRunner: function () {
         var me = this;
 
         me.storeRefreshTask = Ext.TaskManager.start({
@@ -111,94 +204,33 @@ Ext.define('Shopware.apps.Index.view.widgets.Visitors', {
      * @public
      * @return void
      */
-    refreshView: function() {
+    refreshView: function () {
         var me = this;
+
         me.gridPanel.setLoading(true);
 
-        if(!me.visitorsStore) {
-            return false;
+        if (!me.visitorsStore) {
+            return;
         }
 
         me.visitorsStore.load({
-            callback: function() {
+            callback: function () {
                 var stores = me.visitorsStore.first();
 
-                if(!stores || !stores.getCustomersStore || !stores.getVisitorsStore)  {
-                    return false;
+                if (!stores || !stores.getCustomersStore || !stores.getVisitorsStore) {
+                    return;
                 }
 
                 me.gridPanel.reconfigure(stores.getCustomersStore);
                 me.chart.bindStore(stores.getVisitorsStore);
-                me.dataView.update([{
-                    visitors: stores.get('currentUsers')
-                }]);
+                me.dataView.update([
+                    {
+                        visitors: stores.get('currentUsers')
+                    }
+                ]);
                 me.gridPanel.setLoading(false);
             }
         });
-    },
-
-    /**
-     * Creates the necessary containers for the layout.
-     *
-     * @public
-     * @return [array] array of Ext.container.Container's
-     */
-    createColumnContainers: function() {
-        var me = this, containers = [], stores = me.visitorsStore.first();
-
-        me.dataView = Ext.create('Ext.view.View', {
-            tpl: me.createVisitorsOnlineTemplate(),
-            data: [{
-                visitors: stores.get('currentUsers')
-            }]
-        })
-
-        /** Left container */
-        containers.push(Ext.create('Ext.container.Container', {
-            columnWidth: 0.45,
-            height: '100%',
-            items: [ me.createLineChart(stores.getVisitorsStore), me.dataView ]
-        }));
-
-        me.gridPanel = Ext.create('Ext.grid.Panel', {
-            border: 0,
-            store: stores.getCustomersStore,
-            columns: me.createColumns(),
-            viewConfig: {
-                hideLoadingMsg: true
-            }
-        });
-
-        /** Right container */
-        containers.push(Ext.create('Ext.container.Container', {
-            height: '100%',
-            margin: '20 0 0 10',
-            columnWidth: 0.55,
-            items: [ me.gridPanel ]
-        }));
-
-        return containers;
-    },
-
-    /**
-     * Helper method which creates the template
-     * for all current visitors in the shop.
-     *
-     * @public
-     * @return [object] Ext.XTemplate
-     */
-    createVisitorsOnlineTemplate: function() {
-        var me = this;
-
-        return new Ext.XTemplate(
-            '{literal}<tpl for=".">',
-                '<div class="visitors-online">',
-                    '<span class="visitors">{visitors}</span>',
-
-                    '<strong class="title">' + me.snippets.visitors_online + '</strong>',
-                '</div>',
-            '</tpl>{/literal}'
-        );
     },
 
     /**
@@ -208,24 +240,27 @@ Ext.define('Shopware.apps.Index.view.widgets.Visitors', {
      * @public
      * @return [array] generated columns
      */
-    createColumns: function() {
+    createColumns: function () {
         var me = this;
 
-        return [{
-            header: me.snippets.headers.customers_online,
-            dataIndex: 'customer',
-            flex: 1
-        }, {
-            header: me.snippets.headers.basket_amount,
-            dataIndex: 'amount',
-            flex: 1,
-            renderer: function(value) {
-                return Ext.util.Format.currency(value);
+        return [
+            {
+                header: me.snippets.headers.customers_online,
+                dataIndex: 'customer',
+                flex: 1
+            },
+            {
+                header: me.snippets.headers.basket_amount,
+                dataIndex: 'amount',
+                flex: 1,
+                renderer: function (value) {
+                    return Ext.util.Format.currency(value);
+                }
             }
-        }];
+        ];
     },
 
-    createLineChart: function(store) {
+    createLineChart: function (store) {
         var me = this;
 
         me.chart = Ext.create('Ext.chart.Chart', {
@@ -246,10 +281,10 @@ Ext.define('Shopware.apps.Index.view.widgets.Visitors', {
                  * @event afterrender
                  * @param [object] chartCmp - Ext.chart.Chart
                  */
-                afterrender: function(chartCmp) {
+                afterrender: function (chartCmp) {
 
                     // The timeout is kinda dirty, i know, but there's no way around it...
-                    var timeout = setTimeout(function() {
+                    var timeout = setTimeout(function () {
                         chartCmp.setWidth(chartCmp.ownerCt.getWidth());
 
                         clearTimeout(timeout);
@@ -257,82 +292,86 @@ Ext.define('Shopware.apps.Index.view.widgets.Visitors', {
                     }, 5);
                 }
             },
-            axes: [{
-                type: 'Numeric',
-                position: 'left',
-                minorTickSteps: 1,
-                minimum: 0,
-                hidden: true,
-                fields: [ 'visitors']
-            }, {
-                type: 'Category',
-                position: 'bottom',
-                fields: [ 'timestamp' ],
-                label: {
-                    fill: '#77828b',
-                    font: '11px/14px Arial, sans-serif'
+            axes: [
+                {
+                    type: 'Numeric',
+                    position: 'left',
+                    minorTickSteps: 1,
+                    minimum: 0,
+                    hidden: true,
+                    fields: [ 'visitors']
                 },
+                {
+                    type: 'Category',
+                    position: 'bottom',
+                    fields: [ 'timestamp' ],
+                    label: {
+                        fill: '#77828b',
+                        font: '11px/14px Arial, sans-serif'
+                    },
 
-                setLabels: function() {
-                    var store = this.chart.getChartStore(),
-                        data = store.data.items,
-                        d, dLen, record,
-                        fields = this.fields,
-                        ln = fields.length,
-                        i;
+                    setLabels: function () {
+                        var store = this.chart.getChartStore(),
+                            data = store.data.items,
+                            d, dLen, record,
+                            fields = this.fields,
+                            ln = fields.length,
+                            i;
 
-                    this.labels = [];
-                    for (d = 0, dLen = data.length; d < dLen; d++) {
-                        record = data[d];
-                        for (i = 0; i < ln; i++) {
-                            var days = [], date = new Date(record.get(fields[i]) * 1000);
-                            Ext.iterate(me.snippets.date, function(i, element){
-                                days.push(element);
-                            });
-                            var day = days[date.getDay()];
-                            day = day.substring(0, 2);
-                            this.labels.push(day);
+                        this.labels = [];
+                        for (d = 0, dLen = data.length; d < dLen; d++) {
+                            record = data[d];
+                            for (i = 0; i < ln; i++) {
+                                var days = [], date = new Date(record.get(fields[i]) * 1000);
+                                Ext.iterate(me.snippets.date, function (i, element) {
+                                    days.push(element);
+                                });
+                                var day = days[date.getDay()];
+                                day = day.substring(0, 2);
+                                this.labels.push(day);
+                            }
                         }
                     }
                 }
-            }],
-            series: [{
-                type: 'line',
-                axis: 'left',
-                fill: true,
-                xField: 'date',
-                yField: 'visitors',
+            ],
+            series: [
+                {
+                    type: 'line',
+                    axis: 'left',
+                    fill: true,
+                    xField: 'date',
+                    yField: 'visitors',
 
-                // Tips
-                tips: {
-                    trackMouse: true,
-                    width: 260,
-                    height: 24,
-                    renderer: function(storeItem) {
-                        this.setTitle(storeItem.get('date') + ': ' + storeItem.get('visitors') + ' ' + me.snippets.visitors_online_total);
+                    // Tips
+                    tips: {
+                        trackMouse: true,
+                        width: 260,
+                        height: 24,
+                        renderer: function (storeItem) {
+                            this.setTitle(storeItem.get('date') + ': ' + storeItem.get('visitors') + ' ' + me.snippets.visitors_online_total);
+                        }
+                    },
+                    style: {
+                        fill: '#77b3e0'
+                    },
+                    highlight: {
+                        size: 5,
+                        radius: 5,
+                        fill: '#2f79b1',
+                        stroke: '#2f79b1'
+                    },
+                    markerConfig: {
+                        type: 'circle',
+                        fill: '#2f79b1',
+                        size: 4,
+                        radius: 4,
+                        'stroke-width': 0
                     }
-                },
-                style: {
-                    fill: '#c2e6d6'
-                },
-                highlight: {
-                    size: 5,
-                    radius: 5,
-                    fill: '#13be7b',
-                    stroke: '#13be7b'
-                },
-                markerConfig: {
-                    type: 'circle',
-                    fill: '#13be7b',
-                    size: 4,
-                    radius: 4,
-                    'stroke-width': 0
                 }
-            }]
+            ]
         });
 
         return me.chart;
     }
-
 });
 //{/block}

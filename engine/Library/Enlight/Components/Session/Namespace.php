@@ -47,7 +47,7 @@ class Enlight_Components_Session_Namespace
 
     /**
      * Unset the given offset.
-     * @param $key The key to unset.
+     * @param string $key Key to unset.
      */
     public function offsetUnset($key)
     {
@@ -81,5 +81,16 @@ class Enlight_Components_Session_Namespace
     public function count()
     {
         return $this->apply('count');
+    }
+
+    /**
+     * @param $name
+     * @param null $default
+     * @return null
+     */
+    public function get($name, $default = null)
+    {
+        $value = $this->offsetGet($name);
+        return $value !== null ? $value : $default;
     }
 }

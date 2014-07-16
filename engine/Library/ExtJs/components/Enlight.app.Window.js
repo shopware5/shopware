@@ -107,6 +107,12 @@ Ext.define('Enlight.app.Window', {
     isSubWindow: false,
 
     /**
+     * Whether or not the initial window position should be centered in the current desktop.
+     * @boolean
+     */
+    centerOnStart: true,
+
+    /**
      * Provides the window management functionality for
      * the new event bus.
      *
@@ -265,8 +271,11 @@ Ext.define('Enlight.app.Window', {
         }
 
         me.callParent(arguments);
+
+        if(me.centerOnStart) {
+            me.center();
+        }
         me.isWindowOnFront = true;
-        me.center();
 	},
 
     /**
@@ -294,7 +303,7 @@ Ext.define('Enlight.app.Window', {
             elDom = el.dom;
 
             // Setting the style with vanilla js to prevent issues with the Ext.ZIndexManager
-            el.dom.style.zIndex = "999999";
+            elDom.style.zIndex = "999999";
         }
     },
 
@@ -389,7 +398,6 @@ Ext.define('Enlight.app.Window', {
             }
         });
 
-        Ext.WindowManager.bringToFront(me);
         if(viewport) {
             viewport.jumpTo(me.desktopPosition, true);
             me.hiddenLayer.setStyle('z-index', null);
@@ -429,9 +437,8 @@ Ext.define('Enlight.app.Window', {
             container = parent ? parent.getTargetEl() : me.container,
             size = container.getViewSize(false);
 
-        size.height = size.height - 20;
         me.setSize(size);
-        me.setPosition.apply(me, [0, 0]);
+        me.setPosition(0, 0);
     },
 
     maximize: function() {
@@ -449,7 +456,6 @@ Ext.define('Enlight.app.Window', {
             }
             me.maximized = true;
             me.el.disableShadow();
-
 
             if (me.dd) {
                 me.dd.disable();

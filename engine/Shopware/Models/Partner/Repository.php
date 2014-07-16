@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Partner
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Marcel Schmäing
- * @author     $Author$
  */
 
 namespace Shopware\Models\Partner;
@@ -72,7 +64,7 @@ class Repository extends ModelRepository
      */
     public function getListQueryBuilder($order)
     {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(
             array(
                 'partner.id',
@@ -89,7 +81,7 @@ class Repository extends ModelRepository
         if (!empty($order)) {
             $builder->addOrderBy($order);
         }
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -154,7 +146,7 @@ class Repository extends ModelRepository
      */
     public function getStatisticListQueryBuilder($order = null, $partnerId, $summary = false, $fromDate,$toDate)
     {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $expr = $this->getEntityManager()->getExpressionBuilder();
 
         $builder->select(
@@ -194,7 +186,7 @@ class Repository extends ModelRepository
             }
         }
 
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -220,7 +212,7 @@ class Repository extends ModelRepository
      */
     public function getStatisticChartQueryBuilder($partnerId, $fromDate, $toDate)
     {
-    	$builder = $this->getEntityManager()->createQueryBuilder();
+        $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(
             array(
                 'o.orderTime as date',
@@ -240,7 +232,7 @@ class Repository extends ModelRepository
         $builder->setParameter(0, $partnerId);
         $builder->setParameter(1, $fromDate);
         $builder->setParameter(2, $toDate);
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -250,8 +242,8 @@ class Repository extends ModelRepository
      */
     public function getCustomerForMappingQuery($mappingValue)
     {
-    	$builder = $this->getCustomerForMappingQueryBuilder($mappingValue);
-    	return $builder->getQuery();
+        $builder = $this->getCustomerForMappingQueryBuilder($mappingValue);
+        return $builder->getQuery();
     }
 
     /**
@@ -279,7 +271,7 @@ class Repository extends ModelRepository
         $builder->setParameter(0,$mappingValue);
         $builder->setParameter(1,$mappingValue);
         $builder->setParameter(2,$mappingValue);
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -290,8 +282,8 @@ class Repository extends ModelRepository
      */
     public function getValidateTrackingCodeQuery($trackingCode, $partnerId)
     {
-    	$builder = $this->getValidateTrackingCodeQueryBuilder($trackingCode, $partnerId);
-    	return $builder->getQuery();
+        $builder = $this->getValidateTrackingCodeQueryBuilder($trackingCode, $partnerId);
+        return $builder->getQuery();
     }
 
     /**
@@ -313,7 +305,7 @@ class Repository extends ModelRepository
             ->andWhere($builder->expr()->neq('partner.id', '?2'))
             ->setParameter(1, $trackingCode)
             ->setParameter(2, $partnerId);
-    	return $builder;
+        return $builder;
     }
 
     /**
@@ -332,7 +324,7 @@ class Repository extends ModelRepository
                 ->where('DATE_FORMAT(CURRENT_DATE(),\'%Y\') = DATE_FORMAT('.$alias.'.orderTime,\'%Y\')')
                 ->andWhere($alias.'.status NOT IN(\'4\', \'-1\')')
                 ->andWhere($alias.'.partnerId = partner.idCode');
-        if($monthlyAmount){
+        if ($monthlyAmount) {
             $builder->andwhere('DATE_FORMAT(CURRENT_DATE(),\'%m\') = DATE_FORMAT('.$alias.'.orderTime,\'%m\')');
         }
         return $builder->getDQL();

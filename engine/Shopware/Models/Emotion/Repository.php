@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -29,7 +29,7 @@ use Shopware\Components\Model\QueryBuilder;
 /**
  * @category  Shopware
  * @package   Shopware\Models\Emotion
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Repository extends ModelRepository
 {
@@ -71,11 +71,9 @@ class Repository extends ModelRepository
 
         //filter the displayed columns with the passed filter string
         if (!empty($filter)) {
-            $builder->where('category.name LIKE ?2')
-                    ->where('emotions.name LIKE ?2')
-                    ->orWhere('emotions.rows = ?1')
+            $builder->where('categories.name LIKE ?2')
+                    ->orWhere('emotions.name LIKE ?2')
                     ->orWhere('emotions.modified LIKE ?2')
-                    ->setParameter(1, $filter)
                     ->setParameter(2, '%' . $filter . '%');
         }
         if (!empty($orderBy)) {

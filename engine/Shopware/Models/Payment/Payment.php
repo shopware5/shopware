@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Payment
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Patrick Stahl
- * @author     $Author$
  */
 
 namespace   Shopware\Models\Payment;
@@ -228,7 +220,7 @@ class Payment extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Payment", mappedBy="payment", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Payment", mappedBy="payment", orphanRemoval=true, cascade={"persist"})
      * @var \Shopware\Models\Attribute\Payment
      */
     protected $attribute;
@@ -239,6 +231,19 @@ class Payment extends ModelEntity
      * @ORM\JoinColumn(name="pluginID", referencedColumnName="id")
      */
     protected $plugin;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection $paymentInstances
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\PaymentInstance", mappedBy="paymentMean")
+     */
+    protected $paymentInstances;
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection $paymentData
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\PaymentData", mappedBy="paymentMean")
+     */
+    protected $paymentData;
 
     /**
      * Gets the id of the payment
@@ -372,7 +377,7 @@ class Payment extends ModelEntity
      */
     public function setHide($hide)
     {
-        $this->hide = (bool)$hide;
+        $this->hide = (bool) $hide;
         return $this;
     }
 
@@ -483,7 +488,7 @@ class Payment extends ModelEntity
      */
     public function setPosition($position)
     {
-        $this->position = (int)$position;
+        $this->position = (int) $position;
         return $this;
     }
 
@@ -505,7 +510,7 @@ class Payment extends ModelEntity
      */
     public function setActive($active)
     {
-        $this->active = (bool)$active;
+        $this->active = (bool) $active;
         return $this;
     }
 
@@ -527,7 +532,7 @@ class Payment extends ModelEntity
      */
     public function setEsdActive($esdActive)
     {
-        $this->esdActive = (bool)$esdActive;
+        $this->esdActive = (bool) $esdActive;
         return $this;
     }
 
@@ -744,4 +749,35 @@ class Payment extends ModelEntity
         $this->plugin = $plugin;
     }
 
+    /**
+     * @param mixed $paymentInstances
+     */
+    public function setPaymentInstances($paymentInstances)
+    {
+        $this->paymentInstances = $paymentInstances;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPaymentInstances()
+    {
+        return $this->paymentInstances;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $paymentData
+     */
+    public function setPaymentData($paymentData)
+    {
+        $this->paymentData = $paymentData;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getPaymentData()
+    {
+        return $this->paymentData;
+    }
 }

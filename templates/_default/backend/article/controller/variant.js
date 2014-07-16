@@ -1009,6 +1009,12 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         model.set('totalCount', totalCount);
         model['getConfiguratorGroupsStore'] = activeGroups;
 
+        var store = me.getVariantListing().getStore();
+        if (store.getCount() == 0) {
+            // always override the variants when no variants exist
+            groupsChanged = true;
+        }
+
         var progress = me.getView('variant.Progress').create({
             configurator: model,
             article: article,

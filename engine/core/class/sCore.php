@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,106 +20,110 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Core
- * @subpackage Class
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Stefan Hamann
- * @author     $Author$
  */
 
 /**
  * Deprecated Shopware Class providing helper functions for post dispatch url rewriting
- *
- * todo@all: Documentation
  */
 class sCore
 {
-	/**
-	* Pointer to Shopware-Core-Functions
-	*
-	* @var    object
-	* @access private
-	*/
-	var $sSYSTEM;
-	
+    /**
+     * The Front controller object
+     * Needed to retrieve the request and router
+     *
+     * @var Enlight_Controller_Front
+     */
+    private $front;
 
-	public function sBuildLink($sVariables, $sUsePost=false)
-	{
-		$cat = array("sCategory","sPage");
-		
-		$tempGET = $this->sSYSTEM->_GET;	
+    public function __construct($front = null)
+    {
+        $this->front = $front ? : Shopware()->Front();
+    }
 
-		// If viewport is available, this will be the first variable
-		if (!empty($tempGET["sViewport"])){
-			$url['sViewport'] = $tempGET["sViewport"];
-			if ($url["sViewport"]=="cat"
-			){
-				foreach ($cat as $catAllowedVariable){
-					if (!empty($tempGET[$catAllowedVariable])){
-						$url[$catAllowedVariable] = $tempGET[$catAllowedVariable];
-						unset($tempGET[$catAllowedVariable]);
-					}
-				}
-				$tempGET = array();
-			}
-			unset ($tempGET["sViewport"]);
-		}
-		
-		// Strip new variables from _GET
-		foreach ($sVariables as $getKey => $getValue)
-		{
-			$tempGET[$getKey] = $getValue;
-		}
-		
-		// Strip session from array
-		unset($tempGET['coreID']);
-		unset($tempGET['sPartner']);
-		
-		
-		if(!empty($tempGET))
-		foreach ($tempGET as $getKey => $getValue){
-			if ($getValue) $url[$getKey] = $getValue;
-		}
-		
-		if(!empty($url))
-			$queryString = '?'.http_build_query($url,"","&");
-		else 
-			$queryString = '';
-		
-		return $queryString;
-	}
-	
-	public function sRewriteLink($link=null, $title=null)
-	{
-		$url = str_replace(',', '=', $link);
-		$url = html_entity_decode($url);
-		$query = parse_url($url, PHP_URL_QUERY);
-		parse_str($query, $query);
-		
-		if(!empty($title)) {
-			$query['title'] = $title;
-		}
-		$query['module'] = 'frontend';
-		return Shopware()->Front()->Router()->assemble($query);
-	}
-	
-	public function __call($name, $params=null)
-	{
-		switch ($name)
-		{
-			case 'rewriteLink':
-				return call_user_func(array($this, 'sRewriteLink'), $params[0][2], empty($params[0][3]) ? null : $params[0][3]);
-			default:
-				return null;
-		}
-		return null;
-	}
-	
-	public function sCustomRenderer($sRender,$sPath,$sLanguage)
-	{
-		return $sRender;
-	}
+    /**
+     * Creates query string for an url based on sVariables and Request GET variables
+     *
+     * @param array $sVariables Variables that configure the generated url
+     * @return string
+     */
+    public function sBuildLink($sVariables)
+    {
+        $url = array();
+        $allowedCategoryVariables = array("sCategory", "sPage");
+
+        $tempGET = $this->front->Request() ? $this->front->Request()->getParams() : null;
+
+        // If viewport is available, this will be the first variable
+        if (!empty($tempGET["sViewport"])) {
+            $url['sViewport'] = $tempGET["sViewport"];
+            if ($url["sViewport"] === "cat") {
+                foreach ($allowedCategoryVariables as $allowedVariable) {
+                    if (!empty($tempGET[$allowedVariable])) {
+                        $url[$allowedVariable] = $tempGET[$allowedVariable];
+                        unset($tempGET[$allowedVariable]);
+                    }
+                }
+                $tempGET = array();
+            }
+            unset($tempGET["sViewport"]);
+        }
+
+        // Strip new variables from _GET
+        foreach ($sVariables as $getKey => $getValue) {
+            $tempGET[$getKey] = $getValue;
+        }
+
+        // Strip session from array
+        unset($tempGET['coreID']);
+        unset($tempGET['sPartner']);
+
+        foreach ($tempGET as $getKey => $getValue) {
+            if ($getValue) {
+                $url[$getKey] = $getValue;
+            }
+        }
+
+        if(!empty($url)) {
+            $queryString = '?'.http_build_query($url,"","&");
+        } else {
+            $queryString = '';
+        }
+
+        return $queryString;
+    }
+
+    /**
+     * Tries to rewrite the provided link using SEO friendly urls
+     *
+     * @param string $link The link to rewrite.
+     * @param string $title Title of the link or related element.
+     * @return mixed|string Complete url, rewritten if possible
+     */
+    public function sRewriteLink($link = null, $title = null)
+    {
+        $url = str_replace(',', '=', $link);
+        $url = html_entity_decode($url);
+        $query = parse_url($url, PHP_URL_QUERY);
+        parse_str($query, $query);
+
+        if (!empty($title)) {
+            $query['title'] = $title;
+        }
+        $query['module'] = 'frontend';
+
+        return $this->front->Router()->assemble($query);
+    }
+
+    /**
+     * @deprecated Use sRewriteLink instead
+     *
+     * Same as sRewriteLink, but with a different argument structure.
+     *
+     * @param $args
+     * @return mixed|string
+     */
+    public function rewriteLink($args = array())
+    {
+        return $this->sRewriteLink($args[2], empty($args[3]) ? null : $args[3]);
+    }
 }

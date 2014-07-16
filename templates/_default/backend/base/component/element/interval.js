@@ -42,8 +42,8 @@ Ext.define('Shopware.apps.Base.view.element.Interval', {
     store: [
         [0, '{s name=element/interval/empty_value}None (0 Sec.){/s}'],
         [120, '{s name=element/interval/2_minutes}2 Minutes (120 Sec.){/s}'],
-        [120, '{s name=element/interval/5_minutes}5 Minutes (300 Sec.){/s}'],
-        [120, '{s name=element/interval/10_minutes}10 Minutes (600 Sec.){/s}'],
+        [300, '{s name=element/interval/5_minutes}5 Minutes (300 Sec.){/s}'],
+        [600, '{s name=element/interval/10_minutes}10 Minutes (600 Sec.){/s}'],
         [900, '{s name=element/interval/15_minutes}15 Minutes (900 Sec.){/s}'],
         [1800, '{s name=element/interval/30_minutes}30 Minutes (1800 Sec.){/s}'],
         [3600, '{s name=element/interval/1_hour}1 Hour (3600 Sec.){/s}'],

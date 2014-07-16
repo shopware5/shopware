@@ -1,0 +1,17 @@
+default:
+    paths:
+        features: features
+        bootstrap: %behat.paths.features%/bootstrap
+    filters:
+        tags: "~@javascript"
+    extensions:
+        SensioLabs\Behat\PageObjectExtension\Extension: ~
+        Shopware\Behat\ShopwareExtension\Extension: ~
+        Behat\MinkExtension\Extension:
+            ## defined in buildscript
+            #base_url: 'http://localhost/shopware/'
+            default_session: 'goutte'
+            javascript_session: 'sahi'
+            sahi: ~
+            goutte: ~
+            browser_name: firefox

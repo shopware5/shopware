@@ -12,7 +12,7 @@
 
 
 {block name='frontend_index_content'}
-	<div id="detail" class="grid_16 first last">
+	<div id="detail" class="grid_16 first last" itemscope itemtype="http://data-vocabulary.org/Product">
 		
 		{* General detailbox *}
 		<div id="detailbox"><!-- detailbox -->
@@ -127,7 +127,7 @@
 						{include file="frontend/detail/data.tpl" sArticle=$sArticle sView=1}
 					{/block}
 					{block name='frontend_detail_index_after_data'}{/block}
-					
+
 					
 					{* Include buy button and quantity box *}
 					{block name="frontend_detail_index_buybox"}
@@ -158,30 +158,37 @@
 					<div id="tabs">
 						{* Tabsnavigation *}
 						{include file="frontend/detail/tabs.tpl"}
-							
+
+						{block name="frontend_detail_index_outer_tabs"}
 						<div class="inner_tabs">
-						
-							{* Article description *}
-							{block name="frontend_detail_index_tabs_description"}
-								{include file="frontend/detail/description.tpl"}
+
+							{block name="frontend_detail_index_inner_tabs"}
+								{block name='frontend_detail_index_before_tabs'}{/block}
+
+								{* Article description *}
+								{block name="frontend_detail_index_tabs_description"}
+									{include file="frontend/detail/description.tpl"}
+								{/block}
+
+								{* Article rating *}
+								{if !{config name=VoteDisable}}
+									{block name="frontend_detail_index_tabs_rating"}
+										{include file="frontend/detail/comment.tpl"}
+									{/block}
+								{/if}
+
+								{* Related articles *}
+								{block name="frontend_detail_index_tabs_related"}
+									{include file="frontend/detail/related.tpl"}
+								{/block}
+
+								{* Similar articles *}
+								{include file='frontend/detail/similar.tpl'}
+
+								{block name='frontend_detail_index_after_tabs'}{/block}
 							{/block}
-							
-							
-							{* Article rating *}
-							{if !{config name=VoteDisable}}
-							{block name="frontend_detail_index_tabs_rating"}
-								{include file="frontend/detail/comment.tpl"}
-							{/block}
-							{/if}
-							
-							{* Related articles *}
-							{block name="frontend_detail_index_tabs_related"}
-								{include file="frontend/detail/related.tpl"}
-							{/block}
-					    	
-					    	{* Similar articles *}
-							{include file='frontend/detail/similar.tpl'}
 						</div>
+						{/block}
 					</div>
 					<div class="detailinfo_shadow">&nbsp;</div>
 						{* "Customers bought also" slider *}

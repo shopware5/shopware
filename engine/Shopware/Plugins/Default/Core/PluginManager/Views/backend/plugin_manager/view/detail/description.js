@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,7 @@
  * @category   Shopware
  * @package    Order
  * @subpackage View
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author     Stephan Pohl
  * @author     $Author$
@@ -182,7 +182,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Description', {
             attributes = me.article.getAttributeStore.first().data,
             categoryNames = me.getCategoryNames(me.article.getCategoryStore),
             date = me.article.data.datum,
-            formatted = Ext.Date.format(date, 'd.m.Y');
+            formatted = Ext.util.Format.date(date);
 
         var metaData = '<p><strong>'+me.snippets.category+':</strong>' + categoryNames +'</p>' +
            '<p><strong>'+me.snippets.supplier+':</strong>' + me.article.get('supplierName') + '</p>' +

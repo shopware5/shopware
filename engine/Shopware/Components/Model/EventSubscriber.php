@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components_Model
- * @subpackage Model
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Oliver Denter
- * @author     $Author$
  */
 
 namespace Shopware\Components\Model;
@@ -167,7 +159,8 @@ class EventSubscriber implements BaseEventSubscriber
      * @param $entity \Shopware\Components\Model\ModelEntity
      * @return string
      */
-    protected function getEntityName($entity) {
+    protected function getEntityName($entity)
+    {
         if ($entity instanceof \Doctrine\ORM\Proxy\Proxy) {
             $entityName = get_parent_class($entity);
         } else {
@@ -182,7 +175,8 @@ class EventSubscriber implements BaseEventSubscriber
      * @param $eventArgs LifecycleEventArgs
      * @return \Enlight_Event_EventArgs|null
      */
-    protected function notifyEvent($eventName, $eventArgs) {
+    protected function notifyEvent($eventName, $eventArgs)
+    {
         return $this->eventManager->notify($eventName, array(
             'entityManager' => $eventArgs->getEntityManager(),
             'entity' => $eventArgs->getEntity()

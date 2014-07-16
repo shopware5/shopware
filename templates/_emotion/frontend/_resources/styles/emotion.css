@@ -364,6 +364,8 @@ div.orderdata_box div, #newsletterfrm, #frmRegister {background-color: #f7f7f7;}
 #content div.inner .change_shipping div.alternative_shipping, #content div.inner .change_billing .shipping_address {border-color: #dfdfdf;}
 #content .orders .orderoverview_active .lastrow {border-color: #dfdfdf;}
 #content .orders .orderoverview_active .table_foot p.bold, #content .orders .orderoverview_active .table_foot div p {color:#333;}
+#content .orders .listing_actions, #content .downloads .listing_actions {width: 760px; padding-left: 10px; padding-right: 10px;}
+#content .orders .listing_actions .bottom, #content .downloads .listing_actions .bottom {border-top: none;}
 
 .addresses .inner_container, .addresses .inner_container .select_billing, .addresses .inner_container .select_shipping, .account .password .inner_container {border-color: #dfdfdf;}
 .password .outer {border-color: #dfdfdf;}
@@ -2679,6 +2681,7 @@ div#notes .table_row a.zoom_picture:hover {background-position: 0 bottom;}
 
 div#notes .table_row .delivery {top: 30px; right: 0;}
 div#notes .table_row .delivery.full_length {top: 38px; right: auto; left: 590px; }
+div#notes .table_row .delivery.full_length.vote_disabled {top:14px;}
 div#notes .table_row .title {width: 450px;}
 
 
@@ -2799,6 +2802,7 @@ input.instyle_error[type="text"], input.instyle_error[type="password"],
 .register .description {margin-left: 265px; color: #999; font-size: 11px; line-height: 12px;}
 .register .alt_shipping input {float: left;}
 .register .alt_shipping span {margin: 6px 0 5px 5px; float: left; width: 420px; display: block;}
+.register .alt_shipping label {margin: 6px 0 5px 5px; float: left; width: 420px; display: block;}
 
 .register .alternative_shipping select {width: 297px;}
 
@@ -3829,3 +3833,4 @@ body #content .banner-slider-emotion .ajaxSlider .slide_navigation {
 .fuzzy_result_box .inner_box {
     border: 1px solid #dfdfdf;
 }
+.mousetrap { opacity: 0; background: #fff }

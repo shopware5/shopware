@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -46,7 +46,7 @@ use Shopware\Components\Model\Query\SqlWalker;
  *
  * @category  Shopware
  * @package   Shopware\Models\Category
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Repository extends ModelRepository
 {
@@ -498,7 +498,7 @@ class Repository extends ModelRepository
             $category['articleCount'] = $child['articleCount'];
 
             //check if no depth passed or the current depth is lower than the passed depth
-            if ($depth === null || $depth > 0 ) {
+            if ($depth === null || $depth > 0) {
                 $category['sub'] = $this->getActiveChildrenTree($child['category']['id'], $customerGroupId, $depth);
             }
             $categories[] = $category;
@@ -530,7 +530,7 @@ class Repository extends ModelRepository
         $categories = array();
         $depth--;
 
-        foreach($children as &$child) {
+        foreach ($children as &$child) {
             $category = $child['category'];
             $category['childrenCount'] = $child['childrenCount'];
             $category['articleCount'] = $child['articleCount'];

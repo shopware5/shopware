@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,7 +25,7 @@
 /**
  * @category  Shopware
  * @package   Shopware\Controllers\Backend
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_ExtJs
 {
@@ -98,6 +98,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @var \Shopware\Components\Model\ModelRepository
      */
     protected $configuratorSetRepository = null;
+
+    /**
+     * @var \Shopware\Components\Model\ModelRepository
+     */
+    protected $propertyValueRepository = null;
 
     public function initAcl()
     {
@@ -283,6 +288,19 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
 
         return $this->configuratorSetRepository;
+    }
+
+    /**
+     * Helper function to get access to the Property Value repository.
+     * @return \Shopware\Components\Model\ModelRepository
+     */
+    protected function getPropertyValueRepository()
+    {
+        if ($this->propertyValueRepository === null) {
+            $this->propertyValueRepository = Shopware()->Models()->getRepository('Shopware\Models\Property\Value');
+        }
+
+        return $this->propertyValueRepository;
     }
 
     /**
@@ -596,7 +614,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $sql= "INSERT INTO s_articles
                SELECT NULL,
-                   supplierID, CONCAT(name, '-', 'Copy'), description, description_long, shippingtime, datum, active, taxID, pseudosales, topseller, keywords, changetime, pricegroupID, pricegroupActive, filtergroupID, laststock, crossbundlelook, notification, template, mode, NULL, available_from, available_to, NULL
+                   supplierID, CONCAT(name, '-', 'Copy'), description, description_long, shippingtime, datum, active, taxID, pseudosales, topseller, metaTitle, keywords, changetime, pricegroupID, pricegroupActive, filtergroupID, laststock, crossbundlelook, notification, template, mode, NULL, available_from, available_to, NULL
                FROM s_articles as source
                WHERE source.id = ?";
         Shopware()->Db()->query($sql, array($articleId));
@@ -1087,7 +1105,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $imageData['parent'] = $parent;
 
         $join = '';
-        foreach($options as $option) {
+        foreach ($options as $option) {
             $alias = 'alias'. $option->getId();
             $join = $join . ' INNER JOIN s_article_configurator_option_relations alias'. $option->getId() .
                     ' ON ' . $alias . '.option_id = ' . $option->getId() .
@@ -1162,7 +1180,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $detail->fromArray($data);
         Shopware()->Models()->persist($detail);
         Shopware()->Models()->flush();
+        Shopware()->Models()->clear();
+
+        $detail = $this->getArticleDetailRepository()->find($detail->getId());
         if ($data['standard']) {
+            $article = $detail->getArticle();
             $mainDetail = $article->getMainDetail();
             $mainDetail->setKind(2);
             $article->setMainDetail($detail);
@@ -1547,27 +1569,51 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function getPropertyValuesAction()
     {
-        $propertyGroupId =  $this->Request()->getParam('propertyGroupId');
+        $propertyGroupId = $this->Request()->getParam('propertyGroupId');
+        $searchValue = $this->Request()->getParam('query');
+        $optionId = $this->Request()->getParam('optionId');
 
-        $builder = Shopware()->Models()->createQueryBuilder()
-            ->from('Shopware\Models\Property\Value', 'pv')
-            ->join('pv.option', 'po')
-            ->join('po.groups', 'pg', 'with', 'pg.id = :propertyGroupId')
-            ->setParameter('propertyGroupId', $propertyGroupId)
-            ->select(array( 'pv.id', 'pv.value', 'po.id as optionId' ));
+        $builder = Shopware()->Models()->getDBALQueryBuilder();
+        $builder->select(array(
+                'filterValues.id AS id',
+                'filterValues.value AS value',
+                'filterOptions.id AS optionId'))
+            ->from('s_filter_values', 'filterValues')
+            ->innerJoin('filterValues', 's_filter_options', 'filterOptions', 'filterValues.optionID = filterOptions.id' )
+            ->innerJoin('filterOptions', 's_filter_relations', 'filterRelations', 'filterOptions.id = filterRelations.optionID' )
+            ->innerJoin('filterRelations', 's_filter', 'filter', 'filter.id = filterRelations.groupID AND (filter.id = :propertyGroupId)' )
+            ->setParameter('propertyGroupId', $propertyGroupId);
 
-        $query = $builder->getQuery();
-        $data = $query->getArrayResult();
+        if (!empty($searchValue)) {
+            $builder->where('filterValues.value like :searchValue');
+            $builder->setParameter('searchValue', '%' . $searchValue . '%');
+        }
+        if (!empty($optionId)) {
+            $builder->andWhere('filterOptions.id = :optionId');
+            $builder->setParameter('optionId', $optionId);
+        }
+        $statement = $builder->execute();
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
+        foreach ($data as & $row) {
+            $row["id"] = (int)$row["id"];
+            $row["optionId"] = (int)$row["optionId"];
+        }
         $this->View()->assign(array(
-            'data' =>  $data,
-            'total' =>  count($data),
+            'data' => $data,
             'success' => true
         ));
     }
 
+    /**
+     * saves the property list values in the article module
+     */
     public function setPropertyListAction()
     {
+        if(!$this->Request()->isPost()) {
+            //don't save the property list on a get request. This will only occur when there is an ext js problem
+            return;
+        }
         $models = Shopware()->Models();
         $articleId = $this->Request()->getParam('articleId');
         /** @var $article Shopware\Models\Article\Article */
@@ -1590,13 +1636,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         // If no property group is set for the article, don't recreate the property values
         $propertyGroup = $article->getPropertyGroup();
         if (!$propertyGroup) {
-            $this->View()->assign(array(
-                'success' => true
-            ));
-
+            $this->View()->assign(array('success' => true));
             return;
         }
 
+        $propertyValueRepository = $this->getPropertyValueRepository();
         // recreate property values
         foreach ($properties as $property) {
             if (empty($property['value'])) {
@@ -1604,18 +1648,31 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             }
             /** @var $article Shopware\Models\Property\Option */
             $option = $models->find('Shopware\Models\Property\Option', $property['id']);
-            foreach ((array) $property['value'] as $value) {
-                if (is_int($value)) {
-                    $value = $models->find('Shopware\Models\Property\Value', $value);
-                } else {
-                    $value = new Shopware\Models\Property\Value(
-                        $option,
-                        $value
-                    );
-                    $models->persist($value);
+            foreach ((array)$property['value'] as $value) {
+                $propertyValueModel = null;
+                if (is_array($value) && !empty($value["raw"])) {
+                    $value = $value["raw"]["id"];
                 }
-                if ($value !== null) {
-                    $propertyValues->add($value);
+                if (is_int($value)) {
+                    // search for property id
+                    $propertyValueModel = $propertyValueRepository->find($value);
+                }
+                if ($propertyValueModel === null) {
+                    //search for property value
+                    $propertyValueModel = $propertyValueRepository->findOneBy(
+                        array(
+                            'value' => $value,
+                            'optionId' => $option->getId()
+                        )
+                    );
+                }
+                if ($propertyValueModel === null) {
+                    $propertyValueModel = new Shopware\Models\Property\Value($option, $value);
+                    $models->persist($propertyValueModel);
+                }
+                if (!$propertyValues->contains($propertyValueModel)) {
+                    //add only new values
+                    $propertyValues->add($propertyValueModel);
                 }
             }
         }
@@ -1687,6 +1744,20 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         return $categories;
     }
+
+    protected function getArticleSeoCategories($articleId)
+    {
+        $builder = $this->getManager()->createQueryBuilder();
+        $builder->select(array('seoCategories', 'category', 'shop'))
+            ->from('Shopware\Models\Article\SeoCategory', 'seoCategories')
+            ->innerJoin('seoCategories.shop', 'shop')
+            ->innerJoin('seoCategories.category', 'category')
+            ->where('seoCategories.articleId = :articleId')
+            ->setParameter('articleId', $articleId);
+
+        return $builder->getQuery()->getArrayResult();
+    }
+
 
     /**
      * Used for the article backend module to load the article data into
@@ -1924,7 +1995,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getModelManager()->createPaginator($query);
 
         return $paginator->getIterator()->getArrayCopy();
     }
@@ -1943,6 +2014,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $tax = $data[0]['tax'];
 
         $data[0]['categories'] = $this->getArticleCategories($id);
+        $data[0]['seoCategories'] = $this->getArticleSeoCategories($id);
+
         $data[0]['similar'] = $this->getArticleSimilars($id);
         $data[0]['related'] = $this->getArticleRelated($id);
         $data[0]['images'] = $this->getArticleImages($id);
@@ -2343,6 +2416,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             }
 
             Shopware()->Models()->flush();
+            Shopware()->Models()->clear();
+
+            $article = $this->getRepository()->find($articleId);
 
             //check if the main detail variant was deleted
             if ($article->getMainDetail() === null) {
@@ -2605,6 +2681,14 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $template->fromArray($data);
         $template->setArticle($article);
 
+        if ($data['unitId']) {
+            /** @var $articleUnit Shopware\Models\Article\Unit */
+            $articleUnit = Shopware()->Models()->find('Shopware\Models\Article\Unit', $data['unitId']);
+            if ($articleUnit !== null) {
+                $template->setUnit($articleUnit);
+            }
+        }
+
         Shopware()->Models()->persist($template);
         Shopware()->Models()->flush();
     }
@@ -2637,6 +2721,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         //format the posted extJs article categories associations
         $data = $this->prepareCategoryAssociatedData($data);
+
+        $data = $this->prepareSeoCategoryAssociatedData($data, $article);
 
         //format the posted extJs related article association
         $data = $this->prepareRelatedAssociatedData($data, $article);
@@ -2854,6 +2940,59 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             }
         }
         $data['categories'] = $categories;
+
+        return $data;
+    }
+
+    /**
+     * Resolves the passed seo category data.
+     * The functions resolves the passed foreign keys for the
+     * assigned category and shop model.
+     *
+     * @param $data
+     * @param Shopware\Models\Article\ $article
+     * @return array
+     */
+    protected function prepareSeoCategoryAssociatedData($data, $article)
+    {
+        if (!isset($data['seoCategories'])) {
+            return $data;
+        }
+
+        $categories = array();
+        foreach ($data['seoCategories'] as &$categoryData) {
+            $categoryData['article'] = $article;
+
+            if (empty($categoryData['shopId'])) {
+                continue;
+            }
+
+            if (empty($categoryData['categoryId'])) {
+                continue;
+            }
+
+            $categoryData['shop'] = $this->getManager()->find(
+                'Shopware\Models\Shop\Shop',
+                $categoryData['shopId']
+            );
+
+            $categoryData['category'] = $this->getManager()->find(
+                'Shopware\Models\Category\Category',
+                $categoryData['categoryId']
+            );
+
+            if (!($categoryData['shop'] instanceof Shopware\Models\Shop\Shop)) {
+                continue;
+            }
+
+            if (!($categoryData['category'] instanceof Shopware\Models\Category\Category)) {
+                continue;
+            }
+
+            $categories[] = $categoryData;
+        }
+
+        $data['seoCategories'] = $categories;
 
         return $data;
     }
@@ -3082,7 +3221,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $sql = "SELECT `name`, `default` FROM s_core_engine_elements";
         $data = Shopware()->Db()->fetchAll($sql);
         $prepared = array();
-        foreach($data as $item) {
+        foreach ($data as $item) {
             $prepared[$item['name']] = $item['default'];
         }
 
@@ -3381,7 +3520,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
             $query = $builder->getQuery();
             $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-            $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+            $paginator = $this->getModelManager()->createPaginator($query);
 
             //returns the total count of the query
             $totalResult = $paginator->count();
@@ -3414,7 +3553,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $query = $this->getRepository()->getEsdByArticleQuery($articleId, $filter, $limit, $start, $sort);
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getModelManager()->createPaginator($query);
 
         //returns the total count of the query
         $totalResult = $paginator->count();
@@ -3445,7 +3584,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $query = $this->getRepository()->getSerialsByEsdQuery($esdId, $filter, $start, $limit, $sort);
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getModelManager()->createPaginator($query);
 
         //returns the total count of the query
         $totalResult = $paginator->count();
@@ -3874,7 +4013,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $builder = $this->getVariantsWithOptionsBuilder($articleId, $offset, $limit);
             $query = $builder->getQuery();
             $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
-            $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+            $paginator = $this->getModelManager()->createPaginator($query);
             $details = $paginator->getIterator()->getArrayCopy();
 
             $counter = $offset;
@@ -3957,7 +4096,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                     $cursor = $article;
                 }
                 //call the recursive interpreter to resolve all commands
-                $name[] = $this->recursiveInterpreter($cursor, 0, $command['commands']);
+                $value = $this->recursiveInterpreter($cursor, 0, $command['commands']);
+                $name[] = str_replace(' ', '-', $value);
             } else {
                 $name[] = $counter;
             }
@@ -4070,7 +4210,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         ";
         $attributes = Shopware()->Db()->fetchAssoc($sql);
         $prepared = array();
-        foreach($attributes as $name => $attr) {
+        foreach ($attributes as $name => $attr) {
             $prepared[$name] = $attr['default'];
         }
 
@@ -4153,8 +4293,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function previewDetailAction()
     {
-        $shopId = (int)$this->Request()->getParam('shopId');
-        $articleId = (int)$this->Request()->getParam('articleId');
+        $shopId = (int) $this->Request()->getParam('shopId');
+        $articleId = (int) $this->Request()->getParam('articleId');
 
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $shop = $repository->getActiveById($shopId);

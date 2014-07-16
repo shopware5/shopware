@@ -180,7 +180,8 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
         var me = this;
         return Ext.create('Ext.form.field.Date', {
             name: 'from',
-            fieldLabel: me.snippets.from
+            fieldLabel: me.snippets.from,
+            submitFormat: 'd.m.Y'
         });
     },
 
@@ -188,7 +189,8 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
         var me = this;
         return Ext.create('Ext.form.field.Date', {
             name: 'to',
-            fieldLabel: me.snippets.to
+            fieldLabel: me.snippets.to,
+            submitFormat: 'd.m.Y'
         });
     },
 

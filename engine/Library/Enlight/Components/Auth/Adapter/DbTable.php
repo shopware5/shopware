@@ -110,7 +110,7 @@ class Enlight_Components_Auth_Adapter_DbTable extends Zend_Auth_Adapter_DbTable
      */
     public function setLockedUntilColumn($lockedUntilColumn)
     {
-        $this->lockedUntilColumn = (string)$lockedUntilColumn;
+        $this->lockedUntilColumn = (string) $lockedUntilColumn;
         return $this;
     }
 
@@ -123,7 +123,7 @@ class Enlight_Components_Auth_Adapter_DbTable extends Zend_Auth_Adapter_DbTable
      */
     public function setExpiryColumn($expiryColumn, $expiry = 3600)
     {
-        $this->expiryColumn = (string)$expiryColumn;
+        $this->expiryColumn = (string) $expiryColumn;
         $this->expiry = $expiry;
         return $this;
     }

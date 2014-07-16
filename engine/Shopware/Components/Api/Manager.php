@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,12 +24,14 @@
 
 namespace Shopware\Components\Api;
 
+use Shopware\Components\DependencyInjection\ContainerAwareInterface;
+
 /**
  * API Manger
  *
  * @category  Shopware
  * @package   Shopware\Components\Api
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Manager
 {
@@ -45,9 +47,18 @@ class Manager
         /** @var $resource Resource\Resource */
         $resource = new $class();
 
-        $resource->setManager(Shopware()->Models());
-        $resource->setAcl(Shopware()->Acl());
-        $resource->setRole(Shopware()->Auth()->getIdentity()->role);
+        $container = Shopware()->Container();
+
+        if ($resource instanceof ContainerAwareInterface) {
+            $resource->setContainer($container);
+        }
+
+        $resource->setManager($container->get('models'));
+
+        if ($container->initialized('Auth')) {
+            $resource->setAcl($container->get('acl'));
+            $resource->setRole($container->get('auth')->getIdentity()->role);
+        }
 
         return $resource;
     }

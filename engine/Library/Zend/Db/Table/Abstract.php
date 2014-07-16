@@ -15,9 +15,9 @@
  * @category   Zend
  * @package    Zend_Db
  * @subpackage Table
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Abstract.php 24147 2011-06-21 15:08:27Z yoshida@zend.co.jp $
+ * @version    $Id$
  */
 
 /**
@@ -41,7 +41,7 @@ require_once 'Zend/Db.php';
  * @category   Zend
  * @package    Zend_Db
  * @subpackage Table
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 abstract class Zend_Db_Table_Abstract
@@ -70,6 +70,7 @@ abstract class Zend_Db_Table_Abstract
     const ON_UPDATE        = 'onUpdate';
 
     const CASCADE          = 'cascade';
+    const CASCADE_RECURSE  = 'cascadeRecurse';
     const RESTRICT         = 'restrict';
     const SET_NULL         = 'setNull';
 
@@ -884,9 +885,8 @@ abstract class Zend_Db_Table_Abstract
             // if no primary key was specified and none was found in the metadata
             // then throw an exception.
             if (empty($this->_primary)) {
-               $this->_primary[1] = "id";
-               $this->_identity = 1;
-
+                $this->_primary[1] = "id";
+                $this->_identity = 1;
             }
         } else if (!is_array($this->_primary)) {
             $this->_primary = array(1 => $this->_primary);
@@ -1181,6 +1181,22 @@ abstract class Zend_Db_Table_Abstract
      */
     public function delete($where)
     {
+        $depTables = $this->getDependentTables();
+        if (!empty($depTables)) {
+            $resultSet = $this->fetchAll($where);
+            if (count($resultSet) > 0 ) {
+                foreach ($resultSet as $row) {
+                    /**
+                     * Execute cascading deletes against dependent tables
+                     */
+                    foreach ($depTables as $tableClass) {
+                        $t = self::getTableFromString($tableClass, $this);
+                        $t->_cascadeDelete($tableClass, $row->getPrimaryKey());
+                    }
+                }
+            }
+        }
+
         $tableSpec = ($this->_schema ? $this->_schema . '.' : '') . $this->_name;
         return $this->_db->delete($tableSpec, $where);
     }
@@ -1194,27 +1210,56 @@ abstract class Zend_Db_Table_Abstract
      */
     public function _cascadeDelete($parentTableClassname, array $primaryKey)
     {
+        // setup metadata
         $this->_setupMetadata();
+        
+        // get this class name
+        $thisClass = get_class($this);
+        if ($thisClass === 'Zend_Db_Table') {
+            $thisClass = $this->_definitionConfigName;
+        }
+        
         $rowsAffected = 0;
+        
         foreach ($this->_getReferenceMapNormalized() as $map) {
             if ($map[self::REF_TABLE_CLASS] == $parentTableClassname && isset($map[self::ON_DELETE])) {
-                switch ($map[self::ON_DELETE]) {
-                    case self::CASCADE:
-                        $where = array();
-                        for ($i = 0; $i < count($map[self::COLUMNS]); ++$i) {
-                            $col = $this->_db->foldCase($map[self::COLUMNS][$i]);
-                            $refCol = $this->_db->foldCase($map[self::REF_COLUMNS][$i]);
-                            $type = $this->_metadata[$col]['DATA_TYPE'];
-                            $where[] = $this->_db->quoteInto(
-                                $this->_db->quoteIdentifier($col, true) . ' = ?',
-                                $primaryKey[$refCol], $type);
-                        }
-                        $rowsAffected += $this->delete($where);
-                        break;
-                    default:
-                        // no action
-                        break;
+                
+                $where = array();
+                
+                // CASCADE or CASCADE_RECURSE
+                if (in_array($map[self::ON_DELETE], array(self::CASCADE, self::CASCADE_RECURSE))) {
+                    for ($i = 0; $i < count($map[self::COLUMNS]); ++$i) {
+                        $col = $this->_db->foldCase($map[self::COLUMNS][$i]);
+                        $refCol = $this->_db->foldCase($map[self::REF_COLUMNS][$i]);
+                        $type = $this->_metadata[$col]['DATA_TYPE'];
+                        $where[] = $this->_db->quoteInto(
+                            $this->_db->quoteIdentifier($col, true) . ' = ?',
+                            $primaryKey[$refCol], $type);
+                    }
                 }
+                
+                // CASCADE_RECURSE
+                if ($map[self::ON_DELETE] == self::CASCADE_RECURSE) {
+                    
+                    /**
+                     * Execute cascading deletes against dependent tables
+                     */
+                    $depTables = $this->getDependentTables();
+                    if (!empty($depTables)) {
+                        foreach ($depTables as $tableClass) {
+                            $t = self::getTableFromString($tableClass, $this);
+                            foreach ($this->fetchAll($where) as $depRow) {
+                                $rowsAffected += $t->_cascadeDelete($thisClass, $depRow->getPrimaryKey());
+                            }
+                        }
+                    }
+                }
+
+                // CASCADE or CASCADE_RECURSE
+                if (in_array($map[self::ON_DELETE], array(self::CASCADE, self::CASCADE_RECURSE))) {
+                    $rowsAffected += $this->delete($where);
+                }
+                
             }
         }
         return $rowsAffected;
@@ -1532,4 +1577,38 @@ abstract class Zend_Db_Table_Abstract
         return $data;
     }
 
+    public static function getTableFromString($tableName, Zend_Db_Table_Abstract $referenceTable = null)
+    {
+        if ($referenceTable instanceof Zend_Db_Table_Abstract) {
+            $tableDefinition = $referenceTable->getDefinition();
+
+            if ($tableDefinition !== null && $tableDefinition->hasTableConfig($tableName)) {
+                return new Zend_Db_Table($tableName, $tableDefinition);
+            }
+        }
+
+        // assume the tableName is the class name
+        if (!class_exists($tableName)) {
+            try {
+                require_once 'Zend/Loader.php';
+                Zend_Loader::loadClass($tableName);
+            } catch (Zend_Exception $e) {
+                require_once 'Zend/Db/Table/Row/Exception.php';
+                throw new Zend_Db_Table_Row_Exception($e->getMessage(), $e->getCode(), $e);
+            }
+        }
+
+        $options = array();
+
+        if ($referenceTable instanceof Zend_Db_Table_Abstract) {
+            $options['db'] = $referenceTable->getAdapter();
+        }
+
+        if (isset($tableDefinition) && $tableDefinition !== null) {
+            $options[Zend_Db_Table_Abstract::DEFINITION] = $tableDefinition;
+        }
+
+        return new $tableName($options);
+    }
+    
 }

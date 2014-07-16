@@ -46,26 +46,26 @@
 			{/if}
 		</div>
 		{/block}
-	{/if}	
+	{/if}
 
 	<h2>{s name="DetailCommentHeader"}{/s} "{$sArticle.articleName}"</h2>
-	
+
 	{if $sArticle.sVoteAverange.count}
 		<div class="overview_rating">
-			<strong>{se name="DetailCommentInfoAverageRate"}{/se}</strong> 
+			<strong>{se name="DetailCommentInfoAverageRate"}{/se}</strong>
 			<div class="star star{$sArticle.sVoteAverange.averange}">Star Rating</div>
 			<span>({s name="DetailCommentInfoRating"}{/s})</span>
 			<div class="clear">&nbsp;</div>
 		</div>
 	{/if}
-	
+
 	<div class="doublespace">&nbsp;</div>
-	
+
 	{* Display comments *}
 	{if $sArticle.sVoteComments}
-		{foreach name=comment from=$sArticle.sVoteComments item=vote}			
+		{foreach name=comment from=$sArticle.sVoteComments item=vote}
 			<div class="comment_block{if $smarty.foreach.comment.last} last{/if}{if $vote.answer} no_border{/if}">
-				
+
 				<div class="left_container">
 				{* Author *}
 				{block name='frontend_detail_comment_author'}
@@ -73,27 +73,27 @@
 						{se name="DetailCommentInfoFrom"}{/se} {$vote.name}
 					</strong>
 				{/block}
-				
+
 				{* Date *}
 				{block name='frontend_detail_comment_date'}
 					<span class="date">
 						{$vote.datum}
 					</span>
 				{/block}
-				
+
 				{* Star rating *}
 				{block name="frontend_detail_comment_star_rating"}
 					<div class="star star{$vote.points*2}"></div>
-				{/block}	
+				{/block}
 				</div>
-				
+
 				<div class="right_container">
 				{block name='frontend_detail_comment_text'}
 					{* Headline *}
-					{block name='frontend_detail_comment_headline'}	
+					{block name='frontend_detail_comment_headline'}
 						<h3>{$vote.headline}</h3>
 					{/block}
-					
+
 					{* Comment text *}
 					<p>
 						{$vote.comment|nl2br}
@@ -104,7 +104,7 @@
 
 
 				<div class="clear">&nbsp;</div>
-				
+
 			</div>
 
             {block name="frontend_detail_answer_block"}
@@ -127,13 +127,13 @@
             {/block}
 
 		{/foreach}
-		
+
 		<div class="space">&nbsp;</div>
-		
+
 	{/if}
-	
+
 	{block name='frontend_detail_comment_post'}
-		
+
 		{* Display notice if the shop owner needs to unlock a comment before it will'be listed *}
 		{if {config name=VoteUnlock}}
 			<div class="notice">
@@ -142,15 +142,15 @@
 				</div>
 			</div>
 		{/if}
-		
+
 		{* Write comment *}
 		<h2 class="headingbox_dark">
 			{se name="DetailCommentHeaderWriteReview"}{/se}
 		</h2>
-		<form method="post" action="{url action='rating' sArticle=$sArticle.articleID sCategory=$sArticle.categoryID}">	
+		<form method="post" action="{url action='rating' sArticle=$sArticle.articleID sCategory=$sArticle.categoryID}">
 			<div>
 				<a name="tabbox"></a>
-				
+
 				<fieldset>
 					{* Name *}
 					{block name='frontend_detail_comment_input_name'}
@@ -160,7 +160,7 @@
 						<div class="clear">&nbsp;</div>
 					</div>
 					{/block}
-					
+
 					{* E-Mail address *}
 					{if {config name=OptinVote} == true}
 						{block name='frontend_detail_comment_input_mail'}
@@ -171,20 +171,20 @@
 						</div>
 						{/block}
 					{/if}
-					
+
 					{* Comment summary*}
 					{block name='frontend_detail_comment_input_summary'}
 					<div>
 						<label for="sVoteSummary">{se name="DetailCommentLabelSummary"}{/se}*:</label>
 						<input name="sVoteSummary" type="text" value="{$sFormData.sVoteSummary|escape}" id="sVoteSummary" class="text {if $sErrorFlag.sVoteSummary}instyle_error{/if}" />
 						<div class="clear">&nbsp;</div>
-					</div> 
-					{/block}  
-					
+					</div>
+					{/block}
+
 					{* Star Rating *}
 					{block name='frontend_detail_comment_input_rating'}
 					<div>
-						<label for="sVoteStars">{se name="DetailCommentLabelRating"}{/se}*:</label>  
+						<label for="sVoteStars">{se name="DetailCommentLabelRating"}{/se}*:</label>
 						<select name="sVoteStars" class="normal" id="sVoteStars">
 							<option value="10">{s name="Rate10"}{/s}</option>
 							<option value="9">{s name="Rate9"}{/s}</option>
@@ -200,7 +200,7 @@
 						<div class="clear">&nbsp;</div>
 					</div>
 					{/block}
-					
+
 					{* Comment text *}
 					{block name='frontend_detail_comment_input_text'}
 					<div>
@@ -208,16 +208,15 @@
 						<textarea name="sVoteComment" id="sVoteComment" cols="3" rows="2" class="text {if $sErrorFlag.sVoteComment}instyle_error{/if}">{$sFormData.sVoteComment|escape}</textarea>
 						<div class="clear">&nbsp;</div>
 					</div>
-					{/block} 
-					
+					{/block}
+
 					{* Captcha *}
 					{block name='frontend_detail_comment_input_captcha'}
 					<div class="captcha">
-						<img src="{url controller='captcha' rand=$rand}" alt="" />
+                        <div class="captcha-placeholder" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
 						<div class="code">
 							<label>{se name="DetailCommentLabelCaptcha"}{/se}</label>
 							<input type="text" name="sCaptcha"  class="text {if $sErrorFlag.sCaptcha}instyle_error{/if}" />
-							<input type="hidden" name="sRand"  value="{$rand}" />
 							<div class="clear">&nbsp;</div>
 						</div>
 					</div>
@@ -227,10 +226,10 @@
 						{se name="DetailCommentInfoFields"}{/se}
 					</p>
 				</fieldset>
-				
+
 				<div class="buttons">
 					<input class="button-right large" type="submit" name="Submit" value="{s name="DetailCommentActionSave"}{/s}"/>
-					
+
 					<div class="clear">&nbsp;</div>
 				</div>
 			</div>

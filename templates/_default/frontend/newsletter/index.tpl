@@ -58,12 +58,12 @@
 							<p>
 								<label for="street">{s name=NewsletterRegisterBillingLabelStreet}{/s}</label>
 								<input name="street" type="text"  id="street" value="{$_POST.street|escape}" class="street text {if $sStatus.sErrorFlag.street}instyle_error{/if}" />
-								<input name="streetnumber" type="text"  id="streetnumber" value="{$_POST.streetnumber|escape}"  maxlength="5" class="number text {if $sStatus.sErrorFlag.streetnumber}instyle_error{/if}" />
+								<input name="streetnumber" type="text"  id="streetnumber" value="{$_POST.streetnumber|escape}" class="number text {if $sStatus.sErrorFlag.streetnumber}instyle_error{/if}" />
 							</p>
 							
 							<p>
 								<label for="zipcode">{s name=NewsletterRegisterBillingLabelCity}{/s}</label>
-								<input name="zipcode" type="text" id="zipcode" value="{$_POST.zipcode|escape}" maxlength="5" class="zipcode text {if $sStatus.sErrorFlag.zipcode}instyle_error{/if}" />
+								<input name="zipcode" type="text" id="zipcode" value="{$_POST.zipcode|escape}" class="zipcode text {if $sStatus.sErrorFlag.zipcode}instyle_error{/if}" />
 								<input name="city" type="text"  id="city" value="{$_POST.city|escape}" size="25" class="city text {if $sStatus.sErrorFlag.city}instyle_error{/if}" />
 							</p>
 						</div>

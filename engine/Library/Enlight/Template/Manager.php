@@ -21,7 +21,7 @@
  * @author     $Author$
  */
 
-require_once('Smarty/Smarty.class.php');
+require_once 'Smarty/Smarty.class.php';
 
 /**
  * The Enlight_Template_Manager is an extension of smarty to manually set the config in the class constructor.
@@ -125,7 +125,7 @@ class Enlight_Template_Manager extends Smarty
     {
         foreach ((array) $template_dir as $k => $v) {
             $template_dir[$k] = $this->resolveTemplateDir($v, $k);
-            if($template_dir[$k] === false) {
+            if ($template_dir[$k] === false) {
                 unset($template_dir[$k]);
             }
         }
@@ -172,7 +172,7 @@ class Enlight_Template_Manager extends Smarty
      */
     public function resolveTemplateDir($templateDir, $key = null)
     {
-        if($this->eventManager !== null) {
+        if ($this->eventManager !== null) {
             $templateDir = $this->eventManager->filter(
                 __CLASS__ . '_ResolveTemplateDir',
                 $templateDir,

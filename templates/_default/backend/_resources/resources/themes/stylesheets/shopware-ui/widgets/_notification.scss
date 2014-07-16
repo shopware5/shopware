@@ -83,27 +83,35 @@ $default-index: 10000;
     }
 
     .notice {
-        @include filter-gradient(#ffdd7f, #eedc94, vertical); // IE6-9
-        @include background-image(linear-gradient(top, #ffdd7f 0%,#eedc94 100%));
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                      svg-color-stop(#ffdd7f, 0%, 1),
+                      svg-color-stop(#eedc94, 100%, 1)
+                    )) center center no-repeat transparent;
         color: #404040;
         border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
     }
 
     .error {
-        @include filter-gradient(#ee5f5b, #c43c35, vertical); // IE6-9
-        @include background-image(linear-gradient(top, #ee5f5b 0%,#c43c35 100%));
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                      svg-color-stop(#ee5f5b, 0%, 1),
+                      svg-color-stop(#c43c35, 100%, 1)
+                    )) center center no-repeat transparent !important;
         border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
     }
 
     .success {
-        @include filter-gradient(#62c462, #57a957, vertical); // IE6-9
-        @include background-image(linear-gradient(top, #62c462 0%,#57a957 100%));
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                      svg-color-stop(#62c462, 0%, 1),
+                      svg-color-stop(#57a957, 100%, 1)
+                    )) center center no-repeat transparent;
         border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
     }
 
     .info {
-        @include filter-gradient(#5bc0de, #339bb9, vertical); // IE6-9
-        @include background-image(linear-gradient(top, #5bc0de 0%,#339bb9 100%));
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                      svg-color-stop(#5bc0de, 0%, 1),
+                      svg-color-stop(#339bb9, 100%, 1)
+                    )) center center no-repeat transparent;
         border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
     }
 }
@@ -205,8 +213,11 @@ $default-index: 10000;
 		@include border-radius(3px);
 		@include inner-border(1px 1px 0 1px, #53585c);
 		@include box-shadow(0 1px 1px #5b5b5b);
-		@include filter-gradient(#4c4c4c, #242424, vertical);
-		@include background-image(linear-gradient(top, #4c4c4c 0%,#242424 100%));
+
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                      svg-color-stop(#4c4c4c, 0%, 1),
+                      svg-color-stop(#242424, 100%, 1)
+                    )) center center no-repeat transparent;
 
 		background-color: #4c4c4c;
 		display: block;
@@ -215,8 +226,10 @@ $default-index: 10000;
 		margin: 0 2px 4px;
 
 		&:hover {
-			@include filter-gradient(#242424, #4c4c4c, vertical);
-			@include background-image(linear-gradient(top, #242424 0%,#4c4c4c 100%));
+          background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                        svg-color-stop(#242424, 0%, 1),
+                        svg-color-stop(#4c4c4c, 100%, 1)
+                      )) center center no-repeat transparent;
 		}
 	}
 

@@ -65,31 +65,16 @@ class Enlight_Loader
     protected $namespaces = array();
 
     /**
-     * @var array Contains all loaded classes.
-     */
-    protected $classMap = array();
-
-    /**
-     * @var bool
-     */
-    protected $classMapChanged = false;
-
-    /**
      * Init loader method
      */
     public function __construct()
     {
-        if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
-            spl_autoload_register(array($this, 'autoload'), true, true);
-        } else {
-            spl_autoload_register(array($this, 'autoload'), true);
-        }
+        spl_autoload_register(array($this, 'autoload'), true, false);
     }
 
     /**
      * Loads a class by name. If the class is not already loaded the class will load
-     * by the method loadFile. If the class is loaded it will be added to the internal
-     * classMap array.
+     * by the method loadFile.
      *
      * @param   string|array $class
      * @param   string $path
@@ -161,25 +146,7 @@ class Enlight_Loader
             return $path;
         }
 
-        if (function_exists('stream_resolve_include_path')) {
-            return stream_resolve_include_path($path);
-        }
-
-        if (empty($path) || $path{0} === '/' || $path{0} === DIRECTORY_SEPARATOR) {
-            return false;
-        }
-
-        foreach (self::explodeIncludePath() as $includePath) {
-            if ($includePath == '.') {
-                continue;
-            }
-            $file = realpath($includePath . '/' . $path);
-            if ($file && is_readable($file)) {
-                return $file;
-            }
-        }
-
-        return false;
+		return stream_resolve_include_path($path);
     }
 
     /**
@@ -195,7 +162,7 @@ class Enlight_Loader
         }
 
         if (PATH_SEPARATOR == ':') {
-            // On *nix systems, include_paths which include paths with a stream 
+            // On *nix systems, include_paths which include paths with a stream
             // schema cannot be safely explode'd, so we have to be a bit more
             // intelligent in the approach.
             $paths = preg_split('#:(?!//)#', $path);
@@ -217,9 +184,6 @@ class Enlight_Loader
      */
     public function getClassPath($class)
     {
-        if($this->classMap !== null && isset($this->classMap[$class]) && is_readable($this->classMap[$class])) {
-            return $this->classMap[$class];
-        }
         foreach ($this->namespaces as $namespace) {
             if (strpos($class, $namespace['namespace']) !== 0) {
                 continue;
@@ -229,10 +193,6 @@ class Enlight_Loader
             $path = $namespace['path'] . $path . $namespace['extension'];
             $path = self::isReadable($path);
             if ($path !== false) {
-                if($this->classMap !== null) {
-                    $this->classMapChanged = true;
-                    $this->classMap[$class] = $path;
-                }
                 return $path;
             }
         }
@@ -299,7 +259,7 @@ class Enlight_Loader
     public static function addIncludePath($path, $position = self::POSITION_APPEND)
     {
         if (is_array($path)) {
-            return (bool)array_map(__METHOD__, $path);
+            return (bool) array_map(__METHOD__, $path);
         }
         if (!is_string($path) || !file_exists($path) || !is_dir($path)) {
             throw new Enlight_Exception('Path "' . $path . '" is not a dir failure');
@@ -348,16 +308,6 @@ class Enlight_Loader
     }
 
     /**
-     * Returns the internal array classMap which contains all already loaded classes.
-     *
-     * @return  array
-     */
-    public function getClassMap()
-    {
-        return $this->classMap;
-    }
-
-    /**
      * Callback for auto loading of classes.
      *
      * @param   string $class
@@ -366,8 +316,7 @@ class Enlight_Loader
     {
         try {
             $this->loadClass($class);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
         }
     }
 
@@ -380,83 +329,5 @@ class Enlight_Loader
     public static function checkFile($path)
     {
         return !preg_match('/[^a-z0-9\\/\\\\_. :-]/i', $path);
-    }
-
-    /**
-     * @param string $classMap
-     */
-    public function readClassMap($classFile)
-    {
-        $this->classMapChanged = false;
-        if (file_exists($classFile)) {
-            $this->classMap = (array) include $classFile;
-        } else {
-            $this->classMap = array();
-        }
-    }
-
-    /**
-     * @param string $classFile
-     * @return bool
-     */
-    public function saveClassMap($classFile)
-    {
-        if ($this->classMapChanged) {
-            $tempFile = dirname($classFile) . DIRECTORY_SEPARATOR . uniqid('wrt', true);
-            $data = '<?php return ' . var_export($this->classMap, true) . ';';
-            if (!file_put_contents($tempFile, $data)) {
-                return false;
-            }
-            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-                @unlink($classFile);
-                $success = @rename($tempFile, $classFile);
-            } else {
-                $success = @rename($tempFile, $classFile);
-                if (!$success) {
-                    @unlink($classFile);
-                    $success = @rename($tempFile, $classFile);
-                }
-            }
-            return $success;
-        }
-    }
-
-    /**
-     * @param $file
-     * @return bool
-     */
-    public function saveClassBootstrap($file)
-    {
-        if(file_exists($file)) {
-            return true;
-        }
-        $fp = fopen($file, 'w+');
-        if(!$file || !flock($fp, LOCK_EX)) {
-            return false;
-        }
-        fwrite($fp, '<?php' . "\n");
-        foreach(get_included_files() as $i => $file) {
-            if($i === 0) continue;
-            $content = file_get_contents($file);
-            if(strpos($content, '<?php') !== 0) {
-                continue;
-            }
-            $content = substr($content, 5);
-            $content = trim($content);
-            if(strpos($content, 'return') === 0) {
-                continue;
-            }
-            $content = str_replace(
-                '__' . 'FILE' . '__',
-                var_export($file, true), $content
-            );
-            $content = str_replace(
-                '__' . 'DIR' . '__',
-                var_export(dirname($file), true),
-                $content
-            );
-            fwrite($fp, $content . "\n");
-        }
-        fclose($fp);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Property
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Benjamin Cremer
- * @author     $Author$
  */
 
 use Shopware\Models\Property\Value,
@@ -54,18 +46,20 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
      * Helper function to get access to the property repository.
      * @return \Shopware\Models\Property\Repository
      */
-    private function getPropertyRepository() {
-    	if ($this->propertyRepository === null) {
-    		$this->propertyRepository = Shopware()->Models()->getRepository('Shopware\Models\Property\Group');
-    	}
-    	return $this->propertyRepository;
+    private function getPropertyRepository()
+    {
+        if ($this->propertyRepository === null) {
+            $this->propertyRepository = Shopware()->Models()->getRepository('Shopware\Models\Property\Group');
+        }
+        return $this->propertyRepository;
     }
 
     /**
      * Internal helper function to get access to the entity manager.
      * @return null
      */
-    private function getManager() {
+    private function getManager()
+    {
         if ($this->manager === null) {
             $this->manager= Shopware()->Models();
         }
@@ -146,24 +140,24 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
      */
     private function saveGroupAttributes($group, $attributeData)
     {
-    	if (empty($attributeData)) {
-    		return;
-    	}
-    	if ($group->getId() > 0) {
+        if (empty($attributeData)) {
+            return;
+        }
+        if ($group->getId() > 0) {
             $result = $this->getPropertyRepository()
                            ->getAttributesQuery($group->getId())
                            ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
-    		if (empty($result)) {
-    			$attributes = new \Shopware\Models\Attribute\PropertyGroup();
-    		} else {
-    			$attributes = $result;
-    		}
-    	} else {
-    		$attributes = new \Shopware\Models\Attribute\PropertyGroup();
-    	}
-    	$attributes->fromArray($attributeData);
-    	$attributes->setPropertyGroup($group);
-    	$this->getManager()->persist($attributes);
+            if (empty($result)) {
+                $attributes = new \Shopware\Models\Attribute\PropertyGroup();
+            } else {
+                $attributes = $result;
+            }
+        } else {
+            $attributes = new \Shopware\Models\Attribute\PropertyGroup();
+        }
+        $attributes->fromArray($attributeData);
+        $attributes->setPropertyGroup($group);
+        $this->getManager()->persist($attributes);
     }
 
     /**

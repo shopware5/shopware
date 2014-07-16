@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Form
  * @subpackage Element
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -28,9 +28,9 @@ require_once 'Zend/Form/Element/Submit.php';
  * @category   Zend
  * @package    Zend_Form
  * @subpackage Element
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Button.php 23772 2011-02-28 21:35:29Z ralph $
+ * @version    $Id$
  */
 class Zend_Form_Element_Button extends Zend_Form_Element_Submit
 {
@@ -39,4 +39,18 @@ class Zend_Form_Element_Button extends Zend_Form_Element_Submit
      * @var string
      */
     public $helper = 'formButton';
+
+    /**
+     * Validate element value (pseudo)
+     *
+     * There is no need to reset the value
+     *
+     * @param  mixed $value Is always ignored
+     * @param  mixed $context Is always ignored
+     * @return boolean Returns always TRUE
+     */
+    public function isValid($value, $context = null)
+    {
+        return true;
+    }
 }

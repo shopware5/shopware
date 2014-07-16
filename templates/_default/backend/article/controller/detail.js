@@ -337,7 +337,18 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         propertyStore.each(function(property) {
             property.setDirty();
         });
-        propertyStore.sync();
+        propertyStore.save({
+            success: function () {
+                var propertyValueStore = me.getStore('PropertyValue');
+                propertyValueStore.getProxy().extraParams.optionId = '';
+                //reload the property list after finish saving
+                propertyValueStore.load({
+                    callback: function () {
+                        propertyStore.load();
+                    }
+                });
+            }
+        });
         return article;
     },
 
@@ -411,6 +422,13 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
 
         //reconfigure the category listing in the category tab
         mainWindow.down('container[name=category-tab] article-category-list').reconfigure(article.getCategory());
+
+        //reconfigure the seo category listing and the selection store of the listing
+        var seoListing = mainWindow.down('container[name=category-tab] article-category-seo-list');
+
+        seoListing.reconfigure(article.getSeoCategories());
+
+        seoListing.setCategoryStore(article.getCategory());
 
         //reconfigure the image listing
         var imageListing = mainWindow.down('article-image-list dataview[name=image-listing]');
@@ -828,12 +846,18 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
      * Event listener function of the property grid which fired before the user
      * edit a cell.
      */
-    onBeforePropertyEdit: function(editor, event) {
+    onBeforePropertyEdit: function (editor, event) {
         var me = this,
-            store = me.getStore('PropertyValue'),
-            optionId = event.record.getId();
-        store.clearFilter();
-        store.filter('optionId', optionId);
+            store = me.getStore('PropertyValue');
+        if (event.column.dataIndex == "value") {
+            store.getProxy().extraParams.optionId = event.record.getId();
+            store.load({
+                callback: function () {
+                    //reload the store again to convert the ids to values
+                    store.load();
+                }
+            });
+        }
     },
 
     /**

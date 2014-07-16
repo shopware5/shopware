@@ -30,7 +30,8 @@
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
-class Enlight_Config extends Zend_Config implements ArrayAccess
+
+class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
 {
     /**
      * @var string Default config class
@@ -61,7 +62,7 @@ class Enlight_Config extends Zend_Config implements ArrayAccess
     /**
      * The current section.
      *
-     * @var string|array
+     * @var string
      */
     protected $_section;
 
@@ -97,7 +98,7 @@ class Enlight_Config extends Zend_Config implements ArrayAccess
             $options = array('allowModifications' => $options);
         }
         if (isset($options['allowModifications'])) {
-            $this->_allowModifications = (bool)$options['allowModifications'];
+            $this->_allowModifications = (bool) $options['allowModifications'];
         }
         if (isset($options['adapter']) && $options['adapter'] instanceof Enlight_Config_Adapter) {
             $this->_adapter = $options['adapter'];
@@ -295,7 +296,7 @@ class Enlight_Config extends Zend_Config implements ArrayAccess
      */
     public function setAllowModifications($option = true)
     {
-        $this->_allowModifications = (bool)$option;
+        $this->_allowModifications = (bool) $option;
         if ($this->_data !== null) {
             foreach ($this->_data as $value) {
                 if ($value instanceof Enlight_Config) {
@@ -352,7 +353,7 @@ class Enlight_Config extends Zend_Config implements ArrayAccess
     /**
      * Sets the current section of the config list.
      *
-     * @param string|array $section
+     * @param string $section
      * @return Enlight_Config
      */
     public function setSection($section)
@@ -367,7 +368,7 @@ class Enlight_Config extends Zend_Config implements ArrayAccess
     /**
      * Returns the current section of the config list.
      *
-     * @return string|array
+     * @return string
      */
     public function getSection()
     {
@@ -457,7 +458,9 @@ class Enlight_Config extends Zend_Config implements ArrayAccess
      */
     public function read()
     {
-        $this->_adapter->read($this);
+        if (isset($this->_adapter)) {
+            $this->_adapter->read($this);
+        }
         return $this;
     }
 
@@ -466,7 +469,19 @@ class Enlight_Config extends Zend_Config implements ArrayAccess
      */
     public function write()
     {
-        $this->_adapter->write($this);
+        if (isset($this->_adapter)) {
+            $this->_adapter->write($this);
+        }
         return $this;
     }
-} 
+
+    /**
+     * @return string
+     */
+    public function getSectionSeparator()
+    {
+        return $this->_sectionSeparator;
+    }
+
+
+}

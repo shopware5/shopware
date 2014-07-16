@@ -102,7 +102,7 @@ class Enlight_Components_Menu_Adapter_DbTable extends Zend_Db_Table_Abstract imp
             if ($key == 'order') {
                 $this->_order = $option;
             } elseif (substr($key, -6) == 'Column') {
-                $this->_columns[substr($key, 0, -6)] = (string)$option;
+                $this->_columns[substr($key, 0, -6)] = (string) $option;
             }
         }
         return parent::setOptions($options);

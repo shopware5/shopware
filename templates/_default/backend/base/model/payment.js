@@ -56,7 +56,7 @@ Ext.define('Shopware.apps.Base.model.Payment', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend:'Shopware.data.Model',
 
     /**
      * unique id
@@ -88,7 +88,7 @@ Ext.define('Shopware.apps.Base.model.Payment', {
             }
         },
         { name:'position', type: 'int' },
-        { name:'active', type: 'int' }
+        { name:'active', type: 'boolean' }
     ]
 });
 //{/block}

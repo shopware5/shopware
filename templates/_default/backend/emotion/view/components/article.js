@@ -33,6 +33,10 @@ Ext.define('Shopware.apps.Emotion.view.components.Article', {
     extend: 'Shopware.apps.Emotion.view.components.Base',
     alias: 'widget.emotion-components-article',
 
+    snippets: {
+        article: '{s name=article}Search article{/s}'
+    },
+
     /**
      * Base path which will be used from the component.
      * @string

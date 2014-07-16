@@ -182,12 +182,14 @@ Ext.define('Shopware.apps.Order.view.detail.Configuration', {
                 {
                     xtype: 'datefield',
                     fieldLabel: me.snippets.displayDate,
+                    submitFormat: 'd.m.Y',
                     value: new Date(),
                     name: 'displayDate'
                 },
                 {
                     xtype: 'datefield',
                     fieldLabel: me.snippets.deliveryDate,
+                    submitFormat: 'd.m.Y',
                     name: 'deliveryDate'
                 },
                 {

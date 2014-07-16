@@ -58,7 +58,7 @@ class Enlight_Components_Cron_Manager
     {
         $this->setAdapter($adapter);
         $this->setEventManager($eventManager);
-        if($eventArgsClass !== null) {
+        if ($eventArgsClass !== null) {
             $this->eventArgsClass = $eventArgsClass;
         }
     }
@@ -163,7 +163,7 @@ class Enlight_Components_Cron_Manager
      */
     public function getJobById($id)
     {
-        $retVal = $this->adapter->getJobById((int)$id);
+        $retVal = $this->adapter->getJobById((int) $id);
         if (empty($retVal)) {
             return null;
         }
@@ -178,7 +178,7 @@ class Enlight_Components_Cron_Manager
      */
     public function getJobByName($name)
     {
-        $retVal = $this->adapter->getJobByName((string)$name);
+        $retVal = $this->adapter->getJobByName((string) $name);
         if (empty($retVal)) {
             return null;
         }
@@ -226,7 +226,7 @@ class Enlight_Components_Cron_Manager
                 $jobArgs = $this->eventManager->notifyUntil(
                     $job->getAction(), $jobArgs
                 );
-                if($jobArgs !== null) {
+                if ($jobArgs !== null) {
                     $job->setData($jobArgs->getReturn());
                     $this->adapter->updateJob($job);
                 }

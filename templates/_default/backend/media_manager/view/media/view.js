@@ -250,7 +250,6 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             requestURL: '{url controller="mediaManager" action="upload"}',
             hideOnLegacy: true,
             showInput: false,
-			checkSize: true,
             checkType: false,
             checkAmount: false,
             enablePreviewImage: false,

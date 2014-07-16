@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Banner
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 namespace   Shopware\Models\Banner;
@@ -37,13 +29,6 @@ use         Shopware\Components\Model\ModelRepository;
  * Repository for the banner model (Shopware\Models\Banner\Banner).
  * <br>
  * The banner model repository is responsible to load all banner data.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Banner
- * @author     J.Schwehn
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
  */
 class Repository extends ModelRepository
 {

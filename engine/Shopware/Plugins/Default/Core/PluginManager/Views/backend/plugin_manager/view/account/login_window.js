@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,7 @@
  * @category   Shopware
  * @package    Order
  * @subpackage View
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author     Stephan Pohl
  * @author     $Author$
@@ -129,13 +129,13 @@ Ext.define('Shopware.apps.PluginManager.view.account.LoginWindow', {
             xtype: 'toolbar',
             dock: 'bottom',
             items: ['->', {
-                text: 'Abbrechen',
+                text: '{s name=account/login_window/cancel}Cancel{/s}',
                 cls: 'secondary',
                 handler: function() {
                     me.destroy();
                 }
             }, {
-                text: 'Login',
+                text: '{s name=account/login_window/login}Login{/s}',
                 cls: 'primary',
                 handler: function() {
                     me.fireEvent('login', me, me.formPanel, me.targetParams);

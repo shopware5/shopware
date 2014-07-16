@@ -107,7 +107,7 @@ class Enlight_Components_Cron_Adapter_DbTable extends Zend_Db_Table_Abstract imp
     {
         foreach ($options as $key => $option) {
             if (substr($key, -6) == 'Column') {
-                $this->_columns[substr($key, 0, -6)] = (string)$option;
+                $this->_columns[substr($key, 0, -6)] = (string) $option;
             }
         }
         return parent::setOptions($options);
@@ -136,11 +136,11 @@ class Enlight_Components_Cron_Adapter_DbTable extends Zend_Db_Table_Abstract imp
     {
         $data = array();
         foreach ($this->_columns as $key => $mapping) {
-            if($key == $this->_primary) {
+            if ($key == $this->_primary) {
                 continue;
             }
             $value = $job->$key;
-            if($key === 'data') {
+            if ($key === 'data') {
                 $value = serialize($job->$key);
             }
             $data[$mapping] = $value;

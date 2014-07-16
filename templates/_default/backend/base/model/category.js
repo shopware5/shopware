@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Base.model.Category', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend:'Shopware.data.Model',
 
     /**
      * unique id

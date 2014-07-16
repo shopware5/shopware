@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Customer
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Oliver Denter
- * @author     $Author$
  */
 
 namespace   Shopware\Models\Customer;
@@ -49,7 +41,7 @@ use         Shopware\Components\Model\ModelEntity,
  *   - UNIQUE KEY `FOREIGN` (`userID`)
  * </code>
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="BillingRepository")
  * @ORM\Table(name="s_user_billingaddress")
  * @ORM\HasLifecycleCallbacks
  */
@@ -141,14 +133,14 @@ class Billing extends ModelEntity
     /**
      * Contains the street number of the billing address
      * @var string $streetNumber
-     * @ORM\Column(name="streetnumber", type="string", length=6, nullable=false)
+     * @ORM\Column(name="streetnumber", type="string", length=50, nullable=false)
      */
     protected $streetNumber = '';
 
     /**
      * Contains the zip code of the billing address
      * @var string $zipCode
-     * @ORM\Column(name="zipcode", type="string", length=10, nullable=false)
+     * @ORM\Column(name="zipcode", type="string", length=50, nullable=false)
      */
     protected $zipCode = '';
 
@@ -200,7 +192,7 @@ class Billing extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CustomerBilling", mappedBy="customerBilling", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\CustomerBilling", mappedBy="customerBilling", orphanRemoval=true, cascade={"persist"})
      * @var \Shopware\Models\Attribute\CustomerBilling
      */
     protected $attribute;

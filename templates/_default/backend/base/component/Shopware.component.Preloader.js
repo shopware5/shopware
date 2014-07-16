@@ -54,10 +54,16 @@ Ext.define('Shopware.component.Preloader', {
      * @array
      */
     requiredComponents: [{
+        /*{if {acl_is_allowed resource=article privilege=read}}*/
         'Shopware.apps.Article': false,
         'Shopware.apps.ArticleList': false,
+        /*{/if}*/
+        /*{if {acl_is_allowed resource=order privilege=read}}*/
         'Shopware.apps.Order': false,
+        /*{/if}*/
+        /*{if {acl_is_allowed resource=customer privilege=read}}*/
         'Shopware.apps.Customer': false
+        /*{/if}*/
     }, {
         'Shopware.apps.Emotion': false,
         'Shopware.apps.MediaManager': false

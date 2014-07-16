@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -27,7 +27,7 @@
  *
  * @category  Shopware
  * @package   Shopware\Plugins\Core
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -63,10 +63,8 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
     {
         $config = Shopware()->Config();
 
-        require_once(Shopware()->OldPath() . 'engine/core/class/sSystem.php');
-
-        $system = new sSystem();
-
+        $request = Shopware()->Front()->Request();
+        $system = new sSystem($request);
         Shopware()->Bootstrap()->registerResource('System', $system);
 
         $system->sMODULES = Shopware()->Modules();
@@ -75,12 +73,6 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
         $system->sCONFIG = $config;
         $system->sMailer = Shopware()->Mail();
 
-        $request = Shopware()->Front()->Request();
-        if ($request !== null) {
-            $system->_GET = $request->getQuery();
-            $system->_POST = $request->getPost();
-            $system->_COOKIE = $request->getCookie();
-        }
 
         if (Shopware()->Bootstrap()->issetResource('Session')) {
             $system->_SESSION = Shopware()->Session();
@@ -125,25 +117,16 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
             }
         }
 
-        //$system->sCurrencyData = self::getCurrencyData();
-        //$system->sCurrencyData[$system->sCurrency]['flag'] = true;
-        //$system->sCurrency = $system->sCurrencyData[$system->sCurrency];
-
         if ($request !== null) {
-            $system->sPathBase = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
+            $sPathBase = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
         } else {
-            $system->sPathBase = 'http://' . $config->basePath;
+            $sPathBase = 'http://' . $config->basePath;
         }
-        $system->sPathArticleImg = $system->sPathBase . '/media/image/';
-        $system->sPathBanner = $system->sPathBase . $config->banner . '/';
-        $system->sPathSupplierImg = $system->sPathBase . $config->supplierImages . '/';
-        $system->sPathCmsImg = $system->sPathBase . $config->cmsImages . '/';
-        $system->sPathStart = $system->sPathBase . $config->baseFile;
-        $system->sPathArticleFiles = $system->sPathBase . $config->articleFiles;
-        $system->sBasefile = $config->baseFile;
+        $system->sPathArticleImg = $sPathBase . '/media/image/';
+        $system->sPathBanner = $sPathBase . $config->banner . '/';
+        $system->sPathStart = $sPathBase . $config->baseFile;
+        $system->sPathArticleFiles = $sPathBase . $config->articleFiles;
 
-        //$config['sPREMIUM'] = $system->sLicenseData['sPREMIUM'];
-        //$config['sCurrencies'] = $system->sCurrencyData;
         $config['sCURRENCY'] = $system->sCurrency['currency'];
         $config['sCURRENCYHTML'] = $system->sCurrency['symbol'];
 

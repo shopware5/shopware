@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,13 +25,14 @@
 namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Models\Category\Category as CategoryModel;
 
 /**
  * Category API Resource
  *
  * @category  Shopware
  * @package   Shopware\Components\Api\Resource
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Category extends Resource
 {
@@ -87,7 +88,7 @@ class Category extends Resource
         $query = $this->getRepository()->getListQuery($criteria, $orderBy, $limit, $offset);
         $query->setHydrationMode($this->resultMode);
 
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = $this->getManager()->createPaginator($query);
 
         //returns the total count of the query
         $totalResult = $paginator->count();
@@ -225,5 +226,64 @@ class Category extends Resource
         }
 
         return $params;
+    }
+
+
+    /**
+     * Find a category by a given human readable path.
+     * This will step through all categories from top to bottom and return the matching category.
+     *
+     * @param string $path              Path of the category to search separated by pipe. Eg. Deutsch|Foo|Bar
+     * @param boolean $create           Should categories be created?
+     * @return null|Category
+     * @throws \RuntimeException
+     */
+    public function findCategoryByPath($path, $create = false)
+    {
+        if (empty($path)) {
+            return null;
+        }
+
+        $categoryModel = null;
+        $categoryNames = explode('|', $path);
+
+        $parentId = 1; // The root node
+        $parent = null;
+
+        foreach ($categoryNames as $categoryName) {
+            if (empty($categoryName)) {
+                break;
+            }
+
+            $categoryModel = $this->getRepository()->findOneBy(array('name' => $categoryName, 'parentId' => $parentId));
+            if (!$categoryModel) {
+                if (!$create) {
+                    return null;
+                }
+
+                if (null === $parent) {
+                    /** @var Category $parent */
+                    $parent = $this->getRepository()->find($parentId);
+                    if (!$parent) {
+                        throw new \RuntimeException(sprintf('Could not find parent %s', $parentId));
+                    }
+                }
+
+                $categoryModel = new CategoryModel();
+                $this->getManager()->persist($categoryModel);
+                $categoryModel->setParent($parent);
+                $categoryModel->setName($categoryName);
+            }
+
+            $parentId = $categoryModel->getId();
+            $parent = $categoryModel;
+
+        }
+
+        if (empty($categoryModel)) {
+            return null;
+        }
+
+        return $categoryModel;
     }
 }

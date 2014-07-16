@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,13 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Order
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
 
 namespace   Shopware\Models\Order;
@@ -146,7 +139,7 @@ class History extends ModelEntity
      * The $order property in this model is the owning side of the association of the order status history and the
      * order model. The $history property of the order model is the inverse side of this association.
      *
-     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Order\Order", inversedBy="history", cascade={"update"})
+     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Order\Order", inversedBy="history")
      * @ORM\JoinColumn(name="orderID", referencedColumnName="id")
      * @var \Shopware\Models\Order\Order $order
      */

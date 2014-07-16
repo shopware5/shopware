@@ -179,6 +179,8 @@ Ext.define('Shopware.Notification', {
      */
     _validTypes: /(notice|info|success|error)/i,
 
+    closeText: 'Schließen',
+
     /**
      * Sets the default type of the alert and block message.
      *
@@ -543,6 +545,7 @@ Ext.define('Shopware.Notification', {
      *              { Function } opts.btnDetail.callback - Callback method which should be called after the user
      *                           links on the detail link (default: Ext.emptyFn)
      *              { Object }   opts.btnDetail.scope - Scope in which the callback will be fired (default: this)
+*                { Function } opts.onCloseButton - Handler method which called after the user clicked on close button
      *        { Function } caller - Function which calls this method. Only necessary for the logging.
      *        { String }   iconCls - CSS class for the icon which should be displayed. This options is disabled.
      *        { Boolean }  log - Compability parameter. Please use `opts.log` instead of the parameter `log`
@@ -623,14 +626,17 @@ Ext.define('Shopware.Notification', {
         };
 
         // Add detail button
-        if(opts.btnDetail && opts.btnDetail.link) {
+        if(opts.btnDetail && (opts.btnDetail.link || opts.btnDetail.callback)) {
             btnContent.add({
                 xtype: 'button',
                 height: 22,
                 ui: 'growl-sticky',
                 text: opts.btnDetail.text || 'Details aufrufen',
                 handler: function() {
-                    window.open(opts.btnDetail.link, target);
+                    if (opts.btnDetail.link) {
+                        window.open(opts.btnDetail.link, target);
+                    }
+
                     detailCB.apply(opts.btnDetail.scope || me, [ growlMsg, msgData ]);
 
                     if(autoClose) {
@@ -644,9 +650,15 @@ Ext.define('Shopware.Notification', {
         btnContent.add({
             xtype: 'button',
             ui: 'growl-sticky',
-            text: 'Schließen',
+            text: me.closeText,
             height: 22,
-            handler: closeHandler
+            handler: function() {
+                closeHandler();
+
+                if(Ext.isFunction(opts.onCloseButton)) {
+                    opts.onCloseButton();
+                }
+            }
         });
 
         me.growlMsgCollection.each(function(growlEl) {

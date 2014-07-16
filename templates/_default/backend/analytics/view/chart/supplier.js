@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,17 +19,15 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Analytics
- * @subpackage Supplier
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 /**
- * todo@all: Documentation
+ * Analytics Supplier Chart
+ *
+ * @category   Shopware
+ * @package    Analytics
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
+ *
  */
 //{namespace name=backend/analytics/view/main}
 //{block name="backend/analytics/view/chart/supplier"}
@@ -38,12 +36,14 @@ Ext.define('Shopware.apps.Analytics.view.chart.Supplier', {
     alias: 'widget.analytics-chart-supplier',
     animate: true,
     shadows: true,
-    initComponent: function() {
+
+    initComponent: function () {
         var me = this;
 
-        this.series = [{
+        this.series = [
+            {
                 type: 'pie',
-                field: 'amount',
+                field: 'turnover',
                 showInLegend: true,
                 label: {
                     title: '{s name=chart/supplier/title}Supplier{/s}',
@@ -54,13 +54,24 @@ Ext.define('Shopware.apps.Analytics.view.chart.Supplier', {
                 },
                 tips: {
                     trackMouse: true,
-                    width: 80,
-                    height: 40,
-                    renderer: function(storeItem) {
-                        this.setTitle('{s name=chart/supplier/title}Sales{/s} ' +  Ext.util.Format.number(storeItem.get('amount')));
+                    width: 300,
+                    height: 45,
+                    renderer: function (storeItem) {
+                        var value = Ext.util.Format.currency(
+                            storeItem.get('turnover'),
+                            me.subApp.currencySign,
+                            2,
+                            (me.subApp.currencyAtEnd == 1)
+                        );
+
+                        this.setTitle(
+                            storeItem.get('name') + '<br><br>&nbsp;' +
+                            value
+                        );
                     }
                 }
-        }];
+            }
+        ];
         me.callParent(arguments);
     }
 });

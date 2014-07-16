@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,53 +19,71 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Analytics
- * @subpackage Month
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 /**
- * todo@all: Documentation
+ * Analytics Month Table
+ *
+ * @category   Shopware
+ * @package    Analytics
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
+ *
  */
 //{namespace name=backend/analytics/view/main}
 //{block name="backend/analytics/view/table/month"}
 Ext.define('Shopware.apps.Analytics.view.table.Month', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-month',
-    shopColumnText: "{s name=table/month/sum}Sales: [0]{/s}",
+    shopColumnText: "{s name=general/turnover}Turnover{/s}: [0]",
 
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
-        me.columns = [{
-            xtype: 'datecolumn',
-            dataIndex: 'date',
-            text: '{s name=table/month/month}Month{/s}',
-            format: 'F, Y',
-            width: 300
-        }, {
+        me.columns = {
+            items: me.getColumns(),
+            defaults: {
+                flex: 1,
+                sortable: false
+            }
+        };
+
+        me.initStoreIndices('turnover', me.shopColumnText, {
             xtype: 'numbercolumn',
-            dataIndex: 'amount',
-            text: '{s name=table/month/sales}Total sales{/s}',
-            align: 'right',
-            flex: 1
-        }];
-
-        me.shopStore.each(function(shop) {
-
-            me.columns[me.columns.length] = {
-                xtype: 'numbercolumn',
-                dataIndex: 'amount' + shop.data.id,
-                text: Ext.String.format(me.shopColumnText, shop.data.name),
-                align: 'right'
-            };
-        }, me);
+            renderer: me.currencyRenderer
+        });
 
         me.callParent(arguments);
+    },
+
+    getColumns: function () {
+        var me = this;
+
+        return [
+            {
+                xtype: 'datecolumn',
+                dataIndex: 'date',
+                text: '{s name=table/month/month}Month{/s}',
+                format: 'F, Y'
+            },
+            {
+                xtype: 'numbercolumn',
+                dataIndex: 'turnover',
+                text: '{s name=general/turnover}Turnover{/s}',
+                renderer: me.currencyRenderer
+            }
+        ];
+    },
+
+    currencyRenderer: function(value) {
+        var me = this;
+
+        return Ext.util.Format.currency(
+            value,
+            me.subApp.currencySign,
+            2,
+            (me.subApp.currencyAtEnd == 1)
+        );
     }
+
 });
 //{/block}

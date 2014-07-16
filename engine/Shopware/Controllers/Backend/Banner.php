@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Banner
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
@@ -125,7 +117,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         foreach ($data as $key => $category) {
             $data[$key]['text'] = $category['name'];
             $data[$key]['cls'] = 'folder';
-            $data[$key]['childrenCount'] = (int)$category['childrenCount'];
+            $data[$key]['childrenCount'] = (int) $category['childrenCount'];
             $data[$key]['leaf'] = empty($data[$key]['childrenCount']);
             $data[$key]['allowDrag'] = true;
             if ($preselectedNodes !== null) {
@@ -169,7 +161,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         $query   = $this->repository->getBanners($filter);
         $banners = $query->getArrayResult();
 
-        // restructures the data to better fit extjs model 
+        // restructures the data to better fit extjs model
         $nodes = $this->prepareBannerData($banners);
         $this->View()->assign(array('success' => !empty($nodes), 'data' => $nodes));
     }
@@ -199,12 +191,12 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         $nodes = null;
 
         foreach ($banners as $banner) {
-            // we have to split the datetime to date and time 
+            // we have to split the datetime to date and time
             if (!empty($banner['validFrom'])) {
                 $banner['validFromDate'] = $banner['validFrom']->format('d.m.Y');
                 $banner['validFromTime'] = $banner['validFrom']->format('H:i');
             }
-            // we have to split the datetime to date and time 
+            // we have to split the datetime to date and time
             if (!empty($banner['validTo'])) {
                 $banner['validToDate'] = $banner['validTo']->format('d.m.Y');
                 $banner['validToTime'] = $banner['validTo']->format('H:i');
@@ -267,7 +259,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         // check if there are more than one media is submitted
         if (false !== strpos($this->Request()->get('media-manager-selection'), ',')) {
             $this->View()->assign(array(
-                'success' => false, 
+                'success' => false,
                 'errorMsg' => $this
                     ->namespace
                     ->get('error_more_than_one_file', 'More then one file has been submitted - just one is allowed here.')));
@@ -281,8 +273,8 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
 
         // Collecting form data
         if (!empty($tmpId)) {
-            $id             = (int)$tmpId;
-            $liveShoppingId = (int)$this->Request()->get('liveshoppingId');
+            $id             = (int) $tmpId;
+            $liveShoppingId = (int) $this->Request()->get('liveshoppingId');
         } else {
             $createMode     = true;
             $liveShoppingId = 0;
@@ -291,13 +283,13 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         // Check if we are allowed to create a new db entry
         if (!$this->_isAllowed('create') && $createMode) {
             $this->View()->assign(array(
-                'success' => false, 
+                'success' => false,
                 'data' => $this->namespace->get('no_create_rights', 'Create access denied.')));
         }
         // Check if we are allowed to update a db entry
         if (!$this->_isAllowed('update')) {
             $this->View()->assign(array(
-                'success' => false, 
+                'success' => false,
                 'errorMsg' => $this->namespace->get('no_update_rights', 'Update access denied.')));
         }
 
@@ -308,7 +300,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         $params['validFrom'] = $this->prepareDateAndTime($this->Request()->get('validFromDate'), $this->Request()->get('validFromTime'));
         // build a single till date instead of two dates
         $params['validTo'] = $this->prepareDateAndTime($this->Request()->get('validToDate'), $this->Request()->get('validToTime'));
-        // Get media manager 
+        // Get media manager
         $mediaManagerData = $this->Request()->get('media-manager-selection');
 
         // update database entries
@@ -319,7 +311,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
             // check if there are none files submitted
             if (empty($mediaManagerData)) {
                 $this->View()->assign(array(
-                    'success' => false, 
+                    'success' => false,
                     'errorMsg' => $this->namespace->get('no_banner_selected', 'No banner has been selected.')));
                 return;
             }
@@ -339,8 +331,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
             Shopware()->Models()->flush();
             $params['id'] = $bannerModel->getId();
             $this->View()->assign(array('success' => 'true', 'data' => $params));
-        }
-        catch(Exception $e) {
+        } catch (Exception $e) {
             $errorMsg = $e->getMessage();
             $this->View()->assign(array('success' => 'false', 'errorMsg' => $errorMsg));
         }
@@ -364,8 +355,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
             }
             Shopware()->Models()->flush();
             $this->View()->assign(array('success' => true));
-        }
-        catch(Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'errorMsg' => $e->getMessage()));
         }
     }
@@ -379,7 +369,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
     {
         if (!$this->Request()->isPost()) {
             $this->View()->assign(array(
-                'success' => false, 
+                'success' => false,
                 'errorMsg' => $this->namespace->get('wrong_transmit_method', 'Wrong transmit method.')));
             return false;
         }

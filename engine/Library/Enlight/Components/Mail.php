@@ -71,7 +71,7 @@ class Enlight_Components_Mail extends Zend_Mail
      */
     public function IsHTML($isHtml = true)
     {
-        $this->_isHtml = (bool)$isHtml;
+        $this->_isHtml = (bool) $isHtml;
     }
 
     /**

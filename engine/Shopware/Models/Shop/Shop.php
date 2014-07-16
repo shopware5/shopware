@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,23 +20,15 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Shop
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 namespace Shopware\Models\Shop;
+
 use Shopware\Components\Model\ModelEntity,
     Doctrine\ORM\Mapping as ORM,
     Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * todo@all: Documentation
  *
  * @ORM\Table(name="s_core_shops")
  * @ORM\Entity(repositoryClass="Repository")
@@ -57,6 +49,12 @@ class Shop extends ModelEntity
      * @ORM\Column(name="main_id", type="integer", nullable=true)
      */
     private $mainId;
+
+    /**
+     * @var integer $categoryId
+     * @ORM\Column(name="category_id", type="integer", nullable=true)
+     */
+    private $categoryId;
 
     /**
      * @var Shop $main
@@ -111,6 +109,12 @@ class Shop extends ModelEntity
      * @ORM\Column(name="secure", type="boolean", nullable=false)
      */
     private $secure = false;
+
+    /**
+     * @var boolean $secure
+     * @ORM\Column(name="always_secure", type="boolean", nullable=false)
+     */
+    private $alwaysSecure = false;
 
     /**
      * @var string $name
@@ -637,7 +641,7 @@ class Shop extends ModelEntity
      */
     public function get($name)
     {
-        switch($name) {
+        switch ($name) {
             case 'isocode':
                 return $this->getId();
             case 'skipbackend':
@@ -652,7 +656,7 @@ class Shop extends ModelEntity
                 return $this->getCustomerGroup()->getKey();
             case 'defaultcurrency':
                 return $this->getCurrency()->getId();
-	        case 'fallback':
+            case 'fallback':
                 return $this->getFallback() !== null ? $this->getFallback()->getId() : null;
         }
         return null;
@@ -686,21 +690,23 @@ class Shop extends ModelEntity
 
         /** @var $snippets \Enlight_Plugin_PluginManager */
         $plugins = $bootstrap->getResource('Plugins');
+
         /** @var $pluginNamespace  \Shopware_Components_Plugin_Namespace */
         $pluginNamespace = null;
-        foreach($plugins as $pluginNamespace) {
-            if($pluginNamespace instanceof \Shopware_Components_Plugin_Namespace) {
+
+        foreach ($plugins as $pluginNamespace) {
+            if ($pluginNamespace instanceof \Shopware_Components_Plugin_Namespace) {
                 $pluginNamespace->setShop($this);
             }
         }
 
-        if($this->getTemplate() !== null) {
+        if ($this->getTemplate() !== null) {
             /** @var $template \Enlight_Template_Manager */
             $templateManager = $bootstrap->getResource('Template');
             $template = $this->getTemplate();
             $localeName = $this->getLocale()->toString();
 
-            if($template->getVersion() == 2) {
+            if ($template->getVersion() == 2) {
                 $templateManager->addTemplateDir(array(
                     'custom' => $template->toString(),
                     'local' => '_emotion_local',
@@ -727,5 +733,21 @@ class Shop extends ModelEntity
         $templateMail->setShop($this);
 
         return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getAlwaysSecure()
+    {
+        return $this->alwaysSecure;
+    }
+
+    /**
+     * @param boolean $alwaysSecure
+     */
+    public function setAlwaysSecure($alwaysSecure)
+    {
+        $this->alwaysSecure = $alwaysSecure;
     }
 }

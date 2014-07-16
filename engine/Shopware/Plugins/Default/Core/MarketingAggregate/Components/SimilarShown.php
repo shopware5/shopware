@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -30,17 +30,25 @@
  *
  * @category  Shopware
  * @package   Shopware\Plugins\MarketingAggregate\Components
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Components_SimilarShown extends Enlight_Class
 {
     /**
      * Resets the similar show article data.
      */
-    public function resetSimilarShown()
+    public function resetSimilarShown(DateTime $validationTime = null)
     {
-        $sql = "DELETE FROM s_articles_similar_shown_ro";
-        Shopware()->Db()->query($sql);
+        if ($validationTime) {
+            $sql = "DELETE FROM s_articles_similar_shown_ro WHERE init_date <= :validationTime";
+            Shopware()->Db()->query(
+                $sql,
+                array('validationTime' => $validationTime->format('Y-m-d 00:00:00'))
+            );
+        } else {
+            $sql = "DELETE FROM s_articles_similar_shown_ro ";
+            Shopware()->Db()->query($sql);
+        }
     }
 
     /**
@@ -79,13 +87,13 @@ class Shopware_Components_SimilarShown extends Enlight_Class
         ");
 
         //iterate all selected articles which has to be initialed
-        foreach($articles as $articleId) {
+        foreach ($articles as $articleId) {
             //now we select all similar articles of the s_emarketing_lastarticles table
             $preparedSelect->execute(array('articleId' => $articleId));
             $combinations = $preparedSelect->fetchAll();
 
             //at least we have to insert each combination in the aggregate s_articles_similar_shown_ro table.
-            foreach($combinations as $combination) {
+            foreach ($combinations as $combination) {
                 $preparedInsert->execute($combination);
             }
         }
@@ -131,9 +139,9 @@ class Shopware_Components_SimilarShown extends Enlight_Class
      *
      * @return DateTime
      */
-    protected function getSimilarShownValidationTime()
+    public function getSimilarShownValidationTime()
     {
-        //get top seller order time interval
+        //get similar shown validation time
         $interval = Shopware()->Config()->get('similarValidationTime', 10);
 
         //create a new date time object to create the current date subtract the configured date interval.

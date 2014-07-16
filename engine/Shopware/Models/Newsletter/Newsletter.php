@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0 - Dispatch
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Backend, Newsletter
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Daniel Nögel
- * @author     $Author$
  */
 
 namespace   Shopware\Models\Newsletter;
@@ -186,7 +178,7 @@ class Newsletter extends ModelEntity
      *
      * Inverse side of the mailing-container association
      * @var \Doctrine\Common\Collections\ArrayCollection
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\Container", mappedBy="newsletter", cascade={"persist", "update", "remove"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\Container", mappedBy="newsletter", cascade={"persist", "remove"})
      */
     private $containers;
 
@@ -479,4 +471,3 @@ class Newsletter extends ModelEntity
         return $this->alreadySendTo;
     }
 }
-

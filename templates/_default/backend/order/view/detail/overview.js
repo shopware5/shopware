@@ -710,6 +710,7 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             {
                 xtype: 'datefield',
                 name: 'clearedDate',
+                submitFormat: 'd.m.Y',
                 fieldLabel: me.snippets.edit.clearedDate
             },
             {

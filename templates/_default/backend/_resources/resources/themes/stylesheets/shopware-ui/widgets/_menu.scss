@@ -50,11 +50,14 @@
 
     // Active style
     .#{$prefix}menu-item-active .#{$prefix}menu-item-link {
-        @include filter-gradient(#d0e5f5, #a6cdec, vertical); 
-        @include background-image(linear-gradient(top, #d0e5f5 0%,#a6cdec 100%));
+
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                      svg-color-stop(#d0e5f5, 0%, 1),
+                      svg-color-stop(#a6cdec, 100%, 1)
+                    )) center center no-repeat transparent !important;
+
         // Using the box shadw as the second bottom border
         //@include single-box-shadow(#fff, 0, 1px, 0, 0);
-        @include inner-border(1px 1px 1px 1px, rgba(255, 255, 255, .45));
         @include border-radius(2px);
         margin: 1px 0;
         padding: 4px 5px 3px 27px;
@@ -72,8 +75,11 @@
         font-style: italic;
     }
     .#{$prefix}deprecated-menu-item-active .#{$prefix}menu-item-link {
-        @include filter-gradient(#ffdd7f, #febf04, vertical); // IE6-9
-        @include background-image(linear-gradient(top, #ffdd7f 0%,#febf04 100%));
+
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                      svg-color-stop(#ffdd7f, 0%, 1),
+                      svg-color-stop(#febf04, 100%, 1)
+                    )) center center no-repeat transparent !important;
         border: 1px solid #C66401;
     }
 }

@@ -26,12 +26,6 @@
         position: relative;
 
         height: 26px;
-        
-        @if $datepicker-header-background-gradient {
-            @include background-gradient($datepicker-header-background-color, $datepicker-header-background-gradient);
-        } @else {
-            background-color: $datepicker-header-background-color;
-        }
     }
          
     .#{$prefix}datepicker-prev,
@@ -141,13 +135,6 @@
             
             border-bottom: 1px solid $datepicker-th-border-bottom-color;
             border-collapse: separate;
-            
-            @if $datepicker-th-background-gradient {
-                @include background-gradient($datepicker-th-background-color, $datepicker-th-background-gradient);
-            } @else {
-                background-color: $datepicker-th-background-color;
-            }
-            
             cursor: default;
             
             span {

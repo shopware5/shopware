@@ -55,6 +55,9 @@ Ext.define('Shopware.apps.Supplier.model.Supplier', {
         { name : 'media-manager-selection', type: 'string' },
         { name : 'link', type : 'string'},
         { name : 'description', type : 'string' },
+        { name : 'metaTitle', type : 'string' },
+        { name : 'metaDescription', type : 'string' },
+        { name : 'metaKeywords', type : 'string' },
         { name : 'articleCounter', type : 'int' }
     ],
     /**

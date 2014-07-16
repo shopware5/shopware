@@ -131,3 +131,17 @@ div.step_box2 ul li .icon {
 	-moz-box-shadow: 0 0 3px #c0c0c0;
 	box-shadow: 0 0 3px #c0c0c0;
 }
+
+#confirm .personal-information .payment_method .bankdata label {
+    width: 175px !important;
+    line-height: 22px;
+}
+.is--disabled[type="text"] {
+    background: #efefef;
+    color: #999;
+    cursor: not-allowed;
+    padding: 4px 6px;
+}
+.is--disabled[type="text"]:focus {
+    border-color: #bbb;
+}

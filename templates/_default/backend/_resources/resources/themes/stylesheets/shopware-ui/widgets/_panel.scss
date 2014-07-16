@@ -30,9 +30,12 @@
 
 // Panel header
 .#{$prefix}panel-header-default {
-	@include filter-gradient(#f7f7f7, #e5e6e8, vertical);
-	@include background-image(linear-gradient(top, #f7f7f7 0%,#e5e6e8 100%));
-	
+
+    background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                  svg-color-stop(#f7f7f7, 0%, 1),
+                  svg-color-stop(#e5e6e8, 100%, 1)
+                )) center center no-repeat transparent;
+
 	.#{$prefix}panel-header-text-default {
 		font-weight: normal;
 		font-size: 11px;
@@ -41,14 +44,16 @@
 }
 
 .#{$prefix}panel-header-default-top {
-	@include inner-border(1px 1px 1px 1px, #fff);
+	outline: #fff solid 1px;
 }
 
 // Collapsed panel
 .#{$prefix}region-collapsed-placeholder {
-	@include inner-border(0 1px 0 1px, #fff);
-	@include filter-gradient(#f7f7f7, #e5e6e8, vertical);
-	@include background-image(linear-gradient(left, #f7f7f7, #e6e6e8));
+    background: svg-linear-gradient(0%, 0%, 100%, 0%, (
+                  svg-color-stop(#f7f7f7, 0%, 1),
+                  svg-color-stop(#e6e6e8, 100%, 1)
+                )) center center no-repeat transparent;
+
 	border-left: 1px solid $border-color !important;
 	border-bottom: 0 none;
 
@@ -60,11 +65,7 @@
 
 // Panel body
 .#{$prefix}window-body-default .#{$prefix}panel-body-default {
-	@include single-box-shadow(rgba(233, 236, 239, 0.8), 0, 3px, 3px, 0 , true);
 	border-width: 1px;
-}
-.#{$prefix}tabpanel-child .#{$prefix}panel-body-default {
-	@include single-box-shadow(transparent, 0, 0, 0);
 }
 
 // Special detail view
@@ -101,9 +102,7 @@
 
     // Panel body
     .#{$prefix}panel-body {
-        @include inner-border(0 1px 1px 0, $light-border-color);
     	border-top: 0 none;
-    	box-shadow: inset 0 6px 6px -6px $font-color;
     	border-bottom: 0 none;
     	border-right-color: $light-border-color;
     	padding: 12px;
@@ -144,8 +143,11 @@
 
     // Header
     .#{$prefix}panel-header {
-        @include inner-border(1px 0 1px 0, #fff);
-        @include background-image(linear-gradient(top, #f7f7f7 0%,#e5e6e8 100%));
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                      svg-color-stop(#f7f7f7, 0%, 1),
+                      svg-color-stop(#e5e6e8, 100%, 1)
+                    )) center center no-repeat transparent;
+
         border-top: 0 none !important;
 
         // Header text
@@ -166,10 +168,6 @@
     // Panel body
     .#{$prefix}panel-body {
         border-bottom: 0 none;
-
-        & > div {
-            @include single-box-shadow($font-color, 0, 1px, 3px, -2px, true);
-        }
     }
 }
 

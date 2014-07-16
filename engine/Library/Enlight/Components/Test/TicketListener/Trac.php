@@ -74,7 +74,7 @@ class Enlight_Components_Test_TicketListener_Trac extends PHPUnit_Extensions_Tic
             return array('status' => 'invalid_ticket_id');
         }
         try {
-            $info = $this->getClient()->call('ticket.get', (int)$ticketId);
+            $info = $this->getClient()->call('ticket.get', (int) $ticketId);
             switch ($info[3]['status']) {
                 case 'closed':
                 case 'testing':
@@ -89,8 +89,7 @@ class Enlight_Components_Test_TicketListener_Trac extends PHPUnit_Extensions_Tic
                 default:
                     return array('status' => 'unknown_ticket');
             }
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             return array('status' => 'unknown_ticket');
         }
     }
@@ -108,7 +107,7 @@ class Enlight_Components_Test_TicketListener_Trac extends PHPUnit_Extensions_Tic
         $this->getClient()->call(
             'ticket.update',
             array(
-                (int)$ticketId,
+                (int) $ticketId,
                 $message,
                 null,
                 null,

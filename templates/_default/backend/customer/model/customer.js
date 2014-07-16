@@ -100,6 +100,7 @@ Ext.define('Shopware.apps.Customer.model.Customer', {
         { type:'hasMany', model:'Shopware.apps.Customer.model.Shipping', name:'getShipping', associationKey:'shipping' },
         { type:'hasMany', model:'Shopware.apps.Customer.model.Attribute', name:'getCustomerAttributes', associationKey:'attribute' },
         { type:'hasMany', model:'Shopware.apps.Customer.model.Debit', name:'getDebit', associationKey:'debit'},
+        { type:'hasMany', model:'Shopware.apps.Customer.model.PaymentData', name:'getPaymentData', associationKey:'paymentData'},
         { type:'hasMany', model:'Shopware.apps.Customer.model.BillingAttributes', name:'getBillingAttributes', associationKey:'billingAttribute'},
         { type:'hasMany', model:'Shopware.apps.Customer.model.ShippingAttributes', name:'getShippingAttributes', associationKey:'shippingAttribute'}
     ]

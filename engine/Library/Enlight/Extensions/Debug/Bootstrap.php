@@ -245,7 +245,7 @@ class Enlight_Extensions_Debug_Bootstrap extends Enlight_Plugin_Bootstrap_Config
         $this->log->table($table);
 
         foreach ($exceptions as $exception) {
-            $this->log->err((string)$exception);
+            $this->log->err((string) $exception);
         }
     }
 

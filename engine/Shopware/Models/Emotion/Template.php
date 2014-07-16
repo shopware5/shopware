@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 namespace Shopware\Models\Emotion;
 
 use Shopware\Components\Model\ModelEntity;
@@ -33,7 +32,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @category  Shopware
  * @package   Shopware\Models\Emotion
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity
  * @ORM\Table(name="s_emotion_templates")
@@ -62,26 +61,28 @@ class Template extends ModelEntity
     private $name;
 
     /**
-     * @var
+     * @var string
      * @ORM\Column(name="file", type="string", length=255, nullable=false)
      */
     private $file;
 
     /**
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Emotion", mappedBy="grid")
      * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Emotion", mappedBy="template")
      */
     protected $emotions;
 
     /**
      * Clone function for this model.
      */
-    public function __clone() {
+    public function __clone()
+    {
         $this->id = null;
         $this->emotions = new ArrayCollection();
     }
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->emotions = new ArrayCollection();
     }
 

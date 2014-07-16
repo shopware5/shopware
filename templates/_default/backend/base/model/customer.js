@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Base.model.Customer', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend:'Shopware.data.Model',
 
     /**
      * The fields used for this model

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,181 +20,252 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Core
- * @subpackage Class
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Stefan Hamann
- * @author     $Author$
  */
+
+use Shopware\Components\LegacyRequestWrapper\PostWrapper;
+use Shopware\Components\LegacyRequestWrapper\GetWrapper;
+use Shopware\Components\LegacyRequestWrapper\CookieWrapper;
+
 /**
  * Deprecated Shopware Class
- *
- * todo@all: Documentation
  */
 class sSystem
 {
-
-	var $sCONFIG;		// Pointer to configuration
-
-	var $sSESSION_ID;	// Current Session-ID
-
-	var $sSMARTY;		// Pointer to Smarty
-
-	var $sDB_HOST;		// Database Host
-	var $sDB_USER;		// Database User
-	var $sDB_PASSWORD;	// Database Password
-	var $sDB_DATABASE;	// Database to use
-	var $sDB_CONNECTOR;	// Database Connector ('mysql' for example)
-
-	var $sDB_CONNECTION;// Current Connection
-
-	var $sMODULES;		// Pointer to the different modules and its inherits
-
-	var $sUSERGROUP;	// Current customer-group (Scope)
-	var $sUSERGROUPDATA; // Information about customer-group
-
-	var $sDEBUG;		// Array with Debug-Messages
-	var $sBENCHRESULTS;	// Benchmark-results as array
-	var $sBENCHMARK;	// Holds time for benchmark-purposes
-
-	var $_GET;			// Get-Variables
-	var $_POST;			// Post-Variables
-	var $_COOKIE;		// Cookies
-	var $_SESSION;		// Session
-
-	// Absolute pathes
-	var $sPathMedia;		// Path to template images
-	var $sPathArticleImg;	// Path to article images
-	var $sPathBanner;		// Path to banners
-	var $sPathCmsImg;		// Path to CMS-Images
-	var $sPathCmsFiles;		// Path to CMS-Files
-	var $sPathArticleFiles;	// Path to Article-Downloads
-	var $sPathStart;		// Path to Start
-	var $sBasefile;
-	var $sBasePath;
-
-	// Additionals
-	var $sExtractor;		// Strip parts of rewrited urls and append them
-	var $sLicenseData;		// License - Data
-	var $sLanguageData;		// All active languages
-	var $sLanguage;			// Current language
-
-	var $sCurrency;			// Current active currency
-	var $sCurrencyData;		// Array with active currencies
-
-	var $sSubShop;			// Current active subshop
-	var $sSubShops;			// Information about licensed subshops
-
-
-	var $sMailer;			// Pointer to PHP-Mailer Object
-	var $sBotSession;		// True if user is identified as bot
-
-	function __construct()
-	{
-		$this->sBasePath = dirname(dirname(dirname(dirname(__FILE__)))).'/';
-	}
+    /**
+     * Shopware configuration
+     *
+     * @var Shopware_Components_Config
+     * @deprecated Use Shopware()->Config()
+     */
+    public $sCONFIG;
 
     /**
+     * Current session id
+     *
+     * @var string
+     * @deprecated Use Shopware()->SessionID()
+     */
+    public $sSESSION_ID;
+
+    /**
+     * Pointer to Smarty
+     *
+     * @var Enlight_Template_Manager
+     * @deprecated Use Shopware()->Template()
+     */
+    public $sSMARTY;
+
+    /**
+     * Current database connection
+     *
+     * @var Enlight_Components_Adodb
+     * @deprecated Use Shopware()->Db()
+     */
+    public $sDB_CONNECTION;
+
+    /**
+     * Pointer to the different modules and its inherits
+     *
+     * @var Shopware_Components_Modules
+     * @deprecated Use Shopware()->Modules()
+     */
+    public $sMODULES;
+
+    /**
+     * Current customer group
+     *
+     * @var string
+     */
+    public $sUSERGROUP;
+
+    /**
+     * Information about customer group
+     *
+     * @var array
+     */
+    public $sUSERGROUPDATA;
+
+    /**
+     * Session data
+     *
+     * @var Enlight_Components_Session_Namespace Session
+     * @deprecated Use Shopware()->Session()
+     */
+    public $_SESSION;
+
+    /**
+     * @var \Shopware\Components\LegacyRequestWrapper\PostWrapper Wrapper for _POST
+     */
+    private $postWrapper;
+
+    /**
+     * @var \Shopware\Components\LegacyRequestWrapper\GetWrapper Wrapper for _GET
+     */
+    private $getWrapper;
+
+    /**
+     * @var \Shopware\Components\LegacyRequestWrapper\CookieWrapper Wrapper for _COOKIE
+     */
+    private $cookieWrapper;
+
+    /**
+     * Path to article images
+     *
+     * @var string
+     */
+    public $sPathArticleImg;
+
+    /**
+     * Path to banners
+     *
+     * @var string
+     */
+    public $sPathBanner;
+
+    /**
+     * Path to Article downloads
+     *
+     * @var string
+     */
+    public $sPathArticleFiles;
+
+    /**
+     * Path to Start
+     *
+     * @var string
+     */
+    public $sPathStart;
+
+    /**
+     * Strip parts of rewritten urls and append them
+     *
+     * @var array
+     */
+    public $sExtractor;
+
+    /**
+     * All active languages
+     *
+     * @var array
+     */
+    public $sLanguageData;
+
+    /**
+     * Current language
+     *
+     * @var int
+     * @deprecated Shopware()->Shop()->getId()
+     */
+    public $sLanguage;
+
+    /**
+     * Current active currency
+     *
+     * @var array
+     * @deprecated Use Shopware()->Shop()->getCurrency() or Shopware()->Shop()->getCurrency()->toArray()
+     */
+    public $sCurrency;
+
+    /**
+     * Current active subshop
+     *
+     * @var array
+     */
+    public $sSubShop;
+
+    /**
+     * Information about licensed subshops
+     *
+     * @var array
+     */
+    public $sSubShops;
+
+    /**
+     * Pointer to PHP-Mailer Object
+     *
+     * @var
+     * @deprecated Use Shopware()->Mail()
+     */
+    public $sMailer;
+
+    /**
+     * True if user is identified as bot
+     *
+     * @var bool
+     * @deprecated Use Shopware()->Session()->Bot
+     */
+    public $sBotSession;
+
+    /**
+     * Reference to $this, for compability reasons.
+     *
+     * @var sSystem
      * @deprecated
      */
-	function sPreProcess()
-	{
-
-	}
-
+    public $sSYSTEM;
 
     /**
-     * @deprecated
+     * @param Enlight_Controller_Request_RequestHttp $request The request object
      */
-	function sInitMailer()
+    public function __construct(Enlight_Controller_Request_RequestHttp $request = null)
     {
-        // removed mailer initialisation code
-	}
+        $request = $request ? : new Enlight_Controller_Request_RequestHttp();
+        $this->postWrapper = new PostWrapper($request);
+        $this->getWrapper = new GetWrapper($request);
+        $this->cookieWrapper = new CookieWrapper($request);
+        $this->sSYSTEM = $this;
+    }
 
-	function sGetTranslation($data,$id,$object,$language)
+    public function __set($property, $value)
     {
-        return $data;
-	}
+        switch ($property) {
+            case '_POST':
+                $this->postWrapper->setAll($value);
+                break;
+            case '_GET':
+                $this->getWrapper->setAll($value);
+                break;
+        }
+    }
 
-	function sInitAdo()
-	{
-	}
+    public function __get($property)
+    {
+        switch ($property) {
+            case '_POST':
+                return $this->postWrapper;
+                break;
+            case '_GET':
+                return $this->getWrapper;
+                break;
+            case '_COOKIE':
+                return $this->cookieWrapper;
+                break;
+        }
 
-	function sTranslateConfig()
-	{
-	}
-
-	function sInitConfig()
-	{
-
-	}
-
-	function sInitSmarty()
-	{
-	}
-
-	function sInitSession()
-	{
-	}
-
-    /**
-     * DEPRECATED
-     * @param $hook
-     * @return string
-     */
-	function sCallHookPoint($hook)
-	{
-		return '';
-	}
+        return null;
+    }
 
     /**
-     * DEPRECATED
+     * @deprecated Throw your specific exceptions
+     *
+     * @param $WARNING_ID
+     * @param $WARNING_MESSAGE
+     * @throws Enlight_Exception
      */
-	function sLoadHookPoints()
-	{
-	}
-
-	function sInitFactory ()
-	{
-
-	}
+    public function E_CORE_WARNING($WARNING_ID,$WARNING_MESSAGE)
+    {
+        throw new Enlight_Exception($WARNING_ID.': '.$WARNING_MESSAGE);
+    }
 
     /**
-     * DEPRECATED
-     * @param null $host
-     * @param null $module
-     * @param $key
-     * @return bool
+     * @deprecated Use Shopware()->Modules()->Core()->(method name)
+     *
+     * @param $name
+     * @param null $params
+     * @return mixed
      */
-	function sCheckLicense($host=null, $module=null, $key)
-	{
-        return true;
-	}
-
-	function E_CORE_ERROR($ERROR_ID,$ERROR_MESSAGE){
-		throw new Enlight_Exception($ERROR_ID.': '.$ERROR_MESSAGE);
-	}
-
-	function E_CORE_WARNING ($WARNING_ID,$WARNING_MESSAGE){
-		throw new Enlight_Exception($WARNING_ID.': '.$WARNING_MESSAGE);
-	}
-
-	public function __call($name, $params=null)
-	{
-		return call_user_func_array(array($this->sMODULES['sCore'], $name), $params);
-	}
-
-	public function __get($name)
-	{
-		switch ($name)
-		{
-			case '_d':
-				return $this;
-			default:
-				return null;
-		}
-	}
+    public function __call($name, $params = null)
+    {
+        return call_user_func_array(array(Shopware()->Modules()->Core(), $name), $params);
+    }
 }

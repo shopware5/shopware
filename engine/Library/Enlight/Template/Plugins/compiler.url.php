@@ -25,9 +25,10 @@
  * Build an link based on given controller and action name
  *
  * Parameters known by $params
- * - module     : name of the module
- * - controller : name of the controller
- * - action     : name of the action
+ * - module        : name of the module
+ * - controller    : name of the controller
+ * - action        : name of the action
+ * - params : extracts array of params, separate defined params get precedence
  */
 class Smarty_Compiler_Url extends Smarty_Internal_CompileBase
 {
@@ -57,9 +58,14 @@ class Smarty_Compiler_Url extends Smarty_Internal_CompileBase
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
 
+        if (isset($_attr['params'])) {
+            $extractParams = $_attr['params'];
+            unset($_attr['params']);
+        }
+
         // Removes the arguments that were not in the original.
         $noArgs = array();
-        foreach($args as $arg) {
+        foreach ($args as $arg) {
             if (is_array($arg)) {
                 $noArgs[] = key($arg);
             } else {
@@ -67,12 +73,12 @@ class Smarty_Compiler_Url extends Smarty_Internal_CompileBase
             }
         }
         $noArgs = array_diff($this->option_flags, $noArgs);
-        foreach($noArgs as $noArg) {
+        foreach ($noArgs as $noArg) {
             unset($_attr[$noArg]);
         }
 
         // default 'false' for all option flags not set
-        foreach($_attr as $index => $param) {
+        foreach ($_attr as $index => $param) {
             if ($param === false) {
                 $_attr[$index] = "'0'";
             } elseif ($param === true) {
@@ -80,14 +86,23 @@ class Smarty_Compiler_Url extends Smarty_Internal_CompileBase
             }
         }
 
+        if (isset($extractParams) && empty($_attr)) {
+            return '<?php echo Enlight_Application::Instance()->Front()->Router()->assemble((array) ' . $extractParams . '); ?>';
+        }
+
         $params = array();
-        foreach($_attr as $index => $param) {
-            if (!preg_match('/^([\'"]?)[a-zA-Z0-9]+(\\1)$/', $param, $match) || !empty($_attr['appendSession'])) {
+        foreach ($_attr as $index => $param) {
+            if (isset($extractParams) || !preg_match('/^([\'"]?)[a-zA-Z0-9]+(\\1)$/', $param, $match) || !empty($_attr['appendSession'])) {
                 $params = '';
-                foreach($_attr as $index => $param) {
+                foreach ($_attr as $index => $param) {
                     $params .= var_export($index, true). ' => ' . $param . ', ';
                 }
-                return '<?php echo Enlight_Application::Instance()->Front()->Router()->assemble(array(' . $params . ')); ?>';
+
+                if (isset($extractParams)) {
+                    return '<?php echo Enlight_Application::Instance()->Front()->Router()->assemble(array(' . $params . ')+(array) ' . $extractParams . '); ?>';
+                } else {
+                    return '<?php echo Enlight_Application::Instance()->Front()->Router()->assemble(array(' . $params . ')); ?>';
+                }
             }
             $params[$index] = is_numeric($param) ? $param : substr($param, 1, -1);
         }

@@ -1,8 +1,7 @@
 <?php
-
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,136 +20,103 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components
- * @subpackage Check
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
-
-
 
 /**
  * Shopware Check File
  *
- * @todo:all: Doku!
- *
- * {@inheritdoc}
  * <code>
  * $list = new Shopware_Components_Check_File();
  * $data = $list->toArray();
  * </code>
+ *
+ * @category  Shopware
+ * @package   Shopware\Components\Check\File
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Components_Check_File implements IteratorAggregate, Countable
+class Shopware_Components_Check_File
 {
-	protected $list;
-    protected $testDir = '';
-		
-	/**
-	 * Checks all requirements
-	 */
-	protected function checkAll()
-	{
-		foreach ($this->list as $requirement) {
-			$requirement->required = Shopware()->Config()->Version;
-			$requirement->version = $this->check($requirement);
-			$requirement->result = $this->compare(
-				$requirement->name,
-				$requirement->version,
-				$requirement->required
-			);
-		}
-	}
-	
-	/**
-	 * Checks a requirement
-	 *
-	 * @param object $file
-	 * @return bool
-	 */
-	protected function check($file)
-	{
-        $filePath = $this->testDir . $file->name;
-		if (!file_exists($filePath)) {
-			return false;
-		}
-		$file->hash = md5_file($filePath);
-		
-		foreach ($file->test as $test) {
-			if($test->hash == $file->hash) {
-				$file->version = $test->version;
-			}
-		}
-		unset($file->test);
-		
-		return $file->version;
-	}
-	
-	/**
-	 * Compares the requirement with the version
-	 *
-	 * @param string $name
-	 * @param string $version
-	 * @param string $required
-	 * @return bool
-	 */
-	protected function compare($name, $version, $required)
-	{
-		return version_compare($required, $version, '<=');
-	}
-	
-	/**
-	 * Returns the check list
-	 *
-	 * @return Iterator
-	 */
-	public function getList()
-	{
-		if($this->list === null) {
-			$this->list = new Zend_Config_Xml(
-				dirname(__FILE__) . '/Data/File.xml',
-				'files',
-				true
-			);
-			$this->list = $this->list->file;
-			$this->checkAll();
-		}
-		return $this->list;
-	}
-	
-	/**
-	 * Returns the check list
-	 *
-	 * @return Iterator
-	 */
-	public function getIterator()
-    {
-        return $this->getList();
-    }
-    
     /**
-	 * Returns the check list
-	 *
-	 * @return array
-	 */
-    public function toArray()
-    {
-    	return $this->getList()->toArray();
-    }
-    
-    /**
-     * Counts the check list
-     *
-     * @return int
+     * @var array
      */
-    public function count()
+    protected $list = array();
+
+    /**
+     * @var string
+     */
+    protected $testDir = '';
+
+    /**
+     * @var array
+     */
+    private $skipList = array();
+
+    /**
+     * @param string $filePath
+     * @param string $testDir
+     * @param array $skipList List of filenames to be skipped
+     */
+    public function __construct($filePath, $testDir = null, $skipList = array())
     {
-    	return $this->getList()->count();
+        $this->filePath = $filePath;
+        $this->skipList = $skipList;
+
+        if ($testDir !== null) {
+            $this->setTestDir($testDir);
+        }
     }
 
+    /**
+     * Returns the check list
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        $baseDir = $this->testDir;
+
+        $md5Sums = trim(file_get_contents($this->filePath));
+        $md5Sums = explode("\n", $md5Sums);
+
+        $good = array();
+        $bad  = array();
+
+        foreach ($md5Sums as $row) {
+            list($expectedMd5Sum, $file) = explode('  ', trim($row));
+
+            if (in_array($file, $this->skipList)) {
+                continue;
+            }
+
+            $fileAvailable = is_file($baseDir . $file);
+
+            $md5SumMatch = false;
+            if ($fileAvailable) {
+                $md5Sum = md5_file($baseDir . $file);
+                $md5SumMatch = ($md5Sum == $expectedMd5Sum);
+            }
+
+            if ($md5SumMatch) {
+                $good[] = array(
+                    'name'      => $file,
+                    'available' => $fileAvailable,
+                    'result'    => $md5SumMatch
+                );
+            } else {
+                $bad[] = array(
+                    'name'      => $file,
+                    'available' => $fileAvailable,
+                    'result'    => $md5SumMatch
+                );
+            }
+        }
+
+        return $bad + $good;
+    }
+
+    /**
+     * @param string $dir
+     */
     public function setTestDir($dir)
     {
         $this->testDir = $dir;

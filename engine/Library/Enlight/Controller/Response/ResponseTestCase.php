@@ -73,6 +73,14 @@ class Enlight_Controller_Response_ResponseTestCase
     }
 
     /**
+     * @return array
+     */
+    public function getCookies()
+    {
+        return $this->_cookies;
+    }
+
+    /**
      * Gets a cookie value
      *
      * @param string $name
@@ -82,6 +90,17 @@ class Enlight_Controller_Response_ResponseTestCase
     public function getCookie($name, $default = null)
     {
         return isset($this->_cookies[$name]['value']) ? $this->_cookies[$name]['value'] : $default;
+    }
+
+    /**
+     * Gets all the information for a cookie
+     *
+     * @param string $name
+     * @return Zend_Controller_Request_HttpTestCase
+     */
+    public function getFullCookie($name)
+    {
+        return isset($this->_cookies[$name]) ? $this->_cookies[$name] : null;
     }
 
     /**

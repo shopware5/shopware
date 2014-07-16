@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Various', {
                 title: '{s name=fieldset/information}Information{/s}',
                 defaults: me.defaults,
                 items: [
-                    me.createDecriptionContainer("{s name=fieldset/categories/info}In diesem Bereich können Sie verschiedene Funktionen von Shopware deaktivieren, die sich auf die Frontend-Performance auswirken können{/s}")]
+                    me.createDecriptionContainer("{s name=fieldset/categories/info}Here you can adjust various settings which impact the performance of item listings.{/s}")]
             },
             {
                 xtype: 'fieldset',
@@ -83,7 +83,8 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Various', {
                 defaults: me.defaults,
                 items: [
                     {
-                        fieldLabel: '{s name=fieldset/various/disableStats}Deaktiviert die Shopware eigenen Statistiken{/s}',
+                        fieldLabel: '{s name=fieldset/various/disableStats}Deactivates the statistics from Shopware{/s}',
+                        helpText: '{s name=fieldset/various/disableStats/help}Note that the last seen articles will not saved in the database, if this setting is disabled.{/s}',
                         name: 'various[disableShopwareStatistics]',
                         xtype: 'checkbox',
                         uncheckedValue: false,
@@ -97,7 +98,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Various', {
                         inputValue: true
                     },
                     {
-                        fieldLabel: '{s name=fieldset/various/lastArticles}Zuletzt angesehene Artikel anzeigen{/s}',
+                        fieldLabel: '{s name=fieldset/various/lastArticles}Display previously viewed items{/s}',
                         name: 'various[LastArticles:show]',
                         xtype: 'checkbox',
                         uncheckedValue: false,

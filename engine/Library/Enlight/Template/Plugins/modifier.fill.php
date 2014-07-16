@@ -44,7 +44,7 @@ function smarty_modifier_fill($str, $width = 10, $break = '...', $fill = ' ')
     if (empty($width) || !is_numeric($width)) {
         $width = 10;
     } else {
-        $width = (int)$width;
+        $width = (int) $width;
     }
     // if no string is given, just build one string containing the fill pattern
     if (!is_scalar($str)) {
@@ -54,7 +54,7 @@ function smarty_modifier_fill($str, $width = 10, $break = '...', $fill = ' ')
     if (strlen($str) > $width) {
         $str = substr($str, 0, $width - strlen($break)) . $break;
     }
-    // If the string is shorter than the given width - fill the remaining space with the filling pattern  
+    // If the string is shorter than the given width - fill the remaining space with the filling pattern
     if ($width > strlen($str)) {
         return $str . str_repeat($fill, $width - strlen($str));
     } else {

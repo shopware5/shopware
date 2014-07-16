@@ -224,12 +224,12 @@ Ext.define('Shopware.apps.Article.view.detail.Settings', {
             }, {
                 xtype: 'datefield',
                 name: 'mainDetail[releaseDate]',
-                format: 'd.m.Y',
+                submitFormat: 'd.m.Y',
                 fieldLabel: me.snippets.releaseDate
             }, {
                 xtype: 'datefield',
                 name: 'added',
-                format: 'd.m.Y',
+                submitFormat: 'd.m.Y',
                 fieldLabel: me.snippets.createdAt
             }, {
                 xtype: 'numberfield',

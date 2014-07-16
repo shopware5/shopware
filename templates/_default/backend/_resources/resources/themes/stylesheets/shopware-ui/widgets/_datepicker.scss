@@ -33,8 +33,7 @@
 	
 	/** Header */
 	.#{$prefix}datepicker-header {
-		@include inner-border(1px 1px 1px 1px, #3980a9);
-		border: 0 none;
+		border: 1px solid #3980a9;
 		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAZCAIAAAB/8tMoAAAACXBIWXMAAAsTAAALEwEAmpwYAAAASUlEQVQImQXBsQ2AUAxDweRVTMAKrMayTEGPRIf0Y5u7Oq+X+/mwg2w6TaWZJRRjFV0hKjRmSZQCAdnMiDhg0BJ0IwmPWQrHvv0K8Tb1l5GLNAAAAABJRU5ErkJggg==") repeat-x;
 		
 		.#{$prefix}datepicker-month {
@@ -63,7 +62,6 @@
 		
 		/** Selected day */
 		.#{$prefix}datepicker-selected a {
-			@include inner-border(1px 1px 1px 1px, #3bd3ff);
 			text-shadow: 0 1px 0 darken(#207ab7, 10%);
 			border-color: #0d71ff;
 			color: darken(#fff, 5%);
@@ -73,7 +71,6 @@
 	
 	/** Footer */
 	.#{$prefix}datepicker-footer {
-		@include inner-border(1px 1px 1px 1px, #fff);
 		padding: 4px 0;
 		border-top: 1px solid #b5c0c7;
 		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAeCAIAAABi9+OQAAAACXBIWXMAAAsTAAALEwEAmpwYAAAANElEQVQIHQXBwQ0AIADEoOb231dfIoTdc4apVauG0arFZGpeqybDqmExNSxW7WlpZbK0FD7UMzDvjWijtAAAAABJRU5ErkJggg==") repeat-x;

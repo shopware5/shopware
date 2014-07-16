@@ -81,7 +81,7 @@ class Enlight_Components_Db extends Zend_Db
                 $config = $adapter->params->toArray();
             }
             if (isset($adapter->adapter)) {
-                $adapter = (string)$adapter->adapter;
+                $adapter = (string) $adapter->adapter;
             } else {
                 $adapter = null;
             }

@@ -63,7 +63,7 @@ class Shopware_Tests_Modules_Articles_getCategoryFiltersTest extends Enlight_Com
 
     protected function checkCategoryFilterResult($expected, $result)
     {
-        $this->assertArrayCount(count($expected), $result);
+        $this->assertCount(count($expected), $result);
         foreach($expected as $key => $currentExpected) {
             $currentResult = $result[$key];
             foreach($this->properties as $property) {

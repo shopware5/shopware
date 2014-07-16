@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Plugin
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     Stefan Hamann
  */
 
 /**
  * Shopware Plugin Manager
- *
- * todo@all: Documentation
  */
 class Shopware_Controllers_Backend_Store extends Shopware_Controllers_Backend_ExtJs
 {
@@ -115,7 +105,7 @@ class Shopware_Controllers_Backend_Store extends Shopware_Controllers_Backend_Ex
                 'message' => $auth->getMessage()
             ));
             return;
-        } 
+        }
 
         /**@var $domain Shopware_StoreApi_Models_Domain */
         $domain = $this->getCommunityStore()->getAccountService()->getDomain(
@@ -207,7 +197,7 @@ class Shopware_Controllers_Backend_Store extends Shopware_Controllers_Backend_Ex
             $this->getCommunityStore()->getIdentity()
         );
 
-        if($tax instanceof Shopware_StoreApi_Exception_Response) {
+        if ($tax instanceof Shopware_StoreApi_Exception_Response) {
             $this->View()->assign(array(
                 'success' => false,
                 'code' => $tax->getCode(),
@@ -217,7 +207,7 @@ class Shopware_Controllers_Backend_Store extends Shopware_Controllers_Backend_Ex
         }
 
         $product = $this->getCommunityStore()->getProductService()->getProductById($productId);
-        if($product instanceof Shopware_StoreApi_Exception_Response) {
+        if ($product instanceof Shopware_StoreApi_Exception_Response) {
             $this->View()->assign(array(
                 'success' => false,
                 'code' => $product->getCode(),
@@ -231,7 +221,7 @@ class Shopware_Controllers_Backend_Store extends Shopware_Controllers_Backend_Ex
         $detailId = $this->Request()->getParam('detail', null);
         $detail = null;
 
-        foreach($product->getDetails() as $productDetail) {
+        foreach ($product->getDetails() as $productDetail) {
             if ($productDetail['id'] === $detailId) {
                 $detail = $productDetail;
                 break;
@@ -351,7 +341,7 @@ class Shopware_Controllers_Backend_Store extends Shopware_Controllers_Backend_Ex
         );
 
         //first we have to check if an request error occurred. This errors will be displayed in a growl message
-        if($orderModel instanceof Shopware_StoreApi_Exception_Response) {
+        if ($orderModel instanceof Shopware_StoreApi_Exception_Response) {
             return array(
                 'success' => false,
                 'source' => 'order',
@@ -363,7 +353,7 @@ class Shopware_Controllers_Backend_Store extends Shopware_Controllers_Backend_Ex
         /**@var $orderModel Shopware_StoreApi_Models_Order*/
         //if the request was successfully but the order process wasn't successfully, the account data are not completed
         //for example: The user hasn't enough credits or the user bought the plugin already.
-        if(!$orderModel->wasSuccessful()) {
+        if (!$orderModel->wasSuccessful()) {
             return array(
                 'success' => false,
                 'displayInWindow' => true,
@@ -513,7 +503,8 @@ class Shopware_Controllers_Backend_Store extends Shopware_Controllers_Backend_Ex
      * Helper function to check if the ion cube loader is loaded
      * @return bool
      */
-    private function isIonCubeLoaderLoaded() {
+    private function isIonCubeLoaderLoaded()
+    {
         return extension_loaded('ionCube Loader');
     }
 
@@ -528,7 +519,7 @@ class Shopware_Controllers_Backend_Store extends Shopware_Controllers_Backend_Ex
     {
         $namespace = Shopware()->Snippets()->getNamespace('backend/plugin_manager/main');
 
-        switch($code) {
+        switch ($code) {
             case Shopware_StoreApi_Exception_Response::ACCESS_FORBIDDEN:
                 $message = $namespace->get('access_forbidden', 'Access prohibited – Token expired or insufficient rights.', true);
                 break;
@@ -704,5 +695,3 @@ class Shopware_Controllers_Backend_Store extends Shopware_Controllers_Backend_Ex
     }
 
 }
-
-

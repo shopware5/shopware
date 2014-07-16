@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,7 @@
  * @category   Shopware
  * @package    Order
  * @subpackage Controller
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author     Stephan Pohl
  * @author     $Author$
@@ -445,7 +445,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Store', {
      * @return void
      */
     onChangeCategory: function(view, record, dom) {
-        var me = this, store = me.subApplication.categoryStore, el = Ext.get(dom), category, communityStore = me.subApplication.communityStore,
+        var me = this, store = me.subApplication.categoryStore, category, communityStore = me.subApplication.communityStore,
             storeView = me.getStoreView(),
             managerSearch = me.getManagerNavigation().searchField,
             storeSearch = me.getStoreNavigation().searchField,
@@ -463,7 +463,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Store', {
         });
 
         // Terminate the category
-        category = el.getAttribute('data-action');
+        category = dom.getAttribute('data-action');
         if(category === 'null') {
             category = null;
             communityStore.pageSize = 6;

@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,50 +19,73 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Analytics
- * @subpackage Week
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 /**
- * todo@all: Documentation
+ * Analytics Week Table
+ *
+ * @category   Shopware
+ * @package    Analytics
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
+ *
  */
 //{namespace name=backend/analytics/view/main}
 //{block name="backend/analytics/view/table/week"}
 Ext.define('Shopware.apps.Analytics.view.table.Week', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-week',
-    shopColumnText: "{s name=table/month/sum}Sales: [0]{/s}",
+    shopColumnText: "{s name=general/turnover}Turnover{/s}: [0]",
 
-    columns: [{
-        xtype: 'datecolumn',
-        dataIndex: 'date',
-        text: '{s name=table/week/week}Week{/s}',
-        format: '\\K\\W W, Y',
-        width: 300
-    }, {
-        xtype: 'numbercolumn',
-        dataIndex: 'amount',
-        text: '{s name=table/week/sales}Sales{/s}',
-        align: 'right',
-        flex: 1
-    }],
-    initComponent: function() {
-       var me = this;
-       me.shopStore.each(function(shop) {
-            me.columns[me.columns.length] = {
+    initComponent: function () {
+        var me = this;
+
+        me.columns = {
+            items: me.getColumns(),
+            defaults: {
+                flex: 1,
+                sortable: false
+            }
+        };
+
+        me.initStoreIndices('turnover', me.shopColumnText, {
+            xtype: 'numbercolumn',
+            renderer: me.currencyRenderer
+
+        });
+
+        me.callParent(arguments);
+    },
+
+    createPagingbar: function() {},
+
+    getColumns: function () {
+        var me = this;
+
+        return [
+            {
+                xtype: 'datecolumn',
+                dataIndex: 'date',
+                text: '{s name=table/week/week}Week{/s}',
+                format: '\\K\\W W, Y'
+            },
+            {
                 xtype: 'numbercolumn',
-                dataIndex: 'amount' + shop.data.id,
-                text: Ext.String.format(me.shopColumnText, shop.data.name),
-                align: 'right'
-            };
-       }, me);
+                dataIndex: 'turnover',
+                text: '{s name=general/turnover}Turnover{/s}',
+                renderer: me.currencyRenderer
+            }
+        ]
+    },
 
-       me.callParent(arguments);
+    currencyRenderer: function(value) {
+        var me = this;
+
+        return Ext.util.Format.currency(
+            value,
+            me.subApp.currencySign,
+            2,
+            (me.subApp.currencyAtEnd == 1)
+        );
     }
 });
 //{/block}

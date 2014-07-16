@@ -163,7 +163,13 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Seo', {
             }
         });
 
+        me.metaTitle = Ext.create('Ext.form.field.Text', {
+            fieldLabel:'{s name=detail/sidebar/seo/field/title}Title{/s}',
+            name:'metaTitle'
+        });
+
         return [
+            me.metaTitle,
             {
                 xtype:'textareafield',
                 fieldLabel:'{s name=detail/sidebar/seo/field/keywords}Keywords{/s}',
@@ -183,7 +189,8 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Seo', {
             xtype:'googlepreview',
             fieldSetTitle: '{s name=detail/sidebar/seo/field_set/preview/title}Preview{/s}',
             viewData: me.detailRecord,
-            titleField: me.mainTitleField,
+            titleField: me.metaTitle,
+            fallBackTitleField: me.mainTitleField,
             descriptionField: me.metaDescription,
             supportText: '{s name=detail/sidebar/seo/field_set/preview/supportText}This preview displayed can differ from the version shown in the search engine.{/s}',
             refreshButtonText: '{s name=detail/sidebar/seo/field_set/preview/generate}Generate Preview{/s}'

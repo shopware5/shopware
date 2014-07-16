@@ -17,6 +17,8 @@ jQuery(document).ready(function($) {
 {if $sArticle.articleID}
     url += '&articleId=' + encodeURI("{$sArticle.articleID}");
 {/if}
+	url = url.replace('https:', '');
+	url = url.replace('http:', '');
     //url += '&x-shopware-nocache=' + (new Date()).getTime();
     $.ajax({ url: url, dataType: 'jsonp'});
 });

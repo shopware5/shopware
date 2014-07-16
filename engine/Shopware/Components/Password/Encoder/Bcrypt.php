@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -27,7 +27,7 @@ namespace Shopware\Components\Password\Encoder;
 /**
  * @category  Shopware
  * @package   Shopware\Components\Password\Encoder
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Bcrypt implements PasswordEncoderInterface
 {
@@ -70,8 +70,6 @@ class Bcrypt implements PasswordEncoderInterface
      */
     public function isPasswordValid($password, $hash)
     {
-        include_once 'PasswordCompat/Password.php';
-
         return password_verify($password, $hash);
     }
 
@@ -81,8 +79,6 @@ class Bcrypt implements PasswordEncoderInterface
      */
     public function encodePassword($password)
     {
-        include_once 'PasswordCompat/Password.php';
-
         return password_hash($password, PASSWORD_DEFAULT, $this->options);
     }
 
@@ -92,8 +88,6 @@ class Bcrypt implements PasswordEncoderInterface
      */
     public function isReencodeNeeded($hash)
     {
-        include_once 'PasswordCompat/Password.php';
-
         return password_needs_rehash($hash, PASSWORD_DEFAULT, $this->options);
     }
 }

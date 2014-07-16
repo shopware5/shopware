@@ -85,7 +85,7 @@ abstract class Enlight_Event_Handler
      */
     public function setPosition($position)
     {
-        $this->position = (int)$position;
+        $this->position = (int) $position;
         return $this;
     }
 

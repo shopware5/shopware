@@ -38,11 +38,13 @@
  */
 //{block name="backend/media_manager/view/album/setting"}
 Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
-	extend: 'Ext.window.Window',
+    extend: 'Enlight.app.SubWindow',
     title: '{s name="albumSettingsTitle"}Album settings{/s}',
     alias: 'widget.mediamanager-album-setting',
     border: false,
     width: 600,
+    height: 450,
+    layout: 'fit',
     autoShow: true,
 
     /**
@@ -160,6 +162,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
         // Form panel which holds off all options
         me.formPanel = Ext.create('Ext.form.Panel', {
             bodyPadding: 20,
+
             defaults: {
                 labelStyle: 'font-weight: 700; text-align: right;'
             },
@@ -246,6 +249,20 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
             }
         });
 
+        me.thumbnailGenerate = Ext.create('Ext.button.Button', {
+            text: '{s name=settings/generateThumbBtn}Generate thumbnails{/s}',
+            margin: '0 0 0 6',
+            scale: 'small',
+            action: 'mediamanager-album-setting-generate-thumbnail',
+            hidden: Ext.isEmpty(me.settings.get('thumbnailSize')),
+            listeners: {
+                scope: me,
+                click: function(){
+                    me.fireEvent('generateThumbnails', me);
+                }
+            }
+        });
+
         me.thumbnailStore = Ext.create('Ext.data.Store',{
             fields: [ 'id', 'index', 'value' ],
             data: me.settings.data.thumbnailSize
@@ -275,7 +292,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
                 xtype: 'container',
                 layout: 'hbox',
                 padding: '0 0 8',
-                items: [ me.thumbnailField, me.thumbnailSubmit ]
+                items: [ me.thumbnailField, me.thumbnailSubmit, me.thumbnailGenerate ]
             },
                 me.thumbnailView
             ]
@@ -317,6 +334,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
                 index: store.count(),
                 value: size
             });
+            me.thumbnailGenerate.show();
         }
         me.thumbnailField.setValue('');
     },
@@ -395,13 +413,19 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
             store = me.thumbnailStore,
             counter = 0;
 
-        store.remove(record);
+        if(store && store.getCount() > 0){
+            store.remove(record);
 
-        // Iterate through each entry to change the index
-        Ext.each(store.data.items, function(item) {
-            item.set('index', counter);
-            counter++;
-        })
+            // Iterate through each entry to change the index
+            Ext.each(store.data.items, function(item) {
+                item.set('index', counter);
+                counter++;
+            });
+        }
+
+        if(counter === 0){
+            me.thumbnailGenerate.hide();
+        }
     }
 });
 //{/block}

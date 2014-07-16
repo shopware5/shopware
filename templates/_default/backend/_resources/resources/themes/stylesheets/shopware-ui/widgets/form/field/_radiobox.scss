@@ -31,8 +31,8 @@
 /** Radiobox style - Normal state */
 td.#{$prefix}form-item-body .#{$prefix}form-radio {
 	@include single-transition(all, 200ms, ease-in);
-	@include box-shadow(transparent 0 0 0);
-	@include border-radius(0);
+	@include reset-box-shadow;
+	@include reset-border-radius;
 	height: 18px;
 	width: 18px;
 	vertical-align: 2px;

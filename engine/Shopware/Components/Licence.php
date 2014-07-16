@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,27 +20,20 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Components
- * @subpackage Licence
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
  * Shopware License Component
- *todo@all: Documentation
  */
 class Shopware_Components_Licence extends Enlight_Class
 {
-    public function __call($method,$arguments){
+    public function __call($method,$arguments)
+    {
         throw new Enlight_Exception("Licence plugin not installed");
     }
 
-    public function __get($property){
+    public function __get($property)
+    {
         throw new Enlight_Exception("Licence plugin not installed");
     }
 }

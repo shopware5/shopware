@@ -29,7 +29,6 @@
  */
 
 //{namespace name=backend/emotion/view/detail}
-
 Ext.define('Shopware.apps.Emotion.view.components.Base', {
     extend: 'Ext.form.Panel',
     bodyBorder: 0,
@@ -90,23 +89,44 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
     },
 
     createFormElements: function() {
-        var me = this, items = [];
+        var me = this, items = [], store, name, fieldLabel, snippet, supportText;
 
         Ext.each(me.getSettings('fields', true), function(item) {
+            name = item.get('name');
+            fieldLabel = item.get('fieldLabel');
+            supportText = item.get('supportText');
+
+            if (me.snippets && me.snippets[name]) {
+                snippet = me.snippets[name];
+
+                if (Ext.isObject(snippet)) {
+                    if (snippet.hasOwnProperty('supportText')) supportText = snippet.supportText;
+                    if (snippet.hasOwnProperty('fieldLabel')) fieldLabel = snippet.fieldLabel;
+                } else {
+                    fieldLabel = snippet;
+                }
+            }
+            
+            store = null;
+            if (item.get('store')) {
+                store = Ext.create(item.get('store'));
+            }
+
             items.push({
                 xtype: item.get('xType'),
                 helpText: item.get('helpText') || '',
-                fieldLabel: item.get('fieldLabel') || '',
+                fieldLabel: fieldLabel || '',
                 fieldId: item.get('id'),
                 valueType: item.get('valueType'),
+                queryMode: 'remote',
                 name: item.get('name') || '',
-                store: item.get('store'),
+                store: store,
                 displayField: item.get('displayField'),
                 valueField: item.get('valueField'),
                 checkedValue: true,
                 uncheckedValue: false,
-                supportText: item.get('supportText') || '',
-                allowBlank: (!item.get('allowBlank') ? true : false),
+                supportText: supportText || '',
+                allowBlank: (item.get('allowBlank') ? true : false),
                 value: item.get('defaultValue') || ''
             });
         });

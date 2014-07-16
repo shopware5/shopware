@@ -1,9 +1,11 @@
 <div class="table_row {if $lastrow} lastrow{/if}">
 
 	{* Reviews *}
-	<div class="rating{if !$sUserLoggedIn} full_length{/if}">
-		<div class="star star{($sBasketItem.sVoteAverange.averange*2)|round}"></div>
-	</div>
+	{if !{config name=VoteDisable}}
+		<div class="rating{if !$sUserLoggedIn} full_length{/if}">
+			<div class="star star{($sBasketItem.sVoteAverange.averange*2)|round}"></div>
+		</div>
+	{/if}
 
 	{* Article informations *}
 	<div class="grid_12">
@@ -27,7 +29,7 @@
 
 		{* Delivery informations *}
 		{if {config name=BASKETSHIPPINGINFO}}
-			<div class="delivery{if !$sUserLoggedIn} full_length{/if}">
+			<div class="delivery{if !$sUserLoggedIn} full_length{/if}{if {config name=VoteDisable}} vote_disabled{/if}"  >
 				{include file="frontend/plugins/index/delivery_informations.tpl" sArticle=$sBasketItem}
 			</div>
 		{/if}
@@ -60,7 +62,7 @@
 							<strong>{se name="NoteUnitPriceContent"}{/se}:</strong> {$sBasketItem.purchaseunit} {$sBasketItem.sUnit.description}
 							{if $sBasketItem.purchaseunit != $sBasketItem}
 								{if $sBasketItem.referenceunit}
-									{$sBasketItem.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s} / {$sBasketItem.referenceunit} {$sBasketItem.sUnit.description}
+									({$sBasketItem.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s} / {$sBasketItem.referenceunit} {$sBasketItem.sUnit.description})
 								{/if}
 							{/if}
 						</p>
@@ -85,7 +87,7 @@
 		{if $sBasketItem.itemInfo}
 			{$sBasketItem.itemInfo}
 		{else}
-			<strong class="price">{$sBasketItem.price|currency}*</strong>
+			<strong class="price">{if $sBasketItem.priceStartingFrom}{s namespace='frontend/listing/box_article' name='ListingBoxArticleStartsAt'}{/s} {/if}{$sBasketItem.price|currency}*</strong>
 		{/if}
 
 		{* Remove article *}

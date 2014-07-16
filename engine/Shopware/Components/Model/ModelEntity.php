@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -29,7 +29,7 @@ namespace Shopware\Components\Model;
  *
  * @category  Shopware
  * @package   Shopware\Components\Model
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 abstract class ModelEntity
 {
@@ -174,6 +174,9 @@ abstract class ModelEntity
         if ($reference !== null) {
             $setterFunction = "set" . ucfirst($reference);
         }
+
+
+
         //to remove the whole one to many association, u can pass null as parameter.
         if ($data === null) {
             $this->$getterFunction()->clear();
@@ -186,6 +189,8 @@ abstract class ModelEntity
 
         //create a new collection to collect all updated and created models.
         $updated = new \Doctrine\Common\Collections\ArrayCollection();
+
+
 
         //iterate all passed items
         foreach ($data as $item) {
@@ -217,7 +222,10 @@ abstract class ModelEntity
             if ($setterFunction !== null) {
                 $attribute->$setterFunction($this);
             }
-            $this->$getterFunction()->add($attribute);
+
+            if (!$this->$getterFunction()->contains($attribute)) {
+                $this->$getterFunction()->add($attribute);
+            }
 
             //add the model to the updated collection to have an flag which models updated.
             $updated->add($attribute);
@@ -309,7 +317,7 @@ abstract class ModelEntity
      */
     private function getArrayCollectionElementById($collection, $id)
     {
-        if (count($collection) === 0) {
+        if ($collection->count() === 0) {
             return null;
         }
 

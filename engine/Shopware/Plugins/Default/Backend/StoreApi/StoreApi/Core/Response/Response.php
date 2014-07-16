@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -42,43 +42,43 @@ class Shopware_StoreApi_Core_Response_Response implements IteratorAggregate
     {
         $this->collection = array();
 
-        foreach($response as $model => $json) {
-            if($decode === true) {
+        foreach ($response as $model => $json) {
+            if ($decode === true) {
                 $responseArray = Zend_Json::decode($json);
             } else {
                 $responseArray = $json;
             }
-            switch($model) {
+            switch ($model) {
                 case self::TYPE_SEARCH_RESULT:
                     $this->collection[] = new Shopware_StoreApi_Core_Response_SearchResult($responseArray);
                 break;
                 case self::TYPE_PRODUCTS:
-                    foreach($responseArray as $responseItem) {
+                    foreach ($responseArray as $responseItem) {
                         $this->collection[] = new Shopware_StoreApi_Models_Product($responseItem);
                     }
                 break;
                 case self::TYPE_CATEGORIES:
-                    foreach($responseArray as $responseItem) {
+                    foreach ($responseArray as $responseItem) {
                         $this->collection[] = new Shopware_StoreApi_Models_Category($responseItem);
                     }
                 break;
                 case self::TYPE_VENDORS:
-                    foreach($responseArray as $responseItem) {
+                    foreach ($responseArray as $responseItem) {
                         $this->collection[] = new Shopware_StoreApi_Models_Vendor($responseItem);
                     }
                 break;
                 case self::TYPE_DOMAINS:
-                    foreach($responseArray as $responseItem) {
+                    foreach ($responseArray as $responseItem) {
                         $this->collection[] = new Shopware_StoreApi_Models_Domain($responseItem);
                     }
                 break;
                 case self::TYPE_LICENCE:
-                    foreach($responseArray as $responseItem) {
+                    foreach ($responseArray as $responseItem) {
                         $this->collection[] = new Shopware_StoreApi_Models_Licence($responseItem);
                     }
                 break;
                 case self::TYPE_FEEDBACK:
-                    foreach($responseArray as $responseItem) {
+                    foreach ($responseArray as $responseItem) {
                         $this->collection[] = new Shopware_StoreApi_Models_Feedback($responseItem);
                     }
                 break;

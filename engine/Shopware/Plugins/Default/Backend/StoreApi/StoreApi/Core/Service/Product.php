@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -43,7 +43,7 @@ class Shopware_StoreApi_Core_Service_Product extends Enlight_Class
         );
         $searchResult = $this->getProducts($productQuery);
 
-        if($searchResult instanceof Shopware_StoreApi_Exception_Response) {
+        if ($searchResult instanceof Shopware_StoreApi_Exception_Response) {
             return $searchResult;
         }
 
@@ -52,7 +52,7 @@ class Shopware_StoreApi_Core_Service_Product extends Enlight_Class
 
     public function getProductRecommendations(Shopware_StoreApi_Models_Product $productModel, $limit = 5)
     {
-        if(!$productModel instanceof Shopware_StoreApi_Models_Product) {
+        if (!$productModel instanceof Shopware_StoreApi_Models_Product) {
             return new Shopware_StoreApi_Exception_Response('The parameter productModel is not instance of Shopware_StoreApi_Models_Product', 10);
         }
 
@@ -61,7 +61,7 @@ class Shopware_StoreApi_Core_Service_Product extends Enlight_Class
 
     public function getProducts(Shopware_StoreApi_Models_Query_Product $productQuery)
     {
-        if(!$productQuery instanceof Shopware_StoreApi_Models_Query_Product) {
+        if (!$productQuery instanceof Shopware_StoreApi_Models_Query_Product) {
             return new Shopware_StoreApi_Exception_Response('The parameter productModel is not instance of Shopware_StoreApi_Models_Query_Product', 10);
         }
 
@@ -76,10 +76,10 @@ class Shopware_StoreApi_Core_Service_Product extends Enlight_Class
 
     public function getProductsGroupByCategories(Shopware_StoreApi_Models_Query_Product $productQuery, Shopware_StoreApi_Models_Query_Category $categoryQuery)
     {
-        if(!$productQuery instanceof Shopware_StoreApi_Models_Query_Product) {
+        if (!$productQuery instanceof Shopware_StoreApi_Models_Query_Product) {
             return new Shopware_StoreApi_Exception_Response('The parameter productModel is not instance of Shopware_StoreApi_Models_Query_Product', 10);
         }
-        if(!$categoryQuery instanceof Shopware_StoreApi_Models_Query_Category) {
+        if (!$categoryQuery instanceof Shopware_StoreApi_Models_Query_Category) {
             return new Shopware_StoreApi_Exception_Response('The parameter productModel is not instance of Shopware_StoreApi_Models_Query_Category', 10);
         }
 
@@ -102,7 +102,7 @@ class Shopware_StoreApi_Core_Service_Product extends Enlight_Class
 
     public function getProductFeedback(Shopware_StoreApi_Models_Product $productModel)
     {
-        if(!$productModel instanceof Shopware_StoreApi_Models_Product) {
+        if (!$productModel instanceof Shopware_StoreApi_Models_Product) {
             return new Shopware_StoreApi_Exception_Response('The parameter productModel is not instance of Shopware_StoreApi_Models_Product', 10);
         }
 
@@ -111,7 +111,7 @@ class Shopware_StoreApi_Core_Service_Product extends Enlight_Class
 
     public function getProductUpdates($plugins)
     {
-        if(!is_array($plugins)) {
+        if (!is_array($plugins)) {
             return new Shopware_StoreApi_Exception_Response('The parameter plugins is not an array', 10);
         }
 
@@ -120,7 +120,7 @@ class Shopware_StoreApi_Core_Service_Product extends Enlight_Class
 
     public function getBannerHighlights($version = null)
     {
-        if(!is_integer($version) && $version != null) {
+        if (!is_integer($version) && $version != null) {
             return new Shopware_StoreApi_Exception_Response('The parameter version is not instance of Integer', 10);
         }
         return $this->gateway->getBannerHighlights($version);
@@ -128,7 +128,7 @@ class Shopware_StoreApi_Core_Service_Product extends Enlight_Class
 
     public function getCategoryHighlights(Shopware_StoreApi_Models_Category $categoryModel)
     {
-        if(!$categoryModel instanceof Shopware_StoreApi_Models_Category) {
+        if (!$categoryModel instanceof Shopware_StoreApi_Models_Category) {
             return new Shopware_StoreApi_Exception_Response('The parameter categoryModel is not instance of Shopware_StoreApi_Models_Category', 10);
         }
 

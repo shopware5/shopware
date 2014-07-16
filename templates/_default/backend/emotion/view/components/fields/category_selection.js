@@ -55,7 +55,6 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.CategorySelection', {
 
         Ext.apply(me, {
             pageSize: 15,
-            queryMode: 'local',
             triggerAction: 'all',
             fieldLabel: me.snippets.fields.category_select,
             valueField: 'id',

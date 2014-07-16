@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,11 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Plugins
- * @subpackage PostFilter
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
 
 /**
  *
  * Shopware Application
- *
- * todo@all: Documentation
  */
 class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -72,8 +63,8 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         $response = $args->getSubject()->Action()->Response();
 
         $headers = $response->getHeaders();
-        foreach($headers as $header) {
-            if($header['name'] == 'Content-Type' && strpos($header['value'], 'application/javascript') === 0) {
+        foreach ($headers as $header) {
+            if ($header['name'] == 'Content-Type' && strpos($header['value'], 'application/javascript') === 0) {
                 $source = $args->getReturn();
 
                 $source = str_replace(array("\r\n", "\r"), "\n", $source);
@@ -228,7 +219,16 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         if (!preg_match('#^[a-z]+:|^\#|^/#', $link)) {
             $link = $this->basePathUrl . $link;
         }
-        if ($this->useSecure && $src[1] != 'a') {
+
+        //check canonical shopware configuration
+        $forceCanonicalHttp = Shopware()->Config()->get('forceCanonicalHttp');
+
+        //check if the current link is a canonical link
+        $isCanonical = (strpos($src[0], 'rel="canonical"') !== false);
+
+        $replaceCanonical = !($isCanonical && $forceCanonicalHttp);
+
+        if ($this->useSecure && $src[1] != 'a' && $replaceCanonical) {
             $link = str_replace('http://' . $this->basePath, 'https://' . $this->basePath, $link);
         }
 
@@ -245,7 +245,7 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
      */
     public static function rewriteLink($link = null, $title = null)
     {
-        if(!isset(self::$shopConfig)) {
+        if (!isset(self::$shopConfig)) {
             self::$shopConfig = Shopware()->Config();
             self::$baseFile = self::$shopConfig->baseFile;
         }

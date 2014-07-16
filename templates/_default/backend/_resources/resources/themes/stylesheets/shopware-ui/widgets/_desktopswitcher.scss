@@ -63,7 +63,7 @@
 
         /** Active style */
         &.active {
-            @include single-box-shadow($font-color, 0, 0, 3px);
+
             background: theme-image($theme, 'btn_desktop-switcher.png') no-repeat;
             font-weight: 700;
             height: 25px;

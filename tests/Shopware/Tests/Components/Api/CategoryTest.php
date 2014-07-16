@@ -208,4 +208,32 @@ class Shopware_Tests_Components_Api_CategoryTest extends Shopware_Tests_Componen
     {
         $this->resource->delete('');
     }
+
+    public function testfindCategoryByPath()
+    {
+        $parts = array(
+            'Deutsch',
+            'Foo' . uniqid(),
+            'Bar' . uniqid(),
+        );
+
+        $path = implode('|', $parts);
+
+        /** @var  \Shopware\Models\Category\Category $category */
+        $category = $this->resource->findCategoryByPath($path);
+        $this->assertEquals(null, $category);
+
+        $category = $this->resource->findCategoryByPath($path, true);
+        $this->resource->flush();
+
+        $this->assertEquals(array_pop($parts), $category->getName());
+        $this->assertEquals(array_pop($parts), $category->getParent()->getName());
+        $this->assertEquals(array_pop($parts), $category->getParent()->getParent()->getName());
+        $this->assertEquals(3, $category->getParent()->getParent()->getId());
+
+        $secondCategory = $this->resource->findCategoryByPath($path, true);
+        $this->resource->flush();
+
+        $this->assertSame($category->getId(), $secondCategory->getId());
+    }
 }

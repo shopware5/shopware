@@ -53,7 +53,7 @@ Ext.define('Shopware.form.PluginPanel',
      * Store which contains the different shops.
      * @object Ext.data.Store
      */
-    shopStore: Ext.create('Shopware.apps.Base.store.Shop'),
+    shopStore: Ext.create('Shopware.apps.Base.store.ShopLanguage'),
 
     /**
      * Store which contains the form elements.
@@ -72,6 +72,25 @@ Ext.define('Shopware.form.PluginPanel',
     _descriptionAdded: false,
 
     /**
+     * String with the error message for when no formId is configured
+     */
+    noFormIdConfiguredErrorText: 'No formId is passed to the component configuration',
+
+    /**
+     * String with the error message for when the form could not be loaded
+     */
+    formNotLoadedErrorText: "The form store couldn't be loaded successfully.",
+
+    snippets: {
+        resetButton: '{s name=form/reset_text}Reset{/s}',
+        saveButton: '{s name=form/save_text}Save{/s}',
+        description: '{s name=form/description_title}Description{/s}',
+        onSaveFormTitle: '{s name=form/message/save_form_title}Save form{/s}',
+        saveFormSuccess: '{s name=form/message/save_form_success}Form „[name]“ has been saved.{/s}',
+        saveFormError: '{s name=form/message/save_form_error}Form „[name]“ could not be saved.{/s}'
+    },
+
+    /**
      * Initiliazes the component, loads the stores and creates the view.
      *
      * @public
@@ -82,7 +101,7 @@ Ext.define('Shopware.form.PluginPanel',
 
         // Check if we're having a plugin form id
         if(!me.formId) {
-            Ext.Error.raise("No formId is passed to the component configuration");
+            Ext.Error.raise(me.noFormIdConfiguredErrorText);
             return false;
         }
 
@@ -123,7 +142,7 @@ Ext.define('Shopware.form.PluginPanel',
 
         // Check the response
         if (success !== true || !records.length) {
-            Ext.Error.raise("The form store couldn't be loaded successfully.");
+            Ext.Error.raise(me.formNotLoadedErrorText);
             return false;
         }
 
@@ -169,11 +188,11 @@ Ext.define('Shopware.form.PluginPanel',
             dock: 'bottom',
             xtype: 'toolbar',
             items: ['->', {
-                text: '{s name=form/reset_text}Reset{/s}',
+                text: me.snippets.resetButton,
                 cls: 'secondary',
                 action: 'reset'
             }, {
-                text: '{s name=form/save_text}Save{/s}',
+                text: me.snippets.saveButton,
                 cls: 'primary',
                 action: 'save'
             }]
@@ -202,7 +221,7 @@ Ext.define('Shopware.form.PluginPanel',
                 items.push({
                     xtype: 'fieldset',
                     margin: 10,
-                    title: '{s name=form/description_title}Description{/s}',
+                    title: me.snippets.description,
                     html: form.get('description')
                 });
 
@@ -216,7 +235,7 @@ Ext.define('Shopware.form.PluginPanel',
             form.getElements().each(function(element) {
                 value = element.getValues().find('shopId', shop.getId());
                 value = element.getValues().getAt(value);
-
+                var initialValue = value;
                 type = element.get('type').toLowerCase();
                 type = 'base-element-' + type;
                 name = 'values[' + shop.get('id') + ']['+ element.get('id') + ']';
@@ -238,7 +257,7 @@ Ext.define('Shopware.form.PluginPanel',
                     }
                 }
 
-                fields.push(Ext.apply({
+                var field = Ext.apply({
                     xtype: type,
                     name: name,
                     elementName: elementName,
@@ -248,7 +267,22 @@ Ext.define('Shopware.form.PluginPanel',
                     emptyText: shop.get('default') ? null : element.get('value'),
                     disabled: !element.get('scope') && !shop.get('default'),
                     allowBlank: !element.get('required') || !shop.get('default')
-                }, options));
+                }, options);
+
+                if (field.xtype == "base-element-boolean" || field.xtype == "base-element-checkbox") {
+                    field = me.convertCheckBoxToComboBox(field, shop, initialValue);
+                }
+                else if ((field.xtype == "base-element-datetime" ||
+                        field.xtype == "base-element-date" ||
+                        field.xtype == "base-element-time") && field.value) {
+
+                    field.value += '+00:00';
+                    field.value = new Date(field.value);
+                    field.value = new Date((field.value.getTime() + (field.value.getTimezoneOffset() * 60 * 1000)));
+                }
+
+                fields.push(field);
+
             });
             if(fields.length > 0) {
                 tabs.push({
@@ -287,6 +321,38 @@ Ext.define('Shopware.form.PluginPanel',
     },
 
     /**
+     * helper method to convert the checkbox to a combobox
+     * this is done to support the not selected values by the customer
+     * cause checkboxes only have two states
+     *
+     * @param { Shopware.apps.Base.view.element.BooleanSelect } field
+     * @param { Shopware.apps.Base.model.Shop } shop
+     * @param { int } initialValue
+     * @returns Shopware.apps.Base.view.element.BooleanSelect
+     */
+    convertCheckBoxToComboBox: function (field, shop, initialValue) {
+        var booleanSelectValue = field.value;
+
+        if (shop.get('id') != 1 && initialValue === undefined) {
+            // set empty string only for foreign shops as a fallback to the default shop
+            // the default shop always got a value
+            booleanSelectValue = '';
+        }
+        else {
+            //cast the value to boolean
+            booleanSelectValue = Boolean(field.value);
+        }
+
+        Ext.apply(field, {
+            xtype: "base-element-boolean-select",
+            value: booleanSelectValue,
+            emptyText: ""
+        });
+
+        return field;
+    },
+
+    /**
      * Event listener method which triggers when the user
      * wants to save the plugin configuraton form.
      *
@@ -320,12 +386,12 @@ Ext.define('Shopware.form.PluginPanel',
 
         form.setDirty();
 
-        var title = '{s name=form/message/save_form_title}Save form{/s}';
+        var title = me.snippets.onSaveFormTitle;
 
         form.store.add(form);
         form.store.sync({
             success :function (records, operation) {
-                var template = new Ext.Template('{s name=form/message/save_form_success}Form „[name]“ has been saved.{/s}'),
+                var template = new Ext.Template(me.snippets.saveFormSuccess),
                     message = template.applyTemplate({
                         name: form.data.label || form.data.name
                     });
@@ -338,7 +404,7 @@ Ext.define('Shopware.form.PluginPanel',
                 }
             },
             failure:function (records, operation) {
-                var template = new Ext.Template('{s name=form/message/save_form_error}Form „[name]“ could not be saved.{/s}'),
+                var template = new Ext.Template(me.snippets.saveFormError),
                     message = template.applyTemplate({
                         name: form.data.label || form.data.name
                     });

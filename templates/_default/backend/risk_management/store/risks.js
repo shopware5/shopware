@@ -55,6 +55,7 @@ Ext.define('Shopware.apps.RiskManagement.store.Risks', {
 
 	data: [
 		{ description: '{s name=risks_store/comboBox/startValue}Please choose{/s}', value: "" },
+        //{block name="backend/risk_management/store/risk/data"}{/block}
 		{ description: '{s name=risks_store/comboBox/orderValueGt}Ordervalue >={/s}', value: 'ORDERVALUEMORE' },
 		{ description: '{s name=risks_store/comboBox/orderValueLt}Ordervalue <={/s}', value: 'ORDERVALUELESS' },
 		{ description: '{s name=risks_store/comboBox/customerGroupIs}Customergroup IS{/s}', value: 'CUSTOMERGROUPIS' },

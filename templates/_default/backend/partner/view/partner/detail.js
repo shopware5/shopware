@@ -250,13 +250,16 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
                 fieldLabel:'{s name=detail_general/field/commission}Commission in %{/s}',
                 xtype:'numberfield',
                 name:'percent',
+                decimalPrecision: 2,
                 maxValue:100,
                 minValue:0,
                 allowBlank:false,
                 hideTrigger:true,
                 keyNavEnabled:false,
                 mouseWheelEnabled:false,
-                required:true
+                required:true,
+                allowDecimals: true,
+                decimalSeparator: '.'
             },
             {
                 xtype:'combobox',

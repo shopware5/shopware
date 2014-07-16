@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -30,7 +30,7 @@
  *
  * @category  Shopware
  * @package   Shopware\Plugins\MarketingAggregate\Components
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Components_TopSeller extends Enlight_Class
 {
@@ -68,7 +68,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
         Shopware()->Db()->query(
             'DELETE FROM s_articles_top_seller_ro WHERE article_id = :articleId',
             array(
-                'articleId' => (int)$articleId
+                'articleId' => (int) $articleId
             )
         );
 
@@ -93,7 +93,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
 
         Shopware()->Db()->query($sql, array(
             'orderTime' => $orderTime->format('Y-m-d 00:00:00'),
-            'articleId' => (int)$articleId
+            'articleId' => (int) $articleId
         ));
     }
 

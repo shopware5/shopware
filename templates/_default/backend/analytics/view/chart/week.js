@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,17 +19,15 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Analytics
- * @subpackage Week
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 /**
- * todo@all: Documentation
+ * Analytics Week Chart
+ *
+ * @category   Shopware
+ * @package    Analytics
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
+ *
  */
 //{namespace name=backend/analytics/view/main}
 //{block name="backend/analytics/view/chart/week"}
@@ -39,81 +37,115 @@ Ext.define('Shopware.apps.Analytics.view.chart.Week', {
     legend: {
         position: 'right'
     },
-    axes: [{
-        type: 'Numeric',
-        minimum: 0,
-        grid: true,
-        position: 'left',
-        fields: ['amount'],
-        title: '{s name=chart/week/titleLeft}Sales{/s}'
-    }, {
-        type: 'Time',
-        position: 'bottom',
-        fields: ['date'],
-        title: '{s name=chart/week/titleBottom}Date{/s}',
-        dateFormat: '\\K\\W W, Y',
-        minorTickSteps : 6,
-        step : [Ext.Date.HOUR, 7*24],
-        label: {
-            rotate: {
-                degrees: 315
+
+    initComponent: function () {
+        var me = this;
+
+        me.axes = [
+            {
+                type: 'Time',
+                position: 'bottom',
+                fields: ['date'],
+                title: '{s name=chart/week/titleBottom}Date{/s}',
+                dateFormat: '\\K\\W W, Y',
+                minorTickSteps: 6,
+                step: [Ext.Date.HOUR, 7 * 24],
+                label: {
+                    rotate: {
+                        degrees: 315
+                    }
+                }
             }
+        ];
+
+        me.series = [];
+
+        if (me.shopSelection != Ext.undefined && me.shopSelection.length > 0) {
+            Ext.each(me.shopSelection, function (shopId) {
+                var shop = me.shopStore.getById(shopId);
+
+                if (!(shop instanceof Ext.data.Model)) {
+                    return true;
+                }
+
+                me.series.push({
+                    type: 'line',
+                    title: shop.data.name,
+                    axis: ['left', 'bottom'],
+                    xField: 'date',
+                    yField: 'turnover' + shop.data.id,
+                    smooth: true,
+                    fill: true,
+                    tips: {
+                        trackMouse: true,
+                        width: 180,
+                        highlight: {
+                            size: 7,
+                            radius: 7
+                        },
+                        height: 60,
+                        renderer: function (storeItem, item) {
+                            var value = Ext.util.Format.currency(
+                                storeItem.get('turnover' + shop.data.id),
+                                me.subApp.currencySign,
+                                2,
+                                (me.subApp.currencyAtEnd == 1)
+                            );
+                            this.setTitle(
+                                Ext.Date.format(storeItem.get('date'), '\\K\\W W, Y') + '<br><br>&nbsp;' +
+                                value
+                            );
+                        }
+                    }
+                });
+            });
+        } else {
+            me.series = [
+                {
+                    type: 'line',
+                    axis: ['left', 'bottom'],
+                    xField: 'date',
+                    yField: 'turnover',
+                    fill: true,
+                    smooth: true,
+                    title: '{s name=general/turnover}Turnover{/s}',
+                    tips: {
+                        trackMouse: true,
+                        width: 180,
+                        height: 45,
+                        layout: 'fit',
+                        items: {
+                            xtype: 'container',
+                            layout: 'hbox',
+                            items: [me.tipChart, me.tipGrid]
+                        },
+                        renderer: function (storeItem) {
+                            var value = Ext.util.Format.currency(
+                                storeItem.get('turnover'),
+                                me.subApp.currencySign,
+                                2,
+                                (me.subApp.currencyAtEnd == 1)
+                            );
+                            this.setTitle(
+                                Ext.Date.format(storeItem.get('date'), '\\K\\W W, Y') + '<br><br>&nbsp;' +
+                                value
+                            )
+
+                        }
+                    }
+                }
+            ];
         }
-    }],
-    initComponent: function() {
-           var me = this;
-           // Initiate stores for handling multiple shop values
-           this.initMultipleShopTipsStores();
 
-           me.series = [{
-               type: 'line',
-               axis : ['left', 'bottom'],
-               xField: 'date',
-               yField: 'amount',
-               fill: true,
-               smooth: true,
-               title: '{s name=chart/month/legendSum}Sum{/s}',
-               tips: {
-                   trackMouse: true,
-                   width: 580,
-                   height: 130,
-                   layout: 'fit',
-                   items: {
-                       xtype: 'container',
-                       layout: 'hbox',
-                       items: [me.tipChart, me.tipGrid]
-                   },
-                   renderer: function(cls, item) {
-                       me.initMultipleShopTipsData(item,this,"W, Y");
-                   }
-               }
-           }];
-
-           me.shopStore.each(function(shop) {
-               me.series[me.series.length] = {
-                   type: 'line',
-                   title: shop.data.name,
-                   axis : ['left', 'bottom'],
-                   xField: 'date',
-                   yField: 'amount' + shop.data.id,
-                   smooth: true,
-                   tips: {
-                      trackMouse: true,
-                      width: 120,
-                      highlight: {
-                           size: 7,
-                           radius: 7
-                      },
-                      height: 60,
-                      renderer: function(storeItem, item) {
-                          this.setTitle(Ext.Date.format(storeItem.get('date'), 'F, Y'));
-                          var sales = Ext.util.Format.currency(storeItem.get('amount'+shop.data.id), shop.data.currencyChar);
-                          this.update(sales);
-                      }
-                   }
-               };
-           }, me);
-           me.callParent(arguments);
+        me.axes.push({
+            type: 'Numeric',
+            minimum: 0,
+            grid: true,
+            position: 'left',
+            fields: me.getAxesFields('turnover'),
+            title: '{s name=general/turnover}Turnover{/s}'
+        });
+        me.callParent(arguments);
 
     }
 });

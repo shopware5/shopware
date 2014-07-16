@@ -51,7 +51,7 @@ class Enlight_Components_Form_Decorator_DtDdWrapper2 extends Zend_Form_Decorator
         $elementName = $this->getElement()->getName();
 
         $dtLabel = $this->getOption('dtLabel');
-        if( null === $dtLabel ) {
+        if (null === $dtLabel) {
             $dtLabel = '';
         }
 

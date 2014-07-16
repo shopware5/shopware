@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,13 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Api
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Benjamin Cremer
  */
 
 use Shopware\Components\Api\Exception as ApiException;
@@ -92,13 +85,13 @@ class Shopware_Controllers_Api_Index extends Shopware_Controllers_Api_Rest
         if ($exception instanceof ApiException\ParameterMissingException) {
             $this->Response()->setHttpResponseCode(400);
 
-            if($exception->getMissingParam() === null) {
+            if ($exception->getMissingParam() === null) {
                 $this->View()->assign(array(
                    'success' => false,
                    'code'    => 400,
                    'message' => 'A required parameter is missing'
                 ));
-            }else{
+            } else {
                 $this->View()->assign(array(
                    'success' => false,
                    'code'    => 400,
@@ -138,6 +131,17 @@ class Shopware_Controllers_Api_Index extends Shopware_Controllers_Api_Rest
                 'success' => false,
                 'message' => 'Validation error',
                 'errors'  => $errors,
+            ));
+
+            return;
+        }
+
+        if ($exception instanceof ApiException\BatchInterfaceNotImplementedException) {
+            $this->Response()->setHttpResponseCode(405);
+            $this->View()->assign(array(
+                'success' => false,
+                'code'    => 405,
+                'message' => 'This resource has no support for batch operations.'
             ));
 
             return;

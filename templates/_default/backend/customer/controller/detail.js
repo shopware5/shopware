@@ -54,6 +54,10 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
      */
     extend:'Ext.app.Controller',
 
+    refs: [
+        { ref: 'detailWindow', selector: 'customer-detail-window' }
+    ],
+
     /**
      * Contains all snippets for the controller
      * @object
@@ -283,6 +287,10 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
      * @return void
      */
     onChangePayment:function (value, container) {
+        var me = this;
+        var window = me.getDetailWindow();
+        var paymentFieldSet = window.down('customer-debit-field-set');
+
         if ( value !== 2 ) {
             container.getEl().fadeOut({
                 opacity:0,
@@ -300,10 +308,19 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
                 duration:500
             });
         }
-        container.down('textfield[alias=account]').allowBlank = (value !== 2);
-        container.down('textfield[alias=holder]').allowBlank = (value !== 2);
-        container.down('textfield[alias=bankName]').allowBlank = (value !== 2);
-        container.down('textfield[alias=bankCode]').allowBlank = (value !== 2);
+
+        if (paymentFieldSet.accountNumberField != Ext.undefined) {
+            paymentFieldSet.accountNumberField.allowBlank = (value !== 2);
+        }
+        if (paymentFieldSet.accountHolderField != Ext.undefined) {
+            paymentFieldSet.accountHolderField.allowBlank = (value !== 2);
+        }
+        if (paymentFieldSet.bankCodeField != Ext.undefined) {
+            paymentFieldSet.bankCodeField.allowBlank = (value !== 2);
+        }
+        if (paymentFieldSet.bankNameField != Ext.undefined) {
+            paymentFieldSet.bankNameField.allowBlank = (value !== 2);
+        }
     },
 
     /**

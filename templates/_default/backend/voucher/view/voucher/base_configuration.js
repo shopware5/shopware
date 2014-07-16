@@ -342,7 +342,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
                 xtype:'datefield',
                 fieldLabel:'{s name=detail_general/field/valid_from}From{/s}',
                 name:'validFrom',
-                format: 'd.m.Y',
+                submitFormat: 'd.m.Y',
                 id:'valid_from_date',
                 vtype:'daterange',
                 endDateField:'valid_to_date'
@@ -351,7 +351,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
                 xtype:'datefield',
                 fieldLabel:'{s name=detail_general/field/valid_to}Till{/s}',
                 name:'validTo',
-                format: 'd.m.Y',
+                submitFormat: 'd.m.Y',
                 id:'valid_to_date',
                 vtype:'daterange',
                 startDateField:'valid_from_date'

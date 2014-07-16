@@ -74,7 +74,6 @@ Ext.define('Shopware.apps.Article.view.category.DropZone', {
      */
     snippets:{
         title: '{s name=category/drop_zone/title}Allocation by drag&drop{/s}',
-        header: '{s name=category/drop_zone/header}At this point you have the opportunity of assigning categories via drag&drop. For this purpose you can drag the requested category from the category tree on the left side to the area located below the text.{/s}',
         text: '{s name=category/drop_zone/text}Assign this category via drag&drop{/s}'
     },
 
@@ -91,7 +90,6 @@ Ext.define('Shopware.apps.Article.view.category.DropZone', {
     initComponent:function () {
         var me = this;
         me.title = me.snippets.title;
-        me.infoText = me.createInfoText();
         me.dropZone = me.createDropZone();
         me.items = [ me.infoText, me.dropZone ];
         me.registerEvents();
@@ -113,20 +111,6 @@ Ext.define('Shopware.apps.Article.view.category.DropZone', {
              */
             'addCategories'
         );
-    },
-
-    /**
-     * Creates the info text which is displayed on top of the drop zone.
-     * @return Ext.container.Container
-     */
-    createInfoText: function() {
-        var me = this;
-
-        return Ext.create('Ext.container.Container', {
-            html: me.snippets.header,
-            padding: 10,
-            cls: Ext.baseCSSPrefix + 'global-notice-text'
-        });
     },
 
     /**

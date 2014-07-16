@@ -7,17 +7,18 @@ if (file_exists($this->DocPath() . 'config_' . $this->Environment() . '.php')) {
     $customConfig = $this->loadConfig($this->DocPath() . 'config.php');
 } elseif (file_exists(__DIR__ . '/Custom.php')) {
     $customConfig = $this->loadConfig(__DIR__ . '/Custom.php');
-}  else {
+} else {
     $customConfig = array();
 }
 
-if(!is_array($customConfig)) {
+if (!is_array($customConfig)) {
     throw new Enlight_Exception('The custom configuration file must return an array.');
 }
 
 // Allow partial override
 $customConfig = array_merge(array(
     'db' => array(),
+    'snippet' => array(),
     'front' => array(),
     'template' => array(),
     'mail' => array(),
@@ -30,12 +31,20 @@ $customConfig = array_merge(array(
     ),
     'hook' => array(),
     'model' => array(),
+    'config' => array(),
     'custom' => array(),
     'backendSession' => array(),
+    'plugins' => array()
 ), $customConfig);
 
 return array_merge($customConfig, array(
     'custom' => $customConfig['custom'],
+    'snippet' => array_merge(array(
+        'readFromDb' => true,
+        'writeToDb' => true,
+        'readFromIni' => false,
+        'writeToIni' => false,
+    ), $customConfig['snippet']),
     'db' => array_merge(array(
         'username' => 'root',
         'password' => '',
@@ -52,6 +61,8 @@ return array_merge($customConfig, array(
         'showException' => true,
         'charset' => 'utf-8'
     ), $customConfig['front']),
+    'config' => array_merge(array(), $customConfig['config']),
+    'plugins' => array_merge(array(), $customConfig['plugins']),
     'template' => array_merge(array(
         'compileCheck' => true,
         'compileLocking' => true,
@@ -60,8 +71,8 @@ return array_merge($customConfig, array(
         'useIncludePath' => true,
         'charset' => 'utf-8',
         'forceCache' => false,
-        'cacheDir' => $this->DocPath('cache_templates_cache'),
-        'compileDir' => $this->DocPath('cache_templates_compile')
+        'cacheDir' => $this->DocPath('cache_templates'),
+        'compileDir' => $this->DocPath('cache_templates')
     ), $customConfig['template']),
     'mail' => array_merge(array(
         'charset' => 'utf-8'
@@ -100,8 +111,8 @@ return array_merge($customConfig, array(
         ), $customConfig['cache']['frontendOptions']),
         'backend' => isset($customConfig['cache']['backend']) ? $customConfig['cache']['backend'] : 'File',
         'backendOptions' => array_merge(array(
-            'hashed_directory_umask' => 0771,
-            'cache_file_umask' => 0644,
+            'hashed_directory_perm' => 0771,
+            'cache_file_perm' => 0644,
             'hashed_directory_level' => ini_get('safe_mode') ? 0 : 3,
             'cache_dir' => $this->DocPath('cache_general'),
             'file_name_prefix' => 'shopware'
@@ -131,33 +142,33 @@ return array_merge($customConfig, array(
     /*
     'cache' => array(
         'backend' => 'Two Levels',
-    	'backendOptions' => array(
-			'slow_backend' => 'File',
-			'slow_backend_options' =>  array(
-				'hashed_directory_umask' => 0771,
-				'cache_file_umask' => 0644,
-				'hashed_directory_level' => 2,
-				'cache_dir' => $this->DocPath('cache_general'),
-				'file_name_prefix' => 'shopware'
-	    	),
-			'fast_backend'  => 'Memcached',
-			'fast_backend_options' => array(
-				'servers' => array(
-					array(
-						'host' => 'localhost',
-						'port' => 11211,
-						'persistent' => true,
-						'weight' => 1,
-						'timeout' => 5,
-						'retry_interval' => 15,
-						'status' => true,
-						'failure_callback' => null
-					)
-				),
-				'compression' => false,
-				'compatibility' => false
-			)
-    	),
+        'backendOptions' => array(
+            'slow_backend' => 'File',
+            'slow_backend_options' =>  array(
+                'hashed_directory_umask' => 0771,
+                'cache_file_umask' => 0644,
+                'hashed_directory_level' => 2,
+                'cache_dir' => $this->DocPath('cache_general'),
+                'file_name_prefix' => 'shopware'
+            ),
+            'fast_backend'  => 'Memcached',
+            'fast_backend_options' => array(
+                'servers' => array(
+                    array(
+                        'host' => 'localhost',
+                        'port' => 11211,
+                        'persistent' => true,
+                        'weight' => 1,
+                        'timeout' => 5,
+                        'retry_interval' => 15,
+                        'status' => true,
+                        'failure_callback' => null
+                    )
+                ),
+                'compression' => false,
+                'compatibility' => false
+            )
+        ),
     ),
     */
     /*

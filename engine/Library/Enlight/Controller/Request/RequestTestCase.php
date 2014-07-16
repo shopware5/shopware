@@ -43,7 +43,7 @@ class Enlight_Controller_Request_RequestTestCase
     protected $_serverParams = array();
 
     /**
-     * Sets GET values method
+     * Set GET values method
      *
      * @param  string|array $spec
      * @param  null|mixed   $value
@@ -54,8 +54,43 @@ class Enlight_Controller_Request_RequestTestCase
         if (!is_array($spec) && $value === null) {
             unset($_GET[$spec]);
             return $this;
+        } elseif (is_array($spec) && empty($spec)) {
+            $_GET = array();
+            return $this;
         }
         return parent::setQuery($spec, $value);
+    }
+
+    /**
+     * Set POST values method
+     *
+     * @param  string|array $spec
+     * @param  null|mixed   $value
+     * @return Zend_Controller_Request_Http
+     */
+    public function setPost($spec, $value = null)
+    {
+        if (!is_array($spec) && $value === null) {
+            unset($_POST[$spec]);
+            return $this;
+        } elseif (is_array($spec) && empty($spec)) {
+            $_POST = array();
+            return $this;
+        }
+
+        return parent::setPost($spec, $value);
+    }
+
+    /**
+     * Set SERVER remote address
+     *
+     * @param string $address
+     * @return Enlight_Controller_Request_RequestHttp
+     */
+    public function setRemoteAddress($address)
+    {
+        $this->setServer('REMOTE_ADDR', $address);
+        return $this;
     }
 
     /**
@@ -96,7 +131,7 @@ class Enlight_Controller_Request_RequestTestCase
      */
     public function setServer($key, $value = null)
     {
-        $this->_serverParams[$key] = $value === null ? null : (string)$value;
+        $this->_serverParams[$key] = $value === null ? null : (string) $value;
         return $this;
     }
 
@@ -131,11 +166,23 @@ class Enlight_Controller_Request_RequestTestCase
     {
         if ($value !== null) {
             $key = $this->_normalizeHeaderName($key);
-            $this->_headers[$key] = (string)$value;
+            $this->_headers[$key] = (string) $value;
         } else {
             unset($this->_headers[$key]);
         }
         $this->setServer('HTTP_' . $key, $value);
+        return $this;
+    }
+
+    /**
+     * Sets the request URI scheme
+     *
+     * @param $value
+     * @return Enlight_Controller_Request_RequestHttp
+     */
+    public function setSecure($value = true)
+    {
+        $_SERVER['HTTPS'] = $value ? 'on' : null;
         return $this;
     }
 }

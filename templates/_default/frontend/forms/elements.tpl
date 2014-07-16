@@ -16,7 +16,7 @@
 				{/if}
 			</div>
 		{/if}
-		
+
 		<div class="supportrequest">
 		    <fieldset>
 		    {foreach from=$sSupport.sElements item=sElement key=sKey}
@@ -34,19 +34,18 @@
 		    {/if}
 		    {/foreach}
 			<div class="captcha">
-				<img src="{url controller='captcha' rand=$rand forceSecure}" alt="" />
-				<input type="hidden" name="sRand"  value="{$rand}" />
+                <div class="captcha-placeholder" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
 				<div class="code">
 					<label>{s name='SupportLabelCaptcha'}{/s}</label>
 					<input type="text" name="sCaptcha" class="{if $sSupport.sErrors.e.sCaptcha} instyle_error{/if}" />
 				</div>
-			</div>	
+			</div>
 		 </fieldset>
-		 
+
 		<p class="requiredfields">{s name='SupportLabelInfoFields'}{/s}</p>
-		
+
 		<div class="space">&nbsp;</div>
-		
+
 		<p class="buttons">
 			<input class="button-right large" type="submit" name="Submit" value="{s name='SupportActionSubmit'}{/s}" />
 		</p>

@@ -78,7 +78,7 @@ class Enlight_Event_EventArgs extends Enlight_Collection_ArrayCollection
      */
     public function setProcessed($processed)
     {
-        $this->_processed = (bool)$processed;
+        $this->_processed = (bool) $processed;
         return $this;
     }
 

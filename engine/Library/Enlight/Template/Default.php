@@ -21,7 +21,7 @@
  * @author     $Author$
  */
 
-require_once('Smarty/Smarty.class.php');
+require_once 'Smarty/Smarty.class.php';
 
 /**
  * The Enlight_Template_Default class is an extension of Smarty_Internal_Template to extend the
@@ -174,7 +174,7 @@ class Enlight_Template_Default extends Smarty_Internal_Template
         if (is_array($cacheId)) {
             $cacheId = implode('|', $cacheId);
         }
-        $this->cache_id = (string)$cacheId;
+        $this->cache_id = (string) $cacheId;
         return $this;
     }
 
@@ -189,7 +189,7 @@ class Enlight_Template_Default extends Smarty_Internal_Template
         if (is_array($cacheId)) {
             $cacheId = implode('|', $cacheId);
         } else {
-            $cacheId = (string)$cacheId;
+            $cacheId = (string) $cacheId;
         }
         if ($this->cache_id === null) {
             $this->cache_id = $cacheId;

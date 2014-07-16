@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,15 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Blog
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @license    http://shopware.de/license
- * @version    $Id$
- * @author     M.Schmaeing
- * @author     $Author$
  */
 
 namespace Shopware\Models\Blog;
@@ -40,8 +31,6 @@ use Shopware\Components\Model\ModelEntity,
 
 /**
  * Shopware Blog Model
- *
- * todo@all: Documentation
  *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_blog")
@@ -142,6 +131,13 @@ class Blog extends ModelEntity
     private $metaDescription;
 
     /**
+     * @var string $metaTitle
+     *
+     * @ORM\Column(name="meta_title", type="string", nullable=true)
+     */
+    private $metaTitle;
+
+    /**
      * INVERSE SIDE
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Tag", mappedBy="blog", orphanRemoval=true)
@@ -151,7 +147,7 @@ class Blog extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Media", mappedBy="blog", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Media", mappedBy="blog", orphanRemoval=true, cascade={"persist"})
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $media;
@@ -168,7 +164,7 @@ class Blog extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Blog", mappedBy="blog", cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Blog", mappedBy="blog", cascade={"persist"})
      * @var \Shopware\Models\Attribute\Blog
      */
     protected $attribute;
@@ -176,7 +172,7 @@ class Blog extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Comment", mappedBy="blog", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Comment", mappedBy="blog", orphanRemoval=true, cascade={"persist"})
      * @var \Doctrine\Common\Collections\ArrayCollection An array of \Shopware\Models\Blog\Comment Objects
      */
     protected $comments;
@@ -530,14 +526,43 @@ class Blog extends ModelEntity
         return $this->setOneToMany($comments, '\Shopware\Models\Blog\Comment', 'comments', 'blog');
     }
 
-
+    /**
+     * returns the author
+     *
+     * @return mixed
+     */
     public function getAuthor()
     {
         return $this->author;
     }
 
+    /**
+     * sets the author
+     *
+     * @param $author
+     */
     public function setAuthor($author)
     {
         $this->author = $author;
+    }
+
+    /**
+     * set the metaTitle
+     *
+     * @param string $metaTitle
+     */
+    public function setMetaTitle($metaTitle)
+    {
+        $this->metaTitle = $metaTitle;
+    }
+
+    /**
+     * returns the metaTitle
+     *
+     * @return string
+     */
+    public function getMetaTitle()
+    {
+        return $this->metaTitle;
     }
 }

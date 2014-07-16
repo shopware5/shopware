@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,17 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Article
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
 
 namespace Shopware\Models\Article\Configurator\Template;
-use Shopware\Components\Model\ModelEntity,
+use Shopware\Components\Model\LazyFetchModelEntity,
     Doctrine\ORM\Mapping AS ORM,
     Symfony\Component\Validator\Constraints as Assert,
     Doctrine\Common\Collections\ArrayCollection;
@@ -39,7 +32,7 @@ use Shopware\Components\Model\ModelEntity,
  * @ORM\Entity
  * @ORM\Table(name="s_article_configurator_template_prices")
  */
-class Price extends ModelEntity
+class Price extends LazyFetchModelEntity
 {
     /**
      * @var integer $id
@@ -123,7 +116,7 @@ class Price extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\TemplatePrice", mappedBy="templatePrice", cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\TemplatePrice", mappedBy="templatePrice", cascade={"persist"})
      * @var \Shopware\Models\Attribute\TemplatePrice
      */
     protected $attribute;
@@ -158,7 +151,7 @@ class Price extends ModelEntity
      */
     public function getCustomerGroup()
     {
-        return $this->customerGroup;
+        return $this->fetchLazy($this->customerGroup, array('key' => $this->customerGroupKey));
     }
 
     /**

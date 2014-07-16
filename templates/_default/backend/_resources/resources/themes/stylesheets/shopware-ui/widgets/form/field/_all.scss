@@ -39,7 +39,6 @@ $input-color: #6c818f;
 	font-weight: bold;
 	color: $font-color;
 	margin-top: 5px;
-	text-shadow: 0 1px 0 #fff;
     font-size: 11px;
 }
 
@@ -77,6 +76,7 @@ $input-color: #6c818f;
 
     /** Help icon - Hover state */
     &:hover { background-position: 0 -17px }
+
 }
 
 /** Basic form item style - Needs to adjust for the different types of form elements */
@@ -88,7 +88,7 @@ td.#{$prefix}form-item-body {
 
 	.#{$prefix}form-field {
 		@include border-radius(3px);
-		@include single-box-shadow(darken(#d4d9dc, 5%), 1px, 1px, 1px, false, true);
+		//@include single-box-shadow(darken(#d4d9dc, 5%), 1px, 1px, 1px, false, true);
 		@include form-item-focus;
 		border-color: #a6b0b7;
 		border-bottom-color: #d9dee2;
@@ -116,6 +116,7 @@ table[id*=hiddenfield] { display: none !important }
 /** Disable the default border around check- and radioboxes */
 td.#{$prefix}form-cb-wrap, td[id^=fieldcontainer] {
 	@include border-radius(0);
+
 	background: transparent;
 }
 

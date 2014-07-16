@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,13 +19,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Index
- * @subpackage View
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 //{namespace name=backend/index/view/widgets}
@@ -42,8 +35,8 @@ Ext.define('Shopware.apps.Index.view.widgets.Sales', {
     title: '{s name=sales/title}Turnover today / yesterday (Sample Data){/s}',
     layout: {
         type: 'vbox',
-        align : 'stretch',
-        pack  : 'start'
+        align: 'stretch',
+        pack: 'start'
     },
 
     /**
@@ -60,24 +53,53 @@ Ext.define('Shopware.apps.Index.view.widgets.Sales', {
         }
     },
 
+    turnoverStore: null,
+
+    height: 225,
+
     /**
      * Initializes the widget.
      *
      * @public
      * @return void
      */
-    initComponent: function() {
+    initComponent: function () {
         var me = this;
 
-        me.items = [ me.createUpperContainer(), me.createLowerContainer() ];
+        me.items = [];
 
-        me.tools = [{
-            type: 'refresh',
-            scope: me,
-            handler: me.refreshView
-        }];
+        me.tools = [
+            {
+                type: 'refresh',
+                scope: me,
+                handler: me.refreshView
+            }
+        ];
 
-        me.createTaskRunner();
+        me.turnoverStore = Ext.create('Ext.data.Store', {
+            model: 'Shopware.apps.Index.model.Turnover',
+            remoteFilter: true,
+            clearOnLoad: false,
+
+            proxy: {
+                type: 'ajax',
+                url: '{url controller="widgets" action="getTurnOverVisitors"}',
+                reader: {
+                    type: 'json',
+                    root: 'data'
+                }
+            }
+        });
+
+        me.turnoverStore.load({
+            callback: function () {
+                me.add(me.createUpperContainer());
+                me.add(me.createLowerContainer());
+
+                me.createTaskRunner();
+            }
+        });
+
         me.callParent(arguments);
     },
 
@@ -88,7 +110,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Sales', {
      * @public
      * @return void
      */
-    createTaskRunner: function() {
+    createTaskRunner: function () {
         var me = this;
 
         me.storeRefreshTask = Ext.TaskManager.start({
@@ -106,15 +128,25 @@ Ext.define('Shopware.apps.Index.view.widgets.Sales', {
      * @public
      * @return void
      */
-    refreshView: function() {
-        var me = this;
+    refreshView: function () {
+        var me = this,
+            reader;
+
+        if (!me.turnoverStore) {
+            return;
+        }
+
+        reader = me.turnoverStore.getProxy().getReader();
+
         me.turnoverStore.load({
-           callback: function() {
-               me.dataView.update([{
-                   conversationRate: me.turnoverStore.getProxy().getReader().rawData.conversion
-               }]);
-           }
-       });
+            callback: function () {
+                me.dataView.update([
+                    {
+                        conversationRate: reader.jsonData.conversion
+                    }
+                ]);
+            }
+        });
     },
 
     /***
@@ -124,27 +156,34 @@ Ext.define('Shopware.apps.Index.view.widgets.Sales', {
      * @public
      * @return [object] Ext.container.Container
      */
-    createUpperContainer: function() {
-		var me = this, data = me.turnoverStore.data.first();
+    createUpperContainer: function () {
+        var me = this,
+            reader = me.turnoverStore.getProxy().getReader();
 
         me.chart = me.createBarChart();
+
         me.dataView = Ext.create('Ext.view.View', {
             tpl: me.createConversationRateTemplate(),
-            data: [{
-                conversationRate: me.turnoverStore.getProxy().getReader().rawData.conversion
-            }],
-            columnWidth: .5
+            data: [
+                {
+                    conversationRate: reader.jsonData.conversion
+                }
+            ],
+            columnWidth: 0.5
         });
-		
-		return Ext.create('Ext.container.Container', {
-			layout: 'column',
+
+        return Ext.create('Ext.container.Container', {
+            layout: 'column',
             flex: 3,
-			items: [{
-				xtype: 'container',
-				columnWidth: .5,
-                items: [ me.chart ]
-			}, me.dataView]
-		});
+            items: [
+                {
+                    xtype: 'container',
+                    columnWidth: 0.5,
+                    items: [ me.chart ]
+                },
+                me.dataView
+            ]
+        });
     },
 
     /**
@@ -155,16 +194,21 @@ Ext.define('Shopware.apps.Index.view.widgets.Sales', {
      * which calculated the conversation rate.
      *
      * @public
-     * @return [object] Ext.XTemplate
+     * @return { object } Ext.XTemplate
      */
-    createConversationRateTemplate: function() {
+    createConversationRateTemplate: function () {
         var me = this;
-	    return new Ext.XTemplate(
-	    	'{literal}<tpl for="."><div class="conversation-rate">',
-	    		'<strong class="title">' + me.snippets.conversation_rate + ':</strong>',
-	    		'<span class="rate">{conversationRate}%</span>',
-	    	'</div></tpl>{/literal}'
-	    );
+
+        return new Ext.XTemplate(
+            '{literal}',
+            '<tpl for=".">',
+                '<div class="conversation-rate">',
+                    '<strong class="title">' + me.snippets.conversation_rate + ':</strong>',
+                    '<span class="rate">{conversationRate}%</span>',
+                '</div>',
+            '</tpl>',
+            '{/literal}'
+        );
     },
 
     /**
@@ -174,10 +218,10 @@ Ext.define('Shopware.apps.Index.view.widgets.Sales', {
      * @param [object] store - Ext.data.JsonStore
      * @return [object] chart - Ext.chart.Chart
      */
-    createBarChart: function() {
+    createBarChart: function () {
         var me = this;
 
-        var chart = Ext.create('Ext.chart.Chart', {
+        return Ext.create('Ext.chart.Chart', {
             xtype: 'chart',
             height: 110,
             listeners: {
@@ -192,81 +236,76 @@ Ext.define('Shopware.apps.Index.view.widgets.Sales', {
                  * @event afterrender
                  * @param [object] chartCmp - Ext.chart.Chart
                  */
-                afterrender: function(chartCmp) {
-
-                    // The timeout is kinda dirty, i know, but there's no way around it...
-                    var timeout = setTimeout(function() {
+                afterrender: function (chartCmp) {
+                    Ext.defer(function () {
                         chartCmp.setWidth(chartCmp.ownerCt.getWidth());
-
-                        clearTimeout(timeout);
-                        timeout = null;
-                    }, 5);
+                    }, 50);
                 }
             },
             animate: true,
             store: me.turnoverStore,
-            axes: [{
-                type: 'Category',
-                hideTitle: true,
-                grid: false,
-                position: 'left',
-                fields: [ 'name' ],
-                label: {
-                    fill: '#77828b',
-                    font: '11px/14px Arial, sans-serif',
-                    align: 'left'
-                }
-            }, {
-                type: 'Numeric',
-                position: 'bottom',
-                hidden: true,
-                grid: false,
-                minimum: 0,
-                fields: [ 'turnover' ]
-            }],
-            series: [{
-                type: 'bar',
-                axis: 'bottom',
-                highlight: false,
-                xField: 'name',
-                yField: [ 'turnover' ],
-
-                onCreateLabel: function(storeItem, item, i) {
-	                var me = this,
-					    surface = me.chart.surface,
-					    group = me.labelsGroup,
-					    config = me.label,
-					    endLabelStyle = Ext.apply({}, config, me.seriesLabelStyle || {});
-
-                    // Changing the font-width and the font color
-					config.font = (i % 2) ? 'normal 12px/16px Arial, sans-serif' : 'bold 12px/16px Arial, sans-serif';
-					config.fill = (i % 2) ? '#475b53' : '#fff';
-					    
-					return surface.add(Ext.apply({
-					    type: 'text',
-					    group: group
-					}, endLabelStyle || {}));
+            axes: [
+                {
+                    type: 'Category',
+                    hideTitle: true,
+                    grid: false,
+                    position: 'left',
+                    fields: [ 'name' ],
+                    label: {
+                        fill: '#77828b',
+                        font: '11px/14px Arial, sans-serif',
+                        align: 'left'
+                    }
                 },
-
-                // Label
-                label: {
-                	display: 'insideEnd',
-                	orientation: 'horizontal',
-                	field: 'turnover',
-                	fill: '#475b53',
-                	font: 'normal 12px/16px Arial, sans-serif',
-                	'text-anchor': 'middle'
-                },
-
-                // Color renderer
-                renderer: function(sprite, record, attr, index) {
-                    return Ext.apply(attr, {
-                        fill: (index % 2) ? 'rgb(19, 190, 123)' : 'rgb(170, 232, 207)'
-                    });
+                {
+                    type: 'Numeric',
+                    position: 'bottom',
+                    hidden: true,
+                    grid: false,
+                    minimum: 0,
+                    fields: [ 'turnover' ]
                 }
-            }]
+            ],
+            series: [
+                {
+                    type: 'bar',
+                    axis: 'bottom',
+                    highlight: false,
+                    xField: 'name',
+                    yField: [ 'turnover' ],
+
+                    onCreateLabel: function (storeItem, item, i) {
+                        var me = this,
+                            surface = me.chart.surface,
+                            group = me.labelsGroup,
+                            config = me.label,
+                            endLabelStyle = Ext.apply({}, config, me.seriesLabelStyle || {});
+
+                        return surface.add(Ext.apply({
+                            type: 'text',
+                            group: group
+                        }, endLabelStyle || {}));
+                    },
+
+                    // Label
+                    label: {
+                        display: 'insideEnd',
+                        orientation: 'horizontal',
+                        field: 'turnover',
+                        fill: '#FFFFFF',
+                        font: 'bold 12px/16px Arial, sans-serif',
+                        'text-anchor': 'middle'
+                    },
+
+                    // Color renderer
+                    renderer: function (sprite, record, attr, index) {
+                        return Ext.apply(attr, {
+                            fill: (index % 2) ? '#2f79b1' : '#77b3e0'
+                        });
+                    }
+                }
+            ]
         });
-        return chart;
     },
 
     /**
@@ -276,7 +315,7 @@ Ext.define('Shopware.apps.Index.view.widgets.Sales', {
      * @public
      * @return [object] Ext.grid.Panel
      */
-    createLowerContainer: function() {
+    createLowerContainer: function () {
         var me = this;
 
         return Ext.create('Ext.grid.Panel', {
@@ -297,34 +336,40 @@ Ext.define('Shopware.apps.Index.view.widgets.Sales', {
      *
      * @return [array] generated columns
      */
-    createColumns: function() {
+    createColumns: function () {
         var me = this;
 
-        return [{
-            dataIndex: 'name',
-            align: 'left',
-            flex: 1
-        },{
-            header: me.snippets.headers.turnover,
-            dataIndex: 'turnover',
-            align: 'right',
-            flex: 1
-        }, {
-            header: me.snippets.headers.orders,
-            align: 'right',
-            dataIndex: 'orders',
-            flex: 1
-        }, {
-            header: me.snippets.headers.new_customers,
-            align: 'right',
-            dataIndex: 'newCustomers',
-            flex: 1
-        }, {
-            header: me.snippets.headers.visitors,
-            align: 'right',
-            dataIndex: 'visitors',
-            flex: 1
-        }];
+        return [
+            {
+                dataIndex: 'name',
+                align: 'left',
+                flex: 1
+            },
+            {
+                header: me.snippets.headers.turnover,
+                dataIndex: 'turnover',
+                align: 'right',
+                flex: 1
+            },
+            {
+                header: me.snippets.headers.orders,
+                align: 'right',
+                dataIndex: 'orders',
+                flex: 1
+            },
+            {
+                header: me.snippets.headers.new_customers,
+                align: 'right',
+                dataIndex: 'newCustomers',
+                flex: 1
+            },
+            {
+                header: me.snippets.headers.visitors,
+                align: 'right',
+                dataIndex: 'visitors',
+                flex: 1
+            }
+        ];
     }
 });
 //{/block}

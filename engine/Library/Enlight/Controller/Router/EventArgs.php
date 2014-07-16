@@ -73,4 +73,3 @@ class Enlight_Controller_Router_EventArgs extends Enlight_Event_EventArgs
         return $this->get('userParams');
     }
 }
-

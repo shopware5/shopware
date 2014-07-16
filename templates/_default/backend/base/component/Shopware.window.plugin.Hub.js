@@ -57,7 +57,7 @@ Ext.define('Shopware.window.plugin.Hud', {
      * Title for the Hub Panel
      * @string
      */
-	hudTitle: 'Elemente-Bibliothek',	// TODO: Use snippet instead
+	hudTitle: 'Elemente-Bibliothek',
 
     /**
      * Height (in pixels) for the Hub Panel
@@ -94,6 +94,15 @@ Ext.define('Shopware.window.plugin.Hud', {
      * @string
      */
     itemSelector: '.x-library-element',
+
+    /**
+     * Translate hudStore error message
+     *
+     * @param config
+     */
+    hudStoreErrorMessage: function(className) {
+        return className + ' needs the property "hudStore" which represents the store used by the hub panel to create the draggable items.';
+    },
 
 	/**
 	 * Applies the user configuration to the default plugin
@@ -134,7 +143,7 @@ Ext.define('Shopware.window.plugin.Hud', {
 
 		// Check if the hudStore is defined
 		if(!me.hudStore || Ext.isEmpty(me.hudStore)) {
-			Ext.Error.raise(me.$className + ' needs the property "hudStore" which represents the store used by the hub panel to create the draggable items.');
+			Ext.Error.raise(me.hudStoreErrorMessage(me.$className));
 			return false;
 		}
 
@@ -251,7 +260,7 @@ Ext.define('Shopware.window.plugin.Hud', {
 			 */
 			getDragData: function(event) {
 				var source = event.getTarget(view.itemSelector, 10), d, element = Ext.get(source),
-                    id;
+                    id, attr, i;
 
                 var proxy = view.dragZone.proxy;
                 if(!proxy.getEl().hasCls(Ext.baseCSSPrefix + 'shopware-dd-proxy')) {
@@ -261,6 +270,17 @@ Ext.define('Shopware.window.plugin.Hud', {
 				if(!source || !element) { return false; }
 
                 id = ~~(1 * element.getAttribute('data-componentId'));
+
+                if(!id) {
+                    for(i in element.dom.attributes) {
+                        attr = element.dom.attributes[i];
+                        if(attr.name == 'data-componentid') {
+                            id = parseInt(attr.value, 10);
+                            break;
+                        }
+                    }
+                }
+
 				d = source.cloneNode(true);
 				d.id = Ext.id();
 

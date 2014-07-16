@@ -26,10 +26,12 @@
 	{/block}
 	
 	{block name='frontend_detail_actions_voucher'}
-	<li class="lastrow">
-		<a href="{$sArticle.linkTellAFriend}" rel="nofollow" title="{s name='DetailLinkVoucher'}{/s}">
-			{se name="DetailLinkVoucher"}{/se}
-		</a>
-	</li>
+		{if {config name=showTellAFriend}}
+			<li class="lastrow">
+				<a href="{$sArticle.linkTellAFriend}" rel="nofollow" title="{s name='DetailLinkVoucher'}{/s}">
+					{se name="DetailLinkVoucher"}{/se}
+				</a>
+			</li>
+		{/if}
 	{/block}
 </ul>

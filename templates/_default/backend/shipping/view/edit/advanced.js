@@ -327,12 +327,12 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
             counter = 0,
             dayNamesParent = Ext.Date.dayNames,
             dayNames = Ext.clone(dayNamesParent),
-            sunday = dayNames.shift()
-        ;
+            sunday = dayNames.shift();
+
         dayNames.push(sunday);
         //add default value
         dayStore.push([0,'{s name=bind_weekday_from_none_value}no selection{/s}']);
-        Ext.each(Ext.Date.dayNames, function(name) {
+        Ext.each(dayNames, function(name) {
             counter++;
             dayStore.push([counter, name]);
         });

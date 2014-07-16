@@ -29,7 +29,9 @@
  */
 //{block name="backend/base/model/element"}
 Ext.define('Shopware.apps.Base.model.Element', {
+
     extend: 'Ext.data.Model',
+
     alternateClassName: 'Shopware.model.Element',
 
     fields: [
@@ -44,9 +46,12 @@ Ext.define('Shopware.apps.Base.model.Element', {
         { name: 'scope', type: 'int' },
         'options'
     ],
+
     associations: [{
-        type: 'hasMany', model: 'Shopware.apps.Base.model.Value',
-        name: 'getValues', associationKey: 'values'
+        type: 'hasMany',
+        model: 'Shopware.apps.Base.model.Value',
+        name: 'getValues',
+        associationKey: 'values'
     }]
 });
 //{/block}

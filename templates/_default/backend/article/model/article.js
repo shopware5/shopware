@@ -56,6 +56,7 @@ Ext.define('Shopware.apps.Article.model.Article', {
         { name: 'name', type: 'string' },
         { name: 'description', type: 'string', useNull: true },
         { name: 'descriptionLong', type: 'string' },
+        { name: 'metaTitle', type: 'string', useNull: true },
         { name: 'keywords', type: 'string', useNull: true },
         { name: 'added', type: 'date', dateFormat: 'd.m.Y' },
         { name: 'changed', type: 'date' },
@@ -102,6 +103,7 @@ Ext.define('Shopware.apps.Article.model.Article', {
     associations: [
         { type: 'hasMany', model: 'Shopware.apps.Article.model.Detail', name: 'getMainDetail', associationKey: 'mainDetail' },
         { type: 'hasMany', model: 'Shopware.apps.Article.model.Category', name: 'getCategory', associationKey: 'categories' },
+        { type: 'hasMany', model: 'Shopware.apps.Article.model.SeoCategory', name: 'getSeoCategories', associationKey: 'seoCategories' },
         { type: 'hasMany', model: 'Shopware.apps.Article.model.Accessory', name: 'getAccessory', associationKey: 'related' },
         { type: 'hasMany', model: 'Shopware.apps.Article.model.Similar', name: 'getSimilar', associationKey: 'similar' },
         { type: 'hasMany', model: 'Shopware.apps.Article.model.Link', name: 'getLink', associationKey: 'links' },

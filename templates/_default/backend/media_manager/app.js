@@ -66,7 +66,7 @@ Ext.define('Shopware.apps.MediaManager', {
      * Required controllers for module (subapplication)
      * @array
      */
-	controllers: [ 'Main', 'Album', 'Media' ],
+	controllers: [ 'Main', 'Album', 'Media', 'Thumbnail' ],
 
     /**
      * Requires models for sub-application
@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.MediaManager', {
      * Required views for this sub-application
      * @array
      */
-    views: [ 'album.Add', 'album.Setting', 'album.Tree', 'main.Selection', 'main.Window', 'media.View', 'media.Grid'],
+    views: [ 'album.Add', 'album.Setting', 'album.Tree', 'main.Selection', 'main.Window', 'media.View', 'media.Grid', 'thumbnail.Main' ],
     /**
      * Required stores for sub-application
      * @array

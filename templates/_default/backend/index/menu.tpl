@@ -7,7 +7,7 @@
                         {$name = null}
                         {if $category->controller}{$name = $category->controller}{/if}
                         {if $category->action && $category->action != 'Index'}{$name = "{$category->controller}/{$category->action}"}{/if}
-                        text: "{if $name}{$category->label|unescape|snippet:$name:'backend/index/view/main'}{else}{$category->label|unescape}{/if}{if $category->shortcut}&nbsp;<span class='shortcut'>({$category->shortcut})</span>{/if}",
+                        text: "{if $name}{$category->label|unescape|snippet:$name:'backend/index/view/main'}{else}{$category->label|unescape}{/if}{if $category->shortcut}&nbsp;<span class='shortcut'>({$category->shortcut|snippet:$name:'backend/index/view/shortcuts'})</span>{/if}",
                         {if $category->controller && $category->action}handler: function() {
                             Shopware.app.Application.addSubApplication({
                                 name: 'Shopware.apps.{$category->controller}',

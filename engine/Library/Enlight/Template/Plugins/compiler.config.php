@@ -54,36 +54,36 @@ class Smarty_Compiler_Config extends Smarty_Internal_CompileBase
     {
         $_attr = $this->getAttributes($compiler, $args);
 
-        if(!Enlight_Application::Instance()->Bootstrap()->hasResource('Config')) {
-            if(!isset($_attr['default'])) {
+        if (!Enlight_Application::Instance()->Bootstrap()->hasResource('Config')) {
+            if (!isset($_attr['default'])) {
                 $_attr['default'] = 'null';
             }
             return '<?php echo ' . $_attr['default'] . '; ?>';
         }
 
-        if(!preg_match('/^([\'"]?)[a-zA-Z0-9]+(\\1)$/', $_attr['name'], $match)) {
+        if (!preg_match('/^([\'"]?)[a-zA-Z0-9]+(\\1)$/', $_attr['name'], $match)) {
             $return = $_attr['name'];
-            if(isset($_attr['default'])) {
+            if (isset($_attr['default'])) {
                 $return .= ', ' . $_attr['default'];
             }
-			if(isset($_attr['namespace'])) {
-            	return '<?php echo Enlight_Application::Instance()->Config()->getByNamespace(' . $_attr['namespace'] . ', ' . $return . '); ?>';                
-            }			
+            if (isset($_attr['namespace'])) {
+                return '<?php echo Enlight_Application::Instance()->Config()->getByNamespace(' . $_attr['namespace'] . ', ' . $return . '); ?>';
+            }
             return '<?php echo Enlight_Application::Instance()->Config()->get(' . $return . '); ?>';
         }
 
         $name = substr($_attr['name'], 1, -1);
-		if(isset($_attr['namespace'])) {
-			$namespace = substr($_attr['namespace'], 1, -1);
-			$value = Enlight_Application::Instance()->Config()->getByNamespace($namespace, $name);
-		} else {
-	        $value = Enlight_Application::Instance()->Config()->get($name);			
-		}
-		
-        if($value !== null) {
+        if (isset($_attr['namespace'])) {
+            $namespace = substr($_attr['namespace'], 1, -1);
+            $value = Enlight_Application::Instance()->Config()->getByNamespace($namespace, $name);
+        } else {
+            $value = Enlight_Application::Instance()->Config()->get($name);
+        }
+
+        if ($value !== null) {
             return '<?php echo ' .  var_export($value, true) . ';?>';
         }
-        if(isset($_attr['default'])) {
+        if (isset($_attr['default'])) {
             return '<?php echo ' .  $_attr['default'] . ';?>';
         }
 

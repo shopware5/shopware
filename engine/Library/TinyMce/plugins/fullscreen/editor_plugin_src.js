@@ -36,14 +36,6 @@
 							DOM.setStyle(DOM.doc.body, 'overflow', ed.getParam('fullscreen_overflow'));
 							DOM.win.scrollTo(ed.getParam('fullscreen_scrollx'), ed.getParam('fullscreen_scrolly'));
 							tinyMCE.settings = tinyMCE.oldSettings; // Restore old settings
-
-                            var timeout = window.setTimeout(function() {
-                                var textAreaEd = tinyMCE.editors[0];
-                                textAreaEd.setContent(content);
-                                textAreaEd.undoManager.add();
-                                clearTimeout(timeout);
-                                timeout = null;
-                            }, 10);
 						}, 10);
 					}
 

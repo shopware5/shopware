@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Blog
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Marcel Schmäing
- * @author     $Author$
  */
 
 use Shopware\Models\Blog\Blog as Blog,
@@ -182,7 +174,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
             $categoryId = (intval($this->Request()->categoryId) == 0) ? 1 : intval($this->Request()->categoryId);
 
             //order data
-            $order = (array)$this->Request()->getParam('sort', array());
+            $order = (array) $this->Request()->getParam('sort', array());
 
             /** @var $filter array */
             $filter = $this->Request()->getParam('filter', array());
@@ -201,8 +193,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
             $data = $dataQuery->getArrayResult();
 
             $this->View()->assign(array('success' => true, 'data' => $data, 'totalCount' => $totalCount));
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'errorMsg' => $e->getMessage()));
         }
     }
@@ -217,7 +208,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
         $node = $this->Request()->getParam('node');
 
         if ($node !== null) {
-            $node = is_numeric($node) ? (int)$node : 1;
+            $node = is_numeric($node) ? (int) $node : 1;
             $filter[] = array('property' => 'c.parentId', 'value' => $node);
         }
 
@@ -227,7 +218,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
         foreach ($data as $key => $category) {
             $data[$key]['text'] = $category['name'];
             $data[$key]['cls'] = 'folder';
-            $data[$key]['childrenCount'] = (int)$category['childrenCount'];
+            $data[$key]['childrenCount'] = (int) $category['childrenCount'];
             $data[$key]['leaf'] = empty($data[$key]['childrenCount']);
             $data[$key]['allowDrag'] = true;
         }
@@ -279,8 +270,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
             $dataQuery = $repository->getBackendDetailQuery($filter);
             $data = $dataQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
             $this->View()->assign(array('success' => true, 'data' => $data));
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
         }
     }
@@ -326,7 +316,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
         $limit = intval($this->Request()->limit);
         $offset = intval($this->Request()->start);
         //order data
-        $order = (array)$this->Request()->getParam('sort', array());
+        $order = (array) $this->Request()->getParam('sort', array());
 
         /** @var $filter array */
         $filter = $this->Request()->getParam('filter', array());
@@ -531,8 +521,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
             }
             $this->getManager()->flush();
             $this->View()->assign(array('success' => true, 'data' => $blogArticleRequestData));
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'errorMsg' => $e->getMessage()));
         }
     }
@@ -554,8 +543,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
             }
             $this->getManager()->flush();
             $this->View()->assign(array('success' => true, 'data' => $blogCommentRequestData));
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'errorMsg' => $e->getMessage()));
         }
     }
@@ -577,8 +565,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
             }
             $this->getManager()->flush();
             $this->View()->assign(array('success' => true, 'data' => $blogCommentRequestData));
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'errorMsg' => $e->getMessage()));
         }
     }

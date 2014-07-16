@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,13 +19,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Index
- * @subpackage View
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 /**
@@ -89,9 +82,10 @@ Ext.define('Shopware.apps.Index.view.Search', {
             checkChangeBuffer: 400,
 			listeners: {
 				scope: me,
-                change:me.onChange,
-                focus: function() {
+                change:me.sendSearchRequest,
+                focus: function(field) {
                     me.addCls(me.focusCls);
+                    me.sendSearchRequest(field);
                 },
                 blur: function() {
 
@@ -138,12 +132,12 @@ Ext.define('Shopware.apps.Index.view.Search', {
     },
 
 	/**
-	 * Event listener which sends the AJAX request and replaces
+	 * This function sends the AJAX request depending by the field parameter and replaces
 	 * the content of the drop down menu
 	 *
 	 * @param (object) field
 	 */
-	onChange: function(field) {
+	sendSearchRequest: function(field) {
 		var value = field.getValue(),
 			me = this;
 

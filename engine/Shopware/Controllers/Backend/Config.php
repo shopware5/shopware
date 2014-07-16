@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Article
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
  * Shopware Config Controller
- *
- * todo@all: Documentation
  */
 class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_ExtJs
 {
@@ -42,32 +32,32 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     public static $repositories = null;
 
-	protected function initAcl()
-	{
-		$this->addAclPermission('getNavigation', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('getForm', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('getList', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('getTableList', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('getValues', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('getTemplateList', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('refreshTemplate', 'read', 'Insufficient Permissions');
-		$this->addAclPermission('previewTemplate', 'read', 'Insufficient Permissions');
+    protected function initAcl()
+    {
+        $this->addAclPermission('getNavigation', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('getForm', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('getList', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('getTableList', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('getValues', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('getTemplateList', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('refreshTemplate', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('previewTemplate', 'read', 'Insufficient Permissions');
 
-		$this->addAclPermission('saveForm', 'update', 'Insufficient Permissions');
-		$this->addAclPermission('saveValues', 'update', 'Insufficient Permissions');
-		$this->addAclPermission('saveTableValues', 'update', 'Insufficient Permissions');
-		$this->addAclPermission('saveTemplate', 'update', 'Insufficient Permissions');
+        $this->addAclPermission('saveForm', 'update', 'Insufficient Permissions');
+        $this->addAclPermission('saveValues', 'update', 'Insufficient Permissions');
+        $this->addAclPermission('saveTableValues', 'update', 'Insufficient Permissions');
+        $this->addAclPermission('saveTemplate', 'update', 'Insufficient Permissions');
 
-		$this->addAclPermission('deleteValues', 'delete', 'Insufficient Permissions');
-		$this->addAclPermission('deleteTableValues', 'delete', 'Insufficient Permissions');
-	}
+        $this->addAclPermission('deleteValues', 'delete', 'Insufficient Permissions');
+        $this->addAclPermission('deleteTableValues', 'delete', 'Insufficient Permissions');
+    }
 
     /**
      * Return the config form navigation
      */
     public function getNavigationAction()
     {
-        $node = (int)$this->Request()->getParam('node');
+        $node = (int) $this->Request()->getParam('node');
         $filter = $this->Request()->getParam('filter');
         $repository = $this->getRepository('form');
 
@@ -127,6 +117,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $user = Shopware()->Auth()->getIdentity();
         /** @var $locale \Shopware\Models\Shop\Locale */
         $locale = $user->locale;
+        $language = $locale->toString();
 
         /** @var $builder \Shopware\Components\Model\QueryBuilder */
         $builder = $repository->createQueryBuilder('form')
@@ -137,19 +128,23 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             ->select(array('form', 'element', 'value', 'elementTranslation', 'formTranslation'))
             ->setParameter("localeId",$locale->getId());
 
-        
-
-        $builder->addOrderBy((array)$this->Request()->getParam('sort', array()))
-            ->addFilter((array)$this->Request()->getParam('filter', array()));
+        $builder->addOrderBy((array) $this->Request()->getParam('sort', array()))
+            ->addFilter((array) $this->Request()->getParam('filter', array()));
 
         $data = $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        foreach($data['elements'] as $elementsKey => $values) {
-            foreach($values['translations'] as $translationsKey => $array) {
-                if($array['label'] !== null) {
-                    $data['elements'][$elementsKey]['label'] = $array['label'];
+        foreach ($data['elements'] as &$values) {
+            foreach ($values['translations'] as $array) {
+                if ($array['label'] !== null) {
+                    $values['label'] = $array['label'];
                 }
             }
+
+            if (!in_array($values['type'], array('select', 'combo'))) {
+                continue;
+            }
+
+            $values['options']['store'] = $this->translateStore($language, $values['options']['store']);
         }
 
         $this->View()->assign(array(
@@ -160,12 +155,62 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     }
 
     /**
+     * Helper function to translate the store of select- and combo-fields
+     * Store value will be replaced by the value in the correct language.
+     * If there is no matching language in array defined, the first array element will be used.
+     * If the store or a value is not an array, it will not be changed.
+     *
+     * Store should be an array like this:
+     *
+     * $store = array(
+     *              array(1, array('de_DE' => 'Auto', 'en_GB' => 'car')),
+     *              array(2, array('de_DE' => 'Hund', 'en_GB' => 'dog')),
+     *              array(3, array('de_DE' => 'Katze', 'en_GB' => 'cat'))
+     *          );
+     *
+     * @param string $language
+     * @param mixed $store
+     */
+    private function translateStore($language, $store)
+    {
+        if (!is_array($store)) {
+            return $store;
+        }
+
+        foreach ($store as &$row) {
+            $value = array_pop($row);
+
+            if (!is_array($value)) {
+                $row[] = $value;
+                continue;
+            }
+
+            if (!array_key_exists($language, $value)) {
+                $row[] = array_shift($value);
+                continue;
+            }
+
+            $row[] = $value[$language];
+        }
+
+        return $store;
+    }
+
+    /**
      * Save values from a config form
      */
     public function saveFormAction()
     {
         $shopRepository = $this->getRepository('shop');
         $elements = $this->Request()->getParam('elements');
+
+        /* @var $defaultShop \Shopware\Models\Shop\Shop */
+        $defaultShop = $shopRepository->getDefault();
+        if ($defaultShop === null) {
+            $this->View()->assign(array('success' => false, 'message' => 'No default shop found. Check your shop configuration'));
+            return;
+        }
+
         foreach ($elements as $elementData) {
             /** @var $element Shopware\Models\Config\Element */
             $element = Shopware()->Models()->find(
@@ -177,19 +222,26 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             }
             $values = array();
             foreach ($elementData['values'] as $valueData) {
+                /* @var $shop \Shopware\Models\Shop\Shop */
                 $shop = $shopRepository->find(
                     $valueData['shopId']
                 );
                 //  Scope not match
-                if (empty($elementData['scope']) && $shop->getId() != 1) {
+                if (empty($elementData['scope']) && $shop->getId() != $defaultShop->getId()) {
                     continue;
                 }
+
+                // Do not save empty checkbox / boolean select values the fallback should be used
+                if (($elementData['type'] == "checkbox" || $elementData['type'] == "boolean") && $valueData['value'] === '') {
+                    continue;
+                }
+
                 // Do not save missing translations
                 if ((!isset($valueData['value']) || $valueData['value'] === '') && !empty($elementData['required'])) {
                     continue;
                 }
                 // Do not save default value
-                if ($valueData['value'] === $elementData['value']) {
+                if ($valueData['value'] === $elementData['value'] && (empty($elementData['scope']) || $shop->getId() == $defaultShop->getId())) {
                     continue;
                 }
                 $value = new Shopware\Models\Config\Value();
@@ -197,9 +249,24 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 $value->setShop($shop);
                 $value->setValue($valueData['value']);
                 $values[$shop->getId()] = $value;
+
+                Shopware()->Config()->offsetSet($element->getName(), $values);
             }
+
+            $values = Shopware()->Events()->filter('Shopware_Controllers_Backend_Config_Before_Save_Config_Element', $values, array(
+                'subject' => $this,
+                'element' => $element,
+                'shop'    => $shop
+            ));
+
             $element->setValues($values);
             Shopware()->Models()->flush($element);
+
+            Shopware()->Events()->notify('Shopware_Controllers_Backend_Config_After_Save_Config_Element', array(
+                'subject' => $this,
+                'element' => $element,
+                'shop'    => $shop
+            ));
         }
 
         $this->View()->assign(array('success' => true));
@@ -267,8 +334,8 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         }
 
         if ($builder !== null) {
-            $builder->addFilter((array)$this->Request()->getParam('filter', array()))
-                ->addOrderBy((array)$this->Request()->getParam('sort', array()));
+            $builder->addFilter((array) $this->Request()->getParam('filter', array()))
+                ->addOrderBy((array) $this->Request()->getParam('sort', array()));
             $builder->setFirstResult($this->Request()->getParam('start'))
                 ->setMaxResults($this->Request()->getParam('limit'));
 
@@ -286,8 +353,11 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     public function getTableListAction()
     {
         $name = $this->Request()->get('name');
+        $limit = intval($this->Request()->get('limit'));
+        $start = intval($this->Request()->get('start'));
         $table = $this->getTable($name);
         $filter = $this->Request()->get('filter');
+        $data = array();
         if (isset($filter[0]['property']) && $filter[0]['property'] == 'name') {
             $search = $filter[0]['value'];
         }
@@ -295,10 +365,22 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             case 'cronJob':
                 $select = Shopware()->Db()->select();
                 $select->from(array('c' => $table));
+                if (isset($search)) {
+                    $select->where(
+                        'c.name LIKE :search OR ' .
+                        'c.action LIKE :search'
+                    );
+                    $select->bind(
+                        array(
+                            'search' => $search
+                        )
+                    );
+                }
+                $select->limit($limit, $start);
                 $data = Shopware()->Db()->fetchAll($select);
                 foreach ($data as $key => &$row) {
                     $row = array(
-                        'id' => (int)$row['id'],
+                        'id' => (int) $row['id'],
                         'name' => $row['name'],
                         'action' => $row['action'],
                         'active' => !empty($row['active']) && !empty($row['end']),
@@ -306,21 +388,28 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                         'data' => !empty($row['data']) ? unserialize($row['data']) : $row['data'],
                         'next' => isset($row['next']) ? new DateTime($row['next']) : $row['next'],
                         'start' => isset($row['start']) ? new DateTime($row['start']) : $row['start'],
-                        'interval' => (int)$row['interval'],
+                        'interval' => (int) $row['interval'],
                         'end' => isset($row['end']) ? new DateTime($row['end']) : $row['end'],
                         'informTemplate' => $row['inform_template'],
                         'informMail' => $row['inform_mail'],
-                        'pluginId' => isset($row['pluginID']) ? (int)$row['pluginID'] : null
+                        'pluginId' => isset($row['pluginID']) ? (int) $row['pluginID'] : null
                     );
                     $row['data'] = !is_string($row['data']) ? var_export($row['data'], true) : $row['data'];
                 }
+                //get the total count
+                $select->reset(Zend_Db_Select::FROM);
+                $select->reset(Zend_Db_Select::LIMIT_COUNT);
+                $select->reset(Zend_Db_Select::LIMIT_OFFSET);
+                $select->from(array('c' => $table), array('count(*) as total'));
+                $totalCount = Shopware()->Db()->fetchOne($select);
+
                 break;
             case 'searchTable':
                 $select = Shopware()->Db()->select();
                 $select->from(array('t' => $table), array(
                     '*', 'name' => 'table'
                 ));
-                if(isset($search)) {
+                if (isset($search)) {
                     $select->where(
                         't.table LIKE :search'
                     );
@@ -331,30 +420,35 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 $data = Shopware()->Db()->fetchAll($select);
                 break;
             case 'searchField':
-                $select = Shopware()->Db()->select();
-                $select->from(array('f' => $table));
-                $select->joinLeft(
-                    array('t' => 's_search_tables'),
-                    't.id=f.tableID',
-                    array('tableId' => 'id', 'table')
-                );
-                if(isset($search)) {
-                    $select->where(
-                        'f.name LIKE :search OR '.
-                        'f.field LIKE :search OR '.
-                        't.table LIKE :search'
-                    );
-                    $select->bind(array(
-                        'search' => $search
-                    ));
+                $sqlParams = array();
+                $sql = 'SELECT SQL_CALC_FOUND_ROWS f.id, f.name, f.relevance, f.field, f.tableId as tableId, t.table
+                        FROM ' . Shopware()->Db()->quoteTableAs($table, 'f') . '
+                        LEFT JOIN s_search_tables t on f.tableID = t.id';
+
+                if (isset($search)) {
+                    $sql .= ' WHERE f.name LIKE :search OR ' .
+                            'f.field LIKE :search OR ' .
+                            't.table LIKE :search';
+                    $sqlParams = array('search' => $search);
                 }
-                $data = Shopware()->Db()->fetchAll($select);
+
+                if (!empty($limit)) {
+                    $sql .= ' Limit ' . Shopware()->Db()->quote($start) . ',' . Shopware()->Db()->quote($limit);
+                }
+
+                $data = Shopware()->Db()->fetchAll($sql, $sqlParams);
+
+                //get the total count
+                $sql = "SELECT FOUND_ROWS()";
+                $totalCount = Shopware()->Db()->fetchOne($sql);
+
                 break;
             default:
                 break;
         }
 
-        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => count($data)));
+        $totalCount = empty($totalCount) ? count($data) : $totalCount;
+        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $totalCount));
     }
 
     /**
@@ -425,7 +519,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 break;
         }
 
-        $builder->addFilter((array)$this->Request()->getParam('filter', array()));
+        $builder->addFilter((array) $this->Request()->getParam('filter', array()));
 
         $query = $builder->getQuery();
         $data = $query->getArrayResult();
@@ -478,7 +572,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
                     $data['discounts'] = $discounts;
                 }
-                if(empty($data["mode"])) {
+                if (empty($data["mode"])) {
                     $data["discount"] = 0;
                 }
                 break;
@@ -867,8 +961,8 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         /** @var $builder \Shopware\Components\Model\QueryBuilder */
         $builder = $repository->createQueryBuilder('template');
 
-        $builder->addFilter((array)$this->Request()->getParam('filter', array()))
-            ->addOrderBy((array)$this->Request()->getParam('sort', array()));
+        $builder->addFilter((array) $this->Request()->getParam('filter', array()))
+            ->addOrderBy((array) $this->Request()->getParam('sort', array()));
         $builder->setFirstResult($this->Request()->getParam('start'))
             ->setMaxResults($this->Request()->getParam('limit'));
 
@@ -931,9 +1025,9 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             $templateData = array();
             $templateFile = $dirInfo->getPathname() . '/info.json';
             if (file_exists($templateFile)) {
-                $templateData = (array)Zend_Json::decode(file_get_contents($templateFile));
+                $templateData = (array) Zend_Json::decode(file_get_contents($templateFile));
             }
-            if(!isset($templateData['version'])) {
+            if (!isset($templateData['version'])) {
                 $templateData['version'] = strpos($dirName, 'emotion_') !== 0 ? 1 : 2;
             }
             if (isset($templateList[$dirName])) {
@@ -1101,27 +1195,27 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $elementModel->setName('Footer');
         $elementModel->setValue(
             '<table style="height: 90px;" border="0" width="100%">
-			<tbody>
-			<tr valign="top">
-			<td style="width: 25%;">
-			<p><span style="font-size: xx-small;">Demo GmbH</span></p>
-			<p><span style="font-size: xx-small;">Steuer-Nr <br />UST-ID: <br />Finanzamt </span><span style="font-size: xx-small;">Musterstadt</span></p>
-			</td>
-			<td style="width: 25%;">
-			<p><span style="font-size: xx-small;">Bankverbindung</span></p>
-			<p><span style="font-size: xx-small;">Sparkasse Musterstadt<br />BLZ: <br />Konto: </span></p>
-			<span style="font-size: xx-small;">aaaa<br /></span></td>
-			<td style="width: 25%;">
-			<p><span style="font-size: xx-small;">AGB<br /></span></p>
-			<p><span style="font-size: xx-small;">Gerichtsstand ist Musterstadt<br />Erf&uuml;llungsort Musterstadt<br />Gelieferte Ware bleibt bis zur vollst&auml;ndigen Bezahlung unser Eigentum</span></p>
-			</td>
-			<td style="width: 25%;">
-			<p><span style="font-size: xx-small;">Gesch&auml;ftsf&uuml;hrer</span></p>
-			<p><span style="font-size: xx-small;">Max Mustermann</span></p>
-			</td>
-			</tr>
-			</tbody>
-			</table>'
+            <tbody>
+            <tr valign="top">
+            <td style="width: 25%;">
+            <p><span style="font-size: xx-small;">Demo GmbH</span></p>
+            <p><span style="font-size: xx-small;">Steuer-Nr <br />UST-ID: <br />Finanzamt </span><span style="font-size: xx-small;">Musterstadt</span></p>
+            </td>
+            <td style="width: 25%;">
+            <p><span style="font-size: xx-small;">Bankverbindung</span></p>
+            <p><span style="font-size: xx-small;">Sparkasse Musterstadt<br />BLZ: <br />Konto: </span></p>
+            <span style="font-size: xx-small;">aaaa<br /></span></td>
+            <td style="width: 25%;">
+            <p><span style="font-size: xx-small;">AGB<br /></span></p>
+            <p><span style="font-size: xx-small;">Gerichtsstand ist Musterstadt<br />Erf&uuml;llungsort Musterstadt<br />Gelieferte Ware bleibt bis zur vollst&auml;ndigen Bezahlung unser Eigentum</span></p>
+            </td>
+            <td style="width: 25%;">
+            <p><span style="font-size: xx-small;">Gesch&auml;ftsf&uuml;hrer</span></p>
+            <p><span style="font-size: xx-small;">Max Mustermann</span></p>
+            </td>
+            </tr>
+            </tbody>
+            </table>'
         );
         $elementModel->setStyle('width: 170mm; position:fixed; bottom:-20mm; height: 15mm;');
         $elementModel->setDocument($model);

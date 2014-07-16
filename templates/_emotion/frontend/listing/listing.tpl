@@ -9,7 +9,7 @@
 				<h3>{se name='ListingInfoFilterSupplier'}{/se} {$sSupplierInfo.name}</h3>
 		        <div class="inner-supplier">
 		            {if $sSupplierInfo.description}
-		                <div class="supplier-desc">
+		                <div id="description" class="supplier-desc">
 		                    {if $sSupplierInfo.image}
 		                        <img src="{$sSupplierInfo.image}" alt="{$sSupplierInfo.name}" name="{$sSupplierInfo.name}" class="right" border="0" title="{$sSupplierInfo.name}" />
 		                    {/if}

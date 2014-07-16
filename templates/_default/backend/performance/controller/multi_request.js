@@ -79,7 +79,8 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
                 emotion: '{url controller="Seo" action="seoEmotion"}',
                 blog: '{url controller="Seo" action="seoBlog"}',
                 statistic: '{url controller="Seo" action="seoStatic"}',
-                content: '{url controller="Seo" action="seoContent"}'
+                content: '{url controller="Seo" action="seoContent"}',
+                supplier: '{url controller="Seo" action="seoSupplier"}'
             },
             batchSize: 100
         },
@@ -158,6 +159,9 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
                 );
                 window.contentProgress.updateProgress(
                     0, Ext.String.format(window.snippets.seo.content, 0, taskConfig.totalCounts.content)
+                );
+                window.supplierProgress.updateProgress(
+                    0, Ext.String.format(window.snippets.seo.supplier, 0, taskConfig.totalCounts.supplier)
                 );
 
                 window.startButton.enable();
@@ -256,6 +260,21 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         };
     },
 
+    getSeoSupplierRequestConfig: function(window) {
+        var me = this;
+
+        return {
+            batchSize: window.batchSizeCombo.getValue(),
+            progress: window.supplierProgress,
+            requestUrl: me.requestConfig.seo.requestUrls.supplier,
+            totalCount: window.taskConfig.totalCounts.supplier * 1,
+            snippet: window.snippets.seo.supplier,
+            params: {
+                shopId: window.shopCombo.getValue()
+            }
+        };
+    },
+
 
     getSeoInitRequestConfig: function(window) {
         var me = this;
@@ -285,6 +304,7 @@ Ext.define('Shopware.apps.Performance.controller.MultiRequest', {
         configs.push(me.getSeoBlogRequestConfig(window));
         configs.push(me.getSeoStatisticRequestConfig(window));
         configs.push(me.getSeoContentRequestConfig(window));
+        configs.push(me.getSeoSupplierRequestConfig(window));
 
         me.runRequest(0, window, null, configs);
 

@@ -106,6 +106,9 @@ abstract class Enlight_Components_Test_TestCase extends PHPUnit_Framework_TestCa
     {
         parent::setUp();
 
+        // Clear entitymanager to prevent weird 'model shop not persisted' errors.
+        Shopware()->Models()->clear();
+
         $this->databaseTester = null;
         if (method_exists($this, 'getSetUpOperation')) {
             $this->getDatabaseTester()->setSetUpOperation($this->getSetUpOperation());
@@ -185,6 +188,8 @@ abstract class Enlight_Components_Test_TestCase extends PHPUnit_Framework_TestCa
     }
 
     /**
+     * @deprecated please use assertCount instead
+     *
      * Asserts that an array has count values.
      *
      * @param int    $count
@@ -197,12 +202,14 @@ abstract class Enlight_Components_Test_TestCase extends PHPUnit_Framework_TestCa
             throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'integer');
         }
 
-        $constraint = new Enlight_Components_Test_Constraint_ArrayCount($count);
+        $constraint = new PHPUnit_Framework_Constraint_Count($count);
 
         self::assertThat($array, $constraint, $message);
     }
 
     /**
+     * @deprecated
+     *
      * Asserts that an array does not have count values.
      *
      * @param int    $count
@@ -215,7 +222,7 @@ abstract class Enlight_Components_Test_TestCase extends PHPUnit_Framework_TestCa
             throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'integer');
         }
 
-        $constraint = new PHPUnit_Framework_Constraint_Not(new Enlight_Components_Test_Constraint_ArrayCount($count));
+        $constraint = new PHPUnit_Framework_Constraint_Not(new PHPUnit_Framework_Constraint_Count($count));
 
         self::assertThat($array, $constraint, $message);
     }

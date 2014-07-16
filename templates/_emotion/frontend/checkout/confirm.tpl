@@ -298,8 +298,10 @@
                 {block name='frontend_checkout_confirm_agb_checkbox'}
                 <div class="agb_accept">
                     {if !{config name='IgnoreAGB'}}
-                    <input type="checkbox" class="left" name="sAGB" id="sAGB" {if $sAGBChecked} checked="checked"{/if} />
+                    	<input type="checkbox" class="left" name="sAGB" id="sAGB" {if $sAGBChecked} checked="checked"{/if} />
                     {/if}
+					{* Additional hidden input for IE11 fix empty post body *}
+					<input type="hidden" name="ieCheckValue" value="42" />
                     <label for="sAGB" class="chklabel modal_open {if $sAGBError}instyle_error{/if}">{s name="ConfirmTerms"}{/s}</label>
                 </div>
                 {/block}

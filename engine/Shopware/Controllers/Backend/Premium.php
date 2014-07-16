@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,14 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Controllers
- * @subpackage Premium
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Patrick Stahl
- * @author     $Author$
  */
 
 /**
@@ -54,11 +46,12 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
      * Helper function to get access to the articleDetail repository.
      * @return \Shopware\Components\Model\ModelRepository
      */
-    private function getArticleDetailRepository() {
-    	if ($this->articleDetailRepository === null) {
-    		$this->articleDetailRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
-    	}
-    	return $this->articleDetailRepository;
+    private function getArticleDetailRepository()
+    {
+        if ($this->articleDetailRepository === null) {
+            $this->articleDetailRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
+        }
+        return $this->articleDetailRepository;
     }
 
     public function initAcl()
@@ -81,12 +74,13 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
         }
     }
 
-	public function getSubShopsAction(){
-		//load shop repository
-		$repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+    public function getSubShopsAction()
+    {
+        //load shop repository
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
 
-		$builder = $repository->createQueryBuilder('shops');
-		$builder->select(array(
+        $builder = $repository->createQueryBuilder('shops');
+        $builder->select(array(
             'shops.id as id',
             'shopLocale.id as locale',
             'category.id as categoryId',
@@ -94,14 +88,14 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
         ));
         $builder->join('shops.category', 'category');
         $builder->leftJoin('shops.locale', 'shopLocale');
-		$query = $builder->getQuery();
+        $query = $builder->getQuery();
 
-		//select all shops as array
-		$data = $query->getArrayResult();
+        //select all shops as array
+        $data = $query->getArrayResult();
 
-		//return the data and total count
-		$this->View()->assign(array('success' => true, 'data' => $data));
-	}
+        //return the data and total count
+        $this->View()->assign(array('success' => true, 'data' => $data));
+    }
 
     /**
      * Function to get all premium-articles and it's name and subshop-name
@@ -110,37 +104,36 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
      */
     public function getPremiumArticlesAction()
     {
-		$this->repository = Shopware()->Models()->Premium();
+        $this->repository = Shopware()->Models()->Premium();
 
-		$start = $this->Request()->get('start');
-		$limit = $this->Request()->get('limit');
+        $start = $this->Request()->get('start');
+        $limit = $this->Request()->get('limit');
 
-		//order data
-		$order = (array)$this->Request()->getParam('sort', array());
+        //order data
+        $order = (array) $this->Request()->getParam('sort', array());
 
-		//If a search-filter is set
-		if ($this->Request()->get('filter')) {
+        //If a search-filter is set
+        if ($this->Request()->get('filter')) {
 
-			//Get the value itself
-			$filter = $this->Request()->get('filter');
-			$filter = $filter[count($filter) - 1];
-			$filterValue = $filter['value'];
+            //Get the value itself
+            $filter = $this->Request()->get('filter');
+            $filter = $filter[count($filter) - 1];
+            $filterValue = $filter['value'];
 
-			$query = $this->repository->getBackendPremiumListQuery($start, $limit, $order, $filterValue);
-			$totalResult = Shopware()->Models()->getQueryCount($query);
-		} else {
-			$query = $this->repository->getBackendPremiumListQuery($start, $limit, $order);
-			$totalResult = Shopware()->Models()->getQueryCount($query);
-		}
+            $query = $this->repository->getBackendPremiumListQuery($start, $limit, $order, $filterValue);
+            $totalResult = Shopware()->Models()->getQueryCount($query);
+        } else {
+            $query = $this->repository->getBackendPremiumListQuery($start, $limit, $order);
+            $totalResult = Shopware()->Models()->getQueryCount($query);
+        }
 
-		try {
-			$data = $query->getArrayResult();
+        try {
+            $data = $query->getArrayResult();
 
-			$this->View()->assign(array("success" => true, 'data' => $data, 'total' => $totalResult));
-		}
-		catch (Exception $e) {
-			$this->View()->assign(array("success" => false, 'errorMsg' => $e->getMessage()));
-		}
+            $this->View()->assign(array("success" => true, 'data' => $data, 'total' => $totalResult));
+        } catch (Exception $e) {
+            $this->View()->assign(array("success" => false, 'errorMsg' => $e->getMessage()));
+        }
     }
 
     /**
@@ -156,16 +149,16 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
         }
 
         $params = $this->Request()->getParams();
-		$params['startPrice'] = str_replace(",", ".", $params['startPrice']);
+        $params['startPrice'] = str_replace(",", ".", $params['startPrice']);
         $premiumModel = new Shopware\Models\Premium\Premium;
 
         try {
-            if(empty($params['orderNumberExport'])){
+            if (empty($params['orderNumberExport'])) {
                 $params['orderNumberExport'] = $params['orderNumber'];
             }
-			if(empty($params['orderNumber'])){
-				throw new Exception("No ordernumber was entered.");
-			}
+            if (empty($params['orderNumber'])) {
+                throw new Exception("No ordernumber was entered.");
+            }
             //Fills the model by using the array $params
             $premiumModel->fromArray($params);
 
@@ -196,8 +189,7 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
             $data = Shopware()->Models()->toArray($premiumModel);
 
             $this->View()->assign(array("success" => true, "data" => $data));
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array("success" => false, 'errorMsg' => $e->getMessage()));
         }
     }
@@ -218,7 +210,7 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
         $premiumModel = Shopware()->Models()->find('Shopware\Models\Premium\Premium', $params['id']);
 
         try {
-            if(empty($params['orderNumberExport'])){
+            if (empty($params['orderNumberExport'])) {
                 $params['orderNumberExport'] = $params['orderNumber'];
             }
             //Replace a comma with a dot
@@ -231,8 +223,7 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
             Shopware()->Models()->flush();
 
             $this->View()->assign(array("success" => true, "data" => $params));
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array("success" => false, 'errorMsg', $e->getMessage()));
         }
     }
@@ -243,39 +234,38 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
      */
     public function deletePremiumArticleAction()
     {
-		try {
-			if (!$this->Request()->isPost()) {
-				$this->View()->assign(array("success" => false, 'errorMsg' => 'Empty Post Request'));
-				return;
-			}
-			$repository = Shopware()->Models()->Premium();
+        try {
+            if (!$this->Request()->isPost()) {
+                $this->View()->assign(array("success" => false, 'errorMsg' => 'Empty Post Request'));
+                return;
+            }
+            $repository = Shopware()->Models()->Premium();
 
-			$params = $this->Request()->getParams();
-			unset($params['module']);
-			unset($params['controller']);
-			unset($params['action']);
-			unset($params['_dc']);
+            $params = $this->Request()->getParams();
+            unset($params['module']);
+            unset($params['controller']);
+            unset($params['action']);
+            unset($params['_dc']);
 
-			if($params[0]){
-				$data = array();
-				foreach($params as $values){
-					$id = $values['id'];
-					$model = $repository->find($id);
-					Shopware()->Models()->remove($model);
-					Shopware()->Models()->flush();
-					$data[] = Shopware()->Models()->toArray($model);
-				}
-			}else{
-				$id = $this->Request()->get('id');
-				$model = $repository->find($id);
+            if ($params[0]) {
+                $data = array();
+                foreach ($params as $values) {
+                    $id = $values['id'];
+                    $model = $repository->find($id);
+                    Shopware()->Models()->remove($model);
+                    Shopware()->Models()->flush();
+                    $data[] = Shopware()->Models()->toArray($model);
+                }
+            } else {
+                $id = $this->Request()->get('id');
+                $model = $repository->find($id);
 
-				Shopware()->Models()->remove($model);
-				Shopware()->Models()->flush();
-				$data = Shopware()->Models()->toArray($model);
-			}
-			$this->View()->assign(array("success" => true, 'data'=>$data));
-        }
-        catch (Exception $e) {
+                Shopware()->Models()->remove($model);
+                Shopware()->Models()->flush();
+                $data = Shopware()->Models()->toArray($model);
+            }
+            $this->View()->assign(array("success" => true, 'data'=>$data));
+        } catch (Exception $e) {
             $this->View()->assign(array("success" => false, 'errorMsg' => $e->getMessage()));
         }
     }

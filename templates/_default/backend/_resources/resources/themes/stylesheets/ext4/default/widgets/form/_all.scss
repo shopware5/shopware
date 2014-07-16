@@ -69,6 +69,7 @@
         display: block;
         padding: 3px 0 0;
         font-size: $form-label-font-size;
+		text-shadow: 0 1px 0 #fff;
         @include no-select;
     }
 

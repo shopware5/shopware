@@ -292,17 +292,27 @@
 
 
         <div class="table grid_16">
-            {include file="frontend/checkout/confirm_header.tpl"}
+			{block name='frontend_checkout_confirm_confirm_head'}
+           		{include file="frontend/checkout/confirm_header.tpl"}
+			{/block}
+
+			{block name='frontend_checkout_confirm_item_before'}{/block}
 
             {* Article items *}
-            {foreach name=basket from=$sBasket.content item=sBasketItem key=key}
-                {block name='frontend_checkout_confirm_item'}
-                {include file='frontend/checkout/confirm_item.tpl'}
-                {/block}
-            {/foreach}
+			{block name='frontend_checkout_confirm_item_outer'}
+				{foreach name=basket from=$sBasket.content item=sBasketItem key=key}
+					{block name='frontend_checkout_confirm_item'}
+						{include file='frontend/checkout/confirm_item.tpl'}
+					{/block}
+				{/foreach}
+			{/block}
+
+			{block name='frontend_checkout_confirm_item_after'}{/block}
 
             {* Table footer *}
-            {include file="frontend/checkout/confirm_footer.tpl"}
+			{block name='frontend_checkout_confirm_confirm_footer'}
+            	{include file="frontend/checkout/confirm_footer.tpl"}
+			{/block}
         </div>
 
         <div class="space">&nbsp;</div>
@@ -358,8 +368,10 @@
                 {block name='frontend_checkout_confirm_agb_checkbox'}
                 <div class="agb_accept">
                     {if !{config name='IgnoreAGB'}}
-                    <input type="checkbox" class="left" name="sAGB" id="sAGB" {if $sAGBChecked} checked="checked"{/if} />
+                    	<input type="checkbox" class="left" name="sAGB" id="sAGB" {if $sAGBChecked} checked="checked"{/if} />
                     {/if}
+                    {* Additional hidden input for IE11 fix empty post body *}
+					<input type="hidden" name="ieCheckValue" value="42" />
                     <label for="sAGB" class="chklabel modal_open {if $sAGBError}instyle_error{/if}">{s name="ConfirmTerms"}{/s}</label>
                 </div>
                 {/block}

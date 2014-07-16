@@ -34,6 +34,14 @@ Ext.define('Shopware.apps.Emotion.view.components.Blog', {
     extend: 'Shopware.apps.Emotion.view.components.Base',
     alias: 'widget.emotion-components-blog',
 
+    snippets: {
+        entry_amount: '{s name=entry_amount}Number of entries{/s}',
+        thumbnail_size: {
+            fieldLabel: '{s name=thumbnail_size}Thumbnail size{/s}',
+            supportText: '{s name=thumbnail_size_support}Thumbnail number that should be used. In the standard you have 0-3 available.{/s}'
+        }
+    },
+
     /**
      * Initiliaze the component.
      *

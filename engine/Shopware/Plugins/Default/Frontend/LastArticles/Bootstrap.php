@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Plugins
- * @subpackage LastArticles
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
  * Shopware LastArticles Plugin
- *
- * todo@all: Documentation
  */
 class Shopware_Plugins_Frontend_LastArticles_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -48,7 +38,6 @@ class Shopware_Plugins_Frontend_LastArticles_Bootstrap extends Shopware_Componen
             'Enlight_Controller_Action_PostDispatch',
             'onPostDispatch'
         );
-
         $form = $this->Form();
         $parent = $this->Forms()->findOneBy(array('name' => 'Frontend'));
         $form->setParent($parent);
@@ -67,11 +56,40 @@ class Shopware_Plugins_Frontend_LastArticles_Bootstrap extends Shopware_Componen
             'value' => 2,
             'scope' => Shopware\Models\Config\Element::SCOPE_SHOP
         ));
+        $form->setElement('number', 'lastarticlestoshow', array(
+            'label' => 'Anzahl Artikel in Verlauf (zuletzt angeschaut)',
+            'value' => 5
+        ));
         $form->setElement('number', 'time', array(
             'label' => 'Speicherfrist in Tagen',
             'value' => 15
         ));
 
+        $this->addFormTranslations(
+            array(
+                'en_GB' => array(
+                    'plugin_form' => array(
+                        'label' => 'Recently viewed items'
+                    ),
+                    'show' => array(
+                        'label' => 'Display recently viewed items'
+                    ),
+                    'controller' => array(
+                        'label' => 'Controller selection'
+                    ),
+                    'thumb' => array(
+                        'label' => 'Thumbnail size',
+                        'description' => 'Index of the thumbnail size of the associated album to use. Starts at 0'
+                    ),
+                    'lastarticlestoshow' => array(
+                        'label' => 'Maximum number of items to display'
+                    ),
+                    'time' => array(
+                        'label' => 'Storage period in days'
+                    )
+                )
+            )
+        );
         return true;
     }
 
@@ -114,11 +132,11 @@ class Shopware_Plugins_Frontend_LastArticles_Bootstrap extends Shopware_Componen
             && !Shopware()->Session()->Bot
             && Shopware()->Shop()->getTemplate()->getVersion() == 1
         ) {
-            $this->setLastArticle($view->sArticle);
+            $this->setLastArticleById($view->sArticle["articleID"]);
         }
 
         if (rand(0, 100) === 0) {
-            $time = $config->time > 0 ? (int)$config->time : 15;
+            $time = $config->time > 0 ? (int) $config->time : 15;
             $sql = '
                 DELETE FROM s_emarketing_lastarticles
                 WHERE time < DATE_SUB(CONCAT(CURDATE(), ?), INTERVAL ? DAY)
@@ -143,35 +161,68 @@ class Shopware_Plugins_Frontend_LastArticles_Bootstrap extends Shopware_Componen
     }
 
     /**
+     * Creates a new s_emarketing_lastarticles entry for the passed article id.
+     *
      * @param int $articleId
+     * @return \Zend_Db_Statement_Pdo
      */
     public function setLastArticleById($articleId)
     {
-        $articleId = (int) $articleId;
-        /** @var $module \sArticles */
-        $module = Shopware()->Modules()->Articles();
-        $article = array(
-            'articleID' => $articleId,
-            'image' => $module->sGetArticlePictures($articleId, true),
-            'articleName' => $module->sGetArticleNameByArticleId($articleId)
-        );
-        $this->setLastArticle($article);
+        $article = $this->getArticleData((int) $articleId);
+
+        Shopware()->Session()->sLastArticle = $articleId;
+        $sessionId = Shopware()->SessionID();
+
+        if (empty($sessionId) || empty($article['articleName']) || empty($articleId)) {
+            return;
+        }
+
+        Shopware()->Events()->notify('Shopware_Modules_Articles_Before_SetLastArticle', array(
+            'subject'   => Shopware()->Modules()->Articles(),
+            'article'   => $articleId
+        ));
+
+        return Shopware()->Db()->query('
+            INSERT INTO s_emarketing_lastarticles
+                (img, name, articleID, sessionID, time, userID, shopID)
+            VALUES
+                (?, ?, ?, ?, NOW(), ?, ?)
+            ON DUPLICATE KEY UPDATE time=NOW(), userID=VALUES(userID)
+        ', array(
+            (string) $article['image'],
+            (string) $article['articleName'],
+            $articleId,
+            $sessionId,
+            (int) Shopware()->Session()->sUserId,
+            (int) Shopware()->Shop()->getId()
+        ));
     }
 
     /**
-     * @param array $article
+     * Helper function which returns a data array with the article id,
+     * name and preview image.
+     *
+     * @param $id
+     * @return array
      */
-    public function setLastArticle($article)
+    protected function getArticleData($id)
     {
-        $config = $this->Config();
-        $thumb = $config->thumb !== null ? (int)$config->thumb : (int)Shopware()->Config()->lastArticlesThumb;
+        $images = Shopware()->Modules()->Articles()->sGetArticlePictures($id, true);
 
-        Shopware()->Modules()->Articles()->sSetLastArticle(
-            isset($article['image']['src'][$thumb]) ? $article['image']['src'][$thumb] : null,
-            $article['articleName'],
-            $article['articleID']
+        $size = $this->Config()->thumb;
+        if (!$size) {
+            $size = Shopware()->Config()->lastArticlesThumb;
+        }
+        $image = null;
+
+        if (isset($images['src'][$size])) {
+            $image = $images['src'][$size];
+        }
+
+        return array(
+            'articleID' => $id,
+            'image' => $image,
+            'articleName' => Shopware()->Modules()->Articles()->sGetArticleNameByArticleId($id)
         );
-
-        Shopware()->Session()->sLastArticle = $article['articleID'];
     }
 }

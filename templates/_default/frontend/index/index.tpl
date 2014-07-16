@@ -13,7 +13,9 @@
 {block name="frontend_index_doctype"}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 {/block}
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
+{block name='frontend_index_html'}
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{s name='IndexXmlLang'}de{/s}">
+{/block}
 {block name='frontend_index_header'}
 {include file='./frontend/index/header.tpl'}
 {/block}

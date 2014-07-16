@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -56,12 +56,11 @@ class Shopware_Components_StoreApi extends Enlight_Class
     protected function startClient()
     {
         $storeApiUrl = Shopware()->Plugins()->Backend()->StoreApi()->Config()->StoreApiUrl;
-        //@todo: Fix of the plugin configuration
-//        $storeApiUrl = 'http://store.shopware-preview.de/StoreApi';
-        if(empty($storeApiUrl)) {
+        if (empty($storeApiUrl)) {
             throw new Shopware_StoreApi_Exception_Exception('there is no store api url configured');
         }
 
+        $this->client->setConfig($this->Config());
         $this->client->startClient($storeApiUrl);
     }
 
@@ -70,7 +69,7 @@ class Shopware_Components_StoreApi extends Enlight_Class
      */
     public function getProductService()
     {
-        if($this->productService === null) {
+        if ($this->productService === null) {
             $this->productService = new Shopware_StoreApi_Core_Service_Product();
         }
 
@@ -82,7 +81,7 @@ class Shopware_Components_StoreApi extends Enlight_Class
      */
     public function getCategoryService()
     {
-        if($this->categoryService === null) {
+        if ($this->categoryService === null) {
             $this->categoryService = new Shopware_StoreApi_Core_Service_Category();
         }
 
@@ -91,7 +90,7 @@ class Shopware_Components_StoreApi extends Enlight_Class
 
     public function getVendorService()
     {
-        if($this->vendorService === null) {
+        if ($this->vendorService === null) {
             $this->vendorService = new Shopware_StoreApi_Core_Service_Vendor();
         }
 
@@ -100,7 +99,7 @@ class Shopware_Components_StoreApi extends Enlight_Class
 
     public function getAuthService()
     {
-        if($this->authService === null) {
+        if ($this->authService === null) {
             $this->authService = new Shopware_StoreApi_Core_Service_Auth();
         }
 
@@ -109,7 +108,7 @@ class Shopware_Components_StoreApi extends Enlight_Class
 
     public function getAccountService()
     {
-        if($this->accountService === null) {
+        if ($this->accountService === null) {
             $this->accountService = new Shopware_StoreApi_Core_Service_Account();
         }
 
@@ -118,7 +117,7 @@ class Shopware_Components_StoreApi extends Enlight_Class
 
     public function getOrderService()
     {
-        if($this->orderService === null) {
+        if ($this->orderService === null) {
             $this->orderService = new Shopware_StoreApi_Core_Service_Order();
         }
 
@@ -127,7 +126,7 @@ class Shopware_Components_StoreApi extends Enlight_Class
 
     public function Config()
     {
-        if($this->config === null) {
+        if ($this->config === null) {
             $this->config = new Shopware_Components_StoreConfig();
         }
 

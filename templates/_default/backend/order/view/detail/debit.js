@@ -82,6 +82,18 @@ Ext.define('Shopware.apps.Order.view.detail.Debit', {
 
         me.title = me.snippets.title;
 
+        me.items = me.createItems();
+
+        me.callParent(arguments);
+
+        if ( me.record.get('paymentId') !== 2 ) {
+            me.fieldContainer.hide();
+        }
+    },
+
+    createItems: function() {
+        var me = this;
+
         me.topContainer = Ext.create('Ext.container.Container', {
             layout: 'anchor',
             items:me.createTopElements()
@@ -92,14 +104,9 @@ Ext.define('Shopware.apps.Order.view.detail.Debit', {
             defaults: { columnWidth: .5 },
             items:me.createDebitForm()
         });
+        me.debitContainer = me.fieldContainer;
 
-        me.items = [ me.topContainer, me.fieldContainer ];
-
-        me.callParent(arguments);
-
-        if ( me.record.get('paymentId') !== 2 ) {
-            me.fieldContainer.hide();
-        }
+        return [ me.topContainer, me.fieldContainer ];
     },
 
     /**
@@ -129,8 +136,13 @@ Ext.define('Shopware.apps.Order.view.detail.Debit', {
      * @return [Array] Container which contains the payment combo box
      */
     createTopElements:function () {
+        return [ this.createPaymentCombo() ];
+    },
+
+    createPaymentCombo: function() {
         var me = this;
-        return [{
+
+        me.paymentCombo = Ext.create('Ext.form.field.ComboBox', {
             name:'paymentId',
             triggerAction:'all',
             fieldLabel:me.snippets.payment,
@@ -139,19 +151,61 @@ Ext.define('Shopware.apps.Order.view.detail.Debit', {
             displayField:'description',
             allowBlank:false,
             required:true,
-            anchor:'100%',
+            anchor:'97.5%',
             labelWidth: 120,
             minWidth:250,
             labelStyle: 'font-weight: 700;',
             editable:false,
-            xtype:'combobox',
             queryMode: 'local',
-            listeners:{
+            tpl: Ext.create('Ext.XTemplate',
+                '<tpl for=".">',
+                '<tpl if="this.doHighlight(id)">',
+                '<div class="x-boundlist-item" style="background-color:#F2DEDE; color: #A94442">{literal}{description}{/literal}</div>',
+                '<tpl else>',
+                '<div class="x-boundlist-item">{literal}{description}{/literal}</div>',
+                '</tpl>',
+                '</tpl>',
+                {
+                    doHighlight: function (id) {
+                        //highlight all inactive payment methods of the bound list
+                        var record = me.paymentCombo.getStore().findRecord('id', id);
+                        return !record.get('active');
+                    }
+                }
+            ),
+            listeners: {
+                afterrender: function(field) {
+                    //initial call
+                    me.highlightPaymentComboBox(field);
+                    this.on('change', function(field) {
+                        me.highlightPaymentComboBox(field);
+                    });
+                },
                 change:function (field, newValue) {
                     me.fireEvent('changePayment', newValue, me.fieldContainer);
                 }
             }
-        }];
+        });
+
+        return me.paymentCombo;
+    },
+
+    /**
+     * highlights the inactive payment methods of the payment comboBox
+     *
+     * @param field
+     */
+    highlightPaymentComboBox: function (field) {
+        var store = field.getStore();
+            var selectedRecord = store.findRecord('id', field.getValue()),
+            input = Ext.get(field.getEl().down('.x-form-field'));
+
+        if (!selectedRecord.get('active')) {
+            input.setStyle({ 'color': '#A94442', 'background': '#F2DEDE' });
+        }
+        else {
+            input.setStyle({ 'background': '', 'color': '' });
+        }
     },
 
     /**

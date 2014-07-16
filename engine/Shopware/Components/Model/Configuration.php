@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Model;
 
+use Doctrine\Common\Proxy\AbstractProxyFactory;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration as BaseConfiguration;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\CachedReader;
@@ -35,7 +37,7 @@ use Doctrine\Common\Cache\XcacheCache;
 /**
  * @category  Shopware
  * @package   Shopware\Components\Model
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Configuration extends BaseConfiguration
 {
@@ -54,17 +56,23 @@ class Configuration extends BaseConfiguration
     protected $fileCacheDir;
 
     /**
-     * @param $options
+     * @param array $options
+     * @param \Zend_Cache_Core $cache
+     * @param \Enlight_Hook_HookManager $hookManager
      */
-    public function __construct($options)
+    public function __construct($options, \Zend_Cache_Core $cache, \Enlight_Hook_HookManager $hookManager)
     {
+        $this->setHookManager($hookManager);
+
         // Specifies the FQCN of a subclass of the EntityRepository.
         // That will be available for all entities without a custom repository class.
         $this->setDefaultRepositoryClassName('Shopware\Components\Model\ModelRepository');
 
         $this->setProxyDir($options['proxyDir']);
         $this->setProxyNamespace($options['proxyNamespace']);
-        $this->setAutoGenerateProxyClasses(!empty($options['autoGenerateProxyClasses']));
+
+
+        $this->setAutoGenerateProxyClasses(AbstractProxyFactory::AUTOGENERATE_FILE_NOT_EXISTS);
 
         $this->setAttributeDir($options['attributeDir']);
         $this->setFileCacheDir($options['fileCacheDir']);
@@ -72,11 +80,19 @@ class Configuration extends BaseConfiguration
         $this->addEntityNamespace('Shopware', 'Shopware\Models');
         $this->addEntityNamespace('Custom', 'Shopware\CustomModels');
 
+        Type::overrideType('datetime', 'Shopware\Components\Model\DBAL\Types\DateTimeStringType');
+        Type::overrideType('date', 'Shopware\Components\Model\DBAL\Types\DateStringType');
+        Type::overrideType('array', 'Shopware\Components\Model\DBAL\Types\AllowInvalidArrayType');
+
         $this->addCustomStringFunction('DATE_FORMAT', 'Shopware\Components\Model\Query\Mysql\DateFormat');
         $this->addCustomStringFunction('IFNULL', 'Shopware\Components\Model\Query\Mysql\IfNull');
 
         if (isset($options['cacheProvider'])) {
             $this->setCacheProvider($options['cacheProvider']);
+        }
+
+        if ($this->getMetadataCacheImpl() === null) {
+            $this->setCacheResource($cache);
         }
     }
 
@@ -263,7 +279,14 @@ class Configuration extends BaseConfiguration
             throw new \InvalidArgumentException(sprintf('The directory "%s" is not writable.', $dir));
         }
 
-        $dir = rtrim(realpath($dir), '\\/') . DIRECTORY_SEPARATOR;
+        $dir = rtrim(realpath($dir), '\\/') . DIRECTORY_SEPARATOR . \Shopware::REVISION;
+        if (!is_dir($dir)) {
+            mkdir($dir, 0775);
+        }
+
+        if (!is_writable($dir)) {
+            throw new \InvalidArgumentException(sprintf('The directory "%s" is not writable.', $dir));
+        }
 
         parent::setProxyDir($dir);
     }

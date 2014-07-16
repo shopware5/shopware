@@ -42,7 +42,16 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerSlider', {
         'banner_administration': '{s name=banner_administration}Banner administration{/s}',
         'path': '{s name=path}Image path{/s}',
         'actions': '{s name=actions}Action(s){/s}',
-        'link': '{s name=link}Link{/s}'
+        'link': '{s name=link}Link{/s}',
+        'altText': '{s name=altText}Alternative text{/s}',
+        'title': '{s name=title}Title{/s}',
+
+        banner_slider_title: '{s name=banner_slider_title}Title{/s}',
+        banner_slider_arrows: '{s name=banner_slider_arrows}Display arrows{/s}',
+        banner_slider_numbers: '{s name=banner_slider_numbers}Display numbers{/s}',
+        banner_slider_scrollspeed: '{s name=banner_slider_scrollspeed}Scroll speed{/s}',
+        banner_slider_rotation: '{s name=banner_slider_rotation}Rotate automatically{/s}',
+        banner_slider_rotatespeed: '{s name=banner_slider_rotatespeed}Rotation speed{/s}'
     },
 
     /**
@@ -100,7 +109,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerSlider', {
         });
 
         me.bannerStore = Ext.create('Ext.data.Store', {
-            fields: [ 'position', 'path', 'link', 'mediaId' ]
+            fields: [ 'position', 'path', 'link', 'altText', 'title', 'mediaId' ]
         });
 
         me.ddGridPlugin = Ext.create('Ext.grid.plugin.DragDrop');
@@ -166,6 +175,22 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerSlider', {
                 allowBlank: true
             }
         }, {
+            dataIndex: 'altText',
+            header: snippets.altText,
+            flex: 1,
+            editor: {
+                xtype: 'textfield',
+                allowBlank: true
+            }
+        }, {
+            dataIndex: 'title',
+            header: snippets.title,
+            flex: 1,
+            editor: {
+                xtype: 'textfield',
+                allowBlank: true
+            }
+        }, {
             xtype: 'actioncolumn',
             header: snippets.actions,
             width: 60,
@@ -199,7 +224,9 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerSlider', {
                 position: count,
                 path: record.get('path'),
                 mediaId: record.get('id'),
-                link: record.get('link')
+                link: record.get('link'),
+                altText: record.get('altText'),
+                title: record.get('title')
             });
             store.add(model);
         });

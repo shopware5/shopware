@@ -20,6 +20,7 @@
  * @author     Heiner Lohaus
  * @author     $Author$
  */
+use Psr\Log\LoggerInterface;
 
 /**
  * Basic Enlight log component.
@@ -36,6 +37,8 @@
  * @method  mixed dump()
  * @method  mixed trace()
  * @method  mixed err()
+ *
+ * @deprecated 4.2
  */
 class Enlight_Components_Log extends Zend_Log
 {
@@ -44,65 +47,154 @@ class Enlight_Components_Log extends Zend_Log
     const DUMP = 10;
     const TRACE = 11;
 
+    protected $logger;
+
     /**
-     * Factory to construct the logger and one or more writers
-     * based on the configuration array
-     *
-     * @throws  Zend_Log_Exception
-     * @param   Enlight_Config|array $config
-     * @return  Enlight_Components_Log
+     * @param LoggerInterface $logger
      */
-    static public function factory($config = array())
+    public function __construct(LoggerInterface $logger = null)
     {
-        if ($config instanceof Zend_Config) {
-            $config = $config->toArray();
-        }
-
-        if (!is_array($config) || empty($config)) {
-            throw new Enlight_Exception('Configuration must be an array or instance of Enlight_Config');
-        }
-
-        $log = new self;
-
-        if (array_key_exists('timestampFormat', $config)) {
-            if (null != $config['timestampFormat'] && '' != $config['timestampFormat']) {
-                $log->setTimestampFormat($config['timestampFormat']);
-            }
-            unset($config['timestampFormat']);
-        }
-
-        if (!is_array(current($config))) {
-            $log->addWriter(current($config));
-        } else {
-            foreach ($config as $writer) {
-                $log->addWriter($writer);
-            }
-        }
-
-        return $log;
+        $this->logger = $logger;
     }
 
     /**
-     * Add a writer.  A writer is responsible for taking a log
-     * message and writing it out to storage.
+     * @param array $config
+     * @return Enlight_Components_Log
+     */
+    public static function factory($config = array())
+    {
+        return new self();
+    }
+
+    /**
      *
-     * @param  mixed $writer Zend_Log_Writer_Abstract or Config array
-     * @return Zend_Log
+     */
+    public function __destruct()
+    {
+    }
+
+    /**
+     * @param string $method
+     * @param string $params
+     */
+    public function __call($method, $params)
+    {
+        $method = strtolower($method);
+        switch ($method) {
+            case 'debug':
+            case 'info':
+            case 'notice':
+            case 'warn':
+            case 'err':
+            case 'crit':
+            case 'alert':
+            case 'emerg':
+            case 'trace':
+            case 'dump':
+            case 'exception':
+            case 'table':
+                if (isset($params[0])) {
+                    $this->deprecatedMessage($params[0]);
+                }
+                break;
+            default:
+                return;
+        }
+    }
+
+    /**
+     * @param $message
+     */
+    private function deprecatedMessage($message)
+    {
+        if ($this->logger) {
+            $this->logger->info("Deprecated Shopware()->Log() call. Message: " . $message);
+        }
+    }
+
+    /**
+     * @param string $message
+     * @param int $priority
+     * @param null $extras
+     */
+    public function log($message, $priority, $extras = null)
+    {
+        $this->deprecatedMessage($message);
+    }
+
+    /**
+     * @param string $name
+     * @param int $priority
+     * @return $this
+     */
+    public function addPriority($name, $priority)
+    {
+        return $this;
+    }
+
+    /**
+     * @param array|int|Zend_Config|Zend_Log_Filter_Interface $filter
+     * @return $this
+     */
+    public function addFilter($filter)
+    {
+        return $this;
+    }
+
+    /**
+     * @param mixed $writer
+     * @return $this
      */
     public function addWriter($writer)
     {
-        if (is_array($writer) || $writer instanceof  Zend_Config) {
-            $writer = $this->_constructWriterFromConfig($writer);
-        }
+        return $this;
+    }
 
-        if ($writer instanceof Zend_Log_Writer_Firebug) {
-            /** @var $writer Zend_Log_Writer_Firebug */
-            $writer->setPriorityStyle(self::TABLE, 'TABLE');
-            $writer->setPriorityStyle(self::EXCEPTION, 'EXCEPTION');
-            $writer->setPriorityStyle(self::DUMP, 'DUMP');
-            $writer->setPriorityStyle(self::TRACE, 'TRACE');
-        }
+    /**
+     * @param string $name
+     * @param string $value
+     * @return $this
+     */
+    public function setEventItem($name, $value)
+    {
+        return $this;
+    }
 
-        return parent::addWriter($writer);
+    /**
+     * @return $this
+     */
+    public function registerErrorHandler()
+    {
+        return $this;
+    }
+
+    /**
+     * @param int $errno
+     * @param string $errstr
+     * @param string $errfile
+     * @param int $errline
+     * @param array $errcontext
+     * @return bool
+     */
+    public function errorHandler($errno, $errstr, $errfile, $errline, $errcontext)
+    {
+        return false;
+    }
+
+    /**
+     * @param string $format
+     * @return $this
+     */
+    public function setTimestampFormat($format)
+    {
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTimestampFormat()
+    {
+        return 'c';
     }
 }

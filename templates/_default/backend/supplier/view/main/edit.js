@@ -1,6 +1,6 @@
 /**
  * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Copyright Â© 2012 shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
     alias : 'widget.supplier-main-edit',
     layout : 'fit',
     title : '{s name=title}Supplier - edit{/s}',
-    width : 700,
+    width : 850,
     height : '90%',
     stateful : true,
     stateId : 'shopware-supplier-edit',
@@ -125,8 +125,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
     },
 
     /**
-     * Return the entire form uses the methods
-     *  - getFormDefaults
+     * Return the entire form
      *
      *  @return Ext.form.Panel
      */
@@ -148,54 +147,92 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
             region      : 'center',
             width       : '100%',
             id          : 'supplierFormPanel',
-            defaults : me.getFormDefaults(),
+            defaults : {
+                anchor      : '100%'
+            },
             bodyPadding : 10,
             border : 0,
             autoScroll: true,
+            plugins: [{
+                ptype: 'translation',
+                pluginId: 'translation',
+                translationType: 'supplier',
+                translationMerge: false,
+                translationKey: null
+            }],
             items : [
-                {
-                    xtype : 'container',
-                    anchor : '100%',
-                    layout : 'column',
-                    border : 1,
-                    defaults : {
-                        labelStyle : 'font-weight: 700; text-align: right;',
-                        labelWidth : 130,
-                        anchor     : '100%'
-                    },
+                Ext.create('Ext.form.FieldSet', {
+                    alias:'widget.supplier-base-field-set',
+                    cls: Ext.baseCSSPrefix + 'supplier-base-field-set',
+                    title : '{s name=panel_base}Basic information{/s}',
+                    layout: 'form',
                     items : [
                         {
-                            xtype       : 'container',
-                            layout      : 'anchor',
-                            columnWidth : 0.8,
-                            defaults : {
-                                labelStyle : 'font-weight: 700; text-align: right;',
-                                anchor     : '100%'
-                            },
-                            items : me.topForm
-                        },
-                        {
                             xtype : 'container',
-                            layout : 'anchor',
-                            columnWidth : 0.2,
-                            items : logoArray
-                        },
-                        {
-                            xtype : 'container',
-                            layout : 'anchor',
-                            columnWidth : 1,
-                            defaults : {
-                                labelStyle : 'font-weight: 700; text-align: right;',
-                                anchor : '100%'
-                            },
+                            layout : 'column',
+                            border : 1,
                             items : [
-                                me.htmlEditor,
-                                me.dropZone
+                                {
+                                    xtype       : 'container',
+                                    layout      : 'anchor',
+                                    columnWidth : 0.8,
+                                    defaults : {
+                                        labelWidth  : 130
+                                    },
+                                    items : me.topForm
+                                },
+                                {
+                                    xtype : 'container',
+                                    layout : 'anchor',
+                                    columnWidth : 0.2,
+                                    items : logoArray
+                                },
+                                {
+                                    xtype : 'container',
+                                    layout : 'anchor',
+                                    columnWidth : 1,
+                                    defaults : {
+                                        anchor : '100%'
+                                    },
+                                    items : [
+                                        me.htmlEditor,
+                                        me.dropZone
+                                    ]
+                                },
+                                me.hiddenFields
                             ]
-                        },
-                        me.hiddenFields
+                        }
                     ]
-                }
+                }),
+                Ext.create('Ext.form.FieldSet', {
+                    alias:'widget.supplier-seo-field-set',
+                    cls: Ext.baseCSSPrefix + 'supplier-seo-field-set',
+                    collapsible: true,
+                    collapsed: true,
+                    defaults : {
+                        labelWidth  : 130,
+                        anchor      : '100%'
+                    },
+                    title : '{s name=panel_seo}SEO information{/s}',
+                    items : [
+                        {
+                            xtype       : 'textfield',
+                            name        : 'metaDescription',
+                            translatable: true,
+                            fieldLabel  : '{s name=seo_meta_description}Description{/s}',
+                            supportText : '{s name=seo_meta_description_support}Description meta tag{/s}',
+                            allowBlank  : true
+                        },
+                        {
+                            xtype       : 'textfield',
+                            name        : 'metaKeywords',
+                            translatable: true,
+                            fieldLabel  : '{s name=seo_meta_keywords}Keywords{/s}',
+                            supportText : '{s name=seo_meta_keywords_support}Keywords meta tag{/s}',
+                            allowBlank  : true
+                        }
+                    ]
+                })
             ]
         });
     },
@@ -208,8 +245,9 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
     {
         return Ext.create('Shopware.form.field.TinyMCE', {
             name : 'description',
-            emptyText : '{s name=description}Description{/s}',
-            anchor : '100%'
+            translatable: true,
+            fieldLabel : '{s name=description}Description{/s}',
+            labelWidth  : 130
         });
     },
     /**
@@ -231,7 +269,8 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
      * @return array of form fields
      */
     getFormTopPart : function() {
-        return [{
+        return [
+            {
                 xtype : 'textfield',
                 name : 'name',
                 allowBlank  : false,
@@ -240,13 +279,22 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
                 supportText : '{s name=name_support}Name of the supplier e.g. Shopware AG{/s}'
             },
             {
+                xtype       : 'textfield',
+                name        : 'metaTitle',
+                translatable : true,
+                anchor : '95%',
+                fieldLabel  : '{s name=seo_meta_title}Page title{/s}',
+                supportText : '{s name=seo_meta_title_support}Page title in the supplier page{/s}'
+            },
+            {
                 xtype : 'textfield',
                 vtype : 'url',
                 name : 'link',
                 anchor : '95%',
                 fieldLabel  : '{s name=link}URL{/s}',
                 supportText : '{s name=link_support}Link to suppliers website{/s}'
-            }];
+            }
+        ];
     },
     /**
      * Returns the media selector for the supplier module
@@ -260,24 +308,9 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
             name            : 'media-manager-selection',
             supportText     : '{s name=logo_support}Supplier logo selection via Media Manager. The selection is limited to one media.{/s}',
             multiSelect     : false,
-            anchor          : '100%',
-            labelWidth      : 100,
-            albumId: -12 // Default supplier albumId
+            albumId: -12, // Default supplier albumId
+            labelWidth  : 130
         });
-    },
-
-    /**
-     * Returns an object containing all default settings for every form element
-     *
-     * @return object
-     */
-    getFormDefaults : function() {
-        return {
-             /* todo@stp please move this to CSS/SASS */
-            labelStyle : 'font-weight: 700; text-align: right;',
-            labelWidth : 130,
-            anchor : '100%'
-        };
     },
 
     /**
@@ -290,16 +323,16 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
             path = '{link file=""}',
             imageUrl = me.record.get('image'),
             image = Ext.create('Ext.Img', {
-                src         : path+imageUrl,
-                maxWidth    : 120,
-                width       : 120,
-                maxHeight   : 80,
-                margin      : '0 auto',
-                name        : 'image',
-                itemId      : 'supplierFormPanelLogo',
-                style       : 'height: 80px; width: 120px;'
-            }
-        );
+                    src         : path+imageUrl,
+                    maxWidth    : 120,
+                    width       : 120,
+                    maxHeight   : 80,
+                    margin      : '0 auto',
+                    name        : 'image',
+                    itemId      : 'supplierFormPanelLogo',
+                    style       : 'height: 80px; width: 120px;'
+                }
+            );
 
         return image;
     }

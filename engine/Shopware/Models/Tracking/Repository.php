@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,21 +20,12 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Tracking
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
 
 namespace Shopware\Models\Tracking;
 use Shopware\Components\Model\ModelRepository;
 /**
  * Shopware Tracking Model
- *
- * todo@all: Documentation
  */
 class Repository extends ModelRepository
 {
@@ -63,6 +54,46 @@ class Repository extends ModelRepository
             $bannerStatistics->setViews(0);
         }
         return $bannerStatistics;
+    }
+
+    /**
+     * Returns an instance of the \Doctrine\ORM\Query object which select the article impression
+     *
+     * @param $articleId
+     * @param $shopId
+     * @param null $date
+     * @return \Doctrine\ORM\Query
+     */
+    public function getArticleImpressionQuery($articleId, $shopId, $date = null)
+    {
+        if ($date == null) {
+            $date = new \DateTime();
+        }
+        $builder = $this->getArticleImpressionQueryBuilder($articleId, $shopId, $date);
+        return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getArticleImpressionQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     *
+     * @param $articleId
+     * @param $shopId
+     * @param $date
+     * @return \Doctrine\ORM\QueryBuilder
+     *
+     */
+    public function getArticleImpressionQueryBuilder($articleId, $shopId, $date)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select('articleImpression')
+                ->from('Shopware\Models\Tracking\ArticleImpression', 'articleImpression')
+                ->where('articleImpression.articleId = :articleId')
+                ->andWhere('articleImpression.shopId = :shopId')
+                ->andWhere('articleImpression.date = :fromDate')
+                ->setParameters(array('articleId' => $articleId, 'shopId' => $shopId, 'fromDate' => $date->format("Y-m-d")));
+
+        return $builder;
     }
 
 }

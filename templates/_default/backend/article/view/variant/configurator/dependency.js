@@ -353,7 +353,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Dependency', {
                 minValue: 0.1,
                 flex: 1,
                 submitLocaleSeparator: false,
-                decimalPrecision: 2,
+                decimalPrecision: 3,
                 allowBlank: false,
                 name: 'surcharge',
                 emptyText: snippets.price

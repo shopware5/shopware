@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Config
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
  */
 
 /**
  * Shopware Config Model
- *
- * todo@all: Documentation
  */
 class Shopware_Components_Config implements ArrayAccess
 {
@@ -99,7 +89,7 @@ class Shopware_Components_Config implements ArrayAccess
         $this->load();
         $this->offsetSet('host', $shop->getHost());
         $this->offsetSet('basePath', $shop->getHost() . $shop->getBasePath());
-        if($shop->getTitle() !== null) {
+        if ($shop->getTitle() !== null) {
             $this->offsetSet('shopName', $shop->getTitle());
         }
         return $this;
@@ -159,7 +149,7 @@ class Shopware_Components_Config implements ArrayAccess
         $result = array();
         foreach ($data as $row) {
             $result[$row['name']] = unserialize($row['value']);
-			// Take namespaces (form names) into account
+            // Take namespaces (form names) into account
             $result[$row['form'] . '::' . $row['name']] = unserialize($row['value']);
         }
 
@@ -185,13 +175,13 @@ class Shopware_Components_Config implements ArrayAccess
     }
 
     /**
-	 * Get config by namespace (form). Each config name is unique by namespace + name
-	 */
+     * Get config by namespace (form). Each config name is unique by namespace + name
+     */
     public function getByNamespace($namespace, $name, $default = null)
     {
-    	return $this->get($namespace . '::' . $name, $default);
+        return $this->get($namespace . '::' . $name, $default);
     }
-    
+
     /**
      * @param $name
      * @param null $default

@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Config', {
 
     extend: 'Enlight.app.SubApplication',
 
-    controllers: [ 'Main', 'Plugin', 'Template', 'Document' ],
+    controllers: [ 'Main', 'Template', 'Document' ],
 
     bulkLoad: true,
     loadPath: '{url action=load}',

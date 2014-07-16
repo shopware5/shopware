@@ -94,14 +94,14 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
         $response = $subject->Response();
         $request = $subject->Request();
 
-        if(!$request->isDispatched()) {
+        if (!$request->isDispatched()) {
             return;
         }
 
         // If the attribute padding is a boolean true
         if ($this->padding === true) {
             $this->padding = $request->getParam('callback');
-            $this->padding = preg_replace('#[^0-9a-z_]+#i', '', (string)$this->padding);
+            $this->padding = preg_replace('#[^0-9a-z_]+#i', '', (string) $this->padding);
         }
 
         // decide if we should render the data or the whole page
@@ -193,7 +193,7 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
      */
     public function setEncoding($encoding)
     {
-        $this->encoding = (string)$encoding;
+        $this->encoding = (string) $encoding;
         return $this;
     }
 
@@ -236,8 +236,8 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
      */
     protected static function convertDateTime(&$value, $key)
     {
-        if($value instanceof DateTime) {
-            $value = 'Date(' . (int)$value->getTimestamp() . '000)';
+        if ($value instanceof DateTime) {
+            $value = 'Date(' . (int) $value->getTimestamp() . '000)';
         }
     }
 

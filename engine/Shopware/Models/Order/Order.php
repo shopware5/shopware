@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,13 +20,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Order
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     $Author$
  */
 
 namespace   Shopware\Models\Order;
@@ -324,7 +317,7 @@ class Order extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Order", mappedBy="order", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Order", mappedBy="order", orphanRemoval=true, cascade={"persist"})
      * @var \Shopware\Models\Attribute\Order
      */
     protected $attribute;
@@ -345,7 +338,7 @@ class Order extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Order\Detail", mappedBy="order", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Order\Detail", mappedBy="order", orphanRemoval=true, cascade={"persist"})
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $details;
@@ -355,7 +348,7 @@ class Order extends ModelEntity
      * The billing property is the inverse side of the association between order and billing.
      * The association is joined over the billing orderID field and the id field of the order
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Billing", mappedBy="order", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Billing", mappedBy="order", orphanRemoval=true, cascade={"persist"})
      * @var \Shopware\Models\Order\Billing
      */
     protected $billing;
@@ -365,14 +358,14 @@ class Order extends ModelEntity
      * The shipping property is the inverse side of the association between order and shipping.
      * The association is joined over the shipping orderID field and the id field of the order
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Shipping", mappedBy="order", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Shipping", mappedBy="order", orphanRemoval=true, cascade={"persist"})
      * @var \Shopware\Models\Order\Shipping
      */
     protected $shipping;
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Order\Document\Document", mappedBy="order", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Order\Document\Document", mappedBy="order", orphanRemoval=true, cascade={"persist"})
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $documents;
@@ -392,10 +385,20 @@ class Order extends ModelEntity
      */
     protected $esd;
 
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection $paymentInstances
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\PaymentInstance", mappedBy="order")
+     */
+    protected $paymentInstances;
+
+
     public function __construct()
     {
         $this->details = new ArrayCollection();
+        $this->paymentInstances = new ArrayCollection();
     }
+
     /**
      * Get id
      *
@@ -1057,55 +1060,6 @@ class Order extends ModelEntity
     }
 
     /**
-     * Event listener method of the doctrine model. Fired when the model will be updated.
-     * Checks if the order or payment status has been changed and add a history entry in the s_order_history.
-     * @ORM\PostUpdate
-     */
-    public function beforeUpdate()
-    {
-        //returns a change set for the model, which contains all changed properties with the old and new value.
-        $changeSet = Shopware()->Models()->getUnitOfWork()->getEntityChangeSet($this);
-
-        $orderStatus = $changeSet['orderStatus'];
-        $paymentStatus = $changeSet['paymentStatus'];
-
-        //order or payment status changed?
-        if ($orderStatus[0] instanceof Status || $paymentStatus[0] instanceof Status) {
-            $history = new History();
-
-            $history->setOrder($this);
-            $history->setChangeDate(new \DateTime());
-            $history->setUser(null);
-
-            if (Shopware()->Auth()->getIdentity() && Shopware()->Auth()->getIdentity()->id) {
-                $user = Shopware()->Models()->find('Shopware\Models\User\User', Shopware()->Auth()->getIdentity()->id);
-                $history->setUser($user);
-            }
-
-            //order status changed?
-            if ($orderStatus[0] instanceof Status && $orderStatus[1]) {
-                $history->setPreviousOrderStatus($orderStatus[0]);
-                $history->setOrderStatus($orderStatus[1]);
-            } else {
-                $history->setPreviousOrderStatus($this->orderStatus);
-                $history->setOrderStatus($this->orderStatus);
-            }
-
-            //payment status changed?
-            if ($paymentStatus[0] instanceof Status && $paymentStatus[1]) {
-                $history->setPreviousPaymentStatus($paymentStatus[0]);
-                $history->setPaymentStatus($paymentStatus[1]);
-            } else {
-                $history->setPreviousPaymentStatus($this->paymentStatus);
-                $history->setPaymentStatus($this->paymentStatus);
-            }
-
-            Shopware()->Models()->persist($history);
-            Shopware()->Models()->flush();
-        }
-    }
-
-    /**
      * @return \Shopware\Models\Attribute\Order
      */
     public function getAttribute()
@@ -1190,5 +1144,21 @@ class Order extends ModelEntity
     public function getLanguageSubShop()
     {
         return $this->languageSubShop;
+    }
+
+    /**
+     * @param mixed $paymentInstances
+     */
+    public function setPaymentInstances($paymentInstances)
+    {
+        $this->paymentInstances = $paymentInstances;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPaymentInstances()
+    {
+        return $this->paymentInstances;
     }
 }

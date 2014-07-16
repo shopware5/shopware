@@ -5,23 +5,21 @@ app.path =
 
 # Database credentials
 db.name =
-db.host =
+db.host = localhost
 db.user =
 db.password =
 
-test.dir = ${basedir}/tests
+test.dir  = ${basedir}/tests
 test.dir.shopware = ${test.dir}/Shopware
 
 build.dir = ${basedir}/build
-log.dir = ${build.dir}/logs
-doc.dir = ${basedir}/_doc
-sql.dir = ${basedir}/_sql
-delta.dir = ${basedir}/_sql/deltas
+log.dir   = ${build.dir}/logs
+sql.dir   = ${basedir}/_sql
 cache.dir = ${basedir}/cache
-app.dir = ${basedir}/engine/Shopware
-proxy.dir = ${basedir}/cache/proxies/
-library.dir = ${basedir}/engine/Enlight
-library.dir.enlight = ${library.dir}/Enlight
+app.dir   = ${basedir}/engine/Shopware
 
-script.mysql = mysql
-script.phpunit = phpunit
+script.mysql    = mysql
+script.phpunit  = ${basedir}/vendor/bin/phpunit
+script.behat    = ${basedir}/vendor/bin/behat
+
+demo.data = ${sql.dir}/demo/latest.sql

@@ -1133,7 +1133,7 @@ class Shopware_Tests_Modules_Articles_sGetArticlesByCategoryTest extends Enlight
                 continue;
             }
             $data = $this->Module()->sGetArticlesByCategory($id);
-            $this->assertArrayCount(count($data['sArticles']), $expected['sArticles']);
+            $this->assertCount(count($data['sArticles']), $expected['sArticles']);
             $this->assertArticles($expected['sArticles'], $data['sArticles']);
             $this->assertEquals($expected['sPage'], $data['sPage']);
             $this->assertEquals($expected['sNumberArticles'], $data['sNumberArticles']);

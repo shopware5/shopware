@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -31,7 +31,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @category  Shopware
  * @package   Shopware\Models\Plugin
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Table(name="s_core_plugins")
  * @ORM\Entity
@@ -69,7 +69,6 @@ class Plugin extends ModelEntity
      * @ORM\Column(name="source", type="string", nullable=false)
      */
     private $source;
-
 
     /**
      * @var string $description
@@ -222,11 +221,27 @@ class Plugin extends ModelEntity
     private $templates;
 
     /**
-     * @var
+     * INVERSE SIDE
+     * @var \Shopware\Models\Widget\Widget[]|ArrayCollection $elements
+     * @ORM\OneToMany(targetEntity="\Shopware\Models\Widget\Widget", mappedBy="plugin", cascade={"all"})
+     * @ORM\JoinColumn(name="id", referencedColumnName="plugin_id")
+     * @ORM\OrderBy({"id" = "ASC"})
+     */
+    private $widgets;
+
+    /**
+     * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="Shopware\Models\Plugin\License", mappedBy="plugin")
      * @ORM\OrderBy({"type" = "ASC"})
      */
     private $licenses;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Library\Component", mappedBy="plugin", orphanRemoval=true, cascade={"all"})
+     *
+     * @var ArrayCollection
+     */
+    protected $emotionComponents;
 
     /**
      * Class constructor.
@@ -234,11 +249,13 @@ class Plugin extends ModelEntity
     public function __construct()
     {
         $this->added = new \DateTime('now');
+        $this->emotionComponents = new ArrayCollection();
         $this->configForms = new ArrayCollection();
         $this->menuItems = new ArrayCollection();
         $this->payments = new ArrayCollection();
         $this->templates = new ArrayCollection();
         $this->licenses = new ArrayCollection();
+        $this->widgets = new ArrayCollection();
     }
 
     /**
@@ -246,7 +263,7 @@ class Plugin extends ModelEntity
      */
     public function isDummy()
     {
-        return (bool) $this->capabilityDummy;
+        return (bool)$this->capabilityDummy;
     }
 
     /**
@@ -530,7 +547,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Menu\Menu[] $configForms
+     * @param \Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Menu\Menu[] $configForms
      */
     public function setConfigForms($configForms)
     {
@@ -631,5 +648,37 @@ class Plugin extends ModelEntity
     public function setUpdateSource($updateSource)
     {
         $this->updateSource = $updateSource;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getEmotionComponents()
+    {
+        return $this->emotionComponents;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $emotionComponents
+     */
+    public function setEmotionComponents($emotionComponents)
+    {
+        $this->emotionComponents = $emotionComponents;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getWidgets()
+    {
+        return $this->widgets;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $widgets
+     */
+    public function setWidgets($widgets)
+    {
+        $this->widgets = $widgets;
     }
 }

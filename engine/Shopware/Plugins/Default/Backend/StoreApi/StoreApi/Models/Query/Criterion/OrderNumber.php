@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -29,8 +29,8 @@ class Shopware_StoreApi_Models_Query_Criterion_OrderNumber extends Shopware_Stor
      */
     public function __construct($orderNumbers)
     {
-        if(is_array($orderNumbers)) {
-            foreach($orderNumbers as $orderNumber) {
+        if (is_array($orderNumbers)) {
+            foreach ($orderNumbers as $orderNumber) {
                 $this->addId($orderNumber);
             }
         } else {
@@ -42,9 +42,9 @@ class Shopware_StoreApi_Models_Query_Criterion_OrderNumber extends Shopware_Stor
      * @param string $orderNumber
      * @return bool
      */
-    public function addId(string $orderNumber)
+    public function addId($orderNumber)
     {
-        if(!empty($orderNumber)) {
+        if (!empty($orderNumber)) {
             $this->collection[] = $orderNumber;
             return true;
         } else {
@@ -54,7 +54,7 @@ class Shopware_StoreApi_Models_Query_Criterion_OrderNumber extends Shopware_Stor
 
     public function getCriterionStatement()
     {
-        if(empty($this->collection)) {
+        if (empty($this->collection)) {
             return false;
         } else {
             return array(

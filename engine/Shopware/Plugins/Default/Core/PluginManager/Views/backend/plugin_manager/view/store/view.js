@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,7 @@
  * @category   Shopware
  * @package    Order
  * @subpackage View
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author     Stephan Pohl
  * @author     $Author$
@@ -95,13 +95,12 @@ Ext.define('Shopware.apps.PluginManager.view.store.View', {
                 afterrender: function(view) {
                     var el = view.getEl();
                     el.on('click', function(e, t) {
-                        var targetEl = Ext.get(t),
-                            href = targetEl.getAttribute('href'),
-                            articleId, categoryId
+                        var href = t.getAttribute('href'),
+                            articleId, categoryId;
 
                         if(href == '#open-details') {
-                            articleId = targetEl.getAttribute('data-articleId');
-                            categoryId = targetEl.getAttribute('data-categoryId');
+                            articleId = t.getAttribute('data-articleId');
+                            categoryId = t.getAttribute('data-categoryId');
                             categoryId = ~~(1 * categoryId);
 
                             var record = me.communityStore.getById(categoryId);
@@ -128,20 +127,19 @@ Ext.define('Shopware.apps.PluginManager.view.store.View', {
                 afterrender: function(view) {
                     var el = view.getEl();
                     el.on('click', function(e, t) {
-                        var targetEl = Ext.get(t),
-                            href = targetEl.getAttribute('href'),
+                        var href = t.getAttribute('href'),
                             categoryId, articleId, record;
 
                         if(href == '#show-all') {
-                            categoryId = targetEl.getAttribute('data-action');
+                            categoryId = t.getAttribute('data-action');
                             categoryId = ~~(1 * categoryId);
 
                             record = me.categoryStore.getById(categoryId);
                             me.fireEvent('changeCategory', me.categoryView, record, t);
                             window.location.hash = '';
                         } else if(href == '#open-details') {
-                            articleId = targetEl.getAttribute('data-articleId');
-                            categoryId = targetEl.getAttribute('data-categoryId');
+                            articleId = t.getAttribute('data-articleId');
+                            categoryId = t.getAttribute('data-categoryId');
                             categoryId = ~~(1 * categoryId);
 
                             record = me.communityStore.getById(categoryId);

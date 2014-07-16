@@ -40,6 +40,8 @@
  */
 Ext.override(Ext.app.Application, {
 
+    loadingMessage: '{s name=application/loading}Loading [0] ...{/s}',
+
 	/**
 	 * Adds a new controller to the application
 	 *
@@ -108,7 +110,7 @@ Ext.override(Ext.app.Application, {
         showLoadMask = (showLoadMask === undefined) ? true : showLoadMask;
         if(showLoadMask) {
             this.moduleLoadMask = new Ext.LoadMask(Ext.getBody(), {
-                msg: Ext.String.format('{s name=application/loading}Loading{/s} [0]...', (subapp.localizedName) ? subapp.localizedName : subapp.name),
+                msg: Ext.String.format(this.loadingMessage, (subapp.localizedName) ? subapp.localizedName : subapp.name),
                 hideModal: true
             });
             this.moduleLoadMask.show();

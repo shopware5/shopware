@@ -203,5 +203,5 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
         return target;
     }
 
-    });
+});
 //{/block}

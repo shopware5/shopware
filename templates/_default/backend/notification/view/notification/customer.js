@@ -199,7 +199,7 @@ Ext.define('Shopware.apps.Notification.view.notification.Customer', {
             return value;
         }
 
-        return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, 'H:i:s');
+        return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeFormat);
     }
 });
 //{/block}

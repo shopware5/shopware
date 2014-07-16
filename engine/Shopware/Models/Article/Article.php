@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -35,7 +35,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @category  Shopware
  * @package   Shopware\Models
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_articles")
@@ -152,7 +152,14 @@ class Article extends ModelEntity
      *
      * @ORM\Column(name="keywords", type="string", length=255, nullable=true)
      */
-    private $keywords = true;
+    private $keywords = null;
+
+    /**
+     * @var string $metaTitle
+     *
+     * @ORM\Column(name="metaTitle", type="string", length=255, nullable=true)
+     */
+    private $metaTitle = null;
 
     /**
      * @var \DateTime $changed
@@ -260,6 +267,16 @@ class Article extends ModelEntity
      */
     protected $allCategories;
 
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *      targetEntity="Shopware\Models\Article\SeoCategory",
+     *      mappedBy="article",
+     *      orphanRemoval=true,
+     *      cascade={"persist"}
+     * )
+     */
+    protected $seoCategories;
 
     /**
      * @var ArrayCollection
@@ -323,7 +340,7 @@ class Article extends ModelEntity
      *
      * @Assert\Valid
      *
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Supplier", inversedBy="articles", cascade={"persist", "update"})
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Supplier", inversedBy="articles", cascade={"persist"})
      * @ORM\JoinColumn(name="supplierID", referencedColumnName="id")
      */
     protected $supplier;
@@ -335,7 +352,7 @@ class Article extends ModelEntity
      *
      * @Assert\Valid
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Detail", mappedBy="article", cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Detail", mappedBy="article", cascade={"persist"})
      * @ORM\OrderBy({"position" = "ASC"})
      */
     protected $details;
@@ -348,7 +365,7 @@ class Article extends ModelEntity
      * @Assert\NotBlank
      * @Assert\Valid
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Detail", cascade={"persist", "update", "remove"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Detail", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="main_detail_id", referencedColumnName="id")
      */
     protected $mainDetail;
@@ -360,7 +377,7 @@ class Article extends ModelEntity
      *
      * @Assert\Valid
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Link", mappedBy="article", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Link", mappedBy="article", orphanRemoval=true, cascade={"persist"})
      */
     protected $links;
 
@@ -371,7 +388,7 @@ class Article extends ModelEntity
      *
      * @Assert\Valid
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Download", mappedBy="article", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Download", mappedBy="article", orphanRemoval=true, cascade={"persist"})
      */
     protected $downloads;
 
@@ -382,7 +399,7 @@ class Article extends ModelEntity
      *
      * @Assert\Valid
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image", mappedBy="article", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image", mappedBy="article", orphanRemoval=true, cascade={"persist"})
      * @ORM\OrderBy({"position" = "ASC"})
      */
     protected $images;
@@ -402,7 +419,7 @@ class Article extends ModelEntity
      *
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Vote", mappedBy="article", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Vote", mappedBy="article", orphanRemoval=true, cascade={"persist"})
      */
     protected $votes;
 
@@ -413,7 +430,7 @@ class Article extends ModelEntity
      *
      * @Assert\Valid
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Article", mappedBy="article", cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Article", mappedBy="article", cascade={"persist"})
      */
     protected $attribute;
 
@@ -422,7 +439,7 @@ class Article extends ModelEntity
      *
      * @var \Shopware\Models\Article\Configurator\Set
      *
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Set", inversedBy="articles", cascade={"persist", "update"})
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Set", inversedBy="articles", cascade={"persist"})
      * @ORM\JoinColumn(name="configurator_set_id", referencedColumnName="id")
      */
     protected $configuratorSet;
@@ -430,7 +447,7 @@ class Article extends ModelEntity
     /**
      * @var ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="Shopware\Models\Property\Value", inversedBy="articles", cascade={"persist", "update"})
+     * @ORM\ManyToMany(targetEntity="Shopware\Models\Property\Value", inversedBy="articles", cascade={"persist"})
      * @ORM\JoinTable(name="s_filter_articles",
      *      joinColumns={
      *          @ORM\JoinColumn(name="articleID", referencedColumnName="id")
@@ -447,7 +464,7 @@ class Article extends ModelEntity
      *
      * @var \Shopware\Models\Article\Configurator\Template\Template
      *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Configurator\Template\Template", mappedBy="article", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Article\Configurator\Template\Template", mappedBy="article", orphanRemoval=true, cascade={"persist"})
      */
     protected $configuratorTemplate;
 
@@ -456,7 +473,7 @@ class Article extends ModelEntity
      *
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Esd", mappedBy="article", orphanRemoval=true, cascade={"persist", "update"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Esd", mappedBy="article", orphanRemoval=true, cascade={"persist"})
      */
     protected $esds;
 
@@ -467,6 +484,7 @@ class Article extends ModelEntity
     {
         $this->categories = new ArrayCollection();
         $this->allCategories = new ArrayCollection();
+        $this->seoCategories = new ArrayCollection();
         $this->customerGroups = new ArrayCollection();
         $this->propertyValues = new ArrayCollection();
         $this->related = new ArrayCollection();
@@ -669,6 +687,28 @@ class Article extends ModelEntity
     public function getKeywords()
     {
         return $this->keywords;
+    }
+
+    /**
+     * Set metaTitle
+     *
+     * @param string $metaTitle
+     * @return Article
+     */
+    public function setMetaTitle($metaTitle)
+    {
+        $this->metaTitle = $metaTitle;
+        return $this;
+    }
+
+    /**
+     * Get metaTitle
+     *
+     * @return string
+     */
+    public function getMetaTitle()
+    {
+        return $this->metaTitle;
     }
 
     /**
@@ -1220,5 +1260,27 @@ class Article extends ModelEntity
         $this->setOneToOne($configuratorTemplate, '\Shopware\Models\Article\Configurator\Template\Template', 'configuratorTemplate', 'article');
 
         return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getSeoCategories()
+    {
+        return $this->seoCategories;
+    }
+
+    /**
+     * @param ArrayCollection $seoCategories
+     * @return \Shopware\Components\Model\ModelEntity
+     */
+    public function setSeoCategories($seoCategories)
+    {
+        return $this->setOneToMany(
+            $seoCategories,
+            '\Shopware\Models\Article\SeoCategory',
+            'seoCategories',
+            'article'
+        );
     }
 }

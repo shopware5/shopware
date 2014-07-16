@@ -264,7 +264,7 @@ Ext.define('Shopware.apps.Customer.view.order.List', {
         if ( typeof value === Ext.undefined ) {
             return value;
         }
-        return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, 'H:i:s');
+        return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeFormat);
     },
 
     /**
