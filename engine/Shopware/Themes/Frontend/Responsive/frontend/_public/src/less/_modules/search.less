@@ -17,23 +17,19 @@
         .unitize-padding(20, 20);
         width: 100%;
         display: block;
-
-        .types--list {
-            .unitize(10, 16, margin-top);
-            width: 100%;
-            list-style: none;
-        }
-
-        .list--headline {
-            margin-top: 0;
-        }
-
-        .list--entry {
-            list-style: none;
-        }
-
-        .link--reset { display: block }
     }
+
+    .types--list {
+        .unitize(10, 16, margin-top);
+        width: 100%;
+        list-style: none;
+    }
+
+    .list--headline {
+        margin-top: 0;
+    }
+
+    .link--reset { display: block }
 
 
     // Paginator, table view and sort switcher
@@ -49,7 +45,7 @@
 }
 
 @media screen and (min-width: @tabletViewportWidth) {
-    .search--results .filter--types .types--list {
+    .search--results .types--list {
         width: 50%;
 
         &:last-child {
@@ -59,7 +55,7 @@
 }
 
 @media screen and (min-width: @tabletLandscapeViewportWidth) {
-    .search--results .filter--types .types--list {
+    .search--results .types--list {
         width: 50%;
     }
 }
