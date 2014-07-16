@@ -4634,7 +4634,6 @@ class sArticles
             's_articles',
             'product',
             'product.id = variant.articleID
-             AND (product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)
              AND variant.active = 1'
         );
 
