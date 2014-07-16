@@ -74,7 +74,7 @@
 
 			{* Paging *}
 			{block name="frontend_newsletter_listing_paging"}
-				{include file="frontend/newsletter/paging.tpl"}
+				{include file="frontend/listing/actions/action-pagination.tpl"}
 			{/block}
 		</div>
 	{/block}
