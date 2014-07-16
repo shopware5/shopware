@@ -790,14 +790,14 @@ class LegacyStructConverter
         if ($product->hasAttribute('marketing')) {
             /**@var $marketing StoreFrontBundle\Struct\Product\MarketingAttribute */
             $marketing = $product->getAttribute('marketing');
-            $promotion['newArticle'] = $marketing->isNew();
-            $promotion['sUpcoming'] = $marketing->comingSoon();
-            $promotion['topseller'] = $marketing->isTopSeller();
+            $data['newArticle'] = $marketing->isNew();
+            $data['sUpcoming'] = $marketing->comingSoon();
+            $data['topseller'] = $marketing->isTopSeller();
         }
 
         $today = new \DateTime();
         if ($product->getReleaseDate() && $product->getReleaseDate() > $today) {
-            $promotion['sReleasedate'] = $product->getReleaseDate()->format('Y-m-d');
+            $data['sReleasedate'] = $product->getReleaseDate()->format('Y-m-d');
         }
 
         return $data;
