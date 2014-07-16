@@ -36,11 +36,11 @@
                         {partition assign=sCategoriesParts array=$sSearchResults.sCategories parts=2}
 
                         {foreach $sCategoriesParts as $sCategories}
-                            <ul class="categories--list">
+                            <ul class="categories--list list--unstyled">
                                 {foreach $sCategories as $sCategorie}
                                     {if $sCategorie.count!=""}
                                         <li class="list--entry">
-                                            <a class="list--entry-category-link" href="{$sLinks.sFilter.category}&sFilter_category={$sCategorie.id}" title="{$sCategorie.description} ({$sCategorie.count})">
+                                            <a class="entry--category-link" href="{$sLinks.sFilter.category}&sFilter_category={$sCategorie.id}" title="{$sCategorie.description} ({$sCategorie.count})">
                                                 &raquo; {$sCategorie.description} <span class="category-count">({$sCategorie.count})</span>
                                             </a>
                                         </li>
@@ -76,11 +76,11 @@
                         {block name='frontend_search_filter_supplier'}
                             {$sSuppliersFirst = $sSearchResults.sSuppliers|@array_slice:0:10}
                             {$sSuppliersRest = $sSearchResults.sSuppliers|@array_slice:10}
-                            <ul class="suppliers--list">
+                            <ul class="suppliers--list list--unstyled">
                                 {if !$sRequests.sFilter.supplier}
                                     {foreach $sSuppliersFirst as $supplier}
                                         <li class="list--entry">
-                                            <a href="{$sLinks.sFilter.supplier}&sFilter_supplier={$supplier.id}" class="link--supplier" title="{$supplier.name} ({$supplier.count})">
+                                            <a class="entry--supplier-link" href="{$sLinks.sFilter.supplier}&sFilter_supplier={$supplier.id}" class="link--supplier" title="{$supplier.name} ({$supplier.count})">
                                                 &raquo; {$supplier.name} <span class="supplier-count">({$supplier.count})</span>
                                             </a>
                                         </li>
@@ -120,12 +120,12 @@
                     {if $sSearchResults.sPrices||$sRequests.sFilter.price}
                         {* Filter by price *}
                         {block name='frontend_search_fuzzy_filter_price'}
-                            <ul class="prices--list">
+                            <ul class="prices--list list--unstyled">
                                 {if !$sRequests.sFilter.price}
                                     {foreach $sPriceFilter as $sKey => $sFilterPrice}
                                         {if $sSearchResults.sPrices.$sKey}
                                             <li class="list--entry">
-                                                <a href="{$sLinks.sFilter.price}&sFilter_price={$sKey}" title="{$sFilterPrice.start|currency} - {$sFilterPrice.end|currency} ({$sSearchResults.sPrices.$sKey})">
+                                                <a class="entry--price-link" href="{$sLinks.sFilter.price}&sFilter_price={$sKey}" title="{$sFilterPrice.start|currency} - {$sFilterPrice.end|currency} ({$sSearchResults.sPrices.$sKey})">
                                                     &raquo; {$sFilterPrice.start|currency} - {$sFilterPrice.end|currency} <span class="prices-count">({$sSearchResults.sPrices.$sKey})</span>
                                                 </a>
                                             </li>
