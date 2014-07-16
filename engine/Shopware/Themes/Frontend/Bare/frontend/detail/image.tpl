@@ -5,14 +5,17 @@
 		{include file="frontend/detail/images.tpl"}
 	{/block}
 
-    <div data-image-scroller="true" class="image--element">
+    <div data-image-scroller="true" class="box--image">
         <ul class="images--list">
             <li class="images--list-item">
-                <span data-picture data-alt="{if $sArticle.image.res.description}{$sArticle.image.res.description|escape:"html"}{else}{$sArticle.articleName|escape:"html"}{/if}">
+                <span data-picture
+					  data-alt="{if $sArticle.image.res.description}{$sArticle.image.res.description|escape:"html"}{else}{$sArticle.articleName|escape:"html"}{/if}"
+					  class="image--element">
 
                     {*Image based on our default media queries *}
                     {block name='frontend_detail_image_default_queries'}
-                        <span data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.5}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}"></span>
+                        <span class="image--media" data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}"></span>
+						<span class="image--media" data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.5}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" data-media="(min-width: 48em)"></span>
                     {/block}
 
                     {*Block to add additional image based on media queries *}
@@ -29,11 +32,14 @@
 
             {foreach $sArticle.images as $image}
                 <li class="images--list-item">
-                    <span data-picture data-alt="{if $image.res.description}{$image.res.description|escape:"html"}{else}{$sArticle.articleName|escape:"html"}{/if}">
+                    <span data-picture
+						  data-alt="{if $image.res.description}{$image.res.description|escape:"html"}{else}{$sArticle.articleName|escape:"html"}{/if}"
+						  class="image--element">
 
                         {*Image based on our default media queries *}
                         {block name='frontend_detail_image_default_queries'}
-                            <span data-src="{if isset($image.src)}{$image.src.5}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}"></span>
+							<span class="image--media" data-src="{if isset($image.src)}{$image.src.4}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}"></span>
+							<span class="image--media" data-src="{if isset($image.src)}{$image.src.5}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" data-media="(min-width: 48em)"></span>
                         {/block}
 
                         {*Block to add additional image based on media queries *}

@@ -41,22 +41,22 @@
                     </h1>
 				{/block}
 
+				{* Product - Supplier information *}
+				{block name='frontend_detai_supplier_info'}
+					{if $sArticle.supplierImg}
+						<div class="product--supplier block">
+							<a href="{url controller='supplier' sSupplier=$sArticle.supplierID}" title="{s name="DetailDescriptionLinkInformation" namespace="frontend/detail/description"}{/s}">
+								<img src="{$sArticle.supplierImg}" alt="{$sArticle.supplierName}">
+							</a>
+						</div>
+					{/if}
+				{/block}
+
 				{* Product rating *}
 				{block name="frontend_detail_comments_overview"}
 					{include file='frontend/detail/rating.tpl'}
 				{/block}
 			</div>
-
-			{* Product - Supplier information *}
-			{block name='frontend_detai_supplier_info'}
-				{if $sArticle.supplierImg}
-					<div class="product--supplier block">
-						<a href="{url controller='supplier' sSupplier=$sArticle.supplierID}" title="{s name="DetailDescriptionLinkInformation" namespace="frontend/detail/description"}{/s}">
-							<img src="{$sArticle.supplierImg}" alt="{$sArticle.supplierName}">
-						</a>
-					</div>
-				{/if}
-			{/block}
 		</header>
 	{/block}
 
