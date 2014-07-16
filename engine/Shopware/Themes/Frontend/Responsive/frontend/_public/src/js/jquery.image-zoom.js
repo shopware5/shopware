@@ -24,8 +24,6 @@
         init: function () {
             var me = this;
 
-            console.log('imageZoom init()');
-
             me.applyDataAttributes();
 
             me.active = false;
@@ -181,8 +179,6 @@
 
         destroy: function () {
             var me = this;
-
-            console.log('imageZoom destroy()');
 
             me.$lens.remove();
             me.$flyout.remove();
