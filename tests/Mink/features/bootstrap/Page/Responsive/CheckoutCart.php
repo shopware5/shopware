@@ -13,10 +13,15 @@ class CheckoutCart extends \Emotion\CheckoutCart
         'sumWithoutVat' => 'li.entry--totalnet > div.entry--value',
         'taxValue' => 'li.entry--taxes:nth-of-type(%d) > div.entry--value',
         'taxRate' => 'li.entry--taxes:nth-of-type(%d) > div.entry--label',
+        'addVoucher' => array(
+            'input' => 'div.add-voucher--panel input.add-voucher--field',
+            'submit' => 'div.add-voucher--panel button.add-voucher--button'
+        ),
         'addArticle' => array(
             'input' => 'form.add-product--form > input.add-product--field',
             'submit' => 'form.add-product--form > button.add-product--button'
-        )
+        ),
+        'removeVoucher' => 'div.table--row.row--voucher a.btn'
     );
 
     public $namedSelectors = array(

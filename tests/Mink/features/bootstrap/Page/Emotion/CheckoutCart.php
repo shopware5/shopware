@@ -19,10 +19,15 @@ class CheckoutCart extends Page
         'sumWithoutVat' => 'div > div.tax',
         'taxValue' => 'div#aggregation > div:nth-of-type(%d)',
         'taxRate' => 'div#aggregation_left > div:nth-of-type(%d)',
+        'addVoucher' => array(
+            'input' => 'div.vouchers input.text',
+            'submit' => 'div.vouchers input.box_send'
+        ),
         'addArticle' => array(
             'input' => 'div.add_article input.ordernum',
             'submit' => 'div.add_article input.box_send'
-        )
+        ),
+        'removeVoucher' => 'div.table_row.voucher a.del'
     );
 
     public $namedSelectors = array(
@@ -108,10 +113,10 @@ class CheckoutCart extends Page
     {
         $this->open();
 
-        $this->fillField('basket_add_voucher', $voucher);
+        $elements = \Helper::findElements($this, $this->cssLocator['addVoucher'], $this->cssLocator['addVoucher']);
 
-        $button = $this->find('css', 'div.vouchers input.box_send');
-        $button->press();
+        $elements['input']->setValue($voucher);
+        $elements['submit']->press();
     }
 
     /**
@@ -134,11 +139,10 @@ class CheckoutCart extends Page
      */
     public function removeVoucher()
     {
-        $link = $this->find('css', 'div.table_row.voucher a.del');
+        $link = $this->find('css', $this->cssLocator['removeVoucher']);
 
         if (empty($link)) {
-            $message = 'Cart page has no voucher';
-            throw new ResponseTextException($message, $this->getSession());
+            \Helper::throwException('Cart page has no voucher.');
         }
 
         $link->click();
