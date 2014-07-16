@@ -1,5 +1,6 @@
 <?php
 use Behat\Mink\Element\Element;
+use Behat\Mink\Element\TraversableElement;
 
 class Helper
 {
@@ -282,15 +283,42 @@ class Helper
      * @param integer $position
      * @return MultipleElement
      */
-    public static function getMultipleElement(SubContext $parent, $elementName, $position = 1)
+    public static function getMultipleElement(SubContext $parent, $elementName, $position = 1, $offset = 0)
     {
         /** @var MultipleElement $element */
         $element = $parent->getElement($elementName);
 
         $element->setContext($parent);
 
-        $element = $element->getInstance($position);
+        $element = $element->getInstance($position + $offset);
 
         return $element;
+    }
+
+    /**
+     * @param SubContext $context
+     * @param string $page
+     * @param string $key
+     * @param array $locatorArray
+     */
+    public static function pressNamedButton(SubContext $context, $page, $key, $locatorArray = array())
+    {
+        if (empty($page)) {
+            self::throwException(array('No page defined!'));
+        }
+
+        $parent = $context->getPage($page);
+
+        if (empty($locatorArray)) {
+            if (isset($parent->namedSelectors)) {
+                $locatorArray = $parent->namedSelectors;
+            } else {
+                self::throwException(array('No locatorArray defined!'));
+            }
+        }
+
+        $language = $context->getElement('LanguageSwitcher')->getCurrentLanguage();
+
+        $parent->clickLink($locatorArray[$key][$language]);
     }
 }

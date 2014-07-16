@@ -23,7 +23,7 @@ Feature: Checkout articles with voucher
     When I add the voucher "prozentual" to my basket
     Then the total sum should be "55,89 €"
 
-    When I follow "Zur Kasse gehen"
+    When I proceed to confirm
     And I check "skipLogin"
     And I press "Neuer Kunde"
     And I register me
