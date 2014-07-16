@@ -50,9 +50,10 @@ class CheckoutContext extends SubContext
     public function iRemoveTheArticleOnPosition($position)
     {
         $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();
+        $offset = $this->getPage('CheckoutCart')->cartPositionFirst;
 
         /** @var \Emotion\CartPosition $cartPosition */
-        $cartPosition = Helper::getMultipleElement($this, 'CartPosition', $position + 3);
+        $cartPosition = Helper::getMultipleElement($this, 'CartPosition', $position, $offset);
         $cartPosition->clickActionLink('remove', $language);
     }
 
@@ -139,5 +140,13 @@ class CheckoutContext extends SubContext
     {
         $aggregations = $aggregations->getHash();
         $this->getPage('CheckoutCart')->checkAggregation($aggregations);
+    }
+
+    /**
+     * @When /^I proceed to confirm$/
+     */
+    public function iProceedToConfirm()
+    {
+        Helper::pressNamedButton($this, 'CheckoutCart', 'checkout');
     }
 }
