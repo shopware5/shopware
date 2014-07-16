@@ -103,6 +103,7 @@ class Shopware_Tests_Components_Api_CustomerTest extends Shopware_Tests_Componen
             ),
         );
 
+        /** @var \Shopware\Models\Customer\Customer $customer */
         $customer = $this->resource->create($testData);
 
         $this->assertInstanceOf('\Shopware\Models\Customer\Customer', $customer);
@@ -114,11 +115,14 @@ class Shopware_Tests_Components_Api_CustomerTest extends Shopware_Tests_Componen
         $this->assertEquals($customer->getGroup()->getKey(), "EK");
         $this->assertEquals($customer->getActive(), true);
 
+
         $this->assertEquals($customer->getEmail(), $testData['email']);
         $this->assertEquals($customer->getBilling()->getFirstName(), $testData['billing']['firstName']);
         $this->assertEquals($customer->getBilling()->getAttribute()->getText1(), $testData['billing']['attribute']['text1']);
         $this->assertEquals($customer->getShipping()->getFirstName(), $testData['shipping']['firstName']);
         $this->assertEquals($customer->getShipping()->getAttribute()->getText1(), $testData['shipping']['attribute']['text1']);
+
+
 
         //test additional address lines
         $this->assertEquals($customer->getShipping()->getAdditionalAddressLine1(), $testData['shipping']['additionalAddressLine1']);
@@ -247,6 +251,33 @@ class Shopware_Tests_Components_Api_CustomerTest extends Shopware_Tests_Componen
         $this->assertEquals($customer->getShipping()->getAdditionalAddressLine2(), $testData['shipping']['additionalAddressLine2']);
 
         return $id;
+    }
+
+    /**
+     * @depends testCreateShouldBeSuccessful
+     */
+    public function testStreetAndStreetNumberShouldBeJoined($id)
+    {
+        $testData = array(
+            'billing' => array(
+                'street' => 'Fakestreet',
+                'streetNumber' => '333'
+            ),
+            'shipping' => array(
+                'street' => 'Teststreet',
+                'streetNumber' => '111'
+            ),
+        );
+
+        $customer = $this->resource->update($id, $testData);
+        $this->assertEquals(
+            $customer->getBilling()->getStreet(),
+            'Fakestreet 333'
+        );
+        $this->assertEquals(
+            $customer->getShipping()->getStreet(),
+            'Teststreet 111'
+        );
     }
 
     /**
