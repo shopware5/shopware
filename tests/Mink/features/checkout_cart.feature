@@ -15,7 +15,7 @@ Feature: Checkout articles (scenario origin is cart with articles in it)
       | sumWithoutVat | 35,61 € |
       | 19 %          | 6,76 €  |
 
-    When I follow "Zur Kasse gehen"
+    When I proceed to confirm
     Then I should be on the page "Account"
 
     @noEmotion
