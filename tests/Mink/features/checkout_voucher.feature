@@ -1,6 +1,7 @@
-@checkout @registration @noResponsive
+@checkout @voucher
 Feature: Checkout articles with voucher
 
+  @registration @noResponsive
   Scenario: I can use vouchers in my basket and pay as new customer via prepayment
     Given I am on the detail page for article 137
     Then I should see "Fahrerbrille Chronos"

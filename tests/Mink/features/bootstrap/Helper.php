@@ -244,6 +244,10 @@ class Helper
 
     public static function throwException($messages = array())
     {
+        if(!is_array($messages)) {
+            $messages = array($messages);
+        }
+
         $debug = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 3);
 
         $additionalText = '';
