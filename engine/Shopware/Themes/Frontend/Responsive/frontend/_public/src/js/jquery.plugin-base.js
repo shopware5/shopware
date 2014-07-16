@@ -323,7 +323,7 @@
         $.fn[name] = function (options) {
             return this.each(function () {
                 var element = this,
-                    pluginData = $.data(element, 'plugin-' + name);
+                    pluginData = $.data(element, 'plugin_' + name);
 
                 if (!pluginData) {
                     if (typeof plugin === 'function') {
@@ -338,7 +338,7 @@
                         pluginData = new Plugin();
                     }
 
-                    $.data(element, 'plugin-' + name, pluginData);
+                    $.data(element, 'plugin_' + name, pluginData);
                 }
             });
         };
