@@ -250,8 +250,8 @@
                 'onItemClick': $.proxy(me.onThumbnailClick, me)
             });
 
-            me.imageScroller = me._$imageWrapper.data('plugin-image-scroller');
-            me.menuScroller = me._$thumbnailWrapper.data('plugin-menu-scroller');
+            me.imageScroller = me._$imageWrapper.data('plugin_imageScroller');
+            me.menuScroller = me._$thumbnailWrapper.data('plugin_menuScroller');
         },
 
         /**

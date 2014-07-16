@@ -74,13 +74,6 @@
             'imageClass': 'slide--image',
 
             /**
-             * CSS class which will be set for controls wrapper
-             *
-             * @type {String}
-             */
-            'controlsWrapperClass': 'js--image-scroller--controls',
-
-            /**
              * CSS class(es) which will be set for the left arrow
              *
              * @type {String}
@@ -261,16 +254,6 @@
             me._$currentImage = null;
 
             /**
-             * Controls overlay wrapped by jQuery.
-             * Used for touch events.
-             *
-             * @private
-             * @property _$controlsWrapper
-             * @type {jQuery}
-             */
-            me._$controlsWrapper = null;
-
-            /**
              * Left arrow element wrapped in jQuery.
              *
              * @private
@@ -353,17 +336,13 @@
                 slideCount++;
             });
 
-            me._$controlsWrapper = $('<div>', {
-                'class': me.opts.controlsWrapperClass
-            }).appendTo(me.$el);
-
             me._$leftArrow = $('<div>', {
                 'class': me.opts.leftArrowClass
-            }).appendTo(me._$controlsWrapper).toggle(slideCount > 1);
+            }).appendTo(me.$el).toggle(slideCount > 1);
 
             me._$rightArrow = $('<div>', {
                 'class': me.opts.rightArrowClass
-            }).appendTo(me._$controlsWrapper).toggle(slideCount > 1);
+            }).appendTo(me.$el).toggle(slideCount > 1);
         },
 
         /**
@@ -392,10 +371,10 @@
             me._on(me._$leftArrow, 'click touchstart', $.proxy(me.onLeftArrowClick, me));
             me._on(me._$rightArrow, 'click touchstart', $.proxy(me.onRightArrowClick, me));
 
-            me._on(me._$controlsWrapper, 'touchstart MSPointerDown', $.proxy(me.onTouchStart, me));
-            me._on(me._$controlsWrapper, 'touchmove MSPointerMove', $.proxy(me.onTouchMove, me));
-            me._on(me._$controlsWrapper, 'touchend MSPointerUp', $.proxy(me.onTouchEnd, me));
-            me._on(me._$controlsWrapper, 'click', $.proxy(me.onControlsWrapperClick, me));
+            me._on(me.$el, 'touchstart MSPointerDown', $.proxy(me.onTouchStart, me));
+            me._on(me.$el, 'touchmove MSPointerMove', $.proxy(me.onTouchMove, me));
+            me._on(me.$el, 'touchend MSPointerUp', $.proxy(me.onTouchEnd, me));
+            me._on(me.$el, 'click', $.proxy(me.onControlsWrapperClick, me));
 
             me._on(me.$el, 'mouseover', $.proxy(me.onMouseOver, me));
             me._on(me.$el, 'mouseout', $.proxy(me.onMouseOut, me));
@@ -407,6 +386,8 @@
             if (me.isTargetArrow(event.target)) {
                 return;
             }
+
+            $.publish('/plugin/' + me._name + '/onClick', [ me ]);
 
             me.opts.onClick.call(me);
         },
@@ -424,6 +405,8 @@
 
             event.preventDefault();
 
+            $.publish('/plugin/' + me._name + '/onLeftArrowClick', [ me ]);
+
             me.previous();
         },
 
@@ -439,6 +422,8 @@
             var me = this;
 
             event.preventDefault();
+
+            $.publish('/plugin/' + me._name + '/onRightArrowClick', [ me ]);
 
             me.next();
         },
@@ -563,7 +548,7 @@
             }
 
             if (me._startTouchPoint.x === touches[0].clientX && me._startTouchPoint.y === touches[0].clientY) {
-                me._$controlsWrapper.trigger('click');
+                me.$el.trigger('click');
                 return;
             }
 
@@ -910,7 +895,8 @@
                 $el.find('img').removeClass(me.opts.imageClass);
             });
 
-            me._$controlsWrapper.remove();
+            me._$leftArrow.remove();
+            me._$rightArrow.remove();
 
             me._destroy();
         }

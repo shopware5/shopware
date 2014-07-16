@@ -112,12 +112,12 @@
             me._$imageScrollerEl = me.$el.find(opts.scrollerListSelector);
             me._$imageScrollerEl.imageScroller(imageScrollerSettings);
 
-            me.imageScroller = me._$imageScrollerEl.data('plugin-image-scroller');
-            me.imageScroller._$controlsWrapper.css('cursor', 'pointer');
+            me.imageScroller = me._$imageScrollerEl.data('plugin_imageScroller');
+            me.imageScroller.$el.css('cursor', 'pointer');
 
             me.$el.lightbox(opts.lightboxSettings);
 
-            me.lightbox = me.$el.data('plugin-lightbox');
+            me.lightbox = me.$el.data('plugin_lightbox');
 
             me.registerEvents();
         },
