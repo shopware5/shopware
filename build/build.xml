@@ -14,20 +14,13 @@
             <antcall target="test-static"/>
         </parallel>
         <parallel>
-            <antcall target="build-phpdoc"/>
             <antcall target="build-phpcb"/>
         </parallel>
     </target>
 
-    <target name="build-continuous">
-        <antcall target="test-unit-continuous"/>
-    </target>
-
-    <target name="build-unit" depends="build-cache-dir, build-composer-install, build-config, build-database, build-snippets-deploy, build-theme-initialize, build-disable-firstrunwizard" />
-
-    <target name="test-unit" depends="unit-library, unit-shopware"/>
-
-    <target name="test-unit-continuous" depends="unit-shopware-continuous"/>
+    <target name="build-continuous" depends="unit-shopware-continuous"/>
+    <target name="build-unit" depends="build-cache-dir, build-composer-install, build-config, build-database, build-generate-attributes, build-snippets-deploy, build-theme-initialize, build-install-lock-file, build-disable-firstrunwizard" />
+    <target name="test-unit" depends="unit-shopware"/>
 
     <target name="configure" description="Set up build-variables">
         <input message="Please enter db-host:"
@@ -191,6 +184,14 @@
         </exec>
     </target>
 
+    <target name="build-install-lock-file">
+        <tstamp>
+            <format property="installDate" pattern="yyyyMMddHHmm" />
+        </tstamp>
+
+        <echo file="${basedir}/recovery/install/data/install.lock">${installDate}</echo>
+    </target>
+
     <target name="build-cache-dir">
         <exec executable="chmod" os="Linux">
             <arg value="0777"/>
@@ -233,8 +234,6 @@
         </delete>
         <mkdir dir="${log.dir}/"/>
     </target>
-
-    <target name="unit-library"/>
 
     <target name="unit-shopware" depends="build-unit">
         <exec executable="${script.phpunit}" failonerror="false" dir="${test.dir.shopware}">
@@ -338,24 +337,6 @@
         </exec>
     </target>
 
-    <target name="static-phpstyle" description="PHP CheckStyle">
-        <exec executable="phpdoc" failonerror="false" output="/dev/null" error="${log.dir}/error.log" append="true">
-            <arg value="project:run"/>
-            <arg value="--template"/>
-            <arg value="checkstyle"/>
-            <arg value="-t"/>
-            <arg value="${log.dir}/checkstyle/"/>
-            <arg value="-d"/>
-            <arg value="${app.dir}"/>
-            <arg value="-q"/>
-        </exec>
-        <replaceregexp file="${log.dir}/checkstyle/checkstyle.xml"
-                       match="name=&quot;([^/][^&quot;]*)&quot;"
-                       replace="name=&quot;${app.dir}/\1&quot;"
-                       byline="true"
-                />
-    </target>
-
     <target name="static-pdepend">
         <mkdir dir="${log.dir}/depend"/>
         <exec executable="pdepend" failonerror="false" output="${log.dir}/depend/output.txt" error="${log.dir}/error.log" append="true" dir="${app.dir}">
@@ -371,25 +352,6 @@
             <arg value="-l${log.dir}"/>
             <arg value="-o${log.dir}/code-browser"/>
             <arg value="-s${app.dir}"/>
-        </exec>
-    </target>
-
-    <target name="build-phpdoc">
-        <exec executable="phpdoc" failonerror="false" error="${log.dir}/error.log" append="true">
-            <arg value="project:run"/>
-            <arg value="-d${app.dir}"/>
-            <arg value="-t${log.dir}/api"/>
-            <arg value="-i${app.dir}/Plugins/Default/*Payment*"/>
-            <arg value="--template"/>
-            <arg value="shopware"/>
-            <arg value="--title"/>
-            <arg value="Shopware"/>
-            <arg value="--defaultpackagename"/>
-            <arg value="Shopware"/>
-            <arg value="--encoding"/>
-            <arg value="utf-8"/>
-            <arg value="--sourcecode"/>
-            <arg value="--quiet"/>
         </exec>
     </target>
 

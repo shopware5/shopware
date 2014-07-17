@@ -35,28 +35,28 @@ class ResultMapper
     public function toExtJs($result)
     {
         if ($result instanceof ValidResult) {
-            return array(
+            return [
                 'valid'   => true,
                 'offset'  => $result->getOffset(),
                 'total'   => $result->getTotal(),
                 'success' => true,
-            );
+            ];
         }
 
         if ($result instanceof FinishResult) {
-            return array(
+            return [
                 'valid'   => false,
                 'offset'  => $result->getOffset(),
                 'total'   => $result->getTotal(),
                 'success' => true
-            );
+            ];
         }
 
         if ($result instanceof ErrorResult) {
-            return array(
+            return [
                 'valid'    => false,
                 'errorMsg' => $result->getMessage(),
-            );
+            ];
         }
 
         throw new \Exception(sprintf("Result type %s can not be mapped.", get_class($result)));

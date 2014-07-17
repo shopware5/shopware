@@ -116,6 +116,7 @@ class BatchController
         // Manual updates do not contain files to overwrite
         if (UPDATE_IS_MANUAL) {
             $this->toJson(200, $this->resultMapper->toExtJs(new FinishResult(0, 0)));
+
             return;
         }
 

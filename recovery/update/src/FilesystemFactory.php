@@ -88,10 +88,10 @@ class FilesystemFactory
         $adapter = new FtpAdapter(
             $this->remoteConfig['path'],
             $this->remoteConfig['server'],
-            array(
+            [
                 'username' => $this->remoteConfig['user'],
                 'password' => $this->remoteConfig['password'],
-            )
+            ]
         );
 
         return new Filesystem($adapter);
