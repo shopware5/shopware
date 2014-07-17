@@ -1,57 +1,53 @@
-@note @noResponsive
+@note
 Feature: Note
 
-	Background:
-		Given I am on the detail page for article 167
-		Then  I should see "Sonnenbrille Speed Eyes"
+    Background:
+      Given I am on the detail page for article 230
+      And   I follow "Auf den Merkzettel"
+      And   I visit the detail page of the article on position 1 of my note
+      And   I follow "Zahlungsarten"
+      Then  I should see "Zahlungsarten & Riskmanagement"
 
-	Scenario: I can set an article to my note, change the currency, and remove the article from the note
-		When  I press "USD"
-		Then  I should see "18,38"
+      When I go to the detail page of the article on position 2
+      And  I follow "Auf den Merkzettel"
+      Then My note should look like this:
+        | name                           | supplier | ordernumber | text                                                                                                                                               | price    | image                           | link                                                          |
+        | Zahlungsarten & Riskmanagement | Example  | SW100025211 | In Shopware haben Sie ein sehr umfangreiches Riskmanagement, in dem Sie gewünscht Zahlungsarten unter Berücksichtigung verschiedenster Faktoren... | 119,99 € | Kwon-Tasche-Coach-schwarz       | /beispiele/zahlungsarten/228/zahlungsarten-und-riskmanagement |
+        | Abschlag bei Zahlungsarten     | Example  | SW10002694  | In Shopware können Sie bei gewünschten Zahlungsarten auch Abschläge definieren. So ist bei diesem Beispiel ein Abschlag von 10% des...             | 47,90 €  | Kwon-Fitness--Boxhandschuh-blau | /beispiele/zahlungsarten/230/abschlag-bei-zahlungsarten       |
 
-		When  I follow "Auf den Merkzettel"
-		Then  I should see "Sonnenbrille Speed Eyes"
+	Scenario: I can remove articles from my note
+      When  I remove the article on position 2 of my note
+      Then  My note should contain 1 articles
 
-		When  I press "EUR"
-		Then  I should see "13,49"
+      When  I remove the article on position 1 of my note
+      Then  My note should be empty
 
-		When  I remove the article from my note
-		Then  I should see "Merkzettel"
-		But  I should not see "Sonnenbrille Speed Eyes"
+    Scenario: I can put articles from my note into the basket
+      When  I put the article on position 1 of my note in the basket
+      And   I follow "Merkzettel"
+      And   I put the article on position 2 of my note in the basket
 
+      Then  the cart should contain 2 articles with a value of "165,89 €"
+      And   the aggregations should look like this:
+        | aggregation   | value    |
+        | sum           | 165,89 € |
+        | shipping      | 3,90 €   |
+        | total         | 169,79 € |
+        | sumWithoutVat | 142,68 € |
+        | 19 %          | 27,11 €  |
 
-	Scenario: I can compare articles from my note
-		When  I follow "Auf den Merkzettel"
-		Then  My note should look like this:
-			| name                    | supplier              | ordernumber | text                                                                                                                                                     | price   | image              | link                                      |
-			| Sonnenbrille Speed Eyes | Sun Smile and Protect | SW10167     | N sui ut glorificus, voro subdo flos alter laxe novem orbus sesquimellesimus, eruo ivi sero trimodus insuadibilis sus ver Jugiter episcopalis. Humilitas | 13,49 € | Sonnenbrille-gruen | /sommerwelten/167/sonnenbrille-speed-eyes |
+    @comparison
+    Scenario: I can compare articles from my note
+      When  I compare the article on position 1 of my note
+      And   I go to my note
+      And   I compare the article on position 2 of my note
+      And   I follow "Vergleich starten"
+      Then  The comparison should look like this:
+        | image                           | name                           | ranking | text                                                                                                                                      | price    | link                                                          |
+        | Kwon-Tasche-Coach-schwarz       | Zahlungsarten & Riskmanagement | 0       | In Shopware haben Sie ein sehr umfangreiches Riskmanagement, in dem Sie gewünscht Zahlungsarten unter Berücksichtigung verschiedenster... | 119,99 € | /beispiele/zahlungsarten/228/zahlungsarten-und-riskmanagement |
+        | Kwon-Fitness--Boxhandschuh-blau | Abschlag bei Zahlungsarten     | 0       | In Shopware können Sie bei gewünschten Zahlungsarten auch Abschläge definieren.                                                           | 47,90 €  | /beispiele/zahlungsarten/230/abschlag-bei-zahlungsarten       |
 
-		When  I visit the detail page of the article on position 1 of my note
-		And  I go to next article
-		Then  I should see "Sonnenbrille Big Eyes"
-
-		When  I follow "Auf den Merkzettel"
-		Then  My note should look like this:
-			| name                    | supplier              | ordernumber | text                                                                                                                                                       | price   | image                  | link                                      |
-			| Sonnenbrille Big Eyes   | Sun Smile and Protect | SW10166     | Caput. Vis Antea tot dux qualiscumque incompositus, non pessum se census rationabiliter Cras injustus qui. Sis canalis sententiosus Mico, fio eo amo Posco | 9,99 €  | Sonnenbrille-Damen-rot | /sommerwelten/166/sonnenbrille-big-eyes   |
-			| Sonnenbrille Speed Eyes | Sun Smile and Protect | SW10167     | N sui ut glorificus, voro subdo flos alter laxe novem orbus sesquimellesimus, eruo ivi sero trimodus insuadibilis sus ver Jugiter episcopalis. Humilitas   | 13,49 € | Sonnenbrille-gruen     | /sommerwelten/167/sonnenbrille-speed-eyes |
-
-		When  I compare the article on position 1 of my note
-        And  I move backward one page
-		And  I compare the article on position 2 of my note
-		And  I follow "Vergleich starten"
-		Then  The comparison should look like this:
-			| image                              | name                    | ranking | text                                                                                                                                             | price   | link                                      |
-			| Sonnenbrille-Damen-rot_105x105.jpg | Sonnenbrille Big Eyes   | 0       | Caput. Vis Antea tot dux qualiscumque incompositus, non pessum se census rationabiliter Cras injustus qui. Sis canalis sententiosus Mico, fio eo | 9,99 €  | /sommerwelten/166/sonnenbrille-big-eyes   |
-			| Sonnenbrille-gruen_105x105.jpg     | Sonnenbrille Speed Eyes | 0       | N sui ut glorificus, voro subdo flos alter laxe novem orbus sesquimellesimus, eruo ivi sero trimodus insuadibilis sus ver Jugiter episcopalis    | 13,49 € | /sommerwelten/167/sonnenbrille-speed-eyes |
-
-		When  I go to my note
-		And  I follow "Vergleich löschen"
-		And  I go to my note
-		Then  I should not see "Artikel vergleichen"
-
-		When  I remove the article on position 2 of my note
-		Then  My note should contain 1 articles
-
-		When  I remove the article on position 1 of my note
-		Then  My note should be empty
+      When  I go to my note
+      And  I follow "Vergleich löschen"
+      And  I go to my note
+      Then  I should not see "Artikel vergleichen"
