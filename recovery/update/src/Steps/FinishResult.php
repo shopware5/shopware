@@ -46,7 +46,7 @@ class FinishResult
      * @param int   $total
      * @param array $args
      */
-    public function __construct($offset, $total, $args = array())
+    public function __construct($offset, $total, $args = [])
     {
         $this->offset = (int) $offset;
         $this->total = (int) $total;

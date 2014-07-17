@@ -130,6 +130,6 @@ class UnpackStep
             }
         }
 
-       return new FinishResult($total, $total);
+        return new FinishResult($total, $total);
     }
 }

@@ -28,6 +28,10 @@ use Slim\Http\Request;
 
 class Utils
 {
+    /**
+     * @param  string $file
+     * @return bool
+     */
     public static function check($file)
     {
         if (file_exists($file)) {
@@ -48,7 +52,7 @@ class Utils
      */
     public static function getPaths($xmlPath)
     {
-        $paths = array();
+        $paths = [];
         $xml = simplexml_load_file($xmlPath);
 
         foreach ($xml->files->file as $entry) {
@@ -66,14 +70,14 @@ class Utils
      */
     public static function checkPaths($paths, $basePath)
     {
-        $results = array();
+        $results = [];
         foreach ($paths as $path) {
             $name   = $basePath . '/' . $path;
             $result = file_exists($name) && is_readable($name) && is_writeable($name);
-            $results[] = array(
+            $results[] = [
                 'name'   => $path,
                 'result' => $result,
-            );
+            ];
         }
 
         return $results;
@@ -145,13 +149,13 @@ class Utils
     }
 
     /**
-     * @param \Slim\Http\Request $request
-     * @param string $lang
+     * @param  \Slim\Http\Request $request
+     * @param  string             $lang
      * @return string
      */
     public static function getLanguage(Request $request, $lang = null)
     {
-        $allowedLanguages = array("de", "en");
+        $allowedLanguages = ["de", "en"];
         $selectedLanguage = "de";
 
         if ($lang && in_array($lang, $allowedLanguages)) {
@@ -188,8 +192,6 @@ class Utils
     {
         if (file_exists($shopPath . '/config.php')) {
             $config = require $shopPath . '/config.php';
-        } elseif (file_exists($shopPath . '/config.update.php')) {
-            $config = require $shopPath . '/config.update.php';
         } else {
             die('Could not find shopware config');
         }
@@ -199,7 +201,7 @@ class Utils
             $dbConfig['host'] = 'localhost';
         }
 
-        $dsn = array();
+        $dsn = [];
         $dsn[] = 'host=' . $dbConfig['host'];
         $dsn[] = 'dbname=' . $dbConfig['dbname'];
 
@@ -217,7 +219,7 @@ class Utils
                 $dsn,
                 $dbConfig['username'],
                 $dbConfig['password'],
-                array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'")
+                [\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'"]
             );
             $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             $conn->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
@@ -236,7 +238,7 @@ class Utils
      */
     public static function cleanPath($dir)
     {
-        $errorFiles = array();
+        $errorFiles = [];
 
         if (is_file($dir)) {
             try {
