@@ -55,7 +55,14 @@ class NoteContext extends SubContext
     {
         $articles = $articles->getHash();
 
-        $this->getPage('Note')->checkList($articles);
+        /** @var \Emotion\Note $page */
+        $page = $this->getPage('Note');
+
+        /** @var MultipleElement $notePositions */
+        $notePositions = $this->getElement('NotePosition');
+        $notePositions->setParent($page);
+
+        $page->checkList($notePositions, $articles);
     }
 
     /**
@@ -64,15 +71,29 @@ class NoteContext extends SubContext
      */
     public function myNoteShouldBeEmpty($count = 0)
     {
-        $this->getPage('Note')->countArticles($count);
+        /** @var \Emotion\Note $page */
+        $page = $this->getPage('Note');
+
+        /** @var MultipleElement $notePositions */
+        $notePositions = $this->getElement('NotePosition');
+        $notePositions->setParent($page);
+
+        $page->countArticles($notePositions, intval($count));
     }
 
     private function clickActionLink($position, $name)
     {
         $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();
 
+        /** @var \Emotion\Note $page */
+        $page = $this->getPage('Note');
+
+        /** @var MultipleElement $notePositions */
+        $notePositions = $this->getElement('NotePosition');
+        $notePositions->setParent($page);
+
         /** @var \Emotion\NotePosition $notePosition */
-        $notePosition = Helper::getMultipleElement($this, 'NotePosition', $position + 1);
+        $notePosition = $notePositions->setInstance($position);
         $notePosition->clickActionLink($name, $language);
     }
 }

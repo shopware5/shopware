@@ -258,4 +258,21 @@ class Listing extends Page
         $listingBox = $elements['listingBox'];
         return $listingBox->hasLink($name);
     }
+
+    /**
+     * @param $button
+     * @param int $position
+     */
+    public function clickMultipleActionButton($button, $position = 1)
+    {
+        $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();
+
+        /** @var \MultipleElement $articleBoxes */
+        $articleBoxes = $this->getElement('ArticleBox');
+        $articleBoxes->setParent($this);
+
+        /** @var \Emotion\ArticleBox $articleBox */
+        $articleBox = $articleBoxes->setInstance($position);
+        $articleBox->clickActionLink($button, $language);
+    }
 }
