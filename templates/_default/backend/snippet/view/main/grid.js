@@ -97,7 +97,6 @@ Ext.define('Shopware.apps.Snippet.view.main.Grid', {
         );
     },
 
-
     /**
      * Sets up the ui component
      *
