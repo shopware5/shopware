@@ -104,7 +104,7 @@
 						{* Read more button *}
 						{block name='frontend_blog_col_read_more'}
 							<div class="blog--box-readmore">
-								<a href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}" title="{$sArticle.title}" class="btn btn--primary is--small">{s name="BlogLinkMore"}{/s}</a>
+								<a href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}" title="{$sArticle.title|escape:'html'}" class="btn btn--primary is--small">{s name="BlogLinkMore"}{/s}</a>
 							</div>
 						{/block}
 
@@ -114,7 +114,7 @@
 								{if $sArticle.tags|@count > 1}
 									<strong>{s name="BlogInfoTags"}Tags:{/s}</strong>
 									{foreach $sArticle.tags as $tag}
-										<a href="{$tag.link}" title="{$tag.name}">{$tag.name}</a>{if !$tag@last}, {/if}
+										<a href="{$tag.link}" title="{$tag.name|escape:'html'}">{$tag.name}</a>{if !$tag@last}, {/if}
 									{/foreach}
 								{/if}
 							</div>
