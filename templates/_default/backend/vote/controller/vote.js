@@ -93,8 +93,6 @@ Ext.define('Shopware.apps.Vote.controller.Vote', {
             }
         });
 
-        Shopware.Msg.createGrowlMessage('','{s name=view/infomessage}The votes were opened{/s}','{s name=window_title}{/s}');
-
         me.callParent(arguments);
     },
 
@@ -142,9 +140,9 @@ Ext.define('Shopware.apps.Vote.controller.Vote', {
             record = store.data.items[rowIndex];
 
         //Create edit-window
-        Ext.create('Shopware.apps.Vote.view.vote.Edit', { record: record, mainStore: store });
-
+        Ext.create('Shopware.apps.Vote.view.vote.Window', { record: record, mainStore: store });
     },
+
     /**
      * Triggered when a value >=3 is entered in the search-textfield
      * @param field Contains the textfield
@@ -154,9 +152,9 @@ Ext.define('Shopware.apps.Vote.controller.Vote', {
             store = me.subApplication.voteStore;
 
         //If the search-value is empty, reset the filter
-        if(field.getValue().length == 0){
+        if (field.getValue().length == 0) {
             store.clearFilter();
-        }else{
+        } else {
             //This won't reload the store
             store.filters.clear();
             //Loads the store with a special filter
