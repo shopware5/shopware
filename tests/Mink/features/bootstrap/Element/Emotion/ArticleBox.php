@@ -6,9 +6,7 @@ require_once('tests/Mink/features/bootstrap/Element/Emotion/CartPosition.php');
 
 class ArticleBox extends CartPosition
 {
-    /**
-     * @var array $selector
-     */
+    /** @var array $selector */
     protected $selector = array('css' => 'div.artbox');
 
     /** @var array $namedSelectors */
