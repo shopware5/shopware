@@ -4,20 +4,25 @@ namespace Responsive;
 
 class NotePosition extends \Emotion\NotePosition
 {
-    /**
-     * @var array $selector
-     */
-    protected $selector = array('css' => 'div.table_row');
+    /** @var array $selector */
+    protected $selector = array('css' => 'div.note--item');
 
-    protected $cssLocators = array(
-        'a-thumb' => 'a.thumb_image',
+    /** @var array $namedSelectors */
+    protected $namedSelectors = array(
+        'remove'  => array('de' => 'Löschen',       'en' => 'Delete'),
+        'order'   => array('de' => 'Kaufen',        'en' => 'Purchase'),
+        'compare' => array('de' => 'Vergleichen',   'en' => 'Compare'),
+        'details' => array('de' => 'Zum Produkt',   'en' => 'View product')
+    );
+
+    protected $cssLocator = array(
+        'a-thumb' => 'a.note--image-link',
         'img' => 'img',
-        'a-zoom' => 'a.zoom_picture',
-        'a-title' => 'a.title',
-        'div-supplier' => 'div.supplier',
-        'p-number' => 'p.ordernumber',
-        'p-desc' => 'p.desc',
-        'strong-price' => 'strong.price',
-        'a-detail' => 'a.detail'
+        'a-zoom' => 'a.note--zoom',
+        'a-title' => 'a.note--title',
+        'div-supplier' => 'div.note--supplier',
+        'p-number' => 'div.note--ordernumber',
+        'strong-price' => 'div.note--price',
+        'a-detail' => 'a.action--details'
     );
 }

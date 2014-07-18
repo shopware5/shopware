@@ -282,24 +282,6 @@ class Helper
     }
 
     /**
-     * @param SubContext $parent
-     * @param string $elementName
-     * @param integer $position
-     * @return MultipleElement
-     */
-    public static function getMultipleElement(SubContext $parent, $elementName, $position = 1, $offset = 0)
-    {
-        /** @var MultipleElement $element */
-        $element = $parent->getElement($elementName);
-
-        $element->setContext($parent);
-
-        $element = $element->getInstance($position + $offset);
-
-        return $element;
-    }
-
-    /**
      * @param SubContext $context
      * @param string $page
      * @param string $key
