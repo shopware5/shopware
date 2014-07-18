@@ -52,7 +52,7 @@
 								<div class="newsletter--subscription">
 									<select name="subscribeToNewsletter" required="required" class="field--select newsletter--checkmail">
 										<option value="1">{s name="sNewsletterOptionSubscribe"}{/s}</option>
-										<option value="-1" {if $_POST.subscribeToNewsletter eq -1 || (!$_POST.subscribeToNewsletter && $sUnsubscribe == true)}selected="selected"{/if}>{s name="sNewsletterOptionUnsubscribe"}{/s}</option>
+										<option value="-1"{if $_POST.subscribeToNewsletter eq -1 || (!$_POST.subscribeToNewsletter && $sUnsubscribe == true)} selected="selected"{/if}>{s name="sNewsletterOptionUnsubscribe"}{/s}</option>
 									</select>
 								</div>
 							{/block}
@@ -73,8 +73,8 @@
 										{block name="frontend_newsletter_form_input_salutation"}
 											<div class="newsletter--salutation">
 												<select name="salutation" required="required" class="field--select{if $sStatus.sErrorFlag.salutation} has--error{/if}">
-													<option value="mr" {if $_POST.salutation eq "mr"}selected="selected"{/if}>{s name="NewsletterRegisterLabelMr"}{/s}</option>
-													<option value="ms" {if $_POST.salutation eq "ms"}selected="selected"{/if}>{s name="NewsletterRegisterLabelMs"}{/s}</option>
+													<option value="mr"{if $_POST.salutation eq "mr"} selected="selected"{/if}>{s name="NewsletterRegisterLabelMr"}{/s}</option>
+													<option value="ms"{if $_POST.salutation eq "ms"} selected="selected"{/if}>{s name="NewsletterRegisterLabelMs"}{/s}</option>
 												</select>
 											</div>
 										{/block}
