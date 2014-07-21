@@ -11,6 +11,7 @@ In this document you will find a changelog of the important changes related to t
 * Maintenance mode options can now be configured by subshop
 * Error notification via email was improved and now additionally includes environment and request information
 * Minor occurrences of `metadescription` and `metakeywords` have been uniformized to `metaDescription` and `metaKeywords`
+* It's now possible to filter payment methods by subshops
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
