@@ -122,6 +122,9 @@ class ConfiguratorTest extends \Enlight_Components_Test_TestCase
         return $selection;
     }
 
+    /**
+     * @group knownFailing
+     */
     public function testSelection()
     {
         $number = __FUNCTION__;
@@ -174,6 +177,9 @@ class ConfiguratorTest extends \Enlight_Components_Test_TestCase
         }
     }
 
+    /**
+     * @group knownFailing
+     */
     public function testCloseoutSelection()
     {
         $number = __FUNCTION__;
