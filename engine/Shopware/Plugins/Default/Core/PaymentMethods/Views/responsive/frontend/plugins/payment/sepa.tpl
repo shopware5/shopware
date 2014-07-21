@@ -1,6 +1,8 @@
+{namespace name='frontend/plugins/payment/sepa'}
+
 <div class="debit">
     <p class="none">
-        <input name="sSepaIban" type="text" id="iban" {if $checked} required="required" aria-required="true"{/if} placeholder="{s namespace='frontend/plugins/payment/sepa' name='PaymentSepaLabelIban'}{/s}*" value="{$form_data.sSepaIban|escape}" class="is--required{if $error_flags.sSepaIban} has--error{/if}" />
+        <input name="sSepaIban" type="text" id="iban" {if $checked} required="required" aria-required="true"{/if} placeholder="{s name='PaymentSepaLabelIban'}{/s}*" value="{$form_data.sSepaIban|escape}" class="is--required{if $error_flags.sSepaIban} has--error{/if}" />
     </p>
     {if {config name=sepaShowBic}}
         <p class="none">
@@ -18,7 +20,7 @@
                 {if $form_data.sSepaUseBillingData === 'true' || (!$form_data.isPost && $form_data.sSepaUseBillingData !== false)}
                     checked="checked"
                 {/if}
-                class="checkbox {if $error_flags.sSepaBankHolder}instyle_error{/if}"/>
+                class="checkbox{if $error_flags.sSepaBankHolder} has--error{/if}"/>
             <label for="usebilling"  style="float:none; width:100%; display:inline">{s namespace='frontend/plugins/payment/sepa' name='PaymentSepaLabelUseBillingData'}{/s}:</label>
         </p>
     {/if}
