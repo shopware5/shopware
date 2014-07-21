@@ -15,7 +15,7 @@
 				{se name="FinishInfoConfirmationMail"}{/se}<br />{s name="FinishInfoPrintOrder"}{/s}
 			</p>
 
-			<div class="right">
+			<div class="center">
 				<a href="#" class="button-right large" onclick="self.print()" title="{s name='FinishLinkPrint'}{/s}">
 					{s name="FinishLinkPrint"}{/s}
 				</a>
