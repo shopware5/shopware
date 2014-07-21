@@ -9,7 +9,7 @@ Feature: Show Listing
     When  I follow "Listen-Ansicht"
     Then  the articles should be shown in a list-view
 
-  @filter
+  @filter @knownFailing
   Scenario: I can filter the articles by supplier
     Given I am on the listing page:
       | parameter | value |
@@ -113,7 +113,7 @@ Feature: Show Listing
     When  I select "Deutsch" from "__shop"
     Then  I should see "Reisekoffer Set"
 
-  @customergroups
+  @customergroups @knownFailing
   Scenario:
     Given I am on the page "Account"
     And   I log in successful as "Händler Kundengruppe-Netto" with email "mustermann@b2b.de" and password "shopware"

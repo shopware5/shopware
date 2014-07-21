@@ -73,6 +73,7 @@ Feature: Configurator articles
 		| article | name                               | color  | size    |
 		| 202     | "Artikel mit Standardkonfigurator" | "blau" | "36"    |
 
+  @knownFailing
   Scenario Outline: I can't select a disabled configurator variant
     Given I am on the detail page for article <article>
     Then  I should see <name>

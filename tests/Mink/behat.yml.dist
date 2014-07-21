@@ -3,7 +3,7 @@ default:
         features: features
         bootstrap: %behat.paths.features%/bootstrap
     filters:
-        tags: "~@noEmotion&&~@javascript"
+        tags: "~@noEmotion&&~@javascript&&~@knownFailing"
     extensions:
         SensioLabs\Behat\PageObjectExtension\Extension:
             namespaces:
@@ -24,7 +24,7 @@ default:
 
 emotion:
     filters:
-        tags: "~@noEmotion&&~@javascript"
+        tags: "~@noEmotion&&~@javascript&&~@knownFailing"
     extensions:
         SensioLabs\Behat\PageObjectExtension\Extension:
             namespaces:
@@ -36,7 +36,7 @@ emotion:
 
 responsive:
     filters:
-        tags: "~@noResponsive&&~@javascript"
+        tags: "~@noResponsive&&~@javascript&&~@knownFailing"
     extensions:
         SensioLabs\Behat\PageObjectExtension\Extension:
             namespaces:

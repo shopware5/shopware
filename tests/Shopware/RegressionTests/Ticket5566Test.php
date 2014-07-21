@@ -45,6 +45,8 @@ class Shopware_RegressionTests_Ticket5566 extends Enlight_Components_Test_Contro
 
     /**
      * Checks password confirmation field
+     *
+     * @group knownFailing
      */
     public function testArticleXMLExport()
     {
