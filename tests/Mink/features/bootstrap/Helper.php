@@ -1,5 +1,6 @@
 <?php
 use Behat\Mink\Element\Element;
+use Behat\Mink\Element\TraversableElement;
 
 class Helper
 {
@@ -243,6 +244,10 @@ class Helper
 
     public static function throwException($messages = array())
     {
+        if(!is_array($messages)) {
+            $messages = array($messages);
+        }
+
         $debug = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 3);
 
         $additionalText = '';
@@ -277,20 +282,29 @@ class Helper
     }
 
     /**
-     * @param SubContext $parent
-     * @param string $elementName
-     * @param integer $position
-     * @return MultipleElement
+     * @param SubContext $context
+     * @param string $page
+     * @param string $key
+     * @param array $locatorArray
      */
-    public static function getMultipleElement(SubContext $parent, $elementName, $position = 1)
+    public static function pressNamedButton(SubContext $context, $page, $key, $locatorArray = array())
     {
-        /** @var MultipleElement $element */
-        $element = $parent->getElement($elementName);
+        if (empty($page)) {
+            self::throwException(array('No page defined!'));
+        }
 
-        $element->setContext($parent);
+        $parent = $context->getPage($page);
 
-        $element = $element->getInstance($position);
+        if (empty($locatorArray)) {
+            if (isset($parent->namedSelectors)) {
+                $locatorArray = $parent->namedSelectors;
+            } else {
+                self::throwException(array('No locatorArray defined!'));
+            }
+        }
 
-        return $element;
+        $language = $context->getElement('LanguageSwitcher')->getCurrentLanguage();
+
+        $parent->clickLink($locatorArray[$key][$language]);
     }
 }

@@ -44,28 +44,34 @@ class Settings extends ModelEntity
     private $id;
 
     /**
-     * @var boolean $secure
+     * @var boolean $forceCompile
      * @ORM\Column(name="compiler_force", type="boolean", nullable=false)
      */
     private $forceCompile = false;
 
     /**
-     * @var boolean $secure
+     * @var boolean $createSourceMap
      * @ORM\Column(name="compiler_create_source_map", type="boolean", nullable=false)
      */
     private $createSourceMap = false;
 
     /**
-     * @var boolean $secure
+     * @var boolean $compressCss
      * @ORM\Column(name="compiler_compress_css", type="boolean", nullable=false)
      */
     private $compressCss = false;
 
     /**
-     * @var boolean $secure
+     * @var boolean $compressJs
      * @ORM\Column(name="compiler_compress_js", type="boolean", nullable=false)
      */
     private $compressJs = false;
+
+    /**
+     * @var boolean $reloadSnippets
+     * @ORM\Column(name="force_reload_snippets", type="boolean", nullable=false)
+     */
+    private $reloadSnippets = false;
 
     /**
      * @param boolean $compressCss
@@ -139,6 +145,19 @@ class Settings extends ModelEntity
         return $this->id;
     }
 
+    /**
+     * @param boolean $reloadSnippets
+     */
+    public function setReloadSnippets($reloadSnippets)
+    {
+        $this->reloadSnippets = $reloadSnippets;
+    }
 
-
+    /**
+     * @return boolean
+     */
+    public function getReloadSnippets()
+    {
+        return $this->reloadSnippets;
+    }
 }

@@ -230,7 +230,9 @@
     </target>
 
     <target name="start-server">
-        <exec executable="${script.server.start}" />
+        <exec executable="${script.server.start}" >
+            <arg value="${app.host}"/>
+        </exec>
     </target>
 
     <target name="stop-server">

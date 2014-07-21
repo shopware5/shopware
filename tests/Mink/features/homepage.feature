@@ -22,14 +22,14 @@ Feature: General functionality
     Then  I should see "<price_config_detail>"
 
     When  I put the article into the basket
-    And  I move backward one page
-    And  I move backward one page
+    And   I go to the listing page:
+      | parameter | value |
     And  I go to the detail page of the article on position 13
     Then  I should see "<price_normal>"
 
     When  I put the article into the basket
-    And   I move backward one page
-    And   I move backward one page
+    And  I go to the listing page:
+      | parameter | value |
     And   I go to the detail page of the article on position 15
     Then  I should see "<price_base>"
 
@@ -66,16 +66,14 @@ Feature: General functionality
     Then  I should see "<price_config_detail>"
 
     When  I put the article into the basket
-    And  I move backward one page
-    And  I move backward one page
-    And   I move backward one page
+    And   I go to the listing page:
+      | parameter | value |
     And  I go to the detail page of the article on position 13
     Then  I should see "<price_normal>"
 
     When  I put the article into the basket
-    And   I move backward one page
-    And   I move backward one page
-    And   I move backward one page
+    And   I go to the listing page:
+      | parameter | value |
     And   I go to the detail page of the article on position 15
     Then  I should see "<price_base>"
 

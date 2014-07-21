@@ -26,6 +26,13 @@
 						</a>
 					</li>
 				{/block}
+
+				{* Switches for currency and language on mobile devices *}
+				{block name="frontend_index_left_switches"}
+					<div class="mobile--switches">
+						{action module=widgets controller=index action=shopMenu}
+					</div>
+				{/block}
 			</ul>
 		</div>
 	{/block}

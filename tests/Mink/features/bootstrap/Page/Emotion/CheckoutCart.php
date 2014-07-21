@@ -18,8 +18,26 @@ class CheckoutCart extends Page
         'shipping' => 'div > div:nth-of-type(1)',
         'sumWithoutVat' => 'div > div.tax',
         'taxValue' => 'div#aggregation > div:nth-of-type(%d)',
-        'taxRate' => 'div#aggregation_left > div:nth-of-type(%d)'
+        'taxRate' => 'div#aggregation_left > div:nth-of-type(%d)',
+        'addVoucher' => array(
+            'input' => 'div.vouchers input.text',
+            'submit' => 'div.vouchers input.box_send'
+        ),
+        'addArticle' => array(
+            'input' => 'div.add_article input.ordernum',
+            'submit' => 'div.add_article input.box_send'
+        ),
+        'removeVoucher' => 'div.table_row.voucher a.del'
     );
+
+    public $namedSelectors = array(
+        'checkout' => array('de' => 'Zur Kasse gehen!',   'en' => 'Proceed to checkout')
+    );
+
+    protected $taxesPositionFirst = 4;
+    public $cartPositionFirst = 3;
+
+
 
     /**
      * Checks the sum, shipping costs, total sum, sum without vat and vat of the cart.
@@ -63,8 +81,8 @@ class CheckoutCart extends Page
                 $prices['sumWithoutVat'] -= $vat['value'];
 
                 $locators = array(
-                    'taxValue' => $key + 4,
-                    'taxRate' => $key + 4,
+                    'taxValue' => $key + $this->taxesPositionFirst,
+                    'taxRate' => $key + $this->taxesPositionFirst,
                 );
 
                 $elements = \Helper::findElements($this, $locators);
@@ -95,10 +113,10 @@ class CheckoutCart extends Page
     {
         $this->open();
 
-        $this->fillField('basket_add_voucher', $voucher);
+        $elements = \Helper::findElements($this, $this->cssLocator['addVoucher'], $this->cssLocator['addVoucher']);
 
-        $button = $this->find('css', 'div.vouchers input.box_send');
-        $button->press();
+        $elements['input']->setValue($voucher);
+        $elements['submit']->press();
     }
 
     /**
@@ -109,10 +127,10 @@ class CheckoutCart extends Page
     {
         $this->open();
 
-        $this->fillField('basket_add_article', $article);
+        $elements = \Helper::findElements($this, $this->cssLocator['addArticle'], $this->cssLocator['addArticle']);
 
-        $button = $this->find('css', 'div.add_article input.box_send');
-        $button->press();
+        $elements['input']->setValue($article);
+        $elements['submit']->press();
     }
 
     /**
@@ -121,11 +139,10 @@ class CheckoutCart extends Page
      */
     public function removeVoucher()
     {
-        $link = $this->find('css', 'div.table_row.voucher a.del');
+        $link = $this->find('css', $this->cssLocator['removeVoucher']);
 
         if (empty($link)) {
-            $message = 'Cart page has no voucher';
-            throw new ResponseTextException($message, $this->getSession());
+            \Helper::throwException('Cart page has no voucher.');
         }
 
         $link->click();
@@ -154,7 +171,7 @@ class CheckoutCart extends Page
                 continue;
             }
 
-            $taxKey = count($taxLocators) + 4;
+            $taxKey = count($taxLocators) + $this->taxesPositionFirst;
 
             $taxLocators[] = array(
                 'taxRate' => $taxKey,

@@ -56,11 +56,12 @@ Ext.define('Shopware.apps.Theme.model.Settings', {
     },
 
     fields: [
-        { name: 'id', type: 'integer'  },
-        { name: 'forceCompile', type: 'boolean'  },
-        { name: 'createSourceMap', type: 'boolean'  },
-        { name: 'compressCss', type: 'boolean'  },
-        { name: 'compressJs', type: 'boolean'  },
+        { name: 'id', type: 'integer' },
+        { name: 'forceCompile', type: 'boolean' },
+        { name: 'createSourceMap', type: 'boolean' },
+        { name: 'compressCss', type: 'boolean' },
+        { name: 'compressJs', type: 'boolean' },
+        { name: 'reloadSnippets', type: 'boolean' }
     ]
 });
 

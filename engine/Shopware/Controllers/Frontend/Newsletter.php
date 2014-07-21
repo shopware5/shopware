@@ -197,16 +197,16 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         $sql = Shopware()->Db()->limit($sql, $perPage, $perPage * ($page - 1));
         $result = Shopware()->Db()->query($sql, array(Shopware()->System()->sLanguage));
 
+        //$count has to be set before calling Router::assemble() because it removes the FOUND_ROWS()
+        $sql = 'SELECT FOUND_ROWS() as count_' . md5($sql);
+        $count = Shopware()->Db()->fetchOne($sql);
+        $count = ceil($count / $perPage);
+
         $content = array();
         while ($row = $result->fetch()) {
             $row['link'] = $this->Front()->Router()->assemble(array('action' => 'detail', 'sID' => $row['id']));
             $content[] = $row;
         }
-
-        $sql = 'SELECT FOUND_ROWS() as count_' . md5($sql);
-        $count = Shopware()->Db()->fetchOne($sql);
-
-        $count = ceil($count / $perPage);
 
         $pages = array();
         for ($i = 1; $i <= $count; $i++) {

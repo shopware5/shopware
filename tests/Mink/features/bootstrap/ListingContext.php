@@ -64,7 +64,16 @@ class ListingContext extends SubContext
     {
         $properties = $properties->getHash();
 
-        Helper::getMultipleElement($this, 'ArticleBox', $position)->checkProperties($properties);
+        /** @var \Emotion\Listing $page */
+        $page = $this->getPage('Listing');
+
+        /** @var MultipleElement $articleBoxes */
+        $articleBoxes = $this->getElement('ArticleBox');
+        $articleBoxes->setParent($page);
+
+        /** @var \Emotion\ArticleBox $articleBox */
+        $articleBox = $articleBoxes->setInstance($position);
+        $articleBox->checkProperties($properties);
     }
 
     /**
@@ -81,7 +90,17 @@ class ListingContext extends SubContext
     public function iOrderTheArticleOnPosition($position)
     {
         $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();
-        Helper::getMultipleElement($this, 'ArticleBox', $position)->clickActionLink('order', $language);
+
+        /** @var \Emotion\Listing $page */
+        $page = $this->getPage('Listing');
+
+        /** @var MultipleElement $articleBoxes */
+        $articleBoxes = $this->getElement('ArticleBox');
+        $articleBoxes->setParent($page);
+
+        /** @var \Emotion\ArticleBox $articleBox */
+        $articleBox = $articleBoxes->setInstance($position);
+        $articleBox->clickActionLink('order', $language);
     }
 
     /**
@@ -90,7 +109,17 @@ class ListingContext extends SubContext
     public function iSetTheArticleOnPositionToTheComparisonList($position)
     {
         $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();
-        Helper::getMultipleElement($this, 'ArticleBox', $position)->clickActionLink('compare', $language);
+
+        /** @var \Emotion\Listing $page */
+        $page = $this->getPage('Listing');
+
+        /** @var MultipleElement $articleBoxes */
+        $articleBoxes = $this->getElement('ArticleBox');
+        $articleBoxes->setParent($page);
+
+        /** @var \Emotion\ArticleBox $articleBox */
+        $articleBox = $articleBoxes->setInstance($position);
+        $articleBox->clickActionLink('compare', $language);
     }
 
     /**
@@ -100,9 +129,15 @@ class ListingContext extends SubContext
     {
         $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();
 
+        /** @var \Emotion\Listing $page */
+        $page = $this->getPage('Listing');
+
+        /** @var MultipleElement $articleBoxes */
+        $articleBoxes = $this->getElement('ArticleBox');
+        $articleBoxes->setParent($page);
+
         /** @var \Emotion\ArticleBox $articleBox */
-        $articleBox = Helper::getMultipleElement($this, 'ArticleBox', $position);
-//        var_dump($articleBox->getXpath());
+        $articleBox = $articleBoxes->setInstance($position);
         $articleBox->clickActionLink('details', $language);
     }
 
