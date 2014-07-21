@@ -34,7 +34,8 @@
         border-right: 0 none;
 	}
 	.entry--link {
-        .unitize-padding(12, 10, 12, 10, 16);
+        .unitize-padding(0, 10);
+        .unitize(45, 16, line-height);
         display: block;
         text-align: center;
 		font-weight: bold;
@@ -53,7 +54,7 @@
 
 	.entry--cart {
 		.primary-gradient();
-		border-top: 1px solid @primaryColor;
+		border-top: 1px solid darken(@primaryColor, 5%);
 		border-bottom: 1px solid darken(@secondaryColor, 10%);
 		border-left: 0 none;
 
@@ -62,15 +63,15 @@
 		}
 	}
 	.entry--spacer {
-		.unitize-height(48, 16);
-		width: 40%;
+		.unitize-height(47, 16);
+		width: 38%;
 		border-left: 0 none;
 	}
 
 	.entry--menu-left {
 		border-right: 1px solid @borderColor;
 		border-left: 0 none;
-		width: 30%;
+		width: 32%;
 	}
 
 	.entry--search {
@@ -159,16 +160,6 @@
 		}
         .language--flag {
             .unitize-margin(0, 0, 0, 5);
-            .unitize-height(11);
-            .unitize-width(14);
-            background: url("../../img/ico-flags.png") no-repeat 0 0;
-            display: inline-block;
-            text-indent: -9999em;
-            position: relative;
-
-            // We need to work with pixels here
-            &.de_DE { background-position: 0 0; }
-            &.en_GB { background-position: 0 -11px; }
         }
 
 		.logo-main {
@@ -187,11 +178,6 @@
 
 	.logo-main, .shop--navigation {
 		float: left;
-	}
-	.shop--navigation {
-		.unitize-padding(16, 0, 16, 0, 16);
-
-		.entry--account { width: 25% }
 	}
 
 	.top-bar--navigation {
@@ -241,8 +227,8 @@
         }
 		.service--list {
 	        .unitize-width(166);
-            .unitize-padding(8, 0, 0, 0);
-            .unitize(20, 16, top);
+            .unitize-padding(8, 8);
+            .unitize(22, 16, top);
             .unitize(-1, 16, left);
             text-align: left;
             position: absolute;
@@ -271,6 +257,7 @@
 	}
 
 	.shop--navigation {
+        .unitize-padding(16, 0, 16, 0, 16);
 		width: 65%;
 
 		.navigation--list {
@@ -289,6 +276,8 @@
 		.entry--cart {
 			.primary-gradient();
             .unitize-padding(12, 20, 12, 20, 16);
+            .unitize(18, 16, line-height);
+            border-right: none;
 
             .entry--link {
                 padding: 0;
@@ -298,6 +287,7 @@
 
 		.entry--link {
             .unitize-padding(12, 20, 12, 20, 16);
+            .unitize(18, 16, line-height);
             font-weight: normal;
         }
 		.entry--menu-left, .entry--spacer { display: none }
@@ -305,6 +295,14 @@
 		.cart--quantity,
 		.search--display,
 		.entry--account { display: inline-block }
+
+        .entry--account .entry--link {
+            &:hover {
+                color: @primaryColor;
+            }
+
+            i { .unitize(10, 16, margin-right); }
+        }
 
 		.cart--quantity { color: #fff; font-weight: normal }
 	}
@@ -329,6 +327,7 @@
 		}
 		.entry--cart {
 			.unitize-padding(8, 16, 8, 16, 16);
+            margin-right: 0;
 		}
 
 		// Search entry

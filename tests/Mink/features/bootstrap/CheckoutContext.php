@@ -51,8 +51,16 @@ class CheckoutContext extends SubContext
     {
         $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();
 
-        /** @var \Emotion\CartPosition $cartPosition */
-        $cartPosition = Helper::getMultipleElement($this, 'CartPosition', $position + 3);
+        /** @var \Emotion\CheckoutCart $page */
+        $page = $this->getPage('CheckoutCart');
+        $offset = $page->cartPositionFirst;
+
+        /** @var MultipleElement $articleBoxes */
+        $cartPositions = $this->getElement('CartPosition');
+        $cartPositions->setParent($page);
+
+        /** @var \Emotion\ArticleBox $articleBox */
+        $cartPosition = $cartPositions->setInstance($position);
         $cartPosition->clickActionLink('remove', $language);
     }
 
@@ -139,5 +147,13 @@ class CheckoutContext extends SubContext
     {
         $aggregations = $aggregations->getHash();
         $this->getPage('CheckoutCart')->checkAggregation($aggregations);
+    }
+
+    /**
+     * @When /^I proceed to confirm$/
+     */
+    public function iProceedToConfirm()
+    {
+        Helper::pressNamedButton($this, 'CheckoutCart', 'checkout');
     }
 }

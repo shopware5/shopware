@@ -27,7 +27,7 @@ Feature: Checkout articles
       | percent | value  |
       | 19 %    | 6,68 € |
 
-    When  I follow "Zur Kasse gehen"
+    When  I proceed to confirm
     And   I change my payment method to "3"
     Then  I should see "Nachnahme"
     And   the cart should contain 1 articles with a value of "37,95 €"
@@ -110,7 +110,7 @@ Feature: Checkout articles
     When  I select "Deutsch" from "__shop"
     Then  I should see "Sonnenbrille Speed Eyes"
 
-    When I follow "Zur Kasse gehen"
+    When I proceed to confirm
     Then I should see "AGB und Widerrufsbelehrung"
     When I proceed to checkout
     Then I should see "Vielen Dank für Ihre Bestellung bei Shopware 4 Demo!"

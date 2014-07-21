@@ -10,7 +10,7 @@ use Behat\Behat\Context\Step\Then;
 class Sitemap extends \Emotion\Sitemap
 {
     public $cssLocator = array(
-        'sitemapGroups' => 'div.sitemap > div:not(.clear)',
+        'sitemapGroups' => 'div.sitemap--content div.sitemap--category',
         'sitemapNodes' => 'div > ul > ul > li',
         'sitemapSubNodes' => 'li > ul > li',
         'nodeLink' => 'li > a',

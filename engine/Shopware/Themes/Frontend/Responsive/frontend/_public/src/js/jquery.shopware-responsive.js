@@ -128,6 +128,31 @@ $(function() {
 
     window.widgets = window.widgets || [];
 
+    // Premium products
+    window.widgets.push({
+        selector: '.premium-product--content',
+        plugin: 'productSlider',
+        smartphone: {
+            perPage: 1,
+            perSlide: 1,
+            touchControl: true
+        },
+        tablet: {
+            perPage: 2,
+            perSlide: 1,
+            touchControl: true
+        },
+        tabletLandscape: {
+            perPage: 3,
+            perSlide: 1,
+            touchControl: true
+        },
+        desktop: {
+            perPage: 4,
+            perSlide: 1
+        }
+    });
+
     if (window.widgets !== 'undefined' && window.widgets.length > 0) {
         $.each(window.widgets, function(index, widget) {
             StateManager.registerListener([{
@@ -185,6 +210,24 @@ $(function() {
     // Auto submitting form
     $('select[data-auto-submit-form="true"]').on('change', function() {
         $(this).parents('form').submit();
+    });
+
+    $('.add-voucher--checkbox').on('change', function(event) {
+        var method = (!$(this).is(':checked')) ? 'addClass' : 'removeClass';
+        event.preventDefault();
+
+        $('.add-voucher--panel')[method]('is--hidden');
+    });
+
+    $('.table--shipping-costs-trigger').on('click', function(event) {
+
+        event.preventDefault();
+
+        var $this = $(this),
+            $next = $this.next(),
+            method = ($next.hasClass('is--hidden')) ? 'removeClass' : 'addClass';
+
+        $next[method]('is--hidden');
     });
 
     // Change the active tab to the customer reviews, if the url param sAction === rating is set.

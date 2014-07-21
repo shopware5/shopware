@@ -1,26 +1,51 @@
 <?php
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
+use Behat\Mink\Session;
+use SensioLabs\Behat\PageObjectExtension\Context\PageFactoryInterface;
 
 /**
  * Class MultipleElement
  */
 abstract class MultipleElement extends Element implements Countable, Iterator
 {
-    /** @var  SubContext */
-    private $context;
-
-    /** @var  \Behat\Mink\Selector\CssSelector */
-    private $cssSelector;
-
-    /** @var  integer */
-    private $count;
-
     /** @var  integer */
     protected $position;
 
     /** @var  string */
     private $xPath;
+
+    /** @var  array */
+    private $siblings;
+
+    public function __construct(Session $session, PageFactoryInterface $pageFactory)
+    {
+        parent::__construct($session, $pageFactory);
+
+        $this->siblings = array();
+    }
+
+    /**
+     * Have to be called after get the MultipleElement to find all its siblings
+     * @param \Behat\Mink\Element\Element $parent
+     * @return $this
+     */
+    public function setParent(\Behat\Mink\Element\Element $parent)
+    {
+        $selectorType = key($this->selector);
+        $locator = $this->selector[$selectorType];
+
+        $this->siblings = $parent->findAll($selectorType, $locator);
+
+        $this->position = 0;
+
+        if($this->valid()) {
+            $this->setInstance(1);
+        }
+
+        return $this;
+    }
+
 
     /**
      * @return string
@@ -31,34 +56,12 @@ abstract class MultipleElement extends Element implements Countable, Iterator
     }
 
     /**
-     * @param SubContext $context
-     */
-    public function setContext(SubContext $context)
-    {
-        $this->context = $context;
-
-        $session = $context->getSession();
-        $selectorsHandler = $session->getSelectorsHandler();
-        $this->cssSelector = $selectorsHandler->getSelector('css');
-
-        $this->count = 0;
-
-        foreach ($this as $element) {
-            $this->count++;
-        }
-
-        $this->position = 1;
-    }
-
-    /**
      * @param integer $position
      * @return MultipleElement $this
      */
-    public function getInstance($position)
+    public function setInstance($position)
     {
-        $locator = sprintf('%s:nth-of-type(%d)', $this->selector['css'], $position);
-        $this->xPath = $this->cssSelector->translateToXPath($locator);
-        $this->position = $position;
+        $this->xPath = $this->siblings[$position - 1]->getXpath();
 
         return $this;
     }
@@ -74,14 +77,14 @@ abstract class MultipleElement extends Element implements Countable, Iterator
      */
     public function count()
     {
-        return $this->count;
+        return count($this->siblings);
     }
 
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Return the current element
      * @link http://php.net/manual/en/iterator.current.php
-     * @return mixed Can return any type.
+     * @return Element Can return any type.
      */
     public function current()
     {
@@ -96,7 +99,10 @@ abstract class MultipleElement extends Element implements Countable, Iterator
      */
     public function next()
     {
-        $this->getInstance($this->position + 1);
+        $this->position++;
+        if ($this->valid()) {
+            $this->setInstance($this->position + 1);
+        }
     }
 
     /**
@@ -119,8 +125,7 @@ abstract class MultipleElement extends Element implements Countable, Iterator
      */
     public function valid()
     {
-        $element = $this->getSession()->getDriver()->find($this->xPath);
-        return (!empty($element));
+        return isset($this->siblings[$this->position]);
     }
 
     /**
@@ -131,6 +136,7 @@ abstract class MultipleElement extends Element implements Countable, Iterator
      */
     public function rewind()
     {
-        $this->getInstance(1);
+        $this->position = 0;
+        $this->setInstance(1);
     }
 }

@@ -290,7 +290,12 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      */
     protected function _createLabelElement($element)
     {
-        $output = "<label for=\"{$element['name']}\">{$element['label']}";
+        $output = "<label for=\"{$element['name']}\">";
+        if ($element['typ'] == 'text2') {
+            $output .= str_replace(';', '/', "{$element['label']}");
+        } else {
+            $output .= "{$element['label']}";
+        }
         if ($element['required'] == 1) {
             $output .= "*";
         }
@@ -373,8 +378,18 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             case "text2":
                 $element['class'] = explode(";", $element['class']);
                 $element['name'] = explode(";", $element['name']);
-                $output .= "<input type=\"text\" class=\"{$element['class'][0]} $requiredField\" $requiredFieldAria value=\"{$post[0]}\" $placeholder id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][0]}\"/>\r\n";
-                $output .= "<input type=\"text\" class=\"{$element['class'][1]} $requiredField\" $requiredFieldAria value=\"{$post[1]}\" $placeholder id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][1]}\"/>\r\n";
+
+                if (Shopware()->Shop()->getTemplate()->getVersion() >= 3 && strpos($element['label'], ';') !== false) {
+                    $placeholders = explode(";", $element['label']);
+                    $placeholder0 = "placeholder=\"{$placeholders[0]}$requiredFieldSnippet\"";
+                    $placeholder1 = "placeholder=\"{$placeholders[1]}$requiredFieldSnippet\"";
+                } else {
+                    $placeholder0 = $placeholder;
+                    $placeholder1 = $placeholder;
+                }
+
+                $output .= "<input type=\"text\" class=\"{$element['class'][0]} $requiredField\" $requiredFieldAria value=\"{$post[0]}\" $placeholder0 id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][0]}\"/>\r\n";
+                $output .= "<input type=\"text\" class=\"{$element['class'][1]} $requiredField\" $requiredFieldAria value=\"{$post[1]}\" $placeholder1 id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][1]}\"/>\r\n";
                 break;
             case "textarea":
                 if (empty($post) && $element["value"]) {

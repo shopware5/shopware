@@ -56,7 +56,9 @@ class Shopware_Tests_Components_Theme_InstallerTest extends Shopware_Tests_Compo
             $configurator,
             Shopware()->Container()->get('theme_path_resolver'),
             Shopware()->Container()->get('theme_util'),
-            $this->getSnippetHandler()
+            $this->getSnippetHandler(),
+            Shopware()->Container()->get('theme_service'),
+            Shopware()->Container()->getParameter('shopware.snippet')
         );
         //creates a directory iterator for the default theme directory (engine/Shopware/Themes)
         $directories = new \DirectoryIterator(
