@@ -38,8 +38,16 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
     public function tagCloudAction()
     {
-        $this->View()->sCloud = Shopware()->Modules()->Marketing()->sBuildTagCloud(
-            $this->Request()->getParam('sCategory')
-        );
+        $config = Shopware()->Plugins()->Frontend()->TagCloud()->Config();
+
+        if (empty($config->show)) {
+            return;
+        }
+
+        if (strpos($config->controller, $this->Request()->getControllerName()) !== false) {
+            $this->View()->sCloud = Shopware()->Modules()->Marketing()->sBuildTagCloud(
+                $this->Request()->getParam('sCategory')
+            );
+        }
     }
 }
