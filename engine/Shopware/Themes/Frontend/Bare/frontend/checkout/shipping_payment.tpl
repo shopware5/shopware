@@ -37,7 +37,7 @@
 
 {* Main content *}
 {block name="frontend_index_content"}
-    <div id="confirm" class="grid_16 push_2 first" data-ajax-shipping-payment="true">
+    <div class="content block content--confirm product--table" data-ajax-shipping-payment="true">
         {include file="frontend/checkout/shipping_payment_core.tpl"}
     </div>
 {/block}
