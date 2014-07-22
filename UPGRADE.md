@@ -130,6 +130,44 @@ In this document you will find a changelog of the important changes related to t
 * Deprecated `Shopware\Models\Widget\Widget::label` variable, getter and setter, and correspondent `s_core_widgets::label` database column
 * Removed deprecated widget settings from the config module. Active widgets and their positions will now be saved automatically.
 * Removed desktop switcher from the `Shopware.container.Viewport` base component.
+* sGetArticleById result no longer contains the sConfiguratorSelection property. sConfiguratorSelection previously contained the selected variant data, which can now be accessed directly in the first level of the sGetArticleById result.
+* sConfigurator class exist no more. The configurator data can now selected over the Shopware\Bundle\StoreFrontBundle\Service\Core\ConfiguratorService.php. To modify the configurator data you can use the sGetArticleById events.
+* The new shopware core selects all required data for sGetArticleById, sGetPromotionById and sGetArticlesByCategory. The following events and internal functions not used in these functions any more
+    * sGetPromotionById events
+        * Shopware_Modules_Articles_GetPromotionById_FilterSql
+    * sGetPromotionById functions
+        * sGetTranslation
+        * sGetArticleProperties
+        * sGetCheapestPrice
+        * sCalculatingPrice
+        * calculateCheapestBasePriceData
+        * getArticleListingCover
+    * sGetAritcleById events
+        * Shopware_Modules_Articles_GetArticleById_FilterSQL
+    * sGetAritcleById functions
+        * sGetTranslation
+        * sGetPricegroupDiscount
+        * sGetPromotionById (for similar and related products)
+        * sCheckIfEsd
+        * sGetPricegroupDiscount
+        * sCalculatingPrice
+        * sGetCheapestPrice
+        * sGetArticleConfig
+        * calculateReferencePrice
+        * sGetArticlePictures
+        * sGetArticlesVotes
+        * sGetArticlesAverangeVote
+        * sGetArticleProperties
+    * sGetArticlesByCategory events
+        * Shopware_Modules_Articles_sGetArticlesByCategory_FilterSql
+        * Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopStart
+        * Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopEnd
+    * sGetArticlesByCategory functions
+        * sGetSupplierById
+        * sGetCheapestPrice
+        * sCalculatingPrice
+        * calculateCheapestBasePriceData
+
 
 ## 4.2.2
 

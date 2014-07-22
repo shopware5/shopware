@@ -33,7 +33,6 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
         'Basket',
         'Categories',
         'cms',
-        'Configurator',
         'Core',
         'Export',
         'Marketing',

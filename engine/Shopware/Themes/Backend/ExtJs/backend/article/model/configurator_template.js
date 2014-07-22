@@ -64,7 +64,7 @@ Ext.define('Shopware.apps.Article.model.ConfiguratorTemplate', {
         { name: 'shippingTime', type: 'string', useNull: true },
         { name: 'shippingFree', type: 'boolean' },
         { name: 'purchaseSteps', type: 'int', useNull: true },
-        { name: 'minPurchase', type: 'int', useNull: true },
+        { name: 'minPurchase', type: 'int', useNull: false, defaultValue: 1 },
         { name: 'maxPurchase', type: 'int', useNull: true },
         { name: 'unitId', type: 'int', useNull: true },
         { name: 'purchaseUnit', type: 'float', useNull: true },

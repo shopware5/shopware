@@ -196,21 +196,9 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $this->View()->assign($categoryArticles);
 
         $this->View()->assign(array(
-            'sSuppliers' => Shopware()->Modules()->Articles()->sGetAffectedSuppliers($categoryId),
-            'sCategoryContent' => $categoryContent
+            'sCategoryContent' => $categoryContent,
+            'activeFilterGroup' => $this->request->getQuery('sFilterGroup')
         ));
-
-        if (empty($categoryContent["hideFilter"]) && $this->displayFiltersInListing()) {
-            $articleProperties = Shopware()->Modules()->Articles()->sGetCategoryProperties($categoryId, $supplierId, null);
-        }
-
-        if (!empty($articleProperties['filterOptions'])) {
-            $this->View()->assign(array(
-                'activeFilterGroup' => $this->request->getQuery('sFilterGroup'),
-                'sPropertiesOptionsOnly' => $articleProperties['filterOptions']['optionsOnly'] ?: array(),
-                'sPropertiesGrouped' => $articleProperties['filterOptions']['grouped'] ?: array()
-            ));
-        }
     }
 
     /**

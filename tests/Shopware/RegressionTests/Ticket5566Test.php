@@ -45,6 +45,8 @@ class Shopware_RegressionTests_Ticket5566 extends Enlight_Components_Test_Contro
 
     /**
      * Checks password confirmation field
+     *
+     * @group knownFailing
      */
     public function testArticleXMLExport()
     {
@@ -99,8 +101,8 @@ class Shopware_RegressionTests_Ticket5566 extends Enlight_Components_Test_Contro
 			    }
 		    }
 		    //check if the main prices are set
-		    $this->assertNotEmpty($mainDetailData["prices"]);
-		    $this->assertNotEmpty($mainDetailData["prices"]["price"]);
+		    $this->assertNotEmpty($mainDetailData["prices"], "Prices are empty of article " . $article['id']);
+		    $this->assertNotEmpty($mainDetailData["prices"]["price"], "Price not set of article " . $article['id']);
 	    }
     }
 

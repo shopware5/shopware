@@ -2477,6 +2477,7 @@ INSERT INTO `s_articles_details` (`id`, `articleID`, `ordernumber`, `suppliernum
 (826, 271, 'TS080501_20000_30_EUR', NULL, 1, NULL, 0, 0, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL),
 (827, 272, 'SW10239', '', 1, '', 0, 1, 0, 0, 0.000, 0, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, '', NULL, 0, '');
 
+
 TRUNCATE TABLE `s_articles_downloads`;
 TRUNCATE TABLE `s_articles_downloads_attributes`;
 TRUNCATE TABLE `s_articles_esd`;
@@ -10668,3 +10669,5 @@ INSERT INTO `s_user_shippingaddress` (`id`, `userID`, `company`, `department`, `
 (3, 2, 'B2B', 'Einkauf', 'company', 'Händler', 'Kundengruppe-Netto', 'Musterweg', '1', '00000', 'Musterstadt', 2, 3);
 
 TRUNCATE TABLE `s_user_shippingaddress_attributes`;
+
+UPDATE `s_articles_details` SET minpurchase = 1 WHERE minpurchase < 1;
