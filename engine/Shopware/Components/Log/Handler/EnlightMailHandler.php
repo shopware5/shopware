@@ -58,6 +58,7 @@ class EnlightMailHandler extends MailHandler
         $mailer = clone $this->mailer;
 
         try {
+            $mailer->setBodyHtml($content);
             $mailer->setBodyText($content);
             $mailer->send();
         } catch (\Exception $e) {

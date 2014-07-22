@@ -24,6 +24,8 @@
 
 use Monolog\Handler\BufferHandler;
 use Shopware\Components\Log\Handler\EnlightMailHandler;
+use Shopware\Components\Log\Processor\ShopwareEnvironmentProcessor;
+use Shopware\Components\Log\Formatter\HtmlFormatter;
 
 /**
  * Shopware Error Handler
@@ -260,6 +262,8 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
         $mailer->addTo(Shopware()->Config()->Mail);
         $mailer->setSubject('Error in shop "'.Shopware()->Config()->Shopname.'".');
         $mailHandler = new EnlightMailHandler($mailer, \Monolog\Logger::WARNING);
+        $mailHandler->pushProcessor(new ShopwareEnvironmentProcessor());
+        $mailHandler->setFormatter(new HtmlFormatter());
         $bufferedHandler = new BufferHandler($mailHandler);
 
         return $bufferedHandler;
