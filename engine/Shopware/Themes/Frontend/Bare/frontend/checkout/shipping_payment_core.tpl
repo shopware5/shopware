@@ -3,31 +3,53 @@
     {include file="frontend/register/error_message.tpl" error_messages=$sErrorMessages}
 {/block}
 
-<div class="outer-confirm-container">
+<div class="confirm--outer-container">
     <form id="shippingPaymentForm" name="shippingPaymentForm" method="post" action="{url controller='checkout' action='saveShippingPayment' sTarget='checkout' sTargetAction='index'}" class="payment">
-        <div class="shipping-payment-information grid_16 first">
-            {* Payment method *}
-            <div class="inner_container">
-                {block name='frontend_checkout_shipping_payment_core_payment_fields'}
-                    {include file='frontend/checkout/change_payment.tpl'}
-                {/block}
-            </div>
-            {* Shipping method *}
-            <div class="inner_container">
-                {block name='frontend_checkout_shipping_payment_core_shipping_fields'}
-                    {include file="frontend/checkout/change_shipping.tpl"}
-                {/block}
-            </div>
-            {* Cart values *}
-            <div class="inner_container">
-                {block name='frontend_checkout_shipping_payment_core_footer'}
-                    {include file="frontend/checkout/cart_footer.tpl"}
-                {/block}
-            </div>
-        </div>
 
+		{* Action top *}
+		{block name='frontend_checkout_shipping_payment_core_buttons'}
+			<div class="confirm--actions table--actions block">
+				<input type="submit" value="{s name='NextButton'}Next{/s}" class="btn btn--primary right main--actions" />
+			</div>
+		{/block}
+
+		{* Payment and shipping information *}
+		{block name='frontend_checkout_shipping_payment_core_information'}
+			<div class="shipping-payment--information">
+
+				{* Payment method *}
+				<div class="confirm--inner-container block">
+					{block name='frontend_checkout_shipping_payment_core_payment_fields'}
+						{include file='frontend/checkout/change_payment.tpl'}
+					{/block}
+				</div>
+
+				{* Shipping method *}
+				<div class="confirm--inner-container block">
+					{block name='frontend_checkout_shipping_payment_core_shipping_fields'}
+						{include file="frontend/checkout/change_shipping.tpl"}
+					{/block}
+				</div>
+
+				{* Cart values *}
+				<div class="confirm--inner-container block">
+					{block name='frontend_checkout_shipping_payment_core_footer'}
+						{include file="frontend/checkout/cart_footer.tpl"}
+					{/block}
+				</div>
+			</div>
+		{/block}
+
+		{* Action bottom *}
         {block name='frontend_checkout_shipping_payment_core_buttons'}
-            <input type="submit" value="{s name='NextButton'}Next{/s}" class="button-right large right" />
-        {/block}
+			<div class="confirm--actions table--actions block">
+            	<input type="submit" value="{s namespace='frontend/checkout/shipping_payment' name='NextButton'}Weiter{/s}" class="btn btn--primary right main--actions" />
+			</div>
+		{/block}
     </form>
+
+	{* Benefit and services footer *}
+	{block name="frontend_checkout_footer"}
+		{include file="frontend/checkout/table_footer.tpl"}
+	{/block}
 </div>

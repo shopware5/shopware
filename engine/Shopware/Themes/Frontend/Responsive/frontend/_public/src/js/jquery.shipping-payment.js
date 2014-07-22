@@ -1,31 +1,35 @@
-$.plugin('shippingPayment', {
-    init: function () {
-        var me = this;
+;(function($) {
+    'use strict';
 
-        me.registerEvents();
-    },
+    $.plugin('shippingPayment', {
+        init: function () {
+            var me = this;
 
-    registerEvents: function () {
-        var me = this;
+            me.registerEvents();
+        },
 
-        me.$el.delegate('input.auto_submit[type=radio]', 'change', me.onInputChanged.bind(me));
-    },
+        registerEvents: function () {
+            var me = this;
 
-    onInputChanged: function () {
-        var me = this,
-            form = $('#shippingPaymentForm'),
-            url = form.attr('action');
+            me.$el.delegate('input.auto_submit[type=radio]', 'change', $.proxy(me.onInputChanged, me));
+        },
 
-        $.loadingIndicator.open();
+        onInputChanged: function () {
+            var me = this,
+                form = $('#shippingPaymentForm'),
+                url = form.attr('action');
 
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: $("#shippingPaymentForm").serialize(),
-            success: function(res) {
-                $('#confirm').empty().html(res);
-                $.loadingIndicator.close();
-            }
-        })
-    }
-});
+            $.loadingIndicator.open();
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $("#shippingPaymentForm").serialize(),
+                success: function(res) {
+                    me.$el.empty().html(res);
+                    $.loadingIndicator.close();
+                }
+            })
+        }
+    });
+})(jQuery);

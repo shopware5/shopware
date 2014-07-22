@@ -24,16 +24,29 @@
     </style>
 {/block}
 
-{* Hide breadcrumb *}
-{block name='frontend_index_breadcrumb'}{/block}
+{* Shop header *}
+{block name='frontend_index_navigation'}
+	{include file="frontend/checkout/header.tpl"}
+{/block}
 
-{block name="frontend_index_content_top"}
-    {* Step box *}
-    {include file="frontend/register/steps.tpl" sStepActive="paymentShipping"}
+{* Title *}
+{block name='frontend_index_header_title'}
+	{s name="RegisterTitle"}{/s} | {config name=shopName}
 {/block}
 
 {* Hide sidebar left *}
 {block name='frontend_index_content_left'}{/block}
+
+{* Hide breadcrumb *}
+{block name='frontend_index_breadcrumb'}{/block}
+
+{* Step box *}
+{block name='frontend_index_navigation_categories_top'}
+	{include file="frontend/register/steps.tpl" sStepActive="address"}
+{/block}
+
+{* Hide footer *}
+{block name="frontend_index_footer"}{/block}
 
 {* Main content *}
 {block name="frontend_index_content"}
