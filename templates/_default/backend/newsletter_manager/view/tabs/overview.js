@@ -198,7 +198,8 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
             {
                 header: me.snippets.columns.revenue,
                 dataIndex: 'revenue',
-                flex: 1
+                flex: 1,
+                sortable: false
             },
             {
                 header: me.snippets.columns.actions,
