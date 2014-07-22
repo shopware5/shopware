@@ -8,6 +8,7 @@ In this document you will find a changelog of the important changes related to t
 * Create an attributes entity when creating an order document using the Document component and check for an `attributes` array in the document config, whose key/value pairs will be set as the document's attributes
 * Customer reviews backend module was improved to better handle reviews with large texts
 * Auto update module now also reports main shop and subshops languages
+* Maintenance mode options can now be configured by subshop
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
