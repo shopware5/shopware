@@ -1,4 +1,3 @@
-
 {if !$sOffers}
 
 {block name="frontend_listing_actions_class"}
@@ -11,15 +10,15 @@
 		{block name='frontend_listing_actions_sort'}
 			<form method="get" action="{url controller=cat sCategory=$sCategoryContent.id}">
             {foreach from=$categoryParams key=key item=value}
-                {if $key == 'sSort'}
+                {if $key == 'sSort' || $key == $shortParameters.sSort}
                     {continue}
                 {/if}
                 <input type="hidden" name="{$key}" value="{$value}">
             {/foreach}
-            <input type="hidden" name="sPage" value="1">
+            <input type="hidden" name="{$shortParameters.sPage}" value="1">
 			<div class="sort-filter">
 				<label>{s name='ListingLabelSort'}{/s}</label>
-				<select name="sSort" class="auto_submit">
+				<select name="{$shortParameters.sSort}" class="auto_submit">
 					<option value="1"{if $sSort eq 1} selected="selected"{/if}>{s name='ListingSortRelease'}{/s}</option>
 					<option value="2"{if $sSort eq 2} selected="selected"{/if}>{s name='ListingSortRating'}{/s}</option>
 					<option value="3"{if $sSort eq 3} selected="selected"{/if}>{s name='ListingSortPriceLowest'}{/s}</option>
@@ -36,17 +35,19 @@
 		{if $sPerPage}
 			<form method="get" action="{url controller=cat sCategory=$sCategoryContent.id}">
             {foreach from=$categoryParams key=key item=value}
-                {if $key == 'sPerPage'}
+                {if $key == 'sPerPage' || $key == $shortParameters.sPerPage}
                     {continue}
                 {/if}
                 <input type="hidden" name="{$key}" value="{$value}">
             {/foreach}
-            <input type="hidden" name="sPage" value="1">
+            <input type="hidden" name="{$shortParameters.sPage}" value="1">
             <div class="articleperpage{if $sCategoryContent.noViewSelect} rightalign{/if}">
 				<label>{s name='ListingLabelItemsPerPage'}{/s}</label>
-				<select name="sPerPage" class="auto_submit">
+				<select name="{$shortParameters.sPerPage}" class="auto_submit">
 				{foreach from=$sPerPage item=perPage}
-			        <option value="{$perPage.value}" {if $perPage.markup}selected="selected"{/if}>{$perPage.value}</option>
+			        <option value="{$perPage.value}" {if $perPage.markup}selected="selected"{/if}>
+                        {$perPage.value}
+                    </option>
 				{/foreach}
 				</select>
 			</div>
@@ -58,10 +59,18 @@
 
 		{block name="frontend_listing_actions_change_layout"}
 		{if !$sCategoryContent.noViewSelect}
+            {assign var="templateLinks" value=array()}
+            {foreach from=$categoryParams key=key item=value}
+                {if $key == 'sTemplate' || $key == $shortParameters.sTemplate}
+                    {continue}
+                {/if}
+                {$templateLinks[$key] = $value}
+            {/foreach}
+
 			<div class="list-settings">
                 <label>{s name='ListingActionsSettingsTitle'}Darstellung:{/s}</label>
-                <a href="{url params=$categoryParams sViewport='cat' sCategory=$sCategoryContent.id sPage=1 sTemplate='table'}" class="table-view {if $sBoxMode=='table'}active{/if}" title="{s name='ListingActionsSettingsTable'}Tabellen-Ansicht{/s}">&nbsp;</a>
-                <a href="{url params=$categoryParams sViewport='cat' sCategory=$sCategoryContent.id sPage=1 sTemplate='list'}" class="list-view {if $sBoxMode=='list'}active{/if}" title="{s name='ListingActionsSettingsList'}Listen-Ansicht{/s}">&nbsp;</a>
+                <a href="{url params=$templateLinks sViewport='cat' sCategory=$sCategoryContent.id sPage=1 sTemplate='table'}" class="table-view {if $sBoxMode=='table'}active{/if}" title="{s name='ListingActionsSettingsTable'}Tabellen-Ansicht{/s}">&nbsp;</a>
+                <a href="{url params=$templateLinks sViewport='cat' sCategory=$sCategoryContent.id sPage=1 sTemplate='list'}" class="list-view {if $sBoxMode=='list'}active{/if}" title="{s name='ListingActionsSettingsList'}Listen-Ansicht{/s}">&nbsp;</a>
             </div>
 		{/if}
 		{/block}

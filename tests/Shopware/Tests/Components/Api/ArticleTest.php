@@ -2150,21 +2150,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
             $this->assertContains($category->getCategory()->getId(), $ids);
             $this->assertContains($category->getShop()->getId(), array(1,2));
         }
-
-        $german = Shopware()->Modules()->Categories()->sGetCategoryIdByArticleId(
-            $article->getId(),
-            null,
-            1
-        );
-
-        $english = Shopware()->Modules()->Categories()->sGetCategoryIdByArticleId(
-            $article->getId(),
-            null,
-            2
-        );
-
-        $this->assertEquals($first['id'], $german);
-        $this->assertEquals($second['id'], $english);
     }
 
     

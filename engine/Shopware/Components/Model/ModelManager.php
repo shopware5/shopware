@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Model;
 
+use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
 use Shopware\Components\Model\Query\SqlWalker;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
@@ -31,7 +32,6 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
 use Doctrine\Common\Util\Inflector;
 use Doctrine\Common\EventManager;
 use Symfony\Component\Translation\Translator;

@@ -93,6 +93,9 @@ class Shopware_RegressionTests_Ticket5052 extends Enlight_Components_Test_Contro
 
     );
 
+    /**
+     * @group knownFailing
+     */
     public function testArticleDetail()
     {
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();

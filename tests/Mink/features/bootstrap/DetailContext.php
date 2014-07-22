@@ -66,5 +66,13 @@ class DetailContext extends SubContext
     {
         $this->getElement('Notifier')->submit($email);
     }
+
+    /**
+     * @Then /^I can not select "([^"]*)" from "([^"]*)"$/
+     */
+    public function iCanNotSelectFrom($configuratorOption, $configuratorGroup)
+    {
+        $this->getPage('Detail')->canNotSelectConfiguratorOption($configuratorOption, $configuratorGroup);
+    }
 }
 
