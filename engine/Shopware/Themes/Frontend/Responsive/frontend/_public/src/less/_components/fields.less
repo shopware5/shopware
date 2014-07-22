@@ -5,161 +5,222 @@ input[type="search"],
 input[type="password"],
 input[type="number"],
 input[type="email"] {
-	@boxShadowColor: rgba(red(@borderColor), green(@borderColor), blue(@borderColor), .9);
-	.appearance(none);
-	.border-radius(3px);
-	.box-sizing();
-	.unitize-width(290);
-	.unitize-padding(9, 10, 10, 10);
-	.box-shadow(inset 0 1px 1px @boxShadowColor);
-	background: @lightGradientEnd;
-	border: 1px solid @borderColor;
-	border-top-color: darken(@borderColor, 5%);
-	color: @lightTextColor;
+    @boxShadowColor: rgba(red(@borderColor), green(@borderColor), blue(@borderColor), .9);
+    .appearance(none);
+    .border-radius(3px);
+    .box-sizing();
+    .unitize-width(290);
+    .unitize-padding(9, 10, 10, 10);
+    .box-shadow(inset 0 1px 1px @boxShadowColor);
+    background: @lightGradientEnd;
+    border: 1px solid @borderColor;
+    border-top-color: darken(@borderColor, 5%);
+    color: @lightTextColor;
 
-	&:focus {
-		.box-shadow(0 0 0 transparent);
-		outline: none;
-		border-color: @primaryColor;
-		background: #fff;
+    &:focus {
+        .box-shadow(0 0 0 transparent);
+        outline: none;
+        border-color: @primaryColor;
+        background: #fff;
         color: @primaryTextColor;
-	}
+    }
 
-	&.has--error {
-		color: @errorText;
-		background: @errorBackground;
-		border-color: @errorBorderColor;
-	}
+    &.has--error {
+        color: @errorText;
+        background: @errorBackground;
+        border-color: @errorBorderColor;
+    }
+
+    // Input field spacing
+    &.input--field {
+        .unitize(10, 16, margin-bottom);
+        width: 100%;
+
+        &.input--field-street {
+            margin-right: 2%;
+            width: 74%;
+            float: left;
+        }
+
+        &.input--field-streetnumber {
+            width: 24%;
+            float: left;
+        }
+
+        &.input--field-zipcode {
+            margin-right: 2%;
+            width: 30%;
+            float: left;
+        }
+
+        &.input--field-city {
+            width: 68%;
+            float: left;
+        }
+    }
+
 }
 
 .js--fancy-select {
-	.border-radius(3px);
-	.box-sizing();
-	.unitize-width(290);
+    .border-radius(3px);
+    .box-sizing();
+    .unitize-width(290);
     .unitize(44, 16, line-height);
-	.box-shadow(0 1px 1px 0 rgba(0, 0, 0, 0.1));
-	.linear-gradient(#ffffff, #f7f8fa);
-	.clearfix();
-	display: inline-block;
-	position: relative;
-	border: 1px solid @borderColor;
-	overflow: hidden;
-	cursor: pointer;
+    .box-shadow(0 1px 1px 0 rgba(0, 0, 0, 0.1));
+    .linear-gradient(@lightGradientStart, @primaryLightBackgroundColor);
+    .clearfix();
+    display: inline-block;
+    position: relative;
+    border: 1px solid @borderColor;
+    overflow: hidden;
+    cursor: pointer;
 
-	&:hover {
-		.linear-gradient(#f7f8fa, #ffffff);
-	}
+    &:hover {
+        .linear-gradient(@primaryLightBackgroundColor, @lightGradientStart);
+    }
 
     &.js--is--focused {
         border-color: @primaryColor;
     }
 
-	select {
-		.unitize-height(44);
-		.appearance(none);
-		.opacity(0);
-		position: absolute;
-		top: 0; left: 0;
-		width: 100%;
-		display: block;
-		cursor: pointer;
-		z-index: 1000;
+    select {
+        .unitize-height(44);
+        .appearance(none);
+        .opacity(0);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        display: block;
+        cursor: pointer;
+        z-index: 1000;
 
-		// Removes the blue glow around the select field
-		// see: http://www.faridesign.net/2012/02/remove-border-around-input-chrome-safari/
-		&:focus {
-			outline: none;
-		}
-	}
+        // Removes the blue glow around the select field
+        // see: http://www.faridesign.net/2012/02/remove-border-around-input-chrome-safari/
+        &:focus {
+            outline: none;
+        }
+    }
 
-	.js--fancy-select-text {
-		.unitize-padding(0, 40, 0, 10);
-		border-right: 1px solid #fff;
-		font-weight: bold;
-		width: 100%;
+    .js--fancy-select-text {
+        .unitize-padding(0, 40, 0, 10);
+        border-right: 1px solid #fff;
+        font-weight: bold;
+        width: 100%;
 
-		// CSS truncating
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
+        // CSS truncating
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
-	.js--fancy-select-trigger {
-		.unitize-width(30);
-		position: absolute;
-		right: 0; top: 0;
-		border-left: 1px solid @borderColor;
-		text-align: center;
-		text-shadow: 0 1px 0 #fff;
-		font-weight: bold;
-	}
+    .js--fancy-select-trigger {
+        .unitize-width(30);
+        position: absolute;
+        right: 0;
+        top: 0;
+        border-left: 1px solid @borderColor;
+        text-align: center;
+        text-shadow: 0 1px 0 #fff;
+        font-weight: bold;
+    }
 
-	// State disabled
-	&.is--disabled {
-		.opacity(.5);
+    // State disabled
+    &.is--disabled {
+        .opacity(.5);
 
-		select {
-			cursor: not-allowed;
-		}
-	}
+        select {
+            cursor: not-allowed;
+        }
+    }
 
-	// Error state
-	&.has--error {
-		color: @errorText;
-		border-color: @errorBorderColor;
-  		background: @errorBackground;
+    // Error state
+    &.has--error {
+        color: @errorText;
+        border-color: @errorBorderColor;
+        background: @errorBackground;
 
-		.js--fancy-select-trigger {
-			border-color: @errorBorderColor;
-		}
+        .js--fancy-select-trigger {
+            border-color: @errorBorderColor;
+        }
 
-		.js--fancy-select-text {
-			border-color: lighten(@errorBorderColor, 10%);
-		}
-	}
+        .js--fancy-select-text {
+            border-color: lighten(@errorBorderColor, 10%);
+        }
+    }
 }
 
 // Quantity field
 .js--quantity-field {
-	.clearfix();
+    .clearfix();
 
-	input[type="number"] {
-		width: 78%;
-		margin: 0 2% 0 0;
-	}
+    input[type="number"] {
+        width: 78%;
+        margin: 0 2% 0 0;
+    }
 
-	input[type="number"],
-	.js--quantity-button {
-		float: left;
-	}
+    input[type="number"],
+    .js--quantity-button {
+        float: left;
+    }
 
-	.js--quantity-button {
-		width: 20%;
-	}
+    .js--quantity-button {
+        width: 20%;
+    }
 
-	.js--quantity-button > a {
-		.user-select(none);
-		.unitize-height(20, 16);
-		.unitize(18, 16, line-height);
-		display: block;
-		padding: 0;
-		font-weight: bold;
-		text-align: center;
-	}
-	.js--quantity-button-plus {
-		.unitize-margin(0, 0, 4, 0, 16);
-	}
+    .js--quantity-button > a {
+        .user-select(none);
+        .unitize-height(20, 16);
+        .unitize(18, 16, line-height);
+        display: block;
+        padding: 0;
+        font-weight: bold;
+        text-align: center;
+    }
+    .js--quantity-button-plus {
+        .unitize-margin(0, 0, 4, 0, 16);
+    }
 }
+
+@media screen and (min-width: @tabletViewportWidth) {
+
+    /* Standard input fields. */
+    .input--field {
+        .unitize(15, 16, margin-bottom);
+
+        .input--field-street {
+            margin-right: 2%;
+            width: 86%;
+        }
+        .input--field-streetnumber {
+            width: 12%;
+        }
+        .input--field-zipcode {
+            margin-right: 2%;
+            width: 20%;
+        }
+        .input--field-city {
+            width: 78%;
+        }
+    }
+
+}
+
 @media screen and (min-width: @desktopViewportWidth) {
 
-	.js--fancy-select {
+    // Input field styling
+    .input--field {
+        .unitize(15, 16, margin-bottom);
+    }
+
+    .js--fancy-select {
         .unitize-width(290);
         .unitize(34, 16, line-height);
         .box-shadow(0 1px 1px 0 rgba(0, 0, 0, 0.1));
 
-		select {
-			.unitize-height(34);
-		}
+        select {
+            .unitize-height(34);
+        }
     }
 
 }
