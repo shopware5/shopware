@@ -1,12 +1,4 @@
 {if $sArticle.sSimilarArticles}
-
-	{* Similar products - Title *}
-	{block name="frontend_detail_index_similar_slider_title"}
-		<h3 class="content--title">
-			{s name='DetailSimilarHeader'}{/s}
-		</h3>
-	{/block}
-
 	{* Similar products - Content *}
 	{block name="frontend_detail_index_similar_slider_content"}
 		<div class="listing--container">

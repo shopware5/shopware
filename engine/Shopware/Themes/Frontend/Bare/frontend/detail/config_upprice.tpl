@@ -1,16 +1,16 @@
-<form method="post" action="{url sArticle=$sArticle.articleID sCategory=$sArticle.categoryID}" class="confgurator--form upprice--form">
+<form method="post" action="{url sArticle=$sArticle.articleID sCategory=$sArticle.categoryID}" class="configurator--form upprice--form">
 
 	{foreach $sArticle.sConfigurator as $sConfigurator}
 		
 		{* Group name *}
 		{block name='frontend_detail_group_name'}
-			<strong class="content--title">{$sConfigurator.groupname}:</strong>
+			<p class="configurator--label">{$sConfigurator.groupname}:</p>
 		{/block}
 		
 		{* Group description *}
 		{if $sConfigurator.groupdescription}
 			{block name='frontend_detail_group_description'}
-				<p class="content--description">{$sConfigurator.groupdescription}</p>
+				<p class="configurator--description">{$sConfigurator.groupdescription}</p>
 			{/block}
 		{/if}
 
