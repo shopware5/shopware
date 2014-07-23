@@ -87,7 +87,9 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
         Shopware()->Models()->detach($main);
 
         $this->View()->shop = $shop;
-        $this->View()->currencies = $shop->getCurrencies();
+        if (!$this->Request()->getParam('hideCurrency', false)) {
+            $this->View()->currencies = $shop->getCurrencies();
+        }
         $languages = $shop->getChildren()->toArray();
         foreach ($languages as $languageKey => $language) {
             Shopware()->Models()->detach($language);
