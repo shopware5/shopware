@@ -61,19 +61,22 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     public function emotionTopSellerAction()
     {
         $category = (int) $this->Request()->getParam("category");
-        $start = (int) $this->Request()->getParam("start");
         $limit = (int) $this->Request()->getParam("limit");
-
         $elementHeight = $this->Request()->getParam("elementHeight");
         $elementWidth = $this->Request()->getParam("elementWidth");
-
         $pages = $this->Request()->getParam("pages");
+
         $offset = $limit * $pages - $limit;
 
         $this->View()->loadTemplate("widgets/emotion/slide_articles.tpl");
 
         $max = $this->Request()->getParam("max");
         $maxPages = round($max / $limit);
+
+        if (!$category || !$pages || !$limit) {
+            $this->Response()->setHttpResponseCode(404);
+            return;
+        }
 
         $values = $this->getProductTopSeller($category, $offset, $limit);
 
@@ -90,17 +93,21 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     public function emotionNewcomerAction()
     {
         $this->View()->loadTemplate("widgets/emotion/slide_articles.tpl");
+
         $category = (int) $this->Request()->getParam("category");
-        $start = (int) $this->Request()->getParam("start");
         $limit = (int) $this->Request()->getParam("limit");
         $elementHeight = $this->Request()->getParam("elementHeight");
         $elementWidth = $this->Request()->getParam("elementWidth");
-
         $pages = $this->Request()->getParam("pages");
-        $offset = $limit * $pages - $limit;
-
         $max = $this->Request()->getParam("max");
+
+        $offset = $limit * $pages - $limit;
         $maxPages = round($max / $limit);
+
+        if (!$category || !$pages || !$limit) {
+            $this->Response()->setHttpResponseCode(404);
+            return;
+        }
 
         $values = $this->getProductNewcomer($category, $offset, $limit);
 
@@ -541,7 +548,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         }
 
         return array("values" => $values, "pages" => $pages);
-
     }
 
     private function getProductTopSeller($category, $offset = 0, $limit)
