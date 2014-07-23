@@ -4187,7 +4187,7 @@ class sAdmin
     {
         // Check account mode and password
         if (!$postData["skipLogin"] || $edit) {
-            if (!$edit || ($postData["password"] || $postData["passwordConfirmation"])) {
+            if (!$edit || (isset($postData["password"]) || isset($postData["passwordConfirmation"]))) {
                 // Validate password
                 if (strlen(trim($postData["password"])) == 0
                     || !$postData["password"]
