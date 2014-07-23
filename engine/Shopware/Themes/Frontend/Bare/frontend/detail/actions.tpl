@@ -6,7 +6,7 @@
 
 {block name='frontend_detail_actions_review'}
 	{if !{config name=VoteDisable}}
-		<a href="#product--publish-comment" class="action--link link--publish-comment" rel="nofollow" title="{s name='DetailLinkReview'}{/s}">
+		<a href="#content--product-reviews" data-show-tab="true" class="action--link link--publish-comment" rel="nofollow" title="{s name='DetailLinkReview'}{/s}">
 			<i class="icon--star"></i> {s name="DetailLinkReview"}{/s}
 		</a>
 	{/if}

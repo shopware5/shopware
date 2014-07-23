@@ -79,16 +79,13 @@
 				{* Sidebar right *}
 				{block name='frontend_index_content_right'}{/block}
 
-
 				{* Last seen products *}
 				{block name='frontend_index_left_last_articles'}
 					{if $sLastArticlesShow && !$isEmotionLandingPage}
                         {* Last seen products *}
-                        <div class="last-seen-products" data-last-seen-products="true">
-                            <div class="last-seen-products--slider">
-                                <div class="last-seen-products--container">
-
-                                </div>
+                        <div class="last-seen-products panel" data-last-seen-products="true">
+                            <div class="last-seen-products--slider product-slider panel--body" data-product-slider="true">
+                                <div class="last-seen-products--container product-slider--container"></div>
                             </div>
                         </div>
 					{/if}
@@ -148,9 +145,12 @@
                     'articleId': ~~('{$sArticle.articleID}'),
                     'linkDetailsRewritten': '{$sArticle.linkDetailsRewrited}',
                     'articleName': '{$sArticle.articleName|escape:"javascript"}',
-                    'thumbnail': '{$sArticle.image.src[{config name=thumb}]}'
-                    {/if}
-                {rdelim}
+                    'images': {ldelim}
+						{foreach $sArticle.image.src as $key => $value}
+							'{$key}': '{$value}',
+						{/foreach}
+					{rdelim}
+                {/if}{rdelim}
             {rdelim};
         {/block}
         //]]>

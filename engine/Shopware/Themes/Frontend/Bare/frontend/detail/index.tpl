@@ -103,10 +103,12 @@
 
                 {* Product data *}
                 <div itemprop="offers" itemscope itemtype="http://schema.org/Offer" class="buybox--inner">
+
                     {block name='frontend_detail_index_data'}
                         <meta itemprop="priceCurrency" content="{$Shop->getCurrency()->getCurrency()}" />
                         {include file="frontend/detail/data.tpl" sArticle=$sArticle sView=1}
                     {/block}
+
                     {block name='frontend_detail_index_after_data'}{/block}
 
                     {* Configurator drop down menu's *}
@@ -235,49 +237,56 @@
 
 	{* Related and similar products tab panel *}
 	{block name="frontend_detail_index_related_similiar_tabs"}
-		<div class="related-slider--tabs" data-tab-content="true">
-			{block name="frontend_detail_index_related_similiar_tabs_navigation"}
-				<ul class="tab--navigation panel--tab-nav">
+		{if ($sArticle.sRelatedArticles && !$sArticle.crossbundlelook) || $sArticle.sSimilarArticles}
+			<div class="related-slider--tabs" data-tab-content="true">
 
-					{* Tab navigation - Related products *}
-					{block name="frontend_detail_tabs_entry_related"}
-						{if $sArticle.sRelatedArticles && !$sArticle.crossbundlelook}
-							<li class="navigation--entry">
-								<a href="#content--related-products" class="navigation--link">
-									{s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}Zubehör{/s} ({$sArticle.sRelatedArticles|@count})
-								</a>
-							</li>
-						{/if}
-					{/block}
+				{block name="frontend_detail_index_related_similiar_tabs_navigation"}
+					<ul class="tab--navigation panel--tab-nav">
 
-					{* Similar products *}
-					{block name="frontend_detail_index_recommendation_tabs_entry_similar_products"}
-						<li class="navigation--entry entry--similar-products">
-							<a class="navigation--link" href="#content--similar-products">
-								{s name="DetailRecommendationSimilarLabel"}Ähnliche Artikel{/s}
-							</a>
-						</li>
-					{/block}
-				</ul>
-			{/block}
+						{* Tab navigation - Related products *}
+						{block name="frontend_detail_tabs_entry_related"}
+							{if $sArticle.sRelatedArticles && !$sArticle.crossbundlelook}
+								<li class="navigation--entry">
+									<a href="#content--related-products" class="navigation--link">
+										{s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}Zubehör{/s} ({$sArticle.sRelatedArticles|@count})
+									</a>
+								</li>
+							{/if}
+						{/block}
 
-			{block name="frontend_detail_index_related_similiar_tab_content_container"}
-				<div class="tab--content panel--body has--border">
+						{* Similar products *}
+						{block name="frontend_detail_index_recommendation_tabs_entry_similar_products"}
+							{if $sArticle.sSimilarArticles}
+								<li class="navigation--entry entry--similar-products">
+									<a href="#content--similar-products" class="navigation--link">
+										{s name="DetailRecommendationSimilarLabel"}Ähnliche Artikel{/s}
+									</a>
+								</li>
+							{/if}
+						{/block}
+					</ul>
+				{/block}
 
-					{* Related articles *}
-					{block name="frontend_detail_index_tabs_related"}
-						{include file="frontend/detail/tabs/related.tpl"}
-					{/block}
+				{block name="frontend_detail_index_related_similiar_tab_content_container"}
+					<div class="tab--content panel--body has--border">
 
-					{* Similar products slider *}
-					{block name="frontend_detail_index_similar_slider"}
-						<div class="content--similar-products">
-							{include file='frontend/detail/similar.tpl'}
-						</div>
-					{/block}
-				</div>
-			{/block}
-		</div>
+						{* Related articles *}
+						{block name="frontend_detail_index_tabs_related"}
+							<div class="content--related-products">
+								{include file="frontend/detail/tabs/related.tpl"}
+							</div>
+						{/block}
+
+						{* Similar products slider *}
+						{block name="frontend_detail_index_similar_slider"}
+							<div class="content--similar-products">
+								{include file='frontend/detail/similar.tpl'}
+							</div>
+						{/block}
+					</div>
+				{/block}
+			</div>
+		{/if}
 	{/block}
 
 	{* Recommendation tab panel *}
@@ -290,20 +299,24 @@
 
 					{* Customer also bought *}
 					{block name="frontend_detail_index_recommendation_tabs_entry_also_bought"}
-						<li class="navigation--entry entry--also-bought">
-							<a class="navigation--link" href="#content--also-bought">
-								{s name="DetailRecommendationAlsoBoughtLabel"}Kunden kauften auch{/s}
-							</a>
-						</li>
+						{if {config name=alsoBoughtShow}}
+							<li class="navigation--entry entry--also-bought">
+								<a class="navigation--link" href="#content--also-bought">
+									{s name="DetailRecommendationAlsoBoughtLabel"}Kunden kauften auch{/s}
+								</a>
+							</li>
+						{/if}
 					{/block}
 
 					{* Customer also viewed *}
 					{block name="frontend_detail_index_recommendation_tabs_entry_also_viewed"}
-						<li class="navigation--entry entry--customer-viewed">
-							<a class="navigation--link" href="#content--customer-viewed">
-								{s name="DetailRecommendationAlsoViewedLabel"}Kunden haben sich ebenfalls angesehen{/s}
-							</a>
-						</li>
+						{if {config name=similarViewedShow}}
+							<li class="navigation--entry entry--customer-viewed">
+								<a class="navigation--link" href="#content--customer-viewed">
+									{s name="DetailRecommendationAlsoViewedLabel"}Kunden haben sich ebenfalls angesehen{/s}
+								</a>
+							</li>
+						{/if}
 					{/block}
 				</ul>
 			{/block}
@@ -314,20 +327,20 @@
 
 					{* "Customers bought also" slider *}
 					{block name="frontend_detail_index_also_bought_slider"}
-						<div class="content--also-bought">
-							{if {config name=alsoBoughtShow}}
+						{if {config name=alsoBoughtShow}}
+							<div class="content--also-bought">
 								{action module=widgets controller=recommendation action=bought articleId=$sArticle.articleID}
-							{/if}
-						</div>
+							</div>
+						{/if}
 					{/block}
 
 					{* "Customers similar viewed" slider *}
 					{block name="frontend_detail_index_similar_viewed_slider"}
-						<div class="content--customer-viewed">
-							{if {config name=similarViewedShow}}
+						{if {config name=similarViewedShow}}
+							<div class="content--customer-viewed">
 								{action module=widgets controller=recommendation action=viewed articleId=$sArticle.articleID}
-							{/if}
-						</div>
+							</div>
+						{/if}
 					{/block}
 				</div>
 			{/block}

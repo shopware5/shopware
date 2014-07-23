@@ -20,13 +20,13 @@
 	{* Properties *}
 	{block name='frontend_detail_description_properties'}
 		{if $sArticle.sProperties}
-			<div class="panel has--border">
-			    <table class="panel--table">
+			<div class="product--properties panel has--border">
+			    <table>
 					{foreach $sArticle.sProperties as $sProperty}
 						<tr>
 							{* Property label *}
 							{block name='frontend_detail_description_properties_label'}
-								<th>{$sProperty.name}:</th>
+								<td class="is--bold">{$sProperty.name}:</td>
 							{/block}
 
 							{* Property content *}
