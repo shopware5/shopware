@@ -48,23 +48,39 @@
         me.$nav = me.$el.find('.tab--navigation');
         me.$content = me.$el.find('.tab--content');
 
-	if (StateManager.isSmartphone()) {
+        me.$additionalTriggers = $('*[data-show-tab="true"]');
+
+        me.targets = [];
+
+	    if (StateManager.isSmartphone()) {
             me.createMobileView();
         } else {
             me.createDesktopView();
         }
 
-	$(window).on('resize', function () {
-	    if (StateManager.isSmartphone()) {
-                me.createMobileView();
-            } else {
-                me.createDesktopView();
+	    $(window).on('resize', function () {
+            if (StateManager.isSmartphone()) {
+                    me.createMobileView();
+                } else {
+                    me.createDesktopView();
+                }
+        });
+
+        me.$additionalTriggers.each(function() {
+            var trigger = $(this),
+                target = trigger.attr('href').substring(1);
+
+            if (me.targets.indexOf(target) > -1) {
+                trigger.on(clickEvt + '.' + pluginName, function(e) {
+                    e.preventDefault();
+                    me.changeTab($('.' + target).index(), true);
+                })
             }
         });
 
-	if (me.opts.mode == 'local') {
-	    me.$nav.find('.navigation--entry:first-child .navigation--link').trigger(clickEvt + '.' + pluginName);
-	}
+        if (me.opts.mode == 'local') {
+            me.$nav.find('.navigation--entry:first-child .navigation--link').trigger(clickEvt + '.' + pluginName);
+        }
     };
 
     Plugin.prototype.createMobileView = function () {
@@ -72,62 +88,78 @@
 
         me.$el.addClass('js--mobile-tab-panel').removeClass('js--desktop-tab-panel');
 
-	if (me.opts.mode !== 'remote') {
-	    me.$nav.find('.navigation--link').each(function () {
-		var $this = $(this),
-			href = $this.attr('href').substring(1);
+        if (me.opts.mode !== 'remote') {
+            me.$nav.find('.navigation--link').each(function () {
+                var $this = $(this),
+                    href = $this.attr('href').substring(1),
+                    content = me.$el.find('.' + href);
 
-		me.$content.find('.' + href).insertAfter($this);
-	    });
+                if (content.html().length <= 1) {
+                    $this.parent('.navigation--entry').remove();
+                    content.remove();
+                } else {
+                    content.insertAfter($this);
+                }
 
-	    me.$nav.find('.navigation--link').on(clickEvt + '.' + pluginName, function (event) {
-		var $this = $(this),
-			href = $this.attr('href').substring(1);
+                me.targets.push(href);
+            });
 
-		event.preventDefault();
+            me.$nav.find('.navigation--link').on(clickEvt + '.' + pluginName, function (event) {
+            var $this = $(this),
+                href = $this.attr('href').substring(1);
 
-		// Hide all content boxes
-		me.$nav.find('li > div[class^="content--"]').hide().removeClass(me.opts.activeCls);
-		me.$nav.find('.navigation--link').removeClass(me.opts.activeCls);
+            event.preventDefault();
 
-		// Activate the selected content
-		$this.addClass(me.opts.activeCls).next().show();
-	    });
-	} else {
-	    var active = me.$nav.find('.is--active');
-	    me.$el.find('.content--custom').insertAfter(active);
-	}
+            // Hide all content boxes
+            me.$el.find('li > div[class^="content--"]').hide().removeClass(me.opts.activeCls);
+            me.$el.find('.navigation--link').removeClass(me.opts.activeCls);
+
+            // Activate the selected content
+            $this.addClass(me.opts.activeCls).next().show();
+            });
+        } else {
+            var active = me.$nav.find('.is--active');
+            me.$el.find('.content--custom').insertAfter(active);
+        }
     };
 
     Plugin.prototype.createDesktopView = function () {
         var me = this;
         me.$el.removeClass('js--mobile-tab-panel').addClass('js--desktop-tab-panel');
 
-	if (me.opts.mode !== 'remote') {
-	    me.$nav.find('.navigation--link').each(function () {
-		var $this = $(this),
-			href = $this.attr('href').substring(1);
+        if (me.opts.mode !== 'remote') {
+            me.$nav.find('.navigation--link').each(function () {
+                var $this = $(this),
+                    href = $this.attr('href').substring(1),
+                    content = me.$el.find('.' + href);
 
-		me.$nav.find('.' + href).appendTo(me.$content);
-	    });
+                if (content.html().length <= 1) {
+                    $this.parent('.navigation--entry').remove();
+                    content.remove();
+                } else {
+                    content.appendTo(me.$content);
+                }
 
-	    me.$nav.find('.navigation--link').on(clickEvt + '.' + pluginName, function (event) {
-		var $this = $(this),
-			href = $this.attr('href').substring(1);
+                me.targets.push(href);
+            });
 
-		event.preventDefault();
+            me.$nav.find('.navigation--link').on(clickEvt + '.' + pluginName, function (event) {
+            var $this = $(this),
+                href = $this.attr('href').substring(1);
 
-		// Hide all content boxes
-		me.$content.children('div[class^="content--"]').hide().removeClass(me.opts.activeCls);
-		me.$nav.find('.navigation--link').removeClass(me.opts.activeCls);
+            event.preventDefault();
 
-		// Activate the selected content
-		me.$content.find('.' + href).show().addClass(me.opts.activeCls);
-		$this.addClass(me.opts.activeCls);
-	    });
-	} else {
-	    me.$nav.find('.content--custom').appendTo(me.$content);
-	}
+            // Hide all content boxes
+            me.$content.children('div[class^="content--"]').hide().removeClass(me.opts.activeCls);
+            me.$nav.find('.navigation--link').removeClass(me.opts.activeCls);
+
+            // Activate the selected content
+            me.$content.find('.' + href).show().addClass(me.opts.activeCls);
+            $this.addClass(me.opts.activeCls);
+            });
+        } else {
+            me.$nav.find('.content--custom').appendTo(me.$content);
+        }
     };
 
     Plugin.prototype.changeTab = function (idx, scroll) {
@@ -140,13 +172,11 @@
 
         me.$nav.find('.navigation--entry:nth-child(' + idx + ') .navigation--link').trigger(clickEvt + '.' + pluginName);
 
-	if (!scroll) {
-            return;
+	    if (scroll) {
+            $('.page-wrap').animate({
+                'scrollTop':  me.$nav[0].offsetTop
+            }, 500);
         }
-
-        $('body').animate({
-            'scrollTop': me.$nav.offset().top - 50
-        }, 500);
     };
 
     /**
@@ -158,6 +188,8 @@
      */
     Plugin.prototype.destroy = function () {
         var me = this;
+
+        me.$additionalTriggers.off(clickEvt + '.' + pluginName);
 
         me.$el.off(clickEvt + '.' + pluginName).removeData('plugin_' + pluginName);
     };
