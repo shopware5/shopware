@@ -1213,11 +1213,19 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $articleId = $oldMainDetail->getArticle()->getId();
 
         // Get available translations for the old mainDetail (stored on the article)
-        $sql = "SELECT objectlanguage, objectdata FROM s_core_translations WHERE objecttype='article' AND objectkey=?";
+        $sql = "
+            SELECT objectlanguage, objectdata
+            FROM s_core_translations
+            WHERE objecttype = 'article' AND objectkey = ?
+        ";
         $oldTranslations = Shopware()->Db()->fetchAssoc($sql, array($articleId));
 
         // Get available translations for the new mainDetail (stored for the detail)
-        $sql = "SELECT objectlanguage, objectdata FROM s_core_translations WHERE objecttype='variant' AND objectkey=?";
+        $sql = "
+            SELECT objectlanguage, objectdata
+            FROM s_core_translations
+            WHERE objecttype='variant' AND objectkey = ?
+        ";
         $newTranslations = Shopware()->Db()->fetchAssoc($sql, array($newMainDetail->getId()));
 
         // We need to determine which of the old article translations can be used for the translation of the
@@ -1251,6 +1259,12 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         foreach ($newTranslations as $language => $values) {
             $data = unserialize($values['objectdata']);
             $newData = array_intersect_key($data, $translatedFields);
+            // We need to check and include old translations, as an article
+            // translation is a superset of a variant translation
+            if ($oldValues = $oldTranslations[$language]) {
+                $oldData = unserialize($oldValues['objectdata']);
+                $newData = array_merge($oldData, $newData);
+            }
             $this->getTranslationComponent()->write(
                 $language,
                 'article',
