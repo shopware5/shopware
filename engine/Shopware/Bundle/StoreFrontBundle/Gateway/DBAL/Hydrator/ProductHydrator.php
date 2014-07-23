@@ -335,11 +335,11 @@ class ProductHydrator extends Hydrator
     {
         $translation = array();
         if (isset($data['__product_translation'])) {
-            $translation = array_merge($translation, unserialize($data['__product_translation']));
+            $translation = array_merge($translation, $this->unserializeTranslation($data['__product_translation']));
         }
 
         if (isset($data['__variant_translation'])) {
-            $translation = array_merge($translation, unserialize($data['__variant_translation']));
+            $translation = array_merge($translation, $this->unserializeTranslation($data['__variant_translation']));
         }
 
         foreach ($translation as $key => $value) {
@@ -359,4 +359,15 @@ class ProductHydrator extends Hydrator
         );
     }
 
+    /**
+     * Helper to unserialize translations
+     * In case unserialize() returns false (invalid input string), returns an empty array
+     *
+     * @param $serializedTranslation
+     * @return array
+     */
+    private function unserializeTranslation($serializedTranslation)
+    {
+        return unserialize($serializedTranslation) ? : array();
+    }
 }
