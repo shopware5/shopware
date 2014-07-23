@@ -8,7 +8,7 @@
 {block name='frontend_checkout_error_messages_voucher_error'}
 	{* Voucher error *}
 	{if $sVoucherError}
-		{include file="frontend/_includes/messages.tpl" type="error" content=$sVoucherError}
+		{include file="frontend/_includes/messages.tpl" type="error" content=$sVoucherError[0]}
 	{/if}
 {/block}
 
