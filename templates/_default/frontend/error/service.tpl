@@ -9,7 +9,13 @@
 <div class="doublespace">&nbsp;</div>
 </div>
 {/block}
-{block name='frontend_index_actions'}{/block}
+
+{block name='frontend_index_actions'}
+    <div class="my_options">
+        {action module=widgets controller=index action=shopMenu hideCurrency=true}
+        <div class="clear">&nbsp;</div>
+    </div>
+{/block}
 {block name='frontend_index_checkout_actions'}{/block}
 {block name='frontend_index_search'}{/block}
 {block name='frontend_index_content_left'}{/block}
