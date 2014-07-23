@@ -346,6 +346,11 @@
                 float: right;
             }
         }
+
+        .btn--inquiry {
+            text-align: center;
+        }
+
         .js--fancy-select {
             width: 100%;
         }
@@ -358,7 +363,8 @@
 	.product--table {
 		.unitize-margin(50, 0);
 
-        .row--voucher { height: 100%; }
+        .row--voucher,
+        .row--premium-product { height: 100%; }
 
 		.panel--body {
 			border: 1px solid @borderColor;
@@ -455,7 +461,7 @@
 
 		.basket--badge {
 			.unitize-width(48);
-			margin-left: 3%;
+			margin: 0 auto;
 		}
 
 		.row--rebate .column--total-price,
@@ -518,7 +524,6 @@
                 .unitize-width(260);
                 position: absolute;
                 left: 50%;
-                text-align: center;
             }
 		}
 
