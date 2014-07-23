@@ -68,7 +68,7 @@ class UnitHydrator extends Hydrator
             return $translation;
         }
 
-        $result = unserialize($data['__unit_translation']);
+        $result = unserialize($data['__unit_translation']) ? : array();
 
         $translation = $result[$data['__unit_id']];
 
