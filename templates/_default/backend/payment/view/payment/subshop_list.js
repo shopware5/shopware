@@ -77,6 +77,7 @@ Ext.define('Shopware.apps.Payment.view.payment.SubshopList', {
         var me = this;
         me.columns = me.getColumns();
         me.store = Ext.create('Shopware.apps.Base.store.Shop');
+        me.store.clearFilter();
         me.selModel = me.getGridSelModel();
         me.callParent(arguments);
     },
