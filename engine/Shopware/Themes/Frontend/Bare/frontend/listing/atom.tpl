@@ -10,7 +10,7 @@
 {foreach from=$sArticles item=sArticle key=key name="counter"}
 {block name='frontend_listing_atom_entry'}
 	<entry> 
-		<title type="text">{block name='frontend_listing_atom_title'}{$sArticle.articleName|strip_tags|strip|truncate:80:"...":true|escape}{/block}</title>
+		<title type="text">{block name='frontend_listing_atom_article_title'}{$sArticle.articleName|strip_tags|strip|truncate:80:"...":true|escape}{/block}</title>
 		<id>{block name='frontend_listing_atom_article_name'}{$sArticle.linkDetails|rewrite:$sArticle.articleName|escape}{/block}</id>
 		<link href="{block name='frontend_listing_atom_link'}{$sArticle.linkDetails|rewrite:$sArticle.articleName|escape}{/block}"/>
 		<summary type="html">

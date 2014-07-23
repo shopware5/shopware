@@ -82,7 +82,7 @@
 					{/block}
 
 					{* "Buy now" button *}
-					{block name="frontend_detail_buy"}
+					{block name="frontend_detail_buy_button"}
 						{if $sArticle.sConfiguratorSettings.type == 1 && !$sArticle.sConfigurator[$sCountConfigurator-1].user_selected}
 							<button class="buybox--button block is--transparent btn btn--primary" disabled="disabled" aria-disabled="true" name="{s name="DetailBuyActionAdd"}{/s}"{if $buy_box_display} style="{$buy_box_display}"{/if}>
 								{s name="DetailBuyActionAdd"}{/s} <i class="icon--arrow-right"></i>

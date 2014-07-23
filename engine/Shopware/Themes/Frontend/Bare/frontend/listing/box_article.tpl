@@ -3,7 +3,7 @@
 	<div class="panel--body has--border">
 
 		{* Product box badges - highlight, newcomer, ESD product and discount *}
-		{block name='frontend_listing_box_article_rating'}
+		{block name='frontend_listing_box_article_badges'}
 			{include file="frontend/listing/product-box/badges.tpl"}
 		{/block}
 

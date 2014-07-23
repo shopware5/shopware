@@ -87,7 +87,7 @@
 
 				{* Unit price *}
 				{if $sArticle.purchaseunit}
-					{block name='frontend_detail_data_price'}
+					{block name='frontend_detail_data_price_unit'}
 						<div class='product--price price--unit'>
 
 							{* Unit price label *}
@@ -116,7 +116,7 @@
 				{/if}
 
 				{* Tax information *}
-				{block name='frontend_detail_data_price_info'}
+				{block name='frontend_detail_data_tax'}
 					<p class="product--tax" data-modal-link="true">
 						{s name="DetailDataPriceInfo"}{/s}
 					</p>
