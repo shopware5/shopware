@@ -19,16 +19,16 @@
         </div>
 
         {* County state selection *}
-        {block name='frontend_checkout_shipping_costs_country'}
+        {block name='frontend_checkout_shipping_costs_state'}
             {foreach $sCountryList as $country}
                 {if $country.states}
                     <div class="shipping-costs--states{if $country.id != $sCountry.id} is--hidden{/if}">
 
-                        {block name='frontend_checkout_shipping_costs_country_label'}
+                        {block name='frontend_checkout_shipping_costs_state_label'}
                             <label for="country_{$country.id}_states">{s name='RegisterBillingLabelState'}{/s}</label>
                         {/block}
 
-                        {block name='frontend_checkout_shipping_costs_country_selection'}
+                        {block name='frontend_checkout_shipping_costs_state_selection'}
                             <select name="sState" id="country_{$country.id}_states" data-auto-submit-form="true"{if $country.id != $sCountry.id} disabled="disabled"{/if}>
                                 <option value="" selected="selected">{s name='StateSelection'}{/s}</option>
 

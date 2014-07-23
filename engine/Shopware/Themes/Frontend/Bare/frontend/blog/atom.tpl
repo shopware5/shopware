@@ -10,7 +10,7 @@
 {foreach from=$sBlogArticles item=sArticle key=key name="counter"}
     {block name='frontend_listing_atom_entry'}
         <entry>
-            <title type="text">{block name='frontend_listing_atom_title'}{$sArticle.title|strip_tags|strip|truncate:80:"...":true|escape}{/block}</title>
+            <title type="text">{block name='frontend_listing_atom_article_title'}{$sArticle.title|strip_tags|strip|truncate:80:"...":true|escape}{/block}</title>
             <id>{block name='frontend_listing_atom_article_name'}{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}{/block}</id>
             <link href="{block name='frontend_listing_atom_link'}{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}{/block}"/>
             <summary type="html">

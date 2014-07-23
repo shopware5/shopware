@@ -81,7 +81,7 @@
             <div class="table--column column--unit-price block is--align-right">
 
                 {if !$sBasketItem.modus}
-					{block name='frontend_checkout_cart_item_quantity_label'}
+					{block name='frontend_checkout_cart_item_unit_price_label'}
 						<div class="column--label unit-price--label">
 							{s name="CartColumnPrice" namespace="frontend/checkout/cart_header"}{/s}
 						</div>
@@ -98,7 +98,7 @@
         {* Accumulated product price *}
         {block name='frontend_checkout_cart_item_total_sum'}
             <div class="table--column column--total-price block is--align-right">
-				{block name='frontend_checkout_cart_item_quantity_label'}
+				{block name='frontend_checkout_cart_item_total_price_label'}
 					<div class="column--label total-price--label">
 						{s name="CartColumnTotal" namespace="frontend/checkout/cart_header"}{/s}
 					</div>
