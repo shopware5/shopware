@@ -19,6 +19,9 @@
             }).prependTo(me.$el);
 
             me.$list = me.$el.find('.last-seen-products--slider');
+            me.$container = me.$list.find('.last-seen-products--container');
+
+            me.productSlider = me.$list.data('plugin_productSlider');
 
             me.storage = StorageManager.getLocalStorage();
 
@@ -39,40 +42,94 @@
                 i = 0;
 
             for (; i < len; i++) {
-                me.$list.find('.last-seen-products--container').append(me.createTemplate(products[i]));
+                me.$container.append(me.createTemplate(products[i]));
             }
 
-            me.$list.productSlider({
-                wrapperClass: 'last-seen-products--slider',
-                containerClass: 'last-seen-products--container',
-                itemClass: 'last-seen-products--article',
-                touchControl: true
-            });
+            me.productSlider.trackItems();
+            me.productSlider.setSizes();
         },
 
         createTemplate: function (article) {
-            var item = $('<div>', {
-                'class': 'last-seen-products--article'
+            var me = this, item,
+                image = me.createProductImage(article),
+                title = me.createProductTitle(article);
+
+            item = $('<div>', {
+                'class': 'last-seen-products--item product-slider--item'
             });
 
-            $('<a>', {
-                'class': 'last-seen-products--thumbnail',
-                'href': article.linkDetailsRewritten,
-                'html': $('<img>', {
-                    'class': 'last-seen-products--thumbnail-image',
-                    'src': article.thumbnail
-                })
-            }).appendTo(item);
-
-            $('<a>', {
-                'rel': 'nofollow',
-                'class': 'last-seen-products--description',
-                'title': article.articleName,
-                'href': article.linkDetailsRewritten,
-                'html': article.articleName
-            }).appendTo(item);
+            image.appendTo(item);
+            title.appendTo(item);
 
             return item;
+        },
+
+        createProductTitle: function(data) {
+            return $('<a>', {
+                'rel': 'nofollow',
+                'class': 'last-seen-products--title product--title',
+                'title': data.articleName,
+                'href': data.linkDetailsRewritten,
+                'html': data.articleName
+            });
+        },
+
+        createProductImage: function(data) {
+            var element, imageEl,
+                noScript,
+                imageDefault,
+                imageMobile,
+                imageTablet,
+                imageDesktop;
+
+            element = $('<a>', {
+                'class': 'last-seen-products--image product--image',
+                'href': data.linkDetailsRewritten
+            });
+
+            imageEl = $('<span>', {
+                'data-picture': 'true',
+                'class': 'image--element',
+                'data-alt': data.articleName
+            }).appendTo(element);
+
+            imageMobile = $('<span>', {
+                'class': 'image--media',
+                'data-src': data.images[4]
+            }).appendTo(imageEl);
+
+            imageTablet = $('<span>', {
+                'class': 'image--media',
+                'data-src': data.images[3],
+                'data-media': '(min-width: 48em)'
+            }).appendTo(imageEl);
+
+            imageDesktop = $('<span>', {
+                'class': 'image--media',
+                'data-src': data.images[2],
+                'data-media': '(min-width: 78.75em)'
+            }).appendTo(imageEl);
+
+            noScript = $('<noscript></noscript>').appendTo(imageEl);
+
+            imageDefault = $('<img>', {
+                'src': data.images[2],
+                'alt': data.articleName
+            }).appendTo(noScript);
+
+            return element;
+        },
+
+        /**
+         * Formats a string and replaces the placeholders.
+         *
+         * @example format('<div class="%0"'>%1</div>, [value for %0], [value for %1], ...)
+         */
+        format: function(str) {
+            for (var i = 1; i < arguments.length; i++) {
+                str = str.replace('%' + (i - 1), arguments[i]);
+            }
+            return str;
         },
 
         collectProduct: function (newProduct) {
