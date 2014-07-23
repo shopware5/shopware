@@ -12,6 +12,8 @@ In this document you will find a changelog of the important changes related to t
 * Error notification via email was improved and now additionally includes environment and request information
 * Minor occurrences of `metadescription` and `metakeywords` have been uniformized to `metaDescription` and `metaKeywords`
 * It's now possible to filter payment methods by subshops
+* `/widgets` and `/listing` added to `robots.txt`
+* Calling certain widget urls without the required parameters will no longer trigger a server error (returns 404 instead)
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
