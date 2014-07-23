@@ -9,6 +9,7 @@ In this document you will find a changelog of the important changes related to t
 * Customer reviews backend module was improved to better handle reviews with large texts
 * Auto update module now also reports main shop and subshops languages
 * Maintenance mode options can now be configured by subshop
+* Error notification via email was improved and now additionally includes environment and request information
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
