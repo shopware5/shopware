@@ -325,8 +325,6 @@
                 var element = this,
                     pluginData = $.data(element, 'plugin_' + name);
 
-                console.log(pluginData);
-
                 if (!pluginData) {
                     if (typeof plugin === 'function') {
                         pluginData = new plugin();
