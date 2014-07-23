@@ -29,11 +29,6 @@
 	{include file="frontend/checkout/header.tpl"}
 {/block}
 
-{* Title *}
-{block name='frontend_index_header_title'}
-	{s name="RegisterTitle"}{/s} | {config name=shopName}
-{/block}
-
 {* Hide sidebar left *}
 {block name='frontend_index_content_left'}{/block}
 
@@ -42,7 +37,7 @@
 
 {* Step box *}
 {block name='frontend_index_navigation_categories_top'}
-	{include file="frontend/register/steps.tpl" sStepActive="address"}
+	{include file="frontend/register/steps.tpl" sStepActive="paymentShipping"}
 {/block}
 
 {* Hide footer *}
