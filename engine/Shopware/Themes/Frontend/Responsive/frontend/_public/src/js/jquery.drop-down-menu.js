@@ -39,8 +39,12 @@
             }
         },
 
-        onClickBody: function() {
+        onClickBody: function(event) {
             var me = this;
+
+            if ($(event.target).hasClass('service--link')) {
+                return;
+            }
 
             me.$el.removeClass(me.opts.activeCls);
         },
