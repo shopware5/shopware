@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,28 +19,26 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    ArticleList
- * @subpackage Main
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
 /**
- * shopware AG (c) 2012. All rights reserved.
+ *
  */
-
-//{namespace name=backend/article_list/view/main}
+//{namespace name=backend/article_list/main}
 //{block name="backend/article_list/controller/main"}
 Ext.define('Shopware.apps.ArticleList.controller.Main', {
 
     /**
-     * Extend from the standard ExtJS 4
+     * The parent class that this class extends.
      * @string
      */
     extend: 'Ext.app.Controller',
+
+    refs: [
+        { ref: 'grid', selector: 'multi-edit-main-grid' },
+        { ref: 'pagingToolBar', selector: 'multi-edit-main-grid pagingtoolbar' },
+        { ref: 'navigationGrid', selector: 'multi-edit-navigation-grid' }
+    ],
 
     /**
      * Class property which holds the main application if it is created
@@ -50,273 +48,270 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
      */
     mainWindow: null,
 
-    /**
-     * Define references for the different parts of our application. The
-     * references are parsed by ExtJS and Getter methods are automatically created.
-     *
-     * @array
-     */
-    refs: [
-        { ref: 'articleGrid', selector: 'articleList-main-grid' }
-    ],
+    lastSearchFilter: '',
 
-    defaultState: {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0
-    },
+    state: { grammar: false, model: false },
 
     /**
-     * Contains all snippets for the component.
-     * @object
-     */
-    snippets: {
-        growlMessage: '{s name=growl_message}Article{/s}',
-        splitViewTitle: '{s name=splitview_title}Split-View{/s}',
-        splitViewText: '{s name=splitview_text}The split view mode has been activated.{/s}',
-        splitViewAlreadyActive: '{s name=split_view_already_active}The split view mode has already been activated. Please close the product mask window and start a new instance of the split view.{/s}',
-        messages: {
-            successTitle: '{s name=messages/success}Success{/s}',
-            deleteSuccess: '{s name=messages/delete_success}The selected articles have been removed{/s}',
-            deleteArticleTitle: '{s name=messages/delete_article_title}Delete selected Article(s)?{/s}',
-            deleteArticle: '{s name=messages/delete_article}Are you sure you want to delete the selected Article(s)?{/s}'
-        }
-    },
-
-    /**
-     * Creates the necessary event listener for this
-     * specific controller and opens a new Ext.window.Window
+     * A template method that is called when your application boots.
+     * It is called before the Application's launch function is executed
+     * so gives a hook point to run any code before your Viewport is created.
      *
      * @return void
      */
-    init: function() {
+    init: function () {
         var me = this;
 
-        me.control({
-            'articleList-main-window': {
-                categoryChanged: me.onCategoryChanged
-            },
+        me.getController('Suggest').createParser();
 
-            'articleList-main-grid': {
-                filterVariantsChange: me.onFilterVariantsChanged,
-                deleteArticle: me.onDeleteArticle,
-                deleteMultipleArticles: me.onDeleteMultipleArticles,
-                triggerSplitView: me.onTriggerSplitView,
-                edit: me.onEdit,
-                productchange: me.onProductChange
+        me.loadDetailModelFields();
+
+        me.control({
+            'multi-edit-main-grid': {
+                search: me.onSearch
             }
         });
 
-        Shopware.app.Application.addEvents(
-            'moduleConnector:splitView',
-            'moduleConnector:splitViewClose'
-        );
-        Shopware.app.Application.on('moduleConnector:splitViewClose', me.onCloseSplitView, me);
-
-        me.mainWindow = me.getView('main.Window').create({
-            articleStore: me.getStore('List').load()
+        me.subApplication.on('grammarProcessed', function () {
+            me.state.grammar = true;
+            me.loadDefaultStore();
+        });
+        me.subApplication.on('modelCreated', function () {
+            me.state.model = true;
+            me.loadDefaultStore();
         });
 
-        me.subApplication.articleGrid = me.getArticleGrid();
-
-        me.mainWindow.show();
-        me.callParent(arguments);
+        me.callParent();
     },
 
     /**
-     * Fired after a row is edited and passes validation. This event is fired
-     * after the store's update event is fired with this edit.
-     *
-     * @event edit
-     * @param [Ext.grid.plugin.Editing]
-     * @param [object] An edit event
-     *
-     * @return void
+     * Will load the articleStore as soon as all preconditions are met
      */
-    onEdit: function(editor, event) {
-        var me     = this,
-            store  = me.getStore('List'),
-            record = event.record;
+    loadDefaultStore: function () {
+        var me = this,
+                name;
 
-        if (!record.dirty) {
+        if (!me.state.grammar || !me.state.model) {
             return;
         }
 
-        me.getArticleGrid().setLoading(true);
-        record.save({
-            success: function() {
-                store.load({
-                    callback: function() {
-                        me.getArticleGrid().setLoading(false);
-                    }
-                });
+        name = me.getController('CategoryFilter').getFilterNameByConfig(false, false);
+
+        me.getController('Suggest').loadFilter(
+                'ISMAIN AND CATEGORY.ID > 0',
+                name
+        );
+    },
+
+    /**
+     * Will load the detail model fields with an AJAX-request. Will then generate
+     * the corresponding model on the fly => createDetailModel
+     */
+    loadDetailModelFields: function () {
+        var me = this;
+
+        Ext.Ajax.request({
+            url: '{url controller="ArticleList" action = "columnConfig"}',
+            params: {
+                resource: 'product'
             },
-            failure: function() {
-                me.getArticleGrid().setLoading(false);
-            }
-        });
-    },
+            method: 'GET',
+            success: function (response, request) {
+                var result = Ext.JSON.decode(response.responseText);
 
-    /**
-     * @param record
-     */
-    onDeleteArticle: function(record) {
-        var me    = this,
-            store = me.getStore('List');
-
-        Ext.MessageBox.confirm(me.snippets.messages.deleteArticleTitle, me.snippets.messages.deleteArticle, function (response) {
-            if (response !== 'yes') {
-                return false;
-            }
-            record.destroy({
-                callback: function() {
-                    Shopware.Notification.createGrowlMessage(me.snippets.messages.successTitle, me.snippets.messages.deleteSuccess, me.snippets.growlMessage);
-                    store.load();
-                }
-            });
-        });
-    },
-
-    /**
-     * @param records
-     */
-    onDeleteMultipleArticles: function(records) {
-        var me    = this,
-            store = me.getStore('List');
-
-        if (records.length > 0) {
-            // we do not just delete - we are polite and ask the user if he is sure.
-            Ext.MessageBox.confirm(me.snippets.messages.deleteArticleTitle, me.snippets.messages.deleteArticle, function (response) {
-                if ( response !== 'yes' ) {
+                if (!result) {
+                    me.showError(response.responseText);
+                } else if (result.success) {
+                    me.columnConfigArray = result.data;
+                    me.columnConfigObject = me.getColumnConfigObject(me.columnConfigArray);
+                    me.createDetailModel(result.data);
+                    me.subApplication.fireEvent('modelCreated');
                     return;
                 }
-                store.getProxy().batchActions = false;
-                store.remove(records);
-                store.sync({
-                    callback: function() {
-                        Shopware.Notification.createGrowlMessage(me.snippets.messages.successTitle, me.snippets.messages.deleteSuccess, me.snippets.growlMessage);
-                        //store.currentPage = 1;
-                        store.load();
-                    }
-                });
+                me.showError(result.message);
+
+            },
+            failure: function (response, request) {
+                if (response.responseText) {
+                    me.showError(response.responseText);
+                } else {
+                    me.showError('{s name=unknownError}An unknown error occurred, please check your server logs{/s}');
+                }
+            }
+        });
+    },
+
+    /**
+     * Build a columnConfig object from an array in order to access the config by column name
+     *
+     * @param columnConfig
+     * @returns Object
+     */
+    getColumnConfigObject: function (columnConfig) {
+        var me = this,
+                i, column, columnConfigLength = columnConfig.length,
+                columnConfigObject = { };
+
+
+        for (i = 0; i < columnConfigLength; i++) {
+            column = columnConfig[i];
+            columnConfigObject[column.alias] = column;
+        }
+
+        return columnConfigObject;
+    },
+
+    /**
+     * Return the column config for a given column alias.
+     *
+     * @param columnAlias
+     * @returns Object
+     */
+    getConfigForColumn: function (columnAlias) {
+        var me = this;
+
+        columnAlias = columnAlias.replace('.', '_');
+        columnAlias = columnAlias.charAt(0).toUpperCase() + columnAlias.slice(1);
+
+        return me.columnConfigObject[columnAlias];
+    },
+
+    /**
+     * Creates the detail model dynamically.
+     * @param data
+     */
+    createDetailModel: function (data) {
+        var me = this,
+                fields = [
+            { name: 'imageSrc', type: 'string' },
+            { name: 'hasConfigurator', type: 'boolean' },
+            { name: 'hasCategories', type: 'boolean' }
+        ];
+
+        for (var i = 0; i < data.length; i++) {
+            var column = data[i];
+            if (!column.allowInGrid) {
+                continue;
+            }
+            fields.push({
+                name: column.alias,
+                useNull: column.nullable
             });
         }
+
+        Ext.define('Shopware.apps.ArticleList.model.Detail', {
+            extend: 'Ext.data.Model',
+            fields: fields,
+
+
+            /**
+             * Configure the data communication
+             * @object
+             */
+            proxy: {
+                /**
+                 * Set proxy type to ajax
+                 * @string
+                 */
+                type: 'ajax',
+
+                /**
+                 * Configure the url mapping for the different
+                 * store operations based on
+                 * @object
+                 */
+                api: {
+                    create: '{url controller="ArticleList" action="saveSingleEntity"}',
+                    update: '{url controller="ArticleList" action="saveSingleEntity"}',
+                    destroy: '{url controller="ArticleListDelete" action="delete"}'
+                },
+
+                /**
+                 * Configure the data reader
+                 * @object
+                 */
+                reader: {
+                    type: 'json',
+                    root: 'data',
+                    totalProperty: 'total'
+                }
+            }
+        });
+
+        // Bind stores after the detailModel was defined!
+        me.bindStores();
     },
 
     /**
-     * @event filterVariantsChange
-     * @param field
-     * @param newValue
+     * Will create the main window and bind out stores to the corresponding grids
      */
-    onFilterVariantsChanged: function(field, newValue) {
-        var me = this,
-            store = me.getStore('List');
+    bindStores: function () {
+        var me = this;
 
-        if (newValue) {
-            store.getProxy().extraParams.showVariants = 1;
-        } else {
-            store.getProxy().extraParams.showVariants = 0;
-        }
+        me.mainWindow = me.getView('main.Window').create({
+            columnConfig: me.columnConfigArray
+        });
+        me.subApplication.setAppWindow(me.mainWindow);
 
-        store.load();
+        var grid = me.getGrid(),
+                navigationGrid = me.getNavigationGrid(),
+                toolbar = me.getPagingToolBar();
+
+        // Bind main grid store.
+        me.subApplication.articleStore = me.getStore('Shopware.apps.ArticleList.store.Detail');
+        grid.reconfigure(me.subApplication.articleStore);
+        toolbar.bindStore(me.subApplication.articleStore);
+        toolbar.down('combo').setValue(me.subApplication.articleStore.pageSize + ' {s name=pagingCombo/products}products{/s}');
+
+        // Bind filter store (shown in the navigation)
+        me.subApplication.filterStore = me.getStore('Shopware.apps.ArticleList.store.Filter').load();
+        navigationGrid.bindStore(me.subApplication.filterStore);
     },
 
     /**
-     * @event categoryChanged
-     * @param [Ext.view.View] view - the view that fired the event
-     * @param [Ext.data.Model] record
+     * Convenience method to show a sticky growl message
      *
-     * @return void
+     * @param message
      */
-    onCategoryChanged: function(view, record) {
-        var me    = this,
-            store = this.getStore('List'),
-            grid  = me.getArticleGrid();
+    showError: function (message) {
+        var me = this;
 
-        if (record.get('id') === 'root') {
-            store.getProxy().extraParams.categoryId = null;
+        Shopware.Notification.createStickyGrowlMessage({
+                    title: '{s name=error}Error{/s}',
+                    text: message,
+                    log: true
+                },
+                'ArticleList');
+    },
+
+    /**
+     * Triggered for a search
+     *
+     * @param searchTerm
+     */
+    onSearch: function (searchTerm) {
+        var me = this,
+                filter,
+                result,
+                currentFilter = me.subApplication.currentFilterString;
+
+        if (me.lastSearchFilter.length > 0) {
+            currentFilter = currentFilter.replace(me.lastSearchFilter, '');
+        }
+
+        if (searchTerm && searchTerm.length > 0) {
+            filter = '(article.name ~ "[0]" OR detail.number ~ "[0]") AND ';
+            filter = Ext.String.format(filter, searchTerm);
         } else {
-            store.getProxy().extraParams.categoryId = record.get('id');
+            filter = '';
         }
 
-        //scroll the store to first page
-        store.currentPage = 1;
-        grid.setLoading(true);
-        store.load({
-            callback: function() {
-                grid.setLoading(false);
-            }
-        });
-    },
-
-    onTriggerSplitView: function(btn, record) {
-        var me = this,
-            mainWindow = me.mainWindow,
-            tmpPosition = mainWindow.getPosition(),
-            position = {
-                x: tmpPosition[0],
-                y: tmpPosition[1] - 40
-            };
-
-        if(!record) {
-            return;
+        result = me.getController('Suggest').loadFilter(filter + currentFilter);
+        if (result) {
+            me.lastSearchFilter = filter;
         }
-
-        // Is a split view already been up and running...
-        if(me.splitViewMode) {
-            Ext.MessageBox.alert(me.snippets.splitViewTitle, me.snippets.splitViewAlreadyActive);
-            return false;
-        }
-
-        // Add inidicator to the class that the split view mode is up and running...
-        if(!me.hasOwnProperty('splitViewMode') || !me.splitViewMode) {
-            me.splitViewMode = true;
-        }
-
-        Shopware.Notification.createGrowlMessage(me.snippets.splitViewTitle, me.snippets.splitViewText);
-
-        // Save the position and the size of the product list
-        me.defaultState = Ext.Object.merge(me.defaultState, mainWindow.getSize());
-        me.defaultState = Ext.Object.merge(me.defaultState, position);
-
-        // Prepare the article list
-        mainWindow.sidebarPanel.collapse();
-        mainWindow.setPosition(0,0);
-        mainWindow.setSize(Ext.Element.getViewportWidth() / 2, Ext.Element.getViewportHeight() - 90);
-
-        // Open the product module and set it up for the splitview mode
-        Shopware.app.Application.addSubApplication({
-            name: 'Shopware.apps.Article',
-            action: 'detail',
-            params: {
-                splitViewMode: true,
-                articleId: record.get('articleId')
-            }
-        });
-    },
-
-    onProductChange: function(selection) {
-        var me = this,
-            record = selection[0];
-
-        // No record was selected...
-        if(!record) {
-            return false;
-        }
-
-        Shopware.app.Application.fireEvent('moduleConnector:splitView', me, {
-            articleId: record.get('articleId')
-        });
-    },
-
-    onCloseSplitView: function() {
-        var me = this,
-            mainWindow = me.mainWindow;
-
-        mainWindow.setSize(me.defaultState);
-        mainWindow.setPosition(me.defaultState.x, me.defaultState.y);
-        me.splitViewMode = false;
     }
+
+
 });
 //{/block}

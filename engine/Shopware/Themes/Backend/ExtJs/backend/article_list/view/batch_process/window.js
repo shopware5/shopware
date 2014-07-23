@@ -22,8 +22,8 @@
  */
 
 //{namespace name=backend/article_list/main}
-//{block name="backend/article_list/view/main/window"}
-Ext.define('Shopware.apps.ArticleList.view.main.Window', {
+//{block name="backend/article_list/view/batch_process/window"}
+Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Window', {
     /**
      * Define that the plugin manager main window is an extension of the enlight application window
      * @string
@@ -34,7 +34,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Window', {
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias: 'widget.multiedit-main-window',
+    alias: 'widget.multi-edit-batch-process-window',
 
     /**
      * Set no border for the window
@@ -43,28 +43,21 @@ Ext.define('Shopware.apps.ArticleList.view.main.Window', {
     border: false,
 
     /**
-     * True to automatically show the component upon creation.
-     * @boolean
-     */
-    autoShow: true,
-
-    /**
      * Set border layout for the window
      * @string
      */
-    layout: 'border',
 
     /**
      * Define window width
      * @integer
      */
-    width: 1000,
+    width: 600,
 
     /**
      * Define window height
      * @integer
      */
-    height: '90%',
+    height: 400,
 
     /**
      * True to display the 'maximize' tool button and allow the user to maximize the window, false to hide the button and disallow maximizing the window.
@@ -86,15 +79,20 @@ Ext.define('Shopware.apps.ArticleList.view.main.Window', {
     /**
      * The unique id for this object to use for state management purposes.
      */
-    stateId: 'shopware-multiedit-main-window',
+    stateId: 'shopware-multiedit-batch-process-window',
 
     /**
      * Title of the window.
      * @string
      */
-    base_title: '{s name=main_window_title}Product overview{/s}',
+    titleTemplate: '{s name=batchProcess/windowTitle}Batch Process{/s}',
 
     resizable: true,
+
+    /**
+     * Set the windows layout to "fit"
+     */
+    layout: 'fit',
 
     /**
      * Initializes the component.
@@ -105,34 +103,65 @@ Ext.define('Shopware.apps.ArticleList.view.main.Window', {
     initComponent: function () {
         var me = this;
 
+
+        me.title = me.titleTemplate;
+
+        me.dockedItems = [{
+            xtype: 'toolbar',
+            dock: 'bottom',
+            ui: 'shopware-ui',
+            cls: 'shopware-toolbar',
+            items: me.getFormButtons()
+        }]
+
         me.items = [{
-            xtype: 'multi-edit-main-grid',
-            region: 'center',
-            columnConfig: me.columnConfig
-        }, {
-            xtype: 'multi-edit-sidebar',
-            region: 'west'
+            xtype: 'multi-edit-batch-process-grid',
+            editableColumnsStore: me.editableColumnsStore
 
         }];
 
-        me.title = me.base_title;
+        me.addEvents('runBatch');
 
         me.callParent(arguments);
     },
 
-    /**
-     *  Set the window title
-     *
-     * @param addition
-     */
-    setWindowTitle: function(addition) {
-        var me = this;
 
-        if (addition) {
-            me.setTitle(me.base_title + ' - ' + Ext.util.Format.stripTags(addition));
-        } else {
-            me.setTitle(me.base_title);
-        }
+    /**
+     * Creates the save and cancel button for the form panel.
+     *
+     * @return [array] - Contains the cancel button and the save button
+     */
+    getFormButtons: function() {
+        var me = this,
+            buttons = [ '->' ];
+
+
+        var cancelButton = Ext.create('Ext.button.Button', {
+            text: '{s name=close}Close{/s}',
+            scope: me,
+            cls: 'secondary',
+            handler:function () {
+                me.destroy();
+            }
+        });
+        buttons.push(cancelButton);
+
+        var addToQueue = Ext.create('Ext.button.Button', {
+            action: 'addToQueue',
+            cls: 'secondary',
+            text: '{s name=batchProcess/addToQueue}Add to queue{/s}'
+        });
+//        buttons.push(addToQueue);
+
+        var addToQueueAndRun = Ext.create('Ext.button.Button', {
+            action: 'addToQueueAndRun',
+            cls: 'primary',
+            text: '{s name=batchProcess/addToQueueAndRun}Add to queue and run{/s}'
+        });
+        buttons.push(addToQueueAndRun);
+
+        return buttons;
     }
+
 });
 //{/block}

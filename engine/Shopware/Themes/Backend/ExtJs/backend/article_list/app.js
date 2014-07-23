@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 4
+ * Copyright © shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,72 +19,90 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    ArticleList
- * @subpackage View
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author shopware AG
  */
 
-/**
- * todo@all: Documentation
- */
-//{block name="backend/article_List/app"}
+//{block name="backend/article_list/application"}
 Ext.define('Shopware.apps.ArticleList', {
 
     /**
      * The name of the module. Used for internal purpose
      * @string
      */
-    name: 'Shopware.apps.ArticleList',
+    name:'Shopware.apps.ArticleList',
 
     /**
-     * Extends from our special controller, which handles the
-     * sub-application behavior and the event bus
+     * Extends from our special controller, which handles the sub-application behavior and the event bus
      * @string
      */
-    extend: 'Enlight.app.SubApplication',
+    extend:'Enlight.app.SubApplication',
 
     /**
-     * Sets the loading path for the sub-application.
-     *
-     * Note that you'll need a "loadAction" in your
-     * controller (server-side)
-     * @string
-     */
-    loadPath: '{url action=load}',
-
-    /**
-     * load all files at once
-     * @string
+     * Enable bulk loading
+     * @boolean
      */
     bulkLoad: true,
 
     /**
-     * Required controllers
-     * @array
+     * Sets the loading path for the sub-application.
+     *
+     * @string
      */
-    controllers: [ 'Main' ],
+    loadPath: '{url controller=ArticleList action=load}',
 
     /**
-     * Required stores
+     * Array of views to require from AppName.view namespace.
      * @array
      */
-    stores: [ 'List' ],
+    views: [
+        'main.Window',
+        'main.Grid',
+        'main.Sidebar',
+        'main.NavigationGrid',
+        'main.CategoryTree',
+        'main.MultiEditMenu',
+
+        'AddFilter.Window',
+        'AddFilter.Grid',
+
+        'QueryField',
+        'FilterCombo',
+
+        'BatchProcess.Window',
+        'BatchProcess.Grid',
+
+        'Backup.Window',
+        'Backup.Grid'
+
+    ],
+
 
     /**
-     * Required models
+     * Array of models to require from AppName.model namespace.
      * @array
      */
-    models: [ 'List' ],
+    models: [
+        'Filter',
+        'EditableColumn',
+        'Operation',
+        'Operator'
+    ],
 
     /**
-     * Required views
+     * Array of stores to require from AppName.store namespace.
      * @array
      */
-    views: [ 'main.Window', 'main.Grid' ],
+    stores: [
+        'Detail',
+        'Filter',
+        'EditableColumns',
+        'Operation'
+    ],
+
+    /**
+     * Requires controllers for sub-application
+     * @array
+     */
+    controllers: [ 'Main', 'List', 'Filter', 'Suggest', 'BatchProcess' , 'Backup', 'CategoryFilter', 'SplitView', 'ArticleCrud' ],
 
     /**
      * Returns the main application window for this is expected
@@ -100,10 +118,11 @@ Ext.define('Shopware.apps.ArticleList', {
      * @return [object] mainWindow - the main application window based on Enlight.app.Window
      */
     launch: function() {
-        var me             = this,
+        var me = this,
             mainController = me.getController('Main');
 
         return mainController.mainWindow;
     }
 });
 //{/block}
+
