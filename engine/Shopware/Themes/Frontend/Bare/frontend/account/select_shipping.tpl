@@ -12,14 +12,13 @@
 		{* Shipping addresses list *}
 		{block name="frontend_account_select_shipping_address"}
 			<div class="account--addresses-container">
-				{if $sShippingAddresses}
-
 					{block name="frontend_account_select_shipping_headline"}
 						<div class="account--welcome">
 							<h1 class="panel--title">{s name="SelectShippingHeader"}{/s}</h1>
 						</div>
 					{/block}
 
+                {if $sShippingAddresses}
 					{block name="frontend_account_select_shipping_container"}
 						{foreach $sShippingAddresses as $key => $sAddress}
 							<div class="address--container">

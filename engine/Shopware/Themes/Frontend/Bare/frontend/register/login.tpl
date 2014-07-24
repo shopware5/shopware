@@ -33,7 +33,7 @@
 
 						{block name='frontend_register_login_input_email'}
 							<div class="register--login-email">
-								<input name="email" placeholder="{s name="LoginLabelMail"}{/s}" type="text" tabindex="1" value="{$sFormData.email|escape}" id="email" class="register--login-field{if $sErrorFlag.email} has--error{/if}" />
+								<input name="email" placeholder="{s name="LoginLabelMail"}{/s}" type="email" tabindex="1" value="{$sFormData.email|escape}" id="email" class="register--login-field{if $sErrorFlag.email} has--error{/if}" />
 							</div>
 						{/block}
 
