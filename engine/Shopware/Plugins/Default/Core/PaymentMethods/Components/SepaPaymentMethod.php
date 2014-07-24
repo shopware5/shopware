@@ -40,6 +40,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
     public function validate(\Enlight_Controller_Request_Request $request)
     {
         $sErrorFlag = array();
+        $sErrorMessages = array();
 
         if (!$request->getParam("sSepaIban") || strlen(trim($request->getParam("sSepaIban"))) === 0 ) {
             $sErrorFlag["sSepaIban"] = true;
@@ -50,13 +51,14 @@ class SepaPaymentMethod extends GenericPaymentMethod
         if (Shopware()->Config()->sepaShowBankName && Shopware()->Config()->sepaRequireBankName && (!$request->getParam("sSepaBankName") || strlen(trim($request->getParam("sSepaBankName"))) === 0 )) {
             $sErrorFlag["sSepaBankName"] = true;
         }
-        if ($request->getParam("sSepaIban") && !$this->validateIBAN($request->getParam("sSepaIban"))) {
-            $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/plugins/payment/sepa')
-                ->get('ErrorIBAN', 'Invalid IBAN');
-        }
 
         if (count($sErrorFlag)) {
             $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/account/internalMessages')->get('ErrorFillIn', 'Please fill in all red fields');
+        }
+
+        if ($request->getParam("sSepaIban") && !$this->validateIBAN($request->getParam("sSepaIban"))) {
+            $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/plugins/payment/sepa')->get('ErrorIBAN', 'Invalid IBAN');
+            $sErrorFlag["sSepaIban"] = true;
         }
 
         if (count($sErrorMessages)) {
