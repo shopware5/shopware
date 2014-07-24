@@ -132,14 +132,14 @@
 							<div class="panel--body is--wide">
 								{if {config name=accountPasswordCheck}}
 									<p>
-										<input name="currentPassword" type="password" id="currentPassword" placeholder="{s name="AccountLabelCurrentPassword"}Ihr aktuelles Passwort*:{/s}" class="{if $sErrorFlag.currentPassword}has--error{/if}" />
+										<input name="currentPassword" type="password" id="currentPassword" placeholder="{s name="AccountLabelCurrentPassword2"}Ihr aktuelles Passwort*{/s}" class="{if $sErrorFlag.currentPassword}has--error{/if}" />
 									</p>
 								{/if}
 								<p>
-									<input name="password" type="password" id="newpwd" placeholder="{s name="AccountLabelNewPassword"}{/s}" class="{if $sErrorFlag.password}has--error{/if}" />
+									<input name="password" type="password" id="newpwd" placeholder="{s name="AccountLabelNewPassword2"}{/s}" class="{if $sErrorFlag.password}has--error{/if}" />
 								</p>
 								<p>
-									<input name="passwordConfirmation" id="newpwdrepeat" type="password" placeholder="{s name="AccountLabelRepeatPassword"}{/s}" class="{if $sErrorFlag.passwordConfirmation}has--error{/if}" />
+									<input name="passwordConfirmation" id="newpwdrepeat" type="password" placeholder="{s name="AccountLabelRepeatPassword2"}{/s}" class="{if $sErrorFlag.passwordConfirmation}has--error{/if}" />
 								</p>
 							</div>
 						{/block}
@@ -169,14 +169,14 @@
 							<div class="panel--body is--wide">
 								{if {config name=accountPasswordCheck}}
 									<p>
-										<input name="currentPassword" type="password" id="emailPassword" placeholder="{s name="AccountLabelCurrentPassword"}Ihr aktuelles Passwort*:{/s}" class="{if $sErrorFlag.currentPassword}has--error{/if}" />
+										<input name="currentPassword" type="password" id="emailPassword" placeholder="{s name="AccountLabelCurrentPassword2"}Ihr aktuelles Passwort*{/s}" class="{if $sErrorFlag.currentPassword}has--error{/if}" />
 									</p>
 								{/if}
 								<p>
-									<input name="email" type="email" id="newmail" placeholder="{s name="AccountLabelNewMail"}{/s}" class="{if $sErrorFlag.email}has--error{/if}" />
+									<input name="email" type="email" id="newmail" placeholder="{s name="AccountLabelNewMail"}{/s}*" class="{if $sErrorFlag.email}has--error{/if}" />
 								</p>
 								<p>
-									<input name="emailConfirmation" type="email" id="neweailrepeat" placeholder="{s name="AccountLabelMail"}{/s}" class="{if $sErrorFlag.emailConfirmation}has--error{/if}" />
+									<input name="emailConfirmation" type="email" id="neweailrepeat" placeholder="{s name="AccountLabelMail"}{/s}*" class="{if $sErrorFlag.emailConfirmation}has--error{/if}" />
 								</p>
 							</div>
 						{/block}
