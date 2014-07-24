@@ -23,7 +23,7 @@
 	{/block}
 
 	{block name='frontend_index_header_meta_tags_mobile'}
-		<meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
 		{* @TODO - Add snippets or config options here *}
 		<meta name="mobile-web-app-capable" content="yes">
