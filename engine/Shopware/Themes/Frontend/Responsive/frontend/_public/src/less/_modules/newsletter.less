@@ -107,10 +107,10 @@
     .newsletter-detail--buttons {
         .unitize(16, 16, margin-top);
 
-        // Icon
         .newsletter-detail--window {
             .unitize(10, 16, margin-bottom);
             text-align: center;
+            width: 100%;
 
             i[class^=icon] {
                 .unitize-margin(0, 0, 0, 16);
@@ -150,6 +150,11 @@
     // Newsletter detail
     .newsletter-detail--content {
         .unitize(20, 16, margin-top);
+
+        .newsletter-detail--buttons .newsletter-detail--window {
+            width: auto;
+            text-align: right;
+        }
     }
 }
 

@@ -34,7 +34,7 @@
 			<div class="newsletter-detail--buttons block">
 
 				{block name="frontend_newsletter_detail_buttons_window"}
-					<a href="{$sContentItem.link}" class="newsletter-detail--window btn btn--primary right" target="_blank">{s name='NewsletterDetailLinkNewWindow'}{/s}<i class="icon--arrow-right is--small"></i></a>
+					<a href="{$sContentItem.link}" class="newsletter-detail--window btn btn--primary right" target="_blank">{s name='NewsletterDetailLinkOpenNewWindow'}{/s}<i class="icon--arrow-right is--small"></i></a>
 				{/block}
 
 				{block name="frontend_newsletter_detail_buttons_backlink"}
