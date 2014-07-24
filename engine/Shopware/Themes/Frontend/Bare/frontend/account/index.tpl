@@ -173,10 +173,10 @@
 									</p>
 								{/if}
 								<p>
-									<input name="email" type="text" id="newmail" placeholder="{s name="AccountLabelNewMail"}{/s}" class="{if $sErrorFlag.email}has--error{/if}" />
+									<input name="email" type="email" id="newmail" placeholder="{s name="AccountLabelNewMail"}{/s}" class="{if $sErrorFlag.email}has--error{/if}" />
 								</p>
 								<p>
-									<input name="emailConfirmation" type="text" id="neweailrepeat" placeholder="{s name="AccountLabelMail"}{/s}" class="{if $sErrorFlag.emailConfirmation}has--error{/if}" />
+									<input name="emailConfirmation" type="email" id="neweailrepeat" placeholder="{s name="AccountLabelMail"}{/s}" class="{if $sErrorFlag.emailConfirmation}has--error{/if}" />
 								</p>
 							</div>
 						{/block}

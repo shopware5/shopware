@@ -47,7 +47,7 @@
 	                <p>{se name="LoginHeaderFields"}{/se}</p>
 	                <p>
 	                    <label for="email">{se name='LoginLabelMail'}{/se}</label>
-	                    <input name="email" type="text" tabindex="1" value="{$sFormData.email|escape}" id="email" class="text {if $sErrorFlag.email}instyle_error{/if}" />
+	                    <input name="email" type="email" tabindex="1" value="{$sFormData.email|escape}" id="email" class="text {if $sErrorFlag.email}instyle_error{/if}" />
 	                </p>
 	                <p class="none">
 	                    <label for="passwort">{se name="LoginLabelPassword"}{/se}</label>
