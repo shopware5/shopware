@@ -23,13 +23,10 @@
  */
 
 /**
- * @category  Shopware
- * @package   Shopware\Tests
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @ticket SW-4724
  */
-class Shopware_RegressionTests_Ticket4724 extends Enlight_Components_Test_Plugin_TestCase
+class Shopware_Tests_Controllers_Frontend_BlogTest extends Enlight_Components_Test_Plugin_TestCase
 {
-
     /**
      * Set up test case, fix demo data where needed
      */
@@ -42,15 +39,24 @@ class Shopware_RegressionTests_Ticket4724 extends Enlight_Components_Test_Plugin
     }
 
     /**
+     * Cleaning up testData
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $sql = "UPDATE `s_blog` SET `active` = '1' WHERE `id` =3;";
+        Shopware()->Db()->exec($sql, array());
+    }
+
+    /**
      * Tests the behavior if the blog article is not activated
      */
     public function testDispatchNoActiveBlogItem()
     {
-
         try {
             $this->dispatch('/blog/detail/?blogArticle=3');
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->fail("Exception thrown. This should not occur.");
         }
 
@@ -62,28 +68,23 @@ class Shopware_RegressionTests_Ticket4724 extends Enlight_Components_Test_Plugin
      */
     public function testDispatchNotExistingBlogItem()
     {
-
         try {
             $this->dispatch('/blog/detail/?blogArticle=2222');
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->fail("Exception thrown. This should not occur.");
         }
 
         $this->assertTrue($this->Response()->isRedirect());
     }
 
-
     /**
      * Test redirect when the blog category does not exist
      */
     public function testDispatchNotExistingBlogCategory()
     {
-
         try {
             $this->dispatch('/blog/?sCategory=17');
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->fail("Exception thrown. This should not occur.");
         }
 
@@ -91,8 +92,7 @@ class Shopware_RegressionTests_Ticket4724 extends Enlight_Components_Test_Plugin
 
         try {
             $this->dispatch('/blog/?sCategory=156165');
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->fail("Exception thrown. This should not occur.");
         }
 
@@ -105,8 +105,7 @@ class Shopware_RegressionTests_Ticket4724 extends Enlight_Components_Test_Plugin
         //should be redirected because blog category is inactive
         try {
             $this->dispatch('/blog/?sCategory=17');
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->fail("Exception thrown. This should not occur.");
         }
         $this->assertTrue($this->Response()->isRedirect());
@@ -114,29 +113,14 @@ class Shopware_RegressionTests_Ticket4724 extends Enlight_Components_Test_Plugin
         //should be redirected because blog category is inactive
         try {
             $this->dispatch('/blog/detail/?blogArticle=3');
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->fail("Exception thrown. This should not occur.");
         }
 
         $this->assertTrue($this->Response()->isRedirect());
 
-
-    }
-    /**
-     * Cleaning up testData
-     */
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $sql = "UPDATE `s_blog` SET `active` = '1' WHERE `id` =3;";
-        Shopware()->Db()->exec($sql, array());
-
-
         //activate blog category
         $sql= "UPDATE `s_categories` SET `active` = '1' WHERE `id` =17";
         Shopware()->Db()->exec($sql, array());
-
     }
 }

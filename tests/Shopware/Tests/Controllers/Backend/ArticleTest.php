@@ -27,9 +27,8 @@
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
-class Shopware_RegressionTests_Ticket5052 extends Enlight_Components_Test_Controller_TestCase
+class Shopware_Tests_Controllers_Backend_ArticleTest extends Enlight_Components_Test_Controller_TestCase
 {
-
     protected $articles = array(
         //Artikel mit Standardkonfigurator
         202 => array(
@@ -95,6 +94,7 @@ class Shopware_RegressionTests_Ticket5052 extends Enlight_Components_Test_Contro
 
     /**
      * @group knownFailing
+     * @ticket SW-5052
      */
     public function testArticleDetail()
     {

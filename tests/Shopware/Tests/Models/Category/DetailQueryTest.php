@@ -8427,6 +8427,36 @@ class Shopware_Tests_Models_Category_DetailQueryTest extends Enlight_Components_
         }
     }
 
+    /**
+     * Test if the query returns all necessary information
+     *
+     * @ticket SW-5474
+     */
+    public function testCategoryBackendGetDetailQuery()
+    {
+        /** @var $repository Shopware\Models\Category\Repository */
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
+
+        //category Edelbrände
+        $categoryDetailArray = $repository->getDetailQuery(14)->getArrayResult();
+
+        $articleData = $categoryDetailArray[0]["articles"][0];
+        $this->assertNotEmpty($articleData);
+
+        $this->assertEquals(10, $articleData["id"]);
+        $this->assertEquals('Aperitif-Glas Demi Sec', $articleData["name"]);
+
+        $mainDetailData = $articleData["mainDetail"];
+        $this->assertNotEmpty($mainDetailData);
+        $this->assertEquals('16', $mainDetailData["id"]);
+        $this->assertEquals('SW10010', $mainDetailData["number"]);
+
+        $supplierData = $articleData["supplier"];
+        $this->assertNotEmpty($supplierData);
+        $this->assertEquals('2', $supplierData["id"]);
+        $this->assertEquals('Feinbrennerei Sasse', $supplierData["name"]);
+    }
+
     protected function removeDates($data) {
         foreach($data as &$subCategory) {
             unset($subCategory['changed']);
