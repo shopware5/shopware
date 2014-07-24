@@ -42,7 +42,7 @@
 										{block name="frontend_custom_tab_navigation_entry"}
 											<li class="navigation--entry">
 
-												{block name="frontend_custom_tab_navigation_entry"}
+												{block name="frontend_custom_tab_navigation_link"}
 													<a class="navigation--link{if $subPage.active} is--active{/if}" href="{url controller=custom sCustom=$subPage.id}" title="{$subPage.description}">
 														{$subPage.description}
 													</a>
