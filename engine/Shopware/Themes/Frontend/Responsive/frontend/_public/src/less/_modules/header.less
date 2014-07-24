@@ -99,6 +99,7 @@
 	border-bottom: 1px solid @borderColor;
 	width: 100%;
     left: 0;
+    top: 0;
     position: absolute;
 
 	.icon--search {
@@ -138,16 +139,14 @@
 }
 
 // Loading indicator for non css animations supported browsers
-.has--no-cssanimations {
-    .form--ajax-loader {
-        .unitize(24, 16, top);
-        .unitize(20, 16, right);
-        .unitize-width(16);
-        .unitize-height(16);
-        position: absolute;
-        display: none;
-        background-image: url('../../img/icons/loading-indicator.gif');
-    }
+.has--no-cssanimations .form--ajax-loader {
+    .unitize(24, 16, top);
+    .unitize(20, 16, right);
+    .unitize-width(16);
+    .unitize-height(16);
+    position: absolute;
+    display: none;
+    background-image: url('../../img/icons/loading-indicator.gif');
 }
 
 // Search results modal
@@ -209,16 +208,14 @@
         background: lighten(@borderColor, 10%);
         color: @primaryColor;
 
-        .entry--name a { color: @primaryColor }
+        .name--link { color: @primaryColor; }
     }
 
     .entry--media { width: 10%; min-width:10% }
 
-    .entry--name {
-        width: 60%;
+    .entry--name { width: 60%; }
 
-        a { color: @primaryTextColor }
-    }
+    .name--link { color: @primaryTextColor }
 
     .entry--price,
     .entry--all-results-number {
@@ -502,31 +499,24 @@
         }
     }
 
-    .has--cssanimations {
-        .form--ajax-loader {
-            .unitize(10, 16, top);
-            .unitize(10, 16, right);
-            position: absolute;
-        }
+    .has--cssanimations .form--ajax-loader {
+        .unitize(10, 16, top);
+        .unitize(10, 16, right);
+        position: absolute;
+
     }
 
-    .has--no-cssanimations {
-        .form--ajax-loader {
-            .unitize(14, 16, top);
-            .unitize(10, 16, right);
-            position: absolute;
-        }
+    .has--no-cssanimations .form--ajax-loader {
+        .unitize(14, 16, top);
+        .unitize(10, 16, right);
+        position: absolute;
+
     }
 }
 
 @media screen and (min-width: @tabletLandscapeViewportWidth) {
 
-    .shop--navigation {
-
-        // Search entry
-        .entry--search { width: 45%; }
-    }
-
+    .shop--navigation .entry--search { width: 45%; }
 }
 
 // Desktop styling for the global shop header

@@ -33,7 +33,7 @@
                         {* Product name *}
                         {block name="search_ajax_list_entry_name"}
                             <div class="entry--name block">
-                                <a href="{$search_result.link}" title="{$search_result.name|escape:'html'}">
+                                <a class="name--link" href="{$search_result.link}" title="{$search_result.name|escape:'html'}">
                                     {$search_result.name|truncate:200}
                                 </a>
                             </div>
