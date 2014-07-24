@@ -53,7 +53,7 @@
 		{/block}
 
 		{* Links list *}
-		{block name='frontend_detail_description_links'}
+		{block name='frontend_detail_description_links_list'}
 			<ul class="content--list list--unstyled">
 				{block name='frontend_detail_actions_contact'}
 					<li class="list--entry">

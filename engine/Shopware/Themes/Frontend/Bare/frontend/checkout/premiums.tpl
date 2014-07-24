@@ -25,7 +25,7 @@
 
                                         <div class="product--inner">
                                             {if $premium.available}
-                                                {block name='frontend_checkout_premium_info_button'}
+                                                {block name='frontend_checkout_premium_info_free'}
                                                     <p class="premium-product--free">{s name="PremiumInfoFreeProduct"}{/s}</p>
                                                 {/block}
                                             {else}

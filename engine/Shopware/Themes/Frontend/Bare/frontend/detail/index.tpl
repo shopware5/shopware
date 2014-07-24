@@ -176,8 +176,8 @@
                                 {/if}
                             {/block}
 
-                            {* Product attribute 1 *}
-                            {block name='frontend_detail_data_attributes_attr1'}
+                            {* Product attribute 2 *}
+                            {block name='frontend_detail_data_attributes_attr2'}
                                 {if $sArticle.attr2}
                                     <li class="base-info--entry entry-attribute">
                                         <strong class="entry--label">
@@ -240,7 +240,7 @@
 				<ul class="tab--navigation panel--tab-nav">
 
 					{* Tab navigation - Related products *}
-					{block name="frontend_detail_tabs_related"}
+					{block name="frontend_detail_tabs_entry_related"}
 						{if $sArticle.sRelatedArticles && !$sArticle.crossbundlelook}
 							<li class="navigation--entry">
 								<a href="#content--related-products" class="navigation--link">
@@ -261,7 +261,7 @@
 				</ul>
 			{/block}
 
-			{block name="frontend_detail_index_recommendation_tab_content_container"}
+			{block name="frontend_detail_index_related_similiar_tab_content_container"}
 				<div class="tab--content panel--body has--border">
 
 					{* Related articles *}
