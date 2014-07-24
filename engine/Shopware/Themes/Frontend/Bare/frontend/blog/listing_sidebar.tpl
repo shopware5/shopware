@@ -6,7 +6,7 @@
 		{block name='frontend_listing_actions_filter_container'}
 
 			{block name='frontend_listing_actions_filter_closebtn'}
-				<a href="#" class="blog--filter-close-btn">{s name="ListingActionsCloseFilter"}Filter schließen{/s} <i class="icon--arrow-right"></i></a>
+				<a href="#" title="{s name="ListingActionsCloseFilter"}{/s}" class="blog--filter-close-btn">{s name="ListingActionsCloseFilter"}Filter schließen{/s} <i class="icon--arrow-right"></i></a>
 			{/block}
 
 			<div class="filter--container">
