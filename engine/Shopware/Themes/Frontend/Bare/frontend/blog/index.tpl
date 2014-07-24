@@ -6,56 +6,43 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-<div class="grid_13" id="blog">
-	{* Banner *}
-	{block name='frontend_blog_index_banner'}
-		{include file="frontend/listing/banner.tpl"}
-	{/block}
-	{* Blog listing *}
-	{block name='frontend_blog_index_listing'}
-		{include file="frontend/blog/listing.tpl"}
-	{/block}
-</div>
-{/block}
+	<div class="blog--content block-group">
 
-{* Sidebar right *}
-{block name='frontend_index_content_right'}
-<div id="right" class="grid_3 last">
-	
-	{* Campaign top *}
-	{block name='frontend_blog_index_campaign_top'}
-		{include file="frontend/campaign/box.tpl" campaignsData=$campaigns.leftTop}
-	{/block}
-	
-	<div class="blog_navi">
-	
-		{* Subscribe Atom + RSS *}
-		{block name='frontend_blog_index_subscribe'}
-		<h2 class="headingbox">{s name="BlogSubscribe"}Subscribe{/s}</h2>
-		<div class="blogInteract">
-			<ul>
-				<li><a class="rss" href="{$sCategoryContent.rssFeed}" title="{$sCategoryContent.description}">{se name="BlogLinkRSS"}{/se}</a></li>
-				<li class="last"><a class="atom" href="{$sCategoryContent.atomFeed}" title="{$sCategoryContent.description}">{se name="BlogLinkAtom"}{/se}</a></li>
-			</ul>
-		</div>
+		{* Blog Filter Button *}
+		{block name='frontend_blog_listing_filter_button'}
+			<div class="blog--filter-btn">
+				<a href="#"
+				   title="{s namespace='frontend/listing/listing_actions' name='ListingFilterButton'}Filter{/s}"
+				   class="filter--trigger btn btn--primary"
+				   data-collapseTarget=".blog--filter-options"
+				   data-offcanvas="true"
+				   data-offCanvasSelector=".blog--filter-options"
+				   data-closeButtonSelector=".blog--filter-close-btn">
+					<i class="icon--filter"></i> {s namespace='frontend/listing/listing_actions' name='ListingFilterButton'}Filter{/s}
+				</a>
+			</div>
 		{/block}
 
-		{* Campaign Middle *}
-		{block name='frontend_blog_index_campaign_middle'}
-			{include file="frontend/campaign/box.tpl" campaignsData=$campaigns.leftMiddle}
+		{* Blog Sidebar *}
+		{block name='frontend_blog_listing_sidebar'}
+			{include file='frontend/blog/listing_sidebar.tpl'}
 		{/block}
-	
-		{* Blog filter *}
-		{block name='frontend_blog_index_filter'}
-			{include file="frontend/blog/filter.tpl"}
+
+		{* Blog Banner *}
+		{block name='frontend_blog_index_banner'}
+			{include file="frontend/listing/banner.tpl"}
+		{/block}
+
+		{* Blog listing *}
+		{block name='frontend_blog_index_listing'}
+			{include file="frontend/blog/listing.tpl"}
+		{/block}
+
+		{* Blog Pagination *}
+		{block name='frontend_blog_index_pagination'}
+			<div class="blog--paging block">
+				{include file='frontend/listing/actions/action-pagination.tpl'}
+			</div>
 		{/block}
 	</div>
-	{* Campaign bottom *}
-	{block name='frontend_blog_index_campaign_bottom'}
-		{include file="frontend/campaign/box.tpl" campaignsData=$campaigns.leftBottom}
-	{/block}
-</div>
 {/block}
-
-{* Hide sidebar left *}
-{block name='frontend_index_content_left'}{/block}
