@@ -1,80 +1,130 @@
-<div class="blogbox">
+<div class="blog--box panel has--border is--rounded block">
 	{block name='frontend_blog_col_blog_entry'}
-		<div class="blogbox_header">
-			{* Article name *}
-			{block name='frontend_blog_col_article_name'}
-				<h2>
-					<a href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}"
-					   title="{$sArticle.title}">{$sArticle.title}</a>
-				</h2>
-			{/block}
 
-			{* Meta data *}
-			{block name='frontend_blog_col_meta_data'}
-				<p class="post_metadata">
-					{if $sArticle.author.name}
-						<span class="first">
-                        {s name="BlogInfoFrom"}{/s} {$sArticle.author.name}
-                    </span>
+		{* Blog Header *}
+		{block name='frontend_blog-col_box_header'}
+			<div class="blog--box-header">
+
+				{* Article name *}
+				{block name='frontend_blog_col_article_name'}
+					<h1 class="blog--box-headline panel--title">
+						<a href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}" title="{$sArticle.title}">{$sArticle.title}</a>
+					</h1>
+				{/block}
+
+				{* Meta data *}
+				{block name='frontend_blog_col_meta_data'}
+					<div class="blog--box-metadata">
+
+						{* Author *}
+						{block name='frontend_blog_col_meta_data_name'}
+							{if $sArticle.author.name}
+								<span class="blog--metadata-author is--first">{s name="BlogInfoFrom"}{/s} {$sArticle.author.name}</span>
+							{/if}
+						{/block}
+
+						{* Date *}
+						{block name='frontend_blog_col_meta_data_date'}
+							{if $sArticle.displayDate}
+								<span class="blog--metadata-date{if !$sArticle.author.name} is--first{/if}">{$sArticle.displayDate|date:"DATETIME_SHORT"}</span>
+							{/if}
+						{/block}
+
+						{* Description *}
+						{block name='frontend_blog_col_meta_data_description'}
+							{if $sArticle.categoryInfo.description}
+								<span class="blog--metadata-description">
+									{if $sArticle.categoryInfo.linkCategory}
+										<a href="{$sArticle.categoryInfo.linkCategory}" title="{$sArticle.categoryInfo.description}">{$sArticle.categoryInfo.description}</a>
+									{else}
+										{$sArticle.categoryInfo.description}
+									{/if}
+								</span>
+							{/if}
+						{/block}
+
+						{* Comments *}
+						{block name='frontend_blog_col_meta_data_comments'}
+							<span class="blog--metadata-comments{if $sArticle.sVoteAverage|round ==0} is--last{/if}">
+								<a href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}#commentcontainer" title="{$sArticle.articleName}">{if $sArticle.numberOfComments}{$sArticle.numberOfComments}{else}0{/if} {s name="BlogInfoComments"}{/s}</a>
+							</span>
+						{/block}
+
+						{* Rating *}
+						{block name='frontend_blog_col_meta_data_rating'}
+							{if $sArticle.sVoteAverage|round !=0}
+								<div class="blog--metadata-rating is--last" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+									{$average = $vote.points * 2|round:0}
+
+									<meta itemprop="worstRating" content="1">
+									<meta itemprop="ratingValue" content="{$vote.points}">
+									<meta itemprop="bestRating" content="5">
+
+									{for $value=1 to 5}
+										{$cls = 'icon--star'}
+
+										{if $value > $average}
+											{$cls = 'icon--star-empty'}
+										{/if}
+
+										<i class="{$cls}"></i>
+									{/for}
+								</div>
+							{/if}
+						{/block}
+					</div>
+				{/block}
+
+			</div>
+		{/block}
+
+		{* Blog Box *}
+		{block name='frontend_blog_col_box_content'}
+			<div class="blog--box-content panel--body is--wide block">
+
+				{* Article pictures *}
+				{block name='frontend_blog_col_article_picture'}
+					{if $sArticle.preview.thumbNails.2}
+						<div class="blog--box-picture">
+							<a href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}" class="blog--picture-main" title="{$sArticle.title}"><img class="blog--picture-preview" src="{link file=$sArticle.preview.thumbNails.2}" /></a>
+						</div>
 					{/if}
+				{/block}
 
-					{if $sArticle.displayDate}
-						<span {if !$sArticle.author.name} class="first"{/if}>
-                        {$sArticle.displayDate|date:"DATETIME_SHORT"}
-                    </span>
-					{/if}
-					{if $sArticle.categoryInfo.description}<span>{if $sArticle.categoryInfo.linkCategory}<a
-						href="{$sArticle.categoryInfo.linkCategory}"
-						title="{$sArticle.categoryInfo.description}">{$sArticle.categoryInfo.description}</a>{else}{$sArticle.categoryInfo.description}{/if}
-						</span>{/if}
-					<span {if $sArticle.sVoteAverage|round ==0}class="last"{/if}><a
-								href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}#commentcontainer"
-								title="{$sArticle.articleName}">{if $sArticle.numberOfComments}{$sArticle.numberOfComments}{else}0{/if} {s name="BlogInfoComments"}{/s}</a></span>
-					{if $sArticle.sVoteAverage|round !=0}
-						<span class="last star star{$sArticle.sVoteAverage|round}">{se name="BlogInfoRating"}{/se}</span>
-					{/if}
-				</p>
-			{/block}
+				{* Article Description *}
+				{block name='frontend_blog_col_description'}
+					<div class="blog--box-description">
 
-		</div>
-		<div class="blogbox_content">
-			{* Blog Article pictures *}
-			{if $sArticle.preview.thumbNails.1}
-				<div class="blog_picture">
-					{block name='frontend_blog_col_article_picture'}
-						<a href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}"
-						   title="{$sArticle.title}"
-						   style="background: url({link file=$sArticle.preview.thumbNails.1}) no-repeat center center;"
-						   class="main_image">
-						</a>
-					{/block}
-				</div>
-			{/if}
+						{block name='frontend_blog_col_description_short'}
+							<div class="blog--box-description-short">
+								{if $sArticle.shortDescription}{$sArticle.shortDescription|nl2br}{else}{$sArticle.shortDescription}{/if}
+							</div>
+						{/block}
 
+						{* Read more button *}
+						{block name='frontend_blog_col_read_more'}
+							<div class="blog--box-readmore">
+								<a href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}" title="{$sArticle.title|escape:'html'}" class="btn btn--primary is--small">{s name="BlogLinkMore"}{/s}</a>
+							</div>
+						{/block}
 
-			{* Article Description *}
-			{block name='frontend_blog_col_description'}
-				<p>
-					{if $sArticle.shortDescription}{$sArticle.shortDescription|nl2br}{else}{$sArticle.shortDescription}{/if}
-				</p>
-			{/block}
+						{* Tags *}
+						{block name='frontend_blog_col_tags'}
+							<div class="blog--box-tags">
+								{if $sArticle.tags|@count > 1}
+									<strong>{s name="BlogInfoTags"}Tags:{/s}</strong>
+									{foreach $sArticle.tags as $tag}
+										<a href="{$tag.link}" title="{$tag.name|escape:'html'}">{$tag.name}</a>{if !$tag@last}, {/if}
+									{/foreach}
+								{/if}
+							</div>
+						{/block}
 
-			<div class="clear">&nbsp;</div>
+					</div>
+				{/block}
 
-			{* Read more button *}
-			{block name='frontend_blog_col_read_more'}
-				<div class="blog_tags">
-					{if $sArticle.tags|@count > 1}
-						<strong>{s name="BlogInfoTags"}Tags:{/s}</strong>
-						{foreach $sArticle.tags as $tag}
-							<a href="{$tag.link}" title="{$tag.name}">{$tag.name}</a>{if !$tag@last}, {/if}
-						{/foreach}
-					{/if}
-					<a href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}"
-					   title="{$sArticle.title}"
-					   class="button-right small_right right">{se name="BlogLinkMore"}{/se}</a>
-				</div>
-			{/block}
-		</div>
+			</div>
+		{/block}
+
 	{/block}
 </div>
