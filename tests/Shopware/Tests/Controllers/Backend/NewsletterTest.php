@@ -27,20 +27,32 @@
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
-class Shopware_RegressionTests_Ticket4611 extends Enlight_Components_Test_Plugin_TestCase
+class Shopware_Tests_Controllers_Backend_NewsletterTest extends Enlight_Components_Test_Plugin_TestCase
 {
     /**
-     * @group functional
+     * Returns the test dataset
      *
-     * Test case method
+     * @return PHPUnit_Extensions_Database_DataSet_IDataSet
      */
-    public function testListingRss()
+    protected function getDataSet()
     {
-        $this->dispatch('/listing?sCategory=5&sRss=1');
-        if (!preg_match('#<atom:link href="([^"]+)"#msi', $this->Response()->getBody(), $match)) {
-            $this->fail();
-        }
-        $this->assertNotContains('sCoreId', $match[1]);
-        $this->assertLinkExists($match[1]);
+        return $this->createXMLDataSet(Shopware()->TestPath('DataSets_Newsletter').'Lock.xml');
+    }
+
+    /**
+     * @ticket SW-4747
+     */
+    public function testNewsletterLock()
+    {
+        $this->Front()->setParam('noViewRenderer', false);
+        Shopware()->Config()->MailCampaignsPerCall = 1;
+
+        $this->dispatch('/backend/newsletter/cron');
+        $this->assertRegExp('#[0-9]+ Recipients fetched#', $this->Response()->getBody());
+        $this->reset();
+
+        $this->dispatch('/backend/newsletter/cron');
+        $this->assertRegExp('#Wait [0-9]+ seconds ...#', $this->Response()->getBody());
+        $this->reset();
     }
 }
