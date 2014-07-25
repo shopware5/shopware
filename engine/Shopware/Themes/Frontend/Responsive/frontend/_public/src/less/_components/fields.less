@@ -27,9 +27,9 @@ input[type="tel"]{
     }
 
     &.has--error {
-        color: @errorText;
-        background: @errorBackground;
-        border-color: @errorBorderColor;
+	color: @inputErrorColor;
+	background: @inputErrorBackground;
+	border-color: @inputErrorColor;
     }
 
     // Input field spacing
@@ -133,16 +133,16 @@ label.has--error {
 
     // Error state
     &.has--error {
-        color: @errorText;
-        border-color: @errorBorderColor;
-        background: @errorBackground;
+	color: @inputErrorColor;
+	border-color: @inputErrorColor;
+	background: @inputErrorBackground;
 
         .js--fancy-select-trigger {
-            border-color: @errorBorderColor;
+	    border-color: @inputErrorColor;
         }
 
         .js--fancy-select-text {
-            border-color: lighten(@errorBorderColor, 10%);
+	    border-color: lighten(@inputErrorColor, 40%);
         }
     }
 }
