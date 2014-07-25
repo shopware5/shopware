@@ -329,33 +329,36 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
                 && Shopware()->Config()->get('requirePhoneField'));
 
             $rules = array(
-                'salutation'=>array('required'=>1),
-                'company'=>array('required'=>0),
-                'firstname'=>array('required'=>1),
-                'lastname'=>array('required'=>1),
-                'street'=>array('required'=>1),
-                'streetnumber'=>array('required'=>1),
-                'zipcode'=>array('required'=>1),
-                'city'=>array('required'=>1),
-                'phone'=>array('required'=> $requirePhone),
-                'fax'=>array('required'=>0),
-             'country'=>array(
+                'salutation'    => array('required' => 1),
+                'company'       => array('required' => 0),
+                'firstname'     => array('required' => 1),
+                'lastname'      => array('required' => 1),
+                'street'        => array('required' => 1),
+                'zipcode'       => array('required' => 1),
+                'city'          => array('required' => 1),
+                'phone'         => array('required' => $requirePhone),
+                'fax'           => array('required' => 0),
+                'country'       => array(
                     'required' => 1,
                     'in' => $countryIds
                 ),
-                'department'=>array('required'=>0),
-                'shippingAddress'=>array('required'=>0),
-                'text1'=>array('required'=>0),
-                'text2'=>array('required'=>0),
-                'text3'=>array('required'=>0),
-                'text4'=>array('required'=>0),
-                'text5'=>array('required'=>0),
-                'text6'=>array('required'=>0),
-                'birthyear'=>array('required'=>0),
-                'birthmonth'=>array('required'=>0),
-                'birthday'=>array('required'=>0),
-                'additional_address_line1' => array('required' => (Shopware()->Config()->requireAdditionAddressLine1 && Shopware()->Config()->showAdditionAddressLine1) ? 1 : 0),
-                'additional_address_line2' => array('required' => (Shopware()->Config()->requireAdditionAddressLine2 && Shopware()->Config()->showAdditionAddressLine2) ? 1 : 0)
+                'department'    => array('required' => 0),
+                'shippingAddress'=>array('required' => 0),
+                'text1'         => array('required' => 0),
+                'text2'         => array('required' => 0),
+                'text3'         => array('required' => 0),
+                'text4'         => array('required' => 0),
+                'text5'         => array('required' => 0),
+                'text6'         => array('required' => 0),
+                'birthyear'     => array('required' => 0),
+                'birthmonth'    => array('required' => 0),
+                'birthday'      => array('required' => 0),
+                'additional_address_line1' => array(
+                    'required' => (Shopware()->Config()->requireAdditionAddressLine1 && Shopware()->Config()->showAdditionAddressLine1) ? 1 : 0
+                ),
+                'additional_address_line2' => array(
+                    'required' => (Shopware()->Config()->requireAdditionAddressLine2 && Shopware()->Config()->showAdditionAddressLine2) ? 1 : 0
+                )
             );
 
             $values = $this->Request()->getPost('register');
@@ -442,25 +445,24 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             $countryIds = array_column($countryData, 'id');
 
             $rules = array(
-                'salutation'=>array('required'=>1),
-                'company'=>array('required'=>0),
-                'firstname'=>array('required'=>1),
-                'lastname'=>array('required'=>1),
-                'street'=>array('required'=>1),
-                'streetnumber'=>array('required'=>1),
-                'zipcode'=>array('required'=>1),
-                'city'=>array('required'=>1),
-                'department'=>array('required'=>0),
-                'country'=>array(
+                'salutation'        => array('required' => 1),
+                'company'           => array('required' => 0),
+                'firstname'         => array('required' => 1),
+                'lastname'          => array('required' => 1),
+                'street'            => array('required' => 1),
+                'zipcode'           => array('required' => 1),
+                'city'              => array('required' => 1),
+                'department'        => array('required' => 0),
+                'country'           => array(
                     'required' => Shopware()->Config()->get('sCOUNTRYSHIPPING'),
                     'in' => $countryIds
                 ),
-                'text1'=>array('required'=>0),
-                'text2'=>array('required'=>0),
-                'text3'=>array('required'=>0),
-                'text4'=>array('required'=>0),
-                'text5'=>array('required'=>0),
-                'text6'=>array('required'=>0),
+                'text1'             => array('required' => 0),
+                'text2'             => array('required' => 0),
+                'text3'             => array('required' => 0),
+                'text4'             => array('required' => 0),
+                'text5'             => array('required' => 0),
+                'text6'             => array('required' => 0),
                 'additional_address_line1' => array('required' => (Shopware()->Config()->requireAdditionAddressLine1 && Shopware()->Config()->showAdditionAddressLine1) ? 1 : 0),
                 'additional_address_line2' => array('required' => (Shopware()->Config()->requireAdditionAddressLine2 && Shopware()->Config()->showAdditionAddressLine2) ? 1 : 0)
             );

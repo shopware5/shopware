@@ -37,18 +37,17 @@ Feature: My account (without changing login data)
       | firstname    | <firstname>    |
       | lastname     | <lastname>     |
       | street       | <street>       |
-      | streetnumber | <streetnumber> |
       | zipcode      | <zipcode>      |
       | city         | <city>         |
       | country      | <country>      |
 
     Then I should see "Erfolgreich gespeichert"
-    And  the "shipping" address should be "<company>, <firstname> <lastname>, <street> <streetnumber>, <zipcode> <city>, <country>"
+    And  the "shipping" address should be "<company>, <firstname> <lastname>, <street>, <zipcode> <city>, <country>"
 
   Examples:
-    | salutation | company     | firstname | lastname   | street           | streetnumber | zipcode | city        | country     |
-    | ms         |             | Erika     | Musterfrau | Heidestraße      | 17 c         | 12345   | Köln        | Schweiz     |
-    | mr         | shopware AG | Max       | Mustermann | Mustermannstraße | 92           | 48624   | Schöppingen | Deutschland |
+    | salutation | company     | firstname | lastname   | street               | zipcode | city        | country     |
+    | ms         |             | Erika     | Musterfrau | Heidestraße 17 c     | 12345   | Köln        | Schweiz     |
+    | mr         | shopware AG | Max       | Mustermann | Mustermannstraße 92  | 48624   | Schöppingen | Deutschland |
 
   @payment
   Scenario Outline: I can change my payment method

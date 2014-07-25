@@ -232,7 +232,7 @@
 						<p>
 							{if $sUserData.billingaddress.salutation eq "mr"}{s name="AccountSalutationMr"}{/s}{else}{s name="AccountSalutationMs"}{/s}{/if}
 							{$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}<br />
-							{$sUserData.billingaddress.street} {$sUserData.billingaddress.streetnumber}<br />
+							{$sUserData.billingaddress.street}<br />
 							{if $sUserData.billingaddress.additional_address_line1}{$sUserData.billingaddress.additional_address_line1}<br />{/if}
 							{if $sUserData.billingaddress.additional_address_line2}{$sUserData.billingaddress.additional_address_line2}<br />{/if}
 							{$sUserData.billingaddress.zipcode} {$sUserData.billingaddress.city}<br />
@@ -273,7 +273,7 @@
 						<p>
 							{if $sUserData.shippingaddress.salutation eq "mr"}{s name="AccountSalutationMr"}{/s}{else}{s name="AccountSalutationMs"}{/s}{/if}
 							{$sUserData.shippingaddress.firstname} {$sUserData.shippingaddress.lastname}<br />
-							{$sUserData.shippingaddress.street} {$sUserData.shippingaddress.streetnumber}<br />
+							{$sUserData.shippingaddress.street}<br />
 							{if $sUserData.shippingaddress.additional_address_line1}{$sUserData.shippingaddress.additional_address_line1}<br />{/if}
 							{if $sUserData.shippingaddress.additional_address_line2}{$sUserData.shippingaddress.additional_address_line2}<br />{/if}
 							{$sUserData.shippingaddress.zipcode} {$sUserData.shippingaddress.city}<br />

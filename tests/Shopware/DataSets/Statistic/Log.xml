@@ -7,7 +7,6 @@
 		<column>company</column>
 		<column>contact</column>
 		<column>street</column>
-		<column>streetnumber</column>
 		<column>zipcode</column>
 		<column>city</column>
 		<column>phone</column>
@@ -25,7 +24,6 @@
 			<value>test123</value>
 			<value>0000-00-00</value>
 			<value>Partner</value>
-			<value></value>
 			<value></value>
 			<value></value>
 			<value></value>

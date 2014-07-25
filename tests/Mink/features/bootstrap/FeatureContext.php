@@ -31,6 +31,7 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
     public function __construct(array $parameters)
     {
         self::$template = $parameters['template'];
+//        self::$template = array_key_exists('template', $parameters) ? $parameters['template'] : null;
 
         $this->useContext('shopware', new ShopwareContext($parameters));
         $this->useContext('account',  new AccountContext($parameters));

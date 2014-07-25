@@ -44,7 +44,6 @@
 		{block name='frontend_register_shipping_fieldset_input_street'}
 			<div class="register--street">
 				<input name="register[shipping][street]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterShippingLabelStreet'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="street2" value="{$form_data.street|escape}" class="register--field register--field-street is--required{if $error_flags.street} has--error{/if}" />
-				<input name="register[shipping][streetnumber]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterShippingLabelStreetNumber'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="streetnumber2" value="{$form_data.streetnumber|escape}" class="register--field register--field-streetnumber is--required{if $error_flags.streetnumber} has--error{/if}" />
 			</div>
 		{/block}
 

@@ -15,31 +15,27 @@ UPDATE s_user SET email = CONCAT('demoUser', id, '@shopware.de'),
 UPDATE  s_user_billingaddress SET
   firstname =  'Muster',
   lastname =  'Mann',
-  street = 'Musterstrasse',
-  streetnumber =  '1122',
+  street = 'Musterstrasse 1122',
   zipcode =  '123123';
 
 UPDATE  s_user_shippingaddress SET
   firstname =  'Muster',
   lastname =  'Mann',
-  street = 'Musterstrasse',
-  streetnumber =  '1122',
+  street = 'Musterstrasse 1122',
   zipcode =  '123123';
 
 
 UPDATE  s_order_billingaddress SET
   firstname =  'Muster',
   lastname =  'Mann',
-  street = 'Musterstrasse',
-  streetnumber =  '1122',
+  street = 'Musterstrasse 1122',
   zipcode =  '123123';
 
 
 UPDATE  s_order_shippingaddress SET
   firstname =  'Muster',
   lastname =  'Mann',
-  street = 'Musterstrasse',
-  streetnumber =  '1122',
+  street = 'Musterstrasse 1122',
   zipcode =  '123123';
 
 UPDATE s_user_debit SET
@@ -53,8 +49,8 @@ INSERT INTO `s_user` (`id`, `password`, `email`, `active`, `accountmode`, `confi
 
 SET @customerId = (SELECT id FROM s_user WHERE email = 'test@example.com');
 
-INSERT INTO `s_user_billingaddress` (`id`, `userID`, `company`, `department`, `salutation`, `customernumber`, `firstname`, `lastname`, `street`, `streetnumber`, `zipcode`, `city`, `phone`, `fax`, `countryID`, `ustid`, `birthday`) VALUES
-(NULL, @customerId, 'Muster GmbH', '', 'mr', '20001', 'Max', 'Mustermann', 'Musterstr.', '55', '55555', 'Musterhausen', '05555 / 555555', '', 2, '', '0000-00-00');
+INSERT INTO `s_user_billingaddress` (`id`, `userID`, `company`, `department`, `salutation`, `customernumber`, `firstname`, `lastname`, `street`, `zipcode`, `city`, `phone`, `fax`, `countryID`, `ustid`, `birthday`) VALUES
+(NULL, @customerId, 'Muster GmbH', '', 'mr', '20001', 'Max', 'Mustermann', 'Musterstr. 55', '55555', 'Musterhausen', '05555 / 555555', '', 2, '', '0000-00-00');
 
 DELETE FROM `s_cms_static` WHERE `link` LIKE '%sViewport=content%';
 

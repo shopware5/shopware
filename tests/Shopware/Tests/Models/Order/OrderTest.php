@@ -109,7 +109,6 @@ class Shopware_Tests_Models_Order_OrderTest extends Enlight_Components_Test_Test
         $partner->setDate(new \DateTime());
         $partner->setContact('Dummy');
         $partner->setStreet('Dummy');
-        $partner->setStreetNumber('Dummy');
         $partner->setZipCode('Dummy');
         $partner->setCity('Dummy');
         $partner->setPhone('Dummy');

@@ -137,16 +137,9 @@ class Billing extends ModelEntity
     /**
      * Contains the street name of the billing address
      * @var string $street
-     * @ORM\Column(name="street", type="string", length=100, nullable=false)
+     * @ORM\Column(name="street", type="string", length=255, nullable=false)
      */
     private $street = '';
-
-    /**
-     * Contains the street number of the billing address
-     * @var string $streetNumber
-     * @ORM\Column(name="streetnumber", type="string", length=50, nullable=false)
-     */
-    private $streetNumber = '';
 
     /**
      * Contains the zip code of the billing address
@@ -402,28 +395,6 @@ class Billing extends ModelEntity
     public function getStreet()
     {
         return $this->street;
-    }
-
-    /**
-     * Setter function for the streetNumber column property.
-     *
-     * @param string $streetNumber
-     * @return Billing
-     */
-    public function setStreetNumber($streetNumber)
-    {
-        $this->streetNumber = $streetNumber;
-        return $this;
-    }
-
-    /**
-     * Getter function for the streetNumber column property.
-     *
-     * @return string
-     */
-    public function getStreetNumber()
-    {
-        return $this->streetNumber;
     }
 
     /**

@@ -333,7 +333,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'firstname' => 'TestFirstName',
             'lastname' => 'TestLastName',
             'street' => 'TestStreet',
-            'streetnumber' => 'TestStreetNumber',
             'zipcode' => 'TestZip',
             'city' => 'TestCity',
             'phone' => 'TestPhone',
@@ -471,7 +470,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             $this->assertArrayHasKey('firstname', $details);
             $this->assertArrayHasKey('lastname', $details);
             $this->assertArrayHasKey('street', $details);
-            $this->assertArrayHasKey('streetnumber', $details);
             $this->assertArrayHasKey('zipcode', $details);
             $this->assertArrayHasKey('city', $details);
             $this->assertArrayHasKey('country', $details);
@@ -484,8 +482,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             $this->assertEquals('mr', $details['salutation']);
             $this->assertEquals('Max', $details['firstname']);
             $this->assertEquals('Mustermann', $details['lastname']);
-            $this->assertEquals('Mustermannstraße', $details['street']);
-            $this->assertEquals('92', $details['streetnumber']);
+            $this->assertEquals('Mustermannstraße 92', $details['street']);
             $this->assertEquals('48624', $details['zipcode']);
             $this->assertEquals('Schöppingen', $details['city']);
             $this->assertEquals('2', $details['country']);
@@ -516,7 +513,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'firstname' => 'Testfirstname',
             'lastname' => 'Testlastname',
             'street' => 'Teststreet',
-            'streetnumber' => 'Teststreetnumber',
             'zipcode' => 'Testzipcode',
             'city' => 'Testcity',
             'country' => '2',
@@ -1563,7 +1559,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'firstname' => 'Testfirstname',
             'lastname' => 'Testlastname',
             'street' => 'Teststreet',
-            'streetnumber' => 'Teststreetnumber',
             'zipcode' => 'Testzipcode',
             'city' => 'Testcity',
             'phone' => 'Testphone',
@@ -1641,7 +1636,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'firstname' => 'Testfirstname',
             'lastname' => 'Testlastname',
             'street' => 'Teststreet',
-            'streetnumber' => 'Teststreetnumber',
             'zipcode' => 'Testzipcode',
             'city' => 'Testcity',
             'country' => '2',
@@ -1761,7 +1755,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'firstname' => 'testfirstname',
                 'lastname' => 'testlastname',
                 'street' => 'teststreet',
-                'streetnumber' => 'teststreetnumber',
                 'zipcode' => 'testzipcode',
                 'city' => 'testcity',
                 'country' => 'testcountry'
@@ -2153,7 +2146,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'firstname' => 'Max',
                 'lastname' => 'Mustermann',
                 'street' => '',
-                'streetnumber' => '',
                 'zipcode' => '12345',
                 'city' => '',
                 'phone' => '',
@@ -2267,7 +2259,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'firstname' => 'Max',
                 'lastname' => 'Mustermann',
                 'street' => 'Merkel Strasse, 10',
-                'streetnumber' => '',
                 'zipcode' => '',
                 'city' => '',
                 'countryID' => '0',

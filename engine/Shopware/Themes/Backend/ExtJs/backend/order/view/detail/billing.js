@@ -71,7 +71,6 @@ Ext.define('Shopware.apps.Order.view.detail.Billing', {
         firstName:'{s name=address/first_name}First name{/s}',
         lastName:'{s name=address/last_name}Last name{/s}',
         street:'{s name=address/street}Street{/s}',
-        streetNumber:'{s name=address/street_number}Street number{/s}',
         zipCode:'{s name=address/zip_code}Zip code{/s}',
         city:'{s name=address/city}City{/s}',
         additionalAddressLine1:'{s name=address/additionalAddressLine1}Additional address line 1{/s}',
@@ -234,11 +233,6 @@ Ext.define('Shopware.apps.Order.view.detail.Billing', {
         }, {
             name:'billing[street]',
             fieldLabel:me.snippets.street,
-            required:true,
-            allowBlank:false
-        }, {
-            name:'billing[streetNumber]',
-            fieldLabel:me.snippets.streetNumber,
             required:true,
             allowBlank:false
         }, {
