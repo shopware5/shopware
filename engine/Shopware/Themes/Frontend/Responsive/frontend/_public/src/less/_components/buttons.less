@@ -1,7 +1,5 @@
 .btn {
 	@backgroundGradientStart: rgba(red(@primaryBackgroundColor), green(@primaryBackgroundColor), blue(@primaryBackgroundColor), .6);
-	@boxShadowColor: rgba(red(@primaryBackgroundColor), green(@primaryBackgroundColor), blue(@primaryBackgroundColor), .8);
-	.box-shadow(0 1px 1px @backgroundGradientStart);
 	.unitize-padding(10, 16, 10, 16, 16);
 	.border-radius(4px);
 	.transition();
@@ -71,9 +69,7 @@
 
 	/** Type: Primary button */
 	&.btn--primary {
-		@boxShadowColor: rgba(red(@primaryTextColor), green(@primaryTextColor), blue(@primaryTextColor), .6);
 		.primary-gradient();
-		.box-shadow(0 1px 3px @boxShadowColor);
 		text-shadow: 0 1px 1px @primaryContrastColor;
 		border: 0 none;
 		border-bottom: 1px solid @primaryContrastColor;
@@ -90,9 +86,7 @@
 
 	/** Type: Secondary button */
 	&.btn--secondary {
-		@boxShadowColor: rgba(red(@primaryTextColor), green(@primaryTextColor), blue(@primaryTextColor), .5);
 		.secondary-gradient();
-		.box-shadow(0 1px 3px @boxShadowColor);
 		text-shadow: 0 1px 1px darken(@primaryTextColor, 10%);
 		color: #fff;
 		border: 0 none;
