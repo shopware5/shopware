@@ -24,6 +24,7 @@ In this document you will find a changelog of the important changes related to t
 * The sitemap.xml uses now a smarty template
     * Added `Turnover by device type` in the backend statistics module
     * Added device type details to `Impressions` and `Visitors` in the backend statistics module
+
 * Added secureUninstall method for plugins. There will be a message box when capability 'secureUninstall' is set, which uninstall method should be used.
     * (new) Bootstrap::secureUninstall() -> should be used for removing only non-user data
     * (old) Bootstrap::uninstall() -> old logic
@@ -42,6 +43,7 @@ In this document you will find a changelog of the important changes related to t
     * The API still accepts `street number` values on write operations. The values are internally merged into the `street` field. This is legacy support, and will be removed in the future.
     * Read operations on the API no longer return a `street number` field.
 * Shop configuration contains no more the template selection. The shop template selection is only available in the new theme manager 2.0.
+* The configuration for the thumbnail size of the product images in the "last seen products" module takes no effect on the responsive template. The size now changes by screen size.
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
