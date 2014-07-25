@@ -6,11 +6,15 @@
 	{/block}
 
 	{block name="frontend_detail_image_box"}
-		<div data-image-scroller="true" class="box--image">
-			<div class="images--list">
-				<div class="images--list-item">
+		<div class="image-slider--container">
+			<div class="image-slider--slide">
+
+				<div class="image--box image-slider--item">
 					<span data-picture
 						  data-alt="{if $sArticle.image.res.description}{$sArticle.image.res.description|escape:"html"}{else}{$sArticle.articleName|escape:"html"}{/if}"
+						  data-img-large="{$sArticle.image.src.5}"
+						  data-img-small="{$sArticle.image.src.2}"
+						  data-img-original="{$sArticle.image.src.original}"
 						  class="image--element">
 
 						{*Image based on our default media queries *}
@@ -32,9 +36,12 @@
 				</div>
 
 				{foreach $sArticle.images as $image}
-					<div class="images--list-item">
+					<div class="image--box image-slider--item">
 						<span data-picture
 							  data-alt="{if $image.res.description}{$image.res.description|escape:"html"}{else}{$sArticle.articleName|escape:"html"}{/if}"
+							  data-img-large="{$image.src.5}"
+							  data-img-small="{$image.src.2}"
+							  data-img-original="{$image.src.original}"
 							  class="image--element">
 
 							{*Image based on our default media queries *}
