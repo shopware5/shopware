@@ -65,16 +65,18 @@ label.has--error {
     .box-sizing();
     .unitize-width(290);
     .unitize(44, 16, line-height);
-    .linear-gradient(@lightGradientStart, @primaryLightBackgroundColor);
+    .linear-gradient(@lightGradientStart, @primaryBackgroundColor);
     .clearfix();
     display: inline-block;
     position: relative;
-    border: 1px solid @borderColor;
+    border: 1px solid @lightDarkBorderColor;
+    border-bottom-color: lighten(@darkBorderColor, 40%);
     overflow: hidden;
     cursor: pointer;
 
     &:hover {
-        .linear-gradient(@primaryLightBackgroundColor, @lightGradientStart);
+	color: @primaryColor;
+	background: #fff;
     }
 
     &.js--is--focused {

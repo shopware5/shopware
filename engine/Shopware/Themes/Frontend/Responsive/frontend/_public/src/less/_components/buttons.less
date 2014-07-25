@@ -1,18 +1,19 @@
 .btn {
-	@backgroundGradientStart: rgba(red(@primaryBackgroundColor), green(@primaryBackgroundColor), blue(@primaryBackgroundColor), .6);
+	@backgroundGradientStart: rgba(red(@lightGradientStart), green(@lightGradientStart), blue(@lightGradientStart), 1);
+    .linear-gradient(#fff, @primaryBackgroundColor);
 	.unitize-padding(10, 16, 10, 16, 16);
 	.border-radius(4px);
-	.transition();
 	.appearance();
 	.unitize(16, 16, font-size);
-	display: inline-block;
+    display: inline-block;
 	position: relative;
 	font-weight: bold;
 	text-decoration: none;
 	text-align: left;
 	line-height: normal;
 	cursor: pointer;
-	border: 1px solid @borderColor;
+	border: 1px solid @lightDarkBorderColor;
+    border-bottom-color: lighten(@darkBorderColor, 40%);
 	color: @primaryTextColor;
 
 	[class^="icon--"] {
@@ -48,6 +49,7 @@
     }
 
 	&:hover {
+	background: #fff;
 		color: @primaryColor;
 	}
 

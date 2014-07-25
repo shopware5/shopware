@@ -169,16 +169,19 @@
         .unitize(12, 16, font-size);
         .unitize(46, 16, line-height);
         .linear-gradient(#ffffff, #edeff1);
+	.unitize-padding(1, 2, 2, 5);
         display: inline-block;
         font-family: 'shopware';
         text-align: center;
         color: @primaryTextColor;
-        border: 1px solid @borderColor;
         float: left;
 
-        &:hover {
+	&:hover,
+	&.is--active {
+	    background: #fff;
             color: @primaryColor;
         }
+
 
         &.link--table-view {
             .border-radius-multi(3px, 0, 0, 3px);
@@ -216,6 +219,15 @@
 
     .paging--label {
         display: none;
+    }
+    .pagination--link {
+	&.is--active {
+	    background: #fff;
+	}
+
+	[class^="icon--"] {
+	    margin: 0;
+	}
     }
     .pagination--display {
         .unitize(30, 16, line-height);
@@ -433,6 +445,10 @@
 
     .action--change-layout {
         display: inline-block;
+
+	.action--link {
+	    .unitize-padding(0, 2, 2, 3);
+	}
     }
 
     .action--filter-btn {
