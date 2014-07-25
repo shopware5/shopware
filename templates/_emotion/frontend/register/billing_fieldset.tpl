@@ -13,7 +13,7 @@
 	{block name='frontend_register_billing_fieldset_input_department'}
 		<div>
 			<label for="register_billing_department" class="normal">{se name='RegisterLabelDepartment'}{/se}:</label>
-			<input name="register[billing][department]" type="text"  id="register_billing_department" value="{$form_data.department|escape}" class="text" />
+			<input name="register[billing][department]" type="text" id="register_billing_department" value="{$form_data.department|escape}" class="text" />
 		</div>
 	{/block}
 
@@ -33,8 +33,7 @@
 	{block name='frontend_register_billing_fieldset_input_street'}
 		<div>
 			<label for="street">{s name='RegisterBillingLabelStreet'}{/s}</label>
-			<input name="register[billing][street]" type="text"  id="street" value="{$form_data.street|escape}" class="street required text{if $error_flags.street} instyle_error{/if}" />
-			<input name="register[billing][streetnumber]" type="text"  id="streetnumber" value="{$form_data.streetnumber|escape}"  class="number streetnumber required text{if $error_flags.streetnumber} instyle_error{/if}" />
+			<input name="register[billing][street]" type="text" id="street" value="{$form_data.street|escape}" class="required text{if $error_flags.street} instyle_error{/if}" />
 		</div>
 	{/block}
 

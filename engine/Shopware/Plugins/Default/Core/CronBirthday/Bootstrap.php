@@ -49,7 +49,6 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
                 firstname,
                 lastname,
                 street,
-                streetnumber,
                 zipcode,
                 city,
                 phone,

@@ -932,8 +932,6 @@ class sShopwareImport
             $customer["billing_lastname"] = $this->sDB->qstr((string) $customer["billing_lastname"]);
         if(isset($customer["billing_street"]))
             $customer["billing_street"] = $this->sDB->qstr((string) $customer["billing_street"]);
-        if(isset($customer["billing_streetnumber"]))
-            $customer["billing_streetnumber"] = $this->sDB->qstr((string) $customer["billing_streetnumber"]);
         if(isset($customer["billing_zipcode"]))
             $customer["billing_zipcode"] = $this->sDB->qstr((string) $customer["billing_zipcode"]);
         if(isset($customer["billing_city"]))
@@ -965,7 +963,6 @@ class sShopwareImport
             "firstname"=>"billing_firstname",
             "lastname"=>"billing_lastname",
             "street"=>"billing_street",
-            "streetnumber"=>"billing_streetnumber",
             "zipcode"=>"billing_zipcode",
             "city"=>"billing_city",
             "phone"=>"phone",
@@ -1072,8 +1069,6 @@ class sShopwareImport
                 $customer["shipping_lastname"] = $this->sDB->qstr((string) $customer["shipping_lastname"]);
             if(isset($customer["shipping_street"]))
                 $customer["shipping_street"] = $this->sDB->qstr((string) $customer["shipping_street"]);
-            if(isset($customer["shipping_streetnumber"]))
-                $customer["shipping_streetnumber"] = $this->sDB->qstr((string) $customer["shipping_streetnumber"]);
             if(isset($customer["shipping_zipcode"]))
                 $customer["shipping_zipcode"] = $this->sDB->qstr((string) $customer["shipping_zipcode"]);
             if(isset($customer["shipping_city"]))
@@ -1094,7 +1089,6 @@ class sShopwareImport
                 "firstname"=>"shipping_firstname",
                 "lastname"=>"shipping_lastname",
                 "street"=>"shipping_street",
-                "streetnumber"=>"shipping_streetnumber",
                 "zipcode"=>"shipping_zipcode",
                 "city"=>"shipping_city",
                 "countryID"=>"shipping_countryID"

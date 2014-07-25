@@ -184,7 +184,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
 
             'firstname' => $paymentData['sSepaUseBillingData']?$addressData['firstName']:null,
             'lastname' => $paymentData['sSepaUseBillingData']?$addressData['lastName']:null,
-            'address' => $paymentData['sSepaUseBillingData']?($addressData['street'] . ' ' . $addressData['streetNumber']):null,
+            'address' => $paymentData['sSepaUseBillingData']?$addressData['street']:null,
             'zipcode' => $paymentData['sSepaUseBillingData']?$addressData['zipCode']:null,
             'city' => $paymentData['sSepaUseBillingData']?$addressData['city']:null,
 

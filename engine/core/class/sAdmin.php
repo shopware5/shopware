@@ -248,7 +248,7 @@ class sAdmin
             $data['Firmenname'] = $this->front->Request()->getPost('company');
             $data['Ort'] = $this->front->Request()->getPost('city');
             $data['PLZ'] = $this->front->Request()->getPost('zipcode');
-            $data['Strasse'] = $this->front->Request()->getPost('street') . ' ' . $this->front->Request()->getPost('streetnumber');
+            $data['Strasse'] = $this->front->Request()->getPost('street');
         }
 
         $apiRequest = 'http://evatr.bff-online.de/evatrRPC?';
@@ -702,7 +702,6 @@ class sAdmin
             'firstname',
             'lastname',
             'street',
-            'streetnumber',
             'zipcode',
             'city',
             'phone',
@@ -895,9 +894,9 @@ class sAdmin
 
         $sql = '
             SELECT
-                MD5(CONCAT(company, department, salutation, firstname, lastname, street, streetnumber, zipcode, city, a.countryID, a.stateId)) as hash,
+                MD5(CONCAT(company, department, salutation, firstname, lastname, street, zipcode, city, a.countryID, a.stateId)) as hash,
                 company, department, salutation, firstname, lastname,
-                street, streetnumber, zipcode, city, a.countryID as country, a.countryID as countryID, a.stateId as stateId, countryname, cs.name as statename, additional_address_line1, additional_address_line2
+                street, zipcode, city, a.countryID as country, a.countryID as countryID, a.stateId as stateId, countryname, cs.name as statename, additional_address_line1, additional_address_line2
             FROM s_order_'.$type.'address AS a
             LEFT JOIN s_core_countries co
             ON a.countryID=co.id
@@ -955,7 +954,6 @@ class sAdmin
             'firstname',
             'lastname',
             'street',
-            'streetnumber',
             'zipcode',
             'city',
             'countryID',
@@ -2051,7 +2049,6 @@ class sAdmin
             $userObject["firstname"],
             $userObject["lastname"],
             $userObject["street"],
-            $userObject["streetnumber"],
             $userObject["zipcode"],
             $userObject["city"],
             empty($userObject["phone"]) ? "" : $userObject["phone"],
@@ -2066,10 +2063,10 @@ class sAdmin
 
         $sqlBilling = "INSERT INTO s_user_billingaddress
             (userID, company, department, salutation, firstname, lastname,
-            street, streetnumber, zipcode, city,phone,
+            street, zipcode, city,phone,
             fax, countryID, stateID, ustid, birthday, additional_address_line1, additional_address_line2)
             VALUES
-            (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         // Trying to insert
         list($sqlBilling, $data) = $this->eventManager->filter(
@@ -2126,9 +2123,9 @@ class sAdmin
     {
         $sqlShipping = "INSERT INTO s_user_shippingaddress
             (userID, company, department, salutation, firstname, lastname,
-            street, streetnumber, zipcode, city, countryID, stateID, additional_address_line1, additional_address_line2)
+            street, zipcode, city, countryID, stateID, additional_address_line1, additional_address_line2)
             VALUES
-            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
 
         $sqlShipping = $this->eventManager->filter(
             'Shopware_Modules_Admin_SaveRegisterShipping_FilterSql',
@@ -2144,7 +2141,6 @@ class sAdmin
             $userObject["shipping"]["firstname"],
             $userObject["shipping"]["lastname"],
             $userObject["shipping"]["street"],
-            $userObject["shipping"]["streetnumber"],
             $userObject["shipping"]["zipcode"],
             $userObject["shipping"]["city"],
             $userObject["shipping"]["country"],
@@ -3185,16 +3181,14 @@ class sAdmin
      */
     public function sRiskDIFFER($user, $order, $value)
     {
-        // Compare street+streetnumber and zipcode.
+        // Compare street and zipcode.
         // Return true if any of them doesn't match.
         return (
             (
                 strtolower(
                     trim($user["shippingaddress"]["street"])
-                    .trim($user["shippingaddress"]["streetnumber"])
                 ) != strtolower(
                     trim($user["billingaddress"]["street"])
-                    .trim($user["billingaddress"]["streetnumber"])
                 )
             ) || (
                 trim($user["shippingaddress"]["zipcode"])
@@ -3368,9 +3362,9 @@ class sAdmin
             $sql = '
                 REPLACE INTO s_campaigns_maildata (
                   email, groupID, salutation, title, firstname,
-                  lastname, street, streetnumber, zipcode, city, added
+                  lastname, street, zipcode, city, added
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
             ';
             $this->db->query($sql, array(
                 $email,
@@ -3380,7 +3374,6 @@ class sAdmin
                 $this->front->Request()->getPost('firstname'),
                 $this->front->Request()->getPost('lastname'),
                 $this->front->Request()->getPost('street'),
-                $this->front->Request()->getPost('streetnumber'),
                 $this->front->Request()->getPost('zipcode'),
                 $this->front->Request()->getPost('city')
             ));
@@ -4394,7 +4387,7 @@ class sAdmin
             "billing" => array(
                 "salutation", "firstname",
                 "lastname", "street",
-                "streetnumber", "zipcode",
+                "zipcode",
                 "city", "country"
             ),
             "payment" => array(

@@ -348,8 +348,7 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
                             '<span>{lastName}</span>',
                         '</p>',
                         '<p>',
-                            '<span>{street}</span>&nbsp;',
-                            '<span>{streetNumber}</span>',
+                            '<span>{street}</span>',
                         '</p>',
                         '<tpl if="additionalAddressLine1">',
                             '<p>',
@@ -436,7 +435,6 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             shipping.get('firstName') != billing.get('firstName') ||
             shipping.get('lastName') != billing.get('lastName') ||
             shipping.get('street') != billing.get('street') ||
-            shipping.get('streetNumber') != billing.get('streetNumber') ||
             shipping.get('zipCode') != billing.get('zipCode')) {
 
             var helper = new Ext.dom.Helper;
@@ -476,7 +474,6 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
                         '</p>',
                         '<p>',
                             '<span>{street}</span>&nbsp;',
-                            '<span>{streetNumber}</span>',
                         '</p>',
                         '<tpl if="additionalAddressLine1">',
                             '<p>',

@@ -77,7 +77,6 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
         firstName:'{s name=address/first_name}First name{/s}',
         lastName:'{s name=address/last_name}Last name{/s}',
         street:'{s name=address/street}street{/s}',
-        streetNumber:'{s name=address/street_number}Street number{/s}',
         zipCode:'{s name=address/zip_code}Zip code{/s}',
         city:'{s name=address/city}City{/s}',
         additionalAddressLine1:'{s name=address/additionalAddressLine1}Additional address line 1{/s}',
@@ -202,9 +201,6 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
         }, {
             name:'shipping[street]',
             fieldLabel:me.snippets.street
-        }, {
-            name:'shipping[streetNumber]',
-            fieldLabel:me.snippets.streetNumber
         }, {
             name:'shipping[additionalAddressLine1]',
             fieldLabel:me.snippets.additionalAddressLine1

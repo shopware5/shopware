@@ -59,7 +59,6 @@ class BillingRepository extends ModelRepository
             'billing.firstName',
             'billing.lastName',
             'billing.street',
-            'billing.streetNumber',
             'billing.zipCode',
             'billing.city'
         ));

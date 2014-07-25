@@ -49,18 +49,17 @@ Feature: Successful changes of login data
       | firstname     | <firstname>    |
       | lastname      | <lastname>     |
       | street        | <street>       |
-      | streetnumber  | <streetnumber> |
       | zipcode       | <zipcode>      |
       | city          | <city>         |
       | country       | <country>      |
 
     Then I should see "Erfolgreich gespeichert"
-    And  the "billing" address should be "<company>, <firstname> <lastname>, <street> <streetnumber>, <zipcode> <city>, <country>"
+    And  the "billing" address should be "<company>, <firstname> <lastname>, <street>, <zipcode> <city>, <country>"
 
   Examples:
-    | user             | type     | salutation | company     | firstname | lastname   | street           | streetnumber | zipcode | city        | country     |
-    | Max Mustermann   | private  | ms         |             | Erika     | Musterfrau | Heidestraße      | 17 c         | 12345   | Köln        | Schweiz     |
-    | Erika Musterfrau | business | mr         | shopware AG | Max       | Mustermann | Mustermannstraße | 92           | 48624   | Schöppingen | Deutschland |
+    | user             | type     | salutation | company     | firstname | lastname   | street              | zipcode | city        | country     |
+    | Max Mustermann   | private  | ms         |             | Erika     | Musterfrau | Heidestraße 17 c    | 12345   | Köln        | Schweiz     |
+    | Erika Musterfrau | business | mr         | shopware AG | Max       | Mustermann | Mustermannstraße 92 | 48624   | Schöppingen | Deutschland |
 
   @registration @noResponsive
   Scenario: I can create a new account
@@ -68,20 +67,19 @@ Feature: Successful changes of login data
     When I follow "Mein Konto"
     And I press "Neuer Kunde"
     And I register me
-      | field                | billing        | shipping    |
-      | customer_type        | business       |             |
-      | salutation           | mr             | ms          |
-      | firstname            | Max            | Erika       |
-      | lastname             | Mustermann     | Musterfrau  |
-      | email                | a@b.c          |             |
-      | password             | abcdefgh       |             |
-      | passwordConfirmation | ijklmnop       |             |
-      | company              | Muster GmbH    |             |
-      | street               | Musterstr.     | Heidestraße |
-      | streetnumber         | 55             | 17 c        |
-      | zipcode              | 55555          | 12345       |
-      | city                 | Musterhausen   | Köln        |
-      | country              | Deutschland    | Schweiz     |
+      | field                | billing        | shipping         |
+      | customer_type        | business       |                  |
+      | salutation           | mr             | ms               |
+      | firstname            | Max            | Erika            |
+      | lastname             | Mustermann     | Musterfrau       |
+      | email                | a@b.c          |                  |
+      | password             | abcdefgh       |                  |
+      | passwordConfirmation | ijklmnop       |                  |
+      | company              | Muster GmbH    |                  |
+      | street               | Musterstr. 55  | Heidestraße 17 c |
+      | zipcode              | 55555          | 12345            |
+      | city                 | Musterhausen   | Köln             |
+      | country              | Deutschland    | Schweiz          |
 
     Then I should see "Bitte geben Sie eine gültige eMail-Adresse ein"
     And I should see "Die Passwörter stimmen nicht überein."

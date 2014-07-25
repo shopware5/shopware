@@ -746,8 +746,6 @@ div#notes .article_price_unit p { margin: 0; }
 .register .check input, .register #dpacheckbox {float:left;}
 .register .description {margin-left: 210px;}
 .register .debit .description {margin:0;}
-.register .street {width:250px;}
-.register .number {width: 35px}
 .register .zipcode {width: 100px;}
 .register .city {width:185px;}
 .register #shippingAddress {left:-8px; width: 16px;height:16px;}

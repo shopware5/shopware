@@ -84,7 +84,7 @@ class GenericPaymentMethod extends BasePaymentMethod
             'user_id' => $userId,
             'firstname' => $addressData['firstName'],
             'lastname' => $addressData['lastName'],
-            'address' => $addressData['street'] . ' ' . $addressData['streetNumber'],
+            'address' => $addressData['street'],
             'zipcode' => $addressData['zipCode'],
             'city' => $addressData['city'],
             'amount' => $orderAmount,

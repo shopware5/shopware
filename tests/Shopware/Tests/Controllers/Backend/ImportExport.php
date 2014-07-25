@@ -84,7 +84,6 @@ class Shopware_Tests_Controllers_Backend_ImportExportTest extends Enlight_Compon
         $this->assertSame('John', $contactDataOne->getFirstName());
         $this->assertSame('One', $contactDataOne->getLastName());
         $this->assertSame('street1', $contactDataOne->getStreet());
-        $this->assertSame('streetnumber1', $contactDataOne->getStreetNumber());
         $this->assertSame('11111', $contactDataOne->getZipCode());
         $this->assertSame('city1', $contactDataOne->getCity());
 

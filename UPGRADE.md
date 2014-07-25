@@ -36,6 +36,11 @@ In this document you will find a changelog of the important changes related to t
 * Forms: elements of type `text2` now support `;` as a separator between labels for the first and second field:
     * Responsive template: labels are used separately as `placeholder` attribute for each `input` element
     * legacy templates: `;` is replaced with a `/` and used in a single `label` element (old behaviour)
+* `street number` fields were removed from interfaces and database
+    * Existing values were merged into the `street` field
+    * `street` fields were enlarged to 255 chars to accommodate this.
+    * The API still accepts `street number` values on write operations. The values are internally merged into the `street` field. This is legacy support, and will be removed in the future.
+    * Read operations on the API no longer return a `street number` field.
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
