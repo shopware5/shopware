@@ -119,7 +119,7 @@
 
 		{* Set new password *}
 		{block name="frontend_account_index_password"}
-			<div id="account--password" class="account--password account--box panel has--border password{if $sErrorFlag.password || $sErrorFlag.passwordConfirmation || $sErrorFlag.currentPassword} is--block{/if}">
+			<div id="account--password" class="account--password account--box panel has--border password{if $sErrorFlag.password || $sErrorFlag.passwordConfirmation} is--collapsed{/if}">
 
 				{block name="frontend_account_index_password_headline"}
 					<h2 class="panel--title is--underline">{s name='AccountLinkChangePassword'}{/s}</h2>
@@ -156,7 +156,7 @@
 
 		{* Edit mail address *}
 		{block name="frontend_account_index_email"}
-			<div id="account--email" class="account--email account--box panel has--border email{if $sErrorFlag.email || $sErrorFlag.emailConfirmation} is--block{/if}">
+			<div id="account--email" class="account--email account--box panel has--border email{if $sErrorFlag.email || $sErrorFlag.emailConfirmation} is--collapsed{/if}">
 
 				{block name="frontend_account_index_email_headline"}
 					<h2 class="panel--title is--underline">{s name='AccountLinkChangeMail'}{/s}</h2>

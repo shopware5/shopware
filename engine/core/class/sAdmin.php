@@ -4222,7 +4222,7 @@ class sAdmin
             $snippet = $this->snippetManager->getNamespace("frontend");
             if (empty($password) || !$this->passwordEncoder->isPasswordValid($password, $current, $encoderName)) {
                 $sErrorFlag['currentPassword'] = true;
-                if ($postData["password"]) {
+                if (isset($postData["password"])) {
                     $sErrorFlag['password'] = true;
                 } else {
                     $sErrorFlag['email'] = true;
