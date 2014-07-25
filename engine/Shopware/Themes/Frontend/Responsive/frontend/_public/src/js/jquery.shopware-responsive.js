@@ -350,7 +350,6 @@ $(function() {
 
     $('*[data-last-seen-products="true"]').lastSeenProducts($.extend({}, lastSeenProductsConfig));
 
-    // Initialize the image slider plugin
     $('*[data-image-slider="true"]').imageSlider();
 
     // Initialize the menu scroller plugin

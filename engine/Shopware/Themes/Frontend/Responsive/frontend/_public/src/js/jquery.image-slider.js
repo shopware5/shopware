@@ -1,186 +1,177 @@
 ;(function($) {
     'use strict';
 
-    /**
-     * Shopware Image Slider Plugin
-     *
-     * @example
-     *
-     * HTML:
-     *
-     * <div class="container">
-     *     <div data-thumbnails="true">
-     *          <a href="ORIGINAL_SRC" data-original-img="ORIGINAL_SRC" small-img="THUMBNAIL_SRC" data-title="ALT" class="is--active">
-     *              <img src="THUMBNAIL_SRC">
-     *          </a>
-     *
-     *          <a href="ORIGINAL_SRC" data-original-img="ORIGINAL_SRC" small-img="THUMBNAIL_SRC" data-title="ALT">
-     *              <img src="THUMBNAIL_SRC">
-     *          </a>
-     *
-     *          <!-- more thumbnails -->
-     *     </div>
-     *
-     *     <div data-image-scroller="true">
-     *         <ul class="image--list">
-     *             <li>
-     *                 <img src="">
-     *             </li>
-     *
-     *             <li>
-     *                 <img src="">
-     *             </li>
-     *
-     *             <!-- more images -->
-     *         </ul>
-     *     </div>
-     * </div>
-     *
-     * JS:
-     *
-     * $('.container').imageSlider();
-     */
     $.plugin('imageSlider', {
 
-        /**
-         * Default options for the imageSlider plugin.
-         *
-         * @public
-         * @property defaults
-         * @type {Object}
-         */
         defaults: {
-            /**
-             * Selector for the image list container to set the image scroller.
-             *
-             * @type {String}
-             */
-            'scrollerListSelector': '*[data-image-scroller="true"]',
 
-            /**
-             * Selector of the thumbnails for the thumbnail sliding.
-             *
-             * @type {String}
-             */
-            'thumbnailSelector': '*[data-thumbnails="true"] > a',
+            animationSpeed: 300,
 
-            /**
-             * Class that will be applied when a thumbnail is active.
-             *
-             * @type {String}
-             */
-            'activeThumbnailClass': 'is--active',
+            thumbnails: true,
 
-            /**
-             * Options for the lightbox..
-             *
-             * @type {Object}
-             */
-            'lightboxSettings': { },
+            arrowControls: true,
 
-            /**
-             * Options for the image scroller..
-             *
-             * @type {Object}
-             */
-            'imageScrollerSettings': { }
+            autoSlide: false,
+
+            autoSlideInterval: 5000
         },
 
-        /**
-         * Default plugin initialisation function.
-         * Sets all needed properties, creates the slider template
-         * and registers all needed event listeners.
-         *
-         * @public
-         * @method init
-         */
         init: function () {
-            var me = this,
-                opts = me.opts,
-                imageScrollerSettings = $.extend({
-                    'pinchToZoom': false,
-                    'onSlide': $.proxy(me.onScrollerSlide, me),
-                    'onClick': $.proxy(me.onScrollerClick, me)
-                }, opts.imageScrollerSettings);
+            var me = this;
 
-            me._$thumbnails = me.$el.find(opts.thumbnailSelector);
+            me.applyDataAttributes();
 
-            if (!me._$thumbnails.length) {
-                return;
+            me.$slideContainer = me.$el.find('.image-slider--container');
+            me.$slide = me.$slideContainer.find('.image-slider--slide');
+
+            if (me.opts.thumbnails) {
+                me.$thumbnailContainer = me.$el.find('.image-slider--thumbnails');
             }
 
-            me._$imageScrollerEl = me.$el.find(opts.scrollerListSelector);
-            me._$imageScrollerEl.imageScroller(imageScrollerSettings);
+            me.trackItems();
+            me.setSizes();
 
-            me.imageScroller = me._$imageScrollerEl.data('plugin_imageScroller');
-            me.imageScroller.$el.css('cursor', 'pointer');
+            if (me.opts.arrowControls) me.createArrows();
 
-            me.$el.lightbox(opts.lightboxSettings);
-
-            me.lightbox = me.$el.data('plugin_lightbox');
+            me.slideIndex = 0;
+            me.slideInterval = false;
+            me.activeImage = false;
 
             me.registerEvents();
         },
 
-        /**
-         * Registers the event listeners for changing the slides.
-         *
-         * @private
-         * @method registerEvents
-         */
-        registerEvents: function () {
+        registerEvents: function() {
             var me = this;
 
-            $.each(me._$thumbnails, function (index, el) {
-                me._on(el, 'click', function (event) {
-                    event.preventDefault();
-                    me.imageScroller.slideTo(index);
-                })
+            $(window).on('resize', function() {
+                me.setSizes();
+                me.setPosition(0);
             });
+
+            me.$images.on('click.imageSlider', $.proxy(me.openLightBox, me));
+
+            if (me.opts.arrowControls) {
+                me.$arrowLeft.on('click.imageSlider', $.proxy(me.slidePrev, me));
+                me.$arrowRight.on('click.imageSlider', $.proxy(me.slideNext, me));
+            }
+
+            if (me.opts.thumbnails) {
+                me.$thumbnails.each(function(index, el) {
+                    $(el).on('click.imageSlider', function(event) {
+                        event.preventDefault();
+                        me.slide(index);
+                    });
+                });
+            }
         },
 
-        /**
-         * Called when the slider has changed the index.
-         *
-         * @private
-         * @method onScrollerSlide
-         */
-        onScrollerSlide: function ($img, index) {
+        createArrows: function() {
+            var me = this;
+
+            me.$arrowLeft = $('<a>', {
+                'class': 'arrow is--left'
+            }).appendTo(me.$slideContainer);
+
+            me.$arrowRight = $('<a>', {
+                'class': 'arrow is--right'
+            }).appendTo(me.$slideContainer);
+        },
+
+        trackItems: function() {
+            var me = this;
+
+            me.$items = me.$slide.find('.image-slider--item');
+            me.$images = me.$slide.find('.image--element');
+
+            if (me.opts.thumbnails) {
+                me.$thumbnails = me.$thumbnailContainer.find('.thumbnail--link');
+            }
+
+            me.itemCount = me.$items.length;
+        },
+
+        setSizes: function() {
+            var me = this;
+
+            me.itemsWidth = me.$slideContainer.innerWidth();
+            me.slideWidth = me.itemsWidth * me.itemCount;
+
+            me.$slide.css({ 'width': me.slideWidth });
+            me.$items.css({ 'width': me.itemsWidth });
+        },
+
+        setPosition: function(index) {
             var me = this,
-                activeClass = me.opts.activeThumbnailClass;
+                i = index || me.slideIndex;
 
-            $.each(me._$thumbnails, function (i, el) {
-                $(el).toggleClass(activeClass, i === index);
-            });
+            me.$slide.css({ 'left': - ( i * me.itemsWidth ) });
         },
 
-        /**
-         * Called when the slider was clicked.
-         *
-         * @private
-         * @method onScrollerClick
-         */
-        onScrollerClick: function () {
+        setActiveThumbnail: function(index) {
             var me = this;
 
-            me.lightbox.open();
+            me.$thumbnails.removeClass('is--active');
+            me.$thumbnails.eq(index).addClass('is--active');
         },
 
-        /**
-         * Removed all listeners, classes and values from this plugin.
-         *
-         * @public
-         * @method destroy
-         */
-        destroy: function () {
+        startAutoSlide: function() {
             var me = this;
 
-            me.imageScroller.destroy();
-            me.lightbox.destroy();
+            me.slideInterval = window.setInterval(function(){
+                me.slideNext();
+            }, me.opts.autoSlideInterval);
+        },
 
-            me._$thumbnails.length = 0;
+        stopAutoSlide: function() {
+            var me = this;
 
-            me._destroy();
+            window.clearInterval(me.slideInterval);
+        },
+
+        slide: function(index, callback) {
+            var me = this,
+                newPosition = -(index * me.itemsWidth),
+                method = (Modernizr.csstransitions) ? 'transition' : 'animate';
+
+            me.slideIndex = index;
+
+            if (me.opts.thumbnails) me.setActiveThumbnail(index);
+
+            me.$slide[method]({ 'left': newPosition }, me.opts.animationSpeed, 'ease', $.proxy(callback, me));
+        },
+
+        slideNext: function() {
+            var me = this,
+                newIndex = me.slideIndex + 1;
+
+            if (newIndex == me.itemCount) {
+                newIndex = 0;
+            }
+
+            me.slide(newIndex);
+        },
+
+        slidePrev: function() {
+            var me = this,
+                newIndex = me.slideIndex - 1;
+
+            if (newIndex < 0) {
+                newIndex = me.itemCount - 1;
+            }
+
+            me.slide(newIndex);
+        },
+
+        openLightBox: function() {
+            var me = this,
+                image = me.$images.eq(me.slideIndex).attr('data-img-original');
+
+            $.lightbox.open(image);
+        },
+
+        destroy: function() {
+            var me = this;
         }
+
     });
-})(jQuery);
+})(jQuery, Modernizr, window);
