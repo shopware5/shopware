@@ -19,21 +19,21 @@
 						{* Author *}
 						{block name='frontend_blog_col_meta_data_name'}
 							{if $sArticle.author.name}
-								<span class="blog--metadata-author is--first">{s name="BlogInfoFrom"}{/s} {$sArticle.author.name}</span>
+								<span class="blog--metadata-author blog--metadata is--nowrap is--first">{s name="BlogInfoFrom"}{/s} {$sArticle.author.name}</span>
 							{/if}
 						{/block}
 
 						{* Date *}
 						{block name='frontend_blog_col_meta_data_date'}
 							{if $sArticle.displayDate}
-								<span class="blog--metadata-date{if !$sArticle.author.name} is--first{/if}">{$sArticle.displayDate|date:"DATETIME_SHORT"}</span>
+								<span class="blog--metadata-date blog--metadata is--nowrap{if !$sArticle.author.name} is--first{/if}">{$sArticle.displayDate|date:"DATETIME_SHORT"}</span>
 							{/if}
 						{/block}
 
 						{* Description *}
 						{block name='frontend_blog_col_meta_data_description'}
 							{if $sArticle.categoryInfo.description}
-								<span class="blog--metadata-description">
+								<span class="blog--metadata-description is--nowrap">
 									{if $sArticle.categoryInfo.linkCategory}
 										<a href="{$sArticle.categoryInfo.linkCategory}" title="{$sArticle.categoryInfo.description}">{$sArticle.categoryInfo.description}</a>
 									{else}
@@ -45,7 +45,7 @@
 
 						{* Comments *}
 						{block name='frontend_blog_col_meta_data_comments'}
-							<span class="blog--metadata-comments{if $sArticle.sVoteAverage|round ==0} is--last{/if}">
+							<span class="blog--metadata-comments blog--metadata is--nowrap{if $sArticle.sVoteAverage|round ==0} is--last{/if}">
 								<a href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}#commentcontainer" title="{$sArticle.articleName}">{if $sArticle.numberOfComments}{$sArticle.numberOfComments}{else}0{/if} {s name="BlogInfoComments"}{/s}</a>
 							</span>
 						{/block}
@@ -53,11 +53,11 @@
 						{* Rating *}
 						{block name='frontend_blog_col_meta_data_rating'}
 							{if $sArticle.sVoteAverage|round !=0}
-								<div class="blog--metadata-rating is--last" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
-									{$average = $vote.points * 2|round:0}
+								<div class="blog--metadata-rating blog--metadata is--nowrap is--last" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+									{$average = $sArticle.sVoteAverage / 2|round:0}
 
 									<meta itemprop="worstRating" content="1">
-									<meta itemprop="ratingValue" content="{$vote.points}">
+									<meta itemprop="ratingValue" content="{$sArticle.sVoteAverage}">
 									<meta itemprop="bestRating" content="5">
 
 									{for $value=1 to 5}
