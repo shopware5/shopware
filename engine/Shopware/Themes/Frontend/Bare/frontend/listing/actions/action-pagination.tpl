@@ -12,7 +12,7 @@
         {* Pagination - Previous page *}
         {block name='frontend_listing_actions_paging_previous'}
             {if $sPages.previous}
-                <a href="{$sPages.previous|rewrite:$sCategoryInfo.name}" title="{"{s name='ListingLinkPrevious'}{/s}"|escape}" class="pagination--link paging--prev">{s name="ListingTextPrevious"}&lt;{/s}</a>
+                <a href="{$sPages.previous|rewrite:$sCategoryInfo.name}" title="{"{s name='ListingLinkPrevious'}{/s}"|escape}" class="pagination--link paging--prev"><i class="icon--arrow-left"></i></a>
             {/if}
         {/block}
 
@@ -34,7 +34,7 @@
         {* Pagination - Next page *}
         {block name='frontend_listing_actions_paging_next'}
             {if $sPages.next}
-                <a href="{$sPages.next|rewrite:$sCategoryInfo.name}" title="{"{s name='ListingLinkNext'}{/s}"|escape}" class="pagination--link paging--next">{s name="ListingTextNext"}&gt;{/s}</a>
+                <a href="{$sPages.next|rewrite:$sCategoryInfo.name}" title="{"{s name='ListingLinkNext'}{/s}"|escape}" class="pagination--link paging--next"><i class="icon--arrow-right"></i></a>
             {/if}
         {/block}
 
