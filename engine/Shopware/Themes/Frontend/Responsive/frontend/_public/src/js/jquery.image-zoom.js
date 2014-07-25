@@ -51,9 +51,9 @@
             me._on(me.$images, 'mouseleave', me.stopZoom.bind(me));
             me._on(me.$images, 'mousemove', me.onMouseMove.bind(me));
 
-            $.subscribe('/plugin/imageScroller/onRightArrowClick', me.stopZoom.bind(me));
-            $.subscribe('/plugin/imageScroller/onLeftArrowClick', me.stopZoom.bind(me));
-            $.subscribe('/plugin/imageScroller/onClick', me.stopZoom.bind(me));
+            $.subscribe('/plugin/imageSlider/onRightArrowClick', me.stopZoom.bind(me));
+            $.subscribe('/plugin/imageSlider/onLeftArrowClick', me.stopZoom.bind(me));
+            $.subscribe('/plugin/imageSlider/onClick', me.stopZoom.bind(me));
         },
 
         createLensElement: function() {
@@ -131,7 +131,7 @@
 
             me.setLensPosition(positionX, positionY);
 
-            me.$flyout.css({ backgroundPosition: zoomX + 'px ' + zoomY + 'px' });
+            me.$flyout.css({ background: 'url(' + me.zoomImageUrl + ') '+ zoomX + 'px ' + zoomY + 'px no-repeat' })
         },
 
         startZoom: function() {
@@ -141,7 +141,7 @@
             me.$activeImage = me.getActiveImage();
 
             if (!me.zoomImage) {
-                me.zoomImageUrl = me.$activeImageThumbnail.attr('data-original-img');
+                me.zoomImageUrl = me.$activeImage.attr('data-img-original');
                 me.zoomImage =  new Image();
 
                 me.zoomImage.onload = function() {
