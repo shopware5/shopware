@@ -55,32 +55,11 @@
         }
     }
 
-	// Image container
+	// Product Image
 	.product--image-container {
-        position: relative;
-		.unitize-margin(0, 0, 28, 0);
-
-        .box--image {
-            position: relative;
-
-            .js--image-scroller--slide img {
-                margin: auto;
-                position: relative;
-            }
-        }
-
-        img {
-            margin: 0 auto;
-        }
+        .unitize-margin(0, 0, 20, 0);
+        width: 100%;
 	}
-
-	.image--thumbnails {
-        display: none;
-
-        &.has--no-thumbnails {
-            display: none;
-        }
-    }
 
     .alert {
         .unitize-margin(0, 0, 20, 0);
@@ -139,7 +118,7 @@
     // Quanitity box and input
 	.buybox--quantity {
 		margin: 0 2% 0 0;
-		width: 30%;
+		width: 35%;
 
         .js--fancy-select {
 			.unitize-height(44);
@@ -156,7 +135,7 @@
 
 	// "Buy now" button
 	.buybox--button {
-		width: 68%;
+		width: 63%;
 
         .icon--arrow-right {
             .unitize-margin(6, 0, 0, 0);
@@ -424,65 +403,8 @@
 
         // Product image
         .product--image-container {
-			position: relative;
-
-            .box--image {
-                .unitize-height(400);
-            }
+            width: 100%;
         }
-
-		// Thumbnails
-		.image--thumbnails {
-            .unitize-height(400);
-			.unitize-padding(5, 40, 5, 0);
-			.clearfix();
-			background: #fff;
-			position: absolute;
-			left: 0; bottom: 0;
-			z-index: 1000;
-            overflow: hidden;
-			border: 1px solid @borderColor;
-			border-left: 0 none;
-
-            .thumbnail--link {
-                .unitize-width(60);
-                .unitize-height(60);
-                .unitize-padding(5, 5);
-                .unitize-margin(0, 0, 10, 0);
-                .unitize(60, 16, line-height);
-                .border-radius(3px);
-                text-align: center;
-                float: left;
-                border: 1px solid @borderColor;
-
-                &::after {
-                    content: '';
-                    height: 100%;
-                }
-
-                &.is--active {
-                    border-color: @primaryColor;
-                }
-            }
-
-            .thumbnail--link::after,
-            .thumbnail--image {
-                display: inline-block;
-                vertical-align: middle;
-            }
-        }
-
-		.thumbnails--arrow {
-			.unitize-padding(0, 20, 0, 20);
-			.unitize(-11, 16, margin-top);
-			top: 50%; right: 0;
-			position: absolute;
-			cursor: pointer;
-
-			& i[class^=icon] {
-				.unitize(10, 16, font-size);
-			}
-		}
 
         // Product base information
         .product--base-info {
@@ -543,13 +465,21 @@
 @media screen and (min-width: @tabletLandscapeViewportWidth) {
 	.product--details {
 
-		// Float the image container to the left
+		// Product image
 		.product--image-container {
-			width: 55%;
-			margin-right: 5%;
+            width: 60%;
+            margin-right: 4%;
+            float: left;
 		}
 
-		.product--buybox { width: 40% }
+        // Image thumbnails
+        .image--thumbnails {
+
+        }
+
+		.product--buybox {
+            width: 36%;
+        }
 
         .configurator--form {
             .unitize-padding(10, 0);
@@ -582,10 +512,6 @@
 			border-top: 0 none;
 			border-bottom: 1px solid @borderColor;
 		}
-
-        .product--image-container .box--image {
-            .unitize-height(340);
-        }
 	}
 }
 
@@ -666,42 +592,9 @@
             }
         }
 
-		// Product image container and slider styling
-		.product--image-container {
-			margin-right: 5%;
-			width: 50%;
-		}
-
-        .product--buybox { width: 42% }
-
-		.thumbnails--arrow {
-			display: none;
-		}
-
-        .product--image-container .box--image {
-            width: 86%;
-        }
-
+        // Image thumbnails
 		.image--thumbnails {
-			display: block;
-			width: 12%;
-			margin-right: 2%;
-			float: left;
-			border: 0 none;
-			padding: 0;
-			position: static;
-			left: auto; top: auto;
 
-            .thumbnail--link {
-				.unitize-margin(0, 0, 14, 0);
-				display: block;
-				line-height: normal;
-				float: none;
-			}
-
-            .thumbnail--image {
-                .border-radius(2px)
-            }
 		}
 
 		// Product actions
