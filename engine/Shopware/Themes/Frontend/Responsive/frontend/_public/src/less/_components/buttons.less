@@ -75,13 +75,12 @@
 		border-bottom: 1px solid @primaryContrastColor;
 		color: #fff;
 
-		&:hover {
-			@backgroundGradientEnd: rgba(red(@complementarySecondaryColor), green(@complementarySecondaryColor), blue(@complementarySecondaryColor), .5);
-			.linear-gradient-multi(0%, @complementaryPrimaryColor, 65%, @complementaryPrimaryColor, 100%, @backgroundGradientEnd);
-			text-shadow: 0 1px 1px @complementarySecondaryColor;
-			border: 0 none;
-			border-bottom: 1px solid @complementarySecondaryColor;
-		}
+	&:hover {
+	    .linear-gradient-multi(100%, @secondaryColor, 65%, @secondaryColor, 100%, @secondaryColor);
+	    text-shadow: 0 1px 1px @primaryContrastColor;
+	    border: 0 none;
+	    border-bottom: 1px solid @primaryContrastColor;
+	}
 	}
 
 	/** Type: Secondary button */
