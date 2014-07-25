@@ -602,9 +602,20 @@
 			.unitize(20, 16, margin-right);
 		}
 
-		// Tab panel
-		.js--desktop-tab-panel .panel--tab-nav {
-			.unitize-margin(0, 50);
-		}
+        .js--desktop-tab-panel {
+            .unitize(40, 16, margin-bottom);
+            margin-left: 0;
+            margin-right: 0;
+
+
+            .panel--tab-nav {
+                .unitize-margin(0, 50, 0, 0);
+            }
+
+            .tab--content {
+                .unitize-padding(25, 55, 45);
+                border: 1px solid @borderColor;
+            }
+        }
 	}
 }
