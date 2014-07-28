@@ -290,6 +290,9 @@ class DqlHelper
             INNER JOIN `s_articles_attributes`
             ON s_articles_attributes.articledetailsID = s_articles_details.id
 
+            LEFT JOIN `s_articles_supplier`
+            ON s_articles_supplier.id = s_articles.supplierID
+
             LEFT JOIN `s_articles_prices`
             ON s_articles_prices.articledetailsID = s_articles_details.id
             AND s_articles_prices.from = 1
@@ -370,6 +373,7 @@ class DqlHelper
         $mainEntities = array(
             'Shopware\Models\Article\Article',
             'Shopware\Models\Article\Detail',
+            'Shopware\Models\Article\Supplier',
             'Shopware\Models\Attribute\Article'
         );
 
