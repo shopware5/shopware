@@ -116,6 +116,8 @@ class Filter
 
         $builder->andWhere($dql);
 
+        $builder->orderBy('detail.id', 'DESC');
+
         return $builder;
     }
 
