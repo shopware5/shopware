@@ -1,5 +1,5 @@
 ;(function($) {
-    "use strict";
+    'use strict';
 
     $.plugin('dropdownMenu', {
         defaults: {
@@ -11,7 +11,7 @@
         init: function () {
             var me = this;
 
-            me._on(me.$el, 'click', $.proxy(me.onClickMenu, me));
+            me._on(me.$el, 'touchstart click', $.proxy(me.onClickMenu, me));
         },
 
         onClickMenu: function (event) {
@@ -27,11 +27,7 @@
                 event.preventDefault();
             }
 
-            if (me.$el.hasClass(me.opts.activeCls)) {
-                me.$el.removeClass(me.opts.activeCls);
-            } else {
-                me.$el.addClass(me.opts.activeCls);
-            }
+            me.$el.toggleClass(me.opts.activeCls);
 
             if (me.opts.closeOnBody) {
                 event.stopPropagation();
@@ -45,6 +41,8 @@
             if ($(event.target).hasClass('service--link')) {
                 return;
             }
+
+            event.preventDefault();
 
             me.$el.removeClass(me.opts.activeCls);
         },
