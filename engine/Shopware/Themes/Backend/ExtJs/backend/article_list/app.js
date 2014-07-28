@@ -116,6 +116,7 @@ Ext.define('Shopware.apps.ArticleList', {
      *
      * @private
      * @return [object] mainWindow - the main application window based on Enlight.app.Window
+     *
      */
     launch: function() {
         var me = this,
