@@ -44,7 +44,9 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             return;
         }
 
-        if (strpos($config->controller, $this->Request()->getControllerName()) !== false) {
+        $controller = $this->Request()->getParam('sController', $this->Request()->getControllerName());
+
+        if (strpos($config->controller, $controller) !== false) {
             $this->View()->sCloud = Shopware()->Modules()->Marketing()->sBuildTagCloud(
                 $this->Request()->getParam('sCategory')
             );
