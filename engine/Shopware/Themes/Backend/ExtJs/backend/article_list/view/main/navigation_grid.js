@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.NavigationGrid', {
      */
     hideHeaders: true,
 
-    title: '{s name=filter}Filter{/s}',
+    border: 0,
 
     snippets: {
         search: '{s name=search}Search{/s}'
