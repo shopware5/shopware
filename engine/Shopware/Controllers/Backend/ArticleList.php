@@ -382,9 +382,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
      */
     private function translateFilter($filter)
     {
-        $baseName = $this->normalizeFilter($filter['name']);
-        $name = $baseName . '/name';
-        $description = $baseName . '/description';
+        $name = 'filterName-' . $this->normalizeFilter($filter['name']);
+        $description = 'filterDescription-' . $this->normalizeFilter($filter['description']);
 
         $namespace = Shopware()->Snippets()->getNamespace('backend/article_list/main');
         $filter['name'] = $namespace->get($name, $filter['name']);
@@ -405,7 +404,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         foreach ($results as &$filter) {
             $filter = $this->translateFilter($filter);
         }
-
+        
         $this->View()->assign(
             array(
                 'success' => true,

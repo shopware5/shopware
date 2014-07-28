@@ -62,8 +62,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
     init: function () {
         var me = this;
 
-        me.getController('Suggest').createParser();
-
         me.loadDetailModelFields();
 
         me.control({
