@@ -6,6 +6,7 @@
 			<div class="register--salutation field--select">
 				<span class="arrow"></span>
 				<select name="register[shipping][salutation]" id="salutation2" class="normal is--required{if $error_flags.salutation} has--error{/if}">
+                    <option value="" disabled="disabled"{if $form_data.salutation eq ""} selected="selected"{/if}>{s name='RegisterShippingLabelSalutation'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
 					<option value="mr" {if $form_data.salutation eq "mr"}selected="selected"{/if}>{s name='RegisterShippingLabelMr'}{/s}</option>
 					<option value="ms" {if $form_data.salutation eq "ms"}selected="selected"{/if}>{s name='RegisterShippingLabelMrs'}{/s}</option>
 				</select>
@@ -43,7 +44,7 @@
 		{* Street *}
 		{block name='frontend_register_shipping_fieldset_input_street'}
 			<div class="register--street">
-				<input name="register[shipping][street]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterShippingLabelStreet'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="street2" value="{$form_data.street|escape}" class="register--field register--field-street is--required{if $error_flags.street} has--error{/if}" />
+				<input name="register[shipping][street]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterShippingPlaceholderStreet'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="street2" value="{$form_data.street|escape}" class="register--field register--field-street is--required{if $error_flags.street} has--error{/if}" />
 			</div>
 		{/block}
 
@@ -68,8 +69,8 @@
 		{* Zip + City *}
 		{block name='frontend_register_shipping_fieldset_input_zip_and_city'}
 			<div class="register--zip-city">
-				<input name="register[shipping][zipcode]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterShippingLabelZipcode'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="zipcode2" value="{$form_data.zipcode|escape}" class="register--field register--field-zipcode is--required{if $error_flags.zipcode} has--error{/if}" />
-				<input name="register[shipping][city]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterShippingLabelCity'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="city2" value="{$form_data.city|escape}" size="25" class="register--field register--field-city is--required{if $error_flags.city} has--error{/if}" />
+				<input name="register[shipping][zipcode]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterShippingPlaceholderZipcode'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="zipcode2" value="{$form_data.zipcode|escape}" class="register--field register--field-zipcode is--required{if $error_flags.zipcode} has--error{/if}" />
+				<input name="register[shipping][city]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterShippingPlaceholderCity'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="city2" value="{$form_data.city|escape}" size="25" class="register--field register--field-city is--required{if $error_flags.city} has--error{/if}" />
 			</div>
 		{/block}
 
@@ -79,7 +80,7 @@
 				<div class="register--shipping-country field--select">
 					<span class="arrow"></span>
 					<select name="register[shipping][country]" id="country_shipping" required="required" aria-required="true" class="select--country is--required{if $error_flags.country} has--error{/if}">
-						<option value="" selected="selected">{s name='RegisterShippingLabelSelect'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
+						<option value="" disabled="disabled" selected="selected">{s name='RegisterShippingLabelCountry'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
 
 						{foreach from=$country_list item=country}
 							<option value="{$country.id}"{if $country.id eq $form_data.country} selected="selected"{/if}>
@@ -99,8 +100,8 @@
 					{if $country.states}
 						<div id="country_shipping_{$country.id}_states" class="register--state-selection field--select{if $country.id != $form_data.country} is--hidden{/if}">
 							<span class="arrow"></span>
-							<select {if $country.id != $form_data.country}disabled="disabled"{/if} name="register[shipping][country_shipping_state_{$country.id}]"{if $country.force_state_in_registration} required="required" aria-required="true"{/if} class="select--state {if $country.force_state_in_registration}is--required{/if}{if $error_flags.stateID} has--error{/if}">
-							<option value="" selected="selected">{s name='RegisterShippingLabelSelect'}{/s}{if $country.force_state_in_registration}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}</option>
+							<select name="register[shipping][country_shipping_state_{$country.id}]"{if $country.force_state_in_registration} required="required" aria-required="true"{/if}{if $country.id != $form_data.country} disabled="disabled"{/if} class="select--state {if $country.force_state_in_registration}is--required{/if}{if $error_flags.stateID} has--error{/if}">
+							    <option value="" selected="selected"{if $country.force_state_in_registration} disabled="disabled"{/if}>{s name='RegisterShippingLabelState'}{/s}{if $country.force_state_in_registration}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}</option>
 								{assign var="stateID" value="country_shipping_state_`$country.id`"}
 								{foreach $country.states as $state}
 									<option value="{$state.id}" {if $state.id eq $form_data[$stateID]}selected="selected"{/if}>{$state.name}</option>

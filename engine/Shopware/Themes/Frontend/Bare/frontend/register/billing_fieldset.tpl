@@ -33,7 +33,7 @@
 		{* Street *}
 		{block name='frontend_register_billing_fieldset_input_street'}
 			<div class="register--street">
-				<input name="register[billing][street]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterBillingLabelStreet'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="street" value="{$form_data.street|escape}" class="register--field register--field-street is--required{if $error_flags.street} has--error{/if}" />
+				<input name="register[billing][street]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterBillingPlaceholderStreet'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="street" value="{$form_data.street|escape}" class="register--field register--field-street is--required{if $error_flags.street} has--error{/if}" />
 			</div>
 		{/block}
 
@@ -58,8 +58,8 @@
 		{* Zip + City *}
 		{block name='frontend_register_billing_fieldset_input_zip_and_city'}
 			<div class="register--zip-city">
-				<input name="register[billing][zipcode]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterBillingLabelZipcode'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="zipcode" value="{$form_data.zipcode|escape}" class="register--field register--field-zipcode is--required{if $error_flags.zipcode} has--error{/if}" />
-				<input name="register[billing][city]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterBillingLabelCity'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="city" value="{$form_data.city|escape}" size="25" class="register--field register--field-city is--required{if $error_flags.city} has--error{/if}" />
+				<input name="register[billing][zipcode]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterBillingPlaceholderZipcode'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="zipcode" value="{$form_data.zipcode|escape}" class="register--field register--field-zipcode is--required{if $error_flags.zipcode} has--error{/if}" />
+				<input name="register[billing][city]" type="text" required="required" aria-required="true" placeholder="{s name='RegisterBillingPlaceholderCity'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}" id="city" value="{$form_data.city|escape}" size="25" class="register--field register--field-city is--required{if $error_flags.city} has--error{/if}" />
 			</div>
 		{/block}
 
@@ -68,12 +68,12 @@
 			<div class="register--country field--select">
 				<span class="arrow"></span>
 				<select name="register[billing][country]" id="country" required="required" aria-required="true" class="select--country is--required{if $error_flags.country} has--error{/if}">
-				<option value="" selected="selected">{s name='RegisterBillingLabelSelect'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
-				{foreach $country_list as $country}
-					<option value="{$country.id}" {if $country.id eq $form_data.country}selected="selected"{/if} {if $country.states}stateSelector="country_{$country.id}_states"{/if}>
-						{$country.countryname}
-					</option>
-				{/foreach}
+                    <option disabled="disabled" value="" selected="selected">{s name='RegisterBillingLabelCountry'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
+                    {foreach $country_list as $country}
+                        <option value="{$country.id}" {if $country.id eq $form_data.country}selected="selected"{/if} {if $country.states}stateSelector="country_{$country.id}_states"{/if}>
+                            {$country.countryname}
+                        </option>
+                    {/foreach}
 				</select>
 			</div>
 		{/block}
@@ -86,7 +86,7 @@
 						<div id="country_{$country.id}_states" class="register--state-selection field--select{if $country.id != $form_data.country} is--hidden{/if}">
 							<span class="arrow"></span>
 							<select {if $country.id != $form_data.country}disabled="disabled"{/if} name="register[billing][country_state_{$country.id}]"{if $country.force_state_in_registration} required="required" aria-required="true"{/if} class="select--state {if $country.force_state_in_registration}is--required{/if}{if $error_flags.stateID} has--error{/if}">
-							<option value="" selected="selected">{s name='RegisterBillingLabelSelect'}{/s}{if $country.force_state_in_registration}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}</option>
+							    <option value="" selected="selected"{if $country.force_state_in_registration} disabled="disabled"{/if}>{s name='RegisterBillingLabelState'}{/s}{if $country.force_state_in_registration}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}</option>
 								{assign var="stateID" value="country_state_`$country.id`"}
 								{foreach $country.states as $state}
 									<option value="{$state.id}" {if $state.id eq $form_data[$stateID]}selected="selected"{/if}>
