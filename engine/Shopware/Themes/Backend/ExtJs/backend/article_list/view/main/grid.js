@@ -228,6 +228,8 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
                 stateColumn,
                 columnDefinition,
                 width,
+                xtype,
+                renderer,
                 columns = [ ];
 
         colLength = me.columnConfig.length;
@@ -242,12 +244,20 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
                 dataIndex: column.alias,
                 header: me.getTranslationForColumnHead(column.alias),
                 hidden: !column.show,
-                renderer: me.getRendererForColumn(column),
                 /*{if {acl_is_allowed resource=article privilege=save}}*/
                 editor: me.getEditorForColumn(column),
                 /*{/if}*/
                 sortable: false
             };
+
+            if (xtype = me.getXtypeForColumn(column)) {
+                columnDefinition.xtype = xtype;
+            }
+
+            if (renderer = me.getRendererForColumn(column)) {
+                columnDefinition.renderer = renderer;
+            }
+
 
             if (width = me.getWidthForColumn(column) != undefined) {
                 columnDefinition.width = width;
@@ -297,6 +307,22 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
         });
 
         return columns;
+    },
+
+    /**
+     * Returns a proper xtype fo a column
+     *
+     * @param column
+     * @returns *
+     */
+    getXtypeForColumn: function (column) {
+        var me = this;
+
+        if (column.alias == 'Price_price') {
+            return 'numbercolumn';
+        }
+
+        return undefined;
     },
 
     /**
@@ -388,6 +414,10 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
             return me.colorColumnRenderer;
         }
 
+        if (column.alias == 'Price_price') {
+            return undefined;
+        }
+
         return me.defaultColumnRenderer;
     },
 
@@ -470,6 +500,15 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
         }
 
         switch (column.alias) {
+            case 'Price_price':
+                return {
+                    width: 85,
+                    xtype: 'numberfield',
+                    allowBlank: false,
+                    hideTrigger: true,
+                    keyNavEnabled: false,
+                    mouseWheelEnabled: false
+                };
             default:
                 switch (column.type) {
                     case 'integer':
