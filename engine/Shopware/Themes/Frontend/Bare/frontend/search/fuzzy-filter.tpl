@@ -25,11 +25,11 @@
                     {foreach $sCategoriesTree as $sKey => $sCategorie}
                         {block name='frontend_search_filter_category_active_item'}
                             {if $sKey != $sSearchResults.sLastCategory}
-                                <a href="{$sLinks.sFilter.category}&sFilter_category={$sCategorie.id}" class="link--category is--active" title="{$sCategorie.description}">
-                                    {$sCategorie.description} &raquo;
+                                <a href="{$sLinks.sFilter.category}&sFilter_category={$sCategorie.id}" class="link--category is--active" title="{$sCategorie.description|escape}">
+                                    {$sCategorie.description|escape} &raquo;
                                 </a>
                             {else}
-                                <span class="category-description">{$sCategorie.description}</span>
+                                <span class="category-description">{$sCategorie.description|escape}</span>
                             {/if}
                         {/block}
                     {/foreach}
