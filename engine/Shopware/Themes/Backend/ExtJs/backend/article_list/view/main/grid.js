@@ -259,7 +259,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
             }
 
 
-            if (width = me.getWidthForColumn(column) != undefined) {
+            if (width = me.getWidthForColumn(column)) {
                 columnDefinition.width = width;
             } else {
                 columnDefinition.flex = 1;
@@ -270,13 +270,13 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
 
         columns.push({
             header: '{s name=list/column_info}Info{/s}',
-            width: '90px',
+            width: 90,
             renderer: me.infoColumnRenderer
         });
 
         columns.push({
             xtype: 'actioncolumn',
-            width: '90px',
+            width: 90,
             items: [
                 /*{if {acl_is_allowed resource=article privilege=save}}*/
                 {
