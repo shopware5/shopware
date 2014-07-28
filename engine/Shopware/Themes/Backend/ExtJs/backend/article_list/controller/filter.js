@@ -392,13 +392,12 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
     closeFilterWindow: function() {
         var me = this,
             window = me.getFilterWindow();
-
-        window.down('form').getForm().reset();
-        window.down('grid').getStore().removeAll();
-
         // Make sure, that the dropdown is hidden, when the window is closed
         window.down('filterString').collapse();
         window.hide();
+
+        window.down('form').getForm().reset();
+        window.down('grid').getStore().removeAll();
     },
 
     /**
