@@ -61,14 +61,13 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     public function emotionTopSellerAction()
     {
         $category = (int) $this->Request()->getParam("category");
-        $start = (int) $this->Request()->getParam("start");
         $limit = (int) $this->Request()->getParam("limit");
 
         $elementHeight = $this->Request()->getParam("elementHeight");
         $elementWidth = $this->Request()->getParam("elementWidth");
 
         $pages = $this->Request()->getParam("pages");
-        $offset = $limit * $pages - $limit;
+        $offset = (int) $this->Request()->getParam("start", $limit * ($pages-1));
 
         $this->View()->loadTemplate("widgets/emotion/slide_articles.tpl");
 
@@ -91,13 +90,12 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     {
         $this->View()->loadTemplate("widgets/emotion/slide_articles.tpl");
         $category = (int) $this->Request()->getParam("category");
-        $start = (int) $this->Request()->getParam("start");
         $limit = (int) $this->Request()->getParam("limit");
         $elementHeight = $this->Request()->getParam("elementHeight");
         $elementWidth = $this->Request()->getParam("elementWidth");
 
         $pages = $this->Request()->getParam("pages");
-        $offset = $limit * $pages - $limit;
+        $offset = (int) $this->Request()->getParam("start", $limit * ($pages-1));
 
         $max = $this->Request()->getParam("max");
         $maxPages = round($max / $limit);
@@ -310,7 +308,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         // Second get category image per random, if configured
         if ($data["image_type"] != "selected_image") {
 
-	        
+
             if ($data['blog_category']) {
                 $result = $this->getRandomBlogEntry($data["category_selection"]);
                 if (!empty( $result['media']['thumbnails'])) {
