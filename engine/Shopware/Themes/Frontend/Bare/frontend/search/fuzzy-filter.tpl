@@ -23,13 +23,15 @@
                 {* Category items *}
                 {block name="frontend_search_fuzzy_category_items"}
                     {foreach $sCategoriesTree as $sKey => $sCategorie}
-                        {if $sKey != $sSearchResults.sLastCategory}
-                            <a href="{$sLinks.sFilter.category}&sFilter_category={$sCategorie.id}" class="link--category is--active" title="{$sCategorie.description}">
-                                {$sCategorie.description} &raquo;
-                            </a>
-                        {else}
-                            <span class="category-description">{$sCategorie.description}</span>
-                        {/if}
+                        {block name='frontend_search_filter_category_active_item'}
+                            {if $sKey != $sSearchResults.sLastCategory}
+                                <a href="{$sLinks.sFilter.category}&sFilter_category={$sCategorie.id}" class="link--category is--active" title="{$sCategorie.description}">
+                                    {$sCategorie.description} &raquo;
+                                </a>
+                            {else}
+                                <span class="category-description">{$sCategorie.description}</span>
+                            {/if}
+                        {/block}
                     {/foreach}
 
                     {if $sSearchResults.sCategories.0}
@@ -39,11 +41,13 @@
                             <ul class="categories--list list--unstyled">
                                 {foreach $sCategories as $sCategorie}
                                     {if $sCategorie.count!=""}
-                                        <li class="list--entry">
-                                            <a class="entry--category-link" href="{$sLinks.sFilter.category}&sFilter_category={$sCategorie.id}" title="{$sCategorie.description} ({$sCategorie.count})">
-                                                &raquo; {$sCategorie.description} <span class="category-count">({$sCategorie.count})</span>
-                                            </a>
-                                        </li>
+                                        {block name='frontend_search_filter_category_item'}
+                                            <li class="list--entry">
+                                                <a class="entry--category-link" href="{$sLinks.sFilter.category}&sFilter_category={$sCategorie.id}" title="{$sCategorie.description|escape} ({$sCategorie.count})">
+                                                    &raquo; {$sCategorie.description|escape} <span class="category-count">({$sCategorie.count})</span>
+                                                </a>
+                                            </li>
+                                        {/block}
                                     {/if}
                                 {/foreach}
                             </ul>
@@ -79,30 +83,36 @@
                             <ul class="suppliers--list list--unstyled">
                                 {if !$sRequests.sFilter.supplier}
                                     {foreach $sSuppliersFirst as $supplier}
-                                        <li class="list--entry">
-                                            <a class="entry--supplier-link" href="{$sLinks.sFilter.supplier}&sFilter_supplier={$supplier.id}" class="link--supplier" title="{$supplier.name} ({$supplier.count})">
-                                                &raquo; {$supplier.name} <span class="supplier-count">({$supplier.count})</span>
-                                            </a>
-                                        </li>
+                                        {block name='frontend_search_filter_supplier_item'}
+                                            <li class="list--entry">
+                                                <a class="entry--supplier-link" href="{$sLinks.sFilter.supplier}&sFilter_supplier={$supplier.id}" class="link--supplier" title="{$supplier.name} ({$supplier.count})">
+                                                    &raquo; {$supplier.name} <span class="supplier-count">({$supplier.count})</span>
+                                                </a>
+                                            </li>
+                                        {/block}
                                     {/foreach}
 
                                     {if $sSuppliersRest}
-                                        <form name="frmsup" method="POST" action="{$sLinks.sFilter.supplier}" class="form--suppliers-rest">
-                                            <select name="sFilter_supplier" data-auto-submit="true" class="filter-supplier-select">
-                                                <option value="">{s name='SearchLeftInfoSuppliers'}{/s}</option>
-                                                {foreach $sSuppliersRest as $supplier}
-                                                    <option value="{$supplier.id}">{$supplier.name} ({$supplier.count})</option>
-                                                {/foreach}
-                                            </select>
-                                        </form>
+                                        {block name='frontend_search_filter_supplier_dropdown'}
+                                            <form name="frmsup" method="POST" action="{$sLinks.sFilter.supplier}" class="form--suppliers-rest">
+                                                <select name="sFilter_supplier" data-auto-submit="true" class="filter-supplier-select">
+                                                    <option value="">{s name='SearchLeftInfoSuppliers'}{/s}</option>
+                                                    {foreach $sSuppliersRest as $supplier}
+                                                        <option value="{$supplier.id}">{$supplier.name} ({$supplier.count})</option>
+                                                    {/foreach}
+                                                </select>
+                                            </form>
+                                        {/block}
                                     {/if}
                                 {else}
-                                    <li class="is--active">{$sSearchResults.sSuppliers[$sRequests.sFilter.supplier].name}</li>
-                                    <li class="list--entry">
-                                        <a class="link--reset" href="{$sLinks.sFilter.supplier}" title="{s name='SearchFilterLinkDefault'}Alle Kategorien anzeigen{/s}">
-                                            {s name='SearchFilterLinkDefault'}Alle Kategorien anzeigen{/s}
-                                        </a>
-                                    </li>
+                                    {block name='frontend_search_filter_supplier_reset'}
+                                        <li class="is--active">{$sSearchResults.sSuppliers[$sRequests.sFilter.supplier].name}</li>
+                                        <li class="list--entry">
+                                            <a class="link--reset" href="{$sLinks.sFilter.supplier}" title="{s name='SearchFilterLinkDefault'}Alle Kategorien anzeigen{/s}">
+                                                {s name='SearchFilterLinkDefault'}Alle Kategorien anzeigen{/s}
+                                            </a>
+                                        </li>
+                                    {/block}
                                 {/if}
                             </ul>
                         {/block}
@@ -124,20 +134,24 @@
                                 {if !$sRequests.sFilter.price}
                                     {foreach $sPriceFilter as $sKey => $sFilterPrice}
                                         {if $sSearchResults.sPrices.$sKey}
-                                            <li class="list--entry">
-                                                <a class="entry--price-link" href="{$sLinks.sFilter.price}&sFilter_price={$sKey}" title="{$sFilterPrice.start|currency} - {$sFilterPrice.end|currency} ({$sSearchResults.sPrices.$sKey})">
-                                                    &raquo; {$sFilterPrice.start|currency} - {$sFilterPrice.end|currency} <span class="prices-count">({$sSearchResults.sPrices.$sKey})</span>
-                                                </a>
-                                            </li>
+                                            {block name='frontend_search_filter_price_item'}
+                                                <li class="list--entry">
+                                                    <a class="entry--price-link" href="{$sLinks.sFilter.price}&sFilter_price={$sKey}" title="{$sFilterPrice.start|currency} - {$sFilterPrice.end|currency} ({$sSearchResults.sPrices.$sKey})">
+                                                        &raquo; {$sFilterPrice.start|currency} - {$sFilterPrice.end|currency} <span class="prices-count">({$sSearchResults.sPrices.$sKey})</span>
+                                                    </a>
+                                                </li>
+                                            {/block}
                                         {/if}
                                     {/foreach}
                                 {else}
-                                    <li class="is--active">{$sPriceFilter[$sRequests.sFilter.price].start|currency} - {$sPriceFilter[$sRequests.sFilter.price].end|currency}</li>
-                                    <li class="list--entry">
-                                        <a class="link--reset" href="{$sLinks.sFilter.price}" title="{s name='SearchFilterLinkDefault'}Alle Kategorien anzeigen{/s}">
-                                            {s name='SearchFilterLinkDefault'}Alle Kategorien anzeigen{/s}
-                                        </a>
-                                    </li>
+                                    {block name='frontend_search_filter_price_reset'}
+                                        <li class="is--active">{$sPriceFilter[$sRequests.sFilter.price].start|currency} - {$sPriceFilter[$sRequests.sFilter.price].end|currency}</li>
+                                        <li class="list--entry">
+                                            <a class="link--reset" href="{$sLinks.sFilter.price}" title="{s name='SearchFilterLinkDefault'}Alle Kategorien anzeigen{/s}">
+                                                {s name='SearchFilterLinkDefault'}Alle Kategorien anzeigen{/s}
+                                            </a>
+                                        </li>
+                                    {/block}
                                 {/if}
                             </ul>
                         {/block}

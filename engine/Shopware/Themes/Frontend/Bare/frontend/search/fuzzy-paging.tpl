@@ -76,11 +76,6 @@
     {if $sPages.pages|@count != 0}
         <div class="listing--paging panel--paging">
 
-            {* Pagination label *}
-            {block name='frontend_listing_actions_paging_label'}
-                <label class="paging--label action--label">{s name='ListingPaging'}{/s}</label>
-            {/block}
-
             {* Pagination - Previous page *}
             {block name='frontend_listing_actions_paging_previous'}
                 {if isset($sPages.before)}
