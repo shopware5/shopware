@@ -399,7 +399,22 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 break;
             case "select":
                 $values = explode(";", $element['value']);
-                $output .= "<select class=\"{$element['class']} $requiredField\" id=\"{$element['name']}\" name=\"{$element['name']}\">\r\n\t<option selected=\"selected\" value=\"\">" . Shopware()->Snippets()->getNamespace('frontend/newsletter/index')->get('NewsletterLabelSelect') . "$requiredFieldSnippet</option>";
+                $output .= "<select class=\"{$element['class']} $requiredField\" id=\"{$element['name']}\" name=\"{$element['name']}\">\r\n\t";
+
+                if (!empty($requiredField)) {
+                    $requiredField = 'disabled="disabled"';
+                }
+                if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
+                    $label = $element['label'] . $requiredFieldSnippet;
+                } else {
+                    $label = Shopware()->Snippets()->getNamespace('frontend/newsletter/index')->get('NewsletterLabelSelect') . $requiredFieldSnippet;
+                }
+
+                if (empty($post)) {
+                    $output .= "<option selected=\"selected\" $requiredField value=\"\">$label</option>";
+                } else {
+                    $output .= "<option $requiredField value=\"\">$label</option>";
+                }
                 foreach ($values as $value) {
                     if ($value == $post) {
                         $output .= "<option selected>$value</option>";
