@@ -24,11 +24,13 @@
             </div>
 
             {* Shipping method *}
-            <div class="confirm--inner-container block">
-                {block name='frontend_checkout_shipping_payment_core_shipping_fields'}
-                    {include file="frontend/checkout/change_shipping.tpl"}
-                {/block}
-            </div>
+            {if $sDispatches|count}
+                <div class="confirm--inner-container block">
+                    {block name='frontend_checkout_shipping_payment_core_shipping_fields'}
+                        {include file="frontend/checkout/change_shipping.tpl"}
+                    {/block}
+                </div>
+            {/if}
         </div>
     </form>
 

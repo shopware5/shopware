@@ -568,7 +568,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $sErrorFlag = array();
         $sErrorMessages = array();
 
-        if (is_null($dispatch)) {
+        if (is_null($dispatch) && ($this->getDispatches($payment) || Shopware()->Config()->get('premiumshippingnoorder'))) {
             $sErrorFlag['sDispatch'] = true;
             $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/checkout/error_messages')
                 ->get('ShippingPaymentSelectShipping', 'Please select a shipping method');
