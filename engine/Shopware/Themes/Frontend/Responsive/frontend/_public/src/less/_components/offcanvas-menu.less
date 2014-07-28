@@ -112,9 +112,6 @@
 	.navigation--entry {
 		.unitize-padding(10, 20, 10, 20, 16);
 		border-bottom: 1px solid @borderColor;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
 
 		&:last-child {
 			border-bottom: 0 none;
@@ -122,6 +119,8 @@
 	}
 	.navigation--link {
 		color: @primaryTextColor;
+        overflow: hidden;
+        text-overflow: ellipsis;
 	}
 }
 
