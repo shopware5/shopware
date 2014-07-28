@@ -640,8 +640,8 @@ class sExport
 
             $sql_add_select[] = "IF(COUNT(d.ordernumber)<=1,'',GROUP_CONCAT(CONCAT('\"',REPLACE(d.ordernumber,'\"','\"\"'),'\"') SEPARATOR ';')) as group_ordernumber";
             $sql_add_select[] = "IF(COUNT(d.additionaltext)<=1,'',GROUP_CONCAT(CONCAT('\"',REPLACE(d.additionaltext,'\"','\"\"'),'\"') SEPARATOR ';')) as group_additionaltext";
-            $sql_add_select[] = "IF(COUNT($pricefield)<=1,'',GROUP_CONCAT(ROUND($pricefield*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]},2) SEPARATOR ';')) as group_pricenet";
-            $sql_add_select[] = "IF(COUNT($pricefield)<=1,'',GROUP_CONCAT(ROUND($pricefield*(100+t.tax-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]},2) SEPARATOR ';')) as group_price";
+            $sql_add_select[] = "IF(COUNT($pricefield)<=1,'',GROUP_CONCAT(ROUND(CAST($pricefield*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) SEPARATOR ';')) as group_pricenet";
+            $sql_add_select[] = "IF(COUNT($pricefield)<=1,'',GROUP_CONCAT(ROUND(CAST($pricefield*(100+t.tax-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) SEPARATOR ';')) as group_price";
             $sql_add_select[] = "IF(COUNT(d.active)<=1,'',GROUP_CONCAT(d.active SEPARATOR ';')) as group_active";
             $sql_add_select[] = "IF(COUNT(d.instock)<=1,'',GROUP_CONCAT(d.instock SEPARATOR ';')) as group_instock";
 
@@ -693,7 +693,7 @@ class sExport
             $sql_add_where[] ="(v.instock>={$this->sSettings["instock_filter"]} OR (v.instock IS NULL AND d.instock>={$this->sSettings["instock_filter"]}))";
         }
         if (!empty($this->sSettings["price_filter"])) {
-            $sql_add_where[] = "ROUND(IFNULL($grouppricefield,$pricefield)*(100+t.tax-IF(pd.discount IS NULL,0,pd.discount)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]},2)>=".$this->sSettings["price_filter"];
+            $sql_add_where[] = "ROUND(CAST(IFNULL($grouppricefield,$pricefield)*(100+t.tax-IF(pd.discount IS NULL,0,pd.discount)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2)>=".$this->sSettings["price_filter"];
         }
         if (!empty($this->sSettings["own_filter"])&&trim($this->sSettings["own_filter"])) {
             $sql_add_where[] = "(".$this->sSettings["own_filter"].")";
@@ -779,11 +779,11 @@ class sExport
 
                 a.configurator_set_id as configurator,
 
-                ROUND(IFNULL($grouppricefield, $pricefield)*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]},2) as netprice,
-                ROUND(IFNULL($grouppricefield, $pricefield)*(100+t.tax)/100*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]},2) as price,
+                ROUND(CAST(IFNULL($grouppricefield, $pricefield)*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) as netprice,
+                ROUND(CAST(IFNULL($grouppricefield, $pricefield)*(100+t.tax)/100*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) as price,
                 pd.discount,
-                ROUND($pseudoprice*{$this->sCurrency["factor"]},2) as netpseudoprice,
-                ROUND($pseudoprice*(100+t.tax)*{$this->sCurrency["factor"]}/100,2) as pseudoprice,
+                ROUND(CAST($pseudoprice*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) as netpseudoprice,
+                ROUND(CAST($pseudoprice*(100+t.tax)*{$this->sCurrency["factor"]}/100 AS DECIMAL(10,3)),2) as pseudoprice,
                 $baseprice,
                 IF(file IS NULL,0,1) as esd
 
