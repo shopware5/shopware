@@ -331,4 +331,6 @@ $(function () {
         });
     }
 
+    $('*[data-live-search="true"]').liveSearch();
+
 });
