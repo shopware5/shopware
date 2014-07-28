@@ -17,6 +17,7 @@ UPDATE `s_core_config_forms` SET `plugin_id` = NULL WHERE `id`=@formId;
 
 UPDATE `s_core_plugins` SET `active`=0 WHERE `name` = 'SwagMultiEdit';
 
+DELETE FROM `s_core_menu` WHERE `controller`= 'SwagMultiEdit';
 
 INSERT IGNORE INTO `s_core_config_elements`
   (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `filters`, `validators`, `options`)
