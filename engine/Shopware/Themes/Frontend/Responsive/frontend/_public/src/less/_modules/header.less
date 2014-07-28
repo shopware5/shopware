@@ -91,13 +91,16 @@
 	}
 }
 
+// Default ajax search form
 .main-search--form {
 	.unitize-padding(8, 10, 8, 10, 16);
 	.box-shadow(0 6px 6px -6px @lightTextColor);
-	position: relative;
 	background: #fff;
 	border-bottom: 1px solid @borderColor;
 	width: 100%;
+    left: 0;
+    top: 0;
+    position: absolute;
 
 	.icon--search {
 		.unitize(22, 16, top);
@@ -110,6 +113,139 @@
 		width: 100%;
 	}
 	.main-search--button { display: none; }
+
+}
+
+// Loading indicator for css animations supported browsers
+.has--cssanimations {
+    .form--ajax-loader {
+        .unitize(20, 16, top);
+        .unitize(20, 16, right);
+        position: absolute;
+        display: none;
+
+        &::before {
+            .unitize-width(16);
+            .unitize-height(16);
+            .border-radius(100%);
+            .animation(keyframe--spin 1s linear infinite);
+
+            display: block;
+            content: "";
+            border: 2px solid #ccc;
+            border-top: 2px solid #333;
+        }
+    }
+}
+
+// Loading indicator for non css animations supported browsers
+.has--no-cssanimations .form--ajax-loader {
+    .unitize(24, 16, top);
+    .unitize(20, 16, right);
+    .unitize-width(16);
+    .unitize-height(16);
+    position: absolute;
+    display: none;
+    background-image: url('../../img/icons/loading-indicator.gif');
+}
+
+// Search results modal
+.main-search--results {
+    .clearfix();
+    .unitize(110, 16, top);
+    position: absolute;
+    width: 100%;
+    left: 0;
+    background: #fff;
+    text-align: left;
+    z-index: 100;
+}
+
+.results--list {
+    .unitize-padding(10, 15);
+    .box-shadow(0 2px 3px 1px lighten(@borderColor, 5%));
+    border-top: 1px solid @borderColor;
+    border-bottom: 1px solid @borderColor;
+    background: #fff;
+
+    &::after {
+        .rotate(135deg);
+        .unitize-width(15);
+        .unitize-height(15);
+        .unitize(-8, 16, top);
+        content: '';
+        display: block;
+        position: absolute;
+        background: #fff;
+        left: 48%;
+        border: 1px solid @borderColor;
+        border-top: 0 none;
+        border-right: 0 none;
+    }
+
+    .list--entry,
+    .entry--all-results {
+        .unitize-padding(6, 0);
+    }
+
+    .list--entry {
+        .unitize(30, 16, line-height);
+        border-bottom: 1px solid @borderColor;
+
+        &:last-child {
+            border: 0 none;
+        }
+    }
+
+    .entry--no-results {
+        width: 100%;
+        text-align: center;
+        list-style: none;
+        font-weight: normal;
+    }
+
+    .is-active, .list--entry:hover {
+        background: lighten(@borderColor, 10%);
+        color: @primaryColor;
+
+        .name--link { color: @primaryColor; }
+    }
+
+    .entry--media { width: 10%; min-width:10% }
+
+    .entry--name { width: 60%; }
+
+    .name--link { color: @primaryTextColor }
+
+    .entry--price,
+    .entry--all-results-number {
+        width: 30%;
+        text-align: right;
+        color: @primaryColor;
+    }
+
+    .entry--all-results-link,
+    .entry--all-results-number {
+        display: block;
+    }
+    .entry--all-results {
+        .unitize(10, 16, padding-top);
+        font-weight: normal;
+    }
+
+    .entry--all-results-link {
+        width: 70%;
+
+        .icon--arrow-right {
+            .unitize(-1, 16, top);
+            .unitize-margin(0, 8, 0, 0);
+            position: relative;
+        }
+    }
+
+    .entry--all-results-number {
+        font-weight: normal;
+    }
 }
 
 // Tablet styling for the global shop header
@@ -305,7 +441,81 @@
         }
 
 		.cart--quantity { color: #fff; font-weight: normal }
+
+        // Search entry
+        .entry--search {
+          .unitize(14, 16, font-size);
+          margin-right: 7%;
+          background: #fff;
+          padding: 0;
+          border: 0 none;
+          width: 30%;
+          position: relative;
+
+          .icon--search {
+            .unitize(14, 16, top);
+            .unitize(14, 16, left);
+          }
+
+          .entry--trigger { display: none }
+        }
+
+        // Search form
+        .main-search--form {
+          .box-shadow(0 0 0 transparent);
+          display: block;
+          padding: 0;
+          border: 0 none;
+        }
 	}
+
+    .main-search--form {
+        position: relative;
+        left: auto;
+    }
+
+    .main-search--results {
+        .clearfix();
+        .unitize-width(450);
+        .unitize(-225, 16, margin-left);
+        .unitize(60, 16, top);
+        position: absolute;
+        z-index: 100;
+        left: 50%;
+        text-align: left;
+    }
+
+    .results--list {
+        .border-radius();
+        .unitize-padding(10, 15);
+        .box-shadow(0 2px 3px 1px lighten(@borderColor, 5%));
+        border: 1px solid @borderColor;
+        background: #fff;
+
+        .list--entry,
+        .entry--all-results {
+            .unitize-padding(6, 0);
+        }
+    }
+
+    .has--cssanimations .form--ajax-loader {
+        .unitize(10, 16, top);
+        .unitize(10, 16, right);
+        position: absolute;
+
+    }
+
+    .has--no-cssanimations .form--ajax-loader {
+        .unitize(14, 16, top);
+        .unitize(10, 16, right);
+        position: absolute;
+
+    }
+}
+
+@media screen and (min-width: @tabletLandscapeViewportWidth) {
+
+    .shop--navigation .entry--search { width: 45%; }
 }
 
 // Desktop styling for the global shop header
@@ -332,27 +542,7 @@
 
 		// Search entry
 		.entry--search {
-			.unitize(14, 16, font-size);
-			margin-right: 7%;
-			background: #fff;
-			padding: 0;
-			border: 0 none;
 			width: 35%;
-
-			.icon--search {
-				.unitize(14, 16, top);
-				.unitize(14, 16, left);
-			}
-
-			.entry--trigger { display: none }
-		}
-
-		// Search form
-		.main-search--form {
-			.box-shadow(0 0 0 transparent);
-			display: block;
-			padding: 0;
-			border: 0 none;
 		}
 	}
 

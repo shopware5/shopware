@@ -1,0 +1,67 @@
+.search--results {
+
+    .results-headline {
+        text-align: center;
+    }
+
+    .alert {
+        .unitize(30, 16, margin-top);
+    }
+
+    // Filter search results by category
+    .results--filter {
+        .unitize(20, 16, margin-top);
+    }
+
+    .filter--types {
+        .unitize-padding(20, 20);
+        width: 100%;
+        display: block;
+    }
+
+    .types--list {
+        .unitize(10, 16, margin-top);
+        width: 100%;
+        list-style: none;
+    }
+
+    .list--headline {
+        margin-top: 0;
+    }
+
+    .link--reset { display: block }
+
+
+    // Paginator, table view and sort switcher
+    .results--paging {
+        .unitize(20, 16, margin-top)
+    }
+
+    .results--articles {
+        .unitize(25, 16, margin-top);
+        width: 100%;
+
+    }
+}
+
+@media screen and (min-width: @tabletViewportWidth) {
+    .search--results .types--list {
+        width: 50%;
+
+        &:last-child {
+            .unitize(10, 16, margin-top);
+        }
+    }
+}
+
+@media screen and (min-width: @tabletLandscapeViewportWidth) {
+    .search--results .types--list {
+        width: 50%;
+    }
+}
+
+@media screen and (min-width: @desktopViewportWidth) {
+    .is--ctl-search .sidebar-main {
+        display: none;
+    }
+}
