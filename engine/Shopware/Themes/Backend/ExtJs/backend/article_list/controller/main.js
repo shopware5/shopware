@@ -257,6 +257,8 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
                 navigationGrid = me.getNavigationGrid(),
                 toolbar = me.getPagingToolBar();
 
+        me.subApplication.articleGrid = grid;
+
         // Bind main grid store.
         me.subApplication.articleStore = me.getStore('Shopware.apps.ArticleList.store.Detail');
         grid.reconfigure(me.subApplication.articleStore);

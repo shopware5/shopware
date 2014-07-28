@@ -336,7 +336,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
                 selModel = grid.getSelectionModel(),
                 selection = selModel.getLastSelected();
 
-            articleList.getStore('List').load({
+            articleList.articleStore.reload({
                 scope: me,
                 callback: function() {
                     if (selection) {
