@@ -177,14 +177,6 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
         me.categorySelect,
         {
             xtype: 'config-element-select',
-            name: 'templateId',
-            fieldLabel: '{s name=shop/detail/template_label}Template{/s}',
-            store: 'base.Template',
-            isMainRequired: true,
-            isMainField: true,
-            hidden: true
-        },{
-            xtype: 'config-element-select',
             name: 'documentTemplateId',
             fieldLabel: '{s name=shop/detail/document_template_label}Document template{/s}',
             store: 'base.Template',
