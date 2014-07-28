@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.ArticleList.controller.CategoryFilter', {
         if (categoryId > 0) {
             filterString += '(CATEGORY.PATH = "%|' + categoryId + '|%" OR CATEGORY.ID = ' + categoryId + ')';
         } else {
-            filterString += 'CATEGORY.ID > 0'
+            filterString += 'ARTICLE.ID > 0';
         }
 
         me.getController('Suggest').loadFilter(filterString, me.getFilterNameByConfig(categoryId, showVariants));
