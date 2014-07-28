@@ -341,10 +341,10 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
      * @param record
      * @returns string
      */
-    infoColumnRenderer: function(value, metaData, record) {
-        var me     = this,
-            result = '',
-            title;
+    infoColumnRenderer: function (value, metaData, record) {
+        var me = this,
+                result = '',
+                title;
 
         var style = 'style="width: 25px; height: 25px; display: inline-block; margin-right: 3px;"';
 
@@ -384,7 +384,25 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
             return me.booleanColumnRenderer;
         }
 
+        if (column.alias == 'Detail_inStock') {
+            return me.colorColumnRenderer;
+        }
+
         return me.defaultColumnRenderer;
+    },
+
+    /**
+     * Will return a green string for values > 0 and red otherwise
+     *
+     * @param value
+     * @returns string
+     */
+    colorColumnRenderer: function (value) {
+        if (value > 0) {
+            return '<span style="color:green;">' + value + '</span>';
+        } else {
+            return '<span style="color:red;">' + value + '</span>';
+        }
     },
 
     /**
@@ -564,18 +582,18 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
 
 
         buttons.push({
-            xtype : 'textfield',
-            name : 'searchfield',
-            action : 'search',
+            xtype: 'textfield',
+            name: 'searchfield',
+            action: 'search',
             width: 170,
             cls: 'searchfield',
             enableKeyEvents: true,
             checkChangeBuffer: 500,
             emptyText: '{s name=list/emptytext_search}Search ...{/s}',
             listeners: {
-                'change': function(field, value) {
-                    var store        = me.store,
-                        searchString = Ext.String.trim(value);
+                'change': function (field, value) {
+                    var store = me.store,
+                            searchString = Ext.String.trim(value);
 
                     me.fireEvent('search', searchString);
                 }
