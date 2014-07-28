@@ -223,7 +223,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
                 api: {
                     create: '{url controller="ArticleList" action="saveSingleEntity"}',
                     update: '{url controller="ArticleList" action="saveSingleEntity"}',
-                    destroy: '{url controller="ArticleListDelete" action="delete"}'
+                    destroy: '{url controller="ArticleList" action="deleteProduct"}'
                 },
 
                 /**
