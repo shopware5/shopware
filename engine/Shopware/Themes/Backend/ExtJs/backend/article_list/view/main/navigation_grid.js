@@ -125,6 +125,8 @@ Ext.define('Shopware.apps.ArticleList.view.main.NavigationGrid', {
      *  Get column which shows the button for (un)staring a filter
      */
     getFavoriteActionColumn: function () {
+        var me = this;
+
         return {
             xtype: 'actioncolumn',
             width: 25,
