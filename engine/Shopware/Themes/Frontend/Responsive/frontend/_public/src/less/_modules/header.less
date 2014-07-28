@@ -207,9 +207,12 @@
 
         .entry--service {
 	        .unitize-width(166);
+	        .unitize-padding(0, 8);
             position: relative;
             border-right: 1px solid @borderColor;
+            text-align: center;
 
+            &:after,
             &::after {
                 .unitize(-2, 16, top);
                 content: "\e612";
