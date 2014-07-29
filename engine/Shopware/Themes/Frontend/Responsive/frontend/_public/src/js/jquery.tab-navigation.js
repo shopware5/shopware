@@ -105,17 +105,19 @@
             });
 
             me.$nav.find('.navigation--link').on(clickEvt + '.' + pluginName, function (event) {
-            var $this = $(this),
-                href = $this.attr('href').substring(1);
+                var $this = $(this),
+                    href = $this.attr('href').substring(1);
 
-            event.preventDefault();
+                event.preventDefault();
 
-            // Hide all content boxes
-            me.$el.find('li > div[class^="content--"]').hide().removeClass(me.opts.activeCls);
-            me.$el.find('.navigation--link').removeClass(me.opts.activeCls);
+                // Hide all content boxes
+                me.$el.find('li > div[class^="content--"]').hide().removeClass(me.opts.activeCls);
+                me.$el.find('.navigation--link').removeClass(me.opts.activeCls);
 
-            // Activate the selected content
-            $this.addClass(me.opts.activeCls).next().show();
+                // Activate the selected content
+                $this.addClass(me.opts.activeCls).next().show();
+
+                $.publish('plugin/tabContent/onChangeTab');
             });
         } else {
             var active = me.$nav.find('.is--active');
@@ -144,18 +146,20 @@
             });
 
             me.$nav.find('.navigation--link').on(clickEvt + '.' + pluginName, function (event) {
-            var $this = $(this),
-                href = $this.attr('href').substring(1);
+                var $this = $(this),
+                    href = $this.attr('href').substring(1);
 
-            event.preventDefault();
+                event.preventDefault();
 
-            // Hide all content boxes
-            me.$content.children('div[class^="content--"]').hide().removeClass(me.opts.activeCls);
-            me.$nav.find('.navigation--link').removeClass(me.opts.activeCls);
+                // Hide all content boxes
+                me.$content.children('div[class^="content--"]').hide().removeClass(me.opts.activeCls);
+                me.$nav.find('.navigation--link').removeClass(me.opts.activeCls);
 
-            // Activate the selected content
-            me.$content.find('.' + href).show().addClass(me.opts.activeCls);
-            $this.addClass(me.opts.activeCls);
+                // Activate the selected content
+                me.$content.find('.' + href).show().addClass(me.opts.activeCls);
+                $this.addClass(me.opts.activeCls);
+
+                $.publish('plugin/tabContent/onChangeTab');
             });
         } else {
             me.$nav.find('.content--custom').appendTo(me.$content);
@@ -177,6 +181,8 @@
                 'scrollTop':  me.$nav[0].offsetTop
             }, 500);
         }
+
+        $.publish('plugin/tabContent/onChangeTab');
     };
 
     /**
