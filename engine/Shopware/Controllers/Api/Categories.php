@@ -55,7 +55,7 @@ class Shopware_Controllers_Api_Categories extends Shopware_Controllers_Api_Rest
     /**
      * Get one category
      *
-     * GET /api/articles/{id}
+     * GET /api/categories/{id}
      */
     public function getAction()
     {
@@ -70,7 +70,7 @@ class Shopware_Controllers_Api_Categories extends Shopware_Controllers_Api_Rest
     /**
      * Create new category
      *
-     * POST /api/category
+     * POST /api/categories
      */
     public function postAction()
     {
@@ -108,9 +108,9 @@ class Shopware_Controllers_Api_Categories extends Shopware_Controllers_Api_Rest
     }
 
     /**
-     * Delete article
+     * Delete category
      *
-     * DELETE /api/articles/{id}
+     * DELETE /api/categories/{id}
      */
     public function deleteAction()
     {
