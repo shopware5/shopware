@@ -24,7 +24,6 @@ In this document you will find a changelog of the important changes related to t
 * The sitemap.xml uses now a smarty template
     * Added `Turnover by device type` in the backend statistics module
     * Added device type details to `Impressions` and `Visitors` in the backend statistics module
-
 * Added secureUninstall method for plugins. There will be a message box when capability 'secureUninstall' is set, which uninstall method should be used.
     * (new) Bootstrap::secureUninstall() -> should be used for removing only non-user data
     * (old) Bootstrap::uninstall() -> old logic

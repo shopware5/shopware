@@ -18,7 +18,10 @@
             flyoutCls: 'js--img-zoom--flyout',
 
             /* The selector for identifying the active image */
-            activeSelector: '.is--active'
+            activeSelector: '.is--active',
+
+            /* The speed for animations in ms */
+            animationSpeed: 300
         },
 
         init: function () {
@@ -47,14 +50,14 @@
         registerEvents: function() {
             var me = this;
 
-            me._on(me.$images, 'mouseenter', me.startZoom.bind(me));
-            me._on(me.$images, 'mouseleave', me.stopZoom.bind(me));
-            me._on(me.$images, 'mousemove', me.onMouseMove.bind(me));
+            me._on(me.$images, 'mouseenter', $.proxy(me.startZoom, me));
+            me._on(me.$images, 'mouseleave', $.proxy(me.stopZoom, me));
+            me._on(me.$images, 'mousemove', $.proxy(me.onMouseMove, me));
 
-            $.subscribe('plugin/imageSlider/onRightArrowClick', me.stopZoom.bind(me));
-            $.subscribe('plugin/imageSlider/onLeftArrowClick', me.stopZoom.bind(me));
-            $.subscribe('plugin/imageSlider/onClick', me.stopZoom.bind(me));
-            $.subscribe('plugin/imageSlider/onLightbox', me.stopZoom.bind(me));
+            $.subscribe('plugin/imageSlider/onRightArrowClick', $.proxy(me.stopZoom, me));
+            $.subscribe('plugin/imageSlider/onLeftArrowClick', $.proxy(me.stopZoom, me));
+            $.subscribe('plugin/imageSlider/onClick', $.proxy(me.stopZoom, me));
+            $.subscribe('plugin/imageSlider/onLightbox', $.proxy(me.stopZoom, me));
         },
 
         createLensElement: function() {
@@ -164,8 +167,8 @@
 
                     me.setLensSize(me.lensWidth, me.lensHeight);
 
-                    me.$flyout.css('background', 'url(' + me.zoomImageUrl + ') 0 0 no-repeat' ).fadeIn('300');
-                    me.$lens.fadeIn('300');
+                    me.$flyout.css('background', 'url(' + me.zoomImageUrl + ') 0 0 no-repeat' ).fadeIn(me.opts.animationSpeed);
+                    me.$lens.fadeIn(me.opts.animationSpeed);
                 };
 
                 me.zoomImage.src = me.zoomImageUrl;
@@ -177,8 +180,8 @@
         stopZoom: function() {
             var me = this;
 
-            me.$lens.fadeOut('300');
-            me.$flyout.fadeOut('300');
+            me.$lens.fadeOut(me.opts.animationSpeed);
+            me.$flyout.fadeOut(me.opts.animationSpeed);
 
             me.zoomImage = false;
             me.active = false;

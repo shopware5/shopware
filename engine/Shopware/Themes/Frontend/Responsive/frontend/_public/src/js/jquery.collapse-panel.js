@@ -30,6 +30,20 @@
             collapseTargetCls: 'js--collapse-target',
 
             /**
+             * The class which triggers the collapsed state.
+             *
+             * @type {String}
+             */
+            collapsedStateCls: 'is--collapsed',
+
+            /**
+             * The class for the active state of the trigger element.
+             *
+             * @type {String}
+             */
+            activeTriggerCls: 'is--active',
+
+            /**
              * Decide if sibling collapse panels should be closed when the target is collapsed.
              *
              * @type {Boolean}
@@ -92,7 +106,7 @@
         toggleCollapse: function () {
             var me = this;
 
-            if (me.$targetEl.hasClass('is--collapsed')) {
+            if (me.$targetEl.hasClass(me.opts.collapsedStateCls)) {
                 me.closePanel();
                 return;
             }
@@ -112,13 +126,13 @@
                 $targetEl = me.$targetEl,
                 siblings = $('.' + options.collapseTargetCls).not($targetEl);
 
-            me.$el.addClass('is--active');
+            me.$el.addClass(options.activeTriggerCls);
 
-            $targetEl.slideDown(options.duration).addClass('is--collapsed');
+            $targetEl.slideDown(options.duration).addClass(options.collapsedStateCls);
 
             if (options.closeSiblings) {
                 siblings.slideUp(options.duration, function () {
-                    siblings.removeClass('is--collapsed');
+                    siblings.removeClass(options.collapsedStateCls);
                 });
             }
         },
@@ -132,8 +146,8 @@
         closePanel: function () {
             var me = this;
 
-            me.$el.removeClass('is--active');
-            me.$targetEl.slideUp(me.opts.duration).removeClass('is--collapsed');
+            me.$el.removeClass(me.opts.activeTriggerCls);
+            me.$targetEl.slideUp(me.opts.duration).removeClass(me.opts.collapsedStateCls);
         },
 
         /**
@@ -147,8 +161,8 @@
         destroy: function () {
             var me = this;
 
-            me.$el.removeClass('is--active');
-            me.$targetEl.removeClass('is--collapsed')
+            me.$el.removeClass(me.opts.activeTriggerCls);
+            me.$targetEl.removeClass(me.opts.collapsedStateCls)
                 .removeClass(me.opts.collapseTargetCls)
                 .removeAttr('style');
 
