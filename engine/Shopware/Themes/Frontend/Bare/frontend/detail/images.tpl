@@ -35,7 +35,5 @@
 				{/foreach}
 			{/block}
 		</div>
-
-		<div class="thumbnails--arrow thumbnails--trigger"></div>
 	</div>
 {/if}

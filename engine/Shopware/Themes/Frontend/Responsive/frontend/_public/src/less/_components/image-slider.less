@@ -12,11 +12,11 @@
     overflow: hidden;
 
     .arrow {
-        .unitize-width(25);
-        .unitize-height(50);
-        .unitize(-25, 16, margin-top);
-        .unitize(48, 16, line-height);
-        .unitize(12, 16, font-size);
+        .unitize-width(20);
+        .unitize-height(70);
+        .unitize(-35, 16, margin-top);
+        .unitize(68, 16, line-height);
+        .unitize(10, 16, font-size);
         .border-radius(3px);
         .linear-gradient(#ffffff, #edeff2);
         .user-select(none);
@@ -118,6 +118,11 @@
         position: absolute;
         left: 0;
 
+        .image-slider--thumbnails-slide {
+            position: absolute;
+            top: 0; left: 0;
+        }
+
         .thumbnail--link {
             .unitize-width(69);
             .unitize-height(69);
@@ -140,15 +145,15 @@
         }
 
         .thumbnails--arrow {
-            .unitize-width(25);
-            .unitize-height(50);
-            .unitize(48, 16, line-height);
+            .unitize-width(20);
+            .unitize-height(70);
+            .unitize(68, 16, line-height);
             .unitize(8, 16, font-size);
             .border-radius(3px);
-            .linear-gradient(#ffffff, #edeff2);
             .user-select(none);
             .touch-callout(none);
             .tap-highlight-color(rgba(0, 0, 0, 0));
+            .linear-gradient(#ffffff, #edeff2);
             display: none;
             position: absolute;
             z-index: 90;
@@ -158,12 +163,15 @@
             border: 1px solid @borderColor;
             cursor: pointer;
 
+            &:hover {
+                color: @primaryColor;
+            }
+
             &.is--top {
-                .unitize-width(50);
-                .unitize-height(25);
-                .unitize(23, 16, line-height);
-                .unitize(-25, 16, margin-left);
-                display: block;
+                .unitize-width(70);
+                .unitize-height(20);
+                .unitize(18, 16, line-height);
+                .unitize(-35, 16, margin-left);
                 top: 0;
                 left: 50%;
 
@@ -173,11 +181,10 @@
             }
 
             &.is--bottom {
-                .unitize-width(50);
-                .unitize-height(25);
-                .unitize(23, 16, line-height);
-                .unitize(-25, 16, margin-left);
-                display: block;
+                .unitize-width(70);
+                .unitize-height(20);
+                .unitize(18, 16, line-height);
+                .unitize(-35, 16, margin-left);
                 bottom: 0;
                 left: 50%;
 
@@ -187,10 +194,7 @@
             }
 
             &.is--left {
-                .unitize(-25, 16, marin-top);
-                display: block;
-                left: 0;
-                top: 50%;
+                left: 0; top: 0;
 
                 &::before {
                     content: "\e611";
@@ -198,14 +202,15 @@
             }
 
             &.is--right {
-                .unitize(-25, 16, marin-top);
-                display: block;
-                right: 0;
-                top: 50%;
+                right: 0; top: 0;
 
                 &::before {
                     content: "\e60f";
                 }
+            }
+
+            &.is--active {
+                display: block;
             }
         }
     }
