@@ -39,7 +39,7 @@
             me.$lens = me.createLensElement();
 
             me.$activeImageThumbnail = me.getActiveImageThumbnail();
-            me.$activeImage = me.getActiveImage();
+            me.$activeImage = me.getActiveImageElement();
 
             me.registerEvents();
         },
@@ -51,9 +51,10 @@
             me._on(me.$images, 'mouseleave', me.stopZoom.bind(me));
             me._on(me.$images, 'mousemove', me.onMouseMove.bind(me));
 
-            $.subscribe('/plugin/imageSlider/onRightArrowClick', me.stopZoom.bind(me));
-            $.subscribe('/plugin/imageSlider/onLeftArrowClick', me.stopZoom.bind(me));
-            $.subscribe('/plugin/imageSlider/onClick', me.stopZoom.bind(me));
+            $.subscribe('plugin/imageSlider/onRightArrowClick', me.stopZoom.bind(me));
+            $.subscribe('plugin/imageSlider/onLeftArrowClick', me.stopZoom.bind(me));
+            $.subscribe('plugin/imageSlider/onClick', me.stopZoom.bind(me));
+            $.subscribe('plugin/imageSlider/onLightbox', me.stopZoom.bind(me));
         },
 
         createLensElement: function() {
@@ -79,7 +80,7 @@
             return me.$thumbnails.filter(me.opts.activeSelector);
         },
 
-        getActiveImage: function() {
+        getActiveImageElement: function() {
             var me = this;
 
             if (!me.$activeImageThumbnail.length) {
@@ -131,29 +132,39 @@
 
             me.setLensPosition(positionX, positionY);
 
-            me.$flyout.css({ background: 'url(' + me.zoomImageUrl + ') '+ zoomX + 'px ' + zoomY + 'px no-repeat' })
+            me.$flyout.css('background', 'url(' + me.zoomImageUrl + ') '+ zoomX + 'px ' + zoomY + 'px no-repeat' );
         },
 
         startZoom: function() {
             var me = this;
 
             me.$activeImageThumbnail = me.getActiveImageThumbnail();
-            me.$activeImage = me.getActiveImage();
+            me.$activeImageElement = me.getActiveImageElement();
+            me.$activeImage = me.$activeImageElement.find('img');
 
             if (!me.zoomImage) {
-                me.zoomImageUrl = me.$activeImage.attr('data-img-original');
+                me.zoomImageUrl = me.$activeImageElement.attr('data-img-original');
                 me.zoomImage =  new Image();
 
                 me.zoomImage.onload = function() {
 
                     me.factor = me.zoomImage.width / me.$activeImage.innerWidth();
 
+                    /**
+                     * Don't show the lens for small
+                     * images where the original size
+                     * is smaller as the lens.
+                     */
+                    if (me.factor <= 1.2) {
+                        return;
+                    }
+
                     me.lensWidth = me.$flyout.outerWidth() / me.factor;
                     me.lensHeight = me.$flyout.outerHeight() / me.factor;
 
                     me.setLensSize(me.lensWidth, me.lensHeight);
 
-                    me.$flyout.css({ background: 'url(' + me.zoomImageUrl + ') 0 0 no-repeat' }).fadeIn('300');
+                    me.$flyout.css('background', 'url(' + me.zoomImageUrl + ') 0 0 no-repeat' ).fadeIn('300');
                     me.$lens.fadeIn('300');
                 };
 
