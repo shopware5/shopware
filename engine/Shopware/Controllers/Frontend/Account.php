@@ -111,6 +111,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         // If using the new template and we get a request to change address from the checkout page
         // we need to use a different template
         if (Shopware()->Shop()->getTemplate()->getVersion() >= 3 && $this->View()->sTarget == 'checkout') {
+            $this->Request()->setControllerName('checkout');
             return $this->View()->loadTemplate('frontend/account/billing_checkout.tpl');
         }
     }
@@ -144,6 +145,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         // If using the new template and we get a request to change address from the checkout page
         // we need to use a different template
         if (Shopware()->Shop()->getTemplate()->getVersion() >= 3 && $this->View()->sTarget == 'checkout') {
+            $this->Request()->setControllerName('checkout');
             return $this->View()->loadTemplate('frontend/account/shipping_checkout.tpl');
         }
     }
@@ -753,7 +755,8 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
         // If using the new template and we get a request to change address from the checkout page
         // we need to use a different template
-        if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
+        if (Shopware()->Shop()->getTemplate()->getVersion() >= 3 && $this->View()->sTarget == 'checkout') {
+            $this->Request()->setControllerName('checkout');
             return $this->View()->loadTemplate('frontend/account/select_billing_checkout.tpl');
         }
     }
@@ -768,7 +771,8 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
         // If using the new template and we get a request to change address from the checkout page
         // we need to use a different template
-        if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
+        if (Shopware()->Shop()->getTemplate()->getVersion() >= 3 && $this->View()->sTarget == 'checkout') {
+            $this->Request()->setControllerName('checkout');
             return $this->View()->loadTemplate('frontend/account/select_shipping_checkout.tpl');
         }
     }
