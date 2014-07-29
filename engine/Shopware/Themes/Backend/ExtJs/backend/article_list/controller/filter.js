@@ -392,13 +392,12 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
     closeFilterWindow: function() {
         var me = this,
             window = me.getFilterWindow();
-
-        window.down('form').getForm().reset();
-        window.down('grid').getStore().removeAll();
-
         // Make sure, that the dropdown is hidden, when the window is closed
         window.down('filterString').collapse();
         window.hide();
+
+        window.down('form').getForm().reset();
+        window.down('grid').getStore().removeAll();
     },
 
     /**
@@ -568,14 +567,18 @@ Ext.define('Shopware.apps.ArticleList.controller.Filter', {
     onEditFilter: function(rowIndex) {
         var me = this,
             store = me.subApplication.filterStore,
-            record = store.getAt(rowIndex);
+            record = store.getAt(rowIndex),
+            form;
 
         me.getFilterWindow().show();
         me.getTabPanel().setActiveTab(0);
-        me.getQueryField().up('form').getForm().reset().loadRecord(record);
+        form = me.getQueryField().up('form').getForm();
+        form.reset();
+
+        form.loadRecord(record);
 
         if (record.get('isSimple')) {
-            var simpleTokens = me.subApplication.getController('Suggest').getTokensFromString(record.get('filterString'));
+            var simpleTokens = me.getController('Suggest').getTokensFromString(record.get('filterString'));
             me.subApplication.getController('Filter').loadSimpleTokens(simpleTokens );
         }
 

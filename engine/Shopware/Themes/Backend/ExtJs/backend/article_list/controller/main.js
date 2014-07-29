@@ -62,8 +62,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
     init: function () {
         var me = this;
 
-        me.getController('Suggest').createParser();
-
         me.loadDetailModelFields();
 
         me.control({
@@ -223,7 +221,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
                 api: {
                     create: '{url controller="ArticleList" action="saveSingleEntity"}',
                     update: '{url controller="ArticleList" action="saveSingleEntity"}',
-                    destroy: '{url controller="ArticleListDelete" action="delete"}'
+                    destroy: '{url controller="ArticleList" action="deleteProduct"}'
                 },
 
                 /**
@@ -256,6 +254,8 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
         var grid = me.getGrid(),
                 navigationGrid = me.getNavigationGrid(),
                 toolbar = me.getPagingToolBar();
+
+        me.subApplication.articleGrid = grid;
 
         // Bind main grid store.
         me.subApplication.articleStore = me.getStore('Shopware.apps.ArticleList.store.Detail');

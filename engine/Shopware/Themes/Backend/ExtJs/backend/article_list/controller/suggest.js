@@ -65,6 +65,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Suggest', {
     init: function () {
         var me = this;
 
+        me.createParser();
 
         me.control({
             'query-field': {
@@ -172,7 +173,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Suggest', {
      */
     getParser: function() {
         var me = this;
-
         return me.parser;
     },
 

@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Sidebar', {
     title: '{s name=categoriesAndFilters}Categories & Filters{/s}',
 
 
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.items = me.getPanels();
@@ -50,12 +50,21 @@ Ext.define('Shopware.apps.ArticleList.view.main.Sidebar', {
     /**
      * Returns the three elements of the accordion layout
      */
-    getPanels: function() {
+    getPanels: function () {
         var me = this;
 
         return [
             { xtype: 'multi-edit-category-tree' },
-            { xtype: 'multi-edit-navigation-grid' },
+            // Wrap the filter grid into a panel so that the
+            // accordion elements a formatted properly
+            { xtype: 'panel',
+                title: '{s name=filter}Filter{/s}',
+                layout: 'fit',
+                items: [
+                    {
+                        xtype: 'multi-edit-navigation-grid'
+                    }
+                ] },
             { xtype: 'multi-edit-menu' },
         ];
     }
