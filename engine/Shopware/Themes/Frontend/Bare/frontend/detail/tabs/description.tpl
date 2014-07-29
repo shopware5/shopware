@@ -21,17 +21,17 @@
 	{block name='frontend_detail_description_properties'}
 		{if $sArticle.sProperties}
 			<div class="product--properties panel has--border">
-			    <table>
+			    <table class="product--properties-table">
 					{foreach $sArticle.sProperties as $sProperty}
-						<tr>
+						<tr class="product--properties-row">
 							{* Property label *}
 							{block name='frontend_detail_description_properties_label'}
-								<td class="is--bold">{$sProperty.name}:</td>
+								<td class="product--properties-label is--bold">{$sProperty.name}:</td>
 							{/block}
 
 							{* Property content *}
 							{block name='frontend_detail_description_properties_content'}
-								<td>{$sProperty.value}</td>
+								<td class="product--properties-value">{$sProperty.value}</td>
 							{/block}
 						</tr>
 					{/foreach}

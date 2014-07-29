@@ -29,7 +29,7 @@
 						{*If the browser doesn't support JS, the following image will be used *}
 						{block name='frontend_detail_image_fallback'}
 							<noscript>
-								<img itemprop="image" src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" alt="{$sArticle.articleName}">
+								<img itemprop="image" src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" alt="{$sArticle.articleName|escape:"html"}">
 							</noscript>
 						{/block}
 					</span>
@@ -56,7 +56,7 @@
 							{*If the browser doesn't support JS, the following image will be used *}
 							{block name='frontend_detail_image_fallback'}
 								<noscript>
-									<img itemprop="image" src="{if isset($image.src)}{$image.src.4}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" alt="{$sArticle.articleName}">
+									<img itemprop="image" src="{if isset($image.src)}{$image.src.4}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" alt="{$sArticle.articleName|escape:"html"}">
 								</noscript>
 							{/block}
 						</span>

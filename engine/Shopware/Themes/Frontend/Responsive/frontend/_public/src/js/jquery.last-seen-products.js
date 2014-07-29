@@ -6,7 +6,12 @@
             title: '',
             baseUrl: '/',
             shopId: 1,
-            currentArticle: { }
+            currentArticle: { },
+            listSelector: '.last-seen-products--slider',
+            containerSelector: '.last-seen-products--container',
+            itemCls: 'last-seen-products--item product-slider--item',
+            titleCls: 'last-seen-products--title product--title',
+            imageCls: 'last-seen-products--image product--image'
         },
 
         init: function () {
@@ -18,8 +23,8 @@
                 'html': me.opts.title
             }).prependTo(me.$el);
 
-            me.$list = me.$el.find('.last-seen-products--slider');
-            me.$container = me.$list.find('.last-seen-products--container');
+            me.$list = me.$el.find(me.opts.listSelector);
+            me.$container = me.$list.find(me.opts.containerSelector);
 
             me.productSlider = me.$list.data('plugin_productSlider');
 
@@ -55,7 +60,7 @@
                 title = me.createProductTitle(article);
 
             item = $('<div>', {
-                'class': 'last-seen-products--item product-slider--item'
+                'class': me.opts.itemCls
             });
 
             image.appendTo(item);
@@ -65,9 +70,11 @@
         },
 
         createProductTitle: function(data) {
+            var me = this;
+
             return $('<a>', {
                 'rel': 'nofollow',
-                'class': 'last-seen-products--title product--title',
+                'class': me.opts.titleCls,
                 'title': data.articleName,
                 'href': data.linkDetailsRewritten,
                 'html': data.articleName
@@ -75,7 +82,8 @@
         },
 
         createProductImage: function(data) {
-            var element, imageEl,
+            var me = this,
+                element, imageEl,
                 noScript,
                 imageDefault,
                 imageMobile,
@@ -83,7 +91,7 @@
                 imageDesktop;
 
             element = $('<a>', {
-                'class': 'last-seen-products--image product--image',
+                'class': me.opts.imageCls,
                 'href': data.linkDetailsRewritten
             });
 
@@ -120,24 +128,12 @@
             return element;
         },
 
-        /**
-         * Formats a string and replaces the placeholders.
-         *
-         * @example format('<div class="%0"'>%1</div>, [value for %0], [value for %1], ...)
-         */
-        format: function(str) {
-            for (var i = 1; i < arguments.length; i++) {
-                str = str.replace('%' + (i - 1), arguments[i]);
-            }
-            return str;
-        },
-
         collectProduct: function (newProduct) {
             var me = this,
                 opts = me.opts,
                 itemKey = 'lastSeenProducts-' + opts.shopId + '-' + opts.baseUrl,
                 productsJson = me.storage.getItem(itemKey),
-                products = productsJson ? JSON.parse(productsJson) : [],
+                products = productsJson ? $.parseJSON(productsJson) : [],
                 len = products.length,
                 i = 0,
                 url;

@@ -138,10 +138,7 @@
                 duration = me.options.animationSpeed || me.defaults.animationSpeed,
                 easing = 'ease',
                 callback = function () {
-                    me._$overlay.css({
-                            display: 'none'
-                        }
-                    );
+                    me._$overlay.css('display', 'none');
                 };
 
             if (me._$overlay !== null) {

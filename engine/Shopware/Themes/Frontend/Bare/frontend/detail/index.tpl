@@ -45,7 +45,9 @@
 				{block name='frontend_detai_supplier_info'}
 					{if $sArticle.supplierImg}
 						<div class="product--supplier block">
-							<a href="{url controller='supplier' sSupplier=$sArticle.supplierID}" title="{s name="DetailDescriptionLinkInformation" namespace="frontend/detail/description"}{/s}">
+							<a href="{url controller='supplier' sSupplier=$sArticle.supplierID}"
+							   title="{s name="DetailDescriptionLinkInformation" namespace="frontend/detail/description"}{/s}"
+							   class="product--supplier-link">
 								<img src="{$sArticle.supplierImg}" alt="{$sArticle.supplierName}">
 							</a>
 						</div>
@@ -74,27 +76,39 @@
         {block name='frontend_detail_index_buy_container'}
             <div class="product--buybox block{if $sArticle.sConfigurator && $sArticle.sConfiguratorSettings.type==2} is--wide{/if}">
 
-                <meta itemprop="brand" content="{$sArticle.supplierName}" />
+				{block name="frontend_detail_rich_snippets_brand"}
+                	<meta itemprop="brand" content="{$sArticle.supplierName|escape}" />
+				{/block}
 
-                {if $sArticle.weight}
-                    <meta itemprop="weight" content="{$sArticle.weight} kg" />
-                {/if}
+				{block name="frontend_detail_rich_snippets_weight"}
+					{if $sArticle.weight}
+						<meta itemprop="weight" content="{$sArticle.weight} kg" />
+					{/if}
+				{/block}
 
-                {if $sArticle.height}
-                    <meta itemprop="height" content="{$sArticle.height} cm" />
-                {/if}
+				{block name="frontend_detail_rich_snippets_height"}
+					{if $sArticle.height}
+						<meta itemprop="height" content="{$sArticle.height} cm" />
+					{/if}
+				{/block}
 
-                {if $sArticle.width}
-                    <meta itemprop="width" content="{$sArticle.width} cm" />
-                {/if}
+				{block name="frontend_detail_rich_snippets_width"}
+					{if $sArticle.width}
+						<meta itemprop="width" content="{$sArticle.width} cm" />
+					{/if}
+				{/block}
 
-                {if $sArticle.length}
-                    <meta itemprop="depth" content="{$sArticle.length} cm" />
-                {/if}
+				{block name="frontend_detail_rich_snippets_depth"}
+					{if $sArticle.length}
+						<meta itemprop="depth" content="{$sArticle.length} cm" />
+					{/if}
+				{/block}
 
-                {if $sArticle.sReleasedate}
-                    <meta itemprop="releaseDate" content="{$sArticle.sReleasedate}" />
-                {/if}
+				{block name="frontend_detail_rich_snippets_release_date"}
+					{if $sArticle.sReleasedate}
+						<meta itemprop="releaseDate" content="{$sArticle.sReleasedate}" />
+					{/if}
+				{/block}
 
                 {* Product eMail notification *}
                 {block name="frontend_detail_index_notification"}
@@ -104,38 +118,40 @@
                 {/block}
 
                 {* Product data *}
-                <div itemprop="offers" itemscope itemtype="http://schema.org/Offer" class="buybox--inner">
+				{block name='frontend_detail_index_buy_container_inner'}
+					<div itemprop="offers" itemscope itemtype="http://schema.org/Offer" class="buybox--inner">
 
-                    {block name='frontend_detail_index_data'}
-                        <meta itemprop="priceCurrency" content="{$Shop->getCurrency()->getCurrency()}" />
-                        {include file="frontend/detail/data.tpl" sArticle=$sArticle sView=1}
-                    {/block}
+						{block name='frontend_detail_index_data'}
+							<meta itemprop="priceCurrency" content="{$Shop->getCurrency()->getCurrency()}" />
+							{include file="frontend/detail/data.tpl" sArticle=$sArticle sView=1}
+						{/block}
 
-                    {block name='frontend_detail_index_after_data'}{/block}
+						{block name='frontend_detail_index_after_data'}{/block}
 
-                    {* Configurator drop down menu's *}
-                    {block name="frontend_detail_index_configurator"}
-                        {if $sArticle.sConfigurator}
-                            {if $sArticle.sConfiguratorSettings.type eq 1}
-                                {include file="frontend/detail/config_step.tpl"}
-                            {elseif $sArticle.sConfiguratorSettings.type != 2}
-                                {include file="frontend/detail/config_upprice.tpl"}
-                            {/if}
-                        {/if}
-                    {/block}
+						{* Configurator drop down menu's *}
+						{block name="frontend_detail_index_configurator"}
+							{if $sArticle.sConfigurator}
+								{if $sArticle.sConfiguratorSettings.type eq 1}
+									{include file="frontend/detail/config_step.tpl"}
+								{elseif $sArticle.sConfiguratorSettings.type != 2}
+									{include file="frontend/detail/config_upprice.tpl"}
+								{/if}
+							{/if}
+						{/block}
 
-                    {* Include buy button and quantity box *}
-                    {block name="frontend_detail_index_buybox"}
-                        {include file="frontend/detail/buy.tpl"}
-                    {/block}
+						{* Include buy button and quantity box *}
+						{block name="frontend_detail_index_buybox"}
+							{include file="frontend/detail/buy.tpl"}
+						{/block}
 
-                    {* Product actions *}
-                    {block name="frontend_detail_index_actions"}
-                        <nav class="product--actions">
-                            {include file="frontend/detail/actions.tpl"}
-                        </nav>
-                    {/block}
-                </div>
+						{* Product actions *}
+						{block name="frontend_detail_index_actions"}
+							<nav class="product--actions">
+								{include file="frontend/detail/actions.tpl"}
+							</nav>
+						{/block}
+					</div>
+				{/block}
 
                 {* Product - Base information *}
                 {block name='frontend_detail_index_buy_container_base_info'}

@@ -39,7 +39,7 @@
             arrowControls: true,
 
             // Turn touch controls on and off.
-            touchControls: false,
+            touchControls: true,
 
             // Turn the lightbox on and off.
             lightbox: true,
@@ -60,7 +60,28 @@
             thumbnailContainerSelector: '.image-slider--thumbnails',
 
             // The selector for the slide element which slides inside the thumbnail container.
-            thumbnailSlideSelector: '.image-slider--thumbnails-slide'
+            thumbnailSlideSelector: '.image-slider--thumbnails-slide',
+
+            // The css class for the left slider arrow.
+            leftArrowCls: 'arrow is--left',
+
+            // The css class for the right slider arrow.
+            rightArrowCls: 'arrow is--right',
+
+            // The css class for a top positioned thumbnail arrow.
+            thumbnailArrowTopCls: 'is--top',
+
+            // The css class for a left positioned thumbnail arrow.
+            thumbnailArrowLeftCls: 'is--left',
+
+            // The css class for a right positioned thumbnail arrow.
+            thumbnailArrowRightCls: 'is--right',
+
+            // The css class for a bottom positioned thumbnail arrow.
+            thumbnailArrowBottomCls: 'is--bottom',
+
+            // The css class for active states of the arrows.
+            activeStateClass: 'is--active'
         },
 
         /**
@@ -164,11 +185,11 @@
             var me = this;
 
             me.$arrowLeft = $('<a>', {
-                'class': 'arrow is--left'
+                'class': me.opts.leftArrowCls
             }).appendTo(me.$slideContainer);
 
             me.$arrowRight = $('<a>', {
-                'class': 'arrow is--right'
+                'class': me.opts.rightArrowCls
             }).appendTo(me.$slideContainer);
         },
 
@@ -178,8 +199,8 @@
          */
         createThumbnailArrows: function() {
             var me = this,
-                prevClass = (me.thumbnailOrientation == 'horizontal') ? 'is--left' : 'is--top',
-                nextClass = (me.thumbnailOrientation == 'horizontal') ? 'is--right' : 'is--bottom';
+                prevClass = (me.thumbnailOrientation == 'horizontal') ? me.opts.thumbnailArrowLeftCls : me.opts.thumbnailArrowTopCls,
+                nextClass = (me.thumbnailOrientation == 'horizontal') ? me.opts.thumbnailArrowRightCls : me.opts.thumbnailArrowBottomCls;
 
             me.$thumbnailArrowPrev = $('<a>', {
                 'class': 'thumbnails--arrow ' + prevClass
@@ -221,8 +242,8 @@
             me.itemsWidth = me.$slideContainer.innerWidth();
             me.slideWidth = me.itemsWidth * me.itemCount;
 
-            me.$slide.css({ 'width': me.slideWidth });
-            me.$items.css({ 'width': me.itemsWidth });
+            me.$slide.css('width', me.slideWidth);
+            me.$items.css('width', me.itemsWidth);
 
             if (me.opts.thumbnails) {
                 me.setThumbnailSizes();
@@ -239,7 +260,7 @@
             var me = this,
                 i = index || me.slideIndex;
 
-            me.$slide.css({ 'left': - ( i * me.itemsWidth ) });
+            me.$slide.css('left', -(i * me.itemsWidth));
         },
 
         /**
@@ -311,8 +332,8 @@
                 activeThumbnail = me.$thumbnails.eq(index),
                 pageLast = me.thumbnailSlideIndex + me.maxViewable - 1;
 
-            me.$thumbnails.removeClass('is--active');
-            activeThumbnail.addClass('is--active');
+            me.$thumbnails.removeClass(me.opts.activeStateClass);
+            activeThumbnail.addClass(me.opts.activeStateClass);
 
             if (index > pageLast || index < me.thumbnailSlideIndex) {
                 me.slideThumbnails(index);
@@ -338,11 +359,11 @@
                 orientation = me.thumbnailOrientation;
 
             if (orientation == 'vertical') {
-                me.$thumbnailArrowNext.toggleClass('is--active', slideHeight + topPosition > containerHeight);
-                me.$thumbnailArrowPrev.toggleClass('is--active', topPosition < 0);
+                me.$thumbnailArrowNext.toggleClass(me.opts.activeStateClass, slideHeight + topPosition > containerHeight);
+                me.$thumbnailArrowPrev.toggleClass(me.opts.activeStateClass, topPosition < 0);
             } else {
-                me.$thumbnailArrowNext.toggleClass('is--active', slideWidth + leftPosition > containerWidth);
-                me.$thumbnailArrowPrev.toggleClass('is--active', leftPosition < 0);
+                me.$thumbnailArrowNext.toggleClass(me.opts.activeStateClass, slideWidth + leftPosition > containerWidth);
+                me.$thumbnailArrowPrev.toggleClass(me.opts.activeStateClass, leftPosition < 0);
             }
         },
 

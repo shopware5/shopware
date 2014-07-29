@@ -252,9 +252,7 @@
             me.setTitle(opts.title);
 
             // set display to block instead of .show() for browser compatibility
-            me._$modalBox.css({
-                display: 'block'
-            });
+            me._$modalBox.css('display', 'block');
 
             switch (opts.mode) {
                 case 'ajax':
@@ -262,7 +260,7 @@
                     me.options.src = content;
                     break;
                 case 'iframe':
-                    me.setContent('<iframe src="' + content + '"></iframe>');
+                    me.setContent('<iframe src="' + content + '" width="100%" height="100%"></iframe>');
                     me.options.src = content;
                     break;
                 default:
@@ -297,9 +295,7 @@
                     me._$content.empty();
 
                     // set display to none instead of .hide() for browser compatibility
-                    me._$modalBox.css({
-                        display: 'none'
-                    });
+                    me._$modalBox.css('display', 'none');
 
                     me.options.onClose.call(me);
                 });
