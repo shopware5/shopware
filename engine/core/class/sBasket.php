@@ -1230,6 +1230,7 @@ class sBasket
             $getArticles[$key]["linkBasket"] = $this->config->get('sBASEFILE')."?sViewport=basket&sAdd=".$value["ordernumber"];
             $getArticles[$key]["linkDelete"] = $this->config->get('sBASEFILE')."?sViewport=note&sDelete=".$value["id"];
             $getArticles[$key]["datum_add"] = $value["datum"];
+            $getArticles[$key]['note_number'] = $value['ordernumber'];
         }
         return $getArticles;
     }

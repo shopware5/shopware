@@ -4,11 +4,17 @@
 		{* Article informations *}
 		<div class="grid_6">
 			<div class="first">
-			
+
+                {if $sBasketItem.additional_details.sConfigurator}
+                    {assign var=detailLink value={url controller="detail" sArticle=$sBasketItem.articleID number=$sBasketItem.ordernumber}}
+                {else}
+                    {assign var=detailLink value=$sBasketItem.linkDetails}
+                {/if}
+
 				{* Article picture *}
 				{block name='frontend_checkout_cart_item_image'}
 				{if $sBasketItem.image.src.0}
-					<a href="{$sBasketItem.linkDetails}" title="{$sBasketItem.articlename|strip_tags}" class="thumb_image">
+					<a href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags}" class="thumb_image">
 						<img src="{$sBasketItem.image.src.1}" border="0" alt="{$sBasketItem.articlename}" />
 					</a>
 				{else}
@@ -20,7 +26,7 @@
 				<div class="basket_details">
 					{* Article name *}
 					{if $sBasketItem.modus ==0}
-						<a class="title" href="{$sBasketItem.linkDetails}" title="{$sBasketItem.articlename|strip_tags}">
+						<a class="title" href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags}">
 							{$sBasketItem.articlename|strip_tags|truncate:60}
 						</a>
 						<p class="ordernumber">
