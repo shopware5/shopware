@@ -344,6 +344,85 @@ $(function() {
     // Initialize the registration plugin
     $('div[data-register="true"]').register();
 
+    // Modal on add basket item
+    $('.buybox--form').submit(function (event) {
+        event.preventDefault();
+
+        var me = $(this),
+            ajaxData = me.serialize(),
+            ajaxUrl = me.attr('action');
+
+        $.loadingIndicator.open();
+
+        $.ajax({
+            data: ajaxData,
+            dataType: 'jsonp',
+            url: ajaxUrl,
+
+            success: function (result) {
+                var modal;
+
+                $.loadingIndicator.close(function() {
+
+                    modal = $.modal.open(result, {
+                        width: 750,
+                        height: 600
+                    });
+
+                    var slider = $('.js--modal').find('.product-slider');
+
+                    StateManager.registerListener([{
+                        type: 'smartphone',
+                        enter: function () {
+                            slider.productSlider({
+                                perPage: 1,
+                                perSlide: 1,
+                                touchControl: true
+                            });
+                        }
+                    }, {
+                        type: 'tablet',
+                        enter: function () {
+                            slider.productSlider({
+                                perPage: 2,
+                                perSlide: 1,
+                                touchControl: true
+                            });
+                        }
+                    }, {
+                        type: 'tabletLandscape',
+                        enter: function () {
+                            slider.productSlider({
+                                perPage: 3,
+                                perSlide: 1,
+                                touchControl: true
+                            });
+                        }
+                    }, {
+                        type: 'desktop',
+                        enter: function () {
+                            slider.productSlider({
+                                perPage: 3,
+                                perSlide: 1,
+                                touchControl: true
+                            });
+                        }
+                    }, {
+                        type: '*',
+                        enter: function () {
+                            setTimeout(function () {
+                                modal.find('.product-slider').data('plugin_productSlider').setSizes();
+                            }, 10);
+                        },
+                        exit: function () {
+                            modal.find('.product-slider').data('plugin_productSlider').destroy();
+                        }
+                    }]);
+                });
+            }
+        });
+    });
+
     // Debug mode is enabled
     if($('.debug--panel').length) {
         var $debugPanel = $('.debug--panel'),

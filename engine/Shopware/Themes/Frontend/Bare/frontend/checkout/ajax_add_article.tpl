@@ -1,119 +1,157 @@
-<div class="heading">
-	<h2>{if !$sBasketInfo}{s name="AjaxAddHeader"}{/s}{else}{s name='AjaxAddHeaderError'}Hinweis:{/s}{/if}</h2>
-	
-	{* Close button *}
-	<a href="#" class="modal_close" title="{s name='LoginActionClose'}{/s}">
-		{s name='LoginActionClose'}{/s}
-	</a>
-</div>
+{block name='checkout_ajax_add_title'}
+    <div class="modal--title">
+        {if !$sBasketInfo}{s name="AjaxAddHeader"}{/s}{else}{s name='AjaxAddHeaderError'}Hinweis:{/s}{/if}
+    </div>
+{/block}
 
-{if $sBasketInfo}
-<div class="error_container">
-	<p class="text">
-		{$sBasketInfo}
-	</p>
-	<div class="clear">&nbsp;</div>
-</div>
-{/if}
+{block name='checkout_ajax_add_information'}
+    <div class="modal--article block-group">
 
-<div class="ajax_add_article">
-    {block name='frontend_checkout_ajax_add_article_middle'}
-	<div class="middle">
-		{if $sArticle}
-		<div class="article_box">
+        {* Article image *}
+        {block name='checkout_ajax_add_information_image'}
+            <div class="article--image block">
+                <a href="{$sArticle.linkDetails}" title="{$sArticle.articleName|escape}">
+                    {if $sArticle.image.src}
+                        <img class="image--thumbnail" src="{$sArticle.image.src.3}" alt="{$sArticle.articleName|escape}">
+                    {else}
+                        <img class="image--no-picture" src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{s name='ListingBoxNoPicture'}{/s}" />
+                    {/if}
+                </a>
+            </div>
+        {/block}
 
-			{* Thumbnail *}
-			<div class="thumbnail">
-				<a href="{$sArticle.linkDetails}" title="{$sArticle.articleName}" class="artbox_thumb" {if $sArticle.image.src}
-					style="background: url({$sArticle.image.src.1}) no-repeat center center"{/if}>
-					{if !$sArticle.image.src}<img src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{s name='ListingBoxNoPicture'}{/s}" />{/if}
-				</a>
-			</div>
+        {* Article Name *}
+        {block name='checkout_ajax_add_information_name'}
+            <div class="article--name block">
+                <ul class="list--name list--unstyled">
+                    <li class="entry--name">
+                        <a class="link--name" href="{$sArticle.linkDetails}" title="{$sArticle.articleName|escape}">
+                            {$sArticleName|escape|truncate:37}
+                        </a>
+                    </li>
+                    <li class="entry--ordernumber">{s name="AjaxAddLabelOrdernumber"}{/s}: {$sArticle.ordernumber}</li>
+                </ul>
+            </div>
+        {/block}
 
-			{* Title *}
-			<strong class="title">{$sArticleName|truncate:37|strip_tags}</strong>
+        {* Article price *}
+        {block name='checkout_ajax_add_information_price'}
+            <div class="article--price block">
+                <ul class="list--price list--unstyled">
+                    <li class="entry--price">{$sArticle.price|currency}</li>
+                    <li class="entry--quantity">{s name="AjaxAddLabelQuantity"}{/s}: {$sArticle.quantity}</li>
+                </ul>
+            </div>
+        {/block}
+    </div>
+{/block}
 
-			{* Ordernumber *}
-			<span class="ordernumber">{s name="AjaxAddLabelOrdernumber"}{/s}: {$sArticle.ordernumber}</span>
+{block name='checkout_ajax_add_actions'}
+    <div class="modal--actions">
+        {* Contiune shopping *}
+        {block name='checkout_ajax_add_actions_continue'}
+            <a href="{$sBasket.sLastActiveArticle.link}" title="{s name='AjaxAddLinkBack'}{/s}" class="link--back btn btn--secondary is--left">
+                {s name='AjaxAddLinkBack'}{/s} <i class="icon--arrow-left"></i>
+            </a>
+        {/block}
 
-			{* Price *}
-			<strong class="price">{$sArticle.price|currency}</strong>
+        {* Forward to the checkout *}
+        {block name='checkout_ajax_add_actions_checkout'}
+            <a href="{url action=confirm}" title="{s name='AjaxAddLinkCart'}{/s}" class="link--confirm btn btn--primary right">
+                {s name='AjaxAddLinkCart'}{/s} <i class="icon--arrow-right"></i>
+            </a>
+        {/block}
+    </div>
+{/block}
 
-			{* Quantity *}
-			<span class="quantity">{s name="AjaxAddLabelQuantity"}{/s}: {$sArticle.quantity}</span>
-		</div>
-		{/if}
+{block name='checkout_ajax_add_cross_selling'}
+    {if $sCrossSimilarShown|@count || $sCrossBoughtToo|@count}
+        <div class="modal--cross-selling">
+            <div class="panel has--border">
 
-		{* Actions *}
-		<div class="actions">
-			{block name='frontend_checkout_ajax_add_article_action_buttons'}
-				<a title="{s name='AjaxAddLinkBack'}{/s}" class="button-middle large modal_close">
-					{se name="AjaxAddLinkBack"}{/se}
-				</a>
-				<a href="{url action='cart'}" class="button-right large right" title="{s name='AjaxAddLinkCart'}{/s}">
-					{se name="AjaxAddLinkCart"}{/se}
-				</a>
-				<div class="clear">&nbsp;</div>
-			{/block}
-		</div>
-		<div class="space">&nbsp;</div>
-	</div>
-    {/block}
-	
-	<div class="bottom">
-		{block name='frontend_checkout_ajax_add_article_cross_selling'}
-			{if $sCrossSimilarShown|@count || $sCrossBoughtToo|@count}
-				<h2>{se name="AjaxAddHeaderCrossSelling"}{/se}</h2>
-				<div class="slider_modal">
-			        {$sCrossSellingArticles = $sCrossBoughtToo}
-			        {if $sCrossSimilarShown && $sCrossBoughtToo|count < 1}
-			            {$sCrossSellingArticles = $sCrossSimilarShown}
-			        {/if}
+                {* Cross sellung title *}
+                {block name='checkout_ajax_add_cross_selling_title'}
+                    <div class="panel--title  is--underline">
+                        {s name="AjaxAddHeaderCrossSelling"}{/s}
+                    </div>
+                {/block}
 
-					{* @TODO - Use the new syntax *}
-			        {foreach from=$sCrossSellingArticles item=article}
-			            {if $article@index % 3 == 0}
-			                <div class="slide">
-			            {/if}
+                {* Cross selling panel body *}
+                {block name='checkout_ajax_add_cross_selling_panel'}
+                    <div class="panel--body">
 
-						{* @TODO - Use the new syntax *}
-			            {assign var=image value=$article.image.src.2}
-			            <div class="article_box">
-			            {if $image}
-			                <a style="background: url({$image}) no-repeat scroll center center transparent;" class="artbox_thumb" title="{$article.articleName|escape}" href="{$article.linkDetails}">
-			            </a>
-			            {else}
-			            <a class="artbox_thumb no_picture" title="{$article.articleName|escape}" href="{$article.linkDetails}">
-			            </a>
-			            {/if}
-			            <a title="{$article.articleName}" class="title" href="{$article.linkDetails}">{$article.articleName|truncate:28}</a>
-			            {if $article.purchaseunit}
-			                <div class="article_price_unit">
-			                    <p>
-			                        <strong>{se name="SlideArticleInfoContent" namespace="frontend/plugins/recommendation/slide_articles"}{/se}:</strong> {$article.purchaseunit} {$article.sUnit.description}
-			                        {if $article.referenceunit}
-			                           ({$article.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s} / {$article.referenceunit} {$article.sUnit.description})
-			                        {/if}
-			                    </p>
-			                </div>
-			            {/if}
+                        {* Cross selling product slider *}
+                        {block name='checkout_ajax_add_cross_slider'}
+                            <div class="product-slider" data-mode="local">
+                                <div class="product-slider--container">
 
-			            <p class="price">
-			                <span class="price{if $article.pseudoprice} pseudo{/if}">
-			                	{if $article.priceStartingFrom && !$article.liveshoppingData}{s name='ListingBoxArticleStartsAt'}{/s} {/if}{$article.price|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
-								{if $article.pseudoprice}
-									<em>{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s} {$article.pseudoprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</em>
-								{/if}
-			                </span>
-			            </p>
-			            </div>
+                                    {$sCrossSellingArticles = $sCrossBoughtToo}
+                                    {if $sCrossSimilarShown && $sCrossBoughtToo|count < 1}
+                                        {$sCrossSellingArticles = $sCrossSimilarShown}
+                                    {/if}
 
-			            {if $article@index % 3 == 2 || $article@last}
-			                </div>
-			            {/if}
-			        {/foreach}
-				</div>
-			{/if}
-		{/block}
-	</div>
-</div>
+                                    {* Product item *}
+                                    {block name='checkout_ajax_add_cross_slider_item'}
+                                        {foreach $sCrossSellingArticles as $article}
+                                            <div class="product-slider--item">
+
+                                                {* Slider item Image *}
+                                                {block name='checkout_ajax_add_cross_slider_item_image'}
+                                                    <div class="item--image">
+                                                        <a href="{$article.linkDetails}" class="link--image" title="{$article.articleName|escape}">
+                                                            {if $article.image.src.2}
+                                                                <img src="{$article.image.src.2}" class="image--slider-item">
+                                                            {else}
+                                                                <img class="image--no-picture" src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{s name='ListingBoxNoPicture'}{/s}" />
+                                                            {/if}
+                                                        </a>
+                                                    </div>
+                                                {/block}
+
+                                                {* Slider item name *}
+                                                {block name='checkout_ajax_add_cross_slider_item_name'}
+                                                    <div class="item--name">
+                                                        <a href="{$article.linkDetails}" class="link--name" title="{$article.articleName|escape}">
+                                                            {$article.articleName|escape|truncate:30}
+                                                        </a>
+                                                    </div>
+                                                {/block}
+
+                                                {* Slider item purchase unit *}
+                                                {block name='checkout_ajax_add_cross_slider_item_price_unit'}
+                                                    {if $article.purchaseunit}
+                                                        <div class="item--price-unit">
+                                                            <strong>{se name="SlideArticleInfoContent" namespace="frontend/plugins/recommendation/slide_articles"}{/se}:</strong> {$article.purchaseunit} {$article.sUnit.description}
+                                                            {if $article.referenceunit}
+                                                                ({$article.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s} / {$article.referenceunit} {$article.sUnit.description})
+                                                            {/if}
+                                                        </div>
+                                                    {/if}
+                                                {/block}
+
+                                                {* Slider item price *}
+                                                {block name='checkout_ajax_add_cross_slider_item_price'}
+                                                    <div class="item--price">
+                                                        <span class="price--normal {if $article.pseudoprice}price--reduced{/if}">
+                                                            {if $article.priceStartingFrom && !$article.liveshoppingData}{s name='ListingBoxArticleStartsAt'}{/s} {/if}
+                                                            {$article.price|currency}
+                                                            {s name="Star" namespace="frontend/listing/box_article"}{/s}
+                                                        </span>
+
+                                                        {if $article.pseudoprice}
+                                                            <span class="price--pseudo">{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s} {$article.pseudoprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</span>
+                                                        {/if}
+                                                    </div>
+                                                {/block}
+                                            </div>
+                                        {/foreach}
+                                    {/block}
+                                </div>
+                            </div>
+                        {/block}
+                    </div>
+                {/block}
+            </div>
+        </div>
+    {/if}
+{/block}

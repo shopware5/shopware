@@ -67,14 +67,14 @@
         /**
          * Closes the loader element along with the overlay.
          */
-        close: function () {
+        close: function (callback) {
             var me = this,
                 opts = me.options;
 
             $.overlay.close();
 
             if (me.$loader !== null) {
-                me.$loader.fadeOut(opts.animationSpeed || me.defaults.animationSpeed);
+                me.$loader.fadeOut(opts.animationSpeed || me.defaults.animationSpeed, callback);
             }
         },
 
