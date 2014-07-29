@@ -143,13 +143,13 @@
                                 {/if}
                             </div>
 
-                            {* if !$sMinimumSurcharge && ($sInquiry || $sDispatchNoOrder) *}
+                            {if !$sMinimumSurcharge && ($sInquiry || $sDispatchNoOrder)}
                                 {block name="frontend_checkout_actions_inquiry"}
                                     <a href="{$sInquiryLink}" title="{s name='CheckoutActionsLinkOffer' namespace="frontend/checkout/actions"}{/s}" class="btn btn--secondary btn--inquiry">
                                         {s name="CheckoutActionsLinkOffer" namespace="frontend/checkout/actions"}{/s}
                                     </a>
                                 {/block}
-                            {*/if*}
+                            {/if}
                         {/block}
                     </div>
                 {/block}
