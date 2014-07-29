@@ -226,6 +226,7 @@
 	.btn--inquiry {
 		width: 100%;
 		display: block;
+        text-align: center;
 	}
 
 	.main--actions {
@@ -523,7 +524,7 @@
                 .unitize(20, 16, top);
                 .unitize-width(260);
                 position: absolute;
-                left: 50%;
+                left: 55%;
             }
 		}
 
@@ -540,7 +541,13 @@
 }
 
 @media screen and (min-width: @tabletLandscapeViewportWidth) {
-	.product--table .add-product--form {
-		width: 25%;
-	}
+	.product--table {
+        .table--actions .btn--inquiry {
+            left: 50%;
+        }
+
+        .add-product--form {
+            width: 25%;
+        }
+    }
 }
