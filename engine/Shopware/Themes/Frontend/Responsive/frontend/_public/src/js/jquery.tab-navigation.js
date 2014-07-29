@@ -95,8 +95,13 @@
                     content = me.$el.find('.' + href);
 
                 if (content.html().length <= 1) {
-                    $this.parent('.navigation--entry').remove();
-                    content.remove();
+
+                    if (me.$el.find('.navigation--entry').length > 1) {
+                        $this.parent('.navigation--entry').remove();
+                        content.remove();
+                    } else {
+                        me.$el.remove();
+                    }
                 } else {
                     content.insertAfter($this);
                 }
@@ -136,8 +141,14 @@
                     content = me.$el.find('.' + href);
 
                 if (content.html().length <= 1) {
-                    $this.parent('.navigation--entry').remove();
-                    content.remove();
+
+                    if (me.$el.find('.navigation--entry').length > 1) {
+                        $this.parent('.navigation--entry').remove();
+                        content.remove();
+                    } else {
+                        me.$el.remove();
+                    }
+
                 } else {
                     content.appendTo(me.$content);
                 }

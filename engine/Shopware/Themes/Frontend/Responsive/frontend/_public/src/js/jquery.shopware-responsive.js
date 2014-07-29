@@ -75,11 +75,7 @@ $(function() {
             if (btnRegistration.length) btnRegistration.data('plugin_collapsePanel').destroy();
 
             var blogFilterTrigger = $('.blog-filter--trigger');
-            if (blogFilterTrigger.length) {
-                blogFilterTrigger.each(function () {
-                    $(this).data('plugin_collapsePanel').destroy();
-                });
-            }
+            if (blogFilterTrigger.length) blogFilterTrigger.data('plugin_collapsePanel').destroy();
         }
     }, {
         type: 'tablet',
@@ -122,11 +118,7 @@ $(function() {
             if (btnEmail.length) btnEmail.data('plugin_collapsePanel').destroy();
 
             var blogFilterTrigger = $('.blog-filter--trigger');
-            if (blogFilterTrigger.length) {
-                blogFilterTrigger.each(function () {
-                    $(this).data('plugin_collapsePanel').destroy();
-                });
-            }
+            if (blogFilterTrigger.length) blogFilterTrigger.data('plugin_collapsePanel').destroy();
         }
     }, {
         type: 'tabletLandscape',
@@ -169,11 +161,7 @@ $(function() {
             if (btnEmail.length) btnEmail.data('plugin_collapsePanel').destroy();
 
             var blogFilterTrigger = $('.blog-filter--trigger');
-            if (blogFilterTrigger.length) {
-                blogFilterTrigger.each(function () {
-                    $(this).data('plugin_collapsePanel').destroy();
-                });
-            }
+            if (blogFilterTrigger.length) blogFilterTrigger.data('plugin_collapsePanel').destroy();
         }
     }, {
         type: 'desktop',
@@ -238,6 +226,12 @@ $(function() {
     });
 
     if (window.widgets !== 'undefined' && window.widgets.length > 0) {
+
+        var exitWidget = function(widget) {
+            var $el = $(widget.selector);
+            if ($el.length) $el.data('plugin_' + widget.plugin).destroy();
+        };
+
         $.each(window.widgets, function(index, widget) {
             StateManager.registerListener([{
                 type: 'smartphone',
@@ -245,7 +239,7 @@ $(function() {
                     $(widget.selector)[widget.plugin](widget.smartphone);
                 },
                 exit: function() {
-                    $(widget.selector).data('plugin_' + widget.plugin).destroy();
+                    exitWidget(widget);
                 }
             }, {
                 type: 'tablet',
@@ -253,7 +247,7 @@ $(function() {
                     $(widget.selector)[widget.plugin](widget.tablet);
                 },
                 exit: function() {
-                    $(widget.selector).data('plugin_' + widget.plugin).destroy();
+                    exitWidget(widget);
                 }
             }, {
                 type: 'tabletLandscape',
@@ -261,7 +255,7 @@ $(function() {
                     $(widget.selector)[widget.plugin](widget.tabletLandscape);
                 },
                 exit: function() {
-                    $(widget.selector).data('plugin_' + widget.plugin).destroy();
+                    exitWidget(widget);
                 }
             }, {
                 type: 'desktop',
@@ -269,7 +263,7 @@ $(function() {
                     $(widget.selector)[widget.plugin](widget.desktop);
                 },
                 exit: function() {
-                    $(widget.selector).data('plugin_' + widget.plugin).destroy();
+                    exitWidget(widget);
                 }
             }]);
         });
@@ -376,7 +370,5 @@ $(function() {
 
     $('*[data-last-seen-products="true"]').lastSeenProducts($.extend({}, lastSeenProductsConfig));
 
-    // Initialize the menu scroller plugin
-    $('*[data-menu-scroller="true"]').menuScroller();
     $('body').httpCacheFilters();
 });

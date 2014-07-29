@@ -20,7 +20,7 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-<div class="content product--details block" itemscope itemtype="http://schema.org/Product">
+<div class="content product--details" itemscope itemtype="http://schema.org/Product">
 
 	{* Product navigation - Previous and next arrow button *}
 	{block name="frontend_detail_index_navigation"}
@@ -293,60 +293,62 @@
 
 	{* Recommendation tab panel *}
 	{block name="frontend_detail_index_recommendation_tabs"}
-		<div class="recommendation-slider--tabs" data-tab-content="true">
+		{if {config name=alsoBoughtShow} || {config name=similarViewedShow}}
+			<div class="recommendation-slider--tabs" data-tab-content="true">
 
-			{* Tab navigation *}
-			{block name="frontend_detail_index_recommendation_tabs_navigation"}
-				<ul class="tab--navigation panel--tab-nav">
+				{* Tab navigation *}
+				{block name="frontend_detail_index_recommendation_tabs_navigation"}
+					<ul class="tab--navigation panel--tab-nav">
 
-					{* Customer also bought *}
-					{block name="frontend_detail_index_recommendation_tabs_entry_also_bought"}
-						{if {config name=alsoBoughtShow}}
-							<li class="navigation--entry entry--also-bought">
-								<a class="navigation--link" href="#content--also-bought">
-									{s name="DetailRecommendationAlsoBoughtLabel"}Kunden kauften auch{/s}
-								</a>
-							</li>
-						{/if}
-					{/block}
+						{* Customer also bought *}
+						{block name="frontend_detail_index_recommendation_tabs_entry_also_bought"}
+							{if {config name=alsoBoughtShow}}
+								<li class="navigation--entry entry--also-bought">
+									<a class="navigation--link" href="#content--also-bought">
+										{s name="DetailRecommendationAlsoBoughtLabel"}Kunden kauften auch{/s}
+									</a>
+								</li>
+							{/if}
+						{/block}
 
-					{* Customer also viewed *}
-					{block name="frontend_detail_index_recommendation_tabs_entry_also_viewed"}
-						{if {config name=similarViewedShow}}
-							<li class="navigation--entry entry--customer-viewed">
-								<a class="navigation--link" href="#content--customer-viewed">
-									{s name="DetailRecommendationAlsoViewedLabel"}Kunden haben sich ebenfalls angesehen{/s}
-								</a>
-							</li>
-						{/if}
-					{/block}
-				</ul>
-			{/block}
+						{* Customer also viewed *}
+						{block name="frontend_detail_index_recommendation_tabs_entry_also_viewed"}
+							{if {config name=similarViewedShow}}
+								<li class="navigation--entry entry--customer-viewed">
+									<a class="navigation--link" href="#content--customer-viewed">
+										{s name="DetailRecommendationAlsoViewedLabel"}Kunden haben sich ebenfalls angesehen{/s}
+									</a>
+								</li>
+							{/if}
+						{/block}
+					</ul>
+				{/block}
 
-			{* Tab content container *}
-			{block name="frontend_detail_index_recommendation_tab_content_container"}
-				<div class="tab--content panel--body has--border">
+				{* Tab content container *}
+				{block name="frontend_detail_index_recommendation_tab_content_container"}
+					<div class="tab--content panel--body has--border">
 
-					{* "Customers bought also" slider *}
-					{block name="frontend_detail_index_also_bought_slider"}
-						{if {config name=alsoBoughtShow}}
-							<div class="content--also-bought">
-								{action module=widgets controller=recommendation action=bought articleId=$sArticle.articleID}
-							</div>
-						{/if}
-					{/block}
+						{* "Customers bought also" slider *}
+						{block name="frontend_detail_index_also_bought_slider"}
+							{if {config name=alsoBoughtShow}}
+								<div class="content--also-bought">
+									{action module=widgets controller=recommendation action=bought articleId=$sArticle.articleID}
+								</div>
+							{/if}
+						{/block}
 
-					{* "Customers similar viewed" slider *}
-					{block name="frontend_detail_index_similar_viewed_slider"}
-						{if {config name=similarViewedShow}}
-							<div class="content--customer-viewed">
-								{action module=widgets controller=recommendation action=viewed articleId=$sArticle.articleID}
-							</div>
-						{/if}
-					{/block}
-				</div>
-			{/block}
-		</div>
+						{* "Customers similar viewed" slider *}
+						{block name="frontend_detail_index_similar_viewed_slider"}
+							{if {config name=similarViewedShow}}
+								<div class="content--customer-viewed">
+									{action module=widgets controller=recommendation action=viewed articleId=$sArticle.articleID}
+								</div>
+							{/if}
+						{/block}
+					</div>
+				{/block}
+			</div>
+		{/if}
 	{/block}
 </div>
 {/block}

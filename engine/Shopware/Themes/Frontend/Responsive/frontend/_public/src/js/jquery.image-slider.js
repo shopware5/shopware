@@ -85,7 +85,9 @@
             me.trackItems();
             me.setSizes();
 
-            if (me.opts.arrowControls) me.createArrows();
+            if (me.opts.arrowControls) {
+                me.createArrows();
+            }
 
             me.slideIndex = 0;
             me.slideInterval = false;
@@ -204,6 +206,10 @@
             }
 
             me.itemCount = me.$items.length;
+
+            if (me.itemCount <= 1) {
+                me.opts.arrowControls = false;
+            }
         },
 
         /**
@@ -317,18 +323,19 @@
          * Checks which thumbnail arrow controls have to be shown.
          */
         trackThumbnailControls: function() {
-            var me = this,
-                leftPosition = me.$thumbnailSlide.position().left,
+            var me = this;
+
+            if (!me.thumbnailControls) {
+                return;
+            }
+
+            var leftPosition = me.$thumbnailSlide.position().left,
                 topPosition = me.$thumbnailSlide.position().top,
                 slideWidth = me.$thumbnailSlide.innerWidth(),
                 slideHeight = me.$thumbnailSlide.innerHeight(),
                 containerWidth = me.$thumbnailContainer.innerWidth(),
                 containerHeight = me.$thumbnailContainer.innerHeight(),
                 orientation = me.thumbnailOrientation;
-
-            if (!me.thumbnailControls) {
-                return;
-            }
 
             if (orientation == 'vertical') {
                 me.$thumbnailArrowNext.toggleClass('is--active', slideHeight + topPosition > containerHeight);
