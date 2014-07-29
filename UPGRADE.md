@@ -41,6 +41,7 @@ In this document you will find a changelog of the important changes related to t
     * `street` fields were enlarged to 255 chars to accommodate this.
     * The API still accepts `street number` values on write operations. The values are internally merged into the `street` field. This is legacy support, and will be removed in the future.
     * Read operations on the API no longer return a `street number` field.
+* Shop configuration contains no more the template selection. The shop template selection is only available in the new theme manager 2.0.
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
