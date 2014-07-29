@@ -2,12 +2,18 @@
 
 {* Article image *}
 {block name='frontend_checkout_cart_item_image'}
+    {if $sBasketItem.additional_details.sConfigurator}
+        {assign var=detailLink value={url controller=detail sArticle=$sBasketItem.articleID number=$sBasketItem.ordernumber}}
+    {else}
+        {assign var=detailLink value={url controller=detail sArticle=$sBasketItem.articleID forceSecure}}
+    {/if}
+
     {if $sBasketItem.image.src.0}
-        <a href="{url controller=detail sArticle=$sBasketItem.articleID forceSecure}" title="{$sBasketItem.articlename|strip_tags}" class="thumb_image{if {config name=detailmodal}} detail-modal{/if}" target="_blank">
+        <a href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags}" class="thumb_image{if {config name=detailmodal}} detail-modal{/if}" target="_blank">
             <img src="{$sBasketItem.image.src.1}" border="0" alt="{$sBasketItem.articlename}" />
         </a>
     {else}
-        <a href="{url controller=detail sArticle=$sBasketItem.articleID forceSecure}" title="{$sBasketItem.articlename|strip_tags}" class="thumb_image{if {config name=detailmodal}} detail-modal{/if}" target="_blank">
+        <a href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags}" class="thumb_image{if {config name=detailmodal}} detail-modal{/if}" target="_blank">
             <img class="no_image" src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{$sBasketItem.articlename}" />
         </a>
     {/if}
@@ -23,7 +29,7 @@
     <div class="basket_details">
         {* Article name *}
         {if $sBasketItem.modus ==0}
-            <a class="title{if {config name=detailmodal}} detail-modal{/if}" href="{url controller=detail sArticle=$sBasketItem.articleID forceSecure}" target="_blank" title="{$sBasketItem.articlename|strip_tags}">
+            <a class="title{if {config name=detailmodal}} detail-modal{/if}" href="{$detailLink}" target="_blank" title="{$sBasketItem.articlename|strip_tags}">
                 {$sBasketItem.articlename|strip_tags}
             </a>
             <p class="ordernumber">
