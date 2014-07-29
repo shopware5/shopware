@@ -14,15 +14,14 @@ class Blog extends Page
     /**
      * Counts the blog articles
      * If the number is not equal to $count, the helper function will throw an exception $message.
+     * @param array $blogBoxes
      * @param int $count
      */
-    public function countArticles($count = 0)
+    public function countArticles($blogBoxes, $count = 0)
     {
-        $result = \Helper::countElements($this, 'div.blogbox', $count);
-
-        if ($result !== true) {
-            $message = sprintf('There are %d blog articles (should be %d)', $result, $count);
-            \Helper::throwException(array($message));
+        if ($count !== count($blogBoxes)) {
+            $message = sprintf('There are %d blog articles (should be %d)', count($blogBoxes), $count);
+            \Helper::throwException($message);
         }
     }
 }

@@ -25,8 +25,7 @@ class ListingContext extends SubContext
     {
         $properties = array();
 
-        if($filter)
-        {
+        if($filter) {
             $properties = $filter->getHash();
         }
 
@@ -34,11 +33,19 @@ class ListingContext extends SubContext
     }
 
     /**
+     * @Then /^I should see (?P<num>\d+) article$/
      * @Then /^I should see (?P<num>\d+) articles$/
      */
     public function iShouldSeeArticles($count)
     {
-        $this->getPage('Listing')->countArticles($count);
+        /** @var \Emotion\Blog $page */
+        $page = $this->getPage('Listing');
+
+        /** @var MultipleElement $articleBoxes */
+        $articleBoxes = $this->getElement('ArticleBox');
+        $articleBoxes->setParent($page);
+
+        $page->countArticles($articleBoxes, intval($count));
     }
 
     /**
@@ -74,14 +81,6 @@ class ListingContext extends SubContext
         /** @var \Emotion\ArticleBox $articleBox */
         $articleBox = $articleBoxes->setInstance($position);
         $articleBox->checkProperties($properties);
-    }
-
-    /**
-     * @Then /^The price of the article on position (?P<num>\d+) should be "([^"]*)"$/
-     */
-    public function thePriceOfTheArticleOnPositionShouldBe($position, $price)
-    {
-        $this->getPage('Listing')->checkPrice($position, $price);
     }
 
     /**
@@ -189,5 +188,4 @@ class ListingContext extends SubContext
     {
         $this->getPage('Listing')->checkListing($name, true);
     }
-
 }
