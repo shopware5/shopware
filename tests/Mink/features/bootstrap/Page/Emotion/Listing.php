@@ -22,7 +22,6 @@ class Listing extends Page
         'filterCloseLinks' => 'div.slideContainer > ul > li.close > a',
         'filterGroups' => 'div > div:not(.slideContainer)',
         'filterProperties' => 'div.slideContainer:nth-of-type(%d) > ul > li > a',
-        'articleBox' => 'div.artbox',
         'articlePrice' => 'div.listing div.artbox:nth-of-type(%d) p.price',
         'listingBox' => 'div.listing'
     );
@@ -43,18 +42,12 @@ class Listing extends Page
             $parameters[$param['parameter']] = $param['value'];
         }
 
-        if (empty($parameters['sCategory'])) {
-            $parameters['sCategory'] = 3;
-        }
-
-        if (empty($parameters['sPage'])) {
-            $parameters['sPage'] = 1;
-        }
-
+        $parameters['sCategory'] = isset($parameters['sCategory']) ? $parameters['sCategory'] : '3';
         $parameters['sSupplier'] = isset($parameters['sSupplier']) ? $parameters['sSupplier'] : '';
+        $parameters['sPage']     = isset($parameters['sPage'])     ? $parameters['sPage']     : '1';
         $parameters['sTemplate'] = isset($parameters['sTemplate']) ? $parameters['sTemplate'] : '';
-        $parameters['sPerPage'] = isset($parameters['sPerPage']) ? $parameters['sPerPage'] : '';
-        $parameters['sSort'] = isset($parameters['sSort']) ? $parameters['sSort'] : '';
+        $parameters['sPerPage'] = isset($parameters['sPerPage']) ? $parameters['sPerPage'] : '12';
+        $parameters['sSort'] = isset($parameters['sSort']) ? $parameters['sSort'] : '1';
 
         $this->open($parameters);
     }
@@ -189,15 +182,14 @@ class Listing extends Page
     /**
      * Counts the articles in the listing
      * If the number is not equal to $count, the helper function will throw an exception $message.
+     * @param array $blogBoxes
      * @param int $count
      */
-    public function countArticles($count = 0)
+    public function countArticles($articleBoxes, $count = 0)
     {
-        $result = \Helper::countElements($this, $this->cssLocator['articleBox'], $count);
-
-        if ($result !== true) {
-            $message = sprintf('There are %d articles in the listing (should be %d)', $result, $count);
-            \Helper::throwException(array($message));
+        if ($count !== count($articleBoxes)) {
+            $message = sprintf('There are %d articles in the listing (should be %d)', count($articleBoxes), $count);
+            \Helper::throwException($message);
         }
     }
 
