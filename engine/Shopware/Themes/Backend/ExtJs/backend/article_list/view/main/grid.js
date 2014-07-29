@@ -228,6 +228,8 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
                 stateColumn,
                 columnDefinition,
                 width,
+                xtype,
+                renderer,
                 columns = [ ];
 
         colLength = me.columnConfig.length;
@@ -242,14 +244,22 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
                 dataIndex: column.alias,
                 header: me.getTranslationForColumnHead(column.alias),
                 hidden: !column.show,
-                renderer: me.getRendererForColumn(column),
                 /*{if {acl_is_allowed resource=article privilege=save}}*/
                 editor: me.getEditorForColumn(column),
                 /*{/if}*/
                 sortable: false
             };
 
-            if (width = me.getWidthForColumn(column) != undefined) {
+            if (xtype = me.getXtypeForColumn(column)) {
+                columnDefinition.xtype = xtype;
+            }
+
+            if (renderer = me.getRendererForColumn(column)) {
+                columnDefinition.renderer = renderer;
+            }
+
+
+            if (width = me.getWidthForColumn(column)) {
                 columnDefinition.width = width;
             } else {
                 columnDefinition.flex = 1;
@@ -260,13 +270,13 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
 
         columns.push({
             header: '{s name=list/column_info}Info{/s}',
-            width: '90px',
+            width: 90,
             renderer: me.infoColumnRenderer
         });
 
         columns.push({
             xtype: 'actioncolumn',
-            width: '90px',
+            width: 90,
             items: [
                 /*{if {acl_is_allowed resource=article privilege=save}}*/
                 {
@@ -297,6 +307,22 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
         });
 
         return columns;
+    },
+
+    /**
+     * Returns a proper xtype fo a column
+     *
+     * @param column
+     * @returns *
+     */
+    getXtypeForColumn: function (column) {
+        var me = this;
+
+        if (column.alias == 'Price_price') {
+            return 'numbercolumn';
+        }
+
+        return undefined;
     },
 
     /**
@@ -341,10 +367,10 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
      * @param record
      * @returns string
      */
-    infoColumnRenderer: function(value, metaData, record) {
-        var me     = this,
-            result = '',
-            title;
+    infoColumnRenderer: function (value, metaData, record) {
+        var me = this,
+                result = '',
+                title;
 
         var style = 'style="width: 25px; height: 25px; display: inline-block; margin-right: 3px;"';
 
@@ -384,7 +410,29 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
             return me.booleanColumnRenderer;
         }
 
+        if (column.alias == 'Detail_inStock') {
+            return me.colorColumnRenderer;
+        }
+
+        if (column.alias == 'Price_price') {
+            return undefined;
+        }
+
         return me.defaultColumnRenderer;
+    },
+
+    /**
+     * Will return a green string for values > 0 and red otherwise
+     *
+     * @param value
+     * @returns string
+     */
+    colorColumnRenderer: function (value) {
+        if (value > 0) {
+            return '<span style="color:green;">' + value + '</span>';
+        } else {
+            return '<span style="color:red;">' + value + '</span>';
+        }
     },
 
     /**
@@ -452,6 +500,15 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
         }
 
         switch (column.alias) {
+            case 'Price_price':
+                return {
+                    width: 85,
+                    xtype: 'numberfield',
+                    allowBlank: false,
+                    hideTrigger: true,
+                    keyNavEnabled: false,
+                    mouseWheelEnabled: false
+                };
             default:
                 switch (column.type) {
                     case 'integer':
@@ -564,18 +621,18 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
 
 
         buttons.push({
-            xtype : 'textfield',
-            name : 'searchfield',
-            action : 'search',
+            xtype: 'textfield',
+            name: 'searchfield',
+            action: 'search',
             width: 170,
             cls: 'searchfield',
             enableKeyEvents: true,
             checkChangeBuffer: 500,
             emptyText: '{s name=list/emptytext_search}Search ...{/s}',
             listeners: {
-                'change': function(field, value) {
-                    var store        = me.store,
-                        searchString = Ext.String.trim(value);
+                'change': function (field, value) {
+                    var store = me.store,
+                            searchString = Ext.String.trim(value);
 
                     me.fireEvent('search', searchString);
                 }

@@ -290,6 +290,9 @@ class DqlHelper
             INNER JOIN `s_articles_attributes`
             ON s_articles_attributes.articledetailsID = s_articles_details.id
 
+            LEFT JOIN `s_articles_supplier`
+            ON s_articles_supplier.id = s_articles.supplierID
+
             LEFT JOIN `s_articles_prices`
             ON s_articles_prices.articledetailsID = s_articles_details.id
             AND s_articles_prices.from = 1
@@ -369,7 +372,9 @@ class DqlHelper
         $columnPositions = array_flip($shownColumns);
         $mainEntities = array(
             'Shopware\Models\Article\Article',
+            'Shopware\Models\Tax\Tax',
             'Shopware\Models\Article\Detail',
+            'Shopware\Models\Article\Supplier',
             'Shopware\Models\Attribute\Article'
         );
 
@@ -392,7 +397,7 @@ class DqlHelper
                 $result[$entityShort . ucfirst($name)] = array(
                     'entity' => $entityShort,
                     'field' => $name,
-                    'editable' => substr($name, -2) != 'Id' && $name != 'id' && substr($name, -2) != 'ID',
+                    'editable' => substr($name, -2) != 'Id' && $name != 'id' && substr($name, -2) != 'ID' && $entity != 'Shopware\Models\Tax\Tax',
                     'type' => $config['type'],
                     'precision' => $config['precision'],
                     'nullable' => (bool)$config['nullable'],
@@ -492,7 +497,6 @@ class DqlHelper
             $result,
             array('subject' => $this, 'defaultColumns' => $shownColumns, 'mainEntities' => $mainEntities)
         );
-
         return $this->columnInfo = $result;
     }
 
