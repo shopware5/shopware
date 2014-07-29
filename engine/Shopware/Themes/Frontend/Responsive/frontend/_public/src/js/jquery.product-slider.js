@@ -342,12 +342,25 @@
         if (me.opts.touchControl && me.active) {
             me.$el.on('swipeleft.' + pluginName, me.slideNext.bind(me));
             me.$el.on('swiperight.' + pluginName, me.slidePrev.bind(me));
+
+            // Touch scrolling fix
+            me.$el.on('movestart.' + pluginName, function(e) {
+                if ((e.distX > e.distY && e.distX < -e.distY) ||
+                    (e.distX < e.distY && e.distX > -e.distY)) {
+                    e.preventDefault();
+                }
+            });
         }
 
         if (me.opts.autoSlide && me.active) {
             me.$el.on('mouseenter.' + pluginName, me.stopAutoSlide.bind(me));
             me.$el.on('mouseleave.' + pluginName, me.startAutoSlide.bind(me));
         }
+
+        $.subscribe('plugin/tabContent/onChangeTab', function() {
+            me.setSizes();
+            me.setPosition(me.slideIndex);
+        });
     };
 
     /**
@@ -493,6 +506,7 @@
         me.$el.off('mouseleave.' + pluginName);
         me.$el.off('swipeleft.' + pluginName);
         me.$el.off('swiperight.' + pluginName);
+        me.$el.off('movestart.' + pluginName);
 
         $(window).off('resize.' + pluginName);
 
