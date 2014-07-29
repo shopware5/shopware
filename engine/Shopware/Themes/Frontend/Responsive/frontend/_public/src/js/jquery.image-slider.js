@@ -1,31 +1,85 @@
 ;(function($) {
     'use strict';
 
+    /**
+     * Image Slider Plugin.
+     *
+     * This plugin provides the functionality for an advanced responsive image slider.
+     * It has support for thumbnails, arrow controls, touch controls, automatic sliding and a lightbox view.
+     *
+     * Example DOM Structure:
+     *
+     * <div class="image-slider" data-image-slider="true">
+     *      <div class="image-slider--container">
+     *          <div class="image-slider--slide">
+     *              <div class="image-slider--item"></div>
+     *              <div class="image-slider--item"></div>
+     *              <div class="image-slider--item"></div>
+     *          </div>
+     *      </div>
+     *      <div class="image-slider--thumbnails">
+     *          <div class="image-slider--thumbnails-slide">
+     *              <a class="thumbnail--link"></a>
+     *              <a class="thumbnail--link"></a>
+     *              <a class="thumbnail--link"></a>
+     *          </div>
+     *      </div>
+     * </div>
+     */
     $.plugin('imageSlider', {
 
         defaults: {
-
+            // Set the speed of the slide animation in ms.
             animationSpeed: 300,
 
+            // Turn thumbnail support on and off.
             thumbnails: true,
 
+            // Turn arrow controls on and off.
             arrowControls: true,
 
+            // Turn touch controls on and off.
+            touchControls: false,
+
+            // Turn the lightbox on and off.
+            lightbox: true,
+
+            // Turn automatic sliding on and off.
             autoSlide: false,
 
-            autoSlideInterval: 5000
+            // Set the speed for the automatic sliding in ms.
+            autoSlideInterval: 5000,
+
+            // The selector for the container element holding the actual image slider.
+            imageContainerSelector: '.image-slider--container',
+
+            // The selector for the slide element which slides inside the image container.
+            imageSlideSelector: '.image-slider--slide',
+
+            // The selector fot the container element holding the thumbnails.
+            thumbnailContainerSelector: '.image-slider--thumbnails',
+
+            // The selector for the slide element which slides inside the thumbnail container.
+            thumbnailSlideSelector: '.image-slider--thumbnails-slide'
         },
 
+        /**
+         * Initializes the plugin.
+         */
         init: function () {
             var me = this;
 
             me.applyDataAttributes();
 
-            me.$slideContainer = me.$el.find('.image-slider--container');
-            me.$slide = me.$slideContainer.find('.image-slider--slide');
+            me.$slideContainer = me.$el.find(me.opts.imageContainerSelector);
+            me.$slide = me.$slideContainer.find(me.opts.imageSlideSelector);
 
             if (me.opts.thumbnails) {
-                me.$thumbnailContainer = me.$el.find('.image-slider--thumbnails');
+                me.$thumbnailContainer = me.$el.find(me.opts.thumbnailContainerSelector);
+                me.$thumbnailSlide = me.$thumbnailContainer.find(me.opts.thumbnailSlideSelector);
+                me.thumbnailSlideIndex = 0;
+                me.getThumbnailOrientation();
+                me.createThumbnailArrows();
             }
 
             me.trackItems();
@@ -40,31 +94,70 @@
             me.registerEvents();
         },
 
+        /**
+         * Registers all necessary event listeners.
+         */
         registerEvents: function() {
             var me = this;
 
-            $(window).on('resize', function() {
+            $(window).on('resize.imageSlider', function() {
                 me.setSizes();
-                me.setPosition(0);
+                me.setPosition(me.slideIndex);
             });
 
-            me.$images.on('click.imageSlider', $.proxy(me.onSliderClick, me));
+            if (me.opts.lightbox) {
+                me.$images.each(function(index, el) {
+                    me._on($(el), 'click', $.proxy(me.onSliderClick, me));
+                });
+            }
+
+            if (me.opts.touchControls) {
+                me._on(me.$slideContainer, 'swipeleft', $.proxy(me.slideNext, me));
+                me._on(me.$slideContainer, 'swiperight', $.proxy(me.slidePrev, me));
+
+                // Touch scrolling fix
+                me._on(me.$el, 'movestart', function(e) {
+                    if ((e.distX > e.distY && e.distX < -e.distY) ||
+                        (e.distX < e.distY && e.distX > -e.distY)) {
+                        e.preventDefault();
+                    }
+                });
+            }
 
             if (me.opts.arrowControls) {
-                me.$arrowLeft.on('click.imageSlider', $.proxy(me.onLeftArrowClick, me));
-                me.$arrowRight.on('click.imageSlider', $.proxy(me.onRightArrowClick, me));
+                me._on(me.$arrowLeft, 'click', $.proxy(me.onLeftArrowClick, me));
+                me._on(me.$arrowRight, 'click', $.proxy(me.onRightArrowClick, me));
             }
 
             if (me.opts.thumbnails) {
                 me.$thumbnails.each(function(index, el) {
-                    $(el).on('click.imageSlider', function(event) {
+                    me._on($(el), 'click', function(event) {
                         event.preventDefault();
                         me.slide(index);
                     });
                 });
+
+                me._on(me.$thumbnailArrowNext, 'click', $.proxy(me.slideThumbnailsNext, me));
+                me._on(me.$thumbnailArrowPrev, 'click', $.proxy(me.slideThumbnailsPrev, me));
+
+                if (me.opts.touchControls) {
+                    me._on(me.$thumbnailContainer, 'swipeleft', $.proxy(me.slideThumbnailsNext, me));
+                    me._on(me.$thumbnailContainer, 'swiperight', $.proxy(me.slideThumbnailsPrev, me));
+                }
+            }
+
+            if (me.opts.autoSlide) {
+                me.startAutoSlide();
+
+                me._on(me.$el, 'mouseenter', $.proxy(me.stopAutoSlide, me));
+                me._on(me.$el, 'mouseleave', $.proxy(me.startAutoSlide, me));
             }
         },
 
+        /**
+         * Creates the arrow controls for
+         * the image slider.
+         */
         createArrows: function() {
             var me = this;
 
@@ -77,6 +170,28 @@
             }).appendTo(me.$slideContainer);
         },
 
+        /**
+         * Creates the thumbnail arrow controls
+         * for the thumbnail slider.
+         */
+        createThumbnailArrows: function() {
+            var me = this,
+                prevClass = (me.thumbnailOrientation == 'horizontal') ? 'is--left' : 'is--top',
+                nextClass = (me.thumbnailOrientation == 'horizontal') ? 'is--right' : 'is--bottom';
+
+            me.$thumbnailArrowPrev = $('<a>', {
+                'class': 'thumbnails--arrow ' + prevClass
+            }).appendTo(me.$thumbnailContainer);
+
+            me.$thumbnailArrowNext = $('<a>', {
+                'class': 'thumbnails--arrow ' + nextClass
+            }).appendTo(me.$thumbnailContainer);
+        },
+
+        /**
+         * Tracks and counts the image elements
+         * and the thumbnail elements.
+         */
         trackItems: function() {
             var me = this;
 
@@ -85,11 +200,15 @@
 
             if (me.opts.thumbnails) {
                 me.$thumbnails = me.$thumbnailContainer.find('.thumbnail--link');
+                me.thumbnailCount = me.$thumbnails.length;
             }
 
             me.itemCount = me.$items.length;
         },
 
+        /**
+         * Sets the correct sizes for the slide elements.
+         */
         setSizes: function() {
             var me = this;
 
@@ -98,8 +217,18 @@
 
             me.$slide.css({ 'width': me.slideWidth });
             me.$items.css({ 'width': me.itemsWidth });
+
+            if (me.opts.thumbnails) {
+                me.setThumbnailSizes();
+            }
         },
 
+        /**
+         * Sets the position of the image slide
+         * to the given image index.
+         *
+         * @param index
+         */
         setPosition: function(index) {
             var me = this,
                 i = index || me.slideIndex;
@@ -107,13 +236,112 @@
             me.$slide.css({ 'left': - ( i * me.itemsWidth ) });
         },
 
-        setActiveThumbnail: function(index) {
-            var me = this;
+        /**
+         * Sets and returns the orientation of
+         * the thumbnail container.
+         *
+         * @returns {string}
+         */
+        getThumbnailOrientation: function() {
+            var me = this,
+                containerWidth = me.$thumbnailContainer.innerWidth(),
+                containerHeight = me.$thumbnailContainer.innerHeight();
 
-            me.$thumbnails.removeClass('is--active');
-            me.$thumbnails.eq(index).addClass('is--active');
+            if (containerHeight > containerWidth) {
+                me.thumbnailOrientation = 'vertical';
+            } else {
+                me.thumbnailOrientation = 'horizontal';
+            }
+
+            return me.thumbnailOrientation;
         },
 
+        /**
+         * Sets the correct sizes of the thumbnails and
+         * the container based on the orientation.
+         */
+        setThumbnailSizes: function() {
+            var me = this,
+                containerWidth = me.$thumbnailContainer.innerWidth(),
+                containerHeight = me.$thumbnailContainer.innerHeight(),
+                thumbnailWidth = me.$thumbnails.outerWidth(),
+                thumbnailHeight = me.$thumbnails.outerHeight(),
+                thumbnailCount = me.$thumbnails.length,
+                slideWidth = thumbnailCount * (thumbnailWidth + 10),
+                slideHeight = thumbnailCount * (thumbnailHeight + 10),
+                orientation = me.thumbnailOrientation;
+
+            me.thumbnailSize = thumbnailWidth + 10;
+
+            if (orientation === 'vertical') {
+                me.thumbnailControls = (slideHeight > containerHeight);
+                me.maxViewable = Math.floor(containerHeight / me.thumbnailSize);
+                me.$thumbnailSlide.css({
+                    'width': containerWidth,
+                    'height': slideHeight,
+                    'left': 0
+                });
+            } else {
+                me.thumbnailControls = (slideWidth > containerWidth);
+                me.maxViewable = Math.floor(containerWidth / me.thumbnailSize);
+                me.$thumbnailSlide.css({
+                    'width': slideWidth,
+                    'height': containerHeight,
+                    'top': 0
+                });
+            }
+
+            me.trackThumbnailControls();
+        },
+
+        /**
+         * Sets the active state for the thumbnail
+         * at the given index position.
+         *
+         * @param index
+         */
+        setActiveThumbnail: function(index) {
+            var me = this,
+                activeThumbnail = me.$thumbnails.eq(index),
+                pageLast = me.thumbnailSlideIndex + me.maxViewable - 1;
+
+            me.$thumbnails.removeClass('is--active');
+            activeThumbnail.addClass('is--active');
+
+            if (index > pageLast || index < me.thumbnailSlideIndex) {
+                me.slideThumbnails(index);
+            }
+        },
+
+        /**
+         * Checks which thumbnail arrow controls have to be shown.
+         */
+        trackThumbnailControls: function() {
+            var me = this,
+                leftPosition = me.$thumbnailSlide.position().left,
+                topPosition = me.$thumbnailSlide.position().top,
+                slideWidth = me.$thumbnailSlide.innerWidth(),
+                slideHeight = me.$thumbnailSlide.innerHeight(),
+                containerWidth = me.$thumbnailContainer.innerWidth(),
+                containerHeight = me.$thumbnailContainer.innerHeight(),
+                orientation = me.thumbnailOrientation;
+
+            if (!me.thumbnailControls) {
+                return;
+            }
+
+            if (orientation == 'vertical') {
+                me.$thumbnailArrowNext.toggleClass('is--active', slideHeight + topPosition > containerHeight);
+                me.$thumbnailArrowPrev.toggleClass('is--active', topPosition < 0);
+            } else {
+                me.$thumbnailArrowNext.toggleClass('is--active', slideWidth + leftPosition > containerWidth);
+                me.$thumbnailArrowPrev.toggleClass('is--active', leftPosition < 0);
+            }
+        },
+
+        /**
+         * Starts the auto slide interval.
+         */
         startAutoSlide: function() {
             var me = this;
 
@@ -122,12 +350,64 @@
             }, me.opts.autoSlideInterval);
         },
 
+        /**
+         * Stops the auto slide interval.
+         */
         stopAutoSlide: function() {
             var me = this;
 
             window.clearInterval(me.slideInterval);
         },
 
+        /**
+         * Slides the thumbnail slider one position forward.
+         */
+        slideThumbnailsNext: function() {
+            var me = this,
+                newIndex = me.thumbnailSlideIndex + 1;
+
+            if (newIndex < me.thumbnailCount - me.maxViewable + 1) {
+                me.slideThumbnails(newIndex);
+            }
+        },
+
+        /**
+         * Slides the thumbnail slider one position backwards.
+         */
+        slideThumbnailsPrev: function() {
+            var me = this,
+                newIndex = me.thumbnailSlideIndex - 1;
+
+            if (newIndex >= 0) {
+                me.slideThumbnails(newIndex);
+            }
+        },
+
+        /**
+         * Slides the thumbnail slider to the given index position.
+         *
+         * @param index
+         */
+        slideThumbnails: function(index) {
+            var me = this,
+                orientation = me.thumbnailOrientation,
+                newPosition = -(index * me.thumbnailSize),
+                param = (orientation == 'vertical') ? { 'top': newPosition } : { 'left': newPosition },
+                method = (Modernizr.csstransitions) ? 'transition' : 'animate';
+
+            me.thumbnailSlideIndex = index;
+
+            me.$thumbnailSlide[method](param, me.opts.animationSpeed, 'ease', function() {
+                me.trackThumbnailControls();
+            });
+        },
+
+        /**
+         * Slides the image slider to the given index position.
+         *
+         * @param index
+         * @param callback
+         */
         slide: function(index, callback) {
             var me = this,
                 newPosition = -(index * me.itemsWidth),
@@ -138,8 +418,13 @@
             if (me.opts.thumbnails) me.setActiveThumbnail(index);
 
             me.$slide[method]({ 'left': newPosition }, me.opts.animationSpeed, 'ease', $.proxy(callback, me));
+
+            me.trackThumbnailControls();
         },
 
+        /**
+         * Slides the image slider one position forward.
+         */
         slideNext: function() {
             var me = this,
                 newIndex = me.slideIndex + 1;
@@ -149,8 +434,13 @@
             }
 
             me.slide(newIndex);
+
+            $.publish('plugin/imageSlider/slideNext');
         },
 
+        /**
+         * Slides the image slider one position backwards.
+         */
         slidePrev: function() {
             var me = this,
                 newIndex = me.slideIndex - 1;
@@ -160,38 +450,79 @@
             }
 
             me.slide(newIndex);
+
+            $.publish('plugin/imageSlider/slidePrev');
         },
 
+        /**
+         * Is triggered when the left arrow
+         * of the image slider is clicked.
+         */
         onLeftArrowClick: function() {
             var me = this;
 
             me.slidePrev();
-            $.publish('/plugin/imageSlider/onLeftArrowClick');
+            $.publish('plugin/imageSlider/onLeftArrowClick');
         },
 
+        /**
+         * Is triggered when the right arrow
+         * of the image slider is clicked.
+         */
         onRightArrowClick: function() {
             var me = this;
 
             me.slideNext();
-            $.publish('/plugin/imageSlider/onRightArrowClick');
+            $.publish('plugin/imageSlider/onRightArrowClick');
         },
 
+        /**
+         * Is triggered when the user clicks on the image slider.
+         */
         onSliderClick: function() {
             var me = this;
 
             me.openLightBox();
-            $.publish('/plugin/imageSlider/onClick');
+            $.publish('plugin/imageSlider/onClick');
         },
 
+        /**
+         * Opens the original size of the
+         * current image in a lightbox view.
+         */
         openLightBox: function() {
             var me = this,
                 image = me.$images.eq(me.slideIndex).attr('data-img-original');
 
+            $.publish('plugin/imageSlider/onLightbox');
+
             $.lightbox.open(image);
         },
 
+        /**
+         * Destroys the plugin and removes
+         * all elements created by the plugin.
+         */
         destroy: function() {
             var me = this;
+
+            $(window).off('resize.imageSlider');
+
+            if (me.opts.arrowControls) {
+                me.$arrowLeft.remove();
+                me.$arrowRight.remove();
+            }
+
+            if (me.thumbnailControls) {
+                me.$thumbnailArrowPrev.remove();
+                me.$thumbnailArrowNext.remove();
+            }
+
+            if (me.opts.autoSlide) {
+                me.stopAutoSlide();
+            }
+
+            me._destroy();
         }
 
     });
