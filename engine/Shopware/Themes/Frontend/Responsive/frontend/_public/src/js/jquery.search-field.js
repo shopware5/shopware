@@ -20,7 +20,7 @@
          *
          * @returns {Plugin}
          */
-        init: function () {
+        init: function() {
      
             var me = this,
                 isTouch = ('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0),
@@ -62,6 +62,12 @@
                 me.$el.addClass(me.opts.activeCls);
                 me.$el.find(me.defaults.searchFieldCls).delay(150).focus();
             }
+        },
+
+        destroy: function() {
+            var me = this;
+
+            me._destroy();
         }
     });
 })(jQuery, window);
