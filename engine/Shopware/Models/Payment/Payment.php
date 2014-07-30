@@ -148,11 +148,11 @@ class Payment extends ModelEntity
     private $esdActive = false;
 
     /**
-     * @var integer $mobileActive
+     * @var integer $mobileInactive
      *
-     * @ORM\Column(name="mobileactive", type="boolean", nullable=false)
+     * @ORM\Column(name="mobile_inactive", type="boolean", nullable=false)
      */
-    private $mobileActive = false;
+    private $mobileInactive = false;
     
     /**
      * @var string $embedIFrame
@@ -554,25 +554,25 @@ class Payment extends ModelEntity
     }
 
     /**
-     * Sets the mobile-active-state of a payment
+     * Sets the mobile inactive state of a payment
      *
-     * @param boolean $mobileActive
+     * @param boolean $mobileInactive
      * @return Payment
      */
-    public function setMobileActive($mobileActive)
+    public function setMobileInactive($mobileInactive)
     {
-        $this->mobileActive = (bool) $mobileActive;
+        $this->mobileInactive = (bool) $mobileInactive;
         return $this;
     }
 
     /**
-     * Gets the mobile-active-state of a payment
+     * Gets the mobile inactive state of a payment
      *
      * @return boolean
      */
-    public function getMobileActive()
+    public function getMobileInactive()
     {
-        return $this->mobileActive;
+        return $this->mobileInactive;
     }
     
     /**
