@@ -59,8 +59,8 @@
 
 		{if (!isset($sArticle.active) || $sArticle.active)}
 			{block name='frontend_detail_buy_laststock'}
-				{if $sArticle.laststock}
-					{include file="frontend/_includes/messages.tpl" type="error" content="{s name='DetailBuyInfoNotAvailable'}{/s}" visible={$sArticle.instock > 0}}
+				{if $sArticle.laststock && $sArticle.instock <= 0}
+					{include file="frontend/_includes/messages.tpl" type="error" content="{s name='DetailBuyInfoNotAvailable'}{/s}"}
 				{/if}
 			{/block}
 
@@ -77,7 +77,13 @@
 								{$maxQuantity=$sArticle.instock+1}
 							{/if}
 
-							<input type="number" data-quantity-field="true" name="sQuantity" min="{$sArticle.minpurchase}" max="{$maxQuantity - 1}" data-step="{$sArticle.purchasesteps}" value="{$sArticle.minpurchase}" required="required" aria-required="true">
+							{block name='frontend_detail_buy_quantity_select'}
+								<select id="sQuantity" name="sQuantity" class="quantity--select">
+									{section name="i" start=$sArticle.minpurchase loop=$maxQuantity step=$sArticle.purchasesteps}
+										<option value="{$smarty.section.i.index}">{$smarty.section.i.index}{if $sArticle.packunit} {$sArticle.packunit}{/if}</option>
+									{/section}
+								</select>
+							{/block}
 						</div>
 					{/block}
 

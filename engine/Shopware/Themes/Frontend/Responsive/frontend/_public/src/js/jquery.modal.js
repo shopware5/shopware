@@ -1,28 +1,229 @@
 ;(function ($) {
-    "use strict";
+    'use strict';
 
+    var emptyFn = function () { };
+
+    /**
+     * Shopware Modal Module
+     *
+     * The modalbox is "session based".
+     * That means, that an .open() call will completely override the settings of the previous .open() calls.
+     *
+     * @example
+     *
+     * Simple content / text:
+     *
+     * $.modal.open('Hello World', {
+     *     title: 'My title'
+     * });
+     *
+     * Ajax loading:
+     *
+     * $.modal.open('account/ajax_login', {
+     *     mode: 'ajax'
+     * });
+     *
+     * Iframe example / YouTube Video:
+     *
+     * $.modal.open('http://www.youtube.com/embed/5dxVfU-yerQ', {
+     *     mode: 'iframe'
+     * });
+     *
+     * To close the modal box simply call:
+     *
+     * $.modal.close();
+     *
+     * @type {Object}
+     */
     $.modal = {
-        $modalBox: null,
-        $header: null,
-        $title: null,
-        $content: null,
-        $closeButton: null,
+        /**
+         * The complete template wrapped in jQuery.
+         *
+         * @private
+         * @property _$modalBox
+         * @type {jQuery}
+         */
+        _$modalBox: null,
 
+        /**
+         * Container for the title wrapped in jQuery.
+         *
+         * @private
+         * @property _$header
+         * @type {jQuery}
+         */
+        _$header: null,
+
+        /**
+         * The title element wrapped in jQuery.
+         *
+         * @private
+         * @property _$title
+         * @type {jQuery}
+         */
+        _$title: null,
+
+        /**
+         * The content element wrapped in jQuery.
+         *
+         * @private
+         * @property _$content
+         * @type {jQuery}
+         */
+        _$content: null,
+
+        /**
+         * The close button wrapped in jQuery.
+         *
+         * @private
+         * @property _$closeButton
+         * @type {jQuery}
+         */
+        _$closeButton: null,
+
+        /**
+         * Default options of a opening session.
+         *
+         * @public
+         * @property defaults
+         * @type {jQuery}
+         */
         defaults: {
+            /**
+             * The mode in which the lightbox should be showing.
+             *
+             * 'local':
+             *
+             * The given content is either text or HTML.
+             *
+             * 'ajax':
+             *
+             * The given content is the URL from what it should load the HTML.
+             *
+             * 'iframe':
+             *
+             * The given content is the source URL of the iframe.
+             *
+             * @type {String}
+             */
             mode: 'local',
+
+            /**
+             * Sizing mode of the modal box.
+             *
+             * 'auto':
+             *
+             * Will set the given width as max-width so the container can shrink.
+             * Fullscreen mode on small mobile devices.
+             *
+             * 'fixed':
+             *
+             * Will use the width and height as static sizes and will not change to fullscreen mode.
+             *
+             * @type {String}
+             */
             sizing: 'auto',
+
+            /**
+             * The width of the modal box window.
+             *
+             * @type {Number}
+             */
             width: 600,
+
+            /**
+             * The height of the modal box window.
+             *
+             * @type {Number}
+             */
             height: 600,
+
+            /**
+             * Whether or not the overlay should be shown.
+             *
+             * @type {Boolean}
+             */
             overlay: true,
+
+            /**
+             * Whether or not the modal box should be closed when the user clicks on the overlay.
+             *
+             * @type {Boolean}
+             */
             closeOnOverlay: true,
+
+            /**
+             * Whether or not the closing button should be shown.
+             *
+             * @type {Boolean}
+             */
             showCloseButton: true,
+
+            /**
+             * Speed for every CSS transition animation
+             *
+             * @type {Number}
+             */
             animationSpeed: 500,
+
+            /**
+             * The window title of the modal box.
+             * If empty, the header will be hidden.
+             *
+             * @type {String}
+             */
             title: '',
-            src: ''
+
+            /**
+             * Will be overridden by the current URL when the mode is 'ajax' or 'iframe'.
+             * Can be accessed by the options object.
+             *
+             * @type {String}
+             */
+            src: '',
+
+            /**
+             * Array of key codes the modal box can be closed.
+             *
+             * @type {Array}
+             */
+            closeKeys: [27],
+
+            /**
+             * Whether or not it is possible to close the modal box by the keyboard.
+             *
+             * @type {Boolean}
+             */
+            keyboardClosing: true,
+
+            /**
+             * Function which will be called when the modal box is closing.
+             *
+             * @type {Function}
+             */
+            onClose: emptyFn
         },
 
+        /**
+         * The current merged options of the last .open() call.
+         *
+         * @public
+         * @property options
+         * @type {Object}
+         */
         options: {},
 
+        /**
+         * Opens the modal box.
+         * Sets the given content and applies the given options to the current session.
+         * If given, the overlay options will be passed in its .open() call.
+         *
+         * @public
+         * @method open
+         * @param {String|jQuery|HTMLElement} content
+         * @param {Object} options
+         * @param {Object} overlayOptions
+         */
         open: function (content, options, overlayOptions) {
             var me = this,
                 opts;
@@ -30,38 +231,36 @@
             me.options = opts = $.extend({}, me.defaults, options);
 
             if (opts.overlay) {
-                $.overlay.open($.extend({}, overlayOptions, { closeOnClick: opts.closeOnOverlay }));
-
-                $.overlay.removeListener('click.modal');
-
-                if (opts.closeOnOverlay) {
-                    $.overlay.addListener('click.modal', me.close.bind(me));
-                }
+                $.overlay.open($.extend({}, overlayOptions, {
+                    closeOnClick: opts.closeOnOverlay,
+                    onClick: $.proxy(me.onOverlayClick, me)
+                }));
             }
 
-            if (me.$modalBox === null) {
-                me._initModalBox();
+            if (!me._$modalBox) {
+                me.initModalBox();
+                me.registerEvents();
             }
 
-            me.$closeButton.toggle(opts.showCloseButton);
+            me._$closeButton.toggle(opts.showCloseButton);
 
-            me.$modalBox.toggleClass('fixed', opts.sizing === 'fixed');
-
-            me.$modalBox.toggleClass('no--header', opts.title.length === 0);
+            me._$modalBox.toggleClass('fixed', opts.sizing === 'fixed');
+            me._$modalBox.toggleClass('no--header', opts.title.length === 0);
 
             me.setWidth(opts.width);
             me.setHeight(opts.height);
             me.setTitle(opts.title);
 
-            me.$modalBox.show();
+            // set display to block instead of .show() for browser compatibility
+            me._$modalBox.css('display', 'block');
 
             switch (opts.mode) {
                 case 'ajax':
-                    me.$content.load(content);
+                    me._$content.load(content);
                     me.options.src = content;
                     break;
                 case 'iframe':
-                    me.setContent('<iframe src="' + content + '"></iframe>');
+                    me.setContent('<iframe src="' + content + '" width="100%" height="100%"></iframe>');
                     me.options.src = content;
                     break;
                 default:
@@ -74,6 +273,13 @@
             }, me.options.animationSpeed, 'linear');
         },
 
+        /**
+         * Closes the modal box and the overlay if its enabled.
+         * if the fading is completed, the content will be removed.
+         *
+         * @public
+         * @method close
+         */
         close: function () {
             var me = this,
                 opts = me.options;
@@ -82,54 +288,30 @@
                 $.overlay.close();
             }
 
-            if (me.$modalBox !== null) {
+            if (me._$modalBox !== null) {
                 me.setTransition({
                     opacity: 0
                 }, me.options.animationSpeed, 'linear', function () {
-                    me.$content.html('');
-                    me.$modalBox.hide();
+                    me._$content.empty();
+
+                    // set display to none instead of .hide() for browser compatibility
+                    me._$modalBox.css('display', 'none');
+
+                    me.options.onClose.call(me);
                 });
             }
         },
 
-        _initModalBox: function () {
-            var me = this;
-
-            me.$modalBox = $('<div>', {
-                'class': 'js--modal'
-            });
-
-            me.$header = $('<div>', {
-                'class': 'header'
-            }).appendTo(me.$modalBox);
-
-            me.$title = $('<div>', {
-                'class': 'title'
-            }).appendTo(me.$header);
-
-            me.$content = $('<div>', {
-                'class': 'content'
-            }).appendTo(me.$modalBox);
-
-            me.$closeButton = $('<div>', {
-                'class': 'btn icon--cross is--small btn--grey modal--close'
-            }).appendTo(me.$modalBox);
-
-            me.$closeButton.on('click.modal', me.close.bind(me));
-
-            $('body').append(me.$modalBox);
-
-            StateManager.registerListener({
-                type: 'smartphone',
-                enter: function() {
-                    me.$modalBox.addClass('is--fullscreen');
-                },
-                exit: function () {
-                    me.$modalBox.removeClass('is--fullscreen');
-                }
-            });
-        },
-
+        /**
+         * Sets the title of the modal box.
+         *
+         * @public
+         * @method setTransition
+         * @param {Object} css
+         * @param {Number} duration
+         * @param {String} animation
+         * @param {Function} callback
+         */
         setTransition: function (css, duration, animation, callback) {
             var me = this,
                 opts = $.extend({
@@ -141,35 +323,189 @@
                 });
 
             if (!$.support.transition) {
-                me.$modalBox.animate(css, opts.duration, opts.animation, callback);
+                me._$modalBox.stop(true).animate(css, opts.duration, opts.animation, callback);
                 return;
             }
 
-            me.$modalBox.transition(css, opts.duration, opts.animation, callback);
+            me._$modalBox.stop(true).transition(css, opts.duration, opts.animation, callback);
         },
 
+        /**
+         * Sets the title of the modal box.
+         *
+         * @public
+         * @method setTitle
+         * @param {String} title
+         */
         setTitle: function (title) {
             var me = this;
 
-            me.$title.html(title);
+            me._$title.html(title);
         },
 
+        /**
+         * Sets the content of the modal box.
+         *
+         * @public
+         * @method setContent
+         * @param {String|jQuery|HTMLElement} content
+         */
         setContent: function (content) {
             var me = this;
 
-            me.$content.html(content);
+            me._$content.html(content);
         },
 
+        /**
+         * Sets the width of the modal box.
+         *
+         * @public
+         * @method setWidth
+         * @param {Number} width
+         */
         setWidth: function (width) {
             var me = this;
 
-            me.$modalBox.css('width', ~~(width));
+            me._$modalBox.css('width', width);
         },
 
+        /**
+         * Sets the height of the modal box.
+         *
+         * @public
+         * @method setHeight
+         * @param {Number} height
+         */
         setHeight: function (height) {
             var me = this;
 
-            me.$modalBox.css('height', ~~(height));
+            me._$modalBox.css('height', height);
+        },
+
+        /**
+         * Creates the modal box and all its elements.
+         * Appends it to the body.
+         *
+         * @public
+         * @method initModalBox
+         */
+        initModalBox: function () {
+            var me = this;
+
+            me._$modalBox = $('<div>', {
+                'class': 'js--modal'
+            });
+
+            me._$header = $('<div>', {
+                'class': 'header'
+            }).appendTo(me._$modalBox);
+
+            me._$title = $('<div>', {
+                'class': 'title'
+            }).appendTo(me._$header);
+
+            me._$content = $('<div>', {
+                'class': 'content'
+            }).appendTo(me._$modalBox);
+
+            me._$closeButton = $('<div>', {
+                'class': 'btn icon--cross is--small btn--grey modal--close'
+            }).appendTo(me._$modalBox);
+
+            $('body').append(me._$modalBox);
+        },
+
+        /**
+         * Registers all needed event listeners.
+         *
+         * @public
+         * @method registerEvents
+         */
+        registerEvents: function () {
+            var me = this;
+
+            me._$closeButton.on('click.modal', $.proxy(me.close, me));
+
+            $(window).on('keydown', $.proxy(me.onKeyDown, me));
+
+            StateManager.registerListener({
+                type: 'smartphone',
+                enter: function() {
+                    me._$modalBox.addClass('is--fullscreen');
+                },
+                exit: function () {
+                    me._$modalBox.removeClass('is--fullscreen');
+                }
+            });
+        },
+
+        /**
+         * Called when a key was pressed.
+         * Closes the modal box when the keyCode is mapped to a close key.
+         *
+         * @public
+         * @method onKeyDown
+         */
+        onKeyDown: function (event) {
+            var me = this,
+                keyCode = event.which,
+                keys = me.options.closeKeys,
+                len = keys.length,
+                i = 0;
+
+            if (!me.options.keyboardClosing) {
+                return;
+            }
+
+            for (; i < len; i++) {
+                if (keys[i] === keyCode) {
+                    me.close();
+                }
+            }
+        },
+
+        /**
+         * Called when the overlay was clicked.
+         * Closes the modalbox when the 'closeOnOverlay' option is active.
+         *
+         * @public
+         * @method onOverlayClick
+         */
+        onOverlayClick: function () {
+            var me = this;
+
+            if (!me.options.closeOnOverlay) {
+                return;
+            }
+
+            me.close();
+        },
+
+        /**
+         * Removes the current modalbox element from the DOM and destroys its items.
+         * Also clears the options.
+         *
+         * @public
+         * @method destroy
+         */
+        destroy: function () {
+            var me = this,
+                p;
+
+            me._$modalBox.remove();
+
+            me._$modalBox = null;
+            me._$header = null;
+            me._$title = null;
+            me._$content = null;
+            me._$closeButton = null;
+
+            for (p in me.options) {
+                if (!me.options.hasOwnProperty(p)) {
+                    continue;
+                }
+                delete me.options[p];
+            }
         }
     }
 })(jQuery);

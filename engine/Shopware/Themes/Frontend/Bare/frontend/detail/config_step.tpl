@@ -4,18 +4,18 @@
 	{/if}
 {/block}
 
-<form method="post" action="{url sArticle=$sArticle.articleID sCategory=$sArticle.categoryID}" class="confgurator--form selection--form">
+<form method="post" action="{url sArticle=$sArticle.articleID sCategory=$sArticle.categoryID}" class="configurator--form selection--form">
 	{foreach from=$sArticle.sConfigurator item=sConfigurator name=group key=groupID}
 	
 		{* Group name *}
 		{block name='frontend_detail_group_name'}
-			<strong class="content--title">{$sConfigurator.groupname}:</strong>
+			<p class="configurator--label">{$sConfigurator.groupname}:</p>
 		{/block}
 		
 		{* Group description *}
 		{block name='frontend_detail_group_description'}
 			{if $sConfigurator.groupdescription}
-				<p class="content--description">{$sConfigurator.groupdescription}</p>
+				<p class="configurator--description">{$sConfigurator.groupdescription}</p>
 			{/if}
 		{/block}
 		

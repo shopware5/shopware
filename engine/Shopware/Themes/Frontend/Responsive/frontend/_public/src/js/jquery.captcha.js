@@ -1,5 +1,5 @@
 ;(function($, window) {
-    "use strict";
+    'use strict';
 
     /**
      * Shopware Captcha Plugin.
@@ -9,12 +9,22 @@
      * Call the plugin on a node with a "data-src" attribute.
      * This attribute should provide the url for retrieving the captcha.
      *
-     * $('div.captcha--placeholder[data-src]').captcha();
+     * HTML:
+     *
+     * <div data-src="CAPTCHA_REFRESH_URL" data-captcha="true"></div>
+     *
+     * JS:
+     *
+     * $('*[data-captcha="true"]').captcha();
+     *
      */
     $.plugin('captcha', {
         /**
-         * Initializes the plugin and adds the necessary
-         * event listener for the auto submitting.
+         * Default plugin initialisation function.
+         * Registers all needed event listeners and sends a request to load the captcha image.
+         *
+         * @public
+         * @method init
          */
         init: function () {
             var me = this,
@@ -37,6 +47,13 @@
             me.sendRequest(url);
         },
 
+        /**
+         * Sends an ajax request to the passed url and sets the result into the plugin's element.
+         *
+         * @public
+         * @method _sendRequest
+         * @param {String} url
+         */
         sendRequest: function (url) {
             var me = this,
                 $el = me.$el;

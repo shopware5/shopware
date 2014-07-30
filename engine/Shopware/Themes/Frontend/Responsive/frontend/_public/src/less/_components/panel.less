@@ -303,6 +303,7 @@ See the documentation of the child elements for additional information.
     &.left--arrow {
         .unitize(10, 16, left);
 
+        &:before,
         &::before {
             content: "\e611";
         }
@@ -551,6 +552,7 @@ See the documentation of the child elements for additional information.
         font-family: 'shopware';
         text-align: center;
 
+        &:before,
         &::before {
             content: "\e612";
         }
@@ -595,6 +597,7 @@ See the documentation of the child elements for additional information.
         border: 1px solid @borderColor;
         margin: 0;
 
+        &:after,
         &::after {
             .unitize(16, 16, font-size);
             .unitize(8, 16, right);
@@ -604,6 +607,8 @@ See the documentation of the child elements for additional information.
         }
 
         &.is--active { top: 0; cursor: default }
+
+        &.is--active:after,
         &.is--active::after {
             content: '-';
         }
