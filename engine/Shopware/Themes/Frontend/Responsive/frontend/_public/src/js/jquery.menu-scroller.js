@@ -159,7 +159,7 @@
             me._width = 0;
 
             // Apply all given data attributes to the options
-            me.getDataAttributes();
+            me.applyDataAttributes();
 
             // Initializes the template by adding classes to the existing elements and creating the buttons
             me.initTemplate();
