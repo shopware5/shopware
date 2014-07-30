@@ -148,5 +148,22 @@ class ShopwareContext extends SubContext
     {
         $this->getElement('HeaderCart')->checkCart($quantity, $amount);
     }
+
+    /**
+     * @Then /^I should see (?P<quantity>\d+) element of type "(?P<elementClass>[^"]*)"$/
+     * @Then /^I should see (?P<quantity>\d+) elements of type "(?P<elementClass>[^"]*)"$/
+     */
+    public function iShouldSeeElementsOfType($count, $elementName)
+    {
+        /** @var \Emotion\Homepage $page */
+        $page = $this->getPage('Homepage');
+
+        /** @var MultipleElement $elements */
+        $elements = $this->getElement($elementName);
+        $elements->setParent($page);
+
+        $page->assertElementCount($elements, intval($count));
+    }
+
 }
 

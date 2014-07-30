@@ -65,22 +65,6 @@ class NoteContext extends SubContext
         $page->checkList($notePositions, $articles);
     }
 
-    /**
-     * @Then /^My note should be empty$/
-     * @Then /^My note should contain (?P<num>\d+) articles$/
-     */
-    public function myNoteShouldBeEmpty($count = 0)
-    {
-        /** @var \Emotion\Note $page */
-        $page = $this->getPage('Note');
-
-        /** @var MultipleElement $notePositions */
-        $notePositions = $this->getElement('NotePosition');
-        $notePositions->setParent($page);
-
-        $page->countArticles($notePositions, intval($count));
-    }
-
     private function clickActionLink($position, $name)
     {
         $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();

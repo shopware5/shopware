@@ -98,11 +98,10 @@ class Detail extends Page
         $locators = array('productRatingAverage', 'commentNumber');
         $elements = \Helper::findElements($rating, $locators, $this->cssLocator);
 
-        preg_match("/\d+/",$elements['commentNumber']->getText(),$commentNumber);
+        preg_match("/\d+/", $elements['commentNumber']->getText(), $commentNumber);
         $commentNumber = intval($commentNumber[0]);
 
-        if($commentNumber !== count($evaluations))
-        {
+        if ($commentNumber !== count($evaluations)) {
             $message = sprintf(
                 'There is a difference to the number of evaluations of the article (should be %d, but is %d)',
                 count($evaluations),
@@ -121,8 +120,7 @@ class Detail extends Page
 
         $comments = $elements['commentBlock'];
 
-        for($i=0; $i<count($comments); $i++)
-        {
+        for ($i = 0; $i < count($comments); $i++) {
             $locators = array('commentRating', 'commentAuthor', 'commentDate', 'commentTitle', 'commentText');
             $elements = \Helper::findElements($comments[$i], $locators, $this->cssLocator);
 
@@ -150,17 +148,18 @@ class Detail extends Page
 
         $message = "An error occurred.";
 
-        switch($result['error'])
-        {
+        switch ($result['error']) {
             case 'keyNotExists':
-                $message = sprintf('The key "%s" fails in test data! (Keys exist: %s)',
+                $message = sprintf(
+                    'The key "%s" fails in test data! (Keys exist: %s)',
                     $result['key'],
                     implode(', ', array_keys($evaluations[0]))
                 );
                 break;
 
             case 'comparisonFailed':
-                $message = sprintf('The evaluations are different in "%s" ("%s" is not included in "%s")',
+                $message = sprintf(
+                    'The evaluations are different in "%s" ("%s" is not included in "%s")',
                     $result['key'],
                     $result['value'],
                     $result['value2']
@@ -217,25 +216,19 @@ class Detail extends Page
 
     public function canNotSelectConfiguratorOption($configuratorOption, $configuratorGroup)
     {
-        $form = $this->find(
-            'css',
-            'form.config_select'
-        );
+        $group = $this->findField($configuratorGroup);
 
-        $group = $form->findField(
-            'group[7]'
-        );
+        if (empty($group)) {
+            $message = sprintf('Configurator group "%s" was not found!', $configuratorGroup);
+            \Helper::throwException($message);
+        }
 
-        $options = $group->findAll(
-            'css',
-            'option'
-        );
+        $options = $group->findAll('css', 'option');
 
-        foreach($options as $option) {
+        foreach ($options as $option) {
             if ($option->getText() == $configuratorOption) {
-                throw new Exception(
-                    sprintf('Configurator option %s founded but should not', $configuratorOption)
-                );
+                $message = sprintf('Configurator option %s founded but should not', $configuratorOption);
+                \Helper::throwException($message);
             }
         }
     }

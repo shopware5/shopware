@@ -27,7 +27,11 @@ class Paging extends Element
         $elements = \Helper::findElements($this, $locator);
 
         for ($i = 0; $i < $steps; $i++) {
-            $result = \Helper::countElements($this, $this->cssLocator[$direction], 2);
+            $result = \Helper::countElements($this, $this->cssLocator[$direction], 1);
+
+            if ($result !== true) {
+                $result = \Helper::countElements($this, $this->cssLocator[$direction], 2);
+            }
 
             if ($result !== true) {
                 \Helper::throwException(
