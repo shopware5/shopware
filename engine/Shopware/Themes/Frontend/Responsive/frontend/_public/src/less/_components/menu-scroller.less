@@ -1,0 +1,90 @@
+
+// Some styling rules can also be found in the hacks.less!
+
+.js--menu-scroller {
+    overflow: hidden;
+    position: relative;
+
+    &:before,
+    &:after,
+    &::before,
+    &::after {
+        .linear-gradient-multi(0%, white, 50%, rgba(255, 255, 255, 0.8), 100%, rgba(255, 255, 255, 0), left, right);
+        content: "";
+        display: block;
+        width: 10%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color: transparent;
+        z-index: 10;
+        position: absolute;
+    }
+
+    &:after,
+    &::after{
+        .linear-gradient-multi(0%, white, 50%, rgba(255, 255, 255, 0.8), 100%, rgba(255, 255, 255, 0), right, left);
+        background-color: transparent;
+        bottom: 0;
+        right: 0;
+        left: auto;
+    }
+
+    &.is--left:before,
+    &.is--right:after,
+    &.is--left::before,
+    &.is--right::after {
+        visibility: hidden;
+    }
+}
+
+.js--menu-scroller--list {
+    .transition(left, 0.5s, ease);
+    overflow: visible;
+    position: relative;
+    white-space: nowrap;
+    width: 100%;
+    left: 0;
+}
+
+.js--menu-scroller--arrow {
+    .unitize-width(32);
+    .unitize-padding(0, 8);
+    .border-radius(2px);
+    .secondary-gradient();
+    .box-shadow(0 1px 3px rgba(red(@primaryTextColor), green(@primaryTextColor), blue(@primaryTextColor), .5));
+    border-bottom: 1px solid @darkBorderColor;
+    text-shadow: 0 1px 1px darken(@primaryTextColor, 10%);
+    position: absolute;
+    height: 90%;
+    top: 5%;
+    font-family: "shopware";
+    text-align: center;
+    color: #FFFFFF;
+    cursor: pointer;
+    z-index: 100;
+
+    &:hover {
+        background: @primaryTextColor;
+    }
+
+    &:active {
+        .linear-gradient-multi(0%, @primaryTextColor, 55%, @lightTextColor, 100%, @lightTextColor);
+    }
+
+    &.left--arrow {
+        .unitize(5, 16, left);
+    }
+
+    &.right--arrow {
+        .unitize(5, 16, right);
+    }
+
+    .arrow--content {
+        .unitize(-8, 16, margin-top);
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+    }
+}

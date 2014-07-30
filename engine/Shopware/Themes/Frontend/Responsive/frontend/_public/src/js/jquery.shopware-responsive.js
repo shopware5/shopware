@@ -385,4 +385,6 @@ $(function() {
     $('*[data-last-seen-products="true"]').lastSeenProducts($.extend({}, lastSeenProductsConfig));
 
     $('body').httpCacheFilters();
+
+    $('*[data-menu-scroller="true"]').menuScroller();
 });
