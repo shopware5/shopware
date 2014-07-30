@@ -87,7 +87,7 @@
 				{block name="frontend_account_menu_link_logout"}
 					<li class="navigation--entry">
 						<a href="{url controller='account' action='logout'}" class="navigation--link link--logout">
-							<i class="icon--logout"></i> {s name="AccountLinkLogout"}{/s}
+							<i class="icon--logout"></i> {s name="AccountLinkLogout2"}{/s}
 						</a>
 					</li>
 				{/block}

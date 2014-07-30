@@ -147,7 +147,7 @@
             classMethod;
 
         $.each(me.$paymentMethods, function( index, value ) {
-            var radio = $(value).find('.payment--selection input');
+            var radio = $(value).find('.payment--selection-input input');
             isChecked = radio[0].checked;
 
             requiredFields = $(value).find('.is--required');

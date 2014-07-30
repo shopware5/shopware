@@ -245,6 +245,35 @@
 
 }
 
+.account--change-payment {
+    .payment--method {
+        .unitize-padding(0, 0, 10, 0);
+        .unitize-margin(0, 0, 10, 0);
+
+        &:last-child {
+            padding: 0;
+            margin: 0;
+        }
+    }
+
+    .payment--selection-input {
+        .unitize-width(40);
+        float: left;
+        text-align: center;
+    }
+
+    .payment--selection-label,
+    .payment--description,
+    .payment--content {
+        .unitize-padding(0, 0, 0, 40);
+        width: 100%;
+    }
+
+    .payment--content input {
+        max-width: 100%;
+    }
+}
+
 @media screen and (min-width: @tabletViewportWidth) {
 
     // Header Support Info
@@ -372,43 +401,6 @@
         i[class^=icon] {
             .unitize(10, 16, font-size);
             .unitize(10, 16, margin-right);
-        }
-    }
-
-    .payment--selection {
-        .unitize-padding(20, 20);
-        width: 20%;
-
-        input[type="radio"] {
-            .unitize-margin(0, 10, 0, 0);
-        }
-
-        .payment--selection-label {
-            cursor: pointer;
-
-            &:hover {
-                color: @primaryColor;
-            }
-        }
-    }
-
-    .payment--description {
-        .unitize-padding(20, 20);
-        width: 80%;
-    }
-
-    .payment--content {
-        .clearfix();
-        .unitize-padding(20, 20);
-        width: 80%;
-        margin-left: 20%;
-        clear: both;
-
-        label {
-            .unitize(40, 16, line-height);
-            display: block;
-            width: 20%;
-            float: left;
         }
     }
 }
