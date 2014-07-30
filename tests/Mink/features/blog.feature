@@ -4,12 +4,12 @@ Feature: Blog
     Background:
         Given I am on the blog category 17
         Then  I should see "Blogfunktion"
-        And   I should see 3 blog articles
+        And   I should see 3 elements of type "BlogBox"
 
     @filter
     Scenario Outline: I can filter the blog articles by its date
         Given I follow "<date>"
-        Then  I should see 1 blog article
+        Then  I should see 1 element of type "BlogBox"
         And   I should see "<title>"
 
     Examples:
@@ -23,7 +23,7 @@ Feature: Blog
         Given I click to read the blog article on position <position>
         Then  I should see "<title>"
         Then  I should see "Passende Artikel"
-        And   I should see <count> articles
+        And   I should see <count> elements of type "ArticleBox"
 
     Examples:
         | position | title                                               | count |

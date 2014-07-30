@@ -19,10 +19,10 @@ Feature: Search things
 
     Scenario: Search with many hits
         When I search for "str"
-        And  I should see 12 articles
+        And  I should see 12 elements of type "ArticleBox"
 
         When I browse to "next" page
-        And  I should see 1 article
+        And  I should see 1 element of type "ArticleBox"
 
     Scenario: Search with no hits
         When I search for "foo"

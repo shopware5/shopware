@@ -12,27 +12,13 @@ class Note extends Page
     protected $path = '/note';
 
     /**
-     * Counts the articles on the note
-     * If the number is not equal to $count, the helper function will throw an exception $message.
-     * @param array $notePositions
-     * @param int $count
-     */
-    public function countArticles($notePositions, $count = 0)
-    {
-        if ($count !== count($notePositions)) {
-            $message = sprintf('There are %d articles on the note (should be %d)', count($notePositions), $count);
-            \Helper::throwException($message);
-        }
-    }
-
-    /**
      * Compares the complete note with the given list of articles
      * @param array $notePositions
      * @param array $articles
      */
     public function checkList($notePositions, $articles)
     {
-        $this->countArticles($notePositions, count($articles));
+        $this->getPage('Homepage')->assertElementCount($notePositions, count($articles));
 
         /** @var NotePosition $position */
         foreach ($notePositions as $position) {
