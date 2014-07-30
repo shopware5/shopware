@@ -1072,10 +1072,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $documents = $order->getDocuments();
 
             //create only not existing documents
-            if ($documentMode === 1) {
+            if ($documentMode == 1) {
                 $alreadyCreated = false;
                 foreach ($documents as $document) {
-                    if ($document->getTypeId() === $documentType) {
+                    if ($document->getTypeId() == $documentType) {
                         $alreadyCreated = true;
                         break;
                     }
