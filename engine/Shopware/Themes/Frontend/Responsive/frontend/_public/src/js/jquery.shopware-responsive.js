@@ -344,7 +344,33 @@ $(function() {
     // Initialize the registration plugin
     $('div[data-register="true"]').register();
 
-    // Modal on add basket item
+    // Modal on add cart item from listing page
+    $('.action--buynow').click(function(event) {
+        event.preventDefault();
+
+        var me = $(this),
+            ajaxData = me.serialize(),
+            ajaxUrl = me.attr('href');
+
+        $.loadingIndicator.open();
+
+        $.ajax({
+            dataType: 'jsonp',
+            url: ajaxUrl,
+
+            success: function (result) {
+                var modal;
+
+                $.loadingIndicator.close(function() {
+                    modal = $.modal.open(result, { width: 750, height: 600 })
+
+                    initModalSlider(modal);
+                });
+            }
+        });
+    });
+
+    // Modal on add cart item from detail page
     $('.buybox--form').submit(function (event) {
         event.preventDefault();
 
@@ -363,65 +389,69 @@ $(function() {
                 var modal;
 
                 $.loadingIndicator.close(function() {
-
                     modal = $.modal.open(result, {
                         width: 750,
                         height: 600
                     });
 
-                    var slider = $('.js--modal').find('.product-slider');
-
-                    StateManager.registerListener([{
-                        type: 'smartphone',
-                        enter: function () {
-                            slider.productSlider({
-                                perPage: 1,
-                                perSlide: 1,
-                                touchControl: true
-                            });
-                        }
-                    }, {
-                        type: 'tablet',
-                        enter: function () {
-                            slider.productSlider({
-                                perPage: 2,
-                                perSlide: 1,
-                                touchControl: true
-                            });
-                        }
-                    }, {
-                        type: 'tabletLandscape',
-                        enter: function () {
-                            slider.productSlider({
-                                perPage: 3,
-                                perSlide: 1,
-                                touchControl: true
-                            });
-                        }
-                    }, {
-                        type: 'desktop',
-                        enter: function () {
-                            slider.productSlider({
-                                perPage: 3,
-                                perSlide: 1,
-                                touchControl: true
-                            });
-                        }
-                    }, {
-                        type: '*',
-                        enter: function () {
-                            setTimeout(function () {
-                                modal.find('.product-slider').data('plugin_productSlider').setSizes();
-                            }, 10);
-                        },
-                        exit: function () {
-                            modal.find('.product-slider').data('plugin_productSlider').destroy();
-                        }
-                    }]);
+                    initModalSlider(modal);
                 });
             }
         });
     });
+
+    // function for initializing the product slider inside the modal box
+    var initModalSlider = function(modal) {
+        var slider = $('.js--modal').find('.product-slider');
+
+        StateManager.registerListener([{
+            type: 'smartphone',
+            enter: function () {
+                slider.productSlider({
+                    perPage: 1,
+                    perSlide: 1,
+                    touchControl: true
+                });
+            }
+        }, {
+            type: 'tablet',
+            enter: function () {
+                slider.productSlider({
+                    perPage: 2,
+                    perSlide: 1,
+                    touchControl: true
+                });
+            }
+        }, {
+            type: 'tabletLandscape',
+            enter: function () {
+                slider.productSlider({
+                    perPage: 3,
+                    perSlide: 1,
+                    touchControl: true
+                });
+            }
+        }, {
+            type: 'desktop',
+            enter: function () {
+                slider.productSlider({
+                    perPage: 3,
+                    perSlide: 1,
+                    touchControl: true
+                });
+            }
+        }, {
+            type: '*',
+            enter: function () {
+                setTimeout(function () {
+                    modal.find('.product-slider').data('plugin_productSlider').setSizes();
+                }, 10);
+            },
+            exit: function () {
+                modal.find('.product-slider').data('plugin_productSlider').destroy();
+            }
+        }]);
+    }
 
     // Debug mode is enabled
     if($('.debug--panel').length) {
