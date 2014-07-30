@@ -49,7 +49,10 @@
 
             me.options = $.extend({}, me.defaults, indicatorOptions);
 
-            $.overlay.open($.extend({}, overlayOptions, { closeOnClick: me.options.closeOnClick }));
+            $.overlay.open($.extend({}, overlayOptions, {
+                closeOnClick: me.options.closeOnClick,
+                onClick: me.close.bind(me)
+            }));
 
             if (me.$loader === null) {
                 me.$loader = me._createLoader();
@@ -93,12 +96,6 @@
 
             if (!$icon.hasClass(opts.iconCls)) {
                 $icon.removeClass('').addClass(opts.iconCls);
-            }
-
-            $.overlay.removeListener('click.loadingIndicator');
-
-            if (opts.closeOnClick) {
-                $.overlay.addListener('click.loadingIndicator', me.close.bind(me));
             }
         },
 
