@@ -39,43 +39,29 @@ class ConfiguratorHydrator extends Hydrator
     private $attributeHydrator;
 
     /**
-     * @var MediaHydrator
-     */
-    private $mediaHydrator;
-
-    /**
      * @param AttributeHydrator $attributeHydrator
-     * @param MediaHydrator $mediaHydrator
      */
-    public function __construct(AttributeHydrator $attributeHydrator, MediaHydrator $mediaHydrator)
+    public function __construct(AttributeHydrator $attributeHydrator)
     {
         $this->attributeHydrator = $attributeHydrator;
-        $this->mediaHydrator = $mediaHydrator;
     }
 
     /**
      * @param array $data
-     * @param array $selection
      * @return Struct\Configurator\Set
      */
-    public function hydrate(array $data, array $selection = array())
+    public function hydrate(array $data)
     {
         $set = $this->createSet($data[0]);
-
-        $set->setGroups(
-            $this->hydrateGroups($data, $selection)
-        );
-
+        $set->setGroups($this->hydrateGroups($data));
         return $set;
-
     }
 
     /**
      * @param array $data
-     * @param array $selection
      * @return Struct\Configurator\Group[]
      */
-    public function hydrateGroups(array $data, array $selection = array())
+    public function hydrateGroups(array $data)
     {
         $groups = array();
 
@@ -86,13 +72,10 @@ class ConfiguratorHydrator extends Hydrator
                 $group = $groups[$groupId];
             } else {
                 $group = $this->createGroup($row);
-                $group->setSelected(isset($selection[$groupId]));
                 $groups[$groupId] = $group;
             }
 
             $option = $this->createOption($row);
-
-            $option->setSelected(in_array($option->getId(), $selection));
 
             $group->addOption($option);
         }
@@ -151,10 +134,6 @@ class ConfiguratorHydrator extends Hydrator
 
         $option->setId((int) $data['__configuratorOption_id']);
         $option->setName($data['__configuratorOption_name']);
-
-        if (isset($data['__media_id'])) {
-            $option->setMedia($this->mediaHydrator->hydrate($data));
-        }
 
         return $option;
     }

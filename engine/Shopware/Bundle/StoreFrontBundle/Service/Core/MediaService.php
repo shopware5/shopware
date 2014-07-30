@@ -50,11 +50,18 @@ class MediaService implements Service\MediaServiceInterface
     private $shopwareConfig;
 
     /**
+     * @var \Shopware\Bundle\StoreFrontBundle\Gateway\MediaGatewayInterface
+     */
+    private $mediaGateway;
+
+    /**
+     * @param \Shopware\Bundle\StoreFrontBundle\Gateway\MediaGatewayInterface $mediaGateway
      * @param Gateway\ProductMediaGatewayInterface $productMedia
      * @param Gateway\VariantMediaGatewayInterface $variantMedia
      * @param \Shopware_Components_Config $shopwareConfig
      */
     public function __construct(
+        Gateway\MediaGatewayInterface $mediaGateway,
         Gateway\ProductMediaGatewayInterface $productMedia,
         Gateway\VariantMediaGatewayInterface $variantMedia,
         \Shopware_Components_Config $shopwareConfig
@@ -62,6 +69,27 @@ class MediaService implements Service\MediaServiceInterface
         $this->productMediaGateway = $productMedia;
         $this->variantMediaGateway = $variantMedia;
         $this->shopwareConfig = $shopwareConfig;
+        $this->mediaGateway = $mediaGateway;
+    }
+
+    /**
+     * @param $id
+     * @param Struct\Context $context
+     * @return Struct\Media
+     */
+    public function get($id, Struct\Context $context)
+    {
+        return $this->mediaGateway->get($id, $context);
+    }
+
+    /**
+     * @param $ids
+     * @param Struct\Context $context
+     * @return Struct\Media[] Indexed by the media id
+     */
+    public function getList($ids, Struct\Context $context)
+    {
+        return $this->mediaGateway->getList($ids, $context);
     }
 
     /**

@@ -34,6 +34,30 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 interface MediaServiceInterface
 {
     /**
+     * To get detailed information about the selection conditions, structure and content of the returned object,
+     * please refer to the linked classes.
+     *
+     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::get()
+     *
+     * @param $id
+     * @param Struct\Context $context
+     * @return Struct\Media
+     */
+    public function get($id, Struct\Context $context);
+
+    /**
+     * To get detailed information about the selection conditions, structure and content of the returned object,
+     * please refer to the linked classes.
+     *
+     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::get()
+     *
+     * @param $ids
+     * @param Struct\Context $context
+     * @return Struct\Media[] Indexed by the media id
+     */
+    public function getList($ids, Struct\Context $context);
+
+    /**
      * @see \Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface::getProductMedia()
      *
      * @param Struct\ListProduct[] $products
