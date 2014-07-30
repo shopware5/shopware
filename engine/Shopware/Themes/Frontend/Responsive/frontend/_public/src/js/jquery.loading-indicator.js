@@ -27,7 +27,8 @@
             loaderCls: 'js--loading-indicator',
             iconCls: 'icon--default',
             animationSpeed: 500,
-            closeOnClick: true
+            closeOnClick: true,
+            closeOverlay: true
         },
 
         /**
@@ -71,7 +72,9 @@
             var me = this,
                 opts = me.options;
 
-            $.overlay.close();
+            if (opts.closeOverlay) {
+                $.overlay.close();
+            }
 
             if (me.$loader !== null) {
                 me.$loader.fadeOut(opts.animationSpeed || me.defaults.animationSpeed, callback);

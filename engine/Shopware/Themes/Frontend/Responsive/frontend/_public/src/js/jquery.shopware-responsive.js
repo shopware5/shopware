@@ -359,12 +359,12 @@ $(function() {
             url: ajaxUrl,
 
             success: function (result) {
-                var modal;
+                var $modal;
 
                 $.loadingIndicator.close(function() {
-                    modal = $.modal.open(result, { width: 750, height: 600 })
+                    $modal = $.modal.open(result, { width: 750, height: 600 })
 
-                    initModalSlider(modal);
+                    initModalSlider($modal);
                 });
             }
         });
@@ -378,7 +378,9 @@ $(function() {
             ajaxData = me.serialize(),
             ajaxUrl = me.attr('action');
 
-        $.loadingIndicator.open();
+        $.loadingIndicator.open({
+            closeOverlay: false
+        });
 
         $.ajax({
             data: ajaxData,
@@ -386,28 +388,29 @@ $(function() {
             url: ajaxUrl,
 
             success: function (result) {
-                var modal;
+                var $modal;
 
                 $.loadingIndicator.close(function() {
-                    modal = $.modal.open(result, {
+                    $modal = $.modal.open(result, {
                         width: 750,
-                        height: 600
+                        height: 600,
+                        overlay: false
                     });
 
-                    initModalSlider(modal);
+                    initModalSlider($modal);
                 });
             }
         });
     });
 
     // function for initializing the product slider inside the modal box
-    var initModalSlider = function(modal) {
-        var slider = $('.js--modal').find('.product-slider');
+    var initModalSlider = function($modal) {
+        var $slider = $('.js--modal').find('.product-slider');
 
         StateManager.registerListener([{
             type: 'smartphone',
             enter: function () {
-                slider.productSlider({
+                $slider.productSlider({
                     perPage: 1,
                     perSlide: 1,
                     touchControl: true
@@ -416,7 +419,7 @@ $(function() {
         }, {
             type: 'tablet',
             enter: function () {
-                slider.productSlider({
+                $slider.productSlider({
                     perPage: 2,
                     perSlide: 1,
                     touchControl: true
@@ -425,7 +428,7 @@ $(function() {
         }, {
             type: 'tabletLandscape',
             enter: function () {
-                slider.productSlider({
+                $slider.productSlider({
                     perPage: 3,
                     perSlide: 1,
                     touchControl: true
@@ -434,7 +437,7 @@ $(function() {
         }, {
             type: 'desktop',
             enter: function () {
-                slider.productSlider({
+                $slider.productSlider({
                     perPage: 3,
                     perSlide: 1,
                     touchControl: true
@@ -444,11 +447,23 @@ $(function() {
             type: '*',
             enter: function () {
                 setTimeout(function () {
-                    modal.find('.product-slider').data('plugin_productSlider').setSizes();
+                    var $slider = $modal.find('.product-slider');
+
+                    if(!$slider || !$slider.length) {
+                        return;
+                    }
+
+                    $slider.data('plugin_productSlider').setSizes();
                 }, 10);
             },
             exit: function () {
-                modal.find('.product-slider').data('plugin_productSlider').destroy();
+                var $slider = $modal.find('.product-slider');
+
+                if(!$slider || !$slider.length) {
+                    return;
+                }
+
+                $slider.data('plugin_productSlider').destroy();
             }
         }]);
     }

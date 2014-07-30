@@ -288,9 +288,7 @@
             var me = this,
                 opts = me.options;
 
-            if (opts.overlay) {
-                $.overlay.close();
-            }
+            $.overlay.close();
 
             if (me._$modalBox !== null) {
                 me.setTransition({
