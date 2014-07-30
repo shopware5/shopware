@@ -17,7 +17,7 @@ Feature: Show Listing
         When  I set the filter to:
             | filter     | value      |
             | Hersteller | <supplier> |
-        Then I should see <articles> articles
+        Then I should see <articles> elements of type "ArticleBox"
 
     Examples:
         | supplier             | articles |
@@ -29,21 +29,22 @@ Feature: Show Listing
         Given I am on the listing page:
             | parameter | value |
             | sCategory | 21    |
+
         When  I set the filter to:
             | filter        | value     |
             | Geschmack     | mild      |
             | Flaschengröße | 0,5 Liter |
             | Alkoholgehalt | >30%      |
-        Then I should see 4 articles
+        Then I should see 4 elements of type "ArticleBox"
 
         When  I set the filter to:
             | filter          | value   |
             | Trinktemperatur | Gekühlt |
             | Farbe           | rot     |
-        Then I should see 2 articles
+        Then I should see 2 elements of type "ArticleBox"
 
         When I reset all filters
-        Then I should see 10 articles
+        Then I should see 10 elements of type "ArticleBox"
 
     @sort @javascript
     Scenario: I can change the sort
@@ -78,10 +79,10 @@ Feature: Show Listing
         Given I am on the listing page:
             | parameter | value  |
             | sPerPage  | <from> |
-        Then I should see <from> articles
+        Then I should see <from> elements of type "ArticleBox"
 
         When I select "<to>" from "sPerPage"
-        Then I should see <to> articles
+        Then I should see <to> elements of type "ArticleBox"
 
     Examples:
         | from | to |
@@ -151,17 +152,17 @@ Feature: Show Listing
             | sPage     | 4         |
             | sPerPage  | <perPage> |
 
-        Then I should see <perPage> articles
+        Then I should see <perPage> elements of type "ArticleBox"
 
         When I browse to "previous" page 3 times
         Then I should not be able to browse to "previous" page
 
         When I browse to "next" page <countNextPage> times
         Then I should see "ESD Download Artikel"
-        And I should see "Sonnenbrille Speed Eyes"
+        And  I should see "Sonnenbrille Speed Eyes"
 
         When I browse to page <lastPage>
-        Then I should see <countLastPage> articles
+        Then I should see <countLastPage> elements of type "ArticleBox"
         And  I should not be able to browse to "next" page
         And  I should not be able to browse to page 1
 

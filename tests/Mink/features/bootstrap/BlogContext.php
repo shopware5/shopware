@@ -16,22 +16,6 @@ class BlogContext extends SubContext
     }
 
     /**
-     * @Given /^I should see (\d+) blog article$/
-     * @Given /^I should see (\d+) blog articles$/
-     */
-    public function iShouldSeeBlogArticles($count)
-    {
-        /** @var \Emotion\Blog $page */
-        $page = $this->getPage('Blog');
-
-        /** @var MultipleElement $notePositions */
-        $blogBoxes = $this->getElement('BlogBox');
-        $blogBoxes->setParent($page);
-
-        $page->countArticles($blogBoxes, intval($count));
-    }
-
-    /**
      * @Given /^I click to read the blog article on position (\d+)$/
      */
     public function iClickToReadTheBlogArticleOnPosition($position)

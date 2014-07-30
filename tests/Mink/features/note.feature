@@ -17,10 +17,10 @@ Feature: Note
 
     Scenario: I can remove articles from my note
         When  I remove the article on position 2 of my note
-        Then  My note should contain 1 articles
+        Then  I should see 1 element of type "NotePosition"
 
         When  I remove the article on position 1 of my note
-        Then  My note should be empty
+        Then  I should see 0 elements of type "NotePosition"
 
     Scenario: I can put articles from my note into the basket
         When  I put the article on position 1 of my note in the basket

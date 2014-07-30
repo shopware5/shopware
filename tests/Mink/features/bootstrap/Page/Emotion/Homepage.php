@@ -516,7 +516,7 @@ class Homepage extends Page
     {
         $result = \Helper::countElements($this, 'div.compare_article', count($articles));
 
-        if($result !== true) {
+        if ($result !== true) {
             $message = sprintf('There are %d articles in the comparison (should be %d)', $result, count($articles));
             \Helper::throwException(array($message));
         }
@@ -596,5 +596,23 @@ class Homepage extends Page
         $this->open();
         $this->getElement('NewsletterForm')->submit($email);
         $this->verifyResponse();
+    }
+
+    /**
+     * Global method to check the count of an MultipleElement
+     * @param \MultipleElement $elements
+     * @param int $count
+     */
+    public function assertElementCount(\MultipleElement $elements, $count = 0)
+    {
+        if ($count !== count($elements)) {
+            $message = sprintf(
+                'There are %d elements of type "%s" on page (should be %d)',
+                count($elements),
+                get_class($elements),
+                $count
+            );
+            \Helper::throwException($message);
+        }
     }
 }

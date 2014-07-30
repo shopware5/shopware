@@ -22,7 +22,6 @@ class Listing extends Page
         'filterCloseLinks' => 'div.slideContainer > ul > li.close > a',
         'filterGroups' => 'div > div:not(.slideContainer)',
         'filterProperties' => 'div.slideContainer:nth-of-type(%d) > ul > li > a',
-        'articlePrice' => 'div.listing div.artbox:nth-of-type(%d) p.price',
         'listingBox' => 'div.listing'
     );
 
@@ -50,31 +49,6 @@ class Listing extends Page
         $parameters['sSort'] = isset($parameters['sSort']) ? $parameters['sSort'] : '1';
 
         $this->open($parameters);
-    }
-
-    /**
-     * Checks the price of an article on an given position
-     * @param $position
-     * @param $price
-     * @throws \Behat\Mink\Exception\ResponseTextException
-     */
-    public function checkPrice($position, $price)
-    {
-        $locators = array('articlePrice' => $position);
-        $elements = \Helper::findElements($this, $locators);
-
-        $check = \Helper::toFloat(array($elements['articlePrice']->getText(), $price));
-        $result = \Helper::checkArray(array($check));
-
-        if ($result !== true) {
-            $message = sprintf(
-                'The price of article on position %s (%s €) is different from %s €!',
-                $position,
-                money_format('%.2n', $check[0]),
-                money_format('%.2n', $check[1])
-            );
-            throw new ResponseTextException($message, $this->getSession());
-        }
     }
 
     /**
@@ -180,20 +154,6 @@ class Listing extends Page
     }
 
     /**
-     * Counts the articles in the listing
-     * If the number is not equal to $count, the helper function will throw an exception $message.
-     * @param array $blogBoxes
-     * @param int $count
-     */
-    public function countArticles($articleBoxes, $count = 0)
-    {
-        if ($count !== count($articleBoxes)) {
-            $message = sprintf('There are %d articles in the listing (should be %d)', count($articleBoxes), $count);
-            \Helper::throwException($message);
-        }
-    }
-
-    /**
      * Checks the view-method of the listing. Only $view have to be active!
      * @param $view
      */
@@ -249,22 +209,5 @@ class Listing extends Page
         /** @var Element $listingBox */
         $listingBox = $elements['listingBox'];
         return $listingBox->hasLink($name);
-    }
-
-    /**
-     * @param $button
-     * @param int $position
-     */
-    public function clickMultipleActionButton($button, $position = 1)
-    {
-        $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();
-
-        /** @var \MultipleElement $articleBoxes */
-        $articleBoxes = $this->getElement('ArticleBox');
-        $articleBoxes->setParent($this);
-
-        /** @var \Emotion\ArticleBox $articleBox */
-        $articleBox = $articleBoxes->setInstance($position);
-        $articleBox->clickActionLink($button, $language);
     }
 }
