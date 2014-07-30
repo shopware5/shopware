@@ -48,7 +48,9 @@
 			{* Maincategories navigation top *}
 			{block name='frontend_index_navigation_categories_top'}
 				<nav class="navigation-main">
-					{include file='frontend/index/main-navigation.tpl'}
+                    <div class="container" data-menu-scroller="true" data-list-selector=".navigation--list.container">
+                        {include file='frontend/index/main-navigation.tpl'}
+                    </div>
 				</nav>
 			{/block}
 		{/block}
@@ -77,11 +79,15 @@
 				{* Sidebar right *}
 				{block name='frontend_index_content_right'}{/block}
 
-
 				{* Last seen products *}
 				{block name='frontend_index_left_last_articles'}
 					{if $sLastArticlesShow && !$isEmotionLandingPage}
-						{include file="frontend/plugins/index/viewlast.tpl"}
+                        {* Last seen products *}
+                        <div class="last-seen-products panel" data-last-seen-products="true">
+                            <div class="last-seen-products--slider product-slider panel--body" data-product-slider="true">
+                                <div class="last-seen-products--container product-slider--container"></div>
+                            </div>
+                        </div>
 					{/if}
 				{/block}
 			</div>
@@ -125,6 +131,26 @@
                 'checkout': '{url controller="checkout"}',
                 'ajax_logout': '{url controller="account" action="ajax_logout"}',
                 'ajax_validate': '{url controller="register"}'
+            {rdelim};
+
+            var lastSeenProductsConfig = lastSeenProductsConfig || {ldelim}
+                'title': '{s namespace="frontend/plugins/index/viewlast" name='WidgetsRecentlyViewedHeadline'}{/s}',
+                'baseUrl': '{$Shop->getBaseUrl()}',
+                'shopId': '{$Shop->getId()}',
+                'productLimit': ~~('{config name="lastarticlestoshow"}'),
+                'currentArticle': {ldelim}{if $sArticle}
+                    {foreach $sLastArticlesConfig as $key => $value}
+                        '{$key}': '{$value}',
+                    {/foreach}
+                    'articleId': ~~('{$sArticle.articleID}'),
+                    'linkDetailsRewritten': '{$sArticle.linkDetailsRewrited}',
+                    'articleName': '{$sArticle.articleName|escape:"javascript"}',
+                    'images': {ldelim}
+						{foreach $sArticle.image.src as $key => $value}
+							'{$key}': '{$value}',
+						{/foreach}
+					{rdelim}
+                {/if}{rdelim}
             {rdelim};
         {/block}
         //]]>

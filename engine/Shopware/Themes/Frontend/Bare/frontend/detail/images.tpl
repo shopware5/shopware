@@ -2,39 +2,38 @@
 {if $sArticle.images}
 
 	{* Thumbnail - Container *}
-	<div class="image--thumbnails" data-thumbnails="true">
+	<div class="image--thumbnails image-slider--thumbnails">
 
-		{* Thumb - Main image *}
-		{block name='frontend_detail_image_thumbs_main'}
-			{if $sArticle.image.src.4}
-				<a href="{$sArticle.image.src.5}" data-slider-index="1"
-				   class="is--active"
-				   title="{if $sArticle.image.res.description}{$sArticle.image.res.description}{else}{$sArticle.articleName}{/if}"
-				   data-xlarge-img="{$sArticle.image.src.5}"{block name='frontend_detail_image_thumbs_additional_queries'}{/block}>
+		{* Thumbnail - Slide Container *}
+		<div class="image-slider--thumbnails-slide">
+			{block name='frontend_detail_image_thumbnail_items'}
 
-					{block name='frontend_detail_image_thumbs_main_img'}
-						<img class="thumbnail--image" src="{$sArticle.image.src.1}" alt="{if $sArticle.image.res.description}{$sArticle.image.res.description}{else}{$sArticle.articleName}{/if}">
+				{* Thumbnail - Main image *}
+				{if $sArticle.image.src.5}
+					<a href="{$sArticle.image.src.5}"
+					   class="thumbnail--link is--active"
+					   title="{if $sArticle.image.res.description}{$sArticle.image.res.description|escape:"html"}{else}{$sArticle.articleName|escape:"html"}{/if}">
+
+						{block name='frontend_detail_image_thumbs_main_img'}
+							<img class="thumbnail--image" src="{$sArticle.image.src.1}" alt="{if $sArticle.image.res.description}{$sArticle.image.res.description|escape:"html"}{else}{$sArticle.articleName|escape:"html"}{/if}">
+						{/block}
+					</a>
+				{/if}
+
+				{* Thumbnails *}
+				{foreach $sArticle.images as $image}
+					{block name='frontend_detail_image_thumbnail_images'}
+						<a href="{$image.src.5}"
+						   class="thumbnail--link"
+						   title="{if $image.res.description}{$image.res.description|escape:"html"}{else}{$sArticle.articleName|escape:"html"}{/if}">
+
+							{block name='frontend_detail_image_thumbs_images_img'}
+								<img class="thumbnail--image" src="{$image.src.1}" alt="{if $image.res.description}{$image.res.description}{else}{$sArticle.articleName|escape:"html"}{/if}">
+							{/block}
+						</a>
 					{/block}
-				</a>
-			{/if}
-
-			{* Loop through available images *}
-			{foreach $sArticle.images as $image}
-				{block name='frontend_detail_image_thumbs_images'}
-				<a href="{$image.src.5}" data-slider-index="{{$image@index + 2}}"
-				   title="{if $image.res.description}{$image.res.description}{else}{$sArticle.articleName}{/if}"
-				   data-xlarge-img="{$image.src.5}"{block name='frontend_detail_image_thumbs_images_additional_queries'}{/block}>
-
-					{block name='frontend_detail_image_thumbs_images_img'}
-						<img class="thumbnail--image" src="{$image.src.1}" alt="{if $image.res.description}{$image.res.description}{else}{$sArticle.articleName}{/if}">
-					{/block}
-				</a>
-				{/block}
-			{/foreach}
-		{/block}
-
-		<div class="thumbnails--arrow thumbnails--trigger">
-			<i class="icon--arrow-right"></i>
+				{/foreach}
+			{/block}
 		</div>
 	</div>
 {/if}

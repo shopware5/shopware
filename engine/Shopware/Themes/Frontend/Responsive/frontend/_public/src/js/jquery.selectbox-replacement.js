@@ -37,7 +37,7 @@
             var me = this;
 
             // Update the plugin configuration with the HTML5 data-attributes
-            me.getDataAttributes();
+            me.applyDataAttributes();
 
             me.$wrapEl = me.createTemplate(me.$el);
             me.registerEventListeners();

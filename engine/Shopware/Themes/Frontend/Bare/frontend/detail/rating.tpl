@@ -1,7 +1,7 @@
 {namespace name="frontend/detail/index"}
 
-<div class="product--rating-container">
-	{if !{config name=VoteDisable}}
+{if !{config name=VoteDisable}}
+	<div class="product--rating-container">
 		<a href="#product--publish-comment" class="product--rating-link" rel="nofollow" title="{s name='DetailLinkReview'}{/s}" itemprop="aggregateRating"
            itemscope itemtype="http://schema.org/AggregateRating">
 			{$average = $sArticle.sVoteAverange.averange / 2|round:0}
@@ -23,5 +23,5 @@
                 (<span itemprop="ratingCount">{$sArticle.sVoteAverange.count}</span>)
 			{/block}
 		</a>
-	{/if}
-</div>
+	</div>
+{/if}

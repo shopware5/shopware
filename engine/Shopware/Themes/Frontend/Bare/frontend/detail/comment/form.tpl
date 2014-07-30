@@ -2,7 +2,7 @@
 
 {* Review title *}
 {block name='frontend_detail_comment_post_title'}
-	<h2 class="content--title">
+	<h2 id="product--publish-comment" class="content--title">
 		{s name="DetailCommentHeaderWriteReview"}{/s}
 	</h2>
 {/block}
