@@ -132,10 +132,10 @@ Ext.define('Shopware.apps.Payment.view.payment.FormPanel', {
             name: 'esdActive'
         },{
             xtype: 'checkbox',
-            fieldLabel: '{s name=formpanel_mobileActive_label}Active for mobile devices{/s}',
+            fieldLabel: '{s name=formpanel_mobileInactive_label}Disable for smartphones{/s}',
             inputValue: 1,
             uncheckedValue: 0,
-            name: 'mobileActive'
+            name: 'mobileInactive'
         },{
             xtype: 'textfield',
             fieldLabel: '{s name=formpanel_urlIFrame_label}URL for iFrame{/s}',

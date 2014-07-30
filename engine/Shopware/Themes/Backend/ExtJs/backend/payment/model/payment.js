@@ -54,35 +54,35 @@ Ext.define('Shopware.apps.Payment.model.Payment', {
      */
     fields : [
 		//{block name="backend/payment/model/payment/fields"}{/block}
-        { name : 'text',     type: 'string' },
-        { name : 'id',       type: 'int' },
-        { name : 'name',       type: 'string' },
-        { name : 'description',       type: 'string' },
-        { name : 'template',       type: 'string' },
-        { name : 'class',       type: 'string' },
-        { name : 'table',       type: 'string' },
-        { name : 'hide',       type: 'int' },
-        { name : 'additionalDescription',       type: 'string' },
-        { name : 'debitPercent',       type: 'string' },
-        { name : 'surcharge',       type: 'string' },
-        { name : 'surchargeString',       type: 'string' },
-        { name : 'position',       type: 'int' },
-        { name : 'active',       type: 'boolean' },
-        { name : 'esdActive',       type: 'boolean' },
-        { name : 'mobileActive',       type: 'boolean' },
-        { name : 'embedIFrame',       type: 'string' },
-        { name : 'hideProspect',       type: 'boolean' },
-        { name : 'action',       type: 'string' },
-        { name : 'pluginId',       type: 'int' },
-        { name : 'iconCls',  type: 'string' },
+        { name : 'text', type: 'string' },
+        { name : 'id', type: 'int' },
+        { name : 'name', type: 'string' },
+        { name : 'description', type: 'string' },
+        { name : 'template', type: 'string' },
+        { name : 'class', type: 'string' },
+        { name : 'table', type: 'string' },
+        { name : 'hide', type: 'int' },
+        { name : 'additionalDescription', type: 'string' },
+        { name : 'debitPercent', type: 'string' },
+        { name : 'surcharge', type: 'string' },
+        { name : 'surchargeString', type: 'string' },
+        { name : 'position', type: 'int' },
+        { name : 'active', type: 'boolean' },
+        { name : 'esdActive', type: 'boolean' },
+        { name : 'mobileInactive', type: 'boolean' },
+        { name : 'embedIFrame', type: 'string' },
+        { name : 'hideProspect', type: 'boolean' },
+        { name : 'action', type: 'string' },
+        { name : 'pluginId', type: 'int' },
+        { name : 'iconCls', type: 'string' },
         { name : 'surcharge', type: 'double' },
-        { name: 'source', type: 'int' }
+        { name : 'source', type: 'int' }
     ],
 
     associations: [
-        { type:'hasMany', model:'Shopware.apps.Payment.model.Country',  name:'getCountries', associationKey:'countries' },
-        { type:'hasMany', model:'Shopware.apps.Payment.model.Attribute',  name:'getAttributes', associationKey:'attribute' },
-        { type:'hasMany', model:'Shopware.apps.Base.model.Shop',  name:'getShops', associationKey:'shops' }
+        { type:'hasMany', model:'Shopware.apps.Payment.model.Country', name:'getCountries', associationKey:'countries' },
+        { type:'hasMany', model:'Shopware.apps.Payment.model.Attribute', name:'getAttributes', associationKey:'attribute' },
+        { type:'hasMany', model:'Shopware.apps.Base.model.Shop', name:'getShops', associationKey:'shops' }
     ],
 
     proxy : {
