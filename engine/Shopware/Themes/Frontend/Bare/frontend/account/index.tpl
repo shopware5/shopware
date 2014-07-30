@@ -119,7 +119,7 @@
 
 		{* Set new password *}
 		{block name="frontend_account_index_password"}
-			<div id="account--password" class="account--password account--box panel has--border password{if $sErrorFlag.password || $sErrorFlag.passwordConfirmation || $sErrorFlag.currentPassword} is--block{/if}">
+			<div id="account--password" class="account--password account--box panel has--border password{if $sErrorFlag.password || $sErrorFlag.passwordConfirmation} is--collapsed{/if}">
 
 				{block name="frontend_account_index_password_headline"}
 					<h2 class="panel--title is--underline">{s name='AccountLinkChangePassword'}{/s}</h2>
@@ -132,14 +132,14 @@
 							<div class="panel--body is--wide">
 								{if {config name=accountPasswordCheck}}
 									<p>
-										<input name="currentPassword" type="password" id="currentPassword" placeholder="{s name="AccountLabelCurrentPassword"}Ihr aktuelles Passwort*:{/s}" class="{if $sErrorFlag.currentPassword}has--error{/if}" />
+										<input name="currentPassword" type="password" id="currentPassword" placeholder="{s name="AccountLabelCurrentPassword2"}{/s}{s name="Star" namespace="frontend/listing/box_article"}*{/s}" class="{if $sErrorFlag.currentPassword}has--error{/if}" />
 									</p>
 								{/if}
 								<p>
-									<input name="password" type="password" id="newpwd" placeholder="{s name="AccountLabelNewPassword"}{/s}" class="{if $sErrorFlag.password}has--error{/if}" />
+									<input name="password" type="password" id="newpwd" placeholder="{s name="AccountLabelNewPassword2"}{/s}{s name="Star" namespace="frontend/listing/box_article"}*{/s}" class="{if $sErrorFlag.password}has--error{/if}" />
 								</p>
 								<p>
-									<input name="passwordConfirmation" id="newpwdrepeat" type="password" placeholder="{s name="AccountLabelRepeatPassword"}{/s}" class="{if $sErrorFlag.passwordConfirmation}has--error{/if}" />
+									<input name="passwordConfirmation" id="newpwdrepeat" type="password" placeholder="{s name="AccountLabelRepeatPassword2"}{/s}{s name="Star" namespace="frontend/listing/box_article"}*{/s}" class="{if $sErrorFlag.passwordConfirmation}has--error{/if}" />
 								</p>
 							</div>
 						{/block}
@@ -156,7 +156,7 @@
 
 		{* Edit mail address *}
 		{block name="frontend_account_index_email"}
-			<div id="account--email" class="account--email account--box panel has--border email{if $sErrorFlag.email || $sErrorFlag.emailConfirmation} is--block{/if}">
+			<div id="account--email" class="account--email account--box panel has--border email{if $sErrorFlag.email || $sErrorFlag.emailConfirmation} is--collapsed{/if}">
 
 				{block name="frontend_account_index_email_headline"}
 					<h2 class="panel--title is--underline">{s name='AccountLinkChangeMail'}{/s}</h2>
@@ -169,14 +169,14 @@
 							<div class="panel--body is--wide">
 								{if {config name=accountPasswordCheck}}
 									<p>
-										<input name="currentPassword" type="password" id="emailPassword" placeholder="{s name="AccountLabelCurrentPassword"}Ihr aktuelles Passwort*:{/s}" class="{if $sErrorFlag.currentPassword}has--error{/if}" />
+										<input name="currentPassword" type="password" id="emailPassword" placeholder="{s name="AccountLabelCurrentPassword2"}Ihr aktuelles Passwort{/s}{s name="Star" namespace="frontend/listing/box_article"}*{/s}" class="{if $sErrorFlag.currentPassword}has--error{/if}" />
 									</p>
 								{/if}
 								<p>
-									<input name="email" type="text" id="newmail" placeholder="{s name="AccountLabelNewMail"}{/s}" class="{if $sErrorFlag.email}has--error{/if}" />
+									<input name="email" type="email" id="newmail" placeholder="{s name="AccountLabelNewMail"}{/s}{s name="Star" namespace="frontend/listing/box_article"}*{/s}" class="{if $sErrorFlag.email}has--error{/if}" />
 								</p>
 								<p>
-									<input name="emailConfirmation" type="text" id="neweailrepeat" placeholder="{s name="AccountLabelMail"}{/s}" class="{if $sErrorFlag.emailConfirmation}has--error{/if}" />
+									<input name="emailConfirmation" type="email" id="neweailrepeat" placeholder="{s name="AccountLabelMail"}{/s}{s name="Star" namespace="frontend/listing/box_article"}*{/s}" class="{if $sErrorFlag.emailConfirmation}has--error{/if}" />
 								</p>
 							</div>
 						{/block}

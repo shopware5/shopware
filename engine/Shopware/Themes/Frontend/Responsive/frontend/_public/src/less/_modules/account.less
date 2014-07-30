@@ -3,10 +3,6 @@
     .clearfix();
 }
 
-.payment--content {
-    .unitize-padding(10, 10);
-}
-
 .account--menu {
     .link--logout {
         [class^="icon--"] {
@@ -50,9 +46,10 @@
     .clearfix();
 }
 
-// Change Address
+// Change Address / Payment method
 .account--change-billing,
-.account--change-shipping {
+.account--change-shipping,
+.account--change-payment {
     &.register--content {
         display: block;
         width: 100%
@@ -66,8 +63,13 @@
     }
 }
 
-.account--newsletter input[type="checkbox"] {
-    .unitize-margin(0, 10, 0, 0);
+.account--newsletter fieldset {
+    border: 0;
+    padding: 0;
+
+    input[type="checkbox"] {
+        .unitize-margin(0, 10, 0, 0);
+    }
 }
 
 // Select Address
@@ -173,10 +175,19 @@
 }
 
 .order--details,
-.order--download,
 .order--price-unit,
 .order--current-price {
     display: none;
+}
+
+.order--details .panel--tr {
+    border-bottom: 1px solid @borderColor;
+}
+
+.order--repeat {
+    text-align: center;
+    background: @softBackgroundColor;
+    border-bottom: 1px solid @borderColor;
 }
 
 .order--actions {
@@ -260,9 +271,10 @@
         .unitize-margin(45, 0, 0, 0);
     }
 
-    // Change Address
+    // Change Address / Payment method
     .account--change-billing,
-    .account--change-shipping {
+    .account--change-shipping,
+    .account--change-payment {
         &.register--content {
             width: 78%
         }
@@ -371,6 +383,10 @@
         .panel--tr {
             padding: 0;
             border-width: 0 0 1px 0;
+
+            &.order--repeat {
+                .unitize-padding(20, 20);
+            }
         }
         .panel--td {
             .unitize-padding(10, 10);
@@ -403,6 +419,13 @@
         }
         .column--actions {
             width: 15%;
+
+            .btn {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 100%;
+            }
         }
         .column--name {
             width: 50%;
@@ -450,13 +473,6 @@
     .order--price,
     .order--amount {
         .is--align-right;
-    }
-
-    .order--repeat {
-        .unitize-padding(20, 20);
-        text-align: center;
-        background: @softBackgroundColor;
-        border-bottom: 1px solid @borderColor;
     }
 
     .account--downloads {

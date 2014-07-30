@@ -308,21 +308,21 @@
 
 	{* Repeat order *}
 	{block name="frontend_account_order_item_repeat_order"}
-		<form method="post" action="{url controller='checkout' action='add_accessories'}">
-			{foreach $offerPosition.details as $article}{if $article.modus == 0}
-				<input name="sAddAccessories[]" type="hidden" value="{$article.articleordernumber|escape}" />
-				<input name="sAddAccessoriesQuantity[]" type="hidden" value="{$article.quantity|escape}" />
-			{/if}{/foreach}
+        {if $offerPosition.activeBuyButton}
+            <div class="order--repeat panel--tr">
+                <form method="post" action="{url controller='checkout' action='add_accessories'}">
+                    {foreach $offerPosition.details as $article}{if $article.modus == 0}
+                        <input name="sAddAccessories[]" type="hidden" value="{$article.articleordernumber|escape}" />
+                        <input name="sAddAccessoriesQuantity[]" type="hidden" value="{$article.quantity|escape}" />
+                    {/if}{/foreach}
 
-			{* Repeat order button *}
-			{block name="frontend_account_order_item_repeat_button"}
-				{if $offerPosition.activeBuyButton}
-					<div class="order--repeat">
-						<input type="submit" class="btn btn--primary is--small" value="{s name='OrderLinkRepeat'}{/s}" />
-					</div>
-				{/if}
-			{/block}
-		</form>
+                    {* Repeat order button *}
+                    {block name="frontend_account_order_item_repeat_button"}
+                        <input type="submit" class="btn btn--primary is--small" value="{s name='OrderLinkRepeat'}{/s}" />
+                    {/block}
+                </form>
+            </div>
+        {/if}
 	{/block}
 
 {/block}
