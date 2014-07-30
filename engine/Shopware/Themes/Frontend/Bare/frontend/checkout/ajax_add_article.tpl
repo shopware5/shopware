@@ -10,7 +10,7 @@
         {* Article image *}
         {block name='checkout_ajax_add_information_image'}
             <div class="article--image block">
-                <a href="{$sArticle.linkDetails}" title="{$sArticle.articleName|escape}">
+                <a href="{$sArticle.linkDetails}" class="link--article-image" title="{$sArticle.articleName|escape}">
                     {if $sArticle.image.src}
                         <img class="image--thumbnail" src="{$sArticle.image.src.3}" alt="{$sArticle.articleName|escape}">
                     {else}
@@ -71,7 +71,7 @@
 
                 {* Cross sellung title *}
                 {block name='checkout_ajax_add_cross_selling_title'}
-                    <div class="panel--title  is--underline">
+                    <div class="panel--title is--underline">
                         {s name="AjaxAddHeaderCrossSelling"}{/s}
                     </div>
                 {/block}
