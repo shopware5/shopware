@@ -1,7 +1,7 @@
 <?php
 
 use Behat\Behat\Context\Step;
-use Behat\Gherkin\Node\TableNode;
+
 require_once 'SubContext.php';
 
 class BlogContext extends SubContext
@@ -16,12 +16,22 @@ class BlogContext extends SubContext
     }
 
     /**
-     * @Given /^I should see (\d+) blog articles$/
+     * @Given /^I click to read the blog article on position (\d+)$/
      */
-    public function iShouldSeeBlogArticles($count)
+    public function iClickToReadTheBlogArticleOnPosition($position)
     {
-        $this->getPage('Blog')->countArticles($count);
-    }
+        $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();
 
+        /** @var \Emotion\Blog $page */
+        $page = $this->getPage('Blog');
+
+        /** @var MultipleElement $blogBoxes */
+        $blogBoxes = $this->getElement('BlogBox');
+        $blogBoxes->setParent($page);
+
+        /** @var \Emotion\BlogBox $blogBox */
+        $blogBox = $blogBoxes->setInstance($position);
+        $blogBox->clickActionLink('readMore', $language);
+    }
 
 }

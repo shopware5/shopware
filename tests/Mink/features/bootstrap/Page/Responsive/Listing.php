@@ -14,8 +14,6 @@ class Listing extends \Emotion\Listing
         'filterCloseLinks' => 'div.filter--group > div > ul > li > a.filter--link.link--close',
         'filterGroups' => 'div > span.filter--header',
         'filterProperties' => 'div.filter--group:nth-of-type(%d) > div > ul > li > a.filter--link',
-        'articleBox' => 'li.product--box.panel',
-        'articlePrice' => 'li.product--box.panel:nth-of-type(%d) div.product--price',
         'listingBox' => 'div.listing--container'
     );
 

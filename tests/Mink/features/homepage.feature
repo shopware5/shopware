@@ -1,6 +1,6 @@
 Feature: General functionality
 
-  @currency @noResponsive @knownFailing
+  @currency @noResponsive
   Scenario Outline: I can put articles into my basket in different currencies
     Given I am on the listing page:
       | parameter | value |
@@ -24,12 +24,16 @@ Feature: General functionality
     When  I put the article into the basket
     And   I go to the listing page:
       | parameter | value |
+      | sPerPage  | 24    |
+      | sSort     | 5     |
     And  I go to the detail page of the article on position 13
     Then  I should see "<price_normal>"
 
     When  I put the article into the basket
     And  I go to the listing page:
       | parameter | value |
+      | sPerPage  | 24    |
+      | sSort     | 5     |
     And   I go to the detail page of the article on position 15
     Then  I should see "<price_base>"
 
@@ -68,12 +72,16 @@ Feature: General functionality
     When  I put the article into the basket
     And   I go to the listing page:
       | parameter | value |
+      | sPerPage  | 24    |
+      | sSort     | 5     |
     And  I go to the detail page of the article on position 13
     Then  I should see "<price_normal>"
 
     When  I put the article into the basket
     And   I go to the listing page:
       | parameter | value |
+      | sPerPage  | 24    |
+      | sSort     | 5     |
     And   I go to the detail page of the article on position 15
     Then  I should see "<price_base>"
 
