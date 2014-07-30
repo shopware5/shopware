@@ -55,6 +55,11 @@ class Option extends Extendable
     protected $media;
 
     /**
+     * @var bool
+     */
+    protected $active = true;
+
+    /**
      * @param int $id
      */
     public function setId($id)
@@ -116,5 +121,21 @@ class Option extends Extendable
     public function setMedia($media)
     {
         $this->media = $media;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param boolean $active
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
     }
 }
