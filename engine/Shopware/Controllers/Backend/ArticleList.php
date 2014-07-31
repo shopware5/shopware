@@ -344,6 +344,11 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $ast = $this->Request()->getParam('ast');
         $limit = $this->Request()->getParam('limit', 25);
         $offset = ($this->Request()->getParam('page', 1) - 1) * $limit;
+        $sort = $this->Request()->getParam('sort', array());
+
+        if (!empty($sort)) {
+            $sort = array_pop($sort);
+        }
 
         $ast = json_decode($ast, true);
         if ($ast == false) {
@@ -352,7 +357,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
         $resource = $this->container->get('multi_edit.' . $resource);
-        $result = $resource->filter($ast, $offset, $limit);
+        $result = $resource->filter($ast, $offset, $limit, $sort);
 
         $this->View()->assign(
             array(

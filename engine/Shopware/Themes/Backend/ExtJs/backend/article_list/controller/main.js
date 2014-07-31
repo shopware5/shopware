@@ -201,7 +201,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
             extend: 'Ext.data.Model',
             fields: fields,
 
-
             /**
              * Configure the data communication
              * @object

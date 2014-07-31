@@ -501,6 +501,22 @@ class DqlHelper
     }
 
     /**
+     * Return column info for a given alias
+     *
+     * @param $alias
+     * @return bool
+     */
+    public function getColumnInfoByAlias($alias)
+    {
+        foreach ($this->columnInfo as $info) {
+            if ($info['alias'] == $alias) {
+                return $info;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Returns the association name for a given entity in order to join it automatically
      *
      * @param $entity
@@ -584,14 +600,6 @@ class DqlHelper
                 $join['Shopware\Models\Article\Image'] = 'Shopware\Models\Article\Image';
             }
         }
-
-        // Remove Article-Entity
-        $join = array_filter(
-            $join,
-            function ($item) {
-                return $item != 'Shopware\Models\Article\Article';
-            }
-        );
 
         // Allow users to add his own joins depending on the passed tokens
         $join = $this->getEventManager()->filter(
@@ -682,7 +690,7 @@ class DqlHelper
             }
 
             // Replace some convenience operators back
-            // Switch is considdered a looping structure by php
+            // Switch is considered a looping structure by php
             // we need to continue two levels!
             if (strpos($token['type'], 'Operators')) {
                 switch (trim($token['token'])) {

@@ -286,7 +286,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
                 /*{if {acl_is_allowed resource=article privilege=save}}*/
                 editor: me.getEditorForColumn(column),
                 /*{/if}*/
-                sortable: false
+//                sortable: false
             };
 
             if (xtype = me.getXtypeForColumn(column)) {
