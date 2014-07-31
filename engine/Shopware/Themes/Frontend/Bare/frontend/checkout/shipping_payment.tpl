@@ -29,6 +29,16 @@
 	{include file="frontend/checkout/header.tpl"}
 {/block}
 
+{* Back to the shop button *}
+{block name='frontend_index_logo_trusted_shops' append}
+	<a href="{url controller='index'}"
+	   class="btn btn--grey is--small btn--back-top-shop"
+	   title="{s name='FinishButtonBackToShop' namespace='frontend/checkout/finish'}{/s}">
+		<i class="icon--arrow-left is--small"></i>
+		{s name="FinishButtonBackToShop" namespace="frontend/checkout/finish"}{/s}
+	</a>
+{/block}
+
 {* Hide sidebar left *}
 {block name='frontend_index_content_left'}{/block}
 
