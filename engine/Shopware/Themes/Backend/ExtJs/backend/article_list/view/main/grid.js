@@ -276,7 +276,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
 
         columns.push({
             xtype: 'actioncolumn',
-            width: 90,
+            width: 60,
             items: [
                 /*{if {acl_is_allowed resource=article privilege=save}}*/
                 {
@@ -464,6 +464,21 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
 
         if (column.alias.slice(-2).toLowerCase() == 'id') {
             return 60;
+        }
+
+        switch (column.alias) {
+            case 'Price_price':
+                return 90;
+            case 'Detail_number':
+                return 110;
+            case 'Supplier_name':
+                return 110;
+            case 'Article_active':
+                return 40;
+            case 'Tax_name':
+                return 75;
+            case 'Detail_inStock':
+                return 80;
         }
 
         switch (column.type) {
