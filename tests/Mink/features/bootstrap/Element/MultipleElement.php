@@ -27,7 +27,7 @@ abstract class MultipleElement extends Element implements Countable, Iterator
 
     /**
      * Have to be called after get the MultipleElement to find all its siblings
-     * @param \Behat\Mink\Element\Element $parent
+     * @param  \Behat\Mink\Element\Element $parent
      * @return $this
      */
     public function setParent(\Behat\Mink\Element\Element $parent)
@@ -39,13 +39,12 @@ abstract class MultipleElement extends Element implements Countable, Iterator
 
         $this->position = 0;
 
-        if($this->valid()) {
+        if ($this->valid()) {
             $this->setInstance(1);
         }
 
         return $this;
     }
-
 
     /**
      * @return string
@@ -56,7 +55,7 @@ abstract class MultipleElement extends Element implements Countable, Iterator
     }
 
     /**
-     * @param integer $position
+     * @param  integer         $position
      * @return MultipleElement $this
      */
     public function setInstance($position)
@@ -71,9 +70,9 @@ abstract class MultipleElement extends Element implements Countable, Iterator
      * Count elements of an object
      * @link http://php.net/manual/en/countable.count.php
      * @return int The custom count as an integer.
-     * </p>
-     * <p>
-     * The return value is cast to an integer.
+     *             </p>
+     *             <p>
+     *             The return value is cast to an integer.
      */
     public function count()
     {
@@ -121,7 +120,7 @@ abstract class MultipleElement extends Element implements Countable, Iterator
      * Checks if current position is valid
      * @link http://php.net/manual/en/iterator.valid.php
      * @return boolean The return value will be casted to boolean and then evaluated.
-     * Returns true on success or false on failure.
+     *                 Returns true on success or false on failure.
      */
     public function valid()
     {

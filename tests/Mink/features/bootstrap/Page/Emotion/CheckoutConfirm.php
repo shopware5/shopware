@@ -2,7 +2,6 @@
 namespace Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
-use Behat\Behat\Context\Step;
 
 class CheckoutConfirm extends Page
 {
@@ -10,6 +9,25 @@ class CheckoutConfirm extends Page
      * @var string $path
      */
     protected $path = '/checkout/confirm';
+
+    public $cssLocator = array(
+        'pageIdentifier'  => 'div#confirm',
+        'deliveryForm' => 'form.payment',
+        'proceedCheckoutForm' => 'div.additional_footer > form'
+    );
+
+    public function verifyPage()
+    {
+        $locators = array('pageIdentifier');
+        $elements = \Helper::findElements($this, $locators, $this->cssLocator, false, false);
+
+        if (!empty($elements['pageIdentifier'])) {
+            return;
+        }
+
+        $message = array('You are not on CheckoutConfirm page!', 'Current URL: '.$this->getSession()->getCurrentUrl());
+        \Helper::throwException($message);
+    }
 
     /**
      * Login a user
@@ -57,7 +75,7 @@ class CheckoutConfirm extends Page
     /**
      * Changes the payment method
      * @param integer $value
-     * @param array $data
+     * @param array   $data
      */
     public function changePayment($value, $data = array())
     {
@@ -89,17 +107,6 @@ class CheckoutConfirm extends Page
 
         $button = $this->find('css', 'div.dispatch-methods input.button-middle');
         $button->press();
-    }
-
-    /**
-     * Proceeds the checkout
-     */
-    public function proceedToCheckout()
-    {
-        $this->open();
-
-        $this->checkField('sAGB');
-        $this->pressButton('basketButton');
     }
 
     public function getOrderNumber()

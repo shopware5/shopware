@@ -1,6 +1,5 @@
 <?php
 
-use Behat\Behat\Context\Step;
 use Behat\Gherkin\Node\TableNode;
 require_once 'SubContext.php';
 
@@ -13,7 +12,7 @@ class CheckoutContext extends SubContext
      */
     public function theSumsShouldBe($sum, $shippingCosts = null, TableNode $vat = null)
     {
-        if(isset($vat)) {
+        if (isset($vat)) {
             $vat = $vat->getHash();
         }
 
@@ -93,40 +92,11 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @When /^I change my payment method to "([^"]*)"$/
-     */
-    public function iChangeMyPaymentMethodTo($value)
-    {
-        $this->getPage('CheckoutConfirm')->changePayment($value);
-    }
-
-    /**
-     * @When /^I change my payment method to debit using account of "(?P<name>[^"]*)" \(no\. "(?P<account>\d+)"\) of bank "(?P<bank>[^"]*)" \(code "(?P<code>\d+)"\)$/
-     */
-    public function iChangeMyPaymentMethodToDebitUsingAccountOfNoOfBankCode($name, $kto, $bank, $blz)
-    {
-        $data = array('kontonr' => $kto,
-                      'blz' => $blz,
-                      'bank' => $bank,
-                      'bank2' => $name);
-
-        $this->getPage('CheckoutConfirm')->changePayment(2, $data);
-    }
-
-    /**
      * @When /^I change my delivery to "([^"]*)"$/
      */
     public function iChangeMyDeliveryTo($value)
     {
         $this->getPage('CheckoutConfirm')->changeDelivery($value);
-    }
-
-    /**
-     * @When /^I proceed to checkout$/
-     */
-    public function iProceedToCheckout()
-    {
-        $this->getPage('CheckoutConfirm')->proceedToCheckout();
     }
 
     /**
@@ -147,13 +117,5 @@ class CheckoutContext extends SubContext
     {
         $aggregations = $aggregations->getHash();
         $this->getPage('CheckoutCart')->checkAggregation($aggregations);
-    }
-
-    /**
-     * @When /^I proceed to confirm$/
-     */
-    public function iProceedToConfirm()
-    {
-        Helper::pressNamedButton($this, 'CheckoutCart', 'checkout');
     }
 }

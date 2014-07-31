@@ -2,7 +2,6 @@
 namespace Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
-use Behat\Behat\Context\Step;
 use Behat\Mink\Exception\ExpectationException;
 
 class Account extends Page
@@ -16,7 +15,11 @@ class Account extends Page
         'pageIdentifier1'  => 'div#content > div > div.account',
         'pageIdentifier2'  => 'div#login',
         'payment' => 'div#selected_payment strong',
-        'logout' => 'div.adminbox a.logout'
+        'logout' => 'div.adminbox a.logout',
+        'registrationForm' => 'div.register > form',
+        'billingForm' => 'div.change_billing > form',
+        'shippingForm' => 'div.change_shipping > form',
+        'paymentForm' => 'div.change_payment > form'
     );
 
     /**
@@ -52,11 +55,11 @@ class Account extends Page
         $locators = array('pageIdentifier1', 'pageIdentifier2');
         $elements = \Helper::findElements($this, $locators, $this->cssLocator, false, false);
 
-        if(!empty($elements['pageIdentifier1'])) {
+        if (!empty($elements['pageIdentifier1'])) {
             return;
         }
 
-        if(!empty($elements['pageIdentifier2'])) {
+        if (!empty($elements['pageIdentifier2'])) {
             return;
         }
 
@@ -75,6 +78,7 @@ class Account extends Page
 
         if ($elements['logout']) {
             $elements['logout']->click();
+
             return true;
         }
 
@@ -131,119 +135,12 @@ class Account extends Page
         $this->pressButton('Ändern');
     }
 
-    protected function getRegistrationForm()
-    {
-//        $this->pressButton('Neuer Kunde');
-    }
-
-    /**
-     * Register a new user
-     * @param array $values
-     */
-    public function register($values)
-    {
-        $this->getRegistrationForm();
-
-        $billingValues = array();
-        $shippingValues = array();
-
-        foreach ($values as $row) {
-            if (!empty($row['billing'])) {
-                $billingValues[] = array(
-                    'field' => $row['field'],
-                    'value' => $row['billing']
-                );
-            }
-
-            if (!empty($row['shipping'])) {
-                $shippingValues[] = array(
-                    'field' => $row['field'],
-                    'value' => $row['shipping']
-                );
-            }
-        }
-
-        $this->fillBilling($billingValues);
-
-        if (!empty($shippingValues)) {
-            $this->checkField('register_billing_shippingAddress');
-            $this->fillShipping($shippingValues);
-        }
-
-        $this->pressButton('Registrierung abschließen');
-    }
-
-    /**
-     * Helper function to fill the billing address form
-     * @param array $values
-     */
-    private function fillBilling($values)
-    {
-        $personal_fields = array(
-            'customer_type',
-            'salutation',
-            'firstname',
-            'lastname',
-            'email',
-            'password',
-            'passwordConfirmation',
-            'phone',
-            'birthday',
-            'birthmonth',
-            'birthyear'
-        );
-
-        foreach ($values as $row) {
-            if (in_array($row['field'], $personal_fields)) {
-                $prefix = 'personal';
-            } else {
-                $prefix = 'billing';
-            }
-
-            switch ($row['field']) {
-                case 'customer_type':
-                case 'salutation':
-                case 'birthday':
-                case 'birthmonth':
-                case 'birthyear':
-                case 'country':
-                    $this->selectFieldOption('register[' . $prefix . '][' . $row['field'] . ']', $row['value']);
-                    break;
-
-                default:
-                    $this->fillField('register[' . $prefix . '][' . $row['field'] . ']', $row['value']);
-                    break;
-            }
-        }
-    }
-
-    /**
-     * Helper function to fill the shipping address form
-     * @param array $values
-     */
-    private function fillShipping($values)
-    {
-        foreach ($values as $row) {
-            switch ($row['field']) {
-                case 'salutation':
-                case 'country':
-                    $this->selectFieldOption('register[shipping][' . $row['field'] . ']', $row['value']);
-                    break;
-
-                default:
-                    $this->fillField('register[shipping][' . $row['field'] . ']', $row['value']);
-                    break;
-            }
-        }
-    }
-
     public function checkPayment($payment)
     {
         $locators = array('payment');
         $elements = \Helper::findElements($this, $locators);
 
-        if(strcmp($elements['payment']->getText(), $payment) !== 0)
-        {
+        if (strcmp($elements['payment']->getText(), $payment) !== 0) {
             $message = sprintf('The current payment method is %s! (should be %s)', $elements['payment']->getText(), $payment);
             throw new ExpectationException($message, $this->getSession());
         }
@@ -252,7 +149,7 @@ class Account extends Page
     /**
      * Changes the payment method
      * @param integer $value
-     * @param array $data
+     * @param array   $data
      */
     public function changePayment($value, $data = array())
     {
@@ -372,16 +269,6 @@ class Account extends Page
         }
 
         return $downloads;
-    }
-
-    public function chooseAddress($type)
-    {
-        $this->open();
-
-        $type = strtolower($type);
-        $type = ucfirst($type);
-
-        $this->getElement('Account'.$type)->clickButton('chooseOtherButton');
     }
 
     public function checkAddress($type, $address)

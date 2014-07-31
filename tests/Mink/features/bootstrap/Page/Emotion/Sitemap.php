@@ -1,12 +1,10 @@
 <?php
 namespace Emotion;
 
-use Behat\Mink\Driver\SahiDriver;
 use Behat\Mink\Element\NodeElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Behat\Mink\Exception\ResponseTextException;
 use Behat\Behat\Context\Step;
-use Behat\Behat\Context\Step\Then;
 
 class Sitemap extends Page
 {
@@ -24,7 +22,6 @@ class Sitemap extends Page
     );
 
     protected $specialGroupsOrder = array('customPages', 'supplierPages', 'landingPages');
-
 
     /**
      * Compares the category tree (left navigation) with the sitemap
@@ -109,7 +106,7 @@ class Sitemap extends Page
 
     /**
      * Recursive helper function to read all category children from left navigation (by clicking through the category tree)
-     * @param NodeElement $node
+     * @param  NodeElement $node
      * @return array
      */
     private function readNavigationNode($node)
@@ -194,7 +191,7 @@ class Sitemap extends Page
 
     /**
      * Recursive helper function to add all category children to first level of an array
-     * @param array $category
+     * @param  array $category
      * @return array
      */
     private function getCategoryLinks($category)
@@ -240,7 +237,7 @@ class Sitemap extends Page
 
     /**
      * Reads the complete sitemap tree of the group
-     * @param NodeElement $group
+     * @param  NodeElement $group
      * @return array
      */
     private function readSitemapGroup($group)
@@ -263,7 +260,7 @@ class Sitemap extends Page
 
     /**
      * Recursive helper function to read all Node data
-     * @param NodeElement $node
+     * @param  NodeElement $node
      * @return array
      */
     private function getNodeData($node)
@@ -295,7 +292,7 @@ class Sitemap extends Page
 
     /**
      * Helper function to get all sitemap groups of a type (categories, custom pages, supplier pages, landing pages)
-     * @param string $groupName
+     * @param  string            $groupName
      * @return array|NodeElement
      */
     private function getSitemapGroups($groupName = 'categories')
@@ -318,8 +315,8 @@ class Sitemap extends Page
         foreach ($this->specialGroupsOrder as $specialGroup) {
             array_pop($groups);
         }
+
         return $groups;
     }
-
 
 }

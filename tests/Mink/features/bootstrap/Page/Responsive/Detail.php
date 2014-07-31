@@ -3,9 +3,6 @@ namespace Responsive;
 
 use Behat\Mink\Driver\SahiDriver;
 use Behat\Mink\Element\NodeElement;
-use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
-use Behat\Mink\Exception\ResponseTextException;
-use Behat\Behat\Context\Step;
 
 class Detail extends \Emotion\Detail
 {
@@ -21,18 +18,19 @@ class Detail extends \Emotion\Detail
         'commentTitle' => 'div.entry--content.block > h4',
         'commentText' => 'div.entry--content.block > p',
         'commentAnswer' => 'div.entry--content.block > p',
-        'configuratorForm' => 'div.product--buybox > div.buybox--inner > form'
+        'configuratorForm' => 'div.product--buybox > div.buybox--inner > form',
+        'notificationForm' => 'form.notification--form'
     );
 
     protected $configuratorTypes = array(
-        'buybox--form' => 'table',
-        'confgurator--form upprice--form' => 'standard',
-        'confgurator--form selection--form' => 'select'
+        'table' => 'buybox--form',
+        'standard' => 'configurator--form upprice--form',
+        'select' => 'configurator--form selection--form'
     );
 
     /**
      * Helper function how to read the evaluation from the evaluation element
-     * @param NodeElement $element
+     * @param  NodeElement $element
      * @return string
      */
     protected function getEvaluation($element)
@@ -41,7 +39,7 @@ class Detail extends \Emotion\Detail
         $evaluation = floatval($evaluation);
         $evaluation*= 2;
 
-        return (string)$evaluation;
+        return (string) $evaluation;
     }
 
     /**

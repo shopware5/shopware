@@ -15,7 +15,7 @@ class NotePosition extends \Emotion\NotePosition
         'details' => array('de' => 'Zum Produkt',   'en' => 'View product')
     );
 
-    protected $cssLocator = array(
+    public $cssLocator = array(
         'a-thumb' => 'a.note--image-link',
         'img' => 'img',
         'a-zoom' => 'a.note--zoom',

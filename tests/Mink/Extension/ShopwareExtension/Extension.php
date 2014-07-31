@@ -31,7 +31,6 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 use Behat\Behat\Extension\ExtensionInterface;
 
-
 class Extension implements ExtensionInterface
 {
     /**

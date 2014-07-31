@@ -1,8 +1,6 @@
 <?php
 namespace Responsive;
 
-use Behat\Behat\Context\Step;
-
 class Listing extends \Emotion\Listing
 {
     public $cssLocator = array(

@@ -2,7 +2,7 @@
 
 namespace Emotion;
 
-require_once('tests/Mink/features/bootstrap/Element/Emotion/CartPosition.php');
+require_once 'tests/Mink/features/bootstrap/Element/Emotion/CartPosition.php';
 
 class ArticleBox extends CartPosition
 {
@@ -10,7 +10,7 @@ class ArticleBox extends CartPosition
     protected $selector = array('css' => 'div.artbox');
 
     /** @var array $namedSelectors */
-    protected $namedSelectors = array(
+    public $namedSelectors = array(
         'order'   => array('de' => 'Jetzt bestellen',   'en' => 'Order now'),
         'compare' => array('de' => 'Vergleichen',       'en' => 'Compare'),
         'details' => array('de' => 'Zum Produkt',       'en' => 'See details')
@@ -31,13 +31,12 @@ class ArticleBox extends CartPosition
         $locators = array_column($properties, 'property');
         $elements = \Helper::findElements($this, $locators);
 
-        foreach($properties as $row)
-        {
+        foreach ($properties as $row) {
             $element = $elements[$row['property']];
 
             $comparison = array($element->getText(), $row['value']);
 
-            if($row['property'] === 'price') {
+            if ($row['property'] === 'price') {
                 $comparison = \Helper::toFloat($comparison);
             }
 
@@ -46,7 +45,7 @@ class ArticleBox extends CartPosition
 
         $result = \Helper::checkArray($check);
 
-        if($result !== true) {
+        if ($result !== true) {
             $message = sprintf(
                 'The %s of the article on position %d is "%s" (should be "%s")',
                 $result,

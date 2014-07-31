@@ -4,6 +4,7 @@ namespace Emotion;
 
 use Behat\Mink\Element\Element;
 use Behat\Mink\Element\NodeElement;
+use Behat\Mink\Element\TraversableElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page, Behat\Mink\Exception\ResponseTextException,
     Behat\Behat\Context\Step;
 
@@ -15,6 +16,9 @@ class Homepage extends Page
     protected $path = '/';
 
     public $cssLocator = array(
+        'contentBlock' => 'div#content > div.inner',
+        'searchForm' => 'div#searchcontainer form',
+        'newsletterForm' => 'div.footer_column.col4 > form',
         'emotionElement' => 'div.emotion-element > div.%s-element',
         'emotionSliderElement' => 'div.emotion-element > div.%s-slider-element',
         'bannerImage' => 'div.mapping img',
@@ -64,11 +68,10 @@ class Homepage extends Page
         $this->getElement('SearchForm')->receiveSearchResultsFor($searchTerm);
     }
 
-
     /**
      * Checks an emotion banner element
-     * @param string $image
-     * @param mixed $links
+     * @param  string                                      $image
+     * @param  mixed                                       $links
      * @throws \Behat\Mink\Exception\ResponseTextException
      */
     public function checkBanner($image, $links = null)
@@ -124,7 +127,7 @@ class Homepage extends Page
 
     /**
      * Checks an emotion blog element
-     * @param array $articles
+     * @param  array                                       $articles
      * @throws \Behat\Mink\Exception\ResponseTextException
      */
     public function checkBlogArticles($articles)
@@ -186,7 +189,7 @@ class Homepage extends Page
 
     /**
      * Checks an emotion Youtube element
-     * @param string $code
+     * @param  string                                      $code
      * @throws \Behat\Mink\Exception\ResponseTextException
      */
     public function checkYoutubeVideo($code)
@@ -210,8 +213,8 @@ class Homepage extends Page
 
     /**
      * Checks an emotion slider element
-     * @param string $type
-     * @param array $slides
+     * @param  string                                      $type
+     * @param  array                                       $slides
      * @throws \Behat\Mink\Exception\ResponseTextException
      */
     public function checkSlider($type, $slides)
@@ -290,9 +293,9 @@ class Homepage extends Page
 
     /**
      * Checks an emotion category teaser element
-     * @param string $title
-     * @param string $image
-     * @param string $link
+     * @param  string                                      $title
+     * @param  string                                      $image
+     * @param  string                                      $link
      * @throws \Behat\Mink\Exception\ResponseTextException
      */
     public function checkCategoryTeaser($title, $image, $link)
@@ -324,7 +327,7 @@ class Homepage extends Page
 
     /**
      * Checks an emotion article element
-     * @param array $data
+     * @param  array                                       $data
      * @throws \Behat\Mink\Exception\ResponseTextException
      */
     public function checkArticle($data)
@@ -383,7 +386,7 @@ class Homepage extends Page
 
     /**
      * Helper function to find all emotion slider and their important tags
-     * @param string $type
+     * @param  string $type
      * @return array
      */
     private function findAllEmotionSlider($type)
@@ -413,7 +416,7 @@ class Homepage extends Page
 
     /**
      * Helper function to get all important tags of a banner slider
-     * @param string $cssClass
+     * @param  string $cssClass
      * @return array
      */
     private function findAllEmotionBannerSliderElements(NodeElement $slider)
@@ -431,12 +434,13 @@ class Homepage extends Page
 
             $return[] = $elements;
         }
+
         return $return;
     }
 
     /**
      * Helper function to get all important tags of a manufacturer slider
-     * @param string $cssClass
+     * @param  string $cssClass
      * @return array
      */
     private function findAllEmotionManufacturerSliderElements(NodeElement $slider)
@@ -461,12 +465,13 @@ class Homepage extends Page
                 $return[] = $elements;
             }
         }
+
         return $return;
     }
 
     /**
      * Helper function to get all important tags of an article slider
-     * @param string $cssClass
+     * @param  string $cssClass
      * @return array
      */
     private function findAllEmotionArticleSliderElements(NodeElement $slider)
@@ -491,12 +496,13 @@ class Homepage extends Page
                 $return[] = $elements;
             }
         }
+
         return $return;
     }
 
     /**
      * Helper function to find all emotion parents elements of one type
-     * @param string $type
+     * @param  string $type
      * @return array
      */
     private function findAllEmotionParentElements($type, $locator = 'emotionElement')
@@ -509,7 +515,7 @@ class Homepage extends Page
 
     /**
      * Compares the comparison list with the given list of articles
-     * @param array $articles
+     * @param  array                                       $articles
      * @throws \Behat\Mink\Exception\ResponseTextException
      */
     public function checkComparison($articles)
@@ -601,7 +607,7 @@ class Homepage extends Page
     /**
      * Global method to check the count of an MultipleElement
      * @param \MultipleElement $elements
-     * @param int $count
+     * @param int              $count
      */
     public function assertElementCount(\MultipleElement $elements, $count = 0)
     {
@@ -614,5 +620,108 @@ class Homepage extends Page
             );
             \Helper::throwException($message);
         }
+    }
+
+    /**
+     * Global method to check the content of an Element or Page
+     * @param TraversableElement $element
+     * @param array              $content
+     */
+    public function assertElementContent(TraversableElement $element, $content)
+    {
+        $check = array();
+
+        foreach ($content as $subCheck) {
+            $checkMethod = sprintf('get%ssToCheck', ucfirst($subCheck['position']));
+
+            if (!method_exists($element, $checkMethod)) {
+                $message = sprintf('%s->%s() does not exist!', get_class($element), $checkMethod);
+                \Helper::throwException($message);
+            }
+
+            $checkValues = $element->$checkMethod();
+
+            if (!is_array($checkValues) || empty($checkValues)) {
+                $message = sprintf('%s->%s() returned no values to check!', get_class($element), $checkMethod);
+                \Helper::throwException($message);
+            }
+
+            foreach ($checkValues as $key => $checkValue) {
+                //Convert the contentValue to a float if checkValue is also one
+                if (is_float($checkValue)) {
+                    $subCheck['content'] = \Helper::toFloat($subCheck['content']);
+                }
+
+                $check[$key] = array($checkValue, $subCheck['content']);
+            }
+        }
+
+        $result = \Helper::checkArray($check);
+
+        if ($result !== true) {
+            $message = sprintf(
+                '"%s" not found in "%s" of "%s"! (is "%s")',
+                $check[$result][1],
+                $result,
+                get_class($element),
+                $check[$result][0]
+            );
+            \Helper::throwException($message);
+        }
+    }
+
+    /**
+     * @param string             $formLocatorName
+     * @param TraversableElement $element
+     * @param array              $values
+     */
+    public function submitForm($formLocatorName, TraversableElement $element, $values)
+    {
+        $locators = array(
+            'form' => $element->cssLocator[$formLocatorName],
+            'formSubmitButton' => $element->cssLocator[$formLocatorName] . ' *[type="submit"]'
+        );
+        $elements = \Helper::findElements($element, $locators, $locators);
+
+        foreach ($values as $value) {
+            $tempFieldName = $fieldName = $value['field'];
+            unset($value['field']);
+
+            foreach ($value as $key => $fieldValue) {
+                if ($key !== 'value') {
+                    $fieldName = sprintf('%s[%s]', $key, $tempFieldName);
+                }
+
+                $field = $elements['form']->findField($fieldName);
+
+                if (empty($field)) {
+                    if (empty($fieldValue)) {
+                        continue;
+                    }
+
+                    $message = sprintf('The form "%s" has no field "%s"!', $formLocatorName, $fieldName);
+                    \Helper::throwException($message);
+                }
+
+                $fieldType = $field->getAttribute('type');
+
+                //Select
+                if (empty($fieldType)) {
+                    $field->selectOption($fieldValue);
+                    continue;
+                }
+
+                //Checkbox
+                if ($fieldType === 'checkbox') {
+                    $field->check();
+                    continue;
+                }
+
+                //Text
+                $field->setValue($fieldValue);
+            }
+        }
+
+        $elements['formSubmitButton']->press();
     }
 }
