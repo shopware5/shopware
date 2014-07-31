@@ -131,7 +131,7 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
      */
     public function getByCategory(Struct\ListProduct $product, Struct\Context $context)
     {
-        $products = $this->getByListCategory(array($product), $context);
+        $products = $this->getListByCategory(array($product), $context);
 
         return array_shift($products);
     }
@@ -139,7 +139,7 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getByListCategory($products, Struct\Context $context)
+    public function getListByCategory($products, Struct\Context $context)
     {
         $ids = array();
         foreach ($products as $product) {

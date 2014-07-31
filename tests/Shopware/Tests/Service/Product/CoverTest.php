@@ -146,7 +146,6 @@ class CoverTest extends \Enlight_Components_Test_TestCase
         }
     }
 
-
     /**
      * Test the shopware configuration forceMainImageInListing
      *
@@ -182,8 +181,8 @@ class CoverTest extends \Enlight_Components_Test_TestCase
 
         $mediaService = new MediaService(
             Shopware()->Container()->get('media_gateway_dbal'),
-            Shopware()->Container()->get('product_media_gateway'),
-            Shopware()->Container()->get('variant_media_gateway'),
+            Shopware()->Container()->get('product_media_gateway_dbal'),
+            Shopware()->Container()->get('variant_media_gateway_dbal'),
             $config
         );
 
@@ -289,7 +288,6 @@ class CoverTest extends \Enlight_Components_Test_TestCase
             $tax,
             $customerGroup
         );
-
 
         $customerGroup = $this->converter->convertCustomerGroup($customerGroup);
         $data = array_merge(

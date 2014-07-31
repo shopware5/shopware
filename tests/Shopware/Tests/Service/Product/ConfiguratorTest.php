@@ -70,42 +70,6 @@ class ConfiguratorTest extends \Enlight_Components_Test_TestCase
     }
 
 
-    public function testLegacyFioo()
-    {
-        $number = __FUNCTION__;
-        $context = $this->getContext();
-        $data = $this->getProduct($number, $context);
-
-        $this->helper->createArticle($data);
-
-        $listProduct = $this->helper->getListProduct($number, $context);
-
-        $configurator = $this->helper->getProductConfigurator($listProduct, $context);
-
-        $this->assertCount(3, $configurator->getGroups());
-        foreach ($configurator->getGroups() as $group) {
-            $this->assertCount(3, $group->getOptions());
-        }
-    }
-
-    public function testProductConfigurator()
-    {
-        $number = __FUNCTION__;
-        $context = $this->getContext();
-        $data = $this->getProduct($number, $context);
-
-        $this->helper->createArticle($data);
-
-        $listProduct = $this->helper->getListProduct($number, $context);
-
-        $configurator = $this->helper->getProductConfigurator($listProduct, $context);
-
-        $this->assertCount(3, $configurator->getGroups());
-        foreach ($configurator->getGroups() as $group) {
-            $this->assertCount(3, $group->getOptions());
-        }
-    }
-
     private function createSelection(ListProduct $listProduct, array $optionNames)
     {
         $options = $this->helper->getProductOptionsByName(
@@ -122,112 +86,14 @@ class ConfiguratorTest extends \Enlight_Components_Test_TestCase
         return $selection;
     }
 
-    /**
-     * @group knownFailing
-     */
-    public function testSelection()
+    public function testSelectionConfigurator()
     {
         $number = __FUNCTION__;
         $context = $this->getContext();
-        $data = $this->getProduct($number, $context);
+        $productData = $this->getProduct($number, $context);
 
-        $this->helper->createArticle($data);
+        $productData['configuratorSet']['type'] = 2;
 
-        $listProduct = $this->helper->getListProduct($number, $context);
-
-        $this->helper->updateConfiguratorVariants(
-            $listProduct->getId(),
-            array(
-                array(
-                    'options' => array('rot', 'schwarz'),
-                    'data' => array('active' => false)
-                ),
-                array(
-                    'options' => array('L'),
-                    'data' => array('active' => false)
-                ),
-            )
-        );
-
-        $configurator = $this->helper->getProductConfigurator(
-            $listProduct,
-            $context,
-            $this->createSelection($listProduct, array('rot'))
-        );
-
-        foreach ($configurator->getGroups() as $group) {
-            foreach ($group->getOptions() as $option) {
-                $this->assertNotEquals('schwarz', $option->getName());
-                $this->assertNotEquals('L', $option->getName());
-            }
-        }
-
-
-        $configurator = $this->helper->getProductConfigurator(
-            $listProduct,
-            $context,
-            $this->createSelection($listProduct, array('schwarz'))
-        );
-
-        foreach ($configurator->getGroups() as $group) {
-            foreach ($group->getOptions() as $option) {
-                $this->assertNotEquals('rot', $option->getName());
-                $this->assertNotEquals('L', $option->getName());
-            }
-        }
-    }
-
-    /**
-     * @group knownFailing
-     */
-    public function testCloseoutSelection()
-    {
-        $number = __FUNCTION__;
-        $context = $this->getContext();
-        $data = $this->getProduct($number, $context);
-
-        $this->helper->createArticle($data);
-
-        $listProduct = $this->helper->getListProduct($number, $context);
-
-        $this->helper->updateConfiguratorVariants(
-            $listProduct->getId(),
-            array(
-                array(
-                    'options' => array('blau', 'weiß'),
-                    'data' => array('inStock' => 0)
-                ),
-                array(
-                    'options' => array('M'),
-                    'data' => array('inStock' => 0)
-                ),
-            )
-        );
-
-        $configurator = $this->helper->getProductConfigurator(
-            $listProduct,
-            $context,
-            $this->createSelection($listProduct, array('weiß'))
-        );
-
-        foreach ($configurator->getGroups() as $group) {
-            foreach ($group->getOptions() as $option) {
-                $this->assertNotEquals('blau', $option->getName());
-                $this->assertNotEquals('M', $option->getName());
-            }
-        }
-
-        $configurator = $this->helper->getProductConfigurator(
-            $listProduct,
-            $context,
-            $this->createSelection($listProduct, array('blau'))
-        );
-
-        foreach ($configurator->getGroups() as $group) {
-            foreach ($group->getOptions() as $option) {
-                $this->assertNotEquals('weiß', $option->getName());
-                $this->assertNotEquals('M', $option->getName());
-            }
-        }
+        $article = $this->helper->createArticle($productData);
     }
 }

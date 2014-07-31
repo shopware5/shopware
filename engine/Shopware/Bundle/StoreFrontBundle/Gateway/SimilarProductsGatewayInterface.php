@@ -104,5 +104,5 @@ interface SimilarProductsGatewayInterface
      * @param Struct\Context $context
      * @return array Indexed by the product number
      */
-    public function getByListCategory($products, Struct\Context $context);
+    public function getListByCategory($products, Struct\Context $context);
 }
