@@ -116,7 +116,7 @@ class Media extends Extendable
     /**
      * @return boolean
      */
-    public function getPreview()
+    public function isPreview()
     {
         return $this->preview;
     }

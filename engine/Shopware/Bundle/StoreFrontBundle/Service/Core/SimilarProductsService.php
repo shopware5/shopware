@@ -104,7 +104,7 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
             return $result;
         }
 
-        $fallback = $this->gateway->getByListCategory($fallback, $context);
+        $fallback = $this->gateway->getListByCategory($fallback, $context);
 
         //loads the list product data for the selected numbers.
         //all numbers are joined in the extractNumbers function to prevent that a product will be
