@@ -18,6 +18,16 @@
 {* Hide footer *}
 {block name='frontend_index_footer'}{/block}
 
+{* Back to the shop button *}
+{block name='frontend_index_logo_trusted_shops' append}
+	<a href="{url controller='index'}"
+	   class="btn btn--grey is--small btn--back-top-shop"
+	   title="{s name='FinishButtonBackToShop'}{/s}">
+		<i class="icon--arrow-left is--small"></i>
+		{s name="FinishButtonBackToShop"}{/s}
+	</a>
+{/block}
+
 {* Main content *}
 {block name="frontend_index_content"}
 	<div class="content checkout--content finish--content">
@@ -35,22 +45,33 @@
 						<p class="teaser--text">{s name="FinishInfoConfirmationMail"}{/s}<br />{s name="FinishInfoPrintOrder"}{/s}</p>
 
 						{block name='frontend_checkout_finish_teaser_actions'}
+							<p class="teaser--actions">
 
-							{* Print button *}
-							<a href="#" class="btn btn--primary teaser--btn-print" onclick="self.print()" title="{s name='FinishLinkPrint'}{/s}">
-								{s name="FinishLinkPrint"}{/s}
-							</a>
-						{/block}
+								{* Back to the shop button *}
+								<a href="{url controller='index'}" class="btn btn--secondary teaser--btn-back" title="{s name='FinishButtonBackToShop'}{/s}">
+									<i class="icon--arrow-left"></i> {s name="FinishButtonBackToShop"}{/s}
+								</a>
 
-						{* Trusted shops form *}
-						{block name='frontend_checkout_finish_teaser_trusted_shops'}
-							{if {config name=TSID}}
-								{include file="frontend/plugins/trusted_shops/form.tpl"}
-							{/if}
+								{* Print button *}
+								<a href="#" class="btn btn--primary teaser--btn-print" onclick="self.print()" title="{s name='FinishLinkPrint'}{/s}">
+									{s name="FinishLinkPrint"}{/s}
+								</a>
+							</p>
 						{/block}
 					</div>
 				{/block}
 			</div>
+		{/block}
+
+		{* Trusted shops form *}
+		{block name='frontend_checkout_finish_teaser_trusted_shops'}
+			{if {config name=TSID}}
+				<div class="finish--trusted-shops panel has--border">
+					<div class="panel--body is--wide is--align-center">
+						{include file="frontend/plugins/trusted_shops/form.tpl"}
+					</div>
+				</div>
+			{/if}
 		{/block}
 
 		{block name='frontend_checkout_finish_info'}
@@ -178,7 +199,7 @@
 						{/block}
 
 						{* Article items *}
-						{foreach name=basket from=$sBasket.content item=sBasketItem key=key}
+						{foreach $sBasket.content as $key => $sBasketItem}
 							{block name='frontend_checkout_finish_item'}
 								{include file='frontend/checkout/finish_item.tpl'}
 							{/block}
