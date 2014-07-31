@@ -322,6 +322,8 @@ $(function() {
         }
     }
 
+    $('*[data-ajax-shipping-payment="true"]').shippingPayment();
+
     // Initialize the registration plugin
     $('div[data-register="true"]').register();
 

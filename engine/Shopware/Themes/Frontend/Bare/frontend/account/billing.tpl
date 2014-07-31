@@ -27,7 +27,7 @@
 				{* Personal form *}
 				{block name="frontend_account_billing_form"}
 					<div class="account--billing-form">
-						<form name="frmRegister" method="post" action="{url action=saveBilling sTarget=$sTarget}">
+						<form name="frmRegister" method="post" action="{url controller=account action=saveBilling sTarget=$sTarget}">
 
 							{* Personal fieldset *}
 							{block name="frontend_account_personal_information"}

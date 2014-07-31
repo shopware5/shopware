@@ -2,6 +2,14 @@
     .panel--body > .alert {
         .unitize-margin(50, 0);
     }
+
+    .account--change-billing,
+    .account--billing-address,
+    .account--change-shipping,
+    .account--shipping-address
+    {
+        width: 100% !important;
+    }
 }
 
 .content--basket {
@@ -358,6 +366,68 @@
     }
 }
 
+// Checkout Confirm
+.content--confirm {
+
+    .alert {
+        .unitize(10, 16, margin-top);
+    }
+
+    .has--border {
+        border: 1px solid @borderColor;
+    }
+
+    .payment--method-list,
+    .dispatch--method-list {
+        .unitize(10, 16, margin-bottom);
+    }
+
+    .payment--method,
+    .dispatch--method {
+        .unitize(10, 16, padding-top);
+
+        input[type="radio"] {
+            .unitize(10, 16, margin-right);
+        }
+    }
+
+    .confirm--actions {
+
+        input[type="submit"] {
+            .unitize(16, 16, padding-left);
+        }
+    }
+
+    .method--description {
+        .unitize(26, 16, margin-left);
+    }
+
+    .payment--method-logo {
+        .unitize-margin(10, 0, 0, 26, 16);
+    }
+
+    .method--bankdata {
+        .unitize-margin(10, 0, 0, 0, 16);
+
+        input[type="text"] {
+            max-width: 100%;
+        }
+    }
+
+    .table--aggregation,
+    .add-product--field,
+    .add-product--button {
+        display: none
+    }
+
+    .aggregation--list {
+        .unitize(14, 16, font-size);
+        .unitize(24, 16, line-height);
+        .unitize-margin(0, -10, 0, -10, 16);
+        border-top: 1px solid @borderColor;
+    }
+}
+
 @media screen and (min-width: @tabletViewportWidth) {
     .is--ctl-checkout .sidebar-main { display: none }
 
@@ -537,6 +607,44 @@
         .unitize(14, 16, font-size);
         .unitize-padding(0, 20, 0, 20);
         width: 33.33332%;
+    }
+
+    // Payment & Shipping Method Confirmation
+    .content--confirm {
+
+        .alert {
+            margin: 0;
+        }
+
+        .table--aggregation {
+            visibility: hidden;
+            display: block;
+        }
+
+        .confirm--inner-container {
+
+            .payment--method-list,
+            .dispatch--method-list {
+                .unitize(20, 16, margin-bottom);
+            }
+
+            .panel--body {
+                border: 0 none;
+            }
+
+            .has--border {
+                border: 1px solid @borderColor;
+            }
+
+            .basket--footer {
+                border: 1px solid @borderColor;
+                margin: 0;
+            }
+
+            .method--bankdata {
+                .unitize-margin(10, 0, 0, 27, 16);
+            }
+        }
     }
 }
 

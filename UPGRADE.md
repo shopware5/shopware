@@ -43,6 +43,7 @@ In this document you will find a changelog of the important changes related to t
     * Read operations on the API no longer return a `street number` field.
 * Shop configuration contains no more the template selection. The shop template selection is only available in the new theme manager 2.0.
 * The configuration for the thumbnail size of the product images in the "last seen products" module takes no effect on the responsive template. The size now changes by screen size.
+* The registration and checkout workflows have been redesigned for the new template
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).

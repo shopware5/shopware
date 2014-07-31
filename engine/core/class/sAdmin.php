@@ -1042,9 +1042,10 @@ class sAdmin
      * Used in the Frontend Account controller
      *
      * @throws Enlight_Exception On database error
+     * @param null $paymentId
      * @return boolean If operation was successful
      */
-    public function sUpdatePayment()
+    public function sUpdatePayment($paymentId = null)
     {
         $userId = $this->session->offsetGet('sUserId');
         if (empty($userId)) {
@@ -1064,7 +1065,7 @@ class sAdmin
         $this->db->query(
             $sqlPayment,
             array(
-                $this->front->Request()->getPost('sPayment'),
+                $paymentId ? : $this->front->Request()->getPost('sPayment'),
                 $userId
             )
         );

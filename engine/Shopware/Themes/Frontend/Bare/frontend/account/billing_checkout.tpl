@@ -1,15 +1,4 @@
-{extends file="frontend/index/index.tpl"}
-
-{* Javascript *}
-{block name="frontend_index_header_javascript" append}
-    <script type="text/javascript">
-        //<![CDATA[
-        if(top!=self){
-            top.location=self.location;
-        }
-        //]]>
-    </script>
-{/block}
+{extends file="frontend/account/billing.tpl"}
 
 {* Include the necessary stylesheets. We need inline styles here due to the fact that the colors are configuratable. *}
 {block name="frontend_index_header_css_screen" append}
@@ -24,9 +13,13 @@
     </style>
 {/block}
 
+{block name='frontend_index_header' append}
+
+{/block}
+
 {* Shop header *}
 {block name='frontend_index_navigation'}
-	{include file="frontend/checkout/header.tpl"}
+    {include file="frontend/checkout/header.tpl"}
 {/block}
 
 {* Hide sidebar left *}
@@ -37,15 +30,8 @@
 
 {* Step box *}
 {block name='frontend_index_navigation_categories_top'}
-	{include file="frontend/register/steps.tpl" sStepActive="paymentShipping"}
+    {include file="frontend/register/steps.tpl" sStepActive="address"}
 {/block}
 
 {* Hide footer *}
 {block name="frontend_index_footer"}{/block}
-
-{* Main content *}
-{block name="frontend_index_content"}
-    <div class="content block content--confirm product--table" data-ajax-shipping-payment="true">
-        {include file="frontend/checkout/shipping_payment_core.tpl"}
-    </div>
-{/block}

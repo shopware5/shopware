@@ -24,7 +24,7 @@
 			<h2 class="panel--title is--underline">{s name="LoginHeaderExistingCustomer"}{/s}</h2>
 			<div class="panel--body is--wide">
 				{block name='frontend_register_login_form'}
-					<form name="sLogin" method="post" action="{url controller=account action=login sTarget=$sTarget}">
+					<form name="sLogin" method="post" action="{url controller=account action=login sTarget=$sTarget sTargetAction=$sTargetAction}">
 						{if $sTarget}<input name="sTarget" type="hidden" value="{$sTarget|escape}" />{/if}
 
 						{block name='frontend_register_login_description'}
