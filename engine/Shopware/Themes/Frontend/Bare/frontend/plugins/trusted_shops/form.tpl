@@ -8,35 +8,35 @@
 	{/if}
 {/if}
 {if {config name=TSID}}
-    <div class="trustedshops_form">
-        <div class="grid_3">
-            <form name="formSiegel" method="post" action="https://www.trustedshops.com/shop/certificate.php" target="_blank">
-                <input type="image" src="{link file='frontend/_public/src/img/logos/logo--trusted-shops-big.gif'}" title="{s name='WidgetsTrustedShopsHeadline'}{/s}" />
-                <input name="shop_id" type="hidden" value="{config name=TSID}" />
-            </form>
-        </div>
-        <div class="grid_11">
-            <form id="formTShops" name="formTShops" method="post" action="https://www.trustedshops.com/shop/protection.php" target="_blank">
-                <input name="_charset_" type="hidden" value="{encoding}">
-                <input name="shop_id" type="hidden" value="{config name=TSID}">
-                <input name="email" type="hidden" value="{$sUserData.additional.user.email}">
-                <input name="amount" type="hidden" value="{$sRealAmount}">
-                <input name="curr" type="hidden" value="{config name=currency}">
+	{block name='trusted_shops_form'}
+		<div class="trusted-shops--form">
 
-                {* Payment type *}
-                {*  <input name="paymentType" type="hidden" value="{ value paymentType}"> *}
-                <input name="kdnr" type="hidden" value="{$sUserData.billingaddress.customernumber}">
-                <input name="ordernr" type="hidden" value="{$sOrderNumber}">
+			<div class="panel">
+				<form name="formSiegel" method="post" action="https://www.trustedshops.com/shop/certificate.php" target="_blank">
+					<input type="image" src="{link file='frontend/_public/src/img/logos/logo--trusted-shops-big.gif'}" title="{s name='WidgetsTrustedShopsHeadline'}{/s}" />
+					<input name="shop_id" type="hidden" value="{config name=TSID}" />
+				</form>
+			</div>
 
+			<div class="panel">
+				<form id="formTShops" name="formTShops" method="post" action="https://www.trustedshops.com/shop/protection.php" target="_blank">
+					<input name="_charset_" type="hidden" value="{encoding}">
+					<input name="shop_id" type="hidden" value="{config name=TSID}">
+					<input name="email" type="hidden" value="{$sUserData.additional.user.email}">
+					<input name="amount" type="hidden" value="{$sRealAmount}">
+					<input name="curr" type="hidden" value="{config name=currency}">
 
-                {* Descriptiontext *}
-                <p>
-                    {se name='WidgetsTrustedShopsText' class='actions'}{/se}
-                </p>
+					{* Payment type *}
+					{*  <input name="paymentType" type="hidden" value="{ value paymentType}"> *}
+					<input name="kdnr" type="hidden" value="{$sUserData.billingaddress.customernumber}">
+					<input name="ordernr" type="hidden" value="{$sOrderNumber}">
 
-                <input type="submit" class="button-right small" name="btnProtect" value="{s name='WidgetsTrustedShopsInfo'}{/s}" />
-            </form>
-        </div>
-        <div class="clear">&nbsp;</div>
-    </div>
+					{* Descriptiontext *}
+					<p>{s name='WidgetsTrustedShopsText'}{/s}</p>
+
+					<input type="submit" class="btn btn--secondary" name="btnProtect" value="{s name='WidgetsTrustedShopsInfo'}{/s}" />
+				</form>
+			</div>
+		</div>
+	{/block}
 {/if}
