@@ -106,9 +106,9 @@ class Product implements ResourceInterface
     /**
      * Returns products matching a given filter
      */
-    public function filter($ast, $offset, $limit)
+    public function filter($ast, $offset, $limit, $orderBy=null)
     {
-        return $this->filter->filter($ast, $offset, $limit);
+        return $this->filter->filter($ast, $offset, $limit, $orderBy);
     }
 
     /**

@@ -52,9 +52,10 @@ interface ResourceInterface
      * @param $ast
      * @param $offset
      * @param $limit
+     * @param $orderBy
      * @return mixed
      */
-    public function filter($ast, $offset, $limit);
+    public function filter($ast, $offset, $limit, $orderBy=null);
 
     /**
      * Returns columns to be shown in the batchProcess window
