@@ -397,7 +397,7 @@ class DqlHelper
                 $result[$entityShort . ucfirst($name)] = array(
                     'entity' => $entityShort,
                     'field' => $name,
-                    'editable' => substr($name, -2) != 'Id' && $name != 'id' && substr($name, -2) != 'ID' && $entity != 'Shopware\Models\Tax\Tax',
+                    'editable' => substr($name, -2) != 'Id' && $name != 'id' && substr($name, -2) != 'ID' && $entity != 'Shopware\Models\Tax\Tax' && $entity != 'Shopware\Models\Article\Supplier',
                     'type' => $config['type'],
                     'precision' => $config['precision'],
                     'nullable' => (bool)$config['nullable'],
