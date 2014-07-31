@@ -214,6 +214,43 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
         });
     },
 
+    getActionColumn: function () {
+        var me = this;
+
+
+        return {
+            xtype: 'actioncolumn',
+            width: 60,
+            items: [
+                /*{if {acl_is_allowed resource=article privilege=save}}*/
+                {
+                    action: 'edit',
+                    cls: 'editBtn',
+                    iconCls: 'sprite-pencil',
+                    handler: function (view, rowIndex, colIndex, item, opts, record) {
+                        Shopware.app.Application.addSubApplication({
+                            name: 'Shopware.apps.Article',
+                            action: 'detail',
+                            params: {
+                                articleId: record.get('Article_id')
+                            }
+                        });
+                    }
+                },
+                /*{/if}*/
+                /*{if {acl_is_allowed resource=article privilege=delete}}*/
+                {
+                    iconCls: 'sprite-minus-circle-frame',
+                    action: 'delete',
+                    handler: function (view, rowIndex, colIndex, item, opts, record) {
+                        me.fireEvent('deleteProduct', record);
+                    }
+                }
+                /*{/if}*/
+            ]
+        };
+    },
+
     /**
      * Helper method which creates the columns for the
      * grid panel in this widget.
@@ -274,37 +311,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
             renderer: me.infoColumnRenderer
         });
 
-        columns.push({
-            xtype: 'actioncolumn',
-            width: 60,
-            items: [
-                /*{if {acl_is_allowed resource=article privilege=save}}*/
-                {
-                    action: 'edit',
-                    cls: 'editBtn',
-                    iconCls: 'sprite-pencil',
-                    handler: function (view, rowIndex, colIndex, item, opts, record) {
-                        Shopware.app.Application.addSubApplication({
-                            name: 'Shopware.apps.Article',
-                            action: 'detail',
-                            params: {
-                                articleId: record.get('Article_id')
-                            }
-                        });
-                    }
-                },
-                /*{/if}*/
-                /*{if {acl_is_allowed resource=article privilege=delete}}*/
-                {
-                    iconCls: 'sprite-minus-circle-frame',
-                    action: 'delete',
-                    handler: function (view, rowIndex, colIndex, item, opts, record) {
-                        me.fireEvent('deleteProduct', record);
-                    }
-                }
-                /*{/if}*/
-            ]
-        });
+        columns.push(me.getActionColumn());
 
         return columns;
     },
