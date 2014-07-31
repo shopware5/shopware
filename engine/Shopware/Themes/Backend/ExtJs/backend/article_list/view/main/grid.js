@@ -435,6 +435,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
      * @returns string
      */
     colorColumnRenderer: function (value) {
+        value = value || 0;
         if (value > 0) {
             return '<span style="color:green;">' + value + '</span>';
         } else {
