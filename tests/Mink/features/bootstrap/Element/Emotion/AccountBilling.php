@@ -3,7 +3,6 @@
 namespace Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
-use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use  Behat\Mink\Exception\ResponseTextException;
 
 class AccountBilling extends Element
@@ -14,21 +13,14 @@ class AccountBilling extends Element
     protected $selector = array('css' => 'div.billing > div.inner_container');
 
     public $cssLocator = array(
-        'addressData' => 'p',
-        'chooseOtherButton' => 'div.change > a:nth-of-type(1)',
-        'changeAddressButton' => 'div.change > a:nth-of-type(2)'
+        'addressData' => 'p'
     );
 
-    /**
-     * @param string $locator
-     */
-    public function clickButton($locator)
-    {
-        $locators = array($locator);
-        $element = \Helper::findElements($this, $locators);
-
-        $element[$locator]->click();
-    }
+    /** @var array $namedSelectors */
+    public $namedSelectors = array(
+        'otherButton'  => array('de' => 'Andere wählen',            'en' => 'Select other'),
+        'changeButton' => array('de' => 'Rechnungsadresse ändern',  'en' => 'Change billing address')
+    );
 
     public function checkAddress($testAddress)
     {
@@ -41,12 +33,11 @@ class AccountBilling extends Element
 
         $address = array();
 
-        foreach($elements['addressData'] as $data) {
+        foreach ($elements['addressData'] as $data) {
 
             $part = $data->getHtml();
             $parts = explode('<br />', $part);
-            foreach ($parts as &$part)
-            {
+            foreach ($parts as &$part) {
                 $part = strip_tags($part);
                 $part = str_replace(array(chr(0x0009), '  '), ' ', $part);
                 $part = str_replace(array(chr(0x0009), '  '), ' ', $part);

@@ -9,10 +9,14 @@ Feature: Configurator articles
             | groupId | value   |
             | 6       | <color> |
             | 7       | <size>  |
-        Then  I put the article "<quantity>" times into the basket
-        Then  the total sum should be "<total>"
-        And   I should see "<configuration>"
-        And   I should see "<articlenumber>"
+        And   I put the article "<quantity>" times into the basket
+        Then  the page "CheckoutCart" should have the content:
+            | position | content |
+            | totalSum | <total> |
+        And   the element "CartPosition" should have the content:
+            | position | content         |
+            | name     | <configuration> |
+            | number   | <articlenumber> |
 
     Examples:
         | color | size | quantity | total   | configuration | articlenumber |
@@ -28,10 +32,14 @@ Feature: Configurator articles
             | groupId | value      |
             | 12      | <spares>   |
             | 13      | <warranty> |
-        Then  I put the article "<quantity>" times into the basket
-        Then  the total sum should be "<total>"
-        And   I should see "<configuration>"
-        And   I should see "<articlenumber>"
+        And   I put the article "<quantity>" times into the basket
+        Then  the page "CheckoutCart" should have the content:
+            | position | content |
+            | totalSum | <total> |
+        And   the element "CartPosition" should have the content:
+            | position | content         |
+            | name     | <configuration> |
+            | number   | <articlenumber> |
 
     Examples:
         | spares                                | warranty  | quantity | total    | configuration        | articlenumber |
@@ -48,10 +56,14 @@ Feature: Configurator articles
             | groupId | value   |
             | 6       | <color> |
             | 7       | <size>  |
-        Then  I put the article "<quantity>" times into the basket
-        Then  the total sum should be "<total>"
-        And   I should see "<configuration>"
-        And   I should see "<articlenumber>"
+        And   I put the article "<quantity>" times into the basket
+        Then  the page "CheckoutCart" should have the content:
+            | position | content |
+            | totalSum | <total> |
+        And   the element "CartPosition" should have the content:
+            | position | content         |
+            | name     | <configuration> |
+            | number   | <articlenumber> |
 
     Examples:
         | color | size  | quantity | total    | configuration | articlenumber |

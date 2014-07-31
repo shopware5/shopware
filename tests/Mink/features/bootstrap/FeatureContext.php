@@ -31,7 +31,6 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
     public function __construct(array $parameters)
     {
         self::$template = $parameters['template'];
-//        self::$template = array_key_exists('template', $parameters) ? $parameters['template'] : null;
 
         $this->useContext('shopware', new ShopwareContext($parameters));
         $this->useContext('account',  new AccountContext($parameters));
@@ -69,6 +68,10 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
             $templateId
         );
 
+        self::$statickernel->getContainer()->get('db')->exec($sql);
+
+        //activate SEPA payment method
+        $sql = 'UPDATE `s_core_paymentmeans` SET `active`= 1 WHERE `id` = 6';
         self::$statickernel->getContainer()->get('db')->exec($sql);
     }
 

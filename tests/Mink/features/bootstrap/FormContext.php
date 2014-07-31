@@ -1,7 +1,5 @@
 <?php
 
-use Behat\Behat\Context\Step;
-
 class FormContext extends SubContext
 {
     /**

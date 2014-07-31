@@ -18,7 +18,7 @@ Feature: General functionality
       | property | value        |
       | price    | <price_base> |
 
-    When  I go to the detail page of the article on position 11
+    When  I follow the link "details" of the element "ArticleBox" on position 11
     Then  I should see "<price_config_detail>"
 
     When  I put the article into the basket
@@ -26,7 +26,7 @@ Feature: General functionality
       | parameter | value |
       | sPerPage  | 24    |
       | sSort     | 5     |
-    And  I go to the detail page of the article on position 13
+    And  I follow the link "details" of the element "ArticleBox" on position 13
     Then  I should see "<price_normal>"
 
     When  I put the article into the basket
@@ -34,7 +34,7 @@ Feature: General functionality
       | parameter | value |
       | sPerPage  | 24    |
       | sSort     | 5     |
-    And   I go to the detail page of the article on position 15
+    And   I follow the link "details" of the element "ArticleBox" on position 15
     Then  I should see "<price_base>"
 
     When I put the article into the basket
@@ -66,7 +66,7 @@ Feature: General functionality
       | property | value        |
       | price    | <price_base> |
 
-    When  I go to the detail page of the article on position 11
+    When  I follow the link "details" of the element "ArticleBox" on position 11
     Then  I should see "<price_config_detail>"
 
     When  I put the article into the basket
@@ -74,7 +74,7 @@ Feature: General functionality
       | parameter | value |
       | sPerPage  | 24    |
       | sSort     | 5     |
-    And  I go to the detail page of the article on position 13
+    And  I follow the link "details" of the element "ArticleBox" on position 13
     Then  I should see "<price_normal>"
 
     When  I put the article into the basket
@@ -82,7 +82,7 @@ Feature: General functionality
       | parameter | value |
       | sPerPage  | 24    |
       | sSort     | 5     |
-    And   I go to the detail page of the article on position 15
+    And   I follow the link "details" of the element "ArticleBox" on position 15
     Then  I should see "<price_base>"
 
     When I put the article into the basket

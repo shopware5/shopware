@@ -2,10 +2,6 @@
 
 namespace Responsive;
 
-use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
-use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
-use Behat\Mink\Exception\ResponseTextException;
-
 class HeaderCart extends \Emotion\HeaderCart
 {
     /**

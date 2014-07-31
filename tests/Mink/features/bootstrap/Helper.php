@@ -1,6 +1,5 @@
 <?php
 use Behat\Mink\Element\Element;
-use Behat\Mink\Element\TraversableElement;
 
 class Helper
 {
@@ -31,7 +30,7 @@ class Helper
                 continue;
             }
 
-            if (strpos((string)$compare[0], (string)$compare[1]) === false) {
+            if (strpos((string) $compare[0], (string) $compare[1]) === false) {
                 return $key;
             }
         }
@@ -41,24 +40,35 @@ class Helper
 
     /**
      * Helper function to validate values to floats
-     * @param array $values
+     * @param  array $values
      * @return array
      */
     public static function toFloat($values)
     {
+        if (!is_array($values)) {
+            $values = array($values);
+        }
+
         foreach ($values as $key => $value) {
-            if (!is_float($value)) {
-                preg_match("/\d+[\.*]*[\d+\.*]*[,\d+]*/", $value, $value); //matches also numbers like 123.456.789,00
-
-                $value = $value[0];
-
-                if(!is_numeric($value)) {
-                    $value = str_replace('.', '', $value);
-                    $value = str_replace(',', '.', $value);
-                }
-
-                $values[$key] = floatval($value);
+            if (is_float($value)) {
+                continue;
             }
+
+            preg_match("/\d+[\.*]*[\d+\.*]*[,\d+]*/", $value, $value); //matches also numbers like 123.456.789,00
+
+            $value = $value[0];
+
+            if (!is_numeric($value)) {
+                $value = str_replace('.', '', $value);
+                $value = str_replace(',', '.', $value);
+            }
+
+            $values[$key] = floatval($value);
+        }
+
+        if (count($values) === 1) {
+            $values = array_values($values);
+            $values = $values[0];
         }
 
         return $values;
@@ -69,9 +79,9 @@ class Helper
      * If the number is equal to $count, the function will return true.
      * If the number is not equal to $count, the function will return the count of the element.
      *
-     * @param Element $parent
-     * @param string $elementLocator
-     * @param int $count
+     * @param  Element  $parent
+     * @param  string   $elementLocator
+     * @param  int      $count
      * @return bool|int
      */
     public static function countElements($parent, $elementLocator, $count = 0)
@@ -91,8 +101,8 @@ class Helper
     /**
      * Recursive Helper function to compare two arrays over all their levels
      *
-     * @param array $array1
-     * @param array $array2
+     * @param  array      $array1
+     * @param  array      $array2
      * @return array|bool
      */
     public static function compareArrays($array1, $array2)
@@ -129,6 +139,7 @@ class Helper
                 );
             }
         }
+
         return true;
     }
 
@@ -140,11 +151,11 @@ class Helper
      * If $locatorArray parameter is set, the element locators will be read from it instead of the cssLocator of $parent
      * If $all is set to true, the search uses findAll() instead of find()
      * If $throwExceptions is set to false, no Exception will be thrown, if an element was not found.
-     * @param Element $parent
-     * @param array $keys
-     * @param array $locatorArray
-     * @param bool $all
-     * @param bool $throwExceptions
+     * @param  Element   $parent
+     * @param  array     $keys
+     * @param  array     $locatorArray
+     * @param  bool      $all
+     * @param  bool      $throwExceptions
      * @return array
      * @throws Exception
      */
@@ -154,10 +165,9 @@ class Helper
         $elements = array();
 
         if (empty($locatorArray)) {
-            if(isset($parent->cssLocator)) {
+            if (isset($parent->cssLocator)) {
                 $locatorArray = $parent->cssLocator;
-            }
-            else {
+            } else {
                 throw new \Exception('No locatorArray defined!');
             }
         }
@@ -222,8 +232,7 @@ class Helper
             return $elements;
         }
 
-        if($throwExceptions)
-        {
+        if ($throwExceptions) {
             $message = array('Following elements were not found:');
 
             if (isset($missingElements['noLocator'])) {
@@ -244,7 +253,7 @@ class Helper
 
     public static function throwException($messages = array())
     {
-        if(!is_array($messages)) {
+        if (!is_array($messages)) {
             $messages = array($messages);
         }
 
@@ -252,8 +261,7 @@ class Helper
 
         $additionalText = '';
 
-        if(isset($debug[2]['class']))
-        {
+        if (isset($debug[2]['class'])) {
             $additionalText = sprintf(
                 ', called by %s%s%s() (line %d)',
                 $debug[2]['class'],
@@ -283,9 +291,9 @@ class Helper
 
     /**
      * @param SubContext $context
-     * @param string $page
-     * @param string $key
-     * @param array $locatorArray
+     * @param string     $page
+     * @param string     $key
+     * @param array      $locatorArray
      */
     public static function pressNamedButton(SubContext $context, $page, $key, $locatorArray = array())
     {

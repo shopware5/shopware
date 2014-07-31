@@ -1,7 +1,5 @@
 <?php
 
-use Behat\Behat\Context\Step;
-
 require_once 'SubContext.php';
 
 class BlogContext extends SubContext

@@ -51,6 +51,7 @@ class Paging extends Element
         while (!$this->hasLink($page)) {
             if ($this->noElement('next', false)) {
                 \Helper::throwException(array('Not found'));
+
                 return;
             }
             $this->moveDirection('next');
@@ -61,7 +62,7 @@ class Paging extends Element
 
     /**
      * @param $element
-     * @param bool $throwException
+     * @param  bool $throwException
      * @return bool
      */
     public function noElement($element, $throwException = true)
@@ -72,7 +73,7 @@ class Paging extends Element
             $result = !$this->hasLink($element);
         }
 
-        if($result === true) {
+        if ($result === true) {
             return true;
         }
 
