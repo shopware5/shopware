@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.ArticleList.controller.CategoryFilter', {
     },
 
     /**
-     * Gemerated a translatable description of an auto-generated filter based on the configuration
+     * Generates a translatable description of an auto-generated filter based on the configuration
      *
      * @param categoryId
      * @param showVariants
