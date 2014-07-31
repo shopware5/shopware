@@ -21,6 +21,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage;
 
 use Shopware\Bundle\StoreFrontBundle;
 
@@ -1185,17 +1187,66 @@ class sBasket
      */
     public function sGetNotes()
     {
+        $notes = $this->getNoteProducts();
+
+        if (empty($notes)) {
+            return $notes;
+        }
+
+        $numbers = array_column($notes, 'ordernumber');
+
+        $context = Shopware()->Container()->get('context_service')->get();
+
+        $products = Shopware()->Container()->get('list_product_service')
+            ->getList($numbers, $context);
+
+        $votes = Shopware()->Container()->get('vote_service')
+            ->getAverages($products, $context);
+
+        $promotions = array();
+        /**@var $product ListProduct */
+        foreach($products as $product) {
+            $average = null;
+            $note = $notes[$product->getNumber()];
+            if (array_key_exists($product->getNumber(), $votes)) {
+                $average = $votes[$product->getNumber()];
+            }
+
+            $promotions[] = $this->convertListProductToNote($product, $note, $average);
+        }
+        return $promotions;
+
+    }
+
+    private function convertListProductToNote(ListProduct $product, $note, VoteAverage $voteAverage = null)
+    {
+        $structConverter = Shopware()->Container()->get('legacy_struct_converter');
+        $promotion = $structConverter->convertListProductStruct($product);
+
+        if ($voteAverage !== null) {
+            $average = $structConverter->convertVoteAverageStruct($voteAverage);
+            $average['averange'] = $average['averange'] / 2;
+            $promotion['sVoteAverange'] = $average;
+        }
+
+        $promotion["id"] = $note["id"];
+        $promotion["datum_add"] = $note["datum"];
+        $promotion["articlename"] = $promotion["articleName"];
+        $promotion["linkDelete"] = $this->config->get('sBASEFILE')."?sViewport=note&sDelete=". $note['id'];
+
+        return $promotion;
+    }
+
+    private function getNoteProducts()
+    {
         $responseCookies = $this->front->Response()->getCookies();
         $uniqueId = $responseCookies['sUniqueID']['value'] ? : $this->front->Request()->getCookie('sUniqueID');
 
-        $getArticles = $this->db->fetchAll(
-            'SELECT n.* FROM s_order_notes n, s_articles a
-            WHERE
-              (
-                sUniqueID=?
-                OR (userID!=0 AND userID=?)
-              )
-              AND a.id = n.articleID AND a.active = 1
+        $notes = $this->db->fetchAssoc('
+            SELECT n.ordernumber as arrayKey, n.*
+            FROM s_order_notes n, s_articles a
+            WHERE (sUniqueID = ? OR (userID != 0 AND userID = ?))
+            AND a.id = n.articleID AND a.active = 1
             ORDER BY n.datum DESC',
             array(
                 empty($uniqueId) ? $this->session->get('sessionId') : $uniqueId,
@@ -1203,36 +1254,7 @@ class sBasket
             )
         );
 
-        if (empty($getArticles)) {
-            return $getArticles;
-        }
-
-        // Reformatting data, add additional data fields to array
-        foreach ($getArticles as $key => $value) {
-            // Article image
-            $getArticles[$key] = $this->moduleManager->Articles()->sGetPromotionById(
-                "fix",
-                0,
-                (int) $value["articleID"]
-            );
-            if (empty($getArticles[$key])) {
-                $this->sDeleteNote($value["id"]);
-                unset($getArticles[$key]);
-                continue;
-            }
-            $getArticles[$key]["articlename"] = $getArticles[$key]["articleName"];
-            $getArticles[$key]["image"] = $this->moduleManager->Articles()->getArticleListingCover(
-                $value["articleID"],
-                $this->config->get('forceArticleMainImageInListing')
-            );
-            // Links to details, basket
-            $getArticles[$key]["id"] = $value["id"];
-            $getArticles[$key]["linkBasket"] = $this->config->get('sBASEFILE')."?sViewport=basket&sAdd=".$value["ordernumber"];
-            $getArticles[$key]["linkDelete"] = $this->config->get('sBASEFILE')."?sViewport=note&sDelete=".$value["id"];
-            $getArticles[$key]["datum_add"] = $value["datum"];
-            $getArticles[$key]['note_number'] = $value['ordernumber'];
-        }
-        return $getArticles;
+        return $notes;
     }
 
     /**
