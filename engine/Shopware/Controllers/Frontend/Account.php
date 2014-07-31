@@ -67,6 +67,14 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      */
     public function indexAction()
     {
+        if (
+            Shopware()->Shop()->getTemplate()->getVersion() >= 3 &&
+            $this->View()->sUserData['additional']['user']['accountmode'] == 1
+        ) {
+            $this->logoutAction();
+            return $this->redirect(array('controller'=> 'register'));
+        }
+
         if ($this->Request()->getParam('success')) {
             $this->View()->sSuccessAction = $this->Request()->getParam('success');
         }
@@ -99,6 +107,13 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
             $this->View()->sFormData = $address;
         }
+
+        // If using the new template and we get a request to change address from the checkout page
+        // we need to use a different template
+        if (Shopware()->Shop()->getTemplate()->getVersion() >= 3 && $this->View()->sTarget == 'checkout') {
+            $this->Request()->setControllerName('checkout');
+            return $this->View()->loadTemplate('frontend/account/billing_checkout.tpl');
+        }
     }
 
     /**
@@ -125,6 +140,13 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             unset($address['id'], $address['countryID']);
 
             $this->View()->sFormData = $address;
+        }
+
+        // If using the new template and we get a request to change address from the checkout page
+        // we need to use a different template
+        if (Shopware()->Shop()->getTemplate()->getVersion() >= 3 && $this->View()->sTarget == 'checkout') {
+            $this->Request()->setControllerName('checkout');
+            return $this->View()->loadTemplate('frontend/account/shipping_checkout.tpl');
         }
     }
 
@@ -310,7 +332,11 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         // If using the new template, the 'GET' action will be handled
         // in the Register controller (unified login/register page)
         if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
-            $this->forward(array('action' => 'index', 'controller' => 'register', 'sTarget' => $this->View()->sTarget));
+            $this->forward(array(
+                'action' => 'index',
+                'controller' => 'register',
+                'sTarget' => $this->View()->sTarget
+            ));
         }
     }
 
@@ -594,7 +620,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      */
     public function saveNewsletterAction()
     {
-
         if ($this->Request()->isPost()) {
             $status = $this->Request()->getPost('newsletter') ? true : false;
             $this->admin->sUpdateNewsletter($status, $this->admin->sGetUserMailById(), true);
@@ -727,6 +752,13 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     {
         $this->View()->sTarget = $this->Request()->getParam('sTarget', $this->Request()->getControllerName());
         $this->View()->sBillingAddresses = $this->admin->sGetPreviousAddresses('billing');
+
+        // If using the new template and we get a request to change address from the checkout page
+        // we need to use a different template
+        if (Shopware()->Shop()->getTemplate()->getVersion() >= 3 && $this->View()->sTarget == 'checkout') {
+            $this->Request()->setControllerName('checkout');
+            return $this->View()->loadTemplate('frontend/account/select_billing_checkout.tpl');
+        }
     }
 
     /**
@@ -736,6 +768,13 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     {
         $this->View()->sTarget = $this->Request()->getParam('sTarget', $this->Request()->getControllerName());
         $this->View()->sShippingAddresses = $this->admin->sGetPreviousAddresses('shipping');
+
+        // If using the new template and we get a request to change address from the checkout page
+        // we need to use a different template
+        if (Shopware()->Shop()->getTemplate()->getVersion() >= 3 && $this->View()->sTarget == 'checkout') {
+            $this->Request()->setControllerName('checkout');
+            return $this->View()->loadTemplate('frontend/account/select_shipping_checkout.tpl');
+        }
     }
 
     /**

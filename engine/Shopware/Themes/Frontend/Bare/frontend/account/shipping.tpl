@@ -27,7 +27,7 @@
 				{* Shipping form *}
 				{block name="frontend_account_shipping_form"}
 					<div class="account--shipping-form">
-						<form name="frmRegister" method="post" action="{url action=saveShipping sTarget=$sTarget}">
+						<form name="frmRegister" method="post" action="{url controller=account action=saveShipping sTarget=$sTarget}">
 
                             {block name="frontend_account_shipping_hidden"}
                                 <div class="register--alt-shipping is--hidden">
@@ -69,6 +69,5 @@
 
 			</div>
 		{/block}
-
 	</div>
 {/block}

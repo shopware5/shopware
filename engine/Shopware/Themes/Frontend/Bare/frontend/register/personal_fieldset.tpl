@@ -8,8 +8,8 @@
 			{else}
 				<div class="register--customertype">
 					<select id="register_personal_customer_type" name="register[personal][customer_type]" required="required" class="is--required{if $error_flags.customer_type} has--error{/if}">
-						<option value=""{if $form_data.customer_type eq ""} disabled="disabled" selected="selected"{/if}>{s name='RegisterPersonalLabelType'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
-						<option value="private"{if $form_data.customer_type eq "private"} selected="selected"{/if}>{s name='RegisterPersonalLabelPrivate'}{/s}</option>
+						<option value="" disabled="disabled"{if $form_data.customer_type eq ""} selected="selected"{/if}>{s name='RegisterPersonalLabelType'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
+						<option value="private"{if $form_data.customer_type eq "private" or (!$form_data.company and $sUserLoggedIn)} selected="selected"{/if}>{s name='RegisterPersonalLabelPrivate'}{/s}</option>
 						<option value="business"{if $form_data.customer_type eq "business" or $form_data.company or $form_data.sValidation} selected="selected"{/if}>{s name='RegisterPersonalLabelBusiness'}{/s}</option>
 					</select>
 				</div>
@@ -21,9 +21,9 @@
 			<div class="register--salutation field--select">
 				<span class="arrow"></span>
 				<select name="register[personal][salutation]" id="salutation" class="is--required{if $error_flags.salutation} has--error{/if}">
-                    <option value=""{if $form_data.salutation eq ""} disabled="disabled" selected="selected"{/if}>{s name='RegisterLabelSalutation'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
-					<option value="mr" {if $form_data.salutation eq "mr"}selected="selected"{/if}>{s name='RegisterLabelMr'}{/s}</option>
-					<option value="ms" {if $form_data.salutation eq "ms"}selected="selected"{/if}>{s name='RegisterLabelMs'}{/s}</option>
+                    <option value="" disabled="disabled"{if $form_data.salutation eq ""} selected="selected"{/if}>{s name='RegisterLabelSalutation'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
+					<option value="mr"{if $form_data.salutation eq "mr"} selected="selected"{/if}>{s name='RegisterLabelMr'}{/s}</option>
+					<option value="ms"{if $form_data.salutation eq "ms"} selected="selected"{/if}>{s name='RegisterLabelMs'}{/s}</option>
 				</select>
 			</div>
 		{/block}
@@ -45,7 +45,7 @@
 		{* Skip login *}
 		{if !$update}
 			{block name='frontend_register_personal_fieldset_skip_login'}
-				{if !$sEsd && !$form_data.sValidation && !{config name=NoAccountDisable}}
+				{if $showNoAccount && !$sEsd && !$form_data.sValidation && !{config name=NoAccountDisable}}
 					<div class="register--check">
 						<input type="checkbox" value="1" id="register_personal_skipLogin" name="register[personal][skipLogin]" class="register--checkbox chkbox" {if $form_data.skipLogin || $form_data.accountmode || $skipLogin}checked {/if}/>
 						<label for="register_personal_skipLogin" class="chklabel is--bold">{s name='RegisterLabelNoAccount'}{/s}</label>

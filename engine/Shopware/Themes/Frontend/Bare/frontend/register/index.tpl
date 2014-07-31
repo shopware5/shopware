@@ -16,7 +16,7 @@
 
 {* Step box *}
 {block name='frontend_index_navigation_categories_top'}
-	{include file="frontend/register/steps.tpl" sStepActive="register"}
+	{include file="frontend/register/steps.tpl" sStepActive="address"}
 {/block}
 
 {* Hide top bar *}
@@ -55,7 +55,7 @@
 		{/block}
 
 		{block name='frontend_register_index_form'}
-			<form method="post" action="{url action=saveRegister}" class="panel register--form">
+			<form method="post" action="{url action=saveRegister sTarget=$sTarget sTargetAction=$sTargetAction}" class="panel register--form">
 
 				{block name='frontend_register_index_form_personal_fieldset'}
 					{include file="frontend/register/error_message.tpl" error_messages=$register->personal->error_messages}
