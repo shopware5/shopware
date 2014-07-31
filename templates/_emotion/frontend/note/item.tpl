@@ -1,14 +1,14 @@
 <div class="table_row {if $lastrow} lastrow{/if}">
 
 	{* Reviews *}
-	{if !{config name=VoteDisable}}
+	{if !{config name=VoteDisable} && $sBasketItem.sVoteAverange.averange}
 		<div class="rating{if !$sUserLoggedIn} full_length{/if}">
 			<div class="star star{($sBasketItem.sVoteAverange.averange*2)|round}"></div>
 		</div>
 	{/if}
 
     {if $sBasketItem.sConfigurator}
-        {assign var=detailLink value={url controller="detail" sArticle=$sBasketItem.articleID number=$sBasketItem.note_number}}
+        {assign var=detailLink value={url controller="detail" sArticle=$sBasketItem.articleID number=$sBasketItem.ordernumber}}
     {else}
         {assign var=detailLink value=$sBasketItem.linkDetails}
     {/if}
