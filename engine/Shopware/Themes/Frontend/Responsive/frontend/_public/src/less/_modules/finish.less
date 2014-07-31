@@ -1,0 +1,164 @@
+.is--act-finish .content-main {
+    .unitize(20, 16, margin-top);
+}
+
+.finish--content {
+    .unitize(10, 16, padding-top);
+}
+
+.finish--teaser {
+    .unitize-margin(0, 0, 20, 0);
+}
+
+.finish--info {
+    .clearfix();
+}
+
+.finish--details,
+.finish--billing,
+.finish--shipping {
+    .unitize-margin(0, 0, 20, 0);
+}
+
+.finish--table {
+    .panel--body {
+        border: 1px solid @borderColor;
+    }
+
+    .table--aggregation {
+        display: none;
+    }
+
+    .aggregation--list {
+        .unitize-padding(10, 0);
+        margin: 0;
+    }
+}
+
+@media screen and (min-width: @tabletViewportWidth) {
+
+    .is--act-finish .content-main {
+        .unitize(40, 16, margin-top);
+    }
+
+    .finish--content {
+        .unitize(20, 16, padding-top);
+    }
+
+    .finish--info {
+        .unitize-height(280);
+    }
+
+    .finish--details,
+    .finish--billing,
+    .finish--shipping {
+        width: 32%;
+        height: 100%;
+    }
+
+    .finish--billing,
+    .finish--shipping {
+        margin-right: 2%;
+    }
+
+    .finish--table {
+        .unitize-margin(20, 0, 0, 0);
+
+        .column--total-price {
+            width: 49%;
+        }
+
+        .table--row:last-child {
+            border: 0 none;
+        }
+
+        .row--rebate,
+        .row--premium-product,
+        .row--voucher {
+            .column--total-price {
+                margin: 0;
+            }
+        }
+
+        .table--aggregation {
+            display: block;
+            width: 50%;
+        }
+
+        .aggregation--list {
+            .unitize-padding(20, 20);
+        }
+
+        .basket--footer {
+            border-top: 0 none;
+        }
+    }
+}
+
+@media screen and (min-width: @desktopViewportWidth) {
+
+    .finish--content {
+        .unitize(45, 16, padding-top);
+    }
+}
+
+@media print {
+
+    body {
+        width: auto;
+        height: auto;
+        overflow: auto;
+        background: #ffffff;
+    }
+
+    .page-wrap {
+        width: auto;
+        height: auto;
+        overflow: auto;
+        position: static;
+    }
+
+    .container {
+        max-width: none;
+    }
+
+    .is--act-finish .content-main {
+        margin-top: 0;
+    }
+
+    .finish--teaser {
+        display: none;
+    }
+
+    .finish--info {
+        .unitize-height(280);
+    }
+
+    .finish--details,
+    .finish--billing,
+    .finish--shipping {
+        width: 32%;
+        height: 100%;
+    }
+
+    .finish--billing,
+    .finish--shipping {
+        margin-right: 2%;
+    }
+
+    .finish--table {
+        clear: both;
+
+        .column--label {
+            display: none;
+        }
+
+        .column--product {
+            width: 70%;
+        }
+
+        .column--total-price {
+            width: 30%;
+        }
+    }
+}
