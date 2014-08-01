@@ -126,6 +126,9 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
             ->innerJoin('media', 's_media_album_settings', 'mediaSettings', 'mediaSettings.albumID = media.albumID')
             ->leftJoin('media', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = media.id');
 
+        $query->where('image.articleID = :articleId')
+            ->setParameter(':articleId', $product->getId());
+
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
