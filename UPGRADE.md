@@ -45,7 +45,7 @@ In this document you will find a changelog of the important changes related to t
 * The configuration for the thumbnail size of the product images in the "last seen products" module takes no effect on the responsive template. The size now changes by screen size.
 * The registration and checkout workflows have been redesigned for the new template
 * Changed behavior of the `selection` configurator. Configurator options which have none available product variant disabled now in the select-tag. The new snippet `DetailConfigValueNotAvailable` can be used to append additional text after the value name.
-
+* Variant's `additional text` field is now automatically generated using the configurator group options. This can be optionally disabled
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
