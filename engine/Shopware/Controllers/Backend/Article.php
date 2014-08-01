@@ -2569,7 +2569,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         //create the new variant data
         $variantData = array(
-            'additionalText' => implode(' / ', $name),
             'active' => 1,
             'configuratorOptions' => $optionsModels
         );
