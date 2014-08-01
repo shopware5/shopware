@@ -1,48 +1,16 @@
 <?php
 
-namespace Shopware\Tests\Service\Search;
+namespace Shopware\Tests\Service\Search\Condition;
 
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\Helper;
+use Shopware\Tests\Service\Search\TestCase;
 
 class ImmediateDeliveryConditionTest extends TestCase
 {
-    /**
-     * @var Helper
-     */
-    private $helper;
-
-    protected function setUp()
-    {
-        $this->helper = new Helper();
-        parent::setUp();
-    }
-
-    protected function tearDown()
-    {
-        $this->helper->cleanUp();
-        parent::tearDown();
-    }
-
-    /**
-     * @return Context
-     */
-    private function getContext()
-    {
-        $tax = $this->helper->createTax();
-        $customerGroup = $this->helper->createCustomerGroup();
-        $shop = $this->helper->getShop();
-
-        return $this->helper->createContext(
-            $customerGroup,
-            $shop,
-            array($tax)
-        );
-    }
-
     /**
      * @param $number
      * @param \Shopware\Models\Category\Category $category
@@ -50,24 +18,16 @@ class ImmediateDeliveryConditionTest extends TestCase
      * @param array $data
      * @return array
      */
-    private function getDefaultProduct(
+    protected function getProduct(
         $number,
-        Category $category,
         Context $context,
+        Category $category = null,
         $data = array('inStock' => 0, 'minPurchase' => 1)
     ) {
-        $product = $this->helper->getSimpleProduct(
-            $number,
-            array_shift($context->getTaxRules()),
-            $context->getCurrentCustomerGroup()
-        );
+        $product = parent::getProduct($number, $context, $category);
 
         $product['lastStock'] = true;
         $product['mainDetail'] = array_merge($product['mainDetail'], $data);
-
-        $product['categories'] = array(
-            array('id' => $category->getId())
-        );
 
         return $product;
     }
@@ -78,10 +38,10 @@ class ImmediateDeliveryConditionTest extends TestCase
         $context = $this->getContext();
 
         $articles = array(
-            $this->getDefaultProduct('testNoStock-1', $category, $context),
-            $this->getDefaultProduct('testNoStock-2', $category, $context),
-            $this->getDefaultProduct('testNoStock-3', $category, $context, array('inStock' => 2, 'minPurchase' => 1)),
-            $this->getDefaultProduct('testNoStock-4', $category, $context, array('inStock' => 2, 'minPurchase' => 1)),
+            $this->getProduct('testNoStock-1', $context, $category),
+            $this->getProduct('testNoStock-2', $context, $category),
+            $this->getProduct('testNoStock-3', $context, $category, array('inStock' => 2, 'minPurchase' => 1)),
+            $this->getProduct('testNoStock-4', $context, $category, array('inStock' => 2, 'minPurchase' => 1)),
         );
 
         foreach ($articles as $article) {
@@ -108,10 +68,10 @@ class ImmediateDeliveryConditionTest extends TestCase
         $context = $this->getContext();
 
         $articles = array(
-            $this->getDefaultProduct('testMinPurchaseEquals-1', $category, $context),
-            $this->getDefaultProduct('testMinPurchaseEquals-2', $category, $context),
-            $this->getDefaultProduct('testMinPurchaseEquals-3', $category, $context, array('inStock' => 3, 'minPurchase' => 3)),
-            $this->getDefaultProduct('testMinPurchaseEquals-4', $category, $context, array('inStock' => 20, 'minPurchase' => 20)),
+            $this->getProduct('testMinPurchaseEquals-1', $context, $category),
+            $this->getProduct('testMinPurchaseEquals-2', $context, $category),
+            $this->getProduct('testMinPurchaseEquals-3', $context, $category, array('inStock' => 3, 'minPurchase' => 3)),
+            $this->getProduct('testMinPurchaseEquals-4', $context, $category, array('inStock' => 20, 'minPurchase' => 20)),
         );
 
         foreach ($articles as $article) {

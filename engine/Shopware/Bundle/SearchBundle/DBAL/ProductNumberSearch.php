@@ -220,6 +220,11 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
             ));
         }
 
+//        echo '<pre>';
+//        print_r($query->getSQL());
+//        print_r($query->getParameters());
+//        exit();
+
         $query->addGroupBy('product.id')
             ->setFirstResult($criteria->getOffset())
             ->setMaxResults($criteria->getLimit());

@@ -43,7 +43,7 @@ class ManufacturerFacet implements FacetInterface
     /**
      * @var Struct\Product\Manufacturer[]
      */
-    private $manufacturers;
+    private $manufacturers = array();
 
     /**
      * @return string

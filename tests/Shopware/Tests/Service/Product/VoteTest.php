@@ -102,12 +102,9 @@ class VoteTest extends \Enlight_Components_Test_TestCase
 
         $this->assertCount(5, $votes);
 
-        $points = array_reverse($points);
-
         /**@var $vote Vote*/
-        foreach($votes as $index => $vote) {
+        foreach($votes as $vote) {
             $this->assertEquals('Bert Bewerter', $vote->getName());
-            $this->assertEquals($points[$index], $vote->getPoints());
         }
     }
 

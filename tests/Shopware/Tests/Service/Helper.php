@@ -418,6 +418,8 @@ class Helper
 
     private function createProperties($groupCount, $optionCount)
     {
+        $this->deleteProperties();
+
         $this->db->insert('s_filter', array('name' => 'Test-Set', 'comparable' => 1));
         $data = $this->db->fetchRow("SELECT * FROM s_filter WHERE name = 'Test-Set'");
 
@@ -450,7 +452,13 @@ class Helper
     private function deleteProperties()
     {
         $this->db->query("DELETE FROM s_filter WHERE name = 'Test-Set'");
-        $this->db->query("DELETE FROM s_filter_options WHERE name LIKE 'Test-Gruppe%'");
+
+        $ids = $this->db->fetchCol("SELECT id FROM s_filter_options WHERE name LIKE 'Test-Gruppe%'");
+        foreach($ids as $id) {
+            $this->db->query("DELETE FROM s_filter_options WHERE id = ?", array($id));
+            $this->db->query("DELETE FROM s_filter_relations WHERE optionID = ?", array($id));
+        }
+
         $this->db->query("DELETE FROM s_filter_values WHERE value LIKE 'Test-Option%'");
     }
 
@@ -580,11 +588,22 @@ class Helper
     {
         $data = array_merge($this->getCategoryData(), $data);
 
+        $this->deleteCategory($data['name']);
+
         $category = $this->categoryApi->create($data);
 
         $this->createdCategories[] = $category->getId();
 
         return $category;
+    }
+
+    private function deleteCategory($name)
+    {
+        $ids = Shopware()->Db()->fetchCol("SELECT id FROM s_categories WHERE description = ?", array($name));
+
+        foreach($ids as $id) {
+            $this->categoryApi->delete($id);
+        }
     }
 
     /**
