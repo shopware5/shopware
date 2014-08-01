@@ -278,6 +278,18 @@ $(function() {
 
     $('select:not([data-no-fancy-select="true"])').selectboxReplacement();
 
+    // Lightbox auto trigger
+    $('*[data-lightbox="true"]').on('click.lightbox', function(event) {
+        var $el = $(this),
+            target = ($el.is('[data-lightbox-target]')) ? $el.attr('data-lightbox-target'): $el.attr('href');
+
+        event.preventDefault();
+
+        if (target.length) {
+            $.lightbox.open(target);
+        }
+    });
+
     // Start up the placeholder polyfill, see ```jquery.ie-fixes.js```
     $('input, textarea').placeholder();
 
