@@ -99,11 +99,6 @@ class sBasket
     private $additionalTextService;
 
     /**
-     * @var StoreFrontBundle\Service\ListProductServiceInterface
-     */
-    private $listProductService;
-
-    /**
      * Pointer to sSystem object
      * Used for legacy purposes
      *
@@ -123,8 +118,7 @@ class sBasket
         sSystem                                 $systemModule       = null,
 
         StoreFrontBundle\Service\ContextServiceInterface $contextService = null,
-        StoreFrontBundle\Service\AdditionalTextServiceInterface $additionalTextService = null,
-        StoreFrontBundle\Service\ListProductServiceInterface $listProductService = null
+        StoreFrontBundle\Service\AdditionalTextServiceInterface $additionalTextService = null
     )
     {
         $this->db = $db ? : Shopware()->Db();
@@ -138,14 +132,9 @@ class sBasket
 
         $this->contextService = $contextService;
         $this->additionalTextService = $additionalTextService;
-        $this->listProductService = $listProductService;
 
         if ($this->contextService == null) {
             $this->contextService = Shopware()->Container()->get('context_service');
-        }
-
-        if ($this->listProductService == null) {
-            $this->listProductService = Shopware()->Container()->get('list_product_service');
         }
 
         if ($this->additionalTextService == null) {
@@ -484,7 +473,8 @@ class sBasket
 
         $premium = $this->db->fetchRow('
             SELECT premium.id, detail.ordernumber, article.id as articleID, article.name,
-              premium.ordernumber_export, article.configurator_set_id
+              detail.id as variantID, (article.main_detail_id <> detail.id) AS isVariant,
+              detail.additionaltext, premium.ordernumber_export, article.configurator_set_id
             FROM
                 s_addon_premiums premium,
                 s_articles_details detail,
@@ -509,10 +499,20 @@ class sBasket
             $premium, $premium["articleID"], "article", $this->sSYSTEM->sLanguage
         );
 
-        $context = $this->contextService->get();
-        $product = $this->listProductService->get($premium['ordernumber'], $context);
-        $product = $this->additionalTextService->buildAdditionalText($product, $context);
-        $premium['additionaltext'] = $product->getAdditional();
+        if ($premium['isVariant']) {
+            $premium = $this->moduleManager->Articles()->sGetTranslation(
+                $premium, $premium["variantID"], "variant"
+            );
+
+            $product = new StoreFrontBundle\Struct\ListProduct();
+            $product->setAdditional($premium['additionaltext']);
+            $product->setVariantId($premium["variantID"]);
+            $product->setNumber($premium['ordernumber']);
+
+            $context = $this->contextService->get();
+            $product = $this->additionalTextService->buildAdditionalText($product, $context);
+            $premium['additionaltext'] = $product->getAdditional();
+        }
 
         if (!empty($premium['configurator_set_id'])) {
             $number = $premium['ordernumber'];
@@ -2455,7 +2455,8 @@ class sBasket
         $sql = "
             SELECT s_articles.id AS articleID, name AS articleName, taxID,
               additionaltext, s_articles_details.shippingfree, laststock, instock,
-              s_articles_details.id as articledetailsID, ordernumber
+              s_articles_details.id as articledetailsID, ordernumber,
+              (s_articles.main_detail_id <> s_articles_details.id) AS isVariant
             FROM s_articles, s_articles_details
             WHERE s_articles_details.ordernumber = ?
             AND s_articles_details.articleID = s_articles.id
@@ -2485,11 +2486,26 @@ class sBasket
             return false;
         }
 
-        $context = $this->contextService->get();
-        $product = $this->listProductService->get($article['ordernumber'], $context);
-        $product = $this->additionalTextService->buildAdditionalText($product, $context);
-        $article['articleName'] = $product->getName();
-        $article['additionaltext'] = $product->getAdditional();
+        if (!empty($name)) {
+            $article["articleName"] = $name["articleName"];
+
+            $article["additionaltext"] = $name["additionaltext"];
+        }
+
+        if ($article['isVariant']) {
+            $article = $this->moduleManager->Articles()->sGetTranslation(
+                $article, $article["variantID"], "variant"
+            );
+
+            $product = new StoreFrontBundle\Struct\ListProduct();
+            $product->setAdditional($article['additionaltext']);
+            $product->setVariantId($article["articledetailsID"]);
+            $product->setNumber($article['ordernumber']);
+
+            $context = $this->contextService->get();
+            $product = $this->additionalTextService->buildAdditionalText($product, $context);
+            $article['additionaltext'] = $product->getAdditional();
+        }
 
         return $article;
     }
