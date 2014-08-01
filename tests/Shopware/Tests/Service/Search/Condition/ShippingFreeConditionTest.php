@@ -1,48 +1,15 @@
 <?php
 
-namespace Shopware\Tests\Service\Search;
+namespace Shopware\Tests\Service\Search\Condition;
 
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Models\Category\Category;
-use Shopware\Tests\Service\Helper;
+use Shopware\Tests\Service\Search\TestCase;
 
 class ShippingFreeConditionTest extends TestCase
 {
-    /**
-     * @var Helper
-     */
-    private $helper;
-
-    protected function setUp()
-    {
-        $this->helper = new Helper();
-        parent::setUp();
-    }
-
-    protected function tearDown()
-    {
-        $this->helper->cleanUp();
-        parent::tearDown();
-    }
-
-    /**
-     * @return Context
-     */
-    private function getContext()
-    {
-        $tax = $this->helper->createTax();
-        $customerGroup = $this->helper->createCustomerGroup();
-        $shop = $this->helper->getShop();
-
-        return $this->helper->createContext(
-            $customerGroup,
-            $shop,
-            array($tax)
-        );
-    }
-
     /**
      * @param $number
      * @param \Shopware\Models\Category\Category $category
@@ -50,21 +17,13 @@ class ShippingFreeConditionTest extends TestCase
      * @param bool $shippingFree
      * @return array
      */
-    private function getDefaultProduct(
+    protected function getProduct(
         $number,
-        Category $category,
         Context $context,
+        Category $category = null,
         $shippingFree = true
     ) {
-        $product = $this->helper->getSimpleProduct(
-            $number,
-            array_shift($context->getTaxRules()),
-            $context->getCurrentCustomerGroup()
-        );
-
-        $product['categories'] = array(
-            array('id' => $category->getId())
-        );
+        $product = parent::getProduct($number, $context, $category);
 
         $product['mainDetail']['shippingFree'] = $shippingFree;
 
@@ -77,8 +36,8 @@ class ShippingFreeConditionTest extends TestCase
         $context = $this->getContext();
 
         $articles = array(
-            $this->getDefaultProduct('testShippingFree-1', $category, $context),
-            $this->getDefaultProduct('testShippingFree-2', $category, $context, false),
+            $this->getProduct('testShippingFree-1', $context, $category),
+            $this->getProduct('testShippingFree-2', $context, $category, false),
         );
 
         foreach ($articles as $article) {

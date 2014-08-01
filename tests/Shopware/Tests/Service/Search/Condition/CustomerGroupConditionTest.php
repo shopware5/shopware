@@ -1,49 +1,16 @@
 <?php
 
-namespace Shopware\Tests\Service\Search;
+namespace Shopware\Tests\Service\Search\Condition;
 
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Customer\Group;
-use Shopware\Tests\Service\Helper;
+use Shopware\Tests\Service\Search\TestCase;
 
 class CustomerGroupConditionTest extends TestCase
 {
-    /**
-     * @var Helper
-     */
-    private $helper;
-
-    protected function setUp()
-    {
-        $this->helper = new Helper();
-        parent::setUp();
-    }
-
-    protected function tearDown()
-    {
-        $this->helper->cleanUp();
-        parent::tearDown();
-    }
-
-    /**
-     * @return Context
-     */
-    private function getContext()
-    {
-        $tax = $this->helper->createTax();
-        $customerGroup = $this->helper->createCustomerGroup();
-        $shop = $this->helper->getShop();
-
-        return $this->helper->createContext(
-            $customerGroup,
-            $shop,
-            array($tax)
-        );
-    }
-
     /**
      * @param $number
      * @param Group[] $customerGroups
@@ -51,21 +18,13 @@ class CustomerGroupConditionTest extends TestCase
      * @param Context $context
      * @return array
      */
-    private function getDefaultProduct(
+    protected function getProduct(
         $number,
-        array $customerGroups,
-        Category $category,
-        Context $context
+        Context $context,
+        Category $category = null,
+        array $customerGroups = array()
     ) {
-        $product = $this->helper->getSimpleProduct(
-            $number,
-            array_shift($context->getTaxRules()),
-            $context->getCurrentCustomerGroup()
-        );
-
-        $product['categories'] = array(
-            array('id' => $category->getId())
-        );
+        $product = parent::getProduct($number, $context, $category);
 
         $product['customerGroups'] = array();
         foreach ($customerGroups as $customerGroup) {
@@ -82,10 +41,10 @@ class CustomerGroupConditionTest extends TestCase
         $context = $this->getContext();
 
         $articles = array(
-            $this->getDefaultProduct('testSingleCustomerGroup-1', array($customerGroup), $category, $context),
-            $this->getDefaultProduct('testSingleCustomerGroup-2', array($customerGroup), $category, $context),
-            $this->getDefaultProduct('testSingleCustomerGroup-3', array(), $category, $context),
-            $this->getDefaultProduct('testSingleCustomerGroup-4', array(), $category, $context),
+            $this->getProduct('testSingleCustomerGroup-1', $context, $category, array($customerGroup)),
+            $this->getProduct('testSingleCustomerGroup-2', $context, $category, array($customerGroup)),
+            $this->getProduct('testSingleCustomerGroup-3', $context, $category, array()),
+            $this->getProduct('testSingleCustomerGroup-4', $context, $category, array()),
         );
 
         foreach ($articles as $article) {
@@ -114,10 +73,10 @@ class CustomerGroupConditionTest extends TestCase
         $context = $this->getContext();
 
         $articles = array(
-            $this->getDefaultProduct('testSingleCustomerGroup-1', array($customerGroup), $category, $context),
-            $this->getDefaultProduct('testSingleCustomerGroup-2', array($customerGroup), $category, $context),
-            $this->getDefaultProduct('testSingleCustomerGroup-3', array($second), $category, $context),
-            $this->getDefaultProduct('testSingleCustomerGroup-4', array(), $category, $context),
+            $this->getProduct('testSingleCustomerGroup-1', $context, $category, array($customerGroup)),
+            $this->getProduct('testSingleCustomerGroup-2', $context, $category, array($customerGroup)),
+            $this->getProduct('testSingleCustomerGroup-3', $context, $category, array($second)),
+            $this->getProduct('testSingleCustomerGroup-4', $context, $category, array()),
         );
 
         foreach ($articles as $article) {

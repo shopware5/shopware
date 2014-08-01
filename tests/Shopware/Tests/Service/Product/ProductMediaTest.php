@@ -2,6 +2,7 @@
 
 namespace Shopware\Tests\Service\Product;
 
+use Shopware\Bundle\StoreFrontBundle\Service\Core\MediaService;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Tests\Service\Converter;
 use Shopware\Tests\Service\Helper;
@@ -67,11 +68,11 @@ class ProductMediaTest extends \Enlight_Components_Test_TestCase
         return $data;
     }
 
-    private function getVariantImageProduct($number, Struct\Context $context)
+    private function getVariantImageProduct($number, Struct\Context $context, $imageCount = 2)
     {
         $data = $this->getDefaultProduct(
             $number,
-            2,
+            $imageCount,
             $context
         );
 
@@ -174,6 +175,25 @@ class ProductMediaTest extends \Enlight_Components_Test_TestCase
             $media = array_shift($media);
             $this->assertTrue($media->isPreview());
         }
+    }
+
+    public function testProductImagesWithVariant()
+    {
+        $number = 'testProductImagesWithVariant';
+        $context = $this->getContext();
+
+        $data = $this->getVariantImageProduct($number, $context, 3);
+
+        $data['variants'][0]['number'] = 'testProductImagesWithVariant-1';
+        $data['variants'][0]['images'] = array();
+
+        $this->helper->createArticle($data);
+
+        $variantNumber = 'testProductImagesWithVariant-1';
+        $product = Shopware()->Container()->get('product_service_core')
+            ->get($variantNumber, $context);
+
+        $this->assertCount(2, $product->getMedia());
     }
 
     private function assertMediaFile($expected, Struct\Media $media)

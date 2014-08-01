@@ -96,4 +96,28 @@ class ConfiguratorTest extends \Enlight_Components_Test_TestCase
 
         $article = $this->helper->createArticle($productData);
     }
+
+    public function testVariantConfiguration()
+    {
+        $number = __FUNCTION__;
+        $context = $this->getContext();
+        $productData = $this->getProduct($number, $context);
+
+        $this->helper->createArticle($productData);
+
+        foreach($productData['variants'] as $testVariant) {
+            $product = Shopware()->Container()->get('product_service_core')
+                ->get($testVariant['number'], $context);
+
+            $this->assertCount(3, $product->getConfiguration());
+
+            $optionNames = array_column($testVariant['configuratorOptions'], 'option');
+
+            foreach($product->getConfiguration() as $configuratorGroup) {
+                $this->assertCount(1, $configuratorGroup->getOptions());
+                $option = array_shift($configuratorGroup->getOptions());
+                $this->assertContains($option->getName(), $optionNames);
+            }
+        }
+    }
 }
