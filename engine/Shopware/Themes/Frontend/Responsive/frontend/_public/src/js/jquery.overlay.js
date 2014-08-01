@@ -1,6 +1,7 @@
-;
-(function ($, modernizr) {
+;(function ($, modernizr) {
     'use strict';
+
+    function emptyFn() {}
 
     /**
      * Shopware Overlay Module.
@@ -76,7 +77,7 @@
              *
              * @type {Function}
              */
-            onClick: function () { }
+            onClick: emptyFn
         },
 
         /**
@@ -87,6 +88,16 @@
          * @type {Object}
          */
         options: { },
+
+        /**
+         * Internal flag that indicates whether or not the overlay is opened.
+         * Use {@link isOpen} to get this status.
+         *
+         * @private
+         * @property _opened
+         * @type {Boolean}
+         */
+        _opened: false,
 
         /**
          * Opens/Shows the fullscreen overlay element.
@@ -100,6 +111,11 @@
             var me = this;
 
             me.options = $.extend({}, me.defaults, options);
+
+            if (me.isOpen()) {
+                return;
+            }
+            me._opened = true;
 
             if (!me._$overlay) {
                 me._$overlay = $('<div>', {
@@ -141,6 +157,11 @@
                     me._$overlay.css('display', 'none');
                 };
 
+            if (!me.isOpen()) {
+                return;
+            }
+            me._opened = false;
+
             if (me._$overlay !== null) {
                 if (modernizr.csstransitions) {
                     me._$overlay.stop(true).transition(css, duration, easing, callback);
@@ -151,6 +172,17 @@
                     });
                 }
             }
+        },
+
+        /**
+         * Returns the status whether or not the overlay is opened.
+         *
+         * @public
+         * @method isOpen
+         * @returns {Boolean}
+         */
+        isOpen: function () {
+            return this._opened;
         },
 
         /**
