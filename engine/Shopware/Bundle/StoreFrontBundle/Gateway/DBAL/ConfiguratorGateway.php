@@ -57,26 +57,26 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
     private $fieldHelper;
 
     /**
-     * @var Hydrator\MediaHydrator
+     * @var \Shopware\Bundle\StoreFrontBundle\Gateway\MediaGatewayInterface
      */
-    private $mediaHydrator;
+    private $mediaGateway;
 
     /**
      * @param ModelManager $entityManager
      * @param FieldHelper $fieldHelper
      * @param Hydrator\ConfiguratorHydrator $configuratorHydrator
-     * @param Hydrator\MediaHydrator $mediaHydrator
+     * @param \Shopware\Bundle\StoreFrontBundle\Gateway\MediaGatewayInterface $mediaGateway
      */
     public function __construct(
         ModelManager $entityManager,
         FieldHelper $fieldHelper,
         Hydrator\ConfiguratorHydrator $configuratorHydrator,
-        Gateway\DBAL\Hydrator\MediaHydrator $mediaHydrator
+        Gateway\MediaGatewayInterface $mediaGateway
     ) {
         $this->entityManager = $entityManager;
         $this->configuratorHydrator = $configuratorHydrator;
         $this->fieldHelper = $fieldHelper;
-        $this->mediaHydrator = $mediaHydrator;
+        $this->mediaGateway = $mediaGateway;
     }
 
     /**
@@ -111,36 +111,58 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getConfiguratorMedia(Struct\ListProduct $product)
+    public function getConfiguratorMedia(Struct\ListProduct $product, Struct\Context $context)
     {
-        $query = $this->entityManager->getDBALQueryBuilder();
+        $subQuery = $this->entityManager->getDBALQueryBuilder();
 
-        $query->select('DISTINCT rules.option_id')
-            ->addSelect($this->fieldHelper->getMediaFields())
-            ->addSelect($this->fieldHelper->getMediaSettingFields());
-
-        $query->from('s_articles_img', 'image')
-            ->innerJoin('image', 's_media', 'media', 'media.id = image.media_id')
+        $subQuery->select('image.media_id')
+            ->from('s_articles_img', 'image')
             ->innerJoin('image', 's_article_img_mappings', 'mapping', 'mapping.image_id = image.id')
             ->innerJoin('mapping', 's_article_img_mapping_rules', 'rules', 'rules.mapping_id = mapping.id')
-            ->innerJoin('media', 's_media_album_settings', 'mediaSettings', 'mediaSettings.albumID = media.albumID')
-            ->leftJoin('media', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = media.id');
+            ->where('image.articleID = product.id')
+            ->andWhere('rules.option_id = optionRelation.option_id')
+            ->orderBy('image.position')
+            ->setMaxResults(1)
+        ;
 
-        $query->where('image.articleID = :articleId')
-            ->setParameter(':articleId', $product->getId());
+        $query = $this->entityManager->getDBALQueryBuilder();
+
+        $query->select(array(
+            'optionRelation.option_id',
+            '(' . $subQuery->getSQL() . ') as media_id'
+        ));
+
+        $query->from('s_articles', 'product')
+            ->innerJoin(
+                'product',
+                's_article_configurator_set_option_relations',
+                'optionRelation',
+                'product.configurator_set_id = optionRelation.set_id'
+            );
+
+        $query->where('product.id = :articleId');
+
+        $query->groupBy('optionRelation.option_id');
+
+        $query->setParameter(':articleId', $product->getId());
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
-        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
+        $data = array_filter($data);
 
-        $media = array();
+        $media = $this->mediaGateway->getList($data, $context);
 
-        foreach ($data as $row) {
-            $media[$row['option_id']] = $this->mediaHydrator->hydrate($row);
+        $result = array();
+        foreach($data as $optionId => $mediaId) {
+            if (!isset($media[$mediaId])) {
+                continue;
+            }
+            $result[$optionId] = $media[$mediaId];
         }
 
-        return $media;
+        return $result;
     }
 
     /**

@@ -95,7 +95,8 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
         $media = array();
         if ($configurator->getType() === self::CONFIGURATOR_TYPE_PICTURE) {
             $media = $this->configuratorGateway->getConfiguratorMedia(
-                $product
+                $product,
+                $context
             );
         }
 
