@@ -14,6 +14,7 @@ In this document you will find a changelog of the important changes related to t
 * It's now possible to filter payment methods by subshops
 * `/widgets` and `/listing` added to `robots.txt`
 * Calling certain widget urls without the required parameters will no longer trigger a server error (returns 404 instead)
+* `Overview` backend module query was adjusted to produce similar results as the `Statistics` module
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).
