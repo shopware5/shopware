@@ -32,11 +32,10 @@
 					{/if}
 
 					{foreach from=$sConfigurator.values item=configValue name=option key=optionID}
-						{if !isset($configValue.active)||$configValue.active==1}
-							<option{if $configValue.selected&&$sConfigurator.user_selected} selected="selected"{/if} value="{$configValue.optionID}">
-								{$configValue.optionname}{if $configValue.upprice && !$configValue.reset} {if $configValue.upprice > 0}{/if}{/if}
-							</option>
-						{/if}
+                        <option {if !$configValue.selectable}disabled{/if} {if $configValue.selected && $sConfigurator.user_selected} selected="selected"{/if} value="{$configValue.optionID}">
+                            {$configValue.optionname}{if $configValue.upprice && !$configValue.reset} {if $configValue.upprice > 0}{/if}{/if}
+                            {if !$configValue.selectable}{s name="DetailConfigValueNotAvailable"}{/s}{/if}
+                        </option>
 					{/foreach}
 				</select>
 			</div>

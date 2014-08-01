@@ -34,6 +34,10 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
  */
 class ConfiguratorService implements Service\ConfiguratorServiceInterface
 {
+    const CONFIGURATOR_TYPE_STANDARD = 0;
+    const CONFIGURATOR_TYPE_SELECTION = 1;
+    const CONFIGURATOR_TYPE_PICTURE = 2;
+
     /**
      * @var Gateway\ProductConfigurationGatewayInterface
      */
@@ -84,6 +88,67 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
         Struct\Context $context,
         array $selection
     ) {
-        return $this->configuratorGateway->get($product, $context, $selection);
+        $configurator = $this->configuratorGateway->get($product, $context, $selection);
+
+        $combinations = $this->configuratorGateway->getProductCombinations($product);
+
+        $media = array();
+        if ($configurator->getType() === self::CONFIGURATOR_TYPE_PICTURE) {
+            $media = $this->configuratorGateway->getConfiguratorMedia(
+                $product
+            );
+        }
+
+        foreach ($configurator->getGroups() as $group) {
+            $group->setSelected(
+                isset($selection[$group->getId()])
+            );
+
+            foreach ($group->getOptions() as $option) {
+                $option->setSelected(
+                    in_array($option->getId(), $selection)
+                );
+
+                $isValid = $this->isCombinationValid(
+                    $group,
+                    $combinations[$option->getId()],
+                    $selection
+                );
+
+                $option->setActive($isValid);
+
+                if (isset($media[$option->getId()])) {
+                    $option->setMedia(
+                        $media[$option->getId()]
+                    );
+                }
+            }
+        }
+
+        return $configurator;
+    }
+
+    /**
+     * Checks if the passed combination is compatible with the provided customer configurator
+     * selection.
+     *
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group $group
+     * @param array $combinations
+     * @param $selection
+     * @return bool
+     */
+    private function isCombinationValid(Struct\Configurator\Group $group, $combinations, $selection)
+    {
+        if (empty($combinations)) {
+            return false;
+        }
+
+        foreach ($selection as $selectedGroup => $selectedOption) {
+            if (!in_array($selectedOption, $combinations) && $selectedGroup !== $group->getId()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
