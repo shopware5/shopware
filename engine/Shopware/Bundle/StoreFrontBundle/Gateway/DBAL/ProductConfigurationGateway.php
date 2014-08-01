@@ -103,6 +103,8 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
         $query->where('relations.article_id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
+        $query->addOrderBy('configuratorGroup.id');
+
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 

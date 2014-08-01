@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\StoreFrontBundle;
+
 /**
  * Deprecated Shopware Class that handles cart operations
  */
@@ -87,6 +89,21 @@ class sBasket
     private $moduleManager;
 
     /**
+     * @var StoreFrontBundle\Service\ContextServiceInterface
+     */
+    private $contextService;
+
+    /**
+     * @var StoreFrontBundle\Service\AdditionalTextServiceInterface
+     */
+    private $additionalTextService;
+
+    /**
+     * @var StoreFrontBundle\Service\ListProductServiceInterface
+     */
+    private $listProductService;
+
+    /**
      * Pointer to sSystem object
      * Used for legacy purposes
      *
@@ -103,7 +120,11 @@ class sBasket
         Enlight_Components_Session_Namespace    $session            = null,
         Enlight_Controller_Front                $front              = null,
         Shopware_Components_Modules             $moduleManager      = null,
-        sSystem                                 $systemModule       = null
+        sSystem                                 $systemModule       = null,
+
+        StoreFrontBundle\Service\ContextServiceInterface $contextService = null,
+        StoreFrontBundle\Service\AdditionalTextServiceInterface $additionalTextService = null,
+        StoreFrontBundle\Service\ListProductServiceInterface $listProductService = null
     )
     {
         $this->db = $db ? : Shopware()->Db();
@@ -114,6 +135,22 @@ class sBasket
         $this->front = $front ? : Shopware()->Front();
         $this->moduleManager = $moduleManager ? : Shopware()->Modules();
         $this->sSYSTEM = $systemModule ? : Shopware()->System();
+
+        $this->contextService = $contextService;
+        $this->additionalTextService = $additionalTextService;
+        $this->listProductService = $listProductService;
+
+        if ($this->contextService == null) {
+            $this->contextService = Shopware()->Container()->get('context_service');
+        }
+
+        if ($this->listProductService == null) {
+            $this->listProductService = Shopware()->Container()->get('list_product_service');
+        }
+
+        if ($this->additionalTextService == null) {
+            $this->additionalTextService = Shopware()->Container()->get('additional_text_service');
+        }
     }
     /**
      * Get total value of current user's cart
@@ -447,7 +484,7 @@ class sBasket
 
         $premium = $this->db->fetchRow('
             SELECT premium.id, detail.ordernumber, article.id as articleID, article.name,
-              detail.additionaltext, premium.ordernumber_export, article.configurator_set_id
+              premium.ordernumber_export, article.configurator_set_id
             FROM
                 s_addon_premiums premium,
                 s_articles_details detail,
@@ -471,6 +508,12 @@ class sBasket
         $premium = $this->moduleManager->Articles()->sGetTranslation(
             $premium, $premium["articleID"], "article", $this->sSYSTEM->sLanguage
         );
+
+        $context = $this->contextService->get();
+        $product = $this->listProductService->get($premium['ordernumber'], $context);
+        $product = $this->additionalTextService->buildAdditionalText($product, $context);
+        $premium['additionaltext'] = $product->getAdditional();
+
         if (!empty($premium['configurator_set_id'])) {
             $number = $premium['ordernumber'];
         } else {
@@ -2442,15 +2485,12 @@ class sBasket
             return false;
         }
 
-        $name = $this->moduleManager->Articles()->sGetArticleNameByOrderNumber(
-            $article["ordernumber"],
-            true
-        );
+        $context = $this->contextService->get();
+        $product = $this->listProductService->get($article['ordernumber'], $context);
+        $product = $this->additionalTextService->buildAdditionalText($product, $context);
+        $article['articleName'] = $product->getName();
+        $article['additionaltext'] = $product->getAdditional();
 
-        if (!empty($name)) {
-            $article["articleName"] = $name["articleName"];
-            $article["additionaltext"] = $name["additionaltext"];
-        }
         return $article;
     }
 }

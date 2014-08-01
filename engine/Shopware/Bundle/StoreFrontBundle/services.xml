@@ -10,6 +10,7 @@
 
         <service id="context_service" alias="context_service_core"/>
         <service id="list_product_service" alias="list_product_service_core"/>
+        <service id="additional_text_service" alias="additional_text_service_core"/>
         <service id="product_service" alias="product_service_core"/>
         <service id="marketing_service" alias="marketing_service_core"/>
         <service id="product_download_service" alias="product_download_service_core"/>
@@ -150,6 +151,11 @@
         <service id="vote_service_core" class="Shopware\Bundle\StoreFrontBundle\Service\Core\VoteService">
             <argument type="service" id="vote_gateway"/>
             <argument type="service" id="vote_average_gateway"/>
+        </service>
+
+        <service id="additional_text_service_core" class="Shopware\Bundle\StoreFrontBundle\Service\Core\AdditionalTextService">
+            <argument type="service" id="configurator_service_core"/>
+            <argument type="service" id="config"/>
         </service>
 
 
