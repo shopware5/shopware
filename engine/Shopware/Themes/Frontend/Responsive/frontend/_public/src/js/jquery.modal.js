@@ -120,6 +120,11 @@
              *
              * Will use the width and height as static sizes and will not change to fullscreen mode.
              *
+             * 'content':
+             *
+             * Will use the height of its content instead of a given height.
+             * The 'height' option will be ignored when set.
+             *
              * @type {String}
              */
             sizing: 'auto',
@@ -226,6 +231,7 @@
          */
         open: function (content, options, overlayOptions) {
             var me = this,
+                $modalBox = me._$modalBox,
                 opts;
 
             me.options = opts = $.extend({}, me.defaults, options);
@@ -237,22 +243,31 @@
                 }));
             }
 
-            if (!me._$modalBox) {
+            if (!$modalBox) {
                 me.initModalBox();
                 me.registerEvents();
+
+                $modalBox = me._$modalBox;
             }
 
             me._$closeButton.toggle(opts.showCloseButton);
 
-            me._$modalBox.toggleClass('fixed', opts.sizing === 'fixed');
-            me._$modalBox.toggleClass('no--header', opts.title.length === 0);
+            $modalBox.toggleClass('sizing--fixed', opts.sizing === 'fixed');
+            $modalBox.toggleClass('sizing--content', opts.sizing === 'content');
+            $modalBox.toggleClass('no--header', opts.title.length === 0);
+
+            if (opts.sizing === 'content') {
+                opts.height = 'auto';
+            } else {
+                $modalBox.css('top', 0);
+            }
 
             me.setWidth(opts.width);
             me.setHeight(opts.height);
             me.setTitle(opts.title);
 
             // set display to block instead of .show() for browser compatibility
-            me._$modalBox.css('display', 'block');
+            $modalBox.css('display', 'block');
 
             switch (opts.mode) {
                 case 'ajax':
@@ -288,18 +303,20 @@
             var me = this,
                 opts = me.options;
 
-            $.overlay.close();
+            if (opts.overlay) {
+                $.overlay.close();
+            }
 
             if (me._$modalBox !== null) {
                 me.setTransition({
                     opacity: 0
-                }, me.options.animationSpeed, 'linear', function () {
+                }, opts.animationSpeed, 'linear', function () {
                     me._$content.empty();
 
                     // set display to none instead of .hide() for browser compatibility
                     me._$modalBox.css('display', 'none');
 
-                    me.options.onClose.call(me);
+                    opts.onClose.call(me);
                 });
             }
 
@@ -361,6 +378,10 @@
 
             me._$content.html(content);
 
+            if (me.options.sizing === 'content') {
+                me.center();
+            }
+            
             $.publish('plugin/modal/onSetContent');
         },
 
@@ -436,11 +457,13 @@
          * @method registerEvents
          */
         registerEvents: function () {
-            var me = this;
+            var me = this,
+                $window = $(window);
 
             me._$closeButton.on('click.modal', $.proxy(me.close, me));
 
-            $(window).on('keydown', $.proxy(me.onKeyDown, me));
+            $window.on('keydown', $.proxy(me.onKeyDown, me));
+            $window.on('resize', $.proxy(me.onWindowResize, me));
 
             StateManager.registerListener({
                 type: 'smartphone',
@@ -476,6 +499,34 @@
                     me.close();
                 }
             }
+        },
+
+        /**
+         * Called when the window was resized.
+         * Centers the modal box when the sizing is set to 'content'.
+         *
+         * @public
+         * @method onWindowResize
+         */
+        onWindowResize: function (event) {
+            var me = this;
+
+            if (me.options.sizing === 'content') {
+                me.center();
+            }
+        },
+
+        /**
+         * Sets the top position of the modal box to center it to the screen
+         *
+         * @public
+         * @method centerModalBox
+         */
+        center: function () {
+            var me = this,
+                $modalBox = me._$modalBox;
+
+            $modalBox.css('top', ($(window).height() - $modalBox.height()) / 2);
         },
 
         /**
