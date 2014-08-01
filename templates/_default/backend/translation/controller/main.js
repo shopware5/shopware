@@ -157,7 +157,7 @@ Ext.define('Shopware.apps.Translation.controller.Main',
 
         // Register Google Translations
         me.urls.add('google', {
-            tpl: '{literal}http://translate.google.de/?hl=de&tab=wT#{0}|{1}|{2}{/literal}',
+            tpl: '{literal}//translate.google.de/?hl=de&tab=wT#{0}|{1}|{2}{/literal}',
             sep: '|',
             fullName: '{s name=service/google}Google translator{/s}'
         });
