@@ -252,6 +252,7 @@
 
             me._$closeButton.toggle(opts.showCloseButton);
 
+            $modalBox.toggleClass('sizing--auto', opts.sizing === 'auto');
             $modalBox.toggleClass('sizing--fixed', opts.sizing === 'fixed');
             $modalBox.toggleClass('sizing--content', opts.sizing === 'content');
             $modalBox.toggleClass('no--header', opts.title.length === 0);
@@ -271,7 +272,11 @@
 
             switch (opts.mode) {
                 case 'ajax':
-                    me._$content.load(content);
+                    $.ajax(content, {
+                        success: function (result) {
+                            me.setContent(result);
+                        }
+                    });
                     me.options.src = content;
                     break;
                 case 'iframe':
@@ -379,7 +384,11 @@
             me._$content.html(content);
 
             if (me.options.sizing === 'content') {
+                // initial centering
                 me.center();
+
+                // centering again to fix some styling/positioning issues
+                setTimeout(me.center.bind(me), 25);
             }
             
             $.publish('plugin/modal/onSetContent');
