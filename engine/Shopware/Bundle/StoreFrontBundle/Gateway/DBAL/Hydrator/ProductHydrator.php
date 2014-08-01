@@ -336,6 +336,9 @@ class ProductHydrator extends Hydrator
         $translation = array();
         if (isset($data['__product_translation'])) {
             $translation = array_merge($translation, $this->unserializeTranslation($data['__product_translation']));
+            if ($data['__product_main_detail_id'] != $data['__variant_id'] ) {
+                unset($translation['txtzusatztxt']);
+            }
         }
 
         if (isset($data['__variant_translation'])) {

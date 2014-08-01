@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\StoreFrontBundle;
+
 /**
  * Deprecated Shopware Class that handles marketing related functions
  *
@@ -38,6 +40,21 @@ class sMarketing
      * @access private
      */
     public $sSYSTEM;
+
+    /**
+     * @var StoreFrontBundle\Service\ContextServiceInterface
+     */
+    private $contextService;
+
+    /**
+     * @var StoreFrontBundle\Service\AdditionalTextServiceInterface
+     */
+    private $additionalTextService;
+
+    /**
+     * @var StoreFrontBundle\Service\ListProductServiceInterface
+     */
+    private $listProductService;
 
     /**
      * Array with blacklisted articles (already in basket)
@@ -59,11 +76,31 @@ class sMarketing
     /**
      * Class constructor.
      */
-    public function __construct()
+    public function __construct(
+        StoreFrontBundle\Service\ContextServiceInterface $contextService = null,
+        StoreFrontBundle\Service\AdditionalTextServiceInterface $additionalTextService = null,
+        StoreFrontBundle\Service\ListProductServiceInterface $listProductService = null
+    )
     {
         $this->category = Shopware()->Shop()->getCategory();
         $this->categoryId = $this->category->getId();
         $this->customerGroupId = (int) Shopware()->Modules()->System()->sUSERGROUPDATA['id'];
+
+        $this->contextService = $contextService;
+        $this->additionalTextService = $additionalTextService;
+        $this->listProductService = $listProductService;
+
+        if ($this->contextService == null) {
+            $this->contextService = Shopware()->Container()->get('context_service');
+        }
+
+        if ($this->listProductService == null) {
+            $this->listProductService = Shopware()->Container()->get('list_product_service');
+        }
+
+        if ($this->additionalTextService == null) {
+            $this->additionalTextService = Shopware()->Container()->get('additional_text_service');
+        }
     }
 
     public function sGetSimilaryShownArticles($articleId, $limit = 0)
@@ -308,13 +345,61 @@ class sMarketing
                 $premium["available"] = 0;
             }
 
-            if (empty($premium["available"])) $premium["sDifference"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($premium["startprice"] - $sBasketAmount);
+            if (empty($premium["available"])) {
+                $premium["sDifference"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($premium["startprice"] - $sBasketAmount);
+            }
             $premium["sArticle"] = $this->sSYSTEM->sMODULES['sArticles']->sGetPromotionById("fix", 0, $premium["articleID"]);
             $premium["startprice"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($premium["startprice"]);
-            $sql = "SELECT ordernumber, additionaltext FROM s_articles_details WHERE articleID={$premium["articleID"]} AND kind != 3";
-            $premium["sVariants"] = $this->sSYSTEM->sDB_CONNECTION->GetAll($sql);
+            $premium["sVariants"] = $this->getVariantDetailsForPremiumArticles($premium["articleID"]);
         }
         return $premiums;
+    }
+
+    /**
+     * For the provided article id, returns the associated variant numbers and additional texts
+     *
+     * @param $articleId
+     * @return array
+     */
+    private function getVariantDetailsForPremiumArticles($articleId)
+    {
+        $context = $this->contextService->get();
+
+        $sql = "SELECT id, ordernumber, additionaltext
+            FROM s_articles_details
+            WHERE articleID = :articleId AND kind != 3";
+
+        $variantsData = Shopware()->Db()->fetchAll(
+            $sql,
+            array('articleId' => $articleId)
+        );
+
+        foreach ($variantsData as $variantData) {
+            $product = new StoreFrontBundle\Struct\ListProduct();
+
+            $translation = Shopware()->Modules()->Articles()->sGetTranslation(
+                $variantData,
+                $variantData['id'],
+                "variant"
+            );
+
+            $product->setAdditional($translation['additionaltext'] ? : $variantData['additionaltext']);
+            $product->setVariantId($variantData['id']);
+            $product->setNumber($variantData['ordernumber']);
+            $products[$variantData['ordernumber']] = $product;
+        }
+
+        $products = $this->additionalTextService->buildAdditionalTextLists($products, $context);
+
+        return array_map(
+            function(StoreFrontBundle\Struct\Product $elem) {
+                return array(
+                    'ordernumber' => $elem->getNumber(),
+                    'additionaltext' => $elem->getAdditional()
+                );
+            },
+            $products
+        );
     }
 
     public function sBuildTagCloud($categoryId = null)

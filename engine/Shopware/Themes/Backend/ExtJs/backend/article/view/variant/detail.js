@@ -120,7 +120,8 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
             active: '{s name=detail/base/active}Active{/s}',
             activeBox: '{s name=detail/base/active_box}Product can be purchases{/s}',
             numberValidation: '{s name=detail/base/number_validation}The inserted article number already exists!{/s}',
-            additionalText: '{s name=detail/base/additional_text}Additional text{/s}'
+            additionalText: '{s name=detail/base/additional_text}Additional text{/s}',
+            additionalTextSupport: '{s name=detail/base/additional_text_support}If left empty, an automatic text will be generated using the configurator options. This behaviour can be configured.{/s}'
         },
         basePrice: {
             title:'{s name=detail/base_price/title}Base price calculation{/s}',
@@ -393,10 +394,11 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
                 validationErrorMsg: me.snippets.baseFieldSet.numberValidation
             }, {
                 xtype: 'textfield',
-                allowBlank: false,
+                allowBlank: true,
                 name: 'additionalText',
                 translatable: true,
-                fieldLabel: me.snippets.baseFieldSet.additionalText
+                fieldLabel: me.snippets.baseFieldSet.additionalText,
+                supportText: me.snippets.baseFieldSet.additionalTextSupport
             }, {
                 xtype: 'checkbox',
                 name: 'active',
