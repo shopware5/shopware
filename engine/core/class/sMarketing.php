@@ -52,11 +52,6 @@ class sMarketing
     private $additionalTextService;
 
     /**
-     * @var StoreFrontBundle\Service\ListProductServiceInterface
-     */
-    private $listProductService;
-
-    /**
      * Array with blacklisted articles (already in basket)
      *
      * @var array
@@ -78,8 +73,7 @@ class sMarketing
      */
     public function __construct(
         StoreFrontBundle\Service\ContextServiceInterface $contextService = null,
-        StoreFrontBundle\Service\AdditionalTextServiceInterface $additionalTextService = null,
-        StoreFrontBundle\Service\ListProductServiceInterface $listProductService = null
+        StoreFrontBundle\Service\AdditionalTextServiceInterface $additionalTextService = null
     )
     {
         $this->category = Shopware()->Shop()->getCategory();
@@ -88,14 +82,9 @@ class sMarketing
 
         $this->contextService = $contextService;
         $this->additionalTextService = $additionalTextService;
-        $this->listProductService = $listProductService;
 
         if ($this->contextService == null) {
             $this->contextService = Shopware()->Container()->get('context_service');
-        }
-
-        if ($this->listProductService == null) {
-            $this->listProductService = Shopware()->Container()->get('list_product_service');
         }
 
         if ($this->additionalTextService == null) {
@@ -377,13 +366,13 @@ class sMarketing
         foreach ($variantsData as $variantData) {
             $product = new StoreFrontBundle\Struct\ListProduct();
 
-            $translation = Shopware()->Modules()->Articles()->sGetTranslation(
+            $variantData = Shopware()->Modules()->Articles()->sGetTranslation(
                 $variantData,
                 $variantData['id'],
                 "variant"
             );
 
-            $product->setAdditional($translation['additionaltext'] ? : $variantData['additionaltext']);
+            $product->setAdditional($variantData['additionaltext']);
             $product->setVariantId($variantData['id']);
             $product->setNumber($variantData['ordernumber']);
             $products[$variantData['ordernumber']] = $product;
