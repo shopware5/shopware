@@ -659,7 +659,8 @@ class LegacyStructConverter
             'groupID' => $group->getId(),
             'optionname' => $option->getName(),
             'user_selected' => $option->isSelected(),
-            'selected' => $option->isSelected()
+            'selected' => $option->isSelected(),
+            'selectable' => $option->getActive()
         );
 
         if ($option->getMedia()) {

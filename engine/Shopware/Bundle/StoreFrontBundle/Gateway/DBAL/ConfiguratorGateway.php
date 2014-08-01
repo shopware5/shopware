@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Bundle\StoreFrontBundle\Struct;
@@ -58,45 +57,39 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
     private $fieldHelper;
 
     /**
+     * @var Hydrator\MediaHydrator
+     */
+    private $mediaHydrator;
+
+    /**
      * @param ModelManager $entityManager
      * @param FieldHelper $fieldHelper
      * @param Hydrator\ConfiguratorHydrator $configuratorHydrator
+     * @param Hydrator\MediaHydrator $mediaHydrator
      */
     public function __construct(
         ModelManager $entityManager,
         FieldHelper $fieldHelper,
-        Hydrator\ConfiguratorHydrator $configuratorHydrator
+        Hydrator\ConfiguratorHydrator $configuratorHydrator,
+        Gateway\DBAL\Hydrator\MediaHydrator $mediaHydrator
     ) {
         $this->entityManager = $entityManager;
         $this->configuratorHydrator = $configuratorHydrator;
         $this->fieldHelper = $fieldHelper;
+        $this->mediaHydrator = $mediaHydrator;
     }
 
     /**
      * @inheritdoc
      */
-    public function get(Struct\ListProduct $product, Struct\Context $context, array $selection)
+    public function get(Struct\ListProduct $product, Struct\Context $context)
     {
         $query = $this->getQuery();
-
-        $mediaQuery = $this->getMediaQuery();
-
-        $configuratorType = $this->getConfiguratorType($product);
 
         $query->addSelect($this->fieldHelper->getConfiguratorSetFields())
             ->addSelect($this->fieldHelper->getConfiguratorGroupFields())
             ->addSelect($this->fieldHelper->getConfiguratorOptionFields())
         ;
-
-        switch ($configuratorType) {
-            case 1:
-                $this->addSelectionCondition($query, $selection);
-                break;
-
-            case 2:
-                $query->addSelect('('. $mediaQuery->getSQL() .') as __configuratorOption_media');
-                break;
-        }
 
         $this->fieldHelper->addConfiguratorTranslation(
             $query,
@@ -112,138 +105,92 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $mediaIds = array_column($data, '__configuratorOption_media');
-        $mediaIds = array_filter($mediaIds);
-
-        if (!empty($mediaIds)) {
-            $media = $this->getMedia($mediaIds);
-
-            foreach ($data as &$option) {
-                $id = $option['__configuratorOption_media'];
-
-                if (isset($media[$id])) {
-                    $option = array_merge($option, $media[$id][0]);
-                }
-            }
-        }
-
-        $configurator = $this->configuratorHydrator->hydrate($data, $selection);
-
-        return $configurator;
+        return $this->configuratorHydrator->hydrate($data);
     }
 
     /**
-     * @param Struct\ListProduct $product
-     * @return mixed
+     * @inheritdoc
      */
-    private function getConfiguratorType(Struct\ListProduct $product)
+    public function getConfiguratorMedia(Struct\ListProduct $product)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
 
-        $query->select(array('configuratorSet.type'))
-            ->from('s_article_configurator_sets', 'configuratorSet')
-            ->innerJoin(
-                'configuratorSet',
-                's_articles',
-                'product',
-                'configuratorSet.id = product.configurator_set_id'
-            );
-
-        $query->where('product.id = :id')
-            ->setParameter(':id', $product->getId());
-
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
-        $statement = $query->execute();
-
-        return $statement->fetch(\PDO::FETCH_COLUMN);
-    }
-
-    /**
-     * @param array $ids
-     * @return array
-     */
-    private function getMedia(array $ids)
-    {
-        $query = $this->entityManager->getDBALQueryBuilder();
-
-        $query->select('media.id as arrayKey')
+        $query->select('DISTINCT rules.option_id')
             ->addSelect($this->fieldHelper->getMediaFields())
             ->addSelect($this->fieldHelper->getMediaSettingFields());
 
-        $query->from('s_media', 'media')
+        $query->from('s_articles_img', 'image')
+            ->innerJoin('image', 's_media', 'media', 'media.id = image.media_id')
+            ->innerJoin('image', 's_article_img_mappings', 'mapping', 'mapping.image_id = image.id')
+            ->innerJoin('mapping', 's_article_img_mapping_rules', 'rules', 'rules.mapping_id = mapping.id')
             ->innerJoin('media', 's_media_album_settings', 'mediaSettings', 'mediaSettings.albumID = media.albumID')
             ->leftJoin('media', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = media.id');
-
-        $query->where('media.id IN (:ids)')
-            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_GROUP);
+        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        $media = array();
+
+        foreach ($data as $row) {
+            $media[$row['option_id']] = $this->mediaHydrator->hydrate($row);
+        }
+
+        return $media;
     }
 
     /**
-     * @return QueryBuilder
+     * @inheritdoc
      */
-    private function getMediaQuery()
+    public function getProductCombinations(Struct\ListProduct $product)
     {
         $query = $this->entityManager->getDBALQueryBuilder();
 
-        $query->select('media.id')
-            ->from('s_articles_img', 'image')
-            ->innerJoin('image', 's_article_img_mappings', 'mapping', 'mapping.image_id = image.id')
-            ->innerJoin('mapping', 's_article_img_mapping_rules', 'rules', 'rules.mapping_id = mapping.id')
-            ->innerJoin('image', 's_media', 'media', 'media.id = image.media_id');
+        $query->select(array(
+            'relations.option_id',
+            "GROUP_CONCAT(DISTINCT assignedRelations.option_id, '' SEPARATOR '|') as combinations"
+        ));
 
-        $query->where('image.parent_id IS NULL')
-            ->andWhere('image.articleID = products.id')
-            ->andWhere('rules.option_id = configuratorOption.id');
+        $query->from('s_article_configurator_option_relations', 'relations');
 
-        $query->orderBy('image.position')
-            ->setMaxResults(1);
+        $query->innerJoin(
+            'relations',
+            's_articles_details',
+            'variant',
+            'variant.id = relations.article_id AND variant.articleID = :articleId AND variant.active = 1'
+        );
 
-        return $query;
-    }
+        $query->innerJoin(
+            'variant',
+            's_articles',
+            'product',
+            'product.id = variant.articleID AND
+            (product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)'
+        );
 
-    /**
-     * @param QueryBuilder $query
-     * @param array $selection
-     */
-    private function addSelectionCondition(QueryBuilder $query, array $selection)
-    {
-        $previous = null;
-        foreach ($selection as $groupId => $optionId) {
-            $tableAlias = 'group_table_' . (int) $groupId;
-            $optionFilter = 'option_id_' . (int) $optionId;
-            $groupFilter = 'group_' . (int) $groupId;
-            $selectAlias = 'groupFilter_' . (int) $groupId;
+        $query->innerJoin(
+            'relations',
+            's_article_configurator_option_relations',
+            'assignedRelations',
+            'assignedRelations.article_id = relations.article_id
+             AND assignedRelations.option_id != relations.option_id'
+        );
 
-            $query->addSelect(
-                'GROUP_CONCAT(' . $tableAlias . '.article_id) as ' . $selectAlias
-            );
+        $query->groupBy('relations.option_id');
 
-            if ($previous) {
-                $previous .= $tableAlias . '.article_id';
-            }
+        $query->setParameter(':articleId', $product->getId());
 
-            $query->leftJoin(
-                'variants',
-                's_article_configurator_option_relations',
-                $tableAlias,
-                $tableAlias . '.option_id = :' . $optionFilter .
-                ' AND variants.id = ' . $tableAlias . '.article_id' . $previous
-            );
+        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $query->execute();
 
-            $previous .= ' AND ' . $tableAlias . '.article_id = ';
+        $data = $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
 
-            $query->andHaving(
-                '(' . $selectAlias . ' IS NOT NULL OR configuratorGroup.id = :' . $groupFilter . ')'
-            );
-
-            $query->setParameter(':' . $optionFilter, (int) $optionId)
-                ->setParameter(':' . $groupFilter, (int) $groupId);
+        foreach ($data as &$row) {
+            $row = explode('|', $row);
         }
+
+        return $data;
     }
 
     /**
@@ -295,23 +242,6 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
              configuratorOption.group_id = configuratorGroup.id'
         );
 
-        $query->innerJoin(
-            'configuratorOption',
-            's_article_configurator_option_relations',
-            'variantOptions',
-            'variantOptions.option_id = configuratorOption.id'
-        );
-
-        $query->innerJoin(
-            'variantOptions',
-            's_articles_details',
-            'variants',
-            'variants.id = variantOptions.article_id
-             AND variants.active = 1
-             AND variants.articleID = products.id
-             AND (products.laststock * variants.instock) >= (products.laststock * variants.minpurchase)'
-        );
-
         $query->addOrderBy('configuratorGroup.position')
             ->addOrderBy('configuratorGroup.name')
             ->addOrderBy('configuratorOption.position')
@@ -321,5 +251,4 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
 
         return $query;
     }
-
 }

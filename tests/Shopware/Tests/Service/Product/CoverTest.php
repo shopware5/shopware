@@ -181,6 +181,7 @@ class CoverTest extends \Enlight_Components_Test_TestCase
             ->will($this->returnValue(true));
 
         $mediaService = new MediaService(
+            Shopware()->Container()->get('media_gateway_dbal'),
             Shopware()->Container()->get('product_media_gateway'),
             Shopware()->Container()->get('variant_media_gateway'),
             $config
