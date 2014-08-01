@@ -3,16 +3,15 @@
 
 {if $sPerPage}
     <form class="action--per-page action--content block" method="get" action="{url controller=cat sCategory=$sCategoryContent.id}">
-        {foreach $categoryParams as $value}
-            {if $value@key == 'sPerPage'}
+        {foreach $categoryParams as $key => $value}
+            {if $key == 'sPerPage' || $key == $shortParameters.sPerPage}
                 {continue}
             {/if}
-
-            <input type="hidden" name="{$value@key}" value="{$value}">
+            <input type="hidden" name="{$key}" value="{$value}">
         {/foreach}
 
         {* Necessary to reset the page to the first one *}
-        <input type="hidden" name="sPage" value="1">
+        <input type="hidden" name="{$shortParameters.sPage}" value="1">
 
         {* Per page label *}
         {block name='frontend_listing_actions_items_per_page_label'}
@@ -21,7 +20,7 @@
 
         {* Per page field *}
         {block name='frontend_listing_actions_items_per_page_field'}
-			<select name="sPerPage" class="per-page--field action--field" data-auto-submit="true" data-class="per-page--select">
+			<select name="{$shortParameters.sPerPage}" class="per-page--field action--field" data-auto-submit="true" data-class="per-page--select">
 				{foreach $sPerPage as $perPage}
 					<option value="{$perPage.value}" {if $perPage.markup}selected="selected"{/if}>{$perPage.value}</option>
 				{/foreach}

@@ -2,15 +2,15 @@
 {namespace name="frontend/listing/listing_actions"}
 
 <form class="action--sort action--content block" method="get" action="{url controller=cat sCategory=$sCategoryContent.id}">
-    {foreach $categoryParams as $value}
-        {if $value@key == 'sSort'}
+    {foreach $categoryParams as $key => $value}
+        {if $key == 'sSort' || $key == $shortParameters.sSort}
             {continue}
         {/if}
-        <input type="hidden" name="{$value@key}" value="{$value}">
+        <input type="hidden" name="{$key}" value="{$value}">
     {/foreach}
 
     {* Necessary to reset the page to the first one *}
-    <input type="hidden" name="sPage" value="1">
+    <input type="hidden" name="{$shortParameters.sPage}" value="1">
 
     {* Sorting label *}
     {block name='frontend_listing_actions_sort_label'}
@@ -19,7 +19,7 @@
 
     {* Sorting field *}
     {block name='frontend_listing_actions_sort_field'}
-		<select name="sSort" class="sort--field action--field" data-auto-submit="true" data-class="sort--select">
+		<select name="{$shortParameters.sSort}" class="sort--field action--field" data-auto-submit="true" data-class="sort--select">
 			<option value="1"{if $sSort eq 1} selected="selected"{/if}>{s name='ListingSortRelease'}{/s}</option>
 			<option value="2"{if $sSort eq 2} selected="selected"{/if}>{s name='ListingSortRating'}{/s}</option>
 			<option value="3"{if $sSort eq 3} selected="selected"{/if}>{s name='ListingSortPriceLowest'}{/s}</option>
