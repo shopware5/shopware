@@ -81,9 +81,9 @@ EOD;
             DELETE FROM s_core_acl_privileges WHERE resourceID = @resourceId;
             DELETE FROM s_core_acl_resources WHERE name = 'swagmultiedit';
 
-            INSERT IGNORE INTO s_core_acl_resources (name) VALUES ('swagmultiedit');
+            INSERT IGNORE INTO s_core_acl_resources (name) VALUES ('articlelist');
 
-            SET @resourceId = (SELECT id FROM s_core_acl_resources WHERE name = 'swagmultiedit')
+            SET @resourceId = (SELECT id FROM s_core_acl_resources WHERE name = 'articlelist');
 
             INSERT IGNORE INTO s_core_acl_privileges (resourceID,name) VALUES (@resourceId, 'read');
             INSERT IGNORE INTO s_core_acl_privileges (resourceID,name) VALUES (@resourceId, 'createFilters');
