@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Article', {
     basePath: '{link file=""}',
 
     /**
-     * Initiliaze the component.
+     * Initialize the component.
      *
      * @public
      * @return void

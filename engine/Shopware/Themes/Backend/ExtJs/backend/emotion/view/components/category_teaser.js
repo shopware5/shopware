@@ -38,7 +38,8 @@ Ext.define('Shopware.apps.Emotion.view.components.CategoryTeaser', {
             fieldLabel: '{s name=blog_category}Blog category{/s}',
             supportText: '{s name=blog_category_support}The selected category is a blog Category{/s}'
         },
-        image: '{s name=image}Image{/s}'
+        image: '{s name=image}Image{/s}',
+        category_selection: '{s name=category_selection}Select category{/s}'
     },
 
     /**
@@ -48,7 +49,7 @@ Ext.define('Shopware.apps.Emotion.view.components.CategoryTeaser', {
     basePath: '{link file=""}',
 
     /**
-     * Initiliaze the component.
+     * Initialize the component.
      *
      * @public
      * @return void

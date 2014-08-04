@@ -27,11 +27,11 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/emotion/view/components/article}
-Ext.define('Shopware.apps.Emotion.view.components.fields.ArticleType', {
+//{namespace name=backend/emotion/view/components/article_slider_sort_criteria}
+Ext.define('Shopware.apps.Emotion.view.components.fields.ArticleSliderSortCriteria', {
     extend: 'Ext.form.field.ComboBox',
-    alias: 'widget.emotion-components-fields-article-type',
-    name: 'article_type',
+    alias: 'widget.emotion-components-fields-article-slider-sort-criteria',
+    name: 'article_slider_sort_criteria',
 
     /**
      * Snippets for the component
@@ -39,14 +39,15 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.ArticleType', {
      */
     snippets: {
         fields: {
-            'article_type': '{s name=article/fields/article_type}Type of article{/s}',
-            'empty_text': '{s name=article/fields/empty_text}Please select...{/s}'
+            'article_slider_sort_criteria': '{s name=article_slider_sort_criteria/fields/article_slider_sort_criteria}Sorting criteria{/s}',
+            'empty_text': '{s name=article_slider_sort_criteria/fields/empty_text}Please select...{/s}'
         },
         store: {
-            'selected_article': '{s name=article/store/selected_article}Selected article{/s}',
-            'newcomer': '{s name=article/store/newcomer}Newcomer article{/s}',
-            'topseller': '{s name=article/store/topseller}Topseller article{/s}',
-            'random_article': '{s name=article/store/random_article}Random article{/s}'
+            'number': '{s name=article_slider_sort_criteria/store/number}Number{/s}',
+            'release_date': '{s name=article_slider_sort_criteria/store/release_date}Release date{/s}',
+            'sales': '{s name=article_slider_sort_criteria/store/sales}Sales{/s}',
+            'price_asc': '{s name=article_slider_sort_criteria/store/price_asc}Price (low to high){/s}',
+            'price_desc': '{s name=article_slider_sort_criteria/store/price_desc}Price (high to low){/s}'
         }
     },
 
@@ -61,7 +62,7 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.ArticleType', {
 
         Ext.apply(me, {
             emptyText: me.snippets.fields.empty_text,
-            fieldLabel: me.snippets.fields.article_type,
+            fieldLabel: me.snippets.fields.article_slider_sort_criteria,
             displayField: 'display',
             valueField: 'value',
             queryMode: 'local',
@@ -70,28 +71,6 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.ArticleType', {
         });
 
         me.callParent(arguments);
-        me.on('change', me.onArticleSelectChange, me);
-    },
-
-    /**
-     * Event listeners which triggers when the user changs the value
-     * of the select field.
-     *
-     * @public
-     * @event change
-     * @param [object] field - Ext.form.field.ComboBox
-     * @param [string] value - The selected value
-     */
-    onArticleSelectChange: function(field, value) {
-        var me = this;
-
-        // Terminate the article search field
-        if(!me.articleSearch) {
-            me.articleSearch = me.up('fieldset').down('emotion-components-fields-article');
-        }
-
-        // Show/hide article search field based on selected entry
-        me.articleSearch.setVisible(value !== 'selected_article' ? false : true);
     },
 
     /**
@@ -107,17 +86,20 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.ArticleType', {
         return Ext.create('Ext.data.JsonStore', {
             fields: [ 'value', 'display' ],
             data: [{
-                value: 'selected_article',
-                display: snippets.selected_article
+                value: 'number',
+                display: snippets.number
             }, {
-                value: 'newcomer',
-                display: snippets.newcomer
+                value: 'release_date',
+                display: snippets.release_date
             }, {
-                value: 'topseller',
-                display: snippets.topseller
+                value: 'sales',
+                display: snippets.sales
             }, {
-                value: 'random_article',
-                display: snippets.random_article
+                value: 'price_asc',
+                display: snippets.price_asc
+            }, {
+                value: 'price_desc',
+                display: snippets.price_desc
             }]
         });
     }
