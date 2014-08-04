@@ -4,9 +4,9 @@
 {* Article image *}
 {block name='frontend_checkout_cart_item_image'}
     {if $sBasketItem.additional_details.sConfigurator}
-        {assign var=detailLink value={url controller=detail sArticle=$sBasketItem.articleID number=$sBasketItem.ordernumber}}
+        {$detailLink={url controller=detail sArticle=$sBasketItem.articleID number=$sBasketItem.ordernumber}}
     {else}
-        {assign var=detailLink value={url controller=detail sArticle=$sBasketItem.articleID forceSecure}}
+        {$detailLink={url controller=detail sArticle=$sBasketItem.articleID forceSecure}}
     {/if}
 
     {if $sBasketItem.image.src.0}

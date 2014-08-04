@@ -4,9 +4,9 @@
     <form name="basket_change_quantity{$sBasketItem.id}" method="post" action="{url action='changeQuantity' sTargetAction=$sTargetAction}">
 
         {if $sBasketItem.additional_details.sConfigurator}
-            {assign var=detailLink value={url controller=detail sArticle=$sBasketItem.articleID number=$sBasketItem.ordernumber}}
+            {$detailLink={url controller=detail sArticle=$sBasketItem.articleID number=$sBasketItem.ordernumber}}
         {else}
-            {assign var=detailLink value=$sBasketItem.linkDetails}
+            {$detailLink=$sBasketItem.linkDetails}
         {/if}
 
         {* Product information column *}

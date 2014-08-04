@@ -2,9 +2,9 @@
 	<div class="note--item panel--tr">
 
         {if $sBasketItem.sConfigurator}
-            {assign var=detailLink value={url controller="detail" sArticle=$sBasketItem.articleID number=$sBasketItem.ordernumber}}
+            {$detailLink={url controller="detail" sArticle=$sBasketItem.articleID number=$sBasketItem.ordernumber}}
         {else}
-            {assign var=detailLink value=$sBasketItem.linkDetails}
+            {$detailLink=$sBasketItem.linkDetails}
         {/if}
 
 		{* Article information *}
