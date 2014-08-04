@@ -185,7 +185,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('components', 'fields'))
                 ->from('Shopware\Models\Emotion\Library\Component', 'components')
-                ->leftJoin('components.fields', 'fields');
+                ->leftJoin('components.fields', 'fields')
+                ->orderBy('components.id', 'ASC')
+                ->addOrderBy('fields.position', 'ASC');
 
         $components = $builder->getQuery()->getArrayResult();
         $this->View()->assign(array(

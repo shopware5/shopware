@@ -48,11 +48,12 @@ Ext.define('Shopware.apps.Emotion.view.components.ManufacturerSlider', {
         manufacturer_slider_numbers: '{s name=manufacturer_slider_numbers}Display numbers{/s}',
         manufacturer_slider_scrollspeed: '{s name=manufacturer_slider_scrollspeed}Scroll speed{/s}',
         manufacturer_slider_rotation: '{s name=manufacturer_slider_rotation}Rotate automatically{/s}',
-        manufacturer_slider_rotatespeed: '{s name=manufacturer_slider_rotatespeed}Rotation speed{/s}'
+        manufacturer_slider_rotatespeed: '{s name=manufacturer_slider_rotatespeed}Rotation speed{/s}',
+        manufacturer_category: '{s name=manufacturer_category}Select category{/s}'
     },
 
     /**
-     * Initiliaze the component.
+     * Initialize the component.
      *
      * @public
      * @return void

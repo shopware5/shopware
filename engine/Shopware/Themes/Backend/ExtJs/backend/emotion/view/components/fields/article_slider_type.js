@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.ArticleSliderType', {
     },
 
     /**
-     * Initiliaze the component.
+     * Initialize the component.
      *
      * @public
      * @return void
