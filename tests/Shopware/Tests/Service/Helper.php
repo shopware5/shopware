@@ -454,7 +454,7 @@ class Helper
         $this->db->query("DELETE FROM s_filter WHERE name = 'Test-Set'");
 
         $ids = $this->db->fetchCol("SELECT id FROM s_filter_options WHERE name LIKE 'Test-Gruppe%'");
-        foreach($ids as $id) {
+        foreach ($ids as $id) {
             $this->db->query("DELETE FROM s_filter_options WHERE id = ?", array($id));
             $this->db->query("DELETE FROM s_filter_relations WHERE optionID = ?", array($id));
         }
@@ -601,7 +601,7 @@ class Helper
     {
         $ids = Shopware()->Db()->fetchCol("SELECT id FROM s_categories WHERE description = ?", array($name));
 
-        foreach($ids as $id) {
+        foreach ($ids as $id) {
             $this->categoryApi->delete($id);
         }
     }

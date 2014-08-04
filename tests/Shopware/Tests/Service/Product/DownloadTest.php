@@ -5,63 +5,20 @@ namespace Shopware\Tests\Service\Product;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Download;
 use Shopware\Models\Article\Article;
-use Shopware\Tests\Service\Converter;
-use Shopware\Tests\Service\Helper;
+use Shopware\Models\Category\Category;
+use Shopware\Tests\Service\TestCase;
 
-class DownloadTest extends \Enlight_Components_Test_TestCase
+class DownloadTest extends TestCase
 {
-    /**
-     * @var Helper
-     */
-    private $helper;
-
-    /**
-     * @var Converter
-     */
-    private $converter;
-
-    protected function setUp()
-    {
-        $this->helper = new Helper();
-        $this->converter = new Converter();
-
-        parent::setUp();
-    }
-
-    protected function tearDown()
-    {
-        $this->helper->cleanUp();
-        parent::tearDown();
-    }
-
-    /**
-     * @return Context
-     */
-    private function getContext()
-    {
-        $tax = $this->helper->createTax();
-        $customerGroup = $this->helper->createCustomerGroup();
-        $shop = $this->helper->getShop();
-
-        return $this->helper->createContext(
-            $customerGroup,
-            $shop,
-            array($tax)
-        );
-    }
-
     /**
      * @param $number
      * @param Context $context
+     * @param \Shopware\Models\Category\Category $category
      * @return Article
      */
-    private function getDefaultProduct($number, Context $context)
+    protected function getProduct($number, Context $context, Category $category = null)
     {
-        $product = $this->helper->getSimpleProduct(
-            $number,
-            array_shift($context->getTaxRules()),
-            $context->getCurrentCustomerGroup()
-        );
+        $product = parent::getProduct($number, $context, $category);
 
         $product['downloads'] = array(
             array(
@@ -78,7 +35,7 @@ class DownloadTest extends \Enlight_Components_Test_TestCase
             )
         );
 
-        return $this->helper->createArticle($product);
+        return $product;
     }
 
 
@@ -86,7 +43,8 @@ class DownloadTest extends \Enlight_Components_Test_TestCase
     {
         $context = $this->getContext();
         $number = 'testSingleProduct';
-        $this->getDefaultProduct($number, $context);
+        $data = $this->getProduct($number, $context);
+        $this->helper->createArticle($data);
 
         $product = Shopware()->Container()->get('list_product_service_core')->get($number, $context);
 
@@ -95,7 +53,7 @@ class DownloadTest extends \Enlight_Components_Test_TestCase
         $this->assertCount(2, $downloads);
 
         /**@var $download Download*/
-        foreach($downloads as $download) {
+        foreach ($downloads as $download) {
             $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Download', $download);
             $this->assertContains($download->getFile(), array('/var/www/first.txt', '/var/www/second.txt'));
             $this->assertCount(1, $download->getAttributes());
@@ -107,8 +65,9 @@ class DownloadTest extends \Enlight_Components_Test_TestCase
     {
         $numbers = array('testDownloadList-1', 'testDownloadList-2');
         $context = $this->getContext();
-        foreach($numbers as $number) {
-            $this->getDefaultProduct($number, $context);
+        foreach ($numbers as $number) {
+            $data = $this->getProduct($number, $context);
+            $this->helper->createArticle($data);
         }
 
         $products = Shopware()->Container()->get('list_product_service_core')
@@ -119,12 +78,12 @@ class DownloadTest extends \Enlight_Components_Test_TestCase
 
         $this->assertCount(2, $downloads);
 
-        foreach($downloads as $number => $productDownloads) {
+        foreach ($downloads as $number => $productDownloads) {
             $this->assertContains($number, $numbers);
             $this->assertCount(2, $productDownloads);
         }
 
-        foreach($numbers as $number) {
+        foreach ($numbers as $number) {
             $this->assertArrayHasKey($number, $downloads);
         }
     }

@@ -6,71 +6,18 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category;
-use Shopware\Tests\Service\Converter;
-use Shopware\Tests\Service\Helper;
+use Shopware\Tests\Service\TestCase;
 
-class SimilarProductsTest extends \Enlight_Components_Test_TestCase
+class SimilarProductsTest extends TestCase
 {
-    /**
-     * @var Helper
-     */
-    private $helper;
+    protected function getProduct(
+        $number,
+        Context $context,
+        Category $category = null
+    ) {
+        $data = parent::getProduct($number, $context, $category);
 
-    /**
-     * @var Converter
-     */
-    private $converter;
-
-    protected function setUp()
-    {
-        $this->helper = new Helper();
-        $this->converter = new Converter();
-
-        parent::setUp();
-    }
-
-    protected function tearDown()
-    {
-        $this->helper->cleanUp();
-        parent::tearDown();
-    }
-
-    /**
-     * @param $number
-     * @param Context $context
-     * @param \Shopware\Models\Category\Category $category
-     * @return Article
-     */
-    private function createProduct($number, Context $context, Category $category = null)
-    {
-        $product = $this->helper->getSimpleProduct(
-            $number,
-            array_shift($context->getTaxRules()),
-            $context->getCurrentCustomerGroup()
-        );
-
-        if ($category) {
-            $product['categories'] = array(array('id' => $category->getId()));
-        }
-
-        return $this->helper->createArticle($product);
-    }
-
-
-    /**
-     * @return Context
-     */
-    private function getContext()
-    {
-        $tax = $this->helper->createTax();
-        $customerGroup = $this->helper->createCustomerGroup();
-        $shop = $this->helper->getShop();
-
-        return $this->helper->createContext(
-            $customerGroup,
-            $shop,
-            array($tax)
-        );
+        return $this->helper->createArticle($data);
     }
 
     /**
@@ -79,7 +26,7 @@ class SimilarProductsTest extends \Enlight_Components_Test_TestCase
      */
     private function linkSimilarProduct($productId, $similarProductIds)
     {
-        foreach($similarProductIds as $similarProductId) {
+        foreach ($similarProductIds as $similarProductId) {
             Shopware()->Db()->insert('s_articles_similar', array(
                 'articleID' => $productId,
                 'relatedarticle' => $similarProductId
@@ -93,14 +40,14 @@ class SimilarProductsTest extends \Enlight_Components_Test_TestCase
         $context = $this->getContext();
 
         $number = 'testSimilarProduct';
-        $article = $this->createProduct($number, $context);
+        $article = $this->getProduct($number, $context);
 
         $similarNumbers = array();
         $similarProducts = array();
-        for($i=0; $i<4; $i++) {
+        for ($i=0; $i<4; $i++) {
             $similarNumber = 'SimilarProduct-' . $i;
             $similarNumbers[] = $similarNumber;
-            $similarProduct = $this->createProduct($similarNumber, $context);
+            $similarProduct = $this->getProduct($similarNumber, $context);
             $similarProducts[] = $similarProduct->getId();
         }
         $this->linkSimilarProduct($article->getId(), $similarProducts);
@@ -114,7 +61,7 @@ class SimilarProductsTest extends \Enlight_Components_Test_TestCase
         $this->assertCount(4, $similarProducts);
 
         /**@var $similarProduct ListProduct*/
-        foreach($similarProducts as $similarProduct) {
+        foreach ($similarProducts as $similarProduct) {
             $this->assertInstanceOf('\Shopware\Bundle\StoreFrontBundle\Struct\ListProduct', $similarProduct);
             $this->assertContains($similarProduct->getNumber(), $similarNumbers);
         }
@@ -127,15 +74,15 @@ class SimilarProductsTest extends \Enlight_Components_Test_TestCase
         $number = 'testSimilarProductsList';
         $number2 = 'testSimilarProductsList2';
 
-        $article = $this->createProduct($number, $context);
-        $article2 = $this->createProduct($number2, $context);
+        $article = $this->getProduct($number, $context);
+        $article2 = $this->getProduct($number2, $context);
 
         $similarNumbers = array();
         $similarProducts = array();
-        for($i=0; $i<4; $i++) {
+        for ($i=0; $i<4; $i++) {
             $similarNumber = 'SimilarProduct-' . $i;
             $similarNumbers[] = $similarNumber;
-            $similarProduct = $this->createProduct($similarNumber, $context);
+            $similarProduct = $this->getProduct($similarNumber, $context);
             $similarProducts[] = $similarProduct->getId();
         }
 
@@ -150,13 +97,13 @@ class SimilarProductsTest extends \Enlight_Components_Test_TestCase
 
         $this->assertCount(2, $similarProductList);
 
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $similarProducts = $similarProductList[$product->getNumber()];
 
             $this->assertCount(4, $similarProducts);
 
             /**@var $similarProduct ListProduct*/
-            foreach($similarProducts as $similarProduct) {
+            foreach ($similarProducts as $similarProduct) {
                 $this->assertInstanceOf('\Shopware\Bundle\StoreFrontBundle\Struct\ListProduct', $similarProduct);
                 $this->assertContains($similarProduct->getNumber(), $similarNumbers);
             }
@@ -169,11 +116,11 @@ class SimilarProductsTest extends \Enlight_Components_Test_TestCase
         $context = $this->getContext();
         $category = $this->helper->createCategory();
 
-        $this->createProduct($number, $context, $category);
+        $this->getProduct($number, $context, $category);
 
-        for($i=0; $i<4; $i++) {
+        for ($i=0; $i<4; $i++) {
             $similarNumber = 'SimilarProduct-' . $i;
-            $this->createProduct($similarNumber, $context, $category);
+            $this->getProduct($similarNumber, $context, $category);
         }
 
         $product = Shopware()->Container()->get('list_product_service_core')
@@ -184,7 +131,7 @@ class SimilarProductsTest extends \Enlight_Components_Test_TestCase
 
         $this->assertCount(3, $similar);
 
-        foreach($similar as $similarProduct) {
+        foreach ($similar as $similarProduct) {
             $this->assertInstanceOf(
                 'Shopware\Bundle\StoreFrontBundle\Struct\ListProduct',
                 $similarProduct

@@ -2,40 +2,11 @@
 
 namespace Shopware\Tests\Service\Product;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Vote;
-use Shopware\Models\Article\Article;
-use Shopware\Models\Category\Category;
-use Shopware\Tests\Service\Converter;
-use Shopware\Tests\Service\Helper;
+use Shopware\Tests\Service\TestCase;
 
-class VoteTest extends \Enlight_Components_Test_TestCase
+class VoteTest extends TestCase
 {
-    /**
-     * @var Helper
-     */
-    private $helper;
-
-    /**
-     * @var Converter
-     */
-    private $converter;
-
-    protected function setUp()
-    {
-        $this->helper = new Helper();
-        $this->converter = new Converter();
-
-        parent::setUp();
-    }
-
-    protected function tearDown()
-    {
-        $this->helper->cleanUp();
-        parent::tearDown();
-    }
-
-
     private function createVotes($articleId, $points = array())
     {
         $data = array(
@@ -49,50 +20,19 @@ class VoteTest extends \Enlight_Components_Test_TestCase
             'active' => '1'
         );
 
-        foreach($points as $point) {
+        foreach ($points as $point) {
             $data['points'] = $point;
 
             Shopware()->Db()->insert('s_articles_vote', $data);
         }
     }
 
-    /**
-     * @param $number
-     * @param Context $context
-     * @return Article
-     */
-    private function getDefaultProduct($number, Context $context)
-    {
-        $product = $this->helper->getSimpleProduct(
-            $number,
-            array_shift($context->getTaxRules()),
-            $context->getCurrentCustomerGroup()
-        );
-
-        return $this->helper->createArticle($product);
-    }
-
-    /**
-     * @return Context
-     */
-    private function getContext()
-    {
-        $tax = $this->helper->createTax();
-        $customerGroup = $this->helper->createCustomerGroup();
-        $shop = $this->helper->getShop();
-
-        return $this->helper->createContext(
-            $customerGroup,
-            $shop,
-            array($tax)
-        );
-    }
-
     public function testVoteList()
     {
         $number = 'testVoteList';
         $context = $this->getContext();
-        $product = $this->getDefaultProduct($number, $context);
+        $data = $this->getProduct($number, $context);
+        $product = $this->helper->createArticle($data);
 
         $points = array(1,2,2,3,3);
         $this->createVotes($product->getId(), $points);
@@ -103,7 +43,7 @@ class VoteTest extends \Enlight_Components_Test_TestCase
         $this->assertCount(5, $votes);
 
         /**@var $vote Vote*/
-        foreach($votes as $vote) {
+        foreach ($votes as $vote) {
             $this->assertEquals('Bert Bewerter', $vote->getName());
         }
     }
@@ -113,7 +53,8 @@ class VoteTest extends \Enlight_Components_Test_TestCase
     {
         $number = 'testVoteAverage';
         $context = $this->getContext();
-        $product = $this->getDefaultProduct($number, $context);
+        $data = $this->getProduct($number, $context);
+        $product = $this->helper->createArticle($data);
 
         $points = array(1,2,2,3,3,3,3,3);
         $this->createVotes($product->getId(), $points);
@@ -123,8 +64,8 @@ class VoteTest extends \Enlight_Components_Test_TestCase
 
         $this->assertEquals(5, $voteAverage->getAverage());
 
-        foreach($voteAverage->getPointCount() as $pointCount) {
-            switch($pointCount['points']) {
+        foreach ($voteAverage->getPointCount() as $pointCount) {
+            switch ($pointCount['points']) {
                 case 1:
                     $this->assertEquals(1, $pointCount['total']);
                     break;

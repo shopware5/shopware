@@ -7,7 +7,7 @@ use Shopware\Bundle\SearchBundle\Facet\ImmediateDeliveryFacet;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Models\Category\Category;
-use Shopware\Tests\Service\Search\TestCase;
+use Shopware\Tests\Service\TestCase;
 
 class ImmediateDeliveryFacetTest extends TestCase
 {
@@ -73,7 +73,7 @@ class ImmediateDeliveryFacetTest extends TestCase
         $context = $this->getContext();
         $category = $this->helper->createCategory();
 
-        foreach($products as $number => $data) {
+        foreach ($products as $number => $data) {
             $data = $this->getProduct($number, $context, $category, $data);
             $this->helper->createArticle($data);
         }

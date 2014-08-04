@@ -2,59 +2,20 @@
 
 namespace Shopware\Tests\Service\Product;
 
-use Shopware\Bundle\StoreFrontBundle\Service\Core\MediaService;
 use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Tests\Service\Converter;
-use Shopware\Tests\Service\Helper;
+use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Models\Category\Category;
+use Shopware\Tests\Service\TestCase;
 
-class ProductMediaTest extends \Enlight_Components_Test_TestCase
+class ProductMediaTest extends TestCase
 {
-    /**
-     * @var Helper
-     */
-    private $helper;
-
-    /**
-     * @var Converter
-     */
-    private $converter;
-
-    protected function setUp()
-    {
-        $this->helper = new Helper();
-        $this->converter = new Converter();
-
-        parent::setUp();
-    }
-
-    protected function tearDown()
-    {
-        $this->helper->cleanUp();
-        parent::tearDown();
-    }
-    /**
-     * @return Context
-     */
-    private function getContext()
-    {
-        $tax = $this->helper->createTax();
-        $customerGroup = $this->helper->createCustomerGroup();
-        $shop = $this->helper->getShop();
-
-        return $this->helper->createContext(
-            $customerGroup,
-            $shop,
-            array($tax)
-        );
-    }
-
-    private function getDefaultProduct($number, $imageCount, Struct\Context $context)
-    {
-        $data = $this->helper->getSimpleProduct(
-            $number,
-            array_shift($context->getTaxRules()),
-            $context->getCurrentCustomerGroup()
-        );
+    protected function getProduct(
+        $number,
+        Context $context,
+        Category $category = null,
+        $imageCount
+    ) {
+        $data = parent::getProduct($number, $context, $category);
 
         $data['images'][] = $this->helper->getImageData(
             'sasse-korn.jpg',
@@ -70,10 +31,11 @@ class ProductMediaTest extends \Enlight_Components_Test_TestCase
 
     private function getVariantImageProduct($number, Struct\Context $context, $imageCount = 2)
     {
-        $data = $this->getDefaultProduct(
+        $data = $this->getProduct(
             $number,
-            $imageCount,
-            $context
+            $context,
+            null,
+            $imageCount
         );
 
         $data = array_merge(
@@ -96,9 +58,9 @@ class ProductMediaTest extends \Enlight_Components_Test_TestCase
     {
         $context = $this->getContext();
         $numbers = array('testProductMediaList-1', 'testProductMediaList-2');
-        foreach($numbers as $number) {
+        foreach ($numbers as $number) {
             $this->helper->createArticle(
-                $this->getDefaultProduct($number, 4, $context)
+                $this->getProduct($number, $context, null, 4)
             );
         }
 
@@ -110,7 +72,7 @@ class ProductMediaTest extends \Enlight_Components_Test_TestCase
 
         $this->assertCount(2, $mediaList);
 
-        foreach($numbers as $number) {
+        foreach ($numbers as $number) {
             $this->assertArrayHasKey($number, $mediaList);
 
             $productMediaList = $mediaList[$number];
@@ -118,7 +80,7 @@ class ProductMediaTest extends \Enlight_Components_Test_TestCase
             $this->assertCount(3, $productMediaList);
 
             /**@var $media Struct\Media*/
-            foreach($productMediaList as $media) {
+            foreach ($productMediaList as $media) {
                 if ($media->isPreview()) {
                     $this->assertMediaFile('sasse-korn', $media);
                 } else {
@@ -134,7 +96,7 @@ class ProductMediaTest extends \Enlight_Components_Test_TestCase
         $context = $this->getContext();
         $articles = array();
 
-        foreach($numbers as $number) {
+        foreach ($numbers as $number) {
             $data = $this->getVariantImageProduct($number, $context);
             $article = $this->helper->createArticle($data);
             $articles[] = $article;
@@ -149,12 +111,12 @@ class ProductMediaTest extends \Enlight_Components_Test_TestCase
             ->getList($products, $context);
 
         $this->assertCount(3, $mediaList);
-        foreach($variantNumbers as $number) {
+        foreach ($variantNumbers as $number) {
             $this->assertArrayHasKey($number, $mediaList);
 
             $variantMedia = $mediaList[$number];
 
-            foreach($variantMedia as $media) {
+            foreach ($variantMedia as $media) {
                 $this->assertMediaFile('sasse-korn', $media);
             }
         }
@@ -167,7 +129,7 @@ class ProductMediaTest extends \Enlight_Components_Test_TestCase
 
         $this->assertCount(2, $mediaList);
 
-        foreach($numbers as $number) {
+        foreach ($numbers as $number) {
             $this->assertArrayHasKey($number, $mediaList);
             $media = $mediaList[$number];
 

@@ -9,7 +9,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Models\Article\Supplier;
 use Shopware\Models\Category\Category;
-use Shopware\Tests\Service\Search\TestCase;
+use Shopware\Tests\Service\TestCase;
 
 class ManufacturerFacetTest extends TestCase
 {
@@ -95,7 +95,7 @@ class ManufacturerFacetTest extends TestCase
         );
 
         $this->assertCount(2, $facet->getManufacturers());
-        foreach($facet->getManufacturers() as $manufacturer) {
+        foreach ($facet->getManufacturers() as $manufacturer) {
             $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer', $manufacturer);
 
             $this->assertTrue($manufacturer->hasAttribute('facet'));
@@ -116,7 +116,7 @@ class ManufacturerFacetTest extends TestCase
         $context = $this->getContext();
         $category = $this->helper->createCategory();
 
-        foreach($products as $number => $manufacturer) {
+        foreach ($products as $number => $manufacturer) {
             $data = $this->getProduct($number, $context, $category, $manufacturer);
             $this->helper->createArticle($data);
         }

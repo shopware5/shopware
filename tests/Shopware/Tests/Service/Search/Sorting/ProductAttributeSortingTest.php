@@ -4,7 +4,7 @@ namespace Shopware\Tests\Service\Search\Sorting;
 
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Sorting\ProductAttributeSorting;
-use Shopware\Tests\Service\Search\TestCase;
+use Shopware\Tests\Service\TestCase;
 
 class ProductAttributeSortingTest extends TestCase
 {
@@ -61,7 +61,7 @@ class ProductAttributeSortingTest extends TestCase
         $context = $this->getContext();
         $category = $this->helper->createCategory();
 
-        foreach($products as $number => $attribute) {
+        foreach ($products as $number => $attribute) {
             $data = $this->getProduct($number, $context, $category, $attribute);
             $this->helper->createArticle($data);
         }
@@ -69,7 +69,7 @@ class ProductAttributeSortingTest extends TestCase
         $criteria = new Criteria();
         $criteria->addCategoryCondition(array($category->getId()));
 
-        foreach($sortings as $sorting) {
+        foreach ($sortings as $sorting) {
             $criteria->addSorting($sorting);
         }
 

@@ -3,26 +3,12 @@
 namespace Shopware\Tests\Service\Price;
 
 use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Tests\Service\Helper;
+use Shopware\Tests\Service\TestCase;
 
-class PriceCalculationTest extends \Enlight_Components_Test_TestCase
+class PriceCalculationTest extends TestCase
 {
-    /**
-     * @var Helper
-     */
-    private $helper;
-
-    protected function setUp()
-    {
-        $this->helper = new Helper();
-        parent::setUp();
-    }
-
-    protected function tearDown()
-    {
-        $this->helper->cleanUp();
-        parent::tearDown();
-    }
 
     /**
      * @param bool $displayGross
@@ -30,7 +16,7 @@ class PriceCalculationTest extends \Enlight_Components_Test_TestCase
      * @param int $currencyFactor
      * @return StoreFrontBundle\Struct\Context
      */
-    private function getContext($displayGross = true, $discount = 20, $currencyFactor = 1)
+    protected function getContext($displayGross = true, $discount = 20, $currencyFactor = 1)
     {
         $tax = $this->helper->createTax();
         $customerGroup = $this->helper->createCustomerGroup(
@@ -56,15 +42,6 @@ class PriceCalculationTest extends \Enlight_Components_Test_TestCase
             array($tax),
             null,
             $currency
-        );
-    }
-
-    private function getProduct($number, StoreFrontBundle\Struct\Context $context)
-    {
-        return $this->helper->getSimpleProduct(
-            $number,
-            array_shift($context->getTaxRules()),
-            $context->getCurrentCustomerGroup()
         );
     }
 

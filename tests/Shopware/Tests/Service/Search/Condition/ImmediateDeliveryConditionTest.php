@@ -6,8 +6,7 @@ use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Models\Category\Category;
-use Shopware\Tests\Service\Helper;
-use Shopware\Tests\Service\Search\TestCase;
+use Shopware\Tests\Service\TestCase;
 
 class ImmediateDeliveryConditionTest extends TestCase
 {

@@ -7,7 +7,7 @@ use Shopware\Bundle\SearchBundle\Facet\PropertyFacet;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\StoreFrontBundle\Struct\Property\Set;
 use Shopware\Models\Category\Category;
-use Shopware\Tests\Service\Search\TestCase;
+use Shopware\Tests\Service\TestCase;
 
 class PropertyFacetTest extends TestCase
 {
@@ -64,16 +64,16 @@ class PropertyFacetTest extends TestCase
         $set = array_shift($facet->getProperties());
 
         $this->assertCount(2, $set->getGroups());
-        foreach($set->getGroups() as $group) {
+        foreach ($set->getGroups() as $group) {
 
             $this->assertCount(3, $group->getOptions());
 
-            foreach($group->getOptions() as $option) {
+            foreach ($group->getOptions() as $option) {
 
                 $this->assertTrue($option->hasAttribute('facet'));
                 $attribute = $option->getAttribute('facet');
 
-                switch($option->getId()) {
+                switch ($option->getId()) {
                     case $values[0]['id']:
                         $this->assertEquals(1, $attribute->get('total'));
                         break;
@@ -108,7 +108,7 @@ class PropertyFacetTest extends TestCase
         unset($combination['all']);
 
         $values = array();
-        foreach($properties['propertyValues'] as $index => $value) {
+        foreach ($properties['propertyValues'] as $index => $value) {
             if (in_array($index, $indexes)) {
                 $values[] = $value;
             }
@@ -131,7 +131,7 @@ class PropertyFacetTest extends TestCase
         $context = $this->getContext();
         $category = $this->helper->createCategory();
 
-        foreach($products as $number => $properties) {
+        foreach ($products as $number => $properties) {
             $data = $this->getProduct($number, $context, $category, $properties);
             $this->helper->createArticle($data);
         }

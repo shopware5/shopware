@@ -7,7 +7,7 @@ use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Models\Category\Category;
-use Shopware\Tests\Service\Search\TestCase;
+use Shopware\Tests\Service\TestCase;
 
 class PriceSortingTest extends TestCase
 {
@@ -46,7 +46,7 @@ class PriceSortingTest extends TestCase
         if (!empty($prices)) {
             $product['mainDetail']['prices'] = array();
 
-            foreach($prices as $key => $price) {
+            foreach ($prices as $key => $price) {
                 $product['mainDetail']['prices'] = array_merge(
                     $product['mainDetail']['prices'],
                     $this->helper->getGraduatedPrices($key, $price)
@@ -165,7 +165,7 @@ class PriceSortingTest extends TestCase
     ) {
         $category = $this->helper->createCategory();
 
-        foreach($products as $number => $prices) {
+        foreach ($products as $number => $prices) {
             $data = $this->getProduct($number, $context, $category, $prices);
             $this->helper->createArticle($data);
         }
