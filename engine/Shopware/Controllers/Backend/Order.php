@@ -256,7 +256,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('status'))
                     ->from('Shopware\Models\Order\Status', 'status')
-                    ->where("status.id > -1")
                     ->andWhere("status.group = 'state'");
 
         if ($filter !== null) {

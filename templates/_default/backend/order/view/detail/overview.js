@@ -706,6 +706,9 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
      */
     createEditElements: function() {
         var me = this;
+
+        me.orderStatusStore.filterBy(function(item) { return item.get("id") > 0; });
+
         return [
             {
                 xtype: 'datefield',
