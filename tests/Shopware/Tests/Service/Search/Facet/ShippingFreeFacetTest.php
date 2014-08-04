@@ -7,7 +7,7 @@ use Shopware\Bundle\SearchBundle\Facet\ShippingFreeFacet;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Models\Category\Category;
-use Shopware\Tests\Service\Search\TestCase;
+use Shopware\Tests\Service\TestCase;
 
 class ShippingFreeFacetTest extends TestCase
 {
@@ -81,7 +81,7 @@ class ShippingFreeFacetTest extends TestCase
         $context = $this->getContext();
         $category = $this->helper->createCategory();
 
-        foreach($products as $number => $shippingFree) {
+        foreach ($products as $number => $shippingFree) {
             $data = $this->getProduct($number, $context, $category, $shippingFree);
             $this->helper->createArticle($data);
         }

@@ -2,57 +2,16 @@
 
 namespace Shopware\Tests\Service\Product;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
-use Shopware\Tests\Service\Converter;
-use Shopware\Tests\Service\Helper;
+use Shopware\Tests\Service\TestCase;
 
-class ManufacturerTest extends \Enlight_Components_Test_TestCase
+class ManufacturerTest extends TestCase
 {
-    /**
-     * @var Helper
-     */
-    private $helper;
-
-    /**
-     * @var Converter
-     */
-    private $converter;
-
-    protected function setUp()
-    {
-        $this->helper = new Helper();
-        $this->converter = new Converter();
-
-        parent::setUp();
-    }
-
-    protected function tearDown()
-    {
-        $this->helper->cleanUp();
-        parent::tearDown();
-    }
-
-    /**
-     * @return Context
-     */
-    private function getContext()
-    {
-        $tax = $this->helper->createTax();
-        $customerGroup = $this->helper->createCustomerGroup();
-        $shop = $this->helper->getShop();
-
-        return $this->helper->createContext(
-            $customerGroup,
-            $shop,
-            array($tax)
-        );
-    }
-
     public function testManufacturerList()
     {
         $ids = array();
         $context = $this->getContext();
+
         $manufacturer = $this->helper->createManufacturer(array(
             'name' => 'testManufacturerList-1',
             'image' => 'Manufacturer-Cover-1',
@@ -88,7 +47,7 @@ class ManufacturerTest extends \Enlight_Components_Test_TestCase
             ->getList($ids, $context);
 
         /**@var $manufacturer Manufacturer*/
-        foreach($manufacturers as $key => $manufacturer) {
+        foreach ($manufacturers as $key => $manufacturer) {
             $this->assertEquals($key, $manufacturer->getId());
 
             $this->assertNotEmpty($manufacturer->getName());

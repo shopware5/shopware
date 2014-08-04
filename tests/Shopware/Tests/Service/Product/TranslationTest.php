@@ -5,30 +5,11 @@ namespace Shopware\Tests\Service\Product;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Models\Article\Detail;
 use Shopware\Tests\Service\Helper;
+use Shopware\Tests\Service\TestCase;
 
-class TranslationTest extends \Enlight_Components_Test_TestCase
+class TranslationTest extends TestCase
 {
-    /**
-     * @var Helper
-     */
-    private $helper;
-
-    protected function setUp()
-    {
-        $this->helper = new Helper();
-        parent::setUp();
-    }
-
-    protected function tearDown()
-    {
-        $this->helper->cleanUp();
-        parent::tearDown();
-    }
-
-    /**
-     * @return Context
-     */
-    private function getContext()
+    protected function getContext()
     {
         $tax = $this->helper->createTax();
         $customerGroup = $this->helper->createCustomerGroup();
@@ -41,17 +22,15 @@ class TranslationTest extends \Enlight_Components_Test_TestCase
         );
     }
 
+
+
+
     public function testListProductTranslation()
     {
         $number = 'Translation-Test';
         $context = $this->getContext();
 
-        $product = $this->helper->getSimpleProduct(
-            $number,
-            array_shift($context->getTaxRules()),
-            $context->getCurrentCustomerGroup()
-        );
-
+        $product = $this->getProduct($number, $context);
         $article = $this->helper->createArticle($product);
 
         $this->helper->createArticleTranslation(
@@ -77,12 +56,8 @@ class TranslationTest extends \Enlight_Components_Test_TestCase
     {
         $number = 'Translation-Test';
         $context = $this->getContext();
-        $product = $this->helper->getSimpleProduct(
-            $number,
-            array_shift($context->getTaxRules()),
-            $context->getCurrentCustomerGroup()
-        );
 
+        $product = $this->getProduct($number, $context);
         $article = $this->helper->createArticle($product);
 
         $this->helper->createManufacturerTranslation(
@@ -107,11 +82,7 @@ class TranslationTest extends \Enlight_Components_Test_TestCase
         $number = 'Unit-Translation';
         $context = $this->getContext();
 
-        $product = $this->helper->getSimpleProduct(
-            $number,
-            array_shift($context->getTaxRules()),
-            $context->getCurrentCustomerGroup()
-        );
+        $product = $this->getProduct($number, $context);
 
         $product = array_merge(
             $product,
@@ -179,11 +150,7 @@ class TranslationTest extends \Enlight_Components_Test_TestCase
         $number = 'Property-Translation';
         $context = $this->getContext();
 
-        $product = $this->helper->getSimpleProduct(
-            $number,
-            array_shift($context->getTaxRules()),
-            $context->getCurrentCustomerGroup()
-        );
+        $product = $this->getProduct($number, $context);
         $properties = $this->helper->getProperties(2, 2);
         $product = array_merge($product, $properties);
 
@@ -212,11 +179,7 @@ class TranslationTest extends \Enlight_Components_Test_TestCase
         $number = 'Configurator-Translation';
         $context = $this->getContext();
 
-        $product = $this->helper->getSimpleProduct(
-            $number,
-            array_shift($context->getTaxRules()),
-            $context->getCurrentCustomerGroup()
-        );
+        $product = $this->getProduct($number, $context);
 
         $configurator = $this->helper->getConfigurator(
             $context->getCurrentCustomerGroup(),

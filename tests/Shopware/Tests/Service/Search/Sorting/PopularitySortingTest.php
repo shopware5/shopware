@@ -5,7 +5,7 @@ namespace Shopware\Tests\Service\Search\Sorting;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
-use Shopware\Tests\Service\Search\TestCase;
+use Shopware\Tests\Service\TestCase;
 
 class PopularitySortingTest extends TestCase
 {
@@ -63,7 +63,7 @@ class PopularitySortingTest extends TestCase
         $context = $this->getContext();
         $category = $this->helper->createCategory();
 
-        foreach($products as $number => $sales) {
+        foreach ($products as $number => $sales) {
             $data = $this->getProduct($number, $context, $category);
             $article = $this->helper->createArticle($data);
 

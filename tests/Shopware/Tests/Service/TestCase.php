@@ -1,6 +1,6 @@
 <?php
 
-namespace Shopware\Tests\Service\Search;
+namespace Shopware\Tests\Service;
 
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundle\SearchProduct;
@@ -60,7 +60,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
         $productResult = array_values($result->getProducts());
 
         /**@var $product SearchProduct*/
-        foreach($productResult as $index => $product) {
+        foreach ($productResult as $index => $product) {
             $expectedProduct = $expectedNumbers[$index];
 
             $this->assertEquals(

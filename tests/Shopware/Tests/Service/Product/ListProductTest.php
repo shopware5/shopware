@@ -6,34 +6,10 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Tests\Service\Converter;
 use Shopware\Tests\Service\Helper;
+use Shopware\Tests\Service\TestCase;
 
-class ListProductTest extends \Enlight_Components_Test_TestCase
+class ListProductTest extends TestCase
 {
-    /**
-     * @var Helper
-     */
-    private $helper;
-
-    /**
-     * @var Converter
-     */
-    private $converter;
-
-    protected function setUp()
-    {
-        $this->helper = new Helper();
-        $this->converter = new Converter();
-
-        parent::setUp();
-    }
-
-    protected function tearDown()
-    {
-        $this->helper->cleanUp();
-        parent::tearDown();
-    }
-
-
     /**
      * @param $number
      * @param Context $context
@@ -49,32 +25,19 @@ class ListProductTest extends \Enlight_Components_Test_TestCase
     {
         $number = 'List-Product-Test';
 
-        $customerGroup = $this->helper->createCustomerGroup();
-        $tax = $this->helper->createTax();
+        $context = $this->getContext();
 
-        $context = $this->helper->createContext(
-            $customerGroup,
-            $this->helper->getShop(),
-            array($tax)
+        $data = $this->getProduct($number, $context);
+        $data = array_merge(
+            $data,
+            $this->helper->getConfigurator(
+                $context->getCurrentCustomerGroup(),
+                $number
+            )
         );
-
-        $customerGroupStruct = $this->converter->convertCustomerGroup($customerGroup);
-
-        $data = $this->helper->getSimpleProduct(
-            $number,
-            $tax,
-            $customerGroupStruct
-        );
-
-        $data = array_merge($data, $this->helper->getConfigurator(
-            $customerGroupStruct,
-            $number
-        ));
-
         $this->helper->createArticle($data);
 
         $product = $this->getListProduct($number, $context);
-
 
         $this->assertNotEmpty($product->getId());
         $this->assertNotEmpty($product->getVariantId());

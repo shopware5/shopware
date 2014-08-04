@@ -4,7 +4,7 @@ namespace Shopware\Tests\Service\Search\Sorting;
 
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
-use Shopware\Tests\Service\Search\TestCase;
+use Shopware\Tests\Service\TestCase;
 
 class ReleaseDateSortingTest extends TestCase
 {
@@ -45,7 +45,7 @@ class ReleaseDateSortingTest extends TestCase
         $context = $this->getContext();
         $category = $this->helper->createCategory();
 
-        foreach($products as $number => $releaseDate) {
+        foreach ($products as $number => $releaseDate) {
             $data = $this->getProduct($number, $context, $category, $releaseDate);
             $this->helper->createArticle($data);
         }
@@ -53,7 +53,7 @@ class ReleaseDateSortingTest extends TestCase
         $criteria = new Criteria();
         $criteria->addCategoryCondition(array($category->getId()));
 
-        foreach($sortings as $sorting) {
+        foreach ($sortings as $sorting) {
             $criteria->addSorting($sorting);
         }
 

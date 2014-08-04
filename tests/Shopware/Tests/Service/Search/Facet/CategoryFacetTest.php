@@ -5,7 +5,7 @@ namespace Shopware\Tests\Service\Search\Facet;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
 use Shopware\Models\Category\Category;
-use Shopware\Tests\Service\Search\TestCase;
+use Shopware\Tests\Service\TestCase;
 
 class CategoryFacetTest extends TestCase
 {
@@ -75,7 +75,7 @@ class CategoryFacetTest extends TestCase
 
         $this->assertCount(2, $facet->getCategories());
 
-        foreach($facet->getCategories() as $category) {
+        foreach ($facet->getCategories() as $category) {
             $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Category', $category);
             $this->assertTrue($category->hasAttribute('facet'));
 
@@ -124,7 +124,7 @@ class CategoryFacetTest extends TestCase
 
         $this->assertCount(2, $facet->getCategories());
 
-        foreach($facet->getCategories() as $category) {
+        foreach ($facet->getCategories() as $category) {
             $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Category', $category);
             $this->assertTrue($category->hasAttribute('facet'));
 
@@ -151,7 +151,7 @@ class CategoryFacetTest extends TestCase
     ) {
         $context = $this->getContext();
 
-        foreach($products as $number => $productCategory) {
+        foreach ($products as $number => $productCategory) {
             $data = $this->getProduct($number, $context, $productCategory);
             $this->helper->createArticle($data);
         }

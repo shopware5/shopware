@@ -7,7 +7,7 @@ use Shopware\Bundle\SearchBundle\Condition\PropertyCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Models\Category\Category;
-use Shopware\Tests\Service\Search\TestCase;
+use Shopware\Tests\Service\TestCase;
 
 class PropertyConditionTest extends TestCase
 {
@@ -105,7 +105,7 @@ class PropertyConditionTest extends TestCase
         unset($combination['all']);
 
         $values = array();
-        foreach($properties['propertyValues'] as $index => $value) {
+        foreach ($properties['propertyValues'] as $index => $value) {
             if (in_array($index, $indexes)) {
                 $values[] = $value;
             }
@@ -122,7 +122,7 @@ class PropertyConditionTest extends TestCase
         $context = $this->getContext();
         $category = $this->helper->createCategory();
 
-        foreach($products as $number => $properties) {
+        foreach ($products as $number => $properties) {
             $data = $this->getProduct($number, $context, $category, $properties);
             $this->helper->createArticle($data);
         }

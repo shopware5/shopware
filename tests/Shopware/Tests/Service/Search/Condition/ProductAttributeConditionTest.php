@@ -2,14 +2,11 @@
 
 namespace Shopware\Tests\Service\Search\Condition;
 
-use Enlight_Components_Test_TestCase;
 use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Models\Category\Category;
-use Shopware\Tests\Service\Converter;
-use Shopware\Tests\Service\Helper;
-use Shopware\Tests\Service\Search\TestCase;
+use Shopware\Tests\Service\TestCase;
 
 class ProductAttributeConditionTest extends TestCase
 {
@@ -167,7 +164,7 @@ class ProductAttributeConditionTest extends TestCase
         $context = $this->getContext();
         $category = $this->helper->createCategory();
 
-        foreach($products as $number => $attribute) {
+        foreach ($products as $number => $attribute) {
             $data = $this->getProduct($number, $context, $category, $attribute);
             $this->helper->createArticle($data);
         }

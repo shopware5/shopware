@@ -10,7 +10,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\Converter;
 use Shopware\Tests\Service\Helper;
-use Shopware\Tests\Service\Search\TestCase;
+use Shopware\Tests\Service\TestCase;
 
 class ProductAttributeFacetTest extends TestCase
 {
@@ -101,7 +101,7 @@ class ProductAttributeFacetTest extends TestCase
         $this->assertNotEmpty($facet->getResult());
         $result = $facet->getResult();
 
-        foreach($result as $value) {
+        foreach ($result as $value) {
             if ($value['attr1'] == null) {
                 $this->assertEquals(2, $value['total']);
             } else {
@@ -118,7 +118,7 @@ class ProductAttributeFacetTest extends TestCase
         $context = $this->getContext();
         $category = $this->helper->createCategory();
 
-        foreach($products as $number => $attribute) {
+        foreach ($products as $number => $attribute) {
             $data = $this->getProduct($number, $context, $category, $attribute);
             $this->helper->createArticle($data);
         }
