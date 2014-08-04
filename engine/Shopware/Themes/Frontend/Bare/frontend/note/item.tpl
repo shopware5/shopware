@@ -14,7 +14,7 @@
 							</a>
 							{* Zoom picture *}
 							{block name="frontend_note_item_image_zoom"}
-								<a href="{$sBasketItem.image.src.5}" rel="lightbox" class="note--zoom">
+								<a href="{$sBasketItem.image.src.5}" rel="lightbox" class="note--zoom" data-lightbox="true">
 									{s name="NoteLinkZoom"}{/s}
 								</a>
 							{/block}
