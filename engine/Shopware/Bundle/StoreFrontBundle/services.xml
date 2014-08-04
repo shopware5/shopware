@@ -215,7 +215,7 @@
             <argument type="service" id="models"/>
             <argument type="service" id="field_helper_dbal"/>
             <argument type="service" id="configurator_hydrator_dbal"/>
-            <argument type="service" id="media_hydrator_dbal"/>
+            <argument type="service" id="media_gateway" />
         </service>
 
         <service id="graduated_prices_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\GraduatedPricesGateway">
