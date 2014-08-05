@@ -1,6 +1,5 @@
 <?php
 
-use Behat\Behat\Context\Step;
 use Behat\Gherkin\Node\TableNode;
 require_once 'SubContext.php';
 
@@ -60,14 +59,6 @@ class DetailContext extends SubContext
     }
 
     /**
-     * @When /^I subscribe to the notifier with "([^"]*)"$/
-     */
-    public function iSubscribeToTheNotifierWith($email)
-    {
-        $this->getElement('Notifier')->submit($email);
-    }
-
-    /**
      * @Then /^I can not select "([^"]*)" from "([^"]*)"$/
      */
     public function iCanNotSelectFrom($configuratorOption, $configuratorGroup)
@@ -75,4 +66,3 @@ class DetailContext extends SubContext
         $this->getPage('Detail')->canNotSelectConfiguratorOption($configuratorOption, $configuratorGroup);
     }
 }
-

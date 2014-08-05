@@ -1,8 +1,6 @@
 <?php
 namespace Responsive;
 
-use Behat\Behat\Context\Step;
-
 class CheckoutCart extends \Emotion\CheckoutCart
 {
     public $cssLocator = array(

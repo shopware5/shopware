@@ -15,7 +15,7 @@ class NotePosition extends CartPosition
         'details' => array('de' => 'Zum Produkt',   'en' => 'View product')
     );
 
-    protected $cssLocator = array(
+    public $cssLocator = array(
         'a-thumb' => 'a.thumb_image',
         'img' => 'img',
         'a-zoom' => 'a.zoom_picture',
@@ -30,15 +30,14 @@ class NotePosition extends CartPosition
     /**
      * Searches an article from the array, that matches to the NotePosition.
      * If an article was found, the function will return its key, otherwise if no article matches, false will be returned
-     * @param array $articles
+     * @param  array    $articles
      * @return bool|int
      */
     public function search($articles)
     {
         $elements = \Helper::findElements($this, $this->cssLocator, $this->cssLocator);
 
-        foreach($articles as $key => $article)
-        {
+        foreach ($articles as $key => $article) {
             $check = array();
 
             if (!empty($article['name'])) {

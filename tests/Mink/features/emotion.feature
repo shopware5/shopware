@@ -2,7 +2,7 @@
 Feature: Emotion
 
     Background:
-        Given I am on the frontpage
+        Given I am on the homepage
 
     @slider @banner @blog
 	Scenario: Check the frontpage emotions

@@ -2,7 +2,6 @@
 namespace Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
-use Behat\Behat\Context\Step;
 
 class Blog extends Page
 {

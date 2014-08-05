@@ -2,7 +2,7 @@
 
 namespace Emotion;
 
-require_once('tests/Mink/features/bootstrap/Element/Emotion/CartPosition.php');
+require_once 'tests/Mink/features/bootstrap/Element/Emotion/CartPosition.php';
 
 class BlogBox extends CartPosition
 {

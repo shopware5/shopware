@@ -6,7 +6,6 @@ use Behat\Mink\Driver\SahiDriver;
 use Behat\Mink\Element\NodeElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Behat\Mink\Exception\ResponseTextException;
-use Behat\Behat\Context\Step;
 
 class Detail extends Page
 {
@@ -27,13 +26,14 @@ class Detail extends Page
         'commentTitle' => 'div.right_container > h3',
         'commentText' => 'div.right_container > p',
         'commentAnswer' => 'div.right_container',
-        'configuratorForm' => 'div#buybox > form'
+        'configuratorForm' => 'div#buybox > form',
+        'notificationForm' => 'form#sendArticleNotification'
     );
 
     protected $configuratorTypes = array(
-        'basketform' => 'table',
-        'upprice_config' => 'standard',
-        'config_select' => 'select'
+        'table' => 'basketform',
+        'standard' => 'upprice_config',
+        'select' => 'config_select'
     );
 
     /**
@@ -80,7 +80,7 @@ class Detail extends Page
     /**
      * Checks the evaluations of the current article
      * @param integer $average
-     * @param array $evaluations
+     * @param array   $evaluations
      */
     public function checkEvaluations($average, $evaluations)
     {
@@ -172,12 +172,12 @@ class Detail extends Page
 
     /**
      * Helper function how to read the evaluation from the evaluation element
-     * @param NodeElement $element
+     * @param  NodeElement $element
      * @return string
      */
     protected function getEvaluation($element)
     {
-        return (string)$element->getAttribute('class');
+        return (string) $element->getAttribute('class');
     }
 
     /**
@@ -193,7 +193,7 @@ class Detail extends Page
             $element = \Helper::findElements($this, $locators);
 
             $configuratorClass = $element['configuratorForm']->getAttribute('class');
-            $configuratorType = $this->configuratorTypes[$configuratorClass];
+            $configuratorType = array_search($configuratorClass, $this->configuratorTypes);
         }
 
         foreach ($configuration as $group) {

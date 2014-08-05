@@ -13,10 +13,10 @@ class CheckoutCart extends Page
 
     public $cssLocator = array(
         'aggregationAmounts' => 'div#aggregation',
-        'total' => 'div > div.totalamount',
-        'sum' => 'div > p.textright',
+        'sum' => 'div#aggregation > p.textright',
         'shipping' => 'div > div:nth-of-type(1)',
-        'sumWithoutVat' => 'div > div.tax',
+        'total' => 'div#aggregation > div.totalamount',
+        'sumWithoutVat' => 'div#aggregation > div.tax',
         'taxValue' => 'div#aggregation > div:nth-of-type(%d)',
         'taxRate' => 'div#aggregation_left > div:nth-of-type(%d)',
         'addVoucher' => array(
@@ -31,24 +31,72 @@ class CheckoutCart extends Page
     );
 
     public $namedSelectors = array(
-        'checkout' => array('de' => 'Zur Kasse gehen!',   'en' => 'Proceed to checkout')
+        'checkout' => array('de' => 'Zur Kasse gehen!', 'en' => 'Proceed to checkout')
     );
 
     protected $taxesPositionFirst = 4;
     public $cartPositionFirst = 3;
 
+    /**
+     * @return array
+     */
+    public function getSumsToCheck()
+    {
+        $locators = array('sum');
+        $elements = \Helper::findElements($this, $locators);
 
+        return array(
+            'aggregationSum' => \Helper::toFloat($elements['sum']->getText())
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function getShippingsToCheck()
+    {
+        $locators = array('shipping');
+        $elements = \Helper::findElements($this, $locators);
+
+        return array(
+            'aggregationShipping' => \Helper::toFloat($elements['shipping']->getText())
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function getTotalSumsToCheck()
+    {
+        $locators = array('total');
+        $elements = \Helper::findElements($this, $locators);
+
+        return array(
+            'aggregationTotalSum' => \Helper::toFloat($elements['total']->getText())
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function getSumWithoutVatsToCheck()
+    {
+        $locators = array('sumWithoutVat');
+        $elements = \Helper::findElements($this, $locators);
+
+        return array(
+            'aggregationSumWithoutVat' => \Helper::toFloat($elements['sumWithoutVat']->getText())
+        );
+    }
 
     /**
      * Checks the sum, shipping costs, total sum, sum without vat and vat of the cart.
-     * @param string $totalSum
+     * @param string      $totalSum
      * @param string|null $shippingCosts
-     * @param array $vat
+     * @param array       $vat
      */
     public function checkSums($totalAmount, $shippingCosts = null, $vats = array())
     {
-//        $this->open();
-
         $locators = array('aggregationAmounts');
         $elements = \Helper::findElements($this, $locators);
 
@@ -56,7 +104,7 @@ class CheckoutCart extends Page
         $prices = array('total' => $totalAmount);
         $locators = array('total');
 
-        if($shippingCosts !== null) {
+        if ($shippingCosts !== null) {
             $prices['shipping'] = $shippingCosts;
             $locators = array_merge($locators, array('sum', 'shipping'));
         }
@@ -67,13 +115,13 @@ class CheckoutCart extends Page
         $check = array();
         $check[] = \Helper::toFloat(array($elements['total']->getText(), $prices['total']));
 
-        if($shippingCosts !== null) {
+        if ($shippingCosts !== null) {
             $prices['sum'] = $prices['total'] - $prices['shipping'];
             $check[] = \Helper::toFloat(array($elements['sum']->getText(), $prices['sum']));
             $check[] = \Helper::toFloat(array($elements['shipping']->getText(), $prices['shipping']));
         }
 
-        if(!empty($vats)) {
+        if (!empty($vats)) {
             $prices['sumWithoutVat'] = $prices['total'];
 
             foreach ($vats as $key => $vat) {

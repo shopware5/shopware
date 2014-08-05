@@ -1,19 +1,9 @@
 <?php
 
-use Behat\Behat\Context\Step;
-
 require_once 'SubContext.php';
 
 class SitemapContext extends SubContext
 {
-     /**
-     * @Given /^I am on the sitemap$/
-     */
-    public function iAmOnTheSitemap()
-    {
-        $this->getPage('Sitemap')->open(array('xml' => ''));
-    }
-
     /**
      * @Given /^I am on the sitemap\.xml$/
      */
@@ -27,12 +17,9 @@ class SitemapContext extends SubContext
      */
     public function iShouldSeeAllActiveCategories()
     {
-        if(strpos($this->getSession()->getCurrentUrl(), 'sitemap.xml') !== false)
-        {
+        if (strpos($this->getSession()->getCurrentUrl(), 'sitemap.xml') !== false) {
             $this->getPage('Sitemap')->checkXmlCategories();
-        }
-        else
-        {
+        } else {
             $this->getPage('Sitemap')->checkCategories();
         }
     }
