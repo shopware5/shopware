@@ -273,7 +273,10 @@ $(function() {
 
     $('input[data-form-polyfill="true"], button[data-form-polyfill="true"]').formPolyfill();
     $('.datePicker').datepicker({
+        showOn: "button",
+        buttonImage:"/shopware/engine/Shopware/Themes/Frontend/Responsive/frontend/_public/src/img/icons/calendar.gif",
         dateFormat: 'dd.mm.yy',
+        buttonImageOnly: true,
         onSelect: function (dateText, inst) {
             $(this).parents('form').submit();
         }

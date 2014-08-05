@@ -12,7 +12,6 @@
     <script type="text/javascript" src="{link file='frontend/_public/vendors/raphael/raphael.js'}"></script>
     <script type="text/javascript" src="{link file='frontend/_public/vendors/raphael/popup.js'}"></script>
     <script type="text/javascript" src="{link file='frontend/_public/vendors/raphael/analytics.js'}"></script>
-    <script type="text/javascript" src="{link file='frontend/_public/vendors/jquery.ui.datepicker/jquery.ui.datepicker.js'}"></script>
 {/block}
 
 
