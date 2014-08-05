@@ -76,7 +76,7 @@
                 var nameEq = name + '=',
                     cookies = document.cookie.split(';'),
                     cookie,
-                    len = ca.length,
+                    len = cookies.length,
                     i = 0;
 
                 for (; i < len; i++) {
