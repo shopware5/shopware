@@ -3834,3 +3834,87 @@ body #content .banner-slider-emotion .ajaxSlider .slide_navigation {
     border: 1px solid #dfdfdf;
 }
 .mousetrap { opacity: 0; background: #fff }
+
+
+/* New Image Configurator
+   -------------------------------------------- */
+#buybox .configurator--variant .variant--group {
+    margin: 0 0 10px 0;
+    clear: both;
+}
+#buybox .configurator--variant .variant--name {
+    margin: 0 0 5px 0;
+    font-weight: bold;
+}
+#buybox .configurator--variant .variant--option {
+    width: 63px;
+    margin: 0 10px 10px 0;
+    display: block;
+    position: relative;
+    float: left;
+}
+#buybox .configurator--variant .option--input {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    position: absolute;
+    top: 0; left: 0;
+    z-index: 10;
+    cursor: pointer;
+    -khtml-opacity: 0;
+    -moz-opacity: 0;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    filter: alpha(opacity = 0);
+    opacity: 0;
+}
+#buybox .configurator--variant .option--input:hover ~ label {
+    color: #333333;
+    border-color: #333333;
+}
+#buybox .configurator--variant .option--input:hover ~ label.is--disabled {
+    color: #999999;
+    border-color: #DFDFDF;
+}
+#buybox .configurator--variant .option--input:checked ~ label {
+    color: #E1540F;
+    border-color: #E1540F;
+}
+#buybox .configurator--variant .option--input:disabled ~ label {
+    -khtml-opacity: 0.5;
+    -moz-opacity: 0.5;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+    filter: alpha(opacity = 50);
+    opacity: 0.5;
+}
+#buybox .configurator--variant .option--input:disabled {
+    cursor: default;
+}
+#buybox .configurator--variant .option--label {
+    display: block;
+    width: 57px;
+    height: 26px;
+    padding: 3px;
+    margin: 0;
+    line-height: 26px;
+    position: relative;
+    z-index: 1;
+    border: 1px solid #DFDFDF;
+    font-weight: bold;
+    text-align: center;
+    float: none;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
+}
+#buybox .configurator--variant .is--image .option--label {
+    height: 57px;
+    line-height: 57px;
+}
+#buybox .configurator--variant .option--label img {
+    margin: 0 auto;
+    vertical-align: middle;
+}
