@@ -130,8 +130,6 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
         $config['sCURRENCY'] = $system->sCurrency['currency'];
         $config['sCURRENCYHTML'] = $system->sCurrency['symbol'];
 
-        $config['convertedBasePath'] = $sPathBase;
-
         return $system;
     }
 
