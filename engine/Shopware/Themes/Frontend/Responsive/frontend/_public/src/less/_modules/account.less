@@ -150,6 +150,10 @@
         .unitize-padding(0, 0, 16, 0);
     }
 
+    .account--welcome {
+        .unitize-padding(0, 0, 0, 10);
+    }
+
     .listing--actions {
         .unitize-padding(10, 18, 24, 18);
         border-bottom: 1px solid @borderColor;
@@ -176,6 +180,19 @@
         #datePickerFrom,
         #datePickerTo {
             width: 100%;
+
+            &[type='text'] {
+                float: left;
+                padding-right: 25px;
+            }
+
+            &[type='text'] + img {
+                display: inline;
+                height: 20px;
+                margin-left: -30px;
+                margin-top: 10px;
+                width: 20px;
+            }
         }
     }
 
@@ -220,7 +237,7 @@
         .column--price,
         .column--total {
             width:100%;
-            .unitize-padding(8, 10, 12, 10);
+            .unitize-padding(10, 10, 10, 10);
         }
     }
 
@@ -663,6 +680,10 @@
             .unitize-padding(0, 20, 16, 20);
         }
 
+        .account--welcome {
+            .unitize-padding(0, 0, 0, 0);
+        }
+
         .listing--actions {
             .unitize-padding(10, 10, 10, 10);
             .border-radius(3px);
@@ -680,12 +701,7 @@
             .unitize-padding(0, 10, 0, 10);
 
             label {
-                width:20%;
-            }
-
-            #datePickerFrom,
-            #datePickerTo {
-                width: 80%;
+                width:10%;
             }
         }
 
