@@ -126,7 +126,14 @@
              *
              * @type {Number}
              */
-            rightOffset: 5
+            rightOffset: 5,
+
+            /**
+             * Time in milliseconds the slider needs to take to slide..
+             *
+             * @type {Number}
+             */
+            animationSpeed: 500
         },
 
         /**
@@ -259,6 +266,8 @@
             me.setOffset(me._offset);
 
             me.updateButtons();
+
+            $.publish('/plugin/' + me.getName() + '/updateResize', [ me ]);
         },
 
         /**
@@ -293,6 +302,8 @@
             event.preventDefault();
 
             me.addOffset(me._step * -1);
+
+            $.publish('/plugin/' + me.getName() + '/onLeftArrowClick', [ me ]);
         },
 
         /**
@@ -309,6 +320,8 @@
             event.preventDefault();
 
             me.addOffset(me._step);
+
+            $.publish('/plugin/' + me.getName() + '/onRightArrowClick', [ me ]);
         },
 
         /**
@@ -341,14 +354,15 @@
             me.updateButtons();
 
             if (modernizr.csstransitions) {
-                me.$list.css({
+                me.$list.transition({
                     'left': me._offset * -1
-                });
-            } else {
-                me.$list.animate({
-                    'left': me._offset * -1
-                }, 500, 'linear');
+                }, me.opts.animationSpeed);
+                return;
             }
+
+            me.$list.animate({
+                'left': me._offset * -1
+            }, me.opts.animationSpeed, 'linear');
         },
 
         /**
