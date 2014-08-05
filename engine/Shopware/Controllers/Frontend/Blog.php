@@ -360,6 +360,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             $blogArticleQuery = $this->getRepository()->getDetailQuery($blogArticleId);
             $blogArticleData = $blogArticleQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
+            $this->View()->sAction = $this->Request()->getActionName();
+
             if ($hash = $this->Request()->sConfirmation) {
                 //customer confirmed the link in the mail
                 $commentConfirmQuery = $this->getCommentConfirmRepository()->getConfirmationByHashQuery($hash);
@@ -374,7 +376,6 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
                     $this->sSaveComment($commentData, $blogArticleId);
 
-                    $this->View()->sAction = $this->Request()->getActionName();
                     return $this->forward('detail');
                 }
             }
@@ -389,6 +390,10 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
             if (empty($this->Request()->comment)) {
                 $sErrorFlag['comment'] = true;
+            }
+
+            if (empty($this->Request()->points)) {
+                $sErrorFlag['points'] = true;
             }
 
             if (!empty(Shopware()->Config()->CaptchaColor)) {
@@ -428,8 +433,6 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                     $commentData = $this->Request()->getPost();
                     $this->sSaveComment($commentData, $blogArticleId);
                 }
-
-                $this->View()->sAction = $this->Request()->getActionName();
             } else {
                 $this->View()->sFormData = Shopware()->System()->_POST->toArray();
                 $this->View()->sErrorFlag = $sErrorFlag;

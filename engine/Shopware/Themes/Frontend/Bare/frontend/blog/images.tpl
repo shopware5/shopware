@@ -1,35 +1,40 @@
 {* Article picture *}
-{if $sArticle.preview.thumbNails.2}
-	{block name='frontend_blog_images_main_image'}{/block}
-    <div id="imgTarget">
-        <a href="{$sArticle.preview.media.path}"
-           rel="lightbox[photos]"
-           title="{if $sArticle.preview.media.description}{$sArticle.preview.media.description}{else}{$sArticle.title}{/if}"
-           class="main_image">
+{if $sArticle.preview.thumbNails.3}
+	<div class="blog--detail-image-container block">
 
-            <img src="{$sArticle.preview.thumbNails.2}"
-                 alt="{$sArticle.title}"
-                 border="0"
-                 title="{if $sArticle.preview.media.description}{$sArticle.preview.media.description}{else}{$sArticle.title}{/if}"/>
-        </a>
-    </div>
-    
-	{* Thumbnails *}
-	{if $sArticle.media}
-		{block name='frontend_blog_images_thumbnails'}
-		<div class="thumbnail_box">
-			{foreach from=$sArticle.media item=sArticleMedia}
-				{if !$sArticleMedia.preview}
-                    <a href="{link file=$sArticleMedia.media.path}"
-                       rel="lightbox"
-                       title="{if $sArticleMedia.description}{$sArticleMedia.description}{else}{$sArticle.title}{/if}"
-                       style="background: #fff url({link file=$sArticleMedia.thumbNails.0}) no-repeat center center;">
-                        &nbsp;
-                    </a>
-			    {/if}
-			{/foreach}
-	    	<div class="space">&nbsp;</div>
-	    </div>
-	    {/block}
-	{/if}
+		{* Main Image *}
+		{block name='frontend_blog_images_main_image'}
+			<div class="blog--detail-images block">
+				<a href="{$sArticle.preview.media.path}"
+                   data-lightbox="true"
+				   title="{if $sArticle.preview.media.description}{$sArticle.preview.media.description}{else}{$sArticle.title|escape}{/if}"
+				   class="link--blog-image">
+
+                    <img src="{$sArticle.preview.thumbNails.3}"
+                         class="blog--image panel has--border is--rounded"
+                         alt="{$sArticle.title|escape}"
+                         title="{if $sArticle.preview.media.description}{$sArticle.preview.media.description}{else}{$sArticle.title|escape}{/if}" />
+				</a>
+			</div>
+		{/block}
+
+		{* Thumbnails *}
+		{if $sArticle.media}
+			{block name='frontend_blog_images_thumbnails'}
+				<div class="blog--detail-thumbnails block">
+					{foreach $sArticle.media as $sArticleMedia}
+						{if !$sArticleMedia.preview}
+							<a href="{link file=$sArticleMedia.media.path}" data-lightbox="true"
+                               class="blog--thumbnail panel has--border is--rounded block"
+                               data-lightbox="true"
+							   title="{if $sArticleMedia.description}{$sArticleMedia.description}{else}{$sArticle.title|escape}{/if}">
+
+                               <img class="blog--thumbnail-image" src="{link file=$sArticleMedia.thumbNails.1}" />
+							</a>
+						{/if}
+					{/foreach}
+				</div>
+			{/block}
+		{/if}
+	</div>
 {/if}
