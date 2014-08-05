@@ -47,7 +47,8 @@ class Shopware_Controllers_Backend_Overview extends Shopware_Controllers_Backend
                 SUM(visitors.uniquevisits)/SUM(order_count.order_count) AS averageUsers,
                 SUM(visitors.pageimpressions) AS hits,
                 order_count.order_count AS countOrders,
-                SUM(customer_count.new_customer_count) AS countCustomers,
+                SUM(customer_count.new_customer_count) AS countUsers,
+                SUM(customer_count.new_customer_order_count) AS countCustomers,
                 order_amount.amount AS amount,
                 visitors.datum AS `date`
             FROM s_statistics_visitors AS visitors
@@ -75,12 +76,12 @@ class Shopware_Controllers_Backend_Overview extends Shopware_Controllers_Backend
             (
                 SELECT
                     COUNT(DISTINCT s_user.id) AS new_customer_count,
+                    COUNT(DISTINCT s_order.id) AS new_customer_order_count,
                     firstlogin AS first_login_date
                 FROM s_user
-                INNER JOIN s_order ON s_order.userID = s_user.id
-                  AND (DATE(s_order.ordertime) = DATE(s_user.firstlogin))
-                INNER JOIN s_user_billingaddress ON s_user_billingaddress.userID = s_user.id
-                WHERE status NOT IN (-1, 4)
+                LEFT JOIN s_order ON s_order.userID = s_user.id
+                    AND (DATE(s_order.ordertime) = DATE(s_user.firstlogin))
+                    AND s_order.status NOT IN (-1, 4)
                 GROUP BY first_login_date
             ) AS customer_count
             ON customer_count.first_login_date = visitors.datum

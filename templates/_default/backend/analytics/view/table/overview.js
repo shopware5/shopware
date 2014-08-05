@@ -90,7 +90,11 @@ Ext.define('Shopware.apps.Analytics.view.table.Overview', {
             },
             {
                 dataIndex: 'registrations',
-                text: '{s name="table/quick_overview/registrations"}New customers{/s}'
+                text: '{s name="table/quick_overview/registrations"}New users{/s}'
+            },
+            {
+                dataIndex: 'customers',
+                text: '{s name="table/quick_overview/customers"}New customers{/s}'
             },
             {
                 dataIndex: 'visits',
