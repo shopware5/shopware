@@ -1,20 +1,10 @@
 <?php
 
-use Behat\Behat\Context\Step;
 use Behat\Gherkin\Node\TableNode;
 require_once 'SubContext.php';
 
 class NoteContext extends SubContext
 {
-    /**
-     * @Given /^I am on my note$/
-     * @When /^I go to my note$/
-     */
-    public function iAmOnMyNote()
-    {
-        $this->getPage('Note')->open();
-    }
-
     /**
      * @When /^I remove the article from my note$/
      * @When /^I remove the article on position (?P<num>\d+) of my note$/

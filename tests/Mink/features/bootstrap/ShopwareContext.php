@@ -1,28 +1,11 @@
 <?php
 
-use Behat\Behat\Context\Step;
 use Behat\Gherkin\Node\TableNode;
 
 require_once 'SubContext.php';
 
 class ShopwareContext extends SubContext
 {
-    /**
-     * @Given /^I am on the frontpage$/
-     */
-    public function iAmOnTheFrontpage()
-    {
-        $this->getPage('Homepage')->open();
-    }
-
-    /**
-     * @When /^I search for "(?P<searchTerm>[^"]*)"$/
-     */
-    public function iSearchFor($searchTerm)
-    {
-        $this->getPage('Homepage')->searchFor($searchTerm);
-    }
-
     /**
      * @When /^I received the search-results for "(?P<searchTerm>[^"]*)"$/
      */
@@ -149,21 +132,4 @@ class ShopwareContext extends SubContext
         $this->getElement('HeaderCart')->checkCart($quantity, $amount);
     }
 
-    /**
-     * @Then /^I should see (?P<quantity>\d+) element of type "(?P<elementClass>[^"]*)"$/
-     * @Then /^I should see (?P<quantity>\d+) elements of type "(?P<elementClass>[^"]*)"$/
-     */
-    public function iShouldSeeElementsOfType($count, $elementName)
-    {
-        /** @var \Emotion\Homepage $page */
-        $page = $this->getPage('Homepage');
-
-        /** @var MultipleElement $elements */
-        $elements = $this->getElement($elementName);
-        $elements->setParent($page);
-
-        $page->assertElementCount($elements, intval($count));
-    }
-
 }
-

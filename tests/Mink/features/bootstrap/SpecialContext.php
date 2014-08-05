@@ -1,6 +1,8 @@
 <?php
 
 use Behat\Behat\Context\Step;
+use Behat\Gherkin\Node\TableNode;
+use Behat\Behat\Context\Step\Then;
 
 require_once 'SubContext.php';
 
@@ -42,6 +44,7 @@ class SpecialContext extends SubContext
 
     /**
      * @Given /^I am on the page "(?P<page>[^"]*)"$/
+     * @Given /^I go to the page "(?P<page>[^"]*)"$/
      */
     public function iAmOnThePage($page)
     {
@@ -54,5 +57,124 @@ class SpecialContext extends SubContext
     public function iShouldBeOnThePage($page)
     {
         $this->getPage($page)->verifyPage();
+    }
+
+    /**
+     * @Then /^I should see (?P<quantity>\d+) element of type "(?P<elementClass>[^"]*)"$/
+     * @Then /^I should see (?P<quantity>\d+) elements of type "(?P<elementClass>[^"]*)"$/
+     */
+    public function iShouldSeeElementsOfType($count, $elementClass)
+    {
+        /** @var \Emotion\Homepage $page */
+        $page = $this->getPage('Homepage');
+
+        /** @var MultipleElement $elements */
+        $elements = $this->getElement($elementClass);
+        $elements->setParent($page);
+
+        $page->assertElementCount($elements, intval($count));
+    }
+
+    /**
+     * @Then /^the page "(?P<pageClass>[^"]*)" should have the content:$/
+     */
+    public function thePageShouldHaveTheContent($pageClass, TableNode $content)
+    {
+        $page = $this->getPage($pageClass);
+        $this->getPage('Homepage')->assertElementContent($page, $content->getHash());
+    }
+
+    /**
+     * @Given /^the element "(?P<elementClass>[^"]*)" should have the content:$/
+     */
+    public function theElementShouldHaveTheContent($elementClass, TableNode $content)
+    {
+        $this->theElementOnPositionShouldHaveTheContent($elementClass, 1, $content);
+    }
+
+    /**
+     * @Given /^the element "(?P<elementClass>[^"]*)" on position (?P<position>\d+) should have the content:$/
+     */
+    public function theElementOnPositionShouldHaveTheContent($elementClass, $position, TableNode $content)
+    {
+        /** @var \Emotion\Homepage $page */
+        $page = $this->getPage('Homepage');
+
+        $element = $this->getElement($elementClass);
+
+        if ($element instanceof MultipleElement) {
+            /** @var MultipleElement $element */
+            $element->setParent($page);
+
+            $element = $element->setInstance($position);
+        }
+
+        $page->assertElementContent($element, $content->getHash());
+    }
+
+    /**
+     * @Given /^I submit the form "(?P<formName>[^"]*)" on page "(?P<pageClass>[^"]*)" with:$/
+     */
+    public function iSubmitTheFormOnPageWith($formLocatorName, $pageClass, TableNode $values)
+    {
+        $page = $this->getPage($pageClass);
+        $this->getPage('Homepage')->submitForm($formLocatorName, $page, $values->getHash());
+    }
+
+    /**
+     * @When /^I follow the link "(?P<linkName>[^"]*)" of the page "(?P<pageClass>[^"]*)"$/
+     */
+    public function iFollowTheLinkOfThePage($linkName, $pageClass)
+    {
+        $page = $this->getPage($pageClass);
+        $locators = array('contentBlock');
+        $elements = Helper::findElements($page, $locators, $this->getPage('Homepage')->cssLocator);
+
+        $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();
+        $elements['contentBlock']->clickLink($page->namedSelectors[$linkName][$language]);
+    }
+
+    /**
+     * @When /^I follow the link "(?P<linkName>[^"]*)" of the element "(?P<elementClass>[^"]*)"$/
+     * @When /^I follow the link "(?P<linkName>[^"]*)" of the element "(?P<elementClass>[^"]*)" on position (?P<position>\d+)$/
+     */
+    public function iFollowTheLinkOfTheElement($linkName, $elementClass, $position = 1)
+    {
+        $element = $this->getElement($elementClass);
+
+        if ($element instanceof MultipleElement) {
+            /** @var \Emotion\Homepage $page */
+            $page = $this->getPage('Homepage');
+
+            /** @var MultipleElement $element */
+            $element->setParent($page);
+
+            $element = $element->setInstance($position);
+        }
+
+        $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();
+        $element->clickLink($element->namedSelectors[$linkName][$language]);
+    }
+
+    /**
+     * @Given /^only on "(?P<template>[^"]*)" template "(?P<step>[^"]*)"$/
+     * @Given /^only on "(?P<template>[^"]*)" template "(?P<step>[^"]*)" :$/
+     */
+    public function onlyOn($template, $method, TableNode $dataTable = null)
+    {
+        $page = $this->getPage('Homepage');
+        $class = get_class($page);
+
+        if (strpos($class, $template . '\\') === false) {
+            return;
+        }
+
+        $method = str_replace('\'', '"', $method);
+
+        if (empty($dataTable)) {
+            return new Then($method);
+        }
+
+        return new Then($method, $dataTable);
     }
 }

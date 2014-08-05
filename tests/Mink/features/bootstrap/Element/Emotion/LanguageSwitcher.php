@@ -3,8 +3,6 @@
 namespace Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
-use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
-use Behat\Mink\Exception\ResponseTextException;
 
 class LanguageSwitcher extends Element
 {
@@ -23,10 +21,8 @@ class LanguageSwitcher extends Element
 
         $languages = $this->findAll('css', $this->cssLocators['languages']);
 
-        foreach($languages as $language)
-        {
-            if($language->getAttribute('selected'))
-            {
+        foreach ($languages as $language) {
+            if ($language->getAttribute('selected')) {
                 return $languageKeys[$language->getAttribute('value')];
             }
         }

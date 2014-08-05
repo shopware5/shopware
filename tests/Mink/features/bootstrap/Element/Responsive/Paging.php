@@ -2,9 +2,6 @@
 
 namespace Responsive;
 
-use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
-use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
-
 class Paging extends \Emotion\Paging
 {
     /**

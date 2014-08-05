@@ -1,6 +1,5 @@
 <?php
 
-use Behat\Behat\Context\Step;
 use Behat\Gherkin\Node\TableNode;
 require_once 'SubContext.php';
 
@@ -25,7 +24,7 @@ class ListingContext extends SubContext
     {
         $properties = array();
 
-        if($filter) {
+        if ($filter) {
             $properties = $filter->getHash();
         }
 
@@ -84,44 +83,6 @@ class ListingContext extends SubContext
         /** @var \Emotion\ArticleBox $articleBox */
         $articleBox = $articleBoxes->setInstance($position);
         $articleBox->clickActionLink('order', $language);
-    }
-
-    /**
-     * @When /^I set the article on position (?P<position>\d+) to the comparison list$/
-     */
-    public function iSetTheArticleOnPositionToTheComparisonList($position)
-    {
-        $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();
-
-        /** @var \Emotion\Listing $page */
-        $page = $this->getPage('Listing');
-
-        /** @var MultipleElement $articleBoxes */
-        $articleBoxes = $this->getElement('ArticleBox');
-        $articleBoxes->setParent($page);
-
-        /** @var \Emotion\ArticleBox $articleBox */
-        $articleBox = $articleBoxes->setInstance($position);
-        $articleBox->clickActionLink('compare', $language);
-    }
-
-    /**
-     * @When /^I go to the detail page of the article on position (?P<position>\d+)$/
-     */
-    public function iGoToTheDetailPageOfTheArticleOnPosition($position)
-    {
-        $language = $this->getElement('LanguageSwitcher')->getCurrentLanguage();
-
-        /** @var \Emotion\Listing $page */
-        $page = $this->getPage('Listing');
-
-        /** @var MultipleElement $articleBoxes */
-        $articleBoxes = $this->getElement('ArticleBox');
-        $articleBoxes->setParent($page);
-
-        /** @var \Emotion\ArticleBox $articleBox */
-        $articleBox = $articleBoxes->setInstance($position);
-        $articleBox->clickActionLink('details', $language);
     }
 
     /**

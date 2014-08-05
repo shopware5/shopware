@@ -8,6 +8,9 @@ use SensioLabs\Behat\PageObjectExtension\PageObject\Page, Behat\Mink\Exception\R
 class Homepage extends \Emotion\Homepage
 {
     public $cssLocator = array(
+        'contentBlock' => 'section.content-main > div.content-main--inner',
+        'searchForm' => 'form.main-search--form',
+        'newsletterForm' => 'form.newsletter--form',
         'emotionElement' => 'li.emotion--element.%s-element',
         'emotionSliderElement' => 'li.emotion--element.%s-slider-element',
         'bannerImage' => 'div.emotion--element-banner',

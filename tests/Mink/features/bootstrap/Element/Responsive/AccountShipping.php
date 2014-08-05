@@ -2,11 +2,9 @@
 
 namespace Responsive;
 
-use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
-use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use  Behat\Mink\Exception\ResponseTextException;
 
-class AccountShipping extends AccountBilling
+class AccountShipping extends \Emotion\AccountShipping
 {
     /**
      * @var array $selector

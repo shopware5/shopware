@@ -53,7 +53,7 @@ class Listing extends Page
 
     /**
      * Sets the article filter
-     * @param array $properties
+     * @param  array                                       $properties
      * @throws \Behat\Mink\Exception\ResponseTextException
      */
     public function filter($properties)
@@ -103,9 +103,9 @@ class Listing extends Page
 
     /**
      * Helper function to set a filter
-     * @param integer $filterKey
-     * @param string $value
-     * @param NodeElement $filterContainer
+     * @param  integer     $filterKey
+     * @param  string      $value
+     * @param  NodeElement $filterContainer
      * @return bool
      */
     protected function setFilterProperty($filterKey, $value, $filterContainer)
@@ -120,6 +120,7 @@ class Listing extends Page
 
             if ($propertyName === $value) {
                 $property->click();
+
                 return true;
             }
         }
@@ -129,8 +130,8 @@ class Listing extends Page
 
     /**
      * Helper function to get the displayed name of a filter or filter property
-     * @param NodeElement $element
-     * @param bool $hasBrackets
+     * @param  NodeElement $element
+     * @param  bool        $hasBrackets
      * @return string
      */
     protected function getElementName($element, $hasBrackets = true)
@@ -145,7 +146,7 @@ class Listing extends Page
             return $name;
         }
 
-        if($hasBrackets) {
+        if ($hasBrackets) {
             $length = strrpos($name, ' ');
             $name = substr($name, 0, $length);
         }
@@ -208,6 +209,7 @@ class Listing extends Page
 
         /** @var Element $listingBox */
         $listingBox = $elements['listingBox'];
+
         return $listingBox->hasLink($name);
     }
 }

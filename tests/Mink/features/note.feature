@@ -8,7 +8,7 @@ Feature: Note
         And   I follow "Zahlungsarten"
         Then  I should see "Zahlungsarten & Riskmanagement"
 
-        When  I go to the detail page of the article on position 2
+        When  I follow the link "details" of the element "ArticleBox" on position 2
         And   I follow "Auf den Merkzettel"
         Then  My note should look like this:
             | name                           | supplier | ordernumber | text                                                                                                                                               | price    | image                           | link                                                          |
@@ -39,7 +39,7 @@ Feature: Note
     @comparison
     Scenario: I can compare articles from my note
         When  I compare the article on position 1 of my note
-        And   I go to my note
+        And   I go to the page "Note"
         And   I compare the article on position 2 of my note
         And   I follow "Vergleich starten"
         Then  The comparison should look like this:
@@ -47,7 +47,7 @@ Feature: Note
             | Kwon-Tasche-Coach-schwarz      | Zahlungsarten & Riskmanagement | 0       | In Shopware haben Sie ein sehr umfangreiches Riskmanagement, in dem Sie gewünscht Zahlungsarten unter Berücksichtigung verschiedenster... | 119,99 € | /beispiele/zahlungsarten/228/zahlungsarten-und-riskmanagement |
             | Kwon-Fitness-Boxhandschuh-blau | Abschlag bei Zahlungsarten     | 0       | In Shopware können Sie bei gewünschten Zahlungsarten auch Abschläge definieren.                                                           | 47,90 €  | /beispiele/zahlungsarten/230/abschlag-bei-zahlungsarten       |
 
-        When  I go to my note
+        When  I go to the page "Note"
         And   I follow "Vergleich löschen"
-        And   I go to my note
+        And   I go to the page "Note"
         Then  I should not see "Artikel vergleichen"
