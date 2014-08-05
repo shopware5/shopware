@@ -79,6 +79,7 @@ class ContextService implements Service\ContextServiceInterface
      */
     public function initialize()
     {
+        /** @var $session \Enlight_Components_Session_Namespace */
         $session = $this->container->get('session');
 
         /**@var $shop Models\Shop\Shop */
@@ -93,6 +94,10 @@ class ContextService implements Service\ContextServiceInterface
         }
 
         $context = new Struct\Context();
+
+        $context->setBaseUrl(
+            $this->getBaseUrl()
+        );
 
         $context->setShop(
             $this->createShopStruct($shop)
@@ -223,5 +228,29 @@ class ContextService implements Service\ContextServiceInterface
         $struct->setPath($category->getPath());
 
         return $struct;
+    }
+
+    /**
+     * @return string
+     */
+    private function getBaseUrl()
+    {
+        /** @var $config \Shopware_Components_Config */
+        $config = $this->container->get('config');
+
+        $request = null;
+        if ($this->container->initialized('front')) {
+            /** @var $front \Enlight_Controller_Front */
+            $front = $this->container->get('front');
+            $request = $front->Request();
+        }
+
+        if ($request !== null) {
+            $baseUrl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
+        } else {
+            $baseUrl = 'http://' . $config->get('basePath');
+        }
+
+        return $baseUrl;
     }
 }
