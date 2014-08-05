@@ -27,16 +27,20 @@
 													   name="group[{$option.groupID}]"
 													   value="{$option.optionID}"
 													   data-auto-submit="true"
-													   {if !$option.selectable}disabled{/if}
-													   {if $option.selected}checked{/if} />
+													   {if !$option.selectable}disabled="disabled"{/if}
+													   {if $option.selected}checked="checked"{/if} />
 											{/block}
 
 											{block name='frontend_detail_configurator_variant_group_option_label'}
 												<label for="group[{$option.groupID}]" class="option--label{if !$option.selectable} is--disabled{/if}">
 													{if $option.media}
-														<img src="{if isset($option.media.src)}{$option.media.src.1}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" alt="{$option.optionname}">
+														{block name='frontend_detail_configurator_variant_group_option_label_image'}
+															<img src="{if isset($option.media.src)}{$option.media.src.1}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" alt="{$option.optionname}">
+														{/block}
 													{else}
-														{$option.optionname}
+														{block name='frontend_detail_configurator_variant_group_option_label_text'}
+															{$option.optionname}
+														{/block}
 													{/if}
 												</label>
 											{/block}
