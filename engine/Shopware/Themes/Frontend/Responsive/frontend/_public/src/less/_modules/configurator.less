@@ -36,6 +36,11 @@
         z-index: 10;
         cursor: pointer;
 
+        /**
+         * Checkbox/Radio Hack
+         * Changes the styling of the next label element
+         * based on the state of the radio element.
+         */
         &:hover ~ label {
             color: @darkTextColor;
             border-color: @darkBorderColor;
