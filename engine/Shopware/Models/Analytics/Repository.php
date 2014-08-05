@@ -359,10 +359,14 @@ class Repository
 
         $builder->select(array(
             'firstlogin as firstLogin',
-            'COUNT(id) as registrations'
+            'COUNT(users.id) as registrations',
+            'COUNT(orders.id) as customers'
         ));
 
         $builder->from('s_user', 'users')
+            ->leftJoin('users', 's_order', 'orders',
+                'orders.userID = users.id AND (DATE(orders.ordertime) = DATE(users.firstlogin)) AND orders.status NOT IN (-1, 4)'
+            )
             ->orderBy('users.firstlogin', 'DESC')
             ->groupBy('users.firstlogin');
 

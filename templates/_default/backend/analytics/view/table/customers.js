@@ -64,6 +64,7 @@ Ext.define('Shopware.apps.Analytics.view.table.Customers', {
 
         return [
             {
+                xtype: 'datecolumn',
                 dataIndex: 'week',
                 width: 120,
                 align: 'left',
