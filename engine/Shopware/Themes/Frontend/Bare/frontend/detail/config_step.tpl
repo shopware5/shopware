@@ -6,19 +6,19 @@
 
 <form method="post" action="{url sArticle=$sArticle.articleID sCategory=$sArticle.categoryID}" class="configurator--form selection--form">
 	{foreach from=$sArticle.sConfigurator item=sConfigurator name=group key=groupID}
-	
+
 		{* Group name *}
 		{block name='frontend_detail_group_name'}
 			<p class="configurator--label">{$sConfigurator.groupname}:</p>
 		{/block}
-		
+
 		{* Group description *}
 		{block name='frontend_detail_group_description'}
 			{if $sConfigurator.groupdescription}
 				<p class="configurator--description">{$sConfigurator.groupdescription}</p>
 			{/if}
 		{/block}
-		
+
 		{$pregroupID=$groupID-1}
 		{* Configurator drop down *}
 		{block name='frontend_detail_group_selection'}
