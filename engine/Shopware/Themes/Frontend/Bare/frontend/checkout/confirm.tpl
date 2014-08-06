@@ -61,7 +61,7 @@
                 {* Right of revocation notice *}
                 {block name='frontend_checkout_confirm_tos_revocation_notice'}
                     {if {config name=revocationnotice}}
-                        <div class="body--revocation">
+                        <div class="body--revocation" data-modal="true">
                             {s name="ConfirmTextRightOfRevocationNew"}<p>Bitte beachten Sie bei Ihrer Bestellung auch unsere <a href="{url controller=custom sCustom=8 forceSecure}" data-modal-height="500" data-modal-width="800">Widerrufsbelehrung</a>.</p>{/s}
                         </div>
                     {/if}
@@ -89,7 +89,7 @@
                                 {* AGB label *}
                                 {block name='frontend_checkout_confirm_agb_label'}
                                     <div class="block column--label">
-                                        <label for="sAGB"{if $sAGBError} class="has--error"{/if}>{s name="ConfirmTerms"}{/s}</label>
+                                        <label for="sAGB"{if $sAGBError} class="has--error"{/if} data-modal="true">{s name="ConfirmTerms"}{/s}</label>
                                     </div>
                                 {/block}
                             </li>

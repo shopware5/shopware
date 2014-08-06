@@ -301,6 +301,14 @@ $(function() {
         $(this).parents('form').submit();
     });
 
+    $('*[data-modal="true"] a').on('click.modal', function() {
+        event.preventDefault();
+
+        $.modal.open(this.href, {
+            mode: 'ajax'
+        });
+    });
+
     $('.add-voucher--checkbox').on('change', function (event) {
         var method = (!$(this).is(':checked')) ? 'addClass' : 'removeClass';
         event.preventDefault();
