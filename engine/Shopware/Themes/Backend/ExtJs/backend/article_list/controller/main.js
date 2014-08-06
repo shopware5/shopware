@@ -96,7 +96,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
         name = me.getController('CategoryFilter').getFilterNameByConfig(false, false);
 
         me.getController('Suggest').loadFilter(
-                'ISMAIN AND CATEGORY.ID > 0',
+                'ISMAIN',
                 name
         );
     },
