@@ -38,8 +38,6 @@
             var me = this,
                 selector = $(me.$el.attr('data-selector'));
 
-            console.log(selector);
-
             if(!selector.length) {
                 throw new Error('Given selector does not match any element on the page.');
                 return false;

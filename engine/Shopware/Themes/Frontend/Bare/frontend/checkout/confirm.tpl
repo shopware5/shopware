@@ -69,7 +69,7 @@
 
                 <form id="confirm--form" method="post" action="{if $sPayment.embediframe || $sPayment.action}{url action='payment'}{else}{url action='finish'}{/if}">
                     {* Hidden field for the user comment *}
-                    <textarea class="is--hidden user-comment--hidden" rows="1" cols="1" name="sComment"></textarea>
+                    <textarea class="is--hidden user-comment--hidden" rows="1" cols="1" name="sComment">{$sComment|escape}</textarea>
 
                     <ul class="list--checkbox list--unstyled">
 
