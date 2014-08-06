@@ -1,6 +1,12 @@
 {block name="frontend_note_item"}
 	<div class="note--item panel--tr">
 
+        {if $sBasketItem.sConfigurator}
+            {$detailLink={url controller="detail" sArticle=$sBasketItem.articleID number=$sBasketItem.ordernumber}}
+        {else}
+            {$detailLink=$sBasketItem.linkDetails}
+        {/if}
+
 		{* Article information *}
 		{block name="frontend_note_item_info"}
 			<div class="note--info panel--td">
@@ -9,7 +15,7 @@
 				{block name="frontend_note_item_image"}
 					<div class="note--image-container">
 						{if $sBasketItem.image.src.0}
-							<a href="{$sBasketItem.linkDetails}" title="{$sBasketItem.articlename}" class="note--image-link">
+							<a href="{$detailLink}" title="{$sBasketItem.articlename}" class="note--image-link">
 								<img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename}" class="note--image" />
 							</a>
 							{* Zoom picture *}
@@ -19,7 +25,7 @@
 								</a>
 							{/block}
 						{else}
-							<a href="{$sBasketItem.linkDetails}" title="{$sBasketItem.articlename}" class="note--image-link">
+							<a href="{$detailLink}" title="{$sBasketItem.articlename}" class="note--image-link">
 								<img src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{$sBasketItem.articlename}" class="note--image" />
 							</a>
 						{/if}
@@ -32,7 +38,7 @@
 
 						{* Article name *}
 						{block name="frontend_note_item_details_name"}
-							<a class="note--title" href="{$sBasketItem.linkDetails}" title="{$sBasketItem.articlename}">
+							<a class="note--title" href="{$detailLink}" title="{$sBasketItem.articlename}">
 								{$sBasketItem.articlename|truncate:40}
 							</a>
 						{/block}
@@ -133,7 +139,7 @@
 						{block name="frontend_note_item_actions_compare"}{/block}
 
 						{* Article Details *}
-						<a href="{$sBasketItem.linkDetails}" class="action--details btn btn--secondary" title="{$sBasketItem.articlename}">
+						<a href="{$detailLink}" class="action--details btn btn--secondary" title="{$sBasketItem.articlename}">
 							{s name="NoteLinkDetails"}{/s}
 						</a>
 					</div>

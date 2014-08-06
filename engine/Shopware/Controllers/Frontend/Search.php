@@ -325,15 +325,23 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
     protected function searchFuzzyCheck($search)
     {
         $minSearch = empty(Shopware()->Config()->sMINSEARCHLENGHT) ? 2 : (int) Shopware()->Config()->sMINSEARCHLENGHT;
+        $number = null;
         if (!empty($search) && strlen($search) >= $minSearch) {
             $sql = '
-                SELECT DISTINCT articleID
+                SELECT DISTINCT articleID, ordernumber, s_articles.configurator_set_id
                 FROM s_articles_details
+                  INNER JOIN s_articles
+                   ON s_articles.id = s_articles_details.articleID
                 WHERE ordernumber = ?
                 GROUP BY articleID
                 LIMIT 2
             ';
-            $articles = Shopware()->Db()->fetchCol($sql, array($search));
+            $articles = Shopware()->Db()->fetchAll($sql, array($search));
+            if ($articles[0]['configurator_set_id']) {
+                $number = $articles[0]['ordernumber'];
+            }
+
+            $articles = array_column($articles, 'articleID');
 
             if (empty($articles)) {
                 $sql = "
@@ -361,7 +369,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
             $articles = Shopware()->Db()->fetchCol($sql, array(Shopware()->Shop()->get('parentID'), $articles[0]));
         }
         if (!empty($articles) && count($articles) == 1) {
-            return $this->Front()->Router()->assemble(array('sViewport' => 'detail', 'sArticle' => $articles[0]));
+            return $this->Front()->Router()->assemble(array('sViewport' => 'detail', 'sArticle' => $articles[0], 'number' => $number));
         }
     }
 
