@@ -267,7 +267,7 @@
 
             me.updateButtons();
 
-            $.publish('/plugin/' + me.getName() + '/updateResize', [ me ]);
+            $.publish('plugin/' + me.getName() + '/updateResize', [ me ]);
         },
 
         /**
@@ -303,7 +303,7 @@
 
             me.addOffset(me._step * -1);
 
-            $.publish('/plugin/' + me.getName() + '/onLeftArrowClick', [ me ]);
+            $.publish('plugin/' + me.getName() + '/onLeftArrowClick', [ me ]);
         },
 
         /**
@@ -321,7 +321,7 @@
 
             me.addOffset(me._step);
 
-            $.publish('/plugin/' + me.getName() + '/onRightArrowClick', [ me ]);
+            $.publish('plugin/' + me.getName() + '/onRightArrowClick', [ me ]);
         },
 
         /**

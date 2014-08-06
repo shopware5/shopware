@@ -68,7 +68,7 @@
         // Call the init method of the plugin
         me.init();
 
-        $.publish('/plugin/' + name + '/init', [ me ]);
+        $.publish('plugin/' + name + '/init', [ me ]);
     }
 
     PluginBase.prototype = {
@@ -126,7 +126,7 @@
 
             me.$el.removeData('plugin_' + name);
 
-            $.publish('/plugin/' + name + '/destroy', [ me ]);
+            $.publish('plugin/' + name + '/destroy', [ me ]);
 
             return me;
         },
@@ -149,7 +149,7 @@
             args.unshift(event);
             $el.on.apply($el, args);
 
-            $.publish('/plugin/' + me._name + '/on', [ $el, event ]);
+            $.publish('plugin/' + me._name + '/on', [ $el, event ]);
 
             return me;
         },
@@ -185,7 +185,7 @@
                 delete events[id];
             });
 
-            $.publish('/plugin/' + me._name + '/off', [ $element, pluginEvent ]);
+            $.publish('plugin/' + me._name + '/off', [ $element, pluginEvent ]);
 
             return me;
         },
@@ -270,7 +270,7 @@
                 }
             });
 
-            $.publish('/plugin/' + me._name + '/onDataAttributes', [ me.$el, me.opts ]);
+            $.publish('plugin/' + me._name + '/onDataAttributes', [ me.$el, me.opts ]);
 
             return me.opts;
         }
