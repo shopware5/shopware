@@ -114,21 +114,6 @@
             scrollStep: 'auto',
 
             /**
-             * Offset on the left side.
-             *
-             * @type {Number}
-             */
-            leftOffset: 0,
-
-            /**
-             * Offset on the right side.
-             * Default is 5 because some text can look cut off at the end.
-             *
-             * @type {Number}
-             */
-            rightOffset: 5,
-
-            /**
              * Time in milliseconds the slider needs to take to slide..
              *
              * @type {Number}
@@ -154,7 +139,7 @@
              * @property _offset
              * @type {Number}
              */
-            me._offset = me.opts.leftOffset * -1;
+            me._offset = 0;
 
             /**
              * Current summed width of all elements in the list.
@@ -261,7 +246,7 @@
 
             me._step = opts.scrollStep === 'auto' ? me.$list.width() / 2 : opts.scrollStep;
 
-            me._width = me.calculateWidth() + opts.rightOffset;
+            me._width = me.calculateWidth();
 
             me.setOffset(me._offset);
 
@@ -349,18 +334,18 @@
             var me = this,
                 maxWidth = me._width - me.$list.width();
 
-            me._offset = Math.max(me.opts.leftOffset * -1, Math.min(maxWidth, offset));
+            me._offset = Math.max(0, Math.min(maxWidth, offset));
 
             me.updateButtons();
 
             if (modernizr.csstransitions) {
-                me.$list.transition({
+                me.$list.stop(true).transition({
                     'left': me._offset * -1
                 }, me.opts.animationSpeed);
                 return;
             }
 
-            me.$list.animate({
+            me.$list.stop(true).animate({
                 'left': me._offset * -1
             }, me.opts.animationSpeed, 'linear');
         },
