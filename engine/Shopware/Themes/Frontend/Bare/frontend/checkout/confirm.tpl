@@ -265,7 +265,7 @@
                     {block name='frontend_checkout_confirm_left_payment_method_actions'}
                         {* Action buttons *}
                         <div class="panel--actions">
-                            <a href="{url controller=account action=payment sTarget=checkout}" class="btn btn--secondary is--small">
+                            <a href="{url controller=checkout action=shippingPayment sTarget=checkout}" class="btn btn--secondary is--small">
                                 {s name="ConfirmLinkChangePayment" namespace="frontend/checkout/confirm_left"}{/s}
                             </a>
                         </div>
