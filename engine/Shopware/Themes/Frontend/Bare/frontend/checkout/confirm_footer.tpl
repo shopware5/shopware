@@ -8,7 +8,7 @@
 		</li>
 	{/if}
 
-	{if $sUserData.additional.charge_vat && {config name=nettonotice}}
+	{if !$sUserData.additional.charge_vat && {config name=nettonotice}}
 		<li class="list--entry table-footer--netto-notice">
 		    {include file="frontend/_includes/messages.tpl" type="warning" content="{s name='CheckoutFinishTaxInformation'}{/s}"}
         </li>
