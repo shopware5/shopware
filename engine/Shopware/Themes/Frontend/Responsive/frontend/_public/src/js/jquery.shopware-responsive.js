@@ -275,6 +275,7 @@ $(function() {
     $('*[data-auto-submit="true"]').autoSubmit();
     $('*[data-drop-down-menu="true"]').dropdownMenu();
     $('*[data-newsletter="true"]').newsletter();
+    $('*[data-pseudo-text="true"]').pseudoText();
 
     $('select:not([data-no-fancy-select="true"])').selectboxReplacement();
 
