@@ -3,6 +3,12 @@
 <div class="table--row block-group row--product">
     <form name="basket_change_quantity{$sBasketItem.id}" method="post" action="{url action='changeQuantity' sTargetAction=$sTargetAction}">
 
+        {if $sBasketItem.additional_details.sConfigurator}
+            {$detailLink={url controller=detail sArticle=$sBasketItem.articleID number=$sBasketItem.ordernumber}}
+        {else}
+            {$detailLink=$sBasketItem.linkDetails}
+        {/if}
+
         {* Product information column *}
         {block name='frontend_checkout_cart_item_name'}
             <div class="table--column column--product block">
@@ -11,7 +17,7 @@
                 {block name='frontend_checkout_cart_item_image'}
                     <div class="table--media">
                         {if $sBasketItem.image.src.2}
-                            <a href="{$sBasketItem.linkDetails}" title="{$sBasketItem.articlename|strip_tags}" class="table--media-link">
+                            <a href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags}" class="table--media-link">
                                 <img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename}" />
                             </a>
                         {else}
@@ -26,7 +32,7 @@
 
                         {* Product name *}
                         {block name='frontend_checkout_cart_item_details_title'}
-                            <a class="content--title" href="{$sBasketItem.linkDetails}" title="{$sBasketItem.articlename|strip_tags}">
+                            <a class="content--title" href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags}">
                                 {$sBasketItem.articlename|strip_tags|truncate:60}
                             </a>
                         {/block}
