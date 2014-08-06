@@ -219,7 +219,7 @@
                             {s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm_left"}Frau{/s}
                         {/if}
 
-                        {$sUserData.shippingaddress.firstname} {$sUserData.shippingaddress.lastname}<b r/>
+                        {$sUserData.shippingaddress.firstname} {$sUserData.shippingaddress.lastname}<br/>
                         {$sUserData.shippingaddress.street}<br />
                         {if $sUserData.shippingaddress.additional_address_line1}{$sUserData.shippingaddress.additional_address_line1}<br />{/if}
                         {if $sUserData.shippingaddress.additional_address_line2}{$sUserData.shippingaddress.additional_address_line2}<br />{/if}
@@ -389,7 +389,7 @@
                             {block name='frontend_checkout_confirm_submit'}
                                 {* Submit order button *}
                                 {if $sPayment.embediframe || $sPayment.action}
-                                    <button type="submit" class="btn btn--primary right">
+                                    <button type="submit" class="btn btn--primary right" form="confirm--form">
                                         {s name='ConfirmDoPayment'}Zahlung durchführen{/s}<i class="icon--arrow-right"></i>
                                     </button>
                                 {else}
