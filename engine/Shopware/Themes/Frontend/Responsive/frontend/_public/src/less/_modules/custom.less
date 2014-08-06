@@ -16,9 +16,17 @@
     }
 }
 
+.ajax-modal--custom {
+    .unitize-padding(8, 8);
+}
+
 @media screen and (min-width: @tabletViewportWidth) {
 
     .is--ctl-custom .sidebar-main { display: none; }
+
+    .ajax-modal--custom {
+        .unitize-padding(10, 10);
+    }
 
     .custom-page--content {
         .custom-page--tab-headline {
@@ -32,6 +40,10 @@
 @media screen and (min-width: @desktopViewportWidth) {
 
     .is--ctl-custom .sidebar-main { display: block; }
+
+    .ajax-modal--custom {
+        .unitize-padding(20, 20);
+    }
 
     .custom-page--content {
         .unitize(45, 16, margin-top);
