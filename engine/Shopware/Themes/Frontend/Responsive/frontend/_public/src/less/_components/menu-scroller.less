@@ -44,6 +44,11 @@
     white-space: nowrap;
     width: 100%;
     left: 0;
+    font-size: 0;
+}
+
+.js--menu-scroller--item {
+    .unitize(16, 16, font-size);
 }
 
 .js--menu-scroller--arrow {
@@ -85,5 +90,12 @@
         top: 50%;
         left: 0;
         right: 0;
+    }
+}
+
+
+@media screen and(min-width: @desktopViewportWidth) {
+    .js--menu-scroller--item {
+        .unitize(14, 16, font-size);
     }
 }
