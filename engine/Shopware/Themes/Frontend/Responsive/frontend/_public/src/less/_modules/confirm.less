@@ -97,9 +97,6 @@
         }
 
         .product--table {
-            .unitize-padding(20, 20);
-            border: 1px solid @borderColor;
-            margin: 0;
 
             .table--header {
                 .unitize-margin(-10, -10, 10);
@@ -130,7 +127,8 @@
         .tos--panel {
 
             .column--checkbox {
-                width: 5%;
+                .unitize(12, 16, margin-right);
+                width: auto;
             }
 
             .column--label {
