@@ -71,13 +71,17 @@
 
                 <input type="hidden" name="sArticle" value="{$sBasketItem.id}" />
                 {block name='frontend_checkout_cart_item_quantity_selection'}
-                    <select name="sQuantity" data-auto-submit-form="true">
-                        {section name="i" start=$sBasketItem.minpurchase loop=$sBasketItem.maxpurchase+1 step=$sBasketItem.purchasesteps}
-                            <option value="{$smarty.section.i.index}" {if $smarty.section.i.index==$sBasketItem.quantity}selected="selected"{/if}>
-                                {$smarty.section.i.index}
-                            </option>
-                        {/section}
-                    </select>
+                    {if !$sBasketItem.maxpurchase < 0}
+                        <select name="sQuantity" data-auto-submit-form="true">
+                            {section name="i" start=$sBasketItem.minpurchase loop=$sBasketItem.maxpurchase+1 step=$sBasketItem.purchasesteps}
+                                <option value="{$smarty.section.i.index}" {if $smarty.section.i.index==$sBasketItem.quantity}selected="selected"{/if}>
+                                    {$smarty.section.i.index}
+                                </option>
+                            {/section}
+                        </select>
+                    {else}
+                        {s name="CartColumnQuantityEmpty" namespace="frontend/checkout/cart_item"}-{/s}
+                    {/if}
                 {/block}
             </div>
         {/block}
