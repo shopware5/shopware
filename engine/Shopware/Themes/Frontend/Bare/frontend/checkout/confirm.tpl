@@ -25,15 +25,13 @@
     <style type="text/css">
 
         @media screen and (min-width: 768px) {
-            .confirm--content .product--table {
-                background: {config name=baskettablecolor};
-            }
             .confirm--content .product--table .table--header {
-                color: {config name=basketheaderfontcolor};
                 background: {config name=basketheadercolor};
             }
+            .product--table .table--header .table--column {
+                color: {config name=basketheaderfontcolor};
+            }
         }
-
     </style>
 {/block}
 
