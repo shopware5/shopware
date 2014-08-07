@@ -148,6 +148,7 @@
         me._defaults = defaults;
         me._name = pluginName;
 
+        me.itemsCount = 0;
         me.slideIndex = 0;
         me.slideInterval = false;
         me.touchEvent = {};
@@ -185,7 +186,7 @@
     Plugin.prototype.init = function() {
         var me = this;
 
-        me.active = (me.itemsCount > me.opts.perPage);
+        me.checkActiveState();
 
         me.setSizes();
         me.setPosition();
@@ -195,6 +196,16 @@
         if (me.opts.autoSlide && me.active) {
             me.startAutoSlide();
         }
+    };
+
+    /**
+     * Checks if there are enough items
+     * and actives the slider if necessary.
+     */
+    Plugin.prototype.checkActiveState = function() {
+        var me = this;
+
+        me.active = (me.itemsCount > me.opts.perPage);
     };
 
     /**
@@ -319,7 +330,7 @@
     Plugin.prototype.registerEvents = function() {
         var me = this;
 
-        $(window).on('resize.' + pluginName,  me.setSizes.bind(me));
+        $(window).on('resize.' + pluginName, $.proxy(me.setSizes, me));
 
         me.$arrowLeft.on('click.' + pluginName, function(e) {
             e.preventDefault();
@@ -330,9 +341,9 @@
             me.slideNext();
         });
 
-        if (me.opts.touchControl && me.active) {
-            me.$el.on('swipeleft.' + pluginName, me.slideNext.bind(me));
-            me.$el.on('swiperight.' + pluginName, me.slidePrev.bind(me));
+        if (me.opts.touchControl) {
+            me.$el.on('swipeleft.' + pluginName, $.proxy(me.slideNext, me));
+            me.$el.on('swiperight.' + pluginName, $.proxy(me.slidePrev, me));
 
             // Touch scrolling fix
             me.$el.on('movestart.' + pluginName, function(e) {
@@ -343,9 +354,9 @@
             });
         }
 
-        if (me.opts.autoSlide && me.active) {
-            me.$el.on('mouseenter.' + pluginName, me.stopAutoSlide.bind(me));
-            me.$el.on('mouseleave.' + pluginName, me.startAutoSlide.bind(me));
+        if (me.opts.autoSlide) {
+            me.$el.on('mouseenter.' + pluginName, $.proxy(me.stopAutoSlide, me));
+            me.$el.on('mouseleave.' + pluginName, $.proxy(me.startAutoSlide, me));
         }
 
         $.subscribe('plugin/tabContent/onChangeTab', function() {
@@ -360,17 +371,20 @@
     Plugin.prototype.createArrows = function() {
         var me = this;
 
-        me.$arrowLeft = $('<a>', {
-            'class': me.opts.arrowClassLeft
-        });
+        if (!me.opts.showArrows) {
+            return;
+        }
 
-        me.$arrowRight = $('<a>', {
-            'class': me.opts.arrowClassRight
-        });
+        if (!me.$arrowLeft) {
+            me.$arrowLeft = $('<a>', {
+                'class': me.opts.arrowClassLeft
+            }).prependTo(me.$el);
+        }
 
-        if (me.opts.showArrows && me.active) {
-            me.$arrowLeft.prependTo(me.$el);
-            me.$arrowRight.prependTo(me.$el);
+        if (!me.$arrowRight) {
+            me.$arrowRight = $('<a>', {
+                'class': me.opts.arrowClassRight
+            }).prependTo(me.$el);
         }
 
         me.trackArrows();
@@ -383,6 +397,12 @@
     Plugin.prototype.trackArrows = function() {
         var me = this;
 
+        if (!me.active) {
+            me.$arrowRight.hide();
+            me.$arrowLeft.hide();
+            return;
+        }
+
         me.$arrowRight[( me.slideIndex == me.maxIndex ) ? 'hide' : 'show']();
         me.$arrowLeft[( me.slideIndex == me.minIndex ) ? 'hide' : 'show']();
     };
@@ -393,6 +413,10 @@
      */
     Plugin.prototype.startAutoSlide = function() {
         var me = this;
+
+        if (!me.active) {
+            return;
+        }
 
         me.slideInterval = window.setInterval(function(){
             me.slideNext();
@@ -417,6 +441,10 @@
             newIndex = me.slideIndex + me.opts.perSlide,
             itemsLeftToSlideNext = me.itemsCount - (me.slideIndex + me.opts.perPage),
             offset = me.opts.perPage;
+
+        if (!me.active) {
+            return;
+        }
 
         if ( me.opts.perSlide > itemsLeftToSlideNext ) {
             newIndex = me.slideIndex + itemsLeftToSlideNext;
@@ -448,6 +476,10 @@
         var me = this,
             newIndex = me.slideIndex - me.opts.perSlide;
 
+        if (!me.active) {
+            return;
+        }
+
         if ( me.opts.perSlide > me.slideIndex ) {
             newIndex = 0;
         }
@@ -468,6 +500,10 @@
         var me = this,
             newPosition = -(index * me.itemsWidth) + 'px',
             afterSlide = callback || function() {};
+
+        if (!me.active) {
+            return;
+        }
 
         me.slideIndex = index;
 
