@@ -12,14 +12,6 @@ Raphael.fn.drawGrid = function (x, y, w, h, wv, hv, color) {
     return this.path(path.join(",")).attr({stroke: color});
 };
 
-$(function () {
-    $("#data").css({
-        position: "absolute",
-        left: "-9999em",
-        top: "-9999em"
-    });
-});
-
 window.onload = function () {
     function getAnchors(p1x, p1y, p2x, p2y, p3x, p3y) {
         var l1 = (p2x - p1x) / 2,
