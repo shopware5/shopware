@@ -387,11 +387,11 @@
                             {block name='frontend_checkout_confirm_submit'}
                                 {* Submit order button *}
                                 {if $sPayment.embediframe || $sPayment.action}
-                                    <button type="submit" class="btn btn--primary right" form="confirm--form">
+                                    <button type="submit" class="btn btn--primary right" form="confirm--form" data-form-polyfill="true">
                                         {s name='ConfirmDoPayment'}Zahlung durchführen{/s}<i class="icon--arrow-right"></i>
                                     </button>
                                 {else}
-                                    <button type="submit" class="btn btn--primary right" form="confirm--form">
+                                    <button type="submit" class="btn btn--primary right" form="confirm--form" data-form-polyfill="true">
                                         {s name='ConfirmActionSubmit'}{/s}<i class="icon--arrow-right"></i>
                                     </button>
                                 {/if}

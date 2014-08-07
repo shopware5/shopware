@@ -2,19 +2,9 @@
     'use strict';
 
     $.plugin('formPolyfill', {
-        /**
-         * Feature detection for the ```form```-attribute of
-         * input elements.
-         * The W3C spec describes that the attributes contains
-         * the ID of the form which needs to be send to the server
-         * side.
-         *
-         * @private
-         * @returns {Boolean} Truthy, if the browser supports it, otherwise false.
-         */
-        supportFormAttribute: function() {
-            var input = document.createElement('input');
-            return 'form' in input;
+
+        defaults: {
+            eventType: 'click'
         },
 
         /**
@@ -23,14 +13,25 @@
          */
         init: function() {
             var me = this,
-                hasSupport = me.supportFormAttribute();
+                isIE = me.isIE();
 
             // If the browser supports the feature, we don't need to take action
-            if(hasSupport) {
+            if(!isIE) {
                 return false;
             }
 
-            me._on(me.$el, 'click', $.proxy(me.onSubmitForm, this));
+            me._on(me.$el, me.opts.eventType, $.proxy(me.onSubmitForm, this));
+        },
+
+        /**
+         * Checks if we're dealing with the internet explorer.
+         *
+         * @private
+         * @returns {Boolean} Truthy, if the browser supports it, otherwise false.
+         */
+        isIE: function() {
+            var myNav = navigator.userAgent.toLowerCase();
+            return myNav.indexOf('msie') != -1;
         },
 
         /**
@@ -49,6 +50,10 @@
             }
 
             $form.submit();
+        },
+
+        destroy: function() {
+
         }
     });
 })(jQuery, window, document);
