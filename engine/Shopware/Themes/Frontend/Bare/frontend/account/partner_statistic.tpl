@@ -30,7 +30,7 @@
     {block name="frontend_account_orders_welcome"}
         <div class="account--welcome panel">
             {block name="frontend_account_orders_welcome_headline"}
-                <h1 class="panel--title">{se name="PartnerStatisticHeader"}{/se}</h1>
+                <h1 class="panel--title">{s name="PartnerStatisticHeader"}{/s}</h1>
             {/block}
         </div>
     {/block}
@@ -86,19 +86,19 @@
                 <div class="orders--table-header panel--tr">
 
                     <div class="panel--th">
-                        {se name="PartnerStatisticColumnDate"}{/se}
+                        {s name="PartnerStatisticColumnDate"}{/s}
                     </div>
 
                     <div class="panel--th">
-                        {se name="PartnerStatisticColumnId"}{/se}
+                        {s name="PartnerStatisticColumnId"}{/s}
                     </div>
 
                     <div class="panel--th column--price">
-                        {se name="PartnerStatisticColumnNetAmount"}{/se}
+                        {s name="PartnerStatisticColumnNetAmount"}{/s}
                     </div>
 
                     <div class="panel--th column--total">
-                        {se name="PartnerStatisticColumnProvision"}{/se}
+                        {s name="PartnerStatisticColumnProvision"}{/s}
                     </div>
 
                 </div>

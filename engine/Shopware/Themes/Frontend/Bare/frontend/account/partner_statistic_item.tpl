@@ -23,7 +23,7 @@
 
         <div class="panel--td column--item-sum column--price">
             <div class="column--label">
-                {se name="PartnerStatisticItemSum"}{/se}
+                {s name="PartnerStatisticItemSum"}{/s}
             </div>
             <div class="column--value">
                 {$sTotalPartnerAmount.netTurnOver|currency}
@@ -32,7 +32,7 @@
 
         <div class="panel--td column--total">
             <div class="column--label">
-                {se name="PartnerStatisticColumnProvision" namespace="frontend/account/partner_statistic"}{/se}
+                {s name="PartnerStatisticColumnProvision" namespace="frontend/account/partner_statistic"}{/s}
             </div>
             <div class="column--value">
                 {$sTotalPartnerAmount.provision|currency}
