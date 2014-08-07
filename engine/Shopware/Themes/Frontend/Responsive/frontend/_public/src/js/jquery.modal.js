@@ -271,6 +271,10 @@
             me.setTransition({
                 opacity: 1
             }, me.options.animationSpeed, 'linear');
+
+            $.publish('plugin/modal/onOpen');
+
+            return me;
         },
 
         /**
@@ -300,6 +304,10 @@
                     me.options.onClose.call(me);
                 });
             }
+
+            $.publish('plugin/modal/onClose');
+
+            return me;
         },
 
         /**
@@ -354,6 +362,8 @@
             var me = this;
 
             me._$content.html(content);
+
+            $.publish('plugin/modal/onSetContent');
         },
 
         /**
@@ -367,6 +377,8 @@
             var me = this;
 
             me._$modalBox.css('width', width);
+
+            $.publish('plugin/modal/onSetWidth');
         },
 
         /**
@@ -380,6 +392,8 @@
             var me = this;
 
             me._$modalBox.css('height', height);
+
+            $.publish('plugin/modal/onSetHeight');
         },
 
         /**
@@ -413,6 +427,8 @@
             }).appendTo(me._$modalBox);
 
             $('body').append(me._$modalBox);
+
+            $.publish('plugin/modal/onInit');
         },
 
         /**
@@ -479,6 +495,8 @@
             }
 
             me.close();
+
+            $.publish('plugin/modal/onOverlayClick');
         },
 
         /**
