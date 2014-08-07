@@ -392,6 +392,7 @@ class sAdmin
         ) ? : array();
 
         $sEsd = $this->moduleManager->Basket()->sCheckForESD();
+        $isMobile = ($this->front->Request()->getDeviceType() == 'mobile');
 
         if (!count($user)) {
             $user = array();
@@ -411,6 +412,11 @@ class sAdmin
         // If esd - order, hide payment means which
         // are not available for esd
         if (!$data["esdactive"] && $sEsd) {
+            $resetPayment = $this->config->get('sPAYMENTDEFAULT');
+        }
+
+        // Handle blocking for smartphones
+        if (!empty($data["mobile_inactive"]) && $isMobile) {
             $resetPayment = $this->config->get('sPAYMENTDEFAULT');
         }
 
@@ -488,6 +494,7 @@ class sAdmin
     public function sGetPaymentMeans()
     {
         $basket = $this->moduleManager->Basket()->sGetBasket();
+        $isMobile = ($this->front->Request()->getDeviceType() == 'mobile');
 
         $user = $this->sGetUserData();
 
@@ -558,6 +565,12 @@ class sAdmin
             // If esd order, hide payment mean, which
             // are not accessible for esd
             if (empty($payValue["esdactive"]) && $sEsd) {
+                unset($getPaymentMeans[$payKey]);
+                continue;
+            }
+
+            // Handle blocking for smartphones
+            if (!empty($payValue["mobile_inactive"]) && $isMobile) {
                 unset($getPaymentMeans[$payKey]);
                 continue;
             }
