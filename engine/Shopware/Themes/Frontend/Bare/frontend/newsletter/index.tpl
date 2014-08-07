@@ -8,6 +8,17 @@
 {block name="frontend_index_content"}
 	<div class="newsletter--content content block">
 
+		{* Error messages *}
+		{block name="frontend_newsletter_error_messages"}
+			<div class="newsletter--error-messages">
+				{if $sStatus.code==3||$sStatus.code==2||$sStatus.code==5}
+					{include file="frontend/_includes/messages.tpl" type='error' content=$sStatus.message}
+				{elseif $sStatus.code != 0}
+					{include file="frontend/_includes/messages.tpl" type='error' content=$sStatus.message}
+				{/if}
+			</div>
+		{/block}
+
 		{* Newsletter headline *}
 		{block name="frontend_newsletter_headline"}
 			<div class="newsletter--headline panel--body is--wide">
@@ -18,17 +29,6 @@
 				{block name="frontend_newsletter_headline_info"}
 					<p class="newsletter--info">{s name="sNewsletterInfo"}{/s}</p>
 				{/block}
-			</div>
-		{/block}
-
-		{* Error messages *}
-		{block name="frontend_newsletter_error_messages"}
-			<div class="newsletter--error-messages">
-				{if $sStatus.code==3||$sStatus.code==2||$sStatus.code==5}
-					{include file="frontend/_includes/messages.tpl" type='success' content=$sStatus.message}
-				{elseif $sStatus.code != 0}
-					{include file="frontend/_includes/messages.tpl" type='error' content=$sStatus.message}
-				{/if}
 			</div>
 		{/block}
 
