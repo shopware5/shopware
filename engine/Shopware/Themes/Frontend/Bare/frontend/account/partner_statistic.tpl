@@ -40,15 +40,15 @@
                 {block name="frontend_account_partner_statistic_listing_date"}
                     <form method="post" action="{url controller='account' action='partnerStatistic'}">
                         <div class="date-filter">
-                            <label for="datePickerFrom">{s name='PartnerStatisticLabelFromDate'}{/s}</label>
-                            <div>
-                                <input id="datePickerFrom" class="datePicker text" data-datepicker="true" name="fromDate" type="text" value="{$partnerStatisticFromDate}"/>
+                            <label class="date-filter--label" for="datePickerFrom">{s name='PartnerStatisticLabelFromDate'}{/s}</label>
+                            <div class="date-filter--input">
+                                <input id="datePickerFrom" class="datepicker text" data-datepicker="true" name="fromDate" type="text" value="{$partnerStatisticFromDate}"/>
                             </div>
                         </div>
                         <div class="date-filter">
-                            <label for="datePickerTo">{s name='PartnerStatisticLabelToDate'}{/s}</label>
-                            <div>
-                                <input id="datePickerTo" class="datePicker text" data-datepicker="true" name="toDate" type="text" value="{$partnerStatisticToDate}"/>
+                            <label class="date-filter--label for="datePickerTo">{s name='PartnerStatisticLabelToDate'}{/s}</label>
+                            <div class="date-filter--input">
+                                <input id="datePickerTo" class="datepicker text" data-datepicker="true" name="toDate" type="text" value="{$partnerStatisticToDate}"/>
                             </div>
                         </div>
                         <input type="submit" class="btn btn--primary is--small"  value="{s name="PartnerStatisticSubmitFilter"}{/s}" />
@@ -59,7 +59,7 @@
     </div>
     {if $sPartnerOrders}
     <div>
-        <table id="data">
+        <table id="data" class="is--hidden">
             <tbody>
                 <tr>
                     {foreach from=$sPartnerOrderChartData item=chartItem}
@@ -75,7 +75,7 @@
                 </tr>
             </tfoot>
         </table>
-        <div id="holder"></div>
+        <div id="holder" class="chart--holder"></div>
     </div>
 
     <div class="partner_statistic_overview_active panel">
