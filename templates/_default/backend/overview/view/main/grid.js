@@ -126,6 +126,14 @@ Ext.define('Shopware.apps.Overview.view.main.Grid', {
             summaryRenderer: me.summaryRenderer,
             renderer: me.trendRenderer
         }, {
+            header: '{s name=column_countUsers}New users{/s}',
+            dataIndex: 'countUsers',
+            align: 'right',
+            flex: 1,
+            summaryType: 'sum',
+            summaryRenderer: me.summaryRenderer,
+            renderer: me.trendRenderer
+        }, {
             header: '{s name=column_countCustomers}New customers{/s}',
             dataIndex: 'countCustomers',
             align: 'right',

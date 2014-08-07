@@ -34,7 +34,7 @@ Ext.define('Shopware.apps.Analytics.store.navigation.Customers', {
     alias: 'widget.analytics-store-navigation-customers',
     remoteSort: true,
     fields: [
-        { name: 'week', type: 'string' },
+        { name: 'week', type: 'timestamp' },
         { name: 'male', type: 'int', defaultValue: 0 },
         { name: 'female', type: 'int', defaultValue: 0 },
         { name: 'registration', type: 'int', defaultValue: 0 },
