@@ -13,8 +13,9 @@
 		}
     }
 
+	// Margin alert message
     .alert {
-		.unitize-margin(10, 10, 10, 10, 16);
+		.unitize-margin(30, 0, 0, 0);
     }
 
     .has--border {
@@ -131,7 +132,6 @@
 
 		}
     }
-
 }
 
 @media screen and (min-width: @desktopViewportWidth) {
@@ -139,6 +139,11 @@
     .forms--content {
 		.unitize(45, 16, margin-top);
 		width: 78%;
+
+		// Margin alert message
+		.alert {
+			.unitize-margin(0, 0, 0, 0, 16);
+		}
     }
 
 }
