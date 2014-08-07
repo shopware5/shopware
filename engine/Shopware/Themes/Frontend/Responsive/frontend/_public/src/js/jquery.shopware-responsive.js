@@ -277,6 +277,8 @@ $(function() {
     $('*[data-newsletter="true"]').newsletter();
     $('*[data-pseudo-text="true"]').pseudoText();
 
+    $('input[data-form-polyfill="true"], button[data-form-polyfill="true"]').formPolyfill();
+
     $('select:not([data-no-fancy-select="true"])').selectboxReplacement();
 
     // Lightbox auto trigger
