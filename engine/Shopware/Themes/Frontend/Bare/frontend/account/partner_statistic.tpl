@@ -42,13 +42,13 @@
                         <div class="date-filter">
                             <label for="datePickerFrom">{s name='PartnerStatisticLabelFromDate'}{/s}</label>
                             <div>
-                                <input id="datePickerFrom" class="datePicker text" name="fromDate" type="text" value="{$partnerStatisticFromDate}"/>
+                                <input id="datePickerFrom" class="datePicker text" data-datepicker="true" name="fromDate" type="text" value="{$partnerStatisticFromDate}"/>
                             </div>
                         </div>
                         <div class="date-filter">
                             <label for="datePickerTo">{s name='PartnerStatisticLabelToDate'}{/s}</label>
                             <div>
-                                <input id="datePickerTo" class="datePicker text" name="toDate" type="text" value="{$partnerStatisticToDate}"/>
+                                <input id="datePickerTo" class="datePicker text" data-datepicker="true" name="toDate" type="text" value="{$partnerStatisticToDate}"/>
                             </div>
                         </div>
                         <input type="submit" class="btn btn--primary is--small"  value="{s name="PartnerStatisticSubmitFilter"}{/s}" />
