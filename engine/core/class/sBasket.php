@@ -475,8 +475,8 @@ class sBasket
 
         $premium = $this->db->fetchRow('
             SELECT premium.id, detail.ordernumber, article.id as articleID, article.name,
-              detail.id as variantID, (article.main_detail_id <> detail.id) AS isVariant,
-              detail.additionaltext, premium.ordernumber_export, article.configurator_set_id
+              detail.id as variantID, detail.additionaltext, premium.ordernumber_export,
+              article.configurator_set_id
             FROM
                 s_addon_premiums premium,
                 s_articles_details detail,
@@ -498,10 +498,10 @@ class sBasket
         }
 
         $premium = $this->moduleManager->Articles()->sGetTranslation(
-            $premium, $premium["articleID"], "article", $this->sSYSTEM->sLanguage
+            $premium, $premium["articleID"], "article"
         );
 
-        if ($premium['isVariant']) {
+        if ($premium['configurator_set_id'] > 0) {
             $premium = $this->moduleManager->Articles()->sGetTranslation(
                 $premium, $premium["variantID"], "variant"
             );
@@ -1180,7 +1180,7 @@ class sBasket
 
     /**
      * Get all products current on wishlist
-     * Used in AccountController and NoteController
+     * Used in the NoteController
      *
      * @deprecated
      * @return array Article notes
@@ -1200,6 +1200,9 @@ class sBasket
         $products = Shopware()->Container()->get('list_product_service')
             ->getList($numbers, $context);
 
+        $products = Shopware()->Container()->get('additional_text_service')
+            ->buildAdditionalTextLists($products, $context);
+
         $votes = Shopware()->Container()->get('vote_service')
             ->getAverages($products, $context);
 
@@ -1218,6 +1221,12 @@ class sBasket
 
     }
 
+    /**
+     * @param ListProduct $product
+     * @param $note
+     * @param VoteAverage $voteAverage
+     * @return mixed
+     */
     private function convertListProductToNote(ListProduct $product, $note, VoteAverage $voteAverage = null)
     {
         $structConverter = Shopware()->Container()->get('legacy_struct_converter');
@@ -1232,6 +1241,9 @@ class sBasket
         $promotion["id"] = $note["id"];
         $promotion["datum_add"] = $note["datum"];
         $promotion["articlename"] = $promotion["articleName"];
+        if ($product->hasConfigurator() && $product->getAdditional()) {
+            $promotion["articlename"] .= ' ' . $product->getAdditional();
+        }
         $promotion["linkDelete"] = $this->config->get('sBASEFILE')."?sViewport=note&sDelete=". $note['id'];
 
         return $promotion;
@@ -1965,8 +1977,7 @@ class sBasket
                 $getPackUnit = $this->moduleManager->Articles()->sGetTranslation(
                     array(),
                     $getArticles[$key]["articleID"],
-                    "article",
-                    $this->sSYSTEM->sLanguage
+                    "article"
                 );
                 if (!empty($getPackUnit["packunit"])) {
                     $getArticles[$key]["packunit"] = $getPackUnit["packunit"];
@@ -2479,7 +2490,7 @@ class sBasket
             SELECT s_articles.id AS articleID, name AS articleName, taxID,
               additionaltext, s_articles_details.shippingfree, laststock, instock,
               s_articles_details.id as articledetailsID, ordernumber,
-              (s_articles.main_detail_id <> s_articles_details.id) AS isVariant
+              s_articles.configurator_set_id
             FROM s_articles, s_articles_details
             WHERE s_articles_details.ordernumber = ?
             AND s_articles_details.articleID = s_articles.id
@@ -2509,13 +2520,7 @@ class sBasket
             return false;
         }
 
-        if (!empty($name)) {
-            $article["articleName"] = $name["articleName"];
-
-            $article["additionaltext"] = $name["additionaltext"];
-        }
-
-        if ($article['isVariant']) {
+        if ($article['configurator_set_id'] > 0) {
             $article = $this->moduleManager->Articles()->sGetTranslation(
                 $article, $article["variantID"], "variant"
             );

@@ -134,6 +134,11 @@ class sArticles
     private $propertyService;
 
     /**
+     * @var StoreFrontBundle\Service\AdditionalTextServiceInterface
+     */
+    private $additionalTextService;
+
+    /**
      * @var SearchBundle\ProductSearch
      */
     private $searchService;
@@ -170,6 +175,7 @@ class sArticles
         StoreFrontBundle\Service\VoteServiceInterface $voteService = null,
         StoreFrontBundle\Service\ConfiguratorServiceInterface $configuratorService = null,
         StoreFrontBundle\Service\PropertyServiceInterface $propertyService = null,
+        StoreFrontBundle\Service\AdditionalTextServiceInterface $additionalTextService = null,
         SearchBundle\ProductSearchInterface $searchService = null,
         Enlight_Event_EventManager $eventManager = null,
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
@@ -189,6 +195,7 @@ class sArticles
         $this->voteService = $voteService;
         $this->configuratorService = $configuratorService;
         $this->propertyService = $propertyService;
+        $this->additionalTextService = $additionalTextService;
         $this->searchService = $searchService;
         $this->eventManager = $eventManager;
         $this->db = $db;
@@ -222,6 +229,10 @@ class sArticles
 
         if ($this->propertyService == null) {
             $this->propertyService = Shopware()->Container()->get('property_service');
+        }
+
+        if ($this->additionalTextService == null) {
+            $this->additionalTextService = Shopware()->Container()->get('additional_text_service');
         }
 
         if ($this->searchService == null) {
@@ -363,7 +374,7 @@ class sArticles
         if (count($checkForArticle)) {
             foreach ($checkForArticle as $k => $article) {
                 $checkForArticle[$k]["articlename"] = stripslashes($article["articlename"]);
-                $checkForArticle[$k] = $this->sGetTranslation($article, $article["articleID"], "article", $this->sSYSTEM->sLanguage);
+                $checkForArticle[$k] = $this->sGetTranslation($article, $article["articleID"], "article");
                 if (!empty($checkForArticle[$k]["articleName"])) $checkForArticle[$k]["articlename"] = $checkForArticle[$k]["articleName"];
             }
 
@@ -2624,12 +2635,12 @@ class sArticles
         }
 
         $getPromotionResult = $this->sGetTranslation(
-            $getPromotionResult, $getPromotionResult["articleID"], 'article', $this->sSYSTEM->sLanguage
+            $getPromotionResult, $getPromotionResult["articleID"], 'article'
         );
 
         if ($getPromotionResult['kind'] != 1) {
             $getPromotionResult = $this->sGetTranslation(
-                $getPromotionResult, $getPromotionResult['articleDetailsID'], 'variant', $this->sSYSTEM->sLanguage
+                $getPromotionResult, $getPromotionResult['articleDetailsID'], 'variant'
             );
         }
 
@@ -3178,36 +3189,75 @@ class sArticles
     }
 
     /**
-     * Get name from a certain article by ordernumber
-     * @param string $ordernumber
+     * Get name from a certain article by order number
+     * @param string $orderNumber
      * @param bool $returnAll return only name or additional data, too
      * @return string or array
      */
-    public function sGetArticleNameByOrderNumber($ordernumber, $returnAll = false)
+    public function sGetArticleNameByOrderNumber($orderNumber, $returnAll = false)
     {
-        $checkForArticle = $this->sSYSTEM->sDB_CONNECTION->GetRow("
-            SELECT s_articles.id,s_articles_details.id AS did, s_articles.name AS articleName, additionaltext FROM s_articles_details, s_articles WHERE
-            ordernumber=?
-            AND s_articles.id=s_articles_details.articleID
-        ", array($ordernumber));
+        $article = $this->sSYSTEM->sDB_CONNECTION->GetRow("
+            SELECT
+                s_articles.id,
+                s_articles.main_detail_id,
+                s_articles_details.id AS did,
+                s_articles.name AS articleName,
+                additionaltext,
+                s_articles.configurator_set_id
+            FROM s_articles_details, s_articles
+            WHERE ordernumber = :orderNumber
+                AND s_articles.id = s_articles_details.articleID
+        ", array(
+            'orderNumber' => $orderNumber
+            )
+        );
 
-        if (!empty($checkForArticle)) {
-            $checkForArticle = $this->sGetTranslation($checkForArticle, $checkForArticle["id"], "article");
-            if ($returnAll) {
-                $checkForArticle = $this->sGetTranslation($checkForArticle, $checkForArticle["did"], "variant");
-                return $checkForArticle;
-            } else {
-
-                return $checkForArticle["articleName"];
-            }
-        } else {
+        if (empty($article)) {
             return false;
         }
+
+        // Load translations for article or variant
+        if ($article['did'] != $article['main_detail_id']) {
+            $article = $this->sGetTranslation(
+                $article,
+                $article['did'],
+                "variant"
+            );
+        } else {
+            $article = $this->sGetTranslation(
+                $article,
+                $article['id'],
+                "article"
+            );
+        }
+
+        // If article has variants, we need to append the additional text to the name
+        if ($article['configurator_set_id'] > 0) {
+            $product = new StoreFrontBundle\Struct\ListProduct();
+            $product->setAdditional($article['additionaltext']);
+            $product->setVariantId($article["did"]);
+            $product->setNumber($orderNumber);
+
+            $context = $this->contextService->get();
+            $product = $this->additionalTextService->buildAdditionalText($product, $context);
+
+            if (!$returnAll) {
+                return $article["articleName"] . ' ' . $product->getAdditional();
+            }
+
+            $article['additionaltext'] = $product->getAdditional();
+        }
+
+        if (!$returnAll) {
+            return $article["articleName"];
+        }
+        return $article;
     }
 
     /**
      * Get article name by s_articles.id
      * @param int $articleId
+     * @param bool $returnAll
      * @return string name
      */
     public function sGetArticleNameByArticleId($articleId, $returnAll = false)
@@ -3468,7 +3518,7 @@ class sArticles
             return $data;
         }
         $id = (int) $id;
-        $language = Shopware()->Shop()->getId();
+        $language = $language ? : Shopware()->Shop()->getId();
         $fallback = Shopware()->Shop()->get('fallback');
         $cacheTime = Shopware()->Config()->get('cacheTranslations');
 
@@ -3726,7 +3776,7 @@ class sArticles
             $promotion['sVoteAverange'] = $this->legacyStructConverter->convertVoteAverageStruct($average);
         }
 
-        //check if the product has an configured property set which stored in s_filter.
+        //check if the product has a configured property set which stored in s_filter.
         //the mini product doesn't contains this data so we have to load this lazy.
         if (!$product->hasProperties()) {
             return $promotion;
