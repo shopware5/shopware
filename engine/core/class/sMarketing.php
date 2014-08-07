@@ -296,7 +296,9 @@ class sMarketing
             $sBasketAmount = $sBasketAmount["totalAmount"];
         $sql = "
             SELECT
-                p.ordernumber as premium_ordernumber, startprice,subshopID, a.id as articleID
+                p.ordernumber AS premium_ordernumber,
+                startprice, subshopID, a.id AS articleID,
+                a.main_detail_id
             FROM
                 s_addon_premiums p,
                 s_articles a,
@@ -339,7 +341,7 @@ class sMarketing
             }
             $premium["sArticle"] = $this->sSYSTEM->sMODULES['sArticles']->sGetPromotionById("fix", 0, $premium["articleID"]);
             $premium["startprice"] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($premium["startprice"]);
-            $premium["sVariants"] = $this->getVariantDetailsForPremiumArticles($premium["articleID"]);
+            $premium["sVariants"] = $this->getVariantDetailsForPremiumArticles($premium["articleID"], $premium["main_detail_id"]);
         }
         return $premiums;
     }
@@ -348,9 +350,10 @@ class sMarketing
      * For the provided article id, returns the associated variant numbers and additional texts
      *
      * @param $articleId
+     * @param $mainDetailId
      * @return array
      */
-    private function getVariantDetailsForPremiumArticles($articleId)
+    private function getVariantDetailsForPremiumArticles($articleId, $mainDetailId)
     {
         $context = $this->contextService->get();
 
@@ -366,11 +369,19 @@ class sMarketing
         foreach ($variantsData as $variantData) {
             $product = new StoreFrontBundle\Struct\ListProduct();
 
-            $variantData = Shopware()->Modules()->Articles()->sGetTranslation(
-                $variantData,
-                $variantData['id'],
-                "variant"
-            );
+            if ($variantData['id'] == $mainDetailId) {
+                $variantData = Shopware()->Modules()->Articles()->sGetTranslation(
+                    $variantData,
+                    $articleId,
+                    "article"
+                );
+            } else {
+                $variantData = Shopware()->Modules()->Articles()->sGetTranslation(
+                    $variantData,
+                    $variantData['id'],
+                    "variant"
+                );
+            }
 
             $product->setAdditional($variantData['additionaltext']);
             $product->setVariantId($variantData['id']);

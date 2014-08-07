@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\StoreFrontBundle;
+
 /**
  * Deprecated Shopware Class to provide article export feeds
  *
@@ -66,6 +68,36 @@ class sExport
      * @var \Shopware\Models\Media\Album
      */
     protected $articleMediaAlbum = null;
+
+    /**
+     * @var StoreFrontBundle\Service\ContextServiceInterface
+     */
+    private $contextService;
+
+    /**
+     * @var StoreFrontBundle\Service\AdditionalTextServiceInterface
+     */
+    private $additionalTextService;
+
+    /**
+     * Class constructor.
+     */
+    public function __construct(
+        StoreFrontBundle\Service\ContextServiceInterface $contextService = null,
+        StoreFrontBundle\Service\AdditionalTextServiceInterface $additionalTextService = null
+    )
+    {
+        $this->contextService = $contextService;
+        $this->additionalTextService = $additionalTextService;
+
+        if ($this->contextService == null) {
+            $this->contextService = Shopware()->Container()->get('context_service');
+        }
+
+        if ($this->additionalTextService == null) {
+            $this->additionalTextService = Shopware()->Container()->get('additional_text_service');
+        }
+    }
 
     public function sGetCurrency($currency)
     {
@@ -509,36 +541,50 @@ class sExport
         return Shopware()->Modules()->Articles()->sGetArticleProperties($articleId, $filterGroupId);
     }
 
-    public function sMapTranslation($object,$objectdata)
+    public function sMapTranslation($object, $objectData)
     {
-
         switch ($object) {
             case "detail":
             case "article":
-                $map = array("txtshortdescription"=>"description","txtlangbeschreibung"=>"description_long","txtArtikel"=>"name","txtzusatztxt"=>"additionaltext");
-                for ($i=1;$i<=20;$i++)
+                $map = array(
+                    "txtshortdescription" => "description",
+                    "txtlangbeschreibung" => "description_long",
+                    "txtArtikel" => "name",
+                    "txtzusatztxt" => "additionaltext"
+                );
+                for ($i=1; $i<=20; $i++) {
                     $map["attr$i"] = "attr$i";
+                }
                 break;
             case "link":
-                $map = array("linkname"=>"description");
+                $map = array("linkname" => "description");
                 break;
             case "download":
-                $map = array("downloadname"=>"description");
+                $map = array("downloadname" => "description");
                 break;
         }
-        if (empty($objectdata))
+        if (empty($objectData)) {
             return array();
-        $objectdata = unserialize($objectdata);
-        if (empty($objectdata))
+        }
+        $objectData = unserialize($objectData);
+        if (empty($objectData)) {
             return array();
+        }
         $result = array();
-        foreach ($map as $key=>$value) {
-            if(isset($objectdata[$key]))
-                $result[$value] = $objectdata[$key];
+        foreach ($map as $key => $value) {
+            if (isset($objectData[$key])) {
+                $result[$value] = $objectData[$key];
+            }
         }
         return $result;
     }
 
+    /**
+     * Expects a string of type
+     *
+     * @param $line
+     * @return array
+     */
     public function _decode_line($line)
     {
         $separator = ";";
@@ -548,8 +594,9 @@ class sExport
         for ($i = 0; $i < count($elements); $i++) {
             $nquotes = substr_count($elements[$i], $fieldmark);
             if ($nquotes %2 == 1) {
-                if(isset($elements[$i+1]))
-                       $elements[$i+1] = $elements[$i].$separator.$elements[$i+1];
+                if(isset($elements[$i+1])) {
+                    $elements[$i+1] = $elements[$i].$separator.$elements[$i+1];
+                }
             } else {
                 if ($nquotes > 0) {
                     if(substr($elements[$i],0,1)==$fieldmark)
@@ -558,7 +605,9 @@ class sExport
                         $elements[$i] = substr($elements[$i],0,-1);
                     $elements[$i] = str_replace($fieldmark.$fieldmark, $fieldmark, $elements[$i]);
                 }
-                $tmp_elements[] = $elements[$i];
+                $index = substr($elements[$i] , 0, strpos($elements[$i], ':'));
+                $elements[$i] = substr($elements[$i] , strpos($elements[$i], ':')+1);
+                $tmp_elements[$index] = $elements[$i];
             }
         }
         return $tmp_elements;
@@ -587,16 +636,16 @@ class sExport
                 $sqlFallbackLanguageId = $this->sDB->qstr($this->sLanguage["fallback"]);
                 $sql_add_join[] = "
                 LEFT JOIN s_core_translations as taf
-                ON taf.objectkey=a.id AND taf.objecttype='article' AND taf.objectlanguage=$sqlFallbackLanguageId
+                    ON taf.objectkey=a.id AND taf.objecttype='article' AND taf.objectlanguage=$sqlFallbackLanguageId
 
                 LEFT JOIN s_core_translations as tdf
-                ON tdf.objectkey=d.id AND tdf.objecttype='variant' AND tdf.objectlanguage=$sqlFallbackLanguageId
+                    ON tdf.objectkey=d.id AND tdf.objecttype='variant' AND tdf.objectlanguage=$sqlFallbackLanguageId
             ";
                 $sql_add_select[] = "taf.objectdata as article_translation_fallback";
                 $sql_add_select[] = "tdf.objectdata as detail_translation_fallback";
             }
-
         }
+
         if (!empty($this->sSettings["categoryID"])) {
             $sql_add_join[] = "
                 INNER JOIN s_articles_categories_ro act
@@ -619,7 +668,11 @@ class sExport
             ";
         }
 
-        if (!empty($this->sCustomergroup["groupkey"])&&empty($this->sCustomergroup["mode"])&&$this->sCustomergroup["groupkey"]!="EK") {
+        if (
+            !empty($this->sCustomergroup["groupkey"])
+            && empty($this->sCustomergroup["mode"])
+            && $this->sCustomergroup["groupkey"] != "EK"
+        ) {
             $sql_add_join[] = "
                 LEFT JOIN s_articles_prices as p2
                 ON p2.articledetailsID = d.id AND p2.`from`=1
@@ -636,51 +689,33 @@ class sExport
         }
 
 
-        if (empty($this->sSettings["variant_export"])||$this->sSettings["variant_export"]==1) {
-
-            $sql_add_select[] = "IF(COUNT(d.ordernumber)<=1,'',GROUP_CONCAT(CONCAT('\"',REPLACE(d.ordernumber,'\"','\"\"'),'\"') SEPARATOR ';')) as group_ordernumber";
-            $sql_add_select[] = "IF(COUNT(d.additionaltext)<=1,'',GROUP_CONCAT(CONCAT('\"',REPLACE(d.additionaltext,'\"','\"\"'),'\"') SEPARATOR ';')) as group_additionaltext";
+        if (empty($this->sSettings["variant_export"]) || $this->sSettings["variant_export"] == 1) {
+            $sql_add_select[] = "IF(COUNT(d.ordernumber) <= 1, '', GROUP_CONCAT(DISTINCT(CONCAT('\"', d.id, ':', REPLACE(d.ordernumber,'\"','\"\"'),'\"')) SEPARATOR ';')) as group_ordernumber";
+            $sql_add_select[] = "IF(COUNT(d.additionaltext) <= 1, '', GROUP_CONCAT(DISTINCT(CONCAT('\"', d.id, ':', REPLACE(d.additionaltext,'\"','\"\"'),'\"')) SEPARATOR ';')) as group_additionaltext";
             $sql_add_select[] = "IF(COUNT($pricefield)<=1,'',GROUP_CONCAT(ROUND($pricefield*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]},2) SEPARATOR ';')) as group_pricenet";
             $sql_add_select[] = "IF(COUNT($pricefield)<=1,'',GROUP_CONCAT(ROUND($pricefield*(100+t.tax-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]},2) SEPARATOR ';')) as group_price";
             $sql_add_select[] = "IF(COUNT(d.active)<=1,'',GROUP_CONCAT(d.active SEPARATOR ';')) as group_active";
             $sql_add_select[] = "IF(COUNT(d.instock)<=1,'',GROUP_CONCAT(d.instock SEPARATOR ';')) as group_instock";
 
+            $sql_add_group_by = "a.id";
+            $sql_add_article_detail_join_condition = "AND d.kind=1";
+        } elseif ($this->sSettings["variant_export"] == 2) {
+            $sql_add_group_by = "d.id";
+            $sql_add_article_detail_join_condition ='';
         }
 
         $grouppricefield = "gp.price";
-        if (empty($this->sSettings["variant_export"])||$this->sSettings["variant_export"]==2||$this->sSettings["variant_export"]==1) {
+        if (
+            empty($this->sSettings["variant_export"])
+            || $this->sSettings["variant_export"] == 2
+            || $this->sSettings["variant_export"] == 1
+        ) {
             $sql_add_join[] = "
                 JOIN (SELECT NULL as `articleID` , NULL as `valueID` , NULL as `attr1` , NULL as `attr2` , NULL as `attr3` , NULL as `attr4` , NULL as `attr5` , NULL as `attr6` , NULL as `attr7` , NULL as `attr8` , NULL as `attr9` , NULL as `attr10` , NULL as `standard` , NULL as `active` , NULL as `ordernumber` , NULL as `instock`) as v
             ";
-
             $sql_add_join[] = "
                 JOIN (SELECT NULL as articleID, NULL as valueID, NULL as groupkey, NULL as price, NULL as optionID) as gp
             ";
-        }
-
-        $sql_add_article_detail_join_condition ='';
-        if (empty($this->sSettings["variant_export"])||$this->sSettings["variant_export"]==1) {
-            $sql_add_group_by = "a.id";
-            $configurator_settings_sql = ", NULL as configurator_settings";
-            $sql_add_article_detail_join_condition = "AND d.kind=1";
-        } elseif ($this->sSettings["variant_export"]==2) {
-            $sql_add_group_by = "d.id";
-            // If an article is a configurator article, show which configurator groups and options are set
-            $configurator_settings_sql = "
-            , (
-                SELECT
-                    GROUP_CONCAT(CONCAT(acg.name, ':', aco.name) SEPARATOR ', ')
-                FROM
-                    s_article_configurator_option_relations cor
-                LEFT JOIN
-                    s_article_configurator_options aco ON aco.id=cor.option_id
-                LEFT JOIN
-                    s_article_configurator_groups acg ON acg.id=aco.group_id
-                WHERE
-                    cor.article_id=d.id
-            ) as configurator_settings";
-        } else {
-            //$sql_add_group_by = "d.id, v.valueID";
         }
 
         if (!empty($this->sSettings["active_filter"])) {
@@ -700,18 +735,21 @@ class sExport
         }
 
         $sql_add_join = implode(" ",$sql_add_join);
-        if(!empty($sql_add_select))
+        if (!empty($sql_add_select)) {
             $sql_add_select = ", ".implode(", ",$sql_add_select);
-        else
+        } else {
             $sql_add_select = "";
-        if(!empty($sql_add_where))
+        }
+        if (!empty($sql_add_where)) {
             $sql_add_where = " AND ".implode(" AND ",$sql_add_where);
-        else
+        } else {
             $sql_add_where = "";
-        if(!empty($sql_add_group_by))
+        }
+        if (!empty($sql_add_group_by)) {
             $sql_add_group_by = "GROUP BY ($sql_add_group_by)";
-        else
+        } else {
             $sql_add_group_by = "";
+        }
 
         $sql = "
             SELECT
@@ -751,7 +789,6 @@ class sExport
                 COALESCE(sai.impressions, 0) as impressions,
                 d.sales,
 
-
                 IF(v.active IS NOT NULL,IF(a.active=0,0,v.active),a.active) as active,
                 IF(v.instock IS NOT NULL,v.instock,d.instock) as instock,
                 (
@@ -786,8 +823,6 @@ class sExport
                 ROUND($pseudoprice*(100+t.tax)*{$this->sCurrency["factor"]}/100,2) as pseudoprice,
                 $baseprice,
                 IF(file IS NULL,0,1) as esd
-
-                $configurator_settings_sql
 
                 $sql_add_select
 
@@ -830,7 +865,7 @@ class sExport
             LEFT JOIN s_export_articles AS ba
             ON (ba.articleID=a.id AND ba.feedID={$this->sFeedID})
 
-            LEFT JOIN s_articles_prices as p
+            LEFT JOIN s_articles_prices AS p
             ON p.articledetailsID = d.id
             AND p.`from`=1
             AND p.pricegroup='EK'
@@ -857,7 +892,7 @@ class sExport
         if (!empty($this->sSettings["count_filter"])) {
             $sql .= "LIMIT ".$this->sSettings["count_filter"];
         }
-        return  $sql;
+        return $sql;
     }
 
     /**
@@ -939,7 +974,7 @@ class sExport
             $row['name'] = htmlspecialchars_decode($row['name']);
             $row['supplier'] = htmlspecialchars_decode($row['supplier']);
 
-            //cast it to float to prevent the devision by zero warning
+            //cast it to float to prevent the division by zero warning
             $row['purchaseunit'] = floatval($row['purchaseunit']);
             $row['referenceunit'] = floatval($row['referenceunit']);
             if (!empty($row['purchaseunit']) && !empty($row['referenceunit'])) {
@@ -949,7 +984,36 @@ class sExport
                     $row['referenceunit']
                 );
             }
+            if ($row['configurator'] > 0) {
+                if (empty($this->sSettings["variant_export"]) || $this->sSettings["variant_export"] == 1) {
+                    $row['group_additionaltext'] = array();
+                    foreach ($row['group_ordernumber'] as $orderNumber) {
+                        $product = new StoreFrontBundle\Struct\ListProduct();
+                        $product->setAdditional($row['additionaltext']);
+                        $product->setVariantId($row["articledetailsID"]);
+                        $product->setNumber($orderNumber);
 
+                        $context = $this->contextService->get();
+                        $product = $this->additionalTextService->buildAdditionalText($product, $context);
+
+                        if (array_key_exists($orderNumber, $row['group_additionaltext'])) {
+                            $row['group_additionaltext'][$orderNumber] = $product->getAdditional();
+                        }
+                        if ($orderNumber == $row['ordernumber']) {
+                            $row['additionaltext'] = $product->getAdditional();
+                        }
+                    }
+                }
+                $product = new StoreFrontBundle\Struct\ListProduct();
+                $product->setAdditional($row['additionaltext']);
+                $product->setVariantId($row["articledetailsID"]);
+                $product->setNumber($row['ordernumber']);
+
+                $context = $this->contextService->get();
+                $product = $this->additionalTextService->buildAdditionalText($product, $context);
+
+                $row['additionaltext'] = $product->getAdditional();
+            }
             $rows[] = $row;
 
             if ($rowIndex == $count || count($rows) >= 50) {
