@@ -44,8 +44,8 @@
 		{block name='frontend_forms_index_headline'}
 			<div class="forms--headline panel--body is--wide">
 				{if $sSupport.sElements}
-					<h1>{$sSupport.name}</h1>
-					{eval var=$sSupport.text}
+					<h1 class="forms--title">{$sSupport.name}</h1>
+					<div class="forms--text">{eval var=$sSupport.text}</div>
 				{elseif $sSupport.text2}
 					{include file="frontend/_includes/messages.tpl" type="success" content=$sSupport.text2}
 				{/if}
