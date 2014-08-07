@@ -164,36 +164,31 @@
         .unitize-height(50);
         display: block;
         width: 100%;
+    }
 
-        label {
-            .unitize-padding(9, 0, 10, 0);
-            .unitize-width(40);
-            display: block;
-            float: left;
-        }
+    .date-filter--label {
+        .unitize-padding(9, 0, 10, 0);
+        .unitize-width(40);
+        display: block;
+        float: left;
+    }
 
-        div {
-            .unitize-margin(0, 0, 0, 40);
-            width: auto;
-        }
+    .date-filter--input {
+        .unitize-margin(0, 0, 0, 40);
+        width: auto;
+    }
 
-        #datePickerFrom,
-        #datePickerTo {
-            width: 100%;
+    .datepicker {
+        .unitize(35, 16, padding-right);
+        width: 100%;
+        float: left;
+    }
 
-            &[type='text'] {
-                .unitize(35, 16, padding-right);
-                float: left;
-
-            }
-
-            &[type='text'] + img {
-                .unitize-width(20);
-                .unitize-height(20);
-                .unitize-margin(10, 0, 0, -30);
-                display: inline;
-            }
-        }
+    .ui-datepicker-trigger {
+        .unitize-width(20);
+        .unitize-height(20);
+        .unitize-margin(10, 0, 0, -30);
+        display: inline;
     }
 
     .btn {
@@ -202,11 +197,7 @@
         margin: 0;
     }
 
-    #data {
-        .is--hidden;
-    }
-
-    #holder {
+    .chart--holder {
         display: none;
     }
 
@@ -696,10 +687,10 @@
             width: 40%;
             float: left;
             height: auto;
+        }
 
-            label {
-                width:10%;
-            }
+        .date-filter--label {
+            width:10%;
         }
 
         .btn {
@@ -708,10 +699,10 @@
             height:40px;
         }
 
-        #holder {
-            width: 100%;
+        .chart--holder {
             .is--align-center;
             .is--block;
+            width: 100%;
         }
 
         .panel--th,
