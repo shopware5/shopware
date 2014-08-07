@@ -48,7 +48,7 @@
 			{* Maincategories navigation top *}
 			{block name='frontend_index_navigation_categories_top'}
 				<nav class="navigation-main">
-                    <div class="container" data-menu-scroller="true" data-list-selector=".navigation--list.container">
+                    <div class="container" data-menu-scroller="true" data-listSelector=".navigation--list.container">
                         {include file='frontend/index/main-navigation.tpl'}
                     </div>
 				</nav>

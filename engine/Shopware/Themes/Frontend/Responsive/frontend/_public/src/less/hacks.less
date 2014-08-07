@@ -32,6 +32,12 @@
     font-size: 8px;
 }
 
+// List items in the menu scroller are not allowed to float or have another display mode then inline-block.
+// This is because we allow items to overflow the list itself and do not have cropping issues.
+.js--menu-scroller--item {
+    float: none !important;
+    display: inline-block !important;
+}
 
 @media screen and (min-width: @tabletViewportWidth) {
 
