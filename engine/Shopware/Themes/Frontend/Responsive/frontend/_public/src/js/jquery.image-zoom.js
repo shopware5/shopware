@@ -198,10 +198,6 @@
             me.$flyout.remove();
             me.$container.removeClass(me.opts.containerCls);
 
-            $.unsubscribe('/plugin/imageScroller/onRightArrowClick');
-            $.unsubscribe('/plugin/imageScroller/onLeftArrowClick');
-            $.unsubscribe('/plugin/imageScroller/onClick');
-
             me._destroy();
         }
     });
