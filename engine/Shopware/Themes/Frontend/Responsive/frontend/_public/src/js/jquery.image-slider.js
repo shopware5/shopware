@@ -536,19 +536,13 @@
 
             $(window).off('resize.imageSlider');
 
-            if (me.opts.arrowControls) {
-                me.$arrowLeft.remove();
-                me.$arrowRight.remove();
-            }
+            if (me.$arrowLeft.length) me.$arrowLeft.remove();
+            if (me.$arrowRight.length) me.$arrowRight.remove();
 
-            if (me.thumbnailControls) {
-                me.$thumbnailArrowPrev.remove();
-                me.$thumbnailArrowNext.remove();
-            }
+            if (me.$thumbnailArrowPrev.length) me.$thumbnailArrowPrev.remove();
+            if (me.$thumbnailArrowNext.length) me.$thumbnailArrowNext.remove();
 
-            if (me.opts.autoSlide) {
-                me.stopAutoSlide();
-            }
+            if (me.opts.autoSlide) me.stopAutoSlide();
 
             me._destroy();
         }
