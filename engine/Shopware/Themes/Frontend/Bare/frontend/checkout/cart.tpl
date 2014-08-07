@@ -152,10 +152,8 @@
 	{else}
 		{* Empty basket *}
 		{block name='frontend_basket_basket_is_empty'}
-			<div class="panel">
-				<div class="panel--body">
-					{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='CartInfoEmpty'}{/s}"}
-				</div>
+			<div class="basket--info-messages">
+				{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='CartInfoEmpty'}{/s}"}
 			</div>
 		{/block}
 	{/if}
