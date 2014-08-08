@@ -1,0 +1,213 @@
+.confirm--content {
+
+    & > .alert {
+        .unitize-margin(8, 0, 0, 0);
+    }
+
+    .body--revocation {
+        font-weight: bold;
+    }
+
+    .panel {
+        .unitize-margin(8, 0);
+        .border-radius();
+    }
+
+    .panel--actions {
+        .unitize-margin(16, 0, 0, 0);
+        padding: 0;
+    }
+
+    .column--unit-price { display: none }
+
+    .agb_info, .list--checkbox {
+        .unitize-margin(0, 0, 21, 0);
+    }
+
+    .list--checkbox {
+        .column--checkbox {
+            width: 10%;
+        }
+        .column--label {
+            width: 90%;
+        }
+    }
+
+    // Add product using the sku
+    .add-product--form {
+        .unitize-margin(12, 0);
+    }
+
+    .add-voucher--form,
+    .add-product--form {
+        .clearfix();
+    }
+
+    .add-product--field,
+    .add-voucher--field {
+        width: 90%;
+        .border-radius-multi(3px, 0, 0, 3px);
+    }
+
+    .add-product--button,
+    .add-voucher--button {
+        .unitize-padding(11, 0);
+        .border-radius-multi(0, 3px, 3px, 0);
+        width: 10%;
+        text-align: center;
+
+        .icon--arrow-right {
+            padding: 0;
+            margin: 0;
+        }
+    }
+
+    .user-comment--field {
+        width: 100%;
+    }
+
+    .table--actions .btn {
+        width: 100%;
+
+        .icon--arrow-right {
+            .unitize(8, 16, margin-top);
+            float: right;
+        }
+    }
+
+    .table-footer--country-notice {
+        .unitize-margin(11, 0, 0, 0);
+    }
+    .table--aggregation { display: none }
+}
+
+@media screen and (min-width: @tabletViewportWidth) {
+    .confirm--content {
+
+        & > .alert {
+            .unitize-margin(20, 0, 0, 0);
+        }
+
+        .panel {
+            .unitize-margin(20, 0);
+        }
+
+        .panel--body {
+            background: #fff;
+        }
+
+        .product--table {
+
+            .table--header {
+                .unitize-margin(-10, -10, 10);
+                .unitize-padding(28, 10, 18, 10);
+            }
+
+            .is--last-row {
+                border-bottom: 0 none;
+            }
+        }
+
+        .product--delivery { float: none; }
+
+        .product--table .row--rebate .column--tax-price,
+        .product--table .row--premium-product .column--tax-price,
+        .product--table .row--voucher .column--tax-price {
+            margin-left: 10%;
+        }
+
+        .product--table .row--rebate .column--total-price,
+        .product--table .row--premium-product .column--total-price,
+        .product--table .row--voucher .column--total-price {
+            margin-left: 0;
+        }
+
+
+        // Terms of services box
+        .tos--panel {
+
+            .column--checkbox {
+                .unitize(12, 16, margin-right);
+                width: auto;
+            }
+
+            .column--label {
+                width: 95%;
+                display: block;
+            }
+        }
+
+        // Personal information panels like billing and shipping address
+        .panel--group {
+
+            .panel--body {
+                position: static;
+            }
+
+            .panel {
+                .unitize-height(290);
+                margin: 0 2% 0 0;
+                width: 32%;
+                position: relative;
+
+                &:last-child {
+                    margin: 0;
+                }
+            }
+
+            .panel--actions {
+                .clearfix();
+                .unitize(20, 16, bottom);
+                position: absolute;
+
+                .btn {
+                    float: left;
+                }
+            }
+        }
+
+        // Additional features
+        .additional--features {
+            .feature--group {
+                width: 40%;
+                margin: 0 2.5% 0 0;
+            }
+
+            .feature--user-comment {
+                width: 55%;
+                margin: 0 0 0 2.5%;
+            }
+
+            .user-comment--field {
+                .unitize-height(95);
+            }
+        }
+
+        // Aggregation
+        .product--table .aggregation--list {
+            margin-right: 5%;
+            float: right;
+        }
+
+        .main--actions .btn {
+            .clearfix();
+            width: auto;
+            float: right;
+        }
+
+        .relevant--info {
+            display: block;
+        }
+    }
+}
+@media screen and (min-width: @desktopViewportWidth) {
+    .confirm--content {
+        & > .alert {
+            .unitize-margin(45, 0, 0, 0);
+        }
+
+        .panel {
+            .unitize-margin(45, 0);
+        }
+    }
+}

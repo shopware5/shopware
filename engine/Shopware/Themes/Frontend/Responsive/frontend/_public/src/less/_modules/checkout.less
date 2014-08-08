@@ -72,7 +72,6 @@
         .unitize-height(130);
     }
 
-	.product--delivery,
 	.table--media,
 	.table--content {
 		float: left;
@@ -259,6 +258,8 @@
 	background: @primaryLightBackgroundColor;
 	border-bottom: 1px solid @borderColor;
 
+    .list--entry { list-style: none }
+
 	.entry--label {
 		width: 70%;
 	}
@@ -432,7 +433,9 @@
     .is--ctl-checkout .sidebar-main { display: none }
 
 	.product--table {
-		.unitize-margin(50, 0);
+		.unitize-margin(20, 0);
+
+        .product--delivery { float: left }
 
         .row--voucher,
         .row--premium-product { height: 100%; }
