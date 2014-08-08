@@ -132,6 +132,8 @@
                 me.$images.each(function(index, el) {
                     me._on($(el), 'click', $.proxy(me.onSliderClick, me));
                 });
+
+                $.subscribe('plugin/imageZoom/onLensClick', $.proxy(me.onSliderClick, me));
             }
 
             if (me.opts.touchControls) {
@@ -425,7 +427,7 @@
 
             me.thumbnailSlideIndex = index;
 
-            me.$thumbnailSlide[method](param, me.opts.animationSpeed, 'ease', function() {
+            me.$thumbnailSlide[method](param, me.opts.animationSpeed, function() {
                 me.trackThumbnailControls();
             });
         },
@@ -445,7 +447,7 @@
 
             if (me.opts.thumbnails) me.setActiveThumbnail(index);
 
-            me.$slide[method]({ 'left': newPosition }, me.opts.animationSpeed, 'ease', $.proxy(callback, me));
+            me.$slide[method]({ 'left': newPosition }, me.opts.animationSpeed, $.proxy(callback, me));
 
             me.trackThumbnailControls();
         },
