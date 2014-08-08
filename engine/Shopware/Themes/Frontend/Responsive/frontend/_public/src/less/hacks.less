@@ -32,6 +32,20 @@
     font-size: 8px;
 }
 
+.js--modal {
+    // Modalbox should always have the maximum screen size when .is--fullscreen is active
+    &.sizing--auto.is--fullscreen {
+        height: 100% !important;
+        width: 100% !important;
+    }
+
+    // Modalbox size should stay constant when the sizing was set to fixed
+    &.sizing--fixed {
+        max-height: none !important;
+        max-width: none !important;
+    }
+}
+
 // List items in the menu scroller are not allowed to float or have another display mode then inline-block.
 // This is because we allow items to overflow the list itself and do not have cropping issues.
 .js--menu-scroller--item {
