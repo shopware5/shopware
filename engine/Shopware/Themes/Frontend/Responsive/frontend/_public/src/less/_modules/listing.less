@@ -238,18 +238,25 @@
         .unitize-padding(10, 0);
         display: block;
         border-bottom: 1px solid @borderColor;
+        text-align: center;
+
+        &::before {
+            content: '';
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
+        }
+
+        .is--centered {
+            display: inline-block;
+            vertical-align: middle;
+        }
 
         .image--element {
-            height: auto;
+            height: 100%;
             width: 100%;
             display: block;
-
-            &::before {
-                content: '';
-                display: inline-block;
-                height: 100%;
-                vertical-align: middle;
-            }
+            margin: 0 auto;
 
             img {
                 margin: 0 auto;
