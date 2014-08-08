@@ -240,9 +240,16 @@
         border-bottom: 1px solid @borderColor;
 
         .image--element {
-            .unitize-height(255);
-            display: table;
+            height: auto;
             width: 100%;
+            display: block;
+
+            &::before {
+                content: '';
+                display: inline-block;
+                height: 100%;
+                vertical-align: middle;
+            }
 
             img {
                 margin: 0 auto;
@@ -251,7 +258,6 @@
 
         .image--media {
             .unitize-height(255);
-            display: table-cell;
             vertical-align: middle;
         }
     }
@@ -553,7 +559,6 @@
                     .unitize-max-width(160);
                 }
 
-                .image--element,
                 .image--media {
                     .unitize-height(220);
                 }
@@ -777,7 +782,6 @@
                 .unitize-height(220);
                 .unitize-padding(10, 10);
 
-                .image--element,
                 .image--media {
                     .unitize-height(200);
                 }
@@ -850,7 +854,6 @@
                 border-color: @borderColor;
                 float: left;
 
-                .image--element,
                 .image--media {
                     .unitize-height(160);
                 }
@@ -921,7 +924,6 @@
                 .unitize-padding(10, 0);
                 .unitize-margin(0, 0, 10, 0);
 
-                .image--element,
                 .image--media {
                     .unitize-height(140);
                 }
@@ -978,7 +980,6 @@
                 .unitize-padding(10, 0);
                 .unitize-margin(0, 0, 10, 0);
 
-                .image--element,
                 .image--media {
                     .unitize-height(140);
                 }
