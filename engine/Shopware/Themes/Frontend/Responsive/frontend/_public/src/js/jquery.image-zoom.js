@@ -31,18 +31,20 @@
 
             me.active = false;
 
-            me.$container = me.$el.find('.box--image');
-            me.$container.addClass(me.opts.containerCls);
-
-            me.$images = me.$el.find('.image--element');
-
+            me.$container = me.$el.find('.image-slider--container');
+            me.imageBox = me.$el.find('.image--box');
+            me.$imageElements = me.$el.find('.image--element');
             me.$thumbnails = me.$el.find('.thumbnail--link');
 
             me.$flyout = me.createFlyoutElement();
             me.$lens = me.createLensElement();
 
-            me.$activeImageThumbnail = me.getActiveImageThumbnail();
+            me.zoomImage = false;
+
             me.$activeImage = me.getActiveImageElement();
+
+            me.flyoutWidth = me.$flyout.outerWidth();
+            me.flyoutHeight = me.$flyout.outerHeight();
 
             me.registerEvents();
         },
@@ -50,9 +52,11 @@
         registerEvents: function() {
             var me = this;
 
-            me._on(me.$images, 'mouseenter', $.proxy(me.startZoom, me));
-            me._on(me.$images, 'mouseleave', $.proxy(me.stopZoom, me));
-            me._on(me.$images, 'mousemove', $.proxy(me.onMouseMove, me));
+            $('.page-wrap').on('scroll.imageZoom', $.proxy(me.stopZoom, me));
+
+            me._on(me.$container, 'mousemove', $.proxy(me.onMouseMove, me));
+            me._on(me.$container, 'mouseout', $.proxy(me.stopZoom, me));
+            me._on(me.$lens, 'click', $.proxy(me.onLensClick, me));
 
             $.subscribe('plugin/imageSlider/onRightArrowClick', $.proxy(me.stopZoom, me));
             $.subscribe('plugin/imageSlider/onLeftArrowClick', $.proxy(me.stopZoom, me));
@@ -66,7 +70,7 @@
             return $('<div>', {
                 'class': me.opts.lensCls,
                 'html': '&nbsp;'
-            }).appendTo('body');
+            }).appendTo(me.$container);
         },
 
         createFlyoutElement: function() {
@@ -86,19 +90,32 @@
         getActiveImageElement: function() {
             var me = this;
 
+            me.$activeImageThumbnail = me.getActiveImageThumbnail();
+
             if (!me.$activeImageThumbnail.length) {
-                return me.$images.eq(0);
+                return me.$imageElements.eq(0);
             }
 
-            return me.$images.eq(me.$activeImageThumbnail.index());
+            return me.$imageElements.eq(me.$activeImageThumbnail.index());
         },
 
-        setLensSize: function(width, height) {
+        setLensSize: function(factor) {
             var me = this;
 
+            me.lensWidth = me.flyoutWidth / factor;
+            me.lensHeight = me.flyoutHeight / factor;
+
+            if (me.lensWidth > me.imageWidth) {
+                me.lensWidth = me.imageWidth;
+            }
+
+            if (me.lensHeight > me.imageHeight) {
+                me.lensHeight = me.imageHeight;
+            }
+
             me.$lens.css({
-                'width': width,
-                'height': height
+                'width': me.lensWidth,
+                'height': me.lensHeight
             });
         },
 
@@ -111,46 +128,93 @@
             });
         },
 
+        showLens: function() {
+            var me = this;
+
+            me.$lens.stop(true, true).fadeIn(me.opts.animationSpeed);
+        },
+
+        hideLens: function() {
+            var me = this;
+
+            me.$lens.stop(true, true).fadeOut(me.opts.animationSpeed);
+        },
+
+        setZoomPosition: function(x, y) {
+            var me = this;
+
+            me.$flyout.css('backgroundPosition', x+'px '+y+'px');
+        },
+
+        showZoom: function() {
+            var me = this;
+
+            me.$flyout.stop(true, true).fadeIn(me.opts.animationSpeed);
+        },
+
+        hideZoom: function() {
+            var me = this;
+
+            me.$flyout.stop(true, true).fadeOut(me.opts.animationSpeed);
+        },
+
         onMouseMove: function(event) {
             var me = this;
 
-            if (!me.active) {
-                me.startZoom();
+            if (!me.zoomImage) {
+                me.activateZoom();
                 return;
             }
 
-            var offset = me.$activeImage.offset(),
-                imageWidth = me.$activeImage.innerWidth(),
-                imageHeight = me.$activeImage.innerHeight(),
-                eventX = event.pageX,
-                eventY = event.pageY,
-                lensX = eventX - me.lensWidth / 2,
-                lensY = eventY - me.lensHeight / 2,
-                maxX = offset.left + imageWidth - me.lensWidth,
-                maxY = offset.top + imageHeight - me.lensHeight,
-                positionX = me.clamp(lensX, offset.left, maxX),
-                positionY = me.clamp(lensY, offset.top, maxY),
-                zoomX = -(positionX - offset.left) * me.factor,
-                zoomY = -(positionY - offset.top) * me.factor;
+            var containerOffset = me.$container.offset(),
+                mouseX = event.pageX,
+                mouseY = event.pageY,
+                containerX = mouseX - containerOffset.left,
+                containerY = mouseY - containerOffset.top,
+                lensX = containerX - (me.lensWidth / 2),
+                lensY = containerY - (me.lensHeight / 2),
+                minX = me.imageOffset.left - containerOffset.left,
+                minY = me.imageOffset.top - containerOffset.top,
+                maxX = minX + me.imageWidth - me.$lens.outerWidth(),
+                maxY = minY + me.imageHeight - me.$lens.outerHeight(),
+                lensLeft = me.clamp(lensX, minX, maxX),
+                lensTop = me.clamp(lensY, minY, maxY),
+                zoomLeft = -(lensLeft - minX) * me.factor,
+                zoomTop = -(lensTop - minY) * me.factor;
 
-            me.setLensPosition(positionX, positionY);
-
-            me.$flyout.css('background', 'url(' + me.zoomImageUrl + ') '+ zoomX + 'px ' + zoomY + 'px no-repeat' );
+            if (mouseX > me.imageOffset.left && mouseX < me.imageOffset.left + me.imageWidth &&
+                mouseY > me.imageOffset.top && mouseY < me.imageOffset.top + me.imageHeight) {
+                me.showLens();
+                me.showZoom();
+                me.setLensPosition(lensLeft, lensTop);
+                me.setZoomPosition(zoomLeft, zoomTop);
+            } else {
+                me.stopZoom();
+            }
         },
 
-        startZoom: function() {
+        setActiveImage: function() {
             var me = this;
-
-            me.$activeImageThumbnail = me.getActiveImageThumbnail();
             me.$activeImageElement = me.getActiveImageElement();
             me.$activeImage = me.$activeImageElement.find('img');
 
+            me.imageWidth = me.$activeImage.innerWidth();
+            me.imageHeight = me.$activeImage.innerHeight();
+            me.imageOffset = me.$activeImage.offset();
+
+            $.publish('plugin/imageZoom/onSetActiveImage');
+        },
+
+        activateZoom: function() {
+            var me = this;
+
+            me.setActiveImage();
+
             if (!me.zoomImage) {
                 me.zoomImageUrl = me.$activeImageElement.attr('data-img-original');
-                me.zoomImage =  new Image();
+                me.zoomImage = new Image();
 
                 me.zoomImage.onload = function() {
-
                     me.factor = me.zoomImage.width / me.$activeImage.innerWidth();
 
                     /**
@@ -162,17 +226,14 @@
                         return;
                     }
 
-                    me.lensWidth = me.$flyout.outerWidth() / me.factor;
-                    me.lensHeight = me.$flyout.outerHeight() / me.factor;
-
-                    me.setLensSize(me.lensWidth, me.lensHeight);
-
-                    me.$flyout.css('background', 'url(' + me.zoomImageUrl + ') 0 0 no-repeat' ).fadeIn(me.opts.animationSpeed);
-                    me.$lens.fadeIn(me.opts.animationSpeed);
+                    me.setLensSize(me.factor);
+                    me.$flyout.css('background', 'url(' + me.zoomImageUrl + ') 0px 0px no-repeat #fff');
                 };
 
                 me.zoomImage.src = me.zoomImageUrl;
             }
+
+            $.publish('plugin/imageZoom/onActivateZoom');
 
             me.active = true;
         },
@@ -180,11 +241,17 @@
         stopZoom: function() {
             var me = this;
 
-            me.$lens.fadeOut(me.opts.animationSpeed);
-            me.$flyout.fadeOut(me.opts.animationSpeed);
-
+            me.hideLens();
+            me.hideZoom();
             me.zoomImage = false;
             me.active = false;
+
+            $.publish('plugin/imageZoom/onStopZoom');
+        },
+
+        onLensClick: function(event) {
+            event.stopPropagation();
+            $.publish('plugin/imageZoom/onLensClick');
         },
 
         clamp: function(number, min, max) {
@@ -197,6 +264,8 @@
             me.$lens.remove();
             me.$flyout.remove();
             me.$container.removeClass(me.opts.containerCls);
+
+            $('.page-wrap').off('scroll.imageZoom');
 
             me._destroy();
         }
