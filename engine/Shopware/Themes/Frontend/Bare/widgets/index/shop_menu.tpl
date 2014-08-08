@@ -3,7 +3,7 @@
     {if $shop && $languages|count > 1}
         <div class="top-bar--language">
             {if $languages|count > 1}
-                <form method="post" action="{$smarty.server.REQUEST_URI|escape}" class="language--form">
+                <form method="post" action="" class="language--form">
                     <div class="field--select">
                         {if $shop && $languages|count > 1}
                             <div class="language--flag {$shop->getLocale()->toString()}">{$shop->getName()}</div>
@@ -27,7 +27,7 @@
 {block name='frontend_index_actions_currency'}
     {if $currencies|count > 1}
         <div class="top-bar--currency">
-			<form action="{$smarty.server.REQUEST_URI|escape}" method="post" class="currency--form">
+			<form action="" method="post" class="currency--form">
                 <div class="field--select">
                     <select name="__currency" class="currency--select" data-auto-submit-form="true">
                         {foreach $currencies as $currency}
