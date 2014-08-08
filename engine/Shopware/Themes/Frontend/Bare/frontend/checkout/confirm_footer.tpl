@@ -1,34 +1,20 @@
 {extends file='frontend/checkout/cart_footer.tpl'}
 
-{block name='frontend_checkout_cart_footer_tax_information'}
-	<div class="tablefoot_inner-left"></div>
-	<div class="tablefoot_inner">
+{block name='frontend_checkout_cart_footer_field_labels_taxes' append}
+	{if {config name=countrynotice} && $sCountry.notice && {include file="string:{$sCountry.notice}"} !== ""}
+		<li class="list--entry table-footer--country-notice">
+		{* Include country specific notice message *}
+			<p>{include file="string:{$sCountry.notice}"}</p>
+		</li>
+	{/if}
 
-    {if !$sUserData.additional.charge_vat && {config name=nettonotice}}
-		{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='CheckoutFinishTaxInformation'}{/s}"}
+	{if !$sUserData.additional.charge_vat && {config name=nettonotice}}
+		<li class="list--entry table-footer--netto-notice">
+		    {include file="frontend/_includes/messages.tpl" type="warning" content="{s name='CheckoutFinishTaxInformation'}{/s}"}
+        </li>
     {/if}
 {/block}
 
-{block name='frontend_checkout_cart_footer_tax_rates'}
-	{if $sUserData.additional.charge_vat}
-		{foreach $sBasket.sTaxRates as $rate=>$value}
-		<div>
-			<p class="textright">
-				<strong>{$value|currency}</strong>
-			</p>
-		</div>
-		{/foreach}
-	{/if}
-</div>
+{block name='frontend_checkout_cart_footer_add_product'}{/block}
 
-	{if {config name=countrynotice} && $sCountry.notice && {include file="string:{$sCountry.notice}"} !== ""}
-		<div class="clear"></div>
-		<div class="emotion-country_notice">
-		{* Include country specific notice message *}
-			<p>{include file="string:{$sCountry.notice}"}</p>
-		</div>
-	{/if}
-{/block}
-
-{* Hide left sidebar *}
-{block name='frontend_checkout_cart_footer_left'}{/block}
+{block name='frontend_checkout_cart_footer_add_voucher'}{/block}

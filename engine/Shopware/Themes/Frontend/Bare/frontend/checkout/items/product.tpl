@@ -1,6 +1,6 @@
 {namespace name="frontend/checkout/cart_item"}
 
-<div class="table--row block-group row--product">
+<div class="table--row block-group row--product{if $isLast} is--last-row{/if}">
     <form name="basket_change_quantity{$sBasketItem.id}" method="post" action="{url action='changeQuantity' sTargetAction=$sTargetAction}">
 
         {if $sBasketItem.additional_details.sConfigurator}
@@ -71,13 +71,17 @@
 
                 <input type="hidden" name="sArticle" value="{$sBasketItem.id}" />
                 {block name='frontend_checkout_cart_item_quantity_selection'}
-                    <select name="sQuantity" data-auto-submit-form="true">
-                        {section name="i" start=$sBasketItem.minpurchase loop=$sBasketItem.maxpurchase+1 step=$sBasketItem.purchasesteps}
-                            <option value="{$smarty.section.i.index}" {if $smarty.section.i.index==$sBasketItem.quantity}selected="selected"{/if}>
-                                {$smarty.section.i.index}
-                            </option>
-                        {/section}
-                    </select>
+                    {if !$sBasketItem.additional_details.laststock || ($sBasketItem.additional_details.laststock && $sBasketItem.additional_details.instock >= 0)}
+                        <select name="sQuantity" data-auto-submit-form="true">
+                            {section name="i" start=$sBasketItem.minpurchase loop=$sBasketItem.maxpurchase+1 step=$sBasketItem.purchasesteps}
+                                <option value="{$smarty.section.i.index}" {if $smarty.section.i.index==$sBasketItem.quantity}selected="selected"{/if}>
+                                    {$smarty.section.i.index}
+                                </option>
+                            {/section}
+                        </select>
+                    {else}
+                        {s name="CartColumnQuantityEmpty" namespace="frontend/checkout/cart_item"}-{/s}
+                    {/if}
                 {/block}
             </div>
         {/block}

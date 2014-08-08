@@ -275,6 +275,9 @@ $(function() {
     $('*[data-auto-submit="true"]').autoSubmit();
     $('*[data-drop-down-menu="true"]').dropdownMenu();
     $('*[data-newsletter="true"]').newsletter();
+    $('*[data-pseudo-text="true"]').pseudoText();
+
+    $('input[data-form-polyfill="true"], button[data-form-polyfill="true"]').formPolyfill();
 
     $('select:not([data-no-fancy-select="true"])').selectboxReplacement();
 
@@ -299,6 +302,14 @@ $(function() {
     // Auto submitting form
     $('select[data-auto-submit-form="true"]').on('change', function() {
         $(this).parents('form').submit();
+    });
+
+    $('*[data-modal="true"] a').on('click.modal', function() {
+        event.preventDefault();
+
+        $.modal.open(this.href, {
+            mode: 'ajax'
+        });
     });
 
     $('.add-voucher--checkbox').on('change', function (event) {
