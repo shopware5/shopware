@@ -1,56 +1,16 @@
 <?php
 
-namespace Shopware\Tests\Service\Search;
+namespace Shopware\Tests\Service\Search\Condition;
 
+use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Models\Category\Category;
-use Shopware\Tests\Service\Converter;
-use Shopware\Tests\Service\Helper;
+use Shopware\Tests\Service\TestCase;
 
 class PriceConditionTest extends TestCase
 {
-    /**
-     * @var Helper
-     */
-    private $helper;
-
-    /**
-     * @var Converter
-     */
-    private $converter;
-
-    protected function setUp()
-    {
-        $this->helper = new Helper();
-        $this->converter = new Converter();
-        parent::setUp();
-    }
-
-    protected function tearDown()
-    {
-        $this->helper->cleanUp();
-        parent::tearDown();
-    }
-
-    /**
-     * @return Context
-     */
-    private function getContext()
-    {
-        $tax = $this->helper->createTax();
-        $customerGroup = $this->helper->createCustomerGroup();
-
-        $shop = $this->helper->getShop();
-
-        return $this->helper->createContext(
-            $customerGroup,
-            $shop,
-            array($tax)
-        );
-    }
-
     /**
      * @param $number
      * @param \Shopware\Models\Category\Category $category
@@ -58,21 +18,13 @@ class PriceConditionTest extends TestCase
      * @param $price
      * @return array
      */
-    private function getDefaultProduct(
+    protected function getProduct(
         $number,
-        Category $category,
         Context $context,
-        $price
+        Category $category = null,
+        $price = 0
     ) {
-        $product = $this->helper->getSimpleProduct(
-            $number,
-            array_shift($context->getTaxRules()),
-            $context->getCurrentCustomerGroup()
-        );
-
-        $product['categories'] = array(
-            array('id' => $category->getId())
-        );
+        $product = parent::getProduct($number, $context, $category);
 
         $product['mainDetail']['prices'] = array(array(
             'from' => 1,
@@ -90,10 +42,10 @@ class PriceConditionTest extends TestCase
         $context = $this->getContext();
 
         $articles = array(
-            $this->getDefaultProduct('testSimplePriceRange-1', $category, $context, 21),
-            $this->getDefaultProduct('testSimplePriceRange-2', $category, $context, 10),
-            $this->getDefaultProduct('testSimplePriceRange-3', $category, $context, 15),
-            $this->getDefaultProduct('testSimplePriceRange-4', $category, $context, 20),
+            $this->getProduct('testSimplePriceRange-1', $context, $category, 21),
+            $this->getProduct('testSimplePriceRange-2', $context, $category, 10),
+            $this->getProduct('testSimplePriceRange-3', $context, $category, 15),
+            $this->getProduct('testSimplePriceRange-4', $context, $category, 20),
         );
 
         foreach ($articles as $article) {
@@ -119,9 +71,9 @@ class PriceConditionTest extends TestCase
         $context = $this->getContext();
 
         $articles = array(
-            $this->getDefaultProduct('testDecimalPriceRange-2', $category, $context, 9.99),
-            $this->getDefaultProduct('testDecimalPriceRange-3', $category, $context, 10.01),
-            $this->getDefaultProduct('testDecimalPriceRange-4', $category, $context, 19.98),
+            $this->getProduct('testDecimalPriceRange-2', $context, $category, 9.99),
+            $this->getProduct('testDecimalPriceRange-3', $context, $category, 10.01),
+            $this->getProduct('testDecimalPriceRange-4', $context, $category, 19.98),
         );
 
         foreach ($articles as $article) {
@@ -149,8 +101,8 @@ class PriceConditionTest extends TestCase
         $context->setCurrentCustomerGroup($this->converter->convertCustomerGroup($customerGroup));
 
         $articles = array(
-            $this->getDefaultProduct('testCustomerGroupPrices-1', $category, $context, 21),
-            $this->getDefaultProduct('testCustomerGroupPrices-2', $category, $context, 15),
+            $this->getProduct('testCustomerGroupPrices-1', $context, $category, 21),
+            $this->getProduct('testCustomerGroupPrices-2', $context, $category, 15),
         );
 
         /**
@@ -159,7 +111,7 @@ class PriceConditionTest extends TestCase
          *
          * Shouldn't match price condition
          */
-        $product = $this->getDefaultProduct('testCustomerGroupPrices-3', $category, $context, 15);
+        $product = $this->getProduct('testCustomerGroupPrices-3', $context, $category, 15);
         $product['mainDetail']['prices'][] = array(
             'from' => 1,
             'to' => 'beliebig',
@@ -175,7 +127,7 @@ class PriceConditionTest extends TestCase
          *
          * Should match price condition
          */
-        $product = $this->getDefaultProduct('testCustomerGroupPrices-4', $category, $context, 3);
+        $product = $this->getProduct('testCustomerGroupPrices-4', $context, $category, 3);
         $product['mainDetail']['prices'][] = array(
             'from' => 1,
             'to' => 'beliebig',
@@ -201,4 +153,34 @@ class PriceConditionTest extends TestCase
         );
     }
 
+    public function testPriceConditionWithCurrencyFactor()
+    {
+        $category = $this->helper->createCategory();
+        $context = $this->getContext();
+
+        $context->getCurrency()->setFactor(2.5);
+
+        $articles = array(
+            $this->getProduct('first',  $context, $category, 10),
+            $this->getProduct('second', $context, $category, 20),
+            $this->getProduct('third',  $context, $category, 30),
+        );
+
+        foreach ($articles as $article) {
+            $this->helper->createArticle($article);
+        }
+
+        $criteria = new Criteria();
+        $criteria->addCategoryCondition(array($category->getId()));
+        $criteria->addPriceCondition(25, 50);
+
+        /**@var $result ProductNumberSearchResult*/
+        $result = Shopware()->Container()->get('product_number_search_dbal')->search($criteria, $context);
+
+        $this->assertSearchResult(
+            $result,
+            array('first', 'second')
+        );
+
+    }
 }

@@ -2,48 +2,23 @@
 
 namespace Shopware\Tests\Service\Product;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Models\Category\Category;
 use Shopware\Models\Customer\Group;
 use Shopware\Models\Tax\Tax;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\MediaService;
 use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Tests\Service\Converter;
-use Shopware\Tests\Service\Helper;
+use Shopware\Tests\Service\TestCase;
 
-class CoverTest extends \Enlight_Components_Test_TestCase
+class CoverTest extends TestCase
 {
-    /**
-     * @var Helper
-     */
-    private $helper;
-
-    /**
-     * @var Converter
-     */
-    private $converter;
-
-    protected function setUp()
-    {
-        $this->helper = new Helper();
-        $this->converter = new Converter();
-        parent::setUp();
-    }
-
-    protected function tearDown()
-    {
-        $this->helper->cleanUp();
-        parent::tearDown();
-    }
-
     public function testProductWithOneImage()
     {
         $number = 'Cover-Test';
-        $tax = $this->helper->createTax();
-        $customerGroup = $this->helper->createCustomerGroup();
-
-        $data = $this->getDefaultProduct($number, 1, $tax, $customerGroup);
+        $context = $this->getContext();
+        $data = $this->getProduct($number, $context, null, 1);
         $this->helper->createArticle($data);
 
-        $context = $this->helper->createContext($customerGroup, $this->helper->getShop(), array($tax));
         $product = $this->helper->getListProduct($number, $context);
 
         $this->assertMediaFile('sasse-korn', $product->getCover());
@@ -52,13 +27,11 @@ class CoverTest extends \Enlight_Components_Test_TestCase
     public function testProductWithMultipleImages()
     {
         $number = 'Cover-Test-Multiple';
-        $tax = $this->helper->createTax();
-        $customerGroup = $this->helper->createCustomerGroup();
+        $context = $this->getContext();
+        $this->helper->createArticle(
+            $this->getProduct($number, $context, null, 10)
+        );
 
-        $data = $this->getDefaultProduct($number, 10, $tax, $customerGroup);
-        $this->helper->createArticle($data);
-
-        $context = $this->helper->createContext($customerGroup, $this->helper->getShop(), array($tax));
         $product = $this->helper->getListProduct($number, $context);
 
         $this->assertMediaFile('sasse-korn', $product->getCover());
@@ -67,11 +40,10 @@ class CoverTest extends \Enlight_Components_Test_TestCase
     public function testProductList()
     {
         $number = 'Cover-Test-Listing';
-        $tax = $this->helper->createTax();
-        $customerGroup = $this->helper->createCustomerGroup();
+        $context = $this->getContext();
 
-        $product1 = $this->getDefaultProduct($number . '-1', 4, $tax, $customerGroup);
-        $product2 = $this->getDefaultProduct($number . '-2', 4, $tax, $customerGroup);
+        $product1 = $this->getProduct($number . '-1', $context, null, 4);
+        $product2 = $this->getProduct($number . '-2', $context, null, 4);
 
         $product1['images'][0] = $this->helper->getImageData(
             'test-spachtelmasse.jpg',
@@ -85,8 +57,6 @@ class CoverTest extends \Enlight_Components_Test_TestCase
 
         $this->helper->createArticle($product1);
         $this->helper->createArticle($product2);
-
-        $context = $this->helper->createContext($customerGroup, $this->helper->getShop(), array($tax));
 
         $products = $this->helper->getListProducts(
             array($number . '-1', $number . '-2'),
@@ -119,17 +89,10 @@ class CoverTest extends \Enlight_Components_Test_TestCase
     public function testVariantImages()
     {
         $number = 'Variant-Cover-Test';
-        $tax = $this->helper->createTax();
-        $customerGroup = $this->helper->createCustomerGroup();
+        $context = $this->getContext();
 
-        $data = $this->getVariantImageProduct($number, $tax, $customerGroup);
+        $data = $this->getVariantImageProduct($number, $context);
         $this->helper->createArticle($data);
-
-        $context = $this->helper->createContext(
-            $customerGroup,
-            $this->helper->getShop(),
-            array($tax)
-        );
 
         $variants = $this->helper->getListProducts(
             array_column($data['variants'], 'number'),
@@ -146,7 +109,6 @@ class CoverTest extends \Enlight_Components_Test_TestCase
         }
     }
 
-
     /**
      * Test the shopware configuration forceMainImageInListing
      *
@@ -160,17 +122,9 @@ class CoverTest extends \Enlight_Components_Test_TestCase
     public function testForceMainImage()
     {
         $number = 'Force-Main-Cover-Test';
-        $tax = $this->helper->createTax();
-        $customerGroup = $this->helper->createCustomerGroup();
-
-        $data = $this->getVariantImageProduct($number, $tax, $customerGroup);
+        $context = $this->getContext();
+        $data = $this->getVariantImageProduct($number, $context);
         $this->helper->createArticle($data);
-
-        $context = $this->helper->createContext(
-            $customerGroup,
-            $this->helper->getShop(),
-            array($tax)
-        );
 
         $config = $this->getMockBuilder('\Shopware_Components_Config')
             ->disableOriginalConstructor()
@@ -182,8 +136,8 @@ class CoverTest extends \Enlight_Components_Test_TestCase
 
         $mediaService = new MediaService(
             Shopware()->Container()->get('media_gateway_dbal'),
-            Shopware()->Container()->get('product_media_gateway'),
-            Shopware()->Container()->get('variant_media_gateway'),
+            Shopware()->Container()->get('product_media_gateway_dbal'),
+            Shopware()->Container()->get('variant_media_gateway_dbal'),
             $config
         );
 
@@ -217,19 +171,11 @@ class CoverTest extends \Enlight_Components_Test_TestCase
     public function testFallbackImage()
     {
         $number = 'Force-Main-Cover-Test';
-        $tax = $this->helper->createTax();
-        $customerGroup = $this->helper->createCustomerGroup();
+        $context = $this->getContext();
 
-        $data = $this->getVariantImageProduct($number, $tax, $customerGroup);
+        $data = $this->getVariantImageProduct($number, $context);
         $data['variants'][0]['images'] = array();
-
         $this->helper->createArticle($data);
-
-        $context = $this->helper->createContext(
-            $customerGroup,
-            $this->helper->getShop(),
-            array($tax)
-        );
 
         $variants = $this->helper->getListProducts(
             array_column($data['variants'], 'number'),
@@ -259,15 +205,13 @@ class CoverTest extends \Enlight_Components_Test_TestCase
         }
     }
 
-    private function getDefaultProduct($number, $imageCount, Tax $tax, Group $customerGroup)
-    {
-        $customerGroup = $this->converter->convertCustomerGroup($customerGroup);
-
-        $data = $this->helper->getSimpleProduct(
-            $number,
-            $tax,
-            $customerGroup
-        );
+    protected function getProduct(
+        $number,
+        Context $context,
+        Category $category = null,
+        $imageCount = 1
+    ) {
+        $data = parent::getProduct($number, $context, $category);
 
         $data['images'][] = $this->helper->getImageData(
             'sasse-korn.jpg',
@@ -281,21 +225,14 @@ class CoverTest extends \Enlight_Components_Test_TestCase
         return $data;
     }
 
-    private function getVariantImageProduct($number, Tax $tax, Group $customerGroup)
+    private function getVariantImageProduct($number, Context $context)
     {
-        $data = $this->getDefaultProduct(
-            $number,
-            2,
-            $tax,
-            $customerGroup
-        );
+        $data = $this->getProduct($number, $context, null, 2);
 
-
-        $customerGroup = $this->converter->convertCustomerGroup($customerGroup);
         $data = array_merge(
             $data,
             $this->helper->getConfigurator(
-                $customerGroup,
+                $context->getCurrentCustomerGroup(),
                 $number,
                 array('Farbe' => array('rot', 'gelb'))
             )

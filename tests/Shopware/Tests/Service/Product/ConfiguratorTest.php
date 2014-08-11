@@ -2,58 +2,20 @@
 
 namespace Shopware\Tests\Service\Product;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Set;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
-use Shopware\Tests\Service\Helper;
+use Shopware\Models\Category\Category;
+use Shopware\Tests\Service\TestCase;
 
-class ConfiguratorTest extends \Enlight_Components_Test_TestCase
+class ConfiguratorTest extends TestCase
 {
-    /**
-     * @var Helper
-     */
-    private $helper;
-
-    protected function setUp()
-    {
-        $this->helper = new Helper();
-        parent::setUp();
-    }
-
-    protected function tearDown()
-    {
-        $this->helper->cleanUp();
-        parent::tearDown();
-    }
-
-    /**
-     * @return Context
-     */
-    private function getContext()
-    {
-        $tax = $this->helper->createTax();
-        $customerGroup = $this->helper->createCustomerGroup();
-        $shop = $this->helper->getShop();
-
-        return $this->helper->createContext(
-            $customerGroup,
-            $shop,
-            array($tax)
-        );
-    }
-
-
-    /**
-     * @param $number
-     * @param $context
-     * @return array
-     */
-    private function getProduct($number, Context $context)
-    {
-        $product = $this->helper->getSimpleProduct(
-            $number,
-            array_shift($context->getTaxRules()),
-            $context->getCurrentCustomerGroup()
-        );
+    protected function getProduct(
+        $number,
+        Context $context,
+        Category $category = null
+    ) {
+        $product = parent::getProduct($number, $context, $category);
 
         $configurator = $this->helper->getConfigurator(
             $context->getCurrentCustomerGroup(),
@@ -61,7 +23,7 @@ class ConfiguratorTest extends \Enlight_Components_Test_TestCase
             array(
                 'Farbe' => array('rot', 'blau', 'grün'),
                 'Größe' => array('L', 'M', 'S'),
-                'Sekundär' => array('schwarz', 'weiß', 'grau')
+                'Form' => array('rund', 'eckig', 'oval')
             )
         );
 
@@ -69,42 +31,6 @@ class ConfiguratorTest extends \Enlight_Components_Test_TestCase
         return $product;
     }
 
-
-    public function testLegacyFioo()
-    {
-        $number = __FUNCTION__;
-        $context = $this->getContext();
-        $data = $this->getProduct($number, $context);
-
-        $this->helper->createArticle($data);
-
-        $listProduct = $this->helper->getListProduct($number, $context);
-
-        $configurator = $this->helper->getProductConfigurator($listProduct, $context);
-
-        $this->assertCount(3, $configurator->getGroups());
-        foreach ($configurator->getGroups() as $group) {
-            $this->assertCount(3, $group->getOptions());
-        }
-    }
-
-    public function testProductConfigurator()
-    {
-        $number = __FUNCTION__;
-        $context = $this->getContext();
-        $data = $this->getProduct($number, $context);
-
-        $this->helper->createArticle($data);
-
-        $listProduct = $this->helper->getListProduct($number, $context);
-
-        $configurator = $this->helper->getProductConfigurator($listProduct, $context);
-
-        $this->assertCount(3, $configurator->getGroups());
-        foreach ($configurator->getGroups() as $group) {
-            $this->assertCount(3, $group->getOptions());
-        }
-    }
 
     private function createSelection(ListProduct $listProduct, array $optionNames)
     {
@@ -122,9 +48,67 @@ class ConfiguratorTest extends \Enlight_Components_Test_TestCase
         return $selection;
     }
 
-    /**
-     * @group knownFailing
-     */
+    public function testVariantConfiguration()
+    {
+        $number = __FUNCTION__;
+        $context = $this->getContext();
+        $productData = $this->getProduct($number, $context);
+
+        $this->helper->createArticle($productData);
+
+        foreach ($productData['variants'] as $testVariant) {
+            $product = Shopware()->Container()->get('product_service_core')
+                ->get($testVariant['number'], $context);
+
+            $this->assertCount(3, $product->getConfiguration());
+
+            $optionNames = array_column($testVariant['configuratorOptions'], 'option');
+
+            foreach ($product->getConfiguration() as $configuratorGroup) {
+                $this->assertCount(1, $configuratorGroup->getOptions());
+                $option = array_shift($configuratorGroup->getOptions());
+                $this->assertContains($option->getName(), $optionNames);
+            }
+        }
+    }
+
+    public function testDefaultConfigurator()
+    {
+        $number = __FUNCTION__;
+        $context = $this->getContext();
+        $data = $this->getProduct($number, $context);
+
+        $this->helper->createArticle($data);
+
+        $product = Shopware()->Container()->get('list_product_service_core')
+            ->get($number, $context);
+
+        $configurator = Shopware()->Container()->get('configurator_service_core')
+            ->getProductConfigurator($product, $context, array());
+
+        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Set', $configurator);
+
+        $this->assertCount(3, $configurator->getGroups());
+        foreach ($configurator->getGroups() as $group) {
+            $this->assertCount(3, $group->getOptions());
+            $this->assertContains($group->getName(), array('Farbe', 'Größe', 'Form'));
+
+            foreach ($group->getOptions() as $option) {
+                switch ($group->getName()) {
+                    case "Farbe":
+                        $this->assertContains($option->getName(), array('rot', 'blau', 'grün'));
+                        break;
+                    case "Größe":
+                        $this->assertContains($option->getName(), array('L', 'M', 'S'));
+                        break;
+                    case "Form":
+                        $this->assertContains($option->getName(), array('rund', 'eckig', 'oval'));
+                        break;
+                }
+            }
+        }
+    }
+
     public function testSelection()
     {
         $number = __FUNCTION__;
@@ -133,100 +117,109 @@ class ConfiguratorTest extends \Enlight_Components_Test_TestCase
 
         $this->helper->createArticle($data);
 
-        $listProduct = $this->helper->getListProduct($number, $context);
+        $product = Shopware()->Container()->get('list_product_service_core')
+            ->get($number, $context);
 
-        $this->helper->updateConfiguratorVariants(
-            $listProduct->getId(),
-            array(
-                array(
-                    'options' => array('rot', 'schwarz'),
-                    'data' => array('active' => false)
-                ),
-                array(
-                    'options' => array('L'),
-                    'data' => array('active' => false)
-                ),
-            )
-        );
+        $selection = $this->createSelection($product, array(
+            'rot', 'L'
+        ));
 
-        $configurator = $this->helper->getProductConfigurator(
-            $listProduct,
-            $context,
-            $this->createSelection($listProduct, array('rot'))
-        );
+        $configurator = Shopware()->Container()->get('configurator_service_core')
+            ->getProductConfigurator($product, $context, $selection);
 
         foreach ($configurator->getGroups() as $group) {
-            foreach ($group->getOptions() as $option) {
-                $this->assertNotEquals('schwarz', $option->getName());
-                $this->assertNotEquals('L', $option->getName());
+            switch ($group->getName()) {
+                case "Farbe":
+                    $this->assertTrue($group->isSelected());
+                    break;
+                case "Größe":
+                    $this->assertTrue($group->isSelected());
+                    break;
+                case "Form":
+                    $this->assertFalse($group->isSelected());
+                    break;
             }
-        }
 
-
-        $configurator = $this->helper->getProductConfigurator(
-            $listProduct,
-            $context,
-            $this->createSelection($listProduct, array('schwarz'))
-        );
-
-        foreach ($configurator->getGroups() as $group) {
             foreach ($group->getOptions() as $option) {
-                $this->assertNotEquals('rot', $option->getName());
-                $this->assertNotEquals('L', $option->getName());
+                $this->assertTrue($option->getActive());
+
+                switch ($option->getName()) {
+                    case "rot":
+                    case "L":
+                        $this->assertTrue($option->isSelected());
+                        break;
+                    default:
+                        $this->assertFalse($option->isSelected());
+                        break;
+                }
             }
         }
     }
 
-    /**
-     * @group knownFailing
-     */
-    public function testCloseoutSelection()
+    public function testSelectionConfigurator()
     {
         $number = __FUNCTION__;
         $context = $this->getContext();
         $data = $this->getProduct($number, $context);
 
-        $this->helper->createArticle($data);
-
-        $listProduct = $this->helper->getListProduct($number, $context);
+        $article = $this->helper->createArticle($data);
 
         $this->helper->updateConfiguratorVariants(
-            $listProduct->getId(),
+            $article->getId(),
             array(
                 array(
-                    'options' => array('blau', 'weiß'),
-                    'data' => array('inStock' => 0)
+                    'options' => array('rot', 'L'),
+                    'data' => array('active' => false)
                 ),
                 array(
-                    'options' => array('M'),
-                    'data' => array('inStock' => 0)
+                    'options' => array('blau', 'S'),
+                    'data' => array('active' => false)
                 ),
+                array(
+                    'options' => array('rund', 'M'),
+                    'data' => array('active' => false)
+                )
             )
         );
 
-        $configurator = $this->helper->getProductConfigurator(
-            $listProduct,
-            $context,
-            $this->createSelection($listProduct, array('weiß'))
-        );
+        $product = Shopware()->Container()->get('list_product_service_core')
+            ->get($number, $context);
 
+        $selection = $this->createSelection($product, array('rot'));
+        $configurator = Shopware()->Container()->get('configurator_service_core')
+            ->getProductConfigurator($product, $context, $selection);
+        $this->assertInactiveOptions($configurator, array('L'));
+
+        $selection = $this->createSelection($product, array('L'));
+        $configurator = Shopware()->Container()->get('configurator_service_core')
+            ->getProductConfigurator($product, $context, $selection);
+        $this->assertInactiveOptions($configurator, array('rot'));
+
+        $selection = $this->createSelection($product, array('blau', 'rund'));
+        $configurator = Shopware()->Container()->get('configurator_service_core')
+            ->getProductConfigurator($product, $context, $selection);
+
+        $this->assertInactiveOptions($configurator, array('M', 'S'));
+    }
+
+    public function testMediaConfigurator()
+    {
+        $number = __FUNCTION__;
+        $context = $this->getContext();
+        $data = $this->getProduct($number, $context);
+
+        $article = $this->helper->createArticle($data);
+    }
+
+    private function assertInactiveOptions(Set $configurator, $expectedOptions)
+    {
         foreach ($configurator->getGroups() as $group) {
             foreach ($group->getOptions() as $option) {
-                $this->assertNotEquals('blau', $option->getName());
-                $this->assertNotEquals('M', $option->getName());
-            }
-        }
-
-        $configurator = $this->helper->getProductConfigurator(
-            $listProduct,
-            $context,
-            $this->createSelection($listProduct, array('blau'))
-        );
-
-        foreach ($configurator->getGroups() as $group) {
-            foreach ($group->getOptions() as $option) {
-                $this->assertNotEquals('weiß', $option->getName());
-                $this->assertNotEquals('M', $option->getName());
+                if (in_array($option->getName(), $expectedOptions)) {
+                    $this->assertFalse($option->getActive());
+                } else {
+                    $this->assertTrue($option->getActive());
+                }
             }
         }
     }

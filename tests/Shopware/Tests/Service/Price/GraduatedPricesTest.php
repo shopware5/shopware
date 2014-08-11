@@ -4,52 +4,28 @@ namespace Shopware\Tests\Service\Price;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
-use Shopware\Tests\Service\Helper;
+use Shopware\Models\Category\Category;
+use Shopware\Tests\Service\TestCase;
 
-class GraduatedPricesTest extends \Enlight_Components_Test_TestCase
+class GraduatedPricesTest extends TestCase
 {
-    /**
-     * @var Helper
-     */
-    private $helper;
-
-    protected function setUp()
+    protected function getContext()
     {
-        $this->helper = new Helper();
-        parent::setUp();
-    }
+        $context = parent::getContext();
 
-    protected function tearDown()
-    {
-        $this->helper->cleanUp();
-        parent::tearDown();
-    }
-
-    /**
-     * @return Context
-     */
-    private function getContext()
-    {
-        $tax = $this->helper->createTax();
-        $customerGroup = $this->helper->createCustomerGroup();
-        $fallback = $this->helper->createCustomerGroup(array('key'=> 'BACK'));
-        $shop = $this->helper->getShop();
-
-        return $this->helper->createContext(
-            $customerGroup,
-            $shop,
-            array($tax),
-            $fallback
+        $context->setFallbackCustomerGroup(
+            $this->helper->createCustomerGroup(array('key'=> 'BACK'))
         );
+
+        return $context;
     }
 
-    private function getProduct($number, Context $context)
-    {
-        $data = $this->helper->getSimpleProduct(
-            $number,
-            array_shift($context->getTaxRules()),
-            $context->getCurrentCustomerGroup()
-        );
+    protected function getProduct(
+        $number,
+        Context $context,
+        Category $category = null
+    ) {
+        $data = parent::getProduct($number, $context, $category);
 
         $data['mainDetail']['prices'] = array_merge(
             $data['mainDetail']['prices'],
