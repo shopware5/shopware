@@ -91,7 +91,8 @@ class PriceFacetHandler implements FacetHandlerInterface
         );
 
         $selection = $this->priceHelper->getCheapestPriceSelection(
-            $context->getCurrentCustomerGroup()
+            $context->getCurrentCustomerGroup(),
+            $context->getCurrency()
         );
 
         $query->select(

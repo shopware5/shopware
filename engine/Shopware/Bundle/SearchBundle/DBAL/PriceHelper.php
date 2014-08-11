@@ -36,19 +36,21 @@ class PriceHelper
     const STATE_INCLUDES_CHEAPEST_PRICE = 'cheapest_price';
 
     /**
-     * @param Struct\Customer\Group $current
+     * @param Struct\Customer\Group $customerGroup
+     * @param Struct\Currency $currency
      * @return string
      */
-    public function getCheapestPriceSelection(Struct\Customer\Group $current)
+    public function getCheapestPriceSelection(Struct\Customer\Group $customerGroup, Struct\Currency $currency)
     {
-        return 'MIN(' . $this->getSelection($current) . ')';
+        return 'MIN(' . $this->getSelection($customerGroup, $currency) . ')';
     }
 
     /**
-     * @param Struct\Customer\Group $current
+     * @param Struct\Customer\Group $customerGroup
+     * @param Struct\Currency $currency
      * @return string
      */
-    public function getSelection(Struct\Customer\Group $current)
+    public function getSelection(Struct\Customer\Group $customerGroup, Struct\Currency $currency)
     {
         $selection = "ROUND(IF(customerPrice.id, customerPrice.price, defaultPrice.price)";
 
@@ -56,13 +58,17 @@ class PriceHelper
 
         $selection .= "* ((100 - IFNULL(priceGroup.discount, 0)) / 100)";
 
-        if ($current->displayGrossPrices()) {
+        if ($customerGroup->displayGrossPrices()) {
             $selection .= " * ((tax.tax + 100) / 100)";
         }
 
-        if ($current->useDiscount()) {
-            $discount = (100 - (float) $current->getPercentageDiscount()) / 100;
+        if ($customerGroup->useDiscount()) {
+            $discount = (100 - (float) $customerGroup->getPercentageDiscount()) / 100;
             $selection .= " * " . $discount;
+        }
+
+        if ($currency->getFactor()) {
+            $selection .= " * " . $currency->getFactor();
         }
 
         return $selection . ', 2)';
@@ -73,8 +79,11 @@ class PriceHelper
      * @param Struct\Customer\Group $current
      * @param Struct\Customer\Group $fallback
      */
-    public function joinPrices(QueryBuilder $query, Struct\Customer\Group $current, Struct\Customer\Group $fallback)
-    {
+    public function joinPrices(
+        QueryBuilder $query,
+        Struct\Customer\Group $current,
+        Struct\Customer\Group $fallback
+    ) {
         if ($query->hasState(self::STATE_INCLUDES_CHEAPEST_PRICE)) {
             return;
         }
