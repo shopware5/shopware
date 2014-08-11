@@ -132,18 +132,11 @@ class MediaHydrator extends Hydrator
      */
     private function getMediaThumbnails(array $data)
     {
-        $sizes = explode(';', $data['__mediaSettings_thumbnail_size']);
-
-        $entity = new Models\Media\Media();
-        $entity->fromArray(array(
-            'type' => $data['__media_type'],
-            'name' => $data['__media_name'],
-            'extension' => $data['__media_extension']
-        ));
-
         return $this->thumbnailManager->getMediaThumbnails(
-            $entity,
-            $sizes
+            $data['__media_name'],
+            $data['__media_type'],
+            $data['__media_extension'],
+            explode(';', $data['__mediaSettings_thumbnail_size'])
         );
     }
 
