@@ -407,6 +407,10 @@ class Inheritance
             }
         }
 
+        if (!is_array($data) || empty($data)) {
+            return array();
+        }
+
         //creates a key value array for the configuration.
         return array_combine(
             array_column($data, 'name'),
