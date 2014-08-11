@@ -2,6 +2,7 @@
 
 namespace Shopware\Tests\Service\Search\Condition;
 
+use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
@@ -152,4 +153,34 @@ class PriceConditionTest extends TestCase
         );
     }
 
+    public function testPriceConditionWithCurrencyFactor()
+    {
+        $category = $this->helper->createCategory();
+        $context = $this->getContext();
+
+        $context->getCurrency()->setFactor(2.5);
+
+        $articles = array(
+            $this->getProduct('first',  $context, $category, 10),
+            $this->getProduct('second', $context, $category, 20),
+            $this->getProduct('third',  $context, $category, 30),
+        );
+
+        foreach ($articles as $article) {
+            $this->helper->createArticle($article);
+        }
+
+        $criteria = new Criteria();
+        $criteria->addCategoryCondition(array($category->getId()));
+        $criteria->addPriceCondition(25, 50);
+
+        /**@var $result ProductNumberSearchResult*/
+        $result = Shopware()->Container()->get('product_number_search_dbal')->search($criteria, $context);
+
+        $this->assertSearchResult(
+            $result,
+            array('first', 'second')
+        );
+
+    }
 }

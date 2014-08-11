@@ -124,6 +124,31 @@ class PriceFacetTest extends TestCase
         $this->assertEquals(150.00, $facet->getMaxPrice());
     }
 
+    public function testFacetWithCurrencyFactor()
+    {
+        $facet = new PriceFacet();
+        $context = $this->getContext(true, null);
+        $customerGroup = $context->getCurrentCustomerGroup();
+        $fallback = $context->getFallbackCustomerGroup();
+
+        $context->getCurrency()->setFactor(2.5);
+
+        $result = $this->search(
+            $context,
+            $facet,
+            array(
+                'first'  => array($customerGroup->getKey() => 0, $fallback->getKey() => 5),
+                'second' => array($fallback->getKey() => 50),
+                'third'  => array($customerGroup->getKey() => 12, $fallback->getKey() => 14),
+                'fourth' => array($fallback->getKey() => 12)
+            ),
+            array('second', 'third', 'fourth', 'first')
+        );
+        
+        $this->assertEquals(250.00, $facet->getMinPrice());
+        $this->assertEquals(375.00, $facet->getMaxPrice());
+    }
+
     private function search(
         Context $context,
         PriceFacet $facet,
