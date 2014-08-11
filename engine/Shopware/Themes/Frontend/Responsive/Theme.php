@@ -93,29 +93,152 @@ class Theme extends \Shopware\Components\Theme
      */
     public function createConfig(Form\Container\TabContainer $container)
     {
-        $columnWidth = array('columnWidth' => 0.5);
-        $tab = $this->createTab('tab1', 'Responsive Konfiguration');
+        $container->addTab($this->createMainConfigTab());
+        $container->addTab($this->createColorConfigTab());
+    }
 
-        $fieldSet = $this->createFieldSet('field1', 'Startseiten Konfiguration', array('attributes' => array('layout' => 'anchor', 'defaults' => array('anchor' => '100%'))));
+    /**
+     * Helper function to create the main tab ("Responsive configuration")
+     * @return Form\Container\Tab
+     */
+    private function createMainConfigTab()
+    {
+        $tab = $this->createTab('responsiveMain', '__responsive_tab_header__', array('attributes' => array('layout' => 'anchor', 'autoScroll' => true, 'padding' => '0', 'defaults' => array('anchor' => '100%'))));
 
-        $fieldSet->addElement($this->createTextField('text1', 'Überschrift', 'Willkommen'));
-        $fieldSet->addElement($this->createColorPickerField('color1', 'Schriftfarbe', '#000'));
-        $fieldSet->addElement($this->createSelectField('textType', 'Schriftart', 'Arial', array(
-            'Courier New',
-            'Arial'
-        )));
-        $fieldSet->addElement($this->createTextAreaField('text2', 'Begrüßungs-Text', ''));
+        $fieldSet = $this->createFieldSet('responsiveGlobal', '__global_configuration__', array('attributes' => array('padding' => '10', 'margin'=> '5', 'layout' => 'anchor', 'defaults' => array('anchor' => '100%', 'labelWidth' => 150))));
 
-        $secondFieldSet = $this->createFieldSet('field2', 'Logo Konfiguration', array('attributes' => array('margin'=> '15 0', 'layout' => 'column', 'defaults' => array('margin' => '0 10'))));
-        $secondFieldSet->addElement($this->createPixelField('logoMarginTop', 'Abstand unten', '10px', array('attributes' => $columnWidth)));
+        $fieldSet->addElement($this->createTextAreaField('additionalCssData', '__additional_css_data__', '', array('attributes' => array('xtype' => 'textarea'))));
+        $fieldSet->addElement($this->createTextAreaField('additionalJsLibraries', '__additional_js_libraries__', '', array('attributes' => array('xtype' => 'textarea'))));
+        $fieldSet->addElement($this->createTextField('bodyFontStack', 'bodyFontStack', '"Open Sans", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif'));
+        $fieldSet->addElement($this->createTextField('headlineFontStack', 'headlineFontStack', '"Open Sans", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif'));
+        $fieldSet->addElement($this->createTextField('subheadlineFontStack', 'subheadlineFontStack', '"Open Sans", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif'));
 
-        $secondFieldSet->addElement($this->createEmField('logoMarginBottom', 'Abstand oben', '10em', array('attributes' => $columnWidth)));
-        $secondFieldSet->addElement($this->createMediaField('logo', 'Logo', 'media/image/logo.jpg', array('attributes' => array('columnWidth' => 1.0, 'margin' => '10'))));
-        $fieldSet->addElement($secondFieldSet);
+        $description = Shopware()->Snippets()->getNamespace('themes/responsive/backend/config')->get('desktop_responsive_description');
+        $fieldSet->addElement($this->createCheckboxField('desktopResponsive', '__desktop_responsive__', true, array('attributes' => array('boxLabel' => $description))));
 
         $tab->addElement($fieldSet);
-        $container->addTab($tab);
 
+        return $tab;
+    }
+
+    /**
+     * Helper function to create the color tab ("Responsive colors")
+     * @return Form\Container\Tab
+     */
+    private function createColorConfigTab()
+    {
+        $colorTab = $this->createTab('responsiveColors', '__responsive_tab_colors__', array('attributes' => array('layout' => 'anchor', 'autoScroll' => true, 'padding' => '0', 'defaults' => array('anchor' => '100%'))));
+
+        $fieldSet = $this->createFieldSet('responsiveColorsInnerBox', '', array('attributes' => array('padding' => '0', 'margin'=> '0', 'border' => 0, 'layout' => 'hbox')));
+
+        $fieldSet->addElement($this->createLeftFieldSet());
+        $fieldSet->addElement($this->createRightFieldSet());
+
+        $colorTab->addElement($fieldSet);
+
+        return $colorTab;
+    }
+
+    /**
+     * Helper function to create the left column of the color tab (includes all main colors)
+     * @return Form\Container\FieldSet
+     */
+    private function createLeftFieldSet()
+    {
+        $fieldSet = $this->createFieldSet('responsiveColorsLeft', '__main_colors__', array('attributes' => array('padding' => '10', 'margin'=> '5', 'flex' => 1, 'layout' => 'anchor', 'defaults' => array('labelWidth' => 200))));
+
+        $fieldSet->addElement($this->createColorPickerField('primaryColor', 'primaryColor', '#e1540f'));
+        $fieldSet->addElement($this->createColorPickerField('primaryContrastColor', 'primaryContrastColor', '#ad1200'));
+        $fieldSet->addElement($this->createColorPickerField('secondaryColor', 'secondaryColor', '#d9400b'));
+
+        $fieldSet->addElement($this->createColorPickerField('complementaryPrimaryColor', 'complementaryPrimaryColor', '#1ABC9C'));
+        $fieldSet->addElement($this->createColorPickerField('complementarySecondaryColor', 'complementarySecondaryColor', '#006943'));
+
+        $fieldSet->addElement($this->createColorPickerField('darkTextColor', 'darkTextColor', '#2b3742'));
+        $fieldSet->addElement($this->createColorPickerField('primaryTextColor', 'primaryTextColor', '#5f7285'));
+        $fieldSet->addElement($this->createColorPickerField('lightTextColor', 'lightTextColor', '#8594a5'));
+        $fieldSet->addElement($this->createColorPickerField('softTextColor', 'softTextColor', '#a5b2bf'));
+        $fieldSet->addElement($this->createColorPickerField('discountTextColor', 'discountTextColor', '#990000'));
+
+        $fieldSet->addElement($this->createColorPickerField('borderColor', 'borderColor', '#d8dde5'));
+        $fieldSet->addElement($this->createColorPickerField('lightDarkBorderColor', 'lightDarkBorderColor', '#C9D0DB'));
+        $fieldSet->addElement($this->createColorPickerField('darkBorderColor', 'darkBorderColor', '#515b66'));
+        $fieldSet->addElement($this->createColorPickerField('primaryBackgroundColor', 'primaryBackgroundColor', '#eceef1'));
+        $fieldSet->addElement($this->createColorPickerField('softBackgroundColor', 'softBackgroundColor', '#f1f4f7'));
+        $fieldSet->addElement($this->createColorPickerField('darkBackgroundColor', 'darkBackgroundColor', '#475c6a'));
+        $fieldSet->addElement($this->createColorPickerField('primaryLightBackgroundColor', 'primaryLightBackgroundColor', '#f7f8fa'));
+
+        $fieldSet->addElement($this->createColorPickerField('lightGradientStart', 'lightGradientStart', '#fff'));
+        $fieldSet->addElement($this->createColorPickerField('lightGradientEnd', 'lightGradientEnd', '#f8f8fa'));
+        $fieldSet->addElement($this->createColorPickerField('gradientContrastColor', 'gradientContrastColor', '#cc1d00'));
+
+        $fieldSet->addElement($this->createColorPickerField('overlayBackground', 'overlayBackground', '#555555'));
+
+        $fieldSet->addElement($this->createColorPickerField('reviewStarColor', 'reviewStarColor', '#ffcb00'));
+
+        return $fieldSet;
+    }
+
+    /**
+     * Helper function to create the right column of the color tab
+     * @return Form\Container\FieldSet
+     */
+    private function createRightFieldSet()
+    {
+        $fieldSet = $this->createFieldSet('responsiveColorsRight', '', array('attributes' => array('padding' => '0', 'margin'=> '0', 'border' => 0, 'flex' => 1, 'layout' => 'anchor')));
+
+        $fieldSet->addElement($this->createAlertColorsFieldSet());
+        $fieldSet->addElement($this->createDeliveryColorsFieldSet());
+
+        return $fieldSet;
+    }
+
+    /**
+     * Helper function to create the alert colors fieldset for the right column of color tab
+     * @return Form\Container\FieldSet
+     */
+    private function createAlertColorsFieldSet()
+    {
+        $fieldSet = $this->createFieldSet('alertColors', '__alert_colors__', array('attributes' => array('padding' => '10', 'margin'=> '5', 'layout' => 'anchor', 'defaults' => array('labelWidth' => 200))));
+
+        $fieldSet->addElement($this->createColorPickerField('successText', 'successText', '#3c763d'));
+        $fieldSet->addElement($this->createColorPickerField('successBackground', 'successBackground', '#dff0d8'));
+        $fieldSet->addElement($this->createColorPickerField('successBorderColor', 'successBorderColor', '#d6e9c6'));
+
+        $fieldSet->addElement($this->createColorPickerField('infoText', 'infoText', '#31708f'));
+        $fieldSet->addElement($this->createColorPickerField('infoBackground', 'infoBackground', '#d9edf7'));
+        $fieldSet->addElement($this->createColorPickerField('infoBorderColor', 'infoBorderColor', '#bce8f1'));
+
+        $fieldSet->addElement($this->createColorPickerField('warningText', 'warningText', '#8a6d3b'));
+        $fieldSet->addElement($this->createColorPickerField('warningBackground', 'warningBackground', '#fcf8e3'));
+
+        $fieldSet->addElement($this->createColorPickerField('errorText', 'errorText', '#a94442'));
+        $fieldSet->addElement($this->createColorPickerField('errorBackground', 'errorBackground', '#f2dede'));
+        $fieldSet->addElement($this->createColorPickerField('errorBorderColor', 'errorBorderColor', '#ebccd1'));
+
+        return $fieldSet;
+    }
+
+    /**
+     * Helper function to create the delivery colors fieldset for the right column of color tab
+     * @return Form\Container\FieldSet
+     */
+    private function createDeliveryColorsFieldSet()
+    {
+        $fieldSet = $this->createFieldSet('delivery', '__delivery_header__', array('attributes' => array('padding' => '10', 'margin'=> '5', 'layout' => 'anchor', 'defaults' => array('labelWidth' => 200))));
+
+        $fieldSet->addElement($this->createColorPickerField('deliveryInfoText', 'deliveryInfoText', '#ffc000'));
+
+        $fieldSet->addElement($this->createColorPickerField('deliveryAvailableIcon', 'deliveryAvailableIcon', '#62d100'));
+        $fieldSet->addElement($this->createColorPickerField('deliveryAvailableText', 'deliveryAvailableText', '#449101'));
+
+        $fieldSet->addElement($this->createColorPickerField('deliveryMoreIsComingIcon', 'deliveryMoreIsComingIcon', '#f0ad4e'));
+        $fieldSet->addElement($this->createColorPickerField('deliveryMoreIsComingText', 'deliveryMoreIsComingText', '#8a6d3b'));
+
+        $fieldSet->addElement($this->createColorPickerField('deliveryNotAvailableIcon', 'deliveryNotAvailableIcon', '#f9390a'));
+        $fieldSet->addElement($this->createColorPickerField('deliveryNotAvailableText', 'deliveryNotAvailableText', '#b1001d'));
+
+        return $fieldSet;
     }
 
     /**

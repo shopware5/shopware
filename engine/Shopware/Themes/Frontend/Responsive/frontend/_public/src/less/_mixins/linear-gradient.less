@@ -32,7 +32,7 @@
 }
 
 .primary-gradient() {
-	@gradient-contrast-color: #cc1d00;
+	@gradient-contrast-color: @gradientContrastColor;
 	.linear-gradient-multi(0%, @gradient-contrast-color, 66%, @primaryColor, 100%, @primaryColor, bottom, top);
 }
 .secondary-gradient() {

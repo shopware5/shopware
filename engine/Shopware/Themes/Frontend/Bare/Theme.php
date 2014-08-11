@@ -40,9 +40,36 @@ class Theme extends \Shopware\Components\Theme
      */
     public function createConfig(Form\Container\TabContainer $container)
     {
-        $tab = $this->createTab('tab1', 'Basis Konfiguration');
-        $tab->addElement($this->createCheckboxField('debugModeEnabled', 'Debug-Modus', 0, array('attributes' => array('boxLabel' => 'Zeigt ein Resize-Panel an, um die Fenster-Größe und die aktuelle Geräteklasse zu terminieren.'))));
+        $tab = $this->createTab('bareMain', '__bare_tab_header__', array('attributes' => array('layout' => 'anchor', 'autoScroll' => true, 'padding' => '0')));
+
+        $fieldSet = $this->createFieldSet('bareGlobal', '__global_configuration__', array('attributes' => array('padding' => '10', 'margin'=> '5', 'layout' => 'anchor', 'defaults' => array('anchor' => '100%'))));
+        $fieldSet->addElement($this->createCheckboxField('scrollableHeader', '__scrollable_header__', false, $this->getLabelAttribute('scrollable_header_description')));
+        $fieldSet->addElement($this->createCheckboxField('offcanvasBasketTablet', '__offcanvas_basket_tablet__', false, $this->getLabelAttribute('offcanvas_basket_tablet_description')));
+        $fieldSet->addElement($this->createCheckboxField('offcanvasBasketDesktop', '__offcanvas_basket_desktop__', false, $this->getLabelAttribute('offcanvas_basket_desktop_description')));
+        $fieldSet->addElement($this->createCheckboxField('focusSearch', '__focus_search__', false, $this->getLabelAttribute('focus_search_description')));
+        $fieldSet->addElement($this->createCheckboxField('checkoutHeader', '__checkout_header__', true, $this->getLabelAttribute('checkout_header_description')));
+        $fieldSet->addElement($this->createCheckboxField('showCategoriesLeft', '__show_categories_left__', false, $this->getLabelAttribute('show_categories_left_description')));
+        $tab->addElement($fieldSet);
+
+        $fieldSet = $this->createFieldSet('bareLogos', '__logos__', array('attributes' => array('padding' => '10', 'margin'=> '5', 'layout' => 'anchor', 'defaults' => array('anchor' => '100%'))));
+        $fieldSet->addElement($this->createMediaField('mobileLogo', '__smartphone__', 'frontend/_public/src/img/logos/logo--mobile.png'));
+        $fieldSet->addElement($this->createMediaField('tabletLogo', '__tablet__', 'frontend/_public/src/img/logos/logo--tablet.png'));
+        $fieldSet->addElement($this->createMediaField('tabletLandscapeLogo', '__tablet_landscape__', 'frontend/_public/src/img/logos/logo--tablet.png'));
+        $fieldSet->addElement($this->createMediaField('desktopLogo', '__desktop__', 'frontend/_public/src/img/logos/logo--tablet.png'));
+        $tab->addElement($fieldSet);
+
         $container->addTab($tab);
+    }
+
+    /**
+     * Helper function to get the attribute of a checkbox field which shows a description label
+     * @param $snippetName
+     * @return array
+     */
+    private function getLabelAttribute($snippetName)
+    {
+        $description = Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get($snippetName);
+        return array('attributes' => array('boxLabel' => $description));
     }
 
     /**
