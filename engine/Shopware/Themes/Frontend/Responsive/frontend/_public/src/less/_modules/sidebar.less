@@ -152,5 +152,31 @@ body > .sidebar-main {
 @media screen and (min-width: @desktopViewportWidth) {
     .sidebar-main {
         display: block;
+
+	.shop-sites--container {
+	    .unitize-padding(16, 10, 4, 10);
+	    border: 1px solid @borderColor;
+
+	    .shop-sites--headline {
+		.unitize(10 ,16, padding-bottom);
+		.unitize(16, 16, font-size);
+		margin-top: 0;
+		border-bottom: 1px solid @borderColor;
+		color: @darkTextColor;
+		font-weight: bold;
+	    }
+
+	    .shop-sites--navigation {
+		border: 0 none;
+	    }
+
+	    .navigation--entry {
+		border: 0 none;
+	    }
+
+	    .navigation--link {
+		.unitize-padding(5, 0, 5, 0);
+	    }
+	}
     }
 }
