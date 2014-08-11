@@ -137,7 +137,7 @@
 								{else}
 									{$lastitem=false}
 								{/if}
-								{include file="frontend/listing/box_blog.tpl" sArticle=$related lastitem=$lastitem}
+								{include file="frontend/listing/box_blog.tpl" sArticle=$related sTemplate='listing-1col' lastitem=$lastitem}
 							{/foreach}
 						</div>
 					{/block}
