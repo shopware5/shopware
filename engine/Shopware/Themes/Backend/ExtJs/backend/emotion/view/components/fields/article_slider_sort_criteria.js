@@ -43,9 +43,6 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.ArticleSliderSortCriter
             'empty_text': '{s name=article_slider_sort_criteria/fields/empty_text}Please select...{/s}'
         },
         store: {
-            'number': '{s name=article_slider_sort_criteria/store/number}Number{/s}',
-            'release_date': '{s name=article_slider_sort_criteria/store/release_date}Release date{/s}',
-            'sales': '{s name=article_slider_sort_criteria/store/sales}Sales{/s}',
             'price_asc': '{s name=article_slider_sort_criteria/store/price_asc}Price (low to high){/s}',
             'price_desc': '{s name=article_slider_sort_criteria/store/price_desc}Price (high to low){/s}'
         }
@@ -86,15 +83,6 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.ArticleSliderSortCriter
         return Ext.create('Ext.data.JsonStore', {
             fields: [ 'value', 'display' ],
             data: [{
-                value: 'number',
-                display: snippets.number
-            }, {
-                value: 'release_date',
-                display: snippets.release_date
-            }, {
-                value: 'sales',
-                display: snippets.sales
-            }, {
                 value: 'price_asc',
                 display: snippets.price_asc
             }, {
