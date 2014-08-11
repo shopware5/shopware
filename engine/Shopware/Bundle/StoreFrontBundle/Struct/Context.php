@@ -98,13 +98,17 @@ class Context extends Extendable
     protected $state;
 
     /**
+     * @var string
+     */
+    protected $baseUrl;
+
+    /**
      * @param \Shopware\Bundle\StoreFrontBundle\Struct\Currency $currency
      *
      */
     public function setCurrency($currency)
     {
         $this->currency = $currency;
-
     }
 
     /**
@@ -247,4 +251,19 @@ class Context extends Extendable
         return $this->taxRules[$key];
     }
 
+    /**
+     * @return string
+     */
+    public function getBaseUrl()
+    {
+        return $this->baseUrl;
+    }
+
+    /**
+     * @param string $baseUrl
+     */
+    public function setBaseUrl($baseUrl)
+    {
+        $this->baseUrl = $baseUrl;
+    }
 }

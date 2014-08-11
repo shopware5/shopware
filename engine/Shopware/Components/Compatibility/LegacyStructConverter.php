@@ -26,6 +26,7 @@ namespace Shopware\Components\Compatibility;
 
 use Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 
 /**
  * @category  Shopware
@@ -45,15 +46,23 @@ class LegacyStructConverter
     private $legacyEventManager;
 
     /**
+     * @var ContextService
+     */
+    private $contextService;
+
+    /**
      * @param \Shopware_Components_Config $config
      * @param LegacyEventManager $legacyEventManager
+     * @param ContextService $contextService
      */
     function __construct(
         \Shopware_Components_Config $config,
-        LegacyEventManager $legacyEventManager
+        LegacyEventManager $legacyEventManager,
+        ContextService $contextService
     ) {
         $this->config = $config;
         $this->legacyEventManager = $legacyEventManager;
+        $this->contextService = $contextService;
     }
 
     /**
@@ -247,7 +256,7 @@ class LegacyStructConverter
             $data['sDownloads'][] = array(
                 'id' => $download->getId(),
                 'description' => $download->getDescription(),
-                'filename' => $this->config->get('convertedBasePath') . $this->config->get('articleFiles') . "/" . $download->getFile(),
+                'filename' => $this->contextService->get()->getBaseUrl() . $this->config->get('articleFiles') . "/" . $download->getFile(),
                 'size' => $download->getSize()
             );
         }
@@ -365,7 +374,7 @@ class LegacyStructConverter
     public function convertMediaStruct(StoreFrontBundle\Struct\Media $media)
     {
         //now we get the configured image and thumbnail dir.
-        $imageDir = $this->config->get('convertedBasePath') . '/media/image/';
+        $imageDir = $this->contextService->get()->getBaseUrl() . '/media/image/';
         $imageDir = str_replace('/media/image/', DIRECTORY_SEPARATOR, $imageDir);
 
         $src = $media->getThumbnails();
