@@ -149,6 +149,22 @@ label.has--error {
     }
 }
 
+@media screen and (min-width: @tabletViewportWidth) {
+
+    /* Standard input fields. */
+    .input--field {
+	.unitize(15, 16, margin-bottom);
+
+	.input--field-zipcode {
+	    margin-right: 2%;
+	    width: 20%;
+	}
+	.input--field-city {
+	    width: 78%;
+	}
+    }
+}
+
 @media screen and (min-width: @desktopViewportWidth) {
 
     // Input field styling
