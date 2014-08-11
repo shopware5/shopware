@@ -471,8 +471,8 @@
 
             me._$closeButton.on('click.modal', $.proxy(me.close, me));
 
-            $window.on('keydown', $.proxy(me.onKeyDown, me));
-            $window.on('resize', $.proxy(me.onWindowResize, me));
+            $window.on('keydown.modal', $.proxy(me.onKeyDown, me));
+            $window.on('resize.modal', $.proxy(me.onWindowResize, me));
 
             StateManager.registerListener({
                 type: 'smartphone',
