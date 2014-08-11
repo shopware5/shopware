@@ -333,10 +333,10 @@
 
 // Product notification
 .product--notification {
-	.unitize-margin(0, 0, 16, 0, 16);
+	.unitize-margin(0, 0, 16, 0);
 
 	.alert {
-		.unitize-margin(0, 0, 8, 0, 16);
+		.unitize-margin(0, 0, 8, 0);
 		word-wrap: break-word;
 		font-weight: bold;
 	}
@@ -345,8 +345,14 @@
 		width: 80%;
 	}
 	.notification--button {
-		.border-radius-multi(0, 3px, 3px, 0);
+        .unitize(23, 16, line-height);
+        .border-radius-multi(0, 3px, 3px, 0);
 		width: 20%;
+        text-align: center;
+
+        .icon--mail {
+            margin: 0;
+        }
 	}
 }
 
@@ -611,4 +617,17 @@
             }
         }
 	}
+
+    // Product notification
+    .product--notification {
+        .unitize-margin(0, 0, 20, 0);
+
+        .alert {
+            .unitize-margin(0, 0, 10, 0);
+        }
+
+        .notification--button {
+            .unitize(20, 16, line-height);
+        }
+    }
 }
