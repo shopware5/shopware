@@ -161,11 +161,13 @@ class Manager
      * Helper function which returns the thumbnail paths of a single
      * media object.
      *
-     * @param Media $media
+     * @param $name
+     * @param $type
+     * @param $extension
      * @param array $sizes
      * @return array
      */
-    public function getMediaThumbnails(Media $media, array $sizes)
+    public function getMediaThumbnails($name, $type, $extension, array $sizes)
     {
         $sizes = $this->uniformThumbnailSizes($sizes);
 
@@ -174,17 +176,17 @@ class Manager
         foreach ($sizes as $size) {
             $suffix = $size['width'] . 'x' . $size['height'];
 
-            $path = $this->getPathOfMedia($media) . DIRECTORY_SEPARATOR . 'thumbnail' . DIRECTORY_SEPARATOR;
+            $path = $this->getPathOfType($type) . DIRECTORY_SEPARATOR . 'thumbnail' . DIRECTORY_SEPARATOR;
 
-            $thumbnails[] = $path . $media->getName() . '_' . $suffix . '.' . $media->getExtension();
+            $thumbnails[] = $path . $name . '_' . $suffix . '.' . $extension;
         }
 
         return $thumbnails;
     }
 
-    private function getPathOfMedia(Media $media)
+    private function getPathOfType($type)
     {
-        return 'media' . DIRECTORY_SEPARATOR . strtolower($media->getType()) ;
+        return 'media' . DIRECTORY_SEPARATOR . strtolower($type) ;
     }
 
     /**
