@@ -1,7 +1,7 @@
 ;(function ($, modernizr) {
     'use strict';
 
-    function emptyFn() {}
+    var emptyFn = function () {};
 
     /**
      * Shopware Overlay Module.

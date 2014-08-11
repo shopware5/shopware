@@ -1,8 +1,13 @@
+{if $article.additional_details.sConfigurator}
+    {$detailLink={url controller=detail sArticle=$article.articleID number=$article.ordernumber}}
+{else}
+    {$detailLink=$article.linkDetails}
+{/if}
 <div class="product-slider--item">
     {* Slider item Image *}
     {block name='checkout_ajax_add_cross_slider_item_image'}
         <div class="item--image">
-            <a href="{$article.linkDetails}" class="link--image" title="{$article.articleName|escape}">
+            <a href="{$detailLink}" class="link--image" title="{$article.articleName|escape}">
                 <span data-picture data-alt="{if $article.image.res.description}{$article.image.res.description|escape:"html"}{else}{$article.articleName|escape:"html"}{/if}">
 
                     {*Image based on our default media queries*}
@@ -27,7 +32,7 @@
     {* Slider item name *}
     {block name='checkout_ajax_add_cross_slider_item_name'}
         <div class="item--name">
-            <a href="{$article.linkDetails}" class="link--name" title="{$article.articleName|escape}">
+            <a href="{$detailLink}" class="link--name" title="{$article.articleName|escape}">
                 {$article.articleName|escape|truncate:30}
             </a>
         </div>
