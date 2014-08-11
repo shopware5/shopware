@@ -5,13 +5,19 @@
 {/block}
 
 {block name='checkout_ajax_add_information'}
+    {if $sArticle.additional_details.sConfigurator}
+        {$detailLink={url controller=detail sArticle=$sArticle.articleID number=$sArticle.ordernumber}}
+    {else}
+        {$detailLink=$sArticle.linkDetails}
+    {/if}
+
     <div class="modal--article block-group">
 
         {* Article image *}
         {block name='checkout_ajax_add_information_image'}
             <div class="article--image block">
-                <a href="{$sArticle.linkDetails}" class="link--article-image" title="{$sArticle.articleName|escape:"html"}">
-                    <span data-picture data-alt="{if $sArticle.image.res.description}{$sArticle.image.res.description|escape:"html"}{else}{$sArticle.articleName|escape:"html"}{/if}">
+                <a href="{$detailLink}" class="link--article-image" title="{$sArticle.articlename|escape:"html"}">
+                    <span data-picture data-alt="{if $sArticle.image.res.description}{$sArticle.image.res.description|escape:"html"}{else}{$sArticle.articlename|escape:"html"}{/if}">
                         {*Image based on our default media queries*}
                         {block name='frontend_detail_image_default_queries'}
                             <span data-src="{if isset($sArticle.image.src)}{$sArticle.image.src.2}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}"></span>
@@ -23,7 +29,7 @@
                         {*If the browser doesn't support JS, the following image will be used*}
                         {block name='frontend_detail_image_fallback'}
                             <noscript>
-                                <img itemprop="image" src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" alt="{$sArticle.articleName|escape:"html"}">
+                                <img src="{if isset($sArticle.image.src)}{$sArticle.image.src.4}{else}{link file='frontend/_resources/images/no_picture.jpg'}{/if}" alt="{$sArticle.articleName|escape:"html"}">
                             </noscript>
                         {/block}
                     </span>
@@ -36,8 +42,8 @@
             <div class="article--name block">
                 <ul class="list--name list--unstyled">
                     <li class="entry--name">
-                        <a class="link--name" href="{$sArticle.linkDetails}" title="{$sArticle.articleName|escape}">
-                            {$sArticleName|escape|truncate:37}
+                        <a class="link--name" href="{$detailLink}" title="{$sArticle.articlename|escape}">
+                            {$articlename|escape|truncate:37}
                         </a>
                     </li>
                     <li class="entry--ordernumber">{s name="AjaxAddLabelOrdernumber"}{/s}: {$sArticle.ordernumber}</li>
@@ -61,7 +67,7 @@
     <div class="modal--actions">
         {* Contiune shopping *}
         {block name='checkout_ajax_add_actions_continue'}
-            <a href="{$sBasket.sLastActiveArticle.link}" title="{s name='AjaxAddLinkBack'}{/s}" class="link--back btn btn--secondary is--left">
+            <a href="{$detailLink}" title="{s name='AjaxAddLinkBack'}{/s}" class="link--back btn btn--secondary is--left">
                 {s name='AjaxAddLinkBack'}{/s} <i class="icon--arrow-left"></i>
             </a>
         {/block}

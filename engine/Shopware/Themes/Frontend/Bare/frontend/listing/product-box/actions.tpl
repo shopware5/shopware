@@ -22,7 +22,7 @@
 			{* More information button *}
 			{block name='frontend_listing_box_article_actions_more'}
 				<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}"
-                   title="{$sArticle.articleName}"
+                   title="{$sArticle.articleName|escape:"html"}"
 				   class="product--action action--more btn btn--primary">
 					{s name='ListingBoxLinkDetails'}{/s}
 					<i class="icon--arrow-right is--right is--small"></i>

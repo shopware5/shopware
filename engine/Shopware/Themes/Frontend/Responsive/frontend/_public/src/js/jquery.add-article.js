@@ -40,7 +40,7 @@
              *
              * @type {String}
              */
-            eventName: 'click',
+            'eventName': 'click',
 
             /**
              * The ajax url that the request should be send to.
@@ -49,7 +49,7 @@
              *
              * @type {String}
              */
-            addArticleUrl: jQuery.controller['ajax_add_article']
+            'addArticleUrl': jQuery.controller['ajax_add_article']
         },
 
         /**
@@ -79,21 +79,22 @@
          * @param {jQuery.Event} event
          */
         sendSerializedForm: function (event) {
+            event.preventDefault();
+
             var me = this,
                 $el = me.$el,
                 ajaxData = $el.serialize(),
                 $modal;
 
             $.loadingIndicator.open({
-                closeOverlay: false
+                'closeOverlay': false
             });
 
             $.ajax({
-                data: ajaxData,
-                dataType: 'jsonp',
-                url: me.opts.addArticleUrl,
-
-                success: function (result) {
+                'data': ajaxData,
+                'dataType': 'jsonp',
+                'url': me.opts.addArticleUrl,
+                'success': function (result) {
                     $.loadingIndicator.close(function() {
                         $modal = $.modal.open(result, {
                             width: 750,
@@ -106,8 +107,6 @@
                     });
                 }
             });
-
-            event.preventDefault();
         },
 
         /**
@@ -123,44 +122,44 @@
             }
 
             StateManager.registerListener([{
-                type: 'smartphone',
-                enter: function () {
+                'type': 'smartphone',
+                'enter': function () {
                     $slider.productSlider({
-                        perPage: 1,
-                        perSlide: 1,
-                        touchControl: true
+                        'perPage': 1,
+                        'perSlide': 1,
+                        'touchControl': true
                     });
                 }
             }, {
-                type: 'tablet',
-                enter: function () {
+                'type': 'tablet',
+                'enter': function () {
                     $slider.productSlider({
-                        perPage: 2,
-                        perSlide: 1,
-                        touchControl: true
+                        'perPage': 2,
+                        'perSlide': 1,
+                        'touchControl': true
                     });
                 }
             }, {
-                type: 'tabletLandscape',
-                enter: function () {
+                'type': 'tabletLandscape',
+                'enter': function () {
                     $slider.productSlider({
-                        perPage: 3,
-                        perSlide: 1,
-                        touchControl: true
+                        'perPage': 3,
+                        'perSlide': 1,
+                        'touchControl': true
                     });
                 }
             }, {
-                type: 'desktop',
-                enter: function () {
+                'type': 'desktop',
+                'enter': function () {
                     $slider.productSlider({
-                        perPage: 3,
-                        perSlide: 1,
-                        touchControl: true
+                        'perPage': 3,
+                        'perSlide': 1,
+                        'touchControl': true
                     });
                 }
             }, {
-                type: '*',
-                enter: function () {
+                'type': '*',
+                'enter': function () {
                     setTimeout(function () {
                         var $slider = $modal.find('.product-slider');
 
@@ -171,7 +170,7 @@
                         $slider.data('plugin_productSlider').setSizes();
                     }, 10);
                 },
-                exit: function () {
+                'exit': function () {
                     var $slider = $modal.find('.product-slider');
 
                     if(!$slider || !$slider.length) {

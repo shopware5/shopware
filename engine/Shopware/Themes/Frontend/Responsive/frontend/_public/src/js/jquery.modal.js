@@ -1,4 +1,4 @@
-;(function ($) {
+;(function ($, window) {
     'use strict';
 
     var emptyFn = function () { };
@@ -280,7 +280,7 @@
                     me.options.src = content;
                     break;
                 case 'iframe':
-                    me.setContent('<iframe src="' + content + '" width="100%" height="100%"></iframe>');
+                    me.setContent('<iframe class="content--iframe" src="' + content + '" width="100%" height="100%"></iframe>');
                     me.options.src = content;
                     break;
                 default:
@@ -388,7 +388,7 @@
                 me.center();
 
                 // centering again to fix some styling/positioning issues
-                setTimeout(me.center.bind(me), 25);
+                window.setTimeout(me.center.bind(me), 25);
             }
             
             $.publish('plugin/modal/onSetContent');
@@ -584,5 +584,5 @@
             }
         }
     }
-})(jQuery);
+})(jQuery, window);
 
