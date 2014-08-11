@@ -77,7 +77,7 @@
             }
 
             if (me.$loader !== null) {
-                me.$loader.fadeOut(opts.animationSpeed || me.defaults.animationSpeed, callback);
+                me.$loader.fadeOut(opts.animationSpeed || me.defaults.animationSpeed, $.proxy(callback, me));
             }
         },
 

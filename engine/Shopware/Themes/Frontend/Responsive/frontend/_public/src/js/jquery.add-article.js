@@ -1,4 +1,4 @@
-;jQuery(function($) {
+;jQuery(function ($) {
     'use strict';
 
     /**
@@ -49,7 +49,27 @@
              *
              * @type {String}
              */
-            'addArticleUrl': jQuery.controller['ajax_add_article']
+            'addArticleUrl': jQuery.controller['ajax_add_article'],
+
+            /**
+             * Object that maps different device types with their per-page amount.
+             *
+             * @type {Object}
+             */
+            'sliderPerPage': {
+                'desktop': 3,
+                'tabletLandscape': 3,
+                'tablet': 2,
+                'smartphone': 1
+            },
+
+            /**
+             * Default value that is used for the per-page amount when the current device is not mapped.
+             * An extra option because the mapping table can be accidentally overwritten.
+             *
+             * @type {Number}
+             */
+            'sliderPerPageDefault': 3
         },
 
         /**
@@ -71,11 +91,12 @@
         },
 
         /**
+         * Gets called when the element was triggered by the given event name.
          * Serializes the plugin element {@link $el} and sends it to the given url.
          * When the ajax request was successful, the {@link initModalSlider} will be called.
          *
          * @public
-         * @method sendSerializedForm
+         * @event sendSerializedForm
          * @param {jQuery.Event} event
          */
         sendSerializedForm: function (event) {
@@ -83,8 +104,7 @@
 
             var me = this,
                 $el = me.$el,
-                ajaxData = $el.serialize(),
-                $modal;
+                ajaxData = $el.serialize();
 
             $.loadingIndicator.open({
                 'closeOverlay': false
@@ -95,91 +115,79 @@
                 'dataType': 'jsonp',
                 'url': me.opts.addArticleUrl,
                 'success': function (result) {
-                    $.loadingIndicator.close(function() {
-                        $modal = $.modal.open(result, {
+                    $.loadingIndicator.close(function () {
+                        $.modal.open(result, {
                             width: 750,
-                            sizing: 'content'
+                            sizing: 'content',
+                            onClose: me.onCloseModal
                         });
 
                         picturefill();
 
-                        me.initModalSlider($modal);
+                        me.initModalSlider();
                     });
                 }
             });
         },
 
         /**
-         * When the modal content contains a product slider, it will be initialized.
+         * Gets called when the modal box is closing.
+         * Destroys the product slider when its available.
          *
-         * @param {jQuery} $modal
+         * @public
+         * @event onCloseModal
          */
-        initModalSlider: function ($modal) {
-            var $slider = $('.js--modal').find('.product-slider');
+        onCloseModal: function () {
+            var $sliderEl = $('.js--modal').find('.product-slider'),
+                slider;
 
-            if (!$slider || !$slider.length) {
+            if (!$sliderEl || !$sliderEl.length) {
                 return;
             }
 
-            StateManager.registerListener([{
-                'type': 'smartphone',
-                'enter': function () {
-                    $slider.productSlider({
-                        'perPage': 1,
-                        'perSlide': 1,
-                        'touchControl': true
-                    });
-                }
-            }, {
-                'type': 'tablet',
-                'enter': function () {
-                    $slider.productSlider({
-                        'perPage': 2,
-                        'perSlide': 1,
-                        'touchControl': true
-                    });
-                }
-            }, {
-                'type': 'tabletLandscape',
-                'enter': function () {
-                    $slider.productSlider({
-                        'perPage': 3,
-                        'perSlide': 1,
-                        'touchControl': true
-                    });
-                }
-            }, {
-                'type': 'desktop',
-                'enter': function () {
-                    $slider.productSlider({
-                        'perPage': 3,
-                        'perSlide': 1,
-                        'touchControl': true
-                    });
-                }
-            }, {
+            slider = $sliderEl.data('plugin_productSlider');
+
+            if (slider) {
+                slider.destroy();
+            }
+        },
+
+        /**
+         * When the modal content contains a product slider, it will be initialized.
+         *
+         * @public
+         * @method initModalSlider
+         */
+        initModalSlider: function () {
+            var me = this,
+                perPageList = me.opts.sliderPerPage,
+                perPage = me.opts.sliderPerPageDefault,
+                $sliderEl = $('.js--modal').find('.product-slider'),
+                slider;
+
+            if (!$sliderEl || !$sliderEl.length) {
+                return;
+            }
+
+            StateManager.registerListener({
                 'type': '*',
-                'enter': function () {
-                    setTimeout(function () {
-                        var $slider = $modal.find('.product-slider');
+                'enter': function (event) {
+                    slider = $sliderEl.data('plugin_productSlider');
+                    perPage = perPageList[event.entering] || perPage;
 
-                        if(!$slider || !$slider.length) {
-                            return;
-                        }
-
-                        $slider.data('plugin_productSlider').setSizes();
-                    }, 10);
-                },
-                'exit': function () {
-                    var $slider = $modal.find('.product-slider');
-
-                    if(!$slider || !$slider.length) {
+                    if (!slider) {
+                        $sliderEl.productSlider({
+                            'perPage': perPage,
+                            'perSlide': 1,
+                            'touchControl': true
+                        });
                         return;
                     }
 
-                    $slider.data('plugin_productSlider').destroy();
+                    slider.opts.perPage = perPage;
+                    slider.setSizes();
                 }
-            }]);
+            });
         }
     });
 });
