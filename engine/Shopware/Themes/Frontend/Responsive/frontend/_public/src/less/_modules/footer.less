@@ -13,6 +13,8 @@
 
     .column--headline {
         .user-select(none);
+	.unitize-margin(20, 0, 20, 0, 16);
+	font-weight: 700;
         color: @primaryColor;
         cursor: pointer;
 
@@ -111,11 +113,10 @@
     .footer-main {
         border-top: 1px solid @borderColor;
 
-        .column--headline {
+	.column--headline {
 	    .unitize(16, 16, font-size);
-	    font-weight: bold;
-            cursor: text;
-        }
+	    cursor: text;
+	}
 
         .footer--column {
             .unitize-padding(0, 10, 0, 10, 16);
@@ -134,6 +135,10 @@
         .column--content {
             display: block;
         }
+
+	.column--headline {
+	    .unitize-margin(28, 0, 10, 0, 16);
+	}
 
         .column--headline::after {
             display: none;
