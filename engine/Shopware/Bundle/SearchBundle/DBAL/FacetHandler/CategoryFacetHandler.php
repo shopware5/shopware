@@ -30,6 +30,7 @@ use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\DBAL\FacetHandlerInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
 
@@ -120,9 +121,20 @@ class CategoryFacetHandler implements FacetHandlerInterface
 
         $ids = array_keys($categories);
 
-        $facet->setCategories(
-            $this->categoryService->getList($ids, $context)
-        );
+        $categoryStructs = $this->categoryService->getList($ids, $context);
+
+        foreach($categories as $id => $total) {
+            if (!$categoryStructs[$id]) {
+                continue;
+            }
+            $category = $categoryStructs[$id];
+
+            $attribute = new Attribute();
+            $attribute->set('total', $total);
+            $category->addAttribute('facet', $attribute);
+        }
+
+        $facet->setCategories($categoryStructs);
 
         return $facet;
     }

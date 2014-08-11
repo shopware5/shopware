@@ -21,6 +21,17 @@ class Converter
         return $struct;
     }
 
+
+    public function convertCategory(Models\Category\Category $category)
+    {
+        $struct = new Struct\Category();
+        $struct->setId($category->getId());
+        $struct->setName($category->getName());
+        $struct->setPath($category->getPath());
+
+        return $struct;
+    }
+
     /**
      * Converts a currency doctrine model to a currency struct
      *
@@ -57,6 +68,12 @@ class Converter
         $struct->setSecure($shop->getSecure());
         $struct->setSecureHost($shop->getSecureHost());
         $struct->setSecurePath($struct->getSecurePath());
+
+        if ($shop->getCategory()) {
+            $struct->setCategory(
+                $this->convertCategory($shop->getCategory())
+            );
+        }
 
         return $struct;
     }

@@ -388,7 +388,7 @@ class LegacyStructConverter
             'id' => $media->getId(),
             'position' => 1,
             'extension' => $media->getExtension(),
-            'main' => $media->getPreview(),
+            'main' => $media->isPreview(),
             'parentId' => null,
             'src' => $src,
             'res' => array(

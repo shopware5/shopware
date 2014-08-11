@@ -3,43 +3,10 @@
 namespace Shopware\Tests\Service\Price;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
-use Shopware\Tests\Service\Helper;
+use Shopware\Tests\Service\TestCase;
 
-class CheapestPriceTest extends \Enlight_Components_Test_TestCase
+class CheapestPriceTest extends TestCase
 {
-    /**
-     * @var Helper
-     */
-    private $helper;
-
-    protected function setUp()
-    {
-        $this->helper = new Helper();
-        parent::setUp();
-    }
-
-    protected function tearDown()
-    {
-        $this->helper->cleanUp();
-        parent::tearDown();
-    }
-
-    /**
-     * @return Context
-     */
-    private function getContext()
-    {
-        $tax = $this->helper->createTax();
-        $customerGroup = $this->helper->createCustomerGroup();
-        $shop = $this->helper->getShop();
-
-        return $this->helper->createContext(
-            $customerGroup,
-            $shop,
-            array($tax)
-        );
-    }
-
     private function getConfiguratorProduct($number, Context $context)
     {
         $product = $this->helper->getSimpleProduct(

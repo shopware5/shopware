@@ -82,7 +82,7 @@ class ProductAttributeConditionHandler implements ConditionHandlerInterface
                 break;
 
             case ($condition->getOperator() === ProductAttributeCondition::OPERATOR_IN):
-                $query->andWhere('productAttribute' . $condition->getField() . ' IN ('. $placeholder . ')');
+                $query->andWhere('productAttribute.' . $condition->getField() . ' IN ('. $placeholder . ')');
                 $query->setParameter($placeholder, $condition->getValue(), Connection::PARAM_STR_ARRAY);
                 break;
 

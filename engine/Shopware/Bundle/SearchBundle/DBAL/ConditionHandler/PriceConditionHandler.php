@@ -75,7 +75,8 @@ class PriceConditionHandler implements ConditionHandlerInterface
         Context $context
     ) {
         $selection = $this->priceHelper->getCheapestPriceSelection(
-            $context->getCurrentCustomerGroup()
+            $context->getCurrentCustomerGroup(),
+            $context->getCurrency()
         );
 
         $this->priceHelper->joinPrices(

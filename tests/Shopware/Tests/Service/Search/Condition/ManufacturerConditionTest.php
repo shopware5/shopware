@@ -1,49 +1,16 @@
 <?php
 
-namespace Shopware\Tests\Service\Search;
+namespace Shopware\Tests\Service\Search\Condition;
 
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Models\Article\Supplier;
 use Shopware\Models\Category\Category;
-use Shopware\Tests\Service\Helper;
+use Shopware\Tests\Service\TestCase;
 
 class ManufacturerConditionTest extends TestCase
 {
-    /**
-     * @var Helper
-     */
-    private $helper;
-
-    protected function setUp()
-    {
-        $this->helper = new Helper();
-        parent::setUp();
-    }
-
-    protected function tearDown()
-    {
-        $this->helper->cleanUp();
-        parent::tearDown();
-    }
-
-    /**
-     * @return Context
-     */
-    private function getContext()
-    {
-        $tax = $this->helper->createTax();
-        $customerGroup = $this->helper->createCustomerGroup();
-        $shop = $this->helper->getShop();
-
-        return $this->helper->createContext(
-            $customerGroup,
-            $shop,
-            array($tax)
-        );
-    }
-
     /**
      * @param $number
      * @param \Shopware\Models\Category\Category $category
@@ -51,17 +18,13 @@ class ManufacturerConditionTest extends TestCase
      * @param \Shopware\Bundle\StoreFrontBundle\Struct\Context $context
      * @return array
      */
-    private function getDefaultProduct($number, Category $category, Supplier $manufacturer, Context $context)
-    {
-        $product = $this->helper->getSimpleProduct(
-            $number,
-            array_shift($context->getTaxRules()),
-            $context->getCurrentCustomerGroup()
-        );
-
-        $product['categories'] = array(
-            array('id' => $category->getId())
-        );
+    protected function getProduct(
+        $number,
+        Context $context,
+        Category $category = null,
+        Supplier $manufacturer = null
+    ) {
+        $product = parent::getProduct($number, $context, $category);
 
         if ($manufacturer) {
             $product['supplierId'] = $manufacturer->getId();
@@ -78,8 +41,8 @@ class ManufacturerConditionTest extends TestCase
         $context = $this->getContext();
 
         $articles = array(
-            $this->getDefaultProduct('testSingleManufacturer-1', $category, null, $context),
-            $this->getDefaultProduct('testSingleManufacturer-2', $category, $manufacturer, $context),
+            $this->getProduct('testSingleManufacturer-1', $context, $category, null),
+            $this->getProduct('testSingleManufacturer-2', $context, $category, $manufacturer),
         );
 
         foreach ($articles as $article) {
@@ -108,9 +71,9 @@ class ManufacturerConditionTest extends TestCase
         $context = $this->getContext();
 
         $articles = array(
-            $this->getDefaultProduct('testMultipleManufacturers-1', $category, null, $context),
-            $this->getDefaultProduct('testMultipleManufacturers-2', $category, $manufacturer, $context),
-            $this->getDefaultProduct('testMultipleManufacturers-3', $category, $second, $context),
+            $this->getProduct('testMultipleManufacturers-1', $context, $category, null),
+            $this->getProduct('testMultipleManufacturers-2', $context, $category, $manufacturer),
+            $this->getProduct('testMultipleManufacturers-3', $context, $category, $second),
         );
 
         foreach ($articles as $article) {

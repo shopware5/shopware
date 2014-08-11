@@ -83,6 +83,11 @@ class ManufacturerFacetHandler implements FacetHandlerInterface
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         $ids = array_column($data, 'id');
+        $ids = array_filter($ids);
+
+        if (empty($ids)) {
+            return $facet;
+        }
 
         $manufacturers = $this->manufacturerService->getList($ids, $context);
 
@@ -90,6 +95,10 @@ class ManufacturerFacetHandler implements FacetHandlerInterface
         $condition = $criteria->getCondition('manufacturer');
 
         foreach ($data as $row) {
+            if (!$row['id']) {
+                continue;
+            }
+
             $manufacturer = $manufacturers[$row['id']];
 
             $attribute = new Attribute();
