@@ -24,9 +24,11 @@
 {/function}
 
 {if $sMenu.gLeft}
-	{block name='frontend_index_left_menu_headline'}
-		<h2 class="shop-sites--headline navigation--headline">{s name="MenuLeftHeading"}Informationen{/s}</h2>
-	{/block}
+	<div class="shop-sites--container">
+		{block name='frontend_index_left_menu_headline'}
+			<h2 class="shop-sites--headline navigation--headline">{s name="MenuLeftHeading"}Informationen{/s}</h2>
+		{/block}
 
-    {call name=customPages customPages=$sMenu.gLeft}
+		{call name=customPages customPages=$sMenu.gLeft}
+	</div>
 {/if}
