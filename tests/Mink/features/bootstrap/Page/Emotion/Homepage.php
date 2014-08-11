@@ -681,7 +681,36 @@ class Homepage extends Page
             'form' => $element->cssLocator[$formLocatorName],
             'formSubmitButton' => $element->cssLocator[$formLocatorName] . ' *[type="submit"]'
         );
-        $elements = \Helper::findElements($element, $locators, $locators);
+        $elements = \Helper::findElements($element, $locators, $locators, false, false);
+
+        if(empty($elements['form'])) {
+            $message = sprintf('The form "%s" was not found!', $formLocatorName);
+            \Helper::throwException($message);
+        }
+
+        $form = $elements['form'];
+        $formSubmit = $elements['formSubmitButton'];
+
+        if(empty($formSubmit)) {
+            $locators = array(
+                'submitButton' => '*[type="submit"]'
+            );
+            $elements = \Helper::findElements($element, $locators, $locators, true, false);
+
+            $formId = $form->getAttribute('id');
+
+            foreach($elements['submitButton'] as $submit) {
+                if($submit->getAttribute('form') === $formId) {
+                    $formSubmit = $submit;
+                    break;
+                }
+            }
+        }
+
+        if(empty($formSubmit)) {
+            $message = sprintf('The form "%s" has no submit button!', $formLocatorName);
+            \Helper::throwException($message);
+        }
 
         foreach ($values as $value) {
             $tempFieldName = $fieldName = $value['field'];
@@ -692,7 +721,7 @@ class Homepage extends Page
                     $fieldName = sprintf('%s[%s]', $key, $tempFieldName);
                 }
 
-                $field = $elements['form']->findField($fieldName);
+                $field = $form->findField($fieldName);
 
                 if (empty($field)) {
                     if (empty($fieldValue)) {
@@ -722,6 +751,6 @@ class Homepage extends Page
             }
         }
 
-        $elements['formSubmitButton']->press();
+        $formSubmit->press();
     }
 }

@@ -27,7 +27,7 @@ Feature: Checkout articles
             | percent | value  |
             | 19 %    | 6,68 € |
 
-        When  I go to the page "CheckoutConfirm"
+        When  I follow the link "checkout" of the page "CheckoutCart"
         And   I follow the link "changeButton" of the element "CheckoutPayment"
         And   only on "Emotion" template "I submit the form 'paymentForm' on page 'Account' with:" :
             | field   | register |
@@ -36,7 +36,7 @@ Feature: Checkout articles
             | field   | value |
             | payment | 3     |
         Then  I should see "Nachnahme"
-        And   the cart should contain 1 articles with a value of "37,95 €"
+        And   only on "Emotion" template "the cart should contain 1 articles with a value of '37,95 €'"
         And   the total sum should be "41,85 €" when shipping costs are "3,90 €" and VAT is:
             | percent | value  |
             | 19 %    | 6,68 € |
@@ -49,8 +49,8 @@ Feature: Checkout articles
 
     @shipping @payment
     Scenario: I can change the shipping-country to a non-EU-country and back and pay via bill
-        Given I go to the page "CheckoutConfirm"
-        Given I follow the link "changeButton" of the element "CheckoutShipping"
+        Given only on "Responsive" template "I follow the link 'checkout' of the page 'CheckoutCart'"
+        And   I follow the link "changeButton" of the element "CheckoutShipping"
         And   I submit the form "shippingForm" on page "Account" with:
             | field   | register[shipping] |
             | country | Schweiz            |
@@ -89,7 +89,7 @@ Feature: Checkout articles
 
     @delivery @payment
     Scenario: I can change the delivery to Express and pay via debit
-        Given I go to the page "CheckoutConfirm"
+        Given only on "Responsive" template "I follow the link 'checkout' of the page 'CheckoutCart'"
 
         When  only on "Emotion" template "I submit the form 'deliveryForm' on page 'CheckoutConfirm' with:" :
             | field     | value |
