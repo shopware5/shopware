@@ -234,6 +234,7 @@ class Compiler
      *
      * @param $timestamp
      * @param Shop\Shop $shop
+     * @throws \RuntimeException
      */
     private function outputCompiledCss($timestamp, Shop\Shop $shop)
     {
@@ -244,7 +245,12 @@ class Compiler
 
         $css = $this->compiler->getCss();
 
-        $output->fwrite($css);
+        $success = $output->fwrite($css);
+        if ($success === null) {
+            throw new \RuntimeException(
+                "Could not write to " . $output->getPath()
+            );
+        }
     }
 
     /**
