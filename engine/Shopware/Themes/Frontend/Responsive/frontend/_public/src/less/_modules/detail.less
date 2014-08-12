@@ -430,7 +430,7 @@
             .unitize-margin(0, 35, 0, 0);
             color: @primaryTextColor;
 
-            &:last-child { margin: 0 }
+            &:last-child { margin-right: 0 }
 
             &:hover {
                 color: @primaryColor;
@@ -439,7 +439,7 @@
             // Icon
             [class^=icon] {
                 .unitize(14, 16, font-size);
-                .unitize-margin(0, 8, 0, 0);
+                .unitize-margin(0, 5, 0, 0);
             }
         }
 
@@ -503,13 +503,25 @@
 			}
 		}
 
-		// Reformat the product actions
 		.product--actions {
-			.unitize-margin(16, 0, 16, 0);
-			.unitize-padding(0, 0, 10, 0);
+            .clearfix();
+			.unitize-margin(20, 0);
+            padding: 0;
 			border-top: 0 none;
 			border-bottom: 1px solid @borderColor;
 		}
+
+        // Product actions
+        .action--link {
+            .unitize-margin(0, 0, 10, 0);
+            display: inline-block;
+            width: 50%;
+            float: left;
+
+            [class^=icon] {
+                .unitize-margin(0, 3, 0, 0);
+            }
+        }
 	}
 }
 
@@ -591,15 +603,12 @@
             }
         }
 
-        // Image thumbnails
-		.image--thumbnails {
-
-		}
-
-		// Product actions
-		.action--link {
-			.unitize(20, 16, margin-right);
-		}
+        .action--link {
+            .unitize-margin(0, 20, 10, 0);
+            display: inline-block;
+            width: auto;
+            float: left;
+        }
 
         .js--desktop-tab-panel {
             .unitize(40, 16, margin-bottom);
