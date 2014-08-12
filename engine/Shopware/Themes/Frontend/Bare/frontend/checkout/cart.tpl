@@ -46,7 +46,7 @@
                     <div class="table--actions">
 
                         <div class="main--actions">
-                            {* Contiune shopping *}
+			    {* Continue shopping *}
                             {if $sBasket.sLastActiveArticle.link}
                                 {block name="frontend_checkout_actions_link_last"}
                                     <a href="{$sBasket.sLastActiveArticle.link}" title="{"{s name='CheckoutActionsLinkLast' namespace="frontend/checkout/actions"}{/s}"|escape}" class="btn btn--secondary is--left">
