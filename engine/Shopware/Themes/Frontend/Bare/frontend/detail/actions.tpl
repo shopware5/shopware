@@ -15,7 +15,7 @@
 {block name='frontend_detail_actions_voucher'}
 	{if {config name=showTellAFriend}}
 		<a href="{$sArticle.linkTellAFriend}" rel="nofollow" title="{s name='DetailLinkVoucher'}{/s}" class="action--link link--tell-a-friend">
-			{s name="DetailLinkVoucher"}{/s}
+			<i class="icon--comment"></i> {s name="DetailLinkVoucherShort"}{/s}
 		</a>
 	{/if}
 {/block}
