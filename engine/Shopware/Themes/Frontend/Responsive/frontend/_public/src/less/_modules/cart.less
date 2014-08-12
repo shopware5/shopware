@@ -116,7 +116,6 @@
 		text-align: center;
 
 		.btn {
-			.white-gradient();
 			.unitize-padding(10, 14);
 
 			i {
@@ -595,10 +594,21 @@
             border: 0 none;
         }
 
-		.column--actions {
-			position: static;
-			bottom: auto;
+	// Product actions
+	.column--actions {
+	    position: static;
+	    bottom: auto;
+	    float: right;
+
+	    .btn {
+		.unitize-padding(5, 8);
+
+		i {
+		    .unitize(9, 16, font-size);
+		    font-weight: bold;
 		}
+	    }
+	}
 
 		// Hide all inline labels
 		.column--label { display: none }
