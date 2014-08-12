@@ -41,21 +41,25 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
         'select_article': '{s name=select_article}Select article(s){/s}',
         'article_administration': '{s name=article_administration}Article administration{/s}',
         'name': '{s name=name}Article name{/s}',
-        'ordernumber': '{s name=ordernumber}Ordernumber{/s}',
+        'ordernumber': '{s name=ordernumber}Order number{/s}',
         'actions': '{s name=actions}Action(s){/s}',
 
         article_slider_max_number: '{s name=article_slider_max_number}Maximum number of articles{/s}',
         article_slider_title: '{s name=article_slider_title}Title{/s}',
         article_slider_arrows: '{s name=article_slider_arrows}Display arrows{/s}',
-        article_slider_numbers: '{s name=article_slider_numbers}Display numbers{/s}',
+        article_slider_numbers: {
+            fieldLabel: '{s name=article_slider_numbers}Display numbers{/s}',
+            supportText: '{s name=article_slider_numbers_support}Only supported in Emotion templates{/s}'
+        },
         article_slider_scrollspeed: '{s name=article_slider_scrollspeed}Scroll speed{/s}',
+        article_slider_category: '{s name=article_slider_category}Filter by category{/s}',
 
         article_slider_rotation: '{s name=article_slider_rotation}Rotate automatically{/s}',
         article_slider_rotatespeed: '{s name=article_slider_rotatespeed}Rotation speed{/s}'
     },
 
     /**
-     * Initiliaze the component.
+     * Initialize the component.
      *
      * @public
      * @return void
@@ -68,17 +72,25 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
         me.getGridData();
 
         me.articleType = me.down('emotion-components-fields-article-slider-type');
+        me.articleSortCriteria = me.down('emotion-components-fields-article-slider-sort-criteria');
+        me.categoryFilter = me.down('emotion-components-fields-category-selection');
         if(!me.articleType.getValue()) {
             me.maxCountField.hide();
+            me.articleSortCriteria.hide();
+            me.categoryFilter.hide();
             me.articleFieldset.hide();
         }
         if(me.articleType.getValue() === 'selected_article') {
             me.maxCountField.hide();
+            me.articleSortCriteria.hide();
+            me.categoryFilter.hide();
             me.articleFieldset.show();
             me.rotateSpeed.show().enable();
             me.rotation.show().enable();
         } else {
             me.maxCountField.show();
+            me.articleSortCriteria.show();
+            me.categoryFilter.show();
             me.articleFieldset.hide();
             me.rotateSpeed.hide().disable();
             me.rotation.hide().disable();
@@ -93,11 +105,15 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
 
         if(newValue !== 'selected_article') {
             me.maxCountField.show();
+            me.articleSortCriteria.show();
+            me.categoryFilter.show();
             me.articleFieldset.hide();
             me.rotateSpeed.hide().disable();
             me.rotation.hide().disable();
         } else {
             me.maxCountField.hide();
+            me.articleSortCriteria.hide();
+            me.categoryFilter.hide();
             me.articleFieldset.show();
             me.rotateSpeed.show().enable();
             me.rotation.show().enable();
@@ -318,7 +334,7 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
     },
 
     /**
-     * Refactor sthe mapping field in the global record
+     * Refactor the mapping field in the global record
      * which contains all article in the grid.
      *
      * Adds all articles to the article administration grid

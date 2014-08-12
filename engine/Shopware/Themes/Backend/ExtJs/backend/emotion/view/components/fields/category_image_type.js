@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.CategoryImageType', {
     },
 
     /**
-     * Initiliaze the component.
+     * Initialize the component.
      *
      * @public
      * @return void

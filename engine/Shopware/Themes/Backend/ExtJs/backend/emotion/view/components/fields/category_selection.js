@@ -39,13 +39,12 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.CategorySelection', {
      */
     snippets: {
         fields: {
-            please_select: '{s name=fields/please_select}Please select...{/s}',
-            category_select: '{s name=fields/category_select}Select category{/s}'
+            please_select: '{s name=fields/please_select}Please select...{/s}'
         }
     },
 
     /**
-     * Initiliaze the component.
+     * Initialize the component.
      *
      * @public
      * @return void
@@ -56,7 +55,6 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.CategorySelection', {
         Ext.apply(me, {
             pageSize: 15,
             triggerAction: 'all',
-            fieldLabel: me.snippets.fields.category_select,
             valueField: 'id',
             displayField: 'name',
             emptyText: me.snippets.fields.please_select,

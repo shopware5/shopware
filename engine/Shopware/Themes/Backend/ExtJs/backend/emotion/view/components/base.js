@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
             me.items = [];
         }
 
-        // Holder fielset which contains the element settings
+        // Holder fieldset which contains the element settings
         me.elementFieldset = Ext.create('Ext.form.FieldSet', {
             title: '{s name=base/fieldset_title}Element settings{/s}',
             defaults: me.defaults,
@@ -91,9 +91,14 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
     },
 
     createFormElements: function() {
-        var me = this, items = [], store, name, fieldLabel, snippet, supportText;
+        var me = this, items = [], store, name, fieldLabel, snippet, supportText, sortedFields;
 
-        Ext.each(me.getSettings('fields', true), function(item) {
+        sortedFields = Ext.Array.sort(
+            me.getSettings('fields', true),
+            function(item1, item2) { return item1.get('position') - item2.get('position')}
+        );
+
+        Ext.each(sortedFields, function(item) {
             name = item.get('name');
             fieldLabel = item.get('fieldLabel');
             supportText = item.get('supportText');

@@ -47,6 +47,7 @@ In this document you will find a changelog of the important changes related to t
 * Changed behavior of the `selection` configurator. Configurator options which have none available product variant disabled now in the select-tag. The new snippet `DetailConfigValueNotAvailable` can be used to append additional text after the value name.
 * Variant's `additional text` field is now automatically generated using the configurator group options. This can be optionally disabled
 * The sBasket::sGetNotes function is refactored with the new shopware service classes and calls no more the sGetPromotionById function.
+* The article slider now supports sorting by price (asc and desc) and category filtering
 
 ## 4.3.0
 * Removed `location` header in responses for all REST-API PUT routes (e.g. PUT /api/customers/{id}).

@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Blog', {
     },
 
     /**
-     * Initiliaze the component.
+     * Initialize the component.
      *
      * @public
      * @return void

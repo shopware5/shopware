@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.ManufacturerType', {
     },
 
     /**
-     * Initiliaze the component.
+     * Initialize the component.
      *
      * @public
      * @return void
