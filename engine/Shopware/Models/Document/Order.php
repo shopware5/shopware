@@ -23,9 +23,9 @@
  */
 
 /**
+ * Order model for document generation
  */
-class
-    Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Hook
+class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Hook
 {
     /**
      * Id of the order (s_order.id)
@@ -124,13 +124,13 @@ class
      */
     protected $_currency;
     /**
-     * Shippingcosts
+     * Shipping costs
      *
      * @var double
      */
     protected $_shippingCosts;
     /**
-     * Add shippingcosts as order position
+     * Add shipping costs as order position
      *
      * @var bool
      */
@@ -145,29 +145,16 @@ class
      * @param  $id
      * @param array $config
      */
-    public function __construct($id,$config=array())
+    public function __construct($id, $config = array())
     {
         // Test-data for preview mode
-        if ($config["_preview"] == true && $config["_previewSample"]==true) {
-            $array = 'a:18:{s:7:"_amount";i:142;s:12:"_amountNetto";d:119.32773109243697717829491011798381805419921875;s:8:"_billing";s:983:"C:11:"ArrayObject":958:{x:i:2;a:23:{s:2:"id";s:1:"1";s:6:"userID";s:1:"2";s:7:"orderID";s:1:"7";s:7:"company";s:11:"shopware AG";s:10:"department";s:0:"";s:10:"salutation";s:2:"mr";s:14:"customernumber";s:0:"";s:9:"firstname";s:6:"Test  ";s:8:"lastname";s:6:"Test  ";s:6:"street";s:9:"Testerweg";s:7:"zipcode";s:5:"48624";s:4:"city";s:11:"Schöppingen";s:5:"phone";s:14:"02555 / 997500";s:3:"fax";s:0:"";s:9:"countryID";s:1:"2";s:5:"ustid";s:0:"";s:5:"text1";s:0:"";s:5:"text2";s:0:"";s:5:"text3";s:0:"";s:5:"text4";s:0:"";s:5:"text5";s:0:"";s:5:"text6";s:0:"";s:7:"country";C:11:"ArrayObject":373:{x:i:2;a:13:{s:2:"id";s:1:"2";s:11:"countryname";s:11:"Deutschland";s:10:"countryiso";s:2:"DE";s:11:"countryarea";s:11:"deutschland";s:9:"countryen";s:7:"GERMANY";s:8:"position";s:1:"1";s:6:"notice";s:0:"";s:12:"shippingfree";s:1:"0";s:7:"taxfree";s:1:"0";s:13:"taxfree_ustid";s:1:"0";s:21:"taxfree_ustid_checked";s:1:"0";s:6:"active";s:1:"1";s:4:"iso3";s:3:"DEU";};m:a:0:{}}};m:a:0:{}}";s:9:"_currency";s:138:"C:11:"ArrayObject":113:{x:i:2;a:4:{s:8:"currency";s:3:"EUR";s:4:"name";s:4:"Euro";s:6:"factor";s:1:"1";s:4:"char";s:6:"&euro;";};m:a:0:{}}";s:9:"_dispatch";s:45:"C:11:"ArrayObject":21:{x:i:2;a:0:{};m:a:0:{}}";s:3:"_id";i:0;s:4:"_net";b:0;s:6:"_order";s:1014:"C:11:"ArrayObject":989:{x:i:2;a:36:{s:2:"id";s:1:"7";s:11:"ordernumber";s:5:"10001";s:6:"userID";s:1:"2";s:14:"invoice_amount";s:3:"142";s:18:"invoice_amount_net";s:6:"119.32";s:16:"invoice_shipping";s:2:"13";s:20:"invoice_shipping_net";s:5:"10.92";s:9:"ordertime";s:19:"2010-09-09 00:00:00";s:6:"status";s:1:"7";s:7:"cleared";s:2:"17";s:9:"paymentID";s:1:"3";s:13:"transactionID";s:0:"";s:7:"comment";s:0:"";s:15:"customercomment";s:0:"";s:3:"net";s:1:"0";s:7:"taxfree";s:1:"0";s:9:"partnerID";s:0:"";s:11:"temporaryID";s:0:"";s:7:"referer";s:0:"";s:11:"cleareddate";s:19:"0000-00-00 00:00:00";s:12:"trackingcode";s:0:"";s:8:"language";s:2:"de";s:10:"dispatchID";s:1:"9";s:8:"currency";s:3:"EUR";s:14:"currencyFactor";s:1:"1";s:9:"subshopID";s:1:"1";s:7:"o_attr1";s:0:"";s:7:"o_attr2";s:0:"";s:7:"o_attr3";s:0:"";s:7:"o_attr4";s:0:"";s:7:"o_attr5";s:0:"";s:7:"o_attr6";s:0:"";s:11:"remote_addr";s:14:"192.168.178.53";s:6:"factor";s:1:"1";s:12:"templatechar";s:6:"&euro;";s:12:"currencyName";s:4:"Euro";};m:a:0:{}}";s:8:"_payment";s:493:"C:11:"ArrayObject":468:{x:i:2;a:16:{s:2:"id";s:1:"3";s:4:"name";s:4:"cash";s:11:"description";s:9:"Nachnahme";s:8:"template";s:8:"cash.tpl";s:5:"class";s:8:"cash.php";s:5:"table";s:0:"";s:4:"hide";s:1:"0";s:21:"additionaldescription";s:35:"(zzgl. 2,00 Euro Nachnahmegebühren)";s:13:"debit_percent";s:1:"0";s:9:"surcharge";s:1:"0";s:15:"surchargestring";s:0:"";s:8:"position";s:1:"2";s:6:"active";s:1:"1";s:9:"esdactive";s:1:"0";s:11:"embediframe";s:0:"";s:12:"hideprospect";s:1:"0";};m:a:0:{}}";s:10:"_positions";s:1354:"C:11:"ArrayObject":1328:{x:i:2;a:2:{i:0;a:46:{s:2:"id";s:1:"7";s:7:"orderID";s:1:"7";s:11:"ordernumber";s:5:"10001";s:9:"articleID";s:1:"8";s:18:"articleordernumber";s:6:"SW2003";s:5:"price";d:129;s:8:"quantity";s:1:"1";s:4:"name";s:18:"Lunaracer Größe 42";s:6:"status";s:1:"0";s:7:"shipped";s:1:"0";s:12:"shippedgroup";s:1:"0";s:11:"releasedate";s:10:"0000-00-00";s:5:"modus";s:1:"0";s:10:"esdarticle";s:1:"0";s:5:"taxID";s:1:"1";s:6:"config";s:0:"";s:8:"od_attr1";s:0:"";s:8:"od_attr2";s:0:"";s:8:"od_attr3";s:0:"";s:8:"od_attr4";s:0:"";s:8:"od_attr5";s:0:"";s:8:"od_attr6";s:0:"";s:5:"attr1";N;s:5:"attr2";N;s:5:"attr3";N;s:5:"attr4";N;s:5:"attr5";N;s:5:"attr6";N;s:5:"attr7";N;s:5:"attr8";N;s:5:"attr9";N;s:6:"attr10";N;s:6:"attr11";N;s:6:"attr12";N;s:6:"attr13";N;s:6:"attr14";N;s:6:"attr15";N;s:6:"attr16";N;s:6:"attr17";N;s:6:"attr18";N;s:6:"attr19";N;s:6:"attr20";N;s:3:"tax";s:2:"19";s:5:"netto";d:108.40336134453781369302305392920970916748046875;s:12:"amount_netto";d:108.40336134453781369302305392920970916748046875;s:6:"amount";i:129;}i:1;a:8:{s:8:"quantity";i:1;s:5:"netto";d:10.924369747899159932558177388273179531097412109375;s:3:"tax";s:2:"19";s:5:"price";s:2:"13";s:6:"amount";s:2:"13";s:12:"amount_netto";d:10.924369747899159932558177388273179531097412109375;s:18:"articleordernumber";s:0:"";s:4:"name";s:13:"Versandkosten";}};m:a:0:{}}";s:9:"_shipping";s:872:"C:11:"ArrayObject":847:{x:i:2;a:20:{s:2:"id";s:1:"1";s:6:"userID";s:1:"2";s:7:"orderID";s:1:"7";s:7:"company";s:0:"";s:10:"department";s:0:"";s:10:"salutation";s:2:"mr";s:9:"firstname";s:6:"Test  ";s:8:"lastname";s:6:"Test  ";s:6:"street";s:9:"Testerweg";s:7:"zipcode";s:5:"48624";s:4:"city";s:11:"Schöppingen";s:9:"countryID";s:1:"2";s:5:"text1";s:0:"";s:5:"text2";s:0:"";s:5:"text3";s:0:"";s:5:"text4";s:0:"";s:5:"text5";s:0:"";s:5:"text6";s:0:"";s:7:"country";C:11:"ArrayObject":373:{x:i:2;a:13:{s:2:"id";s:1:"2";s:11:"countryname";s:11:"Deutschland";s:10:"countryiso";s:2:"DE";s:11:"countryarea";s:11:"deutschland";s:9:"countryen";s:7:"GERMANY";s:8:"position";s:1:"1";s:6:"notice";s:0:"";s:12:"shippingfree";s:1:"0";s:7:"taxfree";s:1:"0";s:13:"taxfree_ustid";s:1:"0";s:21:"taxfree_ustid_checked";s:1:"0";s:6:"active";s:1:"1";s:4:"iso3";s:3:"DEU";};m:a:0:{}}};m:a:0:{}}";s:14:"_shippingCosts";s:2:"13";s:24:"_shippingCostsAsPosition";b:1;s:11:"_summaryNet";b:0;s:4:"_tax";s:61:"a:1:{i:19;d:22.67226890756302282170508988201618194580078125;}";s:5:"_user";s:615:"C:11:"ArrayObject":590:{x:i:2;a:19:{s:2:"id";s:1:"2";s:8:"password";s:32:"c899f4ef7be7ddaab75bcd8b6c9a85a8";s:5:"email";s:14:"hl@shopware.ag";s:6:"active";s:1:"1";s:11:"accountmode";s:1:"0";s:15:"confirmationkey";s:0:"";s:9:"paymentID";s:1:"5";s:10:"firstlogin";s:10:"2010-06-18";s:9:"lastlogin";s:19:"2010-08-09 15:04:12";s:9:"sessionID";s:32:"b33a7d0a8ee56fe430b70e36c6de7eec";s:10:"newsletter";s:1:"0";s:10:"validation";s:0:"";s:9:"affiliate";s:1:"0";s:13:"customergroup";s:2:"EK";s:13:"paymentpreset";s:1:"0";s:8:"language";s:2:"de";s:9:"subshopID";s:1:"1";s:7:"referer";s:0:"";s:12:"pricegroupID";N;};m:a:0:{}}";s:7:"_userID";i:0;s:17:"_paymentInstances";s:45:"C:11:"ArrayObject":21:{x:i:2;a:0:{};m:a:0:{}}";}';
-            $array = utf8_decode($array);
-            $array = unserialize($array);
-            $array = $this->convertToUtf8($array);
+        if ($config["_preview"] == true && $config["_previewSample"] == true) {
+            $array = $this->getDemoData();
 
             $array['_order']->language = 1;
 
-            foreach ($array as &$element) {
-                if (is_object($element)) {
-                    $element = serialize($element);
-                }
-            }
-
-            foreach ($array as $key => $v) {
-                if (preg_match("/\{/",$v)) {
-                    $this->$key = unserialize($v);
-                } else {
-                    $this->$key = $v;
-                }
+            foreach ($array as $key => $element) {
+                $this->$key = $element;
             }
 
             return;
@@ -742,5 +729,10 @@ class
         }
 
         return $taxRate;
+    }
+
+    private function getDemoData()
+    {
+        return include __DIR__ . DIRECTORY_SEPARATOR . 'Data' . DIRECTORY_SEPARATOR . 'OrderData.php';
     }
 }
