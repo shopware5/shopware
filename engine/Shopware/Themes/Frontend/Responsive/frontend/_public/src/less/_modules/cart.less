@@ -586,6 +586,7 @@
         .row--premium-product { height: 100%; }
 
 		.panel--body {
+	    .unitize-padding(14, 20, 20, 20);
 			border: 1px solid @borderColor;
 		}
 
@@ -615,19 +616,15 @@
 
 		// Basic header styling
 		.table--header {
-			.unitize-padding(18, 0, 8, 0);
+			.unitize-padding(0, 0, 10, 0);
 			.unitize-margin(0, 0, 10, 0);
 			border-bottom: 1px solid @borderColor;
 			display: block;
 
 			.table--column {
-				.unitize(14, 16, font-size);
-				font-weight: bold;
-				color: #000;
-			}
-
-			.column--product {
 				.unitize(16, 16, font-size);
+				font-weight: bold;
+				color: @darkTextColor;
 			}
 		}
 
@@ -714,7 +711,7 @@
 		}
 
 		.basket--footer {
-			.unitize-margin(0, -10, -10, -10);
+			.unitize-margin(0, -20, -20, -20);
 			.unitize(28, 16, padding-bottom);
 			.clearfix();
 			border-top: 1px solid @borderColor;
