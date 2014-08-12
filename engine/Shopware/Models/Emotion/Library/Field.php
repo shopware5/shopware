@@ -168,6 +168,12 @@ class Field extends ModelEntity
     private $helpText;
 
     /**
+     * @var integer $position
+     * @ORM\Column(name="position", type="integer", nullable=false)
+     */
+    private $position;
+
+    /**
      * Contains the assigned \Shopware\Models\Emotion\Library\Component
      * which can be configured in the backend emotion module.
      * The assigned library component contains the data definition for the grid element.
@@ -439,5 +445,21 @@ class Field extends ModelEntity
     public function getDefaultValue()
     {
         return $this->defaultValue;
+    }
+
+    /**
+     * @param int $position
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
     }
 }

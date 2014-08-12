@@ -62,10 +62,9 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     {
         $category = (int) $this->Request()->getParam("category");
         $limit = (int) $this->Request()->getParam("limit");
-
         $elementHeight = $this->Request()->getParam("elementHeight");
         $elementWidth = $this->Request()->getParam("elementWidth");
-
+        $sort = $this->Request()->getParam("sort");
         $pages = $this->Request()->getParam("pages");
         $offset = (int) $this->Request()->getParam("start", $limit * ($pages-1));
 
@@ -74,7 +73,10 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $max = $this->Request()->getParam("max");
         $maxPages = round($max / $limit);
 
-        $values = $this->getProductTopSeller($category, $offset, $limit);
+        $userGroupKey = Shopware()->Modules()->System()->sUSERGROUPDATA['key'];
+
+        $sort = array('popularity', $sort);
+        $values = $this->getProductSliderData($category, $userGroupKey, $offset, $limit, $sort);
 
         $this->View()->assign('articles', $values["values"]);
         $this->View()->assign('pages', $values["pages"] > $maxPages ? $maxPages : $values["pages"]);
@@ -93,6 +95,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $limit = (int) $this->Request()->getParam("limit");
         $elementHeight = $this->Request()->getParam("elementHeight");
         $elementWidth = $this->Request()->getParam("elementWidth");
+        $sort = $this->Request()->getParam("sort");
 
         $pages = $this->Request()->getParam("pages");
         $offset = (int) $this->Request()->getParam("start", $limit * ($pages-1));
@@ -100,7 +103,10 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $max = $this->Request()->getParam("max");
         $maxPages = round($max / $limit);
 
-        $values = $this->getProductNewcomer($category, $offset, $limit);
+        $userGroupKey = Shopware()->Modules()->System()->sUSERGROUPDATA['key'];
+
+        $sort = array('date', $sort);
+        $values = $this->getProductSliderData($category, $userGroupKey, $offset, $limit, $sort);
 
         $this->View()->assign('articles', $values["values"]);
         $this->View()->assign('pages', $values["pages"] > $maxPages ? $maxPages : $values["pages"]);
@@ -474,6 +480,9 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $perPage = $element['endRow'] - $element['startRow'] + 1;
         }
 
+        $userGroupKey = Shopware()->Modules()->System()->sUSERGROUPDATA['key'];
+        $category = (int) $data['article_slider_category'] ? : $category;
+
         $values = array();
 
         $max = $data["article_slider_max_number"];
@@ -488,19 +497,31 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 }
                 break;
             case "topseller":
-                $temp = $this->getProductTopSeller($category, 0, $perPage);
+                $sort = array('popularity', $data['article_slider_sort_criteria']);
+                $temp = $this->getProductSliderData($category, $userGroupKey, 0, $perPage, $sort);
                 $values = $temp["values"];
                 $data["pages"] = $temp["pages"] > $maxPages ? $maxPages : $temp["pages"];
 
-                $query = array('controller' => 'emotion', 'module' => 'widgets', 'action' => 'emotionTopSeller');
+                $query = array(
+                    'controller' => 'emotion',
+                    'module' => 'widgets',
+                    'action' => 'emotionTopSeller',
+                    'sort' => $data['article_slider_sort_criteria']
+                );
                 $data["ajaxFeed"] = Shopware()->Router()->assemble($query);
                 break;
             case "newcomer":
-                $temp = $this->getProductNewcomer($category, 0, $perPage);
+                $sort = array('date', $data['article_slider_sort_criteria']);
+                $temp = $this->getProductSliderData($category, $userGroupKey, 0, $perPage, $sort);
                 $values = $temp["values"];
                 $data["pages"] = $temp["pages"] > $maxPages ? $maxPages : $temp["pages"];
 
-                $query = array('controller' => 'emotion', 'module' => 'widgets', 'action' => 'emotionNewcomer');
+                $query = array(
+                    'controller' => 'emotion',
+                    'module' => 'widgets',
+                    'action' => 'emotionNewcomer',
+                    'sort' => $data['article_slider_sort_criteria']
+                );
                 $data["ajaxFeed"] = Shopware()->Router()->assemble($query);
                 break;
             default;
@@ -514,96 +535,61 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         return $data;
     }
 
-    private function getProductNewcomer($category, $offset = 0, $limit)
+    /**
+     * Returns a list of top sold products
+     *
+     * @param $category
+     * @param $userGroupKey
+     * @param int $offset
+     * @param $limit
+     * @param array $sort
+     * @return array
+     */
+    private function getProductSliderData($category, $userGroupKey, $offset = 0, $limit, $sort = null)
     {
-        $sql = "
-            SELECT DISTINCT SQL_CALC_FOUND_ROWS a.id AS id
-            FROM s_articles a
-              INNER JOIN s_articles_categories_ro ac
-                 ON ac.articleID = a.id
-              INNER JOIN s_categories c
-                 ON c.id = ac.categoryID
-                 AND c.active = 1
+        $context = Shopware()->Container()->get('context_service')->get();
+        $criteria = new \Shopware\Bundle\SearchBundle\Criteria();
 
-            WHERE a.active=1
-            AND c.id=?
+        $criteria
+            ->addCategoryCondition(array($category))
+            ->addCustomerGroupCondition(array($userGroupKey))
+            ->offset($offset)
+            ->limit($limit);
 
-            ORDER BY a.datum DESC
-        ";
-
-        $sql = Shopware()->Db()->limit($sql, $limit, $offset);
-
-        $articles = Shopware()->Db()->fetchAll($sql, array($category));
-
-        $count = Shopware()->Db()->fetchOne("SELECT FOUND_ROWS()");
-        $pages = round($count / $limit);
-
-        $values = array();
-        foreach ($articles as &$article) {
-            $articleId = $article["id"];
-
-            $value = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, $articleId, false);
-            if (!$value) {
-                continue;
+        foreach ($sort as $sortCriteria) {
+            switch ($sortCriteria) {
+                case 'price_asc':
+                    $criteria->sortByCheapestPrice();
+                    break;
+                case 'price_desc':
+                    $criteria->sortByHighestPrice();
+                    break;
+                case 'popularity':
+                    $criteria->sortByPopularity('DESC');
+                    break;
+                case 'date':
+                    $criteria->sortByReleaseDate('DESC');
+                    break;
             }
-
-            $values[] = $value;
         }
 
-        return array("values" => $values, "pages" => $pages);
+        /** @var $result \Shopware\Bundle\SearchBundle\ProductSearchResult */
+        $result = Shopware()->Container()->get('product_search')
+            ->search($criteria, $context);
 
-    }
+        $data = array();
 
-    private function getProductTopSeller($category, $offset = 0, $limit)
-    {
-        $sql = "
-            SELECT
-              STRAIGHT_JOIN
-              SQL_CALC_FOUND_ROWS
+        foreach($result->getProducts() as $product) {
+            $data[] = Shopware()->Container()->get('legacy_struct_converter')->convertListProductStruct($product);
+        }
 
-              a.id AS articleID,
-              s.sales AS quantity
-
-            FROM s_articles_top_seller_ro s
-
-            INNER JOIN s_articles_categories_ro ac
-              ON ac.articleID = s.article_id
-              AND ac.categoryID = :categoryId
-
-            INNER JOIN s_categories c
-              ON ac.categoryID = c.id
-              AND c.active = 1
-
-            INNER JOIN s_articles a
-              ON a.id = s.article_id
-              AND a.active = 1
-
-            GROUP BY a.id
-            ORDER BY quantity DESC
-        ";
-
-        $sql = Shopware()->Db()->limit($sql, $limit, $offset);
-        $articles = Shopware()->Db()->fetchAll($sql, array('categoryId' => $category));
-
-        $count = Shopware()->Db()->fetchOne("SELECT FOUND_ROWS()");
+        $count = $result->getTotalCount();
         $pages = round($count / $limit);
 
         if ($pages == 0 && $count > 0) {
             $pages = 1;
         }
 
-        $values = array();
-
-        foreach ($articles as &$article) {
-            $articleId = $article["articleID"];
-
-            $value = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, $articleId, false);
-            if (!$value) {
-                continue;
-            }
-            $values[] = $value;
-        }
-
-        return array("values" => $values, "pages" => $pages);
+        return array("values" => $data, "pages" => $pages);
     }
 }
