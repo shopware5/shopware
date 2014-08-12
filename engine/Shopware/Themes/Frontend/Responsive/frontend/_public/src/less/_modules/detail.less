@@ -159,6 +159,13 @@
 		.unitize-margin(0, 0, 32, 0, 16);
 	}
 
+    .content--description,
+    .content--product-reviews,
+    .content--related-products,
+    .content--similar-products {
+        .unitize-padding(10, 10);
+    }
+
     .product--properties {
         .unitize-padding(0, 0, 10, 0);
 
@@ -218,6 +225,10 @@
 		.unitize-margin(0, 0, 10, 0);
 		width: 100%;
 	}
+
+    .captcha--placeholder {
+        .unitize-margin(20, 0);
+    }
 
 	.review--notice {
 		.unitize(12, 16, font-size);
@@ -451,13 +462,24 @@
                 .unitize-margin(0, 20);
             }
             .tab--content {
-                .unitize-padding(20, 40);
+                padding: 0;
 				border-left: 0 none;
 				border-right: 0 none;
             }
         }
 
-		// Block prices
+        .content--description,
+        .content--product-reviews {
+            .unitize-padding(10, 35, 35, 35);
+        }
+
+        .content--related-products,
+        .content--similar-products {
+            .unitize-padding(20, 35);
+        }
+
+
+        // Block prices
 		.block-prices--container {
 			.unitize(12, 16, margin-top);
 		}
@@ -492,17 +514,6 @@
             width: 50%;
         }
 
-		.js--desktop-tab-panel {
-			.unitize-margin(0, -45, 20, -45);
-
-			.panel--tab-nav {
-				.unitize-margin(0, 45);
-			}
-			.tab--content {
-				.unitize-padding(25, 55, 45);
-			}
-		}
-
 		.product--actions {
             .clearfix();
 			.unitize-margin(20, 0);
@@ -521,6 +532,10 @@
             [class^=icon] {
                 .unitize-margin(0, 3, 0, 0);
             }
+        }
+
+        .review--form-container {
+            width: 60%;
         }
 	}
 }
@@ -615,17 +630,25 @@
             margin-left: 0;
             margin-right: 0;
 
-
             .panel--tab-nav {
                 .unitize-margin(0, 50, 0, 0);
             }
 
             .tab--content {
-                .unitize-padding(25, 55, 45);
                 border: 1px solid @borderColor;
             }
         }
-	}
+
+        .content--description,
+        .content--product-reviews {
+            .unitize-padding(10, 45, 45, 45);
+        }
+
+        .content--related-products,
+        .content--similar-products {
+            .unitize-padding(30, 45, 20, 45);
+        }
+    }
 
     // Product notification
     .product--notification {
