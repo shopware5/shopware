@@ -224,6 +224,7 @@ class Repository extends ModelRepository
 
     /**
      * This function selects all elements and components of the passed emotion id.
+     * @param $emotionId
      * @return QueryBuilder
      */
     public function getEmotionElementsQuery($emotionId)

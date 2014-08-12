@@ -1,7 +1,7 @@
 {extends file='parent:frontend/home/index.tpl'}
 
 {block name='frontend_index_header_canonical'}
-<link rel="canonical" href="{url sCategory=$sCategoryCurrent emotionId=$emotionId}" />
+<link rel="canonical" href="{url emotionId=$emotionId}" />
 {/block}
 
 
