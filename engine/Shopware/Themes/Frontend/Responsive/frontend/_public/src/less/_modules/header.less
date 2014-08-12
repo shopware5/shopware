@@ -20,6 +20,49 @@
 	}
 }
 
+// Small Checkout & Registration Header
+.is--ctl-checkout,
+.is--ctl-register {
+
+    // Header Support Info
+    .header-main {
+        .logo-main {
+            width: 100%;
+        }
+
+        .logo--shop {
+            width: 50%
+        }
+
+        .logo--supportinfo {
+            display: none;
+        }
+
+        .logo--trusted-shops {
+            width: 10%;
+            float: right;
+
+            .trusted-shops--link {
+                float: right;
+            }
+        }
+
+        .btn--back-top-shop {
+            display: none;
+        }
+    }
+
+    &.is--act-cart {
+        .logo--shop {
+            width: 50%;
+        }
+
+        .logo--trusted-shops {
+            width: 50%;
+        }
+    }
+}
+
 .shop--navigation {
 	position: relative;
 
@@ -248,37 +291,6 @@
     }
 }
 
-// Small Checkout & Registration Header
-.is--ctl-checkout, .is--ctl-register {
-
-    // Header Support Info
-    .header-main {
-        .logo-main {
-            width: 100%;
-        }
-
-        .logo--shop {
-            width: 50%
-        }
-
-        .logo--supportinfo {
-            display: none;
-            width: 40%;
-        }
-    }
-
-    &.is--act-cart {
-        .logo--shop {
-            width: 50%;
-        }
-
-        .logo--trusted-shops {
-            width: 50%;
-        }
-    }
-
-}
-
 // Tablet styling for the global shop header
 @media screen and (min-width: @tabletViewportWidth) {
 	.header-main {
@@ -342,6 +354,27 @@
 			float: left;
 		}
 	}
+
+    // Header Support Info
+    .is--ctl-checkout,
+    .is--ctl-register {
+        .header-main {
+            .box-shadow(0 1px 2px 0 @borderColor);
+
+            .logo-main {
+                width: 100%;
+            }
+
+            .logo--shop {
+                width: 40%
+            }
+
+            .logo--supportinfo {
+                display: block;
+                width: 40%;
+            }
+        }
+    }
 
 	.logo-main, .shop--navigation {
 		float: left;
@@ -550,25 +583,26 @@
 @media screen and (min-width: @tabletLandscapeViewportWidth) {
 
     .shop--navigation .entry--search { width: 45%; }
-    // Small Checkout & Registration Header
-    .is--ctl-checkout, .is--ctl-register {
 
-        // Header Support Info
+    // Small Checkout & Registration Header
+    .is--ctl-checkout,
+    .is--ctl-register {
+
         .header-main {
             .box-shadow(0 1px 2px 0 @borderColor);
 
             .logo--shop {
-                width: 40%
+                width: 30%
             }
 
             .logo--supportinfo {
-                display: block;
+                width: 35%;
             }
 
-            .logo--trusted-shops {
-                width: 20%;
-
-                a { float: right; }
+            .btn--back-top-shop {
+                .unitize-margin(5, 0, 0, 0);
+                display: inline-block;
+                float: right;
             }
         }
 
@@ -597,6 +631,44 @@
 		.logo--shop { width: 75% }
 		.logo--trusted-shops { width: 25%; }
 	}
+
+    // Small Checkout & Registration Header
+    .is--ctl-checkout,
+    .is--ctl-register {
+
+        .header-main {
+            .box-shadow(0 1px 2px 0 @borderColor);
+
+            .logo--shop {
+                width: 30%
+            }
+
+            .logo--supportinfo {
+                width: 35%;
+            }
+
+            .btn--back-top-shop {
+                .unitize-margin(5, 0, 0, 0);
+                display: inline-block;
+                float: right;
+            }
+        }
+
+        // Header Support Info
+        &.is--act-cart {
+            .logo-main {
+                width: 28.5%;
+            }
+
+            .logo--shop {
+                width: 75%;
+            }
+
+            .logo--trusted-shops {
+                width: 25%;
+            }
+        }
+    }
 
 	// General shop navigation
 	.shop--navigation {
@@ -666,23 +738,4 @@
 			position: absolute;
 		}
 	}
-
-    // Small Checkout & Registration Header
-    .is--ctl-checkout, .is--ctl-register {
-
-        // Header Support Info
-        &.is--act-cart {
-            .logo-main {
-                width: 28.5%;
-            }
-
-            .logo--shop {
-                width: 75%;
-            }
-
-            .logo--trusted-shops {
-                width: 25%;
-            }
-        }
-    }
 }
