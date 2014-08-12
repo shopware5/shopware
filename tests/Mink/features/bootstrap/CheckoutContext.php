@@ -64,42 +64,6 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Given /^I log in as "(?P<email>[^"]*)" with password "(?P<password>[^"]*)" on checkout$/
-     */
-    public function iLogInAsWithPasswordOnCheckout($email, $password)
-    {
-        $this->getPage('CheckoutConfirm')->login($email, $password);
-    }
-
-    /**
-     * @Then /^I change my billing address on confirm page:$/
-     */
-    public function iChangeMyBillingAddressOnConfirmPage(TableNode $fieldValues)
-    {
-        $values = $fieldValues->getHash();
-
-        $this->getPage('CheckoutConfirm')->changeBilling($values);
-    }
-
-    /**
-     * @Then /^I change my shipping address on confirm page:$/
-     */
-    public function iChangeMyShippingAddressOnConfirmPage(TableNode $fieldValues)
-    {
-        $values = $fieldValues->getHash();
-
-        $this->getPage('CheckoutConfirm')->changeShipping($values);
-    }
-
-    /**
-     * @When /^I change my delivery to "([^"]*)"$/
-     */
-    public function iChangeMyDeliveryTo($value)
-    {
-        $this->getPage('CheckoutConfirm')->changeDelivery($value);
-    }
-
-    /**
      * @Given /^my finished order should look like this:$/
      */
     public function myFinishedOrderShouldLookLikeThis(TableNode $positions)
