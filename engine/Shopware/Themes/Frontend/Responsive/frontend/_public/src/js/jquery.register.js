@@ -76,11 +76,10 @@
 
     Plugin.prototype.checkType = function () {
         var me = this,
-            status = (me.$typeSelection.val() !== 'business'),
+            hideCompanyFields = (me.$typeSelection.length && me.$typeSelection.val() !== 'business'),
             requiredFields = me.$companyFieldset.find('.is--required'),
-            requiredMethod = (!status) ? me.setHtmlRequired : me.removeHtmlRequired,
-            classMethod = (!status) ? 'removeClass' : 'addClass';
-
+            requiredMethod = (!hideCompanyFields) ? me.setHtmlRequired : me.removeHtmlRequired,
+            classMethod = (!hideCompanyFields) ? 'removeClass' : 'addClass';
         requiredMethod(requiredFields);
 
         me.$companyFieldset[classMethod](me.opts.hiddenCls);
