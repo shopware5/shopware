@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.ArticleList.store.Detail', {
     */
     autoLoad: false,
 
-    remoteSort: false,
+    remoteSort: true,
 
     remoteFilter: false,
 

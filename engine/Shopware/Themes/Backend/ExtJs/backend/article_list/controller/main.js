@@ -37,7 +37,8 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
     refs: [
         { ref: 'grid', selector: 'multi-edit-main-grid' },
         { ref: 'pagingToolBar', selector: 'multi-edit-main-grid pagingtoolbar' },
-        { ref: 'navigationGrid', selector: 'multi-edit-navigation-grid' }
+        { ref: 'navigationGrid', selector: 'multi-edit-navigation-grid' },
+        { ref: 'categoryTree', selector: 'multi-edit-category-tree treepanel' }
     ],
 
     /**
@@ -87,16 +88,21 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
      */
     loadDefaultStore: function () {
         var me = this,
-                name;
+                name,
+                tree, selection;
 
         if (!me.state.grammar || !me.state.model) {
             return;
         }
 
+        tree = me.getCategoryTree();
+        selection = tree.getSelectionModel();
+        selection.select(selection.getStore().first());
+
         name = me.getController('CategoryFilter').getFilterNameByConfig(false, false);
 
         me.getController('Suggest').loadFilter(
-                'ISMAIN AND CATEGORY.ID > 0',
+                'ISMAIN',
                 name
         );
     },
@@ -200,7 +206,6 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
         Ext.define('Shopware.apps.ArticleList.model.Detail', {
             extend: 'Ext.data.Model',
             fields: fields,
-
 
             /**
              * Configure the data communication
