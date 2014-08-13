@@ -11,7 +11,7 @@
 	{include file='frontend/index/header.tpl'}
 {/block}
 
-<body class="is--ctl-{controllerName} is--act-{controllerAction}{if $sUserLoggedIn} is--user{/if}{if $theme.checkoutHeader} is--minimal-header{/if}">
+<body class="is--ctl-{controllerName} is--act-{controllerAction}{if $sUserLoggedIn} is--user{/if}{if $sTarget} is--target-{$sTarget}{/if}{if $theme.checkoutHeader} is--minimal-header{/if}">
 	<div class="page-wrap">
 
 		{* Message if javascript is disabled *}
