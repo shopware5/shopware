@@ -169,6 +169,7 @@
     background: transparent;
 }
 .steps--content {
+    .unitize(16, 16, padding-top);
     display: table;
     border-top: 1px solid @borderColor;
     width: 100%;
@@ -309,7 +310,7 @@
 
     // Register Steps
     .steps--content {
-	    .unitize-padding(30, 0, 40, 0, 16);
+	    .unitize-padding(30, 0, 24, 0, 16);
 	    background: transparent;
 	    border: none;
 
@@ -321,6 +322,7 @@
 
         .steps--entry {
             .text {
+		.unitize-margin(0, 10, 0, 10);
                 display: inline-block;
                 font-weight: bold;
             }
@@ -394,7 +396,11 @@
                 width: 30%;
             }
 
-            .text { width: 70%; }
+	    .text {
+		.unitize-margin(0, 0, 0, 10);
+		width: 70%;
+		text-align: left;
+	    }
         }
 
         .steps--spacer { width: 15% }
