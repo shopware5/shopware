@@ -14,7 +14,7 @@
         init: function() {
             var me = this,
                 isIE = me.isIE();
-
+            
             // If the browser supports the feature, we don't need to take action
             if(!isIE) {
                 return false;
@@ -31,7 +31,7 @@
          */
         isIE: function() {
             var myNav = navigator.userAgent.toLowerCase();
-            return myNav.indexOf('msie') != -1;
+            return myNav.indexOf('msie') != -1 || !!navigator.userAgent.match(/Trident.*rv[ :]*11\./);
         },
 
         /**
