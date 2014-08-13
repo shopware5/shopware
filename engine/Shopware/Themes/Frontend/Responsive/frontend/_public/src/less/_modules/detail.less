@@ -74,6 +74,7 @@
 
     .product--buybox {
         .price--default {
+            .clearfix();
             .unitize-margin(0, 0, 10, 0);
         }
 
@@ -81,6 +82,10 @@
             .unitize(28, 16, font-size);
             font-weight: bold;
             color: @darkTextColor;
+
+            &.is--discount {
+                color: @discountTextColor;
+            }
         }
 
         .content--discount {
@@ -107,6 +112,25 @@
 
         .price--discount-percentage {
             color: @deliveryAvailableText;
+        }
+
+        .price--discount-icon {
+            .unitize-width(25);
+            .unitize-height(25);
+            .unitize-margin(0, 10, 0, 0);
+            .unitize(23, 16, line-height);
+            .unitize(16, 16, font-size);
+            .unitize(8, 16, top);
+            .border-radius(3px);
+            display: inline-block;
+            position: relative;
+            background: @discountTextColor;
+            border: 1px solid @discountBorderColor;
+            text-shadow: 0 1px 1px @discountDarkColor;
+            color: #FFFFFF;
+            text-align: center;
+            font-weight: bold;
+            float: left;
         }
     }
 
