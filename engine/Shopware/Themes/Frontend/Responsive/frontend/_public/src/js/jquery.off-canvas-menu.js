@@ -25,7 +25,7 @@
         defaults = {
 
             /** @string wrapSelector Selector for the content wrapper */
-            wrapSelector: '.page-wrap',
+            wrapSelector: 'body',
 
             /** @string offCanvasSelector Selector of the off-canvas element */
             offCanvasSelector: '.sidebar-main',
