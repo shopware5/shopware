@@ -110,7 +110,9 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
         'Attribute_attr19': '{s name=columns/product/Attribute_attr19}Attribute_attr19{/s}',
         'Attribute_attr20': '{s name=columns/product/Attribute_attr20}Attribute_attr20{/s}',
         'Price_price': '{s name=columns/product/Price_price}Price_price{/s}',
-        'Price_netPrice': '{s name=columns/product/Price_netPrice}Price_netPrice{/s}'
+        'Price_netPrice': '{s name=columns/product/Price_netPrice}Price_netPrice{/s}',
+        'Supplier_name': '{s name=columns/product/Supplier_name}Supplier{/s}',
+        'Tax_name': '{s name=columns/product/Tax_name}Tax{/s}'
     },
 
     /**
@@ -214,6 +216,43 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
         });
     },
 
+    getActionColumn: function () {
+        var me = this;
+
+
+        return {
+            xtype: 'actioncolumn',
+            width: 60,
+            items: [
+                /*{if {acl_is_allowed resource=article privilege=save}}*/
+                {
+                    action: 'edit',
+                    cls: 'editBtn',
+                    iconCls: 'sprite-pencil',
+                    handler: function (view, rowIndex, colIndex, item, opts, record) {
+                        Shopware.app.Application.addSubApplication({
+                            name: 'Shopware.apps.Article',
+                            action: 'detail',
+                            params: {
+                                articleId: record.get('Article_id')
+                            }
+                        });
+                    }
+                },
+                /*{/if}*/
+                /*{if {acl_is_allowed resource=article privilege=delete}}*/
+                {
+                    iconCls: 'sprite-minus-circle-frame',
+                    action: 'delete',
+                    handler: function (view, rowIndex, colIndex, item, opts, record) {
+                        me.fireEvent('deleteProduct', record);
+                    }
+                }
+                /*{/if}*/
+            ]
+        };
+    },
+
     /**
      * Helper method which creates the columns for the
      * grid panel in this widget.
@@ -247,7 +286,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
                 /*{if {acl_is_allowed resource=article privilege=save}}*/
                 editor: me.getEditorForColumn(column),
                 /*{/if}*/
-                sortable: false
+//                sortable: false
             };
 
             if (xtype = me.getXtypeForColumn(column)) {
@@ -274,37 +313,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
             renderer: me.infoColumnRenderer
         });
 
-        columns.push({
-            xtype: 'actioncolumn',
-            width: 90,
-            items: [
-                /*{if {acl_is_allowed resource=article privilege=save}}*/
-                {
-                    action: 'edit',
-                    cls: 'editBtn',
-                    iconCls: 'sprite-pencil',
-                    handler: function (view, rowIndex, colIndex, item, opts, record) {
-                        Shopware.app.Application.addSubApplication({
-                            name: 'Shopware.apps.Article',
-                            action: 'detail',
-                            params: {
-                                articleId: record.get('Article_id')
-                            }
-                        });
-                    }
-                },
-                /*{/if}*/
-                /*{if {acl_is_allowed resource=article privilege=delete}}*/
-                {
-                    iconCls: 'sprite-minus-circle-frame',
-                    action: 'delete',
-                    handler: function (view, rowIndex, colIndex, item, opts, record) {
-                        me.fireEvent('deleteProduct', record);
-                    }
-                }
-                /*{/if}*/
-            ]
-        });
+        columns.push(me.getActionColumn());
 
         return columns;
     },
@@ -428,6 +437,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
      * @returns string
      */
     colorColumnRenderer: function (value) {
+        value = value || 0;
         if (value > 0) {
             return '<span style="color:green;">' + value + '</span>';
         } else {
@@ -464,6 +474,21 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
 
         if (column.alias.slice(-2).toLowerCase() == 'id') {
             return 60;
+        }
+
+        switch (column.alias) {
+            case 'Price_price':
+                return 90;
+            case 'Detail_number':
+                return 110;
+            case 'Supplier_name':
+                return 110;
+            case 'Article_active':
+                return 40;
+            case 'Tax_name':
+                return 75;
+            case 'Detail_inStock':
+                return 80;
         }
 
         switch (column.type) {

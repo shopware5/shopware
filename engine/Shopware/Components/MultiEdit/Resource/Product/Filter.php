@@ -71,12 +71,12 @@ class Filter
      * @param $tokens
      * @param $offset
      * @param $limit
+     * @param $orderBy
      * @return \Doctrine\ORM\Query
      */
-    public function getFilterQuery($tokens, $offset=null, $limit=null)
+    public function getFilterQuery($tokens, $offset=null, $limit=null, $orderBy=null)
     {
-
-        $builder = $this->getFilterQueryBuilder($tokens, $offset, $limit);
+        $builder = $this->getFilterQueryBuilder($tokens, $orderBy);
         if ($offset) {
             $builder->setFirstResult($offset);
         }
@@ -91,11 +91,21 @@ class Filter
      * Returns the basic filter query builder, with all the rules (tokens) applied
      *
      * @param $tokens
+     * @param $orderBy
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getFilterQueryBuilder($tokens)
+    public function getFilterQueryBuilder($tokens, $orderBy)
     {
         $joinEntities = $this->getDqlHelper()->getJoinColumns($tokens);
+
+        if (isset($orderBy['property'])) {
+            $orderByInfo = $this->getDqlHelper()->getColumnInfoByAlias($orderBy['property']);
+            if ($orderByInfo) {
+                $entity = $this->getDqlHelper()->getEntityForPrefix(strtolower($orderByInfo['entity']));
+                $joinEntities[$entity] = $entity;
+            }
+        }
+        $joinEntities = $this->filterJoinEntities($joinEntities);
 
         $builder = $this->getDqlHelper()->getEntityManager()->createQueryBuilder()
                 ->select('partial detail.{id}')
@@ -103,6 +113,7 @@ class Filter
                 // only articles with attributes are considered to be valid
                 ->innerJoin('detail.attribute', 'attr')
                 ->leftJoin('detail.article', 'article');
+
 
         foreach ($joinEntities as $entity) {
             $builder->leftJoin($this->getDqlHelper()->getAssociationForEntity($entity), $this->getDqlHelper()->getPrefixForEntity($entity));
@@ -115,8 +126,14 @@ class Filter
         }
 
         $builder->andWhere($dql);
+        if ($orderByInfo) {
+            $direction = isset($orderBy['direction']) ? $orderBy['direction'] : 'DESC';
+            $field = $orderByInfo['field'];
+            $builder->orderBy(strtolower($orderByInfo['entity']) . '.' . $field, $direction);
+        } else {
+            $builder->orderBy('detail.id', 'DESC');
+        }
 
-        $builder->orderBy('detail.id', 'DESC');
 
         return $builder;
     }
@@ -170,12 +187,12 @@ class Filter
      * @param $tokens
      * @param $offset
      * @param $limit
+     * @param $orderBy
      * @return array
      */
-    public function filter($tokens, $offset, $limit)
+    public function filter($tokens, $offset, $limit, $orderBy)
     {
-
-        $query = $this->getFilterQuery($tokens, $offset, $limit);
+        $query = $this->getFilterQuery($tokens, $offset, $limit, $orderBy);
         list($result, $totalCount) = $this->getPaginatedResult($query);
 
         $articles = array();
@@ -194,4 +211,20 @@ class Filter
 
     }
 
+    /**
+     * @param $joinEntities
+     * @return array
+     */
+    private function filterJoinEntities($joinEntities)
+    {
+        // Remove Article-Entity
+        $joinEntities = array_filter(
+            $joinEntities,
+            function ($item) {
+                return $item != 'Shopware\Models\Article\Article' && $item != 'Shopware\Models\Article\Detail';
+            }
+        );
+
+        return $joinEntities;
+    }
 }

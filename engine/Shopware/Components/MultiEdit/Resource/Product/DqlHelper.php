@@ -31,7 +31,6 @@ namespace Shopware\Components\MultiEdit\Resource\Product;
  */
 class DqlHelper
 {
-
     /**
      * Reference to the PDO object
      * @var \PDO
@@ -77,6 +76,40 @@ class DqlHelper
         array('Shopware\Models\Article\Price', 'price'),
         array('Shopware\Models\Article\Vote', 'vote'),
         array('Shopware\Models\Article\Image', 'image')
+    );
+
+    protected $columnsNotToShowInGrid = array(
+        'Tax_tax',
+        'Tax_id',
+        'Detail_id',
+        'Detail_kind',
+        'Detail_active',
+        'Detail_articleId',
+        'Detail_unitId',
+        'Article_template' ,
+        'Article_configuratorSetId',
+        'Article_description',
+        'Article_descriptionLong',
+        'Article_mode',
+        'Article_filterGroupId',
+        'Article_priceGroupId',
+        'Article_mainDetailId',
+        'Article_availableFrom',
+        'Article_availableTo',
+        'Article_supplierId',
+        'Article_taxId',
+        'Article_crossBundleLook',
+        'Supplier_id',
+        'Supplier_image',
+        'Supplier_metaDescription',
+        'Supplier_metaKeywords',
+        'Supplier_metaTitle',
+        'Supplier_changed',
+        'Supplier_description',
+        'Supplier_link',
+        'Attribute_id',
+        'Attribute_articleId',
+        'Attribute_articleDetailId'
     );
 
     /**
@@ -361,6 +394,36 @@ class DqlHelper
     }
 
     /**
+     * Decide if a column can be shown in the grid
+     *
+     * Use the filter event SwagMultiEdit_Product_DqlHelper_getColumnsForProductListing_filterColumns
+     * in order to overwrite the selectable columns
+     *
+     * @param $column
+     * @return bool
+     */
+    private function showColumnInGrid($column)
+    {
+        $entitiesToShow = array(
+            'Article',
+            'Tax',
+            'Detail',
+            'Supplier',
+            'Attribute'
+        );
+
+        // By default show the main entities
+        $show = in_array($column['entity'], $entitiesToShow);
+
+        // If column was blacklisted explicitly, set $show = false
+        if (in_array($column['alias'], $this->columnsNotToShowInGrid)) {
+            $show = false;
+        };
+
+        return $show;
+    }
+
+    /**
      * Build a list which holds the configuration for all known columns - e.g. name, data type, associated table…
      *
      * Columns having "allowInGrid" set to true, are selected for the main product listing.
@@ -370,13 +433,6 @@ class DqlHelper
     {
         $shownColumns = $this->getDefaultColumns();
         $columnPositions = array_flip($shownColumns);
-        $mainEntities = array(
-            'Shopware\Models\Article\Article',
-            'Shopware\Models\Tax\Tax',
-            'Shopware\Models\Article\Detail',
-            'Shopware\Models\Article\Supplier',
-            'Shopware\Models\Attribute\Article'
-        );
 
         $result = array();
 
@@ -393,21 +449,23 @@ class DqlHelper
 
             foreach ($fields as $name => $config) {
                 $alias = $entityShort . '_' . $name;
+                $key = $entityShort . ucfirst($name);
                 $mapping = $metadata->getFieldMapping($name);
-                $result[$entityShort . ucfirst($name)] = array(
+                $result[$key] = array(
                     'entity' => $entityShort,
                     'field' => $name,
-                    'editable' => substr($name, -2) != 'Id' && $name != 'id' && substr($name, -2) != 'ID' && $entity != 'Shopware\Models\Tax\Tax',
+                    'editable' => substr($name, -2) != 'Id' && $name != 'id' && substr($name, -2) != 'ID' && $entity != 'Shopware\Models\Tax\Tax' && $entity != 'Shopware\Models\Article\Supplier',
                     'type' => $config['type'],
                     'precision' => $config['precision'],
                     'nullable' => (bool)$config['nullable'],
                     'columnName' => $mapping['columnName'],
                     'table' => $metadata->getTableName(),
                     'alias' => $alias,
-                    'allowInGrid' => in_array($entity, $mainEntities),
                     'show' => in_array($alias, $shownColumns),
                     'position' => array_key_exists($alias, $columnPositions) ? $columnPositions[$alias] : -1,
                 );
+
+                $result[$key]['allowInGrid'] = $this->showColumnInGrid($result[$key]);
             }
         }
 
@@ -495,9 +553,27 @@ class DqlHelper
         $result = $this->getEventManager()->filter(
             'SwagMultiEdit_Product_DqlHelper_getColumnsForProductListing_filterColumns',
             $result,
-            array('subject' => $this, 'defaultColumns' => $shownColumns, 'mainEntities' => $mainEntities)
+            array('subject' => $this, 'defaultColumns' => $shownColumns)
         );
+
         return $this->columnInfo = $result;
+    }
+
+    /**
+     * Return column info for a given alias
+     *
+     * @param $alias
+     * @return bool
+     */
+    public function getColumnInfoByAlias($alias)
+    {
+        foreach ($this->columnInfo as $info) {
+            if ($info['alias'] == $alias) {
+                return $info;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -584,14 +660,6 @@ class DqlHelper
                 $join['Shopware\Models\Article\Image'] = 'Shopware\Models\Article\Image';
             }
         }
-
-        // Remove Article-Entity
-        $join = array_filter(
-            $join,
-            function ($item) {
-                return $item != 'Shopware\Models\Article\Article';
-            }
-        );
 
         // Allow users to add his own joins depending on the passed tokens
         $join = $this->getEventManager()->filter(
@@ -682,7 +750,7 @@ class DqlHelper
             }
 
             // Replace some convenience operators back
-            // Switch is considdered a looping structure by php
+            // Switch is considered a looping structure by php
             // we need to continue two levels!
             if (strpos($token['type'], 'Operators')) {
                 switch (trim($token['token'])) {

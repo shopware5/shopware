@@ -64,8 +64,10 @@ Ext.define('Shopware.apps.ArticleList.view.main.Sidebar', {
                     {
                         xtype: 'multi-edit-navigation-grid'
                     }
-                ] },
-            { xtype: 'multi-edit-menu' },
+                ] }
+        /*{if {acl_is_allowed privilege=doMultiEdit}}*/
+        ,{ xtype: 'multi-edit-menu' }
+        /*{/if}*/
         ];
     }
 

@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Window', {
      * Define window width
      * @integer
      */
-    width: 1000,
+    width: 1100,
 
     /**
      * Define window height

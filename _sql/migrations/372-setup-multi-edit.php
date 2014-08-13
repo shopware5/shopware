@@ -22,8 +22,11 @@ class Migrations_Migration372 Extends Shopware\Components\Migrations\AbstractMig
               `is_simple` tinyint(1) DEFAULT 0 NOT NULL COMMENT 'Can the filter be loaded and modified with the simple editor?',
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 COMMENT 'Holds all multi edit filters';
+EOD;
+        $this->addSql($sql);
 
-          CREATE TABLE IF NOT EXISTS `s_multi_edit_backup`  (
+        $sql = <<<'EOD'
+            CREATE TABLE IF NOT EXISTS `s_multi_edit_backup`  (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `filter_string` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Filter string of the backed up change',
               `operation_string` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Operations applied after the backup',
@@ -37,7 +40,10 @@ class Migrations_Migration372 Extends Shopware\Components\Migrations\AbstractMig
               KEY (`size`),
               KEY (`items`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 COMMENT 'Backups known to the system';
+EOD;
+        $this->addSql($sql);
 
+        $sql = <<<'EOD'
           CREATE TABLE IF NOT EXISTS `s_multi_edit_queue`  (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `resource` varchar(255) NOT NULL COMMENT 'Queued resource (e.g. product)',
@@ -50,8 +56,11 @@ class Migrations_Migration372 Extends Shopware\Components\Migrations\AbstractMig
               KEY (`filter_string`(255)),
               KEY (`created`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 COMMENT 'Holds the batch process queue';
+EOD;
+        $this->addSql($sql);
 
-          CREATE TABLE IF NOT EXISTS `s_multi_edit_queue_articles`  (
+        $sql = <<<'EOD'
+            CREATE TABLE IF NOT EXISTS `s_multi_edit_queue_articles`  (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `queue_id` int(11) unsigned NOT NULL COMMENT 'Id of the queue this article belongs to',
               `detail_id` int(11) unsigned NOT NULL COMMENT 'Id of the article detail',
@@ -60,11 +69,13 @@ class Migrations_Migration372 Extends Shopware\Components\Migrations\AbstractMig
               KEY (`queue_id`),
               UNIQUE (`queue_id`, `detail_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 COMMENT 'Products belonging to a certain queue';
+EOD;
+        $this->addSql($sql);
 
+        $sql = <<<'EOD'
         ALTER TABLE `s_multi_edit_queue_articles`
           ADD CONSTRAINT `s_multi_edit_queue_articles_ibfk_1` FOREIGN KEY (`detail_id`) REFERENCES `s_articles_details` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
           ADD CONSTRAINT `s_multi_edit_queue_articles_ibfk_2` FOREIGN KEY (`queue_id`) REFERENCES `s_multi_edit_queue` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
-
 EOD;
 
         $this->addSql($sql);
@@ -81,9 +92,9 @@ EOD;
             DELETE FROM s_core_acl_privileges WHERE resourceID = @resourceId;
             DELETE FROM s_core_acl_resources WHERE name = 'swagmultiedit';
 
-            INSERT IGNORE INTO s_core_acl_resources (name) VALUES ('swagmultiedit');
+            INSERT IGNORE INTO s_core_acl_resources (name) VALUES ('articlelist');
 
-            SET @resourceId = (SELECT id FROM s_core_acl_resources WHERE name = 'swagmultiedit')
+            SET @resourceId = (SELECT id FROM s_core_acl_resources WHERE name = 'articlelist');
 
             INSERT IGNORE INTO s_core_acl_privileges (resourceID,name) VALUES (@resourceId, 'read');
             INSERT IGNORE INTO s_core_acl_privileges (resourceID,name) VALUES (@resourceId, 'createFilters');
