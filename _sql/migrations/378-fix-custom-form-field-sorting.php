@@ -1,5 +1,5 @@
 <?php
-class Migrations_Migration375 Extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration378 Extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up()
     {
@@ -14,7 +14,8 @@ class Migrations_Migration375 Extends Shopware\Components\Migrations\AbstractMig
         foreach($forms as $formId) {
             try {
                 $statement = $this->connection->query("SELECT count(DISTINCT id) FROM s_cms_support_fields WHERE position = 0 AND supportID = $formId;");
-                $fieldCount = $statement->fetch(PDO::FETCH_NUM);
+                $fieldCountArray = $statement->fetch(PDO::FETCH_NUM);
+                $fieldCount = array_shift($fieldCountArray);
             } catch(Exception $e) {
                 continue;
             }
