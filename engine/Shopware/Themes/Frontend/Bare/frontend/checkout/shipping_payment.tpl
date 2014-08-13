@@ -1,42 +1,24 @@
 {extends file="frontend/index/index.tpl"}
 
-{* Javascript *}
-{block name="frontend_index_header_javascript" append}
-    <script type="text/javascript">
-        //<![CDATA[
-        if(top!=self){
-            top.location=self.location;
-        }
-        //]]>
-    </script>
-{/block}
-
-{* Include the necessary stylesheets. We need inline styles here due to the fact that the colors are configuratable. *}
-{block name="frontend_index_header_css_screen" append}
-    <style type="text/css">
-        #confirm .table, #confirm .country-notice {
-            background: {config name=baskettablecolor};
-        }
-        #confirm .table .table_head {
-            color: {config name=basketheaderfontcolor};
-            background: {config name=basketheadercolor};
-        }
-    </style>
-{/block}
-
 {* Shop header *}
 {block name='frontend_index_navigation'}
-	{include file="frontend/checkout/header.tpl"}
+    {if !$theme.checkoutHeader}
+        {$smarty.block.parent}
+    {else}
+        {include file="frontend/checkout/header.tpl"}
+    {/if}
 {/block}
 
 {* Back to the shop button *}
 {block name='frontend_index_logo_trusted_shops' append}
-	<a href="{url controller='index'}"
-	   class="btn btn--grey is--small btn--back-top-shop"
-	   title="{s name='FinishButtonBackToShop' namespace='frontend/checkout/finish'}{/s}">
-		<i class="icon--arrow-left is--small"></i>
-		{s name="FinishButtonBackToShop" namespace="frontend/checkout/finish"}{/s}
-	</a>
+    {if $theme.checkoutHeader}
+        <a href="{url controller='index'}"
+           class="btn btn--grey is--small btn--back-top-shop"
+           title="{s name='FinishButtonBackToShop' namespace='frontend/checkout/finish'}{/s}">
+            <i class="icon--arrow-left is--small"></i>
+            {s name="FinishButtonBackToShop" namespace="frontend/checkout/finish"}{/s}
+        </a>
+    {/if}
 {/block}
 
 {* Hide sidebar left *}
@@ -47,11 +29,19 @@
 
 {* Step box *}
 {block name='frontend_index_navigation_categories_top'}
+    {if !$theme.checkoutHeader}
+        {$smarty.block.parent}
+    {/if}
+
 	{include file="frontend/register/steps.tpl" sStepActive="paymentShipping"}
 {/block}
 
 {* Hide footer *}
-{block name="frontend_index_footer"}{/block}
+{block name="frontend_index_footer"}
+    {if !$theme.checkoutHeader}
+        {$smarty.block.parent}
+    {/if}
+{/block}
 
 {* Main content *}
 {block name="frontend_index_content"}
