@@ -89,6 +89,18 @@
     }
 }
 
+.footer-vat {
+    .unitize(10, 16, margin-top);
+    .unitize-padding(0, 5);
+    background: transparent;
+}
+
+.footer--vat-info p {
+    .unitize(12, 16, font-size);
+    .unitize(10, 16, margin-bottom);
+    text-align: center;
+}
+
 @media screen and (min-width: @tabletViewportWidth) {
     .footer-main {
         border-top: 1px solid @borderColor;
@@ -137,6 +149,13 @@
             }
         }
     }
+
+    .footer-vat {
+        padding: 0;
+    }
+    .footer--vat-info p {
+        .unitize(20, 16, margin-bottom);
+    }
 }
 
 @media screen and (min-width: @desktopViewportWidth) {
@@ -158,5 +177,9 @@
                 .unitize(14, 16, font-size);
             }
         }
+    }
+
+    .footer--vat-info p {
+        .unitize(45, 16, margin-bottom);
     }
 }

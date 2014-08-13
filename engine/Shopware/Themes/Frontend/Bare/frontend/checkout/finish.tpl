@@ -27,11 +27,21 @@
     {/if}
 {/block}
 
-{* Hide footer *}
+{* Footer *}
 {block name='frontend_index_footer'}
     {if !$theme.checkoutHeader}
         {$smarty.block.parent}
-    {/if}
+    {else}
+<div class="container footer-vat">
+<div class="footer--vat-info">
+            {if $sOutputNet}
+                <p>{s name='FooterInfoExcludeVat' namespace="frontend/index/footer"}&nbsp;{/s}</p>
+            {else}
+                <p>{s name='FooterInfoIncludeVat' namespace="frontend/index/footer"}&nbsp;{/s}</p>
+            {/if}
+        </div>
+    </div>
+{/if}
 {/block}
 
 {* Back to the shop button *}
