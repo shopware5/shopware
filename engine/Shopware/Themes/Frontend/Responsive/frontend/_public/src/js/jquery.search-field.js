@@ -21,10 +21,7 @@
          * @returns {Plugin}
          */
         init: function() {
-     
-            var me = this,
-                isTouch = ('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0),
-                clickEvt = (isTouch ? (window.navigator.msPointerEnabled ? 'MSPointerDown' : 'touchstart') : 'mousedown');
+            var me = this;
 
             StateManager.registerListener([{
                 type: 'smartphone',
