@@ -398,4 +398,10 @@ $(function() {
     $('body').httpCacheFilters();
 
     $('*[data-menu-scroller="true"]').menuScroller();
+
+    // Jump to the scroll comments section on the detail-page
+    if(window.location.hash === '#content--product-reviews') {
+        var tabPanel = $('.additional-info--tabs').data('plugin_tabContent');
+        tabPanel.changeTab(1, true);
+    }
 });
