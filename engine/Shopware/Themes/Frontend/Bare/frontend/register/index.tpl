@@ -22,7 +22,13 @@
 {block name='frontend_index_breadcrumb'}{/block}
 
 {* Hide shop navigation *}
-{block name='frontend_index_shop_navigation'}{/block}
+{block name='frontend_index_shop_navigation'}
+    {if $theme.checkoutHeader}
+        minimaler Header
+    {else}
+        normaler Header
+    {/if}
+{/block}
 
 {* Step box *}
 {block name='frontend_index_navigation_categories_top'}
