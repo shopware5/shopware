@@ -9,8 +9,9 @@
 {* Article amount *}
 {block name='frontend_checkout_cart_item_quantity'}{/block}
 
+{* Remove all the delete buttons for products *}
 {block name='frontend_checkout_cart_item_delete_article'}{/block}
 {block name='frontend_checkout_cart_item_voucher_delete'}{/block}
 {block name='frontend_checkout_cart_item_premium_delete'}{/block}
-
 {block name='frontend_checkout_cart_item_premium_delete_article'}{/block}
+{block name='frontend_checkout_cart_item_voucher_delete_article'}{/block}
