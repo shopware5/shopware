@@ -189,14 +189,14 @@
 								{* Payment method *}
 								{block name='frontend_checkout_finish_payment_method'}
 									{if $sPayment.description}
-										<span class="is--bold">{s name="ConfirmHeaderPayment" namespace="frontend/checkout/confirm_left"}{/s}</span> {$sPayment.description}<br />
+										<span class="is--bold">{s name="ConfirmHeaderPayment" namespace="frontend/checkout/confirm_left"}{/s}:</span> {$sPayment.description}<br />
 									{/if}
 								{/block}
 
 								{* Dispatch method *}
 								{block name='frontend_checkout_finish_dispatch_method'}
 									{if $sDispatch.name}
-										<span class="is--bold">{s name="CheckoutDispatchHeadline" namespace="frontend/checkout/confirm_dispatch"}{/s}</span> {$sDispatch.name}
+										<span class="is--bold">{s name="CheckoutDispatchHeadline" namespace="frontend/checkout/confirm_dispatch"}{/s}:</span> {$sDispatch.name}
 									{/if}
 								{/block}
 							</div>
