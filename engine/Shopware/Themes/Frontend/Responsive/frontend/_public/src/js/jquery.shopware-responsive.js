@@ -401,7 +401,20 @@ $(function() {
 
     // Jump to the scroll comments section on the detail-page
     if(window.location.hash === '#content--product-reviews') {
-        var tabPanel = $('.additional-info--tabs').data('plugin_tabContent');
-        tabPanel.changeTab(1, true);
+        var tabPanel = $('.additional-info--tabs').data('plugin_tabContent'),
+            hash = window.location.hash,
+            idx = -1;
+
+        tabPanel.$nav.find('.navigation--link').each(function(i, item) {
+            var $item = $(item),
+                href = $item.attr('href');
+
+            if(href === hash) {
+                idx = i;
+                return false;
+            }
+        });
+
+        tabPanel.changeTab(idx, true);
     }
 });
