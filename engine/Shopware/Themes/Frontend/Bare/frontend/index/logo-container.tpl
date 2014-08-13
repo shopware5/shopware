@@ -20,11 +20,9 @@
 
 	{* Support Info *}
 	{block name='frontend_index_logo_supportinfo'}
-		{if $Controller == 'register'}
-			<div class="logo--supportinfo block">
-				{s name='RegisterSupportInfo' namespace='frontend/register/index'}{/s}
-			</div>
-		{/if}
+        <div class="logo--supportinfo block">
+            {s name='RegisterSupportInfo' namespace='frontend/register/index'}{/s}
+        </div>
 	{/block}
 
 	{* Trusted Shops *}
