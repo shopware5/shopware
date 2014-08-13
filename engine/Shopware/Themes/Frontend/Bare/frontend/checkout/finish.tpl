@@ -165,7 +165,7 @@
 						{* @deprecated block *}
 						{block name='frontend_checkout_finish_header_items'}
 							{block name='frontend_checkout_finish_details_title'}
-								<h2 class="panel--title is--underline">{s name="FinishHeaderItems"}{/s}</h2>
+								<h2 class="panel--title is--underline">{s name="FinishHeaderInformation"}{/s}</h2>
 							{/block}
 						{/block}
 
