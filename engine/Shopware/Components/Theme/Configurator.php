@@ -341,7 +341,7 @@ class Configurator
             'template' => $template
         ));
 
-        return $layout;
+        return new ArrayCollection($layout);
     }
 
     /**
@@ -364,7 +364,7 @@ class Configurator
             'template' => $template
         ));
 
-        return $elements;
+        return new ArrayCollection($elements);
     }
 
     /**
@@ -461,10 +461,10 @@ class Configurator
      * already exists in the passed collection.
      *
      * @param Shop\TemplateConfig\Set[] $collection
-     * @param $name
+     * @param string $name
      * @return Shop\TemplateConfig\Set
      */
-    private function getExistingConfigSet(array $collection, $name)
+    private function getExistingConfigSet($collection, $name)
     {
         /**@var $item Shop\TemplateConfig\Set */
         foreach ($collection as $item) {
@@ -472,6 +472,7 @@ class Configurator
                 return $item;
             }
         }
+
         return null;
     }
 }
