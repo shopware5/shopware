@@ -538,6 +538,8 @@
 
             $(window).off('resize.imageSlider');
 
+            me.setActiveThumbnail(0);
+
             if (me.$arrowLeft.length) me.$arrowLeft.remove();
             if (me.$arrowRight.length) me.$arrowRight.remove();
 
