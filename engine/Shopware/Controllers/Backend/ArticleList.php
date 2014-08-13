@@ -46,7 +46,6 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $this->addAclPermission('saveSingleEntityAction', 'editSingleArticle','Insufficient Permissions');
         $this->addAclPermission('deleteAction', 'doBackup','Insufficient Permissions');
         $this->addAclPermission('restoreAction', 'doBackup','Insufficient Permissions');
-        $this->addAclPermission('listAction', 'doBackup','Insufficient Permissions');
         $this->addAclPermission('getOperationsAction', 'doMultiEdit', 'Insufficient Permissions');
         $this->addAclPermission('getOperatorsAction', 'doMultiEdit', 'Insufficient Permissions');
         $this->addAclPermission('getEditableColumnsAction', 'doMultiEdit', 'Insufficient Permissions');
