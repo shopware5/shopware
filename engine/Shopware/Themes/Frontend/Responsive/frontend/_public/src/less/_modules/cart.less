@@ -47,7 +47,6 @@
 
 		.btn--primary i {
 			.unitize-margin(0, 0, 0, 6);
-			font-size: 8px;
 			vertical-align: middle;
 		}
 
@@ -339,12 +338,11 @@
         }
 
         .btn {
-            .unitize(15, 16, font-size);
             width: 100%;
-            font-weight: normal;
 
             .icon--arrow-right {
-                .unitize(8, 16, margin-top);
+		.unitize-margin(6, 0, 0, 0);
+		.unitize(10, 16, font-size);
                 float: right;
             }
         }
@@ -743,6 +741,14 @@
 			.btn--secondary {
 				.unitize-padding(10, 50, 10, 50);
 				.unitize(20, 16, margin-right);
+
+		&.continue-shopping--action {
+		    .unitize(16, 16, padding-left);
+		}
+
+		.icon--arrow-left {
+		    .unitize(40, 16, margin-right);
+		}
 			}
 
             .btn--inquiry {

@@ -15,15 +15,15 @@
 {block name='frontend_index_content'}
 <div class="content block content--basket content--checkout">
 
-	{* If articles are in the basket... *}
-	{if $sBasket.content}
+    {* If articles are in the basket... *}
+    {if $sBasket.content}
 
-		{* Add article informations *}
-		{block name='frontend_checkout_add_article'}
-			<noscript>
-				{include file='frontend/checkout/added.tpl'}
-			</noscript>
-		{/block}
+        {* Add article informations *}
+        {block name='frontend_checkout_add_article'}
+            <noscript>
+                {include file='frontend/checkout/added.tpl'}
+            </noscript>
+        {/block}
 
         {* Product table *}
         {block name='frontend_checkout_cart_table'}
@@ -46,11 +46,11 @@
                     <div class="table--actions">
 
                         <div class="main--actions">
-			    {* Continue shopping *}
+                            {* Continue shopping *}
                             {if $sBasket.sLastActiveArticle.link}
                                 {block name="frontend_checkout_actions_link_last"}
-                                    <a href="{$sBasket.sLastActiveArticle.link}" title="{"{s name='CheckoutActionsLinkLast' namespace="frontend/checkout/actions"}{/s}"|escape}" class="btn btn--secondary is--left">
-                                        {s name="CheckoutActionsLinkLast" namespace="frontend/checkout/actions"}{/s}
+                                    <a href="{$sBasket.sLastActiveArticle.link}" title="{"{s name='CheckoutActionsLinkLast' namespace="frontend/checkout/actions"}{/s}"|escape}" class="btn btn--secondary left continue-shopping--action">
+                                        <i class="icon--arrow-left is--small"></i>{s name="CheckoutActionsLinkLast" namespace="frontend/checkout/actions"}{/s}
                                     </a>
                                 {/block}
                             {/if}
@@ -61,7 +61,7 @@
                                 {if !$sMinimumSurcharge && !$sDispatchNoOrder}
                                     {block name="frontend_checkout_actions_checkout"}
                                         <a href="{url action=confirm}" title="{"{s name='CheckoutActionsLinkProceedShort' namespace="frontend/checkout/actions"}{/s}"|escape}" class="btn btn--primary right">
-                                            {s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions"}{/s} <i class="icon--arrow-right"></i>
+                                            {s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions"}{/s} <i class="icon--arrow-right is--small"></i>
                                         </a>
                                     {/block}
                                 {/if}
@@ -115,8 +115,8 @@
                                 {* Contiune shopping *}
                                 {if $sBasket.sLastActiveArticle.link}
                                     {block name="frontend_checkout_actions_link_last_bottom"}
-                                        <a href="{$sBasket.sLastActiveArticle.link}" title="{"{s name='CheckoutActionsLinkLast' namespace="frontend/checkout/actions"}{/s}"|escape}" class="btn btn--secondary is--left">
-                                            {s name="CheckoutActionsLinkLast" namespace="frontend/checkout/actions"}{/s}
+                                        <a href="{$sBasket.sLastActiveArticle.link}" title="{"{s name='CheckoutActionsLinkLast' namespace="frontend/checkout/actions"}{/s}"|escape}" class="btn btn--secondary is--left continue-shopping--action">
+                                            <i class="icon--arrow-left is--small"></i> {s name="CheckoutActionsLinkLast" namespace="frontend/checkout/actions"}{/s}
                                         </a>
                                     {/block}
                                 {/if}
@@ -125,7 +125,7 @@
                                 {if !$sMinimumSurcharge && !$sDispatchNoOrder}
                                     {block name="frontend_checkout_actions_confirm_bottom_checkout"}
                                         <a href="{url action=confirm}" title="{"{s name='CheckoutActionsLinkProceedShort' namespace="frontend/checkout/actions"}{/s}"|escape}" class="btn btn--primary right">
-                                            {s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions"}{/s} <i class="icon--arrow-right"></i>
+                                            {s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions"}{/s} <i class="icon--arrow-right is--small"></i>
                                         </a>
                                     {/block}
                                 {/if}
@@ -149,13 +149,13 @@
             </div>
         {/block}
 
-	{else}
-		{* Empty basket *}
-		{block name='frontend_basket_basket_is_empty'}
-			<div class="basket--info-messages">
-				{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='CartInfoEmpty'}{/s}"}
-			</div>
-		{/block}
-	{/if}
+    {else}
+        {* Empty basket *}
+        {block name='frontend_basket_basket_is_empty'}
+            <div class="basket--info-messages">
+                {include file="frontend/_includes/messages.tpl" type="warning" content="{s name='CartInfoEmpty'}{/s}"}
+            </div>
+        {/block}
+    {/if}
 </div>
 {/block}
