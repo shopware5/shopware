@@ -1096,7 +1096,18 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'objectkey' => 1,
             'objectlanguage' => 2,
             'objecttype' => 'config_countries',
-            'objectdata' => 'a:2:{i:2;a:2:{s:6:"active";s:1:"1";s:11:"countryname";s:7:"Germany";}i:5;a:2:{s:6:"active";s:1:"1";s:11:"countryname";s:7:"Belgium";}}'
+            'objectdata' => serialize(
+                array(
+                    2 => array (
+                        'active' => '1',
+                        'countryname' => 'Germany',
+                    ),
+                    5 => array (
+                        'active' => '1',
+                        'countryname' => 'Belgium',
+                    )
+                )
+            )
         );
 
         if($existingData) {
@@ -1155,7 +1166,20 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'objectkey' => 1,
             'objectlanguage' => 2,
             'objecttype' => 'config_dispatch',
-            'objectdata' => 'a:2:{i:9;a:3:{s:13:"dispatch_name";s:17:"Standard shipping";s:20:"dispatch_description";s:29:"Standard shipping description";s:20:"dispatch_status_link";s:18:"http://www.dhl.com";}i:10;a:3:{s:13:"dispatch_name";s:18:"Shipping by weight";s:20:"dispatch_description";s:30:"Shipping by weight description";s:20:"dispatch_status_link";s:3:"url";}}'
+            'objectdata' => serialize(
+                array(
+                    9 => array (
+                        'dispatch_name' => 'Standard shipping',
+                        'dispatch_description' => 'Standard shipping description',
+                        'dispatch_status_link' => 'http://www.dhl.com',
+                    ),
+                    10 => array (
+                        'dispatch_name' => 'Shipping by weight',
+                        'dispatch_description' => 'Shipping by weight description',
+                        'dispatch_status_link' => 'url',
+                    ),
+                )
+            )
         );
 
         if($existingData) {
@@ -1220,7 +1244,29 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'objectkey' => 1,
             'objectlanguage' => 2,
             'objecttype' => 'config_payment',
-            'objectdata' => 'a:5:{i:4;a:2:{s:11:"description";s:7:"Invoice";s:21:"additionalDescription";s:141:"Payment by invoice. Shopware provides automatic invoicing for all customers on orders after the first, in order to avoid defaults on payment.";}i:2;a:2:{s:11:"description";s:5:"Debit";s:21:"additionalDescription";s:15:"Additional text";}i:3;a:2:{s:11:"description";s:16:"Cash on delivery";s:21:"additionalDescription";s:25:"(including 2.00 Euro VAT)";}i:5;a:2:{s:11:"description";s:15:"Paid in advance";s:21:"additionalDescription";s:57:"The goods are delivered directly upon receipt of payment.";}i:6;a:1:{s:21:"additionalDescription";s:17:"SEPA direct debit";}}'
+            'objectdata' => serialize(
+                array (
+                    4 => array (
+                        'description' => 'Invoice',
+                        'additionalDescription' => 'Payment by invoice. Shopware provides automatic invoicing for all customers on orders after the first, in order to avoid defaults on payment.',
+                    ),
+                    2 => array (
+                        'description' => 'Debit',
+                        'additionalDescription' => 'Additional text',
+                    ),
+                    3 => array (
+                        'description' => 'Cash on delivery',
+                        'additionalDescription' => '(including 2.00 Euro VAT)',
+                    ),
+                    5 => array (
+                        'description' => 'Paid in advance',
+                        'additionalDescription' => 'The goods are delivered directly upon receipt of payment.',
+                    ),
+                    6 => array (
+                        'additionalDescription' => 'SEPA direct debit',
+                    ),
+                )
+            )
         );
 
         if($existingData) {
@@ -1286,7 +1332,16 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'objectkey' => 1,
             'objectlanguage' => 1,
             'objecttype' => 'config_country_states',
-            'objectdata' => 'a:2:{i:24;a:1:{s:4:"name";s:10:"California";}i:23;a:1:{s:4:"name";s:18:"Arkansas (english)";}}'
+            'objectdata' => serialize(
+                array (
+                    24 => array (
+                        'name' => 'California',
+                    ),
+                    23 => array (
+                        'name' => 'Arkansas (english)',
+                    ),
+                )
+            )
         );
 
         if($existingData) {
@@ -1325,7 +1380,13 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'objectkey' => 1,
             'objectlanguage' => 10000,
             'objecttype' => 'config_country_states',
-            'objectdata' => 'a:1:{i:2;a:1:{s:4:"name";s:13:"asdfasfdasdfa";}}'
+            'objectdata' => serialize(
+                array (
+                    2 => array (
+                        'name' => 'asdfasfdasdfa',
+                    ),
+                )
+            )
         ));
 
         // Test with fallback
@@ -1385,13 +1446,29 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'objectkey' => 1,
             'objectlanguage' => 1,
             'objecttype' => 'config_countries',
-            'objectdata' => 'a:1:{i:2;a:2:{s:6:"active";s:1:"1";s:11:"countryname";s:7:"Germany";}}'
+            'objectdata' => serialize(
+                array (
+                    2 => array (
+                        'active' => '1',
+                        'countryname' => 'Germany',
+                    ),
+                )
+            )
         );
         $demoStateData = array(
             'objectkey' => 1,
             'objectlanguage' => 1,
             'objecttype' => 'config_country_states',
-            'objectdata' => 'a:2:{i:2;a:1:{s:4:"name";s:3:"111";}i:3;a:1:{s:4:"name";s:3:"222";}}'
+            'objectdata' => serialize(
+                array (
+                    2 => array (
+                        'name' => '111',
+                    ),
+                    3 => array (
+                        'name' => '222',
+                    ),
+                )
+            )
         );
 
         if($existingCountryData) {
