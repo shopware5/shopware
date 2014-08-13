@@ -21,7 +21,7 @@ $(function() {
         type: 'smartphone',
         enter: function() {
             var pageWrap = $('.page-wrap');
-            $('.sidebar-main').insertBefore(pageWrap);
+            //$('.sidebar-main').insertBefore(pageWrap);
             $('.action--filter-options').insertBefore(pageWrap);
             $('.blog--filter-options').insertBefore(pageWrap);
             $('*[data-offcanvas="true"]').offcanvasMenu();
@@ -58,7 +58,7 @@ $(function() {
                 $(this).data('plugin_imageSlider').destroy();
             });
 
-            $('.sidebar-main').prependTo($('.content-main--inner'));
+            //$('.sidebar-main').prependTo($('.content-main--inner'));
             $('.action--filter-options').insertAfter($('.action--per-page'));
             $('.blog--filter-options').insertBefore($('.blog--listing'));
             
