@@ -35,7 +35,7 @@
 					<p>{s name='WidgetsTrustedShopsText'}{/s}</p>
 
 					<button type="submit" class="btn btn--secondary" name="btnProtect">
-                        {s name='WidgetsTrustedShopsInfo'}{/s}">
+                        {s name='WidgetsTrustedShopsInfo'}{/s}
                     </button>
 				</form>
 			</div>
