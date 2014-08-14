@@ -45,7 +45,8 @@ class Cache
      */
     public function factory(\Zend_Cache_Core $zendCache)
     {
-        Zend_Locale_Data::setCache($zendCache);
+        \Zend_Locale_Data::setCache($zendCache);
+        \Zend_Db_Table_Abstract::setDefaultMetadataCache($zendCache);
 
         return $zendCache;
     }

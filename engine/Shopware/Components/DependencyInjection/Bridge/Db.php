@@ -44,6 +44,8 @@ class Db
         // Reset sql_mode "STRICT_TRANS_TABLES" that will be default in MySQL 5.6
         $db->exec("SET @@session.sql_mode = ''");
 
+        \Zend_Db_Table_Abstract::setDefaultAdapter($db);
+
         return $db;
     }
 }

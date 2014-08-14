@@ -25,7 +25,9 @@
 namespace Shopware\Components\Form\Persister;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\PersistentCollection;
 use Shopware\Components\Form as Form;
+use Shopware\Components\Form\Container;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop\Template;
 use Shopware\Models\Shop\TemplateConfig;
@@ -101,13 +103,13 @@ class Theme implements Form\Interfaces\Persister
     /**
      * Helper function to create a generic ConfigLayout entity.
      *
-     * @param Form\Container\TabContainer $container
+     * @param Container $container
      * @param Template $template
      * @param TemplateConfig\Layout $parent
      * @return TemplateConfig\Layout
      */
     private function createContainer(
-        Form\Container\TabContainer $container,
+        Container $container,
         Template $template,
         TemplateConfig\Layout $parent = null)
     {
@@ -242,11 +244,11 @@ class Theme implements Form\Interfaces\Persister
     }
 
     /**
-     * @param ArrayCollection $collection
-     * @param $name
+     * @param PersistentCollection $collection
+     * @param string $name
      * @return TemplateConfig\Element
      */
-    private function checkExistingElement(ArrayCollection $collection, $name)
+    private function checkExistingElement(PersistentCollection $collection, $name)
     {
         /**@var $element TemplateConfig\Element */
         foreach ($collection as $element) {
@@ -258,11 +260,11 @@ class Theme implements Form\Interfaces\Persister
     }
 
     /**
-     * @param ArrayCollection $collection
-     * @param $name
+     * @param PersistentCollection $collection
+     * @param string $name
      * @return TemplateConfig\Layout
      */
-    private function checkExistingLayout(ArrayCollection $collection, $name)
+    private function checkExistingLayout(PersistentCollection $collection, $name)
     {
         /**@var $element TemplateConfig\Layout */
         foreach ($collection as $element) {
