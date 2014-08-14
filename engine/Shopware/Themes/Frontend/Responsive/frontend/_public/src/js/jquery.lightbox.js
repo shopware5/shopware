@@ -17,8 +17,19 @@
      */
     $.lightbox = {
 
+        /**
+         * Holds the object of the modal plugin.
+         *
+         * @type {Boolean | Object}
+         */
         modal: false,
 
+        /**
+         * Opens the image from the given image url
+         * in a lightbox window.
+         *
+         * @param imageURL
+         */
         open: function(imageURL) {
             var me = this, size;
 
@@ -45,6 +56,12 @@
             me.image.src = imageURL;
         },
 
+        /**
+         * Creates the content for the lightbox.
+         *
+         * @param imageURL
+         * @returns {*|HTMLElement}
+         */
         createContent: function(imageURL) {
             return $('<div>', {
                 'class': 'lightbox--container',
@@ -55,6 +72,12 @@
             });
         },
 
+        /**
+         * Set the size of the modal window.
+         *
+         * @param width
+         * @param height
+         */
         setSize: function(width, height) {
             var me = this,
                 size = me.getOptimizedSize(width, height);
@@ -67,6 +90,14 @@
             me.modal.setHeight(size.height);
         },
 
+        /**
+         * Computes the optimal size for the lightbox
+         * based on the measurements of the shown image.
+         *
+         * @param width
+         * @param height
+         * @returns {{width: *, height: *}}
+         */
         getOptimizedSize: function(width, height) {
             var aspect = width / height,
                 maxWidth = Math.round(window.innerWidth * 0.9),

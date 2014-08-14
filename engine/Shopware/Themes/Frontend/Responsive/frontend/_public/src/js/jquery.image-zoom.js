@@ -3,6 +3,10 @@
 
     /**
      * Shopware Image Zoom Plugin.
+     *
+     * Creates a zoomed view of a product image.
+     * You can move a lens object over the original image to
+     * see the zoomed view of the hovered area.
      */
     $.plugin('imageZoom', {
 
@@ -24,6 +28,9 @@
             animationSpeed: 300
         },
 
+        /**
+         * Initializes the plugin.
+         */
         init: function () {
             var me = this;
 
@@ -49,6 +56,9 @@
             me.registerEvents();
         },
 
+        /**
+         * Registers all necessary event listeners.
+         */
         registerEvents: function() {
             var me = this;
 
@@ -64,6 +74,10 @@
             $.subscribe('plugin/imageSlider/onLightbox', $.proxy(me.stopZoom, me));
         },
 
+        /**
+         * Creates the dom element for the lens.
+         * @returns {*}
+         */
         createLensElement: function() {
             var me = this;
 
@@ -73,6 +87,12 @@
             }).appendTo(me.$container);
         },
 
+        /**
+         * Creates the flyout element in
+         * which the zoomed image will be shown.
+         *
+         * @returns {*}
+         */
         createFlyoutElement: function() {
             var me = this;
 
@@ -81,12 +101,24 @@
             }).appendTo(me.$el);
         },
 
+        /**
+         * Returns the thumbnail of the
+         * current active image.
+         *
+         * @returns {*|Array}
+         */
         getActiveImageThumbnail: function() {
             var me = this;
 
             return me.$thumbnails.filter(me.opts.activeSelector);
         },
 
+        /**
+         * Returns the image element of
+         * the current active image.
+         *
+         * @returns {*}
+         */
         getActiveImageElement: function() {
             var me = this;
 
@@ -99,6 +131,13 @@
             return me.$imageElements.eq(me.$activeImageThumbnail.index());
         },
 
+        /**
+         * Computes and sets the size of
+         * the lens element based on the factor
+         * between the image and the zoomed image.
+         *
+         * @param factor
+         */
         setLensSize: function(factor) {
             var me = this;
 
@@ -119,6 +158,13 @@
             });
         },
 
+        /**
+         * Sets the lens position over
+         * the original image.
+         *
+         * @param x
+         * @param y
+         */
         setLensPosition: function(x, y) {
             var me = this;
 
@@ -128,36 +174,60 @@
             });
         },
 
+        /**
+         * Makes the lens element visible.
+         */
         showLens: function() {
             var me = this;
 
             me.$lens.stop(true, true).fadeIn(me.opts.animationSpeed);
         },
 
+        /**
+         * Hides the lens element.
+         */
         hideLens: function() {
             var me = this;
 
             me.$lens.stop(true, true).fadeOut(me.opts.animationSpeed);
         },
 
+        /**
+         * Sets the position of the zoomed image area.
+         *
+         * @param x
+         * @param y
+         */
         setZoomPosition: function(x, y) {
             var me = this;
 
             me.$flyout.css('backgroundPosition', x+'px '+y+'px');
         },
 
+        /**
+         * Makes the zoom view visible.
+         */
         showZoom: function() {
             var me = this;
 
             me.$flyout.stop(true, true).fadeIn(me.opts.animationSpeed);
         },
 
+        /**
+         * Hides the zoom view.
+         */
         hideZoom: function() {
             var me = this;
 
             me.$flyout.stop(true, true).fadeOut(me.opts.animationSpeed);
         },
 
+        /**
+         * Eventhandler for handling the
+         * mouse movement on the image container.
+         *
+         * @param event
+         */
         onMouseMove: function(event) {
             var me = this;
 
@@ -193,6 +263,10 @@
             }
         },
 
+        /**
+         * Sets the active image element
+         * for the zoom view.
+         */
         setActiveImage: function() {
             var me = this;
             me.$activeImageElement = me.getActiveImageElement();
@@ -205,6 +279,9 @@
             $.publish('plugin/imageZoom/onSetActiveImage');
         },
 
+        /**
+         * Activates the zoom view.
+         */
         activateZoom: function() {
             var me = this;
 
@@ -238,6 +315,9 @@
             me.active = true;
         },
 
+        /**
+         * Stops the zoom view.
+         */
         stopZoom: function() {
             var me = this;
 
@@ -249,15 +329,35 @@
             $.publish('plugin/imageZoom/onStopZoom');
         },
 
+        /**
+         * Handles click events on the lens.
+         * Used for legacy browsers to handle
+         * click events on the original image.
+         *
+         * @param event
+         */
         onLensClick: function(event) {
             event.stopPropagation();
             $.publish('plugin/imageZoom/onLensClick');
         },
 
+        /**
+         * Clamps a number between
+         * a max and a min value.
+         *
+         * @param number
+         * @param min
+         * @param max
+         * @returns {number}
+         */
         clamp: function(number, min, max) {
             return Math.max(min, Math.min(max, number));
         },
 
+        /**
+         * Destroys the plugin and removes
+         * all created elements of the plugin.
+         */
         destroy: function () {
             var me = this;
 
