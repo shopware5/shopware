@@ -25,9 +25,5 @@
 				)
 			{/block}
 		</a>
-		{include file="frontend/_includes/rating.tpl"
-		voteAverage=$sArticle.sVoteAverange.averange
-		voteCount=$sArticle.sVoteAverange.count
-		voteType=5}
 	</div>
 {/if}
