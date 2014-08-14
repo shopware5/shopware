@@ -113,6 +113,12 @@ class ListProductService implements Service\ListProductServiceInterface
     {
         $products = $this->productGateway->getList($numbers, $context);
 
+        $products = $this->filterValidProducts($products, $context);
+
+        if (empty($products)) {
+            return array();
+        }
+
         $covers = $this->mediaService->getCovers($products, $context);
 
         $graduatedPrices = $this->graduatedPricesService->getList($products, $context);
@@ -125,10 +131,6 @@ class ListProductService implements Service\ListProductServiceInterface
                 continue;
             }
             $product = $products[$number];
-
-            if (in_array($context->getCurrentCustomerGroup()->getId(), $product->getBlockedCustomerGroupIds())) {
-                continue;
-            }
 
             $product->setCover($covers[$number]);
 
@@ -147,5 +149,39 @@ class ListProductService implements Service\ListProductServiceInterface
         }
 
         return $result;
+    }
+
+
+    /**
+     * @param Struct\ListProduct[] $products
+     * @param Struct\Context $context
+     * @return Struct\ListProduct[]
+     */
+    private function filterValidProducts($products, Struct\Context $context)
+    {
+        $valid = array();
+        foreach($products as $product) {
+            if ($this->isProductValid($product, $context)) {
+                $valid[$product->getNumber()] = $product;
+            }
+        }
+
+        return $valid;
+    }
+
+    /**
+     * Checks if the provided product is allowed to display in the store front for
+     * the provided context.
+     *
+     * @param Struct\ListProduct $product
+     * @param Struct\Context $context
+     * @return bool
+     */
+    private function isProductValid(Struct\ListProduct $product, Struct\Context $context)
+    {
+        return in_array(
+            $context->getCurrentCustomerGroup()->getId(),
+            $product->getBlockedCustomerGroupIds()
+        );
     }
 }
