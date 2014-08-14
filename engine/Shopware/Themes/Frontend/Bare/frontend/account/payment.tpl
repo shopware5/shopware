@@ -47,7 +47,7 @@
                                 <div class="account--actions">
                                     {block name="frontend_account_payment_action_button_back"}
                                         {if $sTarget}
-                                            <a class="btn btn--secondary left" href="{url controller=$sTarget action=$sTargetAction|default:"index"}" title="{s name='PaymentLinkBack'}{/s}">
+                                            <a class="btn btn--secondary left" href="{url controller=$sTarget action=$sTargetAction|default:"index"}" title="{"{s name='PaymentLinkBack'}{/s}"|escape}">
                                                 {s name="PaymentLinkBack"}{/s}
                                             </a>
                                         {/if}

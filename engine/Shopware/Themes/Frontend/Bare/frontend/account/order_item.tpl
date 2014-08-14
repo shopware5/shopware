@@ -100,7 +100,7 @@
 		{block name="frontend_account_order_item_actions"}
 			<div class="order--actions panel--td column--actions">
 				<a href="#order{$offerPosition.ordernumber}"
-				   title="{s name="OrderActionSlide"}{/s} {$offerPosition.ordernumber}"
+				   title="{"{s name="OrderActionSlide"}{/s}"|escape} {$offerPosition.ordernumber}"
 				   class="btn btn--secondary is--small"
 				   data-collapse-panel="true"
 				   data-collapseTarget="#order{$offerPosition.ordernumber}">

@@ -36,7 +36,7 @@
 
                                             {* Product image *}
                                             {block name='frontend_checkout_premium_image'}
-                                                <a href="{$premium.sArticle.linkDetails}" title="{$premium.sArticle.articleName}" class="product--image">
+                                                <a href="{$premium.sArticle.linkDetails}" title="{$premium.sArticle.articleName|escape}" class="product--image">
                                                     {if $premium.available}
                                                         <div class="premium-product--badge">
                                                             <i class="icon--check"></i>
@@ -45,10 +45,12 @@
 
 													{block name='frontend_checkout_premium_image_element'}
 														<span class="image--element">
-															{if $premium.sArticle.image.src}
-																<img src="{$premium.sArticle.image.src.3}" alt="{$premium.sArticle.articleName}" title="{$premium.sArticle.articleName}">
+		                                                    {if $premium.sArticle.image.src}
+		                                                        <img src="{$premium.sArticle.image.src.3}" alt="{$premium.sArticle.articleName|escape}"
+		                                                             title="{$premium.sArticle.articleName|escape}">
 															{else}
-																<img src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{s name="PremiumInfoNoPicture"}{/s}">
+																<img src="{link file='frontend/_resources/images/no_picture.jpg'}" 
+																	 alt="{"{s name="PremiumInfoNoPicture"}{/s}"|escape}">
 															{/if}
 														</span>
 													{/block}

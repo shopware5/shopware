@@ -15,8 +15,8 @@
 				{block name="frontend_note_item_image"}
 					<div class="note--image-container">
 						{if $sBasketItem.image.src.0}
-							<a href="{$detailLink}" title="{$sBasketItem.articlename}" class="note--image-link">
-								<img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename}" class="note--image" />
+							<a href="{$detailLink}" title="{$sBasketItem.articlename|escape}" class="note--image-link">
+								<img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename|escape}" class="note--image" />
 							</a>
 							{* Zoom picture *}
 							{block name="frontend_note_item_image_zoom"}
@@ -25,8 +25,8 @@
 								</a>
 							{/block}
 						{else}
-							<a href="{$detailLink}" title="{$sBasketItem.articlename}" class="note--image-link">
-								<img src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{$sBasketItem.articlename}" class="note--image" />
+							<a href="{$detailLink}" title="{$sBasketItem.articlename|escape}" class="note--image-link">
+								<img src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{$sBasketItem.articlename|escape}" class="note--image" />
 							</a>
 						{/if}
 					</div>
@@ -38,7 +38,7 @@
 
 						{* Article name *}
 						{block name="frontend_note_item_details_name"}
-							<a class="note--title" href="{$detailLink}" title="{$sBasketItem.articlename}">
+							<a class="note--title" href="{$detailLink}" title="{$sBasketItem.articlename|escape}">
 								{$sBasketItem.articlename|truncate:40}
 							</a>
 						{/block}
@@ -130,7 +130,7 @@
 					<div class="note--actions">
 						{* Place article in basket *}
 						{if !$sBasketItem.sConfigurator && !$sBasketItem.sVariantArticle}
-							<a href="{url controller=checkout action=addArticle sAdd=$sBasketItem.ordernumber}" class="action--buy btn btn--primary" title="{s name='NoteLinkBuy'}{/s}">
+							<a href="{url controller=checkout action=addArticle sAdd=$sBasketItem.ordernumber}" class="action--buy btn btn--primary" title="{"{s name='NoteLinkBuy'}{/s}"|escape}">
 								{s name="NoteLinkBuy"}{/s}
 							</a>
 						{/if}
@@ -139,7 +139,7 @@
 						{block name="frontend_note_item_actions_compare"}{/block}
 
 						{* Article Details *}
-						<a href="{$detailLink}" class="action--details btn btn--secondary" title="{$sBasketItem.articlename}">
+						<a href="{$detailLink}" class="action--details btn btn--secondary" title="{$sBasketItem.articlename|escape}">
 							{s name="NoteLinkDetails"}{/s}
 						</a>
 					</div>
@@ -149,7 +149,7 @@
 
 		{* Remove article *}
 		{block name="frontend_note_item_delete"}
-			<a href="{url controller='note' action='delete' sDelete=$sBasketItem.id}" title="{s name='NoteLinkDelete'}{/s}" class="note--delete">
+			<a href="{url controller='note' action='delete' sDelete=$sBasketItem.id}" title="{"{s name='NoteLinkDelete'}{/s}"|escape}" class="note--delete">
 				<i class="icon--cross"></i>
 			</a>
 		{/block}

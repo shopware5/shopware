@@ -54,7 +54,7 @@
     {* Remove product from basket *}
     {block name='frontend_checkout_cart_item_premium_delete_article'}
         <div class="table--column column--actions block">
-            <a href="{url action='deleteArticle' sDelete=$sBasketItem.id sTargetAction=$sTargetAction}" class="btn is--small" title="{s name='CartItemLinkDelete '}{/s}">
+            <a href="{url action='deleteArticle' sDelete=$sBasketItem.id sTargetAction=$sTargetAction}" class="btn is--small" title="{"{s name='CartItemLinkDelete '}{/s}"|escape}">
 				<i class="icon--cross"></i>
             </a>
         </div>

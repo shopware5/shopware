@@ -21,7 +21,7 @@
 				{* My account link in the sidebar *}
 				{block name="frontend_index_left_categories_my_account"}
 					<li class="navigation--entry entry--my-account">
-						<a class="navigation--link" href="{url controller='account'}" title="{s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}">
+						<a class="navigation--link" href="{url controller='account'}" title="{"{s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}"|escape}">
 							<i class="icon--account"></i> {s namespace='frontend/index/checkout_actions' name='IndexLinkAccount'}{/s}
 						</a>
 					</li>

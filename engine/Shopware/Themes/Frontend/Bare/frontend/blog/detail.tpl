@@ -44,7 +44,7 @@
 								{block name='frontend_blog_detail_comments'}
 									{if $sArticle.sVoteAverage|round != "0"}
 										<span class="blog--metadata-comments blog--metadata">
-											<a href="#commentcontainer" title="{s name="BlogLinkComments"}{/s}">{if $sArticle.comments|count}{$sArticle.comments|count}{else}0 {/if} {s name="BlogInfoComments"}{/s}</a>
+											<a href="#commentcontainer" title="{"{s name="BlogLinkComments"}{/s}"|escape}">{if $sArticle.comments|count}{$sArticle.comments|count}{else}0 {/if} {s name="BlogInfoComments"}{/s}</a>
 										</span>
 									{/if}
 								{/block}
@@ -52,7 +52,7 @@
 								{* Rating *}
 								{block name='frontend_blog_detail_rating'}
 									<span class="blog--metadata-rating blog--metadata is--last">
-										<a href="#commentcontainer" class="blog--rating-link" rel="nofollow" title="{s name='DetailLinkReview'}{/s}" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+										<a href="#commentcontainer" class="blog--rating-link" rel="nofollow" title="{"{s name='DetailLinkReview'}{/s}"|escape}" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
 											{$average = $sArticle.sVoteAverage / 2|round:0}
 											<meta itemprop="ratingValue" content="{$average}">
 
@@ -102,7 +102,7 @@
 								{if $sArticle.tags}
 									<span class="is--bold">{s name="BlogInfoTags"}{/s}:</span>
 									{foreach $sArticle.tags as $tag}
-										<a href="{url controller=blog sCategory=$sArticle.categoryId sFilterTags=$tag.name}" title="{$tag.name}">{$tag.name}</a>{if !$tag@last}, {/if}
+										<a href="{url controller=blog sCategory=$sArticle.categoryId sFilterTags=$tag.name}" title="{$tag.name|escape}">{$tag.name}</a>{if !$tag@last}, {/if}
 									{/foreach}
 								{/if}
 							</div>

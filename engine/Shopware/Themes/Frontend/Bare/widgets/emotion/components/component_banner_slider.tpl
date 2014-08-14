@@ -32,10 +32,10 @@
         <div class="slide" style="width:{$sElementWidth}px; height: {$sliderHeight}px">
             {if $banner.link}
                 <a href="{$banner.link}">
-                    <img src="{$banner.path}" alt="{$banner.altText}" {if $banner.title}title="{$banner.title}" {/if}/>
+                    <img src="{$banner.path}" alt="{$banner.altText|escape}" {if $banner.title} title="{$banner.title|escape}" {/if}/>
                 </a>
             {else}
-                <img src="{$banner.path}" alt="{$banner.altText}" {if $banner.title}title="{$banner.title}" {/if}/>
+                <img src="{$banner.path}" alt="{$banner.altText|escape}" {if $banner.title} title="{$banner.title|escape}" {/if}/>
             {/if}
 
         </div>

@@ -16,7 +16,7 @@
 <div id="mainNavigation">
 	<ul>
         <li class="{if $sCategoryCurrent eq $sCategoryStart} active{/if}">
-            <a href="{url controller='index'}" title="{s name='IndexLinkHome'}{/s}" class="first{if $sCategoryCurrent eq $sCategoryStart} active{/if}">
+            <a href="{url controller='index'}" title="{"{s name='IndexLinkHome'}{/s}"|escape}" class="first{if $sCategoryCurrent eq $sCategoryStart} active{/if}">
                 {se name='IndexLinkHome'}Home{/se}
             </a>
         </li>
@@ -24,7 +24,7 @@
             {if !$sCategory.hidetop}
 				<li class="{if !empty($sCategory.flag)}active{/if}{if $sCategory.sub} dropactive{/if}">
 
-					<a href="{$sCategory.link}" title="{$sCategory.description}" {if !empty($sCategory.flag)} class="active"{/if}>
+					<a href="{$sCategory.link}" title="{$sCategory.description|escape}" {if !empty($sCategory.flag)} class="active"{/if}>
 						<span>{$sCategory.description}</span>
 					</a>
 

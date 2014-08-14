@@ -8,7 +8,7 @@
 				{* Article name *}
 				{block name='frontend_blog_col_article_name'}
 					<h1 class="blog--box-headline panel--title">
-						<a href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}" title="{$sArticle.title}">{$sArticle.title}</a>
+						<a href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}" title="{$sArticle.title|escape}">{$sArticle.title}</a>
 					</h1>
 				{/block}
 
@@ -35,7 +35,7 @@
 							{if $sArticle.categoryInfo.description}
 								<span class="blog--metadata-description is--nowrap">
 									{if $sArticle.categoryInfo.linkCategory}
-										<a href="{$sArticle.categoryInfo.linkCategory}" title="{$sArticle.categoryInfo.description}">{$sArticle.categoryInfo.description}</a>
+										<a href="{$sArticle.categoryInfo.linkCategory}" title="{$sArticle.categoryInfo.description|escape}">{$sArticle.categoryInfo.description}</a>
 									{else}
 										{$sArticle.categoryInfo.description}
 									{/if}
@@ -46,7 +46,7 @@
 						{* Comments *}
 						{block name='frontend_blog_col_meta_data_comments'}
 							<span class="blog--metadata-comments blog--metadata is--nowrap{if $sArticle.sVoteAverage|round ==0} is--last{/if}">
-								<a href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}#commentcontainer" title="{$sArticle.articleName}">{if $sArticle.numberOfComments}{$sArticle.numberOfComments}{else}0{/if} {s name="BlogInfoComments"}{/s}</a>
+								<a href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}#commentcontainer" title="{$sArticle.articleName|escape}">{if $sArticle.numberOfComments}{$sArticle.numberOfComments}{else}0{/if} {s name="BlogInfoComments"}{/s}</a>
 							</span>
 						{/block}
 
@@ -86,7 +86,7 @@
 				{block name='frontend_blog_col_article_picture'}
 					{if $sArticle.preview.thumbNails.2}
 						<div class="blog--box-picture">
-							<a href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}" class="blog--picture-main" title="{$sArticle.title}"><img class="blog--picture-preview" src="{link file=$sArticle.preview.thumbNails.2}" /></a>
+							<a href="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}" class="blog--picture-main" title="{$sArticle.title|escape}"><img class="blog--picture-preview" src="{link file=$sArticle.preview.thumbNails.2}" /></a>
 						</div>
 					{/if}
 				{/block}

@@ -18,10 +18,10 @@
                     <div class="table--media">
                         {if $sBasketItem.image.src.2}
                             <a href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags}" class="table--media-link">
-                                <img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename}" />
+                                <img src="{$sBasketItem.image.src.2}" alt="{$sBasketItem.articlename|escape}" />
                             </a>
                         {else}
-                            <img class="table--media" src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{$sBasketItem.articlename}" />
+                            <img class="table--media" src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{$sBasketItem.articlename|escape}" />
                         {/if}
                     </div>
                 {/block}
@@ -120,7 +120,7 @@
         {* Remove product from basket *}
         {block name='frontend_checkout_cart_item_delete_article'}
             <div class="table--column column--actions block">
-                <a href="{url action='deleteArticle' sDelete=$sBasketItem.id sTargetAction=$sTargetAction}" class="btn is--small" title="{s name='CartItemLinkDelete '}{/s}">
+                <a href="{url action='deleteArticle' sDelete=$sBasketItem.id sTargetAction=$sTargetAction}" class="btn is--small" title="{"{s name='CartItemLinkDelete '}{/s}"|escape}">
                 	<i class="icon--cross"></i>
                 </a>
             </div>

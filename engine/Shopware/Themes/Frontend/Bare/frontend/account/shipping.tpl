@@ -52,7 +52,7 @@
 								<div class="account--actions">
                                     {block name="frontend_account_shipping_action_button_back"}
                                         {if $sTarget}
-                                            <a class="btn btn--secondary left" href="{url controller=$sTarget}" title="{s name="ShippingLinkBack"}{/s}">
+                                            <a class="btn btn--secondary left" href="{url controller=$sTarget}" title="{"{s name="ShippingLinkBack"}{/s}"|escape}">
                                                 {s name="ShippingLinkBack"}{/s}
                                             </a>
                                         {/if}

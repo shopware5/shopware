@@ -8,7 +8,7 @@
 			{foreach $categories as $category}
 				{block name="frontend_index_categories_left_entry"}
 					<li class="navigation--entry{if $category.flag} is--active{/if}{if $category.subcategories} has--sub-categories{/if}" role="menuitem">
-						<a href="{$category.link}" class="navigation--link{if $category.flag} is--active{/if}{if $category.subcategories} has--sub-categories{/if}" title="{$category.description}">
+						<a href="{$category.link}" class="navigation--link{if $category.flag} is--active{/if}{if $category.subcategories} has--sub-categories{/if}" title="{$category.description|escape}">
 							{$category.description}
 						</a>
 						{block name="frontend_index_categories_left_entry_subcategories"}

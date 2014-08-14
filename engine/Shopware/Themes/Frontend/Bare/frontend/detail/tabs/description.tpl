@@ -55,7 +55,7 @@
 			<ul class="content--list list--unstyled">
 				{block name='frontend_detail_actions_contact'}
 					<li class="list--entry">
-						<a href="{$sInquiry}" rel="nofollow" class="content--link link--contact" title="{s name='DetailLinkContact' namespace="frontend/detail/actions"}{/s}">
+						<a href="{$sInquiry}" rel="nofollow" class="content--link link--contact" title="{"{s name='DetailLinkContact' namespace="frontend/detail/actions"}{/s}"|escape}">
 							<i class="icon--arrow-right"></i> {s name="DetailLinkContact" namespace="frontend/detail/actions"}{/s}
 						</a>
 					</li>
@@ -67,7 +67,7 @@
 						{* Vendor landing page link *}
 						{block name='frontend_detail_description_links_supplier'}
 							<li class="list--entry">
-								<a href="{url controller='supplier' sSupplier=$sArticle.supplierID}" target="{$information.target}" class="content--link link--supplier" title="{s name="DetailDescriptionLinkInformation"}{/s}">
+								<a href="{url controller='supplier' sSupplier=$sArticle.supplierID}" target="{$information.target}" class="content--link link--supplier" title="{"{s name="DetailDescriptionLinkInformation"}{/s}"|escape}">
                                     <i class="icon--arrow-right"></i> {s name="DetailDescriptionLinkInformation"}{/s}
 								</a>
 							</li>
@@ -123,7 +123,7 @@
 					{foreach $sArticle.sDownloads as $download}
 						{block name='frontend_detail_description_downloads_content_link'}
 							<li class="list--entry">
-								<a href="{$download.filename}" target="_blank" class="content--link link--download" title="{s name="DetailDescriptionLinkDownload"}{/s} {$download.description}">
+								<a href="{$download.filename}" target="_blank" class="content--link link--download" title="{"{s name="DetailDescriptionLinkDownload"}{/s}"|escape} {$download.description|escape}">
 									<i class="icon--arrow-right"></i> {s name="DetailDescriptionLinkDownload"}{/s} {$download.description}
 								</a>
 							</li>

@@ -42,25 +42,25 @@
 
 									{if $categoryTree.name == 'SitemapStaticPages'}
 										{block name="frontend_sitemap_navigation_staticpages"}
-											<a href="{$categoryTree.link}" title="{s name='SitemapStaticPages'}Statische Seiten{/s}" class="sitemap--navigation-head-link is--active">
+											<a href="{$categoryTree.link}" title="{"{s name='SitemapStaticPages'}Statische Seiten{/s}"|escape}" class="sitemap--navigation-head-link is--active">
 												{s name='SitemapStaticPages'}Statische Seiten{/s}
 											</a>
 										{/block}
 									{elseif $categoryTree.name == 'SitemapSupplierPages'}
 										{block name="frontend_sitemap_navigation_supplierpages"}
-											<a href="{$categoryTree.link}" title="{s name='SitemapSupplierPages'}Herstellerseiten{/s}" class="sitemap--navigation-head-link is--active">
+											<a href="{$categoryTree.link}" title="{"{s name='SitemapSupplierPages'}Herstellerseiten{/s}"|escape}" class="sitemap--navigation-head-link is--active">
 												{s name='SitemapSupplierPages'}Herstellerseiten{/s}
 											</a>
 										{/block}
 									{elseif $categoryTree.name == 'SitemapLandingPages'}
 										{block name="frontend_sitemap_navigation_landingpages"}
-											<a href="{$categoryTree.link}" title="{s name='SitemapLandingPages'}Landingpages{/s}" class="sitemap--navigation-head-link is--active">
+											<a href="{$categoryTree.link}" title="{"{s name='SitemapLandingPages'}Landingpages{/s}"|escape}" class="sitemap--navigation-head-link is--active">
 												{s name='SitemapLandingPages'}Landingpages{/s}
 											</a>
 										{/block}
 									{else}
 										{block name="frontend_sitemap_navigation_defaultpages"}
-											<a href="{$categoryTree.link}" title="{$categoryTree.name}" class="sitemap--navigation-head-link is--active">
+											<a href="{$categoryTree.link}" title="{$categoryTree.name|escape}" class="sitemap--navigation-head-link is--active">
 												{$categoryTree.name}
 											</a>
 										{/block}
