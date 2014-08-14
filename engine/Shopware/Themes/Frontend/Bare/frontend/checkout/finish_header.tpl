@@ -6,8 +6,5 @@
 {* Delivery informations *}
 {block name='frontend_checkout_cart_header_availability'}{/block}
 
-{* Product amount *}
-{block name='frontend_checkout_cart_header_quantity'}{/block}
-
 {* Product actions *}
 {block name='frontend_checkout_cart_header_actions'}{/block}

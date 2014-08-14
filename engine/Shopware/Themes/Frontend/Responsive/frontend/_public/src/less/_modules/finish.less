@@ -83,7 +83,7 @@
         .unitize-margin(20, 0, 0, 0);
 
         .column--total-price {
-            width: 49%;
+            width: 39%;
         }
 
         .table--row:last-child {
@@ -94,7 +94,7 @@
         .row--premium-product,
         .row--voucher {
             .column--total-price {
-                margin: 0;
+                margin: 0 0 0 10%;
             }
         }
 
@@ -171,15 +171,13 @@
     .finish--table {
         clear: both;
 
-        .column--label {
-            display: none;
-        }
-
         .column--product {
+            .clearfix();
             width: 70%;
         }
 
-        .column--total-price {
+        .column--total-price,
+        .column--quantity {
             width: 30%;
         }
     }

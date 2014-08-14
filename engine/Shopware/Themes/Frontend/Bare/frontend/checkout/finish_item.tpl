@@ -7,7 +7,18 @@
 {block name='frontend_checkout_cart_item_delivery_informations'}{/block}
 
 {* Article amount *}
-{block name='frontend_checkout_cart_item_quantity'}{/block}
+{block name='frontend_checkout_cart_item_quantity'}
+    <div class="table--column column--quantity block is--align-right">
+        {* Label *}
+        {block name='frontend_checkout_cart_item_quantity_label'}
+            <div class="column--label quantity--label">
+                {s name="CartColumnQuantity" namespace="frontend/checkout/cart_header"}{/s}
+            </div>
+        {/block}
+
+        {$sBasketItem.quantity}
+    </div>
+{/block}
 
 {* Remove all the delete buttons for products *}
 {block name='frontend_checkout_cart_item_delete_article'}{/block}
