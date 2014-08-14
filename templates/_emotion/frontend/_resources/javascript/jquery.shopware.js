@@ -322,10 +322,9 @@ jQuery(document).ready(function ($) {
     /**
      * Account partner statistic
      */
-//    $('.datePicker').datepicker();
     $('.datePicker').datepicker({
         showOn: "button",
-        buttonImage: "images/calendar.gif",
+        buttonImage: "../templates/_emotion/frontend/_resources/images/calendar.gif",
         dateFormat: 'dd.mm.yy',
         buttonImageOnly: true,
         onSelect: function (dateText, inst) {

@@ -279,13 +279,15 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $repository = Shopware()->Models()->Partner();
 
         //get the information of the partner chart
-        $dataQuery = $repository->getStatisticChartQuery($partnerId, $fromDate, $toDate);
+        $userCurrencyFactor = Shopware()->Shop()->getCurrency()->getFactor();
+
+        $dataQuery = $repository->getStatisticChartQuery($partnerId, $fromDate, $toDate, $userCurrencyFactor);
         $this->View()->sPartnerOrderChartData = $dataQuery->getArrayResult();
 
-        $dataQuery = $repository->getStatisticListQuery(null, null, null, $partnerId, false, $fromDate, $toDate);
+        $dataQuery = $repository->getStatisticListQuery(null, null, null, $partnerId, false, $fromDate, $toDate, $userCurrencyFactor);
         $this->View()->sPartnerOrders = $dataQuery->getArrayResult();
 
-        $dataQuery = $repository->getStatisticListQuery(null, null, null, $partnerId, true, $fromDate, $toDate);
+        $dataQuery = $repository->getStatisticListQuery(null, null, null, $partnerId, true, $fromDate, $toDate, $userCurrencyFactor);
         $this->View()->sTotalPartnerAmount = $dataQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
     }
 
