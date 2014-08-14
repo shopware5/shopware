@@ -203,7 +203,6 @@ class LegacyStructConverter
             );
         }
 
-
         /**@var $first StoreFrontBundle\Struct\Product\Price */
         $first = array_shift($product->getPrices());
 
@@ -214,6 +213,17 @@ class LegacyStructConverter
         $data['pseudoprice'] = $this->sFormatPrice(
             $first->getCalculatedPseudoPrice()
         );
+
+        if ($first->getCalculatedPseudoPrice()) {
+            $discPseudo = $first->getCalculatedPseudoPrice();
+            $discPrice = $first->getCalculatedPrice();
+
+            $discount = round(($discPrice / $discPseudo * 100) - 100, 2) * -1;
+            $data["pseudopricePercent"] = array(
+                "int" => round($discount, 0),
+                "float" => $discount
+            );
+        }
 
         $data['pricegroup'] = $first->getCustomerGroup()->getKey();
 
