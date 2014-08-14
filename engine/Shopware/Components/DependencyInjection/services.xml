@@ -82,16 +82,6 @@
             <argument type="service" id="service_container"/>
         </service>
 
-        <service id="table_factory" class="Shopware\Components\DependencyInjection\Bridge\Table" />
-        <service id="table"
-                 class="stdClass"
-                 factory-service="table_factory"
-                 factory-method="factory">
-
-            <argument type="service" id="shopware.db"/>
-            <argument type="service" id="cache"/>
-        </service>
-
         <service id="plugins_factory" class="Shopware\Components\DependencyInjection\Bridge\Plugins" />
         <service id="plugin_manager" alias="plugins" />
         <service id="plugins"
@@ -322,8 +312,6 @@
             <argument type="service" id="multi_edit.product.dql_helper" />
             <argument type="service" id="events" />
         </service>
-
-
 
         <service id="legacy_struct_converter" class="Shopware\Components\Compatibility\LegacyStructConverter">
             <argument type="service" id="config" />
