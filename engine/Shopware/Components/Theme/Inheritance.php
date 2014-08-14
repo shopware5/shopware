@@ -402,12 +402,13 @@ class Inheritance
 
         $data = $builder->getQuery()->getArrayResult();
 
+
         foreach ($data as &$row) {
-            if (empty($row['value'])) {
+            if (!isset($row['value'])) {
                 $row['value'] = $row['defaultValue'];
             }
         }
-
+        
         if (!is_array($data) || empty($data)) {
             return array();
         }
