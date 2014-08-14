@@ -241,6 +241,16 @@ class ListProduct extends Extendable
     protected $hasEsd;
 
     /**
+     * @var bool
+     */
+    protected $isPriceGroupActive;
+
+    /**
+     * @var array
+     */
+    protected $blockedCustomerGroupIds;
+
+    /**
      * @var string
      */
     protected $manufacturerNumber;
@@ -940,5 +950,37 @@ class ListProduct extends Extendable
     public function setEsd(Esd $esd)
     {
         $this->esd = $esd;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isPriceGroupActive()
+    {
+        return $this->isPriceGroupActive;
+    }
+
+    /**
+     * @param boolean $isPriceGroupActive
+     */
+    public function setIsPriceGroupActive($isPriceGroupActive)
+    {
+        $this->isPriceGroupActive = $isPriceGroupActive;
+    }
+
+    /**
+     * @return array
+     */
+    public function getBlockedCustomerGroupIds()
+    {
+        return $this->blockedCustomerGroupIds;
+    }
+
+    /**
+     * @param array $blockedCustomerGroupIds
+     */
+    public function setBlockedCustomerGroupIds($blockedCustomerGroupIds)
+    {
+        $this->blockedCustomerGroupIds = $blockedCustomerGroupIds;
     }
 }

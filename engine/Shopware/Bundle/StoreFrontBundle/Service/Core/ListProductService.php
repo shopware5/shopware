@@ -126,6 +126,10 @@ class ListProductService implements Service\ListProductServiceInterface
             }
             $product = $products[$number];
 
+            if (in_array($context->getCurrentCustomerGroup()->getId(), $product->getBlockedCustomerGroupIds())) {
+                continue;
+            }
+
             $product->setCover($covers[$number]);
 
             $product->setPriceRules($graduatedPrices[$number]);
