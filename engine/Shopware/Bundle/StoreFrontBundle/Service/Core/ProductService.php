@@ -203,6 +203,10 @@ class ProductService implements Service\ProductServiceInterface
 
             $product = $products[$number];
 
+            if (in_array($context->getCurrentCustomerGroup()->getId(), $product->getBlockedCustomerGroupIds())) {
+                continue;
+            }
+
             $product->hasState(Struct\ListProduct::STATE_PRICE_CALCULATED);
 
             $product->setRelatedProducts($relatedProducts[$number]);

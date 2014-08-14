@@ -238,6 +238,18 @@ class ProductHydrator extends Hydrator
             );
         }
 
+        if (isset($data['__product_pricegroupActive'])) {
+            $product->setIsPriceGroupActive(
+                (bool) $data['__product_pricegroupActive']
+            );
+        }
+
+        if (isset($data['__product_blocked_customer_groups'])) {
+            $product->setBlockedCustomerGroupIds(
+                explode('|', $data['__product_blocked_customer_groups'])
+            );
+        }
+
         if (isset($data['__topSeller_sales'])) {
             $product->setSales((int) $data['__topSeller_sales']);
         }
