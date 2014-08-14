@@ -10,7 +10,7 @@
     {if $theme.checkoutHeader && $sTarget != "account"}
         <a href="{url controller='index'}"
            class="btn btn--grey is--small btn--back-top-shop"
-           title="{s name='FinishButtonBackToShop' namespace='frontend/checkout/finish'}{/s}">
+           title="{"{s name='FinishButtonBackToShop' namespace='frontend/checkout/finish'}{/s}"|escape}">
             <i class="icon--arrow-left is--small"></i>
             {s name="FinishButtonBackToShop" namespace="frontend/checkout/finish"}{/s}
         </a>

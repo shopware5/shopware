@@ -3,7 +3,7 @@
 {if !{config name=VoteDisable}}
 	<div class="product--rating-container">
 		<a href="#product--publish-comment" class="product--rating-link" rel="nofollow"
-		   title="{s name='DetailLinkReview'}{/s}" itemprop="aggregateRating"
+		   title="{"{s name='DetailLinkReview'}{/s}"|escape}" itemprop="aggregateRating"
 		   itemscope itemtype="http://schema.org/AggregateRating">
 			{$average = $sArticle.sVoteAverange.averange / 2|round:0}
 			<meta itemprop="ratingValue" content="{$average}">

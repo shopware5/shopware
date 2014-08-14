@@ -79,7 +79,7 @@
             {* Pagination - Previous page *}
             {block name='frontend_listing_actions_paging_previous'}
                 {if isset($sPages.before)}
-                    <a href="{$sLinks.sPage}&sPage={$sPages.before}" title="{s name='ListingLinkPrevious'}{/s}" class="pagination--link paging--prev">{s name="ListingTextPrevious"}&lt;{/s}</a>
+                    <a href="{$sLinks.sPage}&sPage={$sPages.before}" title="{"{s name='ListingLinkPrevious'}{/s}"|escape}" class="pagination--link paging--prev">{s name="ListingTextPrevious"}&lt;{/s}</a>
                 {/if}
             {/block}
 
@@ -88,7 +88,7 @@
                 {foreach $sPages.pages as $page}
                     {if $page<$sRequests.currentPage+4 AND $page>$sRequests.currentPage-4}
                         {if $sRequests.currentPage==$page}
-                            <a title="{$sCategoryInfo.name}" class="pagination--link is--active">{$page}</a>
+                            <a title="{$sCategoryInfo.name|escape}" class="pagination--link is--active">{$page}</a>
                         {else}
                             <a href="{$sLinks.sPage}&sPage={$page}" class="pagination--link">{$page}</a>
                         {/if}
@@ -101,7 +101,7 @@
             {* Pagination - Next page *}
             {block name='frontend_listing_actions_paging_next'}
                 {if $sPages.next}
-                    <a href="{$sLinks.sPage}&sPage={$sPages.next}" title="{s name='ListingLinkNext'}{/s}" class="pagination--link paging--next">{s name="ListingTextNext"}&gt;{/s}</a>
+                    <a href="{$sLinks.sPage}&sPage={$sPages.next}" title="{"{s name='ListingLinkNext'}{/s}"|escape}" class="pagination--link paging--next">{s name="ListingTextNext"}&gt;{/s}</a>
                 {/if}
             {/block}
 

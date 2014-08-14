@@ -20,7 +20,7 @@
 	            	<img class="banner" src="{$sCampaignContainer.data.image}" />
 	            </a>
 	        {else}
-	            <img class="banner" src="{$sCampaignContainer.data.image}" alt="{$sCampaignContainer.data.description}" />
+	            <img class="banner" src="{$sCampaignContainer.data.image}" alt="{$sCampaignContainer.data.description|escape}" />
 	        {/if}
 	    	{/block}
 	    {elseif $sCampaignContainer.type == "ctLinks"}
@@ -47,9 +47,9 @@
 	            {foreach from=$sCampaignContainer.data item=sArticle key=key  name="counter"}
 	            {if $sArticle.mode=="gfx"}
 	            	{if $sArticle.link}
-	            		<a href="{$sArticle.link}" {if $sArticle.linkTarget}target="{$sArticle.linkTarget}"{/if}><img src="{$sArticle.img}" title="{$sArticle.description}" alt="{$sArticle.description}" /></a>
+	            		<a href="{$sArticle.link}" {if $sArticle.linkTarget}target="{$sArticle.linkTarget}"{/if}><img src="{$sArticle.img}" title="{$sArticle.description|escape}" alt="{$sArticle.description|escape}" /></a>
 	            	{else}
-	            		<img src="{$sArticle.img}" alt="{$sArticle.description}" title="{$sArticle.description}" />
+	            		<img src="{$sArticle.img}" alt="{$sArticle.description|escape}" title="{$sArticle.description|escape}" />
 	            	{/if}
 	            {else}
 	                {include file="frontend/listing/box_article.tpl" sArticle=$sArticle}

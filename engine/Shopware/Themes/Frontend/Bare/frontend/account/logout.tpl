@@ -25,7 +25,7 @@
 
 				{block name="frontend_account_logout_info_actions"}
 					<div class="panel--actions">
-						<a class="btn btn--secondary" href="{url controller='index'}" title="{s name='AccountLogoutButton'}{/s}">
+						<a class="btn btn--secondary" href="{url controller='index'}" title="{"{s name='AccountLogoutButton'}{/s}"|escape}">
 							{s name="AccountLogoutButton"}{/s}
 						</a>
 					</div>

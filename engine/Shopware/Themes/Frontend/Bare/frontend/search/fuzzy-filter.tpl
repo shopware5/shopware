@@ -58,7 +58,7 @@
                 {* Reset category filter *}
                 {block name="frontend_search_fuzzy_category_reset"}
                     {if $sRequests.sFilter.category}
-                        <a href="{$sLinks.sFilter.category}" class="link--reset" title="{s name='SearchFilterLinkDefault'}Alle Kategorien anzeigen{/s}">
+                        <a href="{$sLinks.sFilter.category}" class="link--reset" title="{"{s name='SearchFilterLinkDefault'}Alle Kategorien anzeigen{/s}"|escape}">
                             {s name='SearchFilterLinkDefault'}Alle Kategorien anzeigen{/s}
                         </a>
                     {/if}
@@ -85,7 +85,7 @@
                                     {foreach $sSuppliersFirst as $supplier}
                                         {block name='frontend_search_filter_supplier_item'}
                                             <li class="list--entry">
-                                                <a class="entry--supplier-link" href="{$sLinks.sFilter.supplier}&sFilter_supplier={$supplier.id}" class="link--supplier" title="{$supplier.name} ({$supplier.count})">
+                                                <a class="entry--supplier-link" href="{$sLinks.sFilter.supplier}&sFilter_supplier={$supplier.id}" class="link--supplier" title="{$supplier.name|escape} ({$supplier.count})">
                                                     &raquo; {$supplier.name} <span class="supplier-count">({$supplier.count})</span>
                                                 </a>
                                             </li>
@@ -108,7 +108,7 @@
                                     {block name='frontend_search_filter_supplier_reset'}
                                         <li class="is--active">{$sSearchResults.sSuppliers[$sRequests.sFilter.supplier].name}</li>
                                         <li class="list--entry">
-                                            <a class="link--reset" href="{$sLinks.sFilter.supplier}" title="{s name='SearchFilterLinkDefault'}Alle Kategorien anzeigen{/s}">
+                                            <a class="link--reset" href="{$sLinks.sFilter.supplier}" title="{"{s name='SearchFilterLinkDefault'}Alle Kategorien anzeigen{/s}"|escape}">
                                                 {s name='SearchFilterLinkDefault'}Alle Kategorien anzeigen{/s}
                                             </a>
                                         </li>
@@ -147,7 +147,7 @@
                                     {block name='frontend_search_filter_price_reset'}
                                         <li class="is--active">{$sPriceFilter[$sRequests.sFilter.price].start|currency} - {$sPriceFilter[$sRequests.sFilter.price].end|currency}</li>
                                         <li class="list--entry">
-                                            <a class="link--reset" href="{$sLinks.sFilter.price}" title="{s name='SearchFilterLinkDefault'}Alle Kategorien anzeigen{/s}">
+                                            <a class="link--reset" href="{$sLinks.sFilter.price}" title="{"{s name='SearchFilterLinkDefault'}Alle Kategorien anzeigen{/s}"|escape}">
                                                 {s name='SearchFilterLinkDefault'}Alle Kategorien anzeigen{/s}
                                             </a>
                                         </li>

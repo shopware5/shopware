@@ -24,7 +24,7 @@
 				{foreach $sMenu.gBottom as $item}
 					{block name="frontend_index_footer_column_service_menu_entry"}
 						<li class="navigation--entry" role="menuitem">
-							<a class="navigation--link" href="{if $item.link}{$item.link}{else}{url controller='custom' sCustom=$item.id title=$item.description}{/if}" title="{$item.description}" {if $item.target}target="{$item.target}"{/if}>
+							<a class="navigation--link" href="{if $item.link}{$item.link}{else}{url controller='custom' sCustom=$item.id title=$item.description}{/if}" title="{$item.description|escape}" {if $item.target}target="{$item.target}"{/if}>
 								{$item.description}
 							</a>
 						</li>
@@ -48,7 +48,7 @@
             {foreach $sMenu.gBottom2 as $item}
 				{block name="frontend_index_footer_column_information_menu_entry"}
 					<li class="navigation--entry" role="menuitem">
-						<a class="navigation--link" href="{if $item.link}{$item.link}{else}{url controller='custom' sCustom=$item.id title=$item.description}{/if}" title="{$item.description}" {if $item.target}target="{$item.target}"{/if}>
+						<a class="navigation--link" href="{if $item.link}{$item.link}{else}{url controller='custom' sCustom=$item.id title=$item.description}{/if}" title="{$item.description|escape}" {if $item.target}target="{$item.target}"{/if}>
 							{$item.description}
 						</a>
 					</li>

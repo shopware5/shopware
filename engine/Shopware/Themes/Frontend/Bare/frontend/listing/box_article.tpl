@@ -22,7 +22,7 @@
 		{* Product name *}
 		{block name='frontend_listing_box_article_name'}
 			<a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" class="product--title"
-			   title="{$sArticle.articleName}">{$sArticle.articleName|truncate:47}</a>
+			   title="{$sArticle.articleName|escape}">{$sArticle.articleName|truncate:47}</a>
 		{/block}
 
 		{* Product description *}
