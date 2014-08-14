@@ -542,7 +542,7 @@
                 inst.trigger = $(this._get(inst, "buttonImageOnly") ?
                     $("<img/>").addClass(this._triggerClass).
                         attr({ src: buttonImage, alt: buttonText, title: buttonText }) :
-                    $("<button type='button'></button>").addClass(this._triggerClass).
+                    $("<button type='button'></button>").addClass(this._triggerClass).addClass("icon--calendar").
                         html(!buttonImage ? buttonText : $("<img/>").attr(
                             { src:buttonImage, alt:buttonText, title:buttonText })));
                 input[isRTL ? "before" : "after"](inst.trigger);

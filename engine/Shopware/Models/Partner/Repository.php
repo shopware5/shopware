@@ -124,9 +124,9 @@ class Repository extends ModelRepository
      * @param      $toDate
      * @return \Doctrine\ORM\Query
      */
-    public function getStatisticListQuery($order = null, $offset = null, $limit = null, $partnerId, $summary = false, $fromDate, $toDate)
+    public function getStatisticListQuery($order = null, $offset = null, $limit = null, $partnerId, $summary = false, $fromDate, $toDate, $userCurrencyFactor = 1)
     {
-        $builder = $this->getStatisticListQueryBuilder($order, $partnerId, $summary, $fromDate, $toDate);
+        $builder = $this->getStatisticListQueryBuilder($order, $partnerId, $summary, $fromDate, $toDate, $userCurrencyFactor);
         if (!$summary && !empty($limit)) {
             $builder->setFirstResult($offset);
             $builder->setMaxResults($limit);
@@ -144,7 +144,7 @@ class Repository extends ModelRepository
      * @param      $toDate
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getStatisticListQueryBuilder($order = null, $partnerId, $summary = false, $fromDate,$toDate)
+    public function getStatisticListQueryBuilder($order = null, $partnerId, $summary = false, $fromDate, $toDate, $userCurrencyFactor = 1)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $expr = $this->getEntityManager()->getExpressionBuilder();
@@ -154,8 +154,8 @@ class Repository extends ModelRepository
                 'o.orderTime as orderTime',
                 'o.id as id',
                 'o.number as number',
-                'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / o.currencyFactor) as netTurnOver',
-                'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / o.currencyFactor / 100 * partner.percent) as provision',
+                'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / (o.currencyFactor / :userCurrencyFactor)) as netTurnOver',
+                'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / (o.currencyFactor / :userCurrencyFactor) / 100 * partner.percent) as provision',
                 'customer.email as customerEmail',
                 'billing.company as customerCompany',
                 'billing.firstName as customerFirstName',
@@ -176,7 +176,8 @@ class Repository extends ModelRepository
             ->andWhere($expr->lt('o.orderTime','?3' ))
             ->setParameter(1,$partnerId)
             ->setParameter(2,$fromDate)
-            ->setParameter(3,$toDate);
+            ->setParameter(3,$toDate)
+            ->setParameter('userCurrencyFactor', $userCurrencyFactor);
 
         if (!$summary) {
             $builder->groupBy("o.number");
@@ -196,9 +197,9 @@ class Repository extends ModelRepository
      * @param $toDate
      * @return \Doctrine\ORM\Query
      */
-    public function getStatisticChartQuery($partnerId, $fromDate, $toDate)
+    public function getStatisticChartQuery($partnerId, $fromDate, $toDate, $userCurrencyFactor = 1)
     {
-        $builder = $this->getStatisticChartQueryBuilder($partnerId, $fromDate, $toDate);
+        $builder = $this->getStatisticChartQueryBuilder($partnerId, $fromDate, $toDate, $userCurrencyFactor);
         return $builder->getQuery();
     }
 
@@ -210,15 +211,15 @@ class Repository extends ModelRepository
      * @param $toDate
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getStatisticChartQueryBuilder($partnerId, $fromDate, $toDate)
+    public function getStatisticChartQueryBuilder($partnerId, $fromDate, $toDate, $userCurrencyFactor = 1)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(
             array(
                 'o.orderTime as date',
                 'DATE_FORMAT(o.orderTime,\'%Y-%V\') as timeScale',
-                'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / o.currencyFactor) as netTurnOver',
-                'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / o.currencyFactor / 100 * partner.percent) as provision'
+                'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / (o.currencyFactor / :userCurrencyFactor)) as netTurnOver',
+                'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / (o.currencyFactor / :userCurrencyFactor) / 100 * partner.percent) as provision'
             ))
             ->from('Shopware\Models\Order\Order', 'o')
             ->leftJoin('o.partner','partner')
@@ -232,6 +233,7 @@ class Repository extends ModelRepository
         $builder->setParameter(0, $partnerId);
         $builder->setParameter(1, $fromDate);
         $builder->setParameter(2, $toDate);
+        $builder->setParameter('userCurrencyFactor', $userCurrencyFactor);
         return $builder;
     }
 
