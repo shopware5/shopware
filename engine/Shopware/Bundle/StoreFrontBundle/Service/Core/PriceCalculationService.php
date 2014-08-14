@@ -105,7 +105,7 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
         );
 
         //check for price group discounts.
-        if (!$product->getPriceGroup()) {
+        if (!$product->getPriceGroup() || !$product->isPriceGroupActive()) {
             return $this->calculatePriceStruct(
                 $cheapestPrice,
                 $tax,
