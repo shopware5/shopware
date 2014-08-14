@@ -139,7 +139,7 @@ class PriceGroupDiscountGateway implements Gateway\PriceGroupDiscountGatewayInte
 
         $result = array();
         foreach ($products as $product) {
-            if (!$product->getPriceGroup()) {
+            if (!$product->getPriceGroup() || !$product->isPriceGroupActive()) {
                 continue;
             }
 

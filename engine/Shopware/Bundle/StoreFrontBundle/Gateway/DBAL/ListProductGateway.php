@@ -110,6 +110,7 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
     protected function getQuery(array $numbers, Struct\Context $context)
     {
         $esdQuery = $this->getEsdQuery();
+        $customerGroupQuery = $this->getCustomerGroupQuery();
 
         $query = $this->entityManager->getDBALQueryBuilder();
         $query->select($this->fieldHelper->getArticleFields())
@@ -120,14 +121,15 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
             ->addSelect($this->fieldHelper->getPriceGroupFields())
             ->addSelect($this->fieldHelper->getManufacturerFields())
             ->addSelect($this->fieldHelper->getEsdFields())
-            ->addSelect('(' . $esdQuery->getSQL() . ') as __product_has_esd');
+            ->addSelect('(' . $esdQuery->getSQL() . ') as __product_has_esd')
+            ->addSelect('('. $customerGroupQuery->getSQL() .') as __product_blocked_customer_groups');
 
         $query->from('s_articles_details', 'variant')
             ->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID')
             ->innerJoin('product', 's_core_tax', 'tax', 'tax.id = product.taxID')
             ->leftJoin('variant', 's_core_units', 'unit', 'unit.id = variant.unitID')
             ->leftJoin('product', 's_articles_supplier', 'manufacturer', 'manufacturer.id = product.supplierID')
-            ->leftJoin('product', 's_core_pricegroups', 'priceGroup', 'priceGroup.id = product.pricegroupID AND product.pricegroupActive = 1')
+            ->leftJoin('product', 's_core_pricegroups', 'priceGroup', 'priceGroup.id = product.pricegroupID')
             ->leftJoin('variant', 's_articles_attributes', 'productAttribute', 'productAttribute.articledetailsID = variant.id')
             ->leftJoin('product', 's_articles_supplier_attributes', 'manufacturerAttribute', 'manufacturerAttribute.id = product.supplierID')
             ->leftJoin('product', 's_articles_top_seller_ro', 'topSeller', 'topSeller.article_id = product.id')
@@ -161,5 +163,20 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
             ->setMaxResults(1);
 
         return $query;
+    }
+
+    /**
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    private function getCustomerGroupQuery()
+    {
+        $query = $this->entityManager->getDBALQueryBuilder();
+
+        $query->select("GROUP_CONCAT(customerGroups.customergroupId SEPARATOR '|')")
+            ->from('s_articles_avoid_customergroups', 'customerGroups')
+            ->where('customerGroups.articleID = product.id');
+
+        return $query;
+
     }
 }
