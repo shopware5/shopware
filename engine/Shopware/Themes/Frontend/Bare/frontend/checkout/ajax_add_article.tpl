@@ -5,6 +5,14 @@
         </div>
     {/block}
 
+    {block name='checkout_ajax_add_error'}
+        {if $sBasketInfo}
+            <div class="modal--error">
+                {include file="frontend/_includes/messages.tpl" type="info" content="{$sBasketInfo}"}
+            </div>
+        {/if}
+    {/block}
+
     {block name='checkout_ajax_add_information'}
         {if $sArticle.additional_details.sConfigurator}
             {$detailLink={url controller=detail sArticle=$sArticle.articleID number=$sArticle.ordernumber}}
@@ -44,7 +52,7 @@
                     <ul class="list--name list--unstyled">
                         <li class="entry--name">
                             <a class="link--name" href="{$detailLink}" title="{$sArticle.articlename|escape}">
-                                {$articlename|escape|truncate:37}
+                                {$sArticle.articlename|escape|truncate:35}
                             </a>
                         </li>
                         <li class="entry--ordernumber">{s name="AjaxAddLabelOrdernumber"}{/s}: {$sArticle.ordernumber}</li>
@@ -68,14 +76,14 @@
         <div class="modal--actions">
             {* Contiune shopping *}
             {block name='checkout_ajax_add_actions_continue'}
-                <a href="{$detailLink}" title="{s name='AjaxAddLinkBack'}{/s}" class="link--back btn btn--secondary is--left">
+                <a href="{$detailLink}" data-modal-close="true" title="{s name='AjaxAddLinkBack'}{/s}" class="link--back btn btn--secondary is--left">
                     {s name='AjaxAddLinkBack'}{/s} <i class="icon--arrow-left"></i>
                 </a>
             {/block}
 
             {* Forward to the checkout *}
             {block name='checkout_ajax_add_actions_checkout'}
-                <a href="{url action=confirm}" title="{s name='AjaxAddLinkCart'}{/s}" class="link--confirm btn btn--primary right">
+                <a href="{url action=cart}" title="{s name='AjaxAddLinkCart'}{/s}" class="link--confirm btn btn--primary right">
                     {s name='AjaxAddLinkCart'}{/s} <i class="icon--arrow-right"></i>
                 </a>
             {/block}
