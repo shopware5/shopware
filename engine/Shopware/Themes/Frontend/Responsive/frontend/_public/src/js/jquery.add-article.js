@@ -88,6 +88,9 @@
 
             // Will be automatically removed when destroy() is called.
             me._on(me.$el, me.opts.eventName, $.proxy(me.sendSerializedForm, me));
+
+            // Close modal on continue shopping button
+            $('body').delegate('.link--back', 'click', $.proxy(me.closeModal, me));
         },
 
         /**
@@ -125,9 +128,33 @@
                         picturefill();
 
                         me.initModalSlider();
+
+                        // Resize slider after DOM manipulation correctly.
+                        setTimeout(function() {
+                            var $sliderEl = $('.js--modal').find('.product-slider'),
+                            slider = $sliderEl.data('plugin_productSlider');
+                            if (!slider) {
+                                return;
+                            }
+
+                            slider.setSizes();
+                        }, 20);
+
                     });
                 }
             });
+        },
+
+        /**
+         * Closes the modal by continue shopping link.
+         *
+         * @public
+         * @event closeModal
+         */
+        closeModal: function () {
+            event.preventDefault();
+
+            $.modal.close();
         },
 
         /**
@@ -185,7 +212,16 @@
                     }
 
                     slider.opts.perPage = perPage;
-                    slider.setSizes();
+                    //slider.setSizes();
+                },
+                
+                'exit': function () {
+                    slider = $sliderEl.data('plugin_productSlider');
+                    if(!slider) {
+                        return;
+                    }
+
+                    slider.destroy();
                 }
             });
         }
