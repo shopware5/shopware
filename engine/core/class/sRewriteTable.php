@@ -563,21 +563,39 @@ class sRewriteTable
      */
     public function sCreateRewriteTableCampaigns($offset = null, $limit = null)
     {
-        $campaigns = $this->modelManager->getRepository('Shopware\Models\Emotion\Emotion')
-           ->getCampaigns($offset, $limit);
-        $campaigns = $campaigns->getQuery()->getArrayResult();
+        $queryBuilder = $this->modelManager->getRepository('Shopware\Models\Emotion\Emotion')
+           ->getListQueryBuilder();
+        $queryBuilder
+            ->andWhere('emotions.isLandingPage = 1 ')
+            ->andWhere('emotions.active = 1');
+
+        if ($limit !== null && $offset !== null) {
+            $queryBuilder->setFirstResult($offset)
+                ->setMaxResults($limit);
+        }
+
+        $campaigns = $queryBuilder->getQuery()->getArrayResult();
 
         $routerCampaignTemplate = $this->config->get('routerCampaignTemplate');
         foreach ($campaigns as $campaign) {
-            $campaign[0]["categoryId"] = $campaign["categoryId"];
-            $campaign = $campaign[0];
-
+            $campaign["categoryId"] = null;
             $this->data->assign('campaign', $campaign);
             $path = $this->template->fetch('string:' . $routerCampaignTemplate, $this->data);
             $path = $this->sCleanupPath($path, false);
 
-            $org_path = 'sViewport=campaign&sCategory=' . $campaign['categoryId'] . '&emotionId=' . $campaign['id'];
+            $org_path = 'sViewport=campaign&emotionId=' . $campaign['id'];
             $this->sInsertUrl($org_path, $path);
+
+            foreach ($campaign['categories'] as $category) {
+                $campaign["categoryId"] = $category['id'];
+
+                $this->data->assign('campaign', $campaign);
+                $path = $this->template->fetch('string:' . $routerCampaignTemplate, $this->data);
+                $path = $this->sCleanupPath($path, false);
+
+                $org_path = 'sViewport=campaign&sCategory=' . $campaign['categoryId'] . '&emotionId=' . $campaign['id'];
+                $this->sInsertUrl($org_path, $path);
+            }
         }
     }
 
